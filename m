@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A6E63EB1D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4A863EB51
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLAIaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S229565AbiLAImR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiLAIaN (ORCPT
+        with ESMTP id S229558AbiLAImP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:30:13 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 841E855CBC;
-        Thu,  1 Dec 2022 00:30:10 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 01 Dec 2022 17:30:09 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id CEE632059054;
-        Thu,  1 Dec 2022 17:30:09 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 1 Dec 2022 17:30:09 +0900
-Received: from [10.212.157.157] (unknown [10.212.157.157])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id F368CA855D;
-        Thu,  1 Dec 2022 17:30:08 +0900 (JST)
-Message-ID: <fff6d183-ade3-c9d2-5a9c-3edfcca8a266@socionext.com>
-Date:   Thu, 1 Dec 2022 17:30:08 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 7/8] dt-bindings: soc: socionext: Add UniPhier DWC3 USB
- glue layer
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
+        Thu, 1 Dec 2022 03:42:15 -0500
+X-Greylist: delayed 514 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 00:42:13 PST
+Received: from mail-m12746.qiye.163.com (mail-m12746.qiye.163.com [115.236.127.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889EB865BB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 00:42:13 -0800 (PST)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:327b:59a0:748d:aafb:564e:dca6])
+        by mail-m12746.qiye.163.com (Hmail) with ESMTPA id F1FD9BC04CD;
+        Thu,  1 Dec 2022 16:33:35 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     catalin.marinas@arm.com, will@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
- <20221129103509.9958-8-hayashi.kunihiko@socionext.com>
- <12a98c77-5464-0f25-9081-13217f396484@linaro.org>
- <c9e1ee72-6201-3a1e-307a-d5869a22e01c@socionext.com>
- <2978c071-4e3c-8d4d-3819-3ddbf7bc1385@linaro.org>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <2978c071-4e3c-8d4d-3819-3ddbf7bc1385@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Ding Hui <dinghui@sangfor.com.cn>
+Subject: [RFC PATCH] arch/arm64: put crash_save_cpu() at last before die
+Date:   Thu,  1 Dec 2022 16:33:13 +0800
+Message-Id: <20221201083313.11734-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSh5NVklKTk1JSkxMT01LSlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTBlBTkIaS0FMT0MfQRoaHRlBTk1PHkEfGBpNWVdZFhoPEhUdFF
+        lBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MCI6LDo*ND0eSxYuDDAJCCkQ
+        H04wFB9VSlVKTU1CQ0NITUpNTUlNVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUwZQU5CGktBTE9DH0EaGh0ZQU5NTx5BHxgaTVlXWQgBWUFJSkJDNwY+
+X-HM-Tid: 0a84ccd1db81b219kuuuf1fd9bc04cd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/01 0:32, Krzysztof Kozlowski wrote:
-> On 30/11/2022 10:00, Kunihiko Hayashi wrote:
->> Hi Krzysztof,
->>
->> On 2022/11/29 23:52, Krzysztof Kozlowski wrote:
->>> On 29/11/2022 11:35, Kunihiko Hayashi wrote:
->>>> Add DT binding schema for components belonging to the platform-specific
->>>> DWC3 USB glue layer implemented in UniPhier SoCs.
->>>>
->>>> This USB glue layer works as a sideband logic for the host controller,
->>>> including core reset, vbus control, PHYs, and some signals to the
->>>> controller.
->>>>
->>>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+When we debug a vmcore by crash utility, sometimes we got
+backtraces on non-panic core like this:
 
-(snip)
+crash> bt -c 1
+PID: 0      TASK: ffff80014107a000  CPU: 1   COMMAND: "swapper/1"
+ #0 [1ffff0002f73c7dc] crash_save_cpu at ffff20002031cb68
 
->>>> +examples:
->>>> +  - |
->>>> +    usb-controller@65b00000 {
->>>
->>> Node name: usb. There is no usage of "usb-controller".
->>
->> I'm confusing about that.
->>
->> This is an interface logic and doesn't have USB functions by itself.
->> Surely there is a USB host controller node "usb@..." in the same SoC.
->> Can this node be renamed to "usb"?
->>
->> I've renamed the dts node name once in commit 4cc752a88ca9
->> ("arm64: dts: uniphier: Rename usb-glue node for USB3 to usb-controller").
-> 
-> In (almost?) all other cases it is still called "usb". A bit akward to
-> have usb in usb, but usb-controller did not stick...
+The crash utility do backtrace by search LR from stack,
+which pushed by callee of crash_save_cpu().
 
-I see.
-I understand that it is still better to use the generic name "usb"
-rather than "usb-controller".
+So the LR is easier to be destroyed by subsequent invoking other
+functions, and lead to crash failed to backtrace on non-panic core
 
-Thank you,
+I tried to put crash_save_cpu() after sdei_mask_local_cpu(), and
+it turns out bt is working to me.
 
+But I'm not sure the order of crash_save_cpu() is whether strictly
+required, so I send this RFC patch to get some suggestion.
+
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
 ---
-Best Regards
-Kunihiko Hayashi
+ arch/arm64/kernel/smp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index ffc5d76cf695..5f1defe76f3d 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -842,13 +842,13 @@ static atomic_t waiting_for_crash_ipi = ATOMIC_INIT(0);
+ static void ipi_cpu_crash_stop(unsigned int cpu, struct pt_regs *regs)
+ {
+ #ifdef CONFIG_KEXEC_CORE
+-	crash_save_cpu(regs, cpu);
+-
+ 	atomic_dec(&waiting_for_crash_ipi);
+ 
+ 	local_irq_disable();
+ 	sdei_mask_local_cpu();
+ 
++	crash_save_cpu(regs, cpu);
++
+ 	if (IS_ENABLED(CONFIG_HOTPLUG_CPU))
+ 		__cpu_try_die(cpu);
+ 
+-- 
+2.17.1
+
