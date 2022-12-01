@@ -2,98 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32B763EFE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E3163EFED
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiLALup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S230400AbiLALwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiLALuk (ORCPT
+        with ESMTP id S229728AbiLALw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:50:40 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2614AA056A;
-        Thu,  1 Dec 2022 03:50:39 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id o13so3629776ejm.1;
-        Thu, 01 Dec 2022 03:50:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1mHYW7QBgRCxEy3sQjKWQKEVvYIuKwT9l/MfIuCMVow=;
-        b=b6sLZx69YXAEjKUn16Ge/paNCrmNWedAl53ZpUYw7fpNoXrVT5N0UXknFnlfao4Ce0
-         tGA0fUe1eKUJk/7pKjYCttExGPtnXUzgWqc9DMk5G1fsF4kiRXRbIpg0/zB+T/ReLhUx
-         bqkSblyn5YOCwsnGGPruYSkigDqwroAoopNeLPH0ET0k+mvDKoRoGfSwnTooFEQHpu8h
-         GT5Fi4hbPOo9Dq1nLOisN8F7HFI+2MYy4WFVvmIBtF67eFSz7qa1iC+jGQTlxw3KmBJ8
-         1ML8m/meDyn8O+/8nxJn93/S7zYtqkDo6Rd0G2o8ijBQVoapvf0w2fyPTL5v0F6rfnsY
-         mBQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1mHYW7QBgRCxEy3sQjKWQKEVvYIuKwT9l/MfIuCMVow=;
-        b=l6MTM7d3BXptMv7Nvspq4Qdwaufp6p1yVlEKb70Lm2d1bImvIL6E1Q+dxXJms1Mqrq
-         PINhwa4TCfIUM09nZItzCmE4dvnf9Juz4JqwH1mGYnVP0EBfLev4D9A174Vua+QP1Zri
-         LDBCedOXeaJxHRXVbqVVVrbGjSWSkkAgoqWST95sbtyi+RV3K8XocsthpfUnLNW0LFZv
-         K0qo7z5U704Qsp5h5aF4NIbJWNzgJvOiox0ReLZtQenFIP0fXGq8x6G2NRoEk+P+uhHE
-         YZKwcflRXRQUpRGbZvbZt8iub/3T8CHOA4wkEowOCh3vbFv1ayXdhouCaIdNrTBp0HlO
-         btFA==
-X-Gm-Message-State: ANoB5pkK3ZwheRXGUNZk4w3vPIWvb0aZqJi/qhHhWpbjrVNTSoS0y9D1
-        QbMjEN4BeCHNnlzZpI2V8aM=
-X-Google-Smtp-Source: AA0mqf4EtvYipEcgfGaagQRoYu76SgWuwW2Ge5CLfuwLdGnjvuL65Eigs0XilHrBW/pb3dcGP9HC3Q==
-X-Received: by 2002:a17:906:a052:b0:7be:beb3:1343 with SMTP id bg18-20020a170906a05200b007bebeb31343mr18794061ejb.211.1669895437481;
-        Thu, 01 Dec 2022 03:50:37 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id q18-20020a1709066b1200b007bf988ce9f7sm1708749ejr.38.2022.12.01.03.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:50:36 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 1 Dec 2022 12:50:34 +0100
-To:     "Chen, Hu1" <hu1.chen@intel.com>
-Cc:     Yonghong Song <yhs@meta.com>, jpoimboe@kernel.org,
-        memxor@gmail.com, bpf@vger.kernel.org,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf v3] selftests/bpf: Fix "missing ENDBR" BUG for
- destructor kfunc
-Message-ID: <Y4iVCmBS1fbTw63o@krava>
-References: <20221130101135.26806-1-hu1.chen@intel.com>
- <a1745d9b-4bfc-50d2-8da6-7631ae2b24d0@meta.com>
- <aadf45b9-b6e1-256d-c618-31b65e9f7161@intel.com>
+        Thu, 1 Dec 2022 06:52:29 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D164D9AE07;
+        Thu,  1 Dec 2022 03:52:27 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E726D6E;
+        Thu,  1 Dec 2022 03:52:34 -0800 (PST)
+Received: from [10.57.71.118] (unknown [10.57.71.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDCC73F73D;
+        Thu,  1 Dec 2022 03:52:24 -0800 (PST)
+Message-ID: <136b735e-43b0-59bd-c85b-291730cd6371@arm.com>
+Date:   Thu, 1 Dec 2022 11:52:19 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aadf45b9-b6e1-256d-c618-31b65e9f7161@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v6 22/24] dmaengine: dw-edma: Bypass dma-ranges mapping
+ for the local setup
+Content-Language: en-GB
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>, linux-pci@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221107210438.1515-1-Sergey.Semin@baikalelectronics.ru>
+ <20221107210438.1515-23-Sergey.Semin@baikalelectronics.ru>
+ <20221107211134.wxaqi2sew6aejxne@mobilestation>
+ <8b7ce195-27b7-a27f-bf4e-fd5f20f2a83b@arm.com>
+ <20221126234509.ezn6vuefnj2f7pyk@mobilestation>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221126234509.ezn6vuefnj2f7pyk@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,161 +62,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 04:07:56PM +0800, Chen, Hu1 wrote:
-> On 12/1/2022 12:52 AM, Yonghong Song wrote:
-> >  
-> >  
-> >  On 11/30/22 2:11 AM, Chen Hu wrote:
-> > > With CONFIG_X86_KERNEL_IBT enabled, the test_verifier triggers the
-> > > following BUG:
-> > >
-> > >    traps: Missing ENDBR: bpf_kfunc_call_test_release+0x0/0x30
-> > >    ------------[ cut here ]------------
-> > >    kernel BUG at arch/x86/kernel/traps.c:254!
-> > >    invalid opcode: 0000 [#1] PREEMPT SMP
-> > >    <TASK>
-> > >     asm_exc_control_protection+0x26/0x50
-> > >    RIP: 0010:bpf_kfunc_call_test_release+0x0/0x30
-> > >    Code: 00 48 c7 c7 18 f2 e1 b4 e8 0d ca 8c ff 48 c7 c0 00 f2 e1 b4 c3
-> > >     0f 1f 44 00 00 66 0f 1f 00 0f 1f 44 00 00 0f 0b 31 c0 c3 66 90
-> > >         <66> 0f 1f 00 0f 1f 44 00 00 48 85 ff 74 13 4c 8d 47 18 b8 ff ff ff
-> > >     bpf_map_free_kptrs+0x2e/0x70
-> > >     array_map_free+0x57/0x140
-> > >     process_one_work+0x194/0x3a0
-> > >     worker_thread+0x54/0x3a0
-> > >     ? rescuer_thread+0x390/0x390
-> > >     kthread+0xe9/0x110
-> > >     ? kthread_complete_and_exit+0x20/0x20
-> > >
-> > > It turns out that ENDBR in bpf_kfunc_call_test_release() is converted to
-> > > NOP by apply_ibt_endbr().
-> > >
-> > > The only text references to this function from kernel side are:
-> > >
-> > >    $ grep -r bpf_kfunc_call_test_release
-> > >    net/bpf/test_run.c:noinline void bpf_kfunc_call_test_release(...)
-> > >    net/bpf/test_run.c:BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, ...)
-> > >    net/bpf/test_run.c:BTF_ID(func, bpf_kfunc_call_test_release)
+On 2022-11-26 23:45, Serge Semin wrote:
+> On Fri, Nov 25, 2022 at 03:32:23PM +0000, Robin Murphy wrote:
+>> On 2022-11-07 21:11, Serge Semin wrote:
+>>> On Tue, Nov 08, 2022 at 12:04:36AM +0300, Serge Semin wrote:
+>>>> DW eDMA doesn't perform any translation of the traffic generated on the
+>>>> CPU/Application side. It just generates read/write AXI-bus requests with
+>>>> the specified addresses. But in case if the dma-ranges DT-property is
+>>>> specified for a platform device node, Linux will use it to create a
+>>>> mapping the PCIe-bus regions into the CPU memory ranges. This isn't what
+>>>> we want for the eDMA embedded into the locally accessed DW PCIe Root Port
+>>>> and End-point. In order to work that around let's set the chan_dma_dev
+>>>> flag for each DW eDMA channel thus forcing the client drivers to getting a
+>>>> custom dma-ranges-less parental device for the mappings.
+>>>>
+>>>> Note it will only work for the client drivers using the
+>>>> dmaengine_get_dma_device() method to get the parental DMA device.
+>>>
+>>> @Robin, we particularly need you opinion on this patch. I did as you
+>>> said: call *_dma_configure() method to initialize the child device and
+>>> set the DMA-mask here instead of the platform driver.
+>>
+> 
+>> Apologies, I've been busy and this series got buried in my inbox before I'd
+>> clocked it as something I was supposed to be looking at.
+> 
+> No worries. I'm glad you responded.
+> 
+>>
+>>> @Vinoud, @Manivannan I had to drop your tags from this patch since its
+>>> content had been significantly changed.
+>>>
+>>> -Sergey
+>>>
+>>>>
+>>>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>>>>
+>>>> ---
+>>>>
+>>>> Changelog v2:
+>>>> - Fix the comment a bit to being clearer. (@Manivannan)
+>>>>
+>>>> Changelog v3:
+>>>> - Conditionally set dchan->dev->device.dma_coherent field since it can
+>>>>     be missing on some platforms. (@Manivannan)
+>>>> - Remove Manivannan' rb and tb tags since the patch content has been
+>>>>     changed.
+>>>>
+>>>> Changelog v6:
+>>>> - Directly call *_dma_configure() method on the child device used for
+>>>>     the DMA buffers mapping. (@Robin)
+>>>> - Explicitly set the DMA-mask of the child device in the channel
+>>>>     allocation proecedure. (@Robin)
+>>>> - Drop @Manivannan and @Vinod rb- and ab-tags due to significant patch
+>>>>     content change.
+>>>> ---
+>>>>    drivers/dma/dw-edma/dw-edma-core.c | 44 ++++++++++++++++++++++++++++++
+>>>>    1 file changed, 44 insertions(+)
+>>>>
+>>>> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+>>>> index e3671bfbe186..846518509753 100644
+>>>> --- a/drivers/dma/dw-edma/dw-edma-core.c
+>>>> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+>>>> @@ -6,9 +6,11 @@
+>>>>     * Author: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+>>>>     */
+>>>> +#include <linux/acpi.h>
+>>>>    #include <linux/module.h>
+>>>>    #include <linux/device.h>
+>>>>    #include <linux/kernel.h>
+>>>> +#include <linux/of_device.h>
+>>>>    #include <linux/dmaengine.h>
+>>>>    #include <linux/err.h>
+>>>>    #include <linux/interrupt.h>
+>>>> @@ -711,10 +713,52 @@ static irqreturn_t dw_edma_interrupt_common(int irq, void *data)
+>>>>    static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
+>>>>    {
+>>>>    	struct dw_edma_chan *chan = dchan2dw_edma_chan(dchan);
+>>>> +	struct device *dev = chan->dw->chip->dev;
+>>>> +	int ret;
+>>>>    	if (chan->status != EDMA_ST_IDLE)
+>>>>    		return -EBUSY;
+>>>> +	/* Bypass the dma-ranges based memory regions mapping for the eDMA
+>>>> +	 * controlled from the CPU/Application side since in that case
+>>>> +	 * the local memory address is left untranslated.
+>>>> +	 */
+>>>> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> 
+> 
+>>>> +		ret = dma_coerce_mask_and_coherent(&dchan->dev->device,
+>>>> +						   DMA_BIT_MASK(64));
+>>>> +		if (ret) {
+>>
+>> Setting a 64-bit mask should never fail, especially on any platform that
+>> will actually run this code.
+>>
+>>>> +			ret = dma_coerce_mask_and_coherent(&dchan->dev->device,
+>>>> +							   DMA_BIT_MASK(32));
+> 
+> Indeed. I can just drop the 32-bit mask test then. (But I'd retain the
+> error check anyway.)
+> 
+> The problem is that actual device DMA-addressing capability is
+> determined by the MASTER_BUS_ADDR_WIDTH IP-core synthesize parameter.
+> I can't predict its value from this generic code since it isn't
+> auto-detectable and is platform-specific. That's why back then in
+> our discussion I was insisting on setting the mask in the low-level
+> device drivers. But after the commit 423511ec23e2 ("PCI: dwc: Drop
+> dependency on ZONE_DMA32") it turned to be pointless now since the
+> DMA-mask would be overwritten by the generic DW PCIe driver code anyway.
+> What do you suggest then in this regard? Just keep setting the 64-bit
+> mask only? This will work for my platform, but will fail for the
+> devices with AXI-bus address of only 32-bits width.
 
-Alexei mentioned we could now move these ^^^ into kernel module:
-  https://lore.kernel.org/bpf/CAADnVQJ4xaAacOUpzMG+bm2WK5u=1YLo5kLUL+RP3JZGW3Sfww@mail.gmail.com/
+OK, but you already have that problem either way. The point of 
+dma_set_mask() et al is to inform the DMA API of your device's 
+capability - setting a 64-bit mask is saying "I can use 64-bit addresses 
+if you can" to the DMA layer, and as I say the DMA layer is almost 
+always going to respond "indeed I can, let's do that". If the real DMA 
+mask is platform-specific then you need to pass a platform-specific 
+value here.
 
-would it help? not sure objtool scans modules as well
+>>>> +			if (ret)
+>>>> +				return ret;
+>>>> +		}
+>>>> +
+>>>> +		if (dev_of_node(dev)) {
+>>>> +			struct device_node *node = dev_of_node(dev);
+>>>> +
+>>>> +			ret = of_dma_configure(&dchan->dev->device, node, true);
+>>>> +		} else if (has_acpi_companion(dev)) {
+>>
+> 
+>> Can this can ever happen? AFAICS there's no ACPI binding to match and probe
+>> the DWC driver, at best it could only probe as a standard PNP0A08 host
+>> bridge which wouldn't know anything about eDMA anyway.
+> 
+> There are several ACPI-based platforms with DW PCIe controllers:
+> pcie-tegra194-acpi.c, pcie-al.c, pcie-hisi.c. All of them are fully
+> ECAM-based so no DW eDMA probing from the Linux kernel implied. But
+> these are still DW PCIe controllers and they or some other ones can
+> have eDMA embedded. Do you think it won't be ever possible to either
+> directly handle these controllers (bypassing the ECAM interface) or
+> have a DW PCIe device accessed via the ACPI bindings?
 
-but we'd still need fix for bpf_obj_new_impl/bpf_obj_drop_impl below
+It's not entirely impossible, but would require new ACPI bindings and 
+code changes to the dw-pci driver, so if somebody ever did do that work 
+they should be responsible for any required changes at this end as well. 
+There's no point adding untested dead code now, to maintain indefinitely 
+just for the theoretical possibility that someone might ever make it 
+reachable.
 
-jirka
+> Note basically what I've implemented here was based on the
+> platform_dma_configure() DMA-configuration code pattern. I thought it
+> was a reasonable choice since this code path is executed for the
+> platform devices only (implied by the DW_EDMA_CHIP_LOCAL flag
+> semantic).
+> 
+> On the second thought if the problem in subject is only specific to
+> the DT-based platforms, then I could just skip channel device
+> initialization here for the platform devices with no OF-node detected.
+> So the question is is it specific to the DT-based platforms only?
 
-> >  
-> >  We have some other function like this. For example, some newly added
-> >  functions like bpf_obj_new_impl(), bpf_obj_drop_impl(), do they have
-> >  the same missing endbr problem? If this is the case, we need a
-> >  general solution.
-> >
+I think you still want the DW_EDMA_CHIP_LOCAL flag, since the PCI 
+endpoint device in the dw-edma-pcie case may have an of_node on some 
+platforms, and in that case overriding the chan_dma_dev setup would be 
+wrong. When the flag is set, though, we can simply assume dev_of_node() 
+is valid since it's the only possible way for that to happen (and if 
+someone does ever break that assumption in future, it will likely make 
+itself noticed).
+
+> (Before answering to the question above please read the last comment
+> in this message.)
 > 
-> bpf_obj_new_impl(), bpf_obj_drop_impl() also miss the ENDBR. Below is
-> the disassembly on bpf-next kernel:
+>>
+>>>> +			struct acpi_device *adev = to_acpi_device_node(dev->fwnode);
+>>>> +
+>>>> +			ret = acpi_dma_configure(&dchan->dev->device,
+>>>> +						 acpi_get_dma_attr(adev));
+>>>> +		} else {
+>>>> +			ret = -EINVAL;
+>>>> +		}
+>>>> +
+>>>> +		if (ret)
+>>>> +			return ret;
+>>>> +
+>>>> +		if (dchan->dev->device.dma_range_map) {
+>>>> +			kfree(dchan->dev->device.dma_range_map);
+>>>> +			dchan->dev->device.dma_range_map = NULL;
+>>>> +		}
+>>
 > 
-> (gdb) disas bpf_obj_drop_impl
-> Dump of assembler code for function bpf_obj_drop_impl:
->    0xffffffff81288e40 <+0>:     nopw   (%rax)
->    0xffffffff81288e44 <+4>:     nopl   0x0(%rax,%rax,1)
->    0xffffffff81288e49 <+9>:     push   %rbp
->    ...
+>> Ugh, I guess this is still here because now you're passing the channel
+>> device to of_dma_configure() such that it looks like a PCI child :(
 > 
-> (gdb) disas bpf_obj_new_impl
-> Dump of assembler code for function bpf_obj_new_impl:
->    0xffffffff81288cd0 <+0>:     nopw   (%rax)
->    0xffffffff81288cd4 <+4>:     nopl   0x0(%rax,%rax,1)
->    0xffffffff81288cd9 <+9>:     push   %rbp
->    ...
+> No. It's still here because I successfully missed your email in my
+> work inbox so I thought you didn't fix that dma-ranges peculiarity of
+> the PCIe-host nodes.(
 > 
-> The first insn in the bpf_obj_new_impl has been converted from ENDBR to
-> nopw by objtool. If the function is indirectly called on IBT enabled CPU
-> (Tigerlake for example), #CP raise.
+>>
+>> Can we just set "chan->dev->device.of_node = dev->of_node;" beforehand so it
+>> works as expected (with f1ad5338a4d5 in place) and we don't need to be
+>> messing with the dma_range_map details at all? Note that that isn't as hacky
+>> as it might sound - it's a relatively well-established practice in places
+>> like I2C and SPI, and in this case it seems perfectly appropriate
+>> semantically as well.
 > 
-> Looks like the possible fix in this patch is general?
-> If we don't want to seal a funciton, we use macro IBT_NOSEAL to claim.
-> IBT_NOSEAL just creates throwaway dummy compile-time references to the
-> functions. The section is already thrown away when kernel run. See
-> commit e27e5bea956c by Josh Poimboeuf.
-> 
-> > >
-> > > but it may be called from bpf program as kfunc. (no other caller from
-> > > kernel)
-> > >
-> > > This fix creates dummy references to destructor kfuncs so ENDBR stay
-> > > there.
-> > >
-> > > Also modify macro XXX_NOSEAL slightly:
-> > > - ASM_IBT_NOSEAL now stands for pure asm
-> > > - IBT_NOSEAL can be used directly in C
-> > >
-> > > Signed-off-by: Chen Hu <hu1.chen@intel.com>
-> > > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> > > ---
-> > > v3:
-> > > - Macro go to IBT related header as suggested by Jiri Olsa
-> > > - Describe reference to the func clearly in commit message as suggested
-> > >    by Peter Zijlstra and Jiri Olsa
-> > >   v2: https://lore.kernel.org/all/20221122073244.21279-1-hu1.chen@intel.com/
-> > >
-> > > v1: https://lore.kernel.org/all/20221121085113.611504-1-hu1.chen@intel.com/
-> > >
-> > >   arch/x86/include/asm/ibt.h | 6 +++++-
-> > >   arch/x86/kvm/emulate.c     | 2 +-
-> > >   net/bpf/test_run.c         | 5 +++++
-> > >   3 files changed, 11 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/arch/x86/include/asm/ibt.h b/arch/x86/include/asm/ibt.h
-> > > index 9b08082a5d9f..be86dc31661c 100644
-> > > --- a/arch/x86/include/asm/ibt.h
-> > > +++ b/arch/x86/include/asm/ibt.h
-> > > @@ -36,11 +36,14 @@
-> > >    * the function as needing to be "sealed" (i.e. ENDBR converted to NOP by
-> > >    * apply_ibt_endbr()).
-> > >    */
-> > > -#define IBT_NOSEAL(fname)                \
-> > > +#define ASM_IBT_NOSEAL(fname)                \
-> > >       ".pushsection .discard.ibt_endbr_noseal\n\t"    \
-> > >       _ASM_PTR fname "\n\t"                \
-> > >       ".popsection\n\t"
-> > >   +#define IBT_NOSEAL(name)                \
-> > > +    asm(ASM_IBT_NOSEAL(#name))
-> > > +
-> > >   static inline __attribute_const__ u32 gen_endbr(void)
-> > >   {
-> > >       u32 endbr;
-> > > @@ -94,6 +97,7 @@ extern __noendbr void ibt_restore(u64 save);
-> > >   #ifndef __ASSEMBLY__
-> > >     #define ASM_ENDBR
-> > > +#define ASM_IBT_NOSEAL(name)
-> > >   #define IBT_NOSEAL(name)
-> > >     #define __noendbr
-> > > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> > > index 4a43261d25a2..d870c8bb5831 100644
-> > > --- a/arch/x86/kvm/emulate.c
-> > > +++ b/arch/x86/kvm/emulate.c
-> > > @@ -327,7 +327,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
-> > >       ".type " name ", @function \n\t" \
-> > >       name ":\n\t" \
-> > >       ASM_ENDBR \
-> > > -    IBT_NOSEAL(name)
-> > > +    ASM_IBT_NOSEAL(name)
-> > >     #define FOP_FUNC(name) \
-> > >       __FOP_FUNC(#name)
-> > > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > > index fcb3e6c5e03c..9e9c8e8d50d7 100644
-> > > --- a/net/bpf/test_run.c
-> > > +++ b/net/bpf/test_run.c
-> > > @@ -601,6 +601,11 @@ noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
-> > >   {
-> > >   }
-> > >   +#ifdef CONFIG_X86_KERNEL_IBT
-> > > +IBT_NOSEAL(bpf_kfunc_call_test_release);
-> > > +IBT_NOSEAL(bpf_kfunc_call_memb_release);
-> > > +#endif
-> > > +
-> > >   noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
-> > >   {
-> > >       WARN_ON_ONCE(1);
+> Of course we can. But now, thanks to your commit f1ad5338a4d5 ("of:
+> Fix "dma-ranges" handling for bus controllers"), there is no point in
+> any dma-ranges hack here because the dma-ranges property is no longer
+> parsed for the PCIe-host platform device. I can and will just drop the
+> custom DMA-channel device initialization from the patch. The only
+> issue left to solve is about setting the DMA-mask. Please see my notes
+> above regarding that problem.
+
+Ah, I assumed you'd still want to keep the chan_dma_dev setup for the 
+sake of independent DMA masks, at least until we get a better solution 
+for the MSI stuff. If you're happy with the compromise of going back to 
+using the real host device to keep things simple, that's fine by me.
+
+Thanks,
+Robin.
