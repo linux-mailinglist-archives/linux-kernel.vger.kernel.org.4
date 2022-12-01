@@ -2,128 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E2463ED65
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F387F63ED67
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiLAKOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S229956AbiLAKO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiLAKOi (ORCPT
+        with ESMTP id S230035AbiLAKOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:14:38 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153B89208E;
-        Thu,  1 Dec 2022 02:14:37 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NNBkv0lQtz4f3l7D;
-        Thu,  1 Dec 2022 18:14:31 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgCHL66Ifohjq42HBQ--.58049S3;
-        Thu, 01 Dec 2022 18:14:34 +0800 (CST)
-Subject: Re: [PATCH -next v2 9/9] blk-iocost: fix walk_list corruption
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-10-linan122@huawei.com>
- <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
- <c028dd77-cabf-edd6-c893-8ee24762ac8c@huaweicloud.com>
- <Y4h7RxdT83g+zFN0@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <de04965e-1341-3053-0f4b-395b8390d00c@huaweicloud.com>
-Date:   Thu, 1 Dec 2022 18:14:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 1 Dec 2022 05:14:48 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1445A934DB;
+        Thu,  1 Dec 2022 02:14:41 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p0gaU-0007Pe-IB; Thu, 01 Dec 2022 11:14:38 +0100
+Message-ID: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
+Date:   Thu, 1 Dec 2022 11:14:38 +0100
 MIME-Version: 1.0
-In-Reply-To: <Y4h7RxdT83g+zFN0@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgCHL66Ifohjq42HBQ--.58049S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF1UAF1UKw4rJw4UZrykGrg_yoW8Zr4kpF
-        WDWF9xC3yjgr42gayDXws8trnakwn5Kr48Jw18Ga1Fyryagw1xt3WkZr98GF48ZFsrJrW3
-        Zr4Fg3y3CFWjk3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Luca Coelho <luciano.coelho@intel.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, Dave <chiluk@ubuntu.com>
+Subject: =?UTF-8?Q?=5bregression=5d_Bug=c2=a0216753_-_6e_6_ghz_bands_are_dis?=
+ =?UTF-8?Q?abled_since_5=2e16_on_intel_ax211?=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669889681;2c4e8b72;
+X-HE-SMSGID: 1p0gaU-0007Pe-IB
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, this is your Linux kernel regression tracker.
 
-ÔÚ 2022/12/01 18:00, Tejun Heo Ð´µÀ:
-> On Thu, Dec 01, 2022 at 09:19:54AM +0800, Yu Kuai wrote:
->>>> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
->>>> index 710cf63a1643..d2b873908f88 100644
->>>> --- a/block/blk-iocost.c
->>>> +++ b/block/blk-iocost.c
->>>> @@ -2813,13 +2813,14 @@ static void ioc_rqos_exit(struct rq_qos *rqos)
->>>>    {
->>>>    	struct ioc *ioc = rqos_to_ioc(rqos);
->>>> +	del_timer_sync(&ioc->timer);
->>>> +
->>>>    	blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
->>>>    	spin_lock_irq(&ioc->lock);
->>>>    	ioc->running = IOC_STOP;
->>>>    	spin_unlock_irq(&ioc->lock);
->>>> -	del_timer_sync(&ioc->timer);
->>>
->>> I don't about this workaround. Let's fix properly?
->>
->> Ok, and by the way, is there any reason to delete timer after
->> deactivate policy? This seems a litter wreid to me.
+Luca, I noticed a regression report in bugzilla where I'd like your
+advice on. To quote https://bugzilla.kernel.org/show_bug.cgi?id=216753
+
+> It looks like the self-managed regulatory information is causing the 6ghz band to be disabled on my AX211 (in the US).  
+> iw reg get shows no 6ghz bands (output at the bottom).
 > 
-> ioc->running is what controls whether the timer gets rescheduled or not. If
-> we don't shut that down, the timer may as well get rescheduled after being
-> deleted. Here, the only extra activation point is IO issue which shouldn't
-> trigger during rq_qos_exit, so the ordering shouldn't matter but this is the
-> right order for anything which can get restarted.
+> $ sudo iw phy0 channel 
+> ...
+> Band 4:
+> 	* 5955 MHz [1] (disabled)
+> 	* 5975 MHz [5] (disabled)
+> 	* 5995 MHz [9] (disabled)
+>         ....(continues with all disabled 
+>         * 7115 MHz [233] (disabled)
+> ...
+> 
+> I was able to narrow this down to having been introduced during the 5.16 development window, as 5.15.79 linux-stable kernel works and the 5.16.12 does 
+> not (earlier builds of 5.16 kernel fail to boot on my machine for some reason). 
+> 
+> I found https://community.frame.work/t/kernel-5-16-6ghz-disabled-ax210/15675/5
+> and they imply that this regression was introduced by 
+> 698b166ed3464e1604a0e6a3e23cc1b529a5adc1
+> I haven't independently verified this commit as the definitive issue.
 
-Thanks for the explanation.
+You authored 698b166ed346 ("iwlwifi: mvm: read 6E enablement flags from
+DSM and pass to FW"). As it is a regressions is ideally should be dealt
+with. But this area in tricky due to the legal implications. Hence I
+wonder: is there anything we can do about this, or is this simply a case
+where we have to bite the bullet and live with this regression?
 
-I'm trying to figure out how to make sure child blkg pins it's parent,
-btw, do you think following cleanup make sense?
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index a645184aba4a..6ad8791af9d7 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -2810,13 +2810,13 @@ static void ioc_rqos_exit(struct rq_qos *rqos)
-  {
-         struct ioc *ioc = rqos_to_ioc(rqos);
-
--       blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
--
-         spin_lock_irq(&ioc->lock);
-         ioc->running = IOC_STOP;
-         spin_unlock_irq(&ioc->lock);
-
-         del_timer_sync(&ioc->timer);
-+       blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
-+
-         free_percpu(ioc->pcpu_stat);
-         kfree(ioc);
-  }
-
-Thanks,
-Kuai
-
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
