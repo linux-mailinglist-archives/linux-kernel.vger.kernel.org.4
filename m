@@ -2,147 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F025F63EA87
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0105C63EA8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiLAHtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S229756AbiLAHud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 02:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLAHtK (ORCPT
+        with ESMTP id S229711AbiLAHub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:49:10 -0500
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7C809442C1;
-        Wed, 30 Nov 2022 23:49:06 -0800 (PST)
-Received: from mail.didiglobal.com (unknown [10.79.71.35])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id EDC44110021101;
-        Thu,  1 Dec 2022 15:49:04 +0800 (CST)
-Received: from ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) by
- ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 1 Dec 2022 15:49:04 +0800
-Received: from ZJY03-ACTMBX-05.didichuxing.com ([fe80::1dcd:f7bf:746e:c769])
- by ZJY03-ACTMBX-05.didichuxing.com ([fe80::1dcd:f7bf:746e:c769%8]) with mapi
- id 15.01.2375.017; Thu, 1 Dec 2022 15:49:04 +0800
-X-MD-Sfrom: chengkaitao@didiglobal.com
-X-MD-SrcIP: 10.79.71.35
-From:   =?utf-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
-        <chengkaitao@didiglobal.com>
-To:     "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>
-CC:     Tao pilgrim <pilgrimtao@gmail.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Thread-Topic: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Thread-Index: AQHZBK+NwNVzWF9Xk0ibAn/rxGrWSq5XnGYA//+FgwCAAVYiAIAAMVUA
-Date:   Thu, 1 Dec 2022 07:49:04 +0000
-Message-ID: <5019F6D4-D341-4A5E-BAA1-1359A090114A@didiglobal.com>
-In-Reply-To: <E5A5BCC3-460E-4E81-8DD3-88B4A2868285@didiglobal.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.79.64.101]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <55EEAD05261B624DAB9E7E4EE8B22659@didichuxing.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 02:50:31 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B342849B53;
+        Wed, 30 Nov 2022 23:50:29 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN7Xh2vh0z8RV6L;
+        Thu,  1 Dec 2022 15:50:28 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2B17oFIc005759;
+        Thu, 1 Dec 2022 15:50:15 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 15:50:17 +0800 (CST)
+Date:   Thu, 1 Dec 2022 15:50:17 +0800 (CST)
+X-Zmail-TransId: 2af963885cb9ffffffff8cf1090a
+X-Mailer: Zmail v1.0
+Message-ID: <202212011550176254553@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <dmitry.torokhov@gmail.com>
+Cc:     <jiangjian@cdjrlc.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogbW91c2U6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B17oFIc005759
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63885CC4.000 by FangMail milter!
+X-FangMail-Envelope: 1669881028/4NN7Xh2vh0z8RV6L/63885CC4.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63885CC4.000/4NN7Xh2vh0z8RV6L
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QXQgMjAyMi0xMi0wMSAwNzoyOToxMSwgIlJvbWFuIEd1c2hjaGluIiA8cm9tYW4uZ3VzaGNoaW5A
-bGludXguZGV2PiB3cm90ZToNCj5PbiBXZWQsIE5vdiAzMCwgMjAyMiBhdCAwMzowMTo1OFBNICsw
-ODAwLCBjaGVuZ2thaXRhbyB3cm90ZToNCj4+IEZyb206IGNoZW5na2FpdGFvIDxwaWxncmltdGFv
-QGdtYWlsLmNvbT4NCj4+IA0KPj4gV2UgY3JlYXRlZCBhIG5ldyBpbnRlcmZhY2UgPG1lbW9yeS5v
-b20ucHJvdGVjdD4gZm9yIG1lbW9yeSwgSWYgdGhlcmUgaXMNCj4+IHRoZSBPT00ga2lsbGVyIHVu
-ZGVyIHBhcmVudCBtZW1vcnkgY2dyb3VwLCBhbmQgdGhlIG1lbW9yeSB1c2FnZSBvZiBhDQo+PiBj
-aGlsZCBjZ3JvdXAgaXMgd2l0aGluIGl0cyBlZmZlY3RpdmUgb29tLnByb3RlY3QgYm91bmRhcnks
-IHRoZSBjZ3JvdXAncw0KPj4gdGFza3Mgd29uJ3QgYmUgT09NIGtpbGxlZCB1bmxlc3MgdGhlcmUg
-aXMgbm8gdW5wcm90ZWN0ZWQgdGFza3MgaW4gb3RoZXINCj4+IGNoaWxkcmVuIGNncm91cHMuIEl0
-IGRyYXdzIG9uIHRoZSBsb2dpYyBvZiA8bWVtb3J5Lm1pbi9sb3c+IGluIHRoZQ0KPj4gaW5oZXJp
-dGFuY2UgcmVsYXRpb25zaGlwLg0KPj4gDQo+PiBJdCBoYXMgdGhlIGZvbGxvd2luZyBhZHZhbnRh
-Z2VzLA0KPj4gMS4gV2UgaGF2ZSB0aGUgYWJpbGl0eSB0byBwcm90ZWN0IG1vcmUgaW1wb3J0YW50
-IHByb2Nlc3Nlcywgd2hlbiB0aGVyZQ0KPj4gaXMgYSBtZW1jZydzIE9PTSBraWxsZXIuIFRoZSBv
-b20ucHJvdGVjdCBvbmx5IHRha2VzIGVmZmVjdCBsb2NhbCBtZW1jZywNCj4+IGFuZCBkb2VzIG5v
-dCBhZmZlY3QgdGhlIE9PTSBraWxsZXIgb2YgdGhlIGhvc3QuDQo+PiAyLiBIaXN0b3JpY2FsbHks
-IHdlIGNhbiBvZnRlbiB1c2Ugb29tX3Njb3JlX2FkaiB0byBjb250cm9sIGEgZ3JvdXAgb2YNCj4+
-IHByb2Nlc3NlcywgSXQgcmVxdWlyZXMgdGhhdCBhbGwgcHJvY2Vzc2VzIGluIHRoZSBjZ3JvdXAg
-bXVzdCBoYXZlIGENCj4+IGNvbW1vbiBwYXJlbnQgcHJvY2Vzc2VzLCB3ZSBoYXZlIHRvIHNldCB0
-aGUgY29tbW9uIHBhcmVudCBwcm9jZXNzJ3MNCj4+IG9vbV9zY29yZV9hZGosIGJlZm9yZSBpdCBm
-b3JrcyBhbGwgY2hpbGRyZW4gcHJvY2Vzc2VzLiBTbyB0aGF0IGl0IGlzDQo+PiB2ZXJ5IGRpZmZp
-Y3VsdCB0byBhcHBseSBpdCBpbiBvdGhlciBzaXR1YXRpb25zLiBOb3cgb29tLnByb3RlY3QgaGFz
-IG5vDQo+PiBzdWNoIHJlc3RyaWN0aW9ucywgd2UgY2FuIHByb3RlY3QgYSBjZ3JvdXAgb2YgcHJv
-Y2Vzc2VzIG1vcmUgZWFzaWx5LiBUaGUNCj4+IGNncm91cCBjYW4ga2VlcCBzb21lIG1lbW9yeSwg
-ZXZlbiBpZiB0aGUgT09NIGtpbGxlciBoYXMgdG8gYmUgY2FsbGVkLg0KPg0KPkl0IHJlbWluZHMg
-bWUgb3VyIGF0dGVtcHRzIHRvIHByb3ZpZGUgYSBtb3JlIHNvcGhpc3RpY2F0ZWQgY2dyb3VwLWF3
-YXJlIG9vbQ0KPmtpbGxlci4gDQoNCkFzIHlvdSBzYWlkLCBJIGFsc28gbGlrZSBzaW1wbGUgc3Ry
-YXRlZ2llcyBhbmQgY29uY2lzZSBjb2RlIHZlcnkgbXVjaCwgc28gaW4gDQp0aGUgZGVzaWduIG9m
-IG9vbS5wcm90ZWN0LCB3ZSByZXVzZSB0aGUgZXZhbHVhdGlvbiBtZXRob2Qgb2Ygb29tX3Njb3Jl
-LCANCndlIGRyYXdzIG9uIHRoZSBsb2dpYyBvZiA8bWVtb3J5Lm1pbi9sb3c+IGluIHRoZSBpbmhl
-cml0YW5jZSByZWxhdGlvbnNoaXAuIA0KTWVtb3J5Lm1pbi9sb3cgaGF2ZSBiZWVuIGRlbW9uc3Ry
-YXRlZCBmb3IgYSBsb25nIHRpbWUuIEkgZGlkIGl0IHRvIHJlZHVjZSANCnRoZSBidXJkZW4gb24g
-dGhlIGtlcm5lbC4NCg0KPlRoZSBwcm9ibGVtIGlzIHRoYXQgdGhlIGRlY2lzaW9uIHdoaWNoIHBy
-b2Nlc3MoZXMpIHRvIGtpbGwgb3IgcHJlc2VydmUNCj5pcyBpbmRpdmlkdWFsIHRvIGEgc3BlY2lm
-aWMgd29ya2xvYWQgKGFuZCBjYW4gYmUgZXZlbiB0aW1lLWRlcGVuZGVudA0KPmZvciBhIGdpdmVu
-IHdvcmtsb2FkKS4gDQoNCkl0IGlzIGNvcnJlY3QgdG8ga2lsbCBhIHByb2Nlc3Mgd2l0aCBoaWdo
-IHdvcmtsb2FkLCBidXQgaXQgbWF5IG5vdCBiZSB0aGUgDQptb3N0IGFwcHJvcHJpYXRlLiBJIHRo
-aW5rIHRoZSBzcGVjaWZpYyBwcm9jZXNzIHRvIGtpbGwgbmVlZHMgdG8gYmUgZGVjaWRlZCANCmJ5
-IHRoZSB1c2VyLiBJIHRoaW5rIGl0IGlzIHRoZSBvcmlnaW5hbCBpbnRlbnRpb24gb2Ygc2NvcmVf
-YWRqIGRlc2lnbi4NCg0KPlNvIGl0J3MgcmVhbGx5IGhhcmQgdG8gY29tZSB1cCB3aXRoIGFuIGlu
-LWtlcm5lbA0KPm1lY2hhbmlzbSB3aGljaCBpcyBhdCB0aGUgc2FtZSB0aW1lIGZsZXhpYmxlIGVu
-b3VnaCB0byB3b3JrIGZvciB0aGUgbWFqb3JpdHkNCj5vZiB1c2VycyBhbmQgcmVsaWFibGUgZW5v
-dWdoIHRvIHNlcnZlIGFzIHRoZSBsYXN0IG9vbSByZXNvcnQgbWVhc3VyZSAod2hpY2gNCj5pcyB0
-aGUgYmFzaWMgZ29hbCBvZiB0aGUga2VybmVsIG9vbSBraWxsZXIpLg0KPg0KT3VyIGdvYWwgaXMg
-dG8gZmluZCBhIG1ldGhvZCB0aGF0IGlzIGxlc3MgaW50cnVzaXZlIHRvIHRoZSBleGlzdGluZyAN
-Cm1lY2hhbmlzbXMgb2YgdGhlIGtlcm5lbCwgYW5kIGZpbmQgYSBtb3JlIHJlYXNvbmFibGUgc3Vw
-cGxlbWVudCANCm9yIGFsdGVybmF0aXZlIHRvIHRoZSBsaW1pdGF0aW9ucyBvZiBzY29yZV9hZGou
-DQoNCj5QcmV2aW91c2x5IHRoZSBjb25zZW5zdXMgd2FzIHRvIGtlZXAgdGhlIGluLWtlcm5lbCBv
-b20ga2lsbGVyIGR1bWIgYW5kIHJlbGlhYmxlDQo+YW5kIGltcGxlbWVudCBjb21wbGV4IHBvbGlj
-aWVzIGluIHVzZXJzcGFjZSAoZS5nLiBzeXN0ZW1kLW9vbWQgZXRjKS4NCj4NCj5JcyB0aGVyZSBh
-IHJlYXNvbiB3aHkgc3VjaCBhcHByb2FjaCBjYW4ndCB3b3JrIGluIHlvdXIgY2FzZT8NCg0KSSB0
-aGluayB0aGF0IGFzIGtlcm5lbCBkZXZlbG9wZXJzLCB3ZSBzaG91bGQgdHJ5IG91ciBiZXN0IHRv
-IHByb3ZpZGUgDQp1c2VycyB3aXRoIHNpbXBsZXIgYW5kIG1vcmUgcG93ZXJmdWwgaW50ZXJmYWNl
-cy4gSXQgaXMgY2xlYXIgdGhhdCB0aGUgDQpjdXJyZW50IG9vbSBzY29yZSBtZWNoYW5pc20gaGFz
-IG1hbnkgbGltaXRhdGlvbnMuIFVzZXJzIG5lZWQgdG8gDQpkbyBhIGxvdCBvZiB0aW1lZCBsb29w
-IGRldGVjdGlvbiBpbiBvcmRlciB0byBjb21wbGV0ZSB3b3JrIHNpbWlsYXIgDQp0byB0aGUgb29t
-IHNjb3JlIG1lY2hhbmlzbSwgb3IgZGV2ZWxvcCBhIG5ldyBtZWNoYW5pc20ganVzdCB0byANCnNr
-aXAgdGhlIGltcGVyZmVjdCBvb20gc2NvcmUgbWVjaGFuaXNtLiBUaGlzIGlzIGFuIGluZWZmaWNp
-ZW50IGFuZCANCmZvcmNlZCBiZWhhdmlvcg0KDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudCENCg0K
+From: ye xingchen <ye.xingchen@zte.com.cn>
+
+Replace the open-code with sysfs_emit() to simplify the code.
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/input/mouse/cyapa.c      | 14 +++++++-------
+ drivers/input/mouse/cyapa_gen3.c |  2 +-
+ drivers/input/mouse/cyapa_gen5.c |  2 +-
+ drivers/input/mouse/cyapa_gen6.c |  2 +-
+ 4 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/input/mouse/cyapa.c b/drivers/input/mouse/cyapa.c
+index 77cc653edca2..d32643ab9ed1 100644
+--- a/drivers/input/mouse/cyapa.c
++++ b/drivers/input/mouse/cyapa.c
+@@ -756,15 +756,15 @@ static ssize_t cyapa_show_suspend_scanrate(struct device *dev,
+
+ 	switch (pwr_cmd) {
+ 	case PWR_MODE_BTN_ONLY:
+-		len = scnprintf(buf, PAGE_SIZE, "%s\n", BTN_ONLY_MODE_NAME);
++		len = sysfs_emit(buf, "%s\n", BTN_ONLY_MODE_NAME);
+ 		break;
+
+ 	case PWR_MODE_OFF:
+-		len = scnprintf(buf, PAGE_SIZE, "%s\n", OFF_MODE_NAME);
++		len = sysfs_emit(buf, "%s\n", OFF_MODE_NAME);
+ 		break;
+
+ 	default:
+-		len = scnprintf(buf, PAGE_SIZE, "%u\n",
++		len = sysfs_emit(buf, "%u\n",
+ 				cyapa->gen == CYAPA_GEN3 ?
+ 					cyapa_pwr_cmd_to_sleep_time(pwr_cmd) :
+ 					sleep_time);
+@@ -877,7 +877,7 @@ static ssize_t cyapa_show_rt_suspend_scanrate(struct device *dev,
+
+ 	mutex_unlock(&cyapa->state_sync_lock);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n",
++	return sysfs_emit(buf, "%u\n",
+ 			 cyapa->gen == CYAPA_GEN3 ?
+ 				cyapa_pwr_cmd_to_sleep_time(pwr_cmd) :
+ 				sleep_time);
+@@ -988,7 +988,7 @@ static ssize_t cyapa_show_fm_ver(struct device *dev,
+ 	error = mutex_lock_interruptible(&cyapa->state_sync_lock);
+ 	if (error)
+ 		return error;
+-	error = scnprintf(buf, PAGE_SIZE, "%d.%d\n", cyapa->fw_maj_ver,
++	error = sysfs_emit(buf, "%d.%d\n", cyapa->fw_maj_ver,
+ 			 cyapa->fw_min_ver);
+ 	mutex_unlock(&cyapa->state_sync_lock);
+ 	return error;
+@@ -1004,7 +1004,7 @@ static ssize_t cyapa_show_product_id(struct device *dev,
+ 	error = mutex_lock_interruptible(&cyapa->state_sync_lock);
+ 	if (error)
+ 		return error;
+-	size = scnprintf(buf, PAGE_SIZE, "%s\n", cyapa->product_id);
++	size = sysfs_emit(buf, "%s\n", cyapa->product_id);
+ 	mutex_unlock(&cyapa->state_sync_lock);
+ 	return size;
+ }
+@@ -1209,7 +1209,7 @@ static ssize_t cyapa_show_mode(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	size = scnprintf(buf, PAGE_SIZE, "gen%d %s\n",
++	size = sysfs_emit(buf, "gen%d %s\n",
+ 			cyapa->gen, cyapa_state_to_string(cyapa));
+
+ 	mutex_unlock(&cyapa->state_sync_lock);
+diff --git a/drivers/input/mouse/cyapa_gen3.c b/drivers/input/mouse/cyapa_gen3.c
+index a97f4acb6452..60c83bc71d84 100644
+--- a/drivers/input/mouse/cyapa_gen3.c
++++ b/drivers/input/mouse/cyapa_gen3.c
+@@ -860,7 +860,7 @@ static ssize_t cyapa_gen3_show_baseline(struct device *dev,
+
+ 	dev_dbg(dev, "Baseline report successful. Max: %d Min: %d\n",
+ 		max_baseline, min_baseline);
+-	ret = scnprintf(buf, PAGE_SIZE, "%d %d\n", max_baseline, min_baseline);
++	ret = sysfs_emit(buf, "%d %d\n", max_baseline, min_baseline);
+
+ out:
+ 	return ret;
+diff --git a/drivers/input/mouse/cyapa_gen5.c b/drivers/input/mouse/cyapa_gen5.c
+index abf42f77b4c5..4c57036e4281 100644
+--- a/drivers/input/mouse/cyapa_gen5.c
++++ b/drivers/input/mouse/cyapa_gen5.c
+@@ -2418,7 +2418,7 @@ static ssize_t cyapa_gen5_show_baseline(struct device *dev,
+ 		return resume_error ? resume_error : error;
+
+ 	/* 12. Output data strings */
+-	size = scnprintf(buf, PAGE_SIZE, "%d %d %d %d %d %d %d %d %d %d %d ",
++	size = sysfs_emit(buf, "%d %d %d %d %d %d %d %d %d %d %d ",
+ 		gidac_mutual_min, gidac_mutual_max, gidac_mutual_ave,
+ 		lidac_mutual_min, lidac_mutual_max, lidac_mutual_ave,
+ 		gidac_self_rx, gidac_self_tx,
+diff --git a/drivers/input/mouse/cyapa_gen6.c b/drivers/input/mouse/cyapa_gen6.c
+index 0caaf3e64215..b6f7c77c96c2 100644
+--- a/drivers/input/mouse/cyapa_gen6.c
++++ b/drivers/input/mouse/cyapa_gen6.c
+@@ -629,7 +629,7 @@ static ssize_t cyapa_gen6_show_baseline(struct device *dev,
+ 	if (error)
+ 		goto resume_scanning;
+
+-	size = scnprintf(buf, PAGE_SIZE, "%d %d %d %d %d %d ",
++	size = sysfs_emit(buf, "%d %d %d %d %d %d ",
+ 			data[0],  /* RX Attenuator Mutual */
+ 			data[1],  /* IDAC Mutual */
+ 			data[2],  /* RX Attenuator Self RX */
+-- 
+2.25.1
