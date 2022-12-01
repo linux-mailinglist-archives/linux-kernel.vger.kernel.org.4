@@ -2,201 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9462263FACD
+	by mail.lfdr.de (Postfix) with ESMTP id 4819763FACC
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiLAWpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S231522AbiLAWpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiLAWpo (ORCPT
+        with ESMTP id S231470AbiLAWpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:45:44 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC66C38;
-        Thu,  1 Dec 2022 14:45:42 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.27]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MUY5o-1pRJ9q0q2K-00QV4K; Thu, 01 Dec 2022 23:45:26 +0100
-Message-ID: <0f683076-43e6-3f65-e5e1-052059ce7c86@i2se.com>
-Date:   Thu, 1 Dec 2022 23:45:22 +0100
+        Thu, 1 Dec 2022 17:45:49 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4AE65FF;
+        Thu,  1 Dec 2022 14:45:48 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 62so2881256pgb.13;
+        Thu, 01 Dec 2022 14:45:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mz67COhiP2LIOSR/RjOjcqP515AruE68ATdaRH6nni8=;
+        b=Oxk08d7LgKIO11W2YXoWDp6N77NPHo4awIEjlThe1KatRgbufsRdv1EOloK/sIsqzO
+         jvIWN4M6ORdZmL0nk+OVwMmcad0Rll39eegzg+hXKs3DWJCwiwRC7Apml/RQX9mnbhQT
+         YQ0yY1ACQDY5J6Qp3qijLh/GR5Z66lQgq3jen0fIAefZ7/Llw+nG5ln/hG4Qf/6o9fPn
+         ieT9ql1qAQeNzDPTf0hDy2ZQ+pfV340gYX3gej01B1a+ivcoxfZTSovz4uWzOgnYiX5/
+         FC9ENBqRNG1JLaU/biOmKGDMFqd24XHZ03OEhFC1SGTm8vhxWO1mYO5Evicn9TAUY+eO
+         2uIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mz67COhiP2LIOSR/RjOjcqP515AruE68ATdaRH6nni8=;
+        b=MzOQfE6skP0plyUjZ9FqyyMPzSStLuajjpSXec787EoyXFQuj0Rbr8wz5u7vW1ZV9n
+         AIoWx3X7sanvoASx19+dMgQgRRb2qIbOuncMQG/SVbYzJY3H5+SQYlWY/41bQLj0Bmc8
+         4isw2nDRVI47NJFRpilFt3VaNLZ38/m1LL+6mfmVy+ntqK00wnmyRaKpPKN4RWZX01ip
+         vSs198QpioRX+kyERWOp4bhytRya0Eonql5k2uFghHPbeCYBYDQAjW1loCW3Z6u5lEb/
+         Dp+p7T3OqeCTZHfPWR0ZbfTnWmQqSqbRHPaz/C399uLOphPTl2AxEEXQ1AOXnHDQsk0x
+         AFxA==
+X-Gm-Message-State: ANoB5pnL/EdO0pm8eDC+Gm5huVoSRcGmMfP9w4DuPhcdarWnkTlKpgNr
+        ihzJkbJec+tsGHZsxLQaO+Om6UOHb2dqGzKgwpY=
+X-Google-Smtp-Source: AA0mqf44AXvVEUJV0E8tjOZWmdq5g2PebFd55FpDXlWOKp5M3htocvHLrqDql5SJAScaZGwcfDBNydfMw3AH9ZFYC/s=
+X-Received: by 2002:a63:105c:0:b0:46f:f72c:cdae with SMTP id
+ 28-20020a63105c000000b0046ff72ccdaemr44554126pgq.237.1669934748081; Thu, 01
+ Dec 2022 14:45:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 00/14] staging: vc04_services: bcm2835-isp support
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Naushir Patuck <naush@raspberrypi.com>,
-        David Plowman <david.plowman@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
- <fc2fb888-7742-123c-69c9-cdb156ff2d9f@i2se.com>
- <a56d7687-ee44-629c-1a9d-fa34e65e847f@ideasonboard.com>
- <bb16004f-8d5b-5794-8445-aa7e1a758ffa@i2se.com>
- <c73f7261-ec33-ec88-df3e-a34cf9b8015c@ideasonboard.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <c73f7261-ec33-ec88-df3e-a34cf9b8015c@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:AVI9HLFirIbBTe9u1s/kpHdsYNAsYCtTE1hCN3UyP/yXGQzfy7d
- ZGRAGDezR0tYOI1WUZ/7tPXgAvgx/nATHY222skj3dt02+nUvBml3huiupYPhfK/BTHQdJf
- 8NwGQihNa0M2TvjqOMz12w7HWOIY2ZGuDIWgLEMMWsnalIpy9WIAF3FwDyxUeo7v4Vdfweo
- XxjzDRzxv6fZ9AchqFj1Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:D6o8F6DY/+s=:WU5L+AmhqeWuHvQOWdr+6Y
- ilrs3AX/B74is7TQGcT4OJRzPXa3BW7pdo2oTs/vAtSI/PxYB2Y++bXe1ybE4tF4250JpCLv1
- SX0xo1uOnPwLNaak/Aijwp9NX6N/MmwufeE9b1Mvm0XqU6yTwxjzTHpk4srKDcdXDefCyDnqo
- v1QYoVqnmLdCmZzv1A6BM2VebmNVckU/uJzvjkcO6/0H8GqCCT3neIzAp+Mcy5jflrFPBz5GM
- q/z69jbcHih5v/Tuuvv8FFIzQNfd9vHTTCdxgoKPj75KSbeRqAQMckzydiewh7jWfUCFO6xEC
- mF8Ci0rJkxCCi16FfTUCG3wVzrch7dzXj2H4AD56dpN3pXosupxqa2sZ/gkTClPqarKCueVFr
- +1zKlOHJ2PYPSmPOqX08aJCZLULNIgubVXRD2uknegngu+CtCULVil+Wy4QAWeGTZpNkXD45k
- QDRdAtTqE65d1j04h8Y3GjJzxlA0Ush4uGJ9aLb4Q3T4/BfJG/K4A857wywBbptEUvsKjXFiK
- ivCqZSApkSc4GNKb/Qgt5iCrj7Fkcwqvh0df+BFdVLSXp7VeUTg2aOkcQGvXQFZhc8QHck7CB
- 3zQW1D6lErS0FCJQODwFPWYZb9ljZ1tnjutQnQDpsDBHKU0vnTzqZi/o4pNx8vVH6l1FqrAR7
- dckDDF/0yvp40OAQ39vNsKYbVYUq3fyvp5kS5Lz4+TbWw6d2TXCI+2+VZE7fdYd1xWtOY9Yy0
- RHHMiYZGQrKJXdtiByGrpzaQNzzghCu+vjuEHIz1GAItYeFOqClFGeY8HDDA7eQiTMhL2bJJm
- 0WsOgoc
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+ <Y36XchdgTCsMP4jT@cmpxchg.org> <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAHbLzkrmxyzH4R7a9sJQavrUyKCEiNYeA543+sdJLsgRPrwBwQ@mail.gmail.com>
+ <87a64ad1iz.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAHbLzkpVZf-3K0Ys8HG8x6D_XpPChB-H2XMYar7UwnNDeMiw8w@mail.gmail.com>
+ <87ilixatyw.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAHbLzkr_njh2xtAf6RME_Fe0TgTKdC4mcsUe24orqVScjibUrA@mail.gmail.com>
+ <87h6yfao37.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87h6yfao37.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 1 Dec 2022 14:45:36 -0800
+Message-ID: <CAHbLzkr9k8fvBGVskN1sMJiLX_JkWW7OrrscUrA0xASh+rYN7Q@mail.gmail.com>
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Mina Almasry <almasrymina@google.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+On Wed, Nov 30, 2022 at 5:52 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Yang Shi <shy828301@gmail.com> writes:
+>
+> > On Tue, Nov 29, 2022 at 9:33 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >>
+> >> Yang Shi <shy828301@gmail.com> writes:
+> >>
+> >> > On Mon, Nov 28, 2022 at 4:54 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >> >>
+> >> >> Yang Shi <shy828301@gmail.com> writes:
+> >> >>
+> >> >> > On Wed, Nov 23, 2022 at 9:52 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >> >> >>
+> >> >> >> Hi, Johannes,
+> >> >> >>
+> >> >> >> Johannes Weiner <hannes@cmpxchg.org> writes:
+> >> >> >> [...]
+> >> >> >> >
+> >> >> >> > The fallback to reclaim actually strikes me as wrong.
+> >> >> >> >
+> >> >> >> > Think of reclaim as 'demoting' the pages to the storage tier. If we
+> >> >> >> > have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+> >> >> >> > CXL and from CXL to storage. If we reclaim a page from RAM, it means
+> >> >> >> > we 'demote' it directly from RAM to storage, bypassing potentially a
+> >> >> >> > huge amount of pages colder than it in CXL. That doesn't seem right.
+> >> >> >> >
+> >> >> >> > If demotion fails, IMO it shouldn't satisfy the reclaim request by
+> >> >> >> > breaking the layering. Rather it should deflect that pressure to the
+> >> >> >> > lower layers to make room. This makes sure we maintain an aging
+> >> >> >> > pipeline that honors the memory tier hierarchy.
+> >> >> >>
+> >> >> >> Yes.  I think that we should avoid to fall back to reclaim as much as
+> >> >> >> possible too.  Now, when we allocate memory for demotion
+> >> >> >> (alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
+> >> >> >> kswapd reclaim on lower tier node to free some memory to avoid fall back
+> >> >> >> to reclaim on current (higher tier) node.  This may be not good enough,
+> >> >> >> for example, the following patch from Hasan may help via waking up
+> >> >> >> kswapd earlier.
+> >> >> >
+> >> >> > For the ideal case, I do agree with Johannes to demote the page tier
+> >> >> > by tier rather than reclaiming them from the higher tiers. But I also
+> >> >> > agree with your premature OOM concern.
+> >> >> >
+> >> >> >>
+> >> >> >> https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
+> >> >> >>
+> >> >> >> Do you know what is the next step plan for this patch?
+> >> >> >>
+> >> >> >> Should we do even more?
+> >> >> >
+> >> >> > In my initial implementation I implemented a simple throttle logic
+> >> >> > when the demotion is not going to succeed if the demotion target has
+> >> >> > not enough free memory (just check the watermark) to make migration
+> >> >> > succeed without doing any reclamation. Shall we resurrect that?
+> >> >>
+> >> >> Can you share the link to your throttle patch?  Or paste it here?
+> >> >
+> >> > I just found this on the mailing list.
+> >> > https://lore.kernel.org/linux-mm/1560468577-101178-8-git-send-email-yang.shi@linux.alibaba.com/
+> >>
+> >> Per my understanding, this patch will avoid demoting if there's no free
+> >> space on demotion target?  If so, I think that we should trigger kswapd
+> >> reclaiming on demotion target before that.  And we can simply avoid to
+> >> fall back to reclaim firstly, then avoid to scan as an improvement as
+> >> that in your patch above.
+> >
+> > Yes, it should. The rough idea looks like:
+> >
+> > if (the demote target is contended)
+> >     wake up kswapd
+> >     reclaim_throttle(VMSCAN_THROTTLE_DEMOTION)
+> >     retry demotion
+> >
+> > The kswapd is responsible for clearing the contention flag.
+>
+> We may do this, at least for demotion in kswapd.  But I think that this
+> could be the second step optimization after we make correct choice
+> between demotion/reclaim.  What if the pages in demotion target is too
+> hot to be reclaimed first?  Should we reclaim in fast memory node to
+> avoid OOM?
 
-Am 30.11.22 um 11:58 schrieb Umang Jain:
-> Hi Stefan,
+IMHO we can't avoid reclaiming from the fast nodes entirely if we
+prioritize avoiding OOMs. But it should happen very very rarely with
+the throttling logic or other methods. BTW did you run any test to see
+how many times vmscan reclaims from fast nodes instead of demotion
+with the current implementation for some typical workloads?
+
 >
-> On 11/27/22 6:56 AM, Stefan Wahren wrote:
->> Hi Umang,
->>
->> Am 26.11.22 um 17:26 schrieb Umang Jain:
->>> Hi Stefan
->>>
->>> On 11/26/22 8:12 PM, Stefan Wahren wrote:
->>>> Hi Umang,
->>>>
->>>> Am 21.11.22 um 22:47 schrieb Umang Jain:
->>>>> This series aims to upport bcm2835-isp from the RPi kernel [1] and 
->>>>> is a
->>>>> independent subset of earlier series [2] posted to upport CSI-2/CCP2
->>>>> receiver IP core("Unicam) + the ISP driver found in BCM283x and 
->>>>> compatible
->>>>> SoCs (namely BCM2711). Unicam is still under active development to 
->>>>> work
->>>>> with multistream support to get into mainline. Hence only the ISP 
->>>>> driver
->>>>> will remain the primary area of this series.
->>>>
->>>> thanks for working on this. But honestly i would prefer that vchiq 
->>>> comes out of staging before adding more features. As Greg said some 
->>>> time ago staging is not a place to "dump code and run away". These 
->>>> new files are in the same bad shape as the rest of vc04 before the 
->>>> clean-up here in staging started.
->>>
->>> Certainly, I am not here to do that - but I am still learning the 
->>> ropes.
->> no problem.
->>>
->>> If the staging issue is becoming a blocker for bcm2835-isp going 
->>> upstream, I would be happy to help here! Though I must mention that 
->>> I still have limited visibility so my aim would be to chart out a 
->>> plan of things needed to be done to get vc04_services out of staging!
->>
->> The vchiq driver is in staging since 2016, so every step forwards is 
->> good. Unfortunately all of the low hanging fruits has been gathered.
->>
->> For me the most important, but not to tricky steps to get vchiq out 
->> of staging would be:
->>
->> * Cleanup logging mechanism
->>
->> * Get rid of custom function return values
->>
->> There was already an attempt for this [1]
->>
->> * Get rid of all non essential global structures and create a proper per
->> device structure
->>
->>>
->>>>
->>>> I agree that VCSM is on the TODO list for vchiq, but this driver is 
->>>> not necessary for making bcm2835-audio & bcm2835-camera leave 
->>>> staging. It just binds more resources on a new feature.
+> Best Regards,
+> Huang, Ying
 >
-> bcm2835-camera is the legacy camera stack which probably need to be 
-> dropped from hereon...
-I don't not know if there any users left, so i would be careful here. 
-Can bcm2835-isp completely replace bcm2835-camera? Sorry, for this dumb 
-question but i'm not expert here.
->>>
->>> I see two TODO files in vc04_services:
->>>     ./bcm2835-camera/TODO
->>>     ./interface/TODO
->>>
->>> One of the bcm2835-camera TODO points to the vc-sm-cma driver 
->>> itself. So that's address in the series. The other remaining one - I 
->>> will need to take a deeper look before commenting on it.
->>>
->>> The main chunk of TODO are in vc04_services/interfaces/TODO. Doing a 
->>> cursory reading of them suggests that these apply to *all* 
->>> vc04_services components? Am I right?
->> Actually these applies just for the interfaces directory. Some of 
->> them could apply to the services, but this is no priority.
->
-> By no priority, you mean this doesn't affect the criteria required to 
-> ful-fill to get these out of staging?
-Correct
->>>
->>> Are these are the specific bits of cleanup you are referring to in 
->>> your comment?
->>
->> You mean about bcm2835-isp? There were too many changes to vchiq that 
->> i don't remember them all. The first that come to my mind was those 
->> fancy comment sections which is not kernel coding style. It has been 
->> removed.
->
-> No, I don't mean the bcm2835-isp changes (those are upcoming / 
-> out-of-tree still so...). I mean what are the specific bits / points 
-> that needs to be addressed to get vc04_services out of the staging.
-These were the points which i mentioned in my last email. They came from 
-interface/TODO.
->
-> You have mentioned it above now, so I'll follow up on those.
-That would be great :)
-> The many vchiq changes you referred to above comment (that you don't 
-> remember) are from [1] as well or some other series ?
-Sorry, for the confusing. The many changes i refer were the dozens of 
-clean up patches for vc04_interfaces in mainline staging since the last 
-years. [1] was just a single patch which has been accepted yet.
->
->>
->> [1] - 
->> https://lore.kernel.org/linux-staging/20220712181928.17547-1-jslebodn@redhat.com/
->>
->>>
->>>
->>>>
->>>> Unfortuntately i hadn't much time to work on vchiq by myself.
->>>>
->>>> Just my two cents
->>>> Stefan
->>>>
->>>
->>>
->>> _______________________________________________
->>> linux-arm-kernel mailing list
->>> linux-arm-kernel@lists.infradead.org
->>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
->
+> >>
+> >> > But it didn't have the throttling logic, I may not submit that version
+> >> > to the mailing list since we decided to drop this and merge mine and
+> >> > Dave's.
+> >> >
+> >> > Anyway it is not hard to add the throttling logic, we already have a
+> >> > few throttling cases in vmscan, for example, "mm/vmscan: throttle
+> >> > reclaim until some writeback completes if congested".
+> >> >>
+> >> >> > Waking kswapd sooner is fine to me, but it may be not enough, for
+> >> >> > example, the kswapd may not keep up so remature OOM may happen on
+> >> >> > higher tiers or reclaim may still happen. I think throttling the
+> >> >> > reclaimer/demoter until kswapd makes progress could avoid both. And
+> >> >> > since the lower tiers memory typically is quite larger than the higher
+> >> >> > tiers, so the throttle should happen very rarely IMHO.
+> >> >> >
+> >> >> >>
+> >> >> >> From another point of view, I still think that we can use falling back
+> >> >> >> to reclaim as the last resort to avoid OOM in some special situations,
+> >> >> >> for example, most pages in the lowest tier node are mlock() or too hot
+> >> >> >> to be reclaimed.
+> >> >> >>
+> >> >> >> > So I'm hesitant to design cgroup controls around the current behavior.
+> >> >>
+> >> >> Best Regards,
+> >> >> Huang, Ying
