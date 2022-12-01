@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75FC63F75F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9410063F73C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLASRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S230083AbiLASMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiLASRT (ORCPT
+        with ESMTP id S229669AbiLASMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:17:19 -0500
-X-Greylist: delayed 338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 10:17:17 PST
-Received: from out-93.mta0.migadu.com (out-93.mta0.migadu.com [IPv6:2001:41d0:1004:224b::5d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F761A07E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:17:17 -0800 (PST)
-Date:   Thu, 1 Dec 2022 18:11:33 +0000
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Ricardo Koller <ricarkol@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: arm64: Don't serialize if the access flag isn't
- set
-Message-ID: <Y4juVQNx9I0rzYFH@google.com>
-References: <20221129191946.1735662-1-oliver.upton@linux.dev>
- <20221129191946.1735662-3-oliver.upton@linux.dev>
- <Y4Zw/J3srTsZ57P7@google.com>
- <Y4Z2aWVEnluy+d3+@google.com>
+        Thu, 1 Dec 2022 13:12:05 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15CCB7DE2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:12:04 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id x16so1093741ilm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 10:12:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l3glljPevHLdaoBzLBWNwFXRN7RcGOCNYiinqEgq4/0=;
+        b=JS8Sj1+i5nHW2tpMIxi+z4ilQRStIWB7+Fq6pamNnjajP6dr9/CgROQGQANaTp+NvE
+         SWwAYvEE97hgruJDAF80n93mtjhVOSPt7U+JNdZXvaU4JqVKkOoTfEHXsrqgJmwux2Qp
+         GOXX+lv/d/Tvwzwfwj/lbas8EMhh1NwFms182hiED2Dctmrq5ct6SkMTOprnCc0i6OEg
+         iZz5BFRfhv5O8M20rbdKm4MJQ4ixmUi7JRnyp3aHONC9CstCIo5h9g3B5Ma0PhJv9eFf
+         NC+Y+6k5pNvTLu5pmD0Rk0XeetV0HA5cFFn53D9IOIkSSHBNKnepm784rDG/MAd1U5hh
+         rtGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l3glljPevHLdaoBzLBWNwFXRN7RcGOCNYiinqEgq4/0=;
+        b=QjPrrLKsjjuhmKTTN3ZwRDbyL841UIgiLbmYxlVaxK2WIGgPL2koKop2Ss+pUPSzZ1
+         jbIN1OURnKjav/rRd+O1vXRrotLTp2+TyVx5C+a239xi4PFFTIEhUEBsLzhT60gGLvgO
+         h/rg8f5AsUqXlfZ0lnokWO0acarMMxeun9a6rFVpymZallcr8Tl5YOpzm6nLSh24L3k2
+         Ea3EeUAJFGV5pTnDcUZK3kM8iZE/RAbn/qSaWgY1skUYCdwJLuNeM6lcs+1GzepHqVVz
+         UNnzwP5ZeCH1Fmxcqc+wOQ4U/AVcQ3efFG86AgOfgSbN/VHQfsBXBD5DWYBa8vNsijZJ
+         wSkQ==
+X-Gm-Message-State: ANoB5pmVtu01lIfeiRQWHa4nC8+7w/Z87Cl+WAK4176nKA8ieLxIeyXY
+        yKo0U0kI7EvCXYg7RmMEfl8u5glkshClPuh6
+X-Google-Smtp-Source: AA0mqf4IEbw5mAd3F2JAgfJ0NkI2GvjVcFlcGoc5Y1ZoUFTwW8k9WWBsV8tyuXRM1MkY6++S7yr9+w==
+X-Received: by 2002:a05:6e02:1a63:b0:302:a682:485e with SMTP id w3-20020a056e021a6300b00302a682485emr21887861ilv.168.1669918324027;
+        Thu, 01 Dec 2022 10:12:04 -0800 (PST)
+Received: from m1max.localdomain ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id y21-20020a027315000000b00374fe4f0bc3sm1842028jab.158.2022.12.01.10.12.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 10:12:03 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     soheil@google.com, willemdebruijn.kernel@gmail.com,
+        stefanha@redhat.com
+Subject: [PATCHSET v4 0/7] Add support for epoll min_wait
+Date:   Thu,  1 Dec 2022 11:11:49 -0700
+Message-Id: <20221201181156.848373-1-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4Z2aWVEnluy+d3+@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 09:15:21PM +0000, Oliver Upton wrote:
-> Hi Ricardo,
-> 
-> Thanks for having a look.
-> 
-> On Tue, Nov 29, 2022 at 12:52:12PM -0800, Ricardo Koller wrote:
-> > On Tue, Nov 29, 2022 at 07:19:44PM +0000, Oliver Upton wrote:
-> 
-> [...]
-> 
-> > > +	ret = stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
-> > > +				       &pte, NULL, 0);
-> > > +	if (!ret)
-> > > +		dsb(ishst);
-> > 
-> > At the moment, the only reason for stage2_update_leaf_attrs() to not
-> > update the PTE is if it's not valid:
-> > 
-> > 	if (!kvm_pte_valid(pte))
-> > 			return 0;
-> > 
-> > I guess you could check that as well:
-> > 
-> > +	if (!ret || kvm_pte_valid(pte))
-> > +		dsb(ishst);
-> 
-> Thanks for catching this.
-> 
-> Instead of pivoting on the returned PTE value, how about we return
-> -EAGAIN from the early return in stage2_attr_walker()? It would better
-> match the pattern used elsewhere in the pgtable code.
+Hi,
 
-Bugh...
+tldr - we saw a 6-7% CPU reduction with this patch. See patch 6 for
+full numbers.
 
-Returning EAGAIN has some unfortunate consequences that I've missed
-until now...
+This adds support for EPOLL_CTL_MIN_WAIT, which allows setting a minimum
+time that epoll_wait() should wait for events on a given epoll context.
+Some justification and numbers are in patch 6, patches 1-5 are really
+just prep patches or cleanups, and patch 7 adds the API to set min_wait.
 
-The stage2 attr walker is used to handle faults as well as range-based
-operations. In the former case, EAGAIN is sane as we retry execution but
-the latter is not. I stupidly got hung up on write protection not
-working as intended for some time.
+I've decided against adding a syscall for this due to the following
+reasons:
 
-I think that callers into the page table walker should indicate whether
-or not the walk is to address a fault. If it is not,
-__kvm_pgtable_visit() and __kvm_pgtable_walk() should chug along instead
-of bailing for EAGAIN.
+1) We, Meta, don't need the syscall variant.
+2) It's unclear how best to do a clean syscall interface for this. We're
+   already out of arguments with the pwait/pwait2 variants.
 
-Let me mess around with this and figure out what is least ugly.
+With the splitting of the API into a separate patch, anyone who wishes
+to have/use a syscall interface would be tasked with doing that
+themselves.
 
---
-Thanks,
-Oliver
+No real changes in this release, just minor tweaks. Would appreciate
+some review on this so we can get it moving forward. I obviously can't
+start real deployments at Meta before I have the API upstream, or at
+least queued for upstream. So we're currently stuck in limbo with this.
+
+Also available here:
+
+https://git.kernel.dk/cgit/linux-block/log/?h=epoll-min_ts
+
+Since v3:
+- Split the ctl addition into separate patch
+- Gate setup of min_wait on !ewq.timed_out
+- Add comment on calling ctl with wait == 0 is a no-op
+
+-- 
+Jens Axboe
+
+
