@@ -2,105 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC3363FBB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F2E63FBC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiLAXMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S230468AbiLAXNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiLAXLy (ORCPT
+        with ESMTP id S230422AbiLAXNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:11:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C792CC9342;
-        Thu,  1 Dec 2022 15:11:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63022621A3;
-        Thu,  1 Dec 2022 23:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E2FC433D6;
-        Thu,  1 Dec 2022 23:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669936280;
-        bh=AfF/JU379RR4h/QNfLJk97BVEcJidBNpv60Dg4HStxY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LnHzexQRj3Vsp2q/xdwB5o+SICfADhG8Nnw4p2Tim2u8/bgwWTmNYTbEX32bK3ytT
-         1gL6dABRBqKeV40+yS8rHeY2v9qVieqgXmYJJZtORl8gDX5cUbmot5Qt1LN/J2aUuO
-         41Sn+v6qu+kmrcs3O8ZeNMK4FZ5mUmLY81jZC53FXv+zdsfc/DmSQIVwtkFwOjMkg3
-         BiEUKk1NXlySs9SMuJ4aA1yftGKLYH/2XG5IwKdXK4mvE7+1HVsgzoOgW4Uk0TChPA
-         D94BOk8j0CdJ3ajJ9SLEgklpKUH8yyd1B75pKLIgdk5RzdgidoBTG96mQFV4FuQfa8
-         iZXaSvzE3f7Xg==
-Date:   Fri, 2 Dec 2022 00:11:17 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Clark Wang <xiaoning.wang@nxp.com>, linux@rempel-privat.de,
-        kernel@pengutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx: add irqf_no_suspend flag
-Message-ID: <Y4k0lVMueLEic75K@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Clark Wang <xiaoning.wang@nxp.com>, linux@rempel-privat.de,
-        kernel@pengutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221116074431.513214-1-xiaoning.wang@nxp.com>
- <20221116090249.GB12278@pengutronix.de>
+        Thu, 1 Dec 2022 18:13:06 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE1BA65A2;
+        Thu,  1 Dec 2022 15:13:03 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id r21so3640212oie.13;
+        Thu, 01 Dec 2022 15:13:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OKxrfU4YmpY1Kl1yHeMXQyKUWxu44u51bjZxjiYhfek=;
+        b=vHMPKiY8XxZDQSD6tWPqxTc/FbmPBAD59Fl5N5oG3Q/130vxZYb8W1RQEu4FnbZ+6d
+         WpqQa9JORPOjh4oCa2i2w5S0DswbNpqEayOTjStxEO2lQMgxLexYMRBNx7HS4SNMAqZc
+         WO1yCYfAQnRnLH+/iTtFpQ/Ykd45OTRsYBb66SbQrZvAmQpCliYFTkyAuWLmdVChjcuj
+         WJB00kmHRR5N5wCZZatra7SdSIwv2nZXqYPEWVC6XhKR8TWRpdHj4/kToVpkGqDlRZzN
+         3WAaPkvxxCrHjpD60lmTQ5VWA5+tPTG9a3er7BFDUw+uNjHxUjqFb+23cKonQE7P3nwA
+         ENqw==
+X-Gm-Message-State: ANoB5pkhOiDEdhyFU4Lr4Rq/VqAEw5uB0zpH0V0DmFH5JlP5hfLvy9jC
+        X7KLthYmWsVKZ52SusC8/g==
+X-Google-Smtp-Source: AA0mqf6Hw+Gk/anvjA2tVJyGiBiFgpkYa/VeAI295MqD5oc4uGzJJSmIKRZpn+m9seyj7pP7+kUz+A==
+X-Received: by 2002:a54:4783:0:b0:354:7e1:d3ac with SMTP id o3-20020a544783000000b0035407e1d3acmr26707554oic.237.1669936382827;
+        Thu, 01 Dec 2022 15:13:02 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p64-20020acad843000000b0035a9003b8edsm2345943oig.40.2022.12.01.15.13.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 15:13:02 -0800 (PST)
+Received: (nullmailer pid 1658241 invoked by uid 1000);
+        Thu, 01 Dec 2022 23:13:01 -0000
+Date:   Thu, 1 Dec 2022 17:13:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sandor Yu <Sandor.yu@nxp.com>
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        vkoul@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kernel@pengutronix.de, linux-imx@nxp.com, oliver.brown@nxp.com
+Subject: Re: [PATCH v5 07/10] dt-bindings: phy: Add Cadence HDP-TX DP PHY
+Message-ID: <20221201231301.GA1653935-robh@kernel.org>
+References: <cover.1669620155.git.Sandor.yu@nxp.com>
+ <beb1dae2a08595a6b9a6b6028ac994faa207d4bd.1669620155.git.Sandor.yu@nxp.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CRLqoNn9W0Z8WNcC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221116090249.GB12278@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <beb1dae2a08595a6b9a6b6028ac994faa207d4bd.1669620155.git.Sandor.yu@nxp.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 28, 2022 at 03:36:15PM +0800, Sandor Yu wrote:
+> Add bindings for Cadence HDP-TX DisplayPort PHY.
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>  .../bindings/phy/cdns,hdptx-dp-phy.yaml       | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
+> new file mode 100644
+> index 000000000000..f4f741150c12
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/cdns,hdptx-dp-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence HDP-TX(HDMI/DisplayPort) PHY for DisplayPort protocol
+> +
+> +maintainers:
+> +  - Sandor Yu <sandor.yu@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cdns,hdptx-dp-phy
 
---CRLqoNn9W0Z8WNcC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Again, name based on SoC and SoC vendor.
 
-On Wed, Nov 16, 2022 at 10:02:49AM +0100, Oleksij Rempel wrote:
-> On Wed, Nov 16, 2022 at 03:44:31PM +0800, Clark Wang wrote:
-> > The i2c irq is masked when user starts an i2c transfer process
-> > during noirq suspend stage. As a result, i2c transfer fails.
-> > To solve the problem, IRQF_NO_SUSPEND is added to i2c bus.
-> >=20
-> > Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
->=20
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PHY reference clock.
+> +      - description: APB clock.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref
+> +      - const: apb
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  cdns,num-lanes:
 
-Is this really happening? The driver already implements
-master_xfer_atomic, so I'd suspect it gets called instead?
+There is a standard way to define the number of lanes. That goes in 
+output endpoint for the DP node. Not that convenient to the phy, but the 
+information is already there, don't duplicate it.
 
+> +    description:
+> +      Number of lanes.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 3, 4]
+> +    default: 4
+> +
+> +  cdns,max-bit-rate:
 
---CRLqoNn9W0Z8WNcC
-Content-Type: application/pgp-signature; name="signature.asc"
+Same with this.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOJNJUACgkQFA3kzBSg
-Kbb/Ww/7BTGyanlfRVUN/404OpqaEADL7FYtBa2VzbrRmR98+l2Qb+4xxiZARQI9
-UaylcY3A685lVwDzpQbvD5zHFPIDhGqrDcPvLSd/ZFVhCpeTkVmLB2aMpIjfe60K
-fgZqo9FyNA4ogOwaRygqlBGuW41NM40lrt5TIeIoyYSaZ5/4+jwT7JGaIUbFmwwu
-bPuAgUPfqzYZrSRgojP3aR+4NaXzDQGpvj7kjqR7c2u3UnDVbW/rMV4rgPQFBLCV
-+0NYVMFShHszq4Ghl3AqvjrUFWC4ykoBHEaEEqkZy6Jrl3lo82TfO/AK5cqy2G2N
-GUsJxaQ4in08wu4S+LjylRyqQKebv3KPpjyfVk4y5uLJT8gLnTR0k6e61bHvU1lS
-3V2r2WU31SaG8yQIOk0zfMJUaII5emLpPRFw+OWWSsRkY9qeg0IjrWVIx3oq+w+h
-DwKc5FUiHjtI0GyMGYDLSHT0Vc6Nr3pB83ytCJvDMAwB5CdFsG23MflzaIv92wBn
-f0n/hFCWxCbUSS1ahzaRkzfL4gDpmz/mJSgbot2yH6skLrCvMAFp8uhiUsjvJfRK
-wKXnz81vBa+mCZKBWw8ApWb4qJF8/JEOWWavLiLYthbWzhZqHxQktTqnn9RJtmwE
-mbfcwKOifuytwbI9LacmpxrPwR0nkINCw8kyeaSworEzjcxCSoY=
-=pjUR
------END PGP SIGNATURE-----
-
---CRLqoNn9W0Z8WNcC--
+> +    description:
+> +      Maximum DisplayPort link bit rate to use, in Mbps
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [2160, 2430, 2700, 3240, 4320, 5400]
+> +    default: 5400
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8mq-clock.h>
+> +    #include <dt-bindings/phy/phy.h>
+> +    dp_phy: phy@32c00000 {
+> +        compatible = "cdns,hdptx-dp-phy";
+> +        reg = <0x32c00000 0x100000>;
+> +        #phy-cells = <0>;
+> +        clocks = <&hdmi_phy_27m>, <&clk IMX8MQ_CLK_DISP_APB_ROOT>;
+> +        clock-names = "ref", "apb";
+> +        cdns,num-lanes = <4>;
+> +        cdns,max-bit-rate = <5400>;
+> +    };
+> -- 
+> 2.34.1
+> 
+> 
