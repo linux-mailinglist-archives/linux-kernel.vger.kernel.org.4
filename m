@@ -2,188 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE74A63EEA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084CB63EEB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiLALBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        id S230523AbiLALDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiLALBI (ORCPT
+        with ESMTP id S229631AbiLALDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:01:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F30AB03F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:00:42 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p0hIy-0003CQ-O1; Thu, 01 Dec 2022 12:00:36 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:dc5e:59bf:44a8:4077])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 59FFD12F517;
-        Thu,  1 Dec 2022 11:00:35 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 12:00:33 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
- level interrupt
-Message-ID: <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-5-msp@baylibre.com>
- <20221130171715.nujptzwnut7silbm@pengutronix.de>
- <20221201082521.3tqevaygz4nhw52u@blmsp>
- <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
- <20221201101220.r63fvussavailwh5@blmsp>
+        Thu, 1 Dec 2022 06:03:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B6DA321D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:01:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669892488;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dIYgRYjREh+bqtm1hANgqL8y6UtRFdWTjY6cfe7VFrQ=;
+        b=WEQ+qsXr+vDTjMXxUKHsKvSgsr86SDe87QFptvtSry2k6JsirrTs5I8XaoiDmImAIx0wBb
+        ptUTXhZiA2vpNu6282eoNJ9p4xUEH3zXht2Yu+wPKpBKDX9gV0MVGh6L+KCQXLBYhSWtyx
+        AAXm/IFAwmTr/Q0JRNT7Tz8TPLHOkQI=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-306-UBhw5hpiO7qPDmhLau1nMQ-1; Thu, 01 Dec 2022 06:01:27 -0500
+X-MC-Unique: UBhw5hpiO7qPDmhLau1nMQ-1
+Received: by mail-wr1-f70.google.com with SMTP id g14-20020adfa48e000000b00241f94bcd54so306286wrb.23
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:01:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dIYgRYjREh+bqtm1hANgqL8y6UtRFdWTjY6cfe7VFrQ=;
+        b=BSlYIMru4paODzlXVK/B1XMuJatJZIlQ502DBPkWaZn44bL3IArbz380LbaoP8Sa9p
+         vqtTluLV0+2ymH81lZiUHD+e4GL3YbHFZmcJRUuPbNAgBILhCfSP9ey0Vn87OU6shsxn
+         Q4FIGm4x6vShBBA+1DGndXdcaszkAIZWXJ/b7/5XnZmQroN+3bWEFRuuw2L2P/yyk54G
+         TReqIn/8HXwBxiUS6+6/0KsQz2C2ivOrhh5eItc0nBNDwhSEoI9A0fKe17r6t8QJf9/S
+         dPe5JjtQQKy1e2+AiiF49b/4ISpKHW7apVCuYkxhS2RMAFpwS8wmvs3/rZ7EaZJw1rIT
+         S5lw==
+X-Gm-Message-State: ANoB5pnwSxtWGo0wI7TEDvPoaorK+OHwTk/psqHk51Ts6sHZ/S1lo0Dz
+        9GMEqP9g0cgcTpwbaIn6q4uJ3kZMVVRaz1xEvoSzXvWzwDFj9xU4gPx7tw86ZdJVaTzge0NOg+J
+        GUMeGB6QGKru5L8VslIdBDw0y
+X-Received: by 2002:a05:6000:1a4e:b0:242:71b:e3cf with SMTP id t14-20020a0560001a4e00b00242071be3cfmr18607703wry.144.1669892486271;
+        Thu, 01 Dec 2022 03:01:26 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4nUcVhof4h19m5eYtRbCFNncqAgIXWYD1r7VD9LnwHnEJCDPu/hJHesi7WrnlYjBuoBQFaSg==
+X-Received: by 2002:a05:6000:1a4e:b0:242:71b:e3cf with SMTP id t14-20020a0560001a4e00b00242071be3cfmr18607680wry.144.1669892486082;
+        Thu, 01 Dec 2022 03:01:26 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id p14-20020adf9d8e000000b00236b2804d79sm4148410wre.2.2022.12.01.03.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 03:01:25 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v6 3/4] workqueue: Convert the idle_timer to a timer +
+ work_struct
+In-Reply-To: <Y4fFzBrjZiOQO9Te@slm.duckdns.org>
+References: <20221128183109.446754-1-vschneid@redhat.com>
+ <20221128183109.446754-4-vschneid@redhat.com>
+ <Y4fFzBrjZiOQO9Te@slm.duckdns.org>
+Date:   Thu, 01 Dec 2022 11:01:24 +0000
+Message-ID: <xhsmh5yevl75n.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="edcoqv646ihy76od"
-Content-Disposition: inline
-In-Reply-To: <20221201101220.r63fvussavailwh5@blmsp>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30/11/22 11:06, Tejun Heo wrote:
+> On Mon, Nov 28, 2022 at 06:31:08PM +0000, Valentin Schneider wrote:
+>> @@ -1806,7 +1808,9 @@ static void worker_enter_idle(struct worker *worker)
+>>      /* idle_list is LIFO */
+>>      list_add(&worker->entry, &pool->idle_list);
+>>
+>> -	if (too_many_workers(pool) && !timer_pending(&pool->idle_timer))
+>> +	if (too_many_workers(pool) &&
+>> +	    !timer_pending(&pool->idle_timer) &&
+>> +	    !work_pending(&pool->idle_cull_work))
+>
+> Just checking the timer should be enough here, I think.
+>
 
---edcoqv646ihy76od
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That would let the timer be re-armed when the cull work is pending, which
+itself will re-arm the timer to the next non-culled idle worker expiry (if
+there is any remaining).
 
-On 01.12.2022 11:12:20, Markus Schneider-Pargmann wrote:
-> > > For the upcoming receive side patch I already added a hrtimer. I may =
-try
-> > > to use the same timer for both directions as it is going to do the ex=
-act
-> > > same thing in both cases (call the interrupt routine). Of course that
-> > > depends on the details of the coalescing support. Any objections on
-> > > that?
-> >=20
-> > For the mcp251xfd I implemented the RX and TX coalescing independent of
-> > each other and made it configurable via ethtool's IRQ coalescing
-> > options.
-> >=20
-> > The hardware doesn't support any timeouts and only FIFO not empty, FIFO
-> > half full and FIFO full IRQs and the on chip RAM for mailboxes is rather
-> > limited. I think the mcan core has the same limitations.
->=20
-> Yes and no, the mcan core provides watermark levels so it has more
-> options, but there is no hardware timer as well (at least I didn't see
-> anything usable).
+Not an issue per se, it's just that having the cull work pending is a
+"promise" that the timer will be re-armed if and when necessary.
 
-Are there any limitations to the water mark level?
+I think in cases where the cull work doesn't get to run for a while, not
+having the extra work_pending() check and just arming the timer in
+worker_enter_idle() might be cheaper than repeatedly checking both
+timer_pending() and work_pending(), but otherwise I would assume not arming
+the timer would be preferred.
 
-> > The configuration for the mcp251xfd looks like this:
-> >=20
-> > - First decide for classical CAN or CAN-FD mode
-> > - configure RX and TX ring size
-> >   9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configur=
-able RX/TX ring parameters")
-> >   For TX only a single FIFO is used.
-> >   For RX up to 3 FIFOs (up to a depth of 32 each).
-> >   FIFO depth is limited to power of 2.
-> >   On the mcan cores this is currently done with a DT property.
-> >   Runtime configurable ring size is optional but gives more flexibility
-> >   for our use-cases due to limited RAM size.
-> > - configure RX and TX coalescing via ethtools
-> >   Set a timeout and the max CAN frames to coalesce.
-> >   The max frames are limited to half or full FIFO.
->=20
-> mcan can offer more options for the max frames limit fortunately.
->=20
-> >=20
-> > How does coalescing work?
-> >=20
-> > If coalescing is activated during reading of the RX'ed frames the FIFO
-> > not empty IRQ is disabled (the half or full IRQ stays enabled). After
-> > handling the RX'ed frames a hrtimer is started. In the hrtimer's
-> > functions the FIFO not empty IRQ is enabled again.
->=20
-> My rx path patches are working similarly though not 100% the same. I
-> will adopt everything and add it to the next version of this series.
->=20
-> >=20
-> > I decided not to call the IRQ handler from the hrtimer to avoid
-> > concurrency, but enable the FIFO not empty IRQ.
->=20
-> mcan uses a threaded irq and I found this nice helper function I am
-> currently using for the receive path.
-> 	irq_wake_thread()
->=20
-> It is not widely used so I hope this is fine. But this hopefully avoids
-> the concurrency issue. Also I don't need to artificially create an IRQ
-> as you do.
+>>              mod_timer(&pool->idle_timer, jiffies + IDLE_WORKER_TIMEOUT);
+>>
+>>      /* Sanity check nr_running. */
+>> @@ -2019,17 +2023,56 @@ static void destroy_worker(struct worker *worker)
+>>      wake_up_process(worker->task);
+>>  }
+>>
+>> +/*
+>> + * idle_worker_timeout - check if some idle workers can now be deleted.
+>
+> Might as well turn it into a proper function comment starting w/ "/**" and
+> with argument list.
+>
 
-I think it's Ok to use the function. Which IRQs are enabled after you
-leave the RX handler? The mcp251xfd driver enables only a high watermark
-IRQ and sets up the hrtimer. Then we have 3 scenarios:
-- high watermark IRQ triggers -> IRQ is handled,
-- FIFO level between 0 and high water mark -> no IRQ triggered, but
-  hrtimer will run, irq_wake_thread() is called, IRQ is handled
-- FIFO level 0 -> no IRQ triggered, hrtimer will run. What do you do in
-  the IRQ handler? Check if FIFO is empty and enable the FIFO not empty
-  IRQ?
+Ack.
 
-The mcp251xfd unconditionally enables the FIFO not empty IRQ in the
-hrtimer. This avoids reading of the FIFO fill level.
+>> + *
+>> + * The timer is armed in worker_enter_idle(). Note that it isn't disarmed in
+>> + * worker_leave_idle(), as a worker flicking between idle and active while its
+>> + * pool is at the too_many_workers() tipping point would cause too much timer
+>> + * housekeeping overhead. Since IDLE_WORKER_TIMEOUT is long enough, we just let
+>> + * it expire and re-evaluate things from there.
+>> + */
+>>  static void idle_worker_timeout(struct timer_list *t)
+>>  {
+>>      struct worker_pool *pool = from_timer(pool, t, idle_timer);
+>> +	bool do_cull = false;
+>> +
+>> +	if (work_pending(&pool->idle_cull_work))
+>> +		return;
+>>
+>>      raw_spin_lock_irq(&pool->lock);
+>>
+>> -	while (too_many_workers(pool)) {
+>> +	if (too_many_workers(pool)) {
+>>              struct worker *worker;
+>>              unsigned long expires;
+>>
+>>              /* idle_list is kept in LIFO order, check the last one */
+>> +		worker = list_entry(pool->idle_list.prev, struct worker, entry);
+>> +		expires = worker->last_active + IDLE_WORKER_TIMEOUT;
+>> +		do_cull = !time_before(jiffies, expires);
+>> +
+>> +		if (!do_cull)
+>> +			mod_timer(&pool->idle_timer, expires);
+>> +	}
+>> +	raw_spin_unlock_irq(&pool->lock);
+>> +
+>> +	if (do_cull)
+>> +		queue_work(system_unbound_wq, &pool->idle_cull_work);
+>> +}
+>> +
+>> +/*
+>> + * idle_cull_fn - cull workers that have been idle for too long.
+>> + */
+>
+> Please turn it into a full function comment or drop the wings (ie. make it
+> an one-liner).
+>
 
-[...]
+Patch 4/4 adds the rest of the comment, but I can make the whole thing
+appear in patch 4 if you prefer.
 
-> > If you want to implement runtime configurable ring size, I created a
-> > function to help in the calculation of the ring sizes:
-> >=20
-> > a1439a5add62 ("can: mcp251xfd: ram: add helper function for runtime rin=
-g size calculation")
-> >=20
-> > The code is part of the mcp251xfd driver, but is prepared to become a
-> > generic helper function. The HW parameters are described with struct
-> > can_ram_config and use you can_ram_get_layout() to get a valid RAM
-> > layout based on CAN/CAN-FD ring size and coalescing parameters.
->=20
-> Thank you. I think configurable ring sizes are currently out of scope
-> for me as I only have limited time for this.
-
-Ok.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---edcoqv646ihy76od
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOIiUgACgkQrX5LkNig
-012m7wf+Jkt4dPHkK/5FDYm3DG5+UmIraPvosBGc3TpNPpIiQJoA4XYiPfhu9W76
-NiUKMYjg+dNabhQYBLEc3Nn2eQpeJ6ZSQlVqxkphlwe2LTgfJgt3emb9n4AssZYY
-8CW/iXBfT8XW7U+Ju565zGtajtcHaoELpXXxTVaXn/U8NGrla4XGeJEVSBQbnQNN
-Zknw0IqzBgrsAHcU+DZJ2aMtbqGeYNdMWBro1Gftr65pYDLV5Q/ktOlJPNw7WYUp
-pIqYCkHqBqAG/BsUPfJl0DdD9x7+pndiDoY9VnlViN46v/x+Ovh1dKi3tcM3Xzkb
-eiKkOWDsd7+pcqQdWhQZK8ZndXqJ0w==
-=7fy5
------END PGP SIGNATURE-----
-
---edcoqv646ihy76od--
