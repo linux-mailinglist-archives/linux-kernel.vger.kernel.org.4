@@ -2,231 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9509563E785
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B23B63E78C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiLACL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S229693AbiLACMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 21:12:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiLACLY (ORCPT
+        with ESMTP id S229515AbiLACMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:11:24 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDD49D830;
-        Wed, 30 Nov 2022 18:11:22 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NN00b3JrpzRpfH;
-        Thu,  1 Dec 2022 10:10:39 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 10:11:20 +0800
-Message-ID: <27c96875-eacd-e6da-5c9c-25cad7c5bab7@huawei.com>
-Date:   Thu, 1 Dec 2022 10:11:19 +0800
+        Wed, 30 Nov 2022 21:12:21 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF6254465;
+        Wed, 30 Nov 2022 18:12:19 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NN02N574Rz4f3s8m;
+        Thu,  1 Dec 2022 10:12:12 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgC3YK99DYhjepV1BQ--.2209S3;
+        Thu, 01 Dec 2022 10:12:15 +0800 (CST)
+Subject: Re: [PATCH -next v2 8/9] block: fix null-pointer dereference in
+ ioc_pd_init
+To:     Tejun Heo <tj@kernel.org>, Li Nan <linan122@huawei.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221130132156.2836184-1-linan122@huawei.com>
+ <20221130132156.2836184-9-linan122@huawei.com>
+ <Y4fCE7XxcpDfWyDJ@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <9ca2b7ab-7fd3-a9a3-12a6-021a78886b54@huaweicloud.com>
+Date:   Thu, 1 Dec 2022 10:12:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] vfio/mdev: fix possible memory leak in module init funcs
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     <kwankhede@nvidia.com>, <kraxel@redhat.com>, <cjia@nvidia.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <akrowiak@linux.ibm.com>, <pasic@linux.ibm.com>,
-        <jjherne@linux.ibm.com>, <farman@linux.ibm.com>,
-        <mjrosato@linux.ibm.com>
-References: <20221118032827.3725190-1-ruanjinjie@huawei.com>
- <20221130160622.0cf3e47d.alex.williamson@redhat.com>
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-In-Reply-To: <20221130160622.0cf3e47d.alex.williamson@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.254]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500008.china.huawei.com (7.221.188.139)
+In-Reply-To: <Y4fCE7XxcpDfWyDJ@slm.duckdns.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgC3YK99DYhjepV1BQ--.2209S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF4DCFWrZw4rZr1kWF17Jrb_yoW8Ww4UpF
+        WfWF1Yy34jqrs3t3WDAw4xAryYqrs5WF1fZ3s8A3sI9FZruw1Yq3W2kFWqgayxZrs8Zr1F
+        qayjqw17Xry0yrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+ÔÚ 2022/12/01 4:50, Tejun Heo Ð´µÀ:
+> On Wed, Nov 30, 2022 at 09:21:55PM +0800, Li Nan wrote:
+>> Remove block device when iocost is initializing may cause
+>> null-pointer dereference:
+>>
+>> 	CPU1				   CPU2
+>>    ioc_qos_write
+>>     blkcg_conf_open_bdev
+>>      blkdev_get_no_open
+>>       kobject_get_unless_zero
+>>      blk_iocost_init
+>>       rq_qos_add
+>>    					del_gendisk
+>>    					 rq_qos_exit
+>>    					  q->rq_qos = rqos->next
+>>    					   //iocost is removed from q->roqs
+>>        blkcg_activate_policy
+>>         pd_init_fn
+>>          ioc_pd_init
+>>    	 ioc = q_to_ioc(blkg->q)
+>>   	  //cant find iocost and return null
+>>
+>> Fix problem by moving rq_qos_exit() to disk_release(). ioc_qos_write() get
+>> bd_device.kobj in blkcg_conf_open_bdev(), so disk_release will not be
+>> actived until iocost initialization is complited.
+> 
+> I think it'd be better to make del_gendisk wait for these in-flight
+> operations because this might fix the above particular issue but now all the
+> policies are exposed to request_queue in a state it never expected before.
+> 
+> del_gendisk() is quiescing the queue around rq_qos_exit(), so maybe we can
+> piggyback on that and update blkcg_conf_open_bdev() to provide such
+> exclusion?
 
-On 2022/12/1 7:06, Alex Williamson wrote:
-> [Cc +vfio-ap, vfio-ccw]
+Let del_gendisk waiting for that sounds good, but I'm litter confused
+how to do that. Following are what I think about:
+
+1) By mentioning that "del_gendisk() is quiescing the queue", do you
+suggest to add rcu_read_lock()? This seems wrong because blk_iocost_init
+requires memory allocation.
+
+2) Hold gendisk open mutex
+
+3) Use q_usage_counter, and in the meantime, rq_qos_add() and
+blkcg_activate_policy() will need refactoring to factor out freeze
+queue.
+
+4) Define a new metux
+
+Thanks,
+Kuai
 > 
-> On Fri, 18 Nov 2022 11:28:27 +0800
-> ruanjinjie <ruanjinjie@huawei.com> wrote:
+> Thanks.
 > 
->> Inject fault while probing module, if device_register() fails,
->> but the refcount of kobject is not decreased to 0, the name
->> allocated in dev_set_name() is leaked. Fix this by calling
->> put_device(), so that name can be freed in callback function
->> kobject_cleanup().
->>
->> unreferenced object 0xffff88807d687008 (size 8):
->>   comm "modprobe", pid 8280, jiffies 4294807686 (age 12.378s)
->>   hex dump (first 8 bytes):
->>     6d 64 70 79 00 6b 6b a5                          mdpy.kk.
->>   backtrace:
->>     [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
->>     [<ffffffff81731d53>] kstrdup+0x33/0x60
->>     [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
->>     [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
->>     [<ffffffffa0260105>] 0xffffffffa0260105
->>     [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
->>     [<ffffffff813739cb>] do_init_module+0x1ab/0x640
->>     [<ffffffff81379d20>] load_module+0x5d00/0x77f0
->>     [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
->>     [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
->>     [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
->>
->> unreferenced object 0xffff888101ccbcf8 (size 8):
->>   comm "modprobe", pid 15662, jiffies 4295164481 (age 13.282s)
->>   hex dump (first 8 bytes):
->>     6d 74 74 79 00 6b 6b a5                          mtty.kk.
->>   backtrace:
->>     [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
->>     [<ffffffff81731d53>] kstrdup+0x33/0x60
->>     [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
->>     [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
->>     [<ffffffffa0248134>] 0xffffffffa0248134
->>     [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
->>     [<ffffffff813739cb>] do_init_module+0x1ab/0x640
->>     [<ffffffff81379d20>] load_module+0x5d00/0x77f0
->>     [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
->>     [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
->>     [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
->>
->> unreferenced object 0xffff88810177c6c8 (size 8):
->>   comm "modprobe", pid 23657, jiffies 4295314656 (age 13.227s)
->>   hex dump (first 8 bytes):
->>     6d 62 6f 63 68 73 00 a5                          mbochs..
->>   backtrace:
->>     [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
->>     [<ffffffff81731d53>] kstrdup+0x33/0x60
->>     [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
->>     [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
->>     [<ffffffffa0248124>] 0xffffffffa0248124
->>     [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
->>     [<ffffffff813739cb>] do_init_module+0x1ab/0x640
->>     [<ffffffff81379d20>] load_module+0x5d00/0x77f0
->>     [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
->>     [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
->>     [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
->>
->> Fixes: d61fc96f47fd ("sample: vfio mdev display - host device")
->> Fixes: 9d1a546c53b4 ("docs: Sample driver to demonstrate how to use Mediated device framework.")
->> Fixes: a5e6e6505f38 ("sample: vfio bochs vbe display (host device for bochs-drm)")
->> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
->> ---
->>  samples/vfio-mdev/mbochs.c | 4 +++-
->>  samples/vfio-mdev/mdpy.c   | 4 +++-
->>  samples/vfio-mdev/mtty.c   | 4 +++-
->>  3 files changed, 9 insertions(+), 3 deletions(-)
->>
->> diff --git a/samples/vfio-mdev/mbochs.c b/samples/vfio-mdev/mbochs.c
->> index 117a8d799f71..1c47672be815 100644
->> --- a/samples/vfio-mdev/mbochs.c
->> +++ b/samples/vfio-mdev/mbochs.c
->> @@ -1430,8 +1430,10 @@ static int __init mbochs_dev_init(void)
->>  	dev_set_name(&mbochs_dev, "%s", MBOCHS_NAME);
->>  
->>  	ret = device_register(&mbochs_dev);
->> -	if (ret)
->> +	if (ret) {
->> +		put_device(&mbochs_dev);
->>  		goto err_class;
->> +	}
->>  
->>  	ret = mdev_register_parent(&mbochs_parent, &mbochs_dev, &mbochs_driver,
->>  				   mbochs_mdev_types,
-> 
-> 
-> vfio-ap has a similar unwind as the sample drivers, but actually makes
-> an attempt to catch this ex:
-I think the reason is vfio-ap driver error path has common unwind to do
-before device_register, otherwise it can return just after put_device or
-device_unregister.
-> 
-> 	...
->         ret = device_register(&matrix_dev->device);
->         if (ret)
->                 goto matrix_reg_err;
-> 
->         ret = driver_register(&matrix_driver);
->         if (ret)
->                 goto matrix_drv_err;
-> 
->         return 0;
-> 
-> matrix_drv_err:
->         device_unregister(&matrix_dev->device);
-> matrix_reg_err:
->         put_device(&matrix_dev->device);
-> 	...
-> 
-> So of the vfio drivers calling device_register(), vfio-ap is the only
-> one that does a put_device() if device_register() fails, but it also
-> seems sketchy to call both device_unregister() and put_device() in the
-> case that we exit via matrix_drv_err.
-The patch do not change the original error path, just add missing
-put_device out of the normal error path if device_register fails , so
-there is no risk of calling both device_unregister() and put_device().
-> 
-> I wonder if all of these shouldn't adopt a flow like:
-> 
-> 	ret = device_register(&dev);
-> 	if (ret)
-> 		goto err1;
-> 
-> 	....
-> 
-> 	return 0;
-> 
-> err2:
-> 	device_del(&dev);
-> err1:
-> 	put_device(&dev);
-> 
-> Thanks,
-> 
-> Alex
-> 
->> diff --git a/samples/vfio-mdev/mdpy.c b/samples/vfio-mdev/mdpy.c
->> index 946e8cfde6fd..bfb93eaf535b 100644
->> --- a/samples/vfio-mdev/mdpy.c
->> +++ b/samples/vfio-mdev/mdpy.c
->> @@ -717,8 +717,10 @@ static int __init mdpy_dev_init(void)
->>  	dev_set_name(&mdpy_dev, "%s", MDPY_NAME);
->>  
->>  	ret = device_register(&mdpy_dev);
->> -	if (ret)
->> +	if (ret) {
->> +		put_device(&mdpy_dev);
->>  		goto err_class;
->> +	}
->>  
->>  	ret = mdev_register_parent(&mdpy_parent, &mdpy_dev, &mdpy_driver,
->>  				   mdpy_mdev_types,
->> diff --git a/samples/vfio-mdev/mtty.c b/samples/vfio-mdev/mtty.c
->> index e72085fc1376..dddb0619846c 100644
->> --- a/samples/vfio-mdev/mtty.c
->> +++ b/samples/vfio-mdev/mtty.c
->> @@ -1330,8 +1330,10 @@ static int __init mtty_dev_init(void)
->>  	dev_set_name(&mtty_dev.dev, "%s", MTTY_NAME);
->>  
->>  	ret = device_register(&mtty_dev.dev);
->> -	if (ret)
->> +	if (ret) {
->> +		put_device(&mtty_dev.dev);
->>  		goto err_class;
->> +	}
->>  
->>  	ret = mdev_register_parent(&mtty_dev.parent, &mtty_dev.dev,
->>  				   &mtty_driver, mtty_mdev_types,
-> 
+
