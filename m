@@ -2,449 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3C163F109
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA4B63F10C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiLAM7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
+        id S230200AbiLANAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiLAM7g (ORCPT
+        with ESMTP id S230029AbiLANAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:59:36 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718519208F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 04:59:35 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id ay8-20020a05600c1e0800b003d0808d2826so490347wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 04:59:35 -0800 (PST)
+        Thu, 1 Dec 2022 08:00:22 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2159208F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:00:20 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id j4so2437622lfk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:00:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jl64zfNyUoxbRLcQ84uKZWsSyt35VEwXWf4F100TfpM=;
-        b=T5noOyEAGFj6dL3nEWK6LgG/WRciBgfQHE/GXiQEaF2oVLH24n5JaH+JVHT3l71f+2
-         bNchYNRq+zS9sS8OURDkFqL/jk4EcTrGhizLpGEZ6j/zsFyYoLSZomFqgnw5yEOUKDkq
-         p1EAc9AJqEh3dRo2ZuO0y+3MVpvKYuhpLVAr9b8LlylN5PRNV5MCxUALdKgqnruu5OsU
-         fIfZfNbcW4IvxrF9dL43OOUU0aIKd2ilT7A/EVqJAGB6JDoVzFvBce8yp9pmujMeo9D9
-         /gEn1f1AKklmbw2TtyZSj2P8xAC+DsqG7LZ9/+11ik1mPMNV7sSlI1noR5fegy/uXZns
-         20iQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DqSDmVNHy2Q/xp7vUIn4GRUx5KsEEXqp4VrjsuGNq4s=;
+        b=GWZ9/ieTuTI9IwJNdlzJl89iG/PxyDMcSExhXalcV/QL2salUZIyMHgVuMyAmujFIZ
+         7TfnWtYgTRSwaIPoU+q9Uzn++kd+ROyDzS/HPmfAF+Ihd4kezoYVGzxj+eHmjRf2vNFM
+         uA/pMvzS80Rr3DQf/FXdjzw13w5x35p5ON3Q7OBQq5Js8zWs7vxRMzFChOc/E4dfZ9Dq
+         kLN9UDZ7b8zMJcYkHc4ccIbyqI8G5pfbXGZLZkeaJHz/nqiCYg7qtP/RWKdGy2OmKUF5
+         T8n7FcIgOUAG1n7WEAKCv/5IDRxpK/aG6BgoHKiUpmTk19xLboFnAE7MkSNo9JLQDs/d
+         CVJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jl64zfNyUoxbRLcQ84uKZWsSyt35VEwXWf4F100TfpM=;
-        b=zwoJCaGhGd5B58B3iNZCjd1kvXuwrd0ybJfulpbsrB6WVf3b0XYG61BztXlz2ePKB4
-         O+t2Heyhxj6c2LNxdvKcYoTaj5YBs9jGjmIdD4PSfpNV9nMC8dCMBiVP2Bpxv9Fx4DWK
-         Wm5jU9GQyjp4iu8Fw9I5uNIqfLlPrs2fQNOHMAfRYrIM1riSzDfhjXhbSSygBkG4e8nY
-         NLKmXBQQ1ZHyLVCJusUGiruPiPuyqcaZ+zTvkx/h9Y9e05U5PWlQvIzp4OyXW7gdMGiu
-         h999lPFC64TH0CdAh48itEZg5BgnNYpxBnte+T3GJLFMLwTJCkXZz8eU/ucLH/CKcjWn
-         eh3Q==
-X-Gm-Message-State: ANoB5pkquKr4+cPdiRVAKIicSfqo5qXlAfFwZKy6qaWpW/hMK5Mswjmy
-        sM7oY3TL382HvglUkBU98OCrqA==
-X-Google-Smtp-Source: AA0mqf6K+HW+L/CF6vp6JMTc+fT2Y65DwRcQ0EaPSTq+pbjQsvGbKsq89kizFn2lBZfT74JhlpEMlA==
-X-Received: by 2002:a7b:ce05:0:b0:3cf:7c1b:3c29 with SMTP id m5-20020a7bce05000000b003cf7c1b3c29mr39150820wmc.23.1669899573949;
-        Thu, 01 Dec 2022 04:59:33 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:26bb:b860:c227:f05d])
-        by smtp.gmail.com with ESMTPSA id v14-20020a05600c444e00b003a1980d55c4sm9564753wmn.47.2022.12.01.04.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 04:59:33 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DqSDmVNHy2Q/xp7vUIn4GRUx5KsEEXqp4VrjsuGNq4s=;
+        b=UWFAGMEUX3OQf9BZ/cOheLz9zFkvccQFTPYRwqPCCrl+hv7MCNDDd0+PB0DdVhlxDT
+         XALVS10d2eXtasNU5h+j5b2YgOl2Siha+QR94u+VBzkuKbLTXEc2wnafV9p04C7aEWGH
+         gBZB6ftgoTcJ6l7Nd9t0i8MdSxf1xGYsVQxDFU2bB1qaePCUu5Pev+2sueANhkOxFP5h
+         AnZRTOrXvk9LWfqZoyiqW0IYnccwnfBz3/gZ8fmBHjc5whqMz3z0HCpdFnm1gfpdBVSK
+         ZW1enxz9G6Eu6LwFk3mgTOMSdH3H5spd+CJvy2S7IwWatRjTFbANKCl5BbyQRh0WJ9FX
+         LaVQ==
+X-Gm-Message-State: ANoB5pn1svbVPUy7M9uFz94liAgIuz2UWFDNszz4IqHoLwaYN2ZlrN1b
+        wHi7/7NN/GkaFHTzZUsZjYl7Az38vIf6SB2DWRpPKw==
+X-Google-Smtp-Source: AA0mqf5R857XX+UFJqQpjaqhYKzw9X+9ySGbZ8XUm/uBjY0zMq+ynm/BGLtWKE9462T04BciuPaCEZBWWXNe5BC8k+0=
+X-Received: by 2002:a05:6512:3b88:b0:4a3:9533:f4c9 with SMTP id
+ g8-20020a0565123b8800b004a39533f4c9mr17381527lfv.615.1669899618856; Thu, 01
+ Dec 2022 05:00:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20221201125928.3031325-1-brgl@bgdev.pl>
+In-Reply-To: <20221201125928.3031325-1-brgl@bgdev.pl>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 1 Dec 2022 14:00:06 +0100
+Message-ID: <CAMRc=MfGi52s+LcTrBnBPDV91SbC4vf1prrLUpzQ_KZQQZGBuQ@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] gpiolib: don't allow user-space to crash the
+ kernel with hot-unplugs
 To:     Kent Gibson <warthog618@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v6 2/2] gpiolib: protect the GPIO device against being dropped while in use by user-space
-Date:   Thu,  1 Dec 2022 13:59:28 +0100
-Message-Id: <20221201125928.3031325-3-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221201125928.3031325-1-brgl@bgdev.pl>
-References: <20221201125928.3031325-1-brgl@bgdev.pl>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Dec 1, 2022 at 1:59 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> This is (hopefully) the final iteration of the changes that aim at fixing
+> the situation in which the user-space can provoke a NULL-pointer derefence
+> in the kernel when a GPIO device that's in use by user-space is removed.
+>
+> v5 -> v6:
+> - signal an error in poll callbacks instead of returning 0 which would make
+>   the user-space assume a timeout occurred (which could lead to user-space
+>   spinning a timeout loop forever)
+>
+> v4 -> v5:
+> - try to acquire the semaphore for reading and bail out of syscall callbacks
+>   immediately in case of lock contention
+>
+> v3 -> v4:
+> - use function typedefs to make code cleaner
+> - add a blank line after down_write()
+>
+> v2 -> v3:
+> - drop the helper variable in patch 1/2 as we won't be using it in 2/2
+> - refactor patch 2/2 to use locking wrappers around the syscall callbacks
+>
+> v1 -> v2:
+> - add missing gdev->chip checks in patch 1/2
+> - add a second patch that protects the structures that can be accessed
+>   by user-space calls against concurrent removal
+>
+> Bartosz Golaszewski (2):
+>   gpiolib: cdev: fix NULL-pointer dereferences
+>   gpiolib: protect the GPIO device against being dropped while in use by
+>     user-space
+>
+>  drivers/gpio/gpiolib-cdev.c | 193 ++++++++++++++++++++++++++++++++----
+>  drivers/gpio/gpiolib.c      |   4 +
+>  drivers/gpio/gpiolib.h      |   5 +
+>  3 files changed, 180 insertions(+), 22 deletions(-)
+>
+> --
+> 2.37.2
+>
 
-While any of the GPIO cdev syscalls is in progress, the kernel can call
-gpiochip_remove() (for instance, when a USB GPIO expander is disconnected)
-which will set gdev->chip to NULL after which any subsequent access will
-cause a crash.
+I know Kent and Linus left their review tags already, I will add them
+when applying.
 
-To avoid that: use an RW-semaphore in which the syscalls take it for
-reading (so that we don't needlessly prohibit the user-space from calling
-syscalls simultaneously) while gpiochip_remove() takes it for writing so
-that it can only happen once all syscalls return.
-
-Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
-Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
-Fixes: aad955842d1c ("gpiolib: cdev: support GPIO_V2_GET_LINEINFO_IOCTL and GPIO_V2_GET_LINEINFO_WATCH_IOCTL")
-Fixes: a54756cb24ea ("gpiolib: cdev: support GPIO_V2_LINE_SET_CONFIG_IOCTL")
-Fixes: 7b8e00d98168 ("gpiolib: cdev: support GPIO_V2_LINE_SET_VALUES_IOCTL")
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Kent Gibson <warthog618@gmail.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpiolib-cdev.c | 166 +++++++++++++++++++++++++++++++-----
- drivers/gpio/gpiolib.c      |   4 +
- drivers/gpio/gpiolib.h      |   5 ++
- 3 files changed, 153 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index 6fa5c2169985..2e572c643c2a 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -84,6 +84,53 @@ struct linehandle_state {
- 	GPIOHANDLE_REQUEST_OPEN_DRAIN | \
- 	GPIOHANDLE_REQUEST_OPEN_SOURCE)
- 
-+typedef __poll_t (*poll_fn)(struct file *, struct poll_table_struct *);
-+typedef long (*ioctl_fn)(struct file *, unsigned int, unsigned long);
-+typedef ssize_t (*read_fn)(struct file *, char __user *,
-+			   size_t count, loff_t *);
-+
-+static __poll_t call_poll_locked(struct file *file,
-+				 struct poll_table_struct *wait,
-+				 struct gpio_device *gdev, poll_fn func)
-+{
-+	__poll_t ret;
-+
-+	if (!down_read_trylock(&gdev->sem))
-+		return EPOLLHUP | EPOLLERR;
-+	ret = func(file, wait);
-+	up_read(&gdev->sem);
-+
-+	return ret;
-+}
-+
-+static long call_ioctl_locked(struct file *file, unsigned int cmd,
-+			      unsigned long arg, struct gpio_device *gdev,
-+			      ioctl_fn func)
-+{
-+	long ret;
-+
-+	if (!down_read_trylock(&gdev->sem))
-+		return -ENODEV;
-+	ret = func(file, cmd, arg);
-+	up_read(&gdev->sem);
-+
-+	return ret;
-+}
-+
-+static ssize_t call_read_locked(struct file *file, char __user *buf,
-+				size_t count, loff_t *f_ps,
-+				struct gpio_device *gdev, read_fn func)
-+{
-+	ssize_t ret;
-+
-+	if (!down_read_trylock(&gdev->sem))
-+		return -ENODEV;
-+	ret = func(file, buf, count, f_ps);
-+	up_read(&gdev->sem);
-+
-+	return ret;
-+}
-+
- static int linehandle_validate_flags(u32 flags)
- {
- 	/* Return an error if an unknown flag is set */
-@@ -191,8 +238,8 @@ static long linehandle_set_config(struct linehandle_state *lh,
- 	return 0;
- }
- 
--static long linehandle_ioctl(struct file *file, unsigned int cmd,
--			     unsigned long arg)
-+static long linehandle_ioctl_unlocked(struct file *file, unsigned int cmd,
-+				      unsigned long arg)
- {
- 	struct linehandle_state *lh = file->private_data;
- 	void __user *ip = (void __user *)arg;
-@@ -250,6 +297,15 @@ static long linehandle_ioctl(struct file *file, unsigned int cmd,
- 	}
- }
- 
-+static long linehandle_ioctl(struct file *file, unsigned int cmd,
-+			     unsigned long arg)
-+{
-+	struct linehandle_state *lh = file->private_data;
-+
-+	return call_ioctl_locked(file, cmd, arg, lh->gdev,
-+				 linehandle_ioctl_unlocked);
-+}
-+
- #ifdef CONFIG_COMPAT
- static long linehandle_ioctl_compat(struct file *file, unsigned int cmd,
- 				    unsigned long arg)
-@@ -1381,8 +1437,8 @@ static long linereq_set_config(struct linereq *lr, void __user *ip)
- 	return ret;
- }
- 
--static long linereq_ioctl(struct file *file, unsigned int cmd,
--			  unsigned long arg)
-+static long linereq_ioctl_unlocked(struct file *file, unsigned int cmd,
-+				   unsigned long arg)
- {
- 	struct linereq *lr = file->private_data;
- 	void __user *ip = (void __user *)arg;
-@@ -1402,6 +1458,15 @@ static long linereq_ioctl(struct file *file, unsigned int cmd,
- 	}
- }
- 
-+static long linereq_ioctl(struct file *file, unsigned int cmd,
-+			  unsigned long arg)
-+{
-+	struct linereq *lr = file->private_data;
-+
-+	return call_ioctl_locked(file, cmd, arg, lr->gdev,
-+				 linereq_ioctl_unlocked);
-+}
-+
- #ifdef CONFIG_COMPAT
- static long linereq_ioctl_compat(struct file *file, unsigned int cmd,
- 				 unsigned long arg)
-@@ -1410,8 +1475,8 @@ static long linereq_ioctl_compat(struct file *file, unsigned int cmd,
- }
- #endif
- 
--static __poll_t linereq_poll(struct file *file,
--			    struct poll_table_struct *wait)
-+static __poll_t linereq_poll_unlocked(struct file *file,
-+				      struct poll_table_struct *wait)
- {
- 	struct linereq *lr = file->private_data;
- 	__poll_t events = 0;
-@@ -1428,10 +1493,16 @@ static __poll_t linereq_poll(struct file *file,
- 	return events;
- }
- 
--static ssize_t linereq_read(struct file *file,
--			    char __user *buf,
--			    size_t count,
--			    loff_t *f_ps)
-+static __poll_t linereq_poll(struct file *file,
-+			     struct poll_table_struct *wait)
-+{
-+	struct linereq *lr = file->private_data;
-+
-+	return call_poll_locked(file, wait, lr->gdev, linereq_poll_unlocked);
-+}
-+
-+static ssize_t linereq_read_unlocked(struct file *file, char __user *buf,
-+				     size_t count, loff_t *f_ps)
- {
- 	struct linereq *lr = file->private_data;
- 	struct gpio_v2_line_event le;
-@@ -1485,6 +1556,15 @@ static ssize_t linereq_read(struct file *file,
- 	return bytes_read;
- }
- 
-+static ssize_t linereq_read(struct file *file, char __user *buf,
-+			    size_t count, loff_t *f_ps)
-+{
-+	struct linereq *lr = file->private_data;
-+
-+	return call_read_locked(file, buf, count, f_ps, lr->gdev,
-+				linereq_read_unlocked);
-+}
-+
- static void linereq_free(struct linereq *lr)
- {
- 	unsigned int i;
-@@ -1722,8 +1802,8 @@ struct lineevent_state {
- 	(GPIOEVENT_REQUEST_RISING_EDGE | \
- 	GPIOEVENT_REQUEST_FALLING_EDGE)
- 
--static __poll_t lineevent_poll(struct file *file,
--			       struct poll_table_struct *wait)
-+static __poll_t lineevent_poll_unlocked(struct file *file,
-+					struct poll_table_struct *wait)
- {
- 	struct lineevent_state *le = file->private_data;
- 	__poll_t events = 0;
-@@ -1739,15 +1819,21 @@ static __poll_t lineevent_poll(struct file *file,
- 	return events;
- }
- 
-+static __poll_t lineevent_poll(struct file *file,
-+			       struct poll_table_struct *wait)
-+{
-+	struct lineevent_state *le = file->private_data;
-+
-+	return call_poll_locked(file, wait, le->gdev, lineevent_poll_unlocked);
-+}
-+
- struct compat_gpioeevent_data {
- 	compat_u64	timestamp;
- 	u32		id;
- };
- 
--static ssize_t lineevent_read(struct file *file,
--			      char __user *buf,
--			      size_t count,
--			      loff_t *f_ps)
-+static ssize_t lineevent_read_unlocked(struct file *file, char __user *buf,
-+				       size_t count, loff_t *f_ps)
- {
- 	struct lineevent_state *le = file->private_data;
- 	struct gpioevent_data ge;
-@@ -1815,6 +1901,15 @@ static ssize_t lineevent_read(struct file *file,
- 	return bytes_read;
- }
- 
-+static ssize_t lineevent_read(struct file *file, char __user *buf,
-+			      size_t count, loff_t *f_ps)
-+{
-+	struct lineevent_state *le = file->private_data;
-+
-+	return call_read_locked(file, buf, count, f_ps, le->gdev,
-+				lineevent_read_unlocked);
-+}
-+
- static void lineevent_free(struct lineevent_state *le)
- {
- 	if (le->irq)
-@@ -1832,8 +1927,8 @@ static int lineevent_release(struct inode *inode, struct file *file)
- 	return 0;
- }
- 
--static long lineevent_ioctl(struct file *file, unsigned int cmd,
--			    unsigned long arg)
-+static long lineevent_ioctl_unlocked(struct file *file, unsigned int cmd,
-+				     unsigned long arg)
- {
- 	struct lineevent_state *le = file->private_data;
- 	void __user *ip = (void __user *)arg;
-@@ -1864,6 +1959,15 @@ static long lineevent_ioctl(struct file *file, unsigned int cmd,
- 	return -EINVAL;
- }
- 
-+static long lineevent_ioctl(struct file *file, unsigned int cmd,
-+			    unsigned long arg)
-+{
-+	struct lineevent_state *le = file->private_data;
-+
-+	return call_ioctl_locked(file, cmd, arg, le->gdev,
-+				 lineevent_ioctl_unlocked);
-+}
-+
- #ifdef CONFIG_COMPAT
- static long lineevent_ioctl_compat(struct file *file, unsigned int cmd,
- 				   unsigned long arg)
-@@ -2422,8 +2526,8 @@ static int lineinfo_changed_notify(struct notifier_block *nb,
- 	return NOTIFY_OK;
- }
- 
--static __poll_t lineinfo_watch_poll(struct file *file,
--				    struct poll_table_struct *pollt)
-+static __poll_t lineinfo_watch_poll_unlocked(struct file *file,
-+					     struct poll_table_struct *pollt)
- {
- 	struct gpio_chardev_data *cdev = file->private_data;
- 	__poll_t events = 0;
-@@ -2440,8 +2544,17 @@ static __poll_t lineinfo_watch_poll(struct file *file,
- 	return events;
- }
- 
--static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
--				   size_t count, loff_t *off)
-+static __poll_t lineinfo_watch_poll(struct file *file,
-+				    struct poll_table_struct *pollt)
-+{
-+	struct gpio_chardev_data *cdev = file->private_data;
-+
-+	return call_poll_locked(file, pollt, cdev->gdev,
-+				lineinfo_watch_poll_unlocked);
-+}
-+
-+static ssize_t lineinfo_watch_read_unlocked(struct file *file, char __user *buf,
-+					    size_t count, loff_t *off)
- {
- 	struct gpio_chardev_data *cdev = file->private_data;
- 	struct gpio_v2_line_info_changed event;
-@@ -2519,6 +2632,15 @@ static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
- 	return bytes_read;
- }
- 
-+static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
-+				   size_t count, loff_t *off)
-+{
-+	struct gpio_chardev_data *cdev = file->private_data;
-+
-+	return call_read_locked(file, buf, count, off, cdev->gdev,
-+				lineinfo_watch_read_unlocked);
-+}
-+
- /**
-  * gpio_chrdev_open() - open the chardev for ioctl operations
-  * @inode: inode for this chardev
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 4756ea08894f..e0e73bd756ca 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -731,6 +731,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	spin_unlock_irqrestore(&gpio_lock, flags);
- 
- 	BLOCKING_INIT_NOTIFIER_HEAD(&gdev->notifier);
-+	init_rwsem(&gdev->sem);
- 
- #ifdef CONFIG_PINCTRL
- 	INIT_LIST_HEAD(&gdev->pin_ranges);
-@@ -865,6 +866,8 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	unsigned long	flags;
- 	unsigned int	i;
- 
-+	down_write(&gdev->sem);
-+
- 	/* FIXME: should the legacy sysfs handling be moved to gpio_device? */
- 	gpiochip_sysfs_unregister(gdev);
- 	gpiochip_free_hogs(gc);
-@@ -899,6 +902,7 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	 * gone.
- 	 */
- 	gcdev_unregister(gdev);
-+	up_write(&gdev->sem);
- 	put_device(&gdev->dev);
- }
- EXPORT_SYMBOL_GPL(gpiochip_remove);
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index d900ecdbac46..9ad68a0adf4a 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -15,6 +15,7 @@
- #include <linux/device.h>
- #include <linux/module.h>
- #include <linux/cdev.h>
-+#include <linux/rwsem.h>
- 
- #define GPIOCHIP_NAME	"gpiochip"
- 
-@@ -39,6 +40,9 @@
-  * @list: links gpio_device:s together for traversal
-  * @notifier: used to notify subscribers about lines being requested, released
-  *            or reconfigured
-+ * @sem: protects the structure from a NULL-pointer dereference of @chip by
-+ *       user-space operations when the device gets unregistered during
-+ *       a hot-unplug event
-  * @pin_ranges: range of pins served by the GPIO driver
-  *
-  * This state container holds most of the runtime variable data
-@@ -60,6 +64,7 @@ struct gpio_device {
- 	void			*data;
- 	struct list_head        list;
- 	struct blocking_notifier_head notifier;
-+	struct rw_semaphore	sem;
- 
- #ifdef CONFIG_PINCTRL
- 	/*
--- 
-2.37.2
-
+Bart
