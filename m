@@ -2,156 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E444063EF6C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6057763EF6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiLAL0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S229780AbiLAL0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiLAL0S (ORCPT
+        with ESMTP id S229472AbiLAL0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:26:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CB9E21
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:25:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669893918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7ep72vLxE58Hj5NSOsGJz6rENtgNcndE3NkTvnuzGDE=;
-        b=Y3wn249F3IuDUpEo+fxHlQkMVzYdPWns5k2bE2ZCULzdHqmac7sSsaAIIex92dToyCVvgn
-        1AFrfdSEr72H6L2hgjrGvw1CtunMGlWFruBPySH7y4s3GckHINgvxSN2tMr4rUwQ4Hm17y
-        j13QuEY446OYLT6z/QfNG8IP0ADETT0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-250-HT5nIMgrOLiX3xNxa448iA-1; Thu, 01 Dec 2022 06:25:16 -0500
-X-MC-Unique: HT5nIMgrOLiX3xNxa448iA-1
-Received: by mail-wm1-f72.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso716434wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:25:15 -0800 (PST)
+        Thu, 1 Dec 2022 06:26:00 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7071B233
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:25:58 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id g65so1223044vsc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:25:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1+OjgymNTgpya4cFDzkY6TioB8zsQW+gfuuC/5sIFGI=;
+        b=WJm3P5MCtjzSoLs7LiGyBy2a9Y+3xHS3FkTOUDFaDfO3xpAyiimaBU3hyYR2AkCfMP
+         Bl66OvmqYD030PEcT/Md+1x8A9+WD+v27EW5zPDUnTldrKs44PgYCsj4dYXS1S4AzO/2
+         AFofI6KaRIxKQElpiGpkTJdmM7JCHoxKNtJTo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ep72vLxE58Hj5NSOsGJz6rENtgNcndE3NkTvnuzGDE=;
-        b=A0HtrmWSGJpJ3ae90boWjijgyxENhcRzHP6xRdnZEUSJPzDz01FXFNJJXsf5PXWoRJ
-         9BAoV5GB80j+1Prgv1TcHV2i/CM95b9h85RDq1YHnyPqUAVVnbzAZZZBAZsV1uyB2YB1
-         Ve2xegnqyc2ovLIOcTKQnjWhpWZ9DyIc9BQyLH49LOGX3yTWUmvw5jFm4G3blZ5P0WVl
-         XYIyBXYBGTzdVdzeNMxyh7Ed8TqiBh4/JOkzjVfd3FuSACFTjLrvQiL27KTIryDfdF/+
-         d4AvpRQ+xRNYIJNpRPI9JenJLbdUC4lAq7KyaDtDSLl5xUJCCX5Px/bxGUyDLc0AnOYK
-         xfnQ==
-X-Gm-Message-State: ANoB5pn6d1LLwtI1R4wz1dbIcWI5xNHTdjjsipGUnDn/8eXxiuMUYpXd
-        bHdZoVZ68Kn8yDpQ+uvL5JgFw4u+UGX8tvF/eIrqfE14nqaQBvbNt8NU6AGyUHvbJq959S7wgnK
-        EoOOpKjZm75XgYYLUrCFwllyL
-X-Received: by 2002:a5d:4a8c:0:b0:242:165e:7a79 with SMTP id o12-20020a5d4a8c000000b00242165e7a79mr12148260wrq.343.1669893914871;
-        Thu, 01 Dec 2022 03:25:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7T6oAcCAjM/6a6zgzwAS5bkUYUQkeATl7F2kjZacgCrgATu3VUsNvuAWXyhxxd1feg1XyRFw==
-X-Received: by 2002:a5d:4a8c:0:b0:242:165e:7a79 with SMTP id o12-20020a5d4a8c000000b00242165e7a79mr12148245wrq.343.1669893914608;
-        Thu, 01 Dec 2022 03:25:14 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id i1-20020a05600c354100b003b4868eb71bsm9730088wmq.25.2022.12.01.03.25.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:25:14 -0800 (PST)
-Message-ID: <188f255ca50e0e7a46e0fd139982e6ee3652bd7f.camel@redhat.com>
-Subject: Re: [PATCH] nfc: llcp: Fix race in handling llcp_devices
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
-Cc:     liwei391@huawei.com, sameo@linux.intel.com, kuba@kernel.org,
-        davem@davemloft.net, syzkaller-bugs@googlegroups.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 01 Dec 2022 12:25:13 +0100
-In-Reply-To: <20221129094436.3975668-1-bobo.shaobowang@huawei.com>
-References: <20221129094436.3975668-1-bobo.shaobowang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1+OjgymNTgpya4cFDzkY6TioB8zsQW+gfuuC/5sIFGI=;
+        b=lSilSUT4xJeNyeS8HkjkcX8heJY2tHBtNx2O/5Fa4M+xhqSurnB9Vb1ON+VTOtHR1y
+         /HXr7qYW+QRsZeNpEaeSaF5LwSsnxq1SKusB7rDq8PflhKAe9+iXV275Q6y0lj/R+ej1
+         dGD9FdrH9ifIjf/EfGlSIvkD2QgUmPDPp8Y/6dzv9SbyLAp74iLTwSSNN1vb9blCcEvX
+         SYSzeN1FZzpsIYpc9T2iXvbgizx6AdsELG546xvT8Jg7dSkPq09Ad5YVCEE2dwep+I9/
+         jE8P+sTzTEvJYhSh2RRUL51ZKE2ibBvqJEtFu3yu3mbJMJZSjVfXrO/F1/U3V8+FcdQM
+         FYWg==
+X-Gm-Message-State: ANoB5plCAqtqzaQsdFMwwDCZeND29+ra9ur9GSR1iBHWUQkhpCaOWUWT
+        hwzcZyTzKcbYH2AH1YXQ8ZL5bafciDARFM4nxwrPsA==
+X-Google-Smtp-Source: AA0mqf4AYXsolIEAOErn11wxr7jiZlTxjgFcbV7F7SwpGeJg2LHiSLwosnWl4RljWivcFnk5n832mUFOiPN4aGcNMhw=
+X-Received: by 2002:a05:6102:b16:b0:3a7:a88a:6bce with SMTP id
+ b22-20020a0561020b1600b003a7a88a6bcemr28995324vst.65.1669893957629; Thu, 01
+ Dec 2022 03:25:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20221111082912.14557-1-matthias.bgg@kernel.org>
+ <46c17d4b-d130-86a7-b5f8-73c30d7fdfdd@collabora.com> <CAGXv+5FORS=iGe55StxR_1E3sdtk9cvitfvNa1SydqCjWGcubg@mail.gmail.com>
+In-Reply-To: <CAGXv+5FORS=iGe55StxR_1E3sdtk9cvitfvNa1SydqCjWGcubg@mail.gmail.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 1 Dec 2022 19:25:46 +0800
+Message-ID: <CAGXv+5GfZYdhSCkhdGXRvbprwhceMJy9a9j+cNxsyUFYhMNZOw@mail.gmail.com>
+Subject: Re: [PATCH v2] soc: mediatek: Add deprecated compatible to mmsys
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, matthias.bgg@kernel.org
+Cc:     matthias.bgg@gmail.com, nancy.lin@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 17:44 +0800, Wang ShaoBo wrote:
-> There are multiple path operate llcp_devices list without protection:
-> 
->          CPU0                        CPU1
-> 
-> nfc_unregister_device()        nfc_register_device()
->  nfc_llcp_unregister_device()    nfc_llcp_register_device() //no lock
->     ...                            list_add(local->list, llcp_devices)
->     local_release()
->       list_del(local->list)
-> 
->         CPU2
-> ...
->  nfc_llcp_find_local()
->    list_for_each_entry(,&llcp_devices,)
-> 
-> So reach race condition if two of the three occur simultaneously like
-> following crash report, although there is no reproduction script in
-> syzbot currently, our artificially constructed use cases can also
-> reproduce it:
-> 
-> list_del corruption. prev->next should be ffff888060ce7000, but was ffff88802a0ad000. (prev=ffffffff8e536240)
-> ------------[ cut here ]------------
-> kernel BUG at lib/list_debug.c:59!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 16622 Comm: syz-executor.5 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:__list_del_entry_valid.cold+0x12/0x72 lib/list_debug.c:59
-> Code: f0 ff 0f 0b 48 89 f1 48 c7 c7 60 96 a6 8a 4c 89 e6 e8 4b 29 f0 ff 0f 0b 4c 89 e1 48 89 ee 48 c7 c7 c0 98 a6 8a e8 37 29 f0 ff <0f> 0b 48 89 ee 48 c7 c7 a0 97 a6 8a e8 26 29 f0 ff 0f 0b 4c 89 e2
-> RSP: 0018:ffffc900151afd58 EFLAGS: 00010282
-> RAX: 000000000000006d RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff88801e7eba80 RSI: ffffffff8166001c RDI: fffff52002a35f9d
-> RBP: ffff888060ce7000 R08: 000000000000006d R09: 0000000000000000
-> R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8e536240
-> R13: ffff88801f3f3000 R14: ffff888060ce1000 R15: ffff888079d855f0
-> FS:  0000555556f57400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f095d5ad988 CR3: 000000002155a000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __list_del_entry include/linux/list.h:134 [inline]
->  list_del include/linux/list.h:148 [inline]
->  local_release net/nfc/llcp_core.c:171 [inline]
->  kref_put include/linux/kref.h:65 [inline]
->  nfc_llcp_local_put net/nfc/llcp_core.c:181 [inline]
->  nfc_llcp_local_put net/nfc/llcp_core.c:176 [inline]
->  nfc_llcp_unregister_device+0xb8/0x260 net/nfc/llcp_core.c:1619
->  nfc_unregister_device+0x196/0x330 net/nfc/core.c:1179
->  virtual_ncidev_close+0x52/0xb0 drivers/nfc/virtual_ncidev.c:163
->  __fput+0x27c/0xa90 fs/file_table.c:320
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->  exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> This patch add specific mutex lock llcp_devices_list_lock to ensure
-> handling llcp_devices list safety.
+On Thu, Dec 1, 2022 at 7:20 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>
+> On Mon, Nov 14, 2022 at 7:59 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+> >
+> > Il 11/11/22 09:29, matthias.bgg@kernel.org ha scritto:
+> > > From: Matthias Brugger <matthias.bgg@gmail.com>
+> > >
+> > > For backward compatibility we add the deprecated compatible.
+> > >
+> > > Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> >
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> >
+> > ...And tested on MT8195 Cherry Chromebook.
+>
+> This now seems like a bad idea. In the dtsi we have two nodes (vdosys0 and
+> vdosys1) that both currently use the -mmsys compatible, which in the driver
+> maps to vdosys0. So not only do we have vdosys1 incorrectly probing as
+> vdosys0, we also have duplicate clks being registered and duplicate DRM
+> pipelines. On my device vdosys1 ends up winning the duplicate clock race.
+>
+> I suggest just reverting this. The display stuff won't be useful unless
+> the drivers are able to distinguish themselves from one another.
 
-Why a mutex instead of a spinlock? all the critical sections are very
-small (both code and time-wise), while the list of callers reaching
-that code is quite large making hard to check each of them is really in
-process context.
+That and try to fix the vdosys0 node ASAP.
 
-Please switch to a spinlock instead.
-
-Cheers,
-
-Paolo
-
+> Regards
+> ChenYu
