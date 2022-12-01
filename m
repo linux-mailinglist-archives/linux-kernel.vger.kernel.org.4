@@ -2,336 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736E363F192
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AC263F197
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiLAN1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S230174AbiLAN2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:28:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiLAN1H (ORCPT
+        with ESMTP id S231534AbiLAN1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:27:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D8FA897B;
-        Thu,  1 Dec 2022 05:27:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F17996200F;
-        Thu,  1 Dec 2022 13:27:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C47C433C1;
-        Thu,  1 Dec 2022 13:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669901225;
-        bh=NFIvcHXQ+/ERF3OpK8I1hJFW+cU//2XvbCqp4ucNeSM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iObA3Dleu2jdelwAijdwi5+2YZTfvqGM59aZBZlE30aS8f8ETH931ZNCziK1j9mAn
-         DBpEjNBMPqB7gQ49g1mdAGKkOajDDuNKZic92I7fNZvNixJwh9h37PubJr9tf1hzOY
-         cFh71oKgj6OgiT7MC/dVaYyQRMxldK6ymjUeCoFVSZ9S4q/hduXMPl0pEOzkYNeKbF
-         oP9kkvSzjX34VdUl2wuaxPHT6QKAiQQ2vRi2VWht6x50hrUs515CWL4gfWsQMj/gkp
-         qclsVVs03aiOIfzKjKgpJq9JEoaOg7WLRFRHdQ5vJp5jsQ8nNGFTP+oRKBfrp4DkCn
-         4Wa5/phsqCaTg==
-Received: by mercury (Postfix, from userid 1000)
-        id 849AB1060E96; Thu,  1 Dec 2022 14:27:02 +0100 (CET)
-Date:   Thu, 1 Dec 2022 14:27:02 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Markus Laine <markus.laine@fi.rohmeurope.com>,
-        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix maintainer email for a few ROHM ICs
-Message-ID: <20221201132702.y2tdgopcqjtbqkiw@mercury.elektranox.org>
-References: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
+        Thu, 1 Dec 2022 08:27:55 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B81598030
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:27:50 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-14263779059so2143676fac.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:27:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UKX7XbV45ypYpzPDw9elTD9CiMI8plRjBBbcyN9gt8c=;
+        b=k290NBge+7x8zsRMOEqR+FNvzJ7CKWqruPNVjZrPrsoxjjkzNur8PN062w6gpJtLwP
+         PbLa4ieeffSyraHBVpBkMmDlXggS83Y1D9bkutj63LPm+ooztmPAVqzsnlkvsa9NJvpX
+         cL3HGsob5j0yo+GpRSKBijXlI6FyB4RacXI/Y8hgj+AQ3g2zGtd7tSd6T/kok8ykl5/W
+         tMRleQLJ79wf4+oXP4fX8swI/psLpdbwvDPuYocuJeTW0n1WbRvTUsIrSVLzgkBiDl+2
+         8A+4KNX4abdjGPT31QLCjuYLuDwA4h8Nk5Qz+kK5FFTLAZL2QhFitgQ4J4DWaHx8YMr8
+         6mSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UKX7XbV45ypYpzPDw9elTD9CiMI8plRjBBbcyN9gt8c=;
+        b=PCGeHxDivODY3PfKxPn0j+Ywf4rSWdeZHZb+5GHzDFo8hNiS0hDhBDkYr5LFq0doOm
+         jn/HsnNNA94KVdxupjqXLl8NiP/J/9vJKpqbQHvGa5hhu4r30JNpSbVCwRHbR9q+9wLX
+         mMkhVf+Q1CQq9Aoh32kyfqaPDMNhwMUsHtFrro8G00sJB2zksl90uCil3Ma1fdYyxPbg
+         bfEpDg++l44BX7esaMRZ645GDUK6wp08DQnAHPzBln0dKD1P4Iqdhs0CR/0H2Wf9sIdv
+         z3NnfxRznyuR2ggnPr55jMraZ2w4WOTBAmPGyD6VYl1XCqyDtTOdk1te/DioUNuEJ0y+
+         F8Xw==
+X-Gm-Message-State: ANoB5pnLckAdz5DExLmANBEMhSfZKv6sJgtocQgxXoxCqD+zUFPH1DTC
+        sSj6N05usnX9XzG98rAnrzgrDPjZ3N0unJC6C5G5vQ==
+X-Google-Smtp-Source: AA0mqf4Q4727PKmPz/jEaHJf9BWuLDES9qwrpnH5XiL6CQUDZAAuK0g7tkj/lwGSk//UWx853d+S/yLDY+qizR4yyDk=
+X-Received: by 2002:a05:6870:b689:b0:13c:7d1c:5108 with SMTP id
+ cy9-20020a056870b68900b0013c7d1c5108mr27415122oab.282.1669901269175; Thu, 01
+ Dec 2022 05:27:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="olgbnsuo2og2janb"
-Content-Disposition: inline
-In-Reply-To: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000031692f05ebc4cf8a@google.com> <CAKYAXd_sNEM1KE=Tom-htUsvw5h-iF+M+arzjP7uPYLEcJQ+tw@mail.gmail.com>
+In-Reply-To: <CAKYAXd_sNEM1KE=Tom-htUsvw5h-iF+M+arzjP7uPYLEcJQ+tw@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 1 Dec 2022 14:27:37 +0100
+Message-ID: <CACT4Y+bhncXf4LArLVNJGanSinn4sYBWza-wT1Wkv=6Xuj+JHw@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in exfat_fill_super
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     syzbot <syzbot+74fa8cb75d0a18df4790@syzkaller.appspotmail.com>,
+        sj1557.seo@samsung.com, syzkaller-bugs@googlegroups.com,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 30 Nov 2022 at 16:17, Namjae Jeon <linkinjeon@kernel.org> wrote:
+>
+> Hello,
+>
+> I have tried to reproduce this issue using syzkaller and your
+> testcase(C reproducer)
+>
+> root@syzkaller:~# ./repro
+> [ 4278.566005] loop0: detected capacity change from 0 to 4096
+> [ 4278.570538] exfat: Bad value for 'iocharset
+>
+> But I can't see kernel oops or KASAN logs.
+> Could you pleaes confirm that you can still reproduce this ?
 
---olgbnsuo2og2janb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Namjae,
 
-Hi,
+This was reported by a robot, it won't understand such a request.
+But you can see all the info it has about the bug on the dashboard
+page (when it happened, how many times, on what commits, etc):
+https://syzkaller.appspot.com/bug?extid=74fa8cb75d0a18df4790
 
-On Thu, Dec 01, 2022 at 08:57:52AM +0200, Matti Vaittinen wrote:
-> The email backend used by ROHM keeps labeling patches as spam. This can
-> result to missing the patches.
->=20
-> Switch my mail address from a company mail to a personal one.
->=20
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->=20
-> ---
->=20
-> I did this a while ago for my email addresses at the MAINTAINERS. Forgot
-> the dt-bindings and doing the conversion for bindings now.
-> ---
+I am assuming you used the provided kernel commit and config. If you
+can't reproduce it, but need it for debugging/testing, you can ask
+syzbot to test your patches.
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml   | 2 +-
->  Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml    | 2 +-
->  Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml    | 2 +-
->  Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml    | 2 +-
->  Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml    | 2 +-
->  Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml     | 2 +-
->  .../devicetree/bindings/power/supply/rohm,bd99954.yaml          | 2 +-
->  .../devicetree/bindings/regulator/rohm,bd71815-regulator.yaml   | 2 +-
->  .../devicetree/bindings/regulator/rohm,bd71828-regulator.yaml   | 2 +-
->  .../devicetree/bindings/regulator/rohm,bd71837-regulator.yaml   | 2 +-
->  .../devicetree/bindings/regulator/rohm,bd71847-regulator.yaml   | 2 +-
->  .../devicetree/bindings/regulator/rohm,bd9576-regulator.yaml    | 2 +-
->  12 files changed, 12 insertions(+), 12 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yam=
-l b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
-> index 86a37c92b834..d48c404c848e 100644
-> --- a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
-> +++ b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71828 Power Management Integrated Circuit LED driver
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    This module is part of the ROHM BD71828 MFD device. For more details
-> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml=
- b/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
-> index fbface720678..7cda8adc178e 100644
-> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71815 Power Management Integrated Circuit bindings
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    BD71815AGW is a single-chip power management ICs for battery-powered
-> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml=
- b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-> index 8380166d176c..c13730aa34d9 100644
-> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71828 Power Management Integrated Circuit bindings
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    BD71828GW is a single-chip power management IC for battery-powered por=
-table
-> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml=
- b/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
-> index 3bfdd33702ad..3ab8dcf0e8f1 100644
-> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71837 Power Management Integrated Circuit bindings
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    BD71837MWV is programmable Power Management ICs for powering single-co=
-re,
-> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml=
- b/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
-> index 5d531051a153..8ed4390bb43f 100644
-> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71847 and BD71850 Power Management Integrated Circuit bind=
-ings
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    BD71847AMWV and BD71850MWV are programmable Power Management ICs for p=
-owering
-> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml =
-b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
-> index 6483860da955..e1ebea9ad5da 100644
-> --- a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD9576MUF and BD9573MUF Power Management Integrated Circuit =
-bindings
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    BD9576MUF and BD9573MUF are power management ICs primarily intended for
-> diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.=
-yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-> index 24b06957b4ca..6a0756e33eb8 100644
-> --- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD99954 Battery charger
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
->    - Markus Laine <markus.laine@fi.rohmeurope.com>
->    - Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
-> =20
-> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71815-reg=
-ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regu=
-lator.yaml
-> index d61e8675f067..027fab3dc181 100644
-> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.=
-yaml
-> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.=
-yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71815 Power Management Integrated Circuit regulators
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    This module is part of the ROHM BD718215 MFD device. For more details
-> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71828-reg=
-ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regu=
-lator.yaml
-> index 5ce587fff961..3cbe3b76ccee 100644
-> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.=
-yaml
-> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.=
-yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71828 Power Management Integrated Circuit regulators
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    This module is part of the ROHM BD71828 MFD device. For more details
-> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71837-reg=
-ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regu=
-lator.yaml
-> index 1941b36cf1ef..ab842817d847 100644
-> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.=
-yaml
-> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.=
-yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71837 Power Management Integrated Circuit regulators
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    List of regulators provided by this controller. BD71837 regulators node
-> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71847-reg=
-ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regu=
-lator.yaml
-> index a1b806373853..65fc3d15f693 100644
-> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.=
-yaml
-> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.=
-yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD71847 and BD71850 Power Management Integrated Circuit regu=
-lators
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    List of regulators provided by this controller. BD71847 regulators node
-> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regu=
-lator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regula=
-tor.yaml
-> index 7cb74cc8c5d9..1e41168a4980 100644
-> --- a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.y=
-aml
-> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.y=
-aml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: ROHM BD9576 and BD9573 Power Management Integrated Circuit regula=
-tors
-> =20
->  maintainers:
-> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +  - Matti Vaittinen <mazziesaccount@gmail.com>
-> =20
->  description: |
->    This module is part of the ROHM BD9576 MFD device. For more details
->=20
-> base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
-> --=20
-> 2.38.1
->=20
->=20
-> --=20
-> Matti Vaittinen, Linux device drivers
-> ROHM Semiconductors, Finland SWDC
-> Kiviharjunlenkki 1E
-> 90220 OULU
-> FINLAND
->=20
-> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-> Simon says - in Latin please.
-> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-> Thanks to Simon Glass for the translation =3D]=20
-
-
-
---olgbnsuo2og2janb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOIq5wACgkQ2O7X88g7
-+pp1pg//dnrex19LVaxeoRcryBpQCbZZ4lSDJkXbbn3LcD6JZQtZymXViKEBkTi4
-L5xhsh/lVYl6HdbJVuMYe7T1ToBO0pRWVS92oVqDwarsaKn3vX7vJuhi8k5THdxg
-prUNv3zpaYAiS2zp5rr43ojRSS+3/FlcY2WSlyT8xaaPTD8EZjUIwbftyXCvGUpn
-GlTDvidKQp06slW0ef+EYYY3sCFlI2MArrCSZYtKqwz8KhczFTVv4e9S4L/ubwLx
-CM5thTdqW7poNUNVe/8D/0QI+OeCUpzabzgBjldWBajrxeIA9i2EDOODhe2Ebk1M
-j1WC41T55FkjAW7QJIKPVZWT7jiY7bSKpHCpEA0+crrUhCtXq3EmNOl4exewul9z
-um/ZOCdJubuL9YfzpHhBlWagWf1hUVqTZMdMOGnx21T3c0dEDrFjaxPwU+SzOmQT
-TS9VxWqN6N533a6RD7k4fNVu0JQ2MHNmIuyI2jSr1xS7z9EpZ4ne2NjzEP9ScPc7
-5jOnXK/hMx/10rFE/1odqyemGk+TVN74V62W1mzcUEAVzrqUHYFnlk43rda/T8Xn
-GQTMABXrMZykLfac3PMssIrBJWAfMwjs0bWRhHuoaIfASXmHmBvCCcuE8XXW01iN
-rXSuJIU2vNgf+YcEpqLon3n9i/ly9qYV7aLCa3oyqAv2xkVQta0=
-=oRzv
------END PGP SIGNATURE-----
-
---olgbnsuo2og2janb--
+> Thanks!
+>
+> 2022-10-24 18:56 GMT+09:00, syzbot
+> <syzbot+74fa8cb75d0a18df4790@syzkaller.appspotmail.com>:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    4d48f589d294 Add linux-next specific files for 20221021
+> > git tree:       linux-next
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=11fc516e880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=2c4b7d600a5739a6
+> > dashboard link:
+> > https://syzkaller.appspot.com/bug?extid=74fa8cb75d0a18df4790
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils
+> > for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1056a9b4880000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14613b3c880000
+> >
+> > Downloadable assets:
+> > disk image:
+> > https://storage.googleapis.com/syzbot-assets/0c86bd0b39a0/disk-4d48f589.raw.xz
+> > vmlinux:
+> > https://storage.googleapis.com/syzbot-assets/074059d37f1f/vmlinux-4d48f589.xz
+> > mounted in repro:
+> > https://storage.googleapis.com/syzbot-assets/6d392b37ac66/mount_0.gz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the
+> > commit:
+> > Reported-by: syzbot+74fa8cb75d0a18df4790@syzkaller.appspotmail.com
+> >
+> > loop0: detected capacity change from 0 to 4096
+> > general protection fault, probably for non-canonical address
+> > 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+> > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+> > CPU: 0 PID: 3610 Comm: syz-executor183 Not tainted
+> > 6.1.0-rc1-next-20221021-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 10/11/2022
+> > RIP: 0010:strcmp+0x35/0xb0 lib/string.c:281
+> > Code: df 41 54 55 53 48 89 fb 48 83 ec 08 eb 08 40 84 ed 74 5d 4c 89 e6 48
+> > 89 df 48 83 c3 01 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <42> 0f b6 04 28 38
+> > d0 7f 04 84 c0 75 50 0f b6 6b ff 4c 8d 66 01 48
+> > RSP: 0018:ffffc90003e3fbd8 EFLAGS: 00010246
+> > RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffffffff89e65300 RDI: 0000000000000000
+> > RBP: ffffc90003e3fd38 R08: 0000000000000005 R09: 0000000000000100
+> > R10: 0000000000000100 R11: 1ffffffff17b2629 R12: 0000000000000000
+> > R13: dffffc0000000000 R14: ffff8880766a6000 R15: 0000000000000100
+> > FS:  0000555556f6b300(0000) GS:ffff8880b9a00000(0000)
+> > knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00000000005d84c8 CR3: 0000000072c9f000 CR4: 00000000003506f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  <TASK>
+> >  exfat_fill_super+0x16d0/0x2990 fs/exfat/super.c:659
+> >  get_tree_bdev+0x440/0x760 fs/super.c:1324
+> >  vfs_get_tree+0x89/0x2f0 fs/super.c:1531
+> >  do_new_mount fs/namespace.c:3040 [inline]
+> >  path_mount+0x1326/0x1e20 fs/namespace.c:3370
+> >  do_mount fs/namespace.c:3383 [inline]
+> >  __do_sys_mount fs/namespace.c:3591 [inline]
+> >  __se_sys_mount fs/namespace.c:3568 [inline]
+> >  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7fa8d401085a
+> > Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00
+> > 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff
+> > 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007ffdbcd10b08 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+> > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fa8d401085a
+> > RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffdbcd10b20
+> > RBP: 00007ffdbcd10b20 R08: 00007ffdbcd10b60 R09: 0000555556f6b2c0
+> > R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
+> > R13: 00007ffdbcd10b60 R14: 000000000000001d R15: 00000000200004b8
+> >  </TASK>
+> > Modules linked in:
+> > ---[ end trace 0000000000000000 ]---
+> > RIP: 0010:strcmp+0x35/0xb0 lib/string.c:281
+> > Code: df 41 54 55 53 48 89 fb 48 83 ec 08 eb 08 40 84 ed 74 5d 4c 89 e6 48
+> > 89 df 48 83 c3 01 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <42> 0f b6 04 28 38
+> > d0 7f 04 84 c0 75 50 0f b6 6b ff 4c 8d 66 01 48
+> > RSP: 0018:ffffc90003e3fbd8 EFLAGS: 00010246
+> > RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: ffffffff89e65300 RDI: 0000000000000000
+> > RBP: ffffc90003e3fd38 R08: 0000000000000005 R09: 0000000000000100
+> > R10: 0000000000000100 R11: 1ffffffff17b2629 R12: 0000000000000000
+> > R13: dffffc0000000000 R14: ffff8880766a6000 R15: 0000000000000100
+> > FS:  0000555556f6b300(0000) GS:ffff8880b9a00000(0000)
+> > knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00000000005d84c8 CR3: 0000000072c9f000 CR4: 00000000003506f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > ----------------
+> > Code disassembly (best guess):
+> >    0: df 41 54                filds  0x54(%rcx)
+> >    3: 55                      push   %rbp
+> >    4: 53                      push   %rbx
+> >    5: 48 89 fb                mov    %rdi,%rbx
+> >    8: 48 83 ec 08             sub    $0x8,%rsp
+> >    c: eb 08                   jmp    0x16
+> >    e: 40 84 ed                test   %bpl,%bpl
+> >   11: 74 5d                   je     0x70
+> >   13: 4c 89 e6                mov    %r12,%rsi
+> >   16: 48 89 df                mov    %rbx,%rdi
+> >   19: 48 83 c3 01             add    $0x1,%rbx
+> >   1d: 48 89 f8                mov    %rdi,%rax
+> >   20: 48 89 fa                mov    %rdi,%rdx
+> >   23: 48 c1 e8 03             shr    $0x3,%rax
+> >   27: 83 e2 07                and    $0x7,%edx
+> > * 2a: 42 0f b6 04 28          movzbl (%rax,%r13,1),%eax <-- trapping
+> > instruction
+> >   2f: 38 d0                   cmp    %dl,%al
+> >   31: 7f 04                   jg     0x37
+> >   33: 84 c0                   test   %al,%al
+> >   35: 75 50                   jne    0x87
+> >   37: 0f b6 6b ff             movzbl -0x1(%rbx),%ebp
+> >   3b: 4c 8d 66 01             lea    0x1(%rsi),%r12
+> >   3f: 48                      rex.W
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this issue, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+> >
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CAKYAXd_sNEM1KE%3DTom-htUsvw5h-iF%2BM%2BarzjP7uPYLEcJQ%2Btw%40mail.gmail.com.
