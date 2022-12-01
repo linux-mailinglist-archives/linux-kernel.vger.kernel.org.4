@@ -2,171 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A1763F5E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334DD63F5E9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiLAREo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 12:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
+        id S230001AbiLARGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 12:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiLAREn (ORCPT
+        with ESMTP id S229977AbiLARGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 12:04:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A470127154
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 09:03:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669914227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pqP9Fbdjm1VmJifw6lxNDz7iVyrm2MIuSIM1mtZLaoA=;
-        b=R1xJZn4WTwwSbzeduQzJxO77JNywYcyDMrdK/xvQzf3CGY1ODzAtCt86hMiG86hcYWvdzM
-        X8Qb0SimIcp8RQf5E/H9h+OgzhLq10PH3nVM2i2+dIC/djEi8xUi5m9ZoE5dOb7COwgVT5
-        DfinO8o3HVGrtBFjtn43nZHMqiEdAQ4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-513-ncN9QstmON2g-T5n3ozTuQ-1; Thu, 01 Dec 2022 12:03:44 -0500
-X-MC-Unique: ncN9QstmON2g-T5n3ozTuQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1436185A588;
-        Thu,  1 Dec 2022 17:03:43 +0000 (UTC)
-Received: from [10.22.33.41] (unknown [10.22.33.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 37AFBC15BB4;
-        Thu,  1 Dec 2022 17:03:42 +0000 (UTC)
-Message-ID: <330989bf-0015-6d4c-9317-bfc9dba30b65@redhat.com>
-Date:   Thu, 1 Dec 2022 12:03:39 -0500
+        Thu, 1 Dec 2022 12:06:48 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE58AA2832
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 09:06:45 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id b9so2592387ljr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 09:06:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tNqK8ABpJ20Ut6IZq8bTpq8cjfjNpkSTKrUTQ4ZO9wQ=;
+        b=m0BFEI7fG4NoNWMPezAmxX10Nj7BG+3CEcAUBUnOrIoKGpD2NWTkwBe2nfRHEIgwYn
+         qBe7h7sjp5XiM6GPNTpvWhuGZ8ObcXReSZwZgMlv2hCE6yI1axc3/4k/sb5SKNwVLFcO
+         qE29WsVQtlkZ771Bkj/xedg6oRWy8oocJFQHFt3ekokKkuJ1+kzQiOs1+vaurbPh8Nkn
+         6dJV3AawIyj+petGRRH+2rdYuZHklTRT61lkfS7nvLM7uc89Dsa650qhvPANaooD7GqS
+         QXtXyDMujIcs8SAT+PfGQr3Cvq6m7I3RMPqRwSBrSK+Z6SFHZQVnvKibrOsmiMXzHXf9
+         DIwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tNqK8ABpJ20Ut6IZq8bTpq8cjfjNpkSTKrUTQ4ZO9wQ=;
+        b=BqKbjhw7I4F7jHN7O8N54iCHXywK5WlZdt7hCz/m22CM6WurV8/YNaq3F5MHtR8Ybw
+         yXPPApqzFeYM8Hd/E8nFOYW+zGEZIE/Z80wVzV0nJUzdcSFaKryM36wXLTos+t5rlvUj
+         MW1vhhoc8ACUOK2iNoE98z/cBJBlcgZmYCOcPV1RxJr9ErAFzrsU0+7T63zXAwUnnx3m
+         dAlCBikzX+o3bLPY99PAJraswHJ8XJJhwzC83yWajWnydcdAdZEPOslS4QzDCEndhAuC
+         dbwZlmtREZssIeh2ZeFfFFkirt3CnmtYAutvd/qYgljkRfOZktWFaeLDAfwQaCEtLf0P
+         VqRQ==
+X-Gm-Message-State: ANoB5pmzlw0zTNZZdz7BhHL3Fx1xN6opM8dW8u+krVbWJiZk91ZnqwNb
+        lxC2UqBTL88eo0NJHLUiGi4JPg==
+X-Google-Smtp-Source: AA0mqf5qBK59tKVGV7MlW4lUfH/wxFPRF4fellB1UL3lq0f4Vzr/JveS9J2ScMIYZCRHPV8jkadBxg==
+X-Received: by 2002:a2e:8e38:0:b0:26d:e863:2f6d with SMTP id r24-20020a2e8e38000000b0026de8632f6dmr23252733ljk.519.1669914404100;
+        Thu, 01 Dec 2022 09:06:44 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q9-20020ac25fc9000000b004b40f5e7336sm703659lfg.199.2022.12.01.09.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 09:06:43 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] ARM: dts: am335x: align LED node names with dtschema
+Date:   Thu,  1 Dec 2022 18:06:38 +0100
+Message-Id: <166991439955.130674.2720283801810821539.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221125144118.476905-1-krzysztof.kozlowski@linaro.org>
+References: <20221125144118.476905-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-tip] sched: Fix use-after-free bug in dup_user_cpus_ptr()
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        =?UTF-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221128014441.1264867-1-longman@redhat.com>
- <20221201134445.GC28489@willie-the-truck>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221201134445.GC28489@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/22 08:44, Will Deacon wrote:
-> On Sun, Nov 27, 2022 at 08:44:41PM -0500, Waiman Long wrote:
->> Since commit 07ec77a1d4e8 ("sched: Allow task CPU affinity to be
->> restricted on asymmetric systems"), the setting and clearing of
->> user_cpus_ptr are done under pi_lock for arm64 architecture. However,
->> dup_user_cpus_ptr() accesses user_cpus_ptr without any lock
->> protection. When racing with the clearing of user_cpus_ptr in
->> __set_cpus_allowed_ptr_locked(), it can lead to user-after-free and
->> double-free in arm64 kernel.
->>
->> Commit 8f9ea86fdf99 ("sched: Always preserve the user requested
->> cpumask") fixes this problem as user_cpus_ptr, once set, will never
->> be cleared in a task's lifetime. However, this bug was re-introduced
->> in commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
->> do_set_cpus_allowed()") which allows the clearing of user_cpus_ptr in
->> do_set_cpus_allowed(). This time, it will affect all arches.
->>
->> Fix this bug by always clearing the user_cpus_ptr of the newly
->> cloned/forked task before the copying process starts and check the
->> user_cpus_ptr state of the source task under pi_lock.
->>
->> Note to stable, this patch won't be applicable to stable releases.
->> Just copy the new dup_user_cpus_ptr() function over.
->>
->> Fixes: 07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on asymmetric systems")
->> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
->> CC: stable@vger.kernel.org
->> Reported-by: David Wang 王标 <wangbiao3@xiaomi.com>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/sched/core.c | 32 ++++++++++++++++++++++++++++----
->>   1 file changed, 28 insertions(+), 4 deletions(-)
-> As per my comments on the previous version of this patch:
->
-> https://lore.kernel.org/lkml/20221201133602.GB28489@willie-the-truck/T/#t
->
-> I think there are other issues to fix when racing affinity changes with
-> fork() too.
-It is certainly possible that there are other bugs hiding somewhere:-)
->
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index 8df51b08bb38..f2b75faaf71a 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -2624,19 +2624,43 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
->>   int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
->>   		      int node)
->>   {
->> +	cpumask_t *user_mask;
->>   	unsigned long flags;
->>   
->> +	/*
->> +	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
->> +	 * may differ by now due to racing.
->> +	 */
->> +	dst->user_cpus_ptr = NULL;
->> +
->> +	/*
->> +	 * This check is racy and losing the race is a valid situation.
->> +	 * It is not worth the extra overhead of taking the pi_lock on
->> +	 * every fork/clone.
->> +	 */
->>   	if (!src->user_cpus_ptr)
->>   		return 0;
-> data_race() ?
-Race is certainly possible, but the clearing of user_cpus_ptr before 
-will mitigate any risk.
->
->>   
->> -	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
->> -	if (!dst->user_cpus_ptr)
->> +	user_mask = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
->> +	if (!user_mask)
->>   		return -ENOMEM;
->>   
->> -	/* Use pi_lock to protect content of user_cpus_ptr */
->> +	/*
->> +	 * Use pi_lock to protect content of user_cpus_ptr
->> +	 *
->> +	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
->> +	 * do_set_cpus_allowed().
->> +	 */
->>   	raw_spin_lock_irqsave(&src->pi_lock, flags);
->> -	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
->> +	if (src->user_cpus_ptr) {
->> +		swap(dst->user_cpus_ptr, user_mask);
-> Isn't 'dst->user_cpus_ptr' always NULL here? Why do we need the swap()
-> instead of just assigning the thing directly?
+On Fri, 25 Nov 2022 15:41:18 +0100, Krzysztof Kozlowski wrote:
+> The node names should be generic and DT schema expects certain pattern:
+> 
+>   am335x-baltos-ir2110.dtb: leds: 'app', 'power', 'wlan' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
+> 
+> 
 
-True. We still need to clear user_mask. So I used swap() instead of 2 
-assignment statements. I am fine to go with either way.
+Applied, thanks!
 
-Cheers,
-Longman
+[1/1] ARM: dts: am335x: align LED node names with dtschema
+      https://git.kernel.org/krzk/linux-dt/c/37dddd7f7621bd5e0234fb3b8288248f165833b4
 
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
