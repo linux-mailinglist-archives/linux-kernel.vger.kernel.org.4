@@ -2,192 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B19363F1D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F7163F1E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiLANil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S231573AbiLANne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiLANii (ORCPT
+        with ESMTP id S231365AbiLANnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:38:38 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAF1AC18B;
-        Thu,  1 Dec 2022 05:38:36 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B988B21BD8;
-        Thu,  1 Dec 2022 13:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669901914; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EpPEbhYU/ZSzBergbxPG18rF6z3xaGTMJpY/KD4hdN0=;
-        b=NqfMGu7TOFopplQnGWvsL3EJ6f6cvD2+3UqnIH9MgHg26FPG3wmd98hqR7V6xsdZ0c8Vke
-        owU1O7TeMPowfni/Y4/f0++Diu8+bvrgj83AyE4Hl4Mhktx4gC0hH22a1j6phJ4cxlwt0g
-        M51CMPmyt3PVadDP6oU7dmktdW+cvjE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669901914;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EpPEbhYU/ZSzBergbxPG18rF6z3xaGTMJpY/KD4hdN0=;
-        b=nw7rEaNxj44kK7pb8ca9iO9xzjrguRhX54wAGxllFfQlwK4FxfX2KJCahutRLs8Vm8Lynh
-        /90IUhYauTmvsgBQ==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id F010C1320E;
-        Thu,  1 Dec 2022 13:38:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id xfi6OVmuiGPRFwAAGKfGzw
-        (envelope-from <tiwai@suse.de>); Thu, 01 Dec 2022 13:38:33 +0000
-Date:   Thu, 01 Dec 2022 14:38:33 +0100
-Message-ID: <87v8mvmeg6.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Juergen Gross <jgross@suse.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chromeos Kdump <chromeos-kdump@google.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        kexec@lists.infradead.org, alsa-devel@alsa-project.org,
-        stable@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v8 3/3] ASoC: SOF: Fix deadlock when shutdown a frozen userspace
-In-Reply-To: <d3730d1d-6f92-700a-06c4-0e0a35e270b0@suse.com>
-References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
-        <20221127-snd-freeze-v8-3-3bc02d09f2ce@chromium.org>
-        <716e5175-7a44-7ae8-b6bb-10d9807552e6@suse.com>
-        <CANiDSCtwSb50sjn5tM7jJ6W2UpeKzpuzng+RdJuywiC3-j2zdg@mail.gmail.com>
-        <d3730d1d-6f92-700a-06c4-0e0a35e270b0@suse.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 08:43:32 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCAEBF902;
+        Thu,  1 Dec 2022 05:43:30 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NNHMw1xkKz4f3p0n;
+        Thu,  1 Dec 2022 21:43:24 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgCnCrZ9r4hjDLHRBQ--.45302S3;
+        Thu, 01 Dec 2022 21:43:27 +0800 (CST)
+Subject: Re: [PATCH -next v2 9/9] blk-iocost: fix walk_list corruption
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
+        axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221130132156.2836184-1-linan122@huawei.com>
+ <20221130132156.2836184-10-linan122@huawei.com>
+ <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
+ <c028dd77-cabf-edd6-c893-8ee24762ac8c@huaweicloud.com>
+ <Y4h7RxdT83g+zFN0@slm.duckdns.org>
+ <de04965e-1341-3053-0f4b-395b8390d00c@huaweicloud.com>
+ <Y4iB97kcdKHEQP86@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <0f55cf25-d3f9-4f12-220e-9d06a601ed7a@huaweicloud.com>
+Date:   Thu, 1 Dec 2022 21:43:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <Y4iB97kcdKHEQP86@slm.duckdns.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgCnCrZ9r4hjDLHRBQ--.45302S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4rZry5tFyUWr48Aw1UWrg_yoW8uw4DpF
+        W8KF9Fka1UJrn7Kayjvw4Dtr9Yyw1rKr4rXr48tw1rC3sIgw17tF1jkr1Y9F48ZF1xZFyY
+        vr4Fq3y3CFyj93DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Dec 2022 14:22:12 +0100,
-Oliver Neukum wrote:
+
+
+在 2022/12/01 18:29, Tejun Heo 写道:
+> On Thu, Dec 01, 2022 at 06:14:32PM +0800, Yu Kuai wrote:
+>> Hi,
+>>
+>> 在 2022/12/01 18:00, Tejun Heo 写道:
+>>> On Thu, Dec 01, 2022 at 09:19:54AM +0800, Yu Kuai wrote:
+>>>>>> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+>>>>>> index 710cf63a1643..d2b873908f88 100644
+>>>>>> --- a/block/blk-iocost.c
+>>>>>> +++ b/block/blk-iocost.c
+>>>>>> @@ -2813,13 +2813,14 @@ static void ioc_rqos_exit(struct rq_qos *rqos)
+>>>>>>     {
+>>>>>>     	struct ioc *ioc = rqos_to_ioc(rqos);
+>>>>>> +	del_timer_sync(&ioc->timer);
+>>>>>> +
+>>>>>>     	blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
+>>>>>>     	spin_lock_irq(&ioc->lock);
+>>>>>>     	ioc->running = IOC_STOP;
+>>>>>>     	spin_unlock_irq(&ioc->lock);
+>>>>>> -	del_timer_sync(&ioc->timer);
+>>>>>
+>>>>> I don't about this workaround. Let's fix properly?
+>>>>
+>>>> Ok, and by the way, is there any reason to delete timer after
+>>>> deactivate policy? This seems a litter wreid to me.
+>>>
+>>> ioc->running is what controls whether the timer gets rescheduled or not. If
+>>> we don't shut that down, the timer may as well get rescheduled after being
+>>> deleted. Here, the only extra activation point is IO issue which shouldn't
+>>> trigger during rq_qos_exit, so the ordering shouldn't matter but this is the
+>>> right order for anything which can get restarted.
+>>
+>> Thanks for the explanation.
+>>
+>> I'm trying to figure out how to make sure child blkg pins it's parent,
+>> btw, do you think following cleanup make sense?
 > 
-> On 01.12.22 14:03, Ricardo Ribalda wrote:
+> It's on you to explain why any change that you're suggesting is better and
+> safe. I know it's not intentional but you're repeatedly suggesting operation
+> reorderings in code paths which are really sensitive to ordering at least
+> seemingly without putting much effort into thinking through the side
+> effects. This costs disproportionate amount of review bandwidth, and
+> increases the chance of new subtle bugs. Can you please slow down a bit and
+> be more deliberate?
+
+Thanks for the suggestion, I'll pay close attention to explain this "why
+the change is better and safe". And sorry for the review pressure. 😔
+
 > 
-> Hi,
->  
-> > This patchset does not modify this behaviour. It simply fixes the
-> > stall for kexec().
-> > 
-> > The  patch that introduced the stall:
-> > 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers
-> > in .shutdown")
+> Thanks.
 > 
-> That patch is problematic. I would go as far as saying that
-> it needs to be reverted.
-
-... or fixed.
-
-> > was sent as a generalised version of:
-> > https://github.com/thesofproject/linux/pull/3388
-> > 
-> > AFAIK, we would need a similar patch for every single board.... which
-> > I am not sure it is doable in a reasonable timeframe.
-> > 
-> > On the meantime this seems like a decent compromises. Yes, a
-> > miss-behaving userspace can still stall during suspend, but that was
-> > not introduced in this patch.
-> 
-> Well, I mean if you know what wrong then I'd say at least return to
-> a sanely broken state.
-> 
-> The whole approach is wrong. You need to be able to deal with user
-> space talking to removed devices by returning an error and keeping
-> the resources association with the open file allocated until
-> user space calls close()
-
-As I already mentioned in another thread, if the user-space action has
-to be cut off, we just need to call snd_card_disconnect() instead
-without sync.  A quick hack would be like below (totally untested and
-might be wrong, though).
-
-In anyway, Ricardo, please stop spinning too frequently; v8 in a few 
-days is way too much, and now the recipient list became unmanageable.
-Let's give people some time to review and consider a better solution
-at first.
-
-
-thanks,
-
-Takashi
-
--- 8< --
---- a/sound/soc/sof/core.c
-+++ b/sound/soc/sof/core.c
-@@ -475,7 +475,7 @@ EXPORT_SYMBOL(snd_sof_device_remove);
- int snd_sof_device_shutdown(struct device *dev)
- {
- 	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
--	struct snd_sof_pdata *pdata = sdev->pdata;
-+	struct snd_soc_component *component;
- 
- 	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
- 		cancel_work_sync(&sdev->probe_work);
-@@ -484,9 +484,9 @@ int snd_sof_device_shutdown(struct device *dev)
- 	 * make sure clients and machine driver(s) are unregistered to force
- 	 * all userspace devices to be closed prior to the DSP shutdown sequence
- 	 */
--	sof_unregister_clients(sdev);
--
--	snd_sof_machine_unregister(sdev, pdata);
-+	component = snd_soc_lookup_component(sdev->dev, NULL);
-+	if (component && component->card && component->card->snd_card)
-+		snd_card_disconnect(component->card->snd_card);
- 
- 	if (sdev->fw_state == SOF_FW_BOOT_COMPLETE)
- 		return snd_sof_shutdown(sdev);
-
-
-
 
