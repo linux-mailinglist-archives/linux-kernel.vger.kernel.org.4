@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7370363EC87
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA17D63EC92
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiLAJbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S230126AbiLAJc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiLAJaq (ORCPT
+        with ESMTP id S230273AbiLAJcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:30:46 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D9295801;
-        Thu,  1 Dec 2022 01:30:23 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0F50224E12B;
-        Thu,  1 Dec 2022 17:30:22 +0800 (CST)
-Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
- 2022 17:30:22 +0800
-Received: from [192.168.125.61] (113.72.147.18) by EXMBX065.cuchost.com
- (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
- 2022 17:30:21 +0800
-Message-ID: <8de7fd5a-e37c-0365-31ee-4a748c7297a4@starfivetech.com>
-Date:   Thu, 1 Dec 2022 17:31:02 +0800
+        Thu, 1 Dec 2022 04:32:09 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3C15A6D4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:32:08 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id i80so711607ioa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:32:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ExX3G3gkBnJUWc32+CDhQRweHtxmrn8z6j4Z35dZRPc=;
+        b=kyjaVsokDTVxCiGPgkOYMbn02zXiSJSEJCfS2/vKoFQY/2Ujdx9bP+7Da8UWND3yi1
+         9lcytZRbF1tzeeYYVEW0NPLivGtKCyGqw1Xhxmww6yjzZEgiz2vjrfJ435QnETurJFPS
+         X2Ow2AJ5PUPi6r2EiGCBWyjAvuXPnZWLVRU5ypQP4h9h2Gs3idw9vTPnQwwzZQUvNRQD
+         qv80zJUnW0jhSi9zvuxSKHygZGs5KeiEXNwXsM29uXdnycv2CIeLMI+kW/PD8BGidJ6k
+         C2fKudfQQzyfeVx5TeBWmSIwHS7eWnYwzBTow0/Q8rSVnMtNap/P7aoF9lYxSwY+HvMv
+         dhrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ExX3G3gkBnJUWc32+CDhQRweHtxmrn8z6j4Z35dZRPc=;
+        b=nu6oKowpD80P53K7IfOXfZ7IhrWO4RrkJCkarCLgqNA7AH+QiSNPq71ESTnR5/4H6A
+         tXuFSI+NrCkmU5vuxF6Bc5gHBpqYjtb0ubawZNLT4jhWbwkGTtuCOGrXGhe10MP0RtUQ
+         NVZuCo6CU7qgVVPhkAYZDFLbl4vCIpFttpng2J9Y0aZ7PTqIG7/C6nW5gsZftgOqz2Sb
+         9eju6b3tFxpbB4QJuyJ8z09a4bAfWIiDPoMVedxGGOb75SoqQVXtifykI/LNXUKE+KQl
+         3rS22YeChRzQe7bPxvJdFUIchWqP6blS+aCJo/ckgopw5ib+MZLv8e78OquvrfktWvHb
+         tswQ==
+X-Gm-Message-State: ANoB5pmxV/qT46djVVkwHHgYlOinL06pToeALy2CJ9P9PwPDgxzt309Z
+        rWrWm6Xfvv1WPioJT3dy30NIOf6JfFhmjie4imwFFA==
+X-Google-Smtp-Source: AA0mqf6IUwisvqyqDqo3JJojHFmzcAuedM9nJqZvE2u7KtXpQacj6vSKLOROGwIXrkOHsq5UT3VmJEH4zQyYePIh8Yk=
+X-Received: by 2002:a05:6638:89:b0:363:9e67:d9d9 with SMTP id
+ v9-20020a056638008900b003639e67d9d9mr23171809jao.133.1669887127428; Thu, 01
+ Dec 2022 01:32:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl
- definitions
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118011108.70715-1-hal.feng@starfivetech.com>
- <20221118011108.70715-2-hal.feng@starfivetech.com>
- <eb3974a3-f715-f5b0-cac7-551af26bd17b@linaro.org>
- <08db0f3b-5222-9460-26ba-0e6380d16583@linaro.org>
- <0ceba170-f844-e733-a49e-e67746f9f836@starfivetech.com>
- <093ea507-4c42-1af9-4896-64c1a918432e@linaro.org>
- <30c21787-0c48-ff50-1d63-8e69bdcdbe30@starfivetech.com>
- <339be655-aee7-e1a4-51be-28ea20de6792@linaro.org>
- <3db802d6-114f-097a-6c69-e7b40e4d2764@starfivetech.com>
- <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
-Content-Language: en-US
-From:   Jianlong Huang <jianlong.huang@starfivetech.com>
-In-Reply-To: <f52e31a5-a12a-b95e-b99c-1af8f8b41c3b@linaro.org>
+References: <20221129191839.2471308-1-jannh@google.com> <20221129191839.2471308-2-jannh@google.com>
+ <87fse1v4rf.ffs@tglx> <CAG48ez3UBb3Aq7+AFSmRj5a9czmew5b0PEdhWQ9qvQdeejnJZg@mail.gmail.com>
+ <87y1rttid2.ffs@tglx> <1c767e89dcf8475f90d2d817b9096a55@AcuMS.aculab.com>
+In-Reply-To: <1c767e89dcf8475f90d2d817b9096a55@AcuMS.aculab.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 1 Dec 2022 10:31:31 +0100
+Message-ID: <CAG48ez13gz12zQ_tEfO-GP+iA4KpE=27M5ziAtPqZezHiYVSfA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] time/namespace: Forbid timens page faults under kthread_use_mm()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Andrei Vagin <avagin@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.18]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX065.cuchost.com
- (172.16.6.65)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,78 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 15:58:12 +0100, Krzysztof Kozlowski wrote:
-> On 29/11/2022 15:46, Jianlong Huang wrote:
->> On Tue, 29 Nov 2022 08:49:49 +0100, Krzysztof Kozlowski wrote:
->>> On 29/11/2022 02:47, Jianlong Huang wrote:
->>>> On Mon, 28 Nov 2022 09:32:45 +0100, Krzysztof Kozlowski wrote:
->>>>> On 28/11/2022 01:48, Jianlong Huang wrote:
->>>>>
->>>>>>>>> +/* aon_iomux doen */
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_4			2
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_5			3
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_6			4
->>>>>>>>> +#define GPOEN_AON_PTC0_OE_N_7			5
->>>>>>>>> +
->>>>>>>>
->>>>>>>> It looks like you add register constants to the bindings. Why? The
->>>>>>>> bindings are not the place to represent hardware programming model. Not
->>>>>>>> mentioning that there is no benefit in this.
->>>>>>>
->>>>>>> Also: this entire file should be dropped, but if it stays, you have to
->>>>>>> name it matching bindings or compatible (vendor,device.h).
->>>>>>
->>>>>> Thanks your comments.
->>>>>> These macros are used to configure pinctrl in dts, so the file should stay,
->>>>>
->>>>> Why they should stay? What's the reason? If it is not a constant used by
->>>>> driver, then register values should not be placed in the bindings, so
->>>>> drop it.
->>>>>
->>>>
->>>> Thanks.
->>>>
->>>> These macros in binding header(example, DOUT, DOEN etc) will be used in DTS,
->>>> and driver will parse the DT for pinctrl configuration.
->>>>
->>>> Example in dts:
->>>> uart0_pins: uart0-0 {
->>>> 	tx-pins {
->>>> 		pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
->>>
->>> This is usage in DTS and is not an argument to store register
->>> addresses/offsets as bindings. What is the usage (of define, not value)
->>> in the driver?
->>>
->> 
->> The existing implementation reuse the macros for DTS and driver.
-> 
-> Where in the driver? Grep gives zero results.
-> 
->> Do you mean we need to separate the macros, one for DTS and one for driver usage?
-> 
-> No, if driver uses them it is fine. The problem is I cannot find it
-> anywhere.
-> 
->> Or you have any better suggestion?
->> 
->> These macros are the value of register, not register addresses/offsets,
->> except for with prefix of GPI.
-> 
-> Still, values are not usually part of bindings.
-> 
->> 
->> Drivers rarely reference macros directly, mostly parsing dts and writing them to registers.
-> 
-> So drivers do not use macros? Then there is no reason to store them in
-> bindings? What do you "bind" if there is no usage (and we do not talk
-> about DTS...)?
-> 
+On Wed, Nov 30, 2022 at 11:48 PM David Laight <David.Laight@aculab.com> wrote:
+> From: Thomas Gleixner
+> > Sent: 30 November 2022 00:08
+> ....
+> > >> None of those VDSO (user space) addresses are subject to be faulted in
+> > >> by anything else than the associated user space task(s).
+> > >
+> > > Are you saying that it's not possible or that it doesn't happen when
+> > > userspace is well-behaved?
+> >
+> > My subconcious self told me that a kthread won't do that unless it's
+> > buggered which makes the vdso fault path the least of our problems, but
+> > thinking more about it: You are right, that there are ways that the
+> > kthread ends up with a vdso page address.... Bah!
+> >
+> > Still my point stands that this is not a timens VDSO issue, but an issue
+> > of: kthread tries to fault in a VDSO page of whatever nature.
+>
+> Isn't there also the kernel code path where one user thread
+> reads data from another processes address space.
+> (It does some unusual calls to the iov_import() functions.)
+> I can't remember whether it is used by strace or gdb.
+> But there is certainly the option of getting to access
+> an 'invalid' address in the other process and then faulting.
 
-These macros are more friendly for configuring dts, so i stay the file.
-And change the file path to 'arch/riscv/boot/dts/starfive/',
-change the file name to 'jh7110-pinfunc.h'.
+That's a different mechanism. /proc/$pid/mem and process_vm_readv()
+and PTRACE_PEEKDATA and so on go through get_user_pages_remote() or
+pin_user_pages_remote(), which bail out on VMAs with VM_IO or
+VM_PFNMAP. The ptrace-based access can also fall back to using
+vma->vm_ops->access(), but the special_mapping_vmops used by the vvar
+VMA explicitly don't have such a handler:
 
-Best regards,
-Jianlong Huang
+static const struct vm_operations_struct special_mapping_vmops = {
+  .close = special_mapping_close,
+  .fault = special_mapping_fault,
+  .mremap = special_mapping_mremap,
+  .name = special_mapping_name,
+  /* vDSO code relies that VVAR can't be accessed remotely */
+  .access = NULL,
+  .may_split = special_mapping_split,
+};
 
+One path that I'm not sure about is the Intel i915 GPU virtualization
+codepath ppgtt_populate_shadow_entry -> intel_gvt_dma_map_guest_page
+-> gvt_dma_map_page -> gvt_pin_guest_page -> vfio_pin_pages ->
+vfio_iommu_type1_pin_pages -> vfio_pin_page_external -> vaddr_get_pfns
+-> follow_fault_pfn -> fixup_user_fault -> handle_mm_fault. That looks
+like it might actually be able to trigger pagefault handling on the
+vvar mapping from another process.
+
+> ISTR not being convinced that there was a correct check
+> for user/kernel addresses in it either.
+
+The get_user_pages_remote() machinery only works on areas that are
+mapped by VMAs (__get_user_pages() bails out if find_extend_vma()
+fails and the address is not located in the gate area). There are no
+VMAs for kernel memory.
