@@ -2,51 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00E463E761
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E62A63E764
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiLAB57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 20:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S229678AbiLAB7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiLAB55 (ORCPT
+        with ESMTP id S229468AbiLAB7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 20:57:57 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE92C2AC64;
-        Wed, 30 Nov 2022 17:57:55 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NMzjt3DR8z8RV65;
-        Thu,  1 Dec 2022 09:57:54 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B11vmaI032400;
-        Thu, 1 Dec 2022 09:57:48 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 09:57:49 +0800 (CST)
-Date:   Thu, 1 Dec 2022 09:57:49 +0800 (CST)
-X-Zmail-TransId: 2af963880a1dfffffffff1d971cf
-X-Mailer: Zmail v1.0
-Message-ID: <202212010957494197139@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <jarkko@kernel.org>
-Cc:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSB0cG0vcHBpOiB1c2Ugc3lzZnNfZW1pdCgpIHRvIGluc3RlYWQgb2Ygc2NucHJpbnRmKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B11vmaI032400
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63880A22.000 by FangMail milter!
-X-FangMail-Envelope: 1669859874/4NMzjt3DR8z8RV65/63880A22.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63880A22.000/4NMzjt3DR8z8RV65
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        Wed, 30 Nov 2022 20:59:45 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD4956ECE;
+        Wed, 30 Nov 2022 17:59:44 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id h33so378698pgm.9;
+        Wed, 30 Nov 2022 17:59:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1/vOdaMjZAEF+5Q09MuuoEJVXEscHbW6csGYAcl0/ZY=;
+        b=LDbf3NuN5DzLgVQSDCdKyngvV1JobgcsAlYomrVqy51zw1h4EOd7uT5biPsnZerS6U
+         jgCu6FdXJpq9HZIFfBy+tzsmT9JMj/xV+N/z80wWQPU/25Bjub3xYyD6frqzye/+i40o
+         QMy6uby+szkkEEJMY8GDTJ3qC4CJR/hRUioewXDslLURwGn08UJ8G5S9iQMw55H1cFS6
+         KlWDFyb0WQFLYFKVVpmlpehVQYdk+3ZAzDti9g4fNjmiYbJ74nDjF4N+c21Ans7VgsYu
+         RTxihVRzIUZ9Qrj2+QpnJRfqVBQ2/MgGi7nLrdQ5mivetYFqfWnG7F1p1YgpL9HPKfdw
+         /NbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1/vOdaMjZAEF+5Q09MuuoEJVXEscHbW6csGYAcl0/ZY=;
+        b=z1Kr2Yjw4PJIeNuFiWv3HOnrtkHYVbr4s1JxzZFs7yotmaif2SMtd0WzXLVIuqVhyO
+         79Q6tlUvfD/aijZzaIm7IS2O8UwA3mI01vhkTKfuWPxgyhM4CZS5ladiQmFe0u4q1s7a
+         qIk1ssU1yK/3gKuWIGqsl6S5d/EJSIm58+jNLuQnQZU32eXnWGPqWw1UEqkrKJqwv6xJ
+         uqUUTrImQQEdE0pFb+1SK6dRcoVfiJ+qlihfUwiJhhAhAW5pA0u2aGyM1R0dri5eQ3uI
+         XtGbO5XvV2rd51lh6US6qdatso5aQzlLfWhO9FTJgx7emuoVNeYCREld8PJcZqicL+L0
+         G3Ew==
+X-Gm-Message-State: ANoB5plE+2VVJZ+VqbddiBGyRSOSneAFYvBLFMIloIXT+31QCtSsR0hO
+        exgCmX7N4BsyVlVmV1OXflFj7degDcA=
+X-Google-Smtp-Source: AA0mqf5SigCzPhfMurTk/v00E+QxxsLBlszHyG9DhbhgIdz1WBRw6oTYJuW/RHqHf/Eo6+x3fEkqWw==
+X-Received: by 2002:aa7:9245:0:b0:571:3fb3:9b5f with SMTP id 5-20020aa79245000000b005713fb39b5fmr65452188pfp.86.1669859983763;
+        Wed, 30 Nov 2022 17:59:43 -0800 (PST)
+Received: from localhost.localdomain (2001-b400-e2d4-7fe5-a80b-9fee-51f7-4bb8.emome-ip6.hinet.net. [2001:b400:e2d4:7fe5:a80b:9fee:51f7:4bb8])
+        by smtp.gmail.com with ESMTPSA id x12-20020a1709029a4c00b00186a2dd3ffdsm2174398plv.15.2022.11.30.17.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 17:59:43 -0800 (PST)
+From:   Owen Yang <ecs.taipeikernel@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Bob Moragues <moragues@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abner Yen <abner.yen@ecs.com.tw>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@google.com>,
+        Gavin Lee <gavin.lee@ecs.com.tw>, Harvey <hunge@google.com>,
+        Owen Yang <ecs.taipeikernel@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v11 1/2] dt-bindings: arm: qcom: Add zombie
+Date:   Thu,  1 Dec 2022 09:59:33 +0800
+Message-Id: <20221201095900.v11.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,100 +77,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Add entries in the device tree binding for sc7280-zombie.
 
-Replace the open-code with sysfs_emit() to simplify the code.
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
 ---
- drivers/char/tpm/tpm_ppi.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-index bc7b1b4501b3..aa86a6f25120 100644
---- a/drivers/char/tpm/tpm_ppi.c
-+++ b/drivers/char/tpm/tpm_ppi.c
-@@ -52,7 +52,7 @@ static ssize_t tpm_show_ppi_version(struct device *dev,
- {
- 	struct tpm_chip *chip = to_tpm_chip(dev);
+Changes in v11:
+- Put all tags togather as As requested by Douglas.
 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", chip->ppi_version);
-+	return sysfs_emit(buf, "%s\n", chip->ppi_version);
- }
+Changes in v10:
+- Add "Reviewed-by" tags in this patch log.
+- Fixed history log list.
 
- static ssize_t tpm_show_ppi_request(struct device *dev,
-@@ -87,11 +87,11 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
- 		else {
- 			req = obj->package.elements[1].integer.value;
- 			if (tpm_ppi_req_has_parameter(req))
--				size = scnprintf(buf, PAGE_SIZE,
-+				size = sysfs_emit(buf,
- 				    "%llu %llu\n", req,
- 				    obj->package.elements[2].integer.value);
- 			else
--				size = scnprintf(buf, PAGE_SIZE,
-+				size = sysfs_emit(buf,
- 						"%llu\n", req);
- 		}
- 	} else if (obj->package.count == 2 &&
-@@ -100,7 +100,7 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
- 		if (obj->package.elements[0].integer.value)
- 			size = -EFAULT;
- 		else
--			size = scnprintf(buf, PAGE_SIZE, "%llu\n",
-+			size = sysfs_emit(buf, "%llu\n",
- 				 obj->package.elements[1].integer.value);
- 	}
+Changes in v9:
+- Fixed version number (v7 and v8 were erroneously posted as v6)
 
-@@ -211,9 +211,9 @@ static ssize_t tpm_show_ppi_transition_action(struct device *dev,
- 	}
+Changes in v8:
+- Correct commit log. Use "entries" instead of "an entry". As requested by Krzysztof, Matthias and Douglas.
 
- 	if (ret < ARRAY_SIZE(info) - 1)
--		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret, info[ret]);
-+		status = sysfs_emit(buf, "%d: %s\n", ret, info[ret]);
- 	else
--		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret,
-+		status = sysfs_emit(buf, "%d: %s\n", ret,
- 				   info[ARRAY_SIZE(info)-1]);
- 	return status;
- }
-@@ -255,22 +255,22 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
- 	res = ret_obj[2].integer.value;
- 	if (req) {
- 		if (res == 0)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
-+			status = sysfs_emit(buf, "%llu %s\n", req,
- 					   "0: Success");
- 		else if (res == 0xFFFFFFF0)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
-+			status = sysfs_emit(buf, "%llu %s\n", req,
- 					   "0xFFFFFFF0: User Abort");
- 		else if (res == 0xFFFFFFF1)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
-+			status = sysfs_emit(buf, "%llu %s\n", req,
- 					   "0xFFFFFFF1: BIOS Failure");
- 		else if (res >= 1 && res <= 0x00000FFF)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
-+			status = sysfs_emit(buf, "%llu %llu: %s\n",
- 					   req, res, "Corresponding TPM error");
- 		else
--			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
-+			status = sysfs_emit(buf, "%llu %llu: %s\n",
- 					   req, res, "Error");
- 	} else {
--		status = scnprintf(buf, PAGE_SIZE, "%llu: %s\n",
-+		status = sysfs_emit(buf, "%llu: %s\n",
- 				   req, "No Recent Request");
- 	}
+Changes in v7:
+- None.
 
-@@ -314,7 +314,7 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
- 		}
+Changes in v6:
+- None.
 
- 		if (ret > 0 && ret < ARRAY_SIZE(info))
--			str += scnprintf(str, PAGE_SIZE, "%d %d: %s\n",
-+			str += sysfs_emit(str, "%d %d: %s\n",
- 					 i, ret, info[ret]);
- 	}
+Changes in v5:
+- None.
 
+Changes in v4:
+- None.
+
+Changes in v3:
+- None.
+
+Changes in v2:
+- Fixed patch order.
+
+ Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 463509f0f23a..7ec6240311db 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -655,6 +655,16 @@ properties:
+           - const: google,villager-sku512
+           - const: qcom,sc7280
+ 
++      - description: Google Zombie (newest rev)
++        items:
++          - const: google,zombie
++          - const: qcom,sc7280
++
++      - description: Google Zombie with LTE (newest rev)
++        items:
++          - const: google,zombie-sku512
++          - const: qcom,sc7280
++
+       - items:
+           - enum:
+               - lenovo,flex-5g
 -- 
-2.25.1
+2.17.1
+
