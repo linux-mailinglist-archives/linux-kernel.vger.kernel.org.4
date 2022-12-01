@@ -2,94 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D31863EC15
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B1563EC21
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiLAJOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S229847AbiLAJPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiLAJOE (ORCPT
+        with ESMTP id S229576AbiLAJPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:14:04 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9022F70606;
-        Thu,  1 Dec 2022 01:13:57 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bx10so1698773wrb.0;
-        Thu, 01 Dec 2022 01:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZiFvV/PpI7Kv9Cj/ZD/4j9tmtDiYehJfyRtCeZv1mCc=;
-        b=D+N7MLXEkYIUhMAL3zS0P4N6UGeA6VQYhiieMBLTkvz0ksZNrQu2+L9j+iwiIk0nRT
-         khYLA6X44ZX006SsOgUhW2rLJrR1KtR9BhDzQYCOcJlZGx1ZGIUGRA6H18ttYRndjkXQ
-         1Ae/LLGEC8skIrrN2w9z+zNRU85gRzQ2S2g+hvjFQ7oqym+Kn1jVagTjTo1x4JT6AaDK
-         fAewYQP2fct4sdkDFbKuxawcdf1DL+9D4eYD8IgS57wixtAd1YXwn9AYol5rA4hrsin3
-         0qdvabvgYNF67z2yqmfnOPEsrOhHjUd8XE9Ix9cNrlIR8+XoM6m+NUelSFgMHKl1D9xf
-         WDYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZiFvV/PpI7Kv9Cj/ZD/4j9tmtDiYehJfyRtCeZv1mCc=;
-        b=ieNYZO52gL4JOc6fiMIGqvEAfzS6X6lI8N/EYYw937WcbsmzuW8MmdsfRgMIoF2Kkp
-         nIxN5qAEOnqGmfDKU+FPeUYG8Ks2U1r8df2m+1U73Wb2u+W6gnnN0JyWTgcOHUX1zCyT
-         RIvnRgFXmitc/7pyEPo6hJ4UkeOBi7dKfKRJgCcSUAr7NaG/MDzzf3NsO8hneO1z+52g
-         geCD9TpVYxqqToDzjyj8nuGSlCwEt1dM78u0bi+mhTEY3capFZOZjEWVvsppDJiemQK8
-         yN3+c1yuzplvU+8BXdd2oe2GUWwTgHVXGy9ODK+UkGR0wRwjnnRXjqIguR0qT7xBPcws
-         zZfA==
-X-Gm-Message-State: ANoB5pkRYRpNx6Qubug/fNOicd3RY3oTACL9kId8qdwDaoLJ2n+Z9Pb4
-        if1XFhQ+R1W2MacXz1BcTaFa+L3l/giwJUO5
-X-Google-Smtp-Source: AA0mqf79ZR9ZaEyJme/QB9Ao8CfIB8KWk8K8LFC5813EmX4C9KBfJ1hkop11ZOszCAReflbGSCF7EA==
-X-Received: by 2002:a05:6000:1a45:b0:242:1b69:786c with SMTP id t5-20020a0560001a4500b002421b69786cmr10738850wry.486.1669886036011;
-        Thu, 01 Dec 2022 01:13:56 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id i12-20020adffc0c000000b00241d21d4652sm3850499wrr.21.2022.12.01.01.13.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 01:13:55 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] KVM: selftests: Fix spelling mistake "probabalistic" -> "probabilistic"
-Date:   Thu,  1 Dec 2022 09:13:54 +0000
-Message-Id: <20221201091354.1613652-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 1 Dec 2022 04:15:16 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F491442C7;
+        Thu,  1 Dec 2022 01:15:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669886069; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=PuFREHxuJ3FoD3zI0cgmwgxXBACrFbsNXtmB1ZUDMZF0Vw7u5go+yLfWIyRlKmsI4dy/C4JBEgDliSKn1GHoNmOpzBqaWl6iXr8io/eTVI3oCPsCmOMRaRxdzRXptLt4DP3hnV53GkO6NAhhWer+prEaTAbxrLXw/JqtvaQrzWo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1669886069; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=rmnGX0as+j0mWZhRBwCINR7c9wsJ33DTrPhAflpkh7k=; 
+        b=fw/MEtbCpCH9VgI82wo0vE16g6dZ8NV1Le4xk0BjWdTYK38rt7XBr8kXPBBPo3YRUN6Qe0dqE8w6e3UHXsxU9mNhstxy2c3zRoUP/VEPwky/wlzovr2sCQ7tztCh20i22nk9oPAoF3GnSvN5RPlNAcT6sNLjUOovaigMSm1VuKI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669886069;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=rmnGX0as+j0mWZhRBwCINR7c9wsJ33DTrPhAflpkh7k=;
+        b=kC5OJuaedGtqPWAXavS8QBOXmOzGAN9KVKeFTZblN5hQvtgIY+bZgMHEmvSv5xeL
+        m50GcHUsZyBhq0mNsX+aCeIwwvLqFeeWwtPZKWwBHrfnYXDUeClaEjUb82O6yrKKDVx
+        OifNFxxqXQi0y0KKnh1zyARvxBzbuGAfmR/P71Bk=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1669886067241836.827775278157; Thu, 1 Dec 2022 01:14:27 -0800 (PST)
+Message-ID: <b5ed90cf-1b5d-9306-7b06-ded7c331ca2a@arinc9.com>
+Date:   Thu, 1 Dec 2022 12:14:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/5] remove label = "cpu" from DSA dt-binding
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        soc@kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+References: <20221130141040.32447-1-arinc.unal@arinc9.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20221130141040.32447-1-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in some help text. Fix it.
+I'm sending a more specific mail to make sure this series doesn't fall 
+through the cracks like Andrew said. I'd like this merged this week 
+before the merge window closes.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/kvm/dirty_log_perf_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Jakub, please take patch 1.
+Arnd, please take patch 2 and 3.
+Thomas, please take patch 4.
+Michael, please take patch 5.
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index c33e89012ae6..e9d6d1aecf89 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -398,7 +398,7 @@ static void help(char *name)
- 	printf(" -x: Split the memory region into this number of memslots.\n"
- 	       "     (default: 1)\n");
- 	printf(" -w: specify the percentage of pages which should be written to\n"
--	       "     as an integer from 0-100 inclusive. This is probabalistic,\n"
-+	       "     as an integer from 0-100 inclusive. This is probabilistic,\n"
- 	       "     so -w X means each page has an X%% chance of writing\n"
- 	       "     and a (100-X)%% chance of reading.\n"
- 	       "     (default: 100 i.e. all pages are written to.)\n");
--- 
-2.38.1
+Arınç
 
+On 30.11.2022 17:10, Arınç ÜNAL wrote:
+> Hello folks,
+> 
+> With this patch series, we're completely getting rid of 'label = "cpu";'
+> which is not used by the DSA dt-binding at all.
+> 
+> Information for taking the patches for maintainers:
+> Patch 1: netdev maintainers (based off netdev/net-next.git main)
+> Patch 2-3: SoC maintainers (based off soc/soc.git soc/dt)
+> Patch 4: MIPS maintainers (based off mips/linux.git mips-next)
+> Patch 5: PowerPC maintainers (based off powerpc/linux.git next-test)
+> 
+> I've been meaning to submit this for a few months. Find the relevant
+> conversation here:
+> https://lore.kernel.org/netdev/20220913155408.GA3802998-robh@kernel.org/
+> 
+> Here's how I did it, for the interested (or suggestions):
+> 
+> Find the platforms which have got 'label = "cpu";' defined.
+> grep -rnw . -e 'label = "cpu";'
+> 
+> Remove the line where 'label = "cpu";' is included.
+> sed -i /'label = "cpu";'/,+d arch/arm/boot/dts/*
+> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/freescale/*
+> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/marvell/*
+> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/mediatek/*
+> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/rockchip/*
+> sed -i /'label = "cpu";'/,+d arch/mips/boot/dts/qca/*
+> sed -i /'label = "cpu";'/,+d arch/mips/boot/dts/ralink/*
+> sed -i /'label = "cpu";'/,+d arch/powerpc/boot/dts/turris1x.dts
+> sed -i /'label = "cpu";'/,+d Documentation/devicetree/bindings/net/qca,ar71xx.yaml
+> 
+> Restore the symlink files which typechange after running sed.
+> 
+> Arınç ÜNAL (5):
+>    dt-bindings: net: qca,ar71xx: remove label = "cpu" from examples
+>    arm: dts: remove label = "cpu" from DSA dt-binding
+>    arm64: dts: remove label = "cpu" from DSA dt-binding
+>    mips: dts: remove label = "cpu" from DSA dt-binding
+>    powerpc: dts: remove label = "cpu" from DSA dt-binding
+> 
+> 
