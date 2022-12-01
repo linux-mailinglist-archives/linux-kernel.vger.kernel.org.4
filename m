@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0C363F5F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7F063F5F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiLARHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 12:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S229873AbiLARIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 12:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiLARHb (ORCPT
+        with ESMTP id S229512AbiLARIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 12:07:31 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12542AD99D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 09:07:30 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id o12so2416189pjo.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 09:07:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2h6V7XvvjPy1lxD6pcJR/fFIby5mlqq6VvEqNgaJZlA=;
-        b=BB+tP7KcNNb8N9JizMDMdyQGv0d/dZxpBKqOVBhdM+8pqZK0WkeumDcg213DNWErEM
-         w+eTxnf8yqEzZTWCm0AwLbLM65sPH/0A1jzJWV/TsFGXDa0L1m0kFFcQhj8hdMdDNxyg
-         sYs1R8dB1XvBq2U08TJVpoz4A1p5tghKTeK4c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2h6V7XvvjPy1lxD6pcJR/fFIby5mlqq6VvEqNgaJZlA=;
-        b=BA5EQhCWcJUZHAWlMlRJ8I5tWmOCnkD8JEU70/XL1BOdXOsXgeBUZUmJKUnG+JHrrb
-         9SPpCpqL8Wlx2d6MEeimBsEXxvOBt44mbZmy9+uOWQ9tOPmCxyNcstNe/pxOVxuyb5do
-         I19vk0crk6/PqU7uymxc9Oahx4VEqtxif8VTMm3Vd2ENi46/bGeOKZVkijbpqiyMbfBN
-         fWvCDQS/sMY9AxKkI1DgxhCv1CQMT5OSugzEXikie1+rICGQDVnR5vdCum5j6NXQEU6n
-         KHju2HcoVzQ3HpNQPAfnKVWCfbcOiG8lcdZjsU5oLrLVNACpmuF7YPPVBnwKRrXmSQ6F
-         WS3A==
-X-Gm-Message-State: ANoB5pniw8/GaihXnsqJa2E8ubwVpvZxJ17059yraglWRN8DCEc5Gbe2
-        fykB/I+cealcFQNJPm8/oJBFEg==
-X-Google-Smtp-Source: AA0mqf60jfKiNSgx+GE25w+lQV1VW2FGq5KDM0pvIkRI+4RDr6EW2tpwewecphWAWs7Pm7ZM+gv81Q==
-X-Received: by 2002:a17:90a:29e4:b0:219:4056:720c with SMTP id h91-20020a17090a29e400b002194056720cmr20051470pjd.53.1669914450359;
-        Thu, 01 Dec 2022 09:07:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h15-20020a056a00000f00b0056ba7ce4d5asm3531488pfk.52.2022.12.01.09.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 09:07:29 -0800 (PST)
-Date:   Thu, 1 Dec 2022 09:07:28 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Kees Cook <kees@kernel.org>, akpm@linux-foundation.org,
-        elver@google.com, kasan-dev@googlegroups.com, davidgow@google.com,
-        Jason@zx2c4.com, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] lib: fortify_kunit: build without structleak plugin
-Message-ID: <202212010906.0CE64E9CD@keescook>
-References: <20221128104403.2660703-1-anders.roxell@linaro.org>
- <5FC4A1FD-9631-43B2-AE93-EFC059F892D3@kernel.org>
- <CADYN=9LT7xWScSiprwgB2DhTN-Mws7rxG33BRZwLktK7P_jzkQ@mail.gmail.com>
+        Thu, 1 Dec 2022 12:08:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9C6A8964;
+        Thu,  1 Dec 2022 09:08:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07F2462088;
+        Thu,  1 Dec 2022 17:08:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FF8C433D6;
+        Thu,  1 Dec 2022 17:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669914516;
+        bh=bb/+qN0VW/7RqIAk2UofMX4wZlBJKhvkATUkAKF4jKA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JEPpDNsnVhCGYyiDJ5cDyhqXikEiT0RcB4yxn/jMZ7fv7AVfeTgAjru54z8nLIWlj
+         lAIyUaV6PZMy+5Fv1lWEovXj6GTs93W4HzojUbUR0BYPYIXKR/vOReNYf1/0CZPmIQ
+         wuew5xRVU2m+sUCpgV5WNv6G6Z2J3jlGc7qcmprjxBuInSBhHRGP32eJYY7aF4Za2G
+         56suK4RbGZLd6mmSwWIYwg9qyB8O9M7lyENITC6vpJF6FRwJjPg8sma5TjMtdt7aKZ
+         7yqSitWsMo3wz5nKU6bvay1ypJPdwz4tqPzRDey44MYfHRMkmEwm5QPg6FyAu80ysJ
+         jxkhtpTDpBUSw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/damon: test removed scheme sysfs dir access bug
+Date:   Thu,  1 Dec 2022 17:08:34 +0000
+Message-Id: <20221201170834.62823-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADYN=9LT7xWScSiprwgB2DhTN-Mws7rxG33BRZwLktK7P_jzkQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +52,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 03:20:13PM +0100, Anders Roxell wrote:
-> On Mon, 28 Nov 2022 at 15:09, Kees Cook <kees@kernel.org> wrote:
-> >
-> > On November 28, 2022 2:44:03 AM PST, Anders Roxell <anders.roxell@linaro.org> wrote:
-> > >Building fortify_kunit with strucleak plugin enabled makes the stack
-> > >frame size to grow.
-> > >
-> > >lib/fortify_kunit.c:140:1: error: the frame size of 2368 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+A DAMON sysfs user could start DAMON with a scheme, remove the sysfs
+directory for the scheme, and then ask stats or schemes tried regions
+update.  The related logic were not aware of the already removed
+directory situation, so it was able to results in invalid memory
+accesses.  The fix has made with commit 8468b486612c
+("mm/damon/sysfs-schemes: skip stats update if the scheme directory is
+removed"), though.  Add a selftest to avoid such kind of bugs be
+introduced again.
 
-(It seems like lkml never got this email? Or at least I didn't find it
-on lore, so "b4" was unhappy...)
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ tools/testing/selftests/damon/Makefile        |  2 +-
+ .../damon/sysfs_update_removed_scheme_dir.sh  | 58 +++++++++++++++++++
+ 2 files changed, 59 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
 
-> > Under what config
-> 
-> I saw this with a arm64 allmodconfig build [1],
-> 
-> > and compiler version do you see these warnings?
-> 
-> Toolchain
-> aarch64-linux-gnu-gcc (Debian 11.3.0-6) 11.3.0
-
-Thanks! I've applied this to my tree.
-
+diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
+index 838a8e49f77b..b71247ba7196 100644
+--- a/tools/testing/selftests/damon/Makefile
++++ b/tools/testing/selftests/damon/Makefile
+@@ -8,7 +8,7 @@ TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
+ TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
+ TEST_PROGS += debugfs_duplicate_context_creation.sh
+ TEST_PROGS += debugfs_rm_non_contexts.sh
+-TEST_PROGS += sysfs.sh
++TEST_PROGS += sysfs.sh sysfs_update_removed_scheme_dir.sh
+ TEST_PROGS += reclaim.sh lru_sort.sh
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
+new file mode 100644
+index 000000000000..ade35576e748
+--- /dev/null
++++ b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
+@@ -0,0 +1,58 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++if [ $EUID -ne 0 ]
++then
++	echo "Run as root"
++	exit $ksft_skip
++fi
++
++damon_sysfs="/sys/kernel/mm/damon/admin"
++if [ ! -d "$damon_sysfs" ]
++then
++	echo "damon sysfs not found"
++	exit $ksft_skip
++fi
++
++# clear log
++dmesg -C
++
++# start DAMON with a scheme
++echo 1 > "$damon_sysfs/kdamonds/nr_kdamonds"
++echo 1 > "$damon_sysfs/kdamonds/0/contexts/nr_contexts"
++echo "vaddr" > "$damon_sysfs/kdamonds/0/contexts/0/operations"
++echo 1 > "$damon_sysfs/kdamonds/0/contexts/0/targets/nr_targets"
++echo $$ > "$damon_sysfs/kdamonds/0/contexts/0/targets/0/pid_target"
++echo 1 > "$damon_sysfs/kdamonds/0/contexts/0/schemes/nr_schemes"
++scheme_dir="$damon_sysfs/kdamonds/0/contexts/0/schemes/0"
++echo 4096000 > "$scheme_dir/access_pattern/sz/max"
++echo 20 > "$scheme_dir/access_pattern/nr_accesses/max"
++echo 1024 > "$scheme_dir/access_pattern/age/max"
++echo "on" > "$damon_sysfs/kdamonds/0/state"
++sleep 0.3
++
++# remove scheme sysfs dir
++echo 0 > "$damon_sysfs/kdamonds/0/contexts/0/schemes/nr_schemes"
++
++# try to update stat of already removed scheme sysfs dir
++echo "update_schemes_stats" > "$damon_sysfs/kdamonds/0/state"
++if dmesg | grep -q BUG
++then
++	echo "update_schemes_stats triggers a kernel bug"
++	dmesg
++	exit 1
++fi
++
++# try to update tried regions of already removed scheme sysfs dir
++echo "update_schemes_tried_regions" > "$damon_sysfs/kdamonds/0/state"
++if dmesg | grep -q BUG
++then
++	echo "update_schemes_tried_regions triggers a kernel bug"
++	dmesg
++	exit 1
++fi
++
++echo "off" > "$damon_sysfs/kdamonds/0/state"
 -- 
-Kees Cook
+2.25.1
+
