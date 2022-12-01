@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5909663EFD8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08E063EFDB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiLALs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S230354AbiLALtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiLALsr (ORCPT
+        with ESMTP id S229826AbiLALtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:48:47 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7819B784
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:48:44 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id y131so189431iof.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:48:44 -0800 (PST)
+        Thu, 1 Dec 2022 06:49:51 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E129AE04
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:49:50 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id o5so2312057wrm.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:49:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Im8aG2HhGlxgZH4iTquAT2HFHDXCKd8y8vkv6lHhFXg=;
-        b=JYyHDRbO2aW4UmEejNSdCo2szLux+7Zcot5vDKhMJdFx0dBPGVgx6DYXoXYkf194He
-         4B4181TOme1f5FLctjIw9UzccRsiGczbfdoJHuF/hUvJ1scdx6fyaCwrxW9cu1JMHAnx
-         dEuHB9zesWjrBR9mynIWox4PQQfdRXTOGYz/SZp3TXmpfO1tG7lS3P1q8yesWxfLlQ0/
-         bkjoEbCL/7YyK7Gq3cE/JguBp/n4c5zQxEXUOzplpdIGmkCu/tMun9Bkv/vVQk9BjcnF
-         iUE7XqXcfpNRHkUL4uz7XpSTLqFte23BxXh+s5eV5WNv3FbbRnjf/3snn0PiPfSansIf
-         EDig==
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9EKZPY2hBniiNOtz3xFsIq3ixIyaR/34E24Cwlg4TM=;
+        b=Tfoq8xnEDOdKYT+BTIWDRJ/clQ9qBFy9Q6K+s4018wd20fxlU+a5wkqQijASISO6RY
+         FGCzBGXt82C2oe8Ox5isIxegfmEwuD62h3jTMbh0HX1SKu/MuG1wG4MeGl4rJv+cXj+p
+         bQqTHsfg7PcM7b+jN28i/NmNGOj5H4c/kbhWM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Im8aG2HhGlxgZH4iTquAT2HFHDXCKd8y8vkv6lHhFXg=;
-        b=HZEthU4hlJXcpYG6f8T+eHMb9s9co5aOe7RPqOBElEwznu1ACVmYaXzHnHtM3mKhwV
-         CDrU2T35bGNF5CXsJsYV42IdbS9F1YGCq5sS8Q4WqUu0+zBlhNLiG+tibJs0Xh/YU9aQ
-         rvwLjjzmIYIQY4z2SrYYdgsjHsXVecEazlJ8lzg1pj4NwruAn67AprL7+NcN9jqc2v/W
-         BdkdcvIXwhMYxDUwvxa3lh2Bg/WyAyCMHhPLsk0agtNGRvBbD4Iff1+DSo+ZxuDYbcd1
-         goNi9MkzdVr/suCCuhoFZRmtwvk3+7EarrDnAhcj9aTKoZnSRDYzQJtRIszpFxfBSYQ8
-         5SdA==
-X-Gm-Message-State: ANoB5plWwKJLlqHDAc5Co11ogmrR+WL7nMbcmRwCD5zYaPBsqQh8UPCw
-        DiK31ICbXJl5102E6KaJU01YF7SQ6gBmsiBKldC71g==
-X-Google-Smtp-Source: AA0mqf41hMKwtkf4xbRGiRzWBrltGwtbsUvrrqiCOCed4fhJhU6zzDCcb/toEsxMj7xcuXoUo4C5eWh/jY9KyVI1Iik=
-X-Received: by 2002:a6b:6109:0:b0:6df:c08d:2760 with SMTP id
- v9-20020a6b6109000000b006dfc08d2760mr3407964iob.209.1669895323749; Thu, 01
- Dec 2022 03:48:43 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y9EKZPY2hBniiNOtz3xFsIq3ixIyaR/34E24Cwlg4TM=;
+        b=pckH1lCF+fNjGpLW5F1LUjM0Q4BAv7NS/Qh2Lc3yw0Hn0ujKBAsKwal4xKhUCsf2Ys
+         PzkxXmYMb6dhZuh64br15vQLW8DadM3XQQKDj4BF70tu8bC3Yg2Ore0/FDnNy4adckSj
+         X55pWLdUDBwUFHqYA+uvzrDrDO5LQLosOypTdWJ1qi4qSqE5b/4MWX6vXXVmlOYxiUA/
+         FHt+R7BM63/zW0idfuufj2oivtTS6frQW89Mb2Q7GbcXpYMuwM5bxdhHraMueP3y7La+
+         Yf9bL8kMkK1VKQ80HCo4BieerEJa99ZMBOPxyXJeHQuJ2Ul7X9u6U7QuGbyH1ALMEdid
+         xb9A==
+X-Gm-Message-State: ANoB5pnRgnj82sgGUpXHciqtlgkFxXtEL3BCldmobl9nnfa7+3CWdPIo
+        R9xwQc1R8+kz3hEZIiFVqelmog==
+X-Google-Smtp-Source: AA0mqf4qcEqAuLwD8njmkdLkxFyZkebZPMxSJGaXrkDX3Ot1nqpkA1QFzJnmVd4NWofEpOUZXHT8/w==
+X-Received: by 2002:adf:d84e:0:b0:241:7ad0:dd0a with SMTP id k14-20020adfd84e000000b002417ad0dd0amr41578048wrl.290.1669895388800;
+        Thu, 01 Dec 2022 03:49:48 -0800 (PST)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-49-206.cust.vodafonedsl.it. [188.217.49.206])
+        by smtp.gmail.com with ESMTPSA id m28-20020a056000025c00b00242257f2672sm4268751wrz.77.2022.12.01.03.49.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 03:49:48 -0800 (PST)
+Date:   Thu, 1 Dec 2022 12:49:46 +0100
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     isely@pobox.com, mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: pvrusb2: use sysfs_emit() to instead of
+ scnprintf()
+Message-ID: <20221201114946.GA1289482@tom-ThinkPad-T14s-Gen-2i>
+References: <202212011927592559291@zte.com.cn>
 MIME-Version: 1.0
-References: <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
- <CADYN=9L8tt2T-8O+u5NSMSUOkZDvEggnvzxH6aMmd5Rn9yDeuw@mail.gmail.com>
- <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com> <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
- <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com> <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
- <20221014140633.mlypet7skkxvt453@mobilestation> <CADYN=9LrKHRNMON3GA4piDvWeSWTASQ1u2=D30rXFdvo1L18bg@mail.gmail.com>
- <20221017155246.zxal2cfehjgaajcu@mobilestation> <CA+G9fYtYetV5sZVD14WkZxCE_tgTC4VVKm8BcBw5_NwXD6U=Sw@mail.gmail.com>
- <Y4cqcTRcni5H7UAU@x1-carbon>
-In-Reply-To: <Y4cqcTRcni5H7UAU@x1-carbon>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Thu, 1 Dec 2022 12:48:32 +0100
-Message-ID: <CADYN=9KKGBXn-YkiiFxsUzsanTALbDV1c+tB0oUQPouE1idnuQ@mail.gmail.com>
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006 tag
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Carlos Hernandez <ceh@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212011927592559291@zte.com.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -85,101 +68,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 11:03, Niklas Cassel <Niklas.Cassel@wdc.com> wrote:
->
-> On Wed, Nov 30, 2022 at 03:10:37PM +0530, Naresh Kamboju wrote:
-> > On Mon, 17 Oct 2022 at 21:22, Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > FYI,
-> >
-> > We have been noticing this problem [a] & [b] on Linux mainline master 6.1.0-rc7
-> >
-> >     Test error: mkfs.ext4
-> > /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 failed; job
-> > exit
-> >
-> > Please suggest a way forward on this reported issue on arm32 TI BeagleBoard X15
-> > device. Build and Kernel configs details provided in the metadata section.
-> >
-> > metadata:
-> >   git_ref: master
-> >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-> >   git_sha: b7b275e60bcd5f89771e865a8239325f86d9927d
-> >   git_describe: v6.1-rc7
-> >   kernel_version: 6.1.0-rc7
-> >   kernel-config: https://builds.tuxbuild.com/2I9I42JhhQqS9GOpFppfRiuqtRW/config
-> >   build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/706371149
-> >   artifact-location: https://builds.tuxbuild.com/2I9I42JhhQqS9GOpFppfRiuqtRW
-> >   toolchain: gcc-10
-> >
-> > [a] https://lkft.validation.linaro.org/scheduler/job/5892099
-> > [b] https://lore.kernel.org/all/20221017155246.zxal2cfehjgaajcu@mobilestation/
-> >
-> > - Naresh
->
-> Hello Naresh,
->
->
-> Looking at the error from the log:
->
-> + mkfs.ext4 /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> mke2fs 1.46.5 (30-Dec-2021)
-> The file /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 does not exist and no size was specified.
->
-> It seems like the device that you are trying to format does not exist.
->
->
->
-> On October 17th Serge suggested that you guys should try to enable:
-> CONFIG_AHCI_DWC
-> and see if that does solve your problem.
->
-> There was never any reply to his suggestion.
+Hi,
 
-I re-tested this on todays linux tree v6.1-rc7-103-gef4d3ea40565.
+On Thu, Dec 01, 2022 at 07:27:59PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/media/usb/pvrusb2/pvrusb2-sysfs.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
+> index 3e42e209be37..81c8b65bd9ef 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
+> @@ -81,7 +81,7 @@ static ssize_t show_name(struct device *class_dev,
+>  	pvr2_sysfs_trace("pvr2_sysfs(%p) show_name(cid=%d) is %s",
+>  			 cip->chptr, cip->ctl_id, name);
+>  	if (!name) return -EINVAL;
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", name);
+> +	return sysfs_emit(buf, "%s\n", name);
+>  }
+> 
+>  static ssize_t show_type(struct device *class_dev,
+> @@ -102,7 +102,7 @@ static ssize_t show_type(struct device *class_dev,
+>  	}
+>  	pvr2_sysfs_trace("pvr2_sysfs(%p) show_type(cid=%d) is %s",
+>  			 cip->chptr, cip->ctl_id, name);
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", name);
+> +	return sysfs_emit(buf, "%s\n", name);
+>  }
+> 
+>  static ssize_t show_min(struct device *class_dev,
+> @@ -115,7 +115,7 @@ static ssize_t show_min(struct device *class_dev,
+>  	val = pvr2_ctrl_get_min(cip->cptr);
+>  	pvr2_sysfs_trace("pvr2_sysfs(%p) show_min(cid=%d) is %ld",
+>  			 cip->chptr, cip->ctl_id, val);
+> -	return scnprintf(buf, PAGE_SIZE, "%ld\n", val);
+> +	return sysfs_emit(buf, "%ld\n", val);
+>  }
+> 
+>  static ssize_t show_max(struct device *class_dev,
+> @@ -128,7 +128,7 @@ static ssize_t show_max(struct device *class_dev,
+>  	val = pvr2_ctrl_get_max(cip->cptr);
+>  	pvr2_sysfs_trace("pvr2_sysfs(%p) show_max(cid=%d) is %ld",
+>  			 cip->chptr, cip->ctl_id, val);
+> -	return scnprintf(buf, PAGE_SIZE, "%ld\n", val);
+> +	return sysfs_emit(buf, "%ld\n", val);
+>  }
+> 
+>  static ssize_t show_def(struct device *class_dev,
+> @@ -551,7 +551,7 @@ static ssize_t v4l_minor_number_show(struct device *class_dev,
+>  	struct pvr2_sysfs *sfp;
+>  	sfp = dev_get_drvdata(class_dev);
+>  	if (!sfp) return -EINVAL;
+> -	return scnprintf(buf,PAGE_SIZE,"%d\n",
+> +	return sysfs_emit(buf, "%d\n",
+>  			 pvr2_hdw_v4l_get_minor_number(sfp->channel.hdw,
+>  						       pvr2_v4l_type_video));
+>  }
+> @@ -563,7 +563,7 @@ static ssize_t bus_info_show(struct device *class_dev,
+>  	struct pvr2_sysfs *sfp;
+>  	sfp = dev_get_drvdata(class_dev);
+>  	if (!sfp) return -EINVAL;
+> -	return scnprintf(buf,PAGE_SIZE,"%s\n",
+> +	return sysfs_emit(buf, "%s\n",
+>  			 pvr2_hdw_get_bus_info(sfp->channel.hdw));
+>  }
+> 
+> @@ -574,7 +574,7 @@ static ssize_t hdw_name_show(struct device *class_dev,
+>  	struct pvr2_sysfs *sfp;
+>  	sfp = dev_get_drvdata(class_dev);
+>  	if (!sfp) return -EINVAL;
+> -	return scnprintf(buf,PAGE_SIZE,"%s\n",
+> +	return sysfs_emit(buf, "%s\n",
+>  			 pvr2_hdw_get_type(sfp->channel.hdw));
+>  }
+> 
+> @@ -585,7 +585,7 @@ static ssize_t hdw_desc_show(struct device *class_dev,
+>  	struct pvr2_sysfs *sfp;
+>  	sfp = dev_get_drvdata(class_dev);
+>  	if (!sfp) return -EINVAL;
+> -	return scnprintf(buf,PAGE_SIZE,"%s\n",
+> +	return sysfs_emit(buf, "%s\n",
+>  			 pvr2_hdw_get_desc(sfp->channel.hdw));
+>  }
+> 
+> @@ -597,7 +597,7 @@ static ssize_t v4l_radio_minor_number_show(struct device *class_dev,
+>  	struct pvr2_sysfs *sfp;
+>  	sfp = dev_get_drvdata(class_dev);
+>  	if (!sfp) return -EINVAL;
+> -	return scnprintf(buf,PAGE_SIZE,"%d\n",
+> +	return sysfs_emit(buf, "%d\n",
+>  			 pvr2_hdw_v4l_get_minor_number(sfp->channel.hdw,
+>  						       pvr2_v4l_type_radio));
+>  }
+> @@ -609,7 +609,7 @@ static ssize_t unit_number_show(struct device *class_dev,
+>  	struct pvr2_sysfs *sfp;
+>  	sfp = dev_get_drvdata(class_dev);
+>  	if (!sfp) return -EINVAL;
+> -	return scnprintf(buf,PAGE_SIZE,"%d\n",
+> +	return sysfs_emit(buf, "%d\n",
+>  			 pvr2_hdw_get_unit_number(sfp->channel.hdw));
+>  }
+> 
+> -- 
+> 2.25.1
 
-With CONFIG_AHCI_DWC=y the kernel fell on its back and no output was produced
-So changing  the ahci_dwc_init to be a late_initcall [1] made me see
-what was going on [2].
+Looks good to me.
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 
-The kernel booted fine with CONFIG_AHCI_DWC=y + this patch [3]
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
---- a/drivers/ata/libahci_platform.c
-+++ b/drivers/ata/libahci_platform.c
-@@ -109,7 +109,8 @@ struct clk *ahci_platform_find_clk(struct
-ahci_host_priv *hpriv, const char *con
-  int i;
-
-  for (i = 0; i < hpriv->n_clks; i++) {
-- if (!strcmp(hpriv->clks[i].id, con_id))
-+ if (hpriv->clks && hpriv->clks[i].id &&
-+    !strcmp(hpriv->clks[i].id, con_id))
-  return hpriv->clks[i].clk;
-  }
-
-Bootlog [4].
-Thank you Arnd for helping out with the investigation and for
-proposing the patch for me to test.
-
->
->
->
-> Looking at the config in:
-> >   kernel-config: https://builds.tuxbuild.com/2I9I42JhhQqS9GOpFppfRiuqtRW/config
->
-> # CONFIG_AHCI_DWC is not set
->
-> This Kconfig is indeed not enabled.
->
-> Could you guys please try the suggestion from Serge?
-
-The patch was also tested [5] without enabling CONFIG_AHCI_DWC, this
-also worked fine.
-
-Cheers,
-Anders
-[1] http://ix.io/4hmt
-[2] https://lkft.validation.linaro.org/scheduler/job/5902935
-[3] http://ix.io/4hmv
-[4] https://lkft.validation.linaro.org/scheduler/job/5903220
-[5] http://ix.io/4hmw
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
