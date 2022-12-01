@@ -2,150 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D6A63E6BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4FC63E6C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiLAAyn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Nov 2022 19:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S229807AbiLAAzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiLAAyl (ORCPT
+        with ESMTP id S229778AbiLAAza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:54:41 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 655C654356;
-        Wed, 30 Nov 2022 16:54:37 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2B10rQZO1013390, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2B10rQZO1013390
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 1 Dec 2022 08:53:26 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Thu, 1 Dec 2022 08:54:11 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 1 Dec 2022 08:54:11 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Thu, 1 Dec 2022 08:54:11 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     JunASAKA <JunASAKA@zzy040330.moe>,
-        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
-CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
-Thread-Topic: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
-Thread-Index: AQHZBMW0Ra7MKeD5kEmSajNwR0qaiK5YM5hw
-Date:   Thu, 1 Dec 2022 00:54:11 +0000
-Message-ID: <663e6d79c34f44998a937fe9fbd228e9@realtek.com>
-References: <20221130140849.153705-1-JunASAKA@zzy040330.moe>
-In-Reply-To: <20221130140849.153705-1-JunASAKA@zzy040330.moe>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/11/30_=3F=3F_10:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 30 Nov 2022 19:55:30 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CA58D673;
+        Wed, 30 Nov 2022 16:55:27 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id gu23so583707ejb.10;
+        Wed, 30 Nov 2022 16:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yr9ys6HO2MrWpQ3INHTC37QpZhNvq29WcYZp15OMZA0=;
+        b=kcHHG2Iamod1Y29/0RF6tU4qbFBr7C/Zf8EeuSiIehjif8naYO1+rK7wOQHopwBbC2
+         w6tXt+ZQDU/gyDViHmOEvlDnDLTqLVJesYIv7Yr+JC51pT63wA+H68b+xoomLJZXJHSO
+         W85ps7TUbPKxm4MnItGJWiIBAOKbJqo6NJ0ClO8xiAwLazR8st81mv9ywkhbtfCZbrNu
+         CuHOtBsX2RNCBK5ICIfo49IIwvX2Yq5WaE0ClYRqmuSP3buh2jCReV2br51VnAvKWHWY
+         Ug7/Ckr16NoxZNfBPnbAzs5dGfGPo7Zvhh3ee1RpBDluFYPBrzidgY9Tkb9t5NzUgE10
+         m51A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yr9ys6HO2MrWpQ3INHTC37QpZhNvq29WcYZp15OMZA0=;
+        b=OL5/xPowHZNLreDPX+bZB3JK0lVAvnlSmwzloUVMLP5Bbf88Hs3mVBYZEGBisqhblN
+         LS67FHdrzsBPgSubzwvmS1ElXJDA2J8miC/tezIYELhA/Zb66zb7RBcW5RXSUUfAGP+k
+         aqTKVfbuGY8u84KVLfsVUblo2hfx2uEg2QPrvt7wIa8YRkDHroPppIFNouOefTf1wvDt
+         AZYbwo6AYgne4i49hC+qaBvnM0TabBtMCSE5OyJ/lTAenHr+XtDPYCYLAoGiaL9YQIdO
+         ltkH5eCaz2/JtpBuxc+EPs4PIq7ZmbnmQWe2NCGCnkagLQLpJJzWhuewv6oxZpOA/bkl
+         hlzA==
+X-Gm-Message-State: ANoB5pn3StdPXRDri9omydUYq5s/JDRLRpFNYcfMWu69xtOLwUmUvW0z
+        /o9K+IyK91Lpn4iuL7h31SoqSFyJow2zRZFJvD8=
+X-Google-Smtp-Source: AA0mqf5TMdaho2mYK0Woa9ZJMyDANjEA59+nAojEa04/IDe1PQguHXe+kIYnjYgHJzcZO+PRVtPWXpFfE/zfNQm9KDE=
+X-Received: by 2002:a17:906:6403:b0:7b2:9667:241e with SMTP id
+ d3-20020a170906640300b007b29667241emr54933523ejm.115.1669856125585; Wed, 30
+ Nov 2022 16:55:25 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129134217.52767-1-changbin.du@gmail.com> <20221129134217.52767-2-changbin.du@gmail.com>
+In-Reply-To: <20221129134217.52767-2-changbin.du@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 30 Nov 2022 16:55:13 -0800
+Message-ID: <CAEf4BzZ=+DVkNT+Ti2L_ZyqrxwajfN04ou9XDrju704O6Ake4Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] libbpf: show error info about missing ".BTF" section
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: JunASAKA <JunASAKA@zzy040330.moe>
-> Sent: Wednesday, November 30, 2022 10:09 PM
-> To: Jes.Sorensen@gmail.com
-> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
-> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; JunASAKA
-> <JunASAKA@zzy040330.moe>
-> Subject: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
-> 
-> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
-> issues for rtl8192eu chips by replacing the arguments with
-> the ones in the updated official driver.
-
-I think it would be better if you can point out which version you use, and
-people will not modify them back to old version suddenly.
-
-> 
-> Signed-off-by: JunASAKA <JunASAKA@zzy040330.moe>
+On Tue, Nov 29, 2022 at 5:42 AM Changbin Du <changbin.du@gmail.com> wrote:
+>
+> Show the real problem instead of just saying "No such file or directory".
+>
+> Now will print below info:
+> libbpf: can not find '.BTF' section
+> Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
+>
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
 > ---
->  .../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 76 +++++++++++++------
->  1 file changed, 54 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-> index b06508d0cd..82346500f2 100644
-> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>  tools/lib/bpf/btf.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index d88647da2c7f..1adc0f6019a0 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+>         err = 0;
+>
+>         if (!btf_data) {
+> +               pr_warn("can not find '%s' section\n", BTF_ELF_SEC);
 
-[...]
+let's use consistent form of error messages:
 
-> @@ -891,22 +907,28 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
-> 
->  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
->  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
-> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-> 
-> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
-> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
-> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
-> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
-> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
-> +
->  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-> 
-> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
-> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-> +
+pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
 
-I think this is a test code of vendor driver. No need them here. 
-
-
->  	/* Path B IQK setting */
->  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_A, 0x38008c1c);
->  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_A, 0x38008c1c);
->  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
->  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
-> 
-> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
-> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
->  	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
-> 
->  	/* LO calibration setting */
-> -	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
-> +	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
-> 
->  	/* One shot, path A LOK & IQK */
->  	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
-
-[...]
-
-I have compared your patch with internal code, and they are the same.
-But, I don't have a test.
-
-Ping-Ke
-
+>                 err = -ENOENT;
+>                 goto done;
+>         }
+> --
+> 2.37.2
+>
