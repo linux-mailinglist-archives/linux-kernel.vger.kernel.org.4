@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B1963FC39
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910E163FC3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbiLAXpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S231922AbiLAXqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiLAXpH (ORCPT
+        with ESMTP id S231381AbiLAXqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:45:07 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BEBBE4F8;
-        Thu,  1 Dec 2022 15:45:05 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        Thu, 1 Dec 2022 18:46:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C72BE6B0;
+        Thu,  1 Dec 2022 15:46:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 298D985291;
-        Fri,  2 Dec 2022 00:45:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669938303;
-        bh=lvh7bk0X0xJ0k9t1hMcrOK74zP9ebDwEIsFtFQSr3UY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GT2sE7J+6qvb84xLBa7huCUrgAM0aCNnh75bDqOEFGmc1jXSm7iHydrf1lyTGlFbn
-         CISZL8J1vU8T1t3WJhGZTqNtTssjyAyNvYDzBQCggFmhSw7VjN0QuaU8kZ3FqgBnFi
-         D1pCBTCywASNtBkeB+ub07CPpL/944xJLVn9ycK4MuHQEPIjaw6Cf7W8CXJklOZrs2
-         yRPIPL983S87TI82sMQcb4bjm7rtGmqSBNLVANBdI9mRP+4zG6jRBz0CvGB2O0uOZ9
-         4S+zavS9dq9ZWX+THOaoL0FPKH0PSLohkXld2J/Ac1cZX+Gpx76qMqiSyXD29y1J9c
-         PL4n96QeDJF4w==
-Message-ID: <66e960c0-3743-ed7d-f8b1-747ecdc61f9f@denx.de>
-Date:   Fri, 2 Dec 2022 00:44:24 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D27B621B9;
+        Thu,  1 Dec 2022 23:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56CE9C433C1;
+        Thu,  1 Dec 2022 23:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669938360;
+        bh=+ZZDaJ2TRqfIjvZzNrIyeLfItKovFc6+CdjaaxehAkU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=bmRtcrRiqsli1nffSTig33Fg6wjlRraY09f8JVPSUAREoaURLJBdSHqu2lrV/SZ5R
+         5TYFc0CEuOf/4zIwYASGcbrV4ny2llKEzr1amSwVCq9fw6fRSsEB2KuX4VoDZYHcn2
+         WtyHfs3Nk/qb3tlMPcPcrldHoTriA/g0blQ2hmH8NBe7fw1vUEE0X/5F0dBiP2TCLW
+         +f6wDkvUavs6NNay5wxUdRiycigZxnz90zXlvPSVBVD4FLE1LbTDEeuWD/TQVDsS0O
+         2LEr/SoVc2KjiS1E+cYCIK1698Eo6ZSnNp5To0UffvoeI5rSRrAhp0s2lgcAdqgA3u
+         /F4EVPeCMBveQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B9A145C05F8; Thu,  1 Dec 2022 15:45:59 -0800 (PST)
+Date:   Thu, 1 Dec 2022 15:45:59 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v2 4/4] rcu/kvfree: Use a polled API to speedup a reclaim
+ process
+Message-ID: <20221201234559.GA1520591@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221129155822.538434-1-urezki@gmail.com>
+ <20221129155822.538434-5-urezki@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh@kernel.org>
-Cc:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        kernel@dh-electronics.com, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
- <Y3y/S5COG7VPbsqL@duo.ucw.cz> <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
- <20221130191905.GA2631320-robh@kernel.org> <Y4eufPCzKbfp9k3z@duo.ucw.cz>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <Y4eufPCzKbfp9k3z@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129155822.538434-5-urezki@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,48 +61,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/22 20:26, Pavel Machek wrote:
-> On Wed 2022-11-30 13:19:05, Rob Herring wrote:
->> On Fri, Nov 25, 2022 at 10:26:30PM +0100, Marek Vasut wrote:
->>> On 11/22/22 13:23, Pavel Machek wrote:
->>>> Hi!
->>>
->>> Hi,
->>>
->>>>> Mark the label property as deprecated as it is mentioned
->>>>> in the description.
->>>>
->>>> Lets do it the other way around. Functions (etc) don't really provide
->>>> good enough description of LED, and label is still needed.
->>>
->>> Can you please provide a clear explanation which property or approach is the
->>> correct one for new DTs ?
->>>
->>> So far, the documentation states that "label" is deprecated, and users
->>> should replace it with "function" and "color".
->>
->> 'function' is what activity/operation the LED is associated with. It is
->> a fixed set of strings which s/w may use. It is a replacement for
->> 'linux,default-trigger'.
->>
->> 'label' is what is printed next to the LED for a human to read. 'label'
->> can be anything and the OS shouldn't care what it is.
+On Tue, Nov 29, 2022 at 04:58:22PM +0100, Uladzislau Rezki (Sony) wrote:
+> Currently all objects placed into a batch require a full GP
+> after passing which objects in a batch are eligible to be
+> freed.
 > 
-> Unfortunately, no.
+> The problem is that many pointers may already passed several
+> GP sequences so there is no need for them in extra delay and
+> such objects can be reclaimed right away without waiting.
 > 
-> We use label as a path in /sys/class/leds. And it looks like integer
-> "function" is not really adequate for describing what LED does. There
-> are too many LEDs and not enough integers, and it is common to have
-> same function ("activity") on multiple devices ("wifi", "mmc", "eth").
+> In order to reduce a memory footprint this patch introduces
+> a per-page-grace-period-controlling mechanism. It allows us
+> to distinguish pointers for which a grace period is passed
+> and for which not.
+> 
+> A reclaim thread in its turn frees a memory in a reverse
+> order starting from a tail because a GP is likely passed
+> for objects in a page. If a page with a GP sequence in a
+> list hits a condition when a GP is not ready we bail out
+> requesting one more grace period in order to complete a
+> drain process for left pages.
+> 
+> Test example:
+> 
+> kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
+>   --kconfig CONFIG_NR_CPUS=64 \
+>   --kconfig CONFIG_RCU_NOCB_CPU=y \
+>   --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
+>   --kconfig CONFIG_RCU_LAZY=n \
+>   --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 \
+>   rcuscale.holdoff=20 rcuscale.kfree_loops=10000 \
+>   torture.disable_onoff_at_boot" --trust-make
+> 
+> Total time taken by all kfree'ers: 8535693700 ns, loops: 10000, batches: 1188, memory footprint: 2248MB
+> Total time taken by all kfree'ers: 8466933582 ns, loops: 10000, batches: 1157, memory footprint: 2820MB
+> Total time taken by all kfree'ers: 5375602446 ns, loops: 10000, batches: 1130, memory footprint: 6502MB
+> Total time taken by all kfree'ers: 7523283832 ns, loops: 10000, batches: 1006, memory footprint: 3343MB
+> Total time taken by all kfree'ers: 6459171956 ns, loops: 10000, batches: 1150, memory footprint: 6549MB
+> 
+> Total time taken by all kfree'ers: 8560060176 ns, loops: 10000, batches: 1787, memory footprint: 61MB
+> Total time taken by all kfree'ers: 8573885501 ns, loops: 10000, batches: 1777, memory footprint: 93MB
+> Total time taken by all kfree'ers: 8320000202 ns, loops: 10000, batches: 1727, memory footprint: 66MB
+> Total time taken by all kfree'ers: 8552718794 ns, loops: 10000, batches: 1790, memory footprint: 75MB
+> Total time taken by all kfree'ers: 8601368792 ns, loops: 10000, batches: 1724, memory footprint: 62MB
+> 
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-The Documentation/devicetree/bindings/leds/common.yaml schema indicates 
-that function is a string, not an integer:
+A couple more questions interspersed below upon further reflection.
 
-"
-  32   function:
-  33     description:
-  34       LED function. Use one of the LED_FUNCTION_* prefixed definitions
-  35       from the header include/dt-bindings/leds/common.h. If there is no
-  36       matching LED_FUNCTION available, add a new one.
-  37     $ref: /schemas/types.yaml#/definitions/string
-"
+Thoughts?
+
+						Thanx, Paul
+
+> ---
+>  kernel/rcu/tree.c | 47 +++++++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 39 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index c94c17194299..44279ca488ef 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2741,11 +2741,13 @@ EXPORT_SYMBOL_GPL(call_rcu);
+>  /**
+>   * struct kvfree_rcu_bulk_data - single block to store kvfree_rcu() pointers
+>   * @list: List node. All blocks are linked between each other
+> + * @gp_snap: Snapshot of RCU state for objects placed to this bulk
+>   * @nr_records: Number of active pointers in the array
+>   * @records: Array of the kvfree_rcu() pointers
+>   */
+>  struct kvfree_rcu_bulk_data {
+>  	struct list_head list;
+> +	unsigned long gp_snap;
+>  	unsigned long nr_records;
+>  	void *records[];
+>  };
+> @@ -2762,13 +2764,15 @@ struct kvfree_rcu_bulk_data {
+>   * struct kfree_rcu_cpu_work - single batch of kfree_rcu() requests
+>   * @rcu_work: Let queue_rcu_work() invoke workqueue handler after grace period
+>   * @head_free: List of kfree_rcu() objects waiting for a grace period
+> + * @head_free_gp_snap: Snapshot of RCU state for objects placed to "@head_free"
+>   * @bulk_head_free: Bulk-List of kvfree_rcu() objects waiting for a grace period
+>   * @krcp: Pointer to @kfree_rcu_cpu structure
+>   */
+>  
+>  struct kfree_rcu_cpu_work {
+> -	struct rcu_work rcu_work;
+> +	struct work_struct rcu_work;
+>  	struct rcu_head *head_free;
+> +	unsigned long head_free_gp_snap;
+>  	struct list_head bulk_head_free[FREE_N_CHANNELS];
+>  	struct kfree_rcu_cpu *krcp;
+>  };
+> @@ -2964,10 +2968,11 @@ static void kfree_rcu_work(struct work_struct *work)
+>  	struct rcu_head *head;
+>  	struct kfree_rcu_cpu *krcp;
+>  	struct kfree_rcu_cpu_work *krwp;
+> +	unsigned long head_free_gp_snap;
+>  	int i;
+>  
+> -	krwp = container_of(to_rcu_work(work),
+> -			    struct kfree_rcu_cpu_work, rcu_work);
+> +	krwp = container_of(work,
+> +		struct kfree_rcu_cpu_work, rcu_work);
+>  	krcp = krwp->krcp;
+>  
+>  	raw_spin_lock_irqsave(&krcp->lock, flags);
+> @@ -2978,12 +2983,29 @@ static void kfree_rcu_work(struct work_struct *work)
+>  	// Channel 3.
+>  	head = krwp->head_free;
+>  	krwp->head_free = NULL;
+> +	head_free_gp_snap = krwp->head_free_gp_snap;
+>  	raw_spin_unlock_irqrestore(&krcp->lock, flags);
+>  
+>  	// Handle the first two channels.
+> -	for (i = 0; i < FREE_N_CHANNELS; i++)
+> +	for (i = 0; i < FREE_N_CHANNELS; i++) {
+> +		// Start from the tail page, so a GP is likely passed for it.
+> +		list_for_each_entry_safe_reverse(bnode, n, &bulk_head[i], list) {
+> +			// Not yet ready? Bail out since we need one more GP.
+> +			if (!poll_state_synchronize_rcu(bnode->gp_snap))
+> +				break;
+> +
+> +			list_del_init(&bnode->list);
+> +			kvfree_rcu_bulk(krcp, bnode, i);
+> +		}
+> +
+> +		// Please note a request for one more extra GP can
+> +		// occur only once for all objects in this batch.
+> +		if (!list_empty(&bulk_head[i]))
+> +			synchronize_rcu();
+
+Does directly invoking synchronize_rcu() instead of using queue_rcu_work()
+provide benefits, for example, reduced memory footprint?  If not,
+it would be good to instead use queue_rcu_work() in order to avoid an
+unnecessary context switch in this workqueue handler.
+
+My concern is that an RCU CPU stall might otherwise end up tying up more
+workqueue kthreads as well as more memory.
+
+>  		list_for_each_entry_safe(bnode, n, &bulk_head[i], list)
+>  			kvfree_rcu_bulk(krcp, bnode, i);
+> +	}
+>  
+>  	/*
+>  	 * This is used when the "bulk" path can not be used for the
+> @@ -2992,7 +3014,10 @@ static void kfree_rcu_work(struct work_struct *work)
+>  	 * queued on a linked list through their rcu_head structures.
+>  	 * This list is named "Channel 3".
+>  	 */
+> -	kvfree_rcu_list(head);
+> +	if (head) {
+> +		cond_synchronize_rcu(head_free_gp_snap);
+
+And similarly here.
+
+> +		kvfree_rcu_list(head);
+> +	}
+>  }
+>  
+>  static bool
+> @@ -3059,6 +3084,11 @@ static void kfree_rcu_monitor(struct work_struct *work)
+>  			if (!krwp->head_free) {
+>  				krwp->head_free = krcp->head;
+>  				WRITE_ONCE(krcp->head, NULL);
+> +
+> +				// Take a snapshot for this krwp. Please note no more
+> +				// any objects can be added to attached head_free channel
+> +				// therefore fixate a GP for it here.
+> +				krwp->head_free_gp_snap = get_state_synchronize_rcu();
+>  			}
+>  
+>  			WRITE_ONCE(krcp->count, 0);
+> @@ -3068,7 +3098,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
+>  			// be that the work is in the pending state when
+>  			// channels have been detached following by each
+>  			// other.
+> -			queue_rcu_work(system_wq, &krwp->rcu_work);
+> +			queue_work(system_wq, &krwp->rcu_work);
+>  		}
+>  	}
+>  
+> @@ -3196,8 +3226,9 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
+>  		list_add(&bnode->list, &(*krcp)->bulk_head[idx]);
+>  	}
+>  
+> -	/* Finally insert. */
+> +	// Finally insert and update the GP for this page.
+>  	bnode->records[bnode->nr_records++] = ptr;
+> +	bnode->gp_snap = get_state_synchronize_rcu();
+>  	return true;
+>  }
+>  
+> @@ -4801,7 +4832,7 @@ static void __init kfree_rcu_batch_init(void)
+>  		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+>  
+>  		for (i = 0; i < KFREE_N_BATCHES; i++) {
+> -			INIT_RCU_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
+> +			INIT_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
+>  			krcp->krw_arr[i].krcp = krcp;
+>  
+>  			for (j = 0; j < FREE_N_CHANNELS; j++)
+> -- 
+> 2.30.2
+> 
