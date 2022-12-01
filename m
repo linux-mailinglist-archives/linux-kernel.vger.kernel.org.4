@@ -2,101 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579B363E70E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E15A63E711
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiLABZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 20:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S229802AbiLAB05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiLABZv (ORCPT
+        with ESMTP id S229461AbiLAB0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 20:25:51 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94903975F6
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:25:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=pk5DH7G/x9KTP95IkRi4C5JBQ3WWwGoC+AVueVfHSio=; b=SespthigY8G9VWNCp+UTy0ryA8
-        3fxpFCtz3lHm0vPwhJfeb4mvc4aF6+diWFXOfkDxKWlNk2O0ys9mdxqowxrWSBQ/kVCts7+enK/bC
-        nIbTSQ9Y9cDyvv97f6pH9MLoh1bsnnGDML80yWMSBYlLD/wJUa3QWe2sgQJe+7VJALZJoPWi9g+Y0
-        /Zf5kzR3ouTL8eqMtjQbjpa2DBEm87Jfwi4c9tWu8GfxNZH8NZ+638Ml86KoB/g6jSYNbiztUnT0u
-        Ob7M73kMxDoul/3iiFB//OalseT4C8uavkwlY0s8GJphLD50Yg7+/GA+zKgszdVBX3EwK0lXIZ2in
-        7D5uOTvg==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p0YKo-00FVtG-47; Thu, 01 Dec 2022 01:25:54 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>,
-        linux-um@lists.infradead.org, Andres Salomon <dilinger@queued.net>,
-        linux-geode@lists.infradead.org, Lee Jones <lee@kernel.org>
-Subject: [PATCH] mfd: cs5535: don't build on UML
-Date:   Wed, 30 Nov 2022 17:25:41 -0800
-Message-Id: <20221201012541.11809-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 20:26:55 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BF48C6A5;
+        Wed, 30 Nov 2022 17:26:54 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NMz222Fsgz8QrkZ;
+        Thu,  1 Dec 2022 09:26:50 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B11QftC001011;
+        Thu, 1 Dec 2022 09:26:41 +0800 (+08)
+        (envelope-from zhang.songyi@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 09:26:42 +0800 (CST)
+Date:   Thu, 1 Dec 2022 09:26:42 +0800 (CST)
+X-Zmail-TransId: 2af9638802d255a4c856
+X-Mailer: Zmail v1.0
+Message-ID: <202212010926422966197@zte.com.cn>
+Mime-Version: 1.0
+From:   <zhang.songyi@zte.com.cn>
+To:     <adrian.hunter@intel.com>
+Cc:     <ulf.hansson@linaro.org>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zhang.songyi@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG1tYzogc2RoY2k6IFJlbW92ZSB1bm5lZWRlZCBzZW1pY29sb24=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B11QftC001011
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 638802DA.000 by FangMail milter!
+X-FangMail-Envelope: 1669858010/4NMz222Fsgz8QrkZ/638802DA.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<zhang.songyi@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638802DA.000/4NMz222Fsgz8QrkZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cs5535-mfd driver uses CPU-specific data that is not available
-for ARCH=um builds, so don't allow it to be built for UML.
+From: zhang songyi <zhang.songyi@zte.com.cn>
 
-Prevents these build errors:
+The semicolon after the "}" is unneeded.
 
-In file included from ../arch/x86/include/asm/olpc.h:7,
-                 from ../drivers/mfd/cs5535-mfd.c:17:
-../arch/x86/include/asm/geode.h: In function ‘is_geode_gx’:
-../arch/x86/include/asm/geode.h:16:31: error: ‘struct cpuinfo_um’ has no member named ‘x86_vendor’
-   16 |         return ((boot_cpu_data.x86_vendor == X86_VENDOR_NSC) &&
-../arch/x86/include/asm/geode.h:16:46: error: ‘X86_VENDOR_NSC’ undeclared (first use in this function); did you mean ‘X86_VENDOR_ANY’?
-   16 |         return ((boot_cpu_data.x86_vendor == X86_VENDOR_NSC) &&
-../arch/x86/include/asm/geode.h:17:31: error: ‘struct cpuinfo_um’ has no member named ‘x86’
-   17 |                 (boot_cpu_data.x86 == 5) &&
-../arch/x86/include/asm/geode.h:18:31: error: ‘struct cpuinfo_um’ has no member named ‘x86_model’
-   18 |                 (boot_cpu_data.x86_model == 5));
-../arch/x86/include/asm/geode.h: In function ‘is_geode_lx’:
-../arch/x86/include/asm/geode.h:23:31: error: ‘struct cpuinfo_um’ has no member named ‘x86_vendor’
-   23 |         return ((boot_cpu_data.x86_vendor == X86_VENDOR_AMD) &&
-../arch/x86/include/asm/geode.h:23:46: error: ‘X86_VENDOR_AMD’ undeclared (first use in this function); did you mean ‘X86_VENDOR_ANY’?
-   23 |         return ((boot_cpu_data.x86_vendor == X86_VENDOR_AMD) &&
-../arch/x86/include/asm/geode.h:24:31: error: ‘struct cpuinfo_um’ has no member named ‘x86’
-   24 |                 (boot_cpu_data.x86 == 5) &&
-../arch/x86/include/asm/geode.h:25:31: error: ‘struct cpuinfo_um’ has no member named ‘x86_model’
-   25 |                 (boot_cpu_data.x86_model == 10));
-
-Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: linux-um@lists.infradead.org
-Cc: Andres Salomon <dilinger@queued.net>
-Cc: linux-geode@lists.infradead.org
-Cc: Lee Jones <lee@kernel.org>
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
 ---
- drivers/mfd/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/sdhci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -- a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -15,6 +15,7 @@ config MFD_CS5535
- 	tristate "AMD CS5535 and CS5536 southbridge core functions"
- 	select MFD_CORE
- 	depends on PCI && (X86_32 || (X86 && COMPILE_TEST))
-+	depends on !UML
- 	help
- 	  This is the core driver for CS5535/CS5536 MFD functions.  This is
- 	  necessary for using the board's GPIO and MFGPT functionality.
+diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+index 42aaeabcad22..8413180a1039 100644
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -2289,7 +2289,7 @@ static bool sdhci_timing_has_preset(unsigned char timing)
+        case MMC_TIMING_UHS_DDR50:
+        case MMC_TIMING_MMC_DDR52:
+                return true;
+-       };
++       }
+        return false;
+ }
+
+--
+2.15.2
