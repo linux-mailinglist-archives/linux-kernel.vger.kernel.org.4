@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE05C63F9C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A43663F9CE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiLAVZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S231154AbiLAV2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiLAVZb (ORCPT
+        with ESMTP id S230413AbiLAV2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:25:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BDFC1BF6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:25:30 -0800 (PST)
+        Thu, 1 Dec 2022 16:28:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D7976141;
+        Thu,  1 Dec 2022 13:28:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21CF96212D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 21:25:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7401C433D6;
-        Thu,  1 Dec 2022 21:25:27 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 16:25:26 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chris Mason <clm@meta.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
-Message-ID: <20221201162526.2fdfd65d@gandalf.local.home>
-In-Reply-To: <78b7a67f-8c5b-6b2e-7fb5-01c47d75c104@meta.com>
-References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
-        <166991263326.311919.16890937584677289681.stgit@devnote3>
-        <202212010838.B0B109DA@keescook>
-        <20221201114848.13a87aca@gandalf.local.home>
-        <202212010852.6D4B542@keescook>
-        <20221201141426.08411b29@gandalf.local.home>
-        <78b7a67f-8c5b-6b2e-7fb5-01c47d75c104@meta.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3450CB82025;
+        Thu,  1 Dec 2022 21:27:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85AEC433D6;
+        Thu,  1 Dec 2022 21:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669930078;
+        bh=+DN+P/rKB/9tSIZAc6i0bxDS167JyMagYuQTQ8imLrI=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=uQMJuusUn8CNI4pztWvsbyTXchDju2WKgZTz3saR/BgX9smZeCwvibPrzs9Tdto6H
+         VA9B1hA7g7ZOhjYryGYTX7Z2fNYZCFaLNU5zyko1KC8a/DqKJyohuKBs4elBA7l+CK
+         1msdZtU5vSC8+oDl5fYLVFDw3+MmkcaWIyfn7oMfr7b/CWLZNb4x2FdMn8tJJ6Qb8q
+         OFWEsb4OpyFYQmjxyY7bi7RwZSQS1lZqFMFDjlfh23gGwxCP14wpbjORohXqKNMpdJ
+         mpKWX/+eyf8VB0Yv5i8qVoz0YIm4tzoNwis/YhJQieorteKMRctFM6mX1T8jiMv2Wl
+         FqJZjXvPVfNEg==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 8A80727C0054;
+        Thu,  1 Dec 2022 16:27:55 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 01 Dec 2022 16:27:55 -0500
+X-ME-Sender: <xms:WhyJY56bY9F_MYFxv7DaioKPBJHJxAo0Fv98h9FAnoD_QfY89srmBA>
+    <xme:WhyJY25S12Ycs-orXZS5gVWcTnneBahCIouBH5bKrpPz_0xCSU7M-VYtRlImKMbjM
+    6dJs_nLem9NhUmhlzU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdehgdduhedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
+    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
+    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
+    guvg
+X-ME-Proxy: <xmx:WhyJYwdFhZYwNTJEhjA3iEa-0lKweK4UrtEn7GUmniukcOgyJrrWpA>
+    <xmx:WhyJYyIaGsyihW68Uz2LeO1u-ncg-PKppdRDl1e0bZlBmqR6C3NA2w>
+    <xmx:WhyJY9JwMyoeO3Z661IObk96bEKAtdmHD6O9TT3p157Vql2qf5o4iw>
+    <xmx:WxyJY6FVIpHTCYek0JcdB1j1xlCUc9smfmHtm_cu792257_b04rcIA>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E3357B60086; Thu,  1 Dec 2022 16:27:54 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <c88afa91-72a9-4905-a710-90655f97831d@app.fastmail.com>
+In-Reply-To: <7e5f86c0-04b3-aa68-565a-7b86f1e1553d@infradead.org>
+References: <20221201204310.142039-1-arnd@kernel.org>
+ <7e5f86c0-04b3-aa68-565a-7b86f1e1553d@infradead.org>
+Date:   Thu, 01 Dec 2022 22:27:34 +0100
+From:   "Arnd Bergmann" <arnd@kernel.org>
+To:     "Randy Dunlap" <rdunlap@infradead.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>
+Cc:     linux-kernel@vger.kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
+        "Luis Machado" <luis.machado@arm.com>, linux-ide@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] ata: ahci: fix enum constants for gcc-13
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 16:00:03 -0500
-Chris Mason <clm@meta.com> wrote:
+On Thu, Dec 1, 2022, at 21:48, Randy Dunlap wrote:
+> On 12/1/22 12:43, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> gcc-13 slightly changes the type of constant expressions that are deifined
+>
+>                                                                     defined
 
-> On 12/1/22 2:14 PM, Steven Rostedt wrote:
-> > On Thu, 1 Dec 2022 08:53:02 -0800
-> > Kees Cook <keescook@chromium.org> wrote:
-> >   
-> >>> Have you not been reading this thread?    
-> >>
-> >> I skimmed it -- trying to catch up from turkey week. If this was already
-> >> covered, then please ignore me. It just wasn't obvious from the commit
-> >> log why it was included.  
-> > 
-> > That's a better request :-)
-> > 
-> > That is, please add why this is needed for BPF (and also include a Link:
-> > tag to this thread).  
-> 
-> Sorry, I'm completely failing to parse.  Is this directed at Kees or
-> Benjamin?  I'm also not sure what the this is in "why this is needed for
-> BPF"?
-> 
+fixed
 
-It was directed towards Kees. I don't even know who "Benjamin" is. I don't
-see a "Benjamin" in the Cc list.
+>> ---
+>>  drivers/ata/ahci.h | 234 ++++++++++++++++++++++-----------------------
+>>  1 file changed, 117 insertions(+), 117 deletions(-)
+>
+> What #include <linux/bits.h> ?
+> or is it just done indirectly?
 
-And "this" is for:
+Good point. It survived a build test, and it's one of the headers that
+is almost always included from somewhere, but you are correct that
+there should be an explicit include here as well.
 
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2137,6 +2137,8 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
- 		goto unlock;
+I also found that PORT_CMD_ICC_MASK is still a negative number
+that needs to be changed:
+
+@@ -178,10 +178,10 @@ enum {
+        PORT_CMD_SPIN_UP        = BIT(1),  /* Spin up device */
+        PORT_CMD_START          = BIT(0),  /* Enable port DMA engine */
  
- 	/* set the new array to event->tp_event and set event->prog */
-+	if (prog->kprobe_override)
-+		add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
- 	event->prog = prog;
- 	event->bpf_cookie = bpf_cookie;
- 	rcu_assign_pointer(event->tp_event->prog_array, new_array);
+-       PORT_CMD_ICC_MASK       = (0xf << 28), /* i/f ICC state mask */
+-       PORT_CMD_ICC_ACTIVE     = (0x1 << 28), /* Put i/f in active state */
+-       PORT_CMD_ICC_PARTIAL    = (0x2 << 28), /* Put i/f in partial state */
+-       PORT_CMD_ICC_SLUMBER    = (0x6 << 28), /* Put i/f in slumber state */
++       PORT_CMD_ICC_MASK       = (0xfu << 28), /* i/f ICC state mask */
++       PORT_CMD_ICC_ACTIVE     = (0x1u << 28), /* Put i/f in active state */
++       PORT_CMD_ICC_PARTIAL    = (0x2u << 28), /* Put i/f in partial state */
++       PORT_CMD_ICC_SLUMBER    = (0x6u << 28), /* Put i/f in slumber state */
+ 
+        /* PORT_CMD capabilities mask */
+        PORT_CMD_CAP            = PORT_CMD_HPCP | PORT_CMD_MPSP |
 
--- Steve
+
+I've addressed all three issues now, will send a v2 after Luis is
+able to validate that this fixes the problem.
+
+    Arnd
