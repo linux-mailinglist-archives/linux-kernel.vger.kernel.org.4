@@ -2,132 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875BB63ED84
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF8D63ED89
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiLAKVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S230353AbiLAKVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiLAKUU (ORCPT
+        with ESMTP id S230285AbiLAKVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:20:20 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A79C98959
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:20:16 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id q1so1256381pgl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:20:16 -0800 (PST)
+        Thu, 1 Dec 2022 05:21:17 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09C898956
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:21:07 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j4so1828356lfk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j+iNLgZBHVFYVqAiKpaqYdWWjZFUYRy5zBVAjX1O+nQ=;
-        b=YJWv5iOEvqI+beFxfLWL+0HTOZlErkbrpNcTf4vFnDqxK8klrn+BorJpFEMBEdaVLs
-         cnCCj3rLdSXDQQpIXtvi5IZ7L4kV0eNf0/7SnUv1LJ4zNJPZhpvV5JO/ZCxYMaXa2eWC
-         9h40Nv/9x6dEHPPbDONVxIfvE0i5uvkLJN2wuvPy1QGl6Hfd15fAjY+1t4Xjw91U/SV0
-         stIl21nN9reZb88gtoWcLzg7DMyQPFCjx5bplFUAQ3bvD7iw+3a7RswoQ0Qjg2yNtSI1
-         xtk4wemqixDdUN9oYzTPthVUSg0LtfIkVFHL9KuLyxDwgnb2AIpkyHAfm+elNiZFtLY0
-         6CZg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yJWC4EnSIdOHOak+Y01i6W7TmDZjyxRR2uPhy+FOZLk=;
+        b=czOauT1/LL1bLcLrnxMZ7LyUIUmobSmtcydtd7PTiowxd5khBSoAy8Q5Jh0363tYBX
+         mK6jk8DukOA5/cDl1CBuODKtFLZZ4KfXpQGGA5QLqsxFd8hb8DU8/pWLYe5lT8KxvPHX
+         2+605fUYdZQDOI8zSJuqoHxbtfkc1czcwu19yr+IB2DL/MOcMz5r+65zOnMIyKXdmHjH
+         RR9S+Bb+UGytEvll9EFZUpNH1RYOlvOsEomq0QEkxeStmNzb8RCAKaFyyayaLEcisv8A
+         kD0BdlRMNBTNf3S8XK1Jsl6LMH5QKLS/hEAotw654okuI+vL/RhU4XWmIcVm5hAEREqj
+         s+Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j+iNLgZBHVFYVqAiKpaqYdWWjZFUYRy5zBVAjX1O+nQ=;
-        b=Wzc1rViidXIp4gLW689NiNccrxfIrwAxEVsj4H9IC0fDfZR7gowoE4IMOKXvpVsjBC
-         DYsZNlxrD+Rm9ttxhRZ97MO9+pKizwWSgrQHq63L68b8vSiSrlUuQQTLJF0gtX+dHC9D
-         6q8CfsN+1GATDrD53LcrhrFDoYbV2JADFchhdtueF7CMOlpOEii5yXTE2PYhI9yME2ZW
-         BhoCerriKuS8FNyNXk8z4amG4cmNB4qgNJXEWz9IJTL71PwZT0Q7lRQEEvI2y0TTB6fB
-         Cv0qdoIR8wTeEiGagAPLCcFlCS+nYMb+WOmmf/d5xwLDTMCaj1Y6jGmp/rlnDxkfWV26
-         j6qw==
-X-Gm-Message-State: ANoB5ploo6uTGhmB01CNdr7hdO1ImbFz2B8Uq71MGNjnTVV6IDh7oOlD
-        qnWjvc6UBJbSFozM7dCFRUVJgmkSvg3yMhz8
-X-Google-Smtp-Source: AA0mqf7fksbSZOyCBni3D+9eCcjk09sHMqEqioylnSOV7zMZWndYABL6qD4HKFDypG6UJN8iiAW1zw==
-X-Received: by 2002:a05:6a00:324e:b0:575:871f:2e7a with SMTP id bn14-20020a056a00324e00b00575871f2e7amr11661250pfb.35.1669890015643;
-        Thu, 01 Dec 2022 02:20:15 -0800 (PST)
-Received: from alarm.flets-east.jp ([2400:4050:c360:8200:7b99:f7c3:d084:f1e2])
-        by smtp.gmail.com with ESMTPSA id j5-20020a170902690500b001708c4ebbaesm3164914plk.309.2022.12.01.02.20.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 02:20:15 -0800 (PST)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH net v4] igbvf: Regard vf reset nack as success
-Date:   Thu,  1 Dec 2022 19:20:03 +0900
-Message-Id: <20221201102003.67861-1-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJWC4EnSIdOHOak+Y01i6W7TmDZjyxRR2uPhy+FOZLk=;
+        b=qkTIH2PbBeWduH8zGdvClXha1TValrqFPrRtVEP4xq4XakV9c1KZwOYtC2QTljOIc0
+         NUrSi+7arQD8rMmRdp7bKiZAEsMp1emaZF1fhms6Ko02G6O4Oz7gOG2S7vG6mDtWMAcJ
+         dkMhsKHjPF5oMKyUiXHYNX0zCYEPuqc2v3XphX7zWhpcCav33WQ37Xz2sm6F55teTrvG
+         psee2oi2xqWU+Le5Hy7a3HLAAtUTUSBxl6p79rfLqZtJ6ePErUEOwoZGH05WPH2jvuhC
+         i0jnqPvvx4TljBr9btHm6qz27UjEzgYPEARHN282NlAFrqVMMNvKZwUW+Eb16H2PA9zE
+         voOw==
+X-Gm-Message-State: ANoB5pkglOfAUqyvQ3pfqz6Hvc3YFwINym3bZRDJKt+n2Z4WbRRBqpr+
+        0CMFGXu+6zw09YW99WPOyMnSkg==
+X-Google-Smtp-Source: AA0mqf6CUSYZrSFSc59I2YqsCSJOMbf+X1AkF2Fb2hvkfIrHoAJHah4FhaNgx3RzM/yZ3iPB9Yg2fA==
+X-Received: by 2002:ac2:4316:0:b0:4b5:d8e:c12 with SMTP id l22-20020ac24316000000b004b50d8e0c12mr7626503lfh.665.1669890066328;
+        Thu, 01 Dec 2022 02:21:06 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b4-20020a2eb904000000b00279cbcfd7dbsm290384ljb.30.2022.12.01.02.21.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 02:21:05 -0800 (PST)
+Message-ID: <4e94c635-4cbb-449e-24af-f6fee47fb45e@linaro.org>
+Date:   Thu, 1 Dec 2022 11:21:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 09/14] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+Content-Language: en-US
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-10-hal.feng@starfivetech.com>
+ <1d62f95f-0edc-afd4-abb4-37fadc0b6a47@linaro.org>
+ <72b3d10e-5a8e-ed42-6808-f53773913422@starfivetech.com>
+ <768c2add-4c1f-0b36-5709-dbcdd560f504@starfivetech.com>
+ <1fb1474b-ec13-e83a-973e-bd9e9a86cb44@linaro.org>
+ <98d1bac7-8af5-f481-59b2-d58ca4c228ee@starfivetech.com>
+ <9183bac6-121e-0027-a88b-d77d5c9a077e@linaro.org>
+ <e954511b-e74a-2c3a-95ec-d33c938b146f@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e954511b-e74a-2c3a-95ec-d33c938b146f@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vf reset nack actually represents the reset operation itself is
-performed but no address is assigned. Therefore, e1000_reset_hw_vf
-should fill the "perm_addr" with the zero address and return success on
-such an occasion. This prevents its callers in netdev.c from saying PF
-still resetting, and instead allows them to correctly report that no
-address is assigned.
+On 30/11/2022 19:05, Hal Feng wrote:
+> On Wed, 30 Nov 2022 16:19:06 +0100, Krzysztof Kozlowski wrote:
+>> On 30/11/2022 16:12, Hal Feng wrote:
+>>> On Wed, 30 Nov 2022 12:48:30 +0100, Krzysztof Kozlowski wrote:
+>>>> On 30/11/2022 10:47, Hal Feng wrote:
+>>>>> On Fri, 25 Nov 2022 14:41:12 +0800, Hal Feng wrote:
+>>>>>> On Mon, 21 Nov 2022 09:47:08 +0100, Krzysztof Kozlowski wrote:
+>>>>>>> On 18/11/2022 02:06, Hal Feng wrote:
+>>>>>>>> From: Emil Renner Berthing <kernel@esmil.dk>
+>>>>>>>>
+>>>>>>>> Add bindings for the system clock and reset generator (SYSCRG) on the
+>>>>>>>> JH7110 RISC-V SoC by StarFive Ltd.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>>>>>>>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>>>>>>>
+>>>>>>> Binding headers are coming with the file bringing bindings for the
+>>>>>>> device, so you need to squash patches.
+>>>>>>
+>>>>>> As we discussed in patch 7, could I merge patch 7, 8, 9, 10 and add the
+>>>>>> following files in one commit?
+>>>>>>
+>>>>>> include/dt-bindings/clock/starfive,jh7110-crg.h
+>>>>>> include/dt-bindings/reset/starfive,jh7110-crg.h
+>>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+>>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>>>>>
+>>>>> Hi, Krzysztof,
+>>>>>
+>>>>> Could you please give me some suggestions?
+>>>>
+>>>> You can keep aon and sys split. First add one of them with their own
+>>>> headers. Then add second with their own defines.
+>>>
+>>> You mean split patch 7 and patch 8 into sys part and aon part
+>>> respectively? There are totally five regions (sys/aon/stg/isp/vout)
+>>> for clocks and resets in JH7110. If we do that, there will be 5
+>>> headers for JH7110 in either clock or reset directory finally. Is
+>>> that OK if there are too many headers for just one SoC?
+>>
+>>
+>> Sorry, I lost the track of what patches you have. The comment was -
+>> bindings include both the doc and headers. You want to split some, some
+>> merge, sorry, no clue. I did not propose splitting headers...
+> 
+> It's ok. The problem was that the header
+> 
+> include/dt-bindings/clock/starfive,jh7110-crg.h
+> 
+> was used in both
+> 
+> Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+> 
+> and
+> 
+> Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml.
+> 
+> The same for include/dt-bindings/reset/starfive,jh7110-crg.h.
+> So should I add these four files in one patch?
 
-Fixes: 6ddbc4cf1f4d ("igb: Indicate failure on vf reset for empty mac address")
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
-V3 -> V4: Removed blank lines between cases
-V2 -> V3: Added Fixes: tag
+No. I think I wrote proposed flow of patches:
+1. syscrg bindings with header
+2. aoncrg bindings with changes to header
 
- drivers/net/ethernet/intel/igbvf/vf.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Why do you need to merge anything?
 
-diff --git a/drivers/net/ethernet/intel/igbvf/vf.c b/drivers/net/ethernet/intel/igbvf/vf.c
-index b8ba3f94c363..a47a2e3e548c 100644
---- a/drivers/net/ethernet/intel/igbvf/vf.c
-+++ b/drivers/net/ethernet/intel/igbvf/vf.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright(c) 2009 - 2018 Intel Corporation. */
- 
-+#include <linux/etherdevice.h>
-+
- #include "vf.h"
- 
- static s32 e1000_check_for_link_vf(struct e1000_hw *hw);
-@@ -131,11 +133,16 @@ static s32 e1000_reset_hw_vf(struct e1000_hw *hw)
- 		/* set our "perm_addr" based on info provided by PF */
- 		ret_val = mbx->ops.read_posted(hw, msgbuf, 3);
- 		if (!ret_val) {
--			if (msgbuf[0] == (E1000_VF_RESET |
--					  E1000_VT_MSGTYPE_ACK))
-+			switch (msgbuf[0]) {
-+			case E1000_VF_RESET | E1000_VT_MSGTYPE_ACK:
- 				memcpy(hw->mac.perm_addr, addr, ETH_ALEN);
--			else
-+				break;
-+			case E1000_VF_RESET | E1000_VT_MSGTYPE_NACK:
-+				eth_zero_addr(hw->mac.perm_addr);
-+				break;
-+			default:
- 				ret_val = -E1000_ERR_MAC_INIT;
-+			}
- 		}
- 	}
- 
--- 
-2.38.1
+Best regards,
+Krzysztof
 
