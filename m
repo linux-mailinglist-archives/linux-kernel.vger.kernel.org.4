@@ -2,106 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D6663EDB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241B363EDBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiLAK1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S230386AbiLAK2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiLAK03 (ORCPT
+        with ESMTP id S230362AbiLAK2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:26:29 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62E89B7AC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:26:28 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id s8so1772120lfc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:26:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fNNXd8RhvGAVfJwcSOjgVLTgCJ6FFMxxxXCnulCllW8=;
-        b=yCl85oAUo62EuenpGLijwM8k3SFHmatquoQ6zoy0tu0RYxpf6cGw/QNHny+IZwlN4Z
-         LoNiU0dFpnd74XPVPdVsnh0a9T6BZDFf7uxG5J9UP7umoJQDgLgo+qIuZv6vevGl1PuF
-         O4HUVvw6JaDxxDIRRmoifcAlCkmfiVkbnuVFV9imcr5TW6a/hLl40YleC634Qyuj8cTX
-         U/zebsmnUem4BJcBtqkcwhIT1K8tc9G62fD6rmjXyRTSrQo8NqaQOaca+BwUU8gBXMjb
-         Hcw+FCluix/T45thvsjqhC2gIIk5FmGmud+bRq9xgtogUAhgbraK+mgXS9wvdP1OQjWq
-         qh4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNNXd8RhvGAVfJwcSOjgVLTgCJ6FFMxxxXCnulCllW8=;
-        b=rzUVRQR+Jv1zjRO2lBoO64oKJztgR0sr6OZUwlgPRX4IP/4KSVkmrI8YLREU+z2lxe
-         9YsqmIcm8pR/A5ASf9au0LD0HumjxB7rLRSNZtprLodROajgayOFE/ACLQscmfHXdRhj
-         yT2K6VxoBdnseyeMT3L8Y+cz5nS9V8gpQuntIF1Ehi3XkbICdMMHBDOynN1brx07HPGr
-         GLxcE0n+q7N/KJ7QT+2cVJ5mj1iltR004cxglCvZaF9IhwSHVjGf+wF3yKF2y6OmTNgP
-         iKWm7GhgYCKiCcMLH2xYdJqwoG3DZWk8eliXBvmqA/gtQr40t1aEnQMS5As55iyAV2dL
-         uf8Q==
-X-Gm-Message-State: ANoB5plgPT165W8mV0rVZWts05S108JQIVAwY5mknAr9pW/zU+LuoKEZ
-        1BhQzd+lsJDTZk+32Jo9pX9tiw==
-X-Google-Smtp-Source: AA0mqf4CJCIyV+cfwj/kAMm4a4SMm4rBn3dM19tFz8JfQ4X5Zmfof8gfIrFYzOO5zMCFWnX0wnw9wA==
-X-Received: by 2002:a05:6512:e9d:b0:4b1:8698:9f3e with SMTP id bi29-20020a0565120e9d00b004b186989f3emr20903264lfb.421.1669890387041;
-        Thu, 01 Dec 2022 02:26:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id br33-20020a056512402100b004b1756a0ae9sm603072lfb.55.2022.12.01.02.26.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 02:26:25 -0800 (PST)
-Message-ID: <f28da7ab-920d-a534-9f5d-e8407d0487a9@linaro.org>
-Date:   Thu, 1 Dec 2022 11:26:24 +0100
+        Thu, 1 Dec 2022 05:28:09 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7657D5F99;
+        Thu,  1 Dec 2022 02:27:59 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 32628580452;
+        Thu,  1 Dec 2022 05:27:59 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 01 Dec 2022 05:27:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1669890479; x=1669897679; bh=eip0JYxLwA
+        AvXLG5NBGWWs0mG1joDIdVXmK8+H3wc1I=; b=Ifcsm7mFF1kDXPSQsE2BjtauEl
+        4bwtK3ys+M8QAe1DT6cDljjLeiP9u7O0waPCTSzJZvOmYsNzMNupyKSk7RlXCn+z
+        SIt1N4VnFoe4DRug4ptdM/z7kJGtGgRWYHRgCq/DKQ6rEmGJI/hv+ECAVO3zMQeo
+        m/6LelTKZuZRwHGi73LM3aKWDMjnFswHYQHFCEMLH1tLxRaMBy4KGPefilNGDnna
+        6EK9Iysjbf14LMFylHM+HCptA8YYGFlPnzMz5BBJ2Eh0H5sA0SE1O0qzDtKn1/0s
+        9fwoHGL9mP8OuXk1t9ZuXLI8vy7GGe+YC/LR8Z/wxq+3RwzxSR5zYC46inuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669890479; x=1669897679; bh=eip0JYxLwAAvXLG5NBGWWs0mG1jo
+        DIdVXmK8+H3wc1I=; b=jHUQhnx+FI055/Dk7FSqjW8PozYbbmB3jI+xMqePY5Jj
+        0UQDS9Y8DOSGFbJpQ4QEN9aB7JffyVZkvEDR0TvX5/EzJf+vOAqw79xBlTUNz7+W
+        KJ0LinhY/5xoBand1PEsJ0azU99iEa5mlvOM30ACai17rfRBbmuaM4K74XyirEBt
+        3bdKNePuRK7UFfRbZL8DsWMnAinS/Nin6J9uI9cwHq1W2z0iwwD3dx8k2i25xwvt
+        Nvl4b6krJS5AIgr1bDa3eNVaF4kqOl0r/OVmPhb/RYd1D44m+b6kCfijbWUlpNQD
+        qpJjMNXHbnnt75kCuekTNKj6DTBZHrZDeWEHpqPKXw==
+X-ME-Sender: <xms:roGIY3t5EVZ6P2nmvzYh2n3KX1wn5jjGpXvnR_UMoii3VMCt7HzlbA>
+    <xme:roGIY4dX70cqC8xyYYQZj1dMJaBWiGC6MgELboTwMB-kZwhyR6iQLWrSjM5W5iWVU
+    pgvIZu9hJ57oIJZQ44>
+X-ME-Received: <xmr:roGIY6zmX2PjGrVQ_9LAsGEJTWJ3icluf8JDoPz0NpBX8paAhbeL7jtLsJzHakw2XJKg9g0Tz6XO_DNKI9Hurpfi1Whh19sUL2BOd8R4ZMhYlQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdehgdduiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:roGIY2Mrh4wLnI7uI2YewVbvhK3flXFU53LCcK--03OlrKntaKrl8w>
+    <xmx:roGIY38vEFyFckc2pabqAl8ozfHf0tdmLRtbjwDz8NpJU2xRwCFSUA>
+    <xmx:roGIY2XviimfKRkxKNJvK6RXgTp7kk1xgLBBWK0mjxWstfwn18GKsQ>
+    <xmx:r4GIY8I0DibJnlROOBEyRBqM50z2I12pSKhLfsOYzZPX_ytFUHGQuQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Dec 2022 05:27:58 -0500 (EST)
+Date:   Thu, 1 Dec 2022 11:27:56 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+Subject: Re: [PATCH v2 01/17] drm/tests: helpers: Move the helper header to
+ include/drm
+Message-ID: <20221201102756.cdvxu4iryhu3rjpf@houat>
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-1-efe5ed518b63@cerno.tech>
+ <ebe02c21-7770-0415-096e-76a839bad154@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 3/4] hwmon: (pmbus/mpq7932) Add a support for mpq7932
- Power Management IC
-Content-Language: en-US
-To:     Saravanan Sekar <saravanan@linumiz.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marten.lindahl@axis.com
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221201044643.1150870-1-saravanan@linumiz.com>
- <20221201044643.1150870-4-saravanan@linumiz.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221201044643.1150870-4-saravanan@linumiz.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mtc5qjwrdj4bgosl"
+Content-Disposition: inline
+In-Reply-To: <ebe02c21-7770-0415-096e-76a839bad154@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 05:46, Saravanan Sekar wrote:
-> The MPQ7932 is a power management IC designed to operate from 5V buses to
-> power a variety of Advanced driver-assistance system SOCs. Six integrated
-> buck converters with hardware monitoring capability powers a variety of
-> target rails configurable over PMBus interface.
-> 
-> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
-> ---
->  drivers/hwmon/pmbus/Kconfig   |  10 +++
->  drivers/hwmon/pmbus/Makefile  |   1 +
->  drivers/hwmon/pmbus/mpq7932.c | 144 ++++++++++++++++++++++++++++++++++
->  3 files changed, 155 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/mpq7932.c
 
-This is a friendly reminder during the review process.
+--mtc5qjwrdj4bgosl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+Hi Javier,
 
-Thank you.
+On Wed, Nov 30, 2022 at 09:00:03AM +0100, Javier Martinez Canillas wrote:
+> On 11/28/22 15:53, Maxime Ripard wrote:
+> > We'll need to use those helpers from drivers too, so let's move it to a
+> > more visible location.
+> >=20
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > ---
+> >  drivers/gpu/drm/tests/drm_client_modeset_test.c            | 3 +--
+> >  drivers/gpu/drm/tests/drm_kunit_helpers.c                  | 3 +--
+> >  drivers/gpu/drm/tests/drm_modes_test.c                     | 3 +--
+> >  drivers/gpu/drm/tests/drm_probe_helper_test.c              | 3 +--
+> >  {drivers/gpu/drm/tests =3D> include/drm}/drm_kunit_helpers.h | 0
+> >  5 files changed, 4 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/=
+gpu/drm/tests/drm_client_modeset_test.c
+> > index 52929536a158..ed2f62e92fea 100644
+> > --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> > +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> > @@ -8,12 +8,11 @@
+> >  #include <drm/drm_connector.h>
+> >  #include <drm/drm_edid.h>
+> >  #include <drm/drm_drv.h>
+> > +#include <drm/drm_kunit_helpers.h>
+>=20
+> I wonder if now that this header was moved outside of the tests directory,
+> if we should add stub functions in the header file that are just defined
+> but do nothing if CONFIG_DRM_KUNIT_TEST isn't enabled. So that including
+> it in drivers will be a no-op.
+>=20
+> Or do you plan to conditionally include this header file in drivers? So
+> that is only included when CONFIG_DRM_KUNIT_TEST is enabled?
 
-Best regards,
-Krzysztof
+I'm not entirely sure. I'd expect only the tests to include it, and thus
+would depend on DRM_KUNIT_TEST already. But we can always add the stubs
+if it's ever included in a different context.
 
+> Another thing that wondered is if we want a different namespace for this
+> header, i.e: <drm/testing/drm_kunit_helpers.h>, to make it clear that is
+> not part of the DRM API but just for testing helpers.
+
+If there's a single header, I don't think we need to create the
+directory. This is also something we can consolidate later on if needed.
+
+> But these are open questions really, and they can be done as follow-up:
+>=20
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+Thanks :)
+Maxime
+
+--mtc5qjwrdj4bgosl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY4iBrAAKCRDj7w1vZxhR
+xRpOAQDHwNPpAQkoE6hXFx/5LBWCsUpiuUg3V17tLDsBtosnuAD/TKCoP+W/vHA/
+r8y7Tk1Pv3JAJ6pNY93sYVLHX2HmKQM=
+=Kavk
+-----END PGP SIGNATURE-----
+
+--mtc5qjwrdj4bgosl--
