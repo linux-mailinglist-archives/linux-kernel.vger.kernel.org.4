@@ -2,186 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEC663ED7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118E363ED7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiLAKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
+        id S230334AbiLAKTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:19:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiLAKSv (ORCPT
+        with ESMTP id S230328AbiLAKTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:18:51 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DC952896;
-        Thu,  1 Dec 2022 02:18:40 -0800 (PST)
-Received: from frapeml100005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNBm40ZnTz6HJbY;
-        Thu,  1 Dec 2022 18:15:32 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml100005.china.huawei.com (7.182.85.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 11:18:38 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Dec
- 2022 10:18:37 +0000
-Date:   Thu, 1 Dec 2022 10:18:36 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 01/11] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221201101836.00004582@Huawei.com>
-In-Reply-To: <20221201002719.2596558-2-ira.weiny@intel.com>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-2-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Dec 2022 05:19:04 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D38E983BC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:19:03 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id g7so1763436lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:19:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:disposition-notification-to
+         :from:references:cc:to:content-language:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PuxOJHGDccJjZFhK+Cj93qZjBJ3bjpMlB1Gplol81Gg=;
+        b=YXOlmvvd/tYT37+FhjtNXMi/mmXPmR95cfKWQRopG0ACX0voka4wCVc0OPkepSCbTW
+         vFIfKbOC6jZEz96oNoQFHVlcX1S8GRGpT7loa965cMNPtmamduN8UdEs717P0s76WkHL
+         0cGKaaoPCoKjr/C3AQcekADZuXKqXcGHV3ZjDTiF4+1DNkzFFeKfAU2uWcjsjm05kftv
+         hFKNhUW4NNTlJR/XJmpinhSD3fS4tcdF+HgvBiNxDnc7i8jQSeDzl92ZyFuJ7WA/vhYd
+         QW/V4dH4SflKzKOhYDP7ZjZhpyXSYUTBuI9vuJ71kctEEUS/1OfiZwfESqgN6/YPZTdS
+         3GpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:disposition-notification-to
+         :from:references:cc:to:content-language:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PuxOJHGDccJjZFhK+Cj93qZjBJ3bjpMlB1Gplol81Gg=;
+        b=MnDRNq5ReE7ubePFFg3/jdLm+xziulJIkY1Rp1rY1N7eKChvMa9oJ1R3yjTe97x4DU
+         VexnkkwhlQbjyuqyYU353RHFRP6ZrSW/Y4TZiLHnEmTbjtiyyF/GdDvke2AaPPCafTpr
+         GHRdrYyzWPa6bwYZW7i78j9THgPC17CIPmM/nVZ/oVj/mVhsNbTw48A/dvJo7MNGjUlu
+         cD0FWbLig7DaJuW6xAOMDAfoGH5IZtWMwsGDNwpZYYySmoZY2EOUgmnrivLZ7yJZyqyq
+         zrwNDwSu/KK7TvVUihG9PA1Trh4Z1VSa8JWSV3DzS/HDjbI7LyDIDS+XOL+/2Ld3y0Hf
+         SAVw==
+X-Gm-Message-State: ANoB5pl797NhSvNzUWpXiFxx4QDXtk/kxAA7NUf12He/6cDO1zm8manh
+        MPsKfFnQr6vUKqIUsSl8x5KIvg==
+X-Google-Smtp-Source: AA0mqf5kw+8XS6ZLadwpWrejVH29wqbJkJyk83BuiQZoq56zId52NTX3XXb6QFrpvw5kDEIXHt5Ipg==
+X-Received: by 2002:a05:6512:3762:b0:4ac:5faa:654d with SMTP id z2-20020a056512376200b004ac5faa654dmr20387148lft.684.1669889941691;
+        Thu, 01 Dec 2022 02:19:01 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m6-20020ac24286000000b004b501497b6fsm594625lfh.148.2022.12.01.02.18.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 02:18:59 -0800 (PST)
+Message-ID: <9778695f-f8a9-e361-e28f-f99525c96689@linaro.org>
+Date:   Thu, 1 Dec 2022 11:18:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
+ glue driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Chester Lin <clin@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jan Petrous <jan.petrous@nxp.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        s32@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>
+References: <20221128054920.2113-1-clin@suse.com>
+ <20221128054920.2113-3-clin@suse.com>
+ <4a7a9bf7-f831-e1c1-0a31-8afcf92ae84c@linaro.org>
+ <560c38a5-318a-7a72-dc5f-8b79afb664ca@suse.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <560c38a5-318a-7a72-dc5f-8b79afb664ca@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 16:27:09 -0800
-ira.weiny@intel.com wrote:
+On 30/11/2022 18:33, Andreas Färber wrote:
+> Hi Krysztof,
+> 
+> Am 30.11.22 um 16:51 schrieb Krzysztof Kozlowski:
+>> On 28/11/2022 06:49, Chester Lin wrote:
+>>> Add the DT schema for the DWMAC Ethernet controller on NXP S32 Common
+>>> Chassis.
+>>>
+>>> Signed-off-by: Jan Petrous <jan.petrous@nxp.com>
+>>> Signed-off-by: Chester Lin <clin@suse.com>
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+>>> ---
+>>>
+>>> Changes in v2:
+>>>    - Fix schema issues.
+>>>    - Add minItems to clocks & clock-names.
+>>>    - Replace all sgmii/SGMII terms with pcs/PCS.
+>>>
+>>>   .../bindings/net/nxp,s32cc-dwmac.yaml         | 135 ++++++++++++++++++
+>>>   1 file changed, 135 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
+>>> new file mode 100644
+>>> index 000000000000..c6839fd3df40
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
+> [...]
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - nxp,s32cc-dwmac
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: Main GMAC registers
+>>> +      - description: S32 MAC control registers
+>>> +
+>>> +  dma-coherent: true
+>>> +
+>>> +  clocks:
+>>> +    minItems: 5
+>>
+>> Why only 5 clocks are required? Receive clocks don't have to be there?
+>> Is such system - only with clocks for transmit - usable?
 
-> From: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> Currently the only CXL features targeted for irq support require their
-> message numbers to be within the first 16 entries.  The device may
-> however support less than 16 entries depending on the support it
-> provides.
-> 
-> Attempt to allocate these 16 irq vectors.  If the device supports less
-> then the PCI infrastructure will allocate that number.  Store the number
-> of vectors actually allocated in the device state for later use
-> by individual functions.
-> 
-> Upon successful allocation, users can plug in their respective isr at
-> any point thereafter, for example, if the irq setup is not done in the
-> PCI driver, such as the case of the CXL-PMU.
-> 
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+Any comments here? If not, drop minItems.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>>
+>>> +    items:
+>>> +      - description: Main GMAC clock
+>>> +      - description: Peripheral registers clock
+>>> +      - description: Transmit PCS clock
+>>> +      - description: Transmit RGMII clock
+>>> +      - description: Transmit RMII clock
+>>> +      - description: Transmit MII clock
+>>> +      - description: Receive PCS clock
+>>> +      - description: Receive RGMII clock
+>>> +      - description: Receive RMII clock
+>>> +      - description: Receive MII clock
+>>> +      - description:
+>>> +          PTP reference clock. This clock is used for programming the
+>>> +          Timestamp Addend Register. If not passed then the system
+>>> +          clock will be used.
+>>> +
+>>> +  clock-names:
+>>> +    minItems: 5
+>>> +    items:
+>>> +      - const: stmmaceth
+>>> +      - const: pclk
+>>> +      - const: tx_pcs
+>>> +      - const: tx_rgmii
+>>> +      - const: tx_rmii
+>>> +      - const: tx_mii
+>>> +      - const: rx_pcs
+>>> +      - const: rx_rgmii
+>>> +      - const: rx_rmii
+>>> +      - const: rx_mii
+>>> +      - const: ptp_ref
+>>> +
+>>> +  tx-fifo-depth:
+>>> +    const: 20480
+>>> +
+>>> +  rx-fifo-depth:
+>>> +    const: 20480
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - tx-fifo-depth
+>>> +  - rx-fifo-depth
+>>> +  - clocks
+>>> +  - clock-names
+>>> +
+>>> +unevaluatedProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>> +
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_AXI
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_PCS
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RGMII
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RMII
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_MII
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_PCS
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RGMII
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RMII
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_MII
+>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TS
+>>
+>> Why defines? Your clock controller is not ready? If so, just use raw
+>> numbers.
+> 
+> Please compare v1: There is no Linux-driven clock controller here but 
+> rather a fluid SCMI firmware interface. Work towards getting clocks into 
+> a kernel-hosted .dtsi was halted in favor of (downstream) TF-A, which 
+> also explains the ugly examples here and for pinctrl.
+
+This does not explain to me why you added defines in the example. Are
+you saying these can change any moment?
 
 > 
-> ---
-> Changes from V1:
-> 	Jonathan
-> 		pci_alloc_irq_vectors() cleans up the vectors automatically
-> 		use msi_enabled rather than nr_irq_vecs
-> 
-> Changes from Ira
-> 	Remove reviews
-> 	Allocate up to a static 16 vectors.
-> 	Change cover letter
-> ---
->  drivers/cxl/cxlmem.h |  3 +++
->  drivers/cxl/cxlpci.h |  6 ++++++
->  drivers/cxl/pci.c    | 23 +++++++++++++++++++++++
->  3 files changed, 32 insertions(+)
-> 
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 88e3a8e54b6a..cd35f43fedd4 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
->   * @info: Cached DVSEC information about the device.
->   * @serial: PCIe Device Serial Number
->   * @doe_mbs: PCI DOE mailbox array
-> + * @msi_enabled: MSI-X/MSI has been enabled
->   * @mbox_send: @dev specific transport for transmitting mailbox commands
->   *
->   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> @@ -247,6 +248,8 @@ struct cxl_dev_state {
->  
->  	struct xarray doe_mbs;
->  
-> +	bool msi_enabled;
-> +
->  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->  };
->  
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index eec597dbe763..b7f4e2f417d3 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -53,6 +53,12 @@
->  #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
->  #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
->  
-> +/*
-> + * NOTE: Currently all the functions which are enabled for CXL require their
-> + * vectors to be in the first 16.  Use this as the max.
-> + */
-> +#define CXL_PCI_REQUIRED_VECTORS 16
-> +
->  /* Register Block Identifier (RBI) */
->  enum cxl_regloc_type {
->  	CXL_REGLOC_RBI_EMPTY = 0,
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index faeb5d9d7a7a..8f86f85d89c7 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -428,6 +428,27 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->  	}
->  }
->  
-> +static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	int nvecs;
-> +
-> +	/*
-> +	 * NOTE: pci_alloc_irq_vectors() handles calling pci_free_irq_vectors()
-> +	 * automatically despite not being called pcim_*.  See
-> +	 * pci_setup_msi_context().
-> +	 */
-> +	nvecs = pci_alloc_irq_vectors(pdev, 1, CXL_PCI_REQUIRED_VECTORS,
-> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> +	if (nvecs < 0) {
-> +		dev_dbg(dev, "Failed to alloc irq vectors; use polling instead.\n");
-> +		return;
-> +	}
-> +
-> +	cxlds->msi_enabled = true;
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct cxl_register_map map;
-> @@ -494,6 +515,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> +	cxl_pci_alloc_irq_vectors(cxlds);
-> +
->  	cxlmd = devm_cxl_add_memdev(cxlds);
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
+> Logically there are only 5 input clocks; however due to SCMI not 
+> supporting re-parenting today, some clocks got duplicated at SCMI level. 
+> Andrew appeared to approve of that approach. I still dislike it but 
+> don't have a better proposal that would work today. So the two values 
+> above indeed seem wrong and should be 11 rather than 5.
+
+You should rather fix firmware then create some incorrect bindings as a
+workaround...
+
+Best regards,
+Krzysztof
 
