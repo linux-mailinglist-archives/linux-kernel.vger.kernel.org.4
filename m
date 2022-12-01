@@ -2,142 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C0F63F8AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC36363F8AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiLAT5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
+        id S231226AbiLAT6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiLAT5U (ORCPT
+        with ESMTP id S231277AbiLAT5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:57:20 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B56BA602
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:57:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669924640; x=1701460640;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=psXZMKbJQ3yGAryg57Kdkp4DtQsybo7dhx1r47nzioo=;
-  b=BGYQ8AXSleZJ/QFFUN2Bu5ZbDXrHd9U6Znf4aPnoHJFp9H2AshJ/j5+G
-   dbUiEkOflH1H32DZne69qM0ZNIQobgnf/AiyQOjo0AsZ2b8qebDKCoQzn
-   swVQwvkYENr0DyxWlqsmq09HZOSIAYnXFKLs4WUeqCM0cL8aHHIOwuXu7
-   f6o51/wkg5p3tfy15fqTysC6S7HyMSTc5fb7MQy+IOWsd/I5lATrykiwT
-   6EliA7w/+yfHQ/w1D9Xv96sfoOiydObA7TPP9NrNlr0mqIbUJVvpsMHHH
-   Bv/pZWhinXCA0aKcrEJtR9bbeVG6IF1RnfrLaEnefv7eB5yolq+g4o1MF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="303391902"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="303391902"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 11:57:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="708205170"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="708205170"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Dec 2022 11:57:19 -0800
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, eranian@google.com, irogers@google.com,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 9/9] perf script: Support Retire Latency
-Date:   Thu,  1 Dec 2022 11:57:04 -0800
-Message-Id: <20221201195704.2330866-9-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221201195704.2330866-1-kan.liang@linux.intel.com>
-References: <20221201195704.2330866-1-kan.liang@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 14:57:41 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C73BF65F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:57:30 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id p6-20020a170902e74600b001896ba6837bso3429490plf.17
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:57:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CK6Z3pMphCqm/P4z2YhqproeKWq48HVTFIpFHrJotqk=;
+        b=QXPj2lWYXCaifpx9GebybJ3sTEq11p+pDxgPkDGvSEzmAIXkQzQOXZIAzggLeECNae
+         KFWZK3vSHylxoqraBE1/3YN5knTRaF+2DaBoYJa+nfh4T0KX4ygDN1NuJKyMOMwwfs3t
+         vRQV1IX0o7ad6RiL6l8jRPoUvVSdnWakG8b9IVNgHwYkFJSUDcvwvjEMmO+fVzQO8cS+
+         01BbYFXR0AUIcyPr2YU4+ZqzZF6Pfuct+pmYRQu57VhvMBlgVj7kOSwdE9FIDGKN1n61
+         ukPNx9vUXpDgWygk/SFR2mTFRKQagHR21Dxui4YQ5e74TKQWWUHcpHVSnmLUDLDj7D31
+         /y+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CK6Z3pMphCqm/P4z2YhqproeKWq48HVTFIpFHrJotqk=;
+        b=DIcoX67Ox0p+FEztDS0zthnXgMEd1y0c1tiSwJud4N/UP81SYBnqwFvbassHSf9y1H
+         Ci1GShMQIHHBZn/SvVtbq5P/JHMd1BS3zX9MNqzK4pYFrL4/CKayokO4mpjq65HSDKya
+         xA4ob0q4LeFNfXRh9U8Kaz7tl339GESg519eraEpbJyerAMhIe490ZYF55DzmImGUSSi
+         81kJoaPhvPSlJig/7Wz5i+sYe81QxFqtRNqAjRtseL9fZ7ANzlG3to5Egj7JiiMw32Wu
+         M2ycpAsJkj1qL4DdRZTVWEcVrZ86qT2p6zKT/VczBJKQRMNJr27onVGOnYmw7hXQPHuM
+         Wicw==
+X-Gm-Message-State: ANoB5plOy7GuNb/Q9CpP3Kd/bekVx53CViHoc4L1QD3aNhRQDsBkvOc0
+        owt0EV6ltUBQKpMMdTu9LbeBvRnUJwjp
+X-Google-Smtp-Source: AA0mqf4Kvuu18L6bq60fCXdQ2GxrHCXZejhXD4LjdkAaklVZl8ZmwX4OnPg5NMd56bYcbFxxsEBhbdHpypu9
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:aa7:92c7:0:b0:574:39dd:f162 with SMTP id
+ k7-20020aa792c7000000b0057439ddf162mr44530279pfa.44.1669924650263; Thu, 01
+ Dec 2022 11:57:30 -0800 (PST)
+Date:   Thu,  1 Dec 2022 11:57:16 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221201195718.1409782-1-vipinsh@google.com>
+Subject: [Patch v2 0/2] NUMA aware page table allocation
+From:   Vipin Sharma <vipinsh@google.com>
+To:     dmatlack@google.com, bgardon@google.com, seanjc@google.com,
+        pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+Hi,
 
-The Retire Latency field is added in the var3_w of the
-PERF_SAMPLE_WEIGHT_STRUCT. The Retire Latency reports the number of
-elapsed core clocks between the retirement of the instruction
-indicated by the Instruction Pointer field of the PEBS record and the
-retirement of the prior instruction. That's quite useful to display
-the information with perf script.
+This series improves page table accesses by allocating page tables on
+the same NUMA node where underlying physical page is present.
 
-Add a new field retire_lat for the Retire Latency information.
+Currently page tables are allocated during page faults and page splits.
+In both instances page table location will depend on the current thread
+mempolicy. This can create suboptimal placement of page tables on NUMA
+node, for example, thread doing eager page split is on different NUMA
+node compared to page it is splitting.
 
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- tools/perf/builtin-script.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Reviewers please provide suggestion to the following:
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 7ca238277d83..071ffdff1980 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -127,6 +127,7 @@ enum perf_output_field {
- 	PERF_OUTPUT_BRSTACKINSNLEN  = 1ULL << 36,
- 	PERF_OUTPUT_MACHINE_PID     = 1ULL << 37,
- 	PERF_OUTPUT_VCPU            = 1ULL << 38,
-+	PERF_OUTPUT_RETIRE_LAT      = 1ULL << 39,
- };
- 
- struct perf_script {
-@@ -197,6 +198,7 @@ struct output_option {
- 	{.str = "brstackinsnlen", .field = PERF_OUTPUT_BRSTACKINSNLEN},
- 	{.str = "machine_pid", .field = PERF_OUTPUT_MACHINE_PID},
- 	{.str = "vcpu", .field = PERF_OUTPUT_VCPU},
-+	{.str = "retire_lat", .field = PERF_OUTPUT_RETIRE_LAT},
- };
- 
- enum {
-@@ -272,7 +274,7 @@ static struct {
- 			      PERF_OUTPUT_ADDR | PERF_OUTPUT_DATA_SRC |
- 			      PERF_OUTPUT_WEIGHT | PERF_OUTPUT_PHYS_ADDR |
- 			      PERF_OUTPUT_DATA_PAGE_SIZE | PERF_OUTPUT_CODE_PAGE_SIZE |
--			      PERF_OUTPUT_INS_LAT,
-+			      PERF_OUTPUT_INS_LAT | PERF_OUTPUT_RETIRE_LAT,
- 
- 		.invalid_fields = PERF_OUTPUT_TRACE | PERF_OUTPUT_BPF_OUTPUT,
- 	},
-@@ -539,6 +541,10 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
- 	    evsel__check_stype(evsel, PERF_SAMPLE_WEIGHT_STRUCT, "WEIGHT_STRUCT", PERF_OUTPUT_INS_LAT))
- 		return -EINVAL;
- 
-+	if (PRINT_FIELD(RETIRE_LAT) &&
-+	    evsel__check_stype(evsel, PERF_SAMPLE_WEIGHT_STRUCT, "WEIGHT_STRUCT", PERF_OUTPUT_RETIRE_LAT))
-+		return -EINVAL;
-+
- 	return 0;
- }
- 
-@@ -2175,6 +2181,9 @@ static void process_event(struct perf_script *script,
- 	if (PRINT_FIELD(INS_LAT))
- 		fprintf(fp, "%16" PRIu16, sample->ins_lat);
- 
-+	if (PRINT_FIELD(RETIRE_LAT))
-+		fprintf(fp, "%16" PRIu16, sample->retire_lat);
-+
- 	if (PRINT_FIELD(IP)) {
- 		struct callchain_cursor *cursor = NULL;
- 
-@@ -3849,7 +3858,7 @@ int cmd_script(int argc, const char **argv)
- 		     "brstacksym,flags,data_src,weight,bpf-output,brstackinsn,"
- 		     "brstackinsnlen,brstackoff,callindent,insn,insnlen,synth,"
- 		     "phys_addr,metric,misc,srccode,ipc,tod,data_page_size,"
--		     "code_page_size,ins_lat",
-+		     "code_page_size,ins_lat,retire_lat",
- 		     parse_output_fields),
- 	OPT_BOOLEAN('a', "all-cpus", &system_wide,
- 		    "system-wide collection from all CPUs"),
+1. Module parameter is true by default, which means this feature will
+   be enabled by default. Is this okay or should I set it to false?
+
+2. I haven't reduced KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE considering that
+   it might not be too much of an impact as only online nodes are filled
+   during topup phase and in many cases some of these nodes will never
+   be refilled again.  Please let me know if you want this to be
+   reduced.
+
+3. I have tried to keep everything in x86/mmu except for some changes in
+   virt/kvm/kvm_main.c. I used __weak function so that only x86/mmu will
+   see the change, other arch nothing will change. I hope this is the
+   right approach.
+
+4. I am not sure what is the right way to split patch 2. If you think
+   this is too big for a patch please let me know what would you prefer.
+
+Thanks
+Vipin
+
+v2:
+- All page table pages will be allocated on underlying physical page's
+  NUMA node.
+- Introduced module parameter, numa_aware_pagetable, to disable this
+  feature.
+- Using kvm_pfn_to_refcounted_page to get page from a pfn.
+
+v1: https://lore.kernel.org/all/20220801151928.270380-1-vipinsh@google.com/
+
+Vipin Sharma (2):
+  KVM: x86/mmu: Allocate page table pages on TDP splits during dirty log
+    enable on the underlying page's numa node
+  KVM: x86/mmu: Allocate page table pages on NUMA node of underlying
+    pages
+
+ arch/x86/include/asm/kvm_host.h |   4 +-
+ arch/x86/kvm/mmu/mmu.c          | 126 ++++++++++++++++++++++++--------
+ arch/x86/kvm/mmu/paging_tmpl.h  |   4 +-
+ arch/x86/kvm/mmu/tdp_mmu.c      |  26 ++++---
+ include/linux/kvm_host.h        |  17 +++++
+ include/linux/kvm_types.h       |   2 +
+ virt/kvm/kvm_main.c             |   7 +-
+ 7 files changed, 141 insertions(+), 45 deletions(-)
+
+
+base-commit: df0bb47baa95aad133820b149851d5b94cbc6790
 -- 
-2.35.1
+2.39.0.rc0.267.gcb52ba06e7-goog
 
