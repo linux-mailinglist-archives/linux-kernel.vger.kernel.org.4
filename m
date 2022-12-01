@@ -2,134 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448EF63F0FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEC263F103
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiLAM6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S230471AbiLAM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiLAM6a (ORCPT
+        with ESMTP id S230323AbiLAM7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:58:30 -0500
-Received: from out30-1.freemail.mail.aliyun.com (out30-1.freemail.mail.aliyun.com [115.124.30.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1505856EF6;
-        Thu,  1 Dec 2022 04:58:28 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VW8qK3K_1669899504;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VW8qK3K_1669899504)
-          by smtp.aliyun-inc.com;
-          Thu, 01 Dec 2022 20:58:25 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Eric Biggers <ebiggers@kernel.org>,
-        "Theodore Y. Ts o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v4 2/2] fscrypt: Add SM4 XTS/CTS symmetric algorithm support
-Date:   Thu,  1 Dec 2022 20:58:19 +0800
-Message-Id: <20221201125819.36932-3-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20221201125819.36932-1-tianjia.zhang@linux.alibaba.com>
-References: <20221201125819.36932-1-tianjia.zhang@linux.alibaba.com>
+        Thu, 1 Dec 2022 07:59:15 -0500
+Received: from us.icdsoft.com (us.icdsoft.com [192.252.146.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584E6BB7E5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 04:59:00 -0800 (PST)
+Received: (qmail 13748 invoked by uid 1001); 1 Dec 2022 12:58:59 -0000
+Received: from unknown (HELO ?94.155.37.249?) (famzah@icdsoft.com@94.155.37.249)
+  by 192.252.159.165 with ESMTPA; 1 Dec 2022 12:58:59 -0000
+Message-ID: <212daa8e-8f48-30d9-cfc8-ee5c2025f02c@icdsoft.com>
+Date:   Thu, 1 Dec 2022 14:58:38 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [tip: x86/fpu] x86/fpu/xstate: Define new functions for clearing
+ fpregs and xstates
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     linux-tip-commits@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, x86 <x86@kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+References: <20200512145444.15483-6-yu-cheng.yu@intel.com>
+ <158964181793.17951.15480349640697746223.tip-bot2@tip-bot2>
+ <CALCETrXfLbsrBX42Y094YLWTG=pqkrf+aSCLruCGzqnZ0Y=P-Q@mail.gmail.com>
+ <10a553a5-699f-6921-705e-9afa1a8e42de@intel.com>
+ <87y2c28zir.ffs@nanos.tec.linutronix.de>
+ <ff5ad474-6d32-8bf8-e297-ed71a967d27c@icdsoft.com>
+ <31b30c00-9de9-2881-53c3-b08804571d6c@intel.com>
+From:   Ivan Zahariev <famzah@icdsoft.com>
+In-Reply-To: <31b30c00-9de9-2881-53c3-b08804571d6c@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for XTS and CTS mode variant of SM4 algorithm, in similar
-fashion to SM2 and SM3. The former is used to encrypt file contents,
-while the latter (SM4-CBC-CTS) is used to encrypt filenames.
+Hello,
 
-SM4 is a symmetric algorithm widely used in China, and is even mandatory
-algorithm in some special scenarios. We need to provide these users with
-the ability to encrypt files or disks using SM4-XTS.
+On 29.11.2022 г. 20:16, Dave Hansen wrote:
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- Documentation/filesystems/fscrypt.rst |  1 +
- fs/crypto/keysetup.c                  | 15 +++++++++++++++
- fs/crypto/policy.c                    |  5 +++++
- include/uapi/linux/fscrypt.h          |  2 ++
- 4 files changed, 23 insertions(+)
+> On 11/29/22 03:19, Ivan Zahariev wrote:
+>> Can you please take a look into this bug which syzbot tracked to a
+>> commit of yours (b860eb8dce5906b14e3a7f3c771e0b3d6ef61b94). Even since
+>> we switched from kernel 4.14 to 5.15 we are experiencing often random
+>> segmentation faults with the following error in "dmesg":
+> Which kernel are you running, exactly?  There is a fix for the commit
+> that you identified:
+>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=484cea4f362e
+> but it should have been in 5.15.
 
-diff --git a/Documentation/filesystems/fscrypt.rst b/Documentation/filesystems/fscrypt.rst
-index 5ba5817c17c2..c0784ec05553 100644
---- a/Documentation/filesystems/fscrypt.rst
-+++ b/Documentation/filesystems/fscrypt.rst
-@@ -338,6 +338,7 @@ Currently, the following pairs of encryption modes are supported:
- - AES-128-CBC for contents and AES-128-CTS-CBC for filenames
- - Adiantum for both contents and filenames
- - AES-256-XTS for contents and AES-256-HCTR2 for filenames (v2 policies only)
-+- SM4-XTS for contents and SM4-CTS-CBC for filenames (v2 policies only)
- 
- If unsure, you should use the (AES-256-XTS, AES-256-CTS-CBC) pair.
- 
-diff --git a/fs/crypto/keysetup.c b/fs/crypto/keysetup.c
-index f7407071a952..24e55c95abc3 100644
---- a/fs/crypto/keysetup.c
-+++ b/fs/crypto/keysetup.c
-@@ -44,6 +44,21 @@ struct fscrypt_mode fscrypt_modes[] = {
- 		.security_strength = 16,
- 		.ivsize = 16,
- 	},
-+	[FSCRYPT_MODE_SM4_XTS] = {
-+		.friendly_name = "SM4-XTS",
-+		.cipher_str = "xts(sm4)",
-+		.keysize = 32,
-+		.security_strength = 16,
-+		.ivsize = 16,
-+		.blk_crypto_mode = BLK_ENCRYPTION_MODE_SM4_XTS,
-+	},
-+	[FSCRYPT_MODE_SM4_CTS] = {
-+		.friendly_name = "SM4-CTS",
-+		.cipher_str = "cts(cbc(sm4))",
-+		.keysize = 16,
-+		.security_strength = 16,
-+		.ivsize = 16,
-+	},
- 	[FSCRYPT_MODE_ADIANTUM] = {
- 		.friendly_name = "Adiantum",
- 		.cipher_str = "adiantum(xchacha12,aes)",
-diff --git a/fs/crypto/policy.c b/fs/crypto/policy.c
-index 46757c3052ef..ec19066128e5 100644
---- a/fs/crypto/policy.c
-+++ b/fs/crypto/policy.c
-@@ -83,6 +83,11 @@ static bool fscrypt_valid_enc_modes_v2(u32 contents_mode, u32 filenames_mode)
- 	if (contents_mode == FSCRYPT_MODE_AES_256_XTS &&
- 	    filenames_mode == FSCRYPT_MODE_AES_256_HCTR2)
- 		return true;
-+
-+	if (contents_mode == FSCRYPT_MODE_SM4_XTS &&
-+	    filenames_mode == FSCRYPT_MODE_SM4_CTS)
-+		return true;
-+
- 	return fscrypt_valid_enc_modes_v1(contents_mode, filenames_mode);
- }
- 
-diff --git a/include/uapi/linux/fscrypt.h b/include/uapi/linux/fscrypt.h
-index a756b29afcc2..47dbd1994bfe 100644
---- a/include/uapi/linux/fscrypt.h
-+++ b/include/uapi/linux/fscrypt.h
-@@ -26,6 +26,8 @@
- #define FSCRYPT_MODE_AES_256_CTS		4
- #define FSCRYPT_MODE_AES_128_CBC		5
- #define FSCRYPT_MODE_AES_128_CTS		6
-+#define FSCRYPT_MODE_SM4_XTS			7
-+#define FSCRYPT_MODE_SM4_CTS			8
- #define FSCRYPT_MODE_ADIANTUM			9
- #define FSCRYPT_MODE_AES_256_HCTR2		10
- /* If adding a mode number > 10, update FSCRYPT_MODE_MAX in fscrypt_private.h */
--- 
-2.24.3 (Apple Git-128)
+We are running 5.15.75 (LTS) but the problem started when we upgraded 
+from 5.15.31 to 5.15.59 and is present ever since. I erroneously said 
+that it's present into every 5.15.
 
+I didn't do my homework well and blamed the commit by Yu-cheng Yu. But 
+this commit never landed into 5.15, nor the fix commit that you 
+referred. There are no functions fpu__clear_all(), 
+copy_init_fpstate_to_fpregs(), copy_user_to_xstate() anywhere in the 
+sources of 5.15.75 or 5.15.31, so the 5.15 kernel is running with a 
+different FPU implementation.
+
+Additionally, I tested the reproducer on older 5.15 kernels and on the 
+super-stable 4.14.256. They all emit the same "dmesg" error, so the 
+reproducer is not reliable to detect our problem.
+
+I am sorry for wasting your time.
+
+> Is there a chance you could test current mainline and see if the issue
+> is still there?
+
+That's our only option, it seems. Thank you.
+
+Best regards.
+--Ivan
