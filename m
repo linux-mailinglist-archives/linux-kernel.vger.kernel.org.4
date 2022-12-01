@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A1263FAF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C71A63FAA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiLAWvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S231240AbiLAWgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiLAWvY (ORCPT
+        with ESMTP id S230442AbiLAWgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:51:24 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A1BC8683
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:50:26 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id k7so3040956pll.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 14:50:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fC7GRsfU9487zvkZ00n0yK00IS3v6qRRBNuKWVaoA3U=;
-        b=iC4iteAPISIUjyDOTh+rS65EwB8rDVM5P7hVLZJUwBiBvPYWFrTdUF/YBavMs7FzKF
-         R1IcF7xQ1IpJd8oxQR5X1mb5XepEeaFSlUblesgIkIEAPaE1M9Uql+rGeXV4WVAh5YWt
-         NUeH6C8aFRELdXhHy1SkPo+whmdFSdQswqD49MYv7bgwUiDT9OoLroVS31tkT0PzlIYF
-         54Aaz0sE9GeUjW4wYZP3xWrJBlHEobLpgd/f05uUIj6lgtK6XA6XKrXAbDV5qeJ6HpiG
-         tlP32sN+zwdZNo7VZR4nU7uj4slju1xyOZObCOzjobdQoLrU65N88SVPZ7ZA/V3Ov7lR
-         aVKw==
+        Thu, 1 Dec 2022 17:36:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DF17CAB1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:35:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669934109;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NDjeEfQppabaCfN3PfZotiNpYUYQN1CVDNNLoD78gq8=;
+        b=Wu2KSJzWSU8g+2CQ/5oIrEiL6yhJYRQJB4yk/brshR5wXiuu7m98I5tqOWgdlF7/6bRDrD
+        Yeo20IDlmMMTAmDmBPuTTCLQUTsvSfzjpY93yMPlgAxQuMN+KkSuujOWCQ6+p99YaQ7JHW
+        zuiiC5Vk4Q94v7rTOQlMEWES9GMUE6M=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-493-UeDwJTQONAWwFhqOqkiC4A-1; Thu, 01 Dec 2022 17:35:08 -0500
+X-MC-Unique: UeDwJTQONAWwFhqOqkiC4A-1
+Received: by mail-qt1-f199.google.com with SMTP id ff5-20020a05622a4d8500b003a526107477so9052139qtb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 14:35:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fC7GRsfU9487zvkZ00n0yK00IS3v6qRRBNuKWVaoA3U=;
-        b=6BdJROKFBnnF2n6jqjTSGXlragrrINGpe6RAwXlKOVZfUpUR+cg66BmEYEf43PMpgZ
-         tg4UuEpPuzed3FV4xbSo3iZhyT/rr6H3F8+QrijVEqxS46tROmEl1eWuPXRnT1fcE0bx
-         LwfPwo/j67I0MZnnkTJ+RDZl/BT1KK/vnN2yU5gBFLdFYWlZVlGNJRTQhar3dTGzehHd
-         a/ZVKi1wz2h0D81o7P8yLp/pjigTPKn2yGTKOvyxtHIIEAeEloCzh7Z0Rrr3lZco52th
-         lJDS36USj2p7h5uHcTtmCsQtrlT946acJo3iHSFOCgqjj2jtV3czbF1ah4ngpZZzy4ey
-         6TtA==
-X-Gm-Message-State: ANoB5pkKT6bZhmE2Fi9RVf8YZaWhMJ8DNyX19eLLLbK7FhZ7/JcgO/yn
-        zBVM/l1wvlu4vQkC7usxsqB+QUQGUUqZdQVCN5vldQ==
-X-Google-Smtp-Source: AA0mqf6FWoZVhGaziJ0DWoZLVEWjJu8bXNVWon7OsLKFnQGym/jUIE4LmI1FgqCsX+3UEAK+0KsWrwIVbi2mqTsFnKk=
-X-Received: by 2002:a17:903:50c:b0:189:6de9:deb9 with SMTP id
- jn12-20020a170903050c00b001896de9deb9mr30943805plb.153.1669935025832; Thu, 01
- Dec 2022 14:50:25 -0800 (PST)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NDjeEfQppabaCfN3PfZotiNpYUYQN1CVDNNLoD78gq8=;
+        b=iV9RE19eMz5RwcXovtavVcgqQKFFLWWvAAIMzJMHdxEGLdpV/ibHGPAaIaxVWDVII3
+         xSkb+Ts7cWT4b31IF9czpE/XiIAlh8bICQVT3QqQcU8+k6btPZ0f+LI8UvrtgvTq9iJ4
+         Xx/zCwApRVwZuReeXFnNCXTTvPG3BOeQ6vPIImjJlkSlTXKtyZL2h1t2lQeZ+65JHMUn
+         o+2tsgaFkLRMpdploLdKuJhxomHkJnMhKmO0HDUoZLiY6TZRniMzlYpiKXm+ROVpTyWO
+         dQaokDgV+FfBup5ebGi8gHKzGAW7yJ/T7iGCEMvTP0gzsrGC3zPvZYvxwA2Ok+zehWk5
+         w9rg==
+X-Gm-Message-State: ANoB5pmaBaHVGm5FfaONodQjERS0SdAmP9kfY45FLmntoiyOPKE52AxN
+        qhULp3CNhIgcevLmHf2B7qEfpUQDKUAyFP0ytEOZvBF9MVb+yq25GgRg6ttKvtJLHz+B+tpvZLw
+        Uzw7+93SBXj/0tdd/Nb9ptfLW
+X-Received: by 2002:ac8:6e8c:0:b0:3a6:996f:6b9d with SMTP id c12-20020ac86e8c000000b003a6996f6b9dmr126465qtv.42.1669934107404;
+        Thu, 01 Dec 2022 14:35:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6hTTagE5fWY7R0yg+9BDwvx6R5UWlRr2HG/dP1kllTRaddz/3iuPVVszoraFTXQ2H1LgZBKg==
+X-Received: by 2002:ac8:6e8c:0:b0:3a6:996f:6b9d with SMTP id c12-20020ac86e8c000000b003a6996f6b9dmr126447qtv.42.1669934107148;
+        Thu, 01 Dec 2022 14:35:07 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id y17-20020a05620a25d100b006e54251993esm4291891qko.97.2022.12.01.14.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 14:35:06 -0800 (PST)
+Date:   Thu, 1 Dec 2022 17:35:05 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_shazhuss@quicinc.com,
+        psodagud@quicinc.com, ahalaney@redhat.com, echanude@redhat.com
+Subject: Re: [PATCH v2] arm64: dts: qcom: sa8540p-ride: enable PCIe support
+Message-ID: <Y4ksGdtQAqQQ9Shb@x1>
+References: <20221201171931.1919961-1-bmasney@redhat.com>
+ <20221201223012.r6mvz4updf3qoilj@builder.lan>
 MIME-Version: 1.0
-References: <20221201215644.246571-1-andrew@daynix.com> <20221201173252-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221201173252-mutt-send-email-mst@kernel.org>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Fri, 2 Dec 2022 00:35:03 +0200
-Message-ID: <CABcq3pGaf1-XchxYAhX=3k9dEAPLR4p-VR9QUxNa1dNKzwWHXw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] TUN/VirtioNet USO features support.
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, jasowang@redhat.com, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, devel@daynix.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201223012.r6mvz4updf3qoilj@builder.lan>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,63 +82,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, got issues with the internet during sending it. Now, all should be done.
+On Thu, Dec 01, 2022 at 04:30:12PM -0600, Bjorn Andersson wrote:
+> On Thu, Dec 01, 2022 at 12:19:31PM -0500, Brian Masney wrote:
+> > +		vreg_l11a: ldo11 {
+> > +			regulator-name = "vreg_l11a";
+> > +			regulator-min-microvolt = <880000>;
+> > +			regulator-max-microvolt = <880000>;
+> > +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> > +			regulator-allow-set-load;
+> 
+> In order to specify regulator-allow-set-load you also need
+> regulator-allowed-modes.
+> 
+> But if I read the implementation correction, we don't actually alter the
+> load, so perhaps best to just omit this for now?
 
-On Fri, Dec 2, 2022 at 12:33 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Thu, Dec 01, 2022 at 11:56:38PM +0200, Andrew Melnychenko wrote:
-> > Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
-> > Technically they enable NETIF_F_GSO_UDP_L4
-> > (and only if USO4 & USO6 are set simultaneously).
-> > It allows the transmission of large UDP packets.
-> >
-> > UDP Segmentation Offload (USO/GSO_UDP_L4) - ability to split UDP packets
-> > into several segments. It's similar to UFO, except it doesn't use IP
-> > fragmentation. The drivers may push big packets and the NIC will split
-> > them(or assemble them in case of receive), but in the case of VirtioNet
-> > we just pass big UDP to the host. So we are freeing the driver from doing
-> > the unnecessary job of splitting. The same thing for several guests
-> > on one host, we can pass big packets between guests.
-> >
-> > Different features USO4 and USO6 are required for qemu where Windows
-> > guests can enable disable USO receives for IPv4 and IPv6 separately.
-> > On the other side, Linux can't really differentiate USO4 and USO6, for now.
-> > For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
-> > In the future, there would be a mechanism to control UDP_L4 GSO separately.
-> >
-> > New types for virtio-net already in virtio-net specification:
-> > https://github.com/oasis-tcs/virtio-spec/issues/120
-> >
-> > Test it WIP Qemu https://github.com/daynix/qemu/tree/USOv3
-> >
-> > Andrew (5):
-> >   uapi/linux/if_tun.h: Added new offload types for USO4/6.
-> >   driver/net/tun: Added features for USO.
-> >   uapi/linux/virtio_net.h: Added USO types.
-> >   linux/virtio_net.h: Support USO offload in vnet header.
-> >   drivers/net/virtio_net.c: Added USO support.
-> >
-> > Andrew Melnychenko (1):
-> >   udp: allow header check for dodgy GSO_UDP_L4 packets.
->
-> I don't see patches except 0 on list.
->
-> >  drivers/net/tap.c               | 10 ++++++++--
-> >  drivers/net/tun.c               |  8 +++++++-
-> >  drivers/net/virtio_net.c        | 24 +++++++++++++++++++++---
-> >  include/linux/virtio_net.h      |  9 +++++++++
-> >  include/uapi/linux/if_tun.h     |  2 ++
-> >  include/uapi/linux/virtio_net.h |  5 +++++
-> >  net/ipv4/udp_offload.c          |  3 ++-
-> >  net/ipv6/udp_offload.c          |  3 ++-
-> >  8 files changed, 56 insertions(+), 8 deletions(-)
-> >
-> > --
-> > 2.38.1
-> >
-> > _______________________________________________
-> > Virtualization mailing list
-> > Virtualization@lists.linux-foundation.org
-> > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
-> >
->
+I can drop regulator-allow-set-load in v3. I almost left it off and
+verified the other day that PCIe still works without it.
+
+Brian
+
