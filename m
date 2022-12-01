@@ -2,137 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307F063EC32
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E36463EC36
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiLAJTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S229822AbiLAJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiLAJTR (ORCPT
+        with ESMTP id S229628AbiLAJUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:19:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FAE8325A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:18:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669886303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vIuTEZiHlEaLkOOiRuwwN1u46N3S1zvX6DQsFHhXfNs=;
-        b=AfXSWL67snkm4M82sIByiI8ykwg9ZMzvikcMFz99XZMMAzxCIFPqvDljA5aX47/Avl5lRj
-        Hla6PSshpZnvubAdRYBUu4b5pq8z0gzzxreqVN0kHn44OE9UINhIijQ5A2OPI0v55DsFQB
-        OQKp9exiy8kxN/zPSd5A7jpHAYYkA4A=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-169-a-KuZ15SPXylS9GcFH-Lmw-1; Thu, 01 Dec 2022 04:18:17 -0500
-X-MC-Unique: a-KuZ15SPXylS9GcFH-Lmw-1
-Received: by mail-wm1-f70.google.com with SMTP id bi19-20020a05600c3d9300b003cf9d6c4016so2267218wmb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:18:17 -0800 (PST)
+        Thu, 1 Dec 2022 04:20:15 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6586C8325A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:20:11 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id o1so1285791pfp.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:20:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5COQrmAFX80Rt9/QM8jDMmpKU72o7nnxyNe4BluLOMQ=;
+        b=rXzzzyCGtE2MiaqDV3YOQFFJnBtfFZXPm412NZoX9eFQsYO6V1LQGMt0V9dsZbk7D7
+         uZlD6U4sAjq1JhJYXGHx3DlPXxnnkQYtnxQ9jvlSQfrPNNCYc/u7/w6mUksCvDsEY7j/
+         nC1N/Bx/O9tH2YDxsvfrnubO4aSaSkJ3ks80it9KxIiq/JFTWPzrbOmNd/Sh7DxW0hEe
+         LvIanTk+/EGREAdtBb6n2i48zATDKGypwryeccQsd8odzySVMUzd7q8RAuzMLAq4bGrF
+         3iGhKyUFo40Gi/iVZyzqv14i4ngqRXfhS8GJ3Kf9xv7PSmsMrEljIX4S2y2n9nWVPwhZ
+         m39g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vIuTEZiHlEaLkOOiRuwwN1u46N3S1zvX6DQsFHhXfNs=;
-        b=sn9DH5xFOmOeDNUBqtbOpa54P1mfbu9mN2YHvsFQTpfeF208vBehbsxPTcP9Sqmr58
-         PuRZXvTd8LNa1/2OOuo7TvINtqk2U/5cDAlXyreC2NxvKU2Or7WL9bpkgPdPbOUHJ7ye
-         o9dk8ZKT/wAhJmZqeidD2g9gueEWtcTwEP2vB3a7zRQSvHmNmvIIcnYGstEgDeaOBsXm
-         wqCq1JD6lQ+33HFWpceqzj3Bq+YxIyvg209dGDLe1eiJrrUhMu1C4NdIu2sRz85epImI
-         oemPW1NPMgtHOWDTxn5pvt7p9KLP2sLXmpGmW5h/pdrJSJajE+96vEEWSlbkqmvLHJh3
-         z7cg==
-X-Gm-Message-State: ANoB5pkG4tXYm0dz6v8pokp2FRVOsPfnXTdCqxqO9BkEfB7no2UQONTU
-        KZFchr+1AnJtYmzjndbZyC4qqyDCpyWAjrhD+/frhC/HYyTPBynmVawSmyWDTIOYvDN+GQpV9PB
-        44dszSFJqlLTNBPSo1AqUDHfw
-X-Received: by 2002:a5d:5948:0:b0:241:e929:fc44 with SMTP id e8-20020a5d5948000000b00241e929fc44mr25586481wri.27.1669886296307;
-        Thu, 01 Dec 2022 01:18:16 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf56QBIAqebrTf81srtx8Wms1KunBwXJwbQrplf/Bwb4UBr5M9FHfw01rhXcxCuBcF+looDkuA==
-X-Received: by 2002:a5d:5948:0:b0:241:e929:fc44 with SMTP id e8-20020a5d5948000000b00241e929fc44mr25586457wri.27.1669886296097;
-        Thu, 01 Dec 2022 01:18:16 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id n22-20020a7bc5d6000000b003c6c5a5a651sm4692542wmk.28.2022.12.01.01.17.48
+        bh=5COQrmAFX80Rt9/QM8jDMmpKU72o7nnxyNe4BluLOMQ=;
+        b=m2fqxuRAwxrAzwzT5IK6a4CVN/evpx62uiQh9o2efwKz58irNl9qGaNZL8s/YPRsRr
+         ao625K/qGIKRdisdWg/G9/2FcBoCpnA/xcasHYSGHdZH0tegPe4mFQxU0ie3ufEcQptv
+         BcIAsIaFAuWw3eGvn9ZjtqF7npmvK6rCQQ8mjO5e1LyB1SyX8YRdI9NbBWWhmHqpfogJ
+         bTrE7AIEujbIb/r3EqOJyD1fB1ZxH7Z0BFoVtOsbYi+i00Lf4oLTn/1lkvLxNuewZOLv
+         yj3zJGMZHXvBOPkV6e0kuFgrfQRUN65Mm9MgN1hcsByHy5fkDLYogqrfgNsj7yExlLo7
+         HPdA==
+X-Gm-Message-State: ANoB5pmVjGj/WhVmrqmiJ/Rrrw+nTfAQouwvZ4UjFf3BhojXZNx31pGZ
+        inisaXsX3wP8PQSq8lMAgGHQzA==
+X-Google-Smtp-Source: AA0mqf6XZ6BIBIaTNJzI3h5545GwZMXPWSEEOR6kemnJDSWPfoZxJpIHr12pfUHNGP8pI05+jEUT+A==
+X-Received: by 2002:a63:e444:0:b0:477:6a3a:e614 with SMTP id i4-20020a63e444000000b004776a3ae614mr40676499pgk.81.1669886410907;
+        Thu, 01 Dec 2022 01:20:10 -0800 (PST)
+Received: from localhost ([122.172.87.149])
+        by smtp.gmail.com with ESMTPSA id i190-20020a6287c7000000b0056c704abca7sm2714966pfe.220.2022.12.01.01.20.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 01:18:15 -0800 (PST)
-Date:   Thu, 1 Dec 2022 10:17:22 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v2 1/6] vsock: return errors other than -ENOMEM to
- socket
-Message-ID: <20221201091722.p7fth4vkbbpq2zx4@sgarzare-redhat>
-References: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
- <84f44358-dd8b-de8f-b782-7b6f03e0a759@sberdevices.ru>
+        Thu, 01 Dec 2022 01:20:10 -0800 (PST)
+Date:   Thu, 1 Dec 2022 14:50:08 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: tegra186: Use flexible array to simplify memory
+ allocation
+Message-ID: <20221201092008.2nainxhjpxnsptin@vireshk-i7>
+References: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
+ <f6b75a33df6f5fd94da3cfecb1e9e7590bf8cd37.1668963937.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <84f44358-dd8b-de8f-b782-7b6f03e0a759@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f6b75a33df6f5fd94da3cfecb1e9e7590bf8cd37.1668963937.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 05:03:06PM +0000, Arseniy Krasnov wrote:
->From: Bobby Eshleman <bobby.eshleman@bytedance.com>
->
->This removes behaviour, where error code returned from any
->transport was always switched to ENOMEM.
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/af_vsock.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
+On 20-11-22, 18:19, Christophe JAILLET wrote:
+> Use flexible array to simplify memory allocation.
+> It saves some memory, avoids an indirection when reading the 'clusters'
+> array and removes some LoC.
+> 
+> 
+> Detailed explanation:
+> ====================
+> Knowing that:
+>   - each devm_ allocation over-allocates 40 bytes for internal needs
+>   - Some rounding is done by the memory allocator on 8, 16, 32, 64, 96,
+>     128, 192, 256, 512, 1024, 2048, 4096, 8192 boundaries
+> 
+> and that:
+>   - sizeof(struct tegra186_cpufreq_data) = 24
+>   - sizeof(struct tegra186_cpufreq_cluster) = 16
+> 
+> Memory allocations in tegra186_cpufreq_probe() are:
+>   data:           (24 + 40) = 64 		      => 64 bytes
+>   data->clusters: (2 * 16 + 40) = 72     => 96 bytes
+> So a total of 160 bytes are allocated.
+> 56 for the real need, 80 for internal uses and 24 are wasted.
+> 
+> 
+> If 'struct tegra186_cpufreq_data' is reordered so that 'clusters' is a
+> flexible array:
+>   - it saves one pointer in the structure
+>   - only one allocation is needed
+> 
+> So, only 96 bytes are allocated:
+>   16 + 2 * 16 + 40 = 88  => 96 bytes
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
 
-This patch LGTM, but I would move after the 2 patches that change vmci 
-and hyperv transports.
+Applied. Thanks.
 
-First we should fix the transports by returning the error we think is 
-right, and then expose it to the user.
-
-Thanks,
-Stefano
-
->
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index 884eca7f6743..61ddab664c33 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -1862,8 +1862,9 @@ static int vsock_connectible_sendmsg(struct socket *sock, struct msghdr *msg,
-> 			written = transport->stream_enqueue(vsk,
-> 					msg, len - total_written);
-> 		}
->+
-> 		if (written < 0) {
->-			err = -ENOMEM;
->+			err = written;
-> 			goto out_err;
-> 		}
->
->-- 
->2.25.1
-
+-- 
+viresh
