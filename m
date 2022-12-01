@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A87063F550
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6048863F52D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiLAQcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S231801AbiLAQYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbiLAQcT (ORCPT
+        with ESMTP id S229658AbiLAQYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:32:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248DBA80B9
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:32:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEF95B81F8B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:32:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 650AAC433C1;
-        Thu,  1 Dec 2022 16:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669912336;
-        bh=cMwzrRKMQ2waFYK+vs1kMdLHyXhAlnzImiEEX0QXs4U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CAaJawPCOdI05RzgTiR0YrbEamagB7IKEaOxAThb5E0xpyB9Qx4gsrfy/B+HXRGf1
-         vgmaeMrWxHnfNpNlXHWNxVD3OvrTiQZ5FhI67/74iHZeRHCqpBzQGTo3WugcIUjccH
-         KjcP+6WA+VtYEx9WEAfklqX9x3iRj3BKHPBuQny7frB7NGMJCechNmm133FFRL1h+p
-         Ri2YwgcOJWjJ0CA387ZFQo9xvNT/uJFpLQDLxG8FB8uIYnfX5nUxMvFSt/qNvbVO9A
-         rpWYJfeiDZFGQAbi2Mn0l6tektcyc8fU+W2oE9skmJtyCmEcWp3IDCq4idJTlqUEkb
-         u4nEbIdsVQYCA==
-Date:   Fri, 2 Dec 2022 00:22:23 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     guoren@kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] RISC-V: Align the shadow stack
-Message-ID: <Y4jUv42SRiMh+nEH@xhacker>
-References: <20221130023515.20217-1-palmer@rivosinc.com>
+        Thu, 1 Dec 2022 11:24:00 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA5E9075D;
+        Thu,  1 Dec 2022 08:23:59 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1433ef3b61fso2680814fac.10;
+        Thu, 01 Dec 2022 08:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KltAmapYpz63pHSS934XDuUCup563TiM194vCjhuy8E=;
+        b=dhMBGMgjjGXudG2yJwPHJvjiMm0oe89iSDLss674ttuPG014RRPaD/1saawpqsgOb5
+         B64o1My4Desw43I5WLnXYoUACE/NXEBDnUuB+nQqjwcOj/aK/qtivktSjg2f6QsmHAHp
+         5X9rjSj/2zwV///VjVRgX3w2a6tI5zJIp8Mm1iVw74WIMXWjM9dmOhlvNnsmVaLvkkPj
+         S/o6tseLe82RugnCpWGBDXCitczR9e677/J/AAwhzMeSNOV7ngR+PtyWSvy6bLJHoUiQ
+         ZhXJQpDFO9aWK90f/H2Ia1PE4u8tl0arXqYGskA2nizwQQyXJa1Uqp3Ln2bD0m28kh/C
+         r9OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KltAmapYpz63pHSS934XDuUCup563TiM194vCjhuy8E=;
+        b=G7e+bVAm9wP+M8GL7TmGuJkEU7NRMoBzhB7VvisQcpYPb5ftPVS+QF6cWdqttr0BqT
+         OkRIFQ9dJWCqGpTVImeKPCWtX46EGXNDMMuUgVpklyZe0hW9IjR40auJfNgyp8MEJZ8m
+         qS9Uxk8f5YopeGpq0Bx/8r8V9M5IC19Ea5BS0of4jL/rkSuFyH70IVbum54oTCQnAK5v
+         Mhbr8XwMwwc2QFkQzh+l3BlxfY4zm/xzxGOJBW8r8xbtkr7yreaOnUzgGM/GQ5LpBXat
+         j4kAeNT26X+l6YxwMyFWF+L2fb81TmwN08UF1+9eArcfr9MLWJLj6uD7S8s+PpvYc0Dw
+         VhmA==
+X-Gm-Message-State: ANoB5pmLMT3UqgFrNhVzIf7aK33qe4qLpbTEPlHHNR7q2pBt4mFdjxc8
+        8cKiiaL7CY0xNWmhRUglWLys//VAzafYqF6H8iQ=
+X-Google-Smtp-Source: AA0mqf7BBlikq4JHSEmVYt/WMn5IrbEFJXCqnlubbwten9TagjFWlXEEC/8TM5xBSFPYMY1B5j1ut1/j0/EerkW9IPk=
+X-Received: by 2002:a05:6870:2b05:b0:12d:58c1:33f9 with SMTP id
+ ld5-20020a0568702b0500b0012d58c133f9mr28251793oab.46.1669911839290; Thu, 01
+ Dec 2022 08:23:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221130023515.20217-1-palmer@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221201153820.257570-1-bellosilicio@gmail.com>
+In-Reply-To: <20221201153820.257570-1-bellosilicio@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 1 Dec 2022 11:23:47 -0500
+Message-ID: <CADnq5_NN08omJKjJC3rCSYY4oLzBJpJwhbf-wgfeHUAZ+BMbnw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] amdgpu/drm: Documentation updates
+To:     Peter Maucher <bellosilicio@gmail.com>
+Cc:     alexander.deucher@amd.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 06:35:14PM -0800, Palmer Dabbelt wrote:
-> The standard RISC-V ABIs all require 16-byte stack alignment.  We're
-> only calling that one function on the shadow stack so I doubt it'd
-> result in a real issue, but might as well keep this lined up.
-> 
-> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Applied patches 1 and 3.  Patch 2 is not exactly correct, I'll send
+out an improved version of patch 2.
 
-Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
+Thanks!
 
-> ---
->  arch/riscv/kernel/traps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index be54ccea8c47..acdfcacd7e57 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -206,7 +206,7 @@ static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
->   * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
->   * to get per-cpu overflow stack(get_overflow_stack).
->   */
-> -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
-> +long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)] __aligned(16);
->  asmlinkage unsigned long get_overflow_stack(void)
->  {
->  	return (unsigned long)this_cpu_ptr(overflow_stack) +
-> -- 
+Alex
+
+On Thu, Dec 1, 2022 at 10:38 AM Peter Maucher <bellosilicio@gmail.com> wrote:
+>
+> Explain difference between gttsize and gartsize
+> module parameters, and amend related documentation.
+> Also, amdgpu does support RDNA GPUs.
+>
+>
+> Peter Maucher (3):
+>   drm/amdgpu: improve GART and GTT documentation
+>   drm/amdgpu: add GART and GTT to glossary
+>   drm/amdgpu: mention RDNA support in docu
+>
+>  Documentation/gpu/amdgpu/amdgpu-glossary.rst |  6 ++++++
+>  Documentation/gpu/amdgpu/index.rst           |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c      | 11 ++++++-----
+>  3 files changed, 13 insertions(+), 6 deletions(-)
+>
+> --
 > 2.38.1
-> 
+>
