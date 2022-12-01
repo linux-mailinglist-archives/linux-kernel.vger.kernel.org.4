@@ -2,124 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CA563F029
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78DE63F02B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiLAMGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S231237AbiLAMIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiLAMGt (ORCPT
+        with ESMTP id S229720AbiLAMIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:06:49 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C620934EE;
-        Thu,  1 Dec 2022 04:06:47 -0800 (PST)
-Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NNF7j6kRqzqSqk;
-        Thu,  1 Dec 2022 20:02:41 +0800 (CST)
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 20:06:45 +0800
-Subject: Re: [PATCH v2] chardev: fix error handling in cdev_device_add()
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <logang@deltatee.com>, <dan.j.williams@intel.com>,
-        <hans.verkuil@cisco.com>, <alexandre.belloni@free-electrons.com>,
-        <viro@zeniv.linux.org.uk>
-References: <20221025113957.693723-1-yangyingliang@huawei.com>
- <Y1fNnwLlY079xGVY@kroah.com>
- <ae7cbce0-3506-e21b-fa9b-37a13fe00b77@huawei.com>
- <Y1fmgCS7fuf/LQBc@kroah.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <65b29177-6892-7578-b2ae-a09d5adab661@huawei.com>
-Date:   Thu, 1 Dec 2022 20:06:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 1 Dec 2022 07:08:35 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B92485673;
+        Thu,  1 Dec 2022 04:08:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669896514; x=1701432514;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v8Awrxaj1ue8HHnJerJK41Na9ZZisQbb0WsAzLQjuhc=;
+  b=c9WzpMgwmBsNd/modFAdE+NvU+A/O8741e83dv40DyMD5n2zwZAvowqZ
+   VbSZLyfF7r1hCwien05Iv5LgQG07x42NGLSlsvM4LJwYfEJE5S3Rr2KqJ
+   T5DgDHPAe5haGEC+Audlc2jTnxjcHuyOCn0qEQG2ZiRUbJjFXddtwoz6X
+   rT8ke16sMw4n6wYvWaWDmDLIfueH65Tc+ODy9+ra1YA9MaBpr1Ar4myX+
+   rgWlQwle5pmgg7Em9rfyleTd2tIxFi8O9PYrbZZ6UFFUAKnDwzSs7S+vv
+   s46uSWQDBO8cnikxPYzB4IeRas0I5Uk2BTC83PU1SmA1MbSGA7chJ9XEX
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="314366862"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="314366862"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 04:07:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="675415280"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="675415280"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 01 Dec 2022 04:07:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0iLT-002m5J-2D;
+        Thu, 01 Dec 2022 14:07:15 +0200
+Date:   Thu, 1 Dec 2022 14:07:15 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v5 1/2] gpiolib: cdev: fix NULL-pointer dereferences
+Message-ID: <Y4iY8wFBhMh7paXT@smile.fi.intel.com>
+References: <20221201083335.819190-1-brgl@bgdev.pl>
+ <20221201083335.819190-2-brgl@bgdev.pl>
 MIME-Version: 1.0
-In-Reply-To: <Y1fmgCS7fuf/LQBc@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201083335.819190-2-brgl@bgdev.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Dec 01, 2022 at 09:33:34AM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> There are several places where we can crash the kernel by requesting
+> lines, unbinding the GPIO device, then calling any of the system calls
+> relevant to the GPIO character device's annonymous file descriptors:
+> ioctl(), read(), poll().
+> 
+> While I observed it with the GPIO simulator, it will also happen for any
+> of the GPIO devices that can be hot-unplugged - for instance any HID GPIO
+> expander (e.g. CP2112).
+> 
+> This affects both v1 and v2 uAPI.
+> 
+> This fixes it partially by checking if gdev->chip is not NULL but it
+> doesn't entirely remedy the situation as we still have a race condition
+> in which another thread can remove the device after the check.
+> 
+> Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
+> Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
+> Fixes: aad955842d1c ("gpiolib: cdev: support GPIO_V2_GET_LINEINFO_IOCTL and GPIO_V2_GET_LINEINFO_WATCH_IOCTL")
+> Fixes: a54756cb24ea ("gpiolib: cdev: support GPIO_V2_LINE_SET_CONFIG_IOCTL")
+> Fixes: 7b8e00d98168 ("gpiolib: cdev: support GPIO_V2_LINE_SET_VALUES_IOCTL")
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpiolib-cdev.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+> index 0cb6b468f364..911d91668903 100644
+> --- a/drivers/gpio/gpiolib-cdev.c
+> +++ b/drivers/gpio/gpiolib-cdev.c
+> @@ -201,6 +201,9 @@ static long linehandle_ioctl(struct file *file, unsigned int cmd,
+>  	unsigned int i;
+>  	int ret;
+>  
+> +	if (!lh->gdev->chip)
+> +		return -ENODEV;
+> +
+>  	switch (cmd) {
+>  	case GPIOHANDLE_GET_LINE_VALUES_IOCTL:
+>  		/* NOTE: It's okay to read values of output lines */
+> @@ -1384,6 +1387,9 @@ static long linereq_ioctl(struct file *file, unsigned int cmd,
+>  	struct linereq *lr = file->private_data;
+>  	void __user *ip = (void __user *)arg;
+>  
+> +	if (!lr->gdev->chip)
+> +		return -ENODEV;
+> +
+>  	switch (cmd) {
+>  	case GPIO_V2_LINE_GET_VALUES_IOCTL:
+>  		return linereq_get_values(lr, ip);
+> @@ -1410,6 +1416,9 @@ static __poll_t linereq_poll(struct file *file,
+>  	struct linereq *lr = file->private_data;
+>  	__poll_t events = 0;
+>  
+> +	if (!lr->gdev->chip)
+> +		return 0;
 
-On 2022/10/25 21:37, Greg KH wrote:
-> On Tue, Oct 25, 2022 at 09:20:12PM +0800, Yang Yingliang wrote:
->> Hi, Greg
->>
->> On 2022/10/25 19:50, Greg KH wrote:
->>> On Tue, Oct 25, 2022 at 07:39:57PM +0800, Yang Yingliang wrote:
->>>> While doing fault injection test, I got the following report:
->>>>
->>>> ------------[ cut here ]------------
->>>> kobject: '(null)' (0000000039956980): is not initialized, yet kobject_put() is being called.
->>>> WARNING: CPU: 3 PID: 6306 at kobject_put+0x23d/0x4e0
->>>> CPU: 3 PID: 6306 Comm: 283 Tainted: G        W          6.1.0-rc2-00005-g307c1086d7c9 #1253
->>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
->>>> RIP: 0010:kobject_put+0x23d/0x4e0
->>>> Call Trace:
->>>>    <TASK>
->>>>    cdev_device_add+0x15e/0x1b0
->>>>    __iio_device_register+0x13b4/0x1af0 [industrialio]
->>>>    __devm_iio_device_register+0x22/0x90 [industrialio]
->>>>    max517_probe+0x3d8/0x6b4 [max517]
->>>>    i2c_device_probe+0xa81/0xc00
->>>>
->>>> When device_add() is injected fault and returns error, if dev->devt is not set,
->>>> cdev_add() is not called, cdev_del() is not needed. Fix this by checking dev->devt
->>>> in error path.
->>> Nit, please wrap your changelog text at 72 columns.
->>>
->>>> Fixes: 233ed09d7fda ("chardev: add helper function to register char devs with a struct device")
->>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->>>> ---
->>>> v1 -> v2:
->>>>     Add information to update commit message.
->>>>     v1 link: https://lore.kernel.org/lkml/1959fa74-b06c-b8bc-d14f-b71e5c4290ee@huawei.com/T/
->>>> ---
->>>>    fs/char_dev.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/char_dev.c b/fs/char_dev.c
->>>> index ba0ded7842a7..3f667292608c 100644
->>>> --- a/fs/char_dev.c
->>>> +++ b/fs/char_dev.c
->>>> @@ -547,7 +547,7 @@ int cdev_device_add(struct cdev *cdev, struct device *dev)
->>>>    	}
->>>>    	rc = device_add(dev);
->>>> -	if (rc)
->>>> +	if (rc && dev->devt)
->>> No, this is a layering violation and one that you do not know is really
->>> going to be true or not.  the devt being present, or not, should not be
->>> an issue of if the device_add failed or not.  This isn't correct, sorry.
->> Do you mean it's not a bug or the warn can be ignored or it's bug in driver
->> ?
->> I see devt is checked before calling cdev_del() in cdev_device_del().
-> Ah!  The core doesn't set devt, the caller has that set.  That makes
-> more sense now, sorry for the confusion on my side.
->
-> Yes, this looks correct, the diff didn't have the full context and I was
-> confused.
->
-> I'll go queue this up, very nice work.
->
-> greg k-h
-I didn't find this patch in your trees, does it been merged?
+EPOLLHUP ?
 
-Thanks,
-Yang
-> .
+>  	poll_wait(file, &lr->wait, wait);
+>  
+>  	if (!kfifo_is_empty_spinlocked_noirqsave(&lr->events,
+> @@ -1429,6 +1438,9 @@ static ssize_t linereq_read(struct file *file,
+>  	ssize_t bytes_read = 0;
+>  	int ret;
+>  
+> +	if (!lr->gdev->chip)
+> +		return -ENODEV;
+> +
+>  	if (count < sizeof(le))
+>  		return -EINVAL;
+>  
+> @@ -1716,6 +1728,9 @@ static __poll_t lineevent_poll(struct file *file,
+>  	struct lineevent_state *le = file->private_data;
+>  	__poll_t events = 0;
+>  
+> +	if (!le->gdev->chip)
+> +		return 0;
+> +
+>  	poll_wait(file, &le->wait, wait);
+>  
+>  	if (!kfifo_is_empty_spinlocked_noirqsave(&le->events, &le->wait.lock))
+> @@ -1740,6 +1755,9 @@ static ssize_t lineevent_read(struct file *file,
+>  	ssize_t ge_size;
+>  	int ret;
+>  
+> +	if (!le->gdev->chip)
+> +		return -ENODEV;
+> +
+>  	/*
+>  	 * When compatible system call is being used the struct gpioevent_data,
+>  	 * in case of at least ia32, has different size due to the alignment
+> @@ -1821,6 +1839,9 @@ static long lineevent_ioctl(struct file *file, unsigned int cmd,
+>  	void __user *ip = (void __user *)arg;
+>  	struct gpiohandle_data ghd;
+>  
+> +	if (!le->gdev->chip)
+> +		return -ENODEV;
+> +
+>  	/*
+>  	 * We can get the value for an event line but not set it,
+>  	 * because it is input by definition.
+> @@ -2407,6 +2428,9 @@ static __poll_t lineinfo_watch_poll(struct file *file,
+>  	struct gpio_chardev_data *cdev = file->private_data;
+>  	__poll_t events = 0;
+>  
+> +	if (!cdev->gdev->chip)
+> +		return 0;
+> +
+>  	poll_wait(file, &cdev->wait, pollt);
+>  
+>  	if (!kfifo_is_empty_spinlocked_noirqsave(&cdev->events,
+> @@ -2425,6 +2449,9 @@ static ssize_t lineinfo_watch_read(struct file *file, char __user *buf,
+>  	int ret;
+>  	size_t event_size;
+>  
+> +	if (!cdev->gdev->chip)
+> +		return -ENODEV;
+> +
+>  #ifndef CONFIG_GPIO_CDEV_V1
+>  	event_size = sizeof(struct gpio_v2_line_info_changed);
+>  	if (count < event_size)
+> -- 
+> 2.37.2
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
