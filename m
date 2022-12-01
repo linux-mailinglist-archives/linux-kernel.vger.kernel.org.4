@@ -2,123 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9B563F5C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4648163F5C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiLAQ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
+        id S229854AbiLAQ6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiLAQ5t (ORCPT
+        with ESMTP id S229853AbiLAQ6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:57:49 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A946720981
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:57:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f/wviZj0wSlUVOGfM2ryoKzBp6THlKswAaC04eZHvwBw0AZHR0EztUZB4WOOh2a7XkAXmIpGLUxLJtSWqC4JdGSx8bwJvTejAkriqFDrZtgM66Hg2cwT+IrkbSAB4FObzQBdmR7Wz9FB3UZ3nvA0j5nYW6Ix7BcYMw7p67reurLQCIzEsaOrs+eQjBPpB4Mj67jrNyCSrx2En7Uf4fHCyIZvYHsVNPZSrn/ofUH1SERFhyZf2gDMF1WSsSnt1fAfroVY9CW+HvJsP69pkFY0s9FrC/3iBvWLFxF9tZT9K3HUuW7FoE7516fRfkhS24UYohvZJjr9GrTOVuRsdEbS8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tkeMZ623GldsChlfeqzbu9McQoYlNu0JiwYIlHXNDQc=;
- b=TvjTzXMijK1NghWPYrguRND3fZ6cMShP8UOjQ9OXQLoNRI5Xy+1lBf7vMDpzxENMpo6Xg6gB8R/r34fiaVH25Qbd7jwoknX6odMKOMdaMMSivk/zeys/rNn202raZmC1kYe9DaNAcIkC4VnRosz8ub7V0hjYuoAoXIXMkheQ60WRH1nZbPRg25TXx5dvw7ilSW04qdLK/eXHYsp17063BOkvJIvMCB9PewvngnspeWZgQSQqMEJ87n/RUn4g8kcjbGMpSCSc85ZeRrPEdrd/azsx6sadEABBdmQIjOsAAkw4h4HtLc2JCPA1Pl8cZGMTVxdAz4ATrWQKZ4j/p3c2mA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tkeMZ623GldsChlfeqzbu9McQoYlNu0JiwYIlHXNDQc=;
- b=wynstFA/4RoJWluEt3xNsJB/uPEmeld+NJ1yc3AaCWhv/GL/zD9D+7q0fbDhIkPHV9ZOuFDNVllSlncqcPndxABl8RaOdoSQ1aIAf6O66jeB5EybMh720BpeLJREGP6jYnvQ93YRQefK2KuHgS7aIphCdG9lgmNbiwl4YcD4haM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- DS7PR12MB8346.namprd12.prod.outlook.com (2603:10b6:8:e5::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.6; Thu, 1 Dec 2022 16:57:44 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::2fd1:bdaf:af05:e178]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::2fd1:bdaf:af05:e178%3]) with mapi id 15.20.5857.023; Thu, 1 Dec 2022
- 16:57:44 +0000
-Message-ID: <e9f9969e-a1aa-a694-58ca-b18b4248e95a@amd.com>
-Date:   Thu, 1 Dec 2022 11:57:40 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] drm/amdgpu: use sysfs_emit() to instead of scnprintf()
-Content-Language: en-CA
-To:     ye.xingchen@zte.com.cn, alexander.deucher@amd.com
-Cc:     xinhui.pan@amd.com, john.clements@amd.com, tao.zhou1@amd.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        yipeng.chai@amd.com, stanley.yang@amd.com,
-        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
-        hawking.zhang@amd.com
-References: <202212011024212258022@zte.com.cn>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-In-Reply-To: <202212011024212258022@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT1P288CA0026.CANP288.PROD.OUTLOOK.COM (2603:10b6:b01::39)
- To DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25)
+        Thu, 1 Dec 2022 11:58:15 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E690D1A064
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:58:14 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 62so2150334pgb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CcbLtYfJOUPv9hfp+Y14KjDL6nnYgGwjjKw594bKLHA=;
+        b=M7Cy/EGD/LO/JhRD3VFjxVgnlzZBSlIpWZurKAOV4ywrSpW3BkU+d8f9iD0IT7hiOF
+         S8Sj5iB7vAGpqvxgcz3x7K+IYUatpvfwK19hR64X5gGXCtlhz3DpU7q3WkfgJBBRhXoU
+         M4QGPq9IPVAlmcWPmI1Brr1MoCz9OxLy4FbIjLVUhuueYlCAjXTFsG7WVC7rlYOTCY8Q
+         mjXtv3KBNnaPLEVvmY1W1rT4zlJnvwmI4yMHdV+G2oXOkEVM/qOd2TYDCNmqSYjweSk7
+         0zjdlIKCN+vOkRtSErgKZbL9FajfcaKblWDV2awqCIYbvyOe/6114Qt0Xmc8S0MeEgZf
+         QdMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CcbLtYfJOUPv9hfp+Y14KjDL6nnYgGwjjKw594bKLHA=;
+        b=EKz1VjGiG0whycPx/1EvCtVbii8vFtw/hb3bHTwfzqLA4N9qbDVlfLY/E7TGJ+lqCg
+         wkTjAqsq9Hc/k4pcT3usQXO568thlUewSJwow0ZFwysxl19OKnllUYEvOoVARQWz1z2V
+         SrEG0Md0e2BdweXX39OzspLq0j84WygM/43mfAISmsMrImpGjGQ0OUV/JFrfYPNPGLOU
+         HdZxo0jyCZsLlBnvMUA28kNbw848tAqvzhFwxQoJ8U7o78Clm1H0DrzXJ4gUSgwrmxLX
+         Q+9AABZZcoYDW7cUhOyhV62hvUJqMXGXUAsm81720FwpTMIx85Oj6t7GwbfOoigitbYl
+         eeow==
+X-Gm-Message-State: ANoB5plSANBKg6LcVEtOmgcgr19QLJnD0jHh67pE/BWL4mATAKQBol0u
+        iF7GqRIo3okAyMCXvc/wGHoFSA==
+X-Google-Smtp-Source: AA0mqf4jVHKnm8+YROUPUEPkzh3iZM+56tYPVHv8rpwSyePE4ge2p7ShbFEX2c9J+9P9fcWJOqWuzg==
+X-Received: by 2002:a63:4c63:0:b0:477:103:d1c4 with SMTP id m35-20020a634c63000000b004770103d1c4mr40951530pgl.369.1669913894315;
+        Thu, 01 Dec 2022 08:58:14 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id iw1-20020a170903044100b0017f5ad327casm3850241plb.103.2022.12.01.08.58.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 08:58:13 -0800 (PST)
+Date:   Thu, 1 Dec 2022 16:58:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michael Sterritt <sterritt@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu
+ variables
+Message-ID: <Y4jdIl1elcnL8JUU@google.com>
+References: <20221201021948.9259-1-aik@amd.com>
+ <20221201021948.9259-2-aik@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|DS7PR12MB8346:EE_
-X-MS-Office365-Filtering-Correlation-Id: 33d5a1c6-acaa-4cb5-4028-08dad3bd2a43
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E+8BN6Z6gyiY8Kk7F8kDoFxKu2ugIE8mlv0Dz+rDIYz9DT9aV1xTXQBIgPUZfk5h+Z5/GbBLG9+a76RhMNRjAzlJ05YIw6/8grLexNcj/R0eZan5w5dVNNxRJIMOYBoN43zYrjpsc9tRWPkJkqM18h+kX3Ru5YPOirs8gN52I+TwFHU8+B+qUxgtw27POPgPD2zDRzu5Xqbrj5H2JrA3HIngOixvVEQ/eVMR1EBAF9DvVNXwtoHbXoobDiC0BG/r5HIV0Yq+Uzk+vJIdDi9G4iDFqvXczjEKurPIeC25ey7WBOU+eVxrZHYTuGt54e+kb5hW0xNBKHZ4yXG8QIiOregZzIJPZHxUo/dDDE3ac4av6wO6+qZmCyjo5nrPEUCOqzPEMHX8SRpmCKNHN8+8uA2xjMytBNPOCpdvqdFalTh0PRCeMWvZES3r3jOx+XoE8vc1m7xDMmvaHmdaLF7EkUT4k1ljdEiJVpp3YS9HqfRYkkJ9ARvz1Ly7cmY8g2lteiRN0oiuEvja0d4I4XGqiZfZuHuUMC3ReS3e8/dLGrcZppRxTsa5edAXxViiIa4QI6Ni+l1oR32kVqZ0xtb1IJrZp6fsCIgjhCRjr+A7cOKNl9/OwTiBjYVX6OBr9ya1/MiMs9G/0JMSH3YKjiAMhQ0UJTUxoL2Nc8xddOwtbX12o6DFfu/on15ziATYkCa5To9VONXz2fDU/+4xQqJDuYOOQ8epW8jXozgqUEy5l+w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(451199015)(44832011)(2906002)(31686004)(5660300002)(8936002)(41300700001)(66556008)(66476007)(316002)(66946007)(8676002)(4001150100001)(36756003)(6636002)(4326008)(6506007)(53546011)(6666004)(6512007)(186003)(2616005)(6486002)(478600001)(26005)(31696002)(38100700002)(86362001)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bGk3aGthUCsrWkdkbGIyQWh1SElMWnF2K21vZjRUTFRCSGNPODBTemU5SklP?=
- =?utf-8?B?Q0RDUDJMY2gxNTdXN0FiUUVQcm91QmcvOU91WGlrcHo0c1RjTHNCWTZZQXJx?=
- =?utf-8?B?OWRMSi93bVd5L0NVYU93bERPYTl6VDYwVCt4bmVENFI4SVJ4VnBibVV3QmY0?=
- =?utf-8?B?UzQ0KzFTZmNRVEdJY3llWWNRTW9Td2NmMjBOMWVXQkFEeGt3UWtpWk1YS1hX?=
- =?utf-8?B?YVpUL0hyUzFyTmVranNQendvWGJnZmMxV3A5NGYwOG5OU0hqUkdQWitDY1g4?=
- =?utf-8?B?c1lLMkhJYWhXN1l2KzNKbm5hODJST3EvTWVGeEJid1FUdEZUbWVwUERjZS9M?=
- =?utf-8?B?a3ZrWjAvWDBiZ1RXWmlCV1dZUllFWE5JUHlsRzFXM05aOU1FR0E0U28zQXNn?=
- =?utf-8?B?andaL2Y5eXFSM2F0ZWRveFZBYnFsQjROUjhKNXpJWmNkMHRRNW5yZEk1S3dB?=
- =?utf-8?B?TFpnY3JXYldFOFFnU3lrYTFHUXZPeFNyZ0JPWTl0aStIL0FVSzhPVHROZ1hL?=
- =?utf-8?B?RWxVSldvaFhHdVhyUE9OWDFLK1ZMTnQxU3FKanovazUvZUFkV1ZJSFhLNWdr?=
- =?utf-8?B?aGZhb2hmT1hsWHNqUUZUVHlLRlREUC9ZUWdadTd5bzNEbWsxTUIzemZJSXBW?=
- =?utf-8?B?ODNHNUtrcE9NT1VEQmsxeWZSVUV4dmg4bit1Z1lqbllpMlIyT1BVdzFHaXA3?=
- =?utf-8?B?L1k0WjMvN3FhK2R2Vk8vZ25aNnFWNEpjS29sZ3pnSi8yVDN2SEpub0VybTR4?=
- =?utf-8?B?b2sxWndSSlFaT3lsWm1SWmVmNk9KTkpPWHF2dzN6aEZiY2xpTTg0Y2wyRFc5?=
- =?utf-8?B?OUNjZ1VidmN6clhSODl2Zm1nQ2I0dzhVSGN4elhaeGZKKzkvVlkxekV6MlJX?=
- =?utf-8?B?ZWx0M0hsL1RDSTZlS3Z1bkRwaW5icmYrMi9jeEcvWFFkRHZDQUF3czltYTV5?=
- =?utf-8?B?bFdjckdia0ZpUS9DbW4zZDUyenJqYThpRi9WS2FpMUZPY1FQSVpJdXJTQjV4?=
- =?utf-8?B?UzNSUGVyNmZGMkVSQW8wNGFqV3VvT3drNGo5N3llcmpMR1c1R1IzQ09MN2ow?=
- =?utf-8?B?bTBGY1hwZktwVFVKVHQyNWJZY2JWYW9MT0N3MHBNT0FXSHkwaXhOelRKbytJ?=
- =?utf-8?B?bHVVUnZjTlpRdXplb0lOeEJ0eDB1VUtrMGRpZDNMbVdUZWtkS3BiQ3Y2ZTZJ?=
- =?utf-8?B?SWJLeERxeW1TOU1DVDRoZ2R6OFNIcCsvdC9Ob3QyV3lKWlY1VVkwVW0rVTJO?=
- =?utf-8?B?RXE1YjZCWTBrcTVpQ25wUng5ZEQ3K1l5NWRQQWxpV1BRMW5ucndaNDNqZXlR?=
- =?utf-8?B?MUxEV2xzMzU4Wk93WlhrM29ySk15S2x5bGNPekU4TlNvSkFhUFlGTTRhalUr?=
- =?utf-8?B?SlJrcEJaOXkxN3djWENEUHJjNEVWemtOMkFuUTFXY1VwRGdQcko0QTlyOGdi?=
- =?utf-8?B?VmdYR0RUQ0FjUWUwQVYrN0JXVzJOemxWS21SSGRWVVUvcExXaXl5UG1DRndU?=
- =?utf-8?B?elhmbWtPVFNySFYwNTdIQyt3d2trUmkyNnNCWGtDNTd0OWMrclB4bTJ4MEJK?=
- =?utf-8?B?WHRtYWR1MWRUeDF6NFp2M0ovTnRnd0VUQ2pFNWhPamxmeWxtQUExQUVhR3l5?=
- =?utf-8?B?TmlZUzJwWEc3UGluUDZFNEYzVDBuTm8rRktqN2ZGZWR6cmVaY3hsUG1qclhN?=
- =?utf-8?B?dG5PaCtHRlNqZFhYUXE5TlR6TDgzWHRaaVZqeWdiamlMVFEwZlRRLzhGSmY1?=
- =?utf-8?B?QnhRZktNZzV3dGRZM1VDNlNlUkZkUGRjZzdzWUNCK2RoQlVValkzRTd1cExD?=
- =?utf-8?B?cHlmWHc3VXRRSXY4dWJKdW5hcUpqZXJsemNmWHlKaUF2Y3hnSlVndzRiSjFV?=
- =?utf-8?B?OEJsZ3ZrNU5zRGhLczl6Ym8xdjU2WHpETXZac3RFUnVadWt3RUM2OEhVbW1x?=
- =?utf-8?B?ZFFwUXd0cktGYnhPbDR6Z3plRFVqSnhwd254eTNNVG56WG40TUdaOHBzK1p5?=
- =?utf-8?B?ZUN1ajZqY2pHR25tbjJZajJTQlJsdHgvbi9nam5RSlNnVnJOQ1FieHZvZHdD?=
- =?utf-8?B?L1c1am00SDFTY3B6V2lrZVhHN2RKaVBjUXgrN2dpRFZpV2ViTTZocEMvUGg4?=
- =?utf-8?Q?2iNuU2fg9idOrKyhobw3XxfYz?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33d5a1c6-acaa-4cb5-4028-08dad3bd2a43
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 16:57:44.0957
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4Uax742VbVvXLaVIuE/aqcD+D6xvNL5Tbjfni1C2q9W/lY68KWp+dYceUJCqIFlX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8346
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201021948.9259-2-aik@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,32 +90,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Luben Tuikov <luben.tuikov@amd.com>
-
-Regards,
-Luben
-
-On 2022-11-30 21:24, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Replace the open-code with sysfs_emit() to simplify the code.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+On Thu, Dec 01, 2022, Alexey Kardashevskiy wrote:
+> Reading DR[0-3]_ADDR_MASK MSRs takes about 250 cycles which is going to
+> be noticeable when the AMD KVM SEV-ES's DebugSwap feature is enabled and
+> KVM needs to store these before switching to a guest; the DebugSwitch
+> hardware support restores them as type B swap.
+>
+> This stores MSR values from set_dr_addr_mask() in percpu values and
+> returns them via new get_dr_addr_mask(). The gain here is about 10x.
+>
+> Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
 > ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/x86/include/asm/debugreg.h |  1 +
+>  arch/x86/kernel/cpu/amd.c       | 32 ++++++++++++++++++++
+>  2 files changed, 33 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> index 077404a9c935..ad490c1e2f57 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> @@ -1267,7 +1267,7 @@ static ssize_t amdgpu_ras_sysfs_features_read(struct device *dev,
->  	struct amdgpu_ras *con =
->  		container_of(attr, struct amdgpu_ras, features_attr);
-> 
-> -	return scnprintf(buf, PAGE_SIZE, "feature mask: 0x%x\n", con->features);
-> +	return sysfs_emit(buf, "feature mask: 0x%x\n", con->features);
->  }
-> 
->  static void amdgpu_ras_sysfs_remove_bad_page_node(struct amdgpu_device *adev)
+> diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
+> index cfdf307ddc01..c4324d0205b5 100644
+> --- a/arch/x86/include/asm/debugreg.h
+> +++ b/arch/x86/include/asm/debugreg.h
+> @@ -127,6 +127,7 @@ static __always_inline void local_db_restore(unsigned long dr7)
+>  
+>  #ifdef CONFIG_CPU_SUP_AMD
+>  extern void set_dr_addr_mask(unsigned long mask, int dr);
+> +extern unsigned long get_dr_addr_mask(int dr);
+>  #else
+>  static inline void set_dr_addr_mask(unsigned long mask, int dr) { }
 
+KVM_AMD doesn't depend on CPU_SUP_AMD, i.e. this needs a stub.  Or we need to add
+a dependency.
+
+> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> index c75d75b9f11a..ec7efcef4e14 100644
+> --- a/arch/x86/kernel/cpu/amd.c
+> +++ b/arch/x86/kernel/cpu/amd.c
+> @@ -1158,6 +1158,11 @@ static bool cpu_has_amd_erratum(struct cpuinfo_x86 *cpu, const int *erratum)
+>  	return false;
+>  }
+>  
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr0_addr_mask);
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr1_addr_mask);
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr2_addr_mask);
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr3_addr_mask);
+> +
+>  void set_dr_addr_mask(unsigned long mask, int dr)
+>  {
+>  	if (!boot_cpu_has(X86_FEATURE_BPEXT))
+> @@ -1166,17 +1171,44 @@ void set_dr_addr_mask(unsigned long mask, int dr)
+>  	switch (dr) {
+>  	case 0:
+>  		wrmsr(MSR_F16H_DR0_ADDR_MASK, mask, 0);
+
+LOL, I'd love to hear how MSR_F16H_DR0_ADDR_MASK ended up with a completely
+different MSR index.
+
+> +		per_cpu(dr0_addr_mask, smp_processor_id()) = mask;
+
+Use an array to avoid the copy+paste?  And if you're going to add a cache, might
+as well use it to avoid unnecessary writes.
+
+>  		break;
+>  	case 1:
