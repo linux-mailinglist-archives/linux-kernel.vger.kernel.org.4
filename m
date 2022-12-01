@@ -2,238 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62DB63F6F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FCC63F703
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiLASAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+        id S229817AbiLASBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLASAe (ORCPT
+        with ESMTP id S229999AbiLASA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:00:34 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9367FB274B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:00:32 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id y17so2373416plp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 10:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3l6W+4wCOmk5H2E5YROhRyJHHJ2tANXndiSfYTNLKA=;
-        b=LPbxOfrTB9fyfIBLwI9GmIvloOZLwzc5XO84esfl6QNOQpq/PxRAl5rm+Ti+T4Q37d
-         lCWp0inv5wIvqXwglrX83PfpZ3Q0ervr4AYgeL+m50dwe1upazuVZ3UZNSOlMqAd8B6a
-         YGPZ13wOq1yWRIEtEACOhp6H5Pl/6toNQPbGKRqIBqAfyk3cIPBW9tMcAmZH+UTd24+a
-         pkgAGzBKLl+cYt2y0/0DdCj8uHx4sY7xGALTKdDIHFKzVWhn61BRBGwIVZ5atvJGHQO6
-         rSyUjMgbHcmt/ryyQnEmWAqXWOBallk8rs2b9fyQ/qQ34uOkW32no9fiikFXVx7nX37l
-         Sy+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y3l6W+4wCOmk5H2E5YROhRyJHHJ2tANXndiSfYTNLKA=;
-        b=rEXOYhH2uEhlDB4Kn9NI9dtHFoDj84wpqVBp0AUD6FOxv9t1GTRDEvt4ENhZD07hTH
-         OyaoSCL3f8sIqiIC8qUD/CjOQhKShKxrU1OvtV6k2RKcyLoSZTE7dgrWZQ9USqpQToeL
-         MIfkIVMtCuLRSojUiYThbUXTPY+/QKuyClGbhFL5mnyHf5y2Vv6eumKZ7l7Q6c8cM5z+
-         Op0fAUO0TpgvkCZaYj7CTbJJ6Kjv93/GSbXmOgYur5p1KBK1mObeMUUKuHHJeSrwAmdq
-         Rvttin1yR/qnkqNsEJwiM15lRaaRrqOw+sUpxBTaH4mDa92ySRmlkULoMDvVMfw4qxP8
-         myfA==
-X-Gm-Message-State: ANoB5pmVrrHMaPoyPWLL3FfJHu4xC8huuYqho16nzQOI7IqC84IyTFYW
-        5qoX19sxtyena6NG4pdOL2dptCnyBy+qAVQzfeqwvw==
-X-Google-Smtp-Source: AA0mqf6y+U57HPHVdgjCnjJZA/z4cEc+sR5khbPriXkILN5I/gE93IstCZWbONlRJ/Bn8v5oma0tfOOfXJtAqtxlqDU=
-X-Received: by 2002:a17:90a:df0e:b0:20b:22fb:2ef with SMTP id
- gp14-20020a17090adf0e00b0020b22fb02efmr78225062pjb.158.1669917631940; Thu, 01
- Dec 2022 10:00:31 -0800 (PST)
+        Thu, 1 Dec 2022 13:00:59 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79E8B2765;
+        Thu,  1 Dec 2022 10:00:58 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1E4xcU015735;
+        Thu, 1 Dec 2022 10:00:46 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=PbepnRQ8Mtbd6ZEottlav0DTF44g1GzanbdlHhp41eU=;
+ b=c2tQzWn5j0ulYZ35YfJNfgxg9hpspn0O6SMNQII2mLegtGvoSej01fxHHbvWs2R7X5n0
+ ZOVhLl+LAnvF7fjoMA1pGXuJjCbr75tpGKQnp+KbmocVJaqrg1kOgYn8F4N3bJE/6MJn
+ oKtK3cs0joXOAonM871DM3wmxtPkRUHUoGNq07OnFXqr6/W7NpO04BC4hVk2ACzun5Ay
+ PAT0I6UvsGOSCss/hPE8U1nySJmlkgrchlzuxDFAuMDj6If48q1kZVr2fcK4zJGoAffJ
+ 8zgilU+LYE4FLVCh27L9XoRaAW7Jy4t1HSzB3ePk4ONYzYyCitAvGDs98tZ9A/0v9Qxa mw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3m6k712xx9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 10:00:46 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 1 Dec
+ 2022 10:00:44 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 1 Dec 2022 10:00:44 -0800
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 991445B6927;
+        Thu,  1 Dec 2022 10:00:41 -0800 (PST)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <pabeni@redhat.com>,
+        <edumazet@google.com>, <sgoutham@marvell.com>,
+        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
+        <sbhatta@marvell.com>
+Subject: [net-next PATCH v3 0/4]  CN10KB MAC block support
+Date:   Thu, 1 Dec 2022 23:30:36 +0530
+Message-ID: <20221201180040.14147-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20221201130135.1115380-1-apatel@ventanamicro.com>
- <20221201130135.1115380-4-apatel@ventanamicro.com> <87v8mvqbvq.ffs@tglx>
-In-Reply-To: <87v8mvqbvq.ffs@tglx>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 1 Dec 2022 23:30:20 +0530
-Message-ID: <CAK9=C2WN57hHUz=3SDruyWPdAobn+QP8uGwugjPAobeFG7dBkw@mail.gmail.com>
-Subject: Re: [PATCH v14 3/8] genirq: Add mechanism to multiplex a single HW IPI
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: ZCdELoiY8BnKelmKRM315YBQIjipu6Pj
+X-Proofpoint-GUID: ZCdELoiY8BnKelmKRM315YBQIjipu6Pj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_12,2022-12-01_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 10:50 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Thu, Dec 01 2022 at 18:31, Anup Patel wrote:
-> > All RISC-V platforms have a single HW IPI provided by the INTC local
-> > interrupt controller. The HW method to trigger INTC IPI can be through
-> > external irqchip (e.g. RISC-V AIA), through platform specific device
-> > (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
-> >
-> > To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
->
-> s/we//
+OcteonTx2's next gen platform the CN10KB has RPM_USX MAC which has a
+different serdes when compared to RPM MAC. Though the underlying
+HW is different, the CSR interface has been designed largely inline
+with RPM MAC, with few exceptions though. So we are using the same
+CGX driver for RPM_USX MAC as well and will have a different set of APIs
+for RPM_USX where ever necessary.
 
-Okay, I will update.
+The RPM and RPM_USX blocks support a different number of LMACS.
+RPM_USX support 8 LMACS per MAC block whereas legacy RPM supports only 4
+LMACS per MAC. with this RPM_USX support double the number of DMAC filters
+and fifo size.
 
->
-> > mechanism which help us create multiple virtual IPIs using a single
-> > HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
->
-> s/from/by/
+This patchset adds initial support for CN10KB's RPM_USX  MAC i.e
+registering the driver and defining MAC operations (mac_ops). With these
+changes PF and VF netdev packet path will work and PF and VF netdev drivers
+are able to configure MAC features like pause frames,PFC and loopback etc.
 
-Okay, I will update.
+Also implements FEC stats for CN10K Mac block RPM and CN10KB Mac block
+RPM_USX and extends ethtool support for PF and VF drivers by defining
+get_fec_stats API to display FEC stats.
 
->
-> > irqchip driver and it is shared by various RISC-V irqchip drivers.
->
-> Sure, but now we have two copies of this. One in the Apple AIC and one
-> here. The obvious thing to do is:
->
->    1) Provide generic infrastructure
->
->    2) Convert AIC to use it
 
-Mark Z already has a converted version of AIC driver.
-https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/ipi-mux
+Hariprasad Kelam (3):
+  octeontx2-af: cn10kb: Add RPM_USX MAC support
+  octeontx2-pf: ethtool: Implement get_fec_stats
+  octeontx2-af: Add FEC stats for RPM/RPM_USX block
 
->
->    3) Add RISCV users
+Rakesh Babu Saladi (1):
+  octeontx2-af: Support variable number of lmacs
+---
+v2 * remove debugfs entry to display FEC stats
+     rather display same over ethtool APIs
 
-The PATCH4 of this series converts the two existing
-RISC-V users (SBI IPI and CLINT).
+v3 * Dont remove existing FEC stats support over
+     ethtool statistics (ethtool -S)
+---
 
-We also have a RISC-V AIA series (posted recently) which
-uses the IPI muxing added by this series.
 
->
-> No?
->
-> > +static void ipi_mux_mask(struct irq_data *d)
-> > +{
-> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
-> > +
-> > +     atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
-> > +}
-> > +
-> > +static void ipi_mux_unmask(struct irq_data *d)
-> > +{
-> > +     u32 ibit = BIT(irqd_to_hwirq(d));
-> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
->
-> The AIC code got the variable ordering correct ...
->
-> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#variable-declarations
+ .../net/ethernet/marvell/octeontx2/af/cgx.c   |  78 ++++--
+ .../net/ethernet/marvell/octeontx2/af/cgx.h   |   9 +-
+ .../marvell/octeontx2/af/lmac_common.h        |  15 +-
+ .../net/ethernet/marvell/octeontx2/af/rpm.c   | 262 ++++++++++++++++--
+ .../net/ethernet/marvell/octeontx2/af/rpm.h   |  36 ++-
+ .../net/ethernet/marvell/octeontx2/af/rvu.h   |  12 +-
+ .../ethernet/marvell/octeontx2/af/rvu_cgx.c   |  49 +++-
+ .../marvell/octeontx2/af/rvu_debugfs.c        |   2 +-
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |  10 +-
+ .../marvell/octeontx2/af/rvu_npc_hash.c       |   4 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |  40 +++
+ 11 files changed, 434 insertions(+), 83 deletions(-)
 
-Okay, I will update.
-
->
-> > +     atomic_or(ibit, &icpu->enable);
-> > +
-> > +     /*
-> > +      * The atomic_or() above must complete before the atomic_read()
-> > +      * below to avoid racing ipi_mux_send_mask().
-> > +      */
-> > +     smp_mb__after_atomic();
-> > +
-> > +     /* If a pending IPI was unmasked, raise a parent IPI immediately. */
-> > +     if (atomic_read(&icpu->bits) & ibit)
-> > +             ipi_mux_send(smp_processor_id());
-> > +}
-> > +
-> > +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
-> > +{
-> > +     u32 ibit = BIT(irqd_to_hwirq(d));
-> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
-> > +     unsigned long pending;
-> > +     int cpu;
-> > +
-> > +     for_each_cpu(cpu, mask) {
-> > +             icpu = per_cpu_ptr(ipi_mux_pcpu, cpu);
-> > +             pending = atomic_fetch_or_release(ibit, &icpu->bits);
-> > +
-> > +             /*
-> > +              * The atomic_fetch_or_release() above must complete
-> > +              * before the atomic_read() below to avoid racing with
-> > +              * ipi_mux_unmask().
-> > +              */
-> > +             smp_mb__after_atomic();
-> > +
-> > +             /*
-> > +              * The flag writes must complete before the physical IPI is
-> > +              * issued to another CPU. This is implied by the control
-> > +              * dependency on the result of atomic_read() below, which is
-> > +              * itself already ordered after the vIPI flag write.
-> > +              */
-> > +             if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
-> > +                     ipi_mux_send(cpu);
-> > +     }
-> > +}
-> > +
-> > +static const struct irq_chip ipi_mux_chip = {
-> > +     .name           = "IPI Mux",
-> > +     .irq_mask       = ipi_mux_mask,
-> > +     .irq_unmask     = ipi_mux_unmask,
-> > +     .ipi_send_mask  = ipi_mux_send_mask,
-> > +};
-> > +
-> > +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
-> > +                             unsigned int nr_irqs, void *arg)
-> > +{
-> > +     int i;
-> > +
-> > +     for (i = 0; i < nr_irqs; i++) {
-> > +             irq_set_percpu_devid(virq + i);
-> > +             irq_domain_set_info(d, virq + i, i, &ipi_mux_chip, NULL,
-> > +                                 handle_percpu_devid_irq, NULL, NULL);
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct irq_domain_ops ipi_mux_domain_ops = {
-> > +     .alloc          = ipi_mux_domain_alloc,
-> > +     .free           = irq_domain_free_irqs_top,
-> > +};
-> > +
-> > +/**
-> > + * ipi_mux_process - Process multiplexed virtual IPIs
-> > + */
-> > +void ipi_mux_process(void)
-> > +{
-> > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
-> > +     irq_hw_number_t hwirq;
-> > +     unsigned long ipis;
-> > +     unsigned int en;
-> > +
-> > +     /*
-> > +      * Reading enable mask does not need to be ordered as long as
-> > +      * this function called from interrupt handler because only
-> > +      * the CPU itself can change it's own enable mask.
-> > +      */
-> > +     en = atomic_read(&icpu->enable);
-> > +
-> > +     /*
-> > +      * Clear the IPIs we are about to handle. This pairs with the
-> > +      * atomic_fetch_or_release() in ipi_mux_send_mask().
->
-> The comments in the AIC code where you copied from are definitely
-> better...
->
-> Thanks,
->
->         tglx
-
-Regards,
-Anup
+--
+2.17.1
