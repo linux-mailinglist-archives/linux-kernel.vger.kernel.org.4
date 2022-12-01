@@ -2,104 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52DC63E859
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2EB63E85C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiLADcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 22:32:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S229805AbiLADdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 22:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLADcH (ORCPT
+        with ESMTP id S229515AbiLADda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 22:32:07 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC05B5BD69;
-        Wed, 30 Nov 2022 19:32:06 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B12ioum019070;
-        Thu, 1 Dec 2022 03:31:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BfBVfHL55y4El2LYn+90PYn4HEvJdNfd0rEfXcfans8=;
- b=d2Bx1PlwMWwhIAG7DwvtHLc+p62MU1u4nuXX640KzeoPIyJMZ0woHtPpOvpbXdSJe0Gb
- D/+iJRbIottkcTyumxQzMMz/9JQhOeZzMvoFf5irAjau1JM3wWTAoOnw6KBWfFHUJ1Tw
- lkdE6ND7gGj+NcN0i0cut1H6Gy3zg7UAV7lt6+1P3Y3f9eMa8/wrLnBpbKrXw1V/JOee
- P2XT1zrCHpopTYrGMIbaiP3ApAqoWiTdvYWGW2LxvmPdPjAefFYj6bZ1il3+OTPpnvf9
- k1QNNnt8IMNOgUOJrKq68GK/EvirkF67QOup/gplEpNyQ/0lPsQ1CcaBw5tZWv6osD/D jw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m6k3yg67t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 03:31:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B13VXGY004783
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Dec 2022 03:31:33 GMT
-Received: from [10.216.5.116] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 30 Nov
- 2022 19:31:26 -0800
-Message-ID: <24f8252f-b843-4a48-0a98-addf1f56cab5@quicinc.com>
-Date:   Thu, 1 Dec 2022 09:01:23 +0530
+        Wed, 30 Nov 2022 22:33:30 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A8E9134D;
+        Wed, 30 Nov 2022 19:33:29 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id r7so652746pfl.11;
+        Wed, 30 Nov 2022 19:33:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9A6IXbc5qL2YaA9Z5Jlm1Xw7WJGjlGvWyIB5OHQsAis=;
+        b=YIECMwftpYRiyM1xMWlkbV/0XnyVqrVgBfkT5g1BeEZlHp8wN9/9HGSzQLE9FuJ+cZ
+         ItBVplaAUKprUcagA+AcN0wciBHfQk1CI4pBt6YLXN4LpwNxhhlyMm3i9yl3uLuvcmCN
+         oaYhWXwnsW+jUZljq8jck4Pf2dXbuiLlQFmlHWwls9pOMS06jFib71hWCe6EfeX1v/DW
+         FU2ekH3KVmQyfXu+YYib15vS0stKUJ4Fode/ka8bi200oJLPH0OACQMfWc+lfMsOK/7N
+         v3J1x/75CgucbTv8JDPKk+dCioYmF8E6SPPEYoL+5MLF7Ao9sr/CcSRIqD1zPpQ36GBI
+         TGtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9A6IXbc5qL2YaA9Z5Jlm1Xw7WJGjlGvWyIB5OHQsAis=;
+        b=Ty1xu9IWaB07uFBYzdCpE77E4pLe1bfyeJbk7SL6ujgFdKytva4HnWO0km15dW9zYW
+         5L8tbLLI4JnRYmRvYzYBCIObFr3sTysdaKCiouCcSvZPGFlSTJYgx0ELmAhYLtX8CX7L
+         yO+b/3j6g/DA3oBPbcrHR2Sz8+YEFH1OJ36xLYORRPTUV3URLTHuuegmzVMhvftOkNhq
+         H7Pd1Tf0ZOgDgWz38MKTS+S67MuOEXxrJ8mdvSVi0k2t+IPqd6vaXPL0uyNN1QP2Yb+G
+         Riw1sgGmNmMI0Ol1VstWGITgW3GGs0wX97ihAkjIK3WhOQvZcswd71yzB0PHsRpJwkoU
+         4ZnA==
+X-Gm-Message-State: ANoB5plzs1iRCgV+vEqZhmiisU6LfMWHyd1L7fzqgvTkvUmXWjOsu/sf
+        yVVbicSj6yfu2hDWhlFD0FY=
+X-Google-Smtp-Source: AA0mqf4nZdsomMfIQEh7EGH92ODcn4wu9r0Fvi783ledPNVijBn3X5dzfMhdPiv18Im2BFYYXif1ww==
+X-Received: by 2002:a62:6d46:0:b0:563:54fd:3638 with SMTP id i67-20020a626d46000000b0056354fd3638mr66244570pfc.44.1669865608982;
+        Wed, 30 Nov 2022 19:33:28 -0800 (PST)
+Received: from MBP.lan (ec2-18-117-95-84.us-east-2.compute.amazonaws.com. [18.117.95.84])
+        by smtp.gmail.com with ESMTPSA id u4-20020a170902714400b0017f756563bcsm2279577plm.47.2022.11.30.19.33.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Nov 2022 19:33:28 -0800 (PST)
+From:   Schspa Shi <schspa@gmail.com>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: [PATCH v3] 9p/fd: set req refcount to zero to avoid uninitialized usage
+Date:   Thu,  1 Dec 2022 11:33:10 +0800
+Message-Id: <20221201033310.18589-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ASoC: qcom: lpass-sc7180: Add maybe_unused tag for system
- PM ops
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <robh+dt@kernel.org>, <quic_plai@quicinc.com>,
-        <bgoswami@quicinc.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
-References: <1669726428-3140-1-git-send-email-quic_srivasam@quicinc.com>
- <Y4eN4utrDnEnKu/8@google.com> <Y4eP2yFKsmxzyX/4@sirena.org.uk>
- <Y4eU7ra4w3Fm+wLM@google.com> <Y4erFaRfGXbSJLMm@sirena.org.uk>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <Y4erFaRfGXbSJLMm@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PgCB5VPgXqdJlAIFZEeTFpcNsyD3VJyQ
-X-Proofpoint-ORIG-GUID: PgCB5VPgXqdJlAIFZEeTFpcNsyD3VJyQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_02,2022-11-30_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=703 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212010020
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the new request allocated, the refcount will be zero if it is resued
+one. But if the request is newly allocated from slab, it is not fully
+initialized before add it to idr.
 
-On 12/1/2022 12:42 AM, Mark Brown wrote:
-> On Wed, Nov 30, 2022 at 05:37:50PM +0000, Matthias Kaehlcke wrote:
->
->> The tag of the applied patch is incorrect too, which is actually what I noticed:
->>
->> Fixes: a3a96e93cc88 ("ASoC: qcom: lpass-sc7280: Add system suspend/resume PM ops")
->>
->> This patch is for sc7180, so it should be:
->>
->> Fixes: 2d68148f8f85 ("ASoC: qcom: lpass-sc7180: Add system suspend/resume PM ops")
-Actually with the fix already posted v2.
-> Oh, well.  It's just a fixes tag for something that has only been in
-> -next, it doesn't really matter that much.
-Okay. Sorry for Inconvenience.
+If the p9_read_work got a response before the refcount initiated. It will
+use a uninitialized req, which will result in a bad request data struct.
+
+Here is the logs from syzbot.
+
+Corrupted memory at 0xffff88807eade00b [ 0xff 0x07 0x00 0x00 0x00 0x00
+0x00 0x00 . . . . . . . . ] (in kfence-#110):
+ p9_fcall_fini net/9p/client.c:248 [inline]
+ p9_req_put net/9p/client.c:396 [inline]
+ p9_req_put+0x208/0x250 net/9p/client.c:390
+ p9_client_walk+0x247/0x540 net/9p/client.c:1165
+ clone_fid fs/9p/fid.h:21 [inline]
+ v9fs_fid_xattr_set+0xe4/0x2b0 fs/9p/xattr.c:118
+ v9fs_xattr_set fs/9p/xattr.c:100 [inline]
+ v9fs_xattr_handler_set+0x6f/0x120 fs/9p/xattr.c:159
+ __vfs_setxattr+0x119/0x180 fs/xattr.c:182
+ __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:216
+ __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:277
+ vfs_setxattr+0x143/0x340 fs/xattr.c:309
+ setxattr+0x146/0x160 fs/xattr.c:617
+ path_setxattr+0x197/0x1c0 fs/xattr.c:636
+ __do_sys_setxattr fs/xattr.c:652 [inline]
+ __se_sys_setxattr fs/xattr.c:648 [inline]
+ __ia32_sys_setxattr+0xc0/0x160 fs/xattr.c:648
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Below is a similar scenario, the scenario in the syzbot log looks more
+complicated than this one, but this patch can fix it.
+
+     T21124                   p9_read_work
+======================== second trans =================================
+p9_client_walk
+  p9_client_rpc
+    p9_client_prepare_req
+      p9_tag_alloc
+        req = kmem_cache_alloc(p9_req_cache, GFP_NOFS);
+        tag = idr_alloc
+        << preempted >>
+        req->tc.tag = tag;
+                            /* req->[refcount/tag] == uninitialized */
+                            m->rreq = p9_tag_lookup(m->client, m->rc.tag);
+                              /* increments uninitalized refcount */
+
+        refcount_set(&req->refcount, 2);
+                            /* cb drops one ref */
+                            p9_client_cb(req)
+                            /* reader thread drops its ref:
+                               request is incorrectly freed */
+                            p9_req_put(req)
+    /* use after free and ref underflow */
+    p9_req_put(req)
+
+To fix it, we can initize the refcount to zero before add to idr.
+
+Reported-by: syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+
+--
+
+Changelog:
+v1 -> v2:
+        - Set refcount to fix the problem.
+v2 -> v3:
+        - Comment messages improve as asmadeus suggested.
+---
+ net/9p/client.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/net/9p/client.c b/net/9p/client.c
+index aaa37b07e30a..ec74cd29d3bc 100644
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -297,6 +297,11 @@ p9_tag_alloc(struct p9_client *c, int8_t type, uint t_size, uint r_size,
+ 	p9pdu_reset(&req->rc);
+ 	req->t_err = 0;
+ 	req->status = REQ_STATUS_ALLOC;
++	/* refcount needs to be set to 0 before inserting into the idr
++	 * so p9_tag_lookup does not accept a request that is not fully
++	 * initialized. refcount_set to 2 below will mark request live.
++	 */
++	refcount_set(&req->refcount, 0);
+ 	init_waitqueue_head(&req->wq);
+ 	INIT_LIST_HEAD(&req->req_list);
+ 
+-- 
+2.37.3
+
