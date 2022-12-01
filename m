@@ -2,212 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D03C63F2A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C844A63F2A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiLAOV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        id S231844AbiLAOVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbiLAOVY (ORCPT
+        with ESMTP id S231842AbiLAOVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:21:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AE948424;
-        Thu,  1 Dec 2022 06:21:22 -0800 (PST)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNJ8T3jJVz6H7Wb;
-        Thu,  1 Dec 2022 22:18:33 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 15:21:20 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Dec
- 2022 14:21:19 +0000
-Date:   Thu, 1 Dec 2022 14:21:18 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 08/11] cxl/mem: Wire up event interrupts
-Message-ID: <20221201142118.00002933@Huawei.com>
-In-Reply-To: <20221201002719.2596558-9-ira.weiny@intel.com>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-9-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Dec 2022 09:21:33 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F6AFCE7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:21:27 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id j16so2686950lfe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 06:21:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QayC88wUqwsw2iqi2IOXZrL6t5JP2hXiPUA9QtpdHcs=;
+        b=DXHRvX0VZaXDwbpjeIJgmFqakqFFgbl34ZQES9dxdvaIangsk0jsRJIFx+xkWqZ+Hk
+         vjU7EVmBCGvc8XA+U/ldR17XBtEVsiaIiJ8qll37ldNFQdXeYztxzdDbOS8GqOV0B6TY
+         Wk5ACoI7VqF44LOCchzbTGgdtHxGuwqP0Ptstfx8M2YEIszjy3Zm7sMggcqSF8tBhtzT
+         0sGN8hIk1nIyKs1i573i5so/Sgqmuz0BowKkNYLR5BMDcoXrDAdJ/mWj0W9vjqKl5tNY
+         qsqrfk9LniVSu/7adASUxhpKia3es6SF+aAvCyYCne2tIMY5yF3SR+2BctFvBP/UJzdz
+         Yb1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QayC88wUqwsw2iqi2IOXZrL6t5JP2hXiPUA9QtpdHcs=;
+        b=lPXEKyJG+7EUsgJgTaka8n9DrKfo6wpEOU/aHSs/xE1gyyQcU9OAHKfiRzSnVMvBDe
+         KBRYBmPzryTLEiwGu9fYkEuxcnR0O35xBKtgA0UjuV+VjU0/KF8bHvKTgVUcfX3mOpN2
+         kUN9D24sFzQSbecirfrooccVXnvsgJ/kRTg4Yv+xTUz/spxDEBX1VioIaC0sIQDdXjs+
+         R2lZyrKSauSqQXABk/Wwyhn9iL0UDdmC3onoxNR+HgZomimrdvjP2LSSsh+5xXkFQlyV
+         p6fOW2lBl/cuVpXAgl7gPyNoBvccUHaeZUDWIUjcdMMN757Uy4kZqKvR/o6GdWI44WZ0
+         7zoA==
+X-Gm-Message-State: ANoB5pnIOR+b5/j0oJTfbKDNg6rat+gg9wDAHRiNzumv4OfUdrqHmC5n
+        wZksL4Ak+iTUMOret4KCjqk5vA==
+X-Google-Smtp-Source: AA0mqf5ZvTB7vDjVJ4NmJRjR+eA74H+19Kpc80n/TYFKPrOiTH2+sahR/ckHtxS3Rp5e8AJZIPazEw==
+X-Received: by 2002:a05:6512:74d:b0:494:7551:b764 with SMTP id c13-20020a056512074d00b004947551b764mr17426635lfs.574.1669904486334;
+        Thu, 01 Dec 2022 06:21:26 -0800 (PST)
+Received: from [192.168.1.101] (95.49.124.14.neoplus.adsl.tpnet.pl. [95.49.124.14])
+        by smtp.gmail.com with ESMTPSA id d11-20020ac2544b000000b004946bb30469sm661877lfn.82.2022.12.01.06.21.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 06:21:25 -0800 (PST)
+Message-ID: <a849ab57-3a1d-49f6-eba5-2b706220f064@linaro.org>
+Date:   Thu, 1 Dec 2022 15:21:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 4/4] soc: qcom: socinfo: Add SM6115 / SM4250 SoC IDs to
+ the soc_id table
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
+        a39.skl@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20221201141619.2462705-1-bhupesh.sharma@linaro.org>
+ <20221201141619.2462705-5-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221201141619.2462705-5-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 16:27:16 -0800
-ira.weiny@intel.com wrote:
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> CXL device events are signaled via interrupts.  Each event log may have
-> a different interrupt message number.  These message numbers are
-> reported in the Get Event Interrupt Policy mailbox command.
-> 
-> Add interrupt support for event logs.  Interrupts are allocated as
-> shared interrupts.  Therefore, all or some event logs can share the same
-> message number.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-A few trivial comments, but only superficially code style stuff which you
-can ignore if you feel strongly about current style or it matches existing
-file style etc...
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+On 1.12.2022 15:16, Bhupesh Sharma wrote:
+> Add SoC ID table entries for the SM6115 / SM4250 and variants.
 > 
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
-> Changes from V1:
-> 	Remove unneeded evt_int_policy from struct cxl_dev_state
-> 	defer Dynamic Capacity support
-> 	Dave Jiang
-> 		s/irq/rc
-> 		use IRQ_NONE to signal the irq was not for us.
-> 	Jonathan
-> 		use msi_enabled rather than nr_irq_vec
-> 		On failure explicitly set CXL_INT_NONE
-> 		Add comment for Get Event Interrupt Policy
-> 		use devm_request_threaded_irq()
-> 		Use individual handler/thread functions for each of the
-> 		logs rather than struct cxl_event_irq_id.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  drivers/soc/qcom/socinfo.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Changes from RFC v2
-> 	Adjust to new irq 16 vector allocation
-> 	Jonathan
-> 		Remove CXL_INT_RES
-> 	Use irq threads to ensure mailbox commands are executed outside irq context
-> 	Adjust for optional Dynamic Capacity log
-> ---
->  drivers/cxl/core/mbox.c      |  44 +++++++++++-
->  drivers/cxl/cxlmem.h         |  30 ++++++++
->  drivers/cxl/pci.c            | 130 +++++++++++++++++++++++++++++++++++
->  include/uapi/linux/cxl_mem.h |   2 +
->  4 files changed, 204 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 450b410f29f6..2d384b0fc2b3 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -179,6 +179,30 @@ struct cxl_endpoint_dvsec_info {
->  	struct range dvsec_range[2];
->  };
->  
-> +/**
-> + * Event Interrupt Policy
-> + *
-> + * CXL rev 3.0 section 8.2.9.2.4; Table 8-52
-> + */
-> +enum cxl_event_int_mode {
-> +	CXL_INT_NONE		= 0x00,
-> +	CXL_INT_MSI_MSIX	= 0x01,
-> +	CXL_INT_FW		= 0x02
-> +};
-> +#define CXL_EVENT_INT_MODE_MASK 0x3
-> +#define CXL_EVENT_INT_MSGNUM(setting) (((setting) & 0xf0) >> 4)
-> +struct cxl_event_interrupt_policy {
-> +	u8 info_settings;
-> +	u8 warn_settings;
-> +	u8 failure_settings;
-> +	u8 fatal_settings;
-> +} __packed;
-> +
-> +static inline bool cxl_evt_int_is_msi(u8 setting)
-> +{
-> +	return CXL_INT_MSI_MSIX == (setting & CXL_EVENT_INT_MODE_MASK);
-
-Maybe a case for FIELD_GET() though given the defines are all local
-it is already obvious what this is doing so fine if you prefer to
-keep it as is.
-
-> +}
-...
-
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index 11e95a95195a..3c0b9199f11a 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -449,6 +449,134 @@ static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
->  	cxlds->msi_enabled = true;
->  }
->  
-> +static irqreturn_t cxl_event_info_thread(int irq, void *id)
-> +{
-> +	struct cxl_dev_state *cxlds = id;
-> +
-> +	cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_INFO);
-> +	return IRQ_HANDLED;
-> +}
-
-I'm not a great fan of macros, but maybe this is a case for them.
-
-> +
-> +static irqreturn_t cxl_event_info_handler(int irq, void *id)
-> +{
-> +	struct cxl_dev_state *cxlds = id;
-> +	u32 status = readl(cxlds->regs.status + CXLDEV_DEV_EVENT_STATUS_OFFSET);
-
-Superficial and this is guaranteed to work (8.2.8 allow all sizes of read up
-to 64 bytes), but maybe should treat this as a 64 bit register as that aligns
-better with spec?
-
-> +
-> +	if (CXLDEV_EVENT_STATUS_INFO & status)
-
-Another maybe FIELD_GET() case?
-
-> +		return IRQ_WAKE_THREAD;
-> +	return IRQ_NONE;
-> +}
-> +
-> +static irqreturn_t cxl_event_warn_thread(int irq, void *id)
-> +{
-> +	struct cxl_dev_state *cxlds = id;
-
-Why id?  I'd call it what it is (maybe _cxlsd) and not bother with
-the local variable in this case as it is only used once and doesn't
-need the type.
-
-static irqreturn_t cxl_event_warn_thread(int irq, void *cxlds)
-{
-	cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_WARN);
-
-	return IRQ_HANDLED;
-}
-
-
-> +
-> +	cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_WARN);
-> +	return IRQ_HANDLED;
-> +}
-> +
-
-...
-
-
-
+> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+> index 92b27db60840..8f9e3d0e0526 100644
+> --- a/drivers/soc/qcom/socinfo.c
+> +++ b/drivers/soc/qcom/socinfo.c
+> @@ -328,11 +328,13 @@ static const struct soc_id soc_id[] = {
+>  	{ qcom_board_id(IPQ8071A) },
+>  	{ qcom_board_id(IPQ6018) },
+>  	{ qcom_board_id(IPQ6028) },
+> +	{ qcom_board_id(SM4250) },
+>  	{ qcom_board_id(IPQ6000) },
+>  	{ qcom_board_id(IPQ6010) },
+>  	{ qcom_board_id(SC7180) },
+>  	{ qcom_board_id(SM6350) },
+>  	{ qcom_board_id(SM8350) },
+> +	{ qcom_board_id(SM6115) },
+>  	{ qcom_board_id(SC8280XP) },
+>  	{ qcom_board_id(IPQ6005) },
+>  	{ qcom_board_id(QRB5165) },
+> @@ -340,6 +342,8 @@ static const struct soc_id soc_id[] = {
+>  	{ qcom_board_id(SM7225) },
+>  	{ qcom_board_id(SA8295P) },
+>  	{ qcom_board_id(SA8540P) },
+> +	{ qcom_board_id(QCM4290) },
+> +	{ qcom_board_id(QCS4290) },
+>  	{ qcom_board_id_named(SM8450_2, "SM8450") },
+>  	{ qcom_board_id_named(SM8450_3, "SM8450") },
+>  	{ qcom_board_id(SC7280) },
