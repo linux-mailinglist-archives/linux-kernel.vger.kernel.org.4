@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6785E63F9EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4AF63F9EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiLAVgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S231205AbiLAVgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiLAVgl (ORCPT
+        with ESMTP id S230487AbiLAVgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:36:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D503CC3591
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:36:40 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669930599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=icig6D4uwgAQyDOUbFopZsRfmuZi+WK53OPg6HW+JRU=;
-        b=NX+k8RQM4YlaqjZeJz0Y1Vk+qNKus8Tl1OBXr2OcSvK7SaUUzwMvwxphSSY3/Mc5SGhN8V
-        CEbx9R92E8fFpXIiWX4jNtXg4QgpAlXhAHeRI8M6pfmC1+5ZwDVfVZO+LJQeDAPEzy3S78
-        gczQcIJlYC9MP82mxP/f7zWVLGT4BLYlrtXXNolI80h/kYsy97MkdzdYhn5PPlIclg9reJ
-        PDO7Mgjtz1Y/5u22yHRkdTCp+nGy28tcgai9RC3WjjMxcSFu02whtA+C+LITUpVJEVlZ1I
-        hQxVxsuIIhVsLHDeA81W/rYwee1Va/tNX6vZE35n7Do9abnsPp0Kv3xFs205Zw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669930599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=icig6D4uwgAQyDOUbFopZsRfmuZi+WK53OPg6HW+JRU=;
-        b=0GzhW6EDRm8dAsMiWKcYDsegtU3geKer2vTa1G5lCIV8FGmWBovVXy3iWXfpsvPbFr69p5
-        fZ8ADrX8JcsV3fCg==
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v5 03/40] printk: Prepare for SRCU console list
- protection
-In-Reply-To: <Y4jw3hSuwt3RG4DL@dev-arch.thelio-3990X>
-References: <20221116162152.193147-1-john.ogness@linutronix.de>
- <20221116162152.193147-4-john.ogness@linutronix.de>
- <Y4jw3hSuwt3RG4DL@dev-arch.thelio-3990X>
-Date:   Thu, 01 Dec 2022 22:42:25 +0106
-Message-ID: <87lenqq012.fsf@jogness.linutronix.de>
+        Thu, 1 Dec 2022 16:36:46 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BE4C3591
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:36:45 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id h16so2710697qtu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 13:36:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=quISd2pvnqmw/9o3WvzMsMR0W9P1ncFjwjxtR6uCSwc=;
+        b=Tsuz+a1y7dxwXx0w+7ppxovTf/QgqSilAje86IwDPKGmK9k6yZmBA8duaBYj7V8F4P
+         QvzKrzA32dGkk3LlNOPgpK3qsFFMCZh5+iMix2N0HwM5YJqIYxwoRhioDi1dr3fXIGvn
+         8sYlJ4PQLj/QsdfFN74H8i2QKJJOnvg8d3iG4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=quISd2pvnqmw/9o3WvzMsMR0W9P1ncFjwjxtR6uCSwc=;
+        b=y094zIgs7PSk4rB0PP/QF/g5i3gDzpigcljW6c+qhbHdE1NNuAlFkmYkGxwRqkBBnY
+         hb61uqYlS8nQJoj0+ATJ9oqx32sBD3UrWnXVpV8TUlf+kPg/45UAdrv6iP7iAKvmvxrP
+         EpsYwq2ktBCTainMRv05W0O2Hbos96BPX64dEKaYlgd6fk8Db5s3cdKDu12Je9YQEJk7
+         I6PDBRk9+24ABO3mZJ9T52/dbAxRyfCVt43KgHttz7Tg40siNk0sVb5xWmve+OYACeaQ
+         BSQg1P8+jW12oZ2C5g0aVs9xBVkQ3DrIZkZFuung9E9tvz9IAlTwJzl0CjoGpB8tpq5h
+         s9ZQ==
+X-Gm-Message-State: ANoB5pkpel0rbUsbmaSUBpSGxl2567Bz/1vlefikVpyod1g4huZ65dhx
+        dvn6Q4dm5xednO/5/wVd0XmdEHdVrKYBpBVWo8PHoQ==
+X-Google-Smtp-Source: AA0mqf5han2nODM1TVLqeIK1N63h/oWnWVnwyyUnaPkAUSrRFLX2YZBCX6cW18RsykD2s9X5bkAaSL3JHHPueJy019w=
+X-Received: by 2002:a37:f509:0:b0:6fb:ff0f:e7e0 with SMTP id
+ l9-20020a37f509000000b006fbff0fe7e0mr17496799qkk.747.1669930604365; Thu, 01
+ Dec 2022 13:36:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221130231936.1666390-1-wonchung@google.com> <CACeCKad16bs_f6bLthTAoEL28tPvf1S10WDeM7ugeaS9g7R25w@mail.gmail.com>
+ <CANLzEksD=dKgPuCUD74b3YQKCApbZKO_t7Q=tyNKONvAOQ89hw@mail.gmail.com>
+In-Reply-To: <CANLzEksD=dKgPuCUD74b3YQKCApbZKO_t7Q=tyNKONvAOQ89hw@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 1 Dec 2022 13:36:33 -0800
+Message-ID: <CACeCKad7RGVPGdrd9WNpRhn3n99R5TG9zFJpCrMj7CDLK18rMA@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: Create new USB driver for RGB keyboard
+ in ChromeOS devices
+To:     Benson Leung <bleung@chromium.org>
+Cc:     Won Chung <wonchung@google.com>, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+Hey Benson,
 
-Thanks for reporting this. Patch below.
+On Thu, Dec 1, 2022 at 1:00 PM Benson Leung <bleung@chromium.org> wrote:
+>
+> Hi Prashant,
+>
+>
+> On Thu, Dec 1, 2022 at 12:10 PM Prashant Malani <pmalani@chromium.org> wrote:
+> >
+> > Hi Won,
+> >
+> > On Wed, Nov 30, 2022 at 3:19 PM Won Chung <wonchung@google.com> wrote:
+> > >
+> > > Without any driver bound to RGB keyboard, it may not be suspended
+> > > properly, preventing USB xHCI to be suspended and causing power drain.
+> > > Create new USB driver for RGB keyboard so that it can be suspended
+> > > properly.
+> >
+> > This seems like overkill. Can't you set this from USB's sysfs nodes
+> > like power/control [1] ?
+> >
+> > [1] https://www.kernel.org/doc/html/latest/driver-api/usb/power-management.html#the-user-interface-for-dynamic-pm
+> >
+> >
+> > Best regards,
+> >
+> > -Prashant
+>
+> We're seeing some behavior where a bound driver is needed in order for
+> this USB device to properly enter suspend state. Just manipulating the
+> power/control and other sysfs nodes for this usb device when there's
+> no driver in the kernel doesn't seem to affect the device's ability to
+> drop into a usb low power state.
 
-@paulmck: Please also take a look below.
+That seems like an issue with the device then, which should be debugged
+from the device side and/or its interaction with the USB subsystem.
 
-On 2022-12-01, Nathan Chancellor <nathan@kernel.org> wrote:
-> bad: scheduling from the idle thread!
-> CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc1+ #1
-> Hardware name: PowerMac3,1 7400 0xc0209 PowerMac
-> Call Trace:
-> [c0bc1db0] [c07f07e0] dump_stack_lvl+0x34/0x50 (unreliable)
-> [c0bc1dd0] [c008429c] dequeue_task_idle+0x34/0x5c
-> [c0bc1df0] [c0820924] __schedule+0x56c/0x5c4
-> [c0bc1e40] [c08209d0] schedule+0x54/0xfc
-> [c0bc1e60] [c0826034] schedule_timeout+0x13c/0x194
-> [c0bc1ea0] [c082134c] __wait_for_common+0xcc/0x1f4
-> [c0bc1ee0] [c00ac8ac] synchronize_srcu+0xc8/0x12c
-> [c0bc1f20] [c00a0230] unregister_console+0xc8/0x10c
-> [c0bc1f40] [c009e314] register_console+0x2f4/0x390
-> [c0bc1f60] [c0a17510] pmz_console_init+0x34/0x48
-> [c0bc1f70] [c0a0491c] console_init+0x9c/0xf0
-> [c0bc1fa0] [c09f5584] start_kernel+0x588/0x6ac
-> [c0bc1ff0] [00003540] 0x3540
+>
+> Also, I synced with Won about this offline, but the primary concern is
+> not this prism usb device runtime suspending, it's actually it's
+> ability to enter suspend state during system suspend. Right now, this
+> internal usb device is keeping the whole system from entering lower
+> S0iX states because it's not sleeping. This driver patch doesn't
+> address that yet, but I'd like Won to dig down and see if he can get
+> it suspending at suspend time too.
 
-This config is using TINY_RCU. Its srcu_synchronize() implementation
-does not check if it called before scheduling is ready. The following
-patch will fix it.
-
-@paulmck: Should it check (system_state < SYSTEM_SCHEDULING) instead
-since TINY_RCU does not use @rcu_scheduler_active?
-
-John Ogness
-
-diff --git a/kernel/rcu/srcutiny.c b/kernel/rcu/srcutiny.c
-index 33adafdad261..35338e6e37e7 100644
---- a/kernel/rcu/srcutiny.c
-+++ b/kernel/rcu/srcutiny.c
-@@ -197,6 +197,9 @@ void synchronize_srcu(struct srcu_struct *ssp)
- {
- 	struct rcu_synchronize rs;
- 
-+	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
-+		return;
-+
- 	init_rcu_head_on_stack(&rs.head);
- 	init_completion(&rs.completion);
- 	call_srcu(ssp, &rs.head, wakeme_after_rcu);
+Auto-suspend / dynamic PM should take care of that FWIU (but I may be mistaken).
