@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D0A63F0DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE0063F0DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiLAMtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:49:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        id S231189AbiLAMtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiLAMtm (ORCPT
+        with ESMTP id S230354AbiLAMtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Dec 2022 07:49:42 -0500
 Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183AC92081
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C81992A22
         for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 04:49:41 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id c20-20020a5d9754000000b006dbd4e6a5abso1456508ioo.17
+Received: by mail-io1-f69.google.com with SMTP id t2-20020a6b6402000000b006dea34ad528so1483092iog.1
         for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 04:49:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8IHSWu8cpROGIek2vroiLGwTRbK0xKUT/twwPlglJnA=;
-        b=vKrwoteYvt1mcWt0ZpY4em8o1HWI7r93IQEJ+QEUn+sPuJJqar9HfISMPG04hKLoO/
-         od3NzF3i8tPLo28PBDULvjAmY3MgZ+6djRD1fdC/iagx7OSzwoHOYEWGglpUUUCkaPeY
-         odjMEA/dUNeAHW6BCgtciVBszg5+6WS1u0JehduZvTcIYqgyzkmY8JfHMD2DPKGqTAM0
-         2deR8F17FaBj3ErQl6oeK4XdBH7nRwLMK8Wl+DW0KBZ5cWDfuTRE3TxJ0/FLevCPq+BD
-         E0EEZBNZVPUHbAKOwFTOR4ksqxMzdrU5KA5zGA+frakCH7USJmd56qrWxid+kZ5jyrLB
-         xxIg==
-X-Gm-Message-State: ANoB5pl2z1y3M2r04iZeggNcLgcrjU44ty5dPZqxxu1LK0n32Ta2DytK
-        1RPT0axhYlKYP+7uXMHBCBCdR5Aw7G7VANTPkSiQCC3Bes77
-X-Google-Smtp-Source: AA0mqf6JbipCj5IoGcHzLZjfU923ilDwvC/rACUt+vw2J+y1KJ4Qt1F874qk1U3uBoLQWzZJVSQxa8hkRFn26Ld1oDoahWmOIOSG
+        bh=RZveoZjGkmARbnhpw1myZ/t9BM4s+mPwNKve8eAbSuw=;
+        b=tKpnuQV42DBpEjuQ8lbgPkrvsWzNJhLuM+/k87F7Q8pYyx/Br+xDZmpkfLYOMX3pMI
+         aPxiR7n0GerGcuQeyft7PyUPnUuWKvYZzwlU0mnpartyvwxGwbA+xMEM+lxXojtx/T4a
+         cwzNyw2V4sUHzQE7M0ZUzOMUULR31SuFrnKMP0EjCjKC8Od3d6QMkiIeuPfwUKtQzwzg
+         Iu2l7R7yzpMQeELa2vD0VHZUIlb/LwEjgURoWJgaJP5ynbHcX8YFS7cLIQd8aRCEMOdL
+         GaPr0MVT1FFds4+5Wel0e+q2Vc8RJk38ck82VMCl4v8SSCg/IV7R+YAbztpDDpHJraUl
+         TJEg==
+X-Gm-Message-State: ANoB5pn43V2DKImZvbSOp4maWLVbHe/9NS7vrqDUbyaELbBzQKN7s7VN
+        BoP/pj67y5u+KiP25JydeHpUvdIHwXhJHL5f1tDCZcXf08WD
+X-Google-Smtp-Source: AA0mqf7S/dtBzbfs7KhwNVYNFCW9vEBX60grUHFf0i6Wn7JjDN97HSYbMOZoYv/jIxItTYOEYg/Q65GsS5oSG7ODHBZQEY0Nmncl
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:346:b0:388:9146:8361 with SMTP id
- x6-20020a056638034600b0038891468361mr17144222jap.19.1669898980456; Thu, 01
+X-Received: by 2002:a05:6602:4011:b0:6de:a999:203b with SMTP id
+ bk17-20020a056602401100b006dea999203bmr27114113iob.144.1669898980696; Thu, 01
  Dec 2022 04:49:40 -0800 (PST)
 Date:   Thu, 01 Dec 2022 04:49:40 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008a836b05eec3a7e9@google.com>
-Subject: [syzbot] WARNING in hfsplus_cat_read_inode
-From:   syzbot <syzbot+e2787430e752a92b8750@syzkaller.appspotmail.com>
-To:     damien.lemoal@opensource.wdc.com, jlayton@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Message-ID: <0000000000008e23d405eec3a7c4@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in sysv_new_block
+From:   syzbot <syzbot+eda782c229b243c648e9@syzkaller.appspotmail.com>
+To:     hch@infradead.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -58,73 +57,120 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    cdb931b58ff5 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1672f7fd880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ec7118319bfb771e
-dashboard link: https://syzkaller.appspot.com/bug?extid=e2787430e752a92b8750
+HEAD commit:    01f856ae6d0c Merge tag 'net-6.1-rc8-2' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15fddbc5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=eda782c229b243c648e9
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120b96a7880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116da6bd880000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=179d6e75880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124b96a7880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/07e4eae17e60/disk-cdb931b5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fc4815dd00c0/vmlinux-cdb931b5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0f46b40f30e1/Image-cdb931b5.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/3082309c63cc/mount_0.gz
+disk image: https://storage.googleapis.com/syzbot-assets/5428d604f56a/disk-01f856ae.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e953d290d254/vmlinux-01f856ae.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3f71610a4904/bzImage-01f856ae.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/e2e13128a6e4/mount_1.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e2787430e752a92b8750@syzkaller.appspotmail.com
+Reported-by: syzbot+eda782c229b243c648e9@syzkaller.appspotmail.com
 
-loop0: detected capacity change from 0 to 1024
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3073 at fs/hfsplus/inode.c:534 hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
-Modules linked in:
-CPU: 0 PID: 3073 Comm: syz-executor278 Not tainted 6.1.0-rc7-syzkaller-33054-gcdb931b58ff5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
-lr : hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
-sp : ffff80000ff23640
-x29: ffff80000ff23850 x28: ffff0000c23a0000 x27: 000000000000000b
-x26: ffff0000c9e92000 x25: 00000000000000ff x24: ffff0000cbd81530
-x23: ffff0000c7bffdf0 x22: ffff0000c7bffd30 x21: 0000000000000058
-x20: ffff80000ff23880 x19: ffff0000cbd81bb0 x18: 00000000000000c0
-x17: ffff80000dda8198 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000002 x12: ffff80000d514f80
-x11: ff808000088e828c x10: 0000000000000000 x9 : ffff8000088e828c
-x8 : ffff0000c23a0000 x7 : 0000000000000000 x6 : 0000000000000000
-x5 : ffff80000ff235f6 x4 : ffff0001803f7028 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : 0000000000000058 x0 : 00000000000000f8
-Call trace:
- hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
- hfsplus_iget+0x244/0x2ac fs/hfsplus/super.c:84
- hfsplus_fill_super+0x480/0x864 fs/hfsplus/super.c:503
- mount_bdev+0x1b8/0x210 fs/super.c:1401
- hfsplus_mount+0x44/0x58 fs/hfsplus/super.c:641
- legacy_get_tree+0x30/0x74 fs/fs_context.c:610
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x890 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-irq event stamp: 15818
-hardirqs last  enabled at (15817): [<ffff80000c0963d4>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (15817): [<ffff80000c0963d4>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (15818): [<ffff80000c083704>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (15354): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (15241): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+sysv_free_block: flc_count > flc_size
+==================================================================
+BUG: KASAN: use-after-free in sysv_new_block+0x73f/0x910 fs/sysv/balloc.c:113
+Read of size 4 at addr ffff8880712d60c8 by task syz-executor118/3633
+
+CPU: 1 PID: 3633 Comm: syz-executor118 Not tainted 6.1.0-rc7-syzkaller-00101-g01f856ae6d0c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:284
+ print_report+0x107/0x1f0 mm/kasan/report.c:395
+ kasan_report+0xcd/0x100 mm/kasan/report.c:495
+ sysv_new_block+0x73f/0x910 fs/sysv/balloc.c:113
+ alloc_branch fs/sysv/itree.c:134 [inline]
+ get_block+0x2b5/0x16d0 fs/sysv/itree.c:251
+ __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
+ __block_write_begin fs/buffer.c:2041 [inline]
+ block_write_begin+0x93/0x1e0 fs/buffer.c:2102
+ sysv_write_begin+0x2d/0x60 fs/sysv/itree.c:485
+ generic_perform_write+0x2e4/0x5e0 mm/filemap.c:3753
+ __generic_file_write_iter+0x176/0x400 mm/filemap.c:3881
+ generic_file_write_iter+0xab/0x310 mm/filemap.c:3913
+ call_write_iter include/linux/fs.h:2199 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x7dc/0xc50 fs/read_write.c:584
+ ksys_write+0x177/0x2a0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3801c82ee9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffce2453d28 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3801c82ee9
+RDX: 00000000fffffd5e RSI: 000000002000ad00 RDI: 0000000000000004
+RBP: 00007ffce2453e20 R08: 0000000000000031 R09: 0000000000000031
+R10: 0000000000009e07 R11: 0000000000000246 R12: 0000000000000048
+R13: 00007f3801d0c7e0 R14: 00007ffce2453d82 R15: 00007ffce2453df0
+ </TASK>
+
+The buggy address belongs to the physical page:
+page:ffffea0001c4b580 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x712d6
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001c4b5c8 ffffea0001c4b548 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 0, migratetype Movable, gfp_mask 0x8(__GFP_MOVABLE), pid 1, tgid 1 (swapper/0), ts 10227233924, free_ts 11569433830
+ split_map_pages+0x25b/0x540 mm/compaction.c:97
+ isolate_freepages_range+0x4ac/0x510 mm/compaction.c:735
+ alloc_contig_range+0x6a9/0x980 mm/page_alloc.c:9374
+ __alloc_contig_pages mm/page_alloc.c:9397 [inline]
+ alloc_contig_pages+0x3c8/0x4e0 mm/page_alloc.c:9474
+ debug_vm_pgtable_alloc_huge_page+0xcd/0x11e mm/debug_vm_pgtable.c:1098
+ init_args+0xa3a/0xdba mm/debug_vm_pgtable.c:1221
+ debug_vm_pgtable+0x9a/0x4a6 mm/debug_vm_pgtable.c:1259
+ do_one_initcall+0x1c9/0x400 init/main.c:1303
+ do_initcall_level+0x168/0x218 init/main.c:1376
+ do_initcalls+0x4b/0x8c init/main.c:1392
+ kernel_init_freeable+0x428/0x5d5 init/main.c:1631
+ kernel_init+0x19/0x2b0 init/main.c:1519
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1459 [inline]
+ free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3483
+ free_contig_range+0xa3/0x160 mm/page_alloc.c:9496
+ destroy_args+0xfe/0x935 mm/debug_vm_pgtable.c:1031
+ debug_vm_pgtable+0x44d/0x4a6 mm/debug_vm_pgtable.c:1354
+ do_one_initcall+0x1c9/0x400 init/main.c:1303
+ do_initcall_level+0x168/0x218 init/main.c:1376
+ do_initcalls+0x4b/0x8c init/main.c:1392
+ kernel_init_freeable+0x428/0x5d5 init/main.c:1631
+ kernel_init+0x19/0x2b0 init/main.c:1519
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Memory state around the buggy address:
+ ffff8880712d5f80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880712d6000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff8880712d6080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                              ^
+ ffff8880712d6100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880712d6180: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
 
 ---
