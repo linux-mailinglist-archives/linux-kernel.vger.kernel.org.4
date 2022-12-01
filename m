@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5481E63E7F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9883E63E801
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiLACj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S229755AbiLACnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 21:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiLACj4 (ORCPT
+        with ESMTP id S229708AbiLACnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:39:56 -0500
-Received: from pv50p00im-ztdg10011201.me.com (pv50p00im-ztdg10011201.me.com [17.58.6.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D0592A13
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
-        s=sig1; t=1669862394;
-        bh=vVzCkNibPb24yKs1Ys7tKLpUoqZjpBwIEYhRVWu8Mng=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=ETeO8VXzTbHIBsYKIyZ8oDj1h+NtJlzNgAkY+XB0ctRKE2jwlmL7GJhHKs2gTspUJ
-         VrtmXPNckrBix1mb6rJRv++hH3SOevqd60j02vwmG9wq0r9SNdA5bbeqRUBY9KxnS5
-         pmEskund6RIEfdlJYdIMlYCc+WSa+Nousp/HydTjiP7ZK3aXeWhmddXk+o4/n+kLvQ
-         fL+zHZieoUSOYzWHAsXFI0hNKXveD50UK8Y4KWlbC9nO8tm8yKhTrJqDR497Hdvvg/
-         8+kJsWuEuKMJmrSCYREdXQlGXMPwwMYOJhi4KxHlsoInh84rVP9o3pAss0j/pU/E4f
-         cm/E2jdP4c5Yg==
-Received: from vanilla.lan (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-ztdg10011201.me.com (Postfix) with ESMTPSA id 08C1468086F;
-        Thu,  1 Dec 2022 02:39:50 +0000 (UTC)
-From:   Jun ASAKA <JunASAKA@zzy040330.moe>
-To:     Jes.Sorensen@gmail.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jun ASAKA <JunASAKA@zzy040330.moe>
-Subject: [PATCH v2] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
-Date:   Thu,  1 Dec 2022 10:39:45 +0800
-Message-Id: <20221201023945.6221-1-JunASAKA@zzy040330.moe>
-X-Mailer: git-send-email 2.38.1
+        Wed, 30 Nov 2022 21:43:42 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BAF95800
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:43:40 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x2so639302edd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:43:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WMuFoLwq6if5lfsejZqkU+pkwkmJVnwkSd6yWbaeyOY=;
+        b=QFoku3nZm3W8q3prt+EhbRpDYHxv4fc7ergeIIGsDpA+3Us5h/oncs8WpRUeKomnd0
+         pO6VNkJd8slm/hEijPmdOIuqWZNazLV9gkrAwJ1ulptle/tSyJChy6osS7TPbu5fukMY
+         8kQiONr6xYZWU2QR+Yasaf4UX7q0xgko6Kik9x5HBtqiwl9xH4yHYqWQckGrt/xAm5xP
+         Seg86FyFzAHMbABPIJQmygBFBUrIXUxUYSTx3RtmiwEQteE3JQflis3tLloUhcBkaPQp
+         8mCSNbyfIy1D0e6hSbnKmBBcgRYeQhCO/Nc3Ru18Zt6EsiLncfRYlb5jF1iqjkJ0HfaY
+         /hTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WMuFoLwq6if5lfsejZqkU+pkwkmJVnwkSd6yWbaeyOY=;
+        b=m7vNRY99wBe1i2CMJN3zBQ3ujbHUdq1Vy+Zo9si3ttOzvIx81nVb6WBXP+zQ9kuxi8
+         00LPqgg+n28HMTQa2VUVDCAapK8JLO5Ej+L47bZmJUO+q4ylFVn4ut4Sj9Sb55FH1GyZ
+         SejKTiLw6J9yHamRje+RpRmBie9+/ab5Fdt/2rLX8zn9WV/8B3RJ7khywVa9LeF2Qavd
+         mBpyxnIT71JXk6sE9s9y+d4mcqPfT8kP08HCE9KmWO5aBEYnWWBB8ykY1Tt549g1nIHt
+         XA0L7AuBypiVfAa45fwXgi+zjTnr/lewveQbokOgAqk6hXsIOp+JFqceJmcL951INbsB
+         crmg==
+X-Gm-Message-State: ANoB5pnDBywfEGKX8oshaydCI0MHrJkOSPHTRkBPWCdm9puxm7LrMzDA
+        YQfbWGybjSfc6Key01abUj+OPg==
+X-Google-Smtp-Source: AA0mqf6v2PExAoNMrIKI4AK1MjDKAsaOkEr1IGWcxKgj9FPBNjIQkw8GS+pomOGeXWinf7x9/1e4hw==
+X-Received: by 2002:a05:6402:206b:b0:46a:d5ed:e066 with SMTP id bd11-20020a056402206b00b0046ad5ede066mr24110003edb.335.1669862619507;
+        Wed, 30 Nov 2022 18:43:39 -0800 (PST)
+Received: from andrea (host-79-26-70-104.retail.telecomitalia.it. [79.26.70.104])
+        by smtp.gmail.com with ESMTPSA id q3-20020a056402040300b004616b006871sm1210741edv.82.2022.11.30.18.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 18:43:38 -0800 (PST)
+Date:   Thu, 1 Dec 2022 03:43:32 +0100
+From:   Andrea Parri <andrea@rivosinc.com>
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, guoren@kernel.org,
+        jszhang@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] riscv: fix race when vmap stack overflow
+Message-ID: <Y4gSJnVh1/lUSnWo@andrea>
+References: <mhng-72408cf8-cbde-489b-9042-379b5aa8624f@palmer-ri-x1c9>
+ <F84A2656-5938-45F7-A097-58CE348B7119@jrtc27.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 8FEZjWgBZwtKgnkexNtTHi6qyjrbNltU
-X-Proofpoint-GUID: 8FEZjWgBZwtKgnkexNtTHi6qyjrbNltU
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 spamscore=0
- adultscore=0 mlxlogscore=659 phishscore=0 mlxscore=0 clxscore=1030
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2212010014
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+In-Reply-To: <F84A2656-5938-45F7-A097-58CE348B7119@jrtc27.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,206 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
-issues for rtl8192eu chips by replacing the arguments with
-the ones in the updated official driver as shown below.
-1. https://github.com/Mange/rtl8192eu-linux-driver
-2. vendor driver version: 4.3.1.1
+> >>> @@ -23,6 +23,7 @@
+> >>> #define REG_L          __REG_SEL(ld, lw)
+> >>> #define REG_S          __REG_SEL(sd, sw)
+> >>> #define REG_SC         __REG_SEL(sc.d, sc.w)
+> >>> +#define REG_AMOSWAP_AQ __REG_SEL(amoswap.d.aq, amoswap.w.aq)
+> >> Below is the reason why I use the relax version here:
+> >> https://lore.kernel.org/all/CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com/T/#u
+> > 
+> > Sorry, I hadn't seen that one.  Adding Andrea.  IMO the acquire/release pair is necessary here, with just relaxed the stack stores inside the lock could show up on the next hart trying to use the stack.
+> 
+> I think what you really want is a *consume* barrier, and since you have
+> the data dependency between the amoswap and the memory accesses (and
+> this isn’t Alpha) you’re technically fine without the acquire, since
+> you’re writing assembly and have the data dependency as syntactic.
+> Though you may still want (need?) the acquire so loads/stores unrelated
+> to the stack pointer that happen later in program order get ordered
+> after the load of the new stack pointer in case there could be weird
+> issues *there*.
 
-Tested-by: Jun ASAKA <JunASAKA@zzy040330.moe>
-Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
----
-v2: 
- - add detailed info about the newer version this patch used.
- - no functional update.
----
-.../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 76 +++++++++++++------
- 1 file changed, 54 insertions(+), 22 deletions(-)
+Agreed.
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-index b06508d0cd..82346500f2 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
-@@ -734,6 +734,12 @@ static int rtl8192eu_iqk_path_a(struct rtl8xxxu_priv *priv)
- 	 */
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00180);
-+
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x20000);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0x07f77);
-+
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
- 
- 	/* Path A IQK setting */
-@@ -779,11 +785,16 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
--	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf117b);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf1173);
-+
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf1173);
- 
- 	/* PA/PAD control by 0x56, and set = 0x0 */
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00980);
--	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x51000);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x511e0);
- 
- 	/* Enter IQK mode */
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-@@ -798,14 +809,14 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
- 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
- 
--	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
--	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x68160c1f);
-+	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x8216031f);
-+	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x6816031f);
- 
- 	/* LO calibration setting */
- 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a911);
- 
- 	/* One shot, path A LOK & IQK */
--	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
-+	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf9000000);
- 	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf8000000);
- 
- 	mdelay(10);
-@@ -836,11 +847,16 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
--	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf7ffa);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf7ff2);
-+
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
- 
- 	/* PA/PAD control by 0x56, and set = 0x0 */
- 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00980);
--	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x51000);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x510e0);
- 
- 	/* Enter IQK mode */
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-@@ -854,14 +870,14 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
- 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
- 
--	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
--	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x28160c1f);
-+	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x821608ff);
-+	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x281608ff);
- 
- 	/* LO calibration setting */
- 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a891);
- 
- 	/* One shot, path A LOK & IQK */
--	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
-+	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf9000000);
- 	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf8000000);
- 
- 	mdelay(10);
-@@ -891,22 +907,28 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
- 
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
--	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
- 
--	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
-+
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
- 
-+	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
-+	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-+
- 	/* Path B IQK setting */
- 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_A, 0x38008c1c);
- 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_A, 0x38008c1c);
- 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
- 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
- 
--	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
-+	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
- 	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
- 
- 	/* LO calibration setting */
--	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
-+	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
- 
- 	/* One shot, path A LOK & IQK */
- 	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
-@@ -942,11 +964,16 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
--	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf117b);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf1173);
-+
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
-+	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf1173);
- 
- 	/* PA/PAD control by 0x56, and set = 0x0 */
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00980);
--	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x51000);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x511e0);
- 
- 	/* Enter IQK mode */
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-@@ -961,8 +988,8 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
- 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
- 
--	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82160c1f);
--	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160c1f);
-+	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x8216031f);
-+	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x6816031f);
- 
- 	/* LO calibration setting */
- 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a911);
-@@ -1002,11 +1029,16 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
--	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ffa);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
-+
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
- 
- 	/* PA/PAD control by 0x56, and set = 0x0 */
- 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00980);
--	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x51000);
-+	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x510e0);
- 
- 	/* Enter IQK mode */
- 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
-@@ -1020,8 +1052,8 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
- 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
- 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x18008c1c);
- 
--	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
--	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x28160c1f);
-+	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x821608ff);
-+	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x281608ff);
- 
- 	/* LO calibration setting */
- 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a891);
--- 
-2.38.1
+Just the fact that this is the 4th iteration of this discussion strongly
+suggests to stick to the acquire and these inline comments to me.  ;)
 
+  Andrea
