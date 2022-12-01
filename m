@@ -2,123 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9387463EB06
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C12363EABA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLAI0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S229748AbiLAH7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 02:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiLAI0o (ORCPT
+        with ESMTP id S229722AbiLAH6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:26:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B8C64543;
-        Thu,  1 Dec 2022 00:26:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9F1461ECE;
-        Thu,  1 Dec 2022 08:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921A6C433D6;
-        Thu,  1 Dec 2022 08:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669883202;
-        bh=bYN7sFnrzXsqdokyyNjsM57Xzrjedk4SiEcICca4yv8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jBziYPIcz32Zipj7BRwvOAXfBQOI7SAumemnTscF+KrvwpcQ6o6LPYwqi465aB2cN
-         zwgN9DbsD4LMtEgamCL8UVshzL4U0OJeXGgJ5ieVLBX74ESoA+n1jJjJUL6WEDodKw
-         g7R9/qpkKEb7oSxwnYCIWEc0NAyKKq+GpVd5Fd7M=
-Date:   Thu, 1 Dec 2022 08:56:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
-Message-ID: <Y4heSvsjubdeCT1P@kroah.com>
-References: <20221130180544.105550592@linuxfoundation.org>
- <CA+G9fYuJVxhKbeN9OGCr2_zyfa1k3j4DS1gAoTW0P89Eyz2FHg@mail.gmail.com>
- <Y4hQVCBYfwU0abvO@dev-arch.thelio-3990X>
+        Thu, 1 Dec 2022 02:58:53 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE9F3AC21;
+        Wed, 30 Nov 2022 23:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669881435; bh=1TG7t7iGxI5iBeZfr7K40KtO8/tCvEl9OlJVEZXqzdw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=IXXS/ihDLD5r8o14UFrcAyCArHgi7HmLAv0BnsoiEfOZGjm0P1u5N1fUE2XmKrbTa
+         Q2WMF07+M3Cu6d5qGgtxj7Eh8cqCrg4Kf1x+xLQweirrBP6N5gL0cckat36ref6v+A
+         dH0vLbZ0xBUoMlaBzfd/u+yZi0ZtH9qLljT3UiBT9ww17bxSB5q8dE3DUD4IIjGWA2
+         MLevw/Z8GKp9pblHcEr3SnlT7PZPZZaEDNDGxXioAiaPCaTDiWljB/UR4dnlt4AKZC
+         24GzfmzwAzqSNoIuAe/0WAJ4599Z5CntJSSZkL4N5JvIzd/qRdRiOCMxzTFNB1qAMg
+         9pp7Jh0RefuhA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.178.52]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MNKlu-1pKu2r1YOA-00OmnK; Thu, 01
+ Dec 2022 08:57:15 +0100
+Message-ID: <a3e1bbd6-9ff8-6cb2-4034-05055f499c6d@gmx.de>
+Date:   Thu, 1 Dec 2022 08:57:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4hQVCBYfwU0abvO@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/2] fbdev: geode: don't build on UML
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard@nod.at>,
+        linux-um@lists.infradead.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Andres Salomon <dilinger@queued.net>,
+        linux-geode@lists.infradead.org
+References: <20221130215544.28497-1-rdunlap@infradead.org>
+Content-Language: en-US
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221130215544.28497-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:PpGogZnW6HhwaMr7tc/5/1UjEN/jHdMDXMece1a88p3qFJsxYnH
+ pqyNgQ/pEphLd1DIZWkKcguwYgCFIlM/UAVYmmDvU4V/9pMH6vnOOfLlzPzNPwI/kxh0pHP
+ szX0goj+isPJtRkSFRy/nL1DAaJSEUTKyyVL8ZeVlTri8IO49fLLLjCX8w0oMQsM7p21wVx
+ UZjay3b7hdJqUaQGrFhiQ==
+UI-OutboundReport: notjunk:1;M01:P0:5PKJk0yIPzM=;kqh16m3VshbvOOXZdkeQQw4m8pN
+ 34hBkfxHn/b/W2s3sZWRvyww+JuLDdbgq7wd5S/CedBb9F5snxlzC6c90vOT5v1LCw4wvIRL7
+ 1CL43JEfPXgGbdEUkAzy17TxIh8YdhnX2LmCVWz0FoRE03GiCczJBKDAamo5TlqlRUhFecgr2
+ QrCxSIjn4gFMbAbTjMGUiYqdKI6MOHJzvNgGbXVmxqGxrIEzSv3Ob5XEm3m/auy6jJhhgsdqa
+ 6/gUSFChG1uyAvfszTwnCeFCRi9WlAdxU1GBLPz+nedkqCvC46eFUhZsvLy7W34ibGd26ASlo
+ GHGAPfNiY8HrPbYtNW3Mnca7wFXieyosEWEv2YcqxnMd0AnKDbySkRaIX6Ho2TWfx+zv3VAoz
+ I4dmkor/6GgN4N0rq+TVvol2MZbpg2nSadAA/0WP7IBXklp6gAqbfXq5ghJpAeQlmyoCF7QuK
+ 4P/Do+tVzGxsDTU9mZAnjvoeVFGFvFvtenlWQfTJaqpCyOwYrNZRDjiJ3vcbg7otT1exnogbB
+ xyaBOI5VdFVQDwziE7F0iDKWxJarly376Zp0w48+8ZajRLoSiGY/mQfyVHPNs95sTWYbagw5k
+ A8lWTojjckEY3wPiK8ORXum4TGEMu4R27hPNRgE5eJaBopcYgmLEmVQBO5UO5FFOp0Y0wGcs3
+ cRhlLRrWb3STkYZk3VfRfwymh/dC6rA53NAu0U6FmQTjUJtJwhDLsuUGUbUyxRE1sU7yLTVWy
+ CwDvoS69jjogATmheSXUOBThpXfg+cgmFLi+xJ3B9ZLqeutY5XNfXPaKAgN9buh9Ndz7OS0Zn
+ U0UT8KY9fWGEETAt46b1h5SiktUpYGwMwpROxvcXD+W2X0hh4Bvcfu/U1ffT/tlIsGSIp7U+C
+ aBQDmZsh0aaaaNgqb7kdl3spPh75hba0jk1e+xbn7D4BlngYDPdtxLhtQBSnnuZGzhrvP55UF
+ 7lXH5zWou3FdKyj4IS80Xh2Zb+k=
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:57:24PM -0700, Nathan Chancellor wrote:
-> On Thu, Dec 01, 2022 at 11:44:53AM +0530, Naresh Kamboju wrote:
-> > On Thu, 1 Dec 2022 at 00:13, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 6.0.11 release.
-> > > There are 289 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> > 
-> > Results from Linaro's test farm.
-> > Regressions found on x86_64:
-> > 
-> >     - build-clang-15-allmodconfig-x86_64
-> >     - build-clang-nightly-allmodconfig-x86_64
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> >     bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-> >     [ Upstream commit c86df29d11dfba27c0a1f5039cd6fe387fbf4239 ]
-> > 
-> > Causing the following build warnings / errors with clang-15 allmodconfig
-> > on x86_64,
-> > 
-> > Build error:
-> > make --silent --keep-going --jobs=8
-> > O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> > ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu-
-> > 'HOSTCC=sccache clang' 'CC=sccache clang'
-> > kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *'
-> > and 'unsigned int (*)(const void *, const struct bpf_insn *,
-> > bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct
-> > bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn
-> > *))')) [-Werror,-Wpointer-type-mismatch]
-> >         __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
-> >                                    ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-> > include/linux/bpf.h:938:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
-> >         __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
-> >                                                             ^~~~
-> > 1 error generated.
-> 
-> Thanks for the report! This is fixed with upstream commit a679120edfcf
-> ("bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()"),
-> which was marked as a fix for c86df29d11df.
+On 11/30/22 22:55, Randy Dunlap wrote:
+> The geode fbdev driver uses struct cpuinfo fields that are not present
+> on ARCH=3Dum, so don't allow this driver to be built on UML.
+>
+> Prevents these build errors:
+>
+> In file included from ../arch/x86/include/asm/olpc.h:7:0,
+>                   from ../drivers/mfd/cs5535-mfd.c:17:
+> ../arch/x86/include/asm/geode.h: In function =E2=80=98is_geode_gx=E2=80=
+=99:
+> ../arch/x86/include/asm/geode.h:16:24: error: =E2=80=98struct cpuinfo_um=
+=E2=80=99 has no member named =E2=80=98x86_vendor=E2=80=99
+>    return ((boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_NSC) &&
+> ../arch/x86/include/asm/geode.h:16:39: error: =E2=80=98X86_VENDOR_NSC=E2=
+=80=99 undeclared (first use in this function); did you mean =E2=80=98X86_=
+VENDOR_ANY=E2=80=99?
+>    return ((boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_NSC) &&
+> ../arch/x86/include/asm/geode.h:17:17: error: =E2=80=98struct cpuinfo_um=
+=E2=80=99 has no member named =E2=80=98x86=E2=80=99
+>     (boot_cpu_data.x86 =3D=3D 5) &&
+> ../arch/x86/include/asm/geode.h:18:17: error: =E2=80=98struct cpuinfo_um=
+=E2=80=99 has no member named =E2=80=98x86_model=E2=80=99
+>     (boot_cpu_data.x86_model =3D=3D 5));
+> ../arch/x86/include/asm/geode.h: In function =E2=80=98is_geode_lx=E2=80=
+=99:
+> ../arch/x86/include/asm/geode.h:23:24: error: =E2=80=98struct cpuinfo_um=
+=E2=80=99 has no member named =E2=80=98x86_vendor=E2=80=99
+>    return ((boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD) &&
+> ../arch/x86/include/asm/geode.h:23:39: error: =E2=80=98X86_VENDOR_AMD=E2=
+=80=99 undeclared (first use in this function); did you mean =E2=80=98X86_=
+VENDOR_ANY=E2=80=99?
+>    return ((boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD) &&
+> ../arch/x86/include/asm/geode.h:24:17: error: =E2=80=98struct cpuinfo_um=
+=E2=80=99 has no member named =E2=80=98x86=E2=80=99
+>     (boot_cpu_data.x86 =3D=3D 5) &&
+> ../arch/x86/include/asm/geode.h:25:17: error: =E2=80=98struct cpuinfo_um=
+=E2=80=99 has no member named =E2=80=98x86_model=E2=80=99
+>     (boot_cpu_data.x86_model =3D=3D 10));
+>
+> Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: linux-um@lists.infradead.org
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: Andres Salomon <dilinger@queued.net>
+> Cc: linux-geode@lists.infradead.org
 
-Now queued up.  I forgot to run my "do we need fixes for the fixes"
-script on the queues, sorry about that.
+applied.
+Thanks!
 
-greg k-h
+Helge
+
+
+> ---
+>   drivers/video/fbdev/geode/Kconfig |    1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff -- a/drivers/video/fbdev/geode/Kconfig b/drivers/video/fbdev/geode/=
+Kconfig
+> --- a/drivers/video/fbdev/geode/Kconfig
+> +++ b/drivers/video/fbdev/geode/Kconfig
+> @@ -5,6 +5,7 @@
+>   config FB_GEODE
+>   	bool "AMD Geode family framebuffer support"
+>   	depends on FB && PCI && (X86_32 || (X86 && COMPILE_TEST))
+> +	depends on !UML
+>   	help
+>   	  Say 'Y' here to allow you to select framebuffer drivers for
+>   	  the AMD Geode family of processors.
+
