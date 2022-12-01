@@ -2,112 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F5D63E82C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CC363E832
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiLADIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 22:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S229802AbiLADLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 22:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiLADIC (ORCPT
+        with ESMTP id S229700AbiLADLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 22:08:02 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39822EF4F;
-        Wed, 30 Nov 2022 19:08:00 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NN1Gl2M3yz4x1V;
-        Thu,  1 Dec 2022 14:07:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669864079;
-        bh=TfGmS1zCmudsr4uYautLm5Znw0ne7ebMP1HiuHsM1sI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oJVfaAprK6gXnjydn6DsCFq1BnWQaL5OLLKgDK+aI0x8vAI6vgXetXnwyhhWNdmq+
-         7fCOB6F5e+WK9kpSjjZneajXSTqlBrwVRUnjgp9+EZccWujUoSrGCBRjHMfr9qIMSs
-         gS4jBBD1Udqv6DFWVLAL03pQ6so/L8Tdze23kt2qebadfA+pofSpCDMtCHNvQCBkSP
-         8lcFpEI7asvnZzjpKKu+Bqcq2Ik9apaJ0vL5jbPHxSWOE10x7s+IFCAQEvvi4+ZdRV
-         80Rm78pBAWYd2Ym8JOl6eHOMluATttHtii3UoJSwpxD0FEYsb0YR6ALqQi+v1hqHrZ
-         aHt7wr84iC7rQ==
-Date:   Thu, 1 Dec 2022 14:07:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: linux-next: build failure after merge of the kspp tree
-Message-ID: <20221201140758.1d3e9aec@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HlZ8cRjPobylttKtqm9R9rM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 22:11:01 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9BE743879;
+        Wed, 30 Nov 2022 19:10:57 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dx9vA_G4hjR30CAA--.5787S3;
+        Thu, 01 Dec 2022 11:10:55 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+A9G4hj9AUjAA--.22044S2;
+        Thu, 01 Dec 2022 11:10:53 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: net: Use "grep -E" instead of "egrep"
+Date:   Thu,  1 Dec 2022 11:10:48 +0800
+Message-Id: <1669864248-829-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Dxr+A9G4hj9AUjAA--.22044S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWruFWrur1DGFy3tF1xGFyUKFg_yoW8JF13p3
+        y8GwnrKr1rJFyjyF4UWF4SqF4fKan3ZF48WrWrGrnrZrs8J3WxXFySgF47AF47WrWDXws5
+        Z3s29ryruan8A3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b3AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
+        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
+        1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
+        6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
+        AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
+        vjxU4s2-UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/HlZ8cRjPobylttKtqm9R9rM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The latest version of grep claims the egrep is now obsolete so the build
+now contains warnings that look like:
+	egrep: warning: egrep is obsolescent; using grep -E
+fix this using "grep -E" instead.
 
-Hi all,
+  sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests/net`
 
-After merging the kspp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Here are the steps to install the latest grep:
 
-kernel/panic.c: In function 'check_panic_on_warn':
-kernel/panic.c:238:25: error: format '%s' expects argument of type 'char *'=
-, but argument 2 has type 'unsigned int' [-Werror=3Dformat=3D]
-  238 |                 panic("%s: system warned too often (kernel.warn_lim=
-it is %d)",
-      |                        ~^
-      |                         |
-      |                         char *
-      |                        %d
-  239 |                       warn_limit);
-      |                       ~~~~~~~~~~
-      |                       |
-      |                       unsigned int
-kernel/panic.c:238:75: error: format '%d' expects a matching 'int' argument=
- [-Werror=3Dformat=3D]
-  238 |                 panic("%s: system warned too often (kernel.warn_lim=
-it is %d)",
-      |                                                                    =
-      ~^
-      |                                                                    =
-       |
-      |                                                                    =
-       int
+  wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
+  tar xf grep-3.8.tar.gz
+  cd grep-3.8 && ./configure && make
+  sudo make install
+  export PATH=/usr/local/bin:$PATH
 
-Caused by commit
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
-  480e0e1d4817 ("panic: Introduce warn_limit")
+As Shuah suggested, this patch should go through net tree
 
-I have used the kspp tree from next-20221130 for today.
+ tools/testing/selftests/net/toeplitz.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/tools/testing/selftests/net/toeplitz.sh b/tools/testing/selftests/net/toeplitz.sh
+index 0a49907..da5bfd8 100755
+--- a/tools/testing/selftests/net/toeplitz.sh
++++ b/tools/testing/selftests/net/toeplitz.sh
+@@ -32,7 +32,7 @@ DEV="eth0"
+ # This is determined by reading the RSS indirection table using ethtool.
+ get_rss_cfg_num_rxqs() {
+ 	echo $(ethtool -x "${DEV}" |
+-		egrep [[:space:]]+[0-9]+:[[:space:]]+ |
++		grep -E [[:space:]]+[0-9]+:[[:space:]]+ |
+ 		cut -d: -f2- |
+ 		awk '{$1=$1};1' |
+ 		tr ' ' '\n' |
+-- 
+2.1.0
 
---Sig_/HlZ8cRjPobylttKtqm9R9rM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOIGo4ACgkQAVBC80lX
-0GxflAf9E7Q1cEGIFiJwsrqgE3+0ppAkiVA5xXcTYwcz4t0tB5ZGpFhpXm/CJssl
-Kc/V2Wa3+cFd3FmICAnYg94LQrKb6ciMKzXbXvnp4viEeD+v15jC4xcRAq3Iob3a
-K1G/njB+II9CMhv4nxnfjLMH/yVTAvWykprcjmkLYSPn/IcnIrnxPGoeSuYdFa8t
-u7T7r9NIuQptQ8tgzg9Exfs7Qvg6KISr4I9QyO3we0uQ9UEEDZaCLyS377BeC6tS
-hJnyPj7BCLZXDoHbCv54eX6At3QiGGM7OKl+TMVRAJxPs/uvTFYzsndmkMscWe8Y
-HhOyx3Ym/P8p6crt9jQQ34I9jvcXRg==
-=B3L/
------END PGP SIGNATURE-----
-
---Sig_/HlZ8cRjPobylttKtqm9R9rM--
