@@ -2,160 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C531663E6C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB02D63E6D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiLAA5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S229568AbiLABAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLAA5s (ORCPT
+        with ESMTP id S229476AbiLABAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:57:48 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BB81FF92;
-        Wed, 30 Nov 2022 16:57:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMyNR1pd4z4xFv;
-        Thu,  1 Dec 2022 11:57:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669856263;
-        bh=KXADFIMMmWG2dsbS7Re7sU/J+anY0jo/1Wlp2ldlTZc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KVJvCMdGO5y7GtEiY1nOHvbSM+gWYnpNyZ7RxSbYb1dv8F17zI4VYD7/PL+rsqCUt
-         eL3iloa6dUkGSJA1lTxG2h6sNU2qIDHMDBqMRpICCSgETZ2e3yZOUnsNiuI4CSDMqU
-         230fEzKC1FUYfEVi5tm7UIMhMHqCVCAJsNaz+GC/ZtJlpjm4pY2KMMSQ5qz1lLr2qB
-         zTt1PQzhZr15ryCTjHIy/r3IsY/AvQ53B9KH4PyVobjRiPIkklS0TGXuTOFuPSn0Gu
-         5pT8JjbzdjYgSA6SYsHfDuMPPzquJtbjjfkawrx2iykVH8Z/RY0BfHTfYihAMLdq9v
-         qBtpHP4P+uMaw==
-Date:   Thu, 1 Dec 2022 11:57:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, David Matlack <dmatlack@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Sean Christopherson <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20221201115741.7de32422@canb.auug.org.au>
+        Wed, 30 Nov 2022 20:00:06 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFB24E6B6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:00:01 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id 135so124100iou.7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:00:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dKpFb6/jlaeH7F8uv4T9zwnKFkBq6SD8TT8AzfJXYiw=;
+        b=XpCF7ey4k8U6+L2Vy6Th3///Gdku7SiVUm+VDShkmzrHdgxlUSuyaPG0P6Oft7FeuL
+         UphY9ztPeYjA0ZNrk463cTwV2gG72jUDpm6ro/BXLPT6n+ixeC7QGDTm6mrwK5dNWBoN
+         Fw32i0GV/YzVhUJGdvpOdxe8VujMcicEUryLU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKpFb6/jlaeH7F8uv4T9zwnKFkBq6SD8TT8AzfJXYiw=;
+        b=M81pqM0179EwrNUzFOC3Cmr0Gj1qih67dCy/SGXWEbDQQ/XEiZzblGYpO74i+p4N5Y
+         uMVHawT84JQdGv0QVCAdL2uPLpwZZ1gZ07f118tRBeTOppEP12/0fISefMoCTbk/UBHr
+         b0fdW4C9N4wQgg/RkacI0xWzhLuE3FEQYJGlgzvSohQW4egu1+QycS2gxSgl16DWp85L
+         ZUavn4iA0vT6X6qCq71ieyo5hEsYnBRerrfgwlX2xT1tD2bwFj2LbVKpZ1Vsv3GCugz+
+         zVFmNfU1In+fo5biO7yOPwadzTQwJXuBeSwZDz/VSXtKk5ST1US1URB5TNacdL8KVKhP
+         kq0w==
+X-Gm-Message-State: ANoB5pkyKFUUjC4XhzuOp5wNFcQV9ZBcLKFpQYvyDKCVEHqUyGrAkdbf
+        xEBuF4AdL3WFPCJ40dxiUhAd/A==
+X-Google-Smtp-Source: AA0mqf41TEBl48geLh1CMchiDPpIgKNU9buz5NwCnp6hEefNdxo8QFhdXuKNdPLlQSHN0XL72OsBWA==
+X-Received: by 2002:a05:6638:4410:b0:363:aec1:9a04 with SMTP id bp16-20020a056638441000b00363aec19a04mr30680397jab.78.1669856401180;
+        Wed, 30 Nov 2022 17:00:01 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g20-20020a0566380bd400b003734c4d01d2sm1127219jad.61.2022.11.30.17.00.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 17:00:00 -0800 (PST)
+Message-ID: <45ea7769-42fc-a77b-c323-ca1c2f065f5d@linuxfoundation.org>
+Date:   Wed, 30 Nov 2022 17:59:59 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.Ikwq/Ds1OUTjRj1j+hZle3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221130180544.105550592@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221130180544.105550592@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.Ikwq/Ds1OUTjRj1j+hZle3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/30/22 11:19, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.11 release.
+> There are 289 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Hi all,
+Compiled and booted on my test system. No dmesg regressions.
 
-Today's linux-next merge of the kvm-arm tree got conflicts in:
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-  tools/testing/selftests/kvm/access_tracking_perf_test.c
-  tools/testing/selftests/kvm/memslot_modification_stress_test.c
-
-between commit:
-
-  7812d80c0f89 ("KVM: selftests: Rename perf_test_util symbols to memstress=
-")
-
-from the kvm tree and commit:
-
-  9ec1eb1bccee ("KVM: selftests: Have perf_test_util signal when to stop vC=
-PUs")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/kvm/access_tracking_perf_test.c
-index 02d3587cab0a,942370d57392..000000000000
---- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-+++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@@ -321,11 -318,8 +318,8 @@@ static void run_test(enum vm_guest_mod
-  	mark_memory_idle(vm, nr_vcpus);
-  	access_memory(vm, nr_vcpus, ACCESS_READ, "Reading from idle memory");
- =20
-- 	/* Set done to signal the vCPU threads to exit */
-- 	done =3D true;
--=20
- -	perf_test_join_vcpu_threads(nr_vcpus);
- -	perf_test_destroy_vm(vm);
- +	memstress_join_vcpu_threads(nr_vcpus);
- +	memstress_destroy_vm(vm);
-  }
- =20
-  static void help(char *name)
-diff --cc tools/testing/selftests/kvm/memslot_modification_stress_test.c
-index d07e921bfcc5,3a5e4518307c..000000000000
---- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@@ -34,9 -34,7 +34,7 @@@
-  static int nr_vcpus =3D 1;
-  static uint64_t guest_percpu_mem_size =3D DEFAULT_PER_VCPU_MEM_SIZE;
- =20
-- static bool run_vcpus =3D true;
--=20
- -static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
- +static void vcpu_worker(struct memstress_vcpu_args *vcpu_args)
-  {
-  	struct kvm_vcpu *vcpu =3D vcpu_args->vcpu;
-  	struct kvm_run *run;
-@@@ -107,14 -105,13 +105,12 @@@ static void run_test(enum vm_guest_mod
- =20
-  	pr_info("Started all vCPUs\n");
- =20
- -	add_remove_memslot(vm, p->memslot_modification_delay,
- -			   p->nr_memslot_modifications);
- +	add_remove_memslot(vm, p->delay, p->nr_iterations);
- =20
-- 	run_vcpus =3D false;
--=20
- -	perf_test_join_vcpu_threads(nr_vcpus);
- +	memstress_join_vcpu_threads(nr_vcpus);
-  	pr_info("All vCPU threads joined\n");
- =20
- -	perf_test_destroy_vm(vm);
- +	memstress_destroy_vm(vm);
-  }
- =20
-  static void help(char *name)
-
---Sig_/.Ikwq/Ds1OUTjRj1j+hZle3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH/AUACgkQAVBC80lX
-0GzhMgf/ThhiYtkIM/b6+mxQoe8ngRiH+8ZilGBTBSk3dnQUAlpNSx/1tkFF6uFm
-meXTDwigtT1R2iVyDmFYSXz6QFEskH7vtIAF4eqnfpjnZXq7FT+GdP1AAxl40X47
-Qv2YgVh6GOp/dpHjyefy+LwLiSgxMINnxqbkxETOBnR24qQZESN6eJD0w3N4+obj
-QugQKd5nJ1JvDbVwn2NkUkDHmqbPNrj60PSQJwrkEP3zRWg+fuWgfLzLMOIUhBzn
-/WW2bUpRposuEWuqBosy+x4lmM+iepH4Ljb/3e00GkHgml8HfgN9pdNqY73UfPvU
-gww/P8E/VyLm+1EjUszs/vzSGiq5Yg==
-=jCWp
------END PGP SIGNATURE-----
-
---Sig_/.Ikwq/Ds1OUTjRj1j+hZle3--
+thanks,
+-- Shuah
