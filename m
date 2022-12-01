@@ -2,176 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D0263EDF0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C79E63EDF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiLAKev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S229748AbiLAKhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiLAKeZ (ORCPT
+        with ESMTP id S229741AbiLAKg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:34:25 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEDC93A74
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:34:12 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id k185so1130633vsc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rAH21UNUqbLO3zijQeQTjTfJALMFYCO0nKI/Gngxo3k=;
-        b=IwOFeehWF+oYg12+9ZkiwGVadxZFj01NXaOuCnRgTZZLpM+Fn5sqOhpu1UxUlQzM6i
-         xc1P4SeeF/9DaTcEWv4zIFhgg5o4km4geZx+Kts4fY4wOM0jADweJiizzcHbZl3S2X6R
-         twBoFlgb6kiWQg4lDniO80Jub/yfTWo1qyCOQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rAH21UNUqbLO3zijQeQTjTfJALMFYCO0nKI/Gngxo3k=;
-        b=3ATGIEoP/pEqw6rR/5fhneZb9A/T/tBf5/H3/kqZCqm9p8WYd4plcpVVtgmIMxzAtD
-         edtGH2uojq2RV12s564pDbbjpn2MHs3tqPiX+C9sLcfRkJUFpXbANTjn2oQivIjSDpwa
-         dGV579NERA32zK+2Mx4JnO2cO8zu+S0GTHofPKvlG/v33PsXhUdCD+rGitzmNvGR2kmk
-         iQpH+zOl+SchOR3PmjI5DAm4CVyMiFSRtnFz9KhkOXffVQNV5tF//oJL4XkMc/PqC71C
-         AqOzAoRLVXxtjIoOB/W/sEW70UnaTE1xIaJ6slKSsAvK19lnhBcbmKP5hpdC4ddvh4hB
-         7D3A==
-X-Gm-Message-State: ANoB5pkHW2hxbmiNHohzEN7fCjfWg7Ccu4umPd82yutDpKjrz45YLqtk
-        mpAUYYFiZ62Xpn6F7jLj9BGJLj8iQpJc3oYJEirpNA==
-X-Google-Smtp-Source: AA0mqf5Qao8vLv1WxRsnp96mIE7XC+68JCjxa9YlTVwuYfJ+F04VjR31/MXn43r9GYB1R+7pgmupfpOHqY8MQlfAy4g=
-X-Received: by 2002:a05:6102:e0c:b0:3b0:6da7:39ba with SMTP id
- o12-20020a0561020e0c00b003b06da739bamr24540024vst.26.1669890851122; Thu, 01
- Dec 2022 02:34:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20221201084229.3464449-1-wenst@chromium.org> <20221201084229.3464449-2-wenst@chromium.org>
- <5250d7d3-ff46-e08d-926c-4efd92390d88@collabora.com>
-In-Reply-To: <5250d7d3-ff46-e08d-926c-4efd92390d88@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 1 Dec 2022 18:33:59 +0800
-Message-ID: <CAGXv+5E63+dE-=KbD_LW+BV+fBWnfaD+oH0+e9T_aS-XEffN5w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] arm64: dts: mediatek: mt8183: Fix systimer 13 MHz
- clock description
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 1 Dec 2022 05:36:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C37555A3;
+        Thu,  1 Dec 2022 02:36:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 159E7B81EA3;
+        Thu,  1 Dec 2022 10:36:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC406C433C1;
+        Thu,  1 Dec 2022 10:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669891012;
+        bh=Lry5sI7ZzVgzkzluRZ7tP0BZmk5tn6W5JjEgO6v8d8U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GeCMzXKWLqV+qaWBLMIdqSR+DgAjnUzEqdXmre1OuYeRFmK8zx4Wpr2oGVbW4wctN
+         Mx7MfrwxigpiiLxVvbWyNZakFpJdLDxWz7kekpUmV4Tl/BBgjAVF7bT2uhw6Enk12c
+         MTgbfiYpisQKgSQKERwTThfCHnKtuUxP7BXK0a4W/B4SiDxYpmpmk//tHuJYpdooxO
+         +cuNOLb5Y66nxv09MJwMVU7kAwVZ3g/xfQXqRnBDgbNeGP5pAY668mpemkxpJMZPjI
+         Wc3Qsu0VbV+MkE+attTv+CpXmkbCIIx01XYvTce8Eo/lVYcHGldRhDR00reIvHMJmt
+         MLW3nSkrOodFw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p0gvy-009no0-7z;
+        Thu, 01 Dec 2022 10:36:50 +0000
+Date:   Thu, 01 Dec 2022 10:36:49 +0000
+Message-ID: <868rjrmmv2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: stable-rc-5.10: arm64: allmodconfig: (.hyp.text+0x1a4c): undefined reference to `__kvm_nvhe_memset'
+In-Reply-To: <CA+G9fYuNirzmuQvYpH6gYiAr_fqh9g-+RP83FW3oLbty9iKbyw@mail.gmail.com>
+References: <CA+G9fYuNirzmuQvYpH6gYiAr_fqh9g-+RP83FW3oLbty9iKbyw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, stable@vger.kernel.org, linux-kernel@vger.kernel.org, lkft-triage@lists.linaro.org, gregkh@linuxfoundation.org, linux@roeck-us.net, arnd@arndb.de, linux-arm-kernel@lists.infradead.org, will@kernel.org, catalin.marinas@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 5:31 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 01/12/22 09:42, Chen-Yu Tsai ha scritto:
-> > The systimer block derives its 13 MHz clock by dividing the main 26 MHz
-> > oscillator clock by 2 internally, not through the TOPCKGEN clock
-> > controller.
-> >
-> > On the MT8183 this divider is set either by power-on-reset or by the
-> > bootloader. The bootloader may then make the divider unconfigurable to,
-> > but can be read out by, the operating system.
-> >
-> > Making the systimer block take the 26 MHz clock directly requires
-> > changing the implementations. As an ABI compatible fix, change the
-> > input clock of the systimer block a fixed factor divide-by-2 clock
-> > that takes the 26 MHz oscillator as its input.
-> >
-> > Fixes: 5bc8e2875ffb ("arm64: dts: mt8183: add systimer0 device node")
-> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
->
-> I generally not just like - but *love* - this change, I had that in my mind
-> for a couple of months now and forgot about it because reasons.
->
-> There's just one thing that, since we're doing this now, we can clarify (and
-> that's important to avoid questions like "why isn't this board-specific"):
-> the 26MHz clock "clk26m" oscillator that we're using for the system timers
-> is a SoC-provided clock, and its name is "SYSCLK" as in "System bus clock".
+On Thu, 01 Dec 2022 09:39:57 +0000,
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>=20
+> [please ignore if it is already reported]
+>=20
+> The stable-rc 5.10 arm64 allmodconfig builds failed with gcc-12.
+> List of build warnings and errors with gcc-12 are listed below.
+>=20
+> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+> aarch64-linux-gnu-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function
+> `__kvm_nvhe___kvm_tlb_flush_vmid_ipa':
+> (.hyp.text+0x1a4c): undefined reference to `__kvm_nvhe_memset'
 
-Looking at the schematics it is terribly more complicated. :(
+Stupid gcc. Can you try the following patch and check if this works
+for you?
 
-The crystal feeds the DCXO in the PMIC, which also acts as a buffer.
-The PMIC then feeds the SoC and any other chips, such as a modem.
+Thanks,
 
-On other platforms we describe the oscillator at the dtsi level as well.
-The reason why it isn't board-specific is that the requirements and
-properties of the crystal are specified in the platform's datasheet,
-i.e. it is a design requirement that every board use the same crystal.
+	M.
 
-I don't see the datasheet spelling out SYSCLK though. The TOPCKGEN part
-mostly just refers to it as CLK26M, or some variant of it, which likely
-denotes some fan-out branch. The system timer part also just says "26M"
-or "26 MHz clock source".
+=46rom 4e775885654bd667a519df5ca5aaf702ce438f5e Mon Sep 17 00:00:00 2001
+From: Will Deacon <will@kernel.org>
+Date: Fri, 19 Mar 2021 10:01:10 +0000
+Subject: [PATCH] KVM: arm64: Link position-independent string routines into
+ .hyp.text
 
-Also, we can't change the clock name, as "clk26m" is hard-coded into
-the clk drivers.
+Commit 7b4a7b5e6fefd15f708f959dd43e188444e252ec upstream.
 
-> I know that your target is to describe how we get from 26M to 13M, but at
-> this point it may be worth it to use the right names to help preventing
-> confusion about that clock not being an external crystal on the board but
-> something internal to the SoC.
+Pull clear_page(), copy_page(), memcpy() and memset() into the nVHE hyp
+code and ensure that we always execute the '__pi_' entry point on the
+offchance that it changes in future.
 
-But as I described above, it is an actual crystal on the board. We are
-simply omitting parts of the signal path. Notably the PMIC needs to be
-excluded due to circular dependency reasons. And also we most definitely
-don't want the system to be touching it.
+[ qperret: Commit title nits and added linker script alias ]
 
-ChenYu
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Quentin Perret <qperret@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20210319100146.1149909-3-qperret@google.com
+---
+ arch/arm64/include/asm/hyp_image.h |  3 +++
+ arch/arm64/kernel/image-vars.h     | 11 +++++++++++
+ arch/arm64/kvm/hyp/nvhe/Makefile   |  4 ++++
+ 3 files changed, 18 insertions(+)
 
-> So, I propose:
-> 1. Change `clk26m: oscillator` to `clk26m: sysclk` or `clk26m: sysclk-26m`;
-> 2. Add the divider as `clk13m: sysclk-div2`.
->
-> What do you think?
->
-> Cheers,
-> Angelo
->
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 12 ++++++++++--
-> >   1 file changed, 10 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index 19ff1babc359..0cbbaebe1213 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -585,6 +585,15 @@ psci {
-> >               method = "smc";
-> >       };
-> >
-> > +     clk13m: fixed-factor-clock-13m {
-> > +             compatible = "fixed-factor-clock";
-> > +             #clock-cells = <0>;
-> > +             clocks = <&clk26m>;
-> > +             clock-div = <2>;
-> > +             clock-mult = <1>;
-> > +             clock-output-names = "clk13m";
-> > +     };
-> > +
-> >       clk26m: oscillator {
-> >               compatible = "fixed-clock";
-> >               #clock-cells = <0>;
-> > @@ -968,8 +977,7 @@ systimer: timer@10017000 {
-> >                                    "mediatek,mt6765-timer";
-> >                       reg = <0 0x10017000 0 0x1000>;
-> >                       interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>;
-> > -                     clocks = <&topckgen CLK_TOP_CLK13M>;
-> > -                     clock-names = "clk13m";
-> > +                     clocks = <&clk13m>;
-> >               };
-> >
-> >               iommu: iommu@10205000 {
->
->
+diff --git a/arch/arm64/include/asm/hyp_image.h b/arch/arm64/include/asm/hy=
+p_image.h
+index daa1a1da539e..e06842756051 100644
+--- a/arch/arm64/include/asm/hyp_image.h
++++ b/arch/arm64/include/asm/hyp_image.h
+@@ -31,6 +31,9 @@
+  */
+ #define KVM_NVHE_ALIAS(sym)	kvm_nvhe_sym(sym) =3D sym;
+=20
++/* Defines a linker script alias for KVM nVHE hyp symbols */
++#define KVM_NVHE_ALIAS_HYP(first, sec)	kvm_nvhe_sym(first) =3D kvm_nvhe_sy=
+m(sec);
++
+ #endif /* LINKER_SCRIPT */
+=20
+ #endif /* __ARM64_HYP_IMAGE_H__ */
+diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
+index c615b285ff5b..48e43b29a2d5 100644
+--- a/arch/arm64/kernel/image-vars.h
++++ b/arch/arm64/kernel/image-vars.h
+@@ -103,6 +103,17 @@ KVM_NVHE_ALIAS(gic_nonsecure_priorities);
+ KVM_NVHE_ALIAS(__start___kvm_ex_table);
+ KVM_NVHE_ALIAS(__stop___kvm_ex_table);
+=20
++/* Position-independent library routines */
++KVM_NVHE_ALIAS_HYP(clear_page, __pi_clear_page);
++KVM_NVHE_ALIAS_HYP(copy_page, __pi_copy_page);
++KVM_NVHE_ALIAS_HYP(memcpy, __pi_memcpy);
++KVM_NVHE_ALIAS_HYP(memset, __pi_memset);
++
++#ifdef CONFIG_KASAN
++KVM_NVHE_ALIAS_HYP(__memcpy, __pi_memcpy);
++KVM_NVHE_ALIAS_HYP(__memset, __pi_memset);
++#endif
++
+ #endif /* CONFIG_KVM */
+=20
+ #endif /* __ARM64_KERNEL_IMAGE_VARS_H */
+diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Mak=
+efile
+index ddde15fe85f2..230bba1a6716 100644
+--- a/arch/arm64/kvm/hyp/nvhe/Makefile
++++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+@@ -6,9 +6,13 @@
+ asflags-y :=3D -D__KVM_NVHE_HYPERVISOR__
+ ccflags-y :=3D -D__KVM_NVHE_HYPERVISOR__
+=20
++lib-objs :=3D clear_page.o copy_page.o memcpy.o memset.o
++lib-objs :=3D $(addprefix ../../../lib/, $(lib-objs))
++
+ obj-y :=3D timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o hos=
+t.o hyp-main.o
+ obj-y +=3D ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.=
+o \
+ 	 ../fpsimd.o ../hyp-entry.o
++obj-y +=3D $(lib-objs)
+=20
+ ##
+ ## Build rules for compiling nVHE hyp code
+--=20
+2.34.1
+
+
+--=20
+Without deviation from the norm, progress is not possible.
