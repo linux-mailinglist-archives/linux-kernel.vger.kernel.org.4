@@ -2,314 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368FF63F9C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B990163F9C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbiLAV1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S229685AbiLAV2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiLAV1k (ORCPT
+        with ESMTP id S229763AbiLAV14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:27:40 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B0A11458;
-        Thu,  1 Dec 2022 13:27:38 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id c129so3499220oia.0;
-        Thu, 01 Dec 2022 13:27:38 -0800 (PST)
+        Thu, 1 Dec 2022 16:27:56 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB38124F15
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:27:54 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id l15so2669446qtv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 13:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=timesys-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7EfQP5c4Tp15RvKyJNK3BoLF6L+XplDDM23u5kp4g0=;
+        b=71+lGGNZhYeneb21fGOTHJ+8CFElHHEHz0o4clpPLBalxLbUYKKwQPpAPVLi8ufX2t
+         AxVgczUCgm9hK6L5Mt7R3acGsYaHKwErKYKPJDqSG47Vnr0Iz/ixpMXiwbyP1umjOBNV
+         WYwGSKWijoStMkEqUuorEn+iI23tPTfM7HgRWpIKQh/mlXWEdjv19J4/dOC7Bwrt7/xJ
+         dtacUsmg/mABojRS3/Bnn0rnC6ZA+iy3e2ZYX3IE7CbOO0CyN9U1pN5C78tltgnI5MCI
+         pFMd/4T0FbvB/qHvCab+nDuQUHyioBrxK+2T6Q91jnHTK53nDe+kmvtAFpk89mng+NGM
+         IwPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dj0X/cgIRdzA9X8MaAiSgQ8IQIvJqEsW1E/SH7uOhAc=;
-        b=8NnssgGDimV249OpBqoU/S6CXd695qoEUjUbIl6dCX5WZq9hTJoaSDrQX5jYsv/m+c
-         dVanzHjU1r3iNd4oQYiOj9zKwBGz22ZWC+s/IGCxdpQo5Vo5Pvs+IBMVTScd0Nn5e0vB
-         afwqdb6lvB/hrDLa7oYjBHTCAQ8RfSX2vJbt4b5PZHeLrhhIEpokeEsYbojslI/cHimB
-         NXnDn/hS9pcbH58xEWCv9r5/hFLPeg+T8Al1l4CStWs3R+NIMjCn6jMVoI1w4znebrp5
-         kngaTMl9Jm8g6pAdKpZGXdY4W56BF9cUvY/kmUOPtH9209dXAB9xWVkwR83GIMbktLFJ
-         /Hlw==
-X-Gm-Message-State: ANoB5pk+5YBYhUTHJFEHB4fmlk8cOa2IUXBond22RQeLm3Wr2phPI1mf
-        lSVzqYi/R1ah7JnNg2XU+Q==
-X-Google-Smtp-Source: AA0mqf4cecGy5n8P7THiVs09tNFE2eEpF6icE6MFbjl/YV7Fo/7CpjcTb7Q1w6k01nE5ZiA/uqXmdg==
-X-Received: by 2002:a05:6808:1a18:b0:35b:dac6:cc84 with SMTP id bk24-20020a0568081a1800b0035bdac6cc84mr3780814oib.116.1669930057593;
-        Thu, 01 Dec 2022 13:27:37 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ca19-20020a056830611300b00661a3f4113bsm2598515otb.64.2022.12.01.13.27.36
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y7EfQP5c4Tp15RvKyJNK3BoLF6L+XplDDM23u5kp4g0=;
+        b=ri8qyfGAuFBNXRPSmZwEi2XFLJwh8zvAj0X7Tq4Aas1xtwdp5a8quJrPqO1CfU43Fa
+         u989SabvpDtebxfWfRB8Dcr923lFOII8hqwynNKuWlLiwJwMV/VpQnZ4RpdjyMyxEFlh
+         VXEK711doXnSbVO6G+Hwy9/NHuD+CbgqoWQ0Oka+btlFGqZ9GpUd/FuECuzSJ1RdYD3d
+         pMMZfevsm+rI2e/UtREQh4lpo1eDDhyvrFCrvHfIVGBlTB8lJx9Z2MWqcYdaE+ulRnMd
+         FdsyyM+WJ1A6y7LNB0hpx3gKfPVUVxmdD78dz6rNvIGcBhu9nohRq73BLKv12sP/sG4k
+         991g==
+X-Gm-Message-State: ANoB5pmGasKijGQZLOCh8wYoINlE6/Be2/r6muHK2AyVr4GhLbthc3Zp
+        seAkVAVFHXRccVTi0G0ziyB9Xg==
+X-Google-Smtp-Source: AA0mqf75PHhBw3iWbz9uAP/z0xnYmQkvcE0cxiSj329MzHDOvgMt9OzNhDI9vMUqr6SIBChmV4Kp1g==
+X-Received: by 2002:a05:620a:46a2:b0:6fa:d9c:3a61 with SMTP id bq34-20020a05620a46a200b006fa0d9c3a61mr44222688qkb.26.1669930073374;
+        Thu, 01 Dec 2022 13:27:53 -0800 (PST)
+Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
+        by smtp.gmail.com with ESMTPSA id l15-20020a37f90f000000b006fc447eebe5sm4071321qkj.27.2022.12.01.13.27.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 13:27:36 -0800 (PST)
-Received: (nullmailer pid 1472667 invoked by uid 1000);
-        Thu, 01 Dec 2022 21:27:35 -0000
-Date:   Thu, 1 Dec 2022 15:27:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sonal Santan <sonal.santan@amd.com>
-Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        frowand.list@gmail.com, helgaas@kernel.org,
-        clement.leger@bootlin.com, max.zhen@amd.com, larry.liu@amd.com,
-        brian.xu@amd.com, stefano.stabellini@xilinx.com, trix@redhat.com
-Subject: Re: [RESEND PATCH RFC V4 0/3] Generate device tree node for pci
- devices
-Message-ID: <20221201212735.GC1225112-robh@kernel.org>
-References: <1669048984-56394-1-git-send-email-lizhi.hou@amd.com>
- <9d21aa8f-6581-a4bf-644a-6e273373afc4@amd.com>
+        Thu, 01 Dec 2022 13:27:52 -0800 (PST)
+From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org (open list:SPI NOR SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 0/3] mtd: spi-nor: Extend SFDP to support additional octal modes as per latest JEDEC standard
+Date:   Thu,  1 Dec 2022 16:27:47 -0500
+Message-Id: <20221201212750.267721-1-nathan.morrison@timesys.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d21aa8f-6581-a4bf-644a-6e273373afc4@amd.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:50:56PM -0800, Sonal Santan wrote:
-> On 11/21/22 08:43, Lizhi Hou wrote:
-> > This patch series introduces OF overlay support for PCI devices which
-> > primarily addresses two use cases. First, it provides a data driven method
-> > to describe hardware peripherals that are present in a PCI endpoint and
-> > hence can be accessed by the PCI host. Second, it allows reuse of a OF
-> > compatible driver -- often used in SoC platforms -- in a PCI host based
-> > system.
-> > 
-> > There are 2 series devices rely on this patch:
-> > 
-> >   1) Xilinx Alveo Accelerator cards (FPGA based device)
-> >   2) Microchip LAN9662 Ethernet Controller
-> > 
-> >      Please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
-> > 
-> > Normally, the PCI core discovers PCI devices and their BARs using the
-> > PCI enumeration process. However, the process does not provide a way to
-> > discover the hardware peripherals that are present in a PCI device, and
-> > which can be accessed through the PCI BARs. Also, the enumeration process
-> > does not provide a way to associate MSI-X vectors of a PCI device with the
-> > hardware peripherals that are present in the device. PCI device drivers
-> > often use header files to describe the hardware peripherals and their
-> > resources as there is no standard data driven way to do so. This patch
-> > series proposes to use flattened device tree blob to describe the
-> > peripherals in a data driven way. Based on previous discussion, using
-> > device tree overlay is the best way to unflatten the blob and populate
-> > platform devices. To use device tree overlay, there are three obvious
-> > problems that need to be resolved.
-> > 
-> > First, we need to create a base tree for non-DT system such as x86_64. A
-> > patch series has been submitted for this:
-> > https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
-> > https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
-> > 
-> > Second, a device tree node corresponding to the PCI endpoint is required
-> > for overlaying the flattened device tree blob for that PCI endpoint.
-> > Because PCI is a self-discoverable bus, a device tree node is usually not
-> > created for PCI devices. This series adds support to generate a device
-> > tree node for a PCI device which advertises itself using PCI quirks
-> > infrastructure.
-> > 
-> > Third, we need to generate device tree nodes for PCI bridges since a child
-> > PCI endpoint may choose to have a device tree node created.
-> > 
-> > This patch series is made up of three patches.
-> > 
-> > The first patch is adding OF interface to create or destroy OF node
-> > dynamically.
-> > 
-> > The second patch introduces a kernel option, CONFIG_DYNAMIC_PCI_OF_NODEX.
-> > When the option is turned on, the kernel will generate device tree nodes
-> > for all PCI bridges unconditionally. The patch also shows how to use the
-> > PCI quirks infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device
-> > tree node for a device. Specifically, the patch generates a device tree
-> > node for Xilinx Alveo U50 PCIe accelerator device. The generated device
-> > tree nodes do not have any property.
-> > 
-> > The third patch adds basic properties ('reg', 'compatible' and
-> > 'device_type') to the dynamically generated device tree nodes. More
-> > properties can be added in the future.
-> > 
-> > Here is the example of device tree nodes generated within the ARM64 QEMU.
-> > # lspci -t    
-> > -[0000:00]-+-00.0
-> >            +-01.0-[01]--
-> >            +-01.1-[02]----00.0
-> >            +-01.2-[03]----00.0
-> >            +-01.3-[04]----00.0
-> >            +-01.4-[05]----00.0
-> >            +-01.5-[06]--
-> >            +-01.6-[07]--
-> >            +-01.7-[08]--
-> >            +-02.0-[09-0b]----00.0-[0a-0b]----00.0-[0b]--+-00.0
-> >            |                                            \-00.1
-> >            +-02.1-[0c]--
-> >            \-03.0-[0d-0e]----00.0-[0e]----01.0
-> > 
-> > # tree /sys/firmware/devicetree/base/pcie\@10000000
-> > /sys/firmware/devicetree/base/pcie@10000000
-> > |-- #address-cells
-> > |-- #interrupt-cells
-> > |-- #size-cells
-> > |-- bus-range
-> > |-- compatible
-> > |-- device_type
-> > |-- dma-coherent
-> > |-- interrupt-map
-> > |-- interrupt-map-mask
-> > |-- linux,pci-domain
-> > |-- msi-parent
-> > |-- name
-> > |-- pci@1,0
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@1,1
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@1,2
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@1,3
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@1,4
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@1,5
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@1,6
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@1,7
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@2,0
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- pci@0,0
-> > |   |   |-- #address_cells
-> > |   |   |-- #size_cells
-> > |   |   |-- compatible
-> > |   |   |-- device_type
-> > |   |   |-- pci@0,0
-> > |   |   |   |-- #address_cells
-> > |   |   |   |-- #size_cells
-> > |   |   |   |-- compatible
-> > |   |   |   |-- dev@0,0
-> > |   |   |   |   |-- compatible
-> > |   |   |   |   `-- reg
-> > |   |   |   |-- dev@0,1
-> > |   |   |   |   |-- compatible
-> > |   |   |   |   `-- reg
-> > |   |   |   |-- device_type
-> > |   |   |   |-- ranges
-> > |   |   |   `-- reg
-> > |   |   |-- ranges
-> > |   |   `-- reg
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@2,1
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- pci@3,0
-> > |   |-- #address_cells
-> > |   |-- #size_cells
-> > |   |-- compatible
-> > |   |-- device_type
-> > |   |-- pci@0,0
-> > |   |   |-- #address_cells
-> > |   |   |-- #size_cells
-> > |   |   |-- compatible
-> > |   |   |-- device_type
-> > |   |   |-- ranges
-> > |   |   `-- reg
-> > |   |-- ranges
-> > |   `-- reg
-> > |-- ranges
-> > `-- reg
-> > 
-> > Changes since RFC v3:
-> > - Split the Xilinx Alveo U50 PCI quirk to a separate patch
-> > - Minor changes in commit description and code comment
-> > 
-> > Changes since RFC v2:
-> > - Merged patch 3 with patch 2
-> > - Added OF interfaces of_changeset_add_prop_* and use them to create
-> >   properties.
-> > - Added '#address-cells', '#size-cells' and 'ranges' properties.
-> > 
-> > Changes since RFC v1:
-> > - Added one patch to create basic properties.
-> > - To move DT related code out of PCI subsystem, replaced of_node_alloc()
-> >   with of_create_node()/of_destroy_node()
-> > 
-> > Lizhi Hou (3):
-> >   of: dynamic: Add interfaces for creating device node dynamically
-> >   PCI: Create device tree node for selected devices
-> >   PCI: Add PCI quirks to generate device tree node for Xilinx Alveo U50
-> > 
-> >  drivers/of/dynamic.c        | 187 ++++++++++++++++++++++++++
-> >  drivers/pci/Kconfig         |  12 ++
-> >  drivers/pci/Makefile        |   1 +
-> >  drivers/pci/bus.c           |   2 +
-> >  drivers/pci/msi/irqdomain.c |   6 +-
-> >  drivers/pci/of.c            |  71 ++++++++++
-> >  drivers/pci/of_property.c   | 256 ++++++++++++++++++++++++++++++++++++
-> >  drivers/pci/pci-driver.c    |   3 +-
-> >  drivers/pci/pci.h           |  19 +++
-> >  drivers/pci/quirks.c        |  11 ++
-> >  drivers/pci/remove.c        |   1 +
-> >  include/linux/of.h          |  24 ++++
-> >  12 files changed, 590 insertions(+), 3 deletions(-)
-> >  create mode 100644 drivers/pci/of_property.c
-> > 
-> Hello,
-> 
-> This RFC patch set has been patiently waiting for attention. If there
-> are no additional comments can it move forward?
+In the latest JEDEC standard (JESD216F), there are now bitfields in the
+4 byte address instruction table for 1S-1S-8S and 1S-8S-8S modes
 
-Note that "RFC" means "here's my patches I don't think are ready to be 
-merged". That should have a list of issues/todo.
+This patchset adds support for checking the 4BAIT for these modes,
+along with additional NO_SFDP_FLAGS to support enabling these new modes
 
-I'm not getting a good sense that possible issues are being thought 
-about here. If I'm supposed to do that, then you'll just have to wait.
+v2: Move page program commands into sfdp.c instead of core.c,
+as this appears to conform more closely with spi-nor paradigm.
+Page program buswidth appears to be automatically determined, so let's
+follow suit and do the same.
 
-Rob
+v3:
+ - Added missing SPI_NOR_OCTAL_READ_1_8_8 to spi_nor_sfdp check in
+   spi_nor_init_params_deprecated()
+ - Convert IS25LX256 to 1S-8S-8S instead of 1S-1S-8S
+ - Tested and confirmed both 1S-1S-8S and 1S-8S-8S work on IS25LX256
+
+Nathan Barrett-Morrison (3):
+  mtd: spi-nor: Extend SFDP 4byte address instruction lookup table with
+    new octal modes as per JEDEC JESD216F
+  mtd: spi-nor: Add additional octal-mode flags to be checked during
+    SFDP
+  mtd: spi-nor: Add support for IS25LX256 operating in 1S-8S-8S octal
+    read mode
+
+ drivers/mtd/spi-nor/core.c |  8 ++++++++
+ drivers/mtd/spi-nor/core.h |  5 +++--
+ drivers/mtd/spi-nor/issi.c |  3 +++
+ drivers/mtd/spi-nor/sfdp.c | 13 +++++++++++++
+ 4 files changed, 27 insertions(+), 2 deletions(-)
+
+-- 
+2.30.2
+
