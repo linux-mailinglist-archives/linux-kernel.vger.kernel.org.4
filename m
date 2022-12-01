@@ -2,159 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB32363F1F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D1363F1F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiLANsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S231640AbiLANr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiLANsA (ORCPT
+        with ESMTP id S231634AbiLANrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:48:00 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F0A2656F;
-        Thu,  1 Dec 2022 05:47:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669902476; x=1701438476;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mTaZIIv3uUc9JYNMsjX+rfZMzd1G+Dsj8zGp0aHQgQI=;
-  b=EnaOgte25qubhv2XEuGM5FKgJ1yCdOvew2AfNGfNbYv2R5TDYaZdJ5eW
-   cLjpyszi7k+qPIN6/Ke/24WjEwna2zJyxYSy0zIoUFkNSnFQiDnkp5uB6
-   aav2M/Ba0SjIzTozhbo/WBGdYyTgFlWA8xfvM8ORIT8fJWlgmOKEkv9vw
-   dJJhDiSQ/JjmlO3ePR86sYefTKgRog082LAKOkxtgbjB/1m9OKtcxYTUP
-   0dZt865uOrYXtETPEcgCLVP156LxltRN8wNNZg8EFhpobUmqq741/AskC
-   T7ToeuU+TLHPPCo0BZPLf8Srot4CelvouilNvXkKcpmvf9fiiOVRNHkr/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="314385104"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="314385104"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 05:47:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="677219981"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="677219981"
-Received: from ichepiga-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.55.59])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 05:47:47 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id CD4AA109781; Thu,  1 Dec 2022 16:47:44 +0300 (+03)
-Date:   Thu, 1 Dec 2022 16:47:44 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv7 08/14] x86/mm: Reserve unaccepted memory bitmap
-Message-ID: <20221201134744.7p3lgw6buv4oqwyn@box.shutemov.name>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-9-kirill.shutemov@linux.intel.com>
- <Yt+uwhfA57WBrozb@zn.tnic>
- <20221130012840.sf4rvddzc4ev7bj5@box.shutemov.name>
- <Y4h1xsEr7X221EoE@kernel.org>
+        Thu, 1 Dec 2022 08:47:53 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4C425E9F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:47:50 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669902467;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JE0fhHfH7VWLK3JbBcGwJPNOe7/dfPlHGpiWVNcwUNU=;
+        b=qgFQOJUyPhr6v/eff/0V5ZPaFfPpGAXzyCfMMlCRFZhHoq8CfyitjTxfXiNummCaCMHMGs
+        oYUvZPfDKTHbb6ptzkAyz8Kt+R9S07mNr2N5fiCJmKNy/3NznQL/g7wB5gyLpY0/UadOx5
+        GoB8oGTQNdHpHcTu6k3NDX/bnHMLSQ9+vbQfV4BA8s/PsUeShpiowDM2gVbbuy1kIJxic7
+        dUROpAlVt/PiSNUJ+KzrHFPvMjrKLWWy60EcVIqjs0YRh6uDmTUR4aqtxGoGmgVHpk/yoY
+        ovW4gAMWxydq9Wc6JascjbiWYHOAcyXoDkorGQ2v62cEK7XT5w0J58BN9Kl7RA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669902467;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JE0fhHfH7VWLK3JbBcGwJPNOe7/dfPlHGpiWVNcwUNU=;
+        b=zeCHvasjzIxIzlHs7BeB3QWlSpv1LlC8GXs5M83XfEMJp7d4bt3IaU+So/MdS3ZbD1y60P
+        MLJ4nEnpXUCKilAw==
+To:     Jacob Macneal <jake.macneal@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     jake.macneal@gmail.com, John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH] time: copy tai value (International Atomic Time, in
+ seconds) to output __user struct in get_old_timex32().
+In-Reply-To: <20221121055345.111567-1-jake.macneal@gmail.com>
+References: <20221121055345.111567-1-jake.macneal@gmail.com>
+Date:   Thu, 01 Dec 2022 14:47:46 +0100
+Message-ID: <877czbs0al.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4h1xsEr7X221EoE@kernel.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 11:37:10AM +0200, Mike Rapoport wrote:
-> On Wed, Nov 30, 2022 at 04:28:40AM +0300, Kirill A. Shutemov wrote:
-> > On Tue, Jul 26, 2022 at 11:07:14AM +0200, Borislav Petkov wrote:
-> > > On Tue, Jun 14, 2022 at 03:02:25PM +0300, Kirill A. Shutemov wrote:
-> > > > diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-> > > > index f267205f2d5a..22d1fe48dcba 100644
-> > > > --- a/arch/x86/kernel/e820.c
-> > > > +++ b/arch/x86/kernel/e820.c
-> > > > @@ -1316,6 +1316,16 @@ void __init e820__memblock_setup(void)
-> > > >  	int i;
-> > > >  	u64 end;
-> > > >  
-> > > > +	/* Mark unaccepted memory bitmap reserved */
-> > > > +	if (boot_params.unaccepted_memory) {
-> > > > +		unsigned long size;
-> > > > +
-> > > > +		/* One bit per 2MB */
-> > > > +		size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
-> > > > +				    PMD_SIZE * BITS_PER_BYTE);
-> > > > +		memblock_reserve(boot_params.unaccepted_memory, size);
-> > > > +	}
-> > > > +
-> > > 
-> > > Hmm, I don't like how this is dropped right in the middle of a unrelated
-> > > function.
-> > > 
-> > > You're adding arch/x86/mm/unaccepted_memory.c later. Why don't you put
-> > > that chunk in a function there which is called by early_reserve_memory()
-> > > which does exactly what you want - reserve memory early, before memblock
-> > > allocations?
-> > 
-> > early_reserve_memory() specifically called before e820__memory_setup()
-> > (see comment in setup_arch()), so we don't have e820_table finalized and
-> > we need it to get correct RAM size from e820__end_of_ram_pfn().
-> > 
-> > I guess we can hide the chunk in a function in unaccepted_memory.c and
-> > call it from here, but it would require #ifdeffery in a header file as the
-> > .c is only compiled for CONFIG_UNACCEPTED_MEMORY=y.
-> > 
-> > Looks like an overkill to me, no?
-> 
-> Agree. Can we just extend the comment to explain why we reserve the bitmap
-> at e820__memblock_setup() rather than in early_reserve_memory(), pretty
-> much with the explanation above?
+Jacob!
 
-Okay, I will do this:
+On Mon, Nov 21 2022 at 00:53, Jacob Macneal wrote:
+> Previously, this value was not copied into the output struct.
 
-diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index 49b5164a4cba..62068956bb76 100644
---- a/arch/x86/kernel/e820.c
-+++ b/arch/x86/kernel/e820.c
-@@ -1316,7 +1316,14 @@ void __init e820__memblock_setup(void)
- 	int i;
- 	u64 end;
- 
--	/* Mark unaccepted memory bitmap reserved */
-+	/*
-+	 * Mark unaccepted memory bitmap reserved.
-+	 *
-+	 * This kind of reservation usually done from early_reserve_memory(),
-+	 * but early_reserve_memory() called before e820__memory_setup(), so
-+	 * e820_table is not finalized and e820__end_of_ram_pfn() cannot be
-+	 * used to get correct RAM size.
-+	 */
- 	if (boot_params.unaccepted_memory) {
- 		unsigned long size;
- 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Previously has no meaning here.
+
+> This is despite all other fields of the corresponding __kernel_timex
+> struct being copied to the old_timex32 __user struct in this function.
+
+This is completely backwards. get_old_timex32() copies from the user
+supplied old_timex32 struct to the __kernel_timex struct, no?
+
+> Additionally, the matching function put_old_timex32() expects a tai
+> value to be supplied, and copies it appropriately. It would appear to
+> be a mistake that this value was never copied over in
+> get_old_timex32().
+
+Sure, but the important point is that txc->tai is never used as input
+from userspace. It's only ever used as output to userspace, which
+explains why this never caused any functional issue.
+
+I'm not against this change per se, but the justification for it really
+boils down to:
+
+      Make it consistent with the regular syscall
+
+Thanks,
+
+        tglx
