@@ -2,94 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2122663F3A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D124A63F3BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiLAPUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        id S231651AbiLAPXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbiLAPUC (ORCPT
+        with ESMTP id S231638AbiLAPXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:20:02 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C47CA47F2;
-        Thu,  1 Dec 2022 07:20:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mDOf95eDTZe1lv0pAYb0o56fQ3mCO67yFPfF16RFTr8=; b=nvV4tr2Xebh0CdlfoCcpcWIwGN
-        0J1UQKFuGN/RTM0vUU+DCOlZPRxeIQXi2vvFmfmrEYMwbYXGTN6APcx3Ci2R0NpcckMM+DMNTK9eR
-        M9istheCxbVY+vG6kQY1HxTOQ8xend1fwl4TCWtMt1+ZW3ITmlgpgz4eOgQY3muhUGEs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p0lLa-0044WM-9q; Thu, 01 Dec 2022 16:19:34 +0100
-Date:   Thu, 1 Dec 2022 16:19:34 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
-        maciej.fijalkowski@intel.com, kuba@kernel.org, edumazet@google.com,
-        vigneshr@ti.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 4/6] net: ethernet: ti: am65-cpsw: Add
- suspend/resume support
-Message-ID: <Y4jGBtWurJ4tmHOc@lunn.ch>
-References: <20221129133501.30659-1-rogerq@kernel.org>
- <20221129133501.30659-5-rogerq@kernel.org>
- <9fdc4e0eee7ead18c119b6bc3e93f7f73d2980cd.camel@redhat.com>
- <c41064a1-9da7-d848-6f9f-e1f3b722c063@kernel.org>
+        Thu, 1 Dec 2022 10:23:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409662EF09
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:22:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669908172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0uolOOp7yoOC/673O4rWJ2SQim3eJ9tGJUopqkFhibc=;
+        b=B+Uzk/aU+G0kyeVnZME32d4YN4l7sLEVdy7VP6JuIJVqdFtpi6L4u9AR4foUS4yhJn04ji
+        IbCpdEjCFiv/Ox5p9ri3H0diiVKuINuS06MGQTlm7eAeA92w2eMUUp1TObuZXodswa8hnv
+        xYmqwHPcu0DVGFsFXIzPOza1/s2AbEU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-362-2GnRhtVYMgOAgLeMQA27cA-1; Thu, 01 Dec 2022 10:22:51 -0500
+X-MC-Unique: 2GnRhtVYMgOAgLeMQA27cA-1
+Received: by mail-wm1-f69.google.com with SMTP id i8-20020a1c3b08000000b003d0683389daso2677594wma.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 07:22:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0uolOOp7yoOC/673O4rWJ2SQim3eJ9tGJUopqkFhibc=;
+        b=FdhDA50F063w3DSkf9khxEMKJgKpqICOsEXMQQ4feGdBOj1dxQ9H3R+/6bfhFGCBsn
+         CPzIHM7WRQX2HFfEWYcSWW7+TjWOOQfOLQjohkUSV8TTAfjQyBpNdMNjxniXdCIQmhrV
+         iFelSmugeW6DG0sKRGyvyge3CBkRTCWGTVII1MLh8rbRv5rolvifWwsVfSrWb8Qy8f8E
+         s74PeYLcrn+3F4ZGpfT/S8KzhLbN3lRuBKzb8rEF0OuD9MboeSJOQZG70hd3QaiEQAdW
+         g7hVD4b/qkxpf5erqbHtQ0pjUk52yP84ppznOqDBLmgO1V1zAp3kjQEnpwwcLWthQUUR
+         aAnQ==
+X-Gm-Message-State: ANoB5pkt1sEcCQDIFeB0+Dp/TB+fCz/ir0QMBXdkRxMj3RIY3ijlmx+i
+        dJL+lPcQBOb9x4DMU7pqApRtxWVdsnWhwzTOXoHTBtlxg4wGtPFEfLoZ8A3Oo0bK52D6SFDA/Pm
+        m4fDIUiPRaAL5lq7xyHrnwqhS
+X-Received: by 2002:adf:f54e:0:b0:242:1534:7b57 with SMTP id j14-20020adff54e000000b0024215347b57mr14035619wrp.404.1669908170120;
+        Thu, 01 Dec 2022 07:22:50 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4+3YusiSWHR13O3MACnIQbSphop/g7AmmIFME21D1fv2+5ZYUMJJrVIeLUQmj0nQTJeAmHuA==
+X-Received: by 2002:adf:f54e:0:b0:242:1534:7b57 with SMTP id j14-20020adff54e000000b0024215347b57mr14035606wrp.404.1669908169821;
+        Thu, 01 Dec 2022 07:22:49 -0800 (PST)
+Received: from ovpn-194-141.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b003b47e75b401sm10593279wmq.37.2022.12.01.07.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 07:22:49 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>
+Subject: Re: [PATCH v2 12/50] KVM: VMX: Move Hyper-V eVMCS initialization to
+ helper
+In-Reply-To: <20221130230934.1014142-13-seanjc@google.com>
+References: <20221130230934.1014142-1-seanjc@google.com>
+ <20221130230934.1014142-13-seanjc@google.com>
+Date:   Thu, 01 Dec 2022 16:22:45 +0100
+Message-ID: <87k03bf8sa.fsf@ovpn-194-141.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c41064a1-9da7-d848-6f9f-e1f3b722c063@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 01:44:28PM +0200, Roger Quadros wrote:
-> Hi,
-> 
-> On 01/12/2022 13:40, Paolo Abeni wrote:
-> > On Tue, 2022-11-29 at 15:34 +0200, Roger Quadros wrote:
-> >> @@ -555,11 +556,26 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
-> >>  	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
-> >>  	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
-> >>  	int ret, i;
-> >> +	u32 reg;
-> >>  
-> >>  	ret = pm_runtime_resume_and_get(common->dev);
-> >>  	if (ret < 0)
-> >>  		return ret;
-> >>  
-> >> +	/* Idle MAC port */
-> >> +	cpsw_sl_ctl_set(port->slave.mac_sl, CPSW_SL_CTL_CMD_IDLE);
-> >> +	cpsw_sl_wait_for_idle(port->slave.mac_sl, 100);
-> >> +	cpsw_sl_ctl_reset(port->slave.mac_sl);
-> >> +
-> >> +	/* soft reset MAC */
-> >> +	cpsw_sl_reg_write(port->slave.mac_sl, CPSW_SL_SOFT_RESET, 1);
-> >> +	mdelay(1);
-> >> +	reg = cpsw_sl_reg_read(port->slave.mac_sl, CPSW_SL_SOFT_RESET);
-> >> +	if (reg) {
-> >> +		dev_err(common->dev, "soft RESET didn't complete\n");
-> > 
-> > I *think* Andrew was asking for dev_dbg() here, but let's see what he
-> > has to say :)
-> 
-> In the earlier revision we were not exiting with error, so dev_dbg()
-> was more appropriate there.
-> In this revision we error out so I thought dev_err() was ok.
+Sean Christopherson <seanjc@google.com> writes:
 
-Yes, i would agree. It is fatal, so dev_err() is appropriate.
+> Move Hyper-V's eVMCS initialization to a dedicated helper to clean up
+> vmx_init(), and add a comment to call out that the Hyper-V init code
+> doesn't need to be unwound if vmx_init() ultimately fails.
+>
+> No functional change intended.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 73 +++++++++++++++++++++++++-----------------
+>  1 file changed, 43 insertions(+), 30 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c0de7160700b..b8bf95b9710d 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -523,6 +523,8 @@ static inline void vmx_segment_cache_clear(struct vcpu_vmx *vmx)
+>  static unsigned long host_idt_base;
+>  
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> +static struct kvm_x86_ops vmx_x86_ops __initdata;
+> +
+>  static bool __read_mostly enlightened_vmcs = true;
+>  module_param(enlightened_vmcs, bool, 0444);
+>  
+> @@ -551,6 +553,43 @@ static int hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu)
+>  	return 0;
+>  }
+>  
+> +static __init void hv_init_evmcs(void)
+> +{
+> +	int cpu;
+> +
+> +	if (!enlightened_vmcs)
+> +		return;
+> +
+> +	/*
+> +	 * Enlightened VMCS usage should be recommended and the host needs
+> +	 * to support eVMCS v1 or above.
+> +	 */
+> +	if (ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
+> +	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
+> +	     KVM_EVMCS_VERSION) {
+> +
+> +		/* Check that we have assist pages on all online CPUs */
+> +		for_each_online_cpu(cpu) {
+> +			if (!hv_get_vp_assist_page(cpu)) {
+> +				enlightened_vmcs = false;
+> +				break;
+> +			}
+> +		}
+> +
+> +		if (enlightened_vmcs) {
+> +			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
+> +			static_branch_enable(&enable_evmcs);
+> +		}
+> +
+> +		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
+> +			vmx_x86_ops.enable_l2_tlb_flush
+> +				= hv_enable_l2_tlb_flush;
+> +
+> +	} else {
+> +		enlightened_vmcs = false;
+> +	}
+> +}
+> +
+>  static void hv_reset_evmcs(void)
+>  {
+>  	struct hv_vp_assist_page *vp_ap;
+> @@ -577,6 +616,7 @@ static void hv_reset_evmcs(void)
+>  }
+>  
+>  #else /* IS_ENABLED(CONFIG_HYPERV) */
+> +static void hv_init_evmcs(void) {}
+>  static void hv_reset_evmcs(void) {}
+>  #endif /* IS_ENABLED(CONFIG_HYPERV) */
+>  
+> @@ -8500,38 +8540,11 @@ static int __init vmx_init(void)
+>  {
+>  	int r, cpu;
+>  
+> -#if IS_ENABLED(CONFIG_HYPERV)
+>  	/*
+> -	 * Enlightened VMCS usage should be recommended and the host needs
+> -	 * to support eVMCS v1 or above. We can also disable eVMCS support
+> -	 * with module parameter.
+> +	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
+> +	 * to unwind if a later step fails.
+>  	 */
+> -	if (enlightened_vmcs &&
+> -	    ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
+> -	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
+> -	    KVM_EVMCS_VERSION) {
+> -
+> -		/* Check that we have assist pages on all online CPUs */
+> -		for_each_online_cpu(cpu) {
+> -			if (!hv_get_vp_assist_page(cpu)) {
+> -				enlightened_vmcs = false;
+> -				break;
+> -			}
+> -		}
+> -
+> -		if (enlightened_vmcs) {
+> -			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
+> -			static_branch_enable(&enable_evmcs);
+> -		}
+> -
+> -		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
+> -			vmx_x86_ops.enable_l2_tlb_flush
+> -				= hv_enable_l2_tlb_flush;
+> -
+> -	} else {
+> -		enlightened_vmcs = false;
+> -	}
+> -#endif
+> +	hv_init_evmcs();
+>  
+>  	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
+>  		     __alignof__(struct vcpu_vmx), THIS_MODULE);
 
-What is not shown here is the return value. I think it is -EBUSY? I'm
-wondering if -ETIMEDOUT is better?
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-	  Andrew
+-- 
+Vitaly
+
