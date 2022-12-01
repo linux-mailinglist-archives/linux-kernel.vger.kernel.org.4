@@ -2,184 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798A963E6EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DD563E6F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiLABJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 20:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
+        id S229804AbiLABMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiLABJo (ORCPT
+        with ESMTP id S229832AbiLABL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 20:09:44 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905D942F7B;
-        Wed, 30 Nov 2022 17:09:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 30 Nov 2022 20:11:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E7C9491B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:11:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMyfD5F24z4xFv;
-        Thu,  1 Dec 2022 12:09:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669856981;
-        bh=brvavOSOc62js08CKp3eQxixTiCVzmBixPUmp8sxcW8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AAjY4PhM/3tjlWzLFpEF1CVHxtrnPlvH4pXdCV5tiOKOblqlcs+XvkDhJk3DI85qp
-         yjZDxpLjtKHfqgcUOvsJhnZCuRKbV76/2Q6skzSTlb9Tp0np3jO95gHcjrJCeHyXja
-         voC+0YjKnVMAwVhAOHPfgdY+knE6+1+wT5+JnTL7HkGDKu5WF0Yp4pxxPVEM+vkXfw
-         p1zwvMBmWT+BTv+kCr5hDUICis7a96E8Prba5lbhmU/PvBgZWYtcP3HlG6iIgu8CeQ
-         FC/kaU+6u2nzZpNhuOol+VOkUU/uph1dQz1DzZgkxvqEcNqOxC8N68NnhmeSbf1i/e
-         ZatCSvrstGlrQ==
-Date:   Thu, 1 Dec 2022 12:09:39 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Gavin Shan <gshan@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
-        KVM <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vishal Annapurve <vannapurve@google.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20221201120939.3c19f004@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02B9EB81DA2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:11:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5679AC433B5;
+        Thu,  1 Dec 2022 01:11:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669857113;
+        bh=Cn7d5c1HM/HfMC8q2kd3oQKNeEpuHBhp1yz/hZ7/kV8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=dIH078pHAHy01H3xD9BwApkD8WjAL3r9/Y7Na8gLSRGigs9r832+Tzl+ywiilKHqn
+         /JGanG+BIAtQlheHMT3XiMYJ4rN8DIwtKS1ftndKOEiHw78xrrEup/dNaALuBmRTko
+         yIFSqj6JbC4oM/OqckU7bqWcj0P7cVB/CkkIwe+M70Bx6C5eddoWETcFEOFN5K3m9j
+         WvXl9BTgmuCxRc5cL1YtQKsNc9rlX8BYtOks8ppJqPjvgWhoYxMKo9/vyDv8rtkYYh
+         a2dlKWoFm2fWusmbjnYo8do1Bm2VDjEt5L1eT6t/a+RvkyEjpYNy52hVkE/NBkpNU3
+         9Bt9PPCk35Vgg==
+Date:   Wed, 30 Nov 2022 17:11:50 -0800 (PST)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Roger Pau Monne <roger.pau@citrix.com>
+cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2] hvc/xen: lock console list traversal
+In-Reply-To: <20221130163611.14686-1-roger.pau@citrix.com>
+Message-ID: <alpine.DEB.2.22.394.2211301710270.4039@ubuntu-linux-20-04-desktop>
+References: <20221130163611.14686-1-roger.pau@citrix.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/StyU/QJYB47_8rLAkHl4wg4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1211100887-1669857113=:4039"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/StyU/QJYB47_8rLAkHl4wg4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Hi all,
+--8323329-1211100887-1669857113=:4039
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+On Wed, 30 Nov 2022, Roger Pau Monne wrote:
+> The currently lockless access to the xen console list in
+> vtermno_to_xencons() is incorrect, as additions and removals from the
+> list can happen anytime, and as such the traversal of the list to get
+> the private console data for a given termno needs to happen with the
+> lock held.  Note users that modify the list already do so with the
+> lock taken.
+> 
+> Adjust current lock takers to use the _irq{save,restore} helpers,
+> since the context in which vtermno_to_xencons() is called can have
+> interrupts disabled.  Use the _irq{save,restore} set of helpers to
+> switch the current callers to disable interrupts in the locked region.
+> I haven't checked if existing users could instead use the _irq
+> variant, as I think it's safer to use _irq{save,restore} upfront.
+> 
+> While there switch from using list_for_each_entry_safe to
+> list_for_each_entry: the current entry cursor won't be removed as
+> part of the code in the loop body, so using the _safe variant is
+> pointless.
+> 
+> Fixes: 02e19f9c7cac ('hvc_xen: implement multiconsole support')
+> Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
 
-  tools/testing/selftests/kvm/memslot_perf_test.c
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-between commits:
 
-  018ea2d71a43 ("KVM: selftests: Add atoi_paranoid() to catch errors missed=
- by atoi()")
-  dc88244bf548 ("KVM: selftests: Automatically do init_ucall() for non-bare=
-bones VMs")
-  197ebb713ad0 ("KVM: selftests: move common startup logic to kvm_util.c")
-
-from the kvm tree and commits:
-
-  34396437b11f ("KVM: selftests: memslot_perf_test: Probe memory slots for =
-once")
-  8675c6f22698 ("KVM: selftests: memslot_perf_test: Support variable guest =
-page size")
-  a69170c65acd ("KVM: selftests: memslot_perf_test: Report optimal memory s=
-lots")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/kvm/memslot_perf_test.c
-index 36b20abfb948,2ad40f7c9c08..000000000000
---- a/tools/testing/selftests/kvm/memslot_perf_test.c
-+++ b/tools/testing/selftests/kvm/memslot_perf_test.c
-@@@ -252,23 -284,22 +284,21 @@@ static bool prepare_vm(struct vm_data *
-  	struct timespec tstart;
-  	struct sync_area *sync;
- =20
-- 	max_mem_slots =3D kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-- 	TEST_ASSERT(max_mem_slots > 1,
-- 		    "KVM_CAP_NR_MEMSLOTS should be greater than 1");
-- 	TEST_ASSERT(nslots > 1 || nslots =3D=3D -1,
-- 		    "Slot count cap should be greater than 1");
-- 	if (nslots !=3D -1)
-- 		max_mem_slots =3D min(max_mem_slots, (uint32_t)nslots);
-- 	pr_info_v("Allowed number of memory slots: %"PRIu32"\n", max_mem_slots);
-+ 	host_page_size =3D getpagesize();
-+ 	guest_page_size =3D vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
-+ 	mempages =3D mem_size / guest_page_size;
- =20
-- 	TEST_ASSERT(mempages > 1,
-- 		    "Can't test without any memory");
-+ 	data->vm =3D __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code=
-);
- -	ucall_init(data->vm, NULL);
-+ 	TEST_ASSERT(data->vm->page_size =3D=3D guest_page_size, "Invalid VM page=
- size");
- =20
-  	data->npages =3D mempages;
-- 	data->nslots =3D max_mem_slots - 1;
-- 	data->pages_per_slot =3D mempages / data->nslots;
-- 	if (!data->pages_per_slot) {
-- 		*maxslots =3D mempages + 1;
-+ 	TEST_ASSERT(data->npages > 1, "Can't test without any memory");
-+ 	data->nslots =3D nslots;
-+ 	data->pages_per_slot =3D data->npages / data->nslots;
-+ 	rempages =3D data->npages % data->nslots;
-+ 	if (!check_slot_pages(host_page_size, guest_page_size,
-+ 			      data->pages_per_slot, rempages)) {
-+ 		*maxslots =3D get_max_slots(data, host_page_size);
-  		return false;
-  	}
- =20
-@@@ -884,9 -966,9 +965,9 @@@ static bool parse_args(int argc, char *
-  			map_unmap_verify =3D true;
-  			break;
-  		case 's':
- -			targs->nslots =3D atoi(optarg);
- +			targs->nslots =3D atoi_paranoid(optarg);
-- 			if (targs->nslots <=3D 0 && targs->nslots !=3D -1) {
-- 				pr_info("Slot count cap has to be positive or -1 for no cap\n");
-+ 			if (targs->nslots <=3D 1 && targs->nslots !=3D -1) {
-+ 				pr_info("Slot count cap must be larger than 1 or -1 for no cap\n");
-  				return false;
-  			}
-  			break;
-@@@ -994,6 -1103,12 +1090,9 @@@ int main(int argc, char *argv[]
-  	struct test_result rbestslottime;
-  	int tctr;
- =20
- -	/* Tell stdout not to buffer its content */
- -	setbuf(stdout, NULL);
- -
-+ 	if (!check_memory_sizes())
-+ 		return -1;
-+=20
-  	if (!parse_args(argc, argv, &targs))
-  		return -1;
- =20
-
---Sig_/StyU/QJYB47_8rLAkHl4wg4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH/tMACgkQAVBC80lX
-0GzDdAf9EwHzX9q8/A8wU1nDscw28nlh5ATvstpiKd1W6+q0xPn+uQiRgac7J/CP
-K7Eys7ifm6JiwLU+CkP+wRBgIizITNtmcAXyGcMzf4DT5Byop/e9PpBW+CUwE72e
-gzzALRhmYYNdqjuHk73ULD61KcfiF+jb9egmgRHESR1GIZYGNtPHxTUscbb7UQLn
-Vc983LX+Zc9O2t6ApRNpEfhj10C/7RZRg1GmoJMwpHTKXtrGNe1KKLC7PGW/xS40
-aIYoqKiw9xaqGi8i09RX9xvV2ifiC57Gb7m1KlhGrht5oqDdOIQ4yPqnHustp74E
-GX8jhnrzAmecJz5Bo8OrZswf5tfL8w==
-=gwKS
------END PGP SIGNATURE-----
-
---Sig_/StyU/QJYB47_8rLAkHl4wg4--
+> ---
+> Changes since v1:
+>  - Switch current lock users to disable interrupts in the locked
+>    region.
+> ---
+>  drivers/tty/hvc/hvc_xen.c | 46 ++++++++++++++++++++++++---------------
+>  1 file changed, 29 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/tty/hvc/hvc_xen.c b/drivers/tty/hvc/hvc_xen.c
+> index e63c1761a361..d9d023275328 100644
+> --- a/drivers/tty/hvc/hvc_xen.c
+> +++ b/drivers/tty/hvc/hvc_xen.c
+> @@ -53,17 +53,22 @@ static DEFINE_SPINLOCK(xencons_lock);
+>  
+>  static struct xencons_info *vtermno_to_xencons(int vtermno)
+>  {
+> -	struct xencons_info *entry, *n, *ret = NULL;
+> +	struct xencons_info *entry, *ret = NULL;
+> +	unsigned long flags;
+>  
+> -	if (list_empty(&xenconsoles))
+> -			return NULL;
+> +	spin_lock_irqsave(&xencons_lock, flags);
+> +	if (list_empty(&xenconsoles)) {
+> +		spin_unlock_irqrestore(&xencons_lock, flags);
+> +		return NULL;
+> +	}
+>  
+> -	list_for_each_entry_safe(entry, n, &xenconsoles, list) {
+> +	list_for_each_entry(entry, &xenconsoles, list) {
+>  		if (entry->vtermno == vtermno) {
+>  			ret  = entry;
+>  			break;
+>  		}
+>  	}
+> +	spin_unlock_irqrestore(&xencons_lock, flags);
+>  
+>  	return ret;
+>  }
+> @@ -234,7 +239,7 @@ static int xen_hvm_console_init(void)
+>  {
+>  	int r;
+>  	uint64_t v = 0;
+> -	unsigned long gfn;
+> +	unsigned long gfn, flags;
+>  	struct xencons_info *info;
+>  
+>  	if (!xen_hvm_domain())
+> @@ -270,9 +275,9 @@ static int xen_hvm_console_init(void)
+>  		goto err;
+>  	info->vtermno = HVC_COOKIE;
+>  
+> -	spin_lock(&xencons_lock);
+> +	spin_lock_irqsave(&xencons_lock, flags);
+>  	list_add_tail(&info->list, &xenconsoles);
+> -	spin_unlock(&xencons_lock);
+> +	spin_unlock_irqrestore(&xencons_lock, flags);
+>  
+>  	return 0;
+>  err:
+> @@ -296,6 +301,7 @@ static int xencons_info_pv_init(struct xencons_info *info, int vtermno)
+>  static int xen_pv_console_init(void)
+>  {
+>  	struct xencons_info *info;
+> +	unsigned long flags;
+>  
+>  	if (!xen_pv_domain())
+>  		return -ENODEV;
+> @@ -312,9 +318,9 @@ static int xen_pv_console_init(void)
+>  		/* already configured */
+>  		return 0;
+>  	}
+> -	spin_lock(&xencons_lock);
+> +	spin_lock_irqsave(&xencons_lock, flags);
+>  	xencons_info_pv_init(info, HVC_COOKIE);
+> -	spin_unlock(&xencons_lock);
+> +	spin_unlock_irqrestore(&xencons_lock, flags);
+>  
+>  	return 0;
+>  }
+> @@ -322,6 +328,7 @@ static int xen_pv_console_init(void)
+>  static int xen_initial_domain_console_init(void)
+>  {
+>  	struct xencons_info *info;
+> +	unsigned long flags;
+>  
+>  	if (!xen_initial_domain())
+>  		return -ENODEV;
+> @@ -337,9 +344,9 @@ static int xen_initial_domain_console_init(void)
+>  	info->irq = bind_virq_to_irq(VIRQ_CONSOLE, 0, false);
+>  	info->vtermno = HVC_COOKIE;
+>  
+> -	spin_lock(&xencons_lock);
+> +	spin_lock_irqsave(&xencons_lock, flags);
+>  	list_add_tail(&info->list, &xenconsoles);
+> -	spin_unlock(&xencons_lock);
+> +	spin_unlock_irqrestore(&xencons_lock, flags);
+>  
+>  	return 0;
+>  }
+> @@ -394,10 +401,12 @@ static void xencons_free(struct xencons_info *info)
+>  
+>  static int xen_console_remove(struct xencons_info *info)
+>  {
+> +	unsigned long flags;
+> +
+>  	xencons_disconnect_backend(info);
+> -	spin_lock(&xencons_lock);
+> +	spin_lock_irqsave(&xencons_lock, flags);
+>  	list_del(&info->list);
+> -	spin_unlock(&xencons_lock);
+> +	spin_unlock_irqrestore(&xencons_lock, flags);
+>  	if (info->xbdev != NULL)
+>  		xencons_free(info);
+>  	else {
+> @@ -478,6 +487,7 @@ static int xencons_probe(struct xenbus_device *dev,
+>  {
+>  	int ret, devid;
+>  	struct xencons_info *info;
+> +	unsigned long flags;
+>  
+>  	devid = dev->nodename[strlen(dev->nodename) - 1] - '0';
+>  	if (devid == 0)
+> @@ -497,9 +507,9 @@ static int xencons_probe(struct xenbus_device *dev,
+>  	ret = xencons_connect_backend(dev, info);
+>  	if (ret < 0)
+>  		goto error;
+> -	spin_lock(&xencons_lock);
+> +	spin_lock_irqsave(&xencons_lock, flags);
+>  	list_add_tail(&info->list, &xenconsoles);
+> -	spin_unlock(&xencons_lock);
+> +	spin_unlock_irqrestore(&xencons_lock, flags);
+>  
+>  	return 0;
+>  
+> @@ -599,10 +609,12 @@ static int __init xen_hvc_init(void)
+>  
+>  	info->hvc = hvc_alloc(HVC_COOKIE, info->irq, ops, 256);
+>  	if (IS_ERR(info->hvc)) {
+> +		unsigned long flags;
+> +
+>  		r = PTR_ERR(info->hvc);
+> -		spin_lock(&xencons_lock);
+> +		spin_lock_irqsave(&xencons_lock, flags);
+>  		list_del(&info->list);
+> -		spin_unlock(&xencons_lock);
+> +		spin_unlock_irqrestore(&xencons_lock, flags);
+>  		if (info->irq)
+>  			unbind_from_irqhandler(info->irq, NULL);
+>  		kfree(info);
+> -- 
+> 2.37.3
+> 
+--8323329-1211100887-1669857113=:4039--
