@@ -2,137 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E437F63F805
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF30763F816
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiLATTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S230200AbiLATV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiLATS7 (ORCPT
+        with ESMTP id S229669AbiLATVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:18:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C30DB3915;
-        Thu,  1 Dec 2022 11:18:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F39CB8200E;
-        Thu,  1 Dec 2022 19:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D94C433D6;
-        Thu,  1 Dec 2022 19:18:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669922335;
-        bh=hSbyl0ectETj26ZvTfkUVS3Ig7lwtSaBLWBZQNFnGEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EIh5KC85iyhQHOcd1Y+TJD2FNxeFNz/xIsEmQYxsyo6u9YAuICqU90jjtn4vml5nJ
-         ElRBusQir3H6DtBSIZLG8+r6nVUAQTfRD7seZEvqAW/ejW/kfOZZEqikR7u2Wa0EnA
-         pg9aykowp5fJTN573QEZAAL/6EeQqIkfgFf9jnGSQohnT2V4hKgvawIrmJI64Q9or/
-         gFMd2xuOgtHUQZQ1R+nIhwj6WugMl9VNiCd1WbBYglfQCnQKoYqxebeG8AHlKXI9Jq
-         XE8WZRjGwqfnWCkaG4B0s75QRNVBH4ARbJLSM1wlB2gUGygu1hSPbdtko3aEeThEe9
-         CJV7JuYf8RaOg==
-Date:   Thu, 1 Dec 2022 19:18:50 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>, Icenowy Zheng <uwu@icenowy.me>
-Cc:     Icenowy Zheng <uwu@icenowy.me>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/3] dt-bindings: timer: sifive,clint: add compatible for
- OpenC906
-Message-ID: <Y4j+Gpptk3NAFBNV@spud>
-References: <20221121041757.418645-1-uwu@icenowy.me>
- <20221121041757.418645-3-uwu@icenowy.me>
- <98005150-83a7-5439-0db1-d93d459c3809@linaro.org>
- <b924d37d716fa8b1fd93102b1d51fac221f43d59.camel@icenowy.me>
- <d0f3ce4f-5676-f5e1-f04f-dd069679b2d3@linaro.org>
- <81C2234E-C92D-4F78-8295-7C6DD0A9BBC4@icenowy.me>
- <20221130181330.GA2544489-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 1 Dec 2022 14:21:54 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F7B71EE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:21:53 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso6206265pjt.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l4Gc9gN2otXkm8m4oox2qCrf5ekLmPGu19VnxyN13J8=;
+        b=SwT6lk9yHqGS7ky29RXrRN8zcJ5CXFPRqx/GX4tTizpwqqlWwm1V74YvwYVdVv2ykZ
+         e1RJx86pTwR+dPAYl8rF0+Hi9uVJs6zyHl2bR2RlSx8Jrw24pfvo13f6veiXcHvj3QJc
+         Xv81/cHQxq3f8dLf3YfRAMfHHLv6uTDpoqFWIH2PXJZAMFD0fL5vvCDwQD8tDx5ZeZMh
+         reCbklqNrpf7aH2tbl0MBkXx/St4C84QhVSnIOvL+ASXbKgI+YFcA9Eo31KzU6QUuPZz
+         Gk1eRPxzlVaDz/SwfWpqJjqoJm470tmvI8akRxjk3kc5sef9HhyMNNT4chR6vUpltDoG
+         nDzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l4Gc9gN2otXkm8m4oox2qCrf5ekLmPGu19VnxyN13J8=;
+        b=X6OWkBMmmvC6rPabFehLyDIT7uzQH8RuQq7KlJlYt2A3+Cg50FonRm/sSaqhvLLV0B
+         mlwlCbBzHrOhdKcTr8j32sTGPo/W+FnG1Ls2FmOUvwnH/MnZH2ho424nvnJenYGGJSs3
+         UC2vJj4BzcaCd0Z2YTlpicm9BSGQeB8d7o7iqB9B1PM6RGfwOnoZkukdPa5VRiKOh1Ce
+         Usbs4JAAJZyf11lne/hbkaMYEwtdUwJ1LHoNPHL8YIu4+4twNhI+r7j2S/jchge8udMM
+         GQfvPcYvV3NBWBOlvcJtPRzxNmpy2jcRYiV7a1EZIjioBCQ+aWSrUZ78JIwRGbeHKFmq
+         ojSQ==
+X-Gm-Message-State: ANoB5pm7jnLZuAj0ZBiDfEJxCPf4aq/94KdeJEl8M8zH2ZRB/5LOpX0n
+        2CFqF8ZejnnJXhx+DWf1+jB3ag==
+X-Google-Smtp-Source: AA0mqf6YSgYKqisC65u2t1o8VgQbEtHbJDHD+4u2Q56HcmLYNyxLyceIQa1JS6cTUzwYSXW6klAy2w==
+X-Received: by 2002:a17:902:f2c5:b0:189:1cc3:802a with SMTP id h5-20020a170902f2c500b001891cc3802amr50026912plc.56.1669922512296;
+        Thu, 01 Dec 2022 11:21:52 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0016d9b101413sm3980290pll.200.2022.12.01.11.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 11:21:51 -0800 (PST)
+Date:   Thu, 01 Dec 2022 11:21:51 -0800 (PST)
+X-Google-Original-Date: Thu, 01 Dec 2022 11:21:37 PST (-0800)
+Subject:     Re: [PATCH] Documentation: riscv: note that counter access is part of the uABI
+In-Reply-To: <20221201135110.3855965-1-conor.dooley@microchip.com>
+CC:     corbet@lwn.net, Conor Dooley <conor.dooley@microchip.com>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Message-ID: <mhng-72f383f6-a85f-4587-9fa6-f85fb9f27ec8@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221130181330.GA2544489-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 12:13:30PM -0600, Rob Herring wrote:
-> On Tue, Nov 22, 2022 at 03:41:27PM +0800, Icenowy Zheng wrote:
-> > 
-> > 
-> > 于 2022年11月22日 GMT+08:00 下午3:35:48, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 写到:
-> > >On 22/11/2022 08:18, Icenowy Zheng wrote:
-> > >> 在 2022-11-21星期一的 11:06 +0100，Krzysztof Kozlowski写道：
-> > >>> On 21/11/2022 05:17, Icenowy Zheng wrote:
-> > >>>> T-Head OpenC906 is a open-source-licensed fixed-configuration of
-> > >>>> C906,
-> > >>>> which is now public and able to be integrated.
-> > >>>>
-> > >>>> Add a compatible for the CLINT shipped as part of OpenC906, which
-> > >>>> should
-> > >>>> just be ordinary C9xx CLINT.
-> > >>>>
-> > >>>> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > >>>> ---
-> > >>>>  Documentation/devicetree/bindings/timer/sifive,clint.yaml | 1 +
-> > >>>>  1 file changed, 1 insertion(+)
-> > >>>>
-> > >>>> diff --git
-> > >>>> a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > >>>> b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > >>>> index aada6957216c..86703e995e31 100644
-> > >>>> --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > >>>> +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > >>>> @@ -35,6 +35,7 @@ properties:
-> > >>>>            - const: sifive,clint0
-> > >>>>        - items:
-> > >>>>            - enum:
-> > >>>> +              - thead,openc906-clint
-> > >>>>                - allwinner,sun20i-d1-clint
-> > >>>
-> > >>> Add entries sorted alphabetically. This should be squashed with
-> > >>> previous
-> > >>> patch.
-> > >> 
-> > >> I make it a seperated patch because I think it's a questionable
-> > >> approach.
-> > >> 
-> > >> If you think it's okay, I will just squash it and put it as the second
-> > >> patch in the next iteration, with adding openc906-plic as the first
-> > >> one.
-> > >
-> > >What is a questionable approach? Why commit msg is not saying this?
-> > 
-> > Ah I mentioned it in the cover letter. The problem is just I doubt whether
-> > binding strings for single SoCs are necessary.
-> 
-> They are.
-> 
-> Unless all the quirks/bugs/features are somehow guaranteed to be exactly 
-> the same as other SoCs sharing the same compatible string, or there is 
-> another mechanism to identify the exact version (e.g. a version 
-> register).
+On Thu, 01 Dec 2022 05:51:10 PST (-0800), Conor Dooley wrote:
+> Commit 5a5294fbe020 ("RISC-V: Re-enable counter access from userspace")
+> fixed userspace access to CYCLE, TIME & INSTRET counters and left a nice
+> comment in-place about why they must not be restricted. Since we now
+> have a uABI doc in RISC-V land, add a section documenting it.
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Based on an, as yet, unsent v2 of my other uABI changes. I don't expect
+> it to be applicable, just getting a patch into patchwork while I don't
+> forget about this.
+> ---
+>  Documentation/riscv/uabi.rst | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
+> index 8d2651e42fda..638ddce56700 100644
+> --- a/Documentation/riscv/uabi.rst
+> +++ b/Documentation/riscv/uabi.rst
+> @@ -3,6 +3,13 @@
+>  RISC-V Linux User ABI
+>  =====================
+>
+> +Counter access
+> +--------------
+> +
+> +Access to the CYCLE, TIME and INSTRET counters, now controlled by the SBI PMU
+> +extension, were part of the ISA when the uABI was frozen & so remain accessible
+> +from userspace.
+> +
+>  ISA string ordering in /proc/cpuinfo
+>  ------------------------------------
+>
+>
+> base-commit: 13ee7ef407cfcf63f4f047460ac5bb6ba5a3447d
+> prerequisite-patch-id: d17a9ffb6fcf99eb683728da98cd50e18cd28fe8
+> prerequisite-patch-id: 0df4127e3f4a0c02a235fea00bcb69cd94fabb38
+> prerequisite-patch-id: 171724b870ba212b714ebbded480269accd83733
 
-Icenowy,
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Having thought about this a little - are we not *more* likely to see
-bug/quirk disparity between implementations of the OpenC906 stuff by
-the very nature of being an open-source IP?
-
-Thanks,
-Conor.
-
+I think I merged the last one of these, but if the doc folks pick it up 
+that's fine with me.  Otherwise I'll take it when it comes back around, 
+so folks have time to take a look.
