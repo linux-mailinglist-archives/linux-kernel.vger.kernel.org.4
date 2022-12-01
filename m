@@ -2,70 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A742F63FA0B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11A963FA12
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbiLAVuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
+        id S231224AbiLAVvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:51:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiLAVus (ORCPT
+        with ESMTP id S229890AbiLAVvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:50:48 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A33C23C7;
-        Thu,  1 Dec 2022 13:50:47 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso1823503otq.11;
-        Thu, 01 Dec 2022 13:50:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+jgJgRNaHld9gb5rSZvL/PyTZHu4sldrsMLvOaIfMsg=;
-        b=k7kgy+xTRFhvzOCJkP/+QqJQeTngry3sI0ciNfq94n7lniD2iLNiM/b/CRcoyGTUWH
-         BBX3aOpy9Nctue8dNSieIhveIO84wBq1wxhDgZpdI3CR1v1wBJoOLSRGN6AdUC0hyPWh
-         PDP7aHtHp3zKbLFILT7/yACRJTYmpYYnEwFXkgBREKDfxd0G/5ptQ8Vc4Z64jDSYLO0x
-         dRoqT2KuClLJQCtqsUJJSCLO82a90AOzuT0RMauclSt7kMvS+r5x/qbez6yX2UQPeDh6
-         bcjPfGrqoLkb0RmbbMmAwIVOlA+224Vpa8DxxUF5vm96kdOfJjRVT/E8yIpMLD+rGUK2
-         ANkQ==
-X-Gm-Message-State: ANoB5plzLTNbJiyY3TlXOWbdZjTXYeqLCTykRejtsKctBPp5fT15HlxO
-        QwkYfrihadvDW0Ri8z2bng==
-X-Google-Smtp-Source: AA0mqf7a9CN/VqTUx6wJBV9AMr7VW+Ph/y/VwY25+fBiEyLCO+i5U4ofRL+QIWVprk48N1V9XxM1Rw==
-X-Received: by 2002:a05:6830:18f1:b0:66b:99a2:feb9 with SMTP id d17-20020a05683018f100b0066b99a2feb9mr34385584otf.359.1669931447052;
-        Thu, 01 Dec 2022 13:50:47 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d2-20020a4aa582000000b0049e9a80c690sm2233176oom.1.2022.12.01.13.50.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 13:50:46 -0800 (PST)
-Received: (nullmailer pid 1508234 invoked by uid 1000);
-        Thu, 01 Dec 2022 21:50:45 -0000
-Date:   Thu, 1 Dec 2022 15:50:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Sriranjani P <sriranjani.p@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: soc: samsung: exynos-sysreg: split
- from syscon
-Message-ID: <166993144474.1508149.1523006540100879286.robh@kernel.org>
-References: <20221127123259.20339-1-krzysztof.kozlowski@linaro.org>
- <20221127123259.20339-2-krzysztof.kozlowski@linaro.org>
+        Thu, 1 Dec 2022 16:51:11 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2076.outbound.protection.outlook.com [40.107.96.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33B3C23DA;
+        Thu,  1 Dec 2022 13:51:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FiBhTNscCwRLOCVrGn3PIxilsVkETQgZ8xMW90QYjyIgaczRZS8Yn0611j6oved45PpUAG2DX2UIE7mGAmPfNMO4PHfnEWsoiHUAXnQfWxOR7aIJvqrOYhUiBPVT31WEhyMCWa0ZXouhZZw1MjNXQRhac1WoZxQCutTzAllN/DzIX6JiCMws5vO12KhsuwvZwgcYiisJ0RP1ie5I6BMOZfmmwG/vH5qXRO2FPqKf3IwJFKdZlGqzF3xvIRuQ+y+bOmBgU3Ws/RClUUEEV7ho8HenUme+tWsIOgsLyMSMVGY1eptNX0vEwp1XqQQcHmJ3smJQ2/nupYxPyrM2m0oDdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F+CkvHGLmrV1/BwqVdC2cQNeywJ0Te6o1r1Ak+NlSb4=;
+ b=l15w7+S9E36yTNgM/gzdyZIdumbMLvXRC7bMEz4M3vANjWDSsIZCIcj1rSKEALd1sEh+pmHSvRvKWs54SARgr0rr0r5AFLZp/QUgWJwecwZ/ObK46ggPZ9R0SQPoZJb4Pqi9f9awNMsMYnD9pXGIJXccecGGS4C1yPdD3yFTVz64ztjOZ9bZi6fxRHVpULa2C3jxjUUwu20JGkPBGAqBx8M19VBHydm5MmfMWU73BMcSxA4JQ8szGFCZ80dPlyPVEQ+tp60G+5UbwZEQd6lpal/e7z+CTc/v+krOs1foM5NZESIIAkBdt5DZjmf+Q31RGvObRhFF6++EegjFkv+xmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F+CkvHGLmrV1/BwqVdC2cQNeywJ0Te6o1r1Ak+NlSb4=;
+ b=3AYmMj11X+VIJiTQIsMfm/kMOUcTWjmU2WgTWNHOuzwOY1iIb+mFQ/1d1X9OVw4NWeV4BmVgNABbl7sh4k9/jGq5iPJrBKIzyxLCf5VJSDKZkQGhfXMPdhqbIlea5gPHlw1knV1Vip2Nux3Ilc7vFJZKeLuVqi2jmKh/4/tr6kU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by MW4PR12MB7261.namprd12.prod.outlook.com (2603:10b6:303:229::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Thu, 1 Dec
+ 2022 21:51:07 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::5d8:f3f2:d940:5350]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::5d8:f3f2:d940:5350%3]) with mapi id 15.20.5857.023; Thu, 1 Dec 2022
+ 21:51:07 +0000
+Message-ID: <36f2e82a-4f60-bc85-3146-e04ce68923a8@amd.com>
+Date:   Thu, 1 Dec 2022 16:51:03 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/3] drm/amdgpu: add GART and GTT to glossary
+Content-Language: en-US
+To:     Peter Maucher <bellosilicio@gmail.com>, alexander.deucher@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221201153820.257570-1-bellosilicio@gmail.com>
+ <20221201153820.257570-3-bellosilicio@gmail.com>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+Organization: AMD Inc.
+In-Reply-To: <20221201153820.257570-3-bellosilicio@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR03CA0345.namprd03.prod.outlook.com
+ (2603:10b6:610:11a::29) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221127123259.20339-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|MW4PR12MB7261:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa102f14-a795-48a7-7175-08dad3e626c9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f824i2mS4fiMI54CC6ZleWniDl6kZD7sfqzgqVF+Fx+BKJ7o30JJP8KDNBhSVni9h9Mtm3jCv8BCQfvMGmHRErPtHHRj3DCQghGhDPCy2bbiCcu+TexGY9hdbhvNRQjXcn2HTPPkUKdYbljqcM+6/MhjBDuU1d/NK8Q4y8e8Tz54ZR1gWLHvJH27SyBurHdyg4Cm+kn5c2u/8xtt4ZEgoBgT2jShPdCMw0PAxoHkzBarpSDQnFrE3orLHSN8hItkxQA2UDjalBg1NGrNm0y0O+EP1zhN5A81jwxui6ETx8KymhtAvN/L79CuTh23CR8DQy4arezmdZq/wzrp0zocawovx/m0oAmgspnAbMUgCuYdNU+DPYBKmBUoY8nfxZsKElQD8+gYRLzi7K+02lSpsmYm7hphJV2kHzRCk0V4WvVeBsQLiDcqV/u1qbtVIAqiNGn/AS/GALSU7cHIfAW+y1YQMmT6AxceL1W2Ct6eeLXFGBBR4tbzDBK4yvr0kVph/B+80OxIRGjxUU6mP6vr5ZY5o7rl/ElnzJK5fo53PHKj6SrfouL2FFCt4qAgYmdkc1IResJZl4x8mSfEfv/whlOANfyFQ2rVhnW3o7f4uarb5WvbZp8XTmQSAfSsL2yF/7CVDJcxXSBetw+oebchHLWWsBmI15xNwUmaIisFmxtx6jKGdCKDdbYOO4gpmh7tZT5f+etXzxwIgRDjKJ9Ckczr3ScSeFC9YyMhvmlyY/M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(396003)(366004)(136003)(451199015)(2616005)(186003)(31686004)(316002)(6486002)(478600001)(86362001)(38100700002)(31696002)(36756003)(6666004)(6506007)(26005)(53546011)(6512007)(4744005)(2906002)(8936002)(36916002)(44832011)(5660300002)(41300700001)(66476007)(66946007)(8676002)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZThLcURtRk02TXpIY2ZrN0tJMWpULzZHdkJmTzJyaVBGUXpkWlcyWU5PSHhH?=
+ =?utf-8?B?NkhKcnpubUxLc0dkTmxBMDlCOVNOVTdhcXMrV04yTGdXakdQd1FOSExsUnND?=
+ =?utf-8?B?WHlpbHJla3ZMNmpkNC9KWFpGd2FJWUFycmNueHdMaXFRWTVOcVdxNzJ4NzIr?=
+ =?utf-8?B?OXJYL0ZWM1dyV3Q3c1Y1cWRMMU9UaU9vT3BXME1RdmZaZkVyNmdxbDFnb0dm?=
+ =?utf-8?B?VGh2OG4vTTRkN2RMaEttcGF3N2t6VUUvNDduN1lDa083MjFQL2h2dkFlOWpt?=
+ =?utf-8?B?ZHg5SkFYazBRa3BLTHdFdktPdWhsK0ZkOVJmMm5PdDJka0RDU0ErNVNIT3JP?=
+ =?utf-8?B?Mm9Eb0ZSRDFFUnVBTWZDU2pyVmU3ZUp6akVxU1pLajZpRVVpdUtSTll3Mmxo?=
+ =?utf-8?B?ZWFlcUpIeEJMUlI1WHNoaksxc0l6di9pWGRaVytFbXlvM3Z5OFFFS21ka3VQ?=
+ =?utf-8?B?cVRnVkQ1UURQaGIvODJSSVVSTUFUdGk2elgwTXRrODNacEpzSUFlYkt0aUM0?=
+ =?utf-8?B?R1l6K0hCYkJmZ1ZZVHVEckk2U1FUNEh5OWJDMXdJdGd1c21uVHVmRWpaZzdQ?=
+ =?utf-8?B?MTJpdnFOWHpvNGk4VnR4SmlGaGJzUHFSenhpM0RFYUVoQ05jWGJ0cVlqOSs3?=
+ =?utf-8?B?UUI1c2wrTVhGZ204bkxENW9TbmRqM0c2K0FxNTZnTURKNHBRRmRkOVFxY21Q?=
+ =?utf-8?B?V0VvbmZpUmdzblQ0MzBnSWpqd2QvRlpicURMaks3TklIZWFyN0ZYSTRVTWhG?=
+ =?utf-8?B?dURxc3hWSmIreFdwYnlGN3Jnc3pyZHpxakc1TkdPUXVIVzYzTXZWNmpXcVhs?=
+ =?utf-8?B?T0lid0lBdnFueHNsNGp5QzU1UkMwaG5Yd01YWndhd2lBM3NnZ05kQTlmdWNF?=
+ =?utf-8?B?a1diTlFTZ1BYb2NmUEtPSmVqdlRIdGlqdDgxcVU4cTNYaUg3N05LdEpMMmZ4?=
+ =?utf-8?B?cHdpdXhhKzNrOTFYajdYUjlCaEV0bjkzREFsV1BnK2VZbU84S2NoZCt4bUM3?=
+ =?utf-8?B?UmRzZXh5a0NwVTk5VW5RUHVJcWNzdVJrSzEyc0FoNFJVOUJXQVlIc3plZFRm?=
+ =?utf-8?B?WlZBZVpMSnh5SWdRS0srNkcvdlRHNnh4YituNm1wbFc3T3V5TzRDTDdyM3c1?=
+ =?utf-8?B?bTJQdThBZWJIS2p4aFZiZ0JMbUNQbG5XNkZsUVA2Z1djakNHQktBM1RKYWI2?=
+ =?utf-8?B?bkFKUzErYjc5a1VxNm8rVm1uQlZqTHd6ZDYrOHdqTUpnSFVDN1pUVlBHMWYw?=
+ =?utf-8?B?OHRtekNQeHE2WGNuU0Z2VnNTZzBZVXNxMUpUbWpsMGVjSkxnZDk3QUpZUEdD?=
+ =?utf-8?B?TlBrTnpWQTU3cTVZWno2N3A4RWpOL2VXR3B6eWNWRnJqS2t5UTRKSENSbUpp?=
+ =?utf-8?B?UzhaTk9KYjZqYUVtN3BXTnI5MkY0UEQxalhsUmJNOTE3ZTJyZUVDVmNnWkQ0?=
+ =?utf-8?B?NmMwVnUyVXBucW5ydlArditROE94bUZaWHNIQ1hwZ05pSjB5SHdQN1A5VVN0?=
+ =?utf-8?B?aFFZb05JZGJIQXFhbGQ0NkNaSmVnRzNIUDJVVmZsdlhzWCtDMHpnUzFNd2pY?=
+ =?utf-8?B?UmVYM1hQZUVLZHFMY2ViaCswaXl4K2NLalQwY3NhWTFMUWp6QjZCamhkeGF3?=
+ =?utf-8?B?ZlZSZ2xhT1pkWjdkWXpzYXNmaGZDRkhMQzAyZ2dQcTUwbWtEWUcya1h4MzRZ?=
+ =?utf-8?B?QndxWnVMSzdsUWU1dWhGY2xLUTZVRVhKdDluVk9sZitnWlRGeU15eFhLd3lW?=
+ =?utf-8?B?YWZ5OUJHSE96RVRjUEdpRnpxRnlLdHV2czhVdGVid2JzbUdrTGRKWVcrVnhr?=
+ =?utf-8?B?dW5WL0gxWkx2ajcrL2F2V3FPdFpYNXBYNVhCQnRTMUxKU0ladndud0YzMWhV?=
+ =?utf-8?B?bEJuUTIvNXdYQjl5QnJSZERSOHBUbm9zdkJDYlEyNUFIM3Bxa05oTzdESFNZ?=
+ =?utf-8?B?Nk9tVitQYjFFQVc2cGJLRWp3dytGeUplWEJrR2N3djNraVc3clhjcHlDY0tl?=
+ =?utf-8?B?YVcrV3RWazZ1dVJwSjVjTnltUmt4cXRhSk5VLzRKYnlZcnhaMmgyc0tYa2Jm?=
+ =?utf-8?B?ODFjc2E5M0dma1htVUdjeVF0alh2VC9JL2p4VmFETkR4a095SjZXbVREOHlv?=
+ =?utf-8?Q?vnZyRtEEbLgK96+S+gIFw0Gtv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa102f14-a795-48a7-7175-08dad3e626c9
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 21:51:07.5051
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RFvQnwPK4klnClmVkcws4sOcTzcFWH121U64EjHiIGTUGgA5usf3ECNkFRc/rVa0nILHLfPT8QQG6nw4hoXCJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7261
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +126,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Sun, 27 Nov 2022 13:32:57 +0100, Krzysztof Kozlowski wrote:
-> Split Samsung Exynos SoC SYSREG bindings to own file to narrow the
-> bindings and do not allow other parts of syscon.yaml.  This allows
-> further customization of Samsung SoC bindings.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Lee Jones <lee@kernel.org>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Reviewed-by: Sriranjani P <sriranjani.p@samsung.com>
-> 
+On 2022-12-01 10:38, Peter Maucher wrote:
+> GART and GTT are two abbreviations that should be mentioned in the
+> glossary.
+>
+> Signed-off-by: Peter Maucher <bellosilicio@gmail.com>
 > ---
-> 
-> Changes since v1:
-> 1. Add Rb tags.
-> 
-> Cc: Sriranjani P <sriranjani.p@samsung.com>
-> Cc: Chanho Park <chanho61.park@samsung.com>
-> Cc: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../devicetree/bindings/mfd/syscon.yaml       |  6 ---
->  .../soc/samsung/samsung,exynos-sysreg.yaml    | 39 +++++++++++++++++++
->  2 files changed, 39 insertions(+), 6 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> 
+>   Documentation/gpu/amdgpu/amdgpu-glossary.rst | 6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/Documentation/gpu/amdgpu/amdgpu-glossary.rst b/Documentation/gpu/amdgpu/amdgpu-glossary.rst
+> index 326896e9800d..d86bea7926dc 100644
+> --- a/Documentation/gpu/amdgpu/amdgpu-glossary.rst
+> +++ b/Documentation/gpu/amdgpu/amdgpu-glossary.rst
+> @@ -30,6 +30,12 @@ we have a dedicated glossary for Display Core at
+>       EOP
+>         End Of Pipe/Pipeline
+>   
+> +    GART
+> +      Graphics Aperture Table
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The "R" stands for "Remapping". I've usually seen this as "Graphics 
+Address Remapping Table", but "... Aperture ..." would work too.
+
+Regards,
+   Felix
+
+
+> +
+> +    GTT
+> +      Graphics Translation Table, mostly synonymous to GART
+> +
+>       GC
+>         Graphics and Compute
+>   
