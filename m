@@ -2,163 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967F563FA50
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6784863FA53
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiLAWIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S230413AbiLAWKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiLAWIq (ORCPT
+        with ESMTP id S230059AbiLAWKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:08:46 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA74421BD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:08:44 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 6063811C;
-        Thu,  1 Dec 2022 23:08:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669932522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PCoKb4GGFgwOloHgPPyLK39clFt7P0eA0h+X5bcYVQY=;
-        b=WPQXKu+uq7XQ+WmL/YQWOO1lBsrRZDdiVn0jwZaAIisQpB558jnb6+InWVM6UqnEz2yIeO
-        SvEEnER0haqoGklkh/KEiXOJAKUG9ErM2zfKvGGIpbJUgGwNlCFJ1osGj7wzQkE7bnKo+3
-        TAR7ZeQYrkUfy9K6slBElIyuV+7saTPTgup1u4QzohAt3gRuowN4RahXBtXxgwLr8JV6l4
-        tDzRLcLq9NhJW6sxBTzEcQDu4NRsvfIAv5L2OrdOnf2W68XCzcxEBjGCEcWhNI+zhLpfha
-        x9dGoq998agypYDG/jXpEpDCNVB23l0MEDn1iAXXohyq9AwvJa+zcrPZbNlVMg==
+        Thu, 1 Dec 2022 17:10:51 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAE62B1B3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:10:50 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id t5so3005576vsh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 14:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rf84obAKN/8ruolDjM0pM28OtudVnfPduob08XaAHeM=;
+        b=C5A/tE+OvI+/icvXdhe39VigA0TTbTY4PJd9mnXEXbnfkr0SrvZc1sS0BhKGJ9tFbH
+         VrlF6IzPg1aqf/aWu55hvBF9KZc12XIGaiyBaaWM8tzg9pEnKuCYLKsOWIO9iIRoq6fN
+         h+9U6WOdvTl4++/BjtWYxzFMTOs+g5fd6qJ/zeLOaxZ5HqfmU3EFndAxTDwLIhOvufRg
+         lz9HYLOosZUavj+NWHAmwUBmjsPobyVqbSeR7xoIPkhsfX+u6FQFeFXf4lUXDXHETkX+
+         aOg84lpe1797MkZHvW3Z/yK8LBKC0vRON342vgsQ0hEFEvXwFpzRCnmNE0JkU96V1fXe
+         hHqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rf84obAKN/8ruolDjM0pM28OtudVnfPduob08XaAHeM=;
+        b=zRN0+BTUcLtiU6TQ3Ml+jC3YEDN9BOCUGT1nXglDPFF5znRvssg8HnBMTT52NS0mzs
+         YGdAYFlwofcI2jCRoSCrSA0KfGHkf5vSa4KtHNSc9G8f5PbTK9yUF53nlEeKz+N+wYe1
+         Owfjgl8UKhVN3mD6fBEYaPbrmyGDcXwy31Eg8MjZq24NEVMR+TicMOcd1OIiSl7cXoam
+         irDt8PrfQm15vlW+P+yJln1Hw6GpjhIfCoGU7oA0y0aiJnrPGum8RCSzq1d7LWXgcJdL
+         Tljxe2WXyqiIa8b24sIRUP2FT7KJMa4ppAdzsMzcylP98oANRbddFi7WnU1LMUyxnw8I
+         2oGw==
+X-Gm-Message-State: ANoB5pnsYs3r11BSTLprXJt/4rZBmO7qVX1URXpBpZgrZiIH+yChag8y
+        XRlhXfIo76EIXoqQ8ZMBxoyBKKj7IEtJ+72IYINzMQ==
+X-Google-Smtp-Source: AA0mqf7+zcrz2gPmzIkscfmr5SMSSgOcjkv+7kg2SOfHpFg5FBWFgEZt95ZGmuZG032Oshqx0NMxe3bwoGr4Onh742g=
+X-Received: by 2002:a05:6102:cd1:b0:3aa:1bff:a8a5 with SMTP id
+ g17-20020a0561020cd100b003aa1bffa8a5mr39103278vst.67.1669932649473; Thu, 01
+ Dec 2022 14:10:49 -0800 (PST)
 MIME-Version: 1.0
-Date:   Thu, 01 Dec 2022 23:08:42 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     greg.malysa@timesys.com,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] mtd: spi-nor: Add additional octal-mode flags to
- be checked during SFDP
-In-Reply-To: <20221201212750.267721-3-nathan.morrison@timesys.com>
-References: <20221201212750.267721-1-nathan.morrison@timesys.com>
- <20221201212750.267721-3-nathan.morrison@timesys.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0537b888aa4e6b7ce4194e8242a231fd@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130020328.1009347-1-almasrymina@google.com> <20221201213202.ycdaymwojd5plyrk@google.com>
+In-Reply-To: <20221201213202.ycdaymwojd5plyrk@google.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 1 Dec 2022 14:10:37 -0800
+Message-ID: <CAHS8izOn3Kr8vqxHYxEoGVoCXKmysRKNsvXpJ2EumxDU6JfSDQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] mm: Add nodes= arg to memory.reclaim
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        gthelen@google.com, fvdl@google.com, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[In general, please post new versions after a reasonable
-amount of time for reviews. Like a day or so.]
+On Thu, Dec 1, 2022 at 1:32 PM Shakeel Butt <shakeelb@google.com> wrote:
+>
+> On Tue, Nov 29, 2022 at 06:03:27PM -0800, Mina Almasry wrote:
+> [...]
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 7b8e8e43806b..23fc5b523764 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -6735,7 +6735,8 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
+> >  unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+> >                                          unsigned long nr_pages,
+> >                                          gfp_t gfp_mask,
+> > -                                        unsigned int reclaim_options)
+> > +                                        unsigned int reclaim_options,
+> > +                                        nodemask_t nodemask)
+>
+> Can you please make this parameter a nodemask_t* and pass NULL instead
+> of NODE_MASK_ALL?
 
-Am 2022-12-01 22:27, schrieb Nathan Barrett-Morrison:
-> This adds some support for searching a chips SFDP table for:
-> 
-> read commands: 1S-8S-8S
-> program commands: 1S-1S-8S, 1S-8S-8S
-> 
-> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> ---
->  drivers/mtd/spi-nor/core.c | 8 ++++++++
->  drivers/mtd/spi-nor/core.h | 5 +++--
->  drivers/mtd/spi-nor/sfdp.c | 8 ++++++++
->  3 files changed, 19 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index bee8fc4c9f07..2f882608abc6 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2359,6 +2359,13 @@ static void spi_nor_no_sfdp_init_params(struct
-> spi_nor *nor)
->  					  SNOR_PROTO_1_1_8);
->  	}
-> 
-> +	if (no_sfdp_flags & SPI_NOR_OCTAL_READ_1_8_8) {
-> +		params->hwcaps.mask |= SNOR_HWCAPS_READ_1_8_8;
-> +		spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_1_8_8],
-> +					  0, 16, SPINOR_OP_READ_1_8_8,
-> +					  SNOR_PROTO_1_8_8);
-> +	}
+Thank you very much for the review. I sure can in the next version. To
+be honest I thought about that and made the parameter nodemask_t
+because I thought the call sites would be more readable. I.e. this:
 
-This should only be done for flashes which doesn't support
-SFDP at all (see the comment for spi_nor_no_sfdp_init_params()).
+    try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+MEMCG_RECLAIM_MAY_SWAP,  NODE_MASK_ALL);
 
-Yours supports SFDP, has the correct flags in the
-4BAIT table but doesn't have the 17th DWORD in the BFPT. I'm not
-sure if this is correct or if it's a mistake in the SFDP of this
-flash device.
+Would be more readable than this:
 
-If it's correct, we would need to somehow call
-spi_nor_set_read_settings() in sfdp.c; but we don't know the
-mode or wait clocks. If it's a mistake in the SFDP, we'd need
-to add a fixup for this particular flash which sets the read
-settings. I'd go with the second because we just haven't enough
-information.
+    try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+MEMCG_RECLAIM_MAY_SWAP,  NULL);
 
--michael
-
-> +
->  	if (no_sfdp_flags & SPI_NOR_OCTAL_DTR_READ) {
->  		params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
->  		spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_8_8_8_DTR],
-> @@ -2514,6 +2521,7 @@ static void
-> spi_nor_init_params_deprecated(struct spi_nor *nor)
->  	if (nor->info->no_sfdp_flags & (SPI_NOR_DUAL_READ |
->  					SPI_NOR_QUAD_READ |
->  					SPI_NOR_OCTAL_READ |
-> +					SPI_NOR_OCTAL_READ_1_8_8 |
->  					SPI_NOR_OCTAL_DTR_READ))
->  		spi_nor_sfdp_init_params_deprecated(nor);
->  }
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index 85b0cf254e97..7bc1cde049b7 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -514,8 +514,9 @@ struct flash_info {
->  #define SPI_NOR_DUAL_READ		BIT(3)
->  #define SPI_NOR_QUAD_READ		BIT(4)
->  #define SPI_NOR_OCTAL_READ		BIT(5)
-> -#define SPI_NOR_OCTAL_DTR_READ		BIT(6)
-> -#define SPI_NOR_OCTAL_DTR_PP		BIT(7)
-> +#define SPI_NOR_OCTAL_READ_1_8_8	BIT(6)
-> +#define SPI_NOR_OCTAL_DTR_READ		BIT(7)
-> +#define SPI_NOR_OCTAL_DTR_PP		BIT(8)
-> 
->  	u8 fixup_flags;
->  #define SPI_NOR_4B_OPCODES		BIT(0)
-> diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-> index e4e87815ba94..e1b7547bf81e 100644
-> --- a/drivers/mtd/spi-nor/sfdp.c
-> +++ b/drivers/mtd/spi-nor/sfdp.c
-> @@ -1089,6 +1089,14 @@ static int spi_nor_parse_4bait(struct spi_nor 
-> *nor,
->  		spi_nor_set_pp_settings(&params_pp[SNOR_CMD_PP_1_4_4],
->  					SPINOR_OP_PP_1_4_4_4B,
->  					SNOR_PROTO_1_4_4);
-> +	if (pp_hwcaps & SNOR_HWCAPS_PP_1_1_8)
-> +		spi_nor_set_pp_settings(&params_pp[SNOR_CMD_PP_1_1_8],
-> +					SPINOR_OP_PP_1_1_8_4B,
-> +					SNOR_PROTO_1_1_8);
-> +	if (pp_hwcaps & SNOR_HWCAPS_PP_1_8_8)
-> +		spi_nor_set_pp_settings(&params_pp[SNOR_CMD_PP_1_8_8],
-> +					SPINOR_OP_PP_1_8_8_4B,
-> +					SNOR_PROTO_1_8_8);
-> 
->  	for (i = 0; i < SNOR_ERASE_TYPE_MAX; i++) {
->  		if (erase_mask & BIT(i))
+But the tradeoff is that the callers need include/linux/nodemask.h.
+But yes I can fix in the next version.
