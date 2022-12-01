@@ -2,124 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BC463EBFD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B33263EC04
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiLAJHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:07:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S230024AbiLAJKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:10:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiLAJHf (ORCPT
+        with ESMTP id S229468AbiLAJKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:07:35 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E763EB99;
-        Thu,  1 Dec 2022 01:07:32 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 1 Dec 2022 04:10:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE2E5DB82;
+        Thu,  1 Dec 2022 01:10:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 053B06602B84;
-        Thu,  1 Dec 2022 09:07:30 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669885651;
-        bh=8jHjmSVTbJv8cbYTXsHL50wkv2nBgikOZ1z0ILT8YM0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Z4JeI8M/qnmFg2yXh5HVGszAWAtnij7NwUGovyCw1VDdq8aJFaU/BOAgypQoa4QuG
-         zmxc1FKTKI4uJH7RQ9TibRk1ssye11o17QFXQKwdqFoopg2wdbvyKx3QXqndaIef/L
-         hGna4xjprrkUiRqy/czXncySOVxq52/npCTKiiz7vjiwJ7gc9eM2XMvbaAQFym49oK
-         vbvFi81vJUlY1M/l/xZMl7luMFM2v/D+6iQ9nyZ62+qXGGlyc7w5vJTkhqXXZEoGS5
-         QusJN0MzKb6ib1LAhZyQ5w3jUrv19hdmnydvz6gpaX/87pFI01+JBuufV9PNP7ZkTH
-         nd/iPGPb0L4Tw==
-Message-ID: <ba14a46f-477f-70af-761d-696fe8a4f41c@collabora.com>
-Date:   Thu, 1 Dec 2022 10:07:28 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14470B81E65;
+        Thu,  1 Dec 2022 09:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331DFC433D6;
+        Thu,  1 Dec 2022 09:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669885820;
+        bh=B4rSBBn+9jnyDFWA3h9tdw7f7e5sffBAfT1JE8gR29k=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Bbug4YKhfGPHOQn/6C9j/vx7Tc4DLK/cnBo3bzUFK8KLhcK2nJjsPyDS6RF4Mw7xq
+         EdtjUVO9YmF7cVgJIz19YESD7PUJ3WgCQEFi6qwwoQF4X9fHfAQX0J857nbkHBXVgv
+         Iyr/lDd1kA3f3aIo+UYTYhWvzJCdC07WTFahUKBXCv0TRBtd0lZFL6y/wXtZkqBCre
+         wiHXyQKw5Uptni0YTZWDdCcNwGUCc+xy+seLuGoEz0OP0YLk34gc5QdjDjQ1ZlwBlD
+         G71NNKJE+bdZmHWgffPw3gAMt0oDXRRMgUA07ifP515qkXFoBeVej7l7qsCTJOSjPQ
+         2puXiD58+Q+jQ==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     yang.yang29@zte.com.cn, jgg@ziepe.ca,
+        dennis.dalessandro@cornelisnetworks.com
+Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+In-Reply-To: <202211301744378304494@zte.com.cn>
+References: <202211301744378304494@zte.com.cn>
+Subject: Re: [PATCH] IB/hfi1: switch to netif_napi_add()
+Message-Id: <166988581627.44464.17864367397107451165.b4-ty@kernel.org>
+Date:   Thu, 01 Dec 2022 11:10:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] arm64: dts: mt8192: Add adsp power domain controller
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20221201073328.1559-1-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221201073328.1559-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-87e0e
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/12/22 08:33, Allen-KH Cheng ha scritto:
-> Add adsp power domain controller node for mt8192 SoC.
+On Wed, 30 Nov 2022 17:44:37 +0800 (CST), yang.yang29@zte.com.cn wrote:
+> From: Yang Yang <yang.yang29@zte.com.cn>
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
-> Ref: https://lore.kernel.org/all/2ec80bd8-dfef-d2e6-eb41-6e6088043e33@collabora.com/
->      [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
-> ---
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 8 ++++++++
->   include/dt-bindings/power/mt8192-power.h | 1 +
->   2 files changed, 9 insertions(+)
+> There is no need to use netif_napi_add_weight() when the weight argument
+> is 64. See "net: drop the weight argument from netif_napi_add".
+> 
 > 
 
-Allen, thanks for this one, but it's incomplete...
+Applied, thanks!
 
-First of all, you must add the power domain on the driver itself, specifically,
-in drivers/soc/mediatek/mt8192-pm-domains.h - otherwise this change will have no
-effect!
+[1/1] IB/hfi1: switch to netif_napi_add()
+      https://git.kernel.org/rdma/rdma/c/10aa7cd398a9ea
 
-...Then, as Chen-Yu said, you should also add the power domain to the scp_adsp
-clock node as that's solving the lockup issue...
-
-.......and last, but not least: we need a Fixes tag to backport this fix, here
-and on the commit that adds the missing power domain in the driver.
-
-Thanks,
-Angelo
-
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 424fc89cc6f7..e71afba871fc 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -514,6 +514,14 @@
->   						};
->   					};
->   				};
-> +
-> +				power-domain@MT8192_POWER_DOMAIN_ADSP {
-> +					reg = <MT8192_POWER_DOMAIN_ADSP>;
-> +					clocks = <&topckgen CLK_TOP_ADSP_SEL>;
-> +					clock-names = "adsp";
-> +					mediatek,infracfg = <&infracfg>;
-> +					#power-domain-cells = <0>;
-> +				};
->   			};
->   		};
->   
-> diff --git a/include/dt-bindings/power/mt8192-power.h b/include/dt-bindings/power/mt8192-power.h
-> index 4eaa53d7270a..63e81cd0d06d 100644
-> --- a/include/dt-bindings/power/mt8192-power.h
-> +++ b/include/dt-bindings/power/mt8192-power.h
-> @@ -28,5 +28,6 @@
->   #define MT8192_POWER_DOMAIN_CAM_RAWA	18
->   #define MT8192_POWER_DOMAIN_CAM_RAWB	19
->   #define MT8192_POWER_DOMAIN_CAM_RAWC	20
-> +#define MT8192_POWER_DOMAIN_ADSP	21
->   
->   #endif /* _DT_BINDINGS_POWER_MT8192_POWER_H */
-> 
-
+Best regards,
+-- 
+Leon Romanovsky <leon@kernel.org>
