@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B26863EC64
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744EA63EC67
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLAJZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S229676AbiLAJ0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiLAJZf (ORCPT
+        with ESMTP id S229558AbiLAJ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:25:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E019D287
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:24:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669886648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UgJ+HDh8KhhTBQLgmfONT+YSYAYl+JCf9dmOxyoPJKY=;
-        b=N1/PSGKv5YW8MDhRPCJ4zKklu1dF0Tjsd4HUfWspcu25TULowDZN4Pie1P80aAWt63TSrG
-        H5P+jRh5GB1Vl0+L7ylyW2RjEira1PWDo1JAKf6Sxj/+3PwCTX8OFB52wcrXL5RfaBVp5n
-        LTYV8bNuEa9LXHzlkJ0gsCFN53P0KbU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-648-SARdwcseOP6SDHCCNBOvzA-1; Thu, 01 Dec 2022 04:24:06 -0500
-X-MC-Unique: SARdwcseOP6SDHCCNBOvzA-1
-Received: by mail-wm1-f70.google.com with SMTP id x10-20020a05600c420a00b003cfa33f2e7cso600924wmh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:24:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UgJ+HDh8KhhTBQLgmfONT+YSYAYl+JCf9dmOxyoPJKY=;
-        b=JJtjH3XHDwxf454vcAcNdSZ4MOQezze3HZCL3BCTDLL3R0ioKTixjF7HS9BHsO/ie9
-         t+ALQBMh2n3AVg3+gOryqGkL0Dam0vJTS3w9SLRYceP4R7zPKs1vdw3NFp8f+sunDho4
-         H1MOB9qXYxVq0rlqeD4eeUzCniaaxU3Sd+WeiQfhPc6mpyT6gNttsdkqOIdnPfb5S6ZM
-         DqJsNKIp1nPT/ILMp7e3Qf7j9X/KD5n+htMNz8vak3Rn7RLVd74hjjHgqEpJMqPnb2M9
-         fNxiu3ZvDh3lsa+BTaClSpPnSlLjTOfvfwVip35bDL2Zv15tVutCHhk5SiniVOkyZDkn
-         7sdg==
-X-Gm-Message-State: ANoB5pntksixPMePrNq1xHY1scDdPiwTr+RHfbvo/Meip1oIXbIdt7jv
-        gbz18TI1LPeuHp583ukTrQ6rLQf9d7ko5kS0t0hC3U1ZTE3SuLs/DPFOh+Phd92uI+EvSVFligb
-        mQ3HusTZJOGqFuENdcuk3mx+a
-X-Received: by 2002:a5d:4ccb:0:b0:236:d611:4fcf with SMTP id c11-20020a5d4ccb000000b00236d6114fcfmr29574584wrt.192.1669886645078;
-        Thu, 01 Dec 2022 01:24:05 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf51AfiJW8ivh3gMCG70OBpMd9MsL8P1xJEHEG5W9Kg8EmdeOizi/C3u9PaCATJ6V1Bz8hc4Hw==
-X-Received: by 2002:a5d:4ccb:0:b0:236:d611:4fcf with SMTP id c11-20020a5d4ccb000000b00236d6114fcfmr29574568wrt.192.1669886644807;
-        Thu, 01 Dec 2022 01:24:04 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id l5-20020a5d5605000000b002367ad808a9sm3868673wrv.30.2022.12.01.01.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 01:24:04 -0800 (PST)
-Date:   Thu, 1 Dec 2022 10:23:30 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Dexuan Cui <decui@microsoft.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v2 2/6] hv_sock: always return ENOMEM in case of error
-Message-ID: <20221201092330.ia5addl4sgw7fhk2@sgarzare-redhat>
-References: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
- <a10ffbed-848d-df8c-ec4e-ba25c4c8e3e8@sberdevices.ru>
+        Thu, 1 Dec 2022 04:26:31 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539E518D;
+        Thu,  1 Dec 2022 01:26:29 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 318D22D9;
+        Thu,  1 Dec 2022 10:26:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669886787;
+        bh=xt+nYBG9p2F7Ov7TXjZkZafslLalNsVFj5Rxf5PFRAA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hmgrznQNc+PJ5JstFF7M7yPl/IOGPw19T3IfwFXPzGYcdWYn3PwF07QFofkeYOOgA
+         CROgul+H8b2jnVWm2HsAMVn76gytOVSjYN+AxlDF0oZUQYZnVsepUzbBy5ChjzGJtK
+         /msJnOvdo2z/xw5LugwihELPWCFboauYcceHxXQ8=
+Message-ID: <5598c7f8-b47e-338d-e2e3-f62a44903634@ideasonboard.com>
+Date:   Thu, 1 Dec 2022 11:26:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <a10ffbed-848d-df8c-ec4e-ba25c4c8e3e8@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/7] clk: renesas: r8a779g0: Add display related clocks
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+ <20221123065946.40415-4-tomi.valkeinen+renesas@ideasonboard.com>
+ <CAMuHMdUjCS6q44XmTanu=R68GyuVECLa0B-1AFg1CUD_oV4DuA@mail.gmail.com>
+From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+In-Reply-To: <CAMuHMdUjCS6q44XmTanu=R68GyuVECLa0B-1AFg1CUD_oV4DuA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 05:05:53PM +0000, Arseniy Krasnov wrote:
->From: Bobby Eshleman <bobby.eshleman@bytedance.com>
->
->This saves original behaviour from af_vsock.c - switch any error
->code returned from transport layer to ENOMEM.
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/hyperv_transport.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
->index 59c3e2697069..fbbe55133da2 100644
->--- a/net/vmw_vsock/hyperv_transport.c
->+++ b/net/vmw_vsock/hyperv_transport.c
->@@ -687,7 +687,7 @@ static ssize_t hvs_stream_enqueue(struct vsock_sock *vsk, struct msghdr *msg,
-> 	if (bytes_written)
-> 		ret = bytes_written;
-> 	kfree(send_buf);
->-	return ret;
->+	return ret < 0 ? -ENOMEM : ret;
+Hi Geert, Laurent,
 
-I'm not sure for hyperv we want to preserve -ENOMEM. This transport was 
-added after virtio-vsock, so I think we can return the error directly.
+On 30/11/2022 21:18, Geert Uytterhoeven wrote:
+> Hi Tomi,
+> 
+> On Wed, Nov 23, 2022 at 8:00 AM Tomi Valkeinen
+> <tomi.valkeinen+renesas@ideasonboard.com> wrote:
+>> Add clocks related to display which are needed to get the DSI output
+>> working.
+>>
+>> Extracted from Renesas BSP tree.
+>>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> Thanks for your patch!
+> 
+>> --- a/drivers/clk/renesas/r8a779g0-cpg-mssr.c
+>> +++ b/drivers/clk/renesas/r8a779g0-cpg-mssr.c
+>> @@ -145,6 +145,8 @@ static const struct cpg_core_clk r8a779g0_core_clks[] __initconst = {
+>>          DEF_FIXED("viobusd2",   R8A779G0_CLK_VIOBUSD2,  CLK_VIO,        2, 1),
+>>          DEF_FIXED("vcbus",      R8A779G0_CLK_VCBUS,     CLK_VC,         1, 1),
+>>          DEF_FIXED("vcbusd2",    R8A779G0_CLK_VCBUSD2,   CLK_VC,         2, 1),
+>> +       DEF_FIXED("dsiref",     R8A779G0_CLK_DSIREF,    CLK_PLL5_DIV4,  48, 1),
+>> +       DEF_DIV6P1("dsiext",    R8A779G0_CLK_DSIEXT,    CLK_PLL5_DIV4,  0x884),
+>>
+>>          DEF_GEN4_SDH("sd0h",    R8A779G0_CLK_SD0H,      CLK_SDSRC,         0x870),
+>>          DEF_GEN4_SD("sd0",      R8A779G0_CLK_SD0,       R8A779G0_CLK_SD0H, 0x870),
+>> @@ -161,6 +163,14 @@ static const struct mssr_mod_clk r8a779g0_mod_clks[] __initconst = {
+>>          DEF_MOD("avb0",         211,    R8A779G0_CLK_S0D4_HSC),
+>>          DEF_MOD("avb1",         212,    R8A779G0_CLK_S0D4_HSC),
+>>          DEF_MOD("avb2",         213,    R8A779G0_CLK_S0D4_HSC),
+>> +
+> 
+> Weird horizontal and vertical spacing below...
+> 
+>> +       DEF_MOD("dis0",                 411,    R8A779G0_CLK_S0D3),
+> 
+> I doubt this parent clock is correct.
+> Based on Table 8.1.4e ("Lists of CPG clocks generated from PLL5"),
+> this should be one of the VIOBUS clocks.
+> VIOBUSD2 has the same rate as S0D3, so I'd use that one.
+> 
+>> +       DEF_MOD("dsitxlink0",           415,    R8A779G0_CLK_DSIREF),
+>> +       DEF_MOD("dsitxlink1",           416,    R8A779G0_CLK_DSIREF),
 
-@Dexuan what do you think?
+Now that you started questioning about the clocks, I started to wonder 
+about the DSI clocks. They don't quite make sense to me, but here also I 
+just assumed it's "fine" as I copied it and it works.
 
-Thanks,
-Stefano
+The VIOBUS & VIOBUSD2 are marked to as going to the DSI. But we don't 
+actually mark any of the DSI clocks as coming from those sources.
+
+DSIREF is quite clear, it's the source for DSI PLL.
+
+DSIEXT goes to the DSI PHY and is also marked to be used for LP-TX.
+
+In the DT we have now:
+
+clocks = <&cpg CPG_MOD 415>,
+	 <&cpg CPG_CORE R8A779G0_CLK_DSIEXT>,
+	 <&cpg CPG_CORE R8A779G0_CLK_DSIREF>;
+clock-names = "fck", "dsi", "pll";
+
+The "dsi" clock name is a bit vague, but maybe it's "not fclk, not pll, 
+but still needed for dsi"? =)
+
+Is it ok to refer to DSIEXT & DSIREF like that, or should they be in the 
+r8a779g0_mod_clks list? Or is that list for fclks only?
+
+So the fclk in the dts is mod clock 415 (416 for the second dsi), which 
+is dsitxlink0 or dsitxlink1. Well, those names don't quite make sense if 
+it's a fclk.
+
+I would rename those clocks to "dsi0" and "dsi1", and source them from 
+R8A779G0_CLK_VIOBUSD2, similarly to the other video clocks.
+
+Does the above make sense?
+
+  Tomi
 
