@@ -2,101 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB7363F724
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B6B63F732
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiLASJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S230162AbiLASLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiLASJl (ORCPT
+        with ESMTP id S229669AbiLASLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:09:41 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99197A604F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=IFDPDHyResCflYkSCq5q5dLxxdKd
-        kwEHUoejDRAdiGo=; b=D3n8XyEa0LLfouJhZHqwIxo/OISgmMQhEvkCENmFEOKh
-        qYazhwaqag6I5KdHXJw350EX4XJAS4rHDBFEssaGbc4gffEQMcrSeDxMV7VPI85J
-        u+wbYhu1sQQks7QBPrDpfHDalSJWdLMQ6uqvs14orx+dIjCuzXuQyGk7a194ESI=
-Received: (qmail 728924 invoked from network); 1 Dec 2022 19:09:35 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Dec 2022 19:09:35 +0100
-X-UD-Smtp-Session: l3s3148p1@Qx9iH8ju/s8gAQnoAHp8AKw37PRURidB
-Date:   Thu, 1 Dec 2022 19:09:30 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clocksource/drivers/sh_cmt: access registers according
- to spec
-Message-ID: <Y4jt2riYNH0Fq5tD@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-References: <20221130210609.7718-1-wsa+renesas@sang-engineering.com>
- <87pmd3s89f.ffs@tglx>
+        Thu, 1 Dec 2022 13:11:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B716EB71ED;
+        Thu,  1 Dec 2022 10:11:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F8E8B81FD1;
+        Thu,  1 Dec 2022 18:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124E4C433C1;
+        Thu,  1 Dec 2022 18:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669918264;
+        bh=abbxDko8xxIgN43TGD7PjO4ktuR8obKuUDRggHGcGh0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NI/gXF8N4bqL1rTkyPrfaWjTUpOEpjbrOjVnuEaPhoxgbEubRQpcGpo04jTvM5/g/
+         nYelXUZzhXZOxzxn6B3J83OmdNeC2L5pk5uaiENG585sFVUIKWKPwO09SDgzWBuIF0
+         r+hHQy9tLY2C3OYdp1eBljCI4oJBDDaUp/lXVOg3Du61yaGPDVwMg+4Noc1NBaYhx8
+         WcB9LdbpH3HOgHbe5vBWw8YFl3enrHm1QWrBgI0FhmrmfwpYQP7pBgGFwwUKLMIKm/
+         L0vopg3IjCpPQw8tcsXPJE9p8iQga7Eumwek9LmzeoK1EjJDIJKPhDKfmHIrgT8Dk8
+         cD4YByX/98U0w==
+Received: by mail-ua1-f45.google.com with SMTP id n9so866397uao.13;
+        Thu, 01 Dec 2022 10:11:04 -0800 (PST)
+X-Gm-Message-State: ANoB5pnBgr0vBOV0CO0ez6+vq/L2k8CWyzAUtMqvW3lW2SvzlnJL2Uxx
+        OxNIBsnFSUswqtJgECKYqIVnE0Euk2Da5M7Gqw==
+X-Google-Smtp-Source: AA0mqf4QIyT6VahcqDmI12MLMCc/vE3ASpYv1pzurU6CjB/p3SM54fi3Oi2LQpbXvk2AUCuGF9WAWcBZ/6x3KPapb4M=
+X-Received: by 2002:a05:6130:83:b0:418:b849:8187 with SMTP id
+ x3-20020a056130008300b00418b8498187mr41149171uaf.43.1669918262913; Thu, 01
+ Dec 2022 10:11:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aBoNTTNNNXWDqBN/"
-Content-Disposition: inline
-In-Reply-To: <87pmd3s89f.ffs@tglx>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221125202008.64595-1-samuel@sholland.org> <20221125202008.64595-3-samuel@sholland.org>
+ <5b05317d-28cc-bfc8-f415-e6acf453dc7c@linaro.org> <20221126142735.47dcca6d@slackpad.lan>
+ <99c3e666-ec26-07a0-be40-0177dd449d84@linaro.org> <20221201034557.GA2998157-robh@kernel.org>
+In-Reply-To: <20221201034557.GA2998157-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 1 Dec 2022 12:10:49 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+H0tLUJ+vWSkDHqjYdsAK2Rd3UCDEXv9uJ2v-ZR=XCAw@mail.gmail.com>
+Message-ID: <CAL_Jsq+H0tLUJ+vWSkDHqjYdsAK2Rd3UCDEXv9uJ2v-ZR=XCAw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: net: sun8i-emac: Fix snps,dwmac.yaml inheritance
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        LABBE Corentin <clabbe.montjoie@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 30, 2022 at 9:45 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Sat, Nov 26, 2022 at 03:48:33PM +0100, Krzysztof Kozlowski wrote:
+> > On 26/11/2022 15:28, Andre Przywara wrote:
+> > > On Sat, 26 Nov 2022 14:26:25 +0100
+> > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > > Hi,
+> > >
+> > >> On 25/11/2022 21:20, Samuel Holland wrote:
+> > >>> The sun8i-emac binding extends snps,dwmac.yaml, and should accept all
+> > >>> properties defined there, including "mdio", "resets", and "reset-names".
+> > >>> However, validation currently fails for these properties because the
+> > >>
+> > >> validation does not fail:
+> > >> make dt_binding_check -> no problems
+> > >>
+> > >> Maybe you meant that DTS do not pass dtbs_check?
+> > >
+> > > Yes, that's what he meant: If a board actually doesn't have Ethernet
+> > > configured, dt-validate complains. I saw this before, but didn't find
+> > > any solution.
+> > > An example is: $ dt-validate ... sun50i-a64-pinephone-1.2.dtb
+> > > arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb:
+> > >   ethernet@1c30000: Unevaluated properties are not allowed ('resets', 'reset-names', 'mdio' were unexpected)
+> > >   From schema: Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
+> > >
+> > > Why exactly is beyond me, but this patch removes this message.
+> >
+> > I don't think this should be fixed like this. That's the problem of
+> > dtschema (not ignoring fully disabled nodes) and such patch only moves
+> > from one correct syntax to another correct syntax, which fixes dtschema
+> > problem, but changes nothing here.
+>
+> Humm, it looks to me like the 'phy-mode' required in snps,dwmac.yaml
+> causes the problem, but I can't get a minimized example to fail.
+> Something in 'required' shouldn't matter. Definitely seems like an issue
+> in the jsonschema package. I'll keep looking at it.
 
---aBoNTTNNNXWDqBN/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+TLDR: A fix in dtschema for this will be in place soon.
 
+I've simplified this down to:
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
 
-> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#change=
-log
->=20
-> I fixed it up for you this time...
+    "unevaluatedProperties": false,
+    "allOf":[
+        {
+            "properties": {
+                "foo": true,
+                "bar": true
+            },
+            "required": [ "foo" ]
+        }
+    ]
+}
 
-[...]
+An instance { "bar": 1 } will fail due to the 'required' failing. When
+you have a subschema (what's under 'allOf'), then it all has to pass
+to be 'evaluated'. This seems inconsistent to me, but the json-schema
+folks say it is operating as intended.
 
-> Instead of quoting, it would have been helpful to have the lore links
-> for RFC v1/v2....
+I've got 2 possible fixes. One is to just ignore unevaluatedProperties
+errors on disabled nodes like is already done for 'required'. This
+means disabled nodes can have any unknown property or child node added
+which isn't great. The other way overrides 'required' validation to
+always pass on disabled nodes. This would be better, but there are
+some exceptions we need to still fail. 'oneOf' with N entries of
+'required' to say 1 of N properties must be present for example.
+Excluding each one of these cases will be fragile, so probably going
+with the first fix.
 
-Thanks for fixing it, Thomas. I will improve!
-
-
---aBoNTTNNNXWDqBN/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOI7dcACgkQFA3kzBSg
-Kba3Mg/8Dvuz7SuAAiySNTpA5eAUSXzLEFGXi2UR1hLnWP3Yg4xQrtbTzBJo27q/
-aVsamuuKiX+E6mxIF9dHmBZjDz8wmyQrpPbFAP255nggbjNR36uLgBCmMXokV0sn
-VlbS3PrwmqBw+K/tRvrv58RRDAc6Rtgynw2O+8UTIp+odxlCbT54RY7RAqJH0CHU
-T/7sJfz6owtlNy4bWdbBAeQJlk7tI1+NbRav6HLzpSy3UrxdM+uN4XnOpfRMdyS1
-HMmDlXVxCuVFQNDWmY8gvG1eKL8nj0Rfjp8UjeJ3jmYIezjxNSwxoHoRhccWOa0/
-cvS3GxkiZ3Ng3YJS7rUHadnD9xzPULMB3gOhIjPB6Xi1H4kaAvo552ozjJsvjOhU
-NTuQLlXrOdWusOKXguuuATlLxworVi8VLt+87yPqn8BVYyjHBC11KH3RMLWheS5r
-jXEc3qYAxo7QWOTexciORZeEyNnE1+einrsnLJW+jUgTn/MGPJvuEfsjFUw8Mbqz
-O8a9uKibnBDx24fMhCftHuIf0NOfxCSdkNaXmRO7kJj4hw7lFaYDYTco6T9yBLx9
-vjO96ed+71TdMOAPDG7GaMgxfWxPwIEYLk65TXUmJqNUZJtVWblhGGkgbN12/DcV
-U0qHNmnGhFvbkiTDdtXJGi0uoZkIwxBcu2652GAk/aPc1OSyPP4=
-=rPQH
------END PGP SIGNATURE-----
-
---aBoNTTNNNXWDqBN/--
+Rob
