@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7BC63E7BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE0763E7C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiLACUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S229988AbiLACVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 21:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiLACUJ (ORCPT
+        with ESMTP id S229977AbiLACVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:20:09 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D99D83E;
-        Wed, 30 Nov 2022 18:20:04 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t17so530501pjo.3;
-        Wed, 30 Nov 2022 18:20:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6y9AUyAqq0punB0p25H3aQ8RSZH3MKAHnozHOyjdT/o=;
-        b=GkZbysRbQz2Phy3zO7CnVjp8oZ3E1AIXTQMfBWKR51wcKg9K6ymnCmz0eBo5jCz4oD
-         Zm1cqfAb1ajgztTvYr6L/QakMxwGWXUbhljQb9j1L8NuvFH2hKSNdCkMnnCvXkAI5pp5
-         rmdZ4qDJ9egcNLwVa3hiQV+RnGbY5AfJ4+/t+H0uWlpneNWcBmVfOJnalZo0vW3urCBn
-         teX13Pdl/lMyiasmQftLVuyzEQ0XI5gWV0+d4OGlgAlm/JDTU9TUSg9uLSmf8i7mi7La
-         yIriDqpDX23oOTtowOdATtzKYsNyvG5ieGtPnAxieuBWOuvwX8tfpx20xl5EOSyQt0op
-         vTGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6y9AUyAqq0punB0p25H3aQ8RSZH3MKAHnozHOyjdT/o=;
-        b=A19AFL0IWKIPcXqEFdrZzhaPahlTcjWd/x+ATMrFzBjSXQ/+xaJe0OJiZJhmBZENvv
-         MAYB2t5enJjdgfrj3GHUQ5s1pKXLljDnUJPTn9ZeSfcg0YeQMIzWBHLw0WZw3DOYVE35
-         veyOXCZj97lTGLtCqLHoAFwzHBGg9jEnAmAwvbmJ9bD/dZHfie1DsL3M1njsZhD/wQzW
-         fN2+R1n+Ard/drXpmWU3iWPKWiB1jIHjtXgmzsEdHILHkaWsIjT2OPRofKFQg/1QUkEU
-         Jh52COnszH6Wy6DYSCTk5sV9fdSWHLC8egvxDuDKZwuc/jiJVhXed2Iq1A9rEf5qZmL0
-         PVpg==
-X-Gm-Message-State: ANoB5pm8SSCm5Y8aj7ivQwpTCX8ZfMDQSbXeb6hxlxokqG0of2hs56Ab
-        dwh4I3z1/ns1cwldrKx1iLsMs24/ltwfCulqva1LLMIceog=
-X-Google-Smtp-Source: AA0mqf5rVSN3sU8H7annQKroyzCuVfNG6TOykuN/kwAF13K5JIWuu8skyrXchhhBPXYsKpgRNQ8TlQ516IH3mgc28ME=
-X-Received: by 2002:a17:90a:a88e:b0:213:13ab:c309 with SMTP id
- h14-20020a17090aa88e00b0021313abc309mr67274062pjq.80.1669861203738; Wed, 30
- Nov 2022 18:20:03 -0800 (PST)
+        Wed, 30 Nov 2022 21:21:02 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9BDA057D;
+        Wed, 30 Nov 2022 18:20:34 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NN0Cx51fWz4f3s9r;
+        Thu,  1 Dec 2022 10:20:29 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP4 (Coremail) with SMTP id gCh0CgAnS9huD4hjToLJBQ--.36736S2;
+        Thu, 01 Dec 2022 10:20:32 +0800 (CST)
+Subject: Re: [PATCH v2 0/5] A few cleanup and bugfix patches for blk-iocost
+To:     Jens Axboe <axboe@kernel.dk>, tj@kernel.org, josef@toxicpanda.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221018121932.10792-1-shikemeng@huawei.com>
+ <93f9093b-abec-db7e-a945-263cd9355c08@huaweicloud.com>
+ <bd008582-1509-69f3-1812-2b9caa390c05@kernel.dk>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <8d9c98e5-0433-e025-ccec-4144102e91c5@huaweicloud.com>
+Date:   Thu, 1 Dec 2022 10:20:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-References: <20221130180544.105550592@linuxfoundation.org>
-In-Reply-To: <20221130180544.105550592@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Wed, 30 Nov 2022 19:19:52 -0700
-Message-ID: <CAFU3qoaA-_ixnfFFZXvnSp3t5YPTQzY01US4gOyaJedfFg56aw@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bd008582-1509-69f3-1812-2b9caa390c05@kernel.dk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgAnS9huD4hjToLJBQ--.36736S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1Dtr13XF1xKw4xuw48WFg_yoW8Wr4xpF
+        Z5u3WSvFyDJw4Skr1xKw42qr4Fyay8Wry8X3ZFq345Zwn8t34Sg3s2qF18ur1DXrsxA3ya
+        vFW2qa45C34DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 3:16 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.11 release.
-> There are 289 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Hi Greg,
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+on 12/1/2022 9:46 AM, Jens Axboe wrote:
+> On 11/30/22 6:45?PM, Kemeng Shi wrote:
+>>
+>> Hi jens,
+>> on 10/18/2022 8:19 PM, Kemeng Shi wrote:
+>>> This series contain a few patch to correct comment, correct trace of
+>>> vtime_rate and so on. More detail can be found in the respective
+>>> changelogs.
+>>>
+>>> ---
+>>> v2:
+>>>  Thanks Tejun for review and comment!
+>>>  Add Acked-by tag from Tejun.
+>>>  Correct description in patch 3/5 and 4/5.
+>>>  Drop "blk-iocost: Avoid to call current_hweight_max if iocg->inuse
+>>> == iocg->active"
+>>>  Drop "blk-iocost: Remove redundant initialization of struct ioc_gq"
+>>>  Drop "blk-iocost: Get ioc_now inside weight_updated"
+>>> ---
+>>>
+>>> Kemeng Shi (5):
+>>>   blk-iocost: Fix typo in comment
+>>>   blk-iocost: Reset vtime_base_rate in ioc_refresh_params
+>>>   blk-iocost: Trace vtime_base_rate instead of vtime_rate
+>>>   blk-iocost: Remove vrate member in struct ioc_now
+>>>   blk-iocost: Correct comment in blk_iocost_init
+>>>
+>>>  block/blk-iocost.c            | 16 +++++++++-------
+>>>  include/trace/events/iocost.h |  4 ++--
+>>>  2 files changed, 11 insertions(+), 9 deletions(-)
+>> Could you apply this patchset?
+>> By the way, my apply for an cloud variant of email was just passed
+>> a few days ago. Is this mail still in spam?
+> 
+> This one wasn't, but I've seen the huaweicloud.com emails fail
+> the same origination checks in the past.
+I'm not sure if was there any fix to huaweicloud.com email. I will
+use this huaweicloud emails to minimize the trouble before any
+better solution is found. Sorry for the inconvenience.
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+-- 
+Best wishes
+Kemeng Shi
 
-     Total time: 0.710 [sec]
-
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 9.551 [sec]
-
-       9.551475 usecs/op
-         104695 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
