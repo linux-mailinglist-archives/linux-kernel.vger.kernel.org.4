@@ -2,133 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59C263F40B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ED063F408
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiLAPea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiLAPd7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232026AbiLAPd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 1 Dec 2022 10:33:59 -0500
-Received: from mail3.bemta32.messagelabs.com (mail3.bemta32.messagelabs.com [195.245.230.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE691144;
-        Thu,  1 Dec 2022 07:33:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1669908800; i=@fujitsu.com;
-        bh=N56u62cITdKOZ72UbsVRhOqgpDhCsAHPIjg3XTUEUqo=;
-        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=ZqX9Ng/A5FRaOBokMqIa1rXjoF/vL4mEWMY9qBs6VW9pt/CrHzwlPyE0l++hjl5/y
-         dtYF0f14NOEulZWC7nEIWnb0MVrKLdXclRd4PbV0I3QmTfGl6qOnbvHaWRalVL75Vs
-         /9PQhTnveAm247+CIRT9N4gAExtzOGHADFYJt0qw0rWWprL4i+1sk7fVBv4KXws/5L
-         1j1sveZ9b55rwjadsclvaaNYq9IvzA0uqiVTdNMrSm1CDhcb+YkMxU22Y1NWU/K1DQ
-         w1ywzpvnWTBiguOaldpkj/8aOEh+GrjOwwMhxfVDEmcKWNDYcgQXPm2lGbyvFEpbBG
-         74+OhpNxjmhvw==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnleJIrShJLcpLzFFi42Kxs+FI1LU/2ZF
-  s8OuMssWc9WvYLKZPvcBoseXYPUaLy0/4LPbsPclicXnXHDaLXX92sFus/PGH1YHD49QiCY/F
-  e14yeWxa1cnmcWLGbxaPF5tnMnp83iQXwBbFmpmXlF+RwJpx8d4FpoIVXBWXn89gbmB8ztHFy
-  MUhJLCFUaJxywVmCGc5k8SMwyvZIJw9jBLTv01i7GLk5GAT0JG4sOAvaxcjB4eIQLXEraVsIG
-  FmgQyJ41f+MIPYwgJuEp9vPwezWQRUJOa3H2QFsXkFXCV+d95hAbElBBQkpjx8D1bDCRR/+Xc
-  jO4gtJOAicb35IDNEvaDEyZlPWCDmS0gcfPGCGWSthICSxMzueIgxFRKzZrUxQdhqElfPbWKe
-  wCg4C0n3LCTdCxiZVjGaFqcWlaUW6RrpJRVlpmeU5CZm5uglVukm6qWW6panFpfoGuollhfrp
-  RYX6xVX5ibnpOjlpZZsYgTGSkoxy+wdjD1L/+gdYpTkYFIS5dXe15EsxJeUn1KZkVicEV9Ump
-  NafIhRhoNDSYI3ZQ9QTrAoNT21Ii0zBxi3MGkJDh4lEV6+Y0Bp3uKCxNzizHSI1ClGY461DQf
-  2MnNMnf1vP7MQS15+XqqUOG/gcaBSAZDSjNI8uEGwdHKJUVZKmJeRgYFBiKcgtSg3swRV/hWj
-  OAejkjDvtm1AU3gy80rg9r0COoUJ6JRIsTaQU0oSEVJSDUx7StSUf/q9cbwdxXSDReDKiie6G
-  nqBtyar6LrxKldu2lt5SVzgbDqn6lOrxxP2SGje/nAus+VBsc3PhntM/VyH1uuvs5xy/5yHC5
-  fQ8bBV663V9sSf3eL3vWWJqJd9uu57ceE8h2v5TUfj3Dq7uSJ6C55+iJundn7ngu77p7+GtNi
-  7S79nvWO2r9pddZXyx1nT/rX26ruuWfjRKn3HdLv4mUZsOpePGMrd7Ht7o1dTz08iLXtqzUqH
-  uwv/aiUbyQVW7znk+/6K2IMVUdErJrH2dCx9kbd0VY7unK+zPKxtncqd7ETXpOY7lcbN2P1h5
-  xKFhMVB7J1WbO8m7mz6/qQjoyF1yqceVxc+9fh5/5VYijMSDbWYi4oTActQn4KiAwAA
-X-Env-Sender: ruansy.fnst@fujitsu.com
-X-Msg-Ref: server-20.tower-585.messagelabs.com!1669908799!42492!1
-X-Originating-IP: [62.60.8.97]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.101.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 23032 invoked from network); 1 Dec 2022 15:33:19 -0000
-Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
-  by server-20.tower-585.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 1 Dec 2022 15:33:19 -0000
-Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 297E81001A3;
-        Thu,  1 Dec 2022 15:33:19 +0000 (GMT)
-Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231991AbiLAPdX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 1 Dec 2022 10:33:23 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD75B0A36;
+        Thu,  1 Dec 2022 07:33:05 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 1D4EB10019E;
-        Thu,  1 Dec 2022 15:33:19 +0000 (GMT)
-Received: from localhost.localdomain (10.167.225.141) by
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
- (TLS) id 15.0.1497.42; Thu, 1 Dec 2022 15:33:15 +0000
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>
-CC:     <djwong@kernel.org>, <david@fromorbit.com>,
-        <dan.j.williams@intel.com>, <akpm@linux-foundation.org>
-Subject: [PATCH v2 8/8] xfs: remove restrictions for fsdax and reflink
-Date:   Thu, 1 Dec 2022 15:32:53 +0000
-Message-ID: <1669908773-207-1-git-send-email-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
-References: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DEFEB21B33;
+        Thu,  1 Dec 2022 15:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669908783; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lRSCZupTcGdc2fsGVM9Vku4eQargWm6vsSEgV5oJYik=;
+        b=OlXy43fUFMH8T2yyLAMhkz4Elou0mFwMwkZnqNdBEPT1NjePygSIWjkpVjF3qinaZ3+s4f
+        XiQ/xQtoS3A0eG4L7Uz6n25dx1wqGyH5sW/UYhKIlBUEt4T4wqa9Xm6GSTa1H925tmgj9n
+        AaGdUSrqU+LYbtUQMGQlIhOR+lCUTTw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669908783;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lRSCZupTcGdc2fsGVM9Vku4eQargWm6vsSEgV5oJYik=;
+        b=7lD4n/nGslEBouA/tWiW7zxhiyW4sFyy6q+jCkAomee27jlYvrUnx0kOOhkyPTLQ1cTUNs
+        wvsiBN8v2eNyglCw==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id CDB6A13503;
+        Thu,  1 Dec 2022 15:33:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id jVItMi/JiGMWVgAAGKfGzw
+        (envelope-from <jack@suse.cz>); Thu, 01 Dec 2022 15:33:03 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 50D73A06E4; Thu,  1 Dec 2022 16:33:03 +0100 (CET)
+Date:   Thu, 1 Dec 2022 16:33:03 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
+        syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2] ext4: fix WARNING in ext4_expand_extra_isize_ea
+Message-ID: <20221201153303.jk6zgcyhvexu7zzh@quack3>
+References: <20221201145923.73028-1-yebin@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.167.225.141]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201145923.73028-1-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the basic function for fsdax and reflink has been implemented,
-remove the restrictions of them for widly test.
+On Thu 01-12-22 22:59:23, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+> 
+> Syzbot found the following issue:
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 3631 at mm/page_alloc.c:5534 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+> Modules linked in:
+> CPU: 1 PID: 3631 Comm: syz-executor261 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+> RSP: 0018:ffffc90003ccf080 EFLAGS: 00010246
+> RAX: ffffc90003ccf0e0 RBX: 000000000000000c RCX: 0000000000000000
+> RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003ccf108
+> RBP: ffffc90003ccf198 R08: dffffc0000000000 R09: ffffc90003ccf0e0
+> R10: fffff52000799e21 R11: 1ffff92000799e1c R12: 0000000000040c40
+> R13: 1ffff92000799e18 R14: dffffc0000000000 R15: 1ffff92000799e14
+> FS:  0000555555c10300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffc36f70000 CR3: 00000000744ad000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __alloc_pages_node include/linux/gfp.h:223 [inline]
+>  alloc_pages_node include/linux/gfp.h:246 [inline]
+>  __kmalloc_large_node+0x8a/0x1a0 mm/slab_common.c:1096
+>  __do_kmalloc_node mm/slab_common.c:943 [inline]
+>  __kmalloc+0xfe/0x1a0 mm/slab_common.c:968
+>  kmalloc include/linux/slab.h:558 [inline]
+>  ext4_xattr_move_to_block fs/ext4/xattr.c:2558 [inline]
+>  ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
+>  ext4_expand_extra_isize_ea+0xe3f/0x1cd0 fs/ext4/xattr.c:2765
+>  __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
+>  ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
+>  __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
+>  ext4_inline_data_truncate+0x548/0xd00 fs/ext4/inline.c:2021
+>  ext4_truncate+0x341/0xeb0 fs/ext4/inode.c:4221
+>  ext4_process_orphan+0x1aa/0x2d0 fs/ext4/orphan.c:339
+>  ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+>  __ext4_fill_super fs/ext4/super.c:5515 [inline]
+>  ext4_fill_super+0x80ed/0x8610 fs/ext4/super.c:5643
+>  get_tree_bdev+0x400/0x620 fs/super.c:1324
+>  vfs_get_tree+0x88/0x270 fs/super.c:1531
+>  do_new_mount+0x289/0xad0 fs/namespace.c:3040
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  </TASK>
+> 
+> Reason is allocate 16M memory by kmalloc, but MAX_ORDER is 11, kmalloc
+> can allocate maxium size memory is 4M.
+> XATTR_SIZE_MAX is currently 64k, but EXT4_XATTR_SIZE_MAX is '(1 << 24)',
+> so 'ext4_xattr_check_entries()' regards this length as legal. Then trigger
+> warning in 'ext4_xattr_move_to_block()'.
+> To solve above issue, according to Jan Kara's suggestion use kvmalloc()
+> to allocate memory in ext4_xattr_move_to_block().
+> 
+> Reported-by: syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+> Fixes: 54dd0e0a1b25 ("ext4: add extra checks to ext4_xattr_block_get()")
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
----
- fs/xfs/xfs_ioctl.c | 4 ----
- fs/xfs/xfs_iops.c  | 4 ----
- 2 files changed, 8 deletions(-)
+Thanks! The patch looks good to me. Feel free to add:
 
-diff --git a/fs/xfs/xfs_ioctl.c b/fs/xfs/xfs_ioctl.c
-index 1f783e979629..13f1b2add390 100644
---- a/fs/xfs/xfs_ioctl.c
-+++ b/fs/xfs/xfs_ioctl.c
-@@ -1138,10 +1138,6 @@ xfs_ioctl_setattr_xflags(
- 	if ((fa->fsx_xflags & FS_XFLAG_REALTIME) && xfs_is_reflink_inode(ip))
- 		ip->i_diflags2 &= ~XFS_DIFLAG2_REFLINK;
- 
--	/* Don't allow us to set DAX mode for a reflinked file for now. */
--	if ((fa->fsx_xflags & FS_XFLAG_DAX) && xfs_is_reflink_inode(ip))
--		return -EINVAL;
--
- 	/* diflags2 only valid for v3 inodes. */
- 	i_flags2 = xfs_flags2diflags2(ip, fa->fsx_xflags);
- 	if (i_flags2 && !xfs_has_v3inodes(mp))
-diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
-index 2e10e1c66ad6..bf0495f7a5e1 100644
---- a/fs/xfs/xfs_iops.c
-+++ b/fs/xfs/xfs_iops.c
-@@ -1185,10 +1185,6 @@ xfs_inode_supports_dax(
- 	if (!S_ISREG(VFS_I(ip)->i_mode))
- 		return false;
- 
--	/* Only supported on non-reflinked files. */
--	if (xfs_is_reflink_inode(ip))
--		return false;
--
- 	/* Block size must match page size */
- 	if (mp->m_sb.sb_blocksize != PAGE_SIZE)
- 		return false;
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/ext4/xattr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
+> index 718ef3987f94..23cfefc6d262 100644
+> --- a/fs/ext4/xattr.c
+> +++ b/fs/ext4/xattr.c
+> @@ -2556,7 +2556,7 @@ static int ext4_xattr_move_to_block(handle_t *handle, struct inode *inode,
+>  
+>  	is = kzalloc(sizeof(struct ext4_xattr_ibody_find), GFP_NOFS);
+>  	bs = kzalloc(sizeof(struct ext4_xattr_block_find), GFP_NOFS);
+> -	buffer = kmalloc(value_size, GFP_NOFS);
+> +	buffer = kvmalloc(value_size, GFP_NOFS);
+>  	b_entry_name = kmalloc(entry->e_name_len + 1, GFP_NOFS);
+>  	if (!is || !bs || !buffer || !b_entry_name) {
+>  		error = -ENOMEM;
+> @@ -2608,7 +2608,7 @@ static int ext4_xattr_move_to_block(handle_t *handle, struct inode *inode,
+>  	error = 0;
+>  out:
+>  	kfree(b_entry_name);
+> -	kfree(buffer);
+> +	kvfree(buffer);
+>  	if (is)
+>  		brelse(is->iloc.bh);
+>  	if (bs)
+> -- 
+> 2.31.1
+> 
 -- 
-2.38.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
