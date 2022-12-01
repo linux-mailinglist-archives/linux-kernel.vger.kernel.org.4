@@ -2,176 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A546763EB91
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E4A63EB13
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiLAIte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S229704AbiLAI2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:28:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiLAItO (ORCPT
+        with ESMTP id S229898AbiLAI14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:49:14 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E98C8C689;
-        Thu,  1 Dec 2022 00:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669884517; x=1701420517;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e0sGk5FC+bQXFAkQVJL15UcqqaRVlO2Lo1qDc6ms+U8=;
-  b=f9IeOvH49cL2xGrVCDsqD3NlkF76QgXbgm5JbLGgSZKW1BGWGw/viaSP
-   3sMnyAl/d01sBLKw5pw3zy/1pswMPiBZacLoFqZQBItQjl5Umu6bVZ1wY
-   usUYROYBss8YiDMski8otzHBy6ZbPdaZ+xc+Kb0tSwuU0G9lXaVEMQWed
-   lCHxyp5JbBWXLBCOyDDUMnvd8qSHiZ7FQLK77acwHTcjuXlxp434EigEz
-   bi8olOAbxkeCuSBHAD7zWANWsQ7aprn/OMAcpw/lUOJaGJUpmuCI9iQ4y
-   1WT2cTndhgaAq1NWqOnTk6SGiCTW85Th5TbtRzfbpflMxOvCjM1ejmR8c
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
-   d="scan'208";a="125953620"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Dec 2022 01:48:36 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 1 Dec 2022 01:48:36 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Thu, 1 Dec 2022 01:48:34 -0700
-Date:   Thu, 1 Dec 2022 08:48:15 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        <linux-riscv@lists.infradead.org>, <aou@eecs.berkeley.edu>,
-        <corbet@lwn.net>, <guoren@kernel.org>, <heiko@sntech.de>,
-        <paul.walmsley@sifive.com>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 1/3] RISC-V: clarify ISA string ordering rules in cpu.c
-Message-ID: <Y4hqTwpyxMqZTyoC@wendy>
-References: <20221130234125.2722364-1-conor@kernel.org>
- <20221130234125.2722364-2-conor@kernel.org>
- <20221201082743.xjxcnx7zcwycdwy7@kamzik>
+        Thu, 1 Dec 2022 03:27:56 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCDF1A20D;
+        Thu,  1 Dec 2022 00:27:45 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NN8Mc2ZHDz4f3nps;
+        Thu,  1 Dec 2022 16:27:40 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgCnCrZ9ZYhjeFPFBQ--.33056S4;
+        Thu, 01 Dec 2022 16:27:42 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>,
+        syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+Subject: [PATCH] ext4: fix WARNING in ext4_expand_extra_isize_ea
+Date:   Thu,  1 Dec 2022 16:48:44 +0800
+Message-Id: <20221201084844.2855621-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221201082743.xjxcnx7zcwycdwy7@kamzik>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgCnCrZ9ZYhjeFPFBQ--.33056S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrW3JFy5KrWkJr4rZr4kXrb_yoWruF4Dpw
+        43Ary7Cr48WF9rCFs7AFy8twn8Wwn3CF4UJrWxWr1kZFy7Xw1xKFZ5Kr43XFy8trW8Jry2
+        qFn8tw1rKw15G3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbmii3UUUUU==
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 09:27:43AM +0100, Andrew Jones wrote:
-> On Wed, Nov 30, 2022 at 11:41:24PM +0000, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > While the current list of rules may have been accurate when created
-> > it now lacks some clarity in the face of isa-manual updates. Instead of
-> > trying to continuously align this rule-set with the one in the
-> > specifications, change the role of this comment.
-> > 
-> > This particular comment is important, as the array it "decorates"
-> > defines the order in which the ISA string appears to userspace in
-> > /proc/cpuinfo.
-> > 
-> > Re-jig and strengthen the wording to provide contributors with a set
-> > order in which to add entries & note why this particular struct needs
-> > more attention than others.
-> > 
-> > While in the area, add some whitespace and tweak some wording for
-> > readability's sake.
-> > 
-> > Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  arch/riscv/kernel/cpu.c | 49 ++++++++++++++++++++++++++++++-----------
-> >  1 file changed, 36 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index 852ecccd8920..68b2bd0cc3bc 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -120,22 +120,45 @@ device_initcall(riscv_cpuinfo_init);
-> >  		.uprop = #UPROP,				\
-> >  		.isa_ext_id = EXTID,				\
-> >  	}
-> > +
-> >  /*
-> > - * Here are the ordering rules of extension naming defined by RISC-V
-> > - * specification :
-> > - * 1. All extensions should be separated from other multi-letter extensions
-> > - *    by an underscore.
-> > - * 2. The first letter following the 'Z' conventionally indicates the most
-> > + * The canonical order of ISA extension names in the ISA string is defined in
-> > + * chapter 27 of the unprivileged specification.
-> > + *
-> > + * Ordinarily, for in-kernel data structures, this order is unimportant but
-> > + * isa_ext_arr defines the order of the ISA string in /proc/cpuinfo.
-> > + *
-> > + * The specification uses vague wording, such as should, when it comes to
-> > + * ordering so for our purposes the following rules apply:
-> > + *
-> > + * 1. All multi-letter extensions must be separated from other multi-letter
-> 
-> 1. All multi-letter extensions must be separated from other extensions by an
-> underscore.
-> 
-> (Because we always lead multi-letter extensions with underscore, even the
-> first one, which follows the single-letter extensions.)
+From: Ye Bin <yebin10@huawei.com>
 
-Yah, I need to think as if I am using De Morgan's... The DT ABI requires
-"should" and permits this. The uAPI is "must"/"will" and always has an
-_. I'll propagate that change to the docs patch too.
+Syzbot found the following issue:
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3631 at mm/page_alloc.c:5534 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+Modules linked in:
+CPU: 1 PID: 3631 Comm: syz-executor261 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+RSP: 0018:ffffc90003ccf080 EFLAGS: 00010246
+RAX: ffffc90003ccf0e0 RBX: 000000000000000c RCX: 0000000000000000
+RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003ccf108
+RBP: ffffc90003ccf198 R08: dffffc0000000000 R09: ffffc90003ccf0e0
+R10: fffff52000799e21 R11: 1ffff92000799e1c R12: 0000000000040c40
+R13: 1ffff92000799e18 R14: dffffc0000000000 R15: 1ffff92000799e14
+FS:  0000555555c10300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffc36f70000 CR3: 00000000744ad000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __alloc_pages_node include/linux/gfp.h:223 [inline]
+ alloc_pages_node include/linux/gfp.h:246 [inline]
+ __kmalloc_large_node+0x8a/0x1a0 mm/slab_common.c:1096
+ __do_kmalloc_node mm/slab_common.c:943 [inline]
+ __kmalloc+0xfe/0x1a0 mm/slab_common.c:968
+ kmalloc include/linux/slab.h:558 [inline]
+ ext4_xattr_move_to_block fs/ext4/xattr.c:2558 [inline]
+ ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
+ ext4_expand_extra_isize_ea+0xe3f/0x1cd0 fs/ext4/xattr.c:2765
+ __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
+ ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
+ __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
+ ext4_inline_data_truncate+0x548/0xd00 fs/ext4/inline.c:2021
+ ext4_truncate+0x341/0xeb0 fs/ext4/inode.c:4221
+ ext4_process_orphan+0x1aa/0x2d0 fs/ext4/orphan.c:339
+ ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+ __ext4_fill_super fs/ext4/super.c:5515 [inline]
+ ext4_fill_super+0x80ed/0x8610 fs/ext4/super.c:5643
+ get_tree_bdev+0x400/0x620 fs/super.c:1324
+ vfs_get_tree+0x88/0x270 fs/super.c:1531
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ </TASK>
 
-> > + *    extensions by an underscore.
-> > + *
-> > + * 2. Additional standard extensions (starting with 'Z') must be sorted after
-> > + *    single-letter extensions and before any higher-privileged extensions.
-> > +
-> > + * 3. The first letter following the 'Z' conventionally indicates the most
-> >   *    closely related alphabetical extension category, IMAFDQLCBKJTPVH.
-> > - *    If multiple 'Z' extensions are named, they should be ordered first
-> > - *    by category, then alphabetically within a category.
-> > - * 3. Standard supervisor-level extensions (starts with 'S') should be
-> > - *    listed after standard unprivileged extensions.  If multiple
-> > - *    supervisor-level extensions are listed, they should be ordered
-> > + *    If multiple 'Z' extensions are named, they should be ordered first by
-> > + *    category, then alphabetically within a category.
-> > + *
-> > + * 3. Standard supervisor-level extensions (starting with 'S') must be listed
-> > + *    after standard unprivileged extensions.  If multiple
-> > + *    supervisor-level extensions are listed, they must be ordered
-> >   *    alphabetically.
-> > - * 4. Non-standard extensions (starts with 'X') must be listed after all
-> > - *    standard extensions. They must be separated from other multi-letter
-> > - *    extensions by an underscore.
-> > + *
-> > + * 4. Standard machine-level extensions (starting with 'Zxm') must be listed
-> > + *    after any lower-privileged, standard extensions.  If multiple
-> > + *    machine-level extensions are listed, they must be ordered
-> > + *    alphabetically.
-> > + *
-> > + * 5. Non-standard extensions (starts with 'X') must be listed after all
-> > + *    standard extensions.
->                             ^and alphabetically.
+Reason is allocate 16M memory by kmalloc, but MAX_ORDER is 11, kmalloc
+can allocate maxium size memory is 4M.
+XATTR_SIZE_MAX is currently 64k, but EXT4_XATTR_SIZE_MAX is '(1 << 24)',
+so 'ext4_xattr_check_entries()' regards this length as legal. Then trigger
+warning in 'ext4_xattr_move_to_block()'.
+To solve above issue, adjust EXT4_XATTR_SIZE_MAX to '(1 << 22)' which
+is kmalloc can allocate maxium size.
 
-"If multiple non-standard extensions are listed, they must be ordered
-alphabetically." I'll also propagate this to the doc one, if I have not
-already.
+Reported-by: syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+Fixes: 54dd0e0a1b25 ("ext4: add extra checks to ext4_xattr_block_get()")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/xattr.h | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-> Otherwise,
-> 
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Cool. I'll give it a bit before respinning, but I think we are at least
-getting less ambiguous as time goes on..
-
-Thanks,
-Conor.
+diff --git a/fs/ext4/xattr.h b/fs/ext4/xattr.h
+index 824faf0b15a8..22f0c89b1184 100644
+--- a/fs/ext4/xattr.h
++++ b/fs/ext4/xattr.h
+@@ -75,11 +75,12 @@ struct ext4_xattr_entry {
+  * for file system consistency errors, we use a somewhat bigger value.
+  * This allows XATTR_SIZE_MAX to grow in the future, but by using this
+  * instead of INT_MAX for certain consistency checks, we don't need to
+- * worry about arithmetic overflows.  (Actually XATTR_SIZE_MAX is
+- * defined in include/uapi/linux/limits.h, so changing it is going
+- * not going to be trivial....)
+- */
+-#define EXT4_XATTR_SIZE_MAX (1 << 24)
++ * worry about arithmetic overflows. Now, MAX_ORDER is 11 kmalloc can
++ * allocate maxium size is 4M. (Actually XATTR_SIZE_MAX is defined in
++ * include/uapi/linux/limits.h, so changing it is going not going to
++ * be trivial....)
++  */
++#define EXT4_XATTR_SIZE_MAX (1 << 22)
+ 
+ /*
+  * The minimum size of EA value when you start storing it in an external inode
+-- 
+2.31.1
 
