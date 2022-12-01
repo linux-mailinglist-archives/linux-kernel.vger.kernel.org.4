@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91EE63F44C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2C963F452
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiLAPkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S230457AbiLAPkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbiLAPjs (ORCPT
+        with ESMTP id S232033AbiLAPkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:39:48 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B52893A54;
-        Thu,  1 Dec 2022 07:39:11 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id t1so1442042wmi.4;
-        Thu, 01 Dec 2022 07:39:10 -0800 (PST)
+        Thu, 1 Dec 2022 10:40:06 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567B9B3921;
+        Thu,  1 Dec 2022 07:39:28 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso1847369wmp.5;
+        Thu, 01 Dec 2022 07:39:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mOkjJ49YydlvCDY0afffT99zYYKtrxdz8Sf40U74Enc=;
-        b=j9oLbiNRaXpnHIje9VKE4nLcb7+6czmhJN4g3RnHkAh16pmeBwJSme6IimLjBggE8o
-         T5jUcdoPk4+n5jmxiJ6cxIpXqJk8Ia7iyQbT0WH15JN/LI/D58gYwuxKm+ohgRCpc4A4
-         gHshTm+tITLuYPqv5LmhUrn7bd7xfx7bS2CJqY/G+rqfgdQgCSzB8eVMXBzffAJq0uVi
-         DPUqgUcVvzNdZ8fnHhRqBcqqWqcw6uA18xg9Ci55dpZFTdOMhz8kBmdrsDqRbtipxuqI
-         y4G11VZAlqJQ6DOIAhCNXtsmfNGJU7XTy37OfpZfWnOQOqpelBchjxQAVjnPc8hbd0k5
-         RgRQ==
+        bh=K7khnonYfy4kMw5YrLUdWciangWNF/Rcsht2NfCuP98=;
+        b=JDHX2Ef/eGunqsAS2A/QsNSfTGzQ9HLN3nyTgk0TE4UPI4oNls73HDML6r/m9Vda/X
+         ilej4uBBfLJ1H0X/pjnNPvUyTUwHo8YEcbvn8Z7uvvpsudk1v4Q9IO1ygbLkn71uHIEk
+         8+q6Ecke1blGoEePDwxOhvM9fqUx8zUzqtEiCJPTy4TjGEBf18N1Hbys3jClLejEV+QD
+         TeYkUBDxjnnoBov+qs5ZreYpk0OfznbTl9ntaJl3ia2ETbbmQHMYQbBcKklxr3SIttBU
+         oe44XRPAuhNXi7XPi9RqcJOX0ZJ8zUwpZXJk8JifGgQ6Nf83MFkVlH27AnqQ62hMx+Hw
+         JWdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mOkjJ49YydlvCDY0afffT99zYYKtrxdz8Sf40U74Enc=;
-        b=db9PLX7HYivnxCzX46yEYRGLWptuTmfkEOg/AGMzMAke5PnoD2RWAkFglE+9Bxqxpl
-         WJvPS/7ymEyDJ1Fwa48v761WK5xrFDdVvhomCfQuPmLiT38zzO5fUIArQaPbFBw6I77u
-         ez9JCXGosWJbkKRDXGkMPTdMAF202kemNVUmx1rwnZYxnEH8DQUeLU8ufTkn/GWvbCPe
-         mI+t7yCL8zBcwiNQeuasdcXqxjREcCY+e3tXyrxo1Qoi00FaqMMGPy/SQQnEYOp6bzWr
-         mQY+tOXhNaURSpdpdrZjHNA/Y1uLwSCLdkZF7plRWniLS6VLQ2v741BU5JgcRSeZq9Bt
-         xfEQ==
-X-Gm-Message-State: ANoB5plsSOVUt7rO7ZO6jluMyFfKZTbxLNLVuSipBAFm0sXvrEqDoIU+
-        3iSNZngQMT7iQGYU35ze7wXcL4N1pjc=
-X-Google-Smtp-Source: AA0mqf4yPSTXLm0ri7Bg8PiPcSSS0dFxtztOpvXhzUoK76TcINL8V/D9Zo+enxFgpf63HDNxnZhGcg==
-X-Received: by 2002:a05:600c:1d23:b0:3d0:8193:c1c with SMTP id l35-20020a05600c1d2300b003d081930c1cmr1156702wms.143.1669909149638;
-        Thu, 01 Dec 2022 07:39:09 -0800 (PST)
+        bh=K7khnonYfy4kMw5YrLUdWciangWNF/Rcsht2NfCuP98=;
+        b=ILzhmFK/EC+Ibhotp2YM2EKadjA6wuZJJTr58Nt3cf1tXY72ECX07jFpC9Xkppvqo+
+         0mnMx7/Uq7AcKlaQQhslQFBwep4mQX3mC6xiivQ959Tod4QiC5ustuDupitCScfu37XD
+         78X3QZsYdfw2brH/dSmnce6eQzJ+6RJPastaNgcjFTZSE23UHI/dQ6Odjeq0Twf5ZHzZ
+         4RCf/iuiAt7dt8DnINqZaDp3iaFtXdgrspQY8yS74g7wSWJ2yAfFZ6t9A7o0i7zV6UDD
+         q5ZuhkdehP3DEkewjUEcXHKS8vVTXSOTHCF2WbWxm2kZ6zk0cvHkMy5EgwHhbnGgtyhG
+         UNKA==
+X-Gm-Message-State: ANoB5pnkkYnA6yM89m/pvQWJmXGf4UizfDcplPw8/sNVwzBFltv6Fg/7
+        e2VMQozMrPwXJyOoc4Acx0ulBpum6mE=
+X-Google-Smtp-Source: AA0mqf73XEGmHBsINcaGBgXVrgZEX+L3ujME2ZROjhfpOEDJGxp9qHMfj044jAOBJh9ZlwetXJO9YQ==
+X-Received: by 2002:a05:600c:18a1:b0:3cf:a9d5:36c7 with SMTP id x33-20020a05600c18a100b003cfa9d536c7mr34763990wmp.13.1669909167060;
+        Thu, 01 Dec 2022 07:39:27 -0800 (PST)
 Received: from wlan-cl-kit-cs-172-17-20-201.scc.kit.edu ([2a00:1398:9:fb03:6341:588f:5b6d:9173])
-        by smtp.gmail.com with ESMTPSA id fn7-20020a05600c688700b003c6b70a4d69sm5523597wmb.42.2022.12.01.07.39.09
+        by smtp.gmail.com with ESMTPSA id fn7-20020a05600c688700b003c6b70a4d69sm5523597wmb.42.2022.12.01.07.39.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 07:39:09 -0800 (PST)
+        Thu, 01 Dec 2022 07:39:26 -0800 (PST)
 From:   Peter Maucher <bellosilicio@gmail.com>
 To:     alexander.deucher@amd.com, amd-gfx@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Peter Maucher <bellosilicio@gmail.com>
-Subject: [PATCH 2/3] drm/amdgpu: add GART and GTT to glossary
-Date:   Thu,  1 Dec 2022 16:38:22 +0100
-Message-Id: <20221201153820.257570-3-bellosilicio@gmail.com>
+Subject: [PATCH 3/3] drm/amdgpu: mention RDNA support in docu
+Date:   Thu,  1 Dec 2022 16:38:24 +0100
+Message-Id: <20221201153820.257570-4-bellosilicio@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221201153820.257570-1-bellosilicio@gmail.com>
 References: <20221201153820.257570-1-bellosilicio@gmail.com>
@@ -73,30 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GART and GTT are two abbreviations that should be mentioned in the
-glossary.
+The amdgpu kernel module has supported RDNA for a while,
+mention that in the module description.
 
 Signed-off-by: Peter Maucher <bellosilicio@gmail.com>
 ---
- Documentation/gpu/amdgpu/amdgpu-glossary.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/gpu/amdgpu/index.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/gpu/amdgpu/amdgpu-glossary.rst b/Documentation/gpu/amdgpu/amdgpu-glossary.rst
-index 326896e9800d..d86bea7926dc 100644
---- a/Documentation/gpu/amdgpu/amdgpu-glossary.rst
-+++ b/Documentation/gpu/amdgpu/amdgpu-glossary.rst
-@@ -30,6 +30,12 @@ we have a dedicated glossary for Display Core at
-     EOP
-       End Of Pipe/Pipeline
+diff --git a/Documentation/gpu/amdgpu/index.rst b/Documentation/gpu/amdgpu/index.rst
+index a24e1cfa7407..bcc0f5c15f93 100644
+--- a/Documentation/gpu/amdgpu/index.rst
++++ b/Documentation/gpu/amdgpu/index.rst
+@@ -3,7 +3,7 @@
+ ==========================
  
-+    GART
-+      Graphics Aperture Table
-+
-+    GTT
-+      Graphics Translation Table, mostly synonymous to GART
-+
-     GC
-       Graphics and Compute
+ The drm/amdgpu driver supports all AMD Radeon GPUs based on the Graphics Core
+-Next (GCN) architecture.
++Next (GCN) and Radeon DNA (RDNA) architectures.
+ 
+ .. toctree::
  
 -- 
 2.38.1
