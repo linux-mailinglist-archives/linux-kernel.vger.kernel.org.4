@@ -2,102 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BA763F518
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA52F63F573
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiLAQTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S231360AbiLAQjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbiLAQS0 (ORCPT
+        with ESMTP id S232273AbiLAQjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:18:26 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908A8A80AC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:18:25 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id g7so3242569lfv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:18:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8cY6vY+thlkCsq8gkvaJsPRCyrqqjPYljRJ5t7fEBhY=;
-        b=jfbqHyeZzr8xPua9HCdHjoXzpBxC7ALd4kWIH5iTniEhGsyfEjibgdBA8R4ffEqr3V
-         DInsg2LBqcoFqTYPg94zQW5MfzlnPd0KCKnj7wQlulFM+yStYvy1kkax8IbGNaQqDXwj
-         UKQMOiZ4Bg5DylqDInXJxiS9nISr/iLti0B+d4nJWyobSe+VzLb2PJEnWVFp5ZM5IHkH
-         bJHZVHtORznZg8knhE33yfZ/poItxg9WPJImuC0F8HNgq3/Zst2Wf9J6z1C75UepInHW
-         9t894/JigyjJzfyv+x3m+inY93IkFT5U2IF0/jnEc/3Zuf+Eiknt6n7scRXOkFqxNP0U
-         17AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8cY6vY+thlkCsq8gkvaJsPRCyrqqjPYljRJ5t7fEBhY=;
-        b=oISAckNCFDp0jIt7BEoWGaXrAACbh7BC7T91fCiE/dhcmFCDdOhfE4HuYUu5G6jk5s
-         xwpb3VppadQV2fdcClCUIxrizG9HOHhhIt/gYL4ePSn3VFXj5ORDXyyrWYeBi18hkfPC
-         YBU+10CsI0a9UVli2Epmmp+SuH6CVfNy+8gWvUe3dBs6SsqQb50jctF5M+V52t8gFfmb
-         AYIclpjQRDsAZRrvNmYil8NPfcnb5q6mvn3EGGqVMMoemgmriACwy7a6QaXdMhvrLvOP
-         ClWpl2rhoDgkiGyp89ed8Ot/Wzp0Qj9jeiRIcCw74e2AT1pRbjq3ftndL6ujWJ2sFFqf
-         GJpQ==
-X-Gm-Message-State: ANoB5pnGHimqPkX/eOExEehG2GB/3BD0JWk20vLicw4WpGt1zuEYDbr1
-        fRw2pOkawJJFXVMqcCdGN9hpdw==
-X-Google-Smtp-Source: AA0mqf7qGU2jrUUfqNQ9zX7/puSmTFzU4/4K8uEfeV/EPQlWMS86NXUROJC3c9SDMfwfMHDNZvG25w==
-X-Received: by 2002:ac2:4d95:0:b0:4a2:3d03:d951 with SMTP id g21-20020ac24d95000000b004a23d03d951mr16321829lfe.387.1669911503607;
-        Thu, 01 Dec 2022 08:18:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p9-20020a2e7409000000b002770a9ed61bsm408768ljc.66.2022.12.01.08.18.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 08:18:21 -0800 (PST)
-Message-ID: <277f9665-e691-b0ad-e6ef-e11acddc2006@linaro.org>
-Date:   Thu, 1 Dec 2022 17:18:18 +0100
+        Thu, 1 Dec 2022 11:39:15 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C828E58E;
+        Thu,  1 Dec 2022 08:39:14 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1GS8pJ029673;
+        Thu, 1 Dec 2022 16:39:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OKrS9BBvwYfLHBzFMs6pnh1OkU96bxDQqMK4isLLZ1w=;
+ b=b3uZi70YpLpZ/WI6/LDsi73mH4/syWHK3Owhk1EpYP9+WAtQVo33wx7Rk9cOPFjprA+N
+ 2wVUEgKsP1apo7c+Y44AePlJ8an5flVGDcKfBK0joQumJ7qGDYI0WB3vqk8k5psEx0WQ
+ Ci9VBbCMWnpJoTNdvzACVRg8CUeTU1r5EuMI30UAoUlBe7qkgqwNDkZ5ai4HZUte/8Nc
+ NuEplToIJ7gbNz8WsGMOGosDOvf70Fwi1IsGecArsCjLgekdqTHAj2ikNvWyQRlgqfIq
+ pErjEaqk3czyDRJI3KbRToHG5A/NNHsA52sW/SvnJSlM8V058j7b7eXHQKHl9DF6UBRM Zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ytn8974-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 16:39:05 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B1GVXAo010117;
+        Thu, 1 Dec 2022 16:39:05 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ytn8963-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 16:39:05 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B1Gc8iL013559;
+        Thu, 1 Dec 2022 16:39:02 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3m3ae95hvt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 16:39:02 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B1GcxKY26149600
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Dec 2022 16:38:59 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E25BA405C;
+        Thu,  1 Dec 2022 16:38:59 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A27A1A405B;
+        Thu,  1 Dec 2022 16:38:58 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.56])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Dec 2022 16:38:58 +0000 (GMT)
+Date:   Thu, 1 Dec 2022 17:21:04 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v3 2/9] Documentation: KVM: s390: Describe
+ KVM_S390_MEMOP_F_CMPXCHG
+Message-ID: <20221201172104.5540dcad@p-imbrenda>
+In-Reply-To: <20221117221758.66326-3-scgl@linux.ibm.com>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+        <20221117221758.66326-3-scgl@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1 1/7] dt-bindings: net: snps,dwmac: Add compatible
- string for dwmac-5.20 version.
-Content-Language: en-US
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
- <20221201090242.2381-2-yanhong.wang@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221201090242.2381-2-yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Gq7IygJDv2rLUlfmCDcb9PvuDDTeP3T8
+X-Proofpoint-GUID: MYpt7C4ictAZa64_GbKHib27YShXlcJJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_12,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 adultscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=678 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212010123
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 10:02, Yanhong Wang wrote:
-> Add dwmac-5.20 version to snps.dwmac.yaml
+On Thu, 17 Nov 2022 23:17:51 +0100
+Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
 
-Drop full stop from subject and add it here instead.
-
+> Describe the semantics of the new KVM_S390_MEMOP_F_CMPXCHG flag for
+> absolute vm write memops which allows user space to perform (storage key
+> checked) cmpxchg operations on guest memory.
 > 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index eee9f857a986..204d128f23e0 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -3753,7 +3753,8 @@ The fields in each entry are defined as follows:
+>  :Parameters: struct kvm_s390_mem_op (in)
+>  :Returns: = 0 on success,
+>            < 0 on generic error (e.g. -EFAULT or -ENOMEM),
+> -          > 0 if an exception occurred while walking the page tables  
+> +          16 bit program exception code if the access causes such an exception
+> +          other code > maximum 16 bit value with special meaning
 
-Two people contributed this one single line?
+I would write the number explicitly ( > 65535 or > 0xffff )
 
-Best regards,
-Krzysztof
+>  
+>  Read or write data from/to the VM's memory.
+>  The KVM_CAP_S390_MEM_OP_EXTENSION capability specifies what functionality is
+> @@ -3771,6 +3772,8 @@ Parameters are specified via the following structure::
+>  		struct {
+>  			__u8 ar;	/* the access register number */
+>  			__u8 key;	/* access key, ignored if flag unset */
+> +			__u8 pad1[6];	/* ignored */
+> +			__u64 old_p;	/* ignored if flag unset */
+>  		};
+>  		__u32 sida_offset; /* offset into the sida */
+>  		__u8 reserved[32]; /* ignored */
+> @@ -3853,8 +3856,22 @@ Absolute accesses are permitted for non-protected guests only.
+>  Supported flags:
+>    * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+>    * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> +  * ``KVM_S390_MEMOP_F_CMPXCHG``
+> +
+> +The semantics of the flags common with logical acesses are as for logical
+> +accesses.
+> +
+> +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
+> +In this case, instead of doing an unconditional write, the access occurs only
+> +if the target location contains the "size" byte long value pointed to by
+> +"old_p". This is performed as an atomic cmpxchg. "size" must be a power of two
+> +up to and including 16.
+> +The value at the target location is written to the location "old_p" points to.
+> +If the exchange did not take place because the target value doesn't match the
+> +old value KVM_S390_MEMOP_R_NO_XCHG is returned.
+> +The KVM_S390_MEMOP_F_CMPXCHG flag is supported if KVM_CAP_S390_MEM_OP_EXTENSION
+> +has bit 1 (i.e. bit with value 2) set.
+>  
+> -The semantics of the flags are as for logical accesses.
+>  
+>  SIDA read/write:
+>  ^^^^^^^^^^^^^^^^
 
