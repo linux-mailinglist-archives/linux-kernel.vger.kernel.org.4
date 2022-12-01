@@ -2,155 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37C663F0D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D0A63F0DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiLAMrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S231144AbiLAMtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiLAMrA (ORCPT
+        with ESMTP id S230208AbiLAMtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:47:00 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2129.outbound.protection.outlook.com [40.107.212.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6788DBC0;
-        Thu,  1 Dec 2022 04:46:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=afoSxyVMA/CsWFOfYw9M+36KGroeMeR2VsziqV609pcrq/r3xD4Rd5kfZQ4cyatADY1qqnCx3l+X3/mDGz6BzTmsrEWxABgSzsnX4jxqvqreU/YSrObVAIGC19/3TG8xauxfjk3sivMsow64SjELAtEYRULEc+WfmjpiSrTVT1sK0O1pb6ruGNF5UmEf2MkCkR4r5HfmAH4vkUEnZFoUUOoIHFm5D5UhMhlyGwvp3fXDYPV1wonLp5AB+QFpT7wbk0E1eq0JJ9P20cNgsAa7V3vSxXIBHiDABPBDvMLDfZDmxwSQYrZypvogzslvtkNqz3M23/RjM4Ao3L0gQWcRDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nlkbSy1y2B7Jr/HntVQXBMCg5MuC3tbkyjmI+PzuAX0=;
- b=cXHcsc9JGhJigldUIu+brN43l89QFrhE9ZJK+LHS4c/u6paQSmq2OhXq5PNRz7H8nZBU5q5i7dnygDrsb7F181ijwfe/Hz6foNWDZ/SDQh/RU+tUk2vsAZNiBLT3kJt2x4+PCTzwbYLhYdQZVGauBxKeE56jp4pldQYH4EJIszz6KqDmL/xVWipsYfFzvXdvVT+ZM/Wqi9UO2E5wAYlk6XXUzhilbJkO+dIklK7UcCOPZdNiAdPBi5cgsdaJkgQxCL8IN02E3FgBnvNsgb/3lHfY+qPkBwSzVTdBntGcophxRvS3FYbxpUUcURYp+Cgj73c3wGwX7r6jyWninO8vvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nlkbSy1y2B7Jr/HntVQXBMCg5MuC3tbkyjmI+PzuAX0=;
- b=aFRsacsZ4lpEC/s869KB/RfPMtDYYK24+kn+1c8/AiyIKab8zBTNLS7AEDwCWe81zksMuce3xC0HCw14qczeOEnbjFnpKA+jc8wmA+I5JuYiXExR2oIAX2Vs+wbAnQhXUYWfKExaJ5ca4uASzv9cI/dmCqg4qtJ8WrTASuK/YqU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BL0PR13MB4481.namprd13.prod.outlook.com (2603:10b6:208:1c9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Thu, 1 Dec
- 2022 12:46:56 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::483b:9e84:fadc:da30]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::483b:9e84:fadc:da30%7]) with mapi id 15.20.5857.023; Thu, 1 Dec 2022
- 12:46:56 +0000
-Date:   Thu, 1 Dec 2022 13:46:48 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     wangchuanlei <wangchuanlei@inspur.com>
-Cc:     kuba@kernel.org, dev@openvswitch.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, edumazet@google.com,
-        alexandr.lobakin@intel.com, pabeni@redhat.com, davem@davemloft.net
-Subject: Re: [ovs-dev] [PATCH] [PATCH v6 net-next] net: openvswitch: Add
- support to count upcall packets
-Message-ID: <Y4iiOBzus5v5aOIP@corigine.com>
-References: <20221201084601.3598586-1-wangchuanlei@inspur.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221201084601.3598586-1-wangchuanlei@inspur.com>
-X-ClientProxiedBy: AS4P195CA0026.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d6::12) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 1 Dec 2022 07:49:42 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183AC92081
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 04:49:41 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id c20-20020a5d9754000000b006dbd4e6a5abso1456508ioo.17
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 04:49:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8IHSWu8cpROGIek2vroiLGwTRbK0xKUT/twwPlglJnA=;
+        b=vKrwoteYvt1mcWt0ZpY4em8o1HWI7r93IQEJ+QEUn+sPuJJqar9HfISMPG04hKLoO/
+         od3NzF3i8tPLo28PBDULvjAmY3MgZ+6djRD1fdC/iagx7OSzwoHOYEWGglpUUUCkaPeY
+         odjMEA/dUNeAHW6BCgtciVBszg5+6WS1u0JehduZvTcIYqgyzkmY8JfHMD2DPKGqTAM0
+         2deR8F17FaBj3ErQl6oeK4XdBH7nRwLMK8Wl+DW0KBZ5cWDfuTRE3TxJ0/FLevCPq+BD
+         E0EEZBNZVPUHbAKOwFTOR4ksqxMzdrU5KA5zGA+frakCH7USJmd56qrWxid+kZ5jyrLB
+         xxIg==
+X-Gm-Message-State: ANoB5pl2z1y3M2r04iZeggNcLgcrjU44ty5dPZqxxu1LK0n32Ta2DytK
+        1RPT0axhYlKYP+7uXMHBCBCdR5Aw7G7VANTPkSiQCC3Bes77
+X-Google-Smtp-Source: AA0mqf6JbipCj5IoGcHzLZjfU923ilDwvC/rACUt+vw2J+y1KJ4Qt1F874qk1U3uBoLQWzZJVSQxa8hkRFn26Ld1oDoahWmOIOSG
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL0PR13MB4481:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8eb72c82-8f5b-4bde-c149-08dad39a203c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mjSlRjXM7o65DIYTqKxMNCmm9veEAhP3/C7+ZnFJzxG0vIjudgCw5LqyGNFLLJP+8mxCmqoBusy1zF54IZRYP1L0XPP8wI07KdiU4TyJDsp7ADBAvgUSKJ0BZrTbLT9E2wB9oz3uBd9DO4NjX4LdkSFIQvFIWT0QaVv84ktN6p7BM1PwBclXbHoP4QyWR601iyWHGk+3QcpGy8NRJAOqRXRjQv6KiODGg2L5iTYdPCUrC6IFWsEe40XYmvJULXCG1Ies6iBIg9ymPDMADICUjk6yh4ihF/z1lg3Y526EcLDDma2fSp1yDjvhkfCxVl8ojTTodRy28paw+qh+9zVrUp5G3YJ7UhCEiEBp8JQrtRsJjYC14XGtx6I4tnv8lWDwRrT2eK3XytjuejhjGpLNr1Lyp5Mvf8DT18tiuJBigNuu0IIuqGY1DYHaaUfG5L0sU8jziBSSfvZWz20tQOGj31YW427buWL0mSNibLvHPqkdroGe308YEDgHmCpUHBfsC8MGXd9J/8dwe6E4ZSNMgWVqI27hgCfSGfpL+Lvkk5QaX+RiKw5C7rQNhyy6yeTEYmYZZNnW9CvFe8CWzZK9qWbJa3yTJy5G+MnYIV7f1EYeoINXheNqBM2e5fX+9F/ujNJ6Qj1M46LxZYXvEhcnrSYmjkqkisKLWdWFOJwzdPQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(376002)(346002)(136003)(39830400003)(451199015)(316002)(4326008)(41300700001)(8676002)(6512007)(186003)(66946007)(6486002)(6916009)(6506007)(66556008)(6666004)(478600001)(2616005)(86362001)(966005)(44832011)(38100700002)(8936002)(2906002)(83380400001)(5660300002)(66476007)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?A8kVj6iQl10FPcB4sTbD+h/Xx6oYJFXQvD4oDr3q2XpqcF8NDpmejBjzA6EA?=
- =?us-ascii?Q?vRqNOdIVyGVeaxSkacTmjB35Q3mvMOPk52OJ88ydFgNfay2rlj7tH1NoZYpQ?=
- =?us-ascii?Q?cZp6jy7Rap6PLRrEN+zr1w9DubDN16epCH19n+KvH5mNtTeeNm7tQ9/XPz48?=
- =?us-ascii?Q?cPRJXmCIp9sys4+i0XBp0UZodbU1/d2AqfC1msWnn3Zvm4aDOO5UssQkmmZ6?=
- =?us-ascii?Q?mllOS4tsi+5Zds/Nm93jxkpxhIh7Ya3ZMFINcNIf2OAkjpvuV8NH8Nrt+P4j?=
- =?us-ascii?Q?lV3hdweQLW5lYb2JSw/am0lqHyIIEvH9Ff9YABclNR7JGkKuuorYaiLexwIA?=
- =?us-ascii?Q?ZmosjHTuFDYqYEyazXL6LXXka5cJ3hrbdR/9lW5ui1cuB9+ncbZil8DSuQ8m?=
- =?us-ascii?Q?N6ecm8HpG+er/6TjJTQS/edSBqfnAQ78hL3VOORZdQV9koS4pIfamRG+DPQc?=
- =?us-ascii?Q?jel53ASxO4pFlLgbBgPb0TkrBcgR4ZC6/SXrfByt+bbKC9i1asAIijJgF6ps?=
- =?us-ascii?Q?Cb9Uo4UDweuivMV00kKKlWqAAbcy8rtuXNUgB09CD8vyEUv44VT+cuat/RhV?=
- =?us-ascii?Q?7AhhZ1VV1ykkkTrNrxzA1+uRUixZl0UiY+OT8YfKIYyu6rBRkl2DtE7sIzxi?=
- =?us-ascii?Q?d1c7ag7uuiwHuZRgC/rbsHA4XF6g3AlJGqZSwlHnL7XYQhotHgTAvr6qabEi?=
- =?us-ascii?Q?FwoEX7e0yoCl9FM49R75VQUfWq7iynICyBUoYwKKE1SG1a5dmmgmj2xQyAYK?=
- =?us-ascii?Q?MO++XN9MjK7YjK6qDfXg22SKS+wrU3tga8Jo384NDsuAlfONyQt97UVGAUmC?=
- =?us-ascii?Q?zWjY+/Tbl17cgY44jjU6LNTNhVD9JLaWHxYGHab+cryTcjCJywVCeErpBEcl?=
- =?us-ascii?Q?XH+J6/FqozvT7P2O7AoaYqFRbpZc2Gi4raF+ZnPkukecVw5ONxWAaiNJI4xX?=
- =?us-ascii?Q?X+JB3jmZrW2PjRApPpaOoX55s+x0jDvR2dq6lTYrgAIpRBOGd+NTMVsewY/g?=
- =?us-ascii?Q?xO8BUGfFKwXBIhISCEt/YZB9mypxJtSHFknXY3QkWl7g9lxw35s9bqUWwI3d?=
- =?us-ascii?Q?3IechsvZ25+hWM6WyJ15bHBNxySTkh0R21qSbZ9kd165IgoSygCbg1ZRSrNL?=
- =?us-ascii?Q?XpJhHcYJ4LNzwbwVsQG4fN2KQSFP6GYDpficqldJl1cQEWPMy987kKiILt8D?=
- =?us-ascii?Q?9+9jf1rdFiBk5pfL15lEVxNRv4qIISeBXC90qzKmsFMRuk0UU56h239euHGd?=
- =?us-ascii?Q?68Ts5FAg0HDhr8HCfp5a1q7A5OUfPHkY3N/JiWzTGxqyqemE/7R6Xlu2PXqn?=
- =?us-ascii?Q?QJkYAK4UBKu7F2B4Ygwmo9Vw5zmtjm4PouSo1TFKmtOUAmFh8RkFSTBtCBJU?=
- =?us-ascii?Q?6DZKzBfu+AHRQFJw4GuVw8HQ0Kximt0qgU7etPcCshMub47eprauybNmp71U?=
- =?us-ascii?Q?+U3afjEMC3ljWa2DUZqu0PqiXwAmpkfYa4eRgXRGNx1p1jUkBq+NYV+0G4Cx?=
- =?us-ascii?Q?2oNv+I58JLWvgMJgs35dWTnRLq3ARlkm4TaHw6IMyR8CMT65td8YYIXZlsrb?=
- =?us-ascii?Q?zs7bFx6XV13E/XH1ofAhfyBKxCJHcO33aATCOlrpxBYpFwQkekbck5NexnhC?=
- =?us-ascii?Q?KDaHAa3p57dXy0uLxZaRj7ujgZHULfSVqlVRYUVGX9O2ZRP7pPlvdjTCqqxZ?=
- =?us-ascii?Q?V/2Liw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8eb72c82-8f5b-4bde-c149-08dad39a203c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 12:46:56.3458
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5CpevlpZgKHlf+WEMBnDk3B5zcE+hvK9qdMXR3LKVvE5KX+m8+5yjAZxfe5jY5LeUOrndTq3MF9NGduCR4hkxzJp2tU75DpL6JxlNrwp6vc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR13MB4481
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:346:b0:388:9146:8361 with SMTP id
+ x6-20020a056638034600b0038891468361mr17144222jap.19.1669898980456; Thu, 01
+ Dec 2022 04:49:40 -0800 (PST)
+Date:   Thu, 01 Dec 2022 04:49:40 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008a836b05eec3a7e9@google.com>
+Subject: [syzbot] WARNING in hfsplus_cat_read_inode
+From:   syzbot <syzbot+e2787430e752a92b8750@syzkaller.appspotmail.com>
+To:     damien.lemoal@opensource.wdc.com, jlayton@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On Thu, Dec 01, 2022 at 03:46:01AM -0500, wangchuanlei wrote:
-> Hi, Jakub, 
-> 
-> 	Thank you for review, the comments below is a little confusing, can you
-> give a explanation?
-> 
-> Best regards!
-> wangchuanlei
-> 
-> --------------------------------------------------------
-> On Wed, 30 Nov 2022 04:15:59 -0500 wangchuanlei wrote:
-> > +/**
-> > + *	ovs_vport_get_upcall_stats - retrieve upcall stats
-> > + *
-> > + * @vport: vport from which to retrieve the stats
-> > + * @ovs_vport_upcall_stats: location to store stats
-> 
-> s/ovs_vport_upcall_//
+syzbot found the following issue on:
 
-I believe Jakub is asking for "ovs_vport_upcall_" to be removed.
-Or, in other words, to refer to the parameter as "stats",
-(which matches the name in the function signature below).
+HEAD commit:    cdb931b58ff5 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1672f7fd880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ec7118319bfb771e
+dashboard link: https://syzkaller.appspot.com/bug?extid=e2787430e752a92b8750
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120b96a7880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116da6bd880000
 
-> 
-> > + *
-> > + * Retrieves upcall stats for the given device.
-> > + *
-> > + * Must be called with ovs_mutex or rcu_read_lock.
-> > + */
-> > +void ovs_vport_get_upcall_stats(struct vport *vport, struct ovs_vport_upcall_stats *stats)
-> 
-> _______________________________________________
-> dev mailing list
-> dev@openvswitch.org
-> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
-> 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/07e4eae17e60/disk-cdb931b5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fc4815dd00c0/vmlinux-cdb931b5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0f46b40f30e1/Image-cdb931b5.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/3082309c63cc/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e2787430e752a92b8750@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 1024
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3073 at fs/hfsplus/inode.c:534 hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
+Modules linked in:
+CPU: 0 PID: 3073 Comm: syz-executor278 Not tainted 6.1.0-rc7-syzkaller-33054-gcdb931b58ff5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
+lr : hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
+sp : ffff80000ff23640
+x29: ffff80000ff23850 x28: ffff0000c23a0000 x27: 000000000000000b
+x26: ffff0000c9e92000 x25: 00000000000000ff x24: ffff0000cbd81530
+x23: ffff0000c7bffdf0 x22: ffff0000c7bffd30 x21: 0000000000000058
+x20: ffff80000ff23880 x19: ffff0000cbd81bb0 x18: 00000000000000c0
+x17: ffff80000dda8198 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000002 x12: ffff80000d514f80
+x11: ff808000088e828c x10: 0000000000000000 x9 : ffff8000088e828c
+x8 : ffff0000c23a0000 x7 : 0000000000000000 x6 : 0000000000000000
+x5 : ffff80000ff235f6 x4 : ffff0001803f7028 x3 : 0000000000000000
+x2 : 0000000000000002 x1 : 0000000000000058 x0 : 00000000000000f8
+Call trace:
+ hfsplus_cat_read_inode+0x32c/0x338 fs/hfsplus/inode.c:534
+ hfsplus_iget+0x244/0x2ac fs/hfsplus/super.c:84
+ hfsplus_fill_super+0x480/0x864 fs/hfsplus/super.c:503
+ mount_bdev+0x1b8/0x210 fs/super.c:1401
+ hfsplus_mount+0x44/0x58 fs/hfsplus/super.c:641
+ legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+ vfs_get_tree+0x40/0x140 fs/super.c:1531
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x890 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+irq event stamp: 15818
+hardirqs last  enabled at (15817): [<ffff80000c0963d4>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (15817): [<ffff80000c0963d4>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
+hardirqs last disabled at (15818): [<ffff80000c083704>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (15354): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (15241): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
