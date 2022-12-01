@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920EF63EA96
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A030063EA98
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiLAHzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S229806AbiLAH4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 02:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiLAHzD (ORCPT
+        with ESMTP id S229626AbiLAH4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:55:03 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106F251316;
-        Wed, 30 Nov 2022 23:55:02 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN7dw5857z4xVng;
-        Thu,  1 Dec 2022 15:55:00 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2B17sjnm013390;
-        Thu, 1 Dec 2022 15:54:45 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 15:54:47 +0800 (CST)
-Date:   Thu, 1 Dec 2022 15:54:47 +0800 (CST)
-X-Zmail-TransId: 2af963885dc71a3191d5
-X-Mailer: Zmail v1.0
-Message-ID: <202212011554474934696@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <dmitry.torokhov@gmail.com>
-Cc:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B17sjnm013390
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63885DD4.002 by FangMail milter!
-X-FangMail-Envelope: 1669881300/4NN7dw5857z4xVng/63885DD4.002/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63885DD4.002/4NN7dw5857z4xVng
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 1 Dec 2022 02:56:23 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C951316;
+        Wed, 30 Nov 2022 23:56:22 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id h33so972290pgm.9;
+        Wed, 30 Nov 2022 23:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D2ttyoUGNfYuPD9Y7UeScn0v9Wc1/HDJhF/MHUfkAG0=;
+        b=Ajc6HGtyTqDfuTDVMzx4DgN3XK3JkJs/Aj8GtOofFdlaEo4L48G4Mr9JYX5uOsYtm+
+         UHRb7VpXyUCff6SCwyvDAFgaUjRFA2681d/D0SSjKco+fSCOy/Ux9LJrQ7KOg1+1O0Q8
+         NgyQlFztC2qnkYpiZta7sJvHzVHBcjMsJ2LqBbhn8sB+cJ2mCbYrk3gA8Qau50KO8pDJ
+         S0MzOpuToyNY5GG6de6zvk5YRWvXWEXCsFOAuZwU81t+NYOX7no21a3qirG4rSTfCBxC
+         to+um08f7b61lDBtLiVlfX1cixRZsx33AtfY7X6Q7IRE9Vs0bbplxlIzxZrTY+ugAQBL
+         9x0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D2ttyoUGNfYuPD9Y7UeScn0v9Wc1/HDJhF/MHUfkAG0=;
+        b=YHNK3b4KbXB+rHSz42IFPcODvk2HLgj9gK2zwIRLmh4oqXtMP45R1axsjbwEBz0JXu
+         gxuI0jPZuHSLTyT4EcW9WMd3krZY2xfe9eKPiF8MT8fg0jCgg5iZzL4Il2uSgebkCJtp
+         scRpsvGsfQ9EXnqeN8umcMuLQx0HrfELk8HSWnzfsIHlVxiM5aZnE/T1MKq0Nd62SbNQ
+         nE4rgfnW6goQb5TkdhuUuNAEM6ne07GPN3WwCXUfis0s5+/VD42N3Ymg9+nMiozNiyiI
+         p63pMdlkA5yunrAi4q55uoG/EZuG+dslST1wOKggHYXwJgs1Y1gN6IJDf5ebO1WU0Tbh
+         rGAw==
+X-Gm-Message-State: ANoB5pkWkKjmPUbwIf9V5E8tiRL+ZgsdBQd1Shl/u4Mm+puvvJ/OeX9/
+        Svo9DvvONhCakq5xjKgnwRg=
+X-Google-Smtp-Source: AA0mqf4u+VjSI2oWSNzFgED+MHjqCKfP6Wh+vZdqlGgGKkIZUr1zDY4jPr3O3ow0kaxJR/0q7vWU0g==
+X-Received: by 2002:aa7:8b56:0:b0:56c:6f8:fe14 with SMTP id i22-20020aa78b56000000b0056c06f8fe14mr67076789pfd.75.1669881381873;
+        Wed, 30 Nov 2022 23:56:21 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-74.three.co.id. [180.214.233.74])
+        by smtp.gmail.com with ESMTPSA id e2-20020a170902d38200b00189502c8c8bsm2864308pld.87.2022.11.30.23.56.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 23:56:21 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id A4A361042B7; Thu,  1 Dec 2022 14:56:17 +0700 (WIB)
+Date:   Thu, 1 Dec 2022 14:56:17 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/206] 5.15.81-rc1 review
+Message-ID: <Y4heIdzK0Dn32Lm/@debian.me>
+References: <20221130180532.974348590@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kd6H+Tg8rY65JvnO"
+Content-Disposition: inline
+In-Reply-To: <20221130180532.974348590@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Replace the open-code with sysfs_emit() to simplify the code.
+--kd6H+Tg8rY65JvnO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/input/input.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Wed, Nov 30, 2022 at 07:20:52PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.81 release.
+> There are 206 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-diff --git a/drivers/input/input.c b/drivers/input/input.c
-index ca2e3dd7188b..4e4643e74ac5 100644
---- a/drivers/input/input.c
-+++ b/drivers/input/input.c
-@@ -1362,7 +1362,7 @@ static ssize_t input_dev_show_##name(struct device *dev,		\
- {									\
- 	struct input_dev *input_dev = to_input_dev(dev);		\
- 									\
--	return scnprintf(buf, PAGE_SIZE, "%s\n",			\
-+	return sysfs_emit(buf, "%s\n",			\
- 			 input_dev->name ? input_dev->name : "");	\
- }									\
- static DEVICE_ATTR(name, S_IRUGO, input_dev_show_##name, NULL)
-@@ -1455,7 +1455,7 @@ static ssize_t inhibited_show(struct device *dev,
- {
- 	struct input_dev *input_dev = to_input_dev(dev);
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", input_dev->inhibited);
-+	return sysfs_emit(buf, "%d\n", input_dev->inhibited);
- }
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
- static ssize_t inhibited_store(struct device *dev,
-@@ -1502,7 +1502,7 @@ static ssize_t input_dev_show_id_##name(struct device *dev,		\
- 					char *buf)			\
- {									\
- 	struct input_dev *input_dev = to_input_dev(dev);		\
--	return scnprintf(buf, PAGE_SIZE, "%04x\n", input_dev->id.name);	\
-+	return sysfs_emit(buf, "%04x\n", input_dev->id.name);	\
- }									\
- static DEVICE_ATTR(name, S_IRUGO, input_dev_show_id_##name, NULL)
+--=20
+An old man doll... just what I always wanted! - Clara
 
--- 
-2.25.1
+--kd6H+Tg8rY65JvnO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4heGgAKCRD2uYlJVVFO
+o/EKAP90UD5u+Uj/lKRg0v0CbdeQsl+JeEhZaOXRz1XeNj9yhwEAvz3v75uLMYAg
+G8zJiA0QaV4K1RnZcVIVsJkEs+z6hwY=
+=k/I7
+-----END PGP SIGNATURE-----
+
+--kd6H+Tg8rY65JvnO--
