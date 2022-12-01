@@ -2,188 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01A763F648
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE2E63F659
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiLARkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 12:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
+        id S229773AbiLARnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 12:43:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiLARkg (ORCPT
+        with ESMTP id S229653AbiLARno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 12:40:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3810B5DB8C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 09:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669916384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SozBPIbJb2UCYQ0LnWyqv+b8uP4TnIspTEbWHeE9j9k=;
-        b=eohDkD2c7BMJEFdqM/JbH6mWizqOv4SGdp43q5rhmPERbzyuPg9merbreBxFlnIDxqtkWe
-        KOUh0tvBU+QPNaBNxrPcYgnnxy2yGQdf0b2zou8gz/lBxiCw25ks0OxyaNrk+MeiXIrXuQ
-        jwHCmLZC3WB5RU1DIPKB34L3Es+7Rl8=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-465-nKCY4PkfPIai_UYYU_JiVA-1; Thu, 01 Dec 2022 12:39:43 -0500
-X-MC-Unique: nKCY4PkfPIai_UYYU_JiVA-1
-Received: by mail-io1-f71.google.com with SMTP id f23-20020a5d8157000000b006dfb209094fso2176893ioo.18
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 09:39:43 -0800 (PST)
+        Thu, 1 Dec 2022 12:43:44 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D716A7AB0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 09:43:43 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id b21so2313364plc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 09:43:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BpBie4jkW/BfxvQG7eHd3js6+LWawB9Le/asGO1bMFA=;
+        b=UCOwgQt8RZigkWNgSd1ke+sJbq8LSwRBcqZB8crZW/+D3bvgWNt4ttG8AdBYOqpVtc
+         n4N29Eo3116K73DwQjoSmAP49oYkVYTOE3mCM3/O+BXc6YPjvOQjduuPiNN9mLboIuse
+         NNnX7dpqmBfuLMlOtIV5+TGEqQ1puds6oF9YDHp5NK9pkZMhDAHkL1hkWTcSCiCnMsXC
+         0z6+8qnk2Y4IrUbyTXIrH/a8BRw0Rg/M+ozcLt9hEAeIOoWWPDNPXAGyCNShLhUJJ/FR
+         V8AQKugEHC5BqiR31HbMDUQjYullb0JIvr513FZb05CyRYweUXsDfLaTOzgHd5FNP/nc
+         x7lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SozBPIbJb2UCYQ0LnWyqv+b8uP4TnIspTEbWHeE9j9k=;
-        b=nLKVK9XfiGJ6W98CDoMTjqAkfHDVrx8vWSGG36H6+z8omGCeDx0JjGP38F5RAFhLlq
-         vMdz7yVp43OHwP+cG4yOonS/YcQH2Siq4Or9VcWiQs48jRCX18pdAxwjmnaR4LgvQ5dI
-         JmZ0b2V2qws84DRPgQRtKBYwWwRhSThMATMFN1KENZdUeUYerqRlPzfFq9Y4rg0SWS7T
-         ypap3zCXunE5Ntkx/tK0aHv0Z5B6MyYFo9r0jK2x8FVkwLWS2wnJrLfnj+/Vt5XmZZBC
-         bCSce9qfKrQdWyqhVSR4Jw0Ai5fVatDbwYwkY3l0Wa/b4AaJ3NJtVRHMfob78mPtfO5h
-         h+ew==
-X-Gm-Message-State: ANoB5pnOxxcmxK7cRfxbx+KZC3fT7rzf5nhdprhRyCFg56KLTezdqtGv
-        PrbOQlrbz66Hnv5WCgiIneUyOJhqZcu4ivyTEPt8NOHLDBTjMhE+Fphngy2ILDw9UEJLFt6Eggw
-        to1cRsfYBqPaDJ/Ibd/rIWfDOF8OL/1GNZ80uEErT
-X-Received: by 2002:a02:999a:0:b0:388:375a:9011 with SMTP id a26-20020a02999a000000b00388375a9011mr6429263jal.84.1669916381409;
-        Thu, 01 Dec 2022 09:39:41 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6ybWZZe1siMmv1qu+701M82c9gUy5g0uXmn8Z04LHA/nwl84gldlRq3c0TBSkhy2DRED6vruqXbGIDsdxo37c=
-X-Received: by 2002:a02:999a:0:b0:388:375a:9011 with SMTP id
- a26-20020a02999a000000b00388375a9011mr6429246jal.84.1669916381102; Thu, 01
- Dec 2022 09:39:41 -0800 (PST)
+        bh=BpBie4jkW/BfxvQG7eHd3js6+LWawB9Le/asGO1bMFA=;
+        b=Vx55u181Y7W3Bjp9AcKyZ6ETup9YwCsQJXRlOBPcKYqSZMdsa8R2/OAL9zmhIsH7bS
+         WbuMxgGtizRRWYmO3b1Gg8GxSNNo7+fnw7HUgsdAxNZux+QRd3CdAxAAZ8u6t77dOEMM
+         KA25thjhkk2pMoubHxedSPKdKgDeFkZ4sK/mRsmHTgxHSHCOXgB5RtSwDOqWvbTxpmO9
+         SDpYBWC9WCV5T3HBV2QIoa7n5eKpWq7UKUk3siPearTa1CnAwT2Ju6geR4YOrSag6x80
+         l3kc+bHmGWqE0e+WcLOcVihWqJ0kVK+m8+wKmMjE4PBV+PQWrwrBgWfAmqdUEXQcplIl
+         ry+g==
+X-Gm-Message-State: ANoB5plSpxTyEx97ccdtcOdaz2VRlMegU+iS+XwkjCud5RfgRK3ENgRP
+        zF0UwM5dBS3P+OToiCH5l7Mu
+X-Google-Smtp-Source: AA0mqf7lrHvbI6R/i7eq5zc7oayucCfI5hEsfEFmlM7cZP1cBPnHiT5XX45q3DnUog1aq7u69hZeZg==
+X-Received: by 2002:a17:90a:e2c1:b0:219:5bdb:2b45 with SMTP id fr1-20020a17090ae2c100b002195bdb2b45mr12216640pjb.71.1669916622611;
+        Thu, 01 Dec 2022 09:43:42 -0800 (PST)
+Received: from localhost.localdomain ([220.158.159.39])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0016d9b101413sm3898743pll.200.2022.12.01.09.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 09:43:41 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     martin.petersen@oracle.com, jejb@linux.ibm.com,
+        andersson@kernel.org, vkoul@kernel.org
+Cc:     quic_cang@quicinc.com, quic_asutoshd@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
+        dmitry.baryshkov@linaro.org, ahalaney@redhat.com,
+        abel.vesa@linaro.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        bvanassche@acm.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 00/23] ufs: qcom: Add HS-G4 support
+Date:   Thu,  1 Dec 2022 23:13:05 +0530
+Message-Id: <20221201174328.870152-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221121104403.1545f9b5@gandalf.local.home> <Y3vSQo85ofkfD/L8@zn.tnic>
- <CAADnVQLJFnu6gARdZ7ckgxeGaSv70jHBiQo+W=zDKO0-ELFGcQ@mail.gmail.com>
- <Y3ymzAYRyH5IWEe/@zn.tnic> <3fa8ec60-dd96-c41f-ea46-8856bf855949@meta.com>
- <20221122132905.12a8d5ad@gandalf.local.home> <a53e8c6d-b0e5-72bf-1aba-07609c9cf1bf@meta.com>
- <20221130143719.07e36277d1471b83e9a1b627@linux-foundation.org> <CAADnVQ+KLXPhowdBZq0PvGOq5tv4ovNtNCvGBXHQBkVbz4UVkg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+KLXPhowdBZq0PvGOq5tv4ovNtNCvGBXHQBkVbz4UVkg@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 1 Dec 2022 18:39:29 +0100
-Message-ID: <CAO-hwJ+PyqBPAO-3MmR+WFKiRzX-FPd41uNR5tX9sgtgdyf2Og@mail.gmail.com>
-Subject: Re: [PATCH] error-injection: Add prompt for function error injection
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Chris Mason <clm@meta.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 5:59 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Nov 30, 2022 at 2:37 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue, 22 Nov 2022 14:51:08 -0500 Chris Mason <clm@meta.com> wrote:
-> >
-> > > On 11/22/22 1:29 PM, Steven Rostedt wrote:
-> > > > On Tue, 22 Nov 2022 12:42:33 -0500
-> > > > Chris Mason <clm@meta.com> wrote:
-> > > >
-> > > >> On 11/22/22 5:39 AM, Borislav Petkov wrote:
-> > > >>> On Mon, Nov 21, 2022 at 03:36:08PM -0800, Alexei Starovoitov wrote:
-> > > >>>> The commit log is bogus and the lack of understanding what
-> >
-> > Why am I not understanding the controversy here?  With this patch
-> > applied, people who want function error injection enable
-> > CONFIG_FUNCTION_ERROR_INJECTION and people who don't want it don't do
-> > that.
-> >
-> > Alexei, can you please suggest a less bogus changelog for this?
->
-> People are using ALLOW_ERROR_INJECTION to allowlist kernel functions
-> where bpf progs can attach.
-> For example in the linux-next:
-> git grep ALLOW_ERROR_INJECTION
-> drivers/hid/bpf/hid_bpf_dispatch.c:ALLOW_ERROR_INJECTION(hid_bpf_device_event,
-> ERRNO);
-> drivers/hid/bpf/hid_bpf_dispatch.c:ALLOW_ERROR_INJECTION(hid_bpf_rdesc_fixup,
-> ERRNO);
-> drivers/hid/bpf/hid_bpf_jmp_table.c:ALLOW_ERROR_INJECTION(__hid_bpf_tail_call,
-> ERRNO);
+Hello,
 
-To be completely honest, I mark hid_bpf_device_event and
-hid_bpf_rdesc_fixup as ALLOW_ERROR_INJECTION only to have a dedicated
-function to create a SEC("fmod_ret"), but I am actually only using
-__hid_bpf_tail_call() to call the bpf programs.
+This series adds HS-G4 support to the Qcom UFS driver and PHY driver.
+The newer Qcom platforms support configuring the UFS controller and PHY
+in dual gears (i.e., controller/PHY can be configured to run in two gear
+speeds). This is accomplished by adding two different PHY init sequences
+to the PHY driver and the UFS driver requesting the one that's required
+based on the platform configuration.
 
-So technically, I should be able to not use ALLOW_ERROR_INJECTION but
-that would mean manually calling the BPF programs from
-__hid_bpf_tail_call() instead of relying on the magic of libbpf, but
-also would force me to have an other way of telling these 2 other
-functions are fmod_ret capable, which would be definitely not clean.
+Initially the ufs-qcom driver will use the default gear G2 for enumerating
+the UFS device. Afer enumeration, the max gear supported by both the
+controller and device would be found out and that will be used thereafter.
+But for using the max gear after enumeration, the ufs-qcom driver requires
+the UFS device to be reinitialized. For this purpose, a separate quirk has
+been introduced in the UFS core along with a callback and those will be used
+by the ufs-qcom driver.
 
->
-> The hid-bpf framework depends on it.
-> iirc Benjamin mentioned that chromeos is one of the future users
-> of hid-bpf. They need it to deal with a variety of quirks in hid
-> devices in production.
->
-> Either hid-bpf or bpf core can add
-> "depends on FUNCTION_ERROR_INJECTION"
-> to its kconfig.
-> Like:
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index 2dfe1079f772..281e5263f3d1 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-> @@ -32,6 +32,7 @@ config BPF_SYSCALL
->         select BINARY_PRINTF
->         select NET_SOCK_MSG if NET
->         select PAGE_POOL if NET
-> +       depends on FUNCTION_ERROR_INJECTION
->         default n
+This series has been tested on following platforms:
 
-FWIW, this is what I'm going to apply in hid.git for the time being
-[0]. But I'd rather have a BPF_HAVE_FMOD_RET as suggested in [1].
+* Qcom RB5 development platform powered by SM8250 SoC
+* SM8450 based dev board
 
->
-> but the better option for now would be to drop this patch.
-> For the next next merge window we can come up with alternative way
-> (instead of ALLOW_ERROR_INJECTION) to mark kernel functions
-> purely on the bpf side.
-> I don't think we have time to add this marking infrastructure
-> for the upcoming merge window.
->
+Merging Strategy:
+-----------------
 
-Outside of the "should we add ALLOW_ERROR_INJECTION in production
-environments", all I care about is that I want to be able to attach
-SEC("fmod_ret/...") on a specific set of functions that I control. So
-for me, I don't need to full "let's randomly add errors in any
-functions" (which I doubt you can do with ALLOW_ERROR_INJECTION
-anyway), I just need to be able to say "I want a bpf program to be
-able to change the return code of this dedicated function".
+The PHY patches are expected to go through PHY tree and UFS, MAINTAINERS
+patches are expected to go through SCSI tree.
 
-So I agree with Alexei here. The situation has been to enable this
-parameter for quite some time without any complaints, and this patch
-prevents HID-BPF to be enabled on systems where sysadmins would think
-this is unsafe. Postponing this patch to the next merge window will
-give enough time for the BPF folks to change their implementation.
+NOTE: Since this series targets multiple SoCs (base like SM8350) and
+(derivative like SC8280XP), testing on all of these platforms is really
+appreciated. Although, if the series works for base SoC, then for derivatives
+also it should work.
 
-Cheers,
-Benjamin
+Thanks,
+Mani
 
-[0] https://lore.kernel.org/linux-input/7df26319-f4ee-6dd1-a1b8-1caaf595528d@nvidia.com/T/#m9416ad54e2ef63244585c4ef83d07bebedf6e143
-[1] https://lore.kernel.org/linux-input/CABRcYmKyRchQhabi1Vd9RcMQFCcb=EtWyEbFDFRTc-L-U8WhgA@mail.gmail.com/
+Changes in v4:
+
+* Dropped HS G3 specific setting from SM8350 default init sequence
+* Added G4 support to SM8350 and SC8280XP
+* Covered all qcom files under drivers/ufs/host in MAINTAINERS file
+* Added missing Suggested-by tags for Can Guo
+* Rebased on top of linux-next 20221201
+
+Changes in v3:
+
+* Dropped the "device-max-gear" DT property and switched to reinitialization (Krzysztof)
+* Added HS-G4 support to all compatible SoCs (SM8150, SM8250 and SM8450). This will also
+  benefit the derivative SoCs of these platforms like SC8180x, SC8280x etc...
+* Splitted the qmp_phy_init_tbl changes into separate patches (Vinod)
+* Collected reviews from Andrew H
+
+Changes in v2:
+
+* Collected reviews from Dmitry
+* Renamed "max-gear" property to "max-device-gear"
+* Used min() for deciding which gear to use instead of open comparision
+* Added comment about the old register name
+
+Manivannan Sadhasivam (23):
+  phy: qcom-qmp-ufs: Remove _tbl suffix from qmp_phy_init_tbl
+    definitions
+  phy: qcom-qmp-ufs: Rename MSM8996 PHY definitions
+  phy: qcom-qmp-ufs: Move register settings to qmp_phy_cfg_tbls struct
+  phy: qcom-qmp-ufs: Add support for configuring PHY in HS Series B mode
+  phy: qcom-qmp-ufs: Add support for configuring PHY in HS G4 mode
+  phy: qcom-qmp-ufs: Move HS Rate B register setting to tbls_hs_b
+  phy: qcom-qmp-ufs: Add HS G4 mode support to SM8150 SoC
+  phy: qcom-qmp-ufs: Add HS G4 mode support to SM8250 SoC
+  phy: qcom-qmp-ufs: Avoid setting HS G3 specific registers
+  phy: qcom-qmp-ufs: Add HS G4 mode support to SM8350 SoC
+  phy: qcom-qmp-ufs: Add HS G4 mode support to SM8450 SoC
+  phy: qcom-qmp-ufs: Add HS G4 mode support to SC8280XP SoC
+  scsi: ufs: ufs-qcom: Remove un-necessary goto statements
+  scsi: ufs: ufs-qcom: Remove un-necessary WARN_ON()
+  scsi: ufs: ufs-qcom: Use bitfields where appropriate
+  scsi: ufs: ufs-qcom: Use dev_err_probe() for printing probe error
+  scsi: ufs: ufs-qcom: Fix the Qcom register name for offset 0xD0
+  scsi: ufs: core: Add reinit_notify() callback
+  scsi: ufs: core: Add support for reinitializing the UFS device
+  scsi: ufs: ufs-qcom: Factor out the logic finding the HS Gear
+  scsi: ufs: ufs-qcom: Add support for reinitializing the UFS device
+  scsi: ufs: ufs-qcom: Add support for finding max gear on new platforms
+  MAINTAINERS: Add myself as the maintainer for Qcom UFS drivers
+
+ MAINTAINERS                                   |   8 +
+ .../phy/qualcomm/phy-qcom-qmp-pcs-ufs-v5.h    |   1 +
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c       | 454 +++++++++++++-----
+ drivers/ufs/core/ufshcd-priv.h                |   6 +
+ drivers/ufs/core/ufshcd.c                     |  63 ++-
+ drivers/ufs/host/ufs-qcom.c                   | 170 +++----
+ drivers/ufs/host/ufs-qcom.h                   |  70 +--
+ include/ufs/ufshcd.h                          |   8 +
+ 8 files changed, 532 insertions(+), 248 deletions(-)
+
+-- 
+2.25.1
 
