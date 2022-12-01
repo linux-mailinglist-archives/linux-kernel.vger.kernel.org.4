@@ -2,167 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CEB63FA5A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3181463FA5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiLAWMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        id S231281AbiLAWM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiLAWM1 (ORCPT
+        with ESMTP id S231271AbiLAWMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:12:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B13C462A;
-        Thu,  1 Dec 2022 14:12:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 1 Dec 2022 17:12:44 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91D022BE7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:12:42 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD5362163;
-        Thu,  1 Dec 2022 22:12:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F4D7C433C1;
-        Thu,  1 Dec 2022 22:12:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669932743;
-        bh=6L29YbZfP45KfSEKeCJ4KJ1OrLqAXiCErdwDskNl5Co=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BItB6QRZJ6pvebRb6hRT1PxYp6WMMEpxBscCUHUW7Q819f+34QTROwOVQKHtcmIXC
-         AWZkVtgm0p/uWiWQz3IG7cfs15NL3WEprU380IRjfv3zgTJ2e/eyv+wf2l6R2Fjs10
-         M4xqmbk39g+LooqnZ7Reht1AmpwsP+cZO9bs/lWU2uPGjwGEZsIXR7DiPQhbvfFFYV
-         TfkPlVYyDkzzcFkykeX81F9XpltkQ/Tdxiw6e6rmUCO0kwvNkIc8gVGSIegvSJdyvd
-         mrEmzXPHPhGrdjmQV8ivQZGO+LHC2BdJGnilIa5wiwpswTmFfuB/0CsT+M7BJoZgAA
-         AWR3XOjWeXmow==
-Date:   Thu, 1 Dec 2022 16:12:20 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 2/9] dt-bindings: clock: Add SM8550 TCSR CC clocks
-Message-ID: <20221201221220.7kdbndug3m3om62p@builder.lan>
-References: <20221130112852.2977816-1-abel.vesa@linaro.org>
- <20221130112852.2977816-3-abel.vesa@linaro.org>
+        by mail.3ffe.de (Postfix) with ESMTPSA id 1EFA911C;
+        Thu,  1 Dec 2022 23:12:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1669932760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2HyuiWb9CSRxQhFtA9qePcq+AZj4yl2L9uNfDxE/SMM=;
+        b=vougSaIvKYcrIvIq5ZgHtUrJLns2tFLfJSfhDyUhdkvKCrxP5iZS9p+iqbZNQ7EtZaI+di
+        qauQwLoJPdDOP1m6OrwRcitqIPCIcaNwh6GPUOT2fR0YEEpLygbZrDrSLC3+ddovUbGBAj
+        yyR26PAF40hg//T446tym81mhDCheKNp/sIxWoTQc2v/PBPQ0JcwP9jvEixnKhs1VVIISf
+        ufnAAIRn01k7i6xQ+jXTQjLLo9LNDpDJZlR87puxkq9ayX/rGuZflzMKI02zwaX+PKPxJe
+        7XEK2KQDXXTXsdarmGUmjeeXeZkxn44QcOoKWq30UEB6GYurIWjID6yQjTUlnw==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130112852.2977816-3-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 01 Dec 2022 23:12:39 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     greg.malysa@timesys.com,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] mtd: spi-nor: Add support for IS25LX256 operating
+ in 1S-8S-8S octal read mode
+In-Reply-To: <20221201212750.267721-4-nathan.morrison@timesys.com>
+References: <20221201212750.267721-1-nathan.morrison@timesys.com>
+ <20221201212750.267721-4-nathan.morrison@timesys.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <3f51282076fb3e209aa4cae7bc0a4c46@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 01:28:45PM +0200, Abel Vesa wrote:
-> Add bindings documentation for clock TCSR driver on SM8550.
+Am 2022-12-01 22:27, schrieb Nathan Barrett-Morrison:
+> This adds the IS25LX256 chip into the ISSI flash_info parts table
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > ---
->  .../bindings/clock/qcom,sm8550-tcsrcc.yaml    | 45 +++++++++++++++++++
->  .../dt-bindings/clock/qcom,sm8550-tcsrcc.h    | 18 ++++++++
->  2 files changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm8550-tcsrcc.h
+>  drivers/mtd/spi-nor/issi.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml
-> new file mode 100644
-> index 000000000000..b2de251328e4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,sm8550-tcsrcc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm TCSR Clock Controller on SM8550
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +description: |
-> +  Qualcomm TCSR clock control module provides the clocks, resets and
-> +  power domains on SM8550
-> +
-> +  See also:: include/dt-bindings/clock/qcom,sm8550-tcsrcc.h
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sm8550-tcsrcc
+> diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
+> index 89a66a19d754..98cc5e1d9c18 100644
+> --- a/drivers/mtd/spi-nor/issi.c
+> +++ b/drivers/mtd/spi-nor/issi.c
+> @@ -74,6 +74,9 @@ static const struct flash_info issi_nor_parts[] = {
+>  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+>  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
+>  		.fixups = &is25lp256_fixups },
+> +	{ "is25lx256", INFO(0x9d5a19, 0, 128 * 1024, 256)
 
-The block described is the TCSR block, the clock controller represents
-one of the functions provided. I think it would be more appropriate if
-the compatible represented the generic nature of the block, even though
-you currently only care about exposing these clocks.
+Please use INFO(0x9d5a19, 0, 0, 0)
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +
+> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_4B_OPCODES |
+> +			      SPI_NOR_OCTAL_READ_1_8_8) },
 
-Your clocks are fed by cxo. While there might be reasons for not wire
-the parent up in the clocks, I think you should represent it in the
-binding.
+Neither of these flags should be needed. As mentioned before,
+you'd need a fixups for the missing 1-1-8 and 1-8-8 fast read ops.
 
-Regards,
-Bjorn
-
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-controller@1fc0000 {
-> +      compatible = "qcom,sm8550-tcsrcc";
-> +      reg = <0x1fc0000 0x30000>;
-> +      #clock-cells = <1>;
-> +      #reset-cells = <1>;
-> +    };
-> +
-> +...
-> diff --git a/include/dt-bindings/clock/qcom,sm8550-tcsrcc.h b/include/dt-bindings/clock/qcom,sm8550-tcsrcc.h
-> new file mode 100644
-> index 000000000000..091cb76f953a
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/qcom,sm8550-tcsrcc.h
-> @@ -0,0 +1,18 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2022, Linaro Limited
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLK_QCOM_TCSR_CC_SM8550_H
-> +#define _DT_BINDINGS_CLK_QCOM_TCSR_CC_SM8550_H
-> +
-> +/* TCSR CC clocks */
-> +#define TCSR_PCIE_0_CLKREF_EN					0
-> +#define TCSR_PCIE_1_CLKREF_EN					1
-> +#define TCSR_UFS_CLKREF_EN					2
-> +#define TCSR_UFS_PAD_CLKREF_EN					3
-> +#define TCSR_USB2_CLKREF_EN					4
-> +#define TCSR_USB3_CLKREF_EN					5
-> +
-> +#endif
-> -- 
-> 2.34.1
-> 
+-michael
