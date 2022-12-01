@@ -2,33 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A607F63F22A
+	by mail.lfdr.de (Postfix) with ESMTP id 6E77363F229
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiLAOBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
+        id S231706AbiLAOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiLAOBP (ORCPT
+        with ESMTP id S231695AbiLAOBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Dec 2022 09:01:15 -0500
 Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEA469075D;
-        Thu,  1 Dec 2022 06:01:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C641A47CA;
+        Thu,  1 Dec 2022 06:01:13 -0800 (PST)
 Received: from localhost.biz (unknown [10.81.81.211])
-        by gw.red-soft.ru (Postfix) with ESMTPA id 689993E42F8;
-        Thu,  1 Dec 2022 17:01:09 +0300 (MSK)
+        by gw.red-soft.ru (Postfix) with ESMTPA id 198D33E42F9;
+        Thu,  1 Dec 2022 17:01:12 +0300 (MSK)
 From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
-To:     artem.chernyshev@red-soft.ru, Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH v3 1/3] net: dsa: ksz: Check return value
-Date:   Thu,  1 Dec 2022 17:00:30 +0300
-Message-Id: <20221201140032.26746-1-artem.chernyshev@red-soft.ru>
+To:     artem.chernyshev@red-soft.ru, Kurt Kanzenbach <kurt@linutronix.de>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH v3 2/3] net: dsa: hellcreek: Check return value
+Date:   Thu,  1 Dec 2022 17:00:31 +0300
+Message-Id: <20221201140032.26746-2-artem.chernyshev@red-soft.ru>
 X-Mailer: git-send-email 2.30.3
+In-Reply-To: <20221201140032.26746-1-artem.chernyshev@red-soft.ru>
+References: <20221201140032.26746-1-artem.chernyshev@red-soft.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-KLMS-Rule-ID: 1
@@ -55,30 +57,27 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Return NULL if we got unexpected value from skb_trim_rcsum() 
-in ksz_common_rcv()
+in hellcreek_rcv()
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: bafe9ba7d908 ("net: dsa: ksz: Factor out common tag code")
+Fixes: 01ef09caad66 ("net: dsa: Add tag handling for Hirschmann Hellcreek switches")
 Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 ---
 V1->V2 Fixes for tag_hellcreek.c and tag_sja1105.c
 V2->V3 Split patch in 3 separate parts
 
- net/dsa/tag_ksz.c | 3 ++-
+ net/dsa/tag_hellcreek.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/dsa/tag_ksz.c b/net/dsa/tag_ksz.c
-index 38fa19c1e2d5..429250298ac4 100644
---- a/net/dsa/tag_ksz.c
-+++ b/net/dsa/tag_ksz.c
-@@ -21,7 +21,8 @@ static struct sk_buff *ksz_common_rcv(struct sk_buff *skb,
- 	if (!skb->dev)
+diff --git a/net/dsa/tag_hellcreek.c b/net/dsa/tag_hellcreek.c
+index 846588c0070a..53a206d11685 100644
+--- a/net/dsa/tag_hellcreek.c
++++ b/net/dsa/tag_hellcreek.c
+@@ -49,7 +49,8 @@ static struct sk_buff *hellcreek_rcv(struct sk_buff *skb,
  		return NULL;
+ 	}
  
--	pskb_trim_rcsum(skb, skb->len - len);
-+	if (pskb_trim_rcsum(skb, skb->len - len))
+-	pskb_trim_rcsum(skb, skb->len - HELLCREEK_TAG_LEN);
++	if (pskb_trim_rcsum(skb, skb->len - HELLCREEK_TAG_LEN))
 +		return NULL;
  
  	dsa_default_offload_fwd_mark(skb);
