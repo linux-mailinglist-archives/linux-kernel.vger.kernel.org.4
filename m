@@ -2,139 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B254163F9B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7C063F9B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbiLAVRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S230456AbiLAVSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiLAVRt (ORCPT
+        with ESMTP id S230094AbiLAVS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:17:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51792186;
-        Thu,  1 Dec 2022 13:17:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5013B6211E;
-        Thu,  1 Dec 2022 21:17:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9B9C433D6;
-        Thu,  1 Dec 2022 21:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669929465;
-        bh=tdCHmZccPVBOw00B52Hg+0Wg5enkxGAqRv7obDTmBSg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DmT7B6OgfvmSRTH7So5BnVZjmFmqoe0qJSqHd7Cs9wCpjHDNzLex4CdBWepRqY6fJ
-         mW9IQIwzlVzWwHSwAAHa+1UPTg/Ro0bxrpIxHHbZM/K9dVlfTf3KxWbAVLOCJfFAvq
-         0FEn7u7Go8Erixv/ede7uK4BQUE7JwaA0GJUK05XhGdHVACIZXEbj8IM03n/+grpir
-         IBgpj1/8y603l2oVjg79pkt6sSBwLVNcSq3Un1L34V8oRhci/6Bc8cykXXLhhrTtia
-         oFBp1S6ZX0YkGL7dMZLv2okQgh08A8wsTiDY0zQ/dQL0B95sMr4zZS42xki2eWVUxG
-         6P1Nfq883ftTQ==
-Date:   Thu, 1 Dec 2022 13:17:44 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Taras Chornyi <taras.chornyi@plvision.eu>
-Cc:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Elad Nachman <enachman@marvell.com>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        linux-kernel@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>
-Subject: Re: [PATCH v2] MAINTAINERS: Update maintainer for Marvell Prestera
- Ethernet Switch driver
-Message-ID: <20221201131744.6e94c5f7@kernel.org>
-In-Reply-To: <96e3d5fc-ab8c-2344-3266-3b73664499f1@plvision.eu>
-References: <20221128093934.1631570-1-vadym.kochan@plvision.eu>
-        <20221129211405.7d6de0d5@kernel.org>
-        <96e3d5fc-ab8c-2344-3266-3b73664499f1@plvision.eu>
+        Thu, 1 Dec 2022 16:18:28 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F91B9563
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:18:27 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id x28so1522247qtv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 13:18:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HW+cTjgUb12iPneEGhpx2Sj/vvbmNf0F1OcpCH35RNU=;
+        b=QxmG7c3ME3To4xBvAFTW6sn90UZSOww6KeX77UGdKbCZj15VPqTsNLZXGE6wm3D3g2
+         psaRthOFthZceHh5d53zWWZcnoCpjgNah6WFCqEWG3aUI7qxemUoEn0Qgv29m8PXD2SJ
+         tCy9c4QdWcsc+iBDkh0zep+dKdcw2R10puGwA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HW+cTjgUb12iPneEGhpx2Sj/vvbmNf0F1OcpCH35RNU=;
+        b=rMm/xTWssSSSrBP2fgnvITsUpddyPDn8mEvVFvqrRNJ0k1yk5JrUatYmLQ/w1QUh3d
+         rkjTONna+aGPEJOgCnxLILFYA1EUlecF5Quc7pM/+/8WzZmOaoBc7hV8OpoC5A661U3U
+         NcX2jYNTpZynMRgY5x3yvqX8p+4nf/InoBCXsCAw6rloSOe0B9HTjj98nCfNZTbiZOjC
+         guZrMwXEvCC/9WF8/SLwOuwKk//JHNJwqD3QMqfYmwmD8czJ2rJCdhXZfPlmezevQvAM
+         hMj/LtqXlS/k+CczIHuohZRMPKbXLrJTgQSj2kqgdke7zjur3QZMxTcL0LH07sCJib1+
+         /+kQ==
+X-Gm-Message-State: ANoB5pmXDVX3xmJHz26dpPLWZ6V5672qNknRTnqPi4X/SLyZVfZIzmRZ
+        dwC7XIcx957F4wuk7MSX8/pwq3UkPEkKBA==
+X-Google-Smtp-Source: AA0mqf6CB0+TNgO5uqK1b6ae3JIZvXfSXaLL82cqwwd4iH8r50OZySyci70QDqzmw7PSabpUNKl6hw==
+X-Received: by 2002:ae9:dec2:0:b0:6fa:1c6f:1674 with SMTP id s185-20020ae9dec2000000b006fa1c6f1674mr43323496qkf.219.1669929506679;
+        Thu, 01 Dec 2022 13:18:26 -0800 (PST)
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com. [209.85.160.180])
+        by smtp.gmail.com with ESMTPSA id c11-20020ac8660b000000b003a586888a20sm1869485qtp.79.2022.12.01.13.18.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 13:18:25 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id a27so2622422qtw.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 13:18:25 -0800 (PST)
+X-Received: by 2002:ae9:e00c:0:b0:6f8:1e47:8422 with SMTP id
+ m12-20020ae9e00c000000b006f81e478422mr61404296qkk.72.1669929505133; Thu, 01
+ Dec 2022 13:18:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
+ <166991263326.311919.16890937584677289681.stgit@devnote3> <202212010838.B0B109DA@keescook>
+ <20221201114848.13a87aca@gandalf.local.home> <202212010852.6D4B542@keescook>
+ <20221201141426.08411b29@gandalf.local.home> <78b7a67f-8c5b-6b2e-7fb5-01c47d75c104@meta.com>
+In-Reply-To: <78b7a67f-8c5b-6b2e-7fb5-01c47d75c104@meta.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 1 Dec 2022 13:18:09 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi_rTJOjbMxtyWe41QNMs2ojYTHhyNrAEebz-fyGh5Wiw@mail.gmail.com>
+Message-ID: <CAHk-=wi_rTJOjbMxtyWe41QNMs2ojYTHhyNrAEebz-fyGh5Wiw@mail.gmail.com>
+Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
+To:     Chris Mason <clm@meta.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 10:39:07 +0200 Taras Chornyi wrote:
-> On 30.11.22 07:14, Jakub Kicinski wrote:
-> > On Mon, 28 Nov 2022 11:39:34 +0200 Vadym Kochan wrote: =20
-> >> Add Elad Nachman as maintainer for Marvell Prestera Ethernet Switch dr=
-iver.
-> >>
-> >> Change Taras Chornyi mailbox to plvision. =20
-> > This is a patch, so the description needs to explain why...
-> > and who these people are. It would seem more natural if you,
-> > Oleksandr and Yevhen were the maintainers.
+On Thu, Dec 1, 2022 at 1:00 PM Chris Mason <clm@meta.com> wrote:
+>
+> On 12/1/22 2:14 PM, Steven Rostedt wrote:
 > >
-> > Seriously, this is a community project please act the part. =20
-> The Marvell Prestera Switchdev Kernel Driver's focus and maintenance are=
-=20
-> shifted from PLVision (Marvell Contractors) to the Marvell team in Israel.
-> In the last 12 months, the driver's development efforts have been shared=
-=20
-> between the PLVision team and Elad Nachman from the Marvell Israel group.
+> > That is, please add why this is needed for BPF (and also include a Link:
+> > tag to this thread).
+>
+> Sorry, I'm completely failing to parse.  Is this directed at Kees or
+> Benjamin?  I'm also not sure what the this is in "why this is needed for
+> BPF"?
 
-Ah, damn, I was worried that's what you'd say :(
+It's not at all "needed for bpf".
 
-> Elad Nachman is a veteran with over ten years of experience in Linux=20
-> kernel development.
-> He has made many Linux kernel contributions to several community=20
-> projects, including the Linux kernel, DPDK (KNI Linux Kernel driver) and=
-=20
-> the DENT project.
-> Elad has done reviews and technical code contributions on Armada 3700,=20
-> Helping Pali Roh=C3=A1r, who is the maintainer of the Armada 3700 PCI=20
-> sub-system, as well as others in the Armada 3700 cpufreq sub-system.
-> In the last year and a half, Elad has internally dealt extensively with=20
-> the Marvell Prestera sub-system and has led various upstreaming=20
-> sub-projects related to the Prestera sub-system, Including Prestera=20
-> sub-system efforts related to the Marvell AC5/X SOC drivers upstreaming.=
-=20
-> This included technical review and guidance on the technical aspects and=
-=20
-> code content of the patches sent for review.
-> In addition, Elad is a member of the internal review group of code=20
-> before it applies as a PR.
+There are mis-uses of error injection that have nothing to do with
+error injection in linux-next, and some people have argued that said
+mis-uses are a valid.
 
-I see 4 mentions of Elad Nachman in the entire git history.
+They aren't. They need fixing. Thankfully they haven't made it
+upstream, and I most definitely do not want random users mis-using
+"error injection" to inject random bpf code for non-error cases.
 
-The distinction between the kernel community and the corporate Linux
-involvement is something I don't quite know how to verbalize.
-And I don't know whether my perspective is shared by others.
-
-Linux has taken over the world (at least the technical world) so having
-Linux kernel exposure is common. But building a product based on Linux
-which is then packaged and shipped to customers, in the usual corp
-product development methodology, translates very poorly to developing
-upstream. This is more true in networking that other parts of the
-kernel, to my knowledge, because we attempt to build vendor-independent
-abstractions.
-
-While I do not mean to question Elad's expertise and capability as an
-engineer/lead/manager, and very much appreciate Marvell's investment=20
-in the upstream drivers for Prestera and in DENT -- I think the
-community involvement is lacking. Short to medium term we should try to
-find a way of improving this situation, we can clarify what we expect
-from you and if you have ideas on how we can make the involvement**
-easier - we'd love to hear them.
-
-** community involvement ideas, less interested in how we can make the
-   "ship products" part easier, but you can share those too
-
-> Finally, do note the fact that I will continue to maintain/support this=20
-> driver, but I would like to have someone that I can share the effort with.
-
-Understandable. I hope PLVision does not disappear form the picture.
-We are really allergic to the "push the driver upstream and disengage"
-or "throw it over the wall open source" model, if you will.
-
-Unfortunately we only have one nuclear button for discouraging such
-arrangements (git-rm), which will hopefully never be used.
-
-To conclude, I think we should have a call first, and then decide
-who the best choice for a maintainer is.=20
+              Linus
