@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA8063FC03
+	by mail.lfdr.de (Postfix) with ESMTP id 6D91C63FC02
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiLAX2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S231895AbiLAX22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiLAX1v (ORCPT
+        with ESMTP id S231937AbiLAX1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:27:51 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F686CCFC3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:27:18 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id j18-20020a170902da9200b00189b3b16addso3776350plx.23
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:27:17 -0800 (PST)
+        Thu, 1 Dec 2022 18:27:54 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2266CCFCE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:27:19 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id m9-20020a63ed49000000b00477f449365fso2937095pgk.15
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=T4fKy3rsoDeg9TcItgm719DIQWhJRDtEiEGAdRW9bCs=;
-        b=BlKLkceE/MZzKU1chFtrlSK8BRam4GW1b+pEyW8oCQsRojYO+kFKCToEPx4UQQRweG
-         q9MvoW7cjJbdcO4Gv9BYOu4/II6TPltvYOy2zCoxKE4Wr5vZEYObcLExn+/TJqgxLCwR
-         ObMfEyhtP5H8QHkFsRqCNAD3tus2yhawcBHu3bXzcGte0zk1r0YZ4JYi8oLZ9k7LKYRu
-         5nZQoBma6hoh08WelfwSv5FgVK6G3NAVm2YSRUg7Ev5tR/f1LMXz0szwD0O7ZNnSwhg0
-         7rEaHiNYNnp1OcyMH0hOskiAO3CUMlSW02MfQkeyE7g8dujy67jAZC5+ke3bg7W7xrmS
-         A5uQ==
+        bh=7SXAjG1M+IBfGsFtMHywIkRjTzn4Js8KsrZjxZEQBMU=;
+        b=ACp2sPOEEhtUBdUDYUmigXNlNuydDo0L5gzT5adI9Ji7FnPzwS3jyQFj4800dH1gw9
+         aarAXgAVG3T7xg4Qhv/0Lq9enspYAIWfp8dNBJRTmS+OV8tF9ebUWwetC6n5CUXx24+d
+         0uT9DyPL9JhKc9a+6znnfRysveD6YN6SmC+p/THzkHUOU2Qy5pq7IvsseLzKTf9lvQpk
+         jBnmpRrZ8oaXv4SPUSlSo32xL0T3HTioALanjDXwhPrU8IvuVvweucc4eV0oxIvVYTrE
+         6yoSVAkLxA59E0IbPqoP/RYWydh6JrEZiaA0oBmaahC/ifgo4vHX4h36dkajhv5R/+U3
+         0NKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=T4fKy3rsoDeg9TcItgm719DIQWhJRDtEiEGAdRW9bCs=;
-        b=CCkrz5ZRRQwWAFfiuw9tDOT9NjbttYOnzRNlExROVL/TscAXpuebdWCnkUvB/N1BDy
-         Aap4evFVpqNOTawrmhBZPfnqtaXb1xfu9QL9kK43KqZ3E6P89PStrAWkfA6Obyj+0aVI
-         ybJRzlYzxs3SVKKv8TM4KuSQW2jqzUr6F6d7fadWgDd3X9TrRiOqJ5xOhYfeyH6oPvFd
-         5chMyRFqBpNQ/goWZxRl3ui0DVZV6PF9CSu0Y0MYVaNSqQFhfLwWTpL+8giLXoOR02cj
-         ZfgXcFW5BjTc1dnq4BeEnChxWn1kOlUhqRDjMnfoWrLquWn5ay3aJg3A8MjJ7WmM8cEJ
-         rGeQ==
-X-Gm-Message-State: ANoB5pn4TVnJPQIdQELc/ExD39eCrjtrfRI/DVjwKW3w39Cw5VSSoclT
-        9zCLsk/8d0mBk/ifCIJJVZiC0Xe+8aA=
-X-Google-Smtp-Source: AA0mqf5usr/pO/baVlQfScpjJx3z2ov/8/MiXiFA/IdjyZbPp4o0eX12ADXBEcXlx4QR/AKgsuyG+Ood2ts=
+        bh=7SXAjG1M+IBfGsFtMHywIkRjTzn4Js8KsrZjxZEQBMU=;
+        b=s+N0dkZZmEH03u1RjQvVr6VdzY2UWswBVaGYXCmZgHw9R89FZb76sM850dXt5mZyLl
+         CbLhSZqBdApKNcdiAKACw+iP2pqgY5Ymz8q9Oz1jtv2l6l9EEr1CVq2PeH4W7NA9+xYZ
+         /u0mN+e4AjX4M54K6nukHr8w60MxQHUM2pUvRnak3E2Pg0lrKczWJKSa+C02qyIW4p7i
+         or8dTUb4qwV6m1jmRIeo23hbVuVkVRRzY1xtDWEEhY64dt2STR3ndkQx3FAM+FWJyJP7
+         FV9E8sO1f9XElo7cazUFGUgPuJrEZNPSn3alLjMm9ID5BiMhhrW0awb+YlKGT0212eIJ
+         pfmg==
+X-Gm-Message-State: ANoB5plN3bkxG6qut/MwGVSIX0ycZEKhIHJS+olJDjKT79rH5/8ozoKW
+        6oXsSRlGoe85DAx/suXQSGqDeRiIvnY=
+X-Google-Smtp-Source: AA0mqf5WubwN175lIMTyZxAOD6OhDkttOnqc3F5KtxxV+MMxPH5WaxC+3QCgYB5pFp1bK+wzYaA2AQ5YxyA=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:dd82:b0:212:fdb1:720b with SMTP id
- l2-20020a17090add8200b00212fdb1720bmr79232894pjv.66.1669937237499; Thu, 01
- Dec 2022 15:27:17 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:d086:b0:219:227d:d91f with SMTP id
+ k6-20020a17090ad08600b00219227dd91fmr2875299pju.0.1669937238934; Thu, 01 Dec
+ 2022 15:27:18 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  1 Dec 2022 23:26:48 +0000
+Date:   Thu,  1 Dec 2022 23:26:49 +0000
 In-Reply-To: <20221201232655.290720-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221201232655.290720-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221201232655.290720-10-seanjc@google.com>
-Subject: [PATCH 09/16] x86/virt: KVM: Open code cpu_has_vmx() in KVM VMX
+Message-ID: <20221201232655.290720-11-seanjc@google.com>
+Subject: [PATCH 10/16] x86/virt: KVM: Move VMXOFF helpers into KVM VMX
 From:   Sean Christopherson <seanjc@google.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -74,61 +74,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fold the raw CPUID check for VMX into kvm_is_vmx_supported(), its sole
-user.  Keep the check even though KVM also checks X86_FEATURE_VMX, as the
-intent is to provide a unique error message if VMX is unsupported by
-hardware, whereas X86_FEATURE_VMX may be clear due to firmware and/or
-kernel actions.
+Now that VMX is disabled in emergencies via the virt callbacks, move the
+VMXOFF helpers into KVM, the only remaining user.
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/virtext.h | 10 ----------
- arch/x86/kvm/vmx/vmx.c         |  2 +-
- 2 files changed, 1 insertion(+), 11 deletions(-)
+ arch/x86/include/asm/virtext.h | 42 ----------------------------------
+ arch/x86/kvm/vmx/vmx.c         | 29 ++++++++++++++++++++---
+ 2 files changed, 26 insertions(+), 45 deletions(-)
 
 diff --git a/arch/x86/include/asm/virtext.h b/arch/x86/include/asm/virtext.h
-index 97349410c937..c5df63c606be 100644
+index c5df63c606be..0b373543514f 100644
 --- a/arch/x86/include/asm/virtext.h
 +++ b/arch/x86/include/asm/virtext.h
-@@ -22,14 +22,6 @@
- /*
-  * VMX functions:
-  */
--
--static inline int cpu_has_vmx(void)
+@@ -19,48 +19,6 @@
+ #include <asm/svm.h>
+ #include <asm/tlbflush.h>
+ 
+-/*
+- * VMX functions:
+- */
+-/**
+- * cpu_vmxoff() - Disable VMX on the current CPU
+- *
+- * Disable VMX and clear CR4.VMXE (even if VMXOFF faults)
+- *
+- * Note, VMXOFF causes a #UD if the CPU is !post-VMXON, but it's impossible to
+- * atomically track post-VMXON state, e.g. this may be called in NMI context.
+- * Eat all faults as all other faults on VMXOFF faults are mode related, i.e.
+- * faults are guaranteed to be due to the !post-VMXON check unless the CPU is
+- * magically in RM, VM86, compat mode, or at CPL>0.
+- */
+-static inline int cpu_vmxoff(void)
 -{
--	unsigned long ecx = cpuid_ecx(1);
--	return test_bit(5, &ecx); /* CPUID.1:ECX.VMX[bit 5] -> VT */
+-	asm_volatile_goto("1: vmxoff\n\t"
+-			  _ASM_EXTABLE(1b, %l[fault])
+-			  ::: "cc", "memory" : fault);
+-
+-	cr4_clear_bits(X86_CR4_VMXE);
+-	return 0;
+-
+-fault:
+-	cr4_clear_bits(X86_CR4_VMXE);
+-	return -EIO;
+-}
+-
+-static inline int cpu_vmx_enabled(void)
+-{
+-	return __read_cr4() & X86_CR4_VMXE;
+-}
+-
+-/** Disable VMX if it is enabled on the current CPU
+- */
+-static inline void __cpu_emergency_vmxoff(void)
+-{
+-	if (cpu_vmx_enabled())
+-		cpu_vmxoff();
 -}
 -
 -
- /**
-  * cpu_vmxoff() - Disable VMX on the current CPU
-  *
-@@ -61,8 +53,6 @@ static inline int cpu_vmx_enabled(void)
- }
- 
- /** Disable VMX if it is enabled on the current CPU
-- *
-- * You shouldn't call this if cpu_has_vmx() returns 0.
+ /*
+  * SVM functions:
   */
- static inline void __cpu_emergency_vmxoff(void)
- {
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 6f3ade75a670..5bdcae435897 100644
+index 5bdcae435897..8be99651dcc9 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2713,7 +2713,7 @@ static bool kvm_is_vmx_supported(void)
+@@ -47,7 +47,6 @@
+ #include <asm/mshyperv.h>
+ #include <asm/mwait.h>
+ #include <asm/spec-ctrl.h>
+-#include <asm/virtext.h>
+ #include <asm/vmx.h>
+ 
+ #include "capabilities.h"
+@@ -743,6 +742,29 @@ static int vmx_set_guest_uret_msr(struct vcpu_vmx *vmx,
+ 	return ret;
+ }
+ 
++/*
++ * Disable VMX and clear CR4.VMXE (even if VMXOFF faults)
++ *
++ * Note, VMXOFF causes a #UD if the CPU is !post-VMXON, but it's impossible to
++ * atomically track post-VMXON state, e.g. this may be called in NMI context.
++ * Eat all faults as all other faults on VMXOFF faults are mode related, i.e.
++ * faults are guaranteed to be due to the !post-VMXON check unless the CPU is
++ * magically in RM, VM86, compat mode, or at CPL>0.
++ */
++static int kvm_cpu_vmxoff(void)
++{
++	asm_volatile_goto("1: vmxoff\n\t"
++			  _ASM_EXTABLE(1b, %l[fault])
++			  ::: "cc", "memory" : fault);
++
++	cr4_clear_bits(X86_CR4_VMXE);
++	return 0;
++
++fault:
++	cr4_clear_bits(X86_CR4_VMXE);
++	return -EIO;
++}
++
+ static void vmx_emergency_disable(void)
  {
  	int cpu = raw_smp_processor_id();
+@@ -752,7 +774,8 @@ static void vmx_emergency_disable(void)
+ 			    loaded_vmcss_on_cpu_link)
+ 		vmcs_clear(v->vmcs);
  
--	if (!cpu_has_vmx()) {
-+	if (!(cpuid_ecx(1) & feature_bit(VMX))) {
- 		pr_err("VMX not supported by CPU %d\n", cpu);
- 		return false;
- 	}
+-	__cpu_emergency_vmxoff();
++	if (__read_cr4() & X86_CR4_VMXE)
++		kvm_cpu_vmxoff();
+ }
+ 
+ static void __loaded_vmcs_clear(void *arg)
+@@ -2814,7 +2837,7 @@ static void vmx_hardware_disable(void)
+ {
+ 	vmclear_local_loaded_vmcss();
+ 
+-	if (cpu_vmxoff())
++	if (kvm_cpu_vmxoff())
+ 		kvm_spurious_fault();
+ 
+ 	hv_reset_evmcs();
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog
 
