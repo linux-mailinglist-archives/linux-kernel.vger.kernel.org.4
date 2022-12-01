@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513FA63F187
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E69B63F188
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiLANYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S231524AbiLANYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiLANY0 (ORCPT
+        with ESMTP id S231493AbiLANYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:24:26 -0500
+        Thu, 1 Dec 2022 08:24:35 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E80A2832
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:24:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3387A895C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:24:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9565B81F1D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:24:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B53C433D6;
-        Thu,  1 Dec 2022 13:24:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7130BB81F46
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCCEC433C1;
+        Thu,  1 Dec 2022 13:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669901061;
-        bh=amVP+1P0dNrlbJaDPRNEsD4wfnCL+4/BW2bhTC4Kicg=;
+        s=k20201202; t=1669901069;
+        bh=AMDMfVNL3QllttuNsq6hMXAwaGbTMCAQCAHdWUroH0I=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UU/En7RogwdtofVGswPptV6smospR4VEfq2JflWcFFeeL+nFISH8/5wc+2h5nmczU
-         lcmuJGPyW7MFSi9jE1csIdlpYgy9T0wZuFG4Ee63qCBtRTXXvNvcQQznP9MHznFX0+
-         qjsGvCQLSk5Tth35g++TM6W/9VEBTJas3r3kjfQkoyNoNyDwAk9MBb8GJxGeLcu/8C
-         zQbwzE11vEU7K6l7VhywLLPpRlujstLmrsOAj+gS75xlZFzBeebHQbRwfYCG8y6i1G
-         brb0q4O6vNlDEC7xXt12DM+mAEi3OknNtYB+CGAMru8esNc8i7SQaWI3yNlgT5Srs6
-         n/i4Kxl0SYgjQ==
+        b=nTWQvP8gql5krlZmsLlgw/IJHo8p3/ibFeb4DjFeHrw40aa0os0/AtLRzwVWuP9F/
+         TaWpl9LfnMUSXyWk/uD9eBM9Y78NNUn6l/IJ12cKGrrkM9ijBOWwkCXAA//SWRU3DO
+         FV/26SS8UQrTjHOoTu+m/IwECxJiT4qRY+TbNs6koM8aS1D7zMUCgMTGrncopEqkpf
+         B3S2OInvPxlWKKFEVjKnmYqtTqdm8WfuMMjTPMTesYK7wpq1A4+fVoQiDH3I+iIjSK
+         lZWoeruenQ5Bu2CX+YPwUqgZH85Hcq3OIPghnhotxu8f+TjMgomK3FLM5LvJ6zKy7C
+         /sPZHoIvMGlGw==
 From:   Mark Brown <broonie@kernel.org>
-To:     David Rau <we730128@gmail.com>, perex@perex.cz
-Cc:     tiwai@suse.com, support.opensource@diasemi.com,
-        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, David Rau <david.rau.zg@renesas.com>
-In-Reply-To: <20221121050744.2278-1-david.rau.zg@renesas.com>
-References: <20221121050744.2278-1-david.rau.zg@renesas.com>
-Subject: Re: [PATCH] ASoC: da7219: Fix pole orientation detection on OMTP headsets when playing music
-Message-Id: <166990105936.78632.9195345334708461451.b4-ty@kernel.org>
-Date:   Thu, 01 Dec 2022 13:24:19 +0000
+To:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Rui Zhang <zr.zhang@vivo.com>
+Cc:     kernel@vivo.com
+In-Reply-To: <20221122103251.13064-1-zr.zhang@vivo.com>
+References: <20221122103251.13064-1-zr.zhang@vivo.com>
+Subject: Re: [PATCH] regulator: core: fix use_count leakage when handling boot-on
+Message-Id: <166990106807.78829.5258698655691570775.b4-ty@kernel.org>
+Date:   Thu, 01 Dec 2022 13:24:28 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,29 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 05:07:44 +0000, David Rau wrote:
-> The OMTP pin define headsets can be mis-detected as line out
-> instead of OMTP, causing obvious issues with audio quality.
-> This patch is to put increased resistances within
-> the device at a suitable point.
+On Tue, 22 Nov 2022 18:32:51 +0800, Rui Zhang wrote:
+> I found a use_count leakage towards supply regulator of rdev with
+> boot-on option.
 > 
-> To solve this issue better, the new mechanism setup
-> ground switches with conditional delay control
-> and these allow for more stabile detection process
-> to operate as intended. This conditional delay control
-> will not impact the hardware process
-> but use extra system resource.
+> ┌───────────────────┐           ┌───────────────────┐
+> │  regulator_dev A  │           │  regulator_dev B  │
+> │     (boot-on)     │           │     (boot-on)     │
+> │    use_count=0    │◀──supply──│    use_count=1    │
+> │                   │           │                   │
+> └───────────────────┘           └───────────────────┘
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/1] ASoC: da7219: Fix pole orientation detection on OMTP headsets when playing music
-      commit: 969357ec94e670571d6593f2a93aba25e4577d4f
+[1/1] regulator: core: fix use_count leakage when handling boot-on
+      commit: 0591b14ce0398125439c759f889647369aa616a0
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
