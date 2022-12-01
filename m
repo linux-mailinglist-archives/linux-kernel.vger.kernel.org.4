@@ -2,112 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD0463ED1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC5263ED18
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiLAJ6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S230418AbiLAJ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiLAJ5u (ORCPT
+        with ESMTP id S230347AbiLAJ5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:57:50 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CD299520
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:57:22 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id 125-20020a1c0283000000b003d076ee89d6so809039wmc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1kx0jr6iQJBdI7n19m8fhu/gw5LbN1tE/Li1THtvucI=;
-        b=KEKMHsEb3yFB2gFZmV6K9MRknX/7TQp8PLqjSDztCIcOZmjK44ShfAtpydvOKHciza
-         LOOZWO4k7ZESZSSOOmpyFlTekAHYODH8gkS4EB8j4Ddz3JrwUFW9Tb1KLmJNXV/j3rVL
-         Sd1EC3kZG/mRFsIF7il3jAJ93BvMwipxG2nbW3xW9TU614kqsmkXhVswBHMLhl4cAq2T
-         CQtcdrDx8btPeUyvtUckJvE0xhkjpZaAH96+TluFpet/yEqQbVhad39RkBOJkfX4Uv2C
-         MbzoUBhTMvq97GMPYwOpRAdw8knSUbLbZv6vnvtWkYEOuYGJupSVgpSI4Vi2FkLRIIMw
-         czdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1kx0jr6iQJBdI7n19m8fhu/gw5LbN1tE/Li1THtvucI=;
-        b=w5/4V8KgvscXP9U0+JbPd3doVtRTTR23dJ1WEc7zj46iD12GDVeX+QJqO4CcxfTVv3
-         Bhzg8RvLPqEbpPYAx/ZF/EFev9DWapOeC7vhsxrBrmrGQ+kLiN0OsxCfIKvX+E72PxIp
-         ho6V5Y12Q9YqlyUUohvPIK0V87KAUgtHGk8i+6HUFFLvfUh66DN8/4/+E4hGKwutekJl
-         JHo5p+f1ZnuHJb0TYRnADZOf+pP23kObfkunSQVVgBB7qMJFSjLl5x7RmE6mgxHmKu+e
-         PvJvyYcO9jgm/uswWllYPn0cvnEBTvasod93s2q+RT/K6zisUMEBImlFYiBgAHgoJtut
-         Emaw==
-X-Gm-Message-State: ANoB5pmG2YpRHPZou0BoR2AwxbjGp8FzUYzm+trrnnlqTtfEiS2leTSL
-        ONw0hhWbhwpr6mYgmiSLjkbvRt8miLwHgpQasy+pzg==
-X-Google-Smtp-Source: AA0mqf4RQuT3o5dVODYuifcFa7oAG27rTPoh0EMVG7YVp4qUfFAgO9EocfzkH2534iz0neovTigMa97nRDMKlUjfjG4=
-X-Received: by 2002:a05:600c:4f05:b0:3d0:3d33:a629 with SMTP id
- l5-20020a05600c4f0500b003d03d33a629mr24471844wmq.126.1669888641094; Thu, 01
- Dec 2022 01:57:21 -0800 (PST)
+        Thu, 1 Dec 2022 04:57:46 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC6598940
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:57:14 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 873426D0;
+        Thu,  1 Dec 2022 10:57:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669888632;
+        bh=YqqM7z0zZtdmPAvqBbQaujfpmAqlD5uXx35Y9TeeeLc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rzPYgkpp7Y5FPkUkZM47AsyqJjS1bPzlXkM8l+WTDFHUyYwmpe8kbfEd73otnlPGQ
+         x5kRtSc3K/bmCLhVir7HFP25CA7bCetHAxpGO4nZdrJZt50lUbIRPQtdLaPYzevKOn
+         8j5HAfgal9g38MwkR9wkkfi32umiE6NFWEH/rj/Y=
+Date:   Thu, 1 Dec 2022 11:56:55 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Eric Anholt <eric@anholt.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] media: uapi: add MEDIA_BUS_FMT_BGR666_1X24_CPADHI
+Message-ID: <Y4h6Z2duUx4j2tHw@pendragon.ideasonboard.com>
+References: <20221013-rpi-dpi-improvements-v3-0-eb76e26a772d@cerno.tech>
+ <20221013-rpi-dpi-improvements-v3-3-eb76e26a772d@cerno.tech>
 MIME-Version: 1.0
-References: <20221124074725.74325-1-haozhe.chang@mediatek.com>
-In-Reply-To: <20221124074725.74325-1-haozhe.chang@mediatek.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Thu, 1 Dec 2022 10:56:45 +0100
-Message-ID: <CAMZdPi9JOQpmhQepBMeG5jzncP8t5mp68O2nfSOFUUZ9e_fDsQ@mail.gmail.com>
-Subject: Re: [PATCH v5] wwan: core: Support slicing in port TX flow of WWAN subsystem
-To:     haozhe.chang@mediatek.com
-Cc:     M Chetan Kumar <m.chetan.kumar@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
-        Liu Haijun <haijun.liu@mediatek.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        "open list:INTEL WWAN IOSM DRIVER" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) WWAN CONTROL..." 
-        <linux-remoteproc@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, lambert.wang@mediatek.com,
-        xiayu.zhang@mediatek.com, hua.yang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221013-rpi-dpi-improvements-v3-3-eb76e26a772d@cerno.tech>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 at 08:47, <haozhe.chang@mediatek.com> wrote:
->
-> From: haozhe chang <haozhe.chang@mediatek.com>
->
-> wwan_port_fops_write inputs the SKB parameter to the TX callback of
-> the WWAN device driver. However, the WWAN device (e.g., t7xx) may
-> have an MTU less than the size of SKB, causing the TX buffer to be
-> sliced and copied once more in the WWAN device driver.
->
-> This patch implements the slicing in the WWAN subsystem and gives
-> the WWAN devices driver the option to slice(by frag_len) or not. By
-> doing so, the additional memory copy is reduced.
->
-> Meanwhile, this patch gives WWAN devices driver the option to reserve
-> headroom in fragments for the device-specific metadata.
->
-> Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+Hi Maxime,
 
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+Thank you for the patch.
+
+On Thu, Dec 01, 2022 at 09:42:48AM +0100, Maxime Ripard wrote:
+> From: Joerg Quinten <aBUGSworstnightmare@gmail.com>
+> 
+> Add the BGR666 format MEDIA_BUS_FMT_BGR666_1X24_CPADHI supported by the
+> RaspberryPi.
+> 
+> Signed-off-by: Joerg Quinten <aBUGSworstnightmare@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> ---
+>  .../userspace-api/media/v4l/subdev-formats.rst     | 37 ++++++++++++++++++++++
+>  include/uapi/linux/media-bus-format.h              |  3 +-
+>  2 files changed, 39 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> index 6605c056cc7c..5f2ce6eada71 100644
+> --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+> @@ -1060,6 +1060,43 @@ The following tables list existing packed RGB formats.
+>        - b\ :sub:`2`
+>        - b\ :sub:`1`
+>        - b\ :sub:`0`
+> +    * .. _MEDIA-BUS-FMT-BGR666-1X24_CPADHI:
+> +
+> +      - MEDIA_BUS_FMT_BGR666_1X24_CPADHI
+> +      - 0x1024
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - 0
+> +      - 0
+> +      - b\ :sub:`5`
+> +      - b\ :sub:`4`
+> +      - b\ :sub:`3`
+> +      - b\ :sub:`2`
+> +      - b\ :sub:`1`
+> +      - b\ :sub:`0`
+> +      - 0
+> +      - 0
+> +      - g\ :sub:`5`
+> +      - g\ :sub:`4`
+> +      - g\ :sub:`3`
+> +      - g\ :sub:`2`
+> +      - g\ :sub:`1`
+> +      - g\ :sub:`0`
+> +      - 0
+> +      - 0
+> +      - r\ :sub:`5`
+> +      - r\ :sub:`4`
+> +      - r\ :sub:`3`
+> +      - r\ :sub:`2`
+> +      - r\ :sub:`1`
+> +      - r\ :sub:`0`
+>      * .. _MEDIA-BUS-FMT-RGB565-1X24_CPADHI:
+>  
+>        - MEDIA_BUS_FMT_RGB565_1X24_CPADHI
+> diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> index 6ce56a984112..f3b0b8091a2c 100644
+> --- a/include/uapi/linux/media-bus-format.h
+> +++ b/include/uapi/linux/media-bus-format.h
+> @@ -34,7 +34,7 @@
+>  
+>  #define MEDIA_BUS_FMT_FIXED			0x0001
+>  
+> -/* RGB - next is	0x1024 */
+> +/* RGB - next is	0x1025 */
+>  #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+> @@ -49,6 +49,7 @@
+>  #define MEDIA_BUS_FMT_BGR666_1X18		0x1023
+>  #define MEDIA_BUS_FMT_RBG888_1X24		0x100e
+>  #define MEDIA_BUS_FMT_RGB666_1X24_CPADHI	0x1015
+> +#define MEDIA_BUS_FMT_BGR666_1X24_CPADHI	0x1024
+>  #define MEDIA_BUS_FMT_RGB565_1X24_CPADHI	0x1022
+>  #define MEDIA_BUS_FMT_RGB666_1X7X3_SPWG		0x1010
+>  #define MEDIA_BUS_FMT_BGR888_1X24		0x1013
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
