@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D4463E645
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343BB63E64A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiLAAPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S229939AbiLAAPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiLAAOs (ORCPT
+        with ESMTP id S229756AbiLAAPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:14:48 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D21E47;
-        Wed, 30 Nov 2022 16:08:38 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 30 Nov 2022 19:15:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDB9A2816
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 16:09:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMxHm3YjQz4xG6;
-        Thu,  1 Dec 2022 11:08:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669853317;
-        bh=zWrObo4KxrpcrfavyssUlQcI2HjG+yVpYjVwM2SdgXI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jSH9VMTAJXhMqUWm78ZIa9CgA18ETmStFDMRByKtVAsE+N5XWuFVEXl33rDXrAr0F
-         hrhwvDXDD9H0erh1mJNQ9Z0iKruk3a0BTVVf0NSys2AIM4thNIkExoELf1hx/uxaMb
-         uFY+doAMhqsTjkmKeimXLeic5pt/QxYaWaPkRPgCErSwGPd6ok1UXKagyjsWTMRrT0
-         R3G9YP9LRsv3b1i7loOWfPBMF4pfwJFMhWgz6Cl38A2XVQzsbZXYYPRyHzl73oUlrW
-         AtSQan5lZ3bSv2Af0KpTAa3YWDw3onpjWhHNctIaP1MaTepJjrhMYRpijn1sVnjaHe
-         TdVBiutaIw+cA==
-Date:   Thu, 1 Dec 2022 11:08:35 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Peter Xu <peterx@redhat.com>
-Subject: linux-next: manual merge of the kvm tree with the block tree
-Message-ID: <20221201110835.4e72b8fe@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 293FC60A2A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 00:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62BF8C433D7;
+        Thu,  1 Dec 2022 00:09:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669853344;
+        bh=Um3WQhBTYgWaLQy6MGpy/qOcoDY69AWToZC6FBCV2yY=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=T7wHujeay5HaWs2My7e+orkGiaJ2roz7fb2Vjfhfx6RY7x9Bn1JblD5G4OuL6N1su
+         RlSSjLC1mCaSTrpTJOHmVCAJBeY/UdB2VkWAqZGMCZNlHFnto4lH63kEPlQ7zyNYxl
+         PDagDJNR7AOrYYl5lIlr/OVho1FuFETOD9Y8uhFHj5vn2z8kmMpI7npyuDAqigFQym
+         iqrGukfWVTiHeE89AKPNCN2VmKYUD+JnNxWtgh6zkLRcRNU22Uc8VeUQvtEavE1N5A
+         qd1cH2d06VQcJxVkFHDjb1gEh1bt9pOJwetV/zoDCkPUeD6k8clusj8fOfUFsp7VcF
+         ciw7obUfuGFOA==
+Message-ID: <2f8c4d57-1834-146b-07c4-11d6c87d986d@kernel.org>
+Date:   Wed, 30 Nov 2022 16:09:03 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RnLRMe_HzLA/FtXo33c4iV1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] kest.pl: Fix grub2 menu handling for rebooting
+Content-Language: en-MW
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20221130175434.555ea650@gandalf.local.home>
+From:   John 'Warthog9' Hawley <warthog9@kernel.org>
+In-Reply-To: <20221130175434.555ea650@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,71 +56,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/RnLRMe_HzLA/FtXo33c4iV1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/30/22 14:54, Steven Rostedt wrote:
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> grub2 has submenus where to use grub-reboot, it requires:
+> 
+>    grub-reboot X>Y
+> 
+> where X is the main index and Y is the submenu. Thus if you have:
+> 
+> menuentry 'Debian GNU/Linux' --class debian --class gnu-linux ...
+> 	[...]
+> }
+> submenu 'Advanced options for Debian GNU/Linux' $menuentry_id_option ...
+>          menuentry 'Debian GNU/Linux, with Linux 6.0.0-4-amd64' --class debian --class gnu-linux ...
+>                  [...]
+>          }
+>          menuentry 'Debian GNU/Linux, with Linux 6.0.0-4-amd64 (recovery mode)' --class debian --class gnu-linux ...
+> 		[...]
+>          }
+>          menuentry 'Debian GNU/Linux, with Linux test' --class debian --class gnu-linux ...
+>                  [...]
+>          }
+> 
+> And wanted to boot to the "Linux test" kernel, you need to run:
+> 
+>   # grub-reboot 1>2
+> 
+> As 1 is the second top menu (the submenu) and 2 is the third of the sub
+> menu entries.
+> 
+> Have the grub.cfg parsing for grub2 handle such cases.
+> 
+> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+> ---
+>   tools/testing/ktest/ktest.pl | 20 +++++++++++++++-----
+>   1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/ktest/ktest.pl b/tools/testing/ktest/ktest.pl
+> index 799cfc4aa12b..590518144167 100755
+> --- a/tools/testing/ktest/ktest.pl
+> +++ b/tools/testing/ktest/ktest.pl
+> @@ -1963,7 +1963,7 @@ sub run_scp_mod {
+>   
+>   sub _get_grub_index {
+>   
+> -    my ($command, $target, $skip) = @_;
+> +    my ($command, $target, $skip, $submenu) = @_;
+>   
+>       return if (defined($grub_number) && defined($last_grub_menu) &&
+>   	$last_grub_menu eq $grub_menu && defined($last_machine) &&
+> @@ -1980,11 +1980,16 @@ sub _get_grub_index {
+>   
+>       my $found = 0;
+>   
+> +    my $submenu_number = 0;
+> +
+>       while (<IN>) {
+>   	if (/$target/) {
+>   	    $grub_number++;
+>   	    $found = 1;
+>   	    last;
+> +	} elsif (defined($submenu) && /$submenu/) {
+> +		$submenu_number++;
+> +		$grub_number = -1;
+>   	} elsif (/$skip/) {
+>   	    $grub_number++;
+>   	}
+> @@ -1993,6 +1998,9 @@ sub _get_grub_index {
+>   
+>       dodie "Could not find '$grub_menu' through $command on $machine"
+>   	if (!$found);
+> +    if ($submenu_number > 0) {
+> +	$grub_number = "$submenu_number>$grub_number";
+> +    }
+>       doprint "$grub_number\n";
+>       $last_grub_menu = $grub_menu;
+>       $last_machine = $machine;
+> @@ -2003,6 +2011,7 @@ sub get_grub_index {
+>       my $command;
+>       my $target;
+>       my $skip;
+> +    my $submenu;
+>       my $grub_menu_qt;
+>   
+>       if ($reboot_type !~ /^grub/) {
+> @@ -2017,8 +2026,9 @@ sub get_grub_index {
+>   	$skip = '^\s*title\s';
+>       } elsif ($reboot_type eq "grub2") {
+>   	$command = "cat $grub_file";
+> -	$target = '^menuentry.*' . $grub_menu_qt;
+> -	$skip = '^menuentry\s|^submenu\s';
+> +	$target = '^\s*menuentry.*' . $grub_menu_qt;
+> +	$skip = '^\s*menuentry';
+> +	$submenu = '^\s*submenu\s';
+>       } elsif ($reboot_type eq "grub2bls") {
+>   	$command = $grub_bls_get;
+>   	$target = '^title=.*' . $grub_menu_qt;
+> @@ -2027,7 +2037,7 @@ sub get_grub_index {
+>   	return;
+>       }
+>   
+> -    _get_grub_index($command, $target, $skip);
+> +    _get_grub_index($command, $target, $skip, $submenu);
+>   }
+>   
+>   sub wait_for_input {
+> @@ -2090,7 +2100,7 @@ sub reboot_to {
+>       if ($reboot_type eq "grub") {
+>   	run_ssh "'(echo \"savedefault --default=$grub_number --once\" | grub --batch)'";
+>       } elsif (($reboot_type eq "grub2") or ($reboot_type eq "grub2bls")) {
+> -	run_ssh "$grub_reboot $grub_number";
+> +	run_ssh "$grub_reboot \"'$grub_number'\"";
+>       } elsif ($reboot_type eq "syslinux") {
+>   	run_ssh "$syslinux --once \\\"$syslinux_label\\\" $syslinux_path";
+>       } elsif (defined $reboot_script) {
 
-Hi all,
+Ahhh the fun of submenus!
 
-Today's linux-next merge of the kvm tree got a conflict in:
-
-  include/linux/mm.h
-
-between commit:
-
-  4003f107fa2e ("mm: introduce FOLL_PCI_P2PDMA to gate getting PCI P2PDMA p=
-ages")
-
-from the block tree and commit:
-
-  93c5c61d9e58 ("mm/gup: Add FOLL_INTERRUPTIBLE")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-idiff --cc include/linux/mm.h
-index f0eab324102b,3c84f4e48cd7..000000000000
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@@ -2968,7 -2958,7 +2968,8 @@@ struct page *follow_page(struct vm_area
-  #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
-  #define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
-  #define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup=
- */
- -#define FOLL_INTERRUPTIBLE  0x100000 /* allow interrupts from generic sig=
-nals */
- +#define FOLL_PCI_P2PDMA	0x100000 /* allow returning PCI P2PDMA pages */
-++#define FOLL_INTERRUPTIBLE  0x200000 /* allow interrupts from generic sig=
-nals */
- =20
-  /*
-   * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with ea=
-ch
-
---Sig_/RnLRMe_HzLA/FtXo33c4iV1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH8IMACgkQAVBC80lX
-0GwI4Qf+KABiBkmorFvdood/Ke8RQ9Dap/QXLUBkBGDt9a1FFMulQ4KcnNOulqbx
-yA1b+0Wqo3G/rjl1Ugk3RHeipS4KbNao6gKoWzI4U3/M8NlrhAFSH5mIpmPoGYn9
-n+n4YwyKZ9+VAiksCnqCldR/7npXEtJfmpdvRh4HUrnvJFNfxtzC3NFbJTotYsmR
-M0hoHQbtrGOwvEsemne/rH8ca4HH3vbkSrWQmUzVpdi8yPp38dxCI7dgu4UA90u6
-0xlbDvd7blSPEVIciso3djgWUX4F+FR6QRaOMuLZ/zH2UIhpBAlAicUyGGpaRga2
-S8zrwYoXlY/szOl/zw3Xk0WHGYKm4Q==
-=TIgK
------END PGP SIGNATURE-----
-
---Sig_/RnLRMe_HzLA/FtXo33c4iV1--
+Reviewed-by: John 'Warthog9' Hawley (VMware) <warthog9@eaglescrag.net>
