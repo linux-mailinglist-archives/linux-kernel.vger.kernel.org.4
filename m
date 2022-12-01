@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEF263ED72
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C3F63ED78
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiLAKSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S230306AbiLAKTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiLAKRq (ORCPT
+        with ESMTP id S230381AbiLAKSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:17:46 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C0ED17891;
-        Thu,  1 Dec 2022 02:17:44 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9359D6E;
-        Thu,  1 Dec 2022 02:17:50 -0800 (PST)
-Received: from [10.57.7.90] (unknown [10.57.7.90])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96FD63F67D;
-        Thu,  1 Dec 2022 02:17:42 -0800 (PST)
-Message-ID: <38c6bc97-0c18-c645-6973-55a0d29083ff@arm.com>
-Date:   Thu, 1 Dec 2022 10:17:41 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] perf: Fix interpretation of branch records
-Content-Language: en-US
-To:     Sandipan Das <sandipan.das@amd.com>,
-        linux-perf-users@vger.kernel.org, acme@kernel.org,
-        Anshuman.Khandual@arm.com
+        Thu, 1 Dec 2022 05:18:34 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB09303DA
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:18:23 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 74ED15C0187;
+        Thu,  1 Dec 2022 05:18:20 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 01 Dec 2022 05:18:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669889900; x=
+        1669976300; bh=SQDPbuBrjKSSl9BTe/dmiBNvmgZm3jOOEi7z1W5nu7A=; b=F
+        FK6+4M7WrL/93flav3ziB+H7ncsO+tipMyQRej8ghmhi14l5pvB5Fn2h5AAwt4Jk
+        0vQZ4ZaVnmGh1PrQbVI6P8pDPJZPsv3sznYs7XG9pHr/2CHg0Jp75Ut2q/QfzmE3
+        6T0Wl//KBFmjNb/X3ewJCRDVcF2vJJlrkoY1wgahIzFKsZE0Hs0z17Zm+3j3AJzm
+        afZSdHcs/rqUmNcX66lFAxkgZexPWGT/p7zA9PJK+9rnW+l4UJyX76QR0dOSZJbI
+        lcCAYadsKhospBhJgdW0Xtrz4uGX7F7dP2Of2HwprTZ1doqimBakQz3Al7qHbiCR
+        ck85SXftoocGaT+JruA/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669889900; x=
+        1669976300; bh=SQDPbuBrjKSSl9BTe/dmiBNvmgZm3jOOEi7z1W5nu7A=; b=J
+        tVINV7aOOP7O3SzjKfHh4mlAGi0jS3VGEJD9rZGsi5zu2mYfI7wndBf1Tk+PVz7d
+        DM9BTIBoSxwKembXyXo2hFrrPMzCI6F4zEmV9DlEoEEWGIy8Tk8mDn//6cIY1qYK
+        3vX5t509MTzDgzuT6KPyp04UgvbdCgC/moB9IyZ+ho+4xrkAqU41wChSolCw9IoD
+        fmpAI51lVq8aBCg+ZLaw7BD0hKyCSwB4sVHQE58WkUknv9dPXqctH0+8UWPxi3wS
+        E2QJkVFoC/Y7efrC5AX9KySWpXKkfPY9xGRf+nUf/2HU1wiL18y/QlkDqkMGIwkE
+        Fr/IbOCKFXNRV3ebnqt4g==
+X-ME-Sender: <xms:bH-IY_nefTlgKl44-rArxUDOTATtxXlbA4d9RFmaSiSUuWpbwHAUlA>
+    <xme:bH-IYy3CbVRi9EIada97ekrtOYtP0kDPIjmSWmeZpEYPjYc8ENkZv_I1lvQsXI5dA
+    VYOXQeuBNqalAuRke8>
+X-ME-Received: <xmr:bH-IY1pzDI7nagQpT7splvm2mKwh2Pjc-YCYMtwl0uesRLmezo6yAa1xZZaRd8B6sVKlhnyiZAxExSpjEY0cg_z2eej3uNSLsDUQkoyhN0-o9Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdehgddugecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuieeggffhffffieefheduieeuvdetgeeufeffvefgtedvffehheekffev
+    udefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:bH-IY3lly1LFekQGEET9Yt9KfaoS-nRFriSq9L9jL2UXvZXghD7Mpw>
+    <xmx:bH-IY92ulLP4KsuycHZWGfUxuuV3iO5YI10fV8KEE3FX1v0je8vR5A>
+    <xmx:bH-IY2ueC2adYzdHSKbElMvnpLg42zfkvcxuab_KOqgbDLD9Z7V0Mw>
+    <xmx:bH-IYxLFnfGdcthYMrHDiSmCymw9n5HC6V7bphhPawLUy5XJ-RVRuQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Dec 2022 05:18:19 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Airlie <airlied@linux.ie>, Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Emma Anholt <emma@anholt.net>, Eric Anholt <eric@anholt.net>,
+        Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-References: <20221130165158.517385-1-james.clark@arm.com>
- <444e806b-4593-7ea9-a8aa-27d2f726a751@amd.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <444e806b-4593-7ea9-a8aa-27d2f726a751@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH v3 0/7] drm/vc4: dpi: Various improvements
+Date:   Thu,  1 Dec 2022 11:18:11 +0100
+Message-Id: <166988985776.410916.3768232487459584873.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221013-rpi-dpi-improvements-v3-0-eb76e26a772d@cerno.tech>
+References: <20221013-rpi-dpi-improvements-v3-0-eb76e26a772d@cerno.tech>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 01/12/2022 09:02, Sandipan Das wrote:
-> On 11/30/2022 10:21 PM, James Clark wrote:
->> Commit 93315e46b000 ("perf/core: Add speculation info to branch
->> entries") added a new field in between type and new_type. Perf has
->> its own copy of this struct so update it to match the kernel side.
->>
->> This doesn't currently cause any issues because new_type is only used
->> by the Arm BRBE driver which isn't merged yet.
->>
->> Fixes: 93315e46b000 ("perf/core: Add speculation info to branch entries")
+On Thu, 01 Dec 2022 09:42:45 +0100, Maxime Ripard wrote:
+> Those patches have been in the downstream RaspberryPi tree for a while and help
+> to support more DPI displays.
 > 
-> Technically, in the kernel sources, commit 93315e46b000 ("perf/core: Add
-> speculation info to branch entries") landed before commit b190bc4ac9e6
-> ("perf: Extend branch type classification").
-> 
-> So I think the Fixes tag should instead have commit 0ddea8e2a0c2
-> ("perf branch: Extend branch type classification") which added the
-> UAPI changes to the perf tool headers.
-
-Yes maybe, or 831c05a7621b ("tools headers UAPI: Sync linux/perf_event.h
-with the kernel sources") where spec was added to the perf copy of the
-headers.
-
-It's hard to say for sure which one is best. I think that the earliest
-possible one is best in case anyone is debugging that kernel version
-with userspace Perf. And to me it seems any kernel that has the spec
-record should have it matching in userspace so I would still prefer
-93315e46b000. Applying it on top of any other change would still lead to
-misleading interpretation of the records.
-
-> 
-> Aside from that, the patch looks good to me.
-
-Thanks for the review.
-
-> 
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>  tools/perf/util/branch.h | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
->> index d6017c9b1872..3ed792db1125 100644
->> --- a/tools/perf/util/branch.h
->> +++ b/tools/perf/util/branch.h
->> @@ -22,9 +22,10 @@ struct branch_flags {
->>  			u64 abort:1;
->>  			u64 cycles:16;
->>  			u64 type:4;
->> +			u64 spec:2;
->>  			u64 new_type:4;
->>  			u64 priv:3;
->> -			u64 reserved:33;
->> +			u64 reserved:31;
->>  		};
->>  	};
->>  };
+> Let me know what you think,
+> Maxime
 > 
 > 
+> [...]
+
+Applied to drm/drm-misc (drm-misc-next).
+
+Thanks!
+Maxime
