@@ -2,148 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B6B63F732
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D75FC63F75F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiLASLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S230110AbiLASRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiLASLI (ORCPT
+        with ESMTP id S230379AbiLASRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:11:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B716EB71ED;
-        Thu,  1 Dec 2022 10:11:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F8E8B81FD1;
-        Thu,  1 Dec 2022 18:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124E4C433C1;
-        Thu,  1 Dec 2022 18:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669918264;
-        bh=abbxDko8xxIgN43TGD7PjO4ktuR8obKuUDRggHGcGh0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NI/gXF8N4bqL1rTkyPrfaWjTUpOEpjbrOjVnuEaPhoxgbEubRQpcGpo04jTvM5/g/
-         nYelXUZzhXZOxzxn6B3J83OmdNeC2L5pk5uaiENG585sFVUIKWKPwO09SDgzWBuIF0
-         r+hHQy9tLY2C3OYdp1eBljCI4oJBDDaUp/lXVOg3Du61yaGPDVwMg+4Noc1NBaYhx8
-         WcB9LdbpH3HOgHbe5vBWw8YFl3enrHm1QWrBgI0FhmrmfwpYQP7pBgGFwwUKLMIKm/
-         L0vopg3IjCpPQw8tcsXPJE9p8iQga7Eumwek9LmzeoK1EjJDIJKPhDKfmHIrgT8Dk8
-         cD4YByX/98U0w==
-Received: by mail-ua1-f45.google.com with SMTP id n9so866397uao.13;
-        Thu, 01 Dec 2022 10:11:04 -0800 (PST)
-X-Gm-Message-State: ANoB5pnBgr0vBOV0CO0ez6+vq/L2k8CWyzAUtMqvW3lW2SvzlnJL2Uxx
-        OxNIBsnFSUswqtJgECKYqIVnE0Euk2Da5M7Gqw==
-X-Google-Smtp-Source: AA0mqf4QIyT6VahcqDmI12MLMCc/vE3ASpYv1pzurU6CjB/p3SM54fi3Oi2LQpbXvk2AUCuGF9WAWcBZ/6x3KPapb4M=
-X-Received: by 2002:a05:6130:83:b0:418:b849:8187 with SMTP id
- x3-20020a056130008300b00418b8498187mr41149171uaf.43.1669918262913; Thu, 01
- Dec 2022 10:11:02 -0800 (PST)
+        Thu, 1 Dec 2022 13:17:19 -0500
+X-Greylist: delayed 338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 10:17:17 PST
+Received: from out-93.mta0.migadu.com (out-93.mta0.migadu.com [IPv6:2001:41d0:1004:224b::5d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F761A07E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:17:17 -0800 (PST)
+Date:   Thu, 1 Dec 2022 18:11:33 +0000
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Ricardo Koller <ricarkol@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: arm64: Don't serialize if the access flag isn't
+ set
+Message-ID: <Y4juVQNx9I0rzYFH@google.com>
+References: <20221129191946.1735662-1-oliver.upton@linux.dev>
+ <20221129191946.1735662-3-oliver.upton@linux.dev>
+ <Y4Zw/J3srTsZ57P7@google.com>
+ <Y4Z2aWVEnluy+d3+@google.com>
 MIME-Version: 1.0
-References: <20221125202008.64595-1-samuel@sholland.org> <20221125202008.64595-3-samuel@sholland.org>
- <5b05317d-28cc-bfc8-f415-e6acf453dc7c@linaro.org> <20221126142735.47dcca6d@slackpad.lan>
- <99c3e666-ec26-07a0-be40-0177dd449d84@linaro.org> <20221201034557.GA2998157-robh@kernel.org>
-In-Reply-To: <20221201034557.GA2998157-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 1 Dec 2022 12:10:49 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+H0tLUJ+vWSkDHqjYdsAK2Rd3UCDEXv9uJ2v-ZR=XCAw@mail.gmail.com>
-Message-ID: <CAL_Jsq+H0tLUJ+vWSkDHqjYdsAK2Rd3UCDEXv9uJ2v-ZR=XCAw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: net: sun8i-emac: Fix snps,dwmac.yaml inheritance
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        LABBE Corentin <clabbe.montjoie@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4Z2aWVEnluy+d3+@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 9:45 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Sat, Nov 26, 2022 at 03:48:33PM +0100, Krzysztof Kozlowski wrote:
-> > On 26/11/2022 15:28, Andre Przywara wrote:
-> > > On Sat, 26 Nov 2022 14:26:25 +0100
-> > > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > >> On 25/11/2022 21:20, Samuel Holland wrote:
-> > >>> The sun8i-emac binding extends snps,dwmac.yaml, and should accept all
-> > >>> properties defined there, including "mdio", "resets", and "reset-names".
-> > >>> However, validation currently fails for these properties because the
-> > >>
-> > >> validation does not fail:
-> > >> make dt_binding_check -> no problems
-> > >>
-> > >> Maybe you meant that DTS do not pass dtbs_check?
-> > >
-> > > Yes, that's what he meant: If a board actually doesn't have Ethernet
-> > > configured, dt-validate complains. I saw this before, but didn't find
-> > > any solution.
-> > > An example is: $ dt-validate ... sun50i-a64-pinephone-1.2.dtb
-> > > arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb:
-> > >   ethernet@1c30000: Unevaluated properties are not allowed ('resets', 'reset-names', 'mdio' were unexpected)
-> > >   From schema: Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-> > >
-> > > Why exactly is beyond me, but this patch removes this message.
-> >
-> > I don't think this should be fixed like this. That's the problem of
-> > dtschema (not ignoring fully disabled nodes) and such patch only moves
-> > from one correct syntax to another correct syntax, which fixes dtschema
-> > problem, but changes nothing here.
->
-> Humm, it looks to me like the 'phy-mode' required in snps,dwmac.yaml
-> causes the problem, but I can't get a minimized example to fail.
-> Something in 'required' shouldn't matter. Definitely seems like an issue
-> in the jsonschema package. I'll keep looking at it.
+On Tue, Nov 29, 2022 at 09:15:21PM +0000, Oliver Upton wrote:
+> Hi Ricardo,
+> 
+> Thanks for having a look.
+> 
+> On Tue, Nov 29, 2022 at 12:52:12PM -0800, Ricardo Koller wrote:
+> > On Tue, Nov 29, 2022 at 07:19:44PM +0000, Oliver Upton wrote:
+> 
+> [...]
+> 
+> > > +	ret = stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
+> > > +				       &pte, NULL, 0);
+> > > +	if (!ret)
+> > > +		dsb(ishst);
+> > 
+> > At the moment, the only reason for stage2_update_leaf_attrs() to not
+> > update the PTE is if it's not valid:
+> > 
+> > 	if (!kvm_pte_valid(pte))
+> > 			return 0;
+> > 
+> > I guess you could check that as well:
+> > 
+> > +	if (!ret || kvm_pte_valid(pte))
+> > +		dsb(ishst);
+> 
+> Thanks for catching this.
+> 
+> Instead of pivoting on the returned PTE value, how about we return
+> -EAGAIN from the early return in stage2_attr_walker()? It would better
+> match the pattern used elsewhere in the pgtable code.
 
-TLDR: A fix in dtschema for this will be in place soon.
+Bugh...
 
-I've simplified this down to:
-{
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
+Returning EAGAIN has some unfortunate consequences that I've missed
+until now...
 
-    "unevaluatedProperties": false,
-    "allOf":[
-        {
-            "properties": {
-                "foo": true,
-                "bar": true
-            },
-            "required": [ "foo" ]
-        }
-    ]
-}
+The stage2 attr walker is used to handle faults as well as range-based
+operations. In the former case, EAGAIN is sane as we retry execution but
+the latter is not. I stupidly got hung up on write protection not
+working as intended for some time.
 
-An instance { "bar": 1 } will fail due to the 'required' failing. When
-you have a subschema (what's under 'allOf'), then it all has to pass
-to be 'evaluated'. This seems inconsistent to me, but the json-schema
-folks say it is operating as intended.
+I think that callers into the page table walker should indicate whether
+or not the walk is to address a fault. If it is not,
+__kvm_pgtable_visit() and __kvm_pgtable_walk() should chug along instead
+of bailing for EAGAIN.
 
-I've got 2 possible fixes. One is to just ignore unevaluatedProperties
-errors on disabled nodes like is already done for 'required'. This
-means disabled nodes can have any unknown property or child node added
-which isn't great. The other way overrides 'required' validation to
-always pass on disabled nodes. This would be better, but there are
-some exceptions we need to still fail. 'oneOf' with N entries of
-'required' to say 1 of N properties must be present for example.
-Excluding each one of these cases will be fragile, so probably going
-with the first fix.
+Let me mess around with this and figure out what is least ugly.
 
-Rob
+--
+Thanks,
+Oliver
