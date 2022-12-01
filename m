@@ -2,156 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3F863F8C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79EE63F8CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiLAUIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 15:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S230415AbiLAUIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 15:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiLAUIn (ORCPT
+        with ESMTP id S230420AbiLAUIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 15:08:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1CE1F9FC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669925266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=7vCxchUXYd/g7/aej1yKhv5PkKQzLtH7GxJunJKN/lk=;
-        b=E/zas7jSGxGTPGwmu8lDIQBx8NvOyS/FF9iluxYVQGcuVn+VNbc957c4u8hzUpzJiRp9P+
-        lNMumK1gGZPcnK+sLvmTd6YSzAYIRzifEJC+3LGOsNXCE4/KIBhTv4PaHm5Lpo2z8BCORd
-        9AjWJro9AoCZ40r7QXLVnP4KVN5ib3M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-2I_GMm2pNeSxmtI_K0WyIA-1; Thu, 01 Dec 2022 15:07:43 -0500
-X-MC-Unique: 2I_GMm2pNeSxmtI_K0WyIA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7729833A0E;
-        Thu,  1 Dec 2022 20:07:42 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 62035207B344;
-        Thu,  1 Dec 2022 20:07:42 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] trace: Fix some checker warnings
-From:   David Howells <dhowells@redhat.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Thu, 01 Dec 2022 20:07:39 +0000
-Message-ID: <166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Thu, 1 Dec 2022 15:08:50 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734D0BEC67
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:08:49 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id r8so3133122ljn.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 12:08:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8rvAyrz2we2hjJpmdyVxhVn03GUPZL+2N0BOj4UW05o=;
+        b=FwXAqxfQDTxo6xqyP7f7q1CiX6iIY7QorQvxT0hH7/gvRi7q1yERcIK+c6f/2VA9zm
+         gVZ07BH/WcYMGuVutO71oAci8ifQZjMzYEVu6Vaf4ArbJYoFKIjCNc9ywi8pYWkyUHhy
+         IuN/bxolCuprH6D1g1RRN2ALm80E8WPHud6sk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8rvAyrz2we2hjJpmdyVxhVn03GUPZL+2N0BOj4UW05o=;
+        b=tLmFTcMD/kTnVwDENF/0w7Z1NghKE6EKmeYVJFfSQvT9C3lHDqt28c7s520WiU8M2Q
+         Oiv80cEUMBUC/GDMwGvWmm1XBe/3Z6hosFsxVWUraqjeXAkaVKLl/k9s6orplb/3uvJ7
+         FkwM3gbWL/g1lTFIJWabfVGj6uBsR6+OTaV4MgKZsvRA7k5lQoh/aHDOxlfCbSiTg72D
+         GDrAj2sDKO0N7axiVPO397lIz4Jbx83BKyjDVPBQoqq3DyUSIejKCvi+zG/CSyGWDNi/
+         AQJ+ClqWPeW8Q5wVEz7GlQLGm4MlbCwIn/Wr1aLAhN4T8y2VprAKeheCtxD69nbPqB0I
+         Brow==
+X-Gm-Message-State: ANoB5pkT1ErFXAtk15MYxWeVWNHHosWh7WD5Pp1VEZFPHdQD82ak42Fy
+        TdNCAp/qBh5MUXfyEUswUCnBX5OZBJDWuCbrEx9Jww==
+X-Google-Smtp-Source: AA0mqf7JbCUfEVBSucXBM+X5VCr586SrEeYGvUOmGD+03QG/7ZacmvOOfgLDuyl1HQSCkU33nxRM4CQBNiE3EJ84pC8=
+X-Received: by 2002:a05:651c:906:b0:279:1349:b2e2 with SMTP id
+ e6-20020a05651c090600b002791349b2e2mr20903434ljq.382.1669925327829; Thu, 01
+ Dec 2022 12:08:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221111194957.4046771-1-joel@joelfernandes.org>
+ <B336E259-FB18-4E16-8BC7-2117614ABE4D@joelfernandes.org> <CAF6AEGvsmXZkw2epEE3y8hksQea0xW8TAhgitiGJY66PiQPaPA@mail.gmail.com>
+In-Reply-To: <CAF6AEGvsmXZkw2epEE3y8hksQea0xW8TAhgitiGJY66PiQPaPA@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 1 Dec 2022 20:08:36 +0000
+Message-ID: <CAEXW_YTTfw2yhZrCkRUMk97t7tL-Whg2K_4_jE4OWMgr-ys9qA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] adreno: Shutdown the GPU properly
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Ross Zwisler <zwisler@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        dri-devel@lists.freedesktop.org, Emma Anholt <emma@anholt.net>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Sean Paul <sean@poorly.run>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix some checker warning in the trace code:
+On Sat, Nov 12, 2022 at 6:44 PM Rob Clark <robdclark@gmail.com> wrote:
+>
+> On Fri, Nov 11, 2022 at 1:08 PM Joel Fernandes <joel@joelfernandes.org> w=
+rote:
+> >
+> >
+> >
+> > > On Nov 11, 2022, at 2:50 PM, Joel Fernandes (Google) <joel@joelfernan=
+des.org> wrote:
+> > >
+> > > =EF=BB=BFDuring kexec on ARM device, we notice that device_shutdown()=
+ only calls
+> > > pm_runtime_force_suspend() while shutting down the GPU. This means th=
+e GPU
+> > > kthread is still running and further, there maybe active submits.
+> > >
+> > > This causes all kinds of issues during a kexec reboot:
+> > >
+> > > Warning from shutdown path:
+> > >
+> > > [  292.509662] WARNING: CPU: 0 PID: 6304 at [...] adreno_runtime_susp=
+end+0x3c/0x44
+> > > [  292.509863] Hardware name: Google Lazor (rev3 - 8) with LTE (DT)
+> > > [  292.509872] pstate: 80400009 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS =
+BTYPE=3D--)
+> > > [  292.509881] pc : adreno_runtime_suspend+0x3c/0x44
+> > > [  292.509891] lr : pm_generic_runtime_suspend+0x30/0x44
+> > > [  292.509905] sp : ffffffc014473bf0
+> > > [...]
+> > > [  292.510043] Call trace:
+> > > [  292.510051]  adreno_runtime_suspend+0x3c/0x44
+> > > [  292.510061]  pm_generic_runtime_suspend+0x30/0x44
+> > > [  292.510071]  pm_runtime_force_suspend+0x54/0xc8
+> > > [  292.510081]  adreno_shutdown+0x1c/0x28
+> > > [  292.510090]  platform_shutdown+0x2c/0x38
+> > > [  292.510104]  device_shutdown+0x158/0x210
+> > > [  292.510119]  kernel_restart_prepare+0x40/0x4c
+> > >
+> > > And here from GPU kthread, an SError OOPs:
+> > >
+> > > [  192.648789]  el1h_64_error+0x7c/0x80
+> > > [  192.648812]  el1_interrupt+0x20/0x58
+> > > [  192.648833]  el1h_64_irq_handler+0x18/0x24
+> > > [  192.648854]  el1h_64_irq+0x7c/0x80
+> > > [  192.648873]  local_daif_inherit+0x10/0x18
+> > > [  192.648900]  el1h_64_sync_handler+0x48/0xb4
+> > > [  192.648921]  el1h_64_sync+0x7c/0x80
+> > > [  192.648941]  a6xx_gmu_set_oob+0xbc/0x1fc
+> > > [  192.648968]  a6xx_hw_init+0x44/0xe38
+> > > [  192.648991]  msm_gpu_hw_init+0x48/0x80
+> > > [  192.649013]  msm_gpu_submit+0x5c/0x1a8
+> > > [  192.649034]  msm_job_run+0xb0/0x11c
+> > > [  192.649058]  drm_sched_main+0x170/0x434
+> > > [  192.649086]  kthread+0x134/0x300
+> > > [  192.649114]  ret_from_fork+0x10/0x20
+> > >
+> > > Fix by calling adreno_system_suspend() in the device_shutdown() path.
+> > >
+> > > Cc: Rob Clark <robdclark@chromium.org>
+> > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > Cc: Ricardo Ribalda <ribalda@chromium.org>
+> > > Cc: Ross Zwisler <zwisler@kernel.org>
+> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > ---
+> > > drivers/gpu/drm/msm/adreno/adreno_device.c | 5 ++++-
+> > > 1 file changed, 4 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu=
+/drm/msm/adreno/adreno_device.c
+> > > index 24b489b6129a..f0cff62812c3 100644
+> > > --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > > +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > > @@ -607,9 +607,12 @@ static int adreno_remove(struct platform_device =
+*pdev)
+> > >    return 0;
+> > > }
+> > >
+> > > +static int adreno_system_suspend(struct device *dev);
+> > > static void adreno_shutdown(struct platform_device *pdev)
+> > > {
+> > > -    pm_runtime_force_suspend(&pdev->dev);
+> > > +    struct msm_gpu *gpu =3D dev_to_gpu(&pdev->dev);
+> > > +
+> >
+> > This local variable definition should go to patch 2/2. Will fix in v2.
+> >
+> > Thanks,
+> >
+> >  - Joel
+> >
+> >
+> > > +    WARN_ON_ONCE(adreno_system_suspend(&pdev->dev));
+>
+> I think maybe adreno_unbind() needs the same treatment?  Any path
+> where we yank out the power cord without ensuring the scheduler is
+> parked means we'd be racing with jobs in the scheduler queue.  Ie.
+> userspace could queue a job before it is frozen, but the drm/scheduler
+> kthread hasn't yet called the msm_job_run() callback (which does
+> various touching of the now powered off hw).  So I think we need to
+> ensure that the scheduler is parked in all paths that call
+> pm_runtime_force_suspend() (as that bypasses the runpm reference that
+> would otherwise unsure the hw is powered before msm_job_run pokes at
+> registers)
 
- (1) The declaration of tracing_max_lat_fops should be conditionally
-     defined like its definition.
+a6xx_gmu_remove() calls pm_runtime_force_suspend() , would that need a
+treatment too?
 
- (2) A number of trace functions, and their declarations where present,
-     should have __printf attributes.
+Though, adreno_system_suspend() is a static function in adreno_device.cc
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steven Rostedt <rostedt@goodmis.org>
-cc: Masami Hiramatsu <mhiramat@kernel.org>
----
-
- include/linux/trace_events.h |    3 ++-
- include/linux/trace_seq.h    |    3 ++-
- kernel/trace/trace.c         |    2 ++
- kernel/trace/trace.h         |    2 +-
- kernel/trace/trace_output.c  |    5 +++--
- 5 files changed, 10 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 20749bd9db71..112b08ca2c5c 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -235,7 +235,8 @@ void tracing_record_taskinfo_sched_switch(struct task_struct *prev,
- void tracing_record_cmdline(struct task_struct *task);
- void tracing_record_tgid(struct task_struct *task);
- 
--int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...);
-+int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
-+	 __printf(3, 4);
- 
- struct event_filter;
- 
-diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
-index 5a2c650d9e1c..0c4c7587d6c3 100644
---- a/include/linux/trace_seq.h
-+++ b/include/linux/trace_seq.h
-@@ -97,7 +97,8 @@ extern int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
- 			      const void *buf, size_t len, bool ascii);
- 
- #else /* CONFIG_TRACING */
--static inline void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
-+static inline __printf(2, 3)
-+void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
- {
- }
- static inline void
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 5cfc95a52bc3..9da61a54e187 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1692,7 +1692,9 @@ static ssize_t trace_seq_to_buffer(struct trace_seq *s, void *buf, size_t cnt)
- }
- 
- unsigned long __read_mostly	tracing_thresh;
-+#if defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER)
- static const struct file_operations tracing_max_lat_fops;
-+#endif
- 
- #ifdef LATENCY_FS_NOTIFY
- 
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index d42e24507152..ecc6120116da 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -615,7 +615,7 @@ void trace_buffer_unlock_commit_nostack(struct trace_buffer *buffer,
- bool trace_is_tracepoint_string(const char *str);
- const char *trace_event_format(struct trace_iterator *iter, const char *fmt);
- void trace_check_vprintf(struct trace_iterator *iter, const char *fmt,
--			 va_list ap);
-+			 va_list ap) __printf(2, 0);
- 
- int trace_empty(struct trace_iterator *iter);
- 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 67f47ea27921..7039cd883c8b 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -323,8 +323,9 @@ void trace_event_printf(struct trace_iterator *iter, const char *fmt, ...)
- }
- EXPORT_SYMBOL(trace_event_printf);
- 
--static int trace_output_raw(struct trace_iterator *iter, char *name,
--			    char *fmt, va_list ap)
-+static __printf(3, 0)
-+int trace_output_raw(struct trace_iterator *iter, char *name,
-+		     char *fmt, va_list ap)
- {
- 	struct trace_seq *s = &iter->seq;
- 
-
-
+Thanks.
