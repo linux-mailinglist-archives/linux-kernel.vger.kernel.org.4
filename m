@@ -2,55 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E4A63EB13
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A279863EB96
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiLAI2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S229775AbiLAIty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiLAI14 (ORCPT
+        with ESMTP id S229843AbiLAIte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:27:56 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCDF1A20D;
-        Thu,  1 Dec 2022 00:27:45 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NN8Mc2ZHDz4f3nps;
-        Thu,  1 Dec 2022 16:27:40 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgCnCrZ9ZYhjeFPFBQ--.33056S4;
-        Thu, 01 Dec 2022 16:27:42 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>,
-        syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
-Subject: [PATCH] ext4: fix WARNING in ext4_expand_extra_isize_ea
-Date:   Thu,  1 Dec 2022 16:48:44 +0800
-Message-Id: <20221201084844.2855621-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 1 Dec 2022 03:49:34 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157A11A1D;
+        Thu,  1 Dec 2022 00:49:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2D59C1FD68;
+        Thu,  1 Dec 2022 08:49:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669884568; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=guIxpxNAKGFiX13aZHwKzc4sgDiWlaSOm8SorFitB8w=;
+        b=N3ADfolne44ylq/Uj9XYi305h0aolKKN92dzo6nzondChOAnn42JLZGonKi8piI1EwfYrL
+        5qhGgcY5pZR1iPH0r/oAwVw5Bk3BusbtMcafYF38Bf26AKI3S6FsOcdGIdLeNuc4XPcekJ
+        rezD8+qtp+o1njMbFZ0/5oGMnYYS78Q=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A4B813B4A;
+        Thu,  1 Dec 2022 08:49:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gHRmBphqiGM8GgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 08:49:28 +0000
+Date:   Thu, 1 Dec 2022 09:49:27 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     Tao pilgrim <pilgrimtao@gmail.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
+        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
+ oom killed
+Message-ID: <Y4hqlzNeZ6Osu0pI@dhcp22.suse.cz>
+References: <Y4eEiqwMMkHv9ELM@dhcp22.suse.cz>
+ <E5A5BCC3-460E-4E81-8DD3-88B4A2868285@didiglobal.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgCnCrZ9ZYhjeFPFBQ--.33056S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrW3JFy5KrWkJr4rZr4kXrb_yoWruF4Dpw
-        43Ary7Cr48WF9rCFs7AFy8twn8Wwn3CF4UJrWxWr1kZFy7Xw1xKFZ5Kr43XFy8trW8Jry2
-        qFn8tw1rKw15G3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbmii3UUUUU==
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <E5A5BCC3-460E-4E81-8DD3-88B4A2868285@didiglobal.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,94 +96,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+On Thu 01-12-22 04:52:27, 程垲涛 Chengkaitao Cheng wrote:
+> At 2022-12-01 00:27:54, "Michal Hocko" <mhocko@suse.com> wrote:
+> >On Wed 30-11-22 15:46:19, 程垲涛 Chengkaitao Cheng wrote:
+> >> On 2022-11-30 21:15:06, "Michal Hocko" <mhocko@suse.com> wrote:
+> >> > On Wed 30-11-22 15:01:58, chengkaitao wrote:
+> >> > > From: chengkaitao <pilgrimtao@gmail.com>
+> >> > >
+> >> > > We created a new interface <memory.oom.protect> for memory, If there is
+> >> > > the OOM killer under parent memory cgroup, and the memory usage of a
+> >> > > child cgroup is within its effective oom.protect boundary, the cgroup's
+> >> > > tasks won't be OOM killed unless there is no unprotected tasks in other
+> >> > > children cgroups. It draws on the logic of <memory.min/low> in the
+> >> > > inheritance relationship.
+> >> >
+> >> > Could you be more specific about usecases?
+> >
+> >This is a very important question to answer.
+> 
+> usecases 1: users say that they want to protect an important process 
+> with high memory consumption from being killed by the oom in case 
+> of docker container failure, so as to retain more critical on-site 
+> information or a self recovery mechanism. At this time, they suggest 
+> setting the score_adj of this process to -1000, but I don't agree with 
+> it, because the docker container is not important to other docker 
+> containers of the same physical machine. If score_adj of the process 
+> is set to -1000, the probability of oom in other container processes will 
+> increase.
+> 
+> usecases 2: There are many business processes and agent processes 
+> mixed together on a physical machine, and they need to be classified 
+> and protected. However, some agents are the parents of business 
+> processes, and some business processes are the parents of agent 
+> processes, It will be troublesome to set different score_adj for them. 
+> Business processes and agents cannot determine which level their 
+> score_adj should be at, If we create another agent to set all processes's 
+> score_adj, we have to cycle through all the processes on the physical 
+> machine regularly, which looks stupid.
 
-Syzbot found the following issue:
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3631 at mm/page_alloc.c:5534 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
-Modules linked in:
-CPU: 1 PID: 3631 Comm: syz-executor261 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
-RSP: 0018:ffffc90003ccf080 EFLAGS: 00010246
-RAX: ffffc90003ccf0e0 RBX: 000000000000000c RCX: 0000000000000000
-RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003ccf108
-RBP: ffffc90003ccf198 R08: dffffc0000000000 R09: ffffc90003ccf0e0
-R10: fffff52000799e21 R11: 1ffff92000799e1c R12: 0000000000040c40
-R13: 1ffff92000799e18 R14: dffffc0000000000 R15: 1ffff92000799e14
-FS:  0000555555c10300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc36f70000 CR3: 00000000744ad000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __alloc_pages_node include/linux/gfp.h:223 [inline]
- alloc_pages_node include/linux/gfp.h:246 [inline]
- __kmalloc_large_node+0x8a/0x1a0 mm/slab_common.c:1096
- __do_kmalloc_node mm/slab_common.c:943 [inline]
- __kmalloc+0xfe/0x1a0 mm/slab_common.c:968
- kmalloc include/linux/slab.h:558 [inline]
- ext4_xattr_move_to_block fs/ext4/xattr.c:2558 [inline]
- ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
- ext4_expand_extra_isize_ea+0xe3f/0x1cd0 fs/ext4/xattr.c:2765
- __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
- ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
- __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
- ext4_inline_data_truncate+0x548/0xd00 fs/ext4/inline.c:2021
- ext4_truncate+0x341/0xeb0 fs/ext4/inode.c:4221
- ext4_process_orphan+0x1aa/0x2d0 fs/ext4/orphan.c:339
- ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
- __ext4_fill_super fs/ext4/super.c:5515 [inline]
- ext4_fill_super+0x80ed/0x8610 fs/ext4/super.c:5643
- get_tree_bdev+0x400/0x620 fs/super.c:1324
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
- </TASK>
-
-Reason is allocate 16M memory by kmalloc, but MAX_ORDER is 11, kmalloc
-can allocate maxium size memory is 4M.
-XATTR_SIZE_MAX is currently 64k, but EXT4_XATTR_SIZE_MAX is '(1 << 24)',
-so 'ext4_xattr_check_entries()' regards this length as legal. Then trigger
-warning in 'ext4_xattr_move_to_block()'.
-To solve above issue, adjust EXT4_XATTR_SIZE_MAX to '(1 << 22)' which
-is kmalloc can allocate maxium size.
-
-Reported-by: syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
-Fixes: 54dd0e0a1b25 ("ext4: add extra checks to ext4_xattr_block_get()")
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/xattr.h | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/fs/ext4/xattr.h b/fs/ext4/xattr.h
-index 824faf0b15a8..22f0c89b1184 100644
---- a/fs/ext4/xattr.h
-+++ b/fs/ext4/xattr.h
-@@ -75,11 +75,12 @@ struct ext4_xattr_entry {
-  * for file system consistency errors, we use a somewhat bigger value.
-  * This allows XATTR_SIZE_MAX to grow in the future, but by using this
-  * instead of INT_MAX for certain consistency checks, we don't need to
-- * worry about arithmetic overflows.  (Actually XATTR_SIZE_MAX is
-- * defined in include/uapi/linux/limits.h, so changing it is going
-- * not going to be trivial....)
-- */
--#define EXT4_XATTR_SIZE_MAX (1 << 24)
-+ * worry about arithmetic overflows. Now, MAX_ORDER is 11 kmalloc can
-+ * allocate maxium size is 4M. (Actually XATTR_SIZE_MAX is defined in
-+ * include/uapi/linux/limits.h, so changing it is going not going to
-+ * be trivial....)
-+  */
-+#define EXT4_XATTR_SIZE_MAX (1 << 22)
+I do agree that oom_score_adj is far from ideal tool for these usecases.
+But I also agree with Roman that these could be addressed by an oom
+killer implementation in the userspace which can have much better
+tailored policies. OOM protection limits would require tuning and also
+regular revisions (e.g. memory consumption by any workload might change
+with different kernel versions) to provide what you are looking for.
  
- /*
-  * The minimum size of EA value when you start storing it in an external inode
--- 
-2.31.1
+> >> > How do you tune oom.protect
+> >> > wrt to other tunables? How does this interact with the oom_score_adj
+> >> > tunining (e.g. a first hand oom victim with the score_adj 1000 sitting
+> >> > in a oom protected memcg)?
+> >> 
+> >> We prefer users to use score_adj and oom.protect independently. Score_adj is 
+> >> a parameter applicable to host, and oom.protect is a parameter applicable to cgroup. 
+> >> When the physical machine's memory size is particularly large, the score_adj 
+> >> granularity is also very large. However, oom.protect can achieve more fine-grained 
+> >> adjustment.
+> >
+> >Let me clarify a bit. I am not trying to defend oom_score_adj. It has
+> >it's well known limitations and it is is essentially unusable for many
+> >situations other than - hide or auto-select potential oom victim.
+> >
+> >> When the score_adj of the processes are the same, I list the following cases 
+> >> for explanation,
+> >> 
+> >>           root
+> >>            |
+> >>         cgroup A
+> >>        /        \
+> >>  cgroup B      cgroup C
+> >> (task m,n)     (task x,y)
+> >> 
+> >> score_adj(all task) = 0;
+> >> oom.protect(cgroup A) = 0;
+> >> oom.protect(cgroup B) = 0;
+> >> oom.protect(cgroup C) = 3G;
+> >
+> >How can you enforce protection at C level without any protection at A
+> >level? 
+> 
+> The basic idea of this scheme is that all processes in the same cgroup are 
+> equally important. If some processes need extra protection, a new cgroup 
+> needs to be created for unified settings. I don't think it is necessary to 
+> implement protection in cgroup C, because task x and task y are equally 
+> important. Only the four processes (task m, n, x and y) in cgroup A, have 
+> important and secondary differences.
+> 
+> > This would easily allow arbitrary cgroup to hide from the oom
+> > killer and spill over to other cgroups.
+> 
+> I don't think this will happen, because eoom.protect only works on parent 
+> cgroup. If "oom.protect(parent cgroup) = 0", from perspective of 
+> grandpa cgroup, task x and y will not be specially protected.
 
+Just to confirm I am on the same page. This means that there won't be
+any protection in case of the global oom in the above example. So
+effectively the same semantic as the low/min protection.
+
+> >> usage(task m) = 1G
+> >> usage(task n) = 2G
+> >> usage(task x) = 1G
+> >> usage(task y) = 2G
+> >> 
+> >> oom killer order of cgroup A: n > m > y > x
+> >> oom killer order of host:     y = n > x = m
+> >> 
+> >> If cgroup A is a directory maintained by users, users can use oom.protect 
+> >> to protect relatively important tasks x and y.
+> >> 
+> >> However, when score_adj and oom.protect are used at the same time, we 
+> >> will also consider the impact of both, as expressed in the following formula. 
+> >> but I have to admit that it is an unstable result.
+> >> score = task_usage + score_adj * totalpage - eoom.protect * task_usage / local_memcg_usage
+> >
+> >I hope I am not misreading but this has some rather unexpected
+> >properties. First off, bigger memory consumers in a protected memcg are
+> >protected more. 
+> 
+> Since cgroup needs to reasonably distribute the protection quota to all 
+> processes in the cgroup, I think that processes consuming more memory 
+> should get more quota. It is fair to processes consuming less memory 
+> too, even if processes consuming more memory get more quota, its 
+> oom_score is still higher than the processes consuming less memory. 
+> When the oom killer appears in local cgroup, the order of oom killer 
+> remains unchanged
+
+Why cannot you simply discount the protection from all processes
+equally? I do not follow why the task_usage has to play any role in
+that.
+
+> 
+> >Also I would expect the protection discount would
+> >be capped by the actual usage otherwise excessive protection
+> >configuration could skew the results considerably.
+> 
+> In the calculation, we will select the minimum value of memcg_usage and 
+> oom.protect
+> 
+> >> > I haven't really read through the whole patch but this struck me odd.
+> >> 
+> >> > > @@ -552,8 +552,19 @@ static int proc_oom_score(struct seq_file *m, struct pid_namespace *ns,
+> >> > > 	unsigned long totalpages = totalram_pages() + total_swap_pages;
+> >> > > 	unsigned long points = 0;
+> >> > > 	long badness;
+> >> > > +#ifdef CONFIG_MEMCG
+> >> > > +	struct mem_cgroup *memcg;
+> >> > > 
+> >> > > -	badness = oom_badness(task, totalpages);
+> >> > > +	rcu_read_lock();
+> >> > > +	memcg = mem_cgroup_from_task(task);
+> >> > > +	if (memcg && !css_tryget(&memcg->css))
+> >> > > +		memcg = NULL;
+> >> > > +	rcu_read_unlock();
+> >> > > +
+> >> > > +	update_parent_oom_protection(root_mem_cgroup, memcg);
+> >> > > +	css_put(&memcg->css);
+> >> > > +#endif
+> >> > > +	badness = oom_badness(task, totalpages, MEMCG_OOM_PROTECT);
+> >> >
+> >> > the badness means different thing depending on which memcg hierarchy
+> >> > subtree you look at. Scaling based on the global oom could get really
+> >> > misleading.
+> >> 
+> >> I also took it into consideration. I planned to change "/proc/pid/oom_score" 
+> >> to a writable node. When writing to different cgroup paths, different values 
+> >> will be output. The default output is root cgroup. Do you think this idea is 
+> >> feasible?
+> >
+> >I do not follow. Care to elaborate?
+> 
+> Take two example，
+> cmd: cat /proc/pid/oom_score
+> output: Scaling based on the global oom
+> 
+> cmd: echo "/cgroupA/cgroupB" > /proc/pid/oom_score
+> output: Scaling based on the cgroupB oom
+> (If the task is not in the cgroupB's hierarchy subtree, output: invalid parameter)
+
+This is a terrible interface. First of all it assumes a state for the
+file without any way to guarantee atomicity. How do you deal with two
+different callers accessing the file?
+
+-- 
+Michal Hocko
+SUSE Labs
