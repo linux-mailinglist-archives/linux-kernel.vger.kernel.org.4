@@ -2,177 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFAD63E673
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3D163E67A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiLAA0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S229677AbiLAA1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiLAA0X (ORCPT
+        with ESMTP id S229612AbiLAA1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:26:23 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6905A6C7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 16:26:21 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id r12so74486lfp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 16:26:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IigBehPc+Em/qusf/7j6u/r/e7HcF8wFshWUasQJ9B8=;
-        b=jgQJptowxk+tpWm5JxfxLPZwgR+m+Otq4kBaWUfskKldD7GOkjHQI8c1yN6MFxojOn
-         OJ6TBG7mwc0Tbr4l/vtUCCgley8qf2inX64QF059GLKiCOEeGuO//CjDxYsziREdqREF
-         PwaIzaWDzaMiar5Ynyc2kgkNc91VZ/q2xLMvFZPuYfuqs4+1ZRxXvgvacj7F8Wue40Cc
-         A2SDp/u46syaVrCHgAxDcU79nj779XG5rnceNUJtIbeG0pDpdtJP1hTB2NLGTMeD2I+H
-         QLtpdoxtZzTuzLo6dK2dmNChr0r9f1j79Tm7nKvD1rbU2pV1XZ+COTVnPvFDvJwjpsbT
-         mG1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IigBehPc+Em/qusf/7j6u/r/e7HcF8wFshWUasQJ9B8=;
-        b=OOKD/hBnvYNH3ZrzSXXgQAjC59AmQuF9qGit0gYHSzjWCZoW5XIL4AR6dR+E1Bw67Y
-         /3bbh9OG/i9Uh0J42RqRCjioPXfbHZl2SFtkWQ9tALW1QiMQS09cVutjiGZ0Upib7Axu
-         Uh7T32N4SBiGAVB7wH74LAHkPeaNXMwGdXl/ShrVkYHmm3tpvfQB9eQpjxDtX5pKcLRj
-         /O8a4oPovI2kYBxYXISD0rp2xoQNbX24CC7YLioMFCdMW9/Z6sMOFUHtg9Q6w3oTKyai
-         YiaK+VU70a3VBG7vT8Epa9FLSdEgNypesYuMDtkB7qOgSvhf5tustiydYKkHPaR8bBlS
-         g+ng==
-X-Gm-Message-State: ANoB5plW1R6pIUR6hVkasfc5ml0vv1h5ZrodV4Ao3P5jhKKV9xIPNMYg
-        1+hqWd0r/SLBHQdCU7MX98OxsQ==
-X-Google-Smtp-Source: AA0mqf6Y/rBxKmL6xGjcEbKjQtStZUc7jyTJiN1dVB/hUBKz123VUR/fTeFuMFM5wE5Gj9ziDBr4Lg==
-X-Received: by 2002:a05:6512:15a8:b0:4a6:3ed2:3717 with SMTP id bp40-20020a05651215a800b004a63ed23717mr16703128lfb.637.1669854380184;
-        Wed, 30 Nov 2022 16:26:20 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id t15-20020a056512208f00b004b4ec76016esm426881lfr.113.2022.11.30.16.26.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 16:26:19 -0800 (PST)
-Message-ID: <3ead3652-1241-89bd-3441-8ca4a4c8df57@linaro.org>
-Date:   Thu, 1 Dec 2022 02:26:19 +0200
+        Wed, 30 Nov 2022 19:27:30 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BBF5803E;
+        Wed, 30 Nov 2022 16:27:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669854448; x=1701390448;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DNX3WxwJVVhAyY+gP2btOneyIgKiZaVH8GpVBETvHjA=;
+  b=Dfcq9Q10pAEQfwS8BJnBJEuMsq3ie7XQtfG6zdhUInOQTjqmH3CwZEr5
+   EOoNsesLHUXjGY+4N1HW0cjpUtbEm0Djqv3+THPW8G74faavEC6HNqjcM
+   fTithaxwyQFugmT413/Y/Y4F9FtS3d8aIDIYQGraKnPrfEgMWbldtMiie
+   e3kwGUqyrT9UGDM+yWKxZum90BzotHR3jwp+sRakgLh6wDgHMDMxLCtXW
+   rJOOES/B2t0VC6IHB4SLGQYipBVzKK4Iv1apHFC8FUKw9NyCJXflewVrM
+   8rKuNA7ssAoeypixVYw/Z0+UnogQsvPRTjq6VGTiU6wT1n6ziPHmc5UiK
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="317400816"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="317400816"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 16:27:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="622085198"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="622085198"
+Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.251.1.240])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 16:27:25 -0800
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
+Subject: [PATCH V2 00/11] CXL: Process event logs
+Date:   Wed, 30 Nov 2022 16:27:08 -0800
+Message-Id: <20221201002719.2596558-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v6 3/4] drm/msm/dp: parser link-frequencies as property of
- dp_out endpoint
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1669852310-22360-1-git-send-email-quic_khsieh@quicinc.com>
- <1669852310-22360-4-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1669852310-22360-4-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 01:51, Kuogee Hsieh wrote:
-> Add capability to parser and retrieve max DP link supported rate from
-> link-frequencies property of dp_out endpoint.
-> 
-> Changes in v6:
-> -- second patch after split parser patch into two patches
-> 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dp/dp_parser.c | 16 ++++++++++++++++
->   drivers/gpu/drm/msm/dp/dp_parser.h |  2 ++
->   2 files changed, 18 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-> index b06ff60..2006341 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-> @@ -95,6 +95,7 @@ static int dp_parser_misc(struct dp_parser *parser)
->   {
->   	struct device_node *of_node = parser->pdev->dev.of_node;
->   	struct device_node *endpoint;
-> +	u64 frequency;
->   	int cnt;
->   
->   	/*
-> @@ -103,6 +104,7 @@ static int dp_parser_misc(struct dp_parser *parser)
->   	cnt = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
->   	if (cnt > 0) {
->   		parser->max_dp_lanes = cnt;
-> +		parser->max_dp_link_rate = DP_LINK_RATE_HBR2; /* 540000 khz */
->   		return 0;
->   	}
->   
-> @@ -116,8 +118,22 @@ static int dp_parser_misc(struct dp_parser *parser)
->   			parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
->   		else
->   			parser->max_dp_lanes = cnt;
-> +
-> +		cnt = of_property_count_u64_elems(endpoint, "link-frequencies");
-> +		if (cnt < 0) {
-> +			parser->max_dp_link_rate = DP_LINK_RATE_HBR2; /* 540000 khz */
-> +		} else {
-> +			if (cnt > DP_MAX_NUM_DP_LANES)
-> +				cnt = DP_MAX_NUM_DP_LANES;
+From: Ira Weiny <ira.weiny@intel.com>
 
-Why are you comparing the number of link frequencies with the number of 
-lanes? You don't need the comparison at all.
+Changes from V1
+	Address comments, from Jonathan, Dave, and Alison
+		Main comment was to allow for a full payload size number of
+		event records to be processed on each Get event cyle.
+	Pick up tags
 
-> +
-> +			of_property_read_u64_index(endpoint, "link-frequencies",
-> +							cnt - 1, &frequency);
 
-Checking of the return value?
+This code has been tested with a newer qemu which allows for more events to be
+returned at a time as well ad additional QMP event and interrupt injection.
+Thos patches will follow once they have been cleaned up.
 
-> +
-> +			parser->max_dp_link_rate = (frequency / 1000); /* kbits */
-> +		}
->   	} else {
->   		parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
-> +		parser->max_dp_link_rate = DP_LINK_RATE_HBR2; /* 540000 khz */
+The series is in 5 parts:
 
-Instead of having all the nested if's and setting of max_dp_link rate in 
-several branches, please add a function that returns either a valid rate 
-or an error. Then you can simply check the result of that function and 
-set the default.
+	0) Davidlohrs irq patch modified for 16 vectors
+	1) Base functionality
+	2) Parsing specific events (Dynamic Capacity Event Record is defered)
+	3) Event interrupt support
+	4) cxl-test infrastructure for basic tests
 
->   	}
->   
->   	return 0;
-> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-> index 866c1a8..3ddf639 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-> @@ -15,6 +15,7 @@
->   #define DP_LABEL "MDSS DP DISPLAY"
->   #define DP_MAX_PIXEL_CLK_KHZ	675000
->   #define DP_MAX_NUM_DP_LANES	4
-> +#define DP_LINK_RATE_HBR2       540000
->   
->   enum dp_pm_type {
->   	DP_CORE_PM,
-> @@ -119,6 +120,7 @@ struct dp_parser {
->   	struct dp_io io;
->   	struct dp_display_data disp_data;
->   	u32 max_dp_lanes;
-> +	u32 max_dp_link_rate;
->   	struct drm_bridge *next_bridge;
->   
->   	int (*parse)(struct dp_parser *parser);
+While I believe this entire series is ready to be merged I realize that the
+interrupt support may still have some discussion around it.  Therefor parts 1,
+2, and 4 could be merged without irq support as cxl-test provides testing for
+that.  Interrupt testing requires Qemu but it too is fully tested and ready to
+go.
 
+
+Changes from RFC v2
+	Integrated Davidlohr's irq patch, allocate up to 16 vectors, and base
+		my irq support on modifications to that patch.
+	Smita
+		Check event status before reading each log.
+	Jonathan
+		Process more than 1 record at a time
+		Remove reserved fields
+	Steven
+		Prefix trace points with 'cxl_'
+	Davidlohr
+		PUll in his patch
+
+Changes from RFC v1
+	Add event irqs
+	General simplification of the code.
+	Resolve field alignment questions
+	Update to rev 3.0 for comments and structures
+	Add reserved fields and output them
+
+Event records inform the OS of various device events.  Events are not needed
+for any kernel operation but various user level software will want to track
+events.
+
+Add event reporting through the trace event mechanism.  On driver load read and
+clear all device events.
+
+Enable all event logs for interrupts and process each log on interrupt.
+
+
+TESTING:
+
+Testing of this was performed with additions to QEMU in the following repo:
+
+	https://github.com/weiny2/qemu/tree/ira-cxl-events-latest
+
+Changes to this repo are not finalized yet so I'm not posting those patches
+right away.  But there is enough functionality added to further test this.
+
+	1) event status register
+	2) additional event injection capabilities
+	3) Process more than 1 record at a time in Get/Clear mailbox commands
+
+Davidlohr Bueso (1):
+  cxl/pci: Add generic MSI-X/MSI irq support
+
+Ira Weiny (10):
+  cxl/mem: Implement Get Event Records command
+  cxl/mem: Implement Clear Event Records command
+  cxl/mem: Clear events on driver load
+  cxl/mem: Trace General Media Event Record
+  cxl/mem: Trace DRAM Event Record
+  cxl/mem: Trace Memory Module Event Record
+  cxl/mem: Wire up event interrupts
+  cxl/test: Add generic mock events
+  cxl/test: Add specific events
+  cxl/test: Simulate event log overflow
+
+ MAINTAINERS                     |   1 +
+ drivers/cxl/core/mbox.c         | 260 +++++++++++++++++
+ drivers/cxl/cxl.h               |   7 +
+ drivers/cxl/cxlmem.h            | 188 ++++++++++++
+ drivers/cxl/cxlpci.h            |   6 +
+ drivers/cxl/pci.c               | 155 ++++++++++
+ include/trace/events/cxl.h      | 486 ++++++++++++++++++++++++++++++++
+ include/uapi/linux/cxl_mem.h    |   4 +
+ tools/testing/cxl/test/Kbuild   |   2 +-
+ tools/testing/cxl/test/events.c | 362 ++++++++++++++++++++++++
+ tools/testing/cxl/test/events.h |   9 +
+ tools/testing/cxl/test/mem.c    |  35 +++
+ 12 files changed, 1514 insertions(+), 1 deletion(-)
+ create mode 100644 include/trace/events/cxl.h
+ create mode 100644 tools/testing/cxl/test/events.c
+ create mode 100644 tools/testing/cxl/test/events.h
+
+
+base-commit: aae703b02f92bde9264366c545e87cec451de471
 -- 
-With best wishes
-Dmitry
+2.37.2
 
