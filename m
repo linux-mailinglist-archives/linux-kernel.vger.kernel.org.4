@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB59E63E820
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB56E63E824
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiLADCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 22:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S229759AbiLADDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 22:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiLADCA (ORCPT
+        with ESMTP id S229541AbiLADDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 22:02:00 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC0B83256
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:01:59 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id n188so260031iof.8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A1q0DUW0UHb1nD0XGbTyZTTfZ/Tzl76R+aLJImRrqQE=;
-        b=nxB3GTyrTZMoG76NG8T3un04JYOU7mS4NbBynHGZYyxJk+1KTl0xgrZam7ICoBV5sk
-         46cG5ZeZpbvxqm6BO/02KAKO/TSHz9oaSufUZ6hx69OMHM+lFmiAWHCuMik9cnEDuia6
-         Jc9CKI/9nqBA9B6GHEINQFKHU54u9hFGrrZibG3c375ixo5BdkeKYNhZN7ZjY4/La/sI
-         bFpqBz8/VjNqPeH4ngj03RbXzN2MIvQ542DHSLY4EDQP79sHrQOPZ7WphtHRzD/qho+C
-         OryCEbTT6k6S7X77hQC5knHdsoj8tkvuycRNQZzwg2Sxd5eKRuacG2CMz5VE2Bjk22Ku
-         Ikog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A1q0DUW0UHb1nD0XGbTyZTTfZ/Tzl76R+aLJImRrqQE=;
-        b=THj8Yz8cT5Pvagjn9wO6iizMQ4ZVQP68T+bbWjDd32uJs1YzByUNLGDBuaccYpPHTg
-         wzTMYSnMHFSmpwwdm/aGEzwfgcXzwQm5ZTZeaTXqg1UTsyO1fAZPH9SxII52nwsb2QC0
-         uhwaj02ZwAlJlvF7hEWVyrrajYczzOlJ2yCtdKaWd8CLRHTMGHLiTVXizgnYZzvA/ph5
-         2i7Hs/D3VDfeHA4Dl7Gh9efWXzZN2t2p6EMNiiBUwOZXNQ7LcDL3KuHJfdffA8a5DbPD
-         OaWXz351bPyswMiQrRUYRA7UCz6l/JRV0Jr1B2SjrhqSnNObzGQc+0Errh0cUVMi7Bzi
-         yfWA==
-X-Gm-Message-State: ANoB5pkaukySy/EboH9xveD2dkNOnStKBYXa72LfD7ke3JEDoCQcECHL
-        mme+kRNk64j54O8o9kuBko2Wj6uVTJPHiB4wfGs=
-X-Google-Smtp-Source: AA0mqf5z+cv5HPVxQDr315u+p13BdeBR81byPRvf0Vq9IrrDONw5BOcJyyrEaD6inTxLA7L+bsWRtCroOvzcgbt+/SU=
-X-Received: by 2002:a02:cbde:0:b0:387:7704:abc3 with SMTP id
- u30-20020a02cbde000000b003877704abc3mr18317041jaq.72.1669863718925; Wed, 30
- Nov 2022 19:01:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20221128183109.446754-1-vschneid@redhat.com> <20221128183109.446754-5-vschneid@redhat.com>
-In-Reply-To: <20221128183109.446754-5-vschneid@redhat.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Thu, 1 Dec 2022 11:01:47 +0800
-Message-ID: <CAJhGHyB06u=mtbouGBw2CbLX9+gXPSPqHrHZHvorzF+8cPrG+Q@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] workqueue: Unbind kworkers before sending them to exit()
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 30 Nov 2022 22:03:08 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B901C165BF;
+        Wed, 30 Nov 2022 19:03:07 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN1962Zzdz8QrkZ;
+        Thu,  1 Dec 2022 11:03:06 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2B132vl0040902;
+        Thu, 1 Dec 2022 11:02:57 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 11:02:58 +0800 (CST)
+Date:   Thu, 1 Dec 2022 11:02:58 +0800 (CST)
+X-Zmail-TransId: 2af9638819624952e6b0
+X-Mailer: Zmail v1.0
+Message-ID: <202212011102587309217@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <jikos@kernel.org>
+Cc:     <benjamin.tissoires@redhat.com>, <michael.zaidman@gmail.com>,
+        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBISUQ6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B132vl0040902
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6388196A.001 by FangMail milter!
+X-FangMail-Envelope: 1669863786/4NN1962Zzdz8QrkZ/6388196A.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6388196A.001/4NN1962Zzdz8QrkZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,56 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 2:31 AM Valentin Schneider <vschneid@redhat.com> wrote:
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-> @@ -3627,8 +3668,11 @@ static bool wq_manager_inactive(struct worker_pool *pool)
->  static void put_unbound_pool(struct worker_pool *pool)
->  {
->         DECLARE_COMPLETION_ONSTACK(detach_completion);
-> +       struct list_head cull_list;
->         struct worker *worker;
->
-> +       INIT_LIST_HEAD(&cull_list);
-> +
->         lockdep_assert_held(&wq_pool_mutex);
->
->         if (--pool->refcnt)
-> @@ -3651,17 +3695,19 @@ static void put_unbound_pool(struct worker_pool *pool)
->          * Because of how wq_manager_inactive() works, we will hold the
->          * spinlock after a successful wait.
->          */
-> +       mutex_lock(&wq_pool_attach_mutex);
->         rcuwait_wait_event(&manager_wait, wq_manager_inactive(pool),
->                            TASK_UNINTERRUPTIBLE);
->         pool->flags |= POOL_MANAGER_ACTIVE;
+Replace the open-code with sysfs_emit() to simplify the code.
 
-Hello, Valentin
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/hid/hid-core.c   | 2 +-
+ drivers/hid/hid-cp2112.c | 2 +-
+ drivers/hid/hid-ft260.c  | 4 ++--
+ drivers/hid/hid-gt683r.c | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-I'm afraid it might deadlock here.
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index b973df3b825d..ae1ecb21121a 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2658,7 +2658,7 @@ static ssize_t modalias_show(struct device *dev, struct device_attribute *a,
+ {
+ 	struct hid_device *hdev = container_of(dev, struct hid_device, dev);
 
-If put_unbound_pool() is called while manage_workers() is sleeping
-on allocating memory, put_unbound_pool() will get the wq_pool_attach_mutex
-earlier than the manager which prevents the manager from getting the
-lock to attach the newly created worker and deadlock.
+-	return scnprintf(buf, PAGE_SIZE, "hid:b%04Xg%04Xv%08Xp%08X\n",
++	return sysfs_emit(buf, "hid:b%04Xg%04Xv%08Xp%08X\n",
+ 			 hdev->bus, hdev->group, hdev->vendor, hdev->product);
+ }
+ static DEVICE_ATTR_RO(modalias);
+diff --git a/drivers/hid/hid-cp2112.c b/drivers/hid/hid-cp2112.c
+index 1e16b0fa310d..810e3b4b1728 100644
+--- a/drivers/hid/hid-cp2112.c
++++ b/drivers/hid/hid-cp2112.c
+@@ -895,7 +895,7 @@ static ssize_t name##_show(struct device *kdev, \
+ 	int ret = cp2112_get_usb_config(hdev, &cfg); \
+ 	if (ret) \
+ 		return ret; \
+-	return scnprintf(buf, PAGE_SIZE, format, ##__VA_ARGS__); \
++	return sysfs_emit(buf, format, ##__VA_ARGS__); \
+ } \
+ static DEVICE_ATTR_RW(name);
 
-I think mutex_lock(&wq_pool_attach_mutex) can be moved into
-wq_manager_inactive(), and handle it in the same way as pool->lock.
+diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+index 333341e80b0e..8677bea46bea 100644
+--- a/drivers/hid/hid-ft260.c
++++ b/drivers/hid/hid-ft260.c
+@@ -826,7 +826,7 @@ static int ft260_byte_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	if (ret < 0)
+ 		return ret;
 
->
->         while ((worker = first_idle_worker(pool)))
-> -               destroy_worker(worker);
-> +               set_worker_dying(worker, &cull_list);
->         WARN_ON(pool->nr_workers || pool->nr_idle);
->         raw_spin_unlock_irq(&pool->lock);
->
-> -       mutex_lock(&wq_pool_attach_mutex);
-> -       if (!list_empty(&pool->workers))
-> +       wake_dying_workers(&cull_list);
-> +
-> +       if (!list_empty(&pool->workers) || !list_empty(&pool->dying_workers))
->                 pool->detach_completion = &detach_completion;
->         mutex_unlock(&wq_pool_attach_mutex);
->
-> --
-> 2.31.1
->
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", *field);
++	return sysfs_emit(buf, "%d\n", *field);
+ }
+
+ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+@@ -838,7 +838,7 @@ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	if (ret < 0)
+ 		return ret;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", le16_to_cpu(*field));
++	return sysfs_emit(buf, "%d\n", le16_to_cpu(*field));
+ }
+
+ #define FT260_ATTR_SHOW(name, reptype, id, type, func)			       \
+diff --git a/drivers/hid/hid-gt683r.c b/drivers/hid/hid-gt683r.c
+index 29ccb0accfba..fa453de406b9 100644
+--- a/drivers/hid/hid-gt683r.c
++++ b/drivers/hid/hid-gt683r.c
+@@ -90,7 +90,7 @@ static ssize_t mode_show(struct device *dev,
+ 	else
+ 		sysfs_mode = 2;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", sysfs_mode);
++	return sysfs_emit(buf, "%u\n", sysfs_mode);
+ }
+
+ static ssize_t mode_store(struct device *dev,
+-- 
+2.25.1
