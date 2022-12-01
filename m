@@ -2,127 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4116563F138
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DEF63F13F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiLANIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S231235AbiLANKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiLANIc (ORCPT
+        with ESMTP id S231220AbiLANJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:08:32 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDD845A0C;
-        Thu,  1 Dec 2022 05:08:28 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C27961FD81;
-        Thu,  1 Dec 2022 13:08:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669900106; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K/3E4rKV56hZO1ZYVzKhSOwwyXDyBi7M71us9jjagdo=;
-        b=ZC25gQgYpHLJv3sUQUpw833y1NbAm84Kj96hRcqLaxWPqonFdDKoAEQwY8o+h5Urr4f/94
-        sYhbrouqe8Sz2mT73RyW2KuWQ0ZQZVfQyN3N+lHgNLROGt3f2Q2frfuTwFrG8knt0CulCG
-        XireW5USxtH4hjxIvL59nH4fLlaqq3M=
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id A9BA313503;
-        Thu,  1 Dec 2022 13:08:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id uwI1KUqniGPoBQAAGKfGzw
-        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 13:08:26 +0000
-Date:   Thu, 1 Dec 2022 14:08:26 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
-        <chengkaitao@didiglobal.com>
-Cc:     Tao pilgrim <pilgrimtao@gmail.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Message-ID: <Y4inSsNpmomzRt8J@dhcp22.suse.cz>
-References: <Y4hqlzNeZ6Osu0pI@dhcp22.suse.cz>
- <C2CC36C1-29AE-4B65-A18A-19A745652182@didiglobal.com>
- <Y4ihyRqQzyFFLqh6@dhcp22.suse.cz>
+        Thu, 1 Dec 2022 08:09:59 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129129E44A;
+        Thu,  1 Dec 2022 05:09:56 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id vv4so4107639ejc.2;
+        Thu, 01 Dec 2022 05:09:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0jz1HLaxl88ozkD6mHLvrjmXIkPIX0Lx9G6bs3QkAkg=;
+        b=Fk1LLVz8P+OfjdPAyMGQUn6qVnyleCgKlLJSrTJXx04x5Jf7Ocs1/DdRH1ftZdZgyQ
+         pjrauZk8C82Bl+P2XQqcII+xTv0mpDhmxEFYEht/F+Px1fLv372iFJ1E+bJH4pwzqB9P
+         vk3iplF5gu3DAEWtiOpxqSdaMs3p7tXJxyA9bmWE8KdJQpocpNbc3obfMb9BcLRABQgp
+         cCozLtCgDymPg/kLFiAaew9wkKTMKq5XCgR4FFwn7jiU05odvA0UiwjmZOllPCIyMDkS
+         Q0qlT3s64O4ehiVrVAKJSDScVpTQJTSRjtS0pQynb+NcQD7mi1izC+cU4dK2tsKm63Wz
+         igTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0jz1HLaxl88ozkD6mHLvrjmXIkPIX0Lx9G6bs3QkAkg=;
+        b=juAiFhezIRnVI7z1d4RnO9NwmaL5RV6GQrRW0Mrw9o98dQoTDWR+iBR/o2R7VUX2Lc
+         ytsep/bV5b99K46ZcPVyGvXnnU6J7+fa4hcAveiGcPM8jUDcyKjkvynZhnqfx3jV4Ed1
+         6T4d8O+FT8BmE6Kh31V/P6+uU9z9WMKYXtKioCKi4mIh+Yw1SbnJ5/sxC/WhlBR5dNOe
+         1b2txZvFNUE/1ne5/zLia+K74kOZsTUSzgurdIvqmnzDbdtlMnfiSn3mMXyWEp0dexQ8
+         jyLbK4aIidgPvBJwgkCXNELUWgweJwEbqR5HaQPqWwXtyhh/20zcfsxv3q3IYzSTicOk
+         gflg==
+X-Gm-Message-State: ANoB5pmgtPuHttMinAWGG9NxqN/6Bkk8CKGLAJeFYwYUcuhJBW3dNwEi
+        /1bgH39TYaA4lbKrWZaxq/Q=
+X-Google-Smtp-Source: AA0mqf5dP6+vhvNUs9jbQn3Wu4GllWNV3MCZCxwOALYg/+eHJX4RhUbzfEG1BkP45IPlfV/Y4j9EHA==
+X-Received: by 2002:a17:906:6681:b0:7ae:732d:bc51 with SMTP id z1-20020a170906668100b007ae732dbc51mr43644830ejo.549.1669900194522;
+        Thu, 01 Dec 2022 05:09:54 -0800 (PST)
+Received: from [192.168.1.50] ([79.119.240.254])
+        by smtp.gmail.com with ESMTPSA id q18-20020a1709066b1200b007bf988ce9f7sm1778988ejr.38.2022.12.01.05.09.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 05:09:54 -0800 (PST)
+Message-ID: <a0c14bfd-a502-6b19-de75-491ea9af3816@gmail.com>
+Date:   Thu, 1 Dec 2022 15:09:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y4ihyRqQzyFFLqh6@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+To:     Ping-Ke Shih <pkshih@realtek.com>,
+        Jun ASAKA <JunASAKA@zzy040330.moe>,
+        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
+Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221130140849.153705-1-JunASAKA@zzy040330.moe>
+ <663e6d79c34f44998a937fe9fbd228e9@realtek.com>
+ <6ce2e648-9c12-56a1-9118-e1e18c7ecd7d@zzy040330.moe>
+ <870b8a6e591f4de8b83df26f2a65330b@realtek.com>
+Content-Language: en-US
+From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
+In-Reply-To: <870b8a6e591f4de8b83df26f2a65330b@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-12-22 13:44:58, Michal Hocko wrote:
-> On Thu 01-12-22 10:52:35, 程垲涛 Chengkaitao Cheng wrote:
-> > At 2022-12-01 16:49:27, "Michal Hocko" <mhocko@suse.com> wrote:
-[...]
-> > >Why cannot you simply discount the protection from all processes
-> > >equally? I do not follow why the task_usage has to play any role in
-> > >that.
-> > 
-> > If all processes are protected equally, the oom protection of cgroup is 
-> > meaningless. For example, if there are more processes in the cgroup, 
-> > the cgroup can protect more mems, it is unfair to cgroups with fewer 
-> > processes. So we need to keep the total amount of memory that all 
-> > processes in the cgroup need to protect consistent with the value of 
-> > eoom.protect.
+On 01/12/2022 04:18, Ping-Ke Shih wrote:
 > 
-> You are mixing two different concepts together I am afraid. The per
-> memcg protection should protect the cgroup (i.e. all processes in that
-> cgroup) while you want it to be also process aware. This results in a
-> very unclear runtime behavior when a process from a more protected memcg
-> is selected based on its individual memory usage.
+>> -----Original Message-----
+>> From: Jun ASAKA <JunASAKA@zzy040330.moe>
+>> Sent: Thursday, December 1, 2022 9:39 AM
+>> To: Ping-Ke Shih <pkshih@realtek.com>; Jes.Sorensen@gmail.com
+>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+>>
+>> On 01/12/2022 8:54 am, Ping-Ke Shih wrote:
+>>
+>>>
+>>>> -----Original Message-----
+>>>> From: JunASAKA <JunASAKA@zzy040330.moe>
+>>>> Sent: Wednesday, November 30, 2022 10:09 PM
+>>>> To: Jes.Sorensen@gmail.com
+>>>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; JunASAKA
+>>>> <JunASAKA@zzy040330.moe>
+>>>> Subject: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+>>>>
+>>>> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
+>>>> issues for rtl8192eu chips by replacing the arguments with
+>>>> the ones in the updated official driver.
+>>> I think it would be better if you can point out which version you use, and
+>>> people will not modify them back to old version suddenly.
+>>>
+>>>> Signed-off-by: JunASAKA <JunASAKA@zzy040330.moe>
+>>>> ---
+>>>>   .../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 76 +++++++++++++------
+>>>>   1 file changed, 54 insertions(+), 22 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>> index b06508d0cd..82346500f2 100644
+>>>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>> [...]
+>>>
+>>>> @@ -891,22 +907,28 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
+>>>>
+>>>>   	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>>   	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
+>>>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>>
+>>>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
+>>>> +
+>>>>   	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>>
+>>>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>> +
+>>> I think this is a test code of vendor driver. No need them here.
+>>>
+>>>
+>>>>   	/* Path B IQK setting */
+>>>>   	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_A, 0x38008c1c);
+>>>>   	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_A, 0x38008c1c);
+>>>>   	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+>>>>   	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>>>>
+>>>> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
+>>>> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
+>>>>   	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
+>>>>
+>>>>   	/* LO calibration setting */
+>>>> -	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
+>>>> +	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
+>>>>
+>>>>   	/* One shot, path A LOK & IQK */
+>>>>   	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+>>> [...]
+>>>
+>>> I have compared your patch with internal code, and they are the same.
+>>> But, I don't have a test.
+>>>
+>>> Ping-Ke
+>>
+>> I changed those arguments into the ones here:
+>> https://github.com/Mange/rtl8192eu-linux-driver which works fine with my
+>> rtl8192eu wifi dongle. But forgive my ignorant that I don't have enough
+>> experience on wifi drivers, I just compared those two drivers and
+>> figured that those codes fixing my IQK failures.
+> 
+> I do similar things as well. :-)
+> 
+> The github repository mentioned 
+> "This branch is based on Realtek's driver versioned 4.4.1. master is based on 4.3.1.1 originally."
+> So, we can add something to commit message: 
+> 1. https://github.com/Mange/rtl8192eu-linux-driver 
+> 2. vendor driver version: 4.3.1.1
+> 
+> --
+> Ping-Ke
+> 
 
-Let me be more specific here. Although it is primarily processes which
-are the primary source of memcg charges the memory accounted for the oom
-badness purposes is not really comparable to the overal memcg charged
-memory. Kernel memory, non-mapped memory all that can generate rather
-interesting cornercases.
--- 
-Michal Hocko
-SUSE Labs
+That repo is confusing, unfortunately. Indeed, the "master" branch seems to
+contain v4.3.1.1_11320.20140505. But the last commit is from 2017.
+
+The "realtek-4.4.x" branch is the one being actively maintained, and at some
+point it was updated to v5.6.4_35685.20191108_COEX20171113-0047. README.md
+was forgotten.
