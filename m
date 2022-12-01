@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1136463F11C
+	by mail.lfdr.de (Postfix) with ESMTP id C890763F11E
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiLANCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S230463AbiLANC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiLANCS (ORCPT
+        with ESMTP id S231164AbiLANCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:02:18 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBBCBB7ED
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:02:17 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so5160045pjh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:02:17 -0800 (PST)
+        Thu, 1 Dec 2022 08:02:22 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744AB56EF7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:02:21 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so5144873pjs.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:02:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8+D6mfTqwfey0lLy9Lc3RpfTXi+1JUYYl3NRmY/n6Cg=;
-        b=S7g6waYjN+0+SwkKuvSnobOjtygf7FcxN5iSyU6NRY2OD2lh/w0ZVN9fupepMU0mjT
-         Wq0Z/TU8p4Ts0c5qdkPX4OjEZuDR7A+Qxm92oZllmBCjlrjvXAX6NKnBIMox7bDHR431
-         Vym09s61EigwqBmGzjklNXQ7wEEW/xdRouQ1nCGVW0N1N55i886OglkLNr07MrQYPAB7
-         aRrEbiIe2Ls2J88KNodTfLhatlF2xIU6xZZ2FkZx0oMTPOKiTQBZ4E2a3kDxiY+Iib/O
-         mhlC7+fLzvYlZBgYgx6+YIaYwQKDA/nq1ZIFvsKYNZAwPkm+HT6dluSLwS/ZAh04fQJX
-         EbAA==
+        bh=fOsF09BSv6WEjfktoanH0vG9zVuY2VCJ6w8ZQR8SIzw=;
+        b=fo7AY9pboIe0ZJcIHcZHssx/Fv6yMUxHk5pOTZgl/310+2AuM9F4JAgAGN6E98l73e
+         jVxZYWn1D+mPWtaLmlhPAoddu20lmKlsahPX9z5FHHl2H9jGkT7nbJtpsFfSTL1b1oYi
+         Qomi2vFrOFdq/qU0TSA+qe5klggIfjdYzvPi7LoN9GYdX2vp67+K6nOo0VTUTqNvp9PM
+         +Kxnvszajn/b6hlTAoh+eT5vkN/W3/SFrnGs1v0aH4wGzsNHuMT7bm6BNRjLKb5VkXuz
+         sIMvaQmC2Di4rGc4Xx3mRTaCx4pPLQ8eisvuheaX63Z542ybF7ptuHTFqu+i3T5nDDID
+         0EFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8+D6mfTqwfey0lLy9Lc3RpfTXi+1JUYYl3NRmY/n6Cg=;
-        b=DhevpJd6hAB6JfpbaLbY9c4LMbZVMWIg0kukU7Cw24fZvkvtTVMaOZAPB6CDriDqko
-         zvZyERRLlvWPtmMhnRKlr92o4h50f04WtIQ0wq59F9yQYQ3j+N4PR+uKGUsLgCTtM8qT
-         QAraaFkFJ5kmPNIqzbnyI9NVobydaC4iJ2pwGzzf/3HhJ3iDDARyttdpl573f45Z1R6x
-         qSJ5CMqzA1ZwtkxJhnI/7Ya/gx8Nv2LJuiQBdKGpp9BEvk5HoV8TnYavt96abGqJTaU5
-         s3e1BWpFrknE3P2akFaWtOHTA234yJ+Bf2MBXn76LFOApmo/B0CIHbD0BVhFxkI7Q7Ab
-         Nuhw==
-X-Gm-Message-State: ANoB5pl2RMqYU0uNrTBImHRANjdmvprnBhuhZZpZ5AzqaddnvqEYFyyC
-        E0huaBYtP7Dgs1SVModG6P8S7g==
-X-Google-Smtp-Source: AA0mqf7dIIJqC87dxBsH390GH5t6+SbzyL0AgdbTUxWbHGXDJSmxVhTmVwCmHQ35gQ1I7Zu0obTQdQ==
-X-Received: by 2002:a17:90b:3944:b0:214:1df0:fe53 with SMTP id oe4-20020a17090b394400b002141df0fe53mr74908231pjb.214.1669899736990;
-        Thu, 01 Dec 2022 05:02:16 -0800 (PST)
+        bh=fOsF09BSv6WEjfktoanH0vG9zVuY2VCJ6w8ZQR8SIzw=;
+        b=4B6E2sCURX8LO08lD1QeXMYvCx0gDGMEF+JwOY4pk3hS517ytwG5mespGYyx695fJp
+         Pz+GiahuCLNnBIkdAP5BiCMFmot7ngmLj2N42uNQqCNkoU+MymybXFhrpJpAVYh07TTl
+         8FzLnMrNcQtmlwU0hy4Jb7koM3ycg1dXmmkGar1M+MMogI2WuXc0VYVfVdLMl8PuSP4r
+         d4tZX28YEU6swbFvt88Ri3Bl/3m4GvV38lT5LQj1Reeh7Uz4rMB14K/oGv0aKPsYaWM5
+         1JbVtc2CRiTGhdbgSW7JkuFyg8fx2ujBztd55IA0+OrHCcINokDvubi6R+Rvn7V2/FF0
+         vT3w==
+X-Gm-Message-State: ANoB5pnymvLFdTn3reTqxZAaDZUpmt9lB5KwcSsoPya8WPC9kPJi0pWB
+        8j4CHEIYsvzSPSPBkHXONM8K2w==
+X-Google-Smtp-Source: AA0mqf5PQ521+yihjzeyfsJKJ4JWk+Io5YpSnmTZL/MABGqC4OUWdtY2+uZKfeMq2gshRjq3UzIxzw==
+X-Received: by 2002:a17:90a:440f:b0:218:9894:62c1 with SMTP id s15-20020a17090a440f00b00218989462c1mr61850866pjg.205.1669899740831;
+        Thu, 01 Dec 2022 05:02:20 -0800 (PST)
 Received: from anup-ubuntu-vm.localdomain ([171.76.81.69])
-        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm4855856pjf.17.2022.12.01.05.02.13
+        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm4855856pjf.17.2022.12.01.05.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 05:02:16 -0800 (PST)
+        Thu, 01 Dec 2022 05:02:20 -0800 (PST)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -60,11 +60,10 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Alistair Francis <Alistair.Francis@wdc.com>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v14 7/8] RISC-V: Use IPIs for remote icache flush when possible
-Date:   Thu,  1 Dec 2022 18:31:34 +0530
-Message-Id: <20221201130135.1115380-8-apatel@ventanamicro.com>
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v14 8/8] irqchip/riscv-intc: Add empty irq_eoi() for chained irq handlers
+Date:   Thu,  1 Dec 2022 18:31:35 +0530
+Message-Id: <20221201130135.1115380-9-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221201130135.1115380-1-apatel@ventanamicro.com>
 References: <20221201130135.1115380-1-apatel@ventanamicro.com>
@@ -81,45 +80,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we have specialized interrupt controller (such as AIA IMSIC) which
-allows supervisor mode to directly inject IPIs without any assistance
-from M-mode or HS-mode then using such specialized interrupt controller,
-we can do remote icache flushe directly from supervisor mode instead of
-using the SBI RFENCE calls.
-
-This patch extends remote icache flush functions to use supervisor mode
-IPIs whenever direct supervisor mode IPIs.are supported by interrupt
-controller.
+We add empty irq_eoi() in RISC-V INTC driver for child irqchip
+drivers (such as PLIC, SBI IPI, CLINT, APLIC, IMSIC, etc) which
+implement chained handlers for parent per-HART local interrupts.
+This hels us avoid unnecessary mask/unmask of per-HART local
+interrupts at the time of handling interrupts.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/mm/cacheflush.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/irqchip/irq-riscv-intc.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-index 57b40a350420..f10cb47eac3a 100644
---- a/arch/riscv/mm/cacheflush.c
-+++ b/arch/riscv/mm/cacheflush.c
-@@ -19,7 +19,7 @@ void flush_icache_all(void)
- {
- 	local_flush_icache_all();
+diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+index 784d25645704..f229e3e66387 100644
+--- a/drivers/irqchip/irq-riscv-intc.c
++++ b/drivers/irqchip/irq-riscv-intc.c
+@@ -46,10 +46,27 @@ static void riscv_intc_irq_unmask(struct irq_data *d)
+ 	csr_set(CSR_IE, BIT(d->hwirq));
+ }
  
--	if (IS_ENABLED(CONFIG_RISCV_SBI))
-+	if (IS_ENABLED(CONFIG_RISCV_SBI) && !riscv_use_ipi_for_rfence())
- 		sbi_remote_fence_i(NULL);
- 	else
- 		on_each_cpu(ipi_remote_fence_i, NULL, 1);
-@@ -67,7 +67,8 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
- 		 * with flush_icache_deferred().
- 		 */
- 		smp_mb();
--	} else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
-+	} else if (IS_ENABLED(CONFIG_RISCV_SBI) &&
-+		   !riscv_use_ipi_for_rfence()) {
- 		sbi_remote_fence_i(&others);
- 	} else {
- 		on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
++static void riscv_intc_irq_eoi(struct irq_data *d)
++{
++	/*
++	 * The RISC-V INTC driver uses handle_percpu_devid_irq() flow
++	 * for the per-HART local interrupts and child irqchip drivers
++	 * (such as PLIC, SBI IPI, CLINT, APLIC, IMSIC, etc) implement
++	 * chained handlers for the per-HART local interrupts.
++	 *
++	 * In the absence of irq_eoi(), the chained_irq_enter() and
++	 * chained_irq_exit() functions (used by child irqchip drivers)
++	 * will do unnecessary mask/unmask of per-HART local interrupts
++	 * at the time of handling interrupts. To avoid this, we provide
++	 * an empty irq_eoi() callback for RISC-V INTC irqchip.
++	 */
++}
++
+ static struct irq_chip riscv_intc_chip = {
+ 	.name = "RISC-V INTC",
+ 	.irq_mask = riscv_intc_irq_mask,
+ 	.irq_unmask = riscv_intc_irq_unmask,
++	.irq_eoi = riscv_intc_irq_eoi,
+ };
+ 
+ static int riscv_intc_domain_map(struct irq_domain *d, unsigned int irq,
 -- 
 2.34.1
 
