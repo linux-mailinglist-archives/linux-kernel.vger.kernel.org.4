@@ -2,165 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7142263EDA5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C93463EDA7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiLAKZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S230314AbiLAKZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiLAKZW (ORCPT
+        with ESMTP id S230348AbiLAKZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:25:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF8A5AE1C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:24:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669890264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bmBnBm4vsYyGCCu3ovFDuG2h1IVfzb0MiBStdNV5Cdw=;
-        b=ggbibyN856NQk8CZgiGmvGYmCMt6SMRY+R9a2f1Nvpququ1+9I6XykH+8f7pUwkVP05ew8
-        mEXx7mi8JurHxTt9IN/xh/JWKQTiMfMPe6YmLSRUHRteDWN0louiegHzX0j2vlRPvB6U8z
-        w9Bnh48sQQ+PcrwOvPA+rmJQr5kWuAw=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589--XmCby0yPMW2vJTVMHI-6A-1; Thu, 01 Dec 2022 05:24:23 -0500
-X-MC-Unique: -XmCby0yPMW2vJTVMHI-6A-1
-Received: by mail-qv1-f72.google.com with SMTP id nk7-20020a056214350700b004c68c912c93so3776775qvb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:24:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bmBnBm4vsYyGCCu3ovFDuG2h1IVfzb0MiBStdNV5Cdw=;
-        b=MKaWra1talTvBmrCnfl92qlkISDEVzGYk6Ye4Rxa+eylkcpF5cRjVS5ei39XETf2tF
-         9ypQ4Xwn58/19x/xAl47ARhSPg4Bn9XRqfdjn+/MgWkZrHi3k0nMdBK92EXeIFAPxTq/
-         8t4C5oyL4zkSzibVFgBdquqjrmISwgAxyorAFTRlLGQSWvH5n6p5bXp0qGnacXe4jSzh
-         bzp7BYhQaIDI09VIJHRbg8juXzUxKFPrKMUIHjxwvcl2oQhRtKhwnOd+5ArMaHdS85nG
-         F8GPD/neiF81s1rtK8GlGCPlHXiHLer/wTHroDYjZ8ZDdtehVWbd/p+YqHz3fRoGM5cg
-         UVhQ==
-X-Gm-Message-State: ANoB5pluc5Cp0X/sLr69nDYBNLqeZ9XJ2/I++l04cQu0wEeYbgRH4mj3
-        twCYPBf4f7gzJYK5RmihbPn/9TtbSpZo++GlthMa7OTuMOw7wMCNPrcF6I8u2QOTKq700I8vdZO
-        Jv4mk33VtfsuE0JirJ1J4D04n
-X-Received: by 2002:ac8:48d1:0:b0:3a5:c86a:aa46 with SMTP id l17-20020ac848d1000000b003a5c86aaa46mr43891819qtr.534.1669890262346;
-        Thu, 01 Dec 2022 02:24:22 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6B8d/wzBVQ7rtNSYOWOGURgQ/e5A38CmiuDOPmZM2XjCAgWap/ePJI8iE81OPeQx9Z0kUGig==
-X-Received: by 2002:ac8:48d1:0:b0:3a5:c86a:aa46 with SMTP id l17-20020ac848d1000000b003a5c86aaa46mr43891791qtr.534.1669890262052;
-        Thu, 01 Dec 2022 02:24:22 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id s18-20020a05620a29d200b006fba0a389a4sm3309399qkp.88.2022.12.01.02.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 02:24:21 -0800 (PST)
-Message-ID: <a45ab50d7566913913be41336e6e37369c073925.camel@redhat.com>
-Subject: Re: [PATCH v3] net: sched: fix memory leak in tcindex_set_parms
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     18801353760@163.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        Dmitry Vyukov <dvyukov@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 01 Dec 2022 11:24:17 +0100
-In-Reply-To: <20221129025249.463833-1-yin31149@gmail.com>
-References: <20221129025249.463833-1-yin31149@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 1 Dec 2022 05:25:24 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C8FC99F4D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:25:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DA30D6E;
+        Thu,  1 Dec 2022 02:25:29 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 86CB03F67D;
+        Thu,  1 Dec 2022 02:25:21 -0800 (PST)
+Date:   Thu, 1 Dec 2022 10:25:19 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Wang Honghui <honghui.wang@ucas.com.cn>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH]mailbox/arm_scpi: Add to support Phytium FT2000/4 CPUs,
+ show temperature of cpu.
+Message-ID: <20221201102519.epkictlook3lzs4q@bogus>
+References: <414EB9088FC46457+Y4hS8eOJa/XUQ8xR@TP-P15V>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <414EB9088FC46457+Y4hS8eOJa/XUQ8xR@TP-P15V>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 10:52 +0800, Hawkins Jiawei wrote:
-> Syzkaller reports a memory leak as follows:
-> ====================================
-> BUG: memory leak
-> unreferenced object 0xffff88810c287f00 (size 256):
->   comm "syz-executor105", pid 3600, jiffies 4294943292 (age 12.990s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff814cf9f0>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1046
->     [<ffffffff839c9e07>] kmalloc include/linux/slab.h:576 [inline]
->     [<ffffffff839c9e07>] kmalloc_array include/linux/slab.h:627 [inline]
->     [<ffffffff839c9e07>] kcalloc include/linux/slab.h:659 [inline]
->     [<ffffffff839c9e07>] tcf_exts_init include/net/pkt_cls.h:250 [inline]
->     [<ffffffff839c9e07>] tcindex_set_parms+0xa7/0xbe0 net/sched/cls_tcindex.c:342
->     [<ffffffff839caa1f>] tcindex_change+0xdf/0x120 net/sched/cls_tcindex.c:553
->     [<ffffffff8394db62>] tc_new_tfilter+0x4f2/0x1100 net/sched/cls_api.c:2147
->     [<ffffffff8389e91c>] rtnetlink_rcv_msg+0x4dc/0x5d0 net/core/rtnetlink.c:6082
->     [<ffffffff839eba67>] netlink_rcv_skb+0x87/0x1d0 net/netlink/af_netlink.c:2540
->     [<ffffffff839eab87>] netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
->     [<ffffffff839eab87>] netlink_unicast+0x397/0x4c0 net/netlink/af_netlink.c:1345
->     [<ffffffff839eb046>] netlink_sendmsg+0x396/0x710 net/netlink/af_netlink.c:1921
->     [<ffffffff8383e796>] sock_sendmsg_nosec net/socket.c:714 [inline]
->     [<ffffffff8383e796>] sock_sendmsg+0x56/0x80 net/socket.c:734
->     [<ffffffff8383eb08>] ____sys_sendmsg+0x178/0x410 net/socket.c:2482
->     [<ffffffff83843678>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2536
->     [<ffffffff838439c5>] __sys_sendmmsg+0x105/0x330 net/socket.c:2622
->     [<ffffffff83843c14>] __do_sys_sendmmsg net/socket.c:2651 [inline]
->     [<ffffffff83843c14>] __se_sys_sendmmsg net/socket.c:2648 [inline]
->     [<ffffffff83843c14>] __x64_sys_sendmmsg+0x24/0x30 net/socket.c:2648
->     [<ffffffff84605fd5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->     [<ffffffff84605fd5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> ====================================
+On Thu, Dec 01, 2022 at 03:08:33PM +0800, Wang Honghui wrote:
+> Add to support Phytium FT2000/4 CPUs, show temperature of cpu.
 > 
-> Kernel uses tcindex_change() to change an existing
-> filter properties. During the process of changing,
-> kernel uses tcindex_alloc_perfect_hash() to newly
-> allocate filter results, uses tcindex_filter_result_init()
-> to clear the old filter result.
+> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
+> ---
+>  drivers/firmware/arm_scpi.c       |   1 +
+>  drivers/mailbox/Kconfig           |   6 +
+>  drivers/mailbox/Makefile          |   2 +
+>  drivers/mailbox/phytium_mailbox.c | 193 ++++++++++++++++++++++++++++++
+>  4 files changed, 202 insertions(+)
+>  create mode 100644 drivers/mailbox/phytium_mailbox.c
 > 
-> Yet the problem is that, kernel clears the old
-> filter result, without destroying its tcf_exts structure,
-> which triggers the above memory leak.
-> 
-> Considering that there already extis a tc_filter_wq workqueue
-> to destroy the old tcindex_data by tcindex_partial_destroy_work()
-> at the end of tcindex_set_parms(), this patch solves this memory
-> leak bug by removing this old filter result clearing part,
-> and delegating it to the tc_filter_wq workqueue.
-> 
-> [Thanks to the suggestion from Jakub Kicinski, Cong Wang, Paolo Abeni
-> and Dmitry Vyukov]
-> 
-> Fixes: b9a24bb76bf6 ("net_sched: properly handle failure case of tcf_exts_init()")
-> Link: https://lore.kernel.org/all/0000000000001de5c505ebc9ec59@google.com/
-> Reported-by: syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com
-> Tested-by: syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com
-> Cc: Cong Wang <cong.wang@bytedance.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com> 
-> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+> diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
+> index 435d0e2658a4..876eb2f9ff81 100644
+> --- a/drivers/firmware/arm_scpi.c
+> +++ b/drivers/firmware/arm_scpi.c
+> @@ -904,6 +904,7 @@ static const struct of_device_id shmem_of_match[] __maybe_unused = {
+>  	{ .compatible = "amlogic,meson-axg-scp-shmem", },
+>  	{ .compatible = "arm,juno-scp-shmem", },
+>  	{ .compatible = "arm,scp-shmem", },
+> +	{ .compatible = "phytium,ft2004-scpi-shmem", },
 
-The patch looks correct to me, but we are very late in this release
-cycle, and I fear there is a chance of introducing some regression. The
-issue addressed here is present since quite some time, I suggest to
-postpone this fix to the beginning of the next release cycle.
 
-Please, repost this patch after that 6.1 is released, thanks! (And feel
-free to add my Acked-by).
+Where is the binding for this new compatible ?
+And why do you need this ? Any particular reason why you can't use the
+generic "arm,scp-shmem" ?
 
-Paolo
+I don't see the need for this change. Please drop it.
 
+--
+Regards,
+Sudeep
