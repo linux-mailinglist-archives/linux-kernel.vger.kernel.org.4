@@ -2,98 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CE963EDDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318DF63EDE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiLAKdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S229806AbiLAKdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiLAKcc (ORCPT
+        with ESMTP id S230477AbiLAKdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:32:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CCDA0560
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:31:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 1 Dec 2022 05:33:21 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9403731DD6;
+        Thu,  1 Dec 2022 02:32:52 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D57E321B1C;
+        Thu,  1 Dec 2022 10:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669890769; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y2yuajcyNF+KtJPwi+UUylTPzDzWLHsw1+1hqHwfGNw=;
+        b=ckALftw8qzsnAkNw5MgvyuuU71o9wQpiLuaktpcS+hJt/efqDV1ds8P8Tttvd1NFm6/kiL
+        XuDOtSg6uhg/rn9/9CxHXtsmTb4Er7kJyC1/3XQQMSmhkK3zXT/HRya14/g+4uv905YHRn
+        eb3PDwSYIQHjWCUWJe5z67aunsI+Ngw=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9EECB81DEB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DBD2C4347C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669890705;
-        bh=T7g5uISnZ5nebA9inQJ6ZCETQI0m58pKIh7QyKGpeMg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BmWAdslWgXpt6BQWw0AzPB7Es1MyU5gfXoqoUEXxu+43KS17BlI0ZLlM+rXnalX5V
-         KmObSZzbuJjzjW/WoaxUmoQ9QlwBt29mf5y8hMNGXhwV284a5604KHQUkIQz1Z4Hfd
-         yj9vcfMotOaeBWPjy6y4xLFgQ1bVhH5Sa5pZ83OaIhhKg7RhpmoAFjMgUs+720jiof
-         R/0iQxdGPcrOQ+RM1lG/advrrtposwUuF5pRN41BW+KJqwDHF6jOWwle9zP/BeqOxu
-         2hguQOP8H4FQ0B96TmuVZAluwddkPs7MyMhLX5ZKtZJKXuyYFOy7MDuC4ZL+yNZ6Az
-         I/ilvmNAmK0iA==
-Received: by mail-yb1-f177.google.com with SMTP id j196so1479536ybj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:31:45 -0800 (PST)
-X-Gm-Message-State: ANoB5plx65ibJE8QAlY3Q5SuWu4bJsxWeayWfrath70llQvCFwnMXdbO
-        cdHGMBv/+nul81PdrGLMajFjv3gneF+KdzS1gbo=
-X-Google-Smtp-Source: AA0mqf4zEMarRVsx8VGR5hYM/nJsZDAg9HVJ9ObB8YVkj5W9ErIJ4YABgbcSeQZqVBY52fOvX3TY73RyfXujyiEXdDU=
-X-Received: by 2002:a5b:dcb:0:b0:6bc:eea6:2d66 with SMTP id
- t11-20020a5b0dcb000000b006bceea62d66mr42907791ybr.545.1669890704550; Thu, 01
- Dec 2022 02:31:44 -0800 (PST)
+        by relay2.suse.de (Postfix) with ESMTPS id 691432C141;
+        Thu,  1 Dec 2022 10:32:49 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 11:32:46 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH v2 0/3] printk: introduce new macros pr_<level>_cont()
+Message-ID: <Y4iCzsAeEgaBZ4o4@alley>
+References: <20221125190948.2062-1-linux@weissschuh.net>
+ <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
+ <d31b4a2b-fc6b-4084-9cac-ced83a37a8ad@t-8ch.de>
 MIME-Version: 1.0
-References: <20221129115217.129290-1-marpagan@redhat.com>
-In-Reply-To: <20221129115217.129290-1-marpagan@redhat.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 1 Dec 2022 12:31:18 +0200
-X-Gmail-Original-Message-ID: <CAFCwf11cqNHZhAR0b8iKnGeT_XVy5Oa2KHjNo7ROVF2-MjYZfA@mail.gmail.com>
-Message-ID: <CAFCwf11cqNHZhAR0b8iKnGeT_XVy5Oa2KHjNo7ROVF2-MjYZfA@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: fix double assignment in MMU V1
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d31b4a2b-fc6b-4084-9cac-ced83a37a8ad@t-8ch.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 1:52 PM Marco Pagani <marpagan@redhat.com> wrote:
->
-> Removing double assignment of the hop2_pte_addr
-> variable in dram_default_mapping_fini().
->
-> Dead store reported by clang-analyzer.
->
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/misc/habanalabs/common/mmu/mmu_v1.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> index 8a40de4a4761..d925dc4dd097 100644
-> --- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> +++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> @@ -344,7 +344,6 @@ static void dram_default_mapping_fini(struct hl_ctx *ctx)
->                 }
->         }
->
-> -       hop2_pte_addr = hop2_addr;
->         hop2_pte_addr = hop2_addr;
->         for (i = 0 ; i < num_of_hop3 ; i++) {
->                 clear_pte(ctx, hop2_pte_addr);
-> --
-> 2.38.1
->
+On Thu 2022-12-01 00:37:15, Thomas Weiﬂschuh wrote:
+> On 2022-11-30 18:57+0100, Rafael J. Wysocki wrote:
+> > On Fri, Nov 25, 2022 at 8:10 PM Thomas Weiﬂschuh <linux@weissschuh.net> wrote:
+> >>
+> >> This series adds new printk wrapper macros pr_<level>_cont().
+> >> These create continuation messages with an explicit level.
+> >>
+> >> Explicit levels are useful when a continuation message is split from its main
+> >> message. Without the explicit level KERN_DEFAULT ("warn" by default) is used
+> >> which can lead to stray partial log messages when filtering by level.
+> >>
+> >> Also checkpatch is modified to recommend the new macros over plain pr_cont().
+> >>
+> >> Lastly the new macros are used in kernel/power/process.c as this file uses
+> >> continuation messages during system suspend-resume which creates a high
+> >> likelyhood of interspersed messages.
+> > 
+> > Well, if process.c is the only problematic piece of code in this
+> > respect, I'm not sure if adding the new infrastructure for its benefit
+> > alone is worth it, because it can very well do without pr_cont() at
+> > all.
+> 
+> In general all usages of pr_cont() are problematic.
+> Any continuation can be split from its main message, leading to misleved
+> continuations.
 
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Applied to -next.
-Thanks,
-Oded
+In most cases this happens "only" when a message from another CPU
+or interrupt context is printed in parallel.
+
+> process.c is just the one that I noticed reliably hitting this problem on my
+> machine.
+
+The situation in process.c was even worse. The error message was
+printed in the middle of the to-be-continued message. As a result,
+the loglevel of the pr_cont() part was always (reliably) broken
+when the error message was printed.
+
+
+> > Please see the patch below (compiled only, sorry for gmail-induced
+> > white space damage).  I'll submit it properly later if it works for
+> > everyone.
+> 
+> The patch looks fine to me and getting rid of usages of pr_cont() seems to be
+> the better aproach where it is possible.
+
+I agree. It is always better to avoid pr_cont() when possible.
+
+> Petr: do you still want me to submit the new macros even if it is not used
+> directly anymore?
+
+Good question. In general, new API should not be added if there is
+no user. So, I would prefer to do not add the API if the problem
+will be fixed without it.
+
+Best Regards,
+Petr
