@@ -2,131 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DC263E9DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C8163E9D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiLAGV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 01:21:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S229741AbiLAGVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 01:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiLAGVx (ORCPT
+        with ESMTP id S229503AbiLAGVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 01:21:53 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E6AAB039
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:21:52 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p0cwR-00075x-2t; Thu, 01 Dec 2022 07:21:03 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p0cwN-0002Vk-93; Thu, 01 Dec 2022 07:20:59 +0100
-Date:   Thu, 1 Dec 2022 07:20:59 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        soc@kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 1 Dec 2022 01:21:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC08FAB001;
+        Wed, 30 Nov 2022 22:21:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5874061E8F;
+        Thu,  1 Dec 2022 06:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC4F8C433D6;
+        Thu,  1 Dec 2022 06:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669875689;
+        bh=1TShYY6JkDucSJo1cjYSsWtnGpEz8gTWzbxvY/gsAVc=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=Nmr6EadOg/rHV11uZ4icZPKLjWkG9u5exEWuXjcet49ziPi6lKPVIKjGUOYp6CcWx
+         Y12Z/NwkhsvhLIEHSbtm15Y2RB65kw6eZsRUaz2Phq9LxaG7FxUh1g9l8+F7qBS+HD
+         CGeOtlLQauyAR3MBwsA3p8GfaCD9Z9dbk/yh4BUovT3UVpuVYIqfDFshlSc0Qsgaat
+         xX1b8CE466ljiqmJHjjcrMiKQTkwBAH9gx4pQ3hDXQLOp5daBTG65U9wqGD+K0uJkf
+         MbDMzGCSBHmedPkE/bR2v0ikovVSHk5K7DiOGBkIqQXcHADL1iSgVygFDQE1SThq5o
+         Rv80Q+9vzjyTA==
+Date:   Thu, 01 Dec 2022 06:21:25 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Walker Chen <walker.chen@starfivetech.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+CC:     linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 2/5] arm: dts: remove label = "cpu" from DSA dt-binding
-Message-ID: <20221201062059.GF19642@pengutronix.de>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com>
- <20221130141040.32447-3-arinc.unal@arinc9.com>
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
+User-Agent: K-9 Mail for Android
+In-Reply-To: <e0cf51d3-ba58-36a7-5c70-1d070e5fb12a@starfivetech.com>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com> <20221118133216.17037-4-walker.chen@starfivetech.com> <Y3giSQ0YccyY2tVk@spud> <95b05ac3-31a9-50dc-8eeb-eb3a9f883a6b@starfivetech.com> <Y4CkVnmdEhCsyckH@wendy> <e0cf51d3-ba58-36a7-5c70-1d070e5fb12a@starfivetech.com>
+Message-ID: <42D09618-DB39-4A8B-9327-4C6CC9DA2000@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221130141040.32447-3-arinc.unal@arinc9.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 05:10:37PM +0300, Arınç ÜNAL wrote:
-> This is not used by the DSA dt-binding, so remove it from all devicetrees.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi                   | 1 -
->  arch/arm/boot/dts/imx6qp-prtwd3.dts                       | 1 -
+Hey Walker,
 
-Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Apologies for my formatting here=2E=20
 
-Thx! 
+On 1 December 2022 03:56:27 GMT, Walker Chen <walker=2Echen@starfivetech=
+=2Ecom> wrote:
+>On 2022/11/25 19:17, Conor Dooley wrote:
+>> On Fri, Nov 25, 2022 at 06:04:59PM +0800, Walker Chen wrote:
+>>> On 2022/11/19 8:24, Conor Dooley wrote:
+>>> > On Fri, Nov 18, 2022 at 09:32:15PM +0800, Walker Chen wrote:
+>>=20
+>>> >> +void starfive_pmu_hw_event_turn_off(u32 mask)
+>>> >> +{
+>>> >> +	pmu_writel(mask, HW_EVENT_TURN_OFF_MASK);
+>>> >> +}
+>>> >> +EXPORT_SYMBOL(starfive_pmu_hw_event_turn_off);
+>>> >=20
+>>> > Where are the users for these exports? Also, should they be exported=
+ as
+>>> > GPL?
+>>> >=20
+>>> > Either way, what is the point of the extra layer of abstraction here
+>>> > around the writel()?
+>>>=20
+>>> The two export functions are only prepared for GPU module=2E But accor=
+dint to
+>>>  the latest information, it seems that there is no open source plan fo=
+r GPU=2E=20
+>>> So the two functions will be drop in next version of patch=2E
+>>=20
+>> That's a shame!
+>
+>Need to comply with certain commercial terms=2E
+>
+>>=20
+>>> >> +static int starfive_pmu_get_state(struct starfive_power_dev *pmd, =
+bool *is_on)
+>>> >> +{
+>>> >> +	struct starfive_pmu *pmu =3D pmd->power;
+>>> >> +
+>>> >> +	if (!pmd->mask) {
+>>> >> +		*is_on =3D false;
+>>> >> +		return -EINVAL;
+>>> >> +	}
+>>> >> +
+>>> >> +	*is_on =3D __raw_readl(pmu->base + CURR_POWER_MODE) & pmd->mask;
+>>> >=20
+>>> > Is there a specific reason that you are using the __raw variants her=
+e
+>>> > (and elsewhere) in the driver?
+>>>=20
+>>> Will use unified function '__raw_readl' and '__raw_writel'
+>>=20
+>> No no, I want to know *why* you are using the __raw accessors here=2E M=
+y
+>> understanding was that __raw variants are unbarriered & unordered with
+>> respect to other io accesses=2E
+>>=20
+>> I do notice that the bcm driver you mentioned uses the __raw variants,
+>> but only __raw variants - whereas you use readl() which is ordered and
+>> barriered & __raw_readl()=2E
+>>=20
+>> Is there a reason why you would not use readl() or readl_relaxed()?
+>
+>Your question led me to deeply understand the usage of these io accessors=
+=2E
+>__raw_readl / __raw_writel denotes native byte order, no memory barrier=
+=2E
+>readl / writel do guarantee the byte order with barrier, ensure that prev=
+ious writes are done=2E
+>Seem that non-raw accessors are more safe=2E
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Yeah, if there's no good reason to use these "raw"  versions then please u=
+se readl/readl_relaxed=2E
+
+
+>> No worries, looking forward to getting my board :)
+>>=20
+>Have you purchased a VisionFive 2 board online? =20
+
+I have :)
