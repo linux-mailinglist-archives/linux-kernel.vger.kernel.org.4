@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2974563FA74
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2843663FA76
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiLAWWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
+        id S231245AbiLAWWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiLAWWj (ORCPT
+        with ESMTP id S231142AbiLAWWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:22:39 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A9A2B0;
-        Thu,  1 Dec 2022 14:22:34 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id b2so7577634eja.7;
-        Thu, 01 Dec 2022 14:22:33 -0800 (PST)
+        Thu, 1 Dec 2022 17:22:48 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF89215725;
+        Thu,  1 Dec 2022 14:22:46 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id vv4so7580484ejc.2;
+        Thu, 01 Dec 2022 14:22:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xpsoa/KZ/MFtUhwUhKUu1uaTU5EwKaD3apFYo6l+v4w=;
-        b=CnnpZIk4Y5TQrtxWgX1G+3oXoG69fbybTzsf//lOAmIrFK/jyEXVPu/4+Gw22ZNFXU
-         zt4lbyCPhrzTj2Qsf+Rn5UehrL4JjKSP89dH/oOh+LRsY5/CxYAB0xgjRj6eo28e5OWW
-         NNHnNGTtV7qDJuis057LrDxobjDSqeY66N4frx7OMLnQYB28ibtsEudU+kTybMIRn0pR
-         bkz6o6WQFCuYLJzKGchFxMyOhrPWKAgTjOVIg4iWXRW5j3swi/pbVo1SU/MegnbFC4Jd
-         eKGBs3Hdneit2vqlhPHGOyhZkC3tXROhp2bFVLtwcUjNQSnjnKaABP0pt7mk+dR73OF3
-         CUSw==
+        bh=43iXTOhymkFYi+I/PnHOBFe/3hsQ6zcPY1HFPaZnmCE=;
+        b=AA7gdaGirrsn3n2VYahqjSR/5UUKnOeyXYZL3/QBZCSags6Fbx5mz52UAtNVA4InCf
+         edmQXi2mmMMipJEePqDHVrUk4hCFHyKqkt4CgvRblHntIJ04ACcep8QwYyOUQwmhj94V
+         BzZ8LX6XGXlvLg04Rldp5Mz6byKMb4TIYMbkRMRzMfK2fZ1HJcXCejS+5u+zk02s+7uS
+         nh6YZUhfyeTRIGs+67jAWndAiiDv3J7Yx9f3oj7nFlERtcejAPV4wESjSEAePsbpDNlE
+         OL4SeWqojn9ikb7SCJtt4VU+cGO4d2UFOUH//iS7b7B0zGYiNhRTqg5z07anWn1m7PmH
+         9FGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xpsoa/KZ/MFtUhwUhKUu1uaTU5EwKaD3apFYo6l+v4w=;
-        b=Wb2bgw+PES+JY+7tVim8Xk+3sO0raXTbH6ENJ9JoPxzD63fqwhWVP7ZFZBNRFOxnr4
-         dk9X1PZh8yeKRkcQ/6ZXy1F9NYM28zBmyDZNItKxAjoJJq2XnmNST0Vr5gixYmyyXz39
-         7ywRHE7C/R2x84SucsJ/T+JQ9/yE6H7XYLkxw7C4TDpNRxivn0svlX0Mz8zSZXP46qxE
-         2QBb9pwEb4Yvk67WjQclfTIv+KMBpaGqu1icni+MlUeGeL0uM/+S4mIddx0+vcyzVn/o
-         Dpdn7vLTbHuuWBoSRkC8UGTAG40x2WTHGgkr8cSQ/sI3d+h+E+WejKqRIqx2rOTSLG47
-         pzEw==
-X-Gm-Message-State: ANoB5pne+qFk/K+CR+Jpglpc89R8nu/CsEvU3VHMMXOg++HQjLqHSG1Y
-        wKLn5gMgu/5NikceJhobadeheZD0AEkRif3sal8=
-X-Google-Smtp-Source: AA0mqf6GcQ8iC1fMivhTvpOEGYH+gexlEFingeJG62JfHI0uueUEWtk/lXrNQ5+LowZXli5oVJYxwI7PNFBSPckA9XU=
-X-Received: by 2002:a17:906:6bd8:b0:78b:a8d:e76a with SMTP id
- t24-20020a1709066bd800b0078b0a8de76amr2701167ejs.725.1669933352347; Thu, 01
- Dec 2022 14:22:32 -0800 (PST)
+        bh=43iXTOhymkFYi+I/PnHOBFe/3hsQ6zcPY1HFPaZnmCE=;
+        b=ExwBnCqMTRrouqvr/bce/RIjRywZ+uBWB1b22OWMqbX6a1nQrB97XIGDAuqO4VHZYx
+         1lioRwNK43zM8dq3gWmNRb5dM807T9/ZLh+B1BBGQZSCsaSMg2fuXYhcvcFBN/eFImaa
+         QHNlsSUAeJuqDIWMLdR8iTtU5gJgfVWl7loouCQ97r297u5NmY3YksAILkWHtLkAFRRv
+         evVFb+CkSLMzUNbVyKtLqewzID4RTOgVV05+Bq1by8MdUFd4dMM+5cQwHqZqFRzOWnAt
+         sylXJ88cQAuY7aHVOZSwlUJUQxeGoGNPIW+Z7h/b1dngC1dInJnee1BkaYc5COnUvW7N
+         oYGw==
+X-Gm-Message-State: ANoB5pkhOH8pBTI+bhbHLxsB7zNXfNPFQp0Lx2AXQ1R3eRrrHWS59YBy
+        CsYTCGX7AadC53upV2CGPqkkZRSEQOeX7xnA3Pk=
+X-Google-Smtp-Source: AA0mqf47JtVd8xCV1Di9WxT5/mZR1O5eoQCsz4gXAgvql2Da0VICEr1QZE6Pkh83nNHDWXkA0C0hrr4SM+v7cZErJso=
+X-Received: by 2002:a17:906:179b:b0:7c0:ae1c:3eb7 with SMTP id
+ t27-20020a170906179b00b007c0ae1c3eb7mr4545268eje.510.1669933364900; Thu, 01
+ Dec 2022 14:22:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20221201103026.53234-1-tomeu.vizoso@collabora.com> <20221201103026.53234-2-tomeu.vizoso@collabora.com>
-In-Reply-To: <20221201103026.53234-2-tomeu.vizoso@collabora.com>
+References: <20221201103026.53234-1-tomeu.vizoso@collabora.com> <20221201103026.53234-3-tomeu.vizoso@collabora.com>
+In-Reply-To: <20221201103026.53234-3-tomeu.vizoso@collabora.com>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 1 Dec 2022 23:22:21 +0100
-Message-ID: <CAFBinCDqL2sHBV=6C78VFPFopJrK-fSoq+2yDGKK3EpwDHufCQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/7] dt-bindings: reset: meson-g12a: Add missing NNA reset
+Date:   Thu, 1 Dec 2022 23:22:34 +0100
+Message-ID: <CAFBinCD+UWsky=u8FVqEb+nrhgXVXyEJ4=GMdaPZ024s9w-HcA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/7] dt-bindings: power: Add G12A NNA power domain
 To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     italonicola@collabora.com,
         Neil Armstrong <neil.armstrong@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
@@ -81,8 +80,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, Dec 1, 2022 at 11:30 AM Tomeu Vizoso <tomeu.vizoso@collabora.com> wrote:
 >
-> Doesn't appear in the TRM I have, but it is used by the downstream
-> galcore driver.
+> Add define for the NNA power domain for the NPU in the G12A.
 >
 > Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
 > Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
