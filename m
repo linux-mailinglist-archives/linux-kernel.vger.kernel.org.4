@@ -2,162 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF4063EF71
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6079563EF77
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiLAL2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
+        id S230170AbiLAL3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiLAL2N (ORCPT
+        with ESMTP id S229780AbiLAL3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:28:13 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F2250D70;
-        Thu,  1 Dec 2022 03:28:09 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNDMr3pKmz4xVnf;
-        Thu,  1 Dec 2022 19:28:08 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B1BRunB071769;
-        Thu, 1 Dec 2022 19:27:56 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 19:27:59 +0800 (CST)
-Date:   Thu, 1 Dec 2022 19:27:59 +0800 (CST)
-X-Zmail-TransId: 2af963888fbf0b577f89
-X-Mailer: Zmail v1.0
-Message-ID: <202212011927592559291@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <isely@pobox.com>
-Cc:     <mchehab@kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBtZWRpYTogcHZydXNiMjogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B1BRunB071769
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63888FC8.000 by FangMail milter!
-X-FangMail-Envelope: 1669894088/4NNDMr3pKmz4xVnf/63888FC8.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63888FC8.000/4NNDMr3pKmz4xVnf
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 1 Dec 2022 06:29:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0A352148;
+        Thu,  1 Dec 2022 03:29:14 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669894152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EDYHcKJNIl+bFBsPJ9EKGMSmWfe/8gI4HDrW58IPop0=;
+        b=o8IsKqMxg5Xkgxlv83mVHjmHCrw88/1n8GQWsRih1pewbVOeJyEY9TFGg1nPjoeJtVOHWR
+        9+qhCIParsQuUdzuD/Qf/QbU6MIqTThKNCDKkTORdbPxLSJ9GLyXMuUs2opHR7xOaCh9um
+        LHOVcyHL4K0RvjNgf79BcMKr+DRgcQ39V8Lv2y5EnJF6uqpXtqeWhSxiD9CamqQ3l51Y0D
+        wrX8pqk7knVKZyvnI7LaRKrhIpM17v5HyWHAeR1j42SnpLKr3JQlWGHpxB7vUkPELTCYAr
+        ArcU1+H8N1nYX0wXOhIwkVoysCFpcSlqezu4gdK4j2P0TAuF/0vFd8qIO2a8cQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669894152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EDYHcKJNIl+bFBsPJ9EKGMSmWfe/8gI4HDrW58IPop0=;
+        b=NVjcGjbsY+ymyeBytgfnNhP/VQjQSsGfl0G38KK1qXT3nvEO7RAfQ3LDnNPDOF/2LiyC1S
+        MUuww9PZ0hNXi1Bw==
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v11 1/3] clocksource: loongson2_hpet: add hpet driver
+ support
+In-Reply-To: <20221129030925.14074-1-zhuyinbo@loongson.cn>
+References: <20221129030925.14074-1-zhuyinbo@loongson.cn>
+Date:   Thu, 01 Dec 2022 12:29:12 +0100
+Message-ID: <87k03bs6pj.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Tue, Nov 29 2022 at 11:09, Yinbo Zhu wrote:
+> HPET (High Precision Event Timer) defines a new set of timers, which
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+It's not really new. The HPET specification is 20 years old :)
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/media/usb/pvrusb2/pvrusb2-sysfs.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+> +++ b/drivers/clocksource/loongson2_hpet.c
+> @@ -0,0 +1,334 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/percpu.h>
+> +#include <linux/delay.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_address.h>
+> +#include <linux/clk.h>
+> +#include <asm/time.h>
+> +
+> +/* HPET regs */
+> +#define HPET_CFG                0x010
+> +#define HPET_STATUS             0x020
+> +#define HPET_COUNTER            0x0f0
+> +#define HPET_T0_IRS             0x001
+> +#define HPET_T0_CFG             0x100
+> +#define HPET_T0_CMP             0x108
+> +#define HPET_CFG_ENABLE         0x001
+> +#define HPET_TN_LEVEL           0x0002
+> +#define HPET_TN_ENABLE          0x0004
+> +#define HPET_TN_PERIODIC        0x0008
+> +#define HPET_TN_SETVAL          0x0040
+> +#define HPET_TN_32BIT           0x0100
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
-index 3e42e209be37..81c8b65bd9ef 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-sysfs.c
-@@ -81,7 +81,7 @@ static ssize_t show_name(struct device *class_dev,
- 	pvr2_sysfs_trace("pvr2_sysfs(%p) show_name(cid=%d) is %s",
- 			 cip->chptr, cip->ctl_id, name);
- 	if (!name) return -EINVAL;
--	return scnprintf(buf, PAGE_SIZE, "%s\n", name);
-+	return sysfs_emit(buf, "%s\n", name);
- }
+So this is another copy of the defines which are already available in
+x86 and mips. Seriously?
 
- static ssize_t show_type(struct device *class_dev,
-@@ -102,7 +102,7 @@ static ssize_t show_type(struct device *class_dev,
- 	}
- 	pvr2_sysfs_trace("pvr2_sysfs(%p) show_type(cid=%d) is %s",
- 			 cip->chptr, cip->ctl_id, name);
--	return scnprintf(buf, PAGE_SIZE, "%s\n", name);
-+	return sysfs_emit(buf, "%s\n", name);
- }
+> +static DEFINE_SPINLOCK(hpet_lock);
 
- static ssize_t show_min(struct device *class_dev,
-@@ -115,7 +115,7 @@ static ssize_t show_min(struct device *class_dev,
- 	val = pvr2_ctrl_get_min(cip->cptr);
- 	pvr2_sysfs_trace("pvr2_sysfs(%p) show_min(cid=%d) is %ld",
- 			 cip->chptr, cip->ctl_id, val);
--	return scnprintf(buf, PAGE_SIZE, "%ld\n", val);
-+	return sysfs_emit(buf, "%ld\n", val);
- }
+This wants to be a raw spinlock if at all. But first you have to explain
+the purpose of this lock.
 
- static ssize_t show_max(struct device *class_dev,
-@@ -128,7 +128,7 @@ static ssize_t show_max(struct device *class_dev,
- 	val = pvr2_ctrl_get_max(cip->cptr);
- 	pvr2_sysfs_trace("pvr2_sysfs(%p) show_max(cid=%d) is %ld",
- 			 cip->chptr, cip->ctl_id, val);
--	return scnprintf(buf, PAGE_SIZE, "%ld\n", val);
-+	return sysfs_emit(buf, "%ld\n", val);
- }
+> +DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device);
 
- static ssize_t show_def(struct device *class_dev,
-@@ -551,7 +551,7 @@ static ssize_t v4l_minor_number_show(struct device *class_dev,
- 	struct pvr2_sysfs *sfp;
- 	sfp = dev_get_drvdata(class_dev);
- 	if (!sfp) return -EINVAL;
--	return scnprintf(buf,PAGE_SIZE,"%d\n",
-+	return sysfs_emit(buf, "%d\n",
- 			 pvr2_hdw_v4l_get_minor_number(sfp->channel.hdw,
- 						       pvr2_v4l_type_video));
- }
-@@ -563,7 +563,7 @@ static ssize_t bus_info_show(struct device *class_dev,
- 	struct pvr2_sysfs *sfp;
- 	sfp = dev_get_drvdata(class_dev);
- 	if (!sfp) return -EINVAL;
--	return scnprintf(buf,PAGE_SIZE,"%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			 pvr2_hdw_get_bus_info(sfp->channel.hdw));
- }
+Why needs this to be global and why is it needed at all?
 
-@@ -574,7 +574,7 @@ static ssize_t hdw_name_show(struct device *class_dev,
- 	struct pvr2_sysfs *sfp;
- 	sfp = dev_get_drvdata(class_dev);
- 	if (!sfp) return -EINVAL;
--	return scnprintf(buf,PAGE_SIZE,"%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			 pvr2_hdw_get_type(sfp->channel.hdw));
- }
+This code does support exactly _ONE_ clock event device.
 
-@@ -585,7 +585,7 @@ static ssize_t hdw_desc_show(struct device *class_dev,
- 	struct pvr2_sysfs *sfp;
- 	sfp = dev_get_drvdata(class_dev);
- 	if (!sfp) return -EINVAL;
--	return scnprintf(buf,PAGE_SIZE,"%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			 pvr2_hdw_get_desc(sfp->channel.hdw));
- }
+> +static int hpet_read(int offset)
+> +{
+> +	return readl(hpet_mmio_base + offset);
+> +}
+> +
+> +static void hpet_write(int offset, int data)
+> +{
+> +	writel(data, hpet_mmio_base + offset);
+> +}
+> +
+> +static void hpet_start_counter(void)
+> +{
+> +	unsigned int cfg = hpet_read(HPET_CFG);
+> +
+> +	cfg |= HPET_CFG_ENABLE;
+> +	hpet_write(HPET_CFG, cfg);
+> +}
+> +
+> +static void hpet_stop_counter(void)
+> +{
+> +	unsigned int cfg = hpet_read(HPET_CFG);
+> +
+> +	cfg &= ~HPET_CFG_ENABLE;
+> +	hpet_write(HPET_CFG, cfg);
+> +}
+> +
+> +static void hpet_reset_counter(void)
+> +{
+> +	hpet_write(HPET_COUNTER, 0);
+> +	hpet_write(HPET_COUNTER + 4, 0);
+> +}
+> +
+> +static void hpet_restart_counter(void)
+> +{
+> +	hpet_stop_counter();
+> +	hpet_reset_counter();
+> +	hpet_start_counter();
+> +}
 
-@@ -597,7 +597,7 @@ static ssize_t v4l_radio_minor_number_show(struct device *class_dev,
- 	struct pvr2_sysfs *sfp;
- 	sfp = dev_get_drvdata(class_dev);
- 	if (!sfp) return -EINVAL;
--	return scnprintf(buf,PAGE_SIZE,"%d\n",
-+	return sysfs_emit(buf, "%d\n",
- 			 pvr2_hdw_v4l_get_minor_number(sfp->channel.hdw,
- 						       pvr2_v4l_type_radio));
- }
-@@ -609,7 +609,7 @@ static ssize_t unit_number_show(struct device *class_dev,
- 	struct pvr2_sysfs *sfp;
- 	sfp = dev_get_drvdata(class_dev);
- 	if (!sfp) return -EINVAL;
--	return scnprintf(buf,PAGE_SIZE,"%d\n",
-+	return sysfs_emit(buf, "%d\n",
- 			 pvr2_hdw_get_unit_number(sfp->channel.hdw));
- }
+This is also a copy of the x86 HPET code....
 
--- 
-2.25.1
+> +static void hpet_enable_legacy_int(void)
+> +{
+> +	/* Do nothing on Loongson2 */
+> +}
+> +
+> +static int hpet_set_state_periodic(struct clock_event_device *evt)
+> +{
+> +	int cfg;
+> +
+> +	spin_lock(&hpet_lock);
+
+What's the purpose of this lock ?
+
+> +	pr_info("set clock event to periodic mode!\n");
+> +
+> +	/* stop counter */
+> +	hpet_stop_counter();
+> +	hpet_reset_counter();
+> +	hpet_write(HPET_T0_CMP, 0);
+> +
+> +	/* enables the timer0 to generate a periodic interrupt */
+> +	cfg = hpet_read(HPET_T0_CFG);
+> +	cfg &= ~HPET_TN_LEVEL;
+> +	cfg |= HPET_TN_ENABLE | HPET_TN_PERIODIC | HPET_TN_SETVAL |
+> +		HPET_TN_32BIT | hpet_irq_flags;
+> +	hpet_write(HPET_T0_CFG, cfg);
+> +
+> +	/* set the comparator */
+> +	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
+> +	udelay(1);
+> +	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
+> +
+> +	/* start counter */
+> +	hpet_start_counter();
+
+Pretty much the same code as hpet_clkevt_set_state_periodic()
+
+> +	spin_unlock(&hpet_lock);
+> +	return 0;
+> +}
+> +
+> +static int hpet_set_state_shutdown(struct clock_event_device *evt)
+> +{
+> +	int cfg;
+> +
+> +	spin_lock(&hpet_lock);
+> +
+> +	cfg = hpet_read(HPET_T0_CFG);
+> +	cfg &= ~HPET_TN_ENABLE;
+> +	hpet_write(HPET_T0_CFG, cfg);
+> +
+> +	spin_unlock(&hpet_lock);
+
+Another slightly different copy of the x86 code
+
+> +	return 0;
+> +}
+> +
+> +static int hpet_set_state_oneshot(struct clock_event_device *evt)
+> +{
+> +	int cfg;
+> +
+> +	spin_lock(&hpet_lock);
+> +
+> +	pr_info("set clock event to one shot mode!\n");
+> +	cfg = hpet_read(HPET_T0_CFG);
+> +	/*
+> +	 * set timer0 type
+> +	 * 1 : periodic interrupt
+> +	 * 0 : non-periodic(oneshot) interrupt
+> +	 */
+> +	cfg &= ~HPET_TN_PERIODIC;
+> +	cfg |= HPET_TN_ENABLE | HPET_TN_32BIT |
+> +		hpet_irq_flags;
+> +	hpet_write(HPET_T0_CFG, cfg);
+
+Yet another copy.
+
+> +	/* start counter */
+> +	hpet_start_counter();
+
+Why doe you need an explicit start here?
+
+> +	spin_unlock(&hpet_lock);
+> +	return 0;
+> +}
+> +
+> +static int hpet_tick_resume(struct clock_event_device *evt)
+> +{
+> +	spin_lock(&hpet_lock);
+> +	hpet_enable_legacy_int();
+> +	spin_unlock(&hpet_lock);
+
+More copy and paste just to slap a spinlock on to it which has zero
+value AFAICT.
+
+> +	return 0;
+> +}
+> +
+> +static int hpet_next_event(unsigned long delta,
+> +		struct clock_event_device *evt)
+> +{
+> +	u32 cnt;
+> +	s32 res;
+> +
+> +	cnt = hpet_read(HPET_COUNTER);
+> +	cnt += (u32) delta;
+> +	hpet_write(HPET_T0_CMP, cnt);
+> +
+> +	res = (s32)(cnt - hpet_read(HPET_COUNTER));
+> +
+> +	return res < HPET_MIN_CYCLES ? -ETIME : 0;
+
+Another copy of the x86 code except for omitting the big comment which
+explains the logic.
+
+Seriously, this is not how it works. Instead of copy & paste, we create
+shared infrastructure and just keep the real architecture specific
+pieces separate.
+
+Thanks,
+
+        tglx
