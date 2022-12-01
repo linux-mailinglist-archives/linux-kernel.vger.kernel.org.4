@@ -2,334 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A26663F921
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCC663F949
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiLAUaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 15:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S229835AbiLAUke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 15:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiLAUaD (ORCPT
+        with ESMTP id S229571AbiLAUka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 15:30:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2FC769E7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:30:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F03A1B82025
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 20:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CF0C433C1;
-        Thu,  1 Dec 2022 20:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669926599;
-        bh=G6s/neJ/58a8Hb/nA6CqujMZezHgukxnl63LF3NqZnk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=H1aObPDAZgD9K9Wf3p50VGZA3YtpH5al+bf1PD0AHR1Xo7d6ZkoV/iqbJVfPfpqfS
-         dffyyzXfaJsHRDP7Y9Qj31tHjYsMBWY8IwBY+zBY2i53W1lEjbSmA8mm7qGrZx44ks
-         4uoQj7yMT3Iam8zyFGswBLdwixvtzOinxnzGaJ892h8UCN4q1oBavoDPDkvIVA7EV9
-         SaLFXt4Sk7ncRr0YeEvVu2K6yhmbwAys9CaF2gnCIAsPBr/CHyXO3EpIukCgnmnJ6s
-         5z4jGyyxQyi5CLkoozqjWC+H1fJM9lYxoKdKVvv4+MXyu77GXDjnGqUWGP+iMlqOKj
-         hN3r95d3ICbdQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4DB8A5C05F8; Thu,  1 Dec 2022 12:29:59 -0800 (PST)
-Date:   Thu, 1 Dec 2022 12:29:59 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        "Liu, Yujie" <yujie.liu@intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
-        lkp <lkp@intel.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [linux-next:master] [printk] 8bdbdd7f43:
- BUG:scheduling_while_atomic
-Message-ID: <20221201202959.GJ4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202211302358.ef0db537-yujie.liu@intel.com>
- <PH0PR11MB58800C1C971387611633DA7EDA149@PH0PR11MB5880.namprd11.prod.outlook.com>
- <Y4jSfGxkP3HoOU75@alley>
+        Thu, 1 Dec 2022 15:40:30 -0500
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4369FA1C2A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:40:29 -0800 (PST)
+Received: by mail-vk1-xa32.google.com with SMTP id bi15so1398347vkb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 12:40:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8+d/Y6QGxzCRwo466zPM3VyCOXSKLx8dJYK4YlExqPw=;
+        b=kHhd1lJNN1/QkG4w2PtJZDkbCFG9xjthR8OUDLqRnbAHospcNfy5OCNh/Hx2uf59HM
+         3qsa2ra3nVtmktTsWSpx/1wvizTHK+f3yfNmfer9LBmr8CEl1HXS+QrleH8ngBBUzh9Z
+         j/S3wnaSCMBs88wZ12gX2Tl2YnYGx0RvGtCyumY/GZrCVo0Ubo7Qh7pkOijxaXFiSlBO
+         yDYGD00ryih7qUIdL2O4BXMriKUaxq5pSMbLv+d1aFQPjlTdpFx/KILSJQ35wFxwd8BE
+         slEz+13gdl9RT5DNs0PqkQ+RHSePka0GLdwfP1MFajg3gB+QyI9oX+p+Kfz2JenxgPDb
+         9g7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8+d/Y6QGxzCRwo466zPM3VyCOXSKLx8dJYK4YlExqPw=;
+        b=rzGmWpL9BkX4t0tSarCXWtJI6lzQ3uvm0vwRN06UdkyxOMUosJ+ItgUqnm15KwKy2v
+         y9kQ1JBsRkVVs15pdzA4CCyra3Mas9Y4YAjEP9sI45pZVm2n3yWhinHxTbdCuWx3tYaC
+         8HLqkKBOyX2pR0Ll+3MGokoRPUeoD7jRuACZABX+zZ9Wn0cqWKjxRpU9wrOzu+SUj7OI
+         WfCOw19ME/+wNnoC87HvXWeqEWvIzlBSSTc53p6P/gO/VFzvuI5KhQTdRZ3qC8d+PtJ8
+         /Lm+qo7+XpduHrs97K+lqtix1hckvH8NE48O7+dbyamvHqGgmbRFjf2z7R11+PDP37kG
+         bR7Q==
+X-Gm-Message-State: ANoB5pnWu0cSfap1YLH8uQYAullPqV2bjbKFO28A5OBLD5c3fQ7CuBGh
+        sLF9CkxVdY5xTuNZsj2ERV0AYGEO/zFqRac9YUl5XA==
+X-Google-Smtp-Source: AA0mqf7vbPk0q9HDNwJryKLFrpFpMSN/fajOGVbvLf3ajA8ApvPQWKfnkG+PQ//esM2Efw/J/HAk/mqT3Y0pz1xE+zE=
+X-Received: by 2002:a1f:2a49:0:b0:3bc:61cb:e4fa with SMTP id
+ q70-20020a1f2a49000000b003bc61cbe4famr29011961vkq.15.1669927228271; Thu, 01
+ Dec 2022 12:40:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4jSfGxkP3HoOU75@alley>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+ <Y36XchdgTCsMP4jT@cmpxchg.org> <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y4ZKgXdUXZ3ycMp4@cmpxchg.org> <87wn7dayfz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87wn7dayfz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 1 Dec 2022 12:40:16 -0800
+Message-ID: <CAHS8izNc=NeMcNudOB0r4aYbZURpU+Y9xpek_KpO=55R+7ec5g@mail.gmail.com>
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 05:12:44PM +0100, Petr Mladek wrote:
-> On Thu 2022-12-01 05:27:13, Zhang, Qiang1 wrote:
-> > Greeting,
-> > 
-> > FYI, we noticed BUG:scheduling_while_atomic due to commit (built with clang-14):
-> > 
-> > commit: 8bdbdd7f43cd74c7faca6add8a62d541503ae21d ("printk: Prepare for SRCU console list protection")
-> > https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
-> > 
-> > in testcase: boot
-> > 
-> > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> > 
-> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> > 
-> > 
-> > [    8.561823][    T0] BUG: scheduling while atomic: swapper/0/0x00000002
-> > [    8.569154][    T0] no locks held by swapper/0.
-> > [    8.571934][    T0] Modules linked in:
-> > [    8.573001][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc1-00015-g8bdbdd7f43cd #1 9e431b4e696756e99f94acf7e74ac6e512df80ce
-> > [    8.576740][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> > [    8.579942][    T0] Call Trace:
-> > [    8.581143][    T0]  <TASK>
-> > [ 8.582054][ T0] dump_stack_lvl (??:?) 
-> > [ 8.583312][ T0] ? netdev_notice (??:?) 
-> > [ 8.584753][ T0] ? lockdep_print_held_locks (lockdep.c:?) 
-> > [ 8.586563][ T0] __schedule_bug (core.c:?) 
-> > [ 8.588171][ T0] ? trace_sched_switch (core.c:?) 
-> > [ 8.589753][ T0] ? save_trace (lockdep.c:?) 
-> > [ 8.591135][ T0] schedule_debug (core.c:?) 
-> > [ 8.592582][ T0] __schedule (core.c:?) 
-> > [ 8.593902][ T0] ? __sched_text_start (core.c:?) 
-> > [ 8.595356][ T0] ? add_chain_block (lockdep.c:?) 
-> > [ 8.596847][ T0] ? find_held_lock (lockdep.c:?) 
-> > [ 8.598368][ T0] schedule (??:?) 
-> > [ 8.599564][ T0] schedule_timeout (??:?) 
-> > [ 8.600937][ T0] ? console_conditional_schedule (??:?) 
-> > [ 8.602773][ T0] do_wait_for_common (build_utility.c:?) 
-> > [ 8.604522][ T0] ? console_conditional_schedule (??:?) 
-> > [ 8.606462][ T0] ? bit_wait_io_timeout (build_utility.c:?) 
-> > [ 8.608196][ T0] ? _raw_spin_lock_irq (??:?) 
-> > [ 8.609935][ T0] ? lockdep_hardirqs_on (??:?) 
-> > [ 8.611646][ T0] wait_for_completion (??:?) 
-> > [ 8.613253][ T0] synchronize_srcu (??:?) 
-> 
-> Hmm, I do not understand it. It seems that this is called
-> in normal context. There was console_unlock() right
-> before synchronize_srcu(). It means that we took
-> semaphore in the same context.
-> 
-> Also all the calls above looks correct. wait_for_completion()
-> seems to be called in normal context as well.
+On Tue, Nov 29, 2022 at 7:56 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Johannes Weiner <hannes@cmpxchg.org> writes:
+>
+> > Hello Ying,
+> >
+> > On Thu, Nov 24, 2022 at 01:51:20PM +0800, Huang, Ying wrote:
+> >> Johannes Weiner <hannes@cmpxchg.org> writes:
+> >> > The fallback to reclaim actually strikes me as wrong.
+> >> >
+> >> > Think of reclaim as 'demoting' the pages to the storage tier. If we
+> >> > have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+> >> > CXL and from CXL to storage. If we reclaim a page from RAM, it means
+> >> > we 'demote' it directly from RAM to storage, bypassing potentially a
+> >> > huge amount of pages colder than it in CXL. That doesn't seem right.
+> >> >
+> >> > If demotion fails, IMO it shouldn't satisfy the reclaim request by
+> >> > breaking the layering. Rather it should deflect that pressure to the
+> >> > lower layers to make room. This makes sure we maintain an aging
+> >> > pipeline that honors the memory tier hierarchy.
+> >>
+> >> Yes.  I think that we should avoid to fall back to reclaim as much as
+> >> possible too.  Now, when we allocate memory for demotion
+> >> (alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
+> >> kswapd reclaim on lower tier node to free some memory to avoid fall back
+> >> to reclaim on current (higher tier) node.  This may be not good enough,
+> >> for example, the following patch from Hasan may help via waking up
+> >> kswapd earlier.
+> >>
+> >> https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
+> >>
+> >> Do you know what is the next step plan for this patch?
+> >>
+> >> Should we do even more?
+> >>
+> >> From another point of view, I still think that we can use falling back
+> >> to reclaim as the last resort to avoid OOM in some special situations,
+> >> for example, most pages in the lowest tier node are mlock() or too hot
+> >> to be reclaimed.
+> >
+> > If they're hotter than reclaim candidates on the toptier, shouldn't
+> > they get promoted instead and make room that way? We may have to tweak
+> > the watermark logic a bit to facilitate that (allow promotions where
+> > regular allocations already fail?). But this sort of resorting would
+> > be preferable to age inversions.
+>
+> Now it's legal to enable demotion and disable promotion.  Yes, this is
+> wrong configuration in general.  But should we trigger OOM for these
+> users?
+>
+> And now promotion only works for default NUMA policy (and MPOL_BIND to
+> both promotion source and target nodes with MPOL_F_NUMA_BALANCING).  If
+> we use some other NUMA policy, the pages cannot be promoted too.
+>
+> > The mlock scenario sounds possible. In that case, it wouldn't be an
+> > aging inversion, since there is nothing colder on the CXL node.
+> >
+> > Maybe a bypass check should explicitly consult the demotion target
+> > watermarks against its evictable pages (similar to the file_is_tiny
+> > check in prepare_scan_count)?
+>
+> Yes.  This sounds doable.
+>
+> > Because in any other scenario, if there is a bug in the promo/demo
+> > coordination, I think we'd rather have the OOM than deal with age
+> > inversions causing intermittent performance issues that are incredibly
+> > hard to track down.
+>
+> Previously, I thought that people will always prefer performance
+> regression than OOM.  Apparently, I am wrong.
+>
+> Anyway, I think that we need to reduce the possibility of OOM or falling
+> back to reclaim as much as possible firstly.  Do you agree?
+>
 
-Is it possible that this is happening between the time that the scheduler
-is running, but before workqueues are fully up and running?
+I've been discussing this with a few folks here. I think FWIW general
+feeling here is that demoting from top tier nodes is preferred, except
+in extreme circumstances we would indeed like to run with a
+performance issue rather than OOM a customer VM. I wonder if there is
+another way to debug mis-tiered pages rather than trigger an oom to
+debug.
 
-If so, I can adjust synchronize_srcu() to operate during that time.
-But I would need confirmation that this in fact the situation.
+One thing I think/hope we can trivially agree on is that proactive
+reclaim/demotion is _not_ an extreme circumstance. I would like me or
+someone from the team to follow up with a patch that disables fallback
+to reclaim on proactive reclaim/demotion (sc->proactive).
 
-							Thanx, Paul
+> One possibility, can we fall back to reclaim only if the sc->priority is
+> small enough (even 0)?
+>
+
+This makes sense to me.
 
 > Best Regards,
-> Petr
-> 
-> > [ 8.614825][ T0] ? srcu_gp_start_if_needed (??:?) 
-> > [ 8.616664][ T0] ? rcu_read_lock_any_held (??:?) 
-> > [ 8.618281][ T0] ? console_trylock_spinning (??:?) 
-> > [ 8.620181][ T0] unregister_console (??:?) 
-> > [ 8.621875][ T0] register_console (??:?) 
-> > [ 8.623401][ T0] ? serial8250_isa_init_ports (8250_core.c:?) 
-> > [ 8.625281][ T0] ? parse_options (super.c:?) 
-> > [ 8.626887][ T0] univ8250_console_init (8250_core.c:?) 
-> > [ 8.628583][ T0] console_init (??:?) 
-> > [ 8.630025][ T0] start_kernel (??:?) 
-> > [ 8.631558][ T0] secondary_startup_64_no_verify (??:?) 
-> > [    8.633502][    T0]  </TASK>
-> > [    8.634624][    T0] ------------[ cut here ]------------
-> > [    8.636289][    T0] releasing a pinned lock
-> > [ 8.638693][ T0] WARNING: CPU: 0 PID: 0 at kernel/locking/lockdep.c:5352 lock_release (??:?) 
-> > [    8.641591][    T0] Modules linked in:
-> > [    8.642864][    T0] CPU: 0 PID: 0 Comm: swapper Tainted: G        W          6.1.0-rc1-00015-g8bdbdd7f43cd #1 9e431b4e696756e99f94acf7e74ac6e512df80ce
-> > [    8.646469][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> > [ 8.649578][ T0] RIP: 0010:lock_release (??:?) 
-> > [ 8.651243][ T0] Code: 00 00 e9 0f fe ff ff 48 83 05 06 f6 ff 06 01 e8 91 4e 2d 03 e9 67 fe ff ff 48 c7 c7 20 8c cf 84 e8 90 3f ec ff 48 8b 54 24 08 <0f> 0b 48 83 05 a9 f6 ff 06 01 e9 66 fc ff ff e8 67 c9 99 01 85 c0
-> > All code
-> > ========
-> >    0:	00 00                	add    %al,(%rax)
-> >    2:	e9 0f fe ff ff       	jmpq   0xfffffffffffffe16
-> >    7:	48 83 05 06 f6 ff 06 	addq   $0x1,0x6fff606(%rip)        # 0x6fff615
-> >    e:	01 
-> >    f:	e8 91 4e 2d 03       	callq  0x32d4ea5
-> >   14:	e9 67 fe ff ff       	jmpq   0xfffffffffffffe80
-> >   19:	48 c7 c7 20 8c cf 84 	mov    $0xffffffff84cf8c20,%rdi
-> >   20:	e8 90 3f ec ff       	callq  0xffffffffffec3fb5
-> >   25:	48 8b 54 24 08       	mov    0x8(%rsp),%rdx
-> >   2a:*	0f 0b                	ud2    		<-- trapping instruction
-> >   2c:	48 83 05 a9 f6 ff 06 	addq   $0x1,0x6fff6a9(%rip)        # 0x6fff6dd
-> >   33:	01 
-> >   34:	e9 66 fc ff ff       	jmpq   0xfffffffffffffc9f
-> >   39:	e8 67 c9 99 01       	callq  0x199c9a5
-> >   3e:	85 c0                	test   %eax,%eax
-> > 
-> > Code starting with the faulting instruction
-> > ===========================================
-> >    0:	0f 0b                	ud2    
-> >    2:	48 83 05 a9 f6 ff 06 	addq   $0x1,0x6fff6a9(%rip)        # 0x6fff6b3
-> >    9:	01 
-> >    a:	e9 66 fc ff ff       	jmpq   0xfffffffffffffc75
-> >    f:	e8 67 c9 99 01       	callq  0x199c97b
-> >   14:	85 c0                	test   %eax,%eax
-> > [    8.656638][    T0] RSP: 0000:ffffffff862077c0 EFLAGS: 00010086
-> > [    8.658249][    T0] RAX: 0000000000000017 RBX: ffffffff86244244 RCX: ffffffff8631a420
-> > [    8.660383][    T0] RDX: ffffffff86244218 RSI: 0000000000000008 RDI: 0000000000000001
-> > [    8.662798][    T0] RBP: ffffffff862078e0 R08: dffffc0000000000 R09: 00000000035545d9
-> > [    8.665205][    T0] R10: dffff7fff0c40e7a R11: 0000000000000001 R12: ffffffff862fcf58
-> > [    8.667420][    T0] R13: 1ffffffff0c40f06 R14: ffffffff86244220 R15: dffffc0000000000
-> > [    8.669824][    T0] FS:  0000000000000000(0000) GS:ffffffff862ab000(0000) knlGS:0000000000000000
-> > [    8.672552][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [    8.674557][    T0] CR2: ffff88843ffff000 CR3: 0000000006235000 CR4: 00000000000406b0
-> > [    8.677082][    T0] Call Trace:
-> > [    8.678220][    T0]  <TASK>
-> > [ 8.679230][ T0] ? __lock_acquire (??:?) 
-> > [ 8.680709][ T0] ? kvm_sched_clock_read (kvmclock.c:?) 
-> > [ 8.682309][ T0] ? sched_clock_cpu (??:?) 
-> > [ 8.683854][ T0] ? kvm_sched_clock_read (kvmclock.c:?) 
-> > [ 8.685268][ T0] _raw_spin_unlock (??:?) 
-> > [ 8.686730][ T0] dequeue_task_idle (build_policy.c:?) 
-> > [ 8.688259][ T0] ? set_next_task_idle (build_policy.c:?) 
-> > [ 8.689822][ T0] ? update_rq_clock (??:?) 
-> > [ 8.691387][ T0] __schedule (core.c:?) 
-> > [ 8.692782][ T0] ? __sched_text_start (core.c:?) 
-> > [ 8.694287][ T0] ? add_chain_block (lockdep.c:?) 
-> > [ 8.695869][ T0] ? find_held_lock (lockdep.c:?) 
-> > [ 8.697314][ T0] schedule (??:?) 
-> > [ 8.698529][ T0] schedule_timeout (??:?) 
-> > [ 8.701929][ T0] ? console_conditional_schedule (??:?) 
-> > [ 8.703826][ T0] do_wait_for_common (build_utility.c:?) 
-> > [ 8.705395][ T0] ? console_conditional_schedule (??:?) 
-> > [ 8.707189][ T0] ? bit_wait_io_timeout (build_utility.c:?) 
-> > [ 8.708779][ T0] ? _raw_spin_lock_irq (??:?) 
-> > [ 8.710371][ T0] ? lockdep_hardirqs_on (??:?) 
-> > [ 8.711982][ T0] wait_for_completion (??:?) 
-> > [ 8.713487][ T0] synchronize_srcu (??:?) 
-> > [ 8.715020][ T0] ? srcu_gp_start_if_needed (??:?) 
-> > [ 8.716772][ T0] ? rcu_read_lock_any_held (??:?) 
-> > [ 8.718477][ T0] ? console_trylock_spinning (??:?) 
-> > [ 8.720179][ T0] unregister_console (??:?) 
-> > [ 8.721644][ T0] register_console (??:?) 
-> > [ 8.728846][ T0] ? serial8250_isa_init_ports (8250_core.c:?) 
-> > [ 8.730692][ T0] ? parse_options (super.c:?) 
-> > [ 8.732180][ T0] univ8250_console_init (8250_core.c:?) 
-> > [ 8.733762][ T0] console_init (??:?) 
-> > [ 8.735096][ T0] start_kernel (??:?) 
-> > [ 8.736425][ T0] secondary_startup_64_no_verify (??:?) 
-> > [    8.738088][    T0]  </TASK>
-> > [    8.739057][    T0] irq event stamp: 494
-> > [ 8.740376][ T0] hardirqs last enabled at (493): dump_stack_lvl (??:?) 
-> > [ 8.743081][ T0] hardirqs last disabled at (494): __schedule (core.c:?) 
-> > [ 8.745797][ T0] softirqs last enabled at (0): 0x0 
-> > [ 8.747882][ T0] softirqs last disabled at (0): 0x0 
-> > [    8.749889][    T0] ---[ end trace 0000000000000000 ]---
-> > [    8.751520][    T0] bad: scheduling from the idle thread!
-> > [    8.753351][    T0] CPU: 0 PID: 0 Comm: swapper Tainted: G        W          6.1.0-rc1-00015-g8bdbdd7f43cd #1 9e431b4e696756e99f94acf7e74ac6e512df80ce
-> > [    8.757566][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> > [    8.760783][    T0] Call Trace:
-> > [    8.761970][    T0]  <TASK>
-> > [ 8.763067][ T0] dump_stack_lvl (??:?) 
-> > [ 8.764611][ T0] ? netdev_notice (??:?) 
-> > [ 8.766213][ T0] ? lockdep_hardirqs_on_prepare (??:?) 
-> > [ 8.768214][ T0] ? print_irqtrace_events (??:?) 
-> > [ 8.769911][ T0] ? kvm_sched_clock_read (kvmclock.c:?) 
-> > [ 8.771550][ T0] dequeue_task_idle (build_policy.c:?) 
-> > [ 8.773087][ T0] ? set_next_task_idle (build_policy.c:?) 
-> > [ 8.774647][ T0] ? update_rq_clock (??:?) 
-> > [ 8.776280][ T0] __schedule (core.c:?) 
-> > [ 8.777729][ T0] ? __sched_text_start (core.c:?) 
-> > [ 8.779238][ T0] ? add_chain_block (lockdep.c:?) 
-> > [ 8.780922][ T0] ? find_held_lock (lockdep.c:?) 
-> > [ 8.782560][ T0] schedule (??:?) 
-> > [ 8.783988][ T0] schedule_timeout (??:?) 
-> > [ 8.785515][ T0] ? console_conditional_schedule (??:?) 
-> > [ 8.787500][ T0] do_wait_for_common (build_utility.c:?) 
-> > [ 8.789162][ T0] ? console_conditional_schedule (??:?) 
-> > [ 8.790997][ T0] ? bit_wait_io_timeout (build_utility.c:?) 
-> > [ 8.792567][ T0] ? _raw_spin_lock_irq (??:?) 
-> > [ 8.794292][ T0] ? lockdep_hardirqs_on (??:?) 
-> > [ 8.796008][ T0] wait_for_completion (??:?) 
-> > [ 8.797520][ T0] synchronize_srcu (??:?) 
-> > [ 8.799001][ T0] ? srcu_gp_start_if_needed (??:?) 
-> > [ 8.800696][ T0] ? rcu_read_lock_any_held (??:?) 
-> > [ 8.802508][ T0] ? console_trylock_spinning (??:?) 
-> > [ 8.804316][ T0] unregister_console (??:?) 
-> > [ 8.805810][ T0] register_console (??:?) 
-> > [ 8.807364][ T0] ? serial8250_isa_init_ports (8250_core.c:?) 
-> > [ 8.811167][ T0] ? parse_options (super.c:?) 
-> > [ 8.812693][ T0] univ8250_console_init (8250_core.c:?) 
-> > [ 8.814269][ T0] console_init (??:?) 
-> > [ 8.815765][ T0] start_kernel (??:?) 
-> > [ 8.817296][ T0] secondary_startup_64_no_verify (??:?) 
-> > [    8.819246][    T0]  </TASK>
-> > 
-> > 
-> > 
-> > Through the config file, it can be found that the following options are enabled
-> > 
-> > CONFIG_TINY_RCU=y
-> > CONFIG_RCU_EXPERT=y
-> > CONFIG_SRCU=y
-> > CONFIG_TINY_SRCU=y
-> > 
-> > This problem should have been fixed:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=0bf43fcbf8ebbf84a2b1b8770eaefcdb4a99afd6
-> > 
-> > commit dbc6ca150842650d513705f26e3e6b7a4e182ce9
-> > Author: Zqiang <qiang1.zhang@intel.com>
-> > Date:   Wed Nov 9 15:36:38 2022 +0800
-> > 
-> >     srcu: Make Tiny synchronize_srcu() check for readers
-> > 
-> >     This commit adds lockdep checks for illegal use of synchronize_srcu()
-> >     within same-type SRCU read-side critical sections and within normal
-> >     RCU read-side critical sections.  It also makes synchronize_srcu()
-> >     be a no-op during early boot.
-> > 
-> >     These changes bring Tiny synchronize_srcu() into line with both Tree
-> >     synchronize_srcu() and Tiny synchronize_rcu().
-> > 
-> >     Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > 
-> > Thanks
-> > Zqiang
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > If you fix the issue, kindly add following tag
-> > | Reported-by: kernel test robot <yujie.liu@intel.com>
-> > | Link: https://lore.kernel.org/oe-lkp/202211302358.ef0db537-yujie.liu@intel.com
-> > 
-> > 
-> > To reproduce:
-> > 
-> >         # build kernel
-> > 	cd linux
-> > 	cp config-6.1.0-rc1-00015-g8bdbdd7f43cd .config
-> > 	make HOSTCC=clang-14 CC=clang-14 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
-> > 	make HOSTCC=clang-14 CC=clang-14 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
-> > 	cd <mod-install-dir>
-> > 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
-> > 
-> > 
-> >         git clone https://github.com/intel/lkp-tests.git
-> >         cd lkp-tests
-> >         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
-> > 
-> >         # if come across any failure that blocks the test,
-> >         # please remove ~/.lkp and /lkp dir to run from a clean state.
-> > 
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+> Huang, Ying
+>
