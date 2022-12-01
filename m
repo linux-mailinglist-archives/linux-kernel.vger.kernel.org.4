@@ -2,153 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AA363F1BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 189BB63F1C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbiLANgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S231584AbiLANgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:36:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiLANgM (ORCPT
+        with ESMTP id S231582AbiLANgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:36:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F415AB035
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:36:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 875126200D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65AB3C433C1;
-        Thu,  1 Dec 2022 13:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669901768;
-        bh=WLdPshfe4f2Z7hixLEnJ3dcblbOMYhUNLtouSGY+9vc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ipMPXXIoMddbZeYdf2D3TJawXB471s+wRLLLMVJrdHg/B7fSxpxHDxxG0hAJ6MENO
-         8ieoFGyNNdwqkSHHf/5wA5P7VpdzE5ndjCuD1PqokY16Rkr/bc72hwn+tTtVjarycF
-         pEgy943RwvkCYYhmv7t9Rz/K0ogZBtQSoEmGh8bt/1WqVOiafkKdSVEBbkCFcujb2i
-         lOZLxktSr+kqN99+QZ3OzI7fZf34P08WvzT1Ulp7AjdSmljHDha5tGsvc3rOSldJCh
-         f9nNhYZEg1pxwx8GeCMydjw42oEDQP1IyubicroLdVQ+TR/R75txHEG8E7mZqtqhna
-         7UaBH7LCWJ8HQ==
-Date:   Thu, 1 Dec 2022 13:36:02 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
- dup_user_cpus_ptr()
-Message-ID: <20221201133602.GB28489@willie-the-truck>
-References: <20221125023943.1118603-1-longman@redhat.com>
- <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
- <20221128120008.GA25090@willie-the-truck>
- <d49a78bb-dce1-92b1-0f67-d71259609263@redhat.com>
- <20221129140759.GA26437@willie-the-truck>
- <f669ce38-1e23-04b4-fe6f-591579e817de@redhat.com>
- <20221129155757.GC26561@willie-the-truck>
- <4e93019d-4b19-14f9-14d7-da43456d3546@redhat.com>
+        Thu, 1 Dec 2022 08:36:37 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691CCA165;
+        Thu,  1 Dec 2022 05:36:33 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-14286d5ebc3so2163970fac.3;
+        Thu, 01 Dec 2022 05:36:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1K37iH9iyFVta8stQEbIxav/5AtugtdvdeJC9IDIXZQ=;
+        b=0J9OHi0lMhVLmfov4UiioChZX1LgF87fvqX0Ny756MRA9eUfC3+yXdQGMW4aWVtZJB
+         7Qam6UO3+ZmwRAvPO9EhEQbcsuBNL0tepuBgylqYQTsYoivbvSxgaiQsHsc97seFki5E
+         N10iiYYrX75FvSUsVgGN1BQzv5Ys5TOygxVJZdaTeSGAlw9PIVXZhvonBZBojn0n/s2x
+         LEpMWwPkgherxOHjCQAe63TOk9c1JHYz+2KXtfNte3vD5VBkPC1GvKGpar3HVGW+UY9Y
+         9p1ULkjUkEp8yTvgT1x0WgSWLwkbkFVu3WLsQT2E24h6A9ZoXIbVYy3Bk/laWfKHfBSJ
+         8xHw==
+X-Gm-Message-State: ANoB5pkiveuaV8vPoDjUvQB28ISY/ddcwRjLX8/o7sdQ/FDrX4NTU8R5
+        VUX9JkMV99nb4YK/VC58XQ==
+X-Google-Smtp-Source: AA0mqf7RpOe69UtxOJCyqspnx7PZpkYhph5UqVYXm2bLG4LGpD1UvyszRA+XWaFW+lK0FJ4kI4of6A==
+X-Received: by 2002:a05:6870:7b89:b0:13c:e644:d7a9 with SMTP id jf9-20020a0568707b8900b0013ce644d7a9mr38397974oab.148.1669901792169;
+        Thu, 01 Dec 2022 05:36:32 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d7-20020a9d5e07000000b0066c3ca7b12csm2059192oti.61.2022.12.01.05.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 05:36:31 -0800 (PST)
+Received: (nullmailer pid 486292 invoked by uid 1000);
+        Thu, 01 Dec 2022 13:36:29 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e93019d-4b19-14f9-14d7-da43456d3546@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        "David S . Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>
+In-Reply-To: <20221201090242.2381-4-yanhong.wang@starfivetech.com>
+References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+ <20221201090242.2381-4-yanhong.wang@starfivetech.com>
+Message-Id: <166990139276.476262.15116409959152660279.robh@kernel.org>
+Subject: Re: [PATCH v1 3/7] dt-bindings: net: Add bindings for StarFive dwmac
+Date:   Thu, 01 Dec 2022 07:36:29 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 11:03:35AM -0500, Waiman Long wrote:
-> On 11/29/22 10:57, Will Deacon wrote:
-> > On Tue, Nov 29, 2022 at 10:32:49AM -0500, Waiman Long wrote:
-> > > On 11/29/22 09:07, Will Deacon wrote:
-> > > > On Mon, Nov 28, 2022 at 10:11:52AM -0500, Waiman Long wrote:
-> > > > > On 11/28/22 07:00, Will Deacon wrote:
-> > > > > > On Sun, Nov 27, 2022 at 08:43:27PM -0500, Waiman Long wrote:
-> > > > > > > On 11/24/22 21:39, Waiman Long wrote:
-> > > > > > > > In general, a non-null user_cpus_ptr will remain set until the task dies.
-> > > > > > > > A possible exception to this is the fact that do_set_cpus_allowed()
-> > > > > > > > will clear a non-null user_cpus_ptr. To allow this possible racing
-> > > > > > > > condition, we need to check for NULL user_cpus_ptr under the pi_lock
-> > > > > > > > before duping the user mask.
-> > > > > > > > 
-> > > > > > > > Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-> > > > > > > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > > > > > > This is actually a pre-existing use-after-free bug since commit 07ec77a1d4e8
-> > > > > > > ("sched: Allow task CPU affinity to be restricted on asymmetric systems").
-> > > > > > > So it needs to be fixed in the stable release as well. Will resend the patch
-> > > > > > > with an additional fixes tag and updated commit log.
-> > > > > > Please can you elaborate on the use-after-free here? Looking at
-> > > > > > 07ec77a1d4e8, the mask is only freed in free_task() when the usage refcount
-> > > > > > has dropped to zero and I can't see how that can race with fork().
-> > > > > > 
-> > > > > > What am I missing?
-> > > > > I missed that at first. The current task cloning process copies the content
-> > > > > of the task structure over to the newly cloned/forked task. IOW, if
-> > > > > user_cpus_ptr had been set up previously, it will be copied over to the
-> > > > > cloned task. Now if user_cpus_ptr of the source task is cleared right after
-> > > > > that and before dup_user_cpus_ptr() is called. The obsolete user_cpus_ptr
-> > > > > value in the cloned task will remain and get used even if it has been freed.
-> > > > > That is what I call as use-after-free and double-free.
-> > > > If the parent task can be modified concurrently with dup_task_struct() then
-> > > > surely we'd have bigger issues because that's not going to be atomic? At the
-> > > > very least we'd have a data race, but it also feels like we could end up
-> > > > with inconsistent task state in the child. In fact, couldn't the normal
-> > > > 'cpus_mask' be corrupted by a concurrent set_cpus_allowed_common()?
-> > > > 
-> > > > Or am I still failing to understand the race?
-> > > > 
-> > > A major difference between cpus_mask and user_cpus_ptr is that for
-> > > cpus_mask, the bitmap is embedded into task_struct whereas user_cpus_ptr is
-> > > a pointer to an external bitmap. So there is no issue of use-after-free wrt
-> > > cpus_mask. That is not the case where the memory of the user_cpus_ptr of the
-> > > parent task is freed, but then a reference to that memory is still available
-> > > in the child's task struct and may be used.
-> > Sure, I'm not saying there's a UAF on cpus_mask, but I'm concerned that we
-> > could corrupt the data and end up with an affinity mask that doesn't correspond
-> > to anything meaningful. Do you agree that's possible?
-> That is certainly possible. So we have to be careful about it.
 
-Hmm, but we're not being particularly careful, are we? I hacked memcpy()
-to be byte-to-byte to make things a bit easier to reproduce, and sure enough
-I can race a bog-standard sched_setaffinity() call w/ fork():
+On Thu, 01 Dec 2022 17:02:38 +0800, Yanhong Wang wrote:
+> Add bindings for the StarFive dwmac module on the StarFive RISC-V SoCs.
+> 
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> ---
+>  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
+>  .../bindings/net/starfive,dwmac-plat.yaml     | 106 ++++++++++++++++++
+>  MAINTAINERS                                   |   5 +
+>  3 files changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml
+> 
 
-[ 1663.935258] BUG: KCSAN: data-race in arch_dup_task_struct+0x4c/0x224
-[ 1663.936872]
-[ 1663.937292] race at unknown origin, with read to 0xffff06a44b8880a9 of 1 bytes by task 351 on cpu 0:
-[ 1663.938770]  arch_dup_task_struct+0x4c/0x224
-[ 1663.939621]  dup_task_struct+0x68/0x2a8
-[ 1663.940381]  copy_process+0x208/0x1404
-[ 1663.941109]  kernel_clone+0xdc/0x2c8
-[ 1663.941814]  __arm64_sys_clone+0x9c/0xd4
-[ 1663.942909]  invoke_syscall+0x54/0x170
-[ 1663.943816]  el0_svc_common+0x100/0x148
-[ 1663.944607]  do_el0_svc+0x40/0x10c
-[ 1663.945333]  el0_svc+0x2c/0x7c
-[ 1663.946006]  el0t_64_sync_handler+0x84/0xf0
-[ 1663.946804]  el0t_64_sync+0x18c/0x190
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I then managed to get the child process to run with an affinity mask (i.e.
-'task_struct::cpus_mask') of *zero*, which triggers the select_fallback_rq()
-logic:
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml:30:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
 
- | process 14622 (waiman) no longer affine to cpu0
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/net/starfive,dwmac-plat.yaml#
+Documentation/devicetree/bindings/net/starfive,dwmac-plat.example.dts:21:18: fatal error: dt-bindings/clock/starfive-jh7110.h: No such file or directory
+   21 |         #include <dt-bindings/clock/starfive-jh7110.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/net/starfive,dwmac-plat.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
-So sure, it's not a UAF, but I still think it's an issue that should be
-fixed.
+doc reference errors (make refcheckdocs):
 
-Will
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201090242.2381-4-yanhong.wang@starfivetech.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
