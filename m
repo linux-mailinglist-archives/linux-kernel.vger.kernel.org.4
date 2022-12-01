@@ -2,79 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C473163E83B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3369563E83F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiLADNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 22:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S229660AbiLADOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 22:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLADNp (ORCPT
+        with ESMTP id S229515AbiLADOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 22:13:45 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B918754468
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:13:43 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1669864422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SaM+GTjZfJmbOUpTQs/U3f0sQfHp+chDykvHNK7BLiw=;
-        b=IZwlSd/J8MJXz1xM7v29XlDvNRe0dBF9l8WauEjLuiAGymi8UgKxrL3OPI5NdwUHj8qpCJ
-        RdlJBBGFyaPyBd2I8u3KU5Pp321goHksPnA236HHaubHGxnaPeIogO3OoWtHR6TcaGV6US
-        Zh+9GnZbrcxbt5JPwV08xXhvZBp21dM=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     rmk+kernel@armlinux.org.uk, keescook@chromium.org,
-        gregkh@linuxfoundation.org, Jason@zx2c4.com, djwong@kernel.org,
-        ebiederm@xmission.com, thunder.leizhen@huawei.com, ardb@kernel.org,
-        wangkefeng.wang@huawei.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] ARM: Remove redundant arch_cpu_idle_prepare()
-Date:   Thu,  1 Dec 2022 11:13:06 +0800
-Message-Id: <20221201031306.2782204-1-yajun.deng@linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 22:14:30 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8885B851;
+        Wed, 30 Nov 2022 19:14:28 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN1QC2yNbz4xVnf;
+        Thu,  1 Dec 2022 11:14:27 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B13EGCL064526;
+        Thu, 1 Dec 2022 11:14:16 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 11:14:17 +0800 (CST)
+Date:   Thu, 1 Dec 2022 11:14:17 +0800 (CST)
+X-Zmail-TransId: 2af963881c094624a661
+X-Mailer: Zmail v1.0
+Message-ID: <202212011114175709557@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <jikos@kernel.org>
+Cc:     <benjamin.tissoires@redhat.com>, <michael.zaidman@gmail.com>,
+        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIHYyXSBISUQ6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B13EGCL064526
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63881C13.000 by FangMail milter!
+X-FangMail-Envelope: 1669864467/4NN1QC2yNbz4xVnf/63881C13.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63881C13.000/4NN1QC2yNbz4xVnf
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch_cpu_idle_prepare() was only called by cpu_startup_entry() and it is
-just a wrapper for local_fiq_enable().
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-The local_fiq_enable() was already called before cpu_startup_entry().
+Replace the open-code with sysfs_emit() to simplify the code.
 
-So remove redundant arch_cpu_idle_prepare().
-
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- arch/arm/kernel/process.c | 5 -----
- 1 file changed, 5 deletions(-)
+v1 -> v2
+Add the rest in drivers/hid/ with the same changes.
+ drivers/hid/hid-core.c           | 2 +-
+ drivers/hid/hid-cp2112.c         | 2 +-
+ drivers/hid/hid-ft260.c          | 4 ++--
+ drivers/hid/hid-gt683r.c         | 2 +-
+ drivers/hid/hid-lg4ff.c          | 6 +++---
+ drivers/hid/hid-logitech-hidpp.c | 2 +-
+ drivers/hid/wacom_sys.c          | 4 ++--
+ 7 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-index f811733a8fc5..e3f490ab95f4 100644
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
-@@ -81,11 +81,6 @@ void arch_cpu_idle(void)
- 	raw_local_irq_enable();
- }
- 
--void arch_cpu_idle_prepare(void)
--{
--	local_fiq_enable();
--}
--
- void arch_cpu_idle_enter(void)
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index b973df3b825d..ae1ecb21121a 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2658,7 +2658,7 @@ static ssize_t modalias_show(struct device *dev, struct device_attribute *a,
  {
- 	ledtrig_cpu(CPU_LED_IDLE_START);
+ 	struct hid_device *hdev = container_of(dev, struct hid_device, dev);
+
+-	return scnprintf(buf, PAGE_SIZE, "hid:b%04Xg%04Xv%08Xp%08X\n",
++	return sysfs_emit(buf, "hid:b%04Xg%04Xv%08Xp%08X\n",
+ 			 hdev->bus, hdev->group, hdev->vendor, hdev->product);
+ }
+ static DEVICE_ATTR_RO(modalias);
+diff --git a/drivers/hid/hid-cp2112.c b/drivers/hid/hid-cp2112.c
+index 1e16b0fa310d..810e3b4b1728 100644
+--- a/drivers/hid/hid-cp2112.c
++++ b/drivers/hid/hid-cp2112.c
+@@ -895,7 +895,7 @@ static ssize_t name##_show(struct device *kdev, \
+ 	int ret = cp2112_get_usb_config(hdev, &cfg); \
+ 	if (ret) \
+ 		return ret; \
+-	return scnprintf(buf, PAGE_SIZE, format, ##__VA_ARGS__); \
++	return sysfs_emit(buf, format, ##__VA_ARGS__); \
+ } \
+ static DEVICE_ATTR_RW(name);
+
+diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+index 333341e80b0e..8677bea46bea 100644
+--- a/drivers/hid/hid-ft260.c
++++ b/drivers/hid/hid-ft260.c
+@@ -826,7 +826,7 @@ static int ft260_byte_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	if (ret < 0)
+ 		return ret;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", *field);
++	return sysfs_emit(buf, "%d\n", *field);
+ }
+
+ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+@@ -838,7 +838,7 @@ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	if (ret < 0)
+ 		return ret;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", le16_to_cpu(*field));
++	return sysfs_emit(buf, "%d\n", le16_to_cpu(*field));
+ }
+
+ #define FT260_ATTR_SHOW(name, reptype, id, type, func)			       \
+diff --git a/drivers/hid/hid-gt683r.c b/drivers/hid/hid-gt683r.c
+index 29ccb0accfba..fa453de406b9 100644
+--- a/drivers/hid/hid-gt683r.c
++++ b/drivers/hid/hid-gt683r.c
+@@ -90,7 +90,7 @@ static ssize_t mode_show(struct device *dev,
+ 	else
+ 		sysfs_mode = 2;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", sysfs_mode);
++	return sysfs_emit(buf, "%u\n", sysfs_mode);
+ }
+
+ static ssize_t mode_store(struct device *dev,
+diff --git a/drivers/hid/hid-lg4ff.c b/drivers/hid/hid-lg4ff.c
+index e3fcf1353fb3..07f3cf175060 100644
+--- a/drivers/hid/hid-lg4ff.c
++++ b/drivers/hid/hid-lg4ff.c
+@@ -956,7 +956,7 @@ static ssize_t lg4ff_combine_show(struct device *dev, struct device_attribute *a
+ 		return 0;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%u\n", entry->wdata.combine);
++	count = sysfs_emit(buf, "%u\n", entry->wdata.combine);
+ 	return count;
+ }
+
+@@ -1009,7 +1009,7 @@ static ssize_t lg4ff_range_show(struct device *dev, struct device_attribute *att
+ 		return 0;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%u\n", entry->wdata.range);
++	count = sysfs_emit(buf, "%u\n", entry->wdata.range);
+ 	return count;
+ }
+
+@@ -1073,7 +1073,7 @@ static ssize_t lg4ff_real_id_show(struct device *dev, struct device_attribute *a
+ 		return 0;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%s: %s\n", entry->wdata.real_tag, entry->wdata.real_name);
++	count = sysfs_emit(buf, "%s: %s\n", entry->wdata.real_tag, entry->wdata.real_name);
+ 	return count;
+ }
+
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 9afbc68bf063..38ba30f72c8c 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -2506,7 +2506,7 @@ static ssize_t hidpp_ff_range_show(struct device *dev, struct device_attribute *
+ 	struct input_dev *idev = hidinput->input;
+ 	struct hidpp_ff_private_data *data = idev->ff->private;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", data->range);
++	return sysfs_emit(buf, "%u\n", data->range);
+ }
+
+ static ssize_t hidpp_ff_range_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
+index 634263e4556b..00556a045e51 100644
+--- a/drivers/hid/wacom_sys.c
++++ b/drivers/hid/wacom_sys.c
+@@ -1058,7 +1058,7 @@ static ssize_t wacom_led##SET_ID##_select_show(struct device *dev,	\
+ {									\
+ 	struct hid_device *hdev = to_hid_device(dev);\
+ 	struct wacom *wacom = hid_get_drvdata(hdev);			\
+-	return scnprintf(buf, PAGE_SIZE, "%d\n",			\
++	return sysfs_emit(buf, "%d\n",			\
+ 			 wacom->led.groups[SET_ID].select);		\
+ }									\
+ static DEVICE_ATTR(status_led##SET_ID##_select, DEV_ATTR_RW_PERM,	\
+@@ -1102,7 +1102,7 @@ static ssize_t wacom_##name##_luminance_show(struct device *dev,	\
+ 	struct device_attribute *attr, char *buf)			\
+ {									\
+ 	struct wacom *wacom = dev_get_drvdata(dev);			\
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", wacom->led.field);	\
++	return sysfs_emit(buf, "%d\n", wacom->led.field);	\
+ }									\
+ static DEVICE_ATTR(name##_luminance, DEV_ATTR_RW_PERM,			\
+ 		   wacom_##name##_luminance_show,			\
 -- 
 2.25.1
-
