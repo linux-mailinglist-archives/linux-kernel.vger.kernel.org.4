@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E2B63F459
+	by mail.lfdr.de (Postfix) with ESMTP id A03A163F45A
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbiLAPmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S231899AbiLAPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiLAPlm (ORCPT
+        with ESMTP id S232005AbiLAPlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:41:42 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0591F9;
-        Thu,  1 Dec 2022 07:40:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=yHPLxsl9MbDFA39XedT/fNFDaxz54nP8D2zOAb8sz/Y=; b=HOkEQshoMedf4HqS3Ukvmb7K+s
-        gwW38/teWeetRQOOIhMYIOOiEtsrCxnUVbRM/Ut3foVLKH3itDFBBjT+VrD1hOYz5nA/3ZmKwT2Og
-        2BDROwc4BllYWFOQIo2R0/sqq72S6h8/P9lUZ+xMiTjv0oXtR/pSjYvej4dvISZ6Bcjw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p0lfh-0044fZ-7W; Thu, 01 Dec 2022 16:40:21 +0100
-Date:   Thu, 1 Dec 2022 16:40:21 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Subject: Re: [PATCH v1 4/7] net: phy: motorcomm: Add YT8531 phy support
-Message-ID: <Y4jK5VBVuAnl55Xz@lunn.ch>
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
- <20221201090242.2381-5-yanhong.wang@starfivetech.com>
+        Thu, 1 Dec 2022 10:41:50 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C3BBBBC0;
+        Thu,  1 Dec 2022 07:40:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669909250; x=1701445250;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0GOY+1e8ccz1SadE0JDTGj0SX1z4eRNxvGHkNwFzbpw=;
+  b=lpsQhAfTkNvR0aHLjFlE9/ypFFQ+WAXkpsb7PUHiocKiMd++lgnDDYoK
+   ha3xnGoED3dgAmWpN8UEPVWyYUdzsmtYv5JsuklAbE8Tbdm4J/Vv7J5TS
+   g78QZaVh35zAZ0zk9odHzcp21Q53Yc3P0Y929VnrpJSJclZ/zda4j0Hdd
+   akGi6kKPcLHTlwx4af2Jt3gh0/0vxszNEzbdYyybmToRnIVJwGKYnnEFR
+   3iX15xw83dcnfzlIV0uuqMQV581QrU+LXWbWsGHG1yxElkpwac/6CMkZx
+   ve6Dmsp7j5diHai4+CwlcU0BqGQruWRLPjV17/E81Du8PMQmEIOD5u8aa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="377876353"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="377876353"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 07:40:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="819081782"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="819081782"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2022 07:40:47 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0lg5-002s5z-2L;
+        Thu, 01 Dec 2022 17:40:45 +0200
+Date:   Thu, 1 Dec 2022 17:40:45 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v6 0/2] gpiolib: don't allow user-space to crash the
+ kernel with hot-unplugs
+Message-ID: <Y4jK/RPDsyf/wcqM@smile.fi.intel.com>
+References: <20221201125928.3031325-1-brgl@bgdev.pl>
+ <CAMRc=MfGi52s+LcTrBnBPDV91SbC4vf1prrLUpzQ_KZQQZGBuQ@mail.gmail.com>
+ <Y4izMVZBhXGj1jbj@smile.fi.intel.com>
+ <CAMRc=MedXBgh+JnTL0qUOrhKJ+w0vcVZTk-k2TKJzdbk_TNtVQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221201090242.2381-5-yanhong.wang@starfivetech.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMRc=MedXBgh+JnTL0qUOrhKJ+w0vcVZTk-k2TKJzdbk_TNtVQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static const struct ytphy_reg_field ytphy_rxtxd_grp[] = {
-> +	{ "rx_delay_sel", GENMASK(13, 10), 0x0 },
-> +	{ "tx_delay_sel_fe", GENMASK(7, 4), 0xf },
-> +	{ "tx_delay_sel", GENMASK(3, 0), 0x1 }
-> +};
-> +
-> +static const struct ytphy_reg_field ytphy_txinver_grp[] = {
-> +	{ "tx_inverted_1000", BIT(14), 0x0 },
-> +	{ "tx_inverted_100", BIT(14), 0x0 },
-> +	{ "tx_inverted_10", BIT(14), 0x0 }
-> +};
-> +
-> +static const struct ytphy_reg_field ytphy_rxden_grp[] = {
-> +	{ "rxc_dly_en", BIT(8), 0x1 }
-> +};
-> +
-> +static int ytphy_config_init(struct phy_device *phydev)
-> +{
-> +	struct device_node *of_node;
-> +	u32 val;
-> +	u32 mask;
-> +	u32 cfg;
-> +	int ret;
-> +	int i = 0;
-> +
-> +	of_node = phydev->mdio.dev.of_node;
-> +	if (of_node) {
-> +		ret = of_property_read_u32(of_node, ytphy_rxden_grp[0].name, &cfg);
+On Thu, Dec 01, 2022 at 03:13:55PM +0100, Bartosz Golaszewski wrote:
+> On Thu, Dec 1, 2022 at 2:59 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Thu, Dec 01, 2022 at 02:00:06PM +0100, Bartosz Golaszewski wrote:
+> > > On Thu, Dec 1, 2022 at 1:59 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> >
+> > ...
+> >
+> > > I know Kent and Linus left their review tags already, I will add them
+> > > when applying.
+> >
+> > I guess it's good enough, go ahead with it.
+> 
+> Can you leave your Reviewed-by here too?
 
-You need to document the device tree binding.
+Hmm... Your both patches already have it.
 
-Frank Sae always gets the locking wrong in this driver. Have you
-tested your patch with lockdep enabled?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-    Andrew
+
