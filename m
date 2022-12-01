@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A463363E97E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 06:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22BA63E987
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 06:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiLAFwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 00:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S229468AbiLAF5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 00:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiLAFwO (ORCPT
+        with ESMTP id S229499AbiLAF5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 00:52:14 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48116A6052;
-        Wed, 30 Nov 2022 21:52:11 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 59DFC24E167;
-        Thu,  1 Dec 2022 13:51:59 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
- 2022 13:51:59 +0800
-Received: from [192.168.125.96] (113.72.147.18) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
- 2022 13:51:59 +0800
-Message-ID: <da75445a-9bef-7f66-81b9-12c36ad19a37@starfivetech.com>
-Date:   Thu, 1 Dec 2022 13:51:58 +0800
+        Thu, 1 Dec 2022 00:57:01 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A75A6B43
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 21:57:00 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id d20so1053319edn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 21:57:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HDYDeayhp4F4jLRjy3U5o4B4dnh5i5WiJ3M1AeVO0Es=;
+        b=Tsm30sLRx+XONDFQARwXuUPZLtEfeqP8NxElshdDEZhXiD0xnAutmZsWAGl6A1IDKo
+         6liGNzk55cc05ZHG2S0v6q7RZlfXS3Zo/r/nOsSmpxIj5enr0gIYcMx9EALve1jwytbu
+         xjXGjZFIF8Q5HgGwsh+1izmOkwfOVccj0ZLwJ9CeECteokWqMCJLmdDnBxx0SWP2FrBh
+         3+3VVjSQXA3s1fTi6j1bzDRJXe2Xs2Rm2k6EUMZQ1JkDoVvkRMvs3TqNy9+TwydqAV/m
+         0GpLpOafoCdyOP6MsswvykBJr1Xivm25ntJdANH+w5TZxfesJEBNOLe1/PM77qHQggca
+         fNYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HDYDeayhp4F4jLRjy3U5o4B4dnh5i5WiJ3M1AeVO0Es=;
+        b=LiL1AAqeHvfp87SoE8k4nzxvBVQ9xjQql6THpHrnKZsrsDMt00oiaAqsx7wa/RKbpe
+         P8cHOajP3Nl5hyFQ3sggU/VlRfNzBS30zUl8Pw3Ilve4lpclt20XiwnkIWSjRpeHb49J
+         e8a11e3vpyXpT+9eOK+FBvO/TB8laFQqBqNCzEp6SqkKIEThoKCimQEVTgmWyLIM409A
+         Qi/Xsd0/TqYICpanXfgJ0GnFXG2wR1fLX/nj85R10Z7Zp+qNOEkQduKT9rp8IklIZvay
+         EbmYTeJJQ0BKTNy156MtvhXS/ZCPb9Kg1EcplTthZs/Qzn9jcCnk2qHJUDSHp+cALGZr
+         r1Tg==
+X-Gm-Message-State: ANoB5pnj0GI18ZSn+r5fiKUoQdG9FStrOK0aSWUde/HY1rRcr4Z2sU+Q
+        uPzJwCd8j9EVKWUNzMM9X0n8JJ/bBbEcSF8yApv2Rg==
+X-Google-Smtp-Source: AA0mqf5yTOFMssM36FFBLw2deA1PNPuz933yy4B9ZSG+g2Nf/G5qN0Wdnw8m33OYFpJQ/FEjf2buhlV2tlQWr7vOWpE=
+X-Received: by 2002:a05:6402:d78:b0:46b:a177:9d84 with SMTP id
+ ec56-20020a0564020d7800b0046ba1779d84mr7265836edb.134.1669874218518; Wed, 30
+ Nov 2022 21:56:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 2/4] dt-bindings: power: Add starfive,jh71xx-power
- bindings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
+References: <20221129140313.886192-1-apatel@ventanamicro.com>
+ <20221129140313.886192-3-apatel@ventanamicro.com> <174d93be-bedf-bf8c-4a66-284931a997b3@sholland.org>
+In-Reply-To: <174d93be-bedf-bf8c-4a66-284931a997b3@sholland.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 1 Dec 2022 11:26:47 +0530
+Message-ID: <CAAhSdy1zSdqk5B-DBv5puEutT9+5s86QRw4UpjbgkLsiXGurCQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] dt-bindings: timer: Add bindings for the RISC-V
+ timer device
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
         Conor Dooley <conor.dooley@microchip.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118133216.17037-1-walker.chen@starfivetech.com>
- <20221118133216.17037-3-walker.chen@starfivetech.com>
- <99302e53-c0c9-cfe8-4e6a-c70e8428d9c3@linaro.org>
- <f21b0aa9-2ac8-ae28-755a-d530171f930a@starfivetech.com>
- <20221130152451.GA2192004-robh@kernel.org>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <20221130152451.GA2192004-robh@kernel.org>
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.18]
-X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,46 +78,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/30 23:24, Rob Herring wrote:
-> On Tue, Nov 22, 2022 at 09:22:03PM +0800, Walker Chen wrote:
->> On 2022/11/21 18:13, Krzysztof Kozlowski wrote:
->> > On 18/11/2022 14:32, Walker Chen wrote:
->> >> Add bindings for the power domain controller on the StarFive JH71XX SoC.
->> >> 
->> > 
->> > Subject: drop second, redundant "bindings".
->> 
->> Will fix.
->> 
->> > 
->> >> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
->> >> ---
->> >>  .../bindings/power/starfive,jh71xx-power.yaml | 46 +++++++++++++++++++
->> > 
->> > 1st patch should be squashed here. Headers are part of bindings file.
->> 
->> Will be done in the next version of patch.
->> 
->> > 
->> >>  1 file changed, 46 insertions(+)
->> >>  create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
->> >> 
->> >> diff --git a/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
->> >> new file mode 100644
->> >> index 000000000000..2537303b4829
->> >> --- /dev/null
->> >> +++ b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
->> > 
->> > Filename like compatible.
->> 
->> As mentioned in the previous email, the compatible in the driver should be changed to "starfive,jh7110-power".
-> 
-> Is the h/w block called 'power' or 'pmu'? Call it what the h/w is 
-> called.
+On Wed, Nov 30, 2022 at 10:15 AM Samuel Holland <samuel@sholland.org> wrote:
+>
+> On 11/29/22 08:03, Anup Patel wrote:
+> > We add DT bindings for a separate RISC-V timer DT node which can
+> > be used to describe implementation specific behaviour (such as
+> > timer interrupt not triggered during non-retentive suspend).
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  .../bindings/timer/riscv,timer.yaml           | 52 +++++++++++++++++++
+> >  1 file changed, 52 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/timer/riscv,timer.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/timer/riscv,timer.yaml b/Documentation/devicetree/bindings/timer/riscv,timer.yaml
+> > new file mode 100644
+> > index 000000000000..cf53dfff90bc
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/timer/riscv,timer.yaml
+> > @@ -0,0 +1,52 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/timer/riscv,timer.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: RISC-V timer
+> > +
+> > +maintainers:
+> > +  - Anup Patel <anup@brainfault.org>
+> > +
+> > +description: |+
+> > +  RISC-V platforms always have a RISC-V timer device for the supervisor-mode
+> > +  based on the time CSR defined by the RISC-V privileged specification. The
+> > +  timer interrupts of this device are configured using the RISC-V SBI Time
+> > +  extension or the RISC-V Sstc extension.
+> > +
+> > +  The clock frequency of RISC-V timer device is specified via the
+> > +  "timebase-frequency" DT property of "/cpus" DT node which is described
+> > +  in Documentation/devicetree/bindings/riscv/cpus.yaml
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - riscv,timer
+> > +
+> > +  interrupts-extended:
+> > +    minItems: 1
+> > +    maxItems: 4096   # Should be enough?
+> > +
+> > +  riscv,timer-cant-wake-cpu:
+>
+> I don't want to derail getting this merged, but if you do end up sending
+> another version, could you please spell out the word "cannot" here and
+> in the code? The missing apostrophe makes this jarring (and an entirely
+> different word).
 
-h/w block is called PMU, is the abbreviation of Power Management Unit.
-It is more appropriate to change the compatile to 'starfive,jh7110-pmu'.
+Okay, I will update.
 
-Best Regards,
-Walker Chen
+>
+> > +    type: boolean
+> > +    description:
+> > +      If present, the timer interrupt can't wake up the CPU from
+> > +      suspend/idle state.
+>
+> And in that case I would also suggest clarifying this as "one or more
+> suspend/idle states", since the limitation does not apply to all idle
+> states. At least it should never apply to the architectural WFI state;
+> for the SBI idle state binding, it only applies to those with the
+> "local-timer-stop" property.
 
+Okay, I will update.
+
+>
+> > +
+> > +additionalProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - interrupts-extended
+> > +
+> > +examples:
+> > +  - |
+> > +    timer {
+> > +      compatible = "riscv,timer";
+> > +      interrupts-extended = <&cpu1intc 5>,
+> > +                            <&cpu2intc 5>,
+> > +                            <&cpu3intc 5>,
+> > +                            <&cpu4intc 5>;
+>
+> The CLINT and PLIC bindings also include the M-mode interrupts. Should
+> we do the same here?
+
+The RISC-V timer uses SBI time extension or RISC-V Sstc extension hence
+it is only for S-mode software. In other words, the RISC-V timer is a S-mode
+only timer.
+
+The M-mode software is supposed to have its own platform specific MMIO
+based timer.
+
+Regards,
+Anup
