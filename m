@@ -2,134 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF2963EBE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E92063EBF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiLAJCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:02:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S230063AbiLAJFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiLAJCM (ORCPT
+        with ESMTP id S230052AbiLAJFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:02:12 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275FB4E421;
-        Thu,  1 Dec 2022 01:02:11 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C011D24E116;
-        Thu,  1 Dec 2022 17:02:09 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Dec
- 2022 17:02:10 +0800
-Received: from wyh-VirtualBox.starfivetech.com (171.223.208.138) by
- EXMBX173.cuchost.com (172.16.6.93) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Thu, 1 Dec 2022 17:02:08 +0800
-From:   Yanhong Wang <yanhong.wang@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Subject: [PATCH v1 7/7] riscv: dts: starfive: visionfive-v2: Add phy delay_chain configuration
-Date:   Thu, 1 Dec 2022 17:02:42 +0800
-Message-ID: <20221201090242.2381-8-yanhong.wang@starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+        Thu, 1 Dec 2022 04:05:10 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38BE950DC;
+        Thu,  1 Dec 2022 01:04:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669885444; x=1701421444;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=v7Pv5GvsnRCoGfNqd6OZfahTWZAr3UlME0JbK+tDt9s=;
+  b=DA08p0n9uVxZMCkESGFwwRe2HY6LAJ6JhhDyYO9i5wnfrQSJuNNgbCDX
+   CS5ZNeJp4tlPMQoHjiCLQV9LHnLILr5UsS4AXD9GaMRnmDOkbH9VLIEBt
+   Zp9R2/xDJCUCvqSGgb7XdL6NV5kH+st9Lva7IZxtyigqUL84OGKJTVsBa
+   mT4d4oyn3VlVCj9C6n1VEZCdwL8yBjPR3woUvLQadEuonrYn4ByPgYezy
+   PzADqv1GaAVg7r2yxQbJ15IGO/i7OiwnWeqV7/4oAfo87hRYXO9YZgD4E
+   Ugw5TU0Kn8ACI3THh97uegQ0EDR3HhBmbHWVvZ7wQ9WTDiWWeDTtFKNwB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="317492464"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="317492464"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 01:04:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="750716088"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="750716088"
+Received: from eliteleevi.tm.intel.com ([10.237.54.20])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 01:03:59 -0800
+Date:   Thu, 1 Dec 2022 11:03:46 +0200 (EET)
+From:   Kai Vehmanen <kai.vehmanen@linux.intel.com>
+X-X-Sender: kvehmane@eliteleevi.tm.intel.com
+To:     Ricardo Ribalda <ribalda@chromium.org>
+cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Chromeos Kdump <chromeos-kdump@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Alsa-devel <alsa-devel@alsa-project.org>,
+        sound-open-firmware@alsa-project.org, kexec@lists.infradead.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] ASoC: SOF: Fix deadlock when shutdown a frozen
+ userspace
+In-Reply-To: <20221127-snd-freeze-v7-2-127c582f1ca4@chromium.org>
+Message-ID: <alpine.DEB.2.22.394.2212011053540.3532114@eliteleevi.tm.intel.com>
+References: <20221127-snd-freeze-v7-0-127c582f1ca4@chromium.org> <20221127-snd-freeze-v7-2-127c582f1ca4@chromium.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX173.cuchost.com
- (172.16.6.93)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add phy delay_chain configuration to support motorcomm phy driver for
-StarFive VisionFive 2 board.
+Hi,
 
-Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
----
- .../jh7110-starfive-visionfive-v2.dts         | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
+On Wed, 30 Nov 2022, Ricardo Ribalda wrote:
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-index c8946cf3a268..2868ef4c74ef 100644
---- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-@@ -15,6 +15,8 @@
- 
- 	aliases {
- 		serial0 = &uart0;
-+		ethernet0=&gmac0;
-+		ethernet1=&gmac1;
- 	};
- 
- 	chosen {
-@@ -114,3 +116,47 @@
- 	pinctrl-0 = <&uart0_pins>;
- 	status = "okay";
- };
-+
-+&gmac0 {
-+	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	phy-handle = <&phy0>;
-+	status = "okay";
-+	mdio0 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		compatible = "snps,dwmac-mdio";
-+		phy0: ethernet-phy@0 {
-+			reg = <0>;
-+			rxc_dly_en = <1>;
-+			tx_delay_sel_fe = <5>;
-+			tx_delay_sel = <0xa>;
-+			tx_inverted_10 = <0x1>;
-+			tx_inverted_100 = <0x1>;
-+			tx_inverted_1000 = <0x1>;
-+		};
-+	};
-+};
-+
-+&gmac1 {
-+	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	phy-handle = <&phy1>;
-+	status = "okay";
-+	mdio1 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		compatible = "snps,dwmac-mdio";
-+		phy1: ethernet-phy@1 {
-+			reg = <1>;
-+			tx_delay_sel_fe = <5>;
-+			tx_delay_sel = <0>;
-+			rxc_dly_en = <0>;
-+			tx_inverted_10 = <0x1>;
-+			tx_inverted_100 = <0x1>;
-+			tx_inverted_1000 = <0x0>;
-+		};
-+	};
-+};
--- 
-2.17.1
+> During kexec(), the userspace might frozen. Therefore we cannot wait
+> for it to complete.
+[...]
+> --- a/sound/soc/sof/core.c
+> +++ b/sound/soc/sof/core.c
+> @@ -9,6 +9,7 @@
+>  //
+>  
+>  #include <linux/firmware.h>
+> +#include <linux/kexec.h>
+>  #include <linux/module.h>
+>  #include <sound/soc.h>
+>  #include <sound/sof.h>
+> @@ -484,7 +485,8 @@ int snd_sof_device_shutdown(struct device *dev)
+>  	 * make sure clients and machine driver(s) are unregistered to force
+>  	 * all userspace devices to be closed prior to the DSP shutdown sequence
+>  	 */
+> -	sof_unregister_clients(sdev);
+> +	if (!kexec_with_frozen_processes())
+> +		sof_unregister_clients(sdev);
+>  
+>  	snd_sof_machine_unregister(sdev, pdata);
 
+I think the case you hit was specifically snd_card_disconnect_sync() that 
+gets called via snd_sof_machine_unregister(), right, so you'd have to skip 
+both sof_unregister_clients() and the machine_unregister().
+
+Skipping ok might be an ok solution here. There's clearly a problem and we 
+cannot just drop these calls in the general case (when we are going to 
+S5), but in the specific case of kexec, this is probably safe. And I agree 
+one way or another this needs to be fixed. Pierre and others what do you 
+think?
+
+Br, Kai
