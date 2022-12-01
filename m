@@ -2,88 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB3963EA7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38E563EAD5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiLAHr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S229826AbiLAII2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLAHrZ (ORCPT
+        with ESMTP id S229586AbiLAIIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:47:25 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A82721819
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 23:47:24 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NN7P975TvzJp3K;
-        Thu,  1 Dec 2022 15:43:57 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 15:47:22 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <dhowells@redhat.com>, <christophe.jaillet@wanadoo.fr>
-CC:     <linux-kernel@vger.kernel.org>, Wang Yufen <wangyufen@huawei.com>
-Subject: [PATCH] watch_queue: Fix error return code in watch_queue_set_size()
-Date:   Thu, 1 Dec 2022 16:07:25 +0800
-Message-ID: <1669882045-41842-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Thu, 1 Dec 2022 03:08:12 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4361C12E;
+        Thu,  1 Dec 2022 00:08:09 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B12AYOp024672;
+        Thu, 1 Dec 2022 00:07:58 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pfpt0220;
+ bh=QlV4YzWyDEKHu3ZA8fQXtw+am5fVbDPoDzlHK8TK6nI=;
+ b=UPElCX2ejajY5jwOmzWnZdI8ppFU1cVutHabjJjreCoIERRY6jP14bXMVDYFDcp1+VpW
+ 1juskkAzfrYj7kJf2RQu7MLvpaXe7OSu1zooRh2RVVkbWYXM328FeIFkZfpdTrfDnhDi
+ 1g2gJs8aFaH1wB75zy4k6CkCMtp1xIyFjKJPz4fLevKEat5lewiExmo1AErCxEWH/Hm2
+ c7oE3yCHJI3pOLQ4hXZ+emxEW6H/KBRG//hxbkqX4OLbYg8CVxXkrzd4nRcNWyJhvusS
+ Umtth4Ice8b1owcBI8cCx7MyH6SrhokmPva74fLiOhFaX5h5tblurRSGOyS0eW7PZEZC aw== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3m6k8k103h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 00:07:58 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 1 Dec
+ 2022 00:07:56 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 1 Dec 2022 00:07:56 -0800
+Received: from [10.9.118.29] (unknown [10.9.118.29])
+        by maili.marvell.com (Postfix) with ESMTP id C41F63F705D;
+        Thu,  1 Dec 2022 00:07:49 -0800 (PST)
+Message-ID: <7ed83813-0df4-b6ac-f1d2-a28d8011b1aa@marvell.com>
+Date:   Thu, 1 Dec 2022 09:07:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101
+ Thunderbird/107.0
+Subject: Re: [EXT] Re: [PATCH] net: atlantic: fix check for invalid ethernet
+ addresses
+To:     Andrew Lunn <andrew@lunn.ch>, Brian Masney <bmasney@redhat.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <cth451@gmail.com>
+References: <20221130174259.1591567-1-bmasney@redhat.com>
+ <Y4ex6WqiY8IdwfHe@lunn.ch> <Y4fGORYQRfYTabH1@x1> <Y4fMBl6sv+SUyt9Z@lunn.ch>
+Content-Language: en-US
+From:   Igor Russkikh <irusskikh@marvell.com>
+In-Reply-To: <Y4fMBl6sv+SUyt9Z@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: Rc8qE33fkyFS3vduHN461Z1WZrw45Cgl
+X-Proofpoint-ORIG-GUID: Rc8qE33fkyFS3vduHN461Z1WZrw45Cgl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_04,2022-11-30_02,2022-06-22_01
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix to return a negative error code -ENOMEM instead of 0.
 
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- kernel/watch_queue.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+>> That won't work for this board since that function only checks that the
+>> MAC "is not 00:00:00:00:00:00, is not a multicast address, and is not
+>> FF:FF:FF:FF:FF:FF." The MAC address that we get on all of our boards is
+>> 00:17:b6:00:00:00.
+> 
+> Which is a valid MAC address. So i don't see why the kernel should
+> reject it and use a random one.
+> 
+> Maybe you should talk to Marvell about how you can program the
+> e-fuses. You can then use MAC addresses from A8-97-DC etc.
 
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index a6f9bdd..fe6e19c 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -274,19 +274,25 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
- 		goto error;
- 
- 	pages = kcalloc(sizeof(struct page *), nr_pages, GFP_KERNEL);
--	if (!pages)
-+	if (!pages) {
-+		ret = -ENOMEM;
- 		goto error;
-+	}
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		pages[i] = alloc_page(GFP_KERNEL);
--		if (!pages[i])
-+		if (!pages[i]) {
-+			ret = -ENOMEM;
- 			goto error_p;
-+		}
- 		pages[i]->index = i * WATCH_QUEUE_NOTES_PER_PAGE;
- 	}
- 
- 	bitmap = bitmap_alloc(nr_notes, GFP_KERNEL);
--	if (!bitmap)
-+	if (!bitmap) {
-+		ret = -ENOMEM;
- 		goto error_p;
-+	}
- 
- 	bitmap_fill(bitmap, nr_notes);
- 	wqueue->notes = pages;
--- 
-1.8.3.1
+Hi Brian,
 
+I do completely agree with Andrew. Thats not a fix to be made in linux kernel.
+
+The boards you get have zero efuse. You should work with Qualcomm on how to update mac addresses of your boards.
+
+Igor
