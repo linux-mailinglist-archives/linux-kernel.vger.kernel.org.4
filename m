@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0CF63F2AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F48163F20F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiLAOWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S231583AbiLANwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:52:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiLAOWI (ORCPT
+        with ESMTP id S231339AbiLANv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:22:08 -0500
-X-Greylist: delayed 1806 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 06:22:02 PST
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 335C8ABA0B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:22:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=BBFOF
-        5hbXkx5sANxzuB/pHT2CFFBu2rT2z2PtghB9cA=; b=pcXuO6Ud+cMl17jGdi4Jy
-        3AvIzyPm0mmbGZF6WXsDrl6uL10T5Ai7xjNV+Ug70rrdOSKmnSw/pTE2/qdvEaYA
-        k3ai4XJ8Bv0i/2DaTWy+WA256Y9R8K9W31f0+8zf3U+RIQpQVNyyaha9i1t+/gEN
-        BSZCbRjLw5BxfPgXug+/X0=
-Received: from localhost.localdomain (unknown [221.228.128.183])
-        by smtp2 (Coremail) with SMTP id DMmowABn7WE3sYhjaCrQEg--.8644S2;
-        Thu, 01 Dec 2022 21:50:48 +0800 (CST)
-From:   wonder_rock@126.com
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Deyan Wang <wonder_rock@126.com>
-Subject: [PATCH 1/1] mm/page_alloc: update comments in __free_pages_ok()
-Date:   Thu,  1 Dec 2022 21:50:45 +0800
-Message-Id: <20221201135045.31663-1-wonder_rock@126.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Dec 2022 08:51:56 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A58050D69;
+        Thu,  1 Dec 2022 05:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669902715; x=1701438715;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bav08OV3LsnmXxf0ohUY0Zv4EUZl+WnAgOolhM8CEvc=;
+  b=E9pR5cOHEpOrvWNkeKO6TCO5iw21e8hMnaSMHD1pE1TIZRWWFvh0+4uS
+   xwzyF76N7bQJ/pCf7WI8oDnBVA8U1FrpamL7PvE6SiNZ/k3OwiZRxfuK0
+   jFjJv591u3V7siZMdZW/A8u6YxFWcjL3cpm/P0uEexp/vY3yMyyzHkUhG
+   KibRg/+DNto97OccAMA200zRmNvn+DuqBCMdtYJZmTUz0zy4dQYUT+t3g
+   BEMxboqe6v/ANcSAOsSf61RhOMNRelb8KpnqwppcJMbhqmeyVHamjKkdh
+   AHnroB46KlNAklJUNQFE4adHj4tTGMKW7QjK+K2y3guTlQCRUcfDVKmtR
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="186069167"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Dec 2022 06:51:54 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 1 Dec 2022 06:51:52 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Thu, 1 Dec 2022 06:51:50 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+CC:     Conor Dooley <conor.dooley@microchip.com>,
+        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] Documentation: riscv: note that counter access is part of the uABI
+Date:   Thu, 1 Dec 2022 13:51:10 +0000
+Message-ID: <20221201135110.3855965-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <Y4XvnHIPw8ZuBZEk@wendy>
+References: <Y4XvnHIPw8ZuBZEk@wendy>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowABn7WE3sYhjaCrQEg--.8644S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtFyruFWDKF1DZr1ktr17trb_yoWfXFcE9a
-        1qqry7ur4ftF9xKF47A3Z3JFyfKF18uryxuayftrZxtFy8ZFnrJa18JrnxCrWDWFs0gFWk
-        GayvvFZrCw12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRZyCp3UUUUU==
-X-Originating-IP: [221.228.128.183]
-X-CM-SenderInfo: xzrqvv5ubu0ubn6rjloofrz/1tbiuRnKgVpD-Q7q3wAAs0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Deyan Wang <wonder_rock@126.com>
+Commit 5a5294fbe020 ("RISC-V: Re-enable counter access from userspace")
+fixed userspace access to CYCLE, TIME & INSTRET counters and left a nice
+comment in-place about why they must not be restricted. Since we now
+have a uABI doc in RISC-V land, add a section documenting it.
 
-Add a comment to explain why we call get_pfnblock_migratetype() twice
-in __free_pages_ok().
-
-Signed-off-by: Deyan Wang <wonder_rock@126.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- mm/page_alloc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Based on an, as yet, unsent v2 of my other uABI changes. I don't expect
+it to be applicable, just getting a patch into patchwork while I don't
+forget about this.
+---
+ Documentation/riscv/uabi.rst | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 2d4c81224508..52dd4fff280b 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1702,6 +1702,11 @@ static void __free_pages_ok(struct page *page, unsigned int order,
- 	if (!free_pages_prepare(page, order, true, fpi_flags))
- 		return;
+diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
+index 8d2651e42fda..638ddce56700 100644
+--- a/Documentation/riscv/uabi.rst
++++ b/Documentation/riscv/uabi.rst
+@@ -3,6 +3,13 @@
+ RISC-V Linux User ABI
+ =====================
  
-+	/*
-+	 * Calling get_pfnblock_migratetype() without spin_lock_irqsave() here
-+	 * is used to avoid calling get_pfnblock_migratetype() under the lock.
-+	 * This will reduce the lock holding time.
-+	 */
- 	migratetype = get_pfnblock_migratetype(page, pfn);
++Counter access
++--------------
++
++Access to the CYCLE, TIME and INSTRET counters, now controlled by the SBI PMU
++extension, were part of the ISA when the uABI was frozen & so remain accessible
++from userspace.
++
+ ISA string ordering in /proc/cpuinfo
+ ------------------------------------
  
- 	spin_lock_irqsave(&zone->lock, flags);
+
+base-commit: 13ee7ef407cfcf63f4f047460ac5bb6ba5a3447d
+prerequisite-patch-id: d17a9ffb6fcf99eb683728da98cd50e18cd28fe8
+prerequisite-patch-id: 0df4127e3f4a0c02a235fea00bcb69cd94fabb38
+prerequisite-patch-id: 171724b870ba212b714ebbded480269accd83733
 -- 
-2.25.1
+2.38.1
 
