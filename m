@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EB063E9C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A5E63E9BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiLAGPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 01:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S229699AbiLAGPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 01:15:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiLAGPg (ORCPT
+        with ESMTP id S229576AbiLAGPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 01:15:36 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54424A9CC0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:15:34 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id x13so358489ilp.8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=I3cbFWF/3wbRJ/LJGSbr3S2YLSTVjERFCva7QGH+gmg=;
-        b=TQXq8UL4QgqOzU99DZ2FZnR8wuYuOhizw+MMZjtpJkUFGvg9P5i/lw/RWwqrdLoDKQ
-         UnpYETf8awGpkGv3IpRi451RomQ6opklMdUuCi/w2gZGRvoMjNeIrHS4ZTPjma5Cv/Ud
-         loNtoud4t9r43vBYNniWgJcERDfHHrHCNMnplIvKD71BxqW7j1JsRNYzUaMxlrgy1NHn
-         6xdNTQN8tz+KfNNFtAnd4cswjrjr9nbNCsv8wa5thCsyCu4zRmoJ3wvA83cBbsAM1nN7
-         IfS70kBNMfXBwfegiGQRDlLftR0WgGHsIJ9aky32vwQM38kMW3gkXoC+vm0tjq4uMYNc
-         2iBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I3cbFWF/3wbRJ/LJGSbr3S2YLSTVjERFCva7QGH+gmg=;
-        b=EDZLf/greyZXxQDvz8sKytG2/QJFsXKdAN42rqT3/8Gc+vxOCPSZ1cZd/ITqjWogmH
-         ignwyuhk1BiqXyClLn/4ihKtNQSPfmp/B19fMoHtF00VXjmVo8lReBycwagrKbSe6acb
-         7+Hl9WK8VgxfcQOU5SRjtawdNA1AdDiCxDa8KgK1M35YKi95WIcEMh8BWkTfE9mHDu1P
-         eQsnVBMoYaCnA1xA3+H5IWKf/R3TFbNuaKaJoAzyRiDBANiWXP/3vU7DR+6Jyo5u5SU6
-         KTB3cOL40NtT5M6po6gP0LavjBc0HSiafaTIjFRSPUvajm1gsvmWCUn6iqDRaFq4Kquu
-         9GFA==
-X-Gm-Message-State: ANoB5plCWA5Ce45Rkswk+ubyqsFz1wy4URO1ORRWwVJuP1dah82a8NgK
-        DpcXIMPo2xytljmlyJcKNtWj0f9vYIgFj96+BlGF/g==
-X-Google-Smtp-Source: AA0mqf6datZ2W/Sl/db9jupMjDNWdTR8+AnW/Km4dlC/pKlQg+8tzrVb8F6lOwvMJ2ylFNiAwvsV75vh6r2wBQp1BT8=
-X-Received: by 2002:a92:db4b:0:b0:302:5575:9e46 with SMTP id
- w11-20020a92db4b000000b0030255759e46mr29366206ilq.41.1669875333395; Wed, 30
- Nov 2022 22:15:33 -0800 (PST)
+        Thu, 1 Dec 2022 01:15:17 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4049EA85DD
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:15:16 -0800 (PST)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NN5Q03XVmzmWK0;
+        Thu,  1 Dec 2022 14:14:32 +0800 (CST)
+Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Dec 2022 14:15:14 +0800
+Received: from [10.174.177.173] (10.174.177.173) by
+ dggpeml500003.china.huawei.com (7.185.36.200) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Dec 2022 14:15:13 +0800
+Message-ID: <771e309e-d7c6-d4db-ab11-0df05db6b9a0@huawei.com>
+Date:   Thu, 1 Dec 2022 14:15:13 +0800
 MIME-Version: 1.0
-References: <20221130180544.105550592@linuxfoundation.org>
-In-Reply-To: <20221130180544.105550592@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 1 Dec 2022 11:44:53 +0530
-Message-ID: <CA+G9fYuJVxhKbeN9OGCr2_zyfa1k3j4DS1gAoTW0P89Eyz2FHg@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [syzbot] INFO: task hung in gfs2_gl_hash_clear (3)
+Content-Language: en-US
+To:     syzbot <syzbot+ed7d0f71a89e28557a77@syzkaller.appspotmail.com>,
+        <brauner@kernel.org>, <broonie@kernel.org>,
+        <catalin.marinas@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <madvenka@linux.microsoft.com>,
+        <scott@os.amperecomputing.com>, <syzkaller-bugs@googlegroups.com>,
+        <will@kernel.org>
+References: <000000000000d482ba05ee97d4e3@google.com>
+CC:     <bobo.shaobowang@huawei.com>, <liwei391@huawei.com>
+From:   Yu Liao <liaoyu15@huawei.com>
+In-Reply-To: <000000000000d482ba05ee97d4e3@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.173]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500003.china.huawei.com (7.185.36.200)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 at 00:13, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.11 release.
-> There are 289 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 2022/11/29 16:32, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=167aebbb880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=54b747d981acc7b7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ed7d0f71a89e28557a77
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16467353880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=168c3d03880000
+> 
 
-Results from Linaro's test farm.
-Regressions found on x86_64:
+Fix missing call gfs2_make_fs_ro() int gfs2_put_super()
 
-    - build-clang-15-allmodconfig-x86_64
-    - build-clang-nightly-allmodconfig-x86_64
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+b7b275e60bcd
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+--- a/fs/gfs2/super.c
++++ b/fs/gfs2/super.c
+@@ -584,9 +584,7 @@ static void gfs2_put_super(struct super_block *sb)
+ 	}
+ 	spin_unlock(&sdp->sd_jindex_spin);
 
-    bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-    [ Upstream commit c86df29d11dfba27c0a1f5039cd6fe387fbf4239 ]
+-	if (!sb_rdonly(sb)) {
+-		gfs2_make_fs_ro(sdp);
+-	}
++	gfs2_make_fs_ro(sdp);
+ 	WARN_ON(gfs2_withdrawing(sdp));
 
-Causing the following build warnings / errors with clang-15 allmodconfig
-on x86_64,
+ 	/*  At this point, we're through modifying the disk  */
+-- 
 
-Build error:
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu-
-'HOSTCC=sccache clang' 'CC=sccache clang'
-kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *'
-and 'unsigned int (*)(const void *, const struct bpf_insn *,
-bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct
-bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn
-*))')) [-Werror,-Wpointer-type-mismatch]
-        __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
-                                   ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/bpf.h:938:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
-        __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
-                                                            ^~~~
-1 error generated.
-
-Build logs:
-  - https://builds.tuxbuild.com/2IHYTj6JN108YShWQ8K8Fd0HyVW/
-
---
-Linaro LKFT
-https://lkft.linaro.org
