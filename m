@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9995463F8CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 766D163F8CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiLAUKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 15:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
+        id S230503AbiLAUKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 15:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiLAUKU (ORCPT
+        with ESMTP id S229653AbiLAUKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 15:10:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE928C692
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:10:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE00BB82025
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 20:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 93BCBC433D7;
-        Thu,  1 Dec 2022 20:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669925417;
-        bh=66gIZp8QuckhxbGJe3SHqvbaAaSZGcddv1qT3Ntjfgc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=RwVxCn7ViuR1CpOVf8tT3B7ZY+mBob1+3oOGzSLAB0TXI/q6XKS6iEWR/C0+5/aVM
-         PCL6ViSFQ9A607B0yyxFazctlJOP+iK4VaiVP5Rv0bi7ade1Jv3ZNGWSizyIVf7BZU
-         wFk9lr3sDEIZ21tqWvNmBTX9nuTijq4o+cg4ejqgywot+dsCRFHoVx/NwBV+Q5dj8n
-         8UWszWLhy/vDUuwb9ulG89WpKKovAOwdfOzwaz1KD/ajwkQyMMu2HgAxRYDDunfT8t
-         xQemEoI16BHu2An+y/mVxs2S8nA01Xv/xYI2zcsK+tq3Z73k/p2WuPu+Kc/E/YwZqq
-         0WFfcZaWhqMrA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72C2FE52537;
-        Thu,  1 Dec 2022 20:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 1 Dec 2022 15:10:37 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA82FBEC68
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:10:33 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id r19so2357417qtx.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 12:10:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5BHelv3N+41uf2laSJpjxNnqMJlO6nXbKkfIvjH6bF0=;
+        b=mNabcctar8gTptAWFv2qhOoG6jR3HGKA09XMyZgezk74MidRGCgacejr1mVfybneYi
+         LGwixB3c7ahYtBDjCFXzcFSSb2OCsoJ68ibVHMcIHuAHvGQqkB2viOrdeVlg+RzDP31j
+         6rzdkiEzi0902yFRNWpNNhTFw0rneMKbSH+6Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5BHelv3N+41uf2laSJpjxNnqMJlO6nXbKkfIvjH6bF0=;
+        b=aLbHQUod96xHW2gXko9ALSQotW/4AVIqk+9BYC9z7AfTGLeGbo1m706+L3U+4FJwn0
+         dz29hbLl1K2eXPgJuZD7gPfz3aPhoHy635Q6IQMA/IVNg5duyN/EgHcwVlGlXsPQvZJ/
+         Vp7tqepsHrrju2gk3RZxO87GHtXTh2sFKUuKoK/iFi9swvlFaPBDIV/LO5/+l4kPrHrH
+         a4Hm6Bv6Q9VflNkLa64e3+2Yy9eb7tjDRqtA3SlqsAWAi5zrDbs2NEb4Axfmy8vriNbM
+         qou7xPR3QJ9ec51h+cqoAQayyY29mo9euUlqiXG7X9hQpCQQsptwOgyHtvth8Yo3+OkH
+         gbKA==
+X-Gm-Message-State: ANoB5pk8uAh0Nu0TaX+nQ5MD+qzPO70oR2sgboSfkxy8e4/aM3W5Y1Cz
+        QKtNj47k3l9iyXzKgKLei7U4dtT7HKzIez9YuNduog==
+X-Google-Smtp-Source: AA0mqf7zV4NhddToUDXZdGlH1vmjh2U7UTZDhpiLUQ9F8GZDw1aEDBFG0Fic3rL4G2eYwPMHv3MFh3XeZAMF/U6WpQo=
+X-Received: by 2002:ac8:4a13:0:b0:3a5:b4ab:cb80 with SMTP id
+ x19-20020ac84a13000000b003a5b4abcb80mr37195576qtq.59.1669925432860; Thu, 01
+ Dec 2022 12:10:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4] riscv: fix race when vmap stack overflow
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <166992541746.24789.931668146499412553.git-patchwork-notify@kernel.org>
-Date:   Thu, 01 Dec 2022 20:10:17 +0000
-References: <20221130022442.18358-1-palmer@rivosinc.com>
-In-Reply-To: <20221130022442.18358-1-palmer@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, jszhang@kernel.org,
-        guoren@kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221130231936.1666390-1-wonchung@google.com>
+In-Reply-To: <20221130231936.1666390-1-wonchung@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 1 Dec 2022 12:10:22 -0800
+Message-ID: <CACeCKad16bs_f6bLthTAoEL28tPvf1S10WDeM7ugeaS9g7R25w@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: Create new USB driver for RGB keyboard
+ in ChromeOS devices
+To:     Won Chung <wonchung@google.com>
+Cc:     Benson Leung <bleung@chromium.org>, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,29 +64,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Won,
 
-This patch was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+On Wed, Nov 30, 2022 at 3:19 PM Won Chung <wonchung@google.com> wrote:
+>
+> Without any driver bound to RGB keyboard, it may not be suspended
+> properly, preventing USB xHCI to be suspended and causing power drain.
+> Create new USB driver for RGB keyboard so that it can be suspended
+> properly.
 
-On Tue, 29 Nov 2022 18:24:43 -0800 you wrote:
-> From: Jisheng Zhang <jszhang@kernel.org>
-> 
-> Currently, when detecting vmap stack overflow, riscv firstly switches
-> to the so called shadow stack, then use this shadow stack to call the
-> get_overflow_stack() to get the overflow stack. However, there's
-> a race here if two or more harts use the same shadow stack at the same
-> time.
-> 
-> [...]
+This seems like overkill. Can't you set this from USB's sysfs nodes
+like power/control [1] ?
 
-Here is the summary with links:
-  - [v4] riscv: fix race when vmap stack overflow
-    https://git.kernel.org/riscv/c/7e1864332fbc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1] https://www.kernel.org/doc/html/latest/driver-api/usb/power-management.html#the-user-interface-for-dynamic-pm
 
 
+Best regards,
+
+-Prashant
