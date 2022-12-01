@@ -2,54 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3677963F98B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0911263F991
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiLAVDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S230315AbiLAVLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiLAVD2 (ORCPT
+        with ESMTP id S229967AbiLAVLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:03:28 -0500
-X-Greylist: delayed 2016 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 13:03:26 PST
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBF03E0B6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:03:24 -0800 (PST)
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1p0qBi-0005gc-2K;
-        Thu, 01 Dec 2022 15:29:42 -0500
-Message-ID: <07adee081a70c2b4b44d9bf93a0ad3142e091086.camel@surriel.com>
-Subject: Re: [mm] f35b5d7d67: will-it-scale.per_process_ops -95.5% regression
-From:   Rik van Riel <riel@surriel.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        kernel test robot <yujie.liu@intel.com>, lkp@lists.01.org,
-        lkp@intel.com, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Nathan Chancellor <nathan@kernel.org>
-Date:   Thu, 01 Dec 2022 15:29:41 -0500
-In-Reply-To: <e919e5a3-1118-043e-8bbd-5ee35f2ab411@leemhuis.info>
-References: <202210181535.7144dd15-yujie.liu@intel.com>
-         <87edv4r2ip.fsf@yhuang6-desk2.ccr.corp.intel.com>
-         <Y1DNQaoPWxE+rGce@dev-arch.thelio-3990X>
-         <871qr3nkw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-         <366045a27a96e01d0526d63fd78d4f3c5d1f530b.camel@surriel.com>
-         <Y1GCYXGtEVZbcv/5@dev-arch.thelio-3990X>
-         <Y4RX+JZLddDHrLuQ@dev-arch.thelio-3990X>
-         <e919e5a3-1118-043e-8bbd-5ee35f2ab411@leemhuis.info>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-k/uf2/ZCYK22Nz0T1hrw"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 1 Dec 2022 16:11:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71121BEE1A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669929018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8ZG3sGb+U+LRPySnTCOGhSvzYDNSfM2+mgL0KXCWRaI=;
+        b=FDX0TcJyUoNMBKTxRR5ZB+neCtUIBbG0etmoJItq6LtUF/KEk2CpRSCE+SrcpE99NNaxnp
+        6zwxI86bmFphP9FbIy+wo8CM+9nBtLW4Lv5vs4layhfj+iGoW2URu0FIM+s3iWGJHTSzM1
+        Pr2pxv53sT5GGCGnTGK36HwPE7fAReE=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-517-cswW6udmM0W0DuB3HaTqHg-1; Thu, 01 Dec 2022 16:10:17 -0500
+X-MC-Unique: cswW6udmM0W0DuB3HaTqHg-1
+Received: by mail-il1-f199.google.com with SMTP id y12-20020a056e021bec00b00302a7d5bc83so3202302ilv.16
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 13:10:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8ZG3sGb+U+LRPySnTCOGhSvzYDNSfM2+mgL0KXCWRaI=;
+        b=wqyGSrSG2LtI0g8T0uhb0d5D0NgdU68zFtBUyMjE9h+8NZ0kPIIDvyC4dn7LCg6fVU
+         NgkYUYQTSsTprGMcGEz7B/zk8dxT0vojp5ooyi7Vl4zCN9mfkejDGnoMbKYr40/NVHd3
+         5jXvGZn3/qbYGVrZYljR114DLrV0pXeF4z8n7gMsaWFubEPDOWdjvFROoXB1IiaOSBFs
+         56n6+V5jW8I47+DKkl+kwScy+IAyiAde9V8joy4Ga5C31ij6Xz8SpgUvcRyyHf1GNot0
+         3jtaBOYlKzM7Lgw2eV/WvsUiNNGymfSV7i84JzyfqBCz/+It87ygCC+29KYVrLgzqOdz
+         aFxA==
+X-Gm-Message-State: ANoB5pkLg2qaUZYo5i7EqpD3lesKCNwGUoM/2i0bJx+d0jZ3LTSpCQHh
+        pc+w2fBRwYi5pK7dM4paILu450lLcO/hs73AF503DaWEQAOfxOZD6CTJNqFoeq8BDCUzp/FD77f
+        Ch9Y9ifTgrSunJ/uqkrWgK0jv
+X-Received: by 2002:a05:6638:164a:b0:389:d66d:c049 with SMTP id a10-20020a056638164a00b00389d66dc049mr13199706jat.195.1669929015967;
+        Thu, 01 Dec 2022 13:10:15 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4pKQqQjhRn0EcxfBEEp7y59Lnpk5P4WU8x8eOLVuwJfOHGMDoPHk+gJpm8IWwvfwF2WWMSjA==
+X-Received: by 2002:a05:6638:164a:b0:389:d66d:c049 with SMTP id a10-20020a056638164a00b00389d66dc049mr13199696jat.195.1669929015701;
+        Thu, 01 Dec 2022 13:10:15 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056602072c00b006cab79c4214sm1963330iox.46.2022.12.01.13.10.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 13:10:14 -0800 (PST)
+Date:   Thu, 1 Dec 2022 14:10:13 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     ruanjinjie <ruanjinjie@huawei.com>,
+        "kwankhede@nvidia.com" <kwankhede@nvidia.com>,
+        "kraxel@redhat.com" <kraxel@redhat.com>,
+        "cjia@nvidia.com" <cjia@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>
+Subject: Re: [PATCH] vfio/mdev: fix possible memory leak in module init
+ funcs
+Message-ID: <20221201141013.68d2b0cf.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB5276BC0B7E656465950E3A558C149@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20221118032827.3725190-1-ruanjinjie@huawei.com>
+        <20221130160622.0cf3e47d.alex.williamson@redhat.com>
+        <BN9PR11MB5276BC0B7E656465950E3A558C149@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,202 +91,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 1 Dec 2022 02:00:57 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
---=-k/uf2/ZCYK22Nz0T1hrw
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> > From: Alex Williamson <alex.williamson@redhat.com>
+> > Sent: Thursday, December 1, 2022 7:06 AM
+> > 
+> > [Cc +vfio-ap, vfio-ccw]
+> > 
+> > On Fri, 18 Nov 2022 11:28:27 +0800
+> > ruanjinjie <ruanjinjie@huawei.com> wrote:
+> >   
+> > > Inject fault while probing module, if device_register() fails,
+> > > but the refcount of kobject is not decreased to 0, the name
+> > > allocated in dev_set_name() is leaked. Fix this by calling
+> > > put_device(), so that name can be freed in callback function
+> > > kobject_cleanup().  
+> 
+> It's not just about the name. The problem of kboject not being
+> released is a bigger one.
+> 
+> put_device() is always required no matter device_register()
+> succeeds or not:
+> 
+> * NOTE: _Never_ directly free @dev after calling this function, even
+>  * if it returned an error! Always use put_device() to give up the
+>  * reference initialized in this function instead.
+>  */
+> int device_register(struct device *dev)
+> 
+> > > @@ -1430,8 +1430,10 @@ static int __init mbochs_dev_init(void)
+> > >  	dev_set_name(&mbochs_dev, "%s", MBOCHS_NAME);
+> > >
+> > >  	ret = device_register(&mbochs_dev);
+> > > -	if (ret)
+> > > +	if (ret) {
+> > > +		put_device(&mbochs_dev);
+> > >  		goto err_class;
+> > > +	}
+> > >
+> > >  	ret = mdev_register_parent(&mbochs_parent, &mbochs_dev,  
+> > &mbochs_driver,  
+> > >  				   mbochs_mdev_types,  
+> > 
+> > 
+> > vfio-ap has a similar unwind as the sample drivers, but actually makes
+> > an attempt to catch this ex:
+> > 
+> > 	...
+> >         ret = device_register(&matrix_dev->device);
+> >         if (ret)
+> >                 goto matrix_reg_err;
+> > 
+> >         ret = driver_register(&matrix_driver);
+> >         if (ret)
+> >                 goto matrix_drv_err;
+> > 
+> >         return 0;
+> > 
+> > matrix_drv_err:
+> >         device_unregister(&matrix_dev->device);
+> > matrix_reg_err:
+> >         put_device(&matrix_dev->device);
+> > 	...
+> > 
+> > So of the vfio drivers calling device_register(), vfio-ap is the only
+> > one that does a put_device() if device_register() fails, but it also
+> > seems sketchy to call both device_unregister() and put_device() in the
+> > case that we exit via matrix_drv_err.
+> > 
+> > I wonder if all of these shouldn't adopt a flow like:
+> > 
+> > 	ret = device_register(&dev);
+> > 	if (ret)
+> > 		goto err1;
+> > 
+> > 	....
+> > 
+> > 	return 0;
+> > 
+> > err2:
+> > 	device_del(&dev);
+> > err1:
+> > 	put_device(&dev);
+> >   
+> 
+> It's kind of a mixed model.
+> 
+> With above unwind it's clearer to use device_initialize() and device_add() instead.
 
-On Thu, 2022-12-01 at 19:33 +0100, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
->=20
-> On 28.11.22 07:40, Nathan Chancellor wrote:
-> > Hi Rik,
->=20
-> I wonder what we should do about below performance regression. Is
-> reverting the culprit now and reapplying it later together with a fix
-> a
-> viable option? Or was anything done/is anybody doing something
-> already
-> to address the problem and I just missed it?
+That would go against the comment for device_register() recommending
+that device_initialize() and device_add() should only be called
+separately if we have a clearly defined need.  I can only imagine a
+patch bot would quickly come along to rectify the situation if we
+simply open code device_register() for aesthetics.  I don't see that
+splitting device_unregister() for the purpose of having a common unwind
+path necessitates any changes relative to device_register().
 
-The changeset in question speeds up kernel compiles with
-GCC, as well as the runtime speed of other programs, due
-to being able to use THPs more. However, it slows down kernel
-compiles with clang, due to ... something clang does.
+> Otherwise what this patch does looks better IMHO:
+> 
+> 	ret = device_register(&dev);
+> 	if (ret) {
+> 		put_device(&dev);
+> 		goto err1;
+> 	}
+> 
+> 	...
+> 
+> 	return 0;
+> 
+> err2:
+> 	device_unregister(&dev);
+> err1:
+> 	earlier_unwind();
+> 
 
-I have not figured out what that something is yet.
+This is essentially what was originally proposed.  It could also be
+called a "mixed model", implementing part of the unwind in the error
+branch before jumping to the common unwind.  As demonstrated below,
+every current vfio driver calling device_register() follows a similar
+goto unwind stack as found in the sample drivers, which makes it
+trivially easy to split the device_unregister() call and add a goto
+target in between.
 
-I don't know if I have the wrong version of clang here,
-but I have not seen any smoking gun at all when tracing
-clang system calls. I see predominantly small mmap and
-unmap calls, and nothing that even triggers 2MB alignment.
+Either way, they're equivalent and I'll take whichever version
+addresses all the vfio related use cases and gets acks from their
+maintainers.  Thanks,
 
->=20
-> Yang Shi, Andrew, what's your option on this? I ask you directly,
-> because it looks like Rik hasn't posted anything to lists archived on
-> lore during the last few weeks. :-/
->=20
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker'
-> hat)
->=20
-> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> reports and sometimes miss something important when writing mails
-> like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
->=20
-> > On Thu, Oct 20, 2022 at 10:16:20AM -0700, Nathan Chancellor wrote:
-> > > On Thu, Oct 20, 2022 at 11:28:16AM -0400, Rik van Riel wrote:
-> > > > On Thu, 2022-10-20 at 13:07 +0800, Huang, Ying wrote:
-> > > > > Nathan Chancellor <nathan@kernel.org> writes:
-> > > > > >=20
-> > > > > > For what it's worth, I just bisected a massive and visible
-> > > > > > performance
-> > > > > > regression on my Threadripper 3990X workstation to commit
-> > > > > > f35b5d7d676e
-> > > > > > ("mm: align larger anonymous mappings on THP boundaries"),
-> > > > > > which
-> > > > > > seems
-> > > > > > directly related to this report/analysis. I initially
-> > > > > > noticed this
-> > > > > > because my full set of kernel builds against mainline went
-> > > > > > from 2
-> > > > > > hours
-> > > > > > and 20 minutes or so to over 3 hours. Zeroing in on x86_64
-> > > > > > allmodconfig,
-> > > > > > which I used for the bisect:
-> > > > > >=20
-> > > > > > @ 7b5a0b664ebe ("mm/page_ext: remove unused variable in
-> > > > > > offline_page_ext"):
-> > > > > >=20
-> > > > > > Benchmark 1: make -skj128 LLVM=3D1 allmodconfig all
-> > > > > > =C2=A0 Time (mean =C2=B1 =CF=83):=C2=A0=C2=A0=C2=A0=C2=A0 318.1=
-72 s =C2=B1=C2=A0 0.730 s=C2=A0=C2=A0=C2=A0 [User:
-> > > > > > 31750.902 s,
-> > > > > > System: 4564.246 s]
-> > > > > > =C2=A0 Range (min =E2=80=A6 max):=C2=A0=C2=A0 317.332 s =E2=80=
-=A6 318.662 s=C2=A0=C2=A0=C2=A0 3 runs
-> > > > > >=20
-> > > > > > @ f35b5d7d676e ("mm: align larger anonymous mappings on THP
-> > > > > > boundaries"):
-> > > > > >=20
-> > > > > > Benchmark 1: make -skj128 LLVM=3D1 allmodconfig all
-> > > > > > =C2=A0 Time (mean =C2=B1 =CF=83):=C2=A0=C2=A0=C2=A0=C2=A0 406.6=
-88 s =C2=B1=C2=A0 0.676 s=C2=A0=C2=A0=C2=A0 [User:
-> > > > > > 31819.526 s,
-> > > > System: 16327.022 s]
-> > > > > > =C2=A0 Range (min =E2=80=A6 max):=C2=A0=C2=A0 405.954 s =E2=80=
-=A6 407.284 s=C2=A0=C2=A0=C2=A0 3 run
-> > > > >=20
-> > > > > Have you tried to build with gcc?=C2=A0 Want to check whether is
-> > > > > this
-> > > > > clang
-> > > > > specific issue or not.
-> > > >=20
-> > > > This may indeed be something LLVM specific. In previous tests,
-> > > > GCC has generally seen a benefit from increased THP usage.
-> > > > Many other applications also benefit from getting more THPs.
-> > >=20
-> > > Indeed, GCC builds actually appear to be slightly faster on my
-> > > system now,
-> > > apologies for not trying that before reporting :/
-> > >=20
-> > > 7b5a0b664ebe:
-> > >=20
-> > > Benchmark 1: make -skj128 allmodconfig all
-> > > =C2=A0 Time (mean =C2=B1 =CF=83):=C2=A0=C2=A0=C2=A0=C2=A0 355.294 s =
-=C2=B1=C2=A0 0.931 s=C2=A0=C2=A0=C2=A0 [User: 33620.469
-> > > s, System: 6390.064 s]
-> > > =C2=A0 Range (min =E2=80=A6 max):=C2=A0=C2=A0 354.571 s =E2=80=A6 356=
-.344 s=C2=A0=C2=A0=C2=A0 3 runs
-> > >=20
-> > > f35b5d7d676e:
-> > >=20
-> > > Benchmark 1: make -skj128 allmodconfig all
-> > > =C2=A0 Time (mean =C2=B1 =CF=83):=C2=A0=C2=A0=C2=A0=C2=A0 347.400 s =
-=C2=B1=C2=A0 2.029 s=C2=A0=C2=A0=C2=A0 [User: 34389.724
-> > > s, System: 4603.175 s]
-> > > =C2=A0 Range (min =E2=80=A6 max):=C2=A0=C2=A0 345.815 s =E2=80=A6 349=
-.686 s=C2=A0=C2=A0=C2=A0 3 runs
-> > >=20
-> > > > LLVM showing 10% system time before this change, and a whopping
-> > > > 30% system time after that change, suggests that LLVM is
-> > > > behaving
-> > > > quite differently from GCC in some ways.
-> > >=20
-> > > The above tests were done with GCC 12.2.0 from Arch Linux. The
-> > > previous LLVM
-> > > tests were done with a self-compiled version of LLVM from the
-> > > main branch
-> > > (16.0.0), optimized with BOLT [1]. To eliminate that as a source
-> > > of issues, I
-> > > used my distribution's version of clang (14.0.6) and saw similar
-> > > results as
-> > > before:
-> > >=20
-> > > 7b5a0b664ebe:
-> > >=20
-> > > Benchmark 1: make -skj128 LLVM=3D/usr/bin/ allmodconfig all
-> > > =C2=A0 Time (mean =C2=B1 =CF=83):=C2=A0=C2=A0=C2=A0=C2=A0 462.517 s =
-=C2=B1=C2=A0 1.214 s=C2=A0=C2=A0=C2=A0 [User: 48544.240
-> > > s, System: 5586.212 s]
-> > > =C2=A0 Range (min =E2=80=A6 max):=C2=A0=C2=A0 461.115 s =E2=80=A6 463=
-.245 s=C2=A0=C2=A0=C2=A0 3 runs
-> > >=20
-> > > f35b5d7d676e:
-> > >=20
-> > > Benchmark 1: make -skj128 LLVM=3D/usr/bin/ allmodconfig all
-> > > =C2=A0 Time (mean =C2=B1 =CF=83):=C2=A0=C2=A0=C2=A0=C2=A0 547.927 s =
-=C2=B1=C2=A0 0.862 s=C2=A0=C2=A0=C2=A0 [User: 47913.709
-> > > s, System: 17682.514 s]
-> > > =C2=A0 Range (min =E2=80=A6 max):=C2=A0=C2=A0 547.429 s =E2=80=A6 548=
-.922 s=C2=A0=C2=A0=C2=A0 3 runs
-> > >=20
-> > > > If we can figure out what these differences are, maybe we can
-> > > > just fine tune the code to avoid this issue.
-> > > >=20
-> > > > I'll try to play around with LLVM compilation a little bit next
-> > > > week, to see if I can figure out what might be going on. I
-> > > > wonder
-> > > > if LLVM is doing lots of mremap calls or something...
-> > >=20
-> > > If there is any further information I can provide or patches I
-> > > can test,
-> > > I am more than happy to do so.
-> > >=20
-> > > [1]:
-> > > https://github.com/llvm/llvm-project/tree/96552e73900176d65ee6650faca=
-e8d669d6f9498/bolt
-> >=20
-> > Was there ever a follow up to this report that I missed? I just
-> > noticed that I am still reverting f35b5d7d676e in my mainline
-> > kernel.
-> >=20
-> > Cheers,
-> > Nathan
-> >=20
->=20
-> #regzbot ignore-activity
->=20
+Alex
 
---=20
-All Rights Reversed.
+diff --git a/drivers/s390/cio/vfio_ccw_drv.c b/drivers/s390/cio/vfio_ccw_drv.c
+index c2a65808605a..54aba7cceb33 100644
+--- a/drivers/s390/cio/vfio_ccw_drv.c
++++ b/drivers/s390/cio/vfio_ccw_drv.c
+@@ -199,8 +199,9 @@ static int vfio_ccw_sch_probe(struct subchannel *sch)
+ 	return 0;
+ 
+ out_unreg:
+-	device_unregister(&parent->dev);
++	device_del(&parent->dev);
+ out_free:
++	put_device(&parent->dev);
+ 	dev_set_drvdata(&sch->dev, NULL);
+ 	return ret;
+ }
+diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
+index f43cfeabd2cc..997b524bdd2b 100644
+--- a/drivers/s390/crypto/vfio_ap_drv.c
++++ b/drivers/s390/crypto/vfio_ap_drv.c
+@@ -122,7 +122,7 @@ static int vfio_ap_matrix_dev_create(void)
+ 	return 0;
+ 
+ matrix_drv_err:
+-	device_unregister(&matrix_dev->device);
++	device_del(&matrix_dev->device);
+ matrix_reg_err:
+ 	put_device(&matrix_dev->device);
+ matrix_alloc_err:
+diff --git a/samples/vfio-mdev/mbochs.c b/samples/vfio-mdev/mbochs.c
+index 8b5a3a778a25..e54eb752e1ba 100644
+--- a/samples/vfio-mdev/mbochs.c
++++ b/samples/vfio-mdev/mbochs.c
+@@ -1430,7 +1430,7 @@ static int __init mbochs_dev_init(void)
+ 
+ 	ret = device_register(&mbochs_dev);
+ 	if (ret)
+-		goto err_class;
++		goto err_put;
+ 
+ 	ret = mdev_register_parent(&mbochs_parent, &mbochs_dev, &mbochs_driver,
+ 				   mbochs_mdev_types,
+@@ -1441,8 +1441,9 @@ static int __init mbochs_dev_init(void)
+ 	return 0;
+ 
+ err_device:
+-	device_unregister(&mbochs_dev);
+-err_class:
++	device_del(&mbochs_dev);
++err_put:
++	put_device(&mbochs_dev);
+ 	class_destroy(mbochs_class);
+ err_driver:
+ 	mdev_unregister_driver(&mbochs_driver);
+diff --git a/samples/vfio-mdev/mdpy.c b/samples/vfio-mdev/mdpy.c
+index 721fb06c6413..e8400fdab71d 100644
+--- a/samples/vfio-mdev/mdpy.c
++++ b/samples/vfio-mdev/mdpy.c
+@@ -717,7 +717,7 @@ static int __init mdpy_dev_init(void)
+ 
+ 	ret = device_register(&mdpy_dev);
+ 	if (ret)
+-		goto err_class;
++		goto err_put;
+ 
+ 	ret = mdev_register_parent(&mdpy_parent, &mdpy_dev, &mdpy_driver,
+ 				   mdpy_mdev_types,
+@@ -728,8 +728,9 @@ static int __init mdpy_dev_init(void)
+ 	return 0;
+ 
+ err_device:
+-	device_unregister(&mdpy_dev);
+-err_class:
++	device_del(&mdpy_dev);
++err_put:
++	put_device(&mdpy_dev);
+ 	class_destroy(mdpy_class);
+ err_driver:
+ 	mdev_unregister_driver(&mdpy_driver);
+diff --git a/samples/vfio-mdev/mtty.c b/samples/vfio-mdev/mtty.c
+index 3c2a421b9b69..e887de672c52 100644
+--- a/samples/vfio-mdev/mtty.c
++++ b/samples/vfio-mdev/mtty.c
+@@ -1330,7 +1330,7 @@ static int __init mtty_dev_init(void)
+ 
+ 	ret = device_register(&mtty_dev.dev);
+ 	if (ret)
+-		goto err_class;
++		goto err_put;
+ 
+ 	ret = mdev_register_parent(&mtty_dev.parent, &mtty_dev.dev,
+ 				   &mtty_driver, mtty_mdev_types,
+@@ -1340,8 +1340,9 @@ static int __init mtty_dev_init(void)
+ 	return 0;
+ 
+ err_device:
+-	device_unregister(&mtty_dev.dev);
+-err_class:
++	device_del(&mtty_dev.dev);
++err_put:
++	put_device(&mtty_dev.dev);
+ 	class_destroy(mtty_dev.vd_class);
+ err_driver:
+ 	mdev_unregister_driver(&mtty_driver);
 
---=-k/uf2/ZCYK22Nz0T1hrw
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmOJDrUACgkQznnekoTE
-3oOKGwf8D1oU3PFiQY/CyAhm8mGeE9oujka5t++2aI3a2pfWMp3dPGt3JkNfmKau
-wvtntOCd1icP1WSv+QBjgWe6Swvt7KpUfHNH9Zp7rHeLl70j1Uf7zQkPAsMui9Io
-VdewMUgCtYfeJQ7ZFmxFw/PsxMovjdYldi5RUuZYT0+5yW3U2g+Ykrd+8XP7/dcN
-ZtTQ/vxJnqpISOtM3OPUu81LBTZL3GV1FWap9SFMHoL5pVLh/SCF5z+9ndRmm4Ue
-l1UxINj4FoINZzMI9+SJ+v15R2+vMxifSYheBOARz3hCSqat4pe1BgX7nZIS3Xfy
-uWE3xlr+uLuiDvK3q+ilwJum7l0FVw==
-=Skbz
------END PGP SIGNATURE-----
-
---=-k/uf2/ZCYK22Nz0T1hrw--
