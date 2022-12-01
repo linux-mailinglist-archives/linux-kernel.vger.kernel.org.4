@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F6163F854
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F71063F856
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiLATb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S230165AbiLATb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiLATao (ORCPT
+        with ESMTP id S231157AbiLATbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:30:44 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342CECAB51
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:30:36 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id vv4so6628031ejc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:30:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JHC6ytZAHLrNLiHuUN2hc1jXap++ZHEcJiLjtBPhfto=;
-        b=AUxf8Xm6UpCWhAeGDcR+3W5Z4SnIFEAv3fiL9oHqUJoa5WoxIlahHfcmR9mvTQCvZ0
-         MlvtW/BT2XFgh4zIhtnqE+P3QGK1LZrWRLAWuey+2v/ozgM9UmK15XA09InVz968DA1F
-         kT7FMPmrydaUJcVh/AKcj5HbAMRaK9NyoDKXhAS792EyNFsK2D2UA39aKXmifavWBdnm
-         6aOlCGYV7P/sdQGEXYj8JBDtAk0aJSnSBW2DeD8ycmiGmITghzLW7rFRl5ur9GtNrLku
-         rbCusZH9cwlRfbGeKpTG+rw7aAWE8/e27NPrO9MuW4vLQIu2veBTwc6E45+umqQE4IhO
-         Cc4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JHC6ytZAHLrNLiHuUN2hc1jXap++ZHEcJiLjtBPhfto=;
-        b=St5eb7iXr9eZmFUviDwL7RUr99DOT66Ug/r5UGMRiqnXAoxIdS2N4V7SMtA28fZFAo
-         j7lUE9iTO1tZoXlXrn6nY5sVcEm4b81C35v1LbdpkLUtzgK7GvaG7SJglAZVw8blXXeY
-         BGe0THVfV9dYp9vcBhwHF3vjMhI/X0u+SyFeLiCXFKWepC5hcubtIbuV6fu525/KGmkA
-         T4QCkpU+Nx/b6ddseig/lDHKdzvqRvfDFY/Imau4PuRbV2AU9M7SFbSnnovc26gxmiwD
-         zHraDJ/mRV1mHaNy5BV/dV6r3CMdQnjdlaPOFgng6rg41Yw/XEsy0E+7Mbei1Um3jrA/
-         GftA==
-X-Gm-Message-State: ANoB5pkEod7iYcCv5f0bdnDJima9UTjM0PINRUT1CmCimY+rGC5+gC5J
-        cPvU9Qw/SvQPSpjl1XsMo0PAeA==
-X-Google-Smtp-Source: AA0mqf4FN2LlAcctT2gQ+2sI+0CRqoL0SJP2GLj//yvst5I/C/b7mWqa3qMoHOBWeC5EOA3kCTVgdQ==
-X-Received: by 2002:a17:906:cc8f:b0:78b:8ce7:fe3c with SMTP id oq15-20020a170906cc8f00b0078b8ce7fe3cmr57197229ejb.557.1669923034733;
-        Thu, 01 Dec 2022 11:30:34 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id g15-20020aa7c84f000000b004619f024864sm2054110edt.81.2022.12.01.11.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:30:34 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v5 5/5] hwmon: (pmbus/core): Notify regulator events
-Date:   Thu,  1 Dec 2022 20:30:24 +0100
-Message-Id: <20221201193025.1584365-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221201193025.1584365-1-Naresh.Solanki@9elements.com>
-References: <20221201193025.1584365-1-Naresh.Solanki@9elements.com>
+        Thu, 1 Dec 2022 14:31:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D76CA159
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:31:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C524620E1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 19:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A56C433C1;
+        Thu,  1 Dec 2022 19:31:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669923063;
+        bh=V6x+RCOV8HEtgHyu8YD+ZG1KCpXzbM+R80b0/e3k1x0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PRWtp1FAmzKQBnFDts9+ZBt+yu0QYpTlEmmPr075Nc0tRS1Wsl9ZzWTsDq+QrALGO
+         Defb0cyDgFIigMBWcvHqnhehNxFPDkWcqkfrhQl2aAiOZ8Z9bJUaUrMCuPiDwBrLV1
+         PJys0f3u6lMP/4F11PIr/lm44OBCdMPA1q2dYW8w=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH 1/4] container_of: add container_of_const() that preserves const-ness of the pointer
+Date:   Thu,  1 Dec 2022 20:30:54 +0100
+Message-Id: <20221201193057.1195255-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1763; i=gregkh@linuxfoundation.org; h=from:subject; bh=V6x+RCOV8HEtgHyu8YD+ZG1KCpXzbM+R80b0/e3k1x0=; b=owGbwMvMwCRo6H6F97bub03G02pJDMmdDO+XG9uorNbftaru1mNx/kXnU4+VrCw6wTirTGWap/f0 93JFHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRiw8YFkxZxPacZ86aF/+FZG/7cG Xfun8rgoFhQWt+5v+ep39XOzzOuLRCksFI85/ZBAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Notify regulator events in PMBus irq handler.
+container_of does not preserve the const-ness of a pointer that is
+passed into it, which can cause C code that passes in a const pointer to
+get a pointer back that is not const and then scribble all over the data
+in it.  To prevent this, container_of_const() will preserve the const
+status of the pointer passed into it using the newly available _Generic()
+method.
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/linux/container_of.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index caefcb99aadf..5241a3c9bd21 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3158,6 +3158,11 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 		if (ret)
- 			return ret;
+diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+index 2008e9f4058c..3c290e865151 100644
+--- a/include/linux/container_of.h
++++ b/include/linux/container_of.h
+@@ -22,4 +22,18 @@
+ 		      "pointer type mismatch in container_of()");	\
+ 	((type *)(__mptr - offsetof(type, member))); })
  
-+		if (event) {
-+			regulator_notifier_call_chain(data->rdevs[i], event, NULL);
-+			ret = IRQ_HANDLED;
-+		}
++/**
++ * container_of_const - cast a member of a structure out to the containing
++ *			structure and preserve the const-ness of the pointer
++ * @ptr_type:		the type of the pointer @ptr
++ * @ptr:		the pointer to the member
++ * @member_type:	the type of the container struct this is embedded in.
++ * @member:		the name of the member within the struct.
++ */
++#define container_of_const(ptr_type, ptr, member_type, member)		\
++	_Generic(ptr,							\
++		const ptr_type *: ((const member_type *)container_of(ptr, member_type, member)),\
++		ptr_type *: ((member_type *)container_of(ptr, member_type, member))	\
++	)
 +
- 		page = rdev_get_id(data->rdevs[i]);
- 		mutex_lock(&data->update_lock);
- 		status = pmbus_read_status_word(client, page);
+ #endif	/* _LINUX_CONTAINER_OF_H */
 -- 
-2.37.3
+2.38.1
 
