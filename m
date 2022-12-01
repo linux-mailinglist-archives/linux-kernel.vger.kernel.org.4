@@ -2,260 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4DA63EF02
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7F763EF07
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiLALIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S231281AbiLALLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiLALIA (ORCPT
+        with ESMTP id S231258AbiLALK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:08:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3188B68FD;
-        Thu,  1 Dec 2022 03:05:54 -0800 (PST)
-Date:   Thu, 01 Dec 2022 11:05:51 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669892753;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n8oJQFEjC5sobhZIM9mHYcUjrnCXhgGujQYXty2nTEc=;
-        b=heIkxzhfEiFAHkxbc9QMVcJ2hv3r6mSPuRwiUoAYFWsnMK65fkBD6lSP20O3wTdP2XOPyD
-        JSYliPcg4yfcFFf2SOIFevDkbXXweTRIzpPzFB8hZAhLOn9OZ/H578WxF1yTy4+Z8Estuo
-        Qqv25co3L4eTgcx5jMkXeWP/J/ic+1buphl0blkyZHiTaQhMzNWpVSvxKOe0RRiUaqjcek
-        5zzdAfB1FDpx2YCjO2PyDMcz4uTBl4L72WJuvwdKFyElwZOV38jnRnlg/ixaqeB3VkRO4T
-        YOdw+bifdsKQAjB4zV8f2j5sa4Ww1zB0FZH2J0fI5xZIfE6j1x6IpRpkF1paYA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669892753;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n8oJQFEjC5sobhZIM9mHYcUjrnCXhgGujQYXty2nTEc=;
-        b=w/vYrb80THhBDquH03d80/btgI17GxjwIJrDU9hK1mTnEQyS9f5Wrsm/+91rRaVg6XWFqB
-        5K37EPyaUVPkU0CA==
-From:   "tip-bot2 for Wolfram Sang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/sh_cmt: Access registers
- according to spec
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221130210609.7718-1-wsa+renesas@sang-engineering.com>
-References: <20221130210609.7718-1-wsa+renesas@sang-engineering.com>
-MIME-Version: 1.0
-Message-ID: <166989275157.4906.9800204566784593865.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 06:10:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04747CA14B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:06:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8DB0B81EA5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:06:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68650C433D6;
+        Thu,  1 Dec 2022 11:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669892814;
+        bh=i2np9F56qLywDr0RX1dy9AOjTdnmeeEccNFFBfjcT8U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XjPGLWxmn9oQO4FFerUe64zD1DnnuQMWv5kw6ej4pQ+vum0dRpQfw5DIg/F5OmR98
+         M7B41ZUi93fNrJav4R2Vl+UtOfStKc/6AB89nUSjMXvaEt7Zv+qopXqYoQ+Z4B2RTr
+         /yZiyEe+yCwd6i+6UOu6IEVb6iQzATF+tgN+mdIDFKhL+Hg113FREev30545rFbmw9
+         m8KlzYl5C/xNvwp1q9iL+WLFoqYt8wq6tjVLJ07UxZT4RFmZX5Q9jDxMRGk8PG6DnQ
+         HDQE2C8VykJ7Q09bMsD/pLqfV8Q5kMyDe9qDdy2Gz8VdJ6HE4lB6Oyd7yWwN7SZykX
+         YszOhHrZDq1+w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p0hP0-009oHg-Qi;
+        Thu, 01 Dec 2022 11:06:52 +0000
+Date:   Thu, 01 Dec 2022 11:06:50 +0000
+Message-ID: <867czbmlh1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
+In-Reply-To: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+On Thu, 01 Dec 2022 10:49:11 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
 
-Commit-ID:     3f44f7156f59cae06e9160eafb5d8b2dfd09e639
-Gitweb:        https://git.kernel.org/tip/3f44f7156f59cae06e9160eafb5d8b2dfd09e639
-Author:        Wolfram Sang <wsa+renesas@sang-engineering.com>
-AuthorDate:    Wed, 30 Nov 2022 22:06:09 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 01 Dec 2022 11:56:25 +01:00
+Thanks for looking into this.
 
-clocksource/drivers/sh_cmt: Access registers according to spec
+> M2 MacBook Air has mismatched CCSIDR associativity bits, which makes the
+> bits a KVM vCPU sees inconsistent when migrating.
 
-Documentation for most CMTs say that it takes two input clocks before
-changes propagate to the timer. This is especially relevant when the timer
-is stopped to change further settings.
+Can you describe the actual discrepancy? Is that an issue between the
+two core types? In which case, nothing says that these two cluster
+should have the same cache topology.
 
-Implement the delays according to the spec. To avoid unnecessary delays in
-atomic mode, also check if the to-be-written value actually differs.
+> It also makes QEMU fail restoring the vCPU registers because QEMU saves
+> and restores all of the registers including CCSIDRs, and if the vCPU
+> migrated among physical CPUs between saving and restoring, it tries to
+> restore CCSIDR values that mismatch with the current physical CPU, which
+> causes EFAULT.
 
-CMCNT is a bit special because testing showed that it requires 3 cycles to
-propagate, which affects all CMTs. Also, the WRFLAG needs to be checked
-before writing. This fixes "cannot clear CMCNT" messages which occur often
-on R-Car Gen4 SoCs, but only very rarely on older SoCs for some reason.
+Well, QEMU will have plenty of other problems, starting with MIDRs,
+which always reflect the physical one. In general, KVM isn't well
+geared for VMs spanning multiple CPU types. It is improving, but there
+is a long way to go.
 
-Fixes: 81b3b2711072 ("clocksource: sh_cmt: Add support for multiple channels per device")
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20221130210609.7718-1-wsa+renesas@sang-engineering.com
+> Trap CCSIDRs if there are CCSIDR value msimatches, and override the
+> associativity bits when handling the trap.
 
----
- drivers/clocksource/sh_cmt.c | 88 +++++++++++++++++++++--------------
- 1 file changed, 55 insertions(+), 33 deletions(-)
+TBH, I'd rather we stop reporting this stuff altogether.
 
-diff --git a/drivers/clocksource/sh_cmt.c b/drivers/clocksource/sh_cmt.c
-index 64dcb08..7b952aa 100644
---- a/drivers/clocksource/sh_cmt.c
-+++ b/drivers/clocksource/sh_cmt.c
-@@ -13,6 +13,7 @@
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/ioport.h>
- #include <linux/irq.h>
- #include <linux/module.h>
-@@ -116,6 +117,7 @@ struct sh_cmt_device {
- 	void __iomem *mapbase;
- 	struct clk *clk;
- 	unsigned long rate;
-+	unsigned int reg_delay;
- 
- 	raw_spinlock_t lock; /* Protect the shared start/stop register */
- 
-@@ -247,10 +249,17 @@ static inline u32 sh_cmt_read_cmstr(struct sh_cmt_channel *ch)
- 
- static inline void sh_cmt_write_cmstr(struct sh_cmt_channel *ch, u32 value)
- {
--	if (ch->iostart)
--		ch->cmt->info->write_control(ch->iostart, 0, value);
--	else
--		ch->cmt->info->write_control(ch->cmt->mapbase, 0, value);
-+	u32 old_value = sh_cmt_read_cmstr(ch);
-+
-+	if (value != old_value) {
-+		if (ch->iostart) {
-+			ch->cmt->info->write_control(ch->iostart, 0, value);
-+			udelay(ch->cmt->reg_delay);
-+		} else {
-+			ch->cmt->info->write_control(ch->cmt->mapbase, 0, value);
-+			udelay(ch->cmt->reg_delay);
-+		}
-+	}
- }
- 
- static inline u32 sh_cmt_read_cmcsr(struct sh_cmt_channel *ch)
-@@ -260,7 +269,12 @@ static inline u32 sh_cmt_read_cmcsr(struct sh_cmt_channel *ch)
- 
- static inline void sh_cmt_write_cmcsr(struct sh_cmt_channel *ch, u32 value)
- {
--	ch->cmt->info->write_control(ch->ioctrl, CMCSR, value);
-+	u32 old_value = sh_cmt_read_cmcsr(ch);
-+
-+	if (value != old_value) {
-+		ch->cmt->info->write_control(ch->ioctrl, CMCSR, value);
-+		udelay(ch->cmt->reg_delay);
-+	}
- }
- 
- static inline u32 sh_cmt_read_cmcnt(struct sh_cmt_channel *ch)
-@@ -268,14 +282,33 @@ static inline u32 sh_cmt_read_cmcnt(struct sh_cmt_channel *ch)
- 	return ch->cmt->info->read_count(ch->ioctrl, CMCNT);
- }
- 
--static inline void sh_cmt_write_cmcnt(struct sh_cmt_channel *ch, u32 value)
-+static inline int sh_cmt_write_cmcnt(struct sh_cmt_channel *ch, u32 value)
- {
-+	/* Tests showed that we need to wait 3 clocks here */
-+	unsigned int cmcnt_delay = DIV_ROUND_UP(3 * ch->cmt->reg_delay, 2);
-+	u32 reg;
-+
-+	if (ch->cmt->info->model > SH_CMT_16BIT) {
-+		int ret = read_poll_timeout_atomic(sh_cmt_read_cmcsr, reg,
-+						   !(reg & SH_CMT32_CMCSR_WRFLG),
-+						   1, cmcnt_delay, false, ch);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	ch->cmt->info->write_count(ch->ioctrl, CMCNT, value);
-+	udelay(cmcnt_delay);
-+	return 0;
- }
- 
- static inline void sh_cmt_write_cmcor(struct sh_cmt_channel *ch, u32 value)
- {
--	ch->cmt->info->write_count(ch->ioctrl, CMCOR, value);
-+	u32 old_value = ch->cmt->info->read_count(ch->ioctrl, CMCOR);
-+
-+	if (value != old_value) {
-+		ch->cmt->info->write_count(ch->ioctrl, CMCOR, value);
-+		udelay(ch->cmt->reg_delay);
-+	}
- }
- 
- static u32 sh_cmt_get_counter(struct sh_cmt_channel *ch, u32 *has_wrapped)
-@@ -319,7 +352,7 @@ static void sh_cmt_start_stop_ch(struct sh_cmt_channel *ch, int start)
- 
- static int sh_cmt_enable(struct sh_cmt_channel *ch)
- {
--	int k, ret;
-+	int ret;
- 
- 	dev_pm_syscore_device(&ch->cmt->pdev->dev, true);
- 
-@@ -347,26 +380,9 @@ static int sh_cmt_enable(struct sh_cmt_channel *ch)
- 	}
- 
- 	sh_cmt_write_cmcor(ch, 0xffffffff);
--	sh_cmt_write_cmcnt(ch, 0);
--
--	/*
--	 * According to the sh73a0 user's manual, as CMCNT can be operated
--	 * only by the RCLK (Pseudo 32 kHz), there's one restriction on
--	 * modifying CMCNT register; two RCLK cycles are necessary before
--	 * this register is either read or any modification of the value
--	 * it holds is reflected in the LSI's actual operation.
--	 *
--	 * While at it, we're supposed to clear out the CMCNT as of this
--	 * moment, so make sure it's processed properly here.  This will
--	 * take RCLKx2 at maximum.
--	 */
--	for (k = 0; k < 100; k++) {
--		if (!sh_cmt_read_cmcnt(ch))
--			break;
--		udelay(1);
--	}
-+	ret = sh_cmt_write_cmcnt(ch, 0);
- 
--	if (sh_cmt_read_cmcnt(ch)) {
-+	if (ret || sh_cmt_read_cmcnt(ch)) {
- 		dev_err(&ch->cmt->pdev->dev, "ch%u: cannot clear CMCNT\n",
- 			ch->index);
- 		ret = -ETIMEDOUT;
-@@ -995,8 +1011,8 @@ MODULE_DEVICE_TABLE(of, sh_cmt_of_table);
- 
- static int sh_cmt_setup(struct sh_cmt_device *cmt, struct platform_device *pdev)
- {
--	unsigned int mask;
--	unsigned int i;
-+	unsigned int mask, i;
-+	unsigned long rate;
- 	int ret;
- 
- 	cmt->pdev = pdev;
-@@ -1032,10 +1048,16 @@ static int sh_cmt_setup(struct sh_cmt_device *cmt, struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_clk_unprepare;
- 
--	if (cmt->info->width == 16)
--		cmt->rate = clk_get_rate(cmt->clk) / 512;
--	else
--		cmt->rate = clk_get_rate(cmt->clk) / 8;
-+	rate = clk_get_rate(cmt->clk);
-+	if (!rate) {
-+		ret = -EINVAL;
-+		goto err_clk_disable;
-+	}
-+
-+	/* We shall wait 2 input clks after register writes */
-+	if (cmt->info->model >= SH_CMT_48BIT)
-+		cmt->reg_delay = DIV_ROUND_UP(2UL * USEC_PER_SEC, rate);
-+	cmt->rate = rate / (cmt->info->width == 16 ? 512 : 8);
- 
- 	/* Map the memory resource(s). */
- 	ret = sh_cmt_map_memory(cmt);
+There is nothing a correctly written arm64 guest should do with any of
+this (this is only useful for set/way CMOs, which non-secure SW should
+never issue). It would be a lot better to expose a virtual topology
+(one set, one way, one level). It would also save us from the CCSIDRX
+silliness.
+
+The only complexity would be to still accept different topologies from
+userspace so that we can restore a VM saved before this virtual
+topology.
+
+Do you mind having a look at this?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
