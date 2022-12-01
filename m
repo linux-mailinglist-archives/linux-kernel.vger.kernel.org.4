@@ -2,104 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE12463EA19
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4351263EA23
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiLAHDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S229886AbiLAHJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 02:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiLAHDl (ORCPT
+        with ESMTP id S229800AbiLAHJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:03:41 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BBE87C85;
-        Wed, 30 Nov 2022 23:03:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=aL3Yz2hAwe0+hwM7my9v/xKV7aioeozADAd4sMrcP+I=; b=Llp8bU0LERX1OZ+AvZZVRp+fTy
-        b4YZ+HD7ddl779OegdEuUoOWVx6Fx92KcC5ZmwySvYwU8p3R7HX7SVAtsYhJ6EOmp/kfb/2uwhlEd
-        50gAK1Y0RD/YGn76IseNMpxlCGGDYfLnDwj/dEhQi0ILYBZZzaFDHQCQ6BZwJSz5KCEtniXXNzqO6
-        in331cahNPs1VVUiYV8bJc5BcQTQg6PWzQGRtobtIuYDYCuX7hzXtsAducoe3JzotMzK3T22gasmu
-        OJGag367jYs4xDxCNvxauewbZNh0c7/UXVVcJrNItlrXUgloQEVGToUg0+XggQQKL/oZWiOImZTRE
-        6jAnJ4CQ==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p0dbj-00FioH-1y; Thu, 01 Dec 2022 07:03:43 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org
-Subject: [PATCH] block: bdev & blktrace: use consistent function doc. notation
-Date:   Wed, 30 Nov 2022 23:03:31 -0800
-Message-Id: <20221201070331.25685-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.38.1
+        Thu, 1 Dec 2022 02:09:27 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B014A9EF
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 23:09:19 -0800 (PST)
+X-QQ-mid: bizesmtp68t1669878514t9aa36n3
+Received: from localhost ( [202.85.220.39])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 01 Dec 2022 15:08:33 +0800 (CST)
+X-QQ-SSF: 0140000000000080B000000A0000000
+X-QQ-FEAT: q2IHZsLIAbhw2780UmiDVApHXo60V9ixJTSse5NXtpdKda0CQmDGHIOB+jH5r
+        AuqgSi251yrgakBL+tG9BzSTK3BKVwuZCAOchD6XrMEXGGXXq/Iihuosu4DRnvr/7GW+IY4
+        acYCV5umEV+YCn9zzV0rLmsPAhO2nZPGfftYr96Lblt9PAri2YKi4Csp752rOnDkC5ZwzgP
+        1F4WDmVFEpioVsequEB/4xrZxbT7soeurar0lSlMzITV38ikEclXcljTZ2bZozwCXxjh6wp
+        ngA55X0eGz/T4MvS/UFU8D1mzXd6DkZea7uKFkCVCmjY/jwG4vrMLIkwMk1eRi9FN1w2Seh
+        /vODM2tjgNijmHrKnpY5sWqdW/TVA==
+X-QQ-GoodBg: 2
+Date:   Thu, 1 Dec 2022 15:08:33 +0800
+From:   Wang Honghui <honghui.wang@ucas.com.cn>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH]mailbox/arm_scpi: Add to support Phytium FT2000/4 CPUs, show
+ temperature of cpu.
+Message-ID: <414EB9088FC46457+Y4hS8eOJa/XUQ8xR@TP-P15V>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:ucas.com.cn:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use only one hyphen in kernel-doc notation between the function name
-and its short description.
+Add to support Phytium FT2000/4 CPUs, show temperature of cpu.
 
-The is the documented kerenl-doc format. It also fixes the HTML
-presentation to be consistent with other functions.
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org
+Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
 ---
- block/bdev.c            |    4 ++--
- kernel/trace/blktrace.c |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/firmware/arm_scpi.c       |   1 +
+ drivers/mailbox/Kconfig           |   6 +
+ drivers/mailbox/Makefile          |   2 +
+ drivers/mailbox/phytium_mailbox.c | 193 ++++++++++++++++++++++++++++++
+ 4 files changed, 202 insertions(+)
+ create mode 100644 drivers/mailbox/phytium_mailbox.c
 
-diff -- a/block/bdev.c b/block/bdev.c
---- a/block/bdev.c
-+++ b/block/bdev.c
-@@ -224,7 +224,7 @@ int fsync_bdev(struct block_device *bdev
- EXPORT_SYMBOL(fsync_bdev);
+diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
+index 435d0e2658a4..876eb2f9ff81 100644
+--- a/drivers/firmware/arm_scpi.c
++++ b/drivers/firmware/arm_scpi.c
+@@ -904,6 +904,7 @@ static const struct of_device_id shmem_of_match[] __maybe_unused = {
+ 	{ .compatible = "amlogic,meson-axg-scp-shmem", },
+ 	{ .compatible = "arm,juno-scp-shmem", },
+ 	{ .compatible = "arm,scp-shmem", },
++	{ .compatible = "phytium,ft2004-scpi-shmem", },
+ 	{ }
+ };
  
- /**
-- * freeze_bdev  --  lock a filesystem and force it into a consistent state
-+ * freeze_bdev - lock a filesystem and force it into a consistent state
-  * @bdev:	blockdevice to lock
-  *
-  * If a superblock is found on this device, we take the s_umount semaphore
-@@ -268,7 +268,7 @@ done:
- EXPORT_SYMBOL(freeze_bdev);
+diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
+index 05d6fae800e3..4d08e8ebc831 100644
+--- a/drivers/mailbox/Kconfig
++++ b/drivers/mailbox/Kconfig
+@@ -41,6 +41,12 @@ config IMX_MBOX
+ 	help
+ 	  Mailbox implementation for i.MX Messaging Unit (MU).
  
- /**
-- * thaw_bdev  -- unlock filesystem
-+ * thaw_bdev - unlock filesystem
-  * @bdev:	blockdevice to unlock
-  *
-  * Unlocks the filesystem and marks it writeable again after freeze_bdev().
-diff -- a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
---- a/kernel/trace/blktrace.c
-+++ b/kernel/trace/blktrace.c
-@@ -721,7 +721,7 @@ EXPORT_SYMBOL_GPL(blk_trace_startstop);
-  */
++config PHYTIUM_MBOX
++        tristate "Phytium SoC Mailbox Support"
++        depends on ARM_AMBA || COMPILE_TEST
++        help
++          This driver provides the support for the Phytium mailbox controller.
++
+ config PLATFORM_MHU
+ 	tristate "Platform MHU Mailbox"
+ 	depends on OF
+diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
+index fc9376117111..e46cb9b29369 100644
+--- a/drivers/mailbox/Makefile
++++ b/drivers/mailbox/Makefile
+@@ -11,6 +11,8 @@ obj-$(CONFIG_ARM_MHU_V2)	+= arm_mhuv2.o
  
- /**
-- * blk_trace_ioctl: - handle the ioctls associated with tracing
-+ * blk_trace_ioctl - handle the ioctls associated with tracing
-  * @bdev:	the block device
-  * @cmd:	the ioctl cmd
-  * @arg:	the argument data, if any
-@@ -769,7 +769,7 @@ int blk_trace_ioctl(struct block_device
- }
+ obj-$(CONFIG_IMX_MBOX)	+= imx-mailbox.o
  
- /**
-- * blk_trace_shutdown: - stop and cleanup trace structures
-+ * blk_trace_shutdown - stop and cleanup trace structures
-  * @q:    the request queue associated with the device
-  *
-  **/
++obj-$(CONFIG_PHYTIUM_MBOX)      += phytium_mailbox.o
++
+ obj-$(CONFIG_ARMADA_37XX_RWTM_MBOX)	+= armada-37xx-rwtm-mailbox.o
+ 
+ obj-$(CONFIG_PLATFORM_MHU)	+= platform_mhu.o
+diff --git a/drivers/mailbox/phytium_mailbox.c b/drivers/mailbox/phytium_mailbox.c
+new file mode 100644
+index 000000000000..8211db1d2ca0
+--- /dev/null
++++ b/drivers/mailbox/phytium_mailbox.c
+@@ -0,0 +1,193 @@
++/*
++ * Phytium SoC mailbox driver
++ *
++ * Copyright (c) 2020 Phytium Corporation.
++ *
++ * This program is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation, version 2 of the License.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/acpi.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/mailbox_controller.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++
++#define INTR_STAT	0x0
++#define INTR_SET	0x8
++#define INTR_CLR	0x10
++
++#define TX_REG		0x100
++
++#define NR_CHANS	1
++
++struct phytium_mbox_link {
++	unsigned irq;
++	void __iomem *tx_reg;
++	void __iomem *rx_reg;
++};
++
++struct phytium_mbox {
++	void __iomem *base;
++	struct phytium_mbox_link mlink;
++	struct mbox_chan chan;
++	struct mbox_controller mbox;
++};
++
++static irqreturn_t phytium_mbox_rx_irq(int irq, void *ch)
++{
++	struct mbox_chan *chan = ch;
++	struct phytium_mbox_link *mlink = chan->con_priv;
++	u32 val;
++
++	val = readl_relaxed(mlink->rx_reg + INTR_STAT);
++	if (!val)
++		return IRQ_NONE;
++
++	mbox_chan_received_data(chan, (void *)&val);
++
++	writel_relaxed(val, mlink->rx_reg + INTR_CLR);
++
++	return IRQ_HANDLED;
++}
++
++static int phytium_mbox_send_data(struct mbox_chan *chan, void *data)
++{
++	struct phytium_mbox_link *mlink = chan->con_priv;
++	u32 *arg = data;
++
++	writel_relaxed(*arg, mlink->tx_reg + INTR_SET);
++
++	return 0;
++}
++
++static int phytium_mbox_startup(struct mbox_chan *chan)
++{
++	struct phytium_mbox_link *mlink = chan->con_priv;
++	u32 val;
++	int ret;
++
++	val = readl_relaxed(mlink->tx_reg + INTR_STAT);
++	writel_relaxed(val, mlink->tx_reg + INTR_CLR);
++
++	ret = request_irq(mlink->irq, phytium_mbox_rx_irq,
++			  IRQF_SHARED, "phytium_mbox_link", chan);
++	if (ret) {
++		dev_err(chan->mbox->dev,
++			"Unable to acquire IRQ %d\n", mlink->irq);
++	}
++
++	return ret;
++}
++
++static void phytium_mbox_shutdown(struct mbox_chan *chan)
++{
++	struct phytium_mbox_link *mlink = chan->con_priv;
++
++	free_irq(mlink->irq, chan);
++}
++
++static bool phytium_mbox_last_tx_done(struct mbox_chan *chan)
++{
++	struct phytium_mbox_link *mlink = chan->con_priv;
++	u32 val = readl_relaxed(mlink->tx_reg + INTR_STAT);
++
++	return (val == (u32)(1U << 31));
++}
++
++static const struct mbox_chan_ops phytium_mbox_ops = {
++	.send_data = phytium_mbox_send_data,
++	.startup = phytium_mbox_startup,
++	.shutdown = phytium_mbox_shutdown,
++	.last_tx_done = phytium_mbox_last_tx_done,
++};
++
++static const struct of_device_id phytium_mbox_of_match[] = {
++	{ .compatible = "phytium,mbox", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, phytium_mbox_of_match);
++
++static int phytium_mbox_probe(struct platform_device *pdev)
++{
++	struct phytium_mbox *mbox;
++	struct resource *res;
++	int err, irq;
++
++	/* Allocate memory for device */
++	mbox = devm_kzalloc(&pdev->dev, sizeof(*mbox), GFP_KERNEL);
++	if (!mbox)
++		return -ENOMEM;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	mbox->base = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR(mbox->base)) {
++		dev_err(&pdev->dev, "ioremap base failed\n");
++		return PTR_ERR(mbox->base);
++	}
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		dev_err(&pdev->dev, "cannot obtain irq\n");
++		return irq;
++	}
++
++	mbox->chan.con_priv = &mbox->mlink;
++	mbox->mlink.irq = irq;
++	mbox->mlink.rx_reg = mbox->base;
++	mbox->mlink.tx_reg = mbox->mlink.rx_reg + TX_REG;
++
++	mbox->mbox.dev = &pdev->dev;
++	mbox->mbox.chans = &mbox->chan;
++	mbox->mbox.num_chans = NR_CHANS;
++	mbox->mbox.ops = &phytium_mbox_ops;
++	mbox->mbox.txdone_irq = false;
++	mbox->mbox.txdone_poll = true;
++	mbox->mbox.txpoll_period = 1;
++
++	platform_set_drvdata(pdev, mbox);
++
++	err = mbox_controller_register(&mbox->mbox);
++	if (err) {
++		dev_err(&pdev->dev, "Failed to register mailboxes %d\n", err);
++		goto fail;
++	}
++
++	dev_info(&pdev->dev, "Phytium SoC Mailbox registered\n");
++fail:
++	return err;
++}
++
++static int phytium_mbox_remove(struct platform_device *pdev)
++{
++	struct phytium_mbox *mbox = platform_get_drvdata(pdev);
++
++	mbox_controller_unregister(&mbox->mbox);
++
++	return 0;
++}
++
++static struct platform_driver phytium_mbox_driver = {
++	.probe = phytium_mbox_probe,
++	.remove = phytium_mbox_remove,
++	.driver = {
++		.name = "phytium-mbox",
++		.of_match_table = of_match_ptr(phytium_mbox_of_match),
++	},
++};
++
++module_platform_driver(phytium_mbox_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("Phytium SoC Mailbox Driver");
++MODULE_AUTHOR("Chen Baozi <chenbaozi@phytium.com.cn>");
+-- 
+2.34.1
+
