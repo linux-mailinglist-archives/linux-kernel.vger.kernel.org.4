@@ -2,168 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241B363EDBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F55963EDC3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiLAK2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:28:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S230353AbiLAK3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiLAK2J (ORCPT
+        with ESMTP id S229940AbiLAK3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:28:09 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7657D5F99;
-        Thu,  1 Dec 2022 02:27:59 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 32628580452;
-        Thu,  1 Dec 2022 05:27:59 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 01 Dec 2022 05:27:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1669890479; x=1669897679; bh=eip0JYxLwA
-        AvXLG5NBGWWs0mG1joDIdVXmK8+H3wc1I=; b=Ifcsm7mFF1kDXPSQsE2BjtauEl
-        4bwtK3ys+M8QAe1DT6cDljjLeiP9u7O0waPCTSzJZvOmYsNzMNupyKSk7RlXCn+z
-        SIt1N4VnFoe4DRug4ptdM/z7kJGtGgRWYHRgCq/DKQ6rEmGJI/hv+ECAVO3zMQeo
-        m/6LelTKZuZRwHGi73LM3aKWDMjnFswHYQHFCEMLH1tLxRaMBy4KGPefilNGDnna
-        6EK9Iysjbf14LMFylHM+HCptA8YYGFlPnzMz5BBJ2Eh0H5sA0SE1O0qzDtKn1/0s
-        9fwoHGL9mP8OuXk1t9ZuXLI8vy7GGe+YC/LR8Z/wxq+3RwzxSR5zYC46inuw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669890479; x=1669897679; bh=eip0JYxLwAAvXLG5NBGWWs0mG1jo
-        DIdVXmK8+H3wc1I=; b=jHUQhnx+FI055/Dk7FSqjW8PozYbbmB3jI+xMqePY5Jj
-        0UQDS9Y8DOSGFbJpQ4QEN9aB7JffyVZkvEDR0TvX5/EzJf+vOAqw79xBlTUNz7+W
-        KJ0LinhY/5xoBand1PEsJ0azU99iEa5mlvOM30ACai17rfRBbmuaM4K74XyirEBt
-        3bdKNePuRK7UFfRbZL8DsWMnAinS/Nin6J9uI9cwHq1W2z0iwwD3dx8k2i25xwvt
-        Nvl4b6krJS5AIgr1bDa3eNVaF4kqOl0r/OVmPhb/RYd1D44m+b6kCfijbWUlpNQD
-        qpJjMNXHbnnt75kCuekTNKj6DTBZHrZDeWEHpqPKXw==
-X-ME-Sender: <xms:roGIY3t5EVZ6P2nmvzYh2n3KX1wn5jjGpXvnR_UMoii3VMCt7HzlbA>
-    <xme:roGIY4dX70cqC8xyYYQZj1dMJaBWiGC6MgELboTwMB-kZwhyR6iQLWrSjM5W5iWVU
-    pgvIZu9hJ57oIJZQ44>
-X-ME-Received: <xmr:roGIY6zmX2PjGrVQ_9LAsGEJTWJ3icluf8JDoPz0NpBX8paAhbeL7jtLsJzHakw2XJKg9g0Tz6XO_DNKI9Hurpfi1Whh19sUL2BOd8R4ZMhYlQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdehgdduiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:roGIY2Mrh4wLnI7uI2YewVbvhK3flXFU53LCcK--03OlrKntaKrl8w>
-    <xmx:roGIY38vEFyFckc2pabqAl8ozfHf0tdmLRtbjwDz8NpJU2xRwCFSUA>
-    <xmx:roGIY2XviimfKRkxKNJvK6RXgTp7kk1xgLBBWK0mjxWstfwn18GKsQ>
-    <xmx:r4GIY8I0DibJnlROOBEyRBqM50z2I12pSKhLfsOYzZPX_ytFUHGQuQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Dec 2022 05:27:58 -0500 (EST)
-Date:   Thu, 1 Dec 2022 11:27:56 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
-Subject: Re: [PATCH v2 01/17] drm/tests: helpers: Move the helper header to
- include/drm
-Message-ID: <20221201102756.cdvxu4iryhu3rjpf@houat>
-References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
- <20221123-rpi-kunit-tests-v2-1-efe5ed518b63@cerno.tech>
- <ebe02c21-7770-0415-096e-76a839bad154@redhat.com>
+        Thu, 1 Dec 2022 05:29:14 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A505B17E0D;
+        Thu,  1 Dec 2022 02:29:13 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d3so1211744plr.10;
+        Thu, 01 Dec 2022 02:29:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q0yvFuHBJfRIpQvKHdUxBRA6+MC7NXxIM6ZLed908Mg=;
+        b=jnaT62SdRfAmhvoMq4Z06tsiQjuTmLKUVCirP+nkHORlRzdErj6ufu5pb0uIJJlIBD
+         5odOKusGLj7GLS/2OGCFrwhOioJLUfiBcCj1gaaHRbSeSDYaoSmk3m0QhnQ/iuaa9Hzw
+         M4x4WiPzAfdSzjuOz9v3FimEerbjpgfr3rGvV/ELh5MRcM5OgsVe948XKOI1yuJz63IC
+         PyMgP2bncRqEdSJg/5CFrSn+Ogy9xdjWqcrIAlkZC7ohRK1PODJ4uegtDYSp9eJ/f10e
+         /F+riMH2OzCXjsANfrNwW4UozF3v7RiHFrm55N7DuOLvOeUpc3vZJb4RWXAVQhQhLSQQ
+         KGCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q0yvFuHBJfRIpQvKHdUxBRA6+MC7NXxIM6ZLed908Mg=;
+        b=xIz3d1VULzNo8OWWeCOysYAmLQO52OyACm9fb6kzrHSu/xUFKhbqM2naBM/MMMrklk
+         Gz3UaJfgux375lJnNvHpOR31GHU8Q/q6Fae0t6fizZYIbOHFuVXSAZ3vP/F7dFg+ybsS
+         yMCEPoPlylUnrBq1Ws2ZbHIY9/+AyYYLGz3HOh+61laMLO3qDROPFvoSm7dADs5QTkYr
+         HlxUcSrJMAwFU2AxvJpIsgXJYailvmc9tHzILqsMLXfMxnDQbnkYwKk1toL0CukpElES
+         k57aChNZkcQjc+uPykXyikBd7AjKCD2QZqRf3WyagKlHLmdUq/gLAZhM9f6iaL7zRan+
+         i04g==
+X-Gm-Message-State: ANoB5pmMzWALE30DvOJZIP1gSgq4D3hnmdHUC5qxuo+F4AY343JoxdtN
+        sOOOn6k+2bCD3cp05ATxC8g=
+X-Google-Smtp-Source: AA0mqf53hZSK/PYK373YKoxAvojrzBvaeLJZSKxX1kP8zUZSia5yfWSDRNAC+4Gd8NOjdyCWpY/x9Q==
+X-Received: by 2002:a17:90a:8c96:b0:218:7e9d:8d0a with SMTP id b22-20020a17090a8c9600b002187e9d8d0amr64650230pjo.41.1669890552940;
+        Thu, 01 Dec 2022 02:29:12 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id y13-20020aa79aed000000b0056b8b17f914sm2899710pfp.216.2022.12.01.02.29.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 02:29:12 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 1 Dec 2022 00:29:11 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
+        axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH -next v2 9/9] blk-iocost: fix walk_list corruption
+Message-ID: <Y4iB97kcdKHEQP86@slm.duckdns.org>
+References: <20221130132156.2836184-1-linan122@huawei.com>
+ <20221130132156.2836184-10-linan122@huawei.com>
+ <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
+ <c028dd77-cabf-edd6-c893-8ee24762ac8c@huaweicloud.com>
+ <Y4h7RxdT83g+zFN0@slm.duckdns.org>
+ <de04965e-1341-3053-0f4b-395b8390d00c@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mtc5qjwrdj4bgosl"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ebe02c21-7770-0415-096e-76a839bad154@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <de04965e-1341-3053-0f4b-395b8390d00c@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 01, 2022 at 06:14:32PM +0800, Yu Kuai wrote:
+> Hi,
+> 
+> 在 2022/12/01 18:00, Tejun Heo 写道:
+> > On Thu, Dec 01, 2022 at 09:19:54AM +0800, Yu Kuai wrote:
+> > > > > diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> > > > > index 710cf63a1643..d2b873908f88 100644
+> > > > > --- a/block/blk-iocost.c
+> > > > > +++ b/block/blk-iocost.c
+> > > > > @@ -2813,13 +2813,14 @@ static void ioc_rqos_exit(struct rq_qos *rqos)
+> > > > >    {
+> > > > >    	struct ioc *ioc = rqos_to_ioc(rqos);
+> > > > > +	del_timer_sync(&ioc->timer);
+> > > > > +
+> > > > >    	blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
+> > > > >    	spin_lock_irq(&ioc->lock);
+> > > > >    	ioc->running = IOC_STOP;
+> > > > >    	spin_unlock_irq(&ioc->lock);
+> > > > > -	del_timer_sync(&ioc->timer);
+> > > > 
+> > > > I don't about this workaround. Let's fix properly?
+> > > 
+> > > Ok, and by the way, is there any reason to delete timer after
+> > > deactivate policy? This seems a litter wreid to me.
+> > 
+> > ioc->running is what controls whether the timer gets rescheduled or not. If
+> > we don't shut that down, the timer may as well get rescheduled after being
+> > deleted. Here, the only extra activation point is IO issue which shouldn't
+> > trigger during rq_qos_exit, so the ordering shouldn't matter but this is the
+> > right order for anything which can get restarted.
+> 
+> Thanks for the explanation.
+> 
+> I'm trying to figure out how to make sure child blkg pins it's parent,
+> btw, do you think following cleanup make sense?
 
---mtc5qjwrdj4bgosl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's on you to explain why any change that you're suggesting is better and
+safe. I know it's not intentional but you're repeatedly suggesting operation
+reorderings in code paths which are really sensitive to ordering at least
+seemingly without putting much effort into thinking through the side
+effects. This costs disproportionate amount of review bandwidth, and
+increases the chance of new subtle bugs. Can you please slow down a bit and
+be more deliberate?
 
-Hi Javier,
+Thanks.
 
-On Wed, Nov 30, 2022 at 09:00:03AM +0100, Javier Martinez Canillas wrote:
-> On 11/28/22 15:53, Maxime Ripard wrote:
-> > We'll need to use those helpers from drivers too, so let's move it to a
-> > more visible location.
-> >=20
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > ---
-> >  drivers/gpu/drm/tests/drm_client_modeset_test.c            | 3 +--
-> >  drivers/gpu/drm/tests/drm_kunit_helpers.c                  | 3 +--
-> >  drivers/gpu/drm/tests/drm_modes_test.c                     | 3 +--
-> >  drivers/gpu/drm/tests/drm_probe_helper_test.c              | 3 +--
-> >  {drivers/gpu/drm/tests =3D> include/drm}/drm_kunit_helpers.h | 0
-> >  5 files changed, 4 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/=
-gpu/drm/tests/drm_client_modeset_test.c
-> > index 52929536a158..ed2f62e92fea 100644
-> > --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> > +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> > @@ -8,12 +8,11 @@
-> >  #include <drm/drm_connector.h>
-> >  #include <drm/drm_edid.h>
-> >  #include <drm/drm_drv.h>
-> > +#include <drm/drm_kunit_helpers.h>
->=20
-> I wonder if now that this header was moved outside of the tests directory,
-> if we should add stub functions in the header file that are just defined
-> but do nothing if CONFIG_DRM_KUNIT_TEST isn't enabled. So that including
-> it in drivers will be a no-op.
->=20
-> Or do you plan to conditionally include this header file in drivers? So
-> that is only included when CONFIG_DRM_KUNIT_TEST is enabled?
-
-I'm not entirely sure. I'd expect only the tests to include it, and thus
-would depend on DRM_KUNIT_TEST already. But we can always add the stubs
-if it's ever included in a different context.
-
-> Another thing that wondered is if we want a different namespace for this
-> header, i.e: <drm/testing/drm_kunit_helpers.h>, to make it clear that is
-> not part of the DRM API but just for testing helpers.
-
-If there's a single header, I don't think we need to create the
-directory. This is also something we can consolidate later on if needed.
-
-> But these are open questions really, and they can be done as follow-up:
->=20
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
-Thanks :)
-Maxime
-
---mtc5qjwrdj4bgosl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY4iBrAAKCRDj7w1vZxhR
-xRpOAQDHwNPpAQkoE6hXFx/5LBWCsUpiuUg3V17tLDsBtosnuAD/TKCoP+W/vHA/
-r8y7Tk1Pv3JAJ6pNY93sYVLHX2HmKQM=
-=Kavk
------END PGP SIGNATURE-----
-
---mtc5qjwrdj4bgosl--
+-- 
+tejun
