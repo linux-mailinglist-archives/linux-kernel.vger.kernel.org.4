@@ -2,202 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7B363F4F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836C063F4FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiLAQO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S232001AbiLAQPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiLAQOz (ORCPT
+        with ESMTP id S230439AbiLAQPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:14:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC6B54443;
-        Thu,  1 Dec 2022 08:14:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAC3062056;
-        Thu,  1 Dec 2022 16:14:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5C5C433C1;
-        Thu,  1 Dec 2022 16:14:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669911293;
-        bh=RA+oYTRjg5pJois2KzjtgaU2E3HhxewyaArdgu/qh4I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tHG04wr1uG6lJKID3geDq5590EAVNGQa5BbtUYJ3uN2I/iu+Mm6ylnKRwH28/G7YX
-         QfuGBwTCyl1vBS8bZD7EXBvSujfrEKzMD8DRtEuRsIjY6gE07nhs2S0gkbjIiS2gmz
-         Y6Ged32jEWtITYeUAwZWHyF/0AFgc0no/Ac9cNIgeJmKg7uYJG7cMLgacWAEtui60B
-         W6MGnz/A8+XZKQ3zwWLrchrv8AtkHdF325qqXiLjtIyU2SCa+qwPgm3Oy3iqtEXiZ/
-         m8e57TxoG7P41iCRCwgjy/d47Le65e31WloOgK2Wj2R+wkBD/7echONk/PHVKk9jd+
-         7lKpQcltG6ZJg==
-Date:   Thu, 1 Dec 2022 08:14:52 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        david@fromorbit.com, dan.j.williams@intel.com,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH v2 1/8] fsdax: introduce page->share for fsdax in reflink
- mode
-Message-ID: <Y4jS/F7VH3zKdsBi@magnolia>
-References: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
- <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
+        Thu, 1 Dec 2022 11:15:33 -0500
+Received: from pv50p00im-ztdg10012001.me.com (pv50p00im-ztdg10012001.me.com [17.58.6.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F101610FDE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:15:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
+        s=sig1; t=1669911331;
+        bh=vKyLeKWQCPk6Mavbg8Y9EuHHQmXgKg5SOQgL2Jw6WFI=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=ULKoB4oTfm5RLFdr35vjjFAlXstf1XvtL2eGL6Dhdpl+tdV9Q39G8X7VlySLvVxvR
+         yKPZRT+fhy9U86Xd1P+2L087FwvPoHQZfCd5FqMwmlj9b8w7ohqCVQhAwk7VqB9K0T
+         HTJVlStOwUj+DvbT2atX1j/Dp1rekK3WvaMaNQeJYHIeloFIfHCnEicthSd9kvd2Nh
+         +JtYX9cfRMfDc/OyGPGr54RF0p15zJegX20MAPMC0Mj6avsAaRr23ayPqfayuwbuXq
+         n6zAxfc+2qBRz362gK3BndRUPOsN1w7q9H8is6kdmr7Z7d3+LJ7U/rgQZP5x0nA/Nq
+         dmzMHFFiv+KGg==
+Received: from vanilla.lan (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-ztdg10012001.me.com (Postfix) with ESMTPSA id 66A67A0B13;
+        Thu,  1 Dec 2022 16:15:28 +0000 (UTC)
+From:   Jun ASAKA <JunASAKA@zzy040330.moe>
+To:     Jes.Sorensen@gmail.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jun ASAKA <JunASAKA@zzy040330.moe>
+Subject: [PATCH v4] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+Date:   Fri,  2 Dec 2022 00:14:53 +0800
+Message-Id: <20221201161453.16800-1-JunASAKA@zzy040330.moe>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: YcPSMVFsNMDb3tv4RBQ_IxEtcRrjZtXy
+X-Proofpoint-ORIG-GUID: YcPSMVFsNMDb3tv4RBQ_IxEtcRrjZtXy
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.64.514.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2022-02-23?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=644
+ bulkscore=0 mlxscore=0 clxscore=1030 phishscore=0 adultscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2212010120
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 03:28:51PM +0000, Shiyang Ruan wrote:
-> fsdax page is used not only when CoW, but also mapread. To make the it
-> easily understood, use 'share' to indicate that the dax page is shared
-> by more than one extent.  And add helper functions to use it.
-> 
-> Also, the flag needs to be renamed to PAGE_MAPPING_DAX_SHARED.
-> 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> ---
->  fs/dax.c                   | 38 ++++++++++++++++++++++----------------
->  include/linux/mm_types.h   |  5 ++++-
->  include/linux/page-flags.h |  2 +-
->  3 files changed, 27 insertions(+), 18 deletions(-)
-> 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index 1c6867810cbd..85b81963ea31 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -334,35 +334,41 @@ static unsigned long dax_end_pfn(void *entry)
->  	for (pfn = dax_to_pfn(entry); \
->  			pfn < dax_end_pfn(entry); pfn++)
->  
-> -static inline bool dax_mapping_is_cow(struct address_space *mapping)
-> +static inline bool dax_mapping_is_shared(struct page *page)
+Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
+issues for rtl8192eu chips by replacing the arguments with
+the ones in the updated official driver as shown below.
+1. https://github.com/Mange/rtl8192eu-linux-driver
+2. vendor driver version: 5.6.4
 
-dax_page_is_shared?
+Tested-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+---
+v4:
+ - fixed some mistakes.
+v3:
+ - add detailed info about the newer version this patch used.
+ - no functional update.
+---
+ .../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 73 +++++++++++++------
+ 1 file changed, 51 insertions(+), 22 deletions(-)
 
->  {
-> -	return (unsigned long)mapping == PAGE_MAPPING_DAX_COW;
-> +	return (unsigned long)page->mapping == PAGE_MAPPING_DAX_SHARED;
->  }
->  
->  /*
-> - * Set the page->mapping with FS_DAX_MAPPING_COW flag, increase the refcount.
-> + * Set the page->mapping with PAGE_MAPPING_DAX_SHARED flag, increase the
-> + * refcount.
->   */
-> -static inline void dax_mapping_set_cow(struct page *page)
-> +static inline void dax_mapping_set_shared(struct page *page)
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+index b06508d0cd..55da714ea2 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+@@ -734,6 +734,12 @@ static int rtl8192eu_iqk_path_a(struct rtl8xxxu_priv *priv)
+ 	 */
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00180);
++
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x20000);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0x07f77);
++
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+ 
+ 	/* Path A IQK setting */
+@@ -779,11 +785,16 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
+-	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf117b);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf1173);
++
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf1173);
+ 
+ 	/* PA/PAD control by 0x56, and set = 0x0 */
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00980);
+-	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x51000);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x511e0);
+ 
+ 	/* Enter IQK mode */
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+@@ -798,14 +809,14 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
+ 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+ 
+-	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
+-	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x68160c1f);
++	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x8216031f);
++	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x6816031f);
+ 
+ 	/* LO calibration setting */
+ 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a911);
+ 
+ 	/* One shot, path A LOK & IQK */
+-	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
++	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf9000000);
+ 	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf8000000);
+ 
+ 	mdelay(10);
+@@ -836,11 +847,16 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
+-	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf7ffa);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf7ff2);
++
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
+ 
+ 	/* PA/PAD control by 0x56, and set = 0x0 */
+ 	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00980);
+-	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x51000);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x510e0);
+ 
+ 	/* Enter IQK mode */
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+@@ -854,14 +870,14 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
+ 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+ 
+-	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
+-	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x28160c1f);
++	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x821608ff);
++	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x281608ff);
+ 
+ 	/* LO calibration setting */
+ 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a891);
+ 
+ 	/* One shot, path A LOK & IQK */
+-	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
++	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf9000000);
+ 	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf8000000);
+ 
+ 	mdelay(10);
+@@ -891,9 +907,12 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
+ 
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
+-	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+ 
+-	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
++
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+ 
+ 	/* Path B IQK setting */
+@@ -902,11 +921,11 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+ 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+ 
+-	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
++	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
+ 	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
+ 
+ 	/* LO calibration setting */
+-	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
++	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
+ 
+ 	/* One shot, path A LOK & IQK */
+ 	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+@@ -942,11 +961,16 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+-	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf117b);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf1173);
++
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf1173);
+ 
+ 	/* PA/PAD control by 0x56, and set = 0x0 */
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00980);
+-	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x51000);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x511e0);
+ 
+ 	/* Enter IQK mode */
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+@@ -961,8 +985,8 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+ 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+ 
+-	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82160c1f);
+-	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160c1f);
++	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x8216031f);
++	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x6816031f);
+ 
+ 	/* LO calibration setting */
+ 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a911);
+@@ -1002,11 +1026,16 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+-	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ffa);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
++
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
++	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf7ff2);
+ 
+ 	/* PA/PAD control by 0x56, and set = 0x0 */
+ 	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00980);
+-	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x51000);
++	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x510e0);
+ 
+ 	/* Enter IQK mode */
+ 	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+@@ -1020,8 +1049,8 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+ 	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
+ 	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x18008c1c);
+ 
+-	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
+-	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x28160c1f);
++	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x821608ff);
++	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x281608ff);
+ 
+ 	/* LO calibration setting */
+ 	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a891);
+-- 
+2.38.1
 
-It's odd that a function of a struct page still has 'mapping' in the
-name.
-
-dax_page_increase_shared?
-
-or perhaps simply
-
-dax_page_bump_sharing and dax_page_drop_sharing?
-
-Otherwise this mechanical change looks pretty straightforward.
-
---D
-
->  {
-> -	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_COW) {
-> +	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_SHARED) {
->  		/*
->  		 * Reset the index if the page was already mapped
->  		 * regularly before.
->  		 */
->  		if (page->mapping)
-> -			page->index = 1;
-> -		page->mapping = (void *)PAGE_MAPPING_DAX_COW;
-> +			page->share = 1;
-> +		page->mapping = (void *)PAGE_MAPPING_DAX_SHARED;
->  	}
-> -	page->index++;
-> +	page->share++;
-> +}
-> +
-> +static inline unsigned long dax_mapping_decrease_shared(struct page *page)
-> +{
-> +	return --page->share;
->  }
->  
->  /*
-> - * When it is called in dax_insert_entry(), the cow flag will indicate that
-> + * When it is called in dax_insert_entry(), the shared flag will indicate that
->   * whether this entry is shared by multiple files.  If so, set the page->mapping
-> - * FS_DAX_MAPPING_COW, and use page->index as refcount.
-> + * PAGE_MAPPING_DAX_SHARED, and use page->share as refcount.
->   */
->  static void dax_associate_entry(void *entry, struct address_space *mapping,
-> -		struct vm_area_struct *vma, unsigned long address, bool cow)
-> +		struct vm_area_struct *vma, unsigned long address, bool shared)
->  {
->  	unsigned long size = dax_entry_size(entry), pfn, index;
->  	int i = 0;
-> @@ -374,8 +380,8 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
->  	for_each_mapped_pfn(entry, pfn) {
->  		struct page *page = pfn_to_page(pfn);
->  
-> -		if (cow) {
-> -			dax_mapping_set_cow(page);
-> +		if (shared) {
-> +			dax_mapping_set_shared(page);
->  		} else {
->  			WARN_ON_ONCE(page->mapping);
->  			page->mapping = mapping;
-> @@ -396,9 +402,9 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
->  		struct page *page = pfn_to_page(pfn);
->  
->  		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
-> -		if (dax_mapping_is_cow(page->mapping)) {
-> -			/* keep the CoW flag if this page is still shared */
-> -			if (page->index-- > 0)
-> +		if (dax_mapping_is_shared(page)) {
-> +			/* keep the shared flag if this page is still shared */
-> +			if (dax_mapping_decrease_shared(page) > 0)
->  				continue;
->  		} else
->  			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 500e536796ca..f46cac3657ad 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -103,7 +103,10 @@ struct page {
->  			};
->  			/* See page-flags.h for PAGE_MAPPING_FLAGS */
->  			struct address_space *mapping;
-> -			pgoff_t index;		/* Our offset within mapping. */
-> +			union {
-> +				pgoff_t index;		/* Our offset within mapping. */
-> +				unsigned long share;	/* share count for fsdax */
-> +			};
->  			/**
->  			 * @private: Mapping-private opaque data.
->  			 * Usually used for buffer_heads if PagePrivate.
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index 0b0ae5084e60..c8a3aa02278d 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -641,7 +641,7 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
->   * Different with flags above, this flag is used only for fsdax mode.  It
->   * indicates that this page->mapping is now under reflink case.
->   */
-> -#define PAGE_MAPPING_DAX_COW	0x1
-> +#define PAGE_MAPPING_DAX_SHARED	0x1
->  
->  static __always_inline bool folio_mapping_flags(struct folio *folio)
->  {
-> -- 
-> 2.38.1
-> 
