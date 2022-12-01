@@ -2,90 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E679D63EF0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10D363EF12
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiLALO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S231356AbiLALPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:15:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiLALNz (ORCPT
+        with ESMTP id S231347AbiLALO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:13:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A66CD9A6;
-        Thu,  1 Dec 2022 03:08:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43EB3B81EA5;
-        Thu,  1 Dec 2022 11:08:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFE3C433C1;
-        Thu,  1 Dec 2022 11:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669892889;
-        bh=PahB8+mPXd0jsxi+GkOWIVJ003B6bh7/zfcYA2Nb474=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TOXsRcytQw8HTt9oXcQMY8JFsEdYbz4MI33trwwdN9MwwXpPMuuTN7UFwx5IkgWqV
-         78sTqZsILPY8i1tILbPhwhjYQXviU5NAtkOgYvd9HDdbix/o+yEUbJDTnRmnseJ1Gt
-         JRdsVyXu6rFCvVose6s59i9pq3SACvMIfgilGkHmJV42nJX+QcBQWEOgOa1fMw3K5d
-         GJfxmWu3YnzdRtWPeAqdBn+osvR72wELKJGlfEz4sHmIzDFrexuJWWYkfX4iQ/NYBb
-         LyK1I4M0Pwlmx2BGB8dr4NXFDTPO0iu0sJ72djqEHU89Ttozq3qzad0a5CCdhudegl
-         qgth3OOmK1I/Q==
-Date:   Thu, 1 Dec 2022 11:08:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Markus Laine <markus.laine@fi.rohmeurope.com>,
-        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix maintainer email for a few ROHM ICs
-Message-ID: <Y4iLEuIyVSC7Hy/Y@sirena.org.uk>
-References: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
+        Thu, 1 Dec 2022 06:14:27 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CF9A6CE1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:08:47 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z92so1932330ede.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:08:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=lGm4cyBDbhcC+E+E+8rSuqE3igb1lprN1pN6/M3QLys=;
+        b=ZRHyoajEwFC4By5LI1rVbOp/xLGzBq//9Xi/KMCz0lo8z9Pc1kxGrZQGSfdmpQmaMd
+         1GnniREAshZoCU4tyHuy1piJbRVEDqwJVixje9ZJzJ77PtUXKFFljT/b8/IV0BWReOGd
+         SqBdcc0wshVkJyGCE+uvwuRmeLcgRNVAq9pdQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lGm4cyBDbhcC+E+E+8rSuqE3igb1lprN1pN6/M3QLys=;
+        b=dQILog8dOEhEdRDythYNyCuGZweU7wDhXOvXoKiKuCjVMBXUKDZxaLOgGqueJPanpd
+         ev2AArHFDzC/hOO54RzTT4JFAgBTM2RcAf34ES/hTZUEBd2i/D6mwlFxqbkMpHoolodm
+         vEChfBLBdCShcXyoQC33NcJtxXpIF5TsraKIavbquXl9rg15zz76nLvX8ESuaj/RMubE
+         RoxVm44Oucy/6ZVchvjde9abE8r1JLLcSSBSxI3FDo1Rg0yBP+bD/bwtEcgljMySmuoI
+         0/2z84gA3S3OyJIjfqRyjY9XmBd0qIzCzHhjK5vtJvP1yd15/kJnPQ12H0QWIs/s9RQc
+         /uvw==
+X-Gm-Message-State: ANoB5pkWE/PVGYAu1jN55oIL/PKkNEGlPJPxuAoEnlqot7UhYWEZ5wBr
+        ric5pzLibhWb54peAevo6e8Exw==
+X-Google-Smtp-Source: AA0mqf5zzNn9de5BfFPh0J6RLCpw0dw9HFYWDLvw7kVxPfSHwhQH5HyYQ8cKCqwRv03JB5G51Q4CsA==
+X-Received: by 2002:a05:6402:4516:b0:467:b88c:f3af with SMTP id ez22-20020a056402451600b00467b88cf3afmr43151776edb.24.1669892925587;
+        Thu, 01 Dec 2022 03:08:45 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:f554:724a:f89a:73db])
+        by smtp.gmail.com with ESMTPSA id v17-20020a170906293100b0078e0973d1f5sm1663824ejd.0.2022.12.01.03.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 03:08:44 -0800 (PST)
+Subject: [PATCH v8 0/3] ASoC: SOF: Fix deadlock when shutdown a frozen userspace
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hqmJWUz+ZDX1x8fK"
-Content-Disposition: inline
-In-Reply-To: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
-X-Cookie: Isn't this my STOP?!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACSLiGMC/3XPzWrDMAwA4FcpPs8jln/b095j7CA7SmNoHbDXwF
+ by7tN2HDY6CAk+/TxFo5qpicvpKSrtueWtcBFeTiKtWK4k88y1gAlAKfCylVkuleibpCJSRgMEDU
+ 4wiNhIxoolrUzK43bj5prb51a//hbsitN7d9au5CStN06hdo4SvKW1bvf8uL9u9So+eNIOYw2s54
+ AGLOHZOd3Reqw1awSa0WuVUJmONmNtfi9n50z0C2DsaDvWlrWhmSNOIeLU0W6sHWtN58lavTiDtq
+ P9WHvW3Es2wMIP/P/7OI4f/KJYEyACAAA=
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 01 Dec 2022 12:08:20 +0100
+Message-Id: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
+To:     Juergen Gross <jgross@suse.com>, Mark Brown <broonie@kernel.org>,
+        Chromeos Kdump <chromeos-kdump@google.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org
+Cc:     kexec@lists.infradead.org, alsa-devel@alsa-project.org,
+        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org,
+        sound-open-firmware@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4368; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=Rud9IUdbPKIRkkkE6G4uaTZbcmuiccX+lZS5manvrHM=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjiIsuiQZl7CGQiKdplkqC0gHCzURIkJXoavQjeFfS
+ sEPmEE6JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4iLLgAKCRDRN9E+zzrEiIaWD/
+ 9SLVqH6ELG3Nj4DmzbcOc+YbsFvyvs/zS4DGTKOm4a1dsJ6EojOhIs9fpuGLT8o3p3+9VsWHC0In/y
+ k6Iuhsi7YI2K91jtIDrxVIf4dUlmsglcYsc4qe5s+tqH0tWT7y7OlpaNM4+W605lNX2FMTKjGgKfHe
+ jHVMfBfB0ebLbt7OhLXieR55yYucbmtChn3v49MHNc8u6oY5Zy9bC4bNkMJDJtd+ce/qqb8Bp4QeMA
+ rOQjtJMeieO5qtXaDb8EfsUc4gu1PYL42HfoTN2sr18FL9SKNzVejr4Jq0RhUCNg/rf+Oqoqn7EEmV
+ sjud45VDHbBcOD8OQJa/GQAuRwLJQYje6ycI76nIB/gnEiR08+uB3nK3tlAkKMMWbb4wS5vuWnCX2U
+ 3YF/ZK8xWASICm+G0JmfVBdajYCKUxaboXr7DPbP7oCUFU3bLEQqtBpNgeyfU46D4Q0gnTD8/frbVt
+ UgY++3lpoKK+Pxg3zbTIKOvN4fumazPJdSB+a586EbWiw7LhOtWns3EsiPZqFybXoW0BptbVq0Aqan
+ TLmIsVZkJSOl85YER762XGxsWyl9LeYioTLO/h4ozDLEbfseFlKxfz67nGgS7NBgsHBJDuc7Pu2/XP
+ dfaTOEkimDz87TdwqvVEa5v67H9Ve4p2lif6Z3g7ymf71PA6yB0dtq2z/ZqQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Since: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+we wait for all the workloads to be completed during shutdown. This was done to 
+avoid a stall once the device is started again.
 
---hqmJWUz+ZDX1x8fK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Unfortunately this has the side effect of stalling kexec(), if the userspace
+is frozen. Let's handle that case.
 
-On Thu, Dec 01, 2022 at 08:57:52AM +0200, Matti Vaittinen wrote:
-> The email backend used by ROHM keeps labeling patches as spam. This can
-> result to missing the patches.
+To: Joel Fernandes <joel@joelfernandes.org>
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+To: Liam Girdwood <lgirdwood@gmail.com>
+To: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+To: Bard Liao <yung-chuan.liao@linux.intel.com>
+To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+To: Daniel Baluta <daniel.baluta@nxp.com>
+To: Mark Brown <broonie@kernel.org>
+To: Jaroslav Kysela <perex@perex.cz>
+To: Takashi Iwai <tiwai@suse.com>
+To: Eric Biederman <ebiederm@xmission.com>
+To: Chromeos Kdump <chromeos-kdump@google.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Michael Ellerman <mpe@ellerman.id.au>
+To: Nicholas Piggin <npiggin@gmail.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: "K. Y. Srinivasan" <kys@microsoft.com>
+To: Haiyang Zhang <haiyangz@microsoft.com>
+To: Wei Liu <wei.liu@kernel.org>
+To: Dexuan Cui <decui@microsoft.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+To: Ingo Molnar <mingo@redhat.com>
+To: Borislav Petkov <bp@alien8.de>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: x86@kernel.org
+To: "H. Peter Anvin" <hpa@zytor.com>
+To: Juergen Gross <jgross@suse.com>
+To: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+To: Bjorn Helgaas <bhelgaas@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Pavel Machek <pavel@ucw.cz>
+To: Len Brown <len.brown@intel.com>
+Cc: stable@vger.kernel.org
+Cc: sound-open-firmware@alsa-project.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-kernel@vger.kernel.org
+Cc: kexec@lists.infradead.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-hyperv@vger.kernel.org
+Cc: xen-devel@lists.xenproject.org
+Cc: linux-efi@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v8:
+- Wrap pm_freezing and kexec_inprogress in functions.
+- Do not run snd_sof_machine_unregister(sdev, pdata) during kexec (Thanks Kai).
+- Link to v7: https://lore.kernel.org/r/20221127-snd-freeze-v7-0-127c582f1ca4@chromium.org
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Changes in v7:
+- Fix commit message (Thanks Pierre-Louis).
+- Link to v6: https://lore.kernel.org/r/20221127-snd-freeze-v6-0-3e90553f64a5@chromium.org
 
---hqmJWUz+ZDX1x8fK
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in v6:
+- Check if we are in kexec with the userspace frozen.
+- Link to v5: https://lore.kernel.org/r/20221127-snd-freeze-v5-0-4ededeb08ba0@chromium.org
 
------BEGIN PGP SIGNATURE-----
+Changes in v5:
+- Edit subject prefix.
+- Link to v4: https://lore.kernel.org/r/20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOIixIACgkQJNaLcl1U
-h9A/Tgf/bpeGcIzcYVBcPE53GXu5EXCZponWfaEDafOEcyM2WhTfxmR1IbSUzJoh
-d5aDrZxfxUIyJquLZoLSlh768KGinztSczsl+rQUFQ/qoxzCKz7W6LilqWnetcKp
-8ErCZz+M0rlQsPrs5v1BsQfmlfVEiI1iABAWcfWTbTMpd73Urzi1nt/nYXoK+epY
-E5UkrYBO5eiE89Tm995DLMHMtidg0dT2O0K1cZg6I9SdCZrzVDoM7yyVBUSJEAXM
-J8votxt1hLgNkofUtqAWGxR6cv6+e0ZP7i/yDLOFbIRh5mBiygN4nDbHwtHSOqA2
-Lol4wBb8dBmt5IMeOF/pge7nTKfyKg==
-=OCH/
------END PGP SIGNATURE-----
+Changes in v4:
+- Do not call snd_sof_machine_unregister from shutdown.
+- Link to v3: https://lore.kernel.org/r/20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org
 
---hqmJWUz+ZDX1x8fK--
+Changes in v3:
+- Wrap pm_freezing in a function.
+- Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+
+Changes in v2:
+- Only use pm_freezing if CONFIG_FREEZER .
+- Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+
+---
+Ricardo Ribalda (3):
+      kexec: Refactor kexec_in_progress into a function
+      freezer: refactor pm_freezing into a function.
+      ASoC: SOF: Fix deadlock when shutdown a frozen userspace
+
+ arch/powerpc/platforms/pseries/vio.c |  2 +-
+ arch/x86/kernel/cpu/mshyperv.c       |  6 +++---
+ arch/x86/xen/enlighten_hvm.c         |  2 +-
+ drivers/firmware/efi/efi.c           |  2 +-
+ drivers/pci/pci-driver.c             |  2 +-
+ include/linux/freezer.h              |  3 ++-
+ include/linux/kexec.h                |  5 ++---
+ kernel/freezer.c                     |  3 +--
+ kernel/kexec_core.c                  | 12 ++++++++++--
+ kernel/power/process.c               | 24 ++++++++++++++++++++----
+ sound/soc/sof/core.c                 |  9 ++++++---
+ 11 files changed, 48 insertions(+), 22 deletions(-)
+---
+base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+change-id: 20221127-snd-freeze-1ee143228326
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
