@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7334363FC0F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023A463FC13
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiLAX3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S231897AbiLAXdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiLAX2s (ORCPT
+        with ESMTP id S231652AbiLAXdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:28:48 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB10F10B5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:27:45 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so3450153pje.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:27:45 -0800 (PST)
+        Thu, 1 Dec 2022 18:33:22 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2390413F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:33:22 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id e185-20020a2569c2000000b006f28dd5da75so3320969ybc.19
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:33:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1NugFnVCB110oXGMzrxJ93wD+BGdk2//9yqV+Q+IFc=;
-        b=AMe6PZQjL+GG9iGCzR8Y1kDAWFNDPhfhQ+A1ONMZtd40MzMjOdxdVkLPy+o4zaOX0k
-         EapYcGzlaA1WBqr4QlwRfZ/UOs5nydC4Z1Q/Gf0DfQdR3+VxXzQfOWCYeJSuLnkwtnNB
-         L7Vajcoe+gve+aTRDGu6MsW0HaBmVK74RQOdCPb2q3azcTPtng2zprtO4MceWEGmlla3
-         f3hiYd9MJ2N+xVUOXVq+DxA3f9DleU3IbHw/BTopzy8ZL9QIuIC8mpHHUKu8syJvajlJ
-         alNgTMKhLluW+5etzrvrxstnTPTvrN0Wrp8jdMFi222FhOv00hZ6Xw+CcRQjc1UzjctI
-         O/Sw==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=j5xM6059haRL2w3Ml8a9OvL6hEZxMiznHTFr64Muu3Y=;
+        b=ewb56XgkB8OJ94EaI97ZNlJi8hda6Yr2t8q/bkmq3CwmXRsSaDFbJ3M2qcP3Yj2dKA
+         x+WXST6VfgBddgE2zHpubheKMa0xiWrMKYNegpChRy0JHvzkCgwNg0C39luwmaKTBPct
+         xzsWH5vK6uM04ozXYjeyVqAdfMDNK5298lLSIoNCLJuM6ZqXwohnfue0mu1WJ0bVx8HG
+         q8KUfKfm9KdhsuVz1Sb4NfzeW/s1BqCPvIdF4pPry0GId2KBTQ0jsJopvKeiJ7Vta/tW
+         7NSD0AV3P8ivtFJwq588AHC2zW4gjr5w2x6KE71cC2dzC4zTiGFheA9Gk4KQSBrqLyXb
+         fuwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e1NugFnVCB110oXGMzrxJ93wD+BGdk2//9yqV+Q+IFc=;
-        b=ZIpYLEqi7+sRlH7tQUJAJ0Y/bOlOAfUaMEIgAhdj9eFUEOdrSarwHpPFlT+7UgiD+3
-         ZYC/lC2TGx8Yb6Cnlnr27RTjhqHRMDvt/ZWROVz2Z3HhqCfPSTcIir9GFHHaVu752qFs
-         uIm7aIxHoGutq0xqWL3+vlM+TdfO7OVUFcoCqth0IHLx9F+9xVYQ9QcTIuEeDrb5r6hw
-         ao6/CjwLN5Va85XCDlzpUj/x9VwcS6+Q9DeEDwCknFjFo4Yasu87WpV8vS5vXIogPY0M
-         Rb1bXpzW6F6r0wvzW7CVw2YyhpKZrT6ymF4+3siUvN54qMbtXkjBi2AiH7LNHd4XaaLA
-         X6UA==
-X-Gm-Message-State: ANoB5plmLUBLHwafFSWjL5N3QaXVFrD9NrFDDLgrFUIi7/xJMhE6Zuji
-        /4Ozpx/z1QI6z7N+M56MBI8/IETmWXY=
-X-Google-Smtp-Source: AA0mqf5ZwcIe+YY0pzfxIbAo3lP4N19HMp0HJsnVajNzyxLAxNKYPCVLQTfGvi94v6IjIRWdxVfh94oDZbo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:6904:b0:188:fd9b:479d with SMTP id
- j4-20020a170902690400b00188fd9b479dmr53509373plk.93.1669937248948; Thu, 01
- Dec 2022 15:27:28 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  1 Dec 2022 23:26:55 +0000
-In-Reply-To: <20221201232655.290720-1-seanjc@google.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j5xM6059haRL2w3Ml8a9OvL6hEZxMiznHTFr64Muu3Y=;
+        b=grAfoxpf13NsJz3KMKJKOuIPxawgUefoZZq/SbTKEibR+9dr92PddwoFTnzPhHTGCD
+         Bt8sY83KWx22t+IYEBV1pG4CE+iOaPlean2BwoYbepUVTpjJVTp0T/iw+787LQE4mnfq
+         D75GWg1ciMG7VIeGXEDkXiUSbz/u2m6Sj+9nLVVzj9kJUDNgBt7JWypY1ToUZyEeib05
+         BCm56CDLAyIWEaedzbuUfwbVdqRaICRwojWTN7ESLqm4mQXvuZhsvbDAZ8t+IHdfbUuo
+         3KUpEvVYaUIAiXWCYuFt2C6zN9NSj+nDWLibox8eSjvHib8wLq7vjmHGLxcNft1FzkEu
+         K0uQ==
+X-Gm-Message-State: ANoB5plZ6GNXYjSTpepX9n2EvU0OZbTov55JqVJynGVMJwgROKHnp7U/
+        H2AKV0XOakq2TyaAnGJDGlqJpwUMoXDElDtpYg==
+X-Google-Smtp-Source: AA0mqf6KQU6tuDVl1pJYFk7jClux0jWzfMz7wsgxiZKagx1M0EFtB2nfBvK7fKwyYR+G6wQ4nvVr/fFBymw+KEnPAg==
+X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:4f7:4c6:3f81:f009])
+ (user=almasrymina job=sendgmr) by 2002:a25:c447:0:b0:6f8:784:efb9 with SMTP
+ id u68-20020a25c447000000b006f80784efb9mr17934822ybf.334.1669937601439; Thu,
+ 01 Dec 2022 15:33:21 -0800 (PST)
+Date:   Thu,  1 Dec 2022 15:33:17 -0800
 Mime-Version: 1.0
-References: <20221201232655.290720-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221201232655.290720-17-seanjc@google.com>
-Subject: [PATCH 16/16] KVM: SVM: Use "standard" stgi() helper when disabling SVM
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Andrew Cooper <Andrew.Cooper3@citrix.com>
+Message-ID: <20221201233317.1394958-1-almasrymina@google.com>
+Subject: [PATCH v1] mm: disable top-tier fallback to reclaim on proactive reclaim
+From:   Mina Almasry <almasrymina@google.com>
+To:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mina Almasry <almasrymina@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -74,35 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that kvm_rebooting is guaranteed to be true prior to disabling SVM
-in an emergency, use the existing stgi() helper instead of open coding
-STGI.  In effect, eat faults on STGI if and only if kvm_rebooting==true.
+Reclaiming directly from top tier nodes breaks the aging pipeline of
+memory tiers.  If we have a RAM -> CXL -> storage hierarchy, we
+should demote from RAM to CXL and from CXL to storage. If we reclaim
+a page from RAM, it means we 'demote' it directly from RAM to storage,
+bypassing potentially a huge amount of pages colder than it in CXL.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+However disabling reclaim from top tier nodes entirely would cause ooms
+in edge scenarios where lower tier memory is unreclaimable for whatever
+reason, e.g. memory being mlocked() or too hot to reclaim.  In these
+cases we would rather the job run with a performance regression rather
+than it oom altogether.
+
+However, we can disable reclaim from top tier nodes for proactive reclaim.
+That reclaim is not real memory pressure, and we don't have any cause to
+be breaking the aging pipeline.
+
+Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- arch/x86/kvm/svm/svm.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ mm/vmscan.c | 27 ++++++++++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 08ed4679903a..72899a61f708 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -579,13 +579,9 @@ static inline void kvm_cpu_svm_disable(void)
- 	if (efer & EFER_SVME) {
- 		/*
- 		 * Force GIF=1 prior to disabling SVM, e.g. to ensure INIT and
--		 * NMI aren't blocked.  Eat faults on STGI, as it #UDs if SVM
--		 * isn't enabled and SVM can be disabled by an NMI callback.
-+		 * NMI aren't blocked.
- 		 */
--		asm_volatile_goto("1: stgi\n\t"
--				  _ASM_EXTABLE(1b, %l[fault])
--				  ::: "memory" : fault);
--fault:
-+		stgi();
- 		wrmsrl(MSR_EFER, efer & ~EFER_SVME);
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 23fc5b523764..6eb130e57920 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2088,10 +2088,31 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+ 	nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
+ 	/* Folios that could not be demoted are still in @demote_folios */
+ 	if (!list_empty(&demote_folios)) {
+-		/* Folios which weren't demoted go back on @folio_list for retry: */
++		/*
++		 * Folios which weren't demoted go back on @folio_list.
++		 */
+ 		list_splice_init(&demote_folios, folio_list);
+-		do_demote_pass = false;
+-		goto retry;
++
++		/*
++		 * goto retry to reclaim the undemoted folios in folio_list if
++		 * desired.
++		 *
++		 * Reclaiming directly from top tier nodes is not often desired
++		 * due to it breaking the LRU ordering: in general memory
++		 * should be reclaimed from lower tier nodes and demoted from
++		 * top tier nodes.
++		 *
++		 * However, disabling reclaim from top tier nodes entirely
++		 * would cause ooms in edge scenarios where lower tier memory
++		 * is unreclaimable for whatever reason, eg memory being
++		 * mlocked or too hot to reclaim. We can disable reclaim
++		 * from top tier nodes in proactive reclaim though as that is
++		 * not real memory pressure.
++		 */
++		if (!sc->proactive) {
++			do_demote_pass = false;
++			goto retry;
++		}
  	}
- }
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
 
+ 	pgactivate = stat->nr_activate[0] + stat->nr_activate[1];
+--
+2.39.0.rc0.267.gcb52ba06e7-goog
