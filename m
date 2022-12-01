@@ -2,103 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6CA63EE04
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785AE63EE0C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiLAKiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S230416AbiLAKjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiLAKiV (ORCPT
+        with ESMTP id S230306AbiLAKj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:38:21 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9FAE02A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:38:19 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id bp15so1795399lfb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ir3uvErgUob4NFVyXZ4JMzbDFyUKCFAp6JFwnKMpYXU=;
-        b=sDiCfmTwLAL+IKSK6fOyjJI03hKdZIxAwTN23mUq3iwImjKp2FQBCLSi5GOXxBPsHz
-         BdYaxRl6VVlyvlU6jG9NE6ZG8rv3Yj0JnmFXHJTRlzsuIL78G6czmw1vTpU9BjChZF3M
-         rmMJqL65R3fZNXf0/E6oOy/hBWLN3/iir5072tqA+HRaWY7fBEiO0FbK5YJ6YijcnQ8a
-         +mTJELLZsdyHs4cGNDjena94bfmGvZYxnw5jMqOsrOF0BvuaxqpN8pcLqOkR+sqcjRqy
-         tsqki7IGeJr9MY0ED0VxJTG89l+ku1voRYszZZ+iJsbbJXKsZ69oEGGy6biAIZwn2wYU
-         wjLA==
+        Thu, 1 Dec 2022 05:39:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7460E54B16
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669891113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=10Al1tSX1JNmT1W2eYBPU7HPfHOrdNXuqygGPStHWlc=;
+        b=WytJe5b9dZZOf14CVQbSwOdtp4ZeLvSbTYtwvy+DKrArVSXU1aVTQ9H2pCTjU4rWVzA1NG
+        755nZrP2BN6DNJur/uUTxlu16/f4g7PHXMVnxmMZt9ZFonmW16FNjXhCAd2LPkhMi4IHfF
+        eTkJkKTldV3WStqyHsDelQ4U6epU5jU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-489-OItugcUrM22L9OAoX-DE8g-1; Thu, 01 Dec 2022 05:38:32 -0500
+X-MC-Unique: OItugcUrM22L9OAoX-DE8g-1
+Received: by mail-wr1-f71.google.com with SMTP id e19-20020adfa453000000b0024209415034so284152wra.18
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:38:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ir3uvErgUob4NFVyXZ4JMzbDFyUKCFAp6JFwnKMpYXU=;
-        b=SUP+oxVih2FMfejoDjxFaBCGTs/WB58KKSAP8h9U/ghnrju/VW5ShnSAXn2lqKT18M
-         9QvP2ZZg5V/LuusgaaWtO8+fkoyLgrwj85qn3sFj3MhJElYcEPjszS69abjHk8D0PANG
-         GLXwoXfGlOoTniU8usqbTtjCYd+hHwG57oluRg0gECWyumwoZenkGfK7mrIppsoueMpL
-         Nxvu2vh/wmZ7TTSvOn7yQuAk9gWQbQGAgO/NZ9tqa0/Tr50I3kgyb00uP94atUU8ySA0
-         AdLu17pzSVsfpIr1T/L+bNmPiYO56a09lcC+kF5TVteC5+GfMWCmqUJJNVnLrJLGz4fW
-         viMA==
-X-Gm-Message-State: ANoB5plmFX5YK7dGpgQf2ZHqvMaNXiNGPlntD8vQrv/xZVYc7xXQDKyu
-        ioSj7OYp0HZSkuHBHbWFg8Na1w==
-X-Google-Smtp-Source: AA0mqf5fOBE5NhPN7Xd+BTF4xDsWEodGVKp8iN4/HOQ8OyxhgwJEhznyaRqPwZeYHiXu0T46gbRvmQ==
-X-Received: by 2002:a05:6512:3983:b0:4b4:f88:90d3 with SMTP id j3-20020a056512398300b004b40f8890d3mr23278296lfu.37.1669891098347;
-        Thu, 01 Dec 2022 02:38:18 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k29-20020a192d1d000000b004b5138d82b3sm601559lfj.76.2022.12.01.02.38.16
+        bh=10Al1tSX1JNmT1W2eYBPU7HPfHOrdNXuqygGPStHWlc=;
+        b=t4/vgDkSU7gSOK6lkGFTWHuSllAcTcDt4hU6CsFhu6RKh+XMDHqEdMzWgJp+4YquTW
+         QKvaDtPHquI+ygkzQbm6rvhhr2qtUC3S0HK7vL4fHSawfh50TCe8+YmQCRykJfON5nDH
+         NZv2gorlE1ZQFvuIz+7GEFDGdiKYFKkhsCxJVKjQSnQ9XbnMI834+2Z20mSGCD0RBQ+8
+         5+U0EgCNyGJDQQCOxhZr4/vDDltOpnIKdMJ7RJ3VwP4oaM1PRmG1/xGxm3DXyUhkMkTM
+         8cWpDt6/xxvntmyK0jcuTdimFq5pTZM1GawlYw/hl7V3dXpWwDNcQHwmqy/OmieCCmmc
+         Lqig==
+X-Gm-Message-State: ANoB5pn4ihNkTPV/aXqYyM2WIrtKSMpA2G6O1fYUjQhdi5HVMN8yUXq3
+        3VzUU+BUtLvkOpjoeb5SB92/9E98EnzeGJb49DbxjIjH3H2RKQe9IMLzkZw0xa+LjkefSGgP/Sz
+        Z21/cqBXQuO/XUJii0hitTP5z
+X-Received: by 2002:a5d:43c9:0:b0:236:78d0:5223 with SMTP id v9-20020a5d43c9000000b0023678d05223mr41643015wrr.250.1669891111397;
+        Thu, 01 Dec 2022 02:38:31 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6KufTftndeSFnuJj0ww4Bi4u4dwK5MuxmTqCH6QTPyZEYTXUnzD5dmnVqEGF5aWgQYEpubqQ==
+X-Received: by 2002:a5d:43c9:0:b0:236:78d0:5223 with SMTP id v9-20020a5d43c9000000b0023678d05223mr41642998wrr.250.1669891111156;
+        Thu, 01 Dec 2022 02:38:31 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id fc13-20020a05600c524d00b003d04e4ed873sm10098252wmb.22.2022.12.01.02.38.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 02:38:17 -0800 (PST)
-Message-ID: <382df687-c535-4dd6-125a-5f3b6022cbd2@linaro.org>
-Date:   Thu, 1 Dec 2022 11:38:16 +0100
+        Thu, 01 Dec 2022 02:38:30 -0800 (PST)
+Message-ID: <31192e08-3d83-6fb0-06b0-51d50d073abc@redhat.com>
+Date:   Thu, 1 Dec 2022 11:38:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 11/12] arm64: dts: qcom: sm6115: Add WCN node.
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 01/17] drm/tests: helpers: Move the helper header to
+ include/drm
 Content-Language: en-US
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221130200950.144618-1-a39.skl@gmail.com>
- <20221130200950.144618-12-a39.skl@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221130200950.144618-12-a39.skl@gmail.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-1-efe5ed518b63@cerno.tech>
+ <ebe02c21-7770-0415-096e-76a839bad154@redhat.com>
+ <20221201102756.cdvxu4iryhu3rjpf@houat>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221201102756.cdvxu4iryhu3rjpf@houat>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2022 21:09, Adam Skladowski wrote:
-> Add WCN node to allow using wifi module.
+Hello Maxime,
+
+On 12/1/22 11:27, Maxime Ripard wrote:
+
+[...]
+
+>>
+>> I wonder if now that this header was moved outside of the tests directory,
+>> if we should add stub functions in the header file that are just defined
+>> but do nothing if CONFIG_DRM_KUNIT_TEST isn't enabled. So that including
+>> it in drivers will be a no-op.
+>>
+>> Or do you plan to conditionally include this header file in drivers? So
+>> that is only included when CONFIG_DRM_KUNIT_TEST is enabled?
 > 
+> I'm not entirely sure. I'd expect only the tests to include it, and thus
+> would depend on DRM_KUNIT_TEST already. But we can always add the stubs
+> if it's ever included in a different context.
+> 
+>> Another thing that wondered is if we want a different namespace for this
+>> header, i.e: <drm/testing/drm_kunit_helpers.h>, to make it clear that is
+>> not part of the DRM API but just for testing helpers.
+> 
+> If there's a single header, I don't think we need to create the
+> directory. This is also something we can consolidate later on if needed.
+>
 
-A nit: Drop full stop from commit subject.
+Agree on both. It's better to land as is and then figure out if needs
+to be changed once other drivers add more tests.
+ 
+>> But these are open questions really, and they can be done as follow-up:
+>>
+>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> Thanks :)
 
+You are welcome!
+
+-- 
 Best regards,
-Krzysztof
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
