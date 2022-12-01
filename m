@@ -2,92 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3181463FA5B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5742563FA5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiLAWM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
+        id S231335AbiLAWNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiLAWMo (ORCPT
+        with ESMTP id S231289AbiLAWNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:12:44 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91D022BE7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:12:42 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 1EFA911C;
-        Thu,  1 Dec 2022 23:12:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669932760;
+        Thu, 1 Dec 2022 17:13:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05782EF6E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:13:01 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669932779;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2HyuiWb9CSRxQhFtA9qePcq+AZj4yl2L9uNfDxE/SMM=;
-        b=vougSaIvKYcrIvIq5ZgHtUrJLns2tFLfJSfhDyUhdkvKCrxP5iZS9p+iqbZNQ7EtZaI+di
-        qauQwLoJPdDOP1m6OrwRcitqIPCIcaNwh6GPUOT2fR0YEEpLygbZrDrSLC3+ddovUbGBAj
-        yyR26PAF40hg//T446tym81mhDCheKNp/sIxWoTQc2v/PBPQ0JcwP9jvEixnKhs1VVIISf
-        ufnAAIRn01k7i6xQ+jXTQjLLo9LNDpDJZlR87puxkq9ayX/rGuZflzMKI02zwaX+PKPxJe
-        7XEK2KQDXXTXsdarmGUmjeeXeZkxn44QcOoKWq30UEB6GYurIWjID6yQjTUlnw==
+        bh=CpFrIjygw1nEQgBssLvc9/qJ/y+/KmwjS+Tba1a5pog=;
+        b=LdH1lLci95ifxQcuT1jnW//zS0cEDj71ygxerjdYEBoR4KUyFh9Gsm81ahh7fn4+RH4e2A
+        Rc+ZKm8s5BsTblFm3zjVijH/0F6lPgjlUlv0xwlwRNFawMSoIGKtifo43HRPhylx2bVJwW
+        fAEQ4Ub1evbfFVTn9o18fv2eF2if5JHutBff6Y2TG/dxBYqQPYLSxQRBsGTws7fUqFne3X
+        NSwniqlyDWndEvJJ8nrGKcEzTRyShJ42Gk/YYD4VHV6kDXN4O48aCPr+oXkXs9XMl6BDue
+        SgkwV90oGJzT8iy8NTboC85nU0oxKfVRkNcpjloVdT37g8u3KESk+KClM3AZEQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669932779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CpFrIjygw1nEQgBssLvc9/qJ/y+/KmwjS+Tba1a5pog=;
+        b=yUQftVOvC3PEmt3cgwQiZB18W0625RCd43SBflq0zQREV+T4Kz6L+OrKLqRdujmtrdUZG8
+        /vv2X223YicsKOAg==
+To:     paulmck@kernel.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        qiang1.zhang@intel.com
+Subject: Re: [PATCH printk v5 03/40] printk: Prepare for SRCU console list
+ protection
+In-Reply-To: <20221201215650.GK4001@paulmck-ThinkPad-P17-Gen-1>
+References: <20221116162152.193147-1-john.ogness@linutronix.de>
+ <20221116162152.193147-4-john.ogness@linutronix.de>
+ <Y4jw3hSuwt3RG4DL@dev-arch.thelio-3990X>
+ <87lenqq012.fsf@jogness.linutronix.de>
+ <20221201215650.GK4001@paulmck-ThinkPad-P17-Gen-1>
+Date:   Thu, 01 Dec 2022 23:18:44 +0106
+Message-ID: <87edtipycj.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Date:   Thu, 01 Dec 2022 23:12:39 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     greg.malysa@timesys.com,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] mtd: spi-nor: Add support for IS25LX256 operating
- in 1S-8S-8S octal read mode
-In-Reply-To: <20221201212750.267721-4-nathan.morrison@timesys.com>
-References: <20221201212750.267721-1-nathan.morrison@timesys.com>
- <20221201212750.267721-4-nathan.morrison@timesys.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <3f51282076fb3e209aa4cae7bc0a4c46@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-12-01 22:27, schrieb Nathan Barrett-Morrison:
-> This adds the IS25LX256 chip into the ISSI flash_info parts table
-> 
-> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> ---
->  drivers/mtd/spi-nor/issi.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
-> index 89a66a19d754..98cc5e1d9c18 100644
-> --- a/drivers/mtd/spi-nor/issi.c
-> +++ b/drivers/mtd/spi-nor/issi.c
-> @@ -74,6 +74,9 @@ static const struct flash_info issi_nor_parts[] = {
->  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
->  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
->  		.fixups = &is25lp256_fixups },
-> +	{ "is25lx256", INFO(0x9d5a19, 0, 128 * 1024, 256)
+On 2022-12-01, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> I therefore need to pull this into the pile for the upcoming merge
+> window:
+>
+> dbc6ca150842 ("srcu: Make Tiny synchronize_srcu() check for readers")
+>
+> And kudos to Zqiang for a proactive fix!  ;-)
 
-Please use INFO(0x9d5a19, 0, 0, 0)
+Yes! Great job!
 
-> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_4B_OPCODES |
-> +			      SPI_NOR_OCTAL_READ_1_8_8) },
+> I will add your (John's) Tested-by, but please let me know if this is
+> inappropriate.
 
-Neither of these flags should be needed. As mentioned before,
-you'd need a fixups for the missing 1-1-8 and 1-8-8 fast read ops.
+Sure.
 
--michael
+Tested-by: John Ogness <john.ogness@linutronix.de>
+
+John
