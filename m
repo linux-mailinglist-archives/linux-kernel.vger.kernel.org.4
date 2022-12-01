@@ -2,127 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFC563EF91
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDCA63EF94
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLALgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
+        id S230057AbiLALhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiLALgJ (ORCPT
+        with ESMTP id S230081AbiLALg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:36:09 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793998C46E;
-        Thu,  1 Dec 2022 03:36:06 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id EAFDD5FD07;
-        Thu,  1 Dec 2022 14:36:03 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669894564;
-        bh=diW2bt1nmVltkaw9FbBARpnyQZELnALJTnHl6DJ6SBI=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=rwOL/AATBNzSjXZn8ZugQtXSV/95r4hNHPwmeCatujJ+9VQQd7WSryGLz3VYrDW08
-         oGtN0/o2ZTTcGJatqlzi3bskkGFnWq4pU+GW6/iVyGdp+zFnZSvQ+2h7CHGZSGBnfx
-         QTYhH5rkYFLUZrih756Vva33LfJ1Omrjb+xI7frJ91864NI47C7r+BAZ1vP0jKUX+b
-         /124k4orhxHm871BORyWpRWbwrLtaqPPeFVYmVj+cuFusIFExt5EK5peqjGi26vj/Q
-         fH0f5BI5dTjsTzH4KN0bstDdQ/Dg5yzHhtaFet8spi6s1ghxyfYVmLISKwli/k2dv1
-         vvk8FPWngtK4A==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  1 Dec 2022 14:36:01 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        "Bobby Eshleman" <bobby.eshleman@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v2 3/6] vsock/vmci: always return ENOMEM in case of
- error
-Thread-Topic: [RFC PATCH v2 3/6] vsock/vmci: always return ENOMEM in case of
- error
-Thread-Index: AQHZAPB8vpTNk9Cz/UiwVhA3FAXi7a5YmwUAgAAipwA=
-Date:   Thu, 1 Dec 2022 11:36:01 +0000
-Message-ID: <1d01f9ea-0212-ffe9-1168-47b98e2ede46@sberdevices.ru>
-References: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
- <675b1f93-dc07-0a70-0622-c3fc6236c8bb@sberdevices.ru>
- <20221201093048.q2pradrgn5limcfb@sgarzare-redhat>
-In-Reply-To: <20221201093048.q2pradrgn5limcfb@sgarzare-redhat>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D5DB5093729C0541A2F948FB05E0AA6D@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Thu, 1 Dec 2022 06:36:59 -0500
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC38A22BF1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:36:58 -0800 (PST)
+Received: from atl1wswcm04.websitewelcome.com (unknown [50.6.129.165])
+        by atl3wswob05.websitewelcome.com (Postfix) with ESMTP id 450F1F816
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:36:58 +0000 (UTC)
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTP
+        id 0hs7phXThgEOM0hs9piqKB; Thu, 01 Dec 2022 11:36:58 +0000
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=kkbqgxk/YMTTr4GHrSnoqsTFSBqsgm0vcdYl9c4cfVM=; b=cHqwZipTJvf7mo34V7k1JJ/oF3
+        Q+Cbi/iDPx2RAi0MV2UuWRZFTJ4yDmOX7Y9MoufE5BQTM6vKI6tXN2vcUXRl4SVtn5HYV+tuKTzm4
+        mdzRGlGHYHYtqi7Yvuj1MnjPMwOnNvHJsToCD+OyoU5ufhqmhEhkwCEi975lekG8O4it19c27xeLU
+        UPynG/XUCLvIT9gojkYohQBHU+ajExN5/jrXjtrjcOLQgvpzJDCl5wdkbNp4AnPK9mNzVp6UiLf0G
+        N+XqENu/t3S+pBgV8JcuUBUiX985x50JaihfZePxljLN/xqLIA0U04885omD8uFjCOXfF/McHN6lz
+        3bXdVrtQ==;
+Received: from [223.187.121.253] (port=48632 helo=[192.168.221.42])
+        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <saravanan@linumiz.com>)
+        id 1p0hs6-000SeA-HR;
+        Thu, 01 Dec 2022 11:36:54 +0000
+Message-ID: <1c989c0a-e66d-9c57-5932-0fa5599ef8ad@linumiz.com>
+Date:   Thu, 1 Dec 2022 12:36:50 +0100
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/01 00:48:00 #20630840
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/4] hwmon: (pmbus/mpq7932) Add a support for mpq7932
+ Power Management IC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux@roeck-us.net, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, marten.lindahl@axis.com
+References: <20221201044643.1150870-1-saravanan@linumiz.com>
+ <20221201044643.1150870-4-saravanan@linumiz.com>
+ <f28da7ab-920d-a534-9f5d-e8407d0487a9@linaro.org>
+From:   Saravanan Sekar <saravanan@linumiz.com>
+In-Reply-To: <f28da7ab-920d-a534-9f5d-e8407d0487a9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 223.187.121.253
+X-Source-L: No
+X-Exim-ID: 1p0hs6-000SeA-HR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.221.42]) [223.187.121.253]:48632
+X-Source-Auth: saravanan@linumiz.com
+X-Email-Count: 11
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfDORlRsMZXuJ4pMF8BhNN6cZbCbzTG/mojvPzQ26nBSrsOkE0ugCW3AflGcT8XIH+EzFZ8aNcISzRMphUBTeo8isKlnzIM19hdt3So70k7jMgSZwPfL+
+ uNDEiaOPT3PYingYX3aNHLfUSFftqwm7T39JV/MAMef5haG+QF73U+MuLBDG/KUzjJdrk+eg1IJWj0dyDbyyTzTmVX+gZy1O/mE=
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDEuMTIuMjAyMiAxMjozMCwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBGcmks
-IE5vdiAyNSwgMjAyMiBhdCAwNTowODowNlBNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
-DQo+PiBGcm9tOiBCb2JieSBFc2hsZW1hbiA8Ym9iYnkuZXNobGVtYW5AYnl0ZWRhbmNlLmNvbT4N
-Cj4+DQo+PiBUaGlzIHNhdmVzIG9yaWdpbmFsIGJlaGF2aW91ciBmcm9tIGFmX3Zzb2NrLmMgLSBz
-d2l0Y2ggYW55IGVycm9yDQo+PiBjb2RlIHJldHVybmVkIGZyb20gdHJhbnNwb3J0IGxheWVyIHRv
-IEVOT01FTS4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBCb2JieSBFc2hsZW1hbiA8Ym9iYnkuZXNo
-bGVtYW5AYnl0ZWRhbmNlLmNvbT4NCj4+IFNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8
-QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KPj4gLS0tDQo+PiBuZXQvdm13X3Zzb2NrL3ZtY2lf
-dHJhbnNwb3J0LmMgfCA5ICsrKysrKysrLQ0KPj4gMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9u
-cygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gQEJyeWFuIEBWaXNobnUgd2hhdCBkbyB5b3UgdGhp
-bmsgYWJvdXQgdGhpcyBwYXRjaD8NCj4gDQo+IEEgYml0IG9mIGNvbnRleHQ6DQo+IA0KPiBCZWZv
-cmUgdGhpcyBzZXJpZXMsIHRoZSBhZl92c29jayBjb3JlIGFsd2F5cyByZXR1cm5lZCBFTk9NRU0g
-dG8gdGhlIHVzZXIgaWYgdGhlIHRyYW5zcG9ydCBmYWlsZWQgdG8gcXVldWUgdGhlIHBhY2tldC4N
-Cj4gDQo+IE5vdyB3ZSBhcmUgY2hhbmdpbmcgaXQgYnkgcmV0dXJuaW5nIHRoZSB0cmFuc3BvcnQg
-ZXJyb3IuIFNvIEkgdGhpbmsgaGVyZSB3ZSB3YW50IHRvIHByZXNlcnZlIHRoZSBwcmV2aW91cyBi
-ZWhhdmlvciBmb3Igdm1jaSwgYnV0IEkgZG9uJ3Qga25vdyBpZiB0aGF0J3MgdGhlIHJpZ2h0IHRo
-aW5nLg0KPiANCj4gDQo+IA0KPiBAQXJzZW5peSBwbGVhc2UgaW4gdGhlIG5leHQgdmVyc2lvbnMg
-ZGVzY3JpYmUgYmV0dGVyIGluIHRoZSBjb21taXQgbWVzc2FnZXMgdGhlIHJlYXNvbnMgZm9yIHRo
-ZXNlIGNoYW5nZXMsIHNvIGl0IGlzIGVhc2llciByZXZpZXcgZm9yIG90aGVycyBhbmQgYWxzbyBp
-biB0aGUgZnV0dXJlIGJ5IHJlYWRpbmcgdGhlIGNvbW1pdCBtZXNzYWdlIHdlIGNhbiB1bmRlcnN0
-YW5kIHRoZSByZWFzb24gZm9yIHRoZSBjaGFuZ2UuDQpIZWxsbywNCg0KU3VyZSEgU29ycnkgZm9y
-IHRoYXQhIEFsc28sIEkgY2FuIHNlbmQgYm90aCB2bWNpIGFuZCBoeXBlcnYgcGF0Y2hlcyBpbiB0
-aGUgbmV4dCB2ZXJzaW9uKGUuZy4gbm90IHdhaXRpbmcgZm9yDQpyZXZpZXdlcnMgcmVwbHkgYW5k
-IHJlb3JkZXIgdGhlbSB3aXRoIDEvNiBhcyBZb3UgYXNrZWQpLCBhcyByZXN1bHQgb2YgcmV2aWV3
-IGNvdWxkIGJlIGRyb3BwZWQgcGF0Y2ggb25seS4NCg0KVGhhbmtzLCBBcnNlbml5DQo+IA0KPiBU
-aGFua3MsDQo+IFN0ZWZhbm8NCj4gDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2sv
-dm1jaV90cmFuc3BvcnQuYyBiL25ldC92bXdfdnNvY2svdm1jaV90cmFuc3BvcnQuYw0KPj4gaW5k
-ZXggODQyYzk0Mjg2ZDMxLi4yODlhMzZhMjAzYTIgMTAwNjQ0DQo+PiAtLS0gYS9uZXQvdm13X3Zz
-b2NrL3ZtY2lfdHJhbnNwb3J0LmMNCj4+ICsrKyBiL25ldC92bXdfdnNvY2svdm1jaV90cmFuc3Bv
-cnQuYw0KPj4gQEAgLTE4MzgsNyArMTgzOCwxNCBAQCBzdGF0aWMgc3NpemVfdCB2bWNpX3RyYW5z
-cG9ydF9zdHJlYW1fZW5xdWV1ZSgNCj4+IMKgwqDCoMKgc3RydWN0IG1zZ2hkciAqbXNnLA0KPj4g
-wqDCoMKgwqBzaXplX3QgbGVuKQ0KPj4gew0KPj4gLcKgwqDCoCByZXR1cm4gdm1jaV9xcGFpcl9l
-bnF1ZXYodm1jaV90cmFucyh2c2spLT5xcGFpciwgbXNnLCBsZW4sIDApOw0KPj4gK8KgwqDCoCBp
-bnQgZXJyOw0KPj4gKw0KPj4gK8KgwqDCoCBlcnIgPSB2bWNpX3FwYWlyX2VucXVldih2bWNpX3Ry
-YW5zKHZzayktPnFwYWlyLCBtc2csIGxlbiwgMCk7DQo+PiArDQo+PiArwqDCoMKgIGlmIChlcnIg
-PCAwKQ0KPj4gK8KgwqDCoMKgwqDCoMKgIGVyciA9IC1FTk9NRU07DQo+PiArDQo+PiArwqDCoMKg
-IHJldHVybiBlcnI7DQo+PiB9DQo+Pg0KPj4gc3RhdGljIHM2NCB2bWNpX3RyYW5zcG9ydF9zdHJl
-YW1faGFzX2RhdGEoc3RydWN0IHZzb2NrX3NvY2sgKnZzaykNCj4+IC0twqANCj4+IDIuMjUuMQ0K
-PiANCg0K
+On 01/12/22 11:26, Krzysztof Kozlowski wrote:
+> On 01/12/2022 05:46, Saravanan Sekar wrote:
+>> The MPQ7932 is a power management IC designed to operate from 5V buses to
+>> power a variety of Advanced driver-assistance system SOCs. Six integrated
+>> buck converters with hardware monitoring capability powers a variety of
+>> target rails configurable over PMBus interface.
+>>
+>> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+>> ---
+>>   drivers/hwmon/pmbus/Kconfig   |  10 +++
+>>   drivers/hwmon/pmbus/Makefile  |   1 +
+>>   drivers/hwmon/pmbus/mpq7932.c | 144 ++++++++++++++++++++++++++++++++++
+>>   3 files changed, 155 insertions(+)
+>>   create mode 100644 drivers/hwmon/pmbus/mpq7932.c
+> 
+> This is a friendly reminder during the review process.
+> 
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
+> 
+Thank you again for your time for review.
+
+I saw two comments from you on V1 which I believe addressed on V2
+
+1. Missing maybe_unused, so drop of_match_ptr.
+  ".of_match_table = of_match_ptr(mpq7932_of_match)"
+
+dropped of_match_ptr.
+
+2. It's a regulator, not hwmon.
+   "config SENSORS_MPQ7932_REGULATOR
+    tristate "MPS MPQ7932 buck regulator" "
+
+It is PMIC chip with hwmon support access over PMBUS.
+
+Please help if anything I missed
+
+> Thank you.
+> 
+> Best regards,
+> Krzysztof
+> 
+
