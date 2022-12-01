@@ -2,130 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387E163E7A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77F163E7A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiLACSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S229893AbiLACTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 21:19:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiLACSa (ORCPT
+        with ESMTP id S229802AbiLACTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:18:30 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56D02872A;
-        Wed, 30 Nov 2022 18:18:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NN09Z4my0z4xG6;
-        Thu,  1 Dec 2022 13:18:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669861107;
-        bh=kEd/xZARf6Mr8dAYiKlsLt6883mfgikoGzqEeJFFmT8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uWy8prUs1+224MpFaqu8Ev2Y62sxe1Ol0PjThnSnEVy2yB6Z6z6acA3/BOFWQfZmp
-         FmcUspNlV3uER/N7VAKYdq3qCmYfFSKrl4V1JukwBn2CxTWH8DpuwwHrssqXKknX8w
-         kpMesnuPI60FizQ9oe+HtcO/gD3LBxbD07mx/KQJY1kK5deSuwVHl2U68CRqBEWP4j
-         6J6dgxyqGdBaDd9+NWBhhXrYjYWL8GOfjAjQmQfJNTQyZOfXiTNb7JOJhTPArGPW0n
-         MIBAAkkIAE6mE1du0vPjSrt57qr8+/n8Wu28FTwnIdGjmn/tW0+H3QKIIEt/sQBzo/
-         6GJPIIvB3pfxA==
-Date:   Thu, 1 Dec 2022 13:18:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20221201131825.701fb3f5@canb.auug.org.au>
+        Wed, 30 Nov 2022 21:19:19 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C69C099511;
+        Wed, 30 Nov 2022 18:19:17 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2B12I7lpC004454, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2B12I7lpC004454
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 1 Dec 2022 10:18:07 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 1 Dec 2022 10:18:52 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 1 Dec 2022 10:18:52 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Thu, 1 Dec 2022 10:18:52 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Jun ASAKA <JunASAKA@zzy040330.moe>,
+        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
+CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+Thread-Topic: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+Thread-Index: AQHZBMW0Ra7MKeD5kEmSajNwR0qaiK5YM5hw//+IBwCAAIuIkA==
+Date:   Thu, 1 Dec 2022 02:18:52 +0000
+Message-ID: <870b8a6e591f4de8b83df26f2a65330b@realtek.com>
+References: <20221130140849.153705-1-JunASAKA@zzy040330.moe>
+ <663e6d79c34f44998a937fe9fbd228e9@realtek.com>
+ <6ce2e648-9c12-56a1-9118-e1e18c7ecd7d@zzy040330.moe>
+In-Reply-To: <6ce2e648-9c12-56a1-9118-e1e18c7ecd7d@zzy040330.moe>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEyLzEg5LiK5Y2IIDEyOjA5OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.8EklvJ2jx7ZkOzHVWLYcUu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.8EklvJ2jx7ZkOzHVWLYcUu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-After merging the driver-core tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/gpu/drm/../../accel/drm_accel.c: In function 'accel_sysfs_init':
-drivers/gpu/drm/../../accel/drm_accel.c:41:30: error: assignment to 'char *=
- (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct devic=
-e *, short unsigned int *)'} from incompatible pointer type 'char * (*)(str=
-uct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned =
-int *)'} [-Werror=3Dincompatible-pointer-types]
-   41 |         accel_class->devnode =3D accel_devnode;
-      |                              ^
-
-Caused by commit
-
-  ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
-
-interacting with commit
-
-  8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
-
-from the drm tree.
-
-I have applied the following merge resolution patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 1 Dec 2022 13:08:06 +1100
-Subject: [PATCH] fix up for "drivers/accel: define kconfig and register a n=
-ew major"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/accel/drm_accel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/accel/drm_accel.c b/drivers/accel/drm_accel.c
-index a5ee84a4017a..1b69824286fd 100644
---- a/drivers/accel/drm_accel.c
-+++ b/drivers/accel/drm_accel.c
-@@ -27,7 +27,7 @@ static struct device_type accel_sysfs_device_minor =3D {
- 	.name =3D "accel_minor"
- };
-=20
--static char *accel_devnode(struct device *dev, umode_t *mode)
-+static char *accel_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "accel/%s", dev_name(dev));
- }
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.8EklvJ2jx7ZkOzHVWLYcUu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOIDvEACgkQAVBC80lX
-0Gxx2gf/XA+fAqxqjyAf1I4t3IUjS0OgCPGJGGg21g4mKcEtRS63zQAr/TM8z5Af
-kR+vX9j3b+B/iUNy8WnlvEx/utkenW+qKZGckyBL7ryuihpjLoJkKztFcwz/tRe+
-U5nfjM9sXlvX5WTQVPnZQrVryadA22SaU+PJvReqRJi0cqHkpoV82LAUSTuevr0C
-jTYI2i0y5yIV/XJRj+dxoYTQYdgJTUjVGq1cTQJmnXq35tZcvCjxFRZKArE4jqMz
-2qfXQKHLjQj8eAYdoT1zsMVawfHvLfgcJo0YlvZ2hT7DfeOdPRqoVrt0dAMlnTxD
-bhTZfXnAXoi1wpF1oPb74Ow4ZCWyLA==
-=ddvj
------END PGP SIGNATURE-----
-
---Sig_/.8EklvJ2jx7ZkOzHVWLYcUu--
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEp1biBBU0FLQSA8SnVuQVNB
+S0FAenp5MDQwMzMwLm1vZT4NCj4gU2VudDogVGh1cnNkYXksIERlY2VtYmVyIDEsIDIwMjIgOToz
+OSBBTQ0KPiBUbzogUGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+OyBKZXMuU29yZW5z
+ZW5AZ21haWwuY29tDQo+IENjOiBrdmFsb0BrZXJuZWwub3JnOyBkYXZlbUBkYXZlbWxvZnQubmV0
+OyBlZHVtYXpldEBnb29nbGUuY29tOyBrdWJhQGtlcm5lbC5vcmc7IHBhYmVuaUByZWRoYXQuY29t
+Ow0KPiBsaW51eC13aXJlbGVzc0B2Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5lbC5v
+cmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSF0g
+d2lmaTogcnRsOHh4eHU6IGZpeGluZyBJUUsgZmFpbHVyZXMgZm9yIHJ0bDgxOTJldQ0KPiANCj4g
+T24gMDEvMTIvMjAyMiA4OjU0IGFtLCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+IA0KPiA+DQo+ID4+
+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+IEZyb206IEp1bkFTQUtBIDxKdW5BU0FL
+QUB6enkwNDAzMzAubW9lPg0KPiA+PiBTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDMwLCAyMDIy
+IDEwOjA5IFBNDQo+ID4+IFRvOiBKZXMuU29yZW5zZW5AZ21haWwuY29tDQo+ID4+IENjOiBrdmFs
+b0BrZXJuZWwub3JnOyBkYXZlbUBkYXZlbWxvZnQubmV0OyBlZHVtYXpldEBnb29nbGUuY29tOyBr
+dWJhQGtlcm5lbC5vcmc7IHBhYmVuaUByZWRoYXQuY29tOw0KPiA+PiBsaW51eC13aXJlbGVzc0B2
+Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2Vy
+Lmtlcm5lbC5vcmc7IEp1bkFTQUtBDQo+ID4+IDxKdW5BU0FLQUB6enkwNDAzMzAubW9lPg0KPiA+
+PiBTdWJqZWN0OiBbUEFUQ0hdIHdpZmk6IHJ0bDh4eHh1OiBmaXhpbmcgSVFLIGZhaWx1cmVzIGZv
+ciBydGw4MTkyZXUNCj4gPj4NCj4gPj4gRml4aW5nICJQYXRoIEEgUlggSVFLIGZhaWxlZCIgYW5k
+ICJQYXRoIEIgUlggSVFLIGZhaWxlZCINCj4gPj4gaXNzdWVzIGZvciBydGw4MTkyZXUgY2hpcHMg
+YnkgcmVwbGFjaW5nIHRoZSBhcmd1bWVudHMgd2l0aA0KPiA+PiB0aGUgb25lcyBpbiB0aGUgdXBk
+YXRlZCBvZmZpY2lhbCBkcml2ZXIuDQo+ID4gSSB0aGluayBpdCB3b3VsZCBiZSBiZXR0ZXIgaWYg
+eW91IGNhbiBwb2ludCBvdXQgd2hpY2ggdmVyc2lvbiB5b3UgdXNlLCBhbmQNCj4gPiBwZW9wbGUg
+d2lsbCBub3QgbW9kaWZ5IHRoZW0gYmFjayB0byBvbGQgdmVyc2lvbiBzdWRkZW5seS4NCj4gPg0K
+PiA+PiBTaWduZWQtb2ZmLWJ5OiBKdW5BU0FLQSA8SnVuQVNBS0FAenp5MDQwMzMwLm1vZT4NCj4g
+Pj4gLS0tDQo+ID4+ICAgLi4uL3JlYWx0ZWsvcnRsOHh4eHUvcnRsOHh4eHVfODE5MmUuYyAgICAg
+ICAgIHwgNzYgKysrKysrKysrKysrKy0tLS0tLQ0KPiA+PiAgIDEgZmlsZSBjaGFuZ2VkLCA1NCBp
+bnNlcnRpb25zKCspLCAyMiBkZWxldGlvbnMoLSkNCj4gPj4NCj4gPj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsOHh4eHUvcnRsOHh4eHVfODE5MmUuYw0KPiA+
+PiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsOHh4eHUvcnRsOHh4eHVfODE5MmUu
+Yw0KPiA+PiBpbmRleCBiMDY1MDhkMGNkLi44MjM0NjUwMGYyIDEwMDY0NA0KPiA+PiAtLS0gYS9k
+cml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bDh4eHh1L3J0bDh4eHh1XzgxOTJlLmMNCj4g
+Pj4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGw4eHh4dS9ydGw4eHh4dV84
+MTkyZS5jDQo+ID4gWy4uLl0NCj4gPg0KPiA+PiBAQCAtODkxLDIyICs5MDcsMjggQEAgc3RhdGlj
+IGludCBydGw4MTkyZXVfaXFrX3BhdGhfYihzdHJ1Y3QgcnRsOHh4eHVfcHJpdiAqcHJpdikNCj4g
+Pj4NCj4gPj4gICAJcnRsOHh4eHVfd3JpdGUzMihwcml2LCBSRUdfRlBHQTBfSVFLLCAweDAwMDAw
+MDAwKTsNCj4gPj4gICAJcnRsOHh4eHVfd3JpdGVfcmZyZWcocHJpdiwgUkZfQiwgUkY2MDUyX1JF
+R19VTktOT1dOX0RGLCAweDAwMTgwKTsNCj4gPj4gLQlydGw4eHh4dV93cml0ZTMyKHByaXYsIFJF
+R19GUEdBMF9JUUssIDB4ODA4MDAwMDApOw0KPiA+Pg0KPiA+PiAtCXJ0bDh4eHh1X3dyaXRlMzIo
+cHJpdiwgUkVHX0ZQR0EwX0lRSywgMHgwMDAwMDAwMCk7DQo+ID4+ICsJcnRsOHh4eHVfd3JpdGVf
+cmZyZWcocHJpdiwgUkZfQiwgUkY2MDUyX1JFR19XRV9MVVQsIDB4ODAwYTApOw0KPiA+PiArCXJ0
+bDh4eHh1X3dyaXRlX3JmcmVnKHByaXYsIFJGX0IsIFJGNjA1Ml9SRUdfUkNLX09TLCAweDIwMDAw
+KTsNCj4gPj4gKwlydGw4eHh4dV93cml0ZV9yZnJlZyhwcml2LCBSRl9CLCBSRjYwNTJfUkVHX1RY
+UEFfRzEsIDB4MDAwMGYpOw0KPiA+PiArCXJ0bDh4eHh1X3dyaXRlX3JmcmVnKHByaXYsIFJGX0Is
+IFJGNjA1Ml9SRUdfVFhQQV9HMiwgMHgwN2Y3Nyk7DQo+ID4+ICsNCj4gPj4gICAJcnRsOHh4eHVf
+d3JpdGUzMihwcml2LCBSRUdfRlBHQTBfSVFLLCAweDgwODAwMDAwKTsNCj4gPj4NCj4gPj4gKwkv
+LyBydGw4eHh4dV93cml0ZTMyKHByaXYsIFJFR19GUEdBMF9JUUssIDB4MDAwMDAwMDApOw0KPiA+
+PiArCS8vIHJ0bDh4eHh1X3dyaXRlMzIocHJpdiwgUkVHX0ZQR0EwX0lRSywgMHg4MDgwMDAwMCk7
+DQo+ID4+ICsNCj4gPiBJIHRoaW5rIHRoaXMgaXMgYSB0ZXN0IGNvZGUgb2YgdmVuZG9yIGRyaXZl
+ci4gTm8gbmVlZCB0aGVtIGhlcmUuDQo+ID4NCj4gPg0KPiA+PiAgIAkvKiBQYXRoIEIgSVFLIHNl
+dHRpbmcgKi8NCj4gPj4gICAJcnRsOHh4eHVfd3JpdGUzMihwcml2LCBSRUdfVFhfSVFLX1RPTkVf
+QSwgMHgzODAwOGMxYyk7DQo+ID4+ICAgCXJ0bDh4eHh1X3dyaXRlMzIocHJpdiwgUkVHX1JYX0lR
+S19UT05FX0EsIDB4MzgwMDhjMWMpOw0KPiA+PiAgIAlydGw4eHh4dV93cml0ZTMyKHByaXYsIFJF
+R19UWF9JUUtfVE9ORV9CLCAweDE4MDA4YzFjKTsNCj4gPj4gICAJcnRsOHh4eHVfd3JpdGUzMihw
+cml2LCBSRUdfUlhfSVFLX1RPTkVfQiwgMHgzODAwOGMxYyk7DQo+ID4+DQo+ID4+IC0JcnRsOHh4
+eHVfd3JpdGUzMihwcml2LCBSRUdfVFhfSVFLX1BJX0IsIDB4ODIxNDAzZTIpOw0KPiA+PiArCXJ0
+bDh4eHh1X3dyaXRlMzIocHJpdiwgUkVHX1RYX0lRS19QSV9CLCAweDgyMTQwMzAzKTsNCj4gPj4g
+ICAJcnRsOHh4eHVfd3JpdGUzMihwcml2LCBSRUdfUlhfSVFLX1BJX0IsIDB4NjgxNjAwMDApOw0K
+PiA+Pg0KPiA+PiAgIAkvKiBMTyBjYWxpYnJhdGlvbiBzZXR0aW5nICovDQo+ID4+IC0JcnRsOHh4
+eHVfd3JpdGUzMihwcml2LCBSRUdfSVFLX0FHQ19SU1AsIDB4MDA0OTI5MTEpOw0KPiA+PiArCXJ0
+bDh4eHh1X3dyaXRlMzIocHJpdiwgUkVHX0lRS19BR0NfUlNQLCAweDAwNDYyOTExKTsNCj4gPj4N
+Cj4gPj4gICAJLyogT25lIHNob3QsIHBhdGggQSBMT0sgJiBJUUsgKi8NCj4gPj4gICAJcnRsOHh4
+eHVfd3JpdGUzMihwcml2LCBSRUdfSVFLX0FHQ19QVFMsIDB4ZmEwMDAwMDApOw0KPiA+IFsuLi5d
+DQo+ID4NCj4gPiBJIGhhdmUgY29tcGFyZWQgeW91ciBwYXRjaCB3aXRoIGludGVybmFsIGNvZGUs
+IGFuZCB0aGV5IGFyZSB0aGUgc2FtZS4NCj4gPiBCdXQsIEkgZG9uJ3QgaGF2ZSBhIHRlc3QuDQo+
+ID4NCj4gPiBQaW5nLUtlDQo+IA0KPiBJIGNoYW5nZWQgdGhvc2UgYXJndW1lbnRzIGludG8gdGhl
+IG9uZXMgaGVyZToNCj4gaHR0cHM6Ly9naXRodWIuY29tL01hbmdlL3J0bDgxOTJldS1saW51eC1k
+cml2ZXIgd2hpY2ggd29ya3MgZmluZSB3aXRoIG15DQo+IHJ0bDgxOTJldSB3aWZpIGRvbmdsZS4g
+QnV0IGZvcmdpdmUgbXkgaWdub3JhbnQgdGhhdCBJIGRvbid0IGhhdmUgZW5vdWdoDQo+IGV4cGVy
+aWVuY2Ugb24gd2lmaSBkcml2ZXJzLCBJIGp1c3QgY29tcGFyZWQgdGhvc2UgdHdvIGRyaXZlcnMg
+YW5kDQo+IGZpZ3VyZWQgdGhhdCB0aG9zZSBjb2RlcyBmaXhpbmcgbXkgSVFLIGZhaWx1cmVzLg0K
+DQpJIGRvIHNpbWlsYXIgdGhpbmdzIGFzIHdlbGwuIDotKQ0KDQpUaGUgZ2l0aHViIHJlcG9zaXRv
+cnkgbWVudGlvbmVkIA0KIlRoaXMgYnJhbmNoIGlzIGJhc2VkIG9uIFJlYWx0ZWsncyBkcml2ZXIg
+dmVyc2lvbmVkIDQuNC4xLiBtYXN0ZXIgaXMgYmFzZWQgb24gNC4zLjEuMSBvcmlnaW5hbGx5LiIN
+ClNvLCB3ZSBjYW4gYWRkIHNvbWV0aGluZyB0byBjb21taXQgbWVzc2FnZTogDQoxLiBodHRwczov
+L2dpdGh1Yi5jb20vTWFuZ2UvcnRsODE5MmV1LWxpbnV4LWRyaXZlciANCjIuIHZlbmRvciBkcml2
+ZXIgdmVyc2lvbjogNC4zLjEuMQ0KDQotLQ0KUGluZy1LZQ0KDQo=
