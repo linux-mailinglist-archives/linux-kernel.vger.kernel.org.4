@@ -2,193 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B3463F48B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8CC63F48F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiLAPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        id S231755AbiLAPzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbiLAPyU (ORCPT
+        with ESMTP id S231518AbiLAPzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:54:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF46A8976
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:54:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3887FCE1D15
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:54:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4364EC433D6;
-        Thu,  1 Dec 2022 15:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669910055;
-        bh=KgUzMsnJxl5S84ksRk/ivCiFuctafV1QIdNmjNmeVz4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qeIACNxujix93s88GjoojcGg/BMy8NUgGxzPiEEICMPCDMLNuvsMxf9qqv4JwINkG
-         jb83En2iCUhf12QEEQ2qK76W0W+OPMfXggHkGQA8WDdGTWOaMPTiCuJO+JOyDpBmSg
-         DZviX3YW84bYt9WV9j2pJpgDSTvJIfSNDF8lUdVjvj99c083qYRC5a2N21I1y0JZZs
-         FxwqSlKHVl8XZ7vqNcn9gZg9uAl+fN6EwMHm4iUV3XtsCEOMJqD9wn6J/AlT9dEOLb
-         bMvedttQVHoYC7mcmPIeFo3Ofk+cHCgekZ3VSQGcSdpUEdD8+AJ6+dUGhzCSau+Vhs
-         owlYrezZUOhoQ==
-Date:   Fri, 2 Dec 2022 00:54:11 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
-Subject: Re: [PATCH 1/3] arm64: Prohibit probing on arch_stack_walk()
-Message-Id: <20221202005411.49ee4e946e6c790bf482dbd9@kernel.org>
-In-Reply-To: <Y4i+hBAPyOIelFL1@FVFF77S0Q05N>
-References: <166990553243.253128.13594802750635478633.stgit@devnote3>
-        <166990554210.253128.7378208454827328942.stgit@devnote3>
-        <Y4i+hBAPyOIelFL1@FVFF77S0Q05N>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 1 Dec 2022 10:55:11 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4E0A8FC0;
+        Thu,  1 Dec 2022 07:55:10 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ml11so5215005ejb.6;
+        Thu, 01 Dec 2022 07:55:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vNEcMG0EBXvXFShK7G3laBiXFlt1hWqdjXEuldp73CM=;
+        b=TSXTYBvUoCbde0OMspmrya4Jnft+s1LQ9vcQisruFpGkhn9/9Jr3vzuLnjTNM1UkFm
+         zbX+OVPUVCYITrbJ4b18vANqAEwCcdjgEyP6X4LyM/eFMbiewmqiFB6CSih1crXBdUnV
+         KiqdZ7TIcjbWHjabj89ARS1NKogChN/udiCkVSE7RLS4gyANTBdHlo5t6Sa4AJbOum+l
+         BsjRrKapkG5Pn5XR6G5k3m7ArDPRWCDnOuC4wGrSbJ3OCZNPDL9SvaTO8ArVsB8lW/ph
+         HADu0JHhALMZKwVQovvJ157rN2tZ8Bt+XG/gaTZvCGVU+0sjF6gpWfOUYZ+IIZu9tNg3
+         VsSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vNEcMG0EBXvXFShK7G3laBiXFlt1hWqdjXEuldp73CM=;
+        b=CabblVHFcbeZ9kjiHDBHl197dvV0d342p5uzcgMcewaPIFAb6ABSJXSfc5arYWLxWn
+         pBuZy9t80j6vRKsL7evaJdAkzMve7gFWXkYWus3zoBbC+1XBOiMe+Qc1x/nS26LfKf4X
+         z3lCUD3txyFwS56NXRGnjLgggVGtaf8gVwHfrn5Zhr5SgZqiHEMxUfENUyFR5HZ5Rtxh
+         fBIojomKBTgqJYd+n+WiT2nt+nHRdZSMe1YEwQA5VkVcgaQAAuh1r2dZ6Lb7jDanjlRz
+         0WDITpvU/kgTWCo7f+fpP+gt4pkt5WSeKSLh+TZh9tvde/WgnD+HctGorjz4FquTHToE
+         7Qug==
+X-Gm-Message-State: ANoB5plfbTLjmjxSh4vSTD+KP0PTolQOxzMi65hlx6Qpdj7mQEeLauQ3
+        7y/J5TDCCefjVBqWI+BuW7M=
+X-Google-Smtp-Source: AA0mqf5fdooxcZRkV3o0PacuzWIkuVtdq7D0YWsLf09YX8IYmX2yVjm9iOBvf7HS1RX8wt1al5J+0w==
+X-Received: by 2002:a17:906:da0f:b0:7ad:95cf:726e with SMTP id fi15-20020a170906da0f00b007ad95cf726emr40839312ejb.60.1669910108800;
+        Thu, 01 Dec 2022 07:55:08 -0800 (PST)
+Received: from [192.168.1.50] ([79.119.240.254])
+        by smtp.gmail.com with ESMTPSA id dn11-20020a05640222eb00b00462bd673453sm1894661edb.39.2022.12.01.07.55.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 07:55:08 -0800 (PST)
+Message-ID: <0ebf9f47-16bd-aad0-309f-af7616292785@gmail.com>
+Date:   Thu, 1 Dec 2022 17:55:06 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+Content-Language: en-US
+To:     Jun ASAKA <JunASAKA@zzy040330.moe>, Jes.Sorensen@gmail.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221201145500.7832-1-JunASAKA@zzy040330.moe>
+From:   Bitterblue Smith <rtl8821cerfe2@gmail.com>
+In-Reply-To: <20221201145500.7832-1-JunASAKA@zzy040330.moe>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 14:47:32 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
-
-> Hi Masami,
+On 01/12/2022 16:55, Jun ASAKA wrote:
+> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
+> issues for rtl8192eu chips by replacing the arguments with
+> the ones in the updated official driver as shown below.
+> 1. https://github.com/Mange/rtl8192eu-linux-driver
+> 2. vendor driver version: 5.6.4
 > 
-> On Thu, Dec 01, 2022 at 11:39:02PM +0900, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Make arch_stack_walk() as NOKPROBE_SYMBOL and make other inline functions
-> > called from arch_stack_walk() as nokprobe_inline so that user does not
-> > put probe on it, because this function can be used from return_address()
-> > which is already NOKPROBE_SYMBOL.
+> Tested-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+> ---
+> v3: 
+>  - add detailed info about the newer version this patch used.
+>  - no functional update.
+> ---
+>  .../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 76 +++++++++++++------
+>  1 file changed, 54 insertions(+), 22 deletions(-)
 > 
-> I think it would make sense to make this noinstr rather than NOKPROBES, since
-> it's also used in the bowels of ftrace, and any instrumentation is liable to
-> lead to some mutual recursion.
+> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+> index b06508d0cd..82346500f2 100644
+> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+> @@ -734,6 +734,12 @@ static int rtl8192eu_iqk_path_a(struct rtl8xxxu_priv *priv)
+>  	 */
+>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00180);
+> +
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x20000);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0x07f77);
+> +>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>  
+>  	/* Path A IQK setting */
+> @@ -779,11 +785,16 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
+> -	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf117b);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf1173);
+> +
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf1173);
+>  
+>  	/* PA/PAD control by 0x56, and set = 0x0 */
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00980);
+> -	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x51000);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x511e0);
+>  
+>  	/* Enter IQK mode */
+>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+> @@ -798,14 +809,14 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
+>  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>  
+> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
+> -	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x68160c1f);
+> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x8216031f);
+> +	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x6816031f);
+>  
+>  	/* LO calibration setting */
+>  	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a911);
+>  
+>  	/* One shot, path A LOK & IQK */
+> -	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+> +	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf9000000);
+>  	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf8000000);
+>  
+>  	mdelay(10);
+> @@ -836,11 +847,16 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
+> -	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf7ffa);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf7ff2);
+> +
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
+>  
+>  	/* PA/PAD control by 0x56, and set = 0x0 */
+>  	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_DF, 0x00980);
+> -	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x51000);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_UNKNOWN_56, 0x510e0);
+>  
+>  	/* Enter IQK mode */
+>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+> @@ -854,14 +870,14 @@ static int rtl8192eu_rx_iqk_path_a(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
+>  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>  
+> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
+> -	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x28160c1f);
+> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x821608ff);
+> +	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x281608ff);
+>  
+>  	/* LO calibration setting */
+>  	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a891);
+>  
+>  	/* One shot, path A LOK & IQK */
+> -	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+> +	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf9000000);
+>  	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xf8000000);
+>  
+>  	mdelay(10);
+> @@ -891,22 +907,28 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
+>  
+>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
+> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>  
+> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
+> +
+>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>  
+> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+> +
+This commented code is not needed.
 
-Yeah, OK. So use noinstr instead of notrace.
+>  	/* Path B IQK setting */
+>  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_A, 0x38008c1c);
+>  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_A, 0x38008c1c);
+>  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+>  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>  
+> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
+> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
+>  	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
+>  
+>  	/* LO calibration setting */
+> -	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
+> +	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
+>  
+>  	/* One shot, path A LOK & IQK */
+>  	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+> @@ -942,11 +964,16 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+> -	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf117b);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf1173);
+> +
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_WE_LUT, 0x800a0);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_RCK_OS, 0x30000);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G1, 0x0000f);
+> +	rtl8xxxu_write_rfreg(priv, RF_A, RF6052_REG_TXPA_G2, 0xf1173);
+>  
+>  	/* PA/PAD control by 0x56, and set = 0x0 */
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00980);
+> -	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x51000);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x511e0);
+>  
+>  	/* Enter IQK mode */
+>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+> @@ -961,8 +988,8 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+>  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>  
+> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82160c1f);
+> -	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160c1f);
+> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x8216031f);
+> +	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x6816031f);
+>  
+>  	/* LO calibration setting */
+>  	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a911);
+> @@ -1002,11 +1029,16 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+> -	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ffa);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
+> +
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x30000);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0xf7ff2);
+These four lines you added here should be using RF_A.
 
-> 
-> > Without this, if the kernel built with CONFIG_LOCKDEP=y, just probing
-> > arch_stack_walk() via <tracefs>/kprobe_events will crash the kernel on
-> > arm64.
-> > 
-> >  # echo p arch_stack_walk >> ${TRACEFS}/kprobe_events
-> >  # echo 1 > ${TRACEFS}/events/kprobes/enable
-> >   kprobes: Failed to recover from reentered kprobes.
-> >   kprobes: Dump kprobe:
-> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
-> >   ------------[ cut here ]------------
-> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
-> >   kprobes: Failed to recover from reentered kprobes.
-> >   kprobes: Dump kprobe:
-> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
-> >   ------------[ cut here ]------------
-> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
-> >   PREEMPT SMP
-> >   Modules linked in:
-> >   CPU: 0 PID: 17 Comm: migration/0 Tainted: G                 N 6.1.0-rc5+ #6
-> >   Hardware name: linux,dummy-virt (DT)
-> >   Stopper: 0x0 <- 0x0
-> >   pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> >   pc : kprobe_breakpoint_handler+0x178/0x17c
-> >   lr : kprobe_breakpoint_handler+0x178/0x17c
-> >   sp : ffff8000080d3090
-> >   x29: ffff8000080d3090 x28: ffff0df5845798c0 x27: ffffc4f59057a774
-> >   x26: ffff0df5ffbba770 x25: ffff0df58f420f18 x24: ffff49006f641000
-> >   x23: ffffc4f590579768 x22: ffff0df58f420f18 x21: ffff8000080d31c0
-> >   x20: ffffc4f590579768 x19: ffffc4f590579770 x18: 0000000000000006
-> >   x17: 5f6b636174735f68 x16: 637261203d207264 x15: 64612e202c30203d
-> >   x14: 2074657366666f2e x13: 30633178302f3078 x12: 302b6b6c61775f6b
-> >   x11: 636174735f686372 x10: ffffc4f590dc5bd8 x9 : ffffc4f58eb31958
-> >   x8 : 00000000ffffefff x7 : ffffc4f590dc5bd8 x6 : 80000000fffff000
-> >   x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
-> >   x2 : 0000000000000000 x1 : ffff0df5845798c0 x0 : 0000000000000064
-> >   Call trace:
-> >   kprobes: Failed to recover from reentered kprobes.
-> >   kprobes: Dump kprobe:
-> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
-> >   ------------[ cut here ]------------
-> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
-> > 
-> > Fixes: 39ef362d2d45 ("arm64: Make return_address() use arch_stack_walk()")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > ---
-> >  arch/arm64/kernel/stacktrace.c |    7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> > index 634279b3b03d..b0e913f944b4 100644
-> > --- a/arch/arm64/kernel/stacktrace.c
-> > +++ b/arch/arm64/kernel/stacktrace.c
-> > @@ -23,7 +23,7 @@
-> >   *
-> >   * The regs must be on a stack currently owned by the calling task.
-> >   */
-> > -static inline void unwind_init_from_regs(struct unwind_state *state,
-> > +static nokprobe_inline void unwind_init_from_regs(struct unwind_state *state,
-> >  					 struct pt_regs *regs)
-> >  {
-> >  	unwind_init_common(state, current);
-> > @@ -40,7 +40,7 @@ static inline void unwind_init_from_regs(struct unwind_state *state,
-> >   *
-> >   * The function which invokes this must be noinline.
-> >   */
-> > -static __always_inline void unwind_init_from_caller(struct unwind_state *state)
-> > +static nokprobe_inline void unwind_init_from_caller(struct unwind_state *state)
-> 
-> This code must be __always_inline to get the correct caller context, so making
-> this nokprobe_inline breaks a CONFIG_KPROBES=n build of the kernel.
+>  
+>  	/* PA/PAD control by 0x56, and set = 0x0 */
+>  	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00980);
+> -	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x51000);
+> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_56, 0x510e0);
+>  
+>  	/* Enter IQK mode */
+>  	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+> @@ -1020,8 +1052,8 @@ static int rtl8192eu_rx_iqk_path_b(struct rtl8xxxu_priv *priv)
+>  	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x38008c1c);
+>  	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x18008c1c);
+>  
+> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x82160c1f);
+> -	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x28160c1f);
+> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_A, 0x821608ff);
+> +	rtl8xxxu_write32(priv, REG_RX_IQK_PI_A, 0x281608ff);
+>  
+>  	/* LO calibration setting */
+>  	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x0046a891);
 
-Oops, indeed.
-
-> 
-> This also shouldn't be necessary; nokprobe_inline *is* __always_inline when
-> CONFIG_KPROBES=y.
-> 
-> As above, I'd prefer that we mark these helpers as __always_inline and mark the
-> main entry point as noinstr.
-
-OK.
-
-Thank you,
-
-> 
-> Thanks,
-> Mark.
-> 
-> >  {
-> >  	unwind_init_common(state, current);
-> >  
-> > @@ -58,7 +58,7 @@ static __always_inline void unwind_init_from_caller(struct unwind_state *state)
-> >   * duration of the unwind, or the unwind will be bogus. It is never valid to
-> >   * call this for the current task.
-> >   */
-> > -static inline void unwind_init_from_task(struct unwind_state *state,
-> > +static nokprobe_inline void unwind_init_from_task(struct unwind_state *state,
-> >  					 struct task_struct *task)
-> >  {
-> >  	unwind_init_common(state, task);
-> > @@ -218,3 +218,4 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
-> >  
-> >  	unwind(&state, consume_entry, cookie);
-> >  }
-> > +NOKPROBE_SYMBOL(arch_stack_walk);
-> > 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+The rest of your changes look okay to me.
