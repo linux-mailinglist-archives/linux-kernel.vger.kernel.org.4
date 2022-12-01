@@ -2,280 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A279863EB96
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47C163EBA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiLAIty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S229779AbiLAI4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiLAIte (ORCPT
+        with ESMTP id S229452AbiLAI4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:49:34 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157A11A1D;
-        Thu,  1 Dec 2022 00:49:32 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2D59C1FD68;
-        Thu,  1 Dec 2022 08:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669884568; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=guIxpxNAKGFiX13aZHwKzc4sgDiWlaSOm8SorFitB8w=;
-        b=N3ADfolne44ylq/Uj9XYi305h0aolKKN92dzo6nzondChOAnn42JLZGonKi8piI1EwfYrL
-        5qhGgcY5pZR1iPH0r/oAwVw5Bk3BusbtMcafYF38Bf26AKI3S6FsOcdGIdLeNuc4XPcekJ
-        rezD8+qtp+o1njMbFZ0/5oGMnYYS78Q=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A4B813B4A;
-        Thu,  1 Dec 2022 08:49:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gHRmBphqiGM8GgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 08:49:28 +0000
-Date:   Thu, 1 Dec 2022 09:49:27 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
-        <chengkaitao@didiglobal.com>
-Cc:     Tao pilgrim <pilgrimtao@gmail.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Message-ID: <Y4hqlzNeZ6Osu0pI@dhcp22.suse.cz>
-References: <Y4eEiqwMMkHv9ELM@dhcp22.suse.cz>
- <E5A5BCC3-460E-4E81-8DD3-88B4A2868285@didiglobal.com>
+        Thu, 1 Dec 2022 03:56:15 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BAD3D92D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 00:56:13 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NN8zj1tt2zmWNl;
+        Thu,  1 Dec 2022 16:55:29 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Dec 2022 16:56:10 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Dec 2022 16:56:10 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <chenzhongjin@huawei.com>, <jpoimboe@kernel.org>,
+        <peterz@infradead.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>
+Subject: [PATCH] x86/unwind/orc: Fix unwind ip when kprobes hits push/pop
+Date:   Thu, 1 Dec 2022 16:53:11 +0800
+Message-ID: <20221201085311.249883-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <E5A5BCC3-460E-4E81-8DD3-88B4A2868285@didiglobal.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-12-22 04:52:27, 程垲涛 Chengkaitao Cheng wrote:
-> At 2022-12-01 00:27:54, "Michal Hocko" <mhocko@suse.com> wrote:
-> >On Wed 30-11-22 15:46:19, 程垲涛 Chengkaitao Cheng wrote:
-> >> On 2022-11-30 21:15:06, "Michal Hocko" <mhocko@suse.com> wrote:
-> >> > On Wed 30-11-22 15:01:58, chengkaitao wrote:
-> >> > > From: chengkaitao <pilgrimtao@gmail.com>
-> >> > >
-> >> > > We created a new interface <memory.oom.protect> for memory, If there is
-> >> > > the OOM killer under parent memory cgroup, and the memory usage of a
-> >> > > child cgroup is within its effective oom.protect boundary, the cgroup's
-> >> > > tasks won't be OOM killed unless there is no unprotected tasks in other
-> >> > > children cgroups. It draws on the logic of <memory.min/low> in the
-> >> > > inheritance relationship.
-> >> >
-> >> > Could you be more specific about usecases?
-> >
-> >This is a very important question to answer.
-> 
-> usecases 1: users say that they want to protect an important process 
-> with high memory consumption from being killed by the oom in case 
-> of docker container failure, so as to retain more critical on-site 
-> information or a self recovery mechanism. At this time, they suggest 
-> setting the score_adj of this process to -1000, but I don't agree with 
-> it, because the docker container is not important to other docker 
-> containers of the same physical machine. If score_adj of the process 
-> is set to -1000, the probability of oom in other container processes will 
-> increase.
-> 
-> usecases 2: There are many business processes and agent processes 
-> mixed together on a physical machine, and they need to be classified 
-> and protected. However, some agents are the parents of business 
-> processes, and some business processes are the parents of agent 
-> processes, It will be troublesome to set different score_adj for them. 
-> Business processes and agents cannot determine which level their 
-> score_adj should be at, If we create another agent to set all processes's 
-> score_adj, we have to cycle through all the processes on the physical 
-> machine regularly, which looks stupid.
+When unwind stack at asm_exc_int3, the orc type is UNWIND_HINT_TYPE_REGS
+and the unwinder will use pt_regs->ip to find next orc, which point to
+the probed insn + INT3_INSN_SIZE.
 
-I do agree that oom_score_adj is far from ideal tool for these usecases.
-But I also agree with Roman that these could be addressed by an oom
-killer implementation in the userspace which can have much better
-tailored policies. OOM protection limits would require tuning and also
-regular revisions (e.g. memory consumption by any workload might change
-with different kernel versions) to provide what you are looking for.
+If the probed insn is push/pop, it will point to the next insn which has
+different orc state. Before the probed insn has been really excuted in
+single step, using next insn ip to find orc will get a wrong unwinding
+result.
+
+So, when there is kprobe running and the previous op code is int3,
+state->signal should be false so that ip - 1 will be used to find next
+orc, until the probed push/pop has been single steped and kprobe set
+kprobe_status as KPROBE_HIT_SSDONE.
+
+Fixes: ee9f8fce9964 ("x86/unwind: Add the ORC unwinder")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+dump_stack() in pre_handler probing push:
+
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x79/0x9b
+  push_handler_pre+0x1b/0x2e [kp_unwind]
+  aggr_pre_handler+0xd8/0x180
+  ? opt_pre_handler+0x160/0x160
+  ? run_push+0xd/0x61 [kp_unwind]
+  kprobe_int3_handler+0x3f3/0x530
+  do_int3+0x3b/0x80
+  exc_int3+0x2b/0x80
+  asm_exc_int3+0x35/0x40
+ RIP: 0010:run_push+0xd/0x61 [kp_unwind]
+ RSP: 0018:ffff88800650f998 EFLAGS: 00000293
+ RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffffc0708060
+ RDX: ffff8880124b0000 RSI: 0000000000000000 RDI: ffffed1000ca1f28
+ RBP: 0000000000000000 R08: 0000000000000020 R09: ffffed1000ca1ef7
+ R10: ffff88800650f7b7 R11: ffffed1000ca1ef6 R12: ffffffffc0668000
+ R13: 0000000000000000 R14: fffffbfff80e14f8 R15: 1ffffffff80e14f9
+  ? 0xffffffffc0668000
+  ? run_push+0xb/0x61 [kp_unwind]
+  ? run_push+0xd/0x61 [kp_unwind]
+  ? kprobe_init+0x8a/0x1000 [kp_unwind]
+  ? do_one_initcall+0xd0/0x4e0
+  ? trace_event_raw_event_initcall_level+0x1c0/0x1c0
+  ? rcu_read_lock_sched_held+0xa5/0xd0
+  ? rcu_read_lock_bh_held+0xc0/0xc0
+  ? __kmem_cache_alloc_node+0x1da/0x780
+  ? kasan_unpoison+0x23/0x50
+  ? 0xffffffffc0668000
+  ? do_init_module+0x1cc/0x6a0
+  ? load_module+0x5eee/0x7210
+  ? ext4_file_read_iter+0x161/0x3a0
+  ? module_frob_arch_sections+0x40/0x40
+  ? security_file_permission+0x408/0x600
+  ? security_kernel_post_read_file+0x93/0xc0
+  ? __do_sys_finit_module+0x13c/0x200
+  ? __do_sys_finit_module+0x13c/0x200
+  ? __ia32_sys_init_module+0xb0/0xb0
+  ? rcu_read_lock_bh_held+0xc0/0xc0
+  ? rcu_read_lock_bh_held+0xc0/0xc0
+  ? syscall_enter_from_user_mode+0x1d/0x50
+  ? syscall_enter_from_user_mode+0x1d/0x50
+  ? do_syscall_64+0x38/0x90
+  ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
+  </TASK>
+
+After apply this patch, stack trace is correct: 
+
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x79/0x9b
+  push_handler_post+0x1b/0x27 [kp_unwind]
+  aggr_post_handler+0xdc/0x160
+  ? aggr_pre_handler+0x180/0x180
+  ? run_push+0xc/0x61 [kp_unwind]
+  kprobe_post_process+0x7b/0x210
+  kprobe_int3_handler+0x307/0x530
+  ? 0xffffffffc0770000
+  ? 0xffffffffc0770002
+  do_int3+0x3b/0x80
+  exc_int3+0x2b/0x80
+  asm_exc_int3+0x35/0x40
+ RIP: 0010:run_push+0xd/0x61 [kp_unwind]
+ RSP: 0018:ffff88801014f9a0 EFLAGS: 00000293
+ RAX: 0000000000000293 RBX: 0000000000000000 RCX: ffffffffc0760060
+ RDX: ffff88800d1f8000 RSI: 0000000000000000 RDI: ffffed1002029f28
+ RBP: 0000000000000000 R08: 0000000000000020 R09: ffffed1002029ef7
+ R10: ffff88801014f7b7 R11: ffffed1002029ef6 R12: ffffffffc0768000
+ R13: 0000000000000003 R14: fffffbfff80ec4f8 R15: 1ffffffff80ec4f9
+  ? 0xffffffffc0768000
+  ? run_push+0xb/0x61 [kp_unwind]
+  ? 0xffffffffc0770002
+  kprobe_init+0x8a/0x1000 [kp_unwind]
+  do_one_initcall+0xd0/0x4e0
+  ? trace_event_raw_event_initcall_level+0x1c0/0x1c0
+  ? rcu_read_lock_sched_held+0xa5/0xd0
+  ? rcu_read_lock_bh_held+0xc0/0xc0
+  ? __kmem_cache_alloc_node+0x1da/0x780
+  ? kasan_unpoison+0x23/0x50
+  ? 0xffffffffc0768000
+  do_init_module+0x1cc/0x6a0
+  load_module+0x5eee/0x7210
+  ? ext4_file_read_iter+0x161/0x3a0
+  ? module_frob_arch_sections+0x40/0x40
+  ? security_file_permission+0x408/0x600
+  ? security_kernel_post_read_file+0x93/0xc0
+  ? __do_sys_finit_module+0x13c/0x200
+  __do_sys_finit_module+0x13c/0x200
+  ? __ia32_sys_init_module+0xb0/0xb0
+  ? rcu_read_lock_bh_held+0xc0/0xc0
+  ? rcu_read_lock_bh_held+0xc0/0xc0
+  ? syscall_enter_from_user_mode+0x1d/0x50
+  ? syscall_enter_from_user_mode+0x1d/0x50
+  do_syscall_64+0x38/0x90
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ RIP: 0033:0x7fe46ad1b839
+---
+ arch/x86/kernel/unwind_orc.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index c059820dfaea..81e74b7e7fda 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -2,6 +2,7 @@
+ #include <linux/objtool.h>
+ #include <linux/module.h>
+ #include <linux/sort.h>
++#include <linux/kprobes.h>
+ #include <asm/ptrace.h>
+ #include <asm/stacktrace.h>
+ #include <asm/unwind.h>
+@@ -425,6 +426,7 @@ bool unwind_next_frame(struct unwind_state *state)
+ 	enum stack_type prev_type = state->stack_info.type;
+ 	struct orc_entry *orc;
+ 	bool indirect = false;
++	u8 op;
  
-> >> > How do you tune oom.protect
-> >> > wrt to other tunables? How does this interact with the oom_score_adj
-> >> > tunining (e.g. a first hand oom victim with the score_adj 1000 sitting
-> >> > in a oom protected memcg)?
-> >> 
-> >> We prefer users to use score_adj and oom.protect independently. Score_adj is 
-> >> a parameter applicable to host, and oom.protect is a parameter applicable to cgroup. 
-> >> When the physical machine's memory size is particularly large, the score_adj 
-> >> granularity is also very large. However, oom.protect can achieve more fine-grained 
-> >> adjustment.
-> >
-> >Let me clarify a bit. I am not trying to defend oom_score_adj. It has
-> >it's well known limitations and it is is essentially unusable for many
-> >situations other than - hide or auto-select potential oom victim.
-> >
-> >> When the score_adj of the processes are the same, I list the following cases 
-> >> for explanation,
-> >> 
-> >>           root
-> >>            |
-> >>         cgroup A
-> >>        /        \
-> >>  cgroup B      cgroup C
-> >> (task m,n)     (task x,y)
-> >> 
-> >> score_adj(all task) = 0;
-> >> oom.protect(cgroup A) = 0;
-> >> oom.protect(cgroup B) = 0;
-> >> oom.protect(cgroup C) = 3G;
-> >
-> >How can you enforce protection at C level without any protection at A
-> >level? 
-> 
-> The basic idea of this scheme is that all processes in the same cgroup are 
-> equally important. If some processes need extra protection, a new cgroup 
-> needs to be created for unified settings. I don't think it is necessary to 
-> implement protection in cgroup C, because task x and task y are equally 
-> important. Only the four processes (task m, n, x and y) in cgroup A, have 
-> important and secondary differences.
-> 
-> > This would easily allow arbitrary cgroup to hide from the oom
-> > killer and spill over to other cgroups.
-> 
-> I don't think this will happen, because eoom.protect only works on parent 
-> cgroup. If "oom.protect(parent cgroup) = 0", from perspective of 
-> grandpa cgroup, task x and y will not be specially protected.
-
-Just to confirm I am on the same page. This means that there won't be
-any protection in case of the global oom in the above example. So
-effectively the same semantic as the low/min protection.
-
-> >> usage(task m) = 1G
-> >> usage(task n) = 2G
-> >> usage(task x) = 1G
-> >> usage(task y) = 2G
-> >> 
-> >> oom killer order of cgroup A: n > m > y > x
-> >> oom killer order of host:     y = n > x = m
-> >> 
-> >> If cgroup A is a directory maintained by users, users can use oom.protect 
-> >> to protect relatively important tasks x and y.
-> >> 
-> >> However, when score_adj and oom.protect are used at the same time, we 
-> >> will also consider the impact of both, as expressed in the following formula. 
-> >> but I have to admit that it is an unstable result.
-> >> score = task_usage + score_adj * totalpage - eoom.protect * task_usage / local_memcg_usage
-> >
-> >I hope I am not misreading but this has some rather unexpected
-> >properties. First off, bigger memory consumers in a protected memcg are
-> >protected more. 
-> 
-> Since cgroup needs to reasonably distribute the protection quota to all 
-> processes in the cgroup, I think that processes consuming more memory 
-> should get more quota. It is fair to processes consuming less memory 
-> too, even if processes consuming more memory get more quota, its 
-> oom_score is still higher than the processes consuming less memory. 
-> When the oom killer appears in local cgroup, the order of oom killer 
-> remains unchanged
-
-Why cannot you simply discount the protection from all processes
-equally? I do not follow why the task_usage has to play any role in
-that.
-
-> 
-> >Also I would expect the protection discount would
-> >be capped by the actual usage otherwise excessive protection
-> >configuration could skew the results considerably.
-> 
-> In the calculation, we will select the minimum value of memcg_usage and 
-> oom.protect
-> 
-> >> > I haven't really read through the whole patch but this struck me odd.
-> >> 
-> >> > > @@ -552,8 +552,19 @@ static int proc_oom_score(struct seq_file *m, struct pid_namespace *ns,
-> >> > > 	unsigned long totalpages = totalram_pages() + total_swap_pages;
-> >> > > 	unsigned long points = 0;
-> >> > > 	long badness;
-> >> > > +#ifdef CONFIG_MEMCG
-> >> > > +	struct mem_cgroup *memcg;
-> >> > > 
-> >> > > -	badness = oom_badness(task, totalpages);
-> >> > > +	rcu_read_lock();
-> >> > > +	memcg = mem_cgroup_from_task(task);
-> >> > > +	if (memcg && !css_tryget(&memcg->css))
-> >> > > +		memcg = NULL;
-> >> > > +	rcu_read_unlock();
-> >> > > +
-> >> > > +	update_parent_oom_protection(root_mem_cgroup, memcg);
-> >> > > +	css_put(&memcg->css);
-> >> > > +#endif
-> >> > > +	badness = oom_badness(task, totalpages, MEMCG_OOM_PROTECT);
-> >> >
-> >> > the badness means different thing depending on which memcg hierarchy
-> >> > subtree you look at. Scaling based on the global oom could get really
-> >> > misleading.
-> >> 
-> >> I also took it into consideration. I planned to change "/proc/pid/oom_score" 
-> >> to a writable node. When writing to different cgroup paths, different values 
-> >> will be output. The default output is root cgroup. Do you think this idea is 
-> >> feasible?
-> >
-> >I do not follow. Care to elaborate?
-> 
-> Take two example，
-> cmd: cat /proc/pid/oom_score
-> output: Scaling based on the global oom
-> 
-> cmd: echo "/cgroupA/cgroupB" > /proc/pid/oom_score
-> output: Scaling based on the cgroupB oom
-> (If the task is not in the cgroupB's hierarchy subtree, output: invalid parameter)
-
-This is a terrible interface. First of all it assumes a state for the
-file without any way to guarantee atomicity. How do you deal with two
-different callers accessing the file?
-
+ 	if (unwind_done(state))
+ 		return false;
+@@ -568,7 +570,21 @@ bool unwind_next_frame(struct unwind_state *state)
+ 		state->regs = (struct pt_regs *)sp;
+ 		state->prev_regs = NULL;
+ 		state->full_regs = true;
+-		state->signal = true;
++#ifdef CONFIG_KPROBES
++		/*
++		 * When kprobe replaces push/pop to int3, pt_regs->ip points to
++		 * the next insn which has different orc state.
++		 * Before push/pop is really excuted in single step, signal should
++		 * be set to false so we will use ip - 1 to find correct next orc.
++		 */
++		if (kprobe_running() &&
++			get_kprobe_ctlblk()->kprobe_status != KPROBE_HIT_SSDONE &&
++			!get_kernel_nofault(op, (u8 *)state->ip - 1) &&
++			op == INT3_INSN_OPCODE)
++			state->signal = false;
++		else
++#endif
++			state->signal = true;
+ 		break;
+ 
+ 	case UNWIND_HINT_TYPE_REGS_PARTIAL:
 -- 
-Michal Hocko
-SUSE Labs
+2.17.1
+
