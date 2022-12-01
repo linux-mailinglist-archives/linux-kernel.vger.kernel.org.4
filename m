@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081C763E656
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8289763E659
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiLAASV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S229878AbiLAASY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiLAARN (ORCPT
+        with ESMTP id S230282AbiLAARQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:17:13 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA1E99F23;
-        Wed, 30 Nov 2022 16:14:14 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 30 Nov 2022 19:17:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657A9E28;
+        Wed, 30 Nov 2022 16:14:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMxQ92HzTz4xN1;
-        Thu,  1 Dec 2022 11:14:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669853651;
-        bh=WOflUL9wdmBgWPhKgKfZ1BiVppjOCZcEv0oN6Na+PAY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=o+MC33OCmCIcVlQ4YONnnjWyIaMYaVafTBF0cNtvyd5xO9LjcV/ziSiLrqL0fOQFw
-         94mEAz9JyFLxGlMiybB6eQSFA1qcSulGkdZaK5oVoMCT3xwXwRWqiCOlt0qrE/6cHA
-         xWRwMqaqnLFrebB2s+KBFwf18dsPwurNP6F1usqrZ7vdAWhw55/kOgnCrr9eXa5+HC
-         GO6JMP8BWDxOb/sx9KQnKDXArCvdv5IEXrz3A89yM5fdu+VT2nWh9C9id44IPq5RPW
-         jz1Gmd2ZKG6kspsRsOXM5uSKb8OxWXpBJyi0WeUSOs3QuGB6nR39hazJNS5ioDDpUN
-         Hw3pMkbB0L8eg==
-Date:   Thu, 1 Dec 2022 11:14:08 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kvm tree with the tip tree
-Message-ID: <20221201111408.05e4edaa@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF88A61903;
+        Thu,  1 Dec 2022 00:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE745C433C1;
+        Thu,  1 Dec 2022 00:14:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HwCb57zR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669853686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Nv8gvPbFw2821E5AG4Xu9traJZGJZZdmyGaSwU8u28=;
+        b=HwCb57zRDfJMhZHRxFuuhpEJK5s4GnwI+cF/dzV+LWkJblAiPMn9DB7lPotvYjYVlXi6kJ
+        To2/DCIuACvOuxXEBdEU3P9OWFLJvHrQL3tyOSL3nyMd72gfWUiJFkiVOulM4ILJLkEt8Q
+        wbjWWb+SSKizvMtY70GWAZWzdOBPHqI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 85359182 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 1 Dec 2022 00:14:45 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 01:14:43 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Thomas Gleixner' <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+Message-ID: <Y4fx87227hQfLrFq@zx2c4.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-2-Jason@zx2c4.com>
+ <87cz95v2q2.ffs@tglx>
+ <310b91f650424d338e56794b8861a088@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <310b91f650424d338e56794b8861a088@AcuMS.aculab.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 30, 2022 at 10:39:38PM +0000, David Laight wrote:
+> > struct vgetrandom_state {
+> > 	union {
+> > 		struct {
+> > 			u8	batch[CHACHA_BLOCK_SIZE * 3 / 2];
+> > 			u32	key[CHACHA_KEY_SIZE / sizeof(u32)];
+> > 		};
+> > 		u8	batch_key[CHACHA_BLOCK_SIZE * 2];
+> > 	};
+> > 	unsigned long	generation;
+> > 	u8		pos;
+> > 	bool		in_use;
+> > };
+> > 
+> > Plus some kernel doc which explains what this is about.
+> 
+> That structure looks horrid - especially for something shared
+> between entities.
+> The 'unsigned long' should be either u32 or u64.
 
-Hi all,
+This struct isn't shared. It's used only by user mode code.
+There may well be other issues with that long, though.
 
-Today's linux-next merge of the kvm tree got a conflict in:
-
-  arch/x86/include/asm/cpufeatures.h
-
-between commit:
-
-  aa387b1b1e66 ("x86: CPUID and CR3/CR4 flags for Linear Address Masking")
-
-from the tip tree and commits:
-
-  6a19d7aa5821 ("x86: KVM: Advertise CMPccXADD CPUID to user space")
-  af2872f62254 ("x86: KVM: Advertise AMX-FP16 CPUID to user space")
-  5e85c4ebf206 ("x86: KVM: Advertise AVX-IFMA CPUID to user space")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/include/asm/cpufeatures.h
-index 11a0e06362e4,1419c4e04d45..000000000000
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@@ -311,7 -308,9 +311,10 @@@
-  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
-  #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-  #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructio=
-ns */
-+ #define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* "" CMPccXADD instru=
-ctions */
-+ #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
-+ #define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VPMA=
-DD52[H,L]UQ */
- +#define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
- =20
-  /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
-  #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
-
---Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH8dAACgkQAVBC80lX
-0Gw/UQf+N6eZbAHfPNSifcilxxbIYN3mlvfhK8yCcq7yTRRqdsnRsI/7kBMjv6Bp
-QT5Od3gt/JmY3NYYsZkA1J1AupRhTyT2xf7TY/5KuCIwRAqbZIpQiN0urodKGOk4
-1J3XoTxclUIfPIec+jZ4l5ehtJsE+wDovyxMhFLAuX1Qeelh57Oc1HpiNHu1RCgK
-juW72RiXU4mVZzJI/zKFB16lJOPLI+ifYVNw/FTc0A10uX18Jh0bJ735kgyEPCEg
-AvtiziJC/bpNCsQEQ61E5W+pHcdbSqeMBBtYJwFAlUX/u5eMRqRQTs0J/CY7T6nJ
-g+71x6xW/t5fCraxoDAdZRRwmfmYOA==
-=BInx
------END PGP SIGNATURE-----
-
---Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1--
+Jason
