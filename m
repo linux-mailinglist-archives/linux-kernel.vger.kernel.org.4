@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A5263F1FC
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2AF63F1FB
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbiLANtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
+        id S231628AbiLANtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:49:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiLANtF (ORCPT
+        with ESMTP id S229748AbiLANtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:49:05 -0500
+        Thu, 1 Dec 2022 08:49:03 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459D91AF01
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:49:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C82E1DA5E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:49:02 -0800 (PST)
 Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B15l1vC016609;
-        Thu, 1 Dec 2022 07:48:51 -0600
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B15l1vB016609;
+        Thu, 1 Dec 2022 07:48:50 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=Sq7aVdOUXhv799GASybDC0oDppsFxEeabLuPhpHwJW0=;
- b=e+C5tD/EoW0mAzWlfnqJ6/Ne5Q24vNzUPJdGbKt7anCO7HW3HldpKtfQ++3FIxjV8J0M
- OwAuf25tJjinl0Td8ldA0kKN3MxFjZrFPzMTqVBncS2Qy8gMcZIn0p4ooVmqE+Eg1yQ1
- 6wzkJ2th/lAQk7BeDePuSlbsGfiDv/zWsTSGDijQt/wh+Ril0qny4bmQBUcchM7JP1uf
- M9Y06VVwdxiPNea3LIeyFqFDmgBDVOr4G9SLM3pCnqPgQt95q6cdzcq2ZZ6/1z3p/jle
- W7LfyQUrEu+iU5wGAaRDxmTloeDJ/rQrpS7MPIqZSZLjuv5mZsgpgcSWY0r+sOWkWuHz cA== 
+ bh=O24ewM62YnyTshopgCFYg5eq7HQMvKb/cYKJclNcynE=;
+ b=iH+D/pvM3F2HsdV3sbPIDmZMdTQM3pFHKpJq7eZLee9i/u69NRVObv1KHnylpXDx7ZW/
+ a5L/fxVSe+Y+kfarQfLMGjWxx9iBQS5Ecn2cV7K56rtxnXRJW+gZVGMkupk/uhGNYsLa
+ Y/uT/3a8xeao+GGcs2AcKo5xUUKE19Csjn+SE3s8JxYCLevaOqeqcuvATznVKDyhTfge
+ Qdy3VYF+3Ww7kS5JxfbIjCZi2OZ1eALVSI9F8xk7xed3OoCyz9bmBKDEwvOCmMGoIlgK
+ xci/82cGnKqQXRrPWNynyJLv6+A/ijbd9xAb3cyJs/3fKXH6VwlYbzKDDHf8H1i9Zves WQ== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3m6k75rhqm-3
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3m6k75rhqm-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 01 Dec 2022 07:48:50 -0600
 Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
@@ -39,25 +39,25 @@ Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
  Transport; Thu, 1 Dec 2022 07:48:46 -0600
 Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id EC48DB2F;
-        Thu,  1 Dec 2022 13:48:45 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0BCC4B38;
+        Thu,  1 Dec 2022 13:48:46 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <vkoul@kernel.org>, <pierre-louis.bossart@linux.intel.com>
 CC:     <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
         <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 2/3] soundwire: cadence: Remove wasted space in response_buf
-Date:   Thu, 1 Dec 2022 13:48:44 +0000
-Message-ID: <20221201134845.4055907-3-rf@opensource.cirrus.com>
+Subject: [PATCH 3/3] soundwire: cadence: Drain the RX FIFO after an IO timeout
+Date:   Thu, 1 Dec 2022 13:48:45 +0000
+Message-ID: <20221201134845.4055907-4-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221201134845.4055907-1-rf@opensource.cirrus.com>
 References: <20221201134845.4055907-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: gNFKnIwsnYaYG1Uc5sYyKBgrGUK914N_
-X-Proofpoint-GUID: gNFKnIwsnYaYG1Uc5sYyKBgrGUK914N_
+X-Proofpoint-ORIG-GUID: 0xpdTaddmfdlDdsnGRcbsX2iSErxeRUZ
+X-Proofpoint-GUID: 0xpdTaddmfdlDdsnGRcbsX2iSErxeRUZ
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
@@ -68,51 +68,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The response_buf was declared much larger (128 entries) than the number
-of responses that could ever be written into it (maximum 8).
+If wait_for_completion_timeout() times-out in _cdns_xfer_msg() it
+is possible that something could have been written to the RX FIFO.
+In this case, we should drain the RX FIFO so that anything in it
+doesn't carry over and mess up the next transfer.
 
-Reduce response_buf to 8 entries and add checking in cdns_read_response()
-to prevent overflowing reponse_buf if CDNS_MCP_RX_FIFO_AVAIL contains
-an unexpectedly large number.
+Obviously, if we got to this state something went wrong, and we
+don't really know the state of everything. The cleanup in this
+situation cannot be bullet-proof but we should attempt to avoid
+breaking future transaction, if only to reduce the amount of
+error noise when debugging the failure from a kernel log.
+
+Note that this patch only implements the draining for blocking
+(non-deferred) transfers. The deferred API doesn't have any proper
+handling of error conditions and would need some re-design before
+implementing cleanup. That is a task for a separate patch...
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
- drivers/soundwire/cadence_master.c | 6 ++++++
- drivers/soundwire/cadence_master.h | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/soundwire/cadence_master.c | 48 ++++++++++++++++--------------
+ 1 file changed, 26 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-index 27699f341f2c..95c84d9f0775 100644
+index 95c84d9f0775..6bffecf3d61a 100644
 --- a/drivers/soundwire/cadence_master.c
 +++ b/drivers/soundwire/cadence_master.c
-@@ -774,8 +774,14 @@ static void cdns_read_response(struct sdw_cdns *cdns)
- 	u32 num_resp, cmd_base;
- 	int i;
+@@ -555,6 +555,28 @@ cdns_fill_msg_resp(struct sdw_cdns *cdns,
+ 	return SDW_CMD_OK;
+ }
  
++static void cdns_read_response(struct sdw_cdns *cdns)
++{
++	u32 num_resp, cmd_base;
++	int i;
++
 +	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN);
 +
- 	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
- 	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
++	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
++	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
 +	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
 +		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
 +		num_resp = CDNS_MCP_CMD_LEN;
 +	}
++
++	cmd_base = CDNS_MCP_CMD_BASE;
++
++	for (i = 0; i < num_resp; i++) {
++		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
++		cmd_base += CDNS_MCP_CMD_WORD_LEN;
++	}
++}
++
+ static enum sdw_command_response
+ _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
+ 	       int offset, int count, bool defer)
+@@ -596,6 +618,10 @@ _cdns_xfer_msg(struct sdw_cdns *cdns, struct sdw_msg *msg, int cmd,
+ 		dev_err(cdns->dev, "IO transfer timed out, cmd %d device %d addr %x len %d\n",
+ 			cmd, msg->dev_num, msg->addr, msg->len);
+ 		msg->len = 0;
++
++		/* Drain anything in the RX_FIFO */
++		cdns_read_response(cdns);
++
+ 		return SDW_CMD_TIMEOUT;
+ 	}
  
- 	cmd_base = CDNS_MCP_CMD_BASE;
+@@ -769,28 +795,6 @@ EXPORT_SYMBOL(cdns_read_ping_status);
+  * IRQ handling
+  */
  
-diff --git a/drivers/soundwire/cadence_master.h b/drivers/soundwire/cadence_master.h
-index 0434d70d4b1f..c2d817e8e22a 100644
---- a/drivers/soundwire/cadence_master.h
-+++ b/drivers/soundwire/cadence_master.h
-@@ -117,7 +117,7 @@ struct sdw_cdns {
- 	struct sdw_bus bus;
- 	unsigned int instance;
- 
--	u32 response_buf[0x80];
-+	u32 response_buf[8];
- 	struct completion tx_complete;
- 	struct sdw_defer *defer;
- 
+-static void cdns_read_response(struct sdw_cdns *cdns)
+-{
+-	u32 num_resp, cmd_base;
+-	int i;
+-
+-	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN);
+-
+-	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
+-	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
+-	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
+-		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
+-		num_resp = CDNS_MCP_CMD_LEN;
+-	}
+-
+-	cmd_base = CDNS_MCP_CMD_BASE;
+-
+-	for (i = 0; i < num_resp; i++) {
+-		cdns->response_buf[i] = cdns_readl(cdns, cmd_base);
+-		cmd_base += CDNS_MCP_CMD_WORD_LEN;
+-	}
+-}
+-
+ static int cdns_update_slave_status(struct sdw_cdns *cdns,
+ 				    u64 slave_intstat)
+ {
 -- 
 2.30.2
 
