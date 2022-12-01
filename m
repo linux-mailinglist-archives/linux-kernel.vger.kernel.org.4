@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1478163E72E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4CF63E732
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiLABmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 20:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S229838AbiLABpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiLABmq (ORCPT
+        with ESMTP id S229541AbiLABpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 20:42:46 -0500
-Received: from cmccmta1.chinamobile.com (cmccmta1.chinamobile.com [221.176.66.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00B86192A0;
-        Wed, 30 Nov 2022 17:42:43 -0800 (PST)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.13])
-        by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee26388069142d-76770;
-        Thu, 01 Dec 2022 09:42:42 +0800 (CST)
-X-RM-TRANSID: 2ee26388069142d-76770
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[223.108.79.98])
-        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76388068d3dd-2d5be;
-        Thu, 01 Dec 2022 09:42:41 +0800 (CST)
-X-RM-TRANSID: 2ee76388068d3dd-2d5be
-From:   liujing <liujing@cmss.chinamobile.com>
-To:     pbonzini@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liujing <liujing@cmss.chinamobile.com>
-Subject: [PATCH] KVM: x86: Optimize your code to avoid unnecessary calls
-Date:   Wed, 30 Nov 2022 20:42:37 -0500
-Message-Id: <20221201014237.5764-1-liujing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 20:45:17 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459004B773;
+        Wed, 30 Nov 2022 17:45:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NMzRB726Xz4f3nqG;
+        Thu,  1 Dec 2022 09:45:10 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP4 (Coremail) with SMTP id gCh0CgBXydYoB4hjbAzIBQ--.62131S2;
+        Thu, 01 Dec 2022 09:45:13 +0800 (CST)
+Subject: Re: [PATCH v2 0/5] A few cleanup and bugfix patches for blk-iocost
+To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221018121932.10792-1-shikemeng@huawei.com>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <93f9093b-abec-db7e-a945-263cd9355c08@huaweicloud.com>
+Date:   Thu, 1 Dec 2022 09:45:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
+MIME-Version: 1.0
+In-Reply-To: <20221018121932.10792-1-shikemeng@huawei.com>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgBXydYoB4hjbAzIBQ--.62131S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xGFW5JrW8tw48GF13XFb_yoWkAwc_C3
+        yftayUXr1UKa97AFWxKan8JrWUCr4rCw4Ut3Z0qry7tr1DtFs0vanxZw47Jr1rW347Was8
+        uFsxZryIq3Wa9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWHqcUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the kvm_vm_ioctl_get_irqchip function, we can removethe 
-definition of the r variable instead of return 0 in the end.
-In the kvm_vm_ioctl_set_irqchip function, also use return 0 instead,
-return -EINVAL to avoid calling kvm_pic_update_irq again.
 
-Signed-off-by: liujing <liujing@cmss.chinamobile.com>
----
- arch/x86/kvm/x86.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+Hi jens,
+on 10/18/2022 8:19 PM, Kemeng Shi wrote:
+> This series contain a few patch to correct comment, correct trace of
+> vtime_rate and so on. More detail can be found in the respective
+> changelogs.
+> 
+> ---
+> v2:
+>  Thanks Tejun for review and comment!
+>  Add Acked-by tag from Tejun.
+>  Correct description in patch 3/5 and 4/5.
+>  Drop "blk-iocost: Avoid to call current_hweight_max if iocg->inuse
+> == iocg->active"
+>  Drop "blk-iocost: Remove redundant initialization of struct ioc_gq"
+>  Drop "blk-iocost: Get ioc_now inside weight_updated"
+> ---
+> 
+> Kemeng Shi (5):
+>   blk-iocost: Fix typo in comment
+>   blk-iocost: Reset vtime_base_rate in ioc_refresh_params
+>   blk-iocost: Trace vtime_base_rate instead of vtime_rate
+>   blk-iocost: Remove vrate member in struct ioc_now
+>   blk-iocost: Correct comment in blk_iocost_init
+> 
+>  block/blk-iocost.c            | 16 +++++++++-------
+>  include/trace/events/iocost.h |  4 ++--
+>  2 files changed, 11 insertions(+), 9 deletions(-)
+Could you apply this patchset?
+By the way, my apply for an cloud variant of email was just passed
+a few days ago. Is this mail still in spam?
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 2835bd796639..8e94f3d730ee 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -6002,9 +6002,7 @@ static unsigned long kvm_vm_ioctl_get_nr_mmu_pages(struct kvm *kvm)
- static int kvm_vm_ioctl_get_irqchip(struct kvm *kvm, struct kvm_irqchip *chip)
- {
- 	struct kvm_pic *pic = kvm->arch.vpic;
--	int r;
- 
--	r = 0;
- 	switch (chip->chip_id) {
- 	case KVM_IRQCHIP_PIC_MASTER:
- 		memcpy(&chip->chip.pic, &pic->pics[0],
-@@ -6018,18 +6016,15 @@ static int kvm_vm_ioctl_get_irqchip(struct kvm *kvm, struct kvm_irqchip *chip)
- 		kvm_get_ioapic(kvm, &chip->chip.ioapic);
- 		break;
- 	default:
--		r = -EINVAL;
--		break;
-+		return -EINVAL;
- 	}
--	return r;
-+	return 0;
- }
- 
- static int kvm_vm_ioctl_set_irqchip(struct kvm *kvm, struct kvm_irqchip *chip)
- {
- 	struct kvm_pic *pic = kvm->arch.vpic;
--	int r;
--
--	r = 0;	
- 	switch (chip->chip_id) {
- 	case KVM_IRQCHIP_PIC_MASTER:
- 		spin_lock(&pic->lock);
-@@ -6047,11 +6042,10 @@ static int kvm_vm_ioctl_set_irqchip(struct kvm *kvm, struct kvm_irqchip *chip)
- 		kvm_set_ioapic(kvm, &chip->chip.ioapic);
- 		break;
- 	default:
--		r = -EINVAL;
--		break;
-+		return -EINVAL;
- 	}
- 	kvm_pic_update_irq(pic);
--	return r;
-+	return 0;
- }
- 
- static int kvm_vm_ioctl_get_pit(struct kvm *kvm, struct kvm_pit_state *ps)
+Thanks.
 -- 
-2.18.2
-
-
+Best wishes
+Kemeng Shi
 
