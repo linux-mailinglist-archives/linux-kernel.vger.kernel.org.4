@@ -2,266 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4E763F568
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1B563F54B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiLAQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S231932AbiLAQaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbiLAQjK (ORCPT
+        with ESMTP id S229630AbiLAQaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:39:10 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F299B78A;
-        Thu,  1 Dec 2022 08:39:09 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1GP7Qk015109;
-        Thu, 1 Dec 2022 16:39:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=Sa1LChvHQ2k7u2Yx/whdyqREDbJzHoqzZDKK/r++r6M=;
- b=iN9KU7yrTYPAJpsblV2lVRwKDQ6oJRqX4JOvikUOxPZJfqYnDuDaY2tXR7HsAN69zOVp
- 9/uG0F7uku/wZ4DJ8r+MYhiWpOUfqnpa4vmxJyUJDNs7/X7vVyMD35uoOHa0Fe/4F9tl
- 8NuXAPf/LbP+h9Lm4t7xrdpT9sBkWZzN5v6Ysr4IRUezQ0FcuF7bYDxcVl7f9VOmLWj+
- XG3UbGx54RxDSYUQcpBddV52emnfE+f68SXBjZty2jVGP+xMKZDQSJuM0qlIx8XKHVds
- 89Yki8ofnoOQbL61WbPl6sryCi3TiETr05Z1dqtI9j4bzUbwWR29YpDkUcXfr0Kc3hT6 qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ys7rbr0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 16:39:03 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B1GQ3rD021645;
-        Thu, 1 Dec 2022 16:39:03 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ys7rbq5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 16:39:02 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B1GcYEC010804;
-        Thu, 1 Dec 2022 16:39:00 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3m3ae8wjm3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 16:39:00 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B1GcvC97078614
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Dec 2022 16:38:57 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EE41A405B;
-        Thu,  1 Dec 2022 16:38:57 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB370A4054;
-        Thu,  1 Dec 2022 16:38:56 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.56])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Dec 2022 16:38:56 +0000 (GMT)
-Date:   Thu, 1 Dec 2022 17:28:13 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v3 4/9] KVM: s390: selftest: memop: Replace macros by
- functions
-Message-ID: <20221201172813.027bcd13@p-imbrenda>
-In-Reply-To: <20221117221758.66326-5-scgl@linux.ibm.com>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
-        <20221117221758.66326-5-scgl@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 1 Dec 2022 11:30:05 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2056.outbound.protection.outlook.com [40.107.100.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4312D74C;
+        Thu,  1 Dec 2022 08:30:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TzLIBit0fIaelM2CIr2/XMtbyUKgCidh5jANIiNTPZKYScFo0kfL+wzssYwwMkkcksyRvF0jF5/SbTPyCreHyCm0XZUPtK8XPTANNtt+0SrBMys85Qac+GBLyZVYnY7AYueAVpN4CtoJP8IvNO1p/ZhSS2kAQJvUkaNI701bZrHIYxvX2asOsUA2NHvJ/vYA0AJMbyMTpwOSbwcU7i02KexU6/3d+OEhz3diFcTxcUFllDjKFe0nmeQj0CX4uT/rqrPBlKGE8roW6pK/J7DqoEUIUXUaG0kpZK2+YMT8ZK/17+e5PGWlzmkOEb1Pg2OVwktJVlOdZpG7hl5EXdWR7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CEZ4KkIvXt2tTjBzl9LvSVwLGOfViGUudlZs2gb8gS8=;
+ b=AQlYMaq/J/aDFfbnMInTC/HjG3kCzaHfHCIMp7jIlE5VxcKR0GTGb77qW4wuhHpdgzbG6Fwg1r+G4rNYdTRWIXKPFI2fWUk8Lbh3Z3/A/oFZCRYXDgqVp0F6yLAQd38Ykd8sF9zixbOs5d8xlob0ct2Mlt7SwK7As5wNPBA0JoNBfgCBOqOYd4+fsTPayoliSHLk0JmITwYWsuvyCw5FDrMRbK1Ow/pwbXnv882E/vPgcUjtIhy9+d4F7XjKOm+H5KrNZ3g2C5/Dgyh62XUn6/Z2m1oqGcz2JqMrcSQeTJwcoMaX0nzQRGyq7TsMsdv2QNUK5h2TD3Wbziod4bYc8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CEZ4KkIvXt2tTjBzl9LvSVwLGOfViGUudlZs2gb8gS8=;
+ b=myHqng2KqjkdBB8yHBo3me2u2cPoBuklaqCTPdfGelf2o5b5rtlJhFDgz6KoQFkbkRMskRl2UClvG1FNa4NaTjSdLnkBpqbviTqFXY2VJC/eROhrIr+o85mBoj+a0fMq41BTqrocvozOXGssGVD96yZQOwjCRSw3pZNImwGr6nE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by DS0PR12MB6389.namprd12.prod.outlook.com (2603:10b6:8:cf::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.23; Thu, 1 Dec 2022 16:30:01 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::aa5f:5f2c:4143:f981]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::aa5f:5f2c:4143:f981%9]) with mapi id 15.20.5857.023; Thu, 1 Dec 2022
+ 16:30:01 +0000
+Message-ID: <b47c4bc7-aed3-e1a0-c791-818af091d976@amd.com>
+Date:   Thu, 1 Dec 2022 21:59:44 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 2/2] perf test: Add event group test
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     irogers@google.com, acme@kernel.org, jolsa@redhat.com,
+        namhyung@kernel.org, peterz@infradead.org, mark.rutland@arm.com,
+        adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
+        carsten.haitzler@arm.com, leo.yan@linaro.org, maddy@linux.ibm.com,
+        kjain@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
+        tmricht@linux.ibm.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, santosh.shukla@amd.com,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20221129111946.409-1-ravi.bangoria@amd.com>
+ <20221129111946.409-3-ravi.bangoria@amd.com>
+ <0dd566ab-38fd-2204-f59c-e74b2244828b@linux.intel.com>
+ <62399b9c-d5ef-4c56-4592-d2cf1af503d6@amd.com>
+ <7449d858-2110-1ddf-f7e1-013015cbd791@linux.intel.com>
+ <0eb0cc59-d28d-8e42-3233-2587123e291d@amd.com>
+ <c5e97f0e-0039-7e9f-299f-c0d03a6ac33e@linux.intel.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <c5e97f0e-0039-7e9f-299f-c0d03a6ac33e@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NiGTT1eKJg8ec_Bwv0LYuMlzyV7tfXm3
-X-Proofpoint-ORIG-GUID: _3WG0nijUxGdbeeNL4jWPRdpe4MoqBM4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_11,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- spamscore=0 mlxscore=0 impostorscore=0 priorityscore=1501 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212010118
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: PN2PR01CA0148.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::33) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|DS0PR12MB6389:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71d9ce14-98df-4245-6b68-08dad3b94a70
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: twXdwUyjOo+bEWLmspluoJI6PEWpQTlhEdneEBGK6EJGlqr8L1XCxr909iuuphJp1U9gLqiHmpFcNzKO4NmOAOW/5LiRswcl+rnF+G5JGpOQNXdz2siZVouN73wi0vnUGmqTn4dqMvefi9Zv1XK5VGzoKzrLSvsG5f7eYqmHngtRPME10rJv7poG6d4zNSwXBFxleiSnXTr4OFTVQ798FPZBOxOFG1osxYvXkWaL2u/OwVp92MqfXhJtHhoeMmXz9HLLmGLhbzZhL99Xug0IgyGHWxbfQdwgHDVrbJKex6LUw6D392B/HAVLsRlXmMhKdH1nzDE7xUdM5pPbkhI78uPjC30FA+H7sC439+OVqNWyDLQ5HL2XaBZmHwylGW9mhi8HgDz7jeYfcCYBGMTJ0/8yzgUSfegMH2v5UxLTQZApZRn57bv6AXw797wEnzBEiKDpHb0siT1qOIHQEP8Qt/ORXRkNd1xUD7lEbM8DgLOtkQlt/+aLsw/vnaq7MQeBuhswqBqcmifKZHFA3mxOcNBCQ9GzNrYhTLmkBBHtQllAJnEgGo4VdJj8+4rpET4fiTQQHIdtZZ+MoQWhPFH3JlCQUIEzrak5tvILqNClL2eQ5GTs/Lp3206xkc7nj8f9ySDv51gUHAQ4LhK0aftHOrCHcMzmKoyf85lSxUiA8lUGFy50/7/nUzNA+dGZi58QMuDYKtdOoJit9wAgCfxwK5mpgWWyR/8l41OQZHO0+ZPQCEjGmOL2xcTFRwJZ5H7u
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(451199015)(7416002)(31686004)(478600001)(6666004)(186003)(38100700002)(6486002)(5660300002)(53546011)(8936002)(6916009)(6512007)(316002)(26005)(36756003)(2906002)(66946007)(2616005)(6506007)(66556008)(86362001)(8676002)(44832011)(66476007)(4326008)(31696002)(41300700001)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWE0K1A0TDl5STRkVVJzMURrWC85dGZpMkQwenVWYzNnZkVGaXhXVjlwekFD?=
+ =?utf-8?B?bk9KTXE2eW04WE1FbGNGYUgwYjBuSi9sSWJsZVRMUHoxTE1WOWJNbW15WGVB?=
+ =?utf-8?B?VGtlVG1RTTU1R1FYdlpDQzA5TnluenY2M2JmZ2IySWhiTHBQRDIrNG5YcTVm?=
+ =?utf-8?B?TXBXMmlxR3lNSENiWkJQek5hT3FSc3U2ZDQwMHJ4RVFUb1N5ejdPM0NXZVQz?=
+ =?utf-8?B?OG5Odm1jL0k3Um1TYWVBOFhBa3F5Z2pXbHFSL21LMTlkdlFmbVQ2UnhiWUls?=
+ =?utf-8?B?UUs5YUlpdGJlSWZGalNxbkRSYW5ZU3Naa2tqRlU5NFMzUmVSQ1prZ0JSWm9y?=
+ =?utf-8?B?U0RaRWpFa1dJZlN6V1k3VkY2czd5ekVjQ0hSelA1ZitCWWpaR3Uyamt0dFBo?=
+ =?utf-8?B?aWtkUWlyT3p5K1ZHVEpqK0E4QVlRajJWMW5icysvRWJwQ25xaDZJMUlqWHNs?=
+ =?utf-8?B?RFRqS2dXR2I3L2lLNyt2NE1uQzZQSVNIbjBiSWY1aHlkUzJJc000NHNPNlVh?=
+ =?utf-8?B?U3NiZ1N2bmI3VXN3V3lmbGR0UldwY1BzMFhBMXFHSmozZC9jSWlnb1VBT0lJ?=
+ =?utf-8?B?Tm05aU9OL0EyQTB1TkxST21yaVBld05jYmZ3MDd0UUxuUSthbDAwUjA0OGxH?=
+ =?utf-8?B?aEVTQ1QrV3UwQ01nRldWVGkwM1c2dkFTdmpsVC9Sanp6ZlY4TWhRa2tjZU8w?=
+ =?utf-8?B?TlYrM3FTN214ZElwajB4eVJQSGMyd0s2MDNTaWt6SVBlamlLSW42dzY1R3ht?=
+ =?utf-8?B?WVNtc0IwanF5MjBRcmROZlBld3U2NVVXY3dLZURmMU5tRVVRUVNRZE90RU5w?=
+ =?utf-8?B?UnVmWmJ1bndodXdqTHU0RStEdE83SU5YVitGMVRhdEtWT3R4MWEwNm8yTUE1?=
+ =?utf-8?B?VzU0MEphNXEyK1ovTDVacUswZ1N0eXlFaHBZR3k4TmpQTlhMcVZKNWVKc3BZ?=
+ =?utf-8?B?QlkwRXlLK3haMHptTENhcGxXUHNYMGYwV0pkdGtYT3BlaU4ybUNaNTJLOUpB?=
+ =?utf-8?B?b3Zpa0lWZEdyNFA1S2pyYmwrdnlHeEUxTUNHSWFieFYvamEwNG41WUtYdEwv?=
+ =?utf-8?B?TUQ0OHEzWlpJTDRFVzZqWERWeTQwa3NqZkpnNnA0VnNYZ0hUS0pyVUpzcVNt?=
+ =?utf-8?B?VGd6cEYrbFJVSUlsc3RIakZPMEFCNVlJeFhTeWVSQW8zZ0ZLWnd2dDdxUTFt?=
+ =?utf-8?B?WUdTMXQwT0FaS0ZEeDNOcUNZMnlXQ1FzeElWSkNPcEVlZmpPQ09tUEdFZkg5?=
+ =?utf-8?B?L1M3TGFCSnk2NVBGc0w4Y0NDK1IvbzJaNXZoc2FuSExod1FyUTArUGR1enRQ?=
+ =?utf-8?B?MUppMXd0NGhlL1R3SzZScU1ldWd6eEJYa2dmUitIckppUGJ0VmhJQmovdTFK?=
+ =?utf-8?B?L3hQS1VYNndpTVRCWkRlSnRPMmJ5UVE0eVBpdXBMZG9pQ3REYWh4b0JwU1dP?=
+ =?utf-8?B?dWtBcUpDL0tEdXFZZDRYVHFlQ2k3b3ZkVzFGekRUQ2FkWDRPNyt5VE1kTkpD?=
+ =?utf-8?B?bVEvcTJIaWlpaHNQNjB5Q0ZuVDRXU2hGZmFsMEtaSytzSUNOWTVncTdZdmFC?=
+ =?utf-8?B?VG1RbDlndFM3cGZkb0FzL1pmdEtOMFVDMi9xUzVPSld6eGVHZExaSTJENDRx?=
+ =?utf-8?B?VUNaRUpzVW1PbnZLVmExNFRXRWw3SDRabE43am0zQ29PSTNkakZHeHcra3hG?=
+ =?utf-8?B?Z2pSMThWSWl6SklBTXBJSkJKeFI4WitvL2lZbklHUEdOTjAvK1FUY1dTb2dN?=
+ =?utf-8?B?YVhtOGtnMVFZTkdjczFLczhDOHk0RW9tSE9FdGowRUpqc3VhY21rRXpObmtn?=
+ =?utf-8?B?amRKaWFiVmVad3VPc0hpUjRMeURmb21NNVAyS3pGc1JQMlQ2SjlIZWMrVDVh?=
+ =?utf-8?B?cVMxcVlmQkUrcVk1ZWZXa0NsQ1lDVnBDRUErUkNwYmRMVWRZWTdhWlpQdkZU?=
+ =?utf-8?B?YWNGQzlPZG9MWkwyZmNiRlA1eVYvcjFsTjU4ZlhoN2pmQ01nWTkvNklUMkt5?=
+ =?utf-8?B?R0htcjZGZ2N3R2REei92UXVWSUhKZXVMSmtVU1pzYWE2ZFQ1R2hxeTl6eUxH?=
+ =?utf-8?B?TUJ1OURWUEo0blFSQW1uQ3FKdk5SRGNldytzZlBWM1RLZnhYRHROTFpXUGR6?=
+ =?utf-8?Q?ywlaMN3ysefgRAXjWiP30tsBT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71d9ce14-98df-4245-6b68-08dad3b94a70
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 16:30:01.5295
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V4U2yIAzPkBlPvGCyGGYtP/d+wfeHpRuP3zL22psTvAlpXIJR7yhAykxvEUO5I0LvlvRXAsMowsvpK8jLYDiAQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6389
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 23:17:53 +0100
-Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
-
-> Replace the DEFAULT_* test helpers by functions, as they don't
-> need the exta flexibility.
+On 01-Dec-22 9:17 PM, Liang, Kan wrote:
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->  tools/testing/selftests/kvm/s390x/memop.c | 82 +++++++++++------------
->  1 file changed, 39 insertions(+), 43 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index 69869c7e2ab1..286185a59238 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -48,6 +48,8 @@ struct mop_desc {
->  	uint8_t key;
->  };
->  
-> +const uint8_t NO_KEY = 0xff;
-> +
->  static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
->  {
->  	struct kvm_s390_mem_op ksmo = {
-> @@ -85,7 +87,7 @@ static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
->  		ksmo.flags |= KVM_S390_MEMOP_F_INJECT_EXCEPTION;
->  	if (desc->_set_flags)
->  		ksmo.flags = desc->set_flags;
-> -	if (desc->f_key) {
-> +	if (desc->f_key && desc->key != NO_KEY) {
+> On 2022-12-01 10:29 a.m., Ravi Bangoria wrote:
+>>>>   /* Uncore pmus that support more than 3 counters */
+>>>>   static struct uncore_pmus {
+>>>>       char *name;
+>>>>       unsigned long config;
+>>>>   } uncore_pmus[] = {
+>>>>       { "amd_l3",         0x0  },
+>>>>       { "amd_df",         0x0  },
+>>>>       { "uncore_imc_xxx", 0xff },   /* Intel */
+>>>
+>>> IMC seems a safe choice. AFAIK, we should have at least uncore_imc_0 for
+>>> all the existing Intel platforms. { "uncore_imc_0", 0x1 }
+>>
+>> Ok. Ian said he don't see uncore_imc_0 on his tigerlake machine. Are you
+>> sure uncore_imc_0 should be present on all existing Intel platforms?
+> 
+> For TGL and older client platforms, there is only free running IMC
+> counters. For other uncore PMUs on the old client platforms, I cannot
+> guarantee that then always have more then 2 counters. I think you can
+> skip the uncore test for these old platforms if you need at least 3
+> counters.
+> 
+> 
+>>
+>>>>       { "intel_xxx_pmu2", 0xff },   /* Intel */
+>>>
+>>> Intel doesn't have such uncore PMUs.
+>>
+>> Yeah this was just for example purpose.
+>>
+>>>>       { "abc_pmu1",       0x0  },   /* Arm */
+>>>>       { "hv_24x7",        0xa  },   /* PowerPC */
+>>>>       { ...                    },
+>>>>   };
+>>>>
+>>>>   perf_pmus__for_each_pmu(pmu) {
+>>>>       if (pmu present in uncore_pmus[])
+>>>>           type[2] = pmu->type;
+>>>>           config[2] = pmu->config;>   }
+>>>
+>>>
+>>> Not sure the uncore_pmus[] can cover all possible names for all
+>>> architectures.
+>>
+>> It doesn't need to cover _all_ possible names. It just needs to cover
+>> minimal set of names which can cover all platforms for that architecture.
+>>>> Maybe we should fall back to the first uncore PMU and try again if
+>>> nothing match the uncore_pmus[].
+>>
+>> That's a good point. However, this can endup with the same problem you
+>> mentioned: it may trigger false alarm on some platform. So better to
+>> skip the test(and let someone add proper pmu in this list) rather than
+>> proving false negative result?
+> 
+> OK. Skipping the test for this case sounds good to me.
 
-is this change going to affect the behaviour?
-if so, please document it in the patch description
+Thanks. Will respin with this change.
 
->  		ksmo.flags |= KVM_S390_MEMOP_F_SKEY_PROTECTION;
->  		ksmo.key = desc->key;
->  	}
-> @@ -268,34 +270,28 @@ static void prepare_mem12(void)
->  #define ASSERT_MEM_EQ(p1, p2, size) \
->  	TEST_ASSERT(!memcmp(p1, p2, size), "Memory contents do not match!")
->  
-> -#define DEFAULT_WRITE_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)		\
-> -({										\
-> -	struct test_info __copy_cpu = (copy_cpu), __mop_cpu = (mop_cpu);	\
-> -	enum mop_target __target = (mop_target_p);				\
-> -	uint32_t __size = (size);						\
-> -										\
-> -	prepare_mem12();							\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
-> -			GADDR_V(mem1), ##__VA_ARGS__);				\
-> -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size,		\
-> -			GADDR_V(mem2), ##__VA_ARGS__);				\
-> -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
-> -})
-> +static void default_write_read(struct test_info copy_cpu, struct test_info mop_cpu,
-> +			       enum mop_target mop_target, uint32_t size, uint8_t key)
-> +{
-> +	prepare_mem12();
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size,
-> +		   GADDR_V(mem1), KEY(key));
-> +	HOST_SYNC(copy_cpu, STAGE_COPIED);
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
-> +		   GADDR_V(mem2), KEY(key));
-> +	ASSERT_MEM_EQ(mem1, mem2, size);
-> +}
->  
-> -#define DEFAULT_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)		\
-> -({										\
-> -	struct test_info __copy_cpu = (copy_cpu), __mop_cpu = (mop_cpu);	\
-> -	enum mop_target __target = (mop_target_p);				\
-> -	uint32_t __size = (size);						\
-> -										\
-> -	prepare_mem12();							\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
-> -			GADDR_V(mem1));						\
-> -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size, ##__VA_ARGS__);\
-> -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
-> -})
-> +static void default_read(struct test_info copy_cpu, struct test_info mop_cpu,
-> +			 enum mop_target mop_target, uint32_t size, uint8_t key)
-> +{
-> +	prepare_mem12();
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size, GADDR_V(mem1));
-> +	HOST_SYNC(copy_cpu, STAGE_COPIED);
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
-> +		   GADDR_V(mem2), KEY(key));
-> +	ASSERT_MEM_EQ(mem1, mem2, size);
-> +}
->  
->  static void guest_copy(void)
->  {
-> @@ -310,7 +306,7 @@ static void test_copy(void)
->  
->  	HOST_SYNC(t.vcpu, STAGE_INITED);
->  
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size);
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, NO_KEY);
->  
->  	kvm_vm_free(t.kvm_vm);
->  }
-> @@ -357,26 +353,26 @@ static void test_copy_key(void)
->  	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
->  
->  	/* vm, no key */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, NO_KEY);
->  
->  	/* vm/vcpu, machting key or key 0 */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(9));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size, KEY(9));
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 0);
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 9);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, 0);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, 9);
->  	/*
->  	 * There used to be different code paths for key handling depending on
->  	 * if the region crossed a page boundary.
->  	 * There currently are not, but the more tests the merrier.
->  	 */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, 1, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, 1, KEY(9));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, 1, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, 1, KEY(9));
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, 1, 0);
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, 1, 9);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, 1, 0);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, 1, 9);
->  
->  	/* vm/vcpu, mismatching keys on read, but no fetch protection */
-> -	DEFAULT_READ(t.vcpu, t.vcpu, LOGICAL, t.size, GADDR_V(mem2), KEY(2));
-> -	DEFAULT_READ(t.vcpu, t.vm, ABSOLUTE, t.size, GADDR_V(mem1), KEY(2));
-> +	default_read(t.vcpu, t.vcpu, LOGICAL, t.size, 2);
-> +	default_read(t.vcpu, t.vm, ABSOLUTE, t.size, 2);
->  
->  	kvm_vm_free(t.kvm_vm);
->  }
-> @@ -409,7 +405,7 @@ static void test_copy_key_storage_prot_override(void)
->  	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
->  
->  	/* vcpu, mismatching keys, storage protection override in effect */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(2));
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 2);
->  
->  	kvm_vm_free(t.kvm_vm);
->  }
-> @@ -422,8 +418,8 @@ static void test_copy_key_fetch_prot(void)
->  	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
->  
->  	/* vm/vcpu, matching key, fetch protection in effect */
-> -	DEFAULT_READ(t.vcpu, t.vcpu, LOGICAL, t.size, GADDR_V(mem2), KEY(9));
-> -	DEFAULT_READ(t.vcpu, t.vm, ABSOLUTE, t.size, GADDR_V(mem2), KEY(9));
-> +	default_read(t.vcpu, t.vcpu, LOGICAL, t.size, 9);
-> +	default_read(t.vcpu, t.vm, ABSOLUTE, t.size, 9);
->  
->  	kvm_vm_free(t.kvm_vm);
->  }
-
+Ravi
