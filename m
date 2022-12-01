@@ -2,95 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AEB63EBAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C87063EA83
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiLAI5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
+        id S229571AbiLAHtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 02:49:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiLAI5l (ORCPT
+        with ESMTP id S229512AbiLAHs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:57:41 -0500
-X-Greylist: delayed 1716 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 00:57:32 PST
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F00E7;
-        Thu,  1 Dec 2022 00:57:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=INyxVWTl5V40Q4m8iuk6nyPL6/SVXAaVTfMABtgODPU=; b=rtDaLkzT4z+MKduPKz0zQkPZRM
-        HOkXBiv54Lmek4TrfuSnFPduUbrMCNuJNwDJ8/7X7LU+wOJPdb7E0HO7aZLxVidAol4uUyRmShkdP
-        SwkR6K6VlwZ5ycDUR/4GyXuTFoE5tV6wICR67XkwHzvIhziWbmFxavkSE0NwGl/cXmPAeDGIHqtSY
-        JcinySJ3nzMlxkD1Z2GY/S5bTNxIfF47mPMFivIdDn2VCPtfbHd8faQb8hGO1uozAvPYaYd1FgFnk
-        R+m5se88hCaAEWpt5S2JalLCq7gkPom9hti4YVk27Mt99bpGk3ceHxXUk9jb6EF3BTdJeOZ9JP25q
-        iEKRznkQ==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1p0eIv-0044k7-K5; Thu, 01 Dec 2022 09:48:21 +0200
-Message-ID: <e46598e5-d680-5ae3-3e4a-ec6e5be5090b@kapsi.fi>
-Date:   Thu, 1 Dec 2022 09:48:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] gpu: host1x: Remove redundant null checks before kfree
-Content-Language: en-US
-To:     zys.zljxml@gmail.com, thierry.reding@gmail.com, airlied@gmail.com,
-        daniel@ffwll.ch, sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Yushan Zhou <katrinzhou@tencent.com>
-References: <20221201015522.38163-1-zys.zljxml@gmail.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <20221201015522.38163-1-zys.zljxml@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 02:48:59 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A544043858;
+        Wed, 30 Nov 2022 23:48:48 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN7Vk6t5yz4xVnZ;
+        Thu,  1 Dec 2022 15:48:46 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B17maTK013822;
+        Thu, 1 Dec 2022 15:48:36 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 15:48:38 +0800 (CST)
+Date:   Thu, 1 Dec 2022 15:48:38 +0800 (CST)
+X-Zmail-TransId: 2af963885c56ffffffff81a0d858
+X-Mailer: Zmail v1.0
+Message-ID: <202212011548387254492@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <dmitry.torokhov@gmail.com>
+Cc:     <colin.i.king@gmail.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogbWlzYzogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B17maTK013822
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63885C5E.000 by FangMail milter!
+X-FangMail-Envelope: 1669880926/4NN7Vk6t5yz4xVnZ/63885C5E.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63885C5E.000/4NN7Vk6t5yz4xVnZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/22 03:55, zys.zljxml@gmail.com wrote:
-> From: Yushan Zhou <katrinzhou@tencent.com>
-> 
-> Fix the following coccicheck warning:
-> ./drivers/gpu/host1x/fence.c:97:2-7: WARNING:
-> NULL check before some freeing functions is not needed.
-> 
-> Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
-> ---
->   drivers/gpu/host1x/fence.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/host1x/fence.c b/drivers/gpu/host1x/fence.c
-> index ecab72882192..05b36bfc8b74 100644
-> --- a/drivers/gpu/host1x/fence.c
-> +++ b/drivers/gpu/host1x/fence.c
-> @@ -93,8 +93,7 @@ static void host1x_syncpt_fence_release(struct dma_fence *f)
->   {
->   	struct host1x_syncpt_fence *sf = to_host1x_fence(f);
->   
-> -	if (sf->waiter)
-> -		kfree(sf->waiter);
-> +	kfree(sf->waiter);
->   
->   	dma_fence_free(f);
->   }
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-I disagree with this coccinelle rule; I think it obfuscates from the 
-reader the fact that the pointer could be NULL.
+Replace the open-code with sysfs_emit() to simplify the code.
 
-Mikko
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/input/misc/ims-pcu.c | 10 +++++-----
+ drivers/input/misc/iqs269a.c | 18 +++++++++---------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/input/misc/ims-pcu.c b/drivers/input/misc/ims-pcu.c
+index b2f1292e27ef..6e8cc28debd9 100644
+--- a/drivers/input/misc/ims-pcu.c
++++ b/drivers/input/misc/ims-pcu.c
+@@ -1050,7 +1050,7 @@ static ssize_t ims_pcu_attribute_show(struct device *dev,
+ 			container_of(dattr, struct ims_pcu_attribute, dattr);
+ 	char *field = (char *)pcu + attr->field_offset;
+
+-	return scnprintf(buf, PAGE_SIZE, "%.*s\n", attr->field_length, field);
++	return sysfs_emit(buf, "%.*s\n", attr->field_length, field);
+ }
+
+ static ssize_t ims_pcu_attribute_store(struct device *dev,
+@@ -1206,7 +1206,7 @@ ims_pcu_update_firmware_status_show(struct device *dev,
+ 	struct usb_interface *intf = to_usb_interface(dev);
+ 	struct ims_pcu *pcu = usb_get_intfdata(intf);
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", pcu->update_firmware_status);
++	return sysfs_emit(buf, "%d\n", pcu->update_firmware_status);
+ }
+
+ static DEVICE_ATTR(update_firmware_status, S_IRUGO,
+@@ -1309,7 +1309,7 @@ static ssize_t ims_pcu_ofn_reg_data_show(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	return scnprintf(buf, PAGE_SIZE, "%x\n", data);
++	return sysfs_emit(buf, "%x\n", data);
+ }
+
+ static ssize_t ims_pcu_ofn_reg_data_store(struct device *dev,
+@@ -1344,7 +1344,7 @@ static ssize_t ims_pcu_ofn_reg_addr_show(struct device *dev,
+ 	int error;
+
+ 	mutex_lock(&pcu->cmd_mutex);
+-	error = scnprintf(buf, PAGE_SIZE, "%x\n", pcu->ofn_reg_addr);
++	error = sysfs_emit(buf, "%x\n", pcu->ofn_reg_addr);
+ 	mutex_unlock(&pcu->cmd_mutex);
+
+ 	return error;
+@@ -1397,7 +1397,7 @@ static ssize_t ims_pcu_ofn_bit_show(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(data & (1 << attr->nr)));
++	return sysfs_emit(buf, "%d\n", !!(data & (1 << attr->nr)));
+ }
+
+ static ssize_t ims_pcu_ofn_bit_store(struct device *dev,
+diff --git a/drivers/input/misc/iqs269a.c b/drivers/input/misc/iqs269a.c
+index a348247d3d38..e4d5cea51f39 100644
+--- a/drivers/input/misc/iqs269a.c
++++ b/drivers/input/misc/iqs269a.c
+@@ -1332,7 +1332,7 @@ static ssize_t counts_show(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", le16_to_cpu(counts));
++	return sysfs_emit(buf, "%u\n", le16_to_cpu(counts));
+ }
+
+ static ssize_t hall_bin_show(struct device *dev,
+@@ -1369,7 +1369,7 @@ static ssize_t hall_bin_show(struct device *dev,
+ 		return -EINVAL;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static ssize_t hall_enable_show(struct device *dev,
+@@ -1377,7 +1377,7 @@ static ssize_t hall_enable_show(struct device *dev,
+ {
+ 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->hall_enable);
++	return sysfs_emit(buf, "%u\n", iqs269->hall_enable);
+ }
+
+ static ssize_t hall_enable_store(struct device *dev,
+@@ -1407,7 +1407,7 @@ static ssize_t ch_number_show(struct device *dev,
+ {
+ 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->ch_num);
++	return sysfs_emit(buf, "%u\n", iqs269->ch_num);
+ }
+
+ static ssize_t ch_number_store(struct device *dev,
+@@ -1435,7 +1435,7 @@ static ssize_t rx_enable_show(struct device *dev,
+ {
+ 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n",
++	return sysfs_emit(buf, "%u\n",
+ 			 iqs269->ch_reg[iqs269->ch_num].rx_enable);
+ }
+
+@@ -1475,7 +1475,7 @@ static ssize_t ati_mode_show(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static ssize_t ati_mode_store(struct device *dev,
+@@ -1508,7 +1508,7 @@ static ssize_t ati_base_show(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static ssize_t ati_base_store(struct device *dev,
+@@ -1541,7 +1541,7 @@ static ssize_t ati_target_show(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static ssize_t ati_target_store(struct device *dev,
+@@ -1568,7 +1568,7 @@ static ssize_t ati_trigger_show(struct device *dev,
+ {
+ 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->ati_current);
++	return sysfs_emit(buf, "%u\n", iqs269->ati_current);
+ }
+
+ static ssize_t ati_trigger_store(struct device *dev,
+-- 
+2.25.1
