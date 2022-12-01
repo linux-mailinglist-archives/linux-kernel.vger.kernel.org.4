@@ -2,125 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86BC63EBEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D4063EBE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiLAJDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S229980AbiLAJCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiLAJDM (ORCPT
+        with ESMTP id S229968AbiLAJCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:03:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E7C51C27
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669885332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 1 Dec 2022 04:02:12 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29BD41999;
+        Thu,  1 Dec 2022 01:02:07 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BAD041FD63;
+        Thu,  1 Dec 2022 09:02:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669885325; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GbYH4zENy89CzwfflFgwIWWGhamSM9hTJZawssPcIIk=;
-        b=EIiuMntjLoOIJmbm2u6Q1t5X80cuQxM+djRxWzpRJ3SWGFNyEoJJNfgt34EcB7QWHWXaz+
-        Iqwnw3sjxy4iA4Y73dKR1aeXE7bH8vYx08c3v7L6ZU+rvtp2oBxkLVnRVmxkm4OdkyKnrZ
-        mJusS7r+ZYx1XjQSnkJxai/6pZ+z6dc=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-363-A032iaV8PhaO_EYC0U-jlw-1; Thu, 01 Dec 2022 04:02:10 -0500
-X-MC-Unique: A032iaV8PhaO_EYC0U-jlw-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-14261bd9123so592414fac.21
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:02:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GbYH4zENy89CzwfflFgwIWWGhamSM9hTJZawssPcIIk=;
-        b=EpNgjQvqjFFxW+0JCImOEBQsZafSWza5s7HJiHLypOGHvVVGfqlpFBmatMbVlg3vyz
-         RnP59B0Gg9qtj2slRM4ET96t0ol3bY6x340dXJvKzUrydvPwysnKJh5VSyeHCqt+H2gp
-         L26gTZfQITh7U11R/dMvESA0Vv0QjDJe1pKfkNIXlZDhV5/VaD/QFeENyWGUG3o3rFyw
-         FqR8apU0gu70rrLbuTmMYUHr78/qAyK11rrFEebz8zqhlU1DdISOWBLtG3ob3mHl0GeU
-         +P8q+dJONYdmFJj9QrMGDtl5runRLsxL9LRY+UP6kKQtgLW1XhCs1otwJ/TeHNL8kTZ+
-         XFsg==
-X-Gm-Message-State: ANoB5pkWCnZCCjsa/GDT63sSxYvB/4UKyl9itF5dD5mQCcSTMaQBEYrK
-        zCNzAaFYt//qRxtugArwbac+LoqB10ZYmrAjX/rYseDNO5VrDeoxW4MiLYvvsHuJg1W3F1YK38y
-        wMV12QxqvJFSHJpkOT8SpKvcFEuVg8/gwKRGpdl86
-X-Received: by 2002:a05:6870:1e83:b0:132:7b3:29ac with SMTP id pb3-20020a0568701e8300b0013207b329acmr25998083oab.35.1669885330137;
-        Thu, 01 Dec 2022 01:02:10 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7tUBOklO4FBQwcg/EeqBEyl7DGUatKoKhFtd+FqPjTxyHkl7yQq5uNlEzKseBa4w5SnURhdbimUzdSSGOuqsc=
-X-Received: by 2002:a05:6870:1e83:b0:132:7b3:29ac with SMTP id
- pb3-20020a0568701e8300b0013207b329acmr25998067oab.35.1669885329828; Thu, 01
- Dec 2022 01:02:09 -0800 (PST)
+        bh=oLNRgcULxl39VgjFJbWNAjDoQ3yDDlm/yFmMG9HhK6M=;
+        b=Ave28KB7tNiE9ZkiI7R4ytVUUUAZgkBbdNR7IQHcXtu89ZpGOoODAgfa8xscLtJtg0hMJJ
+        6gquAn4cxI2y631J5knFx5hUq5LZS8Udhl8vNAHpi6IWv8yq74McDglEEoEtre9bBwt6TB
+        9OFPwbsrQMhymA6Fhqf+pMPYOfRnQhE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A3D9E13B4A;
+        Thu,  1 Dec 2022 09:02:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YsXwJ41tiGOJIQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 09:02:05 +0000
+Date:   Thu, 1 Dec 2022 10:02:05 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        Tao pilgrim <pilgrimtao@gmail.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
+        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
+ oom killed
+Message-ID: <Y4htjRAX1v7ZzC/z@dhcp22.suse.cz>
+References: <E5A5BCC3-460E-4E81-8DD3-88B4A2868285@didiglobal.com>
+ <5019F6D4-D341-4A5E-BAA1-1359A090114A@didiglobal.com>
 MIME-Version: 1.0
-References: <20221123102207.451527-1-asmetanin@yandex-team.ru>
-In-Reply-To: <20221123102207.451527-1-asmetanin@yandex-team.ru>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 1 Dec 2022 17:01:58 +0800
-Message-ID: <CACGkMEs3gdcQ5_PkYmz2eV-kFodZnnPPhvyRCyLXBYYdfHtNjw@mail.gmail.com>
-Subject: Re: [PATCH] vhost_net: revert upend_idx only on retriable error
-To:     Andrey Smetanin <asmetanin@yandex-team.ru>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yc-core@yandex-team.ru
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5019F6D4-D341-4A5E-BAA1-1359A090114A@didiglobal.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 6:24 PM Andrey Smetanin
-<asmetanin@yandex-team.ru> wrote:
->
-> Fix possible virtqueue used buffers leak and corresponding stuck
-> in case of temporary -EIO from sendmsg() which is produced by
-> tun driver while backend device is not up.
->
-> In case of no-retriable error and zcopy do not revert upend_idx
-> to pass packet data (that is update used_idx in corresponding
-> vhost_zerocopy_signal_used()) as if packet data has been
-> transferred successfully.
+On Thu 01-12-22 07:49:04, 程垲涛 Chengkaitao Cheng wrote:
+> At 2022-12-01 07:29:11, "Roman Gushchin" <roman.gushchin@linux.dev> wrote:
+[...]
+> >The problem is that the decision which process(es) to kill or preserve
+> >is individual to a specific workload (and can be even time-dependent
+> >for a given workload). 
+> 
+> It is correct to kill a process with high workload, but it may not be the 
+> most appropriate. I think the specific process to kill needs to be decided 
+> by the user. I think it is the original intention of score_adj design.
 
-Should we mark head.len as VHOST_DMA_DONE_LEN in this case?
+I guess what Roman tries to say here is that there is no obviously _correct_
+oom victim candidate. Well, except for a very narrow situation when
+there is a memory leak that consumes most of the memory over time. But
+that is really hard to identify by the oom selection algorithm in
+general.
+ 
+> >So it's really hard to come up with an in-kernel
+> >mechanism which is at the same time flexible enough to work for the majority
+> >of users and reliable enough to serve as the last oom resort measure (which
+> >is the basic goal of the kernel oom killer).
+> >
+> Our goal is to find a method that is less intrusive to the existing 
+> mechanisms of the kernel, and find a more reasonable supplement 
+> or alternative to the limitations of score_adj.
+> 
+> >Previously the consensus was to keep the in-kernel oom killer dumb and reliable
+> >and implement complex policies in userspace (e.g. systemd-oomd etc).
+> >
+> >Is there a reason why such approach can't work in your case?
+> 
+> I think that as kernel developers, we should try our best to provide 
+> users with simpler and more powerful interfaces. It is clear that the 
+> current oom score mechanism has many limitations. Users need to 
+> do a lot of timed loop detection in order to complete work similar 
+> to the oom score mechanism, or develop a new mechanism just to 
+> skip the imperfect oom score mechanism. This is an inefficient and 
+> forced behavior
 
-Thanks
+You are right that it makes sense to address typical usecases in the
+kernel if that is possible. But oom victim selection is really hard
+without a deeper understanding of the actual workload. The more clever
+we try to be the more corner cases we can produce. Please note that this
+has proven to be the case in the long oom development history. We used
+to sacrifice child processes over a large process to preserve work or
+prefer younger processes. Both those strategies led to problems.
 
->
-> Signed-off-by: Andrey Smetanin <asmetanin@yandex-team.ru>
-> ---
->  drivers/vhost/net.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-> index 20265393aee7..93e9166039b9 100644
-> --- a/drivers/vhost/net.c
-> +++ b/drivers/vhost/net.c
-> @@ -934,13 +934,16 @@ static void handle_tx_zerocopy(struct vhost_net *net, struct socket *sock)
->
->                 err = sock->ops->sendmsg(sock, &msg, len);
->                 if (unlikely(err < 0)) {
-> +                       bool retry = err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS;
-> +
->                         if (zcopy_used) {
->                                 if (vq->heads[ubuf->desc].len == VHOST_DMA_IN_PROGRESS)
->                                         vhost_net_ubuf_put(ubufs);
-> -                               nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
-> -                                       % UIO_MAXIOV;
-> +                               if (retry)
-> +                                       nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
-> +                                               % UIO_MAXIOV;
->                         }
-> -                       if (err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS) {
-> +                       if (retry) {
->                                 vhost_discard_vq_desc(vq, 1);
->                                 vhost_net_enable_vq(net, vq);
->                                 break;
-> --
-> 2.25.1
->
+Memcg protection based mechanism sounds like an interesting idea because
+it mimics a reclaim protection scheme but I am a bit sceptical it will
+be practically useful. Most for 2 reasons. a) memory reclaim protection
+can be dynamically tuned because on reclaim/refault/psi metrics. oom
+events are rare and mostly a failure situation. This limits any feedback
+based approach IMHO. b) Hierarchical nature of the protection will make
+it quite hard to configure properly with predictable outcome.
 
+-- 
+Michal Hocko
+SUSE Labs
