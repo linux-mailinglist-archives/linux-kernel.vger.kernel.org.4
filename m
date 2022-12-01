@@ -2,81 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6B763F9D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7869863F9D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiLAV3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
+        id S230346AbiLAVat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:30:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiLAV3b (ORCPT
+        with ESMTP id S230087AbiLAVaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:29:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEE17BF8D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:29:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BD8862122
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 21:29:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB20C433D6;
-        Thu,  1 Dec 2022 21:29:28 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 16:29:26 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chris Mason <clm@meta.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
-Message-ID: <20221201162926.559dbdf8@gandalf.local.home>
-In-Reply-To: <20221201162526.2fdfd65d@gandalf.local.home>
-References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
-        <166991263326.311919.16890937584677289681.stgit@devnote3>
-        <202212010838.B0B109DA@keescook>
-        <20221201114848.13a87aca@gandalf.local.home>
-        <202212010852.6D4B542@keescook>
-        <20221201141426.08411b29@gandalf.local.home>
-        <78b7a67f-8c5b-6b2e-7fb5-01c47d75c104@meta.com>
-        <20221201162526.2fdfd65d@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 1 Dec 2022 16:30:46 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C415A95B6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:30:45 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669930242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bEXRe6EnzwLWdTHPhEnnPYCfVGjc5TU7PUtwG1b6J2Y=;
+        b=EFBFeCgrq3Xjm+CembFBotS4JCESPkXLCpyTie2MzvmvM4hErsMkmVz2c9RtMmmxUPY77Q
+        hquFglHRuprTJGQ2qNVqt09SHpAcCuKedEpOw8jWRmrlZHRgklMt668TuiSKv/RslMv0ug
+        u1EirdbH/SzBJx2jnY9wfGcjVt/TdfuE9eBfFudJ+QvYbxbAF4muZ5v1wX4GmKmBhyuX23
+        m9HLDnTHiRwunSgiwuVzooKlUBm2/IxEjv0f7bqI1FovywXfV1QfqvkCTGbWx6EThYbMKF
+        XwTsqBHfuREtPgHTQ7XA4YWdDeBuen871O4zZZExNIN5vTj7fHS2fA8JSPdGWg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669930242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bEXRe6EnzwLWdTHPhEnnPYCfVGjc5TU7PUtwG1b6J2Y=;
+        b=O+HcuIbE29ULW8qzenbyLDVWEu1JLzfv2mdqwmjdLyiXZT4GZKTomqVWkHoY/jRvTwIHMK
+        Hah5zP/cQCOMXnBA==
+To:     Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+Cc:     geert+renesas@glider.be, linux-kernel@vger.kernel.org,
+        yamamoto.rei@jp.fujitsu.com
+Subject: Re: [PATCH] hrtimer: CPU and entry_time is added to a warning
+ message in hrtimer_interrupt()
+In-Reply-To: <20220624070011.128234-1-yamamoto.rei@jp.fujitsu.com>
+References: <87h77lhkzh.ffs@tglx>
+ <20220624070011.128234-1-yamamoto.rei@jp.fujitsu.com>
+Date:   Thu, 01 Dec 2022 22:30:41 +0100
+Message-ID: <87sfhyrev2.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 16:25:26 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Rei!
 
-> > Sorry, I'm completely failing to parse.  Is this directed at Kees or
-> > Benjamin?  I'm also not sure what the this is in "why this is needed for
-> > BPF"?
-> >   
-> 
-> It was directed towards Kees. I don't even know who "Benjamin" is. I don't
-> see a "Benjamin" in the Cc list.
+On Fri, Jun 24 2022 at 16:00, Rei Yamamoto wrote:
+> A warning message in hrtimer_interrupt() is output up to 5 times
+> by default, and CPU and entry_time are also shown.
 
-Oh, I see a Benjamin replied to another branch of the email thread.
+This describes to some extent _what_ the patch is doing, but not the
+why.
 
-May I suggest getting a better email client ;-)  One that has proper
-threading where it is obvious which email is being replied to.
+> These changes are helpful that the function spending a lot of time is clear
+> by using ftrace:
 
--- Steve
+That's a constructed case. There are multiple reasons why this can
+happen, not just because a single hrtimer callback misbehaves.
+
+> @@ -2038,6 +2039,15 @@ static struct ctl_table kern_table[] = {
+>  		.extra1		= SYSCTL_ONE,
+>  		.extra2		= SYSCTL_INT_MAX,
+>  	},
+> +#endif
+> +#ifdef CONFIG_HIGH_RES_TIMERS
+> +	{
+> +		.procname       = "hrtimer_interrupt_warnings",
+> +		.data           = &sysctl_hrtimer_interrupt_warnings,
+> +		.maxlen         = sizeof(int),
+> +		.mode           = 0644,
+> +		.proc_handler   = proc_dointvec,
+> +	},
+
+So this adds a new sysctl, but the changelog does not tell anything
+about it. Aside of the dubious value of this sysctl, this lacks the
+required documentation for new sysctls.
+
+> +	/*
+> +	 * If a message is output many times, the delayed funciton
+> +	 * may be identified by resetting sysctl_hrtimer_interrupt_warnings
+> +	 * and enabling ftrace.
+
+What has the reset of sysctl_hrtimer_interrupt_warnings to do with
+ftrace and how is that reset helpful to identify the root cause?
+
+Also repeating the printk 5 times does not add any value at all. The
+runaway detection already has logic to supress spurious events and if
+the problem persists then it can be observed by ftrace without any of
+these changes.
+
+I assume - because you did not tell so - that you try to have a
+correlation between ftrace and dmesg via the entry timestamp output,
+right?
+
+That's just a half thought out debug bandaid, really.
+
+You can provide a way better mechanism by adding a tracepoint right at
+the pr_warn_once(), which emits information for correlation right into
+the trace.
+
+That allows you to stop the trace once the tracepoint is emitted instead
+of having to do all of this including the correlation manually.
+
+Hmm?
+
+Thanks,
+
+        tglx
+
