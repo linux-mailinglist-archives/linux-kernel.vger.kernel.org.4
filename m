@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E36463EC36
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFEC63EC3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiLAJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S229780AbiLAJVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLAJUP (ORCPT
+        with ESMTP id S229515AbiLAJVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:20:15 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6586C8325A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:20:11 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id o1so1285791pfp.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:20:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5COQrmAFX80Rt9/QM8jDMmpKU72o7nnxyNe4BluLOMQ=;
-        b=rXzzzyCGtE2MiaqDV3YOQFFJnBtfFZXPm412NZoX9eFQsYO6V1LQGMt0V9dsZbk7D7
-         uZlD6U4sAjq1JhJYXGHx3DlPXxnnkQYtnxQ9jvlSQfrPNNCYc/u7/w6mUksCvDsEY7j/
-         nC1N/Bx/O9tH2YDxsvfrnubO4aSaSkJ3ks80it9KxIiq/JFTWPzrbOmNd/Sh7DxW0hEe
-         LvIanTk+/EGREAdtBb6n2i48zATDKGypwryeccQsd8odzySVMUzd7q8RAuzMLAq4bGrF
-         3iGhKyUFo40Gi/iVZyzqv14i4ngqRXfhS8GJ3Kf9xv7PSmsMrEljIX4S2y2n9nWVPwhZ
-         m39g==
+        Thu, 1 Dec 2022 04:21:06 -0500
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4DB4B9A6;
+        Thu,  1 Dec 2022 01:21:03 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id e18so933751qvs.1;
+        Thu, 01 Dec 2022 01:21:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5COQrmAFX80Rt9/QM8jDMmpKU72o7nnxyNe4BluLOMQ=;
-        b=m2fqxuRAwxrAzwzT5IK6a4CVN/evpx62uiQh9o2efwKz58irNl9qGaNZL8s/YPRsRr
-         ao625K/qGIKRdisdWg/G9/2FcBoCpnA/xcasHYSGHdZH0tegPe4mFQxU0ie3ufEcQptv
-         BcIAsIaFAuWw3eGvn9ZjtqF7npmvK6rCQQ8mjO5e1LyB1SyX8YRdI9NbBWWhmHqpfogJ
-         bTrE7AIEujbIb/r3EqOJyD1fB1ZxH7Z0BFoVtOsbYi+i00Lf4oLTn/1lkvLxNuewZOLv
-         yj3zJGMZHXvBOPkV6e0kuFgrfQRUN65Mm9MgN1hcsByHy5fkDLYogqrfgNsj7yExlLo7
-         HPdA==
-X-Gm-Message-State: ANoB5pmVjGj/WhVmrqmiJ/Rrrw+nTfAQouwvZ4UjFf3BhojXZNx31pGZ
-        inisaXsX3wP8PQSq8lMAgGHQzA==
-X-Google-Smtp-Source: AA0mqf6XZ6BIBIaTNJzI3h5545GwZMXPWSEEOR6kemnJDSWPfoZxJpIHr12pfUHNGP8pI05+jEUT+A==
-X-Received: by 2002:a63:e444:0:b0:477:6a3a:e614 with SMTP id i4-20020a63e444000000b004776a3ae614mr40676499pgk.81.1669886410907;
-        Thu, 01 Dec 2022 01:20:10 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id i190-20020a6287c7000000b0056c704abca7sm2714966pfe.220.2022.12.01.01.20.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 01:20:10 -0800 (PST)
-Date:   Thu, 1 Dec 2022 14:50:08 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: tegra186: Use flexible array to simplify memory
- allocation
-Message-ID: <20221201092008.2nainxhjpxnsptin@vireshk-i7>
-References: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
- <f6b75a33df6f5fd94da3cfecb1e9e7590bf8cd37.1668963937.git.christophe.jaillet@wanadoo.fr>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6fSb3KNzIEE0W7AdsV0sBOucQCqOQ/fqMgUl4ol27wc=;
+        b=cJFBxx9j8I/zHqTUyiFAPQ0PAtFeh2XypUVvo7p8ieMvl6ftdDQhEz+Flcy8/irrj7
+         U/FYRdA35UhuOxhFbNhAj9z9WgGYEf9IJ/HaVGgotAHtu2d6W8HEgD0tc3JS5J4W3Fze
+         uL8Tr3dSJeRTTaz2v2WMkx+7JLQdbDe9bfi3g9kACeCQxSNteJwv49Tv5+knTRDZPfMV
+         JGF/4tu8MPF6fZii2H83hxqw9sm1cY9gf91BdAe9ZGF56yepc9uBawEgyTqi+F1Xj3Mm
+         NnaxRpmhEqACmKwJH8EcCOjtudgVC7Fj+AGCNtNz4//nbEdbcXH/0a2Xzgj2upY593aL
+         4G0A==
+X-Gm-Message-State: ANoB5pmn6+uV39Fe7yBHO6Mul62zt1DB4jROZ0gF0C+/OPpy5tmHL2kA
+        IYcoTEw5FAshlaeEGknT9K770z9yQmct7w==
+X-Google-Smtp-Source: AA0mqf7VTgGdtYS84x5c9SRxszdWNDitTe+7wFuFDprrHRlQWDyuZeHB+uAKf6VDZpmEd9M2UDsnFw==
+X-Received: by 2002:a05:6214:5f86:b0:4c6:141f:819d with SMTP id ls6-20020a0562145f8600b004c6141f819dmr49493889qvb.34.1669886462206;
+        Thu, 01 Dec 2022 01:21:02 -0800 (PST)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id x10-20020a05620a258a00b006fc92cf4703sm2983108qko.132.2022.12.01.01.21.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 01:21:01 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-381662c78a9so10946067b3.7;
+        Thu, 01 Dec 2022 01:21:00 -0800 (PST)
+X-Received: by 2002:a81:a148:0:b0:3b4:8af5:48e with SMTP id
+ y69-20020a81a148000000b003b48af5048emr33977890ywg.383.1669886460726; Thu, 01
+ Dec 2022 01:21:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f6b75a33df6f5fd94da3cfecb1e9e7590bf8cd37.1668963937.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com> <20221123065946.40415-5-tomi.valkeinen+renesas@ideasonboard.com>
+In-Reply-To: <20221123065946.40415-5-tomi.valkeinen+renesas@ideasonboard.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 1 Dec 2022 10:20:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWAPZHLxgQioNBw1HhZpvAN5WFydc-bbMkpfH5pdc1vNg@mail.gmail.com>
+Message-ID: <CAMuHMdWAPZHLxgQioNBw1HhZpvAN5WFydc-bbMkpfH5pdc1vNg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] arm64: dts: renesas: r8a779g0: Add display related nodes
+To:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20-11-22, 18:19, Christophe JAILLET wrote:
-> Use flexible array to simplify memory allocation.
-> It saves some memory, avoids an indirection when reading the 'clusters'
-> array and removes some LoC.
-> 
-> 
-> Detailed explanation:
-> ====================
-> Knowing that:
->   - each devm_ allocation over-allocates 40 bytes for internal needs
->   - Some rounding is done by the memory allocator on 8, 16, 32, 64, 96,
->     128, 192, 256, 512, 1024, 2048, 4096, 8192 boundaries
-> 
-> and that:
->   - sizeof(struct tegra186_cpufreq_data) = 24
->   - sizeof(struct tegra186_cpufreq_cluster) = 16
-> 
-> Memory allocations in tegra186_cpufreq_probe() are:
->   data:           (24 + 40) = 64 		      => 64 bytes
->   data->clusters: (2 * 16 + 40) = 72     => 96 bytes
-> So a total of 160 bytes are allocated.
-> 56 for the real need, 80 for internal uses and 24 are wasted.
-> 
-> 
-> If 'struct tegra186_cpufreq_data' is reordered so that 'clusters' is a
-> flexible array:
->   - it saves one pointer in the structure
->   - only one allocation is needed
-> 
-> So, only 96 bytes are allocated:
->   16 + 2 * 16 + 40 = 88  => 96 bytes
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+On Wed, Nov 23, 2022 at 8:00 AM Tomi Valkeinen
+<tomi.valkeinen+renesas@ideasonboard.com> wrote:
+> Add DT nodes for components needed to get the DSI output working:
+> - FCPv
+> - VSPd
+> - DU
+> - DSI
+>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Applied. Thanks.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.3.
 
--- 
-viresh
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
