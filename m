@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0994F63F5BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D990D63F5BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiLAQwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S229770AbiLAQxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLAQwn (ORCPT
+        with ESMTP id S229793AbiLAQxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:52:43 -0500
-Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1975FB4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:52:41 -0800 (PST)
-Received: from atl1wswcm02.websitewelcome.com (unknown [50.6.129.163])
-        by atl3wswob02.websitewelcome.com (Postfix) with ESMTP id 8628D222A3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:52:40 +0000 (UTC)
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-        by cmsmtp with ESMTP
-        id 0mndpuVbq4ZGb0mnfpXlel; Thu, 01 Dec 2022 16:52:40 +0000
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oQj/HJTvdxrVt+zk2ySQjAT2Bd8kLr9eRU+0wbh0SyY=; b=KfZAL9PccHg35tGQV5H19QvMOp
-        0mHs2MiMY6EmiEBcaAgtIV79bHtAAitMPipkUwaf77mIG3gaJyWDkrbQIeOof7orF9rEegDuNGYP7
-        eBaA86RKRTssD0Vjv56GuKiVub8j+0M1JR+ON0BQ1eJ/pyKIM6AGeTnaxgOnOkw4Z00MheCZyBcJF
-        jLSo62221IPO0aSh2eWh+aiWPPaWGEdYpY8x/UoPFpCORKovh8BY0QshN2xbc52ZdLFQfT1F1DYnH
-        c0/TomvO3So5AzQ3LWfWxFvLl3lWTWVO1D9QNfIdzWFm4rPBMcZ1BfqDeWMJvoWtouHHWYZCDgngZ
-        tnusNc0Q==;
-Received: from [106.197.183.239] (port=44685 helo=[192.168.221.42])
-        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <saravanan@linumiz.com>)
-        id 1p0mnc-003un4-Oq;
-        Thu, 01 Dec 2022 16:52:36 +0000
-Message-ID: <ddcda7c9-6aa8-2660-d6fb-8dc117f330c4@linumiz.com>
-Date:   Thu, 1 Dec 2022 17:52:32 +0100
+        Thu, 1 Dec 2022 11:53:05 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A0289310
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:53:04 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so2638918pjo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:53:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfXu45xdfTyVLVkfj9ZZQsbbr7ecm2c21plsrP1SZFA=;
+        b=En2kIJ9mdNILFPY+fiqHUP8koejjvpiaXqpsgU1tFRsaUtYAXsBxPrGuDeB1ZgOEzn
+         63QllEyYhZWrTMMzhjfdVXGqPj+RYhgnY07raNt1VGnjk3RNBiCpli+1qteGrPJgvzdd
+         38eb4KvxHzw79QQ3LXkfXZRseZd6pGafDV2No=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xfXu45xdfTyVLVkfj9ZZQsbbr7ecm2c21plsrP1SZFA=;
+        b=xxtjicnMrqAS6AKnQ/S6Ramipk4q9gxOY+qsmkZ1iRpoQA2DieRJVGjrsf7lry7P+S
+         ys2g0Om7Ikzx3aK46mGloft0XKD1WxBmDBvkKNsYNCUQiE0AvV2o/BlVJJpgYii2NHrX
+         ScdSjTKKrp6eZslBoPIFDhznpNpFbW4LVFX5N1THCQKD5X4HYviTWXVFe4ShseZhGOKd
+         s3IYGrx0kU/qBdnlqCq/24H6Yf5uqzGS7XdBK3iv4opitHJmVtXhNBOHFMlaCc1t1314
+         l6BFLa1j3B/KxJas9bN5iw74ZH78i1OYCJPtLkPrB+L6Q3c3UY/cmqqJuw6AbNMY3WxX
+         U5Ow==
+X-Gm-Message-State: ANoB5pkMR4xaOdqQVg90SZkYxkEQP4026VenkQ2ua0w0gLyNA32SkVej
+        uFVYhtzYZXvYTsyg3nxs2+tPUA==
+X-Google-Smtp-Source: AA0mqf5FATOadw2oQcUmoM1RyvfoRAFkgyzWE9k33ts6EqZ2ZronOD6oVFdPtMBhtyUGlg91iPdMow==
+X-Received: by 2002:a17:903:491:b0:185:46a5:1c73 with SMTP id jj17-20020a170903049100b0018546a51c73mr51085424plb.157.1669913584065;
+        Thu, 01 Dec 2022 08:53:04 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u11-20020a17090341cb00b001896af10ca7sm3902020ple.134.2022.12.01.08.53.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 08:53:03 -0800 (PST)
+Date:   Thu, 1 Dec 2022 08:53:02 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
+Message-ID: <202212010852.6D4B542@keescook>
+References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
+ <166991263326.311919.16890937584677289681.stgit@devnote3>
+ <202212010838.B0B109DA@keescook>
+ <20221201114848.13a87aca@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/4] dt-bindings: hwmon/pmbus: Add mps,mpq7932
- power-management IC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marten.lindahl@axis.com,
-        jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20221201044643.1150870-1-saravanan@linumiz.com>
- <20221201044643.1150870-3-saravanan@linumiz.com>
- <bc86121f-3cc2-1e55-4c6a-02cb1644a8bd@linaro.org>
- <e7b20055-4f44-aa91-e18d-9fb0f835fbf1@linumiz.com>
- <29de4d2b-3e32-809e-6ccd-5e7a4fe548fc@linaro.org>
- <e0d97b79-2133-8869-eaea-eb286fdb3a11@roeck-us.net>
- <785e942a-0691-f87e-b6e9-058749a79ec1@linaro.org>
- <8228db8d-2a32-1d23-74f3-05b9fe529a82@linumiz.com>
- <bdab2e58-ea12-0ccf-a25a-ed89e50a5332@linaro.org>
-Content-Language: en-US
-From:   Saravanan Sekar <saravanan@linumiz.com>
-In-Reply-To: <bdab2e58-ea12-0ccf-a25a-ed89e50a5332@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 106.197.183.239
-X-Source-L: No
-X-Exim-ID: 1p0mnc-003un4-Oq
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.221.42]) [106.197.183.239]:44685
-X-Source-Auth: saravanan@linumiz.com
-X-Email-Count: 14
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfP4751ZaMPlv/LlK4mHcTRyk/fFVTSadVDnoHE4MKSO4i6FrEvkmWc6BkfKS+a69qxLuVz8IjWaecKgkk62W6ESzwZqxf8ITy9Yzxj6T4Ow2fzVcPaXr
- 5QcGmi4uLxvnTaSrL9+s8dRtGxPR0VqY5DhOf1uSVfUVcUvumxVkIF9VYr8Dh8piMvJKCJOfbTXFakdfOerfjR9V8m2DiSG/RY8=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201114848.13a87aca@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/22 17:43, Krzysztof Kozlowski wrote:
-> On 01/12/2022 17:38, Saravanan Sekar wrote:
->>>>> Plus additional comment for the driver (and related to bindings) was
->>>>> that this is not hwmon but a regulator driver. Why putting regulator
->>>>> driver in hwmon?
->>>>>
->>>>
->>>> Turns out this is primarily a hardware monitoring driver, like the drivers
->>>> for all other PMBus chips. Regulator support is actually optional; the driver
->>>> works perfectly well with CONFIG_REGULATOR=n (except that it needs some
->>>> #ifdefs to address that situation).
->>>
->>> OK, this would explain location  of the driver. However the bindings are
->>> saying:
->>> "Monolithic Power System MPQ7932 PMIC"
->>> and PMIC is not mainly a hwmon device, even if it has such capabilities.
->>> It might be missing description and proper title... or might be misplaced.
->>>
->>
->> Indeed it is PMIC chip. I think this is not the first and not sure title
->> has to be changed for hwmon subsystem.
->>
->> bindings/hwmon/pmbus/ti,lm25066.yaml
->> title: National Semiconductor/Texas Instruments LM250x6/LM506x
->> power-management ICs
+On Thu, Dec 01, 2022 at 11:48:48AM -0500, Steven Rostedt wrote:
+> On Thu, 1 Dec 2022 08:39:28 -0800
+> Kees Cook <keescook@chromium.org> wrote:
 > 
-> Then I propose to put it in regulator directory.
->
+> > On Fri, Dec 02, 2022 at 01:37:13AM +0900, Masami Hiramatsu (Google) wrote:
+> > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > 
+> > > Since the function error injection framework in the fault injection
+> > > subsystem can change the function code flow forcibly, it may cause
+> > > unexpected behavior (but that is the purpose of this feature).
+> > > To identify this in the kernel oops message, add a new taint flag
+> > > for this, and set it if it is (and similar things in BPF) used.  
+> > 
+> > Why is hooking through BPF considered to be "fault injection" here?
+> > 
+> 
+> Have you not been reading this thread?
 
-Just for clarification, should bindings put in regulator directory?
+I skimmed it -- trying to catch up from turkey week. If this was already
+covered, then please ignore me. It just wasn't obvious from the commit
+log why it was included.
 
-Thanks,
-Saravanan
-
+-- 
+Kees Cook
