@@ -2,133 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCDE63F38B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC06663F393
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiLAPQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:16:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S229728AbiLAPR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbiLAPQt (ORCPT
+        with ESMTP id S230371AbiLAPRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:16:49 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162AFC771D;
-        Thu,  1 Dec 2022 07:16:45 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id EC6B95FD09;
-        Thu,  1 Dec 2022 18:16:42 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669907803;
-        bh=nU1RE45ZvimMv1CNnJChQ6TI/Z6ed/jCXRq3gvyAM4Q=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=Qgd+g5cc16mHuEcETwq/Sk0nr+1RDxWVtPznIfgclAqOm2whjRqZvZ8/9Vr0IiuQH
-         bgxetdtcVKQ2wfbFiFdnrs8Ml9QgpxnpAhRvltt/zo6gOfydK8XSY8IixtoMNmKFuJ
-         lWjddnMTXTYbPwTV16NCsMVTUwwO3mIy8O+R+JAFCT+93O+IxznMhJOfnRmv1E3X6E
-         h+3pQ3sPYJ8m4dp61g16iWnDme692ace+2TycPM9rRgWfv0p3h3uJkyAc2vLpN0amD
-         WZySH9Hpj9g1/iK+EGPyFrth2k9A1y2/ze2ZREU9J2uUpu3/U33GZCUPpHIZUQA5FD
-         LqXXyAKJMaMpg==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  1 Dec 2022 18:16:38 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Vishnu Dasa <vdasa@vmware.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-CC:     Bryan Tan <bryantan@vmware.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Thu, 1 Dec 2022 10:17:53 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09A920364;
+        Thu,  1 Dec 2022 07:17:51 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1336C21A99;
+        Thu,  1 Dec 2022 15:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669907870; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nXlkWC2x3jCBLbFSc4SzlcbQGp8MHx6uDp5av6z1mNo=;
+        b=k30ixjE6LqemmfsFV0Zse9FQiuesSQnFgGvweadjcr1aagroTOCG5WHwVwJFGEfGusCFCf
+        KW2BoWfpyl09bC/FfJrhxJiI1euhcu0Y3ghwo3YfXLLX4Fou04MqnJwgyeq+bFLrnwfWaS
+        682upUE6Tr9AOU9BINm3McZE+5sMDig=
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id EEA7713503;
+        Thu,  1 Dec 2022 15:17:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id fy3bOZ3FiGMETgAAGKfGzw
+        (envelope-from <mhocko@suse.com>); Thu, 01 Dec 2022 15:17:49 +0000
+Date:   Thu, 1 Dec 2022 16:17:49 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     Tao pilgrim <pilgrimtao@gmail.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
+        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v2 3/6] vsock/vmci: always return ENOMEM in case of
- error
-Thread-Topic: [RFC PATCH v2 3/6] vsock/vmci: always return ENOMEM in case of
- error
-Thread-Index: AQHZAPB8vpTNk9Cz/UiwVhA3FAXi7a5YmwUAgABf+wCAAABQgA==
-Date:   Thu, 1 Dec 2022 15:16:38 +0000
-Message-ID: <ccb9e602-88c1-6d72-75f6-4a3c84549b72@sberdevices.ru>
-References: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
- <675b1f93-dc07-0a70-0622-c3fc6236c8bb@sberdevices.ru>
- <20221201093048.q2pradrgn5limcfb@sgarzare-redhat>
- <D7DE3103-994D-478E-B7F6-42CE8B6469FE@vmware.com>
-In-Reply-To: <D7DE3103-994D-478E-B7F6-42CE8B6469FE@vmware.com>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <828820DEBCB8C8448C1E6D7D6AA05FC3@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
+ oom killed
+Message-ID: <Y4jFnY7kMdB8ReSW@dhcp22.suse.cz>
+References: <Y4inSsNpmomzRt8J@dhcp22.suse.cz>
+ <C9FFF5A4-B883-4C0D-A802-D94080D6C3A4@didiglobal.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/01 11:49:00 #20632713
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C9FFF5A4-B883-4C0D-A802-D94080D6C3A4@didiglobal.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDEuMTIuMjAyMiAxODoxNCwgVmlzaG51IERhc2Egd3JvdGU6DQo+IA0KPiANCj4+IE9uIERl
-YyAxLCAyMDIyLCBhdCAxOjMwIEFNLCBTdGVmYW5vIEdhcnphcmVsbGEgPHNnYXJ6YXJlQHJlZGhh
-dC5jb20+IHdyb3RlOg0KPj4NCj4+ICEhIEV4dGVybmFsIEVtYWlsDQo+Pg0KPj4gT24gRnJpLCBO
-b3YgMjUsIDIwMjIgYXQgMDU6MDg6MDZQTSArMDAwMCwgQXJzZW5peSBLcmFzbm92IHdyb3RlOg0K
-Pj4+IEZyb206IEJvYmJ5IEVzaGxlbWFuIDxib2JieS5lc2hsZW1hbkBieXRlZGFuY2UuY29tPg0K
-Pj4+DQo+Pj4gVGhpcyBzYXZlcyBvcmlnaW5hbCBiZWhhdmlvdXIgZnJvbSBhZl92c29jay5jIC0g
-c3dpdGNoIGFueSBlcnJvcg0KPj4+IGNvZGUgcmV0dXJuZWQgZnJvbSB0cmFuc3BvcnQgbGF5ZXIg
-dG8gRU5PTUVNLg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogQm9iYnkgRXNobGVtYW4gPGJvYmJ5
-LmVzaGxlbWFuQGJ5dGVkYW5jZS5jb20+DQo+Pj4gU2lnbmVkLW9mZi1ieTogQXJzZW5peSBLcmFz
-bm92IDxBVktyYXNub3ZAc2JlcmRldmljZXMucnU+DQo+Pj4gLS0tDQo+Pj4gbmV0L3Ztd192c29j
-ay92bWNpX3RyYW5zcG9ydC5jIHwgOSArKysrKysrKy0NCj4+PiAxIGZpbGUgY2hhbmdlZCwgOCBp
-bnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gQEJyeWFuIEBWaXNobnUgd2hhdCBk
-byB5b3UgdGhpbmsgYWJvdXQgdGhpcyBwYXRjaD8NCj4+DQo+PiBBIGJpdCBvZiBjb250ZXh0Og0K
-Pj4NCj4+IEJlZm9yZSB0aGlzIHNlcmllcywgdGhlIGFmX3Zzb2NrIGNvcmUgYWx3YXlzIHJldHVy
-bmVkIEVOT01FTSB0byB0aGUgdXNlcg0KPj4gaWYgdGhlIHRyYW5zcG9ydCBmYWlsZWQgdG8gcXVl
-dWUgdGhlIHBhY2tldC4NCj4+DQo+PiBOb3cgd2UgYXJlIGNoYW5naW5nIGl0IGJ5IHJldHVybmlu
-ZyB0aGUgdHJhbnNwb3J0IGVycm9yLiBTbyBJIHRoaW5rIGhlcmUNCj4+IHdlIHdhbnQgdG8gcHJl
-c2VydmUgdGhlIHByZXZpb3VzIGJlaGF2aW9yIGZvciB2bWNpLCBidXQgSSBkb24ndCBrbm93IGlm
-DQo+PiB0aGF0J3MgdGhlIHJpZ2h0IHRoaW5nLg0KPj4NCj4gDQo+IEFncmVlIHdpdGggU3RlZmFu
-by4gIEkgZG9uJ3QgdGhpbmsgd2UgbmVlZCB0byBwcmVzZXJ2ZSB0aGUgcHJldmlvdXMNCj4gYmVo
-YXZpb3IgZm9yIHZtY2kuDQpHb29kISBJJ2xsIHJlbW92ZSB0aGlzIHBhdGNoIGZyb20gdGhlIG5l
-eHQgdmVyc2lvbg0KDQpUaGFua3MsIEFyc2VuaXkNCj4gDQo+Pg0KPj4gQEFyc2VuaXkgcGxlYXNl
-IGluIHRoZSBuZXh0IHZlcnNpb25zIGRlc2NyaWJlIGJldHRlciBpbiB0aGUgY29tbWl0DQo+PiBt
-ZXNzYWdlcyB0aGUgcmVhc29ucyBmb3IgdGhlc2UgY2hhbmdlcywgc28gaXQgaXMgZWFzaWVyIHJl
-dmlldyBmb3INCj4+IG90aGVycyBhbmQgYWxzbyBpbiB0aGUgZnV0dXJlIGJ5IHJlYWRpbmcgdGhl
-IGNvbW1pdCBtZXNzYWdlIHdlIGNhbg0KPj4gdW5kZXJzdGFuZCB0aGUgcmVhc29uIGZvciB0aGUg
-Y2hhbmdlLg0KPj4NCj4+IFRoYW5rcywNCj4+IFN0ZWZhbm8NCj4+DQo+Pj4NCj4+PiBkaWZmIC0t
-Z2l0IGEvbmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydC5jIGIvbmV0L3Ztd192c29jay92bWNp
-X3RyYW5zcG9ydC5jDQo+Pj4gaW5kZXggODQyYzk0Mjg2ZDMxLi4yODlhMzZhMjAzYTIgMTAwNjQ0
-DQo+Pj4gLS0tIGEvbmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydC5jDQo+Pj4gKysrIGIvbmV0
-L3Ztd192c29jay92bWNpX3RyYW5zcG9ydC5jDQo+Pj4gQEAgLTE4MzgsNyArMTgzOCwxNCBAQCBz
-dGF0aWMgc3NpemVfdCB2bWNpX3RyYW5zcG9ydF9zdHJlYW1fZW5xdWV1ZSgNCj4+PiAgICAgIHN0
-cnVjdCBtc2doZHIgKm1zZywNCj4+PiAgICAgIHNpemVfdCBsZW4pDQo+Pj4gew0KPj4+IC0gICAg
-ICByZXR1cm4gdm1jaV9xcGFpcl9lbnF1ZXYodm1jaV90cmFucyh2c2spLT5xcGFpciwgbXNnLCBs
-ZW4sIDApOw0KPj4+ICsgICAgICBpbnQgZXJyOw0KPj4+ICsNCj4+PiArICAgICAgZXJyID0gdm1j
-aV9xcGFpcl9lbnF1ZXYodm1jaV90cmFucyh2c2spLT5xcGFpciwgbXNnLCBsZW4sIDApOw0KPj4+
-ICsNCj4+PiArICAgICAgaWYgKGVyciA8IDApDQo+Pj4gKyAgICAgICAgICAgICAgZXJyID0gLUVO
-T01FTTsNCj4+PiArDQo+Pj4gKyAgICAgIHJldHVybiBlcnI7DQo+Pj4gfQ0KPj4+DQo+Pj4gc3Rh
-dGljIHM2NCB2bWNpX3RyYW5zcG9ydF9zdHJlYW1faGFzX2RhdGEoc3RydWN0IHZzb2NrX3NvY2sg
-KnZzaykNCj4+PiAtLQ0KPj4+IDIuMjUuMQ0KPj4NCj4+DQo+PiAhISBFeHRlcm5hbCBFbWFpbDog
-VGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBE
-byBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IHJlY29nbml6
-ZSB0aGUgc2VuZGVyLg0KPiANCg0K
+On Thu 01-12-22 14:30:11, 程垲涛 Chengkaitao Cheng wrote:
+> At 2022-12-01 21:08:26, "Michal Hocko" <mhocko@suse.com> wrote:
+> >On Thu 01-12-22 13:44:58, Michal Hocko wrote:
+> >> On Thu 01-12-22 10:52:35, 程垲涛 Chengkaitao Cheng wrote:
+> >> > At 2022-12-01 16:49:27, "Michal Hocko" <mhocko@suse.com> wrote:
+> >[...]
+> >> There is a misunderstanding, oom.protect does not replace the user's 
+> >> tailed policies, Its purpose is to make it easier and more efficient for 
+> >> users to customize policies, or try to avoid users completely abandoning 
+> >> the oom score to formulate new policies.
+> >
+> > Then you should focus on explaining on how this makes those policies and
+> > easier and moe efficient. I do not see it.
+> 
+> In fact, there are some relevant contents in the previous chat records. 
+> If oom.protect is applied, it will have the following benefits
+> 1. Users only need to focus on the management of the local cgroup, not the 
+> impact on other users' cgroups.
+
+Protection based balancing cannot really work in an isolation.
+
+> 2. Users and system do not need to spend extra time on complicated and 
+> repeated scanning and configuration. They just need to configure the 
+> oom.protect of specific cgroups, which is a one-time task
+
+This will not work same way as the memory reclaim protection cannot work
+in an isolation on the memcg level.
+
+> >> > >Why cannot you simply discount the protection from all processes
+> >> > >equally? I do not follow why the task_usage has to play any role in
+> >> > >that.
+> >> > 
+> >> > If all processes are protected equally, the oom protection of cgroup is 
+> >> > meaningless. For example, if there are more processes in the cgroup, 
+> >> > the cgroup can protect more mems, it is unfair to cgroups with fewer 
+> >> > processes. So we need to keep the total amount of memory that all 
+> >> > processes in the cgroup need to protect consistent with the value of 
+> >> > eoom.protect.
+> >> 
+> >> You are mixing two different concepts together I am afraid. The per
+> >> memcg protection should protect the cgroup (i.e. all processes in that
+> >> cgroup) while you want it to be also process aware. This results in a
+> >> very unclear runtime behavior when a process from a more protected memcg
+> >> is selected based on its individual memory usage.
+> >
+> The correct statement here should be that each memcg protection should 
+> protect the number of mems specified by the oom.protect. For example, 
+> a cgroup's usage is 6G, and it's oom.protect is 2G, when an oom killer occurs, 
+> In the worst case, we will only reduce the memory used by this cgroup to 2G 
+> through the om killer.
+
+I do not see how that could be guaranteed. Please keep in mind that a
+non-trivial amount of memory resources could be completely independent
+on any process life time (just consider tmpfs as a trivial example).
+
+> >Let me be more specific here. Although it is primarily processes which
+> >are the primary source of memcg charges the memory accounted for the oom
+> >badness purposes is not really comparable to the overal memcg charged
+> >memory. Kernel memory, non-mapped memory all that can generate rather
+> >interesting cornercases.
+> 
+> Sorry, I'm thoughtless enough about some special memory statistics. I will fix 
+> it in the next version
+
+Let me just emphasise that we are talking about fundamental disconnect.
+Rss based accounting has been used for the OOM killer selection because
+the memory gets unmapped and _potentially_ freed when the process goes
+away. Memcg changes are bound to the object life time and as said in
+many cases there is no direct relation with any process life time.
+
+Hope that clarifies.
+-- 
+Michal Hocko
+SUSE Labs
