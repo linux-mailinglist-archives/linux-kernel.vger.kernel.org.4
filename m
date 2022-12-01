@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D63063F201
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0CF63F2AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiLANtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        id S231889AbiLAOWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbiLANtp (ORCPT
+        with ESMTP id S231866AbiLAOWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:49:45 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3812FC32;
-        Thu,  1 Dec 2022 05:49:43 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 203842D9;
-        Thu,  1 Dec 2022 14:49:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669902581;
-        bh=3sSiumN32WfXS7NyHhwNkd03q4CT2IYhavfVxB+W+Aw=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=UuYL6Df+a1aTs6G/6I6g4k4VUjHpGkc5HiwpLqflFRPA9Ot//hnN8AUAGABxTa4yh
-         ymILLQZFvLEgxbauR6NwJ3m27zhdf8oVoqNstRgUh4kDtjo3ReGBszkfWGYJyDqO8D
-         CIEiyJMNdgEsRk9d8++NEYjjhXVHNOrpmSxqkV/s=
-Message-ID: <780379d9-2331-cd7a-126d-cdaa8aec023d@ideasonboard.com>
-Date:   Thu, 1 Dec 2022 13:49:38 +0000
+        Thu, 1 Dec 2022 09:22:08 -0500
+X-Greylist: delayed 1806 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 06:22:02 PST
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 335C8ABA0B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:22:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=BBFOF
+        5hbXkx5sANxzuB/pHT2CFFBu2rT2z2PtghB9cA=; b=pcXuO6Ud+cMl17jGdi4Jy
+        3AvIzyPm0mmbGZF6WXsDrl6uL10T5Ai7xjNV+Ug70rrdOSKmnSw/pTE2/qdvEaYA
+        k3ai4XJ8Bv0i/2DaTWy+WA256Y9R8K9W31f0+8zf3U+RIQpQVNyyaha9i1t+/gEN
+        BSZCbRjLw5BxfPgXug+/X0=
+Received: from localhost.localdomain (unknown [221.228.128.183])
+        by smtp2 (Coremail) with SMTP id DMmowABn7WE3sYhjaCrQEg--.8644S2;
+        Thu, 01 Dec 2022 21:50:48 +0800 (CST)
+From:   wonder_rock@126.com
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Deyan Wang <wonder_rock@126.com>
+Subject: [PATCH 1/1] mm/page_alloc: update comments in __free_pages_ok()
+Date:   Thu,  1 Dec 2022 21:50:45 +0800
+Message-Id: <20221201135045.31663-1-wonder_rock@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>,
-        laurent.pinchart@ideasonboard.com
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221201122141.8739-1-szymon.heidrich@gmail.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH] Prevent buffer overflow in UVC Gadget setup handler
-In-Reply-To: <20221201122141.8739-1-szymon.heidrich@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMmowABn7WE3sYhjaCrQEg--.8644S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtFyruFWDKF1DZr1ktr17trb_yoWfXFcE9a
+        1qqry7ur4ftF9xKF47A3Z3JFyfKF18uryxuayftrZxtFy8ZFnrJa18JrnxCrWDWFs0gFWk
+        GayvvFZrCw12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRZyCp3UUUUU==
+X-Originating-IP: [221.228.128.183]
+X-CM-SenderInfo: xzrqvv5ubu0ubn6rjloofrz/1tbiuRnKgVpD-Q7q3wAAs0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello - thanks for the patch
+From: Deyan Wang <wonder_rock@126.com>
 
-On 01/12/2022 12:21, Szymon Heidrich wrote:
-> Setup function uvc_function_setup
+Add a comment to explain why we call get_pfnblock_migratetype() twice
+in __free_pages_ok().
 
+Signed-off-by: Deyan Wang <wonder_rock@126.com>
+---
+ mm/page_alloc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-You've written uvc_function_setup here, but the code changes 
-uvc_function_ep0_complete.
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 2d4c81224508..52dd4fff280b 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1702,6 +1702,11 @@ static void __free_pages_ok(struct page *page, unsigned int order,
+ 	if (!free_pages_prepare(page, order, true, fpi_flags))
+ 		return;
+ 
++	/*
++	 * Calling get_pfnblock_migratetype() without spin_lock_irqsave() here
++	 * is used to avoid calling get_pfnblock_migratetype() under the lock.
++	 * This will reduce the lock holding time.
++	 */
+ 	migratetype = get_pfnblock_migratetype(page, pfn);
+ 
+ 	spin_lock_irqsave(&zone->lock, flags);
+-- 
+2.25.1
 
->   permits control transfer
-> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
-> data stage handler for OUT transfer uses memcpy to copy req->actual
-> bytes to uvc_event->data.data array of size 60. This may result
-> in an overflow of 4 bytes.
->
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-
-
-Good catch
-
-> ---
->   drivers/usb/gadget/function/f_uvc.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> index 6e196e061..69c5eb3a3 100644
-> --- a/drivers/usb/gadget/function/f_uvc.c
-> +++ b/drivers/usb/gadget/function/f_uvc.c
-> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
->   
->   		memset(&v4l2_event, 0, sizeof(v4l2_event));
->   		v4l2_event.type = UVC_EVENT_DATA;
-> -		uvc_event->data.length = req->actual;
-> -		memcpy(&uvc_event->data.data, req->buf, req->actual);
-> +		uvc_event->data.length = (req->actual > sizeof(uvc_event->data.data) ?
-> +			sizeof(uvc_event->data.data) : req->actual);
-
-
-There's a clamp() macro in f_uvc.c, can we use that?
-
-> +		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
->   		v4l2_event_queue(&uvc->vdev, &v4l2_event);
->   	}
->   }
