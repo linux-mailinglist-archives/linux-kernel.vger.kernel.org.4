@@ -2,94 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7646263F060
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C8C63F063
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiLAMXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S230490AbiLAMYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiLAMXN (ORCPT
+        with ESMTP id S230148AbiLAMYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:23:13 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB0018E3C;
-        Thu,  1 Dec 2022 04:23:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669897392; x=1701433392;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EP/AlIx/iBNKrfQdGQpEKhAM6XUj8+gNp+3KbyqvZ/k=;
-  b=gLTRKfpYo4lyvqw0eEuKcJnOkPPnOdCDnB0xXNb8zDtw+kpMnIRMzm6+
-   i8HUWfE3Dzle4reIWIbUGimG87HsLNcMkLBgOZZj3Q3Rg186ZUziqIrBw
-   T/xzdNGp5TJO2xzmdJxwr2TmaIeAcWuTGW1CEAWM6wyAnNQ9ow5fPTvRW
-   KtUKEcw9+KP9077QfpR4by95+WTHwtQ42t6uHKs3VQ/W/dXLL0EBjw58u
-   TSLUMC28hDhfUKf7jFi0jS7xgvCx7DYn2pDi81lmhgij0AtOydAD7aJss
-   agrc6/tkCFx38BqZrY2Uuiy/6nK0/iyqAB+UulBQwPqRyAYqJ2zz62xoh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="313301115"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="313301115"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 04:23:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="644623510"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="644623510"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2022 04:23:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p0iak-002mR5-2C;
-        Thu, 01 Dec 2022 14:23:02 +0200
-Date:   Thu, 1 Dec 2022 14:23:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, macro@orcam.me.uk,
-        jay.dolan@accesio.com, cang1@live.co.uk,
-        u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
-        phil.edworthy@renesas.com, lukas@wunner.de,
-        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: Re: [PATCH v6 tty-next 4/4] serial: 8250_pci1xxxx: Add power
- management functions to quad-uart driver
-Message-ID: <Y4icpjHDim7eAJjx@smile.fi.intel.com>
-References: <20221201045146.1055913-1-kumaravel.thiagarajan@microchip.com>
- <20221201045146.1055913-5-kumaravel.thiagarajan@microchip.com>
+        Thu, 1 Dec 2022 07:24:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397C59581C;
+        Thu,  1 Dec 2022 04:24:05 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669897443;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=lcbWOkps8CeeBrRGflRpGB2RwbFNdBrHgzFXj1dkdtI=;
+        b=EmnCdR1SsPJYlHfskYAEPFbQWb/6iyPe8V1uAjh4ETIAjLvKJvMyLbReICsa2XZ8w+Mm0y
+        WBK14hVm8D4rbIVwFTCMFDo0BVeb4lWPDr74gRIK9sp/C835XyoSjqzmk56xtx6qPqtybd
+        TS28Rxw2prBvA3m5/tEKCZ4f9JKyRQYiDwBm2p6RzbkOYOUGkC0lxlJfwoH8ee6qH4xLFi
+        x/kB+Pfpy++XVVqhesHXoTZN3s2IyZ1fAwY69D3vUw8Nf3q9SLEt+SeIAjxw3hQsDHzblL
+        bmPc3/5GT5xCSyWfV3FHkYRs1FDIIlwxFbyYU65csXNgeuvnyPkDYwtOfl0Xdw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669897443;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=lcbWOkps8CeeBrRGflRpGB2RwbFNdBrHgzFXj1dkdtI=;
+        b=Vr3+KtQqVhPyhAM/sHxP6CWxpoD/A9ye2g03+XWns2x05aYJdVkmvF7jVICbmwQltjP/gs
+        pGI+jUTGBSwgyrAw==
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
+In-Reply-To: <878rk1ectk.ffs@tglx>
+Date:   Thu, 01 Dec 2022 13:24:03 +0100
+Message-ID: <87cz93s464.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221201045146.1055913-5-kumaravel.thiagarajan@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 10:21:46AM +0530, Kumaravel Thiagarajan wrote:
-> pci1xxxx's quad-uart function has the capability to wake up UART
-> from suspend state. Enable wakeup before entering into suspend and
-> disable wakeup on resume.
+Jason!
 
-...
+On Wed, Nov 23 2022 at 19:38, Thomas Gleixner wrote:
+> On Wed, Nov 23 2022 at 12:58, Jason Gunthorpe wrote:
+>> I find your perspective on driver authors as the enemy quite
+>> interesting :)
+>
+> I'm not seeing them as enemies. Just my expectations are rather low by
+> now :)
 
-> +static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend,
-> +				pci1xxxx_resume);
+This made me think about it for a while. Let me follow up on that.
 
-One line?
+When I set out to add real-time capabilities to the kernel about 20 years
+ago, I did a thorough analysis of the kernel design and code base.
 
+It turned out that aside of well encapsulated infrastructure, e.g. mm,
+vfs, scheduler, network core, quite some of the rest was consisting of
+blatant layering violations held together with duct tape, super glue and
+haywire-circuit.
 
--- 
-With Best Regards,
-Andy Shevchenko
+It was immediately clear to me, that this needs a lot of consolidation
+and cleanup work to get me even close to the point where RT becomes
+feasible as an integral part of the kernel. But not only this became
+clear, I also realized that a continuation of this model will end up in
+a maintenance nightmare sooner than later.
 
+Me and the other people interested in RT estimated back then that it'll
+take 5-10 years to get this done.
 
+Boy, we were young and naive back then and completely underestimating
+the efforts required. Obviously we were also underestimating the
+concurrent influx of new stuff.
+
+Just to give you an example. Our early experiments with substituting
+spinlocks was just the start of the horrors. Instead of working on the
+actual substitution mechanisms and the required other modifications, we
+spent a vast amount of our time chasing dead locks all over the place.
+My main test machine had not a single device driver which was correct
+and working out of the box. What's worse is that we had to debate with
+some of the driver people about the correctness of our locking analysis
+and fight for stuff getting fixed.
+
+This ended in writing and integrating lockdep, which has thankfully
+taken this burden of our plate.
+
+When I started to look into interrupt handling to add support for
+threaded interrupts, which are a fundamental prerequisite for RT, the
+next nightmare started to unfold.
+
+The "generic" core code was a skeleton and everything real was
+implemented in architecture specific code in completely incompatible
+ways. It was not even possible to change common data structures without
+breaking the world.  What was even worse, drivers fiddled in the
+interrupt descriptors just to scratch an itch.
+
+What I learned pretty fast is that most driver writers try to work
+around short-comings in common infrastructure instead of tackling the
+problem at the root or talking to the developers/maintainers of that
+infrastructure.
+
+The consequence of that is: if you want to change core infrastructure
+you end up mopping up the driver tree in order not to break things all
+over the place. There are clearly better ways to spend your time.
+
+So I started to encapsulate things more strictly - admittedly to make my
+own life easier. But at the same time I always tried hard to make these
+encapsulations easy to use, to provide common infrastructure in order to
+replace boilerplate code and to help with resource management, which is
+one of the common problems in driver code. I'm also quite confident that
+I carefully listened to the needs of driver developers and I think the
+whole discussion about IMS last year is a good example for that. I
+surely have opinions, but who doesn't?
+
+So no, I'm not seeing driver writers as enemies. I'm just accepting the
+reality that quite some of the drivers are written in "get it out the
+door" mode. I'm well aware that there are other folks who stay around for
+a long time and do proper engineering and maintenance, but that's sadly
+the minority.
+
+Being responsible for core infrastructure is an interesting challenge
+especially with the zoo of legacy to keep alive and the knowledge that
+you can break the world with a trivial and obviously "correct"
+change. Been there, done that. :)
+
+Thanks,
+
+        Thomas
