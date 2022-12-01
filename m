@@ -2,146 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8A063EAF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0038F63EAFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiLAIVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 03:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
+        id S229677AbiLAI0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiLAIVQ (ORCPT
+        with ESMTP id S229571AbiLAI0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 03:21:16 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DCC2B1A9;
-        Thu,  1 Dec 2022 00:21:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669882872; x=1701418872;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AlPYdQCYvkoxVbZrZSZWzW+Og4pUdKEw9Hd0l72WtTI=;
-  b=fx00iyLOCFsdE3jKFuoiz7e7jksNX5aqVO1vxCEG6zyFSZ+NBYkbU/ti
-   nmCioDBW+2pQT+YN3Q2oyT9ApPWo/jlWpkTCdZQ690Qp7ILwKKUth00Zf
-   AGU9njbdqNAxxgbGoN7aFqi8u97Vu8H86erNnL2P3Gx08cGHxlXLGZyPi
-   9+GyZ/xXV+F8EULEOaJaPjY701D7dBzGuwIxvanrCjYd2y4ab4rF6cVZ0
-   C+1ZkLHfInywuy082Pczt1xVZ3iA2wRWoL5O2YJ8NXp/X911oZWRhLN/D
-   l/g67V2+URhcy9pPpDscKHqrofkkl1shvzwIG3ID77y9r6Om+agzonttG
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
-   d="scan'208";a="189505260"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Dec 2022 01:21:08 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 1 Dec 2022 01:21:03 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 1 Dec 2022 01:21:03 -0700
-Date:   Thu, 1 Dec 2022 09:26:07 +0100
-From:   Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
-To:     Divya Koppera - I30481 <Divya.Koppera@microchip.com>
-CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        UNGLinuxDriver <UNGLinuxDriver@microchip.com>,
-        Madhuri Sripada - I34878 <Madhuri.Sripada@microchip.com>
-Subject: Re: [PATCH v3 net-next] net: phy: micrel: Fix warn: passing zero to
- PTR_ERR
-Message-ID: <20221201082607.ap4jqool2uc6ziqk@soft-dev3-1>
-References: <20221129101653.6921-1-Divya.Koppera@microchip.com>
- <20221130145034.rmput7zdhwevo2p7@soft-dev3-1>
- <CO1PR11MB4771030026F8460B5A92DC35E2149@CO1PR11MB4771.namprd11.prod.outlook.com>
+        Thu, 1 Dec 2022 03:26:15 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1E360353
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 00:26:14 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d1so1414048wrs.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 00:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pFqLP9k0bT0Mt44DPB2mvhK9vHSamghHlQLp/vyzST8=;
+        b=U4NmYdKBUx9QdKiyriy5EwHSu8ZdemV5FMZ0WZoeSDd/MeA3b0sg6tfj0CpFSguPFW
+         +U6A6+Vdcha3723PsWPhkeMWkMIkSsHDkDcjT5MU8q1X4MH36b50tWzqtzk/lqy5knMF
+         zBplGMWWnsa3Eg+wFewWUQmhq9gAYJRThFp3rXiJkobm4wJ2R+YpKq6b2zcpyB/fWCGx
+         wcRJXL43lcJQivcPG+EYQdSiUayYl0qIj+HTFlb53Iq6AE47P/rq6YkPQhl745qtYPgo
+         auvpMyt7QPZAwEXytAfeKETc7pelQLqr4Rp5Scsj0mU639NkHNVw1i2U4IjrXlukyLU7
+         JG2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pFqLP9k0bT0Mt44DPB2mvhK9vHSamghHlQLp/vyzST8=;
+        b=DWnpzI0LmGSiQgaKg02cbJbHkt6pqjpm620YyOueqsgHpwvJOkZ8mCT0jnP6jnpwAC
+         jKxr4bntMK3rLyGikIpZO9YwTi0xCC8tOaz9sCHZFRkzBsg/6K2DzzV1vsoI1CxyDg87
+         sFkQepYIrZsTyKNlHHmQ6n2pT4/UGKScRU5R6m0HjBU6ZhnJKe5Z1tfx2sKbumpD3BAp
+         rmpxJ5VMLTiE40wJ9tjXtjywldGejodvZzHdzh/pg/4J1dOxi1NnI4zLT6VE68r0oRwi
+         bkq448XbHDekjYFdIN3WKanHzxPjBkK3xbvXKL7WN5xoB5Ieamp5J2stDS8OK/9bhdNC
+         EovA==
+X-Gm-Message-State: ANoB5pkNPQj574G7r54I2w88lZpidFLnITvoT9VTTGQiPskqaYnMqx6g
+        z/EahKSjDfkmEjnVocnUm8ceboAb2CiBqEFV
+X-Google-Smtp-Source: AA0mqf4a5Z0PH/UgvFikZjY+k5KPvJuMO75nsDbR3SRjCEInYm+8Ie9RFm4XdT39bhTe30ft+HlBSQ==
+X-Received: by 2002:a5d:4887:0:b0:242:1b2e:a8c3 with SMTP id g7-20020a5d4887000000b002421b2ea8c3mr11002249wrq.296.1669883172607;
+        Thu, 01 Dec 2022 00:26:12 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id m9-20020a5d6249000000b002302dc43d77sm3756176wrv.115.2022.12.01.00.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 00:26:12 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Guillaume BRUN <the.cheaterman@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
+        linux-amlogic@lists.infradead.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <20221116143523.2126-1-the.cheaterman@gmail.com>
+References: <20221116143523.2126-1-the.cheaterman@gmail.com>
+Subject: Re: [PATCH] drm: bridge: dw_hdmi: fix preference of RGB modes over YUV420
+Message-Id: <166988317174.1947573.2294084268751804752.b4-ty@linaro.org>
+Date:   Thu, 01 Dec 2022 09:26:11 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB4771030026F8460B5A92DC35E2149@CO1PR11MB4771.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 12/01/2022 07:08, Divya Koppera - I30481 wrote:
-> Hi Horatiu,
-> 
-> > -----Original Message-----
-> > From: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > Sent: Wednesday, November 30, 2022 8:21 PM
-> > To: Divya Koppera - I30481 <Divya.Koppera@microchip.com>
-> > Cc: andrew@lunn.ch; hkallweit1@gmail.com; linux@armlinux.org.uk;
-> > davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> > pabeni@redhat.com; netdev@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; richardcochran@gmail.com; UNGLinuxDriver
-> > <UNGLinuxDriver@microchip.com>; Madhuri Sripada - I34878
-> > <Madhuri.Sripada@microchip.com>
-> > Subject: Re: [PATCH v3 net-next] net: phy: micrel: Fix warn: passing zero to
-> > PTR_ERR
-> > 
-> > The 11/29/2022 15:46, Divya Koppera wrote:
-> > 
-> > Hi Divya,
-> > 
-> > > Handle the NULL pointer case
-> > >
-> > > Fixes New smatch warnings:
-> > > drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing
-> > zero to 'PTR_ERR'
-> > >
-> > > Fixes Old smatch warnings:
-> > > drivers/net/phy/micrel.c:1750 ksz886x_cable_test_get_status() error:
-> > > uninitialized symbol 'ret'.
-> > 
-> > Shouldn't you split this patch in 2 different patches, as you fix 2 issues.
-> 
-> I got these warnings in single mail, so thought of fixing it in one patch. Also, one patch has single line change so did this way.
-> Yeah, splitting sense good, will do in next revision.
-> 
-> > Also any reason why you target net-next and not net? Because I can see the
-> > blamed patches on net branch.
-> > 
-> 
-> Initially I targeted for net-next and in second revision I moved to net as it is fix. But I got a comment as below. So again, targeted to net-next.
-> 
-> "
-> > v1 -> v2:
-> > - Handled NULL pointer case
-> > - Changed subject line with net-next to net
-> 
-> This is not a genuine bug fix, and so it should target next-next."
+Hi,
 
-That is fine by me.
+On Wed, 16 Nov 2022 15:35:23 +0100, Guillaume BRUN wrote:
+> Cheap monitors sometimes advertise YUV modes they don't really have
+> (HDMI specification mandates YUV support so even monitors without actual
+> support will often wrongfully advertise it) which results in YUV matches
+> and user forum complaints of a red tint to light colour display areas in
+> common desktop environments.
+> 
+> Moving the default RGB fall-back before YUV selection results in RGB
+> mode matching in most cases, reducing complaints.
+> 
+> [...]
 
-...
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-fixes)
 
-> > >
-> > >
-> > >  static void lan8814_ptp_init(struct phy_device *phydev)  {
-> > > +	struct lan8814_shared_priv *shared_priv = phydev->shared->priv;
-> > >  	struct kszphy_priv *priv = phydev->priv;
-> > >  	struct kszphy_ptp_priv *ptp_priv = &priv->ptp_priv;
-> > >  	u32 temp;
-> > >
-> > > -	if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
-> > > -	    !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
-> > > +	/* Check if PHC support is missing at the configuration level */
-> > > +	if (!shared_priv->ptp_clock)
-> > >  		return;
-
-Sorry I forgot to mention this in the previous email.
-Can you rename shared_priv to just shared. Because in all the other places
-it is used shared and not shared_priv.
+[1/1] drm: bridge: dw_hdmi: fix preference of RGB modes over YUV420
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=d3d6b1bf85aefe0ebc0624574b3bb62f0693914c
 
 -- 
-/Horatiu
+Neil
