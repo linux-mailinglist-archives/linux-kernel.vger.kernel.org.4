@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E90A63EF5E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D223963EF62
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiLALXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S231281AbiLALXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiLALWr (ORCPT
+        with ESMTP id S230166AbiLALXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:22:47 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECD3A6CF9
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:20:26 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id m4so1231457vsc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:20:26 -0800 (PST)
+        Thu, 1 Dec 2022 06:23:01 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD425E5F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:21:58 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id w37so1405726pga.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:21:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nnfdBIDx/ThTuuxIdap1q8GCjjcmxAGw3qs8tBxtzrg=;
-        b=PzeC+ibqlNyJld1Tn2f8jLjq06c8fOJ83yLHBjS3ztc1gV+KW568QeoVC5zvRzmX0H
-         fj7Z4m3Vs+/NLYHJW536uNxE1amEp0ZTTHDaYw1smNplw56+kticLa76tmXi+jw69SMa
-         IeMvXRHFAfISdZEZfm5rFA85J/irGzSsz/G3I=
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KcV2E+DLshJUcTnYfXOz34aTP2E58VdR57j+4Rky+uQ=;
+        b=TZRZkF65FQ5q55inrSNPxIuLR7N/l0tL+GXiIolKXwtk8Llkai+VTu918FsGjgCVib
+         bkVrtPYfM0rAl/aE/L2eAMDICmu7vR1aujpdtHNEseO+2vEuB6AXCVgq5H1puWe3S+xT
+         t4m90KKwkwe2p1SC683IoQhPxAz4SvGh3deag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nnfdBIDx/ThTuuxIdap1q8GCjjcmxAGw3qs8tBxtzrg=;
-        b=Gg52d0anyN7CKFQ4sLui4omV9whmDM9W+k1jrwofRZDvyDaFL41NvIKhLeQJhRQyMs
-         EZFOJduSjfOvx9e7JSr9L9tkmVP7VIQlGICNkX8kB+mMrekZbq2BZfFamJoLZ6Z88VoO
-         8MI+8bRCErEpIoZ1WMmZmi0D3nnDFS+lHRgoDAXtHoX+ZM54kDoXkcFLt+GvD3FKNgNf
-         J1/Ry2Yib1krUcfdmq1kb1tnYPN7ChslSewFMhj2JUO1rXxqor25vLAiL7Sr1xdWSqmO
-         BCL1vPbyBcMuJ9tS0Hg6IwqmB8mKrg2jnULYetn1V9HKfKuB7ReM9/ZQx6imLolsD6h/
-         anfA==
-X-Gm-Message-State: ANoB5plcc8DRkKeGVS+jMGuJBldXfvj4uNgB0W3tVLf90HBh/dnzeKXA
-        Wo7Oid2T9eTK0BZXcu1mv7O2DsWPX//e2c6yxexB14tnLmw=
-X-Google-Smtp-Source: AA0mqf6Yi1TtSo1SAdDFyuKjmdVnWtDNsOV+rHvgF7IEs6aMJ2+WtlCzJxwxybiATsjU5uxcy15K+4ZVnvezmP1ONH8=
-X-Received: by 2002:a05:6102:e0c:b0:3b0:6da7:39ba with SMTP id
- o12-20020a0561020e0c00b003b06da739bamr24612364vst.26.1669893625753; Thu, 01
- Dec 2022 03:20:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KcV2E+DLshJUcTnYfXOz34aTP2E58VdR57j+4Rky+uQ=;
+        b=TLsYagT56bqFpFbWc3oDvOXM1gH3xb9thXeHkXynM3IR8huvo4EMJnGWfkxdiXWiJ5
+         CxmGPs8tQybi7ELeI5gaYTkYxr3WfjMYt84AM0Wd/NPl9IUv5nHCn6TnJ3l387gQpMHd
+         4LGGq4C7RTPErM8nX5N5DdDq0WCa8A88fvRcpvbFPrVVDt7TwDGgu3FkmAZMQWudmeVX
+         o0NakVZey/7WBsGSPyRXwcbxlexG96ETVG+FB2VvHk4NPtTIXH/fsz/vEym+80lTUrcD
+         XNkmZgtLEFUQmi5qoTQD+xfQOdiqkDiVzer5io2fV85MDPSwsbBUd7whDsgAmvdU7ImN
+         HQiQ==
+X-Gm-Message-State: ANoB5plSVog0bs06g+Fdj9ullMi0BSbqDE3pQIH9YJRXRHM1dfsmhYfC
+        jiBfFuV1orsr28E6Ibah21vnDg==
+X-Google-Smtp-Source: AA0mqf5CwbXqaZTfVyhq2dfjg5jWlL0RCXWBvgRz/usGHIpDiDHZjcRlR8eeEJoMxzZrI/v8Bif1sw==
+X-Received: by 2002:a62:be01:0:b0:575:caf6:5cd8 with SMTP id l1-20020a62be01000000b00575caf65cd8mr8989382pff.22.1669893718200;
+        Thu, 01 Dec 2022 03:21:58 -0800 (PST)
+Received: from 7bbcfc1ba566 ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b00188fc33e96dsm3375966plk.198.2022.12.01.03.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 03:21:57 -0800 (PST)
+Date:   Thu, 1 Dec 2022 11:21:49 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/162] 5.10.157-rc1 review
+Message-ID: <20221201112149.GA1304551@7bbcfc1ba566>
+References: <20221130180528.466039523@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20221111082912.14557-1-matthias.bgg@kernel.org> <46c17d4b-d130-86a7-b5f8-73c30d7fdfdd@collabora.com>
-In-Reply-To: <46c17d4b-d130-86a7-b5f8-73c30d7fdfdd@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 1 Dec 2022 19:20:14 +0800
-Message-ID: <CAGXv+5FORS=iGe55StxR_1E3sdtk9cvitfvNa1SydqCjWGcubg@mail.gmail.com>
-Subject: Re: [PATCH v2] soc: mediatek: Add deprecated compatible to mmsys
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@kernel.org
-Cc:     matthias.bgg@gmail.com, nancy.lin@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130180528.466039523@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,28 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 7:59 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 11/11/22 09:29, matthias.bgg@kernel.org ha scritto:
-> > From: Matthias Brugger <matthias.bgg@gmail.com>
-> >
-> > For backward compatibility we add the deprecated compatible.
-> >
-> > Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
->
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->
-> ...And tested on MT8195 Cherry Chromebook.
+On Wed, Nov 30, 2022 at 07:21:21PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.157 release.
+> There are 162 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-This now seems like a bad idea. In the dtsi we have two nodes (vdosys0 and
-vdosys1) that both currently use the -mmsys compatible, which in the driver
-maps to vdosys0. So not only do we have vdosys1 incorrectly probing as
-vdosys0, we also have duplicate clks being registered and duplicate DRM
-pipelines. On my device vdosys1 ends up winning the duplicate clock race.
+Hi Greg,
 
-I suggest just reverting this. The display stuff won't be useful unless
-the drivers are able to distinguish themselves from one another.
+5.10.157-rc1 tested.
 
-Regards
-ChenYu
+Run tested on:
+- Intel Skylake x86_64 (nuc6 i5-6260U)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
