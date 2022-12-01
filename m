@@ -2,92 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B0F63F4D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F4863F4D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbiLAQHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S230132AbiLAQHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiLAQH3 (ORCPT
+        with ESMTP id S232128AbiLAQH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Dec 2022 11:07:29 -0500
-Received: from srv01.abscue.de (abscue.de [89.58.28.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B928DB68D2;
-        Thu,  1 Dec 2022 08:06:54 -0800 (PST)
-Received: from srv01.abscue.de (localhost [127.0.0.1])
-        by spamfilter.srv.local (Postfix) with ESMTP id 544DB1C0064;
-        Thu,  1 Dec 2022 17:06:53 +0100 (CET)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D48B68E4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:07:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0809B81E83
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF43C433D6;
+        Thu,  1 Dec 2022 16:07:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669910837;
+        bh=tZk2bauAlJiGxbfhv2iiA5QGYnECZTSJnPppqEnoEsE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L9tDT/iQ6KSzpBu6Ar2chF5hHw/xM2wKTE2P6Rp96okbw5LKafBKZohDRidby3l9v
+         wUox/ai4Ro1UoQU/QbHJy0deuaQLAUgWRKYSXLvAzXMpOkvGB2KFRUD8mLqjENLrOZ
+         elkpa4aMUF06hKvESnYmUCUwxyTS9Zt7QqJvj77FEAef3+PIgaLOiHeBPkcE0NKx/u
+         fbaktT3wN4c9PH6zHLFSY9NK8agQVTorgAUuYhl7KnysiazTbdGTuv0Apc2QQsHWaU
+         PxgxjYToFaMnuHrDNUZeJpYsryVZL63MTLiz4h4hJJubYhlYajSgXNtLp4WV/QZ4lD
+         wHqBFuayETqvA==
+Date:   Fri, 2 Dec 2022 01:07:13 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
+Subject: Re: [PATCH 3/3] arm64: kprobes: Return DBG_HOOK_ERROR if kprobes
+ can not handle a BRK
+Message-Id: <20221202010713.15d9c3bf5520b17a3df8e290@kernel.org>
+In-Reply-To: <Y4jDhHDQD3wY6g8C@FVFF77S0Q05N>
+References: <166990553243.253128.13594802750635478633.stgit@devnote3>
+        <166990556124.253128.2968612748605960211.stgit@devnote3>
+        <Y4jDhHDQD3wY6g8C@FVFF77S0Q05N>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from srv01.abscue.de (abscue.de [89.58.28.240])
-        by srv01.abscue.de (Postfix) with ESMTPSA id 4307F1C004B;
-        Thu,  1 Dec 2022 17:06:53 +0100 (CET)
-From:   =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Subject: [PATCH v2 3/3] dt-bindings: display: panel: mipi-dbi-spi: Add io-supply
-Date:   Thu,  1 Dec 2022 17:02:45 +0100
-Message-Id: <20221201160245.2093816-4-otto.pflueger@abscue.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221201160245.2093816-1-otto.pflueger@abscue.de>
-References: <20221201160245.2093816-1-otto.pflueger@abscue.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the new io-supply property, which specifies the
-regulator for the I/O voltage supply on platforms where the panel
-panel power and I/O supplies are separate.
+On Thu, 1 Dec 2022 15:08:52 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
----
- .../bindings/display/panel/panel-mipi-dbi-spi.yaml        | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> On Thu, Dec 01, 2022 at 11:39:21PM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Return DBG_HOOK_ERROR if kprobes can not handle a BRK because it
+> > fails to find a kprobe corresponding to the address.
+> > 
+> > Since arm64 kprobes uses stop_machine based text patching for removing
+> > BRK, it ensures all running kprobe_break_handler() is done at that point.
+> > And after removing the BRK, it removes the kprobe from its hash list.
+> > Thus, if the kprobe_break_handler() fails to find kprobe from hash list,
+> > there is a bug.
+> 
+> IIUC this relies on BRK handling not being preemptible, which is something
+> we've repeatedly considered changing along with a bunch of other debug
+> exception handling.
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
-index c2df8d28aaf5..9b701df5e9d2 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
-@@ -22,8 +22,9 @@ description: |
-   The standard defines the following interface signals for type C:
-   - Power:
-     - Vdd: Power supply for display module
-+      Called power-supply in this binding.
-     - Vddi: Logic level supply for interface signals
--    Combined into one in this binding called: power-supply
-+      Called io-supply in this binding.
-   - Interface:
-     - CSx: Chip select
-     - SCL: Serial clock
-@@ -80,6 +81,11 @@ properties:
-       Controller data/command selection (D/CX) in 4-line SPI mode.
-       If not set, the controller is in 3-line SPI mode.
- 
-+  io-supply:
-+    description: |
-+      Logic level supply for interface signals (Vddi).
-+      No need to set if this is the same as power-supply.
-+
- required:
-   - compatible
-   - reg
+Interesting idea... and it also need many changes in kprobe itself.
+
+> 
+> In case we do try to change that in future, it would be good to have a comment
+> somewhere to that effect.
+
+Hmm, it would fundamentally change the assumptions that kprobes relies on,
+and would require a lot of thought again. (e.g. current running kprobe is
+stored in per-cpu variable, it should be per-task. etc.)
+
+> 
+> I think there are other ways we could synchronise against that (e.g. using RCU
+> tasks rude) if we ever do that, and this patch looks good to me.
+> 
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  arch/arm64/kernel/probes/kprobes.c |   79 +++++++++++++++++-------------------
+> >  1 file changed, 37 insertions(+), 42 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
+> > index d2ae37f89774..ea56b22d4da8 100644
+> > --- a/arch/arm64/kernel/probes/kprobes.c
+> > +++ b/arch/arm64/kernel/probes/kprobes.c
+> > @@ -298,7 +298,8 @@ int __kprobes kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr)
+> >  	return 0;
+> >  }
+> >  
+> > -static void __kprobes kprobe_handler(struct pt_regs *regs)
+> > +static int __kprobes
+> > +kprobe_breakpoint_handler(struct pt_regs *regs, unsigned long esr)
+> >  {
+> >  	struct kprobe *p, *cur_kprobe;
+> >  	struct kprobe_ctlblk *kcb;
+> > @@ -308,39 +309,45 @@ static void __kprobes kprobe_handler(struct pt_regs *regs)
+> >  	cur_kprobe = kprobe_running();
+> >  
+> >  	p = get_kprobe((kprobe_opcode_t *) addr);
+> > +	if (WARN_ON_ONCE(!p)) {
+> > +		/*
+> > +		 * Something went wrong. This must be put by kprobe, but we
+> > +		 * could not find corresponding kprobes. Let the kernel handle
+> > +		 * this error case.
+> > +		 */
+> 
+> Could we make this:
+> 
+> 		/*
+> 		 * Something went wrong. This BRK used an immediate reserved
+> 		 * for kprobes, but we couldn't find any corresponding probe.
+> 		 */
+
+OK.
+
+> 
+> > +		return DBG_HOOK_ERROR;
+> > +	}
+> >  
+> > -	if (p) {
+> > -		if (cur_kprobe) {
+> > -			if (reenter_kprobe(p, regs, kcb))
+> > -				return;
+> > -		} else {
+> > -			/* Probe hit */
+> > -			set_current_kprobe(p);
+> > -			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> > -
+> > -			/*
+> > -			 * If we have no pre-handler or it returned 0, we
+> > -			 * continue with normal processing.  If we have a
+> > -			 * pre-handler and it returned non-zero, it will
+> > -			 * modify the execution path and no need to single
+> > -			 * stepping. Let's just reset current kprobe and exit.
+> > -			 */
+> > -			if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> > -				setup_singlestep(p, regs, kcb, 0);
+> > -			} else
+> > -				reset_current_kprobe();
+> > -		}
+> > +	if (cur_kprobe) {
+> > +		/* Hit a kprobe inside another kprobe */
+> > +		if (!reenter_kprobe(p, regs, kcb))
+> > +			return DBG_HOOK_ERROR;
+> > +	} else {
+> > +		/* Probe hit */
+> > +		set_current_kprobe(p);
+> > +		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> > +
+> > +		/*
+> > +		 * If we have no pre-handler or it returned 0, we
+> > +		 * continue with normal processing.  If we have a
+> > +		 * pre-handler and it returned non-zero, it will
+> > +		 * modify the execution path and no need to single
+> > +		 * stepping. Let's just reset current kprobe and exit.
+> > +		 */
+> 
+> Minor wording nit: could we replace:
+> 
+> 	no need to single stepping.
+> 
+> With:
+> 	
+> 	not need to single-step.
+
+OK, I'll update both in v2.
+
+Thank you!
+
+> 
+> Thanks,
+> Mark.
+> 
+> > +		if (!p->pre_handler || !p->pre_handler(p, regs))
+> > +			setup_singlestep(p, regs, kcb, 0);
+> > +		else
+> > +			reset_current_kprobe();
+> >  	}
+> > -	/*
+> > -	 * The breakpoint instruction was removed right
+> > -	 * after we hit it.  Another cpu has removed
+> > -	 * either a probepoint or a debugger breakpoint
+> > -	 * at this address.  In either case, no further
+> > -	 * handling of this interrupt is appropriate.
+> > -	 * Return back to original instruction, and continue.
+> > -	 */
+> > +
+> > +	return DBG_HOOK_HANDLED;
+> >  }
+> >  
+> > +static struct break_hook kprobes_break_hook = {
+> > +	.imm = KPROBES_BRK_IMM,
+> > +	.fn = kprobe_breakpoint_handler,
+> > +};
+> > +
+> >  static int __kprobes
+> >  kprobe_breakpoint_ss_handler(struct pt_regs *regs, unsigned long esr)
+> >  {
+> > @@ -365,18 +372,6 @@ static struct break_hook kprobes_break_ss_hook = {
+> >  	.fn = kprobe_breakpoint_ss_handler,
+> >  };
+> >  
+> > -static int __kprobes
+> > -kprobe_breakpoint_handler(struct pt_regs *regs, unsigned long esr)
+> > -{
+> > -	kprobe_handler(regs);
+> > -	return DBG_HOOK_HANDLED;
+> > -}
+> > -
+> > -static struct break_hook kprobes_break_hook = {
+> > -	.imm = KPROBES_BRK_IMM,
+> > -	.fn = kprobe_breakpoint_handler,
+> > -};
+> > -
+> >  /*
+> >   * Provide a blacklist of symbols identifying ranges which cannot be kprobed.
+> >   * This blacklist is exposed to userspace via debugfs (kprobes/blacklist).
+> > 
+
+
 -- 
-2.30.2
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
