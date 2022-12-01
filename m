@@ -2,161 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFB763EDF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6C063EDFE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiLAKhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S229589AbiLAKhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiLAKhG (ORCPT
+        with ESMTP id S230193AbiLAKhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:37:06 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B63578FB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:37:05 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id o1so1449497pfp.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:37:05 -0800 (PST)
+        Thu, 1 Dec 2022 05:37:36 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B64B0E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:37:32 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id r8so1380176ljn.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:37:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WRkgKEIfnbIC3sboGx7at523Tajis/IinNKBu0g+f0=;
-        b=4aJjSaljnbWvmCdxfv2Tw8eNcPRlLQgtjkc95h7EWk4LbVtnRfG9yZ9085y/tbN/U+
-         uLYVvkAC3maD/srRId4iYVVZxanKsYrHI7De9MyJxn3JUkxTuRBnhuVBjtmYip+79p9F
-         Ea7P9w6ygdO6c1U5+imSJM2ONyKGZLfOeVeg0eiIpx65LYcNTarhKGvpr5hYydm2U4hi
-         dTjhtEh9F6txeCwAldKilSPo2brXCeRJufeELa0/WjcGjYMWwez6mejy8eIyOrhxWG7o
-         lRIfo84Taw3mifwHYsuzrM/Jg+gQrA2Y+jcUgGH6H/LHx2O6BLCbT8BR/Az3+R+9nUqa
-         QKaQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CIit3J5M4bcdITVWI6ie/I3FGXLXgR6m6GwfusmdrJE=;
+        b=oRuEXXERKZYYDV9WimFhxi+n+W16yYt2dtOc7P5QG08IRUKnts1REggwWcSWA2K7GS
+         CFWqZfYbNsg/vcgWQQ6gDHeVl1xTmW6BEWAWnS5pbY+gqcMzZsnq8L7hVPgEOrI+27Hw
+         SPbvb6eW8+fT07BwkeFkFtubmtV5KF3Jvsky2iUBjMnzlpMQycRNe3Ezvx7xJEAcUhNG
+         +Lgp1rl1ekNfciXbfK+C+cv2ofczu6yn0K8XW9aEDCNpWEGEK8awHimGAY5/lhZxjwwj
+         5mTVf+6Jg1X0Nm1Krh54WT05EljJ43fEtjcKBJ7mDa00Sxbyc6tQuE766VVTCZjfEOXZ
+         igYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+WRkgKEIfnbIC3sboGx7at523Tajis/IinNKBu0g+f0=;
-        b=YcDrPjHJJeUumZVSgpXrz+7WSLiLP+EjgNq5xvY9/keQkmEOaAjbE6ythhiVFKvl9p
-         FzPomrfHdOnSS/Uo6bv14dKNG5eedCelNzLz5zkd+qlZY0iiAa5XW8Kah3fn6pm8S/9/
-         QUJqUY9TgCOhq42MiMZmoA5FVZPSUsZkdRCTeQP8WIUnc0yZ/zS30If1CBmzP+U+4sFP
-         46QvKRSKLI8jQT5qV2hZ54sH+ca4RTpacEF8gzostCzKoXOxG9p8OougF3kK7qx703Gs
-         L2c2OLRxHDRFfA80V8p9qn0rgf1GHktkvrKg8kzxZ1r16KQ9LjvlLSVpHpoCDx7ocnOI
-         5yIQ==
-X-Gm-Message-State: ANoB5pnbxOq3QJ14vbccmiPsF8+uGhsNNXDa5ZyL+khnLMgmWVimtVyF
-        Em2beosZShW8vk29gNSCtaFeeeNtAkO3hrHq
-X-Google-Smtp-Source: AA0mqf43IR8AhUgxd1fohVg0/7ky938ImQTjBbMoTgnM3ajiZwSIxVkoEgYa1CSaTh7TSSmpgJi1iA==
-X-Received: by 2002:a05:6a00:216e:b0:56e:7b62:bba with SMTP id r14-20020a056a00216e00b0056e7b620bbamr46739385pff.55.1669891024654;
-        Thu, 01 Dec 2022 02:37:04 -0800 (PST)
-Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id jx24-20020a17090b46d800b00213202d77d9sm2709877pjb.43.2022.12.01.02.37.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 02:37:04 -0800 (PST)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH] arch: arm64: dts: apple: Remove stdout-path
-Date:   Thu,  1 Dec 2022 19:36:51 +0900
-Message-Id: <20221201103651.27807-1-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CIit3J5M4bcdITVWI6ie/I3FGXLXgR6m6GwfusmdrJE=;
+        b=UceDHlTEEUdF29LO3J+HnXzVbBUUQGI9NIGr5QIr2+OZvt7o3hYDQrYMQYn/1FzrhX
+         Wcc0wC2ZiZQE8ixQ/ram4xTflYC1z/8KaEoMa1eStGYd8IPzfrhPmSfVru7Hfm/Ik40F
+         2TfIbh66BwQE4ljq8bfqdh0bbvoVusDhGe9lp0J08ewybKRBIrmtGefW1OLdpdwwAuqf
+         u0foV+e70NlsL2wVfJ/foXIwkEVUTtCrdg+H13U0ttAMQO1pEZSr92Tey2Mh+iD4yaAO
+         V3Ae49qE/cSevcxRL7S4/DHYQqbfZzZr89n+ikUMCMojrUwi5WIDnZ9Uz1UUqqEWz5Lx
+         VVRg==
+X-Gm-Message-State: ANoB5pkANj3KGLuR63dWO15MsmTg7qRx2QIgq0D4skNbNd/ceIWLMr8G
+        /ww/PiYIbL8X1JsdkFVORGj0cQ==
+X-Google-Smtp-Source: AA0mqf7ynKkshYTZoTQ3GRH//Z1ZR04OWdvwe5TEjKbt7pYwLviofbMpiBkGttO94vlLg2DiroAsTg==
+X-Received: by 2002:a2e:940f:0:b0:277:5df:9728 with SMTP id i15-20020a2e940f000000b0027705df9728mr14128145ljh.337.1669891050977;
+        Thu, 01 Dec 2022 02:37:30 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s21-20020a056512203500b004ab98cd5644sm601503lfs.182.2022.12.01.02.37.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 02:37:30 -0800 (PST)
+Message-ID: <dfd2d1b5-4d1b-2381-ad11-5ea9e6654a55@linaro.org>
+Date:   Thu, 1 Dec 2022 11:37:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 01/12] dt-bindings: display: msm: Rename mdss node name
+ in example
+Content-Language: en-US
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20221130200950.144618-1-a39.skl@gmail.com>
+ <20221130200950.144618-2-a39.skl@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221130200950.144618-2-a39.skl@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-u-boot overrides stdout-path so that it points to /chosen/framebuffer
-with some condition.
-> arm: apple: Point stdout-path to framebuffer when keyboard present
->
-> Unless you have a spare Apple Silicon machine, getting access to
-> the serial port on Apple Silicon machines requires special
-> hardware. Given that most machines come with a built-in screen
-> the framebuffer is likely to be the most convenient output device
-> for most users. While U-Boot will output to both serial and
-> framebuffer, OSes might not. Therefore set stdout-path to point
-> at /chosen/framebuffer when a keyboard is connected to the machine.
-https://github.com/AsahiLinux/u-boot/commit/a609353e82fd757b7635d18ed6a0828fff657d59
+On 30/11/2022 21:09, Adam Skladowski wrote:
+> Follow other YAMLs and replace mdss name into display-subystem.
+> 
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 
-Perhaps it made sense to specify serial0 as stdout-path when the
-framebuffer and keyboard support was inmature, but today it is
-preferrable to use /chosen/framebuffer instead of serial0 for the
-console in the most cases as the u-boot change states.
 
-Remove stdout-path to allow the kernel to choose the appropriate
-console. For Linux, it will be VT, which will be eventually backed by
-the framebuffer, if it is enabled. Otherwise, it will fall back to the
-serial.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi | 2 --
- arch/arm64/boot/dts/apple/t600x-j375.dtsi      | 2 --
- arch/arm64/boot/dts/apple/t8103-jxxx.dtsi      | 2 --
- arch/arm64/boot/dts/apple/t8112-jxxx.dtsi      | 2 --
- 4 files changed, 8 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-index 5547f5e7ac5a..14b6bf234f82 100644
---- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-@@ -30,8 +30,6 @@ chosen {
- 		#size-cells = <2>;
- 		ranges;
- 
--		stdout-path = "serial0";
--
- 		framebuffer0: framebuffer@0 {
- 			compatible = "apple,simple-framebuffer", "simple-framebuffer";
- 			reg = <0 0 0 0>; /* To be filled by loader */
-diff --git a/arch/arm64/boot/dts/apple/t600x-j375.dtsi b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-index 7c207b1df949..22e96b436bf2 100644
---- a/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j375.dtsi
-@@ -28,8 +28,6 @@ chosen {
- 		#size-cells = <2>;
- 		ranges;
- 
--		stdout-path = "serial0";
--
- 		framebuffer0: framebuffer@0 {
- 			compatible = "apple,simple-framebuffer", "simple-framebuffer";
- 			reg = <0 0 0 0>; /* To be filled by loader */
-diff --git a/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi b/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
-index 3c5da0e5a41d..d2483f618d44 100644
---- a/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103-jxxx.dtsi
-@@ -27,8 +27,6 @@ chosen {
- 		#size-cells = <2>;
- 		ranges;
- 
--		stdout-path = "serial0";
--
- 		framebuffer0: framebuffer@0 {
- 			compatible = "apple,simple-framebuffer", "simple-framebuffer";
- 			reg = <0 0 0 0>; /* To be filled by loader */
-diff --git a/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi b/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi
-index b6b815d93c3e..af4153dcb55d 100644
---- a/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8112-jxxx.dtsi
-@@ -22,8 +22,6 @@ chosen {
- 		#size-cells = <2>;
- 		ranges;
- 
--		stdout-path = "serial0";
--
- 		framebuffer0: framebuffer@0 {
- 			compatible = "apple,simple-framebuffer", "simple-framebuffer";
- 			reg = <0 0 0 0>; /* To be filled by loader */
--- 
-2.38.1
+Best regards,
+Krzysztof
 
