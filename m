@@ -2,129 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39ACD63E7D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CAC63E7D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLAC2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S229667AbiLAC2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 21:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiLAC2b (ORCPT
+        with ESMTP id S229776AbiLAC2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:28:31 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104F084DD8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:28:30 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id w79so582591pfc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:28:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VQxLjfQwIIvkV52Cq7O9nwAx6kWt8ENkkmDOLlFKoJE=;
-        b=Yr+GJT7Asyn8ksHLJb8PHRHQ0PgiYUJS0szobNfBh9q8vCtukZC/KybtLZINJ0r5DD
-         D6RqNJK+FJwfuiYlzyckD7Bpawc36ptDJvHEI6BGMdgqQ67CsqJURcaBhkl3ug6zUSYI
-         nMOQ2jjDH4voFqRyNAz+EWPJj2fqyptaAec+7QwPx7lLitNthkDdOFhLlr/O4hjkkWg3
-         uR4e35sqVKLwqImAZEEZMyo4l6u4iCKZjzrdAJZLJmjLYz2La3KljmRH2U6q248Z0RGW
-         QAhEc92zJQ6f3NDlrUzb2LDCq0kEbaWuAj+lMu2aLCtEzaJjpWO2rs6qLWxu6t3WxZ+Y
-         +HPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VQxLjfQwIIvkV52Cq7O9nwAx6kWt8ENkkmDOLlFKoJE=;
-        b=IP7OEczzs27MRKgHuwddEQ76B0ifXZAMKkKrNL2nvGxc5Xs+bGQQFSWqABCfQ9Jfor
-         GITzpRRUiKxH3bVjlL63pPQuBoQGhxGKXlUMzJQm9658Git9Q/oF/oIe0+jqak0XoPD6
-         NKLbjWWNR81c5sMw9+mc/+B6UeDfxhIST54q6YWGr63zGYQHirqplYUsitCwT+9O865F
-         oA6j7SsOuebcHR8x+fJ+Qn6jccMKDDi9f4ZuqJu2hfEuzOGuF2IWXMhSN2G0jWnxvKcr
-         FZnbaDMq4QE66nZy1YaWssOOVnVTWQUTvleK1fkj81lTWrONEpqzP4D/rVEWRU2lwGfw
-         ucHg==
-X-Gm-Message-State: ANoB5plhgmrgTXoRsbr/yTX5bf9a9HBrQ/T0eWytYEbGgu6S2y0xKLEF
-        TLm3gRdxxhPXEinusaRydokWNbDNbcT6hyNL
-X-Google-Smtp-Source: AA0mqf7l9SM37E/C6rBrg4ybq8+g/2jcr9pkHJQFrguoAFYl+YoWHz1wTjg1TPfMtmJXyEpYa9GjHQ==
-X-Received: by 2002:aa7:8d5a:0:b0:560:eec2:d0ab with SMTP id s26-20020aa78d5a000000b00560eec2d0abmr66005155pfe.43.1669861709389;
-        Wed, 30 Nov 2022 18:28:29 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s1-20020a170902c64100b00189240585a7sm2144426pls.173.2022.11.30.18.28.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 18:28:28 -0800 (PST)
-Message-ID: <f4924808-7f53-1ad0-a550-45386fc157ec@kernel.dk>
-Date:   Wed, 30 Nov 2022 19:28:26 -0700
+        Wed, 30 Nov 2022 21:28:44 -0500
+Received: from pv50p00im-hyfv10021501.me.com (pv50p00im-hyfv10021501.me.com [17.58.6.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BE688B65
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
+        s=sig1; t=1669861721;
+        bh=hXu9o+z4jzCMJtTN4v4ZlZQk4u+uGWrXFa39XAveJF4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=PMaM/o187VXYKw4iIShyUz1QBou/CLLn7lKlzqtnp0jM6rChVLD2u+CMiSUKvqL5g
+         R/+NiY9Qb4xMQjQjqFd4TkV52+EL9rFtlthrtI8gkjTJr1uh1l1yTkXLy0DuMlewRB
+         JX/q5FLUY+Er1FYrpUkxP3LE+Q+x/xaqMV0TeHr8QW7RZjXWbfRE+N7dU3TrhGaPKb
+         RQV5uVxIzjYGk/F5h42L+HRP91XGHvVrBhPHiOSewZ9VUJzqAjRyP5styC2acrpbsh
+         asjQoR30cXocCvqjUOg/bueABQFY9u3pSN74mG5XMbPwBPb8u0A68L77SKmBHyiZkh
+         9nYODcZ5ZEChQ==
+Received: from [10.8.0.2] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-hyfv10021501.me.com (Postfix) with ESMTPSA id 89F3F2C086C;
+        Thu,  1 Dec 2022 02:28:38 +0000 (UTC)
+Message-ID: <37a2632f-e65c-a2a3-1382-972a40994bb3@zzy040330.moe>
+Date:   Thu, 1 Dec 2022 10:28:35 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2 0/5] A few cleanup and bugfix patches for blk-iocost
-Content-Language: en-US
-To:     Kemeng Shi <shikemeng@huaweicloud.com>, tj@kernel.org,
-        josef@toxicpanda.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221018121932.10792-1-shikemeng@huawei.com>
- <93f9093b-abec-db7e-a945-263cd9355c08@huaweicloud.com>
- <bd008582-1509-69f3-1812-2b9caa390c05@kernel.dk>
- <8d9c98e5-0433-e025-ccec-4144102e91c5@huaweicloud.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <8d9c98e5-0433-e025-ccec-4144102e91c5@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+To:     Ping-Ke Shih <pkshih@realtek.com>,
+        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
+Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221130140849.153705-1-JunASAKA@zzy040330.moe>
+ <663e6d79c34f44998a937fe9fbd228e9@realtek.com>
+ <6ce2e648-9c12-56a1-9118-e1e18c7ecd7d@zzy040330.moe>
+ <870b8a6e591f4de8b83df26f2a65330b@realtek.com>
+Content-Language: en-GB
+From:   Jun ASAKA <JunASAKA@zzy040330.moe>
+In-Reply-To: <870b8a6e591f4de8b83df26f2a65330b@realtek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: K1shlNYmYtAI86mG2BUCAUj6DItYUi3m
+X-Proofpoint-ORIG-GUID: K1shlNYmYtAI86mG2BUCAUj6DItYUi3m
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.11.64.514.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2022-02-23?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0 mlxscore=0
+ adultscore=0 spamscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ clxscore=1030 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2212010012
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/22 7:20 PM, Kemeng Shi wrote:
-> 
-> 
-> on 12/1/2022 9:46 AM, Jens Axboe wrote:
->> On 11/30/22 6:45?PM, Kemeng Shi wrote:
->>>
->>> Hi jens,
->>> on 10/18/2022 8:19 PM, Kemeng Shi wrote:
->>>> This series contain a few patch to correct comment, correct trace of
->>>> vtime_rate and so on. More detail can be found in the respective
->>>> changelogs.
->>>>
->>>> ---
->>>> v2:
->>>>  Thanks Tejun for review and comment!
->>>>  Add Acked-by tag from Tejun.
->>>>  Correct description in patch 3/5 and 4/5.
->>>>  Drop "blk-iocost: Avoid to call current_hweight_max if iocg->inuse
->>>> == iocg->active"
->>>>  Drop "blk-iocost: Remove redundant initialization of struct ioc_gq"
->>>>  Drop "blk-iocost: Get ioc_now inside weight_updated"
->>>> ---
->>>>
->>>> Kemeng Shi (5):
->>>>   blk-iocost: Fix typo in comment
->>>>   blk-iocost: Reset vtime_base_rate in ioc_refresh_params
->>>>   blk-iocost: Trace vtime_base_rate instead of vtime_rate
->>>>   blk-iocost: Remove vrate member in struct ioc_now
->>>>   blk-iocost: Correct comment in blk_iocost_init
->>>>
->>>>  block/blk-iocost.c            | 16 +++++++++-------
->>>>  include/trace/events/iocost.h |  4 ++--
->>>>  2 files changed, 11 insertions(+), 9 deletions(-)
->>> Could you apply this patchset?
->>> By the way, my apply for an cloud variant of email was just passed
->>> a few days ago. Is this mail still in spam?
+On 01/12/2022 10:18 am, Ping-Ke Shih wrote:
+
+>> -----Original Message-----
+>> From: Jun ASAKA <JunASAKA@zzy040330.moe>
+>> Sent: Thursday, December 1, 2022 9:39 AM
+>> To: Ping-Ke Shih <pkshih@realtek.com>; Jes.Sorensen@gmail.com
+>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
 >>
->> This one wasn't, but I've seen the huaweicloud.com emails fail
->> the same origination checks in the past.
-> I'm not sure if was there any fix to huaweicloud.com email. I will
-> use this huaweicloud emails to minimize the trouble before any
-> better solution is found. Sorry for the inconvenience.
+>> On 01/12/2022 8:54 am, Ping-Ke Shih wrote:
+>>
+>>>> -----Original Message-----
+>>>> From: JunASAKA <JunASAKA@zzy040330.moe>
+>>>> Sent: Wednesday, November 30, 2022 10:09 PM
+>>>> To: Jes.Sorensen@gmail.com
+>>>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; JunASAKA
+>>>> <JunASAKA@zzy040330.moe>
+>>>> Subject: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+>>>>
+>>>> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
+>>>> issues for rtl8192eu chips by replacing the arguments with
+>>>> the ones in the updated official driver.
+>>> I think it would be better if you can point out which version you use, and
+>>> people will not modify them back to old version suddenly.
+>>>
+>>>> Signed-off-by: JunASAKA <JunASAKA@zzy040330.moe>
+>>>> ---
+>>>>    .../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 76 +++++++++++++------
+>>>>    1 file changed, 54 insertions(+), 22 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>> index b06508d0cd..82346500f2 100644
+>>>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>> [...]
+>>>
+>>>> @@ -891,22 +907,28 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
+>>>>
+>>>>    	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>>    	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
+>>>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>>
+>>>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
+>>>> +
+>>>>    	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>>
+>>>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>> +
+>>> I think this is a test code of vendor driver. No need them here.
+>>>
+>>>
+>>>>    	/* Path B IQK setting */
+>>>>    	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_A, 0x38008c1c);
+>>>>    	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_A, 0x38008c1c);
+>>>>    	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+>>>>    	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>>>>
+>>>> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
+>>>> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
+>>>>    	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
+>>>>
+>>>>    	/* LO calibration setting */
+>>>> -	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
+>>>> +	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
+>>>>
+>>>>    	/* One shot, path A LOK & IQK */
+>>>>    	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+>>> [...]
+>>>
+>>> I have compared your patch with internal code, and they are the same.
+>>> But, I don't have a test.
+>>>
+>>> Ping-Ke
+>> I changed those arguments into the ones here:
+>> https://github.com/Mange/rtl8192eu-linux-driver which works fine with my
+>> rtl8192eu wifi dongle. But forgive my ignorant that I don't have enough
+>> experience on wifi drivers, I just compared those two drivers and
+>> figured that those codes fixing my IQK failures.
+> I do similar things as well. :-)
+>
+> The github repository mentioned
+> "This branch is based on Realtek's driver versioned 4.4.1. master is based on 4.3.1.1 originally."
+> So, we can add something to commit message:
+> 1. https://github.com/Mange/rtl8192eu-linux-driver
+> 2. vendor driver version: 4.3.1.1
+>
+> --
+> Ping-Ke
+>
+Thanks for your advice, I will do it right now.
 
-Thanks, I'll let you know if I run into issues with the cloud
-email.
 
--- 
-Jens Axboe
-
+Jun ASAKA.
 
