@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096B463EA35
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9331163EA39
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiLAHRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:17:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S229763AbiLAHVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 02:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiLAHRE (ORCPT
+        with ESMTP id S229476AbiLAHVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:17:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADE6748F8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 23:17:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E96C61E9D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C057C433D6;
-        Thu,  1 Dec 2022 07:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669879022;
-        bh=PrKICSTOmcGLJ/BB8PIwEFn3Kaj9T9r7mow24i0Oobc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uumwS904EL9Ut/AAu8n9jhiOls2CBOTQvzu0hnyR0cAO31xm3hko/NVKsSTCM+Qri
-         /Cc7twuom20PD8xOUAMwqDjUJGqt67MUVMreuW3Hv+brc1Apb2ZoV02s3+yNx2dBTV
-         eZcDodtfONz09kpKl53F8c3xo3pIfOCrGNp1ZRyPW71u4vR73glY6l9x9E9HIbVC6a
-         aZ2uVcLyHmXEbSRavTbvnNOzcxpuv0xgmLiijI1GQFgkRZiU961EyCJDE16uoXvJBg
-         RBJrU272tG/Ud36bgqhF3QpE3rJfr3MGFp/9YEWHTeI1FOZLuIuPd6jwgTy4IeiSOZ
-         iLDe2XM1cr7gQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p0dog-0007lW-Sz; Thu, 01 Dec 2022 08:17:07 +0100
-Date:   Thu, 1 Dec 2022 08:17:06 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Jack Schofield <schofija@oregonstate.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] staging: greybus: Cleanups in loopback_test
-Message-ID: <Y4hU8oC7H5h6G2ZI@hovoldconsulting.com>
-References: <cover.1669872193.git.schofija@oregonstate.edu>
+        Thu, 1 Dec 2022 02:21:13 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A688E54378;
+        Wed, 30 Nov 2022 23:21:09 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NN6tl3g4Cz4f3jpy;
+        Thu,  1 Dec 2022 15:21:03 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP4 (Coremail) with SMTP id gCh0CgC32tfhVYhjlXjVBQ--.52763S2;
+        Thu, 01 Dec 2022 15:21:06 +0800 (CST)
+Subject: Re: [PATCH 1/5] sbitmap: don't consume nr for inactive waitqueue to
+ avoid lost wakeups
+To:     Kemeng Shi <shikemeng@huawei.com>, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linfeilong@huawei.com, liuzhiqiang@huawei.com
+References: <20221201045408.21908-1-shikemeng@huawei.com>
+ <20221201045408.21908-2-shikemeng@huawei.com>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <81e3f861-f163-c17c-49d4-2408f16c3350@huaweicloud.com>
+Date:   Thu, 1 Dec 2022 15:21:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1669872193.git.schofija@oregonstate.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221201045408.21908-2-shikemeng@huawei.com>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgC32tfhVYhjlXjVBQ--.52763S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr48Kw15GryUZw48ZFyxKrg_yoW5Gw17pr
+        4UGF1fAa1ktrW29rW7Jr1jvaya9w4DtrsrKF4fK34DCa17tr93Zr40kFsY9FW8CFs5tFW5
+        tr47Xan8Ga4UXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,22 +63,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:38:49PM -0800, Jack Schofield wrote:
-> Correct issues found by checkpatch.
+
+
+on 12/1/2022 12:54 PM, Kemeng Shi wrote:
+> If we decremented queue without waiters, we should not decremente freed
+> bits number "nr", or all "nr" could be consumed in a empty queue and no
+> wakeup will be called.
+> Currently, for case "wait_cnt > 0", "nr" will not be decremented if we
+> decremented queue without watiers and retry is returned to avoid lost
+> wakeups. However for case "wait_cnt == 0", "nr" will be decremented
+> unconditionally and maybe decremented to zero. Although retry is
+> returned by active state of queue, it's not actually executed for "nr"
+> is zero.
 > 
-> Jack Schofield (3):
->   staging: greybus: loopback_test: Add blank line after declaration.
-
-Nit: no need for a full stop in the commit summary.
-
->   staging: greybus: loopback_test: Remove void function return statement
->   staging: greybus: loopback_test: Remove extra blank lines
+> Fix this by only decrementing "nr" for active queue when "wait_cnt ==
+> 0". After this fix, "nr" will always be non-zero when we decremented
+> inactive queue for case "wait_cnt == 0", so the need to retry could
+> be returned by "nr" and active state of waitqueue returned for the same
+> purpose is not needed.
 > 
->  drivers/staging/greybus/tools/loopback_test.c | 15 +--------------
->  1 file changed, 1 insertion(+), 14 deletions(-)
+> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
+> ---
+>  lib/sbitmap.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index 7280ae8ca88c..e40759bcf821 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -604,7 +604,6 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq, int *nr)
+>  	struct sbq_wait_state *ws;
+>  	unsigned int wake_batch;
+>  	int wait_cnt, cur, sub;
+> -	bool ret;
+>  
+>  	if (*nr <= 0)
+>  		return false;
+> @@ -632,15 +631,15 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq, int *nr)
+>  	if (wait_cnt > 0)
+>  		return !waitqueue_active(&ws->wait);
+>  
+> -	*nr -= sub;
+> -
+>  	/*
+>  	 * When wait_cnt == 0, we have to be particularly careful as we are
+>  	 * responsible to reset wait_cnt regardless whether we've actually
+> -	 * woken up anybody. But in case we didn't wakeup anybody, we still
+> -	 * need to retry.
+> +	 * woken up anybody. But in case we didn't wakeup anybody, we should
+> +	 * not consume nr and need to retry to avoid lost wakeups.
+>  	 */
+> -	ret = !waitqueue_active(&ws->wait);
+There is a warnning reported by checkpatch.pl which is "WARNING:waitqueue_active
+without comment" but I don't know why.
+> +	if (waitqueue_active(&ws->wait))
+> +		*nr -= sub;
+> +
+>  	wake_batch = READ_ONCE(sbq->wake_batch);
+>  
+>  	/*
+> @@ -669,7 +668,7 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq, int *nr)
+>  	sbq_index_atomic_inc(&sbq->wake_index);
+>  	atomic_set(&ws->wait_cnt, wake_batch);
+>  
+> -	return ret || *nr;
+> +	return *nr;
+>  }
+>  
+>  void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
+> 
+Besides, there are some git config problems for my huaweicloud email, I will send
+patchset with huaweicloud email when I fix them.
 
-Other than that, all of these look good to me:
+Thanks.
+-- 
+Best wishes
+Kemeng Shi
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
-
-Johan
