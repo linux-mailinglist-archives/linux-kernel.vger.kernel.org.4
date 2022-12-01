@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AEB63F93D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FAA63F93B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiLAUig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 15:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S230368AbiLAUi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 15:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiLAUi0 (ORCPT
+        with ESMTP id S229692AbiLAUiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 15:38:26 -0500
+        Thu, 1 Dec 2022 15:38:25 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAD9A13C3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:38:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A72CA13C3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669927105; x=1701463105;
+  t=1669927104; x=1701463104;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=zELu1XGPksGPNPCJ7usRTQUQut5ZdnmhS1HI4ZrCSWM=;
-  b=GZBTmZpnnYE6kSCVLi6vGQgdoGlzeU88XtC9qC6hbSGxyY4z1/75nH/h
-   1ApQtOJ+KU2deqGbHzMsdWlUmPttpDp6mHiV0voYYEu5EtJjM+Do7mFPT
-   e5kGFy/mo+LLwbz99xgSAwFSLKIbbauUNFuyUWpg48Dy0Qf+bw7EgLUST
-   lKEbxSWbSe/RYLF8J261NyQORgGGi35Eu+etacKM2l89rg4eVvP2UTn1F
-   9WEuL/vFUJ6ANJ37nnbtRKfJewPy6LXNm8jqkY4fXqikQMpQkdj4tDn8S
-   CALEQbbNOtK5mV2yJggb2uQmS1qJ5QbkGQ+yDsYj6MIAcE8Rr7nK4bhxW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="314498372"
+  bh=38oa5iNj8+pu7Dm8hMinaLo5Pj+hXioLhzHtZupPIes=;
+  b=YtQSPoc/qvEhRdHG+HA+v860UvB0LyQsZVwrO/kQNfmJXWmVHXXsgjE2
+   X/HSf8b2GZa1ugaBnwIdlf9vFfnZvPYTvIWixBAc0gfVz8VtQmgPojIyT
+   oNNUu+c672eDhOMXyIbhWhegL+5P7U8Gr1PxGRFtg1BSd/6BLRxNxloKB
+   9LNkupBOAojZCA7BpEIFAnvWrED/2L6ARrimlIWccQEMyJx8tLAZmxJ6n
+   dPyQg9QXPbEsCrUczwZFcMDBiLX6YPeB+9TRP4X1g+nV0w3pcA6SRkviP
+   TBfWTOWib5Pkji3nzphNIV4QIN7FXMzK/V+oyDD8H9GU32DOubpyFFfev
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="314498377"
 X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="314498372"
+   d="scan'208";a="314498377"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 12:38:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="644781654"
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 12:38:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="644781661"
 X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="644781654"
+   d="scan'208";a="644781661"
 Received: from twcarol-mobl.amr.corp.intel.com (HELO [10.212.10.40]) ([10.212.10.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 12:38:03 -0800
-Message-ID: <ad92df90-3a5f-91ee-59d5-23116b03264a@linux.intel.com>
-Date:   Thu, 1 Dec 2022 11:49:02 -0600
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 12:38:04 -0800
+Message-ID: <cdc6b2ea-d20d-0e2e-0791-faf8f0994c78@linux.intel.com>
+Date:   Thu, 1 Dec 2022 12:12:48 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 1/3] soundwire: cadence: Don't overflow the command FIFOs
+Subject: Re: [PATCH 2/3] soundwire: cadence: Remove wasted space in
+ response_buf
 Content-Language: en-US
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, sanyog.r.kale@intel.com,
-        yung-chuan.liao@linux.intel.com
+Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
 References: <20221201134845.4055907-1-rf@opensource.cirrus.com>
- <20221201134845.4055907-2-rf@opensource.cirrus.com>
+ <20221201134845.4055907-3-rf@opensource.cirrus.com>
 From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20221201134845.4055907-2-rf@opensource.cirrus.com>
+In-Reply-To: <20221201134845.4055907-3-rf@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,39 +68,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 12/1/22 07:48, Richard Fitzgerald wrote:
-> The command FIFOs are 8 entries long, so change CDNS_MCP_CMD_LEN to 8.
-> 
-> CDNS_MCP_CMD_LEN was originally 32, which would lead to cdns_xfer_msg()
-> writing up to 32 commands into the FIFO, so any message longer than 8
-> commands would fail.
+> The response_buf was declared much larger (128 entries) than the number
+> of responses that could ever be written into it (maximum 8).
 
-The change is correct for all instances of SoundWire on Intel platforms.
-That said, maybe we should capture that the Cadence IP can handle
-4/8/16/32 entries - this is a hardware configuration option.
+Indeed I don't know why we used 128 entries. This is a magic value that
+doesn't appear in any specs I've looked at.
 
-We should also mention that so far we have not sent multiple commands so
-far so the code is only broken when grouping commands.
+Note that there's 'sniffer' mode when each response takes two
+consecutive 32-words in the FIFO. we've never used this mode though so
+it's not really an issue.
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+It's also possible that this is related to the automatic command retry,
+where a failed command can be re-issued 15 times. However in that case
+the worst case would be 32 commands * 15 = 480. The value of 128 makes
+no sense at all, unless it was an upper bound for 8 * 15. We don't use
+this hardware retry btw.
 
+See more below...
+
+> Reduce response_buf to 8 entries and add checking in cdns_read_response()
+> to prevent overflowing reponse_buf if CDNS_MCP_RX_FIFO_AVAIL contains
+> an unexpectedly large number.
 > 
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Fixes: 2f52a5177caa ("soundwire: cdns: Add cadence library")
 > ---
->  drivers/soundwire/cadence_master.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/soundwire/cadence_master.c | 6 ++++++
+>  drivers/soundwire/cadence_master.h | 2 +-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-> index a1de363eba3f..27699f341f2c 100644
+> index 27699f341f2c..95c84d9f0775 100644
 > --- a/drivers/soundwire/cadence_master.c
 > +++ b/drivers/soundwire/cadence_master.c
-> @@ -127,7 +127,8 @@ MODULE_PARM_DESC(cdns_mcp_int_mask, "Cadence MCP IntMask");
+> @@ -774,8 +774,14 @@ static void cdns_read_response(struct sdw_cdns *cdns)
+>  	u32 num_resp, cmd_base;
+>  	int i;
 >  
->  #define CDNS_MCP_CMD_BASE			0x80
->  #define CDNS_MCP_RESP_BASE			0x80
-> -#define CDNS_MCP_CMD_LEN			0x20
-> +/* FIFO can hold 8 commands */
-> +#define CDNS_MCP_CMD_LEN			8
->  #define CDNS_MCP_CMD_WORD_LEN			0x4
+> +	BUILD_BUG_ON(ARRAY_SIZE(cdns->response_buf) < CDNS_MCP_CMD_LEN);
+> +
+>  	num_resp = cdns_readl(cdns, CDNS_MCP_FIFOSTAT);
+>  	num_resp &= CDNS_MCP_RX_FIFO_AVAIL;
+> +	if (num_resp > ARRAY_SIZE(cdns->response_buf)) {
+> +		dev_warn(cdns->dev, "RX AVAIL %d too long\n", num_resp);
+> +		num_resp = CDNS_MCP_CMD_LEN;
+
+.... this is different from what the hardware documentation tells me.
+The range of values to RX_FIFO_AVAIL is 0..RX_FIFO_DEPTH + 2.
+
+I don't understand the +2, but we should maybe be more cautious and use
+u32 response_buf[CDNS_MCP_CMD_LEN + 2];
+
+> +	}
 >  
->  #define CDNS_MCP_CMD_SSP_TAG			BIT(31)
+>  	cmd_base = CDNS_MCP_CMD_BASE;
+>  
+> diff --git a/drivers/soundwire/cadence_master.h b/drivers/soundwire/cadence_master.h
+> index 0434d70d4b1f..c2d817e8e22a 100644
+> --- a/drivers/soundwire/cadence_master.h
+> +++ b/drivers/soundwire/cadence_master.h
+> @@ -117,7 +117,7 @@ struct sdw_cdns {
+>  	struct sdw_bus bus;
+>  	unsigned int instance;
+>  
+> -	u32 response_buf[0x80];
+> +	u32 response_buf[8];
+>  	struct completion tx_complete;
+>  	struct sdw_defer *defer;
+>  
