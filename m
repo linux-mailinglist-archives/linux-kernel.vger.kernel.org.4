@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8BD63F50F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B4963F514
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiLAQRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S231819AbiLAQSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbiLAQRZ (ORCPT
+        with ESMTP id S232260AbiLAQSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:17:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFE6BB7D7;
-        Thu,  1 Dec 2022 08:17:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB017B81F8A;
-        Thu,  1 Dec 2022 16:17:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63631C433C1;
-        Thu,  1 Dec 2022 16:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669911435;
-        bh=xEUa0q1V/GeuhlVvbRVjNYe9PdAEmhY+C71nTUjdMVM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vNU6OPABKKc+65PXc3d8NgpN3RZX0rAXLRxEytiZIHpxUsPNvmuoT6sAmN2B/Afkj
-         qFzvPQQsag2/oGaStn/+BPaDQvIshVzRzmYOzrbPHCXBdnZ1TkkzPetuNQbvTNd1vB
-         H7w3P6xXbwE3tEgxOUk5L902I14ChkDxX4hrzo+24bc53Efn3MWkGsw/pdrKYJ1W81
-         2nIYcilIGAJFzlZNNISEFXmD3NwmLAF7H8N8S4MlcCalqRkRBIbhy/8SDie73xrbEz
-         hALH6HKvcb7vFOC6XOESVJDj7gw05C1Emr6vPP8kBt3pmizLcFHXnjz9myigd42+I3
-         ICjVH5KGaPh9Q==
-Date:   Thu, 1 Dec 2022 08:17:14 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        david@fromorbit.com, dan.j.williams@intel.com,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH v2 2/8] fsdax: invalidate pages when CoW
-Message-ID: <Y4jTii+tENz3IeXy@magnolia>
-References: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
- <1669908538-55-3-git-send-email-ruansy.fnst@fujitsu.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1669908538-55-3-git-send-email-ruansy.fnst@fujitsu.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 11:18:05 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442E329804;
+        Thu,  1 Dec 2022 08:17:58 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so5716562pjp.1;
+        Thu, 01 Dec 2022 08:17:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BfYDYtDdWSpf1BGYU9m6venf9VFVD+ygFyov+HV7Yms=;
+        b=cw36wKEXB3mUS1v978XCAC5BErch3wt26EUPwdmLPXj1m8t29fZNTgvr7oPFxoiyD0
+         OFW3LbV2bpmtoHr2GslOsX7QLs7OxWkp10Y+HVkrM1YBvCEYeB6CpdgQmQtchqtpCZIy
+         dP7mF4meMDd+XzCOeWZHLdQvp7OjZJY+jk+on65lACTP3pO5uLycazQpPumN9z1Xg3jZ
+         mOFaqPbrPEMllLZrnVXRoadlRk4FYUMiKibVTFOZRqtjoMgygN928U0Z160q+70xd2Rt
+         1o7L6i6qIX0TIEI7K4r8wc+W31ZGHc+c/vkb1eQCbDCcLJSrDSVswi+p1zmthMqgMxYw
+         UjUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BfYDYtDdWSpf1BGYU9m6venf9VFVD+ygFyov+HV7Yms=;
+        b=cjDnqAzPst6BZg10hDufj+y7eqp7Lhy+noMiZebU/Mwdq0K+qux/p11Hy3xFMKd7Ks
+         or2vc0XDqkREyabDW97bNfiAxqS0dK1FizUVaR3rYGgrDkbjBold7KQfNF5A3YspSFAy
+         JUEynac9bQ4ac6Bt0j9WLKdY4LCn1bPtc2MN9VQsBoAYjsvtKSHbXjP0h8KJvEdEO71p
+         QJhr5Q+ILcIFiHGq4QP6Ijxd760tJcm5ba0LT+SGtq2afUWlGqS/Y25BHD/C3Kf94ZjN
+         UsPwqXBIU+N8zQy+Xiyt0XtyVI16P7+KBbnK33poX4Ia92mgf/KcAxZ8qO13WmEQND8e
+         VMCg==
+X-Gm-Message-State: ANoB5pnPuo4t48CBfs/vfO5vXkcpHNIg0CMHQbeEAL7I4poraHqh48Pf
+        jdz3adAHjL7bP6C01rES7T49y8QgiKM=
+X-Google-Smtp-Source: AA0mqf4/5D6L8Y5ZjG68qTNyUWBPsQBG1ZoClZZ/oqliodHgdPhFZcqo7Rs86REz+mv/oSRaMlsm0g==
+X-Received: by 2002:a17:902:d4c8:b0:186:9d71:228c with SMTP id o8-20020a170902d4c800b001869d71228cmr50156573plg.109.1669911477675;
+        Thu, 01 Dec 2022 08:17:57 -0800 (PST)
+Received: from localhost ([2406:7400:61:64d5:7d23:c512:7205:1e52])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090276ca00b001894881842dsm3837104plt.151.2022.12.01.08.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 08:17:56 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 01 Dec 2022 21:47:49 +0530
+Message-Id: <COQM7MGKFRUI.25DOQ1AAQLLY7@skynet-linux>
+Cc:     <linux-arm-msm@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
+        <phone-devel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 4/9] dt-bindings: remoteproc: qcom: wcnss: Convert to
+ YAML
+From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>
+X-Mailer: aerc 0.13.0
+References: <20220511161602.117772-1-sireeshkodali1@gmail.com>
+ <20220511161602.117772-5-sireeshkodali1@gmail.com>
+ <e8a86b3e-7a2f-3434-52d8-6a827b720f92@linaro.org>
+In-Reply-To: <e8a86b3e-7a2f-3434-52d8-6a827b720f92@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 03:28:52PM +0000, Shiyang Ruan wrote:
-> CoW changes the share state of a dax page, but the share count of the
-> page isn't updated.  The next time access this page, it should have been
-> a newly accessed, but old association exists.  So, we need to clear the
-> share state when CoW happens, in both dax_iomap_rw() and
-> dax_zero_iter().
-> 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+On Thu Dec 1, 2022 at 6:52 PM IST, Krzysztof Kozlowski wrote:
+> On 11/05/2022 18:15, Sireesh Kodali wrote:
+> > Convert the dt-bindings from txt to YAML. This is in preparation for
+> > including the relevant bindings for the MSM8953 platform's wcnss pil.
+> >=20
+> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> > ---
+> >  .../bindings/remoteproc/qcom,wcnss-pil.txt    | 177 --------------
+> >  .../bindings/remoteproc/qcom,wcnss-pil.yaml   | 228 ++++++++++++++++++
+> >  2 files changed, 228 insertions(+), 177 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,w=
+cnss-pil.txt
+> >  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,w=
+cnss-pil.yaml
+> >=20
+>
+> Half year passed, so I wonder if these series are abandoned or shall we
+> expect v2?
+>
 
-Looks ok,
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+This series was split into sub-series to make upstreaming easier. Links
+to the sub-series:
+WCNSS: https://lkml.org/lkml/2022/9/30/1502
+ADSP: https://lkml.org/lkml/2022/10/13/5
 
---D
+Regards,
+Sireesh
+> Best regards,
+> Krzysztof
 
-> ---
->  fs/dax.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index 85b81963ea31..482dda85ccaf 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -1264,6 +1264,15 @@ static s64 dax_zero_iter(struct iomap_iter *iter, bool *did_zero)
->  	if (srcmap->type == IOMAP_HOLE || srcmap->type == IOMAP_UNWRITTEN)
->  		return length;
->  
-> +	/*
-> +	 * invalidate the pages whose sharing state is to be changed
-> +	 * because of CoW.
-> +	 */
-> +	if (iomap->flags & IOMAP_F_SHARED)
-> +		invalidate_inode_pages2_range(iter->inode->i_mapping,
-> +					      pos >> PAGE_SHIFT,
-> +					      (pos + length - 1) >> PAGE_SHIFT);
-> +
->  	do {
->  		unsigned offset = offset_in_page(pos);
->  		unsigned size = min_t(u64, PAGE_SIZE - offset, length);
-> @@ -1324,12 +1333,13 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  		struct iov_iter *iter)
->  {
->  	const struct iomap *iomap = &iomi->iomap;
-> -	const struct iomap *srcmap = &iomi->srcmap;
-> +	const struct iomap *srcmap = iomap_iter_srcmap(iomi);
->  	loff_t length = iomap_length(iomi);
->  	loff_t pos = iomi->pos;
->  	struct dax_device *dax_dev = iomap->dax_dev;
->  	loff_t end = pos + length, done = 0;
->  	bool write = iov_iter_rw(iter) == WRITE;
-> +	bool cow = write && iomap->flags & IOMAP_F_SHARED;
->  	ssize_t ret = 0;
->  	size_t xfer;
->  	int id;
-> @@ -1356,7 +1366,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  	 * into page tables. We have to tear down these mappings so that data
->  	 * written by write(2) is visible in mmap.
->  	 */
-> -	if (iomap->flags & IOMAP_F_NEW) {
-> +	if (iomap->flags & IOMAP_F_NEW || cow) {
->  		invalidate_inode_pages2_range(iomi->inode->i_mapping,
->  					      pos >> PAGE_SHIFT,
->  					      (end - 1) >> PAGE_SHIFT);
-> @@ -1390,8 +1400,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  			break;
->  		}
->  
-> -		if (write &&
-> -		    srcmap->type != IOMAP_HOLE && srcmap->addr != iomap->addr) {
-> +		if (cow) {
->  			ret = dax_iomap_cow_copy(pos, length, PAGE_SIZE, srcmap,
->  						 kaddr);
->  			if (ret)
-> -- 
-> 2.38.1
-> 
