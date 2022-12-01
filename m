@@ -2,205 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB93063E700
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 158E763E70A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiLABR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 20:17:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S229802AbiLABUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLABRZ (ORCPT
+        with ESMTP id S229601AbiLABUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 20:17:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E5C97912
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:17:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBAC0B81DA6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900E6C433C1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669857441;
-        bh=myVISEgQPICcTtw6geOyGVidGo/WDYOXviUTQMLOP4c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=G3PsR0/4EeDPH3WAy/6mgWy+rvRCNXFds+Ne5nRpPKtruKay22w1K8zskBY006pRm
-         opZ7R5m/MnJU1P+4Ew/ypFiajZeko/2MAyRmVukizVogoUSKgL5fAktAVWjjEdKrsE
-         PADb5yJ5/ShnPyEjL5SNtfGYsunSCI2yvJAV9ea/5aO2LbbqS0D8jd5wFkLEIWMaoo
-         gcpeDZ8JYjrTEuBoav335LAA+WvCzELndJQ/zF4u5g2V7dodU3WFeJA8lvLPlA+lzl
-         Pzxnw4OlhLV+eXbJcrPSzzC9/DCn6iCenEpqJiC9KZNH4TIXKYUunDqzkTPJrXEtSe
-         HbzQJQAtHnGUQ==
-Received: by mail-ed1-f49.google.com with SMTP id e13so388537edj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:17:21 -0800 (PST)
-X-Gm-Message-State: ANoB5pnh25qYTYwlepwIMZ+u3+t9wQB4knQ2xFo6+Ed8BbpxBl/g7MKt
-        wpvu/LFXgFDI8bcFQ5qddcOi1pNhVtUB1ZREFaI=
-X-Google-Smtp-Source: AA0mqf6qW/O6MuNLq8Q3suQDIZ7MTPFUAbg0n/ut2l1kl8azfaMDA47Aj9YIvCarSXlRTn/0Tl1SYUL1HCja5jIvabE=
-X-Received: by 2002:aa7:d912:0:b0:46b:2b37:ffa9 with SMTP id
- a18-20020aa7d912000000b0046b2b37ffa9mr15191818edr.79.1669857439770; Wed, 30
- Nov 2022 17:17:19 -0800 (PST)
+        Wed, 30 Nov 2022 20:20:00 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A092890750;
+        Wed, 30 Nov 2022 17:19:59 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NMyt13bVGz4f3v5L;
+        Thu,  1 Dec 2022 09:19:53 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAnmdY6AYhj1APHBQ--.30576S3;
+        Thu, 01 Dec 2022 09:19:56 +0800 (CST)
+Subject: Re: [PATCH -next v2 9/9] blk-iocost: fix walk_list corruption
+To:     Tejun Heo <tj@kernel.org>, Li Nan <linan122@huawei.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221130132156.2836184-1-linan122@huawei.com>
+ <20221130132156.2836184-10-linan122@huawei.com>
+ <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <c028dd77-cabf-edd6-c893-8ee24762ac8c@huaweicloud.com>
+Date:   Thu, 1 Dec 2022 09:19:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <CAJF2gTQ0xuJo6uzB+8SudZOFiZ2_o1sLB=Hn5XuCw6g2tXUtkQ@mail.gmail.com>
- <mhng-72408cf8-cbde-489b-9042-379b5aa8624f@palmer-ri-x1c9>
-In-Reply-To: <mhng-72408cf8-cbde-489b-9042-379b5aa8624f@palmer-ri-x1c9>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 1 Dec 2022 09:17:07 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ2=Ew76-=93WKAiLJzw+Wp4v7g=yyeeVZ5M5q88YsRLg@mail.gmail.com>
-Message-ID: <CAJF2gTQ2=Ew76-=93WKAiLJzw+Wp4v7g=yyeeVZ5M5q88YsRLg@mail.gmail.com>
-Subject: Re: [PATCH v4] riscv: fix race when vmap stack overflow
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Andrea Parri <andrea@rivosinc.com>, jszhang@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAnmdY6AYhj1APHBQ--.30576S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWryruF43Cr4DuFyktw13urg_yoW5Jw1DpF
+        WfKFZ0krWjqr12k3W0q3ZIqF1Sya10qr18JrWfWr1Fya4akw13J3WvkF48GFyDZrWxJrWa
+        qF10g3s8JrWjyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 12:54 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> On Tue, 29 Nov 2022 23:15:40 PST (-0800), guoren@kernel.org wrote:
-> > The comment becomes better. Thx.
-> >
-> > On Wed, Nov 30, 2022 at 10:29 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
-> >>
-> >> From: Jisheng Zhang <jszhang@kernel.org>
-> >>
-> >> Currently, when detecting vmap stack overflow, riscv firstly switches
-> >> to the so called shadow stack, then use this shadow stack to call the
-> >> get_overflow_stack() to get the overflow stack. However, there's
-> >> a race here if two or more harts use the same shadow stack at the same
-> >> time.
-> >>
-> >> To solve this race, we introduce spin_shadow_stack atomic var, which
-> >> will be swap between its own address and 0 in atomic way, when the
-> >> var is set, it means the shadow_stack is being used; when the var
-> >> is cleared, it means the shadow_stack isn't being used.
-> >>
-> >> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> >> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> >> Suggested-by: Guo Ren <guoren@kernel.org>
-> >> Reviewed-by: Guo Ren <guoren@kernel.org>
-> >> Link: https://lore.kernel.org/r/20221030124517.2370-1-jszhang@kernel.org
-> >> [Palmer: Add AQ to the swap, and also some comments.]
-> >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >> ---
-> >> Sorry to just re-spin this one without any warning, but I'd read patch a
-> >> few times and every time I'd managed to convice myself there was a much
-> >> simpler way of doing this.  By the time I'd figured out why that's not
-> >> the case it seemed faster to just write the comments.
-> >>
-> >> I've stashed this, right on top of the offending commit, at
-> >> palmer/riscv-fix_vmap_stack.
-> >>
-> >> Since v3:
-> >>  - Add AQ to the swap.
-> >>  - Add a bunch of comments.
-> >>
-> >> Since v2:
-> >>  - use REG_AMOSWAP
-> >>  - add comment to the purpose of smp_store_release()
-> >>
-> >> Since v1:
-> >>  - use smp_store_release directly
-> >>  - use unsigned int instead of atomic_t
-> >> ---
-> >>  arch/riscv/include/asm/asm.h |  1 +
-> >>  arch/riscv/kernel/entry.S    | 13 +++++++++++++
-> >>  arch/riscv/kernel/traps.c    | 18 ++++++++++++++++++
-> >>  3 files changed, 32 insertions(+)
-> >>
-> >> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-> >> index 618d7c5af1a2..e15a1c9f1cf8 100644
-> >> --- a/arch/riscv/include/asm/asm.h
-> >> +++ b/arch/riscv/include/asm/asm.h
-> >> @@ -23,6 +23,7 @@
-> >>  #define REG_L          __REG_SEL(ld, lw)
-> >>  #define REG_S          __REG_SEL(sd, sw)
-> >>  #define REG_SC         __REG_SEL(sc.d, sc.w)
-> >> +#define REG_AMOSWAP_AQ __REG_SEL(amoswap.d.aq, amoswap.w.aq)
-> > Below is the reason why I use the relax version here:
-> > https://lore.kernel.org/all/CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com/T/#u
->
-> Sorry, I hadn't seen that one.  Adding Andrea.  IMO the acquire/release
-> pair is necessary here, with just relaxed the stack stores inside the
-> lock could show up on the next hart trying to use the stack.
-Don't worry about relaxing amoswap, sp could give WAR & WAW
-dependency. You could add acquire here, just for appearance.
+Hi,
 
->
-> >>  #define REG_ASM                __REG_SEL(.dword, .word)
-> >>  #define SZREG          __REG_SEL(8, 4)
-> >>  #define LGREG          __REG_SEL(3, 2)
-> >> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> >> index 98f502654edd..5fdb6ba09600 100644
-> >> --- a/arch/riscv/kernel/entry.S
-> >> +++ b/arch/riscv/kernel/entry.S
-> >> @@ -387,6 +387,19 @@ handle_syscall_trace_exit:
-> >>
-> >>  #ifdef CONFIG_VMAP_STACK
-> >>  handle_kernel_stack_overflow:
-> >> +       /*
-> >> +        * Takes the psuedo-spinlock for the shadow stack, in case multiple
-> >> +        * harts are concurrently overflowing their kernel stacks.  We could
-> >> +        * store any value here, but since we're overflowing the kernel stack
-> >> +        * already we only have SP to use as a scratch register.  So we just
-> >> +        * swap in the address of the spinlock, as that's definately non-zero.
-> >> +        *
-> >> +        * Pairs with a store_release in handle_bad_stack().
-> >> +        */
-> >> +1:     la sp, spin_shadow_stack
-> >> +       REG_AMOSWAP_AQ sp, sp, (sp)
-> >> +       bnez sp, 1b
-> >> +
-> >>         la sp, shadow_stack
-> >>         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
-> >>
-> >> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> >> index bb6a450f0ecc..be54ccea8c47 100644
-> >> --- a/arch/riscv/kernel/traps.c
-> >> +++ b/arch/riscv/kernel/traps.c
-> >> @@ -213,11 +213,29 @@ asmlinkage unsigned long get_overflow_stack(void)
-> >>                 OVERFLOW_STACK_SIZE;
-> >>  }
-> >>
-> >> +/*
-> >> + * A pseudo spinlock to protect the shadow stack from being used by multiple
-> >> + * harts concurrently.  This isn't a real spinlock because the lock side must
-> >> + * be taken without a valid stack and only a single register, it's only taken
-> >> + * while in the process of panicing anyway so the performance and error
-> >> + * checking a proper spinlock gives us doesn't matter.
-> >> + */
-> >> +unsigned long spin_shadow_stack;
-> >> +
-> >>  asmlinkage void handle_bad_stack(struct pt_regs *regs)
-> >>  {
-> >>         unsigned long tsk_stk = (unsigned long)current->stack;
-> >>         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
-> >>
-> >> +       /*
-> >> +        * We're done with the shadow stack by this point, as we're on the
-> >> +        * overflow stack.  Tell any other concurrent overflowing harts that
-> >> +        * they can proceed with panicing by releasing the pseudo-spinlock.
-> >> +        *
-> >> +        * This pairs with an amoswap.aq in handle_kernel_stack_overflow.
-> >> +        */
-> >> +       smp_store_release(&spin_shadow_stack, 0);
-> >> +
-> >>         console_verbose();
-> >>
-> >>         pr_emerg("Insufficient stack space to handle exception!\n");
-> >> --
-> >> 2.38.1
-> >>
+ÔÚ 2022/12/01 4:59, Tejun Heo Ð´µÀ:
+> On Wed, Nov 30, 2022 at 09:21:56PM +0800, Li Nan wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Our test report a problem:
+>>
+>> ------------[ cut here ]------------
+>> list_del corruption. next->prev should be ffff888127e0c4b0, but was ffff888127e090b0
+>> WARNING: CPU: 2 PID: 3117789 at lib/list_debug.c:62 __list_del_entry_valid+0x119/0x130
+>> RIP: 0010:__list_del_entry_valid+0x119/0x130
+>> RIP: 0010:__list_del_entry_valid+0x119/0x130
+>> Call Trace:
+>>   <IRQ>
+>>   iocg_flush_stat.isra.0+0x11e/0x230
+>>   ? ioc_rqos_done+0x230/0x230
+>>   ? ioc_now+0x14f/0x180
+>>   ioc_timer_fn+0x569/0x1640
+>>
+>> We haven't reporduced it yet, but we think this is due to parent iocg is
+>> freed before child iocg, and then in ioc_timer_fn, walk_list is
+>> corrupted.
+>>
+>> 1) Remove child cgroup can concurrent with remove parent cgroup, and
+>> ioc_pd_free for parent iocg can be called before child iocg. This can be
+>> fixed by moving the handle of walk_list to ioc_pd_offline, since that
+>> offline from child is ensured to be called before parent.
+> 
+> Which you already did in a previous patch, right?
 
+yes, this is already did in patch 7.
 
+> 
+>> 2) ioc_pd_free can be triggered from both removing device and removing
+>> cgroup, this patch fix the problem by deleting timer before deactivating
+>> policy, so that free parent iocg first in this case won't matter.
+> 
+> Okay, so, yeah, css's pin parents but blkg's don't. I think the right thing
+> to do here is making sure that a child blkg pins its parent (and eventually
+> ioc).
 
--- 
-Best Regards
- Guo Ren
+Ok, I can try to do that.
+
+> 
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> Signed-off-by: Li Nan <linan122@huawei.com>
+>> ---
+>>   block/blk-iocost.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+>> index 710cf63a1643..d2b873908f88 100644
+>> --- a/block/blk-iocost.c
+>> +++ b/block/blk-iocost.c
+>> @@ -2813,13 +2813,14 @@ static void ioc_rqos_exit(struct rq_qos *rqos)
+>>   {
+>>   	struct ioc *ioc = rqos_to_ioc(rqos);
+>>   
+>> +	del_timer_sync(&ioc->timer);
+>> +
+>>   	blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
+>>   
+>>   	spin_lock_irq(&ioc->lock);
+>>   	ioc->running = IOC_STOP;
+>>   	spin_unlock_irq(&ioc->lock);
+>>   
+>> -	del_timer_sync(&ioc->timer);
+> 
+> I don't about this workaround. Let's fix properly?
+
+Ok, and by the way, is there any reason to delete timer after
+deactivate policy? This seems a litter wreid to me.
+
+Thanks,
+Kuai
+> 
+
