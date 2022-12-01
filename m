@@ -2,83 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB0E63E7CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3891063E81B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiLACYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S229804AbiLADBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 22:01:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiLACYc (ORCPT
+        with ESMTP id S229791AbiLADBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:24:32 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05864B39
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:24:32 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN0JZ3zMJz4xVnR;
-        Thu,  1 Dec 2022 10:24:30 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B12OKOH091870;
-        Thu, 1 Dec 2022 10:24:20 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 10:24:21 +0800 (CST)
-Date:   Thu, 1 Dec 2022 10:24:21 +0800 (CST)
-X-Zmail-TransId: 2af963881055fffffffff8fd5203
-X-Mailer: Zmail v1.0
-Message-ID: <202212011024212258022@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <alexander.deucher@amd.com>
-Cc:     <christian.koenig@amd.com>, <xinhui.pan@amd.com>,
-        <airlied@gmail.com>, <daniel@ffwll.ch>, <tao.zhou1@amd.com>,
-        <hawking.zhang@amd.com>, <yipeng.chai@amd.com>,
-        <john.clements@amd.com>, <stanley.yang@amd.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBkcm0vYW1kZ3B1OiB1c2Ugc3lzZnNfZW1pdCgpIHRvIGluc3RlYWQgb2Ygc2NucHJpbnRmKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B12OKOH091870
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6388105E.001 by FangMail milter!
-X-FangMail-Envelope: 1669861470/4NN0JZ3zMJz4xVnR/6388105E.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6388105E.001/4NN0JZ3zMJz4xVnR
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 30 Nov 2022 22:01:20 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2543B8EE78;
+        Wed, 30 Nov 2022 19:01:15 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id 124so675823pfy.0;
+        Wed, 30 Nov 2022 19:01:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y5SYxpBI7GimwE3d7ybl3wRGWGVGzAUnabS54e7bxDY=;
+        b=QVmCUwKUAtJKgzojk+tHegMuxgfZ1SSDWXFRGkmqn1+O+CvXy5OKQ2XFdG1CeVd7Bo
+         Bwbe7nQD6X0NpDYd/EBkW6AMTYounrQR2fi+XR/b3pZvEagupxVrwB3+DgZj3B4UKlXu
+         jdBApbJrwR48BDnyY5UZKowEW19kZTBNcz3ksSYpYMH7QE2nAXpbjPhQMdtZL6CyYH92
+         fT5mGigSjNfpY4wRo+NjgIAlYFWB42VCfUz/pFh1im9ss6HoBvCBDyQsdUDO+jDAripp
+         Tibq0M95/oqjOpk/p9KLZEbr4ewHdPq5L9vDSauevls9E6JoJ+aSy9t3zGaqq5C97PnT
+         tz8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y5SYxpBI7GimwE3d7ybl3wRGWGVGzAUnabS54e7bxDY=;
+        b=wRpdcG3p2h/gkMXSldZiyewvTWVRJLwuzM5KX7Zv9IZ4Qkewx5sTkw4gq+EbMWT44n
+         CHzlQyiGTLn2Hs5cfkM0xcHmufxAkFkGcsY9pH8aONJ3NCtcxMI6u+RQoWAcyeceACi6
+         ksgxwryIiY4jmn74hyiWCSLFxYn3DCfVz0xYgSJAR8fJwJoceEMrks+BgaLHVyvjUypA
+         mfaNzukK5Q7jNR7kw/f8aeosOMmLHnsChDTrvoyMtrJImHfFPqsz7m/eTLuytYh166TG
+         4Vh3p0F9qbTAB9zNb02zfg0pN0/xJ3miCi/Z9gMRacmRtlSxYK8KPHLvXpmxhsA3Pt1A
+         7xuA==
+X-Gm-Message-State: ANoB5pkJ3o0yO9jKTevMYAcBbha8FguzQR8gFjRP5/k11v5rniSb0hpG
+        4tRCz9kXAK97Z51EbAdAJHg=
+X-Google-Smtp-Source: AA0mqf6ld2dBOXvxM8gmaV26TPOYSydDpIAYlOMokeBJQCBRwOIp1gl+JZcMGRsk1U30PeUXcUXnjQ==
+X-Received: by 2002:a62:3882:0:b0:56b:9ce2:891f with SMTP id f124-20020a623882000000b0056b9ce2891fmr50778852pfa.43.1669863674575;
+        Wed, 30 Nov 2022 19:01:14 -0800 (PST)
+Received: from MBP (ec2-18-117-95-84.us-east-2.compute.amazonaws.com. [18.117.95.84])
+        by smtp.gmail.com with ESMTPSA id j5-20020a17090a3e0500b00218fb211778sm3742075pjc.41.2022.11.30.19.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 19:01:13 -0800 (PST)
+References: <20221129162251.90790-1-schspa@gmail.com>
+ <Y4aJzjlkkt5VKy0G@codewreck.org> <m2r0xli1mq.fsf@gmail.com>
+ <Y4b1MQaEsPRK+3lF@codewreck.org> <m2o7sowzas.fsf@gmail.com>
+ <Y4c5N/SAuszTLiEA@codewreck.org> <m2a6487f23.fsf@gmail.com>
+ <Y4dcAGM+0xzOgSCa@codewreck.org>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Schspa Shi <schspa@gmail.com>
+To:     asmadeus@codewreck.org
+Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+8f1060e2aaf8ca55220b@syzkaller.appspotmail.com
+Subject: Re: [PATCH] 9p: fix crash when transaction killed
+Date:   Thu, 01 Dec 2022 10:26:12 +0800
+In-reply-to: <Y4dcAGM+0xzOgSCa@codewreck.org>
+Message-ID: <m28rjr6d5f.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Replace the open-code with sysfs_emit() to simplify the code.
+asmadeus@codewreck.org writes:
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Schspa Shi wrote on Wed, Nov 30, 2022 at 09:15:12PM +0800:
+>> >> If the req was newly alloced(It was at a new page), refcount maybe not
+>> >> 0, there will be problem in this case. It seems we can't relay on this.
+>> >> 
+>> >> We need to set the refcount to zero before add it to idr in p9_tag_alloc.
+>> >
+>> > Hmm, if it's reused then it's zero by definition, but if it's a new
+>> > allocation (uninitialized) then anything goes; that lookup could find
+>> > and increase it before the refcount_set, and we'd have an off by one
+>> > leading to use after free. Good catch!
+>> >
+>> > Initializing it to zero will lead to the client busy-looping until after
+>> > the refcount is properly set, which should work.
+>> 
+>> Why? It looks no different from the previous process here. Initializing
+>> it to zero should makes no difference.
+>
+> I do not understand this remark.
+> If this is a freed request it will be zero, because we freed the request
+> as the refcount hit zero, but if it's a newly allocated request then the
+> memory is uninitalized, and the lookup can get anything.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-index 077404a9c935..ad490c1e2f57 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-@@ -1267,7 +1267,7 @@ static ssize_t amdgpu_ras_sysfs_features_read(struct device *dev,
- 	struct amdgpu_ras *con =
- 		container_of(attr, struct amdgpu_ras, features_attr);
+Here is my misunderstanding. I thought you meant that there would be a
+loop on the client side to wait for the refcount to become a non-zero
+value. Actually, there is no such loop.
 
--	return scnprintf(buf, PAGE_SIZE, "feature mask: 0x%x\n", con->features);
-+	return sysfs_emit(buf, "feature mask: 0x%x\n", con->features);
- }
+>
+> In that case we want refcount to be zero to have the check in
+> p9_tag_lookup to not use the request until we set the refcount to 2.
+>
+>
+>> > Setting refcount early might have us use an re-used req before the tag
+>> > has been changed so that one cannot move.
+>> >
+>> > Could you test with just that changed if syzbot still reproduces this
+>> > bug? (perhaps add a comment if you send this)
+>> >
+>> 
+>> I have upload a new v2 change for this. But I can't easily reproduce
+>> this problem.
+>
+> Ah, I read that v2 as you actually ran some tests with this, sorry for
+> the misuderstanding.
+>
+> Well, it's a fix anyway, so it cannot hurt to apply...
 
- static void amdgpu_ras_sysfs_remove_bad_page_node(struct amdgpu_device *adev)
+
 -- 
-2.25.1
+BRs
+Schspa Shi
