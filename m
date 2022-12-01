@@ -2,160 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2059663E98F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A3563E996
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 07:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiLAGDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 01:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S229746AbiLAGFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 01:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiLAGDl (ORCPT
+        with ESMTP id S229497AbiLAGE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 01:03:41 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB289AE18
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:03:40 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id d2-20020a056e020be200b00300ecc7e0d4so1027508ilu.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 22:03:40 -0800 (PST)
+        Thu, 1 Dec 2022 01:04:59 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2050F9AE18;
+        Wed, 30 Nov 2022 22:04:59 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id s186so912045oia.5;
+        Wed, 30 Nov 2022 22:04:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SQ6eCCvP2RIqVFnGOfA4yG/2BtjQTMpdxc/JWs/IikY=;
+        b=PvHY6dBEyebJE6QNI6Wjq2MneXIl4rTpGS7fBC7Qv6R/Yiga7OIh4/Pj4BgHnrpndG
+         GrmgooNZOVFverQjG/PwQwa+jNTTeu5eaofi0fQ6sUgKspL/GgqiAAoT7DsAPA/bcNeL
+         CuuBxemNVt9HiH103qegQcLdL8byYtx9q2Sy8nfwvxBZulJQ2g5EAZZ4I/KTXdccwea1
+         xayFiXCzBGxNpmCBPyhigLfeSVQaNBWPI/KTZtc4+CqnxGM8xxSJGEpvpTJVaXAoUIMI
+         LhDFRKO2nzxUjEipEZonE2WghJNoafzVk4PIFC+1xTm7vj4OLlTNuK0dUH2dye1MdJio
+         EOHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wW/1YFjNuWJqMOaVAW1RF7mU8QRa/BBJWE/WkYjZiWI=;
-        b=R4HV/ltT/OUW5s8GsiCT1C06bcDV+t6zw1G8g6swMJGZiz+oHnmxfVVFCpLu6e2o4e
-         YVLJ9/SSFw136mUIixZ9iKwJx9dVn+00bcRIMTd6ShHJvZOljWBO5OJZyc1B53pXcFwP
-         y5tKxJEbJ40Nt0IUi4w1SSc1zKZ+r6govFoRtoKEc9XMR3UB6sdjkahYyGVpH+TZD9g2
-         wVklmaYbr8imDSbHzlqqmbHp0Hj6skmEIeD5XNUVtRpoci20MgVbKioHwNNcO/tLP/U6
-         wdEtV+8NjBLsbk1zW+2Z3hGML7o8FOBPYxjKHmcUlSh1QpTdYW6gfmwfhsfPDXn9zpdw
-         a3/A==
-X-Gm-Message-State: ANoB5plLiD7ZXbF2QUDVmd7MQs0nyx5M2FzHCt/uO+a81h6/7OciJIEk
-        Pk33Q4tKQ2bLd8RqMrki3azmSR8/3MYzxoGhz8gW/Mrh8uiB
-X-Google-Smtp-Source: AA0mqf7HkgEI5yQHduZ6SroHYd5tfoigh4aq/StabWuoQy7E50ivoM862JacjkAoJzgXvE5icymt8EzS1MXKcPjhbpk5EGMXmtfk
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SQ6eCCvP2RIqVFnGOfA4yG/2BtjQTMpdxc/JWs/IikY=;
+        b=dnzYRuVBOJfA56lOlWjR/3WF0Z0Fjm3n0v8f7/OJcHPT7/LmRqv7H5l2qNRkKNh9yx
+         WyX9eyOIbJKRP5VP9NxC7znaYfNYTl/+tAgfeFcNC7mQ97DUoQwO2O6abDSKnFENADJj
+         y+WydRCnnry+pLKeus0xUDQUcdLivdTuw5T3xZEyrxHYC5wMyiFyTrRpXjJyaxvYAp+g
+         yd/eZMg67b9xBysiIYlucgay23e3rYrdblir0pm/AbO2u6+/BdLe9ruqTwyAKVZUTe/H
+         iYkW49jaOv7lKR9K/oRTXzdSOk2tsWxi3z+t/4Al3E+VB4xScW7tLNdSzECFPxzAm9Iu
+         nOGg==
+X-Gm-Message-State: ANoB5pnrR1okCRFCmjTjKjFv/WDmgXr6nqdMtC5k0tUZzCbFBopzJgVU
+        Aneve+pJMd8CYcRAGEW2+pOXMpAFmKEUjJT1uWk=
+X-Google-Smtp-Source: AA0mqf5l2e4XTILLZHTH7QTRBPvz28RAyHNavvCrAHgTBlylFcIYKmUFvkgoGR7uLixlsP/mcB3a5GSDsiHvA3KSd08=
+X-Received: by 2002:aca:60c6:0:b0:35a:51fc:2134 with SMTP id
+ u189-20020aca60c6000000b0035a51fc2134mr22358640oib.144.1669874698405; Wed, 30
+ Nov 2022 22:04:58 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:c10f:0:b0:303:1f6a:b30c with SMTP id
- p15-20020a92c10f000000b003031f6ab30cmr6045067ile.254.1669874619783; Wed, 30
- Nov 2022 22:03:39 -0800 (PST)
-Date:   Wed, 30 Nov 2022 22:03:39 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008821e805eebdfb07@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in kvmalloc_node
-From:   syzbot <syzbot+11f0fdbd79dbdfdc5984@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+References: <20221130141040.32447-1-arinc.unal@arinc9.com> <20221130141040.32447-5-arinc.unal@arinc9.com>
+In-Reply-To: <20221130141040.32447-5-arinc.unal@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 1 Dec 2022 07:04:47 +0100
+Message-ID: <CAMhs-H_yk4_ieChz9ZaMgZiQNSO7RxhAXPN0nHWWxbox=qY_mw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] mips: dts: remove label = "cpu" from DSA dt-binding
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        soc@kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Nov 30, 2022 at 3:14 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
+9.com> wrote:
+>
+> This is not used by the DSA dt-binding, so remove it from all devicetrees=
+.
+>
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> ---
+>  arch/mips/boot/dts/ralink/mt7621.dtsi | 1 -
 
-syzbot found the following issue on:
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1052b24b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
-dashboard link: https://syzkaller.appspot.com/bug?extid=11f0fdbd79dbdfdc5984
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13f9193d880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155d363d880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/2bf7bb4ee195/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+11f0fdbd79dbdfdc5984@syzkaller.appspotmail.com
-
-Unable to handle kernel paging request at virtual address 00616161616161a1
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-[00616161616161a1] address between user and kernel address ranges
-Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-Modules linked in:
-
-CPU: 0 PID: 3083 Comm: udevd Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __kmem_cache_alloc_node+0x17c/0x350 mm/slub.c:3437
-lr : slab_pre_alloc_hook mm/slab.h:712 [inline]
-lr : slab_alloc_node mm/slub.c:3318 [inline]
-lr : __kmem_cache_alloc_node+0x80/0x350 mm/slub.c:3437
-sp : ffff80000fee3890
-x29: ffff80000fee38a0
- x28: ffff0000c5718000 x27: ffff80000cf6f4f0
-x26: ffff80000fee3a10 x25: 00000000ffffffff x24: ffff8000084360d4
-x23: 0000000000000021 x22: 6161616161616161 x21: 0000000000000000
-x20: 0000000000000cc0 x19: ffff0000c0001200 x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80000dbe6158 x15: ffff0000c5718000
-x14: 0000000000000010 x13: 0000000000000000 x12: ffff0000c5718000
-x11: 0000000000000001 x10: 0000000000000000 x9 : 0000000000000040
-x8 : 00000000000ae251 x7 : ffff8000084bf248 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 00000000000ae259
-x2 : 0000000000000000 x1 : 0000000000000cc0 x0 : fffffc00032c8dc0
-Call trace:
- next_tid mm/slub.c:2349 [inline]
- slab_alloc_node mm/slub.c:3382 [inline]
- __kmem_cache_alloc_node+0x17c/0x350 mm/slub.c:3437
- __do_kmalloc_node mm/slab_common.c:954 [inline]
- __kmalloc_node+0xbc/0x14c mm/slab_common.c:962
- kmalloc_node include/linux/slab.h:579 [inline]
- kvmalloc_node+0x84/0x1a4 mm/util.c:581
- kvmalloc include/linux/slab.h:706 [inline]
- simple_xattr_alloc+0x50/0x90 fs/xattr.c:1008
- shmem_initxattrs+0x44/0xf0 mm/shmem.c:3258
- security_inode_init_security+0x208/0x278 security/security.c:1119
- shmem_mknod+0xa0/0x13c mm/shmem.c:2915
- shmem_create+0x40/0x54 mm/shmem.c:2974
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x804/0x11c4 fs/namei.c:3710
- do_filp_open+0xdc/0x1b8 fs/namei.c:3740
- do_sys_openat2+0xb8/0x22c fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: 54000ee1 34000eeb b9402a69 91002103 (f8696ada) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	54000ee1 	b.ne	0x1dc  // b.any
-   4:	34000eeb 	cbz	w11, 0x1e0
-   8:	b9402a69 	ldr	w9, [x19, #40]
-   c:	91002103 	add	x3, x8, #0x8
-* 10:	f8696ada 	ldr	x26, [x22, x9] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks,
+    Sergio Paracuellos
