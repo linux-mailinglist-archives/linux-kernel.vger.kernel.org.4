@@ -2,168 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B3F63E653
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 081C763E656
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiLAARW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S230209AbiLAASV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiLAAQ6 (ORCPT
+        with ESMTP id S230100AbiLAARN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:16:58 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9978D649
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 16:13:37 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id j26so72002qki.10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 16:13:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHV8O4q/YJYqi3y8OK2heA1MTuVYBE9Z71+HHXjgjL4=;
-        b=IdVVPMRbeJD3ERLIYatf7Qhl7gSloz9FAjQA5VPxurI7mOMGOlRe1SmMkxP8nXen+h
-         ctCSsHsndDMVyouwDaQm0v7TXfHq0aby4aifQ/E+OXRoPNWWRgh40xnSMefoKPKxsmiQ
-         ZtIHvUylWyyCoco0II+oxM9XH6gfMt1tybat6VJivkyIA44CQk1UoG15QByOzCWQKUUR
-         2w4ENrKjCgXgpRcCgsQFoYOFzLSHwZSBMSIxZC5+Qjkn+HaH+uJfn1bOX7w8JWghI2MW
-         3oH9d2vIdfEElOxXDK/quYJ7tUiZOVe1aS7CsaLh9UpRs/BE+dX7qVyUmLRqtQSSj0EE
-         N5TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHV8O4q/YJYqi3y8OK2heA1MTuVYBE9Z71+HHXjgjL4=;
-        b=ZH3Qv8+YQStm7hwZqeZCt1Uj5dSRa+xgEOVGHqxnq69GO6qk3zS8AlrCPMz3P8cW5K
-         0p35kOmHVy3X2ilh0xP2vz6tZe6Kri+aWbFqknE1V9a5GPS79vpFJI0wMh0msHZn5sEl
-         p3ZgpXZPZDGJey5oNk4RA2Y06VjfFRtSkhRH35HcterNUtACiH0jWcs/GilJoEEvG79z
-         c7eHPNttKM0XqY3BTHPNblCsXwpTuKxKhLQqja+sckrdB04ZbgUNomKvTSXOCZcHjiDW
-         rtP+fR7IXFSGLX9EEuHMID17XD1qhnGy9bUvRgqHLAu5qmGbujmvDufz6clPk1m/avUe
-         KZNg==
-X-Gm-Message-State: ANoB5pnO44JARTmYgK0JR499MtCiP6uDG2AG71QHxf6WWnrSdujV2qUM
-        lWX4utkekH1azHEclBgS/FAFFg==
-X-Google-Smtp-Source: AA0mqf6TePEUGMD3StSeLumfJ10Eo16EklOUBHLtB4+ZnlRfBXSytT3eYYPo1hFoETQOHA+hUimEow==
-X-Received: by 2002:a37:34f:0:b0:6fc:a68e:43ec with SMTP id 76-20020a37034f000000b006fca68e43ecmr185704qkd.436.1669853616057;
-        Wed, 30 Nov 2022 16:13:36 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id s12-20020a05620a0bcc00b006ee7e223bb8sm2328277qki.39.2022.11.30.16.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 16:13:35 -0800 (PST)
-Date:   Wed, 30 Nov 2022 16:13:23 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Johannes Weiner <hannes@cmpxchg.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: remove lock_page_memcg() from rmap
-In-Reply-To: <Y4fZbFNVckh1g4WO@cmpxchg.org>
-Message-ID: <33f2f836-98a0-b593-1d43-b289d645db5@google.com>
-References: <20221123181838.1373440-1-hannes@cmpxchg.org> <16dd09c-bb6c-6058-2b3-7559b5aefe9@google.com> <Y4TpCJ+5uCvWE6co@cmpxchg.org> <Y4ZYsrXLBFDIxuoO@cmpxchg.org> <3659bbe0-ccf2-7feb-5465-b287593aa421@google.com> <CALvZod7_FjO-CjzHUpQTsCTm4-68a1eKi_qY=4XdF+g7yMLd4Q@mail.gmail.com>
- <e0918c92-90cd-e3ed-f4e6-92d02062c252@google.com> <Y4fZbFNVckh1g4WO@cmpxchg.org>
+        Wed, 30 Nov 2022 19:17:13 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA1E99F23;
+        Wed, 30 Nov 2022 16:14:14 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMxQ92HzTz4xN1;
+        Thu,  1 Dec 2022 11:14:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669853651;
+        bh=WOflUL9wdmBgWPhKgKfZ1BiVppjOCZcEv0oN6Na+PAY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=o+MC33OCmCIcVlQ4YONnnjWyIaMYaVafTBF0cNtvyd5xO9LjcV/ziSiLrqL0fOQFw
+         94mEAz9JyFLxGlMiybB6eQSFA1qcSulGkdZaK5oVoMCT3xwXwRWqiCOlt0qrE/6cHA
+         xWRwMqaqnLFrebB2s+KBFwf18dsPwurNP6F1usqrZ7vdAWhw55/kOgnCrr9eXa5+HC
+         GO6JMP8BWDxOb/sx9KQnKDXArCvdv5IEXrz3A89yM5fdu+VT2nWh9C9id44IPq5RPW
+         jz1Gmd2ZKG6kspsRsOXM5uSKb8OxWXpBJyi0WeUSOs3QuGB6nR39hazJNS5ioDDpUN
+         Hw3pMkbB0L8eg==
+Date:   Thu, 1 Dec 2022 11:14:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the kvm tree with the tip tree
+Message-ID: <20221201111408.05e4edaa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022, Johannes Weiner wrote:
-> 
-> Hm, I think the below should work for swap pages. Do you see anything
-> obviously wrong with it, or scenarios I haven't considered?
-> 
+--Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think you're overcomplicating it, with the __swap_count(ent) business,
-and consequent unnecessarily detailed comments on the serialization.
+Hi all,
 
-Page/folio lock prevents a !page_mapped(page) becoming a page_mapped(page),
-whether it's in swap cache or in file cache; it does not stop the sharing
-count going further up, or down even to 0, but we just don't need to worry
-about that sharing count - the MC_TARGET_PAGE case does not reject pages
-with mapcount > 1, so why complicate the swap or file case in that way?
+Today's linux-next merge of the kvm tree got a conflict in:
 
-(Yes, it can be argued that all such sharing should be rejected; but we
-didn't come here to argue improvements to memcg charge moving semantics:
-just to minimize its effect on rmap, before it is fully deprecated.)
+  arch/x86/include/asm/cpufeatures.h
 
-Or am I missing the point of why you add that complication?
+between commit:
 
-> @@ -5637,6 +5645,46 @@ static struct page *mc_handle_swap_pte(struct vm_area_struct *vma,
+  aa387b1b1e66 ("x86: CPUID and CR3/CR4 flags for Linear Address Masking")
 
-Don't forget to trylock the page in the device_private case before this.
+from the tip tree and commits:
 
->          * we call find_get_page() with swapper_space directly.
->          */
->         page = find_get_page(swap_address_space(ent), swp_offset(ent));
-> +
-> +       /*
-> +        * Don't move shared charges. This isn't just for saner move
-> +        * semantics, it also ensures that page_mapped() is stable for
-> +        * the accounting in mem_cgroup_mapcount().
+  6a19d7aa5821 ("x86: KVM: Advertise CMPccXADD CPUID to user space")
+  af2872f62254 ("x86: KVM: Advertise AMX-FP16 CPUID to user space")
+  5e85c4ebf206 ("x86: KVM: Advertise AVX-IFMA CPUID to user space")
 
-mem_cgroup_mapcount()??
+from the kvm tree.
 
-> +        *
-> +        * We have to serialize against the following paths: fork
-> +        * (which may copy a page map or a swap pte), fault (which may
-> +        * change a swap pte into a page map), unmap (which may cause
-> +        * a page map or a swap pte to disappear), and reclaim (which
-> +        * may change a page map into a swap pte).
-> +        *
-> +        * - Without swapcache, we only want to move the charge if
-> +        *   there are no other swap ptes. With the pte lock, the
-> +        *   swapcount is stable against all of the above scenarios
-> +        *   when it's 1 (our pte), which is the case we care about.
-> +        *
-> +        * - When there is a page in swapcache, we only want to move
-> +        *   charges when neither the page nor the swap entry are
-> +        *   mapped elsewhere. The pte lock prevents our pte from
-> +        *   being forked or unmapped. The page lock will stop faults
-> +        *   against, and reclaim of, the swapcache page. So if the
-> +        *   page isn't mapped, and the swap count is 1 (our pte), the
-> +        *   test results are stable and the charge is exclusive.
-> +        */
-> +       if (!page && __swap_count(ent) != 1)
-> +               return NULL;
-> +
-> +       if (page) {
-> +               if (!trylock_page(page)) {
-> +                       put_page(page);
-> +                       return NULL;
-> +               }
-> +               if (page_mapped(page) || __swap_count(ent) != 1) {
-> +                       unlock_page(page);
-> +                       put_page(page);
-> +                       return NULL;
-> +               }
-> +       }
-> +
->         entry->val = ent.val;
->  
->         return page;
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Looks right, without the __swap_count() additions and swap count comments.
+--=20
+Cheers,
+Stephen Rothwell
 
-And similar code in mc_handle_file_pte() - or are you saying that only
-swap should be handled this way?  I would disagree.
+diff --cc arch/x86/include/asm/cpufeatures.h
+index 11a0e06362e4,1419c4e04d45..000000000000
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@@ -311,7 -308,9 +311,10 @@@
+  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+  #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+  #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructio=
+ns */
++ #define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* "" CMPccXADD instru=
+ctions */
++ #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
++ #define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VPMA=
+DD52[H,L]UQ */
+ +#define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
+ =20
+  /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
+  #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
 
-And matching trylock in mc_handle_present_pte() (and get_mctgt_type_thp()),
-instead of in mem_cgroup_move_account().
+--Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-I haven't checked to see where the page then needs to be unlocked,
-probably some new places.
+-----BEGIN PGP SIGNATURE-----
 
-And I don't know what will be best for the preliminary precharge pass:
-doesn't really want the page lock at all, but it may be unnecessary
-complication to avoid taking it then unlocking it in that pass.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH8dAACgkQAVBC80lX
+0Gw/UQf+N6eZbAHfPNSifcilxxbIYN3mlvfhK8yCcq7yTRRqdsnRsI/7kBMjv6Bp
+QT5Od3gt/JmY3NYYsZkA1J1AupRhTyT2xf7TY/5KuCIwRAqbZIpQiN0urodKGOk4
+1J3XoTxclUIfPIec+jZ4l5ehtJsE+wDovyxMhFLAuX1Qeelh57Oc1HpiNHu1RCgK
+juW72RiXU4mVZzJI/zKFB16lJOPLI+ifYVNw/FTc0A10uX18Jh0bJ735kgyEPCEg
+AvtiziJC/bpNCsQEQ61E5W+pHcdbSqeMBBtYJwFAlUX/u5eMRqRQTs0J/CY7T6nJ
+g+71x6xW/t5fCraxoDAdZRRwmfmYOA==
+=BInx
+-----END PGP SIGNATURE-----
 
-Hugh
+--Sig_/ZtuWN5ZcZZIjNR0uvB_UDn1--
