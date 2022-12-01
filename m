@@ -2,113 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A8B63F1F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB32363F1F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiLANrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S231697AbiLANsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiLANrn (ORCPT
+        with ESMTP id S231655AbiLANsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:47:43 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED85DFDD;
-        Thu,  1 Dec 2022 05:47:39 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NNHSk1jxsz4f3jHR;
-        Thu,  1 Dec 2022 21:47:34 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgB3jrl4sIhjHtzRBQ--.20446S3;
-        Thu, 01 Dec 2022 21:47:36 +0800 (CST)
-Subject: Re: [PATCH -next v2 2/9] blk-iocost: improve hanlder of match_u64()
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-3-linan122@huawei.com>
- <Y4e90zFnhhq764lP@slm.duckdns.org>
- <7e4f1cea-2691-9b81-35f6-0dd236149f56@huaweicloud.com>
- <Y4h9MEd3q4LXDGQq@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <46bd7f33-6f24-a7a0-6359-3dc9aad98e6f@huaweicloud.com>
-Date:   Thu, 1 Dec 2022 21:47:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 1 Dec 2022 08:48:00 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F0A2656F;
+        Thu,  1 Dec 2022 05:47:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669902476; x=1701438476;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mTaZIIv3uUc9JYNMsjX+rfZMzd1G+Dsj8zGp0aHQgQI=;
+  b=EnaOgte25qubhv2XEuGM5FKgJ1yCdOvew2AfNGfNbYv2R5TDYaZdJ5eW
+   cLjpyszi7k+qPIN6/Ke/24WjEwna2zJyxYSy0zIoUFkNSnFQiDnkp5uB6
+   aav2M/Ba0SjIzTozhbo/WBGdYyTgFlWA8xfvM8ORIT8fJWlgmOKEkv9vw
+   dJJhDiSQ/JjmlO3ePR86sYefTKgRog082LAKOkxtgbjB/1m9OKtcxYTUP
+   0dZt865uOrYXtETPEcgCLVP156LxltRN8wNNZg8EFhpobUmqq741/AskC
+   T7ToeuU+TLHPPCo0BZPLf8Srot4CelvouilNvXkKcpmvf9fiiOVRNHkr/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="314385104"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="314385104"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 05:47:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="677219981"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="677219981"
+Received: from ichepiga-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.55.59])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 05:47:47 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id CD4AA109781; Thu,  1 Dec 2022 16:47:44 +0300 (+03)
+Date:   Thu, 1 Dec 2022 16:47:44 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv7 08/14] x86/mm: Reserve unaccepted memory bitmap
+Message-ID: <20221201134744.7p3lgw6buv4oqwyn@box.shutemov.name>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-9-kirill.shutemov@linux.intel.com>
+ <Yt+uwhfA57WBrozb@zn.tnic>
+ <20221130012840.sf4rvddzc4ev7bj5@box.shutemov.name>
+ <Y4h1xsEr7X221EoE@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Y4h9MEd3q4LXDGQq@slm.duckdns.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgB3jrl4sIhjHtzRBQ--.20446S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFW5GF1UCFW7ZrW7Ary7Wrg_yoW8Wr4DpF
-        W3tas7Ar18Cr1Sk3W2y3y7XayYyr4xJr1YvFy5K348Zr1a9rW2yr17tw1Y93WUA397Kr1j
-        qF4YvasxXw1DZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4h1xsEr7X221EoE@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Dec 01, 2022 at 11:37:10AM +0200, Mike Rapoport wrote:
+> On Wed, Nov 30, 2022 at 04:28:40AM +0300, Kirill A. Shutemov wrote:
+> > On Tue, Jul 26, 2022 at 11:07:14AM +0200, Borislav Petkov wrote:
+> > > On Tue, Jun 14, 2022 at 03:02:25PM +0300, Kirill A. Shutemov wrote:
+> > > > diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+> > > > index f267205f2d5a..22d1fe48dcba 100644
+> > > > --- a/arch/x86/kernel/e820.c
+> > > > +++ b/arch/x86/kernel/e820.c
+> > > > @@ -1316,6 +1316,16 @@ void __init e820__memblock_setup(void)
+> > > >  	int i;
+> > > >  	u64 end;
+> > > >  
+> > > > +	/* Mark unaccepted memory bitmap reserved */
+> > > > +	if (boot_params.unaccepted_memory) {
+> > > > +		unsigned long size;
+> > > > +
+> > > > +		/* One bit per 2MB */
+> > > > +		size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
+> > > > +				    PMD_SIZE * BITS_PER_BYTE);
+> > > > +		memblock_reserve(boot_params.unaccepted_memory, size);
+> > > > +	}
+> > > > +
+> > > 
+> > > Hmm, I don't like how this is dropped right in the middle of a unrelated
+> > > function.
+> > > 
+> > > You're adding arch/x86/mm/unaccepted_memory.c later. Why don't you put
+> > > that chunk in a function there which is called by early_reserve_memory()
+> > > which does exactly what you want - reserve memory early, before memblock
+> > > allocations?
+> > 
+> > early_reserve_memory() specifically called before e820__memory_setup()
+> > (see comment in setup_arch()), so we don't have e820_table finalized and
+> > we need it to get correct RAM size from e820__end_of_ram_pfn().
+> > 
+> > I guess we can hide the chunk in a function in unaccepted_memory.c and
+> > call it from here, but it would require #ifdeffery in a header file as the
+> > .c is only compiled for CONFIG_UNACCEPTED_MEMORY=y.
+> > 
+> > Looks like an overkill to me, no?
+> 
+> Agree. Can we just extend the comment to explain why we reserve the bitmap
+> at e820__memblock_setup() rather than in early_reserve_memory(), pretty
+> much with the explanation above?
 
-在 2022/12/01 18:08, Tejun Heo 写道:
-> On Thu, Dec 01, 2022 at 10:15:53AM +0800, Yu Kuai wrote:
->> Hi,
->>
->> 在 2022/12/01 4:32, Tejun Heo 写道:
->>> On Wed, Nov 30, 2022 at 09:21:49PM +0800, Li Nan wrote:
->>>> From: Yu Kuai <yukuai3@huawei.com>
->>>>
->>>> 1) There are one place that return value of match_u64() is not checked.
->>>> 2) If match_u64() failed, return value is set to -EINVAL despite that
->>>>      there are other possible errnos.
->>>
->>> Ditto. Does this matter?
->>>
->>
->> It's not a big deal, but I think at least return value of match_u64()
->> should be checked, we don't want to continue with invalid input, right?
-> 
-> Yeah, sure.
-> 
->> By the way, match_u64() can return -ERANGE, which can provide more
->> specific error messge to user.
-> 
-> I'm really not convinced going over 64bit range would be all that difficult
-> to spot whether the error code is -EINVAL or -ERANGE. There isn't anything
-> wrong with returning -ERANGE but the fact that that particular function
-> returns an error code doesn't necessarily mean that it *must* be forwarded.
-> 
-> Imagine that we used sscanf(buf, "%llu", &value) to parse the number
-> instead. We'd only know whether the parsing would have succeeded or not and
-> would probably return -EINVAL on failure and the behavior would be just
-> fine. This does not matter *at all*.
-> 
-> So, idk, I'm not necessarily against it but changing -EINVAL to -ERANGE is
-> pure churn. Nothing material is being improved by that change.
+Okay, I will do this:
 
-Thanks for the review and explanation, I'll just keep the addition of
-return value  checking of the former 2 patches.
-
-Thanks,
-Kuai
-
+diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+index 49b5164a4cba..62068956bb76 100644
+--- a/arch/x86/kernel/e820.c
++++ b/arch/x86/kernel/e820.c
+@@ -1316,7 +1316,14 @@ void __init e820__memblock_setup(void)
+ 	int i;
+ 	u64 end;
+ 
+-	/* Mark unaccepted memory bitmap reserved */
++	/*
++	 * Mark unaccepted memory bitmap reserved.
++	 *
++	 * This kind of reservation usually done from early_reserve_memory(),
++	 * but early_reserve_memory() called before e820__memory_setup(), so
++	 * e820_table is not finalized and e820__end_of_ram_pfn() cannot be
++	 * used to get correct RAM size.
++	 */
+ 	if (boot_params.unaccepted_memory) {
+ 		unsigned long size;
+ 
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
