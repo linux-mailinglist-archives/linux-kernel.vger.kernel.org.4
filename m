@@ -2,131 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2154D63EC9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B285E63EC9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiLAJhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S230168AbiLAJiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:38:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiLAJhl (ORCPT
+        with ESMTP id S229569AbiLAJiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:37:41 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE260E7B;
-        Thu,  1 Dec 2022 01:37:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 1 Dec 2022 04:38:16 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9378527B1B;
+        Thu,  1 Dec 2022 01:38:15 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A77CFCE1BB6;
-        Thu,  1 Dec 2022 09:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75389C43470;
-        Thu,  1 Dec 2022 09:37:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669887451;
-        bh=BfOt5syWCVHNIGlCb5w84CIS4Di9VpSeQ2OX3cIcr0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m/T9mQyWRqPURKZX3ywro3KQASCx/8OPjCwEnX3ONXn1gZnBx+Sf4nS2Tr/dDZE2x
-         JyUxtPoL1HCM9kIie8EN+AD1YLaixfOtfzCR1TDv2XoJlmHA1wAEvGMZhzo+0m8Jmb
-         /Z2h7e2XFK1uzrzHO/WpDhAwHo/7pP05AeWgSl29p7Q2yjqRtzC8fb3wzrI6OJ1HkZ
-         KB8ipJ01wFYCSsMZ0DfDAgXLPcPBCSfVY1M5fIW1FlzEpAGu+s5g2QcDyh2qR9Mg8x
-         RYP0Su61tWvN/xP44ZIh2d1yEm7nm1xsw/TWgw2675xlSDvo4WotLTgBYleKetNWad
-         mf5S8Ws3o/j6w==
-Date:   Thu, 1 Dec 2022 11:37:10 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv7 08/14] x86/mm: Reserve unaccepted memory bitmap
-Message-ID: <Y4h1xsEr7X221EoE@kernel.org>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-9-kirill.shutemov@linux.intel.com>
- <Yt+uwhfA57WBrozb@zn.tnic>
- <20221130012840.sf4rvddzc4ev7bj5@box.shutemov.name>
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1092966025DF;
+        Thu,  1 Dec 2022 09:38:14 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669887494;
+        bh=lRVFj8y7/3qwG7xPZn/qzQNq+VLvvEurqAoJ8cB2Ans=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RrNhisTgtqv5meVQ5yhJs4NsLxRnZ1R9V6Oy+XTOySEufKylaThlPfXIfogc2/mRO
+         5mr5pN2yYJQCRVjj6taHE9bq70vQAKw7x+yLTKRrX03aLv2tZct/Q38OHlkgqT4k1t
+         IgEcRzsINzWpkkgjn3b9Rp+RZomnLkF8xPO8zyjfNIHEipXyo1HXux3AQe9HIFl9NE
+         Qmq+x9StJZCTIlOAKwXfCmWSWeMfVkY5VQ6rw4XTyeaXcF3xtCNJk91qYXMsT5+Ew3
+         hi6P9o/AR8WQSAMUYOtbufywXtZ57tHYBGFUhYarwR6j9ZvUHhuyrp9MYSl9TF0JYH
+         IO4dAhoE5PbyQ==
+Message-ID: <c21591d1-7462-974e-3171-e23a0fbd7ddb@collabora.com>
+Date:   Thu, 1 Dec 2022 10:38:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130012840.sf4rvddzc4ev7bj5@box.shutemov.name>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] usb: fotg210-udc: fix potential memory leak in
+ fotg210_udc_probe()
+To:     Yi Yang <yiyang13@huawei.com>, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221130101251.245399-1-yiyang13@huawei.com>
+Content-Language: en-US
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20221130101251.245399-1-yiyang13@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 04:28:40AM +0300, Kirill A. Shutemov wrote:
-> On Tue, Jul 26, 2022 at 11:07:14AM +0200, Borislav Petkov wrote:
-> > On Tue, Jun 14, 2022 at 03:02:25PM +0300, Kirill A. Shutemov wrote:
-> > > diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-> > > index f267205f2d5a..22d1fe48dcba 100644
-> > > --- a/arch/x86/kernel/e820.c
-> > > +++ b/arch/x86/kernel/e820.c
-> > > @@ -1316,6 +1316,16 @@ void __init e820__memblock_setup(void)
-> > >  	int i;
-> > >  	u64 end;
-> > >  
-> > > +	/* Mark unaccepted memory bitmap reserved */
-> > > +	if (boot_params.unaccepted_memory) {
-> > > +		unsigned long size;
-> > > +
-> > > +		/* One bit per 2MB */
-> > > +		size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
-> > > +				    PMD_SIZE * BITS_PER_BYTE);
-> > > +		memblock_reserve(boot_params.unaccepted_memory, size);
-> > > +	}
-> > > +
-> > 
-> > Hmm, I don't like how this is dropped right in the middle of a unrelated
-> > function.
-> > 
-> > You're adding arch/x86/mm/unaccepted_memory.c later. Why don't you put
-> > that chunk in a function there which is called by early_reserve_memory()
-> > which does exactly what you want - reserve memory early, before memblock
-> > allocations?
-> 
-> early_reserve_memory() specifically called before e820__memory_setup()
-> (see comment in setup_arch()), so we don't have e820_table finalized and
-> we need it to get correct RAM size from e820__end_of_ram_pfn().
-> 
-> I guess we can hide the chunk in a function in unaccepted_memory.c and
-> call it from here, but it would require #ifdeffery in a header file as the
-> .c is only compiled for CONFIG_UNACCEPTED_MEMORY=y.
-> 
-> Looks like an overkill to me, no?
+Hi Yi Yang,
 
-Agree. Can we just extend the comment to explain why we reserve the bitmap
-at e820__memblock_setup() rather than in early_reserve_memory(), pretty
-much with the explanation above?
- 
-> -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
+You can make your patch also simplify the code.
 
--- 
-Sincerely yours,
-Mike.
+Earlier, there's
+
+	ret = -ENOMEM;
+
+	/* initialize udc */
+	fotg210 = kzalloc(sizeof(struct fotg210_udc), GFP_KERNEL);
+	if (fotg210 == NULL)
+		goto err;
+
+and the code at the "err" label before your changes merely returns "ret".
+Instead of "goto err" return -ENOMEM can be used. This, in turn,
+eliminates the ret = -ENOMEM assignment. Furthermore, after applying your
+patch as-is, the said "goto err;" will result with kfree(NULL) which is safe,
+but unnecessary.
+
+If you include the above changes you can add my
+
+Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+
+W dniu 30.11.2022 o 11:12, Yi Yang pisze:
+> In fotg210_udc_probe(), if devm_clk_get() or clk_prepare_enable()
+> fails, 'fotg210' will not be freed, which will lead to a memory leak.
+> Fix it by moving kfree() to a proper location.
+> 
+> Fixes: 718a38d092ec ("fotg210-udc: Handle PCLK")
+> Signed-off-by: Yi Yang <yiyang13@huawei.com>
+> ---
+>   drivers/usb/fotg210/fotg210-udc.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
+> index b9ea6c6d931c..a366d69c1818 100644
+> --- a/drivers/usb/fotg210/fotg210-udc.c
+> +++ b/drivers/usb/fotg210/fotg210-udc.c
+> @@ -1178,7 +1178,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
+>   		ret = clk_prepare_enable(fotg210->pclk);
+>   		if (ret) {
+>   			dev_err(dev, "failed to enable PCLK\n");
+> -			return ret;
+> +			goto err;
+>   		}
+>   	} else if (PTR_ERR(fotg210->pclk) == -EPROBE_DEFER) {
+>   		/*
+> @@ -1302,8 +1302,7 @@ int fotg210_udc_probe(struct platform_device *pdev)
+>   	if (!IS_ERR(fotg210->pclk))
+>   		clk_disable_unprepare(fotg210->pclk);
+>   
+> -	kfree(fotg210);
+> -
+>   err:
+> +	kfree(fotg210);
+>   	return ret;
+>   }
+
