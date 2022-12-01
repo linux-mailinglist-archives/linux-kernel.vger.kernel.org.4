@@ -2,125 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F7163F1E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D0A63F1EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiLANne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S231586AbiLANoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiLANnc (ORCPT
+        with ESMTP id S231598AbiLANn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:43:32 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCAEBF902;
-        Thu,  1 Dec 2022 05:43:30 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NNHMw1xkKz4f3p0n;
-        Thu,  1 Dec 2022 21:43:24 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgCnCrZ9r4hjDLHRBQ--.45302S3;
-        Thu, 01 Dec 2022 21:43:27 +0800 (CST)
-Subject: Re: [PATCH -next v2 9/9] blk-iocost: fix walk_list corruption
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-10-linan122@huawei.com>
- <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
- <c028dd77-cabf-edd6-c893-8ee24762ac8c@huaweicloud.com>
- <Y4h7RxdT83g+zFN0@slm.duckdns.org>
- <de04965e-1341-3053-0f4b-395b8390d00c@huaweicloud.com>
- <Y4iB97kcdKHEQP86@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <0f55cf25-d3f9-4f12-220e-9d06a601ed7a@huaweicloud.com>
-Date:   Thu, 1 Dec 2022 21:43:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 1 Dec 2022 08:43:59 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AC8BF92A;
+        Thu,  1 Dec 2022 05:43:56 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2B1DhmvJ044178;
+        Thu, 1 Dec 2022 07:43:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669902228;
+        bh=wQU2wCefajvXNpsJPjUOfFnnZIcYY26KeStzZSXqUaA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=qOCp3MObKXkhUKo2H1FWzFrrHvYomuqF08gMRJXMWYNGc3JlvwZuQySKMgzJJ75Qp
+         QP23jfTtTE/cPRc66XnZgtcEVVrPHqyz6FY+D+BnBwcn0quNvGscoJwDr6prhvnPmU
+         nQEfyx2cactpAumrMAg8jjF82O0FcsxV9pARanyA=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2B1Dhm9D049402
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Dec 2022 07:43:48 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 1
+ Dec 2022 07:43:48 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 1 Dec 2022 07:43:47 -0600
+Received: from [10.250.235.35] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2B1DhgE9092395;
+        Thu, 1 Dec 2022 07:43:43 -0600
+Message-ID: <15846a05-acb7-126e-eb4f-4057c77ce696@ti.com>
+Date:   Thu, 1 Dec 2022 19:13:42 +0530
 MIME-Version: 1.0
-In-Reply-To: <Y4iB97kcdKHEQP86@slm.duckdns.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgCnCrZ9r4hjDLHRBQ--.45302S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4rZry5tFyUWr48Aw1UWrg_yoW8uw4DpF
-        W8KF9Fka1UJrn7Kayjvw4Dtr9Yyw1rKr4rXr48tw1rC3sIgw17tF1jkr1Y9F48ZF1xZFyY
-        vr4Fq3y3CFyj93DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [EXTERNAL] Re: [PATCH v10 3/6] remoteproc: pru: Add enum for PRU
+ Core Indentifiers.
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
+        <nm@ti.com>, <vigneshr@ti.com>, <srk@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221201110500.4017889-1-danishanwar@ti.com>
+ <20221201110500.4017889-4-danishanwar@ti.com>
+ <a32f817e-6b61-7666-94f9-cf11f1f2e0a8@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+In-Reply-To: <a32f817e-6b61-7666-94f9-cf11f1f2e0a8@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Roger,
 
-
-在 2022/12/01 18:29, Tejun Heo 写道:
-> On Thu, Dec 01, 2022 at 06:14:32PM +0800, Yu Kuai wrote:
->> Hi,
->>
->> 在 2022/12/01 18:00, Tejun Heo 写道:
->>> On Thu, Dec 01, 2022 at 09:19:54AM +0800, Yu Kuai wrote:
->>>>>> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
->>>>>> index 710cf63a1643..d2b873908f88 100644
->>>>>> --- a/block/blk-iocost.c
->>>>>> +++ b/block/blk-iocost.c
->>>>>> @@ -2813,13 +2813,14 @@ static void ioc_rqos_exit(struct rq_qos *rqos)
->>>>>>     {
->>>>>>     	struct ioc *ioc = rqos_to_ioc(rqos);
->>>>>> +	del_timer_sync(&ioc->timer);
->>>>>> +
->>>>>>     	blkcg_deactivate_policy(rqos->q, &blkcg_policy_iocost);
->>>>>>     	spin_lock_irq(&ioc->lock);
->>>>>>     	ioc->running = IOC_STOP;
->>>>>>     	spin_unlock_irq(&ioc->lock);
->>>>>> -	del_timer_sync(&ioc->timer);
->>>>>
->>>>> I don't about this workaround. Let's fix properly?
->>>>
->>>> Ok, and by the way, is there any reason to delete timer after
->>>> deactivate policy? This seems a litter wreid to me.
->>>
->>> ioc->running is what controls whether the timer gets rescheduled or not. If
->>> we don't shut that down, the timer may as well get rescheduled after being
->>> deleted. Here, the only extra activation point is IO issue which shouldn't
->>> trigger during rq_qos_exit, so the ordering shouldn't matter but this is the
->>> right order for anything which can get restarted.
->>
->> Thanks for the explanation.
->>
->> I'm trying to figure out how to make sure child blkg pins it's parent,
->> btw, do you think following cleanup make sense?
+On 01/12/22 5:28 pm, Roger Quadros wrote:
+> Danish,
 > 
-> It's on you to explain why any change that you're suggesting is better and
-> safe. I know it's not intentional but you're repeatedly suggesting operation
-> reorderings in code paths which are really sensitive to ordering at least
-> seemingly without putting much effort into thinking through the side
-> effects. This costs disproportionate amount of review bandwidth, and
-> increases the chance of new subtle bugs. Can you please slow down a bit and
-> be more deliberate?
-
-Thanks for the suggestion, I'll pay close attention to explain this "why
-the change is better and safe". And sorry for the review pressure. 😔
-
+> On 01/12/2022 13:04, MD Danish Anwar wrote:
+>> Introducing enum pruss_pru_id for PRU Core Identifiers.
+>> PRUSS_PRU0 indicates PRU Core 0.
+>> PRUSS_PRU1 indicates PRU Core 1.
+>> PRUSS_NUM_PRUS indicates the total number of PRU Cores.
+>>
+>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> ---
+>>   drivers/remoteproc/pru_rproc.c | 16 ++++++++++++----
+>>   include/linux/pruss.h          | 19 +++++++++++++++++--
+>>   2 files changed, 29 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+>> index b4498a505108..7d4ed39b3772 100644
+>> --- a/drivers/remoteproc/pru_rproc.c
+>> +++ b/drivers/remoteproc/pru_rproc.c
+>> @@ -186,6 +186,7 @@ static struct rproc *__pru_rproc_get(struct device_node *np, int index)
+>>    * pru_rproc_get() - get the PRU rproc instance from a device node
+>>    * @np: the user/client device node
+>>    * @index: index to use for the ti,prus property
+>> + * @pru_id: optional pointer to return the PRU remoteproc processor id
+>>    *
+>>    * This function looks through a client device node's "ti,prus" property at
+>>    * index @index and returns the rproc handle for a valid PRU remote processor if
+>> @@ -193,13 +194,17 @@ static struct rproc *__pru_rproc_get(struct device_node *np, int index)
+>>    * time. Caller must call pru_rproc_put() when done with using the rproc, not
+>>    * required if the function returns a failure.
+>>    *
+>> + * When optional @pru_id pointer is passed the PRU remoteproc processor id is
+>> + * returned.
+>> + *
+>>    * Return: rproc handle on success, and an ERR_PTR on failure using one
+>>    * of the following error values
+>>    *    -ENODEV if device is not found
+>>    *    -EBUSY if PRU is already acquired by anyone
+>>    *    -EPROBE_DEFER is PRU device is not probed yet
+>>    */
+>> -struct rproc *pru_rproc_get(struct device_node *np, int index)
+>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+>> +			    enum pruss_pru_id *pru_id)
 > 
-> Thanks.
+> You just introduced pru_rproc_get() in the previous patch and are
+> now updating it here.
 > 
 
+That's because there is dependency between these two patches. The enum 
+pruss_pru_id is declared inside linux/pruss.h file which is introduced 
+in pru_rproc_get() patch. But pru_rproc_get() and pru_rproc_put() APIs 
+use the enum as function argument. So I decided to keep pru_rproc_get() 
+patch as second patch of this series(as it introduces <linux/pruss.h> 
+where eventually the enum will be introduced).
+
+Then I kept the enum introduction patch as third patch of the series and 
+with this patch I modified pru_rproc_get() API by adding pru_id field in 
+the function argument.
+
+> Instead, what you need to do is, first introduce enum pruss_pru_id
+> and make any changes to code using hardcoded values for PRU ID.
+> This patch will have to introduce <linux/pruss.h> as it doesn't exist yet.
+
+This also came to my mind. But I thought introduction of enum 
+pruss_pru_id patch should just introduce the enum and modify APIs which 
+uses the enum accordingly. I wanted to keep the introduction of 
+<linux/pruss.h> file with the pru_rproc_get() patch as it was. That's 
+why I kept pru_rproc_get() patch ahead of enum patch.
+
+> Hopefully this clears the chicken/egg situation.
+> 
+> Then introduce pru_rproc_get() patch with the final desired arguments.
+> 
+>>   {
+>>   	struct rproc *rproc;
+>>   	struct pru_rproc *pru;
+>> @@ -226,6 +231,9 @@ struct rproc *pru_rproc_get(struct device_node *np, int index)
+>>   
+>>   	mutex_unlock(&pru->lock);
+>>   
+>> +	if (pru_id)
+>> +		*pru_id = pru->id;
+>> +
+>>   	return rproc;
+>>   
+>>   err_no_rproc_handle:
+>> @@ -556,7 +564,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
+>>   	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
+>>   	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
+>>   	/* PRU1 has its local RAM addresses reversed */
+>> -	if (pru->id == 1)
+>> +	if (pru->id == PRUSS_PRU1)
+>>   		swap(dram0, dram1);
+>>   	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+>>   
+>> @@ -865,14 +873,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
+>>   	case RTU0_IRAM_ADDR_MASK:
+>>   		fallthrough;
+>>   	case PRU0_IRAM_ADDR_MASK:
+>> -		pru->id = 0;
+>> +		pru->id = PRUSS_PRU0;
+>>   		break;
+>>   	case TX_PRU1_IRAM_ADDR_MASK:
+>>   		fallthrough;
+>>   	case RTU1_IRAM_ADDR_MASK:
+>>   		fallthrough;
+>>   	case PRU1_IRAM_ADDR_MASK:
+>> -		pru->id = 1;
+>> +		pru->id = PRUSS_PRU1;
+>>   		break;
+>>   	default:
+>>   		ret = -EINVAL;
+>> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
+>> index 5c5d14b1249d..efe89c586b4b 100644
+>> --- a/include/linux/pruss.h
+>> +++ b/include/linux/pruss.h
+>> @@ -14,17 +14,32 @@
+>>   
+>>   #define PRU_RPROC_DRVNAME "pru-rproc"
+>>   
+>> +/**
+>> + * enum pruss_pru_id - PRU core identifiers
+>> + * @PRUSS_PRU0: PRU Core 0.
+>> + * @PRUSS_PRU1: PRU Core 1.
+>> + * @PRUSS_NUM_PRUS: Total number of PRU Cores available.
+>> + *
+>> + */
+>> +
+>> +enum pruss_pru_id {
+>> +	PRUSS_PRU0 = 0,
+>> +	PRUSS_PRU1,
+>> +	PRUSS_NUM_PRUS,
+>> +};
+>> +
+>>   struct device_node;
+>>   
+>>   #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>>   
+>> -struct rproc *pru_rproc_get(struct device_node *np, int index);
+>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+>> +			    enum pruss_pru_id *pru_id);
+>>   void pru_rproc_put(struct rproc *rproc);
+>>   
+>>   #else
+>>   
+>>   static inline struct rproc *
+>> -pru_rproc_get(struct device_node *np, int index)
+>> +pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
+>>   {
+>>   	return ERR_PTR(-EOPNOTSUPP);
+>>   }
+> 
+> --
+> cheers,
+> -roger
+
+Thanks,
+Danish.
