@@ -2,111 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC87C63EF45
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5D663EF49
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiLALSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:18:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S230089AbiLALSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiLALRW (ORCPT
+        with ESMTP id S229771AbiLALRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:17:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544C725EB9
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:14:59 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p0hWn-00068H-9A; Thu, 01 Dec 2022 12:14:53 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:dc5e:59bf:44a8:4077])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D242412F557;
-        Thu,  1 Dec 2022 11:14:51 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 12:14:50 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
-Message-ID: <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-4-msp@baylibre.com>
+        Thu, 1 Dec 2022 06:17:46 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E9A87CB7;
+        Thu,  1 Dec 2022 03:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669893315; x=1701429315;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rM+K1icdCaFKZCqOFV+QNCG9qeXYbf+NhJP0kyV2GKQ=;
+  b=vxWBNehwxImCCblXDxK/ZXQ3R4taU74wFJ6dAoK94ptBidqPBsjclLQL
+   5S9UhORHOqF+pGYESXvb4KIGc+EB9GmxIPjbE4bIqT4WEcI7ABdPommhY
+   Ax7Cwt7rVLOtiiMiimNUlHjO+5r5WPOdquojDlG3dQ9AJ6bAD2z38k/7D
+   PXOMWLwyuKrQLKikR8mLEPPjS9rscfq0ykmefq6mLXNDA5pEnqrWamB/s
+   uzzXdH/X7VHopEBmR4vp9MBKlCrZBgRFnaD1CrvJyuStsH60K4SrJSiCn
+   ED3favSXDGh9s5rTryIlT2aM0gk6Fi4QbgSkkZJJxJoX8PikH5v98z7rV
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="191275759"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Dec 2022 04:15:14 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 1 Dec 2022 04:15:13 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Thu, 1 Dec 2022 04:15:10 -0700
+Date:   Thu, 1 Dec 2022 11:14:52 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Jisheng Zhang <jszhang@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v2 5/9] dt-bindings: riscv: Add bouffalolab bl808 board
+ compatibles
+Message-ID: <Y4iMrKjLAHpkCygo@wendy>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-6-jszhang@kernel.org>
+ <60991459-945f-35db-f26a-fb27824728ad@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ysvt4sh7xyxarrpp"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20221116205308.2996556-4-msp@baylibre.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <60991459-945f-35db-f26a-fb27824728ad@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey Krzysztof,
 
---ysvt4sh7xyxarrpp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Dec 01, 2022 at 12:05:04PM +0100, Krzysztof Kozlowski wrote:
+> On 27/11/2022 14:24, Jisheng Zhang wrote:
+> > Several SoMs and boards are available that feature the Bouffalolab
+> > bl808 SoC. Document the compatible strings.
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  .../bindings/riscv/bouffalolab.yaml           | 34 +++++++++++++++++++
+> >  1 file changed, 34 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> > new file mode 100644
+> > index 000000000000..91ca9dbdc798
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> > @@ -0,0 +1,34 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Bouffalo Lab Technology SoC-based boards
+> > +
+> > +maintainers:
+> > +  - Jisheng Zhang <jszhang@kernel.org>
+> > +
+> > +description:
+> > +  Bouffalo Lab Technology SoC-based boards
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    const: '/'
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: Sipeed M1s SoM:
+> > +        items:
+> > +          - const: sipeed,m1s
+> > +          - const: bouffalolab,bl808
+> 
+> I don't think that SoM is usable alone. It always needs a carrier, so
+> drop this entry.
 
-On 16.11.2022 21:52:56, Markus Schneider-Pargmann wrote:
-> On peripheral chips every read/write can be costly. Avoid reading easily
-> trackable information and cache them internally. This saves multiple
-> reads.
->=20
-> Transmit FIFO put index is cached, this is increased for every time we
-> enqueue a transmit request.
->=20
-> The transmits in flight is cached as well. With each transmit request it
-> is increased when reading the finished transmit event it is decreased.
->=20
-> A submit limit is cached to avoid submitting too many transmits at once,
-> either because the TX FIFO or the TXE FIFO is limited. This is currently
-> done very conservatively as the minimum of the fifo sizes. This means we
-> can reach FIFO full events but won't drop anything.
+For my own information, if a SoM is not capable of functioning without a
+carrier there is no merit in it having a compatible?
+Does this also apply if there are multiple possible carriers from
+different vendors?
 
-You have a dedicated in_flight variable, which is read-modify-write in 2
-different code path, i.e. this looks racy.
+Thanks,
+Conor.
 
-If you allow only power-of-two FIFO size, you can use 2 unsigned
-variables, i.e. a head and a tail pointer. You can apply a mask to get
-the index to the FIFO. The difference between head and tail is the fill
-level of the FIFO. See mcp251xfd driver for this.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ysvt4sh7xyxarrpp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOIjKcACgkQrX5LkNig
-0106Pgf/c+3LyxVEAyWReUSMy4S25PKscNC/HC7FSIfZv/T4pUhUfhjoNHFsdOKD
-mxJS60E0hXNuER/oOjUzN/hQYCf8eLDmo7lY1ABkwUMqt03s6ouIeo2nUIxfYBHM
-Cxiju541PilmMvIhydL/j0YMPfexOvvVV6XJHGHPTPAfoRF/adHphiIMHg34IVbv
-R/mZtnutVHNwnjaZLmM0ffiXHxyRexca5ptziY6cqzT5S11ktYPPyqcx4NPxbZeF
-iVCKBICb2Yu4vqFF93shAflWPnfLrgIHewju/lSYA3yGFOgzATIRF/iawTdmK/8K
-e3WT//xQtxnLxJG7bZ33s8AvIWkwvg==
-=k8r2
------END PGP SIGNATURE-----
-
---ysvt4sh7xyxarrpp--
