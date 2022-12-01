@@ -2,385 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A65463EEE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22F963EED2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiLALGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
+        id S230503AbiLALFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbiLALFQ (ORCPT
+        with ESMTP id S230257AbiLALEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:05:16 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77874AB034
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:04:51 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id fy37so3271482ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:04:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/EOxMb4n3Nlc6JLzIY5AGW7V4duQBm1d7NMmCc8Ck6Q=;
-        b=MHMm5sy+h50MFhCatkC/kV8M2e9GBLmPDXSH68rgSAQMfBYnHIXpLgIcCisqpjaW+1
-         1ndMj77GHmEkGhCmCvzyjJP83uIu4tn0aPzmrYExtQc3E9zJK4NRgJTiPFMm3Xw0hR8i
-         odJr+bm4Wu5iId/S9+ctbOnVU2pQ+lxQEKw1fn1XASUfj7Gw9DJW5Ph2veIRiuLiH6Zx
-         nnp82C8skX2XK4ktA8lWJA9niJiFfgm735B9RTuhQd0BBoffMtJDgdKBZFH3ThbVWOR7
-         UkNv6oI9DaGmckzSMQ8pp1gSymS1WfxymJvo7PiED6vbXvDqrK8KiGHBkb5Du82xz6ds
-         Gppg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/EOxMb4n3Nlc6JLzIY5AGW7V4duQBm1d7NMmCc8Ck6Q=;
-        b=zNIlvPg1YlWkCYagVKnkbuW54Za6oi8e7RW4cf9E4e+P+ZzN1sBb0WiSF0+GaG6veW
-         dn2TQWLKgVchrVlyGUODAqnBWgvt/2HP75Clzg6Gg/9lkxQTadTyva0iDGrZ7l4FT2xY
-         ubuXbHNBfXSHhKXABgJZRwJDxkf2fusXguDibb2j1G8L7Q5LxVbbuD0dyJxLpmom9I5x
-         0pqMDmWLxxHKfAg5lDtmfrevn5dmcDphtNhMQ5Zf3OawIffmCMKxsz0P2rdpNAL1Aaoe
-         6ZaXnWhaxCrQomW8fPu5V/jvrJu/K+QsFqTKs1/feLHNPZmLlvVX9aiPqEfMqeIPGYYb
-         HZWA==
-X-Gm-Message-State: ANoB5plh7YST28Mly9A4qJSoDcd9tP82wxly6jaxiHzi0Iv++H1emAeJ
-        vQomCEDx4G3c2x97uv9FutIOV0+UbIc+YA==
-X-Google-Smtp-Source: AA0mqf677w+mpEmA29mz/vtbB1zpY4D0M29lW0jCdFFcxzJPskOMC9Cw+qJHY+rlo2l4d5ArZ2XAgw==
-X-Received: by 2002:a17:907:8b13:b0:781:541:6599 with SMTP id sz19-20020a1709078b1300b0078105416599mr43234197ejc.45.1669892690004;
-        Thu, 01 Dec 2022 03:04:50 -0800 (PST)
-Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id f26-20020a056402161a00b00463a83ce063sm1576424edv.96.2022.12.01.03.04.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:04:49 -0800 (PST)
-From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        linux-block@vger.kernel.org,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-Subject: [PATCH 5/5] drbd: add context parameter to expect() macro
-Date:   Thu,  1 Dec 2022 12:03:50 +0100
-Message-Id: <20221201110349.1282687-6-christoph.boehmwalder@linbit.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221201110349.1282687-1-christoph.boehmwalder@linbit.com>
-References: <20221201110349.1282687-1-christoph.boehmwalder@linbit.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 06:04:30 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F81303D6;
+        Thu,  1 Dec 2022 03:04:27 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNCrT2Nqvz5BNRf;
+        Thu,  1 Dec 2022 19:04:25 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B1B4GFx055613;
+        Thu, 1 Dec 2022 19:04:16 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 19:04:19 +0800 (CST)
+Date:   Thu, 1 Dec 2022 19:04:19 +0800 (CST)
+X-Zmail-TransId: 2af963888a331aa5b09b
+X-Mailer: Zmail v1.0
+Message-ID: <202212011904193038898@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <dmitry.torokhov@gmail.com>
+Cc:     <nick@shmanahar.org>, <giulio.benetti@benettiengineering.com>,
+        <dario.binacchi@amarulasolutions.com>,
+        <michael@amarulasolutions.com>, <oliver.graute@kococonnector.com>,
+        <wsa+renesas@sang-engineering.com>,
+        <u.kleine-koenig@pengutronix.de>, <jeff@labundy.com>,
+        <johan@kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIHYyXSBJbnB1dDogdG91Y2hzY3JlZW46IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZsKgc2NucHJpbnRmKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B1B4GFx055613
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63888A39.000 by FangMail milter!
+X-FangMail-Envelope: 1669892665/4NNCrT2Nqvz5BNRf/63888A39.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63888A39.000/4NNCrT2Nqvz5BNRf
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Originally-from: Andreas Gruenbacher <agruen@linbit.com>
-Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+From: ye xingchen <ye.xingchen@zte.com.cn>
+
+Replace the open-code with sysfs_emit() to simplify the code.
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/block/drbd/drbd_actlog.c           |  4 +-
- drivers/block/drbd/drbd_bitmap.c           | 54 +++++++++++-----------
- drivers/block/drbd/drbd_main.c             |  8 ++--
- drivers/block/drbd/drbd_nl.c               |  2 +-
- drivers/block/drbd/drbd_polymorph_printk.h |  4 +-
- drivers/block/drbd/drbd_receiver.c         | 12 ++---
- 6 files changed, 42 insertions(+), 42 deletions(-)
+v1 -> v2
+fix the Subject.
+ drivers/input/touchscreen/atmel_mxt_ts.c   | 4 ++--
+ drivers/input/touchscreen/edt-ft5x06.c     | 2 +-
+ drivers/input/touchscreen/hideep.c         | 4 ++--
+ drivers/input/touchscreen/hycon-hy46xx.c   | 2 +-
+ drivers/input/touchscreen/ilitek_ts_i2c.c  | 4 ++--
+ drivers/input/touchscreen/iqs5xx.c         | 2 +-
+ drivers/input/touchscreen/usbtouchscreen.c | 2 +-
+ drivers/input/touchscreen/wdt87xx_i2c.c    | 6 +++---
+ 8 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/block/drbd/drbd_actlog.c b/drivers/block/drbd/drbd_actlog.c
-index 87d93012289f..429255876800 100644
---- a/drivers/block/drbd/drbd_actlog.c
-+++ b/drivers/block/drbd/drbd_actlog.c
-@@ -868,9 +868,9 @@ int __drbd_change_sync(struct drbd_device *device, sector_t sector, int size,
- 	nr_sectors = get_capacity(device->vdisk);
- 	esector = sector + (size >> 9) - 1;
- 
--	if (!expect(sector < nr_sectors))
-+	if (!expect(device, sector < nr_sectors))
- 		goto out;
--	if (!expect(esector < nr_sectors))
-+	if (!expect(device, esector < nr_sectors))
- 		esector = nr_sectors - 1;
- 
- 	lbnr = BM_SECT_TO_BIT(nr_sectors-1);
-diff --git a/drivers/block/drbd/drbd_bitmap.c b/drivers/block/drbd/drbd_bitmap.c
-index 8e6534a90e12..289876ffbc31 100644
---- a/drivers/block/drbd/drbd_bitmap.c
-+++ b/drivers/block/drbd/drbd_bitmap.c
-@@ -448,7 +448,7 @@ int drbd_bm_init(struct drbd_device *device)
- 
- sector_t drbd_bm_capacity(struct drbd_device *device)
+diff --git a/drivers/input/touchscreen/atmel_mxt_ts.c b/drivers/input/touchscreen/atmel_mxt_ts.c
+index ccecd1441f0b..daad47c7823f 100644
+--- a/drivers/input/touchscreen/atmel_mxt_ts.c
++++ b/drivers/input/touchscreen/atmel_mxt_ts.c
+@@ -2761,7 +2761,7 @@ static ssize_t mxt_fw_version_show(struct device *dev,
  {
--	if (!expect(device->bitmap))
-+	if (!expect(device, device->bitmap))
- 		return 0;
- 	return device->bitmap->bm_dev_capacity;
+ 	struct mxt_data *data = dev_get_drvdata(dev);
+ 	struct mxt_info *info = data->info;
+-	return scnprintf(buf, PAGE_SIZE, "%u.%u.%02X\n",
++	return sysfs_emit(buf, "%u.%u.%02X\n",
+ 			 info->version >> 4, info->version & 0xf, info->build);
  }
-@@ -457,7 +457,7 @@ sector_t drbd_bm_capacity(struct drbd_device *device)
-  */
- void drbd_bm_cleanup(struct drbd_device *device)
- {
--	if (!expect(device->bitmap))
-+	if (!expect(device, device->bitmap))
- 		return;
- 	bm_free_pages(device->bitmap->bm_pages, device->bitmap->bm_number_of_pages);
- 	bm_vk_free(device->bitmap->bm_pages);
-@@ -636,7 +636,7 @@ int drbd_bm_resize(struct drbd_device *device, sector_t capacity, int set_new_bi
- 	int err = 0;
- 	bool growing;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return -ENOMEM;
- 
- 	drbd_bm_lock(device, "resize", BM_LOCKED_MASK);
-@@ -757,9 +757,9 @@ unsigned long _drbd_bm_total_weight(struct drbd_device *device)
- 	unsigned long s;
- 	unsigned long flags;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return 0;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return 0;
- 
- 	spin_lock_irqsave(&b->bm_lock, flags);
-@@ -783,9 +783,9 @@ unsigned long drbd_bm_total_weight(struct drbd_device *device)
- size_t drbd_bm_words(struct drbd_device *device)
- {
- 	struct drbd_bitmap *b = device->bitmap;
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return 0;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return 0;
- 
- 	return b->bm_words;
-@@ -794,7 +794,7 @@ size_t drbd_bm_words(struct drbd_device *device)
- unsigned long drbd_bm_bits(struct drbd_device *device)
- {
- 	struct drbd_bitmap *b = device->bitmap;
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return 0;
- 
- 	return b->bm_bits;
-@@ -816,9 +816,9 @@ void drbd_bm_merge_lel(struct drbd_device *device, size_t offset, size_t number,
- 
- 	end = offset + number;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return;
- 	if (number == 0)
- 		return;
-@@ -863,9 +863,9 @@ void drbd_bm_get_lel(struct drbd_device *device, size_t offset, size_t number,
- 
- 	end = offset + number;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return;
- 
- 	spin_lock_irq(&b->bm_lock);
-@@ -894,9 +894,9 @@ void drbd_bm_get_lel(struct drbd_device *device, size_t offset, size_t number,
- void drbd_bm_set_all(struct drbd_device *device)
- {
- 	struct drbd_bitmap *b = device->bitmap;
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return;
- 
- 	spin_lock_irq(&b->bm_lock);
-@@ -910,9 +910,9 @@ void drbd_bm_set_all(struct drbd_device *device)
- void drbd_bm_clear_all(struct drbd_device *device)
- {
- 	struct drbd_bitmap *b = device->bitmap;
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return;
- 
- 	spin_lock_irq(&b->bm_lock);
-@@ -1332,9 +1332,9 @@ static unsigned long bm_find_next(struct drbd_device *device,
- 	struct drbd_bitmap *b = device->bitmap;
- 	unsigned long i = DRBD_END_OF_BITMAP;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return i;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return i;
- 
- 	spin_lock_irq(&b->bm_lock);
-@@ -1436,9 +1436,9 @@ static int bm_change_bits_to(struct drbd_device *device, const unsigned long s,
- 	struct drbd_bitmap *b = device->bitmap;
- 	int c = 0;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return 1;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return 0;
- 
- 	spin_lock_irqsave(&b->bm_lock, flags);
-@@ -1582,9 +1582,9 @@ int drbd_bm_test_bit(struct drbd_device *device, const unsigned long bitnr)
- 	unsigned long *p_addr;
- 	int i;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return 0;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return 0;
- 
- 	spin_lock_irqsave(&b->bm_lock, flags);
-@@ -1619,9 +1619,9 @@ int drbd_bm_count_bits(struct drbd_device *device, const unsigned long s, const
- 	 * robust in case we screwed up elsewhere, in that case pretend there
- 	 * was one dirty bit in the requested area, so we won't try to do a
- 	 * local read there (no bitmap probably implies no disk) */
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return 1;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return 1;
- 
- 	spin_lock_irqsave(&b->bm_lock, flags);
-@@ -1635,7 +1635,7 @@ int drbd_bm_count_bits(struct drbd_device *device, const unsigned long s, const
- 				bm_unmap(p_addr);
- 			p_addr = bm_map_pidx(b, idx);
- 		}
--		if (expect(bitnr < b->bm_bits))
-+		if (expect(device, bitnr < b->bm_bits))
- 			c += (0 != test_bit_le(bitnr - (page_nr << (PAGE_SHIFT+3)), p_addr));
- 		else
- 			drbd_err(device, "bitnr=%lu bm_bits=%lu\n", bitnr, b->bm_bits);
-@@ -1668,9 +1668,9 @@ int drbd_bm_e_weight(struct drbd_device *device, unsigned long enr)
- 	unsigned long flags;
- 	unsigned long *p_addr, *bm;
- 
--	if (!expect(b))
-+	if (!expect(device, b))
- 		return 0;
--	if (!expect(b->bm_pages))
-+	if (!expect(device, b->bm_pages))
- 		return 0;
- 
- 	spin_lock_irqsave(&b->bm_lock, flags);
-diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index acfbba3c0f21..7213ffd69a16 100644
---- a/drivers/block/drbd/drbd_main.c
-+++ b/drivers/block/drbd/drbd_main.c
-@@ -1259,7 +1259,7 @@ static int _drbd_send_bitmap(struct drbd_device *device)
- 	struct bm_xfer_ctx c;
- 	int err;
- 
--	if (!expect(device->bitmap))
-+	if (!expect(device, device->bitmap))
- 		return false;
- 
- 	if (get_ldev(device)) {
-@@ -2250,9 +2250,9 @@ static void do_retry(struct work_struct *ws)
- 		bool expected;
- 
- 		expected =
--			expect(atomic_read(&req->completion_ref) == 0) &&
--			expect(req->rq_state & RQ_POSTPONED) &&
--			expect((req->rq_state & RQ_LOCAL_PENDING) == 0 ||
-+			expect(device, atomic_read(&req->completion_ref) == 0) &&
-+			expect(device, req->rq_state & RQ_POSTPONED) &&
-+			expect(device, (req->rq_state & RQ_LOCAL_PENDING) == 0 ||
- 				(req->rq_state & RQ_LOCAL_ABORTED) != 0);
- 
- 		if (!expected)
-diff --git a/drivers/block/drbd/drbd_nl.c b/drivers/block/drbd/drbd_nl.c
-index cb55b28fba78..60757ac31701 100644
---- a/drivers/block/drbd/drbd_nl.c
-+++ b/drivers/block/drbd/drbd_nl.c
-@@ -1543,7 +1543,7 @@ int drbd_adm_disk_opts(struct sk_buff *skb, struct genl_info *info)
- 		goto fail_unlock;
- 	}
- 
--	if (!expect(new_disk_conf->resync_rate >= 1))
-+	if (!expect(device, new_disk_conf->resync_rate >= 1))
- 		new_disk_conf->resync_rate = 1;
- 
- 	sanitize_disk_conf(device, new_disk_conf, device->ldev);
-diff --git a/drivers/block/drbd/drbd_polymorph_printk.h b/drivers/block/drbd/drbd_polymorph_printk.h
-index 914f2a3c0e2e..8e0082d139ba 100644
---- a/drivers/block/drbd/drbd_polymorph_printk.h
-+++ b/drivers/block/drbd/drbd_polymorph_printk.h
-@@ -130,10 +130,10 @@ void drbd_dyn_dbg_with_wrong_object_type(void);
-  *
-  * Unlike the assert macro, this macro returns a boolean result.
-  */
--#define expect(exp) ({								\
-+#define expect(x, exp) ({							\
- 		bool _bool = (exp);						\
- 		if (!_bool && drbd_ratelimit())					\
--			drbd_err(device, "ASSERTION %s FAILED in %s\n",		\
-+			drbd_err(x, "ASSERTION %s FAILED in %s\n",		\
- 				#exp, __func__);				\
- 		_bool;								\
- 		})
-diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
-index afbe0df3ff75..24d0a2262982 100644
---- a/drivers/block/drbd/drbd_receiver.c
-+++ b/drivers/block/drbd/drbd_receiver.c
-@@ -413,7 +413,7 @@ void __drbd_free_peer_req(struct drbd_device *device, struct drbd_peer_request *
- 	drbd_free_pages(device, peer_req->pages, is_net);
- 	D_ASSERT(device, atomic_read(&peer_req->pending_bios) == 0);
- 	D_ASSERT(device, drbd_interval_empty(&peer_req->i));
--	if (!expect(!(peer_req->flags & EE_CALL_AL_COMPLETE_IO))) {
-+	if (!expect(device, !(peer_req->flags & EE_CALL_AL_COMPLETE_IO))) {
- 		peer_req->flags &= ~EE_CALL_AL_COMPLETE_IO;
- 		drbd_al_complete_io(device, &peer_req->i);
- 	}
-@@ -1873,21 +1873,21 @@ read_in_block(struct drbd_peer_device *peer_device, u64 id, sector_t sector,
- 	/* assume request_size == data_size, but special case trim. */
- 	ds = data_size;
- 	if (trim) {
--		if (!expect(data_size == 0))
-+		if (!expect(peer_device, data_size == 0))
- 			return NULL;
- 		ds = be32_to_cpu(trim->size);
- 	} else if (zeroes) {
--		if (!expect(data_size == 0))
-+		if (!expect(peer_device, data_size == 0))
- 			return NULL;
- 		ds = be32_to_cpu(zeroes->size);
- 	}
- 
--	if (!expect(IS_ALIGNED(ds, 512)))
-+	if (!expect(peer_device, IS_ALIGNED(ds, 512)))
- 		return NULL;
- 	if (trim || zeroes) {
--		if (!expect(ds <= (DRBD_MAX_BBIO_SECTORS << 9)))
-+		if (!expect(peer_device, ds <= (DRBD_MAX_BBIO_SECTORS << 9)))
- 			return NULL;
--	} else if (!expect(ds <= DRBD_MAX_BIO_SIZE))
-+	} else if (!expect(peer_device, ds <= DRBD_MAX_BIO_SIZE))
- 		return NULL;
- 
- 	/* even though we trust out peer,
--- 
-2.38.1
 
+@@ -2771,7 +2771,7 @@ static ssize_t mxt_hw_version_show(struct device *dev,
+ {
+ 	struct mxt_data *data = dev_get_drvdata(dev);
+ 	struct mxt_info *info = data->info;
+-	return scnprintf(buf, PAGE_SIZE, "%u.%u\n",
++	return sysfs_emit(buf, "%u.%u\n",
+ 			 info->family_id, info->variant_id);
+ }
+
+diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
+index 9ac1378610bc..b2ec2e04f943 100644
+--- a/drivers/input/touchscreen/edt-ft5x06.c
++++ b/drivers/input/touchscreen/edt-ft5x06.c
+@@ -445,7 +445,7 @@ static ssize_t edt_ft5x06_setting_show(struct device *dev,
+ 		*field = val;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%d\n", val);
++	count = sysfs_emit(buf, "%d\n", val);
+ out:
+ 	mutex_unlock(&tsdata->mutex);
+ 	return error ?: count;
+diff --git a/drivers/input/touchscreen/hideep.c b/drivers/input/touchscreen/hideep.c
+index e9547ee29756..c0d72ba3c44a 100644
+--- a/drivers/input/touchscreen/hideep.c
++++ b/drivers/input/touchscreen/hideep.c
+@@ -922,7 +922,7 @@ static ssize_t hideep_fw_version_show(struct device *dev,
+ 	ssize_t len;
+
+ 	mutex_lock(&ts->dev_mutex);
+-	len = scnprintf(buf, PAGE_SIZE, "%04x\n",
++	len = sysfs_emit(buf, "%04x\n",
+ 			be16_to_cpu(ts->dwz_info.release_ver));
+ 	mutex_unlock(&ts->dev_mutex);
+
+@@ -937,7 +937,7 @@ static ssize_t hideep_product_id_show(struct device *dev,
+ 	ssize_t len;
+
+ 	mutex_lock(&ts->dev_mutex);
+-	len = scnprintf(buf, PAGE_SIZE, "%04x\n",
++	len = sysfs_emit(buf, "%04x\n",
+ 			be16_to_cpu(ts->dwz_info.product_id));
+ 	mutex_unlock(&ts->dev_mutex);
+
+diff --git a/drivers/input/touchscreen/hycon-hy46xx.c b/drivers/input/touchscreen/hycon-hy46xx.c
+index 891d0430083e..2d34959cb510 100644
+--- a/drivers/input/touchscreen/hycon-hy46xx.c
++++ b/drivers/input/touchscreen/hycon-hy46xx.c
+@@ -202,7 +202,7 @@ static ssize_t hycon_hy46xx_setting_show(struct device *dev,
+ 		*field = val;
+ 	}
+
+-	count = scnprintf(buf, PAGE_SIZE, "%d\n", val);
++	count = sysfs_emit(buf, "%d\n", val);
+
+ out:
+ 	mutex_unlock(&tsdata->mutex);
+diff --git a/drivers/input/touchscreen/ilitek_ts_i2c.c b/drivers/input/touchscreen/ilitek_ts_i2c.c
+index c5d259c76adc..114dceb13b77 100644
+--- a/drivers/input/touchscreen/ilitek_ts_i2c.c
++++ b/drivers/input/touchscreen/ilitek_ts_i2c.c
+@@ -512,7 +512,7 @@ static ssize_t firmware_version_show(struct device *dev,
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct ilitek_ts_data *ts = i2c_get_clientdata(client);
+
+-	return scnprintf(buf, PAGE_SIZE,
++	return sysfs_emit(buf,
+ 			 "fw version: [%02X%02X.%02X%02X.%02X%02X.%02X%02X]\n",
+ 			 ts->firmware_ver[0], ts->firmware_ver[1],
+ 			 ts->firmware_ver[2], ts->firmware_ver[3],
+@@ -527,7 +527,7 @@ static ssize_t product_id_show(struct device *dev,
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct ilitek_ts_data *ts = i2c_get_clientdata(client);
+
+-	return scnprintf(buf, PAGE_SIZE, "product id: [%04X], module: [%s]\n",
++	return sysfs_emit(buf, "product id: [%04X], module: [%s]\n",
+ 			 ts->mcu_ver, ts->product_id);
+ }
+ static DEVICE_ATTR_RO(product_id);
+diff --git a/drivers/input/touchscreen/iqs5xx.c b/drivers/input/touchscreen/iqs5xx.c
+index 34c4cca57d13..9119e6b5c44f 100644
+--- a/drivers/input/touchscreen/iqs5xx.c
++++ b/drivers/input/touchscreen/iqs5xx.c
+@@ -943,7 +943,7 @@ static ssize_t fw_info_show(struct device *dev,
+ 	if (!iqs5xx->dev_id_info.bl_status)
+ 		return -ENODATA;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u.%u.%u.%u:%u.%u\n",
++	return sysfs_emit(buf, "%u.%u.%u.%u:%u.%u\n",
+ 			 be16_to_cpu(iqs5xx->dev_id_info.prod_num),
+ 			 be16_to_cpu(iqs5xx->dev_id_info.proj_num),
+ 			 iqs5xx->dev_id_info.major_ver,
+diff --git a/drivers/input/touchscreen/usbtouchscreen.c b/drivers/input/touchscreen/usbtouchscreen.c
+index d6d04b9f04fc..4b2606805240 100644
+--- a/drivers/input/touchscreen/usbtouchscreen.c
++++ b/drivers/input/touchscreen/usbtouchscreen.c
+@@ -456,7 +456,7 @@ static ssize_t mtouch_firmware_rev_show(struct device *dev,
+ 	struct usbtouch_usb *usbtouch = usb_get_intfdata(intf);
+ 	struct mtouch_priv *priv = usbtouch->priv;
+
+-	return scnprintf(output, PAGE_SIZE, "%1x.%1x\n",
++	return sysfs_emit(output, "%1x.%1x\n",
+ 			 priv->fw_rev_major, priv->fw_rev_minor);
+ }
+ static DEVICE_ATTR(firmware_rev, 0444, mtouch_firmware_rev_show, NULL);
+diff --git a/drivers/input/touchscreen/wdt87xx_i2c.c b/drivers/input/touchscreen/wdt87xx_i2c.c
+index 166edeb77776..8f1b45ec2618 100644
+--- a/drivers/input/touchscreen/wdt87xx_i2c.c
++++ b/drivers/input/touchscreen/wdt87xx_i2c.c
+@@ -887,7 +887,7 @@ static ssize_t config_csum_show(struct device *dev,
+ 	cfg_csum = wdt->param.xmls_id1;
+ 	cfg_csum = (cfg_csum << 16) | wdt->param.xmls_id2;
+
+-	return scnprintf(buf, PAGE_SIZE, "%x\n", cfg_csum);
++	return sysfs_emit(buf, "%x\n", cfg_csum);
+ }
+
+ static ssize_t fw_version_show(struct device *dev,
+@@ -896,7 +896,7 @@ static ssize_t fw_version_show(struct device *dev,
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct wdt87xx_data *wdt = i2c_get_clientdata(client);
+
+-	return scnprintf(buf, PAGE_SIZE, "%x\n", wdt->param.fw_id);
++	return sysfs_emit(buf, "%x\n", wdt->param.fw_id);
+ }
+
+ static ssize_t plat_id_show(struct device *dev,
+@@ -905,7 +905,7 @@ static ssize_t plat_id_show(struct device *dev,
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct wdt87xx_data *wdt = i2c_get_clientdata(client);
+
+-	return scnprintf(buf, PAGE_SIZE, "%x\n", wdt->param.plat_id);
++	return sysfs_emit(buf, "%x\n", wdt->param.plat_id);
+ }
+
+ static ssize_t update_config_store(struct device *dev,
+-- 
+2.25.1
