@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD33063FAE3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E199A63FAE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbiLAWtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S231622AbiLAWtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiLAWs4 (ORCPT
+        with ESMTP id S231290AbiLAWs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:48:56 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A6E99F62
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:48:54 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id r8so3539502ljn.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 14:48:54 -0800 (PST)
+        Thu, 1 Dec 2022 17:48:57 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07E95832
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:48:55 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id r12so4806193lfp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 14:48:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BlO6QTZCwR1RLEDuFRe8THkhQOGpd88LnLO5Y8el1kY=;
-        b=OQa+DAdUw25Ne94o8Inx5iCJ59YUCMg+QHfRo6xIu6a4xvMjlsgj5c2yxNNo+UVHxE
-         HeENFmyRRYnS1NoX9sJhjEOFj5+NH0pCOGM4g1y5/p/r6KRF7qzeZEWMkgF6KiVjdQY0
-         VB+Qqyl8R1w0leOOZ82Mhtoj/85biqpWkIevsh4n7JGId7+6BtCdn1LRtjcrttvpK45S
-         sUk8RqXnMV5eqe3OIi+AHNAUMfAQv3xxUHEMuIHZr5wgOa19b0vfcPEGEebDjTPUjC7/
-         ckOTciOmLdDcV4kdYI+fCuGBRYCNf0lusxwinAq2I5mZ580SvwR8PTwhEhKr1XuOc2nl
-         ksnA==
+        bh=wN4DUy4CI6jrcJgFDHsjquJNvQgQh0CBq/XFO2ynUaE=;
+        b=TncvI/pnkeQKaTJfWTddQy6i1xGln5P4sPqmOYmoh8XOX9/iXQfw6N0SvdcfSfVASv
+         r137ImoL64G167gOUOSvgrXtIHtGGfrhTP5jgM/MLOxfUMfiWlSvACwPTVobcHuYR46g
+         MwX4adfi0X7LDRT5bAqj9d2gd1RESvJMB4g/OptXCn94VM8wd2dF6bzxrbT95M2Wt2jJ
+         3N/1pSh5ZX9eNzRDEQ3flEz9Sh7fqVzH0ex6eXtIxDrK1cpjafeWgUQhv2CSqKbFY8Ej
+         pem/ne4CpXcoRv39ko8AWaaMYYtkpUnikYKqfVJQTMfx0IZTrNT3xRK5JlYpFVQHdcLN
+         p69Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BlO6QTZCwR1RLEDuFRe8THkhQOGpd88LnLO5Y8el1kY=;
-        b=Dro5LYpo+7qu7wFduXtcc5waS4INAzDlE8nt+CMuoBpZLcoHqerYsX96B1Z72mSutm
-         7es/vLtFAQJl0JVyJCydxp6f+eGuxreTanYGqHHIRf4aouU6VhCB1Jndz8Miapv7Gm8a
-         CATqmgsLrOrJq5TtoGePtr5NlxDZrUuxq+8vkmKSwyVSs0DgpaWjPPy7mOJlJg/vPBEQ
-         cux1y6RHiizpeMdem1YnmVZYIZCW+kI8xkbKRCiTtnrRWC7HyhOYlpXWAjWXmVi04yZG
-         uGMKzeVmxOhl0ZZDo9Jr11F1lXAvaxDU0rq/h/EfdBC/9MkQfBEdtgv/jEWD9lZ1nEYP
-         7fYw==
-X-Gm-Message-State: ANoB5plfezTsck+ESM1qC8jlwttOCh3BTz59MYvDvEzX1tOZBuM9yK60
-        d/p2sUHOn77tbHho3uROfb3Ekg==
-X-Google-Smtp-Source: AA0mqf5E3BX1xvmG/ZbvCu2JxFuLoiltJ9sVdMphUNGSiGKb9Gk6LgpxIlyJTnX8txMUn7W/r7Qskg==
-X-Received: by 2002:a2e:b891:0:b0:277:8df:88a7 with SMTP id r17-20020a2eb891000000b0027708df88a7mr23324289ljp.139.1669934932549;
-        Thu, 01 Dec 2022 14:48:52 -0800 (PST)
+        bh=wN4DUy4CI6jrcJgFDHsjquJNvQgQh0CBq/XFO2ynUaE=;
+        b=laJNU4nCsRMuu0dHafbbUfC5soS5DxV+PLn1KvxusvC83vtPkI1jlhID6A8q/TV3sY
+         h7/NObEd7yTP3VA/DvKtRcSM+cRa+aYA0DJxx2zTM62LYctPZm+YdjDDUIue9eZF6nhP
+         WFrDMfBROWrugSYnOhEqc0TKOXaAPokWujDq/qX8E2wGMgDyFNG0tp6onQ07wi+pCzIg
+         X1sfvRUojMIduyv8+eK7JH8Wo3l2WsLXPp7x3QXGf7KadZN/rMLr7zolI3sYPts6l5Mb
+         wIR5BDVOgLGkzAmbdoY0fHGGXbNTx1xm2JdrScbh6hQ1OkigKv/MqBPIgjXUfp/8/qoG
+         4Z9A==
+X-Gm-Message-State: ANoB5pl4sCIcwh7+kEHexkywl+genPVRJodtGvoKrrjooULN6wGJzqq2
+        h+eiOemXz2UJ72pTDRz4RDPuyQ==
+X-Google-Smtp-Source: AA0mqf5DW6loVcF3hzhX8GTVWuVnFDAc4kFRcXK0FVNwJuoCTfSpwo3G+W+r5qwFnML4wed50lRdOg==
+X-Received: by 2002:a05:6512:715:b0:4b4:e552:5638 with SMTP id b21-20020a056512071500b004b4e5525638mr14555910lfs.287.1669934933946;
+        Thu, 01 Dec 2022 14:48:53 -0800 (PST)
 Received: from localhost.localdomain ([95.67.24.131])
-        by smtp.gmail.com with ESMTPSA id g7-20020a056512118700b00497ab34bf5asm797573lfr.20.2022.12.01.14.48.51
+        by smtp.gmail.com with ESMTPSA id g7-20020a056512118700b00497ab34bf5asm797573lfr.20.2022.12.01.14.48.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 14:48:52 -0800 (PST)
+        Thu, 01 Dec 2022 14:48:53 -0800 (PST)
 From:   Andrew Melnychenko <andrew@daynix.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, mst@redhat.com, jasowang@redhat.com,
@@ -57,9 +57,9 @@ To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org
 Cc:     devel@daynix.com
-Subject: [PATCH v4 3/6] driver/net/tun: Added features for USO.
-Date:   Fri,  2 Dec 2022 00:33:29 +0200
-Message-Id: <20221201223332.249441-3-andrew@daynix.com>
+Subject: [PATCH v4 4/6] uapi/linux/virtio_net.h: Added USO types.
+Date:   Fri,  2 Dec 2022 00:33:30 +0200
+Message-Id: <20221201223332.249441-4-andrew@daynix.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221201223332.249441-1-andrew@daynix.com>
 References: <20221201223332.249441-1-andrew@daynix.com>
@@ -74,78 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added support for USO4 and USO6.
-For now, to "enable" USO, it's required to set both
-USO4 and USO6 simultaneously.
-USO enables NETIF_F_GSO_UDP_L4.
+Added new GSO type for USO: VIRTIO_NET_HDR_GSO_UDP_L4.
+Feature VIRTIO_NET_F_HOST_USO allows to enable NETIF_F_GSO_UDP_L4.
+Separated VIRTIO_NET_F_GUEST_USO4 & VIRTIO_NET_F_GUEST_USO6 features
+required for Windows guests.
 
 Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
 ---
- drivers/net/tap.c | 10 ++++++++--
- drivers/net/tun.c |  8 +++++++-
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ include/uapi/linux/virtio_net.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index 9e75ed3f08ce..a2be1994b389 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -957,6 +957,10 @@ static int set_offload(struct tap_queue *q, unsigned long arg)
- 			if (arg & TUN_F_TSO6)
- 				feature_mask |= NETIF_F_TSO6;
- 		}
+diff --git a/include/uapi/linux/virtio_net.h b/include/uapi/linux/virtio_net.h
+index 6cb842ea8979..cbc631247489 100644
+--- a/include/uapi/linux/virtio_net.h
++++ b/include/uapi/linux/virtio_net.h
+@@ -57,6 +57,10 @@
+ 					 * Steering */
+ #define VIRTIO_NET_F_CTRL_MAC_ADDR 23	/* Set MAC address */
+ #define VIRTIO_NET_F_NOTF_COAL	53	/* Device supports notifications coalescing */
++#define VIRTIO_NET_F_GUEST_USO4	54	/* Guest can handle USOv4 in. */
++#define VIRTIO_NET_F_GUEST_USO6	55	/* Guest can handle USOv6 in. */
++#define VIRTIO_NET_F_HOST_USO	56	/* Host can handle USO in. */
 +
-+		/* TODO: for now USO4 and USO6 should work simultaneously */
-+		if ((arg & (TUN_F_USO4 | TUN_F_USO6)) == (TUN_F_USO4 | TUN_F_USO6))
-+			features |= NETIF_F_GSO_UDP_L4;
- 	}
- 
- 	/* tun/tap driver inverts the usage for TSO offloads, where
-@@ -967,7 +971,8 @@ static int set_offload(struct tap_queue *q, unsigned long arg)
- 	 * When user space turns off TSO, we turn off GSO/LRO so that
- 	 * user-space will not receive TSO frames.
- 	 */
--	if (feature_mask & (NETIF_F_TSO | NETIF_F_TSO6))
-+	if (feature_mask & (NETIF_F_TSO | NETIF_F_TSO6) ||
-+	    (feature_mask & (TUN_F_USO4 | TUN_F_USO6)) == (TUN_F_USO4 | TUN_F_USO6))
- 		features |= RX_OFFLOADS;
- 	else
- 		features &= ~RX_OFFLOADS;
-@@ -1091,7 +1096,8 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
- 	case TUNSETOFFLOAD:
- 		/* let the user check for future flags */
- 		if (arg & ~(TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TSO6 |
--			    TUN_F_TSO_ECN | TUN_F_UFO))
-+			    TUN_F_TSO_ECN | TUN_F_UFO |
-+			    TUN_F_USO4 | TUN_F_USO6))
- 			return -EINVAL;
- 
- 		rtnl_lock();
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 24001112c323..a7b9808368d0 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -185,7 +185,7 @@ struct tun_struct {
- 	struct net_device	*dev;
- 	netdev_features_t	set_features;
- #define TUN_USER_FEATURES (NETIF_F_HW_CSUM|NETIF_F_TSO_ECN|NETIF_F_TSO| \
--			  NETIF_F_TSO6)
-+			  NETIF_F_TSO6 | NETIF_F_GSO_UDP_L4)
- 
- 	int			align;
- 	int			vnet_hdr_sz;
-@@ -2885,6 +2885,12 @@ static int set_offload(struct tun_struct *tun, unsigned long arg)
- 		}
- 
- 		arg &= ~TUN_F_UFO;
-+
-+		/* TODO: for now USO4 and USO6 should work simultaneously */
-+		if (arg & TUN_F_USO4 && arg & TUN_F_USO6) {
-+			features |= NETIF_F_GSO_UDP_L4;
-+			arg &= ~(TUN_F_USO4 | TUN_F_USO6);
-+		}
- 	}
- 
- 	/* This gives the user a way to test for new features in future by
+ #define VIRTIO_NET_F_HASH_REPORT  57	/* Supports hash report */
+ #define VIRTIO_NET_F_RSS	  60	/* Supports RSS RX steering */
+ #define VIRTIO_NET_F_RSC_EXT	  61	/* extended coalescing info */
+@@ -130,6 +134,7 @@ struct virtio_net_hdr_v1 {
+ #define VIRTIO_NET_HDR_GSO_TCPV4	1	/* GSO frame, IPv4 TCP (TSO) */
+ #define VIRTIO_NET_HDR_GSO_UDP		3	/* GSO frame, IPv4 UDP (UFO) */
+ #define VIRTIO_NET_HDR_GSO_TCPV6	4	/* GSO frame, IPv6 TCP */
++#define VIRTIO_NET_HDR_GSO_UDP_L4	5	/* GSO frame, IPv4& IPv6 UDP (USO) */
+ #define VIRTIO_NET_HDR_GSO_ECN		0x80	/* TCP has ECN set */
+ 	__u8 gso_type;
+ 	__virtio16 hdr_len;	/* Ethernet + IP + tcp/udp hdrs */
 -- 
 2.38.1
 
