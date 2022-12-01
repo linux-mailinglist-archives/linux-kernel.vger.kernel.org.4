@@ -2,161 +2,599 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF8D63ED89
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814F263ED99
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiLAKVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S230262AbiLAKXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiLAKVR (ORCPT
+        with ESMTP id S229968AbiLAKXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:21:17 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09C898956
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:21:07 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id j4so1828356lfk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:21:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yJWC4EnSIdOHOak+Y01i6W7TmDZjyxRR2uPhy+FOZLk=;
-        b=czOauT1/LL1bLcLrnxMZ7LyUIUmobSmtcydtd7PTiowxd5khBSoAy8Q5Jh0363tYBX
-         mK6jk8DukOA5/cDl1CBuODKtFLZZ4KfXpQGGA5QLqsxFd8hb8DU8/pWLYe5lT8KxvPHX
-         2+605fUYdZQDOI8zSJuqoHxbtfkc1czcwu19yr+IB2DL/MOcMz5r+65zOnMIyKXdmHjH
-         RR9S+Bb+UGytEvll9EFZUpNH1RYOlvOsEomq0QEkxeStmNzb8RCAKaFyyayaLEcisv8A
-         kD0BdlRMNBTNf3S8XK1Jsl6LMH5QKLS/hEAotw654okuI+vL/RhU4XWmIcVm5hAEREqj
-         s+Gw==
+        Thu, 1 Dec 2022 05:23:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8619C9581A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:22:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669890126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xoPax3jULmyNPRBQAOAyG4eZNgpJaR2/NZ388qv7Cls=;
+        b=WxXzAaa24w+lyvtHyTx6nH6B77Cgq+UHaps9iJqPchfHOiBzRaXwlqbeTwG0Kl25i/IsL9
+        bbbBMLpb7oFiFbX87bhpHwRLV2oNTGmtEqX0IregZiVMIrefNAuMLv8DXUAJGY51xlTY1W
+        bf8Vch456kTAlG8yGF0FzyDM4ovv5R8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-361-36XFkZJjOOeMy1AOBAe6xQ-1; Thu, 01 Dec 2022 05:22:05 -0500
+X-MC-Unique: 36XFkZJjOOeMy1AOBAe6xQ-1
+Received: by mail-wm1-f72.google.com with SMTP id c26-20020a05600c0ada00b003d07fd2473bso269654wmr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:22:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yJWC4EnSIdOHOak+Y01i6W7TmDZjyxRR2uPhy+FOZLk=;
-        b=qkTIH2PbBeWduH8zGdvClXha1TValrqFPrRtVEP4xq4XakV9c1KZwOYtC2QTljOIc0
-         NUrSi+7arQD8rMmRdp7bKiZAEsMp1emaZF1fhms6Ko02G6O4Oz7gOG2S7vG6mDtWMAcJ
-         dkMhsKHjPF5oMKyUiXHYNX0zCYEPuqc2v3XphX7zWhpcCav33WQ37Xz2sm6F55teTrvG
-         psee2oi2xqWU+Le5Hy7a3HLAAtUTUSBxl6p79rfLqZtJ6ePErUEOwoZGH05WPH2jvuhC
-         i0jnqPvvx4TljBr9btHm6qz27UjEzgYPEARHN282NlAFrqVMMNvKZwUW+Eb16H2PA9zE
-         voOw==
-X-Gm-Message-State: ANoB5pkglOfAUqyvQ3pfqz6Hvc3YFwINym3bZRDJKt+n2Z4WbRRBqpr+
-        0CMFGXu+6zw09YW99WPOyMnSkg==
-X-Google-Smtp-Source: AA0mqf6CUSYZrSFSc59I2YqsCSJOMbf+X1AkF2Fb2hvkfIrHoAJHah4FhaNgx3RzM/yZ3iPB9Yg2fA==
-X-Received: by 2002:ac2:4316:0:b0:4b5:d8e:c12 with SMTP id l22-20020ac24316000000b004b50d8e0c12mr7626503lfh.665.1669890066328;
-        Thu, 01 Dec 2022 02:21:06 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b4-20020a2eb904000000b00279cbcfd7dbsm290384ljb.30.2022.12.01.02.21.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 02:21:05 -0800 (PST)
-Message-ID: <4e94c635-4cbb-449e-24af-f6fee47fb45e@linaro.org>
-Date:   Thu, 1 Dec 2022 11:21:04 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xoPax3jULmyNPRBQAOAyG4eZNgpJaR2/NZ388qv7Cls=;
+        b=ppjjnzq+WUBF4AOmtkzAB6yoRQiQBVmIDI8di/ig89ZAF26cqU8GZjiswQdZBv7MTb
+         Y+qvLHmigaTXhgMAI6/c9vm/+MIMW+Q85sfbwOdWC70dncXiAbWVVTKXec7ysQlfP6lY
+         ELfqcYyIufQEJXhX1aIY57miywzVecLyrH8whiT8ouAE2UQ4lMQ7bLsDbljTtrI5Qrtf
+         zP8ZIxSdHY1QfGU67LYOMn0zMw7o8om1/2JhAiYMq5fBrXgAq1kGVuSyVJn6xSkvPEjf
+         JYK8JSnoPWrqMywdtCGwxgZV5ZSlCNlkvPntoK3DRS2hJCGGVWEQnOxCPBFwhcRI2FF6
+         DtaQ==
+X-Gm-Message-State: ANoB5pkMhfpj4BwWRnvOG/cMlzviK+AKAoIetK2BccDq0MIDx88xOqzT
+        oOmx7MeyaSopTLaxJ9P/37uQ1PxlBjwvslFvkpYGzSvxoua1UjKJRjRWPMBJs7jKE9RGOMAliOv
+        Q3na+4TD8cS+VYLE9MymXH5Zd
+X-Received: by 2002:a05:6000:1e0f:b0:238:3d2a:cd12 with SMTP id bj15-20020a0560001e0f00b002383d2acd12mr40496796wrb.172.1669890124098;
+        Thu, 01 Dec 2022 02:22:04 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7/6SPLV7WLGix8AFoMaorddK5kjKey9+TIwMrbhpSJanYvm2KPLO+aCIKGzA9h0jZku9ccUw==
+X-Received: by 2002:a05:6000:1e0f:b0:238:3d2a:cd12 with SMTP id bj15-20020a0560001e0f00b002383d2acd12mr40496782wrb.172.1669890123810;
+        Thu, 01 Dec 2022 02:22:03 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id d10-20020adffbca000000b002366f9bd717sm4862207wrs.45.2022.12.01.02.22.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 02:22:03 -0800 (PST)
+Date:   Thu, 1 Dec 2022 11:21:53 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v2 6/6] test/vsock: vsock_perf utility
+Message-ID: <20221201102153.nhi3xw7gkabdckfc@sgarzare-redhat>
+References: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
+ <93a19249-e3f3-c1f8-c58a-0f549b94f1b5@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 09/14] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20221118010627.70576-1-hal.feng@starfivetech.com>
- <20221118010627.70576-10-hal.feng@starfivetech.com>
- <1d62f95f-0edc-afd4-abb4-37fadc0b6a47@linaro.org>
- <72b3d10e-5a8e-ed42-6808-f53773913422@starfivetech.com>
- <768c2add-4c1f-0b36-5709-dbcdd560f504@starfivetech.com>
- <1fb1474b-ec13-e83a-973e-bd9e9a86cb44@linaro.org>
- <98d1bac7-8af5-f481-59b2-d58ca4c228ee@starfivetech.com>
- <9183bac6-121e-0027-a88b-d77d5c9a077e@linaro.org>
- <e954511b-e74a-2c3a-95ec-d33c938b146f@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e954511b-e74a-2c3a-95ec-d33c938b146f@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <93a19249-e3f3-c1f8-c58a-0f549b94f1b5@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2022 19:05, Hal Feng wrote:
-> On Wed, 30 Nov 2022 16:19:06 +0100, Krzysztof Kozlowski wrote:
->> On 30/11/2022 16:12, Hal Feng wrote:
->>> On Wed, 30 Nov 2022 12:48:30 +0100, Krzysztof Kozlowski wrote:
->>>> On 30/11/2022 10:47, Hal Feng wrote:
->>>>> On Fri, 25 Nov 2022 14:41:12 +0800, Hal Feng wrote:
->>>>>> On Mon, 21 Nov 2022 09:47:08 +0100, Krzysztof Kozlowski wrote:
->>>>>>> On 18/11/2022 02:06, Hal Feng wrote:
->>>>>>>> From: Emil Renner Berthing <kernel@esmil.dk>
->>>>>>>>
->>>>>>>> Add bindings for the system clock and reset generator (SYSCRG) on the
->>>>>>>> JH7110 RISC-V SoC by StarFive Ltd.
->>>>>>>>
->>>>>>>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->>>>>>>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->>>>>>>
->>>>>>> Binding headers are coming with the file bringing bindings for the
->>>>>>> device, so you need to squash patches.
->>>>>>
->>>>>> As we discussed in patch 7, could I merge patch 7, 8, 9, 10 and add the
->>>>>> following files in one commit?
->>>>>>
->>>>>> include/dt-bindings/clock/starfive,jh7110-crg.h
->>>>>> include/dt-bindings/reset/starfive,jh7110-crg.h
->>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
->>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
->>>>>
->>>>> Hi, Krzysztof,
->>>>>
->>>>> Could you please give me some suggestions?
->>>>
->>>> You can keep aon and sys split. First add one of them with their own
->>>> headers. Then add second with their own defines.
->>>
->>> You mean split patch 7 and patch 8 into sys part and aon part
->>> respectively? There are totally five regions (sys/aon/stg/isp/vout)
->>> for clocks and resets in JH7110. If we do that, there will be 5
->>> headers for JH7110 in either clock or reset directory finally. Is
->>> that OK if there are too many headers for just one SoC?
->>
->>
->> Sorry, I lost the track of what patches you have. The comment was -
->> bindings include both the doc and headers. You want to split some, some
->> merge, sorry, no clue. I did not propose splitting headers...
-> 
-> It's ok. The problem was that the header
-> 
-> include/dt-bindings/clock/starfive,jh7110-crg.h
-> 
-> was used in both
-> 
-> Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-> 
-> and
-> 
-> Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml.
-> 
-> The same for include/dt-bindings/reset/starfive,jh7110-crg.h.
-> So should I add these four files in one patch?
+On Fri, Nov 25, 2022 at 05:15:08PM +0000, Arseniy Krasnov wrote:
+>This adds utility to check vsock rx/tx performance.
+>
+>Usage as sender:
+>./vsock_perf -p <port> -m <bytes to send)
+>Usage as receiver:
+>./vsock_perf -c <cid> -p <port> -r <SO_RCVLOWAT>
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> tools/testing/vsock/Makefile     |   1 +
+> tools/testing/vsock/README       |  34 +++
+> tools/testing/vsock/vsock_perf.c | 400 +++++++++++++++++++++++++++++++
+> 3 files changed, 435 insertions(+)
+> create mode 100644 tools/testing/vsock/vsock_perf.c
+>
+>diff --git a/tools/testing/vsock/Makefile b/tools/testing/vsock/Makefile
+>index f8293c6910c9..d36fdd59fe2e 100644
+>--- a/tools/testing/vsock/Makefile
+>+++ b/tools/testing/vsock/Makefile
+>@@ -3,6 +3,7 @@ all: test
+> test: vsock_test vsock_diag_test
+> vsock_test: vsock_test.o timeout.o control.o util.o
+> vsock_diag_test: vsock_diag_test.o timeout.o control.o util.o
+>+vsock_perf: vsock_perf.o
+>
+> CFLAGS += -g -O2 -Werror -Wall -I. -I../../include -I../../../usr/include -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -D_GNU_SOURCE
+> .PHONY: all test clean
+>diff --git a/tools/testing/vsock/README b/tools/testing/vsock/README
+>index 4d5045e7d2c3..dbeba1d62016 100644
+>--- a/tools/testing/vsock/README
+>+++ b/tools/testing/vsock/README
+>@@ -35,3 +35,37 @@ Invoke test binaries in both directions as follows:
+>                        --control-port=$GUEST_IP \
+>                        --control-port=1234 \
+>                        --peer-cid=3
 
-No. I think I wrote proposed flow of patches:
-1. syscrg bindings with header
-2. aoncrg bindings with changes to header
+I'm not a native speaker, so the suggestions below may be wrong.
 
-Why do you need to merge anything?
+>+
+>+vsock_perf utility
+>+-------------------
+>+'vsock_perf' is simple tool to measure vsock performance. It works in
 
-Best regards,
-Krzysztof
+is a simple tool
+
+>+sender/receiver modes: sender waits for connection at specified port,
+>+and after accept, starts data transmission to receiver. After data
+   ^
+and after accepting it
+                                              ^
+                                              to the receiver
+
+>+processing is done, it prints several metrics(see below).
+>+
+>+Usage:
+>+# run as sender
+>+# listen port 1234, tx buffer size is 1MB, send of data 1G
+>+./vsock_perf -s -p 1234 -b 1MB -m 1G
+
+Like for vsock_test and vsock_diag_test I would use only the long form 
+for the parameters (e.g. --sender, --port, etc.)
+
+>+
+>+Output:
+>+tx performance: A Gb/s
+>+
+>+Output explanation:
+>+A is calculated as "number of bytes to send" / "time in tx loop"
+>+
+>+# run as receiver
+>+# connect to CID 2, port 1234, rx buffer size is 1MB, peer buf is 1G, SO_RCVLOWAT is 65536
+>+./vsock_perf -c 2 -p 1234 -b 1MB -v 1G -r 65536
+>+
+>+Output:
+>+rx performance: A Gb/s
+>+total in 'read()': B sec
+>+POLLIN wakeups: C
+>+average in 'read()': D ns
+>+
+>+Output explanation:
+>+A is calculated as "number of received bytes" / "time in rx loop".
+>+B is time, spent in 'read()' system call(excluding 'poll()')
+>+C is number of 'poll()' wake ups with POLLIN bit set.
+>+D is B / C, e.g. average amount of time, spent in single 'read()'.
+>diff --git a/tools/testing/vsock/vsock_perf.c b/tools/testing/vsock/vsock_perf.c
+>new file mode 100644
+>index 000000000000..bca2027de52d
+>--- /dev/null
+>+++ b/tools/testing/vsock/vsock_perf.c
+>@@ -0,0 +1,400 @@
+>+// SPDX-License-Identifier: GPL-2.0-only
+>+/*
+>+ * vsock_perf - benchmark utility for vsock.
+>+ *
+>+ * Copyright (C) 2022 SberDevices.
+>+ *
+>+ * Author: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>+ */
+>+#include <getopt.h>
+>+#include <stdio.h>
+>+#include <stdlib.h>
+>+#include <stdbool.h>
+>+#include <string.h>
+>+#include <errno.h>
+>+#include <unistd.h>
+>+#include <time.h>
+>+#include <sys/mman.h>
+>+#include <stdint.h>
+>+#include <poll.h>
+>+#include <sys/socket.h>
+>+#include <linux/vm_sockets.h>
+>+
+>+#define DEFAULT_BUF_SIZE_BYTES	(128 * 1024)
+>+#define DEFAULT_TO_SEND_BYTES	(64 * 1024)
+>+#define DEFAULT_VSOCK_BUF_BYTES (256 * 1024)
+>+#define DEFAULT_RCVLOWAT_BYTES	1
+>+#define DEFAULT_PORT		1234
+>+#define DEFAULT_CID		2
+>+
+>+#define BYTES_PER_GB		(1024 * 1024 * 1024ULL)
+>+#define NSEC_PER_SEC		(1000000000ULL)
+>+
+>+static unsigned int port = DEFAULT_PORT;
+>+static unsigned long buf_size_bytes = DEFAULT_BUF_SIZE_BYTES;
+>+static unsigned long vsock_buf_bytes = DEFAULT_VSOCK_BUF_BYTES;
+>+
+>+static inline time_t current_nsec(void)
+>+{
+>+	struct timespec ts;
+>+
+>+	if (clock_gettime(CLOCK_REALTIME, &ts)) {
+>+		perror("clock_gettime");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	return (ts.tv_sec * NSEC_PER_SEC) + ts.tv_nsec;
+>+}
+>+
+>+/* From lib/cmdline.c. */
+>+static unsigned long memparse(const char *ptr)
+>+{
+>+	char *endptr;
+>+
+>+	unsigned long long ret = strtoull(ptr, &endptr, 0);
+>+
+>+	switch (*endptr) {
+>+	case 'E':
+>+	case 'e':
+>+		ret <<= 10;
+>+	case 'P':
+>+	case 'p':
+>+		ret <<= 10;
+>+	case 'T':
+>+	case 't':
+>+		ret <<= 10;
+>+	case 'G':
+>+	case 'g':
+>+		ret <<= 10;
+>+	case 'M':
+>+	case 'm':
+>+		ret <<= 10;
+>+	case 'K':
+>+	case 'k':
+>+		ret <<= 10;
+>+		endptr++;
+>+	default:
+>+		break;
+>+	}
+>+
+>+	return ret;
+>+}
+>+
+>+static void vsock_increase_buf_size(int fd)
+>+{
+>+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_MAX_SIZE,
+>+		       &vsock_buf_bytes, sizeof(vsock_buf_bytes))) {
+>+		perror("setsockopt");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
+>+		       &vsock_buf_bytes, sizeof(vsock_buf_bytes))) {
+>+		perror("setsockopt");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+}
+>+
+>+static int vsock_connect(unsigned int cid, unsigned int port)
+>+{
+>+	union {
+>+		struct sockaddr sa;
+>+		struct sockaddr_vm svm;
+>+	} addr = {
+>+		.svm = {
+>+			.svm_family = AF_VSOCK,
+>+			.svm_port = port,
+>+			.svm_cid = cid,
+>+		},
+>+	};
+>+	int fd;
+>+
+>+	fd = socket(AF_VSOCK, SOCK_STREAM, 0);
+>+
+>+	if (fd < 0)
+>+		return -1;
+>+
+>+	vsock_increase_buf_size(fd);
+>+
+>+	if (connect(fd, &addr.sa, sizeof(addr.svm)) < 0) {
+>+		close(fd);
+>+		return -1;
+>+	}
+>+
+>+	return fd;
+>+}
+>+
+>+static float get_gbps(unsigned long bytes, time_t ns_delta)
+>+{
+>+	return ((float)bytes / BYTES_PER_GB) /
+>+	       ((float)ns_delta / NSEC_PER_SEC);
+>+}
+>+
+>+static void run_sender(unsigned long to_send_bytes)
+>+{
+>+	time_t tx_begin_ns;
+>+	size_t total_send;
+>+	int client_fd;
+>+	char *data;
+>+	int fd;
+>+	union {
+>+		struct sockaddr sa;
+>+		struct sockaddr_vm svm;
+>+	} addr = {
+>+		.svm = {
+>+			.svm_family = AF_VSOCK,
+>+			.svm_port = port,
+>+			.svm_cid = VMADDR_CID_ANY,
+>+		},
+>+	};
+>+	union {
+>+		struct sockaddr sa;
+>+		struct sockaddr_vm svm;
+>+	} clientaddr;
+>+
+>+	socklen_t clientaddr_len = sizeof(clientaddr.svm);
+>+
+>+	printf("Run as sender\n");
+>+	printf("Listen port %u\n", port);
+>+	printf("Send %lu bytes\n", to_send_bytes);
+>+	printf("TX buffer %lu bytes\n", buf_size_bytes);
+>+	printf("Peer buffer %lu bytes\n", vsock_buf_bytes);
+>+
+>+	fd = socket(AF_VSOCK, SOCK_STREAM, 0);
+>+
+>+	if (fd < 0) {
+>+		perror("socket");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
+>+		perror("bind");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	if (listen(fd, 1) < 0) {
+>+		perror("listen");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	client_fd = accept(fd, &clientaddr.sa, &clientaddr_len);
+>+
+>+	if (client_fd < 0) {
+>+		perror("accept");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	vsock_increase_buf_size(client_fd);
+>+
+>+	data = malloc(buf_size_bytes);
+>+
+>+	if (!data) {
+>+		printf("malloc failed\n");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	memset(data, 0, buf_size_bytes);
+>+	total_send = 0;
+>+	tx_begin_ns = current_nsec();
+>+
+>+	while (total_send < to_send_bytes) {
+>+		ssize_t sent;
+>+
+>+		sent = write(client_fd, data, buf_size_bytes);
+>+
+>+		if (sent <= 0) {
+>+			perror("write");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		total_send += sent;
+>+	}
+>+
+>+	printf("tx performance: %f Gb/s\n",
+>+	       get_gbps(total_send, current_nsec() - tx_begin_ns));
+>+
+>+	close(client_fd);
+>+	close(fd);
+>+
+>+	free(data);
+>+}
+>+
+>+static void run_receiver(int peer_cid, unsigned long rcvlowat_bytes)
+>+{
+>+	unsigned int read_cnt;
+>+	time_t rx_begin_ns;
+>+	time_t in_read_ns;
+>+	size_t total_recv;
+>+	void *data;
+>+	int fd;
+>+
+>+	printf("Run as receiver\n");
+>+	printf("Connect to %i:%u\n", peer_cid, port);
+>+	printf("RX buffer %lu bytes\n", buf_size_bytes);
+>+	printf("Peer buffer %lu bytes\n", vsock_buf_bytes);
+>+	printf("SO_RCVLOWAT %lu bytes\n", rcvlowat_bytes);
+>+
+>+	fd = vsock_connect(peer_cid, port);
+>+
+>+	if (fd < 0) {
+>+		perror("socket");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	if (setsockopt(fd, SOL_SOCKET, SO_RCVLOWAT,
+>+		       &rcvlowat_bytes,
+>+		       sizeof(rcvlowat_bytes))) {
+>+		perror("setsockopt");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	data = mmap(NULL, buf_size_bytes, PROT_READ | PROT_WRITE,
+>+		    MAP_ANONYMOUS | MAP_PRIVATE | MAP_POPULATE, -1, 0);
+>+
+>+	if (data == MAP_FAILED) {
+>+		perror("mmap");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	read_cnt = 0;
+>+	in_read_ns = 0;
+>+	total_recv = 0;
+>+	rx_begin_ns = current_nsec();
+>+
+>+	while (1) {
+>+		struct pollfd fds = { 0 };
+>+
+>+		fds.fd = fd;
+>+		fds.events = POLLIN | POLLERR | POLLHUP |
+>+			     POLLRDHUP | POLLNVAL;
+>+
+>+		if (poll(&fds, 1, -1) < 0) {
+>+			perror("poll");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		if (fds.revents & POLLERR) {
+>+			printf("'poll()' error\n");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		if (fds.revents & POLLIN) {
+>+			ssize_t bytes_read;
+>+			time_t t;
+>+
+>+			t = current_nsec();
+>+			bytes_read = read(fd, data, buf_size_bytes);
+>+			in_read_ns += (current_nsec() - t);
+>+			read_cnt++;
+>+
+>+			if (!bytes_read)
+>+				break;
+>+
+>+			if (bytes_read < 0) {
+>+				perror("recv");
+>+				exit(EXIT_FAILURE);
+>+			}
+>+
+>+			total_recv += bytes_read;
+>+		}
+>+
+>+		if (fds.revents & (POLLHUP | POLLRDHUP))
+>+			break;
+>+	}
+>+
+>+	printf("rx performance: %f Gb/s\n",
+>+	       get_gbps(total_recv, current_nsec() - rx_begin_ns));
+>+	printf("total in 'read()': %f sec\n", (float)in_read_ns / NSEC_PER_SEC);
+
+Maybe better "total time in ..."
+
+>+	printf("POLLIN wakeups: %i\n", read_cnt);
+>+	printf("average in 'read()': %f ns\n", (float)in_read_ns / read_cnt);
+
+Ditto.
+
+>+
+>+	munmap(data, buf_size_bytes);
+>+	close(fd);
+>+}
+>+
+>+static void usage(void)
+>+{
+>+	printf("Help:\n"
+>+	       "\n"
+>+	       "This is benchmarking utility, to test vsock performance.\n"
+>+	       "It runs in two modes: sender or receiver. In sender mode, it waits\n"
+>+	       "connection from receiver, and when established, sender starts data\n"
+>+	       "transmission.\n"
+>+	       "\n"
+>+	       "Options:\n"
+>+	       "  -h				This help message\n"
+>+	       "  -s				Sender mode(receiver default)\n"
+>+	       "  -p <port>			Port (%d)\n"
+>+	       "  -c <cid>			CID of the peer (%d)\n"
+>+	       "  -m <bytes to send>		Bytes to send (%d)\n"
+>+	       "  -b <buffer size>		Rx/Tx buffer size (%d). In sender mode\n"
+>+	       "                                it is size of buffer passed to 'write()'.\n"
+>+	       "                                In receiver mode it is size of buffer passed\n"
+>+	       "                                to 'read()'.\n"
+>+	       "  -v <peer buffer size>		Peer buffer size (%d)\n"
+
+Instead of "peer buffer", what about "socket buffer"?
+
+>+	       "  -r <SO_RCVLOWAT>		SO_RCVLOWAT (%d)\n"
+>+	       "\n", DEFAULT_PORT, DEFAULT_CID, DEFAULT_TO_SEND_BYTES,
+>+	       DEFAULT_BUF_SIZE_BYTES, DEFAULT_VSOCK_BUF_BYTES,
+>+	       DEFAULT_RCVLOWAT_BYTES);
+>+	exit(EXIT_FAILURE);
+>+}
+>+
+>+static long strtolx(const char *arg)
+>+{
+>+	long value;
+>+	char *end;
+>+
+>+	value = strtol(arg, &end, 10);
+>+
+>+	if (end != arg + strlen(arg))
+>+		usage();
+>+
+>+	return value;
+>+}
+>+
+>+int main(int argc, char **argv)
+>+{
+>+	unsigned long to_send_bytes = DEFAULT_TO_SEND_BYTES;
+>+	unsigned long rcvlowat_bytes = DEFAULT_RCVLOWAT_BYTES;
+>+	bool receiver_mode = true;
+>+	int peer_cid = DEFAULT_CID;
+>+	int c;
+>+
+>+	while ((c = getopt(argc, argv, "v:r:c:p:m:b:sh")) != -1) {
+>+		switch (c) {
+>+		case 'v': /* Peer buffer size. */
+>+			vsock_buf_bytes = memparse(optarg);
+>+			break;
+>+		case 'r': /* SO_RCVLOWAT value. */
+>+			rcvlowat_bytes = memparse(optarg);
+>+			break;
+>+		case 'c': /* CID to connect to. */
+>+			peer_cid = strtolx(optarg);
+>+			break;
+>+		case 'p': /* Port to connect to. */
+>+			port = strtolx(optarg);
+>+			break;
+>+		case 'm': /* Bytes to send. */
+>+			to_send_bytes = memparse(optarg);
+>+			break;
+>+		case 'b': /* Size of rx/tx buffer. */
+>+			buf_size_bytes = memparse(optarg);
+>+			break;
+>+		case 's': /* Sender mode. */
+>+			receiver_mode = false;
+>+			break;
+>+		case 'h': /* Help. */
+>+			usage();
+>+			break;
+>+		default:
+>+			usage();
+>+		}
+>+	}
+>+
+>+	if (receiver_mode)
+>+		run_receiver(peer_cid, rcvlowat_bytes);
+>+	else
+>+		run_sender(to_send_bytes);
+>+
+>+	return 0;
+>+}
+>-- 
+>2.25.1
 
