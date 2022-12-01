@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C0D63F11D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD22463F11B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiLANCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:02:50 -0500
+        id S231459AbiLANCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:02:46 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbiLANCS (ORCPT
+        with ESMTP id S231441AbiLANCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:02:18 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E2D56EF7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:02:17 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id t17so1781784pjo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:02:17 -0800 (PST)
+        Thu, 1 Dec 2022 08:02:14 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C724C6E52
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:02:13 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so1947974pjd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:02:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=phJlgjNLzib7WTpSGDvnhvf8KTYB6xxmRva4yzSEc44=;
-        b=n2e0yZdcl14EJlhwIp2DpWjwtDctb05QLyLB95I+aBrg36W1iOn0rA6z5dPPzGtuJU
-         jyw51261VT22Ei/HrieKaLxAnIIwX6EobH8XoIpiuP+PxuPka0HDlk9QYtuAGymdCGiQ
-         kVQ2HGoRFUgvFFy70pGK6KyT2AeN/+uc180ndGrpzLy35CIKGKz0d8b7G25Pp6C+QsWJ
-         dhJRTevZtGQy7CkVB7M04oeCTmscjYzV/cjv2DYU/KtsICCqZTvoOV903A5AhoDIrWNC
-         CyC0CWQKU6qbbR0r/iV/ibY0GxB4JEWP1OsqZdTa+exRi9MY0WMOqdTy/MxteijSmaCj
-         OH0Q==
+        bh=PXYoHLXQCavco5NNh0sXuOKKVYR0blfrb+/AP/qt1J8=;
+        b=MnvoQLxLNgbmo5IrRyEZjSpPAnvgKpvqlr+05gHoAOA2OLdGYdmcd82NT1Okx4BBqe
+         ZuWBFm76SwXdW/NrCFeBrIPE1tlBj/GTu4GC6NYQkBVm4cmfcnSy1kRyR4mjFYARy51r
+         YsG1Q2LkkHMwGwdC1AoeXKfVQs5ttxQ13h8QbyYrgO2EV6KKkw+hqlWMoEGivgpo2616
+         egjYvKCSNZKQ8vqfVAPunkGNQFu8v2GPZf2r3xBv5aWrKBC9tbKOl0FTHaGGwpK5q4OD
+         8ywuY1yApdHN7EKl3eANRphgi6ZQh1nBw8HCoy/f9xgXKPXQyt7MKjeGQPTbPB30dDet
+         mhHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=phJlgjNLzib7WTpSGDvnhvf8KTYB6xxmRva4yzSEc44=;
-        b=Rh+3pYu8RAWMxUL24qP7v7spMiBxAotIDZ1SCXOUdNEQJtWgRzvlaiRN6qowhpwdJz
-         CYfJph5kjgYxUwEp0h10pT4ms6PG73WcTghagDfIEf8EMNGg0GnZCIvHgPLZXYee3R7C
-         hufdHGes1EGiVq32JuvBqC6+gfhNOeTD2G+2xGeIjo2bvJ9O7eF1BRjJqkYEyQWhClxd
-         ksgsfWraO2mOeeUlLVSHR6lC6N9Cjk+W9TdoFjFity9VpWwU45xfsupnFKvAvaA3XnkH
-         aBemusdUQwnFE5grbQf+mOfsW4sh2ZKz+aH2/SGMQdFhwUcA4zYSMK5tFJM/Lz8EPMUG
-         0m8g==
-X-Gm-Message-State: ANoB5pkLqdNPD/rFujngjFzh9GwY3C7xcWnqxFbpJvfe23SzM7O35SpO
-        x3K+j1ESaGes8/mjSqRNbU/3vg==
-X-Google-Smtp-Source: AA0mqf4FSsQ4eZJO8kUIGw/6FeT62aPjsFG0xO2PBWtoUUI17G0sLKXpZWKr9BHwRWxwgDZzL88wKQ==
-X-Received: by 2002:a17:902:f243:b0:189:8046:4335 with SMTP id j3-20020a170902f24300b0018980464335mr23845589plc.152.1669899727955;
-        Thu, 01 Dec 2022 05:02:07 -0800 (PST)
+        bh=PXYoHLXQCavco5NNh0sXuOKKVYR0blfrb+/AP/qt1J8=;
+        b=MlV3TYUPJAE8G9hW4yNgaDCqAXV6CGwWySKYvU8t23fJPieabkzQ3ALmygUniH2wtq
+         lktHH4u1PxP8frRiaKVX6k33ccGS0FWGFEVjrOEPvnA5wIYBcJVDUqlzeUtv2ANf+Jbu
+         brvWP7T5La7SSQZf4NInkEvxFW26K43pjiPUEshcrjCkhe2Cg2U7fFLGS9mjARSAPx7J
+         s84maS7Q0TUSo/hHadeaVoch/6AH21agHagifS2fYf60h+qnSFMga6i/sGl+gc/ocnLw
+         EOZ/5EoRMlIAdNRd7zIhbnUW/w+1kcBpDHov2GnPZ/LdaA2rP5oy2DAFL05+p/7o+yQL
+         n5HQ==
+X-Gm-Message-State: ANoB5pkwhjrPRuChkzkYgGLv/diLTadOgiQDW6ZuWEBkKkZ4sMYo/wh6
+        tJjwukQVo+maN/B45+TC8MX93w==
+X-Google-Smtp-Source: AA0mqf6ZGTSHskxR4iL2VVwLEp1XFjtgHEhzkdgxM1JnnHG6QN09+9ukNapPt7gWKZtAL9W+rTIGEw==
+X-Received: by 2002:a17:902:aa06:b0:183:7f67:25d7 with SMTP id be6-20020a170902aa0600b001837f6725d7mr47783541plb.164.1669899732741;
+        Thu, 01 Dec 2022 05:02:12 -0800 (PST)
 Received: from anup-ubuntu-vm.localdomain ([171.76.81.69])
-        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm4855856pjf.17.2022.12.01.05.02.03
+        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm4855856pjf.17.2022.12.01.05.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 05:02:07 -0800 (PST)
+        Thu, 01 Dec 2022 05:02:12 -0800 (PST)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -62,9 +62,9 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anup Patel <apatel@ventanamicro.com>,
         Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v14 5/8] RISC-V: Allow marking IPIs as suitable for remote FENCEs
-Date:   Thu,  1 Dec 2022 18:31:32 +0530
-Message-Id: <20221201130135.1115380-6-apatel@ventanamicro.com>
+Subject: [PATCH v14 6/8] RISC-V: Use IPIs for remote TLB flush when possible
+Date:   Thu,  1 Dec 2022 18:31:33 +0530
+Message-Id: <20221201130135.1115380-7-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221201130135.1115380-1-apatel@ventanamicro.com>
 References: <20221201130135.1115380-1-apatel@ventanamicro.com>
@@ -81,124 +81,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To do remote FENCEs (i.e. remote TLB flushes) using IPI calls on the
-RISC-V kernel, we need hardware mechanism to directly inject IPI from
-the supervisor mode (i.e. RISC-V kernel) instead of using SBI calls.
+If we have specialized interrupt controller (such as AIA IMSIC) which
+allows supervisor mode to directly inject IPIs without any assistance
+from M-mode or HS-mode then using such specialized interrupt controller,
+we can do remote TLB flushes directly from supervisor mode instead of
+using the SBI RFENCE calls.
 
-The upcoming AIA IMSIC devices allow direct IPI injection from the
-supervisor mode (i.e. RISC-V kernel). To support this, we extend the
-riscv_ipi_set_virq_range() function so that IPI provider (i.e. irqchip
-drivers can mark IPIs as suitable for remote FENCEs.
+This patch extends remote TLB flush functions to use supervisor mode
+IPIs whenever direct supervisor mode IPIs.are supported by interrupt
+controller.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/smp.h      | 18 ++++++++++++++++--
- arch/riscv/kernel/sbi-ipi.c       |  2 +-
- arch/riscv/kernel/smp.c           | 11 ++++++++++-
- drivers/clocksource/timer-clint.c |  2 +-
- 4 files changed, 28 insertions(+), 5 deletions(-)
+ arch/riscv/mm/tlbflush.c | 93 +++++++++++++++++++++++++++++++++-------
+ 1 file changed, 78 insertions(+), 15 deletions(-)
 
-diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
-index 79ed0b73cd4e..56976e41a21e 100644
---- a/arch/riscv/include/asm/smp.h
-+++ b/arch/riscv/include/asm/smp.h
-@@ -16,6 +16,9 @@ struct seq_file;
- extern unsigned long boot_cpu_hartid;
- 
- #ifdef CONFIG_SMP
-+
-+#include <linux/jump_label.h>
-+
- /*
-  * Mapping between linux logical cpu index and hartid.
-  */
-@@ -46,7 +49,12 @@ void riscv_ipi_disable(void);
- bool riscv_ipi_have_virq_range(void);
- 
- /* Set the IPI interrupt numbers for arch (called by irqchip drivers) */
--void riscv_ipi_set_virq_range(int virq, int nr);
-+void riscv_ipi_set_virq_range(int virq, int nr, bool use_for_rfence);
-+
-+/* Check if we can use IPIs for remote FENCEs */
-+DECLARE_STATIC_KEY_FALSE(riscv_ipi_for_rfence);
-+#define riscv_use_ipi_for_rfence() \
-+	static_branch_unlikely(&riscv_ipi_for_rfence)
- 
- /* Secondary hart entry */
- asmlinkage void smp_callin(void);
-@@ -93,10 +101,16 @@ static inline bool riscv_ipi_have_virq_range(void)
- 	return false;
+diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+index 37ed760d007c..27a7db8eb2c4 100644
+--- a/arch/riscv/mm/tlbflush.c
++++ b/arch/riscv/mm/tlbflush.c
+@@ -23,14 +23,62 @@ static inline void local_flush_tlb_page_asid(unsigned long addr,
+ 			: "memory");
  }
  
--static inline void riscv_ipi_set_virq_range(int virq, int nr)
-+static inline void riscv_ipi_set_virq_range(int virq, int nr,
-+					    bool use_for_rfence)
- {
- }
- 
-+static inline bool riscv_use_ipi_for_rfence(void)
++static inline void local_flush_tlb_range(unsigned long start,
++		unsigned long size, unsigned long stride)
 +{
-+	return false;
++	if (size <= stride)
++		local_flush_tlb_page(start);
++	else
++		local_flush_tlb_all();
 +}
 +
- #endif /* CONFIG_SMP */
- 
- #if defined(CONFIG_HOTPLUG_CPU) && (CONFIG_SMP)
-diff --git a/arch/riscv/kernel/sbi-ipi.c b/arch/riscv/kernel/sbi-ipi.c
-index 256bc1f951cd..b25116990126 100644
---- a/arch/riscv/kernel/sbi-ipi.c
-+++ b/arch/riscv/kernel/sbi-ipi.c
-@@ -72,6 +72,6 @@ void __init sbi_ipi_init(void)
- 			  "irqchip/sbi-ipi:starting",
- 			  sbi_ipi_starting_cpu, sbi_ipi_dying_cpu);
- 
--	riscv_ipi_set_virq_range(virq, BITS_PER_BYTE);
-+	riscv_ipi_set_virq_range(virq, BITS_PER_BYTE, false);
- 	pr_info("providing IPIs using SBI IPI extension\n");
- }
-diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index e8a20454d65b..74b8cb1a89ab 100644
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -145,7 +145,10 @@ bool riscv_ipi_have_virq_range(void)
- 	return (ipi_virq_base) ? true : false;
- }
- 
--void riscv_ipi_set_virq_range(int virq, int nr)
-+DEFINE_STATIC_KEY_FALSE(riscv_ipi_for_rfence);
-+EXPORT_SYMBOL_GPL(riscv_ipi_for_rfence);
-+
-+void riscv_ipi_set_virq_range(int virq, int nr, bool use_for_rfence)
- {
- 	int i, err;
- 
-@@ -168,6 +171,12 @@ void riscv_ipi_set_virq_range(int virq, int nr)
- 
- 	/* Enabled IPIs for boot CPU immediately */
- 	riscv_ipi_enable();
-+
-+	/* Update RFENCE static key */
-+	if (use_for_rfence)
-+		static_branch_enable(&riscv_ipi_for_rfence);
++static inline void local_flush_tlb_range_asid(unsigned long start,
++		unsigned long size, unsigned long stride, unsigned long asid)
++{
++	if (size <= stride)
++		local_flush_tlb_page_asid(start, asid);
 +	else
-+		static_branch_disable(&riscv_ipi_for_rfence);
++		local_flush_tlb_all_asid(asid);
++}
++
++static void __ipi_flush_tlb_all(void *info)
++{
++	local_flush_tlb_all();
++}
++
+ void flush_tlb_all(void)
+ {
+-	sbi_remote_sfence_vma(NULL, 0, -1);
++	if (riscv_use_ipi_for_rfence())
++		on_each_cpu(__ipi_flush_tlb_all, NULL, 1);
++	else
++		sbi_remote_sfence_vma(NULL, 0, -1);
++}
++
++struct flush_tlb_range_data {
++	unsigned long asid;
++	unsigned long start;
++	unsigned long size;
++	unsigned long stride;
++};
++
++static void __ipi_flush_tlb_range_asid(void *info)
++{
++	struct flush_tlb_range_data *d = info;
++
++	local_flush_tlb_range_asid(d->start, d->size, d->stride, d->asid);
++}
++
++static void __ipi_flush_tlb_range(void *info)
++{
++	struct flush_tlb_range_data *d = info;
++
++	local_flush_tlb_range(d->start, d->size, d->stride);
  }
- EXPORT_SYMBOL_GPL(riscv_ipi_set_virq_range);
  
-diff --git a/drivers/clocksource/timer-clint.c b/drivers/clocksource/timer-clint.c
-index ab7a7b1d535b..455e634055e7 100644
---- a/drivers/clocksource/timer-clint.c
-+++ b/drivers/clocksource/timer-clint.c
-@@ -247,7 +247,7 @@ static int __init clint_timer_init_dt(struct device_node *np)
+-static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
+-				  unsigned long size, unsigned long stride)
++static void __flush_tlb_range(struct mm_struct *mm, unsigned long start,
++			      unsigned long size, unsigned long stride)
+ {
++	struct flush_tlb_range_data ftd;
+ 	struct cpumask *cmask = mm_cpumask(mm);
+ 	unsigned int cpuid;
+ 	bool broadcast;
+@@ -45,19 +93,34 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
+ 		unsigned long asid = atomic_long_read(&mm->context.id);
+ 
+ 		if (broadcast) {
+-			sbi_remote_sfence_vma_asid(cmask, start, size, asid);
+-		} else if (size <= stride) {
+-			local_flush_tlb_page_asid(start, asid);
++			if (riscv_use_ipi_for_rfence()) {
++				ftd.asid = asid;
++				ftd.start = start;
++				ftd.size = size;
++				ftd.stride = stride;
++				on_each_cpu_mask(cmask,
++						 __ipi_flush_tlb_range_asid,
++						 &ftd, 1);
++			} else
++				sbi_remote_sfence_vma_asid(cmask,
++							   start, size, asid);
+ 		} else {
+-			local_flush_tlb_all_asid(asid);
++			local_flush_tlb_range_asid(start, size, stride, asid);
+ 		}
+ 	} else {
+ 		if (broadcast) {
+-			sbi_remote_sfence_vma(cmask, start, size);
+-		} else if (size <= stride) {
+-			local_flush_tlb_page(start);
++			if (riscv_use_ipi_for_rfence()) {
++				ftd.asid = 0;
++				ftd.start = start;
++				ftd.size = size;
++				ftd.stride = stride;
++				on_each_cpu_mask(cmask,
++						 __ipi_flush_tlb_range,
++						 &ftd, 1);
++			} else
++				sbi_remote_sfence_vma(cmask, start, size);
+ 		} else {
+-			local_flush_tlb_all();
++			local_flush_tlb_range(start, size, stride);
+ 		}
  	}
  
- 	irq_set_chained_handler(clint_ipi_irq, clint_ipi_interrupt);
--	riscv_ipi_set_virq_range(rc, BITS_PER_BYTE);
-+	riscv_ipi_set_virq_range(rc, BITS_PER_BYTE, true);
- 	clint_clear_ipi();
- #endif
+@@ -66,23 +129,23 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
  
+ void flush_tlb_mm(struct mm_struct *mm)
+ {
+-	__sbi_tlb_flush_range(mm, 0, -1, PAGE_SIZE);
++	__flush_tlb_range(mm, 0, -1, PAGE_SIZE);
+ }
+ 
+ void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
+ {
+-	__sbi_tlb_flush_range(vma->vm_mm, addr, PAGE_SIZE, PAGE_SIZE);
++	__flush_tlb_range(vma->vm_mm, addr, PAGE_SIZE, PAGE_SIZE);
+ }
+ 
+ void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+ 		     unsigned long end)
+ {
+-	__sbi_tlb_flush_range(vma->vm_mm, start, end - start, PAGE_SIZE);
++	__flush_tlb_range(vma->vm_mm, start, end - start, PAGE_SIZE);
+ }
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
+ 			unsigned long end)
+ {
+-	__sbi_tlb_flush_range(vma->vm_mm, start, end - start, PMD_SIZE);
++	__flush_tlb_range(vma->vm_mm, start, end - start, PMD_SIZE);
+ }
+ #endif
 -- 
 2.34.1
 
