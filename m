@@ -2,137 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E9763FB30
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FD463FB09
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiLAW6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S231573AbiLAW5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiLAW5m (ORCPT
+        with ESMTP id S230284AbiLAW5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:57:42 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E455DF23;
-        Thu,  1 Dec 2022 14:57:40 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E67A95FD14;
-        Fri,  2 Dec 2022 01:57:38 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669935458;
-        bh=bNlxstNU84ePp/QGlEFa5UnW4sFn/xynzmg1ch/OV9o=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=Sysgntah8htYD/a6IF0x+iJffTAI+E6jOLImsQ4Xrpx5M0b9EaXeTXwtZbQ6dkWzD
-         QPxSd65Ud6OAkCKM2M4S3VrxholSmDn7ffdGXgtEyO6rykXQ9QcyVS7LGby4rqr6jX
-         tzYBqaH/YKuCZ1+YvbiofaO2xk+DqorAkAbboiXTyhhYJQ90rCuiJDkA1HGzgkYggz
-         5JZHwubT9Df6wa2HuCZH02LIMs9KshbOOAxTzwuFCQ946SeFZ1jwmVRv0b8rwjnz5y
-         Vk58FSrd/Ru/NEtuSPmyg000uGzKPWeBLoGZXg1HOAFpAiE/rNCizH99TtLSr7Vp7p
-         nfs3vVR8iJmZg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Dec 2022 01:57:38 +0300 (MSK)
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
-CC:     <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v8 11/11] arm64: dts: meson: a1: introduce PLL and Peripherals clk controllers
-Date:   Fri, 2 Dec 2022 01:57:03 +0300
-Message-ID: <20221201225703.6507-12-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
+        Thu, 1 Dec 2022 17:57:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51973BE4E6;
+        Thu,  1 Dec 2022 14:57:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0649CB82059;
+        Thu,  1 Dec 2022 22:57:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158DCC433C1;
+        Thu,  1 Dec 2022 22:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669935428;
+        bh=Iece4Ggdjnc0zgVTxLn8Qf6TaPc+ROmQXehO4YnTyUk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dhi9a4n1MDkugPm6zzlyfa1b463Z4vsP2TF/EUCWg0UeTI/wZXo9HV75Wrqt9ktiN
+         0VE/7gjmbALvarkSaaTK2vduEPR3b0vHlQ8YRjQW8VWmt3r+0KG1ZSer25P2FwUi4j
+         cIPN0/vWkJ8U0tyCI294h+QP/yExXFxgYvLJKem9oRgF7bqTyzY4Cwk8MzOUMgialh
+         XqMJ+4y7T+NuC9fDSOQlLlGdDWFmKH7jGWrxKiw6TPwsijz0ec+D7b7uT0a9dTAuWG
+         W4sAIyUbit8zbldtmN0SLaKsxMhCJgIrQev/i8YLwVihXjXRSQEWEKeAiL1dqsFWj6
+         m/m92RAlKTIxA==
+Date:   Thu, 1 Dec 2022 16:57:05 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        krzysztof.kozlowski@linaro.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
+ 'reset' interface
+Message-ID: <20221201225705.46r2m35ketvzipox@builder.lan>
+References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/01 20:49:00 #20634374
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds clkc_periphs and clkc_pll dts nodes to A1 SoC main dtsi.
-The first one clk controller is responsible for all SoC peripherals
-clocks excluding audio clocks. The second one clk controller is used by
-A1 SoC PLLs. Actually, there are two different APB heads, so we have two
-different drivers.
+On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
+> 
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 27 ++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+@Ulf, Akhil has a power-domain for a piece of hardware which may be
+voted active by multiple different subsystems (co-processors/execution
+contexts) in the system.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index b4000cf65a9a..38e6517c603c 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -6,6 +6,8 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/gpio/meson-a1-gpio.h>
-+#include <dt-bindings/clock/a1-pll-clkc.h>
-+#include <dt-bindings/clock/a1-clkc.h>
- 
- / {
- 	compatible = "amlogic,a1";
-@@ -81,7 +83,6 @@ apb: bus@fe000000 {
- 			#size-cells = <2>;
- 			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x1000000>;
- 
--
- 			reset: reset-controller@0 {
- 				compatible = "amlogic,meson-a1-reset";
- 				reg = <0x0 0x0 0x0 0x8c>;
-@@ -124,6 +125,30 @@ uart_AO_B: serial@2000 {
- 				clock-names = "xtal", "pclk", "baud";
- 				status = "disabled";
- 			};
-+
-+			clkc_periphs: periphs-clock-controller@800 {
-+				compatible = "amlogic,a1-periphs-clkc";
-+				reg = <0 0x800 0 0x104>;
-+				#clock-cells = <1>;
-+				clocks = <&clkc_pll CLKID_FCLK_DIV2>,
-+					 <&clkc_pll CLKID_FCLK_DIV3>,
-+					 <&clkc_pll CLKID_FCLK_DIV5>,
-+					 <&clkc_pll CLKID_FCLK_DIV7>,
-+					 <&clkc_pll CLKID_HIFI_PLL>,
-+					 <&xtal>;
-+				clock-names = "fclk_div2", "fclk_div3",
-+					      "fclk_div5", "fclk_div7",
-+					      "hifi_pll", "xtal";
-+			};
-+
-+			clkc_pll: pll-clock-controller@7c80 {
-+				compatible = "amlogic,a1-pll-clkc";
-+				reg = <0 0x7c80 0 0x18c>;
-+				#clock-cells = <1>;
-+				clocks = <&clkc_periphs CLKID_XTAL_FIXPLL>,
-+					 <&clkc_periphs CLKID_XTAL_HIFIPLL>;
-+				clock-names = "xtal_fixpll", "xtal_hifipll";
-+			};
- 		};
- 
- 		gic: interrupt-controller@ff901000 {
--- 
-2.36.0
+As such, during the powering down sequence we don't wait for the
+power-domain to turn off. But in the event of an error, the recovery
+mechanism relies on waiting for the hardware to settle in a powered off
+state.
 
+The proposal here is to use the reset framework to wait for this state
+to be reached, before continuing with the recovery mechanism in the
+client driver.
+
+Given our other discussions on quirky behavior, do you have any
+input/suggestions on this?
+
+> Some clients like adreno gpu driver would like to ensure that its gdsc
+> is collapsed at hardware during a gpu reset sequence. This is because it
+> has a votable gdsc which could be ON due to a vote from another subsystem
+> like tz, hyp etc or due to an internal hardware signal. To allow
+> this, gpucc driver can expose an interface to the client driver using
+> reset framework. Using this the client driver can trigger a polling within
+> the gdsc driver.
+
+@Akhil, this description is fairly generic. As we've reached the state
+where the hardware has settled and we return to the client, what
+prevents it from being powered up again?
+
+Or is it simply a question of it hitting the powered-off state, not
+necessarily staying there?
+
+Regards,
+Bjorn
+
+> 
+> This series is rebased on top of qcom/linux:for-next branch.
+> 
+> Related discussion: https://patchwork.freedesktop.org/patch/493144/
+> 
+> Changes in v7:
+> - Update commit message (Bjorn)
+> - Rebased on top of qcom/linux:for-next branch.
+> 
+> Changes in v6:
+> - No code changes in this version. Just captured the Acked-by tags
+> 
+> Changes in v5:
+> - Nit: Remove a duplicate blank line (Krzysztof)
+> 
+> Changes in v4:
+> - Update gpu dt-binding schema
+> - Typo fix in commit text
+> 
+> Changes in v3:
+> - Use pointer to const for "struct qcom_reset_ops" in qcom_reset_map (Krzysztof)
+> 
+> Changes in v2:
+> - Return error when a particular custom reset op is not implemented. (Dmitry)
+> 
+> Akhil P Oommen (6):
+>   dt-bindings: clk: qcom: Support gpu cx gdsc reset
+>   clk: qcom: Allow custom reset ops
+>   clk: qcom: gdsc: Add a reset op to poll gdsc collapse
+>   clk: qcom: gpucc-sc7280: Add cx collapse reset support
+>   dt-bindings: drm/msm/gpu: Add optional resets
+>   arm64: dts: qcom: sc7280: Add Reset support for gpu
+> 
+>  .../devicetree/bindings/display/msm/gpu.yaml       |  6 +++++
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +++
+>  drivers/clk/qcom/gdsc.c                            | 23 ++++++++++++++----
+>  drivers/clk/qcom/gdsc.h                            |  7 ++++++
+>  drivers/clk/qcom/gpucc-sc7280.c                    | 10 ++++++++
+>  drivers/clk/qcom/reset.c                           | 27 +++++++++++++++++++++-
+>  drivers/clk/qcom/reset.h                           |  8 +++++++
+>  include/dt-bindings/clock/qcom,gpucc-sc7280.h      |  3 +++
+>  8 files changed, 82 insertions(+), 5 deletions(-)
+> 
+> -- 
+> 2.7.4
+> 
