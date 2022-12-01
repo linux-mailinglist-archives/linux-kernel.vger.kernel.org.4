@@ -2,124 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD1863EFB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BA163EFB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiLALli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S230432AbiLALmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiLALl2 (ORCPT
+        with ESMTP id S230513AbiLALlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:41:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380429582D;
-        Thu,  1 Dec 2022 03:41:27 -0800 (PST)
-Date:   Thu, 01 Dec 2022 11:41:24 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669894885;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VZMu+Ww/tIWv7+5nct9Y8zaEczZTGJtowfe2b2w4XBM=;
-        b=cl33zYaBw6+x2HTKq3LZVbuQ9BL+d3PIERTDStFib0yXCudGYX/8vUNEiXX18IWLl+SrmN
-        xoflbDH2hujPJ5Ld0nQKoUreVJqlChZMdnPMq/JEp4UbrXEJt2ZhZtMjDHAygMSkINdpgk
-        36HRG0Zzil2VSCMa7RMRR54qRuOhERpIj+aFa+0hcArmz8z2+KXAn7nXJ7uE3yD8zQEJaR
-        KcWwtKYMW8w01gv/Fs/NQ7e70grmvYpCm40dF9c33Aat0aFHcAwbkGeuZHu1uu5rVw463H
-        B8w7Y1WlmNQpi/t7niTtcIKkhY5IfsOdcCrUJ5ILH8MBPggVwG0kg5sHe0N2RA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669894885;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VZMu+Ww/tIWv7+5nct9Y8zaEczZTGJtowfe2b2w4XBM=;
-        b=bb982MO/MHk4b6IlgtjlobBPYW8hV7N3JziIi3RwB7Mu4lWXF7CjxSkLWxR+QJxHnDuvyV
-        g8l9F/fd1mZNeZDg==
-From:   "tip-bot2 for Phil Auld" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] cpuhp: Make target_store() a nop when target == state
-Cc:     Phil Auld <pauld@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221117162329.3164999-2-pauld@redhat.com>
-References: <20221117162329.3164999-2-pauld@redhat.com>
+        Thu, 1 Dec 2022 06:41:55 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0596F9582D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:41:52 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id d6so2048464lfs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0UiAnxiG5gru9IeukT0uPFqmufGik114HWN4x39w6FA=;
+        b=zopg1txRN5QgqaXfvugj89RD4LqFxqoqVjHWRsqgKB0npSUazcU7D9c2uZ9eF+aBjn
+         YF6qfci1wHSt4AFzDdaT6TP9OhQ3Mdaza3DpmSV5hpIUekk3KR80oodi3SN9yWI5tGS6
+         BuQ4A1vklebhvhifCHCdZnMSoSeCWvFM/Ob8qdlXPxy4zsG7kk5g+VQP3o6YbOTvD/iZ
+         2WoTXkrwVdgV3weLjEU6HWVghtCCvmbFUyO94sTViyHwjHW1koa5iH6wuV0IKiROfrwq
+         tf+I6a/cjSMNzM9dEX7KO+nfOz8/O/3aZxCS+RhXktnqnxBEzb01V5YJ95RsD8VHUo5a
+         Jrug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0UiAnxiG5gru9IeukT0uPFqmufGik114HWN4x39w6FA=;
+        b=2ou4lMOmyoxLdajqqe85eGRdoe1WyvvtJ2oN8YznnrBkbsqxiqd60uCvWUDhMqNF1A
+         GuxVj03aAaU+4Gq5fMNU7H13jHOncUI/1u9mr0+erpxdi1mKuPMiVrYt8Qd8WZ77zk3/
+         62/klLe1PiBrq7Vj6o/q324O455xXBQ7KCn2Yjb6W85D2k7PzxXVa1Kdag5/zJg+sP4v
+         behVKhaZH1yHqBu9AGU/klEN5wYAhb/e0oUTPF2ssrj5VOUvE6P9HHsByNVS9xH/uooN
+         begS1LZSQM42gk8QDbOTqQC1TnyfnOcWOxBqKuC6eVXe/GjUPCLwPlr0+LM/JXufZEEK
+         Lyrg==
+X-Gm-Message-State: ANoB5pk3+dcmkBAy+ykF+ZJIwHKg/4ja2OEY89kcdV8pcR6q8PhzBlnq
+        ir4QokWzJrnAEzopztjMK6pbAA==
+X-Google-Smtp-Source: AA0mqf5NJwSDFJVZ4ee0obiZShaUI/uPkLiEO75TR/uSDPOAHIZkEPvJJ1JC3LaLkJUeMh2M4XFoqQ==
+X-Received: by 2002:a05:6512:a83:b0:4aa:f944:f7ec with SMTP id m3-20020a0565120a8300b004aaf944f7ecmr17809472lfu.467.1669894910308;
+        Thu, 01 Dec 2022 03:41:50 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w10-20020a05651234ca00b0048a8c907fe9sm612837lfr.167.2022.12.01.03.41.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 03:41:47 -0800 (PST)
+Message-ID: <a1d8197e-33fa-e853-ab73-81b167ec45ec@linaro.org>
+Date:   Thu, 1 Dec 2022 12:41:45 +0100
 MIME-Version: 1.0
-Message-ID: <166989488463.4906.8715334204096231628.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 5/9] dt-bindings: riscv: Add bouffalolab bl808 board
+ compatibles
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-6-jszhang@kernel.org>
+ <60991459-945f-35db-f26a-fb27824728ad@linaro.org> <Y4iMrKjLAHpkCygo@wendy>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y4iMrKjLAHpkCygo@wendy>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the smp/core branch of tip:
+On 01/12/2022 12:14, Conor Dooley wrote:
+> Hey Krzysztof,
+> 
+> On Thu, Dec 01, 2022 at 12:05:04PM +0100, Krzysztof Kozlowski wrote:
+>> On 27/11/2022 14:24, Jisheng Zhang wrote:
+>>> Several SoMs and boards are available that feature the Bouffalolab
+>>> bl808 SoC. Document the compatible strings.
+>>>
+>>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+>>> ---
+>>>  .../bindings/riscv/bouffalolab.yaml           | 34 +++++++++++++++++++
+>>>  1 file changed, 34 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+>>> new file mode 100644
+>>> index 000000000000..91ca9dbdc798
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+>>> @@ -0,0 +1,34 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Bouffalo Lab Technology SoC-based boards
+>>> +
+>>> +maintainers:
+>>> +  - Jisheng Zhang <jszhang@kernel.org>
+>>> +
+>>> +description:
+>>> +  Bouffalo Lab Technology SoC-based boards
+>>> +
+>>> +properties:
+>>> +  $nodename:
+>>> +    const: '/'
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - description: Sipeed M1s SoM:
+>>> +        items:
+>>> +          - const: sipeed,m1s
+>>> +          - const: bouffalolab,bl808
+>>
+>> I don't think that SoM is usable alone. It always needs a carrier, so
+>> drop this entry.
+> 
+> For my own information, if a SoM is not capable of functioning without a
+> carrier there is no merit in it having a compatible?
+> Does this also apply if there are multiple possible carriers from
+> different vendors?
 
-Commit-ID:     0fa5abb6b7d85bf5688b2e11113f50317fb0121c
-Gitweb:        https://git.kernel.org/tip/0fa5abb6b7d85bf5688b2e11113f50317fb0121c
-Author:        Phil Auld <pauld@redhat.com>
-AuthorDate:    Thu, 17 Nov 2022 11:23:28 -05:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 01 Dec 2022 12:35:08 +01:00
+Compatible makes sense anyway. There will be different boards using this
+SoM (not only carriers, but final products) and they all will have
+common piece - the SoM. It's the same for other SoM designs (e.g. for iMX).
 
-cpuhp: Make target_store() a nop when target == state
+Best regards,
+Krzysztof
 
-Writing the current state back in hotplug/target calls cpu_down()
-which will set cpu dying even when it isn't and then nothing will
-ever clear it. A stress test that reads values and writes them back
-for all cpu device files in sysfs will trigger the BUG() in
-select_fallback_rq once all cpus are marked as dying.
-
-kernel/cpu.c::target_store()
-	...
-        if (st->state < target)
-                ret = cpu_up(dev->id, target);
-        else
-                ret = cpu_down(dev->id, target);
-
-cpu_down() -> cpu_set_state()
-	 bool bringup = st->state < target;
-	 ...
-	 if (cpu_dying(cpu) != !bringup)
-		set_cpu_dying(cpu, !bringup);
-
-Fix this by letting state==target fall through in the target_store()
-conditional. Also make sure st->target == target in that case.
-
-Fixes: 757c989b9994 ("cpu/hotplug: Make target state writeable")
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Link: https://lore.kernel.org/r/20221117162329.3164999-2-pauld@redhat.com
-
----
- kernel/cpu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e3..979de99 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2326,8 +2326,10 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
- 
- 	if (st->state < target)
- 		ret = cpu_up(dev->id, target);
--	else
-+	else if (st->state > target)
- 		ret = cpu_down(dev->id, target);
-+	else if (WARN_ON(st->target != target))
-+		st->target = target;
- out:
- 	unlock_device_hotplug();
- 	return ret ? ret : count;
