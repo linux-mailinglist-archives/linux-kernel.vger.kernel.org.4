@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A05F63E95F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 06:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A999963E960
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 06:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiLAFiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 00:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
+        id S229588AbiLAFi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 00:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLAFiV (ORCPT
+        with ESMTP id S229468AbiLAFi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 00:38:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ECF578D1;
-        Wed, 30 Nov 2022 21:38:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7049CB81DEC;
-        Thu,  1 Dec 2022 05:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24F5C433D6;
-        Thu,  1 Dec 2022 05:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669873098;
-        bh=2h7CoLZeC0jMFm3rbqtN3ZLizkHMihcs4KBM1Gmnfgs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o8BAhJnFnlzeFz3P5NpxP3U/qkGQl/h6rQ/5N3Yuocrv8hToVczjVMGxLcLHgraMm
-         rH37/zq2EUAB5syIuWN9O9f07XEdFrpyAtsqTVl6Bu3q+xMfswQojZznlEvJQxJOZQ
-         TeF0HBh3rYoJOE1ZkMoeCvp1PdDpoeKt82kdTy8IQdkd5PrlFYkObSj3W7+1G+Qrmz
-         WZ4hv8S36ciehyJobCp5DYOTVE2jPnpGTIB6fIytG65rIT2lA1VARcJEz0APVknVPF
-         fh51AeXhYjZB1RM+250nbjw8CR8CS2544yyRszAfIhr+BRQEbOGHcq3ubY7lJrYuRv
-         14fxyWs+P8B2Q==
-Date:   Thu, 1 Dec 2022 13:38:13 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Mark Hasemeyer <markhas@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Raul Rangel <rrangel@chromium.org>,
-        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
-Subject: Re: [PATCH v8 2/3] dt-bindings: mfd: Add compatible string for UART
- support
-Message-ID: <Y4g9xXP+LXG6zcqy@google.com>
-References: <20221130131245.v8.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
- <20221130131245.v8.2.I9e018ecb8bdf341648cb64417085978ff0d22a46@changeid>
+        Thu, 1 Dec 2022 00:38:56 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18945AE3C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 21:38:55 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id jl24so621829plb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 21:38:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oregonstate-edu.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6WVt3V8FfzgzDnwBUBeRhDNHIa04Em5O1M/U9tgg5G8=;
+        b=UZbwdtUWMNFeUxioVu4QDNsPbO8DSdnMoVXOsgd0iHeEuEuFV8fpDxJWYUUTYW3Cum
+         mQ/C1mwhZ1gVlBfO+p9rvuwsJvv0RK/xhgyFvdYftENEDpHchxWLcXvcvt8y/3eCD0f9
+         ifjVcRL5+rtGcYF/mj2B5DQ9ehVPbUA+FZL1cieacsV4rTL5udChLTPbY/RAbb2vqtbt
+         uEAYKnnAI/iJ95RcF9XgdN0iNq+w5eJxda5MFY77HC9S1b1d7e0cVUiynKUA0CIvJtzV
+         TXyaK557tzrDhaDNY80InxkqYmixwqaWPDaH4/5WY+qB20/33Ymo5zjqeHEx4uZthRlJ
+         +Pxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6WVt3V8FfzgzDnwBUBeRhDNHIa04Em5O1M/U9tgg5G8=;
+        b=tkxFfKkRFlw7OkX9p1sqjPj0LBQwmP9XcO3Om16vZ/BCeVLajDucx7wjhvvEovnTOO
+         gpbp872xOg9HqIY3ZS9BhfznFxbjht48zXtZoIUG8RR1CE3D31BySc3iyq68kxDdfE/Z
+         q8sZ66pJb7PKg0l3FEKQm3j7aJk/z7aVe1lkz20IEfKYfmngrVlOyCIIF5cIKQrQ01z3
+         YrewWojjd+2LYIRNTFBeXb6PFRqTRSRsW7We1WnSG/GcuvnYmsHJXk8OQoj8+u0/jNPf
+         9GNbLnOTSMH/O847fAmyzGGCvSMH1xEar1JKM5/ktgOqnmhHwi9jkls8sPUEQmE5bLQ1
+         LtnA==
+X-Gm-Message-State: ANoB5pkciOOJOQKv+npoDNCfmlJ33P3gVAZg7wmC/92VGrMMvwgElYmB
+        R362Z3soxIXGrsWVjRz31ZTa8X1ZKgFCyd2mXTY=
+X-Google-Smtp-Source: AA0mqf6EfHKL1F+S6GRgY8Ae0oeN5XfbYeVhUMkna1iH4YadKpdm3eH+pjdUkSrigvzfsFumjoaD9Q==
+X-Received: by 2002:a17:902:f7cb:b0:189:3e8f:fa49 with SMTP id h11-20020a170902f7cb00b001893e8ffa49mr41209551plw.142.1669873135441;
+        Wed, 30 Nov 2022 21:38:55 -0800 (PST)
+Received: from ubu ([76.27.231.73])
+        by smtp.gmail.com with ESMTPSA id t197-20020a635fce000000b00476e84c3530sm1754319pgb.60.2022.11.30.21.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 21:38:55 -0800 (PST)
+From:   Jack Schofield <schofija@oregonstate.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Jack Schofield <schofija@oregonstate.edu>
+Subject: [PATCH 0/3] staging: greybus: Cleanups in loopback_test
+Date:   Wed, 30 Nov 2022 21:38:49 -0800
+Message-Id: <cover.1669872193.git.schofija@oregonstate.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130131245.v8.2.I9e018ecb8bdf341648cb64417085978ff0d22a46@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 01:12:55PM -0700, Mark Hasemeyer wrote:
-> Add a compatible string to support the UART implementation of the cros
-> ec interface.
+Correct issues found by checkpatch.
 
-$ git am ...
-...
-Applying: dt-bindings: mfd: Add compatible string for UART support
-error: patch failed: Documentation/devicetree/bindings/mfd/google,cros-ec.yaml:28
-error: Documentation/devicetree/bindings/mfd/google,cros-ec.yaml: patch does not apply
-Patch failed at 0002 dt-bindings: mfd: Add compatible string for UART support
+Jack Schofield (3):
+  staging: greybus: loopback_test: Add blank line after declaration.
+  staging: greybus: loopback_test: Remove void function return statement
+  staging: greybus: loopback_test: Remove extra blank lines
 
-Please use either for-next branch or linux-next as base.  There are DT binding
-changes in the queue for 6.2.
-- 7a2f36828c7b ("dt-bindings: cros-ec: Reorganize and enforce property
-		 availability")
-- e068bc0b01cf ("dt-bindings: cros-ec: Add ChromeOS fingerprint binding")
+ drivers/staging/greybus/tools/loopback_test.c | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
+
+
+base-commit: 9dadff066244543780e5d9ee406b3ec7af19e22c
+-- 
+2.25.1
+
