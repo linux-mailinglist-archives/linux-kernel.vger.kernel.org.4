@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D097963ED60
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD2763ED64
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiLAKOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
+        id S229953AbiLAKOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiLAKO0 (ORCPT
+        with ESMTP id S229632AbiLAKOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:14:26 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C94E92098
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:14:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669889665; x=1701425665;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wA2Uz06XL5tnvE6M7e3+7dWUYC+5nwFKRKZMZcnoMPQ=;
-  b=lVGnKeE6Use0nS7yrHgRk00NZQPalcMigmRsbW+leEWTGb9MkMtD3/03
-   E4gqS+QCX2pZdVshu3rdLjH+aP/+3gfeZS+8bJAsLGnKj2bOmYT9ELogZ
-   s6VCC6g4rzJHxy62j+ut52Y9Hy1xEaAzB71GOBvEbHH9//EbZEUsc9FT2
-   krDPSXPhju7mcH7QAQ5uAXh17WpxZECHJmeqCx4/U7+WgSYtigVJhf/Oq
-   rxeWQSpj80asf3YNr2Io8tbCeiiuYx6J66qm34i55B04ikXZJ1UwVUIvB
-   CglvNURjkRL1OzI2hYgr7fusLqCU1x/kuQyWhUjEtrK6MoJHX1BtQXTtK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="299014939"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="299014939"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 02:14:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="675382114"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="675382114"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Dec 2022 02:14:21 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p0gaC-000CRs-11;
-        Thu, 01 Dec 2022 10:14:20 +0000
-Date:   Thu, 01 Dec 2022 18:13:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:lazy-obsolete.2022.11.30a] BUILD SUCCESS
- 45b1f52e5e9772ee4aa7e83af8f98328ead684fa
-Message-ID: <63887e50.GlkCZ503e8qqSyZi%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 1 Dec 2022 05:14:34 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6A0920AC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:14:28 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id A10285FD07;
+        Thu,  1 Dec 2022 13:14:24 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1669889664;
+        bh=wl7vBDIsPjcpk2GTYMr4D53WkGXWEKQGydGiDJhgcJ4=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=ZlAKr8tr87vLzNtu9IoGhy7OJeYNjwXj674qCLXgQajfS+7NrmpXt6IoDaKl0EhPc
+         n/XNytEia+Mx+doFKxevtGGfFgGWv7nZpK3V7iOxi5cd53PXoee7CiBDTE9aSaSyAZ
+         9XaQVdTr/2LGOovlyPWNeWlF55lHlVqFb6CrgHl1oDVyXEuvi/RZxefiihtLR+fAO2
+         iTZdDXwC4umABxJMGf5L7EE5yfX9coIyrJdz0Ha+lBNSJ5PkH4Ne/VqssI9+xuagx1
+         bv+vsg/G95WS3gTZPzf1ScbYWUwJ2ZQN+ve1kG/uPyTRHmbywWTrtdWiMN0qyIo09Y
+         iOs1kNteadEaQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  1 Dec 2022 13:14:23 +0300 (MSK)
+Date:   Thu, 1 Dec 2022 13:14:17 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+CC:     Aleksey Romanov <AVRomanov@sberdevices.ru>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
+Message-ID: <20221201101417.f6qm4v3m7ibh3l72@CAB-WSD-L081021>
+References: <20221121190020.66548-1-avromanov@sberdevices.ru>
+ <Y3vjQ7VJYUEWl2uc@cmpxchg.org>
+ <Y3w7VP5CKvm6XmoJ@google.com>
+ <Y3w8/q/HoSbqamoD@google.com>
+ <20221122121413.ssieckg523urj37h@cab-wsm-0029881.lan>
+ <Y32eA93V7w1Wu3VH@google.com>
+ <20221123085306.52ozfjimaeikcbof@CAB-WSD-L081021>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221123085306.52ozfjimaeikcbof@CAB-WSD-L081021>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/01 00:48:00 #20630840
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,LOTS_OF_MONEY,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git lazy-obsolete.2022.11.30a
-branch HEAD: 45b1f52e5e9772ee4aa7e83af8f98328ead684fa  rxrpc: Use call_rcu_hurry() instead of call_rcu()
+Hello Sergey,
 
-elapsed time: 730m
+Hope you are doing well. Really sorry for the ping.
 
-configs tested: 47
-configs skipped: 2
+Did you get a chance to see the patch series, my questions, and
+thoughts?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                            allnoconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-x86_64                               rhel-8.3
-um                             i386_defconfig
-powerpc                           allnoconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-
-clang tested configs:
-s390                 randconfig-r044-20221128
-hexagon              randconfig-r041-20221128
-riscv                randconfig-r042-20221128
-hexagon              randconfig-r045-20221128
-x86_64               randconfig-k001-20221128
-x86_64               randconfig-a011-20221128
-x86_64               randconfig-a014-20221128
-x86_64               randconfig-a012-20221128
-x86_64               randconfig-a013-20221128
-x86_64               randconfig-a016-20221128
-x86_64               randconfig-a015-20221128
-i386                 randconfig-a014-20221128
-i386                 randconfig-a011-20221128
-i386                 randconfig-a013-20221128
-i386                 randconfig-a016-20221128
-i386                 randconfig-a012-20221128
-i386                 randconfig-a015-20221128
+On Wed, Nov 23, 2022 at 11:53:06AM +0300, Dmitry Rokosov wrote:
+> Hello Sergey,
+> 
+> Thank you for your quick and detailed support! Here is my two cents
+> below.
+> 
+> On Wed, Nov 23, 2022 at 01:13:55PM +0900, Sergey Senozhatsky wrote:
+> > On (22/11/22 12:14), Aleksey Romanov wrote:
+> > > > IIRC that was patent in question:
+> > > > 
+> > > > https://patentimages.storage.googleapis.com/e2/66/9e/0ddbfae5c182ac/US9977598.pdf
+> > > 
+> > > I think the patent is talking about "mapping the virtual address" (like
+> > > in KSM). But zram works with the "handle" abstraction, which is a boxed
+> > > pointer to the required object. I think my implementation and the patent
+> > > is slightly different. 
+> > > 
+> > > Also, the patent speaks of "compressing" pages. In this case, we can add
+> > > zs_merge() function (like zs_compact()), that is, remove the merge logic
+> > > at the allocator level. zsmalloc doesn't say anything about what objects
+> > > it can work with. Implementation at the zsmalloc level is possible,
+> > > though more complicated that at the zram level. 
+> > > 
+> > > I believe that we can implement at least one of the options I proposed.
+> > > 
+> > > What do you think?
+> > 
+> > Oh, yeah, I'm not saying that we cannot have something like that
+> > in zram/zsmalloc, just wanted to give some historical retrospective
+> > on this and point at some implementation details that should be
+> > considered.
+> 
+> It's a very curious situation, I would say. I'm not so familiar with US
+> patent law, but I suppose it should be based on some keywords and
+> algorithms.
+> 
+> If we speak in terms of algorithm Alexey patch is different a little bit
+> from suggested in the patent paper. If we care about keywords, I think by
+> moving Alexey same page merging algorithm to zsmalloc we lose
+> "compressing" keyword, because zsmalloc operates with "objects" only,
+> doesn't matter if they are compressed or not.
+> 
+> Anyway, could you please suggest who can help to understand if it's safe
+> to use such same page merging algorithm in the upstream or not?
+> Maybe we can ask Linux Foundation lawyers to help us, just a guess.
+> I'm sure we shouldn't decline helpful features and optimization without
+> complete certainty about all restrictions.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thank you,
+Dmitry
