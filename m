@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0B563E6AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8795263E6B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiLAAqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:46:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
+        id S229694AbiLAAw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiLAAqw (ORCPT
+        with ESMTP id S229614AbiLAAw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:46:52 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3324226105;
-        Wed, 30 Nov 2022 16:46:51 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id s8so89639lfc.8;
-        Wed, 30 Nov 2022 16:46:51 -0800 (PST)
+        Wed, 30 Nov 2022 19:52:26 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CFC7B4F9;
+        Wed, 30 Nov 2022 16:52:25 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id bj12so542747ejb.13;
+        Wed, 30 Nov 2022 16:52:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pqmTUQSzfvHEUN+F2iBAqrzmDtyHBEj68ag1QEGOo5k=;
-        b=f1S0Iaezu+w258iDOTh+9ghB5uI1fUdHmbT0jBMTEKAkXlphFoBzKWbQXQLKZI1oUw
-         DxY8LmS9v4Ggm8YYLhyrrmC16pnsjEj0cHPba0kREouJJ1yCjB5OUB+Jvvlue3+szoya
-         rx/6aI7Y469SUKF4AC9jxPy7OsscMfKX800USz+OGbiuzWp+nSN+SuT9UOxb3VLIo1K9
-         dR5ih2VTix7n7EDJ6VeqOVZ6+b5LW+KGgLgbnqieknFHz4nJ2bsnqoFLY1u4INXJpQx4
-         pN3Ez2jBRAeVKqwRFHmGUtnoNWJhH/EiUon7UW+vUayDD9Yy66FEC9WdA9G3iqjBaggj
-         Q2xQ==
+        bh=EcYtG8fJSEFaCTYWXfq8R84dSZ3VnLHvz4JUlumXUv0=;
+        b=JmfG+COHj9Da/GW0CY8kh7AJfSJyMm9+YNe16nEaUflGBG6szpdDdtghgAIiqIxHtq
+         R7u81kK2IxZyx0MmKk2Dy3kunXIwYV4HlgjYGhOqa6za8zpbMwZ3fteFGHcfAmAD5CbI
+         g1OV7jCWgVse0lMZF1RSqZf3E20f1mo5mg4gqeZf8b6gL3jqwyuA4A4fe7k0E2tK/QDA
+         tdOJLRZfkXO+PCWZ5wlaO61EBzzPw4PvEaD/0/53fAUuVxi4Y8smSCK7jKN5/nLqhDGm
+         S/oH1QtsjA53QdtF8+yloWmnBLr8L3xo8nEZErqUZiflzgOz2DzsdE8zPgUW1YKRwJro
+         giaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pqmTUQSzfvHEUN+F2iBAqrzmDtyHBEj68ag1QEGOo5k=;
-        b=pVpWK0bDFKFgTMHGagAKsCKkn1OIcK8pW8cdy6f7HwuWK7V1kB4wNK4g/35ki30a8q
-         H7QHsYUuYmQ51Nk4t12YOU5KXFSdT3ABl9Mh+SugIyK9BCp+hRMCbF3k9MATIvB6TW6z
-         kXcciBnKHwKr+ZU3qgmix+rR6MWaegmVDZZqeYNcvg234n66tTBm9sFbuW6AyCt+BkFc
-         OyfmeHzFAlKSXLagVjolPirO7BeGZHp7QDhAz2fI8DsBJDNGqouw65eZRtI8GxBdheKu
-         91hhHhMA8+gZPqg2RE5QbS0Sd8MENEsOt+8tCgR5/lTb13wr+0G8BqHxgerNbtA4lcJD
-         Y2Lw==
-X-Gm-Message-State: ANoB5pnLS7FYCsguAcPJ/jGi8so8gOTHRn6emnP44q+054BbHPGVyL5a
-        sAPgF7f1uiYXNn9ZE7RkvFeOJcumGJrdlmvRPA==
-X-Google-Smtp-Source: AA0mqf4vHvRmkLVnJATGVXP8yIbONkm4WrfoF0VaAmg6bfLPGtJ3Gta4zmzl/qowugYsMaLlUzOtPSoS8uF+jRo/WVA=
-X-Received: by 2002:a19:6a18:0:b0:48b:1973:e3bf with SMTP id
- u24-20020a196a18000000b0048b1973e3bfmr19037636lfu.328.1669855609404; Wed, 30
- Nov 2022 16:46:49 -0800 (PST)
+        bh=EcYtG8fJSEFaCTYWXfq8R84dSZ3VnLHvz4JUlumXUv0=;
+        b=RMT0L8pEG5vksa24zi5eGTWyfY83MHY7Lz5ZcCpnPJOHSKEEPjfEQghNMxSkmMP4xg
+         lHay6xW0GPs/TVga/NBRW97DL7r3UTuo5aGPezKCSpOUPccYUmnR+Wy8dn0Ty+O9eO5L
+         xzYAqb4bIWqmq7lhJMQQqvFnw6DJntCvir/X8M64DMtZSyDcdvZxk5onvP2Dade+89se
+         S4kPrsOV75IYEAwfmTnvcCf3QY7hrWVCTyCLJ1EJb9770WQG1gycWS9Rg1ie4LRB4IFV
+         ICd+nNZK8PYEKFBFZqrnPUhrZwXctFZgxAm2FOc4SsxgIylmOvpbY0bsLKGBFD+DTZ7L
+         003g==
+X-Gm-Message-State: ANoB5pkp2SHbC1HMO52cbvfZ6wLtUJJMnSCy14f8ajX458sdDMqO5dSt
+        i2XK1byiMKGcZjzJw8Avjec4diTIknyFHi8seto=
+X-Google-Smtp-Source: AA0mqf6dDvYisUlUN1Gsr07MRUCfV4BhoiCvKwdt+tl2x5lYg06ZyMUT9ehXEzASQCkZ66ZQYbfL6pluykPBul1Ep5k=
+X-Received: by 2002:a17:906:414c:b0:7a9:ecc1:2bd2 with SMTP id
+ l12-20020a170906414c00b007a9ecc12bd2mr42513746ejk.545.1669855943871; Wed, 30
+ Nov 2022 16:52:23 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1669850856.git.quic_asutoshd@quicinc.com> <f4bb4850076c9a953eaaa9e76dc3b2fa37f0505e.1669850856.git.quic_asutoshd@quicinc.com>
-In-Reply-To: <f4bb4850076c9a953eaaa9e76dc3b2fa37f0505e.1669850856.git.quic_asutoshd@quicinc.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Thu, 1 Dec 2022 08:46:37 +0800
-Message-ID: <CAGaU9a-T3YFQ6XJAee_zU9idN=cx=KLaONtMppAabv6oMPxwMw@mail.gmail.com>
-Subject: Re: [PATCH v9 02/16] ufs: core: Probe for ext_iid support
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, mani@kernel.org,
-        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20221129134217.52767-1-changbin.du@gmail.com> <20221129134217.52767-3-changbin.du@gmail.com>
+In-Reply-To: <20221129134217.52767-3-changbin.du@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 30 Nov 2022 16:52:11 -0800
+Message-ID: <CAEf4BzZPZeeGJTZC3NSm+Km4RZirGrwr8d8dXepLmBLTiUn8Hg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] bpf: makefiles: do not generate empty vmlinux.h
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -76,21 +85,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 8:05 AM Asutosh Das <quic_asutoshd@quicinc.com> wrote:
+On Tue, Nov 29, 2022 at 5:42 AM Changbin Du <changbin.du@gmail.com> wrote:
 >
-> Task Tag is limited to 8 bits and this restricts the number
-> of active IOs to 255.
-> In Multi-circular queue mode, this may not be enough.
-> The specification provides EXT_IID which can be used to increase
-> the number of IOs if the UFS device and UFSHC support it.
-> This patch adds support to probe for ext_iid support in
-> ufs device and UFSHC.
->
-> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: Avri Altman <avri.altman@wdc.com>
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> Remove the empty vmlinux.h if bpftool failed to dump btf info.
+> The emptry vmlinux.h can hide real error when reading output
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+typo: empty
+
+> of make.
+>
+> This is done by adding .DELETE_ON_ERROR special target in related
+> makefiles.
+>
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  tools/bpf/bpftool/Makefile           | 3 +++
+>  tools/perf/Makefile.perf             | 2 ++
+>  tools/testing/selftests/bpf/Makefile | 3 +++
+>  3 files changed, 8 insertions(+)
+>
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 4a95c017ad4c..f6b1e65085db 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -265,3 +265,6 @@ FORCE:
+>  .PHONY: all FORCE bootstrap clean install-bin install uninstall
+>  .PHONY: doc doc-clean doc-install doc-uninstall
+>  .DEFAULT_GOAL := all
+> +
+> +# Delete partially updated (corrupted) files on error
+> +.DELETE_ON_ERROR:
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index a432e59afc42..265254fc641a 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -1149,3 +1149,5 @@ FORCE:
+>  .PHONY: libtraceevent_plugins archheaders
+>
+>  endif # force_fixdep
+> +
+> +.DELETE_ON_ERROR:
+
+please split out perf changes, they should go through perf tree
+
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index e6cf21fad69f..f41c4b011221 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -617,3 +617,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)      \
+>                                liburandom_read.so)
+>
+>  .PHONY: docs docs-clean
+> +
+> +# Delete partially updated (corrupted) files on error
+> +.DELETE_ON_ERROR:
+> --
+> 2.37.2
+>
