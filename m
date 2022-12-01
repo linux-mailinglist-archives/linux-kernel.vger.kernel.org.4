@@ -2,224 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F7163F478
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBC763F476
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbiLAPrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiLAPrA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231829AbiLAPrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 1 Dec 2022 10:47:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6DF55AD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669909560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zXP0UHbjB4gS30fO8iLIvs/Qipsj+EODVXd3Gmy47d0=;
-        b=ISlIjpQYKSsPce5/a0uGI9SLiYtap4YE6eRAGXGpcdCloV36sCzeX0j7BfgRkb7vfv054h
-        IwsRpnzZEW0aC8n5qJLRsf9rmp6w+/8mAMBvmhGkBqTX61FLCvVVt9fsvVTdbEcMzyLiKB
-        ofFzzEvMOXwo0tiHvu2Nf+So3o52i3c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-161-BBEZ5xw_PuWZNkm-dt0ykQ-1; Thu, 01 Dec 2022 10:45:56 -0500
-X-MC-Unique: BBEZ5xw_PuWZNkm-dt0ykQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231912AbiLAPqt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 1 Dec 2022 10:46:49 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132DC2185;
+        Thu,  1 Dec 2022 07:46:48 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 074E4101A52A;
-        Thu,  1 Dec 2022 15:45:56 +0000 (UTC)
-Received: from starship (unknown [10.35.206.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 85DCB40C8459;
-        Thu,  1 Dec 2022 15:45:53 +0000 (UTC)
-Message-ID: <00a73e8046d4ce1597b2bc0e331e6bf668d8c98d.camel@redhat.com>
-Subject: Re: [PATCH] KVM: X86: set EXITING_GUEST_MODE as soon as vCPU exits
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 01 Dec 2022 17:45:52 +0200
-In-Reply-To: <E3693FA8-7818-495B-9F40-42AEEE756142@nutanix.com>
-References: <20221129182226.82087-1-jon@nutanix.com>
-         <5162c4cbaaae8de01c77093ac005c2f5abc1d040.camel@redhat.com>
-         <E3693FA8-7818-495B-9F40-42AEEE756142@nutanix.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 91EF941A42;
+        Thu,  1 Dec 2022 15:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1669909604; bh=sweJNKsjr4ljoYIjuQ98l2QsA987tki/vb90mAoNacE=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=vqwoRo3rh1Gn9uAlzocc7qmZjr3RgtGrOSjTt3SrXhOaEJpHr9imroBJp7n/egHjW
+         kKg0vs6Clj52HIV9QnzBYzvz4PkD/6h1KU64FyQCrwbzmgzqJeJ4HfjCjA1YE7RyYh
+         WVpf2cl7tiFnPU2RWpttyvFoBIYzLyqcTcR5v0UnZrYoove1b6eS7xfJAYMH90acOR
+         +Q3dzpOgE5u4STNQUmGJRwVLNlov0cuaefHWZKD0JCK+UMfJdBhU/9Cja3DToH4A2B
+         fR4ua1/7wQjrIYHsvnwsASSGuAaePovgNCFZdu23dBU9JoGJR5+5JOe5wN/gyb3Tay
+         hurVUC5Ydudig==
+Message-ID: <ae89b38f-fd67-e0e5-1439-f376da985be8@marcan.st>
+Date:   Fri, 2 Dec 2022 00:46:38 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        alyssa@rosenzweig.io, sven@svenpeter.dev
+References: <20221201103651.27807-1-akihiko.odaki@daynix.com>
+ <877czb42wk.fsf@bloch.sibelius.xs4all.nl>
+ <c3b0cee9-032c-0447-37df-3ce5ce280e41@daynix.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] arch: arm64: dts: apple: Remove stdout-path
+In-Reply-To: <c3b0cee9-032c-0447-37df-3ce5ce280e41@daynix.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 19:56 +0000, Jon Kohler wrote:
-> > On Nov 29, 2022, at 2:47 PM, Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > 
-> > On Tue, 2022-11-29 at 13:22 -0500, Jon Kohler wrote:
-> > > Set vcpu->mode to EXITING_GUEST_MODE as soon vCPU exits to reflect
-> > > that we are indeed exiting guest mode, but not quite out of guest
-> > > mode yet. Note: This is done lazily without an explicit memory
-> > > barrier so that we do not regress the cost in the critical path
-> > > of going from the exit to the exit handler.
-> > > 
-> > > Flip back to IN_GUEST_MODE for exits that use
-> > > EXIT_FASTPATH_REENTER_GUEST, such that we are IN_GUEST_MODE upon
-> > > reentry.
-> > > 
-> > > Changing vcpu->mode away from IN_GUEST_MODE as early as possible
-> > > gives IPI senders as much runway as possible to avoid ringing
-> > > doorbell or sending posted interrupt IPI in AMD and Intel,
-> > > respectively. Since this is done without an explicit memory
-> > > barrier, the worst case is that the IPI sender sees IN_GUEST_MODE
-> > > still and sends a spurious event, which is the behavior prior
-> > > to this patch.
-> > 
-> > Beware that we had a king sized bug in regard to AVIC inhibition races
-> > vs guest entries, this this should be carefully checked for this.
-> 
-> Thanks, Maxim - any pointers on what we should be looking for here?
+On 02/12/2022 00.19, Akihiko Odaki wrote:
+> So I think we should think more about the case when the kernel is booted 
+> from m1n1. When using its hypervisor feature, it is more likely that you 
+> want console on serial and and that is the opposite of this change. 
+> However, it is still possible to get the console on framebuffer with 
+> keyboard.
 
-I need to swap the whole thing in to be able to comment on this one.
-I'll do this next week.
+Except if the framebuffer is broken, or everything is broken and it
+hangs on early boot, which happens all the time when I'm debugging using
+the hypervisor. Or maybe I'm just SSHing in remotely and not physically
+in front of the machine, which is also often the case. Or maybe I'm just
+booting headless because I didn't feel like swapping around the HDMI cable.
 
-Overall the problem is that the target vCPU can inhibit its AVIC at any moment,
-which forces the senders to use normal KVM_REQ_EVENT + vcpu kick to deliver
-it the interrupt. It is very racy.
+> In contrary, if you boot the kernel without the hypervisor 
+> feature and this change, you will completely lose the console.
 
-The only other pointer I can recall now is the code at 'svm_complete_interrupt_delivery'
+How so? The console goes to both places with stdout-path set to serial0.
+What it *does* change is where input is accepted prior to getty startup
+(which is why u-boot specifically conditions this on keyboard presence,
+modulo the USB issue - because if you *don't* have a keyboard then tty
+keyboard input is useless). But if you're booting kernels without u-boot
+along the way, you're probably doing it from the hypervisor or linux.py
+anyway, especially if you plan to do something like "init=/bin/sh",
+because without u-boot (+ optionally some EFI loader) there is no way of
+editing command line arguments at boot time stand-alone.
 
-Best regards,
-	Maxim Levitsky
+However, while having stdout-path gives you both serial + tty output and
+serial input, *not* having stdout-path kills serial entirely. It also
+kills earlycon, and makes it so that you have to specify a bunch of
+obscure arguments to get earlycon to work, instead of just a plain
+"earlycon" argument which is much easier.
 
-> 
-> > Also, do you have any perf numbers to see if that actually improves performance?
-> > (I am just curious, I do think that this can improve performance).
-> > 
-> 
-> Yes indeed! Sorry I should have put that right in the commit msg as a note,
-> but using the kvm-unit-tests vmexit_ipi with -smp 20 on an Intel 8168 its
-> roughly ~3% better (~3325-ish vs ~3400-ish), though the test is a bit noisy
-> even with taskset to a single socket.
-> 
-> To help validate that we were even getting *any* benefit, in a local build
-> I added a log statement (rough code below) to IPI delivery path, and did see 
-> many, many IPIs getting suppressed that would have otherwise fired.
-> 
-> kvm_vcpu_trigger_posted_interrupt() {
-> ...
->     if (vcpu->mode == EXITING_GUEST_MODE) {
->         pr_warn_ratelimited("exiting suppression worked");
->     }
-> ...
-> }
-> 
-> > Best regards,
-> > 	Maxim Levitsky
-> > 
-> > 
-> > > Signed-off-by: Jon Kohler <jon@nutanix.com>
-> > > ---
-> > > arch/x86/kvm/svm/svm.c |  7 +++++++
-> > > arch/x86/kvm/vmx/vmx.c | 23 +++++++++++++++++++++++
-> > > arch/x86/kvm/x86.c     |  8 ++++++++
-> > > 3 files changed, 38 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > > index ce362e88a567..5f0c118a3ffd 100644
-> > > --- a/arch/x86/kvm/svm/svm.c
-> > > +++ b/arch/x86/kvm/svm/svm.c
-> > > @@ -3907,6 +3907,13 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu, bool spec_ctrl_in
-> > > 	else
-> > > 		__svm_vcpu_run(svm, spec_ctrl_intercepted);
-> > > 
-> > > +	/* Optimize IPI reduction by setting mode immediately after vmexit
-> > > +	 * without a memmory barrier as this as not paired anywhere. vcpu->mode
-> > > +	 * is will be set to OUTSIDE_GUEST_MODE in x86 common code with a memory
-> > > +	 * barrier, after the host is done fully restoring various host states.
-> > > +	 */
-> > > +	vcpu->mode = EXITING_GUEST_MODE;
-> > > +
-> > > 	guest_state_exit_irqoff();
-> > > }
-> > > 
-> > > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > > index 63247c57c72c..243dcb87c727 100644
-> > > --- a/arch/x86/kvm/vmx/vmx.c
-> > > +++ b/arch/x86/kvm/vmx/vmx.c
-> > > @@ -5878,6 +5878,17 @@ static fastpath_t handle_fastpath_preemption_timer(struct kvm_vcpu *vcpu)
-> > > 
-> > > 	if (!vmx->req_immediate_exit &&
-> > > 	    !unlikely(vmx->loaded_vmcs->hv_timer_soft_disabled)) {
-> > > +		/* Reset IN_GUEST_MODE since we're going to reenter
-> > > +		 * guest as part of this fast path. This is done as
-> > > +		 * an optimization without a memory barrier since
-> > > +		 * EXITING_GUEST_MODE is also set without a memory
-> > > +		 * barrier. This also needs to be reset prior to
-> > > +		 * calling apic_timer_expired() so that
-> > > +		 * kvm_use_posted_timer_interrupt() returns the proper
-> > > +		 * value.
-> > > +		 */
-> > > +		if (vcpu->mode == EXITING_GUEST_MODE)
-> > > +			vcpu->mode = IN_GUEST_MODE;
-> > > 		kvm_lapic_expired_hv_timer(vcpu);
-> > > 		return EXIT_FASTPATH_REENTER_GUEST;
-> > > 	}
-> > > @@ -7031,6 +7042,18 @@ void noinstr vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp)
-> > > void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
-> > > 					unsigned int flags)
-> > > {
-> > > +	struct kvm_vcpu *vcpu = &vmx->vcpu;
-> > > +
-> > > +	/* Optimize IPI reduction by setting mode immediately after vmexit
-> > > +	 * without a memmory barrier as this as not paired anywhere. vcpu->mode
-> > > +	 * is will be set to OUTSIDE_GUEST_MODE in x86 common code with a memory
-> > > +	 * barrier, after the host is done fully restoring various host states.
-> > > +	 * Since the rdmsr and wrmsr below are expensive, this must be done
-> > > +	 * first, so that the IPI suppression window covers the time dealing
-> > > +	 * with fixing up SPEC_CTRL.
-> > > +	 */
-> > > +	vcpu->mode = EXITING_GUEST_MODE;
-> > > +
-> > > 	u64 hostval = this_cpu_read(x86_spec_ctrl_current);
-> > > 
-> > > 	if (!cpu_feature_enabled(X86_FEATURE_MSR_SPEC_CTRL))
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 2835bd796639..0e0d228f3fa5 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -2160,6 +2160,14 @@ fastpath_t handle_fastpath_set_msr_irqoff(struct kvm_vcpu *vcpu)
-> > > 		data = kvm_read_edx_eax(vcpu);
-> > > 		if (!handle_fastpath_set_tscdeadline(vcpu, data)) {
-> > > 			kvm_skip_emulated_instruction(vcpu);
-> > > +			/* Reset IN_GUEST_MODE since we're going to reenter
-> > > +			 * guest as part of this fast path. This is done as
-> > > +			 * an optimization without a memory barrier since
-> > > +			 * EXITING_GUEST_MODE is also set without a memory
-> > > +			 * barrier.
-> > > +			 */
-> > > +			if (vcpu->mode == EXITING_GUEST_MODE)
-> > > +				vcpu->mode = IN_GUEST_MODE;
-> > > 			ret = EXIT_FASTPATH_REENTER_GUEST;
-> > > 		}
-> > > 		break;
+So for this to be considered at all, you would first need to propose a
+m1n1 patch to re-add stdout-path in boots under the hypervisor and
+(optionally?) on linux.py boots, so you don't regress tools that our
+developers use every day.
 
+But I still fail to see the benefit of this change. What scenario are
+you envisioning that this would improve (something people actually do,
+not a hypothetical)?
 
+- Hector
