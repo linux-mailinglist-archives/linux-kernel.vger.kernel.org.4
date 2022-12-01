@@ -2,157 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA2063EFBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EAF63EFBF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiLALnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
+        id S230336AbiLALnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiLALmr (ORCPT
+        with ESMTP id S230439AbiLALnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:42:47 -0500
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66FFB48D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:42:42 -0800 (PST)
-Date:   Thu, 01 Dec 2022 11:42:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1669894957; x=1670154157;
-        bh=1DpeR0fOlb5PAMGmnpXX+od9r16gR+9q1pKLo2N9KRI=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=yDI7s0HlJ4McXxo+2ufuGpE4pXDth5CZgcjcV3rSuMzzH6q3wJU2Tk8xl6O17cNkC
-         HGXaHumIUcAtIEKBNwYce9+vZ6SE7uaW92ikgpJXsWAVzP2llfPOvr8KTm04XlizD+
-         qqmrGlCY6Vr+H0QkM3W/9jf6/hOxA26eKCS8YCl+DJk0go0urf5JB+gwEDYNDa+OO5
-         1T8hQYX7JoMQ/eCuypvX3exrqCVOMjP+g6FcbGegvHOS8NPTUhCiVXC8ifRf/Od0W+
-         SNowSPaq79Rn4U19KPuffPal7gPFjk3PQGZv2gIZTRDFaB0Mv+3fBjN1Wz7ItilgIJ
-         mhsl3c7GMLCkg==
-To:     Rob Herring <robh@kernel.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/7] dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Pull pinctrl node changes from MT6795 document
-Message-ID: <OlpG9EaFtnZPPSHGKPeAj0wrG-hceDitxke8L1MrF58nBbOf4Q8bsw1FC8O12qj_3GFxNpM4p_LeKwbCzchvZGaD0a_S56_uKhg7YWszZ9A=@protonmail.com>
-In-Reply-To: <20221130152041.GA2183918-robh@kernel.org>
-References: <20221118113028.145348-1-y.oudjana@protonmail.com> <20221118113028.145348-2-y.oudjana@protonmail.com> <20221130152041.GA2183918-robh@kernel.org>
-Feedback-ID: 6882736:user:proton
+        Thu, 1 Dec 2022 06:43:15 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 365B099532
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:43:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96209D6E;
+        Thu,  1 Dec 2022 03:43:17 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 391693F73D;
+        Thu,  1 Dec 2022 03:43:09 -0800 (PST)
+Date:   Thu, 1 Dec 2022 11:43:06 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Walbran <qwandor@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH 01/12] firmware: arm_ffa: Move constants to header file
+Message-ID: <20221201114306.t6pqniscymm2uizx@bogus>
+References: <20221116170335.2341003-1-qperret@google.com>
+ <20221116170335.2341003-2-qperret@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116170335.2341003-2-qperret@google.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, November 30th, 2022 at 6:20 PM, Rob Herring <robh@kernel.org>=
- wrote:
+On Wed, Nov 16, 2022 at 05:03:24PM +0000, Quentin Perret wrote:
+> From: Will Deacon <will@kernel.org>
+> 
+> FF-A function IDs and error codes will be needed in the hypervisor too,
+> so move to them to the header file where they can be shared. Rename the
+> version constants with an "FFA_" prefix so that they are less likely
+> to clash with other code in the tree.
+>
 
-> On Fri, Nov 18, 2022 at 02:30:22PM +0300, Yassine Oudjana wrote:
->=20
-> > From: Yassine Oudjana y.oudjana@protonmail.com
-> >=20
-> > mediatek,pinctrl-mt6795.yaml has different node name patterns which mat=
-ch
-> > bindings of other MediaTek pin controllers, ref for pinmux-node.yaml wh=
-ich
-> > has a description of the pinmux property, as well as some additional
-> > descriptions for some pin configuration properties. Pull those changes
-> > into mediatek,mt6779-pinctrl.yaml and adjust the example DTS to match i=
-n
-> > preparation to combine the MT6795 document into it.
-> >=20
-> > Signed-off-by: Yassine Oudjana y.oudjana@protonmail.com
-> > ---
-> > .../pinctrl/mediatek,mt6779-pinctrl.yaml | 38 ++++++++++++++-----
-> > 1 file changed, 28 insertions(+), 10 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-=
-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pi=
-nctrl.yaml
-> > index a2141eb0854e..d6231d11e949 100644
-> > --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl=
-.yaml
-> > +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl=
-.yaml
-> > @@ -111,19 +111,21 @@ allOf:
-> > - "#interrupt-cells"
-> >=20
-> > patternProperties:
-> > - '-[0-9]*$':
-> > + '-pins$':
-> > type: object
-> > additionalProperties: false
-> >=20
-> > patternProperties:
-> > - '-pins*$':
-> > + '^pins':
-> > type: object
-> > description: |
-> > A pinctrl node should contain at least one subnodes representing the
-> > pinctrl groups available on the machine. Each subnode will list the
-> > pins it needs, and how they should be configured, with regard to muxer
-> > configuration, pullups, drive strength, input enable/disable and input =
-schmitt.
-> > - $ref: "/schemas/pinctrl/pincfg-node.yaml"
-> > + allOf:
-> > + - $ref: pinmux-node.yaml
-> > + - $ref: pincfg-node.yaml
-> >=20
-> > properties:
-> > pinmux:
-> > @@ -134,9 +136,25 @@ patternProperties:
-> >=20
-> > bias-disable: true
-> >=20
-> > - bias-pull-up: true
-> > -
-> > - bias-pull-down: true
-> > + bias-pull-up:
-> > + oneOf:
-> > + - type: boolean
-> > + - enum: [100, 101, 102, 103]
-> > + description: Pull up PUPD/R0/R1 type define value.
-> > + description: |
-> > + For normal pull up type, it is not necessary to specify R1R0
-> > + values; When pull up type is PUPD/R0/R1, adding R1R0 defines
-> > + will set different resistance values.
-> > +
-> > + bias-pull-down:
-> > + oneOf:
-> > + - type: boolean
-> > + - enum: [100, 101, 102, 103]
->=20
->=20
-> 'bias-pull-down' is defined to be in Ohms. This doesn't look like it's
-> Ohms.
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-That's right, these numbers appear to correspond to MTK_PUPD_SET_R1R0_*
-values defined in include/dt-bindings/pinctrl/mt65xx.h, and work similar
-to mediatek,pull-down-adv as defined in mediatek,mt8183-pinctrl.yaml.
+> Co-developed-by: Andrew Walbran <qwandor@google.com>
+> Signed-off-by: Andrew Walbran <qwandor@google.com>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> ---
+>  drivers/firmware/arm_ffa/driver.c | 101 +++---------------------------
+>  include/linux/arm_ffa.h           |  83 ++++++++++++++++++++++++
+>  2 files changed, 93 insertions(+), 91 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> index d5e86ef40b89..fa85c64d3ded 100644
+> --- a/drivers/firmware/arm_ffa/driver.c
+> +++ b/drivers/firmware/arm_ffa/driver.c
+> @@ -36,81 +36,6 @@
+>  #include "common.h"
+>  
+>  #define FFA_DRIVER_VERSION	FFA_VERSION_1_0
+> -
+> -#define FFA_SMC(calling_convention, func_num)				\
+> -	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, (calling_convention),	\
+> -			   ARM_SMCCC_OWNER_STANDARD, (func_num))
+> -
+> -#define FFA_SMC_32(func_num)	FFA_SMC(ARM_SMCCC_SMC_32, (func_num))
+> -#define FFA_SMC_64(func_num)	FFA_SMC(ARM_SMCCC_SMC_64, (func_num))
+> -
+> -#define FFA_ERROR			FFA_SMC_32(0x60)
+> -#define FFA_SUCCESS			FFA_SMC_32(0x61)
+> -#define FFA_INTERRUPT			FFA_SMC_32(0x62)
+> -#define FFA_VERSION			FFA_SMC_32(0x63)
+> -#define FFA_FEATURES			FFA_SMC_32(0x64)
+> -#define FFA_RX_RELEASE			FFA_SMC_32(0x65)
+> -#define FFA_RXTX_MAP			FFA_SMC_32(0x66)
+> -#define FFA_FN64_RXTX_MAP		FFA_SMC_64(0x66)
+> -#define FFA_RXTX_UNMAP			FFA_SMC_32(0x67)
+> -#define FFA_PARTITION_INFO_GET		FFA_SMC_32(0x68)
+> -#define FFA_ID_GET			FFA_SMC_32(0x69)
+> -#define FFA_MSG_POLL			FFA_SMC_32(0x6A)
+> -#define FFA_MSG_WAIT			FFA_SMC_32(0x6B)
+> -#define FFA_YIELD			FFA_SMC_32(0x6C)
+> -#define FFA_RUN				FFA_SMC_32(0x6D)
+> -#define FFA_MSG_SEND			FFA_SMC_32(0x6E)
+> -#define FFA_MSG_SEND_DIRECT_REQ		FFA_SMC_32(0x6F)
+> -#define FFA_FN64_MSG_SEND_DIRECT_REQ	FFA_SMC_64(0x6F)
+> -#define FFA_MSG_SEND_DIRECT_RESP	FFA_SMC_32(0x70)
+> -#define FFA_FN64_MSG_SEND_DIRECT_RESP	FFA_SMC_64(0x70)
+> -#define FFA_MEM_DONATE			FFA_SMC_32(0x71)
+> -#define FFA_FN64_MEM_DONATE		FFA_SMC_64(0x71)
+> -#define FFA_MEM_LEND			FFA_SMC_32(0x72)
+> -#define FFA_FN64_MEM_LEND		FFA_SMC_64(0x72)
+> -#define FFA_MEM_SHARE			FFA_SMC_32(0x73)
+> -#define FFA_FN64_MEM_SHARE		FFA_SMC_64(0x73)
+> -#define FFA_MEM_RETRIEVE_REQ		FFA_SMC_32(0x74)
+> -#define FFA_FN64_MEM_RETRIEVE_REQ	FFA_SMC_64(0x74)
+> -#define FFA_MEM_RETRIEVE_RESP		FFA_SMC_32(0x75)
+> -#define FFA_MEM_RELINQUISH		FFA_SMC_32(0x76)
+> -#define FFA_MEM_RECLAIM			FFA_SMC_32(0x77)
+> -#define FFA_MEM_OP_PAUSE		FFA_SMC_32(0x78)
+> -#define FFA_MEM_OP_RESUME		FFA_SMC_32(0x79)
+> -#define FFA_MEM_FRAG_RX			FFA_SMC_32(0x7A)
+> -#define FFA_MEM_FRAG_TX			FFA_SMC_32(0x7B)
+> -#define FFA_NORMAL_WORLD_RESUME		FFA_SMC_32(0x7C)
+> -
+> -/*
+> - * For some calls it is necessary to use SMC64 to pass or return 64-bit values.
+> - * For such calls FFA_FN_NATIVE(name) will choose the appropriate
+> - * (native-width) function ID.
+> - */
+> -#ifdef CONFIG_64BIT
+> -#define FFA_FN_NATIVE(name)	FFA_FN64_##name
+> -#else
+> -#define FFA_FN_NATIVE(name)	FFA_##name
+> -#endif
+> -
+> -/* FFA error codes. */
+> -#define FFA_RET_SUCCESS            (0)
+> -#define FFA_RET_NOT_SUPPORTED      (-1)
+> -#define FFA_RET_INVALID_PARAMETERS (-2)
+> -#define FFA_RET_NO_MEMORY          (-3)
+> -#define FFA_RET_BUSY               (-4)
+> -#define FFA_RET_INTERRUPTED        (-5)
+> -#define FFA_RET_DENIED             (-6)
+> -#define FFA_RET_RETRY              (-7)
+> -#define FFA_RET_ABORTED            (-8)
+> -
+> -#define MAJOR_VERSION_MASK	GENMASK(30, 16)
+> -#define MINOR_VERSION_MASK	GENMASK(15, 0)
+> -#define MAJOR_VERSION(x)	((u16)(FIELD_GET(MAJOR_VERSION_MASK, (x))))
+> -#define MINOR_VERSION(x)	((u16)(FIELD_GET(MINOR_VERSION_MASK, (x))))
+> -#define PACK_VERSION_INFO(major, minor)			\
+> -	(FIELD_PREP(MAJOR_VERSION_MASK, (major)) |	\
+> -	 FIELD_PREP(MINOR_VERSION_MASK, (minor)))
+> -#define FFA_VERSION_1_0		PACK_VERSION_INFO(1, 0)
+>  #define FFA_MIN_VERSION		FFA_VERSION_1_0
+>  
+>  #define SENDER_ID_MASK		GENMASK(31, 16)
+> @@ -120,12 +45,6 @@
+>  #define PACK_TARGET_INFO(s, r)		\
+>  	(FIELD_PREP(SENDER_ID_MASK, (s)) | FIELD_PREP(RECEIVER_ID_MASK, (r)))
+>  
+> -/*
+> - * FF-A specification mentions explicitly about '4K pages'. This should
+> - * not be confused with the kernel PAGE_SIZE, which is the translation
+> - * granule kernel is configured and may be one among 4K, 16K and 64K.
+> - */
+> -#define FFA_PAGE_SIZE		SZ_4K
+>  /*
+>   * Keeping RX TX buffer size as 4K for now
+>   * 64K may be preferred to keep it min a page in 64K PAGE_SIZE config
+> @@ -178,9 +97,9 @@ static struct ffa_drv_info *drv_info;
+>   */
+>  static u32 ffa_compatible_version_find(u32 version)
+>  {
+> -	u16 major = MAJOR_VERSION(version), minor = MINOR_VERSION(version);
+> -	u16 drv_major = MAJOR_VERSION(FFA_DRIVER_VERSION);
+> -	u16 drv_minor = MINOR_VERSION(FFA_DRIVER_VERSION);
+> +	u16 major = FFA_MAJOR_VERSION(version), minor = FFA_MINOR_VERSION(version);
+> +	u16 drv_major = FFA_MAJOR_VERSION(FFA_DRIVER_VERSION);
+> +	u16 drv_minor = FFA_MINOR_VERSION(FFA_DRIVER_VERSION);
+>  
+>  	if ((major < drv_major) || (major == drv_major && minor <= drv_minor))
+>  		return version;
+> @@ -204,16 +123,16 @@ static int ffa_version_check(u32 *version)
+>  
+>  	if (ver.a0 < FFA_MIN_VERSION) {
+>  		pr_err("Incompatible v%d.%d! Earliest supported v%d.%d\n",
+> -		       MAJOR_VERSION(ver.a0), MINOR_VERSION(ver.a0),
+> -		       MAJOR_VERSION(FFA_MIN_VERSION),
+> -		       MINOR_VERSION(FFA_MIN_VERSION));
+> +		       FFA_MAJOR_VERSION(ver.a0), FFA_MINOR_VERSION(ver.a0),
+> +		       FFA_MAJOR_VERSION(FFA_MIN_VERSION),
+> +		       FFA_MINOR_VERSION(FFA_MIN_VERSION));
+>  		return -EINVAL;
+>  	}
+>  
+> -	pr_info("Driver version %d.%d\n", MAJOR_VERSION(FFA_DRIVER_VERSION),
+> -		MINOR_VERSION(FFA_DRIVER_VERSION));
+> -	pr_info("Firmware version %d.%d found\n", MAJOR_VERSION(ver.a0),
+> -		MINOR_VERSION(ver.a0));
+> +	pr_info("Driver version %d.%d\n", FFA_MAJOR_VERSION(FFA_DRIVER_VERSION),
+> +		FFA_MINOR_VERSION(FFA_DRIVER_VERSION));
+> +	pr_info("Firmware version %d.%d found\n", FFA_MAJOR_VERSION(ver.a0),
+> +		FFA_MINOR_VERSION(ver.a0));
+>  	*version = ffa_compatible_version_find(ver.a0);
+>  
+>  	return 0;
+> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
+> index 5f02d2e6b9d9..daff44d777fa 100644
+> --- a/include/linux/arm_ffa.h
+> +++ b/include/linux/arm_ffa.h
+> @@ -11,6 +11,89 @@
+>  #include <linux/types.h>
+>  #include <linux/uuid.h>
+>  
+> +#define FFA_SMC(calling_convention, func_num)				\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, (calling_convention),	\
+> +			   ARM_SMCCC_OWNER_STANDARD, (func_num))
+> +
+> +#define FFA_SMC_32(func_num)	FFA_SMC(ARM_SMCCC_SMC_32, (func_num))
+> +#define FFA_SMC_64(func_num)	FFA_SMC(ARM_SMCCC_SMC_64, (func_num))
+> +
+> +#define FFA_ERROR			FFA_SMC_32(0x60)
+> +#define FFA_SUCCESS			FFA_SMC_32(0x61)
+> +#define FFA_INTERRUPT			FFA_SMC_32(0x62)
+> +#define FFA_VERSION			FFA_SMC_32(0x63)
+> +#define FFA_FEATURES			FFA_SMC_32(0x64)
+> +#define FFA_RX_RELEASE			FFA_SMC_32(0x65)
+> +#define FFA_RXTX_MAP			FFA_SMC_32(0x66)
+> +#define FFA_FN64_RXTX_MAP		FFA_SMC_64(0x66)
+> +#define FFA_RXTX_UNMAP			FFA_SMC_32(0x67)
+> +#define FFA_PARTITION_INFO_GET		FFA_SMC_32(0x68)
+> +#define FFA_ID_GET			FFA_SMC_32(0x69)
+> +#define FFA_MSG_POLL			FFA_SMC_32(0x6A)
+> +#define FFA_MSG_WAIT			FFA_SMC_32(0x6B)
+> +#define FFA_YIELD			FFA_SMC_32(0x6C)
+> +#define FFA_RUN				FFA_SMC_32(0x6D)
+> +#define FFA_MSG_SEND			FFA_SMC_32(0x6E)
+> +#define FFA_MSG_SEND_DIRECT_REQ		FFA_SMC_32(0x6F)
+> +#define FFA_FN64_MSG_SEND_DIRECT_REQ	FFA_SMC_64(0x6F)
+> +#define FFA_MSG_SEND_DIRECT_RESP	FFA_SMC_32(0x70)
+> +#define FFA_FN64_MSG_SEND_DIRECT_RESP	FFA_SMC_64(0x70)
+> +#define FFA_MEM_DONATE			FFA_SMC_32(0x71)
+> +#define FFA_FN64_MEM_DONATE		FFA_SMC_64(0x71)
+> +#define FFA_MEM_LEND			FFA_SMC_32(0x72)
+> +#define FFA_FN64_MEM_LEND		FFA_SMC_64(0x72)
+> +#define FFA_MEM_SHARE			FFA_SMC_32(0x73)
+> +#define FFA_FN64_MEM_SHARE		FFA_SMC_64(0x73)
+> +#define FFA_MEM_RETRIEVE_REQ		FFA_SMC_32(0x74)
+> +#define FFA_FN64_MEM_RETRIEVE_REQ	FFA_SMC_64(0x74)
+> +#define FFA_MEM_RETRIEVE_RESP		FFA_SMC_32(0x75)
+> +#define FFA_MEM_RELINQUISH		FFA_SMC_32(0x76)
+> +#define FFA_MEM_RECLAIM			FFA_SMC_32(0x77)
+> +#define FFA_MEM_OP_PAUSE		FFA_SMC_32(0x78)
+> +#define FFA_MEM_OP_RESUME		FFA_SMC_32(0x79)
+> +#define FFA_MEM_FRAG_RX			FFA_SMC_32(0x7A)
+> +#define FFA_MEM_FRAG_TX			FFA_SMC_32(0x7B)
+> +#define FFA_NORMAL_WORLD_RESUME		FFA_SMC_32(0x7C)
+> +
+> +/*
+> + * For some calls it is necessary to use SMC64 to pass or return 64-bit values.
+> + * For such calls FFA_FN_NATIVE(name) will choose the appropriate
+> + * (native-width) function ID.
+> + */
+> +#ifdef CONFIG_64BIT
+> +#define FFA_FN_NATIVE(name)	FFA_FN64_##name
+> +#else
+> +#define FFA_FN_NATIVE(name)	FFA_##name
+> +#endif
+> +
+> +/* FFA error codes. */
+> +#define FFA_RET_SUCCESS            (0)
+> +#define FFA_RET_NOT_SUPPORTED      (-1)
+> +#define FFA_RET_INVALID_PARAMETERS (-2)
+> +#define FFA_RET_NO_MEMORY          (-3)
+> +#define FFA_RET_BUSY               (-4)
+> +#define FFA_RET_INTERRUPTED        (-5)
+> +#define FFA_RET_DENIED             (-6)
+> +#define FFA_RET_RETRY              (-7)
+> +#define FFA_RET_ABORTED            (-8)
+> +
+> +/* FFA version encoding */
+> +#define FFA_MAJOR_VERSION_MASK	GENMASK(30, 16)
+> +#define FFA_MINOR_VERSION_MASK	GENMASK(15, 0)
+> +#define FFA_MAJOR_VERSION(x)	((u16)(FIELD_GET(FFA_MAJOR_VERSION_MASK, (x))))
+> +#define FFA_MINOR_VERSION(x)	((u16)(FIELD_GET(FFA_MINOR_VERSION_MASK, (x))))
+> +#define FFA_PACK_VERSION_INFO(major, minor)			\
+> +	(FIELD_PREP(FFA_MAJOR_VERSION_MASK, (major)) |		\
+> +	 FIELD_PREP(FFA_MINOR_VERSION_MASK, (minor)))
+> +#define FFA_VERSION_1_0		FFA_PACK_VERSION_INFO(1, 0)
+> +
+> +/**
+> + * FF-A specification mentions explicitly about '4K pages'. This should
+> + * not be confused with the kernel PAGE_SIZE, which is the translation
+> + * granule kernel is configured and may be one among 4K, 16K and 64K.
+> + */
+> +#define FFA_PAGE_SIZE		SZ_4K
+> +
+>  /* FFA Bus/Device/Driver related */
+>  struct ffa_device {
+>  	int vm_id;
+> -- 
+> 2.38.1.431.g37b22c650d-goog
+> 
 
-Now I think the easiest thing to do in order to sort this out would be
-be to stop supporting bias-pull-[up/down] properties and replace them
-with mediatek,pull-[up/down]-adv, but I guess that would break old DT.
-Changing the supported values to represent ohms and modifying drivers
-to accommodate for that would be quite tedious since every pin group
-on every SoC has different supported pull resistances, and it would
-still break compatibility with old DT anyway.
-
-Does anyone have a better idea on this? Or perhaps we could leave fixing
-this for another time since issues with these bindings seem to never end
-and this patch series just keeps growing.
-
+-- 
+Regards,
+Sudeep
