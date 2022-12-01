@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFD863EC74
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3586563EC77
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiLAJ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S230076AbiLAJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiLAJ2u (ORCPT
+        with ESMTP id S229924AbiLAJ3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:28:50 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427AB49B51
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:28:45 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id p8so1546895lfu.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:28:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jahb+tEShKBR+Ktu0BgJXy8O1SopxAlMcngu6tulhfo=;
-        b=wzeuJx6xKm1tNX0R828wgisRm6UYpQssq1gEpjild2BMpZ3jiJEGbZBEyphN32yvVV
-         TzR7uzCkl9HBZ5aazB219DCIvHAA3tDilXZHK5QSEnTM1J5GjbxWBHjsU7b8RG3qWgVh
-         UuQuyHmJOfwhZTnSm4HJDKTS1uqYIB3z3xDZUcPR3qyTs3/oKBCapWI3kjvAlEpuM/Nb
-         TsORs1tXAqJGAaAAuTnb7I8BESvchycQt+GQl8F+jRPvqdX+sBUfX1f/MHStul1Td2kB
-         Ne8u+FRMrGYkvUZOMxYIIQ8hyn1GEyeRzpmRLIGs82XQAjSqkMXfrxd7nMtVBVDP0bps
-         Uj7Q==
+        Thu, 1 Dec 2022 04:29:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA1E4E6AB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:28:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669886937;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DqJwh6hYdcIFrfwArsCxvaHceaf9hhtSNB2KWeumwNo=;
+        b=fxWya8OcFK+1iEHJMMwzVT2LG2N5TtN1ItQ2fgim2PK3MC2wBTDwf2dkTL1Z5KhKtW7IpH
+        q/Cvi7WlKRy8cBsL4shDXcXtTQHfcA36y5EHA2Uk4sQA7AnED7wyMmpkeWvA6iUZOFCcyu
+        rqi/rZGtwhNeG6+PaQCGpELdaI8Wsow=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-520-ZtAcDps3O7-Qt3gf6xvpzA-1; Thu, 01 Dec 2022 04:28:54 -0500
+X-MC-Unique: ZtAcDps3O7-Qt3gf6xvpzA-1
+Received: by mail-wm1-f72.google.com with SMTP id h4-20020a1c2104000000b003d01b66fe65so2295830wmh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:28:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jahb+tEShKBR+Ktu0BgJXy8O1SopxAlMcngu6tulhfo=;
-        b=Nu11R5kbawTqKIBl85I2NhS57TA5FD4f2O4SwR91H/cqHKltnbCYDFvxSbcxsvDvXV
-         46bg7Jv/o3RXMFWDrg7gcGDCRTQWgCiZ15RDdheRK8zNGCdb+f/oGvk3Gb4I8RO+i1v/
-         7N8/Xr784VmSpcOuutnpjYM6rFzlzTxGKo/pmWJQ5i6n+z3VnkmqWscH8E/zcDAvPnlk
-         3UPp7XnrQRwAb3jOy78VaLPoGg+zf7bMUBjUjGln06hQOXN9IDDmGy5nECyQMQxLNsMC
-         ZFtlMqgwa34nwKVnYiyoD+V9MrVakwpJIXG+0VwC2cqA5VtdQzZ5gRPtT5ZLzN589Z0d
-         dbxA==
-X-Gm-Message-State: ANoB5pn63nf5OlkBS5p9+cWuJ3QDsgVVeNIwoySJE5m6qT2QDZP5A1uj
-        39t6FXkBKohv6Jp2DL+qdt+xgw==
-X-Google-Smtp-Source: AA0mqf4GR2jAPIP63PrEu23oXP2Y1onMJ5uqoMQq16hLdEJ8d7BaYPyYOXgoM7GjnlGgp9qM6QC+XQ==
-X-Received: by 2002:ac2:4e0e:0:b0:4b1:7c15:e920 with SMTP id e14-20020ac24e0e000000b004b17c15e920mr25286530lfr.453.1669886924183;
-        Thu, 01 Dec 2022 01:28:44 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o6-20020ac25e26000000b00492e3a8366esm589861lfg.9.2022.12.01.01.28.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 01:28:41 -0800 (PST)
-Message-ID: <6028b265-bc8a-3a06-b17c-56aa772a4782@linaro.org>
-Date:   Thu, 1 Dec 2022 10:28:39 +0100
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DqJwh6hYdcIFrfwArsCxvaHceaf9hhtSNB2KWeumwNo=;
+        b=56q98KytyJsZqc1BM+08gGkDXg/DpYc5UmoPTSeRrZuAKCMx1Nl01l2iDwrFuTSwPx
+         7B5KIBR9IXPR3c+8NvAldBiUQhOEAIp5Tl9y8zFROqeyLUT9CRzOjJnkDbafx0RzdGCA
+         TJ9OtnTlU4YCXktitxfMIB9YPHl7AD45n5OjBqNvdTFhjUcCTBe44PqyFVB88JqRoi9U
+         KSL5SM1sfv8BZKtfuJqp9kM46RAFTUha8hBflsCs/R6ryPqk9isgsO3M7KfxHATTUmCs
+         vtZASzLyjpBMK2HNOWXKoSnY7gA6nBfHEXAUnj0QpM6yZ46IL7NyhSCOve+VxR7SXGsZ
+         RVWw==
+X-Gm-Message-State: ANoB5pn3gIUuBEsS20lmx0DzacTxIuXvMby2ibGrC9ePFPW9UpnQn2VV
+        BSUKh6sAKrY4+oL4Uh9hzKjpdYJtMre0KT2mOo4McVnwxeh8wQymf70/+7K/cmbXnSQXHY2Qsvm
+        VS3C38WC4NKgs+spTIBe33cbw
+X-Received: by 2002:a5d:6045:0:b0:242:16ad:9a91 with SMTP id j5-20020a5d6045000000b0024216ad9a91mr12300839wrt.197.1669886933611;
+        Thu, 01 Dec 2022 01:28:53 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7Q06N1wMVePOK6Bx8fS032S/PPHK8GF5CDS+4WAHNvDrSE9S6kZ4/8Pw1TsqL6DFgeERm6dA==
+X-Received: by 2002:a5d:6045:0:b0:242:16ad:9a91 with SMTP id j5-20020a5d6045000000b0024216ad9a91mr12300825wrt.197.1669886933379;
+        Thu, 01 Dec 2022 01:28:53 -0800 (PST)
+Received: from ovpn-194-141.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id y16-20020adfd090000000b002364c77bcacsm3868668wrh.38.2022.12.01.01.28.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 01:28:52 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: restore special vmmcall code layout
+ needed by the harness
+In-Reply-To: <Y4ffgC+HbftkPbaW@google.com>
+References: <20221130181147.9911-1-pbonzini@redhat.com>
+ <Y4ffgC+HbftkPbaW@google.com>
+Date:   Thu, 01 Dec 2022 10:28:51 +0100
+Message-ID: <87r0xjh3qk.fsf@ovpn-194-141.brq.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/6] crypto: starfive - Add StarFive crypto engine support
-Content-Language: en-US
-To:     JiaJie Ho <jiajie.ho@starfivetech.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-References: <20221130055214.2416888-1-jiajie.ho@starfivetech.com>
- <20221130055214.2416888-2-jiajie.ho@starfivetech.com>
- <aafb1c32-bc00-2db2-edbd-aa4771f33ac7@linaro.org>
- <60ad0da0116044d3a1fe575e9904e22c@EXMBX068.cuchost.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <60ad0da0116044d3a1fe575e9904e22c@EXMBX068.cuchost.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 07:52, JiaJie Ho wrote:
+Sean Christopherson <seanjc@google.com> writes:
 
->>> +
->>> +static inline u32 starfive_sec_read(struct starfive_sec_dev *sdev,
->>> +u32 offset) {
->>> +	return __raw_readl(sdev->io_base + offset);
+> On Wed, Nov 30, 2022, Paolo Bonzini wrote:
+>> Commit 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values
+>> in vmmcall()/vmcall()", 2022-11-21) broke the svm_nested_soft_inject_test
+>> because it placed a "pop rbp" instruction after vmmcall.  While this is
+>> correct and mimics what is done in the VMX case, this particular test
+>> expects a ud2 instruction right after the vmmcall, so that it can skip
+>> over it in the L1 part of the test.
+>> 
+>> Inline a suitably-modified version of vmmcall() to restore the
+>> functionality of the test.
 >>
->> I don't think these read/write wrappers help anyhow...
->>
-> 
-> These wrappers are used by the crypto primitives in this patch series.
-> I'll move these to subsequent patches when they are first used.
-> 
-> Thank you for spending time reviewing and providing helpful comments
-> for this driver.
-> 
+>> Fixes: 8fda37cf3d41 ("KVM: selftests: Stuff RAX/RCX with 'safe' values in vmmcall()/vmcall()"
+>> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>> ---
+>
+> We really, really need to save/restore guest GPRs in L1 when handling exits from L2.
 
-Just drop the wrappers. I said they do not help and your answer "are
-used" does not explain anything. If you insist on keeping them, please
-explain what are the benefits except more code and more
-indirections/layers making it more difficult to read?
++1, the amount of stuff we do to workaround the shortcoming (and time
+we waste debugging) is getting ridiculously high. 
 
-Best regards,
-Krzysztof
+>
+> For now,
+>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+>
+
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
+-- 
+Vitaly
 
