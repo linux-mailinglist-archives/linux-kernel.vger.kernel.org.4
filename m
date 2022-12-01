@@ -2,135 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCB663F58D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F4763F5A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLAQqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S229712AbiLAQsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiLAQqF (ORCPT
+        with ESMTP id S229727AbiLAQsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:46:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BDFAE4DB;
-        Thu,  1 Dec 2022 08:46:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADE5AB81F99;
-        Thu,  1 Dec 2022 16:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AFAC433C1;
-        Thu,  1 Dec 2022 16:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669913161;
-        bh=3Q6iXy/xYg6uP/f+JVE/FhVqO1PPrAY0s5KAVCFBU0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ke+Hjq9YiFRCq0yj/GyKBDUTWPJJXuzvkPYM6eNdRTdgw64OYUqJr+o8gbjct6hO0
-         KHqXt1PFL/Hi3ew9rfbkn5emIOR1tvOitOauyeQMezokvwd3MpWvclih1D+uFSpxOp
-         AE452lttx1oA67YxwbpLo+ajBFISI3fZrZalrzJ93hE1WIBvjiudYrEjiG6JS75tWb
-         njDOwYF1aO2oT6t0B0JLVXF+0gW8sYglf+w27YexYvrZViwcDlly24fG+eQCZE1FDE
-         LRPcEHtL3fGsE9fvmbMHRLkUHTZl4OG+nxIBerYWMzFfN1qKvjhfiY8AWlc/gjRoEu
-         qQzg9kaJXzxSQ==
-Date:   Thu, 1 Dec 2022 16:45:55 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        "David S . Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v1 3/7] dt-bindings: net: Add bindings for StarFive dwmac
-Message-ID: <Y4jaQ4snp6x1oU6k@spud>
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
- <20221201090242.2381-4-yanhong.wang@starfivetech.com>
- <166990139276.476262.15116409959152660279.robh@kernel.org>
+        Thu, 1 Dec 2022 11:48:10 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55414B2753
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:48:09 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3c21d6e2f3aso22906937b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:48:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v6lyHoHVTKEoHn2BpYu6Y3TDsg6KZVLToH9RQug1Qs8=;
+        b=x8SxzLXmt9uvMRWQT8/EvDhuDixlBnrc7L5DPDE6wLUH+d7wu9pURE2pTe02CsCGWD
+         BVUpftRcagE9a3Jn3WDf4fJTwt486Xu2MozcrEiEsyoyZMyPxBik3w3XWgoNvxi8m5/i
+         ApGaxj8KCnyj7bjulKwoYALtscU5XvSrqFyT6OJbHguQf4ekfGnsU9/jQ7eOzhgNMtI8
+         DpL5LXYheat+KqvqU2dnDw6a3IVuIY5DBRcb3YuamW4bmxVQNY6Q1cykQd9ZKaIwzunf
+         OeMhTPIR6rDCI4i5JyYxbmjk7mbX442gSuidDjjpTsLhAgUZmp6MIYNCxrabhcM4E020
+         ZTJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v6lyHoHVTKEoHn2BpYu6Y3TDsg6KZVLToH9RQug1Qs8=;
+        b=Sp3kUxJwaxOy4EheESAgC3fISynmOKMcmkc585L/n990l/WMIYoLDjRZ7Z1CwMWdY+
+         fvPtSZU10iKHozumhc96dKl/gZolWF4pJKq8SDmgHozaOPTwIVLqPAm49LCX/tnMdkbV
+         Tpy1QoktB+/l95+Di9M2fuN61Y+3MImy9+thfqsaqC4utd43xX8OszU8kDEUGzOtIrNH
+         TutSgwmm4E78/BwpEG11QBIOa9O0TQQGzRBLiqa1NuLsChEg7dfEFNRsc3Q5HEQuUkcZ
+         QsVYeclOFbyLE4apmcqN21NmFbC6GfyMr+asIP9Jv4CZ5tA8vNBF4Ef2koaHDu/4qLm0
+         wvQA==
+X-Gm-Message-State: ANoB5pmLA3mmD4zVLqOK/ODJQkyEpi2n5oGVCDmdKoWEnvrY04SxtYga
+        +ub9HU8tyoznvSCoJSnebxL7pCY7hgz5Y9g3dvoAYw==
+X-Google-Smtp-Source: AA0mqf6VOaY9LeyYUGBAcsPy0V4iTFjkZ/TmTRlKjH0ow1ItaaZKYmY++xCq82vuhhTIOQytH8f0yG5JTrwesUEG1dk=
+X-Received: by 2002:a05:690c:444:b0:3d7:2ccc:12a3 with SMTP id
+ bj4-20020a05690c044400b003d72ccc12a3mr7288868ywb.459.1669913285515; Thu, 01
+ Dec 2022 08:48:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166990139276.476262.15116409959152660279.robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221130180528.466039523@linuxfoundation.org>
+In-Reply-To: <20221130180528.466039523@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 1 Dec 2022 22:17:54 +0530
+Message-ID: <CA+G9fYtQN2SCStLEd+yJcROUYA6-EVZA2Mu+wpMkM1-BLooPxw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/162] 5.10.157-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Yanhong,
+On Wed, 30 Nov 2022 at 23:55, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.157 release.
+> There are 162 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.157-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Thu, Dec 01, 2022 at 07:36:29AM -0600, Rob Herring wrote:
-> 
-> On Thu, 01 Dec 2022 17:02:38 +0800, Yanhong Wang wrote:
-> > Add bindings for the StarFive dwmac module on the StarFive RISC-V SoCs.
-> > 
-> > Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> > ---
-> >  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
-> >  .../bindings/net/starfive,dwmac-plat.yaml     | 106 ++++++++++++++++++
-> >  MAINTAINERS                                   |   5 +
-> >  3 files changed, 112 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml:30:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
-> 
-> dtschema/dtc warnings/errors:
-> ./Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml: $id: relative path/filename doesn't match actual path or filename
-> 	expected: http://devicetree.org/schemas/net/starfive,dwmac-plat.yaml#
-> Documentation/devicetree/bindings/net/starfive,dwmac-plat.example.dts:21:18: fatal error: dt-bindings/clock/starfive-jh7110.h: No such file or directory
->    21 |         #include <dt-bindings/clock/starfive-jh7110.h>
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Perhaps, rather than putting a long list of "prerequisite-patch-id" in
-your cover letters etc, you drop the need for headers from your bindings
-entirely? Otherwise, you need to wait for the clock bindings to be applied
-before any of your other peripherals etc can have drivers/bindings upstream.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-AFAIU, and Rob/Krzk please correct me, the example in a dt-binding
-really is an *example* and there's no requirement for it to match the
-jh7110 dts exactly. Because of that you can drop the header & just do
-something like `clocks = <&clk 7>, <&clk 77>;` etc and the example is
-still valid. Same goes for all of the other driver patchsets for new
-StarFive stuff, like the pmu or crypto, that also have dt-bindings.
+## Build
+* kernel: 5.10.157-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 97b8f00e4c810098e87b79964b78957b3dd7529c
+* git describe: v5.10.155-312-g97b8f00e4c81
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.155-312-g97b8f00e4c81
 
-The only person who has to worry then about dependencies is me when I
-apply the .dts patches :)
+## Test Regressions (compared to v5.10.155)
 
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/net/starfive,dwmac-plat.example.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1492: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201090242.2381-4-yanhong.wang@starfivetech.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+## Metric Regressions (compared to v5.10.155)
+
+## Test Fixes (compared to v5.10.155)
+
+## Metric Fixes (compared to v5.10.155)
+
+## Test result summary
+total: 141429, pass: 123082, fail: 2536, skip: 15574, xfail: 237
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 49 total, 46 passed, 3 failed
+* i386: 39 total, 37 passed, 2 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 32 total, 25 passed, 7 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-lib
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-openat2
+* kselftest-timens
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
