@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28F663F240
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1327063F233
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiLAOFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbiLAOE6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231693AbiLAOE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 1 Dec 2022 09:04:58 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B57CA518F;
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230366AbiLAOE4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 1 Dec 2022 09:04:56 -0500
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAAC9C61B;
         Thu,  1 Dec 2022 06:04:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669903490;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669903491;
     s=strato-dkim-0002; d=iokpp.de;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=wcfxSKOuTbBkcUevcdbx3NdSEBMJ+Px6H+Sh6zzv4Yg=;
-    b=slw7R3c1xLvlD7j6uBQooP6HrSurV0s5316sovCe31eS+Or1kewtoSa4CDWCQo3bvv
-    IgscYiJz4iTAMV76vdQBgQrb8Re2WjYon+mSg3rBKAVmUvZZ6pmgAkQTVe76gDOr5oQE
-    gA5YZx8IbWczQhoGkzoluDytfYeK74jQlNOnxnObJ+ab/vPGyeeGglAgfy1BodniJ8i/
-    C4KC6mWjuK7oK7G4OaHzCVoL3XGQMSfgpijQ7FmXQlWKf71rDse1YSeZuwL7agK+bQLF
-    LKISshD/oa7KaiMv02BtZ2znB18W0yprIwO+QmKTrgEzyfJGDF7Pg6PyV/wL9oqaxLpW
-    mhxg==
+    bh=8eyKC2fgrN9qumLxJ3Hcsm6flrWlMQT35zpuY2GjhlA=;
+    b=kTTGkmMue8mQ3qeF+gLkKNkSuf7cDNw2REOfX9/BSKmZCMVb/YzjYEnHmRUITcNJGZ
+    C3+a0FQoDCn4+qqQ6G6DRbign8gK8kY5+zDx3LEdecGOUQ2FvKu0kKGq/uR2SgZ0U4vz
+    kJrUy11HdTUSZe7y9cyU1djlxbE5X6igsb0Eaeppnx1Q5cH8aIf5KJ6NiEODdm/wd7LI
+    36C6N8TPwWpHDhVriEQIH4gZ49sHCjTdqvz1N9qqMa3IVVKc+yjInbYhCrC0FdeZQCMS
+    P0EwNJAF6FfeG3s6/9YFzN7tZO1d3cN2IybGVgzzDS+LDEDCZOuFg5Wz0ccvrH2K0F80
+    3/iw==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD2QzemV2tdlNlNRZBXiUw="
 X-RZG-CLASS-ID: mo02
 Received: from blinux.micron.com
     by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id z9cfbfyB1E4oHoV
+    with ESMTPSA id z9cfbfyB1E4pHoW
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Thu, 1 Dec 2022 15:04:50 +0100 (CET)
+    Thu, 1 Dec 2022 15:04:51 +0100 (CET)
 From:   Bean Huo <beanhuo@iokpp.de>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
         martin.petersen@oracle.com, stanley.chu@mediatek.com,
@@ -44,9 +44,9 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
         quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
         quic_richardp@quicinc.com, quic_asutoshd@quicinc.com, hare@suse.de
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/7] ufs: ufs_bsg: Cleanup ufs_bsg_request
-Date:   Thu,  1 Dec 2022 15:04:33 +0100
-Message-Id: <20221201140437.549272-4-beanhuo@iokpp.de>
+Subject: [PATCH v3 4/7] ufs: core: Split ufshcd_map_sg
+Date:   Thu,  1 Dec 2022 15:04:34 +0100
+Message-Id: <20221201140437.549272-5-beanhuo@iokpp.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221201140437.549272-1-beanhuo@iokpp.de>
 References: <20221201140437.549272-1-beanhuo@iokpp.de>
@@ -63,69 +63,94 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Move sg_copy_from_buffer() below its associated case statement.
+Take out the "map scatter-gather list to prdt" part of the code in
+ufshcd_map_sg and split it into a new function ufshcd_sgl_to_prdt.
 
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 Reviewed-by: Avri Altman <avri.altman@wdc.com>
 ---
- drivers/ufs/core/ufs_bsg.c | 27 ++++++++-------------------
- 1 file changed, 8 insertions(+), 19 deletions(-)
+ drivers/ufs/core/ufshcd.c | 48 +++++++++++++++++++++++----------------
+ 1 file changed, 29 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
-index 9ac8204f1ee6..850a0d798f63 100644
---- a/drivers/ufs/core/ufs_bsg.c
-+++ b/drivers/ufs/core/ufs_bsg.c
-@@ -90,11 +90,8 @@ static int ufs_bsg_request(struct bsg_job *job)
- 		desc_op = bsg_request->upiu_req.qr.opcode;
- 		ret = ufs_bsg_alloc_desc_buffer(hba, job, &desc_buff,
- 						&desc_len, desc_op);
--		if (ret) {
--			ufshcd_rpm_put_sync(hba);
-+		if (ret)
- 			goto out;
--		}
--
- 		fallthrough;
- 	case UPIU_TRANSACTION_NOP_OUT:
- 	case UPIU_TRANSACTION_TASK_REQ:
-@@ -102,9 +99,12 @@ static int ufs_bsg_request(struct bsg_job *job)
- 					       &bsg_reply->upiu_rsp, msgcode,
- 					       desc_buff, &desc_len, desc_op);
- 		if (ret)
--			dev_err(hba->dev,
--				"exe raw upiu: error code %d\n", ret);
--
-+			dev_err(hba->dev, "exe raw upiu: error code %d\n", ret);
-+		else if (desc_op == UPIU_QUERY_OPCODE_READ_DESC && desc_len)
-+			bsg_reply->reply_payload_rcv_len =
-+				sg_copy_from_buffer(job->request_payload.sg_list,
-+						    job->request_payload.sg_cnt,
-+						    desc_buff, desc_len);
- 		break;
- 	case UPIU_TRANSACTION_UIC_CMD:
- 		memcpy(&uc, &bsg_request->upiu_req.uc, UIC_CMD_SIZE);
-@@ -123,20 +123,9 @@ static int ufs_bsg_request(struct bsg_job *job)
- 		break;
- 	}
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 2dbe24977822..d1bcb4c4e4e4 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2399,38 +2399,30 @@ int ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd)
+ }
  
-+out:
- 	ufshcd_rpm_put_sync(hba);
+ /**
+- * ufshcd_map_sg - Map scatter-gather list to prdt
+- * @hba: per adapter instance
+- * @lrbp: pointer to local reference block
+- *
+- * Returns 0 in case of success, non-zero value in case of failure
++ * ufshcd_sgl_to_prdt - SG list to PRTD (Physical Region Description Table, 4DW format)
++ * @hba:	per-adapter instance
++ * @lrbp:	pointer to local reference block
++ * @sg_entries:	The number of sg lists actually used
++ * @sg_list:	Pointer to SG list
+  */
+-static int ufshcd_map_sg(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
++static void ufshcd_sgl_to_prdt(struct ufs_hba *hba, struct ufshcd_lrb *lrbp, int sg_entries,
++			       struct scatterlist *sg_list)
+ {
+ 	struct ufshcd_sg_entry *prd_table;
+ 	struct scatterlist *sg;
+-	struct scsi_cmnd *cmd;
+-	int sg_segments;
+ 	int i;
+ 
+-	cmd = lrbp->cmd;
+-	sg_segments = scsi_dma_map(cmd);
+-	if (sg_segments < 0)
+-		return sg_segments;
 -
--	if (!desc_buff)
--		goto out;
--
--	if (desc_op == UPIU_QUERY_OPCODE_READ_DESC && desc_len)
--		bsg_reply->reply_payload_rcv_len =
--			sg_copy_from_buffer(job->request_payload.sg_list,
--					    job->request_payload.sg_cnt,
--					    desc_buff, desc_len);
--
- 	kfree(desc_buff);
--
--out:
- 	bsg_reply->result = ret;
- 	job->reply_len = sizeof(struct ufs_bsg_reply);
- 	/* complete the job here only if no error */
+-	if (sg_segments) {
++	if (sg_entries) {
+ 
+ 		if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
+ 			lrbp->utr_descriptor_ptr->prd_table_length =
+-				cpu_to_le16((sg_segments *
+-					sizeof(struct ufshcd_sg_entry)));
++				cpu_to_le16((sg_entries * sizeof(struct ufshcd_sg_entry)));
+ 		else
+-			lrbp->utr_descriptor_ptr->prd_table_length =
+-				cpu_to_le16(sg_segments);
++			lrbp->utr_descriptor_ptr->prd_table_length = cpu_to_le16(sg_entries);
+ 
+ 		prd_table = lrbp->ucd_prdt_ptr;
+ 
+-		scsi_for_each_sg(cmd, sg, sg_segments, i) {
++		for_each_sg(sg_list, sg, sg_entries, i) {
+ 			const unsigned int len = sg_dma_len(sg);
+ 
+ 			/*
+@@ -2449,6 +2441,24 @@ static int ufshcd_map_sg(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 	} else {
+ 		lrbp->utr_descriptor_ptr->prd_table_length = 0;
+ 	}
++}
++
++/**
++ * ufshcd_map_sg - Map scatter-gather list to prdt
++ * @hba: per adapter instance
++ * @lrbp: pointer to local reference block
++ *
++ * Returns 0 in case of success, non-zero value in case of failure
++ */
++static int ufshcd_map_sg(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
++{
++	struct scsi_cmnd *cmd = lrbp->cmd;
++	int sg_segments = scsi_dma_map(cmd);
++
++	if (sg_segments < 0)
++		return sg_segments;
++
++	ufshcd_sgl_to_prdt(hba, lrbp, sg_segments, scsi_sglist(cmd));
+ 
+ 	return 0;
+ }
 -- 
 2.25.1
 
