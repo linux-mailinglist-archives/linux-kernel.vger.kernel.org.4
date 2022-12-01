@@ -2,119 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B7263ED44
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C3063ED48
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiLAKJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S230262AbiLAKJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiLAKIx (ORCPT
+        with ESMTP id S230333AbiLAKJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:08:53 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CC617E12;
-        Thu,  1 Dec 2022 02:08:50 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id a9so1176769pld.7;
-        Thu, 01 Dec 2022 02:08:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x7QUbC62dh1yGOD50m45VAuI8cYxtojjn7C+uZOwpQw=;
-        b=CeZFgZoW2rpZ3wb4OIITdw6PZfPwrOWAdcEismfeizU78ewLtv3ymPltZr32jLCUE4
-         G3sZ5/Hz2BCeIfKATdzFLu2C/uzX3DvEqhCNJ3bQ2k3/xeQyiyYJfA8FRaKw6qdCl+/A
-         SaDslbrhDpffqAN0sXHDsHmqGbZEGPggDA5MQ+MBicHBGZsPy3z2DSzoO0MAAi0ba1pA
-         /EWtJpwtCigHCFk+0PnK3X8phb4SLCB8pAeaWdh5QBI3Iu2W+o7uvYw6/rxISN2S8W2K
-         wKddXVMfWWgCJRirTX5a6WC2gWayBiK5I4a0vGcrLbdtr7NUVl5TUbh10nERAJViKXg1
-         rj6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7QUbC62dh1yGOD50m45VAuI8cYxtojjn7C+uZOwpQw=;
-        b=71UN3A//kYko8TcKaA2qqZsexux6lto5hd/9thkTC0f056bt9ZuGfdYTq+qJV6gdvh
-         sY2Tt1MzW5uWU5H8qnj40jREn86Gwj+nqKxGkjPUejVcRxS7kigIO9Ka1F8ltkmT5Unf
-         Hg78s4HfgU/ZviIx0givckgzr6LBIe9ogNH8gAlItwGXWI/VilCF2aoYTbOQwBnHyrPs
-         ENiOotLIOaSUmsv46NvcoY2DOmJiR54ELuZ9a8a/Clv0BPxtriJbir8sFS39Lg03qnkN
-         LVTokYW0yEelcGaU6PA9JgcUj8++TFjDSli2BD4+A+JysbGr54T0DTcet7dv7p/sH1o9
-         nLbg==
-X-Gm-Message-State: ANoB5plhZeYi+hYl5dxjiQ/yeZUvhtIX1lNmsiW6XOojjFIvhuPX6K7z
-        FWN1EgwO7eIrDvXH37vkdX8=
-X-Google-Smtp-Source: AA0mqf63jd6HKCrAG0KiF7+IodPzxIFT7yEP1UMmnRxHcu4YQAzIGKbrCo1UcS5ILhUjD3DmyoS83g==
-X-Received: by 2002:a17:90a:7e0d:b0:213:d630:f4af with SMTP id i13-20020a17090a7e0d00b00213d630f4afmr70374100pjl.77.1669889330257;
-        Thu, 01 Dec 2022 02:08:50 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id 63-20020a630642000000b0047702d44861sm2220928pgg.18.2022.12.01.02.08.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 02:08:49 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 1 Dec 2022 00:08:48 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH -next v2 2/9] blk-iocost: improve hanlder of match_u64()
-Message-ID: <Y4h9MEd3q4LXDGQq@slm.duckdns.org>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-3-linan122@huawei.com>
- <Y4e90zFnhhq764lP@slm.duckdns.org>
- <7e4f1cea-2691-9b81-35f6-0dd236149f56@huaweicloud.com>
+        Thu, 1 Dec 2022 05:09:28 -0500
+Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D899B2D75F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:09:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VW8IkAi_1669889363;
+Received: from 30.221.129.69(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VW8IkAi_1669889363)
+          by smtp.aliyun-inc.com;
+          Thu, 01 Dec 2022 18:09:24 +0800
+Message-ID: <016136f8-7402-3f57-0e16-1a3f3ec055ec@linux.alibaba.com>
+Date:   Thu, 1 Dec 2022 18:09:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7e4f1cea-2691-9b81-35f6-0dd236149f56@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH v2] erofs: use kmap_local_page() only for erofs_bread()
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <20221018105313.4940-1-hsiangkao@linux.alibaba.com>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20221018105313.4940-1-hsiangkao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 10:15:53AM +0800, Yu Kuai wrote:
-> Hi,
+
+
+On 10/18/22 6:53 PM, Gao Xiang wrote:
+> Convert all mapped erofs_bread() users to use kmap_local_page()
+> instead of kmap() or kmap_atomic().
+
+Reviewed-and-tested-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
 > 
-> 在 2022/12/01 4:32, Tejun Heo 写道:
-> > On Wed, Nov 30, 2022 at 09:21:49PM +0800, Li Nan wrote:
-> > > From: Yu Kuai <yukuai3@huawei.com>
-> > > 
-> > > 1) There are one place that return value of match_u64() is not checked.
-> > > 2) If match_u64() failed, return value is set to -EINVAL despite that
-> > >     there are other possible errnos.
-> > 
-> > Ditto. Does this matter?
-> > 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> ---
+>  fs/erofs/data.c     | 8 ++------
+>  fs/erofs/internal.h | 3 +--
+>  fs/erofs/xattr.c    | 8 ++++----
+>  fs/erofs/zmap.c     | 4 ++--
+>  4 files changed, 9 insertions(+), 14 deletions(-)
 > 
-> It's not a big deal, but I think at least return value of match_u64()
-> should be checked, we don't want to continue with invalid input, right?
-
-Yeah, sure.
-
-> By the way, match_u64() can return -ERANGE, which can provide more
-> specific error messge to user.
-
-I'm really not convinced going over 64bit range would be all that difficult
-to spot whether the error code is -EINVAL or -ERANGE. There isn't anything
-wrong with returning -ERANGE but the fact that that particular function
-returns an error code doesn't necessarily mean that it *must* be forwarded.
-
-Imagine that we used sscanf(buf, "%llu", &value) to parse the number
-instead. We'd only know whether the parsing would have succeeded or not and
-would probably return -EINVAL on failure and the behavior would be just
-fine. This does not matter *at all*.
-
-So, idk, I'm not necessarily against it but changing -EINVAL to -ERANGE is
-pure churn. Nothing material is being improved by that change.
-
-Thanks.
+> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> index fe8ac0e163f7..fe1ae80284bf 100644
+> --- a/fs/erofs/data.c
+> +++ b/fs/erofs/data.c
+> @@ -13,9 +13,7 @@
+>  void erofs_unmap_metabuf(struct erofs_buf *buf)
+>  {
+>  	if (buf->kmap_type == EROFS_KMAP)
+> -		kunmap(buf->page);
+> -	else if (buf->kmap_type == EROFS_KMAP_ATOMIC)
+> -		kunmap_atomic(buf->base);
+> +		kunmap_local(buf->base);
+>  	buf->base = NULL;
+>  	buf->kmap_type = EROFS_NO_KMAP;
+>  }
+> @@ -54,9 +52,7 @@ void *erofs_bread(struct erofs_buf *buf, struct inode *inode,
+>  	}
+>  	if (buf->kmap_type == EROFS_NO_KMAP) {
+>  		if (type == EROFS_KMAP)
+> -			buf->base = kmap(page);
+> -		else if (type == EROFS_KMAP_ATOMIC)
+> -			buf->base = kmap_atomic(page);
+> +			buf->base = kmap_local_page(page);
+>  		buf->kmap_type = type;
+>  	} else if (buf->kmap_type != type) {
+>  		DBG_BUGON(1);
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 1701df48c446..67dc8e177211 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -253,8 +253,7 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+>  
+>  enum erofs_kmap_type {
+>  	EROFS_NO_KMAP,		/* don't map the buffer */
+> -	EROFS_KMAP,		/* use kmap() to map the buffer */
+> -	EROFS_KMAP_ATOMIC,	/* use kmap_atomic() to map the buffer */
+> +	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
+>  };
+>  
+>  struct erofs_buf {
+> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+> index 8106bcb5a38d..a62fb8a3318a 100644
+> --- a/fs/erofs/xattr.c
+> +++ b/fs/erofs/xattr.c
+> @@ -148,7 +148,7 @@ static inline int xattr_iter_fixup(struct xattr_iter *it)
+>  
+>  	it->blkaddr += erofs_blknr(it->ofs);
+>  	it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr,
+> -				       EROFS_KMAP_ATOMIC);
+> +				       EROFS_KMAP);
+>  	if (IS_ERR(it->kaddr))
+>  		return PTR_ERR(it->kaddr);
+>  	it->ofs = erofs_blkoff(it->ofs);
+> @@ -174,7 +174,7 @@ static int inline_xattr_iter_begin(struct xattr_iter *it,
+>  	it->ofs = erofs_blkoff(iloc(sbi, vi->nid) + inline_xattr_ofs);
+>  
+>  	it->kaddr = erofs_read_metabuf(&it->buf, inode->i_sb, it->blkaddr,
+> -				       EROFS_KMAP_ATOMIC);
+> +				       EROFS_KMAP);
+>  	if (IS_ERR(it->kaddr))
+>  		return PTR_ERR(it->kaddr);
+>  	return vi->xattr_isize - xattr_header_sz;
+> @@ -368,7 +368,7 @@ static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
+>  
+>  		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+>  		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+> -						  EROFS_KMAP_ATOMIC);
+> +						  EROFS_KMAP);
+>  		if (IS_ERR(it->it.kaddr))
+>  			return PTR_ERR(it->it.kaddr);
+>  		it->it.blkaddr = blkaddr;
+> @@ -580,7 +580,7 @@ static int shared_listxattr(struct listxattr_iter *it)
+>  
+>  		it->it.ofs = xattrblock_offset(sbi, vi->xattr_shared_xattrs[i]);
+>  		it->it.kaddr = erofs_read_metabuf(&it->it.buf, sb, blkaddr,
+> -						  EROFS_KMAP_ATOMIC);
+> +						  EROFS_KMAP);
+>  		if (IS_ERR(it->it.kaddr))
+>  			return PTR_ERR(it->it.kaddr);
+>  		it->it.blkaddr = blkaddr;
+> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+> index 0bb66927e3d0..749a5ac943f4 100644
+> --- a/fs/erofs/zmap.c
+> +++ b/fs/erofs/zmap.c
+> @@ -178,7 +178,7 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  	unsigned int advise, type;
+>  
+>  	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+> -				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
+> +				      erofs_blknr(pos), EROFS_KMAP);
+>  	if (IS_ERR(m->kaddr))
+>  		return PTR_ERR(m->kaddr);
+>  
+> @@ -416,7 +416,7 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  out:
+>  	pos += lcn * (1 << amortizedshift);
+>  	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+> -				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
+> +				      erofs_blknr(pos), EROFS_KMAP);
+>  	if (IS_ERR(m->kaddr))
+>  		return PTR_ERR(m->kaddr);
+>  	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
 
 -- 
-tejun
+Thanks,
+Jingbo
