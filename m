@@ -2,145 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE98763F55B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FF963F561
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiLAQhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
+        id S230366AbiLAQid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiLAQhW (ORCPT
+        with ESMTP id S232168AbiLAQi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:37:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E54ABA0A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:37:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4D9CB81F8F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:37:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCB8C433C1;
-        Thu,  1 Dec 2022 16:37:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669912638;
-        bh=e4FpSbE4DElqkkwlRAW7vqGn1U2Oxmc9jQs2WyNHufo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NM4auNJplcKF5KcWXi8vNloDVPPpveaTbp23KYumYc+AnblLUdtiRdm83jnqp7S9+
-         ZNKx1YNPdLRSKBzXP8ibiKfsG+JfoEfdauRZNn6mgkNOt05ZqA57x3Wm3Cf4CS5y7c
-         gn37vMVttZd4SEot9HNI2iA9sVRAmLe0M4V9vWeyUxiYobKxZYvUotNlhpNbgfq/XI
-         XoC33a85TbgbfyY4+uPSFI30R17kQlR7Ll/z4EHzCFQZnpwKUolqcXaafwfiFkFsxG
-         CoBT45OxAEIowMm+XUoJH1nudUJ3iWthMynUIOhlYpvEoFy+L4Opd8xIMJhRk+Dl52
-         LrNVEMovbfmzg==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: [RFC PATCH] panic: Add new taint flag for fault injection
-Date:   Fri,  2 Dec 2022 01:37:13 +0900
-Message-Id: <166991263326.311919.16890937584677289681.stgit@devnote3>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-In-Reply-To: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
-References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
-User-Agent: StGit/0.19
+        Thu, 1 Dec 2022 11:38:26 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE815B5B5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:38:23 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id q12so2350573pfn.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:38:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
+        b=L5oONEpJeyYInhCN8kEGfJ8WS2VPlfmSQI0EIRyACnSb62Ho4uiLAZ+22FZ0LpKSBY
+         OanLGdeorUn/O6YHVn5BHqcWoMtKOfzbPKcz+4fsn48JXXYOuwBU81HsoXu4yIA+KxBs
+         oNf69ULLkYXBFawHATlUKtmTRlCCGuue7O3x4Uj20kNa312jwW6CLd6dDy2pzPGk3DaL
+         y4jm5SpqWS/wMH/C2TjT2ihvVuFcoRw2TnuuxPCYPfzDwkDLPEA8hE11/Idhqhxr7xt0
+         rj/FXhrQIb1ypgd2I2CBp8L/oyRKWO3NUq8Jq7LgrgnoUKAu1/kU3hKmcHIeaOcvmDNO
+         M6Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
+        b=KiAlt7u8VF9MYyzaaWxo4HK+AOkcUvv6XvWGEY73oI55OmK+IHz5ibkewGMRKC6L8T
+         2PlXeVQdperc4OZoYTd+eOvt4g+anxXBcsDgcq8ZF+ETVYzTPID74ZO71K6mUs+okuvN
+         fneK8vSxxt0OA0bi902xszIBKE+Weeh/Shyf/gHejW38CgtcUHGehc2fSbjheQBc78bD
+         6GSyDiTSkPo8B1kuk94sjV7h/70QzFnV1xhmXjvuA4pD7GQwR1F7H4i6bfP/Vz0QHd9u
+         RTUW1RPDteu9wsWciJtNG/yxxl3z6xNdyMogWUe1nVRLlb+a78yaHPW1HTkjrcmqHVTs
+         AR7A==
+X-Gm-Message-State: ANoB5pmZ+TB8a+rehZXCEerFZbpBp154cR8SQQPHvyMvgkHqR7SFrJmT
+        eZ1VmCZoX3rFkUFGhjx+APzVdA==
+X-Google-Smtp-Source: AA0mqf7E8VTs9g+yA9GqMgTdFbO4YLYoa36a9KLdCj074cztIQB7gniXVzh1et27ldGMC17rtCxmqQ==
+X-Received: by 2002:aa7:8512:0:b0:575:65ff:8831 with SMTP id v18-20020aa78512000000b0057565ff8831mr16235817pfn.80.1669912703144;
+        Thu, 01 Dec 2022 08:38:23 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm5118172pjf.17.2022.12.01.08.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 08:38:22 -0800 (PST)
+Date:   Thu, 1 Dec 2022 16:38:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 26/50] KVM: PPC: Move processor compatibility check to
+ module init
+Message-ID: <Y4jXuh4P9Oibki6W@google.com>
+References: <20221130230934.1014142-1-seanjc@google.com>
+ <20221130230934.1014142-27-seanjc@google.com>
+ <87cz93snqc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87cz93snqc.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Thu, Dec 01, 2022, Michael Ellerman wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> > Move KVM PPC's compatibility checks to their respective module_init()
+> > hooks, there's no need to wait until KVM's common compat check, nor is
+> > there a need to perform the check on every CPU (provided by common KVM's
+> > hook), as the compatibility checks operate on global data.
+> >
+> >   arch/powerpc/include/asm/cputable.h: extern struct cpu_spec *cur_cpu_spec;
+> >   arch/powerpc/kvm/book3s.c: return 0
+> >   arch/powerpc/kvm/e500.c: strcmp(cur_cpu_spec->cpu_name, "e500v2")
+> >   arch/powerpc/kvm/e500mc.c: strcmp(cur_cpu_spec->cpu_name, "e500mc")
+> >                              strcmp(cur_cpu_spec->cpu_name, "e5500")
+> >                              strcmp(cur_cpu_spec->cpu_name, "e6500")
+> 
+> I'm not sure that output is really useful in the change log unless you
+> explain more about what it is.
 
-Since the function error injection framework in the fault injection
-subsystem can change the function code flow forcibly, it may cause
-unexpected behavior (but that is the purpose of this feature).
-To identify this in the kernel oops message, add a new taint flag
-for this, and set it if it is (and similar things in BPF) used.
+Agreed, I got lazy.  I'll write a proper description.
+ 
+> > diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
+> > index 57e0ad6a2ca3..795667f7ebf0 100644
+> > --- a/arch/powerpc/kvm/e500mc.c
+> > +++ b/arch/powerpc/kvm/e500mc.c
+> > @@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
+> >  {
+> >  	int r;
+> >  
+> > +	r = kvmppc_e500mc_check_processor_compat();
+> > +	if (r)
+> > +		return kvmppc_e500mc;
+>  
+> This doesn't build:
+> 
+> linux/arch/powerpc/kvm/e500mc.c: In function ‘kvmppc_e500mc_init’:
+> linux/arch/powerpc/kvm/e500mc.c:391:13: error: implicit declaration of function ‘kvmppc_e500mc_check_processor_compat’; did you mean ‘kvmppc_core_check_processor_compat’? [-Werror=implicit-function-declaration]
+>   391 |         r = kvmppc_e500mc_check_processor_compat();
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |             kvmppc_core_check_processor_compat
+> linux/arch/powerpc/kvm/e500mc.c:393:24: error: ‘kvmppc_e500mc’ undeclared (first use in this function); did you mean ‘kvm_ops_e500mc’?
+>   393 |                 return kvmppc_e500mc;
+>       |                        ^~~~~~~~~~~~~
+>       |                        kvm_ops_e500mc
+> linux/arch/powerpc/kvm/e500mc.c:393:24: note: each undeclared identifier is reported only once for each function it appears in
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Huh, CONFIG_PPC_E500MC got unselected in the config I use to compile test this
+flavor.  I suspect I botched an oldconfig at some point.
+ 
+Anyways, fixed that and the bugs.
+
+Thanks much!
+
+--
+Subject: [PATCH] KVM: PPC: Move processor compatibility check to module init
+
+Move KVM PPC's compatibility checks to their respective module_init()
+hooks, there's no need to wait until KVM's common compat check, nor is
+there a need to perform the check on every CPU (provided by common KVM's
+hook).  The compatibility checks are either a nop (Book3S), or simply
+check the CPU name stored in the global CPU spec (e500 and e500mc).
+
+Cc: Fabiano Rosas <farosas@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- include/linux/panic.h    |    3 ++-
- kernel/fail_function.c   |    2 ++
- kernel/panic.c           |    1 +
- kernel/trace/bpf_trace.c |    2 ++
- 4 files changed, 7 insertions(+), 1 deletion(-)
+ arch/powerpc/include/asm/kvm_ppc.h |  1 -
+ arch/powerpc/kvm/book3s.c          | 10 ----------
+ arch/powerpc/kvm/e500.c            |  4 ++--
+ arch/powerpc/kvm/e500mc.c          |  6 +++++-
+ arch/powerpc/kvm/powerpc.c         |  2 +-
+ 5 files changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/panic.h b/include/linux/panic.h
-index c7759b3f2045..2b03a02d86be 100644
---- a/include/linux/panic.h
-+++ b/include/linux/panic.h
-@@ -69,7 +69,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
- #define TAINT_AUX			16
- #define TAINT_RANDSTRUCT		17
- #define TAINT_TEST			18
--#define TAINT_FLAGS_COUNT		19
-+#define TAINT_FAULT_INJECTED		19
-+#define TAINT_FLAGS_COUNT		20
- #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/asm/kvm_ppc.h
+index bfacf12784dd..51a1824b0a16 100644
+--- a/arch/powerpc/include/asm/kvm_ppc.h
++++ b/arch/powerpc/include/asm/kvm_ppc.h
+@@ -118,7 +118,6 @@ extern int kvmppc_xlate(struct kvm_vcpu *vcpu, ulong eaddr,
+ extern int kvmppc_core_vcpu_create(struct kvm_vcpu *vcpu);
+ extern void kvmppc_core_vcpu_free(struct kvm_vcpu *vcpu);
+ extern int kvmppc_core_vcpu_setup(struct kvm_vcpu *vcpu);
+-extern int kvmppc_core_check_processor_compat(void);
+ extern int kvmppc_core_vcpu_translate(struct kvm_vcpu *vcpu,
+                                       struct kvm_translation *tr);
  
- struct taint_flag {
-diff --git a/kernel/fail_function.c b/kernel/fail_function.c
-index a7ccd2930c5f..80a743f14a2c 100644
---- a/kernel/fail_function.c
-+++ b/kernel/fail_function.c
-@@ -9,6 +9,7 @@
- #include <linux/kprobes.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/panic.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
+diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+index 6d525285dbe8..87283a0e33d8 100644
+--- a/arch/powerpc/kvm/book3s.c
++++ b/arch/powerpc/kvm/book3s.c
+@@ -999,16 +999,6 @@ int kvmppc_h_logical_ci_store(struct kvm_vcpu *vcpu)
+ }
+ EXPORT_SYMBOL_GPL(kvmppc_h_logical_ci_store);
  
-@@ -298,6 +299,7 @@ static ssize_t fei_write(struct file *file, const char __user *buffer,
- 		fei_attr_free(attr);
- 		goto out;
- 	}
-+	add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
- 	fei_debugfs_add_attr(attr);
- 	list_add_tail(&attr->list, &fei_attr_list);
- 	ret = count;
-diff --git a/kernel/panic.c b/kernel/panic.c
-index da323209f583..e396a5fd9bb6 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -426,6 +426,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
- 	[ TAINT_AUX ]			= { 'X', ' ', true },
- 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
- 	[ TAINT_TEST ]			= { 'N', ' ', true },
-+	[ TAINT_FAULT_INJECTED ]	= { 'J', ' ', false },
- };
+-int kvmppc_core_check_processor_compat(void)
+-{
+-	/*
+-	 * We always return 0 for book3s. We check
+-	 * for compatibility while loading the HV
+-	 * or PR module
+-	 */
+-	return 0;
+-}
+-
+ int kvmppc_book3s_hcall_implemented(struct kvm *kvm, unsigned long hcall)
+ {
+ 	return kvm->arch.kvm_ops->hcall_implemented(hcall);
+diff --git a/arch/powerpc/kvm/e500.c b/arch/powerpc/kvm/e500.c
+index c8b2b4478545..0ea61190ec04 100644
+--- a/arch/powerpc/kvm/e500.c
++++ b/arch/powerpc/kvm/e500.c
+@@ -314,7 +314,7 @@ static void kvmppc_core_vcpu_put_e500(struct kvm_vcpu *vcpu)
+ 	kvmppc_booke_vcpu_put(vcpu);
+ }
  
- /**
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 1ed08967fb97..de0614d9796c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2137,6 +2137,8 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
- 		goto unlock;
+-int kvmppc_core_check_processor_compat(void)
++static int kvmppc_e500_check_processor_compat(void)
+ {
+ 	int r;
  
- 	/* set the new array to event->tp_event and set event->prog */
-+	if (prog->kprobe_override)
-+		add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
- 	event->prog = prog;
- 	event->bpf_cookie = bpf_cookie;
- 	rcu_assign_pointer(event->tp_event->prog_array, new_array);
+@@ -507,7 +507,7 @@ static int __init kvmppc_e500_init(void)
+ 	unsigned long handler_len;
+ 	unsigned long max_ivor = 0;
+ 
+-	r = kvmppc_core_check_processor_compat();
++	r = kvmppc_e500_check_processor_compat();
+ 	if (r)
+ 		goto err_out;
+ 
+diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
+index 57e0ad6a2ca3..4564aa27edcf 100644
+--- a/arch/powerpc/kvm/e500mc.c
++++ b/arch/powerpc/kvm/e500mc.c
+@@ -168,7 +168,7 @@ static void kvmppc_core_vcpu_put_e500mc(struct kvm_vcpu *vcpu)
+ 	kvmppc_booke_vcpu_put(vcpu);
+ }
+ 
+-int kvmppc_core_check_processor_compat(void)
++int kvmppc_e500mc_check_processor_compat(void)
+ {
+ 	int r;
+ 
+@@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
+ {
+ 	int r;
+ 
++	r = kvmppc_e500mc_check_processor_compat();
++	if (r)
++		goto err_out;
++
+ 	r = kvmppc_booke_init();
+ 	if (r)
+ 		goto err_out;
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index 5faf69421f13..d44b85ba8cef 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -442,7 +442,7 @@ int kvm_arch_hardware_enable(void)
+ 
+ int kvm_arch_check_processor_compat(void *opaque)
+ {
+-	return kvmppc_core_check_processor_compat();
++	return 0;
+ }
+ 
+ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+
+base-commit: 00e4493db7c6163d48d5b45034d1a77e16a1c8dc
+-- 
 
