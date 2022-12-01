@@ -2,279 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F4763EF84
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2464863EF86
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiLALcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
+        id S230450AbiLALdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiLALcG (ORCPT
+        with ESMTP id S230403AbiLALdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:32:06 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFF55BD6B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:32:05 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id x18so912760qki.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:32:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=y5GSAml/0pZJrdUkiDZ7mkwxcp3+ufNbDYexjR+IlH0=;
-        b=XLzWivm2Ypb5D51McuA+bsdIaFUeiFBrFKNYnwG1amFH57QzEjWNf5FRvdtdHwFxD2
-         oycI0zhvxj/oa1MSgjPnY9KagjpmQOEaWPWa+sAcx/4XvzMahrNgjGc5D05M56Y4OYXB
-         h7Um9LumJQ7E4ONifUODdnxSMtWyB4VLgc2dk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y5GSAml/0pZJrdUkiDZ7mkwxcp3+ufNbDYexjR+IlH0=;
-        b=YLJ4DgUmpMdl4rEkwwlyqXg7PQl4HNJyT3/a/zm/tbRHI1vdOk+46vpVkhuCtatoZC
-         jS0yshVf6dDXvP7MlMIayz6Ns1PYjkvc4oHiUnouI+WcyUMbBwmThiasHMM9v/bW3ZXo
-         WHgZT/sNZGWKZ0hcU36yNFPVIYBlKrokiINgzllt4sKW6Gnh7XWKp7oCAdnncLKBklRB
-         p4mHaO3ddXzoDbCRBr2Q2/DkJhFLvYvJw7nM6lLmbuuWjdHGfiHqZP9w6jPCJB845VkM
-         I6UAKMHhA4lu0JpPZ8nZ88DkdSVfsX3UaU9PB92j86sZLjbwHz0aLsQMXB8Vrowq8MCO
-         tfYQ==
-X-Gm-Message-State: ANoB5pk+OFnVlYMW+n/zz6Nt9JDyqSbyJXWcKSyZF2HZK/jSwnaJRB9+
-        UIrkcECyNPqponWvpxM7oV6qLA==
-X-Google-Smtp-Source: AA0mqf7cOFPH72RgtSNCCk5vKVTULqwXYF1K4TEjnN/d9D3hwv5n4rKxRvDY1iW0F3BM+Z0Q2sBt5A==
-X-Received: by 2002:a05:620a:4590:b0:6fa:3b2b:1da3 with SMTP id bp16-20020a05620a459000b006fa3b2b1da3mr58004284qkb.166.1669894324348;
-        Thu, 01 Dec 2022 03:32:04 -0800 (PST)
-Received: from [10.176.68.61] ([192.19.148.250])
-        by smtp.gmail.com with ESMTPSA id j11-20020ac8550b000000b003434d3b5938sm2458924qtq.2.2022.12.01.03.31.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 03:32:02 -0800 (PST)
-Message-ID: <c83d7496-7547-2ab4-571a-60e16aa2aa3d@broadcom.com>
-Date:   Thu, 1 Dec 2022 12:31:58 +0100
+        Thu, 1 Dec 2022 06:33:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E132252C;
+        Thu,  1 Dec 2022 03:32:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A04DBB81EED;
+        Thu,  1 Dec 2022 11:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061CEC433C1;
+        Thu,  1 Dec 2022 11:32:54 +0000 (UTC)
+Message-ID: <20badb75-65c7-719e-ab93-28e6b5e97f22@xs4all.nl>
+Date:   Thu, 1 Dec 2022 12:32:53 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
-        Hector Martin <marcan@marcan.st>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
- <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
- <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
- <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
- <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
- <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> <87fse76yig.fsf@kernel.org>
- <fc2812b1-db96-caa6-2ecb-c5bb2c33246a@linaro.org> <87bkov6x1q.fsf@kernel.org>
- <CACRpkdbpJ8fw0UsuHXGX43JRyPy6j8P41_5gesXOmitHvyoRwQ@mail.gmail.com>
- <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000008a7ce05eec292c3"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: Question for an accepted patch: use of DMA-BUF based videobuf2
+ capture buffer with no-HW-cache-coherent HW
+Content-Language: en-US
+To:     yuji2.ishikawa@toshiba.co.jp, posciak@chromium.org,
+        paul.kocialkowski@bootlin.com, mchehab+samsung@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomasz Figa <tfiga@chromium.org>
+References: <TYAPR01MB6201561D2644EE783BA8B196922E9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+ <b645f983-447b-7b4b-6dd6-d5f10da08e96@xs4all.nl>
+ <TYAPR01MB62019A8DD1215F41F0FE663C92309@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <TYAPR01MB62019A8DD1215F41F0FE663C92309@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000008a7ce05eec292c3
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Yuji,
 
-On 11/28/2022 3:40 PM, Konrad Dybcio wrote:
+On 26/10/2022 11:16, yuji2.ishikawa@toshiba.co.jp wrote:
+> Hi Hans,
 > 
-> 
-> On 26.11.2022 22:45, Linus Walleij wrote:
->> On Fri, Nov 25, 2022 at 1:25 PM Kalle Valo <kvalo@kernel.org> wrote:
->>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
+>> -----Original Message-----
+>> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+>> Sent: Monday, October 24, 2022 4:49 PM
+>> To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
+>> <yuji2.ishikawa@toshiba.co.jp>; posciak@chromium.org;
+>> paul.kocialkowski@bootlin.com; mchehab+samsung@kernel.org;
+>> linux-media@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: Question for an accepted patch: use of DMA-BUF based videobuf2
+>> capture buffer with no-HW-cache-coherent HW
+>>
+>> Hi Yuji,
+>>
+>> On 10/24/22 06:02, yuji2.ishikawa@toshiba.co.jp wrote:
+>>> Hi,
 >>>
->>>> On 25.11.2022 12:53, Kalle Valo wrote:
->>>>> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
->>>>>
->>>>>> On 21.11.2022 14:56, Linus Walleij wrote:
->>>>>>> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>>>>>
->>>>>>>> I can think of a couple of hacky ways to force use of 43596 fw, but I
->>>>>>>> don't think any would be really upstreamable..
->>>>>>>
->>>>>>> If it is only known to affect the Sony Xperias mentioned then
->>>>>>> a thing such as:
->>>>>>>
->>>>>>> if (of_machine_is_compatible("sony,xyz") ||
->>>>>>>      of_machine_is_compatible("sony,zzz")... ) {
->>>>>>>     // Enforce FW version
->>>>>>> }
->>>>>>>
->>>>>>> would be completely acceptable in my book. It hammers the
->>>>>>> problem from the top instead of trying to figure out itsy witsy
->>>>>>> details about firmware revisions.
->>>>>>>
->>>>>>> Yours,
->>>>>>> Linus Walleij
->>>>>>
->>>>>> Actually, I think I came up with a better approach by pulling a page
->>>>>> out of Asahi folks' book - please take a look and tell me what you
->>>>>> think about this:
->>>>>>
->>>>>> [1]
->>>>>> https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
->>>>>> [2]
->>>>>> https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
->>
->> Something in this direction works too.
->>
->> The upside is that it tells all operating systems how to deal
->> with the firmware for this hardware.
->>
->>>>> Instead of a directory path ("brcm/brcmfmac43596-pcie") why not provide
->>>>> just the chipset name ("brcmfmac43596-pcie")? IMHO it's unnecessary to
->>>>> have directory names in Device Tree.
->>>>
->>>> I think it's common practice to include a full $FIRMWARE_DIR-relative
->>>> path when specifying firmware in DT, though here I left out the board
->>>> name bit as that's assigned dynamically anyway. That said, if you don't
->>>> like it, I can change it.
+>>> I'm porting a V4L2 capture driver from 4.19.y to 5.10.y [1].
 >>>
->>> It's just that I have understood that Device Tree is supposed to
->>> describe hardware and to me a firmware directory "brcm/" is a software
->>> property, not a hardware property. But this is really for the Device
->>> Tree maintainers to decide, they know this best :)
+>>> When I test the ported driver, I sometimes find a corruption on a captured
+>> image.
+>>>
+>>> Because the corruption is exactly aligned with cacheline, I started
+>> investigation from map/unmap of DMA-BUF.
+>>>
+>>>
+>>>
+>>> The capture driver uses DMA-BUF for videobuf2.
+>>>
+>>> The capture hardware does not have HW-mantained cache coherency with
+>> CPU, that is, explicit map/unmap is essential on QBUF/DQBUF.
+>>>
+>>> After some hours of struggle, I found a patch removing cache synchronizations
+>> on QBUF/DQBUF.
+>>>
+>>>
+>>>
+>>> https://patchwork.kernel.org/project/linux-media/patch/20190124095156.
+>>> 21898-1-paul.kocialkowski@bootlin.com/
+>>> <https://patchwork.kernel.org/project/linux-media/patch/20190124095156
+>>> .21898-1-paul.kocialkowski@bootlin.com/>
+>>>
+>>>
+>>>
+>>> When I removed this patch from my 5.10.y working-tree, the driver
+>>> yielded images without any defects.v
+>>>
+>>>
+>>>
+>>> ***************
+>>>
+>>> Sorry for a mention to a patch released 4 years ago.
+>>>
+>>> The patch removes map/unmap on QBUF/DQBUF to improve the
+>> performance of V4L2 decoder device, by reusing previously decoded frames.
+>>>
+>>> However, there seems no cares nor compensations for modifying lifecycle of
+>> DMA-BUF, especially on video capture devices.
 >>
->> I would personally just minimize the amount of information
->> put into the device tree to be exactly what is needed to find
->> the right firmware.
+>> I'm not entirely sure what you mean exactly.
 >>
->> brcm,firmware-compatible = "43596";
->>
->> since the code already knows how to conjure the rest of the string.
->>
->> But check with Rob/Krzysztof.
->>
->> Yours,
->> Linus Walleij
+> My concern is consistency between ioctls and the state transition of capture buffers.
+> Generally, streaming I/O (DMA-BUF importing) buffers are handled following by userland.
 > 
-> Krzysztof, Rob [added to CC] - can I have your opinions?
+> Ioctl(VIDIOC_QBUF) -> /* DMA transfer from HW*/ -> ioctl(VIDIOC_DQBUF) -> /* access from CPU */ -> ioctl(VIDIOC_QBUF) -> ...
+> 
+> Therefore, expected semantics is that a buffer is owned by HW after QBUF, and owned by CPU after DQBUF.
+> In practice, ioctl(QBUF) kicks vb2_dc_map_dma_buf() and ioctl(DQBUF) kicks vb2_dc_unmap_dma_buf() before applying the patch.
+> This implementation keeps consistency in terms of cache coherency as cache-clean is done in vb2_dc_map_dma_buf().
+> 
+> By applying the patch, ioctl(DQBUF) does not kick unmap_dma() anymore. The similar for ioctl(QBUF).
+> Therefore, in practice, a buffer is not owned by CPU just after ioctl(DQBUF).
+> To keep compatibility of buffer operations, there should be delayed map_dma()/unmap_dma() call just before DMA-transfer/CPU-access.
+> However, no one referred to such function in the v4l2 framework in the examination of the patch.
+> Also, there is no advice for individual video device drivers; such that adding map_dma()/unmap_dma() explicitly.
 
-I tried catching up on this thread. Reading it I am not sure what the 
-issue is, but I am happy to dive in. If you can provide a boot log with 
-brcmfmac loaded with module parameter 'debug=0x1416' I can try and make 
-sense of the chipid/devid confusion.
+The cache syncing is supposed to happen in __vb2_buf_mem_finish() where the
+'finish' memop is called.
+
+But for DMABUF it notes that:
+
+        /*
+         * DMA exporter should take care of cache syncs, so we can avoid
+         * explicit ->prepare()/->finish() syncs. For other ->memory types
+         * we always need ->prepare() or/and ->finish() cache sync.
+         */
+
+And here https://docs.kernel.org/driver-api/dma-buf.html I read that userspace
+must call DMA_BUF_IOCTL_SYNC to ensure the caches are synced before using the
+buffer.
+
+Are you calling DMA_BUF_IOCTL_SYNC?
+
+I suspect that vb2_dc_unmap_dma_buf() caused a cache sync, so you never noticed
+issues.
 
 Regards,
-Arend
 
---00000000000008a7ce05eec292c3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+	Hans
 
-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
-2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
-Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
-ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
-zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
-sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
-BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
-N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
-p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
-bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA8kcc27C1FOd5qS+Tr
-SwJUqCYLufez/BB/ywEBsR8XlzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjEyMDExMTMyMDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAUtJKd/wU80CTF8z1yDMo+iyyucwcLONzrNgy
-86MxRv6xDgOAGjxzmp4eCdJ5TYowl6Nt7Bisn92rFbaiug9XFjUHLvkGwuGRPRJjzrmg4swkdt64
-8au4wsZsIm3LaQuDtaMukJ98BhRgenwieBi9FFEmhSTrxMpttxubskDr+o7D+GdyYzJgqSYM4I0W
-/pLbWY8wrufwmmbhOJmTfzO4+Su2c0y7Iqf+YO+07zKXpjjtwDu2mofT1dHLwQJaJHQ7yD1hTSOG
-nVIrtXNqM03DEbliPH7P8Zz0Gq0fWRDlEtfFBeFlntGJEQf87YSZgXVLol9mw0RqnhsCqMSpHbDa
-6w==
---00000000000008a7ce05eec292c3--
+> 
+>>>
+>>>
+>>>
+>>> Would you tell me some idea on this patch:
+>>>
+>>> * Do well-implemented capture drivers work well even if this patch is applied?
+>>
+>> Yes, dmabuf is used extensively and I have not had any reports of issues.
+> 
+> Many architectures can avoid this problem.
+> A problem statistically occurs, only if a video capture HW does not have HW-maintained cache coherency with CPU.
+> Does this patch consider such case?
+> 
+>>>
+>>> * How should a video capture driver call V4L2/videobuf2 APIs, especially
+>> when the hardware does not support cache coherency?
+>>
+>> It should all be handled correctly by the core frameworks.
+>>
+>> I think you need to debug more inside videobuf2-core.c. Some printk's that show
+>> the dmabuf fd when the buffer is mapped and when it is unmapped + the length
+>> it is mapping should hopefully help a bit.
+> 
+> I added printk and dump_stack() to several functions.
+> The patched function __prepare_dmabuf() is called every ioctl(QBUF).
+> Function vb2_dc_map_dmabuf() is called only for the 1st call of ioctl(QBUF) for a buffer instance.
+> After that, vb2_dc_map_dmabuf() was never called, as the patch intended.
+> 
+> Regards,
+> 	Yuji
+> 
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>>
+>>>
+>>>
+>>> ***************
+>>>
+>>> [1] FYI: the capture driver is not on mainline yet; the candidate is,
+>>>
+>>> https://lore.kernel.org/all/20220810132822.32534-1-yuji2.ishikawa@tosh
+>>> iba.co.jp/
+>>> <https://lore.kernel.org/all/20220810132822.32534-1-yuji2.ishikawa@tos
+>>> hiba.co.jp/>
+>>>
+>>>
+>>>
+>>>
+>>>
+>>> Regards,
+>>>
+>>>               Yuji Ishikawa
+>>>
+
