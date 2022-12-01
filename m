@@ -2,141 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785AE63EE0C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A61763EE12
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiLAKjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S230029AbiLAKkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiLAKj3 (ORCPT
+        with ESMTP id S230207AbiLAKkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:39:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7460E54B16
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669891113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=10Al1tSX1JNmT1W2eYBPU7HPfHOrdNXuqygGPStHWlc=;
-        b=WytJe5b9dZZOf14CVQbSwOdtp4ZeLvSbTYtwvy+DKrArVSXU1aVTQ9H2pCTjU4rWVzA1NG
-        755nZrP2BN6DNJur/uUTxlu16/f4g7PHXMVnxmMZt9ZFonmW16FNjXhCAd2LPkhMi4IHfF
-        eTkJkKTldV3WStqyHsDelQ4U6epU5jU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-489-OItugcUrM22L9OAoX-DE8g-1; Thu, 01 Dec 2022 05:38:32 -0500
-X-MC-Unique: OItugcUrM22L9OAoX-DE8g-1
-Received: by mail-wr1-f71.google.com with SMTP id e19-20020adfa453000000b0024209415034so284152wra.18
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:38:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=10Al1tSX1JNmT1W2eYBPU7HPfHOrdNXuqygGPStHWlc=;
-        b=t4/vgDkSU7gSOK6lkGFTWHuSllAcTcDt4hU6CsFhu6RKh+XMDHqEdMzWgJp+4YquTW
-         QKvaDtPHquI+ygkzQbm6rvhhr2qtUC3S0HK7vL4fHSawfh50TCe8+YmQCRykJfON5nDH
-         NZv2gorlE1ZQFvuIz+7GEFDGdiKYFKkhsCxJVKjQSnQ9XbnMI834+2Z20mSGCD0RBQ+8
-         5+U0EgCNyGJDQQCOxhZr4/vDDltOpnIKdMJ7RJ3VwP4oaM1PRmG1/xGxm3DXyUhkMkTM
-         8cWpDt6/xxvntmyK0jcuTdimFq5pTZM1GawlYw/hl7V3dXpWwDNcQHwmqy/OmieCCmmc
-         Lqig==
-X-Gm-Message-State: ANoB5pn4ihNkTPV/aXqYyM2WIrtKSMpA2G6O1fYUjQhdi5HVMN8yUXq3
-        3VzUU+BUtLvkOpjoeb5SB92/9E98EnzeGJb49DbxjIjH3H2RKQe9IMLzkZw0xa+LjkefSGgP/Sz
-        Z21/cqBXQuO/XUJii0hitTP5z
-X-Received: by 2002:a5d:43c9:0:b0:236:78d0:5223 with SMTP id v9-20020a5d43c9000000b0023678d05223mr41643015wrr.250.1669891111397;
-        Thu, 01 Dec 2022 02:38:31 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6KufTftndeSFnuJj0ww4Bi4u4dwK5MuxmTqCH6QTPyZEYTXUnzD5dmnVqEGF5aWgQYEpubqQ==
-X-Received: by 2002:a5d:43c9:0:b0:236:78d0:5223 with SMTP id v9-20020a5d43c9000000b0023678d05223mr41642998wrr.250.1669891111156;
-        Thu, 01 Dec 2022 02:38:31 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id fc13-20020a05600c524d00b003d04e4ed873sm10098252wmb.22.2022.12.01.02.38.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 02:38:30 -0800 (PST)
-Message-ID: <31192e08-3d83-6fb0-06b0-51d50d073abc@redhat.com>
-Date:   Thu, 1 Dec 2022 11:38:29 +0100
+        Thu, 1 Dec 2022 05:40:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68E09493D;
+        Thu,  1 Dec 2022 02:40:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NNCJN4W7qz4xFy;
+        Thu,  1 Dec 2022 21:40:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1669891204;
+        bh=KTDVN/7lIjIrER/XXkOz9H8eWtf2nxvkUgRAGM5il/U=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mtH77xWqReqw3bUURmWOaOMUgI1fnhJeqxa/jFrTE2AiPxZgRHJOdcrEogd7m6t+K
+         hSD5E6U7i+ckFXkoXJyBCf9GV9mhqfTh6a2EhgZiI/SRGv0KENZChmJYXHVWQJ6yRk
+         6YrETuvLSFH3GLBrIHlAqPWESejuap3arDVMjfILKy+BGr1aGCqxlVdA7HLC4kSTkB
+         h2Fc1q1HQQmg4WuwySsEcmNguqQitD5GKa/mEHq6/vneU8YBjQFOfp9St3mhaor2x1
+         6DM3kpUr8F1g1c/fjGREENP6GL+7W1pjUv9OMijMtZXQ/VLwrb7rHigKdo6xpjkop7
+         l5PmypY+0tAfg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 5/5] powerpc: dts: remove label = "cpu" from DSA dt-binding
+In-Reply-To: <20221130141040.32447-6-arinc.unal@arinc9.com>
+References: <20221130141040.32447-1-arinc.unal@arinc9.com>
+ <20221130141040.32447-6-arinc.unal@arinc9.com>
+Date:   Thu, 01 Dec 2022 21:40:03 +1100
+Message-ID: <87a647s8zg.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 01/17] drm/tests: helpers: Move the helper header to
- include/drm
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
-References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
- <20221123-rpi-kunit-tests-v2-1-efe5ed518b63@cerno.tech>
- <ebe02c21-7770-0415-096e-76a839bad154@redhat.com>
- <20221201102756.cdvxu4iryhu3rjpf@houat>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221201102756.cdvxu4iryhu3rjpf@houat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Maxime,
-
-On 12/1/22 11:27, Maxime Ripard wrote:
-
-[...]
-
->>
->> I wonder if now that this header was moved outside of the tests directory,
->> if we should add stub functions in the header file that are just defined
->> but do nothing if CONFIG_DRM_KUNIT_TEST isn't enabled. So that including
->> it in drivers will be a no-op.
->>
->> Or do you plan to conditionally include this header file in drivers? So
->> that is only included when CONFIG_DRM_KUNIT_TEST is enabled?
-> 
-> I'm not entirely sure. I'd expect only the tests to include it, and thus
-> would depend on DRM_KUNIT_TEST already. But we can always add the stubs
-> if it's ever included in a different context.
-> 
->> Another thing that wondered is if we want a different namespace for this
->> header, i.e: <drm/testing/drm_kunit_helpers.h>, to make it clear that is
->> not part of the DRM API but just for testing helpers.
-> 
-> If there's a single header, I don't think we need to create the
-> directory. This is also something we can consolidate later on if needed.
+Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com> writes:
+> This is not used by the DSA dt-binding, so remove it from all devicetrees.
 >
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> ---
+>  arch/powerpc/boot/dts/turris1x.dts | 2 --
+>  1 file changed, 2 deletions(-)
 
-Agree on both. It's better to land as is and then figure out if needs
-to be changed once other drivers add more tests.
- 
->> But these are open questions really, and they can be done as follow-up:
->>
->> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> Thanks :)
+Adding Pali to Cc.
 
-You are welcome!
+These were only recently updated in commit:
 
--- 
-Best regards,
+  8bf056f57f1d ("powerpc: dts: turris1x.dts: Fix labels in DSA cpu port nod=
+es")
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Which said:
 
+  DSA cpu port node has to be marked with "cpu" label.
+
+But if the binding doesn't use them then I'm confused why they needed to
+be updated.
+
+cheers
+
+
+> diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/t=
+urris1x.dts
+> index 045af668e928..3841c8d96d00 100644
+> --- a/arch/powerpc/boot/dts/turris1x.dts
+> +++ b/arch/powerpc/boot/dts/turris1x.dts
+> @@ -147,7 +147,6 @@ ports {
+>=20=20
+>  					port@0 {
+>  						reg =3D <0>;
+> -						label =3D "cpu";
+>  						ethernet =3D <&enet1>;
+>  						phy-mode =3D "rgmii-id";
+>=20=20
+> @@ -184,7 +183,6 @@ port@5 {
+>=20=20
+>  					port@6 {
+>  						reg =3D <6>;
+> -						label =3D "cpu";
+>  						ethernet =3D <&enet0>;
+>  						phy-mode =3D "rgmii-id";
+>=20=20
+> --=20
+> 2.34.1
