@@ -2,67 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDED63F792
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A57B63F796
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiLASiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S230089AbiLASil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiLASiA (ORCPT
+        with ESMTP id S229625AbiLASij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:38:00 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFB21EC65;
-        Thu,  1 Dec 2022 10:37:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669919879; x=1701455879;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iPRwggNOmQxuO71WGjy8ua4ueC+pvJHPP8yaHdcqSwM=;
-  b=kSiqyCC2Uv3IP3+/jLMX1XoXADaIApRus99dGBMybSxW6eu51spTnlff
-   d8uXLbqEKro1/+zknnoH6uh+gdx/pNuQZ4Qv6Rmps4uI5J8GW/h+CrBi9
-   k8pimeKEKHfR34pqwoENmfIfJvB9RfdhQyofTtxRYyYEc2TAJ2pry6wJu
-   Exle5vicRgj588oY6p4F8FeNlrp6ug+CpxRxGyt0MSybn5nfKBgaMKfNG
-   OwqZ/ynL2TtSe5XS37kEBXF32pYwOi8LnNa/L2nMPUK15mC6wQOVmpVF4
-   HcXr7flTRK3/UJ6n4nKVLt26uHwvd541B4/m98/YDkAbnnHs3lkMNS+kE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="402045606"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="402045606"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 10:37:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="769333984"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="769333984"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.66.184]) ([10.212.66.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 10:37:56 -0800
-Message-ID: <e896ca47-6192-190f-ad63-6a294c0c246e@intel.com>
-Date:   Thu, 1 Dec 2022 11:37:54 -0700
+        Thu, 1 Dec 2022 13:38:39 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2A432B87;
+        Thu,  1 Dec 2022 10:38:38 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id z4so4232236wrr.3;
+        Thu, 01 Dec 2022 10:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UUhZiDVu1l4R7GELwtStsGItVdYVXKe1EeQ/JddBxpU=;
+        b=WXr9NDML4HHKsy71hpgfUyvx5HNTe8RAxfqblEBP+xlBPTmdqRLJOILbXhsrO+/HFk
+         XWXI4WV9z6JOczXRfDUmZP67xcFFNydEYAvYOGbe1kfITXwCJbCk2e8Q0eDIHy4HfF/E
+         Swq6N1Q+6tfWAzE7njzeEn/OGrdiTKwX9MDKMV31bv/X56FcW9WZsog3QENcEHjxPIIw
+         0a5N4gW5qFtqfbOuotptHu+IGH6Eg5iLSDvQ3yNeYoQFMEh5m93TiBxKqqF09Pt2swFp
+         9cqFgz8B6CAY3jjXAzU0D0Xq8dV9/BkDdKoYRzXJ0LwXN5u1+L0xJzs2BITt+fBIIQ6k
+         aq/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UUhZiDVu1l4R7GELwtStsGItVdYVXKe1EeQ/JddBxpU=;
+        b=eaM4iA+ulOZMKxaWwgyx/0oiN5YsiYCCb4d+LG1PlFxiWw96tOSBqj6zlw5OGDC2Ex
+         cTzRfLZo09uuC0p5VIEW7kRSomqaS/Ls75VV0vG4I8Tg06by5oDKskbfJdgxKuBpMIGJ
+         lttC0O1UHXuv70XV5Fm9+m01O8ob60MOTXhiTFoZpdPAbVL/fJES7WHHh6D9WRnUDQFg
+         9qoaJ62bZ/LAkb/Gs5MLCw4FMmoQOtZd8v+beA8imQpi7WO3fxFEzXR/NMHSkdgfujcA
+         j8mjqj9YLUatn38gqx9H8Y0JvYuJlFWla3DcmTwI+vzmqPSUGpCvAb+a80TfgUcPwGQT
+         WT3A==
+X-Gm-Message-State: ANoB5pmdlAtmTF8FbsVl03OlxlaiZo7Sg6R0kDGAfsuzKZWxhP25Kswr
+        tGsBGo/W8ZLPR9d1QLYfRQqYJje1+1w=
+X-Google-Smtp-Source: AA0mqf5L0O//G3knxROY53909Es1x2VwKOQ9f40XjvkNutn6ulj/WXrM2FYpSFQ7UIgm9kDz+prFQA==
+X-Received: by 2002:adf:e6c8:0:b0:242:18c4:694e with SMTP id y8-20020adfe6c8000000b0024218c4694emr12945304wrm.175.1669919916455;
+        Thu, 01 Dec 2022 10:38:36 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-18.ip85.fastwebnet.it. [93.42.71.18])
+        by smtp.gmail.com with ESMTPSA id z16-20020a5d4d10000000b00241c712916fsm6300234wrt.0.2022.12.01.10.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 10:38:35 -0800 (PST)
+Message-ID: <6388f4ab.5d0a0220.a137.068e@mx.google.com>
+X-Google-Original-Message-ID: <Y4j0rEEA1fC8yRFy@Ansuel-xps.>
+Date:   Thu, 1 Dec 2022 19:38:36 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH 0/3] add dt configuration for dp83867 led modes
+References: <20221118001548.635752-1-tharvey@gateworks.com>
+ <Y3bRX1N0Rp7EDJkS@lunn.ch>
+ <CAJ+vNU3P-t3Q1XZrNG=czvFBU7UsCOA_Ap47k9Ein_3VQy_tGw@mail.gmail.com>
+ <Y3eEiyUn6DDeUZmg@lunn.ch>
+ <CAJ+vNU2pAQh6KKiX5x7hFuVpN68NZjhnzwFLRAzS9YZ8bWm1KA@mail.gmail.com>
+ <Y3q5t+1M5A0+FQ0M@lunn.ch>
+ <CAJ+vNU0yjsJjQLWbtZmswQOyQ6At-Qib8WCcVcSgtDmcFQ3hGQ@mail.gmail.com>
+ <6388f310.050a0220.532be.7cd5@mx.google.com>
+ <CAJ+vNU2AbaDAMhQ0-mDh6ROC7rdkbmXoiSijRTN2ryEgT=QHiQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH V2 01/11] cxl/pci: Add generic MSI-X/MSI irq support
-Content-Language: en-US
-To:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
- <20221201002719.2596558-2-ira.weiny@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221201002719.2596558-2-ira.weiny@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU2AbaDAMhQ0-mDh6ROC7rdkbmXoiSijRTN2ryEgT=QHiQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,126 +89,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 01, 2022 at 10:35:46AM -0800, Tim Harvey wrote:
+> On Thu, Dec 1, 2022 at 10:31 AM Christian Marangi <ansuelsmth@gmail.com> wrote:
+> >
+> > On Thu, Dec 01, 2022 at 10:26:09AM -0800, Tim Harvey wrote:
+> > > On Sun, Nov 20, 2022 at 3:35 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > > >
+> > > > On Fri, Nov 18, 2022 at 11:57:00AM -0800, Tim Harvey wrote:
+> > > > > On Fri, Nov 18, 2022 at 5:11 AM Andrew Lunn <andrew@lunn.ch> wrote:
+> > > > > >
+> > > > > > > Andrew,
+> > > > > > >
+> > > > > > > I completely agree with you but I haven't seen how that can be done
+> > > > > > > yet. What support exists for a PHY driver to expose their LED
+> > > > > > > configuration to be used that way? Can you point me to an example?
+> > > > > >
+> > > > > > Nobody has actually worked on this long enough to get code merged. e.g.
+> > > > > > https://lore.kernel.org/netdev/20201004095852.GB1104@bug/T/
+> > > > > > https://lists.archive.carbon60.com/linux/kernel/3396223
+> > > > > >
+> > > > > > This is probably the last attempt, which was not too far away from getting merged:
+> > > > > > https://patches.linaro.org/project/linux-leds/cover/20220503151633.18760-1-ansuelsmth@gmail.com/
+> > > > > >
+> > > > > > I seem to NACK a patch like yours every couple of months. If all that
+> > > > > > wasted time was actually spent on a common framework, this would of
+> > > > > > been solved years ago.
+> > > > > >
+> > > > > > How important is it to you to control these LEDs? Enough to finish
+> > > > > > this code and get it merged?
+> > > > > >
+> > > > >
+> > > > > Andrew,
+> > > > >
+> > > > > Thanks for the links - the most recent attempt does look promising.
+> > > > > For whatever reason I don't have that series in my mail history so
+> > > > > it's not clear how I can respond to it.
+> > > >
+> > > > apt-get install b4
+> > > >
+> > > > > Ansuel, are you planning on posting a v7 of 'Adds support for PHY LEDs
+> > > > > with offload triggers' [1]?
+> > > > >
+> > > > > I'm not all that familiar with netdev led triggers. Is there a way to
+> > > > > configure the default offload blink mode via dt with your series? I
+> > > > > didn't quite follow how the offload function/blink-mode gets set.
+> > > >
+> > > > The idea is that the PHY LEDs are just LEDs in the Linux LED
+> > > > framework. So read Documentation/devicetree/bindings/leds/common.yaml.
+> > > > The PHY should make use of these standard DT properties, including
+> > > > linux,default-trigger.
+> > > >
+> > > >         Andrew
+> > >
+> > > Ansuel,
+> > >
+> > > Are you planning on posting a v7 of 'Adds support for PHY LEDs with
+> > > offload triggers' [1]?
+> > >
+> > > Best Regards,
+> > >
+> > > Tim
+> > > [1] https://patches.linaro.org/project/linux-leds/list/?series=174704
+> >
+> > I can consider that only if there is a real interest for it and would
+> > love some help by the netdev team to actually have a review from the
+> > leds team...
+> >
+> > I tried multiple time to propose it but I never got a review... only a
+> > review from an external guy that wanted to follow his idea in every way
+> > possible with the only intention of applying his code (sorry to be rude
+> > about that but i'm more than happy to recover the work and search for a
+> > common solution)
+> >
+> > So yes this is still in my TODO list but it would help if others can
+> > tell me that they want to actually review it. That would put that
+> > project on priority and I would recover and push a v7.
+> >
+> > --
+> >         Ansuel
+> 
+> Ansuel,
+> 
+> Considering Andrew is nak'ing any phy code to configure LED's until a
+> solution using via /sys/class/leds is provided I would say there is
+> real interest.
+> 
+> It seems to me that you got very positive feedback for this last
+> series. I would think if you submitted without RFC it would catch more
+> eyes as well.
+> 
 
+Well yes that's the fun part. netdev really liked the concept and how it
+was implemented (and actually also liked the use of a dedicated trigger
+instead of bloating the netdev trigger)
 
-On 11/30/2022 5:27 PM, ira.weiny@intel.com wrote:
-> From: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> Currently the only CXL features targeted for irq support require their
-> message numbers to be within the first 16 entries.  The device may
-> however support less than 16 entries depending on the support it
-> provides.
-> 
-> Attempt to allocate these 16 irq vectors.  If the device supports less
-> then the PCI infrastructure will allocate that number.  Store the number
-> of vectors actually allocated in the device state for later use
-> by individual functions.
-> 
-> Upon successful allocation, users can plug in their respective isr at
-> any point thereafter, for example, if the irq setup is not done in the
-> PCI driver, such as the case of the CXL-PMU.
-> 
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+But I never got a review from LED team and that result in having the
+patch stalled and never merged... But ok I will recover the work and
+recheck/retest everything from the start hoping to get more traction
+now...
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-> 
-> ---
-> Changes from V1:
-> 	Jonathan
-> 		pci_alloc_irq_vectors() cleans up the vectors automatically
-> 		use msi_enabled rather than nr_irq_vecs
-> 
-> Changes from Ira
-> 	Remove reviews
-> 	Allocate up to a static 16 vectors.
-> 	Change cover letter
-> ---
->   drivers/cxl/cxlmem.h |  3 +++
->   drivers/cxl/cxlpci.h |  6 ++++++
->   drivers/cxl/pci.c    | 23 +++++++++++++++++++++++
->   3 files changed, 32 insertions(+)
-> 
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 88e3a8e54b6a..cd35f43fedd4 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
->    * @info: Cached DVSEC information about the device.
->    * @serial: PCIe Device Serial Number
->    * @doe_mbs: PCI DOE mailbox array
-> + * @msi_enabled: MSI-X/MSI has been enabled
->    * @mbox_send: @dev specific transport for transmitting mailbox commands
->    *
->    * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> @@ -247,6 +248,8 @@ struct cxl_dev_state {
->   
->   	struct xarray doe_mbs;
->   
-> +	bool msi_enabled;
-> +
->   	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->   };
->   
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index eec597dbe763..b7f4e2f417d3 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -53,6 +53,12 @@
->   #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
->   #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
->   
-> +/*
-> + * NOTE: Currently all the functions which are enabled for CXL require their
-> + * vectors to be in the first 16.  Use this as the max.
-> + */
-> +#define CXL_PCI_REQUIRED_VECTORS 16
-> +
->   /* Register Block Identifier (RBI) */
->   enum cxl_regloc_type {
->   	CXL_REGLOC_RBI_EMPTY = 0,
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index faeb5d9d7a7a..8f86f85d89c7 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -428,6 +428,27 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->   	}
->   }
->   
-> +static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	int nvecs;
-> +
-> +	/*
-> +	 * NOTE: pci_alloc_irq_vectors() handles calling pci_free_irq_vectors()
-> +	 * automatically despite not being called pcim_*.  See
-> +	 * pci_setup_msi_context().
-> +	 */
-> +	nvecs = pci_alloc_irq_vectors(pdev, 1, CXL_PCI_REQUIRED_VECTORS,
-> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> +	if (nvecs < 0) {
-> +		dev_dbg(dev, "Failed to alloc irq vectors; use polling instead.\n");
-> +		return;
-> +	}
-> +
-> +	cxlds->msi_enabled = true;
-> +}
-> +
->   static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   {
->   	struct cxl_register_map map;
-> @@ -494,6 +515,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	if (rc)
->   		return rc;
->   
-> +	cxl_pci_alloc_irq_vectors(cxlds);
-> +
->   	cxlmd = devm_cxl_add_memdev(cxlds);
->   	if (IS_ERR(cxlmd))
->   		return PTR_ERR(cxlmd);
+-- 
+	Ansuel
