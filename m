@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A548963FA07
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A742F63FA0B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiLAVtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S231134AbiLAVuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiLAVta (ORCPT
+        with ESMTP id S230450AbiLAVus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:49:30 -0500
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0F7BD0EB;
-        Thu,  1 Dec 2022 13:49:29 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1442977d77dso2583237fac.6;
-        Thu, 01 Dec 2022 13:49:29 -0800 (PST)
+        Thu, 1 Dec 2022 16:50:48 -0500
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A33C23C7;
+        Thu,  1 Dec 2022 13:50:47 -0800 (PST)
+Received: by mail-ot1-f52.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso1823503otq.11;
+        Thu, 01 Dec 2022 13:50:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=57yzKLWxqL5GldzJ3/QZmz79jz1YFJsrObt0S+latdo=;
-        b=MA9QSmzKYupJgeleZKtfiJDbBk1+YakV4N6Yqh86LZOwzNo06t8Ck/ovLGPQNObTwZ
-         RnhlFGB9Bi3/owmA7fJ0zpbLWSxQS6sZU6rH7YjwOA/D59pCm0le4esayMa9hmlNQOwc
-         GlmBRWb/My0KSpP/9LgPYFuPBjwDEJcVElScbv1YEStzZq+RmqbuWDnJQ7NXsOP9pib4
-         fxuPgWIPeOgSRsCIBdKrtFnGaHMoIJWEibcWJN3s4so5jxLGgPyeHcwO0MefYcp1dPSe
-         /Z/IcP+IThO41LphbMwqUPUmiJ7zeE1RFpRDE47cpWW/piSJtc3fjJrzZTqVkKbAsqmf
-         S24w==
-X-Gm-Message-State: ANoB5pnjv4E90g7A3rSU/ifuzJSL4880pikyTpSy+Xo6mbz+cKqvTYYk
-        iV9A3P/LyoPBXyYXTwOhQg==
-X-Google-Smtp-Source: AA0mqf7kfkqw12wKx8Bg+cNoCItLOK3uTdw4M2dwW24Q+GfB94xcnEKX6GXNa+fAH8H1rAETKDVKtg==
-X-Received: by 2002:a05:6870:b19:b0:142:78d9:d216 with SMTP id lh25-20020a0568700b1900b0014278d9d216mr27901961oab.207.1669931369066;
-        Thu, 01 Dec 2022 13:49:29 -0800 (PST)
+        bh=+jgJgRNaHld9gb5rSZvL/PyTZHu4sldrsMLvOaIfMsg=;
+        b=k7kgy+xTRFhvzOCJkP/+QqJQeTngry3sI0ciNfq94n7lniD2iLNiM/b/CRcoyGTUWH
+         BBX3aOpy9Nctue8dNSieIhveIO84wBq1wxhDgZpdI3CR1v1wBJoOLSRGN6AdUC0hyPWh
+         PDP7aHtHp3zKbLFILT7/yACRJTYmpYYnEwFXkgBREKDfxd0G/5ptQ8Vc4Z64jDSYLO0x
+         dRoqT2KuClLJQCtqsUJJSCLO82a90AOzuT0RMauclSt7kMvS+r5x/qbez6yX2UQPeDh6
+         bcjPfGrqoLkb0RmbbMmAwIVOlA+224Vpa8DxxUF5vm96kdOfJjRVT/E8yIpMLD+rGUK2
+         ANkQ==
+X-Gm-Message-State: ANoB5plzLTNbJiyY3TlXOWbdZjTXYeqLCTykRejtsKctBPp5fT15HlxO
+        QwkYfrihadvDW0Ri8z2bng==
+X-Google-Smtp-Source: AA0mqf7a9CN/VqTUx6wJBV9AMr7VW+Ph/y/VwY25+fBiEyLCO+i5U4ofRL+QIWVprk48N1V9XxM1Rw==
+X-Received: by 2002:a05:6830:18f1:b0:66b:99a2:feb9 with SMTP id d17-20020a05683018f100b0066b99a2feb9mr34385584otf.359.1669931447052;
+        Thu, 01 Dec 2022 13:50:47 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r81-20020aca5d54000000b0035b99bbe30bsm2248529oib.54.2022.12.01.13.49.28
+        by smtp.gmail.com with ESMTPSA id d2-20020a4aa582000000b0049e9a80c690sm2233176oom.1.2022.12.01.13.50.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 13:49:28 -0800 (PST)
-Received: (nullmailer pid 1506354 invoked by uid 1000);
-        Thu, 01 Dec 2022 21:49:27 -0000
-Date:   Thu, 1 Dec 2022 15:49:27 -0600
+        Thu, 01 Dec 2022 13:50:46 -0800 (PST)
+Received: (nullmailer pid 1508234 invoked by uid 1000);
+        Thu, 01 Dec 2022 21:50:45 -0000
+Date:   Thu, 1 Dec 2022 15:50:45 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     LABBE Corentin <clabbe.montjoie@gmail.com>,
-        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 3/3] dt-bindings: net: sun8i-emac: Add phy-supply property
-Message-ID: <166993136639.1506264.15399520110804856771.robh@kernel.org>
-References: <20221125202008.64595-1-samuel@sholland.org>
- <20221125202008.64595-4-samuel@sholland.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Sriranjani P <sriranjani.p@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2 2/4] dt-bindings: soc: samsung: exynos-sysreg: split
+ from syscon
+Message-ID: <166993144474.1508149.1523006540100879286.robh@kernel.org>
+References: <20221127123259.20339-1-krzysztof.kozlowski@linaro.org>
+ <20221127123259.20339-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221125202008.64595-4-samuel@sholland.org>
+In-Reply-To: <20221127123259.20339-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -75,23 +74,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 25 Nov 2022 14:20:08 -0600, Samuel Holland wrote:
-> This property has always been supported by the Linux driver; see
-> commit 9f93ac8d4085 ("net-next: stmmac: Add dwmac-sun8i"). In fact, the
-> original driver submission includes the phy-supply code but no mention
-> of it in the binding, so the omission appears to be accidental. In
-> addition, the property is documented in the binding for the previous
-> hardware generation, allwinner,sun7i-a20-gmac.
+On Sun, 27 Nov 2022 13:32:57 +0100, Krzysztof Kozlowski wrote:
+> Split Samsung Exynos SoC SYSREG bindings to own file to narrow the
+> bindings and do not allow other parts of syscon.yaml.  This allows
+> further customization of Samsung SoC bindings.
 > 
-> Document phy-supply in the binding to fix devicetree validation for the
-> 25+ boards that already use this property.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Lee Jones <lee@kernel.org>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Reviewed-by: Sriranjani P <sriranjani.p@samsung.com>
 > 
-> Fixes: 0441bde003be ("dt-bindings: net-next: Add DT bindings documentation for Allwinner dwmac-sun8i")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
 > 
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml     | 3 +++
->  1 file changed, 3 insertions(+)
+> Changes since v1:
+> 1. Add Rb tags.
+> 
+> Cc: Sriranjani P <sriranjani.p@samsung.com>
+> Cc: Chanho Park <chanho61.park@samsung.com>
+> Cc: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>  .../devicetree/bindings/mfd/syscon.yaml       |  6 ---
+>  .../soc/samsung/samsung,exynos-sysreg.yaml    | 39 +++++++++++++++++++
+>  2 files changed, 39 insertions(+), 6 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
