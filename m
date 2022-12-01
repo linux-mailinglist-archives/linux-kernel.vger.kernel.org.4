@@ -2,123 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C844A63F2A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841C363F2AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbiLAOVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S231849AbiLAOV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiLAOVd (ORCPT
+        with ESMTP id S231867AbiLAOVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:21:33 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F6AFCE7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:21:27 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j16so2686950lfe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 06:21:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QayC88wUqwsw2iqi2IOXZrL6t5JP2hXiPUA9QtpdHcs=;
-        b=DXHRvX0VZaXDwbpjeIJgmFqakqFFgbl34ZQES9dxdvaIangsk0jsRJIFx+xkWqZ+Hk
-         vjU7EVmBCGvc8XA+U/ldR17XBtEVsiaIiJ8qll37ldNFQdXeYztxzdDbOS8GqOV0B6TY
-         Wk5ACoI7VqF44LOCchzbTGgdtHxGuwqP0Ptstfx8M2YEIszjy3Zm7sMggcqSF8tBhtzT
-         0sGN8hIk1nIyKs1i573i5so/Sgqmuz0BowKkNYLR5BMDcoXrDAdJ/mWj0W9vjqKl5tNY
-         qsqrfk9LniVSu/7adASUxhpKia3es6SF+aAvCyYCne2tIMY5yF3SR+2BctFvBP/UJzdz
-         Yb1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QayC88wUqwsw2iqi2IOXZrL6t5JP2hXiPUA9QtpdHcs=;
-        b=lPXEKyJG+7EUsgJgTaka8n9DrKfo6wpEOU/aHSs/xE1gyyQcU9OAHKfiRzSnVMvBDe
-         KBRYBmPzryTLEiwGu9fYkEuxcnR0O35xBKtgA0UjuV+VjU0/KF8bHvKTgVUcfX3mOpN2
-         kUN9D24sFzQSbecirfrooccVXnvsgJ/kRTg4Yv+xTUz/spxDEBX1VioIaC0sIQDdXjs+
-         R2lZyrKSauSqQXABk/Wwyhn9iL0UDdmC3onoxNR+HgZomimrdvjP2LSSsh+5xXkFQlyV
-         p6fOW2lBl/cuVpXAgl7gPyNoBvccUHaeZUDWIUjcdMMN757Uy4kZqKvR/o6GdWI44WZ0
-         7zoA==
-X-Gm-Message-State: ANoB5pnIOR+b5/j0oJTfbKDNg6rat+gg9wDAHRiNzumv4OfUdrqHmC5n
-        wZksL4Ak+iTUMOret4KCjqk5vA==
-X-Google-Smtp-Source: AA0mqf5ZvTB7vDjVJ4NmJRjR+eA74H+19Kpc80n/TYFKPrOiTH2+sahR/ckHtxS3Rp5e8AJZIPazEw==
-X-Received: by 2002:a05:6512:74d:b0:494:7551:b764 with SMTP id c13-20020a056512074d00b004947551b764mr17426635lfs.574.1669904486334;
-        Thu, 01 Dec 2022 06:21:26 -0800 (PST)
-Received: from [192.168.1.101] (95.49.124.14.neoplus.adsl.tpnet.pl. [95.49.124.14])
-        by smtp.gmail.com with ESMTPSA id d11-20020ac2544b000000b004946bb30469sm661877lfn.82.2022.12.01.06.21.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 06:21:25 -0800 (PST)
-Message-ID: <a849ab57-3a1d-49f6-eba5-2b706220f064@linaro.org>
-Date:   Thu, 1 Dec 2022 15:21:23 +0100
+        Thu, 1 Dec 2022 09:21:49 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02EAAFCE2;
+        Thu,  1 Dec 2022 06:21:46 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 400E51F8C2;
+        Thu,  1 Dec 2022 14:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669904504; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WnpxnNlUSly7U/hdRyXRZKbB/P4yis23zMW/Q++op7A=;
+        b=ejGs99r2GteFvhyQixt5OXdXqiye94cfjpNmrs79H/FLdBZbykaeZK7ofHo7c4PQGzOtgj
+        tiATUdv3qdUZz54jgaYs0Z2S2IkW6rSw22g4TBDw60eg1XnomhfYT5zZf2z2ql3X9SdBpl
+        hlgKF1eY3jxi0s93axX2pWSui+aSSyM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669904504;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WnpxnNlUSly7U/hdRyXRZKbB/P4yis23zMW/Q++op7A=;
+        b=lUbREVuKzuJcLf37plM46mvhZEcVowxtk/gJnYTlTxbITFJ0dJP2JM/+h0IqikSzcMnTVP
+        Mfpuc611JpGmz9AQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 2F9801320E;
+        Thu,  1 Dec 2022 14:21:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id /KiTC3i4iGO+LwAAGKfGzw
+        (envelope-from <jack@suse.cz>); Thu, 01 Dec 2022 14:21:44 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B51B4A06E4; Thu,  1 Dec 2022 15:21:43 +0100 (CET)
+Date:   Thu, 1 Dec 2022 15:21:43 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "yebin (H)" <yebin10@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, Ye Bin <yebin@huaweicloud.com>,
+        tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+Subject: Re: [PATCH] ext4: fix WARNING in ext4_expand_extra_isize_ea
+Message-ID: <20221201142143.yuxnld55qot4jv7b@quack3>
+References: <20221201084844.2855621-1-yebin@huaweicloud.com>
+ <20221201121928.xk5tte4dj3vmxivs@quack3>
+ <6388AB33.6050302@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 4/4] soc: qcom: socinfo: Add SM6115 / SM4250 SoC IDs to
- the soc_id table
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
-        a39.skl@gmail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20221201141619.2462705-1-bhupesh.sharma@linaro.org>
- <20221201141619.2462705-5-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221201141619.2462705-5-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6388AB33.6050302@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1.12.2022 15:16, Bhupesh Sharma wrote:
-> Add SoC ID table entries for the SM6115 / SM4250 and variants.
+On Thu 01-12-22 21:25:07, yebin (H) wrote:
 > 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/soc/qcom/socinfo.c | 4 ++++
->  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-> index 92b27db60840..8f9e3d0e0526 100644
-> --- a/drivers/soc/qcom/socinfo.c
-> +++ b/drivers/soc/qcom/socinfo.c
-> @@ -328,11 +328,13 @@ static const struct soc_id soc_id[] = {
->  	{ qcom_board_id(IPQ8071A) },
->  	{ qcom_board_id(IPQ6018) },
->  	{ qcom_board_id(IPQ6028) },
-> +	{ qcom_board_id(SM4250) },
->  	{ qcom_board_id(IPQ6000) },
->  	{ qcom_board_id(IPQ6010) },
->  	{ qcom_board_id(SC7180) },
->  	{ qcom_board_id(SM6350) },
->  	{ qcom_board_id(SM8350) },
-> +	{ qcom_board_id(SM6115) },
->  	{ qcom_board_id(SC8280XP) },
->  	{ qcom_board_id(IPQ6005) },
->  	{ qcom_board_id(QRB5165) },
-> @@ -340,6 +342,8 @@ static const struct soc_id soc_id[] = {
->  	{ qcom_board_id(SM7225) },
->  	{ qcom_board_id(SA8295P) },
->  	{ qcom_board_id(SA8540P) },
-> +	{ qcom_board_id(QCM4290) },
-> +	{ qcom_board_id(QCS4290) },
->  	{ qcom_board_id_named(SM8450_2, "SM8450") },
->  	{ qcom_board_id_named(SM8450_3, "SM8450") },
->  	{ qcom_board_id(SC7280) },
+> On 2022/12/1 20:19, Jan Kara wrote:
+> > Hello!
+> > 
+> > On Thu 01-12-22 16:48:44, Ye Bin wrote:
+> > > From: Ye Bin <yebin10@huawei.com>
+> > > 
+> > > Syzbot found the following issue:
+> > > ------------[ cut here ]------------
+> > > WARNING: CPU: 1 PID: 3631 at mm/page_alloc.c:5534 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+> > > Modules linked in:
+> > > CPU: 1 PID: 3631 Comm: syz-executor261 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> > > RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+> > > RSP: 0018:ffffc90003ccf080 EFLAGS: 00010246
+> > > RAX: ffffc90003ccf0e0 RBX: 000000000000000c RCX: 0000000000000000
+> > > RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003ccf108
+> > > RBP: ffffc90003ccf198 R08: dffffc0000000000 R09: ffffc90003ccf0e0
+> > > R10: fffff52000799e21 R11: 1ffff92000799e1c R12: 0000000000040c40
+> > > R13: 1ffff92000799e18 R14: dffffc0000000000 R15: 1ffff92000799e14
+> > > FS:  0000555555c10300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00007ffc36f70000 CR3: 00000000744ad000 CR4: 00000000003506e0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >   <TASK>
+> > >   __alloc_pages_node include/linux/gfp.h:223 [inline]
+> > >   alloc_pages_node include/linux/gfp.h:246 [inline]
+> > >   __kmalloc_large_node+0x8a/0x1a0 mm/slab_common.c:1096
+> > >   __do_kmalloc_node mm/slab_common.c:943 [inline]
+> > >   __kmalloc+0xfe/0x1a0 mm/slab_common.c:968
+> > >   kmalloc include/linux/slab.h:558 [inline]
+> > >   ext4_xattr_move_to_block fs/ext4/xattr.c:2558 [inline]
+> > >   ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
+> > >   ext4_expand_extra_isize_ea+0xe3f/0x1cd0 fs/ext4/xattr.c:2765
+> > >   __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
+> > >   ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
+> > >   __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
+> > >   ext4_inline_data_truncate+0x548/0xd00 fs/ext4/inline.c:2021
+> > >   ext4_truncate+0x341/0xeb0 fs/ext4/inode.c:4221
+> > >   ext4_process_orphan+0x1aa/0x2d0 fs/ext4/orphan.c:339
+> > >   ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+> > >   __ext4_fill_super fs/ext4/super.c:5515 [inline]
+> > >   ext4_fill_super+0x80ed/0x8610 fs/ext4/super.c:5643
+> > >   get_tree_bdev+0x400/0x620 fs/super.c:1324
+> > >   vfs_get_tree+0x88/0x270 fs/super.c:1531
+> > >   do_new_mount+0x289/0xad0 fs/namespace.c:3040
+> > >   do_mount fs/namespace.c:3383 [inline]
+> > >   __do_sys_mount fs/namespace.c:3591 [inline]
+> > >   __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+> > >   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >   do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+> > >   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > >   </TASK>
+> > > 
+> > > Reason is allocate 16M memory by kmalloc, but MAX_ORDER is 11, kmalloc
+> > > can allocate maxium size memory is 4M.
+> > > XATTR_SIZE_MAX is currently 64k, but EXT4_XATTR_SIZE_MAX is '(1 << 24)',
+> > > so 'ext4_xattr_check_entries()' regards this length as legal. Then trigger
+> > > warning in 'ext4_xattr_move_to_block()'.
+> > > To solve above issue, adjust EXT4_XATTR_SIZE_MAX to '(1 << 22)' which
+> > > is kmalloc can allocate maxium size.
+> > > 
+> > > Reported-by: syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+> > > Fixes: 54dd0e0a1b25 ("ext4: add extra checks to ext4_xattr_block_get()")
+> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > Thanks for the report and the fix but I think it is actually wrong.  We
+> > cannot just change EXT4_XATTR_SIZE_MAX because there may be already
+> > filesystems with this large extended attributes and we'd be suddently
+> Firstly, thanks for your advice.
+> I have a question. Since the Linux-2.6.12-rc2 version, XATTR can only be set
+> to 64K
+> at most. I understand that no file's extended attribute exceeds 64K.
+
+You're right that VFS actually limits xattr size to 64k. So the chances
+that someone actually has filesystem with larger xattrs are slim. But I
+know that Lustre guys run with their modified kernels and they were the
+ones implementing ea_inode feature so maybe they'd bumped the VFS limit as
+well in their kernels. Dunno. Anyway using kvmalloc() (like the xattr core
+does) looks like a better fix.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
