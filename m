@@ -2,154 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE3E63F7F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC11C63F7FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiLATML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S230009AbiLATOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiLATMJ (ORCPT
+        with ESMTP id S229571AbiLATOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:12:09 -0500
+        Thu, 1 Dec 2022 14:14:34 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07353C5E3B;
-        Thu,  1 Dec 2022 11:12:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000CCA432D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:14:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6DBEB82008;
-        Thu,  1 Dec 2022 19:12:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19036C433C1;
-        Thu,  1 Dec 2022 19:12:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669921925;
-        bh=faLfLn20VwD7SpEhsVcCsFu680sV7lPRVza931ELf/M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iaivx7/3l5XEFtOnUIq2Fku+PTgJ4+Bl0/M6Yl1yn2H1O6nCNg5lIDyS5to5uYwD3
-         gULuQyMpYSX2fjkltzqqwx6gHtOFvudGqpjARhsnPp5ulcLjdYrJFAqgxVhHdMwy9E
-         VPS1MvWRYR8Bi/Y+exOe/txwEUw0v6+GogzWk9f7+WYc1n3aglzk0nwt3mKrZl8qje
-         s2IJUngHzxQtY4RaGoBfVIZQsHg4w/FMaetzG9l3tfgoyyRn8OE511rzE2OCnsiFH4
-         xdP/O6x1Q+C3+Ep4NyV115CokVQ9Llm03OMO2FamRueAZqX9AAu5tlB+LafRhfWbE4
-         ijOV75CF9mJGw==
-Date:   Thu, 1 Dec 2022 11:12:03 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
- CONFIG_VMAP_STACK=y
-Message-ID: <Y4j8g/V4HGgamyLI@sol.localdomain>
-References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
- <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
- <Y4j4MJzizgEHf4nv@sol.localdomain>
- <66d9f3dbfddc5d73e73fa0c6152d70ff1739427a.camel@linux.ibm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AEE1B8200D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 19:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A34AC433C1;
+        Thu,  1 Dec 2022 19:14:29 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 14:14:26 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
+Message-ID: <20221201141426.08411b29@gandalf.local.home>
+In-Reply-To: <202212010852.6D4B542@keescook>
+References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
+        <166991263326.311919.16890937584677289681.stgit@devnote3>
+        <202212010838.B0B109DA@keescook>
+        <20221201114848.13a87aca@gandalf.local.home>
+        <202212010852.6D4B542@keescook>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <66d9f3dbfddc5d73e73fa0c6152d70ff1739427a.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 02:08:58PM -0500, Mimi Zohar wrote:
-> On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
-> > On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > mapping") checks that both the signature and the digest reside in the
-> > > linear mapping area.
-> > > 
-> > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > stack support"), made it possible to move the stack in the vmalloc area,
-> > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > adjacent pages.
-> > > 
-> > > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
-> > > evm_digest structure, and use that instead of the in-stack cbounterpart.
-> > > 
-> > > Cc: stable@vger.kernel.org # 4.9.x
-> > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
-> > >  1 file changed, 21 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> > > index 23d484e05e6f..7f76d6103f2e 100644
-> > > --- a/security/integrity/evm/evm_main.c
-> > > +++ b/security/integrity/evm/evm_main.c
-> > > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > >  	struct signature_v2_hdr *hdr;
-> > >  	enum integrity_status evm_status = INTEGRITY_PASS;
-> > >  	struct evm_digest digest;
-> > > +	struct evm_digest *digest_ptr = &digest;
-> > >  	struct inode *inode;
-> > >  	int rc, xattr_len, evm_immutable = 0;
-> > >  
-> > > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > >  		}
-> > >  
-> > >  		hdr = (struct signature_v2_hdr *)xattr_data;
-> > > -		digest.hdr.algo = hdr->hash_algo;
-> > > +
-> > > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> > > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
-> > > +			if (!digest_ptr) {
-> > > +				rc = -ENOMEM;
-> > > +				break;
-> > > +			}
-> > > +		}
-> > > +
-> > > +		digest_ptr->hdr.algo = hdr->hash_algo;
-> > > +
-> > >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
-> > > -				   xattr_value_len, xattr_data->type, &digest);
-> > > +				   xattr_value_len, xattr_data->type,
-> > > +				   digest_ptr);
-> > >  		if (rc)
-> > >  			break;
-> > >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
-> > >  					(const char *)xattr_data, xattr_len,
-> > > -					digest.digest, digest.hdr.length);
-> > > +					digest_ptr->digest,
-> > > +					digest_ptr->hdr.length);
-> > >  		if (!rc) {
-> > >  			inode = d_backing_inode(dentry);
-> > >  
-> > > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > >  		else
-> > >  			evm_status = INTEGRITY_FAIL;
-> > >  	}
-> > > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
-> > > -		  digest.digest);
-> > > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
-> > > +		 digest_ptr->hdr.length, digest_ptr->digest);
-> > > +
-> > > +	if (digest_ptr && digest_ptr != &digest)
-> > > +		kfree(digest_ptr);
-> > 
-> > What is the actual problem here?  Where is a scatterlist being created from this
-> > buffer?  AFAICS it never happens.
-> 
-> Enabling CONFIG_VMAP_STACK is the culprit, which triggers the BUG_ON
-> only when CONFIG_DEBUG_SG is enabled as well.
-> 
-> Refer to commit ba14a194a434 ("fork: Add generic vmalloced stack
-> support").
+On Thu, 1 Dec 2022 08:53:02 -0800
+Kees Cook <keescook@chromium.org> wrote:
 
-I'm asking about where the actual bug is.  Where is a scatterlist being created
-to represent an on-disk buffer...
+> > Have you not been reading this thread?  
+> 
+> I skimmed it -- trying to catch up from turkey week. If this was already
+> covered, then please ignore me. It just wasn't obvious from the commit
+> log why it was included.
 
-- Eric
+That's a better request :-)
+
+That is, please add why this is needed for BPF (and also include a Link:
+tag to this thread).
+
+-- Steve
