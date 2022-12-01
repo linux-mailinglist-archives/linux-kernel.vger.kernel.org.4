@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3378563F8AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C0F63F8AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiLAT5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S231238AbiLAT5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiLAT5U (ORCPT
+        with ESMTP id S229723AbiLAT5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Dec 2022 14:57:20 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E64BA608
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B56BA602
         for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:57:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669924639; x=1701460639;
+  t=1669924640; x=1701460640;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8EH0h7IkhRrGkxUHjtqjdslz6xr6JL2LMam/qGZ9N70=;
-  b=Twx/sewlEKDzKrHcsosw3QNs/0HyUIvPb6KJJp4Qb/vrFIB0vr7kuKVw
-   HDnXCtp242rRILpw1WlVU1bHwAk+h77hfFP4f+LvuKrA9ZfAFWYntWrI5
-   eYljLOOMVoNwcm9xpvCQOribvB2e+T58J3FgJZTK9W6f04QGGJrpiJSV3
-   0bvS7rLHecwd8bmuZoS6yhll939JXr5Yo92SyYbUn67MFqQ37bTKebm0e
-   sHdmWuwqGox3bn7ZTLa03vCqE1tCjEQdc+Eid0m5TEwxrxr82xH1aDULK
-   dQuzl0pGfx007fORz+6oHg8RzZcjtUmpVullrqT5qSeYhWEUH+rHbYEwC
+  bh=psXZMKbJQ3yGAryg57Kdkp4DtQsybo7dhx1r47nzioo=;
+  b=BGYQ8AXSleZJ/QFFUN2Bu5ZbDXrHd9U6Znf4aPnoHJFp9H2AshJ/j5+G
+   dbUiEkOflH1H32DZne69qM0ZNIQobgnf/AiyQOjo0AsZ2b8qebDKCoQzn
+   swVQwvkYENr0DyxWlqsmq09HZOSIAYnXFKLs4WUeqCM0cL8aHHIOwuXu7
+   f6o51/wkg5p3tfy15fqTysC6S7HyMSTc5fb7MQy+IOWsd/I5lATrykiwT
+   6EliA7w/+yfHQ/w1D9Xv96sfoOiydObA7TPP9NrNlr0mqIbUJVvpsMHHH
+   Bv/pZWhinXCA0aKcrEJtR9bbeVG6IF1RnfrLaEnefv7eB5yolq+g4o1MF
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="303391896"
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="303391902"
 X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="303391896"
+   d="scan'208";a="303391902"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 11:57:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="708205157"
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="708205170"
 X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="708205157"
+   d="scan'208";a="708205170"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Dec 2022 11:57:18 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 01 Dec 2022 11:57:19 -0800
 From:   kan.liang@linux.intel.com
 To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     ak@linux.intel.com, eranian@google.com, irogers@google.com,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 8/9] perf report: Support Retire Latency
-Date:   Thu,  1 Dec 2022 11:57:03 -0800
-Message-Id: <20221201195704.2330866-8-kan.liang@linux.intel.com>
+Subject: [PATCH 9/9] perf script: Support Retire Latency
+Date:   Thu,  1 Dec 2022 11:57:04 -0800
+Message-Id: <20221201195704.2330866-9-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221201195704.2330866-1-kan.liang@linux.intel.com>
 References: <20221201195704.2330866-1-kan.liang@linux.intel.com>
@@ -65,117 +65,79 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Kan Liang <kan.liang@linux.intel.com>
 
 The Retire Latency field is added in the var3_w of the
-PERF_SAMPLE_WEIGHT_STRUCT. The Retire Latency reports pipeline stall
-of this instruction compared to the previous instruction in cycles.
-That's quite useful to display the information with perf mem report.
+PERF_SAMPLE_WEIGHT_STRUCT. The Retire Latency reports the number of
+elapsed core clocks between the retirement of the instruction
+indicated by the Instruction Pointer field of the PEBS record and the
+retirement of the prior instruction. That's quite useful to display
+the information with perf script.
 
-The p_stage_cyc for Power is also from the var3_w. Union the p_stage_cyc
-and retire_lat to share the code.
-
-Implement X86 specific codes to display the X86 specific header.
-
-Add a new sort key retire_lat for the Retire Latency.
+Add a new field retire_lat for the Retire Latency information.
 
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/Documentation/perf-report.txt |  2 ++
- tools/perf/arch/x86/util/event.c         | 20 ++++++++++++++++++++
- tools/perf/util/event.h                  |  5 ++++-
- tools/perf/util/sort.c                   |  2 ++
- tools/perf/util/sort.h                   |  2 ++
- 5 files changed, 30 insertions(+), 1 deletion(-)
+ tools/perf/builtin-script.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
-index 4533db2ee56b..711396cd3a52 100644
---- a/tools/perf/Documentation/perf-report.txt
-+++ b/tools/perf/Documentation/perf-report.txt
-@@ -115,6 +115,8 @@ OPTIONS
- 	- p_stage_cyc: On powerpc, this presents the number of cycles spent in a
- 	  pipeline stage. And currently supported only on powerpc.
- 	- addr: (Full) virtual address of the sampled instruction
-+	- retire_lat: On X86, this reports pipeline stall of this instruction compared
-+	  to the previous instruction in cycles. And currently supported only on X86
- 
- 	By default, comm, dso and symbol keys are used.
- 	(i.e. --sort comm,dso,symbol)
-diff --git a/tools/perf/arch/x86/util/event.c b/tools/perf/arch/x86/util/event.c
-index e670f3547581..5f3a5c95f04f 100644
---- a/tools/perf/arch/x86/util/event.c
-+++ b/tools/perf/arch/x86/util/event.c
-@@ -87,6 +87,7 @@ void arch_perf_parse_sample_weight(struct perf_sample *data,
- 	else {
- 		data->weight = weight.var1_dw;
- 		data->ins_lat = weight.var2_w;
-+		data->retire_lat = weight.var3_w;
- 	}
- }
- 
-@@ -100,3 +101,22 @@ void arch_perf_synthesize_sample_weight(const struct perf_sample *data,
- 		*array |= ((u64)data->ins_lat << 32);
- 	}
- }
-+
-+const char *arch_perf_header_entry(const char *se_header)
-+{
-+	if (!strcmp(se_header, "Local Pipeline Stage Cycle"))
-+		return "Local Retire Latency";
-+	else if (!strcmp(se_header, "Pipeline Stage Cycle"))
-+		return "Retire Latency";
-+
-+	return se_header;
-+}
-+
-+int arch_support_sort_key(const char *sort_key)
-+{
-+	if (!strcmp(sort_key, "p_stage_cyc"))
-+		return 1;
-+	if (!strcmp(sort_key, "local_p_stage_cyc"))
-+		return 1;
-+	return 0;
-+}
-diff --git a/tools/perf/util/event.h b/tools/perf/util/event.h
-index 12eae6917022..ff3f2892b1e3 100644
---- a/tools/perf/util/event.h
-+++ b/tools/perf/util/event.h
-@@ -173,7 +173,10 @@ struct perf_sample {
- 	u8  cpumode;
- 	u16 misc;
- 	u16 ins_lat;
--	u16 p_stage_cyc;
-+	union {
-+		u16 p_stage_cyc;
-+		u16 retire_lat;
-+	};
- 	bool no_hw_idx;		/* No hw_idx collected in branch_stack */
- 	char insn[MAX_INSN];
- 	void *raw_data;
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index 2e7330867e2e..89aee5affe76 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -2035,6 +2035,8 @@ static struct sort_dimension common_sort_dimensions[] = {
- 	DIM(SORT_LOCAL_PIPELINE_STAGE_CYC, "local_p_stage_cyc", sort_local_p_stage_cyc),
- 	DIM(SORT_GLOBAL_PIPELINE_STAGE_CYC, "p_stage_cyc", sort_global_p_stage_cyc),
- 	DIM(SORT_ADDR, "addr", sort_addr),
-+	DIM(SORT_LOCAL_RETIRE_LAT, "local_retire_lat", sort_local_p_stage_cyc),
-+	DIM(SORT_GLOBAL_RETIRE_LAT, "retire_lat", sort_global_p_stage_cyc),
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 7ca238277d83..071ffdff1980 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -127,6 +127,7 @@ enum perf_output_field {
+ 	PERF_OUTPUT_BRSTACKINSNLEN  = 1ULL << 36,
+ 	PERF_OUTPUT_MACHINE_PID     = 1ULL << 37,
+ 	PERF_OUTPUT_VCPU            = 1ULL << 38,
++	PERF_OUTPUT_RETIRE_LAT      = 1ULL << 39,
  };
  
- #undef DIM
-diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
-index 04ff8b61a2a7..a4aff8437b85 100644
---- a/tools/perf/util/sort.h
-+++ b/tools/perf/util/sort.h
-@@ -237,6 +237,8 @@ enum sort_type {
- 	SORT_LOCAL_PIPELINE_STAGE_CYC,
- 	SORT_GLOBAL_PIPELINE_STAGE_CYC,
- 	SORT_ADDR,
-+	SORT_LOCAL_RETIRE_LAT,
-+	SORT_GLOBAL_RETIRE_LAT,
+ struct perf_script {
+@@ -197,6 +198,7 @@ struct output_option {
+ 	{.str = "brstackinsnlen", .field = PERF_OUTPUT_BRSTACKINSNLEN},
+ 	{.str = "machine_pid", .field = PERF_OUTPUT_MACHINE_PID},
+ 	{.str = "vcpu", .field = PERF_OUTPUT_VCPU},
++	{.str = "retire_lat", .field = PERF_OUTPUT_RETIRE_LAT},
+ };
  
- 	/* branch stack specific sort keys */
- 	__SORT_BRANCH_STACK,
+ enum {
+@@ -272,7 +274,7 @@ static struct {
+ 			      PERF_OUTPUT_ADDR | PERF_OUTPUT_DATA_SRC |
+ 			      PERF_OUTPUT_WEIGHT | PERF_OUTPUT_PHYS_ADDR |
+ 			      PERF_OUTPUT_DATA_PAGE_SIZE | PERF_OUTPUT_CODE_PAGE_SIZE |
+-			      PERF_OUTPUT_INS_LAT,
++			      PERF_OUTPUT_INS_LAT | PERF_OUTPUT_RETIRE_LAT,
+ 
+ 		.invalid_fields = PERF_OUTPUT_TRACE | PERF_OUTPUT_BPF_OUTPUT,
+ 	},
+@@ -539,6 +541,10 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
+ 	    evsel__check_stype(evsel, PERF_SAMPLE_WEIGHT_STRUCT, "WEIGHT_STRUCT", PERF_OUTPUT_INS_LAT))
+ 		return -EINVAL;
+ 
++	if (PRINT_FIELD(RETIRE_LAT) &&
++	    evsel__check_stype(evsel, PERF_SAMPLE_WEIGHT_STRUCT, "WEIGHT_STRUCT", PERF_OUTPUT_RETIRE_LAT))
++		return -EINVAL;
++
+ 	return 0;
+ }
+ 
+@@ -2175,6 +2181,9 @@ static void process_event(struct perf_script *script,
+ 	if (PRINT_FIELD(INS_LAT))
+ 		fprintf(fp, "%16" PRIu16, sample->ins_lat);
+ 
++	if (PRINT_FIELD(RETIRE_LAT))
++		fprintf(fp, "%16" PRIu16, sample->retire_lat);
++
+ 	if (PRINT_FIELD(IP)) {
+ 		struct callchain_cursor *cursor = NULL;
+ 
+@@ -3849,7 +3858,7 @@ int cmd_script(int argc, const char **argv)
+ 		     "brstacksym,flags,data_src,weight,bpf-output,brstackinsn,"
+ 		     "brstackinsnlen,brstackoff,callindent,insn,insnlen,synth,"
+ 		     "phys_addr,metric,misc,srccode,ipc,tod,data_page_size,"
+-		     "code_page_size,ins_lat",
++		     "code_page_size,ins_lat,retire_lat",
+ 		     parse_output_fields),
+ 	OPT_BOOLEAN('a', "all-cpus", &system_wide,
+ 		    "system-wide collection from all CPUs"),
 -- 
 2.35.1
 
