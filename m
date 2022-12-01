@@ -2,88 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08E263FBC5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9606363FBC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiLAXO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S231316AbiLAXO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiLAXOX (ORCPT
+        with ESMTP id S231269AbiLAXOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:14:23 -0500
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F16C14D1B;
-        Thu,  1 Dec 2022 15:14:21 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-12c8312131fso3911717fac.4;
-        Thu, 01 Dec 2022 15:14:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FIr/2j9LR1jIfb9YzWHXNooHqxKrRbLzbkzM0aNI0hY=;
-        b=tTqpjdeW1hciag/xwL7I3CyncUsHoxpk+h/sN/lKEcoucGv//ZAzrY052tBRWd4FEx
-         mVFiyohqZ1uaq4zh0kOvh8UwnagRv9XVrNzke0L3hjW05+ayVj4a8xQKZt+fDYF1SBYd
-         b5TodLC8HEo0C9L7BwXwm1F8IeLtb5RGtt59YQ3Pz1B3WFxdqmyT934dSECj5GptgqIj
-         wyOdPgTedtUCkEy4NRVvASgeniTAY6M3n4S61Y+qrII71UHV6894PPGe5uU/zt8gnXwr
-         YBjTmluPgZuLE9UrRLDuExNlfCkt8dQl/kxr4gCx79mtQVoZelBzVwPdPngAd6wKiO44
-         ysgw==
-X-Gm-Message-State: ANoB5pnnNOhaEbGIl/vF+qesKjyEoZBo7OMrPOC6xaGm11PI9HBFRTtQ
-        2/GIUOHCPEtphrLvtiQWD6yP+zkJUg==
-X-Google-Smtp-Source: AA0mqf6/AEyeJtfEHqUXesdIbRoCbHyrdgWlY2GE2eJ13EW0nBRgJuMGOIfp7YWvfzPUFn9MKaX3AA==
-X-Received: by 2002:a05:6870:b39b:b0:142:aa9b:2668 with SMTP id w27-20020a056870b39b00b00142aa9b2668mr30841958oap.166.1669936460377;
-        Thu, 01 Dec 2022 15:14:20 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q13-20020a056808200d00b0035b4b6d1bbfsm2410122oiw.28.2022.12.01.15.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 15:14:19 -0800 (PST)
-Received: (nullmailer pid 1660505 invoked by uid 1000);
-        Thu, 01 Dec 2022 23:14:19 -0000
-Date:   Thu, 1 Dec 2022 17:14:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        yunfei.dong@mediatek.com, Rob Herring <robh+dt@kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v5 2/3] media: dt-bindings: media: mediatek: Remove
- "dma-ranges" property for decoder
-Message-ID: <166993645851.1660446.2817424583068885626.robh@kernel.org>
-References: <20221128143832.25584-1-allen-kh.cheng@mediatek.com>
- <20221128143832.25584-3-allen-kh.cheng@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128143832.25584-3-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 18:14:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858E024BCF
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:14:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FAF162169
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 23:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D45EC433D6;
+        Thu,  1 Dec 2022 23:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669936489;
+        bh=sW2w9vG53AsHMr88biNtK5xVlmmBmRvG3cpj2Bp8Jg4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rsthgWMx6bnE+lspTiwU+KDdWOou+nBiG3jBf5wj014VIwGxMiGdpV0oRwYMbTQhb
+         ZL0lRC49+Aq+/cPwWa63O2wtLQlh6jnj1ogAw12hQA7fMVGdJAnuRdy49S75f786Ph
+         zNF7ejF1U0y7fcmlqghsZZoMx57g/TNk6H2DSbzsWvuxke0S8psrF2s5eznardWAXR
+         aaE11RfDe/Gsb0L3onC8e+fvwJ11mKK9LgoxzrDNMgv9xOau9QBaZx7PwiaTrLBe83
+         ICp/+PraeAlJ8qLbEftISRM3qylUs/D2MwvJ0tUJi71BOk9/SzCDLqD5JgBPWlRJbj
+         ucGRYQH0OBf8A==
+Received: from 51-171-6-54-dynamic.agg9.chf.chf-qkr.eircom.net ([51.171.6.54] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p0slT-009wHo-7n;
+        Thu, 01 Dec 2022 23:14:47 +0000
+Date:   Thu, 01 Dec 2022 23:14:43 +0000
+Message-ID: <87k03au36k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Akihiko Odaki <akihiko.odaki@daynix.com>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
+In-Reply-To: <Y4jyn+aMUGcaa6Ag@google.com>
+References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+        <867czbmlh1.wl-maz@kernel.org>
+        <Y4jyn+aMUGcaa6Ag@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 51.171.6.54
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 01 Dec 2022 18:29:51 +0000,
+Oliver Upton <oliver.upton@linux.dev> wrote:
+> 
+> On Thu, Dec 01, 2022 at 11:06:50AM +0000, Marc Zyngier wrote:
+> 
+> [...]
+> 
+> > It would be a lot better to expose a virtual topology
+> > (one set, one way, one level). It would also save us from the CCSIDRX
+> > silliness.
+> > 
+> > The only complexity would be to still accept different topologies from
+> > userspace so that we can restore a VM saved before this virtual
+> > topology.
+> 
+> I generally agree that the reported topology is meaningless to
+> non-secure software.
+> 
+> However, with the cloud vendor hat on, I'm worried that inevitably some
+> customer will inspect the cache topology of the VM we've provided them
+> and complain.
 
-On Mon, 28 Nov 2022 22:38:31 +0800, Allen-KH Cheng wrote:
-> Since commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
-> controllers") was merge, we don't need a dma-ranges property for IOMMU
-> in mediatek video codec.
-> 
-> We remove the dma-ranges property and fix the example in
-> mediatek,vcodec-subdev-decoder.yaml
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml     | 7 -------
->  1 file changed, 7 deletions(-)
-> 
+That's their prerogative. It is idiotic, but I guess paying customers
+get this privilege ;-).
 
-Acked-by: Rob Herring <robh@kernel.org>
+> Could we extend your suggestion about accepting different topologies to
+> effectively tolerate _any_ topology provided by userspace? KVM can
+> default to the virtual topology, but a well-informed userspace could
+> still provide different values to its guest. No point in trying to
+> babyproofing the UAPI further, IMO.
+
+I think this is *exactly* what I suggested. Any valid topology should
+be able to be restored, as we currently present the VM with any
+topology the host HW may have. This must be preserved.
+
+Eventually, we may even have to expose CCSIDRX, but let's cross that
+bridge when we get to it.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
