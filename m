@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C979263FAFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 313F863FAFE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiLAWxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S231197AbiLAWyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbiLAWw6 (ORCPT
+        with ESMTP id S230401AbiLAWyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:52:58 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39BD11A27
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:52:48 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 62so2892806pgb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 14:52:48 -0800 (PST)
+        Thu, 1 Dec 2022 17:54:37 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AE3BE4E6;
+        Thu,  1 Dec 2022 14:54:35 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id l15so2957646qtv.4;
+        Thu, 01 Dec 2022 14:54:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+GlEJaTRGydAzKEA1KTMHQ/xuICP4OQMpko1BA8XIg=;
-        b=XPVXtTyHEysZOnnWvGQAaaVfsqyZR2ETSAYTP61Rdu8YxUZucOqj52A3xq1SGO+u0h
-         ELLq+skCWfHle+15JIkPWxJErRpzj9WCSL1S4A6QewOFwiK+eN/WfiZFZ/5CUUHo5VQ4
-         XRrFPAeV0J8wk9aCtu+ECfIFe7phYNlBFQz/JhuiUv8uRBe56t2AGDShjACnuDLqDxqy
-         theaR0MNEA9WHGOVFbRmpRvrx0Hef33eevnPp4+LQCoMk1o653IQ37eIx1Q4mN/+lBuc
-         r6jKawOWfgaQvW65kCH667JQ/pARSgdAg1c7lU9dGcxhGb5cs86w3X9p7vBJk8/+KsYi
-         6Y5A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8R0I2HiyAHJp+a7H8FDZLVY4oWPvtVh9vuwq1aO411c=;
+        b=ngpb0iGSKcm6bS2RRRmqb6t9UUdIYG8fHe/JBS7odLAPnuz5QFCcmeFf2dak43WffM
+         sSIulMqzs2uPDOihIcXkn5TiwUPcnQ98eAW7/sJ9lq+F5pEyIUY7EqnwDMlJVLa6Jqi3
+         jZ0pMcz3l6IDHTPo4lYARqeDezhvX1zQCYcDxGYCqX/nEHFPPk8LVNkMT1Bys2l6QeWC
+         B0sgu0+6+Ae13QRjFzpYbKFlctZlnZm80Md2sS84my9OD8y88amErWz4UJ+8zgFggDGK
+         /2X1zGDd2yofGnOhjji/DRF5THoQHpGJescL/5TRwoZXZDTz+gGxm4rWFMJOJqksYVit
+         9cOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u+GlEJaTRGydAzKEA1KTMHQ/xuICP4OQMpko1BA8XIg=;
-        b=2csG/egZIRLObc8DlYKkGdkYjdkof5Q5LG7iyJqIO5nhtUN1QWRNg+1UZ9HzLzaBs7
-         NlheQyi92EmeWXar6RcPdSKvbCH/OkzvYU0i2/LYt4x3hQN86egKTcMJh++n6+k9Fk8E
-         et1vs7HGLO2qCJd5BZOOzXmH0KJ1DM8qxV0rVmnMqKf5TqjzxmKYvTB/BO9q+tIIkbvT
-         2qd9EycFWzUt9ocSUyy9dilnSnRuFJ7x5RgDup6SLuxn+n5amfXt9zYXxC7zXCBzt2Hk
-         4yJ+I9U0upiEVDvP+7nefsT8fU2CevzxotdoRfHZBaK6kXisieswtq8Li7uXVUYrNvEa
-         GkRQ==
-X-Gm-Message-State: ANoB5plrTPKZRTWjbgU7QwNM4sIQZT3w36rxzlr9ggwcMr0lb03n0oX7
-        EYxmFcunXxR91Ra/uQUlLk1SXeybI2TFERI0qTwz4Q==
-X-Google-Smtp-Source: AA0mqf4/Rdlo9twsxywVaqCZLl1ql+AO14cGIHtfU9aOaBMox3gTH/JTcrnCLroC46cSvuayrVe2q2uGMrykuuA0Rh4=
-X-Received: by 2002:a63:4087:0:b0:477:15c8:ff67 with SMTP id
- n129-20020a634087000000b0047715c8ff67mr46291956pga.275.1669935168163; Thu, 01
- Dec 2022 14:52:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8R0I2HiyAHJp+a7H8FDZLVY4oWPvtVh9vuwq1aO411c=;
+        b=sU9GqkH/zpMqcrosA5WiMRFdPT9gpZcUPfg1FL8HunXWWQMznEnO6u/m64mo/KgKNC
+         IXcJZ7DQix5fQs6DiPVpL2dI/JyWUU4Vdo6Bu5BDWCT7HizTiK9YYhhLYN/G9tQe9+ee
+         bMVkVvPevHLD5dPHqSc/VbaGp7LbSs7EBjbcMSENosaRI7ggoSIYEroibRYnwLsMi7Kr
+         mOa2haPvvUkrp0/vYBg7hYizz99ODSr/cH5g00esc3MFwN4YLAqQrfLA6G58eZImVG2W
+         U58n0icIhLJN3+1k5FWM3ECFMWvUmjabWGNm60Pj1iuqPOkoJLc9fD2wFWWh2PTvpDEv
+         h5GQ==
+X-Gm-Message-State: ANoB5pm4qcEf5RzsH1Vx2qJi2S4M+P6CZEShxA+TLvwCNhdmXXz1D72B
+        yoLgbCuw6Lab3jyTA9tyXAs=
+X-Google-Smtp-Source: AA0mqf7hM/x14S5/qCLPz918zYKBXjGm+5ik5312aCqDfGrg8Tsjutzbpkt/No1s9PqD4MYCIGjM4Q==
+X-Received: by 2002:ac8:4908:0:b0:3a5:faa7:35e7 with SMTP id e8-20020ac84908000000b003a5faa735e7mr63854046qtq.66.1669935275135;
+        Thu, 01 Dec 2022 14:54:35 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:19b7:90d3:e1bc:23de? ([2600:1700:2442:6db0:19b7:90d3:e1bc:23de])
+        by smtp.gmail.com with ESMTPSA id v12-20020ac8748c000000b00398df095cf5sm3246366qtq.34.2022.12.01.14.54.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 14:54:34 -0800 (PST)
+Message-ID: <fc106a76-c661-b133-9ce0-2470ef03fefa@gmail.com>
+Date:   Thu, 1 Dec 2022 16:54:33 -0600
 MIME-Version: 1.0
-References: <20221130231936.1666390-1-wonchung@google.com> <CACeCKad16bs_f6bLthTAoEL28tPvf1S10WDeM7ugeaS9g7R25w@mail.gmail.com>
- <CANLzEksD=dKgPuCUD74b3YQKCApbZKO_t7Q=tyNKONvAOQ89hw@mail.gmail.com> <CACeCKad7RGVPGdrd9WNpRhn3n99R5TG9zFJpCrMj7CDLK18rMA@mail.gmail.com>
-In-Reply-To: <CACeCKad7RGVPGdrd9WNpRhn3n99R5TG9zFJpCrMj7CDLK18rMA@mail.gmail.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Thu, 1 Dec 2022 14:52:36 -0800
-Message-ID: <CAOvb9ygJ9afqLaeJRuCK+zFMH2vxjA4JGXAu2qZUvqqyUzhnmQ@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: Create new USB driver for RGB keyboard
- in ChromeOS devices
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>, linux-kernel@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] of: overlay: fix memory leak in add_changeset_node()
+Content-Language: en-US
+To:     Zeng Heng <zengheng4@huawei.com>, pantelis.antoniou@konsulko.com,
+        grant.likely@linaro.org, robh+dt@kernel.org
+Cc:     liwei391@huawei.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221118105308.370474-1-zengheng4@huawei.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20221118105308.370474-1-zengheng4@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,65 +76,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 1:36 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Hey Benson,
->
-> On Thu, Dec 1, 2022 at 1:00 PM Benson Leung <bleung@chromium.org> wrote:
-> >
-> > Hi Prashant,
-> >
-> >
-> > On Thu, Dec 1, 2022 at 12:10 PM Prashant Malani <pmalani@chromium.org> wrote:
-> > >
-> > > Hi Won,
-> > >
-> > > On Wed, Nov 30, 2022 at 3:19 PM Won Chung <wonchung@google.com> wrote:
-> > > >
-> > > > Without any driver bound to RGB keyboard, it may not be suspended
-> > > > properly, preventing USB xHCI to be suspended and causing power drain.
-> > > > Create new USB driver for RGB keyboard so that it can be suspended
-> > > > properly.
-> > >
-> > > This seems like overkill. Can't you set this from USB's sysfs nodes
-> > > like power/control [1] ?
-> > >
-> > > [1] https://www.kernel.org/doc/html/latest/driver-api/usb/power-management.html#the-user-interface-for-dynamic-pm
-> > >
-> > >
-> > > Best regards,
-> > >
-> > > -Prashant
-> >
-> > We're seeing some behavior where a bound driver is needed in order for
-> > this USB device to properly enter suspend state. Just manipulating the
-> > power/control and other sysfs nodes for this usb device when there's
-> > no driver in the kernel doesn't seem to affect the device's ability to
-> > drop into a usb low power state.
->
-> That seems like an issue with the device then, which should be debugged
-> from the device side and/or its interaction with the USB subsystem.
->
+On 11/18/22 04:53, Zeng Heng wrote:
+> In of_changeset_action(), we have called of_node_get() to increase
+> refcount of a node.
+> 
+> Therefore, when tchild (duplicated by __of_node_dup()) is done,
+> of_node_put() needs to call and release the device_node.
+> 
+> Otherwise, there are some memory leak reported about the node:
+> 
+> unreferenced object 0xffff88810cd1e800 (size 256):
+>   backtrace:
+>     kmalloc_trace
+>     __of_node_dup
+>     add_changeset_node (inlined)
+>     build_changeset_next_level
+> 
+> unreferenced object 0xffff888113721240 (size 16):
+>   backtrace:
+>     __kmalloc_node_track_caller
+>     kstrdup
+>     __of_node_dup
+>     add_changeset_node (inlined)
+>     build_changeset_next_level
+> 
+> unreferenced object 0xffff88810a38d400 (size 128):
+>   backtrace:
+>     kmalloc_trace
+>     __of_prop_dup
+>     add_changeset_property
+>     build_changeset_next_level
+> 
+> Fixes: 7518b5890d8a ("of/overlay: Introduce DT overlay support")
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+> ---
+>  drivers/of/overlay.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+> index bd8ff4df723d..a5189a0ec0a3 100644
+> --- a/drivers/of/overlay.c
+> +++ b/drivers/of/overlay.c
+> @@ -436,8 +436,10 @@ static int add_changeset_node(struct overlay_changeset *ovcs,
+>  		of_node_set_flag(tchild, OF_OVERLAY);
+>  
+>  		ret = of_changeset_attach_node(&ovcs->cset, tchild);
+> -		if (ret)
+> +		if (ret) {
+> +			of_node_put(tchild);
+>  			return ret;
+> +		}
+>  
+>  		target_child.np = tchild;
+>  		target_child.in_livetree = false;
 
-Hi Prashant,
+Pending updated Fixes: tag (mentioned in a previous reply).
 
-As Benson mentioned, I can check on my test Vell device that changing
-power/control does not suspend the device.
-Should it be controllable even without a driver bound?
+Reviewed-by: Frank Rowand <frowand.list@gmail.com>
+Tested-by: Frank Rowand <frowand.list@gmail.com>
 
-The RGB keyboard seems to be able to enter sleep with a suspend signal.
-Fyi, here are the related bugs for more context: b/242087721 and b/249173368
+The testing was my normal testing, but did not replicate the triggered warning
+to verify that this patch eliminated the warning.  I am depending upon Zeng having
+verified the elimination of the warning.
 
-Thank you,
-Won
+-Frank
 
-> >
-> > Also, I synced with Won about this offline, but the primary concern is
-> > not this prism usb device runtime suspending, it's actually it's
-> > ability to enter suspend state during system suspend. Right now, this
-> > internal usb device is keeping the whole system from entering lower
-> > S0iX states because it's not sleeping. This driver patch doesn't
-> > address that yet, but I'd like Won to dig down and see if he can get
-> > it suspending at suspend time too.
->
-> Auto-suspend / dynamic PM should take care of that FWIU (but I may be mistaken).
