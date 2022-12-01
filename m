@@ -2,214 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF9863FBAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DE563FBAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiLAXKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+        id S231518AbiLAXKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiLAXKW (ORCPT
+        with ESMTP id S231293AbiLAXKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:10:22 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE51FC3FF1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:09:35 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id h16so3009843qtu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8r55NhVr723cwq0xc0lLRrnya0twXWY3CzmxTQ/dZkI=;
-        b=dLEd/+ZmyTUCV4O9y9TMSltJmihMtv9UXsNn0xX/Q968beeCQDCwHJi5pPHXVTR78O
-         7qeKTHd/S19uxhBD+8OH4MNNWg8+UR/rfukSPVBb4KHSTm/7gX/u5vhXETibNpCSOrwp
-         xZ25CEfHMqwJkdU2iKMXAEIduAAyNECuDJY2CQkWK2gIVU105XWuXU2Bbq7tg4wN/7td
-         /5QuwrSerATX7eI1xdLjGI4GireFJdMa/ovBXLHaS+uPHDuvsWLknxj/FCxDfdUVY5Rr
-         vkRASZNdaPLrGg6PYBQE4GKTk8agTtdgxKkzdauMId1H1aWDduJIlV7XAZc5aQgMCKOk
-         oIdg==
+        Thu, 1 Dec 2022 18:10:21 -0500
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3071FC3FC6;
+        Thu,  1 Dec 2022 15:09:28 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id v82so3675984oib.4;
+        Thu, 01 Dec 2022 15:09:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8r55NhVr723cwq0xc0lLRrnya0twXWY3CzmxTQ/dZkI=;
-        b=Pb77dswEhFxEYREcjXlW33ElryV1AJX7BJpvl5L+DCZe9/9iVo0hzsb52b2e7SKEpn
-         n/Pg3CFM3m3tpRrT0IFptC+ZDg6gBnAo4EzqArnenFNxhd/Dpfi7eW0GwaTQGqM5+4ay
-         Q4j/YQlio/PDjZ6RRbqCJmBuU/CnMK4OZcJtm6V35zwb7w+mb42uAKuM1uaCabFk8gRr
-         EIEHTMAfLefOgU2sSNE28IGDj1P7lza0TozE7dstVShTeFtxc3WYLGyh+zMUY5MO6/r7
-         cVpwdNsDwRLnTpPz1MyQtAkjYiznClIPF+yJJ8tXjaS9dnV5/v74C5xtRoVGLDUpc1AR
-         kgSw==
-X-Gm-Message-State: ANoB5plIxgIh3fCdHYS/Rq12VOki4nL/9wpR/nL31g7Efo/ishZBi22Y
-        +SLrDZapOY+hjWTxgFyQaAQE/A==
-X-Google-Smtp-Source: AA0mqf51axYhjkuyzk2AapRyYK9AGpKHMB+EfDiTiwEmH3b8i9FdDC6v9AeUlfPtkn/xwisHR+FMlA==
-X-Received: by 2002:ac8:6897:0:b0:3a6:964c:c638 with SMTP id m23-20020ac86897000000b003a6964cc638mr2355191qtq.52.1669936174809;
-        Thu, 01 Dec 2022 15:09:34 -0800 (PST)
-Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
-        by smtp.gmail.com with ESMTPSA id r12-20020a05620a298c00b006e16dcf99c8sm4384142qkp.71.2022.12.01.15.09.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 01 Dec 2022 15:09:34 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] hfs: Fix OOB Write in hfs_asc2mac
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <2ca8a20b-047d-bae1-5a01-0892be4d7e7d@huawei.com>
-Date:   Thu, 1 Dec 2022 15:09:22 -0800
-Cc:     zippel@linux-m68k.org, akpm@osdl.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, sunnanyong@huawei.com,
-        wangkefeng.wang@huawei.com,
-        syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7E14DFDD-CA11-46A7-8140-C4A0F9AD069D@dubeyko.com>
-References: <20221126043612.853428-1-zhangpeng362@huawei.com>
- <9F97B7A6-9E20-4D70-BA79-8301D80DF9DB@dubeyko.com>
- <8e298cc0-27b9-a61a-48cc-64a9186048c8@huawei.com>
- <481BF13E-8CEA-48B4-A29B-0BDE4CAABAF9@dubeyko.com>
- <2ca8a20b-047d-bae1-5a01-0892be4d7e7d@huawei.com>
-To:     "zhangpeng (AS)" <zhangpeng362@huawei.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QMUvAy0bV18ieN366+/7XZip9ETIRj8qIxrLTpAZPXM=;
+        b=wZkA7nQBkT2mutrjm1mSjM4Jdrsfx+1/GP4OILg1cCashGgKRLE7T0+d4wBeer1Nkf
+         eq5Ak6hG/vf3loAbKJaQ8HEswbTFi46ajTRKsEFPyeodhU3CWgYAVX3J1JLnO1W4I1F1
+         mYf13orbvzyiFTh6qVymgqW/vGUv07JrjGlVOrZtydRpLYcWpdk0XWkKnueynHyr0C3T
+         z18kblhmbWKrU8n0jzqBoypc/hfdVM8boajT9iZWduG+1RC6ytuKnEf3PtGQFTtMkhST
+         KfvB+nRb1TE0nWPi9Yq6eii3qwqJW9l4uNzmT01IM9oxH8To20aG2HhHy3BvyVnOviM1
+         WY4A==
+X-Gm-Message-State: ANoB5pn7h/h3cQhfFUfCUnZlwF/0UQq17ttjQbRiQp2nBSRKVUOObDvR
+        qwoF3wvVfvXy8ecjL5hQLQ==
+X-Google-Smtp-Source: AA0mqf6qbhxDpUFt+E/w6Sz000nWXl5WW6LFCr5nYStLI8AgCjteYDfiWRTy7Ly+fC84FOB7P53coA==
+X-Received: by 2002:a05:6808:85:b0:35b:bebf:f8ab with SMTP id s5-20020a056808008500b0035bbebff8abmr9328120oic.94.1669936167299;
+        Thu, 01 Dec 2022 15:09:27 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 17-20020a9d0611000000b006605883eae6sm2610542otn.63.2022.12.01.15.09.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 15:09:26 -0800 (PST)
+Received: (nullmailer pid 1653603 invoked by uid 1000);
+        Thu, 01 Dec 2022 23:09:25 -0000
+Date:   Thu, 1 Dec 2022 17:09:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sandor Yu <Sandor.yu@nxp.com>
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        vkoul@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kernel@pengutronix.de, linux-imx@nxp.com, oliver.brown@nxp.com
+Subject: Re: [PATCH v5 05/10] dt-bindings: display: bridge: Add MHDP HDMI for
+ i.MX8MQ
+Message-ID: <20221201230925.GA1615220-robh@kernel.org>
+References: <cover.1669620155.git.Sandor.yu@nxp.com>
+ <ee28481b28a8a38109b109956e9502221b5c97b3.1669620155.git.Sandor.yu@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee28481b28a8a38109b109956e9502221b5c97b3.1669620155.git.Sandor.yu@nxp.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 28, 2022 at 03:36:13PM +0800, Sandor Yu wrote:
+> Add bindings for i.MX8MQ MHDP HDMI.
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>  .../display/bridge/cdns,mhdp-imx8mq-hdmi.yaml | 102 ++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+> new file mode 100644
+> index 000000000000..cca6954a84ff
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence MHDP HDMI bridge
+> +
+> +maintainers:
+> +  - Sandor Yu <Sandor.yu@nxp.com>
+> +
+> +description:
+> +  The Cadence MHDP TX HDMI interface.
 
+What's the difference between this block and the DP block? The binding 
+looks the same other than compatible, so can they be combined?
 
-> On Nov 30, 2022, at 5:53 PM, zhangpeng (AS) <zhangpeng362@huawei.com> =
-wrote:
->=20
->=20
-> On 2022/11/30 3:08, Viacheslav Dubeyko wrote:
->>> On Nov 28, 2022, at 6:23 PM, zhangpeng (AS) =
-<zhangpeng362@huawei.com> wrote:
->>>=20
->>> On 2022/11/29 3:29, Viacheslav Dubeyko wrote:
->>>>> On Nov 25, 2022, at 8:36 PM, Peng Zhang <zhangpeng362@huawei.com> =
-wrote:
->>>>>=20
->>>>> From: ZhangPeng <zhangpeng362@huawei.com>
->>>>>=20
->>>>> Syzbot reported a OOB Write bug:
->>>>>=20
->>>>> loop0: detected capacity change from 0 to 64
->>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>>>> BUG: KASAN: slab-out-of-bounds in hfs_asc2mac+0x467/0x9a0
->>>>> fs/hfs/trans.c:133
->>>>> Write of size 1 at addr ffff88801848314e by task =
-syz-executor391/3632
->>>>>=20
->>>>> Call Trace:
->>>>> <TASK>
->>>>> __dump_stack lib/dump_stack.c:88 [inline]
->>>>> dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
->>>>> print_address_description+0x74/0x340 mm/kasan/report.c:284
->>>>> print_report+0x107/0x1f0 mm/kasan/report.c:395
->>>>> kasan_report+0xcd/0x100 mm/kasan/report.c:495
->>>>> hfs_asc2mac+0x467/0x9a0 fs/hfs/trans.c:133
->>>>> hfs_cat_build_key+0x92/0x170 fs/hfs/catalog.c:28
->>>>> hfs_lookup+0x1ab/0x2c0 fs/hfs/dir.c:31
->>>>> lookup_open fs/namei.c:3391 [inline]
->>>>> open_last_lookups fs/namei.c:3481 [inline]
->>>>> path_openat+0x10e6/0x2df0 fs/namei.c:3710
->>>>> do_filp_open+0x264/0x4f0 fs/namei.c:3740
->>>>>=20
->>>>> If in->len is much larger than HFS_NAMELEN(31) which is the =
-maximum
->>>>> length of an HFS filename, a OOB Write could occur in =
-hfs_asc2mac(). In
->>>>> that case, when the dst reaches the boundary, the srclen is still
->>>>> greater than 0, which causes a OOB Write.
->>>>> Fix this by adding a Check on dstlen before Writing to dst =
-address.
->>>>>=20
->>>>> Fixes: 328b92278650 ("[PATCH] hfs: NLS support")
->>>>> Reported-by: syzbot+dc3b1cf9111ab5fe98e7@syzkaller.appspotmail.com
->>>>> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
->>>>> ---
->>>>> fs/hfs/trans.c | 2 ++
->>>>> 1 file changed, 2 insertions(+)
->>>>>=20
->>>>> diff --git a/fs/hfs/trans.c b/fs/hfs/trans.c
->>>>> index 39f5e343bf4d..886158db07b3 100644
->>>>> --- a/fs/hfs/trans.c
->>>>> +++ b/fs/hfs/trans.c
->>>>> @@ -130,6 +130,8 @@ void hfs_asc2mac(struct super_block *sb, =
-struct hfs_name *out, const struct qstr
->>>>> 				dst +=3D size;
->>>>> 				dstlen -=3D size;
->>>>> 			} else {
->>>>> +				if (dstlen =3D=3D 0)
->>>>> +					goto out;
->>>> Maybe, it makes sense to use dstlen instead of srclen in while()?
->>>>=20
->>>> We have now:
->>>>=20
->>>> while (srclen > 0) {
->>>>    <skipped>
->>>> } else {
->>>>    <skipped>
->>>> }
->>>>=20
->>>> We can use instead:
->>>>=20
->>>> while (dstlen > 0) {
->>>>    <skipped>
->>>> } else {
->>>>    <skipped>
->>>> }
->>>>=20
->>>> Will it fix the issue?
->>>>=20
->>>> Thanks,
->>>> Slava.
->>> Thank you for your help.
->>>=20
->>> After testing, it fix the issue.
->>> Would it be better to add dstlen > 0 instead of replacing srclen > 0 =
-with dstlen > 0?
->>> Because there may be dstlen > 0 and srclen <=3D 0.
->>>=20
->>> we can use:
->>>=20
->>> while (srclen > 0 && dstlen > 0) {
->>>   <skipped>
->>> } else {
->>>   <skipped>
->>> }
->>>=20
->> Looks good to me.
->=20
-> Can I put you down as a Reviewed-by or Suggested-by?
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cdns,mhdp-imx8mq-hdmi
 
-Sure. I hope to see the second version of the patch.
+Same comment here on naming.
 
-Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
-
-Thanks,
-Slava.
-
->=20
-> Thanks,
-> Zhang Peng
->=20
->> Thanks,
->> Slava.
->>=20
->>> Thanks,
->>> Zhang Peng
->>>=20
->>>>> 				*dst++ =3D ch > 0xff ? '?' : ch;
->>>>> 				dstlen--;
->>>>> 			}
->>>>> --=20
->>>>> 2.25.1
-
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: MHDP HDMI APB clock.
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Hotplug cable plugin.
+> +      - description: Hotplug cable plugout.
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: plug_in
+> +      - const: plug_out
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Input port from display controller output.
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Output port to HDMI connector.
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +  - interrupt-names
+> +  - phys
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8mq-clock.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    mhdp_hdmi: hdmi-bridge@32c00000 {
+> +        compatible = "cdns,mhdp-imx8mq-hdmi";
+> +        reg = <0x32c00000 0x100000>;
+> +        interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-names = "plug_in", "plug_out";
+> +        clocks = <&clk IMX8MQ_CLK_DISP_APB_ROOT>;
+> +        phys = <&hdmi_phy>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +
+> +                mhdp_in: endpoint {
+> +                    remote-endpoint = <&dcss_out>;
+> +                };
+> +            };
+> +
+> +            port@1 {
+> +                reg = <1>;
+> +
+> +                mhdp_out: endpoint {
+> +                    remote-endpoint = <&hdmi_con>;
+> +                };
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.34.1
+> 
+> 
