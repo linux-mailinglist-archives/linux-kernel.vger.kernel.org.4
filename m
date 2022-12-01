@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4F663F742
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57CA63F744
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 19:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiLASMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 13:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S230447AbiLASMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 13:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiLASMI (ORCPT
+        with ESMTP id S230359AbiLASMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 13:12:08 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA7AA1C0A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:12:08 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id n188so1570042iof.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 10:12:08 -0800 (PST)
+        Thu, 1 Dec 2022 13:12:18 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B4FB8455
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 10:12:09 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id e189so1586847iof.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 10:12:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+7XieXpcJrzhapQHtWCNoW0rQy5yiKhkq34SDOyw0xw=;
-        b=rCV2KahuRSA2UomgHjcLL2MPSHWQzvEOZHnqXl9CNih1pE+gZRpjzdYg3AGoNxGtH/
-         lrwbTserdKCot3tq/5ePqPYHCEDByLsr5EJeyAa3WUpPRYldyDwDb72H4U+e7EULEDfX
-         YOz044AliNTRJSeVBbissUP76TH1dDpAxrwe5pgd94G4wvCJ4IeVnDfJhMx47sKWeWPs
-         0C7kWE1xTeT+Dx73CkQ/oLdCov1SSDwhGCyL0CKWRohvyTJvqo4qo5nur82aLKeNrnxf
-         rQRbX7ukSMrqtcrZIvRHBe9oddDEKsDHVoB5vCoS6H8vIAXT8EF6vPM5WVzceR1ifqHH
-         kwow==
+        bh=T2Hzb+xxyKnPzMsKtR+WvmF1ywGYO4tzf59V+gc/0/s=;
+        b=2atU+qY8N6U1TWuEjoXo0Ek+wKx6gWrLYp8D9cZz1SEd++H+eWVuXdr3WUmYAaBF3h
+         CXDqX2fX2YFDXbnYSeIWfgeuJyAoP/MnjAsqnXzRedinp+W7XDc7ppleItMH3Ati2r1r
+         pWU+OXSKGhu/TbrMFfI7gUobNXqYO3tuC+SBghlInhOM9GAdacLA5zPErWxgwlToLDPk
+         VLBDRdh/ETAMA76uckSDzQRnLzivJQnR0ZzmDxBpX9FrTbWFBuexQuphd37ILJwWHd0E
+         /cfJYCD7LwtgUHaWTI2vY2Waup5fInS5DVQuUsNCxIiaNr7qjw7Sm35SjXYyN9jMkbTq
+         pfSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+7XieXpcJrzhapQHtWCNoW0rQy5yiKhkq34SDOyw0xw=;
-        b=ECi0HhtZe8LEBgsi6nEXZ2dzxsh3uzYYE7KRVome7IhNOqEutPwIdNHRjHihNtaILC
-         GukkJjarid8/Sq/bRhfOxqlVMYLZWzTQ39wAMTrnrQp26nnAmG6YQvbhAIRZSd5bAh3e
-         s+OA1K8DH/z2lG2jdpLQXz4gdhAtWAPiviJGSBH4Sv1zrlPSUtaueM9vkZsw4aCdCLWQ
-         +iYFIvSIRtquRc80ZwWpH6uxMZ/JUFkm4DUJ8Wgs6XQtISGIPhpWwGStOuD/EZ4WjIg+
-         VhTRlCJKWQnkDkpFgMGvIk3lbtzZLIucBQ3FZthHauWelHI8pPbAv9QmHAyZq+LHl2U+
-         +aVA==
-X-Gm-Message-State: ANoB5plKH2CiAggMn5sW2lsOfyuajFY+c5i1S66NkZZDPWbxcvbFLNqI
-        JeBlwhz+YwE6EoDYBJk7c9kbfcO96Knf9rLM
-X-Google-Smtp-Source: AA0mqf74WtcWLOBknC51Eqq2LhOOyGElfDAy+jSdzXDD60HRlSEZEkNsL3iTmtYnZTNrl5XL3BCV9A==
-X-Received: by 2002:a02:a710:0:b0:389:d089:4233 with SMTP id k16-20020a02a710000000b00389d0894233mr12448957jam.18.1669918327697;
-        Thu, 01 Dec 2022 10:12:07 -0800 (PST)
+        bh=T2Hzb+xxyKnPzMsKtR+WvmF1ywGYO4tzf59V+gc/0/s=;
+        b=olwCyHB2iE2I/lFNwSoWDgEQmxl1GXmyog7O4fQMkG2pLYWJ/O4snC+Rp5TczHbXsJ
+         lFmGCv+0T+tMDxoCVqLZ7O5wKhThgHcEUZcr/vJrxjfqg1SjYmNwacKFxz54V08bZUkB
+         Q8H4P8zHATkFJ/NBm+ib4KAuJKW9BkoZ26WTN2+aaTZoqv6IM9PolwZ+7Ft4i71nEk77
+         A23DAcSJENn3VI6azBaiSTlGxPnTcwg/jdLRri2TJEU75OHYelkg+Ct9KjcqH62ySarL
+         jTmkmm2Hn1w+HUtsSuEB/bsJum8M53xhcHaL02uliOPek/vT96GnBFyIfejUj6ieO8w3
+         p9vg==
+X-Gm-Message-State: ANoB5pn+cpGTZbdsuQdXL6AC9ypvPJS5SJh+uLBjC2fADYgJSj2Omw8A
+        Y7DkrOnjZFrmti8SKksWPn844GbmS62ffDzl
+X-Google-Smtp-Source: AA0mqf71c/tcCYkCrnJEPuvS6YTKCor+CO40ni3Rrsmti3mZrEckPPOVEKukp2kBF215wOaXLqH5OQ==
+X-Received: by 2002:a02:16c8:0:b0:38a:c4d:931f with SMTP id a191-20020a0216c8000000b0038a0c4d931fmr3207615jaa.176.1669918328499;
+        Thu, 01 Dec 2022 10:12:08 -0800 (PST)
 Received: from m1max.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id y21-20020a027315000000b00374fe4f0bc3sm1842028jab.158.2022.12.01.10.12.06
+        by smtp.gmail.com with ESMTPSA id y21-20020a027315000000b00374fe4f0bc3sm1842028jab.158.2022.12.01.10.12.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 10:12:07 -0800 (PST)
+        Thu, 01 Dec 2022 10:12:08 -0800 (PST)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Cc:     soheil@google.com, willemdebruijn.kernel@gmail.com,
         stefanha@redhat.com, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4/7] eventpoll: move expires to epoll_wq
-Date:   Thu,  1 Dec 2022 11:11:53 -0700
-Message-Id: <20221201181156.848373-5-axboe@kernel.dk>
+Subject: [PATCH 5/7] eventpoll: move file checking earlier for epoll_ctl()
+Date:   Thu,  1 Dec 2022 11:11:54 -0700
+Message-Id: <20221201181156.848373-6-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221201181156.848373-1-axboe@kernel.dk>
 References: <20221201181156.848373-1-axboe@kernel.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes the expiration available to the wakeup handler. No functional
-changes expected in this patch, purely in preparation for being able to
-use the timeout on the wakeup side.
+This just cleans up the checking a bit, in preparation for a change
+that will need access to 'ep' earlier.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/eventpoll.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/eventpoll.c | 26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
 diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index 888f565d0c5f..0994f2eb6adc 100644
+index 0994f2eb6adc..962d897bbfc6 100644
 --- a/fs/eventpoll.c
 +++ b/fs/eventpoll.c
-@@ -1765,6 +1765,7 @@ static int ep_autoremove_wake_function(struct wait_queue_entry *wq_entry,
- struct epoll_wq {
- 	wait_queue_entry_t wait;
- 	struct hrtimer timer;
-+	ktime_t timeout_ts;
- 	bool timed_out;
- };
+@@ -2111,6 +2111,20 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
+ 	if (!f.file)
+ 		goto error_return;
  
-@@ -1825,7 +1826,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
- {
- 	int res, eavail;
- 	u64 slack = 0;
--	ktime_t expires, *to = NULL;
-+	ktime_t *to = NULL;
- 	struct epoll_wq ewq;
++	/*
++	 * We have to check that the file structure underneath the file
++	 * descriptor the user passed to us _is_ an eventpoll file.
++	 */
++	error = -EINVAL;
++	if (!is_file_epoll(f.file))
++		goto error_fput;
++
++	/*
++	 * At this point it is safe to assume that the "private_data" contains
++	 * our own data structure.
++	 */
++	ep = f.file->private_data;
++
+ 	/* Get the "struct file *" for the target file */
+ 	tf = fdget(fd);
+ 	if (!tf.file)
+@@ -2126,12 +2140,10 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
+ 		ep_take_care_of_epollwakeup(epds);
  
- 	lockdep_assert_irqs_enabled();
-@@ -1834,7 +1835,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 	/*
+-	 * We have to check that the file structure underneath the file descriptor
+-	 * the user passed to us _is_ an eventpoll file. And also we do not permit
+-	 * adding an epoll file descriptor inside itself.
++	 * We do not permit adding an epoll file descriptor inside itself.
+ 	 */
+ 	error = -EINVAL;
+-	if (f.file == tf.file || !is_file_epoll(f.file))
++	if (f.file == tf.file)
+ 		goto error_tgt_fput;
  
- 	if (timeout && (timeout->tv_sec | timeout->tv_nsec)) {
- 		slack = select_estimate_accuracy(timeout);
--		to = &expires;
-+		to = &ewq.timeout_ts;
- 		*to = timespec64_to_ktime(*timeout);
- 	} else if (timeout) {
- 		/*
+ 	/*
+@@ -2147,12 +2159,6 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
+ 			goto error_tgt_fput;
+ 	}
+ 
+-	/*
+-	 * At this point it is safe to assume that the "private_data" contains
+-	 * our own data structure.
+-	 */
+-	ep = f.file->private_data;
+-
+ 	/*
+ 	 * When we insert an epoll file descriptor inside another epoll file
+ 	 * descriptor, there is the chance of creating closed loops, which are
 -- 
 2.35.1
 
