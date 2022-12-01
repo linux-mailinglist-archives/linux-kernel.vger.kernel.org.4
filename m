@@ -2,194 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AC963EBF4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E13A63EBF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiLAJGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:06:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S229953AbiLAJG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:06:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiLAJFu (ORCPT
+        with ESMTP id S229954AbiLAJG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:05:50 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C970632B87
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:05:16 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p0fVH-0002bz-9P; Thu, 01 Dec 2022 10:05:11 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:dc5e:59bf:44a8:4077])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D80D612EC7E;
-        Thu,  1 Dec 2022 09:05:09 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 10:05:08 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
- level interrupt
-Message-ID: <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-5-msp@baylibre.com>
- <20221130171715.nujptzwnut7silbm@pengutronix.de>
- <20221201082521.3tqevaygz4nhw52u@blmsp>
+        Thu, 1 Dec 2022 04:06:57 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88462C1;
+        Thu,  1 Dec 2022 01:06:55 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ED43B33F;
+        Thu,  1 Dec 2022 10:06:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669885612;
+        bh=ND7XGuKlUkPBHeU5Bp0ctgaJsNefKn67OU0NpJ8J3JA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pwHcQVuCQf27Lg+oqOF9F3quGy4Gc2wMv385LqQ7RhEHRD3DbmsGHjHg/McZSh0vS
+         uv6mDgZUkwkVrlsmmdp0NpHybsU95O2w7YMCZIVzoXtoB7sxZF70v6arYNoY8oO++G
+         2gZr5UF8lbu+ikaZ4hTd+g3xc589sDlUgYSy1sJE=
+Message-ID: <cb85e1f4-2292-19d4-2b7e-f16c1b43d29f@ideasonboard.com>
+Date:   Thu, 1 Dec 2022 11:06:48 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="76e2vv7xqav4dg7p"
-Content-Disposition: inline
-In-Reply-To: <20221201082521.3tqevaygz4nhw52u@blmsp>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/7] clk: renesas: r8a779g0: Add display related clocks
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+ <20221123065946.40415-4-tomi.valkeinen+renesas@ideasonboard.com>
+ <CAMuHMdUjCS6q44XmTanu=R68GyuVECLa0B-1AFg1CUD_oV4DuA@mail.gmail.com>
+From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+In-Reply-To: <CAMuHMdUjCS6q44XmTanu=R68GyuVECLa0B-1AFg1CUD_oV4DuA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---76e2vv7xqav4dg7p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 30/11/2022 21:18, Geert Uytterhoeven wrote:
+> Hi Tomi,
+> 
+> On Wed, Nov 23, 2022 at 8:00 AM Tomi Valkeinen
+> <tomi.valkeinen+renesas@ideasonboard.com> wrote:
+>> Add clocks related to display which are needed to get the DSI output
+>> working.
+>>
+>> Extracted from Renesas BSP tree.
+>>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> Thanks for your patch!
+> 
+>> --- a/drivers/clk/renesas/r8a779g0-cpg-mssr.c
+>> +++ b/drivers/clk/renesas/r8a779g0-cpg-mssr.c
+>> @@ -145,6 +145,8 @@ static const struct cpg_core_clk r8a779g0_core_clks[] __initconst = {
+>>          DEF_FIXED("viobusd2",   R8A779G0_CLK_VIOBUSD2,  CLK_VIO,        2, 1),
+>>          DEF_FIXED("vcbus",      R8A779G0_CLK_VCBUS,     CLK_VC,         1, 1),
+>>          DEF_FIXED("vcbusd2",    R8A779G0_CLK_VCBUSD2,   CLK_VC,         2, 1),
+>> +       DEF_FIXED("dsiref",     R8A779G0_CLK_DSIREF,    CLK_PLL5_DIV4,  48, 1),
+>> +       DEF_DIV6P1("dsiext",    R8A779G0_CLK_DSIEXT,    CLK_PLL5_DIV4,  0x884),
+>>
+>>          DEF_GEN4_SDH("sd0h",    R8A779G0_CLK_SD0H,      CLK_SDSRC,         0x870),
+>>          DEF_GEN4_SD("sd0",      R8A779G0_CLK_SD0,       R8A779G0_CLK_SD0H, 0x870),
+>> @@ -161,6 +163,14 @@ static const struct mssr_mod_clk r8a779g0_mod_clks[] __initconst = {
+>>          DEF_MOD("avb0",         211,    R8A779G0_CLK_S0D4_HSC),
+>>          DEF_MOD("avb1",         212,    R8A779G0_CLK_S0D4_HSC),
+>>          DEF_MOD("avb2",         213,    R8A779G0_CLK_S0D4_HSC),
+>> +
+> 
+> Weird horizontal and vertical spacing below...
 
-On 01.12.2022 09:25:21, Markus Schneider-Pargmann wrote:
-> Hi Marc,
->=20
-> Thanks for reviewing.
->=20
-> On Wed, Nov 30, 2022 at 06:17:15PM +0100, Marc Kleine-Budde wrote:
-> > On 16.11.2022 21:52:57, Markus Schneider-Pargmann wrote:
-> > > Currently the only mode of operation is an interrupt for every transm=
-it
-> > > event. This is inefficient for peripheral chips. Use the transmit FIFO
-> > > event watermark interrupt instead if the FIFO size is more than 2. Use
-> > > FIFOsize - 1 for the watermark so the interrupt is triggered early
-> > > enough to not stop transmitting.
-> > >=20
-> > > Note that if the number of transmits is less than the watermark level,
-> > > the transmit events will not be processed until there is any other
-> > > interrupt. This will only affect statistic counters. Also there is an
-> > > interrupt every time the timestamp wraps around.
-> > >=20
-> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> >=20
-> > Please make this configurable with the ethtool TX IRQ coalescing
-> > parameter. Please setup an hwtimer to enable the regular interrupt after
-> > some configurable time to avoid starving of the TX complete events.
->=20
-> I guess hwtimer=3D=3Dhrtimer?
+Yep. I added those to keep the lines more visible for me while working 
+on this, but forgot to remove.
 
-Sorry, yes!
+> 
+>> +       DEF_MOD("dis0",                 411,    R8A779G0_CLK_S0D3),
+> 
+> I doubt this parent clock is correct.
+> Based on Table 8.1.4e ("Lists of CPG clocks generated from PLL5"),
+> this should be one of the VIOBUS clocks.
+> VIOBUSD2 has the same rate as S0D3, so I'd use that one.
 
-> I thought about setting up a timer but decided against it as the TX
-> completion events are only used to update statistics of the interface,
-> as far as I can tell. I can implement a timer as well.
+I'm pretty clueless about Renesas clocks, and I can't find a nice 
+clock-tree picture from the docs, but looking at the table, what you say 
+makes sense.
 
-It's not only statistics, the sending socket can opt in to receive the
-sent CAN frame on successful transmission. Other sockets will (by
-default) receive successful sent CAN frames. The idea is that the other
-sockets see the same CAN bus, doesn't matter if they are on a different
-system receiving the CAN frame via the bus or on the same system
-receiving the CAN frame as soon it has been sent to the bus.
+Both VIOBUS and VIOBUSD2 are marked to go to the video IPs, but with a 
+bit of browsing, I can't find any more info about the clocking. Afaik, 
+we don't care about the dis0 rate in the driver, so... Basically any 
+clock will work here =). I'll pick VIOBUSD2 as you suggest (why would 
+there be a /2 clock if it's not used...).
 
-> For the upcoming receive side patch I already added a hrtimer. I may try
-> to use the same timer for both directions as it is going to do the exact
-> same thing in both cases (call the interrupt routine). Of course that
-> depends on the details of the coalescing support. Any objections on
-> that?
+>> +       DEF_MOD("dsitxlink0",           415,    R8A779G0_CLK_DSIREF),
+>> +       DEF_MOD("dsitxlink1",           416,    R8A779G0_CLK_DSIREF),
+>> +
+>> +       DEF_MOD("fcpvd0",               508,    R8A779G0_CLK_S0D3),
+>> +       DEF_MOD("fcpvd1",               509,    R8A779G0_CLK_S0D3),
+> 
+> Likewise.
 
-For the mcp251xfd I implemented the RX and TX coalescing independent of
-each other and made it configurable via ethtool's IRQ coalescing
-options.
+Ack.
 
-The hardware doesn't support any timeouts and only FIFO not empty, FIFO
-half full and FIFO full IRQs and the on chip RAM for mailboxes is rather
-limited. I think the mcan core has the same limitations.
+>> +
+>>          DEF_MOD("hscif0",       514,    R8A779G0_CLK_SASYNCPERD1),
+>>          DEF_MOD("hscif1",       515,    R8A779G0_CLK_SASYNCPERD1),
+>>          DEF_MOD("hscif2",       516,    R8A779G0_CLK_SASYNCPERD1),
+>> @@ -193,6 +203,10 @@ static const struct mssr_mod_clk r8a779g0_mod_clks[] __initconst = {
+>>          DEF_MOD("tmu3",         716,    R8A779G0_CLK_SASYNCPERD2),
+>>          DEF_MOD("tmu4",         717,    R8A779G0_CLK_SASYNCPERD2),
+>>          DEF_MOD("tpu0",         718,    R8A779G0_CLK_SASYNCPERD4),
+>> +
+>> +       DEF_MOD("vspd0",                830,    R8A779G0_CLK_S0D1_VIO),
+>> +       DEF_MOD("vspd1",                831,    R8A779G0_CLK_S0D1_VIO),
+> 
+> While S0D1_VIO is a VIO clock, it is clocked from PLL1, which supports
+> spread-spectrum, unlike PLL5.
+> Again, based on Table 8.1.4e ("Lists of CPG clocks generated from
+> PLL5"), this should be one of the VIOBUS clocks.
 
-The configuration for the mcp251xfd looks like this:
+Yep.
 
-- First decide for classical CAN or CAN-FD mode
-- configure RX and TX ring size
-  9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurable=
- RX/TX ring parameters")
-  For TX only a single FIFO is used.
-  For RX up to 3 FIFOs (up to a depth of 32 each).
-  FIFO depth is limited to power of 2.
-  On the mcan cores this is currently done with a DT property.
-  Runtime configurable ring size is optional but gives more flexibility
-  for our use-cases due to limited RAM size.
-- configure RX and TX coalescing via ethtools
-  Set a timeout and the max CAN frames to coalesce.
-  The max frames are limited to half or full FIFO.
+> Not that all of this matters a lot: all of these parents are always-on,
+> and I think "dis0" is the only clock where we care about the actual
+> clock rate?
+No, of the clocks added above, in the drivers we only care about the 
+dsiref rate. That's used for the DSI PLL, and that PLL is used as the 
+DU's pclk.
 
-How does coalescing work?
+  Tomi
 
-If coalescing is activated during reading of the RX'ed frames the FIFO
-not empty IRQ is disabled (the half or full IRQ stays enabled). After
-handling the RX'ed frames a hrtimer is started. In the hrtimer's
-functions the FIFO not empty IRQ is enabled again.
-
-I decided not to call the IRQ handler from the hrtimer to avoid
-concurrency, but enable the FIFO not empty IRQ.
-
-> > I've implemented this for the mcp251xfd driver, see:
-> >=20
-> > 656fc12ddaf8 ("can: mcp251xfd: add TX IRQ coalescing ethtool support")
-> > 169d00a25658 ("can: mcp251xfd: add TX IRQ coalescing support")
-> > 846990e0ed82 ("can: mcp251xfd: add RX IRQ coalescing ethtool support")
-> > 60a848c50d2d ("can: mcp251xfd: add RX IRQ coalescing support")
-> > 9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurab=
-le RX/TX ring parameters")
->=20
-> Thanks for the pointers. I will have a look and try to implement it
-> similarly.
-
-If you want to implement runtime configurable ring size, I created a
-function to help in the calculation of the ring sizes:
-
-a1439a5add62 ("can: mcp251xfd: ram: add helper function for runtime ring si=
-ze calculation")
-
-The code is part of the mcp251xfd driver, but is prepared to become a
-generic helper function. The HW parameters are described with struct
-can_ram_config and use you can_ram_get_layout() to get a valid RAM
-layout based on CAN/CAN-FD ring size and coalescing parameters.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---76e2vv7xqav4dg7p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOIbkEACgkQrX5LkNig
-012oYAf/a+KUcifNesQiHqFnEzD66u05tdKZTWgG7XUoR7dO3htMvva3WILrusi7
-8+X8A7Z/LQ7Xqwt5THmhibSS9gVf1lJikk2FLQSdk0P0sT0y1QP7akAmj37eZpeF
-yCnKXICaGSSJJcNJEaEmepeI5vPttObukGpJMxhwUxli0JJHh9j3MYvdAzpxD8af
-yrX9OLn06rOO18Dy5kZC7Y2zeN1UYz4FDinLOudHJ2juPGUNhrnLRTAdEWaQ+Nwd
-82zB8OdGla8BSqIXuTwccPEYchyIukoHEY0U4EXaZJn4dhAVn1wPg7ZXkku/09xp
-cBFiwvRdLtIKiMKE7+1ut29HxPXUUQ==
-=qQ9M
------END PGP SIGNATURE-----
-
---76e2vv7xqav4dg7p--
