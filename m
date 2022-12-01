@@ -2,115 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8646963ED9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B5A63EDA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiLAKYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S229761AbiLAKY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiLAKYO (ORCPT
+        with ESMTP id S229472AbiLAKYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:24:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D428E25E9D;
-        Thu,  1 Dec 2022 02:24:12 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47667D6E;
-        Thu,  1 Dec 2022 02:24:19 -0800 (PST)
-Received: from [10.57.7.90] (unknown [10.57.7.90])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 364F63F67D;
-        Thu,  1 Dec 2022 02:24:11 -0800 (PST)
-Message-ID: <a1312c5e-b03f-8116-7e86-cff618e9e080@arm.com>
-Date:   Thu, 1 Dec 2022 10:24:09 +0000
+        Thu, 1 Dec 2022 05:24:19 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D137A52896
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 02:24:16 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id c1so1774734lfi.7
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 02:24:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MOKCsWU9dpS78BQKpOF6+3MH224JB/Yua7RRiJjPQZE=;
+        b=hMt87amZFrubMI9BhGQjAJmTbGJ5ZsanZQI7+o9bTMXBR8XN628h/bA8frWYx+q1zO
+         VvpdJDDR2JXc2KJ+rPjsUNbugjWnMEDOGpBi6y8nTEHT1gr0GyqXY7FcqmEByFbermXg
+         zFTT8pBt4yJ2xxhQS46rK8/oRPTQzf8qvsvk4cXsZWp4gEA4/Cx9F9V0WLzM6VTxrfuk
+         MKICrrCq9P7oMENjjYI1ZV4adN2y24FJbVgxWubNrYoyGpuJ4WSZmwUMRz1IqcOBYaeS
+         ia7+IjdC2jvfws3MDfbaGQtxUiWj6WTSQOVWLOdnAW9j5Sz0Y+1WM0D7BuPlHDwi0rPR
+         dq1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MOKCsWU9dpS78BQKpOF6+3MH224JB/Yua7RRiJjPQZE=;
+        b=MCXJrDjlBsa3bETCGhWPvgD9mIihGY9yE9jZZLQuIxQaTe2ijuWvkNpYMKAw0LwRzV
+         RcA8vCwm38dnpY6C+qmBHIpgwKSV5KC5UQ9cS7qZEtoua/4ZRw3o5oZUHCPM+YJnXCnb
+         3HONbO4xtrvB7Zl01Tz9gzoUUjTHho4ok7rBNh4pEdcVpg8nxLMZIOEo0Ssq2UAbGG4Q
+         rDWuw3dPMxu7cf3MWL7LsM/DB8t0PUekXN2ZXBWzeJQBj7sziXC/A+Iu8jMUe/qic+HB
+         lTqwVOpAaSVdBPWf6spmGK2rkV9eiFyLwQOFyuWFUWezuiSHmkTvm7fVOjFi0EI5QEzm
+         Ih8Q==
+X-Gm-Message-State: ANoB5pn3nh8wWRM2e0cBY/LG0RbFPTGez6s+t3VBf7TBUEHVyLerf4Kr
+        FC80R+jb/LriTvhFn+X7hIPZDg==
+X-Google-Smtp-Source: AA0mqf7r3BQ5/HpAV+glVVdTQU7t+frMVE2dbBkvTrDqpG+FKt3YhVWMYhPp8xyRfmLzXmCTRryVIQ==
+X-Received: by 2002:a05:6512:1505:b0:4af:b5d0:695e with SMTP id bq5-20020a056512150500b004afb5d0695emr22904274lfb.6.1669890255214;
+        Thu, 01 Dec 2022 02:24:15 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05651234c800b004ab2cb8deb5sm603169lfr.18.2022.12.01.02.24.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 02:24:13 -0800 (PST)
+Message-ID: <2c83bd3f-90a1-7562-7fec-22b4aeeb6fde@linaro.org>
+Date:   Thu, 1 Dec 2022 11:24:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] perf/core: Reset remaining bits in
- perf_clear_branch_entry_bitfields()
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] dt-bindings: Fix maintainer email for a few ROHM ICs
 Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20221201055103.302019-1-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20221201055103.302019-1-anshuman.khandual@arm.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 01/12/2022 05:51, Anshuman Khandual wrote:
-> perf_clear_branch_entry_bitfields() resets all struct perf_branch_entry bit
-> fields before capturing branch records. This resets remaining bit fields
-> except 'new_type', which is valid only when 'type' is PERF_BR_EXTEND_ABI.
+On 01/12/2022 07:57, Matti Vaittinen wrote:
+> The email backend used by ROHM keeps labeling patches as spam. This can
+> result to missing the patches.
 > 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: linux-perf-users@vger.kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Switch my mail address from a company mail to a personal one.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
 > ---
-> This applies on v6.1-rc6
 > 
-> 'perf_branch_entry.new_type' can remain uninitialized as explained earlier.
-> Also there is no PERF_BR_NEW_UNKNOWN to spare, because 'perf_branch_entry.
-> new_type' enumeration starts at PERF_BR_NEW_FAULT_ALGN, to save a position
-> for the extended branch types instead.
-> 
->  include/linux/perf_event.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 0031f7b4d9ab..c97b5f6f77a4 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1110,8 +1110,9 @@ static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *b
->  	br->in_tx = 0;
->  	br->abort = 0;
->  	br->cycles = 0;
-> -	br->type = 0;
-> +	br->type = PERF_BR_UNKNOWN;
->  	br->spec = PERF_BR_SPEC_NA;
-> +	br->priv = PERF_BR_PRIV_UNKNOWN;
->  	br->reserved = 0;
->  }
+> I did this a while ago for my email addresses at the MAINTAINERS. Forgot
+> the dt-bindings and doing the conversion for bindings now.
 
-I would vote for just memsetting the whole struct to 0 at this point and
-making it work by ensuring the cleared from and to values are only set
-after this function.
+You can also add mailmap entry.
 
-Or do the thing where it's wrapped in a union and the 'u64 value' member
-is assigned 0. See union perf_mem_data_src. I don't know if this would
-be a breaking change, but it doesn't look like it.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Currently this is a bit too fragile and the kind of bugs it will cause
-are almost undetectable.
+Best regards,
+Krzysztof
 
-But as my proposal is an extra change on top of this:
-
-Reviewed-by: James Clark <james.clark@arm.com>
-
-James
-
->  
