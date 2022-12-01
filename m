@@ -2,104 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D53B63F1C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BC063F1CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiLANg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S230265AbiLANhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiLANgo (ORCPT
+        with ESMTP id S231642AbiLANhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:36:44 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF43CA15F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:36:42 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id x6so1885730lji.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:36:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EPqBNbI09YU2LloFC0dcS/pG8X7Q2MR4/7GlUmzvCcQ=;
-        b=SHrlDQdE0KI2hz/+YPtMuVfc61pA79BaYszXXuNDdiNYHbd9jCYtty9SlGOP7E8MmM
-         4jT55q8S5zsmQPNenf4iML9wCTTx8/itvlLyVkIg+lIrD4JBx2ohQNyJ3b0G4WiKwNvs
-         Kzf7fzYT9RWmR345o9X/LbxWFFkPwkfiSV87Wod55JrXzSv0u+mkOPmyjYeKgZqnrPNw
-         UQp/9ozmCjaSUHVIx3/sFwudkuXQLZY8o2Zbcso2x/nW3kyAYS4FViowfh34Y+AXKvOz
-         bzmsPLvIpr4c4x+qekLldEfXspx5pduU+lw+pNwqWwZ1Dw1UrXyn/5xVt3ta164iiNns
-         JdXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EPqBNbI09YU2LloFC0dcS/pG8X7Q2MR4/7GlUmzvCcQ=;
-        b=oBtC6mIon/Fqg2drxlU9t8GKhaTIcEJ+nb3RkvCNfVBICFHulEGE+12zPk/T9eBnEz
-         qle0WjEg2/DXsuarnvI49nhP9uarYCH3zPt0gm1sRjWjlsWXNdQevcTfM5eJ/joowDDR
-         rJw/PKNK1U6ZFgt09cgAacB0HFVOWp8Abo5n5GA0HQ3cO3ol7DnWihkV4jbFbqAXS9mK
-         2OPXAWHTBuyzIErt1b8LsV/op4bHY8vxwKjJr1Z+vn9h0phbe1oXOevcTfpC0Rmh/t6U
-         hCyCBWoNlTEqNxpeqw142FuCt3EO+m1TPURNRr02Zo1tvuID2mY82GgcXnHMLK1vZa4N
-         U3Mw==
-X-Gm-Message-State: ANoB5pn4lxmSnoRqQ3zyriGvNqUsdETAhYUnRULpohcj8tbRjoNUNUoX
-        RLgUNn5QSu84wGoMHb73f+/BNw==
-X-Google-Smtp-Source: AA0mqf6iiQ5r3ydsCnjqQwKGheq2WsT2A75+y8RjMsycMyFRdssEX8qqHJP95PJ58rHz2mPDfV3sTA==
-X-Received: by 2002:a2e:b4b7:0:b0:277:f86:ddc6 with SMTP id q23-20020a2eb4b7000000b002770f86ddc6mr21717691ljm.131.1669901801150;
-        Thu, 01 Dec 2022 05:36:41 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q15-20020a2e914f000000b0027706d22878sm387209ljg.94.2022.12.01.05.36.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 05:36:40 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: soc: qcom: apr: document generic qcom,apr compatible
-Date:   Thu,  1 Dec 2022 14:36:37 +0100
-Message-Id: <20221201133637.46146-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Dec 2022 08:37:01 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A51BA4300
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:36:56 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1CHwf2002873;
+        Thu, 1 Dec 2022 13:36:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=IebuVfQptVmMCbqGFzsn28dDo62oICYBESe0AwhGRwk=;
+ b=naJPar690wdJ5NSgqyFWyoUYX6HviVRArEMkx/ietKOJM0Nlo2f0QLnZxamJ/HmkexTj
+ VZeZZOxICRE3A7BmJFRE1tmXZJQPnRhCQsSJecVMunAEIFnwl9tkxYp11P8/yrjze6r2
+ XqAWIztj5AvGWfMlQgj+KjuOlxeUXZVgINkYaXFOy/8TS7h0KuPBkB3f3YFlqxSFCHwc
+ us64V2z2iDPuvN4TFX6bN3T+2vt08CE40QxMgq8OLJcr6l7zGL4TSkTFP9gGuAZNasUn
+ TdepsRJD2QpK3Iud96UqSQwDLxkucJ/XvQjace7gjhZlUmlOOoyJr5cm1hF9Up6vWpnW YQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m6k2ksmnd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 13:36:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B1DaiqK030704
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Dec 2022 13:36:44 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 1 Dec 2022 05:36:41 -0800
+Date:   Thu, 1 Dec 2022 19:06:37 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     David Hildenbrand <david@redhat.com>
+CC:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>,
+        Prakash Gupta <quic_guptap@quicinc.com>,
+        Divyanand Rangu <quic_drangu@quicinc.com>
+Subject: Re: [PATCH] mm/madvise: fix madvise_pageout for private file mappings
+Message-ID: <20221201133637.GC3980@hu-pkondeti-hyd.qualcomm.com>
+References: <1667971116-12900-1-git-send-email-quic_pkondeti@quicinc.com>
+ <906b0150-ef7c-d2b9-783f-4e94c48fa367@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <906b0150-ef7c-d2b9-783f-4e94c48fa367@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: XJqGYbufGBpF-loKW5gpIbqp1tjogzP1
+X-Proofpoint-GUID: XJqGYbufGBpF-loKW5gpIbqp1tjogzP1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_04,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=542 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212010098
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the qcom,apr compatible, used by Qualcomm Asynchronous Packet
-Router driver.  There are no upstream DTSes using this compatible -
-instead we have ones with APRv2 (qcom,apr-v2).  The driver does not make
-distinction between both compatibles, which raises the question whether
-the compatible is really needed.  Document it (as compatible with v2)
-for completeness.
+Hi David,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for your review.
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-index 4209c6314996..a6bc3197d5dd 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-@@ -17,6 +17,7 @@ description: |
- properties:
-   compatible:
-     enum:
-+      - qcom,apr
-       - qcom,apr-v2
-       - qcom,gpr
- 
--- 
-2.34.1
+On Thu, Dec 01, 2022 at 02:01:22PM +0100, David Hildenbrand wrote:
+> >+	 * If the VMA belongs to a private file mapping, there can be private
+> >+	 * dirty pages which can be paged out if even this process is neither
+> >+	 * owner nor write capable of the file. Cache the file access check
+> >+	 * here and use it later during page walk.
+> >+	 */
+> >+	can_pageout_file = can_do_file_pageout(vma);
+> 
+> Why not move that into madvise_pageout_page_range() ? Avoids passing this
+> variable to that function.
+> 
+Silly me. I should have done that in the first place.
 
+> In fact, why not even call that function directly instead of storing that in
+> madvise_walk_private(). The function is extremely lightweight.
+
+Agreed. I will incorporate your suggestion and send the patch after testing.
+
+> 
+> >  	lru_add_drain();
+> >  	tlb_gather_mmu(&tlb, mm);
+> >-	madvise_pageout_page_range(&tlb, vma, start_addr, end_addr);
+> >+	madvise_pageout_page_range(&tlb, vma, start_addr, end_addr, can_pageout_file);
+> >  	tlb_finish_mmu(&tlb);
+> >  	return 0;
+> 
+Thanks,
+Pavan
