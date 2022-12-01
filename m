@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0533363F44A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91EE63F44C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbiLAPkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S232086AbiLAPkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:40:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbiLAPjl (ORCPT
+        with ESMTP id S232067AbiLAPjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:39:41 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1B46A75E;
-        Thu,  1 Dec 2022 07:39:01 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id m14so3294463wrh.7;
-        Thu, 01 Dec 2022 07:39:01 -0800 (PST)
+        Thu, 1 Dec 2022 10:39:48 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B52893A54;
+        Thu,  1 Dec 2022 07:39:11 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id t1so1442042wmi.4;
+        Thu, 01 Dec 2022 07:39:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3m4lR5iK2kmxABfa43t2m8SIZD2ax3y9Sc1+j5dpKAI=;
-        b=LCvjsgK+CJig+4ldDaHtFllWv0RCXqDGiuaOGqkjxBb/MbaSDbgyGe8l5JV7Z3DaSq
-         B+W6IKfOnodpVe5JClUu5OsuMWLyEPvYKKLVjnNPI0+6qOrFifEAksE2dZwvAPPte+CN
-         5lFsUJgwit1WV0Tb1OYfRLSWPiQNXcscdrCdY3jfBeya7akC1csG9oSaXW4tAtdgeACM
-         uMaQ5bgpr4hpzXSRl6AIwODi17mlcQaiNMbD1ZC50MfuJC7OVCvRM3Q8JwoIBhAAD5IT
-         Hkpk4KatoTm8DhzKoHgz342mSym9AWuFnCduxmvMyR+NZc4FzUp+2A3S5tXqXJuCPGGc
-         sUuQ==
+        bh=mOkjJ49YydlvCDY0afffT99zYYKtrxdz8Sf40U74Enc=;
+        b=j9oLbiNRaXpnHIje9VKE4nLcb7+6czmhJN4g3RnHkAh16pmeBwJSme6IimLjBggE8o
+         T5jUcdoPk4+n5jmxiJ6cxIpXqJk8Ia7iyQbT0WH15JN/LI/D58gYwuxKm+ohgRCpc4A4
+         gHshTm+tITLuYPqv5LmhUrn7bd7xfx7bS2CJqY/G+rqfgdQgCSzB8eVMXBzffAJq0uVi
+         DPUqgUcVvzNdZ8fnHhRqBcqqWqcw6uA18xg9Ci55dpZFTdOMhz8kBmdrsDqRbtipxuqI
+         y4G11VZAlqJQ6DOIAhCNXtsmfNGJU7XTy37OfpZfWnOQOqpelBchjxQAVjnPc8hbd0k5
+         RgRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3m4lR5iK2kmxABfa43t2m8SIZD2ax3y9Sc1+j5dpKAI=;
-        b=VDdwMvD/Q2g19b4d6F3xsEIRLjRaTsApi14eF6aiBDiw5zVOTN1IVvQnDTBh+2yoUr
-         aw3w7UtJxaH0x+t/rdtadqcy7+jIsaBuyzbpL77LSeggM8Kc+P+GiIAygkSXZ/JvhUzJ
-         jJXzcD3HqLe4mpS4Q8wXXWeANuXTVxEmDuybHkzLNn76ETXrm1x83l8PNSuEl9QkZ/U1
-         NYjYbfgv6GaF6W56VT639aWjzGyTiloQ4FER2eZLe76ld0562tC81otZmDGrrnqwOz3R
-         KToQx6ptIPjwpf637aYATdJOABigicTwrJSZUZ/9ccci6yfMvXyu7OYwg4stH3WikMgi
-         pLeg==
-X-Gm-Message-State: ANoB5pldO/j39T+mIk43tWCiGCmOY8iXyUXWo4v3QJA+3lEw0EvCZHh8
-        J50tpE/ttdKHHpvoHMm3l4zAJalx19Q=
-X-Google-Smtp-Source: AA0mqf4YF2ImTRWdFV3LVCym0LVVnvPdj5LT9uGv92FB1Bh89MJf2KmQ3XjU18ekZuWMau74F8S5mg==
-X-Received: by 2002:a5d:6210:0:b0:22e:6a6f:3416 with SMTP id y16-20020a5d6210000000b0022e6a6f3416mr40531398wru.60.1669909140115;
-        Thu, 01 Dec 2022 07:39:00 -0800 (PST)
+        bh=mOkjJ49YydlvCDY0afffT99zYYKtrxdz8Sf40U74Enc=;
+        b=db9PLX7HYivnxCzX46yEYRGLWptuTmfkEOg/AGMzMAke5PnoD2RWAkFglE+9Bxqxpl
+         WJvPS/7ymEyDJ1Fwa48v761WK5xrFDdVvhomCfQuPmLiT38zzO5fUIArQaPbFBw6I77u
+         ez9JCXGosWJbkKRDXGkMPTdMAF202kemNVUmx1rwnZYxnEH8DQUeLU8ufTkn/GWvbCPe
+         mI+t7yCL8zBcwiNQeuasdcXqxjREcCY+e3tXyrxo1Qoi00FaqMMGPy/SQQnEYOp6bzWr
+         mQY+tOXhNaURSpdpdrZjHNA/Y1uLwSCLdkZF7plRWniLS6VLQ2v741BU5JgcRSeZq9Bt
+         xfEQ==
+X-Gm-Message-State: ANoB5plsSOVUt7rO7ZO6jluMyFfKZTbxLNLVuSipBAFm0sXvrEqDoIU+
+        3iSNZngQMT7iQGYU35ze7wXcL4N1pjc=
+X-Google-Smtp-Source: AA0mqf4yPSTXLm0ri7Bg8PiPcSSS0dFxtztOpvXhzUoK76TcINL8V/D9Zo+enxFgpf63HDNxnZhGcg==
+X-Received: by 2002:a05:600c:1d23:b0:3d0:8193:c1c with SMTP id l35-20020a05600c1d2300b003d081930c1cmr1156702wms.143.1669909149638;
+        Thu, 01 Dec 2022 07:39:09 -0800 (PST)
 Received: from wlan-cl-kit-cs-172-17-20-201.scc.kit.edu ([2a00:1398:9:fb03:6341:588f:5b6d:9173])
-        by smtp.gmail.com with ESMTPSA id fn7-20020a05600c688700b003c6b70a4d69sm5523597wmb.42.2022.12.01.07.38.59
+        by smtp.gmail.com with ESMTPSA id fn7-20020a05600c688700b003c6b70a4d69sm5523597wmb.42.2022.12.01.07.39.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 07:38:59 -0800 (PST)
+        Thu, 01 Dec 2022 07:39:09 -0800 (PST)
 From:   Peter Maucher <bellosilicio@gmail.com>
 To:     alexander.deucher@amd.com, amd-gfx@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Peter Maucher <bellosilicio@gmail.com>
-Subject: [PATCH 1/3] drm/amdgpu: improve GART and GTT documentation
-Date:   Thu,  1 Dec 2022 16:38:20 +0100
-Message-Id: <20221201153820.257570-2-bellosilicio@gmail.com>
+Subject: [PATCH 2/3] drm/amdgpu: add GART and GTT to glossary
+Date:   Thu,  1 Dec 2022 16:38:22 +0100
+Message-Id: <20221201153820.257570-3-bellosilicio@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221201153820.257570-1-bellosilicio@gmail.com>
 References: <20221201153820.257570-1-bellosilicio@gmail.com>
@@ -73,43 +73,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document difference between amdgpu.gartsize and amdgpu.gttsize
-module parameters, as initially explained by Alex Deucher here:
-https://lists.freedesktop.org/archives/dri-devel/2022-October/375358.html
+GART and GTT are two abbreviations that should be mentioned in the
+glossary.
 
 Signed-off-by: Peter Maucher <bellosilicio@gmail.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ Documentation/gpu/amdgpu/amdgpu-glossary.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index bf2d50c8c92a..d647836ba7b8 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -230,17 +230,18 @@ module_param_named(vis_vramlimit, amdgpu_vis_vram_limit, int, 0444);
+diff --git a/Documentation/gpu/amdgpu/amdgpu-glossary.rst b/Documentation/gpu/amdgpu/amdgpu-glossary.rst
+index 326896e9800d..d86bea7926dc 100644
+--- a/Documentation/gpu/amdgpu/amdgpu-glossary.rst
++++ b/Documentation/gpu/amdgpu/amdgpu-glossary.rst
+@@ -30,6 +30,12 @@ we have a dedicated glossary for Display Core at
+     EOP
+       End Of Pipe/Pipeline
  
- /**
-  * DOC: gartsize (uint)
-- * Restrict the size of GART in Mib (32, 64, etc.) for testing. The default is -1 (The size depends on asic).
-+ * Restrict the size of GART (for kernel use) in Mib (32, 64, etc.) for testing.
-+ * The default is -1 (The size depends on asic).
-  */
--MODULE_PARM_DESC(gartsize, "Size of GART to setup in megabytes (32, 64, etc., -1=auto)");
-+MODULE_PARM_DESC(gartsize, "Size of kernel GART to setup in megabytes (32, 64, etc., -1=auto)");
- module_param_named(gartsize, amdgpu_gart_size, uint, 0600);
++    GART
++      Graphics Aperture Table
++
++    GTT
++      Graphics Translation Table, mostly synonymous to GART
++
+     GC
+       Graphics and Compute
  
- /**
-  * DOC: gttsize (int)
-- * Restrict the size of GTT domain in MiB for testing. The default is -1 (It's VRAM size if 3GB < VRAM < 3/4 RAM,
-- * otherwise 3/4 RAM size).
-+ * Restrict the size of GTT domain (for userspace usage) in MiB for testing.
-+ * The default is -1 (It's VRAM size if 3GB < VRAM < 3/4 RAM, otherwise 3/4 RAM size).
-  */
--MODULE_PARM_DESC(gttsize, "Size of the GTT domain in megabytes (-1 = auto)");
-+MODULE_PARM_DESC(gttsize, "Size of the GTT userspace domain in megabytes (-1 = auto)");
- module_param_named(gttsize, amdgpu_gtt_size, int, 0600);
- 
- /**
 -- 
 2.38.1
 
