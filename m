@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2742F63E682
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B85B463E685
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 01:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiLAA2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 19:28:10 -0500
+        id S230035AbiLAA2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 19:28:21 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiLAA1z (ORCPT
+        with ESMTP id S229800AbiLAA14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 19:27:55 -0500
+        Wed, 30 Nov 2022 19:27:56 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A93A5FE6;
-        Wed, 30 Nov 2022 16:27:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC5F12D28;
+        Wed, 30 Nov 2022 16:27:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669854457; x=1701390457;
+  t=1669854459; x=1701390459;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MIt8u5M8Ue6CxDEWxdx1n9xx/jT7kbKrMNIRbSJ2oXA=;
-  b=i8hO6rW2LYuq67wuOJasAhmlX6SDKKU9YGSwxXH10I2knZHRB4F64GEA
-   MOEoLdam9N8/gj4PyFHZDP5poUhB4NeprmukDyQjQ2wqqTh+mswdMRTb2
-   ps5IH0NUIfr8wN6jvrJMOTdumaBJV+Oe6sNObGF+Asai1m+fMimk1PK5k
-   ugHwJgFlQGC857dfJKEp4cWoQEOoAQoXE+wu+MvJJzKOs3+h9xhuzh9eR
-   rQLExTeU5tWVOcXMecP5S4MEunM1LjAI6X9tGtiTd1wtKdifM3OdTFeaW
-   dJQll3mG7vaSD3QrbLSHwes5j1oAqUCxVTV/eXntG36WEGtgTupwPbawm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="317400892"
+  bh=nJK5EYVQsbsVhEkfDMZIpLJP3ACrgI2e3ZyBYEWndGU=;
+  b=R9cYtbFtU7B3IIKkqT1zZbay+jdMrQYOeK52h8/unGlk21upSyq6Hfl3
+   BkHEI090Qw9LOT7Seg7LqoLzl+1va7BXqOq0aSW2EXdqpYEiIghQ+oCmn
+   m4NVnzwdWf24TIF3oUx1GTYCjLFWMTJIU2qxN46+xWQL4G5Bat7izbdqx
+   5K7ss4k7usp5OqjADMRtaJxvCSyiD87tJ6WLbuNj7Ep70HaVcTXGqKCNX
+   sC3BPLYSX8x17Czv1n21jfFKJ5lPJTuE4ur2X6nLn5WdUsUeOp2wOuBe4
+   UgkNIotbw+pW1Gv7YKr8fh62ZVApm9pP8cAatTcRgLBCReelVv8RU+A98
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="317400898"
 X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
-   d="scan'208";a="317400892"
+   d="scan'208";a="317400898"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 16:27:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="622085248"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 16:27:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="622085255"
 X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
-   d="scan'208";a="622085248"
+   d="scan'208";a="622085255"
 Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.251.1.240])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 16:27:35 -0800
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 16:27:36 -0800
 From:   ira.weiny@intel.com
 To:     Dan Williams <dan.j.williams@intel.com>
 Cc:     Ira Weiny <ira.weiny@intel.com>,
@@ -49,9 +49,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
         Dave Jiang <dave.jiang@intel.com>,
         linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-Subject: [PATCH V2 10/11] cxl/test: Add specific events
-Date:   Wed, 30 Nov 2022 16:27:18 -0800
-Message-Id: <20221201002719.2596558-11-ira.weiny@intel.com>
+Subject: [PATCH V2 11/11] cxl/test: Simulate event log overflow
+Date:   Wed, 30 Nov 2022 16:27:19 -0800
+Message-Id: <20221201002719.2596558-12-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221201002719.2596558-1-ira.weiny@intel.com>
 References: <20221201002719.2596558-1-ira.weiny@intel.com>
@@ -68,122 +68,117 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-Each type of event has different trace point outputs.
+Log overflow is marked by a separate trace message.
 
-Add mock General Media Event, DRAM event, and Memory Module Event
-records to the mock list of events returned.
+Simulate a log with lots of messages and flag overflow until it is
+drained a bit.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
-Changes from V1:
-	Jonathan
-		use put_unaligned_le16()
-		fix spacing
-
-Changes from RFC:
-	Adjust for struct changes
-	adjust for unaligned fields
+Changes from RFC
+	Adjust for new struct changes
 ---
- tools/testing/cxl/test/events.c | 73 +++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ tools/testing/cxl/test/events.c | 49 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/cxl/test/events.c b/tools/testing/cxl/test/events.c
-index a3d2ec7cc9fe..0bcc485e07da 100644
+index 0bcc485e07da..ceabefb526c2 100644
 --- a/tools/testing/cxl/test/events.c
 +++ b/tools/testing/cxl/test/events.c
-@@ -206,6 +206,66 @@ struct cxl_event_record_raw hardware_replace = {
- 	.data = { 0xDE, 0xAD, 0xBE, 0xEF },
+@@ -15,6 +15,8 @@ struct mock_event_log {
+ 	u16 clear_idx;
+ 	u16 cur_idx;
+ 	u16 nr_events;
++	u16 nr_overflow;
++	u16 overflow_reset;
+ 	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
  };
  
-+struct cxl_event_gen_media gen_media = {
-+	.hdr = {
-+		.id = UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
-+				0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6),
-+		.length = sizeof(struct cxl_event_gen_media),
-+		.flags[0] = CXL_EVENT_RECORD_FLAG_PERMANENT,
-+		/* .handle = Set dynamically */
-+		.related_handle = cpu_to_le16(0),
-+	},
-+	.phys_addr = cpu_to_le64(0x2000),
-+	.descriptor = CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT,
-+	.type = CXL_GMER_MEM_EVT_TYPE_DATA_PATH_ERROR,
-+	.transaction_type = CXL_GMER_TRANS_HOST_WRITE,
-+	/* .validity_flags = <set below> */
-+	.channel = 1,
-+	.rank = 30
-+};
-+
-+struct cxl_event_dram dram = {
-+	.hdr = {
-+		.id = UUID_INIT(0x601dcbb3, 0x9c06, 0x4eab,
-+				0xb8, 0xaf, 0x4e, 0x9b, 0xfb, 0x5c, 0x96, 0x24),
-+		.length = sizeof(struct cxl_event_dram),
-+		.flags[0] = CXL_EVENT_RECORD_FLAG_PERF_DEGRADED,
-+		/* .handle = Set dynamically */
-+		.related_handle = cpu_to_le16(0),
-+	},
-+	.phys_addr = cpu_to_le64(0x8000),
-+	.descriptor = CXL_GMER_EVT_DESC_THRESHOLD_EVENT,
-+	.type = CXL_GMER_MEM_EVT_TYPE_INV_ADDR,
-+	.transaction_type = CXL_GMER_TRANS_INTERNAL_MEDIA_SCRUB,
-+	/* .validity_flags = <set below> */
-+	.channel = 1,
-+	.bank_group = 5,
-+	.bank = 2,
-+	.column = {0xDE, 0xAD},
-+};
-+
-+struct cxl_event_mem_module mem_module = {
-+	.hdr = {
-+		.id = UUID_INIT(0xfe927475, 0xdd59, 0x4339,
-+				0xa5, 0x86, 0x79, 0xba, 0xb1, 0x13, 0xb7, 0x74),
-+		.length = sizeof(struct cxl_event_mem_module),
-+		/* .handle = Set dynamically */
-+		.related_handle = cpu_to_le16(0),
-+	},
-+	.event_type = CXL_MMER_TEMP_CHANGE,
-+	.info = {
-+		.health_status = CXL_DHI_HS_PERFORMANCE_DEGRADED,
-+		.media_status = CXL_DHI_MS_ALL_DATA_LOST,
-+		.add_status = (CXL_DHI_AS_CRITICAL << 2) |
-+			      (CXL_DHI_AS_WARNING << 4) |
-+			      (CXL_DHI_AS_WARNING << 5),
-+		.device_temp = { 0xDE, 0xAD},
-+		.dirty_shutdown_cnt = { 0xde, 0xad, 0xbe, 0xef },
-+		.cor_vol_err_cnt = { 0xde, 0xad, 0xbe, 0xef },
-+		.cor_per_err_cnt = { 0xde, 0xad, 0xbe, 0xef },
-+	}
-+};
-+
- u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
+@@ -45,6 +47,7 @@ void reset_event_log(struct mock_event_log *log)
  {
- 	struct device *dev = cxlds->dev;
-@@ -223,10 +283,23 @@ u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
- 		return 0;
- 	}
+ 	log->cur_idx = 0;
+ 	log->clear_idx = 0;
++	log->nr_overflow = log->overflow_reset;
+ }
  
-+	put_unaligned_le16(CXL_GMER_VALID_CHANNEL | CXL_GMER_VALID_RANK,
-+			   &gen_media.validity_flags);
+ /* Handle can never be 0 use 1 based indexing for handle */
+@@ -76,8 +79,12 @@ static void event_store_add_event(struct mock_event_store *mes,
+ 		return;
+ 
+ 	log = &mes->mock_logs[log_type];
+-	if (WARN_ON(log->nr_events >= CXL_TEST_EVENT_CNT_MAX))
 +
-+	put_unaligned_le16(CXL_DER_VALID_CHANNEL | CXL_DER_VALID_BANK_GROUP |
-+			   CXL_DER_VALID_BANK | CXL_DER_VALID_COLUMN,
-+			   &dram.validity_flags);
++	if ((log->nr_events + 1) > CXL_TEST_EVENT_CNT_MAX) {
++		log->nr_overflow++;
++		log->overflow_reset = log->nr_overflow;
+ 		return;
++	}
+ 
+ 	log->events[log->nr_events] = event;
+ 	log->nr_events++;
+@@ -87,6 +94,7 @@ int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+ {
+ 	struct cxl_get_event_payload *pl;
+ 	struct mock_event_log *log;
++	u16 nr_overflow;
+ 	u8 log_type;
+ 	int i;
+ 
+@@ -118,6 +126,21 @@ int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
+ 	if (!log_empty(log))
+ 		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
+ 
++	if (log->nr_overflow) {
++		u64 ns;
 +
- 	event_store_add_event(mes, CXL_EVENT_TYPE_INFO, &maint_needed);
-+	event_store_add_event(mes, CXL_EVENT_TYPE_INFO,
-+			      (struct cxl_event_record_raw *)&gen_media);
-+	event_store_add_event(mes, CXL_EVENT_TYPE_INFO,
-+			      (struct cxl_event_record_raw *)&mem_module);
++		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
++		pl->overflow_err_count = cpu_to_le16(nr_overflow);
++		ns = ktime_get_real_ns();
++		ns -= 5000000000; /* 5s ago */
++		pl->first_overflow_timestamp = cpu_to_le64(ns);
++		ns = ktime_get_real_ns();
++		ns -= 1000000000; /* 1s ago */
++		pl->last_overflow_timestamp = cpu_to_le64(ns);
++
++		log->nr_overflow = 0;
++	}
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(mock_get_event);
+@@ -297,6 +320,30 @@ u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
+ 			      (struct cxl_event_record_raw *)&mem_module);
  	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
  
- 	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
-+	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL,
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
 +			      (struct cxl_event_record_raw *)&dram);
- 	mes->ev_status |= CXLDEV_EVENT_STATUS_FATAL;
- 
- 	return mes->ev_status;
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
++			      (struct cxl_event_record_raw *)&gen_media);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
++			      (struct cxl_event_record_raw *)&mem_module);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL,
++			      (struct cxl_event_record_raw *)&dram);
++	/* Overflow this log */
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
++	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
++
+ 	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
+ 	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL,
+ 			      (struct cxl_event_record_raw *)&dram);
 -- 
 2.37.2
 
