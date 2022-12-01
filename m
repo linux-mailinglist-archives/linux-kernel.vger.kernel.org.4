@@ -2,223 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87B663E6E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798A963E6EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 02:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLABIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 20:08:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S229565AbiLABJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 20:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiLABIN (ORCPT
+        with ESMTP id S229566AbiLABJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 20:08:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B046742F7B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 17:08:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 30 Nov 2022 20:09:44 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905D942F7B;
+        Wed, 30 Nov 2022 17:09:42 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68C04B81AD6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DBA6C433C1;
-        Thu,  1 Dec 2022 01:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669856890;
-        bh=bFlbLQgBVNKI3BdQdH5xSPIz5WZl3iB+qIlQMkn9m+U=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=YRd9P2mpOz6bqrBG5RBaKtt+CMe5Xifx+G363fJd16ZA/KN4N2N0SgfcVpG3DvVyp
-         UsdnsDOFsTUkjVrZTkhFEi1qUVli0mbmSqpQraYCQ25tMd0cOU8Zs6/3MqJNIIveBF
-         zWVL3hLtafI1xQPsFdGj0Y8utIoFdXtVfSURTpzWs6TWv3LWwhNx7oGxpes2nZBef/
-         3AjhYEtK2cvbcj9Y0ZTtjlip96yRDFAmqZPiJCrRcdWX6NnQ3u8OgrNggQYn4cz2H+
-         Y6k0p4CfxNG+JYfOxlvNagquWOtwxsaPump74xCPQMAeZ6upUbZR4ESPIjVLRqsePn
-         kzTSBC+lac8RA==
-Date:   Wed, 30 Nov 2022 17:08:06 -0800 (PST)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Roger Pau Monne <roger.pau@citrix.com>
-cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Chris Wright <chrisw@sous-sol.org>,
-        Ingo Molnar <mingo@elte.hu>,
-        Jeremy Fitzhardinge <jeremy@xensource.com>,
-        Olof Johansson <olof@lixom.net>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2] hvc/xen: prevent concurrent accesses to the shared
- ring
-In-Reply-To: <20221130150919.13935-1-roger.pau@citrix.com>
-Message-ID: <alpine.DEB.2.22.394.2211301657200.4039@ubuntu-linux-20-04-desktop>
-References: <20221130150919.13935-1-roger.pau@citrix.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMyfD5F24z4xFv;
+        Thu,  1 Dec 2022 12:09:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669856981;
+        bh=brvavOSOc62js08CKp3eQxixTiCVzmBixPUmp8sxcW8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AAjY4PhM/3tjlWzLFpEF1CVHxtrnPlvH4pXdCV5tiOKOblqlcs+XvkDhJk3DI85qp
+         yjZDxpLjtKHfqgcUOvsJhnZCuRKbV76/2Q6skzSTlb9Tp0np3jO95gHcjrJCeHyXja
+         voC+0YjKnVMAwVhAOHPfgdY+knE6+1+wT5+JnTL7HkGDKu5WF0Yp4pxxPVEM+vkXfw
+         p1zwvMBmWT+BTv+kCr5hDUICis7a96E8Prba5lbhmU/PvBgZWYtcP3HlG6iIgu8CeQ
+         FC/kaU+6u2nzZpNhuOol+VOkUU/uph1dQz1DzZgkxvqEcNqOxC8N68NnhmeSbf1i/e
+         ZatCSvrstGlrQ==
+Date:   Thu, 1 Dec 2022 12:09:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Gavin Shan <gshan@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
+        KVM <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vishal Annapurve <vannapurve@google.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
+Message-ID: <20221201120939.3c19f004@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-408063575-1669856560=:4039"
-Content-ID: <alpine.DEB.2.22.394.2211301705510.4039@ubuntu-linux-20-04-desktop>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/StyU/QJYB47_8rLAkHl4wg4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+--Sig_/StyU/QJYB47_8rLAkHl4wg4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---8323329-408063575-1669856560=:4039
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.DEB.2.22.394.2211301705511.4039@ubuntu-linux-20-04-desktop>
+Hi all,
 
-On Wed, 30 Nov 2022, Roger Pau Monne wrote:
-> The hvc machinery registers both a console and a tty device based on
-> the hv ops provided by the specific implementation.  Those two
-> interfaces however have different locks, and there's no single locks
-> that's shared between the tty and the console implementations, hence
-> the driver needs to protect itself against concurrent accesses.
-> Otherwise concurrent calls using the split interfaces are likely to
-> corrupt the ring indexes, leaving the console unusable.
-> 
-> Introduce a lock to xencons_info to serialize accesses to the shared
-> ring.  This is only required when using the shared memory console,
-> concurrent accesses to the hypercall based console implementation are
-> not an issue.
-> 
-> Note the conditional logic in domU_read_console() is slightly modified
-> so the notify_daemon() call can be done outside of the locked region:
-> it's an hypercall and there's no need for it to be done with the lock
-> held.
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-For domU_read_console: I don't mean to block this patch but we need to
-be sure about the semantics of hv_ops.get_chars. Either it is expected
-to be already locked, then we definitely shouldn't add another lock to
-domU_read_console. Or it is not expected to be already locked, then we
-should add the lock.
+  tools/testing/selftests/kvm/memslot_perf_test.c
 
-My impression is that it is expected to be already locked, but I think
-we need Greg or Jiri to confirm one way or the other.
+between commits:
 
-Aside from that the rest looks fine.
+  018ea2d71a43 ("KVM: selftests: Add atoi_paranoid() to catch errors missed=
+ by atoi()")
+  dc88244bf548 ("KVM: selftests: Automatically do init_ucall() for non-bare=
+bones VMs")
+  197ebb713ad0 ("KVM: selftests: move common startup logic to kvm_util.c")
 
+from the kvm tree and commits:
 
+  34396437b11f ("KVM: selftests: memslot_perf_test: Probe memory slots for =
+once")
+  8675c6f22698 ("KVM: selftests: memslot_perf_test: Support variable guest =
+page size")
+  a69170c65acd ("KVM: selftests: memslot_perf_test: Report optimal memory s=
+lots")
 
-> Fixes: b536b4b96230 ('xen: use the hvc console infrastructure for Xen console')
-> Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
-> ---
-> Changes since v1:
->  - Properly initialize the introduced lock in all paths.
-> ---
->  drivers/tty/hvc/hvc_xen.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/hvc/hvc_xen.c b/drivers/tty/hvc/hvc_xen.c
-> index 7c23112dc923..e63c1761a361 100644
-> --- a/drivers/tty/hvc/hvc_xen.c
-> +++ b/drivers/tty/hvc/hvc_xen.c
-> @@ -43,6 +43,7 @@ struct xencons_info {
->  	int irq;
->  	int vtermno;
->  	grant_ref_t gntref;
-> +	spinlock_t ring_lock;
->  };
->  
->  static LIST_HEAD(xenconsoles);
-> @@ -84,12 +85,15 @@ static int __write_console(struct xencons_info *xencons,
->  	XENCONS_RING_IDX cons, prod;
->  	struct xencons_interface *intf = xencons->intf;
->  	int sent = 0;
-> +	unsigned long flags;
->  
-> +	spin_lock_irqsave(&xencons->ring_lock, flags);
->  	cons = intf->out_cons;
->  	prod = intf->out_prod;
->  	mb();			/* update queue values before going on */
->  
->  	if ((prod - cons) > sizeof(intf->out)) {
-> +		spin_unlock_irqrestore(&xencons->ring_lock, flags);
->  		pr_err_once("xencons: Illegal ring page indices");
->  		return -EINVAL;
->  	}
-> @@ -99,6 +103,7 @@ static int __write_console(struct xencons_info *xencons,
->  
->  	wmb();			/* write ring before updating pointer */
->  	intf->out_prod = prod;
-> +	spin_unlock_irqrestore(&xencons->ring_lock, flags);
->  
->  	if (sent)
->  		notify_daemon(xencons);
-> @@ -141,16 +146,19 @@ static int domU_read_console(uint32_t vtermno, char *buf, int len)
->  	int recv = 0;
->  	struct xencons_info *xencons = vtermno_to_xencons(vtermno);
->  	unsigned int eoiflag = 0;
-> +	unsigned long flags;
->  
->  	if (xencons == NULL)
->  		return -EINVAL;
->  	intf = xencons->intf;
->  
-> +	spin_lock_irqsave(&xencons->ring_lock, flags);
->  	cons = intf->in_cons;
->  	prod = intf->in_prod;
->  	mb();			/* get pointers before reading ring */
->  
->  	if ((prod - cons) > sizeof(intf->in)) {
-> +		spin_unlock_irqrestore(&xencons->ring_lock, flags);
->  		pr_err_once("xencons: Illegal ring page indices");
->  		return -EINVAL;
->  	}
-> @@ -174,10 +182,13 @@ static int domU_read_console(uint32_t vtermno, char *buf, int len)
->  		xencons->out_cons = intf->out_cons;
->  		xencons->out_cons_same = 0;
->  	}
-> +	if (!recv && xencons->out_cons_same++ > 1) {
-> +		eoiflag = XEN_EOI_FLAG_SPURIOUS;
-> +	}
-> +	spin_unlock_irqrestore(&xencons->ring_lock, flags);
-> +
->  	if (recv) {
->  		notify_daemon(xencons);
-> -	} else if (xencons->out_cons_same++ > 1) {
-> -		eoiflag = XEN_EOI_FLAG_SPURIOUS;
->  	}
->  
->  	xen_irq_lateeoi(xencons->irq, eoiflag);
-> @@ -234,6 +245,7 @@ static int xen_hvm_console_init(void)
->  		info = kzalloc(sizeof(struct xencons_info), GFP_KERNEL);
->  		if (!info)
->  			return -ENOMEM;
-> +		spin_lock_init(&info->ring_lock);
->  	} else if (info->intf != NULL) {
->  		/* already configured */
->  		return 0;
-> @@ -270,6 +282,7 @@ static int xen_hvm_console_init(void)
->  
->  static int xencons_info_pv_init(struct xencons_info *info, int vtermno)
->  {
-> +	spin_lock_init(&info->ring_lock);
->  	info->evtchn = xen_start_info->console.domU.evtchn;
->  	/* GFN == MFN for PV guest */
->  	info->intf = gfn_to_virt(xen_start_info->console.domU.mfn);
-> @@ -318,6 +331,7 @@ static int xen_initial_domain_console_init(void)
->  		info = kzalloc(sizeof(struct xencons_info), GFP_KERNEL);
->  		if (!info)
->  			return -ENOMEM;
-> +		spin_lock_init(&info->ring_lock);
->  	}
->  
->  	info->irq = bind_virq_to_irq(VIRQ_CONSOLE, 0, false);
-> @@ -472,6 +486,7 @@ static int xencons_probe(struct xenbus_device *dev,
->  	info = kzalloc(sizeof(struct xencons_info), GFP_KERNEL);
->  	if (!info)
->  		return -ENOMEM;
-> +	spin_lock_init(&info->ring_lock);
->  	dev_set_drvdata(&dev->dev, info);
->  	info->xbdev = dev;
->  	info->vtermno = xenbus_devid_to_vtermno(devid);
-> -- 
-> 2.37.3
-> 
---8323329-408063575-1669856560=:4039--
+from the kvm-arm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/kvm/memslot_perf_test.c
+index 36b20abfb948,2ad40f7c9c08..000000000000
+--- a/tools/testing/selftests/kvm/memslot_perf_test.c
++++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+@@@ -252,23 -284,22 +284,21 @@@ static bool prepare_vm(struct vm_data *
+  	struct timespec tstart;
+  	struct sync_area *sync;
+ =20
+- 	max_mem_slots =3D kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
+- 	TEST_ASSERT(max_mem_slots > 1,
+- 		    "KVM_CAP_NR_MEMSLOTS should be greater than 1");
+- 	TEST_ASSERT(nslots > 1 || nslots =3D=3D -1,
+- 		    "Slot count cap should be greater than 1");
+- 	if (nslots !=3D -1)
+- 		max_mem_slots =3D min(max_mem_slots, (uint32_t)nslots);
+- 	pr_info_v("Allowed number of memory slots: %"PRIu32"\n", max_mem_slots);
++ 	host_page_size =3D getpagesize();
++ 	guest_page_size =3D vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
++ 	mempages =3D mem_size / guest_page_size;
+ =20
+- 	TEST_ASSERT(mempages > 1,
+- 		    "Can't test without any memory");
++ 	data->vm =3D __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code=
+);
+ -	ucall_init(data->vm, NULL);
++ 	TEST_ASSERT(data->vm->page_size =3D=3D guest_page_size, "Invalid VM page=
+ size");
+ =20
+  	data->npages =3D mempages;
+- 	data->nslots =3D max_mem_slots - 1;
+- 	data->pages_per_slot =3D mempages / data->nslots;
+- 	if (!data->pages_per_slot) {
+- 		*maxslots =3D mempages + 1;
++ 	TEST_ASSERT(data->npages > 1, "Can't test without any memory");
++ 	data->nslots =3D nslots;
++ 	data->pages_per_slot =3D data->npages / data->nslots;
++ 	rempages =3D data->npages % data->nslots;
++ 	if (!check_slot_pages(host_page_size, guest_page_size,
++ 			      data->pages_per_slot, rempages)) {
++ 		*maxslots =3D get_max_slots(data, host_page_size);
+  		return false;
+  	}
+ =20
+@@@ -884,9 -966,9 +965,9 @@@ static bool parse_args(int argc, char *
+  			map_unmap_verify =3D true;
+  			break;
+  		case 's':
+ -			targs->nslots =3D atoi(optarg);
+ +			targs->nslots =3D atoi_paranoid(optarg);
+- 			if (targs->nslots <=3D 0 && targs->nslots !=3D -1) {
+- 				pr_info("Slot count cap has to be positive or -1 for no cap\n");
++ 			if (targs->nslots <=3D 1 && targs->nslots !=3D -1) {
++ 				pr_info("Slot count cap must be larger than 1 or -1 for no cap\n");
+  				return false;
+  			}
+  			break;
+@@@ -994,6 -1103,12 +1090,9 @@@ int main(int argc, char *argv[]
+  	struct test_result rbestslottime;
+  	int tctr;
+ =20
+ -	/* Tell stdout not to buffer its content */
+ -	setbuf(stdout, NULL);
+ -
++ 	if (!check_memory_sizes())
++ 		return -1;
++=20
+  	if (!parse_args(argc, argv, &targs))
+  		return -1;
+ =20
+
+--Sig_/StyU/QJYB47_8rLAkHl4wg4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH/tMACgkQAVBC80lX
+0GzDdAf9EwHzX9q8/A8wU1nDscw28nlh5ATvstpiKd1W6+q0xPn+uQiRgac7J/CP
+K7Eys7ifm6JiwLU+CkP+wRBgIizITNtmcAXyGcMzf4DT5Byop/e9PpBW+CUwE72e
+gzzALRhmYYNdqjuHk73ULD61KcfiF+jb9egmgRHESR1GIZYGNtPHxTUscbb7UQLn
+Vc983LX+Zc9O2t6ApRNpEfhj10C/7RZRg1GmoJMwpHTKXtrGNe1KKLC7PGW/xS40
+aIYoqKiw9xaqGi8i09RX9xvV2ifiC57Gb7m1KlhGrht5oqDdOIQ4yPqnHustp74E
+GX8jhnrzAmecJz5Bo8OrZswf5tfL8w==
+=gwKS
+-----END PGP SIGNATURE-----
+
+--Sig_/StyU/QJYB47_8rLAkHl4wg4--
