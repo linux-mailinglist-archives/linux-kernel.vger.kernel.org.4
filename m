@@ -2,121 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA3563F1B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA9663F1BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbiLANeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S231534AbiLANev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:34:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiLANeJ (ORCPT
+        with ESMTP id S231569AbiLANeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:34:09 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 901F5AC1B0;
-        Thu,  1 Dec 2022 05:34:08 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1p0jhW-000077-02; Thu, 01 Dec 2022 14:34:06 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D4996C1FB9; Thu,  1 Dec 2022 14:33:44 +0100 (CET)
-Date:   Thu, 1 Dec 2022 14:33:44 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     John Thomson <git@johnthomson.fastmail.com.au>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] mips: ralink: mt7621: do not use kzalloc too early
-Message-ID: <20221201133344.GC10560@alpha.franken.de>
-References: <20221114015658.2873120-1-git@johnthomson.fastmail.com.au>
- <20221114015658.2873120-4-git@johnthomson.fastmail.com.au>
+        Thu, 1 Dec 2022 08:34:44 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EABC7717
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:34:43 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so2084356pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:34:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tKguKo1XmUP31FlNvdaT70p0o/lwuxyZc7lK6ytX1QU=;
+        b=exIoeOCrlPb+Uw2FGLRsALkrLYWj9cDaTvcr81Evjsi5DXIR/uPZJTWsXlu/PiLLI3
+         HTBr5t4pzsWnn6M0lC4H5pNT0n3aLXEpcSRixu/mfsu8XeXoSArYBYlbqRz6mRys5h3T
+         IyXf+jqyVq8u6L+O/LqO4biBjWXlb+7RKXSc0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tKguKo1XmUP31FlNvdaT70p0o/lwuxyZc7lK6ytX1QU=;
+        b=VHWa5T0EdLbdOSlQIOjCnSX4YKqwGxDgeiB5Ny/za6XMDENCyrOo8NfO3dK+HYHJz3
+         zRtfjsS1zOI9daYGSdgA4YzQ4Grjx52zuGhSN0O8zS0objzNX8GJxLCiIRSmhIIOd7Rh
+         o/OFaMoxa4O0AtD1SWD6NX4QBbdR3iKIQObDrIGkLPhmpcPcCHIb/jrSR9/SOpH1NYyi
+         cxDwhA5XHfDmCgY8eatvAxXCldSS1CChB0hScYM2tsPzmfRdfSnXWK5cKBAQO5iWaEbt
+         45ylOvM7OvGkgCUCxmyz9zn37f09ViE23L3+enrEX4HN2+ouCiXtZiTHPE2ZLufHfWfE
+         tzLg==
+X-Gm-Message-State: ANoB5pngBh6Q6zO3rsikAmeb7DioV4I5SYsQ4jGvstfvd+mH5T9XRnkG
+        QGTsKZWtkiUDptMPG4FlP22GBCZCghjKHLqRwwY=
+X-Google-Smtp-Source: AA0mqf608a/KpHViVjips78D4RvC0ijhueYSWAwLqCZwfikwkBbee5skEIbjgFe0Prz1fSHdmWqYMQ==
+X-Received: by 2002:a17:90b:4fc3:b0:219:6224:dffb with SMTP id qa3-20020a17090b4fc300b002196224dffbmr8888717pjb.19.1669901683235;
+        Thu, 01 Dec 2022 05:34:43 -0800 (PST)
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com. [209.85.215.169])
+        by smtp.gmail.com with ESMTPSA id x17-20020aa79411000000b00572c12a1e91sm3261072pfo.48.2022.12.01.05.34.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 05:34:40 -0800 (PST)
+Received: by mail-pg1-f169.google.com with SMTP id 6so1680802pgm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:34:39 -0800 (PST)
+X-Received: by 2002:a92:ca89:0:b0:302:385e:eeb4 with SMTP id
+ t9-20020a92ca89000000b00302385eeeb4mr24829482ilo.66.1669901667796; Thu, 01
+ Dec 2022 05:34:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114015658.2873120-4-git@johnthomson.fastmail.com.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
+ <20221127-snd-freeze-v8-3-3bc02d09f2ce@chromium.org> <716e5175-7a44-7ae8-b6bb-10d9807552e6@suse.com>
+ <CANiDSCtwSb50sjn5tM7jJ6W2UpeKzpuzng+RdJuywiC3-j2zdg@mail.gmail.com> <d3730d1d-6f92-700a-06c4-0e0a35e270b0@suse.com>
+In-Reply-To: <d3730d1d-6f92-700a-06c4-0e0a35e270b0@suse.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 1 Dec 2022 14:34:16 +0100
+X-Gmail-Original-Message-ID: <CANiDSCtm7dCst_atiWk=ZcK_D3=VzvD0+kWXVQr4gEn--JjGkw@mail.gmail.com>
+Message-ID: <CANiDSCtm7dCst_atiWk=ZcK_D3=VzvD0+kWXVQr4gEn--JjGkw@mail.gmail.com>
+Subject: Re: [PATCH v8 3/3] ASoC: SOF: Fix deadlock when shutdown a frozen userspace
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Juergen Gross <jgross@suse.com>, Mark Brown <broonie@kernel.org>,
+        Chromeos Kdump <chromeos-kdump@google.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        kexec@lists.infradead.org, alsa-devel@alsa-project.org,
+        stable@vger.kernel.org, sound-open-firmware@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:56:58AM +1000, John Thomson wrote:
-> With CONFIG_SLUB=y, following commit 6edf2576a6cc ("mm/slub: enable
-> debugging memory wasting of kmalloc") mt7621 failed to boot very early,
-> without showing any console messages.
-> This exposed the pre-existing bug of mt7621.c using kzalloc before normal
-> memory management was available.
-> Prior to this slub change, there existed the unintended protection against
-> "kmem_cache *s" being NULL as slab_pre_alloc_hook() happened to
-> return NULL and bailed out of slab_alloc_node().
-> This allowed mt7621 prom_soc_init to fail in the soc_dev_init kzalloc,
-> but continue booting without the SOC_BUS driver device registered.
-> 
-> Console output from a DEBUG_ZBOOT vmlinuz kernel loading,
-> with mm/slub modified to warn on kmem_cache zero or null:
-> 
-> zimage at:     80B842A0 810B4BC0
-> Uncompressing Linux at load address 80001000
-> Copy device tree to address  80B80EE0
-> Now, booting the kernel...
-> 
-> [    0.000000] Linux version 6.1.0-rc3+ (john@john)
-> (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot
-> 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #73 SMP Wed
->      Nov  2 05:10:01 AEST 2022
-> [    0.000000] ------------[ cut here ]------------
-> [    0.000000] WARNING: CPU: 0 PID: 0 at mm/slub.c:3416
-> kmem_cache_alloc+0x5a4/0x5e8
-> [    0.000000] Modules linked in:
-> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #73
-> [    0.000000] Stack : 810fff78 80084d98 00000000 00000004 00000000
-> 00000000 80889d04 80c90000
-> [    0.000000]         80920000 807bd328 8089d368 80923bd3 00000000
-> 00000001 80889cb0 00000000
-> [    0.000000]         00000000 00000000 807bd328 8084bcb1 00000002
-> 00000002 00000001 6d6f4320
-> [    0.000000]         00000000 80c97d3d 80c97d68 fffffffc 807bd328
-> 00000000 00000000 00000000
-> [    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000
-> 00000020 80010000 80010000
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<80008260>] show_stack+0x28/0xf0
-> [    0.000000] [<8070c958>] dump_stack_lvl+0x60/0x80
-> [    0.000000] [<8002e184>] __warn+0xc4/0xf8
-> [    0.000000] [<8002e210>] warn_slowpath_fmt+0x58/0xa4
-> [    0.000000] [<801c0fac>] kmem_cache_alloc+0x5a4/0x5e8
-> [    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
-> [    0.000000] [<80928060>] prom_init+0x44/0xf0
-> [    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
-> [    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
-> [    0.000000]
-> [    0.000000] ---[ end trace 0000000000000000 ]---
-> [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
-> [    0.000000] printk: bootconsole [early0] enabled
-> 
-> Allowing soc_device_register to work exposed oops in the mt7621 phy pci,
-> and pci controller drivers from soc_device_match_attr, due to missing
-> sentinels in the quirks tables. These were fixed with:
-> commit 819b885cd886 ("phy: ralink: mt7621-pci: add sentinel to quirks
-> table")
-> not yet applied ("PCI: mt7621: add sentinel to quirks table")
-> 
-> Link: https://lore.kernel.org/linux-mm/becf2ac3-2a90-4f3a-96d9-a70f67c66e4a@app.fastmail.com/
-> Fixes: 71b9b5e0130d ("MIPS: ralink: mt7621: introduce 'soc_device' initialization")
-> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
-> ---
->  arch/mips/ralink/mt7621.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
+Hi Oliver
 
-applied to mips-next.
+On Thu, 1 Dec 2022 at 14:22, 'Oliver Neukum' via Chromeos Kdump
+<chromeos-kdump@google.com> wrote:
+>
+> On 01.12.22 14:03, Ricardo Ribalda wrote:
+>
+> Hi,
+>
+> > This patchset does not modify this behaviour. It simply fixes the
+> > stall for kexec().
+> >
+> > The  patch that introduced the stall:
+> > 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers
+> > in .shutdown")
+>
+> That patch is problematic. I would go as far as saying that
+> it needs to be reverted.
+>
 
-Thomas.
+It fixes a real issue. We have not had any complaints until we tried
+to kexec in the platform.
+I wont recommend reverting it until we have an alternative implementation.
+
+kexec is far less common than suspend/reboot.
+
+> > was sent as a generalised version of:
+> > https://github.com/thesofproject/linux/pull/3388
+> >
+> > AFAIK, we would need a similar patch for every single board.... which
+> > I am not sure it is doable in a reasonable timeframe.
+> >
+> > On the meantime this seems like a decent compromises. Yes, a
+> > miss-behaving userspace can still stall during suspend, but that was
+> > not introduced in this patch.
+>
+> Well, I mean if you know what wrong then I'd say at least return to
+> a sanely broken state.
+>
+> The whole approach is wrong. You need to be able to deal with user
+> space talking to removed devices by returning an error and keeping
+> the resources association with the open file allocated until
+> user space calls close()
+
+In general, the whole shutdown is broken for all the subsystems ;).
+It is a complicated issue. Users handling fds, devices with DMAs in
+the middle of an operation, dma fences....
+
+Unfortunately I am not that familiar with the sound subsystem to make
+a proper patch for this.
+
+>
+>         Regards
+>                 Oliver
+>
+>
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Chromeos Kdump" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to chromeos-kdump+unsubscribe@google.com.
+> To view this discussion on the web, visit https://groups.google.com/a/google.com/d/msgid/chromeos-kdump/d3730d1d-6f92-700a-06c4-0e0a35e270b0%40suse.com.
+
+
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Ricardo Ribalda
