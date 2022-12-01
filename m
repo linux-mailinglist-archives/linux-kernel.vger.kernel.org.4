@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FA463FBD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D7963FBD4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiLAXRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S231436AbiLAXRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiLAXRX (ORCPT
+        with ESMTP id S231331AbiLAXRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:17:23 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414492125A;
-        Thu,  1 Dec 2022 15:17:22 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id a13-20020a9d6e8d000000b00668d65fc44fso1943475otr.9;
-        Thu, 01 Dec 2022 15:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DBc6RFle0m00JwSwMB3U89uXhK/jC0j0+ULxJGcGlZs=;
-        b=aVaxUFeXgNiOog4IIjsp4DVM0zKmVuqgyBHsoUAs5rnylyB69Olppto9g4gFcN4FqQ
-         H4SWhHi/33n3YxprvfTVvwFocCK1jHIvsnvJUNLNCItNCsDmNrYzQ9T9l0/XJICjsOWu
-         4o4K0L5FK9udSpwBFbiETnf8s/m/asKVYs2Wqw89hvoGJpb+9pa3jlp5hTvu90T4ED9s
-         Q14Kia1OiG1fSMTVomIH9Nn6lKnpjGWZ9w4OlkKoHvpbofIb4a99ntMv7ExUULwAdv74
-         BXRDzuvdA+X3O/Jm+DEpktWCQ+Rx5DXoDS5rxkjm4YhvB6DUVPtOo3zeBTY+yUnOO3gv
-         zh0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DBc6RFle0m00JwSwMB3U89uXhK/jC0j0+ULxJGcGlZs=;
-        b=gEwvGpsTQUXOqj3mEREwqYg6yQTFI0VW+ESr0B7ihoiRQonW47t/rXM1gtfsLqmreM
-         scpm7D+O+facB/lFIoDgm3ckuVEOmjHXh/rw/H/xjSTEEaxG/msBw5hapJepXKCJEgMT
-         ALuTHs5sjryA26dBLsjTJYk2ksjkkiXJthLvO9u5bjsbShMZP3YnQiwdbikDYvdVnlsm
-         UYvSoMpV0w0Y2fyc8X+FhezvqHimlVxR5Ery2l9biWcAaAUHMZsG6RG5dyyA/+RVHpbv
-         5Y32bh7eYTO3OorRNmVsU+jHn86Zhm1gxj6GJRTU6zSV8IQhQ4WLWIwWz2huzeoEi0Ex
-         D7eQ==
-X-Gm-Message-State: ANoB5pnkBjbYhTjJ2l+kiVa0ATvMJ6vTCH+VyXztsIxFaE3AT4Ob+CIc
-        MLFkCtd4mDM6evg5kO8U12BCMxIArFA9SQpaRe/5i1OS
-X-Google-Smtp-Source: AA0mqf5MPDDKs+XONRrgIA79tbujNUkca/XcpxNtJ/8DIRgqhG2PKd7cZF1d44wjXS0vCpFNxsTDFUCTwFYDhCt86/k=
-X-Received: by 2002:a05:6830:3697:b0:66b:e4f2:7f2a with SMTP id
- bk23-20020a056830369700b0066be4f27f2amr25550959otb.317.1669936641563; Thu, 01
- Dec 2022 15:17:21 -0800 (PST)
+        Thu, 1 Dec 2022 18:17:51 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E066444
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:17:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669936669; x=1701472669;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RY9aaLj+Qa+bji5tEbVewZXKW2D/TGq5pRHWrJyqu6E=;
+  b=QdWol2rx3WuMu602WmzF9E8xcdHVuTW127Qumyfd4NjXuooVi/ECevUy
+   hyCVjbAu5zLm9ON8WUX4ANwFMLv9GDZRt77EL5OdGcgwL5iP+kwauRYon
+   BGcPhsAdDCdOpdD58cigyCir7mztWNwpxCIx28mO8cSsQwo8158npWGbV
+   PdmzTHARbLxwU99xT2beGDGlLyFnu69WjvEJAJGCzVA3ye2kvdno0LLNl
+   Yb99mpxETVPytbT96ML5r2IDxkUeQ6DAZQAbmnKeiU2jman2uuVFVE/BK
+   vKEv+GWuYyRHPKJE4zWJFbhT50P6Jzh/k2h/vYvAcEJxzIJRcJhpSLWWA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="377979001"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="377979001"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 15:17:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="787071533"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="787071533"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Dec 2022 15:17:46 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p0soM-000D0s-0K;
+        Thu, 01 Dec 2022 23:17:46 +0000
+Date:   Fri, 02 Dec 2022 07:17:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:timers/urgent] BUILD SUCCESS
+ d9f15a9de44affe733e34f93bc184945ba277e6d
+Message-ID: <638935ff.PYIJrA+BmeF12iN7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20221123173859.473629-1-dima@arista.com> <20221123173859.473629-2-dima@arista.com>
- <Y4B17nBArWS1Iywo@hirez.programming.kicks-ass.net> <2081d2ac-b2b5-9299-7239-dc4348ec0d0a@arista.com>
- <20221201143134.6bb285d8@kernel.org>
-In-Reply-To: <20221201143134.6bb285d8@kernel.org>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-Date:   Thu, 1 Dec 2022 23:17:11 +0000
-Message-ID: <CAJwJo6Z9sTDgOFFrpbrXT6eagtmbB5mhfudG0Osp75J4ipNSqQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/5] jump_label: Prevent key->enabled int overflow
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Dmitry Safonov <dima@arista.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 at 22:31, Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 25 Nov 2022 14:28:30 +0000 Dmitry Safonov wrote:
-> > > What is the plan for merging this? I'm assuming it would want to go
-> > > through the network tree, but as already noted earlier it depends on a
-> > > patch I have in tip/locking/core.
-> > >
-> > > Now I checked, tip/locking/core is *just* that one patch, so it might be
-> > > possible to merge that branch and this series into the network tree and
-> > > note that during the pull request to Linus.
-> >
-> > I initially thought it has to go through tip trees because of the
-> > dependence, but as you say it's just one patch.
-> >
-> > I was also asked by Jakub on v4 to wait for Eric's Ack/Review, so once I
-> > get a go from him, I will send all 6 patches for inclusion into -net
-> > tree, if that will be in time before the merge window.
->
-> Looks like we're all set on the networking side (thanks Eric!!)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/urgent
+branch HEAD: d9f15a9de44affe733e34f93bc184945ba277e6d  Revert "clocksource/drivers/riscv: Events are stopped during CPU suspend"
 
-Thanks!
+elapsed time: 727m
 
-> Should I pull Peter's branch? Or you want to just resent a patch Peter
-> already queued. A bit of an unusual situation..
+configs tested: 47
+configs skipped: 2
 
-Either way would work for me.
-I can send it in a couple of hours if you prefer instead of pulling the branch.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thank you,
-             Dmitry
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+mips                             allyesconfig
+m68k                             allyesconfig
+powerpc                          allmodconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+ia64                             allmodconfig
+x86_64                           allyesconfig
+arc                  randconfig-r043-20221201
+s390                 randconfig-r044-20221201
+riscv                randconfig-r042-20221201
+x86_64                            allnoconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+
+clang tested configs:
+hexagon              randconfig-r041-20221201
+hexagon              randconfig-r045-20221201
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
