@@ -2,148 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BA163EFB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA2063EFBD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiLALmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S230450AbiLALnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiLALlz (ORCPT
+        with ESMTP id S231130AbiLALmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:41:55 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0596F9582D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:41:52 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id d6so2048464lfs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:41:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0UiAnxiG5gru9IeukT0uPFqmufGik114HWN4x39w6FA=;
-        b=zopg1txRN5QgqaXfvugj89RD4LqFxqoqVjHWRsqgKB0npSUazcU7D9c2uZ9eF+aBjn
-         YF6qfci1wHSt4AFzDdaT6TP9OhQ3Mdaza3DpmSV5hpIUekk3KR80oodi3SN9yWI5tGS6
-         BuQ4A1vklebhvhifCHCdZnMSoSeCWvFM/Ob8qdlXPxy4zsG7kk5g+VQP3o6YbOTvD/iZ
-         2WoTXkrwVdgV3weLjEU6HWVghtCCvmbFUyO94sTViyHwjHW1koa5iH6wuV0IKiROfrwq
-         tf+I6a/cjSMNzM9dEX7KO+nfOz8/O/3aZxCS+RhXktnqnxBEzb01V5YJ95RsD8VHUo5a
-         Jrug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0UiAnxiG5gru9IeukT0uPFqmufGik114HWN4x39w6FA=;
-        b=2ou4lMOmyoxLdajqqe85eGRdoe1WyvvtJ2oN8YznnrBkbsqxiqd60uCvWUDhMqNF1A
-         GuxVj03aAaU+4Gq5fMNU7H13jHOncUI/1u9mr0+erpxdi1mKuPMiVrYt8Qd8WZ77zk3/
-         62/klLe1PiBrq7Vj6o/q324O455xXBQ7KCn2Yjb6W85D2k7PzxXVa1Kdag5/zJg+sP4v
-         behVKhaZH1yHqBu9AGU/klEN5wYAhb/e0oUTPF2ssrj5VOUvE6P9HHsByNVS9xH/uooN
-         begS1LZSQM42gk8QDbOTqQC1TnyfnOcWOxBqKuC6eVXe/GjUPCLwPlr0+LM/JXufZEEK
-         Lyrg==
-X-Gm-Message-State: ANoB5pk3+dcmkBAy+ykF+ZJIwHKg/4ja2OEY89kcdV8pcR6q8PhzBlnq
-        ir4QokWzJrnAEzopztjMK6pbAA==
-X-Google-Smtp-Source: AA0mqf5NJwSDFJVZ4ee0obiZShaUI/uPkLiEO75TR/uSDPOAHIZkEPvJJ1JC3LaLkJUeMh2M4XFoqQ==
-X-Received: by 2002:a05:6512:a83:b0:4aa:f944:f7ec with SMTP id m3-20020a0565120a8300b004aaf944f7ecmr17809472lfu.467.1669894910308;
-        Thu, 01 Dec 2022 03:41:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05651234ca00b0048a8c907fe9sm612837lfr.167.2022.12.01.03.41.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 03:41:47 -0800 (PST)
-Message-ID: <a1d8197e-33fa-e853-ab73-81b167ec45ec@linaro.org>
-Date:   Thu, 1 Dec 2022 12:41:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 5/9] dt-bindings: riscv: Add bouffalolab bl808 board
- compatibles
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
+        Thu, 1 Dec 2022 06:42:47 -0500
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66FFB48D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:42:42 -0800 (PST)
+Date:   Thu, 01 Dec 2022 11:42:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1669894957; x=1670154157;
+        bh=1DpeR0fOlb5PAMGmnpXX+od9r16gR+9q1pKLo2N9KRI=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=yDI7s0HlJ4McXxo+2ufuGpE4pXDth5CZgcjcV3rSuMzzH6q3wJU2Tk8xl6O17cNkC
+         HGXaHumIUcAtIEKBNwYce9+vZ6SE7uaW92ikgpJXsWAVzP2llfPOvr8KTm04XlizD+
+         qqmrGlCY6Vr+H0QkM3W/9jf6/hOxA26eKCS8YCl+DJk0go0urf5JB+gwEDYNDa+OO5
+         1T8hQYX7JoMQ/eCuypvX3exrqCVOMjP+g6FcbGegvHOS8NPTUhCiVXC8ifRf/Od0W+
+         SNowSPaq79Rn4U19KPuffPal7gPFjk3PQGZv2gIZTRDFaB0Mv+3fBjN1Wz7ItilgIJ
+         mhsl3c7GMLCkg==
+To:     Rob Herring <robh@kernel.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20221127132448.4034-1-jszhang@kernel.org>
- <20221127132448.4034-6-jszhang@kernel.org>
- <60991459-945f-35db-f26a-fb27824728ad@linaro.org> <Y4iMrKjLAHpkCygo@wendy>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y4iMrKjLAHpkCygo@wendy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/7] dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Pull pinctrl node changes from MT6795 document
+Message-ID: <OlpG9EaFtnZPPSHGKPeAj0wrG-hceDitxke8L1MrF58nBbOf4Q8bsw1FC8O12qj_3GFxNpM4p_LeKwbCzchvZGaD0a_S56_uKhg7YWszZ9A=@protonmail.com>
+In-Reply-To: <20221130152041.GA2183918-robh@kernel.org>
+References: <20221118113028.145348-1-y.oudjana@protonmail.com> <20221118113028.145348-2-y.oudjana@protonmail.com> <20221130152041.GA2183918-robh@kernel.org>
+Feedback-ID: 6882736:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 12:14, Conor Dooley wrote:
-> Hey Krzysztof,
-> 
-> On Thu, Dec 01, 2022 at 12:05:04PM +0100, Krzysztof Kozlowski wrote:
->> On 27/11/2022 14:24, Jisheng Zhang wrote:
->>> Several SoMs and boards are available that feature the Bouffalolab
->>> bl808 SoC. Document the compatible strings.
->>>
->>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
->>> ---
->>>  .../bindings/riscv/bouffalolab.yaml           | 34 +++++++++++++++++++
->>>  1 file changed, 34 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
->>> new file mode 100644
->>> index 000000000000..91ca9dbdc798
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
->>> @@ -0,0 +1,34 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Bouffalo Lab Technology SoC-based boards
->>> +
->>> +maintainers:
->>> +  - Jisheng Zhang <jszhang@kernel.org>
->>> +
->>> +description:
->>> +  Bouffalo Lab Technology SoC-based boards
->>> +
->>> +properties:
->>> +  $nodename:
->>> +    const: '/'
->>> +  compatible:
->>> +    oneOf:
->>> +      - description: Sipeed M1s SoM:
->>> +        items:
->>> +          - const: sipeed,m1s
->>> +          - const: bouffalolab,bl808
->>
->> I don't think that SoM is usable alone. It always needs a carrier, so
->> drop this entry.
-> 
-> For my own information, if a SoM is not capable of functioning without a
-> carrier there is no merit in it having a compatible?
-> Does this also apply if there are multiple possible carriers from
-> different vendors?
+On Wednesday, November 30th, 2022 at 6:20 PM, Rob Herring <robh@kernel.org>=
+ wrote:
 
-Compatible makes sense anyway. There will be different boards using this
-SoM (not only carriers, but final products) and they all will have
-common piece - the SoM. It's the same for other SoM designs (e.g. for iMX).
+> On Fri, Nov 18, 2022 at 02:30:22PM +0300, Yassine Oudjana wrote:
+>=20
+> > From: Yassine Oudjana y.oudjana@protonmail.com
+> >=20
+> > mediatek,pinctrl-mt6795.yaml has different node name patterns which mat=
+ch
+> > bindings of other MediaTek pin controllers, ref for pinmux-node.yaml wh=
+ich
+> > has a description of the pinmux property, as well as some additional
+> > descriptions for some pin configuration properties. Pull those changes
+> > into mediatek,mt6779-pinctrl.yaml and adjust the example DTS to match i=
+n
+> > preparation to combine the MT6795 document into it.
+> >=20
+> > Signed-off-by: Yassine Oudjana y.oudjana@protonmail.com
+> > ---
+> > .../pinctrl/mediatek,mt6779-pinctrl.yaml | 38 ++++++++++++++-----
+> > 1 file changed, 28 insertions(+), 10 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-=
+pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pi=
+nctrl.yaml
+> > index a2141eb0854e..d6231d11e949 100644
+> > --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl=
+.yaml
+> > +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl=
+.yaml
+> > @@ -111,19 +111,21 @@ allOf:
+> > - "#interrupt-cells"
+> >=20
+> > patternProperties:
+> > - '-[0-9]*$':
+> > + '-pins$':
+> > type: object
+> > additionalProperties: false
+> >=20
+> > patternProperties:
+> > - '-pins*$':
+> > + '^pins':
+> > type: object
+> > description: |
+> > A pinctrl node should contain at least one subnodes representing the
+> > pinctrl groups available on the machine. Each subnode will list the
+> > pins it needs, and how they should be configured, with regard to muxer
+> > configuration, pullups, drive strength, input enable/disable and input =
+schmitt.
+> > - $ref: "/schemas/pinctrl/pincfg-node.yaml"
+> > + allOf:
+> > + - $ref: pinmux-node.yaml
+> > + - $ref: pincfg-node.yaml
+> >=20
+> > properties:
+> > pinmux:
+> > @@ -134,9 +136,25 @@ patternProperties:
+> >=20
+> > bias-disable: true
+> >=20
+> > - bias-pull-up: true
+> > -
+> > - bias-pull-down: true
+> > + bias-pull-up:
+> > + oneOf:
+> > + - type: boolean
+> > + - enum: [100, 101, 102, 103]
+> > + description: Pull up PUPD/R0/R1 type define value.
+> > + description: |
+> > + For normal pull up type, it is not necessary to specify R1R0
+> > + values; When pull up type is PUPD/R0/R1, adding R1R0 defines
+> > + will set different resistance values.
+> > +
+> > + bias-pull-down:
+> > + oneOf:
+> > + - type: boolean
+> > + - enum: [100, 101, 102, 103]
+>=20
+>=20
+> 'bias-pull-down' is defined to be in Ohms. This doesn't look like it's
+> Ohms.
 
-Best regards,
-Krzysztof
+That's right, these numbers appear to correspond to MTK_PUPD_SET_R1R0_*
+values defined in include/dt-bindings/pinctrl/mt65xx.h, and work similar
+to mediatek,pull-down-adv as defined in mediatek,mt8183-pinctrl.yaml.
+
+Now I think the easiest thing to do in order to sort this out would be
+be to stop supporting bias-pull-[up/down] properties and replace them
+with mediatek,pull-[up/down]-adv, but I guess that would break old DT.
+Changing the supported values to represent ohms and modifying drivers
+to accommodate for that would be quite tedious since every pin group
+on every SoC has different supported pull resistances, and it would
+still break compatibility with old DT anyway.
+
+Does anyone have a better idea on this? Or perhaps we could leave fixing
+this for another time since issues with these bindings seem to never end
+and this patch series just keeps growing.
 
