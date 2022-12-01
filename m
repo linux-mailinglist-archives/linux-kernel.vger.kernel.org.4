@@ -2,92 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC4663EFC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DB563EFC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiLALne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
+        id S230482AbiLALol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiLALn0 (ORCPT
+        with ESMTP id S230223AbiLALoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:43:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8768895804
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:43:25 -0800 (PST)
+        Thu, 1 Dec 2022 06:44:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27539D836;
+        Thu,  1 Dec 2022 03:44:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA4B361FAD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:43:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093FDC433D6;
-        Thu,  1 Dec 2022 11:43:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E625B81F17;
+        Thu,  1 Dec 2022 11:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D7ACC433D6;
+        Thu,  1 Dec 2022 11:44:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669895004;
-        bh=b32humZu+PKcy8aKXenWyUF4vn9xYLfzYQwwwXYV6iM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZNmP9cYw7XrR9Fi8RI2ERKG09CjpM13Han0ROS4DngQb9nsxxEjbE2m3By5K6nflD
-         yN52W8Cn8A2smqxX/2MlNHsGPsEBe6F7ZGzwV6Lq9alN+zR2CX84B1mLnWsEk2jCoW
-         QvQI9lE4tlVpwAO6xrmEnqnaqMv2VflFwll5IyFG4lqVhTJlGuGmW5ppnKDzSYuTz7
-         JZr/JDu9q9IVVmHzdnB3GAHmbwMFYRbM3/4pCX+nRadpcmZMA9qQCkd5dvCbahW7YN
-         CSzOQKTUzQ4EMZspOGw6dz2qrVgVMC+b4KGjCjbZ/E3DKYxuYOGuhDlX1N1yl6Bj7P
-         Cnz1T2Si1AMKg==
-Date:   Thu, 1 Dec 2022 11:43:18 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     lgirdwood@gmail.com, lee@kernel.org, matthias.bgg@gmail.com,
-        yangyingliang@huawei.com, chiaen_wu@richtek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        ChiYuan Huang <cy_huang@richtek.com>
-Subject: Re: [PATCH 1/2] regulator: mt6370: Fix potential UAF issue
-Message-ID: <Y4iTVmOA5P/aN2yb@sirena.org.uk>
-References: <1669797463-24887-1-git-send-email-u0084500@gmail.com>
+        s=k20201202; t=1669895073;
+        bh=PrMg5m3+X14CGC2gNHxtuuuFETrafX7CmaULS1L0xC8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KkYZx1vsZ5aPJ+Ehvk6Dk4EprgL/RyuUL3nmeCaI6ZqrnVThqA8uq01p5q+gO0FnD
+         44YQdq4xrdBD8fGzfh6od2MhxdCY7Z7zBzEbDxxGbZ6Qyhe+hgfCbkwDZP2p1kOTy0
+         VyIwHxKQhrTsRoLIuWEj+Ob3oHf3JhiiAOzohXfmM0zxUN2glcR4HnuCW+90pmphGB
+         2oeJfKNl9SgmtO9KGfi6lqjtTzyagr60o2HE744oEEhtxuHTwsOKmjGiBZg+A1Uig3
+         SrCyLw9xCjJ90mADn7rx3pQP5xl3hP+Wb+Z9kC6ybyjOZHqj5US045e8x+sez29alo
+         CFH2FHRMJ9VBA==
+Message-ID: <c41064a1-9da7-d848-6f9f-e1f3b722c063@kernel.org>
+Date:   Thu, 1 Dec 2022 13:44:28 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jonyXJ7Ofmg6Ee47"
-Content-Disposition: inline
-In-Reply-To: <1669797463-24887-1-git-send-email-u0084500@gmail.com>
-X-Cookie: Isn't this my STOP?!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 net-next 4/6] net: ethernet: ti: am65-cpsw: Add
+ suspend/resume support
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
+        maciej.fijalkowski@intel.com, kuba@kernel.org
+Cc:     andrew@lunn.ch, edumazet@google.com, vigneshr@ti.com,
+        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221129133501.30659-1-rogerq@kernel.org>
+ <20221129133501.30659-5-rogerq@kernel.org>
+ <9fdc4e0eee7ead18c119b6bc3e93f7f73d2980cd.camel@redhat.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <9fdc4e0eee7ead18c119b6bc3e93f7f73d2980cd.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---jonyXJ7Ofmg6Ee47
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 01/12/2022 13:40, Paolo Abeni wrote:
+> On Tue, 2022-11-29 at 15:34 +0200, Roger Quadros wrote:
+>> @@ -555,11 +556,26 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
+>>  	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
+>>  	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
+>>  	int ret, i;
+>> +	u32 reg;
+>>  
+>>  	ret = pm_runtime_resume_and_get(common->dev);
+>>  	if (ret < 0)
+>>  		return ret;
+>>  
+>> +	/* Idle MAC port */
+>> +	cpsw_sl_ctl_set(port->slave.mac_sl, CPSW_SL_CTL_CMD_IDLE);
+>> +	cpsw_sl_wait_for_idle(port->slave.mac_sl, 100);
+>> +	cpsw_sl_ctl_reset(port->slave.mac_sl);
+>> +
+>> +	/* soft reset MAC */
+>> +	cpsw_sl_reg_write(port->slave.mac_sl, CPSW_SL_SOFT_RESET, 1);
+>> +	mdelay(1);
+>> +	reg = cpsw_sl_reg_read(port->slave.mac_sl, CPSW_SL_SOFT_RESET);
+>> +	if (reg) {
+>> +		dev_err(common->dev, "soft RESET didn't complete\n");
+> 
+> I *think* Andrew was asking for dev_dbg() here, but let's see what he
+> has to say :)
 
-On Wed, Nov 30, 2022 at 04:37:42PM +0800, cy_huang wrote:
+In the earlier revision we were not exiting with error, so dev_dbg()
+was more appropriate there.
+In this revision we error out so I thought dev_err() was ok.
 
-> The original code uses i2c dev as the parent in order to reuse
-> the 'regulator_of_get_init_data'. But this will cause regulation
-> constraint devres attached to i2c dev, not the mfd cell platform
-> device.
-
-This is a general issue which will affect a lot of MFDs, we would be
-better to fix this by changing the API to provide a device to be used
-for the devres allocations separately to the one used for looking up the
-DT.
-
---jonyXJ7Ofmg6Ee47
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOIk1YACgkQJNaLcl1U
-h9CAEAf+OLCtX/qUZlN1eE3kJF4yWWC2wCV8ARG5w6+YoIv3EjUJGyHkXsdCQ9KP
-D4nDhttbavKDqseq+3MXE8WpQBqjpH0ib8cjpwrRKgnyREOpkcKRDLGMbZjiN54Y
-iiCizyQeZc4YKjgO3/If3xwrXhx1pScpT1wm5KJPj/pd7EaZUrReHtf6oZpvRL/4
-jiqXoqOwZLVaq4xP1rBY/NAgk6Dxt8RwxfjoiDBXXj8i7lbpAIuEn6ytL2DVPj5Q
-HDEJ5jB+ezP2OuPEVsc1Y1U0pCdJW6qDHilWbz2iwcwNzp7auHtYY70MhOcRq6x4
-haVGL6pyAZeo0va9vqQdvltZB9XTqw==
-=/yVC
------END PGP SIGNATURE-----
-
---jonyXJ7Ofmg6Ee47--
+--
+cheers,
+-roger
