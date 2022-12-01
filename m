@@ -2,78 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFCA63EC73
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFD863EC74
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 10:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLAJ3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 04:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S229551AbiLAJ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 04:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiLAJ2m (ORCPT
+        with ESMTP id S229924AbiLAJ2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 04:28:42 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF564E6AA;
-        Thu,  1 Dec 2022 01:28:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=bjlickyhTxl1d4xNXaIojFEZJXJX16jZsh7QD+vtX3U=;
-        t=1669886917; x=1671096517; b=H70JLGWe23zI+csp8meWrufCUQcW9fOV41R/rgU67xvw1J/
-        jTSIPuiCeR80Z8R87AabqGMZkpe9nTAzkZmNiyjMK2naf5BWH3zabnZQvCfF+dusBeKMfpda+mGKZ
-        55dAlJTbaVlpYSqyGIKQNQWTChItTwV9dlfDpsqhhch1fPyi+T5BZSfqVkaJjLAOD+B3ZcyQHPsN4
-        D6b66PR5NgWhXluluF4/qI2cqLPZOFYgpBA7n2S5FNJjnaTs4VWKoF3rfok8b8LAAMK78ub2jKGMI
-        ynYx6pMadLixySw/KYYR41H85YV3LpPK5ZRJ4BlHmsMg8gJvj6QN4NDy//3mMg6w==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1p0fre-00E0NW-3D;
-        Thu, 01 Dec 2022 10:28:19 +0100
-Message-ID: <9fdd6581efb75511f3259ca663cd1afaee4ae4ac.camel@sipsolutions.net>
-Subject: Re: [PATCH 1/2 v2] IB/qib: don't use qib_wc_x86_64 for UML
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Leon Romanovsky <leon@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        linux-rdma@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org
-Date:   Thu, 01 Dec 2022 10:28:18 +0100
-In-Reply-To: <Y4hyPPzyQiI3i9jh@unreal>
-References: <20221130200945.24459-1-rdunlap@infradead.org>
-         <Y4hyPPzyQiI3i9jh@unreal>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 1 Dec 2022 04:28:50 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427AB49B51
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 01:28:45 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id p8so1546895lfu.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 01:28:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jahb+tEShKBR+Ktu0BgJXy8O1SopxAlMcngu6tulhfo=;
+        b=wzeuJx6xKm1tNX0R828wgisRm6UYpQssq1gEpjild2BMpZ3jiJEGbZBEyphN32yvVV
+         TzR7uzCkl9HBZ5aazB219DCIvHAA3tDilXZHK5QSEnTM1J5GjbxWBHjsU7b8RG3qWgVh
+         UuQuyHmJOfwhZTnSm4HJDKTS1uqYIB3z3xDZUcPR3qyTs3/oKBCapWI3kjvAlEpuM/Nb
+         TsORs1tXAqJGAaAAuTnb7I8BESvchycQt+GQl8F+jRPvqdX+sBUfX1f/MHStul1Td2kB
+         Ne8u+FRMrGYkvUZOMxYIIQ8hyn1GEyeRzpmRLIGs82XQAjSqkMXfrxd7nMtVBVDP0bps
+         Uj7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jahb+tEShKBR+Ktu0BgJXy8O1SopxAlMcngu6tulhfo=;
+        b=Nu11R5kbawTqKIBl85I2NhS57TA5FD4f2O4SwR91H/cqHKltnbCYDFvxSbcxsvDvXV
+         46bg7Jv/o3RXMFWDrg7gcGDCRTQWgCiZ15RDdheRK8zNGCdb+f/oGvk3Gb4I8RO+i1v/
+         7N8/Xr784VmSpcOuutnpjYM6rFzlzTxGKo/pmWJQ5i6n+z3VnkmqWscH8E/zcDAvPnlk
+         3UPp7XnrQRwAb3jOy78VaLPoGg+zf7bMUBjUjGln06hQOXN9IDDmGy5nECyQMQxLNsMC
+         ZFtlMqgwa34nwKVnYiyoD+V9MrVakwpJIXG+0VwC2cqA5VtdQzZ5gRPtT5ZLzN589Z0d
+         dbxA==
+X-Gm-Message-State: ANoB5pn63nf5OlkBS5p9+cWuJ3QDsgVVeNIwoySJE5m6qT2QDZP5A1uj
+        39t6FXkBKohv6Jp2DL+qdt+xgw==
+X-Google-Smtp-Source: AA0mqf4GR2jAPIP63PrEu23oXP2Y1onMJ5uqoMQq16hLdEJ8d7BaYPyYOXgoM7GjnlGgp9qM6QC+XQ==
+X-Received: by 2002:ac2:4e0e:0:b0:4b1:7c15:e920 with SMTP id e14-20020ac24e0e000000b004b17c15e920mr25286530lfr.453.1669886924183;
+        Thu, 01 Dec 2022 01:28:44 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o6-20020ac25e26000000b00492e3a8366esm589861lfg.9.2022.12.01.01.28.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 01:28:41 -0800 (PST)
+Message-ID: <6028b265-bc8a-3a06-b17c-56aa772a4782@linaro.org>
+Date:   Thu, 1 Dec 2022 10:28:39 +0100
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/6] crypto: starfive - Add StarFive crypto engine support
+Content-Language: en-US
+To:     JiaJie Ho <jiajie.ho@starfivetech.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+References: <20221130055214.2416888-1-jiajie.ho@starfivetech.com>
+ <20221130055214.2416888-2-jiajie.ho@starfivetech.com>
+ <aafb1c32-bc00-2db2-edbd-aa4771f33ac7@linaro.org>
+ <60ad0da0116044d3a1fe575e9904e22c@EXMBX068.cuchost.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <60ad0da0116044d3a1fe575e9904e22c@EXMBX068.cuchost.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-01 at 11:22 +0200, Leon Romanovsky wrote:
->=20
-> > +++ b/drivers/infiniband/hw/qib/Kconfig
-> > @@ -3,6 +3,7 @@ config INFINIBAND_QIB
-> >  	tristate "Intel PCIe HCA support"
-> >  	depends on 64BIT && INFINIBAND_RDMAVT
-> >  	depends on PCI
-> > +	depends on !UML
->=20
-> I would advocate to add this line to whole drivers/infiniband.
-> None of RDMA code makes sense for UML.
->=20
+On 01/12/2022 07:52, JiaJie Ho wrote:
 
-You could argue that one might want to eventually use kunit for some
-bits and pieces in there, so it'd make sense to be able to build the
-parts that _can_ be built, but I have no idea :)
+>>> +
+>>> +static inline u32 starfive_sec_read(struct starfive_sec_dev *sdev,
+>>> +u32 offset) {
+>>> +	return __raw_readl(sdev->io_base + offset);
+>>
+>> I don't think these read/write wrappers help anyhow...
+>>
+> 
+> These wrappers are used by the crypto primitives in this patch series.
+> I'll move these to subsequent patches when they are first used.
+> 
+> Thank you for spending time reviewing and providing helpful comments
+> for this driver.
+> 
 
-johannes
+Just drop the wrappers. I said they do not help and your answer "are
+used" does not explain anything. If you insist on keeping them, please
+explain what are the benefits except more code and more
+indirections/layers making it more difficult to read?
+
+Best regards,
+Krzysztof
+
