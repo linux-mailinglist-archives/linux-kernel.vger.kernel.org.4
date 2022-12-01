@@ -2,980 +2,1803 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD1663EA47
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E188863EA51
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiLAHXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S229877AbiLAH0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 02:26:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiLAHXO (ORCPT
+        with ESMTP id S229468AbiLAH0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:23:14 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2073.outbound.protection.outlook.com [40.107.22.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2201D31FBD;
-        Wed, 30 Nov 2022 23:23:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jRImYTF5u3NsKda3Cnc/p9itpjg44s/zbQ4Fgi+SUKAcprnuvm6wwPfyK+jdNr9JI4Oo0hA6PLrDXrRD6f2Lk05lftTmUH3DwNfNzi2buWaSWEcoET0XD7cQM04IppP/05tkEnj7fqjC7Wojx7HhtYyYgjP/FKXGGYjOErFxAKKSatmDNtYaMxgEgwKjpC9qTWxQLoX0EYQmy+iilZLH6QG3EJoujcYmNuvIPzBeU05tIKrSBUfLpQV3pqCv5Um4sqoF2fA/7ctjKB7zHMmfzPPE09tfW8+1YMChDbn2NlAEpHcCMKQ532wmT+HAniUgB2LpkooZRtPXqgvRI6dI2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IKBtujhB9frL4G9x7/sZqqvYyb2RXrUdeln72NxSTeU=;
- b=Ci3SE8+4Vs8/TQa60xx3lerPmRJ5JirPKCKRelQYVsm16QGAlSAteIX9fEJtHnKJYYfqKFxT0yCy88vop/lxcTIcRiDgr4f6exR+pRC9dGFllmyZpVR+7Ps5A4vbnTJm0ctWIca9SYaIB6HYRxVI8Z2mQbrSTMQkZswwfa7UaChvfW1sdFraG6xZRKHu8t39JXuI+J6nNlD4+KO43ujKE9gJujpfeMfW6PQLzLt/iXDQYa1B6OQLTAC04rg4yWN6GIYHeosGJqlyv1aC2ISTZQyLTo7sFZfUWG0DqJ9MuKmU0ipp2whyh9SR2D7KzaKFMqZcPqaR9X+/KmMJfmp1IQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IKBtujhB9frL4G9x7/sZqqvYyb2RXrUdeln72NxSTeU=;
- b=y0QYhFMZFe2F17wQC1HOV66/2Zjgq74UFfbE6MHJu2Lhzjvq/GerPOJnPpCHEvh89AJKG2S9WmkgAbvgoZ1xmLVm02v3G5vkfH2nAuMfpvYUk7bpoFw2WBiAK3U9QeTvavYdANyrttRawazPd0GrEsAmlFaaw3uw6FeYGEZ/VJM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VI1PR08MB4544.eurprd08.prod.outlook.com (2603:10a6:803:100::13)
- by AS8PR08MB6023.eurprd08.prod.outlook.com (2603:10a6:20b:291::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Thu, 1 Dec
- 2022 07:23:07 +0000
-Received: from VI1PR08MB4544.eurprd08.prod.outlook.com
- ([fe80::bcc7:bc51:bf44:1454]) by VI1PR08MB4544.eurprd08.prod.outlook.com
- ([fe80::bcc7:bc51:bf44:1454%6]) with mapi id 15.20.5880.008; Thu, 1 Dec 2022
- 07:23:07 +0000
-From:   Gerald Loacker <gerald.loacker@wolfvision.net>
-To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jakob Hauser <jahau@rocketmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>
-Subject: [PATCH v6 3/3] iio: magnetometer: add ti tmag5273 driver
-Date:   Thu,  1 Dec 2022 08:22:20 +0100
-Message-Id: <20221201072220.402585-4-gerald.loacker@wolfvision.net>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221201072220.402585-1-gerald.loacker@wolfvision.net>
-References: <20221201072220.402585-1-gerald.loacker@wolfvision.net>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0501CA0024.eurprd05.prod.outlook.com
- (2603:10a6:800:92::34) To VI1PR08MB4544.eurprd08.prod.outlook.com
- (2603:10a6:803:100::13)
+        Thu, 1 Dec 2022 02:26:21 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5FD50D78;
+        Wed, 30 Nov 2022 23:26:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669879578; x=1701415578;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XgLfmcru2DQ478i2uHjZ68lpzKvb6uQ278DNWznIuOo=;
+  b=B3zUE0jDf863cRQLAjgF6jZzJCCtgMOODrtf/Yz2mUjmwDuKtD+SF8+X
+   mfWMENGkjaHvqpsknvl1N/ildiFM2LNQMS2XMWauhTh1g6nLgzdFPK2+y
+   Ox841K9WgW3YYEuM1kh0THNM1cntdf/VQNJ4jTbccOFfvS0ysGghE0vw7
+   A+PNjqzIf5sWaOZTZPJwzZwOg6kWlHHDpIy5WghCxDj0S1I1dOXBEAR62
+   /0pQmSDHkKetqajxmfgLowwT0dOdlZwO+VgsulKg7b+L92P9aReq3M4nr
+   OxhiVxYvQ8wuKiKbUl1XocQa2ohMzEhTpHnSNB8YjNSciuiPFPesDydKJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="298979495"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="298979495"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 23:26:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="707962005"
+X-IronPort-AV: E=Sophos;i="5.96,207,1665471600"; 
+   d="scan'208";a="707962005"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Nov 2022 23:26:12 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p0dxT-000CIJ-29;
+        Thu, 01 Dec 2022 07:26:11 +0000
+Date:   Thu, 1 Dec 2022 15:25:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hsia-Jun Li <randy.li@synaptics.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     oe-kbuild-all@lists.linux.dev, nicolas@ndufresne.ca,
+        sakari.ailus@linux.intel.com, airlied@linux.ie, ayaka@soulik.info,
+        linux-kernel@vger.kernel.org, tfiga@chromium.org,
+        Hsia-Jun Li <randy.li@synaptics.com>,
+        helen.koike@collabora.com, linux-media@vger.kernel.org,
+        ezequiel@vanguardiasur.com.ar, tzimmermann@suse.de,
+        ribalda@chromium.org, sebastian.hesselbarth@gmail.com,
+        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
+        laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH v5 2/2] Documentation/gpu: Add Synaptics tiling formats
+ documentation
+Message-ID: <202212011513.19kLY4e7-lkp@intel.com>
+References: <20221130092149.102788-3-randy.li@synaptics.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR08MB4544:EE_|AS8PR08MB6023:EE_
-X-MS-Office365-Filtering-Correlation-Id: b5c5f713-a56c-4127-c338-08dad36ce4b7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0xr2GqqCIlFpMKxv5JH45MFHd7FPYue+8tJvt8VOOzgqMW+BLEZ6FOEntb6dQj3BB9Af/OR0XaUkw34gm2227HgkshTZ9j7TICxkYXxkFmTkn2miOrYPF1m7Svfz8otWUj1I30gHjaMNH1BSW49TxQZtS1kK35ICe9kqgTEDKwo6rCBA1fiBa82EQixdLZX8/bILpcDrMqxojM+d323Z54Z8GjvetrDIhDhLNmBihODyN01B/jZf+h1OUdbKGAvYFural4gXMnHeT+RHLcXO2KFJtaN+Qw9LrIKTNcrdJBnwd1YcqrcFsBGB4kdQbt3bwK0vbJvTutGzt2/+onBN34uK44frRRimMofos6oYYUYIC1xtd8Jk82o0IfVTAOfQ/zHQHYarxTKAzo9y5D6vjF6lK/TKYIjEGVrtVC5b4Ez/JPCnsmAUPTx9zk+VwYYfo4IUpNUQNgubkt6xOLhMimG400/26/ml6WF83kZdd7Nq5xDmORpewR/xLHD1M7sebQmg283CXvBHB+NwYezQjxaGgZSeTafa0kO1QftdUGaeW6mGsejFGbbfbGYTJ4/aCLIL8Ws83xVIYiVn+vVxUJOJ0+s06crtqWzcA+tlI0arzNYBUPZzZVwEomvNkKG0GF/M6DoqlAx7C9TMPRxQygkFO3FHzIjAO4AGoa7/eBP6UgZR+LbwROWIaM7rucqw1xyYfVm+YoQkbgpM9AnItLfqkGHGhKDp8X+aNhenD8g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB4544.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(346002)(136003)(39850400004)(451199015)(8936002)(5660300002)(186003)(36756003)(66476007)(41300700001)(4326008)(66556008)(54906003)(316002)(8676002)(38100700002)(107886003)(86362001)(83380400001)(6486002)(6512007)(2616005)(66946007)(26005)(478600001)(7416002)(52116002)(1076003)(966005)(6666004)(38350700002)(6506007)(2906002)(44832011)(30864003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3YS/MIqhhe9EbA1lxBEc1TwB2AnGsjaGNORHKrNGzh6l0YcinTE/MXpeNor7?=
- =?us-ascii?Q?jFo8aeZnODoC6vnG4fvlmBKXqqTc5HpMUV8//wmZnzb7BIJsaWn8KMF0tvHc?=
- =?us-ascii?Q?t9uKAYGaTDBCFj+GjdA8kLFqA/XHe5Zv6eI5njBM6Bhr954TGaIGPjf+s/+4?=
- =?us-ascii?Q?/gpZSyk14Dcx4KmwBLrLCJJn6+pjR+Zc5H+M05uWrlHRC9LPabs9/XM8nVsI?=
- =?us-ascii?Q?3XmBFrzBAKE1ucJXPsm8oKmDzCZkrNBf1LigmSJm78uUujXrrduFNZs73HwA?=
- =?us-ascii?Q?FoLhVt1QaeQLNdc1mh2kSzh5kt3EFySAdrJVGS2JWzCN3JYGA+M8OninjZ9b?=
- =?us-ascii?Q?Ix/ZRjWIgjTJxduX0TwdGtOWhKIQHsMzC0NZVg7BlmnoC1iqYBP11vtHDUcR?=
- =?us-ascii?Q?sOgawGxoEY8vlDBEdY81XmctVdaHApzEkRsIm8WBnBtzYgLqXmep7EGhYsNH?=
- =?us-ascii?Q?OvNLpjWfgBArPn3W/fmUdqVHLPAH4NKRAygH2wp8/7nvY8SEe3nIvEeGWWBA?=
- =?us-ascii?Q?VFOdFg8Web/b1hPXexITk8ZPXgf2sIAV2isAzhdBPwZ9+Ed/5XpRPSDClSek?=
- =?us-ascii?Q?gy0f7VLV9METjEnSWpQg5/5Yegfi5TRq2/eHquBmvwepMHudgVtdimU25ifJ?=
- =?us-ascii?Q?ikb4s7dk0PE+xq3iKe4Rxrnz7HAHU7DqVK23wpjoiPuVXufDopEYAH2EA3hO?=
- =?us-ascii?Q?h8vjHuVoao5Pc4DtuOFAueQrur9hQFiVwc9VSWgC5d9WgK8h7Ub2rrq6ViP9?=
- =?us-ascii?Q?7CwueU0za3uJwEBPl9LWLBq0fGalfhSGFZqI75qRP4R5VhIXDgKrFdb4QQ2L?=
- =?us-ascii?Q?stoCjvJkMjiu2rYrSfjzdh/uNNb341j3srhHokYLdll+1M05UIFEL4FlSW5q?=
- =?us-ascii?Q?JqfGMt6Awoe3s0cPg2amrDGgoqaQjiLwmyk+62EhApXUQB2RVxlUIrtHM/Gb?=
- =?us-ascii?Q?x4MNHkmHqaeiCXXpXiJKdJ8lbgLEVK0jnzxI/JQ5JBPjPDnWjQu5COLS+8xO?=
- =?us-ascii?Q?VeEve29Hz7S52vj3xF637FGZvjA/IffwDdATOINwks28G7UjLDojxQtOAFhU?=
- =?us-ascii?Q?1vuqddBZx+Fo5uq45MyMxm2dderE7VRKYMAp01AvbSW7SnIAOT9qxweB7Hs0?=
- =?us-ascii?Q?S4m0l53QUO02x6NpkG/D/TBwS1uk7wXxBBJJfhqyKVwoinO+nUAgOOH1hx1T?=
- =?us-ascii?Q?J6aFJ+QkfSAFTivJun75VQayyTVFYPajoum5hMmyJ2GsNBk1TXMjAltrbym1?=
- =?us-ascii?Q?tBtjB7uv0iuPKueEs0qUDBnrs+oIt4wdky2DtmagZaj6WBdjI46GNWTF16jl?=
- =?us-ascii?Q?o2qib0joxwi5xmG7EN2FnldkYkaIvanaUr/5A5BijmIPzVqwy6JmxKRbM/Yj?=
- =?us-ascii?Q?jMM3E7qp0SFIhUswr18QiYgcxNwXBObrh4jyvr1uVLiR/Qf8MnsTJ5pBh5eR?=
- =?us-ascii?Q?HuDKgFLPwMbeHAoUHDSYdL1HH44WiCHGmSGIEbwqCTHjdl28N1OdeRYww86h?=
- =?us-ascii?Q?lWMZvGOCZI4FieTz0/TGG1P6YVTxEDdwC/ryE0I5vQXfdm5butYR0OuunHFC?=
- =?us-ascii?Q?HERtQ80vmp8aCfmXYswEI/g2dQO/gLSr8B7eXnkjfv/6Ee30PiSgXE555Qla?=
- =?us-ascii?Q?IQ=3D=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5c5f713-a56c-4127-c338-08dad36ce4b7
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB4544.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2022 07:23:07.4460
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5ODBMs3TIFqHBCT4qsCFAQ7U4q+Rw0zGpIXV3wgggnMYufyRlPqa+AvS/AU9nfgVack/1CtqF/qfgs899db9C15/cJOakQRa0Sjn+sWjy2M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6023
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="t2ImwfqtqdzpjxFL"
+Content-Disposition: inline
+In-Reply-To: <20221130092149.102788-3-randy.li@synaptics.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor.
-Additionally to temperature and magnetic X, Y and Z-axes the angle and
-magnitude are reported.
-The sensor is operating in continuous measurement mode and changes to sleep
-mode if not used for 5 seconds.
 
-Datasheet: https://www.ti.com/lit/gpn/tmag5273
-Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-Changes in v6:
- - Defined TMAG5273_MAX_REG
- - Added comment for unknown device ID
- 
-Changes in v5:
- - Fixed dev_err_probe
- - Removed unnecessary '&' for function pointers
- - Removed warning for device tree reading failure as Linux should not
-   validate device tree.
- - Added comment for device name
- - Added tmag5273_wake_up() and improved comments
- - Reformatted pm_ops
- 
-Changes in v4:
- - Renamed struct iio_val_int_plus_micro members
- - Simplified tmag5273_write_scale()
- - Removed unnecessary  != 0
- - Fixed regmap max_register
- - Simplified tmag5273_read_device_property()
- - Fixed some line breaks
+--t2ImwfqtqdzpjxFL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Changes in v3:
- - Added include <linux/bitfield.h>
-   | Reported-by: kernel test robot <lkp@intel.com> 
- - Added include <linux/bits.h>
- - Removed <asm/unaligned.h>
- - Added missing "static const" for tmag5273_avg_table
- - Documented Device ID
- - Fixed index of tmag5273_scale definition
- - Clarify TMAG5273_MAG_CH_EN_X_Y_Z as an index
- - Removed unnecessary print
- - Introduced tmag5273_write_scale() and tmag5273_write_osr() helper
-    functions
- - Use of match_string()
- - Format
+Hi Hsia-Jun,
 
-Changes in v2:
- - Implemented suggestions from review and cleaned up probe function. This
-   results in changes all over the tmag5273.c code.
+Thank you for the patch! Perhaps something to improve:
 
- MAINTAINERS                         |   1 +
- drivers/iio/magnetometer/Kconfig    |  12 +
- drivers/iio/magnetometer/Makefile   |   2 +
- drivers/iio/magnetometer/tmag5273.c | 743 ++++++++++++++++++++++++++++
- 4 files changed, 758 insertions(+)
- create mode 100644 drivers/iio/magnetometer/tmag5273.c
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.1-rc7 next-20221130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ea7acec52f8b..9d20b5780051 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20618,6 +20618,7 @@ M:	Gerald Loacker <gerald.loacker@wolfvision.net>
- L:	linux-iio@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
-+F:	drivers/iio/magnetometer/tmag5273.c
- 
- TI TRF7970A NFC DRIVER
- M:	Mark Greer <mgreer@animalcreek.com>
-diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
-index b91fc5e6a26e..467819335588 100644
---- a/drivers/iio/magnetometer/Kconfig
-+++ b/drivers/iio/magnetometer/Kconfig
-@@ -208,6 +208,18 @@ config SENSORS_RM3100_SPI
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called rm3100-spi.
- 
-+config TI_TMAG5273
-+	tristate "TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Say Y here to add support for the TI TMAG5273 Low-Power
-+	  Linear 3D Hall-Effect Sensor.
-+
-+	  This driver can also be compiled as a module.
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called tmag5273.
-+
- config YAMAHA_YAS530
- 	tristate "Yamaha YAS530 family of 3-Axis Magnetometers (I2C)"
- 	depends on I2C
-diff --git a/drivers/iio/magnetometer/Makefile b/drivers/iio/magnetometer/Makefile
-index b9f45b7fafc3..b1c784ea71c8 100644
---- a/drivers/iio/magnetometer/Makefile
-+++ b/drivers/iio/magnetometer/Makefile
-@@ -29,4 +29,6 @@ obj-$(CONFIG_SENSORS_RM3100)		+= rm3100-core.o
- obj-$(CONFIG_SENSORS_RM3100_I2C)	+= rm3100-i2c.o
- obj-$(CONFIG_SENSORS_RM3100_SPI)	+= rm3100-spi.o
- 
-+obj-$(CONFIG_TI_TMAG5273)		+= tmag5273.o
-+
- obj-$(CONFIG_YAMAHA_YAS530)		+= yamaha-yas530.o
-diff --git a/drivers/iio/magnetometer/tmag5273.c b/drivers/iio/magnetometer/tmag5273.c
-new file mode 100644
-index 000000000000..0008138cbd63
---- /dev/null
-+++ b/drivers/iio/magnetometer/tmag5273.c
-@@ -0,0 +1,743 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Driver for the TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor
-+ *
-+ * Copyright (C) 2022 WolfVision GmbH
-+ *
-+ * Author: Gerald Loacker <gerald.loacker@wolfvision.net>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/delay.h>
-+#include <linux/module.h>
-+#include <linux/i2c.h>
-+#include <linux/regmap.h>
-+#include <linux/pm_runtime.h>
-+
-+#include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
-+
-+#define TMAG5273_DEVICE_CONFIG_1	 0x00
-+#define TMAG5273_DEVICE_CONFIG_2	 0x01
-+#define TMAG5273_SENSOR_CONFIG_1	 0x02
-+#define TMAG5273_SENSOR_CONFIG_2	 0x03
-+#define TMAG5273_X_THR_CONFIG		 0x04
-+#define TMAG5273_Y_THR_CONFIG		 0x05
-+#define TMAG5273_Z_THR_CONFIG		 0x06
-+#define TMAG5273_T_CONFIG		 0x07
-+#define TMAG5273_INT_CONFIG_1		 0x08
-+#define TMAG5273_MAG_GAIN_CONFIG	 0x09
-+#define TMAG5273_MAG_OFFSET_CONFIG_1	 0x0A
-+#define TMAG5273_MAG_OFFSET_CONFIG_2	 0x0B
-+#define TMAG5273_I2C_ADDRESS		 0x0C
-+#define TMAG5273_DEVICE_ID		 0x0D
-+#define TMAG5273_MANUFACTURER_ID_LSB	 0x0E
-+#define TMAG5273_MANUFACTURER_ID_MSB	 0x0F
-+#define TMAG5273_T_MSB_RESULT		 0x10
-+#define TMAG5273_T_LSB_RESULT		 0x11
-+#define TMAG5273_X_MSB_RESULT		 0x12
-+#define TMAG5273_X_LSB_RESULT		 0x13
-+#define TMAG5273_Y_MSB_RESULT		 0x14
-+#define TMAG5273_Y_LSB_RESULT		 0x15
-+#define TMAG5273_Z_MSB_RESULT		 0x16
-+#define TMAG5273_Z_LSB_RESULT		 0x17
-+#define TMAG5273_CONV_STATUS		 0x18
-+#define TMAG5273_ANGLE_RESULT_MSB	 0x19
-+#define TMAG5273_ANGLE_RESULT_LSB	 0x1A
-+#define TMAG5273_MAGNITUDE_RESULT	 0x1B
-+#define TMAG5273_DEVICE_STATUS		 0x1C
-+#define TMAG5273_MAX_REG		 TMAG5273_DEVICE_STATUS
-+
-+#define TMAG5273_AUTOSLEEP_DELAY_MS	 5000
-+#define TMAG5273_MAX_AVERAGE             32
-+
-+/*
-+ * bits in the TMAG5273_MANUFACTURER_ID_LSB / MSB register
-+ * 16-bit unique manufacturer ID 0x49 / 0x54 = "TI"
-+ */
-+#define TMAG5273_MANUFACTURER_ID	 0x5449
-+
-+/* bits in the TMAG5273_DEVICE_CONFIG_1 register */
-+#define TMAG5273_AVG_MODE_MASK		 GENMASK(4, 2)
-+#define TMAG5273_AVG_1_MODE		 FIELD_PREP(TMAG5273_AVG_MODE_MASK, 0)
-+#define TMAG5273_AVG_2_MODE		 FIELD_PREP(TMAG5273_AVG_MODE_MASK, 1)
-+#define TMAG5273_AVG_4_MODE		 FIELD_PREP(TMAG5273_AVG_MODE_MASK, 2)
-+#define TMAG5273_AVG_8_MODE		 FIELD_PREP(TMAG5273_AVG_MODE_MASK, 3)
-+#define TMAG5273_AVG_16_MODE		 FIELD_PREP(TMAG5273_AVG_MODE_MASK, 4)
-+#define TMAG5273_AVG_32_MODE		 FIELD_PREP(TMAG5273_AVG_MODE_MASK, 5)
-+
-+/* bits in the TMAG5273_DEVICE_CONFIG_2 register */
-+#define TMAG5273_OP_MODE_MASK		 GENMASK(1, 0)
-+#define TMAG5273_OP_MODE_STANDBY	 FIELD_PREP(TMAG5273_OP_MODE_MASK, 0)
-+#define TMAG5273_OP_MODE_SLEEP		 FIELD_PREP(TMAG5273_OP_MODE_MASK, 1)
-+#define TMAG5273_OP_MODE_CONT		 FIELD_PREP(TMAG5273_OP_MODE_MASK, 2)
-+#define TMAG5273_OP_MODE_WAKEUP		 FIELD_PREP(TMAG5273_OP_MODE_MASK, 3)
-+
-+/* bits in the TMAG5273_SENSOR_CONFIG_1 register */
-+#define TMAG5273_MAG_CH_EN_MASK		 GENMASK(7, 4)
-+#define TMAG5273_MAG_CH_EN_X_Y_Z	 7
-+
-+/* bits in the TMAG5273_SENSOR_CONFIG_2 register */
-+#define TMAG5273_Z_RANGE_MASK		 BIT(0)
-+#define TMAG5273_X_Y_RANGE_MASK		 BIT(1)
-+#define TMAG5273_ANGLE_EN_MASK		 GENMASK(3, 2)
-+#define TMAG5273_ANGLE_EN_OFF		 0
-+#define TMAG5273_ANGLE_EN_X_Y		 1
-+#define TMAG5273_ANGLE_EN_Y_Z		 2
-+#define TMAG5273_ANGLE_EN_X_Z		 3
-+
-+/* bits in the TMAG5273_T_CONFIG register */
-+#define TMAG5273_T_CH_EN		 BIT(0)
-+
-+/* bits in the TMAG5273_DEVICE_ID register */
-+#define TMAG5273_VERSION_MASK		 GENMASK(1, 0)
-+
-+/* bits in the TMAG5273_CONV_STATUS register */
-+#define TMAG5273_CONV_STATUS_COMPLETE	 BIT(0)
-+
-+enum tmag5273_channels {
-+	TEMPERATURE = 0,
-+	AXIS_X,
-+	AXIS_Y,
-+	AXIS_Z,
-+	ANGLE,
-+	MAGNITUDE,
-+};
-+
-+enum tmag5273_scale_index {
-+	MAGN_RANGE_LOW = 0,
-+	MAGN_RANGE_HIGH,
-+	MAGN_RANGE_NUM
-+};
-+
-+/* state container for the TMAG5273 driver */
-+struct tmag5273_data {
-+	struct device *dev;
-+	unsigned int devid;
-+	unsigned int version;
-+	char name[16];
-+	unsigned int conv_avg;
-+	unsigned int scale;
-+	enum tmag5273_scale_index scale_index;
-+	unsigned int angle_measurement;
-+	struct regmap *map;
-+	struct regulator *vcc;
-+
-+	/*
-+	 * Locks the sensor for exclusive use during a measurement (which
-+	 * involves several register transactions so the regmap lock is not
-+	 * enough) so that measurements get serialized in a
-+	 * first-come-first-serve manner.
-+	 */
-+	struct mutex lock;
-+};
-+
-+static const char *const tmag5273_angle_names[] = { "off", "x-y", "y-z", "x-z" };
-+
-+/*
-+ * Averaging enables additional sampling of the sensor data to reduce the noise
-+ * effect, but also increases conversion time.
-+ */
-+static const unsigned int tmag5273_avg_table[] = {
-+	1, 2, 4, 8, 16, 32,
-+};
-+
-+/*
-+ * Magnetic resolution in Gauss for different TMAG5273 versions.
-+ * Scale[Gauss] = Range[mT] * 1000 / 2^15 * 10, (1 mT = 10 Gauss)
-+ * Only version 1 and 2 are valid, version 0 and 3 are reserved.
-+ */
-+static const struct iio_val_int_plus_micro tmag5273_scale[][MAGN_RANGE_NUM] = {
-+	{ { 0,     0 }, { 0,     0 } },
-+	{ { 0, 12200 }, { 0, 24400 } },
-+	{ { 0, 40600 }, { 0, 81200 } },
-+	{ { 0,     0 }, { 0,     0 } },
-+};
-+
-+static int tmag5273_get_measure(struct tmag5273_data *data, s16 *t, s16 *x,
-+				s16 *y, s16 *z, u16 *angle, u16 *magnitude)
-+{
-+	unsigned int status, val;
-+	__be16 reg_data[4];
-+	int ret;
-+
-+	mutex_lock(&data->lock);
-+
-+	/*
-+	 * Max. conversion time is 2425 us in 32x averaging mode for all three
-+	 * channels. Since we are in continuous measurement mode, a measurement
-+	 * may already be there, so poll for completed measurement with
-+	 * timeout.
-+	 */
-+	ret = regmap_read_poll_timeout(data->map, TMAG5273_CONV_STATUS, status,
-+				       status & TMAG5273_CONV_STATUS_COMPLETE,
-+				       100, 10000);
-+	if (ret) {
-+		dev_err(data->dev, "timeout waiting for measurement\n");
-+		goto out_unlock;
-+	}
-+
-+	ret = regmap_bulk_read(data->map, TMAG5273_T_MSB_RESULT, reg_data,
-+			       sizeof(reg_data));
-+	if (ret)
-+		goto out_unlock;
-+	*t = be16_to_cpu(reg_data[0]);
-+	*x = be16_to_cpu(reg_data[1]);
-+	*y = be16_to_cpu(reg_data[2]);
-+	*z = be16_to_cpu(reg_data[3]);
-+
-+	ret = regmap_bulk_read(data->map, TMAG5273_ANGLE_RESULT_MSB,
-+			       &reg_data[0], sizeof(reg_data[0]));
-+	if (ret)
-+		goto out_unlock;
-+	/*
-+	 * angle has 9 bits integer value and 4 bits fractional part
-+	 * 15 14 13 12 11 10 9  8  7  6  5  4  3  2  1  0
-+	 * 0  0  0  a  a  a  a  a  a  a  a  a  f  f  f  f
-+	 */
-+	*angle = be16_to_cpu(reg_data[0]);
-+
-+	ret = regmap_read(data->map, TMAG5273_MAGNITUDE_RESULT, &val);
-+	if (ret < 0)
-+		goto out_unlock;
-+	*magnitude = val;
-+
-+out_unlock:
-+	mutex_unlock(&data->lock);
-+	return ret;
-+}
-+
-+static int tmag5273_write_osr(struct tmag5273_data *data, int val)
-+{
-+	int i;
-+
-+	if (val == data->conv_avg)
-+		return 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(tmag5273_avg_table); i++) {
-+		if (tmag5273_avg_table[i] == val)
-+			break;
-+	}
-+	if (i == ARRAY_SIZE(tmag5273_avg_table))
-+		return -EINVAL;
-+	data->conv_avg = val;
-+
-+	return regmap_update_bits(data->map, TMAG5273_DEVICE_CONFIG_1,
-+				  TMAG5273_AVG_MODE_MASK,
-+				  FIELD_PREP(TMAG5273_AVG_MODE_MASK, i));
-+}
-+
-+static int tmag5273_write_scale(struct tmag5273_data *data, int scale_micro)
-+{
-+	u32 value;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(tmag5273_scale[0]); i++) {
-+		if (tmag5273_scale[data->version][i].micro == scale_micro)
-+			break;
-+	}
-+	if (i == ARRAY_SIZE(tmag5273_scale[0]))
-+		return -EINVAL;
-+	data->scale_index = i;
-+
-+	if (data->scale_index == MAGN_RANGE_LOW)
-+		value = 0;
-+	else
-+		value = TMAG5273_Z_RANGE_MASK | TMAG5273_X_Y_RANGE_MASK;
-+
-+	return regmap_update_bits(data->map, TMAG5273_SENSOR_CONFIG_2,
-+				  TMAG5273_Z_RANGE_MASK | TMAG5273_X_Y_RANGE_MASK, value);
-+}
-+
-+static int tmag5273_read_avail(struct iio_dev *indio_dev,
-+			       struct iio_chan_spec const *chan,
-+			       const int **vals, int *type, int *length,
-+			       long mask)
-+{
-+	struct tmag5273_data *data = iio_priv(indio_dev);
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-+		*vals = tmag5273_avg_table;
-+		*type = IIO_VAL_INT;
-+		*length = ARRAY_SIZE(tmag5273_avg_table);
-+		return IIO_AVAIL_LIST;
-+	case IIO_CHAN_INFO_SCALE:
-+		switch (chan->type) {
-+		case IIO_MAGN:
-+			*type = IIO_VAL_INT_PLUS_MICRO;
-+			*vals = (int *)tmag5273_scale[data->version];
-+			*length = ARRAY_SIZE(tmag5273_scale[data->version]) *
-+				  MAGN_RANGE_NUM;
-+			return IIO_AVAIL_LIST;
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int tmag5273_read_raw(struct iio_dev *indio_dev,
-+			     const struct iio_chan_spec *chan, int *val,
-+			     int *val2, long mask)
-+{
-+	struct tmag5273_data *data = iio_priv(indio_dev);
-+	s16 t, x, y, z;
-+	u16 angle, magnitude;
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_PROCESSED:
-+	case IIO_CHAN_INFO_RAW:
-+		ret = pm_runtime_resume_and_get(data->dev);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = tmag5273_get_measure(data, &t, &x, &y, &z, &angle, &magnitude);
-+		if (ret)
-+			return ret;
-+
-+		pm_runtime_mark_last_busy(data->dev);
-+		pm_runtime_put_autosuspend(data->dev);
-+
-+		switch (chan->address) {
-+		case TEMPERATURE:
-+			*val = t;
-+			return IIO_VAL_INT;
-+		case AXIS_X:
-+			*val = x;
-+			return IIO_VAL_INT;
-+		case AXIS_Y:
-+			*val = y;
-+			return IIO_VAL_INT;
-+		case AXIS_Z:
-+			*val = z;
-+			return IIO_VAL_INT;
-+		case ANGLE:
-+			*val = angle;
-+			return IIO_VAL_INT;
-+		case MAGNITUDE:
-+			*val = magnitude;
-+			return IIO_VAL_INT;
-+		default:
-+			return -EINVAL;
-+		}
-+	case IIO_CHAN_INFO_SCALE:
-+		switch (chan->type) {
-+		case IIO_TEMP:
-+			/*
-+			 * Convert device specific value to millicelsius.
-+			 * Resolution from the sensor is 60.1 LSB/celsius and
-+			 * the reference value at 25 celsius is 17508 LSBs.
-+			 */
-+			*val = 10000;
-+			*val2 = 601;
-+			return IIO_VAL_FRACTIONAL;
-+		case IIO_MAGN:
-+			/* Magnetic resolution in uT */
-+			*val = 0;
-+			*val2 = tmag5273_scale[data->version]
-+					      [data->scale_index].micro;
-+			return IIO_VAL_INT_PLUS_MICRO;
-+		case IIO_ANGL:
-+			/*
-+			 * Angle is in degrees and has four fractional bits,
-+			 * therefore use 1/16 * pi/180 to convert to radiants.
-+			 */
-+			*val = 1000;
-+			*val2 = 916732;
-+			return IIO_VAL_FRACTIONAL;
-+		default:
-+			return -EINVAL;
-+		}
-+	case IIO_CHAN_INFO_OFFSET:
-+		switch (chan->type) {
-+		case IIO_TEMP:
-+			*val = -266314;
-+			return IIO_VAL_INT;
-+		default:
-+			return -EINVAL;
-+		}
-+	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-+		*val = data->conv_avg;
-+		return IIO_VAL_INT;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int tmag5273_write_raw(struct iio_dev *indio_dev,
-+			      struct iio_chan_spec const *chan, int val,
-+			      int val2, long mask)
-+{
-+	struct tmag5273_data *data = iio_priv(indio_dev);
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-+		return tmag5273_write_osr(data, val);
-+	case IIO_CHAN_INFO_SCALE:
-+		switch (chan->type) {
-+		case IIO_MAGN:
-+			if (val)
-+				return -EINVAL;
-+			return tmag5273_write_scale(data, val2);
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+#define TMAG5273_AXIS_CHANNEL(axis, index)				     \
-+	{								     \
-+		.type = IIO_MAGN,					     \
-+		.modified = 1,						     \
-+		.channel2 = IIO_MOD_##axis,				     \
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |		     \
-+				      BIT(IIO_CHAN_INFO_SCALE),		     \
-+		.info_mask_shared_by_type_available =			     \
-+				      BIT(IIO_CHAN_INFO_SCALE),		     \
-+		.info_mask_shared_by_all =				     \
-+				      BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO), \
-+		.info_mask_shared_by_all_available =			     \
-+				      BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO), \
-+		.address = index,					     \
-+		.scan_index = index,					     \
-+		.scan_type = {						     \
-+			.sign = 's',					     \
-+			.realbits = 16,					     \
-+			.storagebits = 16,				     \
-+			.endianness = IIO_CPU,				     \
-+		},							     \
-+	}
-+
-+static const struct iio_chan_spec tmag5273_channels[] = {
-+	{
-+		.type = IIO_TEMP,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-+			BIT(IIO_CHAN_INFO_SCALE) |
-+			BIT(IIO_CHAN_INFO_OFFSET),
-+		.address = TEMPERATURE,
-+		.scan_index = TEMPERATURE,
-+		.scan_type = {
-+			.sign = 'u',
-+			.realbits = 16,
-+			.storagebits = 16,
-+			.endianness = IIO_CPU,
-+		},
-+	},
-+	TMAG5273_AXIS_CHANNEL(X, AXIS_X),
-+	TMAG5273_AXIS_CHANNEL(Y, AXIS_Y),
-+	TMAG5273_AXIS_CHANNEL(Z, AXIS_Z),
-+	{
-+		.type = IIO_ANGL,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
-+		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),
-+		.info_mask_shared_by_all =
-+				      BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.info_mask_shared_by_all_available =
-+				      BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.address = ANGLE,
-+		.scan_index = ANGLE,
-+		.scan_type = {
-+			.sign = 'u',
-+			.realbits = 16,
-+			.storagebits = 16,
-+			.endianness = IIO_CPU,
-+		},
-+	},
-+	{
-+		.type = IIO_DISTANCE,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
-+		.info_mask_shared_by_all =
-+				      BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.info_mask_shared_by_all_available =
-+				      BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+		.address = MAGNITUDE,
-+		.scan_index = MAGNITUDE,
-+		.scan_type = {
-+			.sign = 'u',
-+			.realbits = 16,
-+			.storagebits = 16,
-+			.endianness = IIO_CPU,
-+		},
-+	},
-+	IIO_CHAN_SOFT_TIMESTAMP(6),
-+};
-+
-+static const struct iio_info tmag5273_info = {
-+	.read_avail = tmag5273_read_avail,
-+	.read_raw = tmag5273_read_raw,
-+	.write_raw = tmag5273_write_raw,
-+};
-+
-+static bool tmag5273_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	return reg >= TMAG5273_T_MSB_RESULT && reg <= TMAG5273_MAGNITUDE_RESULT;
-+}
-+
-+static const struct regmap_config tmag5273_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = TMAG5273_MAX_REG,
-+	.volatile_reg = tmag5273_volatile_reg,
-+};
-+
-+static int tmag5273_set_operating_mode(struct tmag5273_data *data,
-+				       unsigned int val)
-+{
-+	return regmap_write(data->map, TMAG5273_DEVICE_CONFIG_2, val);
-+}
-+
-+static void tmag5273_read_device_property(struct tmag5273_data *data)
-+{
-+	struct device *dev = data->dev;
-+	const char *str;
-+	int ret;
-+
-+	data->angle_measurement = TMAG5273_ANGLE_EN_X_Y;
-+
-+	ret = device_property_read_string(dev, "ti,angle-measurement", &str);
-+	if (ret)
-+		return;
-+
-+	ret = match_string(tmag5273_angle_names,
-+			   ARRAY_SIZE(tmag5273_angle_names), str);
-+	if (ret >= 0)
-+		data->angle_measurement = ret;
-+}
-+
-+static void tmag5273_wake_up(struct tmag5273_data *data)
-+{
-+	int val;
-+
-+	/* Wake up the chip by sending a dummy I2C command */
-+	regmap_read(data->map, TMAG5273_DEVICE_ID, &val);
-+	/*
-+	 * Time to go to stand-by mode from sleep mode is 50us
-+	 * typically, during this time no I2C access is possible.
-+	 */
-+	usleep_range(80, 200);
-+}
-+
-+static int tmag5273_chip_init(struct tmag5273_data *data)
-+{
-+	int ret;
-+
-+	ret = regmap_write(data->map, TMAG5273_DEVICE_CONFIG_1,
-+			   TMAG5273_AVG_32_MODE);
-+	if (ret)
-+		return ret;
-+	data->conv_avg = 32;
-+
-+	ret = regmap_write(data->map, TMAG5273_DEVICE_CONFIG_2,
-+			   TMAG5273_OP_MODE_CONT);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(data->map, TMAG5273_SENSOR_CONFIG_1,
-+			   FIELD_PREP(TMAG5273_MAG_CH_EN_MASK,
-+				      TMAG5273_MAG_CH_EN_X_Y_Z));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(data->map, TMAG5273_SENSOR_CONFIG_2,
-+			   FIELD_PREP(TMAG5273_ANGLE_EN_MASK,
-+				      data->angle_measurement));
-+	if (ret)
-+		return ret;
-+	data->scale_index = MAGN_RANGE_LOW;
-+
-+	return regmap_write(data->map, TMAG5273_T_CONFIG, TMAG5273_T_CH_EN);
-+}
-+
-+static int tmag5273_check_device_id(struct tmag5273_data *data)
-+{
-+	__le16 devid;
-+	int val, ret;
-+
-+	ret = regmap_read(data->map, TMAG5273_DEVICE_ID, &val);
-+	if (ret)
-+		return dev_err_probe(data->dev, ret, "failed to power on device\n");
-+	data->version = FIELD_PREP(TMAG5273_VERSION_MASK, val);
-+
-+	ret = regmap_bulk_read(data->map, TMAG5273_MANUFACTURER_ID_LSB, &devid,
-+			       sizeof(devid));
-+	if (ret)
-+		return dev_err_probe(data->dev, ret, "failed to read device ID\n");
-+	data->devid = le16_to_cpu(devid);
-+
-+	switch (data->devid) {
-+	case TMAG5273_MANUFACTURER_ID:
-+		/*
-+		 * The device name matches the orderable part number. 'x' stands
-+		 * for A, B, C or D devices, which have different I2C addresses.
-+		 * Versions 1 or 2 (0 and 3 is reserved) stands for different
-+		 * magnetic strengths.
-+		 */
-+		snprintf(data->name, sizeof(data->name), "tmag5273x%1u", data->version);
-+		if (data->version < 1 || data->version > 2)
-+			dev_warn(data->dev, "Unsupported device %s\n", data->name);
-+		return 0;
-+	default:
-+		/*
-+		 * Only print warning in case of unknown device ID to allow
-+		 * fallback compatible in device tree.
-+		 */
-+		dev_warn(data->dev, "Unknown device ID 0x%x\n", data->devid);
-+		return 0;
-+	}
-+}
-+
-+static void tmag5273_power_down(void *data)
-+{
-+	tmag5273_set_operating_mode(data, TMAG5273_OP_MODE_SLEEP);
-+}
-+
-+static int tmag5273_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev = &i2c->dev;
-+	struct tmag5273_data *data;
-+	struct iio_dev *indio_dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	data = iio_priv(indio_dev);
-+	data->dev = dev;
-+	i2c_set_clientdata(i2c, indio_dev);
-+
-+	data->map = devm_regmap_init_i2c(i2c, &tmag5273_regmap_config);
-+	if (IS_ERR(data->map))
-+		return dev_err_probe(dev, PTR_ERR(data->map),
-+				     "failed to allocate register map\n");
-+
-+	mutex_init(&data->lock);
-+
-+	ret = devm_regulator_get_enable(dev, "vcc");
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to enable regulator\n");
-+
-+	tmag5273_wake_up(data);
-+
-+	ret = tmag5273_check_device_id(data);
-+	if (ret)
-+		return ret;
-+
-+	ret = tmag5273_set_operating_mode(data, TMAG5273_OP_MODE_CONT);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to power on device\n");
-+
-+	/*
-+	 * Register powerdown deferred callback which suspends the chip
-+	 * after module unloaded.
-+	 *
-+	 * TMAG5273 should be in SUSPEND mode in the two cases:
-+	 * 1) When driver is loaded, but we do not have any data or
-+	 *    configuration requests to it (we are solving it using
-+	 *    autosuspend feature).
-+	 * 2) When driver is unloaded and device is not used (devm action is
-+	 *    used in this case).
-+	 */
-+	ret = devm_add_action_or_reset(dev, tmag5273_power_down, data);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to add powerdown action\n");
-+
-+	ret = pm_runtime_set_active(dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = devm_pm_runtime_enable(dev);
-+	if (ret)
-+		return ret;
-+
-+	pm_runtime_get_noresume(dev);
-+	pm_runtime_set_autosuspend_delay(dev, TMAG5273_AUTOSLEEP_DELAY_MS);
-+	pm_runtime_use_autosuspend(dev);
-+
-+	tmag5273_read_device_property(data);
-+
-+	ret = tmag5273_chip_init(data);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to init device\n");
-+
-+	indio_dev->info = &tmag5273_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+	indio_dev->name = data->name;
-+	indio_dev->channels = tmag5273_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(tmag5273_channels);
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	ret = devm_iio_device_register(dev, indio_dev);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "device register failed\n");
-+
-+	return 0;
-+}
-+
-+static int tmag5273_runtime_suspend(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-+	struct tmag5273_data *data = iio_priv(indio_dev);
-+	int ret;
-+
-+	ret = tmag5273_set_operating_mode(data, TMAG5273_OP_MODE_SLEEP);
-+	if (ret)
-+		dev_err(dev, "failed to power off device (%pe)\n", ERR_PTR(ret));
-+
-+	return ret;
-+}
-+
-+static int tmag5273_runtime_resume(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-+	struct tmag5273_data *data = iio_priv(indio_dev);
-+	int ret;
-+
-+	tmag5273_wake_up(data);
-+
-+	ret = tmag5273_set_operating_mode(data, TMAG5273_OP_MODE_CONT);
-+	if (ret)
-+		dev_err(dev, "failed to power on device (%pe)\n", ERR_PTR(ret));
-+
-+	return ret;
-+}
-+
-+static DEFINE_RUNTIME_DEV_PM_OPS(tmag5273_pm_ops,
-+				 tmag5273_runtime_suspend, tmag5273_runtime_resume,
-+				 NULL);
-+
-+static const struct i2c_device_id tmag5273_id[] = {
-+	{ "tmag5273" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(i2c, tmag5273_id);
-+
-+static const struct of_device_id tmag5273_of_match[] = {
-+	{ .compatible = "ti,tmag5273" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, tmag5273_of_match);
-+
-+static struct i2c_driver tmag5273_driver = {
-+	.driver	 = {
-+		.name = "tmag5273",
-+		.of_match_table = tmag5273_of_match,
-+		.pm = pm_ptr(&tmag5273_pm_ops),
-+	},
-+	.probe_new = tmag5273_probe,
-+	.id_table = tmag5273_id,
-+};
-+module_i2c_driver(tmag5273_driver);
-+
-+MODULE_DESCRIPTION("TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor driver");
-+MODULE_AUTHOR("Gerald Loacker <gerald.loacker@wolfvision.net>");
-+MODULE_LICENSE("GPL");
+url:    https://github.com/intel-lab-lkp/linux/commits/Hsia-Jun-Li/Add-pixel-formats-used-in-Synatpics-SoC/20221130-172411
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20221130092149.102788-3-randy.li%40synaptics.com
+patch subject: [PATCH v5 2/2] Documentation/gpu: Add Synaptics tiling formats documentation
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/7f84f8d9c98d589eb7283261c18f3702e69e236d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hsia-Jun-Li/Add-pixel-formats-used-in-Synatpics-SoC/20221130-172411
+        git checkout 7f84f8d9c98d589eb7283261c18f3702e69e236d
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/gpu/synaptics.rst:57: WARNING: malformed hyperlink target.
+
+vim +57 Documentation/gpu/synaptics.rst
+
+    48	
+    49	.. flat-table:: Synpatics Image Format Modifiers
+    50	    :header-rows:  1
+    51	    :stub-columns: 0
+    52	    :widths:       3 1 8
+    53	
+    54	    * - Identifier
+    55	      - Fourcc
+    56	      - Details
+  > 57	    * .. _DRM-FORMAT-MOD-SYNA-V4H1
+    58	
+    59	      - ``DRM_FORMAT_MOD_SYNA_V4H1``
+    60	      - ``DRM_FORMAT_NV12``
+    61	      - The plain uncompressed 8 bits tile format. It sounds similar to
+    62		Intel's Y-tile. but it won't take any pixel from the next X direction
+    63		in a tile group. The line stride and image height must be aligned to
+    64		a multiple of 16. The height of chrominance plane would plus 8.
+    65	    * .. _DRM-FORMAT-MOD-SYNA-V4H3P8
+    66	
+    67	      - ``DRM_FORMAT_MOD_SYNA_V4H3P8``
+    68	      - ``DRM_FORMAT_NV15``
+    69	      - The plain uncompressed 10 bits tile format. It stores pixel in 2D
+    70		3x4 tiles with a 8bits padding to each of tile. Then a tile is in a
+    71		128 bits cache line.
+    72	    * .. _DRM-FORMAT-MOD-SYNA-V4H1-64L4-COMPRESSED
+    73	
+    74	      - ``DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED``
+    75	      - ``DRM_FORMAT_NV12``
+    76	      - Group of tiles and compressed variant of ``DRM_FORMAT_MOD_SYNA_V4H1``.
+    77		A group of tiles would contain 64x4 pixels, where a tile has 1x4
+    78		pixel.
+    79	    * .. _DRM-FORMAT-MOD-SYNA-V4H3P8-64L4-COMPRESSED
+    80	
+    81	      - ``DRM_FORMAT_MOD_SYNA_V4H3P8_64L4_COMPRESSED``
+    82	      - ``DRM_FORMAT_NV15``
+    83	      - Group of tiles and compressed variant of ``DRM_FORMAT_MOD_SYNA_V4H3P8``.
+    84		A group of tiles would contains 48x4 pixels, where a tile has 3x4 pixels
+    85		and a 8 bits padding in the end of a tile. A group of tiles would
+    86		be 256 bytes.
+    87	    * .. _DRM-FORMAT-MOD-SYNA-V4H1-128L128-COMPRESSED
+    88	
+    89	      - ``DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED``
+    90	      - ``DRM_FORMAT_NV12``
+    91	      - Group of tiles and compressed variant of ``DRM_FORMAT_MOD_SYNA_V4H1``.
+    92		A group of tiles would contain 128x32 pixels, where a tile has 1x4 pixel.
+    93	    * .. _DRM-FORMAT-MOD-SYNA-V4H3P8-128L128-COMPRESSED
+    94	
+    95	      - ``DRM_FORMAT_MOD_SYNA_V4H3P8_128L128_COMPRESSED``
+    96	      - ``DRM_FORMAT_NV15``
+    97	      - Group of tiles and compressed variant of ``DRM_FORMAT_MOD_SYNA_V4H3P8``.
+    98		A group of tiles would contains 96x128 pixels, where a tile has 3x4 pixels
+    99		and a 8 bits padding in the end of a tile. A group of tiles would 
+   100		be 16 KiB.
+   101	
+
 -- 
-2.37.2
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
+--t2ImwfqtqdzpjxFL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename=config
+
+#
+# Automatically generated file; DO NOT EDIT.
+# Linux/x86_64 6.1.0-rc6 Kernel Configuration
+#
+CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-8) 11.3.0"
+CONFIG_CC_IS_GCC=y
+CONFIG_GCC_VERSION=110300
+CONFIG_CLANG_VERSION=0
+CONFIG_AS_IS_GNU=y
+CONFIG_AS_VERSION=23900
+CONFIG_LD_IS_BFD=y
+CONFIG_LD_VERSION=23900
+CONFIG_LLD_VERSION=0
+CONFIG_CC_CAN_LINK=y
+CONFIG_CC_CAN_LINK_STATIC=y
+CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
+CONFIG_CC_HAS_ASM_INLINE=y
+CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
+CONFIG_PAHOLE_VERSION=123
+CONFIG_IRQ_WORK=y
+CONFIG_BUILDTIME_TABLE_SORT=y
+CONFIG_THREAD_INFO_IN_TASK=y
+
+#
+# General setup
+#
+CONFIG_BROKEN_ON_SMP=y
+CONFIG_INIT_ENV_ARG_LIMIT=32
+CONFIG_COMPILE_TEST=y
+# CONFIG_WERROR is not set
+CONFIG_LOCALVERSION=""
+CONFIG_BUILD_SALT=""
+CONFIG_HAVE_KERNEL_GZIP=y
+CONFIG_HAVE_KERNEL_BZIP2=y
+CONFIG_HAVE_KERNEL_LZMA=y
+CONFIG_HAVE_KERNEL_XZ=y
+CONFIG_HAVE_KERNEL_LZO=y
+CONFIG_HAVE_KERNEL_LZ4=y
+CONFIG_HAVE_KERNEL_ZSTD=y
+CONFIG_KERNEL_GZIP=y
+# CONFIG_KERNEL_BZIP2 is not set
+# CONFIG_KERNEL_LZMA is not set
+# CONFIG_KERNEL_XZ is not set
+# CONFIG_KERNEL_LZO is not set
+# CONFIG_KERNEL_LZ4 is not set
+# CONFIG_KERNEL_ZSTD is not set
+CONFIG_DEFAULT_INIT=""
+CONFIG_DEFAULT_HOSTNAME="(none)"
+# CONFIG_SYSVIPC is not set
+# CONFIG_WATCH_QUEUE is not set
+# CONFIG_CROSS_MEMORY_ATTACH is not set
+# CONFIG_USELIB is not set
+CONFIG_HAVE_ARCH_AUDITSYSCALL=y
+
+#
+# IRQ subsystem
+#
+CONFIG_GENERIC_IRQ_PROBE=y
+CONFIG_GENERIC_IRQ_SHOW=y
+CONFIG_HARDIRQS_SW_RESEND=y
+CONFIG_IRQ_DOMAIN=y
+CONFIG_IRQ_DOMAIN_HIERARCHY=y
+CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR=y
+CONFIG_GENERIC_IRQ_RESERVATION_MODE=y
+CONFIG_IRQ_FORCED_THREADING=y
+CONFIG_SPARSE_IRQ=y
+# end of IRQ subsystem
+
+CONFIG_CLOCKSOURCE_WATCHDOG=y
+CONFIG_ARCH_CLOCKSOURCE_INIT=y
+CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE=y
+CONFIG_GENERIC_TIME_VSYSCALL=y
+CONFIG_GENERIC_CLOCKEVENTS=y
+CONFIG_GENERIC_CLOCKEVENTS_BROADCAST=y
+CONFIG_GENERIC_CLOCKEVENTS_MIN_ADJUST=y
+CONFIG_GENERIC_CMOS_UPDATE=y
+CONFIG_HAVE_POSIX_CPU_TIMERS_TASK_WORK=y
+CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y
+
+#
+# Timers subsystem
+#
+CONFIG_HZ_PERIODIC=y
+# CONFIG_NO_HZ_IDLE is not set
+# CONFIG_NO_HZ is not set
+# CONFIG_HIGH_RES_TIMERS is not set
+CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US=100
+# end of Timers subsystem
+
+CONFIG_HAVE_EBPF_JIT=y
+CONFIG_ARCH_WANT_DEFAULT_BPF_JIT=y
+
+#
+# BPF subsystem
+#
+# CONFIG_BPF_SYSCALL is not set
+# end of BPF subsystem
+
+CONFIG_PREEMPT_NONE_BUILD=y
+CONFIG_PREEMPT_NONE=y
+# CONFIG_PREEMPT_VOLUNTARY is not set
+# CONFIG_PREEMPT is not set
+# CONFIG_PREEMPT_DYNAMIC is not set
+
+#
+# CPU/Task time and stats accounting
+#
+CONFIG_TICK_CPU_ACCOUNTING=y
+# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set
+# CONFIG_IRQ_TIME_ACCOUNTING is not set
+# CONFIG_BSD_PROCESS_ACCT is not set
+# CONFIG_PSI is not set
+# end of CPU/Task time and stats accounting
+
+CONFIG_CPU_ISOLATION=y
+
+#
+# RCU Subsystem
+#
+CONFIG_TINY_RCU=y
+# CONFIG_RCU_EXPERT is not set
+CONFIG_SRCU=y
+CONFIG_TINY_SRCU=y
+# end of RCU Subsystem
+
+# CONFIG_IKCONFIG is not set
+# CONFIG_IKHEADERS is not set
+CONFIG_LOG_BUF_SHIFT=17
+CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=13
+CONFIG_HAVE_UNSTABLE_SCHED_CLOCK=y
+
+#
+# Scheduler features
+#
+# end of Scheduler features
+
+CONFIG_ARCH_SUPPORTS_NUMA_BALANCING=y
+CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH=y
+CONFIG_CC_HAS_INT128=y
+CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough=5"
+CONFIG_GCC12_NO_ARRAY_BOUNDS=y
+CONFIG_ARCH_SUPPORTS_INT128=y
+# CONFIG_CGROUPS is not set
+CONFIG_NAMESPACES=y
+# CONFIG_UTS_NS is not set
+# CONFIG_TIME_NS is not set
+# CONFIG_USER_NS is not set
+# CONFIG_PID_NS is not set
+# CONFIG_CHECKPOINT_RESTORE is not set
+# CONFIG_SCHED_AUTOGROUP is not set
+# CONFIG_SYSFS_DEPRECATED is not set
+# CONFIG_RELAY is not set
+# CONFIG_BLK_DEV_INITRD is not set
+# CONFIG_BOOT_CONFIG is not set
+# CONFIG_INITRAMFS_PRESERVE_MTIME is not set
+CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
+# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
+CONFIG_LD_ORPHAN_WARN=y
+CONFIG_SYSCTL=y
+CONFIG_SYSCTL_EXCEPTION_TRACE=y
+CONFIG_HAVE_PCSPKR_PLATFORM=y
+# CONFIG_EXPERT is not set
+CONFIG_MULTIUSER=y
+CONFIG_SGETMASK_SYSCALL=y
+CONFIG_SYSFS_SYSCALL=y
+CONFIG_FHANDLE=y
+CONFIG_POSIX_TIMERS=y
+CONFIG_PRINTK=y
+CONFIG_BUG=y
+CONFIG_ELF_CORE=y
+CONFIG_PCSPKR_PLATFORM=y
+CONFIG_BASE_FULL=y
+CONFIG_FUTEX=y
+CONFIG_FUTEX_PI=y
+CONFIG_EPOLL=y
+CONFIG_SIGNALFD=y
+CONFIG_TIMERFD=y
+CONFIG_EVENTFD=y
+CONFIG_SHMEM=y
+CONFIG_AIO=y
+CONFIG_IO_URING=y
+CONFIG_ADVISE_SYSCALLS=y
+CONFIG_MEMBARRIER=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=y
+CONFIG_RSEQ=y
+# CONFIG_EMBEDDED is not set
+CONFIG_HAVE_PERF_EVENTS=y
+
+#
+# Kernel Performance Events And Counters
+#
+CONFIG_PERF_EVENTS=y
+# end of Kernel Performance Events And Counters
+
+# CONFIG_PROFILING is not set
+# end of General setup
+
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_X86=y
+CONFIG_INSTRUCTION_DECODER=y
+CONFIG_OUTPUT_FORMAT="elf64-x86-64"
+CONFIG_LOCKDEP_SUPPORT=y
+CONFIG_STACKTRACE_SUPPORT=y
+CONFIG_MMU=y
+CONFIG_ARCH_MMAP_RND_BITS_MIN=28
+CONFIG_ARCH_MMAP_RND_BITS_MAX=32
+CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MIN=8
+CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=16
+CONFIG_GENERIC_ISA_DMA=y
+CONFIG_GENERIC_BUG=y
+CONFIG_GENERIC_BUG_RELATIVE_POINTERS=y
+CONFIG_ARCH_MAY_HAVE_PC_FDC=y
+CONFIG_GENERIC_CALIBRATE_DELAY=y
+CONFIG_ARCH_HAS_CPU_RELAX=y
+CONFIG_ARCH_HIBERNATION_POSSIBLE=y
+CONFIG_ARCH_NR_GPIO=1024
+CONFIG_ARCH_SUSPEND_POSSIBLE=y
+CONFIG_AUDIT_ARCH=y
+CONFIG_ARCH_SUPPORTS_UPROBES=y
+CONFIG_FIX_EARLYCON_MEM=y
+CONFIG_PGTABLE_LEVELS=4
+CONFIG_CC_HAS_SANE_STACKPROTECTOR=y
+
+#
+# Processor type and features
+#
+# CONFIG_SMP is not set
+CONFIG_X86_FEATURE_NAMES=y
+CONFIG_X86_MPPARSE=y
+# CONFIG_GOLDFISH is not set
+# CONFIG_X86_CPU_RESCTRL is not set
+# CONFIG_X86_EXTENDED_PLATFORM is not set
+# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
+# CONFIG_HYPERVISOR_GUEST is not set
+# CONFIG_MK8 is not set
+# CONFIG_MPSC is not set
+# CONFIG_MCORE2 is not set
+# CONFIG_MATOM is not set
+CONFIG_GENERIC_CPU=y
+CONFIG_X86_INTERNODE_CACHE_SHIFT=6
+CONFIG_X86_L1_CACHE_SHIFT=6
+CONFIG_X86_TSC=y
+CONFIG_X86_CMPXCHG64=y
+CONFIG_X86_CMOV=y
+CONFIG_X86_MINIMUM_CPU_FAMILY=64
+CONFIG_X86_DEBUGCTLMSR=y
+CONFIG_IA32_FEAT_CTL=y
+CONFIG_X86_VMX_FEATURE_NAMES=y
+CONFIG_CPU_SUP_INTEL=y
+CONFIG_CPU_SUP_AMD=y
+CONFIG_CPU_SUP_HYGON=y
+CONFIG_CPU_SUP_CENTAUR=y
+CONFIG_CPU_SUP_ZHAOXIN=y
+CONFIG_HPET_TIMER=y
+CONFIG_DMI=y
+CONFIG_NR_CPUS_RANGE_BEGIN=1
+CONFIG_NR_CPUS_RANGE_END=1
+CONFIG_NR_CPUS_DEFAULT=1
+CONFIG_NR_CPUS=1
+CONFIG_UP_LATE_INIT=y
+CONFIG_X86_LOCAL_APIC=y
+CONFIG_X86_IO_APIC=y
+# CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS is not set
+# CONFIG_X86_MCE is not set
+
+#
+# Performance monitoring
+#
+# CONFIG_PERF_EVENTS_AMD_POWER is not set
+# CONFIG_PERF_EVENTS_AMD_UNCORE is not set
+# CONFIG_PERF_EVENTS_AMD_BRS is not set
+# end of Performance monitoring
+
+CONFIG_X86_16BIT=y
+CONFIG_X86_ESPFIX64=y
+CONFIG_X86_VSYSCALL_EMULATION=y
+# CONFIG_X86_IOPL_IOPERM is not set
+# CONFIG_MICROCODE is not set
+# CONFIG_X86_MSR is not set
+# CONFIG_X86_CPUID is not set
+# CONFIG_X86_5LEVEL is not set
+CONFIG_X86_DIRECT_GBPAGES=y
+# CONFIG_AMD_MEM_ENCRYPT is not set
+CONFIG_ARCH_SPARSEMEM_ENABLE=y
+CONFIG_ARCH_SPARSEMEM_DEFAULT=y
+CONFIG_ILLEGAL_POINTER_VALUE=0xdead000000000000
+# CONFIG_X86_CHECK_BIOS_CORRUPTION is not set
+CONFIG_MTRR=y
+# CONFIG_MTRR_SANITIZER is not set
+CONFIG_X86_PAT=y
+CONFIG_ARCH_USES_PG_UNCACHED=y
+CONFIG_X86_UMIP=y
+CONFIG_CC_HAS_IBT=y
+# CONFIG_X86_KERNEL_IBT is not set
+# CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
+CONFIG_X86_INTEL_TSX_MODE_OFF=y
+# CONFIG_X86_INTEL_TSX_MODE_ON is not set
+# CONFIG_X86_INTEL_TSX_MODE_AUTO is not set
+# CONFIG_HZ_100 is not set
+CONFIG_HZ_250=y
+# CONFIG_HZ_300 is not set
+# CONFIG_HZ_1000 is not set
+CONFIG_HZ=250
+# CONFIG_KEXEC is not set
+# CONFIG_CRASH_DUMP is not set
+CONFIG_PHYSICAL_START=0x1000000
+# CONFIG_RELOCATABLE is not set
+CONFIG_PHYSICAL_ALIGN=0x200000
+CONFIG_LEGACY_VSYSCALL_XONLY=y
+# CONFIG_LEGACY_VSYSCALL_NONE is not set
+# CONFIG_CMDLINE_BOOL is not set
+CONFIG_MODIFY_LDT_SYSCALL=y
+# CONFIG_STRICT_SIGALTSTACK_SIZE is not set
+CONFIG_HAVE_LIVEPATCH=y
+# end of Processor type and features
+
+CONFIG_CC_HAS_SLS=y
+CONFIG_CC_HAS_RETURN_THUNK=y
+# CONFIG_SPECULATION_MITIGATIONS is not set
+CONFIG_ARCH_HAS_ADD_PAGES=y
+CONFIG_ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE=y
+
+#
+# Power management and ACPI options
+#
+# CONFIG_SUSPEND is not set
+# CONFIG_PM is not set
+CONFIG_ARCH_SUPPORTS_ACPI=y
+# CONFIG_ACPI is not set
+
+#
+# CPU Frequency scaling
+#
+# CONFIG_CPU_FREQ is not set
+# end of CPU Frequency scaling
+
+#
+# CPU Idle
+#
+# CONFIG_CPU_IDLE is not set
+# end of CPU Idle
+# end of Power management and ACPI options
+
+#
+# Bus options (PCI etc.)
+#
+CONFIG_ISA_DMA_API=y
+# end of Bus options (PCI etc.)
+
+#
+# Binary Emulations
+#
+# CONFIG_IA32_EMULATION is not set
+# CONFIG_X86_X32_ABI is not set
+# end of Binary Emulations
+
+CONFIG_HAVE_KVM=y
+# CONFIG_VIRTUALIZATION is not set
+CONFIG_AS_AVX512=y
+CONFIG_AS_SHA1_NI=y
+CONFIG_AS_SHA256_NI=y
+CONFIG_AS_TPAUSE=y
+
+#
+# General architecture-dependent options
+#
+CONFIG_GENERIC_ENTRY=y
+# CONFIG_JUMP_LABEL is not set
+# CONFIG_STATIC_CALL_SELFTEST is not set
+CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y
+CONFIG_ARCH_USE_BUILTIN_BSWAP=y
+CONFIG_HAVE_IOREMAP_PROT=y
+CONFIG_HAVE_KPROBES=y
+CONFIG_HAVE_KRETPROBES=y
+CONFIG_HAVE_OPTPROBES=y
+CONFIG_HAVE_KPROBES_ON_FTRACE=y
+CONFIG_ARCH_CORRECT_STACKTRACE_ON_KRETPROBE=y
+CONFIG_HAVE_FUNCTION_ERROR_INJECTION=y
+CONFIG_HAVE_NMI=y
+CONFIG_TRACE_IRQFLAGS_SUPPORT=y
+CONFIG_TRACE_IRQFLAGS_NMI_SUPPORT=y
+CONFIG_HAVE_ARCH_TRACEHOOK=y
+CONFIG_HAVE_DMA_CONTIGUOUS=y
+CONFIG_GENERIC_SMP_IDLE_THREAD=y
+CONFIG_ARCH_HAS_FORTIFY_SOURCE=y
+CONFIG_ARCH_HAS_SET_MEMORY=y
+CONFIG_ARCH_HAS_SET_DIRECT_MAP=y
+CONFIG_HAVE_ARCH_THREAD_STRUCT_WHITELIST=y
+CONFIG_ARCH_WANTS_DYNAMIC_TASK_STRUCT=y
+CONFIG_ARCH_WANTS_NO_INSTR=y
+CONFIG_HAVE_ASM_MODVERSIONS=y
+CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=y
+CONFIG_HAVE_RSEQ=y
+CONFIG_HAVE_RUST=y
+CONFIG_HAVE_FUNCTION_ARG_ACCESS_API=y
+CONFIG_HAVE_HW_BREAKPOINT=y
+CONFIG_HAVE_MIXED_BREAKPOINTS_REGS=y
+CONFIG_HAVE_USER_RETURN_NOTIFIER=y
+CONFIG_HAVE_PERF_EVENTS_NMI=y
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_PERF=y
+CONFIG_HAVE_PERF_REGS=y
+CONFIG_HAVE_PERF_USER_STACK_DUMP=y
+CONFIG_HAVE_ARCH_JUMP_LABEL=y
+CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE=y
+CONFIG_MMU_GATHER_MERGE_VMAS=y
+CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=y
+CONFIG_HAVE_ALIGNED_STRUCT_PAGE=y
+CONFIG_HAVE_CMPXCHG_LOCAL=y
+CONFIG_HAVE_CMPXCHG_DOUBLE=y
+CONFIG_HAVE_ARCH_SECCOMP=y
+CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
+# CONFIG_SECCOMP is not set
+CONFIG_HAVE_ARCH_STACKLEAK=y
+CONFIG_HAVE_STACKPROTECTOR=y
+# CONFIG_STACKPROTECTOR is not set
+CONFIG_ARCH_SUPPORTS_LTO_CLANG=y
+CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN=y
+CONFIG_LTO_NONE=y
+CONFIG_ARCH_SUPPORTS_CFI_CLANG=y
+CONFIG_HAVE_ARCH_WITHIN_STACK_FRAMES=y
+CONFIG_HAVE_CONTEXT_TRACKING_USER=y
+CONFIG_HAVE_CONTEXT_TRACKING_USER_OFFSTACK=y
+CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=y
+CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
+CONFIG_HAVE_MOVE_PUD=y
+CONFIG_HAVE_MOVE_PMD=y
+CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
+CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=y
+CONFIG_HAVE_ARCH_HUGE_VMAP=y
+CONFIG_HAVE_ARCH_HUGE_VMALLOC=y
+CONFIG_ARCH_WANT_HUGE_PMD_SHARE=y
+CONFIG_HAVE_ARCH_SOFT_DIRTY=y
+CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
+CONFIG_MODULES_USE_ELF_RELA=y
+CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK=y
+CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK=y
+CONFIG_SOFTIRQ_ON_OWN_STACK=y
+CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
+CONFIG_HAVE_ARCH_MMAP_RND_BITS=y
+CONFIG_HAVE_EXIT_THREAD=y
+CONFIG_ARCH_MMAP_RND_BITS=28
+CONFIG_PAGE_SIZE_LESS_THAN_64KB=y
+CONFIG_PAGE_SIZE_LESS_THAN_256KB=y
+CONFIG_HAVE_OBJTOOL=y
+CONFIG_HAVE_JUMP_LABEL_HACK=y
+CONFIG_HAVE_NOINSTR_HACK=y
+CONFIG_HAVE_NOINSTR_VALIDATION=y
+CONFIG_HAVE_UACCESS_VALIDATION=y
+CONFIG_HAVE_STACK_VALIDATION=y
+CONFIG_HAVE_RELIABLE_STACKTRACE=y
+# CONFIG_COMPAT_32BIT_TIME is not set
+CONFIG_HAVE_ARCH_VMAP_STACK=y
+# CONFIG_VMAP_STACK is not set
+CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET=y
+CONFIG_RANDOMIZE_KSTACK_OFFSET=y
+# CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT is not set
+CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=y
+CONFIG_STRICT_KERNEL_RWX=y
+CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
+CONFIG_HAVE_ARCH_PREL32_RELOCATIONS=y
+CONFIG_ARCH_HAS_MEM_ENCRYPT=y
+CONFIG_HAVE_STATIC_CALL=y
+CONFIG_HAVE_STATIC_CALL_INLINE=y
+CONFIG_HAVE_PREEMPT_DYNAMIC=y
+CONFIG_HAVE_PREEMPT_DYNAMIC_CALL=y
+CONFIG_ARCH_WANT_LD_ORPHAN_WARN=y
+CONFIG_ARCH_SUPPORTS_DEBUG_PAGEALLOC=y
+CONFIG_ARCH_SUPPORTS_PAGE_TABLE_CHECK=y
+CONFIG_ARCH_HAS_ELFCORE_COMPAT=y
+CONFIG_ARCH_HAS_PARANOID_L1D_FLUSH=y
+CONFIG_DYNAMIC_SIGFRAME=y
+CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG=y
+
+#
+# GCOV-based kernel profiling
+#
+CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
+# end of GCOV-based kernel profiling
+
+CONFIG_HAVE_GCC_PLUGINS=y
+# CONFIG_GCC_PLUGINS is not set
+# end of General architecture-dependent options
+
+CONFIG_RT_MUTEXES=y
+CONFIG_BASE_SMALL=0
+# CONFIG_MODULES is not set
+CONFIG_BLOCK=y
+# CONFIG_BLOCK_LEGACY_AUTOLOAD is not set
+# CONFIG_BLK_DEV_BSGLIB is not set
+# CONFIG_BLK_DEV_INTEGRITY is not set
+# CONFIG_BLK_DEV_ZONED is not set
+# CONFIG_BLK_WBT is not set
+# CONFIG_BLK_SED_OPAL is not set
+# CONFIG_BLK_INLINE_ENCRYPTION is not set
+
+#
+# Partition Types
+#
+# CONFIG_PARTITION_ADVANCED is not set
+CONFIG_MSDOS_PARTITION=y
+CONFIG_EFI_PARTITION=y
+# end of Partition Types
+
+#
+# IO Schedulers
+#
+# CONFIG_MQ_IOSCHED_DEADLINE is not set
+# CONFIG_MQ_IOSCHED_KYBER is not set
+# CONFIG_IOSCHED_BFQ is not set
+# end of IO Schedulers
+
+CONFIG_INLINE_SPIN_UNLOCK_IRQ=y
+CONFIG_INLINE_READ_UNLOCK=y
+CONFIG_INLINE_READ_UNLOCK_IRQ=y
+CONFIG_INLINE_WRITE_UNLOCK=y
+CONFIG_INLINE_WRITE_UNLOCK_IRQ=y
+CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
+CONFIG_ARCH_USE_QUEUED_SPINLOCKS=y
+CONFIG_ARCH_USE_QUEUED_RWLOCKS=y
+CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=y
+CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE=y
+CONFIG_ARCH_HAS_SYSCALL_WRAPPER=y
+
+#
+# Executable file formats
+#
+# CONFIG_BINFMT_ELF is not set
+# CONFIG_BINFMT_SCRIPT is not set
+# CONFIG_BINFMT_MISC is not set
+CONFIG_COREDUMP=y
+# end of Executable file formats
+
+#
+# Memory Management options
+#
+# CONFIG_SWAP is not set
+
+#
+# SLAB allocator options
+#
+# CONFIG_SLAB is not set
+CONFIG_SLUB=y
+# CONFIG_SLAB_MERGE_DEFAULT is not set
+# CONFIG_SLAB_FREELIST_RANDOM is not set
+# CONFIG_SLAB_FREELIST_HARDENED is not set
+# CONFIG_SLUB_STATS is not set
+# end of SLAB allocator options
+
+# CONFIG_SHUFFLE_PAGE_ALLOCATOR is not set
+# CONFIG_COMPAT_BRK is not set
+CONFIG_SPARSEMEM=y
+CONFIG_SPARSEMEM_EXTREME=y
+CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
+# CONFIG_SPARSEMEM_VMEMMAP is not set
+CONFIG_HAVE_FAST_GUP=y
+CONFIG_EXCLUSIVE_SYSTEM_RAM=y
+CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
+# CONFIG_MEMORY_HOTPLUG is not set
+CONFIG_SPLIT_PTLOCK_CPUS=4
+CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK=y
+# CONFIG_COMPACTION is not set
+# CONFIG_PAGE_REPORTING is not set
+CONFIG_PHYS_ADDR_T_64BIT=y
+# CONFIG_KSM is not set
+CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
+CONFIG_ARCH_WANT_GENERAL_HUGETLB=y
+CONFIG_ARCH_WANTS_THP_SWAP=y
+# CONFIG_TRANSPARENT_HUGEPAGE is not set
+CONFIG_NEED_PER_CPU_KM=y
+CONFIG_NEED_PER_CPU_EMBED_FIRST_CHUNK=y
+CONFIG_NEED_PER_CPU_PAGE_FIRST_CHUNK=y
+CONFIG_HAVE_SETUP_PER_CPU_AREA=y
+# CONFIG_CMA is not set
+CONFIG_GENERIC_EARLY_IOREMAP=y
+# CONFIG_IDLE_PAGE_TRACKING is not set
+CONFIG_ARCH_HAS_CACHE_LINE_SIZE=y
+CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=y
+CONFIG_ARCH_HAS_PTE_DEVMAP=y
+CONFIG_ZONE_DMA=y
+CONFIG_ZONE_DMA32=y
+CONFIG_VM_EVENT_COUNTERS=y
+# CONFIG_PERCPU_STATS is not set
+
+#
+# GUP_TEST needs to have DEBUG_FS enabled
+#
+CONFIG_ARCH_HAS_PTE_SPECIAL=y
+CONFIG_SECRETMEM=y
+# CONFIG_ANON_VMA_NAME is not set
+# CONFIG_USERFAULTFD is not set
+# CONFIG_LRU_GEN is not set
+
+#
+# Data Access Monitoring
+#
+# CONFIG_DAMON is not set
+# end of Data Access Monitoring
+# end of Memory Management options
+
+# CONFIG_NET is not set
+
+#
+# Device Drivers
+#
+CONFIG_HAVE_EISA=y
+# CONFIG_EISA is not set
+CONFIG_HAVE_PCI=y
+# CONFIG_PCI is not set
+# CONFIG_PCCARD is not set
+
+#
+# Generic Driver Options
+#
+# CONFIG_UEVENT_HELPER is not set
+# CONFIG_DEVTMPFS is not set
+# CONFIG_STANDALONE is not set
+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
+
+#
+# Firmware loader
+#
+CONFIG_FW_LOADER=y
+CONFIG_EXTRA_FIRMWARE=""
+# CONFIG_FW_LOADER_USER_HELPER is not set
+# CONFIG_FW_LOADER_COMPRESS is not set
+# CONFIG_FW_UPLOAD is not set
+# end of Firmware loader
+
+CONFIG_ALLOW_DEV_COREDUMP=y
+CONFIG_GENERIC_CPU_AUTOPROBE=y
+CONFIG_GENERIC_CPU_VULNERABILITIES=y
+# end of Generic Driver Options
+
+#
+# Bus devices
+#
+# CONFIG_ARM_INTEGRATOR_LM is not set
+# CONFIG_BT1_APB is not set
+# CONFIG_BT1_AXI is not set
+# CONFIG_HISILICON_LPC is not set
+# CONFIG_INTEL_IXP4XX_EB is not set
+# CONFIG_QCOM_EBI2 is not set
+# CONFIG_MHI_BUS is not set
+# CONFIG_MHI_BUS_EP is not set
+# end of Bus devices
+
+#
+# Firmware Drivers
+#
+
+#
+# ARM System Control and Management Interface Protocol
+#
+# CONFIG_ARM_SCMI_PROTOCOL is not set
+# end of ARM System Control and Management Interface Protocol
+
+# CONFIG_EDD is not set
+CONFIG_FIRMWARE_MEMMAP=y
+# CONFIG_DMIID is not set
+# CONFIG_DMI_SYSFS is not set
+CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK=y
+# CONFIG_FW_CFG_SYSFS is not set
+# CONFIG_SYSFB_SIMPLEFB is not set
+# CONFIG_BCM47XX_NVRAM is not set
+# CONFIG_GOOGLE_FIRMWARE is not set
+
+#
+# Tegra firmware driver
+#
+# end of Tegra firmware driver
+# end of Firmware Drivers
+
+# CONFIG_GNSS is not set
+# CONFIG_MTD is not set
+# CONFIG_OF is not set
+CONFIG_ARCH_MIGHT_HAVE_PC_PARPORT=y
+# CONFIG_PARPORT is not set
+# CONFIG_BLK_DEV is not set
+
+#
+# NVME Support
+#
+# CONFIG_NVME_FC is not set
+# end of NVME Support
+
+#
+# Misc devices
+#
+# CONFIG_DUMMY_IRQ is not set
+# CONFIG_ATMEL_SSC is not set
+# CONFIG_ENCLOSURE_SERVICES is not set
+# CONFIG_QCOM_COINCELL is not set
+# CONFIG_SRAM is not set
+# CONFIG_XILINX_SDFEC is not set
+# CONFIG_C2PORT is not set
+
+#
+# EEPROM support
+#
+# CONFIG_EEPROM_93CX6 is not set
+# end of EEPROM support
+
+#
+# Texas Instruments shared transport line discipline
+#
+# end of Texas Instruments shared transport line discipline
+
+#
+# Altera FPGA firmware download module (requires I2C)
+#
+# CONFIG_ECHO is not set
+# CONFIG_PVPANIC is not set
+# end of Misc devices
+
+#
+# SCSI device support
+#
+CONFIG_SCSI_MOD=y
+# CONFIG_RAID_ATTRS is not set
+# CONFIG_SCSI is not set
+# end of SCSI device support
+
+# CONFIG_ATA is not set
+# CONFIG_MD is not set
+# CONFIG_TARGET_CORE is not set
+
+#
+# IEEE 1394 (FireWire) support
+#
+# CONFIG_FIREWIRE is not set
+# end of IEEE 1394 (FireWire) support
+
+# CONFIG_MACINTOSH_DRIVERS is not set
+
+#
+# Input device support
+#
+CONFIG_INPUT=y
+# CONFIG_INPUT_FF_MEMLESS is not set
+# CONFIG_INPUT_SPARSEKMAP is not set
+# CONFIG_INPUT_MATRIXKMAP is not set
+
+#
+# Userland interfaces
+#
+# CONFIG_INPUT_MOUSEDEV is not set
+# CONFIG_INPUT_JOYDEV is not set
+# CONFIG_INPUT_EVDEV is not set
+# CONFIG_INPUT_EVBUG is not set
+
+#
+# Input Device Drivers
+#
+# CONFIG_INPUT_KEYBOARD is not set
+# CONFIG_INPUT_MOUSE is not set
+# CONFIG_INPUT_JOYSTICK is not set
+# CONFIG_INPUT_TABLET is not set
+# CONFIG_INPUT_TOUCHSCREEN is not set
+# CONFIG_INPUT_MISC is not set
+# CONFIG_RMI4_CORE is not set
+
+#
+# Hardware I/O ports
+#
+# CONFIG_SERIO is not set
+CONFIG_ARCH_MIGHT_HAVE_PC_SERIO=y
+# CONFIG_GAMEPORT is not set
+# end of Hardware I/O ports
+# end of Input device support
+
+#
+# Character devices
+#
+CONFIG_TTY=y
+CONFIG_VT=y
+CONFIG_CONSOLE_TRANSLATIONS=y
+CONFIG_VT_CONSOLE=y
+CONFIG_HW_CONSOLE=y
+# CONFIG_VT_HW_CONSOLE_BINDING is not set
+CONFIG_UNIX98_PTYS=y
+# CONFIG_LEGACY_PTYS is not set
+# CONFIG_LDISC_AUTOLOAD is not set
+
+#
+# Serial drivers
+#
+# CONFIG_SERIAL_8250 is not set
+
+#
+# Non-8250 serial port support
+#
+# CONFIG_SERIAL_AMBA_PL010 is not set
+# CONFIG_SERIAL_MESON is not set
+# CONFIG_SERIAL_CLPS711X is not set
+# CONFIG_SERIAL_SAMSUNG is not set
+# CONFIG_SERIAL_TEGRA is not set
+# CONFIG_SERIAL_IMX is not set
+# CONFIG_SERIAL_UARTLITE is not set
+# CONFIG_SERIAL_SH_SCI is not set
+# CONFIG_SERIAL_MSM is not set
+# CONFIG_SERIAL_VT8500 is not set
+# CONFIG_SERIAL_OMAP is not set
+# CONFIG_SERIAL_LANTIQ is not set
+# CONFIG_SERIAL_SCCNXP is not set
+# CONFIG_SERIAL_TIMBERDALE is not set
+# CONFIG_SERIAL_BCM63XX is not set
+# CONFIG_SERIAL_ALTERA_JTAGUART is not set
+# CONFIG_SERIAL_ALTERA_UART is not set
+# CONFIG_SERIAL_MXS_AUART is not set
+# CONFIG_SERIAL_MPS2_UART is not set
+# CONFIG_SERIAL_ARC is not set
+# CONFIG_SERIAL_FSL_LPUART is not set
+# CONFIG_SERIAL_FSL_LINFLEXUART is not set
+# CONFIG_SERIAL_ST_ASC is not set
+# CONFIG_SERIAL_STM32 is not set
+# CONFIG_SERIAL_OWL is not set
+# CONFIG_SERIAL_RDA is not set
+# CONFIG_SERIAL_LITEUART is not set
+# CONFIG_SERIAL_SUNPLUS is not set
+# end of Serial drivers
+
+# CONFIG_SERIAL_NONSTANDARD is not set
+# CONFIG_NULL_TTY is not set
+# CONFIG_SERIAL_DEV_BUS is not set
+# CONFIG_VIRTIO_CONSOLE is not set
+# CONFIG_IPMI_HANDLER is not set
+# CONFIG_ASPEED_KCS_IPMI_BMC is not set
+# CONFIG_NPCM7XX_KCS_IPMI_BMC is not set
+# CONFIG_HW_RANDOM is not set
+# CONFIG_MWAVE is not set
+# CONFIG_DEVMEM is not set
+# CONFIG_NVRAM is not set
+# CONFIG_HANGCHECK_TIMER is not set
+# CONFIG_TCG_TPM is not set
+# CONFIG_TELCLOCK is not set
+# CONFIG_RANDOM_TRUST_CPU is not set
+# CONFIG_RANDOM_TRUST_BOOTLOADER is not set
+# end of Character devices
+
+#
+# I2C support
+#
+# CONFIG_I2C is not set
+# end of I2C support
+
+# CONFIG_I3C is not set
+# CONFIG_SPI is not set
+# CONFIG_SPMI is not set
+# CONFIG_HSI is not set
+# CONFIG_PPS is not set
+
+#
+# PTP clock support
+#
+CONFIG_PTP_1588_CLOCK_OPTIONAL=y
+
+#
+# Enable PHYLIB and NETWORK_PHY_TIMESTAMPING to see the additional clocks.
+#
+# end of PTP clock support
+
+# CONFIG_PINCTRL is not set
+# CONFIG_GPIOLIB is not set
+# CONFIG_W1 is not set
+# CONFIG_POWER_RESET is not set
+# CONFIG_POWER_SUPPLY is not set
+# CONFIG_HWMON is not set
+# CONFIG_THERMAL is not set
+# CONFIG_WATCHDOG is not set
+CONFIG_SSB_POSSIBLE=y
+# CONFIG_SSB is not set
+CONFIG_BCMA_POSSIBLE=y
+# CONFIG_BCMA is not set
+
+#
+# Multifunction device drivers
+#
+# CONFIG_MFD_SUN4I_GPADC is not set
+# CONFIG_MFD_AT91_USART is not set
+# CONFIG_MFD_MADERA is not set
+# CONFIG_MFD_EXYNOS_LPASS is not set
+# CONFIG_MFD_MXS_LRADC is not set
+# CONFIG_MFD_MX25_TSADC is not set
+# CONFIG_HTC_PASIC3 is not set
+# CONFIG_MFD_KEMPLD is not set
+# CONFIG_MFD_MT6397 is not set
+# CONFIG_MFD_PM8XXX is not set
+# CONFIG_MFD_SM501 is not set
+# CONFIG_ABX500_CORE is not set
+# CONFIG_MFD_SUN6I_PRCM is not set
+# CONFIG_MFD_SYSCON is not set
+# CONFIG_MFD_TI_AM335X_TSCADC is not set
+# CONFIG_MFD_TQMX86 is not set
+# CONFIG_MFD_STM32_LPTIMER is not set
+# CONFIG_MFD_STM32_TIMERS is not set
+# end of Multifunction device drivers
+
+# CONFIG_REGULATOR is not set
+# CONFIG_RC_CORE is not set
+
+#
+# CEC support
+#
+# CONFIG_MEDIA_CEC_SUPPORT is not set
+# end of CEC support
+
+# CONFIG_MEDIA_SUPPORT is not set
+
+#
+# Graphics support
+#
+# CONFIG_IMX_IPUV3_CORE is not set
+# CONFIG_DRM is not set
+
+#
+# ARM devices
+#
+# end of ARM devices
+
+#
+# Frame buffer Devices
+#
+# CONFIG_FB is not set
+# CONFIG_MMP_DISP is not set
+# end of Frame buffer Devices
+
+#
+# Backlight & LCD device support
+#
+# CONFIG_LCD_CLASS_DEVICE is not set
+# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
+# end of Backlight & LCD device support
+
+#
+# Console display driver support
+#
+CONFIG_VGA_CONSOLE=y
+CONFIG_DUMMY_CONSOLE=y
+CONFIG_DUMMY_CONSOLE_COLUMNS=80
+CONFIG_DUMMY_CONSOLE_ROWS=25
+# end of Console display driver support
+# end of Graphics support
+
+# CONFIG_SOUND is not set
+
+#
+# HID support
+#
+# CONFIG_HID is not set
+# end of HID support
+
+CONFIG_USB_OHCI_LITTLE_ENDIAN=y
+# CONFIG_USB_SUPPORT is not set
+# CONFIG_MMC is not set
+# CONFIG_MEMSTICK is not set
+# CONFIG_NEW_LEDS is not set
+# CONFIG_ACCESSIBILITY is not set
+CONFIG_EDAC_ATOMIC_SCRUB=y
+CONFIG_EDAC_SUPPORT=y
+CONFIG_RTC_LIB=y
+CONFIG_RTC_MC146818_LIB=y
+# CONFIG_RTC_CLASS is not set
+# CONFIG_DMADEVICES is not set
+
+#
+# DMABUF options
+#
+# CONFIG_SYNC_FILE is not set
+# CONFIG_DMABUF_HEAPS is not set
+# end of DMABUF options
+
+# CONFIG_AUXDISPLAY is not set
+# CONFIG_UIO is not set
+# CONFIG_VFIO is not set
+# CONFIG_VIRT_DRIVERS is not set
+# CONFIG_VIRTIO_MENU is not set
+# CONFIG_VHOST_MENU is not set
+
+#
+# Microsoft Hyper-V guest support
+#
+# end of Microsoft Hyper-V guest support
+
+# CONFIG_GREYBUS is not set
+# CONFIG_COMEDI is not set
+# CONFIG_STAGING is not set
+# CONFIG_CHROME_PLATFORMS is not set
+# CONFIG_MELLANOX_PLATFORM is not set
+# CONFIG_OLPC_XO175 is not set
+# CONFIG_SURFACE_PLATFORMS is not set
+# CONFIG_X86_PLATFORM_DEVICES is not set
+# CONFIG_COMMON_CLK is not set
+# CONFIG_HWSPINLOCK is not set
+
+#
+# Clock Source drivers
+#
+CONFIG_CLKEVT_I8253=y
+CONFIG_I8253_LOCK=y
+CONFIG_CLKBLD_I8253=y
+# CONFIG_BCM2835_TIMER is not set
+# CONFIG_BCM_KONA_TIMER is not set
+# CONFIG_DAVINCI_TIMER is not set
+# CONFIG_DIGICOLOR_TIMER is not set
+# CONFIG_OMAP_DM_TIMER is not set
+# CONFIG_DW_APB_TIMER is not set
+# CONFIG_FTTMR010_TIMER is not set
+# CONFIG_IXP4XX_TIMER is not set
+# CONFIG_MESON6_TIMER is not set
+# CONFIG_OWL_TIMER is not set
+# CONFIG_RDA_TIMER is not set
+# CONFIG_SUN4I_TIMER is not set
+# CONFIG_TEGRA_TIMER is not set
+# CONFIG_VT8500_TIMER is not set
+# CONFIG_NPCM7XX_TIMER is not set
+# CONFIG_ASM9260_TIMER is not set
+# CONFIG_CLKSRC_DBX500_PRCMU is not set
+# CONFIG_CLPS711X_TIMER is not set
+# CONFIG_MXS_TIMER is not set
+# CONFIG_NSPIRE_TIMER is not set
+# CONFIG_INTEGRATOR_AP_TIMER is not set
+# CONFIG_CLKSRC_PISTACHIO is not set
+# CONFIG_CLKSRC_STM32_LP is not set
+# CONFIG_ARMV7M_SYSTICK is not set
+# CONFIG_ATMEL_PIT is not set
+# CONFIG_ATMEL_ST is not set
+# CONFIG_CLKSRC_SAMSUNG_PWM is not set
+# CONFIG_FSL_FTM_TIMER is not set
+# CONFIG_OXNAS_RPS_TIMER is not set
+# CONFIG_MTK_TIMER is not set
+# CONFIG_SH_TIMER_CMT is not set
+# CONFIG_SH_TIMER_MTU2 is not set
+# CONFIG_RENESAS_OSTM is not set
+# CONFIG_SH_TIMER_TMU is not set
+# CONFIG_EM_TIMER_STI is not set
+# CONFIG_CLKSRC_PXA is not set
+# CONFIG_TIMER_IMX_SYS_CTR is not set
+# CONFIG_CLKSRC_ST_LPC is not set
+# CONFIG_GXP_TIMER is not set
+# CONFIG_MSC313E_TIMER is not set
+# CONFIG_MICROCHIP_PIT64B is not set
+# end of Clock Source drivers
+
+# CONFIG_MAILBOX is not set
+# CONFIG_IOMMU_SUPPORT is not set
+
+#
+# Remoteproc drivers
+#
+# CONFIG_REMOTEPROC is not set
+# end of Remoteproc drivers
+
+#
+# Rpmsg drivers
+#
+# CONFIG_RPMSG_VIRTIO is not set
+# end of Rpmsg drivers
+
+#
+# SOC (System On Chip) specific Drivers
+#
+
+#
+# Amlogic SoC drivers
+#
+# CONFIG_MESON_CANVAS is not set
+# CONFIG_MESON_CLK_MEASURE is not set
+# CONFIG_MESON_GX_SOCINFO is not set
+# CONFIG_MESON_MX_SOCINFO is not set
+# end of Amlogic SoC drivers
+
+#
+# Apple SoC drivers
+#
+# CONFIG_APPLE_SART is not set
+# end of Apple SoC drivers
+
+#
+# ASPEED SoC drivers
+#
+# CONFIG_ASPEED_LPC_CTRL is not set
+# CONFIG_ASPEED_LPC_SNOOP is not set
+# CONFIG_ASPEED_UART_ROUTING is not set
+# CONFIG_ASPEED_P2A_CTRL is not set
+# CONFIG_ASPEED_SOCINFO is not set
+# end of ASPEED SoC drivers
+
+# CONFIG_AT91_SOC_ID is not set
+# CONFIG_AT91_SOC_SFR is not set
+
+#
+# Broadcom SoC drivers
+#
+# CONFIG_SOC_BCM63XX is not set
+# CONFIG_SOC_BRCMSTB is not set
+# end of Broadcom SoC drivers
+
+#
+# NXP/Freescale QorIQ SoC drivers
+#
+# end of NXP/Freescale QorIQ SoC drivers
+
+#
+# fujitsu SoC drivers
+#
+# end of fujitsu SoC drivers
+
+#
+# i.MX SoC drivers
+#
+# CONFIG_SOC_IMX8M is not set
+# CONFIG_SOC_IMX9 is not set
+# end of i.MX SoC drivers
+
+#
+# IXP4xx SoC drivers
+#
+# CONFIG_IXP4XX_QMGR is not set
+# CONFIG_IXP4XX_NPE is not set
+# end of IXP4xx SoC drivers
+
+#
+# Enable LiteX SoC Builder specific drivers
+#
+# CONFIG_LITEX_SOC_CONTROLLER is not set
+# end of Enable LiteX SoC Builder specific drivers
+
+#
+# MediaTek SoC drivers
+#
+# CONFIG_MTK_CMDQ is not set
+# CONFIG_MTK_DEVAPC is not set
+# CONFIG_MTK_INFRACFG is not set
+# CONFIG_MTK_MMSYS is not set
+# end of MediaTek SoC drivers
+
+#
+# Qualcomm SoC drivers
+#
+# CONFIG_QCOM_GENI_SE is not set
+# CONFIG_QCOM_GSBI is not set
+# CONFIG_QCOM_LLCC is not set
+# CONFIG_QCOM_RPMH is not set
+# CONFIG_QCOM_SPM is not set
+# CONFIG_QCOM_ICC_BWMON is not set
+# end of Qualcomm SoC drivers
+
+# CONFIG_SOC_RENESAS is not set
+# CONFIG_ROCKCHIP_GRF is not set
+# CONFIG_SOC_SAMSUNG is not set
+# CONFIG_SOC_TI is not set
+# CONFIG_UX500_SOC_ID is not set
+
+#
+# Xilinx SoC drivers
+#
+# end of Xilinx SoC drivers
+# end of SOC (System On Chip) specific Drivers
+
+# CONFIG_PM_DEVFREQ is not set
+# CONFIG_EXTCON is not set
+# CONFIG_MEMORY is not set
+# CONFIG_IIO is not set
+# CONFIG_PWM is not set
+
+#
+# IRQ chip support
+#
+# CONFIG_AL_FIC is not set
+# CONFIG_RENESAS_INTC_IRQPIN is not set
+# CONFIG_RENESAS_IRQC is not set
+# CONFIG_RENESAS_RZA1_IRQC is not set
+# CONFIG_RENESAS_RZG2L_IRQC is not set
+# CONFIG_SL28CPLD_INTC is not set
+# CONFIG_TS4800_IRQ is not set
+# CONFIG_INGENIC_TCU_IRQ is not set
+# CONFIG_IRQ_UNIPHIER_AIDET is not set
+# CONFIG_MESON_IRQ_GPIO is not set
+# CONFIG_IMX_IRQSTEER is not set
+# CONFIG_IMX_INTMUX is not set
+# CONFIG_EXYNOS_IRQ_COMBINER is not set
+# CONFIG_MST_IRQ is not set
+# CONFIG_MCHP_EIC is not set
+# CONFIG_SUNPLUS_SP7021_INTC is not set
+# end of IRQ chip support
+
+# CONFIG_IPACK_BUS is not set
+# CONFIG_RESET_CONTROLLER is not set
+
+#
+# PHY Subsystem
+#
+# CONFIG_GENERIC_PHY is not set
+# CONFIG_PHY_PISTACHIO_USB is not set
+# CONFIG_PHY_CAN_TRANSCEIVER is not set
+
+#
+# PHY drivers for Broadcom platforms
+#
+# CONFIG_PHY_BCM63XX_USBH is not set
+# CONFIG_BCM_KONA_USB2_PHY is not set
+# end of PHY drivers for Broadcom platforms
+
+# CONFIG_PHY_HI6220_USB is not set
+# CONFIG_PHY_HI3660_USB is not set
+# CONFIG_PHY_HI3670_USB is not set
+# CONFIG_PHY_HI3670_PCIE is not set
+# CONFIG_PHY_HISTB_COMBPHY is not set
+# CONFIG_PHY_HISI_INNO_USB2 is not set
+# CONFIG_PHY_PXA_28NM_HSIC is not set
+# CONFIG_PHY_PXA_28NM_USB2 is not set
+# CONFIG_PHY_PXA_USB is not set
+# CONFIG_PHY_MMP3_USB is not set
+# CONFIG_PHY_MMP3_HSIC is not set
+# CONFIG_PHY_MT7621_PCI is not set
+# CONFIG_PHY_RALINK_USB is not set
+# CONFIG_PHY_RCAR_GEN3_USB3 is not set
+# CONFIG_PHY_ROCKCHIP_DPHY_RX0 is not set
+# CONFIG_PHY_ROCKCHIP_PCIE is not set
+# CONFIG_PHY_ROCKCHIP_SNPS_PCIE3 is not set
+# CONFIG_PHY_EXYNOS_MIPI_VIDEO is not set
+# CONFIG_PHY_SAMSUNG_USB2 is not set
+# CONFIG_PHY_ST_SPEAR1310_MIPHY is not set
+# CONFIG_PHY_ST_SPEAR1340_MIPHY is not set
+# CONFIG_PHY_TEGRA194_P2U is not set
+# CONFIG_PHY_DA8XX_USB is not set
+# CONFIG_OMAP_CONTROL_PHY is not set
+# CONFIG_TI_PIPE3 is not set
+# CONFIG_PHY_INTEL_KEEMBAY_EMMC is not set
+# CONFIG_PHY_INTEL_KEEMBAY_USB is not set
+# CONFIG_PHY_INTEL_LGM_EMMC is not set
+# CONFIG_PHY_XILINX_ZYNQMP is not set
+# end of PHY Subsystem
+
+# CONFIG_POWERCAP is not set
+# CONFIG_MCB is not set
+
+#
+# Performance monitor support
+#
+# CONFIG_ARM_CCN is not set
+# CONFIG_ARM_CMN is not set
+# CONFIG_FSL_IMX8_DDR_PMU is not set
+# CONFIG_XGENE_PMU is not set
+# CONFIG_ARM_DMC620_PMU is not set
+# CONFIG_MARVELL_CN10K_TAD_PMU is not set
+# CONFIG_ALIBABA_UNCORE_DRW_PMU is not set
+# CONFIG_MARVELL_CN10K_DDR_PMU is not set
+# end of Performance monitor support
+
+# CONFIG_RAS is not set
+
+#
+# Android
+#
+# CONFIG_ANDROID_BINDER_IPC is not set
+# end of Android
+
+# CONFIG_DAX is not set
+# CONFIG_NVMEM is not set
+
+#
+# HW tracing support
+#
+# CONFIG_STM is not set
+# CONFIG_INTEL_TH is not set
+# end of HW tracing support
+
+# CONFIG_FPGA is not set
+# CONFIG_TEE is not set
+# CONFIG_SIOX is not set
+# CONFIG_SLIMBUS is not set
+# CONFIG_INTERCONNECT is not set
+# CONFIG_COUNTER is not set
+# CONFIG_PECI is not set
+# CONFIG_HTE is not set
+# end of Device Drivers
+
+#
+# File systems
+#
+CONFIG_DCACHE_WORD_ACCESS=y
+# CONFIG_VALIDATE_FS_PARSER is not set
+# CONFIG_EXT2_FS is not set
+# CONFIG_EXT3_FS is not set
+# CONFIG_EXT4_FS is not set
+# CONFIG_REISERFS_FS is not set
+# CONFIG_JFS_FS is not set
+# CONFIG_XFS_FS is not set
+# CONFIG_GFS2_FS is not set
+# CONFIG_BTRFS_FS is not set
+# CONFIG_NILFS2_FS is not set
+# CONFIG_F2FS_FS is not set
+CONFIG_EXPORTFS=y
+# CONFIG_EXPORTFS_BLOCK_OPS is not set
+CONFIG_FILE_LOCKING=y
+# CONFIG_FS_ENCRYPTION is not set
+# CONFIG_FS_VERITY is not set
+# CONFIG_DNOTIFY is not set
+# CONFIG_INOTIFY_USER is not set
+# CONFIG_FANOTIFY is not set
+# CONFIG_QUOTA is not set
+# CONFIG_AUTOFS4_FS is not set
+# CONFIG_AUTOFS_FS is not set
+# CONFIG_FUSE_FS is not set
+# CONFIG_OVERLAY_FS is not set
+
+#
+# Caches
+#
+# CONFIG_FSCACHE is not set
+# end of Caches
+
+#
+# CD-ROM/DVD Filesystems
+#
+# CONFIG_ISO9660_FS is not set
+# CONFIG_UDF_FS is not set
+# end of CD-ROM/DVD Filesystems
+
+#
+# DOS/FAT/EXFAT/NT Filesystems
+#
+# CONFIG_MSDOS_FS is not set
+# CONFIG_VFAT_FS is not set
+# CONFIG_EXFAT_FS is not set
+# CONFIG_NTFS_FS is not set
+# CONFIG_NTFS3_FS is not set
+# end of DOS/FAT/EXFAT/NT Filesystems
+
+#
+# Pseudo filesystems
+#
+CONFIG_PROC_FS=y
+# CONFIG_PROC_KCORE is not set
+CONFIG_PROC_SYSCTL=y
+CONFIG_PROC_PAGE_MONITOR=y
+# CONFIG_PROC_CHILDREN is not set
+CONFIG_PROC_PID_ARCH_STATUS=y
+CONFIG_KERNFS=y
+CONFIG_SYSFS=y
+# CONFIG_TMPFS is not set
+# CONFIG_HUGETLBFS is not set
+CONFIG_ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP=y
+CONFIG_ARCH_HAS_GIGANTIC_PAGE=y
+# CONFIG_CONFIGFS_FS is not set
+# end of Pseudo filesystems
+
+# CONFIG_MISC_FILESYSTEMS is not set
+# CONFIG_NLS is not set
+# CONFIG_UNICODE is not set
+CONFIG_IO_WQ=y
+# end of File systems
+
+#
+# Security options
+#
+# CONFIG_KEYS is not set
+# CONFIG_SECURITY_DMESG_RESTRICT is not set
+# CONFIG_SECURITY is not set
+# CONFIG_SECURITYFS is not set
+CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
+# CONFIG_HARDENED_USERCOPY is not set
+# CONFIG_FORTIFY_SOURCE is not set
+# CONFIG_STATIC_USERMODEHELPER is not set
+CONFIG_DEFAULT_SECURITY_DAC=y
+CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,bpf"
+
+#
+# Kernel hardening options
+#
+
+#
+# Memory initialization
+#
+CONFIG_INIT_STACK_NONE=y
+# CONFIG_INIT_ON_ALLOC_DEFAULT_ON is not set
+# CONFIG_INIT_ON_FREE_DEFAULT_ON is not set
+CONFIG_CC_HAS_ZERO_CALL_USED_REGS=y
+# CONFIG_ZERO_CALL_USED_REGS is not set
+# end of Memory initialization
+
+CONFIG_RANDSTRUCT_NONE=y
+# end of Kernel hardening options
+# end of Security options
+
+# CONFIG_CRYPTO is not set
+
+#
+# Library routines
+#
+# CONFIG_PACKING is not set
+CONFIG_BITREVERSE=y
+CONFIG_GENERIC_STRNCPY_FROM_USER=y
+CONFIG_GENERIC_STRNLEN_USER=y
+# CONFIG_CORDIC is not set
+# CONFIG_PRIME_NUMBERS is not set
+CONFIG_GENERIC_PCI_IOMAP=y
+CONFIG_GENERIC_IOMAP=y
+CONFIG_ARCH_USE_CMPXCHG_LOCKREF=y
+CONFIG_ARCH_HAS_FAST_MULTIPLIER=y
+CONFIG_ARCH_USE_SYM_ANNOTATIONS=y
+
+#
+# Crypto library routines
+#
+CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
+# CONFIG_CRYPTO_LIB_CHACHA is not set
+# CONFIG_CRYPTO_LIB_CURVE25519 is not set
+CONFIG_CRYPTO_LIB_POLY1305_RSIZE=11
+# CONFIG_CRYPTO_LIB_POLY1305 is not set
+# end of Crypto library routines
+
+# CONFIG_CRC_CCITT is not set
+# CONFIG_CRC16 is not set
+# CONFIG_CRC_T10DIF is not set
+# CONFIG_CRC64_ROCKSOFT is not set
+# CONFIG_CRC_ITU_T is not set
+CONFIG_CRC32=y
+# CONFIG_CRC32_SELFTEST is not set
+CONFIG_CRC32_SLICEBY8=y
+# CONFIG_CRC32_SLICEBY4 is not set
+# CONFIG_CRC32_SARWATE is not set
+# CONFIG_CRC32_BIT is not set
+# CONFIG_CRC64 is not set
+# CONFIG_CRC4 is not set
+# CONFIG_CRC7 is not set
+# CONFIG_LIBCRC32C is not set
+# CONFIG_CRC8 is not set
+# CONFIG_RANDOM32_SELFTEST is not set
+# CONFIG_XZ_DEC is not set
+CONFIG_HAS_IOMEM=y
+CONFIG_HAS_IOPORT_MAP=y
+CONFIG_HAS_DMA=y
+CONFIG_NEED_SG_DMA_LENGTH=y
+CONFIG_NEED_DMA_MAP_STATE=y
+CONFIG_ARCH_DMA_ADDR_T_64BIT=y
+CONFIG_SWIOTLB=y
+# CONFIG_DMA_API_DEBUG is not set
+# CONFIG_IRQ_POLL is not set
+CONFIG_HAVE_GENERIC_VDSO=y
+CONFIG_GENERIC_GETTIMEOFDAY=y
+CONFIG_GENERIC_VDSO_TIME_NS=y
+CONFIG_ARCH_HAS_PMEM_API=y
+CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE=y
+CONFIG_ARCH_HAS_COPY_MC=y
+CONFIG_ARCH_STACKWALK=y
+CONFIG_STACKDEPOT=y
+CONFIG_SBITMAP=y
+# CONFIG_PARMAN is not set
+# CONFIG_OBJAGG is not set
+# end of Library routines
+
+#
+# Kernel hacking
+#
+
+#
+# printk and dmesg options
+#
+# CONFIG_PRINTK_TIME is not set
+# CONFIG_PRINTK_CALLER is not set
+# CONFIG_STACKTRACE_BUILD_ID is not set
+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7
+CONFIG_CONSOLE_LOGLEVEL_QUIET=4
+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4
+# CONFIG_DYNAMIC_DEBUG is not set
+# CONFIG_DYNAMIC_DEBUG_CORE is not set
+# CONFIG_SYMBOLIC_ERRNAME is not set
+CONFIG_DEBUG_BUGVERBOSE=y
+# end of printk and dmesg options
+
+# CONFIG_DEBUG_KERNEL is not set
+
+#
+# Compile-time checks and compiler options
+#
+CONFIG_AS_HAS_NON_CONST_LEB128=y
+CONFIG_FRAME_WARN=2048
+# CONFIG_STRIP_ASM_SYMS is not set
+# CONFIG_HEADERS_INSTALL is not set
+CONFIG_DEBUG_SECTION_MISMATCH=y
+CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+CONFIG_OBJTOOL=y
+# end of Compile-time checks and compiler options
+
+#
+# Generic Kernel Debugging Instruments
+#
+# CONFIG_MAGIC_SYSRQ is not set
+# CONFIG_DEBUG_FS is not set
+CONFIG_HAVE_ARCH_KGDB=y
+CONFIG_ARCH_HAS_UBSAN_SANITIZE_ALL=y
+# CONFIG_UBSAN is not set
+CONFIG_HAVE_ARCH_KCSAN=y
+CONFIG_HAVE_KCSAN_COMPILER=y
+# end of Generic Kernel Debugging Instruments
+
+#
+# Networking Debugging
+#
+# end of Networking Debugging
+
+#
+# Memory Debugging
+#
+# CONFIG_PAGE_EXTENSION is not set
+CONFIG_SLUB_DEBUG=y
+# CONFIG_SLUB_DEBUG_ON is not set
+# CONFIG_PAGE_TABLE_CHECK is not set
+# CONFIG_PAGE_POISONING is not set
+# CONFIG_DEBUG_RODATA_TEST is not set
+CONFIG_ARCH_HAS_DEBUG_WX=y
+# CONFIG_DEBUG_WX is not set
+CONFIG_GENERIC_PTDUMP=y
+CONFIG_HAVE_DEBUG_KMEMLEAK=y
+CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE=y
+# CONFIG_DEBUG_VM_PGTABLE is not set
+CONFIG_ARCH_HAS_DEBUG_VIRTUAL=y
+CONFIG_DEBUG_MEMORY_INIT=y
+CONFIG_ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP=y
+CONFIG_HAVE_ARCH_KASAN=y
+CONFIG_HAVE_ARCH_KASAN_VMALLOC=y
+CONFIG_CC_HAS_KASAN_GENERIC=y
+CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
+# CONFIG_KASAN is not set
+CONFIG_HAVE_ARCH_KFENCE=y
+# CONFIG_KFENCE is not set
+CONFIG_HAVE_ARCH_KMSAN=y
+# end of Memory Debugging
+
+#
+# Debug Oops, Lockups and Hangs
+#
+# CONFIG_PANIC_ON_OOPS is not set
+CONFIG_PANIC_ON_OOPS_VALUE=0
+CONFIG_PANIC_TIMEOUT=0
+CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=y
+# end of Debug Oops, Lockups and Hangs
+
+#
+# Scheduler Debugging
+#
+# end of Scheduler Debugging
+
+# CONFIG_DEBUG_TIMEKEEPING is not set
+
+#
+# Lock Debugging (spinlocks, mutexes, etc...)
+#
+CONFIG_LOCK_DEBUGGING_SUPPORT=y
+# CONFIG_WW_MUTEX_SELFTEST is not set
+# end of Lock Debugging (spinlocks, mutexes, etc...)
+
+# CONFIG_DEBUG_IRQFLAGS is not set
+CONFIG_STACKTRACE=y
+# CONFIG_WARN_ALL_UNSEEDED_RANDOM is not set
+
+#
+# Debug kernel data structures
+#
+# CONFIG_BUG_ON_DATA_CORRUPTION is not set
+# end of Debug kernel data structures
+
+#
+# RCU Debugging
+#
+# end of RCU Debugging
+
+CONFIG_USER_STACKTRACE_SUPPORT=y
+CONFIG_HAVE_RETHOOK=y
+CONFIG_HAVE_FUNCTION_TRACER=y
+CONFIG_HAVE_DYNAMIC_FTRACE=y
+CONFIG_HAVE_DYNAMIC_FTRACE_WITH_REGS=y
+CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
+CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS=y
+CONFIG_HAVE_DYNAMIC_FTRACE_NO_PATCHABLE=y
+CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
+CONFIG_HAVE_FENTRY=y
+CONFIG_HAVE_OBJTOOL_MCOUNT=y
+CONFIG_HAVE_C_RECORDMCOUNT=y
+CONFIG_HAVE_BUILDTIME_MCOUNT_SORT=y
+CONFIG_TRACING_SUPPORT=y
+# CONFIG_FTRACE is not set
+# CONFIG_SAMPLES is not set
+CONFIG_HAVE_SAMPLE_FTRACE_DIRECT=y
+CONFIG_HAVE_SAMPLE_FTRACE_DIRECT_MULTI=y
+CONFIG_ARCH_HAS_DEVMEM_IS_ALLOWED=y
+
+#
+# x86 Debugging
+#
+# CONFIG_X86_VERBOSE_BOOTUP is not set
+CONFIG_EARLY_PRINTK=y
+CONFIG_HAVE_MMIOTRACE_SUPPORT=y
+CONFIG_IO_DELAY_0X80=y
+# CONFIG_IO_DELAY_0XED is not set
+# CONFIG_IO_DELAY_UDELAY is not set
+# CONFIG_IO_DELAY_NONE is not set
+CONFIG_UNWINDER_ORC=y
+# CONFIG_UNWINDER_FRAME_POINTER is not set
+# end of x86 Debugging
+
+#
+# Kernel Testing and Coverage
+#
+# CONFIG_KUNIT is not set
+CONFIG_ARCH_HAS_KCOV=y
+CONFIG_CC_HAS_SANCOV_TRACE_PC=y
+# CONFIG_KCOV is not set
+# CONFIG_RUNTIME_TESTING_MENU is not set
+CONFIG_ARCH_USE_MEMTEST=y
+# CONFIG_MEMTEST is not set
+# end of Kernel Testing and Coverage
+
+#
+# Rust hacking
+#
+# end of Rust hacking
+
+CONFIG_WARN_MISSING_DOCUMENTS=y
+CONFIG_WARN_ABI_ERRORS=y
+# end of Kernel hacking
+
+--t2ImwfqtqdzpjxFL--
