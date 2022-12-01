@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4283163F5CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4978063F5D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 18:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiLAQ7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
+        id S229681AbiLAQ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiLAQ7J (ORCPT
+        with ESMTP id S229905AbiLAQ74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:59:09 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0249F4AC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:59:08 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id fy37so5611245ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:59:08 -0800 (PST)
+        Thu, 1 Dec 2022 11:59:56 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A258FA555B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:59:54 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id vp12so5640530ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:59:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JAMpMHrp1O/RuJopeXaPzD5eZ1V6ZQmoOR0qBVYhFMA=;
-        b=L4sYRD43/mv/STHpswugH9M/06nyMnRsf/uSTIa/sr0RtkjqB0r3wyI3XGZ+VoyBDb
-         lXkGtLvucaz9S4daD1J2qIqQLeUu0YZjZ/Bz1zBVLAZp2RYVO1fxDMMCKseQ0ItuKD8k
-         OKEXDkaGm6+aGhcBbW/F1B4eXADhp2bKm4yxGm4I6mNi+eNc3fhvu82cma3wlx2gxZwg
-         tKbi1Y/Qhlb4bpyEKEbiJniyPw/7RMi9Tpl6zQ1JEmCzq0NBKWV+KMz38+is2+76ixkJ
-         qUuuQRhuiNzGxcP9tMDOZaTgGCGsU5/wRkKhCjzKa88eil2JgFDiNAzj6S4vabbcXjju
-         1CAw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MxGqyJNrUGujXMX18s1mjL2u0fDn76vkmShKgy0/GIg=;
+        b=ghr+FqNiUeaxQ4O+hMb0CJ0v2KjgGXRQdIdZ9HUrcmEmVzMRFeNhxJgjR8fv8C6DY3
+         S8jsWUxHH/1OOrICy7P7eElJ4AaEhhxQXjEcjRoRy45Mt1OX+1sj/Uh8wQp7Dg7F9CcF
+         j9bMEGrsEEnBzPqz59AYJUw+Uad1SiZ3Mbot3iyudLo9EHr1Be1w3cbope15tyviU+AU
+         su9Te/qPn/N8XSmNGL/LSy0ar9cqpuKYiw3fcAlj1Pr8j8GiuXoYNRH5mS4CYtxiwtYF
+         AGbIHMP3Na7kl92PlvFHnhvehgboRsd1vbFuJXZhNcbZY+RKO8QqfHP85MPp+3pvLYwf
+         PJJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JAMpMHrp1O/RuJopeXaPzD5eZ1V6ZQmoOR0qBVYhFMA=;
-        b=0dFHsgFofeYVKOlZLR6T0TD8Ei16wftfK+Hzs5zzNittruq40kTvNQEXoWfj1tvQ8h
-         bEPOOpCDZvbcZhHep2yC8lNS+xuRvM7f7fn38KvpoT2LhaWmfXzKv3IK5mpJbmPyppTm
-         Zvb1dGW4q1iyDOqRbsURBcWjXQi2kl1U15OiG/kvaRsxadUIaSAjbG0wpZNMq+7v1rp9
-         6UMlB/rwLER/wNFbrMDk4u51J0TtimI56nXH97j/Y17aPTjPrzS8tFRYkUtmtiO0/+bo
-         EgOCHhn2hvQOrrk6H6QRRbpkT5/L+SwIzkJinMRqq7dx7O8bj58Qcz1TOPAVadabCrJM
-         n5pg==
-X-Gm-Message-State: ANoB5pkke8uQ8RaszLdHowxLcN1ox/2/otlu9f/aXKAucy3+CsDVnSIa
-        PqWN4gZAASkUqB6urcudDwtiVIKhzYhy9KiE03k=
-X-Google-Smtp-Source: AA0mqf5OdU5NSsoVseHRZEVNIou2O9oDrHgwA3IMPzdBULQBQIrL22YMGj+KNI5ghWLh4L/Dg5jLGnopMi4fvBCA62k=
-X-Received: by 2002:a17:906:2ac3:b0:7ad:f2f9:2b49 with SMTP id
- m3-20020a1709062ac300b007adf2f92b49mr43484840eje.94.1669913947205; Thu, 01
- Dec 2022 08:59:07 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MxGqyJNrUGujXMX18s1mjL2u0fDn76vkmShKgy0/GIg=;
+        b=IeI4bg1L6DMhDvZhyPoaEI5h7nLyIypRf8+/IpyCD94QcCCcrpL9+HA6UaDaokLrT1
+         LnfRBcoR0S3CAcLp9FQvWOzIe30Kt0WQB1z/n1OB+3IIgiGLHSD7uvuaqT11WsFz6dKm
+         dlmWTHzyqR+fm6Gt5Vg9Km/k/RAU3HgK4R8fCZnPv4FszNrDRBd2sE4ERPr+H2ktOcyQ
+         Lb3v1GVwTh060ItUqdQS9fUs5+eagDy4dJUBmg3IupP3fNoD6C7RTC5BpnBjfHx0U9FM
+         oESxj5Ug2zbeBX5nFAvnvkm7EEYLccAeXgLjReirnVJtuaEyDdv/ENRkR/qtj1fkNRhy
+         jW6Q==
+X-Gm-Message-State: ANoB5pnj4OegS9W4cvIvMdxe05RbHT0O4iRpysWLFDwHjdDByEpStvq3
+        NpprfJRxhyYq7+5vzqP6wsovOw==
+X-Google-Smtp-Source: AA0mqf4sv2kZ4cYbl4xbOf8gb/qBFcNRIjTbJ1RX+Ei7CBmvtdncQ0lBGkaIDZJVRJMUY7sDX1V4Cw==
+X-Received: by 2002:a17:906:d8a6:b0:7c0:b741:8b61 with SMTP id qc6-20020a170906d8a600b007c0b7418b61mr1861040ejb.625.1669913992984;
+        Thu, 01 Dec 2022 08:59:52 -0800 (PST)
+Received: from blmsp ([2001:4091:a245:805c:9cf4:fdb8:bb61:5f4e])
+        by smtp.gmail.com with ESMTPSA id tz4-20020a170907c78400b007c0b530f3cfsm652511ejc.72.2022.12.01.08.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 08:59:52 -0800 (PST)
+Date:   Thu, 1 Dec 2022 17:59:51 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
+ level interrupt
+Message-ID: <20221201165951.5a4srb7zjrsdr3vd@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-5-msp@baylibre.com>
+ <20221130171715.nujptzwnut7silbm@pengutronix.de>
+ <20221201082521.3tqevaygz4nhw52u@blmsp>
+ <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
+ <20221201101220.r63fvussavailwh5@blmsp>
+ <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
 MIME-Version: 1.0
-References: <20221121104403.1545f9b5@gandalf.local.home> <Y3vSQo85ofkfD/L8@zn.tnic>
- <CAADnVQLJFnu6gARdZ7ckgxeGaSv70jHBiQo+W=zDKO0-ELFGcQ@mail.gmail.com>
- <Y3ymzAYRyH5IWEe/@zn.tnic> <3fa8ec60-dd96-c41f-ea46-8856bf855949@meta.com>
- <20221122132905.12a8d5ad@gandalf.local.home> <a53e8c6d-b0e5-72bf-1aba-07609c9cf1bf@meta.com>
- <20221130143719.07e36277d1471b83e9a1b627@linux-foundation.org>
-In-Reply-To: <20221130143719.07e36277d1471b83e9a1b627@linux-foundation.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 1 Dec 2022 08:58:55 -0800
-Message-ID: <CAADnVQ+KLXPhowdBZq0PvGOq5tv4ovNtNCvGBXHQBkVbz4UVkg@mail.gmail.com>
-Subject: Re: [PATCH] error-injection: Add prompt for function error injection
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Chris Mason <clm@meta.com>, Steven Rostedt <rostedt@goodmis.org>,
-        Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,59 +79,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 2:37 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 22 Nov 2022 14:51:08 -0500 Chris Mason <clm@meta.com> wrote:
->
-> > On 11/22/22 1:29 PM, Steven Rostedt wrote:
-> > > On Tue, 22 Nov 2022 12:42:33 -0500
-> > > Chris Mason <clm@meta.com> wrote:
-> > >
-> > >> On 11/22/22 5:39 AM, Borislav Petkov wrote:
-> > >>> On Mon, Nov 21, 2022 at 03:36:08PM -0800, Alexei Starovoitov wrote:
-> > >>>> The commit log is bogus and the lack of understanding what
->
-> Why am I not understanding the controversy here?  With this patch
-> applied, people who want function error injection enable
-> CONFIG_FUNCTION_ERROR_INJECTION and people who don't want it don't do
-> that.
->
-> Alexei, can you please suggest a less bogus changelog for this?
+On Thu, Dec 01, 2022 at 12:00:33PM +0100, Marc Kleine-Budde wrote:
+> On 01.12.2022 11:12:20, Markus Schneider-Pargmann wrote:
+> > > > For the upcoming receive side patch I already added a hrtimer. I may try
+> > > > to use the same timer for both directions as it is going to do the exact
+> > > > same thing in both cases (call the interrupt routine). Of course that
+> > > > depends on the details of the coalescing support. Any objections on
+> > > > that?
+> > > 
+> > > For the mcp251xfd I implemented the RX and TX coalescing independent of
+> > > each other and made it configurable via ethtool's IRQ coalescing
+> > > options.
+> > > 
+> > > The hardware doesn't support any timeouts and only FIFO not empty, FIFO
+> > > half full and FIFO full IRQs and the on chip RAM for mailboxes is rather
+> > > limited. I think the mcan core has the same limitations.
+> > 
+> > Yes and no, the mcan core provides watermark levels so it has more
+> > options, but there is no hardware timer as well (at least I didn't see
+> > anything usable).
+> 
+> Are there any limitations to the water mark level?
 
-People are using ALLOW_ERROR_INJECTION to allowlist kernel functions
-where bpf progs can attach.
-For example in the linux-next:
-git grep ALLOW_ERROR_INJECTION
-drivers/hid/bpf/hid_bpf_dispatch.c:ALLOW_ERROR_INJECTION(hid_bpf_device_event,
-ERRNO);
-drivers/hid/bpf/hid_bpf_dispatch.c:ALLOW_ERROR_INJECTION(hid_bpf_rdesc_fixup,
-ERRNO);
-drivers/hid/bpf/hid_bpf_jmp_table.c:ALLOW_ERROR_INJECTION(__hid_bpf_tail_call,
-ERRNO);
+Anything specific? I can't really see any limitation. You can set the
+watermark between 1 and 32. I guess we could also always use it instead
+of the new-element interrupt, but I haven't tried that yet. That may
+simplify the code.
 
-The hid-bpf framework depends on it.
-iirc Benjamin mentioned that chromeos is one of the future users
-of hid-bpf. They need it to deal with a variety of quirks in hid
-devices in production.
+> 
+> > > The configuration for the mcp251xfd looks like this:
+> > > 
+> > > - First decide for classical CAN or CAN-FD mode
+> > > - configure RX and TX ring size
+> > >   9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurable RX/TX ring parameters")
+> > >   For TX only a single FIFO is used.
+> > >   For RX up to 3 FIFOs (up to a depth of 32 each).
+> > >   FIFO depth is limited to power of 2.
+> > >   On the mcan cores this is currently done with a DT property.
+> > >   Runtime configurable ring size is optional but gives more flexibility
+> > >   for our use-cases due to limited RAM size.
+> > > - configure RX and TX coalescing via ethtools
+> > >   Set a timeout and the max CAN frames to coalesce.
+> > >   The max frames are limited to half or full FIFO.
+> > 
+> > mcan can offer more options for the max frames limit fortunately.
+> > 
+> > > 
+> > > How does coalescing work?
+> > > 
+> > > If coalescing is activated during reading of the RX'ed frames the FIFO
+> > > not empty IRQ is disabled (the half or full IRQ stays enabled). After
+> > > handling the RX'ed frames a hrtimer is started. In the hrtimer's
+> > > functions the FIFO not empty IRQ is enabled again.
+> > 
+> > My rx path patches are working similarly though not 100% the same. I
+> > will adopt everything and add it to the next version of this series.
+> > 
+> > > 
+> > > I decided not to call the IRQ handler from the hrtimer to avoid
+> > > concurrency, but enable the FIFO not empty IRQ.
+> > 
+> > mcan uses a threaded irq and I found this nice helper function I am
+> > currently using for the receive path.
+> > 	irq_wake_thread()
+> > 
+> > It is not widely used so I hope this is fine. But this hopefully avoids
+> > the concurrency issue. Also I don't need to artificially create an IRQ
+> > as you do.
+> 
+> I think it's Ok to use the function. Which IRQs are enabled after you
+> leave the RX handler? The mcp251xfd driver enables only a high watermark
+> IRQ and sets up the hrtimer. Then we have 3 scenarios:
+> - high watermark IRQ triggers -> IRQ is handled,
+> - FIFO level between 0 and high water mark -> no IRQ triggered, but
+>   hrtimer will run, irq_wake_thread() is called, IRQ is handled
+> - FIFO level 0 -> no IRQ triggered, hrtimer will run. What do you do in
+>   the IRQ handler? Check if FIFO is empty and enable the FIFO not empty
+>   IRQ?
 
-Either hid-bpf or bpf core can add
-"depends on FUNCTION_ERROR_INJECTION"
-to its kconfig.
-Like:
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index 2dfe1079f772..281e5263f3d1 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -32,6 +32,7 @@ config BPF_SYSCALL
-        select BINARY_PRINTF
-        select NET_SOCK_MSG if NET
-        select PAGE_POOL if NET
-+       depends on FUNCTION_ERROR_INJECTION
-        default n
+I am currently doing the normal IRQ handler run. It checks the
+"Interrupt Register" at the beginning. This register does not show the
+interrupts that fired, it shows the status. So even though the watermark
+interrupt didn't trigger when called by a timer, RF0N 'new message'
+status bit is still set if there is something new in the FIFO. Of course
+it is the same for the transmit status bits.
+So there is no need to read the FIFO fill levels directly, just the
+general status register.
 
-but the better option for now would be to drop this patch.
-For the next next merge window we can come up with alternative way
-(instead of ALLOW_ERROR_INJECTION) to mark kernel functions
-purely on the bpf side.
-I don't think we have time to add this marking infrastructure
-for the upcoming merge window.
+Best,
+Markus
