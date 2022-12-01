@@ -2,99 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068DE63E805
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BADC63E80C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiLACuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S229762AbiLACxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 21:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiLACuE (ORCPT
+        with ESMTP id S229586AbiLACxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:50:04 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F74D98388;
-        Wed, 30 Nov 2022 18:50:02 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxDOtYFohjmXwCAA--.5743S3;
-        Thu, 01 Dec 2022 10:50:00 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTuBVFohjHwQjAA--.21270S2;
-        Thu, 01 Dec 2022 10:49:58 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: powerpc: Use "grep -E" instead of "egrep"
-Date:   Thu,  1 Dec 2022 10:49:57 +0800
-Message-Id: <1669862997-31335-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8BxTuBVFohjHwQjAA--.21270S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uFWUCFyxXF1ktF47ur45Wrg_yoW8Gw1xpa
-        48C34YvrZagFy7XF4UGF42gFW8KF4kArW8WFWrJrWDZFs8Zas2qryftF47JFnxWrWkta1r
-        ua9akayFkr47G3DanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b3kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
-        6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x
-        07j5xhLUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 21:53:38 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB8089AD1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 18:53:37 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN0y76GV1z8QrkZ;
+        Thu,  1 Dec 2022 10:53:35 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B12rP0R030683;
+        Thu, 1 Dec 2022 10:53:25 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 1 Dec 2022 10:53:26 +0800 (CST)
+Date:   Thu, 1 Dec 2022 10:53:26 +0800 (CST)
+X-Zmail-TransId: 2af9638817266e81791a
+X-Mailer: Zmail v1.0
+Message-ID: <202212011053265568903@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <joonas.lahtinen@linux.intel.com>
+Cc:     <jani.nikula@linux.intel.com>, <rodrigo.vivi@intel.com>,
+        <tvrtko.ursulin@linux.intel.com>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBkcm0vaTkxNTogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B12rP0R030683
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6388172F.000 by FangMail milter!
+X-FangMail-Envelope: 1669863215/4NN0y76GV1z8QrkZ/6388172F.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6388172F.000/4NN0y76GV1z8QrkZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The latest version of grep claims the egrep is now obsolete so the build
-now contains warnings that look like:
-	egrep: warning: egrep is obsolescent; using grep -E
-fix this using "grep -E" instead.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-  sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests/powerpc`
+Replace the open-code with sysfs_emit() to simplify the code.
 
-Here are the steps to install the latest grep:
-
-  wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
-  tar xf grep-3.8.tar.gz
-  cd grep-3.8 && ./configure && make
-  sudo make install
-  export PATH=/usr/local/bin:$PATH
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
+ drivers/gpu/drm/i915/i915_mitigations.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-As Shuah suggested, this patch should go through powerpc/linux.git
+diff --git a/drivers/gpu/drm/i915/i915_mitigations.c b/drivers/gpu/drm/i915/i915_mitigations.c
+index def7302ef7fe..2b7aaaefb3a9 100644
+--- a/drivers/gpu/drm/i915/i915_mitigations.c
++++ b/drivers/gpu/drm/i915/i915_mitigations.c
+@@ -102,10 +102,10 @@ static int mitigations_get(char *buffer, const struct kernel_param *kp)
+ 	bool enable;
 
- tools/testing/selftests/powerpc/scripts/hmi.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 	if (!local)
+-		return scnprintf(buffer, PAGE_SIZE, "%s\n", "off");
++		return sysfs_emit(buffer, "%s\n", "off");
 
-diff --git a/tools/testing/selftests/powerpc/scripts/hmi.sh b/tools/testing/selftests/powerpc/scripts/hmi.sh
-index dcdb392..bcc7b6b 100755
---- a/tools/testing/selftests/powerpc/scripts/hmi.sh
-+++ b/tools/testing/selftests/powerpc/scripts/hmi.sh
-@@ -36,7 +36,7 @@ trap "ppc64_cpu --smt-snooze-delay=100" 0 1
- 
- # for each chip+core combination
- # todo - less fragile parsing
--egrep -o 'OCC: Chip [0-9a-f]+ Core [0-9a-f]' < /sys/firmware/opal/msglog |
-+grep -E -o 'OCC: Chip [0-9a-f]+ Core [0-9a-f]' < /sys/firmware/opal/msglog |
- while read chipcore; do
- 	chip=$(echo "$chipcore"|awk '{print $3}')
- 	core=$(echo "$chipcore"|awk '{print $5}')
+ 	if (local & BIT(BITS_PER_LONG - 1)) {
+-		count = scnprintf(buffer, PAGE_SIZE, "%s,", "auto");
++		count = sysfs_emit(buffer, "%s,", "auto");
+ 		enable = false;
+ 	} else {
+ 		enable = true;
 -- 
-2.1.0
-
+2.25.1
