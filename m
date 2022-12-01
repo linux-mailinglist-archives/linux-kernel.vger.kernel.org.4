@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E951663F3C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B15D563F472
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiLAPZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S231823AbiLAPqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiLAPZf (ORCPT
+        with ESMTP id S231237AbiLAPqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:25:35 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46197AA8CC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:25:33 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NNKY247dfzqSn7;
-        Thu,  1 Dec 2022 23:21:26 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 23:25:30 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Marco Elver <elver@google.com>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Alexander Potapenko <glider@google.com>,
-        <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] ARM: kfence: only handle translation faults
-Date:   Thu, 1 Dec 2022 23:42:58 +0800
-Message-ID: <20221201154258.126144-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 1 Dec 2022 10:46:20 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637BC638A;
+        Thu,  1 Dec 2022 07:46:19 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id n1so2335633ljg.3;
+        Thu, 01 Dec 2022 07:46:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WdojLaVMTpjC3HNtLnBKu1Bus4grE5zzcOEqK4rU84o=;
+        b=oRLc44P0fjUnudowxh4wRpGPchgKMdAudNsOhnO5JvCoqTEnfU34BUi9Kdrq+Ij+zd
+         mO1OUGsd2N5AaxNgxZyYoP3fJKkIk4kkFFaRmOAFtVlop4YARYnr4TmGKAtuIv2KZ2VZ
+         CXvWbSuUO23fNeRul9VnNVrNArM8ZZiRiwxGh81n7chKF1SGNUU4fr26pRmrb+uZj8XD
+         6h5GLIhZ1/pO/5MIaieXc//XkX/gjXGR85CXiNVg5WX7hwbbOUgIHfxg1GlpgBjylUSF
+         GgsUFtMB43bMzinfyRQsF9G5Lbpd/ssPYNPl/R7JXhBiJ3aHFnZNXqoHraLpKJBO4Xew
+         jz+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WdojLaVMTpjC3HNtLnBKu1Bus4grE5zzcOEqK4rU84o=;
+        b=O1zIwlN+SJo+fhutFzTr0AbDRG93ie5foQdo2Vn8RXPmVF98CmEL/4nvK/Usv9Rv+C
+         IbQg+HyDu9V/beL4VOR8e117m+1aJHicl2c0TjHdgThSIiDqT827mN+d7hJI7xYXjS/+
+         imgPEI5DXiOX9zKaEx3bQzOQUidyxd7WEz2F9uJXbH0A3OR7PTgjBKn2moHpmwotFVAk
+         Jwv/Z3qBY/NGnHmkWJBWA528D9ymGfM2DueHQtyjJsoc6Lxk1Tjt7U1zpwI//kRBkq83
+         WoLfFXwKX7rDjJ2sP+J5RSHMChwQq5GCzZSv6AVuj6xIhdhrNoETvJ6yDU8dFnTsrM7v
+         SMIQ==
+X-Gm-Message-State: ANoB5plv8IO0naO5/fs3ywnvq+tYINaU5gq8lFa1rQLPI5zeFkAU0MM3
+        WJh9jqD+VzQuTTZGas1W2UE=
+X-Google-Smtp-Source: AA0mqf7wPAGvJGI2w6SblqJCEUB5t6+5tQ7XJz5zR3Z5bgUcor23OM4a5d+XmGhoGNu4jq5qvfJcWQ==
+X-Received: by 2002:a2e:b004:0:b0:279:c02e:7457 with SMTP id y4-20020a2eb004000000b00279c02e7457mr3866016ljk.475.1669909577574;
+        Thu, 01 Dec 2022 07:46:17 -0800 (PST)
+Received: from localhost.localdomain (077222238151.warszawa.vectranet.pl. [77.222.238.151])
+        by smtp.googlemail.com with ESMTPSA id t15-20020a056512208f00b004b4ec76016esm680965lfr.113.2022.12.01.07.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 07:46:17 -0800 (PST)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
+Cc:     szymon.heidrich@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: uvc: Prevent buffer overflow in setup handler
+Date:   Thu,  1 Dec 2022 16:45:46 +0100
+Message-Id: <20221201154546.11226-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <abe0cc82-2fb8-2e29-e7b9-90fe6ae4d203@gmail.com>
+References: <abe0cc82-2fb8-2e29-e7b9-90fe6ae4d203@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a similar fixup like arm64 does, only handle translation faults
-in case of unexpected kfence report when alignment faults on ARM, see
-more from commit 0bb1fbffc631 ("arm64: mm: kfence: only handle translation
-faults").
+Setup function uvc_function_setup permits control transfer
+requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
+data stage handler for OUT transfer uses memcpy to copy req->actual
+bytes to uvc_event->data.data array of size 60. This may result
+in an overflow of 4 bytes.
 
-Fixes: 75969686ec0d ("ARM: 9166/1: Support KFENCE for ARM")
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 ---
- arch/arm/mm/fault.c | 18 ++++++++++++++++--
- arch/arm/mm/fault.h |  9 ++++++---
- 2 files changed, 22 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/function/f_uvc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mm/fault.c b/arch/arm/mm/fault.c
-index 46cccd6bf705..de988cba9a4b 100644
---- a/arch/arm/mm/fault.c
-+++ b/arch/arm/mm/fault.c
-@@ -105,6 +105,19 @@ static inline bool is_write_fault(unsigned int fsr)
- 	return (fsr & FSR_WRITE) && !(fsr & FSR_CM);
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e196e061..4419b7972 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+ 
+ 		memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 		v4l2_event.type = UVC_EVENT_DATA;
+-		uvc_event->data.length = req->actual;
+-		memcpy(&uvc_event->data.data, req->buf, req->actual);
++		uvc_event->data.length = min_t(unsigned int, req->actual,
++			sizeof(uvc_event->data.data));
++		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+ 	}
  }
- 
-+static inline bool is_translation_fault(unsigned int fsr)
-+{
-+	int fs = fsr_fs(fsr);
-+#ifdef CONFIG_ARM_LPAE
-+	if ((fs & FS_MMU_NOLL_MASK) == FS_TRANS_NOLL)
-+		return true;
-+#else
-+	if (fs == FS_L1_TRANS || fs == FS_L2_TRANS)
-+		return true;
-+#endif
-+	return false;
-+}
-+
- static void die_kernel_fault(const char *msg, struct mm_struct *mm,
- 			     unsigned long addr, unsigned int fsr,
- 			     struct pt_regs *regs)
-@@ -140,7 +153,8 @@ __do_kernel_fault(struct mm_struct *mm, unsigned long addr, unsigned int fsr,
- 	if (addr < PAGE_SIZE) {
- 		msg = "NULL pointer dereference";
- 	} else {
--		if (kfence_handle_page_fault(addr, is_write_fault(fsr), regs))
-+		if (is_translation_fault(fsr) &&
-+		    kfence_handle_page_fault(addr, is_write_fault(fsr), regs))
- 			return;
- 
- 		msg = "paging request";
-@@ -208,7 +222,7 @@ static inline bool is_permission_fault(unsigned int fsr)
- {
- 	int fs = fsr_fs(fsr);
- #ifdef CONFIG_ARM_LPAE
--	if ((fs & FS_PERM_NOLL_MASK) == FS_PERM_NOLL)
-+	if ((fs & FS_MMU_NOLL_MASK) == FS_PERM_NOLL)
- 		return true;
- #else
- 	if (fs == FS_L1_PERM || fs == FS_L2_PERM)
-diff --git a/arch/arm/mm/fault.h b/arch/arm/mm/fault.h
-index 83b5ab32d7a4..54927ba1fa6e 100644
---- a/arch/arm/mm/fault.h
-+++ b/arch/arm/mm/fault.h
-@@ -14,8 +14,9 @@
- 
- #ifdef CONFIG_ARM_LPAE
- #define FSR_FS_AEA		17
-+#define FS_TRANS_NOLL		0x4
- #define FS_PERM_NOLL		0xC
--#define FS_PERM_NOLL_MASK	0x3C
-+#define FS_MMU_NOLL_MASK	0x3C
- 
- static inline int fsr_fs(unsigned int fsr)
- {
-@@ -23,8 +24,10 @@ static inline int fsr_fs(unsigned int fsr)
- }
- #else
- #define FSR_FS_AEA		22
--#define FS_L1_PERM             0xD
--#define FS_L2_PERM             0xF
-+#define FS_L1_TRANS		0x5
-+#define FS_L2_TRANS		0x7
-+#define FS_L1_PERM		0xD
-+#define FS_L2_PERM		0xF
- 
- static inline int fsr_fs(unsigned int fsr)
- {
 -- 
-2.27.0
+2.38.1
 
