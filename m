@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB26F63EF7B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AFB63EF7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiLALaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S230367AbiLALal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiLAL35 (ORCPT
+        with ESMTP id S229617AbiLALai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:29:57 -0500
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.149.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CDA5436A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:29:55 -0800 (PST)
-Received: from atl1wswcm06.websitewelcome.com (unknown [50.6.129.167])
-        by atl3wswob05.websitewelcome.com (Postfix) with ESMTP id 4E9A423773
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:29:55 +0000 (UTC)
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-        by cmsmtp with ESMTP
-        id 0hlIpjkolPz0t0hlKpegY8; Thu, 01 Dec 2022 11:29:55 +0000
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TCNr02UaRvZ8qQ2TFTX6Ynk9lUh1O4TOo+08fJJNC2k=; b=hwsuGXY080THqr1c9HDjoVevnH
-        AGIl7kcDBCpnI9P7+Io3E2QG5TM/ArD2mNLA7y3MxW3nDWUOXKkfr8DrvrJhWljO75m1FQ/jk60hJ
-        NjQkUanU7sQ+2mBcO2IXiS9hjcjokThkYt/tjyb73VILbCJxVZFKxyLPalHrGVNo0X8rsSs/FfqnI
-        2d/mO4STFp/1tVNPeY/pRLhnx4Hp5lECjwyk4qjX2fp3jArj1gTCt7DKUe0yS21QQCkXaVUAvEyvP
-        t0iP9eeC/9RJLLCOsZtGxmOQgsadmH6+bKJguEH/E1SVTlRlP4p1yw7/cpfr2NcByhMwrhHblsZgV
-        MZGtLXMg==;
-Received: from [223.187.121.253] (port=40120 helo=[192.168.221.42])
-        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <saravanan@linumiz.com>)
-        id 1p0hlG-000MTk-Km;
-        Thu, 01 Dec 2022 11:29:51 +0000
-Message-ID: <e7b20055-4f44-aa91-e18d-9fb0f835fbf1@linumiz.com>
-Date:   Thu, 1 Dec 2022 12:29:44 +0100
+        Thu, 1 Dec 2022 06:30:38 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2225436A;
+        Thu,  1 Dec 2022 03:30:37 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ud5so3492357ejc.4;
+        Thu, 01 Dec 2022 03:30:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hy0z9fn6yutvc+dvThk/Y1SdzeHn9pxlN9/eh5uO3cs=;
+        b=YkIRhmkvgKI5VeByBYmm1jWJDDZCuPl51QhLM+LBFmLqimdlWo+pj+K+fPMT+zPB0F
+         AMa8LRhqkrmuqzMZRiLjbwdeseLHv66UO7WSVX6vd9Tnttvwc9+vd9GREUtc8R3Y1kaM
+         j/a84exSdT20BTPXJRti561tqcGWWyMI7oQxb/xrq++ienrgX3hoF1tsCa+fRtElpg5G
+         a3F0Qu2FLENR/gzMY0IQyTfBWdD7Fl439e4rIMO+X9WvViIIDIRVcpyISqZJ2GBRs6GA
+         Ns+gcbiqFopKXHlwt3rW8MXX1HwtL0dQ5byHH+v3+zD2nhNGRMGcvrBJ4rOPWOyUQjbm
+         xlyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hy0z9fn6yutvc+dvThk/Y1SdzeHn9pxlN9/eh5uO3cs=;
+        b=Ozpa+/kV4xOsOtQGMFeVHTqy8XPqvf1cyo2FUoDXEfEBjSMteXEHje60cyUpfoI/0q
+         r+02mifOAuQpz5c7XJW3SahAc/1nJrnTy0EtRiyF0FEk2simt2t/6H1rv/iMnRB5YZbC
+         8AbOIFQaOHS/LJwdNydZ0gi990A42VPpoDjPtxJG7PREG5q4TIL9t2zAH2Uz0o20jvDP
+         7+qmFeGSh27ll+SDVvo9/SbrMI7s6SYYvhlmmPuZ/WmyPuB7bkhwrFLf8BFSxEhuqYel
+         IaHMqMHryGF06JMgEfo5ioZWxsXG9hONsigdeG2jeq62zIhu7PNup21qBQa3dP/cQrzc
+         taVA==
+X-Gm-Message-State: ANoB5plG/lz+DLvf4GfqNuqFTdfb8eD4TyfhC4SBSfs8cGhPUQdUovRz
+        Sm9H5IKfztpI83hwwLTu+8n2sUoiYroXZpPO6V0=
+X-Google-Smtp-Source: AA0mqf7/0JyuhpFTobymLKciVFxPGTz54M/o8dTWiasg+0bDb9chiSoyVVDommRlVqB41SoDJUohNZGrny6505ZBHmM=
+X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
+ m4-20020a17090679c400b00778e3e28311mr42171491ejo.342.1669894234898; Thu, 01
+ Dec 2022 03:30:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/4] dt-bindings: hwmon/pmbus: Add mps,mpq7932
- power-management IC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        marten.lindahl@axis.com, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20221201044643.1150870-1-saravanan@linumiz.com>
- <20221201044643.1150870-3-saravanan@linumiz.com>
- <bc86121f-3cc2-1e55-4c6a-02cb1644a8bd@linaro.org>
-Content-Language: en-US
-From:   Saravanan Sekar <saravanan@linumiz.com>
-In-Reply-To: <bc86121f-3cc2-1e55-4c6a-02cb1644a8bd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 223.187.121.253
-X-Source-L: No
-X-Exim-ID: 1p0hlG-000MTk-Km
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.221.42]) [223.187.121.253]:40120
-X-Source-Auth: saravanan@linumiz.com
-X-Email-Count: 5
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfOwl0/C6Hqv2GdUE9IbQbU1cgux6d2HtEnftl9j/M7UI5sRekRQQjiN5N+GXfgO9RZJiv3ApLvljNppFt0HUOlcq/mG0hNAqw6nNQFFllVIxBLuFhl30
- 63uSPczeLvup8OIqNpZ+0SZpHo81APfRm9GxdGF5aECujk6hN2F/NjHQyTX+FJs9F3RhN7DynMg2JP5WmAyZWbykrSIsmSW7jDA=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <bf8e33fd-a752-d5d5-859e-14302d069f2d@sholland.org> <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
+ <565e1861-7052-9bd3-e7ba-e590bd91cf20@sholland.org>
+In-Reply-To: <565e1861-7052-9bd3-e7ba-e590bd91cf20@sholland.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 1 Dec 2022 11:30:08 +0000
+Message-ID: <CA+V-a8uuAqrtVEB1GqFicQjRvkPGpG5788oNSzCp1LNyoUNmXQ@mail.gmail.com>
+Subject: Re: [PATCH v4 7/7] soc: renesas: Add L2 cache management for RZ/Five SoC
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,61 +88,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/22 11:26, Krzysztof Kozlowski wrote:
-> On 01/12/2022 05:46, Saravanan Sekar wrote:
->> Document mpq7932 power-management IC
->>
->> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
->> ---
-> 
-> This is a friendly reminder during the review process.
-> 
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all
-> requested changes or keep discussing them.
+Hi Samuel,
+
+On Tue, Nov 29, 2022 at 5:58 AM Samuel Holland <samuel@sholland.org> wrote:
 >
-Hi Krzysztof,
+> On 11/26/22 15:09, Lad, Prabhakar wrote:
+> >>> +     if (!ax45mp_priv->l2c_base) {
+> >>> +             ret = -ENOMEM;
+> >>> +             goto l2c_err;
+> >>> +     }
+> >>> +
+> >>> +     ret = ax45mp_configure_l2_cache(np);
+> >>> +     if (ret)
+> >>> +             goto l2c_err;
+> >>> +
+> >>> +     ret = ax45mp_configure_pma_regions(np);
+> >>> +     if (ret)
+> >>> +             goto l2c_err;
+> >>> +
+> >>> +     static_branch_disable(&ax45mp_l2c_configured);
+> >>
+> >> Instead of enabling this before the probe function, and disabling it
+> >> afterward, just enable it once here, in the success case. Then you can
+> >> drop the !ax45mp_priv check in the functions above.
+> >>
+> > I think I had tried it but static_branch_unlikely() was always returning true.
+>
+> You use DEFINE_STATIC_KEY_FALSE above, so static_branch_unlikely()
+> should return false until you call static_branch_enable().
+>
+OK, got that.
 
-Thanks for your time to review and feedback.
+> >> And none of the functions would get called anyway if the alternative is
+> >> not applied. I suppose it's not possible to do some of this probe logic
+> >> in the alternative check function?
+> >>
+> > you mean to check in the vendor errata patch function to see if this
+> > driver has probed?
+>
+> I meant to do the equivalent of:
+>
+> +     ax45mp_priv->ucctl_ok = ax45mp_cpu_cache_controlable();
+> +     ax45mp_priv->l2cache_enabled = ax45mp_cpu_l2c_ctl_status() &
+> AX45MP_L2_CACHE_CTL_CEN_MASK;
+>
+> in the errata function, since that decides if the cache maintenance
+> functions actually do anything. But ax45mp_cpu_l2c_ctl_status() gets the
+> MMIO address from the DT, and trying to do that from the errata function
+> could get ugly, so maybe it is not a good suggestion.
+>
+Actually I did think about this and the best approach is to do it in
+errata only as you suggested. So here's my approach for dropping the
+above checks is to introduce vendor specific SBI EXT
+(RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND) which will check both the above
+conditions and only apply the errata on success and hence avoid the
+"if" checks every time in the sync operation.
 
-Here are the summary of comments on V1, I have fixed all according to my 
-understanding.
-
-
-1. Use subject prefixes matching the subsystem (git log --oneline -- ...).
-
-git log --oneline -- Documentation/devicetree/bindings/hwmon/pmbus/
-1ccca53618c4 dt-bindings: hwmon/pmbus: Add mps,mpq7932 power-management IC
-373c0a77934c dt-bindings: hwmon/pmbus: Add ti,lm25066 power-management IC
-7f464532b05d dt-bindings: Add missing 'additionalProperties: false'
-8a36e38d8b0f dt-bindings: hwmon/pmbus: Add ti,ucd90320 power sequencer
-
-I have used the same format of 373c0a77934c.
-
-2. Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-
-I did run dt_binding_check on V1 but failed to notice warnings. Fixed 
-warning on V2 and didn't observed any warnings.
-
-3. Why requiring nodename? Device schemas usually don't do that.
-dropped "pattern: "pmic@[0-9a-f]{1,2}""
-
-4. regulators node is a regulator with one more regulator? Drop.
-dropped "$ref: regulator.yaml# "
-
-5. Messed indentation. Use same for entire example, e.g. 4-spaces.
-Fixed it.
-
-
-Please help if anything which I missed
-
-
-> Thank you.
-> 
-> Best regards,
-> Krzysztof
-> 
-
+Cheers,
+Prabhakar
