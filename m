@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE77863F83E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEC863F840
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiLATaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S230467AbiLATax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiLAT3t (ORCPT
+        with ESMTP id S230257AbiLATab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:29:49 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D83C82EA
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:29:49 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ha10so6647869ejb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:29:49 -0800 (PST)
+        Thu, 1 Dec 2022 14:30:31 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48239C82EE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:30:16 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c15so2190777qtw.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:30:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7p4ZRoKY8KyAbeLZ3D9FFno3zQClogoAoc0aT3MOswk=;
-        b=cmKp5+osxcEKb3tLLjX5pcnFM5ol/fAQnZO4HPmZBJJzl0r8kVyCNT/d9/wiRLPgnR
-         80vh9xs1IGdIvR61A03RKhTL8jlZ3bQRWCAWgF4C++Etw+u+eFH0dBZo34pp2Prtzccq
-         zcsPUfNnHLHl5JDlxhSJenqQtFCU6UVADMotPapVRkIrv+jGSvGyuiJqFIybgavAE5dT
-         xA1lxEi/f+1Zb7yEulIgSaPBBLbL57ElIiwUSt0nETKM1WyyZXxUjen8RuYherN6QjYo
-         VF7e31ZTseFdg+2zPJgcv83oYFY0etQ4O8ZMa1jQPAMwCOEiSf9e78OT32ZjS8l+NvwG
-         o45Q==
+        d=timesys-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tsmRXs1XrARV8x2b98wPvkGWEv+wWS8i+zTUmm0QBMo=;
+        b=kx13LBQYrQj0PDhS8TjXdPpnrGsFG+moF4OhMOT/dDaZR59xpURwUxLcfLYJmejSko
+         9bKQZFeWjQ6PGdVwmcjZvlpwrIPOcRTrIMbKmFqxXOwTOFKb8fnIpFv5cjC0oj5ZbwQ7
+         3ObDICe7H50Ofjn6thvG7xuAHqulYJ1Tv6JQNNsBUzfxpJjoogrlis6kjsDoW0x6jOz1
+         KeRWzqqySBEV9XOeq8URBgZL2WmQItzrfklgsqs/P3IyrB+mKTYJnm6THUoUQN9r6oE1
+         4cm0r9kmo7zTaYHI0gDaWZIre5/LHs6Y5l4eZOEDq8GMtmIejaA7DUNv6UG72kGy9a7E
+         L2fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7p4ZRoKY8KyAbeLZ3D9FFno3zQClogoAoc0aT3MOswk=;
-        b=cvP1zTPAdeur8de1Nd5iY0tLmBZMOserwtVMy0tns2ESP9NEg9oqMTdznZyHpqa+y0
-         tv5Yq/wCMH1maGDjz3ptzzzFNh9jOTipZAfrod9+KPpwz63bXuKA5bokRRFNTNOJ2oTm
-         pHY4OK8Oz381xFyytili/b75qXvhRuvB/5ojiu1buEKEf7GkVtkKZbjnN/hhk05mVvVt
-         AxU1IqRari9LiVfBOKHxPsTn7JLFpgTB/YCBnpZfa97YPXi4vKtNbpkyoW5nMnr2eLFD
-         NzWxFEH49Ocjs54MaxI+IU4D7Yi0RUy/uIaKQHaL2iaJgSd7vQzhAYH0YfpHrFxxj5ix
-         Xrbw==
-X-Gm-Message-State: ANoB5pny/D5YXaB+fLy+1kM60CllST2T9W1TTN6PPiHlLPLMtzEUMgGA
-        CctsV7JYqlEBhkIxjL7j0Vcglw==
-X-Google-Smtp-Source: AA0mqf6wJMguBRZ+3RDQjOzLIrbL3+wV5RnCVYcQsQFAXhVegf130StesPXX9DTehUn93DFb09aOCA==
-X-Received: by 2002:a17:906:c259:b0:7b5:9670:ae0 with SMTP id bl25-20020a170906c25900b007b596700ae0mr42906077ejb.321.1669922987667;
-        Thu, 01 Dec 2022 11:29:47 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id i13-20020a17090639cd00b0073022b796a7sm2141380eje.93.2022.12.01.11.29.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tsmRXs1XrARV8x2b98wPvkGWEv+wWS8i+zTUmm0QBMo=;
+        b=G3D3iyAN8qC5F52HIBAgPSN3auZJdT2S9tlRWDoioxf6NcXTw2E82tKgxWGSFjqSHt
+         O4Udk66M5D5GVb7Go1qIig4qbVsO+sSTXvU1Pkn3s+lb4vL4Qu1vjYR2t5aq+4fscix8
+         m780tOxfznca36llOo1PhmgNt7y63qL3ezNzr8yPCKVJxBTGwlJeZDQm0nSZUFS8Kkj0
+         jlJMUJqs0q33VtZtbdDMNC+N5tp+qPh4W4qLOZBDStg/ZVUiKQQ29bwikiRFSgItknQd
+         BT4nI+rzBF+po3WZo77irTpixRcUDjDKTB3SR2MIZQtv2T1jUyNmsXD2fE/B8ROD/mlV
+         cHAg==
+X-Gm-Message-State: ANoB5pkRewT34Wbk73fhl5KznjQj0lIkbMQ248O8sA8TWFTGqCJukP7+
+        4T1/PHkih0RTKxY/tLD/lkxgoA==
+X-Google-Smtp-Source: AA0mqf7X7qi2w52qIfDQ55qcQ8HNhQma5ohGztXlAbQ4fSTTgCgUZ23tqFB5YNBiXAmQynnKQRYkGA==
+X-Received: by 2002:a05:622a:90c:b0:3a5:4086:a46 with SMTP id bx12-20020a05622a090c00b003a540860a46mr61808193qtb.200.1669923016031;
+        Thu, 01 Dec 2022 11:30:16 -0800 (PST)
+Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
+        by smtp.gmail.com with ESMTPSA id h19-20020ac85153000000b003a6328ee7acsm2977748qtn.87.2022.12.01.11.30.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:29:47 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v4 5/5] hwmon: (pmbus/core): Notify regulator events
-Date:   Thu,  1 Dec 2022 20:29:39 +0100
-Message-Id: <20221201192940.1584012-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221201192940.1584012-1-Naresh.Solanki@9elements.com>
-References: <20221201192940.1584012-1-Naresh.Solanki@9elements.com>
+        Thu, 01 Dec 2022 11:30:15 -0800 (PST)
+From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org (open list:SPI NOR SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 0/3] mtd: spi-nor: Extend SFDP to support additional octal modes as per latest JEDEC standard
+Date:   Thu,  1 Dec 2022 14:30:03 -0500
+Message-Id: <20221201193007.261690-1-nathan.morrison@timesys.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Notify regulator events in PMBus irq handler.
+In the latest JEDEC standard (JESD216F), there are now bitfields in the
+4 byte address instruction table for 1S-1S-8S and 1S-8S-8S modes
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+This patchset adds support for checking the 4BAIT for these modes,
+along with additional NO_SFDP_FLAGS to support enabling these new modes
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index daf700210c68..dbdf8c8187db 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3159,6 +3159,11 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 		if (ret)
- 			return ret;
- 
-+		if (event) {
-+			regulator_notifier_call_chain(data->rdevs[i], event, NULL);
-+			ret = IRQ_HANDLED;
-+		}
-+
- 		page = rdev_get_id(data->rdevs[i]);
- 		mutex_lock(&data->update_lock);
- 		status = pmbus_read_status_word(client, page);
+v2: Move page program commands into sfdp.c instead of core.c,
+as this appears to conform more closely with spi-nor paradigm.
+Page program buswidth appears to be automatically determined, so let's
+follow suit and do the same.
+
+Nathan Barrett-Morrison (3):
+  mtd: spi-nor: Extend SFDP 4byte address instruction lookup table with
+    new octal modes as per JEDEC JESD216F
+  mtd: spi-nor: Add additional octal-mode flags to be checked during
+    SFDP
+  mtd: spi-nor: Add support for IS25LX256 operating in 1S-1S-8S octal
+    read mode
+
+ drivers/mtd/spi-nor/core.c |  7 +++++++
+ drivers/mtd/spi-nor/core.h |  5 +++--
+ drivers/mtd/spi-nor/issi.c |  2 ++
+ drivers/mtd/spi-nor/sfdp.c | 13 +++++++++++++
+ 4 files changed, 25 insertions(+), 2 deletions(-)
+
 -- 
-2.37.3
+2.30.2
 
