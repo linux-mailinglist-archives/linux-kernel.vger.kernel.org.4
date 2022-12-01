@@ -2,73 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E5863F86D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FA363F870
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiLAThb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S229987AbiLATjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiLATh0 (ORCPT
+        with ESMTP id S229727AbiLATjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:37:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05B8BE4;
-        Thu,  1 Dec 2022 11:37:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D0AB620E3;
-        Thu,  1 Dec 2022 19:37:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A349EC433D6;
-        Thu,  1 Dec 2022 19:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669923444;
-        bh=o1e5cNkaeVBHeVFdVZ4Nge7QDteEUWAJtDcjpk1vBy8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=E1kyj1rsUoTDoTY1rJD9Zo5GlpSW9KDcXtPUsKUI0cKKyVWQw5XQljMqYoOolnm10
-         McznQlnhIYMI3CgddpdZ8saDWKRhKevcKPixjtrRaumRc2kTW+2iqTBso1TIM5kTT9
-         nRICS1O8siFF6BCDZLyNIIeOYvNvpkgjXbo8N+k6Als/LsdQ737j89pwydPADrFHgZ
-         Mh3sAgm6aC/wIypHiwjTzZce/2UELHcA4pJuDHCaIRVgTw+bvBL4zSqWudcAJVIs0y
-         4e42ouV/v7tDFpTFjmkiVwCPI/i140sVyNqA+d/DBrNQAK+OuPjKJMVUAf0czgmb8y
-         wz6KoIX0Tk+YQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F901E270C8;
-        Thu,  1 Dec 2022 19:37:24 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.1-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221201172526.2290129-1-linux@roeck-us.net>
-References: <20221201172526.2290129-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221201172526.2290129-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
-X-PR-Tracked-Commit-Id: 9bdc112be727cf1ba65be79541147f960c3349d8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e214dd935bf154af4c2d5013b16a283d592ccea5
-Message-Id: <166992344458.6584.1340713015035746798.pr-tracker-bot@kernel.org>
-Date:   Thu, 01 Dec 2022 19:37:24 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 14:39:02 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0CC9C619
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:38:57 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3b10392c064so28171757b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XakWQVkH9474LVaYgKMwnUxbaUgmjE7EAkkJC1goNog=;
+        b=UERxYLpkqS4k9Ed3FNI5otOShDe6R6jHfsar2pSBef2+3coMLDt76z8xyuB/svcfFF
+         JgSxng+DsuC9wJjOFGDmKF6f2sVqnKOXmNLncYtqdarC/IH2s3sSEIL0EguWBpqhM8zY
+         P6Nw9Xc2qa59th4XoEkRXSnz0sEhr3O9Ov88gvtQI+IOAHf6va7AlrGitjuZvZ9p/mMT
+         EVG5rvWPn6doD/js9rzu/S8zKesqrl5+FCWuzR/OJ9wss0KvH6k4opLWsqmuCQ7wilSb
+         7gHy80g3oQ2H7Y9WUf/AGoSa9GxXsS6+4cEDfop6WwwL746GkrKBMv7U7B0I7hZDZ+sl
+         Pw4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XakWQVkH9474LVaYgKMwnUxbaUgmjE7EAkkJC1goNog=;
+        b=my5jZS/bTAaSrC1btTJO7RQA7haiikkWksH2adG7I2znNDlShdHS907OdXmMKwPC0R
+         WOvu/4nW9hJza43YOXQuiJZOj68S5MdPcL2aRJyKRDEwBvUddNA63CtB2fK+ECpUgjgt
+         va3+ZDCe5McF02KjEFnzQ3w200tGiwkxvGCoenoTz/OYPlF4ywq4rP5/Ytb2gaKHpXzQ
+         FGjwfGvaHLBbNEStRClyhG2f/MAIMWACXblmtIaluG7qj/+Qspr2GAZO6/1qSwsBWBaZ
+         WYAYGd8cKPIWs0oHmxydtYmMqkd5nSZBxBnMQj5cH4W15vPfV3bC18cTznPT9jeIAp0G
+         5Zhw==
+X-Gm-Message-State: ANoB5plYixk0vt2xFiv2YxpOdt+S5HhPwkxuFeeBmfAbGpP9PD/U/NGP
+        j8fGtOtVFuBj0IByPRVHdD59lqr4EhmpGQlfKXTpKg==
+X-Google-Smtp-Source: AA0mqf5LC7B68PWoPdHAFSDkF20bzVM7g8/jxSQTlKTzogTHfSlp2hWKWtORAdycDukryw61GvdshCMwNi89TPkgG8I=
+X-Received: by 2002:a05:690c:a92:b0:36c:aaa6:e571 with SMTP id
+ ci18-20020a05690c0a9200b0036caaa6e571mr63338613ywb.467.1669923536844; Thu, 01
+ Dec 2022 11:38:56 -0800 (PST)
+MIME-Version: 1.0
+References: <20221123173859.473629-1-dima@arista.com> <20221123173859.473629-4-dima@arista.com>
+In-Reply-To: <20221123173859.473629-4-dima@arista.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 1 Dec 2022 20:38:44 +0100
+Message-ID: <CANn89iJEYhTFsF8vqe6enE7d107HfXZvgxN=iLGQj21sx9gwcQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/5] net/tcp: Disable TCP-MD5 static key on
+ tcp_md5sig_info destruction
+To:     Dmitry Safonov <dima@arista.com>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu,  1 Dec 2022 09:25:26 -0800:
+On Wed, Nov 23, 2022 at 6:39 PM Dmitry Safonov <dima@arista.com> wrote:
+>
+> To do that, separate two scenarios:
+> - where it's the first MD5 key on the system, which means that enabling
+>   of the static key may need to sleep;
+> - copying of an existing key from a listening socket to the request
+>   socket upon receiving a signed TCP segment, where static key was
+>   already enabled (when the key was added to the listening socket).
+>
+> Now the life-time of the static branch for TCP-MD5 is until:
+> - last tcp_md5sig_info is destroyed
+> - last socket in time-wait state with MD5 key is closed.
+>
+> Which means that after all sockets with TCP-MD5 keys are gone, the
+> system gets back the performance of disabled md5-key static branch.
+>
+> While at here, provide static_key_fast_inc() helper that does ref
+> counter increment in atomic fashion (without grabbing cpus_read_lock()
+> on CONFIG_JUMP_LABEL=y). This is needed to add a new user for
+> a static_key when the caller controls the lifetime of another user.
+>
+> Signed-off-by: Dmitry Safonov <dima@arista.com>
+> Acked-by: Jakub Kicinski <kuba@kernel.org>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.1-rc8
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e214dd935bf154af4c2d5013b16a283d592ccea5
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Eric Dumazet <edumazet@google.com>
