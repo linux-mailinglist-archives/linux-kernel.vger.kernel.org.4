@@ -2,164 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8152863F2FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388E463F303
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiLAOhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
+        id S231815AbiLAOjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiLAOhd (ORCPT
+        with ESMTP id S229631AbiLAOjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:37:33 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFBFA8FD8;
-        Thu,  1 Dec 2022 06:37:31 -0800 (PST)
-Received: from frapeml100001.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNJYn3cZMz67KSZ;
-        Thu,  1 Dec 2022 22:37:01 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml100001.china.huawei.com (7.182.85.63) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Dec 2022 15:37:28 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Dec
- 2022 14:37:28 +0000
-Date:   Thu, 1 Dec 2022 14:37:27 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 09/11] cxl/test: Add generic mock events
-Message-ID: <20221201143727.0000255c@Huawei.com>
-In-Reply-To: <20221201002719.2596558-10-ira.weiny@intel.com>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-10-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Dec 2022 09:39:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B23A6040
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:38:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BAD9B81F65
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:38:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0151AC433D6;
+        Thu,  1 Dec 2022 14:38:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669905536;
+        bh=zjg9hqyT/cvW+xoLTuMA96NteGmgZ6jPNBUY+Kiab1s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LptiEmZWEYpFEm+OjQAbOIb9Nkdoc9xQrQqR0Xmc42JD7Ql2j0ejidB+Ri1/jWPSM
+         XvU3HdECIe2WbTuIibMcmo5hDFiwCipgyyemKBTjjSVBhxelQPMZgimOqtNdPcVJed
+         U+RT2jOTRKFaWHnw2Z/SwFz2xr29Wc+8Tx8K9FN/fFqmjLfPX3IW0L63y7CDU9Qr3N
+         PCw8V2be87+djYeRst4QZ6LZlOr0qFO7zPoftndI2IsFAKoQ9oeVBh89GRbj2FdxpW
+         8QeqGBmrnxCQ41sT6lh6npE89dI04VmDE4EsZeQIPyne0vR3NC8T85pfeDlpK2FusG
+         b6JLucNxahpbQ==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
+Subject: [PATCH 0/3] arm64: kprobes: Fix bugs in kprobes for arm64
+Date:   Thu,  1 Dec 2022 23:38:52 +0900
+Message-Id: <166990553243.253128.13594802750635478633.stgit@devnote3>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 16:27:17 -0800
-ira.weiny@intel.com wrote:
+Hi,
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Facilitate testing basic Get/Clear Event functionality by creating
-> multiple logs and generic events with made up UUID's.
-> 
-> Data is completely made up with data patterns which should be easy to
-> spot in trace output.
-> 
-> A single sysfs entry resets the event data and triggers collecting the
-> events for testing.
-> 
-> Events are returned one at a time which is within the specification even
-> though it does not exercise the full capabilities of what a device may
-> do.
-> 
-> Test traces are easy to obtain with a small script such as this:
-> 
-> 	#!/bin/bash -x
-> 
-> 	devices=`find /sys/devices/platform -name cxl_mem*`
-> 
-> 	# Turn on tracing
-> 	echo "" > /sys/kernel/tracing/trace
-> 	echo 1 > /sys/kernel/tracing/events/cxl/enable
-> 	echo 1 > /sys/kernel/tracing/tracing_on
-> 
-> 	# Generate fake interrupt
-> 	for device in $devices; do
-> 	        echo 1 > $device/event_trigger
-> 	done
-> 
-> 	# Turn off tracing and report events
-> 	echo 0 > /sys/kernel/tracing/tracing_on
-> 	cat /sys/kernel/tracing/trace
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
+I found some bugs in kprobes for arm64. One is a critical issue, which
+will cause a kernel crach easily with lockdep[1/3]. Others are minor
+issues and rare cases. [2/3] let do_page_fault() fixup the page fault
+in kprobes user handler, and [3/3] is more like code cleanup and
+returns DBG_HOOK_ERROR if it can not handle kprobe's BRK (but that
+should not happen.)
 
-A minor comment on xarray cleanup inline
+Thank you,
 
-Jonathan
+---
+
+Masami Hiramatsu (Google) (3):
+      arm64: Prohibit probing on arch_stack_walk()
+      arm64: kprobes: Let arch do_page_fault() fix up page fault in user handler
+      arm64: kprobes: Return DBG_HOOK_ERROR if kprobes can not handle a BRK
 
 
-> +void cxl_mock_remove_event_logs(struct device *dev)
-> +{
-> +	struct mock_event_store *mes;
-> +
-> +	mes = xa_erase(&mock_dev_event_store, (unsigned long)dev);
+ arch/arm64/kernel/probes/kprobes.c |   87 +++++++++++++++---------------------
+ arch/arm64/kernel/stacktrace.c     |    7 ++-
+ 2 files changed, 41 insertions(+), 53 deletions(-)
 
-As below, I'd move this into a devm_add_action_or_reset() so
-that we don't need to deal with doing it manually.
-
-> +}
-> +EXPORT_SYMBOL_GPL(cxl_mock_remove_event_logs);
-
-...
-
->  static int cxl_mock_mem_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct cxl_memdev *cxlmd;
->  	struct cxl_dev_state *cxlds;
-> +	u32 ev_status;
->  	void *lsa;
->  	int rc;
->  
-> @@ -281,11 +304,13 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
->  	if (rc)
->  		return rc;
->  
-> +	ev_status = cxl_mock_add_event_logs(cxlds);
-
-On error later in this function these leak.  Just use devm_add_action_or_reset()
-inside cxl_mock_add_event_logs() so we don't have to care about that.
-
-> +
->  	cxlmd = devm_cxl_add_memdev(cxlds);
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
->  
-> -	cxl_mem_get_event_records(cxlds);
-> +	__cxl_mem_get_event_records(cxlds, ev_status);
->  
->  	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
->  		rc = devm_cxl_add_nvdimm(dev, cxlmd);
-> @@ -293,6 +318,12 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +static int cxl_mock_mem_remove(struct platform_device *pdev)
-> +{
-> +	cxl_mock_remove_event_logs(&pdev->dev);
-Why not use devm_add_action_or_reset()?
-
-> +	return 0;
-> +}
-> +
-
->  
-
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
