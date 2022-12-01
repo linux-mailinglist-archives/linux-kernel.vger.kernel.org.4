@@ -2,216 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B0163F547
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4E763F568
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiLAQ2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S231386AbiLAQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiLAQ2G (ORCPT
+        with ESMTP id S231851AbiLAQjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:28:06 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943E224F37;
-        Thu,  1 Dec 2022 08:28:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669912085; x=1701448085;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Uwa5GE+MsAvzWb87j0kaLbVFsNzYxhRQYhZoxGjszZo=;
-  b=TM+zHOVXbln7b49hgvfWzBq9Vi9CSKkSottlU+XOWSMRYdyg5sEXhBUf
-   XCZvYsejXJBeL/jblrN9lQXQ5gf9vzq2Af678sM1q8Q8fMeVVr0EgSsx9
-   IFGa1YtbEQAogO4qcvf9VVJXgJIFuQVXgtEaq+LcMzOh1rS0I00AMtnnE
-   jHzvislHhOm3CTq4uyEHyU6ZgXrjKbGPM4SeCL5BM2kUyIKg2z19NJxsb
-   Xc0gcivGMTQVXnm9jrxGOubiBqgadXC3jxv9FqjGVU0TBsMK84uU3OyGv
-   XHSRJ3qACBenQRSMZpA2V5EPq13JlAO+NhiDJmr8XFyX5ZOJfaDTzRDcT
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="296085397"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="296085397"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 08:28:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="889795226"
-X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="889795226"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.34.240])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 08:27:59 -0800
-Message-ID: <0b5df859-a662-a677-aaa0-cbf68c029ab9@intel.com>
-Date:   Thu, 1 Dec 2022 18:27:54 +0200
+        Thu, 1 Dec 2022 11:39:10 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F299B78A;
+        Thu,  1 Dec 2022 08:39:09 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1GP7Qk015109;
+        Thu, 1 Dec 2022 16:39:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Sa1LChvHQ2k7u2Yx/whdyqREDbJzHoqzZDKK/r++r6M=;
+ b=iN9KU7yrTYPAJpsblV2lVRwKDQ6oJRqX4JOvikUOxPZJfqYnDuDaY2tXR7HsAN69zOVp
+ 9/uG0F7uku/wZ4DJ8r+MYhiWpOUfqnpa4vmxJyUJDNs7/X7vVyMD35uoOHa0Fe/4F9tl
+ 8NuXAPf/LbP+h9Lm4t7xrdpT9sBkWZzN5v6Ysr4IRUezQ0FcuF7bYDxcVl7f9VOmLWj+
+ XG3UbGx54RxDSYUQcpBddV52emnfE+f68SXBjZty2jVGP+xMKZDQSJuM0qlIx8XKHVds
+ 89Yki8ofnoOQbL61WbPl6sryCi3TiETr05Z1dqtI9j4bzUbwWR29YpDkUcXfr0Kc3hT6 qA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ys7rbr0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 16:39:03 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B1GQ3rD021645;
+        Thu, 1 Dec 2022 16:39:03 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ys7rbq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 16:39:02 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B1GcYEC010804;
+        Thu, 1 Dec 2022 16:39:00 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3m3ae8wjm3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 16:39:00 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B1GcvC97078614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Dec 2022 16:38:57 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4EE41A405B;
+        Thu,  1 Dec 2022 16:38:57 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB370A4054;
+        Thu,  1 Dec 2022 16:38:56 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.56])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Dec 2022 16:38:56 +0000 (GMT)
+Date:   Thu, 1 Dec 2022 17:28:13 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v3 4/9] KVM: s390: selftest: memop: Replace macros by
+ functions
+Message-ID: <20221201172813.027bcd13@p-imbrenda>
+In-Reply-To: <20221117221758.66326-5-scgl@linux.ibm.com>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+        <20221117221758.66326-5-scgl@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH v1 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, ulf.hansson@linaro.org,
-        avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, andy.shevchenko@gmail.com
-Cc:     openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221130150857.67113-1-tmaimon77@gmail.com>
- <20221130150857.67113-3-tmaimon77@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221130150857.67113-3-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NiGTT1eKJg8ec_Bwv0LYuMlzyV7tfXm3
+X-Proofpoint-ORIG-GUID: _3WG0nijUxGdbeeNL4jWPRdpe4MoqBM4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_11,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 impostorscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212010118
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/22 17:08, Tomer Maimon wrote:
-> Add Nuvoton NPCM BMC sdhci-pltfm controller driver.
+On Thu, 17 Nov 2022 23:17:53 +0100
+Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
+
+> Replace the DEFAULT_* test helpers by functions, as they don't
+> need the exta flexibility.
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 > ---
->  drivers/mmc/host/Kconfig      |  8 ++++
->  drivers/mmc/host/Makefile     |  1 +
->  drivers/mmc/host/sdhci-npcm.c | 81 +++++++++++++++++++++++++++++++++++
->  3 files changed, 90 insertions(+)
->  create mode 100644 drivers/mmc/host/sdhci-npcm.c
+>  tools/testing/selftests/kvm/s390x/memop.c | 82 +++++++++++------------
+>  1 file changed, 39 insertions(+), 43 deletions(-)
 > 
-> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-> index fb1062a6394c..4b2d9ce4308c 100644
-> --- a/drivers/mmc/host/Kconfig
-> +++ b/drivers/mmc/host/Kconfig
-> @@ -709,6 +709,14 @@ config MMC_TMIO
->  	  This provides support for the SD/MMC cell found in TC6393XB,
->  	  T7L66XB and also HTC ASIC3
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index 69869c7e2ab1..286185a59238 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -48,6 +48,8 @@ struct mop_desc {
+>  	uint8_t key;
+>  };
 >  
-> +config MMC_SDHCI_NPCM
-> +	tristate "Secure Digital Host Controller Interface support for NPCM"
-> +	depends on ARCH_NPCM || COMPILE_TEST
-> +	depends on MMC_SDHCI_PLTFM
-> +	help
-> +	  This provides support for the SD/eMMC controller found in
-> +	  NPCM BMC family SoCs.
+> +const uint8_t NO_KEY = 0xff;
 > +
->  config MMC_SDHI
->  	tristate "Renesas SDHI SD/SDIO controller support"
->  	depends on SUPERH || ARCH_RENESAS || COMPILE_TEST
-> diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-> index 4e4ceb32c4b4..801086613d7f 100644
-> --- a/drivers/mmc/host/Makefile
-> +++ b/drivers/mmc/host/Makefile
-> @@ -37,6 +37,7 @@ obj-$(CONFIG_MMC_SPI)		+= of_mmc_spi.o
->  obj-$(CONFIG_MMC_S3C)   	+= s3cmci.o
->  obj-$(CONFIG_MMC_SDRICOH_CS)	+= sdricoh_cs.o
->  obj-$(CONFIG_MMC_TMIO)		+= tmio_mmc.o
-> +obj-$(CONFIG_MMC_SDHCI_NPCM)	+= sdhci-npcm.o
->  obj-$(CONFIG_MMC_TMIO_CORE)	+= tmio_mmc_core.o
->  obj-$(CONFIG_MMC_SDHI)		+= renesas_sdhi_core.o
->  obj-$(CONFIG_MMC_SDHI_SYS_DMAC)		+= renesas_sdhi_sys_dmac.o
-> diff --git a/drivers/mmc/host/sdhci-npcm.c b/drivers/mmc/host/sdhci-npcm.c
-> new file mode 100644
-> index 000000000000..298c5f3e7c2b
-> --- /dev/null
-> +++ b/drivers/mmc/host/sdhci-npcm.c
-> @@ -0,0 +1,81 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * NPCM SDHC MMC host controller driver.
-> + *
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/mmc/host.h>
-> +#include <linux/mmc/mmc.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +
-> +#include "sdhci-pltfm.h"
-> +
-> +static const struct sdhci_pltfm_data npcm_sdhci_pdata = {
-> +	.quirks  = SDHCI_QUIRK_DELAY_AFTER_POWER,
-> +	.quirks2 = SDHCI_QUIRK2_STOP_WITH_TC |
-> +		   SDHCI_QUIRK2_NO_1_8_V,
-> +};
-> +
-> +static int npcm_sdhci_probe(struct platform_device *pdev)
+>  static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
+>  {
+>  	struct kvm_s390_mem_op ksmo = {
+> @@ -85,7 +87,7 @@ static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
+>  		ksmo.flags |= KVM_S390_MEMOP_F_INJECT_EXCEPTION;
+>  	if (desc->_set_flags)
+>  		ksmo.flags = desc->set_flags;
+> -	if (desc->f_key) {
+> +	if (desc->f_key && desc->key != NO_KEY) {
+
+is this change going to affect the behaviour?
+if so, please document it in the patch description
+
+>  		ksmo.flags |= KVM_S390_MEMOP_F_SKEY_PROTECTION;
+>  		ksmo.key = desc->key;
+>  	}
+> @@ -268,34 +270,28 @@ static void prepare_mem12(void)
+>  #define ASSERT_MEM_EQ(p1, p2, size) \
+>  	TEST_ASSERT(!memcmp(p1, p2, size), "Memory contents do not match!")
+>  
+> -#define DEFAULT_WRITE_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)		\
+> -({										\
+> -	struct test_info __copy_cpu = (copy_cpu), __mop_cpu = (mop_cpu);	\
+> -	enum mop_target __target = (mop_target_p);				\
+> -	uint32_t __size = (size);						\
+> -										\
+> -	prepare_mem12();							\
+> -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
+> -			GADDR_V(mem1), ##__VA_ARGS__);				\
+> -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
+> -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size,		\
+> -			GADDR_V(mem2), ##__VA_ARGS__);				\
+> -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
+> -})
+> +static void default_write_read(struct test_info copy_cpu, struct test_info mop_cpu,
+> +			       enum mop_target mop_target, uint32_t size, uint8_t key)
 > +{
-> +	struct sdhci_pltfm_host *pltfm_host;
-> +	struct sdhci_host *host;
-> +	u32 caps;
-> +	int ret;
-> +
-> +	host = sdhci_pltfm_init(pdev, &npcm_sdhci_pdata, 0);
-> +	if (IS_ERR(host))
-> +		return PTR_ERR(host);
-> +
-> +	pltfm_host = sdhci_priv(host);
-> +	pltfm_host->clk = devm_clk_get(&pdev->dev, NULL);
-
-For an optional clock, something like:
-
-	pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
-	if (IS_ERR(pltfm_host->clk))
-		return PTR_ERR(pltfm_host->clk);
-
-will handle -EPROBE_DEFER
-
-> +
-> +	if (!IS_ERR(pltfm_host->clk))
-> +		clk_prepare_enable(pltfm_host->clk);
-> +
-> +	caps = sdhci_readl(host, SDHCI_CAPABILITIES);
-> +	if (caps & SDHCI_CAN_DO_8BIT)
-> +		host->mmc->caps |= MMC_CAP_8_BIT_DATA;
-> +
-> +	ret = mmc_of_parse(host->mmc);
-> +	if (ret)
-> +		goto err_sdhci_add;
-> +
-> +	ret = sdhci_add_host(host);
-> +	if (ret)
-> +		goto err_sdhci_add;
-> +
-> +	return 0;
-> +
-> +err_sdhci_add:
-> +	clk_disable_unprepare(pltfm_host->clk);
-> +	sdhci_pltfm_free(pdev);
-> +	return ret;
+> +	prepare_mem12();
+> +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size,
+> +		   GADDR_V(mem1), KEY(key));
+> +	HOST_SYNC(copy_cpu, STAGE_COPIED);
+> +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
+> +		   GADDR_V(mem2), KEY(key));
+> +	ASSERT_MEM_EQ(mem1, mem2, size);
 > +}
-> +
-> +static const struct of_device_id npcm_sdhci_of_match[] = {
-> +	{ .compatible = "nuvoton,npcm750-sdhci" },
-> +	{ .compatible = "nuvoton,npcm845-sdhci" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, npcm_sdhci_of_match);
-> +
-> +static struct platform_driver npcm_sdhci_driver = {
-> +	.driver = {
-> +		.name	= "npcm-sdhci",
-> +		.of_match_table = npcm_sdhci_of_match,
-> +		.pm	= &sdhci_pltfm_pmops,
-> +	},
-> +	.probe		= npcm_sdhci_probe,
-> +	.remove		= sdhci_pltfm_unregister,
-> +};
-> +
-> +module_platform_driver(npcm_sdhci_driver);
-> +
-> +MODULE_DESCRIPTION("NPCM Secure Digital Host Controller Interface driver");
-> +MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
-> +MODULE_LICENSE("GPL v2");
-
-WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-#133: FILE: drivers/mmc/host/sdhci-npcm.c:81:
-+MODULE_LICENSE("GPL v2");
-
+>  
+> -#define DEFAULT_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)		\
+> -({										\
+> -	struct test_info __copy_cpu = (copy_cpu), __mop_cpu = (mop_cpu);	\
+> -	enum mop_target __target = (mop_target_p);				\
+> -	uint32_t __size = (size);						\
+> -										\
+> -	prepare_mem12();							\
+> -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
+> -			GADDR_V(mem1));						\
+> -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
+> -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size, ##__VA_ARGS__);\
+> -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
+> -})
+> +static void default_read(struct test_info copy_cpu, struct test_info mop_cpu,
+> +			 enum mop_target mop_target, uint32_t size, uint8_t key)
+> +{
+> +	prepare_mem12();
+> +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size, GADDR_V(mem1));
+> +	HOST_SYNC(copy_cpu, STAGE_COPIED);
+> +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
+> +		   GADDR_V(mem2), KEY(key));
+> +	ASSERT_MEM_EQ(mem1, mem2, size);
+> +}
+>  
+>  static void guest_copy(void)
+>  {
+> @@ -310,7 +306,7 @@ static void test_copy(void)
+>  
+>  	HOST_SYNC(t.vcpu, STAGE_INITED);
+>  
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size);
+> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, NO_KEY);
+>  
+>  	kvm_vm_free(t.kvm_vm);
+>  }
+> @@ -357,26 +353,26 @@ static void test_copy_key(void)
+>  	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
+>  
+>  	/* vm, no key */
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size);
+> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, NO_KEY);
+>  
+>  	/* vm/vcpu, machting key or key 0 */
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(0));
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(9));
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size, KEY(0));
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size, KEY(9));
+> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 0);
+> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 9);
+> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, 0);
+> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, 9);
+>  	/*
+>  	 * There used to be different code paths for key handling depending on
+>  	 * if the region crossed a page boundary.
+>  	 * There currently are not, but the more tests the merrier.
+>  	 */
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, 1, KEY(0));
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, 1, KEY(9));
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, 1, KEY(0));
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, 1, KEY(9));
+> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, 1, 0);
+> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, 1, 9);
+> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, 1, 0);
+> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, 1, 9);
+>  
+>  	/* vm/vcpu, mismatching keys on read, but no fetch protection */
+> -	DEFAULT_READ(t.vcpu, t.vcpu, LOGICAL, t.size, GADDR_V(mem2), KEY(2));
+> -	DEFAULT_READ(t.vcpu, t.vm, ABSOLUTE, t.size, GADDR_V(mem1), KEY(2));
+> +	default_read(t.vcpu, t.vcpu, LOGICAL, t.size, 2);
+> +	default_read(t.vcpu, t.vm, ABSOLUTE, t.size, 2);
+>  
+>  	kvm_vm_free(t.kvm_vm);
+>  }
+> @@ -409,7 +405,7 @@ static void test_copy_key_storage_prot_override(void)
+>  	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
+>  
+>  	/* vcpu, mismatching keys, storage protection override in effect */
+> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(2));
+> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 2);
+>  
+>  	kvm_vm_free(t.kvm_vm);
+>  }
+> @@ -422,8 +418,8 @@ static void test_copy_key_fetch_prot(void)
+>  	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
+>  
+>  	/* vm/vcpu, matching key, fetch protection in effect */
+> -	DEFAULT_READ(t.vcpu, t.vcpu, LOGICAL, t.size, GADDR_V(mem2), KEY(9));
+> -	DEFAULT_READ(t.vcpu, t.vm, ABSOLUTE, t.size, GADDR_V(mem2), KEY(9));
+> +	default_read(t.vcpu, t.vcpu, LOGICAL, t.size, 9);
+> +	default_read(t.vcpu, t.vm, ABSOLUTE, t.size, 9);
+>  
+>  	kvm_vm_free(t.kvm_vm);
+>  }
 
