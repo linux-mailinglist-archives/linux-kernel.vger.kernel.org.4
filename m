@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3848F63F591
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7044863F58F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiLAQqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S229633AbiLAQqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiLAQqM (ORCPT
+        with ESMTP id S229468AbiLAQqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:46:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB1EAE4DC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:45:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669913119;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0j7iDCqKcud61bnCVouYTAjXYx/lMBjTVmeuK6IwiIs=;
-        b=NCBOe8Y+pheTUfOsgWlqkMEwefdvxMOaYnVDzMc/7pEvdZpPQ03apRGblsSMbc9olUhFv0
-        TsNzJSVC18hYJPMhFz7eSPOKaph9c1gd84vWzP31pdqgKEqxJ593IVgXJZMU7E5Fe5Np1v
-        69oNMzxQxmbCHp4tqUIchS7NHUqmlcg=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-413-zOm-sR2FMF20B9Yjm372Ew-1; Thu, 01 Dec 2022 11:45:18 -0500
-X-MC-Unique: zOm-sR2FMF20B9Yjm372Ew-1
-Received: by mail-ej1-f70.google.com with SMTP id gb8-20020a170907960800b007bef177dddeso1691436ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:45:18 -0800 (PST)
+        Thu, 1 Dec 2022 11:46:03 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE843AE4DB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:46:01 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id be13so3373969lfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JyXwsISg2hqrDbLH4PWrxpPoyYkal7Yp7GIi0GYCT4k=;
+        b=fgG275JX+8OA9io0oPMMk9CEmp+OEGlPeTlIhoOk+5omkUPLNO2UkGWH4vlAAl7cfV
+         gI6IsF9ilmW9uf7xAYa521h6vvDRnu/w7hjAAA436flCw2aQMmPIYnZuNCQb1LKsdtsj
+         P17EoydDXWTrEtIbwZlX8rsHCzN39kQQAxHIarKQdUe/7DLNl+nzIcpppW82zE9WL5oy
+         711Uz75zOYJfhQwh6fSpUpwPms5vYakwzJSQik8NeHvlROkb0YqnjyNCpJoT4DqxHHuC
+         gadsDp2TN1pyUkkzwsu9cO7Pdi0nxkmAIH992GGpGzSmw1Nw4rcdfCau4i5UxmYeK3Pw
+         1NjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0j7iDCqKcud61bnCVouYTAjXYx/lMBjTVmeuK6IwiIs=;
-        b=AoXimrHitiCBCkJ3CIAcU7mIxaA4hMR/G/QZ9STSKv7lNOAYl2gNitjNC9BgRnS3El
-         1EngfUI6IkpxO450pUzDGQSGK7/DulW84F8zsOqipdIcJl/wqXme3VYxkP8bPp/wP2Nq
-         ZapAh+R38QsQJ87MV15im69SnXJBdPa8dFcI/P6S/G7JUouJtuxhL6TQE0D2SKLG0u6t
-         TA2YrFh15yNYOCIoQO6WxAxaIyE5sUBp6olRwgkfjqUD4GFfUoEuIZM933iTiIh9nkN0
-         jBvNw71h8ZHpyW8DZ1fKLOdLY8Lsfdsrpb/jlu0tCJhcUXh/4K8l3mdXfLQMtiIx4xy5
-         SsPA==
-X-Gm-Message-State: ANoB5pkhpNPbK2RGccoLn+GJAdqYbOAmdhxdeonK/M5h1fvEO3cYDqe1
-        aK2tn+GsVxC6bbesBR2poOSbHzpviAxCJ59QGPvioPh2aaqalqtS6TINYKsOxGy1V8azCnf8r6r
-        OK1KeF4pxAkHIdHsFzW3/mbV8
-X-Received: by 2002:a17:906:6c7:b0:78d:4061:5e1b with SMTP id v7-20020a17090606c700b0078d40615e1bmr47970145ejb.47.1669913117079;
-        Thu, 01 Dec 2022 08:45:17 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4eaU/O5iQxd1YPRfrkTQE4uquPar9KRJcIbFIa3jXZVSj/nGj010qrX05SJquNTJ1RK03UPA==
-X-Received: by 2002:a17:906:6c7:b0:78d:4061:5e1b with SMTP id v7-20020a17090606c700b0078d40615e1bmr47970132ejb.47.1669913116866;
-        Thu, 01 Dec 2022 08:45:16 -0800 (PST)
-Received: from ovpn-194-141.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id m11-20020a056402050b00b00467cc919072sm1917760edv.17.2022.12.01.08.45.15
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JyXwsISg2hqrDbLH4PWrxpPoyYkal7Yp7GIi0GYCT4k=;
+        b=6mKbA2p3cv+4WcS/x0iISqXN5wRb5Eq4eJdemX6DiZuJZXhOaQd232WhGNkI0qk5Zn
+         Cyw5WRcrYt+7nMaiVBdXo1/AANRkRXN3Pw3hEkjROfK9N7b8Fo1PRjIB0i4H/4rbbE42
+         PKcYNiqbs1ioaHxs45fj1OLzYf+9f5d/CpIdoqe3BxaknGUq5y0hPnHnRn/3xceE60yR
+         JMNU6tE2vah27NDneFjpAoi7eMV6AEvJ8XPD5NvbcDfUKFEtiuBdomZWUhp0o3rSgY4P
+         C4szaeRQyjiU71wfWItC8sX8wBQWDpQjd3JN29x7lnHjcwpiT3c/QmjowBiTtC5BjaN6
+         nLQw==
+X-Gm-Message-State: ANoB5pn9DHtfHPUXBkXQf+a3HAhO+Xyg3oY5PDLFIsGmsTJnt049ZyNd
+        D0VQcfGaFvWVNK8wM9uVGNI=
+X-Google-Smtp-Source: AA0mqf7Km5DdpUp4nfZNls7qFGafYcCRLvQ/3FwcN3fYDb6clK8EopVQF1e5mD6ikno8Oc+kJKECUg==
+X-Received: by 2002:a05:6512:32d1:b0:4af:1e70:9ad with SMTP id f17-20020a05651232d100b004af1e7009admr25928831lfg.38.1669913160093;
+        Thu, 01 Dec 2022 08:46:00 -0800 (PST)
+Received: from dc75zzyyyyyyyyyyyyygt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyygt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::b])
+        by smtp.gmail.com with ESMTPSA id t23-20020a2e8e77000000b0026fbac7468bsm409393ljk.103.2022.12.01.08.45.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 08:45:15 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     coverity-bot <keescook@chromium.org>
-Cc:     Sean Christopherson <seanjc@google.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: kvm_hv_flush_tlb(): Uninitialized variables
-In-Reply-To: <202212010825.9FB75F1F@keescook>
-References: <202212010825.9FB75F1F@keescook>
-Date:   Thu, 01 Dec 2022 17:45:14 +0100
-Message-ID: <87edtjf4yt.fsf@ovpn-194-141.brq.redhat.com>
+        Thu, 01 Dec 2022 08:45:59 -0800 (PST)
+Date:   Thu, 1 Dec 2022 18:45:40 +0200
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>, Kirill Tkhai <tkhai@ya.ru>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mailmap: update Matti Vaittinen's email address
+Message-ID: <8f4498b66fedcbded37b3b87e0c516e659f8f583.1669912977.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6qxhwsub10Ml36pB"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,60 +80,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-coverity-bot <keescook@chromium.org> writes:
 
-> Hello!
->
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20221201 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
->
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
->
->   Fri Nov 18 12:59:05 2022 -0500
->     260970862c88 ("KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently")
->
-> Coverity reported the following:
->
-> *** CID 1527764:  Uninitialized variables  (UNINIT)
-> arch/x86/kvm/hyperv.c:2024 in kvm_hv_flush_tlb()
-> 2018     		 * Hyper-V TLFS doesn't explicitly forbid non-empty sparse vCPU
-> 2019     		 * banks (and, thus, non-zero 'var_cnt') for the 'all vCPUs'
-> 2020     		 * case (HV_GENERIC_SET_ALL).  Always adjust data_offset and
-> 2021     		 * consumed_xmm_halves to make sure TLB flush entries are read
-> 2022     		 * from the correct offset.
-> 2023     		 */
-> vvv     CID 1527764:  Uninitialized variables  (UNINIT)
-> vvv     Using uninitialized value "data_offset".
-> 2024     		data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
-> 2025     		consumed_xmm_halves += hc->var_cnt;
-> 2026     	}
-> 2027
-> 2028     	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
-> 2029     	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
->
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
+--6qxhwsub10Ml36pB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looks half legit) 'data_offset' can only be uninitialized here in
-'hc->fast' case but this also means that the only user of 'data_offset'
-(kvm_hv_get_tlb_flush_entries()) below will not use it. So yes, we do
-increment an uninitialized variable but we won't use the result. I think
-we're better off fixing this, even if there's no real issue. I'll send a
-patch, hopefully tomorrow.
+The email backend used by ROHM keeps labeling patches as spam. This can
+result to missing the patches.
 
-Thanks!
+Switch my mail address from a company mail to a personal one.
 
->
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527764 ("Uninitialized variables")
-> Fixes: 260970862c88 ("KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently")
->
-> Thanks for your attention!
+Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Vitaly
+diff --git a/.mailmap b/.mailmap
+index 4a14ece4cdb7..0b01c3052aa4 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -287,6 +287,7 @@ Matthew Wilcox <willy@infradead.org> <willy@linux.intel=
+=2Ecom>
+ Matthew Wilcox <willy@infradead.org> <willy@parisc-linux.org>
+ Matthias Fuchs <socketcan@esd.eu> <matthias.fuchs@esd.eu>
+ Matthieu CASTET <castet.matthieu@free.fr>
++Matti Vaittinen <mazziesaccount@gmail.com> <matti.vaittinen@fi.rohmeurope.=
+com>
+ Matt Ranostay <matt.ranostay@konsulko.com> <matt@ranostay.consulting>
+ Matt Ranostay <mranostay@gmail.com> Matthew Ranostay <mranostay@embeddedal=
+ley.com>
+ Matt Ranostay <mranostay@gmail.com> <matt.ranostay@intel.com>
+--=20
+2.38.1
 
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--6qxhwsub10Ml36pB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmOI2igACgkQeFA3/03a
+ocXVRggAgirQpHoOrr55mmUD8h/o2AFsPa7jFR0+fZo9S/SqDJ2WnAFnrfMboYR+
+/aoczeS9MelScDK86T9tgfccU75EB1YmOniqFgaXHpwxPsN1r2cBhINA6EY9iMYh
+duLn6n1Om65MkqkNEZW+WheEXY+dWCBNRnNsxze3gNRzRXOuTcxRUcJsAtZh8I1B
+KBjnI8VFRiIKs/0Xq7kHTmAOquGZX8gpcVS9bhdP9zpa9VAyrZLOqh9mhNnUDR8T
+rBhM7GPcuJeDoUmnlF2atzEcSFAQRYEo/33o540i38NF9IaLSgTo6bGpQ9Ink+V/
+T2MqmWHLz+NoIj5yYfJwj4/DdFCzbQ==
+=uvGI
+-----END PGP SIGNATURE-----
+
+--6qxhwsub10Ml36pB--
