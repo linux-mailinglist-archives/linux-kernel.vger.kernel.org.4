@@ -2,193 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC8F63EF2A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7371763EF10
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiLALQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:16:04 -0500
+        id S230219AbiLALPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:15:01 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiLALO7 (ORCPT
+        with ESMTP id S229782AbiLALOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:14:59 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52940CD9B5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:08:54 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id fy37so3296670ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SFyJfR2WUZBDHeWemxJgoKouNxxtAGHlmHCCEO9QQfg=;
-        b=ihhHeh07lyLQ9+bLJAT02xtbEUUwBhwmY6NbvI/an2JMfUbxhGOKl7udb7lLh5mId9
-         jw5dKTuvmRP+w2K8ZYng51eJLaluDUotqflfy43/10yqWgw/yG+fgTeB0ukeRPMWa9sh
-         dgPYzjd9Y05h6Utm7j5Kxf9v/xCIYLObtVbqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SFyJfR2WUZBDHeWemxJgoKouNxxtAGHlmHCCEO9QQfg=;
-        b=MvnJKrfqHo/UiVA0GgrpwWEqa0JUBAbVfgjN+jqPLqvRoitioQ7j02Ok8gjBNoHw2I
-         IIBOeCd5ySF+mZJLsX7RBy9DmfOdK1BVl+HRvq4sJGYkWPSxaAH6j/ZUINyGG0ORSrmx
-         8PtIoXZkivDjiz7OoXgJK8bu/LGIZPg/FI16Wk9qRM3KWzmh01YUQVr+gBeGYGG/7gPI
-         moAIQoLpCjhC3qp3yqrlLgm+Ln4lqj7tXh1a/lGK3bgUivEM//VNc/I+ilynoJZ0CQEM
-         OZ6CVVz4F1+WXotKuq94oURhVM5e//qsXOj1FQf+rdhDWqVijGefV46cB2gFPj7liBkK
-         x7vA==
-X-Gm-Message-State: ANoB5pl3/hblPbJF6gtvZyarbE+7YIQOCeVRuMvV5tGjLKfBWzeRcx9h
-        IiKKG4uHvzL1fK5df+cmJW41jQ==
-X-Google-Smtp-Source: AA0mqf5n8q8ZMG+bv3DehJEYX5ANkxpTsyIzmCnCUsZmiYp8gdzbFTHhMnsW4dhR0VzoX//sUAQsMg==
-X-Received: by 2002:a17:906:7f09:b0:7c0:b3a8:a5f9 with SMTP id d9-20020a1709067f0900b007c0b3a8a5f9mr1338546ejr.154.1669892932820;
-        Thu, 01 Dec 2022 03:08:52 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:f554:724a:f89a:73db])
-        by smtp.gmail.com with ESMTPSA id v17-20020a170906293100b0078e0973d1f5sm1663824ejd.0.2022.12.01.03.08.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:08:52 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 01 Dec 2022 12:08:23 +0100
-Subject: [PATCH v8 3/3] ASoC: SOF: Fix deadlock when shutdown a frozen userspace
+        Thu, 1 Dec 2022 06:14:24 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17FC25EB9;
+        Thu,  1 Dec 2022 03:08:42 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=renyu.zj@linux.alibaba.com;NM=0;PH=DS;RN=20;SR=0;TI=SMTPD_---0VW8ayfo_1669892916;
+Received: from 30.221.148.106(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VW8ayfo_1669892916)
+          by smtp.aliyun-inc.com;
+          Thu, 01 Dec 2022 19:08:38 +0800
+Message-ID: <1a7fc9da-2589-1835-716f-d52027f0ecda@linux.alibaba.com>
+Date:   Thu, 1 Dec 2022 19:08:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221127-snd-freeze-v8-3-3bc02d09f2ce@chromium.org>
-References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
-In-Reply-To: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
-To:     Juergen Gross <jgross@suse.com>, Mark Brown <broonie@kernel.org>,
-        Chromeos Kdump <chromeos-kdump@google.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v3 5/6] perf vendor events arm64: Add PE utilization
+ metrics for neoverse-n2
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org
-Cc:     kexec@lists.infradead.org, alsa-devel@alsa-project.org,
-        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org,
-        sound-open-firmware@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2398; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=GWM+B74HgZm8hg965LkIrG7utJXhrwWC6OA28kyyUjA=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjiIs5X8qunJcdzh4yNadWVeViZgDn3gq/06nr8kdj
- kdUAnBmJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4iLOQAKCRDRN9E+zzrEiBePD/
- 4n9U/k8s8PcSMHwaDWquOwoHUGMa1OTSXQAeS+zkfPMUpMhgcoTNo49nWa43GN+Y810XaYiML51562
- eLirizXRSalXPpYVLlUge+rUD8YTV54zGi5OoX528K7lwHG8z+THm4BSy0/gmpmwdgB3GttlQH5Xh0
- P4IRFzzQUndzF5+V+rD7ZDsOIqsqHLEl2xVrPlelt3OtQTf7xzm+FTwEgxz8fg42kpdkTUjKNidLBa
- PVVihXzxaPSrNmIcrlXDWrTscOrbX2UGlosoMD4NyfKwacu0juZk+QLlYCoIBu78E/d04Top6bsU/I
- uqQOeIB3UrGvmdWb9fO9H/WX4GIFLG+w7VCfaLbEd22SI+WITCvp/dDA/ZO8fzX1wgQBHvFZRLIuM4
- 0mqtOEszlCVB4pMNrAVJcSULhKWOxrKI7MkUyf/otZRJ67hrWlDDaOmlBsOkJTF1T5obHSRoblMSSE
- UwMVB1vp64JD4LAxJGmFWSPjZ3BMJJK0mblOTi/qOiMm2QR7iraSkhMsUcpx9HI4IeSwbTJszKQ1Hb
- BgqjW0c2l0BpHzIlEvkoUHxIGQdKJLMfmy8GbTMKne5zBzPRx9+b+cGgNvRa/zWp72+v9Fm0r2l8rk
- 2c1+78340GIwSb9Ffj750Evz1ISy6b5FAAiC5q+SWoZEFW2mWMAN+3crcCZw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1669310088-13482-6-git-send-email-renyu.zj@linux.alibaba.com>
+ <CAP-5=fV0WSTK=MT6K2nqsqYT6xCTg7Pv_rXahHFeRhV0ZHCiEQ@mail.gmail.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <CAP-5=fV0WSTK=MT6K2nqsqYT6xCTg7Pv_rXahHFeRhV0ZHCiEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we are shutting down due to kexec and the userspace is frozen, the
-system will stall forever waiting for userspace to complete.
 
-Do not wait for the clients to complete in that case.
 
-This fixes:
+在 2022/12/1 上午2:58, Ian Rogers 写道:
+> On Thu, Nov 24, 2022 at 9:15 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
+>>
+>> Add PE utilization related metrics.
+>>
+>> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+>> ---
+>>  .../arch/arm64/arm/neoverse-n2/metrics.json        | 45 ++++++++++++++++++++++
+>>  1 file changed, 45 insertions(+)
+>>
+>> diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> index 23c7d62..7b54819 100644
+>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> @@ -189,5 +189,50 @@
+>>          "MetricGroup": "Branch",
+>>          "MetricName": "branch_miss_pred_rate",
+>>          "ScaleUnit": "100%"
+>> +    },
+>> +    {
+>> +        "MetricExpr": "instructions / CPU_CYCLES",
+>> +        "PublicDescription": "The average number of instructions executed for each cycle.",
+>> +        "BriefDescription": "Instructions per cycle",
+>> +        "MetricGroup": "PEutilization",
+>> +        "MetricName": "ipc"
+>> +    },
+> 
+> A related useful metric is percentage of peak, so if the peak IPC is 8
+> (usually a constant related to the number of functional units) then
+> you can just compute the ratio of IPC with this.
+> 
 
-[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
-[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
-[  246.819035] Call Trace:
-[  246.821782]  <TASK>
-[  246.824186]  __schedule+0x5f9/0x1263
-[  246.828231]  schedule+0x87/0xc5
-[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
-...
-[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
-[  246.899317]  pci_device_shutdown+0x37/0x61
-[  246.903990]  device_shutdown+0x14c/0x1d6
-[  246.908391]  kernel_kexec+0x45/0xb9
+Glad to discuss these with you.
+The peak ipc value of neoverse-n2 is 5. Maybe I should add an ipc_rate metric?
 
-And:
+>> +    {
+>> +        "MetricExpr": "INST_RETIRED / CPU_CYCLES",
+>> +        "PublicDescription": "Architecturally executed Instructions Per Cycle (IPC)",
+>> +        "BriefDescription": "Architecturally executed Instructions Per Cycle (IPC)",
+> 
+> 
+> The duplicated descriptions are unnecessary. Drop the public one for
+> consistency with what we do for Intel:
+> https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py#L299
+> 
 
-[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
-[  246.927709] Call Trace:
-[  246.930461]  <TASK>
-[  246.932819]  __schedule+0x5f9/0x1263
-[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
-[  246.942045]  schedule+0x87/0xc5
-[  246.945567]  schedule_timeout+0x49/0xf3
-[  246.949877]  wait_for_completion+0x86/0xe8
-[  246.954463]  snd_card_free+0x68/0x89
-...
-[  247.001080]  platform_device_unregister+0x12/0x35
+Sounds good, will do.
 
-Cc: stable@vger.kernel.org
-Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- sound/soc/sof/core.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+>> +        "MetricGroup": "PEutilization",
+>> +        "MetricName": "retired_ipc"
+>> +    },
+>> +    {
+>> +        "MetricExpr": "INST_SPEC / CPU_CYCLES",
+>> +        "PublicDescription": "Speculatively executed Instructions Per Cycle (IPC)",
+>> +        "BriefDescription": "Speculatively executed Instructions Per Cycle (IPC)",
+>> +        "MetricGroup": "PEutilization",
+>> +        "MetricName": "spec_ipc"
+>> +    },
+>> +    {
+>> +        "MetricExpr": "OP_RETIRED / OP_SPEC",
+>> +        "PublicDescription": "Fraction of operations retired",
+>> +        "BriefDescription": "Fraction of operations retired",
+> 
+> Would instructions be clearer than operations here?
+> 
 
-diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
-index 3e6141d03770..9587b6a85103 100644
---- a/sound/soc/sof/core.c
-+++ b/sound/soc/sof/core.c
-@@ -9,6 +9,8 @@
- //
- 
- #include <linux/firmware.h>
-+#include <linux/kexec.h>
-+#include <linux/freezer.h>
- #include <linux/module.h>
- #include <sound/soc.h>
- #include <sound/sof.h>
-@@ -484,9 +486,10 @@ int snd_sof_device_shutdown(struct device *dev)
- 	 * make sure clients and machine driver(s) are unregistered to force
- 	 * all userspace devices to be closed prior to the DSP shutdown sequence
- 	 */
--	sof_unregister_clients(sdev);
--
--	snd_sof_machine_unregister(sdev, pdata);
-+	if (!(kexec_in_progress() && pm_freezing())) {
-+		sof_unregister_clients(sdev);
-+		snd_sof_machine_unregister(sdev, pdata);
-+	}
- 
- 	if (sdev->fw_state == SOF_FW_BOOT_COMPLETE)
- 		return snd_sof_shutdown(sdev);
+operation and instruction are different. OP_RETIRED counts any operation (not instruction)
+that has been architecturally executed, For example, speculatively executed operations that
+have been abandoned for a branch mispredict will not be counted. So I think operation might
+be more accurate.
 
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
+>> +        "MetricGroup": "PEutilization",
+>> +        "MetricName": "retired_rate",
+>> +        "ScaleUnit": "100%"
+>> +    },
+>> +    {
+>> +        "MetricExpr": "1 - OP_RETIRED / OP_SPEC",
+> 
+> Should OP_RETIRED be greater than OP_SPEC? In which case won't this
+> metric be negative?
+> 
+
+OP_RETIRED will not be greater than OP_SPEC. OP_SPEC counts any operation that has been
+speculatively executed. OP_SPEC is a superset of the OP_RETIRED event. There is a
+description about OP_SPEC and OP_RETIRED in this neoverse-n2 document.
+Link: https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
+
+>> +        "PublicDescription": "Fraction of operations wasted",
+>> +        "BriefDescription": "Fraction of operations wasted",
+>> +        "MetricGroup": "PEutilization",
+>> +        "MetricName": "wasted_rate",
+>> +        "ScaleUnit": "100%"
+>> +    },
+>> +    {
+>> +        "MetricExpr": "OP_RETIRED / OP_SPEC * (1 - (STALL_SLOT - CPU_CYCLES) / (CPU_CYCLES * 5))",
+>> +        "PublicDescription": "Utilization of CPU",
+>> +        "BriefDescription": "Utilization of CPU",
+> 
+> Some more detail in the description would be useful.
+> 
+
+Ok, I'll describe it in more detail. CPU_utilization reflects the truly effective ratio of operation
+executed by the CPU, which means that misprediction and stall are not included. Note that stall_slot
+minus cpu_cycles is a correction to the stall_slot error count.
+
+>> +        "MetricGroup": "PEutilization",
+>> +        "MetricName": "cpu_utilization",
+>> +        "ScaleUnit": "100%"
+>>      }
+>>  ]
+>> --
+>> 1.8.3.1
+>>
