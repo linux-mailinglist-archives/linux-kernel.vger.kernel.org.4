@@ -2,179 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA9663F1BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AA363F1BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbiLANev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S231564AbiLANgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiLANeo (ORCPT
+        with ESMTP id S229631AbiLANgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:34:44 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EABC7717
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:34:43 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so2084356pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKguKo1XmUP31FlNvdaT70p0o/lwuxyZc7lK6ytX1QU=;
-        b=exIoeOCrlPb+Uw2FGLRsALkrLYWj9cDaTvcr81Evjsi5DXIR/uPZJTWsXlu/PiLLI3
-         HTBr5t4pzsWnn6M0lC4H5pNT0n3aLXEpcSRixu/mfsu8XeXoSArYBYlbqRz6mRys5h3T
-         IyXf+jqyVq8u6L+O/LqO4biBjWXlb+7RKXSc0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tKguKo1XmUP31FlNvdaT70p0o/lwuxyZc7lK6ytX1QU=;
-        b=VHWa5T0EdLbdOSlQIOjCnSX4YKqwGxDgeiB5Ny/za6XMDENCyrOo8NfO3dK+HYHJz3
-         zRtfjsS1zOI9daYGSdgA4YzQ4Grjx52zuGhSN0O8zS0objzNX8GJxLCiIRSmhIIOd7Rh
-         o/OFaMoxa4O0AtD1SWD6NX4QBbdR3iKIQObDrIGkLPhmpcPcCHIb/jrSR9/SOpH1NYyi
-         cxDwhA5XHfDmCgY8eatvAxXCldSS1CChB0hScYM2tsPzmfRdfSnXWK5cKBAQO5iWaEbt
-         45ylOvM7OvGkgCUCxmyz9zn37f09ViE23L3+enrEX4HN2+ouCiXtZiTHPE2ZLufHfWfE
-         tzLg==
-X-Gm-Message-State: ANoB5pngBh6Q6zO3rsikAmeb7DioV4I5SYsQ4jGvstfvd+mH5T9XRnkG
-        QGTsKZWtkiUDptMPG4FlP22GBCZCghjKHLqRwwY=
-X-Google-Smtp-Source: AA0mqf608a/KpHViVjips78D4RvC0ijhueYSWAwLqCZwfikwkBbee5skEIbjgFe0Prz1fSHdmWqYMQ==
-X-Received: by 2002:a17:90b:4fc3:b0:219:6224:dffb with SMTP id qa3-20020a17090b4fc300b002196224dffbmr8888717pjb.19.1669901683235;
-        Thu, 01 Dec 2022 05:34:43 -0800 (PST)
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com. [209.85.215.169])
-        by smtp.gmail.com with ESMTPSA id x17-20020aa79411000000b00572c12a1e91sm3261072pfo.48.2022.12.01.05.34.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 05:34:40 -0800 (PST)
-Received: by mail-pg1-f169.google.com with SMTP id 6so1680802pgm.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:34:39 -0800 (PST)
-X-Received: by 2002:a92:ca89:0:b0:302:385e:eeb4 with SMTP id
- t9-20020a92ca89000000b00302385eeeb4mr24829482ilo.66.1669901667796; Thu, 01
- Dec 2022 05:34:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
- <20221127-snd-freeze-v8-3-3bc02d09f2ce@chromium.org> <716e5175-7a44-7ae8-b6bb-10d9807552e6@suse.com>
- <CANiDSCtwSb50sjn5tM7jJ6W2UpeKzpuzng+RdJuywiC3-j2zdg@mail.gmail.com> <d3730d1d-6f92-700a-06c4-0e0a35e270b0@suse.com>
-In-Reply-To: <d3730d1d-6f92-700a-06c4-0e0a35e270b0@suse.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 1 Dec 2022 14:34:16 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtm7dCst_atiWk=ZcK_D3=VzvD0+kWXVQr4gEn--JjGkw@mail.gmail.com>
-Message-ID: <CANiDSCtm7dCst_atiWk=ZcK_D3=VzvD0+kWXVQr4gEn--JjGkw@mail.gmail.com>
-Subject: Re: [PATCH v8 3/3] ASoC: SOF: Fix deadlock when shutdown a frozen userspace
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Juergen Gross <jgross@suse.com>, Mark Brown <broonie@kernel.org>,
-        Chromeos Kdump <chromeos-kdump@google.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Thu, 1 Dec 2022 08:36:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F415AB035
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:36:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 875126200D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65AB3C433C1;
+        Thu,  1 Dec 2022 13:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669901768;
+        bh=WLdPshfe4f2Z7hixLEnJ3dcblbOMYhUNLtouSGY+9vc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ipMPXXIoMddbZeYdf2D3TJawXB471s+wRLLLMVJrdHg/B7fSxpxHDxxG0hAJ6MENO
+         8ieoFGyNNdwqkSHHf/5wA5P7VpdzE5ndjCuD1PqokY16Rkr/bc72hwn+tTtVjarycF
+         pEgy943RwvkCYYhmv7t9Rz/K0ogZBtQSoEmGh8bt/1WqVOiafkKdSVEBbkCFcujb2i
+         lOZLxktSr+kqN99+QZ3OzI7fZf34P08WvzT1Ulp7AjdSmljHDha5tGsvc3rOSldJCh
+         f9nNhYZEg1pxwx8GeCMydjw42oEDQP1IyubicroLdVQ+TR/R75txHEG8E7mZqtqhna
+         7UaBH7LCWJ8HQ==
+Date:   Thu, 1 Dec 2022 13:36:02 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        kexec@lists.infradead.org, alsa-devel@alsa-project.org,
-        stable@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH-tip v4] sched: Fix NULL user_cpus_ptr check in
+ dup_user_cpus_ptr()
+Message-ID: <20221201133602.GB28489@willie-the-truck>
+References: <20221125023943.1118603-1-longman@redhat.com>
+ <92b99a5e-1588-4e08-a652-72e9c51421cf@redhat.com>
+ <20221128120008.GA25090@willie-the-truck>
+ <d49a78bb-dce1-92b1-0f67-d71259609263@redhat.com>
+ <20221129140759.GA26437@willie-the-truck>
+ <f669ce38-1e23-04b4-fe6f-591579e817de@redhat.com>
+ <20221129155757.GC26561@willie-the-truck>
+ <4e93019d-4b19-14f9-14d7-da43456d3546@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e93019d-4b19-14f9-14d7-da43456d3546@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver
+On Tue, Nov 29, 2022 at 11:03:35AM -0500, Waiman Long wrote:
+> On 11/29/22 10:57, Will Deacon wrote:
+> > On Tue, Nov 29, 2022 at 10:32:49AM -0500, Waiman Long wrote:
+> > > On 11/29/22 09:07, Will Deacon wrote:
+> > > > On Mon, Nov 28, 2022 at 10:11:52AM -0500, Waiman Long wrote:
+> > > > > On 11/28/22 07:00, Will Deacon wrote:
+> > > > > > On Sun, Nov 27, 2022 at 08:43:27PM -0500, Waiman Long wrote:
+> > > > > > > On 11/24/22 21:39, Waiman Long wrote:
+> > > > > > > > In general, a non-null user_cpus_ptr will remain set until the task dies.
+> > > > > > > > A possible exception to this is the fact that do_set_cpus_allowed()
+> > > > > > > > will clear a non-null user_cpus_ptr. To allow this possible racing
+> > > > > > > > condition, we need to check for NULL user_cpus_ptr under the pi_lock
+> > > > > > > > before duping the user mask.
+> > > > > > > > 
+> > > > > > > > Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+> > > > > > > > Signed-off-by: Waiman Long <longman@redhat.com>
+> > > > > > > This is actually a pre-existing use-after-free bug since commit 07ec77a1d4e8
+> > > > > > > ("sched: Allow task CPU affinity to be restricted on asymmetric systems").
+> > > > > > > So it needs to be fixed in the stable release as well. Will resend the patch
+> > > > > > > with an additional fixes tag and updated commit log.
+> > > > > > Please can you elaborate on the use-after-free here? Looking at
+> > > > > > 07ec77a1d4e8, the mask is only freed in free_task() when the usage refcount
+> > > > > > has dropped to zero and I can't see how that can race with fork().
+> > > > > > 
+> > > > > > What am I missing?
+> > > > > I missed that at first. The current task cloning process copies the content
+> > > > > of the task structure over to the newly cloned/forked task. IOW, if
+> > > > > user_cpus_ptr had been set up previously, it will be copied over to the
+> > > > > cloned task. Now if user_cpus_ptr of the source task is cleared right after
+> > > > > that and before dup_user_cpus_ptr() is called. The obsolete user_cpus_ptr
+> > > > > value in the cloned task will remain and get used even if it has been freed.
+> > > > > That is what I call as use-after-free and double-free.
+> > > > If the parent task can be modified concurrently with dup_task_struct() then
+> > > > surely we'd have bigger issues because that's not going to be atomic? At the
+> > > > very least we'd have a data race, but it also feels like we could end up
+> > > > with inconsistent task state in the child. In fact, couldn't the normal
+> > > > 'cpus_mask' be corrupted by a concurrent set_cpus_allowed_common()?
+> > > > 
+> > > > Or am I still failing to understand the race?
+> > > > 
+> > > A major difference between cpus_mask and user_cpus_ptr is that for
+> > > cpus_mask, the bitmap is embedded into task_struct whereas user_cpus_ptr is
+> > > a pointer to an external bitmap. So there is no issue of use-after-free wrt
+> > > cpus_mask. That is not the case where the memory of the user_cpus_ptr of the
+> > > parent task is freed, but then a reference to that memory is still available
+> > > in the child's task struct and may be used.
+> > Sure, I'm not saying there's a UAF on cpus_mask, but I'm concerned that we
+> > could corrupt the data and end up with an affinity mask that doesn't correspond
+> > to anything meaningful. Do you agree that's possible?
+> That is certainly possible. So we have to be careful about it.
 
-On Thu, 1 Dec 2022 at 14:22, 'Oliver Neukum' via Chromeos Kdump
-<chromeos-kdump@google.com> wrote:
->
-> On 01.12.22 14:03, Ricardo Ribalda wrote:
->
-> Hi,
->
-> > This patchset does not modify this behaviour. It simply fixes the
-> > stall for kexec().
-> >
-> > The  patch that introduced the stall:
-> > 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers
-> > in .shutdown")
->
-> That patch is problematic. I would go as far as saying that
-> it needs to be reverted.
->
+Hmm, but we're not being particularly careful, are we? I hacked memcpy()
+to be byte-to-byte to make things a bit easier to reproduce, and sure enough
+I can race a bog-standard sched_setaffinity() call w/ fork():
 
-It fixes a real issue. We have not had any complaints until we tried
-to kexec in the platform.
-I wont recommend reverting it until we have an alternative implementation.
+[ 1663.935258] BUG: KCSAN: data-race in arch_dup_task_struct+0x4c/0x224
+[ 1663.936872]
+[ 1663.937292] race at unknown origin, with read to 0xffff06a44b8880a9 of 1 bytes by task 351 on cpu 0:
+[ 1663.938770]  arch_dup_task_struct+0x4c/0x224
+[ 1663.939621]  dup_task_struct+0x68/0x2a8
+[ 1663.940381]  copy_process+0x208/0x1404
+[ 1663.941109]  kernel_clone+0xdc/0x2c8
+[ 1663.941814]  __arm64_sys_clone+0x9c/0xd4
+[ 1663.942909]  invoke_syscall+0x54/0x170
+[ 1663.943816]  el0_svc_common+0x100/0x148
+[ 1663.944607]  do_el0_svc+0x40/0x10c
+[ 1663.945333]  el0_svc+0x2c/0x7c
+[ 1663.946006]  el0t_64_sync_handler+0x84/0xf0
+[ 1663.946804]  el0t_64_sync+0x18c/0x190
 
-kexec is far less common than suspend/reboot.
+I then managed to get the child process to run with an affinity mask (i.e.
+'task_struct::cpus_mask') of *zero*, which triggers the select_fallback_rq()
+logic:
 
-> > was sent as a generalised version of:
-> > https://github.com/thesofproject/linux/pull/3388
-> >
-> > AFAIK, we would need a similar patch for every single board.... which
-> > I am not sure it is doable in a reasonable timeframe.
-> >
-> > On the meantime this seems like a decent compromises. Yes, a
-> > miss-behaving userspace can still stall during suspend, but that was
-> > not introduced in this patch.
->
-> Well, I mean if you know what wrong then I'd say at least return to
-> a sanely broken state.
->
-> The whole approach is wrong. You need to be able to deal with user
-> space talking to removed devices by returning an error and keeping
-> the resources association with the open file allocated until
-> user space calls close()
+ | process 14622 (waiman) no longer affine to cpu0
 
-In general, the whole shutdown is broken for all the subsystems ;).
-It is a complicated issue. Users handling fds, devices with DMAs in
-the middle of an operation, dma fences....
+So sure, it's not a UAF, but I still think it's an issue that should be
+fixed.
 
-Unfortunately I am not that familiar with the sound subsystem to make
-a proper patch for this.
-
->
->         Regards
->                 Oliver
->
->
->
-> --
-> You received this message because you are subscribed to the Google Groups "Chromeos Kdump" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to chromeos-kdump+unsubscribe@google.com.
-> To view this discussion on the web, visit https://groups.google.com/a/google.com/d/msgid/chromeos-kdump/d3730d1d-6f92-700a-06c4-0e0a35e270b0%40suse.com.
-
-
-
--- 
-Ricardo Ribalda
+Will
