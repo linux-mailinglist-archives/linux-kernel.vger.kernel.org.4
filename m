@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C546D63F412
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642EE63F417
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbiLAPfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S231927AbiLAPgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbiLAPeq (ORCPT
+        with ESMTP id S231802AbiLAPgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:34:46 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA2BC6E69;
-        Thu,  1 Dec 2022 07:34:11 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1442977d77dso1419386fac.6;
-        Thu, 01 Dec 2022 07:34:11 -0800 (PST)
+        Thu, 1 Dec 2022 10:36:03 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832241704D;
+        Thu,  1 Dec 2022 07:36:00 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id b81so1010267vkf.1;
+        Thu, 01 Dec 2022 07:36:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mJ2JTHDAMAbJS/ADBzNEQn0w/E4tOp8FnOKHhN2ooXA=;
-        b=EI9spUqtgaHMkmnx+ii+oviWWd7HOSDI7rNeVmdg2z4gZbP9dJP52B1gyL90PsKbD2
-         rMPiU5FKw4klv/2pN0LOHju2+piSvHytvWyGlOTun3X3Iq6DzkquM2xHDRtXuBwTpSO1
-         PY8P7g7Ch1ImWwttR4DstyjA4DnDZOmlNfmjT35GqsdVhu/KdnDWu/yGJaGoV/FcnOtq
-         2y5R+HRQ15GvJ7E7X35fM7e1TSK2TXzIYAUMjJR/l3aYVJiIuEGzp8rMJ8G3Ek3loDQJ
-         rAkkTl9jFPoRcspnCdiPVcu4JVmo1ZrANRA6Lb0WDVIoJuy7QWZRQ8nbdpxxUDx0Q6hh
-         jlDw==
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2C4Ic/rXKLW7Wm5b9u8f/7TaZwZEpMvyKDBcW8SAsLk=;
+        b=e+CS+oiWp1wdfbWovV6vY/rRGNffWAKIlOBhrrlgpzz9JNfoZWu/lm0Nfn69J+awIr
+         4VPJNWvlEGKr+aFlcJbyisb203YkwCRz2V/PJ+i4CYfNZePm3dA4xGBSClEg+seLVzlt
+         BPI/00DrYA9W7qZb7JNPjY5YtXMLsfFXY8ayJPbTQV5wgREhjN/PaHvrIUYxvNtznIOc
+         3ETlduz1KgwhkrmWsr57KPDuGzcbtuPmEfG9TMj/13FI3T1MntVYXtjMzc+/+ZFeJQbv
+         FyjFpXyejTRJk0MCZ7zAHHS51v4JeCLM/7QoLFNRzSSUz4MQsuOxwPN5R1PuhypJroZ2
+         91SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mJ2JTHDAMAbJS/ADBzNEQn0w/E4tOp8FnOKHhN2ooXA=;
-        b=t3fgGw4I4bE2OFH+h4K/Cb+bjELkaxPoCm4J+zZNkW8Kmsp+GGdh6iFSO3gPgK7iRU
-         eUYitoR1U5n7Z/LK7dtbqC29NRv1F8D/aY5LoPOPCMDMCiDdvKFsbYM9y8JMV8vMgCct
-         BP26iVgw8swTNAIpeWttwdlxppw4X7z76pUz4cswAMjhYJCjHv82Yc+DI2ynCIW0N0kT
-         EDlr939VNRwpPkFzEt4YjoNYHvce9i9DQM/kX2JpW0GQ11oc/LQakWTciA+zmri5ROxh
-         tzHG0mFOJPQ+Zc6QkoZcvEc4broS2PchvMsLj+5EMkmCLZ5/SoKLlM9BOr0W0jMHIK1U
-         GJ9w==
-X-Gm-Message-State: ANoB5pn4GhqEbRmpXPJvMS0qrC15Jk6Wx9sZXk76HcyRkQ8Qm0Sv2bBV
-        v6wPhM7dRlZ5FHIo4apICEI=
-X-Google-Smtp-Source: AA0mqf6+DRNjIpXvT/ZKK2NF9d2O3gRdlWBYaRGmf5VZGlvw7ZLbmDqQDUe5v1uSFuSV4Jj4KZPdvg==
-X-Received: by 2002:a05:6870:f78d:b0:13d:3bb4:479b with SMTP id fs13-20020a056870f78d00b0013d3bb4479bmr38222977oab.68.1669908850713;
-        Thu, 01 Dec 2022 07:34:10 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m12-20020a056870560c00b001417f672787sm2766678oao.36.2022.12.01.07.34.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 07:34:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <00de62b2-51dc-2a72-6659-3425d5e1b72c@roeck-us.net>
-Date:   Thu, 1 Dec 2022 07:34:08 -0800
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2C4Ic/rXKLW7Wm5b9u8f/7TaZwZEpMvyKDBcW8SAsLk=;
+        b=b2clvsXHQ9yCoVJq5Ps7mDX8SWPEbhc7NwC1RDycVFpxtF4R8oUmzf9g99ZwjvTnTQ
+         i1gj03ggioGt5Im3hJWLHPil22+Td0UN+KK9SiL5mcjYDlM3w77reUWtKsHvbm7J4WdQ
+         uEKBYPtjysm4kRDsv7GM5cLW/f31KWsLcDv6wbNz7pllddQBrz7+DawUoaJUCVSWEtxR
+         rzs+tkQoOpFFmxMSp0RMecwrFK4W/KUwNJykZNrQc4pNHpL97hnOCbX52c0MOupWpJva
+         yxHTBYLhf+N51uBxXpKBstpUDzuoTwONnBCHJHc8JlAZK0GyCxQ8gLF87fiqPAtvUBmI
+         NLBA==
+X-Gm-Message-State: ANoB5pm4Zffyv6gcvI5d6TRzcxtQ+5VIqp13H3Sqn29sDMkBFMAAXpf1
+        HgZxNSQY5iS/fB4hgXoixQvF44CXgKr1+A6b55rHf1OL
+X-Google-Smtp-Source: AA0mqf5KPcANLGmMtowqVNJztvO5JBcHknnxue/TlujOQIdSQqoqu6Xqeh1N+bdszi0HANLbBFbC7QkbgGxfe60jsho=
+X-Received: by 2002:a1f:edc6:0:b0:3bc:b66b:fe7 with SMTP id
+ l189-20020a1fedc6000000b003bcb66b0fe7mr19693980vkh.20.1669908959513; Thu, 01
+ Dec 2022 07:35:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Saravanan Sekar <saravanan@linumiz.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        marten.lindahl@axis.com
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221201044643.1150870-1-saravanan@linumiz.com>
- <20221201044643.1150870-4-saravanan@linumiz.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 3/4] hwmon: (pmbus/mpq7932) Add a support for mpq7932
- Power Management IC
-In-Reply-To: <20221201044643.1150870-4-saravanan@linumiz.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220818125027.1131-1-yongsuyoo0215@gmail.com>
+ <CANXPkT4KL9KxvgjaJO058zg8nb00qaiPfDFKEaQ42g6v18XvKA@mail.gmail.com>
+ <CANXPkT4hB4AEKk_=piESRTxToBsoKCpaq8vvjP05o3CX6QX4_g@mail.gmail.com> <CANXPkT4pzpEKMXuBShAeWfA80g5UigodrVZc+EBDnTLrHjnpyA@mail.gmail.com>
+In-Reply-To: <CANXPkT4pzpEKMXuBShAeWfA80g5UigodrVZc+EBDnTLrHjnpyA@mail.gmail.com>
+From:   YongSu Yoo <yongsuyoo0215@gmail.com>
+Date:   Fri, 2 Dec 2022 00:35:51 +0900
+Message-ID: <CANXPkT74VPmFuGjTH+_=ycvoLni5GZDuf5mbo_ACdexp57oHxA@mail.gmail.com>
+Subject: Re: [PATCH] media: dvb_ca_en50221: A bug is fixed for size write
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yongsu.yoo@lge.com,
+        =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>,
+        Hans Petter Selasky <hps@selasky.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,251 +72,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/22 20:46, Saravanan Sekar wrote:
-> The MPQ7932 is a power management IC designed to operate from 5V buses to
-> power a variety of Advanced driver-assistance system SOCs. Six integrated
-> buck converters with hardware monitoring capability powers a variety of
-> target rails configurable over PMBus interface.
-> 
-> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
-> ---
->   drivers/hwmon/pmbus/Kconfig   |  10 +++
->   drivers/hwmon/pmbus/Makefile  |   1 +
->   drivers/hwmon/pmbus/mpq7932.c | 144 ++++++++++++++++++++++++++++++++++
->   3 files changed, 155 insertions(+)
->   create mode 100644 drivers/hwmon/pmbus/mpq7932.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 89668af67206..4a1538949a73 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -317,6 +317,16 @@ config SENSORS_MP5023
->   	  This driver can also be built as a module. If so, the module will
->   	  be called mp5023.
->   
-> +config SENSORS_MPQ7932
-> +	tristate "MPS MPQ7932"
+Dear All
+It has been a long time since this patch was created.
+Can you share how this patch is going ?
 
-As written, a dependency on REGULATOR is missing. However, we want the driver
-enabled even if CONFIG_REGULATOR is not enabled. I would suggest to follow the
-approach used by other drivers: add a second configuration option
-SENSORS_MPQ7932_REGULATOR which depends on SENSORS_MPQ7932 and REGULATOR
-and enables regulator functionality, and use that in the driver to
-make regulator support optional.
-
-> +	help
-> +	  If you say yes here you get six integrated buck converter regulator
-> +	  with hardware monitoring functionality support for power management
-> +	  IC MPS MPQ7932.
-
-That description is more appropriate for the second configuration option.
-Primarily one gets hardware monitoring support for the chip.
-
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mpq7932.
-> +
->   config SENSORS_PIM4328
->   	tristate "Flex PIM4328 and compatibles"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 0002dbe22d52..28a534629cc3 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->   obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
->   obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->   obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
-> +obj-$(CONFIG_SENSORS_MPQ7932_REGULATOR) += mpq7932.o
->   obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
->   obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->   obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
-> diff --git a/drivers/hwmon/pmbus/mpq7932.c b/drivers/hwmon/pmbus/mpq7932.c
-> new file mode 100644
-> index 000000000000..3747d7862afd
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mpq7932.c
-> @@ -0,0 +1,144 @@
-> +/*
-> + * SPDX-License-Identifier: GPL-2.0+
-
-The SPDX license must be in the first line and be a C++ style comment.
-Please run checkpatch --strict and fix what it reports (including the
-various continuation line misalignments and unnecessary empty lines).
-
-> + *
-> + * mpq7932.c  - regulator driver for mps mpq7932
-> + * Copyright 2022 Monolithic Power Systems, Inc
-
-This is a hwmon driver with optional regulator functionality.
-
-> + *
-> + * Author: Saravanan Sekar <saravanan@linumiz.com>
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +#define MPQ7932_BUCK_UV_MIN		206250
-> +#define MPQ7932_UV_STEP			6250
-> +#define MPQ7932_N_VOLTAGES		0xFF
-> +#define MPQ7932_NUM_PAGES		6
-> +
-> +#define MPQ7932_TON_DELAY		0x60
-> +#define MPQ7932_VOUT_STARTUP_SLEW	0xA3
-> +#define MPQ7932_VOUT_SHUTDOWN_SLEW	0xA5
-> +#define MPQ7932_VOUT_SLEW_MASK		GENMASK(1, 0)
-> +#define MPQ7932_TON_DELAY_MASK		GENMASK(4, 0)
-
-Please include the appropriate include file defining GENMASK.
-
-> +
-> +struct mpq7932_data {
-> +	struct pmbus_driver_info info;
-> +	struct pmbus_platform_data pdata;
-> +};
-> +
-> +static struct regulator_desc mpq7932_regulators_desc[] = {
-> +	PMBUS_REGULATOR_STEP("buck", 0, MPQ7932_N_VOLTAGES,
-> +				MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 1, MPQ7932_N_VOLTAGES,
-> +				MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 2, MPQ7932_N_VOLTAGES,
-> +				MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 3, MPQ7932_N_VOLTAGES,
-> +				MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 4, MPQ7932_N_VOLTAGES,
-> +				MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 5, MPQ7932_N_VOLTAGES,
-> +				MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +};
-> +
-> +static int mpq7932_write_word_data(struct i2c_client *client, int page, int reg,
-> +			       u16 word)
-> +{
-> +
-> +	switch (reg) {
-> +	case PMBUS_VOUT_COMMAND:
-
-This needs a comment explaining why it is needed.
-
-> +		return pmbus_write_byte_data(client, page, reg, (u8)word);
-
-word should be clamped to [0, 255], not cut off.
-
-> +
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-> +
-> +static int mpq7932_read_word_data(struct i2c_client *client, int page,
-> +				  int phase, int reg)
-> +{
-> +
-> +	switch (reg) {
-> +	case PMBUS_MFR_VOUT_MIN:
-> +		return 0;
-> +
-> +	case PMBUS_MFR_VOUT_MAX:
-> +		return MPQ7932_N_VOLTAGES;
-
-The above need comments. Also, MPQ7932_N_VOLTAGES is inappropriate. This is not the
-number of voltages, it is the maximum voltage. Even if the values happen to be the
-same, the content is different.
-
-Also, with PMBUS_MFR_VOUT_MIN=0 and PMBUS_MFR_VOUT_MAX=0xff, the number of voltages
-would actually be 256, not 255.
-
-> +
-> +	case PMBUS_READ_VOUT:
-> +		return pmbus_read_byte_data(client, page, PMBUS_VOUT_COMMAND);
-> +
-Needs same comment as above.
-
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-> +
-> +static int mpq7932_probe(struct i2c_client *client)
-> +{
-> +	struct mpq7932_data *data;
-> +	struct pmbus_driver_info *info;
-> +	struct device *dev = &client->dev;
-> +	int i;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_WORD_DATA))
-
-Unnecessary check. This code doesn't use it, and pmbus_do_probe()
-does its own check.
-
-> +		return -ENODEV;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct mpq7932_data),
-
-Use dev.
-
-> +			    GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	info = &data->info;
-> +	info->pages = MPQ7932_NUM_PAGES;
-> +	info->num_regulators = ARRAY_SIZE(mpq7932_regulators_desc);
-> +	info->reg_desc = mpq7932_regulators_desc;
-> +	info->format[PSC_VOLTAGE_OUT] = direct;
-> +	info->m[PSC_VOLTAGE_OUT] = 160;
-> +	info->b[PSC_VOLTAGE_OUT] = -33;
-> +	for (i = 0; i < info->pages; i++) {
-> +		info->func[i] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-> +				| PMBUS_HAVE_STATUS_TEMP;
-
-I think I already asked: Is this really all telemetry supported by the chip ?
-I keep asking because that would be highly unusual.
-
-> +	}
-> +
-> +	info->read_word_data = mpq7932_read_word_data;
-> +	info->write_word_data = mpq7932_write_word_data;
-> +
-> +	data->pdata.flags = PMBUS_NO_CAPABILITY;
-> +	dev->platform_data = &data->pdata;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct of_device_id mpq7932_of_match[] = {
-> +	{ .compatible = "mps,mpq7932"},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, mpq7932_of_match);
-> +
-> +static const struct i2c_device_id mpq7932_id[] = {
-> +	{ "mpq7932", },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(i2c, mpq7932_id);
-> +
-> +static struct i2c_driver mpq7932_regulator_driver = {
-> +	.driver = {
-> +		.name = "mpq7932",
-> +		.of_match_table = mpq7932_of_match,
-> +	},
-> +	.probe_new = mpq7932_probe,
-> +	.id_table = mpq7932_id,
-> +};
-> +module_i2c_driver(mpq7932_regulator_driver);
-> +
-> +MODULE_AUTHOR("Saravanan Sekar <saravanan@linumiz.com>");
-> +MODULE_DESCRIPTION("MPQ7932 PMIC regulator driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-
+2022=EB=85=84 10=EC=9B=94 14=EC=9D=BC (=EA=B8=88) =EC=98=A4=ED=9B=84 10:41,=
+ =EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =
+=EC=9E=91=EC=84=B1:
+>
+> Dear All
+> Can you share how this patch is going ?
+>
+> 2022=EB=85=84 9=EC=9B=94 15=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 5:47,=
+ =EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =
+=EC=9E=91=EC=84=B1:
+> >
+> > Dear All
+> > Can you share how this patch is going ?
+> >
+> > 2022=EB=85=84 8=EC=9B=94 31=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 10:=
+43, =EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4=
+ =EC=9E=91=EC=84=B1:
+> > >
+> > > Dear All
+> > > Can you share how this patch is going ?
+> > >
+> > > 2022=EB=85=84 8=EC=9B=94 18=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 9=
+:50, YongSu Yoo <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
+=B1:
+> > > >
+> > > > Signed-off-by:Yongsu Yoo <yongsuyoo0215@gmail.com>
+> > > >
+> > > > The function of "dvb_ca_en50221_write_data" at source/drivers/media
+> > > > /dvb-core/dvb_ca_en50221.c is used for two cases.
+> > > > The first case is for writing APDU data in the function of
+> > > > "dvb_ca_en50221_io_write" at source/drivers/media/dvb-core/
+> > > > dvb_ca_en50221.c.
+> > > > The second case is for writing the host link buf size on the
+> > > > Command Register in the function of "dvb_ca_en50221_link_init"
+> > > > at source/drivers/media/dvb-core/dvb_ca_en50221.c.
+> > > > In the second case, there exists a bug like followings.
+> > > > In the function of the "dvb_ca_en50221_link_init",
+> > > > after a TV host calculates the host link buf_size,
+> > > > the TV host writes the calculated host link buf_size on the
+> > > > Size Register.
+> > > > Accroding to the en50221 Spec (the page 60 of
+> > > > https://dvb.org/wp-content/uploads/2020/02/En50221.V1.pdf),
+> > > > before this writing operation, the "SW(CMDREG_SW)" flag in the
+> > > > Command Register should be set. We can see this setting operation
+> > > > in the function of the "dvb_ca_en50221_link_init" like below.
+> > > > ...
+> > > >         if ((ret =3D ca->pub->write_cam_control(ca->pub, slot,
+> > > > CTRLIF_COMMAND, IRQEN | CMDREG_SW)) !=3D 0)
+> > > >                 return ret;
+> > > > ...
+> > > > But, after that, the real writing operation is implemented using
+> > > > the function of the "dvb_ca_en50221_write_data" in the function of
+> > > > "dvb_ca_en50221_link_init", and the "dvb_ca_en50221_write_data"
+> > > > includes the function of "ca->pub->write_cam_control",
+> > > > and the function of the "ca->pub->write_cam_control" in the
+> > > > function of the "dvb_ca_en50221_wrte_data" does not include
+> > > > "CMDREG_SW" flag like below.
+> > > > ...
+> > > >         if ((status =3D ca->pub->write_cam_control(ca->pub, slot,
+> > > > CTRLIF_COMMAND, IRQEN | CMDREG_HC)) !=3D 0)
+> > > > ...
+> > > > In the above source code, we can see only the "IRQEN | CMDREG_HC",
+> > > > but we cannot see the "CMDREG_SW".
+> > > > The "CMDREG_SW" flag which was set in the function of the
+> > > > "dvb_ca_en50221_link_init" was rollbacked by the follwoing function
+> > > > of the "dvb_ca_en50221_write_data".
+> > > > This is a bug. and this bug causes that the calculated host link bu=
+f_size
+> > > > is not properly written in the CI module.
+> > > > Through this patch, we fix this bug.
+> > > > ---
+> > > >  drivers/media/dvb-core/dvb_ca_en50221.c | 12 +++++++-----
+> > > >  1 file changed, 7 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/medi=
+a/dvb-core/dvb_ca_en50221.c
+> > > > index 15a08d8c69ef..13f249b0a080 100644
+> > > > --- a/drivers/media/dvb-core/dvb_ca_en50221.c
+> > > > +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
+> > > > @@ -187,7 +187,7 @@ static void dvb_ca_en50221_thread_wakeup(struct=
+ dvb_ca_private *ca);
+> > > >  static int dvb_ca_en50221_read_data(struct dvb_ca_private *ca, int=
+ slot,
+> > > >                                     u8 *ebuf, int ecount);
+> > > >  static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, in=
+t slot,
+> > > > -                                    u8 *ebuf, int ecount);
+> > > > +                                    u8 *ebuf, int ecount, int size=
+_write_flag);
+> > > >
+> > > >  /**
+> > > >   * findstr - Safely find needle in haystack.
+> > > > @@ -370,7 +370,7 @@ static int dvb_ca_en50221_link_init(struct dvb_=
+ca_private *ca, int slot)
+> > > >         ret =3D dvb_ca_en50221_wait_if_status(ca, slot, STATUSREG_F=
+R, HZ / 10);
+> > > >         if (ret)
+> > > >                 return ret;
+> > > > -       ret =3D dvb_ca_en50221_write_data(ca, slot, buf, 2);
+> > > > +       ret =3D dvb_ca_en50221_write_data(ca, slot, buf, 2, CMDREG_=
+SW);
+> > > >         if (ret !=3D 2)
+> > > >                 return -EIO;
+> > > >         ret =3D ca->pub->write_cam_control(ca->pub, slot, CTRLIF_CO=
+MMAND, IRQEN);
+> > > > @@ -778,11 +778,13 @@ static int dvb_ca_en50221_read_data(struct dv=
+b_ca_private *ca, int slot,
+> > > >   * @buf: The data in this buffer is treated as a complete link-lev=
+el packet to
+> > > >   *      be written.
+> > > >   * @bytes_write: Size of ebuf.
+> > > > + * @size_write_flag: A flag on Command Register which says whether=
+ the link size
+> > > > + * information will be writen or not.
+> > > >   *
+> > > >   * return: Number of bytes written, or < 0 on error.
+> > > >   */
+> > > >  static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, in=
+t slot,
+> > > > -                                    u8 *buf, int bytes_write)
+> > > > +                                    u8 *buf, int bytes_write, int =
+size_write_flag)
+> > > >  {
+> > > >         struct dvb_ca_slot *sl =3D &ca->slot_info[slot];
+> > > >         int status;
+> > > > @@ -817,7 +819,7 @@ static int dvb_ca_en50221_write_data(struct dvb=
+_ca_private *ca, int slot,
+> > > >
+> > > >         /* OK, set HC bit */
+> > > >         status =3D ca->pub->write_cam_control(ca->pub, slot, CTRLIF=
+_COMMAND,
+> > > > -                                           IRQEN | CMDREG_HC);
+> > > > +                                           IRQEN | CMDREG_HC | siz=
+e_write_flag);
+> > > >         if (status)
+> > > >                 goto exit;
+> > > >
+> > > > @@ -1508,7 +1510,7 @@ static ssize_t dvb_ca_en50221_io_write(struct=
+ file *file,
+> > > >
+> > > >                         mutex_lock(&sl->slot_lock);
+> > > >                         status =3D dvb_ca_en50221_write_data(ca, sl=
+ot, fragbuf,
+> > > > -                                                          fraglen =
++ 2);
+> > > > +                                                          fraglen =
++ 2, 0);
+> > > >                         mutex_unlock(&sl->slot_lock);
+> > > >                         if (status =3D=3D (fraglen + 2)) {
+> > > >                                 written =3D 1;
+> > > > --
+> > > > 2.17.1
+> > > >
