@@ -2,168 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA52F63F573
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDF763F524
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiLAQjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S231819AbiLAQVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbiLAQjP (ORCPT
+        with ESMTP id S231414AbiLAQVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:39:15 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C828E58E;
-        Thu,  1 Dec 2022 08:39:14 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1GS8pJ029673;
-        Thu, 1 Dec 2022 16:39:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=OKrS9BBvwYfLHBzFMs6pnh1OkU96bxDQqMK4isLLZ1w=;
- b=b3uZi70YpLpZ/WI6/LDsi73mH4/syWHK3Owhk1EpYP9+WAtQVo33wx7Rk9cOPFjprA+N
- 2wVUEgKsP1apo7c+Y44AePlJ8an5flVGDcKfBK0joQumJ7qGDYI0WB3vqk8k5psEx0WQ
- Ci9VBbCMWnpJoTNdvzACVRg8CUeTU1r5EuMI30UAoUlBe7qkgqwNDkZ5ai4HZUte/8Nc
- NuEplToIJ7gbNz8WsGMOGosDOvf70Fwi1IsGecArsCjLgekdqTHAj2ikNvWyQRlgqfIq
- pErjEaqk3czyDRJI3KbRToHG5A/NNHsA52sW/SvnJSlM8V058j7b7eXHQKHl9DF6UBRM Zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ytn8974-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 16:39:05 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B1GVXAo010117;
-        Thu, 1 Dec 2022 16:39:05 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ytn8963-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 16:39:05 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B1Gc8iL013559;
-        Thu, 1 Dec 2022 16:39:02 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3m3ae95hvt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 16:39:02 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B1GcxKY26149600
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Dec 2022 16:38:59 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E25BA405C;
-        Thu,  1 Dec 2022 16:38:59 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A27A1A405B;
-        Thu,  1 Dec 2022 16:38:58 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.56])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Dec 2022 16:38:58 +0000 (GMT)
+        Thu, 1 Dec 2022 11:21:10 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ACB4A9C4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:21:09 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id f13so3256279lfa.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:21:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iegIkb4fipqnzTjEHK3Rzo5fetpTzelf4+OZ20EGaxQ=;
+        b=VbvXhlxH6TipiO2qGi6mtKXCZ0FlWYWE3s3cOvx/seesTXZpq1sMLXDxBph+NPebj3
+         kAOJB4fyBKMl/6/rkR4wjztOUc9WMVU7DkTPlbI/5XE+y8XpZzqP0rR03EgQpTMtEZfm
+         UUv9z6659u9OUywCheoHC6K9pQwLRo8Nl4sGnGmW88JrNTvIKC//5ieGG6NQGyplmQSD
+         fy5kGfrSnT+Nm1JuQPgTsLUF7NLUPVRzU7RxF45iuz8drQZazBFvXle5mGMUSqUNZhye
+         V59Br0xY2ZJ2Ws2c3lvArQPzH3aRtBb1ZMKDBWk7WOogGVz1S4FCGaYPpdDXTZw1lemm
+         Nr3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iegIkb4fipqnzTjEHK3Rzo5fetpTzelf4+OZ20EGaxQ=;
+        b=kjwcdU5Gin4s1bhkJdo44XNOx2PnbG77s34GCwWzv0ldcqo616Hw8w1AKD8su0m7iS
+         KS3jidUvbLRz6/Fqfa65pyZSQLiw+BGyyBGkUGZSpPsqD1ZdhBat7Fdnkl93o4jKE7dc
+         6HteTtmcRWhim91VzoFY+rKO2vjQOfp3lXknJeQ0/dr68jdWEHNRj0ywer+LRZNpwCtM
+         OhNDGWDGXWJZC812gyf2SYNz5mKj+9DDVszmTw+JPkxV+ySEhSeZAxwNSJjSbQ3aUWSi
+         A1fV1LkXCPgOPYq63OUvrb36v5/XZQ09mcKMKfPwRY6TNhvi7BWS+/Py9gCMUIxeaHTD
+         XnNA==
+X-Gm-Message-State: ANoB5pkrQv+omNl+gEfj3eGQka6Dhce5kDqQsybyH0PIG5oxCLdpwQDJ
+        ewGFEF5vx8VsUcabEVFUAfNRFA==
+X-Google-Smtp-Source: AA0mqf6hzJAldb7QB0+TmhU70sfyI9ugpbVn1aL8hGBP0zumhEwBHDgD4o5f2wa/of7dOVE7+YARug==
+X-Received: by 2002:a05:6512:34d0:b0:4a8:ebec:7140 with SMTP id w16-20020a05651234d000b004a8ebec7140mr22563341lfr.150.1669911667556;
+        Thu, 01 Dec 2022 08:21:07 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c24-20020a056512075800b004a01105eea2sm690936lfs.150.2022.12.01.08.21.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 08:21:05 -0800 (PST)
+Message-ID: <36565cc1-3c48-0fa8-f98b-414a7ac8f5bf@linaro.org>
 Date:   Thu, 1 Dec 2022 17:21:04 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v3 2/9] Documentation: KVM: s390: Describe
- KVM_S390_MEMOP_F_CMPXCHG
-Message-ID: <20221201172104.5540dcad@p-imbrenda>
-In-Reply-To: <20221117221758.66326-3-scgl@linux.ibm.com>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
-        <20221117221758.66326-3-scgl@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 3/7] dt-bindings: net: Add bindings for StarFive dwmac
+Content-Language: en-US
+To:     Yanhong Wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+ <20221201090242.2381-4-yanhong.wang@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221201090242.2381-4-yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Gq7IygJDv2rLUlfmCDcb9PvuDDTeP3T8
-X-Proofpoint-GUID: MYpt7C4ictAZa64_GbKHib27YShXlcJJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_12,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- impostorscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
- clxscore=1015 mlxscore=0 adultscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=678 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212010123
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 23:17:51 +0100
-Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
+On 01/12/2022 10:02, Yanhong Wang wrote:
+> Add bindings for the StarFive dwmac module on the StarFive RISC-V SoCs.
 
-> Describe the semantics of the new KVM_S390_MEMOP_F_CMPXCHG flag for
-> absolute vm write memops which allows user space to perform (storage key
-> checked) cmpxchg operations on guest memory.
+Subject: drop second, redundant "bindings".
+
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
 > ---
->  Documentation/virt/kvm/api.rst | 21 +++++++++++++++++++--
->  1 file changed, 19 insertions(+), 2 deletions(-)
+>  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
+>  .../bindings/net/starfive,dwmac-plat.yaml     | 106 ++++++++++++++++++
+>  MAINTAINERS                                   |   5 +
+>  3 files changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index eee9f857a986..204d128f23e0 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -3753,7 +3753,8 @@ The fields in each entry are defined as follows:
->  :Parameters: struct kvm_s390_mem_op (in)
->  :Returns: = 0 on success,
->            < 0 on generic error (e.g. -EFAULT or -ENOMEM),
-> -          > 0 if an exception occurred while walking the page tables  
-> +          16 bit program exception code if the access causes such an exception
-> +          other code > maximum 16 bit value with special meaning
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index d8779d3de3d6..13c5928d7170 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -33,6 +33,7 @@ select:
+>            - snps,dwmac-5.20
+>            - snps,dwxgmac
+>            - snps,dwxgmac-2.10
+> +          - starfive,dwmac
+>  
+>            # Deprecated
+>            - st,spear600-gmac
+> diff --git a/Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml b/Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml
+> new file mode 100644
+> index 000000000000..561cf2a713ab
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml
 
-I would write the number explicitly ( > 65535 or > 0xffff )
+Filename should base on compatible.
 
->  
->  Read or write data from/to the VM's memory.
->  The KVM_CAP_S390_MEM_OP_EXTENSION capability specifies what functionality is
-> @@ -3771,6 +3772,8 @@ Parameters are specified via the following structure::
->  		struct {
->  			__u8 ar;	/* the access register number */
->  			__u8 key;	/* access key, ignored if flag unset */
-> +			__u8 pad1[6];	/* ignored */
-> +			__u64 old_p;	/* ignored if flag unset */
->  		};
->  		__u32 sida_offset; /* offset into the sida */
->  		__u8 reserved[32]; /* ignored */
-> @@ -3853,8 +3856,22 @@ Absolute accesses are permitted for non-protected guests only.
->  Supported flags:
->    * ``KVM_S390_MEMOP_F_CHECK_ONLY``
->    * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
-> +  * ``KVM_S390_MEMOP_F_CMPXCHG``
+> @@ -0,0 +1,106 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 StarFive Technology Co., Ltd.
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/net/dwmac-starfive.yaml#"
+
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+
+Drop quotes from both lines.
+
 > +
-> +The semantics of the flags common with logical acesses are as for logical
-> +accesses.
+> +title: StarFive DWMAC glue layer
 > +
-> +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
-> +In this case, instead of doing an unconditional write, the access occurs only
-> +if the target location contains the "size" byte long value pointed to by
-> +"old_p". This is performed as an atomic cmpxchg. "size" must be a power of two
-> +up to and including 16.
-> +The value at the target location is written to the location "old_p" points to.
-> +If the exchange did not take place because the target value doesn't match the
-> +old value KVM_S390_MEMOP_R_NO_XCHG is returned.
-> +The KVM_S390_MEMOP_F_CMPXCHG flag is supported if KVM_CAP_S390_MEM_OP_EXTENSION
-> +has bit 1 (i.e. bit with value 2) set.
->  
-> -The semantics of the flags are as for logical accesses.
->  
->  SIDA read/write:
->  ^^^^^^^^^^^^^^^^
+> +maintainers:
+> +  - Yanhong Wang <yanhong.wang@starfivetech.com>
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - starfive,dwmac
+> +  required:
+> +    - compatible
+> +
+> +allOf:
+> +  - $ref: "snps,dwmac.yaml#"
+
+Drop quotes.
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+
+Drop oneOf. You do not have more cases here.
+
+> +      - items:
+> +          - enum:
+> +               - starfive,dwmac
+
+Wrong indentation.... kind of expected since you did not test the bindings.
+
+> +          - const: snps,dwmac-5.20
+> +
+> +  clocks:
+> +    items:
+> +      - description: GMAC main clock
+> +      - description: GMAC AHB clock
+> +      - description: PTP clock
+> +      - description: TX clock
+> +      - description: GTXC clock
+> +      - description: GTX clock
+> +
+> +  clock-names:
+> +    contains:
+> +      enum:
+> +        - stmmaceth
+> +        - pclk
+> +        - ptp_ref
+> +        - tx
+> +        - gtxc
+> +        - gtx
+
+Names should be specific and with fixed order, just like clocks are.
+
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +
+> +unevaluatedProperties: false
+> +
+
+Best regards,
+Krzysztof
 
