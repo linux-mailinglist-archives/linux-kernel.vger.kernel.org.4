@@ -2,77 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF7863F5A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC4663F5A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiLAQtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S229799AbiLAQtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiLAQs4 (ORCPT
+        with ESMTP id S229800AbiLAQtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:48:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134411DDCB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:48:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD1F1B81F96
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:48:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7F8C433C1;
-        Thu,  1 Dec 2022 16:48:50 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 11:48:48 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [RFC PATCH] panic: Add new taint flag for fault injection
-Message-ID: <20221201114848.13a87aca@gandalf.local.home>
-In-Reply-To: <202212010838.B0B109DA@keescook>
-References: <20221201234121.8925fdf83115747ac4ac116a@kernel.org>
-        <166991263326.311919.16890937584677289681.stgit@devnote3>
-        <202212010838.B0B109DA@keescook>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 1 Dec 2022 11:49:07 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D81B5D95
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:49:05 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id td2so5600817ejc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:49:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qairkvFMBk38ixno7FXK1yC32lvL5RMbFL4tU3mHNiU=;
+        b=E6+O5sFnlzcfx6vCEWapoW1Pm6SStOFR//uju9VpmHL/c12Gkl0B9mbseX4dybeaws
+         IMPy4v+09Q7C/6/6aSrE35hUPpOzdiLIaZXMxKejpeuwdY0G0XqPHWdyjPyUJy8QdpgE
+         D4DpT7VHfure02QmLJ/U74k1DYN2DlArLESACzF4Y2UocJUxtr0gxAIPv+EZtMVGPtiR
+         sMkEcMF3pD5BNS/FW/uOvR/h+M2bpskrxIGTBtdyQ+T3gWJxGg20+eACCzEErhraAhei
+         YHYAtqNB5Lkh1EGk79Bkve5DRXkMfmt316bV6cr+yCYRcL1LGwAx9O3LpKATtXmjZgsd
+         Pbqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qairkvFMBk38ixno7FXK1yC32lvL5RMbFL4tU3mHNiU=;
+        b=CmSsZITzWf4gEQQcLGQY/dZRBcMnRz0aatlQxpkqYjjiflod0ZZhkHuzjP8ZVer7k6
+         qEMOBZsbk+3Zsn/ptvYEgZDA4349dHOhPpxopoaou/DbMFP0TMQZiexFpb4Kkqmy/1+v
+         2q0Ag9n6eMCiXPyU/Uz/Fe2lrP3pWGQ3dR9+ydlrHDAMSVwsaM9bvbKNNuvRt3/HA9xw
+         yGzYKpri/A14bz/RDp2O4F8r6v7LaiTHqE5CEeKo8XhBhB2OWy+IhKdmFvZBIYo4tkQD
+         cA5xnNhw8xvkDI57hvIByUesaeIkeePvCFCHtkHGVzy5S5F3WMewKoTt569M3CrSfQkm
+         nRFw==
+X-Gm-Message-State: ANoB5pk24sepbVnJFKN4nS4p5yW8mfDb1jmcSKr6dQ7EThUb/0k3dWfp
+        Ak/Grx7E1dq1Mh2+khcc5axN72Y9KYcaTQ==
+X-Google-Smtp-Source: AA0mqf5gFoJAiraBGIPuIXjQYFHjMFmI/vY7Nq2QR8kIuoZe+8iX0nA0VxsHUEAPSYZ8zx3HJVxSzQ==
+X-Received: by 2002:a17:906:27d8:b0:7bd:6264:a022 with SMTP id k24-20020a17090627d800b007bd6264a022mr24292090ejc.693.1669913344077;
+        Thu, 01 Dec 2022 08:49:04 -0800 (PST)
+Received: from blmsp ([2001:4091:a245:805c:9cf4:fdb8:bb61:5f4e])
+        by smtp.gmail.com with ESMTPSA id n9-20020aa7c449000000b004588ef795easm1935430edr.34.2022.12.01.08.49.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 08:49:03 -0800 (PST)
+Date:   Thu, 1 Dec 2022 17:49:02 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
+Message-ID: <20221201164902.ipd3ctrtne47jtmv@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-3-msp@baylibre.com>
+ <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
+ <20221201084302.oodh22xgvwsjmoc3@blmsp>
+ <20221201091605.jgd7dlswcbxapdy3@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221201091605.jgd7dlswcbxapdy3@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 08:39:28 -0800
-Kees Cook <keescook@chromium.org> wrote:
+Hi Marc,
 
-> On Fri, Dec 02, 2022 at 01:37:13AM +0900, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Thu, Dec 01, 2022 at 10:16:05AM +0100, Marc Kleine-Budde wrote:
+> On 01.12.2022 09:43:02, Markus Schneider-Pargmann wrote:
+> > Hi Marc,
 > > 
-> > Since the function error injection framework in the fault injection
-> > subsystem can change the function code flow forcibly, it may cause
-> > unexpected behavior (but that is the purpose of this feature).
-> > To identify this in the kernel oops message, add a new taint flag
-> > for this, and set it if it is (and similar things in BPF) used.  
+> > On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
+> > > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
+> > > > Currently the driver waits to wakeup the queue until the interrupt for
+> > > > the transmit event is received and acknowledged. If we want to use the
+> > > > hardware FIFO, this is too late.
+> > > > 
+> > > > Instead release the queue as soon as the transmit was transferred into
+> > > > the hardware FIFO. We are then ready for the next transmit to be
+> > > > transferred.
+> > > 
+> > > If you want to really speed up the TX path, remove the worker and use
+> > > the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
+> > 
+> > Good idea. I will check how regmap's async_write works and if it is
+> > suitable to do the job. I don't want to drop the regmap usage for this
+> > right now.
 > 
-> Why is hooking through BPF considered to be "fault injection" here?
+> IIRC regmap async write still uses mutexes, but sleeping is not allowed
+> in the xmit handler. The mcp251xfd driver does the endianness conversion
+> (and the optional CRC) manually for the TX path.
+
+I just saw, you can force regmap to use spinlocks as well. But it uses
+the same operation for sync operations as well.
+
 > 
+> Sending directly from the xmit handler basically eliminates the queuing
+> between the network stack and the worker. Getting rid of the worker
+> makes life easier and it's faster anyways.
 
-Have you not been reading this thread?
+The current implementation of the driver doesn't really queue anything
+between the network stack and the worker. It is a queue of size 1 ;).
 
--- Steve
+To be honest I would rather focus on the other things than on getting
+rid of the worker completely as this can be done in a separate patch
+later as well. Yes I agree it would be nice to get rid of the worker but
+it is also probably not a major bottleneck for the performance and in
+its current state it works. If I have time left at the end I will be
+more than happy to do that. But for the moment I would just keep the
+worker as it is. Is that OK for you?
+
+Thanks,
+Markus
+
+> 
+> > > Extra bonus if you implement xmit_more() and transfer more than 1 skb
+> > > per SPI transfer.
+> > 
+> > That's on my todo list, but I am not sure I will get to it soonish.
+> 
+> I haven't implemented this for the mcp251xfd, yet, but I have some
+> proof-of-concept code somewhere. However, the mcp251xfd driver already
+> implemented byte queue limits: 0084e298acfe ("can: mcp251xfd: add BQL
+> support").
+> 
+> regards,
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
