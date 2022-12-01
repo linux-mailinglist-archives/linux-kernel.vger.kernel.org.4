@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2887E63F05D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7646263F060
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 13:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiLAMWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 07:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S231386AbiLAMXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 07:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiLAMWq (ORCPT
+        with ESMTP id S231343AbiLAMXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 07:22:46 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECD06244;
-        Thu,  1 Dec 2022 04:22:43 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id r8so1675776ljn.8;
-        Thu, 01 Dec 2022 04:22:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NOExxS2IjahwCF/S/WjAjF0c/H0u99gptUVy0XMPdbc=;
-        b=JF2WeLbwMFKR38u4Giaiah8fZew5H5mwyzSwBzBjrGud/hQUaiEQO6fzZXlrFbyuWK
-         MGRZK2VTqN1UHQBr07fG8P0L5mVPcccKclxvy9Cqr7MZlRGCVZDN9JlJMDYe1vM1iuOH
-         NhjhlEmgKsKrF0HOEnaNJDyMVsAS+/AQgJXDrzauhkieKSr5jrQNWChhMVLwaj1k8q14
-         tr7qgXxmI7RTt5gaAZFs0PQKmq4V3Vm7fCu+dbmR/Td7xbJej4rglj3vWqtqcFrqJlrf
-         QAfZqRYpmVNJRqNyy9xCkDhg3A3pyy5uXEbXdwvwtnAHJZZmhpMwx9piLBdd1bjtIdxv
-         h9ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NOExxS2IjahwCF/S/WjAjF0c/H0u99gptUVy0XMPdbc=;
-        b=Zwo3y27M+/ZnpdOUCYZBvkO5EeCBwH0+8sh5Lk7+/nS7jgI+AlOCJw/U4ktts9qFjM
-         AV7WENjfiie05u5lQQ37ZY+M4Eq+SHOQPZICBdQAjrE4d3M7v2OzuxFfCQwTkaw16G+A
-         9s8XIOqTZzB5c/+jq6CI6kkC91PsP4as4FxrVZxbWSzR10oqromQKyKfAPXGkGSXbYg1
-         Sws8y+UJ8a4NLRoj0E+PHQc5xXYHtv3PAcdVqzDQbk9jxGsvV0nKgXpQLeBl/oOGTI2Q
-         WYo5SeZQjJe7WQuTVSnlrS3NYj0vJ2yHQ4cs1qqTe8aWeiRjEhRLOcyBpPVZGSdqJVvU
-         Jn5g==
-X-Gm-Message-State: ANoB5pkYF8iPkIGuBnTAju4xhbdtftXgkuqeNix+gS4Q9fsAA9ty4sHB
-        E1IRxzzv+sFHszFajb0VcVs=
-X-Google-Smtp-Source: AA0mqf7wEdj4ql8TNl/pKZ5ROwZ8e68q5E8vY/MPsgX1mM0BAnCMcq4QDDHqm8eydKtYZGdTvb1KSg==
-X-Received: by 2002:a05:651c:c8b:b0:277:f8b:bb4f with SMTP id bz11-20020a05651c0c8b00b002770f8bbb4fmr16556345ljb.161.1669897362141;
-        Thu, 01 Dec 2022 04:22:42 -0800 (PST)
-Received: from localhost.localdomain (077222238151.warszawa.vectranet.pl. [77.222.238.151])
-        by smtp.googlemail.com with ESMTPSA id 11-20020ac25f4b000000b00492dbf809e8sm627184lfz.118.2022.12.01.04.22.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 04:22:41 -0800 (PST)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     szymon.heidrich@gmail.com, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Prevent buffer overflow in UVC Gadget setup handler
-Date:   Thu,  1 Dec 2022 13:21:41 +0100
-Message-Id: <20221201122141.8739-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 1 Dec 2022 07:23:13 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB0018E3C;
+        Thu,  1 Dec 2022 04:23:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669897392; x=1701433392;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EP/AlIx/iBNKrfQdGQpEKhAM6XUj8+gNp+3KbyqvZ/k=;
+  b=gLTRKfpYo4lyvqw0eEuKcJnOkPPnOdCDnB0xXNb8zDtw+kpMnIRMzm6+
+   i8HUWfE3Dzle4reIWIbUGimG87HsLNcMkLBgOZZj3Q3Rg186ZUziqIrBw
+   T/xzdNGp5TJO2xzmdJxwr2TmaIeAcWuTGW1CEAWM6wyAnNQ9ow5fPTvRW
+   KtUKEcw9+KP9077QfpR4by95+WTHwtQ42t6uHKs3VQ/W/dXLL0EBjw58u
+   TSLUMC28hDhfUKf7jFi0jS7xgvCx7DYn2pDi81lmhgij0AtOydAD7aJss
+   agrc6/tkCFx38BqZrY2Uuiy/6nK0/iyqAB+UulBQwPqRyAYqJ2zz62xoh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="313301115"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="313301115"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 04:23:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="644623510"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="644623510"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2022 04:23:05 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0iak-002mR5-2C;
+        Thu, 01 Dec 2022 14:23:02 +0200
+Date:   Thu, 1 Dec 2022 14:23:02 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, macro@orcam.me.uk,
+        jay.dolan@accesio.com, cang1@live.co.uk,
+        u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
+        phil.edworthy@renesas.com, lukas@wunner.de,
+        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Subject: Re: [PATCH v6 tty-next 4/4] serial: 8250_pci1xxxx: Add power
+ management functions to quad-uart driver
+Message-ID: <Y4icpjHDim7eAJjx@smile.fi.intel.com>
+References: <20221201045146.1055913-1-kumaravel.thiagarajan@microchip.com>
+ <20221201045146.1055913-5-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201045146.1055913-5-kumaravel.thiagarajan@microchip.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setup function uvc_function_setup permits control transfer
-requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
-data stage handler for OUT transfer uses memcpy to copy req->actual
-bytes to uvc_event->data.data array of size 60. This may result
-in an overflow of 4 bytes.
+On Thu, Dec 01, 2022 at 10:21:46AM +0530, Kumaravel Thiagarajan wrote:
+> pci1xxxx's quad-uart function has the capability to wake up UART
+> from suspend state. Enable wakeup before entering into suspend and
+> disable wakeup on resume.
 
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
- drivers/usb/gadget/function/f_uvc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 6e196e061..69c5eb3a3 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
- 
- 		memset(&v4l2_event, 0, sizeof(v4l2_event));
- 		v4l2_event.type = UVC_EVENT_DATA;
--		uvc_event->data.length = req->actual;
--		memcpy(&uvc_event->data.data, req->buf, req->actual);
-+		uvc_event->data.length = (req->actual > sizeof(uvc_event->data.data) ?
-+			sizeof(uvc_event->data.data) : req->actual);
-+		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
- 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 	}
- }
+> +static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend,
+> +				pci1xxxx_resume);
+
+One line?
+
+
 -- 
-2.38.1
+With Best Regards,
+Andy Shevchenko
+
 
