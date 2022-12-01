@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B93363F9CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A960363F9CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 22:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiLAV2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 16:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S231147AbiLAV2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 16:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiLAV16 (ORCPT
+        with ESMTP id S230503AbiLAV17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 16:27:58 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A061DDCB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:27:55 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id jr1so2661602qtb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 13:27:55 -0800 (PST)
+        Thu, 1 Dec 2022 16:27:59 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9637345ED2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 13:27:56 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id jr1so2661676qtb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 13:27:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=timesys-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kFCBGy/PHSqulvVt1jN7WYpo1L/uAw3+z6frKWBhRoc=;
-        b=3CXh/w9VqvcrpteYx9ZB6drtCGMaYRyRN3VkzHIHJUjgctE/YIBhqFIb1Q8LDz2obG
-         03sUPuMoq04AewWPt24FcyfTfGVob9U1O5iUUfZXHA+VJQ76jR3N2w7aERMHjFA3PMw3
-         bwA5ZBI30wBg4Vvgz3HKRXFYqWdXRnK/17ml4D7Oa344Tvlrd73XcEaLHszpAOkw4KWJ
-         waTX2CZoNpddDf02/2M4qEcqBrCFxf6a0YiQcq1ZXuRcSqRAQqkyW66jyw3NgqdprRi5
-         nQ+dGC9UwbsUp0bnoliqhRM7jD5JzprvH4CIN8ixgoiw6sArPUNONhgXPNAgXhSSbQtk
-         lpRw==
+        bh=VEyo4vlQR3u2sX38LTBhVX1Aa2arb17/54UJyym5vVg=;
+        b=EWk5IELMmlI38n1uhUacmXE6nI16ZieyrjDtXucqKGOoILjkZCVKd7G5MmpoHtVUDR
+         FODUAoMPinQwe7s/RYoC24pIP5eSH5ct7ktaljx7Ne+L+GrC7Zw9P1lbpqcNIctg7Oys
+         K5MPpKo9YR9fnOMDN/QtxzqAAqAFeoUA8LuDQM/xMlxw4jadGSbkKxbwBV8M2Ypa8+HO
+         fyZ56Xplt1NT6SFye1XZpVCIYFEiCmoA7TZeQwcNZKkCy3GQJkYiTY7N8Qzco3MdgL+Z
+         BJexh6if4a8RuEKHFOxVaUqXIMFiqiYJ/HMg6j1NhyhdRS/lLtn+FvKyEXmCRrosq6hB
+         UQGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kFCBGy/PHSqulvVt1jN7WYpo1L/uAw3+z6frKWBhRoc=;
-        b=5FYcy5vQcQ7P6ZrV55M/3OZjTS5CcSObDRBkoazGNoQHX2lwYIuYohVtL1TaXff/xt
-         2di7vHCKBpIaXbzSa5ks/1wueFe5hUEAnegAiBOAAR+X62mRzj/VlPhKrbPn9Pwt9t9S
-         z5KKUJubzU4w7L/I6rEfzMhGMWhrIDsMcOfKk6pY6HhTcPd3+PCTqt2HQnpLquTGQDPr
-         m3jbutS2HlCKhglxP9prDOa90qOqvrb7tmSxV02dd0ihN0o29w6snm558xba0A+BrVpn
-         Ad4md+8NwAuoCLEOuL5suKANLxmi6yEePZftHeIxNP0Ojo5VmcpH5iajfYMGIKnVAS+g
-         GWBw==
-X-Gm-Message-State: ANoB5pnFEJpKl1RA8NU7ap142vFoxO+ScR9qmK7meH5bEXTzG9+8ukqw
-        ofJfAzKHMMjyr/OipD5A6sikrQ==
-X-Google-Smtp-Source: AA0mqf6szy4I7PVwPg1bZSQuN0IPneSUTPM6WK5Q36vfQp5jcMHNA+3GVZJuPY4CohsqFf7kF3h+Pg==
-X-Received: by 2002:a37:6d7:0:b0:6fc:a68a:64b8 with SMTP id 206-20020a3706d7000000b006fca68a64b8mr3852069qkg.341.1669930074446;
-        Thu, 01 Dec 2022 13:27:54 -0800 (PST)
+        bh=VEyo4vlQR3u2sX38LTBhVX1Aa2arb17/54UJyym5vVg=;
+        b=gqN/M/IXinX4V7vw3oLGZS+owYGaCjNXXrZcUoHiZF+Ckm4Zs1exRFiKY7oe10kMtP
+         CZQT2c4dGZbRZYI9OSJihAzl2IlySptCaCX1kem3xWRpnB4GlW6kf+27OqyN3tGvfrIl
+         19p4lLpET4jEnsdWqnu2rzwn9FIsp34BQM4mxaDttI4hdM8hCapCQ0vMsDVekMDc1yRM
+         LA96zAlWMw/SwGlw4UnbljyL5L8GDzn5ykg4o0Qgj4ln1iSmvTxrtTsWXqv2LvxDDc9Z
+         5D5f2wrijlfJlswzpky3vkutXJSsTzmmA3zcLKU64Ml/cr4a3MGCg/vw6inZfSETMUEK
+         amyg==
+X-Gm-Message-State: ANoB5pm8Dpj15vCUKe41N2a+rdxDYzPQusBu9vVh/CDOnc9/I2/5iwaQ
+        L0m66bnMN+y/dIBH+hdUP2r/eA==
+X-Google-Smtp-Source: AA0mqf4k5vhbOKyhVfUNFXRGyBkYZpgvQPpouVWk0dqcsycuplAYPA4KGV+Z/aOB9NXAI7JE7i3h3w==
+X-Received: by 2002:a05:620a:1098:b0:6ef:a7f:e09d with SMTP id g24-20020a05620a109800b006ef0a7fe09dmr61482350qkk.109.1669930075721;
+        Thu, 01 Dec 2022 13:27:55 -0800 (PST)
 Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
-        by smtp.gmail.com with ESMTPSA id l15-20020a37f90f000000b006fc447eebe5sm4071321qkj.27.2022.12.01.13.27.53
+        by smtp.gmail.com with ESMTPSA id l15-20020a37f90f000000b006fc447eebe5sm4071321qkj.27.2022.12.01.13.27.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 13:27:54 -0800 (PST)
+        Thu, 01 Dec 2022 13:27:55 -0800 (PST)
 From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
         Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -60,9 +60,9 @@ Cc:     nathan.morrison@timesys.com, greg.malysa@timesys.com,
         Vignesh Raghavendra <vigneshr@ti.com>,
         linux-mtd@lists.infradead.org (open list:SPI NOR SUBSYSTEM),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 1/3] mtd: spi-nor: Extend SFDP 4byte address instruction lookup table with new octal modes as per JEDEC JESD216F
-Date:   Thu,  1 Dec 2022 16:27:48 -0500
-Message-Id: <20221201212750.267721-2-nathan.morrison@timesys.com>
+Subject: [PATCH v3 2/3] mtd: spi-nor: Add additional octal-mode flags to be checked during SFDP
+Date:   Thu,  1 Dec 2022 16:27:49 -0500
+Message-Id: <20221201212750.267721-3-nathan.morrison@timesys.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221201212750.267721-1-nathan.morrison@timesys.com>
 References: <20221201212750.267721-1-nathan.morrison@timesys.com>
@@ -78,36 +78,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the new bit fields for
-reading: 1S-1S-8S, 1S-8S-8S, 1D-8D-8D
-programming: 1S-1S-8S, 1S-8S-8S
+This adds some support for searching a chips SFDP table for:
+
+read commands: 1S-8S-8S
+program commands: 1S-1S-8S, 1S-8S-8S
 
 Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 ---
- drivers/mtd/spi-nor/sfdp.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/mtd/spi-nor/core.c | 8 ++++++++
+ drivers/mtd/spi-nor/core.h | 5 +++--
+ drivers/mtd/spi-nor/sfdp.c | 8 ++++++++
+ 3 files changed, 19 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index bee8fc4c9f07..2f882608abc6 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2359,6 +2359,13 @@ static void spi_nor_no_sfdp_init_params(struct spi_nor *nor)
+ 					  SNOR_PROTO_1_1_8);
+ 	}
+ 
++	if (no_sfdp_flags & SPI_NOR_OCTAL_READ_1_8_8) {
++		params->hwcaps.mask |= SNOR_HWCAPS_READ_1_8_8;
++		spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_1_8_8],
++					  0, 16, SPINOR_OP_READ_1_8_8,
++					  SNOR_PROTO_1_8_8);
++	}
++
+ 	if (no_sfdp_flags & SPI_NOR_OCTAL_DTR_READ) {
+ 		params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
+ 		spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_8_8_8_DTR],
+@@ -2514,6 +2521,7 @@ static void spi_nor_init_params_deprecated(struct spi_nor *nor)
+ 	if (nor->info->no_sfdp_flags & (SPI_NOR_DUAL_READ |
+ 					SPI_NOR_QUAD_READ |
+ 					SPI_NOR_OCTAL_READ |
++					SPI_NOR_OCTAL_READ_1_8_8 |
+ 					SPI_NOR_OCTAL_DTR_READ))
+ 		spi_nor_sfdp_init_params_deprecated(nor);
+ }
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 85b0cf254e97..7bc1cde049b7 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -514,8 +514,9 @@ struct flash_info {
+ #define SPI_NOR_DUAL_READ		BIT(3)
+ #define SPI_NOR_QUAD_READ		BIT(4)
+ #define SPI_NOR_OCTAL_READ		BIT(5)
+-#define SPI_NOR_OCTAL_DTR_READ		BIT(6)
+-#define SPI_NOR_OCTAL_DTR_PP		BIT(7)
++#define SPI_NOR_OCTAL_READ_1_8_8	BIT(6)
++#define SPI_NOR_OCTAL_DTR_READ		BIT(7)
++#define SPI_NOR_OCTAL_DTR_PP		BIT(8)
+ 
+ 	u8 fixup_flags;
+ #define SPI_NOR_4B_OPCODES		BIT(0)
 diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-index 2257f1b4c2e2..e4e87815ba94 100644
+index e4e87815ba94..e1b7547bf81e 100644
 --- a/drivers/mtd/spi-nor/sfdp.c
 +++ b/drivers/mtd/spi-nor/sfdp.c
-@@ -953,11 +953,16 @@ static int spi_nor_parse_4bait(struct spi_nor *nor,
- 		{ SNOR_HWCAPS_READ_1_1_1_DTR,	BIT(13) },
- 		{ SNOR_HWCAPS_READ_1_2_2_DTR,	BIT(14) },
- 		{ SNOR_HWCAPS_READ_1_4_4_DTR,	BIT(15) },
-+		{ SNOR_HWCAPS_READ_1_1_8,       BIT(20) },
-+		{ SNOR_HWCAPS_READ_1_8_8,       BIT(21) },
-+		{ SNOR_HWCAPS_READ_1_8_8_DTR,   BIT(22) },
- 	};
- 	static const struct sfdp_4bait programs[] = {
- 		{ SNOR_HWCAPS_PP,		BIT(6) },
- 		{ SNOR_HWCAPS_PP_1_1_4,		BIT(7) },
- 		{ SNOR_HWCAPS_PP_1_4_4,		BIT(8) },
-+		{ SNOR_HWCAPS_PP_1_1_8,         BIT(23) },
-+		{ SNOR_HWCAPS_PP_1_8_8,         BIT(24) },
- 	};
- 	static const struct sfdp_4bait erases[SNOR_ERASE_TYPE_MAX] = {
- 		{ 0u /* not used */,		BIT(9) },
+@@ -1089,6 +1089,14 @@ static int spi_nor_parse_4bait(struct spi_nor *nor,
+ 		spi_nor_set_pp_settings(&params_pp[SNOR_CMD_PP_1_4_4],
+ 					SPINOR_OP_PP_1_4_4_4B,
+ 					SNOR_PROTO_1_4_4);
++	if (pp_hwcaps & SNOR_HWCAPS_PP_1_1_8)
++		spi_nor_set_pp_settings(&params_pp[SNOR_CMD_PP_1_1_8],
++					SPINOR_OP_PP_1_1_8_4B,
++					SNOR_PROTO_1_1_8);
++	if (pp_hwcaps & SNOR_HWCAPS_PP_1_8_8)
++		spi_nor_set_pp_settings(&params_pp[SNOR_CMD_PP_1_8_8],
++					SPINOR_OP_PP_1_8_8_4B,
++					SNOR_PROTO_1_8_8);
+ 
+ 	for (i = 0; i < SNOR_ERASE_TYPE_MAX; i++) {
+ 		if (erase_mask & BIT(i))
 -- 
 2.30.2
 
