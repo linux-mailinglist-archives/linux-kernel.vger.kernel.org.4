@@ -2,201 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C87063EA83
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8E163EABC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiLAHtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S229991AbiLAIAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiLAHs7 (ORCPT
+        with ESMTP id S229600AbiLAH73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:48:59 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A544043858;
-        Wed, 30 Nov 2022 23:48:48 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Thu, 1 Dec 2022 02:59:29 -0500
+X-Greylist: delayed 577 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 23:58:40 PST
+Received: from smtp1.rz.tu-harburg.de (smtp1.rz.tu-harburg.de [134.28.205.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B54163D65
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 23:58:39 -0800 (PST)
+Received: from mail.tu-harburg.de (mail4.rz.tu-harburg.de [134.28.202.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.tu-harburg.de", Issuer "DFN-Verein Global Issuing CA" (verified OK))
+        by smtp1.rz.tu-harburg.de (Postfix) with ESMTPS id 4NN7Vy6CD5zxSK;
+        Thu,  1 Dec 2022 08:48:58 +0100 (CET)
+Received: from mailspring.rz.tuhh.de (mailspring.rz.tuhh.de [134.28.202.181])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NN7Vk6t5yz4xVnZ;
-        Thu,  1 Dec 2022 15:48:46 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B17maTK013822;
-        Thu, 1 Dec 2022 15:48:36 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 1 Dec 2022 15:48:38 +0800 (CST)
-Date:   Thu, 1 Dec 2022 15:48:38 +0800 (CST)
-X-Zmail-TransId: 2af963885c56ffffffff81a0d858
-X-Mailer: Zmail v1.0
-Message-ID: <202212011548387254492@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <dmitry.torokhov@gmail.com>
-Cc:     <colin.i.king@gmail.com>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogbWlzYzogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B17maTK013822
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63885C5E.000 by FangMail milter!
-X-FangMail-Envelope: 1669880926/4NN7Vk6t5yz4xVnZ/63885C5E.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63885C5E.000/4NN7Vk6t5yz4xVnZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        (Authenticated sender: ccd5802@KERBEROS.TU-HARBURG.DE)
+        by mail.tu-harburg.de (Postfix) with ESMTPSA id 4NN7Vy5f1tzJrFd;
+        Thu,  1 Dec 2022 08:48:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuhh.de; s=x2022-48;
+        t=1669880938; bh=DUdudZw64Gb6hkXkWx5ri1/AJvVqw2R3o6BjZY7I9Es=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
+         Content-Transfer-Encoding;
+        b=SPaXVYLMn59nD4ExZ2uqb8dbRrsjbQPtZ2I9ElNBk+2AQkeQvGIW8pobX2GXDhZ2+
+         iqHsxhRx1MCmZUp1tXuhpjNhK89FLN+YVYgsvJrSiH1GZUSavUoLqm1iTyh4FTDxy+
+         rukgWzdC64gCfeDOjdtSxhfcmAVILO4tHHLkY2j4=
+From:   Christian Dietrich <christian.dietrich@tuhh.de>
+To:     linux-kernel@vger.kernel.org
+Subject: Advent(2) - The System-Call Advent Calendar
+Organization: Technische =?utf-8?Q?Universit=C3=A4t?= Hamburg
+X-Commit-Hash-org: d826f5ff8b6302d14bbad59532622974549f4d93
+X-Commit-Hash-Maildir: c1d302decc9270ad3d63b967faa9a449d66c9e69
+Date:   Thu, 01 Dec 2022 08:48:57 +0100
+Message-ID: <s7bv8mvlg2e.fsf@dokucode.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Advent(2) -- The System-Call Advent Calender
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-Replace the open-code with sysfs_emit() to simplify the code.
+Winter is coming and the ELFs have a lot of work to do in Santa's
+Christmas village. And the ELFs, as the name suggests, are big fans of
+Linux to get this work done in time. However, until now they only know
+about those old a crusty interfaces that we inherited from UNIX/POSIX.
+So, they require your help! On the way, you can learn something about
+old and new system calls of Linux.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/input/misc/ims-pcu.c | 10 +++++-----
- drivers/input/misc/iqs269a.c | 18 +++++++++---------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+https://osg.tuhh.de/Advent/
 
-diff --git a/drivers/input/misc/ims-pcu.c b/drivers/input/misc/ims-pcu.c
-index b2f1292e27ef..6e8cc28debd9 100644
---- a/drivers/input/misc/ims-pcu.c
-+++ b/drivers/input/misc/ims-pcu.c
-@@ -1050,7 +1050,7 @@ static ssize_t ims_pcu_attribute_show(struct device *dev,
- 			container_of(dattr, struct ims_pcu_attribute, dattr);
- 	char *field = (char *)pcu + attr->field_offset;
+The Operating System Group at the Hamburg University of Technology
+perpared a System-Call Advent calendar with 24 strace-filled doors for
+you. On every day of December, you will find a system-call, a concept or
+an interface of Linux that you might or might not yet know. Behind the
+door, there is a short article and a small programming exercise, for
+which we provide a commented solution on the following day.
 
--	return scnprintf(buf, PAGE_SIZE, "%.*s\n", attr->field_length, field);
-+	return sysfs_emit(buf, "%.*s\n", attr->field_length, field);
- }
+https://lists.tuhh.de/sympa/subscribe/osg-advent
 
- static ssize_t ims_pcu_attribute_store(struct device *dev,
-@@ -1206,7 +1206,7 @@ ims_pcu_update_firmware_status_show(struct device *dev,
- 	struct usb_interface *intf = to_usb_interface(dev);
- 	struct ims_pcu *pcu = usb_get_intfdata(intf);
+So come, join the mailinglist, and have some fun!
 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", pcu->update_firmware_status);
-+	return sysfs_emit(buf, "%d\n", pcu->update_firmware_status);
- }
+chris
+--=20
+Prof. Dr.-Ing. Christian Dietrich
+Operating System Group (E-EXK4)
+Technische Universit=C3=A4t Hamburg
+Am Schwarzenberg-Campus 3 (E), 4.092
+21073 Hamburg
 
- static DEVICE_ATTR(update_firmware_status, S_IRUGO,
-@@ -1309,7 +1309,7 @@ static ssize_t ims_pcu_ofn_reg_data_show(struct device *dev,
- 	if (error)
- 		return error;
+eMail: christian.dietrich@tuhh.de
+Tel:   +49 40 42878 2188
+WWW:   https://osg.tuhh.de/
+V=C3=BCro:  https://meeting.rz.tuhh.de/b/chr-2y9-1ge-rxr
 
--	return scnprintf(buf, PAGE_SIZE, "%x\n", data);
-+	return sysfs_emit(buf, "%x\n", data);
- }
 
- static ssize_t ims_pcu_ofn_reg_data_store(struct device *dev,
-@@ -1344,7 +1344,7 @@ static ssize_t ims_pcu_ofn_reg_addr_show(struct device *dev,
- 	int error;
-
- 	mutex_lock(&pcu->cmd_mutex);
--	error = scnprintf(buf, PAGE_SIZE, "%x\n", pcu->ofn_reg_addr);
-+	error = sysfs_emit(buf, "%x\n", pcu->ofn_reg_addr);
- 	mutex_unlock(&pcu->cmd_mutex);
-
- 	return error;
-@@ -1397,7 +1397,7 @@ static ssize_t ims_pcu_ofn_bit_show(struct device *dev,
- 	if (error)
- 		return error;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", !!(data & (1 << attr->nr)));
-+	return sysfs_emit(buf, "%d\n", !!(data & (1 << attr->nr)));
- }
-
- static ssize_t ims_pcu_ofn_bit_store(struct device *dev,
-diff --git a/drivers/input/misc/iqs269a.c b/drivers/input/misc/iqs269a.c
-index a348247d3d38..e4d5cea51f39 100644
---- a/drivers/input/misc/iqs269a.c
-+++ b/drivers/input/misc/iqs269a.c
-@@ -1332,7 +1332,7 @@ static ssize_t counts_show(struct device *dev,
- 	if (error)
- 		return error;
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", le16_to_cpu(counts));
-+	return sysfs_emit(buf, "%u\n", le16_to_cpu(counts));
- }
-
- static ssize_t hall_bin_show(struct device *dev,
-@@ -1369,7 +1369,7 @@ static ssize_t hall_bin_show(struct device *dev,
- 		return -EINVAL;
- 	}
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
-
- static ssize_t hall_enable_show(struct device *dev,
-@@ -1377,7 +1377,7 @@ static ssize_t hall_enable_show(struct device *dev,
- {
- 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->hall_enable);
-+	return sysfs_emit(buf, "%u\n", iqs269->hall_enable);
- }
-
- static ssize_t hall_enable_store(struct device *dev,
-@@ -1407,7 +1407,7 @@ static ssize_t ch_number_show(struct device *dev,
- {
- 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->ch_num);
-+	return sysfs_emit(buf, "%u\n", iqs269->ch_num);
- }
-
- static ssize_t ch_number_store(struct device *dev,
-@@ -1435,7 +1435,7 @@ static ssize_t rx_enable_show(struct device *dev,
- {
- 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			 iqs269->ch_reg[iqs269->ch_num].rx_enable);
- }
-
-@@ -1475,7 +1475,7 @@ static ssize_t ati_mode_show(struct device *dev,
- 	if (error)
- 		return error;
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
-
- static ssize_t ati_mode_store(struct device *dev,
-@@ -1508,7 +1508,7 @@ static ssize_t ati_base_show(struct device *dev,
- 	if (error)
- 		return error;
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
-
- static ssize_t ati_base_store(struct device *dev,
-@@ -1541,7 +1541,7 @@ static ssize_t ati_target_show(struct device *dev,
- 	if (error)
- 		return error;
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
-
- static ssize_t ati_target_store(struct device *dev,
-@@ -1568,7 +1568,7 @@ static ssize_t ati_trigger_show(struct device *dev,
- {
- 	struct iqs269_private *iqs269 = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", iqs269->ati_current);
-+	return sysfs_emit(buf, "%u\n", iqs269->ati_current);
- }
-
- static ssize_t ati_trigger_store(struct device *dev,
--- 
-2.25.1
