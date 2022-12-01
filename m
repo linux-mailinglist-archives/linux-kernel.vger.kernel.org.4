@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF4A63ED9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8646963ED9D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 11:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLAKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 05:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
+        id S230207AbiLAKYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 05:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiLAKXd (ORCPT
+        with ESMTP id S229619AbiLAKYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:23:33 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA7C97923;
-        Thu,  1 Dec 2022 02:23:19 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NNBwy3q3Gz4f3mSw;
-        Thu,  1 Dec 2022 18:23:14 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgBHO6qUgIhjvN6HBQ--.58718S3;
-        Thu, 01 Dec 2022 18:23:17 +0800 (CST)
-Subject: Re: [PATCH -next v2 8/9] block: fix null-pointer dereference in
- ioc_pd_init
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Li Nan <linan122@huawei.com>, josef@toxicpanda.com,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-9-linan122@huawei.com>
- <Y4fCE7XxcpDfWyDJ@slm.duckdns.org>
- <9ca2b7ab-7fd3-a9a3-12a6-021a78886b54@huaweicloud.com>
- <Y4h94m8QMPtS4xJV@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <431dcb3f-4572-7fd0-9e5d-90b6c34d577c@huaweicloud.com>
-Date:   Thu, 1 Dec 2022 18:23:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 1 Dec 2022 05:24:14 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D428E25E9D;
+        Thu,  1 Dec 2022 02:24:12 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47667D6E;
+        Thu,  1 Dec 2022 02:24:19 -0800 (PST)
+Received: from [10.57.7.90] (unknown [10.57.7.90])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 364F63F67D;
+        Thu,  1 Dec 2022 02:24:11 -0800 (PST)
+Message-ID: <a1312c5e-b03f-8116-7e86-cff618e9e080@arm.com>
+Date:   Thu, 1 Dec 2022 10:24:09 +0000
 MIME-Version: 1.0
-In-Reply-To: <Y4h94m8QMPtS4xJV@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgBHO6qUgIhjvN6HBQ--.58718S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZry3Jw43Ww4rKF4kZF1kXwb_yoWkGwb_uw
-        4vvw10kw15Ga97A3ZIyF4xXrWvgrs5Jr47X39IgFWfWr9YkasxWFZrZry3WFW5K3WI93Wa
-        kr1DGry5W3y29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
-        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] perf/core: Reset remaining bits in
+ perf_clear_branch_entry_bitfields()
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20221201055103.302019-1-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20221201055103.302019-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-ÔÚ 2022/12/01 18:11, Tejun Heo Ð´µÀ:
-> On Thu, Dec 01, 2022 at 10:12:13AM +0800, Yu Kuai wrote:
->> 1) By mentioning that "del_gendisk() is quiescing the queue", do you
->> suggest to add rcu_read_lock()? This seems wrong because blk_iocost_init
->> requires memory allocation.
+
+On 01/12/2022 05:51, Anshuman Khandual wrote:
+> perf_clear_branch_entry_bitfields() resets all struct perf_branch_entry bit
+> fields before capturing branch records. This resets remaining bit fields
+> except 'new_type', which is valid only when 'type' is PERF_BR_EXTEND_ABI.
 > 
-> Quiescing uses SRCU so that should be fine but I'm not sure whether this is
-> the right one to piggyback on. Jens should have a better idea.
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: linux-perf-users@vger.kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+> This applies on v6.1-rc6
 > 
-> Thanks.
+> 'perf_branch_entry.new_type' can remain uninitialized as explained earlier.
+> Also there is no PERF_BR_NEW_UNKNOWN to spare, because 'perf_branch_entry.
+> new_type' enumeration starts at PERF_BR_NEW_FAULT_ALGN, to save a position
+> for the extended branch types instead.
 > 
+>  include/linux/perf_event.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index 0031f7b4d9ab..c97b5f6f77a4 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -1110,8 +1110,9 @@ static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *b
+>  	br->in_tx = 0;
+>  	br->abort = 0;
+>  	br->cycles = 0;
+> -	br->type = 0;
+> +	br->type = PERF_BR_UNKNOWN;
+>  	br->spec = PERF_BR_SPEC_NA;
+> +	br->priv = PERF_BR_PRIV_UNKNOWN;
+>  	br->reserved = 0;
+>  }
 
-Currently SRCU is used if BLK_MQ_F_BLOCKING set, otherwise RCU is used.
+I would vote for just memsetting the whole struct to 0 at this point and
+making it work by ensuring the cleared from and to values are only set
+after this function.
 
-dispatch:
-#define __blk_mq_run_dispatch_ops(q, check_sleep, dispatch_ops) \
-do {                                                            \
-         if ((q)->tag_set->flags & BLK_MQ_F_BLOCKING) {          \
-                 int srcu_idx;                                   \
-                                                                 \
-                 might_sleep_if(check_sleep);                    \
-                 srcu_idx = srcu_read_lock((q)->tag_set->srcu);  \
-                 (dispatch_ops);                                 \
-                 srcu_read_unlock((q)->tag_set->srcu, srcu_idx); \
-         } else {                                                \
-                 rcu_read_lock();                                \
-                 (dispatch_ops);                                 \
-                 rcu_read_unlock();                              \
-         }                                                       \
-} while (0)
+Or do the thing where it's wrapped in a union and the 'u64 value' member
+is assigned 0. See union perf_mem_data_src. I don't know if this would
+be a breaking change, but it doesn't look like it.
 
-quiesce:
-void blk_mq_wait_quiesce_done(struct blk_mq_tag_set *set)
-{
-         if (set->flags & BLK_MQ_F_BLOCKING)
-                 synchronize_srcu(set->srcu);
-         else
-                 synchronize_rcu();
-}
+Currently this is a bit too fragile and the kind of bugs it will cause
+are almost undetectable.
 
-Thanks,
-Kuai
+But as my proposal is an extra change on top of this:
 
+Reviewed-by: James Clark <james.clark@arm.com>
+
+James
+
+>  
