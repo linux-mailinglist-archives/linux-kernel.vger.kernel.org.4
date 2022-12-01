@@ -2,159 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA98B63F845
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C245763F84C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbiLATbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S230484AbiLATbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiLATai (ORCPT
+        with ESMTP id S230483AbiLATak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:30:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0B1CA15F;
-        Thu,  1 Dec 2022 11:30:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA27BB82008;
-        Thu,  1 Dec 2022 19:30:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97982C433C1;
-        Thu,  1 Dec 2022 19:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669923021;
-        bh=0RxRzmDFLKwQUSgOIo6SuPkpbO4W72b1VHA4ZTgHkqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ky2zh/RynzTEWtmlLZ/FHid1Dc0FH/RMY9FbFYHg35MAt2n3x+hASDaKqs0Mdqca2
-         6Jq6vyKb0SSIk0XYUf0YBuFb4SsFS+geQCDU29CkHxtL+Zh1Ht7ueAYPB0jbpnuVwU
-         9m8bpO/+SQL/qJ5hoAlSHPHaRgf0UgiUbf2Q8ewt2tRKhk/2NR3I+pbgeUjg5efupC
-         7or94wbkXOf/FQ+utb7pR2kUSY5V6Qn5Al9EttMPjKkhs2Q1O3DOAEug0zrKH5sjAN
-         5nmr13FJTgwJXsiwqTL8xcH7bu3pv39GJo+iw+/xvM3fIg0YlcQXYzGe4KwEByGcoD
-         KBg0Ab6Upl0+A==
-Date:   Thu, 1 Dec 2022 19:30:16 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Subject: Re: [PATCH v1 7/7] riscv: dts: starfive: visionfive-v2: Add phy
- delay_chain configuration
-Message-ID: <Y4kAyAhBseNmmDo8@spud>
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
- <20221201090242.2381-8-yanhong.wang@starfivetech.com>
- <Y4jpDvXo/uj9ygLR@spud>
+        Thu, 1 Dec 2022 14:30:40 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453BFC8D25
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:30:32 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id e27so6576032ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fKvZImztyAGYKm8N5WHEv0DzFDUrZgSaslqn8pXCp4=;
+        b=EnlxFW2of+UDwHxryW+kMpzqGXuxTDwAoNmcTHslWecr9SBkZJdHuMHWFI08pKCaug
+         1vntP/acflKa9IY5WkpTy7G5Mcv2izHZGHe6BPpGPSxCG/+eyzE8f3wJEoXjNZ/QsSr+
+         VEtbfeSCQYFJwxPkqbb8gOICofHTknEtCusDwm6YpYDoy48e/MInC2BPOF4oNQ8dSvzw
+         SG+q4W/qWaSoqaadUcg51bK6Ba1y6+PtskkmmZ1ujxihHD8Q42mMektfENTMx9PrMyUk
+         cBgMwyLOauec7NlPc7jnpoUJQr7RUytiE+/uaBM0AN1VRsjJfzqgeW2qj0SSd8xBePRn
+         pv7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9fKvZImztyAGYKm8N5WHEv0DzFDUrZgSaslqn8pXCp4=;
+        b=FPc6x7kOYrwKov7sSQL+jQK85/TQ/usgARgdjN+i/Jor4RCfjx+BKXc9z5ewHg2ofj
+         RC9FitYwcZbRvQ/CLrPxJDjIUqzmgScAA8jdKC/TwMEl+xGJHDOImwPOwrk8X6XmObV2
+         A4aRJqYBRzeVhaPtwJKmOjhnxehSLyMbWlIVctmdcT5XigstZp/LGcqhp8NfUKHZcQRp
+         j62s6pVkkbP16k/D4+l7jUxswdddv5O/1hSxQaTo9LGSHYiQc+t25lvxchOpcpZqVx89
+         i11OZL3h14vC7s7hZomwcozQCqjn1MAsMdahG3trCZKE+TeiijBbACPWDxyDoCWAmkOB
+         AjdA==
+X-Gm-Message-State: ANoB5plqwqn4kuuZdhaIpeDo12x21iOZwfLwGUSXgY49bkMF1X2moRSD
+        5tIF4ff0cWcJl0HpaVSdg4LrPg==
+X-Google-Smtp-Source: AA0mqf4koTAajDL3O33f8A2i615xXP/JTt7Jmfrroko8lEHAPS5WgC+T5WvGS6IO0M31Ogsh1ZKGWg==
+X-Received: by 2002:a17:906:f8cc:b0:7ad:92fa:589e with SMTP id lh12-20020a170906f8cc00b007ad92fa589emr40140822ejb.668.1669923030836;
+        Thu, 01 Dec 2022 11:30:30 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id g15-20020aa7c84f000000b004619f024864sm2054110edt.81.2022.12.01.11.30.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 11:30:30 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v5 1/5] hwmon: (pmbus/core): Add rdev in pmbus_data struct
+Date:   Thu,  1 Dec 2022 20:30:20 +0100
+Message-Id: <20221201193025.1584365-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4jpDvXo/uj9ygLR@spud>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 05:49:08PM +0000, Conor Dooley wrote:
-> On Thu, Dec 01, 2022 at 05:02:42PM +0800, Yanhong Wang wrote:
-> > riscv: dts: starfive: visionfive-v2: Add phy delay_chain configuration
-> > 
-> > Add phy delay_chain configuration to support motorcomm phy driver for
-> > StarFive VisionFive 2 board.
+Add regulator device in pmbus_data & initialize the same during PMBus
+regulator register.
 
-nit: please re-word this commit next time around to actually say what
-you're doing here. I didn't notice it initially, but this patch is doing
-a lot more than adding `delay_chain` configuration. To my dwmac unaware
-brain, there's nothing hits for that term outside of the changelog :(
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-Thanks,
-Conor.
+---
+Change in V5:
+- Fix error check for rdev
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-> > 
-> > Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> > ---
-> >  .../jh7110-starfive-visionfive-v2.dts         | 46 +++++++++++++++++++
-> >  1 file changed, 46 insertions(+)
-> > 
-> > diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> > index c8946cf3a268..2868ef4c74ef 100644
-> > --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> > +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> > @@ -15,6 +15,8 @@
-> >  
-> >  	aliases {
-> >  		serial0 = &uart0;
-> > +		ethernet0=&gmac0;
-> > +		ethernet1=&gmac1;
-> 
-> Please match the whitespace usage of the existing entry.
-> 
-> >  	};
-> >  
-> >  	chosen {
-> > @@ -114,3 +116,47 @@
-> >  	pinctrl-0 = <&uart0_pins>;
-> >  	status = "okay";
-> >  };
-> > +
-> > +&gmac0 {
-> > +	status = "okay";
-> > +	#address-cells = <1>;
-> > +	#size-cells = <0>;
-> > +	phy-handle = <&phy0>;
-> > +	status = "okay";
-> > +	mdio0 {
-> 
-> A line of whitespace before the child nodes too please :)
-> 
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +		compatible = "snps,dwmac-mdio";
-> > +		phy0: ethernet-phy@0 {
-> > +			reg = <0>;
-> > +			rxc_dly_en = <1>;
-> > +			tx_delay_sel_fe = <5>;
-> > +			tx_delay_sel = <0xa>;
-> > +			tx_inverted_10 = <0x1>;
-> > +			tx_inverted_100 = <0x1>;
-> > +			tx_inverted_1000 = <0x1>;
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&gmac1 {
-> > +	status = "okay";
-> > +	#address-cells = <1>;
-> > +	#size-cells = <0>;
-> > +	phy-handle = <&phy1>;
-> > +	status = "okay";
-> > +	mdio1 {
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +		compatible = "snps,dwmac-mdio";
-> > +		phy1: ethernet-phy@1 {
-> > +			reg = <1>;
-> > +			tx_delay_sel_fe = <5>;
-> > +			tx_delay_sel = <0>;
-> > +			rxc_dly_en = <0>;
-> > +			tx_inverted_10 = <0x1>;
-> > +			tx_inverted_100 = <0x1>;
-> > +			tx_inverted_1000 = <0x0>;
-> > +		};
-> > +	};
-> > +};
-> > -- 
-> > 2.17.1
-> > 
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..a95f998ca247 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -81,6 +81,7 @@ struct pmbus_label {
+ struct pmbus_data {
+ 	struct device *dev;
+ 	struct device *hwmon_dev;
++	struct regulator_dev **rdevs;
+ 
+ 	u32 flags;		/* from platform data */
+ 
+@@ -3050,9 +3051,13 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 	struct device *dev = data->dev;
+ 	const struct pmbus_driver_info *info = data->info;
+ 	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
+-	struct regulator_dev *rdev;
+ 	int i;
+ 
++	data->rdevs = devm_kzalloc(dev, sizeof(struct regulator_dev *) * info->num_regulators,
++				  GFP_KERNEL);
++	if (!data->rdevs)
++		return -ENOMEM;
++
+ 	for (i = 0; i < info->num_regulators; i++) {
+ 		struct regulator_config config = { };
+ 
+@@ -3062,10 +3067,10 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 		if (pdata && pdata->reg_init_data)
+ 			config.init_data = &pdata->reg_init_data[i];
+ 
+-		rdev = devm_regulator_register(dev, &info->reg_desc[i],
++		data->rdevs[i] = devm_regulator_register(dev, &info->reg_desc[i],
+ 					       &config);
+-		if (IS_ERR(rdev))
+-			return dev_err_probe(dev, PTR_ERR(rdev),
++		if (IS_ERR(data->rdevs[i]))
++			return dev_err_probe(dev, PTR_ERR(data->rdevs[i]),
+ 					     "Failed to register %s regulator\n",
+ 					     info->reg_desc[i].name);
+ 	}
+
+base-commit: 9494c53e1389b120ba461899207ac8a3aab2632c
+-- 
+2.37.3
+
