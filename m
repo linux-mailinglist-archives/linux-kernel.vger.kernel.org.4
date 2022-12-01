@@ -2,274 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FF963F561
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0EA63F562
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 17:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiLAQid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 11:38:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S231703AbiLAQih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 11:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiLAQi0 (ORCPT
+        with ESMTP id S232259AbiLAQib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 11:38:26 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE815B5B5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:38:23 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id q12so2350573pfn.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:38:23 -0800 (PST)
+        Thu, 1 Dec 2022 11:38:31 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FB55BD42
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 08:38:29 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id s196so2136070pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 08:38:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
-        b=L5oONEpJeyYInhCN8kEGfJ8WS2VPlfmSQI0EIRyACnSb62Ho4uiLAZ+22FZ0LpKSBY
-         OanLGdeorUn/O6YHVn5BHqcWoMtKOfzbPKcz+4fsn48JXXYOuwBU81HsoXu4yIA+KxBs
-         oNf69ULLkYXBFawHATlUKtmTRlCCGuue7O3x4Uj20kNa312jwW6CLd6dDy2pzPGk3DaL
-         y4jm5SpqWS/wMH/C2TjT2ihvVuFcoRw2TnuuxPCYPfzDwkDLPEA8hE11/Idhqhxr7xt0
-         rj/FXhrQIb1ypgd2I2CBp8L/oyRKWO3NUq8Jq7LgrgnoUKAu1/kU3hKmcHIeaOcvmDNO
-         M6Aw==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8ktaBf+m+7zsCEDxnoaX5mo2FVAO2+XdFUnqxLpyGNw=;
+        b=mA7VeMKgH/C+/BL1ppc+N9wU4CejHE+DMIURYuGvfocw1ZcCKphtlPDzo+27wwskjG
+         O1BaMMyilZbgbS7mX0ixrsn+OHqZtW8oEO8kADSp5D2YLJBvjkJ3oTLMDc7SaS70rdft
+         i495mS3a0TYQH3D7DC1n/dTlrIXhwB+AvvhBqmbpD46KjxX6ULRIEyygJ1IhrCZ5XzkE
+         MMMqimGq5z5RC1Pv+baZ1v8Cv0RrhxI2IgXaXp6pRMqB6aFSlBnMpmie8vFEdFKTigqk
+         7LwwzG7bIu9mfvNKYpqJ9WJPQWsP47LlxpQ0DUPETXOGQUGvAl7AKcW3coLmIBRtBdKf
+         5bHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wz5UjU3Ma0W7cBTZ/63jSNwcUzSf/RN7ETO0YflOK9Q=;
-        b=KiAlt7u8VF9MYyzaaWxo4HK+AOkcUvv6XvWGEY73oI55OmK+IHz5ibkewGMRKC6L8T
-         2PlXeVQdperc4OZoYTd+eOvt4g+anxXBcsDgcq8ZF+ETVYzTPID74ZO71K6mUs+okuvN
-         fneK8vSxxt0OA0bi902xszIBKE+Weeh/Shyf/gHejW38CgtcUHGehc2fSbjheQBc78bD
-         6GSyDiTSkPo8B1kuk94sjV7h/70QzFnV1xhmXjvuA4pD7GQwR1F7H4i6bfP/Vz0QHd9u
-         RTUW1RPDteu9wsWciJtNG/yxxl3z6xNdyMogWUe1nVRLlb+a78yaHPW1HTkjrcmqHVTs
-         AR7A==
-X-Gm-Message-State: ANoB5pmZ+TB8a+rehZXCEerFZbpBp154cR8SQQPHvyMvgkHqR7SFrJmT
-        eZ1VmCZoX3rFkUFGhjx+APzVdA==
-X-Google-Smtp-Source: AA0mqf7E8VTs9g+yA9GqMgTdFbO4YLYoa36a9KLdCj074cztIQB7gniXVzh1et27ldGMC17rtCxmqQ==
-X-Received: by 2002:aa7:8512:0:b0:575:65ff:8831 with SMTP id v18-20020aa78512000000b0057565ff8831mr16235817pfn.80.1669912703144;
-        Thu, 01 Dec 2022 08:38:23 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm5118172pjf.17.2022.12.01.08.38.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 08:38:22 -0800 (PST)
-Date:   Thu, 1 Dec 2022 16:38:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paul Durrant <paul@xen.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2 26/50] KVM: PPC: Move processor compatibility check to
- module init
-Message-ID: <Y4jXuh4P9Oibki6W@google.com>
-References: <20221130230934.1014142-1-seanjc@google.com>
- <20221130230934.1014142-27-seanjc@google.com>
- <87cz93snqc.fsf@mpe.ellerman.id.au>
+        bh=8ktaBf+m+7zsCEDxnoaX5mo2FVAO2+XdFUnqxLpyGNw=;
+        b=zJ3vpwEBzHXObc19YcGT2Nks735dmxPR6PPVGH7yaN1qjWYWRyBLYyLS1U+y5sQ126
+         +6sXLxJ6c4xqz+I4rsXD8dCYk8m9NQvjaXzxbD3yHvYno/LlC1/5zoE68/P0Tg5ysTMA
+         lddeqLQzBPIMl0ey2w/c9A3Ypx7Rb0WADxaFtb+u/jhISgDN28p7wFhGH0fmZwaGgtlq
+         8oLoR3pXj2cgqOrhbRIfKyKvrKg9XKf9eAnWclPZ7EkWI/wgGdKMQFoLOmJxA49aPNHi
+         iYMd/T3GylvuvuLeX6KgCwj74mXlWmnOinnZiMmX+qTNTnoBNjsJkJ1Q0TKtNt3ZsTXj
+         KzKQ==
+X-Gm-Message-State: ANoB5pm+PjLAqy6AmpPBIvvHleRur9pvnquKPOj4feZmzX344DQ2uNOa
+        0OmfXSDpMWl/3NSbkiX5eQA5jA==
+X-Google-Smtp-Source: AA0mqf71fmql0yVOroUO352Tyegi4ufTC7eSD+civWVFv4uppvX9jsZvHlH4/5tw9e0rlYBITxqOuQ==
+X-Received: by 2002:a05:6a00:1d0c:b0:573:7b50:acb8 with SMTP id a12-20020a056a001d0c00b005737b50acb8mr51202930pfx.59.1669912709020;
+        Thu, 01 Dec 2022 08:38:29 -0800 (PST)
+Received: from ?IPV6:2400:4050:c360:8200:7b99:f7c3:d084:f1e2? ([2400:4050:c360:8200:7b99:f7c3:d084:f1e2])
+        by smtp.gmail.com with ESMTPSA id x28-20020aa78f1c000000b0056c349f5c70sm3448592pfr.79.2022.12.01.08.38.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 08:38:28 -0800 (PST)
+Message-ID: <8b3c4fe0-4a81-ba47-2f01-3686cfdbd519@daynix.com>
+Date:   Fri, 2 Dec 2022 01:38:25 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87cz93snqc.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] arch: arm64: dts: apple: Remove stdout-path
+Content-Language: en-US
+To:     Hector Martin <marcan@marcan.st>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        alyssa@rosenzweig.io, sven@svenpeter.dev
+References: <20221201103651.27807-1-akihiko.odaki@daynix.com>
+ <877czb42wk.fsf@bloch.sibelius.xs4all.nl>
+ <c3b0cee9-032c-0447-37df-3ce5ce280e41@daynix.com>
+ <ae89b38f-fd67-e0e5-1439-f376da985be8@marcan.st>
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <ae89b38f-fd67-e0e5-1439-f376da985be8@marcan.st>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022, Michael Ellerman wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > Move KVM PPC's compatibility checks to their respective module_init()
-> > hooks, there's no need to wait until KVM's common compat check, nor is
-> > there a need to perform the check on every CPU (provided by common KVM's
-> > hook), as the compatibility checks operate on global data.
-> >
-> >   arch/powerpc/include/asm/cputable.h: extern struct cpu_spec *cur_cpu_spec;
-> >   arch/powerpc/kvm/book3s.c: return 0
-> >   arch/powerpc/kvm/e500.c: strcmp(cur_cpu_spec->cpu_name, "e500v2")
-> >   arch/powerpc/kvm/e500mc.c: strcmp(cur_cpu_spec->cpu_name, "e500mc")
-> >                              strcmp(cur_cpu_spec->cpu_name, "e5500")
-> >                              strcmp(cur_cpu_spec->cpu_name, "e6500")
-> 
-> I'm not sure that output is really useful in the change log unless you
-> explain more about what it is.
+Hi,
 
-Agreed, I got lazy.  I'll write a proper description.
- 
-> > diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
-> > index 57e0ad6a2ca3..795667f7ebf0 100644
-> > --- a/arch/powerpc/kvm/e500mc.c
-> > +++ b/arch/powerpc/kvm/e500mc.c
-> > @@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
-> >  {
-> >  	int r;
-> >  
-> > +	r = kvmppc_e500mc_check_processor_compat();
-> > +	if (r)
-> > +		return kvmppc_e500mc;
->  
-> This doesn't build:
-> 
-> linux/arch/powerpc/kvm/e500mc.c: In function ‘kvmppc_e500mc_init’:
-> linux/arch/powerpc/kvm/e500mc.c:391:13: error: implicit declaration of function ‘kvmppc_e500mc_check_processor_compat’; did you mean ‘kvmppc_core_check_processor_compat’? [-Werror=implicit-function-declaration]
->   391 |         r = kvmppc_e500mc_check_processor_compat();
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |             kvmppc_core_check_processor_compat
-> linux/arch/powerpc/kvm/e500mc.c:393:24: error: ‘kvmppc_e500mc’ undeclared (first use in this function); did you mean ‘kvm_ops_e500mc’?
->   393 |                 return kvmppc_e500mc;
->       |                        ^~~~~~~~~~~~~
->       |                        kvm_ops_e500mc
-> linux/arch/powerpc/kvm/e500mc.c:393:24: note: each undeclared identifier is reported only once for each function it appears in
+Thank you for reviewing and detailed explanation.
 
-Huh, CONFIG_PPC_E500MC got unselected in the config I use to compile test this
-flavor.  I suspect I botched an oldconfig at some point.
- 
-Anyways, fixed that and the bugs.
+I'm withdrawing this patch. As you pointed out it makes earlycon 
+difficult, which is serious in development workflow. As a normal user 
+will use U-Boot, which changes stdout-path if appropriate, this kind of 
+change should be designed to make development easier, and this change 
+does the opposite.
 
-Thanks much!
+On 2022/12/02 0:46, Hector Martin wrote:
+ > On 02/12/2022 00.19, Akihiko Odaki wrote:
+ >> So I think we should think more about the case when the kernel is booted
+ >> from m1n1. When using its hypervisor feature, it is more likely that you
+ >> want console on serial and and that is the opposite of this change.
+ >> However, it is still possible to get the console on framebuffer with
+ >> keyboard.
+ >
+ > Except if the framebuffer is broken, or everything is broken and it
+ > hangs on early boot, which happens all the time when I'm debugging using
+ > the hypervisor. Or maybe I'm just SSHing in remotely and not physically
+ > in front of the machine, which is also often the case. Or maybe I'm just
+ > booting headless because I didn't feel like swapping around the HDMI 
+cable.
 
---
-Subject: [PATCH] KVM: PPC: Move processor compatibility check to module init
+The user can change the kernel parameter in such a case. If you have 
+already ran the kernel with this change, you should have learned that 
+the console is tied to the framebuffer and keyboard and you need to 
+supply the kernel parameter. It is easy to change the kernel parameter 
+if you use m1n1 directly.
 
-Move KVM PPC's compatibility checks to their respective module_init()
-hooks, there's no need to wait until KVM's common compat check, nor is
-there a need to perform the check on every CPU (provided by common KVM's
-hook).  The compatibility checks are either a nop (Book3S), or simply
-check the CPU name stored in the global CPU spec (e500 and e500mc).
+ >
+ >> In contrary, if you boot the kernel without the hypervisor
+ >> feature and this change, you will completely lose the console.
+ >
+ > How so? The console goes to both places with stdout-path set to serial0.
+ > What it *does* change is where input is accepted prior to getty startup
+ > (which is why u-boot specifically conditions this on keyboard presence,
+ > modulo the USB issue - because if you *don't* have a keyboard then tty
+ > keyboard input is useless). But if you're booting kernels without u-boot
+ > along the way, you're probably doing it from the hypervisor or linux.py
+ > anyway, especially if you plan to do something like "init=/bin/sh",
+ > because without u-boot (+ optionally some EFI loader) there is no way of
+ > editing command line arguments at boot time stand-alone.
 
-Cc: Fabiano Rosas <farosas@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/powerpc/include/asm/kvm_ppc.h |  1 -
- arch/powerpc/kvm/book3s.c          | 10 ----------
- arch/powerpc/kvm/e500.c            |  4 ++--
- arch/powerpc/kvm/e500mc.c          |  6 +++++-
- arch/powerpc/kvm/powerpc.c         |  2 +-
- 5 files changed, 8 insertions(+), 15 deletions(-)
+Well, that is not exactly the behavior I saw. In my case, if stdout-path 
+is pointed to serial, there is no output on the framebuffer, and it just 
+printed "_".
 
-diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/asm/kvm_ppc.h
-index bfacf12784dd..51a1824b0a16 100644
---- a/arch/powerpc/include/asm/kvm_ppc.h
-+++ b/arch/powerpc/include/asm/kvm_ppc.h
-@@ -118,7 +118,6 @@ extern int kvmppc_xlate(struct kvm_vcpu *vcpu, ulong eaddr,
- extern int kvmppc_core_vcpu_create(struct kvm_vcpu *vcpu);
- extern void kvmppc_core_vcpu_free(struct kvm_vcpu *vcpu);
- extern int kvmppc_core_vcpu_setup(struct kvm_vcpu *vcpu);
--extern int kvmppc_core_check_processor_compat(void);
- extern int kvmppc_core_vcpu_translate(struct kvm_vcpu *vcpu,
-                                       struct kvm_translation *tr);
- 
-diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
-index 6d525285dbe8..87283a0e33d8 100644
---- a/arch/powerpc/kvm/book3s.c
-+++ b/arch/powerpc/kvm/book3s.c
-@@ -999,16 +999,6 @@ int kvmppc_h_logical_ci_store(struct kvm_vcpu *vcpu)
- }
- EXPORT_SYMBOL_GPL(kvmppc_h_logical_ci_store);
- 
--int kvmppc_core_check_processor_compat(void)
--{
--	/*
--	 * We always return 0 for book3s. We check
--	 * for compatibility while loading the HV
--	 * or PR module
--	 */
--	return 0;
--}
--
- int kvmppc_book3s_hcall_implemented(struct kvm *kvm, unsigned long hcall)
- {
- 	return kvm->arch.kvm_ops->hcall_implemented(hcall);
-diff --git a/arch/powerpc/kvm/e500.c b/arch/powerpc/kvm/e500.c
-index c8b2b4478545..0ea61190ec04 100644
---- a/arch/powerpc/kvm/e500.c
-+++ b/arch/powerpc/kvm/e500.c
-@@ -314,7 +314,7 @@ static void kvmppc_core_vcpu_put_e500(struct kvm_vcpu *vcpu)
- 	kvmppc_booke_vcpu_put(vcpu);
- }
- 
--int kvmppc_core_check_processor_compat(void)
-+static int kvmppc_e500_check_processor_compat(void)
- {
- 	int r;
- 
-@@ -507,7 +507,7 @@ static int __init kvmppc_e500_init(void)
- 	unsigned long handler_len;
- 	unsigned long max_ivor = 0;
- 
--	r = kvmppc_core_check_processor_compat();
-+	r = kvmppc_e500_check_processor_compat();
- 	if (r)
- 		goto err_out;
- 
-diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
-index 57e0ad6a2ca3..4564aa27edcf 100644
---- a/arch/powerpc/kvm/e500mc.c
-+++ b/arch/powerpc/kvm/e500mc.c
-@@ -168,7 +168,7 @@ static void kvmppc_core_vcpu_put_e500mc(struct kvm_vcpu *vcpu)
- 	kvmppc_booke_vcpu_put(vcpu);
- }
- 
--int kvmppc_core_check_processor_compat(void)
-+int kvmppc_e500mc_check_processor_compat(void)
- {
- 	int r;
- 
-@@ -388,6 +388,10 @@ static int __init kvmppc_e500mc_init(void)
- {
- 	int r;
- 
-+	r = kvmppc_e500mc_check_processor_compat();
-+	if (r)
-+		goto err_out;
-+
- 	r = kvmppc_booke_init();
- 	if (r)
- 		goto err_out;
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 5faf69421f13..d44b85ba8cef 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -442,7 +442,7 @@ int kvm_arch_hardware_enable(void)
- 
- int kvm_arch_check_processor_compat(void *opaque)
- {
--	return kvmppc_core_check_processor_compat();
-+	return 0;
- }
- 
- int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+It looks like the kernel only outputs to either of serial and 
+framebuffer, not both.
 
-base-commit: 00e4493db7c6163d48d5b45034d1a77e16a1c8dc
--- 
+ >
+ > However, while having stdout-path gives you both serial + tty output and
+ > serial input, *not* having stdout-path kills serial entirely. It also
+ > kills earlycon, and makes it so that you have to specify a bunch of
+ > obscure arguments to get earlycon to work, instead of just a plain
+ > "earlycon" argument which is much easier.
 
+This is a valid argument. I always struggle when I try earlycon first 
+for a computer. stdout-path should be maintained if it is freeing 
+developers from such trouble.
+
+ >
+ > So for this to be considered at all, you would first need to propose a
+ > m1n1 patch to re-add stdout-path in boots under the hypervisor and
+ > (optionally?) on linux.py boots, so you don't regress tools that our
+ > developers use every day.
+ >
+ > But I still fail to see the benefit of this change. What scenario are
+ > you envisioning that this would improve (something people actually do,
+ > not a hypothetical)?
+ >
+
+What I experienced is that when I directly booted the kernel from m1n1 
+without hypervisor, it showed no output to the display even though the 
+same kernel worked with U-Boot. While I could tell it used wrong console 
+by running the hypervisor, I wondered why it behaves differently without 
+U-Boot, and found the aforementioned U-Boot change, coming up with this 
+patch.
+
+Regards,
+Akihiko Odaki
+
+ > - Hector
