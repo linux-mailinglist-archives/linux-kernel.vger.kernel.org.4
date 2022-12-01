@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023A463FC13
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D9A63FC18
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 00:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiLAXdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 18:33:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S231919AbiLAXdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 18:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiLAXdW (ORCPT
+        with ESMTP id S231803AbiLAXd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 18:33:22 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2390413F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:33:22 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id e185-20020a2569c2000000b006f28dd5da75so3320969ybc.19
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 15:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=j5xM6059haRL2w3Ml8a9OvL6hEZxMiznHTFr64Muu3Y=;
-        b=ewb56XgkB8OJ94EaI97ZNlJi8hda6Yr2t8q/bkmq3CwmXRsSaDFbJ3M2qcP3Yj2dKA
-         x+WXST6VfgBddgE2zHpubheKMa0xiWrMKYNegpChRy0JHvzkCgwNg0C39luwmaKTBPct
-         xzsWH5vK6uM04ozXYjeyVqAdfMDNK5298lLSIoNCLJuM6ZqXwohnfue0mu1WJ0bVx8HG
-         q8KUfKfm9KdhsuVz1Sb4NfzeW/s1BqCPvIdF4pPry0GId2KBTQ0jsJopvKeiJ7Vta/tW
-         7NSD0AV3P8ivtFJwq588AHC2zW4gjr5w2x6KE71cC2dzC4zTiGFheA9Gk4KQSBrqLyXb
-         fuwQ==
+        Thu, 1 Dec 2022 18:33:26 -0500
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229BEB5C;
+        Thu,  1 Dec 2022 15:33:26 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id y194-20020a4a45cb000000b004a08494e4b6so490310ooa.7;
+        Thu, 01 Dec 2022 15:33:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j5xM6059haRL2w3Ml8a9OvL6hEZxMiznHTFr64Muu3Y=;
-        b=grAfoxpf13NsJz3KMKJKOuIPxawgUefoZZq/SbTKEibR+9dr92PddwoFTnzPhHTGCD
-         Bt8sY83KWx22t+IYEBV1pG4CE+iOaPlean2BwoYbepUVTpjJVTp0T/iw+787LQE4mnfq
-         D75GWg1ciMG7VIeGXEDkXiUSbz/u2m6Sj+9nLVVzj9kJUDNgBt7JWypY1ToUZyEeib05
-         BCm56CDLAyIWEaedzbuUfwbVdqRaICRwojWTN7ESLqm4mQXvuZhsvbDAZ8t+IHdfbUuo
-         3KUpEvVYaUIAiXWCYuFt2C6zN9NSj+nDWLibox8eSjvHib8wLq7vjmHGLxcNft1FzkEu
-         K0uQ==
-X-Gm-Message-State: ANoB5plZ6GNXYjSTpepX9n2EvU0OZbTov55JqVJynGVMJwgROKHnp7U/
-        H2AKV0XOakq2TyaAnGJDGlqJpwUMoXDElDtpYg==
-X-Google-Smtp-Source: AA0mqf6KQU6tuDVl1pJYFk7jClux0jWzfMz7wsgxiZKagx1M0EFtB2nfBvK7fKwyYR+G6wQ4nvVr/fFBymw+KEnPAg==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:4f7:4c6:3f81:f009])
- (user=almasrymina job=sendgmr) by 2002:a25:c447:0:b0:6f8:784:efb9 with SMTP
- id u68-20020a25c447000000b006f80784efb9mr17934822ybf.334.1669937601439; Thu,
- 01 Dec 2022 15:33:21 -0800 (PST)
-Date:   Thu,  1 Dec 2022 15:33:17 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221201233317.1394958-1-almasrymina@google.com>
-Subject: [PATCH v1] mm: disable top-tier fallback to reclaim on proactive reclaim
-From:   Mina Almasry <almasrymina@google.com>
-To:     Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mina Almasry <almasrymina@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EV6CjuoOmDJCrT3HK8JiKWVQT6lYUA0pH9U3EEboe7E=;
+        b=41S7YRolHDBLUzrWldnzlgHCOSlkyfK8SfjWLzALAwtJKjfLOTlMqdDzRDWfprtNVz
+         aXBuMkCzrXzuADwhH6vChQTYXA96XnGFE1h9YFByyR4rvsYFv3iiWwJ2hLFqGWVxbqMA
+         BPQctWC/YrxMMmAO0tZP7RhCElRj/+dMBw/mvbpiYOFSQRc+eD7GVymVzGL1ClOrE3Gk
+         HIAjQHdZ4QH+M5kV2Y0fNOFqJOmLoED3uOQoY1o5Yd+3XK4/ImenXd7FVVOUEBfxdUFe
+         xBaXHKgEPhoe0LaHSCBPj4Y2mYWZ5LHjAUngycab9nWgYlGsXt8QKv5xdKYf5c1vOYAY
+         oWKQ==
+X-Gm-Message-State: ANoB5pmjwARRlgPVskNMmZazVQmbifuB2/uQHoLPKnqGU4oMEa4Hjk+K
+        FvD0VD14F1WaFyxzhjljCg==
+X-Google-Smtp-Source: AA0mqf5M9nJX9KDi3rKXW1IQ32Xx7g8ROHxHwlWwX5hwmRYB/D8rbNNcafvpX5yJhj0k3R6jjdm63A==
+X-Received: by 2002:a4a:ad49:0:b0:49b:c0e:3d5f with SMTP id s9-20020a4aad49000000b0049b0c0e3d5fmr29549672oon.69.1669937605311;
+        Thu, 01 Dec 2022 15:33:25 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s34-20020a056870612200b0013d9bd4ad2esm3361315oae.12.2022.12.01.15.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 15:33:24 -0800 (PST)
+Received: (nullmailer pid 1686225 invoked by uid 1000);
+        Thu, 01 Dec 2022 23:33:23 -0000
+Date:   Thu, 1 Dec 2022 17:33:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Fabien Parent <fparent@baylibre.com>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Flora Fu <flora.fu@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Lee Jones <lee@kernel.org>, linux-input@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v7 3/8] dt-bindings: soc: mediatek: convert pwrap
+ documentation
+Message-ID: <166993759991.1686069.16535756664012746082.robh@kernel.org>
+References: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
+ <20221005-mt6357-support-v7-3-477e60126749@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005-mt6357-support-v7-3-477e60126749@baylibre.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,65 +87,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reclaiming directly from top tier nodes breaks the aging pipeline of
-memory tiers.  If we have a RAM -> CXL -> storage hierarchy, we
-should demote from RAM to CXL and from CXL to storage. If we reclaim
-a page from RAM, it means we 'demote' it directly from RAM to storage,
-bypassing potentially a huge amount of pages colder than it in CXL.
 
-However disabling reclaim from top tier nodes entirely would cause ooms
-in edge scenarios where lower tier memory is unreclaimable for whatever
-reason, e.g. memory being mlocked() or too hot to reclaim.  In these
-cases we would rather the job run with a performance regression rather
-than it oom altogether.
+On Tue, 29 Nov 2022 16:57:02 +0100, Alexandre Mergnat wrote:
+> - Convert soc/mediatek/pwrap.txt to soc/mediatek/mediatek,pwrap.yaml
+> - Add syscon compatible const for mt8186 and mt8195 to match the DTS needs,
+>   which is missing from pwrap.txt.
+> 
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  .../devicetree/bindings/leds/leds-mt6323.txt       |   2 +-
+>  Documentation/devicetree/bindings/mfd/mt6397.txt   |   2 +-
+>  .../bindings/soc/mediatek/mediatek,pwrap.yaml      | 147 +++++++++++++++++++++
+>  .../devicetree/bindings/soc/mediatek/pwrap.txt     |  75 -----------
+>  4 files changed, 149 insertions(+), 77 deletions(-)
+> 
 
-However, we can disable reclaim from top tier nodes for proactive reclaim.
-That reclaim is not real memory pressure, and we don't have any cause to
-be breaking the aging pipeline.
-
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- mm/vmscan.c | 27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
-
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 23fc5b523764..6eb130e57920 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2088,10 +2088,31 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
- 	nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
- 	/* Folios that could not be demoted are still in @demote_folios */
- 	if (!list_empty(&demote_folios)) {
--		/* Folios which weren't demoted go back on @folio_list for retry: */
-+		/*
-+		 * Folios which weren't demoted go back on @folio_list.
-+		 */
- 		list_splice_init(&demote_folios, folio_list);
--		do_demote_pass = false;
--		goto retry;
-+
-+		/*
-+		 * goto retry to reclaim the undemoted folios in folio_list if
-+		 * desired.
-+		 *
-+		 * Reclaiming directly from top tier nodes is not often desired
-+		 * due to it breaking the LRU ordering: in general memory
-+		 * should be reclaimed from lower tier nodes and demoted from
-+		 * top tier nodes.
-+		 *
-+		 * However, disabling reclaim from top tier nodes entirely
-+		 * would cause ooms in edge scenarios where lower tier memory
-+		 * is unreclaimable for whatever reason, eg memory being
-+		 * mlocked or too hot to reclaim. We can disable reclaim
-+		 * from top tier nodes in proactive reclaim though as that is
-+		 * not real memory pressure.
-+		 */
-+		if (!sc->proactive) {
-+			do_demote_pass = false;
-+			goto retry;
-+		}
- 	}
-
- 	pgactivate = stat->nr_activate[0] + stat->nr_activate[1];
---
-2.39.0.rc0.267.gcb52ba06e7-goog
+Reviewed-by: Rob Herring <robh@kernel.org>
