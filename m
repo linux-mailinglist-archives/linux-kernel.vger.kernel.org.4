@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248FC63F8C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3F863F8C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 21:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiLAUGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 15:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        id S230334AbiLAUIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 15:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiLAUGl (ORCPT
+        with ESMTP id S230043AbiLAUIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 15:06:41 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6973FA518B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:06:40 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s7so2685003plk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 12:06:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eECL7FFsHBH2zCKlJm2Sf1U0/PkSsC+DaNCICiNrHA4=;
-        b=7ETsuVw75zM20YPxF79vgzShYETVvs5HQJDjgduACfj2mUDnyE17YFhf0CHhdiKqWD
-         /AfYtm/ccEoBX8vXWy2GYwmXzG03S67tezDAW5ER53aGynhfLPoeVKqLvArKDmy39i/F
-         aL6chILSuXx74UTjGA/dYe+R4hJX/3dye42BapjHVlGbgts6QmVt7dCJFbG3OpWoN47z
-         jILXdwAzK+n+1SRVEYLXPQRdDQsZU09NR6SA5ZaUwqP8fnVDSF7Yt09Nj+yG8FVp0i+I
-         e1xQeseSq2Dl6uTPinAerUlmh3KaI0o9ND7siRKwN+gbTy5X+aR6J55ejrbm4Jdra7Rb
-         jXvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eECL7FFsHBH2zCKlJm2Sf1U0/PkSsC+DaNCICiNrHA4=;
-        b=Ot8rh2cLMXJBe1cNfUPubYua+qXnWTODeQZD1jiHeesv90i9miywGPPuLq1HzIn504
-         TBKb6/dXIECD9IdHCdTEyE+06CO6ddgnigNPF2kod6YQb24m2744UfJ0wQ01CtsviCxn
-         yB7UwmUV3CYDGOT2qblfVYGx3bGmGy4uhUhiEf7XNvZu8fkK1KadRoh4sSkyJbNzmfC5
-         /K0VLs66EPvZD1aJyw/yjtOJ/G9Me/axrou90QTrqLqvwp+aRPjM8XXze55fUCRJqCxd
-         jWCPLTw06Q7ge8KQcNlQ73E6CRPRB1/+O0l6ttilkXk9EO1DN/bYAtkFG3knl42TEJNf
-         Q6Bw==
-X-Gm-Message-State: ANoB5pnOwFtYT0T94sD8uV5jY3eGgWLCn2Q4TZFrK6F6dFVT9g7CybLz
-        sP+BEkJsP9LVCd9EeAODRArbYw==
-X-Google-Smtp-Source: AA0mqf763Eoc8HmJOusQht95t6nP6Z+b5yytGjvvh2a2H45c3AhWwYKHfOZ5pFzWbwg+HCmknfKIbA==
-X-Received: by 2002:a17:90b:1186:b0:219:2f17:f952 with SMTP id gk6-20020a17090b118600b002192f17f952mr24170757pjb.195.1669925199763;
-        Thu, 01 Dec 2022 12:06:39 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170902cecd00b00186e34524e3sm4043394plg.136.2022.12.01.12.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 12:06:39 -0800 (PST)
-Date:   Thu, 01 Dec 2022 12:06:39 -0800 (PST)
-X-Google-Original-Date: Thu, 01 Dec 2022 12:06:29 PST (-0800)
-Subject:     Re: [PATCH V4 6/7] riscv: ftrace: Add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
-In-Reply-To: <Y4kIcGY0rXTGb3po@spud>
-CC:     guoren@kernel.org, anup@brainfault.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
-        rostedt@goodmis.org, mhiramat@kernel.org, jolsa@redhat.com,
-        bp@suse.de, jpoimboe@kernel.org, suagrfillet@gmail.com,
-        andy.chiu@sifive.com, mark.rutland@arm.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-2612202a-d3bf-4b2b-9b8b-df67b38b5315@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 1 Dec 2022 15:08:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1CE1F9FC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 12:07:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669925266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7vCxchUXYd/g7/aej1yKhv5PkKQzLtH7GxJunJKN/lk=;
+        b=E/zas7jSGxGTPGwmu8lDIQBx8NvOyS/FF9iluxYVQGcuVn+VNbc957c4u8hzUpzJiRp9P+
+        lNMumK1gGZPcnK+sLvmTd6YSzAYIRzifEJC+3LGOsNXCE4/KIBhTv4PaHm5Lpo2z8BCORd
+        9AjWJro9AoCZ40r7QXLVnP4KVN5ib3M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-304-2I_GMm2pNeSxmtI_K0WyIA-1; Thu, 01 Dec 2022 15:07:43 -0500
+X-MC-Unique: 2I_GMm2pNeSxmtI_K0WyIA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7729833A0E;
+        Thu,  1 Dec 2022 20:07:42 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.36])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 62035207B344;
+        Thu,  1 Dec 2022 20:07:42 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] trace: Fix some checker warnings
+From:   David Howells <dhowells@redhat.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     dhowells@redhat.com, linux-kernel@vger.kernel.org
+Date:   Thu, 01 Dec 2022 20:07:39 +0000
+Message-ID: <166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +62,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Dec 2022 12:02:56 PST (-0800), Conor Dooley wrote:
-> On Mon, Nov 28, 2022 at 10:32:29PM -0500, guoren@kernel.org wrote:
->> From: Song Shuai <suagrfillet@gmail.com>
->>
->> This patch adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
->>
->> select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide the
->> register_ftrace_direct[_multi] interfaces allowing users to register
->> the customed trampoline (direct_caller) as the mcount for one or
->> more target functions. And modify_ftrace_direct[_multi] are also
->> provided for modifying direct_caller.
->>
->> To make the direct_caller and the other ftrace hooks (eg. function/fgraph
->> tracer, k[ret]probes) co-exist, a temporary register is nominated to
->> store the address of direct_caller in ftrace_regs_caller. After the
->> setting of the address direct_caller by direct_ops->func and the
->> RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
->> by the `jr` inst.
->>
->> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
->> Tested-by: Guo Ren <guoren@kernel.org>
->> Signed-off-by: Guo Ren <guoren@kernel.org>
->> ---
->>  arch/riscv/Kconfig              | 1 +
->>  arch/riscv/include/asm/ftrace.h | 6 ++++++
->>  arch/riscv/kernel/mcount-dyn.S  | 4 ++++
->>  3 files changed, 11 insertions(+)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 1d0e5838b11b..2828537abfcd 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -278,6 +278,7 @@ config ARCH_RV64I
->>  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
->>  	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
->>  	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
->> +	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
->>  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->>  	select HAVE_FUNCTION_GRAPH_TRACER
->>  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
->
-> Please sort new entries here in alphabetical order, so move the new
-> entry up by one line :)
+Fix some checker warning in the trace code:
 
-IIRC whomever sorted these entrties orignially posted a script that does 
-that.  Maybe that should be integrated into either checkpatch or one of 
-the patchwork robots so we don't have to manually remember the alphabet?
+ (1) The declaration of tracing_max_lat_fops should be conditionally
+     defined like its definition.
+
+ (2) A number of trace functions, and their declarations where present,
+     should have __printf attributes.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steven Rostedt <rostedt@goodmis.org>
+cc: Masami Hiramatsu <mhiramat@kernel.org>
+---
+
+ include/linux/trace_events.h |    3 ++-
+ include/linux/trace_seq.h    |    3 ++-
+ kernel/trace/trace.c         |    2 ++
+ kernel/trace/trace.h         |    2 +-
+ kernel/trace/trace_output.c  |    5 +++--
+ 5 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 20749bd9db71..112b08ca2c5c 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -235,7 +235,8 @@ void tracing_record_taskinfo_sched_switch(struct task_struct *prev,
+ void tracing_record_cmdline(struct task_struct *task);
+ void tracing_record_tgid(struct task_struct *task);
+ 
+-int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...);
++int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
++	 __printf(3, 4);
+ 
+ struct event_filter;
+ 
+diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
+index 5a2c650d9e1c..0c4c7587d6c3 100644
+--- a/include/linux/trace_seq.h
++++ b/include/linux/trace_seq.h
+@@ -97,7 +97,8 @@ extern int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
+ 			      const void *buf, size_t len, bool ascii);
+ 
+ #else /* CONFIG_TRACING */
+-static inline void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
++static inline __printf(2, 3)
++void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
+ {
+ }
+ static inline void
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 5cfc95a52bc3..9da61a54e187 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -1692,7 +1692,9 @@ static ssize_t trace_seq_to_buffer(struct trace_seq *s, void *buf, size_t cnt)
+ }
+ 
+ unsigned long __read_mostly	tracing_thresh;
++#if defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER)
+ static const struct file_operations tracing_max_lat_fops;
++#endif
+ 
+ #ifdef LATENCY_FS_NOTIFY
+ 
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index d42e24507152..ecc6120116da 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -615,7 +615,7 @@ void trace_buffer_unlock_commit_nostack(struct trace_buffer *buffer,
+ bool trace_is_tracepoint_string(const char *str);
+ const char *trace_event_format(struct trace_iterator *iter, const char *fmt);
+ void trace_check_vprintf(struct trace_iterator *iter, const char *fmt,
+-			 va_list ap);
++			 va_list ap) __printf(2, 0);
+ 
+ int trace_empty(struct trace_iterator *iter);
+ 
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 67f47ea27921..7039cd883c8b 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -323,8 +323,9 @@ void trace_event_printf(struct trace_iterator *iter, const char *fmt, ...)
+ }
+ EXPORT_SYMBOL(trace_event_printf);
+ 
+-static int trace_output_raw(struct trace_iterator *iter, char *name,
+-			    char *fmt, va_list ap)
++static __printf(3, 0)
++int trace_output_raw(struct trace_iterator *iter, char *name,
++		     char *fmt, va_list ap)
+ {
+ 	struct trace_seq *s = &iter->seq;
+ 
+
+
