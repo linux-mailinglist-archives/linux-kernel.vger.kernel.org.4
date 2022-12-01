@@ -2,90 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4956863E825
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB04F63E827
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 04:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiLADF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 22:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
+        id S229700AbiLADFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 22:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLADF1 (ORCPT
+        with ESMTP id S229616AbiLADFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 22:05:27 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA536900ED
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:05:26 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id y6so261300iof.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Nov 2022 19:05:26 -0800 (PST)
+        Wed, 30 Nov 2022 22:05:40 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF23A900ED;
+        Wed, 30 Nov 2022 19:05:39 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id c15so602767pfb.13;
+        Wed, 30 Nov 2022 19:05:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ghOflYgtAB0SuL/RMkdaiMq8+6Srw84LyKVkATdW1DU=;
-        b=leZtn9cMG6mHIEirAPNxnJAGIm9nIhwRxjczYxnnvg47tacl5/lgr1+qfyrdk/1/xb
-         ijRhx2I/Sbjef1cYO/LxwVkj8sFbranNXxg1+2fwEaK9PDb//VGuU3kbjY3HCFLUnwa+
-         4Ac0Yt4xqJNoDabuWFWloAGzTOYmZm4EVWNUr0rH7eXds61BPld2sGnVmO2f6LnsmTg2
-         2D5PvRg7BOvtacGXL3kSRi3P731vR5rO/lm6yuPPENXsKGi7dlqmwWriIEFb0tsSHl+D
-         X25oWzq0JJczKdtfJ/PTmN8RRmye5j8rTrWFWLaLj/EepFIRG0f435DxT+57oOUVdfDN
-         Rknw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KK8O7jlMOI6W0R9voFxwxKYumGIiD46HV1X85X98DQI=;
+        b=QUQP0wQHCAxNQFkYjTDu0PpMbOiP/ZuN3mBY8CvUoKnNQV5DqrztBnpcM+iQTXc5X1
+         yG1yfxtnGXI244yiTRPuYjhRUtl5kpK0U8HOn2rCCqMV8fHpC/iywOX4UsADifmAtWMu
+         h5du9ebjS5A5yb0hZio4RtnBJ4iujaH4bwK9g09pY8oKdubxyHQwYndDrcyDOUnkDxjJ
+         t7iCEOm/fs2jR7iYN6zdv1rqVIRVDy3BowZRtVkS3386bIn5V7LQUKlNhmeMPRF710xk
+         YLQdmtL9rcV1aPle1BQN1X7wOHApL9PzW8Dh+b2sW50Uxam6OjJKWmrzThAW2ci8DuDJ
+         ghYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ghOflYgtAB0SuL/RMkdaiMq8+6Srw84LyKVkATdW1DU=;
-        b=VbvtTybvdUBKm8ciuRLcM9+8514hkoUApUac9RXgoGrQLXuWuxoIxguNIV7Tg/FLu3
-         cnPYYEkrNf0IY9+IDeQjpAGJPVj5fnxt7WfHnGU1tiPWbz+lIVpNM5mpnJnHzTnD+ANs
-         Aga1mZNQImrENaHrdTZ7U/nA9Kd+kJfHjVyBNwUWmzt1rrfpL4+ksShXKLuw6LsDGFdl
-         OVhEf4Uddk9A63reOCEWUlZGHqeVlvHF7yHtaXz7xgMf0L6acniN9EONnzRfsBQnEtp3
-         PieNQrRaRbnjTWlSTnKrZfm3vhwmP2YY4M7yJlg2wE+kSEeGpW1/oW2i6H7aomgUXsuG
-         UVug==
-X-Gm-Message-State: ANoB5pmAWPzDEOVQTIvgt3ktVGyhDMkiY6AGkO9HwcJOzfO4H6g3tzX0
-        xpH7lsbaSJRD+f7+rWRgTm902grFMTs9Rz4/CJg=
-X-Google-Smtp-Source: AA0mqf7n1B6tHyS8ZIe1xJLRNEHJhh71bS05gLk7NQ5XvhBIgPnDmUngjNdrFedKMygDf7R8L7ZPUBZANAQLNrhaCzk=
-X-Received: by 2002:a02:2417:0:b0:376:e17:5eaf with SMTP id
- f23-20020a022417000000b003760e175eafmr30131856jaa.56.1669863925991; Wed, 30
- Nov 2022 19:05:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KK8O7jlMOI6W0R9voFxwxKYumGIiD46HV1X85X98DQI=;
+        b=0xOZNa485VkjFZ9c9v5VxagPE24JjeB6QdoMkgMzqbmCDotnpjRVSU9IvvznAlPUfw
+         QRH2sSaXZa+1Fd6vN5yW/Sg9HGEqowIGJc3HwnwGAuBjTMpL6rYuGwo9buPyeJdEQhsP
+         61LtrZqfLklNcRYdXf5KjDM9BLsWDYYd459XfMc3q5QzRq0E43V2UScfnIRsfR1osAg8
+         sNEbm/PH48Fwc9yWMYY1L1taNt4sWif+5AB8dtyvxdPIaEMt2eLuoHzjs/yFHTQ8szWd
+         JlxB22lnYuVIhq4Wt8SQpfeydc+CqoXPFY9jed5UPpYDQ/HKWZEvhYyPVs0dO0tuGb/i
+         yyHA==
+X-Gm-Message-State: ANoB5pkl4quYgjI11Y+vASlgbAnhrroS49MhpEKGEQj+2FDyZJ+wxe+Y
+        pHAiDm/D9QlPAI7DWzcCmtE=
+X-Google-Smtp-Source: AA0mqf5THWhiH7h71LhvkUzAxi/n2hYMpnESjjEKjTq9xoQUeY6v85Xjn2OS8C7UmdyoEdxcEMhehQ==
+X-Received: by 2002:a63:5719:0:b0:476:ea7d:3ff6 with SMTP id l25-20020a635719000000b00476ea7d3ff6mr41097766pgb.73.1669863939326;
+        Wed, 30 Nov 2022 19:05:39 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-12.three.co.id. [180.214.232.12])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090a674100b002191a64b5d5sm3781625pjm.18.2022.11.30.19.05.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 19:05:38 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id AC58B1042F6; Thu,  1 Dec 2022 10:05:33 +0700 (WIB)
+Date:   Thu, 1 Dec 2022 10:05:32 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        ajones@ventanamicro.com, aou@eecs.berkeley.edu, corbet@lwn.net,
+        guoren@kernel.org, heiko@sntech.de, paul.walmsley@sifive.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] Documentation: riscv: add a section about ISA
+ string ordering in /proc/cpuinfo
+Message-ID: <Y4gZ/KZz9rdYj/0r@debian.me>
+References: <20221130234125.2722364-1-conor@kernel.org>
+ <20221130234125.2722364-4-conor@kernel.org>
 MIME-Version: 1.0
-References: <20221128183109.446754-1-vschneid@redhat.com> <Y4fF7/CtH+sq4KqC@slm.duckdns.org>
-In-Reply-To: <Y4fF7/CtH+sq4KqC@slm.duckdns.org>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Thu, 1 Dec 2022 11:05:15 +0800
-Message-ID: <CAJhGHyAZymt-17oRKogO287Oak9f28ni6E19qiq+E-6oA2bd6w@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] workqueue: destroy_worker() vs isolated CPUs
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gGADNEIMdohg5oZc"
+Content-Disposition: inline
+In-Reply-To: <20221130234125.2722364-4-conor@kernel.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 5:06 AM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> So, this generally looks great to me. Lai, what do you think?
->
-> Thanks.
->
 
-Hello,
+--gGADNEIMdohg5oZc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It looks great to me too. (except for a defect in patch4)
+On Wed, Nov 30, 2022 at 11:41:26PM +0000, Conor Dooley wrote:
+> +#. Single-letter extensions come first, in "canonical order", so
+> +   "IMAFDQLCBKJTPVH".
 
-Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
+"..., that is ... ."
 
-Thanks
-Lai
+> +#. The first letter following the 'Z' conventionally indicates the most
+> +   closely related alphabetical extension category, IMAFDQLCBKJTPVH.
+> +   If multiple 'Z' extensions are named, they should be ordered first by
+> +   category, then alphabetically within a category.
+> +
+
+Did you mean "most closely related alphabetical extension category in
+canonical order"?
+
+> +An example string following the order is:
+> +   rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
+> +
+=20
+IMO literal code block should be better fit for the example above,
+rather than definition list:
+
+---- >8 ----
+diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
+index bc3c8ced644bcf..8005add855dc43 100644
+--- a/Documentation/riscv/uabi.rst
++++ b/Documentation/riscv/uabi.rst
+@@ -43,6 +43,7 @@ ordering, so for our purposes the following rules apply:
+ #. Non-standard extensions (starts with 'X') will be listed after all
+    standard extensions.
+=20
+-An example string following the order is:
++An example string following the order is::
++
+    rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
+=20
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--gGADNEIMdohg5oZc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4gZ8QAKCRD2uYlJVVFO
+o8LXAQDg6voodFPTVXIYpNCPvF2HkaiCwmKqQbyxHuyY8letmwD9Efrm/nRjGJBW
+Pgs+RY15Td/CNE2QL19Q3dU8AzkiwAE=
+=aqlR
+-----END PGP SIGNATURE-----
+
+--gGADNEIMdohg5oZc--
