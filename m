@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3DA63FAF3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1104D63FAF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 23:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiLAWuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 17:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S231290AbiLAWv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 17:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiLAWuT (ORCPT
+        with ESMTP id S231207AbiLAWu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:50:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BE7C86B3;
-        Thu,  1 Dec 2022 14:49:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55DB462084;
-        Thu,  1 Dec 2022 22:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36561C433C1;
-        Thu,  1 Dec 2022 22:49:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669934964;
-        bh=M7nV2gz26gK5iSyAIFMnEJ0Gt4gZXURIaCRJJrGWVxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FHvhp1LgyAA/mE+nZNzb72kPSlTEZL+G4LRNhH/OPMaY8bsZbUuBUGsvPeQ8yX57M
-         yf6raFFlzijL/8k0JET2nFa2etTzeyNBZtyIqZhjf6olJI+sINsOf7FcX/mqHIYAtW
-         wUwi+/a3sesg5XEpxzPnSNPjbNds/Vz01O1ltVYZf7QABYoUnEl7RY+ylglA2xF6WN
-         Z9MFJJS+ShXsqpA8fZWWV5KVwUZKBBoYvEbfa/mDP9A7+zrIUA4UbeaoixLh/V6WcJ
-         NZmR/fJGN5t+pwLPJtyYHexFhEP7qmEznDlaXN+x0fggCTsttpIkgj6vgzPaCJFWyz
-         YgPUOCLl+Hvig==
-Date:   Thu, 1 Dec 2022 23:49:21 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/6] soc: qcom: add support for the I2C Master Hub
-Message-ID: <Y4kvcXTdwImZpaU1@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-0-f6a20dc9996e@linaro.org>
+        Thu, 1 Dec 2022 17:50:56 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AB8CA783
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 14:50:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669935009; x=1701471009;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UeIy8pAdmrZ3lUzO5VL6SSZX6v4M9UmNVytJ9UmGaPM=;
+  b=YlguOzN7yotgQRHkqfL2w3G704+5m9S2qAH5SfNh+P7K+L+TJI9ikvyX
+   s0l8uiRtpyxV9UmmyGj0t/5m4snp36J819SMuWC5fQS7m8/vJhqyGLZPd
+   Hb5RgKXnNJEUFio/aWjOHTUTkB6aksKRWDDwdxhivIC3WSyAj9hd3B6uP
+   NIua1V6SBHcAoClGlcWRzHtbMmd4oHQCB/IlHtSXFPpnpFQHI87bOMm1U
+   aHmFyH1D9eEpwi/Ni606Cn8DF8C+2cH0w7Sz55qldDIQKBzTPzgTnSvBC
+   IGEv/TN1pWIL/y9HzT/0zN8hWy2GwE4xVJEZFEJ5/CU44dwVMzRb60m5G
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="377974544"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="377974544"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 14:50:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="819222654"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="819222654"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2022 14:50:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p0sNZ-0036pP-1N;
+        Fri, 02 Dec 2022 00:50:05 +0200
+Date:   Fri, 2 Dec 2022 00:50:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 1/4] container_of: add container_of_const() that
+ preserves const-ness of the pointer
+Message-ID: <Y4kvne/Vv+H5pjzW@smile.fi.intel.com>
+References: <20221201193057.1195255-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YX5ttnhQhXaDF07q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-i2c-master-hub-v3-0-f6a20dc9996e@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221201193057.1195255-1-gregkh@linuxfoundation.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 01, 2022 at 08:30:54PM +0100, Greg Kroah-Hartman wrote:
+> container_of does not preserve the const-ness of a pointer that is
+> passed into it, which can cause C code that passes in a const pointer to
+> get a pointer back that is not const and then scribble all over the data
+> in it.  To prevent this, container_of_const() will preserve the const
+> status of the pointer passed into it using the newly available _Generic()
+> method.
+> 
+> Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
 
---YX5ttnhQhXaDF07q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I believe this tag requires SoB of the co-develper.
+The code looks good to me, thanks!
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On Tue, Nov 29, 2022 at 03:47:00PM +0100, Neil Armstrong wrote:
-> The I2C Master Hub is a stripped down version of the GENI Serial Engine
-> QUP Wrapper Controller but only supporting I2C serial engines without
-> DMA support.
->=20
-> The I2C Master Hub only supports a variant of the I2C serial engine with:
-> - a separate "core" clock
-> - no DMA support
-> - non discoverable fixed FIFO size
->=20
-> Since DMA isn't supported, the wrapper doesn't need the Master AHB clock
-> and the iommus property neither.
->=20
-> This patchset adds the bindings changes to the QUPv3 wrapper and I2C seri=
-al
-> element bindings to reflect the different resources requirements.
->=20
-> In order to reuse the QUPv3 wrapper and I2C serial element driver support,
-> the I2C Master Hub requirements are expressed in new desc structs passed
-> as device match data.
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  include/linux/container_of.h | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+> index 2008e9f4058c..3c290e865151 100644
+> --- a/include/linux/container_of.h
+> +++ b/include/linux/container_of.h
+> @@ -22,4 +22,18 @@
+>  		      "pointer type mismatch in container_of()");	\
+>  	((type *)(__mptr - offsetof(type, member))); })
+>  
+> +/**
+> + * container_of_const - cast a member of a structure out to the containing
+> + *			structure and preserve the const-ness of the pointer
+> + * @ptr_type:		the type of the pointer @ptr
+> + * @ptr:		the pointer to the member
+> + * @member_type:	the type of the container struct this is embedded in.
+> + * @member:		the name of the member within the struct.
+> + */
+> +#define container_of_const(ptr_type, ptr, member_type, member)		\
+> +	_Generic(ptr,							\
+> +		const ptr_type *: ((const member_type *)container_of(ptr, member_type, member)),\
+> +		ptr_type *: ((member_type *)container_of(ptr, member_type, member))	\
+> +	)
+> +
+>  #endif	/* _LINUX_CONTAINER_OF_H */
+> -- 
+> 2.38.1
+> 
 
-Is everyone fine if I take all this via the I2C tree?
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---YX5ttnhQhXaDF07q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOJL3EACgkQFA3kzBSg
-KbbJOg/9GeM6NURU8nhZCAy2JAcAIK8NTfDvJOQzYFEwPYiYhrH6On5gkziryCCL
-2/3SO5jAQdN+veFD1oRDLpKN9FdMXtEjw6Sp4WMu6/l8smL/oHrlc1QANfi0c9OR
-f2tuU4socvwBZStWWwlCih92Llqz/kz2jb8hYbwQdqJ4MiVJUA0nFWqTR7owGS/d
-IQQlyFF4zGK8r53RVekM1ayyul0h3/IX/rP30rL369sIKcS2H111MjyTkOEiKgcF
-Gr5qmP7StWauhE6ft9bx5u8ePasd90qfX/OiIof63X7cJADmRHHjwjF0Ceo+DLRT
-7c9UAU7i8eivMVTKbjJT6EsG8R53yNPxbR6fX39G72OgbIUf1jo24XGWau95yFp5
-nWHb6nk9wt5ECNZ8GWeZxMV/V9NPZV/J0G47rSTtXVtCgEcrywdVm1mEZQb5+0KO
-VD2Vp5FQ4SodgWqJQWiIeIxSkY5R+4OXVA6NeTBZw+3koNFyl1hEU759weXIX4MC
-UGUm4mpQgJSk2jbRhBCN6ucmSJzcZgzFnqWRp3fphhHEJwOu/A5m9yH7NMc+y4bo
-Po3pFZRYYdHhA3ahGdtlsokfIgukR+fii4qn/45bFK1EJ2vzP5YfiOJK97S1TdmN
-qrMmMIe1ee/EAxNs4V59guFwfh7pAFAPj9YkUotHHBvwgVuygac=
-=QWHn
------END PGP SIGNATURE-----
-
---YX5ttnhQhXaDF07q--
