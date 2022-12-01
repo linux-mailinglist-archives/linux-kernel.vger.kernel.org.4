@@ -2,131 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517F663F117
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9D663F113
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiLANCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S230325AbiLANBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiLANBv (ORCPT
+        with ESMTP id S230367AbiLANBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:01:51 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7775656EF7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:01:50 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 62so1585567pgb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:01:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TXLvXXdTgugvaqwC5VnS0gtZiRjZW9Lq1RMlH39mGsc=;
-        b=Xkgq6BQEcFPJ5gCrHCsooCg52GmidmDXMGoan1daErh1grF+4UP8R2qCE/AfVy4SPR
-         mi05nAdiO1Fijqvm9IHmjhusQlLovEASiwF7RUe50Txg9SMFnQUm3zw8z6RgaHS+X1MX
-         SMPwXqyQBnDVycEPRl/QfCpIYGuHVwX7256QrD30JY+kk6fl8mVTIbP5pIFdYch4qLHi
-         ufLP1xmFa7uCnlFjq4D8AorWOEhVZOZjRqP0i7+Phce7XTHW/BGrBzwbws5yj8HhmH+T
-         EfHudL9kzCtj3v5sMBexNnmVFjTT/h/CO0p7eawyY0Jb4jlomf+t5/DAc9nzFeq3uTOc
-         isJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TXLvXXdTgugvaqwC5VnS0gtZiRjZW9Lq1RMlH39mGsc=;
-        b=rE841MZPdRTnIefOoFZWawQdEzXs0GP4kKLcYhwb/1S1e9QJtjqsq1kQaT3L56D33e
-         YPyTttTTQShBbXo/h6mWdGuqCiQoHzxutAwxw4Qdid8nD0ej/kY9AnusJrLjztezad2i
-         VpM+BOU7csMlkXdtsTNr5N1jkrUM3Rvfcapr3Q6CsrkpI9Ici7n5CHFnzk4/ouHAaj03
-         XVzxBDJem3xxaVPQ2a8UUmow06fZ8jRCGenrCp9A1um3oHoWXYNGIBfC4rt8CRCWqTV2
-         iwa+W/9cclQIhKoZ80JKvQHZOU94hj5XAkaE/Jdn6AdD2kEohWIuZiUSzkUZMQ7kyWf1
-         Xtkg==
-X-Gm-Message-State: ANoB5pkURYIrDfTaUX+qyWsBntyqCAHpDt91xUr3ac5pJzDAtrutjEn6
-        4zt0J9tS5VwL6VhJh2vp0Ny5FA==
-X-Google-Smtp-Source: AA0mqf5sVUGjUM+G6chuxm/fIpO2kBg+LSHQjHKLRSuED7OGm3sCl1RGRCdcBdb5BEnmnpVXTycpCQ==
-X-Received: by 2002:a63:a61:0:b0:478:2d2c:6e82 with SMTP id z33-20020a630a61000000b004782d2c6e82mr15446563pgk.136.1669899709811;
-        Thu, 01 Dec 2022 05:01:49 -0800 (PST)
-Received: from anup-ubuntu-vm.localdomain ([171.76.81.69])
-        by smtp.gmail.com with ESMTPSA id l4-20020a17090a384400b00212c27abcaesm4855856pjf.17.2022.12.01.05.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 05:01:49 -0800 (PST)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v14 1/8] RISC-V: Clear SIP bit only when using SBI IPI operations
-Date:   Thu,  1 Dec 2022 18:31:28 +0530
-Message-Id: <20221201130135.1115380-2-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221201130135.1115380-1-apatel@ventanamicro.com>
-References: <20221201130135.1115380-1-apatel@ventanamicro.com>
+        Thu, 1 Dec 2022 08:01:37 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB8E56EF7;
+        Thu,  1 Dec 2022 05:01:35 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7560E6602B91;
+        Thu,  1 Dec 2022 13:01:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669899694;
+        bh=hxMYqgOO8+sjNisCYU+hvl7cmvzjbfIO/w5932DJd0w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eAGGEb3qQzp5iWBlh40e5KFk8OXyDXcHfiVNbtkhz3ogRhjAMYxugqU8pI+B7VaPc
+         UqHR3ZyCK5ahqoeD76LBF/txTDumgbDWzsX4xIgif/VzQT9E4A23r8/Q9wNGcLbCro
+         AfjGUxE+zqLK+Zsb/p2TbJkmY6hju1zHnzD4wDWpB3UD/z0o6MYKZcuLxPkyG2ri2f
+         y++dpIKKUUvkz156Sl8Kp4vJcihU0riuunI58K+Pc2w2cCpYHiHhKH26aqkSUDM2i2
+         fk10L2RxsaGtlqzgoBqJSY/JGEBgHvyATj3+cxv1LPJDz2rSmrmL7L0563CpDIjZe4
+         oe7gSJN25Rjiw==
+Message-ID: <0bc7c690-597c-e49f-d406-52fd9f9a4348@collabora.com>
+Date:   Thu, 1 Dec 2022 14:01:30 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3,3/3] arm64: dts: mt8195: Add video decoder node
+Content-Language: en-US
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Rob Herring <robh@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221201121525.30777-1-yunfei.dong@mediatek.com>
+ <20221201121525.30777-3-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221201121525.30777-3-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The software interrupt pending (i.e. [M|S]SIP) bit is writeable for
-S-mode but read-only for M-mode so we clear this bit only when using
-SBI IPI operations.
+Il 01/12/22 13:15, Yunfei Dong ha scritto:
+> From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
+> 
+> Add video decoder node to mt8195 device tree.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
----
- arch/riscv/kernel/sbi.c | 8 +++++++-
- arch/riscv/kernel/smp.c | 2 --
- 2 files changed, 7 insertions(+), 3 deletions(-)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index 5c87db8fdff2..ac99a70ead6a 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -646,8 +646,14 @@ static void sbi_send_cpumask_ipi(const struct cpumask *target)
- 	sbi_send_ipi(target);
- }
- 
-+static void sbi_ipi_clear(void)
-+{
-+	csr_clear(CSR_IP, IE_SIE);
-+}
-+
- static const struct riscv_ipi_ops sbi_ipi_ops = {
--	.ipi_inject = sbi_send_cpumask_ipi
-+	.ipi_inject = sbi_send_cpumask_ipi,
-+	.ipi_clear = sbi_ipi_clear
- };
- 
- void __init sbi_init(void)
-diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index 760a64518c58..c56d67f53ea9 100644
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -83,8 +83,6 @@ void riscv_clear_ipi(void)
- {
- 	if (ipi_ops && ipi_ops->ipi_clear)
- 		ipi_ops->ipi_clear();
--
--	csr_clear(CSR_IP, IE_SIE);
- }
- EXPORT_SYMBOL_GPL(riscv_clear_ipi);
- 
--- 
-2.34.1
 
