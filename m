@@ -2,103 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E95363F7E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C5E63F7EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 20:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiLATEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 14:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
+        id S230164AbiLATJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 14:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiLATEc (ORCPT
+        with ESMTP id S229579AbiLATJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:04:32 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF664C5E15
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 11:04:31 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d1so4298025wrs.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 11:04:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7p4ZRoKY8KyAbeLZ3D9FFno3zQClogoAoc0aT3MOswk=;
-        b=SH2MVV3BnFZoWATkbczoZvZG/HGAyVAamyZP7S7zZvbT4k/39Bs9cHY023b3UX8VRe
-         Bxsnh5DGvAll1GvjWvMRULbj9BOin2dbmJfdUFoXz5+wjtqKAVdInn2faoOlqzBtY/Eh
-         Hw1E9X0lEjAiyZIkqB4zsUuT4tUcx2vv/7DhzJrdyH73lJdFJa/WGSbbrkvb2ZsZjo1I
-         ADFh2K4rkfPwEkbZ4aruEo4y8q4kgpeWv06BrgWQih3SH3hETYeiH8RnnuFe6qxtOlE5
-         mQZSSJ/JgPw71vj+9t2hVwmLoOH/GWhMs9tPQ3+DQeYBk5j4sQCXiW2/Y7FXPa12tD75
-         UOIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7p4ZRoKY8KyAbeLZ3D9FFno3zQClogoAoc0aT3MOswk=;
-        b=oS4T7IZhJ159ndDWMFOtz90pWal0tc7KBPI2y+48ob4ff3ymhz5nYRpURK6CDz72qy
-         xb7OoGA3684YWk6fEaAc1B8D6COirlyvIFNmYwFne2SXcU1pTrtfW9UTidMsREjNhKGK
-         as/OIlAqpYBlMuGd8wepVgFoibXRZrFvTK/3cR45sDEsR7PrIcIeX5Tt3+3kMW++Wn7u
-         h5jioo57Vt6aDWlYCsRUsUNSeIfkO3pca34sTqbRzUHenfv2VRlVP30kEovNiTIzHDiU
-         l3qb7LwbQQpRg3u9ZxhazvA2/dG/YULlXDyiLoCHhdpu0q91xP/T3ugeznVCmwwFqPQK
-         uCqA==
-X-Gm-Message-State: ANoB5pliVnLF3klEcEvO2bNsBpo3FUW2Wp8EE9sHA7qaPECbbyheN8Y+
-        J36vvNnxtCwW1bKTKdXRdvFr0Q==
-X-Google-Smtp-Source: AA0mqf4xHLqPxdLdu/xsizAphXKq/j4vIgsGGw8kI+lToc0HFLr8OK8KceGdOynFB2/FIQsRcT1eCQ==
-X-Received: by 2002:adf:f605:0:b0:241:ea0f:f0eb with SMTP id t5-20020adff605000000b00241ea0ff0ebmr29182298wrp.358.1669921470559;
-        Thu, 01 Dec 2022 11:04:30 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003c6cd82596esm11848474wmq.43.2022.12.01.11.04.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:04:30 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v4 5/5] hwmon: (pmbus/core): Notify regulator events
-Date:   Thu,  1 Dec 2022 20:03:54 +0100
-Message-Id: <20221201190354.1512790-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221201190354.1512790-1-Naresh.Solanki@9elements.com>
-References: <20221201190354.1512790-1-Naresh.Solanki@9elements.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 14:09:30 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC23C23FB;
+        Thu,  1 Dec 2022 11:09:29 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1IniCb016930;
+        Thu, 1 Dec 2022 19:09:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=4uw+CPCRVemdMEHUsrEWI16bTHWIR3y+meuRPmGVEXM=;
+ b=iHBh2x43WY1hV8toN79ddPg0L+XlgzW4kFgvWiPcnGmSmBXH3Ymxr3YS+2t+IHMbmiap
+ SlPoASeB/lMf2oVeXBmmbljztRE7bYGw3HuQUi9zjkhC1dIVjieFgYSAFcZzvJ7jtufs
+ lP5MBsTockLzbDbPQ/cmnK5WxNRuCwYXppPMJZEpJkoHashkAHprzQRjJIJFO/mBHdgW
+ wv08+31hdP7VzWC/GYLFIlrTZBCb8PbjyaTq5Ol8sRojiiIydOnUWf/dFzGb6mp1aUoz
+ 9JSOviUtOaDTZarq+GCbn7KW1N1aMd9Eb8xzd5jzEUK/FwECj5PPWZbbHG3YZPbwcHJD 0g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m71vy8dpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 19:09:02 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B1IsNbN032282;
+        Thu, 1 Dec 2022 19:09:01 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m71vy8dpf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 19:09:01 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B1J66XM007115;
+        Thu, 1 Dec 2022 19:09:00 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma02dal.us.ibm.com with ESMTP id 3m3aea5vyu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Dec 2022 19:09:00 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B1J8x2232637276
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Dec 2022 19:08:59 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6EBA45803F;
+        Thu,  1 Dec 2022 19:08:59 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B87865805A;
+        Thu,  1 Dec 2022 19:08:58 +0000 (GMT)
+Received: from sig-9-77-152-136.ibm.com (unknown [9.77.152.136])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Dec 2022 19:08:58 +0000 (GMT)
+Message-ID: <66d9f3dbfddc5d73e73fa0c6152d70ff1739427a.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
+ CONFIG_VMAP_STACK=y
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Thu, 01 Dec 2022 14:08:58 -0500
+In-Reply-To: <Y4j4MJzizgEHf4nv@sol.localdomain>
+References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
+         <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
+         <Y4j4MJzizgEHf4nv@sol.localdomain>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jdNx7N97xn_u8jqVnC_7__uTCrd7I81J
+X-Proofpoint-ORIG-GUID: aDnjaeoreon_8zq-GzNuPhmJ8ePUeZuE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-01_13,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 bulkscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 adultscore=0 clxscore=1015 mlxscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2212010141
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Notify regulator events in PMBus irq handler.
+On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
+> On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
+> > mapping") checks that both the signature and the digest reside in the
+> > linear mapping area.
+> > 
+> > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
+> > stack support"), made it possible to move the stack in the vmalloc area,
+> > which is not contiguous, and thus not suitable for sg_set_buf() which needs
+> > adjacent pages.
+> > 
+> > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
+> > evm_digest structure, and use that instead of the in-stack cbounterpart.
+> > 
+> > Cc: stable@vger.kernel.org # 4.9.x
+> > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
+> >  1 file changed, 21 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> > index 23d484e05e6f..7f76d6103f2e 100644
+> > --- a/security/integrity/evm/evm_main.c
+> > +++ b/security/integrity/evm/evm_main.c
+> > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> >  	struct signature_v2_hdr *hdr;
+> >  	enum integrity_status evm_status = INTEGRITY_PASS;
+> >  	struct evm_digest digest;
+> > +	struct evm_digest *digest_ptr = &digest;
+> >  	struct inode *inode;
+> >  	int rc, xattr_len, evm_immutable = 0;
+> >  
+> > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> >  		}
+> >  
+> >  		hdr = (struct signature_v2_hdr *)xattr_data;
+> > -		digest.hdr.algo = hdr->hash_algo;
+> > +
+> > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+> > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
+> > +			if (!digest_ptr) {
+> > +				rc = -ENOMEM;
+> > +				break;
+> > +			}
+> > +		}
+> > +
+> > +		digest_ptr->hdr.algo = hdr->hash_algo;
+> > +
+> >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
+> > -				   xattr_value_len, xattr_data->type, &digest);
+> > +				   xattr_value_len, xattr_data->type,
+> > +				   digest_ptr);
+> >  		if (rc)
+> >  			break;
+> >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
+> >  					(const char *)xattr_data, xattr_len,
+> > -					digest.digest, digest.hdr.length);
+> > +					digest_ptr->digest,
+> > +					digest_ptr->hdr.length);
+> >  		if (!rc) {
+> >  			inode = d_backing_inode(dentry);
+> >  
+> > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> >  		else
+> >  			evm_status = INTEGRITY_FAIL;
+> >  	}
+> > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
+> > -		  digest.digest);
+> > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
+> > +		 digest_ptr->hdr.length, digest_ptr->digest);
+> > +
+> > +	if (digest_ptr && digest_ptr != &digest)
+> > +		kfree(digest_ptr);
+> 
+> What is the actual problem here?  Where is a scatterlist being created from this
+> buffer?  AFAICS it never happens.
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Enabling CONFIG_VMAP_STACK is the culprit, which triggers the BUG_ON
+only when CONFIG_DEBUG_SG is enabled as well.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index daf700210c68..dbdf8c8187db 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3159,6 +3159,11 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 		if (ret)
- 			return ret;
- 
-+		if (event) {
-+			regulator_notifier_call_chain(data->rdevs[i], event, NULL);
-+			ret = IRQ_HANDLED;
-+		}
-+
- 		page = rdev_get_id(data->rdevs[i]);
- 		mutex_lock(&data->update_lock);
- 		status = pmbus_read_status_word(client, page);
+Refer to commit ba14a194a434 ("fork: Add generic vmalloced stack
+support").
+
 -- 
-2.37.3
+thanks,
+
+Mimi
+
 
