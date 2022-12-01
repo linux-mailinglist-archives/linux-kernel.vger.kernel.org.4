@@ -2,118 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DD963F295
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD60863F2D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbiLAOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S231508AbiLAO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiLAOUW (ORCPT
+        with ESMTP id S229481AbiLAO1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:20:22 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA71548424
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:20:20 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id q7so2026283ljp.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 06:20:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T6nSuHE3Pr/44zedu7eUKGL+66HovS1bsuN5zk6+UNg=;
-        b=sE4Aqubu/Yue3DMRz9z7mJoZMtU8Sjuk8KH8a3UwLnb6Iiqi60SYzB/rZibodoaEJ4
-         GnXmNvj3eEeB2g5ex89jlJtSlT21VWDCeLLhwJGH74P0LfyvtWSEiie3xpVGmFGpvfae
-         rS2AZ8EgXcr5zoqL6uoGEXyBHmFXI3s1XM95XYd3+CuWBJmfiN/s21v1licFax/YkwDJ
-         EES6vaZTYOqT5uhzKthCmto5Kd8HmWlqUd8yK8pPowZUirIaL97B0mp32W75cTqEnzjm
-         3oHLUbuBsk0+e/DlDNoSSpDN+kdL40vzIQx/jHsqvfUkcMuMCZimxBvCqPF7a6uKW9wk
-         Kl7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T6nSuHE3Pr/44zedu7eUKGL+66HovS1bsuN5zk6+UNg=;
-        b=uOnY6sjhmsxbvA5Ms8oj7w2LvigvH488OdWaaKBMq4H31x4BUGNKPG1/0c0/R7Iacr
-         pxzXNbaD0x8N6MWI2c30IhxOVu3JSsBFjKlYG/Dmm8SKiHPabqhUaEQ6xXM9rgQ79Stl
-         NUjfOqlYKjlGDBgqCfE3QnmfNOshhDNhgWc4++iItEfKXwrNjkGiXgQ4JhhP4pWnRLqL
-         qdsS5YKN/0kt9nH1GnsGcE1FUG9vPWuIsmMaq0mk2ZVvIkot+kkOAYD9zJTsjoK0tZX1
-         E+H4ION1SAx5BXmpJKILExV0MWMHfBbz3zDCGQuzeLCNV0wt7Vc9+3VJlZYnratAwnEY
-         y5MQ==
-X-Gm-Message-State: ANoB5pm7VOJzN40X+OioAwQU+u1oFBhIUDxaRJhYxFPoe8pxxNpEtWiO
-        i7jt/x5QGIs0O17fe31zKbKaJg==
-X-Google-Smtp-Source: AA0mqf7If5LbRmEcs/C6uyWO55A1UHXJQ+iDtv5psBgvbNuUJ38KnMDCkzKCTSkbYeB6kedias/CPw==
-X-Received: by 2002:a2e:8946:0:b0:279:d37e:3f6d with SMTP id b6-20020a2e8946000000b00279d37e3f6dmr1039171ljk.163.1669904419136;
-        Thu, 01 Dec 2022 06:20:19 -0800 (PST)
-Received: from [192.168.1.101] (95.49.124.14.neoplus.adsl.tpnet.pl. [95.49.124.14])
-        by smtp.gmail.com with ESMTPSA id x17-20020a056512079100b004b3b7557893sm657241lfr.259.2022.12.01.06.20.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 06:20:17 -0800 (PST)
-Message-ID: <a1af5928-4f3f-39f8-94b7-31fbf84143f2@linaro.org>
-Date:   Thu, 1 Dec 2022 15:20:15 +0100
+        Thu, 1 Dec 2022 09:27:06 -0500
+X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 06:27:03 PST
+Received: from st43p00im-ztdg10073201.me.com (st43p00im-ztdg10073201.me.com [17.58.63.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31802CDC9
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:27:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
+        s=sig1; t=1669904428;
+        bh=wtzsLLp7XjENE+y+1qfBODOVw9Kzt3z16zFHjpWZrac=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=NZEds1ymohFUNwbyS+JvrTFN910B/5QeF8Z/VhU68E9DGP4UPByNt9gCgKMcI93J9
+         IAh369MxxndhRZncMWcKi93FWARvRmyf+7xw5vZsbzDxWS9jA/fK5CdKV5O0HNdEoY
+         lSarebqIPvdUl3h+uBUAk1cSMBxZmaAkVKPV+dRo8y+Q0ci8fIGYVdSqExI4P4mgP6
+         KvSF97k52XgmAx0EgNpq0it6S3uWrHErsgACheDrdiHg/tk4M9gcJhsY2/ftXsnuEo
+         UkGkR7Ljbb4I+4g+1GoslPOQUod1Nx49kqmtoNCBQ01Lm/iGiIREDvWhQ3eY9kRB4l
+         5fhxPHeYmlfMw==
+Received: from [10.8.0.2] (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
+        by st43p00im-ztdg10073201.me.com (Postfix) with ESMTPSA id D15C09A054E;
+        Thu,  1 Dec 2022 14:20:23 +0000 (UTC)
+Message-ID: <698c0cb3-a80b-d49c-9487-1d1f94b2abb3@zzy040330.moe>
+Date:   Thu, 1 Dec 2022 22:20:20 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 1/4] dt-bindings: arm: qcom,ids: Add SoC IDs for SM8150
- and SA8155
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
-        a39.skl@gmail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20221201141619.2462705-1-bhupesh.sharma@linaro.org>
- <20221201141619.2462705-2-bhupesh.sharma@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221201141619.2462705-2-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+To:     Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
+Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221130140849.153705-1-JunASAKA@zzy040330.moe>
+ <663e6d79c34f44998a937fe9fbd228e9@realtek.com>
+ <6ce2e648-9c12-56a1-9118-e1e18c7ecd7d@zzy040330.moe>
+ <870b8a6e591f4de8b83df26f2a65330b@realtek.com>
+ <a0c14bfd-a502-6b19-de75-491ea9af3816@gmail.com>
+Content-Language: en-GB
+From:   Jun ASAKA <JunASAKA@zzy040330.moe>
+In-Reply-To: <a0c14bfd-a502-6b19-de75-491ea9af3816@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: A6YuppsmKZny5XT1-RK7zj3Hl9WgNfjh
+X-Proofpoint-ORIG-GUID: A6YuppsmKZny5XT1-RK7zj3Hl9WgNfjh
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-06-21=5F01:2022-06-21=5F01,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
+ suspectscore=0 clxscore=1030 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2212010101
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/12/2022 9:09 pm, Bitterblue Smith wrote:
+
+> On 01/12/2022 04:18, Ping-Ke Shih wrote:
+>>> -----Original Message-----
+>>> From: Jun ASAKA <JunASAKA@zzy040330.moe>
+>>> Sent: Thursday, December 1, 2022 9:39 AM
+>>> To: Ping-Ke Shih <pkshih@realtek.com>; Jes.Sorensen@gmail.com
+>>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+>>> Subject: Re: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+>>>
+>>> On 01/12/2022 8:54 am, Ping-Ke Shih wrote:
+>>>
+>>>>> -----Original Message-----
+>>>>> From: JunASAKA <JunASAKA@zzy040330.moe>
+>>>>> Sent: Wednesday, November 30, 2022 10:09 PM
+>>>>> To: Jes.Sorensen@gmail.com
+>>>>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+>>>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; JunASAKA
+>>>>> <JunASAKA@zzy040330.moe>
+>>>>> Subject: [PATCH] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+>>>>>
+>>>>> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
+>>>>> issues for rtl8192eu chips by replacing the arguments with
+>>>>> the ones in the updated official driver.
+>>>> I think it would be better if you can point out which version you use, and
+>>>> people will not modify them back to old version suddenly.
+>>>>
+>>>>> Signed-off-by: JunASAKA <JunASAKA@zzy040330.moe>
+>>>>> ---
+>>>>>    .../realtek/rtl8xxxu/rtl8xxxu_8192e.c         | 76 +++++++++++++------
+>>>>>    1 file changed, 54 insertions(+), 22 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>>> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>>> index b06508d0cd..82346500f2 100644
+>>>>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8192e.c
+>>>> [...]
+>>>>
+>>>>> @@ -891,22 +907,28 @@ static int rtl8192eu_iqk_path_b(struct rtl8xxxu_priv *priv)
+>>>>>
+>>>>>    	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>>>    	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_UNKNOWN_DF, 0x00180);
+>>>>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>>>
+>>>>> -	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_WE_LUT, 0x800a0);
+>>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_RCK_OS, 0x20000);
+>>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G1, 0x0000f);
+>>>>> +	rtl8xxxu_write_rfreg(priv, RF_B, RF6052_REG_TXPA_G2, 0x07f77);
+>>>>> +
+>>>>>    	rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>>>
+>>>>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x00000000);
+>>>>> +	// rtl8xxxu_write32(priv, REG_FPGA0_IQK, 0x80800000);
+>>>>> +
+>>>> I think this is a test code of vendor driver. No need them here.
+>>>>
+>>>>
+>>>>>    	/* Path B IQK setting */
+>>>>>    	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_A, 0x38008c1c);
+>>>>>    	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_A, 0x38008c1c);
+>>>>>    	rtl8xxxu_write32(priv, REG_TX_IQK_TONE_B, 0x18008c1c);
+>>>>>    	rtl8xxxu_write32(priv, REG_RX_IQK_TONE_B, 0x38008c1c);
+>>>>>
+>>>>> -	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x821403e2);
+>>>>> +	rtl8xxxu_write32(priv, REG_TX_IQK_PI_B, 0x82140303);
+>>>>>    	rtl8xxxu_write32(priv, REG_RX_IQK_PI_B, 0x68160000);
+>>>>>
+>>>>>    	/* LO calibration setting */
+>>>>> -	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00492911);
+>>>>> +	rtl8xxxu_write32(priv, REG_IQK_AGC_RSP, 0x00462911);
+>>>>>
+>>>>>    	/* One shot, path A LOK & IQK */
+>>>>>    	rtl8xxxu_write32(priv, REG_IQK_AGC_PTS, 0xfa000000);
+>>>> [...]
+>>>>
+>>>> I have compared your patch with internal code, and they are the same.
+>>>> But, I don't have a test.
+>>>>
+>>>> Ping-Ke
+>>> I changed those arguments into the ones here:
+>>> https://github.com/Mange/rtl8192eu-linux-driver which works fine with my
+>>> rtl8192eu wifi dongle. But forgive my ignorant that I don't have enough
+>>> experience on wifi drivers, I just compared those two drivers and
+>>> figured that those codes fixing my IQK failures.
+>> I do similar things as well. :-)
+>>
+>> The github repository mentioned
+>> "This branch is based on Realtek's driver versioned 4.4.1. master is based on 4.3.1.1 originally."
+>> So, we can add something to commit message:
+>> 1. https://github.com/Mange/rtl8192eu-linux-driver
+>> 2. vendor driver version: 4.3.1.1
+>>
+>> --
+>> Ping-Ke
+>>
+> That repo is confusing, unfortunately. Indeed, the "master" branch seems to
+> contain v4.3.1.1_11320.20140505. But the last commit is from 2017.
+>
+> The "realtek-4.4.x" branch is the one being actively maintained, and at some
+> point it was updated to v5.6.4_35685.20191108_COEX20171113-0047. README.md
+> was forgotten.
+
+Well, it is and I am using the branch "realtek-4.4.x" for this patch 
+that my problems has fixed correctly. But I has issued a v2 patch added 
+"vendor driver version: 4.3.1.1" which may be incorrect as you 
+mentioned. Is that means I need issue a v3 patch to change the commit 
+messages to "version 5.6.4"? I can do it right now.
 
 
-On 1.12.2022 15:16, Bhupesh Sharma wrote:
-> Add SoC IDs for Qualcomm SM8150 and SA8155 SoCs.
-> 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Jun ASAKA.
 
-Konrad
->  include/dt-bindings/arm/qcom,ids.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
-> index 8b1a0f43bd93..5e0524991e99 100644
-> --- a/include/dt-bindings/arm/qcom,ids.h
-> +++ b/include/dt-bindings/arm/qcom,ids.h
-> @@ -102,6 +102,7 @@
->  #define QCOM_ID_SDA658			326
->  #define QCOM_ID_SDA630			327
->  #define QCOM_ID_SDM450			338
-> +#define QCOM_ID_SM8150			339
->  #define QCOM_ID_SDA845			341
->  #define QCOM_ID_IPQ8072			342
->  #define QCOM_ID_IPQ8076			343
-> @@ -112,6 +113,7 @@
->  #define QCOM_ID_SDA632			350
->  #define QCOM_ID_SDA450			351
->  #define QCOM_ID_SM8250			356
-> +#define QCOM_ID_SA8155			362
->  #define QCOM_ID_IPQ8070			375
->  #define QCOM_ID_IPQ8071			376
->  #define QCOM_ID_IPQ8072A		389
