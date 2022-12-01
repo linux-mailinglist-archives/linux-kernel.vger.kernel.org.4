@@ -2,111 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE0763E7C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BA563E7CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiLACVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        id S229935AbiLACXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Nov 2022 21:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiLACVC (ORCPT
+        with ESMTP id S229840AbiLACWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Nov 2022 21:21:02 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9BDA057D;
-        Wed, 30 Nov 2022 18:20:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NN0Cx51fWz4f3s9r;
-        Thu,  1 Dec 2022 10:20:29 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP4 (Coremail) with SMTP id gCh0CgAnS9huD4hjToLJBQ--.36736S2;
-        Thu, 01 Dec 2022 10:20:32 +0800 (CST)
-Subject: Re: [PATCH v2 0/5] A few cleanup and bugfix patches for blk-iocost
-To:     Jens Axboe <axboe@kernel.dk>, tj@kernel.org, josef@toxicpanda.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221018121932.10792-1-shikemeng@huawei.com>
- <93f9093b-abec-db7e-a945-263cd9355c08@huaweicloud.com>
- <bd008582-1509-69f3-1812-2b9caa390c05@kernel.dk>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <8d9c98e5-0433-e025-ccec-4144102e91c5@huaweicloud.com>
-Date:   Thu, 1 Dec 2022 10:20:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Wed, 30 Nov 2022 21:22:51 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AF928738;
+        Wed, 30 Nov 2022 18:22:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=eNbTy2sBeMZqoW1g/n9wE8NZpX1k3sWmDNk3oQPmY/k=; b=EoxX6nkA/VVC2drRKJkY4RwY/x
+        aWUK/YVmWguUvsQTHBWeV6pilMOOuLhEQvnHQ6jgIQl9vE1Xpl4C9thiIP2yZYusl6xF+Js6GW9nD
+        CqmR4uGDOF5E/F2h4DnV5jcoNbTpljM8XlcofK3anT1wH3i3fT7Jk1uQOZmDyic7G0jI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p0ZDV-0041RC-Af; Thu, 01 Dec 2022 03:22:25 +0100
+Date:   Thu, 1 Dec 2022 03:22:25 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Brian Masney <bmasney@redhat.com>,
+        "irusskikh@marvell.com" <irusskikh@marvell.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "cth451@gmail.com" <cth451@gmail.com>
+Subject: Re: [PATCH] net: atlantic: fix check for invalid ethernet addresses
+Message-ID: <Y4gP4W+CBSA7qD6a@lunn.ch>
+References: <20221130174259.1591567-1-bmasney@redhat.com>
+ <Y4ex6WqiY8IdwfHe@lunn.ch>
+ <Y4fGORYQRfYTabH1@x1>
+ <Y4fMBl6sv+SUyt9Z@lunn.ch>
+ <3adb7dc622a3429782ca89e83c8e020d@AcuMS.aculab.com>
 MIME-Version: 1.0
-In-Reply-To: <bd008582-1509-69f3-1812-2b9caa390c05@kernel.dk>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgAnS9huD4hjToLJBQ--.36736S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF1Dtr13XF1xKw4xuw48WFg_yoW8Wr4xpF
-        Z5u3WSvFyDJw4Skr1xKw42qr4Fyay8Wry8X3ZFq345Zwn8t34Sg3s2qF18ur1DXrsxA3ya
-        vFW2qa45C34DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3adb7dc622a3429782ca89e83c8e020d@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Pretty much zero chance of that board ever working well
+> enough to be in a system.
 
+IBM, for example, has at least three ranges. Maybe they could of
+reached the end of one range, and simply continued shipping products
+from the beginning of the next range...
 
-on 12/1/2022 9:46 AM, Jens Axboe wrote:
-> On 11/30/22 6:45?PM, Kemeng Shi wrote:
->>
->> Hi jens,
->> on 10/18/2022 8:19 PM, Kemeng Shi wrote:
->>> This series contain a few patch to correct comment, correct trace of
->>> vtime_rate and so on. More detail can be found in the respective
->>> changelogs.
->>>
->>> ---
->>> v2:
->>>  Thanks Tejun for review and comment!
->>>  Add Acked-by tag from Tejun.
->>>  Correct description in patch 3/5 and 4/5.
->>>  Drop "blk-iocost: Avoid to call current_hweight_max if iocg->inuse
->>> == iocg->active"
->>>  Drop "blk-iocost: Remove redundant initialization of struct ioc_gq"
->>>  Drop "blk-iocost: Get ioc_now inside weight_updated"
->>> ---
->>>
->>> Kemeng Shi (5):
->>>   blk-iocost: Fix typo in comment
->>>   blk-iocost: Reset vtime_base_rate in ioc_refresh_params
->>>   blk-iocost: Trace vtime_base_rate instead of vtime_rate
->>>   blk-iocost: Remove vrate member in struct ioc_now
->>>   blk-iocost: Correct comment in blk_iocost_init
->>>
->>>  block/blk-iocost.c            | 16 +++++++++-------
->>>  include/trace/events/iocost.h |  4 ++--
->>>  2 files changed, 11 insertions(+), 9 deletions(-)
->> Could you apply this patchset?
->> By the way, my apply for an cloud variant of email was just passed
->> a few days ago. Is this mail still in spam?
-> 
-> This one wasn't, but I've seen the huaweicloud.com emails fail
-> the same origination checks in the past.
-I'm not sure if was there any fix to huaweicloud.com email. I will
-use this huaweicloud emails to minimize the trouble before any
-better solution is found. Sorry for the inconvenience.
+aQuantia only has one range, so i would however agree for them, the
+first valid MAC address is probably assigned to some internal
+development device.
 
--- 
-Best wishes
-Kemeng Shi
-
+     Andrew
