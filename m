@@ -2,242 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEDB63F158
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D6F63F15F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 14:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiLANPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 08:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        id S231277AbiLANQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 08:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiLANPN (ORCPT
+        with ESMTP id S229631AbiLANQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 08:15:13 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A059E475
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:15:10 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b3so2454126lfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:15:10 -0800 (PST)
+        Thu, 1 Dec 2022 08:16:36 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340319E478
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 05:16:34 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id j196so2001367ybj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 05:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=397kbqZIvcY9WZM25zkLtCOQdvj4LqgI2IGa6Y1sONU=;
-        b=NSfaThwXrrMYeqtiOqi8Ur7yJYrt4b6KqyJq0ynfyC1A4Xsj1AptXn96VSW/U7560E
-         w9qEMf8yOKrJkM4DhRIkaTskBZuzNjnifn/BAiFXutvD6v33GABfAXM4LjjeR0++GlpW
-         IvxSTHoS/XtBB0MJh53dYgGmNfWDRxqZOhVKTZ8/yutCVGr1+e6JJaFrzKgQGJPp24ci
-         vwBPALQhWAXc4ENqmP5g/Aw7QK0TK2x/IsEwFNNTwzd4Gk7TTqdd/zQ33Jzfcuy82cCP
-         AfmFZUpBJyGAtAN7m9gO2qvJqI+GjGHu4eZiEMjarerlrSpDynIcNBAeeZH+3EBGR38q
-         SecA==
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZP7dd2L8s05nfl/eGQvgpf5n57IpEARrcYtHZqbzQU=;
+        b=baygwh7MpvfYYrW1EkmDi8UA7WbwYyRRF+B4vXIKYqUikbMhkB9RU/xIMwyk2ePrLd
+         0xLQnXr4f7nSfmKFi4/jSWlfxM8qcESo89/BF0nNBn6R+/pw2UMF/bW60bncUjaMgtRy
+         vyz2OnpXH55w/qyyqsQRi7d81ZIOVbmamSh6M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=397kbqZIvcY9WZM25zkLtCOQdvj4LqgI2IGa6Y1sONU=;
-        b=I0sFqB1rpPijs2eURG/nVshdR/dtPC3K++tOGe/Jb2mDoUBLe+6gt0re+3mE+KPjUW
-         Xplcw9za8cmhHgcWRiEKTQ9fOpLEIQ3Y7Ars2ujg75iRh+d2CXoC1abxM45ouIVCu8Vg
-         0xCNZTi1Ou0Y3gjl17jAgIv3yEebQ6/7l5OLbMojg3uUfq7dFk3p2XQtdiDjtZ3WmoOV
-         Mi/YTC0QNsb7YSx2bN2XMUKYTcKbnyhBdnagK2pC55P4vJP1N7LtVPBFCMohACe7a5WY
-         wFLaKjFAzhwztZLHgHQpvOfWgPSP3/CKl9h7JBBJ/zWMWOPPom6XY5ikR+mNOV40YJZ0
-         fHaw==
-X-Gm-Message-State: ANoB5pm1CoeTHP+LgK9y80xPg7caVPg8VdjFzmb+r7n8M9Bd1kaAP8kM
-        rv5DS7Kp6uASwRO4EO6Xrj1laA==
-X-Google-Smtp-Source: AA0mqf4vJdo/O26H3KI5RceWwW2GVcGsw7XVgSKr19Bu1LaGEOKlszIGgfHyL6G5vQQN7cbLYpUwyg==
-X-Received: by 2002:ac2:5931:0:b0:4ae:ba01:1f48 with SMTP id v17-20020ac25931000000b004aeba011f48mr16942988lfi.373.1669900508597;
-        Thu, 01 Dec 2022 05:15:08 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u11-20020a2e9b0b000000b0027712379ec8sm382252lji.28.2022.12.01.05.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 05:15:08 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] leds: qcom,pm8058-led: Convert to DT schema
-Date:   Thu,  1 Dec 2022 14:15:05 +0100
-Message-Id: <20221201131505.42292-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=pZP7dd2L8s05nfl/eGQvgpf5n57IpEARrcYtHZqbzQU=;
+        b=C3ncPguyxD8K+Qwp8XIC1Jvr8eMuLnUqXWTM82d3SH5nM2z7ozPgg3kgDYvhcnkHTy
+         M7ZABVMMsIynTKowarjNpBzcQbjz5vhzdYFXleIgiaR6fCJZeshWPQki01vNaOLxO2n1
+         GikHbHQCmwmwcToK9s+w3VsonYsVtfE4qOYOB/3VNw9zUB9vEQnkTk13K89hR31lra7M
+         Mmt/dsbNt9rV7tV+NHHhRA8vRDcg/Gt0VcQpFzfBjvaX2neS1EIhBQ5f4i9ACqX8pwYj
+         qMHjVLfi5GdAUj7wQYO0mhNBJPzkzbTQoA1Nzj56zIiyExRiD2YOsFz1Uhe9f8GVX8dL
+         seyQ==
+X-Gm-Message-State: ANoB5pkMCBrD0+Tb9Tzi3HmxvG+jLxiVxWLwDwbl9FrUkOiaX/w3mUfH
+        3G1rSFwxU2E5sjHAxHHy2mNedVhDItnd7zJGxCWn3O2aeISMNQ==
+X-Google-Smtp-Source: AA0mqf634rChlBV+hDJz6XqHfF4SbCN+5E3/VFtWye4wZq0lmYRzzczfmNd219kHAzLnsHYFUiDCMJop/CvXn+6NAxc=
+X-Received: by 2002:a25:9e8a:0:b0:6cc:54cb:71ff with SMTP id
+ p10-20020a259e8a000000b006cc54cb71ffmr63212521ybq.339.1669900593228; Thu, 01
+ Dec 2022 05:16:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <1669817512-4560-1-git-send-email-george.kennedy@oracle.com>
+In-Reply-To: <1669817512-4560-1-git-send-email-george.kennedy@oracle.com>
+From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
+Date:   Thu, 1 Dec 2022 18:46:22 +0530
+Message-ID: <CALs4sv2ZfT1SAYY0oOYhrBBCjsG_th5g=QtSsbKJnPbW8faQ+w@mail.gmail.com>
+Subject: Re: [PATCH] net: check for dev pointer being NULL in
+ dev_hard_header() to avoid GPF
+To:     George Kennedy <george.kennedy@oracle.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        harshit.m.mogalapalli@oracle.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000b184bd05eec407e4"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm PM8058 PMIC LED bindings to DT schema.
+--000000000000b184bd05eec407e4
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/leds/leds-pm8058.txt  | 67 -------------------
- .../bindings/leds/qcom,pm8058-led.yaml        | 57 ++++++++++++++++
- .../devicetree/bindings/mfd/qcom-pm8xxx.yaml  |  4 ++
- 3 files changed, 61 insertions(+), 67 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-pm8058.txt
- create mode 100644 Documentation/devicetree/bindings/leds/qcom,pm8058-led.yaml
+On Wed, Nov 30, 2022 at 7:43 PM George Kennedy
+<george.kennedy@oracle.com> wrote:
+>
+> The dev pointer can be NULL in dev_hard_header(). Add check for dev being
+> NULL in dev_hard_header() to avoid GPF.
+>
+> general protection fault, probably for non-canonical address
+>     0xdffffc0000000046: 0000 [#1] PREEMPT SMP KASAN NOPTI
+> KASAN: null-ptr-deref in range [0x0000000000000230-0x0000000000000237]
+> CPU: 1 PID: 45 Comm: kworker/1:1 Not tainted 6.1.0-rc7+ #2
+> Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0+20659+3dcf7c70
+> Workqueue: mld mld_ifc_work
+> RIP: 0010:macvlan_hard_header (./include/linux/netdevice.h:3057
+>     (discriminator 4) drivers/net/macvlan.c:594 (discriminator 4))
+> RSP: 0018:ffff888103d377d0 EFLAGS: 00010212
+> RAX: dffffc0000000000 RBX: ffff88801cf1a000 RCX: 0000000000000000
+> RDX: 0000000000000046 RSI: 0000000000000000 RDI: 0000000000000230
+> RBP: ffff88801e8ef328 R08: 0000000000000000 R09: 0000000000000060
+> R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801f0497c0
+> R13: 0000000000000000 R14: ffff888045187c98 R15: 0000000000000060
+> FS:  0000000000000000(0000) GS:ffff888106c80000(0000)
+>     knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fbf3f1c1840 CR3: 0000000014e36000 CR4: 00000000000006e0
+> Call Trace:
+>  <TASK>
+> neigh_connected_output (./include/linux/netdevice.h:3060
+>     net/core/neighbour.c:1595)
+> ip6_finish_output2 (./include/net/neighbour.h:546
+>     net/ipv6/ip6_output.c:134)
+> ip6_finish_output (net/ipv6/ip6_output.c:195 net/ipv6/ip6_output.c:206)
+> ip6_output (./include/linux/netfilter.h:291 net/ipv6/ip6_output.c:227)
+> NF_HOOK.constprop.0 (./include/net/dst.h:445
+>     ./include/linux/netfilter.h:302)
+> mld_sendpack (net/ipv6/mcast.c:1824)
+> mld_send_cr (net/ipv6/mcast.c:2122)
+> mld_ifc_work (net/ipv6/mcast.c:2655)
+> process_one_work (kernel/workqueue.c:2294)
+> worker_thread (./include/linux/list.h:292 kernel/workqueue.c:2437)
+> kthread (kernel/kthread.c:376)
+> ret_from_fork (arch/x86/entry/entry_64.S:312)
+>  </TASK>
+> Modules linked in:
+> Dumping ftrace buffer:
+>    (ftrace buffer empty)
+> ---[ end trace 0000000000000000 ]---
+>
+> Fixes: 0c4e85813d0a ("[NET]: Wrap netdevice hardware header creation.")
+> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+> ---
+>  include/linux/netdevice.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index eddf8ee270e7..9b25a6301fa5 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -3054,7 +3054,7 @@ static inline int dev_hard_header(struct sk_buff *skb, struct net_device *dev,
+>                                   const void *daddr, const void *saddr,
+>                                   unsigned int len)
+>  {
+> -       if (!dev->header_ops || !dev->header_ops->create)
+> +       if (!dev || !dev->header_ops || !dev->header_ops->create)
+>                 return 0;
 
-diff --git a/Documentation/devicetree/bindings/leds/leds-pm8058.txt b/Documentation/devicetree/bindings/leds/leds-pm8058.txt
-deleted file mode 100644
-index 89584c49aab2..000000000000
---- a/Documentation/devicetree/bindings/leds/leds-pm8058.txt
-+++ /dev/null
-@@ -1,67 +0,0 @@
--Qualcomm PM8058 LED driver
--
--The Qualcomm PM8058 is a multi-functional device which contains
--an LED driver block for up to six LEDs: three normal LEDs, two
--"flash" LEDs and one "keypad backlight" LED. The names are
--quoted because sometimes these LED drivers are used for wildly
--different things than flash or keypad backlight: their names
--are more of a suggestion than a hard-wired usecase.
--
--Hardware-wise the different LEDs support slightly different
--output currents. The "flash" LEDs do not need to charge nor
--do they support external triggers. They are just powerful LED
--drivers.
--
--The LEDs appear as children to the PM8058 device, with the
--proper compatible string. For the PM8058 bindings see:
--mfd/qcom-pm8xxx.txt.
--
--Each LED is represented as a sub-node of the syscon device. Each
--node's name represents the name of the corresponding LED.
--
--LED sub-node properties:
--
--Required properties:
--- compatible: one of
--  "qcom,pm8058-led" (for the normal LEDs at 0x131, 0x132 and 0x133)
--  "qcom,pm8058-keypad-led" (for the "keypad" LED at 0x48)
--  "qcom,pm8058-flash-led" (for the "flash" LEDs at 0x49 and 0xFB)
--
--Optional properties:
--- label: see Documentation/devicetree/bindings/leds/common.txt
--- default-state: see Documentation/devicetree/bindings/leds/common.txt
--- linux,default-trigger: see Documentation/devicetree/bindings/leds/common.txt
--
--Example:
--
--qcom,ssbi@500000 {
--	pmicintc: pmic@0 {
--		compatible = "qcom,pm8058";
--		led@48 {
--			compatible = "qcom,pm8058-keypad-led";
--			reg = <0x48>;
--			label = "pm8050:white:keypad";
--			default-state = "off";
--		};
--		led@131 {
--			compatible = "qcom,pm8058-led";
--			reg = <0x131>;
--			label = "pm8058:red";
--			default-state = "off";
--		};
--		led@132 {
--			compatible = "qcom,pm8058-led";
--			reg = <0x132>;
--			label = "pm8058:yellow";
--			default-state = "off";
--			linux,default-trigger = "mmc0";
--		};
--		led@133 {
--			compatible = "qcom,pm8058-led";
--			reg = <0x133>;
--			label = "pm8058:green";
--			default-state = "on";
--			linux,default-trigger = "heartbeat";
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/leds/qcom,pm8058-led.yaml b/Documentation/devicetree/bindings/leds/qcom,pm8058-led.yaml
-new file mode 100644
-index 000000000000..fa03e73622d4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/qcom,pm8058-led.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/qcom,pm8058-led.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PM8058 PMIC LED
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description: |
-+  The Qualcomm PM8058 contains an LED block for up to six LEDs:: three normal
-+  LEDs, two "flash" LEDs and one "keypad backlight" LED. The names are quoted
-+  because sometimes these LED drivers are used for wildly different things than
-+  flash or keypad backlight:: their names are more of a suggestion than a
-+  hard-wired usecase.
-+
-+  Hardware-wise the different LEDs support slightly different output currents.
-+  The "flash" LEDs do not need to charge nor do they support external triggers.
-+  They are just powerful LED drivers.
-+
-+allOf:
-+  - $ref: common.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pm8058-led
-+      - qcom,pm8058-keypad-led
-+      - qcom,pm8058-flash-led
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/leds/common.h>
-+
-+    pmic {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        led@131 {
-+            compatible = "qcom,pm8058-led";
-+            reg = <0x131>;
-+            label = "pm8058:red";
-+            color = <LED_COLOR_ID_RED>;
-+            default-state = "off";
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml b/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-index 84b87f01e029..9acad9d326eb 100644
---- a/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-@@ -43,6 +43,10 @@ properties:
-   interrupt-controller: true
- 
- patternProperties:
-+  "led@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/leds/qcom,pm8058-led.yaml#
-+
-   "rtc@[0-9a-f]+$":
-     type: object
-     $ref: "../rtc/qcom-pm8xxx-rtc.yaml"
--- 
-2.34.1
+net_device being NULL during eth header construction? seems like a
+more serious issue?
+If it indeed is a genuine scenario I think a better description is needed...
 
+>
+>         return dev->header_ops->create(skb, dev, type, daddr, saddr, len);
+> --
+> 2.31.1
+>
+
+--000000000000b184bd05eec407e4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
+dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
+fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
+9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
+pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
+25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
+Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICOxZVKDCs83BghAQJfrXQGrIdUo9dpx
+XVk7QLaGCPQKMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIw
+MTEzMTYzM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQCdesEI6liHnREmarUKE5SjXxOkMxbTwhakhYSHs8PrfMKp7iya
+35jm5PqaeME5DRmjpvugmFxJeNu/ob225f13G00Apc0jRm9PvhfwtH+NP4aLE+MkJf+AXB07ujyu
+u0KnRtt5Oz3mEaMDaCg1eqpg5w6VLz4BM4slQi1EFwqDkeSjll6OwbzGF41JAqfCnKHfihwUxJcg
+fbY8GzQ+2i78u6J683VF19CdJICTkgcNCCbBoHYL76EEZSvECcdoQztwHe7Q7Li12A5cqkUUdyEn
+93smOZ72bya+E9n7gLM/lEhirEjQ0187xAo0atE0WXUFFX4n6rnYpv310w4DgjFB
+--000000000000b184bd05eec407e4--
