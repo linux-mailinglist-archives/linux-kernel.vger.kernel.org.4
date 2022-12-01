@@ -2,97 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D223963EF62
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E444063EF6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiLALXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S229948AbiLAL0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiLALXB (ORCPT
+        with ESMTP id S229795AbiLAL0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:23:01 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD425E5F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:21:58 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id w37so1405726pga.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KcV2E+DLshJUcTnYfXOz34aTP2E58VdR57j+4Rky+uQ=;
-        b=TZRZkF65FQ5q55inrSNPxIuLR7N/l0tL+GXiIolKXwtk8Llkai+VTu918FsGjgCVib
-         bkVrtPYfM0rAl/aE/L2eAMDICmu7vR1aujpdtHNEseO+2vEuB6AXCVgq5H1puWe3S+xT
-         t4m90KKwkwe2p1SC683IoQhPxAz4SvGh3deag=
+        Thu, 1 Dec 2022 06:26:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CB9E21
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:25:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669893918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ep72vLxE58Hj5NSOsGJz6rENtgNcndE3NkTvnuzGDE=;
+        b=Y3wn249F3IuDUpEo+fxHlQkMVzYdPWns5k2bE2ZCULzdHqmac7sSsaAIIex92dToyCVvgn
+        1AFrfdSEr72H6L2hgjrGvw1CtunMGlWFruBPySH7y4s3GckHINgvxSN2tMr4rUwQ4Hm17y
+        j13QuEY446OYLT6z/QfNG8IP0ADETT0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-250-HT5nIMgrOLiX3xNxa448iA-1; Thu, 01 Dec 2022 06:25:16 -0500
+X-MC-Unique: HT5nIMgrOLiX3xNxa448iA-1
+Received: by mail-wm1-f72.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso716434wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:25:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KcV2E+DLshJUcTnYfXOz34aTP2E58VdR57j+4Rky+uQ=;
-        b=TLsYagT56bqFpFbWc3oDvOXM1gH3xb9thXeHkXynM3IR8huvo4EMJnGWfkxdiXWiJ5
-         CxmGPs8tQybi7ELeI5gaYTkYxr3WfjMYt84AM0Wd/NPl9IUv5nHCn6TnJ3l387gQpMHd
-         4LGGq4C7RTPErM8nX5N5DdDq0WCa8A88fvRcpvbFPrVVDt7TwDGgu3FkmAZMQWudmeVX
-         o0NakVZey/7WBsGSPyRXwcbxlexG96ETVG+FB2VvHk4NPtTIXH/fsz/vEym+80lTUrcD
-         XNkmZgtLEFUQmi5qoTQD+xfQOdiqkDiVzer5io2fV85MDPSwsbBUd7whDsgAmvdU7ImN
-         HQiQ==
-X-Gm-Message-State: ANoB5plSVog0bs06g+Fdj9ullMi0BSbqDE3pQIH9YJRXRHM1dfsmhYfC
-        jiBfFuV1orsr28E6Ibah21vnDg==
-X-Google-Smtp-Source: AA0mqf5CwbXqaZTfVyhq2dfjg5jWlL0RCXWBvgRz/usGHIpDiDHZjcRlR8eeEJoMxzZrI/v8Bif1sw==
-X-Received: by 2002:a62:be01:0:b0:575:caf6:5cd8 with SMTP id l1-20020a62be01000000b00575caf65cd8mr8989382pff.22.1669893718200;
-        Thu, 01 Dec 2022 03:21:58 -0800 (PST)
-Received: from 7bbcfc1ba566 ([220.253.112.46])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b00188fc33e96dsm3375966plk.198.2022.12.01.03.21.52
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7ep72vLxE58Hj5NSOsGJz6rENtgNcndE3NkTvnuzGDE=;
+        b=A0HtrmWSGJpJ3ae90boWjijgyxENhcRzHP6xRdnZEUSJPzDz01FXFNJJXsf5PXWoRJ
+         9BAoV5GB80j+1Prgv1TcHV2i/CM95b9h85RDq1YHnyPqUAVVnbzAZZZBAZsV1uyB2YB1
+         Ve2xegnqyc2ovLIOcTKQnjWhpWZ9DyIc9BQyLH49LOGX3yTWUmvw5jFm4G3blZ5P0WVl
+         XYIyBXYBGTzdVdzeNMxyh7Ed8TqiBh4/JOkzjVfd3FuSACFTjLrvQiL27KTIryDfdF/+
+         d4AvpRQ+xRNYIJNpRPI9JenJLbdUC4lAq7KyaDtDSLl5xUJCCX5Px/bxGUyDLc0AnOYK
+         xfnQ==
+X-Gm-Message-State: ANoB5pn6d1LLwtI1R4wz1dbIcWI5xNHTdjjsipGUnDn/8eXxiuMUYpXd
+        bHdZoVZ68Kn8yDpQ+uvL5JgFw4u+UGX8tvF/eIrqfE14nqaQBvbNt8NU6AGyUHvbJq959S7wgnK
+        EoOOpKjZm75XgYYLUrCFwllyL
+X-Received: by 2002:a5d:4a8c:0:b0:242:165e:7a79 with SMTP id o12-20020a5d4a8c000000b00242165e7a79mr12148260wrq.343.1669893914871;
+        Thu, 01 Dec 2022 03:25:14 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7T6oAcCAjM/6a6zgzwAS5bkUYUQkeATl7F2kjZacgCrgATu3VUsNvuAWXyhxxd1feg1XyRFw==
+X-Received: by 2002:a5d:4a8c:0:b0:242:165e:7a79 with SMTP id o12-20020a5d4a8c000000b00242165e7a79mr12148245wrq.343.1669893914608;
+        Thu, 01 Dec 2022 03:25:14 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id i1-20020a05600c354100b003b4868eb71bsm9730088wmq.25.2022.12.01.03.25.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:21:57 -0800 (PST)
-Date:   Thu, 1 Dec 2022 11:21:49 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/162] 5.10.157-rc1 review
-Message-ID: <20221201112149.GA1304551@7bbcfc1ba566>
-References: <20221130180528.466039523@linuxfoundation.org>
+        Thu, 01 Dec 2022 03:25:14 -0800 (PST)
+Message-ID: <188f255ca50e0e7a46e0fd139982e6ee3652bd7f.camel@redhat.com>
+Subject: Re: [PATCH] nfc: llcp: Fix race in handling llcp_devices
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
+Cc:     liwei391@huawei.com, sameo@linux.intel.com, kuba@kernel.org,
+        davem@davemloft.net, syzkaller-bugs@googlegroups.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 01 Dec 2022 12:25:13 +0100
+In-Reply-To: <20221129094436.3975668-1-bobo.shaobowang@huawei.com>
+References: <20221129094436.3975668-1-bobo.shaobowang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130180528.466039523@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 07:21:21PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.157 release.
-> There are 162 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 2022-11-29 at 17:44 +0800, Wang ShaoBo wrote:
+> There are multiple path operate llcp_devices list without protection:
+> 
+>          CPU0                        CPU1
+> 
+> nfc_unregister_device()        nfc_register_device()
+>  nfc_llcp_unregister_device()    nfc_llcp_register_device() //no lock
+>     ...                            list_add(local->list, llcp_devices)
+>     local_release()
+>       list_del(local->list)
+> 
+>         CPU2
+> ...
+>  nfc_llcp_find_local()
+>    list_for_each_entry(,&llcp_devices,)
+> 
+> So reach race condition if two of the three occur simultaneously like
+> following crash report, although there is no reproduction script in
+> syzbot currently, our artificially constructed use cases can also
+> reproduce it:
+> 
+> list_del corruption. prev->next should be ffff888060ce7000, but was ffff88802a0ad000. (prev=ffffffff8e536240)
+> ------------[ cut here ]------------
+> kernel BUG at lib/list_debug.c:59!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 16622 Comm: syz-executor.5 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> RIP: 0010:__list_del_entry_valid.cold+0x12/0x72 lib/list_debug.c:59
+> Code: f0 ff 0f 0b 48 89 f1 48 c7 c7 60 96 a6 8a 4c 89 e6 e8 4b 29 f0 ff 0f 0b 4c 89 e1 48 89 ee 48 c7 c7 c0 98 a6 8a e8 37 29 f0 ff <0f> 0b 48 89 ee 48 c7 c7 a0 97 a6 8a e8 26 29 f0 ff 0f 0b 4c 89 e2
+> RSP: 0018:ffffc900151afd58 EFLAGS: 00010282
+> RAX: 000000000000006d RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff88801e7eba80 RSI: ffffffff8166001c RDI: fffff52002a35f9d
+> RBP: ffff888060ce7000 R08: 000000000000006d R09: 0000000000000000
+> R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8e536240
+> R13: ffff88801f3f3000 R14: ffff888060ce1000 R15: ffff888079d855f0
+> FS:  0000555556f57400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f095d5ad988 CR3: 000000002155a000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __list_del_entry include/linux/list.h:134 [inline]
+>  list_del include/linux/list.h:148 [inline]
+>  local_release net/nfc/llcp_core.c:171 [inline]
+>  kref_put include/linux/kref.h:65 [inline]
+>  nfc_llcp_local_put net/nfc/llcp_core.c:181 [inline]
+>  nfc_llcp_local_put net/nfc/llcp_core.c:176 [inline]
+>  nfc_llcp_unregister_device+0xb8/0x260 net/nfc/llcp_core.c:1619
+>  nfc_unregister_device+0x196/0x330 net/nfc/core.c:1179
+>  virtual_ncidev_close+0x52/0xb0 drivers/nfc/virtual_ncidev.c:163
+>  __fput+0x27c/0xa90 fs/file_table.c:320
+>  task_work_run+0x16f/0x270 kernel/task_work.c:179
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+>  exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+>  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> This patch add specific mutex lock llcp_devices_list_lock to ensure
+> handling llcp_devices list safety.
 
-Hi Greg,
+Why a mutex instead of a spinlock? all the critical sections are very
+small (both code and time-wise), while the list of callers reaching
+that code is quite large making hard to check each of them is really in
+process context.
 
-5.10.157-rc1 tested.
+Please switch to a spinlock instead.
 
-Run tested on:
-- Intel Skylake x86_64 (nuc6 i5-6260U)
+Cheers,
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
+Paolo
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
