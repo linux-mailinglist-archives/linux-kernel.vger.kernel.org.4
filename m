@@ -2,126 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C27C63F3C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C549263F3CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 16:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiLAPYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 10:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S231689AbiLAP2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 10:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiLAPXw (ORCPT
+        with ESMTP id S229728AbiLAP2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 10:23:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8FBCD9B1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:23:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 233DD62020
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 15:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B016C433D7;
-        Thu,  1 Dec 2022 15:23:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669908231;
-        bh=12sVLJi1eV03nDA+i/p257FYeSwqbJxoO6cnJV24q0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jibOnvj+ceP+BR55o6l9sQb1r8X/aMrdlpGQOisuZrWI+9WRbIhyylj+kTZFfYlvp
-         hNGiLmS9l2xxf4fif7DL8ttkIl9exc9XMydLUEKvtGaFge7cHgtYyVALiK4S3x9f4o
-         Gs4i+gzT4cS/dUW9koQ9VPgpSC6PSh9B6CXmXTFIFDvniE1wJjsWxP7xiBEoQXf5DF
-         Z/mYIB+yybJptD2yMIELxwqgd2Xst42X0OumPYHkleZk2z/on9OjZnlP0orCmE7XgZ
-         BXnkX1uV/88dBrZr3qN651U5LdpGE6+aRW7Hye2gsi9gVtqf+EBKwFjDnsLhaCnWp2
-         8HGX6KLuok7WQ==
-Date:   Thu, 1 Dec 2022 15:23:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu =?utf-8?B?KOS/nuWutumRqyk=?= <Jiaxin.Yu@mediatek.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "ajye_huang@compal.corp-partner.google.com" 
-        <ajye_huang@compal.corp-partner.google.com>,
-        Chunxu Li =?utf-8?B?KOadjuaYpeaXrSk=?= <Chunxu.Li@mediatek.com>,
-        Allen-KH Cheng =?utf-8?B?KOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "kuninori.morimoto.gx@renesas.com" <kuninori.morimoto.gx@renesas.com>,
-        "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "robert.foss@linaro.org" <robert.foss@linaro.org>,
-        "Laurent.pinchart@ideasonboard.com" 
-        <Laurent.pinchart@ideasonboard.com>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "nfraprado@collabora.com" <nfraprado@collabora.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH v2 1/3] ASoC: hdmi-codec: Add event handler for hdmi TX
-Message-ID: <Y4jHAJgmz/P58Q/C@sirena.org.uk>
-References: <20221125094413.4940-1-jiaxin.yu@mediatek.com>
- <20221125094413.4940-2-jiaxin.yu@mediatek.com>
- <Y4Cysgk5Gic5ae9B@sirena.org.uk>
- <18c82f6f723cd97a9d6b9a7ff16c6ed62fd005d6.camel@mediatek.com>
- <Y4Y/vEWe3dw0FPQH@sirena.org.uk>
- <cf9ea98a3263ffb8fc8b542888ad0ad680facfc7.camel@mediatek.com>
+        Thu, 1 Dec 2022 10:28:34 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F588A7A97
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 07:28:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669908513; x=1701444513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8eDwBDESw/gPbMuGOrqIjfdT/B1sRstTWnlMgk4CnK0=;
+  b=jb529CWrtHFhbPD5Y1L7rek9tL8DqqSV0nGltlyByosB0nqWoHyHucJV
+   Dt2gHrKTTQ5h04+KbrWNadqEbqd2d+I1EUrLEPbSITRbr0ni/nJZosXJ3
+   Ozp2n0Y4doPvS+sp9W/NP8WibXpXzN8bYnjeCsYHbkXTNhIOzYoChKTBn
+   MGokukmZloLSl02qFo/IW1ZTMuCVaG00nnSPKrW95L7ySCen/Z8A/NbQ8
+   xbfhASUJDLEY9LxIDpt8Cwe0S21G7Vmkl6qEBL+16UCsBj0nEucBP51Rd
+   QUoNAkoy/fMzQmpVU1hiIhXuSxPUhU9rhM0fMh61kQioDq6yT+2RldAva
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="186083997"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Dec 2022 08:28:32 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 1 Dec 2022 08:28:31 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Thu, 1 Dec 2022 08:28:29 -0700
+Date:   Thu, 1 Dec 2022 15:28:10 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <guoren@kernel.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <apatel@ventanamicro.com>, <atishp@atishpatra.org>,
+        <heiko@sntech.de>, <anshuman.khandual@arm.com>,
+        <liaochang1@huawei.com>, <juerg.haefliger@canonical.com>,
+        <wangkefeng.wang@huawei.com>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] riscv : select
+ FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+Message-ID: <Y4jICn5oxLozsv6m@wendy>
+References: <20221201151336.8044-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w3piYtER9tAyOK42"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <cf9ea98a3263ffb8fc8b542888ad0ad680facfc7.camel@mediatek.com>
-X-Cookie: Leveraging always beats prototyping.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221201151336.8044-1-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 01, 2022 at 11:13:36PM +0800, Song Shuai wrote:
+> In RISC-V, -fpatchable-function-entry option is used to support
+> dynamic ftrace in this commit afc76b8b8011 ("riscv: Using
+> PATCHABLE_FUNCTION_ENTRY instead of MCOUNT"). So recordmcount
+> don't have to be called to create the __mcount_loc section before
+> the vmlinux linking.
+> 
+> Here selects FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
+> Makefile not to run recordmcount.
+> 
+> Link_v1: https://lore.kernel.org/linux-riscv/CAAYs2=j3Eak9vU6xbAw0zPuoh00rh8v5C2U3fePkokZFibWs2g@mail.gmail.com/T/#t
+> Link_v2: https://lore.kernel.org/linux-riscv/CAAYs2=iYn8sLQB8oh+RzTKd2VKs8MXOLX6Mwpamx5gdVVN6mkA@mail.gmail.com/T/#m62138d7a76664798d00051818a438a601eff4cf1
 
---w3piYtER9tAyOK42
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hey Song Shuai,
 
-On Thu, Dec 01, 2022 at 03:06:04PM +0000, Jiaxin Yu (=E4=BF=9E=E5=AE=B6=E9=
-=91=AB) wrote:
-> On Tue, 2022-11-29 at 17:22 +0000, Mark Brown wrote:
+For future patches, please use normal "Link:" tags. If you're just
+linking to prior versions of the patch, just put them below the ---
+line so they don't end up in the git history.
 
-> >  static const struct snd_kcontrol_new
-> >  mt8186_mt6366_rt1019_rt5682s_controls[] =3D {
-> >          SOC_DAPM_PIN_SWITCH("Speakers"),
-> >          SOC_DAPM_PIN_SWITCH("Headphone"),
-> >          SOC_DAPM_PIN_SWITCH("Headset Mic"),
-> >          SOC_DAPM_PIN_SWITCH("HDMI1"),
-> >  };
+Please don't resend for this alone :)
 
-> Which operation should I use to inform bridge driver to control audio
-> on or off? I'm curious why I don't see .trigger in the structure
-> hdmi_codec_ops compared to the structure snd_soc_dai_ops?
+Thanks,
+Conor.
 
-You'd need to add a callback that the user of hdmi-codec passes in which
-would be triggered by an event on a DAPM widget added in the audio path
-rather than trying to shoehorn this into a PCM operation - a big part of
-the problem here is that you're trying to add something that doesn't fit
-into a PCM operation.
-
---w3piYtER9tAyOK42
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOIxv8ACgkQJNaLcl1U
-h9Ar2Af+KORDgtT/ighVT+gTBJm3oFdl9XsZhX6jFBIroRtVZqlgV0n2nL7IWrfL
-oJQg0v/yecie2DMkQ5waSBz5RuFJktM6GkBBS21lztK1l/SpikqkDgNVAdiAEz10
-FUldzHAK0zmjpp+jLHkJrATrzeMkJWDqyKXc7CVR6z8pStwYFJ9Ag6fkuKR7Y+CX
-schrnd9I3hhtjcEfIG861/h8N9zVv2sRsG65nM4zjHFTMCWqxPwN8h2Ds7JialV7
-gygMUpRaIdyoN79I/RllLk04yYtzQS3iVAS4KJevkYI/T9+zP3RLcuwSbzQJYdya
-l5qY5/GtaQ3DiQVkOzLSxa4KfxCOmQ==
-=fvZ3
------END PGP SIGNATURE-----
-
---w3piYtER9tAyOK42--
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> Tested-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 572973103d73..c19cddb8feb9 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -277,6 +277,7 @@ config ARCH_RV64I
+>  	select 64BIT
+>  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>  	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
+> +	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRACE
+>  	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+>  	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  	select HAVE_SAMPLE_FTRACE_DIRECT
+> -- 
+> 2.20.1
+> 
