@@ -2,151 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8F563E79D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A152363E79B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 03:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiLACQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Nov 2022 21:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiLACQf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229802AbiLACQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 30 Nov 2022 21:16:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C93F9C637;
-        Wed, 30 Nov 2022 18:16:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229475AbiLACQd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 30 Nov 2022 21:16:33 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E0D8932A;
+        Wed, 30 Nov 2022 18:16:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDA1461E33;
-        Thu,  1 Dec 2022 02:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99982C433D6;
-        Thu,  1 Dec 2022 02:16:30 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="W9BC4zgH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669860987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u3FTOtZpdTZLy3/k78tZkT54sf8xZfaUw16L7xc/1go=;
-        b=W9BC4zgHnBzwICnH/96H72eXUR+/bnlmnKyNj58IytMW4u+R3rETOIp1hrjekTSMOU77Bt
-        SPWUBmYkAArZxIZarKQbdCW5TM6vPas2sTEbM9K4UCnTLM3AYldAIOeJUj5PYKP1G++C/b
-        bmfxZ1yb5uXK/F+TeQZpd9Q+KJO3FZ4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d009f39a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 1 Dec 2022 02:16:27 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 03:16:20 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
-Message-ID: <Y4gOdC8J+zzRsago@zx2c4.com>
-References: <20221129210639.42233-1-Jason@zx2c4.com>
- <20221129210639.42233-2-Jason@zx2c4.com>
- <877czc7m0g.fsf@oldenburg.str.redhat.com>
- <Y4d5SyU3akA9ZBaJ@zx2c4.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NN07F4bmdz4xG6;
+        Thu,  1 Dec 2022 13:16:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669860986;
+        bh=S5ONOgZTz0o2WtCmNBz+lPKRdK6AlxXo3Pg1r0rdX+Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qgDcVfK5GnoATJ2aezvzB2v9wS6E7f6tkrn+ne0/J5FHBMnvUzwTbtzFMB9M0aVVZ
+         ixD9IR3Pqo6Cy8Sy0CPBpS0R1AVDGQufX3/9/ixNeUU5ieYaPj4VwncAqauK+5teqh
+         cKm+SRrp3soXJJgqOGBH8nsJRVyrAuUSsoyRDm+PTTOuPeZMa/5hYfBq8t6qzgJ6o9
+         lgk+Ouu/DHvNj2mh7Zk4rLhaoR3Sx/leBS3T9nl05kGWB1A0JEWuMdpNLXg0DHwIue
+         xvfz23RD25gBCwMsw0KPeAZ4UNQZtUfBIFQ3iXbn70ZakmQYTszrSef5JDNrsNxDjU
+         lW02TseOnZOAw==
+Date:   Thu, 1 Dec 2022 13:16:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>, David Matlack <dmatlack@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Sean Christopherson <seanjc@google.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
+Message-ID: <20221201131623.18ebc8d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y4d5SyU3akA9ZBaJ@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7OYHAZ/oIIkHuO+IrwWjSQq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 04:39:55PM +0100, Jason A. Donenfeld wrote:
-> > Can userspace use the memory for something else if it's not passed to
-> > getrandom?
-> 
-> I suspect the documentation answer here is, "no", even if technically it
-> might happen to work on this kernel or that kernel. I suppose this could
-> even be quasi-enforced by xoring the top bits with some vdso
-> compile-time constant, so you can't rely on being able to dereference
-> it yourself.
-> [...]
-> Then they're caught holding the bag? This doesn't seem much different
-> from userspace shooting themselves in general, like writing garbage into
-> the allocated states and then trying to use them. If this is something
-> you really, really are concerned about, then maybe my cheesy dumb xor
-> thing mentioned above would be a low effort mitigation here.
+--Sig_/7OYHAZ/oIIkHuO+IrwWjSQq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I implemented a sample of this, below. I think this is a bit silly,
-though, and making this fully robust could take some effort. Overall, I
-don't think we should do this.
+Hi all,
 
-However, the more I think about the args thing from the last email,
-the more I like *that* idea. So I think I'll roll with that.
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-But this cheesy pointer obfuscation thing here, meh. But here's what it
-could look like anyway:
+  tools/testing/selftests/kvm/include/perf_test_util.h
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 2aaeb48d11be..7aff45165ce5 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -228,7 +228,7 @@ SYSCALL_DEFINE2(vgetrandom_alloc, struct vgetrandom_alloc_args __user *, uargs,
- 	if (args.flags & VGRA_DEALLOCATE) {
- 		if (args.size_per_each != state_size || args.num > max_states || !args.states)
- 			return -EINVAL;
--		return vm_munmap(args.states, args.num * state_size);
-+		return vm_munmap(args.states ^ VGETRANDOM_STATE_HI_TAINT, args.num * state_size);
- 	}
+between commit:
 
- 	/* These don't make sense as input values if allocating, so reject them. */
-@@ -249,7 +249,7 @@ SYSCALL_DEFINE2(vgetrandom_alloc, struct vgetrandom_alloc_args __user *, uargs,
+  9fda6753c9dd ("KVM: selftests: Rename perf_test_util.[ch] to memstress.[c=
+h]")
 
- 	args.num = num_states;
- 	args.size_per_each = state_size;
--	args.states = pages_addr;
-+	args.states = pages_addr ^ VGETRANDOM_STATE_HI_TAINT;
+from the kvm tree and commit:
 
- 	ret = -EFAULT;
- 	if (copy_to_user(uargs, &args, sizeof(args)))
-diff --git a/include/vdso/getrandom.h b/include/vdso/getrandom.h
-index cb624799a8e7..9a6aaf4d99d4 100644
---- a/include/vdso/getrandom.h
-+++ b/include/vdso/getrandom.h
-@@ -8,6 +8,7 @@
+  9ec1eb1bccee ("KVM: selftests: Have perf_test_util signal when to stop vC=
+PUs")
 
- #include <crypto/chacha.h>
- #include <vdso/limits.h>
-+#include <linux/version.h>
+from the kvm-arm tree.
 
- /**
-  * struct vgetrandom_state - State used by vDSO getrandom() and allocated by vgetrandom_alloc().
-@@ -41,4 +42,10 @@ struct vgetrandom_state {
- 	bool 			in_use;
- };
+I fixed it up (I removed the file and applied the following patch) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
-+/* Be annoying by changing frequently enough. */
-+#define VGETRANDOM_STATE_HI_TAINT ((unsigned long)(((LINUX_VERSION_CODE >> 16) + \
-+				    (LINUX_VERSION_CODE >>  8) + (LINUX_VERSION_CODE >>  0) + \
-+				    __GNUC__ + __GNUC_MINOR__ + __GNUC_PATCHLEVEL__) \
-+				   & 0xff) << (BITS_PER_LONG - 8))
-+
- #endif /* _VDSO_GETRANDOM_H */
-diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-index 9ca624756432..14cbd349186c 100644
---- a/lib/vdso/getrandom.c
-+++ b/lib/vdso/getrandom.c
-@@ -57,7 +57,7 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
- 		       unsigned int flags, void *opaque_state)
+(this patch covered another occurrence fo the needed rename)
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 1 Dec 2022 12:19:45 +1100
+Subject: [PATCH] fix up for rename of perf_test_args to memstress_args
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ tools/testing/selftests/kvm/access_tracking_perf_test.c       | 2 +-
+ tools/testing/selftests/kvm/demand_paging_test.c              | 2 +-
+ tools/testing/selftests/kvm/include/memstress.h               | 2 ++
+ tools/testing/selftests/kvm/lib/memstress.c                   | 4 ++--
+ .../testing/selftests/kvm/memslot_modification_stress_test.c  | 2 +-
+ 5 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tool=
+s/testing/selftests/kvm/access_tracking_perf_test.c
+index 2c9e0abcac94..57a16371e9c2 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -208,7 +208,7 @@ static bool spin_wait_for_next_iteration(int *current_i=
+teration)
+ 	int last_iteration =3D *current_iteration;
+=20
+ 	do {
+-		if (READ_ONCE(perf_test_args.stop_vcpus))
++		if (READ_ONCE(memstress_args.stop_vcpus))
+ 			return false;
+=20
+ 		*current_iteration =3D READ_ONCE(iteration);
+diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testi=
+ng/selftests/kvm/demand_paging_test.c
+index f980ed8aeead..b0e1fc4de9e2 100644
+--- a/tools/testing/selftests/kvm/demand_paging_test.c
++++ b/tools/testing/selftests/kvm/demand_paging_test.c
+@@ -161,7 +161,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 			vcpu_alias =3D addr_gpa2alias(vm, vcpu_args->gpa);
+=20
+ 			prefault_mem(vcpu_alias,
+-				vcpu_args->pages * perf_test_args.guest_page_size);
++				vcpu_args->pages * memstress_args.guest_page_size);
+=20
+ 			/*
+ 			 * Set up user fault fd to handle demand paging
+diff --git a/tools/testing/selftests/kvm/include/memstress.h b/tools/testin=
+g/selftests/kvm/include/memstress.h
+index bbd2a302df10..4ae63963c14f 100644
+--- a/tools/testing/selftests/kvm/include/memstress.h
++++ b/tools/testing/selftests/kvm/include/memstress.h
+@@ -40,6 +40,8 @@ struct memstress_args {
+=20
+ 	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
+ 	bool nested;
++	/* Test is done, stop running vCPUs. */
++	bool stop_vcpus;
+ 	/* Randomize which pages are accessed by the guest. */
+ 	bool random_access;
+ 	/* True if all vCPUs are pinned to pCPUs */
+diff --git a/tools/testing/selftests/kvm/lib/memstress.c b/tools/testing/se=
+lftests/kvm/lib/memstress.c
+index 3742ce238129..5f1d3173c238 100644
+--- a/tools/testing/selftests/kvm/lib/memstress.c
++++ b/tools/testing/selftests/kvm/lib/memstress.c
+@@ -292,7 +292,7 @@ void memstress_start_vcpu_threads(int nr_vcpus,
+=20
+ 	vcpu_thread_fn =3D vcpu_fn;
+ 	WRITE_ONCE(all_vcpu_threads_running, false);
+-	WRITE_ONCE(perf_test_args.stop_vcpus, false);
++	WRITE_ONCE(memstress_args.stop_vcpus, false);
+=20
+ 	for (i =3D 0; i < nr_vcpus; i++) {
+ 		struct vcpu_thread *vcpu =3D &vcpu_threads[i];
+@@ -315,7 +315,7 @@ void memstress_join_vcpu_threads(int nr_vcpus)
  {
- 	ssize_t ret = min_t(size_t, INT_MAX & PAGE_MASK /* = MAX_RW_COUNT */, len);
--	struct vgetrandom_state *state = opaque_state;
-+	struct vgetrandom_state *state = (void *)((unsigned long)opaque_state ^ VGETRANDOM_STATE_HI_TAINT);
- 	size_t batch_len, nblocks, orig_len = len;
- 	unsigned long current_generation;
- 	void *orig_buffer = buffer;
+ 	int i;
+=20
+-	WRITE_ONCE(perf_test_args.stop_vcpus, true);
++	WRITE_ONCE(memstress_args.stop_vcpus, true);
+=20
+ 	for (i =3D 0; i < nr_vcpus; i++)
+ 		pthread_join(vcpu_threads[i].thread, NULL);
+diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c=
+ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+index 431dbc47d345..9855c41ca811 100644
+--- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
++++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+@@ -43,7 +43,7 @@ static void vcpu_worker(struct memstress_vcpu_args *vcpu_=
+args)
+ 	run =3D vcpu->run;
+=20
+ 	/* Let the guest access its memory until a stop signal is received */
+-	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
++	while (!READ_ONCE(memstress_args.stop_vcpus)) {
+ 		ret =3D _vcpu_run(vcpu);
+ 		TEST_ASSERT(ret =3D=3D 0, "vcpu_run failed: %d\n", ret);
+=20
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7OYHAZ/oIIkHuO+IrwWjSQq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOIDncACgkQAVBC80lX
+0GyVCwf/edGjXd7ZvZT0fmFfLkguTmC35h3y2vHQKmhdYRrIlg6lM/C8idsqOdbL
+BecCFGcT3gTE3wMYk6fjoOKsEE6dH61vhsviMH0IyUpaK/vnwxEBWsMfX06osVUh
+jjTBw9dY9MAn8xxAx/j0vCn6VVkKWutFDqLKAiv8+IMj1/qbmbli9038+kKFpJmC
+aFeJme5UhVA9dJxRVNffnEgXau0em2QkrsjFHi8qgXurL1YbSAtpccW55dpvLEmJ
+z2NT7gLcSWfPvQ2TUer8/eoYdzhxBC53/f1MM80LMgjX424QUWG7sQBdqEEIHubO
+TIEZWZIESmXxurCN5G2F1eCzwMgn5A==
+=JMf6
+-----END PGP SIGNATURE-----
+
+--Sig_/7OYHAZ/oIIkHuO+IrwWjSQq--
