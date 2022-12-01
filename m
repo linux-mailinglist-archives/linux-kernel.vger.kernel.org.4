@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B2D63EA13
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 08:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A80063EB08
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 09:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLAHA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 02:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S229772AbiLAI05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 03:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLAHAz (ORCPT
+        with ESMTP id S229713AbiLAI0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 02:00:55 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E75963D4A;
-        Wed, 30 Nov 2022 23:00:54 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NN6Qb0yJ6zHw6f;
-        Thu,  1 Dec 2022 15:00:07 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 1 Dec
- 2022 15:00:49 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <robert.moore@intel.com>, <rafael.j.wysocki@intel.com>,
-        <lenb@kernel.org>, <lv.zheng@intel.com>,
-        <david.e.box@linux.intel.com>
-CC:     <lizetao1@huawei.com>, <linux-acpi@vger.kernel.org>,
-        <devel@acpica.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ACPICA: Fix use-after-free in acpi_ut_copy_ipackage_to_ipackage()
-Date:   Thu, 1 Dec 2022 16:05:14 +0800
-Message-ID: <20221201080514.3015400-1-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 1 Dec 2022 03:26:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B463D6E;
+        Thu,  1 Dec 2022 00:26:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC9B8B81E5D;
+        Thu,  1 Dec 2022 08:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2E9C433D6;
+        Thu,  1 Dec 2022 08:26:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669883199;
+        bh=0v/dpeMN0p7fo5PgE4B1pGCBv2KmNGUMHOEOdHV/Zcg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1jyhZPFK+Ep5/C8SwcvxvjaUpqP3wVecqIt3iOEpBEHfwytXWcrGv2Y8h0qNJ+PyS
+         yZuDjbrw5B2mRJav6voN0z7ZbKftXRo/2/28TTHXT7wApSGISs6fQVcjJpR+5HGNQj
+         Tu3oiOA+lhflmdRFuauNEZdHU5uL2t4sF/+imUE4=
+Date:   Thu, 1 Dec 2022 07:06:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] modules: add modalias file to sysfs for modules.
+Message-ID: <Y4hEUP31sbGl5vw8@kroah.com>
+References: <Y4cA8y1NX1ZPTboF@kroah.com>
+ <20221130221447.1202206-1-allenwebb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130221447.1202206-1-allenwebb@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,62 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is an use-after-free reported by KASAN:
+On Wed, Nov 30, 2022 at 04:14:47PM -0600, Allen Webb wrote:
+> USB devices support the authorized attribute which can be used by
+> user-space to implement trust-based systems for enabling USB devices. It
+> would be helpful when building these systems to be able to know in
+> advance which kernel drivers (or modules) are reachable from a
+> particular USB device.
+> 
+> This information is readily available for external modules in
+> modules.alias. However, builtin kernel modules are not covered. This
+> patch adds a sys-fs attribute to both builtin and loaded modules
+> exposing the matching rules in the modalias format for integration
+> with tools like USBGuard.
+> 
+> Signed-off-by: Allen Webb <allenwebb@google.com>
+> ---
+>  drivers/base/Makefile          |   2 +-
+>  drivers/base/base.h            |   8 +
+>  drivers/base/bus.c             |  42 ++++++
+>  drivers/base/mod_devicetable.c | 257 +++++++++++++++++++++++++++++++++
+>  drivers/usb/core/driver.c      |   2 +
+>  include/linux/device/bus.h     |   8 +
+>  include/linux/module.h         |   1 +
+>  kernel/module/internal.h       |   2 +
+>  kernel/module/sysfs.c          |  88 +++++++++++
+>  kernel/params.c                |   7 +
+>  10 files changed, 416 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/base/mod_devicetable.c
+> 
+> Fixed another kernel config incompability identified by:
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Fixed a couple CHECK messages from checkpatch.pl.
+> 
+> There are still some CHECK messages that are by design in a macro that
+> depends on modifying a parameter and string literal concatenation.
+> 
+> There is also a maintainer file update warning for a new file, but that
+> file is already covered by an existing maintainers entry.
+> 
 
-  BUG: KASAN: use-after-free in acpi_ut_remove_reference+0x3b/0x82
-  Read of size 1 at addr ffff888112afc460 by task modprobe/2111
-  CPU: 0 PID: 2111 Comm: modprobe Not tainted 6.1.0-rc7-dirty
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-  Call Trace:
-   <TASK>
-   kasan_report+0xae/0xe0
-   acpi_ut_remove_reference+0x3b/0x82
-   acpi_ut_copy_iobject_to_iobject+0x3be/0x3d5
-   acpi_ds_store_object_to_local+0x15d/0x3a0
-   acpi_ex_store+0x78d/0x7fd
-   acpi_ex_opcode_1A_1T_1R+0xbe4/0xf9b
-   acpi_ps_parse_aml+0x217/0x8d5
-   ...
-   </TASK>
+Again, please read the kernel documentation for how to list changes that
+have happened since the 1st version you submitted, it's impossible to
+know what has changed in each version here, right?  Also how has this
+changed based on the reviews of the first release where people pointed
+you at other alternatives?  How did they not work out?
 
-The root cause of the problem is that the acpi_operand_object
-is freed when acpi_ut_walk_package_tree() fails in
-acpi_ut_copy_ipackage_to_ipackage(), lead to repeated release in
-acpi_ut_copy_iobject_to_iobject(). The problem was introduced
-by "8aa5e56eeb61" commit, this commit is to fix memory leak in
-acpi_ut_copy_iobject_to_iobject(), repeatedly adding remove
-operation, lead to "acpi_operand_object" used after free.
+You might need to start including a 0/1 email with all of this
+information as it needs an introduction in places, right?
 
-Fix it by removing acpi_ut_remove_reference() in
-acpi_ut_copy_ipackage_to_ipackage(). acpi_ut_copy_ipackage_to_ipackage()
-is called to copy an internal package object into another internal
-package object, when it fails, the memory of acpi_operand_object
-should be freed by the caller.
+thanks,
 
-Fixes: 8aa5e56eeb61 ("ACPICA: Utilities: Fix memory leak in acpi_ut_copy_iobject_to_iobject")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
----
- drivers/acpi/acpica/utcopy.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/drivers/acpi/acpica/utcopy.c b/drivers/acpi/acpica/utcopy.c
-index 400b9e15a709..63c17f420fb8 100644
---- a/drivers/acpi/acpica/utcopy.c
-+++ b/drivers/acpi/acpica/utcopy.c
-@@ -916,13 +916,6 @@ acpi_ut_copy_ipackage_to_ipackage(union acpi_operand_object *source_obj,
- 	status = acpi_ut_walk_package_tree(source_obj, dest_obj,
- 					   acpi_ut_copy_ielement_to_ielement,
- 					   walk_state);
--	if (ACPI_FAILURE(status)) {
--
--		/* On failure, delete the destination package object */
--
--		acpi_ut_remove_reference(dest_obj);
--	}
--
- 	return_ACPI_STATUS(status);
- }
- 
--- 
-2.31.1
-
+greg k-h
