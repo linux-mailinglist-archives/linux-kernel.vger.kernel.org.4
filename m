@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C993363F28E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DD963F295
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 15:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiLAOSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 09:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
+        id S231730AbiLAOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 09:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiLAORy (ORCPT
+        with ESMTP id S231253AbiLAOUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 09:17:54 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07061D32D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:17:49 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1BqUwG031346;
-        Thu, 1 Dec 2022 14:17:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=RBHvfFvfjPggq85BmasY8t3grXmjKTmAAepeqUyVSSg=;
- b=IRQWKguMolO4NcpFbx9TyBlCJJCpgblSFAW9T8iNvi6PruFtUbDbnlUQ+3O6C3A9BRPP
- e8TzpNS8HHtRuc6K88KdjbD44VVYrvcdJXywBfVAqpBGWNrXGDSxuwAGG54kZUc9C7K7
- zlSN+mNubxKZw0Lwg/ICgDIi+WIhUltpQDviABkSehKGLm+MMz3gr8eQNGKb4gt4mKOb
- S6Tdfl264T2QcITC0hM6ZF6PKBNstlsOXe7S2HtFoVrdW/3RmYkdnyojkE1kNgNqTQk1
- PxOKsQ3KePLj3hgR6IFlBLLK2n8ALgWOAosdOT4Ggo3MYWGQIV+KmEwo3zf+jWgOLW7Y jQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m6k6xhypq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 14:17:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B1EHXse012499
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Dec 2022 14:17:33 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 1 Dec 2022 06:17:30 -0800
-Date:   Thu, 1 Dec 2022 19:47:26 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Mark Hemment <markhemm@googlemail.com>
-CC:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        Prakash Gupta <quic_guptap@quicinc.com>,
-        Divyanand Rangu <quic_drangu@quicinc.com>
-Subject: Re: [PATCH] mm/madvise: fix madvise_pageout for private file mappings
-Message-ID: <20221201141726.GA18487@hu-pkondeti-hyd.qualcomm.com>
-References: <1667971116-12900-1-git-send-email-quic_pkondeti@quicinc.com>
- <CANe_+Uidg=YuZG71VF7YnRhBtUHb-CGRMN45RGgp2PMn+SXGkg@mail.gmail.com>
+        Thu, 1 Dec 2022 09:20:22 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA71548424
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 06:20:20 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id q7so2026283ljp.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 06:20:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T6nSuHE3Pr/44zedu7eUKGL+66HovS1bsuN5zk6+UNg=;
+        b=sE4Aqubu/Yue3DMRz9z7mJoZMtU8Sjuk8KH8a3UwLnb6Iiqi60SYzB/rZibodoaEJ4
+         GnXmNvj3eEeB2g5ex89jlJtSlT21VWDCeLLhwJGH74P0LfyvtWSEiie3xpVGmFGpvfae
+         rS2AZ8EgXcr5zoqL6uoGEXyBHmFXI3s1XM95XYd3+CuWBJmfiN/s21v1licFax/YkwDJ
+         EES6vaZTYOqT5uhzKthCmto5Kd8HmWlqUd8yK8pPowZUirIaL97B0mp32W75cTqEnzjm
+         3oHLUbuBsk0+e/DlDNoSSpDN+kdL40vzIQx/jHsqvfUkcMuMCZimxBvCqPF7a6uKW9wk
+         Kl7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T6nSuHE3Pr/44zedu7eUKGL+66HovS1bsuN5zk6+UNg=;
+        b=uOnY6sjhmsxbvA5Ms8oj7w2LvigvH488OdWaaKBMq4H31x4BUGNKPG1/0c0/R7Iacr
+         pxzXNbaD0x8N6MWI2c30IhxOVu3JSsBFjKlYG/Dmm8SKiHPabqhUaEQ6xXM9rgQ79Stl
+         NUjfOqlYKjlGDBgqCfE3QnmfNOshhDNhgWc4++iItEfKXwrNjkGiXgQ4JhhP4pWnRLqL
+         qdsS5YKN/0kt9nH1GnsGcE1FUG9vPWuIsmMaq0mk2ZVvIkot+kkOAYD9zJTsjoK0tZX1
+         E+H4ION1SAx5BXmpJKILExV0MWMHfBbz3zDCGQuzeLCNV0wt7Vc9+3VJlZYnratAwnEY
+         y5MQ==
+X-Gm-Message-State: ANoB5pm7VOJzN40X+OioAwQU+u1oFBhIUDxaRJhYxFPoe8pxxNpEtWiO
+        i7jt/x5QGIs0O17fe31zKbKaJg==
+X-Google-Smtp-Source: AA0mqf7If5LbRmEcs/C6uyWO55A1UHXJQ+iDtv5psBgvbNuUJ38KnMDCkzKCTSkbYeB6kedias/CPw==
+X-Received: by 2002:a2e:8946:0:b0:279:d37e:3f6d with SMTP id b6-20020a2e8946000000b00279d37e3f6dmr1039171ljk.163.1669904419136;
+        Thu, 01 Dec 2022 06:20:19 -0800 (PST)
+Received: from [192.168.1.101] (95.49.124.14.neoplus.adsl.tpnet.pl. [95.49.124.14])
+        by smtp.gmail.com with ESMTPSA id x17-20020a056512079100b004b3b7557893sm657241lfr.259.2022.12.01.06.20.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 06:20:17 -0800 (PST)
+Message-ID: <a1af5928-4f3f-39f8-94b7-31fbf84143f2@linaro.org>
+Date:   Thu, 1 Dec 2022 15:20:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CANe_+Uidg=YuZG71VF7YnRhBtUHb-CGRMN45RGgp2PMn+SXGkg@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oY82rhSEp2POs5Pbfe7YGy3HuPUmgv0A
-X-Proofpoint-ORIG-GUID: oY82rhSEp2POs5Pbfe7YGy3HuPUmgv0A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_04,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1011 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212010103
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/4] dt-bindings: arm: qcom,ids: Add SoC IDs for SM8150
+ and SA8155
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
+        a39.skl@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20221201141619.2462705-1-bhupesh.sharma@linaro.org>
+ <20221201141619.2462705-2-bhupesh.sharma@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221201141619.2462705-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,174 +80,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
 
-On Thu, Dec 01, 2022 at 01:46:36PM +0000, Mark Hemment wrote:
-> On Wed, 9 Nov 2022 at 05:19, Pavankumar Kondeti
-> <quic_pkondeti@quicinc.com> wrote:
-> >
-> > When MADV_PAGEOUT is called on a private file mapping VMA region,
-> > we bail out early if the process is neither owner nor write capable
-> > of the file. However, this VMA may have both private/shared clean
-> > pages and private dirty pages. The opportunity of paging out the
-> > private dirty pages (Anon pages) is missed. Fix this by caching
-> > the file access check and use it later along with PageAnon() during
-> > page walk.
-> >
-> > We observe ~10% improvement in zram usage, thus leaving more available
-> > memory on a 4GB RAM system running Android.
-> >
-> > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> 
-> Only scanned review the patch; the logic looks good (as does the
-> reasoning) but a couple of minor comments;
-> 
-Thanks for the review and nice suggestions on how the patch can be improved.
 
+On 1.12.2022 15:16, Bhupesh Sharma wrote:
+> Add SoC IDs for Qualcomm SM8150 and SA8155 SoCs.
 > 
-> > ---
-> >  mm/madvise.c | 30 +++++++++++++++++++++++-------
-> >  1 file changed, 23 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/mm/madvise.c b/mm/madvise.c
-> > index c7105ec..b6b88e2 100644
-> > --- a/mm/madvise.c
-> > +++ b/mm/madvise.c
-> > @@ -40,6 +40,7 @@
-> >  struct madvise_walk_private {
-> >         struct mmu_gather *tlb;
-> >         bool pageout;
-> > +       bool can_pageout_file;
-> >  };
-> >
-> >  /*
-> > @@ -328,6 +329,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
-> >         struct madvise_walk_private *private = walk->private;
-> >         struct mmu_gather *tlb = private->tlb;
-> >         bool pageout = private->pageout;
-> > +       bool pageout_anon_only = pageout && !private->can_pageout_file;
-> >         struct mm_struct *mm = tlb->mm;
-> >         struct vm_area_struct *vma = walk->vma;
-> >         pte_t *orig_pte, *pte, ptent;
-> > @@ -364,6 +366,9 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
-> >                 if (page_mapcount(page) != 1)
-> >                         goto huge_unlock;
-> >
-> > +               if (pageout_anon_only && !PageAnon(page))
-> > +                       goto huge_unlock;
-> > +
-> >                 if (next - addr != HPAGE_PMD_SIZE) {
-> >                         int err;
-> >
-> > @@ -432,6 +437,8 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
-> >                 if (PageTransCompound(page)) {
-> >                         if (page_mapcount(page) != 1)
-> >                                 break;
-> > +                       if (pageout_anon_only && !PageAnon(page))
-> > +                               break;
-> >                         get_page(page);
-> >                         if (!trylock_page(page)) {
-> >                                 put_page(page);
-> > @@ -459,6 +466,9 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
-> >                 if (!PageLRU(page) || page_mapcount(page) != 1)
-> >                         continue;
-> >
-> > +               if (pageout_anon_only && !PageAnon(page))
-> > +                       continue;
-> > +
-> 
-> The added PageAnon()s probably do not have a measurable performance
-> impact, but not ideal when walking a large anonymous mapping (as
-> '->can_pageout_file' is zero for anon mappings).
-> Could the code be re-structured so that PageAnon() is only tested when
-> filtering is needed? Say;
->     if (pageout_anon_only_filter && !PageAnon(page)) {
->         continue;
->     }
-> where 'pageout_anon_only_filter' is only set for a private named
-> mapping when do not have write perms on backing object.  It would not
-> be set for anon mappings.
-> 
-Understood. Like you suggested, PageAnon() check can be eliminated for
-an anon mapping. will make the necessary changes.
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  include/dt-bindings/arm/qcom,ids.h | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> >                 VM_BUG_ON_PAGE(PageTransCompound(page), page);
-> >
-> >                 if (pte_young(ptent)) {
-> > @@ -541,11 +551,13 @@ static long madvise_cold(struct vm_area_struct *vma,
-> >
-> >  static void madvise_pageout_page_range(struct mmu_gather *tlb,
-> >                              struct vm_area_struct *vma,
-> > -                            unsigned long addr, unsigned long end)
-> > +                            unsigned long addr, unsigned long end,
-> > +                            bool can_pageout_file)
-> >  {
-> >         struct madvise_walk_private walk_private = {
-> >                 .pageout = true,
-> >                 .tlb = tlb,
-> > +               .can_pageout_file = can_pageout_file,
-> >         };
-> >
-> >         tlb_start_vma(tlb, vma);
-> > @@ -553,10 +565,8 @@ static void madvise_pageout_page_range(struct mmu_gather *tlb,
-> >         tlb_end_vma(tlb, vma);
-> >  }
-> >
-> > -static inline bool can_do_pageout(struct vm_area_struct *vma)
-> > +static inline bool can_do_file_pageout(struct vm_area_struct *vma)
-> >  {
-> > -       if (vma_is_anonymous(vma))
-> > -               return true;
-> >         if (!vma->vm_file)
-> >                 return false;
-> >         /*
-> > @@ -576,17 +586,23 @@ static long madvise_pageout(struct vm_area_struct *vma,
-> >  {
-> >         struct mm_struct *mm = vma->vm_mm;
-> >         struct mmu_gather tlb;
-> > +       bool can_pageout_file;
-> >
-> >         *prev = vma;
-> >         if (!can_madv_lru_vma(vma))
-> >                 return -EINVAL;
-> >
-> > -       if (!can_do_pageout(vma))
-> > -               return 0;
-> 
-> The removal of this test results in a process, which cannot get write
-> perms for a shared named mapping, performing a 'walk'.  As such a
-> mapping cannot have anon pages, this walk will be a no-op.  Not sure
-> why a well-behaved program would do a MADV_PAGEOUT on such a mapping,
-> but if one does this could be considered a (minor performance)
-> regression. As madvise_pageout() can easily filter this case, might be
-> worth adding a check.
-> 
-
-Got it. we can take care of this edge case by rejecting shared mappings i.e
-!!(vma->vm_flags & VM_MAYSHARE) == 1 where the process has no write
-permission.
-
-> 
-> > +       /*
-> > +        * If the VMA belongs to a private file mapping, there can be private
-> > +        * dirty pages which can be paged out if even this process is neither
-> > +        * owner nor write capable of the file. Cache the file access check
-> > +        * here and use it later during page walk.
-> > +        */
-> > +       can_pageout_file = can_do_file_pageout(vma);
-> >
-> >         lru_add_drain();
-> >         tlb_gather_mmu(&tlb, mm);
-> > -       madvise_pageout_page_range(&tlb, vma, start_addr, end_addr);
-> > +       madvise_pageout_page_range(&tlb, vma, start_addr, end_addr, can_pageout_file);
-> >         tlb_finish_mmu(&tlb);
-> >
-> >         return 0;
-> > --
-> > 2.7.4
-> >
-> >
-> 
-Thanks,
-Pavan
+> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+> index 8b1a0f43bd93..5e0524991e99 100644
+> --- a/include/dt-bindings/arm/qcom,ids.h
+> +++ b/include/dt-bindings/arm/qcom,ids.h
+> @@ -102,6 +102,7 @@
+>  #define QCOM_ID_SDA658			326
+>  #define QCOM_ID_SDA630			327
+>  #define QCOM_ID_SDM450			338
+> +#define QCOM_ID_SM8150			339
+>  #define QCOM_ID_SDA845			341
+>  #define QCOM_ID_IPQ8072			342
+>  #define QCOM_ID_IPQ8076			343
+> @@ -112,6 +113,7 @@
+>  #define QCOM_ID_SDA632			350
+>  #define QCOM_ID_SDA450			351
+>  #define QCOM_ID_SM8250			356
+> +#define QCOM_ID_SA8155			362
+>  #define QCOM_ID_IPQ8070			375
+>  #define QCOM_ID_IPQ8071			376
+>  #define QCOM_ID_IPQ8072A		389
