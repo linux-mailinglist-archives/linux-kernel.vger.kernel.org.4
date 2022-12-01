@@ -2,103 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B9363EEB3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2407963EEBA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Dec 2022 12:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiLALDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 06:03:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S230238AbiLALE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 06:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiLALDI (ORCPT
+        with ESMTP id S231213AbiLALDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:03:08 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5C32D75D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 03:03:07 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id f13so1922424lfa.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 03:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xZPsJdX0DeKIWrtluUWX3HVvTrGo25QoDXGFCZw1PXk=;
-        b=Iymxm2gwfFfqDxv99/Cvwgt5Tt86cvRAlbIcRFWVwq86La55pm/Wo85Vda8Abburiq
-         +n3izNS6OKkWrKNxSR7d4nYTKkRisuxhy72xbJdZlPGyodm9rRlv79WAHcEZEQh5ODCF
-         3bI2VKbSof5THgzSiG1M/osblrxsXxBEwbET9bJM1ToEZYibo54O/MKYhxPMwN2HTEMF
-         xzxmqF6zfBPGlwF2GgpYW38omTN4zE/muv5xZer5SOacWpy09fPs11gsgRsHlzgKI4b6
-         2CqKCMUboHskQm8xxv8fyveBOPHoYbQbYxdiFH/eY+rnKKTJ82CRWYT5YdyErzWM+iBc
-         E1bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xZPsJdX0DeKIWrtluUWX3HVvTrGo25QoDXGFCZw1PXk=;
-        b=AyebLAYr1EBroUcsx+6jvhsIi2VrBOBv5OZDnzjY3kZYEmS2j16mCH0zRkxkMJq7xK
-         RUMot7ExvzNp84DYcSLrHvYiBUMBCsanokdKsY/Ra8BqeUQs7MxDGNpLsar7gxdMaZIF
-         qCoWyYcdAg6CM8b/PO4uVmIhZNruLkDdenQokNo+1odjg6SPYTQa527Tye6/bfhmZsEs
-         UAIDEkNbt99uX1UzPn/fjxhBAjfKYqyBJpoA8X8dm8wjVohzLu4wvgl30h7We3rfTS2d
-         I7pqzd+HjTp0bGnkPbK6AS1SyEvj1K1kD0ntlnPHYNh6+uha5ho8fe1bItqOXONpN/Ai
-         R4Fg==
-X-Gm-Message-State: ANoB5pkGNnw/aw0Ou+VBmFABDzqGyKR9XasagvhzvHZ/yGvRM62dFToS
-        C3xHJFA+s5vNylrXnVpqU+Lsmw==
-X-Google-Smtp-Source: AA0mqf4rvnW0TD1qNBxou5BIbgpN6sDqmoCi83kGXJ7IydthJadNC0OxxCFRj4tbainX/imKqFlpAQ==
-X-Received: by 2002:a05:6512:3a8a:b0:4b5:4888:4362 with SMTP id q10-20020a0565123a8a00b004b548884362mr244955lfu.176.1669892585363;
-        Thu, 01 Dec 2022 03:03:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j22-20020a056512399600b004b49025f96dsm610425lfu.187.2022.12.01.03.03.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 03:03:03 -0800 (PST)
-Message-ID: <be603b02-9357-431f-0f5a-069659bd6ce5@linaro.org>
-Date:   Thu, 1 Dec 2022 12:03:01 +0100
+        Thu, 1 Dec 2022 06:03:50 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E348EAB002;
+        Thu,  1 Dec 2022 03:03:46 -0800 (PST)
+Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8811020B83C2;
+        Thu,  1 Dec 2022 03:03:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8811020B83C2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1669892626;
+        bh=3tomXufxwo6Fq4U6Mhi3QbG5IOffUz8BLm6xAs40j8s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qGwBvdOJBGYPQc4tSFjNvAkB3nSmOgT/Unfa5JHYTmxiJOjqKuadEL3m7ZbqNHn3t
+         Ee4khXSO+BdUPnZGBK+PXuuvGpXX5QaE+H71XvVIrBtjhmpUHBrnXAisX5PB/hbUNz
+         RNrbHhEzMvyEU9UIUsuxKnhcJsV0kJaBuUi5CCo0=
+From:   Jinank Jain <jinankjain@linux.microsoft.com>
+To:     jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+Subject: [PATCH v7 0/5] Add support running nested Microsoft Hypervisor
+Date:   Thu,  1 Dec 2022 11:03:34 +0000
+Message-Id: <cover.1669788587.git.jinankjain@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1667406350.git.jinankjain@linux.microsoft.com>
+References: <cover.1667406350.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 4/9] dt-bindings: vendor-prefixes: add bouffalolab
-Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20221127132448.4034-1-jszhang@kernel.org>
- <20221127132448.4034-5-jszhang@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221127132448.4034-5-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/2022 14:24, Jisheng Zhang wrote:
-> In the following commits, we will support bl808 SoC which is from
-> Bouffalo Lab Technology (Nanjing) Co., Ltd.
-> 
-> Add bouffalolab vendor prefix binding.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+This patch series plans to add support for running nested Microsoft
+Hypervisor. In case of nested Microsoft Hypervisor there are few
+privileged hypercalls which need to go L0 Hypervisor instead of L1
+Hypervisor. This patches series basically identifies such hypercalls and
+replace them with nested hypercalls.
 
-Wrong order of commits. You cannot start using something before adding
-its description. This should be the first patch in the set.
+Jinank Jain (5):
+  x86/hyperv: Add support for detecting nested hypervisor
+  Drivers: hv: Setup synic registers in case of nested root partition
+  x86/hyperv: Add an interface to do nested hypercalls
+  Drivers: hv: Enable vmbus driver for nested root partition
+  x86/hyperv: Change interrupt vector for nested root partition
 
-Best regards,
-Krzysztof
+[v4]
+- Fix ARM64 compilation
+
+[v5]
+- Fix comments from Michael Kelly
+
+[v6]
+- Send the correct patches from the right folder
+
+[v7]
+- Fix linker issues for CONFIG_HYPERV=n pointed out by Michael
+- Fix comments from Nuno: created two separate functions for fetching
+  nested vs non-nested registers.
+
+ arch/x86/include/asm/hyperv-tlfs.h | 17 ++++-
+ arch/x86/include/asm/idtentry.h    |  2 +
+ arch/x86/include/asm/irq_vectors.h |  6 ++
+ arch/x86/include/asm/mshyperv.h    | 72 +++++++++++++---------
+ arch/x86/kernel/cpu/mshyperv.c     | 91 +++++++++++++++++++++++++++
+ arch/x86/kernel/idt.c              |  9 +++
+ drivers/hv/hv.c                    | 99 ++++++++++++++++++++++--------
+ drivers/hv/hv_common.c             |  9 ++-
+ drivers/hv/vmbus_drv.c             |  5 +-
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ include/asm-generic/mshyperv.h     |  6 +-
+ 11 files changed, 258 insertions(+), 59 deletions(-)
+
+-- 
+2.25.1
 
