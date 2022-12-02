@@ -2,50 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16502640105
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A93B64010C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbiLBH2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 02:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S232480AbiLBHcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 02:32:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbiLBH2n (ORCPT
+        with ESMTP id S232312AbiLBHcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 02:28:43 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E318B181
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 23:28:42 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NNl143nJnz501Qh;
-        Fri,  2 Dec 2022 15:28:40 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2B27SYq9055125;
-        Fri, 2 Dec 2022 15:28:34 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 2 Dec 2022 15:28:36 +0800 (CST)
-Date:   Fri, 2 Dec 2022 15:28:36 +0800 (CST)
-X-Zmail-TransId: 2af96389a92462a65f16
-X-Mailer: Zmail v1.0
-Message-ID: <202212021528368292334@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <lee@kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBtZmQ6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B27SYq9055125
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6389A928.000 by FangMail milter!
-X-FangMail-Envelope: 1669966120/4NNl143nJnz501Qh/6389A928.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6389A928.000/4NNl143nJnz501Qh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        Fri, 2 Dec 2022 02:32:43 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7401A208
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 23:32:40 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 21so4171684pfw.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 23:32:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XMc+fVt7lMfpPfThQ2LlpZjE3HoFIHWqL+MbvHeGkEw=;
+        b=oplmIpKFwFcFi6/ERjvfl0+tQ/V8jWbzFESczzbKPDTgQVNfrp3vRG7+gCT0Z/b5+x
+         xD49t/+X9FZqYePZCmfUzwJ76isJLV2MfDBd8TIa14UmO2p+8T8TfJyMoVVbqop8j3Y1
+         c9whpqskeIMG7M5bClR1rdr9+J7TL13EmVakLaTb5DnZ3jHD+EYCrMC3Cz0UOtkIgSz+
+         eKLOo6caI46pIEkRUIOPeVIR+Yrv6vg6EcXZjfgGIzy8TJ+03Rmh6K5+CUWJIxhocDCu
+         A9HSaXvtbQoZswTpzajRjLWm5edk/rbuNicq/DUsB7ivUAbrOmBS7DcgUqSSzWGDkgSL
+         uZ2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMc+fVt7lMfpPfThQ2LlpZjE3HoFIHWqL+MbvHeGkEw=;
+        b=lEU7DaBMBfexbQuNB5ErA+JEB4hGwlyaUsenzIgbUd8K0BPWZ9aDZMBae7A+7BpRYZ
+         bfDmCU/GDCqD1GNI4Dvr3mBoTiecaqKFVt1q+S46/SuDGR2TXhQCd16HTmsQA0nSm0jQ
+         ZVQastuE6XA88iz0XgaUVaDm9AxEegSRsuJmylZlgwYoI2KiEIj+bQOcs/vXinDewN07
+         e+vAlD4Yv7bPmsd34E4VjrVKzvXVVDXxJK25tW5lUbcPo2YAa5ERR9E1wxDAB11UrhBh
+         9exkAWRRGfG3iuNsTxHzTwHWBk5s0U/lB9JJWI7kHl9xm4f9MFmH3QQ1lRHUZu5OQ6HW
+         MX4g==
+X-Gm-Message-State: ANoB5pmTEeyd7tRLgsUS/9vYJModiWAU9cbV0hXE0fpvt1LtHu6ibg4R
+        xK8w105tausqwGOxnjf8hjWF
+X-Google-Smtp-Source: AA0mqf7qXeTcy+fGt0iYZFNf/ZVn4x0iMUwzgp35UZl85c396Ki0j3U9GoxMup5q3KyaRCUXr3odpg==
+X-Received: by 2002:a63:f80a:0:b0:478:427a:85f0 with SMTP id n10-20020a63f80a000000b00478427a85f0mr14001019pgh.124.1669966360305;
+        Thu, 01 Dec 2022 23:32:40 -0800 (PST)
+Received: from thinkpad ([27.111.75.154])
+        by smtp.gmail.com with ESMTPSA id jg20-20020a17090326d400b00189bf5deda3sm317712plb.133.2022.12.01.23.32.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 23:32:38 -0800 (PST)
+Date:   Fri, 2 Dec 2022 13:02:31 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
+        andersson@kernel.org, vkoul@kernel.org, quic_cang@quicinc.com,
+        quic_asutoshd@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, dmitry.baryshkov@linaro.org,
+        ahalaney@redhat.com, abel.vesa@linaro.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com
+Subject: Re: [PATCH v4 18/23] scsi: ufs: core: Add reinit_notify() callback
+Message-ID: <20221202073231.GA5356@thinkpad>
+References: <20221201174328.870152-1-manivannan.sadhasivam@linaro.org>
+ <20221201174328.870152-19-manivannan.sadhasivam@linaro.org>
+ <fa0e6167-a893-4eb7-efff-8f378ee819e1@acm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fa0e6167-a893-4eb7-efff-8f378ee819e1@acm.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,62 +80,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Thu, Dec 01, 2022 at 10:05:57AM -0800, Bart Van Assche wrote:
+> On 12/1/22 09:43, Manivannan Sadhasivam wrote:
+> > reinit_notify() callback can be used by the UFS controllers to perform
+> > changes required for UFS core reinit.
+> 
+> What does "UFS core" refer to in this context? Should "UFS core" perhaps be
+> changed into "UFS controller phy"?
+> 
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+By "UFS core" I meant the UFSHCD driver. Will change it.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/mfd/kempld-core.c | 7 +++----
- drivers/mfd/lm3533-core.c | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+> > diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+> > index 5cf81dff60aa..af8c95077d96 100644
+> > --- a/include/ufs/ufshcd.h
+> > +++ b/include/ufs/ufshcd.h
+> > @@ -297,6 +297,7 @@ struct ufs_pwr_mode_info {
+> >    * @config_scaling_param: called to configure clock scaling parameters
+> >    * @program_key: program or evict an inline encryption key
+> >    * @event_notify: called to notify important events
+> > + * @reinit_notify: called to notify UFS core reinit
+> 
+> Please make this comment more clear. Nobody knows what "UFS core" means.
+> 
 
-diff --git a/drivers/mfd/kempld-core.c b/drivers/mfd/kempld-core.c
-index bb26241c73bd..33c6cfe9fe42 100644
---- a/drivers/mfd/kempld-core.c
-+++ b/drivers/mfd/kempld-core.c
-@@ -349,7 +349,7 @@ static ssize_t pld_version_show(struct device *dev,
- {
- 	struct kempld_device_data *pld = dev_get_drvdata(dev);
+Will change it to "called to notify reinit of UFSHCD during max gear switch"
 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", pld->info.version);
-+	return sysfs_emit(buf, "%s\n", pld->info.version);
- }
+Thanks,
+Mani
 
- static ssize_t pld_specification_show(struct device *dev,
-@@ -357,8 +357,7 @@ static ssize_t pld_specification_show(struct device *dev,
- {
- 	struct kempld_device_data *pld = dev_get_drvdata(dev);
+> Thanks,
+> 
+> Bart.
+> 
 
--	return scnprintf(buf, PAGE_SIZE, "%d.%d\n", pld->info.spec_major,
--		       pld->info.spec_minor);
-+	return sysfs_emit(buf, "%d.%d\n", pld->info.spec_major, pld->info.spec_minor);
- }
-
- static ssize_t pld_type_show(struct device *dev,
-@@ -366,7 +365,7 @@ static ssize_t pld_type_show(struct device *dev,
- {
- 	struct kempld_device_data *pld = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%s\n", kempld_get_type_string(pld));
-+	return sysfs_emit(buf, "%s\n", kempld_get_type_string(pld));
- }
-
- static DEVICE_ATTR_RO(pld_version);
-diff --git a/drivers/mfd/lm3533-core.c b/drivers/mfd/lm3533-core.c
-index be32ffc5af38..b353d93b0939 100644
---- a/drivers/mfd/lm3533-core.c
-+++ b/drivers/mfd/lm3533-core.c
-@@ -286,7 +286,7 @@ static ssize_t show_output(struct device *dev,
-
- 	val = (val & mask) >> shift;
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
-
- static ssize_t store_output(struct device *dev,
 -- 
-2.25.1
+மணிவண்ணன் சதாசிவம்
