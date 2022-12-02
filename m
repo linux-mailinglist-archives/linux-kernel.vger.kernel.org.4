@@ -2,45 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8263863FF25
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 04:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AB063FF4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiLBDks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 22:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
+        id S231631AbiLBECw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 23:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiLBDkn (ORCPT
+        with ESMTP id S231853AbiLBECq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 22:40:43 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D263B874;
-        Thu,  1 Dec 2022 19:40:42 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NNdx94X3wzRpkm;
-        Fri,  2 Dec 2022 11:39:57 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Dec 2022 11:40:40 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <bvanassche@acm.org>, <jgg@ziepe.ca>, <leon@kernel.org>,
-        <dennis.dalessandro@cornelisnetworks.com>
-CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <andriy.shevchenko@linux.intel.com>, <bart.vanassche@wdc.com>,
-        <easwar.hariharan@intel.com>, Wang Yufen <wangyufen@huawei.com>
-Subject: [PATCH v5 2/2] RDMA/srp: Fix error return code in srp_parse_options()
-Date:   Fri, 2 Dec 2022 12:00:38 +0800
-Message-ID: <1669953638-11747-2-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1669953638-11747-1-git-send-email-wangyufen@huawei.com>
-References: <1669953638-11747-1-git-send-email-wangyufen@huawei.com>
+        Thu, 1 Dec 2022 23:02:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E481082;
+        Thu,  1 Dec 2022 20:02:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7031DB820BB;
+        Fri,  2 Dec 2022 04:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B2FC433C1;
+        Fri,  2 Dec 2022 04:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669953752;
+        bh=CvrNWuUmSQ01k4JCpXfJeFQhiUYpB4P+Jo/odP+ZimE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i+t5oY8fPObK90uORwJ1PD9iL/jNcVuJTa+52GDSzqCKOqb/qiVlerPrLocQOnEE1
+         5NfaOQ0yKw32mJQl+WE3xLn4+iERZbCCUAP5GyZD+NNOTvgntZNGMglGCKLifb3S5Q
+         O2XhayY6BeqwJwH4KLfplIkfvUm7F1mtXOMBAHgw8nUosNzgFqYmqBQdQ3hlSUR+EO
+         x2/KefOksYiDslqvJDiqqm/vHQxUWk+cxWKH85mOmxEesP4P+F2QWO8LiXq8aIjfxy
+         ZPddtAEAE/E3WNBtmblQsOR18e6LoeSVNuw3zvYSqHeUJefg2mufuMdlctjo4xCsZh
+         c5rIjcGpxtd0w==
+Date:   Thu, 1 Dec 2022 20:02:30 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <f.fainelli@gmail.com>, <olteanv@gmail.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>
+Subject: Re: [RFC Patch net-next 3/5] net: dsa: microchip: add eth mac
+ grouping for ethtool statistics
+Message-ID: <20221201200230.0f1054fe@kernel.org>
+In-Reply-To: <20221130132902.2984580-4-rakesh.sankaranarayanan@microchip.com>
+References: <20221130132902.2984580-1-rakesh.sankaranarayanan@microchip.com>
+        <20221130132902.2984580-4-rakesh.sankaranarayanan@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,231 +57,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the previous iteration of the while loop, the "ret" may have been
-assigned a value of 0, so the error return code -EINVAL may have been
-incorrectly set to 0. To fix set valid return code before calling to
-goto. Also investigate each case separately as Andy suggessted.
+On Wed, 30 Nov 2022 18:59:00 +0530 Rakesh Sankaranarayanan wrote:
+> +	mac_stats->FramesTransmittedOK = ctr[ksz9477_tx_mcast] +
+> +					 ctr[ksz9477_tx_bcast] +
+> +					 ctr[ksz9477_tx_ucast] +
+> +					 ctr[ksz9477_tx_pause];
 
-Fixes: e711f968c49c ("IB/srp: replace custom implementation of hex2bin()")
-Fixes: 2a174df0c602 ("IB/srp: Use kstrtoull() instead of simple_strtoull()")
-Fixes: 19f313438c77 ("IB/srp: Add RDMA/CM support")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- drivers/infiniband/ulp/srp/ib_srp.c | 96 +++++++++++++++++++++++++++++++------
- 1 file changed, 82 insertions(+), 14 deletions(-)
+do control frames count towards FramesTransmittedOK?
+Please check the standard I don't recall.
 
-diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
-index 1075c2a..b4d6a4a 100644
---- a/drivers/infiniband/ulp/srp/ib_srp.c
-+++ b/drivers/infiniband/ulp/srp/ib_srp.c
-@@ -3410,7 +3410,8 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_PKEY:
--			if (match_hex(args, &token)) {
-+			ret = match_hex(args, &token);
-+			if (ret) {
- 				pr_warn("bad P_Key parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3470,7 +3471,8 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_MAX_SECT:
--			if (match_int(args, &token)) {
-+			ret = match_int(args, &token);
-+			if (ret) {
- 				pr_warn("bad max sect parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3478,8 +3480,15 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_QUEUE_SIZE:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for queue_size parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 1) {
- 				pr_warn("bad queue_size parameter '%s'\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->scsi_host->can_queue = token;
-@@ -3490,25 +3499,40 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_MAX_CMD_PER_LUN:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for max cmd_per_lun parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 1) {
- 				pr_warn("bad max cmd_per_lun parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->scsi_host->cmd_per_lun = token;
- 			break;
- 
- 		case SRP_OPT_TARGET_CAN_QUEUE:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for max target_can_queue parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 1) {
- 				pr_warn("bad max target_can_queue parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->target_can_queue = token;
- 			break;
- 
- 		case SRP_OPT_IO_CLASS:
--			if (match_hex(args, &token)) {
-+			ret = match_hex(args, &token);
-+			if (ret) {
- 				pr_warn("bad IO class parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3517,6 +3541,7 @@ static int srp_parse_options(struct net *net, const char *buf,
- 				pr_warn("unknown IO class parameter value %x specified (use %x or %x).\n",
- 					token, SRP_REV10_IB_IO_CLASS,
- 					SRP_REV16A_IB_IO_CLASS);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->io_class = token;
-@@ -3539,16 +3564,24 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_CMD_SG_ENTRIES:
--			if (match_int(args, &token) || token < 1 || token > 255) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for max cmd_sg_entries parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 1 || token > 255) {
- 				pr_warn("bad max cmd_sg_entries parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->cmd_sg_cnt = token;
- 			break;
- 
- 		case SRP_OPT_ALLOW_EXT_SG:
--			if (match_int(args, &token)) {
-+			ret = match_int(args, &token);
-+			if (ret) {
- 				pr_warn("bad allow_ext_sg parameter '%s'\n", p);
- 				goto out;
- 			}
-@@ -3556,43 +3589,77 @@ static int srp_parse_options(struct net *net, const char *buf,
- 			break;
- 
- 		case SRP_OPT_SG_TABLESIZE:
--			if (match_int(args, &token) || token < 1 ||
--					token > SG_MAX_SEGMENTS) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for max sg_tablesize parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 1 || token > SG_MAX_SEGMENTS) {
- 				pr_warn("bad max sg_tablesize parameter '%s'\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->sg_tablesize = token;
- 			break;
- 
- 		case SRP_OPT_COMP_VECTOR:
--			if (match_int(args, &token) || token < 0) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for comp_vector parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 0) {
- 				pr_warn("bad comp_vector parameter '%s'\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->comp_vector = token;
- 			break;
- 
- 		case SRP_OPT_TL_RETRY_COUNT:
--			if (match_int(args, &token) || token < 2 || token > 7) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for tl_retry_count parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 2 || token > 7) {
- 				pr_warn("bad tl_retry_count parameter '%s' (must be a number between 2 and 7)\n",
- 					p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->tl_retry_count = token;
- 			break;
- 
- 		case SRP_OPT_MAX_IT_IU_SIZE:
--			if (match_int(args, &token) || token < 0) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for max it_iu_size parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 0) {
- 				pr_warn("bad maximum initiator to target IU size '%s'\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->max_it_iu_size = token;
- 			break;
- 
- 		case SRP_OPT_CH_COUNT:
--			if (match_int(args, &token) || token < 1) {
-+			ret = match_int(args, &token);
-+			if (ret) {
-+				pr_warn("match_int() failed for channel count parameter '%s', Error %d\n",
-+					p, ret);
-+				goto out;
-+			}
-+			if (token < 1) {
- 				pr_warn("bad channel count %s\n", p);
-+				ret = -EINVAL;
- 				goto out;
- 			}
- 			target->ch_count = token;
-@@ -3601,6 +3668,7 @@ static int srp_parse_options(struct net *net, const char *buf,
- 		default:
- 			pr_warn("unknown parameter or missing value '%s' in target creation request\n",
- 				p);
-+			ret = -EINVAL;
- 			goto out;
- 		}
- 	}
--- 
-1.8.3.1
+> +	mac_stats->SingleCollisionFrames = ctr[ksz9477_tx_single_col];
+> +	mac_stats->MultipleCollisionFrames = ctr[ksz9477_tx_mult_col];
+> +	mac_stats->FramesReceivedOK = ctr[ksz9477_rx_mcast] +
+> +				      ctr[ksz9477_rx_bcast] +
+> +				      ctr[ksz9477_rx_ucast] +
+> +				      ctr[ksz9477_rx_pause];
+> +	mac_stats->FrameCheckSequenceErrors = ctr[ksz9477_rx_crc_err];
+> +	mac_stats->AlignmentErrors = ctr[ksz9477_rx_align_err];
+> +	mac_stats->OctetsTransmittedOK = ctr[ksz9477_tx_total_col];
 
+OctetsTransmittedOK = ksz9477_tx_total_col[lisons] ?
+
+> +	mac_stats->InRangeLengthErrors = ctr[ksz9477_rx_oversize];
+
+You use the same counter for RMON oversize statistic, the two
+definitely have different semantics, please check the standard
+and the datasheet.
+
+Remember that you don't have to fill in all the stats, if the HW does
+not maintain a matching statistic - leave the field be. Kernel will
+not report to user space unset fields.
