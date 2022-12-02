@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCFA6405AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8C96405B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbiLBLUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:20:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S233214AbiLBLVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbiLBLUY (ORCPT
+        with ESMTP id S233173AbiLBLVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:20:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDCC7F8A8;
-        Fri,  2 Dec 2022 03:20:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 980DFB82145;
-        Fri,  2 Dec 2022 11:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50E45C4347C;
-        Fri,  2 Dec 2022 11:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669980017;
-        bh=xddJ7x7rxdG1xP6l+opPk82BgIWXEMwXu5GWq4GKQkw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=B2UPAhLWeqiMA1wya58Yj0ult79WMCjL5m9OpWxUaAb/Rwq76sGfYJUb8gd62zKyY
-         qZbdJXyDT9oNRBzAKFKj0n0ihS0WfH4ZRNgu07YPo6OA1oXlAVhwAN4n0cW9l8mazG
-         Isv/vg9OcdIZVljdc38hZlwZyvrKrdjb8XWv4BtOGqC70k899z4RWrFz99ZHDD+EML
-         hcPhXEfFxpPaCCL3ps93ULXoytgij7MnO/tx5fzRX/FxXIIYcydjlbaSCJB0qyjmfT
-         qeGHlF+jNa7DqeAJe/8BGqBuArojzYfyXk35l1l2dlYTqwgYDZyWp7/hXltAEEAmP6
-         //9vqiQVCsJgg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3917DE450B7;
-        Fri,  2 Dec 2022 11:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 2 Dec 2022 06:21:19 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58558D3A11;
+        Fri,  2 Dec 2022 03:21:10 -0800 (PST)
+Date:   Fri, 2 Dec 2022 12:21:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669980067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUQrge8plg+w3veFNfesME539B6kRsAYWeeTF/4ow6U=;
+        b=gIbaXxqbfa/DKrpVLcquPWnUONxpPCPbMltn7ZiMsVmSPV0+jWRUGxk0r/LU4lzIHG0TaN
+        nGB3RhNeKb17G6Yu/pPNjR0qBRcaHb9V+89fHomimz2f2NAuTHtcoh4oSqsdWR+vRe6SX0
+        JSAjsLETamPvn6rpLkRZA935cqn1J9B348CYpP695I9jWzonoUHhrr7ljCu+M2U3b1kKD8
+        t55pgi7fuwqpdjtLd+oI4zTvIg2omxBCpq30ixQ8Db5cWtemBUL2e6Mymbj83Ym9VPjY7m
+        TyXOHapCF/kTE8CrR6SvpwOvYJJus99o1I8lLjgKZ0NKQfrueqE5T7bQYkh30Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669980067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUQrge8plg+w3veFNfesME539B6kRsAYWeeTF/4ow6U=;
+        b=IFM03siZCUBxNyT1YdfePX74U+EaISXE6cDPra5trFsblD1y74xAxrC3uDDVD5+4iS44mR
+        EKtvSGfPQ4eVoIAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>, Jan Kara <jack@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-RT <linux-rt-users@vger.kernel.org>
+Subject: Re: [PATCH] rtmutex: Add acquire semantics for rtmutex lock
+ acquisition
+Message-ID: <Y4nfopZfBxR4lJ6G@linutronix.de>
+References: <20221202100223.6mevpbl7i6x5udfd@techsingularity.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 1/2] net: thunderbolt: Switch from __maybe_unused
- to pm_sleep_ptr() etc
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166998001723.12503.5723895618150427571.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Dec 2022 11:20:17 +0000
-References: <20221130123613.20829-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221130123613.20829-1-andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221202100223.6mevpbl7i6x5udfd@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 2022-12-02 10:02:23 [+0000], Mel Gorman wrote:
+> The lock owner is updated with an IRQ-safe raw spinlock held but the
+> spin_unlock does not provide acquire semantics which are needed when
+> acquiring a mutex. This patch adds the necessary acquire semantics for a
+> lock operation when the lock owner is updated. It successfully completed
+> 10 iterations of the dbench workload while the vanilla kernel fails on
+> the first iteration.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+I *think* it is
 
-On Wed, 30 Nov 2022 14:36:12 +0200 you wrote:
-> Letting the compiler remove these functions when the kernel is built
-> without CONFIG_PM_SLEEP support is simpler and less heavier for builds
-> than the use of __maybe_unused attributes.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> [...]
+Fixes: 700318d1d7b38 ("locking/rtmutex: Use acquire/release semantics")
 
-Here is the summary with links:
-  - [net-next,v3,1/2] net: thunderbolt: Switch from __maybe_unused to pm_sleep_ptr() etc
-    https://git.kernel.org/netdev/net-next/c/0bbe50f3e85a
-  - [net-next,v3,2/2] net: thunderbolt: Use bitwise types in the struct thunderbolt_ip_frame_header
-    https://git.kernel.org/netdev/net-next/c/a479f9264bdd
+Before that, it did cmpxchg() which should be fine.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regarding mark_rt_mutex_waiters(). Isn't acquire semantic required in
+order for the lock-owner not perform the fastpath but go to the slowpath
+instead?
 
-
+Sebastian
