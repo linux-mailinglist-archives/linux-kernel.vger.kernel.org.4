@@ -2,91 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEDB64037F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51AA640381
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiLBJjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S232638AbiLBJk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbiLBJjE (ORCPT
+        with ESMTP id S232354AbiLBJkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:39:04 -0500
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C3DB7DDF
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:39:03 -0800 (PST)
-Received: by mail-pg1-f173.google.com with SMTP id s196so3958479pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:39:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OTUvgvzDNVb3Q9BB7bRv2FXaIaCGfv+EeGtlZYfVaoQ=;
-        b=hMvIFlwlVksw1eDYumOyDAe11st4Yq+ToOip5YnUcW5IwJNugmUb5q4tjItT0aLg/g
-         ZGEZJosDgbqFI6/v6pFNmaUhRn32NHYNdix/RZIExGDNKFOMKkDliczA9U9/xZrxE58K
-         MdWNRAAbO50wdaSO/Qc3XwLAb/0gv/0aBMRLxheLiT7zmcyBZuOrTyiUjfLppMTbguJl
-         VSqVmyVXlkEWjah4ofHrHaRYP0KAxH/Erbri50B5okozhkrwG5x71uPU233dj7gDzpfY
-         YQ1gEdKVDcY91IDBTLS9CXrYWla8a8bSE3TTfst6uss5M45xO9uBMHa9rYL9R+TZlJhd
-         8DfA==
-X-Gm-Message-State: ANoB5pkwNl5pX7L3+ZHXSOBshPYbPKnxMAXkMPN2A17HVqbhR9xpkUfR
-        iD0j0t0Zj7LICEN9rLUOwDs=
-X-Google-Smtp-Source: AA0mqf6J1M+yCJEF5nYzQWdCHEx6Sr9pLrtgXjbBufF2fVOSOVHalEqonlNYxQzI8ak98NKtBx2JCQ==
-X-Received: by 2002:a05:6a00:3017:b0:56b:ac5c:f3dc with SMTP id ay23-20020a056a00301700b0056bac5cf3dcmr53663510pfb.77.1669973942742;
-        Fri, 02 Dec 2022 01:39:02 -0800 (PST)
-Received: from redsun91.ssa.fujisawa.hgst.com ([129.253.182.55])
-        by smtp.gmail.com with ESMTPSA id d15-20020a17090a564f00b001ef8ab65052sm4370881pji.11.2022.12.02.01.39.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 01:39:01 -0800 (PST)
-From:   Johannes Thumshirn <jth@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Johannes Thumshirn <jth@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: [PATCH 2/2] mcb: mcb-parse: fix error handing in chameleon_parse_gdd()
-Date:   Fri,  2 Dec 2022 01:38:50 -0800
-Message-Id: <ebfb06e39b19272f0197fa9136b5e4b6f34ad732.1669624063.git.johannes.thumshirn@wdc.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1669624063.git.johannes.thumshirn@wdc.com>
-References: <cover.1669624063.git.johannes.thumshirn@wdc.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 04:40:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4286CB71C3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:40:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E63B2B8210E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD43C433D6;
+        Fri,  2 Dec 2022 09:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669974009;
+        bh=C8ySU2FWQgsD68imRfeyGlSW0TJii+QC9V3BvojoXMw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AiAs0wGNZDPebO8ykbwc0tKssOFX09O6hEb0JF4/PrvRSSeDURg17GYfJ8XSlCsWf
+         y8et5MdMSY9YTyVqI7He9Sydra7AF27/4cAMZLqPNl1ZWoK+31fJ3FeWvNv3VGUgp5
+         rA9+vP7VZKYYwSaMdPEPFci2Wd2x/F/KhmMPF4CHHOn6AxFJqm6KN/Igg+fmB/ps+z
+         MOHhEVrvuM/kPONYYyPj3G27gySumUuXoGhg85sv6f9BBy5FY411YLVJ47Mcqs3HGQ
+         C9ZJMxZlukJJ9KOcVsuEyuW9zml/+xYHdZR89SIC7R668Il17l19sd1rhd8HtkiAek
+         pxdBZjOMXsthQ==
+Received: from 51-171-6-54-dynamic.agg9.chf.chf-qkr.eircom.net ([51.171.6.54] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p12Wd-00A2LU-9Q;
+        Fri, 02 Dec 2022 09:40:07 +0000
+Date:   Fri, 02 Dec 2022 09:40:04 +0000
+Message-ID: <87h6yeta8b.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
+In-Reply-To: <525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com>
+References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+        <867czbmlh1.wl-maz@kernel.org>
+        <50499ee9-33fe-4f5d-9d0a-76ceef038333@daynix.com>
+        <87lenqu37t.wl-maz@kernel.org>
+        <525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 51.171.6.54
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+On Fri, 02 Dec 2022 05:17:12 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> 
+> >> On M2 MacBook Air, I have seen no other difference in standard ID
+> >> registers and CCSIDRs are exceptions. Perhaps Apple designed this way
+> >> so that macOS's Hypervisor can freely migrate vCPU, but I can't assure
+> >> that without more analysis. This is still enough to migrate vCPU
+> >> running Linux at least.
+> > 
+> > I guess that MacOS hides more of the underlying HW than KVM does. And
+> > KVM definitely doesn't hide the MIDR_EL1 registers, which *are*
+> > different between the two clusters.
+> 
+> It seems KVM stores a MIDR value of a CPU and reuse it as "invariant"
+> value for ioctls while it exposes the MIDR value each physical CPU
+> owns to vCPU.
 
-If mcb_device_register() returns error in chameleon_parse_gdd(), the refcount
-of bus and device name are leaked. Fix this by calling put_device() to give up
-the reference, so they can be released in mcb_release_dev() and kobject_cleanup().
+This only affects the VMM though, and not the guest which sees the
+MIDR of the CPU it runs on. The problem is that at short of pinning
+the vcpus, you don't know where they will run. So any value is fair
+game.
 
-Fixes: 3764e82e5150 ("drivers: Introduce MEN Chameleon Bus")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Reviewed-by: Johannes Thumshirn <jth@kernel.org>
-Signed-off-by: Johannes Thumshirn <jth@kernel.org>
----
- drivers/mcb/mcb-parse.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> This may be a problem worth fixing. My understanding is that while
+> there is no serious application which requires vCPU migration among
+> physical clusters,
 
-diff --git a/drivers/mcb/mcb-parse.c b/drivers/mcb/mcb-parse.c
-index 0266bfddfbe2..aa6938da0db8 100644
---- a/drivers/mcb/mcb-parse.c
-+++ b/drivers/mcb/mcb-parse.c
-@@ -108,7 +108,7 @@ static int chameleon_parse_gdd(struct mcb_bus *bus,
- 	return 0;
- 
- err:
--	mcb_free_dev(mdev);
-+	put_device(&mdev->dev);
- 
- 	return ret;
- }
+Hey, I do that all the time with kvmtool! It's just that my guest do
+not care about being run on a CPU or another.
+
+> crosvm uses KVM on big.LITTLE processors by pinning
+> vCPU to physical CPU, and it is a real-world application which needs
+> to be supported.
+> 
+> For an application like crosvm, you would expect the vCPU thread gets
+> the MIDR value of the physical CPU which the thread is pinned to when
+> it calls ioctl, but it can get one of another arbitrary CPU in
+> reality.
+
+No. It will get the MIDR of the CPU it runs on. Check again. What you
+describing above is solely for userspace.
+
+> 
+> Fixing this problem will pose two design questions:
+> 
+> 1. Should it expose a value consistent among clusters?
+> 
+> For example, we can change the KVM initialization code so that it
+> initializes VPIDR with the value stored as "invariant". This would
+> help migrating vCPU among clusters, but if you pin each vCPU thread to
+> a distinct phyiscal CPU, you may rather want the vCPU to see the MIDR
+> value specific to each physical CPU and to apply quirks or tuning
+> parameters according to the value.
+
+Which is what happens. Not at the cluster level, but at the CPU
+level. The architecture doesn't describe what a *cluster* is.
+
+> 2. Should it be invariant or variable?
+> 
+> Fortunately making it variable is easy. Arm provides VPIDR_EL1
+> register to specify the value exposed as MPIDR_EL0 so there is no
+> trapping cost.
+
+And if you do that you make it impossible for the guest to mitigate
+errata, as most of the errata handling is based on the MIDR values.
+
+> ...or we may just say the value of MPIDR_EL0 (and possibly other
+
+I assume you meant MIDR_EL1 here, as MPIDR_EL1 is something else (and
+it has no _EL0 equivalent).
+
+> "invariant" registers) exposed via ioctl are useless and deprecated.
+
+Useless? Not really. The all are meaningful to the guest, and a change
+there will cause issues.
+
+CTR_EL0 must, for example, be an invariant. Otherwise, you need to
+trap all the CMOs when the {I,D}minLine values that are restored from
+userspace are bigger than the ones the HW has. Even worse, when the
+DIC/IDC bits are set from userspace while the HW has them cleared: you
+cannot mitigate that one, and you'll end up with memory corruption.
+
+I've been toying with the idea of exposing to guests the list of
+MIDR/REVIDR the guest is allowed to run on, as a PV service. This
+would allow that guest to enable all the mitigations it wants in one
+go.
+
+Not sure I have time for this at the moment, but that'd be something
+to explore.
+
+[...]
+
+> > So let's first build on top of HCR_EL2.TID2, and only then once we
+> > have an idea of the overhead add support for HCR_EL2.TID4 for the
+> > systems that have FEAT_EVT.
+> 
+> That sounds good, I'll write a new series according to this idea.
+
+Thanks!
+
+	M.
+
 -- 
-2.37.3
-
+Without deviation from the norm, progress is not possible.
