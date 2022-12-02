@@ -2,152 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41855641189
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9292564118A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234242AbiLBXfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 18:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S234498AbiLBXfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 18:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbiLBXfK (ORCPT
+        with ESMTP id S234306AbiLBXfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 18:35:10 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F3BDBF7D;
-        Fri,  2 Dec 2022 15:35:09 -0800 (PST)
+        Fri, 2 Dec 2022 18:35:14 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FE5EBCBA;
+        Fri,  2 Dec 2022 15:35:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670024109; x=1701560109;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=xSXWFKgZ7tJdXiQIgcErpjsnhYIVgtDEiNSlqCtypfM=;
-  b=I5iaKP35VFZ5V7dIzHyEIB1lmYpSSPRPybNn9Pe7Vw6wWvORwLhpBbep
-   H70brZAima2EO+uzy9FK8qOkk7MQaBzXrXpTCfJGI4E3gR4TokpLuULvh
-   +oqgM7W6gDtSJ/b8qAkWwYOsHVPJLrB7MZoeJtY3i5h5+L8DSXjqStwjh
-   dbtpADOKDXIrHgGT+qFcA0jt3QcSUe8BTUf/dCwEUYmk4s6UxRe/UG8i6
-   tLJzc3aCUZghH5YGAcZJkK77uBMp69HYd5pdJE8U0fDtSGazY6lVE0olO
-   kYVHx4LhkGmbLwFzG6o1RbdDnWefvhoeKSV9Lwf92ySCwsHCgdSZR8OaW
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="316092798"
+  t=1670024114; x=1701560114;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Zu7k8CJE6Vd1bk5CoRuiRC45EJJvmvxuYKgqnbPmZHc=;
+  b=l7AzuBZDiteMEifdteiG5CIRlhyC5MlMegZXSB3mSyh5hdphJIoDWoXf
+   bwkUxs0xRX9E3K6mDiRkaF0t/u6RE+43OtahtPtkkPN106JqP8XOPrRdd
+   PmyoYrpTqpW403aAZV/FXd008YStZ1mFvEtrevThCjKYqzszpvl5ph6fB
+   usEeiLSCgOTkkp6GhJARs5v03XdkDEpGpZFOsHGtrGBPjuDnNVU80VLhd
+   gve/kpMA7VVBHb4wgXds8/QNPxmP4poSg+gF6/QTTj51uGq2Iwi3Kv5yK
+   6T/G2yTFChHIzX4hTsKwUJ/e2MSvK7RVf60j9uWpIi7+IeTJiz2EYI7iZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="314774828"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="316092798"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 15:35:02 -0800
+   d="scan'208";a="314774828"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 15:35:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="890330195"
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="595612032"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="890330195"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Dec 2022 15:35:02 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="595612032"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga003.jf.intel.com with ESMTP; 02 Dec 2022 15:35:13 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 2 Dec 2022 15:35:01 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.16; Fri, 2 Dec 2022 15:35:12 -0800
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 2 Dec 2022 15:35:01 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2507.16; Fri, 2 Dec 2022 15:35:12 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 2 Dec 2022 15:35:12 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 2 Dec 2022 15:34:26 -0800
+ 15.1.2507.16; Fri, 2 Dec 2022 15:35:11 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YOGNJkEnSqPoOVo1LIg+pBU7/BpTb8bgHbYciVBdM/srz6eu7P2NKlbbzgV6mgwfNgoi5hg7KupQYp7ho0mG+Sd/WHl9cDfpLIQ911UdyK1fBm1CmqJgNcsfpD/FHw42VcT40m8q3BOZ2cO3aTIAAtUZc21+ON334hWMF2xFv9d8VXzV3lTE2joV+Yaku8Zg37nRd0JActd0Ji6P2ToUc46ALZaT+0iuoTJXtfar6GRbnAH48iAvCH3t69iCslTaBSojX55L8eNTk/NEXMCcBzc16Jqy/O1dzjy4FON8Ntc4l1issecNfDlCWPOvg/qARlo8hZagn790CUUyKNQwvg==
+ b=Kv0+dFNpQbZ3SgRJ5I2sCDIUyA4zrLdGvk4YtZWy3145lKWqgCVL2NHNsKLt5Fsc+DBLoFAsFjug0f/Y02Im6hV47LntZOCCbD/4k0nGIjVn0DoPZ1+rcZWFWlL20NCI7yb3IcwUqDt55fR1mYW5/6WGaZWlXAwqxJfV2XZlNCN4CMmrrjg9N1ti0KkUgDWDCmjFgpGeAbQ46g7RnsugW+m1DhTqw/wGSkpn6ytlgYMVA8wf6PcnNmvP/b3wnXFbNmMGmBm9jKHP4PPsaxH6PeNDMuyU0YjftMp+K1GVq9WGkXCS7iUCXS4tcXejKrDdHkV2FJwMzsrGzFd5pZMPeA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gREKjW5FDBRDEH1ORSeoFJU2Wd19weI4kJ3DvB0nw3E=;
- b=QRwmjZEOKKWuDLYJe6v+SyeZZpSCPf04W3ECXGBDlfZgAWck2uUTWnPEXPDk03hIVehWpE2NMkmtCpHaQvJsZuX1ysZdLe7J52aNVpyPB+R7+zEGFm7NB3WMOohJDNejyFjzqzlxtR232uSjwuedV85z3PPioS8sMVsa4YagvOXIyKNZ+Vhzh8lkRR4Ek5aMdSrTYsi/VFiExJkCtHt9ag41nKQ3MyHg3zvC8N44cCh2cLiZuVVN+tjZGcxyUd95dzSeSv+n3Rnqm5AEucDyFLVpXeUikUeQBQ4/Mz4tijRjxnRLvFpHkv8FGqj5Fr/7SN6bDvIUqZWyyfr71OIg3Q==
+ bh=F0zQVdlbaZn1gnIrlKlngqB+8Y2asDkpnJLqdklNBDI=;
+ b=MPBcXRg20Ibg5KuGpfGAHvGQtVxApwZpe4G8NbVkreSxBD6L10qno8MeRcwGXA/ugPuUU2weUywP9dOQmZUqmTSL4UOjsjNGAEjUyX76lgqDhGzE06uG8sDB8STK5vNU7uIt8TPY8Wvo9PBnA8OZRmoqrd6rt547xfde86+LRlh0XF4UU55KznZdpeNrUfLqs/++V4lwaqGZxGO+QjV5LlFbWndqEhD9Pj70t5eJ5fsn3dR01ixi1IE4fiWRnvDYDR7RD98/qT3B4C5O5rBp8NL8E5MhBRy6KVEozcmfFX6x2a84b/lW7vDv2oRHvWlXfqXcGqDhbjpsD11KNtAbbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
+ by CH0PR11MB5561.namprd11.prod.outlook.com (2603:10b6:610:d4::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Fri, 2 Dec
+ 2022 23:35:09 +0000
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::8f92:b03a:1de2:e315]) by PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::8f92:b03a:1de2:e315%4]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
+ 23:35:09 +0000
+From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
+To:     "paulmck@kernel.org" <paulmck@kernel.org>
+CC:     "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] rcu-tasks: Make shrink down to a single callback queue
+ safely
+Thread-Topic: [PATCH] rcu-tasks: Make shrink down to a single callback queue
+ safely
+Thread-Index: AQHZBHmgbK+Gas4s2UyDwnafgcYkO65bB6OAgAA6H0A=
+Date:   Fri, 2 Dec 2022 23:35:09 +0000
+Message-ID: <PH0PR11MB5880B8D62B5EA5643593EC62DA179@PH0PR11MB5880.namprd11.prod.outlook.com>
+References: <20221130051253.1884572-1-qiang1.zhang@intel.com>
+ <20221202195723.GB4001@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20221202195723.GB4001@paulmck-ThinkPad-P17-Gen-1>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by BL1PR11MB5381.namprd11.prod.outlook.com
- (2603:10b6:208:308::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Fri, 2 Dec
- 2022 23:34:23 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.008; Fri, 2 Dec 2022
- 23:34:23 +0000
-Date:   Fri, 2 Dec 2022 15:34:20 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 04/11] cxl/mem: Clear events on driver load
-Message-ID: <638a8b7c97ceb_18fe029410@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
- <20221201002719.2596558-5-ira.weiny@intel.com>
- <6389676c60d39_3cbe029487@dwillia2-xfh.jf.intel.com.notmuch>
- <Y4oo+rxYAyBoHexo@iweiny-desk3>
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5880:EE_|CH0PR11MB5561:EE_
+x-ms-office365-filtering-correlation-id: 663f4cb8-ffcb-4b44-88f9-08dad4bdd9ec
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CJFTZgN6Bbne4fD4d6QXWJxGmS+IZOCe5l+S5SNZpCEigWxpl5NsN+kS4G9yJjDB2Ql2hSLZd0/sEF5Q0ABLhIiRkKwZYQv9L4mmhjMyMKS+iqdsiosgGlwURvp6MWeYNtq0id0QQGaX03Da8cJRPJamtNGIvKbyiIem1KSr4SZMPAfCcDO4SvrWYpEA7rd7LJUcCcwfTrFJaMfPwMo4R4YSyNlH/lHV3Av6tl5y9em1gZW6i62T5Gi3FayjfAb/7kRi3FA0hJdKB7psFqDgnE2yMOWUh++sVIYNoBmS/lZDqGCSz+z2BqMHMaycsLg8yM+cSG/Z6jbgCHponDiBag2FXk6rWotJWRreIw8xbs2GiXhvNypmRE5SlJdBDhl7gWRPmRJn/T041jrBd7Y84LGMk3gToeZOVrqpMisegqdQpi+/lH0oiplDAg7r+4MCR5B/PA7TXpFTo+OXPpP1WSubOCFx309e82L9Zvd+tazfaK+Kp6/3x3AJgElSEDeuieAbu9oY9zMLE8kmx29Bn9z3io10jzNpvYtkbxCF1OlXxz3DJt3DllkwVbNDzUe3IxQMiNwV0IVOyOBj0XIwevU0yxIVZpmDbzST5II9pAONCTJ4RzXHHUMoBizx+8Q1icJ0Iv10h3/8KNE7mNd8Tew11UHhaMg9oqkZsNRa+fNbtI/ov8AyUmiqQEpqOILlccrQo2SWpLnLuiB3SP3mSw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(38070700005)(86362001)(122000001)(82960400001)(71200400001)(38100700002)(6506007)(7696005)(9686003)(8936002)(52536014)(8676002)(4326008)(186003)(26005)(316002)(6916009)(54906003)(2906002)(41300700001)(55016003)(83380400001)(478600001)(66556008)(66476007)(66446008)(64756008)(66946007)(76116006)(5660300002)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?L9OSEyifURvuCZeu7pao9wQzrymdG7yWD96k7EfeMw8cbdHTGfA8xosN+IuR?=
+ =?us-ascii?Q?FqFzv43f85vmoE41qu3slyEcl9Nr5yoqMCvFn1YEsKeAGecOB/6sE01eLqUV?=
+ =?us-ascii?Q?FANNhQe25DuSGALtkl/Pwm1WFSrLYPTdX6pgBx24XRfD/ah7ifNsV/VY1J5b?=
+ =?us-ascii?Q?QIRdT3Pa+0VFTfgkrW3KljlKfyV1g2076OpWghH9Ipo//z6E7H/BPCO3Au8n?=
+ =?us-ascii?Q?1w27Wf7o8yBcWTKlU7UKcUN2cPEyoFPds9J1LBsdPUzyPX056rF+RmULfDUG?=
+ =?us-ascii?Q?FwS4P3HOMHEUz7CT/RAxfVlJbjxW5pfiSNOvwjlRAHlXiHmbEjXSFxeeHfWo?=
+ =?us-ascii?Q?Eh7M7ykU5vCUf+t8NeQnRZYBrOIk5ga38HrzlU+33MECgtduUai7VPtgNTnJ?=
+ =?us-ascii?Q?ngTAKKpQOeKS171sI8m2MQ+FTd/oLUWFbsngGGdV7I3heztaAF2L1BHls6K1?=
+ =?us-ascii?Q?7g+fi6J0RNoM3XNNOMVs8AgJbApdqJHnjx1OycgfiqKsdidlpjWc5MiaSfbs?=
+ =?us-ascii?Q?iOy52ZJufqCN6ZhJZn+kR729cd30yAnDttKKj75MFkrxuCjP8bbrMxXyIJ7b?=
+ =?us-ascii?Q?HAy/jQyReS2+YL9ljlMGpaxP7uGmMFov9bYDWN4swcqVsmZmTVkbv2p7eEk9?=
+ =?us-ascii?Q?+nX2VWBAN9sp6XpvYsBMkwUrxTiWskbpqSA84K/d/e4b2NYcQE+PcxrZuquG?=
+ =?us-ascii?Q?b4Z+bGs1R2r438QMdsuLtu0VvbOGoNXwuyS5Z2DbNsGZXQsSg0ZEFfbY8D+N?=
+ =?us-ascii?Q?7VQwWTDWPS5VdMRK62/y9w+W0HTSVp/mgCdGibhuRuHKLeat48oTcam6kN8C?=
+ =?us-ascii?Q?1uSfQ1QSfAbl1AtxuK19CcABL20CbXv2cnNVud1zRKhRhyCckPtRzqE8ZdOO?=
+ =?us-ascii?Q?DBO1cVDswbkxVOLi2QH4OKd2n990PTlJI0yhftt0Hsw4IHGk6/CqmUYyW6/t?=
+ =?us-ascii?Q?V9t7BMXvHVwf3sttnyBuW/JRfuw1FFe1Os137lcZYiAP6n2eIG9HKF5+BUGq?=
+ =?us-ascii?Q?OMUIXKRowcTjbw8oWwlTIRpdetRGOP/Tudkq9hm203QSRuXc+xIalbEcH/v6?=
+ =?us-ascii?Q?z3rJWH6jHeruQj6oj46TxmcH99K9mqnWeB3t9izUDc5eEWmcgrr+TXG75YS5?=
+ =?us-ascii?Q?I1gil+kCxQQr5j00x6sk/Znl3YAqbQaW2CuW6qMxT+leiMKHpAmEgULLhHrP?=
+ =?us-ascii?Q?cs2c7JxCXdT9Od+5DUfbz2KIJEHx8ynE+IlQlO8izA2wOsAu2lW0IKC4wmAl?=
+ =?us-ascii?Q?9CvqbvzfZAaJb8lToQZkTTeb+B0WPmCIgX9ljB5fgHYOdHd00vtZ0N7z+vh2?=
+ =?us-ascii?Q?K4EJOCq7NUVeMxW7M88db0P36SJPzJy2cXlp0kwH3ZykdnQQoYFPyQAQ2G4k?=
+ =?us-ascii?Q?Q/uI2hPiUkznXRLazl0pjLNCYuIP4TKa6sp9T8WLfDUwIVvmYkTPM7ccoCmX?=
+ =?us-ascii?Q?EN6/71gN1s8DcQYFCM4SB4SqhG3RHtKgvcu05nq8ImMXmAuH9ywbPhHy6M/k?=
+ =?us-ascii?Q?eFhiV+uUFHJSjRwm3EtK8KY1DEAFv2eUV94KHrPToX4LU2zuq1DVoxnhvxOY?=
+ =?us-ascii?Q?Vrdnh+IMW70YAbnfTlUZWgU9gGhpqZ4wFzSIcWTW?=
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y4oo+rxYAyBoHexo@iweiny-desk3>
-X-ClientProxiedBy: SJ0PR03CA0025.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::30) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|BL1PR11MB5381:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2519ab18-6194-4196-8fb4-08dad4bdbe22
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A4n6lRiJ8U8DTCFhWQy50z6fdbVM1g2aR1UXjgxLLhoXaEMp2sA6/uj2Ksp7lMyIbhQXGXYpJwJtIY82HRynmQ/ptsZnB2Jolkf2T2M5O370GE3SHIEe1bMoy00Ks8AalQbE5Lnx2I4/OnLzikvqcyoLfW7xOTeM7V1SRpuE1+TJvBnyjj+YtGp92W+CeXAiHLWfSPK8zGDnsMjgVehQ2ejYlmF5FpRnIk+DrXNLk1DMiPk7nRa3yajgtNIN7nwK9uCLvo2Qo+kwZ5MMegetgcRcaV1PhWRHg/FvpJWlbVW+owgbMMwOmrxQ8zEcIdAZf3WoHH9z1qzd2uUXIaQEEPDhPUdBsTczVGYqVfq1vuIUMtepEC9TryBx/KhZSm+t1Sce0TVmLcOOxPu9brxTE+nAy8SMb1xNL6/orXkO6VdzI/wQ0NrKnrXFkuThEyulqZteLPRpz6liOpuJ1TU+zq07kPGRaOsrnZU7W1YDtVSFHm+SJXuhsbbHiwq3KFCIvgQDBPXeqwEHxGMWFVOa3hm9yfVLErtol3KGj7mC2E6iSyxkESNrR0W4F8PyYhi0GTq45giPy02BuZD0ngC2L7g3ychlMPd5EPveRxreUp/XibFT6i0rV0Ljoj+jsryNKuq40rH8kxjts+QSwqtwFQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(376002)(136003)(39860400002)(396003)(451199015)(83380400001)(86362001)(478600001)(6486002)(82960400001)(2906002)(38100700002)(4326008)(6506007)(9686003)(26005)(186003)(6512007)(54906003)(66556008)(66946007)(66476007)(110136005)(8676002)(5660300002)(41300700001)(8936002)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HQmbhoAnB4PLUcUHIDLsCoB5Y0KOQkgfkFCSbXry7BmyDnrVYU+xY0rdkLIa?=
- =?us-ascii?Q?wjRwoX7fD8bgej+tNkFbJVq5dxHCtoNXEimsFAk9mb6HtilSxwLqOuDMC8X2?=
- =?us-ascii?Q?VoiLvfOUpIpSiFioyWNJRQlr5xa1QRZXIYPP0EQW586AZ68Vtcg23EdrHYd3?=
- =?us-ascii?Q?z4jFZLcMcrJobnvPToq2S4+dkMrP3qSNtNrAFmJ3dRiSWvGsq4anGwtKFg58?=
- =?us-ascii?Q?UZJSx9vFq1c2CNdgcttbUNH+qpO0+D5OslskrZI7DDHXMxyicWT4sr3gBiZl?=
- =?us-ascii?Q?qBGSSrEE2IuaRqYnMcCz47ciaMC85/YMAGAAMSnZLA3Zx4gL4/q9SeftPMRm?=
- =?us-ascii?Q?V21GWMQ7KzEA3j2xAv+EldewAkVut3Q6DzmSHICmN+X53AA60bdAVxQAGVaN?=
- =?us-ascii?Q?ywZ3+NmDLjNHTI4gsbUj/QMuruC8UKkJEPlCeFdgbU+8kFS2ocF8aV2HiZsP?=
- =?us-ascii?Q?5HAhTO6ui1qh35fINHdNBI4/kqpnEInjeZW+eFmHmVvs1YFEGxgInfRFHQqU?=
- =?us-ascii?Q?6Q115GWABH79nTacoG+i87IhnfuRF2VDDfI1zAdvqif0Vczbio76SYPXBATA?=
- =?us-ascii?Q?KSNBw/+pIuRmmtaLxyrEN/cwE29u31u4mv0XcGOhuMMfaHvH1jMigYZXe/Up?=
- =?us-ascii?Q?ZF8E8NLdPRlOpAIIEoab/hJqKz2q8FjWkq84FlhgXctgL3JLiEuw97+28XxC?=
- =?us-ascii?Q?TlvRabRRKqoWcUN7LxJBSkEG+mZTlLoSMkBl6VUSh70cPBT+wZiQ+FhFySTo?=
- =?us-ascii?Q?37Wv8bIVZmNmdjkKtBXpiPOoQGeJCRPy8UDl3bh38xpDUoh37sLKBZlasinQ?=
- =?us-ascii?Q?Jd073D3P+clIE1f1RUveOPAJIRgWJ/UGohkujklsLLOErrlEGZbK6fjb0Ins?=
- =?us-ascii?Q?cFWaZOILWmH0/jhAeyGUz+ym7oVrwC1aM1frowgQoCGJD5JrTQZFTkppU3DO?=
- =?us-ascii?Q?0vfIeT+HA8EZumcHR89suiCEV4uX6PB/mo8HzLBZc+nz7l0KzNOrmhBt35Do?=
- =?us-ascii?Q?t3NtLtEFakAJEorivuzIh4amRjIzB2x20/okGM7HqwPvdTV1fNpEegbgRyMP?=
- =?us-ascii?Q?twWjXN9qxGqU7Z/arzevMSPtRFqvot5EBRhnxImcIvw5EEf8qv/mShsbSE9b?=
- =?us-ascii?Q?5wu8meEnWP5ad4XEYto0A9eTqhg2TuH+blongjdF+m9M+TFTA+8bvj9tdSOm?=
- =?us-ascii?Q?2Wv5lkuNrO7FGL8u1F64MRSfdWnzUqF8PjrJCrkVxJObqzJXPgVa5MzmX6pu?=
- =?us-ascii?Q?O5OcevPnJSG2qMVOTI7vOyMMAVIR+IMbn3zokjgt488cvBfqtEcGFirIaC9K?=
- =?us-ascii?Q?DmLS0H+F20BW42UMwXBlTaEPsvmrAirovQai1/hrmHbHFdTDS7GhL2fJm4mo?=
- =?us-ascii?Q?PxAHBElk8pK1Lb1aq0L5EVoD1yEuTN2Ltli54gbz944pl85bsIlF7VxotLNL?=
- =?us-ascii?Q?Q8YI72w4G3eMFPs+o/rDvZDhIU/TohNHQzMqqDiY/FRJZk3jIoYAy6/JSuHa?=
- =?us-ascii?Q?vWBIQ2iOlOyWAdHoyK6LCiGlvm4vvU/uYIE/3toTuVLdooDB/IvLWlTGimN7?=
- =?us-ascii?Q?Sxszaq6vRfXWd23aNMZ1J6W2+tJfEgEgWYkLpvq1G4gPB3XPNP3ig4qxgvJG?=
- =?us-ascii?Q?bQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2519ab18-6194-4196-8fb4-08dad4bdbe22
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 23:34:23.3002
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 663f4cb8-ffcb-4b44-88f9-08dad4bdd9ec
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 23:35:09.6098
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZORTdUcT01BTj8+KnGGP0GJLIx1BmaP4KnlKNrvB+S09nat5tLLpltoeVwKrAeILYQw2sll1REv4LnRd8Gor/4DMvtYvZUxoM6FOuAnx0wI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5381
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5ciAfBO4Yvd2DO8G0SXImSrcqePmo8LA++stS5/TeARQTIguoFrzTJVhxWnpeRWW69act/HDadjcZrutyDtDaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5561
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,90 +156,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ira Weiny wrote:
-> On Thu, Dec 01, 2022 at 06:48:12PM -0800, Dan Williams wrote:
-> > cxl/mem is cxl_mem.ko, This is cxl/pci.
-> > 
-> > ira.weiny@ wrote:
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > The information contained in the events prior to the driver loading can
-> > > be queried at any time through other mailbox commands.
-> > > 
-> > > Ensure a clean slate of events by reading and clearing the events.  The
-> > > events are sent to the trace buffer but it is not anticipated to have
-> > > anyone listening to it at driver load time.
-> > 
-> > This is easy to guarantee with modprobe policy, so I am not sure it is
-> > worth stating.
-> 
-> Fair enough.  But there was some discussion early on regarding why reading and
-> clearing on startup was a good thing.  This showed that we chose to do that and
-> why we don't care.  I'll remove it.
-> 
-> > 
-> > This breakdown feels odd. I would split the trace event definitions into
-> > its own lead in patch since that is a pile of definitions that can be
-> > merged on their own. Then squash get, clear, and this patch into one
-> > patch as they don't have much reason to go in separately.
-> 
-> I agree that splitting the Get/Clear/and this patch was odd.  However,
-> splitting Get/Clear made the discussion on those operations easier IMO.
-> 
-> As a result this did not really belong in either of those patches on their own.
-> 
-> It is also very clearly a do one thing per patch situation.
-> 
-> > 
-> > > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > > ---
-> > >  drivers/cxl/pci.c            | 2 ++
-> > >  tools/testing/cxl/test/mem.c | 2 ++
-> > >  2 files changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > > index 8f86f85d89c7..11e95a95195a 100644
-> > > --- a/drivers/cxl/pci.c
-> > > +++ b/drivers/cxl/pci.c
-> > > @@ -521,6 +521,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> > >  	if (IS_ERR(cxlmd))
-> > >  		return PTR_ERR(cxlmd);
-> > >  
-> > > +	cxl_mem_get_event_records(cxlds);
-> > > +
-> > >  	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
-> > >  		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
-> > >  
-> > > diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-> > > index aa2df3a15051..e2f5445d24ff 100644
-> > > --- a/tools/testing/cxl/test/mem.c
-> > > +++ b/tools/testing/cxl/test/mem.c
-> > > @@ -285,6 +285,8 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
-> > >  	if (IS_ERR(cxlmd))
-> > >  		return PTR_ERR(cxlmd);
-> > >  
-> > > +	cxl_mem_get_event_records(cxlds);
-> > > +
-> > 
-> > This hunk likely goes with the first patch that actually implements some
-> > mocked events.
-> 
-> If this patch was squashed into the other patches yes.  But as a patch which
-> does exactly 1 thing "Clear events on driver load" it works IMO.  I could just
-> have well put this patch at the very end.
-> 
-> Now that the Get/Clear operations are more settled I'll split this out and
-> squash it as you suggest.  Jonathan suggested squashing Get/Clear too but again
-> I really prefer the 1 thing/patch and each of those operations seemed like a
-> good breakdown.
-> 
+On Wed, Nov 30, 2022 at 01:12:53PM +0800, Zqiang wrote:
+> Assume that the current RCU-task belongs to per-CPU callback queuing
+> mode and the rcu_task_cb_adjust is true.
+>=20
+>       CPU0					CPU1
+>=20
+> rcu_tasks_need_gpcb()
+>   ncbsnz =3D=3D 0 and
+>   ncbs < rcu_task_collapse_lim
+>=20
+> 					      invoke call_rcu_tasks_generic()
+> 						 enqueue callback to CPU1
+> 					        (CPU1 n_cbs not equal zero)
+>=20
+>   if (rcu_task_cb_adjust &&
+>   ncbs <=3D rcu_task_collapse_lim)
+>     if (rtp->percpu_enqueue_lim > 1)
+>       rtp->percpu_enqueue_lim =3D 1;
+>       rtp->percpu_dequeue_gpseq =3D
+>       get_state_synchronize_rcu();
+>=20
+>=20
+>   A full RCU grace period has passed
+>
+>
+>I don't see how this grace period can elapse.  The rcu_tasks_need_gpcb()
+>function is invoked only from rcu_tasks_one_gp(), and while holding
+>->tasks_gp_mutex.
 
-I'll preface this by saying if you ask 3 kernel developers how to split
-a patch series you'll get 5 answers. For me though, a patch should be a
-bisectable full-thought. That at each step of a series the kernel is
-incrementally better in a way that makes sense. The kernel that gets Get
-Events likely needs to clear them too to complete 1 full thought about
-enbling Event handling. Otherwise a kernel that just retrieves some
-events until they overflow feels like a POC.
+
+Hi Paul
+
+I mean that It's the RCU grace period instead of the RCU task grace period.
+
+rtp->percpu_dequeue_gpseq =3D get_state_synchronize_rcu();
+
+get_state_synchronize_rcu(rtp->percpu_dequeue_gpseq);
+
+There is a window period between these two calls,  preemption may occur.
+A full RCU grace period may have passed.
+when we run it again we find get_state_synchronize_rcu() =3D=3D true.
+
+Thanks
+Zqiang
+
+
+>
+>What am I missing here?
+>
+>							Thanx, Paul
+
+>   if (rcu_task_cb_adjust && !ncbsnz &&
+>   poll_state_synchronize_rcu(
+>     rtp->percpu_dequeue_gpseq) =3D=3D true
+>     if (rtp->percpu_enqueue_lim <
+> 	rtp->percpu_dequeue_lim)
+>         rtp->percpu_dequeue_lim =3D 1
+>     for (cpu =3D rtp->percpu_dequeue_lim;
+>         cpu < nr_cpu_ids; cpu++)
+>         find CPU1 n_cbs is not zero
+>         trigger warning
+>=20
+> The above scenario will not only trigger WARN_ONCE(), but also set the
+> rcu_tasks structure's->percpu_dequeue_lim is one when CPU1 still have
+> callbacks, which will cause the callback of CPU1 to have no chance to be
+> called.
+>=20
+> This commit add per-cpu callback check(except CPU0) before set the rcu_ta=
+sks
+> structure's->percpu_dequeue_lim to one, if other CPUs(except CPU0) still =
+have
+> callback, not set the rcu_tasks structure's->percpu_dequeue_lim to one, s=
+et it
+> until the all CPUs(except CPU0) has no callback.
+>=20
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tasks.h | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> index e4f7d08bde64..690af479074f 100644
+> --- a/kernel/rcu/tasks.h
+> +++ b/kernel/rcu/tasks.h
+> @@ -433,14 +433,17 @@ static int rcu_tasks_need_gpcb(struct rcu_tasks *rt=
+p)
+>  	    poll_state_synchronize_rcu(rtp->percpu_dequeue_gpseq)) {
+>  		raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
+>  		if (rtp->percpu_enqueue_lim < rtp->percpu_dequeue_lim) {
+> +			for (cpu =3D rtp->percpu_enqueue_lim; cpu < nr_cpu_ids; cpu++) {
+> +				struct rcu_tasks_percpu *rtpcp =3D per_cpu_ptr(rtp->rtpcpu, cpu);
+> +
+> +				if(rcu_segcblist_n_cbs(&rtpcp->cblist)) {
+> +					raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
+> +					return needgpcb;
+> +				}
+> +			}
+>  			WRITE_ONCE(rtp->percpu_dequeue_lim, 1);
+>  			pr_info("Completing switch %s to CPU-0 callback queuing.\n", rtp->nam=
+e);
+>  		}
+> -		for (cpu =3D rtp->percpu_dequeue_lim; cpu < nr_cpu_ids; cpu++) {
+> -			struct rcu_tasks_percpu *rtpcp =3D per_cpu_ptr(rtp->rtpcpu, cpu);
+> -
+> -			WARN_ON_ONCE(rcu_segcblist_n_cbs(&rtpcp->cblist));
+> -		}
+>  		raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
+>  	}
+> =20
+> --=20
+> 2.25.1
+>=20
