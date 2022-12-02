@@ -2,139 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286CD640A49
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F50640A4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbiLBQIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S233721AbiLBQJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbiLBQIL (ORCPT
+        with ESMTP id S233633AbiLBQJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:08:11 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EA78BD3B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:08:09 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id v3so4734796pgh.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:08:09 -0800 (PST)
+        Fri, 2 Dec 2022 11:09:03 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2149ACA6B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:09:02 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id b2so12606330eja.7
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LMdFvNSIKdTJxppFI5JflU3ZXHxkZjSJ4fG5U4tk7Tk=;
-        b=kw0qyCOMp2u+ojev0wrASw/lF7r9rOnRJHqLy08FIIr+f+qpPtSFohe59bJmaOi/rJ
-         xcGzBwmHctfDCuY/HsZstsw01nTTKqB9D0ItsIVCZBuDkF6U4LFd8/XxyiMZ9HQQBawu
-         5Br6kbHRMEkmhVdkrdlpAnXBg7aXr8x1ngEkT987D0vDq9wJ1LYSA7pyGWl0PB6S36YX
-         Ye0BXjX/JFQwCFB0idj1kNjBh1WOFf2yIueArh18nn+f3Kk6RhG95XRHvHGlIJTCnyAw
-         T+Hf0HOA9lpO63L3167YfTmLHua9wbiTHz1XwCqkS0us3SdkuoK9a/bX1aNd1tZdIG9m
-         GSrg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Lv5UzsGC5MNuyMX51lzq8lQHZSD5qCFW0KbPV3N8yA=;
+        b=dHkIQtDWVxEzkcR9PWkORdgWl8wQJYfleFiUtDlLhO2HldA84X5tRjuMoTlAAEsMGo
+         Qulu3evExmDVuVSuIYaMi5eDn18ElcfYbcklsiHd1mLy48yHzoBKd4YfJgIutpRBcYz4
+         L2xut/t837fa812aTvn25G+M4SLiEhL47Vxhc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LMdFvNSIKdTJxppFI5JflU3ZXHxkZjSJ4fG5U4tk7Tk=;
-        b=08v5puGGv0nfiV9vIu2gbr/0E87kiEXkyeZx2OEpoQB23+ZPGWze7QCCg+DJEVfBdx
-         8wd960tWNvuKoJpo5sRR3FHsq67n5LTiwOSp5fIJ4qDs/EQ0m0IbnqcmxrTNht/xg0RR
-         F5gn2vq4MtJPftkpkSKmvMJId2IJ4jYsDvPAlN5b7yxdTlZZf7k6vky0rIqlJaJweTLd
-         VfJ9oz3ZULfqJVS2EvF6mIkWfpBpoWCa3lSZg6GBAGufmrw3Ob+yNGUXUKSTcV3niDDU
-         7RysL+XOTaHHv4+ezGF8mLO9N5Jq9N7at7CAJSVzoeoD3vOyabF5frMrlZH2TTc9sJqJ
-         jRSQ==
-X-Gm-Message-State: ANoB5plxK0H3iTMm8X5+eT2v7XxO55Diqq6Pv6RVQn6S7YDcjL0Fo/0M
-        aDxlJsvZPuanteiavZGvNM3rqg==
-X-Google-Smtp-Source: AA0mqf5a5KU+HXt1yCJ0zhlFtswkW2r0VasQIXpEBIwwE2hKQw/T3gXBywz5nj+1M/Ux52wSBF1P1g==
-X-Received: by 2002:a63:495e:0:b0:470:75a1:c6d7 with SMTP id y30-20020a63495e000000b0047075a1c6d7mr47336241pgk.120.1669997286584;
-        Fri, 02 Dec 2022 08:08:06 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w23-20020a1709026f1700b00189667acf19sm5714233plk.95.2022.12.02.08.08.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 08:08:06 -0800 (PST)
-Date:   Fri, 2 Dec 2022 16:08:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "paul@xen.org" <paul@xen.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "Yao, Yuan" <yuan.yao@intel.com>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "philmd@linaro.org" <philmd@linaro.org>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH v2 41/50] KVM: Rename and move CPUHP_AP_KVM_STARTING to
- ONLINE section
-Message-ID: <Y4oi4oRk7jsCqYJO@google.com>
-References: <20221130230934.1014142-1-seanjc@google.com>
- <20221130230934.1014142-42-seanjc@google.com>
- <c74c88ba6a17da2d36e2d340ce22af127bda8383.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9Lv5UzsGC5MNuyMX51lzq8lQHZSD5qCFW0KbPV3N8yA=;
+        b=11X0gWDcIWKHP8IwYNU4rNLVpUFpJsuty419dA95Sh5lVFE/ft+5u9D2WppciwlRCK
+         AgqjoFDo5e+l35rEhJr8Us5/eE/rqHl1KjgHMXrtIJhKRCBtsyqVy7j4V6o9k//ezEhX
+         sshiO2oACc/ci0szKw68QtZDJlbpk5yYPfsGN6bhlNYRaOr5Ly0ulzsyhAvAL0hTawRa
+         M7kUwMhzNGKL7QvAIOUysjO9ukcL7fRd59vEBEVyRHa5qG7bqqJzn2FQXbx6LqH/NauX
+         lZz55wYXFTI65rTml92Yj+/TKjFH2NHeZv4VmEX4iX/lclu6QWOTfGOV+3ywpzfJgdPF
+         Cp3Q==
+X-Gm-Message-State: ANoB5pmGX2uX2uPVgHyZh6Qj8d4TYEScvmm4rfDlziSfvDhDaABEKXtK
+        5Q+JhEgHemCVZSmpQkiTcKvs+GoKi2OUxg9azyg=
+X-Google-Smtp-Source: AA0mqf5rGuR6A19R+4UMtmBLU7egZTeVEig5R6C5FGeR/tVNROQ2OS1ljq8l0rbKNLm7IXSFP8AFlQ==
+X-Received: by 2002:a17:906:6809:b0:7c0:cd95:bbaf with SMTP id k9-20020a170906680900b007c0cd95bbafmr1538563ejr.460.1669997341317;
+        Fri, 02 Dec 2022 08:09:01 -0800 (PST)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id d13-20020a17090694cd00b007c0b28b85c5sm1976895ejy.138.2022.12.02.08.08.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 08:08:59 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id o30so3860901wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:08:59 -0800 (PST)
+X-Received: by 2002:a1c:cc04:0:b0:3cf:7716:8954 with SMTP id
+ h4-20020a1ccc04000000b003cf77168954mr52698641wmb.57.1669997339063; Fri, 02
+ Dec 2022 08:08:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c74c88ba6a17da2d36e2d340ce22af127bda8383.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 2 Dec 2022 08:08:46 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=U86PyVQP4wbhwEkzYprJxz2-S3ooniuYKJBNQOudx2uA@mail.gmail.com>
+Message-ID: <CAD=FV=U86PyVQP4wbhwEkzYprJxz2-S3ooniuYKJBNQOudx2uA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] arm64: dts: qcom: sdm845-db845c: fix audio codec
+ interrupt pin name
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022, Huang, Kai wrote:
-> On Wed, 2022-11-30 at 23:09 +0000, Sean Christopherson wrote:
-> > From: Chao Gao <chao.gao@intel.com>
-> > 
-> ...
-> 
-> > 
-> > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> > Signed-off-by: Chao Gao <chao.gao@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> Perhaps I am wrong, but I have memory that if someone has SoB but isn't the
-> original author should also have a Co-developed-by?
+Hi,
 
-This is the case where a patched is passed along as-is, e.g. same as when
-maintainers apply a patch.  Isaku posted Chao's patch, and then I came along and
-grabbed the patch that Isaku posted.  I could go back and grab Chao's patch
-directly, but Yuan's review was provided for the version Isaku posted, so I
-grabbed that version.
+On Fri, Dec 2, 2022 at 7:57 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The pin config entry should have a string, not number, for the GPIO used
+> as WCD9340 audio codec interrupt.
+>
+> Reported-by: Doug Anderson <dianders@chromium.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> Cc: Doug Anderson <dianders@chromium.org>
+>
+> Changes since v2:
+> 1. New patch.
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Reviewed-by: Yuan Yao <yuan.yao@intel.com>
-> > [sean: drop WARN that IRQs are disabled]
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> 
+Presumably should have a "Fixes" tag since this is likely a true bug.
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
