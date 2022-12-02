@@ -2,85 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1084E640CC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0725640C5D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbiLBSCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S233845AbiLBRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbiLBSCB (ORCPT
+        with ESMTP id S232550AbiLBRn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:02:01 -0500
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 10:01:58 PST
-Received: from ns.iliad.fr (ns.iliad.fr [212.27.33.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A36CE51D8;
-        Fri,  2 Dec 2022 10:01:57 -0800 (PST)
-Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id 91E7920055;
-        Fri,  2 Dec 2022 18:42:13 +0100 (CET)
-Received: from sakura (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id 816D920041;
-        Fri,  2 Dec 2022 18:42:13 +0100 (CET)
-Message-ID: <19ea39c87df3c54cbc487466f806bc157d0bf563.camel@freebox.fr>
-Subject: Re: [regression] Bug 216753 - 6e 6 ghz bands are disabled since
- 5.16 on intel ax211
-From:   Maxime Bizon <mbizon@freebox.fr>
-Reply-To: mbizon@freebox.fr
-To:     Dave Chiluk <chiluk@ubuntu.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        "Coelho, Luciano" <luciano.coelho@intel.com>,
-        "Greenman, Gregory" <gregory.greenman@intel.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Fri, 02 Dec 2022 18:42:13 +0100
-In-Reply-To: <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com>
-References: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
-         <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
-         <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
-         <9a03c244-adff-afaf-7385-d8e89cd3f338@leemhuis.info>
-         <02F8DDF1-EC0D-4EBD-88F5-7E000841C337@holtmann.org>
-         <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com>
-Organization: Freebox
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
+        Fri, 2 Dec 2022 12:43:56 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C90DEA47;
+        Fri,  2 Dec 2022 09:43:55 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n16-20020a05600c3b9000b003d08febff59so284421wms.3;
+        Fri, 02 Dec 2022 09:43:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I7gcmDY2i8H8nOgJd+/7YR9Wml+Y6wMDjwIDDCDK+EA=;
+        b=CK9HVBzPcVTyLBqrwqnixOSWS3Ky91StRIaYIBXIlZ8xZIHIKCn9fB++l4/aJ0jhE7
+         dzMEgmAD063h7+lGJNGgJ886wVblLnRQDs4AXDu2f59D8fUIeJ1oWRiS4sUDIuIM+I5U
+         Reo79LfldT8ZEILK2dn7dyU60mvPXwyBdT7f+F0QN+2EEnqyt70HVvea53RMEMLpeM2k
+         NwVU+0TiuDnaxsclFIbYfg2wGfkoykA8RTIYXtG/BQZFL6mqx9sVqM/tpAsSthGl6jfn
+         wXL3Hs7fU8KvsL8DUXlaBvSGEp2j3TkU2LQFbfUSUGQuGBcAiFcM4ORFOIAdr1ebyTp3
+         2LYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7gcmDY2i8H8nOgJd+/7YR9Wml+Y6wMDjwIDDCDK+EA=;
+        b=uojCxsZvMbrckC2atm795/HV5S8mIyGa0VCkNyxKWj4yT2bw1lo2eeB973m6598clo
+         HpZij/ok31GkIWMhjOzUaUNRxmo1ICuuwWF4htNexw3Z5LzH+4MpGQJ2QhESjCG2a9lG
+         6HcbsLWCjf/XkFLeUH/IJUVjJiArl0a/eP/Kwx6W013864SWRoAo7GZrP/P7VmaTALmS
+         l0EtmjxIHtZiKfUl94y9YqmI6JDaFJz9krLDV8QTmfnjQmoTVk03Z5OIn2oaL1NVnxI9
+         omrhHNX+lZJKIxdo3LY/jofXoyfsG4x4Kz9wIZT6BLsWqB49PTeRpEeVdLvlsQwzsoAY
+         mhAA==
+X-Gm-Message-State: ANoB5pnXIKCklbqLvYHOJvEe1Jtz/WD7TJFMDReEvmd28sIzZIaHhPUw
+        cfCsLjIp9pg591a6F1fW5o4=
+X-Google-Smtp-Source: AA0mqf5sVVP51gLMwRzFGWqSIDNnlCH4OFmV1E1eFgIYtbaDPna6XrofuDwAexiQyFJPpcx+4gkG+Q==
+X-Received: by 2002:a05:600c:5385:b0:3d0:8644:19fe with SMTP id hg5-20020a05600c538500b003d0864419femr2904719wmb.132.1670003034537;
+        Fri, 02 Dec 2022 09:43:54 -0800 (PST)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id fn9-20020a05600c688900b003cf75213bb9sm12467768wmb.8.2022.12.02.09.43.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 09:43:53 -0800 (PST)
+Message-ID: <10445a4d-0175-3e5e-aa74-9d232737a7c2@gmail.com>
+Date:   Fri, 2 Dec 2022 17:43:52 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH][next] KVM: selftests: Fix spelling mistake
+ "probabalistic" -> "probabilistic"
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221201091354.1613652-1-colin.i.king@gmail.com>
+ <Y4o0Nq4SKGZgDOxi@google.com>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+In-Reply-To: <Y4o0Nq4SKGZgDOxi@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 02/12/2022 17:21, Sean Christopherson wrote:
+> On Thu, Dec 01, 2022, Colin Ian King wrote:
+>> There is a spelling mistake in some help text. Fix it.
+> 
+> I assume you have a script/tool of some form to do spell checking?  If so, can
+> you point me at it?  I'd love to incorporate something like that into my workflow.
 
-On Fri, 2022-12-02 at 11:18 -0600, Dave Chiluk wrote:
+https://github.com/ColinIanKing/kernelscan
 
-Hello,
+It needs an appropriate dictionary to be installed. It's very fast (but 
+sometimes makes mistakes, I need to fix those!).
 
-> The 6ghz band becomes disabled as soon as I upgrade to the 5.16+
-> linux-stable kernels. So from a user perspective this really is a
-> case of a kernel upgrade breaking user-space.  This is what led me
-> down this rabbit hole here.
- 
-FWIW
+./kernelscan -k src_directory > mistakes.txt
 
-I have the same issue on a Lenovo T14 gen2 laptop with built-in ax210
-card, and sold as Wifi-6E compliant.
+I normally run this across the entire kernel git repo on a daily basis, 
+and diff the new results with the previous results using meld and figure 
+out what needs to be fixed.
 
-The exact patch you mention causes the issue, so it seems my bios does
-not return the correct values either.
+You may be better off with using codespell
 
-I recompiled the kernel with all those cmd_allow_xxx bitmaps set to ~0
-and 6Ghz works fine.
+Colin
 
--- 
-Maxime
-
-
+> 
+> Thanks!
+> 
+>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>> ---
+> 
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
 
