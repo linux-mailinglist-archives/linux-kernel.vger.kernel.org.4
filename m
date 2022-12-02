@@ -2,68 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38036405BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8396405C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbiLBL0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
+        id S232750AbiLBL0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbiLBL0d (ORCPT
+        with ESMTP id S233170AbiLBL0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:26:33 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C7984DE5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:26:32 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2AS0I3012954;
-        Fri, 2 Dec 2022 05:26:23 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=1W0ML02+yxS2Wjg2iU2lEiI24ccpZbfrln48kLKoNwQ=;
- b=k4QLG/h9W97e78kj96ebGQLfDrTxyU2WpgO9quBDQ9mAjkbuyl7Z+XrsslAQNF0IU75w
- xkGT/4W5uD3wXkhskXaYAegRBxLnWDPG5Lcq38tzoAYV6Psz9qtNbfxs0mmwx7FmsFy+
- TTjgsCw6OcOhMh8SinAQMdQhx8zTozwge4X0uk5Wrtm/cRZxjtWoG3SAoYYqw3xORgNV
- wKiI0S2GNAzM3pbENyxisBOeIdP4cU9nIqix97O043e/onTudXqCtoA/P33rGM7hKoV1
- vx56FZdZQLA/drbU3mMghem2q5vRNvp4GzygiFXSShvNFWhirGmjhtnGo9DeMJjxW29z Cg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3m6k2vsqev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 05:26:23 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 2 Dec
- 2022 05:26:21 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.20 via Frontend Transport; Fri, 2 Dec 2022 05:26:21 -0600
-Received: from [198.90.251.111] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9165EB10;
-        Fri,  2 Dec 2022 11:26:21 +0000 (UTC)
-Message-ID: <266bf397-4395-873b-c933-73a9e28f463c@opensource.cirrus.com>
-Date:   Fri, 2 Dec 2022 11:26:21 +0000
+        Fri, 2 Dec 2022 06:26:38 -0500
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31234CAF80;
+        Fri,  2 Dec 2022 03:26:36 -0800 (PST)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 6D3132FA6A;
+        Fri,  2 Dec 2022 13:26:33 +0200 (EET)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 0F3232FA69;
+        Fri,  2 Dec 2022 13:26:32 +0200 (EET)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 3640D3C0435;
+        Fri,  2 Dec 2022 13:26:28 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 2B2BQQ5M043907;
+        Fri, 2 Dec 2022 13:26:27 +0200
+Date:   Fri, 2 Dec 2022 13:26:26 +0200 (EET)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Dan Carpenter <error27@gmail.com>
+cc:     liqiong <liqiong@nfschina.com>, Peilin Ye <yepeilin.cs@gmail.com>,
+        Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
+Subject: Re: [PATCH] ipvs: initialize 'ret' variable in do_ip_vs_set_ctl()
+In-Reply-To: <Y4nSu7D5T2jDkXGK@kadam>
+Message-ID: <7758482-42e8-9057-b568-3980858267f@ssi.bg>
+References: <20221202032511.1435-1-liqiong@nfschina.com> <Y4nORiViTw0XlU2a@kadam> <9bc0af1a-3cf0-de4e-7073-0f7895b7f6eb@nfschina.com> <Y4nSu7D5T2jDkXGK@kadam>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/2] soundwire: Remove redundant zeroing of page registers
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <vkoul@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>, <sanyog.r.kale@intel.com>,
-        <yung-chuan.liao@linux.intel.com>
-References: <20221201140813.4062146-1-rf@opensource.cirrus.com>
- <002826da-f22f-9ce2-1688-345fe4e3c7ed@linux.intel.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <002826da-f22f-9ce2-1688-345fe4e3c7ed@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: Dxm0bNnxqnEuk_xNxjz6wG9NcDKN47bl
-X-Proofpoint-ORIG-GUID: Dxm0bNnxqnEuk_xNxjz6wG9NcDKN47bl
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: multipart/mixed; boundary="-1463811672-1864568413-1669980388=:40112"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,55 +51,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 18:31, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 12/1/22 08:08, Richard Fitzgerald wrote:
->> Writing zero to the page registers after each message transaction can add
->> up to a lot of overhead for codecs that need to transfer large amount of
->> data - for example a firmware download.
->>
->> There's no spec reason I can see for this zeroing. The page registers are
->> only used for a paged address. The bus code uses a non-paged address for
->> registers in page 0. It always writes the page registers at the start of
->> a paged transaction.
->>
->> If this zeroing was a workaround for anything, let me know and I will
->> re-implement the zeroing as a quirk that can be enabled only when it is
->> necessary.
-> 
-> It's a feature, not a bug :-)
-> 
-> The page registers have to be zeroed out so that any bus-management
-> command hits the page0 instead of using a value that was set by codec
-> driver for vendor-specific configurations.
-> 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Why would these bus management commands set bit 15 to indicate a paged
-access? If they don't set bit 15 the page registers are not used and
-bits 15..31 of the register address must be 0. Table 78 in the Soundwire
-1.2 spec. Table 71 in the 1.0 spec. Table 43 in the 0.6 draft spec.
+---1463811672-1864568413-1669980388=:40112
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
 
-> The implementation is far from optimal though, and indeed if we have
-> long transactions that are not interrupted by anything else we could
-> avoid resetting the page registers.
+	Hello,
+
+On Fri, 2 Dec 2022, Dan Carpenter wrote:
+
+> On Fri, Dec 02, 2022 at 06:18:37PM +0800, liqiong wrote:
+> > 
+> > 
+> > 在 2022年12月02日 18:07, Dan Carpenter 写道:
+> > > On Fri, Dec 02, 2022 at 11:25:11AM +0800, Li Qiong wrote:
+> > >> The 'ret' should need to be initialized to 0, in case
+> > >> return a uninitialized value because no default process
+> > >> for "switch (cmd)".
+> > >>
+> > >> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> > > If this is a real bug, then it needs a fixes tag.  The fixes tag helps
+> > > us know whether to back port or not and it also helps in reviewing the
+> > > patch.  Also get_maintainer.pl will CC the person who introduced the
+> > > bug so they can review it.  They are normally the best person to review
+> > > their own code.
+> > >
+> > > Here it would be:
+> > > Fixes: c5a8a8498eed ("ipvs: Fix uninit-value in do_ip_vs_set_ctl()")
+> > >
+> > > Which is strange...  Also it suggest that the correct value is -EINVAL
+> > > and not 0.
+> > >
+> > > The thing about uninitialized variable bugs is that Smatch and Clang
+> > > both warn about them so they tend to get reported pretty quick.
+> > > Apparently neither Nathan nor I sent forwarded this static checker
+> > > warning.  :/
+> > >
+> > > regards,
+> > > dan carpenter
+> > 
+> > It is not a real bug,   I  use tool (eg: smatch, sparse) to audit the
+> > code,  got this warning and check it, found may be a real problem.
 > 
-> I tried to implement a 'lazy approach' some time back, but at the time I
-> didn't see any benefits due to the limited number of configurations.
+> Yeah.  If it is a false positive just ignore it, do not bother to
+> silence wrong static checker warnings.
 > 
-> I can't remember where the code is, but the initial enhancement was
-> listed here: https://github.com/thesofproject/linux/issues/2881
+> The code in question here is:
 > 
->>
->> Richard Fitzgerald (2):
->>    soundwire: bus: Don't zero page registers after every transaction
->>    soundwire: bus: Remove unused reset_page_addr() callback
->>
->>   drivers/soundwire/bus.c             | 23 -----------------------
->>   drivers/soundwire/cadence_master.c  | 14 --------------
->>   drivers/soundwire/cadence_master.h  |  3 ---
->>   drivers/soundwire/intel_auxdevice.c |  1 -
->>   include/linux/soundwire/sdw.h       |  3 ---
->>   5 files changed, 44 deletions(-)
->>
+> 	if (len != set_arglen[CMDID(cmd)]) {
+> 
+> The only time that condition can be true is for the cases in the switch
+> statement.  So Peilin's patch is correct.
+> 
+> Smatch is bad at understanding arrays so Smatch cannot parse the if
+> statement above as a human reader can.
+
+	Yes, no bug in current code. But it is better to return the 
+default switch case with -EINVAL (not 0), in case new commands are added.
+Such patch should target net-next, it is just for compilers/tools
+that do not look into set_arglen[].
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+---1463811672-1864568413-1669980388=:40112--
+
