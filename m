@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304B463FF1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 04:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AE863FF1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 04:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbiLBDgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 22:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S232382AbiLBDiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 22:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiLBDgW (ORCPT
+        with ESMTP id S232249AbiLBDia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 22:36:22 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841C6DFB6E;
-        Thu,  1 Dec 2022 19:33:45 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NNdnz5vVGz501Qq;
-        Fri,  2 Dec 2022 11:33:43 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2B23XcpA051832;
-        Fri, 2 Dec 2022 11:33:38 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 2 Dec 2022 11:33:39 +0800 (CST)
-Date:   Fri, 2 Dec 2022 11:33:39 +0800 (CST)
-X-Zmail-TransId: 2af9638972134f291fb0
-X-Mailer: Zmail v1.0
-Message-ID: <202212021133398847947@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <dmitry.torokhov@gmail.com>
-Cc:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jeff@labundy.com>
-Subject: =?UTF-8?B?W1BBVENIIHYyXSBJbnB1dDogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B23XcpA051832
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63897217.002 by FangMail milter!
-X-FangMail-Envelope: 1669952023/4NNdnz5vVGz501Qq/63897217.002/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63897217.002/4NNdnz5vVGz501Qq
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 1 Dec 2022 22:38:30 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0029BBBFC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 19:36:04 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id u12so4987482wrr.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 19:36:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x3IEJJUdCdGG8U1WrhDSRoS/ptvIHsxOFNuOE68d/I0=;
+        b=oneK4l5oRB68i/urz6v9XuyXXIAzS8mXuk7hrFMm6ySyZDysNQoJkWSAtrpATrU1gE
+         qu/ph2JckzhdE/sll6ROKUMH9k5HMpskTdvwS9yz/9SpZh9V2uIvX4RqAVXyO88WNMHo
+         YEIxENk68RvtdLvRiPzRNzEoUkRKGenRv7jwE013/jqnejh97o7+cnccW3SUdV8DzNEZ
+         Bk2L3n3MwjHg6WwxMmwNjhAwOxlmx7pPf6KObVS08iT/mSnEwQdcFJ1s4zCQDit8JJGN
+         e+W8y9Xh/RbV11aI9550ywUTpBt0iAEawQksFGtkWp2YEeLYJRtmo5C3hWhLwfRJFXs7
+         Be7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x3IEJJUdCdGG8U1WrhDSRoS/ptvIHsxOFNuOE68d/I0=;
+        b=Dqnuxm5wOb2zL/oKWcwhDPZvjwshyfk4/dRXCfzsc7PubRtMAGNK4Wip0kzF3blLwY
+         8joVPUrnIOV/cXr9ajNb/mwq3tdvFplvuekY92oOOlXvBoOclCCe6CpImkAq9PPB8LSJ
+         8F/BEdrCPiBu4LuLGyHXD96CZmgffS40M9MgIPlNMjjZzX+aJEPNyXs+MM9OV25bKfVg
+         liNXUPtzaKgmlb12zPFCfKbsqavYce+I2vN39IgkuvhOQiYM/ZZZ8wtDjOsaBvFPGIFS
+         iKfAyIJv30T4YqdAEkAWXcgO+VP3M4DOQdFbXyuYgebPrlCOhTXueCB2kHMwxjfq/1ol
+         4UiA==
+X-Gm-Message-State: ANoB5pkcgSuGxbTXYM+63mTk5fwSY4R35kHWBZko73I94ga5Eg6ndcYh
+        4BlGkzUt5xTo2m6quCE302rqmyTlGTKNmt2AWRM=
+X-Google-Smtp-Source: AA0mqf5zltDU33DVT2ReMBUccg4qtzilym5j7/G+wHcvegLvavRcRsRjBnvW+BJWA/7y6crSrtPYvambJKRmYHUaEcw=
+X-Received: by 2002:a5d:55c9:0:b0:242:1057:40b8 with SMTP id
+ i9-20020a5d55c9000000b00242105740b8mr16070380wrw.182.1669952147042; Thu, 01
+ Dec 2022 19:35:47 -0800 (PST)
+MIME-Version: 1.0
+References: <1669797463-24887-1-git-send-email-u0084500@gmail.com> <Y4iTVmOA5P/aN2yb@sirena.org.uk>
+In-Reply-To: <Y4iTVmOA5P/aN2yb@sirena.org.uk>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Fri, 2 Dec 2022 11:35:35 +0800
+Message-ID: <CADiBU3-gr1OrH0_OtuWyAN8WwvZtPghC6zfB3NYuVTq4b+DZBw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] regulator: mt6370: Fix potential UAF issue
+To:     Mark Brown <broonie@kernel.org>
+Cc:     lgirdwood@gmail.com, lee@kernel.org, matthias.bgg@gmail.com,
+        yangyingliang@huawei.com, chiaen_wu@richtek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        ChiYuan Huang <cy_huang@richtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Mark Brown <broonie@kernel.org> =E6=96=BC 2022=E5=B9=B412=E6=9C=881=E6=97=
+=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A7:43=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Wed, Nov 30, 2022 at 04:37:42PM +0800, cy_huang wrote:
+>
+> > The original code uses i2c dev as the parent in order to reuse
+> > the 'regulator_of_get_init_data'. But this will cause regulation
+> > constraint devres attached to i2c dev, not the mfd cell platform
+> > device.
+>
+> This is a general issue which will affect a lot of MFDs, we would be
+> better to fix this by changing the API to provide a device to be used
+> for the devres allocations separately to the one used for looking up the
+> DT.
 
-Replace the open-code with sysfs_emit() to simplify the code.
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
-v1 -> v2
-Fix the code style.
- drivers/input/input.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/input/input.c b/drivers/input/input.c
-index ca2e3dd7188b..c061bbe96086 100644
---- a/drivers/input/input.c
-+++ b/drivers/input/input.c
-@@ -1362,8 +1362,8 @@ static ssize_t input_dev_show_##name(struct device *dev,		\
- {									\
- 	struct input_dev *input_dev = to_input_dev(dev);		\
- 									\
--	return scnprintf(buf, PAGE_SIZE, "%s\n",			\
--			 input_dev->name ? input_dev->name : "");	\
-+	return sysfs_emit(buf, "%s\n",			\
-+			input_dev->name ? input_dev->name : "");	\
- }									\
- static DEVICE_ATTR(name, S_IRUGO, input_dev_show_##name, NULL)
-
-@@ -1455,7 +1455,7 @@ static ssize_t inhibited_show(struct device *dev,
- {
- 	struct input_dev *input_dev = to_input_dev(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", input_dev->inhibited);
-+	return sysfs_emit(buf, "%d\n", input_dev->inhibited);
- }
-
- static ssize_t inhibited_store(struct device *dev,
-@@ -1502,7 +1502,7 @@ static ssize_t input_dev_show_id_##name(struct device *dev,		\
- 					char *buf)			\
- {									\
- 	struct input_dev *input_dev = to_input_dev(dev);		\
--	return scnprintf(buf, PAGE_SIZE, "%04x\n", input_dev->id.name);	\
-+	return sysfs_emit(buf, "%04x\n", input_dev->id.name);	\
- }									\
- static DEVICE_ATTR(name, S_IRUGO, input_dev_show_id_##name, NULL)
-
--- 
-2.25.1
+Not to affect too much, the better way may change the 'regulator_register' =
+API.
+Append it as regulator_register(dev, .....
+This could separate device object with devres allocation and DT lookup.
