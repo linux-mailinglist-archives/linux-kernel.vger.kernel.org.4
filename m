@@ -2,142 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E096B64088E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2A3640891
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiLBOhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S232315AbiLBOhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiLBOhF (ORCPT
+        with ESMTP id S232550AbiLBOhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:37:05 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6D4F4E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669991824; x=1701527824;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bH6DQJCbDWOMJnSePwTP9d5C8M7uG/7GnKUlXVVPz60=;
-  b=B4KfRhoKiDBaUHimm3+0Sh1yMXPqi492GJ3ipPH22EdGPPkzBOwp0Ip5
-   HsHgCQDqDdKcsBKvRZWz4CFpnsobpks16cSVePWBjDtUQpQP8c4BCj1ea
-   kJrR/ZF1JFMj43K2r6Fr5zRmX+EhuH0jDEoYeAW4KAN52JdT/WFPvRWT2
-   qm98LTMlw1fuHSxAAqpfxo+G/KCvjbnumJPsmOQCJJi+xXdoUNUvgqREF
-   +6CLqqchkX4gY5TizhO5kLntkTI/t2WjwbZdvMpz/f4k8JF9CTb04c7RW
-   KqSKMHEFxtIqO4Don48VdFjtkwFMGdgUtzf3kKTBHclc6fE1GB2gUKRdS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="380253673"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="380253673"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 06:36:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="645043622"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="645043622"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2022 06:36:16 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p179E-000DkN-0S;
-        Fri, 02 Dec 2022 14:36:16 +0000
-Date:   Fri, 02 Dec 2022 22:35:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 1ab6c3f2e9237692f4d3d4a555d1ac31290ae0d1
-Message-ID: <638a0d32.5ue94wgSe4r1Qecv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 2 Dec 2022 09:37:17 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A93D220D2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:37:10 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id vp12so11986569ejc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:37:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R7S1hXfJrdA2OO05qT0bVLolHIgquQtzY/qiJ0ELKso=;
+        b=iFbV+ZBpq8wDqSDeD0899VZYy/j7fXEh0JVZ4Ka/doaR3TEJKeRuxWUCeWOlPa2fPr
+         abC1KxI3WehkC31cOilHKIqbJIsG5th63gllZOJqo10ba+MTr51kqHv2Anx6CKgXJwY1
+         Qn/K+41ta0ATg6z/bJC9YrqtPWaQT/RDRGo7A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R7S1hXfJrdA2OO05qT0bVLolHIgquQtzY/qiJ0ELKso=;
+        b=A92s9KNQISx5Mc4kF6LFX6vrIpO23hOBjaepiSaqjq60pMFj8M3htvXD50WFIqhAGk
+         QTXElEUBgGx9IWhvI84G75Ix9xxPGndh+gssLN/YvQO0xFAbPbbmSGJjP1XnJjQNSL4b
+         XFg+RaQ5v3/cl0Uyx6oZ7vwmr9NKZ8p3Cm/SRBgsFi9iDikvO61VW9osM8uPzGHVxHcA
+         yRsMhkXhjt81cQI7OcY4qVXk+d0Y4J6UIB9ioardQ6cQK6gg3k7lwOxuirjCN6Ilklx8
+         KWfGM5e1zYTpFqNqbb9eKKuQYXb9IkWmIcaRec9PAS8TALVl3VIgpehQAURMNy5O1Gag
+         Zaig==
+X-Gm-Message-State: ANoB5pk0Hfbffr7X6LGnUaJRjg1YAODU2sG62wTVDP0U0W6K0DXSGHz7
+        E3oUlbH4YsWiiX82M13pQ3o7ERPZHfDndrNKM5s=
+X-Google-Smtp-Source: AA0mqf6g8p8aO+wBRpj9UqnDoICu6gq6Fmhi2QTB3huj0gd9k4sMKcKEFeDJFqUsuXHecb/Idl8ggA==
+X-Received: by 2002:a17:906:d1cc:b0:7c0:ae21:f1ff with SMTP id bs12-20020a170906d1cc00b007c0ae21f1ffmr7130084ejb.318.1669991828612;
+        Fri, 02 Dec 2022 06:37:08 -0800 (PST)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id b18-20020aa7d492000000b004615e1bbaf4sm2986313edr.87.2022.12.02.06.37.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 06:37:07 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso4428819wmo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:37:07 -0800 (PST)
+X-Received: by 2002:a05:600c:3c8e:b0:3d0:69f4:d3d0 with SMTP id
+ bg14-20020a05600c3c8e00b003d069f4d3d0mr12058890wmb.93.1669991827159; Fri, 02
+ Dec 2022 06:37:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118164201.321147-1-krzysztof.kozlowski@linaro.org>
+ <20221118164201.321147-2-krzysztof.kozlowski@linaro.org> <CAD=FV=XeaskcBRVRQDoha7Xiv9j57fuvtcSJUeN7HCZSGVJ8uQ@mail.gmail.com>
+ <68bcdf25-e8e3-f817-f213-efb0bce3f43a@linaro.org>
+In-Reply-To: <68bcdf25-e8e3-f817-f213-efb0bce3f43a@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 2 Dec 2022 06:36:54 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WBNpeWK31dCgzX5QAuR7AySkp_dEyY8WK3o8+SaiPxOg@mail.gmail.com>
+Message-ID: <CAD=FV=WBNpeWK31dCgzX5QAuR7AySkp_dEyY8WK3o8+SaiPxOg@mail.gmail.com>
+Subject: Re: [RFT PATCH v2 2/2] arm64: dts: qcom: sdm845: align TLMM pin
+ configuration with DT schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Fritz Koenig <frkoenig@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 1ab6c3f2e9237692f4d3d4a555d1ac31290ae0d1  Merge branch 'nolibc.2022.10.28a' into HEAD
+Hi,
 
-elapsed time: 784m
+On Fri, Dec 2, 2022 at 12:15 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> >>                         qup_uart6_4pin: qup-uart6-4pin-state {
+> >> -
+> >> -                               cts-pins {
+> >> +                               qup_uart6_4pin_cts: cts-pins {
+> >>                                         pins = "gpio45";
+> >>                                         function = "qup6";
+> >> -                                       bias-pull-down;
+> >
+> > After your patch, where is the above bias set for cheza, db845c,
+> > oneplus, shift-axolotl, ...?
+> >
+> >
+> >>                                 };
+> >>
+> >> -                               rts-tx-pins {
+> >> +                               qup_uart6_4pin_rts_tx: rts-tx-pins {
+> >>                                         pins = "gpio46", "gpio47";
+> >>                                         function = "qup6";
+> >> -                                       drive-strength = <2>;
+> >> -                                       bias-disable;
+> >
+> > After your patch, where is the above bias / drive-strength set?
+>
+> They don't use 4-pin setup. If they use, I would assume they will
+> override the entries just like sdm850 boards (where I override it to set
+> these).
+>
+> Alternatively I can keep it in DTSI, but it is not really property of
+> the SoC.
 
-configs tested: 60
-configs skipped: 2
+I see things like:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+.../sdm845-cheza.dtsi:     pinctrl-0 = <&qup_uart6_4pin>;
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a013
-x86_64                              defconfig
-x86_64                        randconfig-a011
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a015
-s390                             allyesconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-ia64                             allmodconfig
-arc                  randconfig-r043-20221201
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-riscv                randconfig-r042-20221201
-powerpc                           allnoconfig
-s390                 randconfig-r044-20221201
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-sh                               allmodconfig
-i386                          randconfig-a014
-mips                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-powerpc                          allmodconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                                defconfig
-x86_64                            allnoconfig
-i386                             allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-hexagon              randconfig-r041-20221201
-hexagon              randconfig-r045-20221201
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-k001
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+...before your patch that would get the bias/drive strength from the
+SoC dtsi, right? After your patch, you've removed it from the dtsi but
+not added it to the board. ...so I think it's a net change. Did I mess
+up / miss something?
