@@ -2,119 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B2E640790
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF1D640798
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbiLBNPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 08:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S232923AbiLBNRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 08:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiLBNPh (ORCPT
+        with ESMTP id S233062AbiLBNRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 08:15:37 -0500
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D01C2D34;
-        Fri,  2 Dec 2022 05:15:36 -0800 (PST)
-Received: by mail-pj1-f51.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so5157836pjb.0;
-        Fri, 02 Dec 2022 05:15:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CXax7MzLMmcpUbR7j4j5Z+A0zH0BPeP/1NeIQzWumhA=;
-        b=8MVgukWp4/TCO8U8xhF3HBlRuihurmBl5EToj1A0UGgweTuDnjoxXmT+M2sIOwfcPH
-         0vno5/8eCo5vWKUUD+7uuo6bRQtXOq6M6qjQyXeINf3xTCbPBLU3EKTDVycAMifWQ/XM
-         Zkd++EPIfNFF89kcB+BYNzRC4SV+ww8iDfnGOhgwKifu+lQ9F25SGEtXavCJSD8/vdJh
-         tNABwC9jLgePVYozT1OGRHeoNb3NjCusPogPVQiwZjct+X/acYLsO3B6YR+F1FxTOsYl
-         WytuycO3//mF44NxzQGtihEQ5/V5/dRZlcc731MLnVTOlrlmZ2Zt1PNz7d1gIssvPhg3
-         /9Cw==
-X-Gm-Message-State: ANoB5pniOyt/e3F6X5wntgjntgmFIJJm1bbiqI6WC1yAr18aemlykh5y
-        hnRvCaW0kgyd8U7ntsrJBHYUaj7ylpxnVyOkmo0MBvmO
-X-Google-Smtp-Source: AA0mqf7rou+HDTGrB7duYcNJqBj1ifeMeXSb9YluHr/oNmFkiW6kdUvNrTQ1CO5rfw2zo45qNcQto+7cIbG4RE18Brw=
-X-Received: by 2002:a17:90a:a60c:b0:213:2e97:5ea4 with SMTP id
- c12-20020a17090aa60c00b002132e975ea4mr81737675pjq.92.1669986934229; Fri, 02
- Dec 2022 05:15:34 -0800 (PST)
+        Fri, 2 Dec 2022 08:17:45 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EFE521BE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 05:17:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE2B323A;
+        Fri,  2 Dec 2022 05:17:44 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.38.229])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DB9C3F73D;
+        Fri,  2 Dec 2022 05:17:36 -0800 (PST)
+Date:   Fri, 2 Dec 2022 13:17:30 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
+Subject: Re: [PATCH v2 1/3] arm64: Prohibit instrumentation on
+ arch_stack_walk()
+Message-ID: <Y4n66ioPq0BZF4Pi@FVFF77S0Q05N>
+References: <166994750386.439920.1754385804350980158.stgit@devnote3>
+ <166994751368.439920.3236636557520824664.stgit@devnote3>
 MIME-Version: 1.0
-References: <20221130174658.29282-1-mailhol.vincent@wanadoo.fr>
- <20221130174658.29282-8-mailhol.vincent@wanadoo.fr> <20221202122702.rlxvatn2m6dx7zyp@pengutronix.de>
-In-Reply-To: <20221202122702.rlxvatn2m6dx7zyp@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 2 Dec 2022 22:15:23 +0900
-Message-ID: <CAMZ6Rq+f9wMG7H0k-c4T5Jo+64gk8+0b=tP8Vz26-cx0odG34Q@mail.gmail.com>
-Subject: Re: [PATCH v5 7/7] Documentation: devlink: add devlink documentation
- for the etas_es58x driver
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <166994751368.439920.3236636557520824664.stgit@devnote3>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2 Dec. 2022 at 21:49, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 01.12.2022 02:46:58, Vincent Mailhol wrote:
-> > List all the version information reported by the etas_es58x driver
-> > through devlink. Also, update MAINTAINERS with the newly created file.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  .../networking/devlink/etas_es58x.rst         | 36 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  2 files changed, 37 insertions(+)
-> >  create mode 100644 Documentation/networking/devlink/etas_es58x.rst
-> >
-> > diff --git a/Documentation/networking/devlink/etas_es58x.rst b/Documentation/networking/devlink/etas_es58x.rst
-> > new file mode 100644
-> > index 000000000000..9893e57b625a
-> > --- /dev/null
-> > +++ b/Documentation/networking/devlink/etas_es58x.rst
-> > @@ -0,0 +1,36 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +==========================
-> > +etas_es58x devlink support
-> > +==========================
-> > +
-> > +This document describes the devlink features implemented by the
-> > +``etas_es58x`` device driver.
-> > +
-> > +Info versions
-> > +=============
-> > +
-> > +The ``etas_es58x`` driver reports the following versions
-> > +
-> > +.. list-table:: devlink info versions implemented
-> > +   :widths: 5 5 90
-> > +
-> > +   * - Name
-> > +     - Type
-> > +     - Description
-> > +   * - ``fw``
-> > +     - running
-> > +     - Version of the firmware running on the device. Also available
-> > +       through ``ethtool -i`` as the first member of the
-> > +       ``firmware-version``.
-> > +   * - ``bl``
->             ^^
->             fw.bootloader?
->
-> Fixed that up while applying.
+On Fri, Dec 02, 2022 at 11:18:33AM +0900, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Mark arch_stack_walk() as noinstr instead of notrace and inline functions
+> called from arch_stack_walk() as __always_inline so that user does not
+> put any instrumentations on it, because this function can be used from
+> return_address() which is used by lockdep.
 
-Thanks for catching this. "fw" was the name in v4. "fw.bootloader" is
-indeed correct.
+Hmmm... since arch_stack_walk is marked as notrace, that will be prohibited by
+default unless the kernel was built with CONFIG_KPROBE_EVENTS_ON_NOTRACE=y,
+and the commit message for that says:
 
+│ This option disables such protection and allows you to put kprobe                                                                                                                                   │
+│ events on ftrace functions for debugging ftrace by itself.                                                                                                                                          │
+│ Note that this might let you shoot yourself in the foot.
 
-Yours sincerely,
-Vincent Mailhol
+... and IIUC we generally don't expect people to set that, and that might be
+worth calling out in the commit message.
+
+> Without this, if the kernel built with CONFIG_LOCKDEP=y, just probing
+> arch_stack_walk() via <tracefs>/kprobe_events will crash the kernel on
+> arm64.
+> 
+>  # echo p arch_stack_walk >> ${TRACEFS}/kprobe_events
+>  # echo 1 > ${TRACEFS}/events/kprobes/enable
+
+I had a go at testing this patch, and it fixes the crash with the reproducer
+above, but there are plenty of other instances in stacktrace.c that lead to the
+same sort of crash, e.g.
+
+# echo p stackinfo_get_task >> ${TRACEFS}/kprobe_events
+# echo 1 > ${TRACEFS}/events/kprobes/enable
+
+... so I think there's more that we need to do to fix this generally.
+
+Note: I found interesting functions to try tracing by looking at the output of:
+
+  aarch64-linux-objdump -t arch/arm64/kernel/stacktrace.o | grep -w '.text'
+
+That all said, I think this patch is nice-to-have, and that we can address the
+other cases as a follow-up, so for this patch as-is (with or without some
+wording regarding CONFIG_KPROBE_EVENTS_ON_NOTRACE):
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
+>   kprobes: Failed to recover from reentered kprobes.
+>   kprobes: Dump kprobe:
+>   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+>   ------------[ cut here ]------------
+>   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+>   kprobes: Failed to recover from reentered kprobes.
+>   kprobes: Dump kprobe:
+>   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+>   ------------[ cut here ]------------
+>   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+>   PREEMPT SMP
+>   Modules linked in:
+>   CPU: 0 PID: 17 Comm: migration/0 Tainted: G                 N 6.1.0-rc5+ #6
+>   Hardware name: linux,dummy-virt (DT)
+>   Stopper: 0x0 <- 0x0
+>   pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : kprobe_breakpoint_handler+0x178/0x17c
+>   lr : kprobe_breakpoint_handler+0x178/0x17c
+>   sp : ffff8000080d3090
+>   x29: ffff8000080d3090 x28: ffff0df5845798c0 x27: ffffc4f59057a774
+>   x26: ffff0df5ffbba770 x25: ffff0df58f420f18 x24: ffff49006f641000
+>   x23: ffffc4f590579768 x22: ffff0df58f420f18 x21: ffff8000080d31c0
+>   x20: ffffc4f590579768 x19: ffffc4f590579770 x18: 0000000000000006
+>   x17: 5f6b636174735f68 x16: 637261203d207264 x15: 64612e202c30203d
+>   x14: 2074657366666f2e x13: 30633178302f3078 x12: 302b6b6c61775f6b
+>   x11: 636174735f686372 x10: ffffc4f590dc5bd8 x9 : ffffc4f58eb31958
+>   x8 : 00000000ffffefff x7 : ffffc4f590dc5bd8 x6 : 80000000fffff000
+>   x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+>   x2 : 0000000000000000 x1 : ffff0df5845798c0 x0 : 0000000000000064
+>   Call trace:
+>   kprobes: Failed to recover from reentered kprobes.
+>   kprobes: Dump kprobe:
+>   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+>   ------------[ cut here ]------------
+>   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+> 
+> Fixes: 39ef362d2d45 ("arm64: Make return_address() use arch_stack_walk()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  Changes in v2:
+>   - Use noinstr instead of NOKPROBE_SYMBOL()
+>   - Use __always_inline because nokprobe_inline will be changed if
+>     CONFIG_KPROBES=n.
+>   - Fix indentation.
+> ---
+>  arch/arm64/kernel/stacktrace.c |   10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index 634279b3b03d..117e2c180f3c 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -23,8 +23,8 @@
+>   *
+>   * The regs must be on a stack currently owned by the calling task.
+>   */
+> -static inline void unwind_init_from_regs(struct unwind_state *state,
+> -					 struct pt_regs *regs)
+> +static __always_inline void unwind_init_from_regs(struct unwind_state *state,
+> +						  struct pt_regs *regs)
+>  {
+>  	unwind_init_common(state, current);
+>  
+> @@ -58,8 +58,8 @@ static __always_inline void unwind_init_from_caller(struct unwind_state *state)
+>   * duration of the unwind, or the unwind will be bogus. It is never valid to
+>   * call this for the current task.
+>   */
+> -static inline void unwind_init_from_task(struct unwind_state *state,
+> -					 struct task_struct *task)
+> +static __always_inline void unwind_init_from_task(struct unwind_state *state,
+> +						  struct task_struct *task)
+>  {
+>  	unwind_init_common(state, task);
+>  
+> @@ -186,7 +186,7 @@ void show_stack(struct task_struct *tsk, unsigned long *sp, const char *loglvl)
+>  			: stackinfo_get_unknown();		\
+>  	})
+>  
+> -noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  			      void *cookie, struct task_struct *task,
+>  			      struct pt_regs *regs)
+>  {
+> 
