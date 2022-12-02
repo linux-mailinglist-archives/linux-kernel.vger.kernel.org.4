@@ -2,156 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEF6640016
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA72C640018
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbiLBGAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 01:00:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S232238AbiLBGB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 01:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiLBGAH (ORCPT
+        with ESMTP id S231367AbiLBGBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 01:00:07 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3327B57F;
-        Thu,  1 Dec 2022 22:00:06 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NNhyt4SPFzJp4n;
-        Fri,  2 Dec 2022 13:56:38 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Dec 2022 14:00:03 +0800
-Subject: Re: [PATCH v2 1/3] ext4: fix incorrect calculate 'reserved' in
- '__es_remove_extent' when enable bigalloc feature
-To:     Eric Whitney <enwlinux@gmail.com>, Ye Bin <yebin@huaweicloud.com>
-References: <20221121121434.1061725-1-yebin@huaweicloud.com>
- <20221121121434.1061725-2-yebin@huaweicloud.com>
- <Y4ko3OL57iyiRC0W@debian-BULLSEYE-live-builder-AMD64>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jack@suse.cz>,
-        <syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com>
-From:   "yebin (H)" <yebin10@huawei.com>
-Message-ID: <63899462.6030100@huawei.com>
-Date:   Fri, 2 Dec 2022 14:00:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Fri, 2 Dec 2022 01:01:23 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2032.outbound.protection.outlook.com [40.92.103.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173897B57F;
+        Thu,  1 Dec 2022 22:01:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U1MRFFEBaOlnKpgZdRI9mfN0UPZ+1Q5+6X2j2UDEzqHSpHDuTf4z1Kcrs489XJtTkvh8IyDDq4XhcjvzCxW3mI8m3lYx+lbrXyGkxdreb7c2nSqsY68khZm5G+wb+68k3uVWdQ7TPCbdLHLoSFM5KrCTR+O/2t/7LzJZNuyLfKo32dso+AR2WL3j9hj/43pWfRlAP9yiJnseBylfIWFYTMDO5Ivz6Z/FPSpQe8cIYgsfMUsdKVReCZVLpAQm01lPeyWzwYSwGJiZapJtCpKHqyZeGhVU55ZKrWK1omrFu+FuA5W3ZMP+4rZo5Yb2kqZ02zhPO7o2NINzTBvG4Ee/Xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xV6Pvff4GuBymTgIIBw/Ps3ArFxz1+1GoeMc/bsJq8A=;
+ b=lHcmI/GIbpcf1LZHmXKshYvhWylw9O2aOM5H8qLu9LzpNRyrbt2y77FZG/s6Qe5d4CICRuFGYVXlP8Ib4r1wQASvWMmSAMaoxK5tJ6+Qo0Hfs5Yf6mN/LvljRMTZoq6dQex0eE2WgVDs7NO7pN534zpoXeEozxjuXKDejnhNNDIwLQkMXJSQS+bqqSygIVPagK8ZK1aFtBmWKzA43CvCvw04agFF4CjZYe7xowvGXUgDq7OPTyND//xaVsKIMqwSABAIj/YfYszaPFjguUlSWcxQrI/KAY3dn72oEDqc1Jm5Do+d0hGNr4c1svDHtG+R1YvwLYJ1JqySHFrZgKWazg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xV6Pvff4GuBymTgIIBw/Ps3ArFxz1+1GoeMc/bsJq8A=;
+ b=o/aykkAP72ZCrVg5rVQkpadD3omK1XYsTp5T4Otq/Nt04xMUvVfznXSPoaKrn2/JqA3Es0WEs+sNcvAWsFhP/HXvnrxqXEKvkJ+h80APOhbXBNjj7kpZfJSOt1y0M0ZzQD8O9s6Hth3SB5xw6T3DELHn2CGHTNcqPXeTRKdxrv92ItyifacUccpouUIy41o9pRV+pumXMtAu44Esq6Y1UI4Jee3rTcipBt1azUrv7BmuP1mKzIIJAAk11GOM1eg2G0zuD6uhXMe1qBDSNR1QgywB4i/KKcan3/LwvKtPtPgmIS6L3X5xYfrEQd3ARtM832frm+h6VWRnmq4PK+B4sw==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ MA1PR01MB4242.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:15::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.8; Fri, 2 Dec 2022 06:01:16 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1%4]) with mapi id 15.20.5880.008; Fri, 2 Dec 2022
+ 06:01:16 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     "willy@infradead.org" <willy@infradead.org>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "slava@dubeyko.com" <slava@dubeyko.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] hfsplus: Add module parameter to enable force writes
+Thread-Topic: [PATCH] hfsplus: Add module parameter to enable force writes
+Thread-Index: AQHZBhN9MNP94cgWt0ywcFHXTOJUWg==
+Date:   Fri, 2 Dec 2022 06:01:16 +0000
+Message-ID: <53821C76-DAFE-4505-9EC8-BE4ACBEA9DD9@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [IfNeKhMxLx8eMsXb+qLYm2qBYioAwsh5I/maREVBl9qM+kijCPbB+3SA7iA5FfLx]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MA1PR01MB4242:EE_
+x-ms-office365-filtering-correlation-id: 9e9d8063-ca8a-4233-7606-08dad42a9fd4
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IayyXXUM/sLhnuq8/SaaFbQUcKFwFGPBHZV8oEhc1lPjteZpTcLa8I9Rt6feXVu0gO+tVt5H34gpp+hj0dbuRvxrAX+DhME/ekZU0C9IBGmEcAaetgnyb4E6HhYStoVYln1tE7+SuIr6FBq5+Ks3QWXpAd0olJpsfYUBpKib58jn6EGvJDyAv/NNMX/knTdcivN77FxGPlnPEhmT+pexP1LLkMUiNgcIMI5eS3nJQxBj8xMMC8dlEegYMlF+p4YtREuFi4pAXjGod0HiWdYgtNH1+V/MwuGkf/12eVgRGGk25dZFtQkoY4kApgo7fIpQjWewq+exiI8Px68in7M/wrER5jl1oYOPMSza1vaMJwqfNo6fNStu2cDLKx3ZOdNjVwV9WVAd0T4FMOvnCPI0foSGFsRk8VgYz1gX8Fr6xIV5wkhONSr7Jc1q+gXkZJBBpuYWAdpIB1Uurxrt2jUcVtsq8IPiEIfUQEAVEhD+Z8jXeWE/fCqA6vhVfZ91gMBdej9+NYyvdzrRPMnTHX5yw5gpdnVQFAwBPyLFwiLS+NB3IzOQSt+H8sD6D2VoG/nmXeg1/hAUp/hvIE6k0XUBTHfZKpUs/ZvbI2MZABCqsEA=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?80oa2n1amOZByGpdo6WN1R0miPgkSr9BkyHOCI/uRvySnmAQRmzpSPtPOWKx?=
+ =?us-ascii?Q?ok1ckxw19P6W6Tqe76i1L5KEJg7lDMmQahZKxNIK7TMFAPJTV5AflrbcevXB?=
+ =?us-ascii?Q?wKE3UUqjlzcU2Xw4QrnCsin+YT8tmxw7FLPQuG2i4oL5vjnWjlPizBfU73yg?=
+ =?us-ascii?Q?3Sx0KEfI6H/aK17HbVaTgGvJ3rGQDGiw6M8ehUheiFK/Z7hJB10DHJbi/zIN?=
+ =?us-ascii?Q?+XXMHYoh0GUS/RiWklk2vo4d7CesTr4FYbniqQVypO55oenPNgKatfAPTkkG?=
+ =?us-ascii?Q?U78eNSPe+G8i7KdpI2SHYFOKoy06Sgftn1UqSmuG2O9Ns4rZT9BESXTMDboU?=
+ =?us-ascii?Q?mpUKOybpcwfV2NahXBmj/7FzaHbVvwW8n4+OMx6XMD+W1E40nux5cAZgA9y/?=
+ =?us-ascii?Q?MerCs21dmf70l79krRHwIeGuZwbTCK4dZAFdDgTyeSJ0eBVbq9iWegPsotu/?=
+ =?us-ascii?Q?KOBJwswN4IZpkT0mJh890JCJJVzEd8XpUCgL5xMpXnhcghbwtDFQEyKRgvTV?=
+ =?us-ascii?Q?Kw7ww1haHuCqrlTC/0EkqqplYxNwNzKg89YLrwasDZnwQb12gwzgXwPdTH2Q?=
+ =?us-ascii?Q?eQowz9e+TIrrbZG8UgM+KILG3Xm7jrKu0GOR6YItWIZsWiy4XLP1D26Nsam0?=
+ =?us-ascii?Q?Zya8qKdmDEAmzGWub7LZMXA3J2UuqUdDtW9WDVaH6a7C0sXf04ga9z4uA7ol?=
+ =?us-ascii?Q?ltxrKlgpB5FtCizvAXK4zU3Ip9sR6eeBclJz/04lfS47zhU57m8qryK8WTeY?=
+ =?us-ascii?Q?Rv28qYDsnJeReYx1SEEaw9rhjBvK4NRhchCJVYwPNwOiVZxK4DbXb7ELbjBS?=
+ =?us-ascii?Q?HFt6c9e3G8gpWi5euGtLJScIZMEbCC3gpC2MNypn9f4+uI+5Hmc8X0DpLcMA?=
+ =?us-ascii?Q?x4xgyQB+q2E2fn4bUWs2YSYbz0RQzyurGRhYT6TR+kNXc06UkIcm/hhENIFu?=
+ =?us-ascii?Q?7QmaA4wh/E+xDKhuE/+V/Px69ZmJkimj8UEU6k+JkeWoUZycJTEm+XhurfWr?=
+ =?us-ascii?Q?vFfAh4huWL2UI5jKBl1zZb/1UKU2tcq7yd8YS2CQsjWuqlWGU9YOmgQQhmqb?=
+ =?us-ascii?Q?EOdnkmZAEZL0oOsvo4018eDLz3w9RmWK5TtTTtiZLpmwk2GD0vS2VCGPGAdc?=
+ =?us-ascii?Q?XtWqJrasFEUzaZxJz3iAYdLT+zB1acZBRXbJwOVNbi6DXS1a4Tmzt7iZmVLv?=
+ =?us-ascii?Q?18DH/F/WkOMInGYUovlE8O0Z2mYhMTnXG/7LnKKxc/VzfNJqHgs/w7/OFCqG?=
+ =?us-ascii?Q?OfH/9/uxUaVql90YSZtWHd7RRYAPaCHKruXVugmIC83pctBO5BpBhi4/O89m?=
+ =?us-ascii?Q?N4kVB2XuHIg8BDwwqU9N/C8GBZW+L5a4zBf/Wo4goxULvQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <0B621F8D5A9EEA41849DEF499AB7DB19@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <Y4ko3OL57iyiRC0W@debian-BULLSEYE-live-builder-AMD64>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e9d8063-ca8a-4233-7606-08dad42a9fd4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 06:01:16.1250
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA1PR01MB4242
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Aditya Garg <gargaditya08@live.com>
 
+This patch enables users to permanently enable writes of HFS+ locked
+and/or journaled volumes using a module parameter.
 
-On 2022/12/2 6:21, Eric Whitney wrote:
-> * Ye Bin <yebin@huaweicloud.com>:
->> From: Ye Bin <yebin10@huawei.com>
->>
->> Syzbot report issue as follows:
->> EXT4-fs error (device loop0): ext4_validate_block_bitmap:398: comm rep: bg 0: block 5: invalid block bitmap
->> EXT4-fs (loop0): Delayed block allocation failed for inode 18 at logical offset 0 with max blocks 32 with error 28
->> EXT4-fs (loop0): This should not happen!! Data will be lost
->>
->> EXT4-fs (loop0): Total free blocks count 0
->> EXT4-fs (loop0): Free/Dirty block details
->> EXT4-fs (loop0): free_blocks=0
->> EXT4-fs (loop0): dirty_blocks=32
->> EXT4-fs (loop0): Block reservation details
->> EXT4-fs (loop0): i_reserved_data_blocks=2
->> EXT4-fs (loop0): Inode 18 (00000000845cd634): i_reserved_data_blocks (1) not cleared!
->>
->> Above issue happens as follows:
->> Assume:
->> sbi->s_cluster_ratio = 16
->> Step1: Insert delay block [0, 31] -> ei->i_reserved_data_blocks=2
->> Step2:
->> ext4_writepages
->>    mpage_map_and_submit_extent -> return failed
->>    mpage_release_unused_pages -> to release [0, 30]
->>      ext4_es_remove_extent -> remove lblk=0 end=30
->>        __es_remove_extent -> len1=0 len2=31-30=1
->>   __es_remove_extent:
->>   ...
->>   if (len2 > 0) {
->>    ...
->> 	  if (len1 > 0) {
->> 		  ...
->> 	  } else {
->> 		es->es_lblk = end + 1;
->> 		es->es_len = len2;
->> 		...
->> 	  }
->>    	if (count_reserved)
->> 		count_rsvd(inode, lblk, orig_es.es_len - len1 - len2, &orig_es, &rc);
->> 	goto out; -> will return but didn't calculate 'reserved'
->>   ...
->> Step3: ext4_destroy_inode -> trigger "i_reserved_data_blocks (1) not cleared!"
->>
->> To solve above issue if 'len2>0' call 'get_rsvd()' before goto out.
->>
->> Reported-by: syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
->> ---
->>   fs/ext4/extents_status.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
->> index cd0a861853e3..4684eaea9471 100644
->> --- a/fs/ext4/extents_status.c
->> +++ b/fs/ext4/extents_status.c
->> @@ -1371,7 +1371,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->>   		if (count_reserved)
->>   			count_rsvd(inode, lblk, orig_es.es_len - len1 - len2,
->>   				   &orig_es, &rc);
->> -		goto out;
->> +		goto count;
->>   	}
->>   
->>   	if (len1 > 0) {
->> @@ -1413,6 +1413,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->>   		}
->>   	}
->>   
->> +count:
->>   	if (count_reserved)
->>   		*reserved = get_rsvd(inode, end, es, &rc);
->>   out:
->> -- 
->> 2.31.1
->>
-> I'm unable to find the sysbot report for this patch, so I can't verify that
-> this fix works.  The more serious problem would be whatever is causing
-> the invalid block bitmap and delayed allocation failure messages before the
-> i_reserved_data_blocks message.  Perhaps that's simply what syzkaller set
-> up, but it's not clear from this posting.  Have you looked for the cause
-> of those first two messages?
->
-> However, by inspection this patch should fix an obvious bug causing that last
-> message, introduced by 8fcc3a580651 ("ext4: rework reserved cluster accounting
-> when invalidating pages").  A Fixes tag should be added to the patch.  Also,
-> the readability of the code should be improved by changing the label "count" to
-> the more descriptive "out_get_reserved".
->
-> With those two changes, feel free to add:
->
-> Reviewed-by: Eric Whitney <enwlinux@gmail.com>
->
-> Eric
-> .
+Why module parameter?
+Reason being, its not convenient to manually mount the volume with force
+everytime. There are use cases which are fine with force enabling writes
+on journaled volumes. I've seen many on various online forums and I am one
+of them as well.
 
-Thanks for your suggestion. I will send another version.
+Isn't it risky?
+Yes obviously it is, as the driver itself warns users for the same. But
+any user using the parameter obviously shall be well aware of the risks
+involved. To be honest, I've been writing on a 100Gb journaled volume for
+a few days, including both large and small files, and haven't faced any
+corruption yet.
 
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+---
+ fs/hfsplus/super.c | 46 ++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 36 insertions(+), 10 deletions(-)
+
+diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
+index 122ed89eb..2367a2407 100644
+--- a/fs/hfsplus/super.c
++++ b/fs/hfsplus/super.c
+@@ -24,6 +24,16 @@ static void hfsplus_free_inode(struct inode *inode);
+ #include "hfsplus_fs.h"
+ #include "xattr.h"
+=20
++static unsigned int force_journaled_rw;
++module_param(force_journaled_rw, uint, 0644);
++MODULE_PARM_DESC(force_journaled_rw, "Force enable writes on Journaled HFS=
++ volumes. "
++		"([0] =3D disabled, 1 =3D enabled)");
++
++static unsigned int force_locked_rw;
++module_param(force_locked_rw, uint, 0644);
++MODULE_PARM_DESC(force_locked_rw, "Force enable writes on locked HFS+ volu=
+mes. "
++		"([0] =3D disabled, 1 =3D enabled)");
++
+ static int hfsplus_system_read_inode(struct inode *inode)
+ {
+ 	struct hfsplus_vh *vhdr =3D HFSPLUS_SB(inode->i_sb)->s_vhdr;
+@@ -346,14 +356,22 @@ static int hfsplus_remount(struct super_block *sb, in=
+t *flags, char *data)
+ 			/* nothing */
+ 		} else if (vhdr->attributes &
+ 				cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) {
+-			pr_warn("filesystem is marked locked, leaving read-only.\n");
+-			sb->s_flags |=3D SB_RDONLY;
+-			*flags |=3D SB_RDONLY;
++			if (force_locked_rw) {
++				pr_warn("filesystem is marked locked, but writes have been force enabl=
+ed.\n");
++			} else {
++				pr_warn("filesystem is marked locked, leaving read-only.\n");
++				sb->s_flags |=3D SB_RDONLY;
++				*flags |=3D SB_RDONLY;
++			}
+ 		} else if (vhdr->attributes &
+ 				cpu_to_be32(HFSPLUS_VOL_JOURNALED)) {
+-			pr_warn("filesystem is marked journaled, leaving read-only.\n");
+-			sb->s_flags |=3D SB_RDONLY;
+-			*flags |=3D SB_RDONLY;
++			if (force_journaled_rw) {
++				pr_warn("filesystem is marked journaled, but writes have been force en=
+abled.\n");
++			} else {
++				pr_warn("filesystem is marked journaled, leaving read-only.\n");
++				sb->s_flags |=3D SB_RDONLY;
++				*flags |=3D SB_RDONLY;
++			}
+ 		}
+ 	}
+ 	return 0;
+@@ -459,12 +477,20 @@ static int hfsplus_fill_super(struct super_block *sb,=
+ void *data, int silent)
+ 	} else if (test_and_clear_bit(HFSPLUS_SB_FORCE, &sbi->flags)) {
+ 		/* nothing */
+ 	} else if (vhdr->attributes & cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) {
+-		pr_warn("Filesystem is marked locked, mounting read-only.\n");
+-		sb->s_flags |=3D SB_RDONLY;
++		if (force_locked_rw) {
++			pr_warn("Filesystem is marked locked, but writes have been force enable=
+d.\n");
++		} else {
++			pr_warn("Filesystem is marked locked, mounting read-only.\n");
++			sb->s_flags |=3D SB_RDONLY;
++		}
+ 	} else if ((vhdr->attributes & cpu_to_be32(HFSPLUS_VOL_JOURNALED)) &&
+ 			!sb_rdonly(sb)) {
+-		pr_warn("write access to a journaled filesystem is not supported, use th=
+e force option at your own risk, mounting read-only.\n");
+-		sb->s_flags |=3D SB_RDONLY;
++		if (force_journaled_rw) {
++			pr_warn("write access to a journaled filesystem is not supported, but h=
+as been force enabled.\n");
++		} else {
++			pr_warn("write access to a journaled filesystem is not supported, use t=
+he force option at your own risk, mounting read-only.\n");
++			sb->s_flags |=3D SB_RDONLY;
++		}
+ 	}
+=20
+ 	err =3D -EINVAL;
+--=20
+2.38.1
 
