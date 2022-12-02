@@ -2,124 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC2F640CCB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C30640CCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiLBSDe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Dec 2022 13:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbiLBSDb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234230AbiLBSDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 2 Dec 2022 13:03:31 -0500
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0397260B4C;
-        Fri,  2 Dec 2022 10:03:30 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id y16so8995363wrm.2;
-        Fri, 02 Dec 2022 10:03:29 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233887AbiLBSDZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 2 Dec 2022 13:03:25 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC4160B6B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:03:24 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 21so5603486pfw.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:03:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Fj/GOmrzncgAG1HwiGCIj6uObETJ2A+WRaEGkSptgo=;
+        b=fIdthOwAqz6rz4ph0qN2N5M8ImkazzFm8W3RM7IIh70xntOL1pP7mfPNyBUCnegxFH
+         dwdRVH092Q/RsgF2xSXkKQJM+6+9V1QOBPhnaitJFsNkcWJL4wUuLpohsMEXKuSnaWBu
+         kp+wTia6DbZGzzB2a2DGc2ZNYvhewKWVBOIourDOWPuhYjhUj+gDKH4o7ovOk4NSkK5a
+         ZL+VE7WSOClVj2/p08efPZPfHfoqWChsY1BomaI4n1xxIuUhzZOT8HI87Dq7tNOzB4M3
+         xWTvFDLZQ5qdDQDcd4tnxGKFQZWsVfsadritMvCGliMHfMNQZ+PaZzy94VLxDg/LvwNw
+         1S6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v5S9AInjAkBzgT4Ue2Z9+cewf5MRHGtio+KBn1axLoU=;
-        b=ljRwqPwIY3zJkK+ZKd+fmuYoxTbwwtPcuyB7Qx/2C590v+s04ukAE2dDkG0z8T2Jok
-         w2c6O5CXEBQUmwY+p0qNcEWIpH3Moxm8HdG1WKATf10zWtc/r9SE4Znk9op8/zevnb8g
-         1PgwqXXdRXxkZJ8/kQasd0nwfz0gM2bx0kdkR3Fl5CC0vlH49vznkj4vNudELOWmIlpT
-         kZxDdok39xvVQnMa7yIUcPTgH2Bo4yewZtayojEJ5hFiZCZCrnPzgvfPNpaYke5ibvL1
-         oZIuW2kWk0yyV9gOPUFcjl7NR8FF8V4f0JN+3rVpE8axEKWaJGSFwDYMAlRTrnT6/cWH
-         0M1g==
-X-Gm-Message-State: ANoB5plKNR1UDOj1PHwSSXKoWkpS30HUuDvqYvVCryebVqfTj524XZlh
-        wtn/85Y30JpE1lhgq+orDUn0WBy0695UcV2PRo8=
-X-Google-Smtp-Source: AA0mqf4J29r5VWt/rIsXxWUvZrIM5pOiyObcfuwEfzF4lKw4wKaW8FjVPrPCKe4pd0OWBfGxpijsqt3j8zXtDkL+T2U=
-X-Received: by 2002:a5d:5b08:0:b0:241:d7b1:b3db with SMTP id
- bx8-20020a5d5b08000000b00241d7b1b3dbmr1829830wrb.293.1670004208244; Fri, 02
- Dec 2022 10:03:28 -0800 (PST)
-MIME-Version: 1.0
-References: <CO6PR11MB56352D2831C1554FE8C3A872EE179@CO6PR11MB5635.namprd11.prod.outlook.com>
-In-Reply-To: <CO6PR11MB56352D2831C1554FE8C3A872EE179@CO6PR11MB5635.namprd11.prod.outlook.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 2 Dec 2022 10:03:16 -0800
-Message-ID: <CAM9d7chqpLxZ81GRZktZf03pjZ-a7BOnD2mOCpNSDDCRZn3RMg@mail.gmail.com>
-Subject: Re: [PATCH 13/15] perf stat: Fix JSON output in metric-only mode
-To:     "Wang, Weilin" <weilin.wang@intel.com>
-Cc:     "acme@kernel.org" <acme@kernel.org>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        "atrajeev@linux.vnet.ibm.com" <atrajeev@linux.vnet.ibm.com>,
-        "irogers@google.com" <irogers@google.com>,
-        "james.clark@arm.com" <james.clark@arm.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Fj/GOmrzncgAG1HwiGCIj6uObETJ2A+WRaEGkSptgo=;
+        b=A1tBxMM2HGZHJTwMw+SZvl1Q7lQnpLavd74oyiDBKVai0gDm6N1QsGVFfvhIhViHqK
+         pdU4VyVexji05MYwukrfAIFAmXMtmOIUdguuSHfvJ82vGlXVaTUVIhPIIXW4mZlUr4ci
+         qe55y08+PcX+0oESC8z+Y48Rx6HYrbyntaq1+gyTiTbY1BbAxlxe1m7IscdrogcRJ/2v
+         /8bIKa8fxWk9vLPtgVdP/i9gpFRV2qc5wn+I8Rl5SGIDXBxjFCCcg/NjX80QUUGBagoY
+         EjmFFrs6gCLgRGleg/mRNTC4xavH8DUXoU+loHbdy0aXs8Z+8aMq7ZbY697YiBEWciCB
+         QyXQ==
+X-Gm-Message-State: ANoB5pnKxIEs+2BuGjjfovTXFc3/TK66lULka1yV++SJMw9FN0FZE/XS
+        Zj6iLSmtMbII/4cd54t15gVSOA==
+X-Google-Smtp-Source: AA0mqf6OKlfF860xpvjuMskcHd4UtSYgsGvzT6gTPKffFg+HpkwWymVJj1rCSlnbaq2p434WklJIgg==
+X-Received: by 2002:a63:4b0f:0:b0:439:3b80:615d with SMTP id y15-20020a634b0f000000b004393b80615dmr47409964pga.255.1670004203619;
+        Fri, 02 Dec 2022 10:03:23 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id j9-20020a654d49000000b0046ae5cfc3d5sm4331272pgt.61.2022.12.02.10.03.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 10:03:23 -0800 (PST)
+Date:   Fri, 02 Dec 2022 10:03:23 -0800 (PST)
+X-Google-Original-Date: Fri, 02 Dec 2022 10:03:08 PST (-0800)
+Subject:     Re: [PATCH V2] selftests/vDSO: Add riscv getcpu & gettimeofday test
+In-Reply-To: <20221103080451.1642500-1-guoren@kernel.org>
+CC:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org, shuah@kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        haocheng.zy@linux.alibaba.com, han_mao@linux.alibaba.com,
+        guoren@linux.alibaba.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        enh@google.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     guoren@kernel.org, skhan@linuxfoundation.org
+Message-ID: <mhng-d689ac9f-1a92-43a7-91b4-2be89c388e8d@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 03 Nov 2022 01:04:51 PDT (-0700), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@kernel.org>
+>
+> Enable vDSO getcpu & gettimeofday test for riscv. But only riscv64
+> supports __vdso_gettimeofday and riscv32 is under development.
+>
+> VERSION
+> {
+>         LINUX_4.15 {
+>         global:
+>                 __vdso_rt_sigreturn;
+>                 __vdso_gettimeofday;
+>                 __vdso_clock_gettime;
+>                 __vdso_clock_getres;
+>                 __vdso_getcpu;
+>                 __vdso_flush_icache;
+>         local: *;
+>         };
+> }
+>
+> Co-developed-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
+> Signed-off-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
+> Suggested-by: Mao Han <han_mao@linux.alibaba.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Elliott Hughes <enh@google.com>
+> ---
+>  tools/testing/selftests/vDSO/vdso_test_getcpu.c       | 4 ++++
+>  tools/testing/selftests/vDSO/vdso_test_gettimeofday.c | 3 +++
+>  2 files changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
+> index fc25ede131b8..1df5d057d79f 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
+> @@ -14,7 +14,11 @@
+>  #include "../kselftest.h"
+>  #include "parse_vdso.h"
+>
+> +#if defined(__riscv)
+> +const char *version = "LINUX_4.15";
+> +#else
+>  const char *version = "LINUX_2.6";
+> +#endif
+>  const char *name = "__vdso_getcpu";
+>
+>  struct getcpu_cache;
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
+> index 8ccc73ed8240..e411f287a426 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
+> @@ -27,6 +27,9 @@
+>  #if defined(__aarch64__)
+>  const char *version = "LINUX_2.6.39";
+>  const char *name = "__kernel_gettimeofday";
+> +#elif defined(__riscv)
+> +const char *version = "LINUX_4.15";
+> +const char *name = "__vdso_gettimeofday";
+>  #else
+>  const char *version = "LINUX_2.6";
+>  const char *name = "__vdso_gettimeofday";
 
-On Thu, Dec 1, 2022 at 4:56 PM Wang, Weilin <weilin.wang@intel.com> wrote:
->
-> Hi Namhyung,
->
->
->
-> I encountered an issue with the metric json output, which I think might be related to this commit.
->
->
->
-> This is one of the commands I tried:
->
->
->
-> ./perf stat -M memory_bandwidth_total,memory_bandwidth_read,memory_bandwidth_write -a -j -- sleep 1
->
->
->
-> Output before this commit:
->
-> ====================================================
->
-> {"counter-value" : "1117309.000000", "unit" : "", "event" : "UNC_M_CAS_COUNT.RD", "event-runtime" : 8017286783, "pcnt-running" : 100.00, "metric-value" : 124.961911, "metric-unit" : "MB/s  memory_bandwidth_read"} {"metric-value" : 237.237504, "metric-unit" : "MB/s  memory_bandwidth_total"} {"counter-value" : "1004052.000000", "unit" : "", "event" : "UNC_M_CAS_COUNT.WR", "event-runtime" : 8017286783, "pcnt-running" : 100.00, "metric-value" : 112.275593, "metric-unit" : "MB/s  memory_bandwidth_write"} {"counter-value" : "1002140370.000000", "unit" : "ns", "event" : "duration_time", "event-runtime" : 1002140370, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "(null)"}
->
-> ====================================================
->
->
->
-> Output after this commit:
->
-> ====================================================
->
-> {"counter-value" : "1374098.000000", "unit" : "", "event" : "UNC_M_CAS_COUNT.RD", "event-runtime" : 8016491003, "pcnt-running" : 100.00, "metric-value" : 153.660738, "metric-unit" : "MB/s  memory_bandwidth_read"} "metric-value" : 300.338968, "metric-unit" : "MB/s  memory_bandwidth_total"} {"counter-value" : "1311710.000000", "unit" : "", "event" : "UNC_M_CAS_COUNT.WR", "event-runtime" : 8016491003, "pcnt-running" : 100.00, "metric-value" : 146.678229, "metric-unit" : "MB/s  memory_bandwidth_write"} {"counter-value" : "1002037512.000000", "unit" : "ns", "event" : "duration_time", "event-runtime" : 1002037512, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "(null)"}
->
-> ====================================================
->
->
->
-> The second set of output is missing a "{" on the second line. Looks like it happens when I collect two related metrics together. Another example is:
->
->
->
-> ./perf stat -M memory_bandwidth_total,memory_bandwidth_read,memory_bandwidth_write,L3_Cache_Fill_BW_1T,L3_Cache_Fill_BW -a -j -- sleep 1
->
->
->
-> {"counter-value" : "944204.000000", "unit" : "", "event" : "UNC_M_CAS_COUNT.RD", "event-runtime" : 8033937053, "pcnt-running" : 100.00, "metric-value" : 105.369994, "metric-unit" : "MB/s  memory_bandwidth_read"} "metric-value" : 210.592807, "metric-unit" : "MB/s  memory_bandwidth_total"} {"counter-value" : "942679.000000", "unit" : "", "event" : "UNC_M_CAS_COUNT.WR", "event-runtime" : 8033937053, "pcnt-running" : 100.00, "metric-value" : 105.222813, "metric-unit" : "MB/s  memory_bandwidth_write"} {"counter-value" : "1004471458.000000", "unit" : "ns", "event" : "duration_time", "event-runtime" : 1004471458, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "(null)"} {"counter-value" : "184675.000000", "unit" : "", "event" : "LONGEST_LAT_CACHE.MISS", "event-runtime" : 88387319917, "pcnt-running" : 100.00, "metric-value" : 0.011767, "metric-unit" : "L3_Cache_Fill_BW_1T"} "metric-value" : 0.011767, "metric-unit" : "L3_Cache_Fill_BW"} {"counter-value" : "1004471458.000000", "unit" : "ns", "event" : "duration_time", "event-runtime" : 1004471458, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "(null)"}
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Thanks for your report.  It seems it misses the open bracket when the metric
-produces more than one values.  I think new_line_json() should have it.
-Will send the fix soon.
+Looks like Shauh usually takes patches for this vdso selftest, but happy 
+to take it through the RISC-V tree if that's easier.  Either way's fine 
+with me, I'm leaving it in patchwork for now as a reminder.
 
-Thanks,
-Namhyung
+Thanks!
