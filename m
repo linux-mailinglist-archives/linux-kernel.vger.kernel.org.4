@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F53A63FE3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 03:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3504763FE3F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 03:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbiLBCmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 21:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S232082AbiLBCm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 21:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiLBCmV (ORCPT
+        with ESMTP id S230193AbiLBCmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 21:42:21 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CCFD11FA
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 18:42:20 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNcfg35Hrz4xVnn;
-        Fri,  2 Dec 2022 10:42:19 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B22g3kg039926;
-        Fri, 2 Dec 2022 10:42:03 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 2 Dec 2022 10:42:04 +0800 (CST)
-Date:   Fri, 2 Dec 2022 10:42:04 +0800 (CST)
-X-Zmail-TransId: 2af9638965fcffffffff86bec3ce
-X-Mailer: Zmail v1.0
-Message-ID: <202212021042043546303@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <soc@kernel.org>, <arnd@arndb.de>
-Cc:     <zhang.songyi@zte.com.cn>, <robert.jarzmik@free.fr>,
-        <lkundrak@v3.sk>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHB4YTogUmVtb3ZlIGRldl9lcnIoKSBhZnRlciBwbGF0Zm9ybV9nZXRfaXJxKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B22g3kg039926
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6389660B.000 by FangMail milter!
-X-FangMail-Envelope: 1669948939/4NNcfg35Hrz4xVnn/6389660B.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6389660B.000/4NNcfg35Hrz4xVnn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 1 Dec 2022 21:42:55 -0500
+Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5189D15BA;
+        Thu,  1 Dec 2022 18:42:53 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VWAkoq4_1669948970;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VWAkoq4_1669948970)
+          by smtp.aliyun-inc.com;
+          Fri, 02 Dec 2022 10:42:51 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     tj@kernel.org, josef@toxicpanda.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next v2] blk-cgroup: Fix some kernel-doc comments
+Date:   Fri,  2 Dec 2022 10:42:49 +0800
+Message-Id: <20221202024249.12884-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+Make the description of @gendisk to @disk in blkcg_schedule_throttle()
+to clear the below warnings:
 
-There is no need to call the dev_err() function directly to print a
-custom message when handling an error from either the platform_get_irq()
-or platform_get_irq_byname() functions as both are going to display an
-appropriate error message in case of a failure.
+block/blk-cgroup.c:1850: warning: Function parameter or member 'disk' not described in 'blkcg_schedule_throttle'
+block/blk-cgroup.c:1850: warning: Excess function parameter 'gendisk' description in 'blkcg_schedule_throttle'
 
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
-Reviewed-by: Lubomir Rintel <lkundrak@v3.sk>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3338
+Fixes: de185b56e8a6 ("blk-cgroup: pass a gendisk to blkcg_schedule_throttle")
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/soc/pxa/ssp.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
-index 93449fb3519e..bd029e838241 100644
---- a/drivers/soc/pxa/ssp.c
-+++ b/drivers/soc/pxa/ssp.c
-@@ -146,10 +146,8 @@ static int pxa_ssp_probe(struct platform_device *pdev)
- 	}
+change in v2:
+--According to Jens's suggestion, add a fixes line.
 
- 	ssp->irq = platform_get_irq(pdev, 0);
--	if (ssp->irq < 0) {
--		dev_err(dev, "no IRQ resource defined\n");
-+	if (ssp->irq < 0)
- 		return -ENODEV;
--	}
+ block/blk-cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- 	if (dev->of_node) {
- 		const struct of_device_id *id =
+diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+index 1bb939d3b793..77f44472b41e 100644
+--- a/block/blk-cgroup.c
++++ b/block/blk-cgroup.c
+@@ -1831,7 +1831,7 @@ void blkcg_maybe_throttle_current(void)
+ 
+ /**
+  * blkcg_schedule_throttle - this task needs to check for throttling
+- * @gendisk: disk to throttle
++ * @disk: disk to throttle
+  * @use_memdelay: do we charge this to memory delay for PSI
+  *
+  * This is called by the IO controller when we know there's delay accumulated
 -- 
-2.15.2
+2.20.1.7.g153144c
+
