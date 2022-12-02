@@ -2,429 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9218D640FFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF13640FFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234493AbiLBV1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S234492AbiLBV2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiLBV1R (ORCPT
+        with ESMTP id S234174AbiLBV23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:27:17 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B87AEDD50
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:27:16 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so9445626pjs.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 13:27:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6KvESW44AhTsHc5ESlAeNE/LS991MfoWG7Pbv6IGrw=;
-        b=KHjWwkjE87Va1p2/ovvkLOIoleEdApvbyF9LCdlhpOlc/paBaCvh6TvwQssc1ofw0L
-         H+G25vsj4PVm7kIqHNAOfQUaj552fynyM1leQgWHsPOWg9q9KPz1XlIganSXGL4ECuaZ
-         QYDOkSWT0QlVnR3ilGchnEiZXeA5XEoYT81y0fXORYIohM4aoa+GQkE55lFgVRDTd0tM
-         GkNvk9RGjI8hKBwPOMsVtjKYHohXNOWDs5Ol5bS2IbDOpxS8uCpoLrG6ZrGiCAz5D30+
-         gkDoklGX6HlUxbh0M+QrmXy0ttvBAJFX9pxfm6wrM7WrXJu8mjdSuGxjHOEPS8JIPJss
-         jm9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W6KvESW44AhTsHc5ESlAeNE/LS991MfoWG7Pbv6IGrw=;
-        b=BmCYT0OIml2p94EX14XLC71R0ceA7hc0u1I737xZxShjZoVYvuqZU1guL6HAqD04SF
-         NN6oNPIrTqTTkT830EaIZazcuuDxFI9kJDtSxVek8/v8tU1+1NDFcEaIF6G+VYOcto5A
-         JnE9vvv0e+WI50jNgE1ryKqrauJmtqe/vu+lMoHEi31raIoKD8FKgY0jc0og6uzx5nVE
-         tAtQIao6KbNpVWtyhhmn/itPsu8SXz/ta8AhyZQFz7wNzxDCTlPAuwiYzdw//Z2HH8Fk
-         khhWupZWxcjooEY0HCaZOWQRQHS8dtiBtY0ZQwdwFLfM4UrIgUrE1UxW51IgyHbNsU/y
-         R7Yw==
-X-Gm-Message-State: ANoB5pkUfaXUE8GYpiOeXzHl68q9YrfIbbc4MrexLss/vxPgm7oegvWB
-        0iaYIT+zBRMZKdSGt5I5+0o=
-X-Google-Smtp-Source: AA0mqf7mnIQfMqs9BPn59Qew3ZZY8lPcuHAae9YTnGVEzfJ4/A+h35HXS1+Sd7zXiAWVsFDh8wYr2w==
-X-Received: by 2002:a17:90a:de0f:b0:213:1143:9886 with SMTP id m15-20020a17090ade0f00b0021311439886mr78626579pjv.236.1670016435666;
-        Fri, 02 Dec 2022 13:27:15 -0800 (PST)
-Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:c181])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902650400b00176dc67df44sm6020119plk.132.2022.12.02.13.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 13:27:14 -0800 (PST)
-Date:   Fri, 2 Dec 2022 13:27:11 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chris Mason <clm@meta.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH] error-injection: Add prompt for function error injection
-Message-ID: <20221202212711.5ot66apmazm4yz6y@macbook-pro-6.dhcp.thefacebook.com>
-References: <CAADnVQLJFnu6gARdZ7ckgxeGaSv70jHBiQo+W=zDKO0-ELFGcQ@mail.gmail.com>
- <Y3ymzAYRyH5IWEe/@zn.tnic>
- <3fa8ec60-dd96-c41f-ea46-8856bf855949@meta.com>
- <20221122132905.12a8d5ad@gandalf.local.home>
- <a53e8c6d-b0e5-72bf-1aba-07609c9cf1bf@meta.com>
- <20221130143719.07e36277d1471b83e9a1b627@linux-foundation.org>
- <CAADnVQ+KLXPhowdBZq0PvGOq5tv4ovNtNCvGBXHQBkVbz4UVkg@mail.gmail.com>
- <CAHk-=wjeq1m=9mU17WzfRQ1W6N0SgKHY-e2J35SpppWwUUBFbQ@mail.gmail.com>
- <20221202014129.n5lmvzsy436ebo4b@macbook-pro-6.dhcp.thefacebook.com>
- <Y4ogRH7zWLpmVXzJ@mit.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Fri, 2 Dec 2022 16:28:29 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610C92A246;
+        Fri,  2 Dec 2022 13:28:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670016508; x=1701552508;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=wH8YCOLjy33ZSdHYht5jTJxZqjMCs4y9aTBejgfG5ds=;
+  b=J5sPOxQNMtEkOQkAyU4+gOovBDWDy1DZ3sLbKhPRAYTigAnm/bup6/I4
+   urNTm9ZdzbOmcmDW/xJInDrJubU3n5AP7YLkHWZag5Il09LlPFX9Pj70w
+   I3BV50e1XxXaUHZ+8oFPvFKTZkzUYjJ4zuzeOE9HtFE+ULJ+PVWArhbGI
+   kifF4k9iwPHTB/aGn8ifW/LbbVtZqbePjx3NHg04WTnm3GLmR6eLpKxZT
+   u7kf4EvzVlTa1/o/AaR7sMlSXdY5nTuW+xlC47gbqDnuVwJvyDsMoJzdT
+   waNtcf9hPblyusUpLecEy51LjPsHQ3/ESpOmRZ+V0fuE0tpK2W5sm8cYt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313685391"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="313685391"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:28:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="733950081"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="733950081"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Dec 2022 13:28:27 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 2 Dec 2022 13:28:27 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 2 Dec 2022 13:28:27 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 2 Dec 2022 13:28:27 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.41) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 2 Dec 2022 13:28:26 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ac93WcHYHCMa8ZSaiPILWFkgdrQ14wFhGWDzowfpDOBZgLxtHU9WFEVZQx+9LJ3pWrr71OlttUDwnsq/NgrW33bkgSXFc0kSKSInGe3+XL6JlQSntv6lc4qsTTb3/fkEAqwipYofU3Hk/hOn4BsRv1fkd3VqtmKHb7mBE+deCXz2UCXFGAGMAqAnWZiHTc/tyq9UGvj+F79qUp/tcxjQ2Y+i4K024QshbFR+v0zPrHk6+evbShBKJCD8IVZQe/1XxqtaG95w5Kq1RcvsjF8qaBw2tZTjGxjZX3dKiRkVy+j9pmeCoo/dA+IID5b/FaMhcgA2adI6/6EiYLQmXy2KUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xB1Rw5j6bZ1HpP7tQttCsqdcAMJa8l41Z2MM07DtNFo=;
+ b=N9aSLkvqFPW5/qGRlQtTRxBiDZaQVee8FGNF+m+f+YNIN71hAV6Kxcs0h+xT1AwRbeSoQnFIzTF1eCTWeRBThJOHN1ty534CN0ZigZMpq/1Xc9+eMLBv1WaR4HHNira42MQcnT8fin8qMhpKsTu4jx/LcG+RHlsarF1g41AZWsT3CrLJYYCotIOvp7GB83/15qtJEqDxgff0jrl395NLdVRB/n9qtsLWJWirPuVToAKHxPP8RZPIuYhPIuGAsoU5NdJFepY4qt/sy4ihnC3swY4uY8o77ha6M+9Iy+rfkuc0II4L7DPEIhek/vCDb/q49KNwZq3D2slbk/tmEbT2Mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by BL3PR11MB6339.namprd11.prod.outlook.com (2603:10b6:208:3b3::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Fri, 2 Dec
+ 2022 21:28:22 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::5236:c530:cc10:68f]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::5236:c530:cc10:68f%4]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
+ 21:28:22 +0000
+Date:   Fri, 2 Dec 2022 13:28:19 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     Steven Rostedt <rostedt@goodmis.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH V2 03/11] cxl/mem: Implement Clear Event Records command
+Message-ID: <Y4pt87Lr2D5Hkycj@iweiny-desk3>
+References: <20221201002719.2596558-1-ira.weiny@intel.com>
+ <20221201002719.2596558-4-ira.weiny@intel.com>
+ <6389630036769_3cbe02947d@dwillia2-xfh.jf.intel.com.notmuch>
+ <20221202083448.4b3b3254@gandalf.local.home>
+ <638a518b9c9b5_3cbe0294b5@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Y4ogRH7zWLpmVXzJ@mit.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <638a518b9c9b5_3cbe0294b5@dwillia2-xfh.jf.intel.com.notmuch>
+X-ClientProxiedBy: BYAPR05CA0034.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::47) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL3PR11MB6339:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb684a37-6308-4f34-f6e5-08dad4ac23c8
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Smr8zaDi9zFZTy55rL6d5jB4HX61k1YKac4Sp2+uJAAYH0YogWS3LnaUtL8lHvYo4iaLq9cTOH9KpID/QRO4VQs8H2b+QwGCLCqh2tGVUohLHZ02ZOG0y85ko+ss4U41l0Updnhwn4hOx1mk4A5ALk8XXyT8Zc3wG8esx3YWYGxkOla/dBXFlbC4KwYrTqF/XwVQ4TAmVhVEEkSjN2k/0SPFiyb2V7I4NRFrkIbB8P79FPhFdkA733Ztbjo0AXWmD5RlrAXtRwGpQlQCn2qQhF+oFitc/jZCmf7WLxoluz3TcJ6jyFGFPcCTcdXRaem7wNq9pnk+f0guw86TUfaBJXiFK9ngR8Sw6AdRqP8Jxxg1yXVVkYXmagbs8nckBgSmEPjB/2BxFtlGRPFKyesehuWk54joxpxuEjPjGpQQ+0Gsi80Kt9jNUXl9Lu0mYXND6QryGQ1O4P/j/RVnoaiLim7d/I+ETsOQZk/rlQlWygfWW6MUPTAIGxE42JJVyomvg43pqYXjL5BCPEQDrcUHmcN/tfZAUrGqmzzh6aFGwpbxv265aT0pd+fLl1nNWWJvD9kvYD+G3WF9ql326BIDzEjVwlbYEX/lcNCbE/yicgzeKfdNW/3ycSGHeJWBhOJMMhkP47xpE5EO9y0Xsmr3SQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(396003)(136003)(366004)(39860400002)(346002)(451199015)(66946007)(33716001)(66556008)(44832011)(38100700002)(5660300002)(54906003)(6636002)(316002)(6512007)(9686003)(186003)(6506007)(41300700001)(6862004)(8936002)(6666004)(26005)(4326008)(66476007)(8676002)(82960400001)(6486002)(478600001)(66899015)(83380400001)(2906002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?azJOU7/uxdTAjWfXu9VNldhjiT9jkwv0Tm9ggGsNEHiBsRpJvTC2xHsnIdJU?=
+ =?us-ascii?Q?4H7N+ZBQN+R1vkI1vjuGTCSKURLN3iykVTWkSnEl8GRYWVmQ2tjkYJg6StBT?=
+ =?us-ascii?Q?+JNwvJKqPMPomSH6jt1WFrio+hATQot3ySvg3kV8HqnxJZ7I5mmacsUERpwB?=
+ =?us-ascii?Q?R2gnqkwgDMavn/G+qgPjVuVKLB15Hf1QFa3ngz1czusiWgf5nzMXafswOcNy?=
+ =?us-ascii?Q?euhrxZKX85WOZBqksHm9JoHBOAItSnFU+4VqyFhbDgwaeUtniz94+TSTLimS?=
+ =?us-ascii?Q?2VR3vNdwCa+hpgRXo/OP7RGOp/Bj7evDx4kVjO3mwSHSDGpcSCOBgUwjW9Pd?=
+ =?us-ascii?Q?slURisqsU4I2cEZOKjuaKDWXRCSSOCcUZFmYta/2BxPgj5Kyol7dfXKs9UjL?=
+ =?us-ascii?Q?8C5A17DvCT7I67Rn0JQt2tyDdV0fRbPf2jPS2c+Fc5beknDpSwygSUMHFba6?=
+ =?us-ascii?Q?RYchwynOEu/7e6pjdyeczgHLIElKgNZoHoGEVWGzUBdnb1Afpr5/9PXwPPgM?=
+ =?us-ascii?Q?nZDT2xMYR5Dag8QPLC2gq1uOkbX/a8N5DGn40NYbfXhEni+Am2RrfZTgu3nL?=
+ =?us-ascii?Q?SosYd8UPzWWxeSBjgpMF0oJgq61lekGzbnf6LgA8Kchcg66I82CLnNNW3NkS?=
+ =?us-ascii?Q?U2/Zd5VH4q0SxC7xj5EpbfFbMMHlEjC0PFIbCoTbYvpnmOoWdMPeJcUAr73E?=
+ =?us-ascii?Q?nXg3MzvNpHd79c8EglcBAh0mJT5xXLFsTT52Y+zItHf1CxZMttWwDtBuKTDr?=
+ =?us-ascii?Q?yvbK7Dp6TM7oEeLKdoTbsB+8GyfbcsFv3Uact23FXUJmc/37Wi7l8QvM6bre?=
+ =?us-ascii?Q?D27o5kn5/XLTe3wm5hjxo8SCRqenoPkwzUj+kBHYh1UK0PoRvXK3B4O4a2Lx?=
+ =?us-ascii?Q?CbRd2QOjNI7DOa9JBVkM94b9p0OZJWlSvgnSK1z7Z3y9lhaY88QlvJpi2Nl6?=
+ =?us-ascii?Q?dtm6tAqVhwVIPYkvUwxvFJFfihlymdt5BxJgHNZIZihd/x9KiCPBWhYs5NnE?=
+ =?us-ascii?Q?dTx+G9SUBGWzbsfxcZsAf28hrEGxv51RXCAJJurka9LNalrwyjE/7dP0viPd?=
+ =?us-ascii?Q?xzg+e7jD5U05QGmoIN4QGiD3OM1/CjKYZ3qSP+JNCpxXRyyM+5pK75ERaJm1?=
+ =?us-ascii?Q?j9c582NA/d4iOvc6N4uFN07o5fOJbVsTPmhTi1fgUtg88TTFQMpn1wj3KqQz?=
+ =?us-ascii?Q?rGtk9lZTZPRSKHTFSYPTNXdpL/MDOiHxmakP5LdgcNun59qTC1b/KRmRGUf0?=
+ =?us-ascii?Q?pseUlU8ci1AwlouDKdLQ+zrZnGR8n5bZEaceRyA8AhRPFER1Uw398HKuO+bM?=
+ =?us-ascii?Q?e/pvb7iszC551SfcI9S9QB9RFIZb4o261kkgffsLo9h3VYGfP58+QBNzgZC3?=
+ =?us-ascii?Q?PoeHlTbNmTJ26ZUkxq9feK6jQv1lj2xc6wn4/6H4g8Ms2tVRBsrLkPKPiOxf?=
+ =?us-ascii?Q?FvR1ryPN7iVtLGeC4R5e6Zl3OTsFDsU5M24CO7slZosrwgf3Gw2gACrFgnPW?=
+ =?us-ascii?Q?xC9QCps54pAqmoZIUpp8iWgIsDsEP7Jl4UD2yaFD6+3nf48BH+NNcDIyAGYJ?=
+ =?us-ascii?Q?WipHwzpZapuuVEILe1Fip+biz0xyhJ0QEjiTlYZ3?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb684a37-6308-4f34-f6e5-08dad4ac23c8
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 21:28:22.7444
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9/MVrq2Unzk9fshhZsXjeFwDtc1TB0qxoD6/NQn/AVZRs8Vb5jxpzOTL7wknY2xBX5rhXLjdjKNaxyhAHyU/Jw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6339
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 10:56:52AM -0500, Theodore Ts'o wrote:
-> On Thu, Dec 01, 2022 at 05:41:29PM -0800, Alexei Starovoitov wrote:
+On Fri, Dec 02, 2022 at 11:27:07AM -0800, Dan Williams wrote:
+> Steven Rostedt wrote:
+> > On Thu, 1 Dec 2022 18:29:20 -0800
+> > Dan Williams <dan.j.williams@intel.com> wrote:
 > > 
-> > The fault injection framework disables individual syscall with zero performance
-> > overhead comparing to LSM and seccomp mechanisms.
-> > BPF is not involved here. It's a kprobe in one spot.
-> > All other syscalls don't notice it.
-> > It's an attractive way to improve security.
+> > > >  static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
+> > > >  				    enum cxl_event_log_type type)
+> > > >  {
+> > > > @@ -732,13 +769,22 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
+> > > >  		}
+> > > >  
+> > > >  		nr_rec = le16_to_cpu(payload->record_count);
+> > > > -		if (trace_cxl_generic_event_enabled()) {
+> > > > +		if (nr_rec > 0) {
+> > > >  			int i;
+> > > >  
+> > > > -			for (i = 0; i < nr_rec; i++)
+> > > > -				trace_cxl_generic_event(dev_name(cxlds->dev),
+> > > > -							type,
+> > > > -							&payload->records[i]);
+> > > > +			if (trace_cxl_generic_event_enabled()) {  
+> > > 
+> > > Again, trace_cxl_generic_event_enabled() injects some awkward
+> > > formatting here to micro-optimize looping. Any performance benefit this
+> > > code might offer is likely offset by the extra human effort to read it.
 > > 
-> > A BPF prog over syscall can filter by user, cgroup, task and give fine grain
-> > control over security surface.
-> > tbh I'm not aware of folks doing "syscall disabling" through command line like
-> > above (I've only seen it through bpf), but it doesn't mean that somebody will
-> > not start complaining that their script broke, because distro disabled fault
-> > injection.
+> > This is commonly used throughout the kernel, and highly suggested for use to
+> > encapsulate any work being done only for tracing, when tracing is disabled.
+> > It uses static_braches/jump_labels which makes the loop into a 'nop' when
+> > tracing is off. That is, there is zero overhead for the for loop below (and
+> > there's not even a branch to skip it!)
 > > 
-> > So should we split FUNCTION_ERROR_INJECTION kconfig into two ?
-> > And do default N for things like should_failslab() and
-> > default Y for syscalls?
+> > But sure, if you really don't care as it's not a fast path, then keep it
+> > out. I like people to keep the habit of doing this, because otherwise it
+> > tends to creep into the fast paths.
+
+Thanks for chiming in here Steven.  I should have pushed back on this.
+
 > 
-> How about calling the latter something like bpf syscall hooks, and not
-> using the terminology "error injection" in relation to system calls?
-> I think that might be less confusing.
+> Duly noted. It makes a lot of sense when you are tracing in a fast path
+> to skip any and all preamble code. In this case we are doing it after
+> doing a whole series of uncached PCI mmio reads with all the stalling
+> and serialization that implies. 
+> 
+> Speaking of which, this probably wants a cond_resched() after each loop
+> iteration.
+> 
+> I'll note it is also a tracepoint that is likely to be enabled most of
+> the time in production.
 
-I think 'syscall error injection' name fits well.
-It's a generic feature that both kprobes and bpf should be able to use.
-Here is the patch...
+Ok I did not have any of these in there originally and I will remove them now.
 
-Even with this patch we have 7 failures in BPF selftests.
-We will fix them later with the same mechanism as we will pick for hid-bpf.
-
-This patch will keep 'syscall disabling' scripts working
-and bpf syscall adjustment will work too.
-So no chance of breaking anyone.
-While actual error injection inside the kernel will be disabled.
-
-Better name suggestions are welcome, of course.
-
-From 2960958f91d1134b1a8f27787875f6b9300f205e Mon Sep 17 00:00:00 2001
-From: Alexei Starovoitov <ast@kernel.org>
-Date: Fri, 2 Dec 2022 13:06:08 -0800
-Subject: [PATCH] error-injection: Split FUNCTION_ERROR_INJECTION into syscalls
- and the rest.
-
-Split FUNCTION_ERROR_INJECTION into:
-- SYSCALL_ERROR_INJECTION with default y
-- FUNC_ERROR_INJECTION with default n.
-
-The former is only used to modify return values of syscalls for security and
-user space testing reasons while the latter is for the rest of error injection
-in the kernel that should only be used to stress test and debug the kernel.
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- arch/arm64/include/asm/syscall_wrapper.h   |  8 ++++----
- arch/powerpc/include/asm/syscall_wrapper.h |  4 ++--
- arch/s390/include/asm/syscall_wrapper.h    | 12 ++++++------
- arch/x86/include/asm/syscall_wrapper.h     |  4 ++--
- include/asm-generic/error-injection.h      |  1 +
- include/linux/compat.h                     |  4 ++--
- include/linux/syscalls.h                   |  4 ++--
- kernel/fail_function.c                     |  1 +
- lib/Kconfig.debug                          | 15 +++++++++++++++
- lib/error-inject.c                         |  6 ++++++
- 10 files changed, 41 insertions(+), 18 deletions(-)
-
-diff --git a/arch/arm64/include/asm/syscall_wrapper.h b/arch/arm64/include/asm/syscall_wrapper.h
-index d30217c21eff..2c5ca239e88c 100644
---- a/arch/arm64/include/asm/syscall_wrapper.h
-+++ b/arch/arm64/include/asm/syscall_wrapper.h
-@@ -19,7 +19,7 @@
- 
- #define COMPAT_SYSCALL_DEFINEx(x, name, ...)						\
- 	asmlinkage long __arm64_compat_sys##name(const struct pt_regs *regs);		\
--	ALLOW_ERROR_INJECTION(__arm64_compat_sys##name, ERRNO);				\
-+	ALLOW_ERROR_INJECTION(__arm64_compat_sys##name, SYSCALL);				\
- 	static long __se_compat_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));		\
- 	static inline long __do_compat_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));	\
- 	asmlinkage long __arm64_compat_sys##name(const struct pt_regs *regs)		\
-@@ -34,7 +34,7 @@
- 
- #define COMPAT_SYSCALL_DEFINE0(sname)							\
- 	asmlinkage long __arm64_compat_sys_##sname(const struct pt_regs *__unused);	\
--	ALLOW_ERROR_INJECTION(__arm64_compat_sys_##sname, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(__arm64_compat_sys_##sname, SYSCALL);			\
- 	asmlinkage long __arm64_compat_sys_##sname(const struct pt_regs *__unused)
- 
- #define COND_SYSCALL_COMPAT(name) 							\
-@@ -50,7 +50,7 @@
- 
- #define __SYSCALL_DEFINEx(x, name, ...)						\
- 	asmlinkage long __arm64_sys##name(const struct pt_regs *regs);		\
--	ALLOW_ERROR_INJECTION(__arm64_sys##name, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(__arm64_sys##name, SYSCALL);			\
- 	static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));		\
- 	static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));	\
- 	asmlinkage long __arm64_sys##name(const struct pt_regs *regs)		\
-@@ -69,7 +69,7 @@
- #define SYSCALL_DEFINE0(sname)							\
- 	SYSCALL_METADATA(_##sname, 0);						\
- 	asmlinkage long __arm64_sys_##sname(const struct pt_regs *__unused);	\
--	ALLOW_ERROR_INJECTION(__arm64_sys_##sname, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(__arm64_sys_##sname, SYSCALL);			\
- 	asmlinkage long __arm64_sys_##sname(const struct pt_regs *__unused)
- 
- #define COND_SYSCALL(name)							\
-diff --git a/arch/powerpc/include/asm/syscall_wrapper.h b/arch/powerpc/include/asm/syscall_wrapper.h
-index 67486c67e8a2..ce1148809c6b 100644
---- a/arch/powerpc/include/asm/syscall_wrapper.h
-+++ b/arch/powerpc/include/asm/syscall_wrapper.h
-@@ -17,7 +17,7 @@ struct pt_regs;
- 
- #define __SYSCALL_DEFINEx(x, name, ...)						\
- 	long sys##name(const struct pt_regs *regs);			\
--	ALLOW_ERROR_INJECTION(sys##name, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(sys##name, SYSCALL);			\
- 	static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));		\
- 	static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));	\
- 	long sys##name(const struct pt_regs *regs)			\
-@@ -36,7 +36,7 @@ struct pt_regs;
- #define SYSCALL_DEFINE0(sname)							\
- 	SYSCALL_METADATA(_##sname, 0);						\
- 	long sys_##sname(const struct pt_regs *__unused);		\
--	ALLOW_ERROR_INJECTION(sys_##sname, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(sys_##sname, SYSCALL);			\
- 	long sys_##sname(const struct pt_regs *__unused)
- 
- #define COND_SYSCALL(name)							\
-diff --git a/arch/s390/include/asm/syscall_wrapper.h b/arch/s390/include/asm/syscall_wrapper.h
-index fde7e6b1df48..a253def48cbe 100644
---- a/arch/s390/include/asm/syscall_wrapper.h
-+++ b/arch/s390/include/asm/syscall_wrapper.h
-@@ -58,7 +58,7 @@
- 
- #define __S390_SYS_STUBx(x, name, ...)						\
- 	long __s390_sys##name(struct pt_regs *regs);				\
--	ALLOW_ERROR_INJECTION(__s390_sys##name, ERRNO);				\
-+	ALLOW_ERROR_INJECTION(__s390_sys##name, SYSCALL);				\
- 	long __s390_sys##name(struct pt_regs *regs)				\
- 	{									\
- 		long ret = __do_sys##name(SYSCALL_PT_ARGS(x, regs,		\
-@@ -74,13 +74,13 @@
- #define COMPAT_SYSCALL_DEFINE0(sname)					\
- 	SYSCALL_METADATA(_##sname, 0);					\
- 	long __s390_compat_sys_##sname(void);				\
--	ALLOW_ERROR_INJECTION(__s390_compat_sys_##sname, ERRNO);	\
-+	ALLOW_ERROR_INJECTION(__s390_compat_sys_##sname, SYSCALL);	\
- 	long __s390_compat_sys_##sname(void)
- 
- #define SYSCALL_DEFINE0(sname)						\
- 	SYSCALL_METADATA(_##sname, 0);					\
- 	long __s390x_sys_##sname(void);					\
--	ALLOW_ERROR_INJECTION(__s390x_sys_##sname, ERRNO);		\
-+	ALLOW_ERROR_INJECTION(__s390x_sys_##sname, SYSCALL);		\
- 	long __s390_sys_##sname(void)					\
- 		__attribute__((alias(__stringify(__s390x_sys_##sname)))); \
- 	long __s390x_sys_##sname(void)
-@@ -100,7 +100,7 @@
- 	long __s390_compat_sys##name(struct pt_regs *regs);				\
- 	long __s390_compat_sys##name(struct pt_regs *regs)				\
- 		__attribute__((alias(__stringify(__se_compat_sys##name))));		\
--	ALLOW_ERROR_INJECTION(__s390_compat_sys##name, ERRNO);				\
-+	ALLOW_ERROR_INJECTION(__s390_compat_sys##name, SYSCALL);				\
- 	static inline long __do_compat_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));	\
- 	long __se_compat_sys##name(struct pt_regs *regs);				\
- 	long __se_compat_sys##name(struct pt_regs *regs)				\
-@@ -131,7 +131,7 @@
- #define SYSCALL_DEFINE0(sname)						\
- 	SYSCALL_METADATA(_##sname, 0);					\
- 	long __s390x_sys_##sname(void);					\
--	ALLOW_ERROR_INJECTION(__s390x_sys_##sname, ERRNO);		\
-+	ALLOW_ERROR_INJECTION(__s390x_sys_##sname, SYSCALL);		\
- 	long __s390x_sys_##sname(void)
- 
- #define COND_SYSCALL(name)						\
-@@ -148,7 +148,7 @@
- 		      "Type aliasing is used to sanitize syscall arguments");		\
- 	long __s390x_sys##name(struct pt_regs *regs)					\
- 		__attribute__((alias(__stringify(__se_sys##name))));			\
--	ALLOW_ERROR_INJECTION(__s390x_sys##name, ERRNO);				\
-+	ALLOW_ERROR_INJECTION(__s390x_sys##name, SYSCALL);				\
- 	static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));		\
- 	long __se_sys##name(struct pt_regs *regs);					\
- 	__S390_SYS_STUBx(x, name, __VA_ARGS__)						\
-diff --git a/arch/x86/include/asm/syscall_wrapper.h b/arch/x86/include/asm/syscall_wrapper.h
-index fd2669b1cb2d..ca0cd8fa1866 100644
---- a/arch/x86/include/asm/syscall_wrapper.h
-+++ b/arch/x86/include/asm/syscall_wrapper.h
-@@ -67,13 +67,13 @@ extern long __ia32_sys_ni_syscall(const struct pt_regs *regs);
- 
- #define __SYS_STUB0(abi, name)						\
- 	long __##abi##_##name(const struct pt_regs *regs);		\
--	ALLOW_ERROR_INJECTION(__##abi##_##name, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(__##abi##_##name, SYSCALL);			\
- 	long __##abi##_##name(const struct pt_regs *regs)		\
- 		__alias(__do_##name);
- 
- #define __SYS_STUBx(abi, name, ...)					\
- 	long __##abi##_##name(const struct pt_regs *regs);		\
--	ALLOW_ERROR_INJECTION(__##abi##_##name, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(__##abi##_##name, SYSCALL);			\
- 	long __##abi##_##name(const struct pt_regs *regs)		\
- 	{								\
- 		return __se_##name(__VA_ARGS__);			\
-diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
-index fbca56bd9cbc..c4fb52f5b789 100644
---- a/include/asm-generic/error-injection.h
-+++ b/include/asm-generic/error-injection.h
-@@ -9,6 +9,7 @@ enum {
- 	EI_ETYPE_ERRNO,		/* Return -ERRNO if failure */
- 	EI_ETYPE_ERRNO_NULL,	/* Return -ERRNO or NULL if failure */
- 	EI_ETYPE_TRUE,		/* Return true if failure */
-+	EI_ETYPE_SYSCALL,	/* Return -ERRNO out of syscall */
- };
- 
- struct error_injection_entry {
-diff --git a/include/linux/compat.h b/include/linux/compat.h
-index 594357881b0b..21d2fd48f7e2 100644
---- a/include/linux/compat.h
-+++ b/include/linux/compat.h
-@@ -45,7 +45,7 @@
- #ifndef COMPAT_SYSCALL_DEFINE0
- #define COMPAT_SYSCALL_DEFINE0(name) \
- 	asmlinkage long compat_sys_##name(void); \
--	ALLOW_ERROR_INJECTION(compat_sys_##name, ERRNO); \
-+	ALLOW_ERROR_INJECTION(compat_sys_##name, SYSCALL); \
- 	asmlinkage long compat_sys_##name(void)
- #endif /* COMPAT_SYSCALL_DEFINE0 */
- 
-@@ -74,7 +74,7 @@
- 		      "Type aliasing is used to sanitize syscall arguments");\
- 	asmlinkage long compat_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))	\
- 		__attribute__((alias(__stringify(__se_compat_sys##name))));	\
--	ALLOW_ERROR_INJECTION(compat_sys##name, ERRNO);				\
-+	ALLOW_ERROR_INJECTION(compat_sys##name, SYSCALL);				\
- 	static inline long __do_compat_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
- 	asmlinkage long __se_compat_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
- 	asmlinkage long __se_compat_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))	\
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index a34b0f9a9972..05fc3a0575c0 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -210,7 +210,7 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
- #define SYSCALL_DEFINE0(sname)					\
- 	SYSCALL_METADATA(_##sname, 0);				\
- 	asmlinkage long sys_##sname(void);			\
--	ALLOW_ERROR_INJECTION(sys_##sname, ERRNO);		\
-+	ALLOW_ERROR_INJECTION(sys_##sname, SYSCALL);		\
- 	asmlinkage long sys_##sname(void)
- #endif /* SYSCALL_DEFINE0 */
- 
-@@ -241,7 +241,7 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
- 		      "Type aliasing is used to sanitize syscall arguments");\
- 	asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))	\
- 		__attribute__((alias(__stringify(__se_sys##name))));	\
--	ALLOW_ERROR_INJECTION(sys##name, ERRNO);			\
-+	ALLOW_ERROR_INJECTION(sys##name, SYSCALL);			\
- 	static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
- 	asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
- 	asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))	\
-diff --git a/kernel/fail_function.c b/kernel/fail_function.c
-index a7ccd2930c5f..65d3f5db5f3a 100644
---- a/kernel/fail_function.c
-+++ b/kernel/fail_function.c
-@@ -38,6 +38,7 @@ static unsigned long adjust_error_retval(unsigned long addr, unsigned long retv)
- 	switch (get_injectable_error_type(addr)) {
- 	case EI_ETYPE_NULL:
- 		return 0;
-+	case EI_ETYPE_SYSCALL:
- 	case EI_ETYPE_ERRNO:
- 		if (retv < (unsigned long)-MAX_ERRNO)
- 			return (unsigned long)-EINVAL;
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 38545c56bf69..729002405a55 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1874,8 +1874,12 @@ config NETDEV_NOTIFIER_ERROR_INJECT
- 	  If unsure, say N.
- 
- config FUNCTION_ERROR_INJECTION
-+        bool
-+
-+config FUNC_ERROR_INJECTION
- 	bool "Fault-injections of functions"
- 	depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
-+	select FUNCTION_ERROR_INJECTION
- 	help
- 	  Add fault injections into various functions that are annotated with
- 	  ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
-@@ -1883,6 +1887,17 @@ config FUNCTION_ERROR_INJECTION
- 
- 	  If unsure, say N
- 
-+config SYSCALL_ERROR_INJECTION
-+	bool "Error injections in syscalls"
-+	depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
-+	select FUNCTION_ERROR_INJECTION
-+	default y
-+	help
-+	  Allows error injection framework to return errors from syscalls.
-+	  BPF may modify return values of syscalls as well.
-+
-+	  If unsure, say Y
-+
- config FAULT_INJECTION
- 	bool "Fault-injection framework"
- 	depends on DEBUG_KERNEL
-diff --git a/lib/error-inject.c b/lib/error-inject.c
-index 1afca1b1cdea..9ba868eb8c43 100644
---- a/lib/error-inject.c
-+++ b/lib/error-inject.c
-@@ -71,6 +71,10 @@ static void populate_error_injection_list(struct error_injection_entry *start,
- 
- 	mutex_lock(&ei_mutex);
- 	for (iter = start; iter < end; iter++) {
-+		if (iter->etype != EI_ETYPE_SYSCALL &&
-+		    !IS_ENABLED(CONFIG_FUNC_ERROR_INJECTION))
-+			continue;
-+
- 		entry = (unsigned long)dereference_symbol_descriptor((void *)iter->addr);
- 
- 		if (!kernel_text_address(entry) ||
-@@ -189,6 +193,8 @@ static const char *error_type_string(int etype)
- 		return "ERRNO_NULL";
- 	case EI_ETYPE_TRUE:
- 		return "TRUE";
-+	case EI_ETYPE_SYSCALL:
-+		return "SYSCALL";
- 	default:
- 		return "(unknown)";
- 	}
--- 
-2.30.2
-
+Thanks!
+Ira
