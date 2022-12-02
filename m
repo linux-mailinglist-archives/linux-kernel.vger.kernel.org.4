@@ -2,144 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05148640897
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9875364089A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbiLBOid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:38:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S233197AbiLBOih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiLBOi3 (ORCPT
+        with ESMTP id S232556AbiLBOid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:38:29 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2F85C0C5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:38:28 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id bj12so11963818ejb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:38:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qGY6WkT4lRuXaZzdlQnZdGGZzLB2sng4XfKDkywn0jw=;
-        b=FpCfeMTD2EZbG+mTWjfqX3lVMRGEWAZfQorccOoXyuf8d2BQchQ7uk5E07hW/9GL07
-         SKyA3TwOxE7I5E0WFP4wLPF6M4oX4RBIQtoSyYHmUgCiSZGN97onFVIfLRUzEOmHT8OB
-         3nUePhQjN7eie9jW0mEXtJShB0YsHewywd9Ok=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qGY6WkT4lRuXaZzdlQnZdGGZzLB2sng4XfKDkywn0jw=;
-        b=M/ebb9+qYrdD55Ps9Igd1AaamSsB7gx7MjFU86Lwbii9gjscO2Wivqvm0ZwS2MX6ey
-         CkgLHyq5HhHaRn2oYsTqPywT4R/DJA8nAMwqce9SXcM6XjzrmHsrExlZ6PplDJnHpIZM
-         +vuKhcRwUgIuDDy6EDYgOuOxG0tYBZ6zwC94Qr0596RECPFC/lA2eCmGKg5Vpcya5xb0
-         Ezbq6WHCqGtHo5fVkxak/2ei9vh2BwwyQnGx7hZrY2BfUErIraLM5ZRj9mmbKWW9D2Wa
-         mOu6yXMps5SBslRjl6oRp0Zz++bXydHw3nba7KWP/H011Rtijd8ZFjOkCfW1t0yRianc
-         c8Gg==
-X-Gm-Message-State: ANoB5pmqJgwy79BxL/bHM6VHgPUCTHzIndd9GMwj9SjNnjUCUtJ5KkAI
-        TFnArsIYUVonlCvu5sFuheHGM6rZeNaRHEf3AkQ=
-X-Google-Smtp-Source: AA0mqf47PEMDKwNO6Bho58Hy29OxYc3s0Z7w0iMCM8Fl6XXJd6ULXr06oo0T4sDZ7ClI0FcZjxgV2A==
-X-Received: by 2002:a17:907:d042:b0:78c:c893:1965 with SMTP id vb2-20020a170907d04200b0078cc8931965mr7382678ejc.247.1669991907324;
-        Fri, 02 Dec 2022 06:38:27 -0800 (PST)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id jt10-20020a170906dfca00b007a9a56e2a07sm3064211ejc.49.2022.12.02.06.38.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 06:38:25 -0800 (PST)
-Received: by mail-wr1-f43.google.com with SMTP id d1so8056028wrs.12
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:38:25 -0800 (PST)
-X-Received: by 2002:adf:fb4c:0:b0:236:5270:735e with SMTP id
- c12-20020adffb4c000000b002365270735emr32762102wrs.659.1669991904737; Fri, 02
- Dec 2022 06:38:24 -0800 (PST)
+        Fri, 2 Dec 2022 09:38:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FA363BB9;
+        Fri,  2 Dec 2022 06:38:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A20D6B82185;
+        Fri,  2 Dec 2022 14:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2219C433D6;
+        Fri,  2 Dec 2022 14:38:26 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GmyxGuFQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669991904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sj3sV8ZF7V6ZxV0fZYVQwprsf9twVEkMvj7MCPVNWHc=;
+        b=GmyxGuFQp01uapUzRl7YaSjdjmIqqzsPUwKU6mQ2gE0BK8y2nZxasRl1JTs3QgLZb55mFN
+        Fh7cAQ+hjTkU8z+9E5aw7a8xbV2mPAHSTSf80vdda0JwxoPDcynQIaTOFSvdJts5qEyFki
+        ERZ91gFHRp8vMEyq8/qdSI41j4LOgOQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ccdf8612 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 2 Dec 2022 14:38:24 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 15:38:20 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v10 1/4] random: add vgetrandom_alloc() syscall
+Message-ID: <Y4oN3JDG4uH2+OUo@zx2c4.com>
+References: <20221129210639.42233-1-Jason@zx2c4.com>
+ <20221129210639.42233-2-Jason@zx2c4.com>
+ <877czc7m0g.fsf@oldenburg.str.redhat.com>
+ <Y4d5SyU3akA9ZBaJ@zx2c4.com>
+ <Y4eG9cUE28s0YpgO@zx2c4.com>
 MIME-Version: 1.0
-References: <20221118164201.321147-1-krzysztof.kozlowski@linaro.org>
- <CAD=FV=Vo9zbsjgYEn0eBkC8eKRceg6v4u1g=w6nSYHNctFQWxg@mail.gmail.com> <ca4693a5-e941-a2c9-b023-42a91589dad6@linaro.org>
-In-Reply-To: <ca4693a5-e941-a2c9-b023-42a91589dad6@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 2 Dec 2022 06:38:12 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VCJA0v-EpT9YyCRZg07QzGeH9PGcNcO=j=x0e9XeHtHQ@mail.gmail.com>
-Message-ID: <CAD=FV=VCJA0v-EpT9YyCRZg07QzGeH9PGcNcO=j=x0e9XeHtHQ@mail.gmail.com>
-Subject: Re: [RFT PATCH v2 1/2] arm64: dts: qcom: sdm845-db845c: drop unneeded qup_spi0_default
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y4eG9cUE28s0YpgO@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Nov 30, 2022 at 05:38:13PM +0100, Jason A. Donenfeld wrote:
+> On Wed, Nov 30, 2022 at 04:39:55PM +0100, Jason A. Donenfeld wrote:
+> > 2) Convert vgetrandom_alloc() into a clone3-style syscall, as Christian
+> >    suggested earlier, which might allow for a bit more overloading
+> >    capability. That would be a struct that looks like:
+> > 
+> >       struct vgetrandom_alloc_args {
+> > 	  __aligned_u64 flags;
+> >           __aligned_u64 states;
+> > 	  __aligned_u64 num;
+> > 	  __aligned_u64 size_of_each;
+> >       }
+> > 
+> >   - If flags is VGRA_ALLOCATE, states and size_of_each must be zero on
+> >     input, while num is the hint, as is the case now. On output, states,
+> >     size_of_each, and num are filled in.
+> > 
+> >   - If flags is VGRA_DEALLOCATE, states, size_of_each, and num must be as
+> >     they were originally, and then it deallocates.
+> > 
+> > I suppose (2) would alleviate your concerns entirely, without future
+> > uncertainty over what it'd be like to add special cases to munmap(). And
+> > it'd add a bit more future proofing to the syscall, depending on what we
+> > do.
+> > 
+> > So maybe I'm warming up to that approach a bit.
+> 
+> So I just did a little quick implementation to see what it'd feel like,
+> and actually, it's quite simple, and might address a lot of concerns all
+> at once. What do you think of the below? Documentation and such still
+> needs work obviously, but the bones should be there.
 
-On Fri, Dec 2, 2022 at 12:17 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 02/12/2022 01:49, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Fri, Nov 18, 2022 at 8:42 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> The qup_spi0_default pin override is exactly the same as one already in
-> >> sdm845.dtsi.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>
-> >> ---
-> >>
-> >> Cc: Doug Anderson <dianders@chromium.org>
-> >>
-> >> Changes since v1:
-> >> 1. New patch.
-> >> ---
-> >>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 8 --------
-> >>  1 file changed, 8 deletions(-)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> >> index 02dcf75c0745..56a7afb697ed 100644
-> >> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> >> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> >> @@ -1274,11 +1274,3 @@ ov7251_ep: endpoint {
-> >>                 };
-> >>         };
-> >>  };
-> >> -
-> >> -/* PINCTRL - additions to nodes defined in sdm845.dtsi */
-> >> -&qup_spi0_default {
-> >> -       config {
-> >> -               drive-strength = <6>;
-> >> -               bias-disable;
-> >> -       };
-> >> -};
-> >
-> > I guess it's more of a question for what Bjorn thinks, but I view the
-> > fact that the drive-strength / bias are in the dtsi file to begin with
-> > as more as a bug in commit 8f6e20adaaf3 ("arm64: dts: qcom: sdm845:
-> > enable dma for spi"), which is where these properties were introduced
-> > to sdm845.dtsi.
-> >
-> > The historical guidance from Bjorn was that things like
-> > "drive-strength" and "bias" didn't belong in the SoC dtsi file. Later
-> > we came to an agreement that it could be OK to put drive-strength in
-> > the SoC dtsi file but that bias was still problematic because it meant
-> > ugly "/delete-property/" stuff in the board dtsi files [1].
->
-> So let's move it from DTSI to all boards? Although what if the board
-> does not use SPI0?
+Well, despite writing into the ether here, I continue to chase my tail
+around in circles over this. After Adhemerval expressed a sort of "meh"
+opinion to me on IRC around doing the clone3-like thing, I went down a
+mm rabbit hole and started looking at all the various ways memory is
+allocated in userspace and under what conditions and for what and why.
+Turns out there are a few drivers doing interesting things in this
+space.
 
-You'd look for boards that set spi0's status to "okay" and those
-boards would be the ones to have it in their dtsi.
+The long and short of it is that:
+- All addresses involve maps and page tables.
+- Allocating is mapping, deallocating is unmapping, and there's no way
+  around that.
+- Memory that's "special" usually comes with special attributes or
+  operations on its vma.
 
--Doug
+So, this makes me think that `munmap` is the fine *and correct* API for
+deallocation. It's what everything else uses, even "special" things. And
+it doesn't constrain us in the future in case this gets "registered"
+somehow, as Florian described it, because it's still attached to
+current->mm and will still always go through the same mapping APIs
+anyway.
+
+In light of that, I'm going to stick with the original API design, and
+not do the clone3() args struct thing and the VGRA_DEALLOCATE flag.
+However, I think it'd be a good idea to add an additional parameter of
+"unsigned long addr", which is enforced/reserved to be always 0 for now.
+This might prove useful for something together with the currently unused
+flags argument, sometime in the future.
+
+Jason
