@@ -2,133 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072CB63FDEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 03:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A107163FDF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 03:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiLBCDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 21:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S231845AbiLBCGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 21:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiLBCDU (ORCPT
+        with ESMTP id S231402AbiLBCGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 21:03:20 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796ECBE117
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 18:03:19 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id b3so5312068lfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 18:03:19 -0800 (PST)
+        Thu, 1 Dec 2022 21:06:33 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BFAD4AD2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 18:06:31 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id 3so2551836vsq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 18:06:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DC30ra67XbimQ0DPoAW+D9lHfkQCC2g+rgI/z0QNHM=;
-        b=XbCWI67Q8OAZgL4Wau2xeIeIytpIwMQxvjeU30HTI/a+y1BnRiRRoRO4mJgFhAISmV
-         gtnXQG8XTMrlVx99MvawpbB9QACC/wSfDHghUJiL4sbz3g6pF1/zjyIn4dn8+J1YjQMB
-         YrTDnKSGQkvmraXxKJ6WfSxgABqdrwvJLLSxZKFc4bOuIbZLsC+7VbvnwN0dhc5VgA8O
-         X/B8HugSgszqD/Id/T4L1nlB0V7MUmorYjCu57NTsoycqmJePoJED852KMAGoH4B9G7x
-         AszHulURpntF6Fs5uafyEIFgxLHLdCKoVQJ3NSi+0kO4R/BBnaHvVjLDWSyKhPXoJCmD
-         fRUw==
+        bh=1N+8R3B0R8scfqdo5hcRRcXMxMacRIFBiFcRxzf5Jso=;
+        b=FGvlzpklux1eQvCCAhLE2Dtsmq6kxEJYMyrDPhWhi4Ffz08/w1SdCuiWgYdyoClJrY
+         a0R+QzFLk3lpRqYN6QRoKAZl3xnbErPu1BCj04OFhGMBvJ7ekKm6VjmUMppeSXtW/nh9
+         APmORNQZQH1gsBgsfLGMdXY4tCY/CITBgZjmetWkAQOJ98MvFniyGzZ9jCfv29rmJbym
+         GeG4mcozIeZ6jOER3fKuVByTFou9p4ezpVgtmMEfyoB+nyhDGjXA6MifkrozZS75L1D5
+         vzBn/PAYaRr5383y41JHtPWyAYdDU+3I8ThF3FCuAqrene7IRm3XyJb6NWsEhvGhg426
+         jxLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6DC30ra67XbimQ0DPoAW+D9lHfkQCC2g+rgI/z0QNHM=;
-        b=saSYYyZ3cXffVwhWQCMmOM/S5IxAbjh8DdVXhu3eA+6mMy8JBc3JUR4cHRH4IZ67AT
-         eA69VPxYDgczh2Zf6+CSNo6bcsCl5n1zsvWccCCtXOMe/1BQYlBAZojKc98Hc4mOyXpp
-         ydOnjxcNiBWddTNr35Cj4xmeIr9qQeTpfoKPd88zhjA0d0/8HboOW7eZBEbPH7gYMo3D
-         70TpjXdJr8myAzrqlKQNS6WlvdpCOw2pWlol4L6yASUSQFL5MaaiUf7QAYpvdgu4f0KF
-         dRJnH3N+wRwl1pHnNTXjJZ+a5AaJ2Zu6Manxc44Kh/0F7jPhQb5KhKU2PSxcTrXh3JWf
-         Aw4Q==
-X-Gm-Message-State: ANoB5pmyQ80k/6bgxJNCoFCoZ2r3OLLkORVdmuCi2IEoY0hJlIz/EWqU
-        3VxSTTLuVyNjGsgrJthaobMq1ifMXWwpTcrI7/xYfQ==
-X-Google-Smtp-Source: AA0mqf7OXDRBb0RQNP0Alc5TqIwHvZAArQDKI7dY8JCWviTOMDXwEOM0P9W6SH9e6DGU3L6vHTY4NiNuPTamBW1YHQQ=
-X-Received: by 2002:ac2:5f76:0:b0:4af:7f16:e1c4 with SMTP id
- c22-20020ac25f76000000b004af7f16e1c4mr24901596lfc.351.1669946597502; Thu, 01
- Dec 2022 18:03:17 -0800 (PST)
+        bh=1N+8R3B0R8scfqdo5hcRRcXMxMacRIFBiFcRxzf5Jso=;
+        b=EzPnJ3tur0oRwgbIEc9cF6ov6WRr3d04THY2lC6momr8n+HieuKGIuXBx6GDmE4WWA
+         gSuf74onKPke7c2hmzftdaNSRD8GFlTLhxDKaBvOp8JwZq4iC4EG2OG9NOueoisj0xuG
+         EwtPZ4ULPz7UTAsWZmPktOYhSrNExoMUlOTyl7JHFlO0Elw9OpdZE+H9YoxYiHY8byFq
+         oEtmvc2mQyFa9BLqZnNCj7ZtnBqsyMBraprFiOIQZKAFUq4RktOnLsuEE9sxfi6b+D8P
+         1DivA2IG+15Olwx6r5utxID5dSrPuIE4ao8+yjiK38z77P/3wOBrl7fv9Sd2sh25if0P
+         ZcPA==
+X-Gm-Message-State: ANoB5plSypk36PX4Ux1h8SOhsGw90Bm5Z2K8W3YEp/FDF2KDgByHNt4W
+        NN4KI3lAezem+Ofna8o133Q6SyxZiw0e3m3RKF63Kw==
+X-Google-Smtp-Source: AA0mqf40PUHC3tnPKxX3qZepvqqyV1zyMITMf7TM43b3OWxLKuSILSQEYgxex+vVCemsw7KTP+Z5PZ6eKBQOI4Ffyfk=
+X-Received: by 2002:a05:6102:1c5:b0:3b0:4f9b:238d with SMTP id
+ s5-20020a05610201c500b003b04f9b238dmr28776025vsq.59.1669946790569; Thu, 01
+ Dec 2022 18:06:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20221129200653.962019-1-lixiaoyan@google.com> <20221129200653.962019-2-lixiaoyan@google.com>
- <CACKFLi=qu7KBNPAST0fffxu1TC7-PAX2QzMM6b-1C0X5OCNFqQ@mail.gmail.com>
-In-Reply-To: <CACKFLi=qu7KBNPAST0fffxu1TC7-PAX2QzMM6b-1C0X5OCNFqQ@mail.gmail.com>
-From:   Coco Li <lixiaoyan@google.com>
-Date:   Thu, 1 Dec 2022 18:03:06 -0800
-Message-ID: <CADjXwjgJtXQx14h4_aSYiEHgZjGsYVGEs+LKm13BkweZFAtUUQ@mail.gmail.com>
-Subject: Re: [RFC net-next v3 2/2] bnxt: Use generic HBH removal helper in tx path
-To:     Michael Chan <michael.chan@broadcom.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Daisuke Nishimura <nishimura@mxp.nes.nec.co.jp>,
-        linux-kernel@vger.kernel.org
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+ <Y36XchdgTCsMP4jT@cmpxchg.org> <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y4ZKgXdUXZ3ycMp4@cmpxchg.org> <87wn7dayfz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAHS8izNc=NeMcNudOB0r4aYbZURpU+Y9xpek_KpO=55R+7ec5g@mail.gmail.com> <87tu2e36nw.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87tu2e36nw.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 1 Dec 2022 18:06:18 -0800
+Message-ID: <CAHS8izO3HZOpACJV0zqGZ-OpsNWYat3H-Adp9Vg7mtVO+5C3fw@mail.gmail.com>
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-16.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 12:42 PM Michael Chan <michael.chan@broadcom.com> wrote:
+On Thu, Dec 1, 2022 at 6:02 PM Huang, Ying <ying.huang@intel.com> wrote:
 >
-> On Tue, Nov 29, 2022 at 12:07 PM Coco Li <lixiaoyan@google.com> wrote:
-> > diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > index 0fe164b42c5d..f144a5ef2e04 100644
-> > --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > @@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
-> >                         return NETDEV_TX_BUSY;
-> >         }
-> >
-> > +       if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
-> > +               goto tx_free;
-> > +
-> >         length = skb->len;
-> >         len = skb_headlen(skb);
-> >         last_frag = skb_shinfo(skb)->nr_frags;
-> > @@ -11342,9 +11345,15 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
-> >
-> >                 if (hdrlen > 64)
-> >                         return false;
-> > +
-> > +               /* The ext header may be a hop-by-hop header inserted for
-> > +                * big TCP purposes. This will be removed before sending
-> > +                * from NIC, so do not count it.
-> > +                */
-> > +               if (!(*nexthdr == NEXTHDR_HOP && ipv6_has_hopopt_jumbo(skb)))
+> Mina Almasry <almasrymina@google.com> writes:
 >
-> To be more efficient, why not just check the header's tlv_type here
-> instead of calling ipv6_has_hopopt_jumbo()?
+> > On Tue, Nov 29, 2022 at 7:56 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >>
+> >> Johannes Weiner <hannes@cmpxchg.org> writes:
+> >>
+> >> > Hello Ying,
+> >> >
+> >> > On Thu, Nov 24, 2022 at 01:51:20PM +0800, Huang, Ying wrote:
+> >> >> Johannes Weiner <hannes@cmpxchg.org> writes:
+> >> >> > The fallback to reclaim actually strikes me as wrong.
+> >> >> >
+> >> >> > Think of reclaim as 'demoting' the pages to the storage tier. If we
+> >> >> > have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+> >> >> > CXL and from CXL to storage. If we reclaim a page from RAM, it means
+> >> >> > we 'demote' it directly from RAM to storage, bypassing potentially a
+> >> >> > huge amount of pages colder than it in CXL. That doesn't seem right.
+> >> >> >
+> >> >> > If demotion fails, IMO it shouldn't satisfy the reclaim request by
+> >> >> > breaking the layering. Rather it should deflect that pressure to the
+> >> >> > lower layers to make room. This makes sure we maintain an aging
+> >> >> > pipeline that honors the memory tier hierarchy.
+> >> >>
+> >> >> Yes.  I think that we should avoid to fall back to reclaim as much as
+> >> >> possible too.  Now, when we allocate memory for demotion
+> >> >> (alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
+> >> >> kswapd reclaim on lower tier node to free some memory to avoid fall back
+> >> >> to reclaim on current (higher tier) node.  This may be not good enough,
+> >> >> for example, the following patch from Hasan may help via waking up
+> >> >> kswapd earlier.
+> >> >>
+> >> >> https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
+> >> >>
+> >> >> Do you know what is the next step plan for this patch?
+> >> >>
+> >> >> Should we do even more?
+> >> >>
+> >> >> From another point of view, I still think that we can use falling back
+> >> >> to reclaim as the last resort to avoid OOM in some special situations,
+> >> >> for example, most pages in the lowest tier node are mlock() or too hot
+> >> >> to be reclaimed.
+> >> >
+> >> > If they're hotter than reclaim candidates on the toptier, shouldn't
+> >> > they get promoted instead and make room that way? We may have to tweak
+> >> > the watermark logic a bit to facilitate that (allow promotions where
+> >> > regular allocations already fail?). But this sort of resorting would
+> >> > be preferable to age inversions.
+> >>
+> >> Now it's legal to enable demotion and disable promotion.  Yes, this is
+> >> wrong configuration in general.  But should we trigger OOM for these
+> >> users?
+> >>
+> >> And now promotion only works for default NUMA policy (and MPOL_BIND to
+> >> both promotion source and target nodes with MPOL_F_NUMA_BALANCING).  If
+> >> we use some other NUMA policy, the pages cannot be promoted too.
+> >>
+> >> > The mlock scenario sounds possible. In that case, it wouldn't be an
+> >> > aging inversion, since there is nothing colder on the CXL node.
+> >> >
+> >> > Maybe a bypass check should explicitly consult the demotion target
+> >> > watermarks against its evictable pages (similar to the file_is_tiny
+> >> > check in prepare_scan_count)?
+> >>
+> >> Yes.  This sounds doable.
+> >>
+> >> > Because in any other scenario, if there is a bug in the promo/demo
+> >> > coordination, I think we'd rather have the OOM than deal with age
+> >> > inversions causing intermittent performance issues that are incredibly
+> >> > hard to track down.
+> >>
+> >> Previously, I thought that people will always prefer performance
+> >> regression than OOM.  Apparently, I am wrong.
+> >>
+> >> Anyway, I think that we need to reduce the possibility of OOM or falling
+> >> back to reclaim as much as possible firstly.  Do you agree?
+> >>
+> >
+> > I've been discussing this with a few folks here. I think FWIW general
+> > feeling here is that demoting from top tier nodes is preferred, except
+> > in extreme circumstances we would indeed like to run with a
+> > performance issue rather than OOM a customer VM. I wonder if there is
+> > another way to debug mis-tiered pages rather than trigger an oom to
+> > debug.
+> >
+> > One thing I think/hope we can trivially agree on is that proactive
+> > reclaim/demotion is _not_ an extreme circumstance. I would like me or
+> > someone from the team to follow up with a patch that disables fallback
+> > to reclaim on proactive reclaim/demotion (sc->proactive).
+>
+> Yes.  This makes sense to me.
 >
 
-It may be possible that the next header is Hop_by_hop but the packet
-is not tcp, meaning that it would not be removed and we'd still want
-to count this header towards the limit.
-ipv6_has_hopopt_jumbo checks for the big tcp case (gso, skb len
-reaches a certain size) particularly.
+Glad to hear it. Patch is already sent for review btw:
+https://lore.kernel.org/linux-mm/20221201233317.1394958-1-almasrymina@google.com/T/
 
-> > +                       hdr_count++;
-> >                 nexthdr = &hp->nexthdr;
-> >                 start += hdrlen;
-> > -               hdr_count++;
-> >         }
-> >         if (nextp) {
-> >                 /* Caller will check inner protocol */
-> > @@ -13657,6 +13666,8 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
-> >                 dev->features &= ~NETIF_F_LRO;
-> >         dev->priv_flags |= IFF_UNICAST_FLT;
+> Best Regards,
+> Huang, Ying
+>
+> >> One possibility, can we fall back to reclaim only if the sc->priority is
+> >> small enough (even 0)?
+> >>
 > >
-> > +       netif_set_tso_max_size(dev, GSO_MAX_SIZE);
-> > +
-> >  #ifdef CONFIG_BNXT_SRIOV
-> >         init_waitqueue_head(&bp->sriov_cfg_wait);
-> >  #endif
-> > --
-> > 2.38.1.584.g0f3c55d4c2-goog
+> > This makes sense to me.
 > >
+> >> Best Regards,
+> >> Huang, Ying
+> >>
+>
