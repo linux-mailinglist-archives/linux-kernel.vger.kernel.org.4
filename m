@@ -2,137 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7950964038B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D4A640393
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiLBJnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        id S232526AbiLBJny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbiLBJnB (ORCPT
+        with ESMTP id S232564AbiLBJnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:43:01 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3082FA659F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:43:00 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3b56782b3f6so43017347b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:43:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2slbUiJmXoRmpNuRxOv1K083wWFnheMGIwwKztKIFzE=;
-        b=tCQ5/XmgqkcfC40O80yasOYCKHkzhwgepZgGGTeZs9YXcUBntp9tjV3tXTdTKYhQjK
-         GcHlOU0T2s/Va9He+t2YF8cAPY30g0D1vPR+g/ttoaY/k7op9dh3OTqtBVAdciWgI29w
-         eyph+Px2wuhBix0loKUPb9CiHK/FkTD8P6/POuCMoWPfPSwGPUKLrBNM4q8hV+oAJ3xg
-         pKure5WZ6hdoHpma0E9pQm0LusvTP+XGfqYzxX1548PbZvSL0SDYXxJxF+f4lpJSNOLd
-         7a5GMX4XWeiIDy9MHRlTNBnR/pCZHoE4fzYmdlul6+h05Zw2DZ9Cjk3Cef+NfcTos9Bc
-         CuFw==
+        Fri, 2 Dec 2022 04:43:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D881D0FF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:42:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669974169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+wLl4vtYCGhwohXxITZQq5I6CY9K6KjTKaeRzYrEEpY=;
+        b=GVyMkVrxHuH6ntzuBs4aff9tewyssz9Vp2M/M4P1m+LoXlEEKm8kH2GbKgdYtd2OJeF+vE
+        RyWKS65gp9qEqlF88IMqgTPxdZZiUdCeYdKGVDv6WMLCE2WO1AivtqZxglgo1HaZW+Wknk
+        BK4lxk/HK8Xti52QOHJO/Z22nhzgWSQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-459-u6Q-wNZ_MAaB1hlSrtmJJQ-1; Fri, 02 Dec 2022 04:42:47 -0500
+X-MC-Unique: u6Q-wNZ_MAaB1hlSrtmJJQ-1
+Received: by mail-wm1-f71.google.com with SMTP id c187-20020a1c35c4000000b003cfee3c91cdso2238093wma.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:42:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2slbUiJmXoRmpNuRxOv1K083wWFnheMGIwwKztKIFzE=;
-        b=oyIR+ScEdkdaa46+Ro1o1WS5hLf0VnDziEIG/FocPb+D3baVaNMHlYMjGQ2i+tBftv
-         etXWq4U+2fDA4ZhBrqlKLSNATKsZ+uKRCqebtA1y65YGAdNlKqKpHOiF2MqTkZrjf6FA
-         TFtm/LsZ67JGZVIPnxW4V4VqSfY+gJO1xUkzZ0FZe1AjvUdM0slI6wNWQ/hwEWRJHvHN
-         xNCGs2aiVQiSfIWplnCgfAj9sICLGtvANC7Kt39+gcw6DZ+4Fz5grMAnSdZvfGPyBmY7
-         ZoP/POcAWlwdzgzFYpuXZXeTZ2HZJAnKLIFOUIENXt/d5SkhCMXAzRLrcU4ROTklAVnM
-         U+tQ==
-X-Gm-Message-State: ANoB5pnet8rfpb6IyJYl4qjqP7bq3rjgo27Frh13CTFe+1HUSqyUvGMQ
-        1hxxlMkIC8NF/EDcwSCoI6lCXZrVeePCWGPKGNVe6A==
-X-Google-Smtp-Source: AA0mqf5kDX6jCDuPLbaGSMnRhNF04YeIJnTtrSOziYlU+zLnS0MyX9YTp0fIYld/VBvyePXysL6Zbyq7V5vq0UVO5gg=
-X-Received: by 2002:a81:1915:0:b0:3bf:9e45:1139 with SMTP id
- 21-20020a811915000000b003bf9e451139mr28525181ywz.267.1669974179263; Fri, 02
- Dec 2022 01:42:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wLl4vtYCGhwohXxITZQq5I6CY9K6KjTKaeRzYrEEpY=;
+        b=rzWZ13xN0mK1/VvRMYfJCAWypYaD952XIlaWJhTauFBptrFU9/TM+IRYurXtLqtGsD
+         7cjm6nwknWeS/yE1gFfVCJSPxl1AgTt/MuUGeB1YP+u+D26VZyojHNhncFkxt3Hl8V45
+         TXSv5fBEmcfNecqfssrmiowWi/Xb0GfbwSV8I8CrT1Cyef4lsh4VmvMhmbR92OpzdMIZ
+         7MAr2ToS4xRFka0olq4C7mBmG5zMl+nhkCSgGuYuAfQQK1VS0D37vGFNhzILjQ61Y5+G
+         73+Nj7IP5QLwm02+HxELL5qiIERvNA45qFfuEdfC7xwPRmonO5j1JsAr/hSclEHhwQj1
+         Eg7g==
+X-Gm-Message-State: ANoB5pmrW+u0s85kvLL2Y35o3cmajxgWk4w9YDOMiRwyoyoIKIgrG543
+        JYxKl0cN4g7D+9nGhXZgA7xBgVFPJF4g/jwaaPhVSxRgqZlANyEaChSbvg2d03SIRkiT9uKR8Kl
+        X+TKMMI5n5FCAXx0nBCA7e70z
+X-Received: by 2002:a5d:6947:0:b0:242:17a5:ee80 with SMTP id r7-20020a5d6947000000b0024217a5ee80mr14530215wrw.628.1669974166727;
+        Fri, 02 Dec 2022 01:42:46 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6UdJV/mDJpmRG4muvnS79yLQAxAfJtB+81SwOHAcWOxkps8MZJhxfA5YRNqhJp3giA0N1wyw==
+X-Received: by 2002:a5d:6947:0:b0:242:17a5:ee80 with SMTP id r7-20020a5d6947000000b0024217a5ee80mr14530202wrw.628.1669974166476;
+        Fri, 02 Dec 2022 01:42:46 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id z5-20020adff745000000b002383fc96509sm6488257wrp.47.2022.12.02.01.42.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 01:42:46 -0800 (PST)
+Message-ID: <3805ed81-2315-4eca-3ea6-b391c1659cc7@redhat.com>
+Date:   Fri, 2 Dec 2022 10:42:44 +0100
 MIME-Version: 1.0
-References: <202212021713.p3N3pHkV-lkp@intel.com>
-In-Reply-To: <202212021713.p3N3pHkV-lkp@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 2 Dec 2022 10:42:23 +0100
-Message-ID: <CANpmjNNzkSVGeogm4fjHsENW52PEdwJey-=vz89QC9b5Fa-KGA@mail.gmail.com>
-Subject: Re: ld.lld: error: undefined symbol: __tsan_memset
-To:     kernel test robot <lkp@intel.com>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/2] KVM: Mark KVM_SET_MEMORY_REGION and
+ KVM_SET_MEMORY_ALIAS as obsoleted
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Sergio Lopez Pascual <slp@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221119085632.1018994-1-javierm@redhat.com>
+ <Y4T+SY9SZIRFBdBM@google.com>
+ <a6a59b75-2ee2-ab9b-3038-2590df17d031@redhat.com>
+Content-Language: en-US
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <a6a59b75-2ee2-ab9b-3038-2590df17d031@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Dec 2022 at 10:32, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Kefeng,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   a4412fdd49dc011bcc2c0d81ac4cab7457092650
-> commit: dd03762ab608e058c8f390ad9cf667e490089796 arm64: Enable KCSAN
-> date:   12 months ago
-> config: arm64-randconfig-r006-20221201
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd03762ab608e058c8f390ad9cf667e490089796
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout dd03762ab608e058c8f390ad9cf667e490089796
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: undefined symbol: __tsan_memset
->    >>> referenced by main.c
->    >>>               main.o:(init_setup) in archive init/built-in.a
->    >>> referenced by main.c
->    >>>               main.o:(rdinit_setup) in archive init/built-in.a
->    >>> referenced by main.c
->    >>>               main.o:(do_one_initcall) in archive init/built-in.a
->    >>> referenced 8519 more times
-> --
-> >> ld.lld: error: undefined symbol: __tsan_memcpy
->    >>> referenced by main.c
->    >>>               main.o:(do_one_initcall) in archive init/built-in.a
->    >>> referenced by initramfs.c
->    >>>               initramfs.o:(panic_show_mem) in archive init/built-in.a
->    >>> referenced by initramfs.c
->    >>>               initramfs.o:(do_collect) in archive init/built-in.a
->    >>> referenced 3922 more times
-> --
-> >> ld.lld: error: undefined symbol: __tsan_memmove
->    >>> referenced by main.c
->    >>>               main.o:(repair_env_string) in archive init/built-in.a
->    >>> referenced by range.c
->    >>>               range.o:(add_range_with_merge) in archive kernel/built-in.a
->    >>> referenced by core.c
->    >>>               bpf/core.o:(bpf_patch_insn_single) in archive kernel/built-in.a
->    >>> referenced 88 more times
+Hello Sean and Paolo,
 
-The fix for this has been in -next (-rcu) for a while. Once it hits
-mainline, it should also reach stable kernels since I attached Cc:
-stable tags to the patches.
+Thanks for your feedback.
 
-Given Clang 16 isn't even released yet, I think this is fair and does
-not require urgency at this point.
+On 11/30/22 15:28, Paolo Bonzini wrote:
+> On 11/28/22 19:30, Sean Christopherson wrote:
+>> E.g. KVM_{CREATE,GET,SET}_PIT are good examples of obsolete ioctls; they've been
+>> supplanted by newer variants, but KVM still supports the old ones too.
+>>
+>> Alternatively (to marking them deprecated), can we completely remove all references
+>> to VM_SET_MEMORY_REGION and KVM_SET_MEMORY_ALIAS?  The cascading updates in api.rst
+>> will be painful, but it's one-time pain.
+> 
+> Yes, we should.
+>
 
-Thanks,
--- Marco
+Ok. I'll do that and post a v2 then.
+ 
+> Paolo
+> 
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
