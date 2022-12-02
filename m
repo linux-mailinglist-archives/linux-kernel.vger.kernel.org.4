@@ -2,271 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21EC640332
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DAD640337
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbiLBJWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S232797AbiLBJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiLBJV6 (ORCPT
+        with ESMTP id S233054AbiLBJXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:21:58 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1924BDCC0;
-        Fri,  2 Dec 2022 01:21:20 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1p12ED-003AqB-SJ; Fri, 02 Dec 2022 17:21:06 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Dec 2022 17:21:05 +0800
-From:   "Herbert Xu" <herbert@gondor.apana.org.au>
-Date:   Fri, 02 Dec 2022 17:21:05 +0800
-Subject: [PATCH 10/10] crypto: qce - Set DMA alignment explicitly
-References: <Y4nDL50nToBbi4DS@gondor.apana.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Message-Id: <E1p12ED-003AqB-SJ@formenos.hmeau.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 04:23:21 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E57C7D29;
+        Fri,  2 Dec 2022 01:22:09 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNnWz5v70z8RTZL;
+        Fri,  2 Dec 2022 17:22:07 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B29LqdK063118;
+        Fri, 2 Dec 2022 17:21:52 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Fri, 2 Dec 2022 17:21:54 +0800 (CST)
+Date:   Fri, 2 Dec 2022 17:21:54 +0800 (CST)
+X-Zmail-TransId: 2af96389c3b25295ad21
+X-Mailer: Zmail v1.0
+Message-ID: <202212021721543696124@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <hdegoede@redhat.com>
+Cc:     <markgross@kernel.org>, <pobrn@protonmail.com>,
+        <dell.client.kernel@dell.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBwbGF0Zm9ybS94ODY6IGRlbGw6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZsKgc2NucHJpbnRmKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B29LqdK063118
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6389C3BF.002 by FangMail milter!
+X-FangMail-Envelope: 1669972927/4NNnWz5v70z8RTZL/6389C3BF.002/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6389C3BF.002/4NNnWz5v70z8RTZL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver has been implicitly relying on kmalloc alignment
-to be sufficient for DMA.  This may no longer be the case with
-upcoming arm64 changes.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-This patch changes it to explicitly request DMA alignment from
-the Crypto API.
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
+ drivers/platform/x86/dell/alienware-wmi.c | 41 +++++++++--------------
+ 1 file changed, 16 insertions(+), 25 deletions(-)
 
- drivers/crypto/qce/aead.c   |   22 +++++++++++-----------
- drivers/crypto/qce/common.c |    5 +++--
- drivers/crypto/qce/sha.c    |   18 +++++++++---------
- 3 files changed, 23 insertions(+), 22 deletions(-)
+diff --git a/drivers/platform/x86/dell/alienware-wmi.c b/drivers/platform/x86/dell/alienware-wmi.c
+index a34e07ef2c79..a9477e5432e4 100644
+--- a/drivers/platform/x86/dell/alienware-wmi.c
++++ b/drivers/platform/x86/dell/alienware-wmi.c
+@@ -398,10 +398,10 @@ static ssize_t show_control_state(struct device *dev,
+ 				  struct device_attribute *attr, char *buf)
+ {
+ 	if (lighting_control_state == LEGACY_BOOTING)
+-		return scnprintf(buf, PAGE_SIZE, "[booting] running suspend\n");
++		return sysfs_emit(buf, "[booting] running suspend\n");
+ 	else if (lighting_control_state == LEGACY_SUSPEND)
+-		return scnprintf(buf, PAGE_SIZE, "booting running [suspend]\n");
+-	return scnprintf(buf, PAGE_SIZE, "booting [running] suspend\n");
++		return sysfs_emit(buf, "booting running [suspend]\n");
++	return sysfs_emit(buf, "booting [running] suspend\n");
+ }
 
-diff --git a/drivers/crypto/qce/aead.c b/drivers/crypto/qce/aead.c
-index 6eb4d2e35629..7d811728f047 100644
---- a/drivers/crypto/qce/aead.c
-+++ b/drivers/crypto/qce/aead.c
-@@ -24,7 +24,7 @@ static void qce_aead_done(void *data)
- {
- 	struct crypto_async_request *async_req = data;
- 	struct aead_request *req = aead_request_cast(async_req);
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct qce_aead_ctx *ctx = crypto_tfm_ctx(async_req->tfm);
- 	struct qce_alg_template *tmpl = to_aead_tmpl(crypto_aead_reqtfm(req));
- 	struct qce_device *qce = tmpl->qce;
-@@ -92,7 +92,7 @@ static void qce_aead_done(void *data)
- static struct scatterlist *
- qce_aead_prepare_result_buf(struct sg_table *tbl, struct aead_request *req)
- {
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_aead_tmpl(crypto_aead_reqtfm(req));
- 	struct qce_device *qce = tmpl->qce;
- 
-@@ -103,7 +103,7 @@ qce_aead_prepare_result_buf(struct sg_table *tbl, struct aead_request *req)
- static struct scatterlist *
- qce_aead_prepare_ccm_result_buf(struct sg_table *tbl, struct aead_request *req)
- {
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 
- 	sg_init_one(&rctx->result_sg, rctx->ccmresult_buf, QCE_BAM_BURST_SIZE);
- 	return qce_sgtable_add(tbl, &rctx->result_sg, QCE_BAM_BURST_SIZE);
-@@ -112,7 +112,7 @@ qce_aead_prepare_ccm_result_buf(struct sg_table *tbl, struct aead_request *req)
- static struct scatterlist *
- qce_aead_prepare_dst_buf(struct aead_request *req)
- {
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_aead_tmpl(crypto_aead_reqtfm(req));
- 	struct qce_device *qce = tmpl->qce;
- 	struct scatterlist *sg, *msg_sg, __sg[2];
-@@ -186,7 +186,7 @@ qce_aead_ccm_prepare_buf_assoclen(struct aead_request *req)
- {
- 	struct scatterlist *sg, *msg_sg, __sg[2];
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct qce_aead_ctx *ctx = crypto_aead_ctx(tfm);
- 	unsigned int assoclen = rctx->assoclen;
- 	unsigned int adata_header_len, cryptlen, totallen;
-@@ -300,7 +300,7 @@ qce_aead_ccm_prepare_buf_assoclen(struct aead_request *req)
- 
- static int qce_aead_prepare_buf(struct aead_request *req)
- {
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_aead_tmpl(crypto_aead_reqtfm(req));
- 	struct qce_device *qce = tmpl->qce;
- 	struct scatterlist *sg;
-@@ -328,7 +328,7 @@ static int qce_aead_prepare_buf(struct aead_request *req)
- 
- static int qce_aead_ccm_prepare_buf(struct aead_request *req)
- {
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct qce_aead_ctx *ctx = crypto_aead_ctx(tfm);
- 	struct scatterlist *sg;
-@@ -408,7 +408,7 @@ static int
- qce_aead_async_req_handle(struct crypto_async_request *async_req)
- {
- 	struct aead_request *req = aead_request_cast(async_req);
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct qce_aead_ctx *ctx = crypto_tfm_ctx(async_req->tfm);
- 	struct qce_alg_template *tmpl = to_aead_tmpl(crypto_aead_reqtfm(req));
-@@ -502,7 +502,7 @@ qce_aead_async_req_handle(struct crypto_async_request *async_req)
- static int qce_aead_crypt(struct aead_request *req, int encrypt)
- {
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct qce_aead_ctx *ctx = crypto_aead_ctx(tfm);
- 	struct qce_alg_template *tmpl = to_aead_tmpl(tfm);
- 	unsigned int blocksize = crypto_aead_blocksize(tfm);
-@@ -675,8 +675,8 @@ static int qce_aead_init(struct crypto_aead *tfm)
- 	if (IS_ERR(ctx->fallback))
- 		return PTR_ERR(ctx->fallback);
- 
--	crypto_aead_set_reqsize(tfm, sizeof(struct qce_aead_reqctx) +
--				crypto_aead_reqsize(ctx->fallback));
-+	crypto_aead_set_reqsize_dma(tfm, sizeof(struct qce_aead_reqctx) +
-+					 crypto_aead_reqsize(ctx->fallback));
- 	return 0;
+ static ssize_t store_control_state(struct device *dev,
+@@ -547,14 +547,12 @@ static ssize_t show_hdmi_cable(struct device *dev,
+ 				   (u32 *) &out_data);
+ 	if (ACPI_SUCCESS(status)) {
+ 		if (out_data == 0)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "[unconnected] connected unknown\n");
++			return sysfs_emit(buf, "[unconnected] connected unknown\n");
+ 		else if (out_data == 1)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "unconnected [connected] unknown\n");
++			return sysfs_emit(buf, "unconnected [connected] unknown\n");
+ 	}
+ 	pr_err("alienware-wmi: unknown HDMI cable status: %d\n", status);
+-	return scnprintf(buf, PAGE_SIZE, "unconnected connected [unknown]\n");
++	return sysfs_emit(buf, "unconnected connected [unknown]\n");
  }
- 
-diff --git a/drivers/crypto/qce/common.c b/drivers/crypto/qce/common.c
-index 7c612ba5068f..04253a8d3340 100644
---- a/drivers/crypto/qce/common.c
-+++ b/drivers/crypto/qce/common.c
-@@ -3,6 +3,7 @@
-  * Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
-  */
- 
-+#include <crypto/internal/hash.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
- #include <linux/types.h>
-@@ -147,7 +148,7 @@ static int qce_setup_regs_ahash(struct crypto_async_request *async_req)
- {
- 	struct ahash_request *req = ahash_request_cast(async_req);
- 	struct crypto_ahash *ahash = __crypto_ahash_cast(async_req->tfm);
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_ahash_tmpl(async_req->tfm);
- 	struct qce_device *qce = tmpl->qce;
- 	unsigned int digestsize = crypto_ahash_digestsize(ahash);
-@@ -419,7 +420,7 @@ static unsigned int qce_be32_to_cpu_array(u32 *dst, const u8 *src, unsigned int
- static int qce_setup_regs_aead(struct crypto_async_request *async_req)
- {
- 	struct aead_request *req = aead_request_cast(async_req);
--	struct qce_aead_reqctx *rctx = aead_request_ctx(req);
-+	struct qce_aead_reqctx *rctx = aead_request_ctx_dma(req);
- 	struct qce_aead_ctx *ctx = crypto_tfm_ctx(async_req->tfm);
- 	struct qce_alg_template *tmpl = to_aead_tmpl(crypto_aead_reqtfm(req));
- 	struct qce_device *qce = tmpl->qce;
-diff --git a/drivers/crypto/qce/sha.c b/drivers/crypto/qce/sha.c
-index 37bafd7aeb79..fc72af8aa9a7 100644
---- a/drivers/crypto/qce/sha.c
-+++ b/drivers/crypto/qce/sha.c
-@@ -38,7 +38,7 @@ static void qce_ahash_done(void *data)
- 	struct crypto_async_request *async_req = data;
- 	struct ahash_request *req = ahash_request_cast(async_req);
- 	struct crypto_ahash *ahash = crypto_ahash_reqtfm(req);
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_ahash_tmpl(async_req->tfm);
- 	struct qce_device *qce = tmpl->qce;
- 	struct qce_result_dump *result = qce->dma.result_buf;
-@@ -75,7 +75,7 @@ static void qce_ahash_done(void *data)
- static int qce_ahash_async_req_handle(struct crypto_async_request *async_req)
- {
- 	struct ahash_request *req = ahash_request_cast(async_req);
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_sha_ctx *ctx = crypto_tfm_ctx(async_req->tfm);
- 	struct qce_alg_template *tmpl = to_ahash_tmpl(async_req->tfm);
- 	struct qce_device *qce = tmpl->qce;
-@@ -132,7 +132,7 @@ static int qce_ahash_async_req_handle(struct crypto_async_request *async_req)
- 
- static int qce_ahash_init(struct ahash_request *req)
- {
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_ahash_tmpl(req->base.tfm);
- 	const u32 *std_iv = tmpl->std_iv;
- 
-@@ -147,7 +147,7 @@ static int qce_ahash_init(struct ahash_request *req)
- 
- static int qce_ahash_export(struct ahash_request *req, void *out)
- {
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_sha_saved_state *export_state = out;
- 
- 	memcpy(export_state->pending_buf, rctx->buf, rctx->buflen);
-@@ -164,7 +164,7 @@ static int qce_ahash_export(struct ahash_request *req, void *out)
- 
- static int qce_ahash_import(struct ahash_request *req, const void *in)
- {
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	const struct qce_sha_saved_state *import_state = in;
- 
- 	memset(rctx, 0, sizeof(*rctx));
-@@ -183,7 +183,7 @@ static int qce_ahash_import(struct ahash_request *req, const void *in)
- static int qce_ahash_update(struct ahash_request *req)
- {
- 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_ahash_tmpl(req->base.tfm);
- 	struct qce_device *qce = tmpl->qce;
- 	struct scatterlist *sg_last, *sg;
-@@ -275,7 +275,7 @@ static int qce_ahash_update(struct ahash_request *req)
- 
- static int qce_ahash_final(struct ahash_request *req)
- {
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_ahash_tmpl(req->base.tfm);
- 	struct qce_device *qce = tmpl->qce;
- 
-@@ -302,7 +302,7 @@ static int qce_ahash_final(struct ahash_request *req)
- 
- static int qce_ahash_digest(struct ahash_request *req)
- {
--	struct qce_sha_reqctx *rctx = ahash_request_ctx(req);
-+	struct qce_sha_reqctx *rctx = ahash_request_ctx_dma(req);
- 	struct qce_alg_template *tmpl = to_ahash_tmpl(req->base.tfm);
- 	struct qce_device *qce = tmpl->qce;
- 	int ret;
-@@ -395,7 +395,7 @@ static int qce_ahash_cra_init(struct crypto_tfm *tfm)
- 	struct crypto_ahash *ahash = __crypto_ahash_cast(tfm);
- 	struct qce_sha_ctx *ctx = crypto_tfm_ctx(tfm);
- 
--	crypto_ahash_set_reqsize(ahash, sizeof(struct qce_sha_reqctx));
-+	crypto_ahash_set_reqsize_dma(ahash, sizeof(struct qce_sha_reqctx));
- 	memset(ctx, 0, sizeof(*ctx));
- 	return 0;
+
+ static ssize_t show_hdmi_source(struct device *dev,
+@@ -571,14 +569,12 @@ static ssize_t show_hdmi_source(struct device *dev,
+
+ 	if (ACPI_SUCCESS(status)) {
+ 		if (out_data == 1)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "[input] gpu unknown\n");
++			return sysfs_emit(buf, "[input] gpu unknown\n");
+ 		else if (out_data == 2)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "input [gpu] unknown\n");
++			return sysfs_emit(buf, "input [gpu] unknown\n");
+ 	}
+ 	pr_err("alienware-wmi: unknown HDMI source status: %u\n", status);
+-	return scnprintf(buf, PAGE_SIZE, "input gpu [unknown]\n");
++	return sysfs_emit(buf, "input gpu [unknown]\n");
  }
+
+ static ssize_t toggle_hdmi_source(struct device *dev,
+@@ -652,14 +648,12 @@ static ssize_t show_amplifier_status(struct device *dev,
+ 				   (u32 *) &out_data);
+ 	if (ACPI_SUCCESS(status)) {
+ 		if (out_data == 0)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "[unconnected] connected unknown\n");
++			return sysfs_emit(buf, "[unconnected] connected unknown\n");
+ 		else if (out_data == 1)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "unconnected [connected] unknown\n");
++			return sysfs_emit(buf, "unconnected [connected] unknown\n");
+ 	}
+ 	pr_err("alienware-wmi: unknown amplifier cable status: %d\n", status);
+-	return scnprintf(buf, PAGE_SIZE, "unconnected connected [unknown]\n");
++	return sysfs_emit(buf, "unconnected connected [unknown]\n");
+ }
+
+ static DEVICE_ATTR(status, S_IRUGO, show_amplifier_status, NULL);
+@@ -706,17 +700,14 @@ static ssize_t show_deepsleep_status(struct device *dev,
+ 					(u32 *) &out_data);
+ 	if (ACPI_SUCCESS(status)) {
+ 		if (out_data == 0)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "[disabled] s5 s5_s4\n");
++			return sysfs_emit(buf, "[disabled] s5 s5_s4\n");
+ 		else if (out_data == 1)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "disabled [s5] s5_s4\n");
++			return sysfs_emit(buf, "disabled [s5] s5_s4\n");
+ 		else if (out_data == 2)
+-			return scnprintf(buf, PAGE_SIZE,
+-					 "disabled s5 [s5_s4]\n");
++			return sysfs_emit(buf, "disabled s5 [s5_s4]\n");
+ 	}
+ 	pr_err("alienware-wmi: unknown deep sleep status: %d\n", status);
+-	return scnprintf(buf, PAGE_SIZE, "disabled s5 s5_s4 [unknown]\n");
++	return sysfs_emit(buf, "disabled s5 s5_s4 [unknown]\n");
+ }
+
+ static ssize_t toggle_deepsleep(struct device *dev,
+-- 
+2.25.1
