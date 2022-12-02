@@ -2,161 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DE0640DC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D21D640DC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiLBSqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:46:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S234302AbiLBSsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiLBSqc (ORCPT
+        with ESMTP id S233073AbiLBSsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:46:32 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2055.outbound.protection.outlook.com [40.107.9.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A160E2AA8
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:46:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ekOPUcMLA0OBLQL4JmGJoU5tmWG+GBZ/87IvWgoCftAuXViUlp1BEkCfuYg/ubgZI87/gl1RGaGSAlXsCqrkr+TB5J0sufASg6BBZnneTq+nyE9+NlgVfZXFVQCoFq71+evkFQMjVWt6KF7/8x9iMfKcHHQ2ehlMLKbIB7LAPv0dbGtVVFwf0ZpNr/KXZV822JckYxsXlzLQyWR8VDRtmUCwxQV5BpIL66yO/+x4z5ACaGl0VKNriNhfgxzroWh06hv28WRHb7Q+RHnG5bDOkB0Aa9wxQxF3GPs3uqPB8EMlJ3qrSQrFBuv1UUK7D7xE+SwoD8Pmclc8rxL4gDLq9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3EM6Ql/NoP43Wnft8I0jTdiFlwcni8B2x5lRKLEIZhY=;
- b=Ma2Pg5/LtGdfix+WtMGFH3MAS14p1jKB/bFjFzMig2AV29LFCq6ZB/M/5ixmRCcnfycvCOcfRvblXH5iJb0PxZZeAvi7+gmI2AWXcsGbP/w0S8or6mHE5tqAeXcZXIWrxSyeokP/Y2UYlXVGD0MFJok2Sq7kXWVHErCGq1ojEDBnsJTjwsN3UJm8fg3eyvIb7crPTlOQ6lY8rd/3QXES3fl/9TqPQWwJ+x6ypHetqhP+YKSm//aawYmnErXA7/luSD6D7MnmudLDHLGVHlZeqEAayiEvjSOrlyAii9E5xYJ3xktW3DF6ZmGA5SHpOau0XOPIR/nnyg9GLTUC/lezpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3EM6Ql/NoP43Wnft8I0jTdiFlwcni8B2x5lRKLEIZhY=;
- b=p0kjIs8T1TsXPHzNmcS6GE3o9zmAx5omr3DLiGB9GQBtfBdZ0VyKDsT0QEkwRpZzXnJZQl+zv7+0rE4kp7/pCb1WtOQlkHqGgLGSFDJVpwmFFR2mpnO9fMT4WnrAfbmWQKBrEu40INlZ/G+0g2/hjlY7167aYZ+6VWSyLXyzwbe6KFNepZAl1zF/dgGj4Cbm3wRFdUNTHG0146Hl/Fnp3AQWcixoJ/dL7oiaaNyk3ON13W2WbHhrwIcwpaZz/P3Jw/IkM021iFup1ZPrK/L4QwngXnDCi623TZ6mlzlvwPjPCCrtFMHClVm7L6ddbZ+ukPzZy8zX0/GrRdIzsEphDQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2419.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:34::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Fri, 2 Dec
- 2022 18:46:18 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5880.010; Fri, 2 Dec 2022
- 18:46:18 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
-Thread-Topic: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
-Thread-Index: AQHYtABEs/XtKdJlskKmHA1duRa+Xq3xsPoAgAAA5QCAH4SHgIAAYvgAgBmQ94CAJtUoAIAJlT2A
-Date:   Fri, 2 Dec 2022 18:46:18 +0000
-Message-ID: <5bf1f2fc-a1de-d873-7d1b-0058ff8b9aa2@csgroup.eu>
-References: <20220819191557.28116-1-pali@kernel.org>
- <20220819191557.28116-3-pali@kernel.org>
- <fd9c174e-2c89-7e11-9e68-d6044b7eab21@csgroup.eu>
- <20220926094706.km22rqzuuulvfssq@pali> <20221016110529.76bcgq2v2h4pg2of@pali>
- <3111f16b-2e6d-c46f-67e9-6cb5fada4cc7@csgroup.eu>
- <20221101232503.qymzj7dypsehafvj@pali> <20221126162550.r4rhg5ud2e5vxzot@pali>
-In-Reply-To: <20221126162550.r4rhg5ud2e5vxzot@pali>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB2419:EE_
-x-ms-office365-filtering-correlation-id: 53d1b751-0fd0-4e68-a5da-08dad4958003
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JcBzO8eV0esb6or+PdOb/VMprf1fiIeTY3/sQSY8/ZDXFUt6yIkuCIdF+oIR2W2Mas+SeK62OjOu7kqko9VnJpToqBe5O5/82OQhuf8yCzO60CSQJKn7hImgLj6rwPpjajhfXZQE46tFelXV7uzVvoEyaujLd2DFbUbVJOmYsVmcvCmDmNCrseZUoUkvAS14iGwFWOXnUSvhuW350B4rpYhfTHv5iAvPReepXPGf9+z9Lw2b5FfiIyl6akEE/DA4HBEdKVNNcYkHUiSNiJ85iCppTdButlJAlfKCODvJISkSNQIFLHinEaUhjSQJdXgfDon5aBmv7pzpgVwxnlOH8Ejdj2g7WiwB+irl9pXC9PCI3Gnt3DjAl+JwAMhc/mfAkepHvaTggNAaR6ghhx9/OpcaLFyJnQ/HVzgqldq1LXlAAO/M/KIBjy1qvjMhJGLAkQ24ufJrZqzhSDHUWbgjEVJaLo7fgsTCJBtclrHHtk+ijNoTweTKQzRAHu6EO5oyq8NzTCap8GO3Snj/EOxjZNSBjKgLBmeYR4bH+yZf7EsNcJw4TS24NkhhUmrQf3GpxgQ069aKPrP+dwi9r0/3f5Mpznt9IUdgjGDuAwxzyfcx52D3uBUYzdCfF5R6ckZvllwNRCNFFxVHbGcEJbvipXVsY5X7hFMGRTZIYLiZNG3l9fBQlOtStj8MtQY0ygYgAFpMUzklqXmF6nkVt3OKVDpWlGSh5v3ubD4JtfsA+QzzQt1RmfIpFv/CGOvuzXGG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(451199015)(36756003)(38100700002)(38070700005)(86362001)(31696002)(6916009)(54906003)(316002)(31686004)(8676002)(71200400001)(478600001)(91956017)(6486002)(26005)(6512007)(6506007)(83380400001)(122000001)(64756008)(186003)(41300700001)(2906002)(76116006)(66556008)(66476007)(2616005)(66446008)(5660300002)(4326008)(66946007)(44832011)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?amFva2VjNGI4SjlwWlZwdzJKK3QxYjVGS0N1RnR1YWZrZEgyV25NZzYzelhK?=
- =?utf-8?B?TnBRa2pUU0dSblkwMWdBRnB5eEsyVkgxVkRuWlJ4dURONTA3S0V5RzE4RmZW?=
- =?utf-8?B?U3kyeDdwaGhtbkRlNEZ1RVpMbktIeUxWTWhDdjNPS3NLVitGM211b3FlYXkv?=
- =?utf-8?B?OTR6NzJsWkxjc0tWR1BOUEhnZkhmK0JydUNZUytydjhQK2RBTTdnSlVTbVZU?=
- =?utf-8?B?TUtDZlA3c0x6NGV4SytFQ3pkazNQd1VKQitJQk5zY29nVWtoeGNjSGVpdXoz?=
- =?utf-8?B?VTFWdzVxdVBVVFpXcFUvQndkRTQvT2J1SXBUa3JrZmp1bmlTVGxld01wVC9J?=
- =?utf-8?B?aXQxZG5NRDZYMG9NRkVLRGJ6RlJFUHJrQ3BKL2FrUjBEZ0Fmek1BbXZjYUVw?=
- =?utf-8?B?VlZYZjRBQWRxanZxTkdYYnMyMUpla0JoVXdGT3BZZjNBaGR3YzRnaGFiVUxu?=
- =?utf-8?B?dE9CTXg1ZEJyUjVjRUVBUk9UdktQL1MrUnNZN0ViVHY4YzJBSHpreDJxYTMx?=
- =?utf-8?B?dmF1MkFxeEZ5ckd4ajBwZVB3NkI4UXQwNWFCTUVGKzdadDdDWDFNd0Z4VUF2?=
- =?utf-8?B?UmlyNnFLQnR4SHd4MWhSV1BHeStMT1FvSTNBOEJLVHZPZUxoZzZ3QW4zSDlY?=
- =?utf-8?B?WTFnbkgzTm1GNWFRNjU0N0lOVUhJUFphdFd1bEFlMGdDM3BRc3VxTWJEM3FT?=
- =?utf-8?B?c1J0blpxa3VJYnp6dk9GODlSaWt0ZERVampKRlNFTS9UcDZMQ2htSXZTMmlX?=
- =?utf-8?B?TlgrSUNzV2s5azZBektXaG5uRnF4bHMzaUF1K2VkT3FTZUJVNnlBQjlyRW04?=
- =?utf-8?B?L1FlL2I5K1h5MndlTmZPZE13aVZRS3BRSUFGZmMwbzdISGhBS01RcHBmNzha?=
- =?utf-8?B?UTZTajF3bFlIbmlOcWorWkppTHF2UDVudE1xU3NXVmlKOVU0MG5BUngvanh3?=
- =?utf-8?B?Vzd0dlU1d3pVT2pGRXhzY1RnUTZFY1VWMnh5aDhJQXAvZmd4Y05KZUZCVEow?=
- =?utf-8?B?VUFLYXhIQVdueUtsMlJJK0hUZjZrUkR6Slo2UWtrU1dtK3RLRzFRSVREeHlY?=
- =?utf-8?B?Ym1qMk0zTHN4cHNTOElVRlZYdE9vSVpmTGszaUxhNnlwYUNiTis5ZVVlV3ZD?=
- =?utf-8?B?aC9LcDhDS2E5TjV0NmpxejdrT0JjemsyN2FvbmhQMUFHenZsbUl3ZTRhaDJP?=
- =?utf-8?B?WjBxNWVmTDZNVXd3TlBUMzB4UElSa2FVMVhLRGJ0ejVlY3lWdWt0K0Yvek9Z?=
- =?utf-8?B?aWNJemUxOWNmSGQ0bjg5SmJwMU5uQzQ5bVExZmNYRHQ3UFFQOU9KMEJ4cjha?=
- =?utf-8?B?UmNiR2RwbUJxMHh5ZTBnMm1tYUlrVkFROEc3dEdqNXBrZDhxL04xaEtCeUtD?=
- =?utf-8?B?K3ZDd2pIYkFEQ2hXRTJnRjZSSkhaVGQvdTNwNDhReEw3U21NYndxclRtVlUr?=
- =?utf-8?B?Q2dVdjZobnhuSjJFdmo4UENxWFZtRDYvU1lITmlzcnIwSjBTQ2NzRU9ra1k1?=
- =?utf-8?B?MmdydEpYZ2l0R0U2ZjZ2ZHVvSVFUcnZwNGM0SS9qalpjTnhTRnRWb0p0eENm?=
- =?utf-8?B?aGNCL3ptMmZmcHVkZFNFRWxYVEZqOHZvbitzUTBDeVplRHE3MWxnejY4elI2?=
- =?utf-8?B?ZytQYWYwY1lqb0p3MTZYdUZudTkvT29JYW1vaGxnc083YWFESkd4NzhoWCty?=
- =?utf-8?B?RVZrckl0aTd4dTZKS084Rkl0cjI3RE5kN3pKR2ZMNXh3ZWcwc3RDUENKNDJV?=
- =?utf-8?B?Nm9mWkZFVnB5ZVorcHhQSVYrWmloRWxtcUswWWtMYXN3Sy82bldyN3NkRHhR?=
- =?utf-8?B?T2dGakN0a3ZkWE55bEhNbEV2aDhWVHo3STJNUmcwRDZXalVIS0RmbEs3SVJQ?=
- =?utf-8?B?VUZMWWtudnNCR0w0VHVpQnRjSG4rNTFNQ3l6dVNFakJ0ZFluWENxNDhxeFJ1?=
- =?utf-8?B?WXhYRnc0bSswQ3NWZ0RPVDlzVGxkS29pVDU0MHNneUZOek45eFN5TFhwN091?=
- =?utf-8?B?M2VIZFZSYWNVY0lTWXpBWnMxSklnRjJXZUE4OGsyZFpGTzhlaWpTVmJVb2ZY?=
- =?utf-8?B?MG5jTkVYMGlOZW5CUThmc3REKzBFTjdqclh2RERZenp4TjVTQVN1YkZ1SHpS?=
- =?utf-8?B?MndEZTN1VkQ1djBBeUZMUUQ5Z0wydWNTNmxtUklKN1IwWVNYYTBaWlQ4S0Zq?=
- =?utf-8?B?Q0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <037E6C4B9F4F744FA485ADCDF8177DF1@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 2 Dec 2022 13:48:20 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B198F8B3A6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:48:19 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670006897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K2j1SZM4oUlYwwMJynT0T9xQynq1mOR1/i8Jr4xfZAI=;
+        b=ljR13D0G4DN1u5TsdK0h1i/8z0NwLjdw+nSj0/qT1Tlwxi6d9DnsShRi+2uifQ2uWKcQtF
+        qlgd9D+BoAtYpzuVFzADQsrJW2pjYX/0sVc5mI7iQCfLqfW+D37BZL4QlX3fbMw9uzJiar
+        zAbVWYRZgceJYU1r3H6vHm1LjGvmSZDR6vBuoOHzHUmGVVwKiOHVffqrF/WWB8dzh1O7gM
+        0K2UiORvwp2vi7Rl6nsxNutTv9k0kiuUVppkKS14uB1/gwv6G1iXkUSCBQf6RL22K+0K5u
+        xN521DILnAjkbG2aRTzIGLBc6cDx+fIv0d+zbQfn3yLzun4G14oH9IIH9+FGCw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670006897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K2j1SZM4oUlYwwMJynT0T9xQynq1mOR1/i8Jr4xfZAI=;
+        b=Dg/DGD+AXnLEYc/XTYzWsCPDJOp98aDmxx9+Im2rofZTPTU9nOnVAWg4E03EwjVmnPO/U5
+        WVheFDX/4+mSpZBQ==
+To:     lirongqing@baidu.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterz@infradead.org,
+        tony.luck@intel.com, wyes.karny@amd.com,
+        linux-kernel@vger.kernel.org, rafael.j.wysocki@intel.com
+Subject: Re: [PATCH][RFC] x86: override prefer_mwait_c1_over_halt to avoid
+ loading cpuidle-haltpoll driver
+In-Reply-To: <1669952252-32710-1-git-send-email-lirongqing@baidu.com>
+References: <1669952252-32710-1-git-send-email-lirongqing@baidu.com>
+Date:   Fri, 02 Dec 2022 19:48:16 +0100
+Message-ID: <87fsdxprpr.ffs@tglx>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53d1b751-0fd0-4e68-a5da-08dad4958003
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 18:46:18.9128
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dIt7A1fq7gBkTJi8XVbXXGlXItb5ZW8XuciFwhUxItd7+PT1LjPQWbTLutfauujWkork/jRZUYPi4LUMk6ALTh68G7wz1ASZO/VJYQNx1Hk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2419
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI2LzExLzIwMjIgw6AgMTc6MjUsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IE9u
-IFdlZG5lc2RheSAwMiBOb3ZlbWJlciAyMDIyIDAwOjI1OjAzIFBhbGkgUm9ow6FyIHdyb3RlOg0K
-Pj4gT24gU3VuZGF5IDE2IE9jdG9iZXIgMjAyMiAxNjo1OTo1MyBDaHJpc3RvcGhlIExlcm95IHdy
-b3RlOg0KPj4+IEhlbGxvLA0KPj4+DQo+Pj4gTGUgMTYvMTAvMjAyMiDDoCAxMzowNSwgUGFsaSBS
-b2jDoXIgYSDDqWNyaXTCoDoNCj4+Pj4gSGVsbG8gQ2hyaXN0b3BoZSEgRG8geW91IGhhdmUgYW55
-IG90aGVyIGNvbW1lbnRzIGZvciB0aGlzIHBhdGNoIHNlcmllcz8NCj4+Pg0KPj4+IEknbSBBRksg
-Zm9yIHR3byB3ZWVrcywgYnV0IGFzIGZhciBhcyBJIHJlbWVtYmVyIEkgZG9uJ3QgaGF2ZSBhbnkg
-bW9yZQ0KPj4+IGNvbW1lbnRzLg0KPj4NCj4+IEhlbGxvISBXaGVuIHlvdSBhcmUgYmFjaywgY291
-bGQgeW91IGxvb2sgYXQgbXkgZmVlZGJhY2sgdG8geW91ciBjb21tZW50cz8NCj4gDQo+IFBJTkc/
-DQo+IA0KPj4+Pg0KPj4+PiBPbiBNb25kYXkgMjYgU2VwdGVtYmVyIDIwMjIgMTE6NDc6MDYgUGFs
-aSBSb2jDoXIgd3JvdGU6DQo+Pj4+PiBPbiBNb25kYXkgMjYgU2VwdGVtYmVyIDIwMjIgMDk6NDM6
-NTUgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+Pj4+PiBMZSAxOS8wOC8yMDIyIMOgIDIxOjE1
-LCBQYWxpIFJvaMOhciBhIMOpY3JpdMKgOg0KPj4+Pj4+PiBGdW5jdGlvbiBtcGM4NXh4X2RzX3Bp
-Y19pbml0KCkgaXMgbm90IHVzZWQgb3V0IG9mIHRoZSBtcGM4NXh4X2RzLmMgZmlsZS4NCj4+Pj4+
-Pj4NCj4+Pj4+Pj4gU2lnbmVkLW9mZi1ieTogUGFsaSBSb2jDoXIgPHBhbGlAa2VybmVsLm9yZz4N
-Cj4+Pj4+Pg0KPj4+Pj4+IFRoaXMgcGF0Y2ggc2hvdWxkIGJlIHNxdWFzaGVkIGludG8gcGF0Y2gg
-MS4NCj4+Pj4+DQo+Pj4+PiBObyBwcm9ibGVtLiBKdXN0IHRvIGV4cGxhaW4gdGhhdCBJIHNwbGl0
-IHRob3NlIGNoYW5nZXMgaW50byBkaWZmZXJlbnQNCj4+Pj4+IHBhdGNoZXMgYmVjYXVzZSB0aGV5
-IHRvdWNoIGRpZmZlcmVudCBmaWxlcyBhbmQgZGlmZmVyZW50IGJvYXJkIGNvZGUuDQo+Pj4+PiBB
-bmQgSSB0aG91Z2h0IHRoYXQgZGlmZmVyZW50IHRoaW5ncyBzaG91bGQgYmUgaW4gZGlmZmVyZW50
-IHBhdGNoZXMuDQoNCkl0J3MgZmluZSBmb3IgbWUgaWYgeW91IHByZWZlciBrZWVwaW5nIHRoZW0g
-c2VwYXJhdGUsIHVwIHRvIHlvdS4NCg0KQ2hyaXN0b3BoZQ0K
+Li!
+
+On Fri, Dec 02 2022 at 11:37, lirongqing@baidu.com wrote:
+> From: Li RongQing <lirongqing@baidu.com>
+>
+> x86 KVM guests with MWAIT can load cpuidle-haltpoll driver, and will
+> cause performance degradation, so override prefer_mwait_c1_over_halt
+> to a new value, aviod loading cpuidle-haltpoll driver
+
+Neither the subject line nor the above makes any sense to me.
+
+prefer_mwait_c1_over_halt() is a function which is invoked and when it
+returns true then the execution ends up in the code path you are
+patching.
+
+> @@ -889,6 +889,7 @@ void select_idle_routine(const struct cpuinfo_x86 *c)
+>  	} else if (prefer_mwait_c1_over_halt(c)) {
+>  		pr_info("using mwait in idle threads\n");
+>  		x86_idle = mwait_idle;
+> +		boot_option_idle_override = IDLE_PREF_MWAIT;
+
+What you do is setting boot_option_idle_override to a new value, but
+that has nothing to do with prefer_mwait_c1_over_halt() at all.
+
+So how are you overriding that function to a new value?
+
+But that's just a word smithing problem.
+
+The real and way worse problem is that you pick a variable, which has
+the purpose to capture the idle override on the kernel command line, and
+modify it as you see fit, just to prevent that driver from loading.
+
+select_idle_routine() reads it to check whether there was a command line
+override or not. But it is not supposed to write it. Why?
+
+Have you checked what else evaluates that variable? Obviously not,
+because a simple grep would have told you:
+
+drivers/cpuidle/cpuidle-haltpoll.c:     if (boot_option_idle_override != IDLE_NO_OVERRIDE)
+drivers/idle/intel_idle.c:      if (boot_option_idle_override != IDLE_NO_OVERRIDE)
+
+Congratulations!
+
+Your patch breaks the default setup of every recent Intel system on the
+planet because it not only prevents the cpuidle-haltpoll, but also the
+intel_idle driver from loading.
+
+Seriously. It's not too much asked to do at least a simple grep and look
+at all _nine_ places which evaluate boot_option_idle_override.
+
+Thanks,
+
+      tglx
+
+
+
+
