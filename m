@@ -2,116 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D4A640393
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C56640399
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiLBJny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S232540AbiLBJor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiLBJnw (ORCPT
+        with ESMTP id S232874AbiLBJoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:43:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D881D0FF
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:42:49 -0800 (PST)
+        Fri, 2 Dec 2022 04:44:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5F3B7DC3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:43:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669974169;
+        s=mimecast20190719; t=1669974205;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+wLl4vtYCGhwohXxITZQq5I6CY9K6KjTKaeRzYrEEpY=;
-        b=GVyMkVrxHuH6ntzuBs4aff9tewyssz9Vp2M/M4P1m+LoXlEEKm8kH2GbKgdYtd2OJeF+vE
-        RyWKS65gp9qEqlF88IMqgTPxdZZiUdCeYdKGVDv6WMLCE2WO1AivtqZxglgo1HaZW+Wknk
-        BK4lxk/HK8Xti52QOHJO/Z22nhzgWSQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-459-u6Q-wNZ_MAaB1hlSrtmJJQ-1; Fri, 02 Dec 2022 04:42:47 -0500
-X-MC-Unique: u6Q-wNZ_MAaB1hlSrtmJJQ-1
-Received: by mail-wm1-f71.google.com with SMTP id c187-20020a1c35c4000000b003cfee3c91cdso2238093wma.6
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:42:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+wLl4vtYCGhwohXxITZQq5I6CY9K6KjTKaeRzYrEEpY=;
-        b=rzWZ13xN0mK1/VvRMYfJCAWypYaD952XIlaWJhTauFBptrFU9/TM+IRYurXtLqtGsD
-         7cjm6nwknWeS/yE1gFfVCJSPxl1AgTt/MuUGeB1YP+u+D26VZyojHNhncFkxt3Hl8V45
-         TXSv5fBEmcfNecqfssrmiowWi/Xb0GfbwSV8I8CrT1Cyef4lsh4VmvMhmbR92OpzdMIZ
-         7MAr2ToS4xRFka0olq4C7mBmG5zMl+nhkCSgGuYuAfQQK1VS0D37vGFNhzILjQ61Y5+G
-         73+Nj7IP5QLwm02+HxELL5qiIERvNA45qFfuEdfC7xwPRmonO5j1JsAr/hSclEHhwQj1
-         Eg7g==
-X-Gm-Message-State: ANoB5pmrW+u0s85kvLL2Y35o3cmajxgWk4w9YDOMiRwyoyoIKIgrG543
-        JYxKl0cN4g7D+9nGhXZgA7xBgVFPJF4g/jwaaPhVSxRgqZlANyEaChSbvg2d03SIRkiT9uKR8Kl
-        X+TKMMI5n5FCAXx0nBCA7e70z
-X-Received: by 2002:a5d:6947:0:b0:242:17a5:ee80 with SMTP id r7-20020a5d6947000000b0024217a5ee80mr14530215wrw.628.1669974166727;
-        Fri, 02 Dec 2022 01:42:46 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6UdJV/mDJpmRG4muvnS79yLQAxAfJtB+81SwOHAcWOxkps8MZJhxfA5YRNqhJp3giA0N1wyw==
-X-Received: by 2002:a5d:6947:0:b0:242:17a5:ee80 with SMTP id r7-20020a5d6947000000b0024217a5ee80mr14530202wrw.628.1669974166476;
-        Fri, 02 Dec 2022 01:42:46 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z5-20020adff745000000b002383fc96509sm6488257wrp.47.2022.12.02.01.42.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 01:42:46 -0800 (PST)
-Message-ID: <3805ed81-2315-4eca-3ea6-b391c1659cc7@redhat.com>
-Date:   Fri, 2 Dec 2022 10:42:44 +0100
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JPL3HeqWrrSKDJIfWXlo82sdG8gZ+m15F8/peAepuFE=;
+        b=C+JlyDCtR57nKSm1HBGiAQr5bAoyerXOzrq/T7NrrMVhpeN0DrZCcH8ilwoz/XKZMaR9GS
+        Buhnss1ZVuY+v9HiR4QF+0vxE3CvhdZjOiFkd87jbUNUzf+YhtJCNn8ZlYzXAi0JSwZiiH
+        cTvtfb56njpKtRicE3ggUIXCRxzMZaY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-348-6efNmvdpPW2mpW2TiorUrg-1; Fri, 02 Dec 2022 04:43:22 -0500
+X-MC-Unique: 6efNmvdpPW2mpW2TiorUrg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0DD0338173CB;
+        Fri,  2 Dec 2022 09:43:22 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.116])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A55E2028E96;
+        Fri,  2 Dec 2022 09:43:19 +0000 (UTC)
+Subject: [PATCH v3 0/4] iov_iter: Add extraction helpers
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-fsdevel@vger.kernel.org,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, linux-cachefs@redhat.com,
+        linux-cifs@vger.kernel.org, linux-mm@kvack.org,
+        Steve French <sfrench@samba.org>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jeff Layton <jlayton@kernel.org>, dhowells@redhat.com,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 02 Dec 2022 09:43:16 +0000
+Message-ID: <166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] KVM: Mark KVM_SET_MEMORY_REGION and
- KVM_SET_MEMORY_ALIAS as obsoleted
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Sergio Lopez Pascual <slp@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221119085632.1018994-1-javierm@redhat.com>
- <Y4T+SY9SZIRFBdBM@google.com>
- <a6a59b75-2ee2-ab9b-3038-2590df17d031@redhat.com>
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <a6a59b75-2ee2-ab9b-3038-2590df17d031@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sean and Paolo,
 
-Thanks for your feedback.
+Hi Al,
 
-On 11/30/22 15:28, Paolo Bonzini wrote:
-> On 11/28/22 19:30, Sean Christopherson wrote:
->> E.g. KVM_{CREATE,GET,SET}_PIT are good examples of obsolete ioctls; they've been
->> supplanted by newer variants, but KVM still supports the old ones too.
->>
->> Alternatively (to marking them deprecated), can we completely remove all references
->> to VM_SET_MEMORY_REGION and KVM_SET_MEMORY_ALIAS?  The cascading updates in api.rst
->> will be painful, but it's one-time pain.
-> 
-> Yes, we should.
->
+Here are four patches to provide support for extracting pages from an
+iov_iter, where such a thing makes sense, if you could take a look?
 
-Ok. I'll do that and post a v2 then.
- 
-> Paolo
-> 
+[!] NOTE that I've switched the functions to be exported GPL-only at
+    Christoph's request[1].  They are, however, intended as a replacement
+    for iov_iter_get_pages*(), which is not marked _GPL - so that
+    functionality will probably become unavailable to non-GPL 3rd party
+    modules in future.
 
--- 
-Best regards,
+The first couple of patches provide iov_iter general stuff:
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+ (1) Move the FOLL_* flags to linux/mm_types.h so that linux/uio.h can make
+     use of them.
+
+ (2) Add a function to list-only, get or pin pages from an iterator as a
+     future replacement for iov_iter_get_pages*().  Pointers to the pages
+     are placed into an array (which will get allocated if not provided)
+     and, depending on the iterator type and direction, the pages will have
+     a ref or a pin get on them, or left untouched (on the assumption that
+     the caller manages their lifetime).
+
+     The determination is:
+
+	UBUF/IOVEC + READ	-> pin
+	UBUF/IOVEC + WRITE	-> get
+	PIPE + READ		-> list-only
+	BVEC/XARRAY		-> list-only
+	Anything else		-> EFAULT
+
+     The function also returns an indication of which of "list only, get or
+     pin" the extraction function did to aid in cleaning up (returning 0,
+     FOLL_GET or FOLL_PIN as appropriate).
+
+Then there are a couple of patches that add stuff to netfslib that I want
+to use there as well as in cifs:
+
+ (3) Add a netfslib function to use (2) to extract pages from an ITER_IOBUF
+     or ITER_UBUF iterator into an ITER_BVEC iterator.  This will get or
+     pin the pages as appropriate.
+
+ (4) Add a netfslib function to extract pages from an iterator that's of
+     type ITER_UBUF/IOVEC/BVEC/KVEC/XARRAY and add them to a scatterlist.
+
+     The function in (2) is used for a UBUF and IOVEC iterators, so those
+     need cleaning up afterwards.  BVEC and XARRAY iterators are ungot and
+     unpinned and may be rendered into elements that span multiple pages,
+     for example if large folios are present.
+
+Changes:
+========
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
+
+David
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+
+---
+David Howells (4):
+      mm: Move FOLL_* defs to mm_types.h
+      iov_iter: Add a function to extract a page list from an iterator
+      netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
+      netfs: Add a function to extract an iterator into a scatterlist
+
+
+ fs/netfs/Makefile        |   1 +
+ fs/netfs/iterator.c      | 367 +++++++++++++++++++++++++++++++++++++++
+ include/linux/mm.h       |  74 --------
+ include/linux/mm_types.h |  73 ++++++++
+ include/linux/netfs.h    |   7 +
+ include/linux/uio.h      |   4 +
+ lib/iov_iter.c           | 350 +++++++++++++++++++++++++++++++++++++
+ mm/vmalloc.c             |   1 +
+ 8 files changed, 803 insertions(+), 74 deletions(-)
+ create mode 100644 fs/netfs/iterator.c
+
 
