@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF73640D58
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 230F2640D65
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234361AbiLBSec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:34:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S234502AbiLBShN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234270AbiLBSe2 (ORCPT
+        with ESMTP id S234523AbiLBShE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:34:28 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DC2EDD40
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:34:27 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id m14so9084335wrh.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uM5qYEcEfq1G6+RMFkevC5ozRbBEd4PXgJE50YN+e3U=;
-        b=pECRmNhhVnkaSfbU9NbIyzdiBpY7C8V2AqaNNVQz0pKin8L593CkkVqJwiMBK3lCTC
-         kP5FTdxKkd+CjXNh/ly765lVFKWjWkV2/cZhYIJMv0924TWeRFwCHVs6ZKp0urt9hblY
-         2WSIs4phfaq7dxcRJle2WIJtVZJDSbdpIc2qI6EuDjWWUq3q2a5OsMZDzkxH3dsWtQsa
-         6UVM61IS8c++33jWnYcTTfzIhq/54MBZ3WJj2lFieo1js4lXzqJVb84UpurXIE38e6Ha
-         EGvOg4SCXTFr+rO8Fvg1cMkRpDh9tlWy5Q3QJKUZZoKdJdeTPV/OSJzqQEFDB4vy1S4C
-         3Glw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uM5qYEcEfq1G6+RMFkevC5ozRbBEd4PXgJE50YN+e3U=;
-        b=kQSXWj5cb7tIIRZDNy99ArmbQdBkgNlDPqvTHVjHe16s9tmoWv2vToB6+JY2iGbDpf
-         sPUkuRtDXNzD469R6JR80C15MzHwK9+VXb1gt+Ka+YWXE0E25TlUyhfWBJ4QpflNepsU
-         gDi40uDnVQit5HoKAjeNrki4UTQoG3DX8Iix0qNbMMsjqO1pVewVTsWVpVkfZ2jSZvou
-         Qrzv5zlc4uT9fuY87hnGhoI8E4qt7wd3nvsMy1OJyOFGuqNdSdMBzTSOfxpjFqPAHzdP
-         okwt0NNDtmNxpFjuaBvh7+d4Jregq7IQMkKoDWOAKmB6UH1xSw/jZgL8GB0hdYBCVhMY
-         W1nw==
-X-Gm-Message-State: ANoB5pkiqPIJj6+V2mpQ0Vc6PV6DdtlFcp5s0uZSgS0s9Bpn967GUOpD
-        NBwPYzuSrIfcosUbfzeR6oC9hg==
-X-Google-Smtp-Source: AA0mqf7Upzn+p6/WOgfvwmoYsnEfBAatge7V+AbZyi3eW6OWub2CAMkYB5tFbInWebBXNa9iqdlTDw==
-X-Received: by 2002:adf:f64b:0:b0:241:cdf2:fe53 with SMTP id x11-20020adff64b000000b00241cdf2fe53mr37809416wrp.85.1670006065989;
-        Fri, 02 Dec 2022 10:34:25 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfa3a12660sm14828113wmb.1.2022.12.02.10.34.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 10:34:25 -0800 (PST)
-Message-ID: <689e6879-ad0c-5cab-2c7b-238d61d0a923@linaro.org>
-Date:   Fri, 2 Dec 2022 19:34:24 +0100
+        Fri, 2 Dec 2022 13:37:04 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9A3EDD47;
+        Fri,  2 Dec 2022 10:37:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670006223; x=1701542223;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZqDhaSj465j8Weu6K/8SPWCZ4E93AhshOKFXA95cDvk=;
+  b=eCQsefgyEG0ZCMcPfJ9ZWAwd5o6pzLuygGaqGnXt1nUPSBLKBNkAJN/1
+   4hIQsle/vNd+HT/UbKPSE+AZgYgyizphTuSZgtNOSUnEqHVVsVxGpPdB0
+   uvNfleEPPifEgpiLIp2QDpBGvN5LcGyJkAvHuFVdIJHBLK6SxQV0LDd3H
+   Ow0O4n7Px9WRszq5M/6uSnxMBaqUVwfTkU6SDVUdLGEQGotLfDZb0uJoi
+   QgpDb5WG7un2j/gYJ0t5xidbADSnaAdAsTy9w75n+9djLdrOWZAa336Cl
+   f8crkKsl01YzmwjH4KDPUAEdU0VxNcVf+fPO1c+Em5RvOxHEIy7yUra2W
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="314724460"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="314724460"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 10:37:03 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="713717323"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="713717323"
+Received: from kcaskeyx-mobl1.amr.corp.intel.com (HELO kcaccard-desk.amr.corp.intel.com) ([10.251.1.207])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 10:37:01 -0800
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org
+Cc:     zhiquan1.li@intel.com
+Subject: [PATCH v2 00/18]  Add Cgroup support for SGX EPC memory
+Date:   Fri,  2 Dec 2022 10:36:36 -0800
+Message-Id: <20221202183655.3767674-1-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] clocksource/drivers/hyperv: use Hyper-V's page size to
- calculate PFN
-Content-Language: en-US
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221103152338.2926983-1-anrayabh@linux.microsoft.com>
- <BYAPR21MB1688743DD4507008D33499B0D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y2PiyAEJZitd3LS8@liuwe-devbox-debian-v2>
- <ab0e318d-0840-a76f-bf34-73db659eef63@linaro.org>
- <Y4pAmUQZuSP9MMiu@liuwe-devbox-debian-v2>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y4pAmUQZuSP9MMiu@liuwe-devbox-debian-v2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 19:14, Wei Liu wrote:
-> On Fri, Dec 02, 2022 at 01:33:17PM +0100, Daniel Lezcano wrote:
->>
->> Hi,
->>
->> On 03/11/2022 16:48, Wei Liu wrote:
->>
->> [ ... ]
->>
->>>> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
->>>
->>> Thank you both for the quick turnaround. I will just squash this patch
->>> into the previous one.
->>
->> Can you point to the mailing list the squashed version ?
-> 
-> The squashed patch is this one:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ad1aa571214e8d6468a1806794d987b374b5a08
+Utilize the Miscellaneous cgroup controller to regulate the distribution
+of SGX EPC memory, which is a subset of system RAM that is used to provide
+SGX-enabled applications with protected memory, and is otherwise inaccessible.
 
-Thanks!
+SGX EPC memory allocations are separate from normal RAM allocations,
+and is managed solely by the SGX subsystem. The existing cgroup memory
+controller cannot be used to limit or account for SGX EPC memory.
+
+This patchset implements the support for sgx_epc memory within the 
+misc cgroup controller, and then utilizes the misc cgroup controller
+to provide support for setting the total system capacity, max limit
+per cgroup, and events.
+
+This work was originally authored by Sean Christopherson a few years ago,
+and was modified to work with more recent kernels, and to utilize the
+misc cgroup controller rather than a custom controller. It is currently
+based on top of the MCA patches.
+
+Here's the MCA patchset for reference.
+https://lore.kernel.org/linux-sgx/2d52c8c4-8ed0-6df2-2911-da5b9fcc9ae4@intel.com/T/#t
+
+The patchset adds support for multiple LRUs to track both reclaimable
+EPC pages (i.e. pages the reclaimer knows about), as well as unreclaimable
+EPC pages (i.e. pages which the reclaimer isn't aware of, such as va pages).
+These pages are assigned to an LRU, as well as an enclave, so that an
+enclave's full EPC usage can be tracked, and limited to a max value. During
+OOM events, an enclave can be have its memory zapped, and all the EPC pages
+not tracked by the reclaimer can be freed.
+
+I appreciate your comments and feedback.
+
+Changelog:
+
+v2:
+ * rename struct sgx_epc_lru to sgx_epc_lru_lists to be more clear
+   that this struct contains 2 lists.
+ * use inline functions rather than macros for sgx_epc_page_list*
+   wrappers.
+ * Remove flags macros and open code all flags.
+ * Improve the commit message for RECLAIM_IN_PROGRESS patch to make
+   it more clear what the patch does.
+ * remove notifier_block from misc cgroup changes and use a set
+   of ops for callbacks instead.
+ * rename root_misc to misc_cg_root and parent_misc to misc_cg_parent
+ * consolidate misc cgroup changes to 2 patches and remove most of
+   the previous helper functions.
+
+Kristen Carlson Accardi (7):
+  x86/sgx: Add 'struct sgx_epc_lru_lists' to encapsulate lru list(s)
+  x86/sgx: Use sgx_epc_lru_lists for existing active page list
+  x86/sgx: Track epc pages on reclaimable or unreclaimable lists
+  cgroup/misc: Add per resource callbacks for css events
+  cgroup/misc: Prepare for SGX usage
+  x86/sgx: Add support for misc cgroup controller
+  Docs/x86/sgx: Add description for cgroup support
+
+Sean Christopherson (11):
+  x86/sgx: Call cond_resched() at the end of sgx_reclaim_pages()
+  x86/sgx: Store struct sgx_encl when allocating new VA pages
+  x86/sgx: Introduce RECLAIM_IN_PROGRESS flag for EPC pages
+  x86/sgx: Use a list to track to-be-reclaimed pages during reclaim
+  x86/sgx: Allow reclaiming up to 32 pages, but scan 16 by default
+  x86/sgx: Return the number of EPC pages that were successfully
+    reclaimed
+  x86/sgx: Add option to ignore age of page during EPC reclaim
+  x86/sgx: Prepare for multiple LRUs
+  x86/sgx: Expose sgx_reclaim_pages() for use by EPC cgroup
+  x86/sgx: Add helper to grab pages from an arbitrary EPC LRU
+  x86/sgx: Add EPC OOM path to forcefully reclaim EPC
+
+ Documentation/x86/sgx.rst            |  77 ++++
+ arch/x86/Kconfig                     |  13 +
+ arch/x86/kernel/cpu/sgx/Makefile     |   1 +
+ arch/x86/kernel/cpu/sgx/encl.c       |  90 ++++-
+ arch/x86/kernel/cpu/sgx/encl.h       |   4 +-
+ arch/x86/kernel/cpu/sgx/epc_cgroup.c | 539 +++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/sgx/epc_cgroup.h |  59 +++
+ arch/x86/kernel/cpu/sgx/ioctl.c      |  14 +-
+ arch/x86/kernel/cpu/sgx/main.c       | 412 ++++++++++++++++----
+ arch/x86/kernel/cpu/sgx/sgx.h        | 122 +++++-
+ arch/x86/kernel/cpu/sgx/virt.c       |  28 +-
+ include/linux/misc_cgroup.h          |  35 ++
+ kernel/cgroup/misc.c                 |  76 +++-
+ 13 files changed, 1341 insertions(+), 129 deletions(-)
+ create mode 100644 arch/x86/kernel/cpu/sgx/epc_cgroup.c
+ create mode 100644 arch/x86/kernel/cpu/sgx/epc_cgroup.h
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.38.1
 
