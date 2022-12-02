@@ -2,114 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF320640C81
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3317B640C87
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234012AbiLBRrk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Dec 2022 12:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
+        id S233389AbiLBRsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:48:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234336AbiLBRrW (ORCPT
+        with ESMTP id S234262AbiLBRsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:47:22 -0500
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C4D8E1195;
-        Fri,  2 Dec 2022 09:46:39 -0800 (PST)
-Received: from smtpclient.apple (p4fefca0f.dip0.t-ipconnect.de [79.239.202.15])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 9FA51CED00;
-        Fri,  2 Dec 2022 18:46:38 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [regression] Bug 216753 - 6e 6 ghz bands are disabled since 5.16
- on intel ax211
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com>
-Date:   Fri, 2 Dec 2022 18:46:38 +0100
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        "Coelho, Luciano" <luciano.coelho@intel.com>,
-        "Greenman, Gregory" <gregory.greenman@intel.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <457D8649-B855-43BB-B3AD-334E166FED31@holtmann.org>
-References: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
- <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
- <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
- <9a03c244-adff-afaf-7385-d8e89cd3f338@leemhuis.info>
- <02F8DDF1-EC0D-4EBD-88F5-7E000841C337@holtmann.org>
- <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com>
-To:     Dave Chiluk <chiluk@ubuntu.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 12:48:01 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740B27DA74;
+        Fri,  2 Dec 2022 09:47:59 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id fp23so5913137qtb.0;
+        Fri, 02 Dec 2022 09:47:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cZkrcSltncE8/ZuZoYv4b2d7hscDOxyl0JUDZPI6liw=;
+        b=RaGlrd0ba8dYvndE1TLtFoQdEVC7LSet9MIgIcBBC4QOcWYtZn5YZZMX4oVb3ThRUK
+         P7pOUy+ubpMKYXE4xbVbUP3qMGQU63s2QguP8LiQRFvoUIZc3yx5iEEgigxGJ7tvZ6DO
+         /WkvDhcRd2BLd+HQdYgX00yWGKScXs/YEtC1FMFqRymib9P72pBI4NkdCZ26D/RbNdiR
+         kew8s4YydKL7s0NcK3x01xRf5oVT9q4GW5ZToewO5ihFa/BkmTHLcsf2QNeENkhqzHs0
+         Zo1SC5L1St0x0P2F9xBCFl25c+voRlg754QTZylfcFiNot18FmzWtYESxZxH/VkdtRoG
+         gf3A==
+X-Gm-Message-State: ANoB5pmRqeAPQ7my/7gaqlI+AoY1ZzQLgpPjb0m9rURuk11vM3iAs53B
+        X7b43MyNBs6UtZvLGCyWqHb5AijwJondlfQff20=
+X-Google-Smtp-Source: AA0mqf51uIOWkjKSwhAqxTpfKMjsu42I0eiMVKrm0VEx7HQYTsVmieNicP3p40lc7YCyIthr+ry0hUYCl4VWsxspqf0=
+X-Received: by 2002:ac8:7dcb:0:b0:3a6:8dd0:4712 with SMTP id
+ c11-20020ac87dcb000000b003a68dd04712mr11196833qte.411.1670003278849; Fri, 02
+ Dec 2022 09:47:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org> <20221127-snd-freeze-v8-2-3bc02d09f2ce@chromium.org>
+In-Reply-To: <20221127-snd-freeze-v8-2-3bc02d09f2ce@chromium.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Dec 2022 18:47:47 +0100
+Message-ID: <CAJZ5v0jbKSTQopEoXW9FpqDmAqp6Pn=-Om5QP2-7ocuGdq8R9w@mail.gmail.com>
+Subject: Re: [PATCH v8 2/3] freezer: refactor pm_freezing into a function.
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Juergen Gross <jgross@suse.com>, Mark Brown <broonie@kernel.org>,
+        Chromeos Kdump <chromeos-kdump@google.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        kexec@lists.infradead.org, alsa-devel@alsa-project.org,
+        stable@vger.kernel.org, sound-open-firmware@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+On Thu, Dec 1, 2022 at 12:08 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
+>
+> Add a way to let the drivers know if the processes are frozen.
+>
+> This is needed by drivers that are waiting for processes to end on their
+> shutdown path.
+>
+> Convert pm_freezing into a function and export it, so it can be used by
+> drivers that are either built-in or modules.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-> Running
-> $ iw reg set US
-> or
-> $ iw reg set DE
-> do not result in the bands becoming enabled.  I should have included
-> that in the initial bug report.   Additionally shouldn't the country
-> code should be getting gathered through 802.11d from the broadcast APs
-> within region?
-> 
-> Also crda is now disabled in both debian and Ubuntu.
-> https://bugs.debian.org/1003903
-> https://bugs.launchpad.net/ubuntu/jammy/+source/crda/+bug/1958918
-> 
-> I'm specifically on 22.04, and the 6ghz band works on the 5.15 ubuntu
-> kernel and the 5.15.79 linux-stable kernel.
-> The 6ghz band becomes disabled as soon as I upgrade to the 5.16+
-> linux-stable kernels. So from a user perspective this really is a case
-> of a kernel upgrade breaking user-space.  This is what led me down
-> this rabbit hole here.
-> 
-> If there's something that needs to be done differently from a
-> userspace perspective I'm all ears, but this seems as if it's a hard
-> disable by the above mentioned commit.
+Why can't you export the original pm_freezing variable and why is this
+fixing anything?
 
-can you run iwd and set Country=DE (or US) in its main.conf. I think
-most distros have a 2.0 package of iwd available. With iwd we have
-implemented all the handling and re-scanning to make sure we actually
-get to use 6Ghz is available.
+> ---
+>  include/linux/freezer.h |  3 ++-
+>  kernel/freezer.c        |  3 +--
+>  kernel/power/process.c  | 24 ++++++++++++++++++++----
+>  3 files changed, 23 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/freezer.h b/include/linux/freezer.h
+> index b303472255be..3413c869d68b 100644
+> --- a/include/linux/freezer.h
+> +++ b/include/linux/freezer.h
+> @@ -13,7 +13,7 @@
+>  #ifdef CONFIG_FREEZER
+>  DECLARE_STATIC_KEY_FALSE(freezer_active);
+>
+> -extern bool pm_freezing;               /* PM freezing in effect */
+> +bool pm_freezing(void);
+>  extern bool pm_nosig_freezing;         /* PM nosig freezing in effect */
+>
+>  /*
+> @@ -80,6 +80,7 @@ static inline int freeze_processes(void) { return -ENOSYS; }
+>  static inline int freeze_kernel_threads(void) { return -ENOSYS; }
+>  static inline void thaw_processes(void) {}
+>  static inline void thaw_kernel_threads(void) {}
+> +static inline bool pm_freezing(void) { return false; }
+>
+>  static inline bool try_to_freeze(void) { return false; }
+>
+> diff --git a/kernel/freezer.c b/kernel/freezer.c
+> index 4fad0e6fca64..2d3530ebdb7e 100644
+> --- a/kernel/freezer.c
+> +++ b/kernel/freezer.c
+> @@ -20,7 +20,6 @@ EXPORT_SYMBOL(freezer_active);
+>   * indicate whether PM freezing is in effect, protected by
+>   * system_transition_mutex
+>   */
+> -bool pm_freezing;
+>  bool pm_nosig_freezing;
+>
+>  /* protects freezing and frozen transitions */
+> @@ -46,7 +45,7 @@ bool freezing_slow_path(struct task_struct *p)
+>         if (pm_nosig_freezing || cgroup_freezing(p))
+>                 return true;
+>
+> -       if (pm_freezing && !(p->flags & PF_KTHREAD))
+> +       if (pm_freezing() && !(p->flags & PF_KTHREAD))
+>                 return true;
+>
+>         return false;
+> diff --git a/kernel/power/process.c b/kernel/power/process.c
+> index ddd9988327fe..8a4d0e2c8c20 100644
+> --- a/kernel/power/process.c
+> +++ b/kernel/power/process.c
+> @@ -108,6 +108,22 @@ static int try_to_freeze_tasks(bool user_only)
+>         return todo ? -EBUSY : 0;
+>  }
+>
+> +/*
+> + * Indicate whether PM freezing is in effect, protected by
+> + * system_transition_mutex.
+> + */
+> +static bool pm_freezing_internal;
+> +
+> +/**
+> + * pm_freezing - indicate whether PM freezing is in effect.
+> + *
+> + */
+> +bool pm_freezing(void)
+> +{
+> +       return pm_freezing_internal;
+> +}
+> +EXPORT_SYMBOL(pm_freezing);
 
-Btw. you can run iwd from its source tree. No need to install it if
-You don’t want to mess up your system. Just make sure to disable
-wpa_supplicant so it doesn’t interfere.
+Use EXPORT_SYMBOL_GPL() instead, please.
 
-I have this working on 6.0 kernel (not with ax211 hardware though) and
-it needed some help to get the regdom loaded correctly. I think the key
-part was to install crda on Fedora.
-
-$ iw reg get
-global
-country DE: DFS-ETSI
-	(2400 - 2483 @ 40), (N/A, 20), (N/A)
-	(5150 - 5250 @ 80), (N/A, 23), (N/A), NO-OUTDOOR, AUTO-BW
-	(5250 - 5350 @ 80), (N/A, 20), (0 ms), NO-OUTDOOR, DFS, AUTO-BW
-	(5470 - 5725 @ 160), (N/A, 26), (0 ms), DFS
-	(5725 - 5875 @ 80), (N/A, 13), (N/A)
-	(5945 - 6425 @ 160), (N/A, 23), (N/A), NO-OUTDOOR
-	(57000 - 66000 @ 2160), (N/A, 40), (N/A)
-
-Unless you see it available in iw reg get, then it is also not available,
-but I remember that you also have per PHY regdom and other fun stuff. As
-I said, it was a breath to get it running with iwd once you set your
-country code in the config file.
-
-On a note, you could run iwmon and see what nl80211 related calls to
-regdom handling actually happen.
-
-Regards
-
-Marcel
-
+> +
+>  /**
+>   * freeze_processes - Signal user space processes to enter the refrigerator.
+>   * The current thread will not be frozen.  The same process that calls
+> @@ -126,12 +142,12 @@ int freeze_processes(void)
+>         /* Make sure this task doesn't get frozen */
+>         current->flags |= PF_SUSPEND_TASK;
+>
+> -       if (!pm_freezing)
+> +       if (!pm_freezing())
+>                 static_branch_inc(&freezer_active);
+>
+>         pm_wakeup_clear(0);
+>         pr_info("Freezing user space processes ... ");
+> -       pm_freezing = true;
+> +       pm_freezing_internal = true;
+>         error = try_to_freeze_tasks(true);
+>         if (!error) {
+>                 __usermodehelper_set_disable_depth(UMH_DISABLED);
+> @@ -187,9 +203,9 @@ void thaw_processes(void)
+>         struct task_struct *curr = current;
+>
+>         trace_suspend_resume(TPS("thaw_processes"), 0, true);
+> -       if (pm_freezing)
+> +       if (pm_freezing())
+>                 static_branch_dec(&freezer_active);
+> -       pm_freezing = false;
+> +       pm_freezing_internal = false;
+>         pm_nosig_freezing = false;
+>
+>         oom_killer_enable();
+>
+> --
