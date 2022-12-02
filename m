@@ -2,229 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E12863FFC8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 06:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6AE63FFD0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 06:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbiLBFRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 00:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S232295AbiLBF0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 00:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbiLBFRT (ORCPT
+        with ESMTP id S231629AbiLBF0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 00:17:19 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1471D67A1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 21:17:17 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id z14so9541pfr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 21:17:17 -0800 (PST)
+        Fri, 2 Dec 2022 00:26:14 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16405D15A3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 21:26:12 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 62so3505019pgb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 21:26:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uXDFMrE1UvonJwna6/qDy1dIKcqVQK/pCVdH6z/kGzg=;
-        b=XO5vDtYYGE/vrJRZL9jWWossHYkzldTugmavz8aHWQ1I5R3D2HZ2rBLEi5IDZgzw3t
-         NOa/IIA7+JkueaK9aAXvgWQ/Ui12YZ4+T7FFMGXfBUE+97KTYV0MgSu07a/QW2toPXLp
-         rtgaOLj4x6l7oq1sQj+eGrTlModC3tN7r5tHY0lbwiUDa27dkMlngWp17EcPudo/FKS/
-         YtziY2Z0YZ0lVGKGzJnbNHryh0GoTv0x5UO9WvIjCoXUmSXPAxH/R/wRh+kU59LvmFbe
-         BZAhRitKM7cl3dLT+ewft2HG/mSWOJ5Fm7yaBSMHSTkqnvoYfHt7Rgi5/FB+pX7RNp/7
-         W/vA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+7CLY/cg5ojs9SWtTqzajbZDLdfKBEhfLiZf2rmzvKo=;
+        b=lXKxGX6WE0PEpSZ3htACVAs0aK8M0kYePPgSv8PdJq6TPyHlZ+z54XkOZ2nITnpHzf
+         qptpwXUsP7AcWoSyiHhoLn4Dl4yojBl99u3WehwDcbgZrO6B/pLb4eA89ur8UU3XuP7n
+         9XkcBmDUiq1714lciG8O5wzArf4phIcYc0mLXI1MnX5yKfMeg2kbk5Ity/U+9Q6H03Nz
+         ts9OK3esqBi3I0z67EqjQDb2N4HQ3xesjW3Bu0OXK5us05gOq5AogY2nmmf7meBekLZk
+         VMhY1NMBYLtTwb0qeR4P4NWaUBRavI0G7Q7OwB2vUSIMrBq9GzzTxRFnKE3Iowy6mRfq
+         8vnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uXDFMrE1UvonJwna6/qDy1dIKcqVQK/pCVdH6z/kGzg=;
-        b=I/DUozt1HY0Ol92BSOn1GLVzWw2W04zJ+4KdZgT07TPoeg4i6bSvBjIdlvlty8pndJ
-         IByMgYLmB3w1SVsgRrx+PTJp3Yiyv6UFBX80U5FhdamvE4y+Do11yGSjgOVSxDner7xT
-         Eiz8iSmafV196arMbr3tbFUSoTJmLdr0lv5X1pYUCwAwfbXJIW28Rje3bMkWiq4Awyxk
-         vyC9d1v9rC09jsn/uVqzmIoEppdW466znHnhp+QSZttYa0HsWXfAkw0TjVXFQWzXU+YA
-         72oWCFSRMtF/T7rvd5KrGn5762oIQ0f23XzXY833kmcmXvA5RYSrLvJ9CLxj+i1DR9S8
-         Oy2A==
-X-Gm-Message-State: ANoB5pmc5uLtTHC/NwNKAuSvawBI3qR3TLpWM4WgPy3KFLz/Byhd6qDO
-        i8c5d8Leun+bS5m/pMuFDpFqJQ==
-X-Google-Smtp-Source: AA0mqf64KfT5K8NMbONNZg0RyISrnBcnpyDV0KjqhI+e4U6B3E5IyPBgeaoyrnNls02jIqo5qGFdlA==
-X-Received: by 2002:a63:2306:0:b0:46f:918e:7339 with SMTP id j6-20020a632306000000b0046f918e7339mr42792281pgj.429.1669958237424;
-        Thu, 01 Dec 2022 21:17:17 -0800 (PST)
-Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id p29-20020a635b1d000000b004785d99321asm3368017pgb.86.2022.12.01.21.17.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 21:17:17 -0800 (PST)
-Message-ID: <525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com>
-Date:   Fri, 2 Dec 2022 14:17:12 +0900
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+7CLY/cg5ojs9SWtTqzajbZDLdfKBEhfLiZf2rmzvKo=;
+        b=WCvfJJBeYUsTRIUPg0FZP8vHagnPKL5WrEXfh/Hr2POYMiA3w2Lo/KtWmCDK7Qwkto
+         HOx8LTGJJKxw61pT460exUUE/3Q7kRn4dHE4m3H2l8kisJ1hSCENgIQCQXAXfWJzMHUv
+         /IL9VOHU1WAnhjhgXEQnbj28sT1zV8sCug06RrK+kj5TZqroe1GezHUwzojOs2Dgw6OS
+         0odrbRys1HFZ66qKpnmpuby9LHj0XHoBBkqL7MBghdvgr5aa0XkUn1+9FnKOmi9b8Ycw
+         rVxJTQ4nOW7tfvbqg+gv91xfJ7e4zd7FnxhORvuXGOMek/JaUihpemisXXzxC3XW88Z5
+         4KNQ==
+X-Gm-Message-State: ANoB5plq3C2fMFst7x2sIyT3B4+lhKyVXn5bWgrIcHX7+tONleYsDWR3
+        1jIvXqeQRHEiFCbpkbtzEHURDA==
+X-Google-Smtp-Source: AA0mqf4gLNzfw4IqDl++LKk9PBLXk4Rf0Xbt66bkQ6IAWTukB70GJgv1O47OinugE/tSm16nmV8uwA==
+X-Received: by 2002:a63:5042:0:b0:46f:e658:a8ff with SMTP id q2-20020a635042000000b0046fe658a8ffmr47515928pgl.493.1669958771316;
+        Thu, 01 Dec 2022 21:26:11 -0800 (PST)
+Received: from localhost ([122.172.87.149])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170902e54900b001898ca438fcsm4595052plf.282.2022.12.01.21.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 21:26:10 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        regressions@leemhuis.info, daniel@makrotopia.org,
+        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
+        Nick <vincent@systemli.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] Revert "cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()"
+Date:   Fri,  2 Dec 2022 10:56:07 +0530
+Message-Id: <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>
-References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
- <867czbmlh1.wl-maz@kernel.org>
- <50499ee9-33fe-4f5d-9d0a-76ceef038333@daynix.com>
- <87lenqu37t.wl-maz@kernel.org>
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <87lenqu37t.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This reverts commit 6a17b3876bc8303612d7ad59ecf7cbc0db418bcd.
 
+This commit caused regression on Banana Pi R64 (MT7622), revert until
+the problem is identified and fixed properly.
 
-On 2022/12/02 8:13, Marc Zyngier wrote:
-> On Thu, 01 Dec 2022 17:26:08 +0000,
-> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>
->> On 2022/12/01 20:06, Marc Zyngier wrote:
->>> On Thu, 01 Dec 2022 10:49:11 +0000,
->>> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>
->>> Thanks for looking into this.
->>>
->>>> M2 MacBook Air has mismatched CCSIDR associativity bits, which makes the
->>>> bits a KVM vCPU sees inconsistent when migrating.
->>>
->>> Can you describe the actual discrepancy? Is that an issue between the
->>> two core types? In which case, nothing says that these two cluster
->>> should have the same cache topology.
->>
->> Yes, the processor has big.LITTLE configuration.
->>
->> On the processor, the valid CSSELR values are 0 (L1D), 1 (L1I), 3
->> (L2D). For each CSSELR values, each cluster has:
->> - 0x700FE03A, 0x203FE01A, 0x70FFE07B
->> - 0x701FE03A, 0x203FE02A, 0x73FFE07B
-> 
-> This is a perfectly valid configuration. The architecture doesn't
-> place any limitation on how different or identical the cache
-> hierarchies are from the PoV of each CPU. Actually, most big-little
-> systems show similar differences across their clusters.
-> 
->>>> It also makes QEMU fail restoring the vCPU registers because QEMU saves
->>>> and restores all of the registers including CCSIDRs, and if the vCPU
->>>> migrated among physical CPUs between saving and restoring, it tries to
->>>> restore CCSIDR values that mismatch with the current physical CPU, which
->>>> causes EFAULT.
->>>
->>> Well, QEMU will have plenty of other problems, starting with MIDRs,
->>> which always reflect the physical one. In general, KVM isn't well
->>> geared for VMs spanning multiple CPU types. It is improving, but there
->>> is a long way to go.
->>
->> On M2 MacBook Air, I have seen no other difference in standard ID
->> registers and CCSIDRs are exceptions. Perhaps Apple designed this way
->> so that macOS's Hypervisor can freely migrate vCPU, but I can't assure
->> that without more analysis. This is still enough to migrate vCPU
->> running Linux at least.
-> 
-> I guess that MacOS hides more of the underlying HW than KVM does. And
-> KVM definitely doesn't hide the MIDR_EL1 registers, which *are*
-> different between the two clusters.
+Link: https://lore.kernel.org/all/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
+Cc: v5.19+ <stable@vger.kernel.org> # v5.19+
+Reported-by: Nick <vincent@systemli.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/mediatek-cpufreq.c | 147 +++++++++++++++++++----------
+ 1 file changed, 96 insertions(+), 51 deletions(-)
 
-It seems KVM stores a MIDR value of a CPU and reuse it as "invariant" 
-value for ioctls while it exposes the MIDR value each physical CPU owns 
-to vCPU.
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 7f2680bc9a0f..4466d0c91a6a 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -8,7 +8,6 @@
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+ #include <linux/cpumask.h>
+-#include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+@@ -16,6 +15,8 @@
+ #include <linux/pm_opp.h>
+ #include <linux/regulator/consumer.h>
+ 
++#define VOLT_TOL		(10000)
++
+ struct mtk_cpufreq_platform_data {
+ 	int min_volt_shift;
+ 	int max_volt_shift;
+@@ -55,7 +56,6 @@ struct mtk_cpu_dvfs_info {
+ 	unsigned int opp_cpu;
+ 	unsigned long current_freq;
+ 	const struct mtk_cpufreq_platform_data *soc_data;
+-	int vtrack_max;
+ 	bool ccifreq_bound;
+ };
+ 
+@@ -82,7 +82,6 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+ 	struct regulator *proc_reg = info->proc_reg;
+ 	struct regulator *sram_reg = info->sram_reg;
+ 	int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
+-	int retry = info->vtrack_max;
+ 
+ 	pre_vproc = regulator_get_voltage(proc_reg);
+ 	if (pre_vproc < 0) {
+@@ -90,44 +89,91 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+ 			"invalid Vproc value: %d\n", pre_vproc);
+ 		return pre_vproc;
+ 	}
++	/* Vsram should not exceed the maximum allowed voltage of SoC. */
++	new_vsram = min(new_vproc + soc_data->min_volt_shift,
++			soc_data->sram_max_volt);
++
++	if (pre_vproc < new_vproc) {
++		/*
++		 * When scaling up voltages, Vsram and Vproc scale up step
++		 * by step. At each step, set Vsram to (Vproc + 200mV) first,
++		 * then set Vproc to (Vsram - 100mV).
++		 * Keep doing it until Vsram and Vproc hit target voltages.
++		 */
++		do {
++			pre_vsram = regulator_get_voltage(sram_reg);
++			if (pre_vsram < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vsram value: %d\n", pre_vsram);
++				return pre_vsram;
++			}
++			pre_vproc = regulator_get_voltage(proc_reg);
++			if (pre_vproc < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vproc value: %d\n", pre_vproc);
++				return pre_vproc;
++			}
+ 
+-	pre_vsram = regulator_get_voltage(sram_reg);
+-	if (pre_vsram < 0) {
+-		dev_err(info->cpu_dev, "invalid Vsram value: %d\n", pre_vsram);
+-		return pre_vsram;
+-	}
++			vsram = min(new_vsram,
++				    pre_vproc + soc_data->min_volt_shift);
+ 
+-	new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
+-			  soc_data->sram_min_volt, soc_data->sram_max_volt);
++			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
++				vsram = soc_data->sram_max_volt;
+ 
+-	do {
+-		if (pre_vproc <= new_vproc) {
+-			vsram = clamp(pre_vproc + soc_data->max_volt_shift,
+-				      soc_data->sram_min_volt, new_vsram);
+-			ret = regulator_set_voltage(sram_reg, vsram,
+-						    soc_data->sram_max_volt);
++				/*
++				 * If the target Vsram hits the maximum voltage,
++				 * try to set the exact voltage value first.
++				 */
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram);
++				if (ret)
++					ret = regulator_set_voltage(sram_reg,
++							vsram - VOLT_TOL,
++							vsram);
+ 
+-			if (ret)
+-				return ret;
+-
+-			if (vsram == soc_data->sram_max_volt ||
+-			    new_vsram == soc_data->sram_min_volt)
+ 				vproc = new_vproc;
+-			else
++			} else {
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram + VOLT_TOL);
++
+ 				vproc = vsram - soc_data->min_volt_shift;
++			}
++			if (ret)
++				return ret;
+ 
+ 			ret = regulator_set_voltage(proc_reg, vproc,
+-						    soc_data->proc_max_volt);
++						    vproc + VOLT_TOL);
+ 			if (ret) {
+ 				regulator_set_voltage(sram_reg, pre_vsram,
+-						      soc_data->sram_max_volt);
++						      pre_vsram);
+ 				return ret;
+ 			}
+-		} else if (pre_vproc > new_vproc) {
++		} while (vproc < new_vproc || vsram < new_vsram);
++	} else if (pre_vproc > new_vproc) {
++		/*
++		 * When scaling down voltages, Vsram and Vproc scale down step
++		 * by step. At each step, set Vproc to (Vsram - 200mV) first,
++		 * then set Vproc to (Vproc + 100mV).
++		 * Keep doing it until Vsram and Vproc hit target voltages.
++		 */
++		do {
++			pre_vproc = regulator_get_voltage(proc_reg);
++			if (pre_vproc < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vproc value: %d\n", pre_vproc);
++				return pre_vproc;
++			}
++			pre_vsram = regulator_get_voltage(sram_reg);
++			if (pre_vsram < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vsram value: %d\n", pre_vsram);
++				return pre_vsram;
++			}
++
+ 			vproc = max(new_vproc,
+ 				    pre_vsram - soc_data->max_volt_shift);
+ 			ret = regulator_set_voltage(proc_reg, vproc,
+-						    soc_data->proc_max_volt);
++						    vproc + VOLT_TOL);
+ 			if (ret)
+ 				return ret;
+ 
+@@ -137,24 +183,32 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+ 				vsram = max(new_vsram,
+ 					    vproc + soc_data->min_volt_shift);
+ 
+-			ret = regulator_set_voltage(sram_reg, vsram,
+-						    soc_data->sram_max_volt);
++			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
++				vsram = soc_data->sram_max_volt;
++
++				/*
++				 * If the target Vsram hits the maximum voltage,
++				 * try to set the exact voltage value first.
++				 */
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram);
++				if (ret)
++					ret = regulator_set_voltage(sram_reg,
++							vsram - VOLT_TOL,
++							vsram);
++			} else {
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram + VOLT_TOL);
++			}
++
+ 			if (ret) {
+ 				regulator_set_voltage(proc_reg, pre_vproc,
+-						      soc_data->proc_max_volt);
++						      pre_vproc);
+ 				return ret;
+ 			}
+-		}
+-
+-		pre_vproc = vproc;
+-		pre_vsram = vsram;
+-
+-		if (--retry < 0) {
+-			dev_err(info->cpu_dev,
+-				"over loop count, failed to set voltage\n");
+-			return -EINVAL;
+-		}
+-	} while (vproc != new_vproc || vsram != new_vsram);
++		} while (vproc > new_vproc + VOLT_TOL ||
++			 vsram > new_vsram + VOLT_TOL);
++	}
+ 
+ 	return 0;
+ }
+@@ -250,8 +304,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+ 	 * If the new voltage or the intermediate voltage is higher than the
+ 	 * current voltage, scale up voltage first.
+ 	 */
+-	target_vproc = max(inter_vproc, vproc);
+-	if (pre_vproc <= target_vproc) {
++	target_vproc = (inter_vproc > vproc) ? inter_vproc : vproc;
++	if (pre_vproc < target_vproc) {
+ 		ret = mtk_cpufreq_set_voltage(info, target_vproc);
+ 		if (ret) {
+ 			dev_err(cpu_dev,
+@@ -513,15 +567,6 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ 	 */
+ 	info->need_voltage_tracking = (info->sram_reg != NULL);
+ 
+-	/*
+-	 * We assume min voltage is 0 and tracking target voltage using
+-	 * min_volt_shift for each iteration.
+-	 * The vtrack_max is 3 times of expeted iteration count.
+-	 */
+-	info->vtrack_max = 3 * DIV_ROUND_UP(max(info->soc_data->sram_max_volt,
+-						info->soc_data->proc_max_volt),
+-					    info->soc_data->min_volt_shift);
+-
+ 	return 0;
+ 
+ out_disable_inter_clock:
+-- 
+2.31.1.272.g89b43f80a514
 
-This may be a problem worth fixing. My understanding is that while there 
-is no serious application which requires vCPU migration among physical 
-clusters, crosvm uses KVM on big.LITTLE processors by pinning vCPU to 
-physical CPU, and it is a real-world application which needs to be 
-supported.
-
-For an application like crosvm, you would expect the vCPU thread gets 
-the MIDR value of the physical CPU which the thread is pinned to when it 
-calls ioctl, but it can get one of another arbitrary CPU in reality.
-
-Fixing this problem will pose two design questions:
-
-1. Should it expose a value consistent among clusters?
-
-For example, we can change the KVM initialization code so that it 
-initializes VPIDR with the value stored as "invariant". This would help 
-migrating vCPU among clusters, but if you pin each vCPU thread to a 
-distinct phyiscal CPU, you may rather want the vCPU to see the MIDR 
-value specific to each physical CPU and to apply quirks or tuning 
-parameters according to the value.
-
-2. Should it be invariant or variable?
-
-Fortunately making it variable is easy. Arm provides VPIDR_EL1 register 
-to specify the value exposed as MPIDR_EL0 so there is no trapping cost.
-
-...or we may just say the value of MPIDR_EL0 (and possibly other 
-"invariant" registers) exposed via ioctl are useless and deprecated.
-
-> 
->>>> Trap CCSIDRs if there are CCSIDR value msimatches, and override the
->>>> associativity bits when handling the trap.
->>>
->>> TBH, I'd rather we stop reporting this stuff altogether.
->>>
->>> There is nothing a correctly written arm64 guest should do with any of
->>> this (this is only useful for set/way CMOs, which non-secure SW should
->>> never issue). It would be a lot better to expose a virtual topology
->>> (one set, one way, one level). It would also save us from the CCSIDRX
->>> silliness.
->>>
->>> The only complexity would be to still accept different topologies from
->>> userspace so that we can restore a VM saved before this virtual
->>> topology.
->>
->> Another (minor) concern is that trapping relevant registers may cost
->> too much. Currently KVM traps CSSELR and CCSIDR accesses with
->> HCR_TID2, but HCR_TID2 also affects CTR_EL0.
-> 
-> It will have an additional impact (JITs, for example, will take a hit
-> if they don't cache that value), but this is pretty easy to mitigate
-> if it proves to have too much of an impact. We already have a bunch of
-> fast-paths for things that we want to emulate more efficiently, and
-> CTR_EL0 could be one of them,
-> 
->> Although I'm not sure if the register is referred frequently, Arm
->> introduced FEAT_EVT to trap CSSELR and CSSIDR but not CTR_EL0 so
->> there may be some case where trapping CTR_EL0 is not
->> tolerated. Perhaps Arm worried that a userspace application may read
->> CTR_EL0 frequently.
-> 
-> FEAT_EVT is one of these "let's add random traps" extensions,
-> culminating in FEAT_FGT. Having FEAT_EVT would make it more efficient,
-> but we need to support this for all revisions of the architecture.
-> 
-> So let's first build on top of HCR_EL2.TID2, and only then once we
-> have an idea of the overhead add support for HCR_EL2.TID4 for the
-> systems that have FEAT_EVT.
-
-That sounds good, I'll write a new series according to this idea.
-
-Regards,
-Akihiko Odaki
-
-> 
->> If you think the concern on VM restoration you mentioned and the
->> trapping overhead is tolerable, I'll write a new, much smaller patch
->> accordingly.
-> 
-> That would great, thanks. There are a number of gotchas around that
-> (like the 32bit stuff that already plays the emulation game), but this
-> is the right time to start and have something in 6.3 if you keep to it!
-> 
-> 	M.
-> 
