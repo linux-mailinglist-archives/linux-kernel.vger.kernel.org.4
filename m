@@ -2,185 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36518640763
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9919B640714
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233646AbiLBNC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 08:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S233528AbiLBMrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbiLBNCX (ORCPT
+        with ESMTP id S232450AbiLBMrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 08:02:23 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5264CC724A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 05:02:21 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id f18so7693704wrj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 05:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=VSGdRkSATXRqKQ0oJba1FJCwjfGxv8hG7quZPS95hvo=;
-        b=kVQJH+qbKlFSL/lKFRaeroiYGaVJTUnlUnXd7aiavCn9HHnizu+WWANGihtdRNDna8
-         gOt9GvdHfAe6rYp5ofwnMes+P4GZy9Hf5LozVSkkicjfe8g8Zoucopd609V/EwGpW9UN
-         GIFT4Zvk0w6TpKs5Y+8/t9RA0qC2cvhVey8tmcArrLMXMFxhfE466wMJGQjvrGwd3Q5/
-         ENO+zqUQd9BanfxXBWeC+RFMomLTUyulJ3/utt3lTTlmsT38RH5mGVGHSSD0bmEb5of/
-         sgShbMSo2KGdgRxn0fkcjb4MW1ZuCbuFKojyEGKpMUJK83QTxUoVJvK2yC8uMy4COhiU
-         6x8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VSGdRkSATXRqKQ0oJba1FJCwjfGxv8hG7quZPS95hvo=;
-        b=yWUIpIMuUeCpMuhPVOSjtAY6XdFJVOQGEnO/TIg6T6MdqL1sX+RUC43E8azFzXuKup
-         dWw2BKxOyZEjzDGR1KLR4FmYtvq/Tl4tAWaCCFsQu5dD67vEwhaZDNdQCnwLmDFqCzSD
-         JQl1int3plL5KPek7fs8K+Pzg1rlgLHrRHVig44hDdGvo33YOA931SICVWctPMTl9n32
-         VvmqRzDAzxY/yVa4EwNAEqVYDS1XO5g6pcBYeeUhqHjEqW4wxP9H6s6/fflDhCz3SpdA
-         6hfY+nwA0m4veRCOBMJuIPDuW1dqhDIP+DwkfBSzQyIs/zCePPpOZjtdXptnthp7lNZT
-         UMDg==
-X-Gm-Message-State: ANoB5pm0rZ9Ayd7q+ElF0jc21Hgu/zaRfSMiFoH5fmVOA6+GPnYzPKoL
-        vH6d7OH9yRGcr1zPCsWhT/85+Q==
-X-Google-Smtp-Source: AA0mqf4nlk4w6LcawMx9ECvjWt6+yVF8oBT4lT6RFJmdvgQzCahSEK7NLtivQOb0bLQz3bsBY/s6mg==
-X-Received: by 2002:adf:ee0d:0:b0:242:28c9:d116 with SMTP id y13-20020adfee0d000000b0024228c9d116mr8740663wrn.286.1669986139791;
-        Fri, 02 Dec 2022 05:02:19 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id j33-20020a05600c1c2100b003b4ff30e566sm14902720wms.3.2022.12.02.05.02.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 05:02:19 -0800 (PST)
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-8-ddrokosov@sberdevices.ru>
- <1jtu2e6mn5.fsf@starbuckisacylon.baylibre.com>
- <20221202124730.uckax232hnjqg26a@CAB-WSD-L081021>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     neil.armstrong@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, jian.hu@amlogic.com,
-        kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 07/11] clk: meson: a1: redesign Amlogic A1 PLL clock
- controller
-Date:   Fri, 02 Dec 2022 13:49:59 +0100
-In-reply-to: <20221202124730.uckax232hnjqg26a@CAB-WSD-L081021>
-Message-ID: <1jh6ye6js6.fsf@starbuckisacylon.baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 07:47:03 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7AED4AE7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:47:01 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NNswG4zGhz9xHYT
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 20:39:58 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.206.133.88])
+        by APP2 (Coremail) with SMTP id GxC2BwAXSfWj84ljytWyAA--.50887S2;
+        Fri, 02 Dec 2022 13:46:38 +0100 (CET)
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+To:     paulmck@kernel.org
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>
+Subject: [PATCH v2] tools: memory-model: Make plain accesses carry dependencies
+Date:   Fri,  2 Dec 2022 13:51:00 +0100
+Message-Id: <20221202125100.30146-1-jonas.oberhauser@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: GxC2BwAXSfWj84ljytWyAA--.50887S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Wry8KFWDCw43tF1kCw4fAFb_yoW7XFyDp3
+        ykK345KF4ktr9xZF97Gw17WFyfWan7Cr1UJrna9ry09r45ur1Fyry3KryYvFy8ur4kA3WU
+        urWYqF40kw1kJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r106r1rM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2NtUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jonas Oberhauser <jonas.oberhauser@huawei.com>
 
-On Fri 02 Dec 2022 at 15:47, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+As reported by Viktor, plain accesses in LKMM are weaker than
+accesses to registers: the latter carry dependencies but the former
+do not. This is exemplified in the following snippet:
 
-> On Fri, Dec 02, 2022 at 12:42:17PM +0100, Jerome Brunet wrote:
->> 
->> On Fri 02 Dec 2022 at 01:56, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
->> 
->> > Summary changes:
->> >     - supported meson-a1-clkc common driver
->> >     - inherited from the base clk-pll driver, implemented own version of
->> >       init/enable/disable/enabled routines; rate calculating logic is
->> >       fully the same
->> >     - aligned CLKID-related definitions with CLKID list from order
->> >       perspective to remove holes and permutations
->> >     - corrected Kconfig dependencies and types
->> >     - provided correct MODULE_AUTHORs() and MODULE_LICENSE()
->> >     - optimized and fix up some clock relationships
->> >     - removed unused register offset definitions (ANACTRL_* group)
->> 
->> This patch mix PLL stuff, factorization change, etc ...
->> In general, when your commit description is a list, it is a hint that
->> you are doing more than one thing in it. It is unlikely to be OK then
->
-> It will be fixed by itself, when I'll squash patches.
->
->> > +static int meson_a1_pll_init(struct clk_hw *hw)
->> > +{
->> > +	struct clk_regmap *clk = to_clk_regmap(hw);
->> > +	struct meson_a1_pll_data *pll = meson_a1_pll_data(clk);
->> > +
->> > +	regmap_multi_reg_write(clk->map, pll->base.init_regs,
->> > +			       pll->base.init_count);
->> > +
->> > +	return 0;
->> 
->> Looks the the default init mostly
->> 
->> Looks like you are trying the handle the absence of the rst bit.
->> I'm pretty sure the hifi PLL of the SoC as one but you really don't want
->> to poke, this can be in the generic driver, with MESON_PARM_APPLICABLE()
->> test.
->> 
->> No need to redefine this
->> 
->
-> I've redefined it, because in the previous v7 you mentioned that's
-> not acceptable to mix init/enable/disable sequences between a1 pll and clk
-> common pll driver:
->
-> https://lore.kernel.org/linux-amlogic/1jd0ac5kpk.fsf@starbuckisacylon.baylibre.com/
->
-> Hmmm, looks like I've made a mistake. You meant only enable/disable
-> callbacks...
->
-> Anyway, it doesn't matter to me. I think both approaches are okay:
->     * clk-pll customization using MESON_PARM_APPLICABLE()
->     * custom callbacks implementation for some clk_ops like implemented in
->       this patchset.
->
-> Please advise what's the best from you point of view?
+  int r = READ_ONCE(*x);
+  WRITE_ONCE(*y, r);
 
-It is a balance.
+Here a data dependency links the READ_ONCE() to the WRITE_ONCE(),
+preserving their order, because the model treats r as a register.
+If r is turned into a memory location accessed by plain accesses,
+however, the link is broken and the order between READ_ONCE() and
+WRITE_ONCE() is no longer preserved.
 
-Everytime a new PLL comes up, it tends to treaded as a new ip block but,
-most of the time after some digging and rework, we learn new things and
-it ends up being compatible with the previous ones.
+This is too conservative, since any optimizations on plain
+accesses that might break dependencies are also possible on
+registers; it also contradicts the intuitive notion of "dependency"
+as the data stored by the WRITE_ONCE() does depend on the data read
+by the READ_ONCE(), independently of whether r is a register or a
+memory location.
 
-From what I see here
-* You are trying to make rst optional, that's fine. Do it with
-  MESON_PARM_APPLICABLE() in the main driver. Still I would recommend to
-  thorougly for this bit. I'm pretty sure the hifi pll has one.
+This is resolved by redefining all dependencies to include
+dependencies carried by memory accesses; a dependency is said to be
+carried by memory accesses (in the model: carry-dep) from one load
+to another load if the initial load is followed by an arbitrarily
+long sequence alternating between stores and loads of the same
+thread, where the data of each store depends on the previous load,
+and is read by the next load.
 
-* You add a new feature called current self-adaptation.
-  This can be made optional too in the enable sequence.
-  I would not be surprised to find out more PLL have that, even on
-  earlier SoC.
+Any dependency linking the final load in the sequence to another
+access also links the initial load in the sequence to that access.
 
->
->> > +}
->> > +
->> > +static int meson_a1_pll_is_enabled(struct clk_hw *hw)
->> > +{
->> > +	struct clk_regmap *clk = to_clk_regmap(hw);
->> > +	struct meson_a1_pll_data *pll = meson_a1_pll_data(clk);
->> > +
->> > +	if (MESON_PARM_APPLICABLE(&pll->base.rst) &&
->> > +	    meson_parm_read(clk->map, &pll->base.rst))
->> > +		return 0;
->> > +
->> > +	if (!meson_parm_read(clk->map, &pll->base.en) ||
->> > +	    !meson_parm_read(clk->map, &pll->base.l))
->> > +		return 0;
->> > +
->> 
->> Same here, pretty sure rst is there and the generic function works but
->> if this update is required, it seems safe to do in the generic driver.
->
-> The same thing... in the v7 version you suggested to not touch clk-pll
-> driver.
->
-> https://lore.kernel.org/linux-amlogic/1jd0ac5kpk.fsf@starbuckisacylon.baylibre.com/
->
-> ...
+Reported-by: Viktor Vafeiadis <viktor@mpi-sws.org>
+Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huawei.com>
+Reviewed-by: Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+---
+ .../Documentation/explanation.txt             |  9 +++++-
+ tools/memory-model/linux-kernel.bell          |  6 ++++
+ .../litmus-tests/dep+plain.litmus             | 31 +++++++++++++++++++
+ 3 files changed, 45 insertions(+), 1 deletion(-)
+ create mode 100644 tools/memory-model/litmus-tests/dep+plain.litmus
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index e901b47236c3..8e7085238470 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -2575,7 +2575,7 @@ smp_store_release() -- which is basically how the Linux kernel treats
+ them.
+ 
+ Although we said that plain accesses are not linked by the ppo
+-relation, they do contribute to it indirectly.  Namely, when there is
++relation, they do contribute to it indirectly.  Firstly, when there is
+ an address dependency from a marked load R to a plain store W,
+ followed by smp_wmb() and then a marked store W', the LKMM creates a
+ ppo link from R to W'.  The reasoning behind this is perhaps a little
+@@ -2584,6 +2584,13 @@ for this source code in which W' could execute before R.  Just as with
+ pre-bounding by address dependencies, it is possible for the compiler
+ to undermine this relation if sufficient care is not taken.
+ 
++Secondly, plain accesses can carry dependencies: If a data dependency
++links a marked load R to a store W, and the store is read by a load R'
++from the same thread, then the data loaded by R' depends on the data
++loaded originally by R. Thus, if R' is linked to any access X by a
++dependency, R is also linked to access X by the same dependency, even
++if W' or R' (or both!) are plain.
++
+ There are a few oddball fences which need special treatment:
+ smp_mb__before_atomic(), smp_mb__after_atomic(), and
+ smp_mb__after_spinlock().  The LKMM uses fence events with special
+diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+index 65c32ca9d5ea..5f0b98c1ab81 100644
+--- a/tools/memory-model/linux-kernel.bell
++++ b/tools/memory-model/linux-kernel.bell
+@@ -76,3 +76,9 @@ flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
+ let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
+ 		LKR | LKW | UL | LF | RL | RU
+ let Plain = M \ Marked
++
++(* Redefine dependencies to include those carried through plain accesses *)
++let carry-dep = (data ; rfi)*
++let addr = carry-dep ; addr
++let ctrl = carry-dep ; ctrl
++let data = carry-dep ; data
+diff --git a/tools/memory-model/litmus-tests/dep+plain.litmus b/tools/memory-model/litmus-tests/dep+plain.litmus
+new file mode 100644
+index 000000000000..ebf84daa9a59
+--- /dev/null
++++ b/tools/memory-model/litmus-tests/dep+plain.litmus
+@@ -0,0 +1,31 @@
++C dep+plain
++
++(*
++ * Result: Never
++ *
++ * This litmus test demonstrates that in LKMM, plain accesses
++ * carry dependencies much like accesses to registers:
++ * The data stored to *z1 and *z2 by P0() originates from P0()'s
++ * READ_ONCE(), and therefore using that data to compute the
++ * conditional of P0()'s if-statement creates a control dependency
++ * from that READ_ONCE() to P0()'s WRITE_ONCE().
++ *)
++
++{}
++
++P0(int *x, int *y, int *z1, int *z2)
++{
++	int a = READ_ONCE(*x);
++	*z1 = a;
++	*z2 = *z1;
++	if (*z2 == 1)
++		WRITE_ONCE(*y, 1);
++}
++
++P1(int *x, int *y)
++{
++	int r = smp_load_acquire(y);
++	smp_store_release(x, r);
++}
++
++exists (x=1 /\ y=1)
+-- 
+2.17.1
 
