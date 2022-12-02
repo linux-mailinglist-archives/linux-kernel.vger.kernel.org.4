@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CCE6404DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100026404E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiLBKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S233015AbiLBKkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbiLBKkY (ORCPT
+        with ESMTP id S232470AbiLBKkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:40:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDD8C4CE2;
-        Fri,  2 Dec 2022 02:40:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75395B82129;
-        Fri,  2 Dec 2022 10:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 289D2C433C1;
-        Fri,  2 Dec 2022 10:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669977616;
-        bh=9TJWvPBkEqE2daxuJdASbu2lj+aoO2m9KXnJwJTO+K0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rYQkg0Z9zktXtOPN8Bc0oyOE3NYUT38dfpi5aJLMPmthMI3aDLQ9UpBQD4Bwim+Ur
-         LUFSKl0YKlGt6qMWDeuZTvjo7M2Ya4+9C6vnk+iEJnfFlt11eqfzWxc+jK2t2y01aQ
-         88nbPxSxMned0Uvowvzgz8QWryqZ3cRCiyNOFEg9anhKfyVYDDLvYunCxBLHOsfH2x
-         GujXkMo3bguUgSENweCmkFkaHroSFvVgdrtV+al3rGxtEsazBz+ZrLO71c2fBVWZK0
-         ICNOmja1EvsRsM+Lb39OLB+E6hQNStluFz1erph0JhUUbjj6pxM8KeCKXijGnm5GJp
-         tcZ2Z4oopxNUQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0EDB3E450B4;
-        Fri,  2 Dec 2022 10:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 2 Dec 2022 05:40:35 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14656CEFBF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:40:31 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id be13so6795623lfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TPk3ApbRCS0/4hhMFJ/d7DRNyPwO/DR9Aal7CDZHgzk=;
+        b=HEiPaeK82n8UhnGfAkC3Ydjm03bumfbVLUgTH1il6UfUvynI2T3gUniZgCOp+PROe8
+         +oAFrM3Xl4qkJRsGqLZ6jmHVDk/BHtAi8WteHEfOdlMfmuzppFHUSk2TOSkGHX2RDM/4
+         F9hzOPgWwLl3vrVFTuM+6wB5B4vpuS3uSaz6nhGDksqtXs8u2AxTU8QapxZmwAOVQZvd
+         /L0n7ivXdQ9BmSVqY7tidcdCt8+uWlfA/G6gWvKu0zXfuf7n3F6OGX78JRcj+J0f+Xts
+         XaHLzli5Rjry5b4JHkVlvBTFzGvWHA5+NhqkeDHHPsIJVHNquIJYjj2lg4oQ/U/AEACN
+         Q7OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPk3ApbRCS0/4hhMFJ/d7DRNyPwO/DR9Aal7CDZHgzk=;
+        b=uzVYI2RF82YvVT6js4+vysPZqKpfMBJrXeWvNzju/pgwyd3ofDdNrC2KBou44Yykk0
+         RBnawMn8RobD5tAW/tdydR/nq+sPhuP2rBN2quqIKV1kVOYNGyy98esN35GjWq1ADhVN
+         pWnxALTLBz0dvyWtYKhRcb2clinhEIOBQa6ixFWUeXF1pqGht1rFqLAH6iJAvxt2ST5e
+         SNObyC2k3xKXR1OcJ2Zu6FJ7IfExa4M/Fvdm87SUTgFgM1wb4xBLENd8dL+og8fi3a81
+         aMBTxnKlct2eC99R34uhYCMau30PfCQSVh0dNVqvPqsrUMDJrp68gS3ePTHOFdr0doDH
+         Hdng==
+X-Gm-Message-State: ANoB5pkIscRr9bN/x+91MqGWx33uJZO7QiglD9tvWLWygePBGGiJXKEY
+        VxF9hQ7Ak2y8QgLUQZJH/LAK3Q==
+X-Google-Smtp-Source: AA0mqf7w4T+ArramDxaYnxkQZkngy0bGcYs96DDb75oY+RO84Yx8wbbk5xolu8+QOpXawniNAqT39g==
+X-Received: by 2002:a19:2d0a:0:b0:4ac:e5ff:d1d8 with SMTP id k10-20020a192d0a000000b004ace5ffd1d8mr22660150lfj.304.1669977629431;
+        Fri, 02 Dec 2022 02:40:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id e4-20020a05651236c400b00485caa0f5dfsm981818lfs.44.2022.12.02.02.40.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 02:40:28 -0800 (PST)
+Message-ID: <05cadb7d-2087-a507-f33d-c4501361175f@linaro.org>
+Date:   Fri, 2 Dec 2022 11:40:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net  0/2] vmxnet3: couple of fixes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166997761605.20046.4334047014624425550.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Dec 2022 10:40:16 +0000
-References: <20221130082148.9605-1-doshir@vmware.com>
-In-Reply-To: <20221130082148.9605-1-doshir@vmware.com>
-To:     Ronak Doshi <doshir@vmware.com>
-Cc:     netdev@vger.kernel.org, stable@vger.kernel.org,
-        pv-drivers@vmware.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v8 08/11] dt-bindings: clock: meson: fixup A1 PLL clkc
+ dtb_check errors
+Content-Language: en-US
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
+ <20221201225703.6507-9-ddrokosov@sberdevices.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221201225703.6507-9-ddrokosov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,32 +82,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 30 Nov 2022 00:21:45 -0800 you wrote:
-> This series fixes following issues:
+On 01/12/2022 23:57, Dmitry Rokosov wrote:
+> During running dtbs_check and dt_binding_check checkers the following
+> problems were found and resolved:
+>     - $id is not correct, it has wrong url path
+>     - CLKIDs aren't applied by names, just magic int constants there
+>     - address and size cells are required for long reg definition
+>     - wrong indentations
 > 
-> Patch 1:
->   This patch provides a fix to correctly report encapsulated LRO'ed
->   packet.
+> Also this patch adds new A1 clk controllers dt bindings to MAINTAINERS.
 > 
-> Patch 2:
->   This patch provides a fix to use correct intrConf reference.
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 27 ++++++++++++-------
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 18 insertions(+), 10 deletions(-)
 > 
-> [...]
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> index d67250fbeece..83f98a73c04e 100644
+> --- a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: "http://devicetree.org/schemas/amlogic,a1-pll-clkc.yaml#"
+> +$id: "http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#"
+>  $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>  
+>  title: Amlogic Meson A/C serials PLL Clock Control Unit Device Tree Bindings
 
-Here is the summary with links:
-  - [v2,net,1/2] vmxnet3: correctly report encapsulated LRO packet
-    https://git.kernel.org/netdev/net/c/40b8c2a1af03
-  - [v2,net,2/2] vmxnet3: use correct intrConf reference when using extended queues
-    https://git.kernel.org/netdev/net/c/409e8ec8c582
+NAK.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This must be squashed.
 
+Best regards,
+Krzysztof
 
