@@ -2,266 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8369C63FD39
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBAD63FD3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiLBAnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 19:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S231557AbiLBAqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 19:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiLBAnI (ORCPT
+        with ESMTP id S229890AbiLBAqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 19:43:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27F45AE20
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:43:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F909621D5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:43:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC501C433D6;
-        Fri,  2 Dec 2022 00:43:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669941782;
-        bh=vrpHgsXnWq/mFSpt5S6Islz7chU8nc7CTyA5NLJO2CQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yi1Vp5+azdR9L5gJ9EOmJbTLCfvxt0poEKYHftsX3TPvWgVHg6kFOtwji8/F8l3se
-         xFRYA0OILK8snjGAQ8jKvwyMQAzRaiRxDdZcNUP4P3eERu6prJXRAIfQJhPfP0/A+7
-         Bcb+Fe7kWjYK01cJbvTz/YsAhlenewYuphyyl7nNVaIr+N524BUO0qAX64zpsZehIz
-         YLJZ1kQVCySDwuKREvkpHRGEtWRYt7B72zS3SeK4zV3hX4obFUT9qHer8Sr0dhyNgX
-         4zAoeqNkEb7rPgPc83CMgEAe0oQ2SFkp7u0TsdiurKc7vBT+3eawtiEgpm8rGBhINr
-         ex37831vU5mwA==
-Date:   Fri, 2 Dec 2022 09:42:58 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
-Subject: Re: [PATCH 3/3] arm64: kprobes: Return DBG_HOOK_ERROR if kprobes
- can not handle a BRK
-Message-Id: <20221202094258.1ca06a6f49dcc3878e18c46a@kernel.org>
-In-Reply-To: <Y4jis+EsXuQb7l2n@FVFF77S0Q05N>
-References: <166990553243.253128.13594802750635478633.stgit@devnote3>
-        <166990556124.253128.2968612748605960211.stgit@devnote3>
-        <Y4jDhHDQD3wY6g8C@FVFF77S0Q05N>
-        <20221202010713.15d9c3bf5520b17a3df8e290@kernel.org>
-        <Y4jis+EsXuQb7l2n@FVFF77S0Q05N>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Dec 2022 19:46:15 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D5A1A07
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:46:14 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id h16so3259959qtu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 16:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tg48tuWS75RG4EGpWvYE/NpwbAAmMt5D2QrvouYOgx8=;
+        b=Qzp+wvhFcilhPxXoaEEGw8EFjQNcZ7TaAMDrAcZbyaJ6aamI4z372SBxTcPc2Ce6nu
+         KFUdSKFRXGWtX+SJvbHjZoAuGIoEWAy/6oJSYzZ8tGYvKY+uq7VRpTjrLHsyQD/psQ8e
+         xvGZB6+dTz3slpQ4cS8bXXp/mHCVf9BrxyOO+hHDtL91o3AZYb8vWfB8iLr3LszXtUFU
+         lnE7pwjO/ZVjQMNpT3h/Nhse7JDKC4h+3hC78cUBxna2f8p1HSi+rFlnYSUL2T9WevOe
+         cvrmRBmtmfSYfJWu5nrjzgR5NLrnrgXnpWLRbVJtL1TBWQhzq8VMTN7vkeORt9MpeN5I
+         BKMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tg48tuWS75RG4EGpWvYE/NpwbAAmMt5D2QrvouYOgx8=;
+        b=QsEVFOR0UgoztohXnzy/OocX8CyWC11Q8Y6BRbHFpp4S5A2PYEmgJ9PEEpWJ/Kow8R
+         lLEY/OypNBKqGfmbU4Q2AM8j+ERfAOkMbdS0z/OFJ+GLcIWGP/t5bspBTcGqfvW8sLxr
+         rFDqNVvhZDuobmPzy0ps2hEhRCVArGwnMca9obQHxWX8Kc7XcZ1sDkSCtj5od+9cAfua
+         MBlUL589HGtVUA22lR6w6i5t2kskKKhHq4LY5YwrTJJ1VIug2h1EMZvPg38CZNgnW//s
+         idmAuWWQtwQFk5YcjuFNMEL4bo4Yj2lCuExmXcHe4SydHbjKpVLKhverlKmV7UsAv7ji
+         ZQXA==
+X-Gm-Message-State: ANoB5pkJDixU/zqOOtwljdJ/mwAUXBimE88STeufZuIZghnUfd43T3iT
+        dOTeYt+1lbnsQkfsZ/VzmbRPvg==
+X-Google-Smtp-Source: AA0mqf7n/gdqwPAOFiIWaSFo9Bw4Uc7np/iVzzHE0mMwoYc8nZDUL759lXTL1/pcepigGT0jlZ7HCA==
+X-Received: by 2002:ae9:dd46:0:b0:6ce:4868:2fd6 with SMTP id r67-20020ae9dd46000000b006ce48682fd6mr45382812qkf.491.1669941973890;
+        Thu, 01 Dec 2022 16:46:13 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05620a450300b006eea4b5abcesm4765861qkp.89.2022.12.01.16.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 16:46:12 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1p0uBw-001yp6-1e;
+        Thu, 01 Dec 2022 20:46:12 -0400
+Date:   Thu, 1 Dec 2022 20:46:12 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 1/4] container_of: add container_of_const() that
+ preserves const-ness of the pointer
+Message-ID: <Y4lK1LbEaI0LqtJW@ziepe.ca>
+References: <20221201193057.1195255-1-gregkh@linuxfoundation.org>
+ <Y4kvne/Vv+H5pjzW@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4kvne/Vv+H5pjzW@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 17:21:55 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
-
-> On Fri, Dec 02, 2022 at 01:07:13AM +0900, Masami Hiramatsu wrote:
-> > On Thu, 1 Dec 2022 15:08:52 +0000
-> > Mark Rutland <mark.rutland@arm.com> wrote:
+On Fri, Dec 02, 2022 at 12:50:05AM +0200, Andy Shevchenko wrote:
+> On Thu, Dec 01, 2022 at 08:30:54PM +0100, Greg Kroah-Hartman wrote:
+> > container_of does not preserve the const-ness of a pointer that is
+> > passed into it, which can cause C code that passes in a const pointer to
+> > get a pointer back that is not const and then scribble all over the data
+> > in it.  To prevent this, container_of_const() will preserve the const
+> > status of the pointer passed into it using the newly available _Generic()
+> > method.
 > > 
-> > > On Thu, Dec 01, 2022 at 11:39:21PM +0900, Masami Hiramatsu (Google) wrote:
-> > > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > 
-> > > > Return DBG_HOOK_ERROR if kprobes can not handle a BRK because it
-> > > > fails to find a kprobe corresponding to the address.
-> > > > 
-> > > > Since arm64 kprobes uses stop_machine based text patching for removing
-> > > > BRK, it ensures all running kprobe_break_handler() is done at that point.
-> > > > And after removing the BRK, it removes the kprobe from its hash list.
-> > > > Thus, if the kprobe_break_handler() fails to find kprobe from hash list,
-> > > > there is a bug.
-> > > 
-> > > IIUC this relies on BRK handling not being preemptible, which is something
-> > > we've repeatedly considered changing along with a bunch of other debug
-> > > exception handling.
-> > 
-> > Interesting idea... and it also need many changes in kprobe itself.
-> > 
-> > > 
-> > > In case we do try to change that in future, it would be good to have a comment
-> > > somewhere to that effect.
-> > 
-> > Hmm, it would fundamentally change the assumptions that kprobes relies on,
-> > and would require a lot of thought again. (e.g. current running kprobe is
-> > stored in per-cpu variable, it should be per-task. etc.)
+> > Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
 > 
-> Ah; I had not considered that.
-> 
-> Feel free to ignore the above; with the comments as below:
-> 
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
+> I believe this tag requires SoB of the co-develper.
 
-OK, Thanks!
+Sure, Greg you can add whatever tags are required
 
-> 
-> Thanks,
-> Mark.
-> 
-> > 
-> > > 
-> > > I think there are other ways we could synchronise against that (e.g. using RCU
-> > > tasks rude) if we ever do that, and this patch looks good to me.
-> > > 
-> > > > 
-> > > > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > ---
-> > > >  arch/arm64/kernel/probes/kprobes.c |   79 +++++++++++++++++-------------------
-> > > >  1 file changed, 37 insertions(+), 42 deletions(-)
-> > > > 
-> > > > diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
-> > > > index d2ae37f89774..ea56b22d4da8 100644
-> > > > --- a/arch/arm64/kernel/probes/kprobes.c
-> > > > +++ b/arch/arm64/kernel/probes/kprobes.c
-> > > > @@ -298,7 +298,8 @@ int __kprobes kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr)
-> > > >  	return 0;
-> > > >  }
-> > > >  
-> > > > -static void __kprobes kprobe_handler(struct pt_regs *regs)
-> > > > +static int __kprobes
-> > > > +kprobe_breakpoint_handler(struct pt_regs *regs, unsigned long esr)
-> > > >  {
-> > > >  	struct kprobe *p, *cur_kprobe;
-> > > >  	struct kprobe_ctlblk *kcb;
-> > > > @@ -308,39 +309,45 @@ static void __kprobes kprobe_handler(struct pt_regs *regs)
-> > > >  	cur_kprobe = kprobe_running();
-> > > >  
-> > > >  	p = get_kprobe((kprobe_opcode_t *) addr);
-> > > > +	if (WARN_ON_ONCE(!p)) {
-> > > > +		/*
-> > > > +		 * Something went wrong. This must be put by kprobe, but we
-> > > > +		 * could not find corresponding kprobes. Let the kernel handle
-> > > > +		 * this error case.
-> > > > +		 */
-> > > 
-> > > Could we make this:
-> > > 
-> > > 		/*
-> > > 		 * Something went wrong. This BRK used an immediate reserved
-> > > 		 * for kprobes, but we couldn't find any corresponding probe.
-> > > 		 */
-> > 
-> > OK.
-> > 
-> > > 
-> > > > +		return DBG_HOOK_ERROR;
-> > > > +	}
-> > > >  
-> > > > -	if (p) {
-> > > > -		if (cur_kprobe) {
-> > > > -			if (reenter_kprobe(p, regs, kcb))
-> > > > -				return;
-> > > > -		} else {
-> > > > -			/* Probe hit */
-> > > > -			set_current_kprobe(p);
-> > > > -			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> > > > -
-> > > > -			/*
-> > > > -			 * If we have no pre-handler or it returned 0, we
-> > > > -			 * continue with normal processing.  If we have a
-> > > > -			 * pre-handler and it returned non-zero, it will
-> > > > -			 * modify the execution path and no need to single
-> > > > -			 * stepping. Let's just reset current kprobe and exit.
-> > > > -			 */
-> > > > -			if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> > > > -				setup_singlestep(p, regs, kcb, 0);
-> > > > -			} else
-> > > > -				reset_current_kprobe();
-> > > > -		}
-> > > > +	if (cur_kprobe) {
-> > > > +		/* Hit a kprobe inside another kprobe */
-> > > > +		if (!reenter_kprobe(p, regs, kcb))
-> > > > +			return DBG_HOOK_ERROR;
-> > > > +	} else {
-> > > > +		/* Probe hit */
-> > > > +		set_current_kprobe(p);
-> > > > +		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> > > > +
-> > > > +		/*
-> > > > +		 * If we have no pre-handler or it returned 0, we
-> > > > +		 * continue with normal processing.  If we have a
-> > > > +		 * pre-handler and it returned non-zero, it will
-> > > > +		 * modify the execution path and no need to single
-> > > > +		 * stepping. Let's just reset current kprobe and exit.
-> > > > +		 */
-> > > 
-> > > Minor wording nit: could we replace:
-> > > 
-> > > 	no need to single stepping.
-> > > 
-> > > With:
-> > > 	
-> > > 	not need to single-step.
-> > 
-> > OK, I'll update both in v2.
-> > 
-> > Thank you!
-> > 
-> > > 
-> > > Thanks,
-> > > Mark.
-> > > 
-> > > > +		if (!p->pre_handler || !p->pre_handler(p, regs))
-> > > > +			setup_singlestep(p, regs, kcb, 0);
-> > > > +		else
-> > > > +			reset_current_kprobe();
-> > > >  	}
-> > > > -	/*
-> > > > -	 * The breakpoint instruction was removed right
-> > > > -	 * after we hit it.  Another cpu has removed
-> > > > -	 * either a probepoint or a debugger breakpoint
-> > > > -	 * at this address.  In either case, no further
-> > > > -	 * handling of this interrupt is appropriate.
-> > > > -	 * Return back to original instruction, and continue.
-> > > > -	 */
-> > > > +
-> > > > +	return DBG_HOOK_HANDLED;
-> > > >  }
-> > > >  
-> > > > +static struct break_hook kprobes_break_hook = {
-> > > > +	.imm = KPROBES_BRK_IMM,
-> > > > +	.fn = kprobe_breakpoint_handler,
-> > > > +};
-> > > > +
-> > > >  static int __kprobes
-> > > >  kprobe_breakpoint_ss_handler(struct pt_regs *regs, unsigned long esr)
-> > > >  {
-> > > > @@ -365,18 +372,6 @@ static struct break_hook kprobes_break_ss_hook = {
-> > > >  	.fn = kprobe_breakpoint_ss_handler,
-> > > >  };
-> > > >  
-> > > > -static int __kprobes
-> > > > -kprobe_breakpoint_handler(struct pt_regs *regs, unsigned long esr)
-> > > > -{
-> > > > -	kprobe_handler(regs);
-> > > > -	return DBG_HOOK_HANDLED;
-> > > > -}
-> > > > -
-> > > > -static struct break_hook kprobes_break_hook = {
-> > > > -	.imm = KPROBES_BRK_IMM,
-> > > > -	.fn = kprobe_breakpoint_handler,
-> > > > -};
-> > > > -
-> > > >  /*
-> > > >   * Provide a blacklist of symbols identifying ranges which cannot be kprobed.
-> > > >   * This blacklist is exposed to userspace via debugfs (kprobes/blacklist).
-> > > > 
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Did you look at possibly just calling this "container_of" ?
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Jason
