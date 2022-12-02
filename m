@@ -2,175 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D628B64025C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AC6640263
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbiLBIj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        id S232100AbiLBIkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiLBIix (ORCPT
+        with ESMTP id S231730AbiLBIjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:38:53 -0500
-Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1982A1CFD3;
-        Fri,  2 Dec 2022 00:37:56 -0800 (PST)
-Received: from mail.didiglobal.com (unknown [10.79.71.35])
-        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 5360AB055B002;
-        Fri,  2 Dec 2022 16:37:53 +0800 (CST)
-Received: from ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) by
- ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 2 Dec 2022 16:37:53 +0800
-Received: from ZJY03-ACTMBX-05.didichuxing.com ([fe80::1dcd:f7bf:746e:c769])
- by ZJY03-ACTMBX-05.didichuxing.com ([fe80::1dcd:f7bf:746e:c769%8]) with mapi
- id 15.01.2375.017; Fri, 2 Dec 2022 16:37:52 +0800
-X-MD-Sfrom: chengkaitao@didiglobal.com
-X-MD-SrcIP: 10.79.71.35
-From:   =?utf-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
-        <chengkaitao@didiglobal.com>
-To:     Michal Hocko <mhocko@suse.com>
-CC:     Tao pilgrim <pilgrimtao@gmail.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "ran.xiaokai@zte.com.cn" <ran.xiaokai@zte.com.cn>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Thread-Topic: [PATCH] mm: memcontrol: protect the memory in cgroup from being
- oom killed
-Thread-Index: AQHZBK+NwNVzWF9Xk0ibAn/rxGrWSq5XnGYA//+FgwCAAVYiAP//vByAgACohID//5lJgAAA0fUAABOecID//4cygIABqLMA
-Date:   Fri, 2 Dec 2022 08:37:52 +0000
-Message-ID: <771CC621-A19E-4174-B3D0-F451B1D7D69A@didiglobal.com>
-In-Reply-To: <Y4jFnY7kMdB8ReSW@dhcp22.suse.cz>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.79.65.102]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5B5BD234FEA1914B8C9C78E8E2953F58@didichuxing.com>
-Content-Transfer-Encoding: base64
+        Fri, 2 Dec 2022 03:39:51 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AA4D113
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:39:45 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id e189so2692594iof.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 00:39:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHMoD/DcrhObTGtyvyKEig8wHn7CtcVTXrQ4ciasUkM=;
+        b=JnXkfoFq7hb5GNb8lyWcXA//VaK0QvOA+CpsnlLhjtGk/vicAEoolpKw3/6044ildC
+         HAYIX8MfXJ49PDjbHXWmMFDTaR0CH+ZhQrs1XwGRHP3IIyImxckBaOFK9yyaCk7AIJSg
+         C46zmAx4VHTTe8uzvUneLbW7Ma+M8EYqqdNw3yevC0CrxwD6TgYDzWcky8zM7UAWZxKq
+         cRLeRQYIIy0kU7bFpUYZ5ntA0ybx9Og3/6jYUbdbjlvOTHcZbFfFUy1otbq0Jy3/muri
+         wmpGYoVFBglbeRWCZa4Urowy4APUojbeQgCPCzYCVsh5pC4pNeFVd71gypdw6uVPln15
+         qKYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uHMoD/DcrhObTGtyvyKEig8wHn7CtcVTXrQ4ciasUkM=;
+        b=ifbZ9QpAwM5UHtQOUEDe3tr7RabRNnL9MCxdH7XSE13/1E5wOQ8Jf2rNORCfVqxQ9F
+         Z8wcdtskzKKG7BXCPOL2uaOW4xSnIC9YgB5ryFaofZ42vi5I75f7AyS5uAQJiAnGUB7N
+         GnZ2N6VyNOZRypw0Nir07DdJ4jvVchguJz9LiSP57Z7tzvCaX6QZruYSj4SUfbMqH1VZ
+         /Ccij3GDNgA/A2SH7WQN6l1uk7SGUvf5eOH3uQGZaHVLTTsWXEjgZ+MOSJJOGsYormXQ
+         CDrqNn7S1AactWg1RQpw0wzEeKL2LzT9vyI803DuE7Q7vvNuEidXB7erd0riIWwrD5or
+         j+EQ==
+X-Gm-Message-State: ANoB5pnfVoUlGVeJwkQKWW1uU3dNuiXs0OBJezXRU7RP/RbA6lYiCpwP
+        I3FdzPxumksnqCO+rt6vmh5kgj+5aPqM8242Mc95e6w99uGFGvVK
+X-Google-Smtp-Source: AA0mqf4JiwQnAyPsXCWrNbTSZVfNVE6Y+b/uABBIXoE9/WT+6EniEpMZGgn/Las+wt5J8BW7NftFFpYE6E9BR7+lwjQ=
+X-Received: by 2002:a02:cc4d:0:b0:373:2fc2:96d7 with SMTP id
+ i13-20020a02cc4d000000b003732fc296d7mr27723585jaq.177.1669970384908; Fri, 02
+ Dec 2022 00:39:44 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYuNirzmuQvYpH6gYiAr_fqh9g-+RP83FW3oLbty9iKbyw@mail.gmail.com>
+ <868rjrmmv2.wl-maz@kernel.org>
+In-Reply-To: <868rjrmmv2.wl-maz@kernel.org>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 2 Dec 2022 09:39:33 +0100
+Message-ID: <CADYN=9KSKQx816id-zWepV-E3ozph3k2_i9Rhs6QseFv0hkPfg@mail.gmail.com>
+Subject: Re: stable-rc-5.10: arm64: allmodconfig: (.hyp.text+0x1a4c):
+ undefined reference to `__kvm_nvhe_memset'
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QXQgMjAyMi0xMi0wMSAyMzoxNzo0OSwgIk1pY2hhbCBIb2NrbyIgPG1ob2Nrb0BzdXNlLmNvbT4g
-d3JvdGU6DQo+T24gVGh1IDAxLTEyLTIyIDE0OjMwOjExLCDnqIvlnrLmtpsgQ2hlbmdrYWl0YW8g
-Q2hlbmcgd3JvdGU6DQo+PiBBdCAyMDIyLTEyLTAxIDIxOjA4OjI2LCAiTWljaGFsIEhvY2tvIiA8
-bWhvY2tvQHN1c2UuY29tPiB3cm90ZToNCj4+ID5PbiBUaHUgMDEtMTItMjIgMTM6NDQ6NTgsIE1p
-Y2hhbCBIb2NrbyB3cm90ZToNCj4+ID4+IE9uIFRodSAwMS0xMi0yMiAxMDo1MjozNSwg56iL5Z6y
-5rabIENoZW5na2FpdGFvIENoZW5nIHdyb3RlOg0KPj4gPj4gPiBBdCAyMDIyLTEyLTAxIDE2OjQ5
-OjI3LCAiTWljaGFsIEhvY2tvIiA8bWhvY2tvQHN1c2UuY29tPiB3cm90ZToNCj4+ID5bLi4uXQ0K
-Pj4gPj4gVGhlcmUgaXMgYSBtaXN1bmRlcnN0YW5kaW5nLCBvb20ucHJvdGVjdCBkb2VzIG5vdCBy
-ZXBsYWNlIHRoZSB1c2VyJ3MgDQo+PiA+PiB0YWlsZWQgcG9saWNpZXMsIEl0cyBwdXJwb3NlIGlz
-IHRvIG1ha2UgaXQgZWFzaWVyIGFuZCBtb3JlIGVmZmljaWVudCBmb3IgDQo+PiA+PiB1c2VycyB0
-byBjdXN0b21pemUgcG9saWNpZXMsIG9yIHRyeSB0byBhdm9pZCB1c2VycyBjb21wbGV0ZWx5IGFi
-YW5kb25pbmcgDQo+PiA+PiB0aGUgb29tIHNjb3JlIHRvIGZvcm11bGF0ZSBuZXcgcG9saWNpZXMu
-DQo+PiA+DQo+PiA+IFRoZW4geW91IHNob3VsZCBmb2N1cyBvbiBleHBsYWluaW5nIG9uIGhvdyB0
-aGlzIG1ha2VzIHRob3NlIHBvbGljaWVzIGFuZA0KPj4gPiBlYXNpZXIgYW5kIG1vZSBlZmZpY2ll
-bnQuIEkgZG8gbm90IHNlZSBpdC4NCj4+IA0KPj4gSW4gZmFjdCwgdGhlcmUgYXJlIHNvbWUgcmVs
-ZXZhbnQgY29udGVudHMgaW4gdGhlIHByZXZpb3VzIGNoYXQgcmVjb3Jkcy4gDQo+PiBJZiBvb20u
-cHJvdGVjdCBpcyBhcHBsaWVkLCBpdCB3aWxsIGhhdmUgdGhlIGZvbGxvd2luZyBiZW5lZml0cw0K
-Pj4gMS4gVXNlcnMgb25seSBuZWVkIHRvIGZvY3VzIG9uIHRoZSBtYW5hZ2VtZW50IG9mIHRoZSBs
-b2NhbCBjZ3JvdXAsIG5vdCB0aGUgDQo+PiBpbXBhY3Qgb24gb3RoZXIgdXNlcnMnIGNncm91cHMu
-DQo+DQo+UHJvdGVjdGlvbiBiYXNlZCBiYWxhbmNpbmcgY2Fubm90IHJlYWxseSB3b3JrIGluIGFu
-IGlzb2xhdGlvbi4NCg0KSSB0aGluayB0aGF0IGEgY2dyb3VwIG9ubHkgbmVlZHMgdG8gY29uY2Vy
-biB0aGUgcHJvdGVjdGlvbiB2YWx1ZSBvZiB0aGUgY2hpbGQgDQpjZ3JvdXAsIHdoaWNoIGlzIGlu
-ZGVwZW5kZW50IGluIGEgY2VydGFpbiBzZW5zZS4NCg0KPj4gMi4gVXNlcnMgYW5kIHN5c3RlbSBk
-byBub3QgbmVlZCB0byBzcGVuZCBleHRyYSB0aW1lIG9uIGNvbXBsaWNhdGVkIGFuZCANCj4+IHJl
-cGVhdGVkIHNjYW5uaW5nIGFuZCBjb25maWd1cmF0aW9uLiBUaGV5IGp1c3QgbmVlZCB0byBjb25m
-aWd1cmUgdGhlIA0KPj4gb29tLnByb3RlY3Qgb2Ygc3BlY2lmaWMgY2dyb3Vwcywgd2hpY2ggaXMg
-YSBvbmUtdGltZSB0YXNrDQo+DQo+VGhpcyB3aWxsIG5vdCB3b3JrIHNhbWUgd2F5IGFzIHRoZSBt
-ZW1vcnkgcmVjbGFpbSBwcm90ZWN0aW9uIGNhbm5vdCB3b3JrDQo+aW4gYW4gaXNvbGF0aW9uIG9u
-IHRoZSBtZW1jZyBsZXZlbC4NCg0KVGhlIHBhcmVudCBjZ3JvdXAncyBvb20ucHJvdGVjdCBjYW4g
-Y2hhbmdlIHRoZSBhY3R1YWwgcHJvdGVjdGVkIG1lbW9yeSBzaXplIA0Kb2YgdGhlIGNoaWxkIGNn
-cm91cCwgd2hpY2ggaXMgZXhhY3RseSB3aGF0IHdlIG5lZWQuIEJlY2F1c2Ugb2YgaXQsIHRoZSBj
-aGlsZCBjZ3JvdXAgDQpjYW4gc2V0IGl0cyBvd24gb29tLnByb3RlY3QgYXQgd2lsbC4NCg0KPj4g
-Pj4gPiA+V2h5IGNhbm5vdCB5b3Ugc2ltcGx5IGRpc2NvdW50IHRoZSBwcm90ZWN0aW9uIGZyb20g
-YWxsIHByb2Nlc3Nlcw0KPj4gPj4gPiA+ZXF1YWxseT8gSSBkbyBub3QgZm9sbG93IHdoeSB0aGUg
-dGFza191c2FnZSBoYXMgdG8gcGxheSBhbnkgcm9sZSBpbg0KPj4gPj4gPiA+dGhhdC4NCj4+ID4+
-ID4gDQo+PiA+PiA+IElmIGFsbCBwcm9jZXNzZXMgYXJlIHByb3RlY3RlZCBlcXVhbGx5LCB0aGUg
-b29tIHByb3RlY3Rpb24gb2YgY2dyb3VwIGlzIA0KPj4gPj4gPiBtZWFuaW5nbGVzcy4gRm9yIGV4
-YW1wbGUsIGlmIHRoZXJlIGFyZSBtb3JlIHByb2Nlc3NlcyBpbiB0aGUgY2dyb3VwLCANCj4+ID4+
-ID4gdGhlIGNncm91cCBjYW4gcHJvdGVjdCBtb3JlIG1lbXMsIGl0IGlzIHVuZmFpciB0byBjZ3Jv
-dXBzIHdpdGggZmV3ZXIgDQo+PiA+PiA+IHByb2Nlc3Nlcy4gU28gd2UgbmVlZCB0byBrZWVwIHRo
-ZSB0b3RhbCBhbW91bnQgb2YgbWVtb3J5IHRoYXQgYWxsIA0KPj4gPj4gPiBwcm9jZXNzZXMgaW4g
-dGhlIGNncm91cCBuZWVkIHRvIHByb3RlY3QgY29uc2lzdGVudCB3aXRoIHRoZSB2YWx1ZSBvZiAN
-Cj4+ID4+ID4gZW9vbS5wcm90ZWN0Lg0KPj4gPj4gDQo+PiA+PiBZb3UgYXJlIG1peGluZyB0d28g
-ZGlmZmVyZW50IGNvbmNlcHRzIHRvZ2V0aGVyIEkgYW0gYWZyYWlkLiBUaGUgcGVyDQo+PiA+PiBt
-ZW1jZyBwcm90ZWN0aW9uIHNob3VsZCBwcm90ZWN0IHRoZSBjZ3JvdXAgKGkuZS4gYWxsIHByb2Nl
-c3NlcyBpbiB0aGF0DQo+PiA+PiBjZ3JvdXApIHdoaWxlIHlvdSB3YW50IGl0IHRvIGJlIGFsc28g
-cHJvY2VzcyBhd2FyZS4gVGhpcyByZXN1bHRzIGluIGENCj4+ID4+IHZlcnkgdW5jbGVhciBydW50
-aW1lIGJlaGF2aW9yIHdoZW4gYSBwcm9jZXNzIGZyb20gYSBtb3JlIHByb3RlY3RlZCBtZW1jZw0K
-Pj4gPj4gaXMgc2VsZWN0ZWQgYmFzZWQgb24gaXRzIGluZGl2aWR1YWwgbWVtb3J5IHVzYWdlLg0K
-Pj4gPg0KPj4gVGhlIGNvcnJlY3Qgc3RhdGVtZW50IGhlcmUgc2hvdWxkIGJlIHRoYXQgZWFjaCBt
-ZW1jZyBwcm90ZWN0aW9uIHNob3VsZCANCj4+IHByb3RlY3QgdGhlIG51bWJlciBvZiBtZW1zIHNw
-ZWNpZmllZCBieSB0aGUgb29tLnByb3RlY3QuIEZvciBleGFtcGxlLCANCj4+IGEgY2dyb3VwJ3Mg
-dXNhZ2UgaXMgNkcsIGFuZCBpdCdzIG9vbS5wcm90ZWN0IGlzIDJHLCB3aGVuIGFuIG9vbSBraWxs
-ZXIgb2NjdXJzLCANCj4+IEluIHRoZSB3b3JzdCBjYXNlLCB3ZSB3aWxsIG9ubHkgcmVkdWNlIHRo
-ZSBtZW1vcnkgdXNlZCBieSB0aGlzIGNncm91cCB0byAyRyANCj4+IHRocm91Z2ggdGhlIG9tIGtp
-bGxlci4NCj4NCj5JIGRvIG5vdCBzZWUgaG93IHRoYXQgY291bGQgYmUgZ3VhcmFudGVlZC4gUGxl
-YXNlIGtlZXAgaW4gbWluZCB0aGF0IGENCj5ub24tdHJpdmlhbCBhbW91bnQgb2YgbWVtb3J5IHJl
-c291cmNlcyBjb3VsZCBiZSBjb21wbGV0ZWx5IGluZGVwZW5kZW50DQo+b24gYW55IHByb2Nlc3Mg
-bGlmZSB0aW1lIChqdXN0IGNvbnNpZGVyIHRtcGZzIGFzIGEgdHJpdmlhbCBleGFtcGxlKS4NCj4N
-Cj4+ID5MZXQgbWUgYmUgbW9yZSBzcGVjaWZpYyBoZXJlLiBBbHRob3VnaCBpdCBpcyBwcmltYXJp
-bHkgcHJvY2Vzc2VzIHdoaWNoDQo+PiA+YXJlIHRoZSBwcmltYXJ5IHNvdXJjZSBvZiBtZW1jZyBj
-aGFyZ2VzIHRoZSBtZW1vcnkgYWNjb3VudGVkIGZvciB0aGUgb29tDQo+PiA+YmFkbmVzcyBwdXJw
-b3NlcyBpcyBub3QgcmVhbGx5IGNvbXBhcmFibGUgdG8gdGhlIG92ZXJhbCBtZW1jZyBjaGFyZ2Vk
-DQo+PiA+bWVtb3J5LiBLZXJuZWwgbWVtb3J5LCBub24tbWFwcGVkIG1lbW9yeSBhbGwgdGhhdCBj
-YW4gZ2VuZXJhdGUgcmF0aGVyDQo+PiA+aW50ZXJlc3RpbmcgY29ybmVyY2FzZXMuDQo+PiANCj4+
-IFNvcnJ5LCBJJ20gdGhvdWdodGxlc3MgZW5vdWdoIGFib3V0IHNvbWUgc3BlY2lhbCBtZW1vcnkg
-c3RhdGlzdGljcy4gSSB3aWxsIGZpeCANCj4+IGl0IGluIHRoZSBuZXh0IHZlcnNpb24NCj4NCj5M
-ZXQgbWUganVzdCBlbXBoYXNpc2UgdGhhdCB3ZSBhcmUgdGFsa2luZyBhYm91dCBmdW5kYW1lbnRh
-bCBkaXNjb25uZWN0Lg0KPlJzcyBiYXNlZCBhY2NvdW50aW5nIGhhcyBiZWVuIHVzZWQgZm9yIHRo
-ZSBPT00ga2lsbGVyIHNlbGVjdGlvbiBiZWNhdXNlDQo+dGhlIG1lbW9yeSBnZXRzIHVubWFwcGVk
-IGFuZCBfcG90ZW50aWFsbHlfIGZyZWVkIHdoZW4gdGhlIHByb2Nlc3MgZ29lcw0KPmF3YXkuIE1l
-bWNnIGNoYW5nZXMgYXJlIGJvdW5kIHRvIHRoZSBvYmplY3QgbGlmZSB0aW1lIGFuZCBhcyBzYWlk
-IGluDQo+bWFueSBjYXNlcyB0aGVyZSBpcyBubyBkaXJlY3QgcmVsYXRpb24gd2l0aCBhbnkgcHJv
-Y2VzcyBsaWZlIHRpbWUuDQoNCkJhc2VkIG9uIHlvdXIgcXVlc3Rpb24sIEkgd2FudCB0byByZXZp
-c2UgdGhlIGZvcm11bGEgYXMgZm9sbG93cywNCnNjb3JlID0gdGFza191c2FnZSArIHNjb3JlX2Fk
-aiAqIHRvdGFscGFnZSAtIGVvb20ucHJvdGVjdCAqICh0YXNrX3VzYWdlIC0gdGFza19yc3NzaGFy
-ZSkgLyANCihsb2NhbF9tZW1jZ191c2FnZSArIGxvY2FsX21lbWNnX3N3YXBjYWNoZSkNCg0KQWZ0
-ZXIgdGhlIHByb2Nlc3MgaXMga2lsbGVkLCB0aGUgdW5tYXBwZWQgY2FjaGUgYW5kIHNoYXJlbWVt
-IHdpbGwgbm90IGJlIA0KcmVsZWFzZWQgaW1tZWRpYXRlbHksIHNvIHRoZXkgc2hvdWxkIG5vdCBh
-cHBseSB0byBjZ3JvdXAgZm9yIHByb3RlY3Rpb24gcXVvdGEuIA0KSW4gZXh0cmVtZSBlbnZpcm9u
-bWVudHMsIHRoZSBtZW1vcnkgdGhhdCBjYW5ub3QgYmUgcmVsZWFzZWQgYnkgdGhlIG9vbSBraWxs
-ZXIgDQooaS5lLiBzb21lIG1lbXMgdGhhdCBoYXZlIG5vdCBiZWVuIGNoYXJnZWQgdG8gdGhlIHBy
-b2Nlc3MpIG1heSBvY2N1cHkgYSBsYXJnZSANCnNoYXJlIG9mIHByb3RlY3Rpb24gcXVvdGEsIGJ1
-dCBpdCBpcyBleHBlY3RlZC4gT2YgY291cnNlLCB0aGUgaWRlYSBtYXkgaGF2ZSBzb21lIA0KcHJv
-YmxlbXMgdGhhdCBJIGhhdmVuJ3QgY29uc2lkZXJlZC4NCg0KPg0KPkhvcGUgdGhhdCBjbGFyaWZp
-ZXMuDQoNClRoYW5rcyBmb3IgeW91ciBjb21tZW50IQ0KY2hlbmdrYWl0YW8NCg0K
+On Thu, 1 Dec 2022 at 11:36, Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Thu, 01 Dec 2022 09:39:57 +0000,
+> Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > [please ignore if it is already reported]
+> >
+> > The stable-rc 5.10 arm64 allmodconfig builds failed with gcc-12.
+> > List of build warnings and errors with gcc-12 are listed below.
+> >
+> > aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+> > aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+> > aarch64-linux-gnu-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function
+> > `__kvm_nvhe___kvm_tlb_flush_vmid_ipa':
+> > (.hyp.text+0x1a4c): undefined reference to `__kvm_nvhe_memset'
+>
+> Stupid gcc. Can you try the following patch and check if this works
+> for you?
+
+The patch didn't apply smodly, was a few minor issues.
+But it solved the build error.
+
+Cheers,
+Anders
+
+>
+> Thanks,
+>
+>         M.
+>
+> From 4e775885654bd667a519df5ca5aaf702ce438f5e Mon Sep 17 00:00:00 2001
+> From: Will Deacon <will@kernel.org>
+> Date: Fri, 19 Mar 2021 10:01:10 +0000
+> Subject: [PATCH] KVM: arm64: Link position-independent string routines into
+>  .hyp.text
+>
+> Commit 7b4a7b5e6fefd15f708f959dd43e188444e252ec upstream.
+>
+> Pull clear_page(), copy_page(), memcpy() and memset() into the nVHE hyp
+> code and ensure that we always execute the '__pi_' entry point on the
+> offchance that it changes in future.
+>
+> [ qperret: Commit title nits and added linker script alias ]
+>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Link: https://lore.kernel.org/r/20210319100146.1149909-3-qperret@google.com
+> ---
+>  arch/arm64/include/asm/hyp_image.h |  3 +++
+>  arch/arm64/kernel/image-vars.h     | 11 +++++++++++
+>  arch/arm64/kvm/hyp/nvhe/Makefile   |  4 ++++
+>  3 files changed, 18 insertions(+)
+>
+> diff --git a/arch/arm64/include/asm/hyp_image.h b/arch/arm64/include/asm/hyp_image.h
+> index daa1a1da539e..e06842756051 100644
+> --- a/arch/arm64/include/asm/hyp_image.h
+> +++ b/arch/arm64/include/asm/hyp_image.h
+> @@ -31,6 +31,9 @@
+>   */
+>  #define KVM_NVHE_ALIAS(sym)    kvm_nvhe_sym(sym) = sym;
+>
+> +/* Defines a linker script alias for KVM nVHE hyp symbols */
+> +#define KVM_NVHE_ALIAS_HYP(first, sec) kvm_nvhe_sym(first) = kvm_nvhe_sym(sec);
+> +
+>  #endif /* LINKER_SCRIPT */
+>
+>  #endif /* __ARM64_HYP_IMAGE_H__ */
+> diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
+> index c615b285ff5b..48e43b29a2d5 100644
+> --- a/arch/arm64/kernel/image-vars.h
+> +++ b/arch/arm64/kernel/image-vars.h
+> @@ -103,6 +103,17 @@ KVM_NVHE_ALIAS(gic_nonsecure_priorities);
+>  KVM_NVHE_ALIAS(__start___kvm_ex_table);
+>  KVM_NVHE_ALIAS(__stop___kvm_ex_table);
+>
+> +/* Position-independent library routines */
+> +KVM_NVHE_ALIAS_HYP(clear_page, __pi_clear_page);
+> +KVM_NVHE_ALIAS_HYP(copy_page, __pi_copy_page);
+> +KVM_NVHE_ALIAS_HYP(memcpy, __pi_memcpy);
+> +KVM_NVHE_ALIAS_HYP(memset, __pi_memset);
+> +
+> +#ifdef CONFIG_KASAN
+> +KVM_NVHE_ALIAS_HYP(__memcpy, __pi_memcpy);
+> +KVM_NVHE_ALIAS_HYP(__memset, __pi_memset);
+> +#endif
+> +
+>  #endif /* CONFIG_KVM */
+>
+>  #endif /* __ARM64_KERNEL_IMAGE_VARS_H */
+> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+> index ddde15fe85f2..230bba1a6716 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+> @@ -6,9 +6,13 @@
+>  asflags-y := -D__KVM_NVHE_HYPERVISOR__
+>  ccflags-y := -D__KVM_NVHE_HYPERVISOR__
+>
+> +lib-objs := clear_page.o copy_page.o memcpy.o memset.o
+> +lib-objs := $(addprefix ../../../lib/, $(lib-objs))
+> +
+>  obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o hyp-main.o
+>  obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
+>          ../fpsimd.o ../hyp-entry.o
+> +obj-y += $(lib-objs)
+>
+>  ##
+>  ## Build rules for compiling nVHE hyp code
+> --
+> 2.34.1
+>
+>
+> --
+> Without deviation from the norm, progress is not possible.
