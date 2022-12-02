@@ -2,117 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C8F640A20
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 853BC640A1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233760AbiLBQEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S233875AbiLBQEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbiLBQE3 (ORCPT
+        with ESMTP id S233734AbiLBQEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:04:29 -0500
-Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBBCDA9590;
-        Fri,  2 Dec 2022 08:03:29 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 284FCFF9B7;
-        Fri,  2 Dec 2022 16:03:23 +0000 (UTC)
-From:   Max Staudt <max@enpas.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] can: can327: Flush tx_work on ldisc .close()
-Date:   Sat,  3 Dec 2022 01:01:48 +0900
-Message-Id: <20221202160148.282564-1-max@enpas.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 2 Dec 2022 11:04:16 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DE689AC3;
+        Fri,  2 Dec 2022 08:02:50 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p18Ux-0005Di-Pr; Fri, 02 Dec 2022 17:02:47 +0100
+Message-ID: <9a03c244-adff-afaf-7385-d8e89cd3f338@leemhuis.info>
+Date:   Fri, 2 Dec 2022 17:02:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [regression] Bug 216753 - 6e 6 ghz bands are disabled since 5.16
+ on intel ax211
+Content-Language: en-US, de-DE
+To:     Dave Chiluk <chiluk@ubuntu.com>,
+        "Coelho, Luciano" <luciano.coelho@intel.com>
+Cc:     "Greenman, Gregory" <gregory.greenman@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
+ <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
+ <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669996970;1d693492;
+X-HE-SMSGID: 1p18Ux-0005Di-Pr
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Additionally, remove it from .ndo_stop().
+On 02.12.22 16:37, Dave Chiluk wrote:
+> The other possibility is that this is actually a bios bug, as the DSM
+> is being read out of ACPI.  In which case that would be Dell's fault.
 
-This ensures that the worker is not called after being freed, and that
-the UART TX queue remains active to send final commands when the netdev
-is stopped.
+Yes and no, but no:
 
-Thanks to Jiri Slaby for finding this in slcan:
+A kernel change exposed this problem, hence it doesn't matter if the
+BIOS is faulty: it's makes it a kernel regression and those are not
+allowed. For more on this see
+https://docs.kernel.org/admin-guide/reporting-issues.html
 
-  https://lore.kernel.org/linux-can/20221201073426.17328-1-jirislaby@kernel.org/
+That at least would be the normal approach. But the thing is: the legal
+implications when it comes to things like wifi make this somewhat
+trickier. :-/
 
-A variant of this patch for slcan, with the flush in .ndo_stop() still
-present, has been tested successfully on physical hardware:
+> On Thu, Dec 1, 2022 at 5:33 AM Coelho, Luciano <luciano.coelho@intel.com> wrote:
+>>
+>> On Thu, 2022-12-01 at 11:14 +0100, Thorsten Leemhuis wrote:
+>>> Hi, this is your Linux kernel regression tracker.
+>>>
+>>> Luca, I noticed a regression report in bugzilla where I'd like your
+>>> advice on. To quote https://bugzilla.kernel.org/show_bug.cgi?id=216753
+>>
+>> Hi Thorsten wearing-the-regression-hat, 🙂
 
-  https://bugzilla.suse.com/show_bug.cgi?id=1205597
+:-D
 
-Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters")
-Cc: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: Max Staudt <max@enpas.org>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Max Staudt <max@enpas.org>
----
- drivers/net/can/can327.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+>> I'm not the maintainer of iwlwifi anymore, so I'm adding the new
+>> maintainer here, Gregory Greenman.
 
-diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
-index ed3d0b8989a0..dc7192ecb001 100644
---- a/drivers/net/can/can327.c
-+++ b/drivers/net/can/can327.c
-@@ -796,9 +796,9 @@ static int can327_netdev_close(struct net_device *dev)
- 
- 	netif_stop_queue(dev);
- 
--	/* Give UART one final chance to flush. */
--	clear_bit(TTY_DO_WRITE_WAKEUP, &elm->tty->flags);
--	flush_work(&elm->tx_work);
-+	/* We don't flush the UART TX queue here, as we want final stop
-+	 * commands (like the above dummy char) to be flushed out.
-+	 */
- 
- 	can_rx_offload_disable(&elm->offload);
- 	elm->can.state = CAN_STATE_STOPPED;
-@@ -1069,12 +1069,15 @@ static void can327_ldisc_close(struct tty_struct *tty)
- {
- 	struct can327 *elm = (struct can327 *)tty->disc_data;
- 
--	/* unregister_netdev() calls .ndo_stop() so we don't have to.
--	 * Our .ndo_stop() also flushes the TTY write wakeup handler,
--	 * so we can safely set elm->tty = NULL after this.
--	 */
-+	/* unregister_netdev() calls .ndo_stop() so we don't have to. */
- 	unregister_candev(elm->dev);
- 
-+	/* Give UART one final chance to flush.
-+	 * No need to clear TTY_DO_WRITE_WAKEUP since .write_wakeup() is
-+	 * serialised against .close() and will not be called once we return.
-+	 */
-+	flush_work(&elm->tx_work);
-+
- 	/* Mark channel as dead */
- 	spin_lock_bh(&elm->lock);
- 	tty->disc_data = NULL;
--- 
-2.30.2
+Well, you where the author of the commit, that's why I addressed you.
+But if Gregory or someone else steps in that's of course totally fine
+for me as well. :-D
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+>> Gregory, can you take a look?
+>>
+>>
+>>>> It looks like the self-managed regulatory information is causing the 6ghz band to be disabled on my AX211 (in the US).
+>>>> iw reg get shows no 6ghz bands (output at the bottom).
+>>>>
+>>>> $ sudo iw phy0 channel
+>>>> ...
+>>>> Band 4:
+>>>>     * 5955 MHz [1] (disabled)
+>>>>     * 5975 MHz [5] (disabled)
+>>>>     * 5995 MHz [9] (disabled)
+>>>>         ....(continues with all disabled
+>>>>         * 7115 MHz [233] (disabled)
+>>>> ...
+>>>>
+>>>> I was able to narrow this down to having been introduced during the 5.16 development window, as 5.15.79 linux-stable kernel works and the 5.16.12 does
+>>>> not (earlier builds of 5.16 kernel fail to boot on my machine for some reason).
+>>>>
+>>>> I found https://community.frame.work/t/kernel-5-16-6ghz-disabled-ax210/15675/5
+>>>> and they imply that this regression was introduced by
+>>>> 698b166ed3464e1604a0e6a3e23cc1b529a5adc1
+>>>> I haven't independently verified this commit as the definitive issue.
+>>>
+>>> You authored 698b166ed346 ("iwlwifi: mvm: read 6E enablement flags from
+>>> DSM and pass to FW"). As it is a regressions is ideally should be dealt
+>>> with. But this area in tricky due to the legal implications. Hence I
+>>> wonder: is there anything we can do about this, or is this simply a case
+>>> where we have to bite the bullet and live with this regression?
+>>>
+>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>>
+>>> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+>>> reports and sometimes miss something important when writing mails like
+>>> this. If that's the case here, don't hesitate to tell me in a public
+>>> reply, it's in everyone's interest to set the public record straight.
+> 
+> 
