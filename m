@@ -2,181 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF1D640798
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3175664079A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiLBNRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 08:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S233560AbiLBNSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 08:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbiLBNRp (ORCPT
+        with ESMTP id S232705AbiLBNSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 08:17:45 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EFE521BE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 05:17:38 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE2B323A;
-        Fri,  2 Dec 2022 05:17:44 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.38.229])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DB9C3F73D;
-        Fri,  2 Dec 2022 05:17:36 -0800 (PST)
-Date:   Fri, 2 Dec 2022 13:17:30 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
-Subject: Re: [PATCH v2 1/3] arm64: Prohibit instrumentation on
- arch_stack_walk()
-Message-ID: <Y4n66ioPq0BZF4Pi@FVFF77S0Q05N>
-References: <166994750386.439920.1754385804350980158.stgit@devnote3>
- <166994751368.439920.3236636557520824664.stgit@devnote3>
+        Fri, 2 Dec 2022 08:18:46 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC55A1C3A;
+        Fri,  2 Dec 2022 05:18:42 -0800 (PST)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNtmL5LLfz6J68q;
+        Fri,  2 Dec 2022 21:18:10 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Fri, 2 Dec 2022 14:18:40 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 2 Dec
+ 2022 13:18:40 +0000
+Date:   Fri, 2 Dec 2022 13:18:36 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     <ira.weiny@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH V2 03/11] cxl/mem: Implement Clear Event Records command
+Message-ID: <20221202131836.00000f35@Huawei.com>
+In-Reply-To: <6389630036769_3cbe02947d@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20221201002719.2596558-1-ira.weiny@intel.com>
+        <20221201002719.2596558-4-ira.weiny@intel.com>
+        <6389630036769_3cbe02947d@dwillia2-xfh.jf.intel.com.notmuch>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <166994751368.439920.3236636557520824664.stgit@devnote3>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 11:18:33AM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+> > +static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
+> > +				  enum cxl_event_log_type log,
+> > +				  struct cxl_get_event_payload *get_pl,
+> > +				  u16 total)
+> > +{
+> > +	struct cxl_mbox_clear_event_payload payload = {
+> > +		.event_log = log,
+> > +	};
+> > +	int cnt;
+> > +
+> > +	/*
+> > +	 * Clear Event Records uses u8 for the handle cnt while Get Event
+> > +	 * Record can return up to 0xffff records.
+> > +	 */
+> > +	for (cnt = 0; cnt < total; /* cnt incremented internally */) {
+> > +		u8 nr_recs = min_t(u8, (total - cnt),
+> > +				   CXL_CLEAR_EVENT_MAX_HANDLES);  
 > 
-> Mark arch_stack_walk() as noinstr instead of notrace and inline functions
-> called from arch_stack_walk() as __always_inline so that user does not
-> put any instrumentations on it, because this function can be used from
-> return_address() which is used by lockdep.
+> This seems overly complicated. @total is a duplicate of
+> @get_pl->record_count, and the 2 loops feel like it could be cut
+> down to one.
 
-Hmmm... since arch_stack_walk is marked as notrace, that will be prohibited by
-default unless the kernel was built with CONFIG_KPROBE_EVENTS_ON_NOTRACE=y,
-and the commit message for that says:
 
-│ This option disables such protection and allows you to put kprobe                                                                                                                                   │
-│ events on ftrace functions for debugging ftrace by itself.                                                                                                                                          │
-│ Note that this might let you shoot yourself in the foot.
+You could do something nasty like
+	for (i = 0; i < total; i++) {
 
-... and IIUC we generally don't expect people to set that, and that might be
-worth calling out in the commit message.
+		...
+		payload.handle[i % CLEAR_EVENT_MAX_HANDLES] = ...
+		if (i % CXL_CLEAR_EVENT_MAX_HANDLES == CXL_CLEAR_EVENT_MAX_HANDLE - 1) {
+			send command.
+		}
+	}
 
-> Without this, if the kernel built with CONFIG_LOCKDEP=y, just probing
-> arch_stack_walk() via <tracefs>/kprobe_events will crash the kernel on
-> arm64.
+but that looks worse to me than the double loop.
+
+Making outer loop
+	for (j = 0; j <= total / CXL_CLEAR_EVENT_MAX_HANDLES; j++)
+might bet clearer but then you'd have to do
+records[j * CXL_CLEAR_EVENT_MAX_HANDLES + i] which isn't nice.
+
+Ah well, Ira gets to try and find a happy compromise.
+
+
+...
+
+> > diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
+> > index 70459be5bdd4..7c1ad8062792 100644
+> > --- a/include/uapi/linux/cxl_mem.h
+> > +++ b/include/uapi/linux/cxl_mem.h
+> > @@ -25,6 +25,7 @@
+> >  	___C(RAW, "Raw device command"),                                  \
+> >  	___C(GET_SUPPORTED_LOGS, "Get Supported Logs"),                   \
+> >  	___C(GET_EVENT_RECORD, "Get Event Record"),                       \
+> > +	___C(CLEAR_EVENT_RECORD, "Clear Event Record"),                   \
+> >  	___C(GET_FW_INFO, "Get FW Info"),                                 \
+> >  	___C(GET_PARTITION_INFO, "Get Partition Information"),            \
+> >  	___C(GET_LSA, "Get Label Storage Area"),                          \  
 > 
->  # echo p arch_stack_walk >> ${TRACEFS}/kprobe_events
->  # echo 1 > ${TRACEFS}/events/kprobes/enable
+> Same, "yikes" / "must be at the end of the enum" feedback.
 
-I had a go at testing this patch, and it fixes the crash with the reproducer
-above, but there are plenty of other instances in stacktrace.c that lead to the
-same sort of crash, e.g.
+Macro magic makes that non obvious.. Not that I'd ever said I thought this trick
+was a bad idea ;) 
 
-# echo p stackinfo_get_task >> ${TRACEFS}/kprobe_events
-# echo 1 > ${TRACEFS}/events/kprobes/enable
-
-... so I think there's more that we need to do to fix this generally.
-
-Note: I found interesting functions to try tracing by looking at the output of:
-
-  aarch64-linux-objdump -t arch/arm64/kernel/stacktrace.o | grep -w '.text'
-
-That all said, I think this patch is nice-to-have, and that we can address the
-other cases as a follow-up, so for this patch as-is (with or without some
-wording regarding CONFIG_KPROBE_EVENTS_ON_NOTRACE):
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
->   kprobes: Failed to recover from reentered kprobes.
->   kprobes: Dump kprobe:
->   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
->   ------------[ cut here ]------------
->   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
->   kprobes: Failed to recover from reentered kprobes.
->   kprobes: Dump kprobe:
->   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
->   ------------[ cut here ]------------
->   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
->   PREEMPT SMP
->   Modules linked in:
->   CPU: 0 PID: 17 Comm: migration/0 Tainted: G                 N 6.1.0-rc5+ #6
->   Hardware name: linux,dummy-virt (DT)
->   Stopper: 0x0 <- 0x0
->   pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->   pc : kprobe_breakpoint_handler+0x178/0x17c
->   lr : kprobe_breakpoint_handler+0x178/0x17c
->   sp : ffff8000080d3090
->   x29: ffff8000080d3090 x28: ffff0df5845798c0 x27: ffffc4f59057a774
->   x26: ffff0df5ffbba770 x25: ffff0df58f420f18 x24: ffff49006f641000
->   x23: ffffc4f590579768 x22: ffff0df58f420f18 x21: ffff8000080d31c0
->   x20: ffffc4f590579768 x19: ffffc4f590579770 x18: 0000000000000006
->   x17: 5f6b636174735f68 x16: 637261203d207264 x15: 64612e202c30203d
->   x14: 2074657366666f2e x13: 30633178302f3078 x12: 302b6b6c61775f6b
->   x11: 636174735f686372 x10: ffffc4f590dc5bd8 x9 : ffffc4f58eb31958
->   x8 : 00000000ffffefff x7 : ffffc4f590dc5bd8 x6 : 80000000fffff000
->   x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
->   x2 : 0000000000000000 x1 : ffff0df5845798c0 x0 : 0000000000000064
->   Call trace:
->   kprobes: Failed to recover from reentered kprobes.
->   kprobes: Dump kprobe:
->   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
->   ------------[ cut here ]------------
->   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
-> 
-> Fixes: 39ef362d2d45 ("arm64: Make return_address() use arch_stack_walk()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  Changes in v2:
->   - Use noinstr instead of NOKPROBE_SYMBOL()
->   - Use __always_inline because nokprobe_inline will be changed if
->     CONFIG_KPROBES=n.
->   - Fix indentation.
-> ---
->  arch/arm64/kernel/stacktrace.c |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index 634279b3b03d..117e2c180f3c 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -23,8 +23,8 @@
->   *
->   * The regs must be on a stack currently owned by the calling task.
->   */
-> -static inline void unwind_init_from_regs(struct unwind_state *state,
-> -					 struct pt_regs *regs)
-> +static __always_inline void unwind_init_from_regs(struct unwind_state *state,
-> +						  struct pt_regs *regs)
->  {
->  	unwind_init_common(state, current);
->  
-> @@ -58,8 +58,8 @@ static __always_inline void unwind_init_from_caller(struct unwind_state *state)
->   * duration of the unwind, or the unwind will be bogus. It is never valid to
->   * call this for the current task.
->   */
-> -static inline void unwind_init_from_task(struct unwind_state *state,
-> -					 struct task_struct *task)
-> +static __always_inline void unwind_init_from_task(struct unwind_state *state,
-> +						  struct task_struct *task)
->  {
->  	unwind_init_common(state, task);
->  
-> @@ -186,7 +186,7 @@ void show_stack(struct task_struct *tsk, unsigned long *sp, const char *loglvl)
->  			: stackinfo_get_unknown();		\
->  	})
->  
-> -noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
-> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
->  			      void *cookie, struct task_struct *task,
->  			      struct pt_regs *regs)
->  {
-> 
