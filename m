@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20C06408BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2866408BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiLBOsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S233553AbiLBOtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbiLBOss (ORCPT
+        with ESMTP id S232265AbiLBOtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:48:48 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E23DCAB50
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:48:46 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id p9so1725046uam.12
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:48:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OuRJnTeKjq6r9MP1xf+PA8XGnVHD2Jj2xuTkOIE2tQk=;
-        b=twdZXXS67RdfArXAJw6kcz/cz8vYVZPOq3b130pTjReT9osmyrVEKuLFy2G5Mcx2md
-         5kQCBNSgUq4cFpRwMBGMEkdnOwyETrzp/0pNio0FwDRXo4Dhnv6QJE03oKH/dchUaS0/
-         PI80t3r2Msf1MKHzHjXGEbu46hie45f3xX6XqZdbnat5HOh0OnFk8cSKwxxI2AstrrI9
-         gF4/FXShFcdSDTmqqSz1jg69tU5E2JoeIO+jov3u29rOZSRT8BNq53jNgtLEFhJa/BCW
-         4CA1HMHaW1KAE20njaB2bp6wpVDTN+Iw7Sqkfg+Ha69NqEDz7aVFRBPyniLtJh6Xug23
-         kYtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OuRJnTeKjq6r9MP1xf+PA8XGnVHD2Jj2xuTkOIE2tQk=;
-        b=n5wE1okfDaqvsfLwB4RlEFamiL/yBMYOlv3hE5iP3sed1uXqwsUi4UoV9atSEq9266
-         qb/Yo06fJLpkQ/9b+4ziHT9JtSrmwKluwbZ4BHoOEez3ha7EoTseSbdrnVNJbaOhpBT+
-         2VGXQiOwsC5wyia2pn52ZH4wlUzapfp5EaH+hdFhGnEzMEtvwr50gpQTzo7clAF/szjl
-         lr2feVj5c8mjjpFbWY5aPvo7E7thoOItUFMMhRk5prwLWU+paNGRq7zOkm6d9j93swJ3
-         I4UunqAcq2AyGH9HtPhA/tVGWRJLYc1TSaomEbfbaI1/v5pqtZFHYiFTjb8rGFnAL863
-         RwtA==
-X-Gm-Message-State: ANoB5pnWhAv3H96aDKEoZR6y3jSuUPqwwVpxmdapRUXd+XDpHIMq4T0P
-        eevHhShPcsdQW5MGcED9pN3SZ2w2kQC6XfEdKy1Lbw==
-X-Google-Smtp-Source: AA0mqf5UrkL+mO8lgA+r75PXKEDapjawSRlt4JOXRkCclgc78M/8JXJ/f8uZycm3gMKctvTYCo6b8W32UIk6+S2Z12I=
-X-Received: by 2002:ab0:734e:0:b0:419:18c7:58d with SMTP id
- k14-20020ab0734e000000b0041918c7058dmr16962245uap.119.1669992525433; Fri, 02
- Dec 2022 06:48:45 -0800 (PST)
+        Fri, 2 Dec 2022 09:49:10 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CC8D2936;
+        Fri,  2 Dec 2022 06:49:09 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 5AF6588;
+        Fri,  2 Dec 2022 15:49:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1669992547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q6y9iigXj3WP0hzsik/QSNuzmj4g9Dp1lWgTADU4n9g=;
+        b=cZaf5Cuisju6zyt4dTQ5ygX0nSSXzAQ1vJ8+HIqq7BeDigqksGEpZdn3V+30MzLnvU32tL
+        iAIcAb23huqXrnS5okAsM4qshxpSxwhJlR4m1B9b3Obd046JmIxCDXEAiEZmFPvxC1og3+
+        WLH5PgGuOSwxxlimkMzIs6+yHUZStIiTkGL8vFR3dTPTwafGUetN5BYlXxDatDvx9OkM+m
+        vehtqii72WWk1JR092//giJwz2NkgqprsdHF1YOWAk/PN+4cnPwvXRgWrmWbCoeB34Esv/
+        hlYihXkmWxz4J+aT48jnnaNxO/h2+xxZevvzRbqrl/reFPrn87XpL6GULsF5ew==
+From:   Michael Walle <michael@walle.cc>
+To:     Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next] net: phy: mxl-gpy: rename MMD_VEND1 macros to match datasheet
+Date:   Fri,  2 Dec 2022 15:49:00 +0100
+Message-Id: <20221202144900.3298204-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20221202140454.273333-1-vincent@systemli.org> <Y4oMCYksMaQ6KYwU@smile.fi.intel.com>
-In-Reply-To: <Y4oMCYksMaQ6KYwU@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 2 Dec 2022 15:48:34 +0100
-Message-ID: <CAMRc=Mc2XtcbZPh5pic_uYiOuie0+5KdMO2hJav2HYGc_3ygfw@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: fix compiling when CONFIG_GPIO_CDEV_V1 is not defined
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Nick Hainke <vincent@systemli.org>, linux-next@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 3:30 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Dec 02, 2022 at 03:04:54PM +0100, Nick Hainke wrote:
->
-> Thank you for the report!
->
-> I believe Bart needs to fold it into his patch / PR, because
-> it's not good to send a broken PR to Linus.
->
+Rename the temperature sensors macros to match the names in the
+datasheet.
 
-Ah cr*p, I saw today's next build went fine, so I assumed the patch
-was good to go and sent the PR.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+For the curious: I probably copied the prefix from the already existing
+VPSPEC2_ macros in the driver, the datasheet also mentions some VPSPEC2_
+names, but I suspect they are typos.
 
-Yeah, if Nick is fine with that, I'd like to squash it with the
-offending commit or we'll break bisectability.
+ drivers/net/phy/mxl-gpy.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for the report.
+diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
+index 27c0f161623e..0ff7ef076072 100644
+--- a/drivers/net/phy/mxl-gpy.c
++++ b/drivers/net/phy/mxl-gpy.c
+@@ -78,8 +78,8 @@
+ 				 VSPEC1_SGMII_CTRL_ANRS)
+ 
+ /* Temperature sensor */
+-#define VPSPEC1_TEMP_STA	0x0E
+-#define VPSPEC1_TEMP_STA_DATA	GENMASK(9, 0)
++#define VSPEC1_TEMP_STA	0x0E
++#define VSPEC1_TEMP_STA_DATA	GENMASK(9, 0)
+ 
+ /* WoL */
+ #define VPSPEC2_WOL_CTL		0x0E06
+@@ -140,14 +140,14 @@ static int gpy_hwmon_read(struct device *dev,
+ 	struct phy_device *phydev = dev_get_drvdata(dev);
+ 	int ret;
+ 
+-	ret = phy_read_mmd(phydev, MDIO_MMD_VEND1, VPSPEC1_TEMP_STA);
++	ret = phy_read_mmd(phydev, MDIO_MMD_VEND1, VSPEC1_TEMP_STA);
+ 	if (ret < 0)
+ 		return ret;
+ 	if (!ret)
+ 		return -ENODATA;
+ 
+ 	*value = polynomial_calc(&poly_N_to_temp,
+-				 FIELD_GET(VPSPEC1_TEMP_STA_DATA, ret));
++				 FIELD_GET(VSPEC1_TEMP_STA_DATA, ret));
+ 
+ 	return 0;
+ }
+-- 
+2.30.2
 
-Bartosz
