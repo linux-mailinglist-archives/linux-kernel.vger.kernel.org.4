@@ -2,76 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E138641082
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC947641086
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiLBWVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S234858AbiLBWVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbiLBWVI (ORCPT
+        with ESMTP id S234159AbiLBWVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:21:08 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C55E8E26;
-        Fri,  2 Dec 2022 14:21:06 -0800 (PST)
-Date:   Fri, 2 Dec 2022 14:20:58 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670019664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nb8k+DXeBU/J0+0BiQ1cnwf8hXfYeMnAmujWdPmsnKU=;
-        b=UxM8kjrT9Ea2zn2bW1xVTLb0ig9zVs+Un8YBzcLzK7pOIf97+C/ov/djzFl3e7QSaXWeda
-        FP0gGaYLRkXM8B1mFBNJc0IsIcbnK3fQgl0fMEbesY65k0hd48x2jgSiiNubIX1gTlc9SL
-        8p/21LJMfIiYG6LzYyf1NcABb1nKOqw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Tejun Heo <tj@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chris Down <chris@chrisdown.name>,
-        David Rientjes <rientjes@google.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 2/3] selftests: cgroup: refactor proactive reclaim
- code to reclaim_until()
-Message-ID: <Y4p6SlewnfvOFs7d@P9FQF9L96D.corp.robot.car>
-References: <20221202031512.1365483-1-yosryahmed@google.com>
- <20221202031512.1365483-3-yosryahmed@google.com>
+        Fri, 2 Dec 2022 17:21:49 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3139F8187
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:21:48 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id r18so5461422pgr.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:21:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aMS0b2RE+vIHMOYP2E8EZZmUlghR9trNposIEeXjKJI=;
+        b=GNTcUDsFn03JscGIy0a+vYklYFfFxJZZqGpErbZZkJXfUy51L4mNHn15JV39Wn01z3
+         vb4zrIv5tFVn1hMThrwS+Z1/O+pe9nX5VyfbHAqFsufDYe/6mHsHteF9gFgr7BbTHhZt
+         kdAMU2oSGR44L1sJjQuBc7Zg+9UiSLhcbzifE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aMS0b2RE+vIHMOYP2E8EZZmUlghR9trNposIEeXjKJI=;
+        b=5oa8D19Oxcl7COMrrvRgC0hvww+sREWW0kjSaDjIsveTeLUU2rAhvt5f6JzCKY+7Ut
+         01hs53IDZAwrFvq019onjqdEaY1iXwjVXym2d65x9l/hIwNg67JFIubFfOSpEcFPBht4
+         OgPHvxVPYN3UXvxfG5AoKpV7THkTLEinqr3CZopzEyNaJLRPA/Y9PDbzccQwDmaUHcBW
+         d1eLfbpkuzVLEiIyeC6Ryv0J9oa94gd51HSCWkJDXtSfOVBNU8SWwlhIxVqIUjiPPVz7
+         Oo64T9rQNYy0NhtDXEMf3sl5nTtBedSxM9C/+A65s7pOJKdCBPnSlcAfg9KRk5an9nV4
+         QVFw==
+X-Gm-Message-State: ANoB5pmOUrZOe+twGde8aZVkWBWxOQPlID+K4XEc7I01zA3GLPodUZfx
+        5mzQghQo7pTE2lxv0lzScX1Iyw==
+X-Google-Smtp-Source: AA0mqf793ESx/sscIPyNmg7Zc2YStJKUoN2l9l7kbnO18Sros+YI1MVyANNMCuAajv/r7OdyYX7R0A==
+X-Received: by 2002:a05:6a00:3029:b0:576:6bff:1c61 with SMTP id ay41-20020a056a00302900b005766bff1c61mr3817196pfb.15.1670019708300;
+        Fri, 02 Dec 2022 14:21:48 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t15-20020a170902e84f00b00188c9c11559sm6123882plg.1.2022.12.02.14.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 14:21:47 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Fri, 2 Dec 2022 14:21:46 -0800
+To:     Sean Wang <sean.wang@mediatek.com>
+Cc:     YN Chen <YN.Chen@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Leon Yen <leon.yen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Deren Wu <deren.wu@mediatek.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Quan Zhou <quan.zhou@mediatek.com>,
+        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Ben Greear <greearb@candelatech.com>,
+        Ming Yen Hsieh <mingyen.hsieh@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: mt7921_check_offload_capability(): Resource leaks
+Message-ID: <202212021421.6B6D4F45@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221202031512.1365483-3-yosryahmed@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 03:15:11AM +0000, Yosry Ahmed wrote:
-> Refactor the code that drives writing to memory.reclaim (retrying, error
-> handling, etc) from test_memcg_reclaim() to a helper called
-> reclaim_until(), which proactively reclaims from a memcg until its
-> usage reaches a certain value.
-> 
-> While we are at it, refactor and simplify the reclaim loop.
-> 
-> This will be used in a following patch in another test.
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Suggested-by: Roman Gushchin <roman.gushchin@linux.dev>
+Hello!
 
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221202 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-Thanks!
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
+
+  Thu Dec 1 17:29:13 2022 +0100
+    034ae28b56f1 ("wifi: mt76: mt7921: introduce remain_on_channel support")
+
+Coverity reported the following:
+
+*** CID 1527806:  Resource leaks  (RESOURCE_LEAK)
+drivers/net/wireless/mediatek/mt76/mt7921/init.c:178 in mt7921_check_offload_capability()
+172     	ret = request_firmware(&fw, fw_wm, dev);
+173     	if (ret)
+174     		return ret;
+175
+176     	if (!fw || !fw->data || fw->size < sizeof(*hdr)) {
+177     		dev_err(dev, "Invalid firmware\n");
+vvv     CID 1527806:  Resource leaks  (RESOURCE_LEAK)
+vvv     Variable "fw" going out of scope leaks the storage it points to.
+178     		return -EINVAL;
+179     	}
+180
+181     	data = fw->data;
+182     	hdr = (const void *)(fw->data + fw->size - sizeof(*hdr));
+183
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527806 ("Resource leaks")
+Fixes: 034ae28b56f1 ("wifi: mt76: mt7921: introduce remain_on_channel support")
+
+Thanks for your attention!
+
+-- 
+Coverity-bot
