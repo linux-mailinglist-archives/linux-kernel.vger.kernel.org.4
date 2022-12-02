@@ -2,173 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1812640577
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1A3640573
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiLBLEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S232588AbiLBLEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbiLBLEs (ORCPT
+        with ESMTP id S230094AbiLBLEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:04:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75004BBBE4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:03:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669979035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cl9BjYb9f8vItMx0TFPNMbbgg++LcJpl4yIcLgyzCmw=;
-        b=S2/S2EzxHXlNiZN9Dl4QyJLuMCyH7dSVwCJhpqYKFFjY600bBgSAWq5tVRRMOYOR+Hwkc9
-        YKTHgD48QcVQda9RNEd/kuax2H2CE53vNLH/PuKTDHf2sOQ8KaIaraMiNlHzlwQfkAp6uY
-        XQxrgjdscG8OgsoZYsWx97pqvtZQDuE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-94-NQjCRC-gM8ujqlFSyaa15g-1; Fri, 02 Dec 2022 06:03:54 -0500
-X-MC-Unique: NQjCRC-gM8ujqlFSyaa15g-1
-Received: by mail-wr1-f69.google.com with SMTP id w11-20020adfbacb000000b002418a90da01so987681wrg.16
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:03:54 -0800 (PST)
+        Fri, 2 Dec 2022 06:04:32 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168DCBC5A6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:04:30 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id q1so4080393pgl.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:04:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D1KXzSfZtuAisNZ05G51clQ324jnx8aq/gsDbzWWu5w=;
+        b=RF10Mb34k2R5dAeYwD2YhiPWcI2Lcs/g4SWXS3huGVHmzpcWS3aJCJjenoi5+J5qNL
+         N3PGDtE7158fXkTpnGTBESokd8cDI4BVGr2BjHh9zxuiC0jIT0ixgMWzN5Cqrgd5aeqd
+         1zCBIzqITcDuwDjvZ4zN50m/xb9TGNBnSluxE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cl9BjYb9f8vItMx0TFPNMbbgg++LcJpl4yIcLgyzCmw=;
-        b=c8uc9oKT2SiJ5npJtCq6AKRgOoGy39onshRt592odkcQbyk/UNKQvWvzLgTPUqEOr2
-         xsV0Pq1hzlF5bScPZoMQZtbj+1nX9+KKoJ6hTDaSAQhU1YMG9EGzS7v9+ZssnvbGnGD8
-         FxJIFJDGExYmVNnvov6WIpW49GWI+KN/rMZHggNmDNzwGDiqslngDdAZk6qic6vx/Nup
-         amnRIYkE2ihISSzdb6OhJMDLk8TZulZZKh6JitL0YorttjR78TpojFW3c0jAlAGMCh0A
-         OZW9F9Vczvi+VqdUrYReAOw5/8qO37wnPWMoxATxTeBp8SMfeUaYa1N6uULuOn1jycZ8
-         P17g==
-X-Gm-Message-State: ANoB5pnLbD5WLUSBXD5BHhZO5UqIA6zb8ZLxGRZYy3zhW8pm32o9OA6b
-        Y5+5/WT2HLWEIhtnevtk+385Mq744p/bN4fd8iVWCrfjKGnG+i32RhTMuZT9IMXnapq9wKuRLA7
-        dEtXuoGI2QyfLIOnOqvoxsuBn
-X-Received: by 2002:a5d:4d51:0:b0:242:1bad:6f79 with SMTP id a17-20020a5d4d51000000b002421bad6f79mr14341711wru.342.1669979033600;
-        Fri, 02 Dec 2022 03:03:53 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7Z7CSJWV3aVGdFrhurXtg5Jl7JAd2UPh1oqFxa5cN4kxMH/tvksSMCkT/9ngAbabHuPc5XuA==
-X-Received: by 2002:a5d:4d51:0:b0:242:1bad:6f79 with SMTP id a17-20020a5d4d51000000b002421bad6f79mr14341694wru.342.1669979033335;
-        Fri, 02 Dec 2022 03:03:53 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:7a00:852e:72cd:ed76:d72f? (p200300cbc7037a00852e72cded76d72f.dip0.t-ipconnect.de. [2003:cb:c703:7a00:852e:72cd:ed76:d72f])
-        by smtp.gmail.com with ESMTPSA id f7-20020adffcc7000000b00236883f2f5csm6742721wrs.94.2022.12.02.03.03.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 03:03:52 -0800 (PST)
-Message-ID: <fc3e3497-053d-8e50-a504-764317b6a49a@redhat.com>
-Date:   Fri, 2 Dec 2022 12:03:51 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D1KXzSfZtuAisNZ05G51clQ324jnx8aq/gsDbzWWu5w=;
+        b=p1EWtl9BAJCNdsc1VCFg2N52Gy03BEGdSUNTAGHvF8uiI8MHSCclj276rqnuWOyUE+
+         IfV+lOxI/6Mg9z4YU6peixIXwZdv1YoIQpBRrOcz+VOGf/Xq+WloRb9VsnnfhDVLybXJ
+         o7DYqwrQYJxpQfD0NHefskKn6a8+o/oIaZKwKsn9HQi9jGQQwDMwHoRwniyoKme2yZfj
+         m8nRf7hR7zeM6A9KboFIdSjhvW77fMdjgvCXeW1KQolZCWP0iZiVrhiLVa74pSHE5BOa
+         ypCnNdkEow8W0Ub7p+FkZAQiQGi7mHhxN6ysVFvWdIBEg8u+H+iQPmdP1k/iK+plEFm2
+         lEog==
+X-Gm-Message-State: ANoB5pmmjWasV4mtxOuLqNPSCDSKP1Pkxx7qzVmuH1/OWnWDUbscZzaW
+        ImgD/OaqSu0zg0HAI1MjFsKypw==
+X-Google-Smtp-Source: AA0mqf7wTZc+5wt4aeoquiU5DMuMCNEz7aE23amfAwhpaX6SQfiBJKju3DcbsUGJ+ZaHl0jVjFfUGA==
+X-Received: by 2002:aa7:85c8:0:b0:574:5789:b8a4 with SMTP id z8-20020aa785c8000000b005745789b8a4mr44798364pfn.47.1669979068145;
+        Fri, 02 Dec 2022 03:04:28 -0800 (PST)
+Received: from d86934a8d1b3 ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id mm10-20020a17090b358a00b00218f9bd50c7sm4519127pjb.50.2022.12.02.03.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 03:04:27 -0800 (PST)
+Date:   Fri, 2 Dec 2022 11:04:20 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 000/280] 6.0.11-rc2 review
+Message-ID: <20221202110420.GA20583@d86934a8d1b3>
+References: <20221201131113.897261583@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
-References: <20221114000447.1681003-1-peterx@redhat.com>
- <20221114000447.1681003-2-peterx@redhat.com>
- <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
- <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
- <Y4jIHureiOd8XjDX@x1n> <a215fe2f-ef9b-1a15-f1c2-2f0bb5d5f490@redhat.com>
- <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
-In-Reply-To: <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201131113.897261583@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.12.22 23:30, Andrew Morton wrote:
-> On Thu, 1 Dec 2022 16:42:52 +0100 David Hildenbrand <david@redhat.com> wrote:
-> 
->> On 01.12.22 16:28, Peter Xu wrote:
->>>
->>> I didn't reply here because I have already replied with the question in
->>> previous version with a few attempts.  Quotting myself:
->>>
->>> https://lore.kernel.org/all/Y3KgYeMTdTM0FN5W@x1n/
->>>
->>>           The thing is recovering the pte into its original form is the
->>>           safest approach to me, so I think we need justification on why it's
->>>           always safe to set the write bit.
->>>
->>> I've also got another longer email trying to explain why I think it's the
->>> other way round to be justfied, rather than justifying removal of the write
->>> bit for a read migration entry, here:
->>>
->>
->> And I disagree for this patch that is supposed to fix this hunk:
->>
->>
->> @@ -243,11 +243,15 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
->>                   entry = pte_to_swp_entry(*pvmw.pte);
->>                   if (is_write_migration_entry(entry))
->>                           pte = maybe_mkwrite(pte, vma);
->> +               else if (pte_swp_uffd_wp(*pvmw.pte))
->> +                       pte = pte_mkuffd_wp(pte);
->>    
->>                   if (unlikely(is_zone_device_page(new))) {
->>                           if (is_device_private_page(new)) {
->>                                   entry = make_device_private_entry(new, pte_write(pte));
->>                                   pte = swp_entry_to_pte(entry);
->> +                               if (pte_swp_uffd_wp(*pvmw.pte))
->> +                                       pte = pte_mkuffd_wp(pte);
->>                           }
->>                   }
-> 
-> David, I'm unclear on what you mean by the above.  Can you please
-> expand?
-> 
->>
->> There is really nothing to justify the other way around here.
->> If it's broken fix it independently and properly backport it independenty.
->>
->> But we don't know about any such broken case.
->>
->> I have no energy to spare to argue further ;)
-> 
-> This is a silent data loss bug, which is about as bad as it gets.
-> Under obscure conditions, fortunately.  But please let's keep working
-> it.  Let's aim for something minimal for backporting purposes.  We can
-> revisit any cleanliness issues later.
+On Thu, Dec 01, 2022 at 02:11:47PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.11 release.
+> There are 280 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-Okay, you activated my energy reserves.
+Hi Greg,
 
-> 
-> David, do you feel that the proposed fix will at least address the bug
-> without adverse side-effects?
+6.0.11-rc2 tested.
 
-Usually, when I suspect something is dodgy I unconsciously push back 
-harder than I usually would.
+Run tested on:
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+- SolidRun Cubox-i Dual/Quad - NXP iMX6 (Cubox-i4Pro)
 
-I just looked into the issue once again and realized that this patch 
-here (and also my alternative proposal) most likely tackles the 
-more-generic issue from the wrong direction. I found yet another such 
-bug (most probably two, just too lazy to write another reproducer). 
-Migration code does the right thing here -- IMHO -- and the issue should 
-be fixed differently.
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-I'm testing an alternative patch right now and will share it later 
-today, along with a reproducer.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
