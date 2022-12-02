@@ -2,238 +2,559 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C446405EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD60D640646
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbiLBLkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S233030AbiLBMAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbiLBLkQ (ORCPT
+        with ESMTP id S232955AbiLBMAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:40:16 -0500
-Received: from esa1.hc3370-68.iphmx.com (esa1.hc3370-68.iphmx.com [216.71.145.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2A3CAF84
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:40:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1669981214;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Xty5QrePFdD61vX9gLf+bWucE4wh3C739XvdioDyAmw=;
-  b=I//xcKUoQl54iLRX5BY4QQaNNWa1QXYENF9nAhZBpgiVWucX/7tHOuc+
-   rrXZtrbmslftVVXu0qy7TU4iVP+cGF7lxR3XkTGvZ1U1lj0t+2nP8n9Hx
-   7iMdt486JdVXbHliCUbKALat6MdaYfWWhjfZbjUNKHxLn1yQAT+QWOCsu
-   c=;
-X-IronPort-RemoteIP: 104.47.66.46
-X-IronPort-MID: 86659349
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:lagO86seT2/DIoYrGqLT2b3KAufnVC5eMUV32f8akzHdYApBsoF/q
- tZmKTuAPvyCZmPxetB+bNvk8hxS6JTSydFlHgRt/i08EywT+JbJXdiXEBz9bniYRiHhoOCLz
- O1FM4Wdc5pkJpP4jk3wWlQ0hSAkjclkfpKlVKiffHg0HVU/IMsYoUoLs/YjhYJ1isSODQqIu
- Nfjy+XSI1bg0DNvWo4uw/vrRChH4bKj5lv0gnRkPaoR5QWGzSFPZH4iDfrZw0XQE9E88tGSH
- 44v/JnhlkvF8hEkDM+Sk7qTWiXmlZaLYGBiIlIPM0STqkAqSh4ai87XB9JFAatjsB2bnsgZ9
- Tl4ncfYpTHFnEH7sL91vxFwS0mSNEDdkVPNCSDXXce7lyUqf5ZwqhnH4Y5f0YAwo45K7W9yG
- fMwK2sfTEuDrLmMwaulZsxsqJsjPuW2I9ZK0p1g5Wmx4fcOZ7nmGv+PwOACmTA6i4ZJAOrUY
- NcfZXx3dhPcbhZTO1ARTpUjgOOvgXq5eDpdwL6XjfNvvy6Pk0ovjv6xbrI5efTTLSlRtlyfq
- W/cuXzwHzkRNcCFyCrD+XWp7gPKtXOlBt9DT+HpnhJsqH2YxH0/NhoxbmWYuMiQlUK6AdMcO
- nVBr0LCqoB3riRHVOLVRAakqXSJuhodXdt4EOAg7gyJjK3O7G6xCXIJQT1BQNgnstImSzs30
- FOAg9LuA3poqrL9YXCc7LaPqTq4KAAWIHUEaCtCShEKi/HnoYcunlfMQ8xlHaqdkNL4A3fzz
- iqMoSx4gK8c5eYb2qP+8V3ZjjaEopnSUhVz9gjRRnii7A5yeMiifYPAwVrU9/FbN66CU0KM+
- nMDnqC27uoDEJWMnyylW/gWEfei4PPtGDfbm190WZ466y6q5WWgbKhX+jh1IEovOcEBERfiY
- FXSohx5/5hOJz6xaqsxZJi+Y+wvzK7vEvzoUuzZKNpTCrB2cAiJ1CVvdUmVmWbgjCAElaA5J
- IeDac3pAXsEIaBm1yatAeAP1bYh3WY532y7eHzg5xGu0L7bYWHPT74AaQGKdrphsP3CpxjJ+
- dFCMcfM0w9YTOD1fijQ98gUMEwOKn84Q5vxrqS7a9K+H+avI0l5Y9e5/F/rU9UNc3h9/gsQw
- kyAZw==
-IronPort-HdrOrdr: A9a23:zQ9lM623xoOi9V+roLibewqjBIwkLtp133Aq2lEZdPU1SKylfq
- WV98jzuiWYtN9vYgBGpTntAsW9qArnhP1ICOoqXItKPjOW3FdAd7sSj7cKqgeIcxEWndQy6U
- 4PScdD4Y3LZ2RSvILG/gmkDto6hPOm3cmT9ILj80s=
-X-IronPort-AV: E=Sophos;i="5.96,212,1665460800"; 
-   d="scan'208";a="86659349"
-Received: from mail-mw2nam12lp2046.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.46])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Dec 2022 06:40:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y31lBoLXLCnef8KGytNNQiWsGEQaZq8cD624qUvKwiC1+CVFYSveUjgBdgnKoEDP306aJgHlxNIh8RnO5oFb3ep3mGgwNzcHo65NPzVdTw4FHqxEdWWaBHlDNi93D184MxrCdqjus+WRvzcEeh0kxr6hy6UAf/deSX3pZw7Ai5V9Jjc+2iFv+6NAe0TOvTaCqmvZPFUh32hK7yx6jk8lK5zYEjdX2JJsIlZLBQtgr1hiPaPuiT1YwPphVz1x5gDb/dmhPE9EoIHRfZfZFeWxSfiPraq3AZdUeBNUSSM00dayudnCRkUfh0gGOi6nFHomxzdJoTeGhjFW+AsBs0JGaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3/TzwSHGpP2p1Yz+lpbrnlAdsXzRUqR00WAaoANJDlk=;
- b=DdiGo/SYcaCoRG0Wgd6/9gl5CvrQIz5J5jAK0APUb+B+5uUvZXVjN3MbughFwo7HwO0H8x4TB2/DJ8q7X4XazxuX03xbKpMevyatr6UW1V661u56zZegfdkuKgc2+l3eUYIG23M9Vth/bHZBawKjQttTs0tEOqWiWqedMa7e+SrxhT5Iv8oHOY2SWpFIVZZFIpwMvBFsEBuQ4xeoo4ERJbKYD3OLOEj9z5EJBVF6v0PzlDamWOaFLa23aaX39A9G6N6DADLu899oJYML9TgpWEyLQZKVnErHsJW0wBGlRuuGIB2xajcsREjzWiZ0NoxLaeMnZVWUbWMDamEQe9P+Fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
+        Fri, 2 Dec 2022 07:00:37 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBACA4339
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:00:34 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id h11so7424890wrw.13
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 04:00:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3/TzwSHGpP2p1Yz+lpbrnlAdsXzRUqR00WAaoANJDlk=;
- b=PbEfRCOBgtyaLw6F/z8E/Iu12JpdcYkZxuJtvAbfSNm2n003abbRMQYm7bAsueo1p1DN+LhUATguHGPpfNBTfiVIQ6YgGbu5x5oWW69V1Ir1MQcvZriuy+eajq25Oxow3uxQsIazFzbRydLelrA9lXyxoqrFcfW8mBdnROdUDv4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from SJ0PR03MB6360.namprd03.prod.outlook.com (2603:10b6:a03:395::11)
- by BN9PR03MB5964.namprd03.prod.outlook.com (2603:10b6:408:135::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Fri, 2 Dec
- 2022 11:40:11 +0000
-Received: from SJ0PR03MB6360.namprd03.prod.outlook.com
- ([fe80::740b:4e0a:7de4:5ab1]) by SJ0PR03MB6360.namprd03.prod.outlook.com
- ([fe80::740b:4e0a:7de4:5ab1%9]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
- 11:40:10 +0000
-Date:   Fri, 2 Dec 2022 12:40:05 +0100
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Stefano Stabellini <sstabellini@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Wright <chrisw@sous-sol.org>,
-        Ingo Molnar <mingo@elte.hu>,
-        Jeremy Fitzhardinge <jeremy@xensource.com>,
-        Olof Johansson <olof@lixom.net>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2] hvc/xen: prevent concurrent accesses to the shared
- ring
-Message-ID: <Y4nkFZal7oy+aICa@Air-de-Roger>
-References: <20221130150919.13935-1-roger.pau@citrix.com>
- <alpine.DEB.2.22.394.2211301657200.4039@ubuntu-linux-20-04-desktop>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2211301657200.4039@ubuntu-linux-20-04-desktop>
-X-ClientProxiedBy: BN0PR02CA0015.namprd02.prod.outlook.com
- (2603:10b6:408:e4::20) To SJ0PR03MB6360.namprd03.prod.outlook.com
- (2603:10b6:a03:395::11)
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=GWX70xn0dqSqHiT7lrRzVs8OYH7GF30kjWfCIFDZh4M=;
+        b=cFgJucSgoRYbYoM8zA7Z9qcf8b5uwYjZE+VSAPjLikZsvDatCS0k1ZnRsVSiVzHVOj
+         FM1tyCTQq3HCl/rhvlSaQiIZX8+ddcedfaVjz7bQKDN7ZXziMmnPeXZSQ2g7Y3U6fWwa
+         Zrc7aqnZgoqOv9WSKhqEzGAi+Od8L2slPYR/PIE+O9bTQ36VwIla0t302mgYiBJnHVrF
+         M1XG8jtbjp5nEYuHAmZ0wnzkgyRU8qVpq9vmkb6XeJxelvclLaROpBSef3oRays+jP8Y
+         k21xuW4+QA9WVQuAjc1hbZm0dpw+RpeZerNhJ+G5yWplAa01IXJNdNs1N1jiQpYR8xb5
+         NOhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GWX70xn0dqSqHiT7lrRzVs8OYH7GF30kjWfCIFDZh4M=;
+        b=LA+zExIDae5lYBOXS/8o7oYxPRHkRn7jTfRCTcocGbSXiCjErY30ASKFk7gXEKUVW+
+         htH3XSQHrfmEfmJ8gXePxdbEbJIY924D0aXDNj+CHkATqBS+5qO0JBnerHm2xJKsksVP
+         vxIVmREFbZL+eJ4ef8w4MOaanLgvRK96T28J/VHswYtU8uyvb02LOWZRh0PTt+IV5AcM
+         /H9c4OEAgxJdDv25WKy8PPdIHUQnRl64mRGAMlh99YDoDs48dUppfwRPgMMjfPbDlTeQ
+         4T2jPnGH2jHF139qyD8MslI3kERZjXe1XaisVkJTm3iTnRdbU0MNC3M5FzcUMtU6TJ72
+         ymLA==
+X-Gm-Message-State: ANoB5pmp6jpImO2oRU400sFKL7FCWbioXT/02O8211qgE2p/jTqsyQLT
+        ILO50jRuX6MuwO2kqNu05rJbTQ==
+X-Google-Smtp-Source: AA0mqf5uehRfOkHDS7jQMGx7cQbU+U6OshnEnwzn+lkFfpLF/wdTC+qh/ak8h4SxexJSA4YKZGxG7w==
+X-Received: by 2002:a5d:698b:0:b0:242:768:8aef with SMTP id g11-20020a5d698b000000b0024207688aefmr21831064wru.544.1669982432716;
+        Fri, 02 Dec 2022 04:00:32 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id p18-20020a05600c419200b003d0777b527asm6524229wmh.20.2022.12.02.04.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 04:00:32 -0800 (PST)
+References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
+ <20221201225703.6507-8-ddrokosov@sberdevices.ru>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 07/11] clk: meson: a1: redesign Amlogic A1 PLL clock
+ controller
+Date:   Fri, 02 Dec 2022 12:42:17 +0100
+In-reply-to: <20221201225703.6507-8-ddrokosov@sberdevices.ru>
+Message-ID: <1jtu2e6mn5.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR03MB6360:EE_|BN9PR03MB5964:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d81d5d9-7c6b-4b3f-d064-08dad459f778
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XxpYyIUKDkK0DCqc44EumRxM5SNJwkawwqNZj8U2+OJMpyxrvzB2PjF5pAvNYY2s0YdgvaHl5Kb2iqr9N4OMfRgIzqHhlgbb4Xq2XdJ+q8RjwEfUgu7s2wMQ9Dt7lfl5NfcwSk3UcrIUUaiNUmo5FvFnT4gv38+tAZuLmD/QMcg1lKzwFpHxjqemnqOpAxhFaX/KoE7zJCY5hB9XRbAXX20GlrtizXqCllbUKHIOt30YMuJMkQCOq7Hqwe3SS2EnJfZMqdESy/WSn7pNRJSSeCygkU0ji+zab/0fZl2DiIR49g5o44AisWbipLKZo/KrzBooB8lSmBbpvbjoYIcRSWM7qOBHjR+U2QH1P2Nms3mNYgM5sTyo2PLo90osH+gGKBMz3ApjGmfOD1060DyQvG4KG8veyUb3Ao1qT287lISFI7rkmu6RlZ9W2ZSBefHzsyqni62txWJiyRE+ttlPbb+5vM0xGIASvfXSzEM9G52Pe5/4r8CNpohaY4OaW2p9MF2V3h7jLs23pCIIivIBC8g5s29x1JLr4BK5UU8k9qAs0lxQUofbBQ/dj4WfhKACdW/ivP3k0sOkQqD4czB1+TY9gNKNs4r5rRDnbhONnAbi0wb3e/VDsBkmS6myz7KXmT0x6nHChS4bjPplKOMDBzIOUCg8QkYyTASOMyC+whntKED9GY2Pd14LboH7I+q1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6360.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(346002)(376002)(136003)(396003)(39860400002)(366004)(451199015)(316002)(85182001)(83380400001)(54906003)(110136005)(5660300002)(7416002)(2906002)(4326008)(66476007)(66556008)(66946007)(41300700001)(8676002)(82960400001)(6666004)(38100700002)(8936002)(478600001)(33716001)(6486002)(86362001)(9686003)(186003)(6512007)(6506007)(26005)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WU1NVERCZ2RZa2M5TDNBeGd3Zlhpa2xpVnhBTlIyZnJzTVhIcFlZU3BKalhi?=
- =?utf-8?B?OHVKb1B0ZGxrRFJ4OWhUL3NyMlM5bDBUNnBFNUN6dWN5SUhRbStoVW9CTk9P?=
- =?utf-8?B?Vi93c2k5T0ZOZm9waFJ0ZE5oaWxSVmVodjYwcEd2Z2cveFh6QVpPZUVXOFAx?=
- =?utf-8?B?UWRNTXZReFVvR0tYYnBzRWlKUk15TTB0bEdMV0JSN3g2dGpyOVdRR1ppK0tL?=
- =?utf-8?B?RGtTdnczbDlzYUVsTTMwUXZpZWtHTVgrd0hkMXpkekVucmFGbDZKeGNOaXhL?=
- =?utf-8?B?MTYzRG1jaVhtYXlkQVg1NW5HY2t4TDlBTVF3clpHekRIeXh4bE1LU1U3OXRV?=
- =?utf-8?B?bkNKa3BmUDZzVGNzWlBnQ2lqNTEzMHNOTVBESkd1cnlIcDFSMGI4QVdpQ25j?=
- =?utf-8?B?d3RFek9DSzN5UVAyTHJxdEdkTkpmTkJhdFRIYjFxYmd1WUZ2UHYwK09wcXdx?=
- =?utf-8?B?NzRoOHk3Vy83V1RYcFNtV3JRaXVnZWkrUC9CVlJVV2l4OEtqeTM0UjkxQW8y?=
- =?utf-8?B?Z3ErZ2d6UFBwVFZkT3V1UVl4TTRUbkpTdXVjTzhudloxTnpvYkxHb0pBVjRl?=
- =?utf-8?B?VzFYaHNBRXUrV3h1d1poTEtHZm9oYWNET2k5Vm92TkR4MGVscUtRSWwwSm93?=
- =?utf-8?B?SVAzT0g4OHVOOXIxQVlzemhpQnZQQnNiVUlwNXI0N0V5eWg2U3ZjZXphZEgy?=
- =?utf-8?B?R0hzdzVxQmdxMGgyTEtRbytVbzRqM25BRjZMMDZnYk5PTnJ3SzRZbnk4WGho?=
- =?utf-8?B?UDFHYXQyeVBjOE5jN0J2Q202RkZGZGI0ckxLNWNvMkZrYzd1RXZKeTJXeVBp?=
- =?utf-8?B?R29qZ2dMSFNNaVZjRHgzTlRoRXM3VmlNMUgzaFlvUk1uaC9sTXg0emJyU3B0?=
- =?utf-8?B?aTFIWFpuYmRxVE4vaVBRandOS1RlWVFJdU5JenV1cGlleHlvWTZrUHhYZEU0?=
- =?utf-8?B?dXM3VzdzdFZrMVB5emxvRHVBTEtYNkY0UlMxanNuUURlZHFyZ3kxbEU3TGZy?=
- =?utf-8?B?ME00MnlVR0NLWlEvUmZ4MTRscXFVYUt2b095eGRDL2EwWFR1c2U2V1pHdEo1?=
- =?utf-8?B?Wi9vZnBJYSs3SGtmRi9WOWdqRnRKbGlaZ3RRRHpaS0VRMzBacmgrMVF6VEN0?=
- =?utf-8?B?Qk8xUkdLUjg0b3ZaWVVKaVNtMnFsNEk4L2d3VjhkZHFJTi94LzNRRzZmcDI5?=
- =?utf-8?B?dGVPMDM1TFl3azJvVlRkVDBZNmswNjkrNzNtc3QyWXB2SVd4eVJVQVVwa3pt?=
- =?utf-8?B?RFFkTVhDKzU3SEg4dmdhTGdpODJJYy9oNDdFZWJxb0dRMStNaU9ucTRaMDJ4?=
- =?utf-8?B?dVFmNGpBWlNadWs3MWZ3MmpWNzNlYjdTRHg1R0VmYlE0VGduQmtHTFhPcW54?=
- =?utf-8?B?dXptOWVEMzZYRTBaWXJJZWFVM09iNXBkb2dQeHl0MHpLYmg5YWNvOGFFT3d2?=
- =?utf-8?B?dTB5ejIzNUNEQzZzVWdrVnJPSUJVVUJ4a00wcWFTbTVEam5GbmMwS2ROOHda?=
- =?utf-8?B?MWlWcFFSdldFYWFMaFlMcmNUbDdKM2NhdnBpVWVSWHVyRlZ3OUhBVHh4S2Vu?=
- =?utf-8?B?bFpzbUl2YS9FNHFDaHd0K2NLN1ErNHB2di9xTFN4ZnlhRUFSdklnT3EvY2d4?=
- =?utf-8?B?RjFMajZxdkkzQ2xqWmVwckJyZFZxRS8zZi9aamo5cXlkL0Z2QzM0MkUvYTRZ?=
- =?utf-8?B?Y09Ga0x1c2FKTHBNSyt3RHVKUTMvSUlvWEF6UUpHbXNReDF5UGxUK2RERmow?=
- =?utf-8?B?M3g1QjlTSGhvWmY5NGdkV3VqczRGSUh3RXE2MzBPTTltSFhnWGFpOEZxNGVK?=
- =?utf-8?B?SmlBQkcrYjJRNVowVFhkQlJUMXJzNXVueXVkbEExY3VkMVFmcjRQWEs2aG9n?=
- =?utf-8?B?Y2ZBT2JiVmVxMU1DejgrZVorQVl2N2dFVmNJb3FtRDlrVms3NDV4RHc3dVlU?=
- =?utf-8?B?TWlrdXA4Z3M0SXJwZlhIN2FUc2lGZU42MXdXbmZSaGNKT2VIRGEzcnZpRld3?=
- =?utf-8?B?Umc1c2U1VllGNFNIc1ZCVU1weGlVZEc1eDFZUE1MT3pDeitkTTJoSUhINnR6?=
- =?utf-8?B?TjYxckkwdGZxYU9GNG52NTNzOE14SHFvMWl5d0lSQjIyQjd2VUpLc282SGQ4?=
- =?utf-8?Q?tofOo+63PnIOyqjBm8SDRrfdl?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?R3Z2MURNNzV1WHM2QkRIL1A0Z1d6QUtZYnlTYVRhZTlkRDRUeW1OL3l2d2RB?=
- =?utf-8?B?OStLRUhnL25CODRpWE9XbzFLeTNydFJmdzdNaWErZGUrZk1tNTZUeGxaZ3BL?=
- =?utf-8?B?UmhmeG5GSjZZQzRTTGwrelVmQ0NuK2dYT1VpeitOelFXUUIrLzVGbGsvbG43?=
- =?utf-8?B?UUFMUGxSSVNiTk9tWjBCQ0gyRm1STCsyRnpBY1NGRGtkTlVmNFg2a2RMc0E1?=
- =?utf-8?B?VTBwaGZuLzFjM2NNbDdCN0dRMDBKdTl5L1loYXdaYUluU2lhank0YlZBTzhP?=
- =?utf-8?B?dUR2ak9acmE3cVNqQUhNUnNXejBmUHpHUWMwdW9Nd05vK2NFS0tKaHFOa2ho?=
- =?utf-8?B?RVl4cEdyODhyd0w3eDRFV1NBQjVONHMwTW5VNUhGUkc5V1RDUERFeThja0VO?=
- =?utf-8?B?cGNjN2l6T3QwWnduNStTc2VqTjlSTG1VeXA4U1NUdGRSWDdlOG1pUFBMK3Ns?=
- =?utf-8?B?K0VJcktQZkZocVRlY0M2VkQrMXVlL2RlVWhCaGZpL28zT0lJeDJ4andnKzlI?=
- =?utf-8?B?NUZxVXVUWUtQWFkyUVVxbkllRkRZNzZScVBwY0gwZXdQL3hiM3VrWmxReklw?=
- =?utf-8?B?aGRmdE56WkdFaHlmV3JnaDRnWERLR0hHZjdPZzVZdEhDaWFwemc2WGJ1WExt?=
- =?utf-8?B?U1FuWEtYcU9WdTZUMmVPUVFqNEV3aGFidllLakpFWFdnMnNLZHRRV3ZNZHp3?=
- =?utf-8?B?eTQwcE1OemFScmxaMi85ekJNNHNVTXlRT25jMnRxa0xweExQaktSTmJnSzI3?=
- =?utf-8?B?SkF1OFk1Z2hpU1ZvemphQkE0YkFRVFI2SjN6ZzB5VzVXSktVVmV0TEpOdWpX?=
- =?utf-8?B?SWlrMlFBRHNneDlvVUNzNnFaT3ZKNWFadFRzQStPVkRaNzFubUZvUFBOVFIr?=
- =?utf-8?B?MVE1WHhxeU1SUXliSmVEN3Vka3hyTCtTVjRwZWhvTU5xaCtNRGNaNjVZRHVr?=
- =?utf-8?B?bUx3TUxCUDNjU1N4MzFYK01nWG9mTDVuVnhPUS9NbC9KVk1FajNLUHVaNlQy?=
- =?utf-8?B?OVZ5bURGVFRBamNYbHh5Y1ExcHRXRnFsbUY3dlZEVUIvRDRxK1RuM1pjZzFr?=
- =?utf-8?B?RFZmQmJxZGczZFg2QzJNQXovek9tRkxRb0EwbVFhSlE4ZTZWMEE2QU9MMVl0?=
- =?utf-8?B?dEdHN0VWKzA4NUJKR0JBbmtGUGNrNnNrNElIdjlXYS9iMEg4MHIzblUxMS9q?=
- =?utf-8?B?YmZqVGRFQXRGem9SZ0I5RFRqeUU1RzB2dnFja1hTRWF3bUhoMFlxNldtckhr?=
- =?utf-8?B?LzVQVG8wcDhjaFpneVJUaXV5WU41NWRobTlGdElJenVUU3RHVXZtKzlnc3Jx?=
- =?utf-8?B?RnROVUpmYTdsS2hSWGRLZDFmZ1JKM1dtU0lxNlhKTDBVS2UrWnFNamcxaVVL?=
- =?utf-8?B?dms0NUl1VXZDalBqdy9nVzZRT0FHaWJKWDVKN3JWTkhuTDlkeXcyRHo2OGZq?=
- =?utf-8?B?TlZsUTZvN1l3RnMrT3lKOUMyTWkyMG0zSHA2b2MrY05QTnRDRUo4dGNyNFJr?=
- =?utf-8?Q?Nrfr8FrEgEenhl/PIfVoL3rTXXC?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d81d5d9-7c6b-4b3f-d064-08dad459f778
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6360.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 11:40:10.6833
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VtbOwEN71fvS74DHLfPx2rox/W3Vb+QEeE0oBSlwgRRfK7NiFi4k52rT3WNKVqbp+9RhUdwB4uOLmPb3FBtGjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR03MB5964
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 05:08:06PM -0800, Stefano Stabellini wrote:
-> On Wed, 30 Nov 2022, Roger Pau Monne wrote:
-> > The hvc machinery registers both a console and a tty device based on
-> > the hv ops provided by the specific implementation.  Those two
-> > interfaces however have different locks, and there's no single locks
-> > that's shared between the tty and the console implementations, hence
-> > the driver needs to protect itself against concurrent accesses.
-> > Otherwise concurrent calls using the split interfaces are likely to
-> > corrupt the ring indexes, leaving the console unusable.
-> > 
-> > Introduce a lock to xencons_info to serialize accesses to the shared
-> > ring.  This is only required when using the shared memory console,
-> > concurrent accesses to the hypercall based console implementation are
-> > not an issue.
-> > 
-> > Note the conditional logic in domU_read_console() is slightly modified
-> > so the notify_daemon() call can be done outside of the locked region:
-> > it's an hypercall and there's no need for it to be done with the lock
-> > held.
-> 
-> For domU_read_console: I don't mean to block this patch but we need to
-> be sure about the semantics of hv_ops.get_chars. Either it is expected
-> to be already locked, then we definitely shouldn't add another lock to
-> domU_read_console. Or it is not expected to be already locked, then we
-> should add the lock.
-> 
-> My impression is that it is expected to be already locked, but I think
-> we need Greg or Jiri to confirm one way or the other.
 
-Let me move both to the 'To:' field then.
+On Fri 02 Dec 2022 at 01:56, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
-My main concern is the usage of hv_ops.get_chars hook in
-hvc_poll_get_char(), as it's not obvious to me that callers of
-tty->poll_get_char hook as returned by tty_find_polling_driver() will
-always do so with the tty lock held (in fact the only user right now
-doesn't seem to hold the tty lock).
+> Summary changes:
+>     - supported meson-a1-clkc common driver
+>     - inherited from the base clk-pll driver, implemented own version of
+>       init/enable/disable/enabled routines; rate calculating logic is
+>       fully the same
+>     - aligned CLKID-related definitions with CLKID list from order
+>       perspective to remove holes and permutations
+>     - corrected Kconfig dependencies and types
+>     - provided correct MODULE_AUTHORs() and MODULE_LICENSE()
+>     - optimized and fix up some clock relationships
+>     - removed unused register offset definitions (ANACTRL_* group)
 
-> Aside from that the rest looks fine.
+This patch mix PLL stuff, factorization change, etc ...
+In general, when your commit description is a list, it is a hint that
+you are doing more than one thing in it. It is unlikely to be OK then
 
-Thanks for the review, Roger.
+>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  drivers/clk/meson/Kconfig  |   5 +-
+>  drivers/clk/meson/a1-pll.c | 267 +++++++++++++++++++++++++------------
+>  drivers/clk/meson/a1-pll.h |  37 ++---
+>  3 files changed, 202 insertions(+), 107 deletions(-)
+>
+> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> index 1c885541c3a9..deb273673ec1 100644
+> --- a/drivers/clk/meson/Kconfig
+> +++ b/drivers/clk/meson/Kconfig
+> @@ -104,10 +104,11 @@ config COMMON_CLK_AXG_AUDIO
+>  	  aka axg, Say Y if you want audio subsystem to work.
+>  
+>  config COMMON_CLK_A1_PLL
+> -	bool
+> -	depends on ARCH_MESON
+> +	tristate "Meson A1 SoC PLL controller support"
+> +	depends on ARM64
+>  	select COMMON_CLK_MESON_REGMAP
+>  	select COMMON_CLK_MESON_PLL
+> +	select COMMON_CLK_MESON_A1_CLKC
+>  	help
+>  	  Support for the PLL clock controller on Amlogic A113L device,
+>  	  aka a1. Say Y if you want PLL to work.
+> diff --git a/drivers/clk/meson/a1-pll.c b/drivers/clk/meson/a1-pll.c
+> index 69c1ca07d041..23487ca797b3 100644
+> --- a/drivers/clk/meson/a1-pll.c
+> +++ b/drivers/clk/meson/a1-pll.c
+> @@ -2,15 +2,133 @@
+>  /*
+>   * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+>   * Author: Jian Hu <jian.hu@amlogic.com>
+> + *
+> + * Copyright (c) 2022, SberDevices. All Rights Reserved.
+> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>   */
+>  
+>  #include <linux/clk-provider.h>
+>  #include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+> +#include "meson-a1-clkc.h"
+>  #include "a1-pll.h"
+> -#include "clk-pll.h"
+>  #include "clk-regmap.h"
+>  
+> +static inline
+> +struct meson_a1_pll_data *meson_a1_pll_data(struct clk_regmap *clk)
+> +{
+> +	return (struct meson_a1_pll_data *)clk->data;
+> +}
+> +
+> +static int meson_a1_pll_init(struct clk_hw *hw)
+> +{
+> +	struct clk_regmap *clk = to_clk_regmap(hw);
+> +	struct meson_a1_pll_data *pll = meson_a1_pll_data(clk);
+> +
+> +	regmap_multi_reg_write(clk->map, pll->base.init_regs,
+> +			       pll->base.init_count);
+> +
+> +	return 0;
+
+Looks the the default init mostly
+
+Looks like you are trying the handle the absence of the rst bit.
+I'm pretty sure the hifi PLL of the SoC as one but you really don't want
+to poke, this can be in the generic driver, with MESON_PARM_APPLICABLE()
+test.
+
+No need to redefine this
+
+> +}
+> +
+> +static int meson_a1_pll_is_enabled(struct clk_hw *hw)
+> +{
+> +	struct clk_regmap *clk = to_clk_regmap(hw);
+> +	struct meson_a1_pll_data *pll = meson_a1_pll_data(clk);
+> +
+> +	if (MESON_PARM_APPLICABLE(&pll->base.rst) &&
+> +	    meson_parm_read(clk->map, &pll->base.rst))
+> +		return 0;
+> +
+> +	if (!meson_parm_read(clk->map, &pll->base.en) ||
+> +	    !meson_parm_read(clk->map, &pll->base.l))
+> +		return 0;
+> +
+
+Same here, pretty sure rst is there and the generic function works but
+if this update is required, it seems safe to do in the generic driver.
+
+> +	return 1;
+> +}
+> +
+> +static int meson_a1_pll_enable(struct clk_hw *hw)
+> +{
+> +	struct clk_regmap *clk = to_clk_regmap(hw);
+> +	struct meson_a1_pll_data *pll = meson_a1_pll_data(clk);
+> +
+> +	/* Do nothing if the PLL is already enabled */
+> +	if (clk_hw_is_enabled(hw))
+> +		return 0;
+> +
+> +	/* Enable the pll */
+> +	meson_parm_write(clk->map, &pll->base.en, 1);
+> +
+> +	/*
+> +	 * Compared with the previous SoCs, self-adaption current module
+> +	 * is newly added for A1, keep the new power-on sequence to enable the
+> +	 * PLL. The sequence is:
+> +	 * 1. enable the pll, delay for 10us
+> +	 * 2. enable the pll self-adaption current module, delay for 40us
+> +	 * 3. enable the lock detect module
+> +	 */
+> +	usleep_range(10, 20);
+> +	meson_parm_write(clk->map, &pll->current_en, 1);
+
+this base.en vs current_en needs some explanation.
+
+Again I think there is room to handle this through the pll driver
+
+> +	usleep_range(40, 50);
+> +
+> +	meson_parm_write(clk->map, &pll->l_detect, 1);
+> +	meson_parm_write(clk->map, &pll->l_detect, 0);
+> +
+> +	if (meson_clk_pll_wait_lock(hw))
+> +		return -EIO;
+> +
+> +	return 0;
+> +}
+> +
+> +static void meson_a1_pll_disable(struct clk_hw *hw)
+> +{
+> +	struct clk_regmap *clk = to_clk_regmap(hw);
+> +	struct meson_a1_pll_data *pll = meson_a1_pll_data(clk);
+> +
+> +	/* Disable the pll */
+> +	meson_parm_write(clk->map, &pll->base.en, 0);
+> +
+> +	/* Disable PLL internal self-adaption current module */
+> +	meson_parm_write(clk->map, &pll->current_en, 0);
+> +}
+> +
+> +/*
+> + * A1 PLL clock controller driver is based on meson clk_pll driver,
+> + * so some rate calculating routines are reused
+> + */
+> +static unsigned long meson_a1_pll_recalc_rate(struct clk_hw *hw,
+> +					      unsigned long parent_rate)
+> +{
+> +	return meson_clk_pll_ops.recalc_rate(hw, parent_rate);
+> +}
+> +
+> +static int meson_a1_pll_determine_rate(struct clk_hw *hw,
+> +				       struct clk_rate_request *req)
+> +{
+> +	return meson_clk_pll_ops.determine_rate(hw, req);
+> +}
+> +
+> +static int meson_a1_pll_set_rate(struct clk_hw *hw, unsigned long rate,
+> +				 unsigned long parent_rate)
+> +{
+> +	return meson_clk_pll_ops.set_rate(hw, rate, parent_rate);
+> +}
+> +
+
+This really does not scale well
+
+> +static const struct clk_ops meson_a1_pll_ops = {
+> +	.init		= meson_a1_pll_init,
+> +	.recalc_rate	= meson_a1_pll_recalc_rate,
+> +	.determine_rate	= meson_a1_pll_determine_rate,
+> +	.set_rate	= meson_a1_pll_set_rate,
+> +	.is_enabled	= meson_a1_pll_is_enabled,
+> +	.enable		= meson_a1_pll_enable,
+> +	.disable	= meson_a1_pll_disable
+> +};
+> +
+> +static const struct clk_ops meson_a1_pll_ro_ops = {
+> +	.recalc_rate	= meson_a1_pll_recalc_rate,
+> +	.is_enabled	= meson_a1_pll_is_enabled,
+> +};
+> +
+>  static struct clk_regmap a1_fixed_pll_dco = {
+>  	.data = &(struct meson_clk_pll_data){
+>  		.en = {
+> @@ -46,7 +164,7 @@ static struct clk_regmap a1_fixed_pll_dco = {
+>  	},
+>  	.hw.init = &(struct clk_init_data){
+>  		.name = "fixed_pll_dco",
+> -		.ops = &meson_clk_pll_ro_ops,
+> +		.ops = &meson_a1_pll_ro_ops,
+>  		.parent_data = &(const struct clk_parent_data) {
+>  			.fw_name = "xtal_fixpll",
+>  		},
+> @@ -87,31 +205,36 @@ static const struct reg_sequence a1_hifi_init_regs[] = {
+>  };
+>  
+>  static struct clk_regmap a1_hifi_pll = {
+> -	.data = &(struct meson_clk_pll_data){
+> -		.en = {
+> -			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> -			.shift   = 28,
+> -			.width   = 1,
+> -		},
+> -		.m = {
+> -			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> -			.shift   = 0,
+> -			.width   = 8,
+> -		},
+> -		.n = {
+> -			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> -			.shift   = 10,
+> -			.width   = 5,
+> -		},
+> -		.frac = {
+> -			.reg_off = ANACTRL_HIFIPLL_CTRL1,
+> -			.shift   = 0,
+> -			.width   = 19,
+> -		},
+> -		.l = {
+> -			.reg_off = ANACTRL_HIFIPLL_STS,
+> -			.shift   = 31,
+> -			.width   = 1,
+> +	.data = &(struct meson_a1_pll_data){
+> +		.base = {
+> +			.en = {
+> +				.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +				.shift   = 28,
+> +				.width   = 1,
+> +			},
+> +			.m = {
+> +				.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +				.shift   = 0,
+> +				.width   = 8,
+> +			},
+> +			.n = {
+> +				.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +				.shift   = 10,
+> +				.width   = 5,
+> +			},
+> +			.frac = {
+> +				.reg_off = ANACTRL_HIFIPLL_CTRL1,
+> +				.shift   = 0,
+> +				.width   = 19,
+> +			},
+> +			.l = {
+> +				.reg_off = ANACTRL_HIFIPLL_STS,
+> +				.shift   = 31,
+> +				.width   = 1,
+> +			},
+> +			.range = &a1_hifi_pll_mult_range,
+> +			.init_regs = a1_hifi_init_regs,
+> +			.init_count = ARRAY_SIZE(a1_hifi_init_regs),
+>  		},
+>  		.current_en = {
+>  			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> @@ -123,13 +246,10 @@ static struct clk_regmap a1_hifi_pll = {
+>  			.shift   = 6,
+>  			.width   = 1,
+>  		},
+> -		.range = &a1_hifi_pll_mult_range,
+> -		.init_regs = a1_hifi_init_regs,
+> -		.init_count = ARRAY_SIZE(a1_hifi_init_regs),
+>  	},
+>  	.hw.init = &(struct clk_init_data){
+>  		.name = "hifi_pll",
+> -		.ops = &meson_clk_pll_ops,
+> +		.ops = &meson_a1_pll_ops,
+>  		.parent_data = &(const struct clk_parent_data) {
+>  			.fw_name = "xtal_hifipll",
+>  		},
+> @@ -276,15 +396,15 @@ static struct clk_hw_onecell_data a1_pll_hw_onecell_data = {
+>  	.hws = {
+>  		[CLKID_FIXED_PLL_DCO]		= &a1_fixed_pll_dco.hw,
+>  		[CLKID_FIXED_PLL]		= &a1_fixed_pll.hw,
+> -		[CLKID_HIFI_PLL]		= &a1_hifi_pll.hw,
+> -		[CLKID_FCLK_DIV2]		= &a1_fclk_div2.hw,
+> -		[CLKID_FCLK_DIV3]		= &a1_fclk_div3.hw,
+> -		[CLKID_FCLK_DIV5]		= &a1_fclk_div5.hw,
+> -		[CLKID_FCLK_DIV7]		= &a1_fclk_div7.hw,
+>  		[CLKID_FCLK_DIV2_DIV]		= &a1_fclk_div2_div.hw,
+>  		[CLKID_FCLK_DIV3_DIV]		= &a1_fclk_div3_div.hw,
+>  		[CLKID_FCLK_DIV5_DIV]		= &a1_fclk_div5_div.hw,
+>  		[CLKID_FCLK_DIV7_DIV]		= &a1_fclk_div7_div.hw,
+> +		[CLKID_FCLK_DIV2]		= &a1_fclk_div2.hw,
+> +		[CLKID_FCLK_DIV3]		= &a1_fclk_div3.hw,
+> +		[CLKID_FCLK_DIV5]		= &a1_fclk_div5.hw,
+> +		[CLKID_FCLK_DIV7]		= &a1_fclk_div7.hw,
+> +		[CLKID_HIFI_PLL]		= &a1_hifi_pll.hw,
+
+I get you are trying to do but keep the ID order here 
+
+>  		[NR_PLL_CLKS]			= NULL,
+>  	},
+>  	.num = NR_PLL_CLKS,
+> @@ -293,68 +413,39 @@ static struct clk_hw_onecell_data a1_pll_hw_onecell_data = {
+>  static struct clk_regmap *const a1_pll_regmaps[] = {
+>  	&a1_fixed_pll_dco,
+>  	&a1_fixed_pll,
+> -	&a1_hifi_pll,
+>  	&a1_fclk_div2,
+>  	&a1_fclk_div3,
+>  	&a1_fclk_div5,
+>  	&a1_fclk_div7,
+> +	&a1_hifi_pll,
+
+?
+
+>  };
+>  
+> -static struct regmap_config clkc_regmap_config = {
+> -	.reg_bits       = 32,
+> -	.val_bits       = 32,
+> -	.reg_stride     = 4,
+> +static const struct meson_a1_clkc_data a1_pll_clkc __maybe_unused = {
+> +	.hw = &a1_pll_hw_onecell_data,
+> +	.regs = a1_pll_regmaps,
+> +	.num_regs = ARRAY_SIZE(a1_pll_regmaps),
+>  };
+>  
+> -static int meson_a1_pll_probe(struct platform_device *pdev)
+> -{
+> -	struct device *dev = &pdev->dev;
+> -	struct resource *res;
+> -	void __iomem *base;
+> -	struct regmap *map;
+> -	int ret, i;
+> -
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -
+> -	base = devm_ioremap_resource(dev, res);
+> -	if (IS_ERR(base))
+> -		return PTR_ERR(base);
+> -
+> -	map = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
+> -	if (IS_ERR(map))
+> -		return PTR_ERR(map);
+> -
+> -	/* Populate regmap for the regmap backed clocks */
+> -	for (i = 0; i < ARRAY_SIZE(a1_pll_regmaps); i++)
+> -		a1_pll_regmaps[i]->map = map;
+> -
+> -	for (i = 0; i < a1_pll_hw_onecell_data.num; i++) {
+> -		/* array might be sparse */
+> -		if (!a1_pll_hw_onecell_data.hws[i])
+> -			continue;
+> -
+> -		ret = devm_clk_hw_register(dev, a1_pll_hw_onecell_data.hws[i]);
+> -		if (ret) {
+> -			dev_err(dev, "Clock registration failed\n");
+> -			return ret;
+> -		}
+> -	}
+> -
+> -	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+> -					   &a1_pll_hw_onecell_data);
+> -}
+> -
+> -static const struct of_device_id clkc_match_table[] = {
+> -	{ .compatible = "amlogic,a1-pll-clkc", },
+> -	{}
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id a1_pll_clkc_match_table[] = {
+> +	{
+> +		.compatible = "amlogic,a1-pll-clkc",
+> +		.data = &a1_pll_clkc,
+> +	},
+> +	{},
+>  };
+> +MODULE_DEVICE_TABLE(of, a1_pll_clkc_match_table);
+> +#endif /* CONFIG_OF */
+>  
+> -static struct platform_driver a1_pll_driver = {
+> -	.probe		= meson_a1_pll_probe,
+> -	.driver		= {
+> -		.name	= "a1-pll-clkc",
+> -		.of_match_table = clkc_match_table,
+> +static struct platform_driver a1_pll_clkc_driver = {
+> +	.probe = meson_a1_clkc_probe,
+> +	.driver = {
+> +		.name = "a1-pll-clkc",
+> +		.of_match_table = of_match_ptr(a1_pll_clkc_match_table),
+>  	},
+>  };
+>  
+> -builtin_platform_driver(a1_pll_driver);
+> +module_platform_driver(a1_pll_clkc_driver);
+> +MODULE_AUTHOR("Jian Hu <jian.hu@amlogic.com>");
+> +MODULE_AUTHOR("Dmitry Rokosov <ddrokosov@sberdevices.ru>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/clk/meson/a1-pll.h b/drivers/clk/meson/a1-pll.h
+> index 8ded267061ad..2ff5a2042a97 100644
+> --- a/drivers/clk/meson/a1-pll.h
+> +++ b/drivers/clk/meson/a1-pll.h
+> @@ -1,38 +1,29 @@
+>  /* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+>  /*
+> + * Amlogic Meson-A1 PLL Clock Controller internals
+> + *
+>   * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + * Author: Jian Hu <jian.hu@amlogic.com>
+> + *
+> + * Copyright (c) 2022, SberDevices. All Rights Reserved.
+> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>   */
+>  
+>  #ifndef __A1_PLL_H
+>  #define __A1_PLL_H
+>  
+> +#include "clk-pll.h"
+> +
+>  /* PLL register offset */
+>  #define ANACTRL_FIXPLL_CTRL0		0x0
+>  #define ANACTRL_FIXPLL_CTRL1		0x4
+> -#define ANACTRL_FIXPLL_CTRL2		0x8
+> -#define ANACTRL_FIXPLL_CTRL3		0xc
+> -#define ANACTRL_FIXPLL_CTRL4		0x10
+>  #define ANACTRL_FIXPLL_STS		0x14
+> -#define ANACTRL_SYSPLL_CTRL0		0x80
+> -#define ANACTRL_SYSPLL_CTRL1		0x84
+> -#define ANACTRL_SYSPLL_CTRL2		0x88
+> -#define ANACTRL_SYSPLL_CTRL3		0x8c
+> -#define ANACTRL_SYSPLL_CTRL4		0x90
+> -#define ANACTRL_SYSPLL_STS		0x94
+>  #define ANACTRL_HIFIPLL_CTRL0		0xc0
+>  #define ANACTRL_HIFIPLL_CTRL1		0xc4
+>  #define ANACTRL_HIFIPLL_CTRL2		0xc8
+>  #define ANACTRL_HIFIPLL_CTRL3		0xcc
+>  #define ANACTRL_HIFIPLL_CTRL4		0xd0
+>  #define ANACTRL_HIFIPLL_STS		0xd4
+> -#define ANACTRL_AUDDDS_CTRL0		0x100
+> -#define ANACTRL_AUDDDS_CTRL1		0x104
+> -#define ANACTRL_AUDDDS_CTRL2		0x108
+> -#define ANACTRL_AUDDDS_CTRL3		0x10c
+> -#define ANACTRL_AUDDDS_CTRL4		0x110
+> -#define ANACTRL_AUDDDS_STS		0x114
+> -#define ANACTRL_MISCTOP_CTRL0		0x140
+> -#define ANACTRL_POR_CNTL		0x188
+>  
+>  /*
+>   * CLKID index values
+> @@ -53,4 +44,16 @@
+>  /* include the CLKIDs that have been made part of the DT binding */
+>  #include <dt-bindings/clock/a1-pll-clkc.h>
+>  
+> +/**
+> + * struct meson_a1_pll_data - A1 PLL state
+> + * @base: Basic CLK PLL state
+> + * @current_en: Enable or disable the PLL self-adaption current module
+> + * @l_detect: Enable or disable the lock detect module
+> + */
+> +struct meson_a1_pll_data {
+> +	struct meson_clk_pll_data base;
+> +	struct parm current_en;
+> +	struct parm l_detect;
+> +};
+> +
+>  #endif /* __A1_PLL_H */
+
