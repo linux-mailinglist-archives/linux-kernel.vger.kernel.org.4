@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A7E640F37
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 21:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DDE640F3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 21:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234744AbiLBUeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 15:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S234498AbiLBUi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 15:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiLBUeQ (ORCPT
+        with ESMTP id S229527AbiLBUiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 15:34:16 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC106EF0F0;
-        Fri,  2 Dec 2022 12:34:15 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id c7so1433051pls.4;
-        Fri, 02 Dec 2022 12:34:15 -0800 (PST)
+        Fri, 2 Dec 2022 15:38:25 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D45C724F
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 12:38:24 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id fz10so6852956qtb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 12:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=14xUzCkDZTIX4ZvU2fMuPgJCXPTawps2raw0aQTAfl0=;
-        b=pBEOhi2yxhV+E7GqedD9eNHZmCTArEPPbWq4xksBXggTqWKRrE0aiiUNneRCxa0I0M
-         TJvoP14DtrabIoGKwaPWxLVspTj7n7l12BIpwMyFhKHKt1CAmP7CMfHDqXDQI/AMuzFz
-         2g0c5bOpBtP7M0Oxm3/o218UsMS37zz+r5QycjR4PNcYwPqYD9rSId+Hs//Dt0S5e1kP
-         OXPLIpsKgnlVRVSR3xMzIyilKOPG1yEkyyO5iSj7PhYfc3mcsP4chz8jJySuCgM5NtyJ
-         FO28y3aiRj8cMY7Cbyza654NXjLKIVIeyj2Bl2SmS6mbOI7n7Jd93X2N0nMcatwYldbi
-         SZnQ==
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0JOcxwhxiaCN4P7YWLL832teuG1uo7i/ABv0IaQTb0E=;
+        b=reBeD053PlaDOPDSnyvPRP39vnzXXg2sA1itIFF2NtImWJNKi/J4MhYB0BsdCJBUDZ
+         I89EceiVXhDw9DE7erUVEXWQdiGHTqBLRc0DbBhRONRv0//kulqIFSvt6xpzlyO/oCUQ
+         CdS9WyJCcWiQQWcY6jZmZmPD2DtiWYTWDsLk1SmVLlx0QARzF2kMxL7DYj6FR8awrbZC
+         mpsJhMtjqvTlnCEoKg4eiUxoiClTC/5TCK+sovq45cqIW5peytkcjvFDDdxOzJtUbbEo
+         6u3N4w3ii6R0rLesUiQrAjNTvL086cL/giED5c5O0hUvQ1z3xkwmFbwuOQYpr69RCl5M
+         NSnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=14xUzCkDZTIX4ZvU2fMuPgJCXPTawps2raw0aQTAfl0=;
-        b=pmRbHU5chQot9RIky9ZJQDBJKZLWrR/0yjxTMLmuR+y5qDjLSY9nbho5cpzSrwEHR6
-         eIWoTEcmp6mueWJlvfQ8irKi39W2Exam+g31jfWlvZ9O28ba3rJPEflFxU3+4t0sLfD/
-         lCBRNw+6rv0dgDaD7TnfDXvdVN5+MvV8bMZVCjsqu9DtnP13Eduv4gYGqR7k4kMG9koQ
-         OdTq/idjBPJzUl5deuWjLmrkE29x/yXyirdD0PJidVc0+WwZ2M1J/7HqyLVnm4Of5YNr
-         OZdg4fnI+r9UHhEnQNFUQ1l1u0zoqvllIG1BWWmioXzmTFZvfjiHIZs2luzzfoj31RXP
-         alQQ==
-X-Gm-Message-State: ANoB5pkgQN1Ede/rOWAGTFqjPgXp5ApR+/17BEjeYc0pYa5Cc0c0X3mt
-        CZuKlEJkTQYaRpC+mXUbwEg=
-X-Google-Smtp-Source: AA0mqf4IHG/sg2OVW8OJWOgenUejFzNKEzflUA06eBquAm7jugZvIQAntzHW2HYsMqvNKWYh00959A==
-X-Received: by 2002:a17:903:41ca:b0:189:78d9:fe2e with SMTP id u10-20020a17090341ca00b0018978d9fe2emr33049857ple.96.1670013254897;
-        Fri, 02 Dec 2022 12:34:14 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:cc23:eebe:90c0:1fbf])
-        by smtp.gmail.com with ESMTPSA id e16-20020a17090301d000b00186727e5f5csm5954861plh.248.2022.12.02.12.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 12:34:13 -0800 (PST)
-Date:   Fri, 2 Dec 2022 12:34:10 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org
-Subject: Re: [PATCH] Input: edt-ft5x06 - always do msleep(300) during
- initialization
-Message-ID: <Y4phQpK1Kwn5RC3u@google.com>
-References: <20221202105800.653982-1-linux@rasmusvillemoes.dk>
- <Y4pCtm4J3HWhYl8/@nixie71>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4pCtm4J3HWhYl8/@nixie71>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0JOcxwhxiaCN4P7YWLL832teuG1uo7i/ABv0IaQTb0E=;
+        b=oIBpfbyN39jmomDzXsS99yTZCk9Jl7d1L+HUvp1wzyHFQAAjvear+KNbp+1aeU0YuJ
+         fHYmFzJC7ke8eSdharVOJ2QANq9H32osgLiUfUwgb0ZIz9n/ji4aYDjQ6skvCAU5dXIW
+         1mcNdA5DguaXbhWEMeT2B7W5/AixBO8LOL5UPzxDqiEKbYPYAXAUvgCe8rr16ShDdUI7
+         ENjPAqOfoEC6hvwf1PdjLVJUVVjj3CncFaCszxptCCRfD7h9qxIU/IXHssN51KAqqrRM
+         tD7iZh49haiOj/tthRqO7WlKalRvSm3cpuPONufabyStYdEhQdowe/KnJjgLq0LGA9WX
+         udoQ==
+X-Gm-Message-State: ANoB5pnJbSCRZyelERJpacC16afmS9d0uYBOHjPQVqtFar2wsHCxIEvS
+        jqCHoDCpb0po0fClatBm5+rzkg==
+X-Google-Smtp-Source: AA0mqf6IcPIo2erPqqnbdgRw4umsKGiZJaMf7hfV1peyeO+X2MxwX8vViJNz/QQdAr7SUCeKMPrQyw==
+X-Received: by 2002:a05:622a:4a11:b0:3a5:1cc6:ae12 with SMTP id fv17-20020a05622a4a1100b003a51cc6ae12mr67298178qtb.103.1670013503222;
+        Fri, 02 Dec 2022 12:38:23 -0800 (PST)
+Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05620a450300b006eea4b5abcesm6713795qkp.89.2022.12.02.12.38.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 02 Dec 2022 12:38:22 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] hfsplus: Add module parameter to enable force writes
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <53821C76-DAFE-4505-9EC8-BE4ACBEA9DD9@live.com>
+Date:   Fri, 2 Dec 2022 12:38:19 -0800
+Cc:     "willy@infradead.org" <willy@infradead.org>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6AE11F8A-3C10-46A3-9F42-B5F72F1FC634@dubeyko.com>
+References: <53821C76-DAFE-4505-9EC8-BE4ACBEA9DD9@live.com>
+To:     Aditya Garg <gargaditya08@live.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,71 +80,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
-
-On Fri, Dec 02, 2022 at 12:23:50PM -0600, Jeff LaBundy wrote:
-> + Mark
-> 
-> Hi Rasmus,
-> 
-> On Fri, Dec 02, 2022 at 11:57:59AM +0100, Rasmus Villemoes wrote:
-> > We have a board with an FT5446, which is close enough to a
-> > FT5506 (i.e. it also supports up to 10 touch points and has similar
-> > register layout) for this driver to work. However, on our board the
-> > iovcc and vcc regulators are indeed controllable (so not always-on),
-> > but there is no reset or wakeup gpio hooked up.
-> > 
-> > Without a large enough delay between the regulator_enable() calls and
-> > edt_ft5x06_ts_identify(), the first edt_ft5x06_ts_readwrite() call
-> > fails with -ENXIO and thus the device fails to probe. So
-> > unconditionally do an mdelay(300) instead of only when a reset-gpio is
-> > present.
-> > 
-> > Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> 
-> This is just my $.02, but it does not seem we are on the correct path
-> here. 300 ms sounds more like bulk capacitor charge time rather than
-> anything to do with this specific IC; is that a reasonable assumption?
-> 
-> Normally, we want to do the following:
-> 
-> 1. Enable regulator
-> 2. Wait for voltage rail to stabilize (RC time constant)
-> 3. Wait for any applicable POR delay (IC datasheet)
-> 4. Deassert reset
-> 5. Wait for any applicable reset delay (IC datasheet)
-> 6. Start communication
-> 
-> Here we are dealing with step (2), which is board dependent. Some may
-> require more time (larger bulk capacitance), same may require less or
-> none at all (e.g. voltage rail enabled by default and stable by the
-> time the kernel starts).
-> 
-> I think the right solution is to introduce a variant of regulator_enable()
-> which does not return until a delay passes, where that delay is specified
-> in the regulator's child node. Unless something like this exists?
-
-regulator_enable() (via regulator_do_enable() already does this:
 
 
-	/* Allow the regulator to ramp; it would be useful to extend
-	 * this for bulk operations so that the regulators can ramp
-	 * together.
-	 */
-	trace_regulator_enable_delay(rdev_get_name(rdev));
-	...
+> On Dec 1, 2022, at 10:01 PM, Aditya Garg <gargaditya08@live.com> =
+wrote:
+>=20
+> From: Aditya Garg <gargaditya08@live.com>
+>=20
+> This patch enables users to permanently enable writes of HFS+ locked
+> and/or journaled volumes using a module parameter.
+>=20
+> Why module parameter?
+> Reason being, its not convenient to manually mount the volume with =
+force
+> everytime. There are use cases which are fine with force enabling =
+writes
+> on journaled volumes. I've seen many on various online forums and I am =
+one
+> of them as well.
+>=20
+> Isn't it risky?
+> Yes obviously it is, as the driver itself warns users for the same. =
+But
+> any user using the parameter obviously shall be well aware of the =
+risks
+> involved. To be honest, I've been writing on a 100Gb journaled volume =
+for
+> a few days, including both large and small files, and haven't faced =
+any
+> corruption yet.
+>=20
 
-but I wonder if here we are still dealing with some form of 5 even in
-the absence of reset gpio being actually wired up (how is the chip's
-reset pin actually wired in this system)?
+If you created HFS+ volume under Linux, then you never have journal
+and problem of journal replay (even if you created journaled volume).
+So, I see the only one case when you have journal with transactions.
+You are using HFS+ volume in Linux and Mac OS X. It means that
+Mac OS X can create transactions in the journal and Linux needs
+to manage it somehow.
 
-It would be good if we had something like regulator_get_enabled_time()
-to know actual time when regulator was enabled (and for always on or
-stub regulators we might use the boot time as "on" time), so that we do
-not wait unnecessarily in case the regulator was turned on long time ago
-or was never turned off...
+Even if you don=E2=80=99t see any corruptions after such short testing, =
+then
+it doesn=E2=80=99t mean that you are safe. The key trouble that you can
+silently lose the data because some metadata state could sit
+in the journal and no replay operation has happened. Yes, you can
+ignore the transactions in the journal and continue to store data and
+modify metadata. But if journal still contain valid transactions, then
+mount operation under Mac OS X will replay journal. And it sounds
+that journal replay under Mac OS X can corrupt metadata and data
+state that was modified/created under Linux.
 
-Thanks.
+So, I believe that your suggestion is slightly dangerous because
+people loves to make mistakes and really hates to lose data.
 
--- 
-Dmitry
+Thanks,
+Slava.=20
+
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> ---
+> fs/hfsplus/super.c | 46 ++++++++++++++++++++++++++++++++++++----------
+> 1 file changed, 36 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
+> index 122ed89eb..2367a2407 100644
+> --- a/fs/hfsplus/super.c
+> +++ b/fs/hfsplus/super.c
+> @@ -24,6 +24,16 @@ static void hfsplus_free_inode(struct inode =
+*inode);
+> #include "hfsplus_fs.h"
+> #include "xattr.h"
+>=20
+> +static unsigned int force_journaled_rw;
+> +module_param(force_journaled_rw, uint, 0644);
+> +MODULE_PARM_DESC(force_journaled_rw, "Force enable writes on =
+Journaled HFS+ volumes. "
+> +		"([0] =3D disabled, 1 =3D enabled)");
+> +
+> +static unsigned int force_locked_rw;
+> +module_param(force_locked_rw, uint, 0644);
+> +MODULE_PARM_DESC(force_locked_rw, "Force enable writes on locked HFS+ =
+volumes. "
+> +		"([0] =3D disabled, 1 =3D enabled)");
+> +
+> static int hfsplus_system_read_inode(struct inode *inode)
+> {
+> 	struct hfsplus_vh *vhdr =3D HFSPLUS_SB(inode->i_sb)->s_vhdr;
+> @@ -346,14 +356,22 @@ static int hfsplus_remount(struct super_block =
+*sb, int *flags, char *data)
+> 			/* nothing */
+> 		} else if (vhdr->attributes &
+> 				cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) {
+> -			pr_warn("filesystem is marked locked, leaving =
+read-only.\n");
+> -			sb->s_flags |=3D SB_RDONLY;
+> -			*flags |=3D SB_RDONLY;
+> +			if (force_locked_rw) {
+> +				pr_warn("filesystem is marked locked, =
+but writes have been force enabled.\n");
+> +			} else {
+> +				pr_warn("filesystem is marked locked, =
+leaving read-only.\n");
+> +				sb->s_flags |=3D SB_RDONLY;
+> +				*flags |=3D SB_RDONLY;
+> +			}
+> 		} else if (vhdr->attributes &
+> 				cpu_to_be32(HFSPLUS_VOL_JOURNALED)) {
+> -			pr_warn("filesystem is marked journaled, leaving =
+read-only.\n");
+> -			sb->s_flags |=3D SB_RDONLY;
+> -			*flags |=3D SB_RDONLY;
+> +			if (force_journaled_rw) {
+> +				pr_warn("filesystem is marked journaled, =
+but writes have been force enabled.\n");
+> +			} else {
+> +				pr_warn("filesystem is marked journaled, =
+leaving read-only.\n");
+> +				sb->s_flags |=3D SB_RDONLY;
+> +				*flags |=3D SB_RDONLY;
+> +			}
+> 		}
+> 	}
+> 	return 0;
+> @@ -459,12 +477,20 @@ static int hfsplus_fill_super(struct super_block =
+*sb, void *data, int silent)
+> 	} else if (test_and_clear_bit(HFSPLUS_SB_FORCE, &sbi->flags)) {
+> 		/* nothing */
+> 	} else if (vhdr->attributes & cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) =
+{
+> -		pr_warn("Filesystem is marked locked, mounting =
+read-only.\n");
+> -		sb->s_flags |=3D SB_RDONLY;
+> +		if (force_locked_rw) {
+> +			pr_warn("Filesystem is marked locked, but writes =
+have been force enabled.\n");
+> +		} else {
+> +			pr_warn("Filesystem is marked locked, mounting =
+read-only.\n");
+> +			sb->s_flags |=3D SB_RDONLY;
+> +		}
+> 	} else if ((vhdr->attributes & =
+cpu_to_be32(HFSPLUS_VOL_JOURNALED)) &&
+> 			!sb_rdonly(sb)) {
+> -		pr_warn("write access to a journaled filesystem is not =
+supported, use the force option at your own risk, mounting =
+read-only.\n");
+> -		sb->s_flags |=3D SB_RDONLY;
+> +		if (force_journaled_rw) {
+> +			pr_warn("write access to a journaled filesystem =
+is not supported, but has been force enabled.\n");
+> +		} else {
+> +			pr_warn("write access to a journaled filesystem =
+is not supported, use the force option at your own risk, mounting =
+read-only.\n");
+> +			sb->s_flags |=3D SB_RDONLY;
+> +		}
+> 	}
+>=20
+> 	err =3D -EINVAL;
+> --=20
+> 2.38.1
+>=20
+
