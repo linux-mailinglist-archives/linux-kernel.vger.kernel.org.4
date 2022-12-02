@@ -2,71 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ABB6403B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5046403B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiLBJqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S232793AbiLBJr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbiLBJqq (ORCPT
+        with ESMTP id S231831AbiLBJr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:46:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAC3638A;
-        Fri,  2 Dec 2022 01:46:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A78FFB8211C;
-        Fri,  2 Dec 2022 09:46:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 813F5C433D7;
-        Fri,  2 Dec 2022 09:46:41 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AKWtqlKF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669974398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EheHaU/FjdrXBCarNx5tWWY2eAZs79C/tTj4LU4xU5w=;
-        b=AKWtqlKFT2IKm3ggdrW0xeG3dYA5RzisUH8cTfExlY/ATlZbFBJb22AJXbtdIdpPFfyTdC
-        PtSeUuLC2EhHVqbjWFgRElm+CIsdht234RShbPpYLYbBKV1xoh+ufwrEzohNwt9cvaejcL
-        3JmwvrlY+d4H6SDuLzBnsM3dTzefmQQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d87882d7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 2 Dec 2022 09:46:38 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 10:46:35 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        linux-integrity@vger.kernel.org, jgg@ziepe.ca,
-        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
-        timvp@google.com, apronin@google.com, mw@semihalf.com,
-        upstream@semihalf.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
-Message-ID: <Y4nJe+XMoNwTVjlh@zx2c4.com>
-References: <20221128195651.322822-1-Jason@zx2c4.com>
- <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
+        Fri, 2 Dec 2022 04:47:56 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E834012D27;
+        Fri,  2 Dec 2022 01:47:54 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NNp5c33Zzz4f3pFM;
+        Fri,  2 Dec 2022 17:47:48 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.67.175.61])
+        by APP4 (Coremail) with SMTP id gCh0CgAXidbGyYlj7LYVBg--.50134S2;
+        Fri, 02 Dec 2022 17:47:51 +0800 (CST)
+From:   Pu Lehui <pulehui@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v2] riscv, bpf: Emit fixed-length instructions for BPF_PSEUDO_FUNC
+Date:   Fri,  2 Dec 2022 17:48:37 +0800
+Message-Id: <20221202094837.3872444-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAXidbGyYlj7LYVBg--.50134S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFy5AFyxuryDur4UAryxZrb_yoW8Cw43pF
+        ZxGry3CFWvqr1S9F13tr12qr4SkFsYqay7Kry7G3y5G3WaqwsF93Z8Gw4Yyas8ZFW8Gr15
+        XFWjkrn8ua4qv37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
+        UQvtAUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for handling this, Thorsten. I had poked Jarkko about this
-earlier this week, but he didn't respond. So I'm glad you're on the case
-now getting this in somewhere. Probably this should make it to rc8, so
-there's still one week left of testing it.
+From: Pu Lehui <pulehui@huawei.com>
 
-Jason
+For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
+correct addresses of bpf_calls and then run last pass of JIT.
+Since the emit_imm of RV64 is variable-length, which will emit
+appropriate length instructions accorroding to the imm, it may
+broke ctx->offset, and lead to unpredictable problem, such as
+inaccurate jump. So let's fix it with fixed-length instructions.
+
+Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Suggested-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index eb99df41fa33..9723f34f7a06 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -139,6 +139,19 @@ static bool in_auipc_jalr_range(s64 val)
+ 		val < ((1L << 31) - (1L << 11));
+ }
+ 
++/* Emit fixed-length instructions for address */
++static void emit_addr(u8 rd, u64 addr, struct rv_jit_context *ctx)
++{
++	u64 ip = (u64)(ctx->insns + ctx->ninsns);
++	s64 off = addr - ip;
++	s64 upper = (off + (1 << 11)) >> 12;
++	s64 lower = ((off & 0xfff) << 52) >> 52;
++
++	emit(rv_auipc(rd, upper), ctx);
++	emit(rv_addi(rd, rd, lower), ctx);
++}
++
++/* Emit variable-length instructions for 32-bit and 64-bit imm */
+ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
+ {
+ 	/* Note that the immediate from the add is sign-extended,
+@@ -1053,7 +1066,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 		u64 imm64;
+ 
+ 		imm64 = (u64)insn1.imm << 32 | (u32)imm;
+-		emit_imm(rd, imm64, ctx);
++		if (bpf_pseudo_func(insn))
++			/* fixed-length insns for extra jit pass */
++			emit_addr(rd, imm64, ctx);
++		else
++			emit_imm(rd, imm64, ctx);
++
+ 		return 1;
+ 	}
+ 
+-- 
+2.25.1
+
