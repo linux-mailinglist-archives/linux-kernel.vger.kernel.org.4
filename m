@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5579640B52
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5DE640B4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbiLBQzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S234145AbiLBQyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234106AbiLBQzA (ORCPT
+        with ESMTP id S234113AbiLBQyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:55:00 -0500
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EA7D159C;
-        Fri,  2 Dec 2022 08:54:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670000066; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=nDjyPFgEloDmM8T/sBNrO/VlMDxo8r7LRbTRDALSR/0ucLLwORJlzGZ29coIGPEro/biYP4tUkD9b7WN88J5YnkXrdZodCcH7RMSsKc5SvD/SMuEM8dLlvNPdRG58BXEND8Rk0XSCO1yCKRhkxgiMfpM1tKnm4v+cPVl4Blw46c=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1670000066; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=e1xazqjcXwEUoLesqlU4Blrrp+KuPG+K4ku0ElP/cxA=; 
-        b=D5ZY3Ijf/zhMeYAD+yEGsHTHlmHyHqzGyaK9JqmmTNIPVvLhmK/flzm7eystCGyPP5VXUWSQLJomdjcCvvNxUnmHszFC8DQjRXtRefUo6SxSHmf11V+bEg9cRDzyRgqQCsddBZjwpYohed7C4FWuZoBeOxMIpveh5lr+yKpxUbE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670000066;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=e1xazqjcXwEUoLesqlU4Blrrp+KuPG+K4ku0ElP/cxA=;
-        b=VvQi8dcBCDb3e9NAUXLCWJRxiVEr3dtPpqx+r3MtjZ5NBmYOLpbOjY6CJH5wFFbT
-        p3nDacOTxUyjdfgJejiwitZdzMInxBiPij6tHtl9PBkHWOvrtAE7Jeom0rZoAH5DnKC
-        Er5IzWqt76AhOKRqwNisKFxVYOFFU+iIvI+5cPcs=
-Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
-        with SMTPS id 1670000064421431.1187913489915; Fri, 2 Dec 2022 08:54:24 -0800 (PST)
-Message-ID: <2f0f31551d361cf23abdd2c4117f2feb84e2b1a8.camel@icenowy.me>
-Subject: Re: [PATCH v2 2/6] dt-bindings: usb: Add binding for Genesys Logic
- GL850G hub controller
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Date:   Sat, 03 Dec 2022 00:54:18 +0800
-In-Reply-To: <b4ddf139-5604-bd04-e309-d7bc15e9d23b@linaro.org>
-References: <20221202081647.3183870-1-uwu@icenowy.me>
-         <20221202081647.3183870-3-uwu@icenowy.me>
-         <b4ddf139-5604-bd04-e309-d7bc15e9d23b@linaro.org>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
-MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 2 Dec 2022 11:54:32 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A28AD2908
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:54:32 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id m9-20020a63ed49000000b00477f449365fso5017146pgk.15
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:54:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4be2lHBFg2WCV6qZhgqwvxIUVEumxynCQKUkXCdxvk=;
+        b=Px9L2aZyxN7M0m1j6cdE9wvoe9DlFFr6V9pBMfV6Qe74oU94DfmBzQjiJmFm/Z7NdA
+         Se2GV/J+ZGJU5J3AHKBzHWHYPyKtEVTHW7xJHtfxhcuT3vj4NMuZx+1ysp687XHlqYP7
+         supnwsh3llnyikXrpRbKZN8wVwla+4zgByrdGSg2mkBwwuuBP0N9o/hTZwf/nK1+f67A
+         54GJE/cPumSBO4Tw18cFvAf8DHpNKpGQQzCjhSoLPb+M4VpMT4xlXI2arVfCcpVaX0mI
+         Q4Lm3DoIJ1cUfPVJVF4AWRMpB/bhrO0Ia5NvbQWj4Gb4hvv/AxNACUS4v38qXx6I9cvg
+         0sWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4be2lHBFg2WCV6qZhgqwvxIUVEumxynCQKUkXCdxvk=;
+        b=dJ2FPqgP1mOSUjTnZDdCv9OyiL4EEl9JW+EH8+IgWKiJpr6ZUeW6cwD9shyR5Pa4Y2
+         6eV+Dy3QVnh/zI5X/4ptw4814U6YGjgIIZ31v/bhi5PKPFn06IxGB/PxgOxBbsP6wZGf
+         aq361+TiBJqssasNyFnAsWUwKq98OfMHgRsYwjTRXRS4yxpREFFlvs30OikqcL6TA3jw
+         nomYAul0ajWOGUpPA0Z1eAsTWw3mYo8VLACV1U/lsovGVWazl+x+n6FSyl/Vk4gwzgT7
+         sSTyJa11NYtS7e3cT7q0ejUaFbPLspmgSWW3KCH54TDcCT2Dn7b+INWhnWt+Fvu1Ha3h
+         8ocQ==
+X-Gm-Message-State: ANoB5pn96MaNLXNIpTPbqrqa0RWYk1WFKcUSCR1YspN2gYglkUdvRqq4
+        r4i7D4nuwzoVh3Vq3LweqggFffb44rvs5Q==
+X-Google-Smtp-Source: AA0mqf6c1yIvU/EpzrCsHwOdXo3r7WkG7BPirYqhfsBkw5h+T5ol09HKzMFFE8uOis8dykdyKCnHE3oVns74yw==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a17:90a:d086:b0:219:227d:d91f with SMTP
+ id k6-20020a17090ad08600b00219227dd91fmr3265907pju.0.1670000071361; Fri, 02
+ Dec 2022 08:54:31 -0800 (PST)
+Date:   Fri, 2 Dec 2022 16:54:29 +0000
+In-Reply-To: <Y4m8Unt6FhWKC6IH@dhcp22.suse.cz>
+Mime-Version: 1.0
+References: <202212010958.c1053bd3-yujie.liu@intel.com> <Y4m8Unt6FhWKC6IH@dhcp22.suse.cz>
+Message-ID: <20221202165429.wapfvrgw5mp7cz5h@google.com>
+Subject: Re: [PATCH] kselftests: cgroup: update kmem test precision tolerance
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     kernel test robot <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-12-02=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 10:02 +0100=EF=BC=
-=8CKrzysztof Kozlowski=E5=86=99=E9=81=93=EF=BC=9A
-> On 02/12/2022 09:16, Icenowy Zheng wrote:
-> > The Genesys Logic GL850G is a USB 2.0 Single TT hub controller that
-> > features 4 downstream ports, an internal 5V-to-3.3V LDO regulator
-> > (can
-> > be bypassed) and an external reset pin.
-> >=20
-> > Add a device tree binding for its USB protocol part. The internal
-> > LDO is
-> > not covered by this and can just be modelled as a fixed regulator.
-> >=20
-> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > ---
-> > Changes in v2:
-> > - Misc fixes suggested by Krzysztof, including property
-> > descriptions,
-> > =C2=A0 single-item "items" and fixing the example's gpio property.
-> > - Fixed $id.
-> >=20
-> (...)
->=20
-> > +
-> > +examples:
-> > +=C2=A0 - |
-> > +=C2=A0=C2=A0=C2=A0 usb {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dr_mode =3D "host";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hub: hub@1 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 com=
-patible =3D "usb5e3,608";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg=
- =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 res=
-et-gpios =3D <&pio 7 2>;
->=20
-> Use GPIO flags. What did you fix in the example?
+On Fri, Dec 02, 2022 at 09:50:26AM +0100, Michal Hocko wrote:
+> OK, so this is a full patch to fix this
+> --- 
+> From 7f338ed952ba4a100822004bc8399bf720b42899 Mon Sep 17 00:00:00 2001
+> From: Michal Hocko <mhocko@suse.com>
+> Date: Fri, 2 Dec 2022 09:45:29 +0100
+> Subject: [PATCH] kselftests: cgroup: update kmem test precision tolerance
+> 
+> 1813e51eece0 ("memcg: increase MEMCG_CHARGE_BATCH to 64") has changed
+> the batch size while this test case has been left behind. This has led
+> to a test failure reported by test bot:
+> not ok 2 selftests: cgroup: test_kmem # exit=1
+> 
+> Update the tolerance for the pcp charges to reflect the
+> MEMCG_CHARGE_BATCH change to fix this.
+> 
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Link: https://lore.kernel.org/oe-lkp/202212010958.c1053bd3-yujie.liu@intel.com
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
 
-It used to be here, but using it needs another include, which I don't
-think it necessary here.
-
-Maybe I should just drop this line in the example?
-
->=20
->=20
->=20
-> Best regards,
-> Krzysztof
->=20
-
+Acked-by: Shakeel Butt <shakeelb@google.com>
