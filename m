@@ -2,73 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0484A640506
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F3164050A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbiLBKra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S233073AbiLBKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:48:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiLBKr1 (ORCPT
+        with ESMTP id S232381AbiLBKsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:47:27 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8884638A0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:47:26 -0800 (PST)
-Received: from 8bytes.org (p200300c27724780086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7724:7800:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id ED0252A1015;
-        Fri,  2 Dec 2022 11:47:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1669978045;
-        bh=MrRLtMGdkNoDB4cZ7dIOWUTKNshh0a2U2aNyuOa2eRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=5TWv0wC8jU4XRCyosPu9bWr5fOVAReMSrNqp3/OtCB0ohTA5exc8DMzMI98VfXIOb
-         1AA4wRbGs7t+unoPkbN2VSylB1B23yZ/fDxENs3poGMtIeQg7DBIorHCvYm6Rb8of5
-         nEu9Bt5FEmi2AW/pcNSGu9s6/yDWmYxcklsFJUPjAFzN+oRsLz8Kg2KxJbrStikK7m
-         JtW1KbI/BPK8VMzRTbq2E9JR5PCaiHPDjUHe5QLuhcAzFiYI9djEpajYG/SIPm/ngA
-         cXcuD2eBPFL8fyWSexjOqDRGUFXNp/lmFtcvSxDGaT+oOCSKWYqlcJnBAxaN32CaaZ
-         1Kc4ovisG5c3w==
-Date:   Fri, 2 Dec 2022 11:47:23 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] [PULL REQUEST] iommu/vt-d: Fixes for v6.1-rc8
-Message-ID: <Y4nXu9uBwXZFwjq2@8bytes.org>
-References: <20221201040127.1962750-1-baolu.lu@linux.intel.com>
+        Fri, 2 Dec 2022 05:48:06 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E61950C9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:48:05 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id h10so4962283ljk.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:48:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rtYcu6/3CQ2S7j8h20Y4A6KAn9ZcSJMr/CDNrzIstnQ=;
+        b=Hk/Li4JaaBWRgFd1nMX7JJDu1fjwBX3sjpsJWIwGzephlDPZiA0DG3oR/1IBdlJBHc
+         3AxVGQowYtusxWTTcYll8wjfvwMUH+Pisxon83SbDwMiR1j0832B0FuJdXxqwKp8ls7M
+         cfjBZqWHag+V8EfW4d9kx9ISJkAmvjVyyfZm3aUl6uCUSn/tHCBnXPCUTv7GhIo6+iWh
+         5D//Aw/6VB1mJLZcF1CJrdCa1Dk0L1Ag1msAFjRoWBlbe1izqBRxWvgF4bcS/aAhEj6a
+         LVUh65SvjG4TxbSxxKaibmPilM/mfxDn+3KjIbDBxVAubnNkqurweUq80+qLwe4CEMU2
+         foWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rtYcu6/3CQ2S7j8h20Y4A6KAn9ZcSJMr/CDNrzIstnQ=;
+        b=SZ1ATH+3ipHFspcCO8xYKLTSm4ol0Teps7IxxdzNL+TTHMxSQv6m5412cQPE7gQuio
+         8HR5x3rt35nfA4Dmh5TwcT9hwucdUXM9pbsGdVX3teJWQKynXEdb8TFWEliYFuHeFGp+
+         m/TwNCYC3GV7GS2v/FsaSRalUpnAnk3tEXpPnov89jKUTfhrQgTrpD61gqWdWNOCfXnY
+         /dSeB9CRqYnSjGgWm0lfBw8FZcnu2NnuvDkVP2uPEQk8p0zcL9Hf2T5w0B4wMJtjbCIf
+         yjCqRFB8wC8g8OlCYileYvSWspvIns38pfXHdkitdClVZYnZJnoajCQLh86SEfkQ+4/V
+         MwEw==
+X-Gm-Message-State: ANoB5plvFSnWLx47yKCPaJ9J20GlQnhV/6V4c0XtJ2FkDfG3Q/VGSFKf
+        +8qjEnsHPvuWio/JaS7Fcct09w==
+X-Google-Smtp-Source: AA0mqf5kICRVgIlw6pQmSQRYTPuyrEjRpC1cLcHLMJHCp2kVwoaY5Hrz+SdFZjavsjSxLsCYIrXicg==
+X-Received: by 2002:a2e:be07:0:b0:26c:6dce:ce59 with SMTP id z7-20020a2ebe07000000b0026c6dcece59mr17660429ljq.130.1669978083449;
+        Fri, 02 Dec 2022 02:48:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b26-20020a2e895a000000b00279e0b8bae7sm92593ljk.65.2022.12.02.02.48.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 02:48:03 -0800 (PST)
+Message-ID: <66e66749-cc0f-f147-2648-03b52f95cca5@linaro.org>
+Date:   Fri, 2 Dec 2022 11:48:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221201040127.1962750-1-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: jh7110: Add watchdog node
+Content-Language: en-US
+To:     "xingu.wu" <xingyu.wu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+References: <20221202093943.149674-1-xingyu.wu@starfivetech.com>
+ <20221202093943.149674-4-xingyu.wu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221202093943.149674-4-xingyu.wu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 12:01:23PM +0800, Lu Baolu wrote:
-> Jacob Pan (1):
->   iommu/vt-d: Add a fix for devices need extra dtlb flush
+On 02/12/2022 10:39, xingu.wu wrote:
+> From: Xingyu Wu <xingyu.wu@starfivetech.com>
 > 
-> Xiongfeng Wang (2):
->   iommu/vt-d: Fix PCI device refcount leak in has_external_pci()
->   iommu/vt-d: Fix PCI device refcount leak in dmar_dev_scope_init()
-> 
-> Yang Yingliang (1):
->   iommu/vt-d: Fix PCI device refcount leak in prq_event_thread()
-> 
->  drivers/iommu/intel/iommu.h |  4 ++
->  drivers/iommu/intel/dmar.c  |  1 +
->  drivers/iommu/intel/iommu.c | 73 +++++++++++++++++++++++++++++++++++--
->  drivers/iommu/intel/svm.c   | 19 +++++++---
->  4 files changed, 88 insertions(+), 9 deletions(-)
+> This adds the watchdog node for the Starfive JH7110 SoC.
 
-Applied to iommu/fixes, thanks Baolu.
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+> 
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> index c22e8f1d2640..22f5a37d691e 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> @@ -433,5 +433,19 @@ uart5: serial@12020000 {
+>  			reg-shift = <2>;
+>  			status = "disabled";
+>  		};
+> +
+> +		wdog: watchdog@13070000 {
+> +			compatible = "starfive,jh7110-wdt";
+> +			reg = <0x0 0x13070000 0x0 0x10000>;
+> +			interrupts = <68>;
+> +			clocks = <&syscrg JH7110_SYSCLK_WDT_CORE>,
+> +				 <&syscrg JH7110_SYSCLK_WDT_APB>;
+> +			clock-names = "core_clk", "apb_clk";
+> +			resets = <&syscrg JH7110_SYSRST_WDT_APB>,
+> +				 <&syscrg JH7110_SYSRST_WDT_CORE>;
+> +			reset-names = "rst_apb", "rst_core";
+> +			timeout-sec = <15>;
+> +			status = "okay";
+
+Why? okay is by default
+
+Best regards,
+Krzysztof
+
