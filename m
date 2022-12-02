@@ -2,111 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D521640280
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C92640286
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiLBIud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S232124AbiLBIxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbiLBIua (ORCPT
+        with ESMTP id S232277AbiLBIw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:50:30 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C69B0A28
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:50:28 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0BC3C1FE16;
-        Fri,  2 Dec 2022 08:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669971027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LZIm84O2bOoJ4U2lQJhS8k8kVVfk2BSguwHQiEl9M5c=;
-        b=bUk3okfzs0YoxvvN5f+8+xRn5zpW4Gi8OmvjTDMX8cYsCbH0Vu7ctaHt/1juowu6cw8hR5
-        11ok1o+tPH4vwlJ/kIIWjQScvYCPvPQjQdw8BoPTom8tZJMJ0GlXr0gWN8dICTztWxDfKY
-        tz0fTw31190RQHEkhH9cA3w4QatgETI=
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id E0DC9133DE;
-        Fri,  2 Dec 2022 08:50:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id c4f6M1K8iWMiMgAAGKfGzw
-        (envelope-from <mhocko@suse.com>); Fri, 02 Dec 2022 08:50:26 +0000
-Date:   Fri, 2 Dec 2022 09:50:26 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     Shakeel Butt <shakeelb@google.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
+        Fri, 2 Dec 2022 03:52:58 -0500
+X-Greylist: delayed 87075 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 00:52:56 PST
+Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F956B7F0;
+        Fri,  2 Dec 2022 00:52:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1669971176;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=qqj1QKn9p38OC5FgLpJnXTkkTnf1m/IVXt+K5+MGMhU=;
+  b=ccc3R9EYwdHXh2fyCMWREzYeeGUkI725+ogBMQOv8xSksgF/kw9Wb37B
+   IcL0mN89JUtZJ4C/317hvS1Lf7wgKViVRT7E8+MrCsS4VqVxVAMqCxBwJ
+   eTngOQ//vaFGwgJEuQqtgPk0/BWjhvvN9DCydcXSCJYK9rXONMXfYkGPd
+   4=;
+Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+X-SBRS: 4.0
+X-MesageID: 88748218
+X-Ironport-Server: esa4.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:pNlVkqj+rGQ4NdwFl5KpzKjPX1610xAKZh0ujC45NGQN5FlHY01je
+ htvWzvVbP6CazT8c9EgO4qyph4Gu5bdn9FiSVRkr3hgHn8b9cadCdqndUqhZCn6wu8v7q5Ex
+ 55HNoSfdpBcolv0/ErF3m3J9CEkvU2wbuOgTrWCYmUpH1QMpB4J0XpLg/Q+jpNjne+3CgaMv
+ cKai8DEMRqu1iUc3lg8sspvkzsy+qWs0N8klgZmP6oS5geEzyB94K83fsldEVOpGuG4IcbiL
+ wrz5OnR1n/U+R4rFuSknt7TGqHdauePVeQmoiM+t5mK2nCulARrukoIHKN0hXNsoyeIh7hMJ
+ OBl7vRcf+uL0prkw4zxWzEAe8130DYvFLXveRBTuuTLp6HKnueFL1yDwyjaMKVBktubD12i+
+ tRHNRczPz+4m9mu3ayCSvUwjMQpAuDkadZ3VnFIlVk1DN4jSJHHBa7L+cVZzHE7gcUm8fT2P
+ pRDL2A1NVKZPkMJagx/5JEWxY9EglH7cjserFOIjaE2/3LS3Ep6172F3N/9KozVGZUPxxbwS
+ mTu4nznMDA6KO6k8Tei4FKSlPPAhg7JR9dHfFG/3qEz2wDCroAJMzUOXFG2p/iRkEOyW9tDb
+ UcT/0IGrrU4/WSoQ8P7Uhn+p2SL1jYMVtwVH+Ak5QWlzqvP/x3fFmUCViRGatEtqIkxXzNC/
+ luImc75QD9iqruYTVqD+bqO6zC/Iy4YKSkFfyBsZQ0I/9XuvqktgR/VCNVuCqi4ipvyAz6Y6
+ z2GsS03lbgPpcEM0Kq/8BbMhDfEjprGVAku/S3MQ3moqAh+YeaNfJe04FLW6fJBKoexTVSbu
+ nUA3c+E44gmAZiTmSmlTOwTEbSt4PiZdjvRnTZHGJ0s9C+k/XK5SpxB+zF1JEpvMcEsdCfgZ
+ QnYvgY52XNIFCL0N+ktOdv3Upl0i/i7fTj4ahzKRoVTRaYgWzSbxzlze3eQwzznkEICuK5qb
+ P93bv2QJXodDK1myh+/SOEczaIny0gC+I/DeXzo50/5iOTDPRZ5XZ9AaQLTNb5hsMtotS2Pq
+ 75i2922JwKzuQEUSg3e6sYtIF8DNhDX7rim+pUMJoZvzueLcVzN6sM9I5t7I+SJfIwPzI8kG
+ 01RvWcGoGcTfVWddW23holLMdsDp6pXo3MhJjALNl21wXUlaovHxP5BKcpmJOh5rbc9lKMco
+ xw5lyKoW6Qnd9g6025FMcmVQHJKK3xHej5izwL6OWNiLvaMtiTC+8P+fxuHycX9JnPfiCfKm
+ JX5jlmzacNaF2xf4DP+NKrHI6WZ4SJMx4qfniLgfrFuRakb2NMzcHyq16BueZFkxNeq7mLy6
+ jt6yCww/YHly7LZOvGQ7UxYh+9Fy9dDI3c=
+IronPort-HdrOrdr: A9a23:fNU3xKx4vlslGeBNzlgOKrPxaeskLtp133Aq2lEZdPU1SL3sqy
+ nKpp906faaslYssQ4b6Ky90cW7IE80lqQFkrX5Q43SPjUO0VHAROtfBODZsl7d8kPFh4tgPa
+ wJSdkANDWZZ2IXsS6QijPWLz7uquPrzImYwd77i1NRZUVSbadkhj0JeDpy0CdNNXd77V5SLu
+ vt2iKDzQDQCEj/Ff7LYkUtbqz4vtjWk5CjSQcebiRXkTWmvHeT8bvnFBrd9QsfVj4n+8ZezU
+ H11zbh47mlsbWdwhvRvlWjiKh+qZ/a095eA87JrNYTJi6EsHfPWK1RH4eauSwzoqWUyHtCqq
+ i1nz4Qe/5r7m/XfCWOrQDz1xLG2DIjgkWSsmOwsD/YuMnkQzB/NMZbn4JedXLimjAdgO0=
+X-IronPort-AV: E=Sophos;i="5.96,210,1665460800"; 
+   d="scan'208";a="88748218"
+From:   Lin Liu <lin.liu@citrix.com>
+CC:     Lin Liu <lin.liu@citrix.com>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kselftests: cgroup: update kmem test precision tolerance
-Message-ID: <Y4m8Unt6FhWKC6IH@dhcp22.suse.cz>
-References: <202212010958.c1053bd3-yujie.liu@intel.com>
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH net] xen-netfront: Fix NULL sring after live migration
+Date:   Fri, 2 Dec 2022 08:52:48 +0000
+Message-ID: <7ae75e4582993c6d3e89511aec9c84426405f6a4.1669960461.git.lin.liu@citrix.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212010958.c1053bd3-yujie.liu@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        TO_EQ_FM_DIRECT_MX autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OK, so this is a full patch to fix this
---- 
-From 7f338ed952ba4a100822004bc8399bf720b42899 Mon Sep 17 00:00:00 2001
-From: Michal Hocko <mhocko@suse.com>
-Date: Fri, 2 Dec 2022 09:45:29 +0100
-Subject: [PATCH] kselftests: cgroup: update kmem test precision tolerance
+A NAPI is setup for each network sring to poll data to kernel
+The sring with source host is destroyed before live migration and
+new sring with target host is setup after live migration.
+The NAPI for the old sring is not deleted until setup new sring
+with target host after migration. With busy_poll/busy_read enabled,
+the NAPI can be polled before got deleted when resume VM.
 
-1813e51eece0 ("memcg: increase MEMCG_CHARGE_BATCH to 64") has changed
-the batch size while this test case has been left behind. This has led
-to a test failure reported by test bot:
-not ok 2 selftests: cgroup: test_kmem # exit=1
+BUG: unable to handle kernel NULL pointer dereference at
+0000000000000008
+IP: xennet_poll+0xae/0xd20
+PGD 0 P4D 0
+Oops: 0000 [#1] SMP PTI
+Call Trace:
+ finish_task_switch+0x71/0x230
+ timerqueue_del+0x1d/0x40
+ hrtimer_try_to_cancel+0xb5/0x110
+ xennet_alloc_rx_buffers+0x2a0/0x2a0
+ napi_busy_loop+0xdb/0x270
+ sock_poll+0x87/0x90
+ do_sys_poll+0x26f/0x580
+ tracing_map_insert+0x1d4/0x2f0
+ event_hist_trigger+0x14a/0x260
 
-Update the tolerance for the pcp charges to reflect the
-MEMCG_CHARGE_BATCH change to fix this.
+ finish_task_switch+0x71/0x230
+ __schedule+0x256/0x890
+ recalc_sigpending+0x1b/0x50
+ xen_sched_clock+0x15/0x20
+ __rb_reserve_next+0x12d/0x140
+ ring_buffer_lock_reserve+0x123/0x3d0
+ event_triggers_call+0x87/0xb0
+ trace_event_buffer_commit+0x1c4/0x210
+ xen_clocksource_get_cycles+0x15/0x20
+ ktime_get_ts64+0x51/0xf0
+ SyS_ppoll+0x160/0x1a0
+ SyS_ppoll+0x160/0x1a0
+ do_syscall_64+0x73/0x130
+ entry_SYSCALL_64_after_hwframe+0x41/0xa6
+...
+RIP: xennet_poll+0xae/0xd20 RSP: ffffb4f041933900
+CR2: 0000000000000008
+---[ end trace f8601785b354351c ]---
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202212010958.c1053bd3-yujie.liu@intel.com
-Signed-off-by: Michal Hocko <mhocko@suse.com>
+xen frontend should remove the NAPIs for the old srings before live
+migration as the bond srings are destroyed
+
+There is a tiny window between the srings are set to NULL and
+the NAPIs are disabled, It is safe as the NAPI threads are still
+frozen at that time
+
+Signed-off-by: Lin Liu <lin.liu@citrix.com>
+Fixes: 4ec2411980d0 ([NET]: Do not check netif_running() and carrier state in ->poll())
 ---
- tools/testing/selftests/cgroup/test_kmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/xen-netfront.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 22b31ebb3513..1d073e28254b 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -24,7 +24,7 @@
-  * the maximum discrepancy between charge and vmstat entries is number
-  * of cpus multiplied by 32 pages.
-  */
--#define MAX_VMSTAT_ERROR (4096 * 32 * get_nprocs())
-+#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
+diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
+index 9af2b027c19c..dc404e05970c 100644
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -1862,6 +1862,12 @@ static int netfront_resume(struct xenbus_device *dev)
+ 	netif_tx_unlock_bh(info->netdev);
  
+ 	xennet_disconnect_backend(info);
++
++	rtnl_lock();
++	if (info->queues)
++		xennet_destroy_queues(info);
++	rtnl_unlock();
++
+ 	return 0;
+ }
  
- static int alloc_dcache(const char *cgroup, void *arg)
 -- 
-2.30.2
+2.17.1
 
--- 
-Michal Hocko
-SUSE Labs
