@@ -2,198 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2C5640403
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCCA640408
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbiLBKDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S232851AbiLBKEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbiLBKDM (ORCPT
+        with ESMTP id S233220AbiLBKEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:03:12 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAFB1ADB1
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:03:11 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 7so5412265ybp.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:03:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F3ezcv5M+REzIqWxUdRRPyW9Bey3ddNkryot0GmP95M=;
-        b=VC52XMGcmFw85IdZsJGXE5zTLSmMiYLwbISPh5BgRkhZwu1i1/GwkvXTk1nWtkYN7l
-         3//3i+VxdjZ5C7r2xQwXOCIrVCPyslvdeZZOr1IidB274kAfiTIomixeK3WBd3oTGoMe
-         /0Pid3RQoPPDWqopBLuQkVvTe6/06bnDnvrOg=
+        Fri, 2 Dec 2022 05:04:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ACE4C25A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669975410;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n9awmabG6XvbNEKd1oVF0XKSctjBCIkEyRVzKA78FSM=;
+        b=h0u4/AbGsy0qmFLyEFn4dbqh1xwayqg2OuVW0x5KZ3aN63kGCHxjy+oQGpm8jka5xJiX0D
+        xaPGS+CASFjSmtEB09mKF3AWwO2pxxwCtOrUB2JHqZYcBzG7Lq5vSmongcZ1goxz8mmE0m
+        g0xGseYTQDvKHuapAdVahNvN0ywpmV0=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-279-XNewq_uKPniUBRJ1e8dRZw-1; Fri, 02 Dec 2022 05:03:29 -0500
+X-MC-Unique: XNewq_uKPniUBRJ1e8dRZw-1
+Received: by mail-wr1-f69.google.com with SMTP id h10-20020adfaa8a000000b0024208cf285eso960147wrc.22
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:03:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F3ezcv5M+REzIqWxUdRRPyW9Bey3ddNkryot0GmP95M=;
-        b=P/e62om77d4D4HDJo5ZaAnFBrLph0RcGZACED0S8iptP9bKdmvUHAiPvoXGNngnli0
-         ROHGctKQ6AVPvbXhgX1j4AaU0pHuezedE+5u6P4Uwtm223DO1/QVkeZL+K9h8/NMoyw4
-         B/0tnGyRIXyV8KzH7dTGjwLMuOj5xQXQmTbW6YsYk9Jp7tV+GEqg4wUsp2yxzvBoUFmo
-         DMFzJh79r2tB8gI872zixkG1nugcBmD6Ge4Ejr0bc/xL2Z+psvo20oIw6n9kY8tbw+v4
-         0GpXgaTEOfDmQ6i22mDYgQYxNidyTZFNPrOIi2DFbuBQdLENW3m976V3/kq+TUh8FOtR
-         KC0A==
-X-Gm-Message-State: ANoB5pnCEV0Pg6I84IUnKlF7NsFvJFB/TWfNOEbTBb1EAps1exs5cDZc
-        Qfnwth3vbIDSrF4uxw5/nIVTAiqXy95qEm51Bgfv2w==
-X-Google-Smtp-Source: AA0mqf7wVNk6UToslP4bkOga/AoxYfNdWgxpnIv5jAQhbL/aJu4/MolxOOICnaQ25VwnLiLOJKA1+XRBAVNBh0Ascn8=
-X-Received: by 2002:a25:9e8a:0:b0:6cc:54cb:71ff with SMTP id
- p10-20020a259e8a000000b006cc54cb71ffmr67273283ybq.339.1669975390207; Fri, 02
- Dec 2022 02:03:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20221201134717.25750-1-linqiheng@huawei.com> <CALs4sv36FCT6uUAHM8KTGX5GwgeZGNTSLxB2cq7h-K3jxuK+HQ@mail.gmail.com>
-In-Reply-To: <CALs4sv36FCT6uUAHM8KTGX5GwgeZGNTSLxB2cq7h-K3jxuK+HQ@mail.gmail.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Fri, 2 Dec 2022 15:32:59 +0530
-Message-ID: <CALs4sv3w4Gjs2JGr-hHh_XEXoVWJm3t27O=ezy6HEzRXuk2TwA@mail.gmail.com>
-Subject: Re: [PATCH] net: microchip: sparx5: Fix missing destroy_workqueue of mact_queue
-To:     Qiheng Lin <linqiheng@huawei.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n9awmabG6XvbNEKd1oVF0XKSctjBCIkEyRVzKA78FSM=;
+        b=0UpwTBjfbZ3DHRPSwMyH3tAe02BQn7jLzulcmt/SzizUhmPWCPksR8Yst5d9BhI4Na
+         Zak9aIdP8Agb6bcQ9Xg38YRD9+kL+PUMXTu7sBRUJj0k+1ig8IeEtJ28GtI0t182wckN
+         bGavyiFueIhJayien6Z629gXSDCsye02HL5vPJNDOy/4S/i5dmccWwM6uIKeg4mKQZjO
+         v1BrxHnvZauM+3jJrqIXrPJgwfCiJI9u2l8Vf41R2qx80OugRNhE73aeVWQUE4miUBgc
+         gskD9V4jEq86/VryWPTtGUYEEohCpaK0rwsLyr61mnV41/u94LKqireYOXCcyX0+hWob
+         Gheg==
+X-Gm-Message-State: ANoB5pl8Prgdfl+7HyXbGLHjteFyt2n9Sf+mHP1fF4G7WEHCYloEXWCr
+        5vd78LblkFsgN9VmiHnJXwaDFH8u3CaNeBMAg7T1HSYGGybmHMIDjeFnK+/lxo9q/TQWYFktmCw
+        1qLXp5znr1u4mjZVFBUvj0DAo
+X-Received: by 2002:adf:dbcd:0:b0:242:1294:5174 with SMTP id e13-20020adfdbcd000000b0024212945174mr16694588wrj.249.1669975408280;
+        Fri, 02 Dec 2022 02:03:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6QQzz2WQf7FwPPGbf38zlKpQ+ep18wbfi3hGdiVjM24Y7h+bdOIA1f/rLK+OFoxrrZJquhlw==
+X-Received: by 2002:adf:dbcd:0:b0:242:1294:5174 with SMTP id e13-20020adfdbcd000000b0024212945174mr16694570wrj.249.1669975408027;
+        Fri, 02 Dec 2022 02:03:28 -0800 (PST)
+Received: from redhat.com ([2.52.16.138])
+        by smtp.gmail.com with ESMTPSA id w6-20020adfec46000000b0022efc4322a9sm6895537wrn.10.2022.12.02.02.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 02:03:27 -0800 (PST)
+Date:   Fri, 2 Dec 2022 05:03:23 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andrew Melnychenko <andrew@daynix.com>
 Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lars.povlsen@microchip.com,
-        Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
-        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000efef2305eed57191"
+        pabeni@redhat.com, jasowang@redhat.com, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, devel@daynix.com
+Subject: Re: [PATCH v4 4/6] uapi/linux/virtio_net.h: Added USO types.
+Message-ID: <20221202050230-mutt-send-email-mst@kernel.org>
+References: <20221201223332.249441-1-andrew@daynix.com>
+ <20221201223332.249441-4-andrew@daynix.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201223332.249441-4-andrew@daynix.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000efef2305eed57191
-Content-Type: text/plain; charset="UTF-8"
+On Fri, Dec 02, 2022 at 12:33:30AM +0200, Andrew Melnychenko wrote:
+> Added new GSO type for USO: VIRTIO_NET_HDR_GSO_UDP_L4.
+> Feature VIRTIO_NET_F_HOST_USO allows to enable NETIF_F_GSO_UDP_L4.
+> Separated VIRTIO_NET_F_GUEST_USO4 & VIRTIO_NET_F_GUEST_USO6 features
+> required for Windows guests.
+> 
+> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
 
-On Fri, Dec 2, 2022 at 1:36 PM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
->
-> On Thu, Dec 1, 2022 at 6:57 PM Qiheng Lin <linqiheng@huawei.com> wrote:
-> >
-> > The mchp_sparx5_probe() won't destroy workqueue created by
-> > create_singlethread_workqueue() in sparx5_start() when later
-> > inits failed. Add destroy_workqueue in the cleanup_ports case,
-> > also add it in mchp_sparx5_remove()
-> >
-> > Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
-> > ---
-> >  drivers/net/ethernet/microchip/sparx5/sparx5_main.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.c b/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
-> > index eeac04b84638..b6bbb3c9bd7a 100644
-> > --- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
-> > +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
-> > @@ -887,6 +887,8 @@ static int mchp_sparx5_probe(struct platform_device *pdev)
-> >
-> >  cleanup_ports:
-> >         sparx5_cleanup_ports(sparx5);
-> > +       if (sparx5->mact_queue)
-> > +               destroy_workqueue(sparx5->mact_queue);
->
-> Would be better if you destroy inside sparx5_start() before returning failure.
->
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-Alternatively you could add the destroy inside sparx5_cleanup_ports()
-that will cover all error exits?
+> ---
+>  include/uapi/linux/virtio_net.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/include/uapi/linux/virtio_net.h b/include/uapi/linux/virtio_net.h
+> index 6cb842ea8979..cbc631247489 100644
+> --- a/include/uapi/linux/virtio_net.h
+> +++ b/include/uapi/linux/virtio_net.h
+> @@ -57,6 +57,10 @@
+>  					 * Steering */
+>  #define VIRTIO_NET_F_CTRL_MAC_ADDR 23	/* Set MAC address */
+>  #define VIRTIO_NET_F_NOTF_COAL	53	/* Device supports notifications coalescing */
+> +#define VIRTIO_NET_F_GUEST_USO4	54	/* Guest can handle USOv4 in. */
+> +#define VIRTIO_NET_F_GUEST_USO6	55	/* Guest can handle USOv6 in. */
+> +#define VIRTIO_NET_F_HOST_USO	56	/* Host can handle USO in. */
+> +
 
-> >  cleanup_config:
-> >         kfree(configs);
-> >  cleanup_pnode:
-> > @@ -911,6 +913,7 @@ static int mchp_sparx5_remove(struct platform_device *pdev)
-> >         sparx5_cleanup_ports(sparx5);
-> >         /* Unregister netdevs */
-> >         sparx5_unregister_notifier_blocks(sparx5);
-> > +       destroy_workqueue(sparx5->mact_queue);
-> >
-> >         return 0;
-> >  }
-> > --
-> > 2.32.0
-> >
+for consistency pls don't add an empty line here.
 
---000000000000efef2305eed57191
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+>  #define VIRTIO_NET_F_HASH_REPORT  57	/* Supports hash report */
+>  #define VIRTIO_NET_F_RSS	  60	/* Supports RSS RX steering */
+>  #define VIRTIO_NET_F_RSC_EXT	  61	/* extended coalescing info */
+> @@ -130,6 +134,7 @@ struct virtio_net_hdr_v1 {
+>  #define VIRTIO_NET_HDR_GSO_TCPV4	1	/* GSO frame, IPv4 TCP (TSO) */
+>  #define VIRTIO_NET_HDR_GSO_UDP		3	/* GSO frame, IPv4 UDP (UFO) */
+>  #define VIRTIO_NET_HDR_GSO_TCPV6	4	/* GSO frame, IPv6 TCP */
+> +#define VIRTIO_NET_HDR_GSO_UDP_L4	5	/* GSO frame, IPv4& IPv6 UDP (USO) */
+>  #define VIRTIO_NET_HDR_GSO_ECN		0x80	/* TCP has ECN set */
+>  	__u8 gso_type;
+>  	__virtio16 hdr_len;	/* Ethernet + IP + tcp/udp hdrs */
+> -- 
+> 2.38.1
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPghV3K9pMks3mQwTFtwAyohffjZ/l6E
-H1/j0ht2DjjMMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIw
-MjEwMDMxMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAWBSrfAA6plqPn583mnzcaaecB0odISBB8UEfJVwrQcm3PMAse
-v2IXCwYcSqGmBhZwbSxUeG3gf6LKMte5lcJo6g45Vxv7M14WIwT0BA83te5S1ZgVq14On+HA9YqK
-hmkXCFfK1p5ivPZRSuevjxMIhqo0wz7v2hg9qIAQLx3BWHTlknETZul1934M+++IQRGCi01WG7/s
-MUoOQq3gnmgQ3/b4BSQOGo/k5EdF+cgEOCOnmkITphJFZgoLR1ndvPLjdpT4iAvI1FBo7pdGpRSy
-AlH/0Qp4Kcs7uuslfcHuqauN6Df9ynyQ4RgYPnkHxXEWNInX/5RbE248+olDxiy8
---000000000000efef2305eed57191--
