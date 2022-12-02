@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921D16403C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FC06403CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiLBJvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S232996AbiLBJxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233039AbiLBJv3 (ORCPT
+        with ESMTP id S232647AbiLBJxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:51:29 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F987CAF89;
-        Fri,  2 Dec 2022 01:51:26 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id D13BF5FD0B;
-        Fri,  2 Dec 2022 12:51:24 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669974684;
-        bh=72VVTkRY9DjXgUjSD9VXksh7Od+zuedUupDyk8ZPL64=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Ud3M/0dAGTjSPWCJ4qDcqnrloGRDW4WyDNac2USRNB1fBT0jW82Aagmxt+Imnip4B
-         zpGE9qStbUJLOpbGVZZR7Ksa3sdzYFNee1SYP2uDfwQt/T4deWBHFyHULhK2dQ6ixH
-         9DvfRo3qDQwt1dpvlZRknRuT5NCArqi98n2vb4Ja+w6CCDfPeejQOtYVfrVorbQmaw
-         l8WkEuaZxJJxEBuZdaWVCy3mEA4TORauZczB4vpdYNyHkDXhz41yyoUzBTN6Fyejxn
-         szgQlsAAE53MM/dnECSed+OhqBqBK8mNTAPCel9vx2pgk3WU15JgPUSTmRYDZn9xWU
-         Z3MTXLbQa/tMg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Dec 2022 12:51:24 +0300 (MSK)
-Date:   Fri, 2 Dec 2022 12:51:24 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <sboyd@kernel.org>,
-        <khilman@baylibre.com>, <kernel@sberdevices.ru>,
-        <robh+dt@kernel.org>, <martin.blumenstingl@googlemail.com>,
-        <linux-arm-kernel@lists.infradead.org>, <jian.hu@amlogic.com>,
-        <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-amlogic@lists.infradead.org>, <jbrunet@baylibre.com>,
-        <rockosov@gmail.com>, <mturquette@baylibre.com>,
-        <linux-clk@vger.kernel.org>, <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v8 01/11] dt-bindings: clock: meson: add A1 PLL clock
- controller bindings
-Message-ID: <20221202095124.4ecpfqhtzf34lwbf@CAB-WSD-L081021>
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-2-ddrokosov@sberdevices.ru>
- <166995398251.2089685.16059995540663317860.robh@kernel.org>
+        Fri, 2 Dec 2022 04:53:14 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B72326F9;
+        Fri,  2 Dec 2022 01:53:14 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BAD536602BB8;
+        Fri,  2 Dec 2022 09:53:11 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669974792;
+        bh=0SFbDcrjgdD7wLBImp+e4xl59u0MBvEJjOar0fcf22M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MpUHSJNjjrAaah9BzvQfbxFwCFmUvuLyArUQIkqitNGpRZ5UByHfyXjeoE582XThv
+         ehgRGkC8FC1TNAtRXATImVO+UAtBWoTGLl4OyuDBDJhN0foXXk6tNyt3jgro6Y0VKO
+         EIOwHdaNKoCrsFX/W8IJv7+QOt8mu0ZCIJDb72VtkNjkgB55OHYpn+Zox7vF7JxdoU
+         EYdT3cFQFK0xk7zrD2SI5qRlqlOrNtTir1TVt3hITUABWWqNiKtbGtmR7nUS3k9XwM
+         pTJ3CiHPYDlk/aJYwhJ00ndo2ceWUwic95eCqvJqoA8EUq2zVX0cm/rnbIOGIBkgK0
+         /3+qZpdk54tpg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     viresh.kumar@linaro.org
+Cc:     rafael@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, vincent@systemli.org,
+        frank-w@public-files.de, daniel@makrotopia.org
+Subject: [PATCH] cpufreq: mediatek: Raise proc and sram max voltage for MT7622/7623
+Date:   Fri,  2 Dec 2022 10:52:27 +0100
+Message-Id: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <166995398251.2089685.16059995540663317860.robh@kernel.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/02 07:44:00 #20636821
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -73,60 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 10:10:04PM -0600, Rob Herring wrote:
-> 
-> On Fri, 02 Dec 2022 01:56:53 +0300, Dmitry Rokosov wrote:
-> > From: Jian Hu <jian.hu@amlogic.com>
-> > 
-> > Add the documentation to support Amlogic A1 PLL clock driver,
-> > and add A1 PLL clock controller bindings.
-> > 
-> > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > ---
-> >  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 52 +++++++++++++++++++
-> >  include/dt-bindings/clock/a1-pll-clkc.h       | 16 ++++++
-> >  2 files changed, 68 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> >  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml:26:6: [warning] wrong indentation: expected 6 but found 5 (indentation)
-> 
-> dtschema/dtc warnings/errors:
-> ./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml: $id: relative path/filename doesn't match actual path or filename
-> 	expected: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.example.dtb: pll-clock-controller@7c80: reg: [[0, 31872], [0, 396]] is too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201225703.6507-2-ddrokosov@sberdevices.ru
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+During the addition of SRAM voltage tracking for CCI scaling, this
+driver got some voltage limits set for the vtrack algorithm: these
+were moved to platform data first, then enforced in a later commit
+6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+using these as max values for the regulator_set_voltage() calls.
 
-Please find all fixes of above warnings and errors in the my patch
-located at the link:
+In this case, the vsram/vproc constraints for MT7622 and MT7623
+were supposed to be the same as MT2701 (and a number of other SoCs),
+but that turned out to be a mistake because the aforementioned two
+SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
 
-https://lore.kernel.org/linux-amlogic/20221201225703.6507-9-ddrokosov@sberdevices.ru/
+Fix that by adding new platform data for MT7622/7623 declaring the
+right {proc,sram}_max_volt parameter.
 
+Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
+Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 7f2680bc9a0f..f9a9f08c75c4 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -695,6 +695,15 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
+ 	.ccifreq_supported = false,
+ };
+ 
++static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
++	.min_volt_shift = 100000,
++	.max_volt_shift = 200000,
++	.proc_max_volt = 1360000,
++	.sram_min_volt = 0,
++	.sram_max_volt = 1360000,
++	.ccifreq_supported = false,
++};
++
+ static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
+ 	.min_volt_shift = 100000,
+ 	.max_volt_shift = 200000,
+@@ -717,8 +726,8 @@ static const struct mtk_cpufreq_platform_data mt8186_platform_data = {
+ static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+ 	{ .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+-	{ .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
+-	{ .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
++	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
++	{ .compatible = "mediatek,mt7623", .data = &mt7622_platform_data },
+ 	{ .compatible = "mediatek,mt8167", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
 -- 
-Thank you,
-Dmitry
+2.38.1
+
