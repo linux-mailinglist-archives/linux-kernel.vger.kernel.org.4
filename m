@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13E7640987
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFA964098A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiLBPoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S233774AbiLBPpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiLBPoM (ORCPT
+        with ESMTP id S233675AbiLBPp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:44:12 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393A1D4AF0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:44:10 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id d3so4957261plr.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uXUuqbYPWAo0e3SfziJ9q3Uvez640/WBQSFJuuCG+jA=;
-        b=KjipsMnKbBOqlmR9iEYkjoW1t+nkBJuZnixDinUZqw7JWWIxWGcuL7cN3ZoaGkrjO/
-         cEfYg48wEe4ZNPurP83hila+K8klWIcJ1bO+ATwT/5EnivKUTZHKHIPv1Jg0Rh3+Yp9S
-         2M7wmP3U3PFF+1vwZvNAdgY3Hd4NwdT/Jyh2HRunQFk4Tqm6ZXGF0N99icZtSOI3NczZ
-         qZSYmdQQclv1Hmh+57Y/a1+hsPl+WJi2j1fqq98S6UcYaktFoenD+71UAdIyAVHAreJt
-         NIOyxjEQI1ialks3HJ5R/oZzmZR1nO9TousAOhXig05OiYg8YwTtvf+r0WXZHQ52/Bn6
-         Smpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uXUuqbYPWAo0e3SfziJ9q3Uvez640/WBQSFJuuCG+jA=;
-        b=gtzLcqIe6hNdfgQIdqJi/lVW7YYk16kAI/1sS6yTLYqN5iYFwHvM3urs31bIR0qLLG
-         gfHqGyJYtvO9R1o+q0lGcCw2AnMuFCjF7ukejN90jWWn5uqGLOc29YW2M5Eq7DrTy/BZ
-         VvYVoMKxwo4ixvE2x1/wk1p/Y5i1VnbRzTE9qysnM1Hg9dJN9cDNsD5q6bLGtTZNfbvK
-         D+jF4nmtbXY4IlgA6l32dk7Jdg5GGpAUAf0CeHZ8ZDtDdpIy26aZqbcNSPtdPFSHaD7j
-         3cSkBgRU0DTLJB8FAszFIHYhkKeH5X8FUp4a//dqBgOfb8YuQa9eL4C911/NNA3v4kt/
-         QLjw==
-X-Gm-Message-State: ANoB5pmq1qq1mfvmqTMNehJ18OAQow6SePJRyy9BRdwqsj3zhcsBOe+6
-        vLFHRRW8visDfagoZsR1T6QfMg==
-X-Google-Smtp-Source: AA0mqf6lG8zpsfXSEo+gd8HtX4QQl0A/muxZY7NjcwlZU/V3DYzO3fMLcI5A1qZ10aIlPO2rRm6mdw==
-X-Received: by 2002:a17:902:ab5e:b0:189:56ab:ab69 with SMTP id ij30-20020a170902ab5e00b0018956abab69mr45367903plb.106.1669995849555;
-        Fri, 02 Dec 2022 07:44:09 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170902d88a00b001868981a18esm5754075plz.6.2022.12.02.07.44.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 07:44:07 -0800 (PST)
-Date:   Fri, 2 Dec 2022 15:44:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        coverity-bot <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: hyper-v: Fix 'using uninitialized value'
- Coverity warning
-Message-ID: <Y4odRLlFRj17tUNE@google.com>
-References: <20221202105856.434886-1-vkuznets@redhat.com>
+        Fri, 2 Dec 2022 10:45:27 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E15D5876;
+        Fri,  2 Dec 2022 07:45:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669995926; x=1701531926;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GcRX7WmZAbCTPDq8gE+aA0ZUaodFBclsrxsx/rt7bwU=;
+  b=Tl7GV7kOIgEtV57qw381xD9na7npvREq5W5hgaT3fKT88LXa3cB9C1AQ
+   7VawILLZyGU6D4gov7fdEa9yD8KsmrNIFT+LzsFvUOktexTZvKJgUOA6U
+   iHb8oakWllAvmlqqNaP6DmOnTYwgN4vxV4uUvXYvWjgInBCUWE6D2p/Rx
+   ZTkGiHigwP/8pLoNS3nuOUjCPiLvctBEABXtplq6rbpzsd5f49wmL54MY
+   K3JjB7RyvNb3uJ3WTTlY/xBiII5RLQjDHpm1PPY45U4NXMcKZnlWDw/Ly
+   tJS2GRxKoDLgOWLvCVZmHNiJirE0CxgcWMZ8Yd5i+u1X3YeGQ+NfMz14b
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="314679304"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="314679304"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 07:45:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="751306221"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="751306221"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 02 Dec 2022 07:45:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p18Dj-003XZC-0E;
+        Fri, 02 Dec 2022 17:44:59 +0200
+Date:   Fri, 2 Dec 2022 17:44:58 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nick Hainke <vincent@systemli.org>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v7 2/2] gpiolib: protect the GPIO device against being
+ dropped while in use by user-space
+Message-ID: <Y4odem+9MTsm3VPh@smile.fi.intel.com>
+References: <20221202150444.244313-1-brgl@bgdev.pl>
+ <20221202150444.244313-3-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221202105856.434886-1-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221202150444.244313-3-brgl@bgdev.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022, Vitaly Kuznetsov wrote:
-> In kvm_hv_flush_tlb(), 'data_offset' and 'consumed_xmm_halves' variables
-> are used in a mutually exclusive way: in 'hc->fast' we count in 'XMM
-> halves' and increase 'data_offset' otherwise. Coverity discovered, that in
-> one case both variables are incremented unconditionally. This doesn't seem
-> to cause any issues as the only user of 'data_offset'/'consumed_xmm_halves'
-> data is kvm_hv_get_tlb_flush_entries() ->  kvm_hv_get_hc_data() which also
-> takes into account 'hc->fast' but is still worth fixing.
+On Fri, Dec 02, 2022 at 04:04:44PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> While any of the GPIO cdev syscalls is in progress, the kernel can call
+> gpiochip_remove() (for instance, when a USB GPIO expander is disconnected)
+> which will set gdev->chip to NULL after which any subsequent access will
+> cause a crash.
+> 
+> To avoid that: use an RW-semaphore in which the syscalls take it for
+> reading (so that we don't needlessly prohibit the user-space from calling
+> syscalls simultaneously) while gpiochip_remove() takes it for writing so
+> that it can only happen once all syscalls return.
+> 
+> Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
+> Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
+> Fixes: aad955842d1c ("gpiolib: cdev: support GPIO_V2_GET_LINEINFO_IOCTL and GPIO_V2_GET_LINEINFO_WATCH_IOCTL")
+> Fixes: a54756cb24ea ("gpiolib: cdev: support GPIO_V2_LINE_SET_CONFIG_IOCTL")
+> Fixes: 7b8e00d98168 ("gpiolib: cdev: support GPIO_V2_LINE_SET_VALUES_IOCTL")
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> [Nick: fixed a build failure with CDEV_V1 disabled]
 
-If those calls aren't inlined, then 32-bit Hyper-V will be "consuming" uninitialized
-data when pushing parameters onto the stack.  It won't cause real problems, but
-checkers might complain.
+> Co-authored-by: Nick Hainke <vincent@systemli.org>
 
-What about shoving this metadata into "struct kvm_hv_hcall" as a union?  That'd
-help convey that the two are mutually exclusive, would provide a place to document
-said exclusion, and would yield a nice cleanup too by eliminating multiple params
-from various functions.
+In Linux kernel there is no such tag. And in case you want to use
+Co-developed-by, you also need to add the respective SoB one.
+
+> Reviewed-by: Kent Gibson <warthog618@gmail.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
