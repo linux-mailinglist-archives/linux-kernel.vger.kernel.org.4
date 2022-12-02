@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFC9640131
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A7164015A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiLBHr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 02:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
+        id S232656AbiLBHxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 02:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbiLBHrx (ORCPT
+        with ESMTP id S232413AbiLBHwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 02:47:53 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2081.outbound.protection.outlook.com [40.107.21.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029C3FCD3;
-        Thu,  1 Dec 2022 23:47:52 -0800 (PST)
+        Fri, 2 Dec 2022 02:52:41 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36392B2B43;
+        Thu,  1 Dec 2022 23:52:07 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AXmhhOk2bdfa8h7gm2MeFLxoCeMBAaAIGHnIgxkpxhG7ijk49jfP/R7+9EcuT4VIhKZJVom2lX2D36W0iPkMvAgzNvIGGOWLLfWfMEdT6lOop1/lSUzsbhkRZ9lItIix344AlxFGCxUUABvFaPAwhGun9gZnxX4niPpHeI1/vJQG6fVEKAOENTHSlG0tgToMyDxcdNQ7vNuhWe1hyo3v5qw18yCyNWXh++zCF0cb+rsbOq8xfdqWtbJ7IlCYaZKM3rreMSA3VKWJ7TyfxUqzE+bUPWmNzLt+u+tWplTzxb56M7P80S4j6cTwzz6RsyWY0wanrGjzm8OpoPS3jBsEAQ==
+ b=Ud1BO4BwfPNeReO9ydEp0c7w3Nb0jknMANxe70jTFYyEZodxZZh8ir21a7MYC+H1USp+5TBZ2qi/haRz0RCvvmEtMpj+R55OCMwJqCWXPlwdIdc/Dx6ui/r/bCbM2RtU0vGX7djHuiXlhBrauM8oc1gl2Mq4hjpUKnkyMbt9IA5y4bax76urTpnt7cXpZjjTGY9CkFmo0Jd8hEiFXV7REoG35EKmomnFr2SMfJXd6PDNbyFzKksFe/x99NC1Gn4ItERwxagdVrD17DuLwzlrEZdlFIxCUBYBl8kxlxNGErNaFApZpkqGox8qToRnY9khET1lEkMKrBfTX7BKmfl3sA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cu3P7ryNMLoHtw08Bw8zwZYVi+5b7Hwih9KWC1ja8+o=;
- b=HQJuKbZQw8BdQTCN4K282Sh6kRcg7ef0uL6jHRQjm8OJSjvHEjb8Lc1145Wr3dwQNF3pTs+Rmf5Wh52LcLOXoa6q85Se9Sk2Bp7QBlakV+RTUlFSiONxFqNodt94owwiyL1yPL5kNitnx9ncpNdkxu2b+abl6anZ0lhNjR9A23UbZbxJhjT4ta6o1olpwtjtSknE5M4f+tMhlaps4Oa1a7d/dEDfEaQVIAeSGZevv+9xndkqaKWCxFx2ChqQb1CIvWxdktuxRGNPJIbVhP7yqfyjiuj0ks/omsk5htV7qcdPFnh17IhWxRnDa9abiNjaE7m3uQZv9mz6ZTLQmH0yTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=7iLNwCDA2FPuXX0XbspH2ZQmIiCfHs2C+UB1BWc0KDM=;
+ b=SBpL9JAj5aNMRV7IRRwFe7WR5V+KkxHyNTJprwBxNVSST+wEdg/S0jiCYQq1pjbBTSRTptuPULVTWVhWvj3RjSEIaIiVThjblj1BKv/zwCjJtTDHLo9wJIxOZtu3GzeptwYt/Sm/d7gD+OBiEZ0NtGCOBV3auBf82qVWAJffNyelX1LD3T4FBxk/beXBHqOs83nDbrKCy7/uULNu9KU1acIFMBtVsBEIVc/GtnmrkbwXXnLfT8VvyzVwnADjGmYwHgbnue1hHrnZLb3wnyzoh3ubw8Ci/YdOQFK/uRVr4ogZN5RoWBsUtAOuQy+cWQihedFkbfDd73C0IuAVpiQmgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cu3P7ryNMLoHtw08Bw8zwZYVi+5b7Hwih9KWC1ja8+o=;
- b=Ur+1ayGQ2r0joy9s3AxdWF+z4lAeYmStbEK0mP01yipMY5KNDBTVVGI7obYKqYgZZV1G7V1RNPKaQ8EWuKCQ9PNvgmFqlgmyMIQGn1bAA2IpVcXuDCZdeobcr7HIhrL2JSRdMQNBzhIahRxiZsnEi6f8HvCbMSsRPUMPT1wWyMM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AS1PR04MB9384.eurprd04.prod.outlook.com (2603:10a6:20b:4d8::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Fri, 2 Dec
- 2022 07:47:49 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::4e64:fadc:30cf:4b86]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::4e64:fadc:30cf:4b86%5]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
- 07:47:49 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, ming.zhou@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 1/2] media: add Sorenson Spark video format
-Date:   Fri,  2 Dec 2022 15:47:16 +0800
-Message-Id: <d4d0f9178e1645917d96033f4a4cb2541dedba7c.1669966698.git.ming.qian@nxp.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1669966698.git.ming.qian@nxp.com>
-References: <cover.1669966698.git.ming.qian@nxp.com>
+ bh=7iLNwCDA2FPuXX0XbspH2ZQmIiCfHs2C+UB1BWc0KDM=;
+ b=aVqe2IGYOCLMrx22KL/ojrNQaYwaFK8uqpkzxNQPpQmuh1KMB6zqFCMatyz9eGeRjrOgl86f+GD9Ltk6e/i7QQ9KF7b7BYTDzJdjNEJSPB5o4jZTwIBRiWtYCNlUktniTVOotUEVx+QXg3Yv48fYtd5jpNHm3uImvm56WZOumlk=
+Received: from DS7PR06CA0047.namprd06.prod.outlook.com (2603:10b6:8:54::27) by
+ CO6PR12MB5411.namprd12.prod.outlook.com (2603:10b6:5:356::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.8; Fri, 2 Dec 2022 07:52:05 +0000
+Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::d7) by DS7PR06CA0047.outlook.office365.com
+ (2603:10b6:8:54::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8 via Frontend
+ Transport; Fri, 2 Dec 2022 07:52:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5880.8 via Frontend Transport; Fri, 2 Dec 2022 07:52:04 +0000
+Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 2 Dec 2022 01:52:00 -0600
+From:   Perry Yuan <perry.yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+        <ray.huang@amd.com>, <viresh.kumar@linaro.org>
+CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
+        <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
+        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 09/11] Documentation: amd-pstate: add amd pstate driver mode introduction
+Date:   Fri, 2 Dec 2022 15:47:17 +0800
+Message-ID: <20221202074719.623673-10-perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221202074719.623673-1-perry.yuan@amd.com>
+References: <20221202074719.623673-1-perry.yuan@amd.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0015.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::18) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
-MIME-Version: 1.0
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AS1PR04MB9384:EE_
-X-MS-Office365-Filtering-Correlation-Id: 10411770-fece-4316-7632-08dad4398279
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT049:EE_|CO6PR12MB5411:EE_
+X-MS-Office365-Filtering-Correlation-Id: d14fb8f8-30b8-4e7e-777d-08dad43a1a95
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m/PyysXWkQbdorpsyULn5k9MUSaWsRQVmt5y0Aa/fBEHgj5ELc3YNHsOtKp3VAWTowzdtdHJRjTAwbpo3GtjILsDEJeTICKSmNzRh7+7uZlldv/NCToh312YothKm4L8N2jnY924WscEo2t5Dhfp163KIAPfjeyQqZ0oB7op1AzaeNCqyVf+tgvuUySRdw+kWNRDFLgh7McLQpq59/ycDCnU7a1v5VfeRpQHdnTdEwFy9oeouY4sC99JFYU5lq1zUZo0C33nxpZ10+IMeNiqHQQPn6i+bva6E7QKrpHhDlHPyjVgsW5FXveTUAsVtT4H4EKODBtmyXdwbnwFd/jisQxMJ9G5ZvNjelK7gsvb5taoYkDVmmluZHNhnV+ZURqYPJE5p2brDw6eBo5h16PVrBXgJ/IC1jPXlPfMGQxwsae/yJD6UQd8l0P7j2WjFDq0rvFEko/NTwJ/1gO/cn6SlVnfaAZMmV5YUE75lHyOyhR+2mfa/TZIyjkXoE+sEkrkq47pk2uOKNIwM+h80L/MrmIJoAo3znT0D7SEuCKrvmH2BvUFKpF/9AFGyJXJisqq1QZ+vYyyN6+xVEUQ1mfb4p1HMc/I3dhsYj4adPbq8BAsSJ+elaJTR79YY4gJWHyZcn2IkGyD3eyOtk8gDJL/xnz5x0OXPEQXGM725hvhkLjn0EeQp/Zizv/RI+l+1Pc6
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(39860400002)(346002)(396003)(451199015)(36756003)(86362001)(6486002)(316002)(44832011)(5660300002)(8936002)(4326008)(66946007)(8676002)(7416002)(41300700001)(66476007)(478600001)(66556008)(38350700002)(38100700002)(6506007)(6666004)(2906002)(52116002)(26005)(6512007)(186003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lSWIVt/P8J1IYT+2szbhEQ9Aw0gqkhqIRerm2w2JLeSinSG41WE1CYpfXzvD?=
- =?us-ascii?Q?LaqbQo6uR8bzp4R2ttBbDndpjzHsExGlbTUyRZtUMwEtEXTPv9gqTvf18L6s?=
- =?us-ascii?Q?XHwkE2MBb+FyDGpmGAPyQwL0B3PYCtHPax1tB7cDE/1hggE7iaAkb9gxRJU8?=
- =?us-ascii?Q?vXBTsW7bFxKUdNSzH5PYl45PtKkBiijkMU6tXEj8gC0adwHHzkGZUOcSNnGY?=
- =?us-ascii?Q?yqH5LOcBa2NoG4xMOSGssby1I3tIvN/BBQ+tP1TU2KYVFPcShuhVLTKwRhES?=
- =?us-ascii?Q?NeuTXDRHl5veqoEgmlYvMkeBD/CFq3IV0mywZrvbQRtSWfJ8M+vV56lwO+H8?=
- =?us-ascii?Q?hGlwCu81ZUMlbEGSHwoOgP1UlcQj5GzxbCKomcC49QZOYLr0U55pTD8gTiq4?=
- =?us-ascii?Q?d7CTx/2nMVpqLmj2uil8wA1vgMSoeoTNTOlpfDXF71ntDrWA8vsVM5GmKSZh?=
- =?us-ascii?Q?5VAs9cFXydaY2BW/xgm8QUHEH64WBLO/hwKj77R6u3/jBCgoBy+kBdFlLY1b?=
- =?us-ascii?Q?SMcsUMQRQJIpbXnORVkPWdnXpSj840wPNqHycUNHivGIKHS9FWPdiNnDKiAc?=
- =?us-ascii?Q?dSuP2KxBKFc7Vi/ni0WzQ3vuce2VAtq+M/FhiEfPtSuYRZXc+MMmyMN1XQtF?=
- =?us-ascii?Q?YXIICPePTqvHco3P07Sux0i/4St1M3dMiglYRO0U6tywXvQ0QC91DrKKoPPn?=
- =?us-ascii?Q?YnwIK9w2QjRe6WbLtcsK3TFcq7y68lQkuTMiu/yXti9AvnT+2VKjb9qGoN55?=
- =?us-ascii?Q?aDCx6bymPVXRHelmpfZmj+0VvCzl9Lhcj5u4SarnwhQ1/Mxc3ASZk220ktp3?=
- =?us-ascii?Q?j2oRRF0V1GANuvXUZyDJBIGJgHKQd3PF0irQuz6rG42UJiKUsNs367PHbx5T?=
- =?us-ascii?Q?LiGMMGomYDVPQ9Rwh4JXAYu+YCx6fsOrAQbBgHbUIajeoVKCsJ9m6BCCn/Uz?=
- =?us-ascii?Q?O8zf+eGV5i/1fLqsglTYfnCIEDEQD92a8s6WP8ZnVbSrQYS90/sgbGnx1/c4?=
- =?us-ascii?Q?n5s0Mqp41ZH7AGBBchzjpPfgLAlYJEEf9vnmNu9KVkXon/IxUxTEntEmi2tC?=
- =?us-ascii?Q?AGl/jLZ4AUkGmtmE1fB4xZ+XS9CtqG/wc6kX9vqcXyT9QG2FoYGWihGC7H1l?=
- =?us-ascii?Q?Ap9pPBJgdUD3Za3e+N8eJ+CibnnFqmXsdujt+g4kwI8n4jKCqvHN0y9BDhhy?=
- =?us-ascii?Q?rouV/ZncK9fmzQkWTHOloUJk4DZqyLXAaULkmSpoDUhUuD9Z7cYz5+tqcnoR?=
- =?us-ascii?Q?3O3s/4XfL6kPlUCyj45zFca6iYZUQptxT9qet5payKo2iFmv3BWt7RpFwCOf?=
- =?us-ascii?Q?I5GMjSGMkWl+L0pndHOvtzraokIZKRL7I2xl+I1uyhqRAb4/UwbpYsu/F9GB?=
- =?us-ascii?Q?SZUIUHk3pdnyiZqjE2Y/3jK4rPUeNi1dFn8hLSDtM9yxUz77TWYqIwRyJlvO?=
- =?us-ascii?Q?uc6019RRpEhzyuTrPgdsx/URWQ0rWcyyD79xmayrPMQIm3BWeGtUgpv7WHja?=
- =?us-ascii?Q?4WRUo2XNNn3Me2oyzvIoQxw/iogvJ8Jop9Fgz4MH5lKfoKQ124I2E58MIqZz?=
- =?us-ascii?Q?QSA7+dQgFlTEZyjN0Dzgs5HxUL812fAzd69RxFiX?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10411770-fece-4316-7632-08dad4398279
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 07:47:49.4506
+X-Microsoft-Antispam-Message-Info: SeQHYtGZhcaW42y8UOGHTVzDt0LtPJaWJbCGgmw+IJl1B+WnXANvtxK2VsZhBoIMTJUDJhxTWfR2wf0RFyY1/TSojplWxlav13YUpWaf8d+Sg1aEnxIuDNE+/Zr8sWEr6q9z0rnibaHEBp/fuNH5E/vPVp3Mxt3aafRvvp9WyqrEI5+9yZXiQ8ne81gyqlfyF+dUZiiQtU+YsPMvhOyJJrLk28SRbGW3uzXYPF9xNRSENMtuMVxD07wDWn9jzsrWyUoouCsswtaOfNRk5iEyfzbXbdZd0gSnzzwTsgFc4LAiLWK8C42Kniill/KsAK41Q+xiy9poEzcjtT+O/EdP0xmHTQGNtATxZRrpG02Rw7BziarhRc+msI3FQdQp5LAhS2flO7rHdppA8ykOwnwG9haX4MRuAfro2bHYHSYLgYqBU0ZalYjvO3RQWV5Iz65lqwMEq13IZAXbu57CF6PjrY087OMi8Gy6+5qvRbQ1RPecDo5d0Bhk1TZON+gRElazNXk4IjsqGr+RXktptP5P+lOZOT/BnIWSdwGOX4biU0yhTREFVKMDjChnKvCWTsgiTLa0E8RgbfuxEodEUa14PYRYJ7zVess5RpuzqpgtxZ/2OXK8AO/7rCASQSsYW5zGeBdREeO1j2yoXI/JLG/x6gW2odmtrrk6+B8gNFShicN3wYmlFDpwQ1zcoSC5Y9VLV1xLLl/lQbB2UEoIf7s4f8KSQZhgcd24CKmwIQudEJ4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(40470700004)(36840700001)(46966006)(40480700001)(81166007)(36756003)(86362001)(356005)(40460700003)(110136005)(316002)(44832011)(5660300002)(8936002)(70206006)(4326008)(70586007)(8676002)(41300700001)(478600001)(36860700001)(83380400001)(6666004)(82740400003)(2906002)(47076005)(26005)(7696005)(186003)(426003)(82310400005)(2616005)(16526019)(336012)(54906003)(1076003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 07:52:04.4760
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Vno4Dmb1Y+A8LwbJW4bUgEmzVuPZmwMR33ZtL3xetYT5GX8XH/J/1LzDWcpyo9XC8srhowjDtSRd/xu/uevI+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9384
+X-MS-Exchange-CrossTenant-Network-Message-Id: d14fb8f8-30b8-4e7e-777d-08dad43a1a95
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5411
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -116,58 +101,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorenson Spark is an implementation of H.263 for use
-in Flash Video and Adobe Flash files.
-Sorenson Spark is an incomplete implementation of H.263.
-It differs mostly in header structure and ranges of the coefficients.
+From: Perry Yuan <Perry.Yuan@amd.com>
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Introduce ``amd-pstate`` CPPC has two operation modes:
+* CPPC Autonomous (active) mode
+* CPPC non-autonomous (passive) mode.
+active mode and passive mode can be chosen by different kernel parameters.
+
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 ---
- Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 5 +++++
- drivers/media/v4l2-core/v4l2-ioctl.c                        | 1 +
- include/uapi/linux/videodev2.h                              | 1 +
- 3 files changed, 7 insertions(+)
+ Documentation/admin-guide/pm/amd-pstate.rst | 26 +++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index 506dd3c98884..8794b92fde36 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -88,6 +88,11 @@ Compressed Formats
-       - ``V4L2_PIX_FMT_H263``
-       - 'H263'
-       - H263 video elementary stream.
-+    * .. _V4L2-PIX-FMT-SPK:
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 33ab8ec8fc2f..62744dae3c5f 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -299,8 +299,30 @@ module which supports the new AMD P-States mechanism on most of the future AMD
+ platforms. The AMD P-States mechanism is the more performance and energy
+ efficiency frequency management method on AMD processors.
+ 
+-Kernel Module Options for ``amd-pstate``
+-=========================================
 +
-+      - ``V4L2_PIX_FMT_SPK``
-+      - 'Sorenson Spark'
-+      - Sorenson Spark is an implementation of H.263 for use in Flash Video and Adobe Flash files
-     * .. _V4L2-PIX-FMT-MPEG1:
++AMD Pstate Driver Operation Modes
++=================================
++
++``amd_pstate`` CPPC has two operation modes: CPPC Autonomous(active) mode and
++CPPC non-autonomous(passive) mode.
++active mode and passive mode can be chosen by different kernel parameters.
++When in Autonomous mode, CPPC ignores requests done in the Desired Performance
++Target register and takes into account only the values set to the Minimum requested
++performance, Maximum requested performance, and Energy Performance Preference
++registers. When Autonomous is disabled, it only considers the Desired Performance Target.
++
++Active Mode
++------------
++
++``amd_pstate=active``
++
++This is the low-level firmware control mode which is implemented by ``amd_pstate_epp``
++driver with ``amd_pstate=active`` passed to the kernel in the command line.
++In this mode, ``amd_pstate_epp`` driver provides a hint to the hardware if software
++wants to bias toward performance (0x0) or energy efficiency (0xff) to the CPPC firmware.
++then CPPC power algorithm will calculate the runtime workload and adjust the realtime
++cores frequency according to the power supply and thermal, core voltage and some other
++hardware conditions.
  
-       - ``V4L2_PIX_FMT_MPEG1``
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index d5a259db55b0..ee4196b9d71f 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1478,6 +1478,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 		case V4L2_PIX_FMT_HEVC_SLICE:	descr = "HEVC Parsed Slice Data"; break;
- 		case V4L2_PIX_FMT_FWHT:		descr = "FWHT"; break; /* used in vicodec */
- 		case V4L2_PIX_FMT_FWHT_STATELESS:	descr = "FWHT Stateless"; break; /* used in vicodec */
-+		case V4L2_PIX_FMT_SPK:		descr = "Sorenson Spark"; break;
- 		case V4L2_PIX_FMT_CPIA1:	descr = "GSPCA CPiA YUV"; break;
- 		case V4L2_PIX_FMT_WNVA:		descr = "WNVA"; break;
- 		case V4L2_PIX_FMT_SN9C10X:	descr = "GSPCA SN9C10X"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 0e2ccd7dc877..0f905abbd15a 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -739,6 +739,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
- #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
- #define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
-+#define V4L2_PIX_FMT_SPK      v4l2_fourcc('S', 'P', 'K', '0') /* Sorenson Spark */
- 
- /*  Vendor-specific formats   */
- #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
+ Passive Mode
+ ------------
 -- 
-2.38.1
+2.34.1
 
