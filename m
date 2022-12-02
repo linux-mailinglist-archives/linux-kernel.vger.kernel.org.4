@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB836406FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1526406E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiLBMlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
+        id S233392AbiLBMgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbiLBMk4 (ORCPT
+        with ESMTP id S232752AbiLBMgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:40:56 -0500
-X-Greylist: delayed 316 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 04:40:53 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE8C91C16;
-        Fri,  2 Dec 2022 04:40:53 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.27]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MuUWi-1ojpcj28mI-00rWFS; Fri, 02 Dec 2022 13:35:19 +0100
-Message-ID: <d44a4819-1d4c-255e-212d-70abcf9fbb05@i2se.com>
-Date:   Fri, 2 Dec 2022 13:35:15 +0100
+        Fri, 2 Dec 2022 07:36:00 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8469DFCCB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:35:59 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id z4so5265318ljq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 04:35:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6mVfZx+5SZWHF/rzn6Dn1bgtGaqrI8G9edfutTST++8=;
+        b=NLbxbOqszmxX9f7VRQ5cyeR/+zLbLcIQKZ+4BdyRuRFJUUEszNu1/yJIks8gwIP8fU
+         j9IGIeSW0L5WPrX4uwjVCTzpYBS0Xfyx93tOTTs3vplZYLFIjZfKMciwnOgOkuXlbIID
+         NDQVIWIQi+E/xucQAIO962tmZP4fSXg+R5NxWUlbBqmi4SdLHSo9qpSYqSm5f5JCdeby
+         bEyqJoGD6AZAvzUXgRMZRKzjqCW1d0Bk6mBQ/WlxAe3RMCz9Q7ubYABraXy43nSiq6WF
+         hr2xMabgN4NqWxfDA9AtfLL0LxuLjgWHyUCdaF1d6vMC4TjkvKC93BZGOWfWqasr2gJg
+         5YMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6mVfZx+5SZWHF/rzn6Dn1bgtGaqrI8G9edfutTST++8=;
+        b=V93S6DI11cqHeGF+4iZAsaKEbyXzcec7XdqljdqgvSnqd4OGCCvKBK5NSNqk832PRb
+         viMmEdv9GJHDQwwWV1+EzyCI8JfsTJYlCy67SIGAgeEpn5TCwjxDypahd/cyxom3ZTWO
+         keEsWAlNIAEWJbRDHkB0GWi/p8j6V9uASVrPSPPiIAqRBfSqKD2/iT0o1M/azqJaaVDp
+         lqPi+/76L6Ib4Hcq+ZmbfOqhlmOV1sPLY65wWqbgFRPk6l4qcbFEWS3YJ9taGavaPoCC
+         X+xvMC4YUxqKk6zR2sjitcqaHpY0N2LVAF0zaysJi4I5MGlTEvbTGA7da/PL59O0YeIQ
+         KCzQ==
+X-Gm-Message-State: ANoB5pkAsnRrf0JW5+V0b7PZie/N3+XtMdFxTNjx9+LPH+ZXqhEr1at7
+        8VZwY8hGIryioXGpAaCJIB4=
+X-Google-Smtp-Source: AA0mqf4uC79LG0MkXzDQl7hq4Bxub6xWpXRdzge1iwzF6na5IL5HLhs1g80PjVnGbqIZ9NHyrnk5Lg==
+X-Received: by 2002:a2e:3512:0:b0:277:c68:874b with SMTP id z18-20020a2e3512000000b002770c68874bmr20798723ljz.261.1669984557692;
+        Fri, 02 Dec 2022 04:35:57 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id m6-20020ac24286000000b004b501497b6fsm1001311lfh.148.2022.12.02.04.35.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 04:35:57 -0800 (PST)
+Date:   Fri, 2 Dec 2022 14:35:47 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Karol Herbst <kherbst@redhat.com>
+Subject: Re: [BUG] lockdep splat using mmio tracer
+Message-ID: <20221202143547.3ead0246@eldfell>
+In-Reply-To: <20221202072028.40b62728@gandalf.local.home>
+References: <20221201213126.620b7dd3@gandalf.local.home>
+        <20221202104334.649dacdf@eldfell>
+        <20221202072028.40b62728@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 00/14] staging: vc04_services: bcm2835-isp support
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Naushir Patuck <naush@raspberrypi.com>,
-        David Plowman <david.plowman@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        "Ivan T. Ivanov" <iivanov@suse.de>
-References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
- <fc2fb888-7742-123c-69c9-cdb156ff2d9f@i2se.com>
- <a56d7687-ee44-629c-1a9d-fa34e65e847f@ideasonboard.com>
- <bb16004f-8d5b-5794-8445-aa7e1a758ffa@i2se.com>
- <c73f7261-ec33-ec88-df3e-a34cf9b8015c@ideasonboard.com>
- <0f683076-43e6-3f65-e5e1-052059ce7c86@i2se.com>
- <910dbd8f-85f2-4979-49ee-6d760e89af84@ideasonboard.com>
- <Y4nCnEwqs69QezPn@pendragon.ideasonboard.com>
- <CAPY8ntAK9yh6ZQkuOrZqUn2GC2=qGaJrcxEjWyGep7KcWvxkhQ@mail.gmail.com>
- <Y4nrPuq0OjWKCzfS@pendragon.ideasonboard.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <Y4nrPuq0OjWKCzfS@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:G3bNdCF9NfdRZxvP//LZQ/peuodgZ2ios5536nOU0JmXGDwmg3n
- KX8j0Suxmrz8Zcr6Daoo7h9HZspILwoeBvdM6Ue4JB67YLkMn5Bqh/DuLQI4g1iluKKrL/J
- sdpNL5PDZB92owIcdH4JPFc8lZvtLR6UU6YDwKppfg9Xc8iVquXm1wmRAkVjEP33OtVPdjF
- 5bL1rrcSrR4j17WBg+HLA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8nxra/ts3vM=:GQzXrNqxmtys5pVopjkZ8C
- ElOpdlgFag7++3DVgbW4JcmVWeJcyVX0UnZMoaYNSNY88YLeVxN/kxjY+IUNT5YUYxxxJ3qZc
- +JcXMX+ujjLyMyNRZr0x50KLZR9vl/2kcB7zdrBsSC0jebQ7cRtzctaQyyPtzBSCZmSh+mw7v
- ThuOc+/8pqHbzipx7OCjV3zhSZLZqQfTzQA4Xv2UkMd7TfJ+t7F7X/ucNn56lthjjVxerv8Ob
- brqYvDJVfVOp5gagESDPGl9EA9ccD1yiOXr8blXxgnJcyyh7+gZqC7RMlo2G0Y8pxirW3F/ll
- qeyvSIgWBiI2ffnCYjBxyFqPyR3jTqb8VFL0VSDPRn5cIkf+IhJgG4Chi/mwpAL6O9+w0cJ/k
- IhlxT6KmSHu9t8GY6ubgsgGoJoGruVkZICu3pueLkUa8VkbrootWIY3Z2/5age/wdCZEabo/n
- PDSKvhSaSxsyq/t/MCw5Az0niK6BzlymvxKqfLfk0mpJS+fn6dBwFM+D9jysXhK6Mr+WMqi7n
- gRPAXSPcYF2h1jCVzpIyqUUBiiBQHL4dl8vJafBJNJMLW8bXadwezz/0hBrUBx825MfqafS+G
- ihVoW5yp9ZGkYUXRa1QAOMcbvFz5NVJ4mPPXHlqBx5DNe7uSgcE9r+KYwPpq/e8wghcBwkASH
- RcVh5bWqPTiO6Tbs6qQcTj+zskgL13FKTxZUtQv5X/UnlEmSgTdeHwcBOEszjFPAa8kyBa95d
- wtw0//LlPoQMz3SU9OzBOvtYBXFchJEtxCW4KR1dTUiI3Mb+/323JzNi6iGRk/DJ82hTKNfov
- Ju1e8quo0aajCUfCbwc28opAJl0Dg==
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_rVfk51wGqS=6u5YCFd05wN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+--Sig_/_rVfk51wGqS=6u5YCFd05wN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Am 02.12.22 um 13:10 schrieb Laurent Pinchart:
-> Hi Dave,
->
-> On Fri, Dec 02, 2022 at 11:23:29AM +0000, Dave Stevenson wrote:
->> Dropping anything prior to those points would be rather premature in my book.
-> Something I forgot to mention is that there should be no issue at all
-> keeping bcm2835-camera fully supported in the Raspberry Pi downstream
-> kernel for a longer period of time. It's in upstream that I don't think
-> it should be destaged, as it's already considered legacy and should be
-> phased out. Do you know if there are users of that driver with a
-> mainline kernel ?
->
-In Fedora there seems to be no official support [1], but openSuSE seems 
-to mention it [2].
+On Fri, 2 Dec 2022 07:20:28 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-[1] - 
-https://docs.fedoraproject.org/en-US/quick-docs/raspberry-pi/#_does_the_add_on_camera_work
+> On Fri, 2 Dec 2022 10:43:34 +0200
+> Pekka Paalanen <ppaalanen@gmail.com> wrote:
+>=20
+> > On Thu, 1 Dec 2022 21:31:26 -0500
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> >  =20
+> > > I hit this while testing ftrace on an x86 32 bit VM (I've just started
+> > > converting my tests to run on a VM, which is find new found bugs).   =
+=20
+> >=20
+> > Hi Steven,
+> >=20
+> > sorry, I don't think I know anymore how mmiotrace works. Surely the
+> > kernel has changed in those more than 10 years since I last looked at
+> > it. If I'm still listed as a contact for mmiotrace somewhere, maybe it
+> > would be best to drop me? =20
+>=20
+> You're still listed as a Reviewer in the MAINTAINERS file. Which means you
+> only want to see patches (and possibly review them), but doesn't mean you
+> have to fix them ;-)
+>=20
+> >=20
+> > I don't mind the emails, it's nice to see people hit or touch it, but
+> > I'm afraid I can't help.
+> >  =20
+>=20
+> Nice hearing from you too :-) I'll only drop you if you ask.
 
-[2] - https://en.opensuse.org/HCL:Raspberry_Pi_Camera_Modules
+Do people have expectations from people listed as reviewers? If not,
+I'm happy to stay. If yes, maybe best to not give a wrong impression,
+and drop me.
 
+
+Thanks,
+pq
+
+--Sig_/_rVfk51wGqS=6u5YCFd05wN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmOJ8SMACgkQI1/ltBGq
+qqc7Ug//QuZh3dAkDQ9ZhRu4tRE0ZjLUu9PS8/cE7VJaHLo7Ulu6ahYiVg5ok+dL
+V2L9vRXsLeMI5mv5bPHPt3pC33p0MAAn7+TmbHvY/dZdPhNhOxta8rH+Fo59gwgY
+KPbd1WOIb9bt1zBkGlSLDEJsTsFnXHyZ+cHurrhKaTBdefYL/EG/QZcFccBKpc8E
+AOKAPMLAN6uHBL2qhBlkMDfbPa1sLeEq/JkHvP9wKLz257GzqIwfoZC84NoEHWCe
+ZawYfk+MACgANeHP7UN//aOK/N3LIFran+2onAXbofkdVwHfTaS77auPa5Zep3EQ
+IlpPbPmxOc8dJxt+caSKG5VBEw1QX4llYoGfnMe6PyXv0u8KOab3EsNtx/7cPGXl
+nvfrXzzLYfNQiDZqcjNMx4RdcnmAb0tMQMn6/oAjKJqfnJfk690CcenKiakXcihL
+/bp/2lgwPPubJe5wy9VOq8W0SHOKUd6lltF7Ss3Oa1x7JnqpHv+HkbiX4ocDVwCK
+55kpJMIFl7TQJEImOmVkgHiZIaXTNt/FDOeQ2r+C60sR3c6xvzghRj06+biP2Znv
++L2naBxaH4vUwGAjMJCOnUy8kJkorQcy9J1JJFUR9ZwE9+HkeKS9eZA1qJoSb5tl
+Q3VNXNMmYGepFQfOsBtm4gs1RXlq+Hya0cyuOb+iy662IEJUAUU=
+=R6qk
+-----END PGP SIGNATURE-----
+
+--Sig_/_rVfk51wGqS=6u5YCFd05wN--
