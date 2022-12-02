@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200BF640FEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEF3640FF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234270AbiLBVWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
+        id S234389AbiLBVY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLBVWp (ORCPT
+        with ESMTP id S229500AbiLBVY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:22:45 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DA723160;
-        Fri,  2 Dec 2022 13:22:43 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id o12so6056780pjo.4;
-        Fri, 02 Dec 2022 13:22:43 -0800 (PST)
+        Fri, 2 Dec 2022 16:24:26 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C30D92FE8
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:24:25 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id w37so5383559pga.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 13:24:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S5nNMX1EahXRoqcP+r5gLnG0D7xor4fKiUSWKgh5Q/4=;
-        b=iF6aQCrc27Tg12HtqUiR1ke6C24qgHRrOpSxTml+BlnWk/RPCOeiPl+y0Xl0hXWseR
-         gt9uX0ElepD+ehy2efag1UlINkEnUEf7loh/3eoX5DMWE4Tkczjvh4Uv2FS0AIuoQkvA
-         G4J7mu2VZ6va38Dy4PfNUtRfOYoNhI20+iSRA76vgVf+coD5J33U/wOXQi0h6M6IbfBU
-         fIsCbWZObsNYxFQIGrccDztO/Xn8ZaHl289Uwvxa1emcI7k61K+riaoBYtjy7M9SBX2C
-         3DeFYEiYmZfZgNEbzX4k290tl13wpText2g5lEawkBbaOT6j47fN2HSxvT3rqq+wkC/S
-         sWFg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=12aQYv6pNDlz3kqQzWKO2uUnIoYw8k+CG7RR/rv2kas=;
+        b=T74PGYDhKiQHFX1rUbRIOiCv4vz6iGaOnC7K9ErdB1BzmUXvCH/1kx1QXL4c6ieoZX
+         21PDT5faUpOfudcVt38fnDW7vDITh8I2bKWFIbpNHm1D2uypViY1q6E/jYtk4TBq/3X+
+         1NhpdIBX6KQwlDjZbZZFFud2SzjQaT2z58vqU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S5nNMX1EahXRoqcP+r5gLnG0D7xor4fKiUSWKgh5Q/4=;
-        b=GyHW/5X63Ku/dLZt+r+GLUevPYg4tDUwa1AP6QLyi2mm2XoW3AxZfKX1XBFCvt8a6w
-         hpPUJXHPbRH+vcp35dY2W/7pmexOIt2Er6LLBohsjcg1IKE+SIv0cjUFTO/loHpgcAMp
-         IUCRE/nUgE7yOCR3COcvHu/vBwC9K9rgo4d6weiu/KlwyyRfVz+m4XdcLtamvV4g4dXm
-         uICgsvHawitt8a9nNGihHixE1MELvdfaZigO7b4wd/AagL8fN3bG/iETrQ7oSOHDbyWh
-         bKeFbeBwBHk0pteemFpdJQL4cYw1mJ8i7RHhAVNlI0jHZ54C7+sQHtGl2YHVg9BLkwSm
-         kp3g==
-X-Gm-Message-State: ANoB5pnZWs1YjknMq3bSzWoucBvwXeLc/v1a7zygvISUQKdwRTdpKxvN
-        io/3nmHcxn7CHhScbhyaMtk=
-X-Google-Smtp-Source: AA0mqf4FDRZuxra7lB45oD3I+9L9Kg8sy7m0uGhT6+vY4pHnr6PBBshURE48ehMWbiyvnO3YMokcnw==
-X-Received: by 2002:a17:902:cf02:b0:186:c372:72d6 with SMTP id i2-20020a170902cf0200b00186c37272d6mr67178115plg.25.1670016162652;
-        Fri, 02 Dec 2022 13:22:42 -0800 (PST)
-Received: from mail.broadcom.net ([192.19.144.250])
-        by smtp.gmail.com with ESMTPSA id x9-20020aa79a49000000b0056e0ff577edsm5514703pfj.43.2022.12.02.13.22.40
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=12aQYv6pNDlz3kqQzWKO2uUnIoYw8k+CG7RR/rv2kas=;
+        b=NLVeI22EiSteYK3927v6ldaWzIqBIw613SW+OCyz87X2DBQR/q4o7Nh/fHx57OIeug
+         xsQvVzfOG1xBJtHbjHmMB4GJtJgvXIHUvlV/GyquzeAPFEMf0ozo4EZzpXMSL9GKCFcI
+         W0X8wA7DfK3m3dl6b++jlqvF4b1r3r5eHS9FVbIS+hS7g1JTw4F65LpCPETZeOFtdqKO
+         FIIoO9ZitoyvUHzxWVgZDIyQAa8OCZMu1ND9gZebA6lGltAa8mvFLNXlKfTJ9L7Utt/j
+         uyOd5X55Qdx1GaTOTjDoSeqzNTYNNNkLjo7klAEwcU+aTx3myeID3t6sw6LG+DHbNNoa
+         vKsQ==
+X-Gm-Message-State: ANoB5pncc+UJAss+DABazY5/nTEnt0t/4B+dYuI3jDA9DCZilqDQyxtz
+        9UidFIahTYoUQwjKDzmLdEZgnQ==
+X-Google-Smtp-Source: AA0mqf5lWrRZyB1rb6+beDappO2/uB53e2Y3KK87lKvgcg9P19h3aBTnySuTNFkeNbXD7PlGLuieIQ==
+X-Received: by 2002:aa7:9416:0:b0:575:518e:dc11 with SMTP id x22-20020aa79416000000b00575518edc11mr23821532pfo.86.1670016264915;
+        Fri, 02 Dec 2022 13:24:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i29-20020a056a00005d00b0056b6c7a17c6sm5695671pfk.12.2022.12.02.13.24.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 13:22:42 -0800 (PST)
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-To:     ulf.hansson@linaro.org, linux-kernel@vger.kernel.org,
-        alcooperx@gmail.com, linux-arm-kernel@lists.infradead.org,
-        adrian.hunter@intel.com, linux-mmc@vger.kernel.org
-Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: [PATCH] MAINTAINERS: Update maintainer for SDHCI Broadcom BRCMSTB driver
-Date:   Fri,  2 Dec 2022 16:21:19 -0500
-Message-Id: <20221202212119.43214-1-kdasu.kdev@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 02 Dec 2022 13:24:24 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Cc:     Kees Cook <keescook@chromium.org>, Joel Stanley <joel@jms.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] net/ncsi: Silence runtime memcpy() false positive warning
+Date:   Fri,  2 Dec 2022 13:24:22 -0800
+Message-Id: <20221202212418.never.837-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1371; h=from:subject:message-id; bh=2sUnLG3FFN8pFif3YWCnaOEtrm0LjtacXGcVGEiw/+Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjim0FA4ytswXqmWp1hRMca/r2avtZHR15euW2n+B3 jQs7mISJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4ptBQAKCRCJcvTf3G3AJpzCD/ 9E+a3vKrpcpU0BDeu4dr57dQgQ9SeaSG2Ag/XejMzr19dmuMerdXl6P1NqOmAWo7UYt/D4qId4z3Hp X7E/W5FiDu3uI/Bt2w1ibs7eZ0HcN5Uvu059rx1xAkoiryxEICiHyrHuXyCL622b3Dph3tyPjFTpbJ vl7cDe374WWh8g1Drj90IaHF7ZNq7ZpzJU+EL+/DseIcncBX5KMoNH8bcOqnKCfLhp0Rn+cRE2oOWP GocayW8y41PU4VijiPtVY+NPP86UOKTvko6/5mIlOudbLFUm39KlmXEkdxAHiZUK5wg0OJ56uXnSv0 8OMxyQoFPjmZe7Pw/UErnIxW/ReOejRN6mVzDFV8r12CXTwzSqfFGgzUfep1o6HVoRKSrun+eA9dxR +6iRUGEp0uDIFIDHPJoZvmMC3VGzvxT6krGxWgMOYB8bNUOTjkNkp6iheICNV4sk8OUCoIJzSKZYDY g5STXOgCghnpRCfC4jGxQsSAxRsqlurLMP2ej83Q0ExoR+U1E7dCG/vnxQMrZnb33q2vGyWUwuVdoS ujQgFyXD1gqgQmeBE2BlbEuLkCeLHJLT5gAypd9TnZ6aVe8SQ6d5sHFPQbc4ZAO0MrgPo2Yv3l0t1d VREmX/tud/ODKGuWxensvuZM9kgb3XFccEt8oeVwHZiFZ4L9xCx+yJ9Vhopg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Taking over as upstream maintainer for Broadcom SDHCI
-driver from Al Cooper.
+The memcpy() in ncsi_cmd_handler_oem deserializes nca->data into a
+flexible array structure that overlapping with non-flex-array members
+(mfr_id) intentionally. Since the mem_to_flex() API is not finished,
+temporarily silence this warning, since it is a false positive, using
+unsafe_memcpy().
 
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+Reported-by: Joel Stanley <joel@jms.id.au>
+Link: https://lore.kernel.org/netdev/CACPK8Xdfi=OJKP0x0D1w87fQeFZ4A2DP2qzGCRcuVbpU-9=4sQ@mail.gmail.com/
+Cc: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ net/ncsi/ncsi-cmd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1daadaa4d48b..90beddcf84b0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18497,6 +18497,7 @@ K:	\bsecure_computing
- K:	\bTIF_SECCOMP\b
+diff --git a/net/ncsi/ncsi-cmd.c b/net/ncsi/ncsi-cmd.c
+index dda8b76b7798..fd2236ee9a79 100644
+--- a/net/ncsi/ncsi-cmd.c
++++ b/net/ncsi/ncsi-cmd.c
+@@ -228,7 +228,8 @@ static int ncsi_cmd_handler_oem(struct sk_buff *skb,
+ 	len += max(payload, padding_bytes);
  
- SECURE DIGITAL HOST CONTROLLER INTERFACE (SDHCI) Broadcom BRCMSTB DRIVER
-+M:	Kamal Dasu <kdasu.kdev@gmail.com>
- M:	Al Cooper <alcooperx@gmail.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-mmc@vger.kernel.org
+ 	cmd = skb_put_zero(skb, len);
+-	memcpy(&cmd->mfr_id, nca->data, nca->payload);
++	unsafe_memcpy(&cmd->mfr_id, nca->data, nca->payload,
++		      /* skb allocated with enough to load the payload */);
+ 	ncsi_cmd_build_header(&cmd->cmd.common, nca);
+ 
+ 	return 0;
 -- 
-2.17.1
+2.34.1
 
