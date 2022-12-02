@@ -2,149 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C30640CCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599E0640CCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiLBSDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
+        id S234079AbiLBSEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233887AbiLBSDZ (ORCPT
+        with ESMTP id S233357AbiLBSEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:03:25 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC4160B6B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:03:24 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 21so5603486pfw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:03:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Fj/GOmrzncgAG1HwiGCIj6uObETJ2A+WRaEGkSptgo=;
-        b=fIdthOwAqz6rz4ph0qN2N5M8ImkazzFm8W3RM7IIh70xntOL1pP7mfPNyBUCnegxFH
-         dwdRVH092Q/RsgF2xSXkKQJM+6+9V1QOBPhnaitJFsNkcWJL4wUuLpohsMEXKuSnaWBu
-         kp+wTia6DbZGzzB2a2DGc2ZNYvhewKWVBOIourDOWPuhYjhUj+gDKH4o7ovOk4NSkK5a
-         ZL+VE7WSOClVj2/p08efPZPfHfoqWChsY1BomaI4n1xxIuUhzZOT8HI87Dq7tNOzB4M3
-         xWTvFDLZQ5qdDQDcd4tnxGKFQZWsVfsadritMvCGliMHfMNQZ+PaZzy94VLxDg/LvwNw
-         1S6A==
+        Fri, 2 Dec 2022 13:04:46 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2DAF030;
+        Fri,  2 Dec 2022 10:04:45 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id fp23so5983684qtb.0;
+        Fri, 02 Dec 2022 10:04:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Fj/GOmrzncgAG1HwiGCIj6uObETJ2A+WRaEGkSptgo=;
-        b=A1tBxMM2HGZHJTwMw+SZvl1Q7lQnpLavd74oyiDBKVai0gDm6N1QsGVFfvhIhViHqK
-         pdU4VyVexji05MYwukrfAIFAmXMtmOIUdguuSHfvJ82vGlXVaTUVIhPIIXW4mZlUr4ci
-         qe55y08+PcX+0oESC8z+Y48Rx6HYrbyntaq1+gyTiTbY1BbAxlxe1m7IscdrogcRJ/2v
-         /8bIKa8fxWk9vLPtgVdP/i9gpFRV2qc5wn+I8Rl5SGIDXBxjFCCcg/NjX80QUUGBagoY
-         EjmFFrs6gCLgRGleg/mRNTC4xavH8DUXoU+loHbdy0aXs8Z+8aMq7ZbY697YiBEWciCB
-         QyXQ==
-X-Gm-Message-State: ANoB5pnKxIEs+2BuGjjfovTXFc3/TK66lULka1yV++SJMw9FN0FZE/XS
-        Zj6iLSmtMbII/4cd54t15gVSOA==
-X-Google-Smtp-Source: AA0mqf6OKlfF860xpvjuMskcHd4UtSYgsGvzT6gTPKffFg+HpkwWymVJj1rCSlnbaq2p434WklJIgg==
-X-Received: by 2002:a63:4b0f:0:b0:439:3b80:615d with SMTP id y15-20020a634b0f000000b004393b80615dmr47409964pga.255.1670004203619;
-        Fri, 02 Dec 2022 10:03:23 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id j9-20020a654d49000000b0046ae5cfc3d5sm4331272pgt.61.2022.12.02.10.03.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 10:03:23 -0800 (PST)
-Date:   Fri, 02 Dec 2022 10:03:23 -0800 (PST)
-X-Google-Original-Date: Fri, 02 Dec 2022 10:03:08 PST (-0800)
-Subject:     Re: [PATCH V2] selftests/vDSO: Add riscv getcpu & gettimeofday test
-In-Reply-To: <20221103080451.1642500-1-guoren@kernel.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org, shuah@kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        haocheng.zy@linux.alibaba.com, han_mao@linux.alibaba.com,
-        guoren@linux.alibaba.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        enh@google.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     guoren@kernel.org, skhan@linuxfoundation.org
-Message-ID: <mhng-d689ac9f-1a92-43a7-91b4-2be89c388e8d@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hSNlZGuxFTjHy+mvg3CfUFdIORUFrFfti24llF9FbFQ=;
+        b=0IV4vn/oXs4ALuugcY4yr/nP5RPtEiHYsmlMIhoL/+aZAMNdIltNBnTal+l882DwCP
+         zWaKWDMso8dKunP90Y8XPpsHq4kh4MB0qMakg2GoQscxizYlF+PcL0QHPF5ZGeU1FWF0
+         xzAru3p3AmVZbavIFkRHHhGBhMpkIoV0CHiQsbnaPUyKPKYEHYfuM3cyclU/c0q5rQ5O
+         PwCuw3M/Hz1rIGB/GbNCF4e8xerNkntVmzg+1OE9gF/QFX+PD/ukRdtrcPm1ypiu8MVq
+         2g8bdVZRReQKuvkMIgRFaDF8vQxeK7oIGklIWV7LddtRxWRINNTtwtnqk7+5UZVWbMTL
+         iP1w==
+X-Gm-Message-State: ANoB5pkgz+cRX7X9BDVEfubA5Oqlad0laxcQH7iQhC2PnUdNlHNlUihg
+        JH+cWoJgIlBzN6oTk1HtKuuI9ZxPY65Cfb/AmgA=
+X-Google-Smtp-Source: AA0mqf4p11RLa3BDka7CrWRvSwFgbHNRA7OcIY7yBU9aPOKL2QvM8JsP0dPjrxTZjAZzs63/lQYxns31puKNubhq+wY=
+X-Received: by 2002:ac8:7dcb:0:b0:3a6:8dd0:4712 with SMTP id
+ c11-20020ac87dcb000000b003a68dd04712mr11252979qte.411.1670004284736; Fri, 02
+ Dec 2022 10:04:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20221202153454.83185-1-bart@gpxbv.nl>
+In-Reply-To: <20221202153454.83185-1-bart@gpxbv.nl>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Dec 2022 19:04:33 +0100
+Message-ID: <CAJZ5v0hCa75oSXUsTyr5XWx6TftjwGA2qqzve3KO_YVh-Y3owQ@mail.gmail.com>
+Subject: Re: [PATCH] acpi: allow usage of acpi_tad without PRW
+To:     "Bart Groeneveld | GPX Solutions B.V" <bart@gpxbv.nl>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 03 Nov 2022 01:04:51 PDT (-0700), guoren@kernel.org wrote:
-> From: Guo Ren <guoren@kernel.org>
+On Fri, Dec 2, 2022 at 4:36 PM Bart Groeneveld | GPX Solutions B.V
+<bart@gpxbv.nl> wrote:
 >
-> Enable vDSO getcpu & gettimeofday test for riscv. But only riscv64
-> supports __vdso_gettimeofday and riscv32 is under development.
+> From: "Bart Groeneveld | GPX Solutions B.V." <bart@gpxbv.nl>
 >
-> VERSION
-> {
->         LINUX_4.15 {
->         global:
->                 __vdso_rt_sigreturn;
->                 __vdso_gettimeofday;
->                 __vdso_clock_gettime;
->                 __vdso_clock_getres;
->                 __vdso_getcpu;
->                 __vdso_flush_icache;
->         local: *;
->         };
-> }
+> Not all tads have the PRW capability, which is totally OK,
+> according to the ACPI spec [1]:
 >
-> Co-developed-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
-> Signed-off-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
-> Suggested-by: Mao Han <han_mao@linux.alibaba.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Elliott Hughes <enh@google.com>
+> > _PRW is only required for devices that have the ability to wake
+> > the system from a system sleeping state.
+
+No, the ACPI TAD definition in Section 9.17 (ACPI 6.5) specifically
+requires _PRW to be present unless the system is hardware-reduced.
+
+Anyway, the RTC part can still be supported without _PRW, but then the
+wakeup-related attributes should not be present in such cases.
+
+> This partially solves [2] and [3].
+>
+> [1]: https://uefi.org/sites/default/files/resources/ACPI_Spec_6_4_Jan22.pdf
+> [2]: https://bugzilla.kernel.org/show_bug.cgi?id=212313
+> [3]: https://github.com/linux-surface/linux-surface/issues/415
+>
+> Signed-off-by: Bart Groeneveld | GPX Solutions B.V. <bart@gpxbv.nl>
 > ---
->  tools/testing/selftests/vDSO/vdso_test_getcpu.c       | 4 ++++
->  tools/testing/selftests/vDSO/vdso_test_gettimeofday.c | 3 +++
->  2 files changed, 7 insertions(+)
+>  drivers/acpi/acpi_tad.c | 5 -----
+>  1 file changed, 5 deletions(-)
 >
-> diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-> index fc25ede131b8..1df5d057d79f 100644
-> --- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-> +++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-> @@ -14,7 +14,11 @@
->  #include "../kselftest.h"
->  #include "parse_vdso.h"
+> diff --git a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
+> index e9b8e8305e23..67f71fa4362f 100644
+> --- a/drivers/acpi/acpi_tad.c
+> +++ b/drivers/acpi/acpi_tad.c
+> @@ -604,11 +604,6 @@ static int acpi_tad_probe(struct platform_device *pdev)
+>                 return -ENODEV;
+>         }
 >
-> +#if defined(__riscv)
-> +const char *version = "LINUX_4.15";
-> +#else
->  const char *version = "LINUX_2.6";
-> +#endif
->  const char *name = "__vdso_getcpu";
->
->  struct getcpu_cache;
-> diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-> index 8ccc73ed8240..e411f287a426 100644
-> --- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-> +++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-> @@ -27,6 +27,9 @@
->  #if defined(__aarch64__)
->  const char *version = "LINUX_2.6.39";
->  const char *name = "__kernel_gettimeofday";
-> +#elif defined(__riscv)
-> +const char *version = "LINUX_4.15";
-> +const char *name = "__vdso_gettimeofday";
->  #else
->  const char *version = "LINUX_2.6";
->  const char *name = "__vdso_gettimeofday";
+> -       if (!acpi_has_method(handle, "_PRW")) {
+> -               dev_info(dev, "Missing _PRW\n");
+> -               return -ENODEV;
+> -       }
+> -
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+This may be sufficient for the RTC part alone to work, but making the
+wakeup-related attributes available doesn't really make sense in the
+_PRW absent case, so they all should be made optional.
 
-Looks like Shauh usually takes patches for this vdso selftest, but happy 
-to take it through the RISC-V tree if that's easier.  Either way's fine 
-with me, I'm leaving it in patchwork for now as a reminder.
-
-Thanks!
+>         dd = devm_kzalloc(dev, sizeof(*dd), GFP_KERNEL);
+>         if (!dd)
+>                 return -ENOMEM;
+> --
