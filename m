@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A938640BA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26AC640B9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234301AbiLBRDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S233701AbiLBRDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiLBRDB (ORCPT
+        with ESMTP id S234142AbiLBRDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:03:01 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AEFBF9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:03:00 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id z20so7212591edc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:03:00 -0800 (PST)
+        Fri, 2 Dec 2022 12:03:03 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70956403
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:03:01 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id gu23so12919552ejb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:03:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRSqOrKRxkHkRwNxoSy4VyopzzE9hshqNihi6pocRbI=;
-        b=YWUvrRpFsKrxdzOsrJkzOL0M8ObEXBAQyzbmlIud74RorBXTOnbHVsVAPH+2fF/hMm
-         P+nNs0gjQKrMf2KjA6ImWLIwuTmWrAB9Hj3y3rsnx7VsfFd610/F6VuNZCw4HtgemxuR
-         /SUI3iER5mg76gprjEoMi4mAFOnPfz1Th5/GQ=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KTzGbELlKza/9kwevLALsVHryAN8WDcrHC7w5wg6Na4=;
+        b=S1W+HUREYDZKrxoEwQlXVCBdLqkRqdX82DIpktGpRdIUD37IVAzsh6+SFRkd53Gehp
+         wrD3D9qdP8ZtQsarb+lyYS+HWHIa9Dc5HCWTWNabZZ4dOINTJeNiBDLfqhVW39NAc5j9
+         KwMeED/SfoGbr4LxJhamZkhandaEf2or7m48A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rRSqOrKRxkHkRwNxoSy4VyopzzE9hshqNihi6pocRbI=;
-        b=nuIdfZaO/LxXtUwLUyLSBfb/BPjCJ4UCSxBsNFeNXklCnXgZiLCd3jUIPQ0Lzns2kG
-         GnnbVXQl9D1ne6LnTZU4QvYQc2CxNMRX+Sm4vuf6heHqMY8TvKl8Gg/+cKSlTTJB8ET9
-         wVVNu7kYiZdGFBXeEca2e/MJEj94GwOnyBCU8TJunRmJlT/xors3idcgB8fgFIinEbRz
-         ZtIk8wtBBcWSVld/SxXHlN8jH/aVjbnS+mojU/L4yTj1zggKkL/cQROenKTOmtyvp3wo
-         1Vy4Z+yEOiwXFpQC8rxTQpA+yZ9Np/tesijnTFsdC9YYa+pL8ipa4Cn8fJLHSeoOuhE/
-         L5hQ==
-X-Gm-Message-State: ANoB5pl7hFKJLApKzlr6UiWbVOubZBZjujiPSxFDwNT5P0j+IXBik9jA
-        tATPyhGOTRrDhPe3B6OUlXePAg==
-X-Google-Smtp-Source: AA0mqf5qFfC4CaMuQazNAE5BtZ5BoPYROKc9adlaY7YOMnedY+qShwvKQxHB1dSCpLh2cpuY1pSyhg==
-X-Received: by 2002:a05:6402:289d:b0:46c:2460:cdf with SMTP id eg29-20020a056402289d00b0046c24600cdfmr3858386edb.103.1670000579282;
-        Fri, 02 Dec 2022 09:02:59 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KTzGbELlKza/9kwevLALsVHryAN8WDcrHC7w5wg6Na4=;
+        b=3lIlJcMyxX7YwRVOjz6/c5AqAJM1NCUi8Eywe941+rjWOUfuMvQmzVIlu4yr+BaYWy
+         XyFpLsz9a9Cq4p7OIN5TdiXWpchI6+WgOAi7aBValasBgNzquj/NFsr1sxUCfG9I5qoh
+         EQ7g0V/b+5aArAX07D04hnUC2QBdxe8xzWSxHgTEHuTI3UiNpSeZ45ZQL1ZTFNN1N8Yq
+         31bfWj1Bmiz3KXnnbyFKB82592Cti+MKQ86uOpFS2wndm1RrkduRDSeYO4tzHiUB1IQP
+         0kyqn7zFyGp0JL7LyjckCZnndr/4RfrpqllR88lB1yGaj/TGd8ZyuxeQD6wUoJNMNhe9
+         4sqQ==
+X-Gm-Message-State: ANoB5plgv7JMSsuGxlNY83Ns5fulfjkjeOfV+SGXHjTm36RXBZyV7vdK
+        xBSu79qTAuGP9pgi1neYAjwVXQ==
+X-Google-Smtp-Source: AA0mqf74vRoxIe4aNEmMo2oxp30TopAL+kIpKPU6F86E0C2ECj0n+2PIVpWwNrkTsEScDuTNKHz8aA==
+X-Received: by 2002:a17:907:6744:b0:7c0:8d04:d1f1 with SMTP id qm4-20020a170907674400b007c08d04d1f1mr14711050ejc.208.1670000580335;
+        Fri, 02 Dec 2022 09:03:00 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id sa22-20020a170906edb600b0073d7ab84375sm3249133ejb.92.2022.12.02.09.02.58
+        by smtp.gmail.com with ESMTPSA id sa22-20020a170906edb600b0073d7ab84375sm3249133ejb.92.2022.12.02.09.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:02:58 -0800 (PST)
-Subject: [PATCH RESEND v2 0/8] uvcvideo: Fixes for hw timestamping
+        Fri, 02 Dec 2022 09:02:59 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 02 Dec 2022 18:02:41 +0100
+Subject: [PATCH RESEND v2 1/8] media: uvc: Extend documentation of
+ uvc_video_clock_decode()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:02:40 +0100
-Message-Id: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
+Message-Id: <20220920-resend-hwtimestamp-v2-1-0d7978a817cc@chromium.org>
+References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
+In-Reply-To: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-kernel@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1714; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=4P/OGbO11kxTP9OilepqO/3sCN1ElEME+3c5V0/x33c=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii+0xYNdF4ADpNjE0sA4rkRB5zG+nNdIqf12BFeJ
- 2aJyrZOJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovtAAKCRDRN9E+zzrEiPkfD/
- 0ep+SLtgWJmTbi68AnRUCATjpVWPotzllksm8WQ8dkg6WTlI4YowDqhsZH9y3bN7yfQHnihpA8j6jV
- T92j/cuzL70ctFccQXc61fAUXlcKll6fp2YXRCNLM4sX6Wv+C/dw28vhGmulwucpyPMzxYZ6qHV21/
- dk8ywA01xMVQW36PtAqndetwlKhiKsGflTUGyc7+dKK/moor9Jvzm2peZX2S1ovHpDTbGXlVgMECK1
- TkKKXHrLgZD+fIoQWPm0Sa5lFx9j6VgR2tOSdMyAQbhh1VEc1K6P1E20bF8ZYnwJo8MJDW1xJr37UN
- n4JnFXtGk8jkl+3Df9WzigJBMQVCWfrcA52bQFFkESd+cHWP4oUWqGSp5OmnZ4T8+Wd5q5L7CjupiK
- mdu8Sf7MQUrS/330PUa4rit2qy3EGp6jEUGAFhaLfHxQA8uDrH3ntRhDBkJKOtGFpLMcdB9AAs5tnC
- BGqgvh4g+NXE1IYqV2ehOllKN7/HnE/P1yZEMFHGjViAYlXSm5scK5s0q78g3CVUXlQds/pUYSJefy
- tDS/lhk7JFXmPTS0Y6YzBCNkvT5fdpg7r/xBxJe+ZQ4cdVDTsbbOjVpaZM+DUwnh7PyXwwjdeptSKN
- sDZfoSc/8ON5eqSOgulumnoXnadvvrjaT7r1dJzMhdZZDVk7V1fy4ihgTnGA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1083; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=7/FBms1zVY/y54Npj9F3M2JJkIZ6gxgY9l354aVjRxo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii+3/p+J4BSKRQ04UFfbXKbXXmgs+tPfyCpseQQV
+ RMSUzwuJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovtwAKCRDRN9E+zzrEiDUBD/
+ 4xijQ+AnWrIOeimoMQ3X5ag4tK54eZT+YleK8V+KtwjkDWV0CKU+NO/1q1gnHw5F6Lo1e8Z1doB/cX
+ i/COrdCCXiY5W3bWii+riMj9si4YupbU5L/xZpk9V5aVDrqS0yT5KDdboPm7I20/T5k6HcP/DNgR8p
+ DaWbTWQpthqQk8yYnOjqL/7LsWISKFQZ5v5/zoIdnv9qT5iwiWn5owJ2Ba3BBvYZjk46gKVpVhUZqM
+ a0bYJKvo7AMpS6coBbYSfsox7ob9+3KihZUyuTpt6xARPteYa8ltiXbY+E91LeI+ECzrklNLQ6Kj38
+ HJoIjsqqckzN/bfGY0tgGQsyA+hMudrXFOv1UjSdmP0RkFWUqcV1Nch2rThr21N7bBVut8W1WGuUeI
+ dsqk9RIHvb0VYV5jc9HZCV/PLFIZ/jy9JjndXnQ7qRo+86gIfZBJqy9C9U6BgHfKyXis2l5HJa/TQt
+ DQKCBYwwFmjLtUqw3dzx7VvFhe5zxl+hXwKLK1fABr8mRkJ0Yo+05a/voyD4WnySlNuewhxAaCDb9n
+ XZe992z4le/DZq6Xt+LlrSkkTlqpFm1dJFxEVLw4c5BhODyJhMS39lbJLJkMyx/xqZAn0aKhY9CSTu
+ x1cOQTBoFizuVkAGMqGCmCjvN3pdhMgvpd7kZIXlaeOS3VuTwbxU2aMVI/Rg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some fixes for fixing hw timestamp on some Logitech and Sunplus
-cameras. The issues have been previously reported to the manufacturers.
+Make a explicit reference to uvc 1.5, explaining how the algorithm
+supports the different behaviour of uvc 1.1 and 1.5.
 
-Also include a patch to fix the current hw timestamping logic for ANY
-uvc 1.5 model running at under 16 fps.
-
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: hn.chen <hn.chen@sunplusit.com>
 Tested-by: HungNien Chen <hn.chen@sunplusit.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
 ---
-Changes in v2:
-- Require 1/4 sec of data before using the hw timestamps
-- Add Tested-by SunplusIT
-- Link to v1: https://lore.kernel.org/r/20220920-resend-hwtimestamp-v1-0-e9c14b258404@chromium.org
+ drivers/media/usb/uvc/uvc_video.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
----
-Ricardo Ribalda (8):
-      media: uvc: Extend documentation of uvc_video_clock_decode()
-      media: uvc: Allow quirking by entity guid
-      media: uvc: Create UVC_QUIRK_IGNORE_EMPTY_TS quirk
-      media: uvcvideo: Quirk for invalid dev_sof in Logi C922
-      media: uvcvideo: Quirk for autosuspend in Logi C910
-      media: uvcvideo: Allow hw clock updates with buffers not full
-      media: uvcvideo: Refactor clock circular buffer
-      media: uvcvideo: Fix hw timestampt handling for slow FPS
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 170a008f4006..ab56e65ca324 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -517,6 +517,9 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+ 	/*
+ 	 * To limit the amount of data, drop SCRs with an SOF identical to the
+ 	 * previous one.
++	 * This filtering is also needed for supporting UVC 1.5. Where all the
++	 * data packages of the same frame contains the same sof. In that case
++	 * only the first one will match the host_sof.
+ 	 */
+ 	dev_sof = get_unaligned_le16(&data[header_size - 2]);
+ 	if (dev_sof == stream->clock.last_sof)
 
- drivers/media/usb/uvc/uvc_driver.c |  63 ++++++++++++++++++
- drivers/media/usb/uvc/uvc_video.c  | 127 ++++++++++++++++++++++++-------------
- drivers/media/usb/uvc/uvcvideo.h   |   4 ++
- 3 files changed, 150 insertions(+), 44 deletions(-)
----
-base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
-change-id: 20220920-resend-hwtimestamp-b3e22729284d
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
