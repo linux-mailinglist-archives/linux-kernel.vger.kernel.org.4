@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E75B63FFA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F192663FFA9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiLBE6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 23:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S232244AbiLBE7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 23:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbiLBE63 (ORCPT
+        with ESMTP id S232203AbiLBE6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 23:58:29 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FED4CCEC6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 20:58:21 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e15-20020a5b0ccf000000b006ed1704b40cso4015551ybr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 20:58:21 -0800 (PST)
+        Thu, 1 Dec 2022 23:58:34 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B36D754E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 20:58:29 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id p69-20020a254248000000b006fdc6aaec4fso32630yba.20
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 20:58:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xhcm838vqRbviJVINtawNn6TNcB3z9aWYltBLm5HIxk=;
-        b=PxVUhm64KsR6Mi0JEzZpmyH+ESj3GpUqdRBullEc2TxUiMuvpELl5BPD4CkqSSATx1
-         aL6QaAxPJ3htK3byYaO89DGkDpFn1KRa3HgX8lWZRHnSpFb4Eb4ZQlu1Bsc7xyTIEHsI
-         NOQ5J2WyixET0VOdWUYOypZJWpIZu6Q2rBfTJbftC7WMaCjfbvjIt6BwSwWzoNKVXFT1
-         iEFe4fokWc/5rSyeeF0LHkHUZaAr/CLM+4B7/Jsf4BLyWytkbkPraQCiZSTjYKK4ts5S
-         lOpUyFOSGaKEaT+gnY6PBMdyeS0ijyebSTbrKj6NyIoNfnMC/OT3aQZf+IMcUZsDZj+5
-         xiVQ==
+        bh=fILq8A5qrz+unrhULUsXFNDjXn/1W1i4JLQUQRTfzvo=;
+        b=acO/rNicqUru8CkyXkWALo/Fo2ksQ8hWFQGgauAkCDH9CYAjhXMx2G6uXmAEFKIYU1
+         FEDkyb6VhGSOK4t1tK46XWBuCchhlS1aJSGEKIH79Q+G/OhDs4MXMewZmk34Rn8E1vM/
+         mSRisawQckSeTp2MkhOMqYTigFB1Z9FMDVqpWaX9U4M39HG23S3FBx4aLE4ndNeqEnCI
+         2BRkONxouTflHYDQgx1iDO6qwz3B2MTCqeeRsAc8W36Zm+6Dhabs1ZY+Fmqatd0/KZZx
+         M1DWpDDg0SjO4hCaqS04mv5+k9MacTqZ3R0iYJO3mfBnIj0cw0trCdA7okWKg6xa1xsf
+         YqBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xhcm838vqRbviJVINtawNn6TNcB3z9aWYltBLm5HIxk=;
-        b=KK/RTZOK0Rf/65Y3Z1iadufqeJka9hPydPbzCJou+D2QAm2CpiZr469X3t34Tz4R7E
-         Py0r+ArmbyrJtQK4oeLVfWlhek/1CdfiRPcBwODKQluJXqNdjUtKlQZ4ak+avLkk+knr
-         LNizYP22YI3c3eHGWAjWTZRLn+YslNaD+RI2/YZfkFVQapAinaQSs3898J2cvHtrn8AA
-         4bXO3aoQTFQCllT+CXLShvQ4VYgqajd9slp3ln+YxdHoTeY0NjZ5DxPoUde2qjHl9Zbv
-         dVbYYQUwOy0wUXv3xXb+Gn/9BCdU64zAjN+GZSmJ5ASdegr9H4cJ+wep8tVOGGuiCAfD
-         beCA==
-X-Gm-Message-State: ANoB5plLHiDcKOZZY+cCpGKdUerjGX+jPGl/FH8qWhFgU4+TTHx2nHNE
-        utKAsYKVyi3b0tmGM4MnHh+O3fPFSEw+
-X-Google-Smtp-Source: AA0mqf5CfUr1ni1ydhOijcrKDrUH6Q4Z/fxX0gKX0+scEkSznJvNYmEWVgOtlPAgSNKl/d+ltip8dBgQpasK
+        bh=fILq8A5qrz+unrhULUsXFNDjXn/1W1i4JLQUQRTfzvo=;
+        b=Q/ed+XZcCWPuNDox46E6nlL0L6519akv5SVWpbIL9DI9lm2j49ltVACC3IVAlCjgoQ
+         /vSUrJ5qnsUnmhXxbT33QJyqNfue9rI3XN88I/V44+CLsq4EfVC22imBm0kK3Xy1vizf
+         Hy4qoRw7Ic0lqfUy7mP3fNoRlObQ153NKjBHueERV5zTNWo0FwZ/MspObLLH5KIQ32e4
+         wvN2+yIStQaKZodE9EJysM/+akUFg86weQ33YOZl0lzoU6/x5sPRXXJlFPbT8bSXxWjd
+         8B2MZnjrHp/EMERyMwr06+ZmIszDBkmfyE6QHFSmX4cHWn0Rh3PLwqEigZVHpXtq2txo
+         B3rA==
+X-Gm-Message-State: ANoB5pmkxOZF5YnS1mYtGM3qa4F+r20orgNw6/8fg3KthZOhrGDuZoJF
+        eprMlX/2CltPlVa1yNrm/V9D9ieFmYlZ
+X-Google-Smtp-Source: AA0mqf6J88v0jQ/vpUt8gWXuYLzszh3xJz4A/psqOw9CH17kaOd1Hvy7pJ8mWpeUGZogqM+Y2HcWcehDaIV6
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e3b0:e3d1:6040:add2])
- (user=irogers job=sendgmr) by 2002:a25:3454:0:b0:6f9:41dd:faef with SMTP id
- b81-20020a253454000000b006f941ddfaefmr14632533yba.87.1669957101240; Thu, 01
- Dec 2022 20:58:21 -0800 (PST)
-Date:   Thu,  1 Dec 2022 20:57:41 -0800
+ (user=irogers job=sendgmr) by 2002:a05:690c:8:b0:391:c415:f872 with SMTP id
+ bc8-20020a05690c000800b00391c415f872mr47275258ywb.318.1669957108981; Thu, 01
+ Dec 2022 20:58:28 -0800 (PST)
+Date:   Thu,  1 Dec 2022 20:57:42 -0800
 In-Reply-To: <20221202045743.2639466-1-irogers@google.com>
-Message-Id: <20221202045743.2639466-4-irogers@google.com>
+Message-Id: <20221202045743.2639466-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20221202045743.2639466-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Subject: [PATCH 3/5] tools lib subcmd: Add dependency test to install_headers
+Subject: [PATCH 4/5] tools lib symbol: Add dependency test to install_headers
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -89,40 +89,37 @@ then causes files that depend on the header to be rebuilt.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/subcmd/Makefile | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ tools/lib/symbol/Makefile | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-index 9a316d8b89df..b87213263a5e 100644
---- a/tools/lib/subcmd/Makefile
-+++ b/tools/lib/subcmd/Makefile
+diff --git a/tools/lib/symbol/Makefile b/tools/lib/symbol/Makefile
+index ea8707b3442a..13d43c6f92b4 100644
+--- a/tools/lib/symbol/Makefile
++++ b/tools/lib/symbol/Makefile
 @@ -89,10 +89,10 @@ define do_install_mkdir
  endef
  
  define do_install
 -	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
 -		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
+-	fi;                                             \
+-	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
 +	if [ ! -d '$2' ]; then             \
 +		$(INSTALL) -d -m 755 '$2'; \
- 	fi;                                             \
--	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
++	fi;                                \
 +	$(INSTALL) $1 $(if $3,-m $3,) '$2'
  endef
  
  install_lib: $(LIBFILE)
-@@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
+@@ -100,9 +100,16 @@ install_lib: $(LIBFILE)
  		$(call do_install_mkdir,$(libdir_SQ)); \
  		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
  
 -install_headers:
--	$(call QUIET_INSTALL, libsubcmd_headers) \
--		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
--		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
--		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
--		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
--		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
-+HDRS := exec-cmd.h help.h pager.h parse-options.h run-command.h
-+INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/subcmd
+-	$(call QUIET_INSTALL, libsymbol_headers) \
+-		$(call do_install,kallsyms.h,$(prefix)/include/symbol,644);
++HDRS := kallsyms.h
++INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/symbol
 +INSTALL_HDRS := $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
 +
 +$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
@@ -130,7 +127,7 @@ index 9a316d8b89df..b87213263a5e 100644
 +		$(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
 +
 +install_headers: $(INSTALL_HDRS)
-+	$(call QUIET_INSTALL, libsubcmd_headers)
++	$(call QUIET_INSTALL, libsymbol_headers)
  
  install: install_lib install_headers
  
