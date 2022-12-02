@@ -2,153 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A6E6408EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3052A6408E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiLBPFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
+        id S233567AbiLBPEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbiLBPFY (ORCPT
+        with ESMTP id S229523AbiLBPEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:05:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F273E37F83
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:05:23 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p17as-0004iX-Qd; Fri, 02 Dec 2022 16:04:50 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 135E2131753;
-        Fri,  2 Dec 2022 15:04:48 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 16:04:39 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
-        wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-Subject: Re: RE: RE: [PATCH v3 1/2] can: m_can: Move mram init to mcan device
- setup
-Message-ID: <20221202150439.dmt7omdck7wdjpbv@pengutronix.de>
-References: <20221122105455.39294-1-vivek.2311@samsung.com>
- <CGME20221122105022epcas5p3f5db1c5790b605bac8d319fe06ad915b@epcas5p3.samsung.com>
- <20221122105455.39294-2-vivek.2311@samsung.com>
- <20221123224146.iic52cuhhnwqk2te@pengutronix.de>
- <01a101d8ffe4$1797f290$46c7d7b0$@samsung.com>
- <20221124145405.d67cb6xmoiqfdsq3@pengutronix.de>
- <01f901d9053a$f138bdd0$d3aa3970$@samsung.com>
+        Fri, 2 Dec 2022 10:04:51 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D36BD37BB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:04:50 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bs21so8206891wrb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:04:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sWntLOso8o9063LNWZJJYme5vULdsehktJiTEafe5Yc=;
+        b=MmZs8WNLZzH3Ve3COf6jKgg0XAxCoWHQv2IqCRK21J8mLyeCIdMPubL2Fk2aaQ4ZTP
+         M3AKunN+njwVmA50iIJuPBcJAEdb/gegAESDznvqboZoz/rxyjxqO2mq6l+bT1GBAXj+
+         DVuewhC3diXchlw5TYaX5ZbqiYWB8q69xChbZrDfZzwUDLPGMzxZ+kY+4Uk+SshOhhP8
+         /0uThk/DhMR9Yw1Y4IzSPYmQKoopKiXJOnsbmODzZ/ukv59T+RMLVqSZzzRSJY/nXSuj
+         kouoaMwT0HnxVnPDd5mdqLrB0ZY3ifFV5WDozB1MeaMHaw1acaxrqQp/ZLugB+r0EmFP
+         IomA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sWntLOso8o9063LNWZJJYme5vULdsehktJiTEafe5Yc=;
+        b=ssCTPm5/+iQ+JYhsQ5OJmqqjx3JTUWvIYFpHCuq5ELvbjL7hrodJsRXhlKO0iKDLYJ
+         UOTLMfkwc4KfR4+kbIk8gvEb9GsSyZNFAKLnHlP0fhZ88jTUVJEl9+3kvQRvzSjsu5vL
+         nNM69BEnfAlVBeA9j5C5zNFDenNcXCauDaVUuexI+5RFgv1gSJEfj28KHsoblbkK1KG/
+         JVkhlLMpg83ByUaJHl4Q7lzeazNHQrJtVMihDsnEiNcNpujB8IdGceiU60HKtdcMqIHb
+         9ZjfQ2XiIte7eR0hI9Rttno8MBw4EOEgiUM1cAQWMQId7slAHIgoPAo42TFhNtqpqKMo
+         WhEw==
+X-Gm-Message-State: ANoB5pnRWveocda1UiypNuxO3zlqJZgcbjEHuFui0B/AK+DDyBcgifkM
+        NmrhTUWm27qwSo3YxtYpD1EpIQ==
+X-Google-Smtp-Source: AA0mqf5hO0RpjKqzK0vhPgDx3wdWpQKvjtLG+kMNnN+zODPNKQTp6qFMFXmdD/G9WL6LfhBHImiGWA==
+X-Received: by 2002:adf:ea0a:0:b0:241:fcd5:6b94 with SMTP id q10-20020adfea0a000000b00241fcd56b94mr25889868wrm.592.1669993488778;
+        Fri, 02 Dec 2022 07:04:48 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:29a4:6f04:ddb1:1ed7])
+        by smtp.gmail.com with ESMTPSA id v6-20020adfe286000000b00241f467f888sm7218237wri.74.2022.12.02.07.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 07:04:48 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nick Hainke <vincent@systemli.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v7 0/2] gpiolib: don't allow user-space to crash the kernel with hot-unplugs
+Date:   Fri,  2 Dec 2022 16:04:42 +0100
+Message-Id: <20221202150444.244313-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nnzicvks5gam4beu"
-Content-Disposition: inline
-In-Reply-To: <01f901d9053a$f138bdd0$d3aa3970$@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
---nnzicvks5gam4beu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I need to respin this series after Nick Hainke reported a build failure when
+the v1 uAPI for character device is disabled. I also noticed that we need to
+lower the semaphore when opening the character device file as well.
 
-On 01.12.2022 09:40:50, Vivek Yadav wrote:
-> > That probably depends on you power management. If I add a regulator
-> > to power the external tcan4x5x chip and power it up during open(), I
-> > need to initialize the RAM.
-> >=20
-> Thanks for the clarification,
->
-> There is one doubt for which I need clarity if I add ram init in
-> m_can_chip_config.
->=20
-> In the current implementation, m_can_ram_init is added in the probe
-> and m_can_class_resume function.
->
-> If I add the ram init function in chip_config which is getting called
-> from m_can_start, then m_can_init_ram will be called two times, once
-> in resume and next from m_can_start also.
+v6 -> v7:
+- fix a build issue with CDEV_V1 code disabled (giving credit to Nick Hainke)
+- protect the gdev->chip also in gpio_chrdev_open()
 
-As m_can_start() is called from resume, remove the direct call to
-m_can_init_ram() from m_can_class_resume().
+v5 -> v6:
+- signal an error in poll callbacks instead of returning 0 which would make
+  the user-space assume a timeout occurred (which could lead to user-space
+  spinning a timeout loop forever)
 
-> Can we add ram init inside the m_can_open function itself? Because it
-> is independent of m_can resume functionality.
+v4 -> v5:
+- try to acquire the semaphore for reading and bail out of syscall callbacks
+  immediately in case of lock contention
 
-See above.
+v3 -> v4:
+- use function typedefs to make code cleaner
+- add a blank line after down_write()
 
-mainline implementation:
+v2 -> v3:
+- drop the helper variable in patch 1/2 as we won't be using it in 2/2
+- refactor patch 2/2 to use locking wrappers around the syscall callbacks
 
-m_can_class_resume()
-        -> m_can_init_ram()
+v1 -> v2:
+- add missing gdev->chip checks in patch 1/2
+- add a second patch that protects the structures that can be accessed
+  by user-space calls against concurrent removal
 
-m_can_open()
-        -> m_can_start()
-        -> m_can_chip_config()
-        -> ops->init
-                m_can_init_ram() (for tcan only)
+Bartosz Golaszewski (2):
+  gpiolib: cdev: fix NULL-pointer dereferences
+  gpiolib: protect the GPIO device against being dropped while in use by
+    user-space
 
+ drivers/gpio/gpiolib-cdev.c | 207 +++++++++++++++++++++++++++++++-----
+ drivers/gpio/gpiolib.c      |   4 +
+ drivers/gpio/gpiolib.h      |   5 +
+ 3 files changed, 191 insertions(+), 25 deletions(-)
 
-proposed:
+-- 
+2.37.2
 
-m_can_class_resume()
-        -> m_can_start()
-        -> m_can_chip_config()
-        -> m_can_init_ram()
-
-m_can_open()
-        -> m_can_start()
-        -> m_can_chip_config()
-        -> m_can_init_ram()
-
-In mainline m_can_init_ram() is called for the tcan during open(). So if
-you call m_can_init_ram() from m_can_chip_config(), remove it from the
-tcan's tcan4x5x_init() functions, and from m_can_class_resume() it
-should only be called once for open and once for resume.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---nnzicvks5gam4beu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKFAUACgkQrX5LkNig
-011Q9Af8D5n0O+psn9BhVDedhpW//hB/XQMMH7zksV1ocaFaqRhrKndNq/6VxvaQ
-76p0XvaMDoItxBNZOQPFCNibWg8okFne0hyy1QiFmAxzxstuitQJmdsdRAAFZ3Sd
-wheA/xiL2BYQtbRgDkK2ANmQawU9+tOyRmIRRWCki9vcZ4J346uhAzRs6G7BShOr
-w1KH/8oTD5dDIwoyAXvaFeGKNgaf/YDV4JUhwrjFr9dpX4g7HrVsacPxD0V9gyVX
-nI8hamSZM4JAB5tN16hCIsUlnejUHR7QRPy+/q88HyvULstvXWZJ64OERksd++7G
-TCm0ycMZAmZ8WzJmxhCKz01go341Zg==
-=1sZ5
------END PGP SIGNATURE-----
-
---nnzicvks5gam4beu--
