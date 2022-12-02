@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3751963FD63
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A0963FD65
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiLBAzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 19:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S232192AbiLBA5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 19:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiLBAzn (ORCPT
+        with ESMTP id S231961AbiLBA52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 19:55:43 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6E8CB20E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:55:42 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id w23so3236088ply.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 16:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7xl+qejN3tIVmJSkrvPgdLgILrBaOoxJHIfgTJ2nuQg=;
-        b=U+LyVbbvc/EqSA7iugywzm78ANe70elPrUE6NMTdrgNZxzrN3L+KXn1dw/OCBzTVZC
-         1ziu5BU9NNZ4E2l91AsMA/fiQOZTncgXH1a9s7Ci/SxRB1aneAxbUhMBp9Ni35w4S9ez
-         sJ75+Hlki+gge/DYEBT4WOxRPS8Jcf3Y7BgOI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7xl+qejN3tIVmJSkrvPgdLgILrBaOoxJHIfgTJ2nuQg=;
-        b=EuC2jLXapxbXNZUbrlVgmA13ssOnTwSzQt/A5pgDsT47dRW9F+Q1IUcegG84kpYdkz
-         4e6MG/zSzKtwXhr6yKRACRJY8C8FsdgsEMyrT6W6fk6Qvw2VFmKiC2RcbR8Yu4QuH7SO
-         05UvnyQIxRMWaT+lH+Nkm0c9qlBsTqWmTdZLjmuWE9QxXZmiZswpnpkbuSquGBfA1KA9
-         ndbeklg+sXICnM/iil1KY2STjxorC0M5zTddZwozLw7lE4z9Ue2yRvueb/kwQZqJR5rj
-         QZGG2Y6rz7lbcz3aipiYEQ6LC3Ea3MrlgU/3LOdsNxrZj/9zid2UR+kdYFZkIkiMWflC
-         O7aw==
-X-Gm-Message-State: ANoB5pnvOwKfmruqwi4AWv4CC9Rjf/3U5jBlNzVtYAAzSOFE7qVpOFz2
-        YOMC7/B24qXRjYAgT//H5BxkIg==
-X-Google-Smtp-Source: AA0mqf4f9epwr9PYq1sO4cqczGzM2TpxtnEKENtU4QLl6r1QIGi9jn92cAb1SK/+1n/byGKTD/iLfQ==
-X-Received: by 2002:a17:902:c194:b0:189:6995:660c with SMTP id d20-20020a170902c19400b001896995660cmr32787116pld.48.1669942541672;
-        Thu, 01 Dec 2022 16:55:41 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x3-20020aa79ac3000000b00575c5ae50cdsm3949150pfp.142.2022.12.01.16.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 16:55:41 -0800 (PST)
-Date:   Thu, 1 Dec 2022 16:55:40 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, Oliver Glitta <glittao@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v4 3/3] mm: slub: test: Use the kunit_get_current_test()
- function
-Message-ID: <202212011655.7B32E97C92@keescook>
-References: <20221125084306.1063074-1-davidgow@google.com>
- <20221125084306.1063074-3-davidgow@google.com>
+        Thu, 1 Dec 2022 19:57:28 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30919CB23E;
+        Thu,  1 Dec 2022 16:57:27 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NNZKX70b5z4f3kKc;
+        Fri,  2 Dec 2022 08:57:20 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP2 (Coremail) with SMTP id Syh0CgCXrLdwTYljf+TsBQ--.3634S2;
+        Fri, 02 Dec 2022 08:57:22 +0800 (CST)
+Subject: Re: [PATCH 1/5] sbitmap: don't consume nr for inactive waitqueue to
+ avoid lost wakeups
+To:     Gabriel Krisman Bertazi <krisman@suse.de>,
+        Kemeng Shi <shikemeng@huawei.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linfeilong@huawei.com,
+        liuzhiqiang@huawei.com
+References: <20221201045408.21908-1-shikemeng@huawei.com>
+ <20221201045408.21908-2-shikemeng@huawei.com> <87y1rrmeq3.fsf@suse.de>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <20551512-a703-9637-29d8-931f5a76e392@huaweicloud.com>
+Date:   Fri, 2 Dec 2022 08:57:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125084306.1063074-3-davidgow@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87y1rrmeq3.fsf@suse.de>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: Syh0CgCXrLdwTYljf+TsBQ--.3634S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFy5Jw4UtF43JrWDAFW3trb_yoWDZFb_Kw
+        4vgFWay39agFnrWw1Yka17uFnxGFW8Gw1kCr40qF9ayF1ftrs3AFsxCrZ5uF4xG34kAFnY
+        gFn0v34vvr429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzkYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
+        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+        0EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
+        7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 04:43:06PM +0800, David Gow wrote:
-> Use the newly-added function kunit_get_current_test() instead of
-> accessing current->kunit_test directly. This function uses a static key
-> to return more quickly when KUnit is enabled, but no tests are actively
-> running. There should therefore be a negligible performance impact to
-> enabling the slub KUnit tests.
-> 
-> Other than the performance improvement, this should be a no-op.
-> 
-> Cc: Oliver Glitta <glittao@gmail.com>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: David Gow <davidgow@google.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+
+on 12/1/2022 9:32 PM, Gabriel Krisman Bertazi wrote:
+> Kemeng Shi <shikemeng@huawei.com> writes:
+> 
+>> If we decremented queue without waiters, we should not decremente freed
+>> bits number "nr", or all "nr" could be consumed in a empty queue and no
+>> wakeup will be called.
+>> Currently, for case "wait_cnt > 0", "nr" will not be decremented if we
+>> decremented queue without watiers and retry is returned to avoid lost
+>> wakeups. However for case "wait_cnt == 0", "nr" will be decremented
+>> unconditionally and maybe decremented to zero. Although retry is
+>> returned by active state of queue, it's not actually executed for "nr"
+>> is zero.
+>>
+> 
+> Hi Kemeng,
+> 
+> Fwiw, I sent a patch rewriting this algorithm which is now merged in
+> axboe/for-next.  It drops the per-waitqueue wait_cnt entirely.  You can
+> find it here:
+> 
+> https://lore.kernel.org/lkml/20221110153533.go5qs3psm75h27mx@quack3/T/
+> 
+> Thanks!
+Hi Gabriel,
+Thanks for remind me of this, I will recheck my patches in the
+axboe/for-next branch.
 
 -- 
-Kees Cook
+Best wishes
+Kemeng Shi
+
