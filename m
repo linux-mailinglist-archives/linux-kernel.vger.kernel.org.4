@@ -2,126 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8BC640E01
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB22640E0C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbiLBS6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S234500AbiLBS6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233882AbiLBS6P (ORCPT
+        with ESMTP id S234720AbiLBS6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:58:15 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DC392FD7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:58:13 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id l127so5086294pfl.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:58:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hPdGcOCEsG7lUmArEzStFj43mzNWvKg2+Ebw16M3TCY=;
-        b=PU3gDK3JBsY8Izq24LkRkMa24eKn0Mu0dmVHTCV4yTEpqX6bxxHxWKaBIDHx0HnqeJ
-         jhExXB/Ex03vAiF69WJEpsCl4UWQ9Tovfwyo9wxw+NkZDdH0KfetQa679Ugg8duke325
-         KxFZeqdCU9j9zaf0rQ4JEC0LZDDu0WcfjaHss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hPdGcOCEsG7lUmArEzStFj43mzNWvKg2+Ebw16M3TCY=;
-        b=YOuhGmrG3SBhX9Gu5rctSrmFC/mk0+q6RuQV+7go8bGzZPSCASPZzFw3es97Jjpy2T
-         E+iPdBvKAF6ctwFEBSRqgONmZvwWdoiaQ3u0ydyuGM1HP+/39duWKPv/IHXXd4WOcZCe
-         HD2swc/dDiyPFr0l4pc4zpjYU9X1S5USrUVUco77eDnVnQJ9BmwdJfTr5dqrjwAtioAR
-         gyYqiqMv8q5PeQGNuQxxfw87Iwe3u3oiy2sSHLN3TiopbSY2jm4cCFOq+9EALdSMhKqX
-         IxwKEFXBE7s0yKb9gc8gCkJR+83/pnEm0KnwUNkEKMOTss89tE2QoyNeOkAWAzjwDu9J
-         kyPw==
-X-Gm-Message-State: ANoB5pl0EAw3oK8lnwH0x1FkeJgYOfD4B362MjYurDnVmf96bSjyfPvQ
-        igrw6ocYURtpff2pPrlDDjm4iQ==
-X-Google-Smtp-Source: AA0mqf48V3uHLmY0yySTaOoB/FYAXZPXo2e4ikb3ZgTnAR9y+ke4PQBq1FnMqulyBpKVV19bLfFIbA==
-X-Received: by 2002:a62:65c3:0:b0:562:ce80:1417 with SMTP id z186-20020a6265c3000000b00562ce801417mr53353551pfb.19.1670007492560;
-        Fri, 02 Dec 2022 10:58:12 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c9e5f291bsm5948660plh.111.2022.12.02.10.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 10:58:11 -0800 (PST)
-Date:   Fri, 2 Dec 2022 10:58:11 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Anders Roxell' <anders.roxell@linaro.org>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] crypto/caam: Avoid GCC constprop bug warning
-Message-ID: <202212021057.B1B1BDE380@keescook>
-References: <20221028210527.never.934-kees@kernel.org>
- <20221202005814.GD69385@mutt>
- <4f7ffdd948a84013a0e84876b3e3944b@AcuMS.aculab.com>
+        Fri, 2 Dec 2022 13:58:45 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC1A9A4D2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:58:44 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670007522;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YTAaq0K2yMj7q/wt8hfIaZP0HJYKKi1+zXlY0Z5SIEE=;
+        b=TgdxiseKmR3QZUPIkisqSBFbY2qjrS4do1CEQXae/CPfZi/pMY94N5Iza9+0Dw23J0R4Ga
+        vowu2Vp2W/FXUYoEBuuHwim1pQ4DrO83ueF/g7AVRdlgrtVifSqEZlfKePJ6zpFomV8z+5
+        XVRg1pRDCEOG+zc27vNzunSk7/so/KTU23AQ0q9NYRfAn36GWeTR0eRg6dQ36MO0CgVwTg
+        Ohzn8KFNQszWsYGYVROV9EIzHxZBedHy3MtJvPJMr2W1VatkLbrlEfT/IPQ+4LnsMcOkFH
+        KSbO7pyatDfSJDfXpswAL03eUwy/9wl6rbueMwAFP9+eMkaa8flwksnmetbVSg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670007522;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YTAaq0K2yMj7q/wt8hfIaZP0HJYKKi1+zXlY0Z5SIEE=;
+        b=7j6+Gers8GCK8kklGUF/xqNmB6OIiRTTnAjOaAZQEdlTg+esPXHR7JCt6/28UbBc/74M8J
+        6rF/s+ELdXjw72BQ==
+To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>
+Cc:     X86-kernel <x86@kernel.org>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>, alison.schofield@intel.com,
+        reinette.chatre@intel.com
+Subject: Re: [Patch V1 1/7] x86/microcode/intel: Remove redundant microcode
+ rev pr_info()s
+In-Reply-To: <20221129210832.107850-2-ashok.raj@intel.com>
+References: <20221129210832.107850-1-ashok.raj@intel.com>
+ <20221129210832.107850-2-ashok.raj@intel.com>
+Date:   Fri, 02 Dec 2022 19:58:42 +0100
+Message-ID: <87cz91pr8d.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4f7ffdd948a84013a0e84876b3e3944b@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 10:01:50AM +0000, David Laight wrote:
-> From: Anders Roxell
-> > Sent: 02 December 2022 00:58
-> > 
-> > On 2022-10-28 14:05, Kees Cook wrote:
-> > > GCC 12 appears to perform constant propagation incompletely(?) and can
-> > > no longer notice that "len" is always 0 when "data" is NULL. Expand the
-> > > check to avoid warnings about memcpy() having a NULL argument:
-> > >
-> > >    ...
-> > >                     from drivers/crypto/caam/key_gen.c:8:
-> > >    drivers/crypto/caam/desc_constr.h: In function 'append_data.constprop':
-> > >    include/linux/fortify-string.h:48:33: warning: argument 2 null where non-null expected [-
-> > Wnonnull]
-> > >       48 | #define __underlying_memcpy     __builtin_memcpy
-> > >          |                                 ^
-> > >    include/linux/fortify-string.h:438:9: note: in expansion of macro '__underlying_memcpy'
-> > >      438 |         __underlying_##op(p, q, __fortify_size);                        \
-> > >          |         ^~~~~~~~~~~~~
-> ...
-> 
-> Is this really a bug in the fortify-string wrappers?
-> IIRC the call is memcpy(NULL, ptr, 0) (or maybe memcpy(ptr, NULL, 0).
-> In either case call can be removed at compile time.
-> 
-> I'd bet that the constant propagation of 'len' fails because
-> of all the intermediate variables that get used in order to
-> avoid multiple evaluation.
-> 
-> The some 'tricks' that are used in min() (see minmax.h) to
-> generate a constant output for constant input could be
-> use to detect a compile-time zero length.
-> 
-> Something like:
-> #define memcpy(dst, src, len) \
-> 	(__is_constzero(len) ? (dst) : memcpy_check(dst, src, len))
-> 
-> With:
-> #define __is_constzero(x) sizeof(*(1 ? (void *)(x) : (int *)0) != 1)
-> Which could go into const.h and used in the definition of __is_constexpr().
+Ashok!
 
-While it could be possible to strip the nonnull attribute, I think it's
-not an unreasonable check to have. This is literally the only case in
-the entire kernel that is tripped, for example.
+On Tue, Nov 29 2022 at 13:08, Ashok Raj wrote:
+> There is a pr_info() to dump information about newly loaded microcode.
 
--- 
-Kees Cook
+There... Somewhere, right?
+
+> The code intends this pr_info() to be just once, but the check to ensure
+> is racy. Unfortunately this happens quite often in with this new change
+> resulting in multiple redundant prints on the console.
+
+-ENOPARSE. Can you try to express that in coherent sentences please?
+
+> microcode_init()->schedule_on_each_cpu(setup_online_cpu)->collect_cpu_info
+>
+> [   33.688639] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+> [   33.688659] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+> [   33.688660] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+>
+> There is already a pr_info() in microcode/core.c as shown below:
+>
+> microcode: Reload completed, microcode revision: 0x2b000041 -> 0x2b000070
+
+There are quite some pr_info()'s in microcode/core.c...
+
+$function_name() prints the new and the previous microcode revision once
+when the load has completed:
+
+  microcode: Reload completed, microcode revision: 0x2b000041 -> 0x2b000070
+
+Hmm?
+
+> The sig and pf aren't that useful to end user, they are available via
+
+The sig and pf ?!? Come on, you really can do better.
+
+> /proc/cpuinfo and this never changes between microcode loads.
+>
+> Remove the redundant pr_info() and the racy single print checks. This
+> removes the race entirely, zap the duplicated pr_info() spam and
+> simplify the code.
+
+The last sentence does not qualify as coherent either.
+
+Other than that. Nice cleanup.
+
+Thanks,
+
+        tglx
