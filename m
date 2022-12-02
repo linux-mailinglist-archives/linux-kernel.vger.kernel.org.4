@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4643764106B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2664A641070
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiLBWNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        id S234868AbiLBWNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234844AbiLBWMt (ORCPT
+        with ESMTP id S234860AbiLBWNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:12:49 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C221F2D4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:12:44 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id z9so2649372ilu.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:12:44 -0800 (PST)
+        Fri, 2 Dec 2022 17:13:06 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BA9BC5A4
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:13:04 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 62so5444813pgb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZRQ27iiIlmC3Mofd++eqe24lVJKTTth6Ng6tJK9AsA=;
-        b=qOLSu1CwE7LSryMVEdLpxMcW2u2rN8DJ2Y0evJB9pQ6GNkz3YF+yUdNLUg61fnjeYK
-         bbgwmb0i2+h2jsPKY3/sKTqpNwpwRcsAJo92O3xXcktEZ+lwz6celntYxHJ9LzDpgPy2
-         ujUiBhEPGmcP8cnsNgBwBoCDZtV2tXMhAI7eLeIWcvkcxlzr/WgtLkVz5Eo3eSoAOSqx
-         dLMss4s6xlI/IjEDEge1hAgk5kt7d9vQ7ah6xX94RRlTwLfLpkUCxzZkMdjv7AB2pErj
-         J4KtBxtcBN1oy1/MOQl9p4QiVHcSy5Z2wPKs6O9BMXFSvafw2PmyGacdxWBmT5OOVI+j
-         z7zg==
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
+        b=GAXzEoo+S14lTK4cD0oXTEUsG2k/16arWIJHGYDGGoAITzPptHOYra+4PIZqAMKrAp
+         0tB61+aGUNfbM+CwM2yGVn+YfT1RARaHjexCaAWA6Kq22roouKhqhimPBUwevE+wG2Sg
+         ZdiVdxiW6gDD6Q9OAe7rXSCASwOhwS+nWPyfQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MZRQ27iiIlmC3Mofd++eqe24lVJKTTth6Ng6tJK9AsA=;
-        b=XMQkeqvuec7GYDP5N4fQ0fFVkMmLmqpO6eBfNRy6/SctPUqBJWBLXUBAU+aZNChk2j
-         sc21VyIEvRLZAlwE55/+yvhosa+Pz1JI4aCD+IiKm9kVGWglVQgFjzTAGKPoBOQP+LiN
-         IN/An70pvYgU8ba/OXxNjyO7YBbmFnDoWR9fUK8rJ+dHt8CA3C9TrTcTC8uKwusmVilM
-         dJ/dgcukh2ZLnsH9sCwgBMrryxH5cfDSxrUFZlqmr6o5V3/hzH+i1ZMLMpNhLaGTforv
-         dSYUE7SwEHB/H6EIfZLLpp1s5SNp9BGXSPSilk8P2UWztpAFjFlCdqdXogmrn4x4pEH5
-         Yx5A==
-X-Gm-Message-State: ANoB5pnW+vZopjUbRP9YKJQW1/kHItZV2ydTwOOyK1K8x9x+jZ4j/qTg
-        9C7zqa2OGRHsJV2rSYHe/c/pHg==
-X-Google-Smtp-Source: AA0mqf7NKDHBCcqWsoB1rFTu+fH2wPlTnoaZdsz+IBreYBWOuQssiA+mjnuS6vQqA48/SHCp9hujpA==
-X-Received: by 2002:a05:6e02:dc5:b0:302:e604:f814 with SMTP id l5-20020a056e020dc500b00302e604f814mr21154766ilj.113.1670019163812;
-        Fri, 02 Dec 2022 14:12:43 -0800 (PST)
-Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id r26-20020a02aa1a000000b003633848da58sm3162404jam.41.2022.12.02.14.12.42
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
+        b=nzBBsMhyFiwgVe4dq4hg0CT8kac++wR3q+teMJ4AWSzPPGweQpfGL0LkV0usOuB0/7
+         +fwyCM7znF03w27q9pDNZsErOHxIpUHLDzaQ/PKlocNdY55mTXIOaps3BWRSGRPXfed6
+         z++NY/dmgQblYPfY/3nRDe14sZa5a4/x9r2IPk19OWoqU03uQ61xEu1aQL124S0VNPfw
+         bZsT9z69IVjGy61RbcxWuf9zQT7RAALCUqMCzQp+kVP9CuvhfwY+w2BhuqzEIP7Zsa0S
+         XW4W+Ql/Kyb/WLqMQegEcLqiSvT7EDH/syf6VrwmaDqFsh8HqAzKAe7jn0knkTu1kZu3
+         yF3Q==
+X-Gm-Message-State: ANoB5pl9lCuhHyjf0G7ZcdAiSvX3ZUcVeoGUEM8c1wLoxMrSI+UWB/1G
+        NfUHXZ1Cg3xbD1Auh8Csr1xt9g==
+X-Google-Smtp-Source: AA0mqf4yMGLxJ4yzBzgABiEyiOC9Cw7v89H4Mg51yU3dIagFC0iIYu5hjOGUJWotx3YNlubWgYaiJQ==
+X-Received: by 2002:a63:dd16:0:b0:476:d2d9:5151 with SMTP id t22-20020a63dd16000000b00476d2d95151mr45023874pgg.487.1670019184321;
+        Fri, 02 Dec 2022 14:13:04 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f205-20020a6238d6000000b00574679561b4sm5563234pfa.134.2022.12.02.14.13.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:12:43 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     sboyd@kernel.org, mturquette@baylibre.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, agross@kernel.org
-Cc:     Luca Weiss <luca.weiss@fairphone.com>, dmitry.baryshkov@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] clk: qcom: rpmh: add support for SM6350 rpmh IPA clock
-Date:   Fri,  2 Dec 2022 16:12:40 -0600
-Message-Id: <20221202221240.225720-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 02 Dec 2022 14:13:03 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Fri, 2 Dec 2022 14:13:02 -0800
+To:     Shayne Chen <shayne.chen@mediatek.com>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        StanleyYP Wang <StanleyYP.Wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Chiu <chui-hao.chiu@mediatek.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Money Wang <Money.Wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Howard Hsu <howard-yh.hsu@mediatek.com>,
+        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
+        "David S. Miller" <davem@davemloft.net>,
+        Evelyn Tsai <evelyn.tsai@mediatek.com>,
+        linux-kernel@vger.kernel.org,
+        MeiChia Chiu <meichia.chiu@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Bo Jiao <Bo.Jiao@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sujuan Chen <sujuan.chen@mediatek.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: mt7996_mcu_rx_radar_detected(): Insecure data handling
+Message-ID: <202212021413.392BADAF@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,30 +86,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Weiss <luca.weiss@fairphone.com>
+Hello!
 
-The IPA core clock is required for SM6350.  Define it.
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221202 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-[elder@linaro.org: rebased with Dmitry's changes]
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
-v2: This is now based on qualcomm/for-next.
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
- drivers/clk/qcom/clk-rpmh.c | 1 +
- 1 file changed, 1 insertion(+)
+  Thu Dec 1 17:29:14 2022 +0100
+    98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 2c2ef4b6d130e..586a810c682ca 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -606,6 +606,7 @@ static struct clk_hw *sm6350_rpmh_clocks[] = {
- 	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_ln_bb_clk3_g4_ao.hw,
- 	[RPMH_QLINK_CLK]	= &clk_rpmh_qlink_div4.hw,
- 	[RPMH_QLINK_CLK_A]	= &clk_rpmh_qlink_div4_ao.hw,
-+	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
- };
- 
- static const struct clk_rpmh_desc clk_rpmh_sm6350 = {
+Coverity reported the following:
+
+*** CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
+drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:338 in mt7996_mcu_rx_radar_detected()
+332     {
+333     	struct mt76_phy *mphy = &dev->mt76.phy;
+334     	struct mt7996_mcu_rdd_report *r;
+335
+336     	r = (struct mt7996_mcu_rdd_report *)skb->data;
+337
+vvv     CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
+vvv     Using tainted variable "r->band_idx" as an index into an array "(*dev).mt76.phys".
+338     	mphy = dev->mt76.phys[r->band_idx];
+339     	if (!mphy)
+340     		return;
+341
+342     	if (r->band_idx == MT_RX_SEL2)
+343     		cfg80211_background_radar_event(mphy->hw->wiphy,
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527812 ("Insecure data handling")
+Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+
+Thanks for your attention!
+
 -- 
-2.34.1
-
+Coverity-bot
