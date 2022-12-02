@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F212640686
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EAC64068C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbiLBMPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S233206AbiLBMP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiLBMO7 (ORCPT
+        with ESMTP id S233410AbiLBMPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:14:59 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA180B90FE;
-        Fri,  2 Dec 2022 04:14:58 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 02 Dec 2022 21:14:57 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 690CA2059054;
-        Fri,  2 Dec 2022 21:14:57 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 2 Dec 2022 21:14:57 +0900
-Received: from [10.212.159.169] (unknown [10.212.159.169])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 4A2DC1974;
-        Fri,  2 Dec 2022 21:14:56 +0900 (JST)
-Message-ID: <04a9db58-4768-f045-9d97-f79e237369bb@socionext.com>
-Date:   Fri, 2 Dec 2022 21:14:55 +0900
+        Fri, 2 Dec 2022 07:15:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64DED9B1A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:15:20 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p14we-0008Hv-0H; Fri, 02 Dec 2022 13:15:08 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1C95A13156D;
+        Fri,  2 Dec 2022 12:15:04 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 13:14:58 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        dario.binacchi@amarulasolutions.com, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Richard Palethorpe <richard.palethorpe@suse.com>,
+        Petr Vorel <petr.vorel@suse.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org, ltp@lists.linux.it
+Subject: Re: [PATCH] can: slcan: fix freed work crash
+Message-ID: <20221202121458.qeqjzewvdbnqhvnt@pengutronix.de>
+References: <20221201073426.17328-1-jirislaby@kernel.org>
+ <20221202035242.155d54f4.max@enpas.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 8/8] dt-bindings: soc: socionext: Add UniPhier AHCI glue
- layer
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
- <20221129103509.9958-9-hayashi.kunihiko@socionext.com>
- <33ca35f4-acee-6b2b-1a73-41ed5882819e@socionext.com>
- <4345f968-8c2b-6c54-7f2c-81effaba3ab2@linaro.org>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <4345f968-8c2b-6c54-7f2c-81effaba3ab2@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x4q6zeagiapw3mdj"
+Content-Disposition: inline
+In-Reply-To: <20221202035242.155d54f4.max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/02 21:08, Krzysztof Kozlowski wrote:
-> On 01/12/2022 10:30, Kunihiko Hayashi wrote:
->> Hi Krzysztof,
->>
->> On 2022/11/29 19:35, Kunihiko Hayashi wrote:
->>> Add DT binding schema for components belonging to the platform-specific
->>> AHCI glue layer implemented in UniPhier SoCs.
->>>
->>> This AHCI glue layer works as a sideband logic for the host controller,
->>> including core reset, PHYs, and some signals to the controller.
->>>
->>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->>
->> (snip)
->>
->>> +examples:
->>> +  - |
->>> +    sata-controller@65700000 {
->>> +        compatible = "socionext,uniphier-pxs3-ahci-glue", "simple-mfd";
->>> +        reg = <0x65b00000 0x400>;
->>> +        #address-cells = <1>;
->>> +        #size-cells = <1>;
->>> +        ranges = <0 0x65700000 0x100>;
->>
->> In PATCH 7/8, you suggested that the node name of "USB glue layer" should
->> changes to the generic node name "usb@...".
->>
->> However, in case of this "AHCI glue layer", I can't change
->> "sata-controller"
->> to the generic node name "sata@...", because ata/sata-common.yaml has
->> pattern
->> "^sata(@.*)?$", and the changed node matches this pattern unintentionally.
->>
->> This layer isn't a sata host controller, so it's hard to give a generic
->> name
->> to this node. I'd like you opinion.
-> 
-> Yeah, I think it's fine. We do not have good names for such nodes.
 
-OK, I leave the name for this node.
+--x4q6zeagiapw3mdj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you,
+On 02.12.2022 03:52:42, Max Staudt wrote:
+> (CC: ltp@lists.linux.it because Petr did so.)
+>=20
+> Hi Jiry,
+>=20
+> Thanks for finding this!
+>=20
+>=20
+> Your patch looks correct to me, so please have a
+>=20
+>   Reviewed-by: Max Staudt <max@enpas.org>
+>=20
+> for both this patch to slcan, as well as an 1:1 patch to can327.
 
----
-Best Regards
-Kunihiko Hayashi
+Max, can you create a patch for the can327 driver?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--x4q6zeagiapw3mdj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOJ7D8ACgkQrX5LkNig
+013NnAf/Z62/13CIDQ7V894/ROU5ZGk6S6LRPGG/p7Q4oFGe7BxjDOn4Izk+wTGX
+kisclotCPB1hsAfPi988cEjHEe2b6CXib1aZmtJOyGC8cuTgRvBimHElXGgDIUJe
+NYsq2C+WZsGSQqHX6eSClICQZ0DrIsyidSrhZ3gsl0KKGxxLEV1oKhlYjLhM7Hx2
+Ntd/uU3oFiOAIoRtDXORfGf1kleLK/XTvJMv1gg+NkTuYYh01HKXK7d42bthX1tP
+X0a28lItgg4SyQMXm6tX3KJ8AMsbpMKHPhIjXSB/Fild1XdAvnhxnNuZYg4w1oPI
+/Ib6xzyF13qn8t2HKAY0C8C3YfnTzw==
+=EslA
+-----END PGP SIGNATURE-----
+
+--x4q6zeagiapw3mdj--
