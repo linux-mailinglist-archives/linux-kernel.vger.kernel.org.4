@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7136A64065F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77CB640665
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiLBMH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S232743AbiLBMI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbiLBMHz (ORCPT
+        with ESMTP id S233256AbiLBMIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:07:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20F621E3C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:07:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3416462289
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 12:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96C7C433C1;
-        Fri,  2 Dec 2022 12:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669982873;
-        bh=QL08V1CblNQ344sEitshQJpL3YPFWoVO6Z8OdfPPB0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RJrww0dSL0LWtWKJq6omLZUVF6wGmYVGbogyRMVshRt/x+pnUwtssR0yJkJKxqpKm
-         HP+5vkWiQpUpW9x1aawnO7AwhG3XHsEIOYFoHqDdpi+BZX3Pk8wc7wtmiMHu0QQdaY
-         6ORvwdx+l3rFedkeLdV8rPt9Gn9wTOZL0dYiLZ3EMvsRIPt+7USWmML33zxgu28s1E
-         h0pDAZcoJM6XBThoRykOUc61HmEEOyCOvv+svsklTUAtT5dgBzp6hl0HE1m8tuvc1w
-         edRdZDhGCZ83dzoW3/HGWG53G4m4cERrA10RyxtFh+T2iFawEiC65oKz6+pecbQjVG
-         +uwcYuOFnwu7g==
-Date:   Fri, 2 Dec 2022 12:08:13 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     lgirdwood@gmail.com, lee@kernel.org, matthias.bgg@gmail.com,
-        yangyingliang@huawei.com, chiaen_wu@richtek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        ChiYuan Huang <cy_huang@richtek.com>
-Subject: Re: [PATCH 1/2] regulator: mt6370: Fix potential UAF issue
-Message-ID: <Y4nqrcw3LGfj3OZR@sirena.org.uk>
-References: <1669797463-24887-1-git-send-email-u0084500@gmail.com>
- <Y4iTVmOA5P/aN2yb@sirena.org.uk>
- <CADiBU3-gr1OrH0_OtuWyAN8WwvZtPghC6zfB3NYuVTq4b+DZBw@mail.gmail.com>
+        Fri, 2 Dec 2022 07:08:24 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5952A246
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:08:23 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id f13so7094197lfa.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 04:08:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aduZyZsfoBSNeS7PUzHQe3IQH2NBuBYUfQB0aJd37+E=;
+        b=vZYgHHxJgzG7uGa8/l+TR4Sys+oq5ytJ9eFelFwVpL5EFD54fCjgS+0UxakUpZYF6B
+         pCc6dINKs8kjbILfld67LYdMEOBWPpPXGIApYs2Mg4d+Fz22ePwuIZGZJGbx7CaFXxRK
+         6I9c+omo2pVqiwKrDXkapRG46Dj3hDD0JZqur4i82ogXIT8azPVl3P/YM/E0zleJ/isw
+         p9A4+OkYK6aRhb1f/C+4TP/G9eq5w9XgLJ6IEeOpRguQQ3T11G0FJcwcGTFeRDaYrG9F
+         V/xgtlYGqFHWecxcqf7ovrBXi4A+hbCCi4RRZ6orbQQ3SA75AVi7OcULKH40bJB1hPr+
+         RKdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aduZyZsfoBSNeS7PUzHQe3IQH2NBuBYUfQB0aJd37+E=;
+        b=2rngBlG7s0kgnXSxN67AHOjmRGF5Gk/SoGCN0VoBLTpoTYqlO8t9dIV2yQndbAoCLH
+         +NHdYE5sIIVDzb6RJrPqLxJeHUjKzpKMDEH5Ci4kdozXXoTE/XiGPfYlvv3lFF+X7LOH
+         +hojYBlvp8bkYt00l3LjALB9AGelQYIakzs7pn7j9yNI2Kd9H5zr2ni4TOnZprg92JgR
+         rRjx3K9dXFqzLpwfPArmgXP4m762ZhedCbeHQwhmvBhwy8j+lRVWN3E7rlmecAKmQbbS
+         uWT0HXh2wpZPzuKCbpW3OnX/Hb9rOG4DwsOiVcZgBLgRRfFkIje3To0g7aTtFNx+Vbp3
+         pZVw==
+X-Gm-Message-State: ANoB5pmGgaWSi3rTUlh46LyTIbMiM+kUbdexnuS4HlXbor/vIt/0anve
+        6Cv6L4tKU14r6XFuWIZ33Uh47w==
+X-Google-Smtp-Source: AA0mqf7zq3pmBogeq/BXvzyr/S6ku4C+ro/un1B7bvvRgBTagttqVf4EMSjp0gZD7ymuiLT4pSW4jg==
+X-Received: by 2002:a05:6512:12d5:b0:4b5:f51:aa72 with SMTP id p21-20020a05651212d500b004b50f51aa72mr5518700lfg.371.1669982902095;
+        Fri, 02 Dec 2022 04:08:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o6-20020a05651205c600b004917a30c82bsm992831lfo.153.2022.12.02.04.08.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 04:08:21 -0800 (PST)
+Message-ID: <4345f968-8c2b-6c54-7f2c-81effaba3ab2@linaro.org>
+Date:   Fri, 2 Dec 2022 13:08:20 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IykTNXYspChJUhfV"
-Content-Disposition: inline
-In-Reply-To: <CADiBU3-gr1OrH0_OtuWyAN8WwvZtPghC6zfB3NYuVTq4b+DZBw@mail.gmail.com>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 8/8] dt-bindings: soc: socionext: Add UniPhier AHCI glue
+ layer
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
+ <20221129103509.9958-9-hayashi.kunihiko@socionext.com>
+ <33ca35f4-acee-6b2b-1a73-41ed5882819e@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <33ca35f4-acee-6b2b-1a73-41ed5882819e@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,45 +80,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/12/2022 10:30, Kunihiko Hayashi wrote:
+> Hi Krzysztof,
+> 
+> On 2022/11/29 19:35, Kunihiko Hayashi wrote:
+>> Add DT binding schema for components belonging to the platform-specific
+>> AHCI glue layer implemented in UniPhier SoCs.
+>>
+>> This AHCI glue layer works as a sideband logic for the host controller,
+>> including core reset, PHYs, and some signals to the controller.
+>>
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> 
+> (snip)
+> 
+>> +examples:
+>> +  - |
+>> +    sata-controller@65700000 {
+>> +        compatible = "socionext,uniphier-pxs3-ahci-glue", "simple-mfd";
+>> +        reg = <0x65b00000 0x400>;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +        ranges = <0 0x65700000 0x100>;
+> 
+> In PATCH 7/8, you suggested that the node name of "USB glue layer" should
+> changes to the generic node name "usb@...".
+> 
+> However, in case of this "AHCI glue layer", I can't change "sata-controller"
+> to the generic node name "sata@...", because ata/sata-common.yaml has pattern
+> "^sata(@.*)?$", and the changed node matches this pattern unintentionally.
+> 
+> This layer isn't a sata host controller, so it's hard to give a generic name
+> to this node. I'd like you opinion.
 
---IykTNXYspChJUhfV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, I think it's fine. We do not have good names for such nodes.
 
-On Fri, Dec 02, 2022 at 11:35:35AM +0800, ChiYuan Huang wrote:
-> Mark Brown <broonie@kernel.org> =E6=96=BC 2022=E5=B9=B412=E6=9C=881=E6=97=
-=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A7:43=E5=AF=AB=E9=81=93=EF=BC=9A
-> > > The original code uses i2c dev as the parent in order to reuse
-> > > the 'regulator_of_get_init_data'. But this will cause regulation
-> > > constraint devres attached to i2c dev, not the mfd cell platform
-> > > device.
+Best regards,
+Krzysztof
 
-> > This is a general issue which will affect a lot of MFDs, we would be
-> > better to fix this by changing the API to provide a device to be used
-> > for the devres allocations separately to the one used for looking up the
-> > DT.
-
-> Not to affect too much, the better way may change the 'regulator_register=
-' API.
-> Append it as regulator_register(dev, .....
-> This could separate device object with devres allocation and DT lookup.
-
-Yes, I think so - a new optional argument.
-
---IykTNXYspChJUhfV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOJ6qwACgkQJNaLcl1U
-h9BboQf/fkr05047bYXQZwnpRvQs/KoEOmkQQY7wZUDoqQSBwDGwjV8wi2Z2sAo3
-lq4q5n1FW9Qtbk26Ui68g9Zt7hIUZFUOm8af//67agU/fvV8fKwNa/haBywcp8yw
-cwKyW6Ih4LOTSOPJtukyx9Jm0Qu+gZHYh/p4YGq8Lw4C5bUjQDPvr2HeMVhl8oc1
-uCphypPS/RV46dFBIM714iq7Hpb3w9ted0qh2+LrGchXYq43SQPeK6auKlu+xVcT
-3MhEYJVohvXkIAnvZ5WYu3EUgi5KG6zHmWW6f69wW6gjoo+9zuytnJQBHjgq/zRJ
-x1c5vobZCCUD0YkFLG5tlq4ZobYw9Q==
-=wnjD
------END PGP SIGNATURE-----
-
---IykTNXYspChJUhfV--
