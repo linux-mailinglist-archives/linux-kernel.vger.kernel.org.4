@@ -2,63 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A188640ADD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A53640AE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbiLBQdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S233795AbiLBQdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiLBQc4 (ORCPT
+        with ESMTP id S233721AbiLBQdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:32:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7674508C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:32:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 2 Dec 2022 11:33:33 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34817B56D;
+        Fri,  2 Dec 2022 08:33:31 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 166246233A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF39AC433D6;
-        Fri,  2 Dec 2022 16:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669998774;
-        bh=pQ7g0nDMOMcY6daJmycAqY67TFIHNGmsVxECzKIRMaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1s3wulxVdXIVq63bb87WUMUUL+XldGTyL7zWeuy5CHBc6+Xspp0QWBY2C5xcWatCl
-         88nRgRjSA9XlLB0ROROfY4ObT2oVdXFa2PfqLdv2SaUZj7ufAVg7d0eiVPBw9d7gB9
-         45ZkQaeX5l/ZydAUSGRq8i0AvssFWLnFfapK05P4=
-Date:   Fri, 2 Dec 2022 17:32:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Will Deacon <will@kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>, andersson@kernel.org,
-        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, hch@lst.de
-Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
- arch_dma_prep_coherent()"
-Message-ID: <Y4oos/xXL+tLT7E7@kroah.com>
-References: <018517b8-0ae0-54f5-f342-dcf1b3330a13@quicinc.com>
- <Y39blgEueyegkz6C@arm.com>
- <6d637906-e1d5-c481-a73d-2b2b845e223b@leemhuis.info>
- <Y4joR2sQMMjIt+yE@arm.com>
- <CAMi1Hd2wM5MLsjkx0HAWKkswzTDACb0C4tsPymNrRa0ariWsww@mail.gmail.com>
- <f98d163b-3410-9cf7-7d98-0f7640f4aa1f@leemhuis.info>
- <20221202100357.GB29396@willie-the-truck>
- <92a148a3-a8ac-4065-123c-99b72ac3ebeb@leemhuis.info>
- <Y4ojXyXMX2p+RVBR@kroah.com>
- <395ad6ef-eb54-ec7e-e131-714f23c84d7a@leemhuis.info>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0FCC121C4A;
+        Fri,  2 Dec 2022 16:33:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669998810; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hIc9GGjidMLX67s74TxPgelqErquLYtaNNBhCjPFqvA=;
+        b=MwBmd4I4d8KSktFz/t5PZovdXIqOQ5v2Zt6TQ0Df/7i7flVc8VMat/73irTERwEquJZWuM
+        6ijPzkGxOpuXdJKjN7nsix4C2kjRUJUHja2j8+Xu1AxemS131SQg6jiCLzSJhvxiOi/x1l
+        g8T2TpH66VWCsQku07NdRlCazSFzJVA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669998810;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hIc9GGjidMLX67s74TxPgelqErquLYtaNNBhCjPFqvA=;
+        b=Cv8NaFoZeePDhTQ0uNdRQTyG/d8lLH+uoet4DwRfwNTXpyWRbDGj0rorDax8+cPZeWkp9S
+        l6KyAVGggKGciHBA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id C423013644;
+        Fri,  2 Dec 2022 16:33:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id KrwsL9koimPFLQAAGKfGzw
+        (envelope-from <vbabka@suse.cz>); Fri, 02 Dec 2022 16:33:29 +0000
+Message-ID: <a4bc8ee2-8db9-5ce4-630b-ab0be6b1a890@suse.cz>
+Date:   Fri, 2 Dec 2022 17:33:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <395ad6ef-eb54-ec7e-e131-714f23c84d7a@leemhuis.info>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] mm: do not BUG_ON missing brk mapping, because userspace
+ can unmap it
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Cc:     "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        SeongJae Park <sj@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Will Deacon <will@kernel.org>
+References: <20221202162724.2009-1-Jason@zx2c4.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221202162724.2009-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +84,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 05:27:24PM +0100, Thorsten Leemhuis wrote:
+On 12/2/22 17:27, Jason A. Donenfeld wrote:
+> The following program will trigger the BUG_ON that this patch removes,
+> because the user can munmap() mm->brk:
 > 
+>   #include <sys/syscall.h>
+>   #include <sys/mman.h>
+>   #include <assert.h>
+>   #include <unistd.h>
 > 
-> On 02.12.22 17:10, Greg KH wrote:
-> > On Fri, Dec 02, 2022 at 11:34:30AM +0100, Thorsten Leemhuis wrote:
-> >> On 02.12.22 11:03, Will Deacon wrote:
-> >>> On Fri, Dec 02, 2022 at 09:54:05AM +0100, Thorsten Leemhuis wrote:
-> >>>> On 02.12.22 09:26, Amit Pundir wrote:
-> >>>>> On Thu, 1 Dec 2022 at 23:15, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> >>>>>>
-> >>>>>> On Thu, Dec 01, 2022 at 10:29:39AM +0100, Thorsten Leemhuis wrote:
-> >>>>>>> Has any progress been made to fix this regression? It afaics is not a
-> >>>>>>> release critical issue, but well, it still would be nice to get this
-> >>>>>>> fixed before 6.1 is released.
-> >>>>>>
-> >>>>>> The only (nearly) risk-free "fix" for 6.1 would be to revert the commit
-> >>>>>> that exposed the driver bug. It doesn't fix the actual bug, it only
-> >>>>>> makes it less likely to happen.
-> >>>>>>
-> >>>>>> I like the original commit removing the cache invalidation as it shows
-> >>>>>> drivers not behaving properly
-> >>>>
-> >>>> Yeah, I understand that, but I guess it's my job to ask at this point:
-> >>>> "is continuing to live with the old behavior for one or two more cycles"
-> >>>> that much of a problem"?
-> >>>
-> >>> That wouldn't be a problem. The problem is that I haven't see any efforts
-> >>> from the Qualcomm side to actually fix the drivers [...]
-> >>
-> >> Thx for sharing the details. I can fully understand your pain. But well,
-> >> in the end it looks to me like this commit it intentionally breaking
-> >> something that used to work -- which to my understanding of the "no
-> >> regression rule" is not okay, even if things only worked by chance and
-> >> not flawless.
-> > 
-> > "no regressions" for userspace code, this is broken, out-of-tree driver
-> > code, right?
+>   static void *brk_now(void)
+>   {
+>     return (void *)syscall(SYS_brk, 0);
+>   }
 > 
-> If so: apologies. But that's not the impression I got, as Amit wrote "I
-> can reproduce this crash on vanilla v6.1-rc1 as well with no out-of-tree
-> drivers." here:
-> https://lore.kernel.org/linux-arm-kernel/CAMi1Hd3H2k1J8hJ6e-Miy5+nVDNzv6qQ3nN-9929B0GbHJkXEg@mail.gmail.com/
+>   static void brk_set(void *b)
+>   {
+>     assert(syscall(SYS_brk, b) != -1);
+>   }
+> 
+>   int main(int argc, char *argv[])
+>   {
+>     void *b = brk_now();
+>     brk_set(b + 4096);
+>     assert(munmap(b - 4096, 4096 * 2) == 0);
+>     brk_set(b);
+>     return 0;
+>   }
+> 
+> Compile that with musl, since glibc actually uses brk(), and then
+> execute it, and it'll hit this splat:
+> 
+>   kernel BUG at mm/mmap.c:229!
+>   invalid opcode: 0000 [#1] PREEMPT SMP
+>   CPU: 12 PID: 1379 Comm: a.out Tainted: G S   U             6.1.0-rc7+ #419
+>   RIP: 0010:__do_sys_brk+0x2fc/0x340
+>   Code: 00 00 4c 89 ef e8 04 d3 fe ff eb 9a be 01 00 00 00 4c 89 ff e8 35 e0 fe ff e9 6e ff ff ff 4d 89 a7 20>
+>   RSP: 0018:ffff888140bc7eb0 EFLAGS: 00010246
+>   RAX: 0000000000000000 RBX: 00000000007e7000 RCX: ffff8881020fe000
+>   RDX: ffff8881020fe001 RSI: ffff8881955c9b00 RDI: ffff8881955c9b08
+>   RBP: 0000000000000000 R08: ffff8881955c9b00 R09: 00007ffc77844000
+>   R10: 0000000000000000 R11: 0000000000000001 R12: 00000000007e8000
+>   R13: 00000000007e8000 R14: 00000000007e7000 R15: ffff8881020fe000
+>   FS:  0000000000604298(0000) GS:ffff88901f700000(0000) knlGS:0000000000000000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: 0000000000603fe0 CR3: 000000015ba9a005 CR4: 0000000000770ee0
+>   PKRU: 55555554
+>   Call Trace:
+>    <TASK>
+>    do_syscall_64+0x2b/0x50
+>    entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>   RIP: 0033:0x400678
+>   Code: 10 4c 8d 41 08 4c 89 44 24 10 4c 8b 01 8b 4c 24 08 83 f9 2f 77 0a 4c 8d 4c 24 20 4c 01 c9 eb 05 48 8b>
+>   RSP: 002b:00007ffc77863890 EFLAGS: 00000212 ORIG_RAX: 000000000000000c
+>   RAX: ffffffffffffffda RBX: 000000000040031b RCX: 0000000000400678
+>   RDX: 00000000004006a1 RSI: 00000000007e6000 RDI: 00000000007e7000
+>   RBP: 00007ffc77863900 R08: 0000000000000000 R09: 00000000007e6000
+>   R10: 00007ffc77863930 R11: 0000000000000212 R12: 00007ffc77863978
+>   R13: 00007ffc77863988 R14: 0000000000000000 R15: 0000000000000000
+>    </TASK>
+> 
+> Instead, just error out if the original mapping has been removed.
+> 
+> Fixes: 2e7ce7d354f2 ("mm/mmap: change do_brk_flags() to expand existing VMA and add do_brk_munmap()")
 
-Ah, I missed that.
+That's 6.1-rc1 so probably fast track to Linus as we don't need to introduce
+such trivial local user DoS in 6.1, right?
 
-Ok, what in-tree drivers are having problems being buggy?  I can't seem
-to figure that out from that report at all.  Does anyone know?
+> Cc: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: SeongJae Park <sj@kernel.org>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-thanks,
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-greg k-h
+> ---
+>  mm/mmap.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index c3c5c1d6103d..f5a37fe9a19e 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -226,8 +226,7 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
+>  		/* Search one past newbrk */
+>  		mas_set(&mas, newbrk);
+>  		brkvma = mas_find(&mas, oldbrk);
+> -		BUG_ON(brkvma == NULL);
+> -		if (brkvma->vm_start >= oldbrk)
+> +		if (!brkvma || brkvma->vm_start >= oldbrk)
+>  			goto out; /* mapping intersects with an existing non-brk vma. */
+>  		/*
+>  		 * mm->brk must be protected by write mmap_lock.
+
