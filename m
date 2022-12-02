@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FE5640A84
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A33640AEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234050AbiLBQVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S234041AbiLBQhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbiLBQVb (ORCPT
+        with ESMTP id S233795AbiLBQhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:21:31 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D089EECE41
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:18:50 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id c66so834411edf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9sSKXcDsyGwMJeWY4NDSO718BkFmb+d6Aniz+mE21XI=;
-        b=DMcjVh5J0PLUm4KCi2yThPTKI61xrD/51r2/Ok5zUYgIBjhEOFJPoR+53vqsJaGXeb
-         o4FgU79/sR8k7rABYurayQCm0emRdY+OM4hauUeAM60mGgGe7HGCp+icrlEziWASk2aa
-         lZYKIVVT9zINcAIrUgC9muSsvr6Whu52Zt+ZY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9sSKXcDsyGwMJeWY4NDSO718BkFmb+d6Aniz+mE21XI=;
-        b=ZZ59eOAesUA1E3CPsf3Ptg7UKu8v4BZKDObMscfFoT0Ko7rf3HsatuBpnMMBaJt0hS
-         nnFnQa65ntjhr4VswD/5MJeAYLIOAm/xCDa154b5ixgPWvLcqz+6vCYzB+TTgKvyoqa+
-         OwRpsKQK0R/DNUsAkB7QFw8lp3p8AHYS/lPG411hM5bPLuZQOqMmaCK0uLvxe1vIQUx+
-         7t2TgtlhvlDx3EmwjhvPO5TA2SigTokKaZAr9OsjvBEOFAjCGic8ud1bM8/lj4uYKUSN
-         GWkgIcyeK3Sy3TuDJL8TxLOIw2mV8lSNS+FjDIUSy4Hv25biSehz8DSK5XlETH9fuvGQ
-         yoLw==
-X-Gm-Message-State: ANoB5pnwJs/7EP36kBQRQYn/pZq4lx+EkMQCY0/gNqIub19MPEUGR1iB
-        8LVY2GNFjvV7kDkgXWHzk8Z4yYq/H3aXxZLTozw=
-X-Google-Smtp-Source: AA0mqf5xa2zYJBaJgQ4P/CcG/bT7AEGZCB7N1djg2sB1pFjqeJvFK5Z8qY4QU9hViOwoKUBYVQNHtg==
-X-Received: by 2002:aa7:cb15:0:b0:458:e9c0:3e6f with SMTP id s21-20020aa7cb15000000b00458e9c03e6fmr65877008edt.61.1669997894835;
-        Fri, 02 Dec 2022 08:18:14 -0800 (PST)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id v1-20020a50a441000000b0046b4e0fae75sm3124153edb.40.2022.12.02.08.18.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 08:18:13 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id bx10so8601784wrb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:18:13 -0800 (PST)
-X-Received: by 2002:a5d:4943:0:b0:242:3ca3:b7bd with SMTP id
- r3-20020a5d4943000000b002423ca3b7bdmr4732468wrs.583.1669997893515; Fri, 02
- Dec 2022 08:18:13 -0800 (PST)
+        Fri, 2 Dec 2022 11:37:25 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEDBB0B45
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:37:24 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B28j12k022681;
+        Fri, 2 Dec 2022 10:18:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=RIFCmyy6/4s76okPuZ7eQuTU58jGZcnvgrzMHZqxzxY=;
+ b=mAE7Tqx7LOPHnchN2hJ3/2V2i231GtpO4kElveA8j+WCzOAc80n4NmkTlqEoSZD0gVnG
+ be56TQwteIRDe1Z3RoOO+ZzPZ9x2RqzVIuAVjpiCy6wr01GfqAovyAUmSMbsWC2zqEul
+ wzkWI1IetFJXQTCWNgNvRL6vc/JMi0nw3Gczy7Wvd6EmCQjXIia//LStczR2ubvptL++
+ Ezf+OgYtsGM/M+pgpmUDYXtPRYx3RZXOMg9a0R03xnEBani+6dcboONc2WuZEV1nXJCR
+ z80hHYo/z8EdTHeLpkl6+fd2cGSMF9Ehk3KqTALxsRYeQ3zDXH3cGoLjbajN5PJmjBHE aA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3m6k2vt0n6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 10:18:14 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 2 Dec
+ 2022 10:18:12 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Fri, 2 Dec 2022 10:18:12 -0600
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 71E17B10;
+        Fri,  2 Dec 2022 16:18:12 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <vkoul@kernel.org>, <pierre-louis.bossart@linux.intel.com>
+CC:     <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v2 0/3] soundwire: cadence: Fix oversized FIFO size define
+Date:   Fri, 2 Dec 2022 16:18:09 +0000
+Message-ID: <20221202161812.4186897-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org> <CAD=FV=U86PyVQP4wbhwEkzYprJxz2-S3ooniuYKJBNQOudx2uA@mail.gmail.com>
-In-Reply-To: <CAD=FV=U86PyVQP4wbhwEkzYprJxz2-S3ooniuYKJBNQOudx2uA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 2 Dec 2022 08:18:01 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VjfFx_GBNh9zC=fdV5gUBHww+4BhSSpAq0iq-72i62TQ@mail.gmail.com>
-Message-ID: <CAD=FV=VjfFx_GBNh9zC=fdV5gUBHww+4BhSSpAq0iq-72i62TQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] arm64: dts: qcom: sdm845-db845c: fix audio codec
- interrupt pin name
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: s3b6a1tc7ugk36PbSMbViYKf154AY-yy
+X-Proofpoint-ORIG-GUID: s3b6a1tc7ugk36PbSMbViYKf154AY-yy
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+As determined by experimentation and asking a hardware person, the FIFO
+in the Cadence IP is actually only 8 entries long, not 32. This is fixed
+in patch #1.
 
-On Fri, Dec 2, 2022 at 8:08 AM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Fri, Dec 2, 2022 at 7:57 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > The pin config entry should have a string, not number, for the GPIO used
-> > as WCD9340 audio codec interrupt.
-> >
-> > Reported-by: Doug Anderson <dianders@chromium.org>
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> > ---
-> >
-> > Cc: Doug Anderson <dianders@chromium.org>
-> >
-> > Changes since v2:
-> > 1. New patch.
-> > ---
-> >  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Presumably should have a "Fixes" tag since this is likely a true bug.
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+As a bonus, patches #2 and #3 fix two other things I noticed while
+debugging this.
 
-FWIW, this got copy-pasta-ed to another place, which I just noticed as
-I'm looking at your v3. So while your change is correct, it'd be
-better to also fix "sdm845-xiaomi-beryllium-common.dtsi"
+Changes since v1:
+- Rewrite commit message of patch #1
+- Only reduce response_buf to 34 (32 + 2)
+- Trim RX_FIFO_AVAIL to length of response_buf instead of expected
+  FIFO size
 
--Doug
+Richard Fitzgerald (3):
+  soundwire: cadence: Don't overflow the command FIFOs
+  soundwire: cadence: Remove wasted space in response_buf
+  soundwire: cadence: Drain the RX FIFO after an IO timeout
+
+ drivers/soundwire/cadence_master.c | 46 +++++++++++++++++++-----------
+ drivers/soundwire/cadence_master.h | 13 ++++++++-
+ 2 files changed, 41 insertions(+), 18 deletions(-)
+
+-- 
+2.30.2
+
