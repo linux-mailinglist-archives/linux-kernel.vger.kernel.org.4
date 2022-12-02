@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B92E64097B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E62064097D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbiLBPiM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Dec 2022 10:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
+        id S233768AbiLBPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiLBPiL (ORCPT
+        with ESMTP id S233765AbiLBPjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:38:11 -0500
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC53E8EE68;
-        Fri,  2 Dec 2022 07:38:09 -0800 (PST)
-Received: by mail-lf1-f52.google.com with SMTP id c1so7941385lfi.7;
-        Fri, 02 Dec 2022 07:38:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vhdW6X1bGFq1GUdOEe+pRgDK494GKVDs9c7r4mfiruQ=;
-        b=LxxZ7FlWH8XL/kaWszGQrGzeF4XG459tvGqgl6Kvw8m3N17fUZIz2Q0oqoopaCVjpj
-         V4EnP8zR6O39C27o4qS6tNx1LCSZmPJWy4UK7ggUgPReIpf6qOkaF37SNhRihWdJv8I1
-         EQDri6tcxZEk13oe8XDikUw6cTp3R7TtDbxEzCc3wD1dfyO/Z2CUhJLZXaauOx5uiImt
-         MxAx1j/ZIT4accfojEVgKx0NQaT/+1lDleX93KEwX/MB8KjspTrYyTDgb8UJ2qa3ROfS
-         t/uq4yycFTHcWWMsvAYDm7pBeEgsxteg+WqUhWXs2G/u57fXc9+iPrkN3i+e+zj4Xqgz
-         Nlfw==
-X-Gm-Message-State: ANoB5pk1u+e69VhCGd26FtS5s9yJxxby186uscHNwShoVCKg93axVXJH
-        rWnKUYnvDg5OiS0cHhgWRzLTJvaUr4x1oyNH
-X-Google-Smtp-Source: AA0mqf6WtGjNW0sRh9DgNZgKPJR9GAncVUIOvYTF7gw1mwIYgjb8GDaohcd0uwrycY5073j2BrJa2g==
-X-Received: by 2002:a05:6512:2983:b0:4b4:d338:4d8e with SMTP id du3-20020a056512298300b004b4d3384d8emr17761989lfb.512.1669995486840;
-        Fri, 02 Dec 2022 07:38:06 -0800 (PST)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id bi37-20020a05651c232500b0027708c94c9bsm6705ljb.79.2022.12.02.07.38.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 07:38:05 -0800 (PST)
-Received: by mail-lj1-f173.google.com with SMTP id a19so5862765ljk.0;
-        Fri, 02 Dec 2022 07:38:04 -0800 (PST)
-X-Received: by 2002:a05:651c:200c:b0:279:3d7a:c240 with SMTP id
- s12-20020a05651c200c00b002793d7ac240mr19420636ljo.289.1669995484289; Fri, 02
- Dec 2022 07:38:04 -0800 (PST)
+        Fri, 2 Dec 2022 10:39:07 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A609BE6B3;
+        Fri,  2 Dec 2022 07:39:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.ch; s=s31663417;
+        t=1669995523; bh=ldG0fzm6Qem0Pfa6GXvE+somhuAXUV/Lz5s/EE/u7EU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=FwbQ27KZcoVQ67aMcSqdAPD+8ALJiPA+vNIE2krhZB0EuucO6VfV7+wVGMkq0Oq2M
+         Y9esfsDr91p3srfVAQ0/3eYQ5q98qsfnbrWJ0HsGPKvnGruvcLFq1ZEqN6nlgv97OM
+         2pDTzcDdpD5eLvbKl9Odlt5ccqVW7znk4ZLSyfFR4KNTh9VI85kNZMnBmnQLbCVFWh
+         qp+A65OmvVhRktZ9mEXvsF0ug3naIJ8iJ7jxHs3Xl5Jaq96joqyLuvAT9eC6dKQQ5s
+         +MbIvrYuU9rK0jNpsGwVgmFLeirudl6IzxesHH6a8dlnvej2RoYrNpE49pu9hOLVSP
+         s2hvlEGy/d4SQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from x1c6.fritz.box ([185.76.96.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mqs4f-1ofYxe2J61-00muzS; Fri, 02
+ Dec 2022 16:38:43 +0100
+From:   Timo Hunziker <timo.hunziker@gmx.ch>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@google.com, linux-kernel@vger.kernel.org,
+        Timo Hunziker <timo.hunziker@gmx.ch>
+Subject: [PATCH bpf-next] libbpf: parse usdt args without offset on x86 (e.g. 8@(%rsp))
+Date:   Fri,  2 Dec 2022 16:38:16 +0100
+Message-Id: <20221202153816.1180450-1-timo.hunziker@gmx.ch>
 MIME-Version: 1.0
-References: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info> <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
-In-Reply-To: <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
-From:   Dave Chiluk <chiluk@ubuntu.com>
-Date:   Fri, 2 Dec 2022 09:37:51 -0600
-X-Gmail-Original-Message-ID: <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
-Message-ID: <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
-Subject: Re: [regression] Bug 216753 - 6e 6 ghz bands are disabled since 5.16
- on intel ax211
-To:     "Coelho, Luciano" <luciano.coelho@intel.com>
-Cc:     "regressions@leemhuis.info" <regressions@leemhuis.info>,
-        "Greenman, Gregory" <gregory.greenman@intel.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:iHEIR/r7nBpuEQBqpUIq+/Y5by8Fmo14yoHvLmB2k7rtJJNeMIx
+ glfIQ9h8LYddQqnoX/WTe9YZ6H+lQxxKrpgBoEa/GfneQK2Nw+bgm8ZUIWUwQzY/YKfgDe+
+ 2xD2GdG8HahVd+pDY/PFDjFQA1MaFFzoNmsfiRVZoCzl1s5Vf3ijw5sc87w4iThmngEDX2p
+ 3HUwG1a1ol5DZ3nU/z3gA==
+UI-OutboundReport: notjunk:1;M01:P0:8shPd3u1qR0=;z5Myn1tE+QAb72nrUcKTqW+liYq
+ ucRGQlRe4QaHCQWXCLKUWMGqqBVfYn+Da96FO+hQjozzgJvDEPx3LVDCXjBfygnNxp4xMsr8x
+ YXiX89jApej6HZl+DRvlA5DCU8S1YjiTavDyR+qb4luWGp5MQ8lnXMSUZkIe7YRRdSKqoHn5+
+ AWizaJGDkgQWvuvAXwdCMAxDJWkT9tWwieLl31D6S61HjmgT62p511edlT7z9YGSqDB5Zvpju
+ S2xoUdTK8y4Z78u0Na1R7Jf2/zC87rQJRqwjT8XM1AVsH/pLN9ayUpgZj8dX/o/aMLiSEbzsV
+ LabclslBOgHGzOwfLD9vpjuqyBPA99TriD/U5/ZoEImO60Qmpn+YUA2G0MmWogaumkGvY1uKq
+ cjBGNbO4wlgUq27ThNcEw5JJXx4dKHTsKoFRG7AD50TIZUm5gZt3DJBwanOAvwK0tENYTj328
+ cNAa5akFBeu9jaCpvRAcbmGqcnIDuN1kxpH1d3futiRZvHkoJrof9J3Y2puvQKJRj6kXS4zLh
+ V0+WehPmuy+vx2YZ+2PITZ0GQ9JNQAuNlckRwAfzTGntQV3QdFV3A+XnXeRYYqPfaY0jQIDQA
+ MjZEuv32wFgUbWqqYdIsU+E8W1Q1hBQYMtM0Hf7JW+FX13+eXRV7h0wgb7opdpv+kxJr6eKG8
+ b4Pfhnjpm3j2erLK6aB7DlckqI6GSEdsgtCVAZ2Jgu28xaDGYZwl4ybiSn4gicuesP1mReBXE
+ VWQLElGkiNzXDKzOLWMroPEE7ZzdleQ5NZhxwvBTP8w+tW5o4VGSQMCYs3VhwKeba1Nujn3gg
+ X/QgFZVv4veyIwGSqDiqsa1Gr4JvfW8e4+x9IlBTugeCH4ldFpQf1AbuVc90hKoF4g7CP46ut
+ tbkKcYlrUuskNHM5F4HmtdJnLt7EfWismnAj+9OKvoSSobFfl2j73qkfQcEjplEhxfrz54mA1
+ WbPgnJX98ljEa233twKCCxforig=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The other possibility is that this is actually a bios bug, as the DSM
-is being read out of ACPI.  In which case that would be Dell's fault.
-Either way I appreciate any guidance you can provide.
+Parse USDT arguments like "8@(%rsp)" on x86. These are emmited by
+systemtap. The syntax is a mixture between the "memory dereference
+case" and the "register read case" as the offset is zero but the
+register is wrapped in parentheses. We treat them the same as the
+the "register read case".
 
-Thanks,
-Dave.
+I've tested that this fixes the "unrecognized arg #N spec: 8@(%rsp).."
+error I've run into when attaching to a probe with such an argument.
+Attaching and reading the arguments works.
 
+Something similar might be needed for the other supported
+architectures.
 
-On Thu, Dec 1, 2022 at 5:33 AM Coelho, Luciano <luciano.coelho@intel.com> wrote:
->
-> On Thu, 2022-12-01 at 11:14 +0100, Thorsten Leemhuis wrote:
-> > Hi, this is your Linux kernel regression tracker.
-> >
-> > Luca, I noticed a regression report in bugzilla where I'd like your
-> > advice on. To quote https://bugzilla.kernel.org/show_bug.cgi?id=216753
->
-> Hi Thorsten wearing-the-regression-hat, 🙂
->
-> I'm not the maintainer of iwlwifi anymore, so I'm adding the new
-> maintainer here, Gregory Greenman.
->
-> Gregory, can you take a look?
->
->
-> > > It looks like the self-managed regulatory information is causing the 6ghz band to be disabled on my AX211 (in the US).
-> > > iw reg get shows no 6ghz bands (output at the bottom).
-> > >
-> > > $ sudo iw phy0 channel
-> > > ...
-> > > Band 4:
-> > >     * 5955 MHz [1] (disabled)
-> > >     * 5975 MHz [5] (disabled)
-> > >     * 5995 MHz [9] (disabled)
-> > >         ....(continues with all disabled
-> > >         * 7115 MHz [233] (disabled)
-> > > ...
-> > >
-> > > I was able to narrow this down to having been introduced during the 5.16 development window, as 5.15.79 linux-stable kernel works and the 5.16.12 does
-> > > not (earlier builds of 5.16 kernel fail to boot on my machine for some reason).
-> > >
-> > > I found https://community.frame.work/t/kernel-5-16-6ghz-disabled-ax210/15675/5
-> > > and they imply that this regression was introduced by
-> > > 698b166ed3464e1604a0e6a3e23cc1b529a5adc1
-> > > I haven't independently verified this commit as the definitive issue.
-> >
-> > You authored 698b166ed346 ("iwlwifi: mvm: read 6E enablement flags from
-> > DSM and pass to FW"). As it is a regressions is ideally should be dealt
-> > with. But this area in tricky due to the legal implications. Hence I
-> > wonder: is there anything we can do about this, or is this simply a case
-> > where we have to bite the bullet and live with this regression?
-> >
-> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> >
-> > P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> > reports and sometimes miss something important when writing mails like
-> > this. If that's the case here, don't hesitate to tell me in a public
-> > reply, it's in everyone's interest to set the public record straight.
+ref: https://github.com/libbpf/libbpf/issues/559
+
+Signed-off-by: Timo Hunziker <timo.hunziker@gmx.ch>
+=2D--
+ tools/lib/bpf/usdt.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index b8daae265f99..5e7ec7ad8ad7 100644
+=2D-- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -1233,6 +1233,14 @@ static int parse_usdt_arg(const char *arg_str, int =
+arg_num, struct usdt_arg_spec
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off =3D reg_off;
++	} else if (sscanf(arg_str, " %d @ ( %%%15[^)] ) %n", &arg_sz, reg_name, =
+&len) =3D=3D 2) {
++		/* Register read case with parentheses, e.g., 8@(%rsp) */
++		arg->arg_type =3D USDT_ARG_REG;
++		arg->val_off =3D 0;
++		reg_off =3D calc_pt_regs_off(reg_name);
++		if (reg_off < 0)
++			return reg_off;
++		arg->reg_off =3D reg_off;
+ 	} else if (sscanf(arg_str, " %d @ %%%15s %n", &arg_sz, reg_name, &len) =
+=3D=3D 2) {
+ 		/* Register read case, e.g., -4@%eax */
+ 		arg->arg_type =3D USDT_ARG_REG;
+=2D-
+2.36.2
+
