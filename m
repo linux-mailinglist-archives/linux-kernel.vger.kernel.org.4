@@ -2,127 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C60640128
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550C264012C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiLBHkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 02:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S232323AbiLBHod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 02:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbiLBHke (ORCPT
+        with ESMTP id S230094AbiLBHob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 02:40:34 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAD2B0B74
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 23:40:34 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id 21so4185782pfw.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 23:40:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nDu6wdj2BavaJhgV2+IGABHC/KEWWb+4yyQcwbwd+rA=;
-        b=vGIxaz68/q/F+Cc79hSj1Yrfct0QR+YaiyK5BQ4C6hiZyHx/8iu6y8E1PtRzXKEnzd
-         s9nXKon0twvku4AZQbm055w40EBHnDL6JPYOlxUbIjUIXCKtG+4oo18baBM7adk7YXDd
-         bAjOjJkst88dSaFg7cIdCItKVRFr1McJ6Q7rPs/U6W7ROvkGJ7oQyoGeQlWnH0dEDMn5
-         2/OzC6HJQ47VwY9YtMb46EGL7qkqD8qEEMtUroNW33oXC1dZotRDcZJ+sQi0+ERv9Noz
-         OL/BwIz8fRqvvb11QAIxCyGvhfs53+UOdgk0e3LxwwIEytbmELTBaAgUACZH2kBEQqbd
-         HOLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nDu6wdj2BavaJhgV2+IGABHC/KEWWb+4yyQcwbwd+rA=;
-        b=0qX48y+2GhGv829Cq1dDBvfb1coCnbUWpvf/gqVJ2Wv4b8w+RmpZUSW5xJ+QAMO0ki
-         V5iKr7vGlXgmur8hNGI9xUg9mVbTqNdkZ9mOT8PuDhMQaIBCQ3NCsHDNWIIBP2zQIXme
-         FOUB7oETNxhL7TRo5eA3/PU+4RTliHrUb6WCxae9zEkoW33Ifpus67bq3ieh2AR5X8Tz
-         Eu2AVtenFGImzVRRaDu37QCqunZ6AABbXgrN6qLNPxnqbGrEZHKiJ0yhJ3xgclI/KJQI
-         Wmi9mv2/fXVgiWmZNhOvk7Jc/4z22hX30dS6iuAxsNyfgVzg75f8wI7ejW5uW773UJjB
-         cdwA==
-X-Gm-Message-State: ANoB5pkY6SSx1EaEtkaSVgjR9ocpJEnuit+ufSg8lavwZ1OneV6268zC
-        uDoGUxSjYfhuQvnQuCdytYux
-X-Google-Smtp-Source: AA0mqf5Ag5+BnQmSsuOlhiMDTVxXCd5381jopnyR1FNdrsNyFJE6Wo2Z9eXE7MXXIb3+AkYNm36GHw==
-X-Received: by 2002:a63:ec07:0:b0:470:90f1:6216 with SMTP id j7-20020a63ec07000000b0047090f16216mr62174034pgh.42.1669966833731;
-        Thu, 01 Dec 2022 23:40:33 -0800 (PST)
-Received: from thinkpad ([27.111.75.154])
-        by smtp.gmail.com with ESMTPSA id z15-20020a655a4f000000b0046faefad8a1sm3630828pgs.79.2022.12.01.23.40.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 23:40:32 -0800 (PST)
-Date:   Fri, 2 Dec 2022 13:10:25 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] scsi: ufs: ufs-qcom: Use dev_err() where possible
-Message-ID: <20221202074025.GE5356@thinkpad>
-References: <20221201230810.1019834-1-ahalaney@redhat.com>
- <20221201230810.1019834-5-ahalaney@redhat.com>
+        Fri, 2 Dec 2022 02:44:31 -0500
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2DA868EE71
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 23:44:28 -0800 (PST)
+Received: from mail.didiglobal.com (unknown [10.79.64.13])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 9F153110365E14;
+        Fri,  2 Dec 2022 15:44:25 +0800 (CST)
+Received: from [172.28.50.89] (10.79.71.102) by
+ ZJY01-ACTMBX-03.didichuxing.com (10.79.64.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 2 Dec 2022 15:44:24 +0800
+Message-ID: <8d976d4a-ecb6-41af-85b0-65e6022a0d82@didichuxing.com>
+Date:   Fri, 2 Dec 2022 15:44:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221201230810.1019834-5-ahalaney@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v3 1/2] sched/fair: Introduce short duration task check
+To:     Chen Yu <yu.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+CC:     Juri Lelli <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>, <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+X-MD-Sfrom: wanghonglei@didiglobal.com
+X-MD-SrcIP: 10.79.64.13
+From:   Honglei Wang <wanghonglei@didichuxing.com>
+In-Reply-To: <7621888af45a89c3963b39e062695602a3b9499f.1669862147.git.yu.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.79.71.102]
+X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
+ ZJY01-ACTMBX-03.didichuxing.com (10.79.64.13)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 05:08:10PM -0600, Andrew Halaney wrote:
-> dev_err() statements are better to use than pr_err(), so switch to
-> those.
-> 
-> In a similar vein, the check on the dev_req_params pointer here is
-> not needed, the two places this function is called never pass in a
-> NULL pointer, so instead of using dev_err() there just remove it.
-> 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+On 2022/12/1 16:44, Chen Yu wrote:
+> Introduce short-duration task checks, as there is requirement
+> to leverage this attribute for better task placement.
+> 
+> There are several choices of metrics that could be used to
+> indicate if a task is a short-duration task.
+> 
+> At first thought the (p->se.sum_exec_runtime / p->nvcsw)
+> could be used to measure the task duration. However, the
+> history long past was factored too heavily in such a formula.
+> Ideally, the old activity should decay and not affect
+> the current status too much.
+> 
+> Although something based on PELT could be used, se.util_avg might
+> not be appropriate to describe the task duration:
+> 1. Task p1 and task p2 are doing frequent ping-pong scheduling on
+>     one CPU, both p1 and p2 have a short duration, but the util_avg
+>     can be up to 50%.
+> 2. Suppose a task lasting less than 4ms is regarded as a short task.
+>     If task p3 runs for 6ms and sleeps for 32ms, p3 should not be a
+>     short-duration task. However, PELT would decay p3's accumulated
+>     running time from 6ms to 3ms, because 32ms is the half-life in PELT.
+>     As a result, p3 would be incorrectly treated as a short task.
+> 
+> It was found that there was once a similar feature to track the
+> duration of a task, which is in Commit ad4b78bbcbab ("sched: Add
+> new wakeup preemption mode: WAKEUP_RUNNING"). Unfortunately, it
+> was reverted because it was an experiment. So pick the patch up
+> again, by recording the average duration when a task voluntarily
+> switches out. Introduce SIS_SHORT to control this strategy.
+> 
+> The threshold of short duration reuses sysctl_sched_min_granularity,
+> so it can be tuned by the user. Ideally there should be a dedicated
+> parameter for the threshold, but that might introduce complexity.
+> 
+> Suggested-by: Tim Chen <tim.c.chen@intel.com>
+> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+>   include/linux/sched.h   |  4 ++++
+>   kernel/sched/core.c     |  2 ++
+>   kernel/sched/fair.c     | 17 +++++++++++++++++
+>   kernel/sched/features.h |  1 +
+>   4 files changed, 24 insertions(+)
+> 
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index ffb6eb55cd13..64b7acb77a11 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -558,6 +558,10 @@ struct sched_entity {
+>   
+>   	u64				nr_migrations;
+>   
+> +	u64				prev_sum_exec_runtime_vol;
+> +	/* average duration of a task */
+> +	u64				dur_avg;
+> +
+>   #ifdef CONFIG_FAIR_GROUP_SCHED
+>   	int				depth;
+>   	struct sched_entity		*parent;
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index daff72f00385..c5202f1be3f7 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4348,6 +4348,8 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+>   	p->se.prev_sum_exec_runtime	= 0;
+>   	p->se.nr_migrations		= 0;
+>   	p->se.vruntime			= 0;
+> +	p->se.dur_avg			= 0;
+> +	p->se.prev_sum_exec_runtime_vol	= 0;
+>   	INIT_LIST_HEAD(&p->se.group_node);
+>   
+>   #ifdef CONFIG_FAIR_GROUP_SCHED
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index e4a0b8bd941c..a4b314b664f8 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6200,6 +6200,16 @@ static int wake_wide(struct task_struct *p)
+>   	return 1;
+>   }
+>   
+> +/*
+> + * If a task switches in and then voluntarily relinquishes the
+> + * CPU quickly, it is regarded as a short duration task.
+> + */
+> +static inline int is_short_task(struct task_struct *p)
+> +{
+> +	return sched_feat(SIS_SHORT) &&
+> +		(p->se.dur_avg <= sysctl_sched_min_granularity);
+> +}
+> +
+
+Hi Yu,
+
+I still have a bit concern about the sysctl_sched_min_granularity 
+stuff.. This grab can be set to different value which will impact the 
+action of this patch and make things not totally under control.
+
+Not sure if we can add a new grab for this.. The test result shows good 
+improvement for short task, and with this grab, admins will be able to 
+custom the system base on their own 'short task' view.
 
 Thanks,
-Mani
+Honglei
 
-> ---
->  drivers/ufs/host/ufs-qcom.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index b1fcff1fad0c..4350c44a6fc7 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -680,12 +680,6 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
->  	struct ufs_dev_params ufs_qcom_cap;
->  	int ret = 0;
->  
-> -	if (!dev_req_params) {
-> -		pr_err("%s: incoming dev_req_params is NULL\n", __func__);
-> -		ret = -EINVAL;
-> -		goto out;
-> -	}
-> -
->  	switch (status) {
->  	case PRE_CHANGE:
->  		ufshcd_init_pwr_dev_param(&ufs_qcom_cap);
-> @@ -709,7 +703,7 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
->  					       dev_max_params,
->  					       dev_req_params);
->  		if (ret) {
-> -			pr_err("%s: failed to determine capabilities\n",
-> +			dev_err(hba->dev, "%s: failed to determine capabilities\n",
->  					__func__);
->  			goto out;
->  		}
-> -- 
-> 2.38.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+>   /*
+>    * The purpose of wake_affine() is to quickly determine on which CPU we can run
+>    * soonest. For the purpose of speed we only consider the waking and previous
+> @@ -7680,6 +7690,13 @@ static void put_prev_task_fair(struct rq *rq, struct task_struct *prev)
+>   	struct sched_entity *se = &prev->se;
+>   	struct cfs_rq *cfs_rq;
+>   
+> +	if (sched_feat(SIS_SHORT) && !prev->on_rq) {
+> +		u64 this_dur = se->sum_exec_runtime - se->prev_sum_exec_runtime_vol;
+> +
+> +		se->prev_sum_exec_runtime_vol = se->sum_exec_runtime;
+> +		update_avg(&se->dur_avg, this_dur);
+> +	}
+> +
+>   	for_each_sched_entity(se) {
+>   		cfs_rq = cfs_rq_of(se);
+>   		put_prev_entity(cfs_rq, se);
+> diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+> index ee7f23c76bd3..efdc29c42161 100644
+> --- a/kernel/sched/features.h
+> +++ b/kernel/sched/features.h
+> @@ -62,6 +62,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+>    */
+>   SCHED_FEAT(SIS_PROP, false)
+>   SCHED_FEAT(SIS_UTIL, true)
+> +SCHED_FEAT(SIS_SHORT, true)
+>   
+>   /*
+>    * Issue a WARN when we do multiple update_rq_clock() calls
