@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54EC641016
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A3C641019
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234620AbiLBVis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S233907AbiLBVjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:39:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233541AbiLBViq (ORCPT
+        with ESMTP id S233541AbiLBVjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:38:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FBCDA7D3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:38:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17E61B822B9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 21:38:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62DB9C433D6;
-        Fri,  2 Dec 2022 21:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1670017121;
-        bh=tJ16Bk0WI8y8XcmDkzMO+dBcBAplNjNR2GBLgl4eFgQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nG9gJJjNM1REQ9Dp2YlErXGNujtva4AwRxgbaw//vEAA+mb9a2qG+/9ZCpzJdNayg
-         rrjBRTylp+09XRSUZBbv3eM65UQCWET0S5lrUINYtGA0CTQ1sUXjowiYIfbqFIxPK9
-         nUat24/ksykBSb2BMwBB3ivIRcfOZNfJLiEEbOic=
-Date:   Fri, 2 Dec 2022 13:38:40 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] mm: disable top-tier fallback to reclaim on
- proactive reclaim
-Message-Id: <20221202133840.5cdd4270cf73eaaa1d9d0345@linux-foundation.org>
-In-Reply-To: <20221201233317.1394958-1-almasrymina@google.com>
-References: <20221201233317.1394958-1-almasrymina@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 2 Dec 2022 16:39:45 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5F4DF610;
+        Fri,  2 Dec 2022 13:39:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670017184; x=1701553184;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x3lQwjwLht49M/jM4Z/ZUC2yG9PXyBbEO1YpDGLZO68=;
+  b=Nn4+NRSNTy0rVF8PpJEIqUxtTiGeYmhuMIjRfJQXYHN+BCEtwZe0da/Q
+   JntlgbJwaI81aibynFCw/GL7p6ZrXY/ocJWnCwNj16qLTqLNdSjQ36EKO
+   1+dNMUCbFj8n5aVdV1ToBMi3cnWo2rgvGK5nKf5AiBNR0GFcx3V3yw0io
+   i+B8iQm31V0pChiJwDk2RAHVdJTkXvHwsP8V0P/vxecObkPpWhQrp5ssD
+   gBxeva1uQNXjMXdHK/72q9Jy2FaJb2DS4fyor+fyOSUGP6S9Y0BvnAI27
+   POv4QfO+x3SpNTCMZB/zahVRb3sYVIsL4op+M44XrXPW1gQBO7BpVexuQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="402329971"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="402329971"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:39:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="677743028"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="677743028"
+Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:39:43 -0800
+Message-ID: <cfdfd5df-9b5d-f4c1-91fe-e0443819fa7e@intel.com>
+Date:   Fri, 2 Dec 2022 13:39:42 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 03/18] x86/sgx: Add 'struct sgx_epc_lru_lists' to
+ encapsulate lru list(s)
+Content-Language: en-US
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-4-kristen@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221202183655.3767674-4-kristen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  1 Dec 2022 15:33:17 -0800 Mina Almasry <almasrymina@google.com> wrote:
-
-> Reclaiming directly from top tier nodes breaks the aging pipeline of
-> memory tiers.  If we have a RAM -> CXL -> storage hierarchy, we
-> should demote from RAM to CXL and from CXL to storage. If we reclaim
-> a page from RAM, it means we 'demote' it directly from RAM to storage,
-> bypassing potentially a huge amount of pages colder than it in CXL.
+On 12/2/22 10:36, Kristen Carlson Accardi wrote:
+> Introduce a data structure to wrap the existing reclaimable list
+> and its spinlock in a struct to minimize the code changes needed
+> to handle multiple LRUs as well as reclaimable and non-reclaimable
+> lists, both of which will be introduced and used by SGX EPC cgroups.
 > 
-> However disabling reclaim from top tier nodes entirely would cause ooms
-> in edge scenarios where lower tier memory is unreclaimable for whatever
-> reason, e.g. memory being mlocked() or too hot to reclaim.  In these
-> cases we would rather the job run with a performance regression rather
-> than it oom altogether.
-> 
-> However, we can disable reclaim from top tier nodes for proactive reclaim.
-> That reclaim is not real memory pressure, and we don't have any cause to
-> be breaking the aging pipeline.
-> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>
 
-Is this purely from code inspection, or are there quantitative
-observations to be shared?
+Tiny nits: Let's also allude to the fact that this doesn't do anything
+with the new helpers or structures for now.
 
+I also think it's probably a sane idea to mention that the core VM also
+has parallel LRU lists for cgroups.
+
+> +static inline struct sgx_epc_page *
+> +sgx_epc_pop_reclaimable(struct sgx_epc_lru_lists *lrus)
+> +{
+> +	return __sgx_epc_page_list_pop(&(lrus)->reclaimable);
+> +}
+
+Are those '(lrus)' parenthesis doing anything useful?
