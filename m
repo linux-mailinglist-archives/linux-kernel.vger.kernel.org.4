@@ -2,245 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1F3640B7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7552F640B7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiLBQ7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S234314AbiLBQ7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbiLBQ7U (ORCPT
+        with ESMTP id S234277AbiLBQ7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:59:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DEAE36BB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:56:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670000194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b4eKbFg7g83Utc9laDTG1bfOmc5hP5ybhCQkldsbAH0=;
-        b=E/M0ibeCJK12x+QbaT9Kw2qTpwgSdxbHvHgvoCDC/FfV/ULaUk9v1nwp03wVhx3w8GhJ9c
-        zOvOBIt2bsj1HFghcFllPnBrdAvGj+2T41IXyvMLV7VSkUontqb0sSt3slaF9rzaZbFICV
-        KTbN7Bx8Hr48w9Wnuhn9iTs8XGp3Yt4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-55--EkKH8wBNWOV8V6gCv7e-w-1; Fri, 02 Dec 2022 11:56:26 -0500
-X-MC-Unique: -EkKH8wBNWOV8V6gCv7e-w-1
-Received: by mail-wm1-f72.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso2762360wms.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:56:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b4eKbFg7g83Utc9laDTG1bfOmc5hP5ybhCQkldsbAH0=;
-        b=K6O9fZ8TaNNw22ERYZm9eI0o3ttF75bGq5DMBPvaAXGnZjjxTlfBaKQEWLroj3JHWf
-         9XS6oC02MI9REpm1wDz6DXf4pGnK7MUryUXSBNZZAQxPeiPFUjjLuGtAB7+BnOloOVPS
-         f2q7ap5TszmwtaFtv4/FPLPmwcTcXSrkO+YYLf1x0ysyKIghmKQUW5ippSI0gEe6ER1w
-         zK80XVbW7wy4d5Vpq/CtsfAENx8VMvzC437CdY0ECFjvs9xjAaRJ2ANWjdQAQ5j0UBXi
-         8oXsmxPksslxx0YlQlKPMq7hzY/k8cbiNhRi2cQdQNgCpGi3bjYBijGZ27XDas1lB285
-         ptbw==
-X-Gm-Message-State: ANoB5pkjOKWM31gqMgme9c0fDkW42dy49i1H7QoyjpW34k+AcWa04+7n
-        SgEyQQtVOiQXpTXwuRqYy85dY2+0QWosScvPzZ8JXC0QGX6juxdf5FYzuDGDBYrKxfYgW9j3uQE
-        JVp4APkcVxkbZWs1j1D0EdB1e
-X-Received: by 2002:adf:a117:0:b0:242:d27:c359 with SMTP id o23-20020adfa117000000b002420d27c359mr18435643wro.152.1670000185306;
-        Fri, 02 Dec 2022 08:56:25 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7K8uiiQgOvY60dYoLLbXPrh/iZzkx1xZ9Vi6Ebb/jodwg3ulKWAaHj6tRrBwlKdxWfBo7N6g==
-X-Received: by 2002:adf:a117:0:b0:242:d27:c359 with SMTP id o23-20020adfa117000000b002420d27c359mr18435628wro.152.1670000184965;
-        Fri, 02 Dec 2022 08:56:24 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:7a00:852e:72cd:ed76:d72f? (p200300cbc7037a00852e72cded76d72f.dip0.t-ipconnect.de. [2003:cb:c703:7a00:852e:72cd:ed76:d72f])
-        by smtp.gmail.com with ESMTPSA id u17-20020a05600c19d100b003c6f8d30e40sm14189295wmq.31.2022.12.02.08.56.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 08:56:24 -0800 (PST)
-Message-ID: <690afe0f-c9a0-9631-b365-d11d98fdf56f@redhat.com>
-Date:   Fri, 2 Dec 2022 17:56:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
+        Fri, 2 Dec 2022 11:59:15 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3B925C5;
+        Fri,  2 Dec 2022 08:57:52 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2Fhinh003543;
+        Fri, 2 Dec 2022 16:57:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=FfTMBNE79osxJMnX5TIcRmskvfag0bhfBUkxWqsqy8s=;
+ b=vw+wOisqMRFohrdNgGLNZ8ql4GjhdfrRwv472o6oDp4Pf47q++bXj2nB8YlZIcKWG1OZ
+ ztl29jtciCuGLwcrKIeW69d/dH1QOgF1y5VuoVEBgO4qRL/9qDqZsaACgQXzirgL74jt
+ JXqhC4F/YkHJ5JGlS8BpAn0n9K0gheBGVXUiq0+53hRWFBwyGoraUTJunwMdPBi7OSaF
+ KD6/E/r7c+Q0ed7F+BDKE4gdjcJ+fqOpzbUI5Y5uct1yidrcSyODnLMTaIfPEMCxoXml
+ wjDOj+iSy8bi5mP25mxCHrHfik9W4gk+dKiT136837U0cihWbc4ICuCRNQ0pIsLwD8/0 tA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m782h9y6w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 02 Dec 2022 16:57:27 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B2FPhdb002804;
+        Fri, 2 Dec 2022 16:57:26 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3m398d7rau-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 02 Dec 2022 16:57:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P73X3z0NmnXloHRs1T/BO6iRpBFwgE8Fbq+vUnYTH6xPAvSNvYL4PX103yaoz3y7zKeCyWRB56+sNxeC48eDiwH+iXBcx1VIv/+2F7aJZcKIyF5ifCqX36v5yQWtMjATxjVO2zW7fNR8+yV58WyWUgolgfznhcp8E8qz/Dd8lhQSdxmLoRNfV2Kj+zHgauzo0F/pD/R5h9CjH4qHdD2dicRtr9VTpzl0OaBAJb9NMlR0xMx26KNQbxj0K4bXkAZfa6SaZMX97HVCmOlZECvLxuEmIVjYqgxpI8qUHgH1L5Vddnac9M9AneyOsaH1vUs/GV2LgcWpbQ4F1Q3qUgxKzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FfTMBNE79osxJMnX5TIcRmskvfag0bhfBUkxWqsqy8s=;
+ b=FQBQaQ1TRZAdsgPLlKbkXqyy8Cwd8rXSm+i5hYQ0/ts37lUTNW5AAU/TCsh0hyprAwbyz3rggicY2bgxLBGVGGnF4Hr9TS+ipDUTkHrwDK0hPPSs34gXdu+cx3fdpbCbmTM5iE3NuyObz/shdyNe9gWi+oGkhZ2S1fIdzqIBLhSj9fgD4v2BPbrwgbW33MQwAcVZ1jqHjrTlXozo8x3iPY6RfOyCj90OTrzUU5yQe4uO1TO83yu56edKeTJwd2wvBCNDl6AH2vKLZRvxd6ivK6FeJmOELHpL2c0uIhC2FjlPOI3VrnWN6iMFjeo+uGFHlt+CYKFiVqzvaLpcE+4znQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FfTMBNE79osxJMnX5TIcRmskvfag0bhfBUkxWqsqy8s=;
+ b=aT1BJ5hXQ/kOpzhxHGym9GKQM+aYnahkbofmT+ExmJ/IRAmGkMa4HbHBP2y9T7af+Fam6xpVz4+OW+Hg43/jc7HcbVeqjEPPJOMijiryw6riuwUZrS1e+k3VQuBk9Nn+kMi7NkS7b0xUVlMVs9FA0y2OF+LorXVOFSWCo9/yMZk=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by CO6PR10MB5791.namprd10.prod.outlook.com (2603:10b6:303:14c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Fri, 2 Dec
+ 2022 16:57:24 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::a02:2ac8:ee3e:682]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::a02:2ac8:ee3e:682%4]) with mapi id 15.20.5880.008; Fri, 2 Dec 2022
+ 16:57:24 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        SeongJae Park <sj@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] mm: do not BUG_ON missing brk mapping, because userspace
+ can unmap it
+Thread-Topic: [PATCH] mm: do not BUG_ON missing brk mapping, because userspace
+ can unmap it
+Thread-Index: AQHZBmsFAkrli55WlUiTpq8z55YrNa5a0WmA
+Date:   Fri, 2 Dec 2022 16:57:24 +0000
+Message-ID: <20221202165713.xgiqahqfc3zvm6px@revolver>
+References: <20221202162724.2009-1-Jason@zx2c4.com>
+In-Reply-To: <20221202162724.2009-1-Jason@zx2c4.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ives van Hoorne <ives@codesandbox.io>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-References: <20221202122748.113774-1-david@redhat.com> <Y4oo6cN1a4Yz5prh@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH RFC] mm/userfaultfd: enable writenotify while
- userfaultfd-wp is enabled for a VMA
-In-Reply-To: <Y4oo6cN1a4Yz5prh@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR10MB3022:EE_|CO6PR10MB5791:EE_
+x-ms-office365-filtering-correlation-id: 05f72e01-44a0-4196-bc60-08dad48648fe
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IzTmzIqyizLv32TTZzfBRCLDJnIG7MXq0ODHTqDA3Q7C+F38hIAzipU/ip2I9dejIaQgLW81Gtyu0b47ruf+xcoSW4n5Qn0ghuR0zA9+XgiJfWFdW8jgDOiBdfjQ1U5c9RiNYpTVE5ApDLvNANJ9d4n5+Lbzx/j+RDEIcvPvilsGPBNw399D4ca6dNE8OEIzojYN5/6Lhd/DK2SZ4d/U7zavEEsD6VpXKrS5ApbdRWUbg1DHhxgliKcbkqhSN8JzV8L/Gbt4zGvO50zlRQDeinm9KPXvK3cmC2s1BUAFJF+SJ+0cBddozhg5Imvw2Hz8qBncJi14PG+0HVwY4SB0xix7PcAqxR66LujOU2yVUfVZ1fOw71uB1YAFS0+4wadgF87Q2tK/FXQpVMS40wbjr8N23bzV6XnJG2EHyCYk+1ntxAu6inzErcf/am66jSLaxaV6xhVISwc8K/yElHmSp4RCcfFk13eherSu0AfVQLmNeM2ZYUpyrnNb8ezhIn807Y6EOGDO0gAGCFKkKlWYazfN4XaYskfzRZ9FixPcyLBM0rVWEicrIZeVNSR/Fbjgemgof0NIFDL8e4yGVqh3TCmwX+XWSj4IOeEc8e66NkLcJCqV+/Xy7yavr6oS5Bua7x4Ss1iCmrbQRkGrMfL5wUOIzNeRQ8aO2eeF2kc7a31Jy58VdbXfstncXqZZqCqEbI7f5Fp9Xue9Lk/yo7zVZA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(366004)(396003)(136003)(376002)(39860400002)(451199015)(5660300002)(44832011)(7416002)(66446008)(66476007)(64756008)(4326008)(66556008)(8676002)(6512007)(41300700001)(6486002)(8936002)(71200400001)(76116006)(86362001)(66946007)(478600001)(2906002)(316002)(91956017)(9686003)(186003)(1076003)(26005)(6506007)(54906003)(38070700005)(6916009)(122000001)(33716001)(38100700002)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1q3jChTJuX1OrCXih/bAtkfnqePMYXWeafj6TVPt0RWU/kxQGb81yZWeSRJl?=
+ =?us-ascii?Q?ybvPXwY76ab5e9lvnZ6TSx1PVAFt0Pjt5Br6CHZHAX0bWfImorr2Jz2b/bLw?=
+ =?us-ascii?Q?/SxlGIsAf9Brv3CkA6NqPUn4A4YI6D7xQ8hIJZ3Gps027hy8+roJcAn/SaSS?=
+ =?us-ascii?Q?txFXQO5r47vfNvR/+fPgC1r4LX6AFUwyBQ2oMP3C5Y0PUi8JmnUBK17azkz6?=
+ =?us-ascii?Q?m3w9LLGW3xwD4Cd1VyPm7I6jYWysMFtVnM/QcJTa6IHymnRmhHg51WlxZx8h?=
+ =?us-ascii?Q?dUt8GfVole9vDGEps9CjUGGZqvnGTEB4zKFXwczlowGpL2aV5B+dlpyzOh3l?=
+ =?us-ascii?Q?MobBj3elTSMG8+nxpuRF84UAoQKERdTJECl/NtqNsSJ98gZKLBWBylFzvR3l?=
+ =?us-ascii?Q?wHRcUrtnaR/cHoOXZoLokPyCzcyAaCEUwqyFO4Y+3Lam+EY5U9F8gWcMAVeX?=
+ =?us-ascii?Q?PutsacLARqdVDJJdfqVdjbUyDjqH8M840r2aoqKsHPqmZVgmi0L6Mtb8GG9h?=
+ =?us-ascii?Q?ep8jKAYpSEOYG5HeaGYa9tnBoa3nvpNBUJE0ckVNtThNimJhMBSbBGEq2jnM?=
+ =?us-ascii?Q?BaJGqsdpMKiyIzgk8CO9qBqQPGv19JD2T/TRgBdjv+dSrq7Au0rloC80E8nD?=
+ =?us-ascii?Q?r16hfzbNj3OBSdecVSdJzjYBNe3+7igG5r6s1EXODiVjfPhVdhZLDj3fALo5?=
+ =?us-ascii?Q?ECD75pd4FOunkW3tfGPgLKBnANfb4P0zkhM2gZIvEj1TyVweQvTmNymj1QFO?=
+ =?us-ascii?Q?F9Jd6FSEqNuH4hquDY0eTiWpwwdMQpu4ZaUptJiv+pyot+TNK5KQ72Tk8L/e?=
+ =?us-ascii?Q?a65aPgldS00helIc8VGYmELxBeHCpy4oNuQnjhdCUszrVLecRnEmZebk+xWx?=
+ =?us-ascii?Q?D5Nx01vNKWE9FTtIjIwc4GyaVwhm5A9eksMeedNDPlIs1YzojNM7jVgGD5kt?=
+ =?us-ascii?Q?Mz+1bRq2lRPSKqA3V1KDJw/px1tR1yNNhAk6ri1ihbOdTeFyW/5XQTIHo43p?=
+ =?us-ascii?Q?Q2EB121fdBCKwHy40YUz4qWcCrHuDq2CiT6FKBwyfD9EzrYf26p6tzelKg3C?=
+ =?us-ascii?Q?Q2hYT/bZ0Fq4nNWrIzOKRU/gb+6dZjCGSfhpujNKWOnc/oLe3HxtdnFtHP6j?=
+ =?us-ascii?Q?ByLZs6p9eVpU+XrOJv0ik0JGO4IgI69BeCbUMU9m+uOM+dxEn2W2BrwlJmy+?=
+ =?us-ascii?Q?9eOir/we6AuaYqCMlh18IQh40LZtBt9LpieXOeQtLdeDmePdSamimwlUKuL1?=
+ =?us-ascii?Q?K1vDgTGkVWLsL2UzjYZJISYMzdbILdoaU1E9oWQZgPoRyfmNrFiT52mcvwJE?=
+ =?us-ascii?Q?RtXgwT3sJMubadVJlZoZ08G9TPzo4IZYX1Vqq/LAN11pduuf+Yj6l8KPT7aF?=
+ =?us-ascii?Q?VOaiuiHuMQf26RA9aPDRbrJi+085AFGwzXnnGzwBDsBUinitrsNIHlyr7nug?=
+ =?us-ascii?Q?bM/kgEcSRbv5VtRuMbQ+6DS2Ca8Jpx5v1eepsm+35SGWJ+gwGsIzPAKXk2MC?=
+ =?us-ascii?Q?qdOom6nvnCD0U/eh/ELKEeJQXcc/dyATonHbo+NV1KkTPesUqBU8xT8dpi9j?=
+ =?us-ascii?Q?h51YNLGLFw5EIVYRlD2AWjWLwZGJhnS4EP6CtKFaBxNblG18ddiob35VIIgM?=
+ =?us-ascii?Q?Ug=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A8AEA5C5141C184BB7368F0E67621D26@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?OOqaRizV/Wd1mdnKpS51hvlDm3A7fDSNkIiKUQvs951V3vGZEiACbU9QmLNa?=
+ =?us-ascii?Q?fejBhk5b9NqrsdXN6roCtzC1mbWYOsmqDbIvehcx+2p3czcB6MxMZkLv3WY6?=
+ =?us-ascii?Q?4aDh7x3DAekviFTqj5et+UO4Qic2VnDnpSCXG2aF+qMThGGtmY4d2dOUFObx?=
+ =?us-ascii?Q?21xB4sKYzZkiSUVK/AEnT9SFg1af6sKEYpAb8Fue9GRUYCiQfFrzbWhOkhnl?=
+ =?us-ascii?Q?ZT/3ZFcCn1hTx/AKo6VtU+EsWwxlQQzynsuOV3xWpJCIKKXDI8aIPVRDWqVv?=
+ =?us-ascii?Q?qSbnn75opRUOts8OaPN6kCnOGkG0IEtwpBva/UC6UYB9ZfQpiHRg5Z7M0PUG?=
+ =?us-ascii?Q?Yu2BK8Nj7CkX0HXuGCSKsw0s8xhty6+naQSVOoSF7f2o7uQ1N+4quvebnkbY?=
+ =?us-ascii?Q?7notsmkW1WVj2WCc3gV3LYCbozMZ613sCqhpDfhuzwoRoL/r4TX//YmEI4Y3?=
+ =?us-ascii?Q?y66T4NPF35tuj3k3v50bMvas2TV4TzUKv9fxEPbt28npi44GNhdY49OBOV2O?=
+ =?us-ascii?Q?25RvDY5fRhftz9JvyyDtUUHg8lWCKjzZJ22MBCGcbiLPiv75689Qt0LPqjup?=
+ =?us-ascii?Q?gFINPObKhkxDbLJOWiJ/leh2bHsLRCj+LgDMpuwd9YqpeIohYrdmvpm37Lsh?=
+ =?us-ascii?Q?A4MHTMMFWuQ2KLIga/8AWSZ6We3i+o65cOzemlCN2XIGF1TDCHOFu22tir7A?=
+ =?us-ascii?Q?NiRCeUBXpM8okaRcLBqc/pf6LU7g+VpvPFfo6PDC7aKiwoVuPTWj0wT7P0Vm?=
+ =?us-ascii?Q?4rdrbKWa+WWS7j3vVYvJDyVS23QlhFw4WxVPe55nrp5NVc/z4Iq7LFY652l7?=
+ =?us-ascii?Q?mvpQ8uSZj3Ir9odZsP6N8NzlCDdXVsIscudLcnwzfE6tRIsGMXbs88GFaO6W?=
+ =?us-ascii?Q?//Dfq2qZQcLyd+tIIA2swv2vAsBg1cLIbRozqA2QYb0nh/hIEXy9Xuaga0Id?=
+ =?us-ascii?Q?607nKnv49mqc0EEdPcMzUNllB+ktYv8y1TnVzSxZ3me0Xi8HzFAo78G1N0Wk?=
+ =?us-ascii?Q?KXzEWiKKGmbbAZ4qSHKkkGWOvtaLMZOxZiyf0pNWkBoOqpuFUBGhTsshlXoO?=
+ =?us-ascii?Q?Wsw/7wQKxM+VxIPLTzDFL84W1ZbbtyZn/VIPEIhjtDdJ1CL1KuBVn+5SMwvD?=
+ =?us-ascii?Q?1wkjRAO4KjwfE+ib2T4pY8ESO7ND+fjU5yM+ZSD+r0/wCay6SF8Qf9Ln4sSE?=
+ =?us-ascii?Q?Bw7NwaHNzWLWkR6BQATSj86DoRydIShAuNKVSA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05f72e01-44a0-4196-bc60-08dad48648fe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 16:57:24.1081
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KbIgXUENyYvrT+2mo0PITqYNg9fa/HM80AbWP8rg09nCs0QgHOF6oVubrrlAxU0NmOJbjQama7lZv2UxUnPIeg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR10MB5791
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-02_10,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
+ mlxscore=0 spamscore=0 adultscore=0 malwarescore=0 mlxlogscore=921
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212020134
+X-Proofpoint-ORIG-GUID: y5bSXH41ZfGsb2SS2RspsVGfcWQT0rTB
+X-Proofpoint-GUID: y5bSXH41ZfGsb2SS2RspsVGfcWQT0rTB
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.12.22 17:33, Peter Xu wrote:
-> On Fri, Dec 02, 2022 at 01:27:48PM +0100, David Hildenbrand wrote:
->> Currently, we don't enable writenotify when enabling userfaultfd-wp on
->> a shared writable mapping (for now we only support SHMEM). The consequence
-> 
-> and hugetlbfs
-> 
->> is that vma->vm_page_prot will still include write permissions, to be set
->> as default for all PTEs that get remapped (e.g., mprotect(), NUMA hinting,
->> page migration, ...).
-> 
-> The thing is by default I think we want the write bit..
-> 
-> The simple example is (1) register UFFD_WP on shmem writable, (2) write a
-> page.  Here we didn't wr-protect anything, so we want the write bit there.
-> 
-> Or the other example is when UFFDIO_COPY with flags==0 even if with
-> VM_UFFD_WP.  We definitely wants the write bit.
-> 
-> We only doesn't want the write bit when uffd-wp is explicitly set.
-> 
-> I think fundamentally the core is uffd-wp is pte-based, so the information
-> resides in pte not vma.  I'm not strongly objecting this patch, especially
-> you mentioned auto-numa so I need to have a closer look later there.
-> However I do think uffd-wp is slightly special because we always need to
-> consider pte information anyway, so a per-vma information doesn't hugely
-> help, IMHO.
+* Jason A. Donenfeld <Jason@zx2c4.com> [221202 11:27]:
+> The following program will trigger the BUG_ON that this patch removes,
+> because the user can munmap() mm->brk:
+>=20
+>   #include <sys/syscall.h>
+>   #include <sys/mman.h>
+>   #include <assert.h>
+>   #include <unistd.h>
+>=20
+>   static void *brk_now(void)
+>   {
+>     return (void *)syscall(SYS_brk, 0);
+>   }
+>=20
+>   static void brk_set(void *b)
+>   {
+>     assert(syscall(SYS_brk, b) !=3D -1);
+>   }
+>=20
+>   int main(int argc, char *argv[])
+>   {
+>     void *b =3D brk_now();
+>     brk_set(b + 4096);
+>     assert(munmap(b - 4096, 4096 * 2) =3D=3D 0);
+>     brk_set(b);
+>     return 0;
+>   }
+>=20
+> Compile that with musl, since glibc actually uses brk(), and then
+> execute it, and it'll hit this splat:
+>=20
+>   kernel BUG at mm/mmap.c:229!
+>   invalid opcode: 0000 [#1] PREEMPT SMP
+>   CPU: 12 PID: 1379 Comm: a.out Tainted: G S   U             6.1.0-rc7+ #=
+419
+>   RIP: 0010:__do_sys_brk+0x2fc/0x340
+>   Code: 00 00 4c 89 ef e8 04 d3 fe ff eb 9a be 01 00 00 00 4c 89 ff e8 35=
+ e0 fe ff e9 6e ff ff ff 4d 89 a7 20>
+>   RSP: 0018:ffff888140bc7eb0 EFLAGS: 00010246
+>   RAX: 0000000000000000 RBX: 00000000007e7000 RCX: ffff8881020fe000
+>   RDX: ffff8881020fe001 RSI: ffff8881955c9b00 RDI: ffff8881955c9b08
+>   RBP: 0000000000000000 R08: ffff8881955c9b00 R09: 00007ffc77844000
+>   R10: 0000000000000000 R11: 0000000000000001 R12: 00000000007e8000
+>   R13: 00000000007e8000 R14: 00000000007e7000 R15: ffff8881020fe000
+>   FS:  0000000000604298(0000) GS:ffff88901f700000(0000) knlGS:00000000000=
+00000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: 0000000000603fe0 CR3: 000000015ba9a005 CR4: 0000000000770ee0
+>   PKRU: 55555554
+>   Call Trace:
+>    <TASK>
+>    do_syscall_64+0x2b/0x50
+>    entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>   RIP: 0033:0x400678
+>   Code: 10 4c 8d 41 08 4c 89 44 24 10 4c 8b 01 8b 4c 24 08 83 f9 2f 77 0a=
+ 4c 8d 4c 24 20 4c 01 c9 eb 05 48 8b>
+>   RSP: 002b:00007ffc77863890 EFLAGS: 00000212 ORIG_RAX: 000000000000000c
+>   RAX: ffffffffffffffda RBX: 000000000040031b RCX: 0000000000400678
+>   RDX: 00000000004006a1 RSI: 00000000007e6000 RDI: 00000000007e7000
+>   RBP: 00007ffc77863900 R08: 0000000000000000 R09: 00000000007e6000
+>   R10: 00007ffc77863930 R11: 0000000000000212 R12: 00007ffc77863978
+>   R13: 00007ffc77863988 R14: 0000000000000000 R15: 0000000000000000
+>    </TASK>
+>=20
+> Instead, just error out if the original mapping has been removed.
+>=20
+> Fixes: 2e7ce7d354f2 ("mm/mmap: change do_brk_flags() to expand existing V=
+MA and add do_brk_munmap()")
+> Cc: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: SeongJae Park <sj@kernel.org>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  mm/mmap.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index c3c5c1d6103d..f5a37fe9a19e 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -226,8 +226,7 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
+>  		/* Search one past newbrk */
+>  		mas_set(&mas, newbrk);
+>  		brkvma =3D mas_find(&mas, oldbrk);
+> -		BUG_ON(brkvma =3D=3D NULL);
+> -		if (brkvma->vm_start >=3D oldbrk)
+> +		if (!brkvma || brkvma->vm_start >=3D oldbrk)
+>  			goto out; /* mapping intersects with an existing non-brk vma. */
 
-That's the same as softdirty tracking, IMHO.
+nit: The out label does not return an error as you specified in the
+comment, it returns "origbrk" doesn't it?
 
-[...]
+I actually had something like this prepared to reduce the calls to
+BUG_ON(), but I like this better.
 
->> Running the mprotect() reproducer [1] without this commit:
->>    $ ./uffd-wp-mprotect
->>    FAIL: uffd-wp did not fire
->> Running the mprotect() reproducer with this commit:
->>    $ ./uffd-wp-mprotect
->>    PASS: uffd-wp fired
->>
->> [1] https://lore.kernel.org/all/222fc0b2-6ec0-98e7-833f-ea868b248446@redhat.com/T/#u
-> 
-> I still hope for a formal patch (non-rfc) we can have a reproducer outside
-> mprotect().  IMHO mprotect() is really ambiguously here being used with
-> uffd-wp, so not a good example IMO as I explained in the other thread [1].
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-I took the low hanging fruit to showcase that this is a more generic problem.
-The reproducer is IMHO nice because it's simple and race-free.
-
-> 
-> I'll need to off-work most of the rest of today, but maybe I can also have
-> a look in the weekend or Monday more on the numa paths.  Before that, can
-> we first reach a consensus that we have the mm/migrate patch there to be
-> merged first?  These are two issues, IMHO.
-> 
-> I know you're against me for some reason, but until now I sincerely don't
-> know why.  That patch sololy recovers write bit status (by removing it for
-> read-only) for a migration entry and that definitely makes sense to me.  As
-> I also mentioned in the old version of that thread, we can rework migration
-> entries and merge READ|WRITE entries into a GENERIC entry one day if you
-> think proper, but that's for later.
-
-I'm not against you. I'm against changing well-working, common code
-when it doesn't make any sense to me to change it. And now we have proof that
-mprotect() just behaves exactly the same way, using the basic rules of vma->vm_page_prot.
-
-Yes, there is broken sparc64 (below), but that shouldn't dictate our implementation.
-
-
-What *would* make sense to me, as I raised, is:
-
-diff --git a/mm/migrate.c b/mm/migrate.c
-index dff333593a8a..9fc181fd3c5a 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -213,8 +213,10 @@ static bool remove_migration_pte(struct folio *folio,
-                         pte = pte_mkdirty(pte);
-                 if (is_writable_migration_entry(entry))
-                         pte = maybe_mkwrite(pte, vma);
--               else if (pte_swp_uffd_wp(*pvmw.pte))
-+               else if (pte_swp_uffd_wp(*pvmw.pte)) {
-                         pte = pte_mkuffd_wp(pte);
-+                       pt = pte_wrprotect(pte);
-+               }
-  
-                 if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
-                         rmap_flags |= RMAP_EXCLUSIVE;
-
-
-It still requires patch each and every possible code location, which I dislike as
-described in the patch description. The fact that there are still uffd-wp bugs
-with your patch makes that hopefully clear. I'd be interested if they can be
-reproduced witht his patch.
-
-
-> 
-> Let me provide another example why I think recovering write bit may matter
-> outside uffd too so it's common and it's always good to explicit check it.
-> 
-> If you still remember for sparc64 (I think you're also in the loop)
-> pte_mkdirty will also apply write bit there; even though I don't know why
-> but it works like that for years.  Consider below sequence:
-
-Yes, and I consider that having to be fixed properly on in sparc64 code.
-pte_mkdirty() must not allow write access. That's why we have pte_mkwrite()
-after all. It's just plain wrong and requires custom hacks all over the place.
-
-As raised, the whole maybe_mkwrite() logic is completely broken on sparc64.
-
-> 
->    - map a page writable, write to page (fault in, set dirty)
->    - mprotect(RO) on the page (keep dirty bit, vma/pte becomes RO)
->    - migrate the page
->      - mk_pte returns with WRITE bit cleared (which is correct)
->      - pte_mkdirty set dirty and write bit (because dirty used to set)
-> 
-> If without the previous mm/migrate patch [1] IIUC it'll allow the pte
-> writable even without VM_WRITE here after migration.
-
-That would be my reaction:
-
-diff --git a/mm/migrate.c b/mm/migrate.c
-index dff333593a8a..05183cd22f0f 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -209,12 +209,20 @@ static bool remove_migration_pte(struct folio *folio,
-                 entry = pte_to_swp_entry(*pvmw.pte);
-                 if (!is_migration_entry_young(entry))
-                         pte = pte_mkold(pte);
-+               /*
-+                * HACK alert. sparc64 really has to fix it's pte_mkwrite()
-+                * implementation to not allow random write access.
-+                */
-+#ifndef CONFIG_SPARC64
-                 if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
-                         pte = pte_mkdirty(pte);
-+#endif
-
-
-> 
-> I'm not sure whether I missed something, nor can I write a reproducer
-> because I don't have sparc64 systems on hand, not to mention time.  But
-> hopefully I explained why I think it's safer to just always double check on
-> the write bit to be the same as when before migration, irrelevant of
-> uffd-wp, vma pgprot or mk_pte().
-> 
-> For this patch itself, I'll rethink again when I read more on numa.
-
-Most probably we'll have to agree to disagree.
-
--- 
-Thanks,
-
-David / dhildenb
-
+>  		/*
+>  		 * mm->brk must be protected by write mmap_lock.
+> --=20
+> 2.38.1
+> =
