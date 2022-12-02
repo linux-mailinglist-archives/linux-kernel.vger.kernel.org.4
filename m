@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B454640F12
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 21:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C36640F16
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 21:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbiLBUR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 15:17:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S234895AbiLBUSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 15:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbiLBURz (ORCPT
+        with ESMTP id S234878AbiLBUSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 15:17:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC0021886;
-        Fri,  2 Dec 2022 12:17:54 -0800 (PST)
+        Fri, 2 Dec 2022 15:18:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469D4317CE;
+        Fri,  2 Dec 2022 12:18:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60DE7B82279;
-        Fri,  2 Dec 2022 20:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E906C433C1;
-        Fri,  2 Dec 2022 20:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670012272;
-        bh=UPgyDqVtI4sBKcyW4PXkCDbwBBQobxjh4DV5HWykYno=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OXHirJk16MC+0kC4YsXGf480BYDX06Z7a6y9cQQIUNhkffwxd6L6+fkhdpCSTDTT3
-         NuWzSYxy+dM3F6eJX0eMuBbwbI+OZ0kKxsr6MvDH5lZafCKj5KbjXIcj8yTck0PkNt
-         +0OR5ra3GC++5ejZdT16P7eG3aLp1VxiHwJUb3wHdBpd943Prufa0QgkF3tc79gFWU
-         NRfvNO9pj0a2AJAMQV2uOuG04CP889Lg/HC8HACmjl0aZVSa2Vckq5fY+J/wlR1PHk
-         yXRI6HoMCoi0fQFnq3R/At7CWGdC2mZa/CalhDy7Qv7CSrRH+PShPtPvKPVJ+pfVAm
-         tGL5UZOH8jK1A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p1CTw-0007xY-UN; Fri, 02 Dec 2022 21:18:01 +0100
-Date:   Fri, 2 Dec 2022 21:18:00 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 6.1-rc8
-Message-ID: <Y4pdeBFL+7pQF1jD@hovoldconsulting.com>
-References: <Y4o6ypWhDfI8DPuO@hovoldconsulting.com>
- <Y4pEcSmEuwGWo4TD@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4pEcSmEuwGWo4TD@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7E96623B2;
+        Fri,  2 Dec 2022 20:18:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0366EC433C1;
+        Fri,  2 Dec 2022 20:18:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1670012281;
+        bh=vzzVaosh6o8JL4+OzaJBhy3ljlqNHLgnYfdJDBqdxdM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Qiy/Rz8BpdMFrfatVnHWOKxqNt2djdf4PTkeB4ZV0Tyn/Jb62vwuneHFMPvFBOLkw
+         w+r2SMd4NOzTl+0auLMbL5P9Ju/DUFPVUf9f6PpA331zT7i0awPSCxDvrLwf3LVuOZ
+         5NfKJOs/ikde+UrvqNcQBJIVEwVlRSMNBkhNHLXY=
+Date:   Fri, 2 Dec 2022 12:18:00 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+        <djwong@kernel.org>, <david@fromorbit.com>,
+        <dan.j.williams@intel.com>
+Subject: Re: [PATCH v2.1 1/8] fsdax: introduce page->share for fsdax in
+ reflink mode
+Message-Id: <20221202121800.598afc7a5124561069f91014@linux-foundation.org>
+In-Reply-To: <1669972991-246-1-git-send-email-ruansy.fnst@fujitsu.com>
+References: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
+        <1669972991-246-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,19 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 07:31:13PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Dec 02, 2022 at 06:50:02PM +0100, Johan Hovold wrote:
-> > The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
-> > 
-> >   Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.1-rc8
+On Fri, 2 Dec 2022 09:23:11 +0000 Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
+
+> fsdax page is used not only when CoW, but also mapread. To make the it
+> easily understood, use 'share' to indicate that the dax page is shared
+> by more than one extent.  And add helper functions to use it.
 > 
-> It's too late for 6.1-final for my tree, so I'll just queue these up for
-> 6.2-rc1 and they can be backported if needed for 6.1.
+> Also, the flag needs to be renamed to PAGE_MAPPING_DAX_SHARED.
+> 
 
-Sounds good.
+For those who are wondering what changed, I queued the below incremental
+patch.
 
-Johan
+
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Subject: fsdax: introduce page->share for fsdax in reflink mode
+Date: Fri, 2 Dec 2022 09:23:11 +0000
+
+rename several functions
+
+Link: https://lkml.kernel.org/r/1669972991-246-1-git-send-email-ruansy.fnst@fujitsu.com
+Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc: Alistair Popple <apopple@nvidia.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Darrick J. Wong <djwong@kernel.org>
+Cc: Dave Chinner <david@fromorbit.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ fs/dax.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+--- a/fs/dax.c~fsdax-introduce-page-share-for-fsdax-in-reflink-mode-fix
++++ a/fs/dax.c
+@@ -334,7 +334,7 @@ static unsigned long dax_end_pfn(void *e
+ 	for (pfn = dax_to_pfn(entry); \
+ 			pfn < dax_end_pfn(entry); pfn++)
+ 
+-static inline bool dax_mapping_is_shared(struct page *page)
++static inline bool dax_page_is_shared(struct page *page)
+ {
+ 	return (unsigned long)page->mapping == PAGE_MAPPING_DAX_SHARED;
+ }
+@@ -343,7 +343,7 @@ static inline bool dax_mapping_is_shared
+  * Set the page->mapping with PAGE_MAPPING_DAX_SHARED flag, increase the
+  * refcount.
+  */
+-static inline void dax_mapping_set_shared(struct page *page)
++static inline void dax_page_bump_sharing(struct page *page)
+ {
+ 	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_SHARED) {
+ 		/*
+@@ -357,7 +357,7 @@ static inline void dax_mapping_set_share
+ 	page->share++;
+ }
+ 
+-static inline unsigned long dax_mapping_decrease_shared(struct page *page)
++static inline unsigned long dax_page_drop_sharing(struct page *page)
+ {
+ 	return --page->share;
+ }
+@@ -381,7 +381,7 @@ static void dax_associate_entry(void *en
+ 		struct page *page = pfn_to_page(pfn);
+ 
+ 		if (shared) {
+-			dax_mapping_set_shared(page);
++			dax_page_bump_sharing(page);
+ 		} else {
+ 			WARN_ON_ONCE(page->mapping);
+ 			page->mapping = mapping;
+@@ -402,9 +402,9 @@ static void dax_disassociate_entry(void
+ 		struct page *page = pfn_to_page(pfn);
+ 
+ 		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
+-		if (dax_mapping_is_shared(page)) {
++		if (dax_page_is_shared(page)) {
+ 			/* keep the shared flag if this page is still shared */
+-			if (dax_mapping_decrease_shared(page) > 0)
++			if (dax_page_drop_sharing(page) > 0)
+ 				continue;
+ 		} else
+ 			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
+_
+
