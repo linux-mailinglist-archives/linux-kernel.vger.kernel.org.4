@@ -2,203 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D1664084C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EF0640859
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbiLBOVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
+        id S232966AbiLBOYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbiLBOVP (ORCPT
+        with ESMTP id S229489AbiLBOX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:21:15 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC12E93828;
-        Fri,  2 Dec 2022 06:21:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rX7SOjiuhddlh1KAl+MNvgomUzVHF7S30agNcSCE7Ss=; b=py/4OnOV4CAWntxUQio1Bg18BN
-        MfrvgwWl9XvBll9Srdp1mxzA/DEe6WAFme+VfFS+XkY8Uy9bcI0/OyxDxJnJII4l8LzKM0RAvK8i6
-        /zO1gdtHRI1u44i1YAY0Y29J5AolUNK3oRDT3qZeB4Jn8vU7WYA1ispNuth/Gt1F6QNpuI3kVVFyx
-        0ffqtqRoFoYzaO3SNFoRzu67YF4An/LlW7EKytJrcCns/2FJCxvYdjECu6XnB20g5XBnsBKZ3XkNR
-        u2kSLUlNNysilcp+9drgIy5ACqbwrGtHotjtOO43reMs23LyIvozyAlnXG9WoLo5uSpRqXhOvTKS1
-        BwCwHXSw==;
-Received: from 54-240-198-36.amazon.com ([54.240.198.36] helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p16uh-000EDO-01; Fri, 02 Dec 2022 14:21:15 +0000
-Message-ID: <ffc971cc6166528de7c33c30d190ece5eaee3dbf.camel@infradead.org>
-Subject: Re: [PATCH v2 05/16] KVM: x86: Remove unused argument in
- gpc_unmap_khva()
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Michal Luczaj <mhal@rbox.co>, Like Xu <like.xu.linux@gmail.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Date:   Fri, 02 Dec 2022 06:21:04 -0800
-In-Reply-To: <6a984015-cacc-b8e9-d834-9d6827be5832@rbox.co>
-References: <20221013211234.1318131-1-seanjc@google.com>
-         <20221013211234.1318131-6-seanjc@google.com>
-         <544d854f-e980-c7bf-39e9-425202760cc5@gmail.com>
-         <6a984015-cacc-b8e9-d834-9d6827be5832@rbox.co>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-/nKiW8rdZIhmj3hszkIF"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 2 Dec 2022 09:23:58 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B074923BE8;
+        Fri,  2 Dec 2022 06:23:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669991036; x=1701527036;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=KNrMk727asvMseqx5cDLpNnJ58d4ScysoenZgXUxKEs=;
+  b=hl8VyVia+M8xHB5Xk0jYMGMnSuQjVNHnGV+hxvFoLRBvkyS9aElKiH4A
+   TBU4tsnvgL55ILt7q8f2dzVIu0wVKRDY3PFLYp5A81lgH5E5ED+WOx7xh
+   p7j12IEYi/Fos+neVRd/JHrsY/iJhWINjAYDnlyANjji2xVDYv892eGVX
+   Z19jr0kkUMX7vtJin44TlE5pFPhyT0GL0qH3F/PxSR0H+ZSosK4ONRA2o
+   t+l8JghbeFOC6X443E8/PvMhXJftlHbVddva/oBaoM6dxMoBk4PgllFm5
+   6LecrxgAxTMhnk4eQhaUUwKlNwT2WnHdLyqJbLTR0A1EfW6jQ9q9xLTnt
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="317108394"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="317108394"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 06:23:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="769617099"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="769617099"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 06:23:51 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id B601020363;
+        Fri,  2 Dec 2022 16:23:48 +0200 (EET)
+Date:   Fri, 2 Dec 2022 14:23:48 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jammy Huang <jammy_huang@aspeedtech.com>
+Cc:     eajames@linux.ibm.com, mchehab@kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, xavier.roumegue@oss.nxp.com,
+        ezequiel@vanguardiasur.com.ar, stanimir.varbanov@linaro.org,
+        nicolas.dufresne@collabora.com, ming.qian@nxp.com,
+        andrzej.p@collabora.com, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 1/5] media: v4l: Add definition for the Aspeed JPEG
+ format
+Message-ID: <Y4oKdBApOGk9TUHO@paasikivi.fi.intel.com>
+References: <20221028023554.928-1-jammy_huang@aspeedtech.com>
+ <20221028023554.928-2-jammy_huang@aspeedtech.com>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221028023554.928-2-jammy_huang@aspeedtech.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jammy,
 
---=-/nKiW8rdZIhmj3hszkIF
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Apologies for a late reply.
 
-On Fri, 2022-12-02 at 11:57 +0100, Michal Luczaj wrote:
-> On 12/2/22 10:28, Like Xu wrote:
-> > On 14/10/2022 5:12 am, Sean Christopherson wrote:
-> > > Remove the unused @kvm argument from gpc_unmap_khva().
-> >=20
-> > Nit: the caller kvm_gpc_unmap() can also get rid of the unused @kvm arg=
-ument.
->=20
-> Right, the initial series cleaned up kvm_gpc_unmap() in a separate patch.
-> Current iteration removes kvm_gpc_unmap() later in the series:
-> https://lore.kernel.org/kvm/20221013211234.1318131-12-seanjc@google.com/
+On Fri, Oct 28, 2022 at 10:35:50AM +0800, Jammy Huang wrote:
+> This introduces support for the Aspeed JPEG format, where the new frame
+> can refer to previous frame to reduce the amount of compressed data.
+> The concept is similar to I/P frame of video compression. It will
+> compare the new frame with previous one to decide which macroblock's
+> data is changed, and only the changed macroblocks will be compressed.
+> 
+> This Aspeed JPEG format is used by the video engine on Aspeed platforms,
+> which is generally adapted for remote KVM.
+> 
+> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+> ---
+> v11:
+>   - no update
+> v10:
+>   - no update
+> v9:
+>   - Rebase on new kernel
+> v8:
+>   - Add decoder information for aspeed-jpeg
+> v7:
+>   - Add more information for aspeed-jpeg
+> v6:
+>   - Update description for new format, aspeed-jpeg, in Documentation.
+> v5:
+>   - no update
+> v4:
+>   - new
+> ---
+>  .../userspace-api/media/v4l/pixfmt-reserved.rst | 17 +++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c            |  1 +
+>  include/uapi/linux/videodev2.h                  |  1 +
+>  3 files changed, 19 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+> index 0ff68cd8cf62..73cd99828010 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+> @@ -258,6 +258,23 @@ please make a proposal on the linux-media mailing list.
+>          and it is used by various multimedia hardware blocks like GPU, display
+>          controllers, ISP and video accelerators.
+>          It contains four planes for progressive video.
+> +    * .. _V4L2-PIX-FMT-AJPG:
+> +
+> +      - ``V4L2_PIX_FMT_AJPG``
+> +      - 'AJPG'
+> +      - ASPEED JPEG format used by the aspeed-video driver on Aspeed platforms,
+> +        which is generally adapted for remote KVM.
+> +        On each frame compression, I will compare the new frame with previous
+> +        one to decide which macroblock's data is changed, and only the changed
+> +        macroblocks will be compressed.
+> +
+> +        The implementation is based on AST2600 A3 datasheet, revision 0.9, which
+> +        is not publicly available. Or you can reference Video stream data format
+> +        – ASPEED mode compression of SDK_User_Guide which available on
+> +        AspeedTech-BMC/openbmc/releases.
 
-I have been keeping that series up to date in
-https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/gpc-fix=
-es
+What does this refer to? If it's a URL, please add a reference as below.
 
-Now that the dust has settled on the Xen runstate area, I may post it
-as v3 of the series.
+Also please run this on the patches:
 
-Or I may attempt to resolve the gpc->len immutability thing first. I'm
-still not really convinced Sean has won me round on that; I'm still
-quite attached to the TOCTOU benefit of checking the length right there
-at the moment you're going to use the pointer =E2=80=94 especially given th=
-at
-it *doesn't* have bounds checks like get_user() does, as Sean points
-out.
+	$ scripts/checkpatch.pl --strict --max-line-length=80
 
---=-/nKiW8rdZIhmj3hszkIF
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+> +
+> +        Decoder's implementation can be found here,
+> +        `aspeed_codec <https://github.com/AspeedTech-BMC/aspeed_codec/>`__
+>  .. raw:: latex
+>  
+>      \normalsize
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index fddba75d9074..8cb4b976064e 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1497,6 +1497,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  		case V4L2_PIX_FMT_MT21C:	descr = "Mediatek Compressed Format"; break;
+>  		case V4L2_PIX_FMT_QC08C:	descr = "QCOM Compressed 8-bit Format"; break;
+>  		case V4L2_PIX_FMT_QC10C:	descr = "QCOM Compressed 10-bit Format"; break;
+> +		case V4L2_PIX_FMT_AJPG:		descr = "Aspeed JPEG"; break;
+>  		default:
+>  			if (fmt->description[0])
+>  				return;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 86cae23cc446..870a7e5ef8ca 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -775,6 +775,7 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-bit dithered RGB */
+>  #define V4L2_PIX_FMT_QC08C    v4l2_fourcc('Q', '0', '8', 'C') /* Qualcomm 8-bit compressed */
+>  #define V4L2_PIX_FMT_QC10C    v4l2_fourcc('Q', '1', '0', 'C') /* Qualcomm 10-bit compressed */
+> +#define V4L2_PIX_FMT_AJPG     v4l2_fourcc('A', 'J', 'P', 'G') /* Aspeed JPEG */
+>  
+>  /* 10bit raw packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
+>  #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIxMjAyMTQyMTA0WjAvBgkqhkiG9w0BCQQxIgQgAkFyHmea
-aNQzo40K+Iv0vT9/N6h6gUdaiTlTn+2TsQowgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCqXp0XQvTMuw7fSrDaoRybOV0rzvRuW0jc
-FB1UR8pkhTcJ5sh3+IXeT7vvCkYD3uhUWxJBwU+fq90QAx2mxapk0EYptKJHXLCQ7RvHetyVy2C4
-HjwiXSbtgI/tgozQp6bp4kf0R+XQZDfR8miYv+fyd141292jejl9CaGQbx44H4mVG3g0pPr/E7Ji
-X9azL1HV/w0D0OORU14arxaqNpk6El9fdgs2RoH6VNBKhqT0C8WHX5B8PigB/2pBVHmFiJ8Lg1Ol
-rmCuYpanYovDTtrvPPulWHL9ga6lBaycSUCSukzFPUzIKZ8JAuCzX62OJEIpAahA8Ei3h6NjhgZq
-4Rq/26Z+U5VrkrL/5WrcWKn1qNgusHKxAJNw18Q0H5cf1Aud2+njbl3fPyE3N3HyT7/fhbsqAaWo
-BseTc0CSo2BW0jUMm+/obfbMNyFBoAqamkqiSXX6Q7Kk+uh2DcIZMr4q0srCKMYrwcnGhXRoi+KL
-YrnJG8mAyWlN5QeI89JQk+T0HzxM4AksK8KIMkSfJVF6ILWJPSlyueSqUk8YZFdfQoWnjX9AWnz5
-dYaSnoDZLWoatz2Ukf/A56LOzz5YXcD51rwttkZZ6tafpmlvcw7GIpk5hio9DKULw6mIG8n3lWXn
-TCTzkV8guVq8m3HsEaJjj2y4F23YMN/gBL1WSfm7ygAAAAAAAA==
+-- 
+Kind regards,
 
-
---=-/nKiW8rdZIhmj3hszkIF--
-
+Sakari Ailus
