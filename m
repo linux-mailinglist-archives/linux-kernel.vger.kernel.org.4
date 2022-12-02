@@ -2,167 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B2E640DF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E69A2640DF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbiLBSyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S234682AbiLBSyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbiLBSyM (ORCPT
+        with ESMTP id S234777AbiLBSyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:54:12 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5AC6357
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:53:57 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id s16so2444588iln.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:53:57 -0800 (PST)
+        Fri, 2 Dec 2022 13:54:16 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F359E8E1C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:54:07 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id c7so2332359pfc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:54:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+IlkcihNFHJyA3n7MDxRBqeitYBTuuPEepu2A5KGxpo=;
-        b=ChOQbsqjv5s3kpubStmmCeD7p+nYw4dFq21Uq+Pn2ZWPWGP2y5GChi+rqb0ge/W0qv
-         lXQRtP1tWLiqYErWMyuFfFcrZ8ZABBVrn4ztZB7J2OgWBEXuhsW1esZ+10XhRMTySn/T
-         fp4WvyoUynBGtcqkSF/wjQFiKkVrgXtc2xl89Cigay+U0ZfjiYX6kuGehY8FJxGwiqYt
-         3QocLqiifLcpLETZitEu6IVCJjLEJi+/azAG32sN02AbHkGZNTEm1W3Xp6Oits3mUWbw
-         c/1oWW0+jjgA1A2J2BVOjoI90D775jvoheZ5Lsmq1NWy7KGWIHGBuE31r6JrbivrliDV
-         CaOg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6iMOnyAeQsAPxih1P0qQQ/qb4Uyj+szfK6Khgj7UVBM=;
+        b=gaQZ/2L0TZuF0vlG6F8FXYeQZ1QCiQ4oPOli05DX+LfBfEE/JCeOzeHyX4Rb4cAwh+
+         k/u4J+C9Mk52XWfLFmd75lNLMXGn7Dx0sqmr8dAuRkfhivo330YgFt/EmYYp+wtltMgH
+         uMFEkb6J4hTL10CrJZ9fffzLbBIQhIHL9CBLE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+IlkcihNFHJyA3n7MDxRBqeitYBTuuPEepu2A5KGxpo=;
-        b=bn/7fKWguy2uS9U5Tipw08TOqY73Ex+D4hGcbT5k36jtIAo/JICa79vHp6bwhbX9j/
-         Pe82iV5IAb1rlaIs+I/XyVjuHfiFOm5IpZD/rkhmCwFfE7xWdlJDJtQvvqt42pXrGSqJ
-         DmS6ZJqcDYnigAVu2UtbYNqo8JBW+XNNBVKtcwflyqbPHruMuzlS1lq62CJ7bluRL5tX
-         5jGz6JVZuMSzTPI2kbAAONnZPmWncLstfP/IjbrDOjvdx35Du6wzbwUFzhMvnZ5zXEb9
-         YcHip9HRVFFhncN3L91Mp5DeOwxbiw/OPe1WB6MrmkTQzK3aWaUb/7EY++pRGps1vOG3
-         evTA==
-X-Gm-Message-State: ANoB5plW8Gfc2Fc8AO+1GK7OEh4JNmrDY2hDeUEG7alr/+YSOeVhadL9
-        vQxX8lWaBhQf9sJIgDXSDLjlsyV/SyInnvz2SndF0A==
-X-Google-Smtp-Source: AA0mqf68pjoJ4fPsShveu0rA+Q2e2QNgJwdW7H4KfqQ1EkpcK8XqnVRjhl/Lc3DbxUbuPp7SrHdcS4P+kwGWLKHDoP8=
-X-Received: by 2002:a92:6809:0:b0:2f9:4d92:5b2a with SMTP id
- d9-20020a926809000000b002f94d925b2amr24339211ilc.177.1670007236288; Fri, 02
- Dec 2022 10:53:56 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6iMOnyAeQsAPxih1P0qQQ/qb4Uyj+szfK6Khgj7UVBM=;
+        b=0oj9MRWK4Mbpmz8slVKv/jxXtCKPLmE774avSiwip/jVIxjfvS/cOg2+7vpNVBbwrL
+         +i4gMBxu1pnYTy3FLJ+pKTTzFVO24nB64khtWlqklHBtxKvKgt978Hk+RI9QyzkPOkwD
+         QjH8M5e0KoLHMVKEv5tD1PWrV9vJQVM3liOvDFHh8lNjERs5hZCxHDAGPiPA1OYXrDV4
+         DKd/aSbbV4DLw/Bop9QxMiz++WuIRzKF8LtVtogpCPMaTz2gJFx56s5cfzLd6xQsJNL5
+         yAM9kQYMos4P4zqWGmNBHs24EOBRiWqT9w4Vw5sBjft3g+Ml1M4emLZTImyLZbPKrs+Y
+         jfYQ==
+X-Gm-Message-State: ANoB5pleJPiBMR7DuDXdMuBeGKHpLoOtsReHbamPqWwuZiu5F/zRGOxb
+        vKsBs1aHEoAvHHmJgtq05lqTXA==
+X-Google-Smtp-Source: AA0mqf4oA/ZhqGNXZKsEB/aIA5GakcxaJJXeeAgFZIxsVTNBPLoZ+SknjDWJAkfMNj9dEspJpOKx4Q==
+X-Received: by 2002:a63:cd10:0:b0:476:c36a:42b9 with SMTP id i16-20020a63cd10000000b00476c36a42b9mr48440644pgg.235.1670007246921;
+        Fri, 02 Dec 2022 10:54:06 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s20-20020a170902a51400b001894dc5fdf2sm5859890plq.296.2022.12.02.10.54.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 10:54:06 -0800 (PST)
+Date:   Fri, 2 Dec 2022 10:54:05 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] crypto/caam: Avoid GCC constprop bug warning
+Message-ID: <202212021049.16C438A@keescook>
+References: <20221202010410.gonna.444-kees@kernel.org>
+ <Y4loCFGhxecG6Ta0@gondor.apana.org.au>
+ <202212011928.97A43D01@keescook>
+ <Y4mHjKXnF/4Pfw5I@gondor.apana.org.au>
 MIME-Version: 1.0
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 2 Dec 2022 19:53:20 +0100
-Message-ID: <CAG48ez1tJZTOjS_FjRZhvtDA-STFmdw8PEizPDwMGFd_ui0Nrw@mail.gmail.com>
-Subject: brk() in v6.1-rc1 can expand file mappings, seemingly without taking
- file locks
-To:     Linux-MM <linux-mm@kvack.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Jason Donenfeld <Jason@zx2c4.com>, Yu Zhao <yuzhao@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        SeongJae Park <sj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4mHjKXnF/4Pfw5I@gondor.apana.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As of commit ca57f02295f, brk() can expand ordinary file mappings (but
-not file mappings with weird flags), and I think it does it with
-insufficient locks. I think brk() probably needs some extra checks to
-make sure it's operating on a brk-like VMA (which means it should at
-least be anonymous, and perhaps pass the full can_vma_merge_after()
-check so that we're not creating unnecessary special cases?).
+On Fri, Dec 02, 2022 at 01:05:16PM +0800, Herbert Xu wrote:
+> On Thu, Dec 01, 2022 at 07:30:22PM -0800, Kees Cook wrote:
+> >
+> > Getting rid of the if doesn't solve the warning. I can switch it to just
+> > "if (data)", though. That keeps GCC happy.
+> 
+> OK I misread the thread.
+> 
+> Anyhow, it appears that this warning only occurs due to a debug
+> printk in caam.  So how about something like this?
 
-user@vm:~/brk_stretch$ cat brk_file.c
-#define _GNU_SOURCE
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <err.h>
-#include <stdlib.h>
-#include <malloc.h>
-#include <sys/auxv.h>
-#include <sys/mman.h>
-#include <sys/syscall.h>
+What? I don't think that's true? I think
+CONFIG_CRYPTO_DEV_FSL_CAAM_DEBUG only controls "PRINT_POS", which is
+unrelated?
 
-#define SYSCHK(x) ({          \
-  typeof(x) __res = (x);      \
-  if (__res == (typeof(x))-1) \
-    err(1, "SYSCHK(" #x ")"); \
-  __res;                      \
-})
+The call path is:
 
-int main(void) {
-  mallopt(M_MMAP_THRESHOLD, 0);
+drivers/crypto/caam/key_gen.c: gen_split_key()
+	append_fifo_load_as_imm(..., NULL, ...) <- literal NULL
+		append_cmd_data(..., data, ...)
+			memcpy(..., data, ...)
 
-  void *brk_space = sbrk(0x2000);
-  if (brk_space == NULL)
-    errx(1, "sbrk() fail");
-  printf("brk_space = %p\n", brk_space);
-  int fd = SYSCHK(open("/etc/services", O_RDONLY));
-  void *map = SYSCHK(mmap(brk_space, 0x2000, PROT_READ|PROT_WRITE,
-MAP_PRIVATE|MAP_FIXED, fd, 0));
+and doesn't seem affected at all by CONFIG_CRYPTO_DEV_FSL_CAAM_DEBUG.
 
-  /* stretch */
-  if (sbrk(0x111000) == NULL)
-    err(1, "sbrk");
-  printf("sbrk() success\n");
+-Kees
 
-  system("cat /proc/$PPID/maps");
+> 
+> diff --git a/drivers/crypto/caam/desc_constr.h b/drivers/crypto/caam/desc_constr.h
+> index 62ce6421bb3f..b49c995e1cc6 100644
+> --- a/drivers/crypto/caam/desc_constr.h
+> +++ b/drivers/crypto/caam/desc_constr.h
+> @@ -163,7 +163,7 @@ static inline void append_data(u32 * const desc, const void *data, int len)
+>  {
+>  	u32 *offset = desc_end(desc);
+>  
+> -	if (len) /* avoid sparse warning: memcpy with byte count of 0 */
+> +	if (!IS_ENABLED(CONFIG_CRYPTO_DEV_FSL_CAAM_DEBUG) || data)
+>  		memcpy(offset, data, len);
+>  
+>  	(*desc) = cpu_to_caam32(caam32_to_cpu(*desc) +
 
-  return 0;
-}
-user@vm:~/brk_stretch$ gcc -o brk_file brk_file.c
-user@vm:~/brk_stretch$ ./brk_file
-brk_space = 0x557f71b5d000
-sbrk() success
-557f70616000-557f70617000 r--p 00000000 fd:00 2752938
-  /home/user/brk_stretch/brk_file
-557f70617000-557f70618000 r-xp 00001000 fd:00 2752938
-  /home/user/brk_stretch/brk_file
-557f70618000-557f70619000 r--p 00002000 fd:00 2752938
-  /home/user/brk_stretch/brk_file
-557f70619000-557f7061a000 r--p 00002000 fd:00 2752938
-  /home/user/brk_stretch/brk_file
-557f7061a000-557f7061b000 rw-p 00003000 fd:00 2752938
-  /home/user/brk_stretch/brk_file
-557f71b5d000-557f71c70000 rw-p 00000000 fd:00 2621496
-  /etc/services
-7fd67993d000-7fd67995f000 r--p 00000000 fd:00 527268
-  /usr/lib/x86_64-linux-gnu/libc-2.28.so
-7fd67995f000-7fd679aa6000 r-xp 00022000 fd:00 527268
-  /usr/lib/x86_64-linux-gnu/libc-2.28.so
-7fd679aa6000-7fd679af2000 r--p 00169000 fd:00 527268
-  /usr/lib/x86_64-linux-gnu/libc-2.28.so
-7fd679af2000-7fd679af3000 ---p 001b5000 fd:00 527268
-  /usr/lib/x86_64-linux-gnu/libc-2.28.so
-7fd679af3000-7fd679af7000 r--p 001b5000 fd:00 527268
-  /usr/lib/x86_64-linux-gnu/libc-2.28.so
-7fd679af7000-7fd679af9000 rw-p 001b9000 fd:00 527268
-  /usr/lib/x86_64-linux-gnu/libc-2.28.so
-7fd679af9000-7fd679aff000 rw-p 00000000 00:00 0
-7fd679b16000-7fd679b18000 rw-p 00000000 00:00 0
-7fd679b18000-7fd679b19000 r--p 00000000 fd:00 527258
-  /usr/lib/x86_64-linux-gnu/ld-2.28.so
-7fd679b19000-7fd679b37000 r-xp 00001000 fd:00 527258
-  /usr/lib/x86_64-linux-gnu/ld-2.28.so
-7fd679b37000-7fd679b3f000 r--p 0001f000 fd:00 527258
-  /usr/lib/x86_64-linux-gnu/ld-2.28.so
-7fd679b3f000-7fd679b40000 r--p 00026000 fd:00 527258
-  /usr/lib/x86_64-linux-gnu/ld-2.28.so
-7fd679b40000-7fd679b41000 rw-p 00027000 fd:00 527258
-  /usr/lib/x86_64-linux-gnu/ld-2.28.so
-7fd679b41000-7fd679b42000 rw-p 00000000 00:00 0
-7ffd58087000-7ffd580a8000 rw-p 00000000 00:00 0                          [stack]
-7ffd581fa000-7ffd581fe000 r--p 00000000 00:00 0                          [vvar]
-7ffd581fe000-7ffd58200000 r-xp 00000000 00:00 0                          [vdso]
-user@vm:~/brk_stretch$
-
-The codepaths that are intended to expand file VMAs do stuff like
-i_mmap_lock_write() and vma_interval_tree_remove(), which
-do_brk_flags() doesn't seem to do (because it was never intended to
-operate on file VMAs?).
+-- 
+Kees Cook
