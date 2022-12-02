@@ -2,179 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F2263FF65
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DA063FF72
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiLBELz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 23:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S232090AbiLBEUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 23:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiLBELt (ORCPT
+        with ESMTP id S231701AbiLBEUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 23:11:49 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D51D11D6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 20:11:48 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id c140so4626244ybf.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 20:11:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qsLZ9QinNJ5AzcCVDj65lKVRt2q6QVkrs/mM5EuxNrg=;
-        b=TnZDrkbdoVV/k8MLXd4HqS3nDGVgQlltXR3BGEz/poNjNWBa7YcHHQG2DsJ2FEaGOO
-         rsJI7FGEoVg+9pyS1CRAuWNg0SVEiflBRLRhZypltUyyBKZT+JjUC+g2KsxkX5zC+OzU
-         P/01s67yI9VM2/u8+J/GA6i6iiHhmqgfYNW8/9yj60cJVNe83Q4waOmUVJSP6TwG/K4b
-         Ns2IwPcivfVqu008GC1i1WkRqF/XFoqoXhAv+bRvOkRDMBLlVBDoISuCcoaOlPIXRY/9
-         R1Au42ujcBhV+hGd99Rwk+fd0gcCAl7pGBI8E4WqcrtjIU3VRN5exTviQxkOwNjEu9bb
-         ruDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qsLZ9QinNJ5AzcCVDj65lKVRt2q6QVkrs/mM5EuxNrg=;
-        b=MDps9bD8fMFgIfKI0c4EmSdiodILRy0f1+w5dtH2VDuFyd0m15zF8yPTmANJtR3an0
-         QvI+RWAEv3JH5zr2wIMIPqtbvnHIegyQ8K2ipX0H0G/5q72GMRJGhDRbHqCN1oZ4KCAg
-         O0Wqbb/c6lUjsC5iAQggdXvRI3j+ECANEJ6BHTmhxwWX3ga7u/6G23Ku87H9MCeeTVnG
-         Y73UKdpxA5nQSZbW5h64oZsROcptcvhgcp39nXwDc1ShVQfFdk6tw8MjX2PBFJRz+m9R
-         W3OsGzuS2lXiIld5XGIMdAGoulGy2OsYjwMPzam2uUiF9SnRliGumakMttwrz6aOjyEC
-         jqVQ==
-X-Gm-Message-State: ANoB5pnY5LgPh/Qrb+WXMYbI8w6FAVAd7ymFy5yN5A7g1AG+r3qElky6
-        vpSp+gw3A5iY7fnYFeoLMSqyTJxYbFLI+5zcU8MuGg==
-X-Google-Smtp-Source: AA0mqf4Pu+uoaoe/rykm9fS3616W670EnDT64BWobgwiXPf8xRmmv3lgh154rHDL/QPe40vpvKBzRZ57j6TsEeF23zo=
-X-Received: by 2002:a25:2546:0:b0:6f0:b332:f35e with SMTP id
- l67-20020a252546000000b006f0b332f35emr40284066ybl.55.1669954307781; Thu, 01
- Dec 2022 20:11:47 -0800 (PST)
+        Thu, 1 Dec 2022 23:20:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81A4D15A6;
+        Thu,  1 Dec 2022 20:20:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BFD7B820D5;
+        Fri,  2 Dec 2022 04:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4B75CC433D7;
+        Fri,  2 Dec 2022 04:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669954817;
+        bh=mJJCaKvnmgG7UPA54zSpnH2jj4arqkKMPDOumHntA7w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QD9fgm4Wo/WX5gDldS043gI7TKh+6oYWX6DbWP1n/pfiQoJjkfm4hMmToGtHkVIdc
+         ldgnrMI3NSgoZhQ+xyl1VJWPSqDObO40q0ZZa2yKCcQNXnRgs52emOjC8IyU3H1bcj
+         GFdp4zA5dnk4WbP7+SWTeStjmgjVcg/8F2XpVMEPnSl21aeIxYzDRmTRvmSHuoY1db
+         GADStGHvNnD9BXpLvcqiKuOQfg+mqpfaq195i3ieFhzwHNuY8/sCqZ1DmJ+gMNsDdl
+         P4QpMZSGcPulBJyOqWFC9sWYnBcPQHxpt4sKks2ysuYkfS+kRe7XwamMNZsIAKD75U
+         Ihm4z11zogSkw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 358D8E29F38;
+        Fri,  2 Dec 2022 04:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <1669817512-4560-1-git-send-email-george.kennedy@oracle.com>
- <CALs4sv2ZfT1SAYY0oOYhrBBCjsG_th5g=QtSsbKJnPbW8faQ+w@mail.gmail.com>
- <CANn89iL9obgd==tdp9DgdxXk78UvzF6D4J1OeihB1kx9_U4oZw@mail.gmail.com> <99adf483-ae89-8010-4689-fd50a77ff023@oracle.com>
-In-Reply-To: <99adf483-ae89-8010-4689-fd50a77ff023@oracle.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 2 Dec 2022 05:11:36 +0100
-Message-ID: <CANn89iL18gPus7YWMMX_UFg9PSxAv0SkWTjLYCPhncOCEKrWuQ@mail.gmail.com>
-Subject: Re: [PATCH] net: check for dev pointer being NULL in
- dev_hard_header() to avoid GPF
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     Pavan Chebbi <pavan.chebbi@broadcom.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        harshit.m.mogalapalli@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 00/11] mptcp: PM listener events + selftests cleanup
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166995481721.23610.10721074683556586652.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Dec 2022 04:20:17 +0000
+References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
+In-Reply-To: <20221130140637.409926-1-matthieu.baerts@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        mathew.j.martineau@linux.intel.com, pabeni@redhat.com,
+        shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 9:44 PM George Kennedy <george.kennedy@oracle.com> wrote:
->
->
->
-> On 12/1/2022 2:25 PM, Eric Dumazet wrote:
-> > On Thu, Dec 1, 2022 at 2:16 PM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
-> >> On Wed, Nov 30, 2022 at 7:43 PM George Kennedy
-> >> <george.kennedy@oracle.com> wrote:
-> >>> The dev pointer can be NULL in dev_hard_header(). Add check for dev being
-> >>> NULL in dev_hard_header() to avoid GPF.
-> >>>
-> >>> general protection fault, probably for non-canonical address
-> >>>      0xdffffc0000000046: 0000 [#1] PREEMPT SMP KASAN NOPTI
-> >>> KASAN: null-ptr-deref in range [0x0000000000000230-0x0000000000000237]
-> >>> CPU: 1 PID: 45 Comm: kworker/1:1 Not tainted 6.1.0-rc7+ #2
-> >>> Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0+20659+3dcf7c70
-> >>> Workqueue: mld mld_ifc_work
-> >>> RIP: 0010:macvlan_hard_header (./include/linux/netdevice.h:3057
-> >>>      (discriminator 4) drivers/net/macvlan.c:594 (discriminator 4))
-> >>> RSP: 0018:ffff888103d377d0 EFLAGS: 00010212
-> >>> RAX: dffffc0000000000 RBX: ffff88801cf1a000 RCX: 0000000000000000
-> >>> RDX: 0000000000000046 RSI: 0000000000000000 RDI: 0000000000000230
-> >>> RBP: ffff88801e8ef328 R08: 0000000000000000 R09: 0000000000000060
-> >>> R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801f0497c0
-> >>> R13: 0000000000000000 R14: ffff888045187c98 R15: 0000000000000060
-> >>> FS:  0000000000000000(0000) GS:ffff888106c80000(0000)
-> >>>      knlGS:0000000000000000
-> >>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >>> CR2: 00007fbf3f1c1840 CR3: 0000000014e36000 CR4: 00000000000006e0
-> >>> Call Trace:
-> >>>   <TASK>
-> >>> neigh_connected_output (./include/linux/netdevice.h:3060
-> >>>      net/core/neighbour.c:1595)
-> >>> ip6_finish_output2 (./include/net/neighbour.h:546
-> >>>      net/ipv6/ip6_output.c:134)
-> >>> ip6_finish_output (net/ipv6/ip6_output.c:195 net/ipv6/ip6_output.c:206)
-> >>> ip6_output (./include/linux/netfilter.h:291 net/ipv6/ip6_output.c:227)
-> >>> NF_HOOK.constprop.0 (./include/net/dst.h:445
-> >>>      ./include/linux/netfilter.h:302)
-> >>> mld_sendpack (net/ipv6/mcast.c:1824)
-> >>> mld_send_cr (net/ipv6/mcast.c:2122)
-> >>> mld_ifc_work (net/ipv6/mcast.c:2655)
-> >>> process_one_work (kernel/workqueue.c:2294)
-> >>> worker_thread (./include/linux/list.h:292 kernel/workqueue.c:2437)
-> >>> kthread (kernel/kthread.c:376)
-> >>> ret_from_fork (arch/x86/entry/entry_64.S:312)
-> >>>   </TASK>
-> >>> Modules linked in:
-> >>> Dumping ftrace buffer:
-> >>>     (ftrace buffer empty)
-> >>> ---[ end trace 0000000000000000 ]---
-> >>>
-> >>> Fixes: 0c4e85813d0a ("[NET]: Wrap netdevice hardware header creation.")
-> >>> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> >>> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-> >>> ---
-> >>>   include/linux/netdevice.h | 2 +-
-> >>>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> >>> index eddf8ee270e7..9b25a6301fa5 100644
-> >>> --- a/include/linux/netdevice.h
-> >>> +++ b/include/linux/netdevice.h
-> >>> @@ -3054,7 +3054,7 @@ static inline int dev_hard_header(struct sk_buff *skb, struct net_device *dev,
-> >>>                                    const void *daddr, const void *saddr,
-> >>>                                    unsigned int len)
-> >>>   {
-> >>> -       if (!dev->header_ops || !dev->header_ops->create)
-> >>> +       if (!dev || !dev->header_ops || !dev->header_ops->create)
-> > Do  you have a repro ?
-> See syzkaller repros attached.
->
-> > This patch will not prevent a crash later I think.
->
-> The repro ran overnight without failure with the patch applied.
+Hello:
 
-Yes, but the patch is hiding a potential bug that might show up with
-other 'repros'
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 30 Nov 2022 15:06:22 +0100 you wrote:
+> Thanks to the patch 6/11, the MPTCP path manager now sends Netlink events when
+> MPTCP listening sockets are created and closed. The reason why it is needed is
+> explained in the linked ticket [1]:
+> 
+>   MPTCP for Linux, when not using the in-kernel PM, depends on the userspace PM
+>   to create extra listening sockets before announcing addresses and ports. Let's
+>   call these "PM listeners".
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,01/11] selftests: mptcp: run mptcp_inq from a clean netns
+    https://git.kernel.org/netdev/net-next/c/b4e0df4cafe1
+  - [net-next,02/11] selftests: mptcp: removed defined but unused vars
+    https://git.kernel.org/netdev/net-next/c/b71dd705179c
+  - [net-next,03/11] selftests: mptcp: uniform 'rndh' variable
+    https://git.kernel.org/netdev/net-next/c/787eb1e4df93
+  - [net-next,04/11] selftests: mptcp: clearly declare global ns vars
+    https://git.kernel.org/netdev/net-next/c/de2392028a19
+  - [net-next,05/11] selftests: mptcp: declare var as local
+    https://git.kernel.org/netdev/net-next/c/5f17f8e315ad
+  - [net-next,06/11] mptcp: add pm listener events
+    https://git.kernel.org/netdev/net-next/c/f8c9dfbd875b
+  - [net-next,07/11] selftests: mptcp: enhance userspace pm tests
+    https://git.kernel.org/netdev/net-next/c/7dff74f5716e
+  - [net-next,08/11] selftests: mptcp: make evts global in userspace_pm
+    https://git.kernel.org/netdev/net-next/c/1cc94ac1af4b
+  - [net-next,09/11] selftests: mptcp: listener test for userspace PM
+    https://git.kernel.org/netdev/net-next/c/6c73008aa301
+  - [net-next,10/11] selftests: mptcp: make evts global in mptcp_join
+    https://git.kernel.org/netdev/net-next/c/a3735625572d
+  - [net-next,11/11] selftests: mptcp: listener test for in-kernel PM
+    https://git.kernel.org/netdev/net-next/c/178d023208eb
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-
->
-> >
-> > Please fix the root cause, thanks !
->
-> Will try.
-
-Thanks, having a repro definitely should help to find the real bug.
-
-I took a look at macvlan , and could not see how vlan->lowerdev  could
-be NULL in the first place.
-
->
-> Thanks,
-> George
-> >
-> >>>                  return 0;
-> >> net_device being NULL during eth header construction? seems like a
-> >> more serious issue?
-> >> If it indeed is a genuine scenario I think a better description is needed...
-> >>
-> >>>          return dev->header_ops->create(skb, dev, type, daddr, saddr, len);
-> >>> --
-> >>> 2.31.1
-> >>>
