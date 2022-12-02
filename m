@@ -2,160 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28E5640EAD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215E5640EB2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234833AbiLBTpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S234844AbiLBTqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234828AbiLBTpj (ORCPT
+        with ESMTP id S234816AbiLBTqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:45:39 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F16CF4E92
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 11:45:37 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id y16so9384180wrm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 11:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nbzsLHN287NRmoIH0dYEVu2IEaMjMYmTN1PuYOM7BuY=;
-        b=P0xsU1IaQIAlZ/k9ksfZJKi/poK1AM9cbxHTrW5Jdls9S08vVA7J6RBU29lS/jSXid
-         PTSg6KsAT1b0xEjqI7fZv5PA5+bzTo0pbnkJU0iCP/Vhe+jA0tVqse99QjU5lB8oSEar
-         VCY2rVFQ+n4emwu12CYcOyKyKbRXjfCxUSCigW3I8lh/wXIK6rlbYu/ZD3z5K7vKhZv9
-         TE5o1xJjJoFeOyQUmmF4dh1LqLdxixA5asrDT8vV5qARsF+iT8p/z2wJnpnTX5KnVu9S
-         odOFSf7EZ1xKWcvostLn9L9l5VUaNjcCnQAaV4FsLGHHRuqyIKQlW85ysM/W7U0SFWw0
-         Jgdg==
+        Fri, 2 Dec 2022 14:46:39 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2887F3FAA;
+        Fri,  2 Dec 2022 11:46:37 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id h16so6664388qtu.2;
+        Fri, 02 Dec 2022 11:46:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nbzsLHN287NRmoIH0dYEVu2IEaMjMYmTN1PuYOM7BuY=;
-        b=icxKKo9BPx2rf/QIX96XbPgUATdvqnKjOSO5Z+xVmR9DVc/0fFiw+9vxdm+o7eJBqH
-         euzloIB7cY9V9Rfi+Wj/2gIAp9F4g/DqD0o9isQjdZlQ3fzZk/dzldjfCboWJ1rICqAP
-         g+fBUxnMUFZ28e8glNRWs4QbMSagpMm+bs6QU14xf9nqsvUsanG7Q/FhPuvg0rK/nP73
-         HhWqJwornoa9jgeEoea6lnbKs9uJuTc/+6JneIrYxRBGSrrEU/VSRzNa9+8DY8lN8Y9m
-         1Bvhly+Jt1q/7CLzY/9Od0srcuQgn150l+ACxsFxTYdKDq8PihvfRSuww/lJepioT4Db
-         0YJw==
-X-Gm-Message-State: ANoB5pk5izqE/jje5oOb/XDNhiKzA6Rk1/kZUkgFk+k1OSYwFFE/SaWo
-        xT7ENt16r3hEErMMuN7QXMMIwWjBl9LOARiLHrFlzw==
-X-Google-Smtp-Source: AA0mqf5xdmtiVOODB6ewoUgH8vtcAtvaFCzCCZOnzUfuX1tmNCWT2nBVI+1TuXrlRdfbuEEX9SDRo7JCH6B9dSKzIr8=
-X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id
- d9-20020adfe2c9000000b00241db86176dmr34644247wrj.40.1670010335669; Fri, 02
- Dec 2022 11:45:35 -0800 (PST)
+        bh=yt0wmF0a++96BW0ABApkcWlkwutyseNN3f24uUrtD88=;
+        b=fUNhtvhbhZpOxGGObFOKxDH9/OSGXCY8SFz6TFDwLDJqNVgbftepZK2ehevrB93UiV
+         EMreZ9nUTSFt20A4Cx3DbRCwf5A8lRbT2N+XA4wMTQN5eEDfMQbvWju+aoBGGSWK7AHI
+         M34mzwGk9OJpFH6cW2AuHhg++14M27Mt/35BsAlFw6XXhHuGYQBjhrNfW+x4lI1OaCHD
+         3BduIERoiOYtceE/YELKZqALOl69ezU13FVhVNrS+Gno/6ApKG3Sl0hXcxvig/sB0fii
+         rjj8EVcrZfFwgpmFScFhU3dZgqRjX305N8A1DOT4LMfys0IA+wLEPZtm+tPqTg8sjaro
+         fYJg==
+X-Gm-Message-State: ANoB5pnyEfN6G8074QJ/xhHxcbLlycCSW+2P0gQoHbKcEpViRBydU4Re
+        7g6JPoM0rNip2HOYtgC1wOmuwbQ2GTGwTV7lcQk=
+X-Google-Smtp-Source: AA0mqf4L9vUfM78+IFKlNHBPG8BCS2R5OW8RJjOWCGHjKW8XiUyhbPac1wNubiIE4PGn51wrEpQkhpc1KhBRPuupgm8=
+X-Received: by 2002:ac8:4818:0:b0:3a6:a0d7:e1f7 with SMTP id
+ g24-20020ac84818000000b003a6a0d7e1f7mr1779513qtq.153.1670010396808; Fri, 02
+ Dec 2022 11:46:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20221130062935.2219247-1-irogers@google.com> <20221130062935.2219247-4-irogers@google.com>
- <CAM9d7chrsLHoGe=RcU2e5hRL22j=813j3uuEHDOPZrkpWqnSsw@mail.gmail.com>
- <CAP-5=fWZVHN5tDG+eKRr7v_RXKYA_uUgY-dFH_g3Yc3mFgkXbA@mail.gmail.com>
- <CAM9d7chsymFFq1di15w+s7jtDenV=kFnk=EDrFO_rDWcSQSa6g@mail.gmail.com> <Y4pEHlmaT1i3j23J@kernel.org>
-In-Reply-To: <Y4pEHlmaT1i3j23J@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 2 Dec 2022 11:45:22 -0800
-Message-ID: <CAP-5=fUJ-X4vePcTN7DED4+R5NmqSuaO5Z=a5xLzV9mNbNwK-g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] perf build: Use libtraceevent from the system
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
+References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+ <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
+ <CAJZ5v0ixHocQbu6-zs3dMDsiw8vdPyv=8Re7N4kUckeGkLhUzg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ixHocQbu6-zs3dMDsiw8vdPyv=8Re7N4kUckeGkLhUzg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Dec 2022 20:46:25 +0100
+Message-ID: <CAJZ5v0hc8CsvqLKxi5iRq7iR0bkt25dRnLBd23mx-zdi2Sjgsw@mail.gmail.com>
+Subject: Re: [PATCH] Revert "cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()"
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        regressions@leemhuis.info, daniel@makrotopia.org,
+        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
+        Nick <vincent@systemli.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 10:29 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+On Fri, Dec 2, 2022 at 1:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> Em Fri, Dec 02, 2022 at 10:08:04AM -0800, Namhyung Kim escreveu:
-> > On Wed, Nov 30, 2022 at 12:13 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Wed, Nov 30, 2022 at 11:05 AM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > >
-> > > > On Tue, Nov 29, 2022 at 10:30 PM Ian Rogers <irogers@google.com> wrote:
-> > > > >
-> > > > > Remove the LIBTRACEEVENT_DYNAMIC and LIBTRACEFS_DYNAMIC. If
-> > > > > libtraceevent isn't installed or NO_LIBTRACEEVENT=1 is passed to the
-> > > > > build, don't compile in libtraceevent and libtracefs support. This
-> > > > > also disables CONFIG_TRACE that controls "perf
-> > > > > trace". CONFIG_TRACEEVENT is used to control enablement in
-> > > > > Build/Makefiles, HAVE_LIBTRACEEVENT is used in C code. Without
-> > > > > HAVE_LIBTRACEEVENT tracepoints are disabled and as such the commands
-> > > > > kmem, kwork, lock, sched and timechart are removed. The majority of
-> > > > > commands continue to work including "perf test".
-> > > >
-> > > > Maybe we can have a different approach.  I guess the trace data
-> > > > access is isolated then we can make dummy interfaces when there's
-> > > > no libtraceevent.  This way we don't need to touch every command
-> > > > and let it fail when it's asked.
-> > >
-> > > Sounds like a worthwhile refactor that can land on top of this change.
-> > >
-> > > > The motivation is that we should be able to run the sub-commands
-> > > > as much as possible.  In fact, we could run 'record' part only on the
-> > > > target machine and pass the data to the host for analysis with a
-> > > > full-fledged perf.  Also some commands like 'perf lock contention'
-> > > > can run with or without libtraceevent (using BPF only).
-> > >
-> > > The issue here is that perf lock contention will use evsel__new_tp and
-> > > internally that uses libtraceevent. As such it is removed without
-> > > HAVE_LIBTRACEEVENT. Without the evsel there's not much perf lock
-> > > contention can do, so rather than litter the code with
-> > > HAVE_LIBTRACEEVENT and for it to be broken, I made the choice just to
-> > > remove it from the no libtraceevent build for now.
+> On Fri, Dec 2, 2022 at 6:26 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > >
-> > I don't think it needs evsel__new_tp() when BPF is used.
-> > The BPF program is attached to the raw tracepoint without
-> > perf_event and the result is written to the BPF map.
+> > This reverts commit 6a17b3876bc8303612d7ad59ecf7cbc0db418bcd.
 > >
-> > >
-> > > I think it is worth pursuing these patches in the shape they are in so
-> > > that we can land the removal of tools/lib/traceevent and ensure the
-> > > migration away from an out-of-date version of that library.
+> > This commit caused regression on Banana Pi R64 (MT7622), revert until
+> > the problem is identified and fixed properly.
 > >
-> > Yeah, I agree that we should remove the stale libtraceevent but
-> > I'd like to do it with minimal changes in the perf code base.
-> > Let me take a look at this.
+> > Link: https://lore.kernel.org/all/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
+> > Cc: v5.19+ <stable@vger.kernel.org> # v5.19+
+> > Reported-by: Nick <vincent@systemli.org>
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 >
-> Ok, was going to take a look at this patchkit, will wait for you now.
->
-> - Arnaldo
+> Do you want me to push this revert for -rc8?
 
-So the problematic function is:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evsel.c?h=perf/core#n482
-struct evsel *evsel__newtp_idx(const char *sys, const char *name, int idx)
+After all, I've decided to queue it up for 6.2, thanks!
 
-on success it will always initialize:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evsel.c?h=perf/core#n499
-evsel->tp_format = trace_event__tp_format(sys, name);
-
-tp_format is a libtraceevent type so this patch makes the variable
-conditional on HAVE_LIBTRACEEVENT. I think this will remain true even
-with a new evsel__newtp function that isn't dependent on
-libtraceevent. I also think adding such things is best kept out of
-this patch which is trying to do the minimal (only 312 lines of
-addition) to have a build without libtraceevent.
-
-Given we expect builds to use libtraceevent and we should build off of
-this patch, I think we should look to land it for 6.2.
-
-Thanks,
-Ian
+> > ---
+> >  drivers/cpufreq/mediatek-cpufreq.c | 147 +++++++++++++++++++----------
+> >  1 file changed, 96 insertions(+), 51 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> > index 7f2680bc9a0f..4466d0c91a6a 100644
+> > --- a/drivers/cpufreq/mediatek-cpufreq.c
+> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> > @@ -8,7 +8,6 @@
+> >  #include <linux/cpu.h>
+> >  #include <linux/cpufreq.h>
+> >  #include <linux/cpumask.h>
+> > -#include <linux/minmax.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_platform.h>
+> > @@ -16,6 +15,8 @@
+> >  #include <linux/pm_opp.h>
+> >  #include <linux/regulator/consumer.h>
+> >
+> > +#define VOLT_TOL               (10000)
+> > +
+> >  struct mtk_cpufreq_platform_data {
+> >         int min_volt_shift;
+> >         int max_volt_shift;
+> > @@ -55,7 +56,6 @@ struct mtk_cpu_dvfs_info {
+> >         unsigned int opp_cpu;
+> >         unsigned long current_freq;
+> >         const struct mtk_cpufreq_platform_data *soc_data;
+> > -       int vtrack_max;
+> >         bool ccifreq_bound;
+> >  };
+> >
+> > @@ -82,7 +82,6 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+> >         struct regulator *proc_reg = info->proc_reg;
+> >         struct regulator *sram_reg = info->sram_reg;
+> >         int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
+> > -       int retry = info->vtrack_max;
+> >
+> >         pre_vproc = regulator_get_voltage(proc_reg);
+> >         if (pre_vproc < 0) {
+> > @@ -90,44 +89,91 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+> >                         "invalid Vproc value: %d\n", pre_vproc);
+> >                 return pre_vproc;
+> >         }
+> > +       /* Vsram should not exceed the maximum allowed voltage of SoC. */
+> > +       new_vsram = min(new_vproc + soc_data->min_volt_shift,
+> > +                       soc_data->sram_max_volt);
+> > +
+> > +       if (pre_vproc < new_vproc) {
+> > +               /*
+> > +                * When scaling up voltages, Vsram and Vproc scale up step
+> > +                * by step. At each step, set Vsram to (Vproc + 200mV) first,
+> > +                * then set Vproc to (Vsram - 100mV).
+> > +                * Keep doing it until Vsram and Vproc hit target voltages.
+> > +                */
+> > +               do {
+> > +                       pre_vsram = regulator_get_voltage(sram_reg);
+> > +                       if (pre_vsram < 0) {
+> > +                               dev_err(info->cpu_dev,
+> > +                                       "invalid Vsram value: %d\n", pre_vsram);
+> > +                               return pre_vsram;
+> > +                       }
+> > +                       pre_vproc = regulator_get_voltage(proc_reg);
+> > +                       if (pre_vproc < 0) {
+> > +                               dev_err(info->cpu_dev,
+> > +                                       "invalid Vproc value: %d\n", pre_vproc);
+> > +                               return pre_vproc;
+> > +                       }
+> >
+> > -       pre_vsram = regulator_get_voltage(sram_reg);
+> > -       if (pre_vsram < 0) {
+> > -               dev_err(info->cpu_dev, "invalid Vsram value: %d\n", pre_vsram);
+> > -               return pre_vsram;
+> > -       }
+> > +                       vsram = min(new_vsram,
+> > +                                   pre_vproc + soc_data->min_volt_shift);
+> >
+> > -       new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
+> > -                         soc_data->sram_min_volt, soc_data->sram_max_volt);
+> > +                       if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
+> > +                               vsram = soc_data->sram_max_volt;
+> >
+> > -       do {
+> > -               if (pre_vproc <= new_vproc) {
+> > -                       vsram = clamp(pre_vproc + soc_data->max_volt_shift,
+> > -                                     soc_data->sram_min_volt, new_vsram);
+> > -                       ret = regulator_set_voltage(sram_reg, vsram,
+> > -                                                   soc_data->sram_max_volt);
+> > +                               /*
+> > +                                * If the target Vsram hits the maximum voltage,
+> > +                                * try to set the exact voltage value first.
+> > +                                */
+> > +                               ret = regulator_set_voltage(sram_reg, vsram,
+> > +                                                           vsram);
+> > +                               if (ret)
+> > +                                       ret = regulator_set_voltage(sram_reg,
+> > +                                                       vsram - VOLT_TOL,
+> > +                                                       vsram);
+> >
+> > -                       if (ret)
+> > -                               return ret;
+> > -
+> > -                       if (vsram == soc_data->sram_max_volt ||
+> > -                           new_vsram == soc_data->sram_min_volt)
+> >                                 vproc = new_vproc;
+> > -                       else
+> > +                       } else {
+> > +                               ret = regulator_set_voltage(sram_reg, vsram,
+> > +                                                           vsram + VOLT_TOL);
+> > +
+> >                                 vproc = vsram - soc_data->min_volt_shift;
+> > +                       }
+> > +                       if (ret)
+> > +                               return ret;
+> >
+> >                         ret = regulator_set_voltage(proc_reg, vproc,
+> > -                                                   soc_data->proc_max_volt);
+> > +                                                   vproc + VOLT_TOL);
+> >                         if (ret) {
+> >                                 regulator_set_voltage(sram_reg, pre_vsram,
+> > -                                                     soc_data->sram_max_volt);
+> > +                                                     pre_vsram);
+> >                                 return ret;
+> >                         }
+> > -               } else if (pre_vproc > new_vproc) {
+> > +               } while (vproc < new_vproc || vsram < new_vsram);
+> > +       } else if (pre_vproc > new_vproc) {
+> > +               /*
+> > +                * When scaling down voltages, Vsram and Vproc scale down step
+> > +                * by step. At each step, set Vproc to (Vsram - 200mV) first,
+> > +                * then set Vproc to (Vproc + 100mV).
+> > +                * Keep doing it until Vsram and Vproc hit target voltages.
+> > +                */
+> > +               do {
+> > +                       pre_vproc = regulator_get_voltage(proc_reg);
+> > +                       if (pre_vproc < 0) {
+> > +                               dev_err(info->cpu_dev,
+> > +                                       "invalid Vproc value: %d\n", pre_vproc);
+> > +                               return pre_vproc;
+> > +                       }
+> > +                       pre_vsram = regulator_get_voltage(sram_reg);
+> > +                       if (pre_vsram < 0) {
+> > +                               dev_err(info->cpu_dev,
+> > +                                       "invalid Vsram value: %d\n", pre_vsram);
+> > +                               return pre_vsram;
+> > +                       }
+> > +
+> >                         vproc = max(new_vproc,
+> >                                     pre_vsram - soc_data->max_volt_shift);
+> >                         ret = regulator_set_voltage(proc_reg, vproc,
+> > -                                                   soc_data->proc_max_volt);
+> > +                                                   vproc + VOLT_TOL);
+> >                         if (ret)
+> >                                 return ret;
+> >
+> > @@ -137,24 +183,32 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+> >                                 vsram = max(new_vsram,
+> >                                             vproc + soc_data->min_volt_shift);
+> >
+> > -                       ret = regulator_set_voltage(sram_reg, vsram,
+> > -                                                   soc_data->sram_max_volt);
+> > +                       if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
+> > +                               vsram = soc_data->sram_max_volt;
+> > +
+> > +                               /*
+> > +                                * If the target Vsram hits the maximum voltage,
+> > +                                * try to set the exact voltage value first.
+> > +                                */
+> > +                               ret = regulator_set_voltage(sram_reg, vsram,
+> > +                                                           vsram);
+> > +                               if (ret)
+> > +                                       ret = regulator_set_voltage(sram_reg,
+> > +                                                       vsram - VOLT_TOL,
+> > +                                                       vsram);
+> > +                       } else {
+> > +                               ret = regulator_set_voltage(sram_reg, vsram,
+> > +                                                           vsram + VOLT_TOL);
+> > +                       }
+> > +
+> >                         if (ret) {
+> >                                 regulator_set_voltage(proc_reg, pre_vproc,
+> > -                                                     soc_data->proc_max_volt);
+> > +                                                     pre_vproc);
+> >                                 return ret;
+> >                         }
+> > -               }
+> > -
+> > -               pre_vproc = vproc;
+> > -               pre_vsram = vsram;
+> > -
+> > -               if (--retry < 0) {
+> > -                       dev_err(info->cpu_dev,
+> > -                               "over loop count, failed to set voltage\n");
+> > -                       return -EINVAL;
+> > -               }
+> > -       } while (vproc != new_vproc || vsram != new_vsram);
+> > +               } while (vproc > new_vproc + VOLT_TOL ||
+> > +                        vsram > new_vsram + VOLT_TOL);
+> > +       }
+> >
+> >         return 0;
+> >  }
+> > @@ -250,8 +304,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+> >          * If the new voltage or the intermediate voltage is higher than the
+> >          * current voltage, scale up voltage first.
+> >          */
+> > -       target_vproc = max(inter_vproc, vproc);
+> > -       if (pre_vproc <= target_vproc) {
+> > +       target_vproc = (inter_vproc > vproc) ? inter_vproc : vproc;
+> > +       if (pre_vproc < target_vproc) {
+> >                 ret = mtk_cpufreq_set_voltage(info, target_vproc);
+> >                 if (ret) {
+> >                         dev_err(cpu_dev,
+> > @@ -513,15 +567,6 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+> >          */
+> >         info->need_voltage_tracking = (info->sram_reg != NULL);
+> >
+> > -       /*
+> > -        * We assume min voltage is 0 and tracking target voltage using
+> > -        * min_volt_shift for each iteration.
+> > -        * The vtrack_max is 3 times of expeted iteration count.
+> > -        */
+> > -       info->vtrack_max = 3 * DIV_ROUND_UP(max(info->soc_data->sram_max_volt,
+> > -                                               info->soc_data->proc_max_volt),
+> > -                                           info->soc_data->min_volt_shift);
+> > -
+> >         return 0;
+> >
+> >  out_disable_inter_clock:
+> > --
