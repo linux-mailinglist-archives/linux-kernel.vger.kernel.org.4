@@ -2,140 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15CD6402E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E756402E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbiLBJEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S232341AbiLBJFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbiLBJEY (ORCPT
+        with ESMTP id S231578AbiLBJFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:04:24 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C872BA632;
-        Fri,  2 Dec 2022 01:04:16 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669971853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MckjuAgrX9lPRRxAXgnWKVuqqFRTRL6g7Q93m+oxRpw=;
-        b=zm9bAyKz9vWaZbKqWxM2FlRGsBKSUCB+fz3hebT+5HdIbA2ov/u5M1rmdOmRJ8xGtK++8s
-        YfybLezzeXk3FvqzMOeEJ1zJnQSvdH5IvfSvum1gRGPkEnauyZJeKxwg1r8STWcwFqDxzk
-        dd84kLqb9t8NYTV9haq10aBOHxu3cgnOWEs4TgR++hdbC+3og6jnqluG2Nn9pHQ5C3auIE
-        UvbVr9hcopOIHfJSxrYfDfrdQFl1Cd3vxNkFHYpeCDO7aA5hRWPr8NnQWPlg7J4MX/nGKP
-        Nm6y6Eu3LJmK5ywjoTWFXqIBQ3BOuL3N2/5Xo2nagc7iVyXZ1K7n53Cfk0EelA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669971853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MckjuAgrX9lPRRxAXgnWKVuqqFRTRL6g7Q93m+oxRpw=;
-        b=3T1FVTK1GegP2cFse6RkU9JjMvJHY94AqQTDeH2joWNRB/quwq2MG0RhxW5q6BeesKfias
-        6WWT9gXfkMWcQsAw==
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev, zhuyinbo@loongson.cn
-Subject: Re: [PATCH v11 1/3] clocksource: loongson2_hpet: add hpet driver
- support
-In-Reply-To: <c46e5ebf-5293-5123-52d3-b3594c6e9244@loongson.cn>
-References: <20221129030925.14074-1-zhuyinbo@loongson.cn>
- <87k03bs6pj.ffs@tglx> <c46e5ebf-5293-5123-52d3-b3594c6e9244@loongson.cn>
-Date:   Fri, 02 Dec 2022 10:04:12 +0100
-Message-ID: <87bkomqir7.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 04:05:31 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FB525CC;
+        Fri,  2 Dec 2022 01:05:30 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNn8n16BMz5BNS0;
+        Fri,  2 Dec 2022 17:05:29 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B295Avb031743;
+        Fri, 2 Dec 2022 17:05:10 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Fri, 2 Dec 2022 17:05:12 +0800 (CST)
+Date:   Fri, 2 Dec 2022 17:05:12 +0800 (CST)
+X-Zmail-TransId: 2af96389bfc805f2c885
+X-Mailer: Zmail v1.0
+Message-ID: <202212021705128095546@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <hdegoede@redhat.com>
+Cc:     <justin.ernst@hpe.com>, <markgross@kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBwbGF0Zm9ybS94ODY6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B295Avb031743
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6389BFD9.001 by FangMail milter!
+X-FangMail-Envelope: 1669971929/4NNn8n16BMz5BNS0/6389BFD9.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6389BFD9.001/4NNn8n16BMz5BNS0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02 2022 at 12:36, Yinbo Zhu wrote:
-> =E5=9C=A8 2022/12/1 19:29, Thomas Gleixner =E5=86=99=E9=81=93:
->>
->>> +static DEFINE_SPINLOCK(hpet_lock);
->> This wants to be a raw spinlock if at all. But first you have to explain
->> the purpose of this lock.
->>
->>> +DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device);
->> Why needs this to be global and why is it needed at all?
->>
->> This code does support exactly _ONE_ clock event device.
->
-> This is consider that the one hardware clock_event_device is used for=20
-> multiple cpu cores,
->
-> and earch cpu cores has a device from its perspective, so add=20
-> DEFINE_SPINLOCK(hpet_lock)
->
-> and DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device),
->
-> the use of locks described below is also this reason .
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-You cannot use _ONE_ clock event device as per CPU clock event device
-for multiple CPUs. That simply cannot work ever.
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-There are two types of clockevent devices:
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/platform/x86/uv_sysfs.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-      1) strictly per CPU, i.e. one distinct device per CPU
+diff --git a/drivers/platform/x86/uv_sysfs.c b/drivers/platform/x86/uv_sysfs.c
+index 625b0b79d185..73fc38ee7430 100644
+--- a/drivers/platform/x86/uv_sysfs.c
++++ b/drivers/platform/x86/uv_sysfs.c
+@@ -119,12 +119,12 @@ struct uv_hub {
 
-      2) global broadcast device
+ static ssize_t hub_name_show(struct uv_bios_hub_info *hub_info, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", hub_info->name);
++	return sysfs_emit(buf, "%s\n", hub_info->name);
+ }
 
-The global broadcast device is used if there are less physical devices
-than CPUs or to handle the cases where the per CPU device stops in
-deep idle states.
+ static ssize_t hub_location_show(struct uv_bios_hub_info *hub_info, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", hub_info->location);
++	return sysfs_emit(buf, "%s\n", hub_info->location);
+ }
 
-For the case that there are less physical devices than CPUs, you have to
-install dummy per CPU devices. Grep for CLOCK_EVT_FEAT_DUMMY.
+ static ssize_t hub_partition_show(struct uv_bios_hub_info *hub_info, char *buf)
+@@ -460,12 +460,12 @@ struct uv_pci_top_obj {
 
-The core code will use the broadcast device to provide timer interrupts
-and it propagates them to the CPUs which are backed by a dummy per CPU
-device via IPIs.
+ static ssize_t uv_pci_type_show(struct uv_pci_top_obj *top_obj, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", top_obj->type);
++	return sysfs_emit(buf, "%s\n", top_obj->type);
+ }
 
-None of this needs a lock in the driver code unless the hardware is
-really dumb designed and has a register shared with something else.
+ static ssize_t uv_pci_location_show(struct uv_pci_top_obj *top_obj, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", top_obj->location);
++	return sysfs_emit(buf, "%s\n", top_obj->location);
+ }
 
-The serialization for all clockevent devices is completely provided by
-the core code.
+ static ssize_t uv_pci_iio_stack_show(struct uv_pci_top_obj *top_obj, char *buf)
+@@ -475,7 +475,7 @@ static ssize_t uv_pci_iio_stack_show(struct uv_pci_top_obj *top_obj, char *buf)
 
->> Seriously, this is not how it works. Instead of copy & paste, we create
->> shared infrastructure and just keep the real architecture specific
->> pieces separate.
->
-> I don't find the shared infrastructure in LoongArch, I want to support=C2=
-=A0=20
-> hpet for LoongArch
+ static ssize_t uv_pci_ppb_addr_show(struct uv_pci_top_obj *top_obj, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", top_obj->ppb_addr);
++	return sysfs_emit(buf, "%s\n", top_obj->ppb_addr);
+ }
 
-Of course you can't find shared infrastructure because there is none.
+ static ssize_t uv_pci_slot_show(struct uv_pci_top_obj *top_obj, char *buf)
+@@ -737,7 +737,7 @@ static ssize_t coherence_id_show(struct kobject *kobj,
+ static ssize_t uv_type_show(struct kobject *kobj,
+ 			struct kobj_attribute *attr, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", uv_type_string());
++	return sysfs_emit(buf, "%s\n", uv_type_string());
+ }
 
-That's the whole point. Instead of creating copies of code, you rework
-the code so that the common parts can be shared between x86, longson and
-loongarch. Then you have the architecture/platform specific pieces which
-deal with the specific enumeration/initialization and use the shared
-infrastructure.
+ static ssize_t uv_archtype_show(struct kobject *kobj,
+@@ -749,13 +749,13 @@ static ssize_t uv_archtype_show(struct kobject *kobj,
+ static ssize_t uv_hub_type_show(struct kobject *kobj,
+ 			struct kobj_attribute *attr, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "0x%x\n", uv_hub_type());
++	return sysfs_emit(buf, "0x%x\n", uv_hub_type());
+ }
 
-Thanks,
+ static ssize_t uv_hubless_show(struct kobject *kobj,
+ 			struct kobj_attribute *attr, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "0x%x\n", uv_get_hubless_system());
++	return sysfs_emit(buf, "0x%x\n", uv_get_hubless_system());
+ }
 
-        tglx
-
-
-
-
+ static struct kobj_attribute partition_id_attr =
+-- 
+2.25.1
