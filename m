@@ -2,142 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FB363FF85
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B216263FF87
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiLBEey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 23:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
+        id S232118AbiLBEhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 23:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbiLBEew (ORCPT
+        with ESMTP id S232090AbiLBEg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 23:34:52 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC52D9B79E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 20:34:51 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id f23-20020a5d8157000000b006dfb209094fso3647457ioo.18
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 20:34:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mjOcm8yGinHOze3UymrcRt7aGjfvDo58Gv15I7hjwzA=;
-        b=G48dYc1oMSf2gkvaIVebiLSqbb3072I62lix1gbFZpR6Mwp4jLYWJxBf1vkhSaLwvc
-         A9jXpfYn2+o5oPuzKfLBfE5PO21JvmDR/+DD6O3oyuK0xYwltOQ20KoXZ4OBCRgcRqsC
-         h3PJT4Drm2XQselly+oIlYxdxcQj5ypzXbWD8SFyiSR64BtaJtbhbWrEx5f0jRIEcXNm
-         1dkXTCroQHns4mDHhqT9W3MzNoxpXN3X8m65HDEPYoNgglgLoRzvFI4fh8TQ4VolxDfW
-         4mc86JReRDuf1iFvfY6KKLQrgmdnAW3pQXi0uvnUbTnfEibyGQeFJb3jtLgOippVclFV
-         brwQ==
-X-Gm-Message-State: ANoB5plcx5nPUEaAkEinWLh4N+ViR67DT1XPY0mWjYOy0ISkYvGzOeSD
-        025L5ZzSFm5iFC6whXwq8Mpbti1i1A2y4ozRo1EiMTLkpF5C
-X-Google-Smtp-Source: AA0mqf6Fd1voLCWecr34VJTbH5ryMsJgrPkzbegt5fxFDcuRzwYw1HQD1xb8RuY0Q37NMrJ4UAPLqHYseSIkf0l/0bkI0T1HrgKy
+        Thu, 1 Dec 2022 23:36:59 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA6E4D3781;
+        Thu,  1 Dec 2022 20:36:56 -0800 (PST)
+Received: from loongson.cn (unknown [117.133.84.183])
+        by gateway (Coremail) with SMTP id _____8Bx1vDngIljqrcCAA--.6342S3;
+        Fri, 02 Dec 2022 12:36:55 +0800 (CST)
+Received: from [192.168.1.2] (unknown [117.133.84.183])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VblgIljvRckAA--.5510S3;
+        Fri, 02 Dec 2022 12:36:54 +0800 (CST)
+Message-ID: <c46e5ebf-5293-5123-52d3-b3594c6e9244@loongson.cn>
+Date:   Fri, 2 Dec 2022 12:36:53 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca8d:0:b0:302:de10:7ae1 with SMTP id
- t13-20020a92ca8d000000b00302de107ae1mr21652419ilo.15.1669955691220; Thu, 01
- Dec 2022 20:34:51 -0800 (PST)
-Date:   Thu, 01 Dec 2022 20:34:51 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c41adb05eed0db7d@google.com>
-Subject: [syzbot] WARNING in hfsplus_bnode_create
-From:   syzbot <syzbot+1c8ff72d0cd8a50dfeaa@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
-        ira.weiny@intel.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, slava@dubeyko.com,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v11 1/3] clocksource: loongson2_hpet: add hpet driver
+ support
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev, zhuyinbo@loongson.cn
+References: <20221129030925.14074-1-zhuyinbo@loongson.cn>
+ <87k03bs6pj.ffs@tglx>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+In-Reply-To: <87k03bs6pj.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx9VblgIljvRckAA--.5510S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3JF17Kr48Jr1rCF1Duw17ZFb_yoWxArWUpF
+        yIvFsxtFWDJr1kXr1jqrs8urWqq3yfury7Kry5tayUJ34qvwn3GFy0939xCr10krZ3Ja9F
+        ya1Yq347uF9FyaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FAp5UUUUU==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+在 2022/12/1 19:29, Thomas Gleixner 写道:
+> On Tue, Nov 29 2022 at 11:09, Yinbo Zhu wrote:
+>> HPET (High Precision Event Timer) defines a new set of timers, which
+> It's not really new. The HPET specification is 20 years old :)
 
-HEAD commit:    ef4d3ea40565 afs: Fix server->active leak in afs_put_server
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=174b244d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8e7e79f8a1e34200
-dashboard link: https://syzkaller.appspot.com/bug?extid=1c8ff72d0cd8a50dfeaa
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165f624d880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e7e55b880000
+I will change it.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ef790e7777cd/disk-ef4d3ea4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2ed3c6bc9230/vmlinux-ef4d3ea4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f1dbd004fa88/bzImage-ef4d3ea4.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/ac35ccffd559/mount_0.gz
+thanks.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1c8ff72d0cd8a50dfeaa@syzkaller.appspotmail.com
+>
+>> +++ b/drivers/clocksource/loongson2_hpet.c
+>> @@ -0,0 +1,334 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+>> + */
+>> +
+>> +#include <linux/init.h>
+>> +#include <linux/percpu.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/spinlock.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/of_irq.h>
+>> +#include <linux/of_address.h>
+>> +#include <linux/clk.h>
+>> +#include <asm/time.h>
+>> +
+>> +/* HPET regs */
+>> +#define HPET_CFG                0x010
+>> +#define HPET_STATUS             0x020
+>> +#define HPET_COUNTER            0x0f0
+>> +#define HPET_T0_IRS             0x001
+>> +#define HPET_T0_CFG             0x100
+>> +#define HPET_T0_CMP             0x108
+>> +#define HPET_CFG_ENABLE         0x001
+>> +#define HPET_TN_LEVEL           0x0002
+>> +#define HPET_TN_ENABLE          0x0004
+>> +#define HPET_TN_PERIODIC        0x0008
+>> +#define HPET_TN_SETVAL          0x0040
+>> +#define HPET_TN_32BIT           0x0100
+> So this is another copy of the defines which are already available in
+> x86 and mips. Seriously?
 
-loop0: detected capacity change from 0 to 1024
-hfsplus: trying to free free bnode 0(1)
-hfsplus: new node 0 already hashed?
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3631 at fs/hfsplus/bnode.c:573 hfsplus_bnode_create+0x3d4/0x460 fs/hfsplus/bnode.c:572
-Modules linked in:
-CPU: 0 PID: 3631 Comm: syz-executor306 Not tainted 6.1.0-rc7-syzkaller-00103-gef4d3ea40565 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:hfsplus_bnode_create+0x3d4/0x460 fs/hfsplus/bnode.c:573
-Code: 31 c0 e8 41 9b 43 08 e9 5f fd ff ff e8 45 25 2b ff 4c 89 ff e8 7d fe 4e 08 48 c7 c7 c0 52 27 8b 44 89 e6 31 c0 e8 1e 9b 43 08 <0f> 0b eb b1 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 61 fc ff ff 48 89
-RSP: 0018:ffffc90003bfedb0 EFLAGS: 00010246
-RAX: 0000000000000023 RBX: ffff888017af7400 RCX: 99976e79c3affa00
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffff816fdabd R09: fffff5200077fd6d
-R10: fffff5200077fd6d R11: 1ffff9200077fd6c R12: 0000000000000000
-R13: dffffc0000000000 R14: ffff88807bef8000 R15: ffff88807bef80e0
-FS:  00005555558fc300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe4e739000 CR3: 000000007bbce000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- hfsplus_bmap_alloc+0x5a5/0x640 fs/hfsplus/btree.c:415
- hfs_btree_inc_height+0x131/0xda0 fs/hfsplus/brec.c:475
- hfsplus_brec_insert+0x160/0xdf0 fs/hfsplus/brec.c:75
- hfsplus_create_attr+0x4b2/0x620 fs/hfsplus/attributes.c:252
- __hfsplus_setxattr+0x6e4/0x2270 fs/hfsplus/xattr.c:354
- hfsplus_initxattrs+0x15c/0x230 fs/hfsplus/xattr_security.c:59
- security_inode_init_security+0x3bf/0x3f0 security/security.c:1119
- hfsplus_mknod+0x1bd/0x290 fs/hfsplus/dir.c:498
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12e2/0x2e00 fs/namei.c:3711
- do_filp_open+0x275/0x500 fs/namei.c:3741
- do_sys_openat2+0x13b/0x500 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_creat fs/open.c:1402 [inline]
- __se_sys_creat fs/open.c:1396 [inline]
- __x64_sys_creat+0x11f/0x160 fs/open.c:1396
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4788f48779
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe4e738698 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4788f48779
-RDX: 00007f4788f48779 RSI: 0000000000000000 RDI: 0000000020000300
-RBP: 00007f4788f08010 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000604 R11: 0000000000000246 R12: 00007f4788f080a0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+in fact, these definition was also record in LoongArch Loongson-2 SoC
+
+datasheet.
+
+>
+>> +static DEFINE_SPINLOCK(hpet_lock);
+> This wants to be a raw spinlock if at all. But first you have to explain
+> the purpose of this lock.
+>
+>> +DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device);
+> Why needs this to be global and why is it needed at all?
+>
+> This code does support exactly _ONE_ clock event device.
+
+This is consider that the one hardware clock_event_device is used for 
+multiple cpu cores,
+
+and earch cpu cores has a device from its perspective, so add 
+DEFINE_SPINLOCK(hpet_lock)
+
+and DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device),
+
+the use of locks described below is also this reason .
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+and I will use raw spinlock to replace spin lock.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>
+>> +static int hpet_read(int offset)
+>> +{
+>> +	return readl(hpet_mmio_base + offset);
+>> +}
+>> +
+>> +static void hpet_write(int offset, int data)
+>> +{
+>> +	writel(data, hpet_mmio_base + offset);
+>> +}
+>> +
+>> +static void hpet_start_counter(void)
+>> +{
+>> +	unsigned int cfg = hpet_read(HPET_CFG);
+>> +
+>> +	cfg |= HPET_CFG_ENABLE;
+>> +	hpet_write(HPET_CFG, cfg);
+>> +}
+>> +
+>> +static void hpet_stop_counter(void)
+>> +{
+>> +	unsigned int cfg = hpet_read(HPET_CFG);
+>> +
+>> +	cfg &= ~HPET_CFG_ENABLE;
+>> +	hpet_write(HPET_CFG, cfg);
+>> +}
+>> +
+>> +static void hpet_reset_counter(void)
+>> +{
+>> +	hpet_write(HPET_COUNTER, 0);
+>> +	hpet_write(HPET_COUNTER + 4, 0);
+>> +}
+>> +
+>> +static void hpet_restart_counter(void)
+>> +{
+>> +	hpet_stop_counter();
+>> +	hpet_reset_counter();
+>> +	hpet_start_counter();
+>> +}
+> This is also a copy of the x86 HPET code....
+>
+>> +static void hpet_enable_legacy_int(void)
+>> +{
+>> +	/* Do nothing on Loongson2 */
+>> +}
+>> +
+>> +static int hpet_set_state_periodic(struct clock_event_device *evt)
+>> +{
+>> +	int cfg;
+>> +
+>> +	spin_lock(&hpet_lock);
+> What's the purpose of this lock ?
+>
+>> +	pr_info("set clock event to periodic mode!\n");
+>> +
+>> +	/* stop counter */
+>> +	hpet_stop_counter();
+>> +	hpet_reset_counter();
+>> +	hpet_write(HPET_T0_CMP, 0);
+>> +
+>> +	/* enables the timer0 to generate a periodic interrupt */
+>> +	cfg = hpet_read(HPET_T0_CFG);
+>> +	cfg &= ~HPET_TN_LEVEL;
+>> +	cfg |= HPET_TN_ENABLE | HPET_TN_PERIODIC | HPET_TN_SETVAL |
+>> +		HPET_TN_32BIT | hpet_irq_flags;
+>> +	hpet_write(HPET_T0_CFG, cfg);
+>> +
+>> +	/* set the comparator */
+>> +	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
+>> +	udelay(1);
+>> +	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
+>> +
+>> +	/* start counter */
+>> +	hpet_start_counter();
+> Pretty much the same code as hpet_clkevt_set_state_periodic()
+>
+>> +	spin_unlock(&hpet_lock);
+>> +	return 0;
+>> +}
+>> +
+>> +static int hpet_set_state_shutdown(struct clock_event_device *evt)
+>> +{
+>> +	int cfg;
+>> +
+>> +	spin_lock(&hpet_lock);
+>> +
+>> +	cfg = hpet_read(HPET_T0_CFG);
+>> +	cfg &= ~HPET_TN_ENABLE;
+>> +	hpet_write(HPET_T0_CFG, cfg);
+>> +
+>> +	spin_unlock(&hpet_lock);
+> Another slightly different copy of the x86 code
+>
+>> +	return 0;
+>> +}
+>> +
+>> +static int hpet_set_state_oneshot(struct clock_event_device *evt)
+>> +{
+>> +	int cfg;
+>> +
+>> +	spin_lock(&hpet_lock);
+>> +
+>> +	pr_info("set clock event to one shot mode!\n");
+>> +	cfg = hpet_read(HPET_T0_CFG);
+>> +	/*
+>> +	 * set timer0 type
+>> +	 * 1 : periodic interrupt
+>> +	 * 0 : non-periodic(oneshot) interrupt
+>> +	 */
+>> +	cfg &= ~HPET_TN_PERIODIC;
+>> +	cfg |= HPET_TN_ENABLE | HPET_TN_32BIT |
+>> +		hpet_irq_flags;
+>> +	hpet_write(HPET_T0_CFG, cfg);
+> Yet another copy.
+>
+>> +	/* start counter */
+>> +	hpet_start_counter();
+> Why doe you need an explicit start here?
+
+if the hpet doesn't support period mode,  the the hpet irq doesn't enable in
+
+oneshot mode, so add it in here.
+
+>
+>> +	spin_unlock(&hpet_lock);
+>> +	return 0;
+>> +}
+>> +
+>> +static int hpet_tick_resume(struct clock_event_device *evt)
+>> +{
+>> +	spin_lock(&hpet_lock);
+>> +	hpet_enable_legacy_int();
+>> +	spin_unlock(&hpet_lock);
+> More copy and paste just to slap a spinlock on to it which has zero
+> value AFAICT.
+thank you for reminding me, I will remove it.
+>> +	return 0;
+>> +}
+>> +
+>> +static int hpet_next_event(unsigned long delta,
+>> +		struct clock_event_device *evt)
+>> +{
+>> +	u32 cnt;
+>> +	s32 res;
+>> +
+>> +	cnt = hpet_read(HPET_COUNTER);
+>> +	cnt += (u32) delta;
+>> +	hpet_write(HPET_T0_CMP, cnt);
+>> +
+>> +	res = (s32)(cnt - hpet_read(HPET_COUNTER));
+>> +
+>> +	return res < HPET_MIN_CYCLES ? -ETIME : 0;
+> Another copy of the x86 code except for omitting the big comment which
+> explains the logic.
+>
+> Seriously, this is not how it works. Instead of copy & paste, we create
+> shared infrastructure and just keep the real architecture specific
+> pieces separate.
+>
+> Thanks,
+>
+>          tglx
+
+I don't find the shared infrastructure in LoongArch, I want to support  
+hpet for LoongArch
+
+architecture Loongson-2 SoC series.   the peripherals on the SoC are 
+generally
+
+descriped by dts.
+
+
+In addition, I havent' found any architecture releated differences for 
+hpet, at least Mips (loongson)
+
+and LoongArch should be like this,  in addtion to the hpet control base 
+address.
+
+
+Loongson-2 SoC need to support dts, so I refer to the hpet driver of 
+Mips and add
+
+hpet dts support for LoongArch architecture Loongson-2 SoC.
+
+
+Thanks,
+
+Yinbo.
+
