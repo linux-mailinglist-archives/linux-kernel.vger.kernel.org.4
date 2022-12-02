@@ -2,75 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F42563FDCE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561BF63FDD1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiLBBpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 20:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
+        id S231613AbiLBBqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 20:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbiLBBow (ORCPT
+        with ESMTP id S230209AbiLBBqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 20:44:52 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B97D3A21;
-        Thu,  1 Dec 2022 17:44:49 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id n186so3962926oih.7;
-        Thu, 01 Dec 2022 17:44:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hvv9FXRsemW4l4PI8H5cpdCXf8vmtqJ7GI82fIK6u4o=;
-        b=PKiIUIpGAFOfhhBaT8KJAuT9pkwk93cvcGzaJtFpLZUJF70Zv2fJDVc9qwuc6qr1OI
-         WjRNy/ZmJtDIXrWNJSdpPGGcubnY2qSxNIkoPqQu0QSQ9QI6+NxtotZ2lj4lwsYytWxA
-         RbzSVODbUVVNDMNefGRPppaWp6m2CcvVDg/usXYTWngWX1H+wy3WwbaAeSHH+gUMe3X5
-         AibEVd3pXFnpOpRF/ZInKk3lj3SVKgiakgGR49RHxLQYUisjdie0pV2xp5KuHtzcrAbm
-         Kj5rjiXJRJywaBiR6wvioNJ7ugWen3LZGmTKRuDWT8KOaTjednTOhEDAhhRZr6PXy4TQ
-         EP+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hvv9FXRsemW4l4PI8H5cpdCXf8vmtqJ7GI82fIK6u4o=;
-        b=lIMDiIYcuuqwBps7xOP02V1nMliXOCy5Ay+L5BdDJlklBKilMnSP7aLq+TeUAuh5UQ
-         dwGYpOWNfLT7tFCcxwCHOitYtw/yhL2zXZZsrStcw+7bbmIXkFhP/aLaBZTP+bY1lQJE
-         lETXe9eCLoqDQLGOE/XKuRZslDxVRPvlJHFQ3ONnFnUji5fcPePVX23aWty1gn4IkNXb
-         QLWmUogHiuaoscikNOnsBu599Kyz1gYc7VsR6FweJP74qJyc9/MjfEwtbQ8Xn8L3BOSe
-         Zbp/tE5f4cigpJ8I9d3D3p7De0/yd5QfJKrwEQKlQMl8XfBqkmE6oreGQJ6y0fd5QXZ1
-         qCdw==
-X-Gm-Message-State: ANoB5pkqXHg5Ox2bmRPbQTEVbDunKu2Lma2sP6PMUOYapbaqujJ36acw
-        MNJJ6fH7Uk2AsqDUGQgP4PU=
-X-Google-Smtp-Source: AA0mqf4H7tZ+qhYY4A8AFKeW70Jbj/ilQpfMxewTYF7ODE2Dx5NyfcWB3E0hJ8I4FtZ8AHyRrhdlYQ==
-X-Received: by 2002:a05:6808:138a:b0:35b:29de:da29 with SMTP id c10-20020a056808138a00b0035b29deda29mr24974660oiw.55.1669945489271;
-        Thu, 01 Dec 2022 17:44:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o6-20020acad706000000b003549db40f38sm2441136oig.46.2022.12.01.17.44.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 17:44:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 1 Dec 2022 17:44:48 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/162] 5.10.157-rc1 review
-Message-ID: <20221202014448.GC2255418@roeck-us.net>
-References: <20221130180528.466039523@linuxfoundation.org>
+        Thu, 1 Dec 2022 20:46:47 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F21D3A3C;
+        Thu,  1 Dec 2022 17:46:46 -0800 (PST)
+Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NNbPj363qzmWDc;
+        Fri,  2 Dec 2022 09:46:01 +0800 (CST)
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 2 Dec 2022 09:46:43 +0800
+Subject: Re: [PATCH v2] chardev: fix error handling in cdev_device_add()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <logang@deltatee.com>, <dan.j.williams@intel.com>,
+        <hans.verkuil@cisco.com>, <alexandre.belloni@free-electrons.com>,
+        <viro@zeniv.linux.org.uk>
+References: <20221025113957.693723-1-yangyingliang@huawei.com>
+ <Y1fNnwLlY079xGVY@kroah.com>
+ <ae7cbce0-3506-e21b-fa9b-37a13fe00b77@huawei.com>
+ <Y1fmgCS7fuf/LQBc@kroah.com>
+ <65b29177-6892-7578-b2ae-a09d5adab661@huawei.com>
+ <Y4id1sc4J9mctEU2@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <83280689-206f-668d-665c-0a2a3b8d8838@huawei.com>
+Date:   Fri, 2 Dec 2022 09:46:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130180528.466039523@linuxfoundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <Y4id1sc4J9mctEU2@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +57,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 07:21:21PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.157 release.
-> There are 162 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
-> Anything received after that time might be too late.
-> 
 
-Build results:
-	total: 162 pass: 162 fail: 0
-Qemu test results:
-	total: 475 pass: 475 fail: 0
+On 2022/12/1 20:28, Greg KH wrote:
+> On Thu, Dec 01, 2022 at 08:06:44PM +0800, Yang Yingliang wrote:
+>> Hi Greg,
+>>
+>> On 2022/10/25 21:37, Greg KH wrote:
+>>> On Tue, Oct 25, 2022 at 09:20:12PM +0800, Yang Yingliang wrote:
+>>>> Hi, Greg
+>>>>
+>>>> On 2022/10/25 19:50, Greg KH wrote:
+>>>>> On Tue, Oct 25, 2022 at 07:39:57PM +0800, Yang Yingliang wrote:
+>>>>>> While doing fault injection test, I got the following report:
+>>>>>>
+>>>>>> ------------[ cut here ]------------
+>>>>>> kobject: '(null)' (0000000039956980): is not initialized, yet kobject_put() is being called.
+>>>>>> WARNING: CPU: 3 PID: 6306 at kobject_put+0x23d/0x4e0
+>>>>>> CPU: 3 PID: 6306 Comm: 283 Tainted: G        W          6.1.0-rc2-00005-g307c1086d7c9 #1253
+>>>>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+>>>>>> RIP: 0010:kobject_put+0x23d/0x4e0
+>>>>>> Call Trace:
+>>>>>>     <TASK>
+>>>>>>     cdev_device_add+0x15e/0x1b0
+>>>>>>     __iio_device_register+0x13b4/0x1af0 [industrialio]
+>>>>>>     __devm_iio_device_register+0x22/0x90 [industrialio]
+>>>>>>     max517_probe+0x3d8/0x6b4 [max517]
+>>>>>>     i2c_device_probe+0xa81/0xc00
+>>>>>>
+>>>>>> When device_add() is injected fault and returns error, if dev->devt is not set,
+>>>>>> cdev_add() is not called, cdev_del() is not needed. Fix this by checking dev->devt
+>>>>>> in error path.
+>>>>> Nit, please wrap your changelog text at 72 columns.
+>>>>>
+>>>>>> Fixes: 233ed09d7fda ("chardev: add helper function to register char devs with a struct device")
+>>>>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>>>>>> ---
+>>>>>> v1 -> v2:
+>>>>>>      Add information to update commit message.
+>>>>>>      v1 link: https://lore.kernel.org/lkml/1959fa74-b06c-b8bc-d14f-b71e5c4290ee@huawei.com/T/
+>>>>>> ---
+>>>>>>     fs/char_dev.c | 2 +-
+>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/fs/char_dev.c b/fs/char_dev.c
+>>>>>> index ba0ded7842a7..3f667292608c 100644
+>>>>>> --- a/fs/char_dev.c
+>>>>>> +++ b/fs/char_dev.c
+>>>>>> @@ -547,7 +547,7 @@ int cdev_device_add(struct cdev *cdev, struct device *dev)
+>>>>>>     	}
+>>>>>>     	rc = device_add(dev);
+>>>>>> -	if (rc)
+>>>>>> +	if (rc && dev->devt)
+>>>>> No, this is a layering violation and one that you do not know is really
+>>>>> going to be true or not.  the devt being present, or not, should not be
+>>>>> an issue of if the device_add failed or not.  This isn't correct, sorry.
+>>>> Do you mean it's not a bug or the warn can be ignored or it's bug in driver
+>>>> ?
+>>>> I see devt is checked before calling cdev_del() in cdev_device_del().
+>>> Ah!  The core doesn't set devt, the caller has that set.  That makes
+>>> more sense now, sorry for the confusion on my side.
+>>>
+>>> Yes, this looks correct, the diff didn't have the full context and I was
+>>> confused.
+>>>
+>>> I'll go queue this up, very nice work.
+>>>
+>>> greg k-h
+>> I didn't find this patch in your trees, does it been merged?
+> Hm, is this:
+> 4634c973096a ("chardev: Fix potential memory leak when cdev_add() failed")
+> or is this a different patch?  If different, it's not in my review queue
+> anymore, sorry, can you resend it?
+It's a different patch, I can resend it.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Thanks,
+Yang
+>
+> thanks,
+>
+> greg k-h
+> .
