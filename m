@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BD7640556
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA9B64055C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbiLBK4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S232354AbiLBK6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbiLBKzh (ORCPT
+        with ESMTP id S231929AbiLBK6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:55:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF13DBE20;
-        Fri,  2 Dec 2022 02:54:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7991FB80139;
-        Fri,  2 Dec 2022 10:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8EEC433C1;
-        Fri,  2 Dec 2022 10:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669978497;
-        bh=LSMFzqyB1fXLSKOizp7KzytquPKo2a5Fv0X9tR9yTCY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=l8ad7NbW5u0wdRxS+IL6ctl2VgKfegP2RIE05KO94y1XhSvK4LT9JiPs089HgJxSc
-         NsMtBrcg3NHEy8fXck5X5V43E2pALn90tGhyGdmy2Nd5IzK12swQgUpQ4psUZ9+J+V
-         +yYd64gKbmMMfnOG3mHojxMaMx3dr3woKWIj2me5QlTfN3URu4WU50HXiQBUT0QSmK
-         5LqfCTevkKmXcxcqkGj7dJzv0Y4X42bjROjovG7I6tl4Fxd0DT6Xt3ECUSKwvzg1VE
-         eLI5hnqA6FcW6lBB2Zt82HWIficeeCTy+Qf3Jo4ES98qc67+l11XX4k2StIrZ7/TnB
-         MneZ3HtNIuYoA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf v2] riscv, bpf: Emit fixed-length instructions for
- BPF_PSEUDO_FUNC
-In-Reply-To: <20221202094837.3872444-1-pulehui@huaweicloud.com>
-References: <20221202094837.3872444-1-pulehui@huaweicloud.com>
-Date:   Fri, 02 Dec 2022 11:54:54 +0100
-Message-ID: <87y1rq848x.fsf@all.your.base.are.belong.to.us>
+        Fri, 2 Dec 2022 05:58:14 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB40716DD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:58:12 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id c1so6839447lfi.7
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:58:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=asePIDAduz3wjwHekIjxIWyoaIECGFH8vErA/u3bLN4=;
+        b=bWhJrmXjdq55NOaGcwX/Atz3vFl/oz3eIvphok+SzkjhWZydkEk9JsO4pC/rGw+HYG
+         QfdTuTpMRYZ1UnLUhZhmULmAksl2y3p2hSV8ijlP/U58/H0R5fn5WeXxpnDVSq31K/5E
+         Kvnnijeqp+AfgnM5QnHt/scqsVOJL/T7KmJgY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=asePIDAduz3wjwHekIjxIWyoaIECGFH8vErA/u3bLN4=;
+        b=mxfPxhrW6NbJg9WAptjPxh+vKwPiUyLWHduTvTv9m10bKpj3INfXa2AQMYJ6SxmLWY
+         DKGPk5QjjLk5+dbBoYztyaVMeog5O5W1KhkUKtVJtc7QPVcwjZv1XEJE4ouLM4NctbRg
+         4H6rI8dnO4QgyPkyALyC8Ua7w7blLGZRTAg6d/l2Jxwk+nQs4U2KJxn00tJSpF0HUeSP
+         hm+dJxDpXbzYyGM87DDmPzEG3VBi/Ij79QytQEqdyR5aePnD99h1fm0YIidc/7E5MCcQ
+         gVqe/g0oTziQA5Hv7VSSISwr+ZO01TOfJ/Pq0NZTY2/hg3a5SIiQmUL4M3fUA5xoOG3+
+         oq7A==
+X-Gm-Message-State: ANoB5pmpC1E/ESezkqXTIoiAv+33SEjuMUUghksTWXfdwDDKWqdX1Q+p
+        2YNvuoLq/Jp1wt1KwvxQJsI9Nw==
+X-Google-Smtp-Source: AA0mqf6u8qX9oGcO0BTh42XYDDh2o/SjY3dXsfoJGAUXY/CS3GBafSO66+JXnzYW4msK5+vhPKVWAA==
+X-Received: by 2002:a05:6512:b8d:b0:4b4:ec87:ef9d with SMTP id b13-20020a0565120b8d00b004b4ec87ef9dmr15987504lfv.70.1669978690303;
+        Fri, 02 Dec 2022 02:58:10 -0800 (PST)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id dw8-20020a0565122c8800b004998d9ccb62sm982682lfb.99.2022.12.02.02.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 02:58:09 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: edt-ft5x06 - always do msleep(300) during initialization
+Date:   Fri,  2 Dec 2022 11:57:59 +0100
+Message-Id: <20221202105800.653982-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pu Lehui <pulehui@huaweicloud.com> writes:
+We have a board with an FT5446, which is close enough to a
+FT5506 (i.e. it also supports up to 10 touch points and has similar
+register layout) for this driver to work. However, on our board the
+iovcc and vcc regulators are indeed controllable (so not always-on),
+but there is no reset or wakeup gpio hooked up.
 
-> From: Pu Lehui <pulehui@huawei.com>
->
-> For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
-> correct addresses of bpf_calls and then run last pass of JIT.
-> Since the emit_imm of RV64 is variable-length, which will emit
-> appropriate length instructions accorroding to the imm, it may
-> broke ctx->offset, and lead to unpredictable problem, such as
-> inaccurate jump. So let's fix it with fixed-length instructions.
->
-> Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> Suggested-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> ---
->  arch/riscv/net/bpf_jit_comp64.c | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index eb99df41fa33..9723f34f7a06 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -139,6 +139,19 @@ static bool in_auipc_jalr_range(s64 val)
->  		val < ((1L << 31) - (1L << 11));
->  }
->=20=20
-> +/* Emit fixed-length instructions for address */
-> +static void emit_addr(u8 rd, u64 addr, struct rv_jit_context *ctx)
-> +{
-> +	u64 ip =3D (u64)(ctx->insns + ctx->ninsns);
-> +	s64 off =3D addr - ip;
-> +	s64 upper =3D (off + (1 << 11)) >> 12;
-> +	s64 lower =3D ((off & 0xfff) << 52) >> 52;
-> +
-> +	emit(rv_auipc(rd, upper), ctx);
-> +	emit(rv_addi(rd, rd, lower), ctx);
-> +}
+Without a large enough delay between the regulator_enable() calls and
+edt_ft5x06_ts_identify(), the first edt_ft5x06_ts_readwrite() call
+fails with -ENXIO and thus the device fails to probe. So
+unconditionally do an mdelay(300) instead of only when a reset-gpio is
+present.
 
-Nice! Two instructions are better than 6! :-)
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ drivers/input/touchscreen/edt-ft5x06.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-One final thing. Please add a sanity check, that the range is correct,
-e.g.:
+diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
+index 9ac1378610bc..8bafa123083c 100644
+--- a/drivers/input/touchscreen/edt-ft5x06.c
++++ b/drivers/input/touchscreen/edt-ft5x06.c
+@@ -1239,8 +1239,8 @@ static int edt_ft5x06_ts_probe(struct i2c_client *client,
+ 	if (tsdata->reset_gpio) {
+ 		usleep_range(5000, 6000);
+ 		gpiod_set_value_cansleep(tsdata->reset_gpio, 0);
+-		msleep(300);
+ 	}
++	msleep(300);
+ 
+ 	input = devm_input_allocate_device(&client->dev);
+ 	if (!input) {
+-- 
+2.37.2
 
-  if (!(addr && in_auipc_addi_range(off)))
-     return -1;
-
-Have a look at emit_jump_and_link().
-
-
-Thanks!
-Bj=C3=B6rn
