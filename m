@@ -2,96 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181C364016A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B4464016E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiLBH6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 02:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S232529AbiLBH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 02:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiLBH56 (ORCPT
+        with ESMTP id S231989AbiLBH6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 02:57:58 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF5F5BD7C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 23:57:57 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id h33so3756448pgm.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 23:57:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Uaty77MzZY7lsyZLRMmVZ/Dameh2HjoJMvJoMCuT6aI=;
-        b=qK2s/NbMmT8JUINg48LZkRksiuXbIgxcbwPThoBhxQVCpsTzwrsyndkWA90/g3MFAY
-         Lhan41rk2boKAQuWrrdpstM+o2Q/QrKT7apPo+BujQPdTqUHhlXZ9KbbVshTK2+4jR6M
-         i3L7lpEclfflvQVlpbky5Rcz/9RSoDfCJ6/W5tyRc6kuAkLn3jXlEaimC0++ygk92JrD
-         xx+Onfj+hv2IkntTzyfXiYOybEOvT2ei3gK4lCVVDfKWiH2gloL19UgXZuuWCZv3w3ci
-         v+iFo+4uBcx4Cla0o60hHBRlJRTpGziMrEw+5FToJfQXVd4KUMnl/VuPbbQfmNw9p0ei
-         q7uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uaty77MzZY7lsyZLRMmVZ/Dameh2HjoJMvJoMCuT6aI=;
-        b=Oc4fVqsTb0hF17+/LPr1Z9fhUJ2Xit7GPp+jHCiYzebH1NFUqA1cQQVIA3SlmVNyk0
-         nYXnmmFCs4pIMlgQvnKERVP9AqZvawtwEzKlEu08qL+iJzZbHd8VCbwB16NNvix6CkaE
-         s0ThHGV2t331NpApUMA0IUyrhrnNB6YfSlTc9237xukxRh8xb0erkWRiwDwvyygoE48f
-         Ise+mGb+FW+v9ZUCSPsSxWGGtIYY9I3rmefpCdQsGDZdyiMFUYRRwrUoRhMF7ijB+I0J
-         FPuIJ8cz9KsqK7wYq2hn8Fhumzjt5dm7Sxij9iUAH3u8QdpsOnHmxYdNV4ZAAhIPktxA
-         sgkQ==
-X-Gm-Message-State: ANoB5pnXQSQ6b0lGdFd5yx7EDMrQ6o/3jiC/FJfBecZJwE3WY68fcW46
-        K2HqFpS/1HST7Q9tADGeQAyA2A==
-X-Google-Smtp-Source: AA0mqf6B4GgYKWQ1o4Pufmc7iCmMCGrhpF+fp/uoBu6OXA9kksUjd7THXvnHJWUiHIuQnUVNK0XwLw==
-X-Received: by 2002:a63:1965:0:b0:464:a9a6:5717 with SMTP id 37-20020a631965000000b00464a9a65717mr46692703pgz.584.1669967877063;
-        Thu, 01 Dec 2022 23:57:57 -0800 (PST)
-Received: from [10.4.98.208] ([139.177.225.231])
-        by smtp.gmail.com with ESMTPSA id e4-20020a056a0000c400b0057293b17c8bsm4477855pfj.22.2022.12.01.23.57.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 23:57:56 -0800 (PST)
-Message-ID: <13d9d01f-e80d-b7a2-80e8-d1e076cb8057@bytedance.com>
-Date:   Fri, 2 Dec 2022 15:57:50 +0800
+        Fri, 2 Dec 2022 02:58:53 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD6E950FA;
+        Thu,  1 Dec 2022 23:58:50 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NNlWj3P8nz9xFQc;
+        Fri,  2 Dec 2022 15:51:45 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDHsm8gsIlj1LiyAA--.51906S2;
+        Fri, 02 Dec 2022 08:58:32 +0100 (CET)
+Message-ID: <c8ef0ab69635b99d5175eaf4c96bb3a8957c6210.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
+ CONFIG_VMAP_STACK=y
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Fri, 02 Dec 2022 08:58:21 +0100
+In-Reply-To: <Y4j4MJzizgEHf4nv@sol.localdomain>
+References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
+         <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
+         <Y4j4MJzizgEHf4nv@sol.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH v3] sched/core: Minor optimize ttwu_runnable()
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, vschneid@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, linux-kernel@vger.kernel.org
-References: <20221112033910.73273-1-zhouchengming@bytedance.com>
- <Y4mq44pyzVqkedBp@debian.me>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <Y4mq44pyzVqkedBp@debian.me>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwDHsm8gsIlj1LiyAA--.51906S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw4DKry8Wr4Uur4DtryfCrg_yoW5Zw1Upa
+        1kKa10qr4rJr1SkF1aya1Yya1rKrW0qry2gws8Aw1YyF9xZrnYy34xAFy7WryFkry8WF1x
+        tFWSqrn8C3WqyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj4ItyAABsf
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/2 15:36, Bagas Sanjaya wrote:
-> On Sat, Nov 12, 2022 at 11:39:10AM +0800, Chengming Zhou wrote:
->> This patch reorg ttwu_do_wakeup() and ttwu_do_activate() to make
->> ttwu_do_wakeup() only mark the task runnable, so it can be used
->> in ttwu_runnable() and try_to_wake_up() fast paths.
->>
+On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
+> On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
+> > mapping") checks that both the signature and the digest reside in the
+> > linear mapping area.
+> > 
+> > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
+> > stack support"), made it possible to move the stack in the vmalloc area,
+> > which is not contiguous, and thus not suitable for sg_set_buf() which needs
+> > adjacent pages.
+> > 
+> > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
+> > evm_digest structure, and use that instead of the in-stack counterpart.
+> > 
+> > Cc: stable@vger.kernel.org # 4.9.x
+> > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
+> >  1 file changed, 21 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> > index 23d484e05e6f..7f76d6103f2e 100644
+> > --- a/security/integrity/evm/evm_main.c
+> > +++ b/security/integrity/evm/evm_main.c
+> > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> >  	struct signature_v2_hdr *hdr;
+> >  	enum integrity_status evm_status = INTEGRITY_PASS;
+> >  	struct evm_digest digest;
+> > +	struct evm_digest *digest_ptr = &digest;
+> >  	struct inode *inode;
+> >  	int rc, xattr_len, evm_immutable = 0;
+> >  
+> > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> >  		}
+> >  
+> >  		hdr = (struct signature_v2_hdr *)xattr_data;
+> > -		digest.hdr.algo = hdr->hash_algo;
+> > +
+> > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+> > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
+> > +			if (!digest_ptr) {
+> > +				rc = -ENOMEM;
+> > +				break;
+> > +			}
+> > +		}
+> > +
+> > +		digest_ptr->hdr.algo = hdr->hash_algo;
+> > +
+> >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
+> > -				   xattr_value_len, xattr_data->type, &digest);
+> > +				   xattr_value_len, xattr_data->type,
+> > +				   digest_ptr);
+> >  		if (rc)
+> >  			break;
+> >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
+> >  					(const char *)xattr_data, xattr_len,
+> > -					digest.digest, digest.hdr.length);
+> > +					digest_ptr->digest,
+> > +					digest_ptr->hdr.length);
+> >  		if (!rc) {
+> >  			inode = d_backing_inode(dentry);
+> >  
+> > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> >  		else
+> >  			evm_status = INTEGRITY_FAIL;
+> >  	}
+> > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
+> > -		  digest.digest);
+> > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
+> > +		 digest_ptr->hdr.length, digest_ptr->digest);
+> > +
+> > +	if (digest_ptr && digest_ptr != &digest)
+> > +		kfree(digest_ptr);
 > 
-> s/This patch reorg/Reorganize/
+> What is the actual problem here?  Where is a scatterlist being created from this
+> buffer?  AFAICS it never happens.
 
-Ok, will change it.
+Hi Eric
 
-> 
-> Also, please rebase and resend.
-> 
+it is in public_key_verify_signature(), called by asymmetric_verify()
+and integrity_digsig_verify().
 
-Ok, will rebase on tip/sched/core branch.
+Roberto
 
-Thanks.
