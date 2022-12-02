@@ -2,127 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F3164050A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E5E64052D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbiLBKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S232993AbiLBKv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:51:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbiLBKsG (ORCPT
+        with ESMTP id S232941AbiLBKvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:48:06 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E61950C9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:48:05 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id h10so4962283ljk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:48:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rtYcu6/3CQ2S7j8h20Y4A6KAn9ZcSJMr/CDNrzIstnQ=;
-        b=Hk/Li4JaaBWRgFd1nMX7JJDu1fjwBX3sjpsJWIwGzephlDPZiA0DG3oR/1IBdlJBHc
-         3AxVGQowYtusxWTTcYll8wjfvwMUH+Pisxon83SbDwMiR1j0832B0FuJdXxqwKp8ls7M
-         cfjBZqWHag+V8EfW4d9kx9ISJkAmvjVyyfZm3aUl6uCUSn/tHCBnXPCUTv7GhIo6+iWh
-         5D//Aw/6VB1mJLZcF1CJrdCa1Dk0L1Ag1msAFjRoWBlbe1izqBRxWvgF4bcS/aAhEj6a
-         LVUh65SvjG4TxbSxxKaibmPilM/mfxDn+3KjIbDBxVAubnNkqurweUq80+qLwe4CEMU2
-         foWg==
+        Fri, 2 Dec 2022 05:51:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68BACF7A7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669978227;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Xns7M6Diybr7dzy3wYbJXBXTTPyGOV7tjq20IdAiq6U=;
+        b=KD3Liz2XPWZoIyKj4VldyxhJYPWsqExDk5SEYd0WxxZ+FeBch5gbF8LDIlqK9AS/ppMLrL
+        ev7uKMkGY8nPPqJadi7EuARcNJWhTsXQvF5tS/fam0x7QnpHDTK3Ox8Snlhhc/X0tGoWP9
+        T/yIADUKHQ4Go4rWkXf7QvpbYSIPoeg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-349-Kut9GfHFOyyAwwCP6Q7FZg-1; Fri, 02 Dec 2022 05:50:25 -0500
+X-MC-Unique: Kut9GfHFOyyAwwCP6Q7FZg-1
+Received: by mail-wr1-f69.google.com with SMTP id e7-20020adf9bc7000000b00242121eebe2so969370wrc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:50:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rtYcu6/3CQ2S7j8h20Y4A6KAn9ZcSJMr/CDNrzIstnQ=;
-        b=SZ1ATH+3ipHFspcCO8xYKLTSm4ol0Teps7IxxdzNL+TTHMxSQv6m5412cQPE7gQuio
-         8HR5x3rt35nfA4Dmh5TwcT9hwucdUXM9pbsGdVX3teJWQKynXEdb8TFWEliYFuHeFGp+
-         m/TwNCYC3GV7GS2v/FsaSRalUpnAnk3tEXpPnov89jKUTfhrQgTrpD61gqWdWNOCfXnY
-         /dSeB9CRqYnSjGgWm0lfBw8FZcnu2NnuvDkVP2uPEQk8p0zcL9Hf2T5w0B4wMJtjbCIf
-         yjCqRFB8wC8g8OlCYileYvSWspvIns38pfXHdkitdClVZYnZJnoajCQLh86SEfkQ+4/V
-         MwEw==
-X-Gm-Message-State: ANoB5plvFSnWLx47yKCPaJ9J20GlQnhV/6V4c0XtJ2FkDfG3Q/VGSFKf
-        +8qjEnsHPvuWio/JaS7Fcct09w==
-X-Google-Smtp-Source: AA0mqf5kICRVgIlw6pQmSQRYTPuyrEjRpC1cLcHLMJHCp2kVwoaY5Hrz+SdFZjavsjSxLsCYIrXicg==
-X-Received: by 2002:a2e:be07:0:b0:26c:6dce:ce59 with SMTP id z7-20020a2ebe07000000b0026c6dcece59mr17660429ljq.130.1669978083449;
-        Fri, 02 Dec 2022 02:48:03 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b26-20020a2e895a000000b00279e0b8bae7sm92593ljk.65.2022.12.02.02.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 02:48:03 -0800 (PST)
-Message-ID: <66e66749-cc0f-f147-2648-03b52f95cca5@linaro.org>
-Date:   Fri, 2 Dec 2022 11:48:01 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xns7M6Diybr7dzy3wYbJXBXTTPyGOV7tjq20IdAiq6U=;
+        b=LdqE9fm0hfs+RfVPAYTwdx7V32CGUMH+xBl7WhBDyigKP6GZsTNAuaTqI83lBu3PEk
+         bFTFxtp2tkbMWx+auJ5Rvjd/v2nRQqDD2XUUOhakuC/WIy4prkI4bwiPDnkr/wkfUZJm
+         +MVPcbaNPR07ZIUZOcT8YK0pAiw4/uXEaYLnBF3k/RvLhE18OAj861fqsFXc8D2QQzzL
+         5SZYIzIRkdp+nX/Os+R4EbnkBPGAfFn51qR1BJcDhxmV6aF+TVGTXBkD4gCse+pf126b
+         kY6VmM4ciB1JVJy9LYYqFO5lJHy1j9sKwEINu4SxXZhzEhlGZ7Rcnb8Q6mbXqPk3uU4P
+         2MvA==
+X-Gm-Message-State: ANoB5pltS6WX78raFT0qG0blOj9AcYasK5wyNuyDc0N6t6kZHpDLP680
+        OOe48VKGC/XKT2VUoiZIPpfi3UXJba+WnHxNtDX76EcQlN2edeIEOPCcV1gPV+6bsAD1Q/Pzt0Q
+        v4PPjYyTBFMtB+P19HOgiWpiVUr3pbe1BeNGMNg2LZXtAhlwZ42XTU9WU4vqzXEyjuibk8RJnsU
+        o=
+X-Received: by 2002:a05:6000:1707:b0:242:271f:d2c3 with SMTP id n7-20020a056000170700b00242271fd2c3mr8077383wrc.335.1669978224408;
+        Fri, 02 Dec 2022 02:50:24 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5KVbheYS9+aIJHNe8ulgIHTKGDlnF1XXTtDUssVMgRTABBeui6psvy+mx/A5EvFLuKYkRu9g==
+X-Received: by 2002:a05:6000:1707:b0:242:271f:d2c3 with SMTP id n7-20020a056000170700b00242271fd2c3mr8077349wrc.335.1669978224064;
+        Fri, 02 Dec 2022 02:50:24 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id bg2-20020a05600c3c8200b003a3170a7af9sm9728818wmb.4.2022.12.02.02.50.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 02:50:23 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sergio Lopez Pascual <slp@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Yang Zhong <yang.zhong@intel.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v2 0/4] KVM: Delete all references to removed ioctls
+Date:   Fri,  2 Dec 2022 11:50:07 +0100
+Message-Id: <20221202105011.185147-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: jh7110: Add watchdog node
-Content-Language: en-US
-To:     "xingu.wu" <xingyu.wu@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20221202093943.149674-1-xingyu.wu@starfivetech.com>
- <20221202093943.149674-4-xingyu.wu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221202093943.149674-4-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 10:39, xingu.wu wrote:
-> From: Xingyu Wu <xingyu.wu@starfivetech.com>
-> 
-> This adds the watchdog node for the Starfive JH7110 SoC.
+Hello,
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+This series contains patches that cleanups KVM headers and documentation,
+by removing left overs of ioctls that were already removed.
 
-> 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
->  arch/riscv/boot/dts/starfive/jh7110.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index c22e8f1d2640..22f5a37d691e 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -433,5 +433,19 @@ uart5: serial@12020000 {
->  			reg-shift = <2>;
->  			status = "disabled";
->  		};
-> +
-> +		wdog: watchdog@13070000 {
-> +			compatible = "starfive,jh7110-wdt";
-> +			reg = <0x0 0x13070000 0x0 0x10000>;
-> +			interrupts = <68>;
-> +			clocks = <&syscrg JH7110_SYSCLK_WDT_CORE>,
-> +				 <&syscrg JH7110_SYSCLK_WDT_APB>;
-> +			clock-names = "core_clk", "apb_clk";
-> +			resets = <&syscrg JH7110_SYSRST_WDT_APB>,
-> +				 <&syscrg JH7110_SYSRST_WDT_CORE>;
-> +			reset-names = "rst_apb", "rst_core";
-> +			timeout-sec = <15>;
-> +			status = "okay";
-
-Why? okay is by default
+This is a v2 that instead of marking these ioctls as "obsoleted", remove
+any mentions to them. This was suggested by Sean Christopherson in v1.
 
 Best regards,
-Krzysztof
+Javier
+
+Changes in v2:
+- Delete all references to removed ioctls instead of marking them as
+  deprecated (Sean Christopherson).
+
+Javier Martinez Canillas (4):
+  KVM: Delete all references to removed KVM_SET_MEMORY_REGION ioctl
+  KVM: Delete all references to removed KVM_SET_MEMORY_ALIAS ioctl
+  KVM: Reference to kvm_userspace_memory_region in doc and comments
+  KVM: Add missing arch for KVM_CREATE_DEVICE and
+    KVM_{SET,GET}_DEVICE_ATTR
+
+ Documentation/virt/kvm/api.rst        | 31 +++------------------------
+ arch/x86/include/uapi/asm/kvm.h       |  8 -------
+ include/linux/kvm_host.h              |  4 ++--
+ include/uapi/linux/kvm.h              | 20 +++--------------
+ tools/arch/x86/include/uapi/asm/kvm.h |  8 -------
+ tools/include/uapi/linux/kvm.h        | 20 +++--------------
+ 6 files changed, 11 insertions(+), 80 deletions(-)
+
+-- 
+2.38.1
 
