@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BD1640FAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 21:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 250D0640FB1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 21:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiLBU7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 15:59:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S234457AbiLBU7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 15:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiLBU72 (ORCPT
+        with ESMTP id S234331AbiLBU73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 15:59:28 -0500
+        Fri, 2 Dec 2022 15:59:29 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CE0EBC84;
-        Fri,  2 Dec 2022 12:59:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E34DEBC9E;
+        Fri,  2 Dec 2022 12:59:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20D7CB822B7;
-        Fri,  2 Dec 2022 20:59:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E82C43147;
-        Fri,  2 Dec 2022 20:59:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D64FB822B1;
+        Fri,  2 Dec 2022 20:59:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F5BC43141;
+        Fri,  2 Dec 2022 20:59:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670014744;
-        bh=zwk3G/W9G3eInMd5bV6RPwk5PdxVTHRY8sMtXBmGsds=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Bnv1MLY/e9wknW7/fzS/4jzZ7EYtdtOl8n3GW3+9z4d8uicbYDzUQCafzqEHcRvnl
-         Yjb2RBKEdsrpoo2choNdMFTlmsYbAHgaRD+0reRtCDmmH1Ksp5f7s7DXd/YFO0D8Fv
-         qUmNl9SZDy8EbzHF/EDwMeThKJNeDVOoC+LQqeaGSL1cLplsx0QXt1K4HncSv1d7ov
-         ln9/gAC+rvCv4obgrEOuUmaoXXx49LOji4ETkO5GBHClr/sj+28izjxBFTKieoUB30
-         g58B3qrnfIfl4LxKdhfLeEKCRcd8omR+x0UQPWcF2QcCF28ylITWXtJBAS86uNhIHG
-         9wG+/hpBaoCzA==
+        s=k20201202; t=1670014745;
+        bh=joGYk9dwiA9FLOs0C7yYliD3619UgJO1LXlq7zOukqg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZEqATaso6fMxx1DVjbUqB0UTvc5tiFnuUf9AlBpBTVtAXjeh0RWNCqicxk0c3RQZg
+         X9kCxImCCamJXXGUqwUHi68uwDCHa6wMNALoQo+xJbmd40HRNGE5nCBqZwLeKV94Sm
+         CtnjASVybzuNkxXEg1kWnfM3LrslIGENbkSqjIO5KlFwRy7W0t3vK60Br0odPuGYdb
+         203sv3bU/Vw0+8CgXWNddKhBeDs6CVdp3qnRgHOrYdatL3BWcmhHDGcTyRYpxX2zPo
+         FioCAdmU6x2pRdWtz3G5URty5Esz0hjYO8CQoWiAXJ8WQFwkmE8qWQDi9CL18GiHgJ
+         Dwi5OvORyXg2Q==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     konrad.dybcio@somainline.org, robimarko@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        sboyd@kernel.org, devicetree@vger.kernel.org,
+To:     robimarko@gmail.com, konrad.dybcio@linaro.org, sboyd@kernel.org,
         linux-arm-msm@vger.kernel.org, agross@kernel.org,
         mturquette@baylibre.com, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: Re: (subset) [PATCH 1/3] clk: qcom: reset: support resetting multiple bits
-Date:   Fri,  2 Dec 2022 14:58:50 -0600
-Message-Id: <167001472421.2721945.16481256998331888527.b4-ty@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: Re: [PATCH v2] clk: qcom: ipq8074: populate fw_name for all parents
+Date:   Fri,  2 Dec 2022 14:58:51 -0600
+Message-Id: <167001472424.2721945.9873510086467091950.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221107132901.489240-1-robimarko@gmail.com>
-References: <20221107132901.489240-1-robimarko@gmail.com>
+In-Reply-To: <20221116214655.1116467-1-robimarko@gmail.com>
+References: <20221116214655.1116467-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,24 +56,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 14:28:59 +0100, Robert Marko wrote:
-> This patch adds the support for giving the complete bitmask
-> in reset structure and reset operation will use this bitmask
-> for all reset operations.
+On Wed, 16 Nov 2022 22:46:55 +0100, Robert Marko wrote:
+> It appears that having only .name populated in parent_data for clocks
+> which are only globally searchable currently will not work as the clk core
+> won't copy that name if there is no .fw_name present as well.
 > 
-> Currently, reset structure only takes a single bit for each reset
-> and then calculates the bitmask by using the BIT() macro.
+> So, populate .fw_name for all parent clocks in parent_data.
+> 
+> Fixes: ae55ad32e273 ("clk: qcom: ipq8074: convert to parent data")
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] clk: qcom: reset: support resetting multiple bits
-      commit: 4a5210893625f89723ea210d7c630b730abb37ad
-[2/3] dt-bindings: clock: qcom: ipq8074: add missing networking resets
-      commit: bb524058eb5635ee6ecbe3ef154d44088f7a2154
-[3/3] clk: qcom: ipq8074: add missing networking resets
-      commit: ce520e312918bc8f02d1c6bd58b288c2eb2d23c0
+[1/1] clk: qcom: ipq8074: populate fw_name for all parents
+      commit: 35dc8e101a8e08f69f4725839b98ec0f11a8e2d3
 
 Best regards,
 -- 
