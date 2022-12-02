@@ -2,67 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C446403D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F09E6403D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbiLBJzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S233128AbiLBJze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbiLBJzC (ORCPT
+        with ESMTP id S232996AbiLBJzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:55:02 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E531ACB22E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:55:00 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id h12so6950892wrv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:55:00 -0800 (PST)
+        Fri, 2 Dec 2022 04:55:31 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA37148763
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:55:30 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id k7so4182782pll.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:55:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3XXGGy2Cr+s5WVEmSutsjX6ZwfS6xUvfx5zJegufWfU=;
-        b=cskof/OK0kcidfcxoHHwUAuutIkHWGAS+bL7a2E6XnPyj2luXi0rN7mj2CJSmp4P92
-         GJNseJ8wUcgcgDRbXWgU+luPNwQYP8LKL2sL1NstwRDtSiZ2oJUh8pQ1RoeCTruXk9v2
-         3oDyMCovKBBqnmtkVwDlh4fvfbScTi/vZgJ8SjMup6NnvRzQFPosYeGNK1eiBSMLENqb
-         so9EL2QdkHJ9nS622Ca3OshiAcFNQF1NsjzHqlVeB2A/BXQFm2xO9jE1h4FMc7IlC9Vt
-         3w9XNZWdJ4w8TijovJS17fVP/xfD64a4L+5hGe1Y+ddS4LJfpZcKPJDvasPpFxNqkuGj
-         c5IA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SiNH+J33VpyIQDYVvWeq7Cr+JtDYqACf4JbEasUl180=;
+        b=F0CI7XedxSQCcnKRIkZSxjtelGz9DSWh5cWO9aQfJorTeZDaYnJynPxfX7GoFKQ29j
+         cwVU0Rg0wtPS7tBi+6PcyAgITcvp2twH/fqGXXgRRgDfrwYcwwlJFAJsjJbvjHzyAeU6
+         1T4TDvn8Lk9tP1hag0Go94jolQrB4VYh96lwa+q8QsMBJOQIvdYCwzbx5Ieuyfw1ZCxu
+         Idzcl1YOFDobBWi3soxwWY+Vl5bQ043PDlSi+qRmotpkGrqC4uoo9FJCvou4wIgk9IQ2
+         8mvyiz90lU2S/Sc3yJKVRMkTBws7x5m2A5aqM8d+CuFukjigIsn3cT8uLcBFkM7ewWls
+         DmyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3XXGGy2Cr+s5WVEmSutsjX6ZwfS6xUvfx5zJegufWfU=;
-        b=qJqZWQelaErrgHtKDTwnUl2wv1/WV2hV2EBYE6iRUyKIkMGRbY6hjwCh+L6jqGinE9
-         kf/mqFT0+EWOVd5N9WaSX/I2LwTKvjUo5c3dID6vaiav219ppbQXTzkbCd6VR0zrLOHB
-         EywhkbF+9CTNBtMRfRUTyEBeWEOIKY9nJAHJlDxPmmP6Owe79RQbXCaq986VvWQGjKX5
-         f3yWeQSEbEYGj+kf+XFw+2O0wKK3DDVDjoh5PbLDvQ4XxUrS2K0EjdB/1nX3P99Awa5c
-         E8y9bKbZyb/55SZJplnytS6qQ0eklN58dqs8guDCxA+U34puKip9xVITRIhxKjjbagwB
-         KkMQ==
-X-Gm-Message-State: ANoB5pkKnMCb2N+0hECvkT4kx2UqDgtsKnL6ui6ndLBCuzqd6s92xrWO
-        pyfbj6DHRyqIreDwmHczLe1iNVzCo7vOEDsI
-X-Google-Smtp-Source: AA0mqf4qcpIXcD++6X/tPUUgP9cNl56tZ6bFXsKiGMf3AjHue06X2msD8bKE7Kwxwbx7pRBEi1OQ8Q==
-X-Received: by 2002:a5d:4dc5:0:b0:242:1d11:f990 with SMTP id f5-20020a5d4dc5000000b002421d11f990mr12798679wru.686.1669974899427;
-        Fri, 02 Dec 2022 01:54:59 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:29a4:6f04:ddb1:1ed7])
-        by smtp.gmail.com with ESMTPSA id l2-20020a5d6742000000b0024216d2e386sm6479215wrw.16.2022.12.02.01.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 01:54:58 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] gpio: fixes for v6.1-rc8
-Date:   Fri,  2 Dec 2022 10:54:55 +0100
-Message-Id: <20221202095455.83356-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SiNH+J33VpyIQDYVvWeq7Cr+JtDYqACf4JbEasUl180=;
+        b=4AaAA95wTAfe8/mF4a5mu+NH5wcK3+R0ljkq5lRFFcYpe3l2gJgM37KbCa4LrFDOMy
+         mjF1XEIQ1f1lSQy2ApiiGrQ6Wj+qablFugJOLj4Ees6DOEwLbWZIP11kaEW1NYatpWiU
+         wihAGdCdmDQLa5GFXlry5xhAy9x+8jxSdOBqpSBvrJgtXlLYhMjThaIaPKbi4FjtbJ7F
+         UTPdY6ExVzPSPPGSDjEyGvrruCNBhSKFakVWyzZvGUnF3moEoXhqyjNzZmCkXKSosibZ
+         jQQm+lzdr/ui2pW6g1Mmqi0NVC1nUFoVTpE9T49Z9FvIDblDjMsfaOvK7tTYLNfhBkk7
+         4rOQ==
+X-Gm-Message-State: ANoB5pmE0QwI+SFrnJwRSqc9kLUZPMXIMe2TWvfR3rhYbJTY8R8AwHkJ
+        Pee1l30mmRMHGXQAiK6djhk=
+X-Google-Smtp-Source: AA0mqf63Cfx6DN4ieT70IkDlzzYu/aJCUI5CVTk21hXSBeKgLZNTwJo7rTYDppkPPNMBI3gzxSB1qg==
+X-Received: by 2002:a17:903:22c4:b0:184:cb7e:ba36 with SMTP id y4-20020a17090322c400b00184cb7eba36mr51321205plg.57.1669974930149;
+        Fri, 02 Dec 2022 01:55:30 -0800 (PST)
+Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id 133-20020a62148b000000b0056c3a0dc65fsm4675471pfu.71.2022.12.02.01.55.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 01:55:29 -0800 (PST)
+Message-ID: <d54e7e38-cdf6-ef5d-a6e6-e30ad8a59034@gmail.com>
+Date:   Fri, 2 Dec 2022 18:55:24 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+ <867czbmlh1.wl-maz@kernel.org>
+ <50499ee9-33fe-4f5d-9d0a-76ceef038333@daynix.com>
+ <87lenqu37t.wl-maz@kernel.org>
+ <525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com>
+ <87h6yeta8b.wl-maz@kernel.org>
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+In-Reply-To: <87h6yeta8b.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,76 +91,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 2022/12/02 18:40, Marc Zyngier wrote:
+> On Fri, 02 Dec 2022 05:17:12 +0000,
+> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>
+>>>> On M2 MacBook Air, I have seen no other difference in standard ID
+>>>> registers and CCSIDRs are exceptions. Perhaps Apple designed this way
+>>>> so that macOS's Hypervisor can freely migrate vCPU, but I can't assure
+>>>> that without more analysis. This is still enough to migrate vCPU
+>>>> running Linux at least.
+>>>
+>>> I guess that MacOS hides more of the underlying HW than KVM does. And
+>>> KVM definitely doesn't hide the MIDR_EL1 registers, which *are*
+>>> different between the two clusters.
+>>
+>> It seems KVM stores a MIDR value of a CPU and reuse it as "invariant"
+>> value for ioctls while it exposes the MIDR value each physical CPU
+>> owns to vCPU.
+> 
+> This only affects the VMM though, and not the guest which sees the
+> MIDR of the CPU it runs on. The problem is that at short of pinning
+> the vcpus, you don't know where they will run. So any value is fair
+> game.
 
-Linus,
+Yes, my concern is that VMM can be confused if it sees something 
+different from what the guest on the vCPU sees.
 
-Here's the last round of fixes for the upcoming release. The two resource leak
-fixes are self-explanatory. The two character device commits need some more
-backstory:
+>> crosvm uses KVM on big.LITTLE processors by pinning
+>> vCPU to physical CPU, and it is a real-world application which needs
+>> to be supported.
+>>
+>> For an application like crosvm, you would expect the vCPU thread gets
+>> the MIDR value of the physical CPU which the thread is pinned to when
+>> it calls ioctl, but it can get one of another arbitrary CPU in
+>> reality.
+> 
+> No. It will get the MIDR of the CPU it runs on. Check again. What you
+> describing above is solely for userspace.
 
-I recently listened to Laurent Pinchart's talk from this year's LPC[1] where he
-discussed an issue with many subsystems that export device nodes to user-space
-where one can open the device file, unbind the underlying device from the
-driver, then call any of the relevant system calls and observe the kernel crash
-with a NULL-pointer derefence. 
+By "ioctl", I meant the value the VMM gets for the vCPU thread. The 
+problem is that the guest on the vCPU and the VMM issuing ioctl on the 
+same thread can see different values, and it doesn't seem quite right.
 
-I verified that the problem exists with the GPIO subsystem as well. The reason
-for that is: when a GPIO chip is removed, we drop the chip's data from the
-GPIO device and set the relevant pointer to NULL but don't check it in syscall
-callbacks in the character device's code. That's fixed by the first patch.
+>> ...or we may just say the value of MPIDR_EL0 (and possibly other
+> 
+> I assume you meant MIDR_EL1 here, as MPIDR_EL1 is something else (and
+> it has no _EL0 equivalent).
 
-However that fix alone leaves the character device vulnerable to a race
-condition in which the GPIO chip is removed when a syscall is in progress.
-To avoid that, we have a second fix that uses a lock to protect the device's
-structure from being disabled before all syscall callbacks returned.
+Yes, I meant MIDR_EL1.
 
-Laurent blamed the issue on devres but I believe the problem comes from the
-fact that many driver developers are simply unaware that resources exported
-to user-space need to survive the driver unbind and only be released when the
-device's reference count goes down to 0. Devres' docs are pretty clear on that:
-the resources get freed on driver unbind. Resources that should survive it,
-must not be managed. This is however a topic for a separate discussion which
-I intend to start soon.
+> 
+>> "invariant" registers) exposed via ioctl are useless and deprecated.
+> 
+> Useless? Not really. The all are meaningful to the guest, and a change
+> there will cause issues.
+> 
+> CTR_EL0 must, for example, be an invariant. Otherwise, you need to
+> trap all the CMOs when the {I,D}minLine values that are restored from
+> userspace are bigger than the ones the HW has. Even worse, when the
+> DIC/IDC bits are set from userspace while the HW has them cleared: you
+> cannot mitigate that one, and you'll end up with memory corruption.
+> 
+> I've been toying with the idea of exposing to guests the list of
+> MIDR/REVIDR the guest is allowed to run on, as a PV service. This
+> would allow that guest to enable all the mitigations it wants in one
+> go.
+> 
+> Not sure I have time for this at the moment, but that'd be something
+> to explore.
+> 
+> [...]
 
-Please pull,
-Bartosz Golaszewski
+I meant that the values exposed to the VMM via ioctls does not seem 
+useful. They still need to be exposed to the guest as you say.
 
-[1] https://www.youtube.com/watch?v=kW8LHWlJPTU
-
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
-
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.1-rc8
-
-for you to fetch changes up to 98d8b93c617139aeaf745c1573c02d86830f25d1:
-
-  gpiolib: protect the GPIO device against being dropped while in use by user-space (2022-12-01 19:17:47 +0100)
-
-----------------------------------------------------------------
-gpio fixes for v6.1-rc8
-
-- fix a memory leak in gpiochip_setup_dev() in core gpiolib
-- fix a reference leak in gpio-amd8111
-- fix a problem with user-space being able to trigger a NULL-pointer
-  dereference ovet the GPIO character device
-
-----------------------------------------------------------------
-Bartosz Golaszewski (2):
-      gpiolib: cdev: fix NULL-pointer dereferences
-      gpiolib: protect the GPIO device against being dropped while in use by user-space
-
-Xiongfeng Wang (1):
-      gpio: amd8111: Fix PCI device reference count leak
-
-Zeng Heng (1):
-      gpiolib: fix memory leak in gpiochip_setup_dev()
-
- drivers/gpio/gpio-amd8111.c |   4 +
- drivers/gpio/gpiolib-cdev.c | 193 +++++++++++++++++++++++++++++++++++++++-----
- drivers/gpio/gpiolib.c      |  46 +++++++----
- drivers/gpio/gpiolib.h      |   5 ++
- 4 files changed, 210 insertions(+), 38 deletions(-)
+Regards,
+Akihiko Odaki
