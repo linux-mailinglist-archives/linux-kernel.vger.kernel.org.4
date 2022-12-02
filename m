@@ -2,207 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594AB6407A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FA16407A6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbiLBNXI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Dec 2022 08:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S233073AbiLBNZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 08:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLBNXF (ORCPT
+        with ESMTP id S231929AbiLBNZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 08:23:05 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA246723F;
-        Fri,  2 Dec 2022 05:23:03 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id e15so5008734qts.1;
-        Fri, 02 Dec 2022 05:23:03 -0800 (PST)
+        Fri, 2 Dec 2022 08:25:27 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB73880E6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 05:25:26 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id fp23so4732668qtb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 05:25:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/0AbfHPEywIA+i7OFl/ipuz3aIR2RkHnn2kAkqZ72ys=;
+        b=TW+iximgJ0oL/SlYQ2fe8D6XdrISaaOwu8cy1iFARQav3L9StrWbkFzqjgJm634oP6
+         rVCqNA+R2Sov9mhfsin6mmnZEfApcXHr7i+63T8L5dBnFQTuWkCF3aD9//DMqlSSu5qB
+         ZTizvpRQGKqAWhHx/NLf+Ru8R/48fTQSJLkGE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uB0EJbwNDLUzHJGWsxp/Ffm7ffwt2LXwWWQALhl5JaM=;
-        b=QtP2i+caY+YdEj6OLFTnQKAnZ1DrMryw0+syM2EtnpL70K0ep96nhGBduxTHXUQqTN
-         JrEIz58zfzAyoMsoa7SdlnFQDqFNumWjgTrHUoTsvGghuqQjJrcLsv3CWHtqUVZqy9Qv
-         xe+mKpnwFBSQXv+LcwEe09JP/1wLYVtPk9KUPwHT1j6Vqh+rjynkhmEH/xI42tPuTDTZ
-         5Dl8RSi67sgnt7yuRx2vxegUJa+OUVpRWqHYefCtQwZ31V+Co7iqkVQkf5yP9aBAg4/V
-         sUdyu1sLmSgSscB9QAW0CUOLlBFg3h2qsYsuBkR8XZJZAE0fAyjQknedd3HhtDpcRuhQ
-         74fQ==
-X-Gm-Message-State: ANoB5pmsSw3O5f07ijB8kY6kfJ9A810H2Y+WROpGcm4TeXLn2AfEI9hB
-        6xDKuJ0V3W3Z4U7hzR5YBxShTujVJ/iG+a/enSU1RmCu
-X-Google-Smtp-Source: AA0mqf55TDX7u9F3kG/xbZtS8Suh1tAWhAP0HJL1HMeiMk0lAXO9Sc6v6x1pGZeNNoHjfCmNzfLF7KGFXrmI1GWKhIk=
-X-Received: by 2002:a05:622a:410a:b0:3a5:5987:42c6 with SMTP id
- cc10-20020a05622a410a00b003a5598742c6mr65643174qtb.147.1669987382578; Fri, 02
- Dec 2022 05:23:02 -0800 (PST)
-MIME-Version: 1.0
-References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
- <20aae21e-62d2-8fdb-b57a-7b5a180266d8@intel.com> <CAJZ5v0gdg=PUz-j0yd_QJRPmjhZ7pCuRrHt30U60H4QyTHCmdA@mail.gmail.com>
- <12104185.O9o76ZdvQC@kreacher> <5f129a61-0311-0b80-2e74-8425650bbd26@quicinc.com>
-In-Reply-To: <5f129a61-0311-0b80-2e74-8425650bbd26@quicinc.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 2 Dec 2022 14:22:51 +0100
-Message-ID: <CAJZ5v0h6wskR+bQPsG3A5xV6kwupoj3XLdLS-FCz0caEGKpXeQ@mail.gmail.com>
-Subject: Re: PM-runtime: supplier looses track of consumer during probe
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        bjorn.andersson@kernel.org, quic_mkshah@quicinc.com,
-        quic_lsrao@quicinc.com, bvanassche@acm.org,
-        Peter Wang <peter.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        bh=/0AbfHPEywIA+i7OFl/ipuz3aIR2RkHnn2kAkqZ72ys=;
+        b=wqzs5N2doVDKQG18ww0PRmb08JQNw1jW3YA8YSGX9CAhoTAz4WheFWaZIJafcnqq8p
+         U6DbBZXIHPRRDYM2WoYdPIgjZCsYzIlCabL6Lk4QE/bboA2XOZNnJfHxHqh6iQKBCY9l
+         01kAdK/k6DuCvFjh0LEvKZIbKl1VHYDmqWQHbbejIMkrz3Y5kaYc+mwa91VlhBYDUokI
+         ZpXrPYtjrlx3tfHVRJc8YHMV2ip4rOz8FtlPX4HXArDwdFxiw2DcYozzj5cyvaTSy1Za
+         GbZa1qfRje45Jco13gRPq6XFDKIEdBbf/FlVJfV1du3jdK5B2ibBUIf+gM3CqwQZIUQT
+         Nirw==
+X-Gm-Message-State: ANoB5pk3AiVsGucMW/frnDRNd3hKVGeUBxRgaMzEagK3qQ3AKy5UpSeB
+        7iF/1Sptx4L3qgCx5qGYDuZwsw==
+X-Google-Smtp-Source: AA0mqf71uEGmxIoIYJ/40kP+aU4bJMdD+QvwF5wEyZ4734MQkAs53+dpzDK5uETo8/ati2e6P5yEOA==
+X-Received: by 2002:a05:622a:1c1a:b0:3a6:5699:2ad3 with SMTP id bq26-20020a05622a1c1a00b003a656992ad3mr45733934qtb.12.1669987525239;
+        Fri, 02 Dec 2022 05:25:25 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id bm8-20020a05620a198800b006fa8299b4d5sm5519887qkb.100.2022.12.02.05.25.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 05:25:24 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
+Date:   Fri, 2 Dec 2022 08:25:13 -0500
+Message-Id: <6AC29795-0292-4FE9-9167-13122C08CD96@joelfernandes.org>
+References: <PH0PR11MB58800E4DF4BF0B60FBFC71E2DA179@PH0PR11MB5880.namprd11.prod.outlook.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <PH0PR11MB58800E4DF4BF0B60FBFC71E2DA179@PH0PR11MB5880.namprd11.prod.outlook.com>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 1:23 PM Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
->
-> Thanks Adrian and Rafael,
-> We are trying both patches separately. And will update result once we get.
 
-Thank you!
 
-I'm going to submit the change in rpm_idle() regardless of whether or
-not it is sufficient to address the issue, because it is a clear
-mistake to still call __rpm_callback() from there after adding the
-handling of device links to it.
+> On Dec 2, 2022, at 7:52 AM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+>=20
+> =EF=BB=BFOn Thu, Dec 01, 2022 at 07:45:33AM +0800, Zqiang wrote:
+>> Currently, invoke rcu_tasks_rude_wait_gp() to wait one rude
+>> RCU-tasks grace period, if __num_online_cpus =3D=3D 1, will return
+>> directly, indicates the end of the rude RCU-task grace period.
+>> suppose the system has two cpus, consider the following scenario:
+>>=20
+>>        CPU0                                   CPU1 (going offline)
+>>                                          migration/1 task:
+>>                                      cpu_stopper_thread
+>>                                       -> take_cpu_down
+>>                                          -> _cpu_disable
+>>                                           (dec __num_online_cpus)
+>>                                          ->cpuhp_invoke_callback
+>>                                                preempt_disable
+>>                                                access old_data0
+>>           task1
+>> del old_data0                                  .....
+>> synchronize_rcu_tasks_rude()
+>> task1 schedule out
+>> ....
+>> task2 schedule in
+>> rcu_tasks_rude_wait_gp()
+>>     ->__num_online_cpus =3D=3D 1
+>>       ->return
+>> ....
+>> task1 schedule in
+>> ->free old_data0
+>>                                                preempt_enable
+>>=20
+>> when CPU1 dec __num_online_cpus and __num_online_cpus is equal one,
+>> the CPU1 has not finished offline, stop_machine task(migration/1)
+>> still running on CPU1, maybe still accessing 'old_data0', but the
+>> 'old_data0' has freed on CPU0.
+>>=20
+>> In order to prevent the above scenario from happening, this commit
+>> remove check for __num_online_cpus =3D=3D 0 and add handling of calling
+>> synchronize_rcu_tasks_generic() during early boot(when the
+>> rcu_scheduler_active variable is RCU_SCHEDULER_INACTIVE, the scheduler
+>> not yet initialized and only one boot-CPU online).
+>>=20
+>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>=20
+>> Very good, thank you!  I did the usual wordsmithing, including to that
+>> error message, so as usual please check to make sure that I didn't mess
+>> something up.
+>>=20
+>>                            Thanx, Paul
+>>=20
+>> ------------------------------------------------------------------------
+>>=20
+>> commit 033ddc5d337984e20b9d49c8af4faa4689727626
+>> Author: Zqiang <qiang1.zhang@intel.com>
+>> Date:   Thu Dec 1 07:45:33 2022 +0800
+>>=20
+>>   rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
+>>=20
+>>   The synchronize_rcu_tasks_rude() function invokes rcu_tasks_rude_wait_g=
+p()
+>>   to wait one rude RCU-tasks grace period.  The rcu_tasks_rude_wait_gp()
+>>   function in turn checks if there is only a single online CPU.  If so, i=
+t
+>>   will immediately return, because a call to synchronize_rcu_tasks_rude()=
 
-> On 12/2/2022 1:14 AM, Rafael J. Wysocki wrote:
-> > On Thursday, December 1, 2022 8:28:25 PM CET Rafael J. Wysocki wrote:
-> >> On Thu, Dec 1, 2022 at 2:10 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>>
-> >>> On 29/11/22 18:56, Nitin Rawat wrote:
-> >>>> Hi Adrian,
-> >>>>
-> >>>> On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
-> >>>>> Hi Adrian,
-> >>>>>
-> >>>>> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
-> >>>>>> On 4/11/22 11:19, Tushar Nimkar wrote:
-> >>>>>>> Hi linux-pm/linux-scsi,
-> >>>>>
-> >>>>>>>> Process -1
-> >>>>>>>> ufshcd_async_scan context (process 1)
-> >>>>>>>> scsi_autopm_put_device() //0:0:0:0
-> >>>>>>
-> >>>>>> I am having trouble following your description.  What function is calling
-> >>>>>> scsi_autopm_put_device() here?
-> >>>>>>
-> >>>>> Below is flow which calls scsi_autopm_put_device()
-> >>>>> Process -1
-> >>>>> ufshcd_async_scan()
-> >>>>>       scsi_probe_and_add_lun()
-> >>>>>           scsi_add_lun()
-> >>>>>               slave_configure()
-> >>>>>                   scsi_sysfs_add_sdev()
-> >>>>>                       scsi_autopm_get_device()
-> >>>>>                           device_add()     <- invoked [Process 2] sd_probe()
-> >>>>>                               scsi_autopm_put_device()
-> >>>>>
-> >>>>>>>> pm_runtime_put_sync()
-> >>>>>>>> __pm_runtime_idle()
-> >>>>>>>> rpm_idle() -- RPM_GET_PUT(4)
-> >>>>>>>>        __rpm_callback
-> >>>>>>>>            scsi_runtime_idle()
-> >>>>>>>>                pm_runtime_mark_last_busy()
-> >>>>>>>>                pm_runtime_autosuspend()  --[A]
-> >>>>>>>>                    rpm_suspend() -- RPM_AUTO(8)
-> >>>>>>>>                        pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
-> >>>>>>>>                            __update_runtime_status to RPM_SUSPENDING
-> >>>>>>>>                        __rpm_callback()
-> >>>>>>>>                            __rpm_put_suppliers(dev, false)
-> >>>>>>>>                        __update_runtime_status to RPM_SUSPENDED
-> >>>>>>>>                    rpm_suspend_suppliers()
-> >>>>>>>>                        rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
-> >>>>>>>>                    rpm_suspend() – END with return=0
-> >>>>>>>>            scsi_runtime_idle() END return (-EBUSY) always.
-> >>>>>>
-> >>>>>> Not following here either.  Which device is EBUSY and why?
-> >>>>>
-> >>>>> scsi_runtime_idle() return -EBUSY always [3]
-> >>>>> Storage/scsi team can better explain -EBUSY implementation.
-> >>>>
-> >>>> EBUSY is returned from below code for consumer dev 0:0:0:0.
-> >>>> scsi_runtime_idle is called from scsi_autopm_put_device which inturn is called from ufshcd_async_scan (Process 1 as per above call stack)
-> >>>> static int scsi_runtime_idle(struct device *dev)
-> >>>> {
-> >>>>      :
-> >>>>
-> >>>>      if (scsi_is_sdev_device(dev)) {
-> >>>>          pm_runtime_mark_last_busy(dev);
-> >>>>          pm_runtime_autosuspend(dev);
-> >>>>          return -EBUSY; ---> EBUSY returned from here.
-> >>>>      }
-> >>>>
-> >>>>
-> >>>> }
-> >>>>
-> >>>>>
-> >>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
-> >>>>>
-> >>>>>
-> >>>>>>>>
-> >>>>>>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
-> >>>>>>>> [2]: https://lkml.org/lkml/2022/10/12/259
-> >>>
-> >>> It looks to me like __rpm_callback() makes assumptions about
-> >>> dev->power.runtime_status that are not necessarily true because
-> >>> dev->power.lock is dropped.
-> >>
-> >> Well, this happens because rpm_idle() calls __rpm_callback() and
-> >> allows it to run concurrently with rpm_suspend() and rpm_resume(), so
-> >> one of them may change runtime_status to RPM_SUSPENDING or
-> >> RPM_RESUMING while __rpm_callback() is running.
-> >>
-> >> It is somewhat questionable whether or not this should be allowed to
-> >> happen, but since it is generally allowed to suspend the device from
-> >> its .runtime_idle callback, there is not too much that can be done
-> >> about it.
-> >
-> > But this means that the patch below should help too.
-> >
-> > I actually think that we can do both, because rpm_idle() doesn't have to do
-> > the whole device links dance and the fact that it still calls __rpm_callback()
-> > is a clear oversight.
-> >
-> > ---
-> >   drivers/base/power/runtime.c |   12 +++++++++++-
-> >   1 file changed, 11 insertions(+), 1 deletion(-)
-> >
-> > Index: linux-pm/drivers/base/power/runtime.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/base/power/runtime.c
-> > +++ linux-pm/drivers/base/power/runtime.c
-> > @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
-> >
-> >       dev->power.idle_notification = true;
-> >
-> > -     retval = __rpm_callback(callback, dev);
-> > +     if (dev->power.irq_safe)
-> > +             spin_unlock(&dev->power.lock);
-> > +     else
-> > +             spin_unlock_irq(&dev->power.lock);
-> > +
-> > +     retval = callback(dev);
-> > +
-> > +     if (dev->power.irq_safe)
-> > +             spin_lock(&dev->power.lock);
-> > +     else
-> > +             spin_lock_irq(&dev->power.lock);
-> >
-> >       dev->power.idle_notification = false;
-> >       wake_up_all(&dev->power.wait_queue);
-> >
-> >
-> >
+>>   is by definition a grace period on a single-CPU system.  (We could
+>>   have blocked!)
+>>=20
+>>   Unfortunately, this check uses num_online_cpus() without synchronizatio=
+n,
+>>   which can result in too-short grace periods.  To see this, consider the=
+
+>>   following scenario:
+>>=20
+>>           CPU0                                   CPU1 (going offline)
+>>                                             migration/1 task:
+>>                                         cpu_stopper_thread
+>>                                          -> take_cpu_down
+>>                                             -> _cpu_disable
+>>                                              (dec __num_online_cpus)
+>>                                            ->cpuhp_invoke_callback
+>>                                                   preempt_disable
+>>                                                   access old_data0
+>>              task1
+>>    del old_data0                                  .....
+>>    synchronize_rcu_tasks_rude()
+>>    task1 schedule out
+>>    ....
+>>    task2 schedule in
+>>    rcu_tasks_rude_wait_gp()
+>>        ->__num_online_cpus =3D=3D 1
+>>          ->return
+>>    ....
+>>    task1 schedule in
+>>    ->free old_data0
+>>                                                   preempt_enable
+>>=20
+>>   When CPU1 decrements __num_online_cpus, its value becomes 1.  However,
+>>   CPU1 has not finished going offline, and will take one last trip throug=
+h
+>>   the scheduler and the idle loop before it actually stops executing
+>>   instructions.  Because synchronize_rcu_tasks_rude() is mostly used for
+>>   tracing, and because both the scheduler and the idle loop can be traced=
+,
+>>   this means that CPU0's prematurely ended grace period might disrupt the=
+
+>>   tracing on CPU1.  Given that this disruption might include CPU1 executi=
+ng
+>>   instructions in memory that was just now freed (and maybe reallocated),=
+
+>>   this is a matter of some concern.
+>>=20
+>>   This commit therefore removes that problematic single-CPU check from th=
+e
+>>   rcu_tasks_rude_wait_gp() function.  This dispenses with the single-CPU
+>>   optimization, but there is no evidence indicating that this optimizatio=
+n
+>>   is important.  In addition, synchronize_rcu_tasks_generic() contains a
+>>   similar optimization (albeit only for early boot), which also splats.
+>>   (As in exactly why are you invoking synchronize_rcu_tasks_rude() so
+>>   early in boot, anyway???)
+>>=20
+>>   It is OK for the synchronize_rcu_tasks_rude() function's check to be
+>>   unsynchronized because the only times that this check can evaluate to
+>>   true is when there is only a single CPU running with preemption
+>>   disabled.
+>>=20
+>>   While in the area, this commit also fixes a minor bug in which a
+>>   call to synchronize_rcu_tasks_rude() would instead be attributed to
+>>   synchronize_rcu_tasks().
+>>=20
+>>   [ paulmck: Add "synchronize_" prefix and "()" suffix. ]
+>>=20
+>>   Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>>   Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>=20
+>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+>> index 4dda8e6e5707f..d845723c1af41 100644
+>> --- a/kernel/rcu/tasks.h
+>> +++ b/kernel/rcu/tasks.h
+>> @@ -560,8 +560,9 @@ static int __noreturn rcu_tasks_kthread(void *arg)
+>> static void synchronize_rcu_tasks_generic(struct rcu_tasks *rtp)
+>> {
+>>    /* Complain if the scheduler has not started.  */
+>> -    WARN_ONCE(rcu_scheduler_active =3D=3D RCU_SCHEDULER_INACTIVE,
+>> -             "synchronize_rcu_tasks called too soon");
+>> +    if (WARN_ONCE(rcu_scheduler_active =3D=3D RCU_SCHEDULER_INACTIVE,
+>> +             "synchronize_%s() called too soon", rtp->name))
+>=20
+> Thanks Paul,  detailed description and modification =F0=9F=98=8A.
+
+True statement. Good example for everyone ;-)
+
+ - Joel
+
+
+>=20
+>=20
+>> +        return;
+>>=20
+>>    // If the grace-period kthread is running, use it.
+>>    if (READ_ONCE(rtp->kthread_ptr)) {
+>> @@ -1064,9 +1065,6 @@ static void rcu_tasks_be_rude(struct work_struct *w=
+ork)
+>> // Wait for one rude RCU-tasks grace period.
+>> static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+>> {
+>> -    if (num_online_cpus() <=3D 1)
+>> -        return;    // Fastpath for only one CPU.
+>> -
+>>    rtp->n_ipis +=3D cpumask_weight(cpu_online_mask);
+>>    schedule_on_each_cpu(rcu_tasks_be_rude);
+>> }
