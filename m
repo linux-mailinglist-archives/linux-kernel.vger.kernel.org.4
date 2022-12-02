@@ -2,239 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A318640EC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7E3640EC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbiLBTtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
+        id S234503AbiLBTvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234860AbiLBTtJ (ORCPT
+        with ESMTP id S229527AbiLBTvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:49:09 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2122.outbound.protection.outlook.com [40.107.7.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFFEF142F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 11:49:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KHTvH+aI/7aXBOxNb5a35/B1Iw7DmTQELVfGWEKVeCQUBOQqOHCK6XVioSZk7x5PT/ZCCc+Mh4xQAl6trRI4JDxwQTztZmT8/YIRZvcKXv2ARf5wM8vvcoYIsMia0Hcv7CWs0Ph67/EHjR4AU1bv9qq5dsC/pxAJSHxeKnccVP24yw2pSm+xHNWa0KBrQT3ugnXPgfW3MDKY96u5+Qx1epZYaekmkAcEIVZIiOw0jbkA3nBHuQMeu7vXamNjoKor2tfPbjMxrmExdWVZPLAobhbgByvbbNpAPl9LFLmuVc9XmImZc0c00kd4JS9I4dBCif9YmRLhVbyQKpuBgrqxIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AyGMYbEDJbNyvD/a4jN32i/bs5k6AOQsJlurA/JnGVY=;
- b=FdKEDiGCAkQwKVHTqiCi5+PjBXziHvpxObwaneRER8kOmXGkJchlwN8IpUTQf62oGmLm1YQ0UeK4w8ramzvfl1gUyXkMzIOJ5pdvaPbdnB9XRdfr4WuOVMqRZKc7gdj9/PMBnFB2qLD0MZ8chUCcUbicBy+8MrUTanE1SK4IXt3z02CGmIGripiIUbqqTX2rv0pmOx57T8CKZo0VDvuuD9J9xy0+dpxtQueZLi7EmbLM6qLWPV1VTHTZsQTD93pQrAePKSV2bPfK9Xn+L9+ITWerwSJhSa5GsCvPZz21fQch00aXgD0XHz8697kj1loJviP8j6U9mlL4hwobS9jETA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AyGMYbEDJbNyvD/a4jN32i/bs5k6AOQsJlurA/JnGVY=;
- b=Z3YvPZhELrfBLlPXweqNdpTVCh18ydiiJszX5LicuQ0v2FLPMR7JM1HGCCxmramZrpZwhAwQGrVPHOLAXpINZlSW5f8rA+FJcFrJyybE26trD/InO8wvvS+l3Cz7Xmn+lYI+Q3CNclLNvO8U2FrYadpDw+6I+cf8IXKbU7jC9lyWJPHNl5bYXu54YpjOttd9Q0oQcWGpPHTuNVDNW38jY28Jl9y/Xl+0g3UGsBqYGZfSUco5akZYe3I5Gjx5/8PFqIFKTzT68d2MA3NE45+BELcK2exQVKUdA8elpXgBNWVUr0EkKSGqEIw3k7wINn8NTLoWIwOu2vBT3ESOLG7D2w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from VE1PR08MB4765.eurprd08.prod.outlook.com (2603:10a6:802:a5::16)
- by PA4PR08MB6286.eurprd08.prod.outlook.com (2603:10a6:102:f2::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Fri, 2 Dec
- 2022 19:49:04 +0000
-Received: from VE1PR08MB4765.eurprd08.prod.outlook.com
- ([fe80::f313:6bb7:8c6b:f8b]) by VE1PR08MB4765.eurprd08.prod.outlook.com
- ([fe80::f313:6bb7:8c6b:f8b%4]) with mapi id 15.20.5880.010; Fri, 2 Dec 2022
- 19:49:04 +0000
-Message-ID: <e676694f-6f6e-661d-d776-75d357ba510d@virtuozzo.com>
-Date:   Fri, 2 Dec 2022 21:49:03 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH] devtmpfs: move NULLing the thread pointer before
- unregistering fs
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org
-References: <20221202124502.217462-1-alexander.atanasov@virtuozzo.com>
- <Y4ogFSOaQtZ+5Xqy@kroah.com>
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-In-Reply-To: <Y4ogFSOaQtZ+5Xqy@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0302CA0024.eurprd03.prod.outlook.com
- (2603:10a6:800:e9::34) To VE1PR08MB4765.eurprd08.prod.outlook.com
- (2603:10a6:802:a5::16)
+        Fri, 2 Dec 2022 14:51:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C756EE940;
+        Fri,  2 Dec 2022 11:51:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0ADB2B82289;
+        Fri,  2 Dec 2022 19:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9085C433C1;
+        Fri,  2 Dec 2022 19:51:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670010694;
+        bh=PQS0Q2kaYS8KTdeCxBPO7GTuok90UY+nMD7Df6BbxSw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iH2tqD+ohbVJ97TeS+2MVKc19wUB79WFx9vYrUe6WMz/BDcsNfpKNP+3m3etXmGQM
+         r/iYwMVaAS9bWtBguP33HzQO3EH8mUhVhUbsnraU2urN5M9kLpha/m3Qpzb44cuqE9
+         MBHZACOcxXlDOCpEsc1YRhpc0vBREyr8dsSmG3M/OodZDYeJTwAEXf7ND1TBytw1vP
+         +LrnDVzzXu3S1uUI5G34BuguoV3tjBWXIBxlJIUEnlTzVLwwA0PefNq8Qn7R6Rw0nj
+         P1ZG98344IzON0E/khsfwHXoivRGvqqHAjJhhYHLz5SPfTMcO1PuyvDVdaYn7scMpi
+         STpLpbJ9xc1vg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 591575C095D; Fri,  2 Dec 2022 11:51:34 -0800 (PST)
+Date:   Fri, 2 Dec 2022 11:51:34 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
+Subject: Re: [PATCH 3/3] rcu-tasks: Fix synchronize_rcu_tasks() VS
+ zap_pid_ns_processes()
+Message-ID: <20221202195134.GA4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221125135500.1653800-1-frederic@kernel.org>
+ <20221125135500.1653800-4-frederic@kernel.org>
+ <871qpkqof8.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4765:EE_|PA4PR08MB6286:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3db7642-0e09-4818-5542-08dad49e4466
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xA7htoYjnpxV6NDTiTx411A4kryDOAhDahZvjhcFUAhsMga1+fgZ2iybri7H4vNMgXK+wZaRP0NMhsfCvJ94zMQQSJN77Xj2AuY0TH+T9Ty5www6rVftzmX022wChgXgvMgtUH89mx1Sun5Sr3/CunjFDwXhHuG+BnmqFM5kN09XszQfyRrzML2WVMywN0vyTUr95IWQtxbDvLmyPFylb4MnKMAV/GEfAxUJlHcezbNu7VvQNpfCIyrX7UCKlM5hDgQ/gUdJpz5bmtJmN6bnFFAowkUENBCZq7H8e1K85MzTCpm302YppPmb3lzZG+7sKq9wh6jykgO5TOgX8sigrrtt3sl3JBEri/0BfM3jQvoiaZQLxjdScIFEVx0Gj7/M7sGUZxzxeEilG7nnh7P40WyBn9WWwzgKgMYPgITxwl2slS74zKqaMkD0nW4CJwm6GoFN5nBzxjDlNZaY/Upp34Vy2uAuYKoX+Ykx/+FKOfwsny2cuNHW8ge0ZwNDbnHM+6Zr4qY1DaNbxfkjVAwFg6FifMfIoXwEu8TdapHnvJuO4zhcrT0N/oOa2M/XrETLpS9pcU+NZBsw4dgtSPXP69DheGNTQQF4u9HbRzlk/YxVEgziBq7x1LD2C1OGvVhFQV8ziQvRMabIEo5i7JHDk71/ptoGgxgwcjwjeQyEt0SIi8Fr10fsv1d289aq1b8vWEgMyRYF9ywHfW7+ZXfeAO0bmL8zwVTvy7ExHM8Uo3A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4765.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(346002)(396003)(376002)(366004)(136003)(451199015)(31686004)(36756003)(6916009)(86362001)(31696002)(41300700001)(4326008)(8676002)(316002)(66946007)(66476007)(66556008)(83380400001)(478600001)(26005)(38100700002)(5660300002)(8936002)(2906002)(44832011)(186003)(6512007)(6506007)(53546011)(6486002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFR3bm9aYi9rL2J0K1FYeWZzRlhXckhXMXBuWnFHR0NGaVU5aUhGSjZ2eldZ?=
- =?utf-8?B?ZGxzejE3M2ZaOW5JdFdhc2FKVVlka0toRjVlUHR4NjByOGlnc1pScTN0SnZ3?=
- =?utf-8?B?b1Nzb0ZiaXRNU2p0aHBGeTFaUlZKN1F2Tm51VkR2cS9Ud3hLangzQzlNbVkz?=
- =?utf-8?B?Q1NlS05RWEdrNFhpZUtub29RTTJ3TkZRVzFxR1dBSnh6T3VpVlI1amxtRlh3?=
- =?utf-8?B?d040aWZYQWhEWHdWYVVnZGlvRGkrT3BUOHErVHptKy9qQzdzb016UjQ0U2Yy?=
- =?utf-8?B?WTR4eWhQL1ZOWGNWZ2MwZlNDbW10VEF1SENYNWd6YXEvTGl0eHZtVk1TdFNz?=
- =?utf-8?B?K1VLVS9wb3I5cC9qNWtjc1lYMnZxd3Q0cS9GbjdMVjdiNzlPdW9VdGppRWxz?=
- =?utf-8?B?NndYRFFJTkZLUTdHb2Y0aFJqbzFLL1JvaWVaWU4reGltSjFwNGp5dE1RdUZi?=
- =?utf-8?B?dVpFUENkN1RScFE5Rk1mTThWeVJtTzNlV2tCTU5VWU84ZEUzQzJ6VW95UWxM?=
- =?utf-8?B?S3FxUEdiUGZTTGtnM1lxajFmVnJHaFBtS2VNM2JZV2FkMnNhb2JpRk5yMFVu?=
- =?utf-8?B?eXVWZExXRi9ZUUhGZDlnSmdMQXpHS3hVclh0WXFQL0d2VU1YMWxHdnJ0TXlm?=
- =?utf-8?B?bWtZSlJEa2dKa0R3bmhMd3hmUk9LM3VZRlZidXRsbHVuTU12d3lZWnVOU3VE?=
- =?utf-8?B?TlVlTnFPVVFTRkNNNFJ3aUJoK2tNeFZRWWtwK0s4S05QcFdhUnlSSFcvOEVI?=
- =?utf-8?B?a0c2YnBLUXo3dWxYeCs5MVdCTGQrZzRXd3pxTXA0aFZjdHVleFliUkxRbWNQ?=
- =?utf-8?B?aldQTDdkS3cwTjFKSDY3L0gyNU9XMXVqNXRVTGZML2ZSMENWZ1JicGZiSHN5?=
- =?utf-8?B?aTVNMkV4cTJGUVE2UmhkakF2VERmV2FkYkJ5OUdhZ21CWDE1OTNpb0JZb1ps?=
- =?utf-8?B?Q3ZubUJ4VUlyVzlRdE1DK2tPSWl6SEZkUFMyenkwQ1hJOTBQaS8wZjFPd2hR?=
- =?utf-8?B?QUxmWTJJd2MwY2Y3bk0rb0RLMTM5V0dVenZjYy85QWh3VUM3cTdNcldBZHY5?=
- =?utf-8?B?c21yYXdXc3dId0NzSHBLS1pSbEZsVDJvRm81NmVXMmQvZC9nYnRXMUJvaHZh?=
- =?utf-8?B?QmFDNUdPOVI1RGVuNllOS1dGK0g4c2dHcmEwKytOSG84aUgwaFkvRGJxVUJ3?=
- =?utf-8?B?VkZ3MnJZRkxacnp6SUt0L0lJQnE5bm9wdzVyeUJCMGY5clFRZ3g1YlpWbThL?=
- =?utf-8?B?UlB6Vk5ZLzREYmNOVzhZY01ZaDNkeGZTOUl0YUoxR0hQcnBZRWQyMnVQaldt?=
- =?utf-8?B?TGh3dHVpeTZDWTF0Zk5RbXBadnBBYmZha0JtNHRuYzF3dHdrYnVRVHMrMnVP?=
- =?utf-8?B?Q3hIb1EwUE1pd0QyelR3QUpCdThOK3JZZUVlenFuNHdRRElRWlUxNUNwNHFK?=
- =?utf-8?B?U2J4LzJUUnNwNW1ucmxRb2hQQ2QxR1M2RlFVdWZJSFpYNXZEQkJFaE5XTktq?=
- =?utf-8?B?MlUzamZBQzdscnlpV2RTQ05pTlJsbG8vOHVVb1NRT252d1U2cko2SUxRcFhF?=
- =?utf-8?B?dXJzdWlyMmEzK3M5RkUyMG9LU2oyeUtTVkxwUmNvU2ZRbXNmY3k4L3NBcXAr?=
- =?utf-8?B?UnlIOWhWcGZSQ1puVE42dHduM21CWWRDRGgzMUoxTEZ1cTdDMFV4THRDRU9w?=
- =?utf-8?B?S3Y1RXQxN3FpK2RrU2x1ZFpuOUhDWTdyK1pFSWxuaEtkelp4UHVsZDZRcktp?=
- =?utf-8?B?N0ZtQmdTOWRIaWNVNWVDRzB5VTYwT0tVSzJudTdsN2VPTHR2czF3MFBnaHJ1?=
- =?utf-8?B?TVJTMkxIa3pMV01ZUFBjQmJldlcxTFVKeFZTS3dmbld2U1hUb1k4c2FZRElP?=
- =?utf-8?B?eklDR2o3NVJ3cUNvU2d0YU1KRGw0TE5BU1BTenQ4SWlabnFxSGNPenpqMDVt?=
- =?utf-8?B?TDExSm1OT0k0WDVwc3RTTy9pRUpmbkRpemVXY2dsYmV6ODVhcE9MSSt4N0t5?=
- =?utf-8?B?ZEMwd0JmRmlOL3lyemZwR0VWV0h3QjM4dTk0b01nanFYaWR5MEF4WVhxR0li?=
- =?utf-8?B?UGxyZXpJN1U3WkZwZTdaVUpacmxHWWFzaWduMGh4K1lscUVkYjdyZmtjakV4?=
- =?utf-8?B?MDJRMnpRejlTdG5vbndYZzNsSys3V01VSHh2ZkZnVU9sYTVBNnBoYUZlbU9w?=
- =?utf-8?B?bWc9PQ==?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3db7642-0e09-4818-5542-08dad49e4466
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4765.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 19:49:04.5387
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GUlqvNWknWmPa92xjMiJWwAjaOmtLPkVMWrezKpUuLCzBqB0J86gcd2Y6iB9t037IPe6bDl/scDD+9EdHCtnJ/Q/03FeE2N2x8YTMXreVBr0lnJCtjyrvSx87qLodevG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB6286
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871qpkqof8.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2.12.22 17:56, Greg Kroah-Hartman wrote:
-> On Fri, Dec 02, 2022 at 02:45:01PM +0200, Alexander Atanasov wrote:
->> In commit
->> 31c779f293b3 ("devtmpfs: fix the dangling pointer of global devtmpfsd thread")
->> a dangling pointer on an error condition was fixed. But the fix
->> left the dangling pointer during unregister_filesystem and printk calls.
+On Wed, Nov 30, 2022 at 12:37:15PM -0600, Eric W. Biederman wrote:
+> Frederic Weisbecker <frederic@kernel.org> writes:
 > 
-> And how could it be used there?
-
-I don't said it can be used there - they might trigger events that get 
-back to it.
-
+> > RCU Tasks and PID-namespace unshare can interact in do_exit() in a
+> > complicated circular dependency:
+> >
+> > 1) TASK A calls unshare(CLONE_NEWPID), this creates a new PID namespace
+> >    that every subsequent child of TASK A will belong to. But TASK A
+> >    doesn't itself belong to that new PID namespace.
+> >
+> > 2) TASK A forks() and creates TASK B. TASK A stays attached to its PID
+> >    namespace (let's say PID_NS1) and TASK B is the first task belonging
+> >    to the new PID namespace created by unshare()  (let's call it PID_NS2).
+> >
+> > 3) Since TASK B is the first task attached to PID_NS2, it becomes the
+> >    PID_NS2 child reaper.
+> >
+> > 4) TASK A forks() again and creates TASK C which get attached to PID_NS2.
+> >    Note how TASK C has TASK A as a parent (belonging to PID_NS1) but has
+> >    TASK B (belonging to PID_NS2) as a pid_namespace child_reaper.
+> >
+> > 5) TASK B exits and since it is the child reaper for PID_NS2, it has to
+> >    kill all other tasks attached to PID_NS2, and wait for all of them to
+> >    die before getting reaped itself (zap_pid_ns_process()).
+> >
+> > 6) TASK A calls synchronize_rcu_tasks() which leads to
+> >    synchronize_srcu(&tasks_rcu_exit_srcu).
+> >
+> > 7) TASK B is waiting for TASK C to get reaped. But TASK B is under a
+> >    tasks_rcu_exit_srcu SRCU critical section (exit_notify() is between
+> >    exit_tasks_rcu_start() and exit_tasks_rcu_finish()), blocking TASK A.
+> >
+> > 8) TASK C exits and since TASK A is its parent, it waits for it to reap
+> >    TASK C, but it can't because TASK A waits for TASK B that waits for
+> >    TASK C.
+> >
+> > Pid_namespace semantics can hardly be changed at this point. But the
+> > coverage of tasks_rcu_exit_srcu can be reduced instead.
+> >
+> > The current task is assumed not to be concurrently reapable at this
+> > stage of exit_notify() and therefore tasks_rcu_exit_srcu can be
+> > temporarily relaxed without breaking its constraints, providing a way
+> > out of the deadlock scenario.
+> >
+> > Fixes: 3f95aa81d265 ("rcu: Make TASKS_RCU handle tasks that are almost done exiting")
+> > Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+> > Suggested-by: Boqun Feng <boqun.feng@gmail.com>
+> > Suggested-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Oleg Nesterov <oleg@redhat.com>
+> > Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> > Cc: Eric W . Biederman <ebiederm@xmission.com>
+> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > ---
+> >  include/linux/rcupdate.h |  2 ++
+> >  kernel/pid_namespace.c   | 17 +++++++++++++++++
+> >  kernel/rcu/tasks.h       | 14 ++++++++++++--
+> >  3 files changed, 31 insertions(+), 2 deletions(-)
 > 
->> Improve the fix to clear the pointer before unregistration to close
->> the window  where the dangling pointer can be potentially used.
+> > diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+> > index f4f8cb0435b4..fc21c5d5fd5d 100644
+> > --- a/kernel/pid_namespace.c
+> > +++ b/kernel/pid_namespace.c
+> > @@ -244,7 +244,24 @@ void zap_pid_ns_processes(struct pid_namespace *pid_ns)
+> >  		set_current_state(TASK_INTERRUPTIBLE);
+> >  		if (pid_ns->pid_allocated == init_pids)
+> >  			break;
+> > +		/*
+> > +		 * Release tasks_rcu_exit_srcu to avoid following deadlock:
+> > +		 *
+> > +		 * 1) TASK A unshare(CLONE_NEWPID)
+> > +		 * 2) TASK A fork() twice -> TASK B (child reaper for new ns)
+> > +		 *    and TASK C
+> > +		 * 3) TASK B exits, kills TASK C, waits for TASK A to reap it
+> > +		 * 4) TASK A calls synchronize_rcu_tasks()
+> > +		 *                   -> synchronize_srcu(tasks_rcu_exit_srcu)
+> > +		 * 5) *DEADLOCK*
+> > +		 *
+> > +		 * It is considered safe to release tasks_rcu_exit_srcu here
+> > +		 * because we assume the current task can not be concurrently
+> > +		 * reaped at this point.
+> > +		 */
+> > +		exit_tasks_rcu_stop();
+> >  		schedule();
+> > +		exit_tasks_rcu_start();
+> >  	}
+> >  	__set_current_state(TASK_RUNNING);
 > 
-> Again, how can that happen?  And you have an extra ' ' in that line :(
-
-Sorry for the extra ' ' i will check where it came from.
-
+> Two questions.
 > 
->> Make it clear the pointer at only one place in the function.
->>
->> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
->> ---
->>   drivers/base/devtmpfs.c | 8 +++-----
->>   1 file changed, 3 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
->> index e4bffeabf344..773e66ef5642 100644
->> --- a/drivers/base/devtmpfs.c
->> +++ b/drivers/base/devtmpfs.c
->> @@ -472,17 +472,15 @@ int __init devtmpfs_init(void)
->>   	}
->>   
->>   	thread = kthread_run(devtmpfsd, &err, "kdevtmpfs");
->> -	if (!IS_ERR(thread)) {
->> +	if (!IS_ERR(thread))
->>   		wait_for_completion(&setup_done);
->> -	} else {
->> +	else
->>   		err = PTR_ERR(thread);
->> -		thread = NULL;
->> -	}
->>   
->>   	if (err) {
->> +		thread = NULL;
->>   		printk(KERN_ERR "devtmpfs: unable to create devtmpfs %i\n", err);
->>   		unregister_filesystem(&dev_fs_type);
->> -		thread = NULL;
->>   		return err;
->>   	}
+> 1) Is there any chance you need the exit_task_rcu_stop() and
+>    exit_tasks_rcu_start() around schedule in the part of this code that
+>    calls kernel_wait4.
+
+Quite possibly, but I must defer to Frederic on this one.
+
+> 2) I keep thinking zap_pid_ns_processes() should be changed so that
+>    after it sends SIGKILL to all of the relevant processes to not wait,
+>    and instead have wait_consider_task simply not allow the 
+>    init process of the pid namespace to be reaped.
 > 
-> This all feels wrong and way too complex to have to clean up from a call
-> to kthread_run().  Are you sure this is the correct way to do this?
+>    Am I right in thinking that such a change were to be made it would
+>    make remove the deadlock without having to have any special code?
+> 
+>    It is just tricky enough to do that I don't want to discourage your
+>    simpler change but this looks like a case that makes the pain of
+>    changing zap_pid_ns_processes worthwhile in the practice.
 
-Agree on this but this is the code as it is.
+I would dearly love for there to be a fix that allowed the RCU-related
+code to go back to what it was originally.  But there is apparently some
+concern that users might be relying on the current sleep-while-exiting
+semantics.  :-/
 
-> And how was this "issue" found?  How does the call to kthread_run() ever
-> fail for you?
-
-I was after something else and this stuck into my eye:
-....
-         thread = kthread_run(devtmpfsd, &err, "kdevtmpfs");
-         if (!IS_ERR(thread)) {
-                 wait_for_completion(&setup_done);
-         } else {
-                 err = PTR_ERR(thread);
-                 thread = NULL;
-         }
-
-         if (err) {
-                 printk(KERN_ERR "devtmpfs: unable to create devtmpfs 
-%i\n", err);
-                 unregister_filesystem(&dev_fs_type);
-                 thread = NULL;
-                 return err;
-         }
-....
-
-Why do we do thread = NULL twice ? One time before unregistration, one 
-time after unregistration.
-
-So if it is going to handle the error the same way as the kthread_run 
-error (original) then when the thread completes with error we must do 
-the same. And do it one time.
-
-...
-         thread = kthread_run(devtmpfsd, &err, "kdevtmpfs");
-         if (!IS_ERR(thread))
-                 wait_for_completion(&setup_done);
-         else
-                 err = PTR_ERR(thread);
-
-         if (err) {
-                 thread = NULL;
-                 printk(KERN_ERR "devtmpfs: unable to create devtmpfs 
-%i\n", err);
-                 unregister_filesystem(&dev_fs_type);
-                 return err;
-         }
-...
-
-Which is more readable ?
-
-I guess  I should have put this as the commit message.
-
--- 
-Regards,
-Alexander Atanasov
-
+							Thanx, Paul
