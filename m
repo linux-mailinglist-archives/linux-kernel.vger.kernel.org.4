@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546FA64098C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9936064098F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbiLBPsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S233647AbiLBPtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbiLBPsL (ORCPT
+        with ESMTP id S232517AbiLBPtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:48:11 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3807195800
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:48:10 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id j19so2460414vke.12
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:48:10 -0800 (PST)
+        Fri, 2 Dec 2022 10:49:32 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70E6DB0D5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:49:31 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id w23so4955880ply.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:49:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WCgdexCSnOP3jsTOfhvVQsi6dij3FdbBYBs2XpV8hk=;
-        b=oSJ1gCC0lCI8Cb7UB7pNoUw+vbSqonz1W7vCW7LCHMg/dWFRG5zneyaVXS30ENWd4r
-         aFvbWq+eMA8GDsNeiNPZ3PrmI7U9TJ9aK16UjqH5ISSRls6zkCIJOIRn3IO5ajQf6xNF
-         kRVv+cF83jVT4xPBnGVeBZBZqwHV2j+xLmRLrIEQiLTOUXlQaKS5dZ74v3w4p69KOhwj
-         4fgKkR0h8M/h/sT1BiLZfGXRnucqOQ50WO2iDwYVmiLmmasPPf+vJx13tBL5fFHKNEz7
-         x3+yd/e+WnS0FktpBk3SjUfJ67huDGxs26xk4Ti8GTbGqG3moTOqfYIi3RTmlTUoEOPn
-         FMVg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DyYjQXepcIbzGGZBsmjIHP+6MBxFisvUmuz9uOlal90=;
+        b=QgblYDa1UHXmusNEhRA1SXEQt6qUJxGSgOgm0vHv6mYiK5mcZQkhNqW8Gflw3kmWM0
+         FG6n7SPAeo4qwl8fkumIKNb7wgGL7bi7LQ/Z9siNk+J1pK9YhLY3osIDWTQywv7ira2D
+         oq/CJ7ijyu/el/oEsQZdO9xbu4otycY7myNvjt1Vb3yz8CNVOpNFvY2jiNHDAl8aczQC
+         aYBrGJ7QPqflmDTAgN6I+I+srChSFSyao7XsAr7vHkPez+xZP4BkmbJ+13tLzFSc/WiF
+         ztkz2liYkezUxcPqJelaakiUo0czw/Jg1Zjjvs40yVLOfdTP3fsfc8QukSYXrEau7DyO
+         bGnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2WCgdexCSnOP3jsTOfhvVQsi6dij3FdbBYBs2XpV8hk=;
-        b=BGkxghTHVjOxrGUn4uMUpjSFQyhhfAdI6Mp6CC4d2c0ARmXj+YdbT4EvHCTxylV4l5
-         G+itubA5c4CME/b2pPwcDzXX0b58L1DYKftBk6J/b7EJs/f9+hmCakfVD78qyXQovQOL
-         J0Hmb/15MZP4Hm7szDucqhKek4zwXCZgZvMRZgNWjzQ7k+k4jlGKHcjxqyZ0PVB0jqDA
-         lS0/8Ett5xV5PL57YaAeMdziLHm7RYcCJV5t36synt66geer4Tlxp8ClHXid0RsWnwXl
-         PwTVAv3GuETGpA6pMEnRG28LRar/OkjNDjdx4T6Y2a02cg+i0zQbhsUO/dDjoB3ijuVR
-         MmwQ==
-X-Gm-Message-State: ANoB5pmbu4sM7ONDjHJbBKXRN50cy6xUtjPIHglSLCjhTJK88+1D0+7j
-        pcm3YdU1OWkYKdy9W0Znaj1t7clfnhAV5N9xek8ygA==
-X-Google-Smtp-Source: AA0mqf4BQnLz/2MMkkoDIMheY7cdKHy01NaJcElptwz2Sjt35xMUWOZFvLiwl0dOGlpXfiDbs4WHoQ1lO8a1VOS5oZw=
-X-Received: by 2002:ac5:c915:0:b0:3b8:7fbd:9554 with SMTP id
- t21-20020ac5c915000000b003b87fbd9554mr31077536vkl.27.1669996089310; Fri, 02
- Dec 2022 07:48:09 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DyYjQXepcIbzGGZBsmjIHP+6MBxFisvUmuz9uOlal90=;
+        b=d8V050FIxU5FsIOnBOLLGG33SWA/Pzr46IzPvLZ74N9o6Nz2muCi2T8N/HPaXSdlUd
+         7gtVWdS4cTRWWJda5sOcs7wZwRU+zKRACGc04gGCYJTYxs2jt2vdRrzMwhrUZoSHHoUL
+         TtPWQm6aXEyfuE1RTrAjpmkcfXhNiQSBj4p+XRWQ1OQj+7fMFfnNCEcAmBt0pP4wf3aF
+         1NcBHZa/foR7hToPqyDVO+OeQELH/aSFas3yRv2Um5XKdSsD9brAWmnHLuts7FZeZuk+
+         uPoU1wWwzpv423bNsJ6KKBfAp3siz7DZb6q6CpyPMJL3NTlKsTFopuQ219LaQJ8UzTaJ
+         4m2w==
+X-Gm-Message-State: ANoB5pn38p0XtG6DWMJ+tJCHfOOPfiveNzFLs1WsE2ZV91MZujhO4Lt9
+        nzd8B4bLtNCH3zMslXlyG2k1xA==
+X-Google-Smtp-Source: AA0mqf6h2qn7y7jsYhPTQrDSXOOhGa0+ryoI1RU+O7IyslS1qQ7k3Pxe4SKQnxmJmDjQ7uuEmNXHLQ==
+X-Received: by 2002:a17:903:289:b0:189:25fb:8e83 with SMTP id j9-20020a170903028900b0018925fb8e83mr55598112plr.20.1669996171241;
+        Fri, 02 Dec 2022 07:49:31 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i14-20020a17090332ce00b00189422a6b8bsm5800996plr.91.2022.12.02.07.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 07:49:30 -0800 (PST)
+Date:   Fri, 2 Dec 2022 15:49:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        mlevitsk@redhat.com, x86@kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: fix APICv/x2AVIC disabled when vm reboot by
+ itself
+Message-ID: <Y4oeh6XWw2qzETEQ@google.com>
+References: <1669984574-32692-1-git-send-email-yuanzhaoxiong@baidu.com>
 MIME-Version: 1.0
-References: <20221202150444.244313-1-brgl@bgdev.pl> <20221202150444.244313-3-brgl@bgdev.pl>
- <Y4odem+9MTsm3VPh@smile.fi.intel.com>
-In-Reply-To: <Y4odem+9MTsm3VPh@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 2 Dec 2022 16:47:58 +0100
-Message-ID: <CAMRc=MfcVAeEMrd61YeMuwmVYRxsZUoVeEKFvpeVaei+1RrYBQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] gpiolib: protect the GPIO device against being
- dropped while in use by user-space
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nick Hainke <vincent@systemli.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669984574-32692-1-git-send-email-yuanzhaoxiong@baidu.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,38 +75,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 4:45 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Dec 02, 2022 at 04:04:44PM +0100, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > While any of the GPIO cdev syscalls is in progress, the kernel can call
-> > gpiochip_remove() (for instance, when a USB GPIO expander is disconnected)
-> > which will set gdev->chip to NULL after which any subsequent access will
-> > cause a crash.
-> >
-> > To avoid that: use an RW-semaphore in which the syscalls take it for
-> > reading (so that we don't needlessly prohibit the user-space from calling
-> > syscalls simultaneously) while gpiochip_remove() takes it for writing so
-> > that it can only happen once all syscalls return.
-> >
-> > Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
-> > Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
-> > Fixes: aad955842d1c ("gpiolib: cdev: support GPIO_V2_GET_LINEINFO_IOCTL and GPIO_V2_GET_LINEINFO_WATCH_IOCTL")
-> > Fixes: a54756cb24ea ("gpiolib: cdev: support GPIO_V2_LINE_SET_CONFIG_IOCTL")
-> > Fixes: 7b8e00d98168 ("gpiolib: cdev: support GPIO_V2_LINE_SET_VALUES_IOCTL")
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > [Nick: fixed a build failure with CDEV_V1 disabled]
->
-> > Co-authored-by: Nick Hainke <vincent@systemli.org>
->
-> In Linux kernel there is no such tag. And in case you want to use
-> Co-developed-by, you also need to add the respective SoB one.
->
+On Fri, Dec 02, 2022, Yuan ZhaoXiong wrote:
+> This patch fixes that VM rebooting itself will cause APICv
+> disabled when VM is started with APICv/x2AVIC enabled.
+> 
+> When a VM reboot itself, The Qemu whill reset LAPIC by invoking
+> ioctl(KVM_SET_LAPIC, ...) to disable x2APIC mode and set APIC_ID
+> to its vcpuid in xAPIC mode.
+> 
+> That will be handled in KVM as follows:
+> 
+>      kvm_vcpu_ioctl_set_lapic
+>        kvm_apic_set_state
+> 	  kvm_lapic_set_base  =>  disable X2APIC mode
+> 	    kvm_apic_state_fixup
+> 	      kvm_lapic_xapic_id_updated
+> 	        kvm_xapic_id(apic) != apic->vcpu->vcpu_id
+> 		kvm_set_apicv_inhibit(APICV_INHIBIT_REASON_APIC_ID_MODIFIED)
+> 	   memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s))  => update APIC_ID
+> 
+> kvm_apic_set_state invokes kvm_lapic_set_base to disable x2APIC mode
+> firstly, but don't change APIC_ID, APIC_ID is 32 bits in x2APIC mode
+> and 8 bist(bit 24 ~ bit 31) in xAPIC mode. So kvm_lapic_xapic_id_updated
+> will set APICV_INHIBIT_REASON_APIC_ID_MODIFIED bit inhibit and disable
+> APICv/x2AVIC.
+> 
+> kvm_lapic_xapic_id_updated must be called after APIC_ID is changed.
+> 
+> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
+> 
+> Signed-off-by: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
+> ---
+>  arch/x86/kvm/lapic.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index d7639d1..bf5ce86 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2722,8 +2722,6 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+>  			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
+>  			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
+>  		}
+> -	} else {
+> -		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
+>  	}
+>  
+>  	return 0;
+> @@ -2759,6 +2757,9 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
+>  	}
+>  	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
+>  
+> +	if (!apic_x2apic_mode(apic))
+> +		kvm_lapic_xapic_id_updated(apic);
+> +
 
-Right, I forgot the tags got standardized. I will fix it when
-applying. I'll fix it directly in the for-current branch and let it
-cook again overnight. I'll then resend my PR tomorrow.
+Already posted[*], along with a pile of other APIC fixes.  Hopefully it will land
+in 6.2.
 
-Bartosz
+[*] https://lore.kernel.org/all/20221001005915.2041642-7-seanjc@google.com
