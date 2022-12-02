@@ -2,73 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FCC64090F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FCC640911
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbiLBPNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S233460AbiLBPOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbiLBPN3 (ORCPT
+        with ESMTP id S233765AbiLBPNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:13:29 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47C36D7DB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:13:13 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        Fri, 2 Dec 2022 10:13:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58076D7E8
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:13:33 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p17jG-0005zw-Mv; Fri, 02 Dec 2022 16:13:30 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 8EE0F88;
-        Fri,  2 Dec 2022 16:13:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669993991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wMd+8gwhXm0Fts7QCJ/QK2hfDZAHqyWO5aLUxQbiTRQ=;
-        b=J1Wzk2PgyZvCZMvCymQSd0PjvrBIyptWHSY5KUv2QVIy5BPV/31hQyu/PJmEnXeoWY+FGv
-        pUmGHK0i1OuxihbFfe9D62U4Szf9XTMZz718rk/Qmgsh5Bji3zCHCAiANYFLVGOJB8dmXm
-        SEUazpoly748dLkDsrv7VBLJg1xg0FRvew/TjVm3/hCqe6HunkldM2z6J/GGZVNXUg/PYi
-        ezNBtxksqvhA30P3/EHpq+7XWMdq0EDO0mWBCyvZYDPjFhDb7Intz5kA9BHT/PpvTUkN4t
-        FGeHktoUyLKekNgCtnsn3r36cH6PFJ8orSembemIvX5GlLw6NZ57xiVLY3x7sw==
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5D0E413176E;
+        Fri,  2 Dec 2022 15:13:29 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 16:13:20 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] can: esd_usb: Allow REC and TEC to return to zero
+Message-ID: <20221202151320.7pimdtgqehi4x77k@pengutronix.de>
+References: <20221130202242.3998219-1-frank.jungclaus@esd.eu>
+ <20221130202242.3998219-2-frank.jungclaus@esd.eu>
 MIME-Version: 1.0
-Date:   Fri, 02 Dec 2022 16:13:11 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     greg.malysa@timesys.com,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] mtd: spi-nor: Extend SFDP 4byte address
- instruction lookup table with new octal modes as per JEDEC JESD216F
-In-Reply-To: <20221202135539.271936-2-nathan.morrison@timesys.com>
-References: <20221202135539.271936-1-nathan.morrison@timesys.com>
- <20221202135539.271936-2-nathan.morrison@timesys.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <80cc15aa905f151ecb28500fefdd0817@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zbmgx7pa7b3psdf2"
+Content-Disposition: inline
+In-Reply-To: <20221130202242.3998219-2-frank.jungclaus@esd.eu>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-12-02 14:55, schrieb Nathan Barrett-Morrison:
-> This adds the new bit fields for
-> reading: 1S-1S-8S, 1S-8S-8S, 1D-8D-8D
-> programming: 1S-1S-8S, 1S-8S-8S
-> 
-> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+--zbmgx7pa7b3psdf2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 30.11.2022 21:22:42, Frank Jungclaus wrote:
+> We don't get any further EVENT from an esd CAN USB device for changes
+> on REC or TEC while those counters converge to 0 (with ecc =3D=3D 0).
+> So when handling the "Back to Error Active"-event force
+> txerr =3D rxerr =3D 0, otherwise the berr-counters might stay on
+> values like 95 forever ...
+>=20
+> Also, to make life easier during the ongoing development a
+> netdev_dbg() has been introduced to allow dumping error events send by
+> an esd CAN USB device.
+>=20
+> Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+
+Added to linux-can. It will go into the net/master after v6.1.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--zbmgx7pa7b3psdf2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKFg0ACgkQrX5LkNig
+010xqQf+KEMYSuEJz87Zms6RXIkVZFKmW8TXTACOZazR4adl2kyi+FwSwp3TmD1a
+hurLZLlXR6v475v0rdPebdtUpEk/glg9FfdHhQuCUL+eHEUEkOC0Ou/Yrqsnkl75
+25k/+qzmXKo4Wcf1g5lRCRku76kybdbkPyhlLzqx9qzuZREkZ1vjXGFYTFbBYnTJ
+XOeCDKqker45QQ2Zh7pQjxI8Alg/CGOGpkgpUhZBohWpS5Vcmric2t7Le10Dnikd
+BB3vion2stmKazY3iK6SeihDp4EkvbT08V05ptnD1EJ77FlAaX+AAXegKSIeDXmG
+91o3GwICCcr6tWeKDBNu88/HE1sLUQ==
+=48WK
+-----END PGP SIGNATURE-----
+
+--zbmgx7pa7b3psdf2--
