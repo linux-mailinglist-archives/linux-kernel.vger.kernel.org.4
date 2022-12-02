@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7BA6410B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B63406410BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbiLBWea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S234949AbiLBWg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbiLBWeO (ORCPT
+        with ESMTP id S234996AbiLBWgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:34:14 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBF2FB88C;
-        Fri,  2 Dec 2022 14:33:49 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id ha10so14700296ejb.3;
-        Fri, 02 Dec 2022 14:33:49 -0800 (PST)
+        Fri, 2 Dec 2022 17:36:03 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F614FA459
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:35:13 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id c7so2804073pfc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:35:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g/p1+V/z+oR39h38nh1M5hCwPSL3t8Y/qdykCOeejV0=;
-        b=a+50oLwNxjPhsywArY16tosqg875B9DBC57M3kQPZvQ+ach28oR8C+aEWIz01Ccabg
-         JRJNW+YyvhAS29M1sSxSY4AP8LPgHVzlv/sfvH7AR2FLW+JDImaeGzMEO6OdqHIdam8f
-         fVjwEog2vr3o+97yDA8vz5/rWSdFeYl+qS4DvtnXZ6L30K8tFX9nZeasfF3VQ5AX0og1
-         0mN/BQ8vzzaMM4spCCz58L9rnWSD85eshQgniJqcPMoVCeDlUbTu3JT+WibZ/5S+P1cK
-         Y8TCh6+uSiz3UCAIw1PwWtH023IO6f7z+foESvBcwVXWWTJFRhLNO/Z8li4EA9hkc1JK
-         e4DA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c3AsPBlStxM5I2Ol3fQv4IigRWmDsbShzT0tHCkMWpc=;
+        b=ODGW++iHa9F+rS6SwwuY93cCe2n+w1WZcRsza8S7XVaW4m0QTCHPGuWrWU0YbABHDT
+         jjKouQfhsXnhHWR7hV/UnqPxP9JQMq4+wyMM6M7Q1stGl6Lo7/thVMCPwtolJsk+yNa0
+         pIo7PPrDZdwNXrX9sAb3/rR9JFpaHOlctjjyBx8Z0e8LCsX+z3syP4TZPf23YmiDuat8
+         ls3MGIOXTJeSlwXRetecOnRzC1pZ7DogR0v9Uqrfi7XJrJBiKPNpyqWviLmix5yedLMa
+         +2FHfJgGbV85dhz2J0zpsbsaVGOWLil1D7qyI1wnnC6fTKpwqdv1L2GL79hx2FfYZn6N
+         sTIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g/p1+V/z+oR39h38nh1M5hCwPSL3t8Y/qdykCOeejV0=;
-        b=Xv1b/LuYLayVNGEFBXSGhVGLBNYGiepNRo9Ua3H05rftwJHamKS6Ofrf6/4En13pvQ
-         w10VegqAxV/yYxryzwVoJzdQUNH9fGgumOtQglZjeC5p6Pe6aqEZNJYAgIz4YyV9d+Sz
-         lc3XcjHLivwHqArmynfeILg0zQtgqajVOvjbQPTc7XEBiL8foEGmLCGBZKeViY4aIy1p
-         wV46P29OtPD4+vQmBuZWAuI8Sv4RVyCep+ghAvsdtra4oCoaz6sv2Xc2xn/wL8pqUSOA
-         YpuvHHNrsUKLNgq4+u1omXAwHGVRoZetWYr0ihRVSBRZdurv9jjPU9Z3e3GeZt3s4E51
-         3yGg==
-X-Gm-Message-State: ANoB5pnHRjFnIGEwV6lFOfiE0p/uL14BbqIGRPxG6DAdCxWRyh9I6pWo
-        VBwR6BPhC68H0kzTJotzWHBJY7F+b6PhXg==
-X-Google-Smtp-Source: AA0mqf4BHmpLiknHAc13V79dFatrRncPt6Rt7EdPxLr6NgmamON5IQzNkObb/askcObyCVkvHs2aSA==
-X-Received: by 2002:a17:907:d60b:b0:7bc:dbd8:184b with SMTP id wd11-20020a170907d60b00b007bcdbd8184bmr31632110ejc.110.1670020428205;
-        Fri, 02 Dec 2022 14:33:48 -0800 (PST)
-Received: from xws.localdomain ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b007c0d0dad9c6sm575340ejg.108.2022.12.02.14.33.46
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c3AsPBlStxM5I2Ol3fQv4IigRWmDsbShzT0tHCkMWpc=;
+        b=jofxjZTYRuLwDVTnvSYIq3NAUCywCU40kmayEujdYNOzk3/UQ1DVTiRwbhPWtKLWwE
+         mIIpdXlDfrBvLJfT7b1DsmyrcZgRn0vOaDW4zKQCHkLTOtNCLrUe/jiy3srHIyWR+Ll2
+         3ol8GlqPK4SxqSCkx45AODZ0ls8Cw2woK2ivSVwgl4JUfJqj1NiZMzQr4VQUycVggiSb
+         v3MD8sCwWbaf8c5inxEAAcMWqlaOjMOboAAoCnmoJpQXc3f6dWq9/AfT92t5tEKNv/RR
+         D4VVa4F1L8sIr4qrdAwUhYbgmJWg9jvwTz04d05Nq5HO6GhzVxNEstGl37OhWgvPaLoi
+         Mcjw==
+X-Gm-Message-State: ANoB5pl1eowtfuF/CU1wKTM7VXjRkFeWBzC987rj4Yw0c8cJG9YZj8Gn
+        9JyMWfyMUhBGKvekw7dFxaJOGg==
+X-Google-Smtp-Source: AA0mqf7nH73xcxVT1coc+0CqH8zWWPgkL4uiAQR/zMxNI0Rnz4QS+6fzpb85FA1LUptLIDNgDK9eBg==
+X-Received: by 2002:aa7:954e:0:b0:574:36b6:f91b with SMTP id w14-20020aa7954e000000b0057436b6f91bmr50736002pfq.55.1670020512590;
+        Fri, 02 Dec 2022 14:35:12 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 3-20020a631543000000b0044ed37dbca8sm4573520pgv.2.2022.12.02.14.35.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:33:47 -0800 (PST)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] platform/surface: aggregator_registry: Fix target-ID of base-hub
-Date:   Fri,  2 Dec 2022 23:33:27 +0100
-Message-Id: <20221202223327.690880-10-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221202223327.690880-1-luzmaximilian@gmail.com>
-References: <20221202223327.690880-1-luzmaximilian@gmail.com>
+        Fri, 02 Dec 2022 14:35:12 -0800 (PST)
+Date:   Fri, 2 Dec 2022 22:35:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com
+Subject: Re: [PATCH v2 02/18] x86/sgx: Store struct sgx_encl when allocating
+ new VA pages
+Message-ID: <Y4p9nKV+jpLnOVwD@google.com>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-3-kristen@linux.intel.com>
+ <3a789b1c-4c70-158b-d764-daec141a5816@intel.com>
+ <abfc00a2ab1d97f8081c696f78e2d0ced23902b4.camel@linux.intel.com>
+ <2015ae96-5459-1f82-596b-f46af08ef766@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2015ae96-5459-1f82-596b-f46af08ef766@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +82,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The target ID of the base hub is currently set to KIP (keyboard/
-peripherals). However, even though it manages such devices with the KIP
-target ID, the base hub itself is actually accessed via the SAM target
-ID. So set it accordingly.
+On Fri, Dec 02, 2022, Dave Hansen wrote:
+> On 12/2/22 13:40, Kristen Carlson Accardi wrote:
+> > On Fri, 2022-12-02 at 13:35 -0800, Dave Hansen wrote:
+> >> On 12/2/22 10:36, Kristen Carlson Accardi wrote:
+> >>> When allocating new Version Array (VA) pages, pass the struct
+> >>> sgx_encl
+> >>> of the enclave that is allocating the page. sgx_alloc_epc_page()
+> >>> will
+> >>> store this value in the encl_owner field of the struct
+> >>> sgx_epc_page. In
+> >>> a later patch, VA pages will be placed in an unreclaimable queue,
+> >>> and then when the cgroup max limit is reached and there are no more
+> >>> reclaimable pages and the enclave must be oom killed, all the
+> >>> VA pages associated with that enclave can be uncharged and freed.
+> >> What does this have to do with the 'encl' that is being passed,
+> >> though?
+> >>
+> >> In other words, why is this new sgx_epc_page-to-encl mapping needed
+> >> for
+> >> VA pages now, but it wasn't before?
+> > When we OOM kill an enclave, we want to get rid of all the associated
+> > VA pages too. Prior to this patch, there wasn't a way to easily get the
+> > VA pages associated with an enclave.
+> 
+> Given an enclave, we have encl->va_pages to look up all the VA pages.
+> Also, this patch's code allows you to go from a va page to an enclave.
 
-Note that the target ID of the hub can be chosen arbitrarily and does
-not directly correspond to any physical or virtual component of the EC.
-This change is only a code improvement intended for consistency and
-clarity, it does not fix an actual bug.
+Yep.
 
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
- drivers/platform/surface/surface_aggregator_hub.c      | 2 +-
- drivers/platform/surface/surface_aggregator_registry.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> That seems like it's going the other direction from what an OOM-kill
+> would need to do.
 
-diff --git a/drivers/platform/surface/surface_aggregator_hub.c b/drivers/platform/surface/surface_aggregator_hub.c
-index 6abd1efe2088..8b8b80228c14 100644
---- a/drivers/platform/surface/surface_aggregator_hub.c
-+++ b/drivers/platform/surface/surface_aggregator_hub.c
-@@ -349,7 +349,7 @@ static const struct ssam_hub_desc kip_hub = {
- 
- static const struct ssam_device_id ssam_hub_match[] = {
- 	{ SSAM_VDEV(HUB, SAM, SSAM_SSH_TC_KIP, 0x00), (unsigned long)&kip_hub  },
--	{ SSAM_VDEV(HUB, KIP, SSAM_SSH_TC_BAS, 0x00), (unsigned long)&base_hub },
-+	{ SSAM_VDEV(HUB, SAM, SSAM_SSH_TC_BAS, 0x00), (unsigned long)&base_hub },
- 	{ }
- };
- MODULE_DEVICE_TABLE(ssam, ssam_hub_match);
-diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
-index 023f126121d7..296f72d52e6a 100644
---- a/drivers/platform/surface/surface_aggregator_registry.c
-+++ b/drivers/platform/surface/surface_aggregator_registry.c
-@@ -46,7 +46,7 @@ static const struct software_node ssam_node_hub_kip = {
- 
- /* Base device hub (devices attached to Surface Book 3 base). */
- static const struct software_node ssam_node_hub_base = {
--	.name = "ssam:00:00:02:11:00",
-+	.name = "ssam:00:00:01:11:00",
- 	.parent = &ssam_node_root,
- };
- 
--- 
-2.38.1
-
+Providing a backpointer from a VA page to its enclave allows OOM-killing the enclave
+if its cgroup is over the limit but there are no reclaimable pages for said cgroup
+(for SGX's definition of "reclaimable").  I.e. if all of an enclave's "regular"
+pages have been swapped out, the only thing left resident in the EPC will be the
+enclave's VA pages, which are not reclaimable in the kernel's current SGX
+implementation.
