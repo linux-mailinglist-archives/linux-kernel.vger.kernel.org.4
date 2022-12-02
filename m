@@ -2,183 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2316408CB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122096408CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiLBOzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
+        id S233603AbiLBO4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:56:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiLBOzN (ORCPT
+        with ESMTP id S232860AbiLBO4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:55:13 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6F3D2D84
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:55:12 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id t5so4842685vsh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WSR/jOiIMc+WctNrPMvJ0YJJViycQTM52rkCmF02xVw=;
-        b=06pSc1H0ciV1jAKJgXgmctqZVhQowD04Spo8gawSoFMBwoLdRr3+xVVUaYH3wISuR5
-         Doe0jESL71O27cfK+YwkSDsnrBSWSeQTiDM3l5B2630UN1HA5EnvFgfjd/av5yrL1TYq
-         2/XxYbOfOY6ilvzlnpXxnHYHhyJG7xlMc4yqrei3IyeOEAEAnycmGh0tid5S0pmoNxhc
-         cYY4SjkhUODQXMZlkhZI9lXlRkM8Tewf1BI5VQq5aSKfYyQGWuK2g+pPk0ZAFcKm3Puf
-         7NtwLI593ggU6RWmc+Kf8RRfdeUTf52oEJqjxurYTnp6rlUR0ljBdtsnZW6VYNlkSQJA
-         897g==
+        Fri, 2 Dec 2022 09:56:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065BDD2D91
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669992943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oHUHbx8F/8wtzFT6faTcNX7ZhZo5NrRQiROyLPZZhTA=;
+        b=diynUNwpXR6zKOUvF7HjV9e198NJQTDktTxY7nu7KTIYsSXGvTauOCAiYGlzNaZm1gcI5m
+        eRlUV6wWjXRgeM6EhcFtlpQFiuSO3lhui1cdQD36iUwhxN8BvMb+t5LJyI7+BPO0yaB6tc
+        jYa35Zg/hJzz4xXfhq/mKi3Z5SECq/k=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-169-oKz2nJgVOU2BCGxdjkm7uw-1; Fri, 02 Dec 2022 09:55:41 -0500
+X-MC-Unique: oKz2nJgVOU2BCGxdjkm7uw-1
+Received: by mail-wr1-f71.google.com with SMTP id a7-20020adfbc47000000b002421f817287so1136069wrh.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:55:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WSR/jOiIMc+WctNrPMvJ0YJJViycQTM52rkCmF02xVw=;
-        b=KOTA8+GEfAfa5X81Wzau7j7yP3SI+jgV1nfB/LB0LpmRKqSx0WXV9rxT8xnR0dn3Dt
-         glNwp7kB/x0yM3xdyZ3yyJQagk5nkTyc0en4r0obme7eLy1gw57vuBjSRbKgRWS3SsBx
-         AxQitXOl80N0WkD5ba+cGchg3TfziFOYSZEBq/I4fA+fRXIW9RV9K0BHnKBWstXAcGqK
-         KumMxnHdNHZ2RQWA9fNHRkYaOurtQab7TdBgWIBkwJBDHUrBTdQRzJbOQn9YX6M5E8ML
-         ayc6PEc2ZFClZk9wiVtAXhN7lWzMnu4Ppc1AyRA4Tt9jowZrQPTv4sI3MAQWmTQjChrj
-         +72A==
-X-Gm-Message-State: ANoB5pkf0Mk2EnYWU3QS0gBt0sYO7EyWr+T/gQn2Hhm2gBPGLfZNOVI7
-        6mEHlx2JkAkVx00WJpFnn2vRra5PrTl5LuRStQM2ja6QjHBHkQ==
-X-Google-Smtp-Source: AA0mqf6hX/zO75nXkwbRfAu1OudLsJJaNd/2GRkokM3wcSqtTjCy7u8UtweBseFTqOZp5mORdlbnxK8jtFTPUlUbyzI=
-X-Received: by 2002:a67:1c85:0:b0:3b0:92e2:37b0 with SMTP id
- c127-20020a671c85000000b003b092e237b0mr16656024vsc.9.1669992911616; Fri, 02
- Dec 2022 06:55:11 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oHUHbx8F/8wtzFT6faTcNX7ZhZo5NrRQiROyLPZZhTA=;
+        b=PIZxflNlOZc2rn2RQW+t26UkXDEwVpWAyn+eDCN/27z4vuxzg72XZ0RztLHH19wXxC
+         6VNAMoLfoqgGEwzJn1jkwHTCr928XWNH4qNEm9eCWCSp4VtU/gtqBDG3a5PuYkgWnS6L
+         W8JDTPrx4Gv1XFz8Gks+tFJcJ0RUSsGZ2Dwwi+BVwrDXOucL0kPXqvzpagpDeBxgrNmM
+         OR7W9pFfjy1KektlfsjilkMdeY33woB07LllMqhhw6Agn/h+Q3sPxO1hj0Cnueht0grn
+         2MVuyBIuJ72qLS7RDbUARF4enNG+/dc3fO/GIV9hMEuGdQlfMNUh7DLN7yc7PBjcD7b/
+         oEQg==
+X-Gm-Message-State: ANoB5pkW5eTctmFl/OzAVaHewij0j9sPIc4FHzi46HwogUczkiDUJXET
+        A7v/WX9EADxR+9Sh9gRe8Azcux+SdW3aCshR1ElSoCRRy9OCSAvwKVCxSZX5mBpgVr/3qvlhG6q
+        cKSidtYAUASOpPfSaXKPRmi3q
+X-Received: by 2002:a05:6000:12cf:b0:236:6442:2f86 with SMTP id l15-20020a05600012cf00b0023664422f86mr4143803wrx.588.1669992940577;
+        Fri, 02 Dec 2022 06:55:40 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5eX11b1JZOPoseBqgJt9x/1WBiTeKiOnqv3/IZ3HiskKmhV1TftMA7rfJ0rb0BaiAsNkeyeg==
+X-Received: by 2002:a05:6000:12cf:b0:236:6442:2f86 with SMTP id l15-20020a05600012cf00b0023664422f86mr4143793wrx.588.1669992940378;
+        Fri, 02 Dec 2022 06:55:40 -0800 (PST)
+Received: from [192.168.110.200] (82-65-22-26.subs.proxad.net. [82.65.22.26])
+        by smtp.gmail.com with ESMTPSA id a16-20020a5d4570000000b00242109cf587sm7420324wrc.28.2022.12.02.06.55.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 06:55:39 -0800 (PST)
+Message-ID: <c9912b24-f611-29b8-28e1-5e8be0d5ad41@redhat.com>
+Date:   Fri, 2 Dec 2022 15:55:38 +0100
 MIME-Version: 1.0
-References: <20221202140454.273333-1-vincent@systemli.org>
-In-Reply-To: <20221202140454.273333-1-vincent@systemli.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 2 Dec 2022 15:55:00 +0100
-Message-ID: <CAMRc=MdZbV+BE1TD1HXRL7XGgKn-+zcdCiGpXWyA=LYWzd4sfg@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: fix compiling when CONFIG_GPIO_CDEV_V1 is not defined
-To:     Nick Hainke <vincent@systemli.org>
-Cc:     linux-next@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kent Gibson <warthog618@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] error-injection: Add prompt for function error injection
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Chris Mason <clm@meta.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+References: <20221121104403.1545f9b5@gandalf.local.home>
+ <Y3vSQo85ofkfD/L8@zn.tnic>
+ <CAADnVQLJFnu6gARdZ7ckgxeGaSv70jHBiQo+W=zDKO0-ELFGcQ@mail.gmail.com>
+ <Y3ymzAYRyH5IWEe/@zn.tnic> <3fa8ec60-dd96-c41f-ea46-8856bf855949@meta.com>
+ <20221122132905.12a8d5ad@gandalf.local.home>
+ <a53e8c6d-b0e5-72bf-1aba-07609c9cf1bf@meta.com>
+ <20221130143719.07e36277d1471b83e9a1b627@linux-foundation.org>
+ <CAADnVQ+KLXPhowdBZq0PvGOq5tv4ovNtNCvGBXHQBkVbz4UVkg@mail.gmail.com>
+ <CAHk-=wjeq1m=9mU17WzfRQ1W6N0SgKHY-e2J35SpppWwUUBFbQ@mail.gmail.com>
+Content-Language: en-US
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+In-Reply-To: <CAHk-=wjeq1m=9mU17WzfRQ1W6N0SgKHY-e2J35SpppWwUUBFbQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 3:06 PM Nick Hainke <vincent@systemli.org> wrote:
->
-> If CONFIG_GPIO_CDEV_V1 is not defined compiling will fail with:
->
-> drivers/gpio/gpiolib-cdev.c: In function 'linereq_ioctl':
-> drivers/gpio/gpiolib-cdev.c:1468:16: error: implicit declaration of
->  function 'call_ioctl_locked' [-Werror=implicit-function-declaration]
->  1468 |         return call_ioctl_locked(file, cmd, arg, lr->gdev,
->       |                ^~~~~~~~~~~~~~~~~
-> drivers/gpio/gpiolib-cdev.c: In function 'linereq_poll':
-> drivers/gpio/gpiolib-cdev.c:1503:16: error: implicit declaration of
->  function 'call_poll_locked'; did you mean 'wake_up_all_locked'?
->  [-Werror=implicit-function-declaration]
->  1503 |         return call_poll_locked(file, wait, lr->gdev,
->                                       linereq_poll_unlocked);
->       |                ^~~~~~~~~~~~~~~~
->       |                wake_up_all_locked
-> drivers/gpio/gpiolib-cdev.c: In function 'linereq_read':
-> drivers/gpio/gpiolib-cdev.c:1566:16: error: implicit declaration of
->  function 'call_read_locked'; did you mean 'xa_head_locked'?
->  [-Werror=implicit-function-declaration]
->  1566 |         return call_read_locked(file, buf, count, f_ps, lr->gdev,
->       |                ^~~~~~~~~~~~~~~~
->       |                xa_head_locked
->
-> Move "call_poll_locked", "call_ioctl_locked", "call_read_locked" and
-> the necessary typedefs "poll_fn", "ioctl_fn", "read_fn" in front of the
-> ifdef-statement checking CONFIG_GPIO_CDEV_V1.
->
-> Fixes: 98d8b93c6171 ("gpiolib: protect the GPIO device against being dropped while in use by user-space")
->
-> Signed-off-by: Nick Hainke <vincent@systemli.org>
-> ---
->  drivers/gpio/gpiolib-cdev.c | 50 ++++++++++++++++++-------------------
->  1 file changed, 25 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> index e8079c1d2e1b..067e26a00775 100644
-> --- a/drivers/gpio/gpiolib-cdev.c
-> +++ b/drivers/gpio/gpiolib-cdev.c
-> @@ -61,31 +61,6 @@ static_assert(IS_ALIGNED(sizeof(struct gpio_v2_line_values), 8));
->   * GPIO line handle management
->   */
 
-This comment refers to the below code so should be moved too. Don't
-worry about it, I'll resend my series with that included.
 
-Bartosz
+On 12/1/22 22:13, Linus Torvalds wrote:
+> On Thu, Dec 1, 2022 at 8:59 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>>
+>> The hid-bpf framework depends on it.
+> 
+> Ok, this is completely unacceptably disgusting hack.
 
->
-> -#ifdef CONFIG_GPIO_CDEV_V1
-> -/**
-> - * struct linehandle_state - contains the state of a userspace handle
-> - * @gdev: the GPIO device the handle pertains to
-> - * @label: consumer label used to tag descriptors
-> - * @descs: the GPIO descriptors held by this handle
-> - * @num_descs: the number of descriptors held in the descs array
-> - */
-> -struct linehandle_state {
-> -       struct gpio_device *gdev;
-> -       const char *label;
-> -       struct gpio_desc *descs[GPIOHANDLES_MAX];
-> -       u32 num_descs;
-> -};
-> -
-> -#define GPIOHANDLE_REQUEST_VALID_FLAGS \
-> -       (GPIOHANDLE_REQUEST_INPUT | \
-> -       GPIOHANDLE_REQUEST_OUTPUT | \
-> -       GPIOHANDLE_REQUEST_ACTIVE_LOW | \
-> -       GPIOHANDLE_REQUEST_BIAS_PULL_UP | \
-> -       GPIOHANDLE_REQUEST_BIAS_PULL_DOWN | \
-> -       GPIOHANDLE_REQUEST_BIAS_DISABLE | \
-> -       GPIOHANDLE_REQUEST_OPEN_DRAIN | \
-> -       GPIOHANDLE_REQUEST_OPEN_SOURCE)
-> -
->  typedef __poll_t (*poll_fn)(struct file *, struct poll_table_struct *);
->  typedef long (*ioctl_fn)(struct file *, unsigned int, unsigned long);
->  typedef ssize_t (*read_fn)(struct file *, char __user *,
-> @@ -133,6 +108,31 @@ static ssize_t call_read_locked(struct file *file, char __user *buf,
->         return ret;
->  }
->
-> +#ifdef CONFIG_GPIO_CDEV_V1
-> +/**
-> + * struct linehandle_state - contains the state of a userspace handle
-> + * @gdev: the GPIO device the handle pertains to
-> + * @label: consumer label used to tag descriptors
-> + * @descs: the GPIO descriptors held by this handle
-> + * @num_descs: the number of descriptors held in the descs array
-> + */
-> +struct linehandle_state {
-> +       struct gpio_device *gdev;
-> +       const char *label;
-> +       struct gpio_desc *descs[GPIOHANDLES_MAX];
-> +       u32 num_descs;
-> +};
-> +
-> +#define GPIOHANDLE_REQUEST_VALID_FLAGS \
-> +       (GPIOHANDLE_REQUEST_INPUT | \
-> +       GPIOHANDLE_REQUEST_OUTPUT | \
-> +       GPIOHANDLE_REQUEST_ACTIVE_LOW | \
-> +       GPIOHANDLE_REQUEST_BIAS_PULL_UP | \
-> +       GPIOHANDLE_REQUEST_BIAS_PULL_DOWN | \
-> +       GPIOHANDLE_REQUEST_BIAS_DISABLE | \
-> +       GPIOHANDLE_REQUEST_OPEN_DRAIN | \
-> +       GPIOHANDLE_REQUEST_OPEN_SOURCE)
-> +
->  static int linehandle_validate_flags(u32 flags)
->  {
->         /* Return an error if an unknown flag is set */
-> --
-> 2.38.1
->
+[foreword: I have read the other replies, just replying to this one
+because it is the explicit ask for a fix]
+
+> 
+> That needs fixing.
+> 
+>> Either hid-bpf or bpf core can add
+>> "depends on FUNCTION_ERROR_INJECTION"
+> 
+> No, it needs to be narrowed down a lot. Nobody sane wants error
+> injection just because they want some random HID thing.
+> 
+> And no, BPF shouldn't need it either.
+> 
+> This needs to be narrowed down to the point where HID can say "I want
+> *this* particular call to be able to be a bpf call.
+
+So, would the following be OK? I still have a few concerns I'll explain
+after the patch.
+
+---
+ From 1290561304eb3e48e1e6d727def13c16698a26f1 Mon Sep 17 00:00:00 2001
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date: Fri, 2 Dec 2022 12:40:29 +0100
+Subject: [PATCH] bpf: do not rely on ALLOW_ERROR_INJECTION for fmod_ret
+
+The current way of expressing that a non-bpf kernel component is willing
+to accept that bpf programs can be attached to it and that they can change
+the return value is to abuse ALLOW_ERROR_INJECTION.
+This is debated in the link below, and the result is that it is not a
+reasonable thing to do.
+
+An easy fix is to keep the list of valid functions in the BPF verifier
+in the same way we keep the non-sleepable ALLOW_ERROR_INJECTION ones.
+However, this kind of defeat the point of being able to add bpf APIs in
+non-BPF subsystems, so we probably need to rethink that part.
+
+
+Link: https://lore.kernel.org/all/20221121104403.1545f9b5@gandalf.local.home/
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
+  drivers/hid/bpf/hid_bpf_dispatch.c  |  2 --
+  drivers/hid/bpf/hid_bpf_jmp_table.c |  1 -
+  kernel/bpf/verifier.c               | 20 +++++++++++++++++++-
+  3 files changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+index 3c989e74d249..d1f6a1d4ae60 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -44,7 +44,6 @@ __weak noinline int hid_bpf_device_event(struct hid_bpf_ctx *ctx)
+  {
+  	return 0;
+  }
+-ALLOW_ERROR_INJECTION(hid_bpf_device_event, ERRNO);
+  
+  u8 *
+  dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type, u8 *data,
+@@ -105,7 +104,6 @@ __weak noinline int hid_bpf_rdesc_fixup(struct hid_bpf_ctx *ctx)
+  {
+  	return 0;
+  }
+-ALLOW_ERROR_INJECTION(hid_bpf_rdesc_fixup, ERRNO);
+  
+  u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+  {
+diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
+index 579a6c06906e..207972b028d9 100644
+--- a/drivers/hid/bpf/hid_bpf_jmp_table.c
++++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
+@@ -103,7 +103,6 @@ __weak noinline int __hid_bpf_tail_call(struct hid_bpf_ctx *ctx)
+  {
+  	return 0;
+  }
+-ALLOW_ERROR_INJECTION(__hid_bpf_tail_call, ERRNO);
+  
+  int hid_bpf_prog_run(struct hid_device *hdev, enum hid_bpf_prog_type type,
+  		     struct hid_bpf_ctx_kern *ctx_kern)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 225666307bba..4eac440d659f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24,6 +24,7 @@
+  #include <linux/bpf_lsm.h>
+  #include <linux/btf_ids.h>
+  #include <linux/poison.h>
++#include <linux/hid_bpf.h>
+  
+  #include "disasm.h"
+  
+@@ -14827,6 +14828,20 @@ static int check_non_sleepable_error_inject(u32 btf_id)
+  	return btf_id_set_contains(&btf_non_sleepable_error_inject, btf_id);
+  }
+  
++/* Manually tag fmod_ret functions to not misuse ALLOW_ERROR_INJECTION */
++BTF_SET_START(btf_modify_return)
++#if CONFIG_HID_BPF
++BTF_ID(func, hid_bpf_device_event)
++BTF_ID(func, hid_bpf_rdesc_fixup)
++BTF_ID(func, __hid_bpf_tail_call)
++#endif /* CONFIG_HID_BPF */
++BTF_SET_END(btf_modify_return)
++
++static int check_function_modify_return(u32 btf_id)
++{
++	return btf_id_set_contains(&btf_modify_return, btf_id);
++}
++
+  int bpf_check_attach_target(struct bpf_verifier_log *log,
+  			    const struct bpf_prog *prog,
+  			    const struct bpf_prog *tgt_prog,
+@@ -15047,7 +15062,10 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+  				bpf_log(log, "can't modify return codes of BPF programs\n");
+  				return -EINVAL;
+  			}
+-			ret = check_attach_modify_return(addr, tname);
++			ret = -EINVAL;
++			if (!check_function_modify_return(btf_id) ||
++			    check_attach_modify_return(addr, tname))
++				ret = 0;
+  			if (ret) {
+  				bpf_log(log, "%s() is not modifiable\n", tname);
+  				return ret;
+-- 
+2.38.1
+---
+
+While this patch removes the need for ALLOW_ERROR_INJECTION it has a
+couple of drawbacks:
+- suddenly we lose the nice separation of concerns between bpf core and
+its users (HID in my case)
+- it would need to be changed in 6.3 simply because of the previous
+point, so it is just a temporary fix.
+
+So I am not sure if this would qualify HID-BPF for 6.2. Please speak up.
+
+> 
+> Stop this crazy "bpf / hid needs error injection" when that then
+> implies a _lot_ more than that, plus is documented to be something
+> entirely different anyway.
+> 
+> I realize that HID has mis-used the "we could just use error injection
+> here to instead insert random bpf code", but that's a complete hack.
+
+Just to be fair, HID only happens to be the first on the front line for
+this particular problem. I was told to use that mis-use because that was
+probably what was available, and adding that decorator didn't seem to be
+such a big deal to me.
+
+But with a bigger picture in mind, I am happy we get to that point now
+before it is merged because I know that behind me there are a few other
+people in other subsystems also willing to take advantage of BPF in
+their own subsystem. And at Plumbers, everybody was saying: look at the
+HID-BPF patch series.
+
+Cheers,
+Benjamin
+
+> 
+> Plus it seems to happily not even have made it into mainline anyway,
+> and only exists in linux-next. Let's head that disgusting hack off at
+> the pass.
+> 
+> I'm going to apply Steven's patch, because honestly, we need to fix
+> this disgusting mess *before* it gets to mainline, rather than say
+> "oh, we already have broken users in next, so let's bend over
+> backwards for that".
+> 
+> The code is called "error injection", not "random bpf extension"
+> 
+>                 Linus
+> 
+
