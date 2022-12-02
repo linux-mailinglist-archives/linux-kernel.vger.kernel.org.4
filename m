@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882C6640630
+	by mail.lfdr.de (Postfix) with ESMTP id 3C43164062F
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiLBLxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S233155AbiLBLxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:53:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233303AbiLBLwp (ORCPT
+        with ESMTP id S233042AbiLBLwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:52:45 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7D81263C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:52:43 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x2so6204578edd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:52:43 -0800 (PST)
+        Fri, 2 Dec 2022 06:52:46 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1547F2A961
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:52:44 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id s5so6104952edc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:52:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vcT8YWVtzB1GH3wOdz9aZTQd5ehiQWJpYZBWZtycvm8=;
-        b=n6rSQm2scPUp8G7dkrFMvAlrmDdT5HqkEFLp5tVgjnDhobTyndc90glH9j1b0mNhM4
-         PlCdqyRunGFcWaw40v1XO1FSXh9aTfLBBrupdRpb73kotN52w4f1n2ij3hFHRPRX2wa4
-         kacKVYbnJWeQHWjvGMvFfVlMplLd/isdSbjz2AqBN0jDpGu7R2+DvXsdJd7fNvJf4Zhq
-         3kTdiH0gyp40Vejo7JRT3g8aEMXlLccp97tvG1j6mQExD9L9JFARULn1LNhUHNas2AKl
-         vp6Xn+JSyYqlVspuDjrELJGnySjWwMg2YjB61h3wwHglmL06xvpYDgkkhBaBCSJ8wvgk
-         0mjw==
+        bh=NbApf1anPXhkyL1eMhU3x4CauZkX++vBii8PykYLja0=;
+        b=Zaz1ET+G1SWchZ+VgoJoMcRplKphEziazSa2ThOiA/jFoSYOSbYC/0JWmbk7indYGE
+         ZNKMyOgAmUOqNDEv9TUk/yPiJfFZkIKOcnLiuk7lFX+eXBoL6pMBgUrEf3KpCCqeJ/qo
+         5exqrQ1zKJlL05VIAa7DhkMb1bOyy9MePplKkiSQQh12oUA/OthYWtBMqG8Y/Fm2BMyi
+         WlMKCLlUyCo+9gj9XV4nNWp1GoeRH4V3xkcy4dssda4Ap2EKC4gQoaH6o6deopLDVDPl
+         2YjPZ0RBftgHbuCkasZZbFvPihe9aeRTPIU1M+nLd/Ccoj7JLw1YSDnIs/jDREcL/5yG
+         siUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=vcT8YWVtzB1GH3wOdz9aZTQd5ehiQWJpYZBWZtycvm8=;
-        b=NOBo1gsVtETHbjjmrnYVE9tsudLMHbQnbzmv6Zhw2HcXjHt5aeoacXX3H5eYV8EuM8
-         QH2hb9RMa1gxrYFSYKZGUS+Jox6yrsjLdChpHVJsSvWkbcfJR+UUEw81pvY0Ba9KvD8c
-         N3xEuQq2di9DJn2UXGHm7V/ehbRFZwtyATw6DqvKLVbDHBfULCyBjLiMBBNQKhuxsi6Q
-         0XzNAYZ1+C9/Qvc8FNvAjDoYuI/VRSHFCpCjf+/K2jj7c9zVJwJBchf5AcPN+0SCRhXs
-         DHABmtebHRStWOJIjuTdAyn7sYcjm+bwH1K5H3HyETbdynIh6VBilPngpxKAzS+7nPo+
-         KpHw==
-X-Gm-Message-State: ANoB5pn9qyoBTioEpBFo1rVHe3wXPznnLju+B+KGUUT6KlR/iYVGJ+Zf
-        gH5EFc0pa3MRfoVWWvaZXgo=
-X-Google-Smtp-Source: AA0mqf7z5O8rS3mctV42J+CAKDbBvQEW1qpHWHU4cS8Gyjn6lrLWf90VBV+FexZaVWvv37D7WFdRNw==
-X-Received: by 2002:a05:6402:1f89:b0:458:caec:8f1e with SMTP id c9-20020a0564021f8900b00458caec8f1emr62952822edc.280.1669981962298;
-        Fri, 02 Dec 2022 03:52:42 -0800 (PST)
+        bh=NbApf1anPXhkyL1eMhU3x4CauZkX++vBii8PykYLja0=;
+        b=Yv9q1AxZLP9s3ai8THmy5NhkaLU98+A2u/kjbQ2aCZMb3CfGOU6tJZ7O1FmX+rDGKL
+         aJTfs84MrnLpczAMH8bFpiVQQ+ndET4chkNRL0aiw8FudUQzPoogWVKLIOv/p8oSv53W
+         4fLoJoW94kBUbJzGy0tg7R0h0qiyH7722sZbXM+bbU4sjRyHWfLcw2B9B5O146EiDBPu
+         9Z8Ycz2/mTOCtUbILsnLMP33OzgkAB+mKwTOJd19o0PmU+0rbaBOl1nLmDyLRJNAFhCg
+         qLkgHpoJj87sG7FiIAcmteuTKu726VTx0fXwGqPzZLx0HIssf3rWN94C7JRI3mtsom8A
+         hTvw==
+X-Gm-Message-State: ANoB5pmV2tHasZySYDVg/REuDJf/6kCYlWkbktTLkiEOFmMtj6OHq7ez
+        8Vh6F89NB+3DwOGyc39xjm8=
+X-Google-Smtp-Source: AA0mqf5u8WJUjMkgmdOQWN0p+3lPuMNPUEsyeQq7hpK3juNAdPo9O2CUMmzQw/QKtlOmoJlwzM+H5w==
+X-Received: by 2002:a05:6402:2404:b0:467:67e1:ca61 with SMTP id t4-20020a056402240400b0046767e1ca61mr12816866eda.27.1669981963506;
+        Fri, 02 Dec 2022 03:52:43 -0800 (PST)
 Received: from cizrna.home (cst-prg-44-69.cust.vodafone.cz. [46.135.44.69])
-        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b007c0bb571da5sm1206762ejb.41.2022.12.02.03.52.41
+        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b007c0bb571da5sm1206762ejb.41.2022.12.02.03.52.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 03:52:41 -0800 (PST)
+        Fri, 02 Dec 2022 03:52:43 -0800 (PST)
 Sender: Tomeu Vizoso <tomeu.vizoso@gmail.com>
 From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     italonicola@collabora.com,
@@ -63,9 +63,9 @@ Cc:     italonicola@collabora.com,
         GPU IP),
         dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
         IP), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v6 5/8] drm/etnaviv: Add nn_core_count to chip feature struct
-Date:   Fri,  2 Dec 2022 12:52:17 +0100
-Message-Id: <20221202115223.39051-6-tomeu.vizoso@collabora.com>
+Subject: [PATCH v6 6/8] drm/etnaviv: Warn when probing on NPUs
+Date:   Fri,  2 Dec 2022 12:52:18 +0100
+Message-Id: <20221202115223.39051-7-tomeu.vizoso@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221202115223.39051-1-tomeu.vizoso@collabora.com>
 References: <20221202115223.39051-1-tomeu.vizoso@collabora.com>
@@ -82,65 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We will use these for differentiating between GPUs and NPUs, as the
-downstream driver does.
+Userspace is still not making full use of the hardware, so we don't know
+yet if changes to the UAPI won't be needed. Warn about it.
 
 Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_gpu.h  | 3 +++
- drivers/gpu/drm/etnaviv/etnaviv_hwdb.c | 4 ++++
- 2 files changed, 7 insertions(+)
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-index 85eddd492774..c8f3ad2031ce 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-@@ -50,6 +50,9 @@ struct etnaviv_chip_identity {
- 	/* Number of shader cores. */
- 	u32 shader_core_count;
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+index 37018bc55810..3cbc82bbf8d4 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+@@ -765,6 +765,10 @@ int etnaviv_gpu_init(struct etnaviv_gpu *gpu)
+ 		goto fail;
+ 	}
  
-+	/* Number of Neural Network cores. */
-+	u32 nn_core_count;
++	if (gpu->identity.nn_core_count > 0)
++		dev_warn(gpu->dev, "etnaviv has been instantiated on a NPU, "
++                                   "for which the UAPI is still experimental\n");
 +
- 	/* Size of the vertex cache. */
- 	u32 vertex_cache_size;
- 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
-index f2fc645c7956..44df273a5aae 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_hwdb.c
-@@ -16,6 +16,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
- 		.register_max = 64,
- 		.thread_count = 128,
- 		.shader_core_count = 1,
-+		.nn_core_count = 0,
- 		.vertex_cache_size = 8,
- 		.vertex_output_buffer_size = 1024,
- 		.pixel_pipes = 1,
-@@ -47,6 +48,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
- 		.register_max = 64,
- 		.thread_count = 512,
- 		.shader_core_count = 2,
-+		.nn_core_count = 0,
- 		.vertex_cache_size = 16,
- 		.vertex_output_buffer_size = 1024,
- 		.pixel_pipes = 1,
-@@ -78,6 +80,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
- 		.register_max = 64,
- 		.thread_count = 512,
- 		.shader_core_count = 2,
-+		.nn_core_count = 0,
- 		.vertex_cache_size = 16,
- 		.vertex_output_buffer_size = 1024,
- 		.pixel_pipes = 1,
-@@ -109,6 +112,7 @@ static const struct etnaviv_chip_identity etnaviv_chip_identities[] = {
- 		.register_max = 64,
- 		.thread_count = 1024,
- 		.shader_core_count = 4,
-+		.nn_core_count = 0,
- 		.vertex_cache_size = 16,
- 		.vertex_output_buffer_size = 1024,
- 		.pixel_pipes = 2,
+ 	/* Exclude VG cores with FE2.0 */
+ 	if (gpu->identity.features & chipFeatures_PIPE_VG &&
+ 	    gpu->identity.features & chipFeatures_FE20) {
 -- 
 2.38.1
 
