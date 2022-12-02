@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F1C64013E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C2F64013F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 08:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiLBHuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 02:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S231367AbiLBHu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 02:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiLBHuq (ORCPT
+        with ESMTP id S232465AbiLBHus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 02:50:46 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2DDA1C19;
+        Fri, 2 Dec 2022 02:50:48 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF545A054A;
         Thu,  1 Dec 2022 23:50:37 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fy7XM8SkN4viO2AVys6Gg3N+08XaDNxK2cy03uqwK1wZNKXM8epjX7ezGS4ajUWdVfzTmUoBzynHorQ9hEqt3HtIqIttZTsPRZDwnAUBkSNeKrO+k6IGr09TbaV3y2O2TwkJIxTFNrChwxiMMSAOk7C1Gu7s598QpSmjObLalZgs3fI91F9hcX/xiFUrt/Qrw7naAZ/sKwrBksH7oDmTBgLfx7p9l+z4B+/Qa+Rl/LauwygkyKIlbuOJPESk/EQpJqh8VahX56k5n9P+XQvYCyWx28eGTHmNPkS7vyugpTi/PXCUIOxM3vk7RXYpnfoU3C3xPxJaqQV/fp7scI+ZVA==
+ b=iYG7UGc3iR0y7VJYKnuUqNd+p28sCy/o2J8qEEvBqAC9mJu4e9nkhDkhDg3cp5FyWzxq8KO4ZRuFweYzXLDOVD549IERwfgu6R0w9NGaCZ8WArcA5NsFsgcK2/YuDeBw6m0P5lVOuQsNTrdynFSRLHIKorQxhDGM58JRdbQih6438/u8RQwzRzinFn9fN6KO9RwmHgFqshQpPuydBcMSJAWxlpgC7wV2LTJmud1kMs9dcgr3X9DZqtKZm/blnaD5TLQH8wLqTsHXR3l8tGXaicN8lNxfVBhUhFZx6kYl9LEZnop91tK1JzW1Ye6WjspS1byyaKJzYjZX2sX6O8iY8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/lHyokvSSTNMOUXwriwhOhupYBjdKujambfB0vTM8Zk=;
- b=MEs3DhY0atxhkj8G8j9xln/Y31yFZAIMC8gtNv9yICsyBgPSzS3vFJVXNsbpgTbERDMuiRNVzcwm7LBG7hVn9et9+m+btFivdoHPZJDHhEZGyKeF/AbS0+oDWlrCjk5yXhECty54PlQL0cvhcKWJTPeDueg7wIR7mjxYYKxPPLyz2GNbKWNyFs64TniIQLUEU7mj8bkb9MBUVovw6+WRaREMuDKXLGyKMxafoZPXy4b9oteAfrMK5BP51vv0yzr6sNqsN2ei0VCS3QAw4AGITdZrp/RDcpv7lShIMlhFE4QASpY7fz8/Oxiyt8IY6ooo/kxZlKFsnePJOBCTYV+g5A==
+ bh=Q+C4iUKjwXwEm0UuOYNQXdTkPvGvjj1IuenIn3mTcD4=;
+ b=glVp9sgAIIUOpnuLAPHpG3lsiO+rkiUK0zVPfOSC1tY5Fl4XSvrefFnfCkZDM4wX5jlnj9gVEEePDCuOfLLr11V9IQilSYTl1N8sOHM8GUTq/u5wueQkDiS2QqntR94hBOBi0oncG5coTZFLPlFmBWoBMO0PBEK/ZTnUbv19gIzSes62GuMmNCLRU4OQUYE2PuMl71p3OvB7ApA/9YqG2/UPIP6DNdlV5TD91C68FHiiaF1AaRTOd6lHi3WI6SeLovpFK7IkYGZDcyg7X1dUNMt+cuP1hQjhJOdwV05uKqwh0UWhmh6UJ6LksWCa4oVdwA1mixv0zAOE3S4XNAOhBw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/lHyokvSSTNMOUXwriwhOhupYBjdKujambfB0vTM8Zk=;
- b=zO85ZZfGY4cpW7XIkWoAOiDjQoDPahFvcUezO7dsP6AVSV8euwlZ6Y6yLjLe+MSfHIfbws7L0pQdA2scUNhXLVfcZRhJYJBkgcfoCOp8zft14Oq7pcmnWFCqySWJ2OjAk9Olqcj8HNeehle1HwTv4sgFJWWBWX9ByXvGABp/Suw=
-Received: from DM6PR08CA0049.namprd08.prod.outlook.com (2603:10b6:5:1e0::23)
- by DM6PR12MB4911.namprd12.prod.outlook.com (2603:10b6:5:20e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Fri, 2 Dec
- 2022 07:50:34 +0000
+ bh=Q+C4iUKjwXwEm0UuOYNQXdTkPvGvjj1IuenIn3mTcD4=;
+ b=C1DnVSJeDOxJqyEWHHvT3gP6+Fk0zFE8Yj5WUX5C6wycBmOLqbhPz1ljcrmf+Jb7MZdyyyIkk89Rtekkd8qrV/gLKtyw2b63zGa1qTa/kYAdBKmrptKHfaoz/tZT2Uc2pcilkvZCsTxD4ORSP7UJAY59PeuYNd0tH2iHWhyVD/s=
+Received: from DM6PR08CA0040.namprd08.prod.outlook.com (2603:10b6:5:1e0::14)
+ by DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.8; Fri, 2 Dec 2022 07:50:35 +0000
 Received: from DM6NAM11FT065.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1e0:cafe::da) by DM6PR08CA0049.outlook.office365.com
- (2603:10b6:5:1e0::23) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:5:1e0:cafe::d5) by DM6PR08CA0040.outlook.office365.com
+ (2603:10b6:5:1e0::14) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8 via Frontend
- Transport; Fri, 2 Dec 2022 07:50:34 +0000
+ Transport; Fri, 2 Dec 2022 07:50:35 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +48,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DM6NAM11FT065.mail.protection.outlook.com (10.13.172.109) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5880.10 via Frontend Transport; Fri, 2 Dec 2022 07:50:34 +0000
+ 15.20.5880.10 via Frontend Transport; Fri, 2 Dec 2022 07:50:35 +0000
 Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 2 Dec 2022 01:50:28 -0600
+ 15.1.2375.34; Fri, 2 Dec 2022 01:50:31 -0600
 From:   Perry Yuan <perry.yuan@amd.com>
 To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
         <ray.huang@amd.com>, <viresh.kumar@linaro.org>
@@ -61,9 +60,9 @@ CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
         <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
         <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
         <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 02/11] Documentation: amd-pstate: add EPP profiles introduction
-Date:   Fri, 2 Dec 2022 15:47:10 +0800
-Message-ID: <20221202074719.623673-3-perry.yuan@amd.com>
+Subject: [PATCH v6 03/11] cpufreq: intel_pstate: use common macro definition for Energy Preference Performance(EPP)
+Date:   Fri, 2 Dec 2022 15:47:11 +0800
+Message-ID: <20221202074719.623673-4-perry.yuan@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221202074719.623673-1-perry.yuan@amd.com>
 References: <20221202074719.623673-1-perry.yuan@amd.com>
@@ -75,23 +74,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT065:EE_|DM6PR12MB4911:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a73cf73-2b3c-4731-9b24-08dad439e525
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT065:EE_|DM8PR12MB5445:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca69a75b-3585-41cc-d23e-08dad439e589
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W1lJuE/DxaemZlGl7Jq0QKGAedRxKiOJ/Q3G9eHCucPAVBs6PUT1DtHhxlzivXXm/bkTOI0CNxh8B3YP6fAncOhmZYGvLeyxC9WMxHENu5Ez9anBXrg7cpS+AXNoCKVB8A8bI9WItHHN1OSGsNEuue+uPArOwaNNPlmhSsyuPrpswjtQmR4CyP5vftZG3vYRy98wcPZKU5Kt3oOF3RY6vyPlPu3X11VcYrXcRMbUepW5qPEfVTC+T4Ik4uVw4fdr1CGi8xSJ1iaUjmvO2zpccypQQWP3F7Y7GwaIbJqu6I0NzsJR3oe8HinRz4CIEBbU9M7hm6yIk1TeRYfh4hYiLeaCnqMN3Wu3a1wR5wymqnogZdWK+u6G7itTVSAfJeqhmnDqwtMqVVIcrPIQR5+NraX0/dHm77le1gObYlyX16hVL1GVzI5ZfMlg6FLPMHAvfDDDxxoS7kPUf5egLPS9OLwgbV/t2bybK0lQihPdL1GUAh3JW3KuGSA2GJj0yHv65xcLkYJ3qMPwmL90Kp4P/EwSKeMwFQhw28fbezQNkFKY3NIQr9hpcALBxSFsj/12mySL4KTm+uCMGlBK1PUwNkGDi9X8OS2kWp/PNkV8fwrtUrnuwz3pwfbXswy2fxWJWzPqUmg4dK1ddRlVRErCMDslUhLbE9FUbtEBQUOoFZAOKJh4ZIQfZ+7AGbcGdUHAATWc0o84u+Gjjabj+gQIEkD/82Tya5AOf4a+ngSYVuM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(136003)(376002)(451199015)(46966006)(36840700001)(40470700004)(336012)(2616005)(16526019)(1076003)(2906002)(40460700003)(54906003)(316002)(110136005)(81166007)(36756003)(478600001)(356005)(86362001)(40480700001)(7696005)(6666004)(82740400003)(83380400001)(26005)(82310400005)(47076005)(426003)(186003)(44832011)(5660300002)(36860700001)(8936002)(41300700001)(8676002)(70586007)(4326008)(70206006)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: s2xGcXB04kYD+BkrAFFKCIWvgXhNf2rF3Fbp63+bSiuOjIAQ77F86+DlHrQPJXg/yegace0kIiHOdIpjZmQtEADMvJpfNGGl7OJsY0eqbUl6Zpm5MHaz0LHcHSRs3dFBAmJq+/yIE5rXSf2nEQM4M4quW8kq3LE4dKLXPg7aC2IvjGUcMoFWOkx2lq/zjDI57veAsiWdtf1ST9KzNDKoQf45955g66mcA0s+qiX2D/9+U/Lqc0cE2F2dCJWW3Bm8ZCHOSzBH4H/mxJgTrERhvDor1f7a2LAMApCLtvBNx29GABWHXBHQY5rqA1zirRwyq4WctQBhS3E0QX4xld+2oHVjbe7PJvXNYVah2612jL9zw7HDYy80jAr0DHPryv0dYKmuc4twYmJ0lwmTYSOEwPu7ogOCMm2Iqz4J2aNNoOamSA8I262NRV2e7bwBy1SQEBGxuunj2692UUc4/lDy9Ace1+qFyhnVe97+/xFpNx03tfQx+44l4E6o5hHqpmDMPVMDuxWz6ex+PNhRnnYhULZqg+hEqIt/tuPTrshT9buAmy08GnsLrNQsQXcPnp0lt/Zmi/rDUy1RaX/XzFcfRtNQ+EGjDNqVykz/H+4rstPmR/e/9htFXGMQdFbN0tMN+AMwvxPHOg4LmosM4pxOQrLqdD9gXS/aJaQcDlPRoB3MfuD8a9A7BX9KuUQggsPvSlHmnBKRgbD5bCt23zpZCURIRcqdeVyuhWA0ZpOxtsU=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199015)(36840700001)(46966006)(40470700004)(2906002)(44832011)(5660300002)(41300700001)(8936002)(8676002)(70586007)(316002)(110136005)(4326008)(54906003)(70206006)(36860700001)(36756003)(6666004)(1076003)(336012)(16526019)(82310400005)(478600001)(86362001)(47076005)(26005)(186003)(2616005)(426003)(82740400003)(40460700003)(83380400001)(7696005)(356005)(81166007)(40480700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 07:50:34.8236
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 07:50:35.4804
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a73cf73-2b3c-4731-9b24-08dad439e525
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca69a75b-3585-41cc-d23e-08dad439e589
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT065.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4911
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5445
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -102,61 +101,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Perry Yuan <Perry.Yuan@amd.com>
+make the energy preference performance strings and profiles using one
+common header for intel_pstate driver, then the amd_pstate epp driver can
+use the common header as well. This will simpify the intel_pstate and
+amd_pstate driver.
 
-The patch add AMD pstate EPP feature introduction and what EPP
-preference supported for AMD processors.
-
-User can get supported list from
-energy_performance_available_preferences attribute file, or update
-current profile to energy_performance_preference file
-
-1) See all EPP profiles
-$ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
-default performance balance_performance balance_power power
-
-2) Check current EPP profile
-$ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference
-performance
-
-3) Set new EPP profile
-$ sudo bash -c "echo power > /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference"
-
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 ---
- Documentation/admin-guide/pm/amd-pstate.rst | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/x86/include/asm/msr-index.h |  4 ---
+ drivers/cpufreq/intel_pstate.c   | 37 +--------------------
+ include/linux/cpufreq_common.h   | 56 ++++++++++++++++++++++++++++++++
+ 3 files changed, 57 insertions(+), 40 deletions(-)
+ create mode 100644 include/linux/cpufreq_common.h
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 06e23538f79c..33ab8ec8fc2f 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -262,6 +262,25 @@ lowest non-linear performance in `AMD CPPC Performance Capability
- <perf_cap_>`_.)
- This attribute is read-only.
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 4a2af82553e4..3983378cff5b 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -472,10 +472,6 @@
+ #define HWP_MAX_PERF(x) 		((x & 0xff) << 8)
+ #define HWP_DESIRED_PERF(x)		((x & 0xff) << 16)
+ #define HWP_ENERGY_PERF_PREFERENCE(x)	(((unsigned long long) x & 0xff) << 24)
+-#define HWP_EPP_PERFORMANCE		0x00
+-#define HWP_EPP_BALANCE_PERFORMANCE	0x80
+-#define HWP_EPP_BALANCE_POWERSAVE	0xC0
+-#define HWP_EPP_POWERSAVE		0xFF
+ #define HWP_ACTIVITY_WINDOW(x)		((unsigned long long)(x & 0xff3) << 32)
+ #define HWP_PACKAGE_CONTROL(x)		((unsigned long long)(x & 0x1) << 42)
  
-+``energy_performance_available_preferences``
-+
-+A list of all the supported EPP preferences that could be used for
-+``energy_performance_preference`` on this system.
-+These profiles represent different hints that are provided
-+to the low-level firmware about the user's desired energy vs efficiency
-+tradeoff.  ``default`` represents the epp value is set by platform
-+firmware. This attribute is read-only.
-+
-+``energy_performance_preference``
-+
-+The current energy performance preference can be read from this attribute.
-+and user can change current preference according to energy or performance needs
-+Please get all support profiles list from
-+``energy_performance_available_preferences`` attribute, all the profiles are
-+integer values defined between 0 to 255 when EPP feature is enabled by platform
-+firmware, if EPP feature is disabled, driver will ignore the written value
-+This attribute is read-write.
-+
- Other performance and frequency values can be read back from
- ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index ad9be31753b6..65036ca21719 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -25,6 +25,7 @@
+ #include <linux/acpi.h>
+ #include <linux/vmalloc.h>
+ #include <linux/pm_qos.h>
++#include <linux/cpufreq_common.h>
+ #include <trace/events/power.h>
  
+ #include <asm/cpu.h>
+@@ -628,42 +629,6 @@ static int intel_pstate_set_epb(int cpu, s16 pref)
+ 	return 0;
+ }
+ 
+-/*
+- * EPP/EPB display strings corresponding to EPP index in the
+- * energy_perf_strings[]
+- *	index		String
+- *-------------------------------------
+- *	0		default
+- *	1		performance
+- *	2		balance_performance
+- *	3		balance_power
+- *	4		power
+- */
+-
+-enum energy_perf_value_index {
+-	EPP_INDEX_DEFAULT = 0,
+-	EPP_INDEX_PERFORMANCE,
+-	EPP_INDEX_BALANCE_PERFORMANCE,
+-	EPP_INDEX_BALANCE_POWERSAVE,
+-	EPP_INDEX_POWERSAVE,
+-};
+-
+-static const char * const energy_perf_strings[] = {
+-	[EPP_INDEX_DEFAULT] = "default",
+-	[EPP_INDEX_PERFORMANCE] = "performance",
+-	[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
+-	[EPP_INDEX_BALANCE_POWERSAVE] = "balance_power",
+-	[EPP_INDEX_POWERSAVE] = "power",
+-	NULL
+-};
+-static unsigned int epp_values[] = {
+-	[EPP_INDEX_DEFAULT] = 0, /* Unused index */
+-	[EPP_INDEX_PERFORMANCE] = HWP_EPP_PERFORMANCE,
+-	[EPP_INDEX_BALANCE_PERFORMANCE] = HWP_EPP_BALANCE_PERFORMANCE,
+-	[EPP_INDEX_BALANCE_POWERSAVE] = HWP_EPP_BALANCE_POWERSAVE,
+-	[EPP_INDEX_POWERSAVE] = HWP_EPP_POWERSAVE,
+-};
+-
+ static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data, int *raw_epp)
+ {
+ 	s16 epp;
+diff --git a/include/linux/cpufreq_common.h b/include/linux/cpufreq_common.h
+new file mode 100644
+index 000000000000..2d14b0b0f55c
+--- /dev/null
++++ b/include/linux/cpufreq_common.h
+@@ -0,0 +1,56 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * linux/include/linux/cpufreq_common.h
++ *
++ * Copyright (C) 2022 Advanced Micro Devices, Inc.
++ *
++ * Author: Perry Yuan <Perry.Yuan@amd.com>
++ */
++
++#ifndef _LINUX_CPUFREQ_COMMON_H
++#define _LINUX_CPUFREQ_COMMON_H
++
++#include <asm/msr.h>
++/*
++ * EPP/EPB display strings corresponding to EPP index in the
++ * energy_perf_strings[]
++ *	index		String
++ *-------------------------------------
++ *	0		default
++ *	1		performance
++ *	2		balance_performance
++ *	3		balance_power
++ *	4		power
++ */
++
++#define HWP_EPP_PERFORMANCE		0x00
++#define HWP_EPP_BALANCE_PERFORMANCE	0x80
++#define HWP_EPP_BALANCE_POWERSAVE	0xC0
++#define HWP_EPP_POWERSAVE		0xFF
++
++enum energy_perf_value_index {
++	EPP_INDEX_DEFAULT = 0,
++	EPP_INDEX_PERFORMANCE,
++	EPP_INDEX_BALANCE_PERFORMANCE,
++	EPP_INDEX_BALANCE_POWERSAVE,
++	EPP_INDEX_POWERSAVE,
++};
++
++static const char * const energy_perf_strings[] = {
++	[EPP_INDEX_DEFAULT] = "default",
++	[EPP_INDEX_PERFORMANCE] = "performance",
++	[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
++	[EPP_INDEX_BALANCE_POWERSAVE] = "balance_power",
++	[EPP_INDEX_POWERSAVE] = "power",
++	NULL
++};
++
++static unsigned int epp_values[] = {
++	[EPP_INDEX_DEFAULT] = 0, /* Unused index */
++	[EPP_INDEX_PERFORMANCE] = HWP_EPP_PERFORMANCE,
++	[EPP_INDEX_BALANCE_PERFORMANCE] = HWP_EPP_BALANCE_PERFORMANCE,
++	[EPP_INDEX_BALANCE_POWERSAVE] = HWP_EPP_BALANCE_POWERSAVE,
++	[EPP_INDEX_POWERSAVE] = HWP_EPP_POWERSAVE,
++};
++
++#endif /* _LINUX_CPUFREQ_COMMON_H */
+\ No newline at end of file
 -- 
 2.34.1
 
