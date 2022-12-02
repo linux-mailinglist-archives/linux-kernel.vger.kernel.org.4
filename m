@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3E364053D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EB164053C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiLBKvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S233256AbiLBKvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbiLBKv3 (ORCPT
+        with ESMTP id S232315AbiLBKvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:51:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7583ED0382
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:50:32 -0800 (PST)
+        Fri, 2 Dec 2022 05:51:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FE8D0391
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:50:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669978231;
+        s=mimecast20190719; t=1669978233;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1ZiLhwAB4T5DlsifWPEOUp55KcHRF76jPNns8olDBLs=;
-        b=Hc4NLD78+J6CD/ItmgTJgM2ITujoOJl44UrVS2ORnwjbqr6lR5k9B4HyljCz95d+P9xuWm
-        mhUbFKYadcF/qwhAqAYATiYP/A8wbFscVucdZDa7Su/hY5v40QTR06Uc4FNidV2jMoUsdn
-        zogq9cPOCVREkrPjN0EXFubUtBnn5X8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=01EVu86F03ZVkaisaIA8aOhxapK6bD5iJUUbcQRNmys=;
+        b=gRBpVn4XFihIn5sMWZ7vHPj7PrTqcPk7f3MON2lpeIUdwZDH/iz1Zp1x2Rx6qagylD8apH
+        jj/4jxKXIM+n0hu4onVD7EoxT0wcrykZ2IOaLze5fo44iNwf4gLwW6ziBSjZpN/MB/+yz7
+        gi/YUlstB6B/dNnINKtWBpK/A9f8Bvk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-502-hjBjK3HyOQe7N1ccMe4EzA-1; Fri, 02 Dec 2022 05:50:30 -0500
-X-MC-Unique: hjBjK3HyOQe7N1ccMe4EzA-1
-Received: by mail-wm1-f72.google.com with SMTP id 8-20020a05600c228800b003d0376e42deso1742456wmf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:50:30 -0800 (PST)
+ us-mta-221-RHzUfQalMWCr7IQNpp64HQ-1; Fri, 02 Dec 2022 05:50:32 -0500
+X-MC-Unique: RHzUfQalMWCr7IQNpp64HQ-1
+Received: by mail-wr1-f71.google.com with SMTP id d6-20020adfa346000000b0024211c0f988so972651wrb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:50:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1ZiLhwAB4T5DlsifWPEOUp55KcHRF76jPNns8olDBLs=;
-        b=q/iGZ0zFjC9o20rCOxfHzPbjdobaANiekutkWiGeMg643GsJAnDiBlalysxFfDX5Jm
-         XwGzgAhHjsDO4YyogsdrYip3v97Cdoepdj2mEoGqB7Pk69BmEVSBu7QHyKx7hWqCWG3t
-         XjfIcn6bNCKsRgqk9eUT1bOSpDxPy3qDEr1aYPGVujhfvDa8wM79fICDLkMZstL8lx1M
-         96+EUxIDa/TBogmuKrfh4i33au7XUEj/7w4GhJGe7OqaCWXtSoAKtZcp9ae8AoGKFxj0
-         cpYWVjObalSJghW9DyAzNj/3lvOeTQ+JgBX2mLytAUDlWwshDIrh7F+8heklxVzrDlv4
-         Aqxw==
-X-Gm-Message-State: ANoB5pm6amVwu95V12XV2s5mIF4AfeGJgHUERweFRSH7WL8iz9DB86cJ
-        kri19WtRlOCXI9pmT2WmZteIc836MyWIzIC7WFjFnSe5nULeSmn8d+OOIbAou71g4kNOMZlJYTR
-        UcuEd6QEo4VgnsW1FazjVOr8gifwVHR9xWZeOwNwXRzupvDJzpkiTEYdi/xUq5HwqeSUhVl7zYF
-        0=
-X-Received: by 2002:a05:6000:983:b0:236:aacc:ea07 with SMTP id by3-20020a056000098300b00236aaccea07mr45038558wrb.36.1669978229135;
-        Fri, 02 Dec 2022 02:50:29 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5xmf8N/KoyM3E7rvK+vbyjX3grYot4oQfWOk16THK9TJ5D1uAwksRui+qdQ92XRGd+sHEYog==
-X-Received: by 2002:a05:6000:983:b0:236:aacc:ea07 with SMTP id by3-20020a056000098300b00236aaccea07mr45038533wrb.36.1669978228835;
-        Fri, 02 Dec 2022 02:50:28 -0800 (PST)
+        bh=01EVu86F03ZVkaisaIA8aOhxapK6bD5iJUUbcQRNmys=;
+        b=Kagl/86lgZyTjuVJiPq13W4Fj/2iNdBQxby9IOt/Nmv5568v118ym8jlrbMt1WMfYa
+         Uxel41PANXqvLiPY+W1x8DiItSPJIZqnIUShV0oeh08dxz+ljXQSKXvxxrETpy9G5WVr
+         w237G8zDeWg1aRIXHbSORAZY8+GLQKLQCBIlrux/6Yjf1nyaf7IHd3YDeHaHC/qfpaOF
+         U03OjhTACydC8L7sZo6reTXJUhocbYmzgftXECfaw46HkA07H5UdocEuZ/sTD481o9YP
+         nuICUYC4veYeHYCcZXhJUV4Bcq9fbjpEiM3DKBw6MLRcFKL/wHcD9QvfYvM4RV6zyz0Y
+         n9Ag==
+X-Gm-Message-State: ANoB5pnw1I3yKUMLqpvsEAqzZ0u88XqDwfNpK7xRP7dFm5ghlEGBN+i2
+        rr56EpC6NQ/7ThX9NA5FkGBDK2BR8FjCl3VQ6Voscj/EiqYwgVvEksmjugAOmzN+5cjMcAe3Nui
+        e4MsAT0ecYQWLb4jb36rBU5reiW5sYBDJbbKCdh3VgALaaLjojlF+3Rpe73qGvt6+MlbxTOK1aH
+        g=
+X-Received: by 2002:adf:e105:0:b0:236:73af:f9ad with SMTP id t5-20020adfe105000000b0023673aff9admr42046594wrz.225.1669978230908;
+        Fri, 02 Dec 2022 02:50:30 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5gKhowvqyk/ROz6Tub/sMJPyTW0HCi4czVL2HWfKAPTpnGRqZYvsKYMG8CpBMMwJo8CzalVg==
+X-Received: by 2002:adf:e105:0:b0:236:73af:f9ad with SMTP id t5-20020adfe105000000b0023673aff9admr42046575wrz.225.1669978230635;
+        Fri, 02 Dec 2022 02:50:30 -0800 (PST)
 Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bg2-20020a05600c3c8200b003a3170a7af9sm9728818wmb.4.2022.12.02.02.50.27
+        by smtp.gmail.com with ESMTPSA id bg2-20020a05600c3c8200b003a3170a7af9sm9728818wmb.4.2022.12.02.02.50.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 02:50:28 -0800 (PST)
+        Fri, 02 Dec 2022 02:50:29 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Sergio Lopez Pascual <slp@redhat.com>,
         Sean Christopherson <seanjc@google.com>,
         Javier Martinez Canillas <javierm@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jing Liu <jing2.liu@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Wei Wang <wei.w.wang@intel.com>, kvm@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH v2 3/4] KVM: Reference to kvm_userspace_memory_region in doc and comments
-Date:   Fri,  2 Dec 2022 11:50:10 +0100
-Message-Id: <20221202105011.185147-4-javierm@redhat.com>
+Subject: [PATCH v2 4/4] KVM: Add missing arch for KVM_CREATE_DEVICE and KVM_{SET,GET}_DEVICE_ATTR
+Date:   Fri,  2 Dec 2022 11:50:11 +0100
+Message-Id: <20221202105011.185147-5-javierm@redhat.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221202105011.185147-1-javierm@redhat.com>
 References: <20221202105011.185147-1-javierm@redhat.com>
@@ -89,84 +83,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are still references to the removed kvm_memory_region data structure
-but the doc and comments should mention struct kvm_userspace_memory_region
-instead, since that is what's used by the ioctl that replaced the old one
-and this data structure support the same set of flags.
+The ioctls are missing an architecture property that is present in others.
 
+Suggested-by: Sergio Lopez Pascual <slp@redhat.com>
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
 
 (no changes since v1)
 
- Documentation/virt/kvm/api.rst | 2 +-
- include/linux/kvm_host.h       | 4 ++--
- include/uapi/linux/kvm.h       | 6 +++---
- tools/include/uapi/linux/kvm.h | 6 +++---
- 4 files changed, 9 insertions(+), 9 deletions(-)
+ Documentation/virt/kvm/api.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 85a5b12eb017..b15ea129f9cf 100644
+index b15ea129f9cf..1db60cd9e1ba 100644
 --- a/Documentation/virt/kvm/api.rst
 +++ b/Documentation/virt/kvm/api.rst
-@@ -1309,7 +1309,7 @@ yet and must be cleared on entry.
- 	__u64 userspace_addr; /* start of the userspace allocated memory */
-   };
+@@ -3266,6 +3266,7 @@ valid entries found.
+ ----------------------
  
--  /* for kvm_memory_region::flags */
-+  /* for kvm_userspace_memory_region::flags */
-   #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
-   #define KVM_MEM_READONLY	(1UL << 1)
- 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 18592bdf4c1b..759ed18dabb7 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -50,8 +50,8 @@
- #endif
- 
- /*
-- * The bit 16 ~ bit 31 of kvm_memory_region::flags are internally used
-- * in kvm, other bits are visible for userspace which are defined in
-+ * The bit 16 ~ bit 31 of kvm_userspace_memory_region::flags are internally
-+ * used in kvm, other bits are visible for userspace which are defined in
-  * include/linux/kvm_h.
-  */
- #define KVM_MEMSLOT_INVALID	(1UL << 16)
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 6ba2928f8f18..e42be6b45b9b 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -96,9 +96,9 @@ struct kvm_userspace_memory_region {
- };
- 
- /*
-- * The bit 0 ~ bit 15 of kvm_memory_region::flags are visible for userspace,
-- * other bits are reserved for kvm internal use which are defined in
-- * include/linux/kvm_host.h.
-+ * The bit 0 ~ bit 15 of kvm_userspace_memory_region::flags are visible for
-+ * userspace, other bits are reserved for kvm internal use which are defined
-+ * in include/linux/kvm_host.h.
-  */
- #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
- #define KVM_MEM_READONLY	(1UL << 1)
-diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
-index 6ba2928f8f18..21d6d29502e4 100644
---- a/tools/include/uapi/linux/kvm.h
-+++ b/tools/include/uapi/linux/kvm.h
-@@ -96,9 +96,9 @@ struct kvm_userspace_memory_region {
- };
- 
- /*
-- * The bit 0 ~ bit 15 of kvm_memory_region::flags are visible for userspace,
-- * other bits are reserved for kvm internal use which are defined in
-- * include/linux/kvm_host.h.
-+ * The bit 0 ~ bit 15 of kvm_userspace_memory_region::flags are visible for
-+ * userspace, other bits are reserved for kvm internal use which are defined
-+ *in include/linux/kvm_host.h.
-  */
- #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
- #define KVM_MEM_READONLY	(1UL << 1)
+ :Capability: KVM_CAP_DEVICE_CTRL
++:Architectures: all
+ :Type: vm ioctl
+ :Parameters: struct kvm_create_device (in/out)
+ :Returns: 0 on success, -1 on error
+@@ -3306,6 +3307,7 @@ number.
+ :Capability: KVM_CAP_DEVICE_CTRL, KVM_CAP_VM_ATTRIBUTES for vm device,
+              KVM_CAP_VCPU_ATTRIBUTES for vcpu device
+              KVM_CAP_SYS_ATTRIBUTES for system (/dev/kvm) device (no set)
++:Architectures: x86, arm64, s390
+ :Type: device ioctl, vm ioctl, vcpu ioctl
+ :Parameters: struct kvm_device_attr
+ :Returns: 0 on success, -1 on error
 -- 
 2.38.1
 
