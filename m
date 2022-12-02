@@ -2,154 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DED640CDB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49096640CDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbiLBSMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
+        id S233041AbiLBSNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbiLBSMB (ORCPT
+        with ESMTP id S234024AbiLBSNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:12:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA26BECE7B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:11:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670004667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XeeaXrmiSXAz7yiwwsn7OAqyBFbYdfVCZ2HcYBmojMY=;
-        b=cR2GHvhzqVbCQZfm730IvG11gRVhWF3ms/yZTYYzjXz9rBmYFpEMHiS4VevfIYHkN/bHXL
-        ln8hCo6zY/0wHJE4F4z57x/00SOXVJ95+6aBkeixdL/T/JOjs/KZMI5Qu/MaKHhhTvhktV
-        GVPqOEdb6n0faJepbkWJfBEDUFoBweg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-470-Qql5lt-VPHqFTMRXo9KBXw-1; Fri, 02 Dec 2022 13:11:04 -0500
-X-MC-Unique: Qql5lt-VPHqFTMRXo9KBXw-1
-Received: by mail-wm1-f70.google.com with SMTP id h4-20020a1c2104000000b003d01b66fe65so4487018wmh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:11:03 -0800 (PST)
+        Fri, 2 Dec 2022 13:13:42 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEA4E802E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:13:41 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id cm20so5678622pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=td4xci5diB4fq00DG+7VzeBznbBu3BTL2nUPPpTbtak=;
+        b=znwv0rWJ35Zi5rd78lBnOWAQjqe71CNHUDvpy9+X6MQkTVdLvFe1vt80DYaX0q60gZ
+         tLDjuYOEIZLjchfjdb/gv0Wi3N8fnWmHVp9Lu/u2jyc4xTeTD1ypkp2d+F0FlU4UltgZ
+         4HwpCwGKxIELgDtemo5W5GifjlJwAK5wTa3BrRJ2hWdU3YCtDB40axA52e9WNfZHio9T
+         ZIW5PXoL1Phr0KeqvXZBONGDEBAi6V2NhLi1JgwoLgWTfloruPYHNHqRGiLUmwVKDUIh
+         yxKQzKVD+5KY4WCL/LkdM8K3vPOvro2Edv/AZWQRzYMXsBj0lM4gr220L2f1mQ6cTps4
+         OXJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XeeaXrmiSXAz7yiwwsn7OAqyBFbYdfVCZ2HcYBmojMY=;
-        b=Tcb4tvRsDtYRmDO9FmL6mt1A+62Yqj/w/YORy8Sc/VN2aSmTpCIGA445RpYGawKXql
-         8aacji0UZPfy7dIptj7jehTtDPxDcbVHFTzYpxhyamsMbnHXx5BxO75taV64Fljb0Neb
-         Q99DXz4PS0Y9vhDM4J+V7dPXpW39srIBW5DJh4BxTMZJVgFm4fstjwikqZa0owY4O1gm
-         ypzi6N23Xryhyb6Ztt7aEWyWQiP80BxpsN4GgG9wz4BoPOaB7mBd7MZtCpJBj6/vzE2U
-         zaFxMMQQO7FFugVNGDsYR7qxhKq8wz3F//oqbCPrb57QYHWEx/ltYvwFRqEvQImWFYAm
-         nTKQ==
-X-Gm-Message-State: ANoB5pl7GpC3Q3oALasDVynyDhY5wlfaegImTWZosj4R4wTB8ANgb6ho
-        We02R2n3YU4VXCpi49GRZ44cuRIjsECWDVxO6JZpCUpURd3K61mKctGl7/d+ebEPHaeOc5WeLXs
-        stTrTKmzt3ukqhYIi3lXktGI9
-X-Received: by 2002:adf:fc48:0:b0:236:e0d:9ad with SMTP id e8-20020adffc48000000b002360e0d09admr34642322wrs.692.1670004662303;
-        Fri, 02 Dec 2022 10:11:02 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4xWcTwPRLiOiZsUXz8fZzsv2cqll2GO9uYls5i+J9Nl6ucOPyDDmBw9oVRGcoRF6b305NMrw==
-X-Received: by 2002:adf:fc48:0:b0:236:e0d:9ad with SMTP id e8-20020adffc48000000b002360e0d09admr34642303wrs.692.1670004662050;
-        Fri, 02 Dec 2022 10:11:02 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm16843406wmo.0.2022.12.02.10.11.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 10:11:00 -0800 (PST)
-Message-ID: <fe8c3a38-5d91-aed3-1e7d-6923aa157e79@redhat.com>
-Date:   Fri, 2 Dec 2022 19:10:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] KVM: x86: fix APICv/x2AVIC disabled when vm reboot by
- itself
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mlevitsk@redhat.com,
-        x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1669984574-32692-1-git-send-email-yuanzhaoxiong@baidu.com>
- <Y4oeh6XWw2qzETEQ@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y4oeh6XWw2qzETEQ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=td4xci5diB4fq00DG+7VzeBznbBu3BTL2nUPPpTbtak=;
+        b=qgC9tyazEtbV4er5Ew8qKjGIGzt31rwk3iJxiwyAuDmRQ7fN2brL9MO/TSbatbpWt0
+         Ix/qKwiqlgpl2tIR0zq7Obgfixilw0m0txTXgtxaU4TTsab1LIoyGYYxIrqyUQ6aHtJl
+         tnYgdjzkM+4IA7hG4UdJoaCt+rRuVOI1eEB81YbrXk4kOkfS8x+Wti7RHv4OKKa5d37j
+         RtlXRiqqyK+1gXDrKriWE1TqyayAYR2AxxH2TVwc+9sKt9FmBeZv+omKrQxG+68WfF+W
+         S6pV2iAnOBLJz9/ARuCDR7sqFb+3s8rZVSheII60xZs4zXZURc+fXvV49vZWluWlnYT/
+         BlqQ==
+X-Gm-Message-State: ANoB5pkZfJRJhtwW2w/uBNg7SBpXk2eKZj8UzgyEL9p7f6n2wtX1rtzK
+        Tp3cUK4440mJy9UT4/G/9kutcQ==
+X-Google-Smtp-Source: AA0mqf43J8lPrptpkCkbq/DYOD09yooJAY9HJ+V6haZEp7urNBCX5HoHqSVnhtgTwlX3obMkTG3ztQ==
+X-Received: by 2002:a17:902:e3ca:b0:189:a11e:9994 with SMTP id r10-20020a170902e3ca00b00189a11e9994mr17778649ple.54.1670004820918;
+        Fri, 02 Dec 2022 10:13:40 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id w80-20020a627b53000000b0056d73ef41fdsm5396669pfc.75.2022.12.02.10.13.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 10:13:40 -0800 (PST)
+Date:   Fri, 02 Dec 2022 10:13:40 -0800 (PST)
+X-Google-Original-Date: Fri, 02 Dec 2022 10:13:30 PST (-0800)
+Subject:     Re: [PATCH v2 8/8] RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
+In-Reply-To: <Y4o+5ayW0vHcmvo6@spud>
+CC:     hal.feng@starfivetech.com, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, ben.dooks@sifive.com, tglx@linutronix.de,
+        Marc Zyngier <maz@kernel.org>, sboyd@kernel.org,
+        mturquette@baylibre.com, p.zabel@pengutronix.de,
+        linus.walleij@linaro.org, emil.renner.berthing@canonical.com,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-2ff22bb7-a48a-4434-b498-1f928e75cd01@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 16:49, Sean Christopherson wrote:
-> On Fri, Dec 02, 2022, Yuan ZhaoXiong wrote:
->> This patch fixes that VM rebooting itself will cause APICv
->> disabled when VM is started with APICv/x2AVIC enabled.
->>
->> When a VM reboot itself, The Qemu whill reset LAPIC by invoking
->> ioctl(KVM_SET_LAPIC, ...) to disable x2APIC mode and set APIC_ID
->> to its vcpuid in xAPIC mode.
->>
->> That will be handled in KVM as follows:
->>
->>       kvm_vcpu_ioctl_set_lapic
->>         kvm_apic_set_state
->> 	  kvm_lapic_set_base  =>  disable X2APIC mode
->> 	    kvm_apic_state_fixup
->> 	      kvm_lapic_xapic_id_updated
->> 	        kvm_xapic_id(apic) != apic->vcpu->vcpu_id
->> 		kvm_set_apicv_inhibit(APICV_INHIBIT_REASON_APIC_ID_MODIFIED)
->> 	   memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s))  => update APIC_ID
->>
->> kvm_apic_set_state invokes kvm_lapic_set_base to disable x2APIC mode
->> firstly, but don't change APIC_ID, APIC_ID is 32 bits in x2APIC mode
->> and 8 bist(bit 24 ~ bit 31) in xAPIC mode. So kvm_lapic_xapic_id_updated
->> will set APICV_INHIBIT_REASON_APIC_ID_MODIFIED bit inhibit and disable
->> APICv/x2AVIC.
->>
->> kvm_lapic_xapic_id_updated must be called after APIC_ID is changed.
->>
->> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
->>
->> Signed-off-by: Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>
->> ---
->>   arch/x86/kvm/lapic.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
->> index d7639d1..bf5ce86 100644
->> --- a/arch/x86/kvm/lapic.c
->> +++ b/arch/x86/kvm/lapic.c
->> @@ -2722,8 +2722,6 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
->>   			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
->>   			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
->>   		}
->> -	} else {
->> -		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
->>   	}
->>   
->>   	return 0;
->> @@ -2759,6 +2757,9 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
->>   	}
->>   	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
->>   
->> +	if (!apic_x2apic_mode(apic))
->> +		kvm_lapic_xapic_id_updated(apic);
->> +
-> 
-> Already posted[*], along with a pile of other APIC fixes.  Hopefully it will land
-> in 6.2.
+On Fri, 02 Dec 2022 10:07:33 PST (-0800), Conor Dooley wrote:
+> On Fri, Dec 02, 2022 at 10:00:35AM -0800, Palmer Dabbelt wrote:
+>> On Thu, 17 Nov 2022 17:17:14 PST (-0800), hal.feng@starfivetech.com wrote:
+>> > Add CONFIG_SERIAL_8250_DW=y, which is a necessary option for
+>> > StarFive JH7110 and JH7100 SoCs to boot with serial ports.
+>> > 
+>> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>> > ---
+>> >  arch/riscv/configs/defconfig | 1 +
+>> >  1 file changed, 1 insertion(+)
+>> > 
+>> > diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+>> > index 05fd5fcf24f9..a23d022974ad 100644
+>> > --- a/arch/riscv/configs/defconfig
+>> > +++ b/arch/riscv/configs/defconfig
+>> > @@ -122,6 +122,7 @@ CONFIG_MICROSEMI_PHY=y
+>> >  CONFIG_INPUT_MOUSEDEV=y
+>> >  CONFIG_SERIAL_8250=y
+>> >  CONFIG_SERIAL_8250_CONSOLE=y
+>> > +CONFIG_SERIAL_8250_DW=y
+>> >  CONFIG_SERIAL_OF_PLATFORM=y
+>> >  CONFIG_VIRTIO_CONSOLE=y
+>> >  CONFIG_HW_RANDOM=y
+>> 
+>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> Hey Palmer, could you take this as v6.2 material instead of Acking it
+> please? It applies to the jh7100 stuff that's already in-tree.
 
-I'll let this patch overtake the others since it is stable@ material.
-
-I'll also volunteer someone to write a testcase (we can add an 
-apicv_enabled boolean statistic too for the sake of the test).
-
-Paolo
-
-> [*] https://lore.kernel.org/all/20221001005915.2041642-7-seanjc@google.com
-
+Ya, no problem.  Just this patch, or the whole series?
