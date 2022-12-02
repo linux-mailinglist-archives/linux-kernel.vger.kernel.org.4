@@ -2,91 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52CF640FE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC130640FEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbiLBVTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S234266AbiLBVUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234266AbiLBVSz (ORCPT
+        with ESMTP id S234530AbiLBVTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:18:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B048B39E;
-        Fri,  2 Dec 2022 13:18:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E647C623D6;
-        Fri,  2 Dec 2022 21:18:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D03C433D6;
-        Fri,  2 Dec 2022 21:18:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670015932;
-        bh=wsQic+DniH74o9yizSX8yaBBMzi/Wi+iIyhKaROtdo8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p3sXXHwxN9VweUd0NumRiwmL3FmBqGo0lrQpAsZNTwWMWhlAH1z4Hvw4Z2wNQpPec
-         owEC9CSEADGVaI21ILS1qF6lSOHhZoQiAlIGQE2DWLNzxtIuIyERr1u9ESbAiaBI6d
-         YwAzIC2FtT/KwO8JBE+KbzFalYk/b/UTa22xwt8zT8KaURtErdrMTiCj0mcY9qsxWA
-         zeFGtNAaoZV6aeMlbE1Q83Lvr/5KjtOhLXYN4P63q8Z0kZXaVFBw8XJ1qOX3Owuyw5
-         wQw2xSON9scGc4fj0HxEFCwhTVfD749EM94NFKN9LtFef604z9Imao+T5hXLlUll1v
-         Yd9Uozi/3S5tw==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        =?UTF-8?q?Benoit=20Gr=C3=A9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 4/4] x86/PCI: Fix log message typo
-Date:   Fri,  2 Dec 2022 15:18:38 -0600
-Message-Id: <20221202211838.1061278-5-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221202211838.1061278-1-helgaas@kernel.org>
-References: <20221202211838.1061278-1-helgaas@kernel.org>
+        Fri, 2 Dec 2022 16:19:51 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209AA9D2E6;
+        Fri,  2 Dec 2022 13:19:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=oV6byBYn0tYljp79kb76vPExm6qPuaFXLFbzIN1Gi3c=; b=lnJcPZFJS0R/dpvl0Gq+K5lQSR
+        YmE2/eMHy0Y8CPju06DjtzSTvdcfzjDWl9/42ArRjqWkNLYlUnHaqldz/k/hvFkHAg0Z0I0uQplpo
+        TMwbvD9pjvr8iPdEv/YtwLMgRf38lM0dcer5EYpq5KuZwUMAd18+79Dza6xICzBqczHxV0nw+n+D5
+        QRFpFbtq5MTJJTHRY6luSsVrGWtZVWcRPCFI/GvClnINnKe7dShzFjnHj1pcGLZqdlBlTH3O+j3HP
+        3n6YSaFFQHFVXpp8492HMQ+jtTAfk6SER0KdDMI7FWNfw8i37o8k7R8nLjNbkez2Uz6lahb95DKdP
+        lTkOALHg==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p1DRp-000X5k-Sp; Fri, 02 Dec 2022 21:19:54 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-rdma@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Subject: [PATCH v2] infiniband: disable IB HW for UML
+Date:   Fri,  2 Dec 2022 13:19:40 -0800
+Message-Id: <20221202211940.29111-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+Disable all of drivers/infiniband/hw/ for UML builds until someone
+needs it and provides patches to support it.
 
-Add missing word in the log message:
+This prevents build errors in hw/qib/qib_wc_x86_64.c.
 
-  - ... so future kernels can this automatically
-  + ... so future kernels can do this automatically
-
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
+Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Suggested-by: Leon Romanovsky <leon@kernel.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: linux-rdma@vger.kernel.org
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: linux-um@lists.infradead.org
 ---
- arch/x86/pci/acpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: just disable infiniband/hw/, not all of infiniband.
 
-diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
-index 2f82480fd430..83dfea9e9894 100644
---- a/arch/x86/pci/acpi.c
-+++ b/arch/x86/pci/acpi.c
-@@ -245,7 +245,7 @@ void __init pci_acpi_crs_quirks(void)
- 	printk(KERN_INFO "PCI: %s E820 reservations for host bridge windows\n",
- 	       pci_use_e820 ? "Using" : "Ignoring");
- 	if (pci_probe & (PCI_NO_E820 | PCI_USE_E820))
--		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can this automatically\n");
-+		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can do this automatically\n");
- }
+ drivers/infiniband/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff -- a/drivers/infiniband/Kconfig b/drivers/infiniband/Kconfig
+--- a/drivers/infiniband/Kconfig
++++ b/drivers/infiniband/Kconfig
+@@ -78,6 +78,7 @@ config INFINIBAND_VIRT_DMA
+ 	def_bool !HIGHMEM
  
- #ifdef	CONFIG_PCI_MMCONFIG
--- 
-2.25.1
-
+ if INFINIBAND_USER_ACCESS || !INFINIBAND_USER_ACCESS
++if !UML
+ source "drivers/infiniband/hw/bnxt_re/Kconfig"
+ source "drivers/infiniband/hw/cxgb4/Kconfig"
+ source "drivers/infiniband/hw/efa/Kconfig"
+@@ -94,6 +95,7 @@ source "drivers/infiniband/hw/qedr/Kconf
+ source "drivers/infiniband/hw/qib/Kconfig"
+ source "drivers/infiniband/hw/usnic/Kconfig"
+ source "drivers/infiniband/hw/vmw_pvrdma/Kconfig"
++endif # !UML
+ source "drivers/infiniband/sw/rdmavt/Kconfig"
+ source "drivers/infiniband/sw/rxe/Kconfig"
+ source "drivers/infiniband/sw/siw/Kconfig"
