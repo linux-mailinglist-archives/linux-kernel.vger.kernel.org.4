@@ -2,110 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DF5640C9A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54B2640C9C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiLBRxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S234064AbiLBRyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233541AbiLBRxl (ORCPT
+        with ESMTP id S233541AbiLBRyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:53:41 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3DBC2D30
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:53:40 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id 4so5327597pli.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ZvJzDorQtOwNqLa1HHYVuO6backFKSVBd3ruJxRA2A=;
-        b=eQnZOvNRY11eiZD6GVvQZwn1takWYswEZO6mnHfFnI3IOwcIiD6Zx+pagggcuTggyE
-         KI2v9qhiuLOtxUaSbh05X+3u3ZJeuy2KPUw24QAEHeemgwvBVYSNg7VIrTgM/9CZF7Mh
-         qIGRAfb52QV9/EArXB3WfOf73n/Zj+mT+acVF8xXToHtE9sTGamB58BUDzFZvKKrcrQs
-         N82x9nRGEqlbGZDDayglBKpHk1Ju0LRifyISFL7XGTuJ4VTQZxgsAckVsHg9WKJDAtXL
-         l1P2Bi6HAp3c1vtRk7yGNxdUdXKhF7PSfRXpRsPFM+uN9qkQfh86kWUV6Q3Nt+kAw8ul
-         RFAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ZvJzDorQtOwNqLa1HHYVuO6backFKSVBd3ruJxRA2A=;
-        b=NSINNtytevAWVGtX29sSB3ikHop/e+F9xrz78d+tEgUk+wfQTLTUSe+FdHvorw7toT
-         bX2GqPtcMivJBrQTeX0bClN7WN5N9ltw3TaFVqdoFeGPFxnggZ964e07FVaGiIYiKJLL
-         b1+kW0idHwlCHCtqBWClYpR+05yu3SfglDcj0KDTkLWzz+Yo3xT/NNcm2D0w15JNOe/b
-         Ws/7BDudlesg5cHdpr15n/nVvszLnzJGxIHsPR4PEW1ASJTeONPK2scze3jgOtSIkjxs
-         DGpNNUJtdb7UlL1/HasTZ5ulSZzQPKyiKPeTPU97m67Hzt8yyYqQg7hRkszi99Aeqp0T
-         +sOg==
-X-Gm-Message-State: ANoB5pmWRU2eMF41UsxVoRx6gyIFHP2zMxaCXjmqU3WUEYqdKbMa6n4F
-        7SxoluKeKbY9MFY7fYDPx8MF3DJIqnlsw1uW
-X-Google-Smtp-Source: AA0mqf5X/TeHx5A5xtNnIKw6jgBgvRIH82EYzaYQxx+YmUJkhxCg9UKytVs/q/xMiH6X+7zxecaK0w==
-X-Received: by 2002:a17:90a:ca85:b0:219:88aa:d3d1 with SMTP id y5-20020a17090aca8500b0021988aad3d1mr4968286pjt.135.1670003619663;
-        Fri, 02 Dec 2022 09:53:39 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id w15-20020aa7954f000000b0056283e2bdbdsm5391440pfq.138.2022.12.02.09.53.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:53:39 -0800 (PST)
-Date:   Fri, 02 Dec 2022 09:53:39 -0800 (PST)
-X-Google-Original-Date: Fri, 02 Dec 2022 09:53:24 PST (-0800)
-Subject:     Re: [PATCH 6/9] RISC-V: Export sbi_get_mvendorid() and friends
-In-Reply-To: <20221128161424.608889-7-apatel@ventanamicro.com>
-CC:     pbonzini@redhat.com, atishp@atishpatra.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, apatel@ventanamicro.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     apatel@ventanamicro.com
-Message-ID: <mhng-365b9851-cb0a-4e2c-9cf4-4eca9623cf04@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Fri, 2 Dec 2022 12:54:14 -0500
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EDDC2D39
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:54:12 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 1AEhpL49Pb9QW1AEhp4Yhx; Fri, 02 Dec 2022 18:54:10 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 02 Dec 2022 18:54:10 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <4bef43c9-1ba9-6739-07be-2a819ee01091@wanadoo.fr>
+Date:   Fri, 2 Dec 2022 18:54:07 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] rtc: msc313: Fix function prototype mismatch in
+ msc313_rtc_probe()
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Daniel Palmer <daniel@thingy.jp>,
+        kernel test robot <lkp@intel.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20221118233101.never.215-kees@kernel.org>
+ <ef3c1a62-029e-ffae-8a37-fde35a8235d5@wanadoo.fr>
+ <202212012043.C4ED0824@keescook>
+Content-Language: fr, en-GB
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <202212012043.C4ED0824@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Nov 2022 08:14:21 PST (-0800), apatel@ventanamicro.com wrote:
-> The sbi_get_mvendorid(), sbi_get_marchid(), and sbi_get_mimpid()
-> can be used by KVM module so let us export these functions.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/kernel/sbi.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> index 775d3322b422..5c87db8fdff2 100644
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
->  {
->  	return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
->  }
-> +EXPORT_SYMBOL_GPL(sbi_get_mvendorid);
->
->  long sbi_get_marchid(void)
->  {
->  	return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
->  }
-> +EXPORT_SYMBOL_GPL(sbi_get_marchid);
->
->  long sbi_get_mimpid(void)
->  {
->  	return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
->  }
-> +EXPORT_SYMBOL_GPL(sbi_get_mimpid);
->
->  static void sbi_send_cpumask_ipi(const struct cpumask *target)
->  {
+Le 02/12/2022 à 05:46, Kees Cook a écrit :
+> On Sat, Nov 19, 2022 at 09:05:28AM +0100, Christophe JAILLET wrote:
+>> Le 19/11/2022 à 00:31, Kees Cook a écrit :
+>>> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+>>> indirect call targets are validated against the expected function
+>>> pointer prototype to make sure the call target is valid to help mitigate
+>>> ROP attacks. If they are not identical, there is a failure at run time,
+>>> which manifests as either a kernel panic or thread getting killed.
+>>>
+>>> msc313_rtc_probe() was passing clk_disable_unprepare() directly, which
+>>> did not have matching prototypes for devm_add_action_or_reset()'s callback
+>>> argument. Add a wrapper and remove the cast.
+>>>
+>>> This was found as a result of Clang's new -Wcast-function-type-strict
+>>> flag, which is more sensitive than the simpler -Wcast-function-type,
+>>> which only checks for type width mismatches.
+>>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
+>>> Cc: Daniel Palmer <daniel@thingy.jp>
+>>> Cc: Romain Perier <romain.perier@gmail.com>
+>>> Cc: Alessandro Zummo <a.zummo@towertech.it>
+>>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+>>> Cc: linux-arm-kernel@lists.infradead.org
+>>> Cc: linux-rtc@vger.kernel.org
+>>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>>> ---
+>>>    drivers/rtc/rtc-msc313.c | 9 ++++++++-
+>>>    1 file changed, 8 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+>>> index f3fde013c4b8..36e3e77f303e 100644
+>>> --- a/drivers/rtc/rtc-msc313.c
+>>> +++ b/drivers/rtc/rtc-msc313.c
+>>> @@ -177,6 +177,13 @@ static irqreturn_t msc313_rtc_interrupt(s32 irq, void *dev_id)
+>>>    	return IRQ_HANDLED;
+>>>    }
+>>> +static void msc313_clk_disable_unprepare(void *data)
+>>> +{
+>>> +	struct clk *clk = data;
+>>> +
+>>> +	clk_disable_unprepare(clk);
+>>> +}
+>>> +
+>>>    static int msc313_rtc_probe(struct platform_device *pdev)
+>>>    {
+>>>    	struct device *dev = &pdev->dev;
+>>> @@ -224,7 +231,7 @@ static int msc313_rtc_probe(struct platform_device *pdev)
+>>>    		return ret;
+>>>    	}
+>>> -	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
+>>> +	ret = devm_add_action_or_reset(dev, msc313_clk_disable_unprepare, clk);
+>>>    	if (ret)
+>>>    		return ret;
+>>
+>> Hi,
+>>
+>> another way to fix it, is to use devm_clk_get_enabled().
+>>
+>> It removes some LoC instead of introducing some new ones and saves a few
+>> bytes of memory.
+> 
+> Hrm, I'm not familiar with the clk stuff here -- how do I use it? Should
+> it just be like this? (The NULL argument is ok?)
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Yes, the code below looks fine.
+NULL argument is ok.
+
+See [1]. Both function are very similar. devm_clk_get_enabled() just 
+pass some additional init() and exit() functions.
+
+CJ
+
+
+[1]: 
+https://elixir.bootlin.com/linux/v6.1-rc7/source/drivers/clk/clk-devres.c#L63
+> 
+> diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+> index f3fde013c4b8..8d7737e0e2e0 100644
+> --- a/drivers/rtc/rtc-msc313.c
+> +++ b/drivers/rtc/rtc-msc313.c
+> @@ -212,22 +212,12 @@ static int msc313_rtc_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> -	clk = devm_clk_get(dev, NULL);
+> +	clk = devm_clk_get_enabled(dev, NULL);
+>   	if (IS_ERR(clk)) {
+>   		dev_err(dev, "No input reference clock\n");
+>   		return PTR_ERR(clk);
+>   	}
+>   
+> -	ret = clk_prepare_enable(clk);
+> -	if (ret) {
+> -		dev_err(dev, "Failed to enable the reference clock, %d\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
+> -	if (ret)
+> -		return ret;
+> -
+>   	rate = clk_get_rate(clk);
+>   	writew(rate & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_L);
+>   	writew((rate >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_H);
+> 
+
