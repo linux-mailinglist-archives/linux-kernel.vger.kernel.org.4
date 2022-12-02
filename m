@@ -2,148 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E62640C14
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CA3640BEE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbiLBRYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S234340AbiLBRSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:18:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbiLBRXn (ORCPT
+        with ESMTP id S234111AbiLBRSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:23:43 -0500
-X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 09:23:08 PST
-Received: from out-206.mta0.migadu.com (out-206.mta0.migadu.com [IPv6:2001:41d0:1004:224b::ce])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6E7DBF6B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:23:07 -0800 (PST)
-Date:   Fri, 2 Dec 2022 09:16:17 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670001383;
+        Fri, 2 Dec 2022 12:18:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C968E7840
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670001382;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4Iyf0EnB7OzEo139Ba2aL1bqTplHNZ8kxQ6sIzX92Xk=;
-        b=nl7+RrUrTXK1s3Lr3EamD3DykStZYrZ142fU4QdsUjhPpiQwesO9qQ6HlrXpOOuDcBLhL9
-        Y7EvFHsU98LZrMV8ynLM5IEO/N5E2fOH5PalDRxJTxS4RaEftX/Cz1HpNeh/u5EvIEoocP
-        woP72s6yWZQFC63/tZwv3C9giigI1qI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     kernel test robot <yujie.liu@intel.com>,
-        Shakeel Butt <shakeelb@google.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        bh=E+1/kxt1BcrGWlRNRbifBPUUK2viMqVoDBsQbTYSfG4=;
+        b=huYppDrAY2Nnrl2dZ9Ljh9XmQclpez7XkNcvIuX0z4vxeEcAf62AiuV17WCKj58JiRsByy
+        kx4GRs75S7AosG9kiX0n77z9uVtYL0TlAljFGLgYiPtBtYDCMI2LVq+K5uVvKF/X8P7d6e
+        IFgA80Cb5F+j2+icie4eBk5T/tUDqqU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-210-p9TcCX5SMzOk8TRsi3DIrA-1; Fri, 02 Dec 2022 12:16:19 -0500
+X-MC-Unique: p9TcCX5SMzOk8TRsi3DIrA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DCE23C0F7F6;
+        Fri,  2 Dec 2022 17:16:15 +0000 (UTC)
+Received: from bfoster.redhat.com (unknown [10.22.8.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B0DD40C947B;
+        Fri,  2 Dec 2022 17:16:15 +0000 (UTC)
+From:   Brian Foster <bfoster@redhat.com>
+To:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftests: cgroup: update kmem test precision tolerance
-Message-ID: <Y4oy4foegCdOKVKj@P9FQF9L96D.corp.robot.car>
-References: <202212010958.c1053bd3-yujie.liu@intel.com>
- <Y4m8Unt6FhWKC6IH@dhcp22.suse.cz>
+Cc:     ikent@redhat.com, onestero@redhat.com, willy@infradead.org,
+        ebiederm@redhat.com
+Subject: [PATCH v3 2/5] pid: split cyclic id allocation cursor from idr
+Date:   Fri,  2 Dec 2022 12:16:17 -0500
+Message-Id: <20221202171620.509140-3-bfoster@redhat.com>
+In-Reply-To: <20221202171620.509140-1-bfoster@redhat.com>
+References: <20221202171620.509140-1-bfoster@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4m8Unt6FhWKC6IH@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 09:50:26AM +0100, Michal Hocko wrote:
-> OK, so this is a full patch to fix this
-> --- 
-> From 7f338ed952ba4a100822004bc8399bf720b42899 Mon Sep 17 00:00:00 2001
-> From: Michal Hocko <mhocko@suse.com>
-> Date: Fri, 2 Dec 2022 09:45:29 +0100
-> Subject: [PATCH] kselftests: cgroup: update kmem test precision tolerance
-> 
-> 1813e51eece0 ("memcg: increase MEMCG_CHARGE_BATCH to 64") has changed
-> the batch size while this test case has been left behind. This has led
-> to a test failure reported by test bot:
-> not ok 2 selftests: cgroup: test_kmem # exit=1
-> 
-> Update the tolerance for the pcp charges to reflect the
-> MEMCG_CHARGE_BATCH change to fix this.
-> 
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Link: https://lore.kernel.org/oe-lkp/202212010958.c1053bd3-yujie.liu@intel.com
-> Signed-off-by: Michal Hocko <mhocko@suse.com>
-> ---
->  tools/testing/selftests/cgroup/test_kmem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-> index 22b31ebb3513..1d073e28254b 100644
-> --- a/tools/testing/selftests/cgroup/test_kmem.c
-> +++ b/tools/testing/selftests/cgroup/test_kmem.c
-> @@ -24,7 +24,7 @@
->   * the maximum discrepancy between charge and vmstat entries is number
->   * of cpus multiplied by 32 pages.
->   */
-> -#define MAX_VMSTAT_ERROR (4096 * 32 * get_nprocs())
-> +#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
+As a next step in separating pid allocation from the idr, split off
+the cyclic pid allocation cursor from the idr. Lift the cursor value
+into the struct pid_namespace. Note that this involves temporarily
+open-coding the cursor increment on allocation, but this is cleaned
+up in the subsequent patch.
 
-Hi Michal!
-
-You need to update comments above too (it says 32 pages in a couple of places).
-I actually sent the similar patch to Andrew yesterday, but hit reply and missed
-adding people to cc.
-
-Please, feel free to send your v2 with comments fixed and my acked-by,
-or we can go with my version.
-
-Thanks!
-
---
-
-From 354850a59bb8e000490a23bc768f4d3183faf8e4 Mon Sep 17 00:00:00 2001
-From: Roman Gushchin <roman.gushchin@linux.dev>
-Date: Thu, 1 Dec 2022 18:05:07 -0800
-Subject: [PATCH] kselftests/cgroup: adjust memcg charge batch size
-
-Commit 1813e51eece0 ("memcg: increase MEMCG_CHARGE_BATCH to 64")
-doubled the memcg charge batch size, which broke the kmem_memcg_deletion
-test. Bump the corresponding error margin on the test side to fix the
-problem.
-
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202212010958.c1053bd3-yujie.liu@intel.com
-Fixes: 1813e51eece0 ("memcg: increase MEMCG_CHARGE_BATCH to 64")
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Shakeel Butt <shakeelb@google.com>
+Signed-off-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Brian Foster <bfoster@redhat.com>
 ---
- tools/testing/selftests/cgroup/test_kmem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/powerpc/platforms/cell/spufs/sched.c | 2 +-
+ fs/proc/loadavg.c                         | 2 +-
+ include/linux/pid_namespace.h             | 1 +
+ kernel/pid.c                              | 6 ++++--
+ kernel/pid_namespace.c                    | 4 ++--
+ 5 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 22b31ebb3513..258ddc565deb 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -19,12 +19,12 @@
+diff --git a/arch/powerpc/platforms/cell/spufs/sched.c b/arch/powerpc/platforms/cell/spufs/sched.c
+index 99bd027a7f7c..a2ed928d7658 100644
+--- a/arch/powerpc/platforms/cell/spufs/sched.c
++++ b/arch/powerpc/platforms/cell/spufs/sched.c
+@@ -1072,7 +1072,7 @@ static int show_spu_loadavg(struct seq_file *s, void *private)
+ 		LOAD_INT(c), LOAD_FRAC(c),
+ 		count_active_contexts(),
+ 		atomic_read(&nr_spu_contexts),
+-		idr_get_cursor(&task_active_pid_ns(current)->idr) - 1);
++		READ_ONCE(task_active_pid_ns(current)->pid_next) - 1);
+ 	return 0;
+ }
+ #endif
+diff --git a/fs/proc/loadavg.c b/fs/proc/loadavg.c
+index 817981e57223..2740b31b6461 100644
+--- a/fs/proc/loadavg.c
++++ b/fs/proc/loadavg.c
+@@ -22,7 +22,7 @@ static int loadavg_proc_show(struct seq_file *m, void *v)
+ 		LOAD_INT(avnrun[1]), LOAD_FRAC(avnrun[1]),
+ 		LOAD_INT(avnrun[2]), LOAD_FRAC(avnrun[2]),
+ 		nr_running(), nr_threads,
+-		idr_get_cursor(&task_active_pid_ns(current)->idr) - 1);
++		READ_ONCE(task_active_pid_ns(current)->pid_next) - 1);
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/pid_namespace.h b/include/linux/pid_namespace.h
+index 07481bb87d4e..82c72482019d 100644
+--- a/include/linux/pid_namespace.h
++++ b/include/linux/pid_namespace.h
+@@ -18,6 +18,7 @@ struct fs_pin;
+ 
+ struct pid_namespace {
+ 	struct idr idr;
++	unsigned int pid_next;
+ 	struct rcu_head rcu;
+ 	unsigned int pid_allocated;
+ 	struct task_struct *child_reaper;
+diff --git a/kernel/pid.c b/kernel/pid.c
+index 3622f8b13143..2e2d33273c8e 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -75,6 +75,7 @@ int pid_max_max = PID_MAX_LIMIT;
+ struct pid_namespace init_pid_ns = {
+ 	.ns.count = REFCOUNT_INIT(2),
+ 	.idr = IDR_INIT(init_pid_ns.idr),
++	.pid_next = 0,
+ 	.pid_allocated = PIDNS_ADDING,
+ 	.level = 0,
+ 	.child_reaper = &init_task,
+@@ -208,7 +209,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+ 			 * init really needs pid 1, but after reaching the
+ 			 * maximum wrap back to RESERVED_PIDS
+ 			 */
+-			if (idr_get_cursor(&tmp->idr) > RESERVED_PIDS)
++			if (tmp->pid_next > RESERVED_PIDS)
+ 				pid_min = RESERVED_PIDS;
+ 
+ 			/*
+@@ -217,6 +218,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+ 			 */
+ 			nr = idr_alloc_cyclic(&tmp->idr, NULL, pid_min,
+ 					      pid_max, GFP_ATOMIC);
++			tmp->pid_next = nr + 1;
+ 		}
+ 		xa_unlock_irq(&tmp->idr.idr_rt);
+ 		idr_preload_end();
+@@ -278,7 +280,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+ 
+ 		/* On failure to allocate the first pid, reset the state */
+ 		if (tmp == ns && tmp->pid_allocated == PIDNS_ADDING)
+-			idr_set_cursor(&ns->idr, 0);
++			ns->pid_next = 0;
+ 
+ 		idr_remove(&tmp->idr, upid->nr);
+ 		xa_unlock_irq(&tmp->idr.idr_rt);
+diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+index f4f8cb0435b4..a53d20c5c85e 100644
+--- a/kernel/pid_namespace.c
++++ b/kernel/pid_namespace.c
+@@ -272,12 +272,12 @@ static int pid_ns_ctl_handler(struct ctl_table *table, int write,
+ 	 * it should synchronize its usage with external means.
+ 	 */
+ 
+-	next = idr_get_cursor(&pid_ns->idr) - 1;
++	next = READ_ONCE(pid_ns->pid_next) - 1;
+ 
+ 	tmp.data = &next;
+ 	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+ 	if (!ret && write)
+-		idr_set_cursor(&pid_ns->idr, next + 1);
++		WRITE_ONCE(pid_ns->pid_next, next + 1);
+ 
+ 	return ret;
+ }
+-- 
+2.37.3
 
-
- /*
-- * Memory cgroup charging is performed using percpu batches 32 pages
-+ * Memory cgroup charging is performed using percpu batches 64 pages
-  * big (look at MEMCG_CHARGE_BATCH), whereas memory.stat is exact. So
-  * the maximum discrepancy between charge and vmstat entries is number
-- * of cpus multiplied by 32 pages.
-+ * of cpus multiplied by 64 pages.
-  */
--#define MAX_VMSTAT_ERROR (4096 * 32 * get_nprocs())
-+#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
-
-
- static int alloc_dcache(const char *cgroup, void *arg)
---
-2.38.1
