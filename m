@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3955763FD9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DC063FDA4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiLBBXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 20:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S230456AbiLBBdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 20:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbiLBBW6 (ORCPT
+        with ESMTP id S230370AbiLBBdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 20:22:58 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0375254442
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 17:22:56 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so3808715pjg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 17:22:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cfArFpI4a8R+b20KyasbiTdOtc7N2bQ1wdu7RJkkhko=;
-        b=Cb8jMoLSfDnJGI9Pp33XdZXlJvDDfcMbz3oDrUJLziJarvhGWpFLrKZAAyoLNDVtvx
-         jqO7+iWRdzqJYKLL+CyQgt6GEH8V/G2frXfIYxVeR+1FVT5B3jdhcvpTsUvVkUl0N3oD
-         8TVFe40JPZgJ0fBFDt3dE7RRExTcSYjq2Qno38tbDtL2tX0VOwDTUgtoOE6hd8w0W9VZ
-         n5ELhE8nZFhNtEkn0tPxZhAEjfHMWPsspeJVxt10lkJX4smRqMOpQRfgvF3CMr+YoMk6
-         Ityq+JjMXg85AJcC/vWX5CPFwE/KMKTJPXVgvGeQGc1KyaArklIMAo8hRNPezrSGfNfk
-         4j2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cfArFpI4a8R+b20KyasbiTdOtc7N2bQ1wdu7RJkkhko=;
-        b=rCG5pxKNgopmvV1FMobyf7XLdf8vAjqFhz37fCFVEDG7LT5Abk1MnqlzE5hHTiMsT3
-         Tr98NuGRFrpd28pFcE129+8Rz19U4b4qzErdbuLUPKyWeIgZ5iI+GrUTOcM8VxrZxEFI
-         /Z20ItOs3Ge5Q8eSWQfudPx06LTAyD8D/uRbEIHb/PEMdpPyPC48LXPw70gCWthS4qAE
-         q9MTOcr0NhB0IBV6c2D0TI6zYIxB0+5XWaSbiMWL1jHvfmjh6ChJ6j+z0k/eMordOntP
-         mRPsrkYd8bO2RY4RwbhEu+N8dUSx1bBuyXcuBgLluBmvHDz/1QuiNz5h3lx5u1+Z09aF
-         F6JA==
-X-Gm-Message-State: ANoB5plLDEKzjHBaZy3aA0V5vUT4S8pLL1HtYqWk7uNsD4mMRipCrSz2
-        7LJHtlHDdVWgGJZQP40hLAQ+LQ==
-X-Google-Smtp-Source: AA0mqf4SlVzbyxVzO55poMNBTlzJ3qqx67RwC/iohUq/55qYNicOtE463AWnygQojnZJv6xU4RxfoA==
-X-Received: by 2002:a17:902:f7ca:b0:189:a884:1ea0 with SMTP id h10-20020a170902f7ca00b00189a8841ea0mr11088540plw.92.1669944175417;
-        Thu, 01 Dec 2022 17:22:55 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id e8-20020a17090301c800b00189b2b8dbedsm2282448plh.228.2022.12.01.17.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 17:22:54 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, Yang Li <yang.lee@linux.alibaba.com>
-Cc:     josef@toxicpanda.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-In-Reply-To: <20221202011713.14834-1-yang.lee@linux.alibaba.com>
-References: <20221202011713.14834-1-yang.lee@linux.alibaba.com>
-Subject: Re: [PATCH -next] blk-cgroup: Fix some kernel-doc comments
-Message-Id: <166994417436.875585.12360362062569377229.b4-ty@kernel.dk>
-Date:   Thu, 01 Dec 2022 18:22:54 -0700
+        Thu, 1 Dec 2022 20:33:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AAEC3FC6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 17:33:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2970EB81FBE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01B4C433D6;
+        Fri,  2 Dec 2022 01:32:58 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 20:32:57 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chris Mason <clm@meta.com>, Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH] error-injection: Add prompt for function error
+ injection
+Message-ID: <20221201203257.6fa19473@gandalf.local.home>
+In-Reply-To: <nycvar.YFH.7.76.2212020158420.6045@cbobk.fhfr.pm>
+References: <20221121104403.1545f9b5@gandalf.local.home>
+        <Y3vSQo85ofkfD/L8@zn.tnic>
+        <CAADnVQLJFnu6gARdZ7ckgxeGaSv70jHBiQo+W=zDKO0-ELFGcQ@mail.gmail.com>
+        <Y3ymzAYRyH5IWEe/@zn.tnic>
+        <3fa8ec60-dd96-c41f-ea46-8856bf855949@meta.com>
+        <20221122132905.12a8d5ad@gandalf.local.home>
+        <a53e8c6d-b0e5-72bf-1aba-07609c9cf1bf@meta.com>
+        <20221130143719.07e36277d1471b83e9a1b627@linux-foundation.org>
+        <CAADnVQ+KLXPhowdBZq0PvGOq5tv4ovNtNCvGBXHQBkVbz4UVkg@mail.gmail.com>
+        <CAHk-=wjeq1m=9mU17WzfRQ1W6N0SgKHY-e2J35SpppWwUUBFbQ@mail.gmail.com>
+        <nycvar.YEU.7.76.2212020141280.27249@gjva.wvxbf.pm>
+        <CAHk-=wjnwupwPOcTxGnDb1-dJ+wZDk1yiVvuDp8dAAAmLesrvA@mail.gmail.com>
+        <nycvar.YFH.7.76.2212020158420.6045@cbobk.fhfr.pm>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-50ba3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2 Dec 2022 02:03:03 +0100 (CET)
+Jiri Kosina <jikos@kernel.org> wrote:
 
-On Fri, 02 Dec 2022 09:17:13 +0800, Yang Li wrote:
-> Make the description of @gendisk to @disk in blkcg_schedule_throttle()
-> to clear the below warnings:
+> On Thu, 1 Dec 2022, Linus Torvalds wrote:
 > 
-> block/blk-cgroup.c:1850: warning: Function parameter or member 'disk' not described in 'blkcg_schedule_throttle'
-> block/blk-cgroup.c:1850: warning: Excess function parameter 'gendisk' description in 'blkcg_schedule_throttle'
+> > > Anyway, I believe [1] that ERROR_INJECTION has been designed as a
+> > > debugging feature in the first place, and should stay so. After figuring
+> > > out now that HID-BPF actually has hard dependence on it, I fully agree [2]
+> > > that the series should be ditched for 6.2 and will work with Benjamin to
+> > > have it removed from current hid.git#for-next.  
+> > 
+> > I do think that it is interesting to have a "let's have a bpf
+> > insertion hook here", so I'm not against the _concept_ of HID doing
+> > that.  
 > 
-> 
-> [...]
+> Absolutely, me neither, quite the contrary -- I am quite happy to see 
+> HID-BPF happening, because it'll actually make life easier for everybody: 
+> for people with quirky hardware (trivial testing of fixes), for kernel 
+> developers (trivial testing of fixes), and for distributions (trivial 
+> distribution of fixes).
 
-Applied, thanks!
+Full disclosure, I'm not against a bpf_hook either. In fact, I think I even
+stated something to that effect, like adding a bpf_hook annotation to
+functions or whatever, so that people can plainly see that the function can
+have bpf attached to it.
 
-[1/1] blk-cgroup: Fix some kernel-doc comments
-      commit: 1d6df9d352bb2a3c2ddb32851dfcafb417c47762
+I just *hate* the ad hoc way of using infrastructure for other purposes
+than what they were designed for.
 
-Best regards,
--- 
-Jens Axboe
-
-
+-- Steve
