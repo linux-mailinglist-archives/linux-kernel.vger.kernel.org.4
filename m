@@ -2,131 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E102B640DC0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60D0640DC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbiLBSq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S234564AbiLBSqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbiLBSp5 (ORCPT
+        with ESMTP id S234711AbiLBSq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:45:57 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F971B7BD;
-        Fri,  2 Dec 2022 10:45:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670006739; x=1701542739;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XWxJdpquJhmjnEg+41kl3vTulfrJiGCU35Tza1QgcvI=;
-  b=ZLqCuX9pbdsbDAtwCBJF8NXBqMlFRHJ+s6kl9N4nXG5NXr8FRzMjSoha
-   Vq13orYQp17p3A5oj4IiKSbEmm5hsBU6KWFmI8QQVmNU5dLbmpCCQMrU5
-   yw/koRIV8gdFWBYsQSZqSWuBamxjQV3O7iaCfW753ed3WAb9NCJLFKn4s
-   /igAYkcO5PKd7dUYrQOh2WU6r/Gb28lgszHgWtOkUjEu9Fd3aCNXF1KPQ
-   1oI6VLwocW5WdncuMdsEoY9f7lLKRHYDcs5BF89DAWxXs2olOs3Ucd1GC
-   ChLs4D2pGHmfs2CkTI6LQS4Y4/kOc/37DwuzGjFfuG2cyJSm3yKJ2ertX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="402299324"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="402299324"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 10:45:39 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="890249286"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="890249286"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.59.223]) ([10.212.59.223])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 10:45:39 -0800
-Message-ID: <044897a1-e6e1-b80a-e4cb-6b87423680fe@intel.com>
-Date:   Fri, 2 Dec 2022 11:45:38 -0700
+        Fri, 2 Dec 2022 13:46:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17785DBF7C;
+        Fri,  2 Dec 2022 10:46:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDFA6B82242;
+        Fri,  2 Dec 2022 18:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EEC0C433D6;
+        Fri,  2 Dec 2022 18:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670006771;
+        bh=YtK9Rbdr1BlS3FSUUNTiCqS+imWPNk+kOo2kMIyNNM8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Veqd9XW81oxxEbsNRNDEgPtmBM9t3alXRz/iHXbDe4SWPYL2PPtB5DMMcTRheaVZF
+         +VilR/FjgxMTuvnFaDiupnkksVg3HFcAHryuyd3raOqRHML2mD0Ts637Hg3+Ejktvw
+         3TkMfjqKTcazHdLwsix/z/CoXD+IQP3ZgGogrRc8kV7vrHNCKtMQlRvlU3nB51RTWm
+         PtbeYo0L8yloL0W3oSV6U3TnT2l7hqgGDJQNfm/kGslt+6omGXCkeLqWsCRF/1Kfdf
+         Wxoi2iBDnXUNRwM1k9kxKgb/la0iFU5f/EL5CZo1TKdaymorgi2gc/LHeNpgrcjvFl
+         kdOwdUGHqtyqQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id CFAA34034E; Fri,  2 Dec 2022 15:46:08 -0300 (-03)
+Date:   Fri, 2 Dec 2022 15:46:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, namhyung@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 1/2] perf tests: Fix "perf stat JSON output linter" test
+ for new output
+Message-ID: <Y4pH8NEzfAPGkyW7@kernel.org>
+References: <20221130111521.334152-1-james.clark@arm.com>
+ <CAP-5=fXAhs-xgOo9GPH-w5f1QxNBCt5pdzpC5Cr7K+ovPzdgzw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH 3/3] dmaengine: idxd: Do not call DMX TX callbacks during
- workqueue disable
-Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com,
-        vkoul@kernel.org, dmaengine@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <cover.1670005163.git.reinette.chatre@intel.com>
- <93b5d144bfc16e0c0f640d5f7cfaeda6bf08753f.1670005163.git.reinette.chatre@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <93b5d144bfc16e0c0f640d5f7cfaeda6bf08753f.1670005163.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fXAhs-xgOo9GPH-w5f1QxNBCt5pdzpC5Cr7K+ovPzdgzw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Wed, Nov 30, 2022 at 10:18:49AM -0800, Ian Rogers escreveu:
+> On Wed, Nov 30, 2022 at 3:15 AM James Clark <james.clark@arm.com> wrote:
+> >
+> > Commit c4b41b83c250 ("perf stat: Rename "aggregate-number" to
+> > "cpu-count" in JSON") renamed a field, so update the tests to reflect
+> > this.
+> >
+> > This fixes the following failure:
+> >
+> >   $ sudo ./perf test "json output" -vvv
+> >    96: perf stat JSON output linter                                    :
+> >   --- start ---
+> >   test child forked, pid 327720
+> >   Checking json output: no args [Success]
+> >   Checking json output: system wide [Success]
+> >   Checking json output: interval [Success]
+> >   Checking json output: event [Success]
+> >   Checking json output: per thread [Success]
+> >   Checking json output: per node Test failed for input:
+> >   ...
+> >   Traceback (most recent call last):
+> >     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 93, in <module>
+> >       check_json_output(expected_items)
+> >     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 78, in check_json_output
+> >       raise RuntimeError(f'Unexpected key: key={key} value={value}')
+> >   RuntimeError: Unexpected key: key=cpu-count value=16
+> >   test child finished with -1
+> >   ---- end ----
+> >   perf stat JSON output linter: FAILED!
+> >
+> > Fixes: c4b41b83c250 ("perf stat: Rename "aggregate-number" to "cpu-count" in JSON")
+> > Signed-off-by: James Clark <james.clark@arm.com>
+> 
+> Namhyung mentioned reverting change c4b41b83c250, in which case
+> merging this would break the test again. I think the revert is better.
 
+Applied the revert, with an Acked-by: you.
+ 
+> Thanks,
+> Ian
+> 
+> > ---
+> >  tools/perf/tests/shell/lib/perf_json_output_lint.py | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+> > index d90f8d102eb9..9c073e257d33 100644
+> > --- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
+> > +++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+> > @@ -54,7 +54,7 @@ def check_json_output(expected_items):
+> >            raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
+> >                               f' in \'{line}\'')
+> >    checks = {
+> > -      'aggregate-number': lambda x: isfloat(x),
+> > +      'cpu-count': lambda x: isfloat(x),
+> >        'core': lambda x: True,
+> >        'counter-value': lambda x: is_counter_value(x),
+> >        'cgroup': lambda x: True,
+> > --
+> > 2.25.1
+> >
 
-On 12/2/2022 11:25 AM, Reinette Chatre wrote:
-> On driver unload any pending descriptors are flushed and pending
-> DMA descriptors are explicitly completed:
-> idxd_dmaengine_drv_remove() ->
-> 	drv_disable_wq() ->
-> 		idxd_wq_free_irq() ->
-> 			idxd_flush_pending_descs() ->
-> 				idxd_dma_complete_txd()
-> 
-> With this done during driver unload any remaining descriptor is
-> likely stuck and can be dropped. Even so, the descriptor may still
-> have a callback set that could no longer be accessible. An
-> example of such a problem is when the dmatest fails and the dmatest
-> module is unloaded. The failure of dmatest leaves descriptors with
-> dma_async_tx_descriptor::callback pointing to code that no longer
-> exist. This causes a page fault as below at the time the IDXD driver
-> is unloaded when it attempts to run the callback:
->   BUG: unable to handle page fault for address: ffffffffc0665190
->   #PF: supervisor instruction fetch in kernel mode
->   #PF: error_code(0x0010) - not-present page
-> 
-> Fix this by clearing the callback pointers on the transmit
-> descriptors only when workqueue is disabled.
-> 
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+-- 
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-> ---
-> 
-> History of refactoring made the Fixes: hard to identify by me.
-> 
->   drivers/dma/idxd/device.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-> index b4d7bb923a40..2ac71a34fa34 100644
-> --- a/drivers/dma/idxd/device.c
-> +++ b/drivers/dma/idxd/device.c
-> @@ -1156,6 +1156,7 @@ int idxd_device_load_config(struct idxd_device *idxd)
->   
->   static void idxd_flush_pending_descs(struct idxd_irq_entry *ie)
->   {
-> +	struct dma_async_tx_descriptor *tx;
->   	struct idxd_desc *desc, *itr;
->   	struct llist_node *head;
->   	LIST_HEAD(flist);
-> @@ -1175,6 +1176,15 @@ static void idxd_flush_pending_descs(struct idxd_irq_entry *ie)
->   	list_for_each_entry_safe(desc, itr, &flist, list) {
->   		list_del(&desc->list);
->   		ctype = desc->completion->status ? IDXD_COMPLETE_NORMAL : IDXD_COMPLETE_ABORT;
-> +		/*
-> +		 * wq is being disabled. Any remaining descriptors are
-> +		 * likely to be stuck and can be dropped. callback could
-> +		 * point to code that is no longer accessible, for example
-> +		 * if dmatest module has been unloaded.
-> +		 */
-> +		tx = &desc->txd;
-> +		tx->callback = NULL;
-> +		tx->callback_result = NULL;
->   		idxd_dma_complete_txd(desc, ctype, true);
->   	}
->   }
+- Arnaldo
