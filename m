@@ -2,131 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906A1641062
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B90641065
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbiLBWLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S234677AbiLBWMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234460AbiLBWLg (ORCPT
+        with ESMTP id S229543AbiLBWMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:11:36 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE93F89A7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:11:35 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id b11so6173833pjp.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:11:35 -0800 (PST)
+        Fri, 2 Dec 2022 17:12:20 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08392F899C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:12:19 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3d0465d32deso63620787b3.20
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:12:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w0dcCRAw7breQBxRgO7vXMzRE1EKaCH1sm8fAccBDKk=;
-        b=OwVi+W7xvxR/nGjj39pmX3oRQiji/LPiwOpKAVbcIfM5DiCUEx2CVjjGCPgXGrAYj2
-         5UoXRgnzXLZKAL8W05vLqFxBXlQ6XcoYM3KtBnvhqQMVng3lNY2A1Ac0VfEk1e+mkKH0
-         2KCcNECGN1AEN2hcX554Bmw8qWfXqc5l8cIxA=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aqtQqt3CYbfEmZYhGTH/QgYDRef/TM1s51odegjsqeI=;
+        b=HdgVFnSLUnEmFG4MkBjFMO4G2tTWjjsOcCEdrCCe+T/mJxH48wYxh0iNqe6oMNckjR
+         OPoNQfdgUK0jrKTtdGC9jVZRT8z+mfsZwc65UsCrVc/ms9azzlRS/eOsXn00RItDM4TL
+         1b623/78nCbsdtkrLJe7LBgL2mlvaW2QnLxQDEECMJy8iN18LfGdLCv1XAanIvgQ/ifn
+         hKzUAN9CEY98iN9PzLbfT3UDryQE3BXEzb/qWphS/1MWZNDX25qiiIeHhGSWJ6UVIcVG
+         0Uqu6qrgKrnGHZJ3OKKgpDfz8JkTn92v0KcwF/ZxfzKV+epZN5gnlW3XbWzpPa8xogbh
+         tpTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w0dcCRAw7breQBxRgO7vXMzRE1EKaCH1sm8fAccBDKk=;
-        b=0JDD7Q8V+Tv9nc0dvIeQ14yQROblpDU3QhrfzcDMMZgQgPF3P2ZQum1UuAlshSPRaj
-         csWh1VbHDP3vEqXDvZw+YtcFgxycYE8P4X754+pNznBNywYYVMsjr30heKY4ifCRtGWz
-         w3/S2UvRJ2TnH/cRpblpcyuFEBhdylX0bsG74lU4FAN/HI1CI7sO2doKQJgzQ1ALKnTe
-         yGE4TQbB7hjznvCl+7wYK162BOmIEX+s5uPO3sDHqPS+Ew95DGSZVqaSO5837ilRt1D2
-         9E5eYDXB4JK9tDell+Npc84jeZT/TVA7SD/hp4sJ8un9wUlHMbB/DlvXFGKbAC7tMOyd
-         xwkA==
-X-Gm-Message-State: ANoB5plS5U6GcGw2dwBoKluGup3+hTlXh367zhkvHSTuc/B0XZu6g1mF
-        AXuaQV6bOrcyy0aYCOGwbzeVDA==
-X-Google-Smtp-Source: AA0mqf6QTLbmI+X8jti2r+C7tdO68/bOJUECQQLNnuZG8zdOtdYlL2NT2bZgqzSjU6DeRIsbPY36zw==
-X-Received: by 2002:a17:90a:9e5:b0:219:5139:7fa8 with SMTP id 92-20020a17090a09e500b0021951397fa8mr20815064pjo.15.1670019094904;
-        Fri, 02 Dec 2022 14:11:34 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h131-20020a628389000000b0056bb36c047asm5510216pfe.105.2022.12.02.14.11.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:11:34 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 2 Dec 2022 14:11:33 -0800
-To:     Shayne Chen <shayne.chen@mediatek.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        StanleyYP Wang <StanleyYP.Wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Chiu <chui-hao.chiu@mediatek.com>,
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aqtQqt3CYbfEmZYhGTH/QgYDRef/TM1s51odegjsqeI=;
+        b=emIyguDtRiHgHjfWr8g8D92R9FxrnIj1dQFwzQKG08+++eZ+eLUO+xQQ7GSro/pRzs
+         AIJ3pSmbodOHRQJgJwLkHp/c3okwWd3wm9LunDfnAgK1pGq0albLw6a5y+jY5ZmI0BhB
+         hwmJ1E0TT30EqYOjlhWzGyBMC6lI/U9JtDAS6cb7PTNwFcWim4H7lq0DG7p0qQEnwhdT
+         HyKVFDYjElQjB2Mke7tDa3qn0OTYvS0GMND9EdwE2fcLe2s0FLaWE4WVv9Xhg4u+Xs/S
+         2/O1qZwuY+qYeEMAEHPZBJ8JIYBqB0qZILWKiJZ/XZ8KJAX6czjaU/gu0u9TAfaI+YPt
+         YFCA==
+X-Gm-Message-State: ANoB5pmFPb7NQeVwR/r8LiohM+W/dBXNU3JYAQpI63GHQQiZuJCKa//f
+        wiRSfW792qNSdGGoGQ3OVVvN4iNt7STzEOw=
+X-Google-Smtp-Source: AA0mqf5ciOxlekVv9aOeSzePlJQ4uYKqkzOIVZqTyxgblQDfY//KIiJDG0IH/dEbc4yf6QjRcXFMEfjrtp//x28=
+X-Received: from lixiaoyan-desktop.svl.corp.google.com ([2620:15c:2c4:201:806c:1abb:ce24:13cf])
+ (user=lixiaoyan job=sendgmr) by 2002:a81:510:0:b0:356:4adb:67b4 with SMTP id
+ 16-20020a810510000000b003564adb67b4mr57763344ywf.141.1670019138178; Fri, 02
+ Dec 2022 14:12:18 -0800 (PST)
+Date:   Fri,  2 Dec 2022 14:12:12 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221202221213.236564-1-lixiaoyan@google.com>
+Subject: [RFC net-next v4 1/2] IPv6/GRO: generic helper to remove temporary
+ HBH/jumbo header in driver
+From:   Coco Li <lixiaoyan@google.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
-        Money Wang <Money.Wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Howard Hsu <howard-yh.hsu@mediatek.com>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        "David S. Miller" <davem@davemloft.net>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        MeiChia Chiu <meichia.chiu@mediatek.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Bo Jiao <Bo.Jiao@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: mt7996_hw_queue_read(): Integer handling issues
-Message-ID: <202212021411.A5E618D3@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Michael Chan <michael.chan@broadcom.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Coco Li <lixiaoyan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+IPv6/TCP and GRO stacks can build big TCP packets with an added
+temporary Hop By Hop header.
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221202 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+Is GSO is not involved, then the temporary header needs to be removed in
+the driver. This patch provides a generic helper for drivers that need
+to modify their headers in place.
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+Signed-off-by: Coco Li <lixiaoyan@google.com>
+---
+ include/net/ipv6.h     | 35 +++++++++++++++++++++++++++++++++++
+ net/ipv6/ip6_offload.c | 27 ++++-----------------------
+ 2 files changed, 39 insertions(+), 23 deletions(-)
 
-  Thu Dec 1 17:29:14 2022 +0100
-    98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
-
-Coverity reported the following:
-
-*** CID 1527813:  Integer handling issues  (SIGN_EXTENSION)
-drivers/net/wireless/mediatek/mt76/mt7996/debugfs.c:460 in mt7996_hw_queue_read()
-454     	for (i = 0; i < size; i++) {
-455     		u32 ctrl, head, tail, queued;
-456
-457     		if (val & BIT(map[i].index))
-458     			continue;
-459
-vvv     CID 1527813:  Integer handling issues  (SIGN_EXTENSION)
-vvv     Suspicious implicit sign extension: "map[i].qid" with type "u8" (8 bits, unsigned) is promoted in "map[i].qid << 24" to type "int" (32 bits, signed), then sign-extended to type "unsigned long" (64 bits, unsigned).  If "map[i].qid << 24" is greater than 0x7FFFFFFF, the upper bits of the result will all be 1.
-460     		ctrl = BIT(31) | (map[i].pid << 10) | (map[i].qid << 24);
-461     		mt76_wr(dev, MT_FL_Q0_CTRL, ctrl);
-462
-463     		head = mt76_get_field(dev, MT_FL_Q2_CTRL,
-464     				      GENMASK(11, 0));
-465     		tail = mt76_get_field(dev, MT_FL_Q2_CTRL,
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527813 ("Integer handling issues")
-Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
-
-Thanks for your attention!
-
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index d383c895592a..08adec74f067 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -500,6 +500,41 @@ static inline int ipv6_has_hopopt_jumbo(const struct sk_buff *skb)
+ 	return jhdr->nexthdr;
+ }
+ 
++/* Return 0 if HBH header is successfully removed
++ * Or if HBH removal is unnecessary (packet is not big TCP)
++ * Return error to indicate dropping the packet
++ */
++static inline int ipv6_hopopt_jumbo_remove(struct sk_buff *skb)
++{
++	const int hophdr_len = sizeof(struct hop_jumbo_hdr);
++	int nexthdr = ipv6_has_hopopt_jumbo(skb);
++	struct ipv6hdr *h6;
++
++	if (!nexthdr)
++		return 0;
++
++	if (skb_cow_head(skb, 0))
++		return -1;
++
++	/* Remove the HBH header.
++	 * Layout: [Ethernet header][IPv6 header][HBH][L4 Header]
++	 */
++	memmove(skb_mac_header(skb) + hophdr_len, skb_mac_header(skb),
++		skb_network_header(skb) - skb_mac_header(skb) +
++		sizeof(struct ipv6hdr));
++
++	if (unlikely(!pskb_may_pull(skb, hophdr_len)))
++		return -1;
++
++	skb->network_header += hophdr_len;
++	skb->mac_header += hophdr_len;
++
++	h6 = ipv6_hdr(skb);
++	h6->nexthdr = nexthdr;
++
++	return 0;
++}
++
+ static inline bool ipv6_accept_ra(struct inet6_dev *idev)
+ {
+ 	/* If forwarding is enabled, RA are not accepted unless the special
+diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
+index 3ee345672849..00dc2e3b0184 100644
+--- a/net/ipv6/ip6_offload.c
++++ b/net/ipv6/ip6_offload.c
+@@ -77,7 +77,7 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
+ 	struct sk_buff *segs = ERR_PTR(-EINVAL);
+ 	struct ipv6hdr *ipv6h;
+ 	const struct net_offload *ops;
+-	int proto, nexthdr;
++	int proto, err;
+ 	struct frag_hdr *fptr;
+ 	unsigned int payload_len;
+ 	u8 *prevhdr;
+@@ -87,28 +87,9 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
+ 	bool gso_partial;
+ 
+ 	skb_reset_network_header(skb);
+-	nexthdr = ipv6_has_hopopt_jumbo(skb);
+-	if (nexthdr) {
+-		const int hophdr_len = sizeof(struct hop_jumbo_hdr);
+-		int err;
+-
+-		err = skb_cow_head(skb, 0);
+-		if (err < 0)
+-			return ERR_PTR(err);
+-
+-		/* remove the HBH header.
+-		 * Layout: [Ethernet header][IPv6 header][HBH][TCP header]
+-		 */
+-		memmove(skb_mac_header(skb) + hophdr_len,
+-			skb_mac_header(skb),
+-			ETH_HLEN + sizeof(struct ipv6hdr));
+-		skb->data += hophdr_len;
+-		skb->len -= hophdr_len;
+-		skb->network_header += hophdr_len;
+-		skb->mac_header += hophdr_len;
+-		ipv6h = (struct ipv6hdr *)skb->data;
+-		ipv6h->nexthdr = nexthdr;
+-	}
++	err = ipv6_hopopt_jumbo_remove(skb);
++	if (err)
++		return ERR_PTR(err);
+ 	nhoff = skb_network_header(skb) - skb_mac_header(skb);
+ 	if (unlikely(!pskb_may_pull(skb, sizeof(*ipv6h))))
+ 		goto out;
 -- 
-Coverity-bot
+2.39.0.rc0.267.gcb52ba06e7-goog
+
