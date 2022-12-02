@@ -2,206 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C0E640D8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E798F640D9C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiLBSjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S234259AbiLBSmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234631AbiLBSjC (ORCPT
+        with ESMTP id S234512AbiLBSle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:39:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33F0191
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:37:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670006251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RuMG0d33sEC7aE30jwx3bdY7txbQTuJrOEcspw8hQrc=;
-        b=HxKwIinq2Cg0k6DVKjcU9npokUtivN3nWCGUxyakrkix6jKybZejQs6VNH1fmIEQbsvMg4
-        5NjItCK9AsYxTXaQ3o6V2iKRF05xS1WoYp5bj4UN830jmghSE5n2PPKAso8reASycivzGA
-        GznIaCbKE21LrO2AfJw9EFtllOg7UL8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-216-c-bv2q4XNBuoVs_WvpVduA-1; Fri, 02 Dec 2022 13:37:28 -0500
-X-MC-Unique: c-bv2q4XNBuoVs_WvpVduA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 2 Dec 2022 13:41:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB082F4EB0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:39:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D85985A59D;
-        Fri,  2 Dec 2022 18:37:28 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 59E6040C845E;
-        Fri,  2 Dec 2022 18:37:28 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Like Xu <like.xu.linux@gmail.com>
-Subject: [PATCH] KVM: x86: remove unnecessary exports
-Date:   Fri,  2 Dec 2022 13:37:27 -0500
-Message-Id: <20221202183727.1033906-1-pbonzini@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E7E623A9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB72C433C1;
+        Fri,  2 Dec 2022 18:39:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670006389;
+        bh=BleIvxODy6ciEnk+PuCyneMSnGiwb5+/ySNjeEHNJkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LJUwhG4CRx8Ozeh7tSuc48PznuxPcM+We5TOZo/7oRcm/2mkD1+QBUDWQDCO9Ljk9
+         Qq8O1oAa2r4z01tL12S4XiE8d+bKhkQF1POhEPbTudpw8sN/2SbKdhUnJQI4oEh7cD
+         uLZigFpldlNU+3f0rR/22kr/AK2ZSbGLshxlUxmhT5bTAd8iyDPVEhqKZOicSB2HlV
+         DcW6KfEaVAVcYYbhenC1fj5zop65p0oIiwAGNQy4ZmLp69KvxYFCxt76OXC790lxkN
+         8HzTTArSJ5S+1+ARm9H/O5uW/J5lxO9VEOXH62Ama4ZB89hANTfwjEzyDHKXrgmphD
+         MdwucQPzlQLbA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 03D564034E; Fri,  2 Dec 2022 15:39:46 -0300 (-03)
+Date:   Fri, 2 Dec 2022 15:39:46 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Hans-Peter Nilsson <hp@axis.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kim Phillips <kim.phillips@arm.com>
+Subject: Re: [PATCH] perf arm64: Fix mksyscalltbl, don't lose syscalls due to
+ sort -nu
+Message-ID: <Y4pGchpqZCaWhPQg@kernel.org>
+References: <20201228023941.E0DE2203B5@pchp3.se.axis.com>
+ <20201229030933.GC28115@leoy-ThinkPad-X240s>
+ <Y4Cspv98j8TqwCqZ@axis.com>
+ <Y4C66dg+9wwiXdVs@leoy-yangtze.lan>
+ <98978f82-eb78-4fa7-901e-76c3070362e3@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98978f82-eb78-4fa7-901e-76c3070362e3@app.fastmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several symbols are not used by vendor modules but still exported.
-Removing them ensures that new coupling between kvm.ko and kvm-*.ko
-is noticed and reviewed.
+Em Fri, Nov 25, 2022 at 02:56:31PM +0100, Arnd Bergmann escreveu:
+> On Fri, Nov 25, 2022, at 13:54, Leo Yan wrote:
+> > On Fri, Nov 25, 2022 at 12:53:10PM +0100, Vincent Whitchurch wrote:
+> 
+> >> It looks like this patch was never applied?  AFAICS it is still needed
+> >> on current HEAD and it still applies cleanly.
+> >
+> > Thanks a lot for bringing up this.
+> >
+> > Before there have a discussion [1] for refactoring Arm64 system call
+> > table but it didn't really happen.
+> 
+> I actually worked on this last week and did a new series to convert
+> the old asm-generic/unistd.h header into the syscall.tbl format,
+> and change arm64 to use that.
+> 
+> You can find my work in the 'syscall-tbl' branch of my asm-generic
+> tree [1]. This has only seen light build testing so far, and is
+> probably still buggy, but most of the work is there. The missing
+> bits are the Makefiles for the other seven architectures using
+> asm-generic/unistd.h, and checking the output to ensure the
+> contents are still the same.
+> 
+> > I think it's the right thing to merge
+> > this patch, @Arnaldo, could you pick up this patch?
+> 
+> That sounds fine to me.
 
-Co-developed-by: Sean Christopherson <seanjc@google.com>
-Co-developed-by: Like Xu <like.xu.linux@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Like Xu <like.xu.linux@gmail.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/hyperv.c | 1 -
- arch/x86/kvm/irq.c    | 2 --
- arch/x86/kvm/lapic.c  | 3 ---
- arch/x86/kvm/x86.c    | 8 --------
- 4 files changed, 14 deletions(-)
+Sure, and adding an Acked-by: Arnd
+ 
+>     Arnd
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 2c7f2a26421e..cc3e8c7d0850 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -898,7 +898,6 @@ bool kvm_hv_assist_page_enabled(struct kvm_vcpu *vcpu)
- 		return false;
- 	return vcpu->arch.pv_eoi.msr_val & KVM_MSR_ENABLED;
- }
--EXPORT_SYMBOL_GPL(kvm_hv_assist_page_enabled);
- 
- int kvm_hv_get_assist_page(struct kvm_vcpu *vcpu)
- {
-diff --git a/arch/x86/kvm/irq.c b/arch/x86/kvm/irq.c
-index d8d50558f165..a70952eca905 100644
---- a/arch/x86/kvm/irq.c
-+++ b/arch/x86/kvm/irq.c
-@@ -31,7 +31,6 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
- 
- 	return r;
- }
--EXPORT_SYMBOL(kvm_cpu_has_pending_timer);
- 
- /*
-  * check if there is a pending userspace external interrupt
-@@ -150,7 +149,6 @@ void kvm_inject_pending_timer_irqs(struct kvm_vcpu *vcpu)
- 	if (kvm_xen_timer_enabled(vcpu))
- 		kvm_xen_inject_timer_irqs(vcpu);
- }
--EXPORT_SYMBOL_GPL(kvm_inject_pending_timer_irqs);
- 
- void __kvm_migrate_timers(struct kvm_vcpu *vcpu)
- {
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 8224ac8b617a..4efdb4a4d72c 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -160,7 +160,6 @@ bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
- 	       && !(kvm_mwait_in_guest(vcpu->kvm) ||
- 		    kvm_can_post_timer_interrupt(vcpu));
- }
--EXPORT_SYMBOL_GPL(kvm_can_use_hv_timer);
- 
- static bool kvm_use_posted_timer_interrupt(struct kvm_vcpu *vcpu)
- {
-@@ -1914,7 +1913,6 @@ bool kvm_lapic_hv_timer_in_use(struct kvm_vcpu *vcpu)
- 
- 	return vcpu->arch.apic->lapic_timer.hv_timer_in_use;
- }
--EXPORT_SYMBOL_GPL(kvm_lapic_hv_timer_in_use);
- 
- static void cancel_hv_timer(struct kvm_lapic *apic)
- {
-@@ -2432,7 +2430,6 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
- 		apic->isr_count = count_vectors(apic->regs + APIC_ISR);
- 	}
- }
--EXPORT_SYMBOL_GPL(kvm_apic_update_apicv);
- 
- void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
- {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 152ea4993b76..4825773886f9 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -463,7 +463,6 @@ u64 kvm_get_apic_base(struct kvm_vcpu *vcpu)
- {
- 	return vcpu->arch.apic_base;
- }
--EXPORT_SYMBOL_GPL(kvm_get_apic_base);
- 
- enum lapic_mode kvm_get_apic_mode(struct kvm_vcpu *vcpu)
- {
-@@ -491,7 +490,6 @@ int kvm_set_apic_base(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	kvm_recalculate_apic_map(vcpu->kvm);
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(kvm_set_apic_base);
- 
- /*
-  * Handle a fault on a hardware virtualization (VMX or SVM) instruction.
-@@ -782,7 +780,6 @@ void kvm_inject_page_fault(struct kvm_vcpu *vcpu, struct x86_exception *fault)
- 		kvm_queue_exception_e_p(vcpu, PF_VECTOR, fault->error_code,
- 					fault->address);
- }
--EXPORT_SYMBOL_GPL(kvm_inject_page_fault);
- 
- void kvm_inject_emulated_page_fault(struct kvm_vcpu *vcpu,
- 				    struct x86_exception *fault)
-@@ -811,7 +808,6 @@ void kvm_inject_nmi(struct kvm_vcpu *vcpu)
- 	atomic_inc(&vcpu->arch.nmi_queued);
- 	kvm_make_request(KVM_REQ_NMI, vcpu);
- }
--EXPORT_SYMBOL_GPL(kvm_inject_nmi);
- 
- void kvm_queue_exception_e(struct kvm_vcpu *vcpu, unsigned nr, u32 error_code)
- {
-@@ -836,7 +832,6 @@ bool kvm_require_cpl(struct kvm_vcpu *vcpu, int required_cpl)
- 	kvm_queue_exception_e(vcpu, GP_VECTOR, 0);
- 	return false;
- }
--EXPORT_SYMBOL_GPL(kvm_require_cpl);
- 
- bool kvm_require_dr(struct kvm_vcpu *vcpu, int dr)
- {
-@@ -2069,7 +2064,6 @@ int kvm_emulate_as_nop(struct kvm_vcpu *vcpu)
- {
- 	return kvm_skip_emulated_instruction(vcpu);
- }
--EXPORT_SYMBOL_GPL(kvm_emulate_as_nop);
- 
- int kvm_emulate_invd(struct kvm_vcpu *vcpu)
- {
-@@ -2515,7 +2509,6 @@ u64 kvm_scale_tsc(u64 tsc, u64 ratio)
- 
- 	return _tsc;
- }
--EXPORT_SYMBOL_GPL(kvm_scale_tsc);
- 
- static u64 kvm_compute_l1_tsc_offset(struct kvm_vcpu *vcpu, u64 target_tsc)
- {
-@@ -12068,7 +12061,6 @@ bool kvm_vcpu_is_reset_bsp(struct kvm_vcpu *vcpu)
- {
- 	return vcpu->kvm->arch.bsp_vcpu_id == vcpu->vcpu_id;
- }
--EXPORT_SYMBOL_GPL(kvm_vcpu_is_reset_bsp);
- 
- bool kvm_vcpu_is_bsp(struct kvm_vcpu *vcpu)
- {
 -- 
-2.31.1
 
+- Arnaldo
