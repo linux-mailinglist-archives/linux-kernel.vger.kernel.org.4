@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D16640D4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A3B640D53
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234285AbiLBSc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S234204AbiLBSeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiLBScx (ORCPT
+        with ESMTP id S233808AbiLBSeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:32:53 -0500
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6A37F8E;
-        Fri,  2 Dec 2022 10:32:50 -0800 (PST)
-Received: by mail-wr1-f47.google.com with SMTP id w15so9069102wrl.9;
-        Fri, 02 Dec 2022 10:32:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dPMI3+zK71UDugRLfvvjNZoXPuW3L0kj2lPu6Tc7ooM=;
-        b=PZ2SBb35YHOXylVqc7daqMUbAJ0UbVHRnpYdm1IFb0CEFehrWf1LCIvNfZTPE0Wv88
-         6ker0qcXTdsUgoJwGBapF6au4CY1G5/htzo2T1vFJZfkjYH6QOQ5Ocf3NIaRjywmq3fK
-         zMzXcqMomEeoLCFJTYh74l/8LnISBKmTiCg/mehoXmxC0+2ReDOEO/6v7ocXDwgbidOT
-         w2nfudOx8vrqIUs96gAKJn++DHs4wj78iDXTgy1r0Dbq5glHfGixbhpaaVmxZmxYADHQ
-         twnMYPbFminhMFINCGMuJIxH8518WOyjy8RAuRbtUhX80/N9GMrHSXs5OCTK9mfQzb8G
-         2R/A==
-X-Gm-Message-State: ANoB5pmVsWfQhFMXf2b+pAOgxQjQshWKVRpJ59bOKFyzUf/cnfwAGIiV
-        ADYs+CbxxC71dEv/5b879sU=
-X-Google-Smtp-Source: AA0mqf6YqRlHZN2hozxkeZwQrDln42/fBDSISeGrupnXTaC7vfUgHTO/zDo75j9GUPu8GYUhgRPeZg==
-X-Received: by 2002:a05:6000:18cd:b0:242:26ed:2d69 with SMTP id w13-20020a05600018cd00b0024226ed2d69mr10428691wrq.3.1670005969130;
-        Fri, 02 Dec 2022 10:32:49 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1c720c000000b003c64c186206sm8950653wmc.16.2022.12.02.10.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 10:32:48 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:32:47 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     ojeda@kernel.org
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v2 26/28] rust: build_assert: add `build_{error,assert}!`
- macros
-Message-ID: <Y4pEzzSs9vO7cvjT@liuwe-devbox-debian-v2>
-References: <20221202161502.385525-1-ojeda@kernel.org>
- <20221202161502.385525-27-ojeda@kernel.org>
+        Fri, 2 Dec 2022 13:34:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D01EAB5B;
+        Fri,  2 Dec 2022 10:33:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6CEC62396;
+        Fri,  2 Dec 2022 18:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1623FC433D6;
+        Fri,  2 Dec 2022 18:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670006038;
+        bh=5qgN/0KlobinRAEgvoeGfuKAnSG6v3OxU8LJMnoH+E0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uQ2DGYWglzVHEkUP2eVpH058hqA3Us8Uf0+qA11160E8sHybY5Q/0eINbByslV88m
+         wng+HULdmUZCt+3d9rPc3/4lLG7YzptkCPuykqfZuB50vb1PU7G0sd6Nq4Nx0P9zVY
+         y1DIps3rs6xQkNZzqEISISQe+YjrR47hPC2IOg8s0U3rxfzNAa6Ohnhgk6WbTIMwbu
+         m7CE0QQ55yARTmAvE/V9FzsQqNenRqjwD/BNquqVxj5b78i3Jp+yC+DowgzOGE5IKO
+         f6uruOyfHXQDahQVAbULEnyNBM95qH0tGtNJJ7Mbw5WozMjoL5m3fnFwNGQranVhkU
+         WZL9UUreGfY8w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B3F844034E; Fri,  2 Dec 2022 15:33:55 -0300 (-03)
+Date:   Fri, 2 Dec 2022 15:33:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, sandipan.das@amd.com,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH] perf: Fix interpretation of branch records
+Message-ID: <Y4pFE1bNObTTLL2+@kernel.org>
+References: <20221130165158.517385-1-james.clark@arm.com>
+ <8b7606a4-63e4-6d0c-6b83-5ef51c83385c@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221202161502.385525-27-ojeda@kernel.org>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8b7606a4-63e4-6d0c-6b83-5ef51c83385c@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 05:14:57PM +0100, ojeda@kernel.org wrote:
-> From: Gary Guo <gary@garyguo.net>
+Em Thu, Dec 01, 2022 at 09:46:53AM +0530, Anshuman Khandual escreveu:
 > 
-> Add the `build_error!` and `build_assert!` macros which leverage
-> the previously introduced `build_error` crate. Do so in a new
-> module, called `build_assert`.
 > 
-> The former fails the build if the code path calling it can possibly
-> be executed. The latter asserts that a boolean expression is `true`
-> at compile time.
+> On 11/30/22 22:21, James Clark wrote:
+> > Commit 93315e46b000 ("perf/core: Add speculation info to branch
+> > entries") added a new field in between type and new_type. Perf has
+> > its own copy of this struct so update it to match the kernel side.
+> > 
+> > This doesn't currently cause any issues because new_type is only used
+> > by the Arm BRBE driver which isn't merged yet.
+> > 
+> > Fixes: 93315e46b000 ("perf/core: Add speculation info to branch entries")
+> > Signed-off-by: James Clark <james.clark@arm.com>
 > 
-> In particular, `build_assert!` can be used in some contexts where
-> `static_assert!` cannot:
-> 
->     fn f1<const N: usize>() {
->         static_assert!(N > 1);` // Error.
->         build_assert!(N > 1);   // Build-time check.
->         assert!(N > 1);         // Run-time check.
->     }
-> 
->     #[inline]
->     fn f2(n: usize) {
->         static_assert!(n > 1);  // Error.
->         build_assert!(n > 1);   // Build-time check.
->         assert!(n > 1);         // Run-time check.
->     }
-> 
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> [Reworded, adapted for upstream and applied latest changes]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Again, problem from having the same structure in two different places
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Indeed, this was my first reaction, how about backward compatibility, is
+this really an ABI?
+
+- Arnaldo
+ 
+> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+ 
+> > ---
+> >  tools/perf/util/branch.h | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
+> > index d6017c9b1872..3ed792db1125 100644
+> > --- a/tools/perf/util/branch.h
+> > +++ b/tools/perf/util/branch.h
+> > @@ -22,9 +22,10 @@ struct branch_flags {
+> >  			u64 abort:1;
+> >  			u64 cycles:16;
+> >  			u64 type:4;
+> > +			u64 spec:2;
+> >  			u64 new_type:4;
+> >  			u64 priv:3;
+> > -			u64 reserved:33;
+> > +			u64 reserved:31;
+> >  		};
+> >  	};
+> >  };
+
+-- 
+
+- Arnaldo
