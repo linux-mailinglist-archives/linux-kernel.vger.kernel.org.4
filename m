@@ -2,75 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CC7641154
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F64641159
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbiLBXGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 18:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        id S234672AbiLBXJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 18:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234110AbiLBXGj (ORCPT
+        with ESMTP id S232011AbiLBXJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 18:06:39 -0500
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BF8E2543;
-        Fri,  2 Dec 2022 15:06:38 -0800 (PST)
-Received: by mail-pf1-f173.google.com with SMTP id 130so6229932pfu.8;
-        Fri, 02 Dec 2022 15:06:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yeaYWU+3i8hJhYxbYSjWcKLZ68H+ZM9quUzrKih1bmI=;
-        b=PXCMcae2/cyTtwdcdjU5kUBMaPmudQZ/MwFie64nB6UgI1VhyTFh+0HaCIGx9JhyZV
-         IO5gYW7W/b1D2QKbndMshTH4imuJtjpv0jyvISTSQackLlEFgNUtNmuV9eRM8iTYqU+x
-         Dhfu9hH8DnpfcSpypGIvWGeE1KrRzQjxrQgX5ZoIkHYV2ipmZjMsoqyEbFosN6qEXQXm
-         fexxd7AAodtP4xWgQIQgmWGCn33v8Immvwd0VOQLriEgq1sB+RTt/isr0WvfxTaJebUw
-         oooiUdonEQW689sJ3ICwxrEakLfOthmX50eMuaVb6v1JUydu1/5qYP49Rlx6WqtXX8Dv
-         TklQ==
-X-Gm-Message-State: ANoB5pkJ2mU2axCeNEDHhb5cSfTAJzBveYnBAl3l3hclh+APH8Q1/Tji
-        EKrLRO9aSwX1swI/34MJ8MUkbk4GDzo=
-X-Google-Smtp-Source: AA0mqf7gHE8J1XDK0GDwt+lhWMttnr20CPo9OL9RP4nm8K3/77LyKsZlGKA/931ZqB0Ia44OrXKUxg==
-X-Received: by 2002:a05:6a02:187:b0:46b:26a6:51bc with SMTP id bj7-20020a056a02018700b0046b26a651bcmr64720229pgb.204.1670022397719;
-        Fri, 02 Dec 2022 15:06:37 -0800 (PST)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id f14-20020aa7968e000000b0056bee23a80bsm5593515pfk.137.2022.12.02.15.06.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 15:06:36 -0800 (PST)
-Message-ID: <feecdae4-6a50-5991-5792-eda44c0a641b@acm.org>
-Date:   Fri, 2 Dec 2022 15:06:35 -0800
+        Fri, 2 Dec 2022 18:09:13 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CF31182B;
+        Fri,  2 Dec 2022 15:09:10 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 2B96524E;
+        Sat,  3 Dec 2022 00:09:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1670022548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9NRV57aXTBgiKCSCgggXRv2Sdf97U/uCm/dme3mjklM=;
+        b=fGcqBMd5asKZtdHRi/fYbtEU4DmqcYPap2wb/JsZDR2S/XBTRqDPM7WOYI0uYkLqvZQS+0
+        hTOxk9vmtAvtyhI7uNQnPIjm5J8EKxEodmKMcBPfdHrpKauCeOixO8cOlXnAkUq9yVRlaT
+        rmwn37JcTJIHDMR9tceyXiphEJdhPZWC2iPgeavqh5PaRph9qHBDmyYt6m4dkDxPWplBd9
+        d2FUwn+4bLsOq4G+CCtd1toryjaO31FATxupFC8UBi7DpbzoxdeL05iCFS7WZj68npv7Jc
+        Xd6Hrlm6vxbLgZNnoqeeja3Pos4SJyrBwr3ULo1d8eev6AU6809yeyPad1+PAQ==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 2/2] RDMA/srp: Fix error return code in
- srp_parse_options()
-Content-Language: en-US
-To:     Wang Yufen <wangyufen@huawei.com>, jgg@ziepe.ca, leon@kernel.org,
-        dennis.dalessandro@cornelisnetworks.com
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, bart.vanassche@wdc.com,
-        easwar.hariharan@intel.com
-References: <1669953638-11747-1-git-send-email-wangyufen@huawei.com>
- <1669953638-11747-2-git-send-email-wangyufen@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1669953638-11747-2-git-send-email-wangyufen@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Sat, 03 Dec 2022 00:09:07 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Xu Liang <lxu@maxlinear.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 4/4] net: phy: mxl-gpy: disable interrupts on
+ GPY215 by default
+In-Reply-To: <Y4pHCQrDbXXmOT+A@lunn.ch>
+References: <20221202151204.3318592-1-michael@walle.cc>
+ <20221202151204.3318592-5-michael@walle.cc> <Y4pHCQrDbXXmOT+A@lunn.ch>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <69e0468cf192455fd2dc7fc93194a8ff@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/22 20:00, Wang Yufen wrote:
-> In the previous iteration of the while loop, the "ret" may have been
-> assigned a value of 0, so the error return code -EINVAL may have been
-> incorrectly set to 0. To fix set valid return code before calling to
-> goto. Also investigate each case separately as Andy suggessted.
+Am 2022-12-02 19:42, schrieb Andrew Lunn:
+> On Fri, Dec 02, 2022 at 04:12:04PM +0100, Michael Walle wrote:
+>> The interrupts on the GPY215B and GPY215C are broken and the only 
+>> viable
+>> fix is to disable them altogether. There is still the possibilty to
+>> opt-in via the device tree.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>>  drivers/net/phy/mxl-gpy.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>> 
+>> diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
+>> index 20e610dda891..edb8cd8313b0 100644
+>> --- a/drivers/net/phy/mxl-gpy.c
+>> +++ b/drivers/net/phy/mxl-gpy.c
+>> @@ -12,6 +12,7 @@
+>>  #include <linux/mutex.h>
+>>  #include <linux/phy.h>
+>>  #include <linux/polynomial.h>
+>> +#include <linux/property.h>
+>>  #include <linux/netdevice.h>
+>> 
+>>  /* PHY ID */
+>> @@ -290,6 +291,10 @@ static int gpy_probe(struct phy_device *phydev)
+>>  	phydev->priv = priv;
+>>  	mutex_init(&priv->mbox_lock);
+>> 
+>> +	if (gpy_has_broken_mdint(phydev) &&
+>> +	    !device_property_present(dev, 
+>> "maxlinear,use-broken-interrupts"))
+>> +		phydev->irq = PHY_POLL;
+>> +
+> 
+> I'm not sure of ordering here. It could be phydev->irq is set after
+> probe. The IRQ is requested as part of phy_connect_direct(), which is
+> much later.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+I've did it that way, because phy_probe() also sets phydev->irq = 
+PHY_POLL
+in some cases and the phy driver .probe() is called right after it.
+
+> I think a better place for this test is in gpy_config_intr(), return
+> -EOPNOTSUPP. phy_enable_interrupts() failing should then cause
+> phy_request_interrupt() to use polling.
+
+Which will then print a warning, which might be misleading.
+Or we disable the warning if -EOPNOTSUPP is returned?
+
+-michael
