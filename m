@@ -2,178 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC726404B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58426404BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbiLBKdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
+        id S232532AbiLBKdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiLBKdX (ORCPT
+        with ESMTP id S233309AbiLBKdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:33:23 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A577C1BC3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:33:22 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id o30so3231706wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:33:22 -0800 (PST)
+        Fri, 2 Dec 2022 05:33:38 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B829C4CF5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:33:36 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id s5so5854874edc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:33:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=319dmF23gwJK1akaWUytWINSdZyUZn6mYWv2AFrEvXo=;
-        b=LolCNAjp8odhCiMzE1CWcI/k7ve1fvFvyHmzTvLl5QBZgGw7eXneQh8wD3olh4o1Ri
-         rtEuowwpMdnrC9s5Rlfw2Gwc+VTnv3ZBkXo2w94zYQcvWR9kE/WB8nW0pr15EpoxWOTU
-         AndyX49+UzNhi65llM4u34e0ctQ8/hsQa2lOuUNBfnkTOylumMgMUIYC3074fH0TUoJR
-         G6U2JLUDTbig+kheenO6WKmhAcSH3hIndDuqck25IWkIo+rm3kSYUS4L2AGTmBmHkmj6
-         l6gTFk+CmulioyhUbFT8qf2n0YDBajiHS5nAKiKiw4AaU53sG+zU7JmL3bVpYqR89lJm
-         Jimw==
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/e58gZBtEpImuaapH5z3ZZXyBnJ+7CtdRYYz6q6IemE=;
+        b=FBEXuKdH6DfRsx/hPmSsGMAoEqRA85szN/9ar3oRgmjZKJSW0qhSTMipDJfm2YOWoQ
+         aWCWj3YaFHriFVFVuqIBHBXtPSRJz901i+Ix+WOHoKB1VeZHk0CAHkNfH9Smf9l9Rrvo
+         IM7L/PfDnCGhkeVRsZpsK5387PYAMfyEO9yXca3u/33VOejA35Y3GUqR26S+Fq+2fXAs
+         7prhT/G8V2D2zcr13/2W37SvVVSd/K4e//HKKA00PKCpBfAe/bn3D9M/KjmGI+m+j4uk
+         sMW66RUtnuKD1kEyUEwzuxEJ6wQ1LSgsuwNLLnkK8vqBclsIMWz3KBejJw9PelhZCz0P
+         Oexw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=319dmF23gwJK1akaWUytWINSdZyUZn6mYWv2AFrEvXo=;
-        b=59BKvaXKgPZusizwrO2/Hukp7rzIH9cCQdBCnNO8p1sYjjVjYT/Q7BBQ25eyJmt14z
-         eWcIlcdymLI8OC+nJh2k3OkbDyeKd0s3GtNzH/79jKkyzxWvp+Yg8Gij5fnCMYiida/y
-         Muzu56WjvhqdtQSDG6k4yDDN6LiO8apkaNOOBbL1R6iagHKMMxwND3G2o3gkOMYLDVmI
-         R0Fpv+AT7mg+jy/ZcTkeEc+zk5qZLcrvXzHgRKi3uSlG8zaeW8U0BWN/RTwGB9rk0g3+
-         VcrpX++9J12JGM00i5QXpNQdvSqjldEJk63gL8zrV5K5HS3mtC9WMSgQGCiVECTxKcEm
-         IGqQ==
-X-Gm-Message-State: ANoB5pn4NGS+LlU+IMsi47Nn2ITEVmmdiBTunL1cN6g3KVV+XmK67DNK
-        EIf52b2bvK1crsgN19eTNPCoSA==
-X-Google-Smtp-Source: AA0mqf5MasTI2olKjBxig8ppzSE99CaJVV90JPkC7fb8qDKJK8xOdMTP/AoSJjoRRLZElCCYyX9HRg==
-X-Received: by 2002:a05:600c:35c4:b0:3cf:9668:e8f8 with SMTP id r4-20020a05600c35c400b003cf9668e8f8mr42600076wmq.195.1669977200633;
-        Fri, 02 Dec 2022 02:33:20 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:c6e:eb0:b551:55ee? ([2a01:e0a:982:cbb0:c6e:eb0:b551:55ee])
-        by smtp.gmail.com with ESMTPSA id z12-20020a5d44cc000000b002362f6fcaf5sm6640919wrr.48.2022.12.02.02.33.19
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/e58gZBtEpImuaapH5z3ZZXyBnJ+7CtdRYYz6q6IemE=;
+        b=EYCyMCHDwgY8w2EV31apUb2XN8iLyqYOlrFBpwoMIV/8jAL/fodlZyWmWlEaLUbC68
+         t/qQF7qIC1/hSWVcUu/jn64J51hIE1YpFBuuxxVKAmUUglbe/0efLFtuLJJgChm9VMSJ
+         dxXb/YqcrtBJ8rSLM5lNIy8eg/Er9OE2IYoOTknEcpRXwdvwc3Ge6EOCoZqvlx6uEFdC
+         u3+3oGZQunqGE3BVsLXmMmXdY3Wyl+Uac7qcS9csOlSqpHXN67L0kBTu3U2ebkv6WgxV
+         PqDJuJYZIrndfucME3VBGkNAGXurCM17P2BvWnzdybWfMIOSQdS9/jMk5ql6tTSbKGWI
+         hK7g==
+X-Gm-Message-State: ANoB5pmav4FngCiqde1TliGR268VO3X5TJjCTjzlbbx2n+LoZO+XHHJR
+        c4xFjCJ0KUsBc8YkGKYBnTTCMw==
+X-Google-Smtp-Source: AA0mqf62g7tL05/yrH9Nmc/hP4lJkxbx6iU2/cPHDSx5Oqj8j6hZK8YiIPj5dHAh++pcOEG7PBPo0w==
+X-Received: by 2002:a05:6402:528d:b0:468:dc9:ec08 with SMTP id en13-20020a056402528d00b004680dc9ec08mr49095306edb.17.1669977214833;
+        Fri, 02 Dec 2022 02:33:34 -0800 (PST)
+Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
+        by smtp.gmail.com with ESMTPSA id q18-20020a1709066b1200b007bf988ce9f7sm2876728ejr.38.2022.12.02.02.33.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 02:33:20 -0800 (PST)
-Message-ID: <ace35de2-9aa8-8cfa-1f4c-46480fbbc442@linaro.org>
-Date:   Fri, 2 Dec 2022 11:33:19 +0100
+        Fri, 02 Dec 2022 02:33:34 -0800 (PST)
+Message-ID: <fc48c2e1-1df2-c636-bfa4-621148790133@tessares.net>
+Date:   Fri, 2 Dec 2022 11:33:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 2/5] dt-bindings: remoteproc: qcom: adsp: document
- sm8550 adsp, cdsp & mpss compatible
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-        linux-remoteproc@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-remoteproc-v2-0-12bc22255474@linaro.org>
- <20221114-narmstrong-sm8550-upstream-remoteproc-v2-2-12bc22255474@linaro.org>
- <8d7367b2-126a-d8ba-b616-be1ef9c67122@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <8d7367b2-126a-d8ba-b616-be1ef9c67122@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net-next 00/11] mptcp: PM listener events + selftests
+ cleanup
+Content-Language: en-GB
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org
+References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
+ <20221201200953.2944415e@kernel.org>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20221201200953.2944415e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 11:58, Krzysztof Kozlowski wrote:
-> On 30/11/2022 11:29, Neil Armstrong wrote:
->> This documents the compatible for the component used to boot the
->> aDSP, cDSP and MPSS on the SM8550 SoC.
+Hi Jakub,
+
+On 02/12/2022 05:09, Jakub Kicinski wrote:
+> On Wed, 30 Nov 2022 15:06:22 +0100 Matthieu Baerts wrote:
+>> Thanks to the patch 6/11, the MPTCP path manager now sends Netlink events when
+>> MPTCP listening sockets are created and closed. The reason why it is needed is
+>> explained in the linked ticket [1]:
 >>
->> The SM8550 boot process on SM8550 now requires a secondary "Devicetree"
->> firmware to be passed along the main Firmware, and the cDSP a new power
->> domain named "NSP".
+>>   MPTCP for Linux, when not using the in-kernel PM, depends on the userspace PM
+>>   to create extra listening sockets before announcing addresses and ports. Let's
+>>   call these "PM listeners".
 >>
->> A third memory domain for the DSM memory zone is also needed for the MPSS
->> PAS bindings.
+>>   With the existing MPTCP netlink events, a userspace PM can create PM listeners
+>>   at startup time, or in response to an incoming connection. Creating sockets in
+>>   response to connections is not optimal: ADD_ADDRs can't be sent until the
+>>   sockets are created and listen()ed, and if all connections are closed then it
+>>   may not be clear to the userspace PM daemon that PM listener sockets should be
+>>   cleaned up.
 >>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>   Hence this feature request: to add MPTCP netlink events for listening socket
+>>   close & create, so PM listening sockets can be managed based on application
+>>   activity.
+>>
+>>   [1] https://github.com/multipath-tcp/mptcp_net-next/issues/313
+>>
+>> Selftests for these new Netlink events have been added in patches 9,11/11.
+>>
+>> The remaining patches introduce different cleanups and small improvements in
+>> MPTCP selftests to ease the maintenance and the addition of new tests.
 > 
-> Thank you for your patch. There is something to discuss/improve.
-> 
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - qcom,sm8550-adsp-pas
->> +    then:
->> +      properties:
->> +        power-domains:
->> +          items:
->> +            - description: LCX power domain
->> +            - description: LMX power domain
->> +        power-domain-names:
->> +          items:
->> +            - const: lcx
->> +            - const: lmx
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - qcom,sm8550-cdsp-pas
->> +    then:
->> +      properties:
->> +        power-domains:
->> +          items:
->> +            - description: CX power domain
->> +            - description: MXC power domain
->> +        power-domain-names:
->> +          items:
->> +            - const: cx
->> +            - const: mxc
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,sm8550-cdsp-pas
-> 
-> This entire if does not look valid - compatible is covered in the
-> previous one. You should see `dtbs_check` warnings on your DTS.
+> Also could you warp you cover letters at 72 characters?
+> I need to reflow them before I can read them :(
 
-Wow indeed, this should be mpss-pas...
+Oops, my bad, I'm sorry for that! Thank you for having reported the issue!
 
-The main changes here was firmware-name and memory-region to handle
-the dtb firmware and the DSM memory region, are those OK ?
+I didn't notice I didn't set the limit to 72 chars for the
+"gitsendemail" file type like I did for "gitcommit" in my current vim
+config. Done now, next cover-letter should be properly formatted! :)
 
-Neil
-
-> 
->> +    then:
->> +      properties:
->> +        power-domains:
->> +          items:
->> +            - description: CX power domain
->> +            - description: MXC power domain
->> +            - description: NSP power domain
->> +        power-domain-names:
->> +          items:
->> +            - const: cx
->> +            - const: mxc
->> +            - const: nsp
->> +
->> +unevaluatedProperties: false
->> +
-> 
-> Best regards,
-> Krzysztof
-> 
-
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
