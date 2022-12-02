@@ -2,224 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA72C640018
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B32264001A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiLBGB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 01:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S231562AbiLBGCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 01:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiLBGBX (ORCPT
+        with ESMTP id S230447AbiLBGCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 01:01:23 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2032.outbound.protection.outlook.com [40.92.103.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173897B57F;
-        Thu,  1 Dec 2022 22:01:22 -0800 (PST)
+        Fri, 2 Dec 2022 01:02:08 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD15C1BF7;
+        Thu,  1 Dec 2022 22:02:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669960927; x=1701496927;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=7R5XTBxAypfuuhmaMqIFrNZ1roe+Dhm9J2HNjmsy15Q=;
+  b=mzADClbEzukZhSigOvrlQnYblaWdSUTXwnmbF3xG+OfmHfl/IDmIj707
+   aFSzHAoCdtHJvTM2HcYlse98j7EdWGKz7l6+ojDk8tlTbdTUokKiliSMS
+   fphs0E49IhAvuMT60gBE+ezfYs3z0lCxI2Ea2gucYkp22ERdURB29gIgJ
+   OCRb3IJD2JI+y95FsoEuejTLK6bpE/R6EPDuuD/VfK7nSd/6IMQ1VJXrM
+   RTjC/haETGxHrFlrlvzgs5ZTqSeLQPkPIwZzEwuu24kN4/nTZCsdLd1ZT
+   j41Cp8gYQ/C5XAW6veIh8bZbU/XeoaLi1UPKV8oVO9YKQScNzv/VY1Xlf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="296233915"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="296233915"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 22:02:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="647042505"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="647042505"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Dec 2022 22:02:07 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 1 Dec 2022 22:02:06 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 1 Dec 2022 22:02:06 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 1 Dec 2022 22:02:05 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U1MRFFEBaOlnKpgZdRI9mfN0UPZ+1Q5+6X2j2UDEzqHSpHDuTf4z1Kcrs489XJtTkvh8IyDDq4XhcjvzCxW3mI8m3lYx+lbrXyGkxdreb7c2nSqsY68khZm5G+wb+68k3uVWdQ7TPCbdLHLoSFM5KrCTR+O/2t/7LzJZNuyLfKo32dso+AR2WL3j9hj/43pWfRlAP9yiJnseBylfIWFYTMDO5Ivz6Z/FPSpQe8cIYgsfMUsdKVReCZVLpAQm01lPeyWzwYSwGJiZapJtCpKHqyZeGhVU55ZKrWK1omrFu+FuA5W3ZMP+4rZo5Yb2kqZ02zhPO7o2NINzTBvG4Ee/Xw==
+ b=XiCrFQG2a/1XS0NIpsIjEpWaiJ/HPgoUTD6lPL5rK/4r+kAUQ4QM7fBa8RMsHLDC58kcE/5MgeFOMY/HMFZPGCW/i5EpJXBf9Vc/+LobKMQmIKs17Bo6LIwAqlEVbumOYe8SrNmyVMp5zcdYB5RPWw+AJYJr1NRUAYFFaRjxkEyrWF0Q1e79cL+T7gu7aWYkorkzCj/4z1jwgcIoRa2SMEi2VUmJbQGhjyeVL0hehydw3i1Ibw7DY+xnMHkeYprJTSJy2asTp4HHUh/Ll2NGRHmIp8zpTKoH7kvgTurlqZODk5sxisaLl8Kb7e/0puwd79wxwWHgHMYtQ3rSCIPNRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xV6Pvff4GuBymTgIIBw/Ps3ArFxz1+1GoeMc/bsJq8A=;
- b=lHcmI/GIbpcf1LZHmXKshYvhWylw9O2aOM5H8qLu9LzpNRyrbt2y77FZG/s6Qe5d4CICRuFGYVXlP8Ib4r1wQASvWMmSAMaoxK5tJ6+Qo0Hfs5Yf6mN/LvljRMTZoq6dQex0eE2WgVDs7NO7pN534zpoXeEozxjuXKDejnhNNDIwLQkMXJSQS+bqqSygIVPagK8ZK1aFtBmWKzA43CvCvw04agFF4CjZYe7xowvGXUgDq7OPTyND//xaVsKIMqwSABAIj/YfYszaPFjguUlSWcxQrI/KAY3dn72oEDqc1Jm5Do+d0hGNr4c1svDHtG+R1YvwLYJ1JqySHFrZgKWazg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xV6Pvff4GuBymTgIIBw/Ps3ArFxz1+1GoeMc/bsJq8A=;
- b=o/aykkAP72ZCrVg5rVQkpadD3omK1XYsTp5T4Otq/Nt04xMUvVfznXSPoaKrn2/JqA3Es0WEs+sNcvAWsFhP/HXvnrxqXEKvkJ+h80APOhbXBNjj7kpZfJSOt1y0M0ZzQD8O9s6Hth3SB5xw6T3DELHn2CGHTNcqPXeTRKdxrv92ItyifacUccpouUIy41o9pRV+pumXMtAu44Esq6Y1UI4Jee3rTcipBt1azUrv7BmuP1mKzIIJAAk11GOM1eg2G0zuD6uhXMe1qBDSNR1QgywB4i/KKcan3/LwvKtPtPgmIS6L3X5xYfrEQd3ARtM832frm+h6VWRnmq4PK+B4sw==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- MA1PR01MB4242.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:15::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.8; Fri, 2 Dec 2022 06:01:16 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::68ba:5320:b72:4b1]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::68ba:5320:b72:4b1%4]) with mapi id 15.20.5880.008; Fri, 2 Dec 2022
- 06:01:16 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "willy@infradead.org" <willy@infradead.org>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "slava@dubeyko.com" <slava@dubeyko.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] hfsplus: Add module parameter to enable force writes
-Thread-Topic: [PATCH] hfsplus: Add module parameter to enable force writes
-Thread-Index: AQHZBhN9MNP94cgWt0ywcFHXTOJUWg==
-Date:   Fri, 2 Dec 2022 06:01:16 +0000
-Message-ID: <53821C76-DAFE-4505-9EC8-BE4ACBEA9DD9@live.com>
+ bh=6wzIpH4VpqBvYZ+VPhZu/tZHFIgXyFQLIgbkE0IcmY4=;
+ b=hu0+GV118LbJL84Kb/utUXyqjx+UDpZ8Q2N0C3j1ArzD4H0HVtSiAe9o7l+2DD4jovKZrXJorrp1PaGn1ISjoFhZmFF7jYZJR+2TT4cxMDc7GlScN6e1CWWjDu7MO9eSaOxymINu6xEVWyjFh6aM7IVjcULMnRO09HkELWuPSAXzqfwQy/63JNVvTZ2Y5jiTPILcWwCnzbC59NLtHJbMNPiRIrh/kuRxfyGiEVGZFxw6y0jZ93p1eeyfVgPXXbb0KlVkGvpZwsrt97QHmxJjDfsz9aWEct2C/61q85Y3GmoXIGicavchOO884snvKehxLHzrobf0x2/Uj3MXZRmDCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY4PR11MB1320.namprd11.prod.outlook.com (2603:10b6:903:2b::21)
+ by DM6PR11MB4690.namprd11.prod.outlook.com (2603:10b6:5:2ae::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Fri, 2 Dec
+ 2022 06:02:03 +0000
+Received: from CY4PR11MB1320.namprd11.prod.outlook.com
+ ([fe80::7c2b:3507:c308:2437]) by CY4PR11MB1320.namprd11.prod.outlook.com
+ ([fe80::7c2b:3507:c308:2437%11]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
+ 06:02:02 +0000
+From:   "Zhou, Jie2X" <jie2x.zhou@intel.com>
+To:     "Weight, Russell H" <russell.h.weight@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "shuah@kernel.org" <shuah@kernel.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "Zhang, Tianfei" <tianfei.zhang@intel.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Li, Philip" <philip.li@intel.com>
+Subject: Re: fw_fallback.sh test failed in Debian 11
+Thread-Topic: fw_fallback.sh test failed in Debian 11
+Thread-Index: AQHZA5lIOHIFr50OcUq4S5sLOYsQua5VjYWAgAFsaHyAAMJuAIAAd7cVgAAD/YCAAAUgCIAAF3IAgAHKUkU=
+Date:   Fri, 2 Dec 2022 06:02:02 +0000
+Message-ID: <CY4PR11MB132068A19AF9704D1B14814FC5179@CY4PR11MB1320.namprd11.prod.outlook.com>
+References: <CY4PR11MB1320DAA7D7972E738EDA754EC5129@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <Y4W+/TfM4F9TdSnZ@kroah.com>
+ <CY4PR11MB132092589F9270FB559B01D8C5159@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <0e688462-7f22-118e-6cb1-de8b582e3973@intel.com>
+ <CY4PR11MB13205F799D0A30BB011E4334C5149@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <217b7959-facc-1028-19be-1040898a705c@intel.com>
+ <CY4PR11MB13206A6918FFDEB5B3D3794BC5149@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <57b8f45b-da8c-e9ae-6b3f-ba82f936c9b2@intel.com>
+In-Reply-To: <57b8f45b-da8c-e9ae-6b3f-ba82f936c9b2@intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [IfNeKhMxLx8eMsXb+qLYm2qBYioAwsh5I/maREVBl9qM+kijCPbB+3SA7iA5FfLx]
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MA1PR01MB4242:EE_
-x-ms-office365-filtering-correlation-id: 9e9d8063-ca8a-4233-7606-08dad42a9fd4
+x-ms-traffictypediagnostic: CY4PR11MB1320:EE_|DM6PR11MB4690:EE_
+x-ms-office365-filtering-correlation-id: 4a622655-0afb-4ffd-789c-08dad42abb78
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IayyXXUM/sLhnuq8/SaaFbQUcKFwFGPBHZV8oEhc1lPjteZpTcLa8I9Rt6feXVu0gO+tVt5H34gpp+hj0dbuRvxrAX+DhME/ekZU0C9IBGmEcAaetgnyb4E6HhYStoVYln1tE7+SuIr6FBq5+Ks3QWXpAd0olJpsfYUBpKib58jn6EGvJDyAv/NNMX/knTdcivN77FxGPlnPEhmT+pexP1LLkMUiNgcIMI5eS3nJQxBj8xMMC8dlEegYMlF+p4YtREuFi4pAXjGod0HiWdYgtNH1+V/MwuGkf/12eVgRGGk25dZFtQkoY4kApgo7fIpQjWewq+exiI8Px68in7M/wrER5jl1oYOPMSza1vaMJwqfNo6fNStu2cDLKx3ZOdNjVwV9WVAd0T4FMOvnCPI0foSGFsRk8VgYz1gX8Fr6xIV5wkhONSr7Jc1q+gXkZJBBpuYWAdpIB1Uurxrt2jUcVtsq8IPiEIfUQEAVEhD+Z8jXeWE/fCqA6vhVfZ91gMBdej9+NYyvdzrRPMnTHX5yw5gpdnVQFAwBPyLFwiLS+NB3IzOQSt+H8sD6D2VoG/nmXeg1/hAUp/hvIE6k0XUBTHfZKpUs/ZvbI2MZABCqsEA=
+x-microsoft-antispam-message-info: za1PUc/n8MN+b1nzWBpOAO1L5zqJn5bD/Hv8X16kB+C4U6hPiY+UVLgQ8zw857ZJ/8bmfd2rAl5HLAuAdQtoGAw7ymiJeF+SQGb4TvoPDkd9vyZphk8YJEdzpFkNgqm7y6RMxpx8jWSpDtGClbu+qln9t377rgldWbqbHiRnuDWEkpwgn5nXS0i4k+nd+/TPa01mEtAVLbh4w4zSse96LrXtJvEPeKq4vCTbNVxB/QlpPA5a9gaKSv25AuClS4DyvHgrI1aV7SqaCg9pRAIIKWHpiEzbNsZowxRUhdsFQYl1Ju6yds+9lfOGWTTgkLHBnzwir1s8iPBEnGO3yFjjWkybLiPbJx21mYFEkw0+g+KQmdtIvhS65j7n6n+QT0Vo2GUoMAiIOb3ERcY2m2qGtDTGgQnShi/ZLBCVyR22djAy5k3uuUWdhIgzmrH94huQxiSYEzHV6ald6xAUqEM1Qn2LJBaBWQX+vXkjrmc8XMvyqhadBHy0o8d1U+5LY18SgBEj1Yqqq/q7gJrSMqiqTfah6yRNxwdp8qDDe2JF/mjBN8K2pPCAhUszFwHHS4gRvckKDh5pFtDnRXbmfDBilqZP3DtrsKMeG1kQUvLFDCM5E00VZFd6ndNPgfKGGR264JmuF/OPBSguC8XbIHIjRrldMEczr+05Srq2IS5P7OAhBabZ0evB4wltYs6MHfgilnmorUNoTgvB6KtMGwhJxg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(39860400002)(396003)(136003)(376002)(451199015)(83380400001)(2906002)(5660300002)(41300700001)(52536014)(8936002)(186003)(33656002)(86362001)(55016003)(38100700002)(82960400001)(122000001)(38070700005)(54906003)(110136005)(66946007)(53546011)(316002)(7696005)(6506007)(26005)(478600001)(107886003)(71200400001)(76116006)(9686003)(8676002)(66476007)(91956017)(4326008)(66556008)(66446008)(64756008);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?80oa2n1amOZByGpdo6WN1R0miPgkSr9BkyHOCI/uRvySnmAQRmzpSPtPOWKx?=
- =?us-ascii?Q?ok1ckxw19P6W6Tqe76i1L5KEJg7lDMmQahZKxNIK7TMFAPJTV5AflrbcevXB?=
- =?us-ascii?Q?wKE3UUqjlzcU2Xw4QrnCsin+YT8tmxw7FLPQuG2i4oL5vjnWjlPizBfU73yg?=
- =?us-ascii?Q?3Sx0KEfI6H/aK17HbVaTgGvJ3rGQDGiw6M8ehUheiFK/Z7hJB10DHJbi/zIN?=
- =?us-ascii?Q?+XXMHYoh0GUS/RiWklk2vo4d7CesTr4FYbniqQVypO55oenPNgKatfAPTkkG?=
- =?us-ascii?Q?U78eNSPe+G8i7KdpI2SHYFOKoy06Sgftn1UqSmuG2O9Ns4rZT9BESXTMDboU?=
- =?us-ascii?Q?mpUKOybpcwfV2NahXBmj/7FzaHbVvwW8n4+OMx6XMD+W1E40nux5cAZgA9y/?=
- =?us-ascii?Q?MerCs21dmf70l79krRHwIeGuZwbTCK4dZAFdDgTyeSJ0eBVbq9iWegPsotu/?=
- =?us-ascii?Q?KOBJwswN4IZpkT0mJh890JCJJVzEd8XpUCgL5xMpXnhcghbwtDFQEyKRgvTV?=
- =?us-ascii?Q?Kw7ww1haHuCqrlTC/0EkqqplYxNwNzKg89YLrwasDZnwQb12gwzgXwPdTH2Q?=
- =?us-ascii?Q?eQowz9e+TIrrbZG8UgM+KILG3Xm7jrKu0GOR6YItWIZsWiy4XLP1D26Nsam0?=
- =?us-ascii?Q?Zya8qKdmDEAmzGWub7LZMXA3J2UuqUdDtW9WDVaH6a7C0sXf04ga9z4uA7ol?=
- =?us-ascii?Q?ltxrKlgpB5FtCizvAXK4zU3Ip9sR6eeBclJz/04lfS47zhU57m8qryK8WTeY?=
- =?us-ascii?Q?Rv28qYDsnJeReYx1SEEaw9rhjBvK4NRhchCJVYwPNwOiVZxK4DbXb7ELbjBS?=
- =?us-ascii?Q?HFt6c9e3G8gpWi5euGtLJScIZMEbCC3gpC2MNypn9f4+uI+5Hmc8X0DpLcMA?=
- =?us-ascii?Q?x4xgyQB+q2E2fn4bUWs2YSYbz0RQzyurGRhYT6TR+kNXc06UkIcm/hhENIFu?=
- =?us-ascii?Q?7QmaA4wh/E+xDKhuE/+V/Px69ZmJkimj8UEU6k+JkeWoUZycJTEm+XhurfWr?=
- =?us-ascii?Q?vFfAh4huWL2UI5jKBl1zZb/1UKU2tcq7yd8YS2CQsjWuqlWGU9YOmgQQhmqb?=
- =?us-ascii?Q?EOdnkmZAEZL0oOsvo4018eDLz3w9RmWK5TtTTtiZLpmwk2GD0vS2VCGPGAdc?=
- =?us-ascii?Q?XtWqJrasFEUzaZxJz3iAYdLT+zB1acZBRXbJwOVNbi6DXS1a4Tmzt7iZmVLv?=
- =?us-ascii?Q?18DH/F/WkOMInGYUovlE8O0Z2mYhMTnXG/7LnKKxc/VzfNJqHgs/w7/OFCqG?=
- =?us-ascii?Q?OfH/9/uxUaVql90YSZtWHd7RRYAPaCHKruXVugmIC83pctBO5BpBhi4/O89m?=
- =?us-ascii?Q?N4kVB2XuHIg8BDwwqU9N/C8GBZW+L5a4zBf/Wo4goxULvQ=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1MMGqZunROrySZoSmHnynwrJ4IcmI0ZrmdJ9Xb2xEiDWcoFwxl41KIS+9gCC?=
+ =?us-ascii?Q?WfrrxqqKDC0h5NURtFwrPkMUUN0d+r6tFjpomLJ0MALL+d3YT7SZaLg8Vea7?=
+ =?us-ascii?Q?P9tSQxNykimTbbma/8LXbz/32fG2v1srw0Pw5WmMJ8K9ZJOfsFA1gGMjYmxN?=
+ =?us-ascii?Q?opPA+NglqwYcfgaNusuq64bKY9dGrS4X0vB8BA6P3QibWZZDDeW038iyvJt/?=
+ =?us-ascii?Q?2VPa9RyApT4oCWZwhwOtWlIMSz80f/cn/MsUeY/yrekrnmWc2Stoz/uUBCsH?=
+ =?us-ascii?Q?TyMXVNMotRHROVQvwRE6cshsa2+XSylgFyDVEfgrzd1dIwGP2AhElOoXEPFf?=
+ =?us-ascii?Q?uPfoCip9aF/iqgpWhborblWvye95rXdULZldY9E9/PMy2GSaBMk+JvYTjFYi?=
+ =?us-ascii?Q?FNrTgINJUQ91dxaBX/dunixIwTQy289ZPKsN9XaseMe7XwXslQjThHyq6xbX?=
+ =?us-ascii?Q?qu2IUnOak4ieIXzlgJwZP7pB2qXm+gIPsrIxz/gv5OXjg9/YccgNNL0OZqfZ?=
+ =?us-ascii?Q?VlmemF5fUKsnw4ieESyTn1bw00XPWYTsUTh5abiQ9CYgRhEkG8YVpt/Xgb0y?=
+ =?us-ascii?Q?xkGsOhJ2y+NdLDV+rOx5fkDC2pr35LM9qLu6NKWM/S3+1xw7Kacxmf99wdQl?=
+ =?us-ascii?Q?fjE2ChhojMjooMCodS7eJTGQE7Qf+Uve6XqYoZDgaVmHtZ7UlYa259eNCouf?=
+ =?us-ascii?Q?VyxVrQeKOfhs2S5/zH7p7+vmFIRFLpV+SUXugBnbsNLwoVI6UJl0QEmZFMhQ?=
+ =?us-ascii?Q?RM+RCoYf3A+mSzUR6CdGGThIzjyM9JFxgJpOVpFeNmy2eizozkJxfq+nNM/9?=
+ =?us-ascii?Q?itgyZL7gAXEw3sa8zW2T5A0cRP+YODRZdLGwhjZdMGSzt3+s6lI0aNi76l3p?=
+ =?us-ascii?Q?aIrfovGarKqH7oB9i3L/yaQR68hhRR28sIAgjwUQZux40s3ulO2lML5eRWAn?=
+ =?us-ascii?Q?61aqFdcZbyByrOM8Vn90Q/k/BQ3xXE2KXSgAA4T4M+1SmYFJjTCHhbYArIBI?=
+ =?us-ascii?Q?WVdyNVfGaigrDRxJiM0gXvEz7xGRIBmJz6u0kDBGIsR4OWJaccW7uuyGELQh?=
+ =?us-ascii?Q?O+zXOJlPruSgUlFHxbVyestxIPwVKpfugS+CHeSKpxbLJ4fzS2n4VhcoEo23?=
+ =?us-ascii?Q?e1nJeDg+MVwNRuTwfGDqgVycjHajSxG4inzb8icX41EM9vjy3t33pdKiqeQJ?=
+ =?us-ascii?Q?H+J4bcvAHdAzh5k9o5XbRAy/kWEtv3AvSnsQowYqO53wShnRKFKTg11OlRjy?=
+ =?us-ascii?Q?6TZZtdZkW23JEGiGQs3j6BWktATPfsTSYyNWAf6jPmqgfM4sETDTP6hJOsI/?=
+ =?us-ascii?Q?Kf961NTmeLpdOAP2XtbdCyCLMVIjnDJkgLdixlxLX79s/wwpwnriTbvpJH8i?=
+ =?us-ascii?Q?C1PXcHgUBZj8kl25EhgAhNsXhcVVX11HKXJ2edK9iyzwkyE1ZmCFno7o9lB+?=
+ =?us-ascii?Q?cFEM77mONNpFrhUvLoAjwp7D4PAfGwk5qbcxsMB1Wo+anmdHBb/2cML/UOVl?=
+ =?us-ascii?Q?qdU7ceb9N++v/QdlBTYi+g4eflCX5WApIhtxpm6Erh/WjXPUIUO4YaoGvt3C?=
+ =?us-ascii?Q?a8U66qH9GZGwwXoPmkX007GnrmWTJ1Up9Ncy9ymB?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <0B621F8D5A9EEA41849DEF499AB7DB19@INDPRD01.PROD.OUTLOOK.COM>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e9d8063-ca8a-4233-7606-08dad42a9fd4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 06:01:16.1250
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a622655-0afb-4ffd-789c-08dad42abb78
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 06:02:02.4671
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA1PR01MB4242
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: J3igObhn+X0G2aBDngQgbh30T13l/wO1zC1YpdPSb8Cfh/kX9JaqT1UGaHNqhZMg0YdO5dNdkfR27vGQHWCM/w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4690
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+>The above message looks like the problem. Firmware sysfs fallback has been=
+ turned off
+>on this system using sysctl. Can you try turning it on and rerunning the t=
+est?
+Sorry, I don't know how to turn on firmware sysfs fallback.
+Could you tell me?
 
-This patch enables users to permanently enable writes of HFS+ locked
-and/or journaled volumes using a module parameter.
+I search the firmware fallback options in kernel config.
+CONFIG_FW_LOADER_USER_HELPER=3Dy
+# CONFIG_FW_LOADER_USER_HELPER_FALLBACK is not set
 
-Why module parameter?
-Reason being, its not convenient to manually mount the volume with force
-everytime. There are use cases which are fine with force enabling writes
-on journaled volumes. I've seen many on various online forums and I am one
-of them as well.
+best regards,
 
-Isn't it risky?
-Yes obviously it is, as the driver itself warns users for the same. But
-any user using the parameter obviously shall be well aware of the risks
-involved. To be honest, I've been writing on a 100Gb journaled volume for
-a few days, including both large and small files, and haven't faced any
-corruption yet.
+________________________________________
+From: Weight, Russell H <russell.h.weight@intel.com>
+Sent: Thursday, December 1, 2022 10:37 AM
+To: Zhou, Jie2X; gregkh@linuxfoundation.org
+Cc: shuah@kernel.org; mcgrof@kernel.org; Zhang, Tianfei; linux-kselftest@vg=
+er.kernel.org; linux-kernel@vger.kernel.org; Li, Philip
+Subject: Re: fw_fallback.sh test failed in Debian 11
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
----
- fs/hfsplus/super.c | 46 ++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 36 insertions(+), 10 deletions(-)
 
-diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
-index 122ed89eb..2367a2407 100644
---- a/fs/hfsplus/super.c
-+++ b/fs/hfsplus/super.c
-@@ -24,6 +24,16 @@ static void hfsplus_free_inode(struct inode *inode);
- #include "hfsplus_fs.h"
- #include "xattr.h"
-=20
-+static unsigned int force_journaled_rw;
-+module_param(force_journaled_rw, uint, 0644);
-+MODULE_PARM_DESC(force_journaled_rw, "Force enable writes on Journaled HFS=
-+ volumes. "
-+		"([0] =3D disabled, 1 =3D enabled)");
-+
-+static unsigned int force_locked_rw;
-+module_param(force_locked_rw, uint, 0644);
-+MODULE_PARM_DESC(force_locked_rw, "Force enable writes on locked HFS+ volu=
-mes. "
-+		"([0] =3D disabled, 1 =3D enabled)");
-+
- static int hfsplus_system_read_inode(struct inode *inode)
- {
- 	struct hfsplus_vh *vhdr =3D HFSPLUS_SB(inode->i_sb)->s_vhdr;
-@@ -346,14 +356,22 @@ static int hfsplus_remount(struct super_block *sb, in=
-t *flags, char *data)
- 			/* nothing */
- 		} else if (vhdr->attributes &
- 				cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) {
--			pr_warn("filesystem is marked locked, leaving read-only.\n");
--			sb->s_flags |=3D SB_RDONLY;
--			*flags |=3D SB_RDONLY;
-+			if (force_locked_rw) {
-+				pr_warn("filesystem is marked locked, but writes have been force enabl=
-ed.\n");
-+			} else {
-+				pr_warn("filesystem is marked locked, leaving read-only.\n");
-+				sb->s_flags |=3D SB_RDONLY;
-+				*flags |=3D SB_RDONLY;
-+			}
- 		} else if (vhdr->attributes &
- 				cpu_to_be32(HFSPLUS_VOL_JOURNALED)) {
--			pr_warn("filesystem is marked journaled, leaving read-only.\n");
--			sb->s_flags |=3D SB_RDONLY;
--			*flags |=3D SB_RDONLY;
-+			if (force_journaled_rw) {
-+				pr_warn("filesystem is marked journaled, but writes have been force en=
-abled.\n");
-+			} else {
-+				pr_warn("filesystem is marked journaled, leaving read-only.\n");
-+				sb->s_flags |=3D SB_RDONLY;
-+				*flags |=3D SB_RDONLY;
-+			}
- 		}
- 	}
- 	return 0;
-@@ -459,12 +477,20 @@ static int hfsplus_fill_super(struct super_block *sb,=
- void *data, int silent)
- 	} else if (test_and_clear_bit(HFSPLUS_SB_FORCE, &sbi->flags)) {
- 		/* nothing */
- 	} else if (vhdr->attributes & cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) {
--		pr_warn("Filesystem is marked locked, mounting read-only.\n");
--		sb->s_flags |=3D SB_RDONLY;
-+		if (force_locked_rw) {
-+			pr_warn("Filesystem is marked locked, but writes have been force enable=
-d.\n");
-+		} else {
-+			pr_warn("Filesystem is marked locked, mounting read-only.\n");
-+			sb->s_flags |=3D SB_RDONLY;
-+		}
- 	} else if ((vhdr->attributes & cpu_to_be32(HFSPLUS_VOL_JOURNALED)) &&
- 			!sb_rdonly(sb)) {
--		pr_warn("write access to a journaled filesystem is not supported, use th=
-e force option at your own risk, mounting read-only.\n");
--		sb->s_flags |=3D SB_RDONLY;
-+		if (force_journaled_rw) {
-+			pr_warn("write access to a journaled filesystem is not supported, but h=
-as been force enabled.\n");
-+		} else {
-+			pr_warn("write access to a journaled filesystem is not supported, use t=
-he force option at your own risk, mounting read-only.\n");
-+			sb->s_flags |=3D SB_RDONLY;
-+		}
- 	}
-=20
- 	err =3D -EINVAL;
---=20
-2.38.1
+
+On 11/30/22 17:28, Zhou, Jie2X wrote:
+>> How much of this path exists on your machine?
+>> /sys/devices/virtual/misc/test_firmware/trigger_request
+> This path exists.
+>
+>> And is there anything in the dmesg output that indicates a failure assoc=
+iated with
+>> the test_firmware device?
+> Yes.
+>
+> kern  :info  : [   77.858068] test_firmware: loading 'test-firmware.bin'
+> kern  :info  : [   77.864705] test_firmware: loaded: 8
+> kern  :info  : [   77.874250] test_firmware: loading 'test-firmware.bin'
+> kern  :warn  : [   77.880672] misc test_firmware: Direct firmware load fo=
+r test-firmware.bin failed with error -2
+> kern  :info  : [   77.890106] test_firmware: load of 'test-firmware.bin' =
+failed: -2
+> kern  :info  : [   78.896662] test_firmware: loading ''
+> kern  :info  : [   78.901059] test_firmware: load of '' failed: -22
+> kern  :info  : [   78.907422] test_firmware: loading ''
+> kern  :err   : [   78.912278] test_firmware: failed to async load firmwar=
+e
+> kern  :info  : [   78.918594] test_firmware: loading 'nope-test-firmware.=
+bin'
+> kern  :warn  : [   78.925405] misc test_firmware: Direct firmware load fo=
+r nope-test-firmware.bin failed with error -2
+> kern  :info  : [   78.935260] Ignoring firmware sysfs fallback due to sys=
+ctl knob
+
+The above message looks like the problem. Firmware sysfs fallback has been =
+turned off
+on this system using sysctl. Can you try turning it on and rerunning the te=
+st?
+
+Thanks,
+- Russ
+
+> kern  :info  : [   78.941934] test_firmware: load of 'nope-test-firmware.=
+bin' failed: -2
+> kern  :info  : [   78.962155] test_firmware: loading 'test-firmware.bin'
+> kern  :info  : [   78.968232] test_firmware: loaded: 9
+> kern  :info  : [   78.986063] test_firmware: loading 'test-firmware.bin'
+> kern  :info  : [   78.992269] test_firmware: loaded: 9
+> kern  :info  : [   79.023611] test_firmware: reset
+> kern  :info  : [   79.028466] test_firmware: batched sync firmware loadin=
+g 'test-firmware.bin' 4 times
+>
+> best regards,
 
