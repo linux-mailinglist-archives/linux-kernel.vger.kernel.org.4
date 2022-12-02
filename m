@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576CD6401A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5A96401CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbiLBILh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
+        id S232846AbiLBINa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiLBIL2 (ORCPT
+        with ESMTP id S232719AbiLBIMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:11:28 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FEDB0A17;
-        Fri,  2 Dec 2022 00:11:23 -0800 (PST)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AAE54240005;
-        Fri,  2 Dec 2022 08:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669968681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PAptEfvYgIwFK8ngkctQU/JTtGEWZC2Koz9VlQAcRkA=;
-        b=kstJhwEO+cLVVec3Sk9Sa/uvB4r26XymgSL33QXP8njtUT0BOxFIWIvPdYUnPHe+NQ9YnV
-        8v32TN8SCY7ufUMPXXrCfRJHlIQm8PlGtwD4KSJ1q+A2/NR42Zd0+HWuJQRET6uDEIpf/v
-        /vMIijMbtujIVkMZtWkARcIL2Wax80uO+EEn6wGnkEawZMpXyyCb7UTIq23yz8HZhqEruq
-        sTVeVu0bO793DjT3K4Wql5mZvpZyHc9mlzTN/SJEgzIuhMuiCmqR6IROge5OD3ws1YnU5Q
-        lujAdDH/jD7nAhFgQhWBUp9+T9UPjn7wDdKaRu32IH4cta0RDt+nFQvtdawnUg==
-Date:   Fri, 2 Dec 2022 09:11:17 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: Re: [PATCH v2 02/21] dt-bindings: display: tegra: vi: add 'vip'
- property and example
-Message-ID: <20221202091117.52a9a8f0@booty>
-In-Reply-To: <20221201231636.GA1660613-robh@kernel.org>
-References: <20221128152336.133953-1-luca.ceresoli@bootlin.com>
-        <20221128152336.133953-3-luca.ceresoli@bootlin.com>
-        <20221201231636.GA1660613-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 2 Dec 2022 03:12:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4B41EAC6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:12:42 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1p119o-00059a-IC; Fri, 02 Dec 2022 09:12:28 +0100
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1p119m-001lGP-Ko; Fri, 02 Dec 2022 09:12:27 +0100
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1p119m-00BfDY-N6; Fri, 02 Dec 2022 09:12:26 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-wireless@vger.kernel.org
+Cc:     Neo Jou <neojou@gmail.com>, Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v5 00/11] RTW88: Add support for USB variants
+Date:   Fri,  2 Dec 2022 09:12:13 +0100
+Message-Id: <20221202081224.2779981-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rob,
+This has only small changes to the last version. I dropped the endless
+loop check again and added the "Edimax EW-7611ULB V2" to the rtw8723du
+id table.
 
-On Thu, 1 Dec 2022 17:16:36 -0600
-Rob Herring <robh@kernel.org> wrote:
+Sascha
 
-> On Mon, Nov 28, 2022 at 04:23:17PM +0100, Luca Ceresoli wrote:
-> > The Tegra20 VI peripheral can receive parallel input from the VIP parallel
-> > input module. Add it to the allowed properties and augment the existing
-> > nvidia,tegra20-vi example to show a 'vip' property.
-> > 
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > 
-> > ---
-> > 
-> > Changed in v2 (suggested by Krzysztof Kozlowski):
-> > - rename "i2c3" -> "ic2"
-> > - add review tag
-> > ---
-> >  .../display/tegra/nvidia,tegra20-vi.yaml      | 68 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  2 files changed, 69 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-> > index 782a4b10150a..5b5583c2b562 100644
-> > --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-> > +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-> > @@ -74,6 +74,22 @@ properties:
-> >    avdd-dsi-csi-supply:
-> >      description: DSI/CSI power supply. Must supply 1.2 V.
-> >  
-> > +  vip:
-> > +    $ref: /schemas/display/tegra/nvidia,tegra20-vip.yaml
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description:
-> > +          Input from the VIP (parallel input capture) module
-> > +
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint  
-> 
-> You can drop 'endpoint'. You only need port nodes if there's no extra 
-> properties in the endpoints.
+Sascha Hauer (11):
+  wifi: rtw88: print firmware type in info message
+  wifi: rtw88: Call rtw_fw_beacon_filter_config() with rtwdev->mutex
+    held
+  wifi: rtw88: Drop rf_lock
+  wifi: rtw88: Drop h2c.lock
+  wifi: rtw88: Drop coex mutex
+  wifi: rtw88: iterate over vif/sta list non-atomically
+  wifi: rtw88: Add common USB chip support
+  wifi: rtw88: Add rtw8821cu chipset support
+  wifi: rtw88: Add rtw8822bu chipset support
+  wifi: rtw88: Add rtw8822cu chipset support
+  wifi: rtw88: Add rtw8723du chipset support
 
-Oh, nice, will remove in v3.
-
-Krzysztof, can I keep your Reviewed-by after this change?
+ drivers/net/wireless/realtek/rtw88/Kconfig    |  47 +
+ drivers/net/wireless/realtek/rtw88/Makefile   |  15 +
+ drivers/net/wireless/realtek/rtw88/coex.c     |   3 +-
+ drivers/net/wireless/realtek/rtw88/debug.c    |  15 +
+ drivers/net/wireless/realtek/rtw88/fw.c       |  13 +-
+ drivers/net/wireless/realtek/rtw88/hci.h      |   9 +-
+ drivers/net/wireless/realtek/rtw88/mac.c      |   3 +
+ drivers/net/wireless/realtek/rtw88/mac80211.c |   2 +-
+ drivers/net/wireless/realtek/rtw88/main.c     |  12 +-
+ drivers/net/wireless/realtek/rtw88/main.h     |  12 +-
+ drivers/net/wireless/realtek/rtw88/phy.c      |   6 +-
+ drivers/net/wireless/realtek/rtw88/ps.c       |   2 +-
+ drivers/net/wireless/realtek/rtw88/reg.h      |   1 +
+ drivers/net/wireless/realtek/rtw88/rtw8723d.c |  28 +
+ drivers/net/wireless/realtek/rtw88/rtw8723d.h |  13 +-
+ .../net/wireless/realtek/rtw88/rtw8723du.c    |  36 +
+ drivers/net/wireless/realtek/rtw88/rtw8821c.c |  18 +
+ drivers/net/wireless/realtek/rtw88/rtw8821c.h |  21 +
+ .../net/wireless/realtek/rtw88/rtw8821cu.c    |  50 +
+ drivers/net/wireless/realtek/rtw88/rtw8822b.c |  19 +
+ .../net/wireless/realtek/rtw88/rtw8822bu.c    |  90 ++
+ drivers/net/wireless/realtek/rtw88/rtw8822c.c |  24 +
+ .../net/wireless/realtek/rtw88/rtw8822cu.c    |  44 +
+ drivers/net/wireless/realtek/rtw88/tx.h       |  31 +
+ drivers/net/wireless/realtek/rtw88/usb.c      | 911 ++++++++++++++++++
+ drivers/net/wireless/realtek/rtw88/usb.h      | 107 ++
+ drivers/net/wireless/realtek/rtw88/util.c     | 103 ++
+ drivers/net/wireless/realtek/rtw88/util.h     |  12 +-
+ 28 files changed, 1609 insertions(+), 38 deletions(-)
+ create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8723du.c
+ create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8821cu.c
+ create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8822bu.c
+ create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8822cu.c
+ create mode 100644 drivers/net/wireless/realtek/rtw88/usb.c
+ create mode 100644 drivers/net/wireless/realtek/rtw88/usb.h
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
+
