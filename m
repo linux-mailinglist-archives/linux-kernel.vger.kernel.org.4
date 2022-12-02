@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3177E6408DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8456408E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbiLBO76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S233041AbiLBPC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiLBO74 (ORCPT
+        with ESMTP id S229523AbiLBPCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:59:56 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B596E255A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:59:55 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id c7so1748241pfc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rVn9fYReGWeklGU9GMj6LqOCAyq6HzvsmE8l0X+UGY4=;
-        b=F4eIwSBlqT7o9RkATux/IYaxbq0p8cPog7/J3bPOef3vAZpOQnwSWarC+9qILgQEIl
-         WEGxrNIRpMqZMGueMF9aiU2aR0KcfpclsAVf31iMwBVNL4KypWt25KrwHeGz0NUnXFMf
-         LujR/fL8L9M0RB3yn/VF2M2xNXTflu1tnb+OL4BqS9gH3My9p3ew+miEleDXg2m1YRK/
-         2OPE/SEq0MENOCn28ef9yWGizFu2289AeVed9hx2/gJ+jPcoRNpCKwkpbHel6g4Ay7+q
-         /hjYw5fb8r+65IsHigcYPTehjvtNk2D82sOfsuilcqNJ4J5Ckmg0Ly+2hsuWH6vr77Of
-         VagQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rVn9fYReGWeklGU9GMj6LqOCAyq6HzvsmE8l0X+UGY4=;
-        b=N2GojiTVsPhNP50ZpQpZTXzcMumoUyLIAaxsSJ4d7YSUm7YLGJFNy6zNhTJb4yyKFh
-         fPGEMmvGAnunrRO57h3JFWaDz7Qt9weXMPgzR/aT1tCpAqhJEj0RRixqSGoseDmyBsIi
-         kbllwUhIpOTx0qWuQ9m6k70fGEyg5z3BbvFZ4NikcGTZ43Lqo4CRRYSXQactm1n8398B
-         1aY9gtdHTsP465Oj0Ns6OlO7Gx3vKjZ79xBz863HTKrgh7qZ5DTe5LaGiwsBlBL7ltb7
-         GadF9O0MDK6KQjJKBphYaIif7IE8w2y2ilOERIBxrgtEZY7ZLHgsEP4X98mYRoSFlQp1
-         d+xg==
-X-Gm-Message-State: ANoB5pkzgX30Iv5c9afkl7ZKuX4S1X26dfOtbpH5LV87FWJ9tAfmeqgy
-        j8C6SnezgBaLsKn17/wxvPIx/g==
-X-Google-Smtp-Source: AA0mqf7+D9ptufQt6gtLv8VJWJ4Nyf0vHGoTCmcVlBRCz5hA+ZEj1frb5fsoCB3Aw8UmjpV8QROTrQ==
-X-Received: by 2002:a63:fb46:0:b0:478:1c87:7fcb with SMTP id w6-20020a63fb46000000b004781c877fcbmr21990948pgj.330.1669993194175;
-        Fri, 02 Dec 2022 06:59:54 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id y2-20020aa78f22000000b0053e62b6fd22sm5186907pfr.126.2022.12.02.06.59.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 06:59:53 -0800 (PST)
-Date:   Fri, 02 Dec 2022 06:59:53 -0800 (PST)
-X-Google-Original-Date: Fri, 02 Dec 2022 06:59:52 PST (-0800)
-Subject:     Re: [PATCH]     Implement ioremap_prot support (v2)
-In-Reply-To: <20221202083356.169176-1-jiangjianwen@uniontech.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        alexandre.ghiti@canonical.com, geert@linux-m68k.org,
-        panqinglin2020@iscas.ac.cn, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jiangjianwen@uniontech.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jiangjianwen@uniontech.com
-Message-ID: <mhng-5118b440-6182-41c4-81d2-a369336ee8e3@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 10:02:25 -0500
+Received: from outbound-smtp15.blacknight.com (outbound-smtp15.blacknight.com [46.22.139.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0910BE2543
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:02:22 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp15.blacknight.com (Postfix) with ESMTPS id A700E1C4395
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:02:20 +0000 (GMT)
+Received: (qmail 20000 invoked from network); 2 Dec 2022 15:02:20 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Dec 2022 15:02:20 -0000
+Date:   Fri, 2 Dec 2022 15:01:58 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>, Jan Kara <jack@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-RT <linux-rt-users@vger.kernel.org>
+Subject: Re: [PATCH] rtmutex: Add acquire semantics for rtmutex lock
+ acquisition
+Message-ID: <20221202150158.xzgovoy7wuic6vvk@techsingularity.net>
+References: <20221202100223.6mevpbl7i6x5udfd@techsingularity.net>
+ <Y4nfopZfBxR4lJ6G@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Y4nfopZfBxR4lJ6G@linutronix.de>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 02 Dec 2022 00:33:56 PST (-0800), jiangjianwen@uniontech.com wrote:
->     Feature ioremap_prot only needs an implementation of pte_pgprot on riscv.
->     That macro is similar to the same one on platform loongarch, mips and sh.
->     We just need:
->     1. replace _PFN_MASK with _PAGE_PFN_MASK in pte_gpprot;
->     2. add "select HAVE_IOREMAP_PROT" into arch/riscv/Kconfig;
->     3. add "depends on MMU" into drivers/fpga/Kconfig to fix the building error "undefined reference to generic_access_phys".
+On Fri, Dec 02, 2022 at 12:21:06PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2022-12-02 10:02:23 [+0000], Mel Gorman wrote:
+> > The lock owner is updated with an IRQ-safe raw spinlock held but the
+> > spin_unlock does not provide acquire semantics which are needed when
+> > acquiring a mutex. This patch adds the necessary acquire semantics for a
+> > lock operation when the lock owner is updated. It successfully completed
+> > 10 iterations of the dbench workload while the vanilla kernel fails on
+> > the first iteration.
+> 
+> I *think* it is
+> 
+> Fixes: 700318d1d7b38 ("locking/rtmutex: Use acquire/release semantics")
+> 
 
-That third one should be its own patch, it's not really related to the 
-RISC-V bits.
+Adding Davidlohr to cc.
 
->
->     Signed-off-by: Jianwen Jiang <jiangjianwen@uniontech.com>
-> ---
->  arch/riscv/Kconfig            | 1 +
->  arch/riscv/include/asm/page.h | 2 ++
->  drivers/fpga/Kconfig          | 1 +
->  3 files changed, 4 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index fa78595a6089..5ed2c7361040 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -95,6 +95,7 @@ config RISCV
->  	select HAVE_FUNCTION_ERROR_INJECTION
->  	select HAVE_GCC_PLUGINS
->  	select HAVE_GENERIC_VDSO if MMU && 64BIT
-> +	select HAVE_IOREMAP_PROT
->  	select HAVE_IRQ_TIME_ACCOUNTING
->  	select HAVE_KPROBES if !XIP_KERNEL
->  	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index ac70b0fd9a9a..cb08a4911d60 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -84,6 +84,8 @@ typedef struct page *pgtable_t;
->  #define __pgd(x)	((pgd_t) { (x) })
->  #define __pgprot(x)	((pgprot_t) { (x) })
->
-> +#define pte_pgprot(x)  __pgprot(pte_val(x) & ~_PAGE_PFN_MASK)
-> +
->  #ifdef CONFIG_64BIT
->  #define PTE_FMT "%016lx"
->  #else
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index bbe0a7cabb75..0493272b8bff 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -5,6 +5,7 @@
->
->  menuconfig FPGA
->  	tristate "FPGA Configuration Framework"
-> +	depends on MMU
->  	help
->  	  Say Y here if you want support for configuring FPGAs from the
->  	  kernel.  The FPGA framework adds an FPGA manager class and FPGA
+It might have made the problem worse but even then rt_mutex_set_owner was
+just a plain assignment and while I didn't check carefully, at a glance
+try_to_take_rt_mutex didn't look like it guaranteed ACQUIRE semantics.
+
+> Before that, it did cmpxchg() which should be fine.
+> 
+> Regarding mark_rt_mutex_waiters(). Isn't acquire semantic required in
+> order for the lock-owner not perform the fastpath but go to the slowpath
+> instead?
+> 
+
+Good spot, it does. While the most straight-forward solution is to use
+cmpxchg_acquire, I think it is overkill because it could incur back-to-back
+ACQUIRE operations in the event of contention. There could be a smp_wmb
+after the cmpxchg_relaxed but that impacts all arches and a non-paired
+smp_wmb is generally frowned upon.
+
+I'm thinking this on top of the patch should be sufficient even though
+it's a heavier operation than is necesary for ACQUIRE as well as being
+"not typical" according to Documentation/atomic_t.txt. Will, as this
+affects ARM primarily do you have any preference?
+
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 35212f260148..af0dbe4d5e97 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -238,6 +238,13 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
+ 		owner = *p;
+ 	} while (cmpxchg_relaxed(p, owner,
+ 				 owner | RT_MUTEX_HAS_WAITERS) != owner);
++
++	/*
++	 * The cmpxchg loop above is relaxed to avoid back-to-back ACQUIRE
++	 * operations in the event of contention. Ensure the successful
++	 * cmpxchg is visible.
++	 */
++	smp_mb__after_atomic();
+ }
+ 
+ /*
