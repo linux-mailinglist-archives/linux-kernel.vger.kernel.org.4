@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E8564101B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76ACD64101C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234639AbiLBVkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S234654AbiLBVkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233541AbiLBVka (ORCPT
+        with ESMTP id S233541AbiLBVkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:40:30 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3522AE5A8B;
-        Fri,  2 Dec 2022 13:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670017230; x=1701553230;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=NuDVEcz+ZwrxpvyK1gNkgUCJxIW8h0yVGClVY+eE7s8=;
-  b=T8Kd0PqA/x5Ex0q76P7Dk4IGJsKrWS0chB9dPU2MzD03rr0xga3o6/jX
-   +il7IaGjLQ0aGSBMMhPsK3WFw8e9mUa7pU56knff+3227LhdcR8pKJ4M7
-   yw+axMA6JMJsgSaBfN06+yp+/JQw8bWDF+SZD0l1BmBtLKL/BCr+gI5yN
-   P3dq18srfRSnvsAov1IxYh7hSjD1Mn+CQrIc9L7ywHzPjrehpigcg6Yhy
-   aPlmOs+eWCRV1CyT4jgnG0impu+yNf1jIKJNAdciFxhw1HDidxQ/Dna4m
-   bFD9GszPkQWizhLrOxR06D1DtPS4kZp4jv/Qq/EPKb0vc+bSCXM2d8WCy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="317196856"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="317196856"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:40:28 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="595586009"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="595586009"
-Received: from kcaskeyx-mobl1.amr.corp.intel.com (HELO [10.251.1.207]) ([10.251.1.207])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:40:27 -0800
-Message-ID: <abfc00a2ab1d97f8081c696f78e2d0ced23902b4.camel@linux.intel.com>
-Subject: Re: [PATCH v2 02/18] x86/sgx: Store struct sgx_encl when allocating
- new VA pages
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, jarkko@kernel.org,
-        dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Date:   Fri, 02 Dec 2022 13:40:26 -0800
-In-Reply-To: <3a789b1c-4c70-158b-d764-daec141a5816@intel.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
-         <20221202183655.3767674-3-kristen@linux.intel.com>
-         <3a789b1c-4c70-158b-d764-daec141a5816@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 2 Dec 2022 16:40:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E818F117C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:40:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30BA8B820F4
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 21:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E8EC433D6;
+        Fri,  2 Dec 2022 21:40:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670017236;
+        bh=xEX1gU5d5g9bK1jwmy+3WggnCkBcnz6d4DOza7/cIbc=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=porFOOad5EGmZHzBA3Qhpg+8BcRIFfHAzCV0N1052+8nhYd/6aRVdM5uku4zkWBfg
+         iCa6LZrx3RdgjRfMSsRtaf6eRRLBdpcK/o3ULuDdJDEGjOA9QBBNslBrQHK7CMa/i/
+         ABRu3yVa7fUYfYdDJxVPRMUtPePi6viOSUAZNxR55LqFkh7M3yeLMhlTXneHP7zER7
+         F2wG6doyj8XuIndIL65C7QtDanuxLvksYEaueg7rXciYIHF55Vrw7AWD/mfOX4RAEa
+         qy02oxwOyG0/wPWRy++OpGuCk+DGMPK5vX54TMFjXp5Q45pg7LRaiNexSeIVWZn4gG
+         msPVlxSg8/C1A==
+Message-ID: <33c88623-b08c-c8b9-e0b6-be8ce5694af0@kernel.org>
+Date:   Fri, 2 Dec 2022 13:40:35 -0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] ktest.pl minconfig: Unset configs instead of just
+ removing them
+Content-Language: en-MW
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20221202115936.016fce23@gandalf.local.home>
+From:   John 'Warthog9' Hawley <warthog9@kernel.org>
+In-Reply-To: <20221202115936.016fce23@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-02 at 13:35 -0800, Dave Hansen wrote:
-> On 12/2/22 10:36, Kristen Carlson Accardi wrote:
-> > When allocating new Version Array (VA) pages, pass the struct
-> > sgx_encl
-> > of the enclave that is allocating the page. sgx_alloc_epc_page()
-> > will
-> > store this value in the encl_owner field of the struct
-> > sgx_epc_page. In
-> > a later patch, VA pages will be placed in an unreclaimable queue,
-> > and then when the cgroup max limit is reached and there are no more
-> > reclaimable pages and the enclave must be oom killed, all the
-> > VA pages associated with that enclave can be uncharged and freed.
->=20
-> What does this have to do with the 'encl' that is being passed,
-> though?
->=20
-> In other words, why is this new sgx_epc_page-to-encl mapping needed
-> for
-> VA pages now, but it wasn't before?
+On 12/2/22 08:59, Steven Rostedt wrote:
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> After a full run of a make_min_config test, I noticed there were a lot of
+> CONFIGs still enabled that really should not be. Looking at them, I
+> noticed they were all defined as "default y". The issue is that the test
+> simple removes the config and re-runs make oldconfig, which enables it
+> again because it is set to default 'y'. Instead, explicitly disable the
+> config with writing "# CONFIG_FOO is not set" to the file to keep it from
+> being set again.
+> 
+> With this change, one of my box's minconfigs went from 768 configs set,
+> down to 521 configs set.
+> 
+> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+> ---
+>   tools/testing/ktest/ktest.pl | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/ktest/ktest.pl b/tools/testing/ktest/ktest.pl
+> index 590518144167..56135e7d2295 100755
+> --- a/tools/testing/ktest/ktest.pl
+> +++ b/tools/testing/ktest/ktest.pl
+> @@ -3775,9 +3775,10 @@ sub test_this_config {
+>       # .config to make sure it is missing the config that
+>       # we had before
+>       my %configs = %min_configs;
+> -    delete $configs{$config};
+> +    $configs{$config} = "# $config is not set";
+>       make_new_config ((values %configs), (values %keep_configs));
+>       make_oldconfig;
+> +    delete $configs{$config};
+>       undef %configs;
+>       assign_configs \%configs, $output_config;
+>   
 
-When we OOM kill an enclave, we want to get rid of all the associated
-VA pages too. Prior to this patch, there wasn't a way to easily get the
-VA pages associated with an enclave.
-
-
+Reviewed-by: John 'Warthog9' Hawley (VMware) <warthog9@eaglescrag.net>
