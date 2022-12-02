@@ -2,115 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35ABE641173
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78086641178
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiLBXXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 18:23:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S234672AbiLBXYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 18:24:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbiLBXXP (ORCPT
+        with ESMTP id S234590AbiLBXYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 18:23:15 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF67BB007;
-        Fri,  2 Dec 2022 15:23:14 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id n3so2008589pfq.10;
-        Fri, 02 Dec 2022 15:23:14 -0800 (PST)
+        Fri, 2 Dec 2022 18:24:15 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7977F898E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:24:14 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id cm20so6297205pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 15:24:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aKfchYwXntIzxvzacjQAm257xQlqoADf84p5ijUnCK0=;
-        b=TaCN5yg5es/OCGcj/NfRM2JW10uoQVGBXHx4nPm2YvNINoWjPB/7TD4giwLlv1wmiQ
-         MrVnyFLL88Au5p3oYp1EJYZR/IVa/Sg+w13ge9FLN42eRLZ8YCEcMn0LYkAgWqmlWXru
-         Ys77EdaRACuFl4UD7Zc5QA0sT2gdllTsO02SnM3KKb9q1lGMhzoyg9r39ZhxGEKuFUZL
-         3NyIyjVvfssCdHP1hiknRb2HJ7Fhoh0tfD7E1AHVMxpSYIK9SYHU5ukdOWphGRfSlCWk
-         I20zRW9PJCZ+zcJRTZWzsfaJicGKJVFa6tGplkl1y6uhCqlPXK6Lg9tshNdCdkQChJ0J
-         HC3Q==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=on58jY6T434zQgu2CSXS/icw6nLEfVeftPkBpeTWD00=;
+        b=f9N08HoP3vjXrlBMoa1BWvaTSWYndYLcM4wvp+sp+YXl3LIIVsOpQuF46rZaSwVNfq
+         nHVkSzNk6vjd6vvV4fmVD3rpGz5vZAwUikyB5tUcEHoW+afHzh1WXuoPSu784boKvqNM
+         FdiMdq9PdHK4j0Q/imjoWxQ2FaNvTxNHqr7LrJfZ9lwi3EMqsJfwCF3hnBUWxxpwRTn0
+         0jvlP5iIb4KaObAhu8XtR2n5TKJLYoG7RLWkUrDoas8k4jsWcAWlntQBnMiRZqlEYoTP
+         H442pPWf0jqdJyXM05cDctKukg6U+w+JyvNaWMDjfVn+YuFO5hK7+MJnmg0T32oxYnDL
+         oH6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aKfchYwXntIzxvzacjQAm257xQlqoADf84p5ijUnCK0=;
-        b=U5UyXbBFenA+T5dsU/5Ioin3sWZX3pikwt76bjNa1KE9emZOKy3NWZrXgsZrrn1uTb
-         /llXQM440vwf0jQIOtvfyCQjNHjQLJlLM9h1Wi7TU1xG47mkW+2mT1jdLWrDOp2A9gH/
-         Q+0sCAKA5We11RS4vPznAludltyga/uOpgcR6nG4NnsUXsmLKahygA2IWQeUj5kRPlD1
-         Ns6o/E0N4d44iFaxpwz95Fd9JuFW2qQYgrZY3+lMBlPDQEpDsVaX3pQohA5776n0PwG+
-         UFnVhZEXyMQCegronUvUuY+uZZ6iKrBsRemRQVg/8WDP6A9OavCl9DYgkJStjfBmS2xy
-         +dsA==
-X-Gm-Message-State: ANoB5pmjY9fxI/WtSvZlWwTr/pr/nf/Z+feNpjvhvByzd2+BB/4UGaY0
-        c4QiFL4ycjMfAw9w91DFuUU=
-X-Google-Smtp-Source: AA0mqf469Y/cLftoGZmaO0lNzpRTefrBSYqmtP4hEkeLeoQt6FlGPNCfB6JCSw1jptFd6fmJSV4lEw==
-X-Received: by 2002:a63:2c05:0:b0:477:ceeb:cb9c with SMTP id s5-20020a632c05000000b00477ceebcb9cmr37582557pgs.17.1670023393811;
-        Fri, 02 Dec 2022 15:23:13 -0800 (PST)
-Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id n9-20020aa79849000000b005769ccca18csm35204pfq.85.2022.12.02.15.23.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 15:23:13 -0800 (PST)
-Message-ID: <e13357cb-bc5f-1a66-db54-0fa41e788668@gmail.com>
-Date:   Sat, 3 Dec 2022 08:23:09 +0900
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=on58jY6T434zQgu2CSXS/icw6nLEfVeftPkBpeTWD00=;
+        b=meY/x4QryLtHpsYoe0UYSinvmoe2OVt0IBWPm/UGHJVVb0aHCU5I8Likroa7RBta6O
+         bgME5q4Lt2eNbC8KMmSiImOakJFmVBZGw0g90R7Dlxs67cfvQ4GtDByGTeiVGzGyZnIq
+         /xoq6x6vWxGFEory63Hz8A88MZGfNYGvm5WYWV+wqhAO1m2wNwRIcGH4LNzMPQ0kc4Z1
+         UoErKPk/s/ZkyIG8oJek4+tRy9tiodVqt3NTqdBVcTUMFybbq0Rzzb407OwSibvgM92A
+         0/Xh+Rax55lTioxmoF5bAlyAJ9dNlXcbUAIbDv7YpS7s69aYE8ekweUoSI5Gzm9KfwOs
+         D0Dg==
+X-Gm-Message-State: ANoB5plt6bHpT8OV9pvosWIVPJv/A57Hs3Xjb3iMH3HBjp91klRb8JuS
+        wgdDIME90eypaHByhoDSAzPTF3rJokh4DF78F9qTTA==
+X-Google-Smtp-Source: AA0mqf5E8zMLU2q3bZ7mZyyna7VvQKkHk3cfGKZrg32/dY3cWByKKJPBLwGkdKGt4CtkQAcmr9HvbrVMpAETT+qUAP8=
+X-Received: by 2002:a17:902:ec04:b0:189:894c:6b58 with SMTP id
+ l4-20020a170902ec0400b00189894c6b58mr28915373pld.172.1670023454228; Fri, 02
+ Dec 2022 15:24:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] PM / devfreq: event: use
- devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, cw00.choi@samsung.com
-Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        krzysztof.kozlowski@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn
-References: <202211220942288196359@zte.com.cn>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <202211220942288196359@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221202013404.163143-1-jeffxu@google.com> <20221202013404.163143-6-jeffxu@google.com>
+ <202212021457.EC46B27677@keescook>
+In-Reply-To: <202212021457.EC46B27677@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 2 Dec 2022 15:23:37 -0800
+Message-ID: <CALmYWFuQUcd1RYu1idS5cirAXNbynDLkxLYTHRAFS6yQE=gOmw@mail.gmail.com>
+Subject: Re: [PATCH v3] mm/memfd: security hook for memfd_create
+To:     Kees Cook <keescook@chromium.org>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 11. 22. 10:42, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/devfreq/event/exynos-nocp.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/devfreq/event/exynos-nocp.c b/drivers/devfreq/event/exynos-nocp.c
-> index ccc531ee6938..c1cc23bcb995 100644
-> --- a/drivers/devfreq/event/exynos-nocp.c
-> +++ b/drivers/devfreq/event/exynos-nocp.c
-> @@ -214,8 +214,7 @@ static int exynos_nocp_parse_dt(struct platform_device *pdev,
->  		nocp->clk = NULL;
-> 
->  	/* Maps the memory mapped IO to control nocp register */
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	base = devm_ioremap_resource(dev, res);
-> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->  	if (IS_ERR(base))
->  		return PTR_ERR(base);
-> 
+On Fri, Dec 2, 2022 at 2:58 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Dec 02, 2022 at 01:34:03AM +0000, jeffxu@chromium.org wrote:
+> > From: Jeff Xu <jeffxu@chromium.org>
+> >
+> > The new security_memfd_create allows lsm to check flags of
+> > memfd_create.
+> >
+> > The security by default system (such as chromeos) can use this
+> > to implement system wide lsm to allow only non-executable memfd
+> > being created.
+> >
+> > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> > ---
+> >  include/linux/lsm_hook_defs.h | 1 +
+> >  include/linux/lsm_hooks.h     | 4 ++++
+> >  include/linux/security.h      | 6 ++++++
+> >  mm/memfd.c                    | 5 +++++
+> >  4 files changed, 16 insertions(+)
+> >
+> > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> > index ec119da1d89b..fd40840927c8 100644
+> > --- a/include/linux/lsm_hook_defs.h
+> > +++ b/include/linux/lsm_hook_defs.h
+> > @@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
+> >  LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
+> >  LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
+> >        unsigned long arg)
+> > +LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
+> >  LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
+> >  LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
+> >        unsigned long prot, unsigned long flags)
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index 4ec80b96c22e..5a18a6552278 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -543,6 +543,10 @@
+> >   *   simple integer value.  When @arg represents a user space pointer, it
+> >   *   should never be used by the security module.
+> >   *   Return 0 if permission is granted.
+> > + * @memfd_create:
+> > + *   @name is the name of memfd file.
+> > + *   @flags is the flags used in memfd_create.
+> > + *   Return 0 if permission is granted.
+> >   * @mmap_addr :
+> >   *   Check permissions for a mmap operation at @addr.
+> >   *   @addr contains virtual address that will be used for the operation.
+> > diff --git a/include/linux/security.h b/include/linux/security.h
+> > index ca1b7109c0db..5b87a780822a 100644
+> > --- a/include/linux/security.h
+> > +++ b/include/linux/security.h
+> > @@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
+> >  int security_file_alloc(struct file *file);
+> >  void security_file_free(struct file *file);
+> >  int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+> > +int security_memfd_create(char *name, unsigned int flags);
+> >  int security_mmap_file(struct file *file, unsigned long prot,
+> >                       unsigned long flags);
+> >  int security_mmap_addr(unsigned long addr);
+> > @@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
+> >       return 0;
+> >  }
+> >
+> > +static inline int security_memfd_create(char *name, unsigned int flags)
+> > +{
+> > +     return 0;
+> > +}
+>
+> I think this is missing the security/security.c changes for the
+> non-inline version?
+>
+Yes. I will add that in V4.
 
-Applied it. Thanks.
-
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
-
+> -Kees
+>
+> > +
+> >  static inline int security_mmap_file(struct file *file, unsigned long prot,
+> >                                    unsigned long flags)
+> >  {
+> > diff --git a/mm/memfd.c b/mm/memfd.c
+> > index 69e897dea6d5..96dcfbfed09e 100644
+> > --- a/mm/memfd.c
+> > +++ b/mm/memfd.c
+> > @@ -346,6 +346,11 @@ SYSCALL_DEFINE2(memfd_create,
+> >               goto err_name;
+> >       }
+> >
+> > +     /* security hook for memfd_create */
+> > +     error = security_memfd_create(name, flags);
+> > +     if (error)
+> > +             return error;
+> > +
+> >       if (flags & MFD_HUGETLB) {
+> >               file = hugetlb_file_setup(name, 0, VM_NORESERVE,
+> >                                       HUGETLB_ANONHUGE_INODE,
+> > --
+> > 2.39.0.rc0.267.gcb52ba06e7-goog
+> >
+>
+> --
+> Kees Cook
