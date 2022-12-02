@@ -2,147 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7684640ED0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94772640ED2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiLBT51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S234638AbiLBT5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiLBT5Z (ORCPT
+        with ESMTP id S229554AbiLBT5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:57:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC51BEE958;
-        Fri,  2 Dec 2022 11:57:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EB1F62237;
-        Fri,  2 Dec 2022 19:57:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E890C433D6;
-        Fri,  2 Dec 2022 19:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670011043;
-        bh=acLl0i6Ws/i0Io5d6dMkIRF0Fh8/UGGdP7tcPSuvFLY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=eE+VVFxQskQjOSvQjiHlUv7GnJBc3WzIHD9IvX9jEmiW6lSuVvwOOWniGONNE6OUv
-         QTKkN1oV6OHMvbTA3R7XkaPz//JcrhMiSVi/HOX+Zy8OxAjCng+T7TfLMDhSQSi2Bt
-         L4mNRSWFL8pBM+n/1r+NcRpK9HphWyVd1ddQE4koOhh9zz1sxU30rdVo5OU0ntHrIz
-         HkfedLIflKQXGmcliYo1DWKBmLEj52FPq1ITp9Oz3NblXMUXIKbbnSh11YNxMwBgDk
-         0ZZ3HsZhvaHfuwGDGF3DKX8IB3fGFuMP6nu3AjWFPL2GKdl0eN7qmXVo6d1Tgxk2WG
-         3FIOAGVK+rBGw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 39B795C095D; Fri,  2 Dec 2022 11:57:23 -0800 (PST)
-Date:   Fri, 2 Dec 2022 11:57:23 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu-tasks: Make shrink down to a single callback queue
- safely
-Message-ID: <20221202195723.GB4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221130051253.1884572-1-qiang1.zhang@intel.com>
+        Fri, 2 Dec 2022 14:57:53 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D01BDF78;
+        Fri,  2 Dec 2022 11:57:52 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id h16so6705969qtu.2;
+        Fri, 02 Dec 2022 11:57:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E6UpE/TC2qj4+oVdALXhIZeIKkqXXSJmNthecCyn0hk=;
+        b=qQ/WXxlPpIF2XwyOyjcHwhDGyLblUJ+Lkb9hr6hXAUQiL7bWcof/NhMH+kpPMzJT2O
+         DIFmF4FQ3Z45BdxPjH1Rga2BgnDoOjIt81kZ63PzxRx+DmhWnEwG0Iuvh5EsCDzdwhW7
+         XTYEnZFyrGRsXjKkg8AU2Z96M0qGeFp+mXfTZnILJAOEOZ6TSQIHYj5yomM4aoUG2lag
+         LN2aZEh+Um/Qfm6EwnM+WR1l8UQvJD+4QgD5nIJy0fRgV4SuvOC5CX8XvA7lkTUom30M
+         ywAQ0iD5X8eJyUb+Ge24qpuCcgUol1jRwyKOGaqjy5sctPxw4XCQtwdh+3lT/3D1plUB
+         6M3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6UpE/TC2qj4+oVdALXhIZeIKkqXXSJmNthecCyn0hk=;
+        b=sHTntibF7QXt3AoZrxdjfk4m32gu8nZ05PYAd56IJhseSp/t0UanusLrC6dKzIriGH
+         qmT32nKtjhDoFG6Bo9Win/st3/KjmVBYhuzZQKguagON3Z82j1obQ2N+3KjKMPjociqm
+         LwokxkNaC47+iSq6NFFOUbdGLR/oGTl+BN37Iotlq33anpiFnVlDkPXMe6fS+QB712FI
+         a2az8d88T49xXYWALo9krzCXMvQWLiiTP31CwtFYmyhllo+9u05MGVkpQw56Q5OqUMbw
+         wL0mhkVar/UudiXowfhjR5wQ5M0oy40O70J61BwjwG/ac+KJXcNM2/6C2b4mZXf2lQ/W
+         BGnw==
+X-Gm-Message-State: ANoB5pknJdC7aOKVAkDtJ64IfybHbcStSLqE/U41xTZZzyxxcCfrpAp/
+        ZYY6Av74grGp7FGpH6ltDgc=
+X-Google-Smtp-Source: AA0mqf4yAuBiietYn1UxMo9lKP2dUUH6GbZaquVG0c7el97Lr9LlGR8ZNmoKn/o0CLko3ULUxhkMHA==
+X-Received: by 2002:a05:620a:13d7:b0:6fb:57cb:47ce with SMTP id g23-20020a05620a13d700b006fb57cb47cemr50930432qkl.452.1670011071179;
+        Fri, 02 Dec 2022 11:57:51 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bq43-20020a05620a46ab00b006ce580c2663sm5934875qkb.35.2022.12.02.11.57.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 11:57:50 -0800 (PST)
+Message-ID: <bea1c858-dc1b-6251-8b2f-c7b88f48fe28@gmail.com>
+Date:   Fri, 2 Dec 2022 11:57:47 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130051253.1884572-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6.0 000/280] 6.0.11-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221201131113.897261583@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221201131113.897261583@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 01:12:53PM +0800, Zqiang wrote:
-> Assume that the current RCU-task belongs to per-CPU callback queuing
-> mode and the rcu_task_cb_adjust is true.
+On 12/1/22 05:11, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.11 release.
+> There are 280 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
->       CPU0					CPU1
+> Responses should be made by Sat, 03 Dec 2022 13:10:41 +0000.
+> Anything received after that time might be too late.
 > 
-> rcu_tasks_need_gpcb()
->   ncbsnz == 0 and
->   ncbs < rcu_task_collapse_lim
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
 > 
-> 					      invoke call_rcu_tasks_generic()
-> 						 enqueue callback to CPU1
-> 					        (CPU1 n_cbs not equal zero)
+> thanks,
 > 
->   if (rcu_task_cb_adjust &&
->   ncbs <= rcu_task_collapse_lim)
->     if (rtp->percpu_enqueue_lim > 1)
->       rtp->percpu_enqueue_lim = 1;
->       rtp->percpu_dequeue_gpseq =
->       get_state_synchronize_rcu();
-> 
-> 
->   A full RCU grace period has passed
+> greg k-h
 
-I don't see how this grace period can elapse.  The rcu_tasks_need_gpcb()
-function is invoked only from rcu_tasks_one_gp(), and while holding
-->tasks_gp_mutex.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-What am I missing here?
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-							Thanx, Paul
-
->   if (rcu_task_cb_adjust && !ncbsnz &&
->   poll_state_synchronize_rcu(
->     rtp->percpu_dequeue_gpseq) == true
->     if (rtp->percpu_enqueue_lim <
-> 	rtp->percpu_dequeue_lim)
->         rtp->percpu_dequeue_lim = 1
->     for (cpu = rtp->percpu_dequeue_lim;
->         cpu < nr_cpu_ids; cpu++)
->         find CPU1 n_cbs is not zero
->         trigger warning
-> 
-> The above scenario will not only trigger WARN_ONCE(), but also set the
-> rcu_tasks structure's->percpu_dequeue_lim is one when CPU1 still have
-> callbacks, which will cause the callback of CPU1 to have no chance to be
-> called.
-> 
-> This commit add per-cpu callback check(except CPU0) before set the rcu_tasks
-> structure's->percpu_dequeue_lim to one, if other CPUs(except CPU0) still have
-> callback, not set the rcu_tasks structure's->percpu_dequeue_lim to one, set it
-> until the all CPUs(except CPU0) has no callback.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tasks.h | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> index e4f7d08bde64..690af479074f 100644
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-> @@ -433,14 +433,17 @@ static int rcu_tasks_need_gpcb(struct rcu_tasks *rtp)
->  	    poll_state_synchronize_rcu(rtp->percpu_dequeue_gpseq)) {
->  		raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
->  		if (rtp->percpu_enqueue_lim < rtp->percpu_dequeue_lim) {
-> +			for (cpu = rtp->percpu_enqueue_lim; cpu < nr_cpu_ids; cpu++) {
-> +				struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, cpu);
-> +
-> +				if(rcu_segcblist_n_cbs(&rtpcp->cblist)) {
-> +					raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
-> +					return needgpcb;
-> +				}
-> +			}
->  			WRITE_ONCE(rtp->percpu_dequeue_lim, 1);
->  			pr_info("Completing switch %s to CPU-0 callback queuing.\n", rtp->name);
->  		}
-> -		for (cpu = rtp->percpu_dequeue_lim; cpu < nr_cpu_ids; cpu++) {
-> -			struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, cpu);
-> -
-> -			WARN_ON_ONCE(rcu_segcblist_n_cbs(&rtpcp->cblist));
-> -		}
->  		raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
->  	}
->  
-> -- 
-> 2.25.1
-> 
