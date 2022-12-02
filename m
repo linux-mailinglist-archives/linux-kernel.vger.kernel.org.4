@@ -2,83 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411EB64035C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B209640362
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiLBJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S233030AbiLBJdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232708AbiLBJcV (ORCPT
+        with ESMTP id S233023AbiLBJcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:32:21 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B859EBE111
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:32:20 -0800 (PST)
-Received: from ipservice-092-217-087-074.092.217.pools.vodafone-ip.de ([92.217.87.74] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1p12P0-0001zC-3F; Fri, 02 Dec 2022 10:32:14 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 2/2] staging: r8188eu: use subtype helper in rtw_check_bcn_info
-Date:   Fri,  2 Dec 2022 10:31:59 +0100
-Message-Id: <20221202093159.404111-3-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221202093159.404111-1-martin@kaiser.cx>
-References: <20221202093159.404111-1-martin@kaiser.cx>
+        Fri, 2 Dec 2022 04:32:35 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA93112A;
+        Fri,  2 Dec 2022 01:32:33 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p12PH-0003qq-OA; Fri, 02 Dec 2022 10:32:31 +0100
+Message-ID: <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
+Date:   Fri, 2 Dec 2022 10:32:31 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
+Content-Language: en-US, de-DE
+To:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de
+Cc:     stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        linux-integrity@vger.kernel.org, jgg@ziepe.ca,
+        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
+        timvp@google.com, apronin@google.com, mw@semihalf.com,
+        upstream@semihalf.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+References: <20221128195651.322822-1-Jason@zx2c4.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20221128195651.322822-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669973553;529cc8e0;
+X-HE-SMSGID: 1p12PH-0003qq-OA
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ieee80211_is_beacon to check the frame subtype in rtw_check_bcn_info.
-Replace the call to the driver-specific GetFrameSubType function.
+Hi, this is your Linux kernel regression tracker.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_wlan_util.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+On 28.11.22 20:56, Jason A. Donenfeld wrote:
 
-diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-index da3465d6bb0f..f1ebb5358cb9 100644
---- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
-+++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-@@ -874,9 +874,10 @@ void VCS_update(struct adapter *padapter, struct sta_info *psta)
- 
- int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
- {
-+	struct ieee80211_mgmt *mgmt = (struct ieee80211_mgmt *)pframe;
- 	unsigned int		len;
- 	unsigned char		*p;
--	unsigned short	val16, subtype;
-+	unsigned short	val16;
- 	struct wlan_network *cur_network = &Adapter->mlmepriv.cur_network;
- 	/* u8 wpa_ie[255], rsn_ie[255]; */
- 	u16 wpa_len = 0, rsn_len = 0;
-@@ -908,9 +909,7 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
- 	if (!bssid)
- 		return _FAIL;
- 
--	subtype = GetFrameSubType(pframe) >> 4;
--
--	if (subtype == WIFI_BEACON)
-+	if (ieee80211_is_beacon(mgmt->frame_control))
- 		bssid->Reserved[0] = 1;
- 
- 	bssid->Length = sizeof(struct wlan_bssid_ex) - MAX_IE_SZ + len;
--- 
-2.30.2
+BTW, many thx for taking care of this Jason!
 
+> From: Jan Dabros <jsd@semihalf.com>
+> 
+> Currently tpm transactions are executed unconditionally in
+> tpm_pm_suspend() function, which may lead to races with other tpm
+> accessors in the system. Specifically, the hw_random tpm driver makes
+> use of tpm_get_random(), and this function is called in a loop from a
+> kthread, which means it's not frozen alongside userspace, and so can
+> race with the work done during system suspend:
+
+Peter, Jarkko, did you look at this patch or even applied it already to
+send it to Linus soon? Doesn't look like it from here, but maybe I
+missed something.
+
+Thing is: the linked regression afaics is overdue fixing (for details
+see "Prioritize work on fixing regressions" in
+https://www.kernel.org/doc/html/latest/process/handling-regressions.html
+). Hence if this doesn't make any progress I'll likely have to point
+Linus to this patch and suggest to apply it directly if it looks okay
+from his perspective.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+> [    3.277834] tpm tpm0: tpm_transmit: tpm_recv: error -52
+> [    3.278437] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
+> [    3.278445] CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc5+ #135
+> [    3.278450] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+> [    3.278453] Call Trace:
+> [    3.278458]  <TASK>
+> [    3.278460]  dump_stack_lvl+0x34/0x44
+> [    3.278471]  tpm_tis_status.cold+0x19/0x20
+> [    3.278479]  tpm_transmit+0x13b/0x390
+> [    3.278489]  tpm_transmit_cmd+0x20/0x80
+> [    3.278496]  tpm1_pm_suspend+0xa6/0x110
+> [    3.278503]  tpm_pm_suspend+0x53/0x80
+> [    3.278510]  __pnp_bus_suspend+0x35/0xe0
+> [    3.278515]  ? pnp_bus_freeze+0x10/0x10
+> [    3.278519]  __device_suspend+0x10f/0x350
+> 
+> Fix this by calling tpm_try_get_ops(), which itself is a wrapper around
+> tpm_chip_start(), but takes the appropriate mutex.
+> 
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> Reported-by: Vlastimil Babka <vbabka@suse.cz>
+> Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Tested-by: Vlastimil Babka <vbabka@suse.cz>
+> Link: https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
+> Cc: stable@vger.kernel.org
+> Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
+> [Jason: reworked commit message, added metadata]
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/char/tpm/tpm-interface.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce818705..d69905233aff 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
+>  	    !pm_suspend_via_firmware())
+>  		goto suspended;
+>  
+> -	if (!tpm_chip_start(chip)) {
+> +	rc = tpm_try_get_ops(chip);
+> +	if (!rc) {
+>  		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>  			tpm2_shutdown(chip, TPM2_SU_STATE);
+>  		else
+>  			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+>  
+> -		tpm_chip_stop(chip);
+> +		tpm_put_ops(chip);
+>  	}
+>  
+>  suspended:
