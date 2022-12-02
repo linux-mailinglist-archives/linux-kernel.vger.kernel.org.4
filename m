@@ -2,76 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC6064086E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C76640871
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbiLBOag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S233478AbiLBOap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbiLBOab (ORCPT
+        with ESMTP id S233332AbiLBOam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:30:31 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02560DCBCA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:30:31 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id w129so5057875pfb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 06:30:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QuJaADLy0s4fSOAHYyYcKJlmR4N46y5Ed14w99UYvwo=;
-        b=baoX/JUMA+VCZMFwVNdxGizr15gJ9t9RC7WarFpyNNajaYguEpJ1Fgi5LCPLcIBK//
-         R/+ucFErE6Jvxdt8emlT/KdWL7DxVIL1SU4eWJvfKnRZDC/OHXPUrOr13mtPdzTaaMde
-         a8goDCNg+qyvnJBH4HKe9xgIWx77VKs6dCqslq3K5Tw6uzDoH9r5Tqo3LuYBizUOe+G5
-         8rdK7I+9g/rsMQi7qldPI1Y3d1WloPSdwIn+6lkRYHsaiNeufZSNOrl0VBJ9qzCOEJ4d
-         +HkRa9O2+AzS71ituxmPRwCLD4zEQv+OSkgVOmhgPCIoPArlgZ69NYvQxCBFLsLEALde
-         hPEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QuJaADLy0s4fSOAHYyYcKJlmR4N46y5Ed14w99UYvwo=;
-        b=GCi6nV7e6tacAWbPczn5L7xLnBL0PXwXx+vrsAbB3N23bXRTSldz/Defd9kcX83RhR
-         agwiZADNUtYI46EmrJgaAUA+roQRc8Bo22rGlgcihBACd/Wi3+9ZptWZBew+dMdgPi60
-         OenyEMWe7/t2vY+6XtzqdU7AQ7Sxuo2N20cbwV3RVG1TXmxMIOwmOFMobvmhlLlYsCjn
-         JyrsWWDhIz0qFNaapGtGymMf4rr60ZAbilDx+TLPpHPFsKqUhWMEet/llPoPkZ0T7OgW
-         ggfGTV89qospRasi6/Da6gAQzkeEYqmfObU2m7iGEXHVcwfz7gExaZMC/hBkrct1SXkg
-         GD3Q==
-X-Gm-Message-State: ANoB5pnbIXsm11k+7uzFdnTatC0QSQD+YohsMrkqvNOmmFb6vvcXJwD5
-        DZkWSnuZ09rDm51u6JnXqddAGHB9oeRRon1fDM8=
-X-Google-Smtp-Source: AA0mqf5GNZcKuGv+DNDv/jODPv76iAfkuwY8Wz8ANYFgCLAdM+yOKCY027FOphHz9ctF8zQ97wfWbGev9lJAs5z9Mvo=
-X-Received: by 2002:a62:1d54:0:b0:575:5cfc:d905 with SMTP id
- d81-20020a621d54000000b005755cfcd905mr21749428pfd.69.1669991430416; Fri, 02
- Dec 2022 06:30:30 -0800 (PST)
+        Fri, 2 Dec 2022 09:30:42 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74CBBDB;
+        Fri,  2 Dec 2022 06:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669991441; x=1701527441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nTnEijI8Fb2UVr0W+JyDLaLc4bx6bhIBKTbFLfhAcuI=;
+  b=l+nqzCxzUcqfCXJz8IPC1hml78Eexak2zIFD0UJIoNgtqEqeLmDNLxKN
+   +84EAHaJ/3NGFf6hTm/NYRoxmq/XlwP/EdubM3wICBbraVhHrLFg8og9D
+   ySVigk0sv45rhwnY6zaqSj8NOC6MfdqetOEyHaQwkIGAIR6EMuH+IABFu
+   OvNA0viKFiw8Z+f/OqSKw4r3f7j1v/iXaeFTaO6VgJ9UVCCZZ+z0EN/xy
+   mwU1PdZ2ED8Es/c+Tav1MH6WFrAonstJSes4c6n0WU+1IYWpT+L7IjXOV
+   tOkVC4rHtKQq0ZcjL5VHWPkAEdbFidgpFRu/M7ONkXmwxoKDHMdf++BYx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="342900903"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="342900903"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 06:30:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="819449631"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="819449631"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2022 06:30:35 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p173h-003Vm8-2J;
+        Fri, 02 Dec 2022 16:30:33 +0200
+Date:   Fri, 2 Dec 2022 16:30:33 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Nick Hainke <vincent@systemli.org>
+Cc:     linux-next@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpiolib: fix compiling when CONFIG_GPIO_CDEV_V1 is not
+ defined
+Message-ID: <Y4oMCYksMaQ6KYwU@smile.fi.intel.com>
+References: <20221202140454.273333-1-vincent@systemli.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7022:2492:b0:46:f45c:a828 with HTTP; Fri, 2 Dec 2022
- 06:30:30 -0800 (PST)
-Reply-To: chuinh021@gmail.com
-From:   chuinh <gimenezmarco201@gmail.com>
-Date:   Fri, 2 Dec 2022 15:30:30 +0100
-Message-ID: <CA+cx=QmYMnKenpYZPuO4upYuo8ex0-kuUH=QVA7xSmoJsrRYvg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202140454.273333-1-vincent@systemli.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 02, 2022 at 03:04:54PM +0100, Nick Hainke wrote:
+
+Thank you for the report!
+
+I believe Bart needs to fold it into his patch / PR, because
+it's not good to send a broken PR to Linus.
+
+> If CONFIG_GPIO_CDEV_V1 is not defined compiling will fail with:
+> 
+> drivers/gpio/gpiolib-cdev.c: In function 'linereq_ioctl':
+> drivers/gpio/gpiolib-cdev.c:1468:16: error: implicit declaration of
+>  function 'call_ioctl_locked' [-Werror=implicit-function-declaration]
+>  1468 |         return call_ioctl_locked(file, cmd, arg, lr->gdev,
+>       |                ^~~~~~~~~~~~~~~~~
+> drivers/gpio/gpiolib-cdev.c: In function 'linereq_poll':
+> drivers/gpio/gpiolib-cdev.c:1503:16: error: implicit declaration of
+>  function 'call_poll_locked'; did you mean 'wake_up_all_locked'?
+>  [-Werror=implicit-function-declaration]
+>  1503 |         return call_poll_locked(file, wait, lr->gdev,
+>                                       linereq_poll_unlocked);
+>       |                ^~~~~~~~~~~~~~~~
+>       |                wake_up_all_locked
+> drivers/gpio/gpiolib-cdev.c: In function 'linereq_read':
+> drivers/gpio/gpiolib-cdev.c:1566:16: error: implicit declaration of
+>  function 'call_read_locked'; did you mean 'xa_head_locked'?
+>  [-Werror=implicit-function-declaration]
+>  1566 |         return call_read_locked(file, buf, count, f_ps, lr->gdev,
+>       |                ^~~~~~~~~~~~~~~~
+>       |                xa_head_locked
+
+Above is a bit too noisy for the commit message. It can be trimmed 3x times.
+
+> Move "call_poll_locked", "call_ioctl_locked", "call_read_locked" and
+> the necessary typedefs "poll_fn", "ioctl_fn", "read_fn" in front of the
+> ifdef-statement checking CONFIG_GPIO_CDEV_V1.
+
+> Fixes: 98d8b93c6171 ("gpiolib: protect the GPIO device against being dropped while in use by user-space")
+> 
+> Signed-off-by: Nick Hainke <vincent@systemli.org>
+
+Mustn't be blank line(s) in the tag block.
+
 -- 
-Dear Friend,
+With Best Regards,
+Andy Shevchenko
 
-I have an important message which i want to discuss with you.
 
-Sincerely,
-
-Mrs Can Yeu
