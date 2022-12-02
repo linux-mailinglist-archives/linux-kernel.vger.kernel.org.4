@@ -2,160 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02EE640585
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C8464057C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiLBLLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S232854AbiLBLF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:05:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiLBLLm (ORCPT
+        with ESMTP id S232470AbiLBLFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:11:42 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6480EBC5A6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:11:40 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id h7so1258138wrs.6
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:11:40 -0800 (PST)
+        Fri, 2 Dec 2022 06:05:53 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C246DBC5B6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:05:50 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id a19so5071931ljk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:05:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPFY6FywBKVj+Q58Yw/8slS+YqsfBvqMM52HPpLV7Yg=;
-        b=PK8M1saJytpZlmaXb3XWJFyS5hZ3aAlrzHUwrN6PU6ZaeGcR7pPz4JuaiUSCVdPF6y
-         PcAIYFZfibtHJZDGbvk3wIlQ1dKWdMMrlXlQ7DZQ+HTXVPCwSTc+RQUHp8Hj1RDgjGlZ
-         On3vt7uwklxoeMeYWvOAjbpUGwmpMzFPPzX7oibG5vs5V3gQneg1WbQi+AZUpwuv0VPb
-         3yIYyUI/Qm0upcz1kwIeZAbzZoLUmsyuLMQqAT7WjLaUpU55M8W82UHK8RixmCfbRDkT
-         Jg+TxM//BNrTccnwgm5hD2KCkmSSr7ddCsMoCsvm/bkcAepwwVyBSOBE7w97k+btGteg
-         vTVw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L/MYWAzLrsiFv/kife7wjMs75KZhRzq7Qa+Mjizpr/0=;
+        b=e9dLVlFZ6g3NZLVtx3jd9ZJMo1yjijb3LlpqvrlAT2O0mCpFQf5KcAa/CNU3C7yPuE
+         nzgXnIf1oQ1ixZK+4E7SXCLouNNVSEMwAv+oTrnBTzd4TEihWsw65p40nT6EtcRYoleK
+         //eARJM6h8w3XG1IYGMKUn5pYiXp5MfMEvp6wwTIcJfuz/HGmEs8AnA9DcPxAMMYlV04
+         MYzvGiS2iy1jKuPv5q8/F2f3aRQgaFxS7vEFHmqsekUN6PWiY9GWl3fkkGT18f/L35mH
+         HpEB8BT0EinF5/PejBu68SQlXcD2U9e8kCgxPoG0W2Y8N0jgBjrKliamf9stojUh1gkP
+         CZ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zPFY6FywBKVj+Q58Yw/8slS+YqsfBvqMM52HPpLV7Yg=;
-        b=mlY0Ui7pPLy2pdxCKJz1iljQ1BSdO4MIIIE99rcIJD+X82qjODbF5GA7O6rKP4D6Ky
-         EXvKvxOuv5gyR+qjZ2jzGsNN0+smfPh9PdbECtNIsmuK5iZe0QR51nZjdhiE6RwgilCU
-         wRo82q2Wk0J+i2bVV56UgEGRuLYLTXoQJUKBOBT7QY1TW2AX9YgDPqxeqx5y6QwKvlzQ
-         Iib5zEZOa3ZSkre5yvCtfUYq1G8mN63mEN95CW1+snI2a/LscM4WwuGJblTw8AAqOoSE
-         ry4UM60FftpvxFrbZNIfecFBkgab3YlXO0WYhSiyDYkqBmd+q0Zwwnbx6ekJ+6fCwZRu
-         fzew==
-X-Gm-Message-State: ANoB5pkpT1Y9cLcPGsbvl1SRkmrWIdiXbTK/Wo4vJExXfACb2a7Lha2l
-        GF6akRy3No6BD95A1m23y4W+RQ==
-X-Google-Smtp-Source: AA0mqf4ecV5sn0MU3WIXansYGgAefGMmGfieNqDEHYX8GlRHU+otVXVZ8ZQgQ62Qiq3SOe//i8WZ+Q==
-X-Received: by 2002:a5d:58d5:0:b0:242:1ff2:eeb4 with SMTP id o21-20020a5d58d5000000b002421ff2eeb4mr11630176wrf.419.1669979498869;
-        Fri, 02 Dec 2022 03:11:38 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id b16-20020a5d4b90000000b002422202fa7fsm4038995wrt.39.2022.12.02.03.11.38
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L/MYWAzLrsiFv/kife7wjMs75KZhRzq7Qa+Mjizpr/0=;
+        b=BAhg80wXM3KL0eUC/pOKH9XqPPBfUw065TaP9IkRqBSbuuVoaNGcMjVFoinzvPmpjj
+         jq6b/4B/pnlP8VI8ix0oNYgjlOBeZqRw8dV4GvhIFUOWt+pTnUp+TovDIhHdZQg0AVkF
+         i70WxGHLms4xjSmCIhoOr8b0dnT765V4mT/zhMYpY9u2g6V8Twp7CW+yOEhgjiGnV5Ki
+         Ikn29d95ZGHCSE0GjkVXeaTlZPa5EqiOv1wPJefVNaCZZBN9aftbPLNLuHc+KFz3WpwY
+         KKAJTk+JM9LXhVh18QwEqfdmJuFYWM+6hK2vmJ51iXpwf+JjHeT9FJwxlMrx9zKLRPfv
+         Drbg==
+X-Gm-Message-State: ANoB5pkj+OjbJpExX13xaMJYaADryuCaxLjX/P68H68XPachxpXVT84O
+        Vvu5uRo2bIIYrc6eFycsZfiQ1w==
+X-Google-Smtp-Source: AA0mqf5p2GN6tdQOaDO61vyYhvtBhYwCW2hqoggoR/3/VzjKQ488fykU9lScF73tXkfx+auCKMQGNA==
+X-Received: by 2002:a2e:7e0a:0:b0:277:6f0:5239 with SMTP id z10-20020a2e7e0a000000b0027706f05239mr17465456ljc.186.1669979149097;
+        Fri, 02 Dec 2022 03:05:49 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z5-20020a2eb525000000b0027973ba8718sm588267ljm.37.2022.12.02.03.05.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 03:11:38 -0800 (PST)
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-2-ddrokosov@sberdevices.ru>
- <166995398251.2089685.16059995540663317860.robh@kernel.org>
- <20221202095124.4ecpfqhtzf34lwbf@CAB-WSD-L081021>
- <cea3cdd4-3d36-1439-b211-047091c05a0f@linaro.org>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, sboyd@kernel.org, khilman@baylibre.com,
-        kernel@sberdevices.ru, robh+dt@kernel.org,
-        martin.blumenstingl@googlemail.com,
-        linux-arm-kernel@lists.infradead.org, jian.hu@amlogic.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-amlogic@lists.infradead.org, rockosov@gmail.com,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        neil.armstrong@linaro.org
-Subject: Re: [PATCH v8 01/11] dt-bindings: clock: meson: add A1 PLL clock
- controller bindings
-Date:   Fri, 02 Dec 2022 12:04:51 +0100
-In-reply-to: <cea3cdd4-3d36-1439-b211-047091c05a0f@linaro.org>
-Message-ID: <1jfsdy83h3.fsf@starbuckisacylon.baylibre.com>
+        Fri, 02 Dec 2022 03:05:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: vendor-prefixes: sort entries alphabetically
+Date:   Fri,  2 Dec 2022 12:05:36 +0100
+Message-Id: <20221202110536.22230-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_DBL_SPAM autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sort entries alphabetically.  This was a semi manual job with help of:
 
-On Fri 02 Dec 2022 at 11:39, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+  cat Documentation/devicetree/bindings/vendor-prefixes.yaml | grep '":' > old
+  cat old | sort > new
+  diff -ubB old new
 
-> On 02/12/2022 10:51, Dmitry Rokosov wrote:
->> On Thu, Dec 01, 2022 at 10:10:04PM -0600, Rob Herring wrote:
->>>
->>> On Fri, 02 Dec 2022 01:56:53 +0300, Dmitry Rokosov wrote:
->>>> From: Jian Hu <jian.hu@amlogic.com>
->>>>
->>>> Add the documentation to support Amlogic A1 PLL clock driver,
->>>> and add A1 PLL clock controller bindings.
->>>>
->>>> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
->>>> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
->>>> ---
->>>>  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 52 +++++++++++++++++++
->>>>  include/dt-bindings/clock/a1-pll-clkc.h       | 16 ++++++
->>>>  2 files changed, 68 insertions(+)
->>>>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
->>>>  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
->>>>
->>>
->>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>
->>> yamllint warnings/errors:
->>> ./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml:26:6: [warning] wrong indentation: expected 6 but found 5 (indentation)
->>>
->>> dtschema/dtc warnings/errors:
->>> ./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml: $id: relative path/filename doesn't match actual path or filename
->>> 	expected: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
->>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.example.dtb: pll-clock-controller@7c80: reg: [[0, 31872], [0, 396]] is too long
->>> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
->>>
->>> doc reference errors (make refcheckdocs):
->>>
->>> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201225703.6507-2-ddrokosov@sberdevices.ru
->>>
->>> The base for the series is generally the latest rc1. A different dependency
->>> should be noted in *this* patch.
->>>
->>> If you already ran 'make dt_binding_check' and didn't see the above
->>> error(s), then make sure 'yamllint' is installed and dt-schema is up to
->>> date:
->>>
->>> pip3 install dtschema --upgrade
->>>
->>> Please check and re-submit after running the above command yourself. Note
->>> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
->>> your schema. However, it must be unset to test all examples with your schema.
->>>
->> 
->> Please find all fixes of above warnings and errors in the my patch
->> located at the link:
->> 
->> https://lore.kernel.org/linux-amlogic/20221201225703.6507-9-ddrokosov@sberdevices.ru/
->
-> Why? This patch here is broken and it should be fixed. Don't apply
-> broken patches...
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Dmitry is ressurecting a series that is several years old and not his to
-begin with.
+---
 
-He was unsure about take the code of somebody else.
-To be fair, he even asked for advice on IRC about to proceed.
+Patch rebased on next-20221201 therefore might not apply cleanly to
+Rob's tree. Probably should be taken after the 6.2-rc1.
+---
+ .../devicetree/bindings/vendor-prefixes.yaml  | 64 +++++++++----------
+ 1 file changed, 32 insertions(+), 32 deletions(-)
 
-Dmitry, as you may have guessed, for next revision, please fix Jian Hu
-original patches in place, not with fixup patches.
-
-If your fixes are minor (not complete rewrite), please keep the original
-author and add your SoB
-
->
-> Best regards,
-> Krzysztof
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 10c178d97b02..7a27a8c5df49 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -198,10 +198,10 @@ patternProperties:
+     description: Bosch Sensortec GmbH
+   "^boundary,.*":
+     description: Boundary Devices Inc.
+-  "^broadmobi,.*":
+-    description: Shanghai Broadmobi Communication Technology Co.,Ltd.
+   "^brcm,.*":
+     description: Broadcom Corporation
++  "^broadmobi,.*":
++    description: Shanghai Broadmobi Communication Technology Co.,Ltd.
+   "^bsh,.*":
+     description: BSH Hausgeraete GmbH
+   "^bticino,.*":
+@@ -547,6 +547,8 @@ patternProperties:
+     description: Hitex Development Tools
+   "^holt,.*":
+     description: Holt Integrated Circuits, Inc.
++  "^holtek,.*":
++    description: Holtek Semiconductor, Inc.
+   "^honestar,.*":
+     description: Honestar Technologies Co., Ltd.
+   "^honeywell,.*":
+@@ -559,8 +561,6 @@ patternProperties:
+     description: Hewlett Packard Enterprise
+   "^hsg,.*":
+     description: HannStar Display Co.
+-  "^holtek,.*":
+-    description: Holtek Semiconductor, Inc.
+   "^huawei,.*":
+     description: Huawei Technologies Co., Ltd.
+   "^hugsun,.*":
+@@ -605,12 +605,10 @@ patternProperties:
+     description: Infineon Technologies
+   "^inforce,.*":
+     description: Inforce Computing
+-  "^ingrasys,.*":
+-    description: Ingrasys Technology Inc.
+-  "^ivo,.*":
+-    description: InfoVision Optoelectronics Kunshan Co. Ltd.
+   "^ingenic,.*":
+     description: Ingenic Semiconductor
++  "^ingrasys,.*":
++    description: Ingrasys Technology Inc.
+   "^injoinic,.*":
+     description: Injoinic Technology Corp.
+   "^innocomm,.*":
+@@ -647,6 +645,8 @@ patternProperties:
+     description: ITEAD Intelligent Systems Co.Ltd
+   "^itian,.*":
+     description: ITian Corporation
++  "^ivo,.*":
++    description: InfoVision Optoelectronics Kunshan Co. Ltd.
+   "^iwave,.*":
+     description: iWave Systems Technologies Pvt. Ltd.
+   "^jadard,.*":
+@@ -895,14 +895,14 @@ patternProperties:
+     description: Shenzhen Netxeon Technology CO., LTD
+   "^neweast,.*":
+     description: Guangdong Neweast Optoelectronics CO., LTD
++  "^newhaven,.*":
++    description: Newhaven Display International
+   "^newvision,.*":
+     description: New Vision Display (Shenzhen) Co., Ltd.
+   "^nexbox,.*":
+     description: Nexbox
+   "^nextthing,.*":
+     description: Next Thing Co.
+-  "^newhaven,.*":
+-    description: Newhaven Display International
+   "^ni,.*":
+     description: National Instruments
+   "^nintendo,.*":
+@@ -1051,10 +1051,10 @@ patternProperties:
+     description: QEMU, a generic and open source machine emulator and virtualizer
+   "^qi,.*":
+     description: Qi Hardware
+-  "^qihua,.*":
+-    description: Chengdu Kaixuan Information Technology Co., Ltd.
+   "^qiaodian,.*":
+     description: QiaoDian XianShi Corporation
++  "^qihua,.*":
++    description: Chengdu Kaixuan Information Technology Co., Ltd.
+   "^qishenglong,.*":
+     description: Shenzhen QiShenglong Industrialist Co., Ltd.
+   "^qnap,.*":
+@@ -1081,22 +1081,22 @@ patternProperties:
+     description: reMarkable AS
+   "^renesas,.*":
+     description: Renesas Electronics Corporation
+-  "^rex,.*":
+-    description: iMX6 Rex Project
+   "^rervision,.*":
+     description: Shenzhen Rervision Technology Co., Ltd.
+   "^revotics,.*":
+     description: Revolution Robotics, Inc. (Revotics)
++  "^rex,.*":
++    description: iMX6 Rex Project
+   "^richtek,.*":
+     description: Richtek Technology Corporation
+   "^ricoh,.*":
+     description: Ricoh Co. Ltd.
+   "^rikomagic,.*":
+     description: Rikomagic Tech Corp. Ltd
+-  "^riscv,.*":
+-    description: RISC-V Foundation
+   "^riot,.*":
+     description: Embest RIoT
++  "^riscv,.*":
++    description: RISC-V Foundation
+   "^rockchip,.*":
+     description: Fuzhou Rockchip Electronics Co., Ltd
+   "^rocktech,.*":
+@@ -1159,6 +1159,8 @@ patternProperties:
+     description: Si-En Technology Ltd.
+   "^si-linux,.*":
+     description: Silicon Linux Corporation
++  "^siemens,.*":
++    description: Siemens AG
+   "^sifive,.*":
+     description: SiFive, Inc.
+   "^sigma,.*":
+@@ -1181,8 +1183,8 @@ patternProperties:
+     description: Siliconfile Technologies lnc.
+   "^siliconmitus,.*":
+     description: Silicon Mitus, Inc.
+-  "^siemens,.*":
+-    description: Siemens AG
++  "^silvaco,.*":
++    description: Silvaco, Inc.
+   "^simtek,.*":
+     description: Cypress Semiconductor Corporation (Simtek Corporation)
+   "^sinlinx,.*":
+@@ -1268,8 +1270,6 @@ patternProperties:
+     description: Sun Microsystems, Inc
+   "^supermicro,.*":
+     description: Super Micro Computer, Inc.
+-  "^silvaco,.*":
+-    description: Silvaco, Inc.
+   "^swir,.*":
+     description: Sierra Wireless
+   "^syna,.*":
+@@ -1291,16 +1291,18 @@ patternProperties:
+     description: Shenzhen City Tang Cheng Technology Co., Ltd.
+   "^tdo,.*":
+     description: Shangai Top Display Optoelectronics Co., Ltd
++  "^team-source-display,.*":
++    description: Shenzhen Team Source Display Technology Co., Ltd. (TSD)
+   "^technexion,.*":
+     description: TechNexion
+   "^technologic,.*":
+     description: Technologic Systems
++  "^techstar,.*":
++    description: Shenzhen Techstar Electronics Co., Ltd.
+   "^teltonika,.*":
+     description: Teltonika Networks
+   "^tempo,.*":
+     description: Tempo Semiconductor
+-  "^techstar,.*":
+-    description: Shenzhen Techstar Electronics Co., Ltd.
+   "^terasic,.*":
+     description: Terasic Inc.
+   "^tesla,.*":
+@@ -1354,10 +1356,6 @@ patternProperties:
+     description: Tronsmart
+   "^truly,.*":
+     description: Truly Semiconductors Limited
+-  "^visionox,.*":
+-    description: Visionox
+-  "^team-source-display,.*":
+-    description: Shenzhen Team Source Display Technology Co., Ltd. (TSD)
+   "^tsd,.*":
+     description: Theobroma Systems Design und Consulting GmbH
+   "^tyan,.*":
+@@ -1366,10 +1364,10 @@ patternProperties:
+     description: u-blox
+   "^u-boot,.*":
+     description: U-Boot bootloader
+-  "^ucrobotics,.*":
+-    description: uCRobotics
+   "^ubnt,.*":
+     description: Ubiquiti Networks
++  "^ucrobotics,.*":
++    description: uCRobotics
+   "^udoo,.*":
+     description: Udoo
+   "^ugoos,.*":
+@@ -1408,6 +1406,8 @@ patternProperties:
+     description: Used for virtual device without specific vendor.
+   "^vishay,.*":
+     description: Vishay Intertechnology, Inc
++  "^visionox,.*":
++    description: Visionox
+   "^vitesse,.*":
+     description: Vitesse Semiconductor Corporation
+   "^vivante,.*":
+@@ -1422,6 +1422,8 @@ patternProperties:
+     description: Vision Optical Technology Co., Ltd.
+   "^vxt,.*":
+     description: VXT Ltd
++  "^wanchanglong,.*":
++    description: Wanchanglong Electronics Technology（SHENZHEN）Co.，Ltd.
+   "^wand,.*":
+     description: Wandbord (Technexion)
+   "^waveshare,.*":
+@@ -1462,8 +1464,6 @@ patternProperties:
+     description: Wondermedia Technologies, Inc.
+   "^wobo,.*":
+     description: Wobo
+-  "^wanchanglong,.*":
+-    description: Wanchanglong Electronics Technology（SHENZHEN）Co.，Ltd.
+   "^x-powers,.*":
+     description: X-Powers
+   "^xen,.*":
+@@ -1506,10 +1506,10 @@ patternProperties:
+     description: Shenzhen Yashi Changhua Intelligent Technology Co., Ltd.
+   "^ysoft,.*":
+     description: Y Soft Corporation a.s.
+-  "^zealz,.*":
+-    description: Zealz
+   "^zarlink,.*":
+     description: Zarlink Semiconductor
++  "^zealz,.*":
++    description: Zealz
+   "^zeitec,.*":
+     description: ZEITEC Semiconductor Co., LTD.
+   "^zidoo,.*":
+-- 
+2.34.1
 
