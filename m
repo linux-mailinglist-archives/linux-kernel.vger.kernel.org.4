@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06B76402DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D0A6402E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbiLBJDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S233079AbiLBJER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbiLBJC5 (ORCPT
+        with ESMTP id S233083AbiLBJD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:02:57 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B788B7B60C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:02:53 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b3so6445308lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:02:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d357RzDjtKPp3WWfYQH7heJGal+F6FSfSLrUVjGFkq4=;
-        b=mqQDCmyQG/5SbngulvRTuzJ+3MSK7nhUjoSr1pO3OsabBxMFkZxkO57kyM54zuuIlB
-         KvuYqLNBYLzbVUlhIF1Xq9kJ/6T5lSjKU3IjlcPtmtmiNa8jFtHjtOI3fSz9iaDpi3Jf
-         Z837xjUXND20xRlWba3kft1qe4e8wAn+2XlY/diMNcATQayBieQEt0z9pCv/7GK8PzVO
-         X4h4rXXG7YuPpG99jceY92wBuxwH3OgCy8hSdkxXayq3uI0MAcLLJa1295zN3js5Y5N4
-         i1UOpLtoy0M08qaURXJlaVd/NPxCyq9yRsWjbLcgWzvqJ2oWNO2ZlskojhIVGPbrHO17
-         ybzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d357RzDjtKPp3WWfYQH7heJGal+F6FSfSLrUVjGFkq4=;
-        b=iUxuogjJmTnG5IBH5mv2SeWrR3hUfIC269oNh9jOxGYVhwd7EgA0OOwkgRCLufIb96
-         lo0DNuE8oPmMRBwUG+R6Z5DzKjH+O1N90j0zg3jt2uK7O5XkhppU/QXo5HmegSrzrMAW
-         fKLBzYZUuy3nNO1zIE8zdObY/bersk7H2D2892udIvt8CfoAb6uFrWr6xP+GlzAynuCW
-         NaTpfitRhXRgzsw543msOs5AFn6sIfwkwzxlaWVAIWIXltTaE650dFz0PDhcChubJR+Z
-         o21khTwHAz87ww9l6x7ZyULaXzzQZ6aM+DQllLnO/kOqo5wuWLh/iDMCCHIZ0xdJiUx+
-         XB0A==
-X-Gm-Message-State: ANoB5pmnoPil0el4p0otkqCgqFwb70W1vlSwXge5xYxSn4tEztCaEss8
-        K/uFJlIDmydZnztDnmVnlE0nGg==
-X-Google-Smtp-Source: AA0mqf6orlGlnS1Quh4XPH1Nz+WLhaE31FI5CTQ7FzMVAJbD5FIAGwSYxFTHdfAgFkxWB1dNmxZ5EQ==
-X-Received: by 2002:a05:6512:b8f:b0:4a2:3953:7e43 with SMTP id b15-20020a0565120b8f00b004a239537e43mr18056878lfv.229.1669971772101;
-        Fri, 02 Dec 2022 01:02:52 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b6-20020ac25e86000000b004a95d5098f2sm948550lfq.226.2022.12.02.01.02.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 01:02:51 -0800 (PST)
-Message-ID: <b4ddf139-5604-bd04-e309-d7bc15e9d23b@linaro.org>
-Date:   Fri, 2 Dec 2022 10:02:49 +0100
+        Fri, 2 Dec 2022 04:03:56 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EE90C0557
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:03:26 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8CxI_Bdv4ljAcECAA--.6648S3;
+        Fri, 02 Dec 2022 17:03:25 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOJcv4ljhUckAA--.24197S3;
+        Fri, 02 Dec 2022 17:03:25 +0800 (CST)
+Message-ID: <c5e1b113-f457-2cc7-808b-b13f83adbb2b@loongson.cn>
+Date:   Fri, 2 Dec 2022 17:03:24 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/6] dt-bindings: usb: Add binding for Genesys Logic
- GL850G hub controller
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] LoongArch: export symbol with function
+ smp_send_reschedule
 Content-Language: en-US
-To:     Icenowy Zheng <uwu@icenowy.me>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20221202081647.3183870-1-uwu@icenowy.me>
- <20221202081647.3183870-3-uwu@icenowy.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221202081647.3183870-3-uwu@icenowy.me>
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221202075854.2253116-1-maobibo@loongson.cn>
+ <07e0d775-6bb7-051b-9ec9-71153efbdf21@xen0n.name>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <07e0d775-6bb7-051b-9ec9-71153efbdf21@xen0n.name>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxoOJcv4ljhUckAA--.24197S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFWkGrW8AF4fGrW3Gw1kAFb_yoW5Zr1rpF
+        97Zr1kCr4UWr97Ar90v3yruryrGrs5Gr1aqF43tay8Arnxt3WkZryvqwn0gFyUZ3yIkF1F
+        gFWrWwna9FyUA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU24SoDUUUU
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 09:16, Icenowy Zheng wrote:
-> The Genesys Logic GL850G is a USB 2.0 Single TT hub controller that
-> features 4 downstream ports, an internal 5V-to-3.3V LDO regulator (can
-> be bypassed) and an external reset pin.
+
+
+在 2022/12/2 16:25, WANG Xuerui 写道:
+> On 2022/12/2 15:58, Bibo Mao wrote:
+>> Function smp_send_reschedule is standard kernel ABI, which is
+>> defined header file include/linux/smp.h, however on LoongArch
+>> it is defined as inline function, so that kernel module can
+>> not use this function.
+>>
+>> Now define smp_send_reschedule as general function, and add
+>> EXPORT_SYMBOL_GPL on this function, so that kernel modules can
+>> use it.
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> ---
+>>   arch/loongarch/include/asm/smp.h | 10 ----------
+>>   arch/loongarch/kernel/smp.c      | 11 +++++++++++
+>>   2 files changed, 11 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/asm/smp.h
+>> index 3dd172d9ffea..d82687390b4a 100644
+>> --- a/arch/loongarch/include/asm/smp.h
+>> +++ b/arch/loongarch/include/asm/smp.h
+>> @@ -78,16 +78,6 @@ extern void calculate_cpu_foreign_map(void);
+>>    */
+>>   extern void show_ipi_list(struct seq_file *p, int prec);
+>>   -/*
+>> - * This function sends a 'reschedule' IPI to another CPU.
+>> - * it goes straight through and wastes no time serializing
+>> - * anything. Worst case is that we lose a reschedule ...
+>> - */
+>> -static inline void smp_send_reschedule(int cpu)
+>> -{
+>> -    loongson_send_ipi_single(cpu, SMP_RESCHEDULE);
+>> -}
+>> -
+>>   static inline void arch_send_call_function_single_ipi(int cpu)
+>>   {
+>>       loongson_send_ipi_single(cpu, SMP_CALL_FUNCTION);
+>> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+>> index 6ed72f7ff278..51dd3c3f06cb 100644
+>> --- a/arch/loongarch/kernel/smp.c
+>> +++ b/arch/loongarch/kernel/smp.c
+>> @@ -141,6 +141,17 @@ void loongson_send_ipi_single(int cpu, unsigned int action)
+>>       ipi_write_action(cpu_logical_map(cpu), (u32)action);
+>>   }
+>>   +/*
+>> + * This function sends a 'reschedule' IPI to another CPU.
+>> + * it goes straight through and wastes no time serializing
+>> + * anything. Worst case is that we lose a reschedule ...
+>> + */
+>> +void smp_send_reschedule(int cpu)
+>> +{
+>> +    loongson_send_ipi_single(cpu, SMP_RESCHEDULE);
+>> +}
+>> +EXPORT_SYMBOL_GPL(smp_send_reschedule);
+>> +
 > 
-> Add a device tree binding for its USB protocol part. The internal LDO is
-> not covered by this and can just be modelled as a fixed regulator.
+> While the change is in itself okay (one less case of mips legacy, getting in line with ia64, powerpc and riscv that all EXPORT_SYMBOL_GPL this), I'd suggest you batch this patch with the subsequent changes you plan to enable with this one, so reviewers would have more context and hopefully avoid churn. (I, by my familiarity with Loongson and LoongArch development, know you're probably aiming to use this with KVM, but others probably don't know, and again it's always better to have more context.)
 > 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
-> Changes in v2:
-> - Misc fixes suggested by Krzysztof, including property descriptions,
->   single-item "items" and fixing the example's gpio property.
-> - Fixed $id.
+
+yes, kvm module depends on function smp_send_reschedule, only that it is not mature now. And this function is standard API, not arch specified API, it is normal for modules to use it :)
+
+regards
+bibo,mao
+>>   void loongson_send_ipi_mask(const struct cpumask *mask, unsigned int action)
+>>   {
+>>       unsigned int i;
 > 
-(...)
-
-> +
-> +examples:
-> +  - |
-> +    usb {
-> +        dr_mode = "host";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        hub: hub@1 {
-> +            compatible = "usb5e3,608";
-> +            reg = <1>;
-> +            reset-gpios = <&pio 7 2>;
-
-Use GPIO flags. What did you fix in the example?
-
-
-
-Best regards,
-Krzysztof
 
