@@ -2,132 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B94641012
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54EC641016
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiLBVhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S234620AbiLBVis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbiLBVhJ (ORCPT
+        with ESMTP id S233541AbiLBViq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:37:09 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D8AEF8B5;
-        Fri,  2 Dec 2022 13:37:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670017028; x=1701553028;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=DguheD/f9S21J80UEfRyncUNc3fn53UTu3Kx4IOdBY8=;
-  b=G79X/5G63TmqnfKDquhvGQOrH8AipiyBITvvHcsPWJdPDZTvjz77IBxy
-   U0eEKzzpOTY2BuH8E2/yXGcZxWDcUqBngNn7Dziy3wgZ0CiGsZLkxdqpj
-   M8a9UdLNpRvwhfelKiSm45ikQFl18gyGfyvj/CPABLk9mVC8YKti5AjGy
-   sR6TJrVm2RWXxuiNJvioh624PdT51llIauxU6KaZ97TtjfaG6bonhI2ps
-   vvbZEc475NIkYoGmIdI4W3gIxKElIwTHivRDndo3VVOnenSQNsylw+ctu
-   vHI8LH7xHJ/m7BVdmiOBFBOC0lPPBVIafxlwHb+f7Ul/sktERMF4L7mDT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="316076195"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="316076195"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:37:08 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="974060170"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="974060170"
-Received: from kcaskeyx-mobl1.amr.corp.intel.com (HELO [10.251.1.207]) ([10.251.1.207])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:37:06 -0800
-Message-ID: <da690a45a36038399c63ddac8f0efed9872ec13e.camel@linux.intel.com>
-Subject: Re: [PATCH v2 01/18] x86/sgx: Call cond_resched() at the end of
- sgx_reclaim_pages()
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, jarkko@kernel.org,
-        dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Date:   Fri, 02 Dec 2022 13:37:05 -0800
-In-Reply-To: <37de083d-a63b-b2ff-d00a-e890a1ba5eea@intel.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
-         <20221202183655.3767674-2-kristen@linux.intel.com>
-         <37de083d-a63b-b2ff-d00a-e890a1ba5eea@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 16:38:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FBCDA7D3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:38:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17E61B822B9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 21:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62DB9C433D6;
+        Fri,  2 Dec 2022 21:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1670017121;
+        bh=tJ16Bk0WI8y8XcmDkzMO+dBcBAplNjNR2GBLgl4eFgQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nG9gJJjNM1REQ9Dp2YlErXGNujtva4AwRxgbaw//vEAA+mb9a2qG+/9ZCpzJdNayg
+         rrjBRTylp+09XRSUZBbv3eM65UQCWET0S5lrUINYtGA0CTQ1sUXjowiYIfbqFIxPK9
+         nUat24/ksykBSb2BMwBB3ivIRcfOZNfJLiEEbOic=
+Date:   Fri, 2 Dec 2022 13:38:40 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] mm: disable top-tier fallback to reclaim on
+ proactive reclaim
+Message-Id: <20221202133840.5cdd4270cf73eaaa1d9d0345@linux-foundation.org>
+In-Reply-To: <20221201233317.1394958-1-almasrymina@google.com>
+References: <20221201233317.1394958-1-almasrymina@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-02 at 13:33 -0800, Dave Hansen wrote:
-> On 12/2/22 10:36, Kristen Carlson Accardi wrote:
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> >=20
-> > In order to avoid repetition of cond_resched() in ksgxd() and
-> > sgx_alloc_epc_page(), move the invocation of post-reclaim
-> > cond_resched()
-> > inside sgx_reclaim_pages(). Except in the case of
-> > sgx_reclaim_direct(),
-> > sgx_reclaim_pages() is always called in a loop and is always
-> > followed
-> > by a call to cond_resched().=C2=A0 This will hold true for the EPC
-> > cgroup
-> > as well, which adds even more calls to sgx_reclaim_pages() and thus
-> > cond_resched(). Calls to sgx_reclaim_direct() may be performance
-> > sensitive. Allow sgx_reclaim_direct() to avoid the cond_resched()
-> > call by moving the original sgx_reclaim_pages() call to
-> > __sgx_reclaim_pages() and then have sgx_reclaim_pages() become a
-> > wrapper around that call with a cond_resched().
-> >=20
-> > Signed-off-by: Sean Christopherson
-> > <sean.j.christopherson@intel.com>
-> > Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > ---
-> > =C2=A0arch/x86/kernel/cpu/sgx/main.c | 17 +++++++++++------
-> > =C2=A01 file changed, 11 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/arch/x86/kernel/cpu/sgx/main.c
-> > b/arch/x86/kernel/cpu/sgx/main.c
-> > index 160c8dbee0ab..ffce6fc70a1f 100644
-> > --- a/arch/x86/kernel/cpu/sgx/main.c
-> > +++ b/arch/x86/kernel/cpu/sgx/main.c
-> > @@ -287,7 +287,7 @@ static void sgx_reclaimer_write(struct
-> > sgx_epc_page *epc_page,
-> > =C2=A0 * problematic as it would increase the lock contention too much,
-> > which would
-> > =C2=A0 * halt forward progress.
-> > =C2=A0 */
-> > -static void sgx_reclaim_pages(void)
-> > +static void __sgx_reclaim_pages(void)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_epc_page *ch=
-unk[SGX_NR_TO_SCAN];
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sgx_backing back=
-ing[SGX_NR_TO_SCAN];
-> > @@ -369,6 +369,12 @@ static void sgx_reclaim_pages(void)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0}
-> > =C2=A0
-> > +static void sgx_reclaim_pages(void)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0__sgx_reclaim_pages();
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cond_resched();
-> > +}
->=20
-> Why bother with the wrapper?=C2=A0 Can't we just put cond_resched() in th=
-e
-> existing sgx_reclaim_pages()?
+On Thu,  1 Dec 2022 15:33:17 -0800 Mina Almasry <almasrymina@google.com> wrote:
 
-Because sgx_reclaim_direct() needs to call sgx_reclaim_pages() but not
-do the cond_resched(). It was this or add a boolean or something to let
-caller's opt out of the resched.
+> Reclaiming directly from top tier nodes breaks the aging pipeline of
+> memory tiers.  If we have a RAM -> CXL -> storage hierarchy, we
+> should demote from RAM to CXL and from CXL to storage. If we reclaim
+> a page from RAM, it means we 'demote' it directly from RAM to storage,
+> bypassing potentially a huge amount of pages colder than it in CXL.
+> 
+> However disabling reclaim from top tier nodes entirely would cause ooms
+> in edge scenarios where lower tier memory is unreclaimable for whatever
+> reason, e.g. memory being mlocked() or too hot to reclaim.  In these
+> cases we would rather the job run with a performance regression rather
+> than it oom altogether.
+> 
+> However, we can disable reclaim from top tier nodes for proactive reclaim.
+> That reclaim is not real memory pressure, and we don't have any cause to
+> be breaking the aging pipeline.
+> 
+
+Is this purely from code inspection, or are there quantitative
+observations to be shared?
 
