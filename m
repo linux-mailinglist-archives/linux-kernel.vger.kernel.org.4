@@ -2,82 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9C26400A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B769A6400B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiLBGnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 01:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
+        id S232438AbiLBGxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 01:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiLBGnU (ORCPT
+        with ESMTP id S232314AbiLBGxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 01:43:20 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7C89E44D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 22:43:19 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p0zlV-0000PL-Kq; Fri, 02 Dec 2022 07:43:17 +0100
-Message-ID: <8d2dbbb5-5816-c1e9-e98c-6c64a8d85f81@leemhuis.info>
-Date:   Fri, 2 Dec 2022 07:43:17 +0100
+        Fri, 2 Dec 2022 01:53:43 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2254BB7C1;
+        Thu,  1 Dec 2022 22:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669964022; x=1701500022;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=hsL57ikcNVoLHdsSPb/2quBPJAcrsHQWRoxcjDJhwfk=;
+  b=eT0WFURXcMGeVYPNWIXxRON88XkgDgnK57MP8L9HBxKxsLmaAF3wJG7q
+   rnDKkrgZoX9TcVbQjFOyiHKO0gbbZ9fcMwwssDAXYyl0WJvN4OeI0hfn/
+   Kn0FuzeN0TDa37Lo4FaguVQsHPwL8t1p0mbouzgGyTeMfR+/WJw28w2b8
+   rh2r81QD8/4ACEi8dpcM54W2kVY5TcI1TPegcZnSzlgwg7wDRxmJr7X5t
+   P2v2sBsKA3vddkTIPlScUBDZCzecu1t1zNo639kpdVQMg7YY5Tl2lDL/u
+   KEf8CmRexAJLimiQPuCvaGZlDcib1wrhzm98hW6Vv0ekfUBtGpO0LdthQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="299253379"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="299253379"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 22:53:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="708374082"
+X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
+   d="scan'208";a="708374082"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Dec 2022 22:53:30 -0800
+Date:   Fri, 2 Dec 2022 14:49:09 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221202064909.GA1070297@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+ <CAGtprH9Qu==pohH9ZSTzX9rZWSO0QWJ9rGK6NRGaiDetWAPLYg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [mm] f35b5d7d67: will-it-scale.per_process_ops -95.5% regression
- #forregzbot
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <202210181535.7144dd15-yujie.liu@intel.com>
- <87edv4r2ip.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y1DNQaoPWxE+rGce@dev-arch.thelio-3990X>
- <84964891-5a39-adb2-3093-54b716ca94ae@leemhuis.info>
-In-Reply-To: <84964891-5a39-adb2-3093-54b716ca94ae@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669963399;c9588390;
-X-HE-SMSGID: 1p0zlV-0000PL-Kq
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGtprH9Qu==pohH9ZSTzX9rZWSO0QWJ9rGK6NRGaiDetWAPLYg@mail.gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.11.22 09:59, Thorsten Leemhuis wrote:
-> [Note: this mail is primarily send for documentation purposes and/or for
-> regzbot, my Linux kernel regression tracking bot. That's why I removed
-> most or all folks from the list of recipients, but left any that looked
-> like a mailing lists. These mails usually contain '#forregzbot' in the
-> subject, to make them easy to spot and filter out.]
+On Thu, Dec 01, 2022 at 06:16:46PM -0800, Vishal Annapurve wrote:
+> On Tue, Oct 25, 2022 at 8:18 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> >
+...
+> > +}
+> > +
+> > +SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+> > +{
 > 
-> On 20.10.22 06:23, Nathan Chancellor wrote:
->> [...]
->> For what it's worth, I just bisected a massive and visible performance
->> regression on my Threadripper 3990X workstation to commit f35b5d7d676e
->> ("mm: align larger anonymous mappings on THP boundaries"), which seems
->> directly related to this report/analysis. I initially noticed this
->> because my full set of kernel builds against mainline went from 2 hours
->> and 20 minutes or so to over 3 hours. Zeroing in on x86_64 allmodconfig,
->> which I used for the bisect:
+> Looking at the underlying shmem implementation, there seems to be no
+> way to enable transparent huge pages specifically for restricted memfd
+> files.
 > 
-> Thanks for the report. To be sure below issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-> tracking bot:
+> Michael discussed earlier about tweaking
+> /sys/kernel/mm/transparent_hugepage/shmem_enabled setting to allow
+> hugepages to be used while backing restricted memfd. Such a change
+> will affect the rest of the shmem usecases as well. Even setting the
+> shmem_enabled policy to "advise" wouldn't help unless file based
+> advise for hugepage allocation is implemented.
+
+Had a look at fadvise() and looks it does not support HUGEPAGE for any
+filesystem yet.
+
 > 
-> #regzbot ^introduced f35b5d7d676e59e4
-> #regzbot title performance: mm: building Linux with clang takes a lot
-> longer (~27 %)
-> #regzbot ignore-activity
+> Does it make sense to provide a flag here to allow creating restricted
+> memfds backed possibly by huge pages to give a more granular control?
 
-#regzbot fix: revert "mm: align larger anonymous mappings on THP boundaries"
+We do have a unused 'flags' can be extended for such usage, but I would
+let Kirill have further look, perhaps need more discussions.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Chao
+> 
+> > +       struct file *file, *restricted_file;
+> > +       int fd, err;
+> > +
+> > +       if (flags)
+> > +               return -EINVAL;
+> > +
+> > +       fd = get_unused_fd_flags(0);
+> > +       if (fd < 0)
+> > +               return fd;
+> > +
+> > +       file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> > +       if (IS_ERR(file)) {
+> > +               err = PTR_ERR(file);
+> > +               goto err_fd;
+> > +       }
+> > +       file->f_mode |= FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE;
+> > +       file->f_flags |= O_LARGEFILE;
+> > +
+> > +       restricted_file = restrictedmem_file_create(file);
+> > +       if (IS_ERR(restricted_file)) {
+> > +               err = PTR_ERR(restricted_file);
+> > +               fput(file);
+> > +               goto err_fd;
+> > +       }
+> > +
+> > +       fd_install(fd, restricted_file);
+> > +       return fd;
+> > +err_fd:
+> > +       put_unused_fd(fd);
+> > +       return err;
+> > +}
+> > +
+> > +void restrictedmem_register_notifier(struct file *file,
+> > +                                    struct restrictedmem_notifier *notifier)
+> > +{
+> > +       struct restrictedmem_data *data = file->f_mapping->private_data;
+> > +
+> > +       mutex_lock(&data->lock);
+> > +       list_add(&notifier->list, &data->notifiers);
+> > +       mutex_unlock(&data->lock);
+> > +}
+> > +EXPORT_SYMBOL_GPL(restrictedmem_register_notifier);
+> > +
+> > +void restrictedmem_unregister_notifier(struct file *file,
+> > +                                      struct restrictedmem_notifier *notifier)
+> > +{
+> > +       struct restrictedmem_data *data = file->f_mapping->private_data;
+> > +
+> > +       mutex_lock(&data->lock);
+> > +       list_del(&notifier->list);
+> > +       mutex_unlock(&data->lock);
+> > +}
+> > +EXPORT_SYMBOL_GPL(restrictedmem_unregister_notifier);
+> > +
+> > +int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> > +                          struct page **pagep, int *order)
+> > +{
+> > +       struct restrictedmem_data *data = file->f_mapping->private_data;
+> > +       struct file *memfd = data->memfd;
+> > +       struct page *page;
+> > +       int ret;
+> > +
+> > +       ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       *pagep = page;
+> > +       if (order)
+> > +               *order = thp_order(compound_head(page));
+> > +
+> > +       SetPageUptodate(page);
+> > +       unlock_page(page);
+> > +
+> > +       return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(restrictedmem_get_page);
+> > --
+> > 2.25.1
+> >
