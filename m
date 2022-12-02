@@ -2,161 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36526640873
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479F9640879
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbiLBOcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
+        id S233505AbiLBOcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbiLBOcF (ORCPT
+        with ESMTP id S233385AbiLBOc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:32:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3E4DC853
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:31:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669991466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgpLNIT66ErryuxPdjv0tApz3UHWmKnN5g6P90JRQDI=;
-        b=Us8X2MB9ASEstsQzNgEeyjg5lXpMiz3LvGFWtHQEXWmhW/NfMAev6J69YTo68xWPLiFnTP
-        G+1bumcoJgWnExRDduIry8uKjnX3AmfxBspEy4r9m+kKl8hTxuit5c7c3GdKcQ7aEsDR2N
-        Rlb4OMHLiANjNILaGCifLQjWU4QQUCw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-yoYZnvTqNxGOKWQq1jgnIA-1; Fri, 02 Dec 2022 09:31:02 -0500
-X-MC-Unique: yoYZnvTqNxGOKWQq1jgnIA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 2 Dec 2022 09:32:27 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9C8BDB;
+        Fri,  2 Dec 2022 06:32:26 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 9a89291df2bf92d8; Fri, 2 Dec 2022 15:32:23 +0100
+Received: from kreacher.localnet (unknown [213.134.188.181])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E82A7801585;
-        Fri,  2 Dec 2022 14:30:59 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 25924C15BB4;
-        Fri,  2 Dec 2022 14:30:59 +0000 (UTC)
-Message-ID: <e9c7a920-4801-59fd-2429-361c54523d8e@redhat.com>
-Date:   Fri, 2 Dec 2022 09:30:56 -0500
+        by v370.home.net.pl (Postfix) with ESMTPSA id 371D52602969;
+        Fri,  2 Dec 2022 15:32:22 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Tushar Nimkar <quic_tnimkar@quicinc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v1 2/2] PM: runtime: Relocate rpm_callback() right after __rpm_callback()
+Date:   Fri, 02 Dec 2022 15:32:09 +0100
+Message-ID: <2264402.ElGaqSPkdT@kreacher>
+In-Reply-To: <5627469.DvuYhMxLoT@kreacher>
+References: <5627469.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-tip] sched: Fix use-after-free bug in dup_user_cpus_ptr()
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        =?UTF-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221128014441.1264867-1-longman@redhat.com>
- <20221201134445.GC28489@willie-the-truck>
- <330989bf-0015-6d4c-9317-bfc9dba30b65@redhat.com>
- <20221202101835.GA29522@willie-the-truck>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221202101835.GA29522@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.188.181
+X-CLIENT-HOSTNAME: 213.134.188.181
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrtdekgdegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekkedrudekudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeekrddukedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghtnhhimhhkrghrsehquhhitghinhgtrdgtohhmpdhrtghpthhtoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtphht
+ thhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghnihhtihhrrgifrgesqhhuihgtihhntgdrtghomhdprhgtphhtthhopehpvghtvghrrdifrghnghesmhgvughirghtvghkrdgtohhmpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 05:18, Will Deacon wrote:
-> On Thu, Dec 01, 2022 at 12:03:39PM -0500, Waiman Long wrote:
->> On 12/1/22 08:44, Will Deacon wrote:
->>> On Sun, Nov 27, 2022 at 08:44:41PM -0500, Waiman Long wrote:
->>>> Since commit 07ec77a1d4e8 ("sched: Allow task CPU affinity to be
->>>> restricted on asymmetric systems"), the setting and clearing of
->>>> user_cpus_ptr are done under pi_lock for arm64 architecture. However,
->>>> dup_user_cpus_ptr() accesses user_cpus_ptr without any lock
->>>> protection. When racing with the clearing of user_cpus_ptr in
->>>> __set_cpus_allowed_ptr_locked(), it can lead to user-after-free and
->>>> double-free in arm64 kernel.
->>>>
->>>> Commit 8f9ea86fdf99 ("sched: Always preserve the user requested
->>>> cpumask") fixes this problem as user_cpus_ptr, once set, will never
->>>> be cleared in a task's lifetime. However, this bug was re-introduced
->>>> in commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
->>>> do_set_cpus_allowed()") which allows the clearing of user_cpus_ptr in
->>>> do_set_cpus_allowed(). This time, it will affect all arches.
->>>>
->>>> Fix this bug by always clearing the user_cpus_ptr of the newly
->>>> cloned/forked task before the copying process starts and check the
->>>> user_cpus_ptr state of the source task under pi_lock.
->>>>
->>>> Note to stable, this patch won't be applicable to stable releases.
->>>> Just copy the new dup_user_cpus_ptr() function over.
->>>>
->>>> Fixes: 07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on asymmetric systems")
->>>> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
->>>> CC: stable@vger.kernel.org
->>>> Reported-by: David Wang 王标 <wangbiao3@xiaomi.com>
->>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>>> ---
->>>>    kernel/sched/core.c | 32 ++++++++++++++++++++++++++++----
->>>>    1 file changed, 28 insertions(+), 4 deletions(-)
->>> As per my comments on the previous version of this patch:
->>>
->>> https://lore.kernel.org/lkml/20221201133602.GB28489@willie-the-truck/T/#t
->>>
->>> I think there are other issues to fix when racing affinity changes with
->>> fork() too.
->> It is certainly possible that there are other bugs hiding somewhere:-)
-> Right, but I actually took the time to hit the same race for the other
-> affinity mask field so it seems a bit narrow-minded for us just to fix the
-> one issue.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I focused on this particular one because of a double-free bug report 
-from David. What other fields have you found to be subjected to data race?
+Because rpm_callback() is a wrapper around __rpm_callback(), and the
+only caller of it after the change eliminating an invocation of it
+from rpm_idle(), move the former next to the latter to make the code
+a bit easier to follow.
 
->
->>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>>> index 8df51b08bb38..f2b75faaf71a 100644
->>>> --- a/kernel/sched/core.c
->>>> +++ b/kernel/sched/core.c
->>>> @@ -2624,19 +2624,43 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
->>>>    int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
->>>>    		      int node)
->>>>    {
->>>> +	cpumask_t *user_mask;
->>>>    	unsigned long flags;
->>>> +	/*
->>>> +	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
->>>> +	 * may differ by now due to racing.
->>>> +	 */
->>>> +	dst->user_cpus_ptr = NULL;
->>>> +
->>>> +	/*
->>>> +	 * This check is racy and losing the race is a valid situation.
->>>> +	 * It is not worth the extra overhead of taking the pi_lock on
->>>> +	 * every fork/clone.
->>>> +	 */
->>>>    	if (!src->user_cpus_ptr)
->>>>    		return 0;
->>> data_race() ?
->> Race is certainly possible, but the clearing of user_cpus_ptr before will
->> mitigate any risk.
-> Sorry, I meant let's wrap this access in the data_race() macro and add a
-> comment so that KCSAN won't report the false positive.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/base/power/runtime.c |   64 +++++++++++++++++++++----------------------
+ 1 file changed, 32 insertions(+), 32 deletions(-)
 
-Good point. I should have done that.
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -422,6 +422,38 @@ fail:
+ }
+ 
+ /**
++ * rpm_callback - Run a given runtime PM callback for a given device.
++ * @cb: Runtime PM callback to run.
++ * @dev: Device to run the callback for.
++ */
++static int rpm_callback(int (*cb)(struct device *), struct device *dev)
++{
++	int retval;
++
++	if (dev->power.memalloc_noio) {
++		unsigned int noio_flag;
++
++		/*
++		 * Deadlock might be caused if memory allocation with
++		 * GFP_KERNEL happens inside runtime_suspend and
++		 * runtime_resume callbacks of one block device's
++		 * ancestor or the block device itself. Network
++		 * device might be thought as part of iSCSI block
++		 * device, so network device and its ancestor should
++		 * be marked as memalloc_noio too.
++		 */
++		noio_flag = memalloc_noio_save();
++		retval = __rpm_callback(cb, dev);
++		memalloc_noio_restore(noio_flag);
++	} else {
++		retval = __rpm_callback(cb, dev);
++	}
++
++	dev->power.runtime_error = retval;
++	return retval != -EACCES ? retval : -EIO;
++}
++
++/**
+  * rpm_idle - Notify device bus type if the device can be suspended.
+  * @dev: Device to notify the bus type about.
+  * @rpmflags: Flag bits.
+@@ -505,38 +537,6 @@ static int rpm_idle(struct device *dev,
+ }
+ 
+ /**
+- * rpm_callback - Run a given runtime PM callback for a given device.
+- * @cb: Runtime PM callback to run.
+- * @dev: Device to run the callback for.
+- */
+-static int rpm_callback(int (*cb)(struct device *), struct device *dev)
+-{
+-	int retval;
+-
+-	if (dev->power.memalloc_noio) {
+-		unsigned int noio_flag;
+-
+-		/*
+-		 * Deadlock might be caused if memory allocation with
+-		 * GFP_KERNEL happens inside runtime_suspend and
+-		 * runtime_resume callbacks of one block device's
+-		 * ancestor or the block device itself. Network
+-		 * device might be thought as part of iSCSI block
+-		 * device, so network device and its ancestor should
+-		 * be marked as memalloc_noio too.
+-		 */
+-		noio_flag = memalloc_noio_save();
+-		retval = __rpm_callback(cb, dev);
+-		memalloc_noio_restore(noio_flag);
+-	} else {
+-		retval = __rpm_callback(cb, dev);
+-	}
+-
+-	dev->power.runtime_error = retval;
+-	return retval != -EACCES ? retval : -EIO;
+-}
+-
+-/**
+  * rpm_suspend - Carry out runtime suspend of given device.
+  * @dev: Device to suspend.
+  * @rpmflags: Flag bits.
 
-Thanks,
-Longman
+
 
