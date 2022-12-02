@@ -2,161 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9934C640AC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A66B5640AF4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiLBQ2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S234053AbiLBQiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:38:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbiLBQ2I (ORCPT
+        with ESMTP id S232951AbiLBQiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:28:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9FAE0ED;
-        Fri,  2 Dec 2022 08:27:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB7EBB82149;
-        Fri,  2 Dec 2022 16:27:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1367CC43470;
-        Fri,  2 Dec 2022 16:27:34 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="K2mu/d0h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669998453;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=efvuuNTBLR4HLAxHYiJEHInfh40yYXX9WEzTI0HmGLg=;
-        b=K2mu/d0hu0fuzeoZKXgWBK7i9x1nguVwSTDZXFuEa3J7bt0HjPrQQ9z0Xwa1mFBqiNMNvZ
-        dmtf6N02mK4Q9NAL9afNBybBlywue7fSRDHHInpB8fOVOct1LuB2lxQ5gzsu8zpbNFgJ/J
-        JqygsfBkKumNEQHAEK4/CX3G3WXIWe8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 228e8cf8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 2 Dec 2022 16:27:32 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        SeongJae Park <sj@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>
-Subject: [PATCH] mm: do not BUG_ON missing brk mapping, because userspace can unmap it
-Date:   Fri,  2 Dec 2022 17:27:24 +0100
-Message-Id: <20221202162724.2009-1-Jason@zx2c4.com>
+        Fri, 2 Dec 2022 11:38:05 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B48773F48;
+        Fri,  2 Dec 2022 08:38:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669999081; x=1701535081;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=hGNc1g82zkLmEWQsUiwpumdAF8Ff8s0nd725mUW+1ko=;
+  b=fwRtPbkF5g3cbjLofDjfaFjG2bUx7kSS3gVf37f/qWuBhtdWU2qQn1S/
+   OZtONTKgdMMrSoaFJljooFHn4bgEc8Jkb9UmI7X36mqfkjRzfwJNyjnMz
+   cQeoTC8rmtzIzlwnNAw0ZUu+zBff9YHPMZE4hZefjTNYciOVyY8FQU0mc
+   mdXbn1EcwybNZoe4CiVveNkYuz+U0xgFinmsjKIwzNvfuuCEvIHK6h1Rs
+   dsuz+2LtsTYn91d0PmjSJzyoKifZ9yFB1kep6tjzXlFYZmYOKHtO4y3qi
+   JSRZ+JdJnrihx9LnWamioDl36hW4xyGjJH37ftl/dCuTBOhF2VAk+SzPR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="316015898"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="316015898"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 08:38:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="769653874"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="769653874"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga004.jf.intel.com with ESMTP; 02 Dec 2022 08:37:52 -0800
+Date:   Sat, 3 Dec 2022 00:28:11 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 6/9] mfd: intel-m10-bmc: Downscope SPI defines &
+ prefix with M10BMC_SPI
+Message-ID: <Y4onmwWT8duVV0Sv@yilunxu-OptiPlex-7050>
+References: <20221202100841.4741-1-ilpo.jarvinen@linux.intel.com>
+ <20221202100841.4741-7-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221202100841.4741-7-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following program will trigger the BUG_ON that this patch removes,
-because the user can munmap() mm->brk:
+On 2022-12-02 at 12:08:38 +0200, Ilpo Järvinen wrote:
+> Move SPI based board definitions to per interface file from the global
+> header. This makes it harder to use them accidently in the
+> generic/interface agnostic code. Prefix the defines with M10BMC_SPI
 
-  #include <sys/syscall.h>
-  #include <sys/mman.h>
-  #include <assert.h>
-  #include <unistd.h>
+I'm not sure if the register layout is actually bound to the bus
+interface. My experience is the register layout is always decided by
+board type. Is it possible there will be a new SPI based board but
+has different register layout in future?
 
-  static void *brk_now(void)
-  {
-    return (void *)syscall(SYS_brk, 0);
-  }
+So is M10BMC_SPI_XXX a good name?
 
-  static void brk_set(void *b)
-  {
-    assert(syscall(SYS_brk, b) != -1);
-  }
+The same concern for PMCI in patch #7.
 
-  int main(int argc, char *argv[])
-  {
-    void *b = brk_now();
-    brk_set(b + 4096);
-    assert(munmap(b - 4096, 4096 * 2) == 0);
-    brk_set(b);
-    return 0;
-  }
+Thanks,
+Yilun
 
-Compile that with musl, since glibc actually uses brk(), and then
-execute it, and it'll hit this splat:
-
-  kernel BUG at mm/mmap.c:229!
-  invalid opcode: 0000 [#1] PREEMPT SMP
-  CPU: 12 PID: 1379 Comm: a.out Tainted: G S   U             6.1.0-rc7+ #419
-  RIP: 0010:__do_sys_brk+0x2fc/0x340
-  Code: 00 00 4c 89 ef e8 04 d3 fe ff eb 9a be 01 00 00 00 4c 89 ff e8 35 e0 fe ff e9 6e ff ff ff 4d 89 a7 20>
-  RSP: 0018:ffff888140bc7eb0 EFLAGS: 00010246
-  RAX: 0000000000000000 RBX: 00000000007e7000 RCX: ffff8881020fe000
-  RDX: ffff8881020fe001 RSI: ffff8881955c9b00 RDI: ffff8881955c9b08
-  RBP: 0000000000000000 R08: ffff8881955c9b00 R09: 00007ffc77844000
-  R10: 0000000000000000 R11: 0000000000000001 R12: 00000000007e8000
-  R13: 00000000007e8000 R14: 00000000007e7000 R15: ffff8881020fe000
-  FS:  0000000000604298(0000) GS:ffff88901f700000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 0000000000603fe0 CR3: 000000015ba9a005 CR4: 0000000000770ee0
-  PKRU: 55555554
-  Call Trace:
-   <TASK>
-   do_syscall_64+0x2b/0x50
-   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-  RIP: 0033:0x400678
-  Code: 10 4c 8d 41 08 4c 89 44 24 10 4c 8b 01 8b 4c 24 08 83 f9 2f 77 0a 4c 8d 4c 24 20 4c 01 c9 eb 05 48 8b>
-  RSP: 002b:00007ffc77863890 EFLAGS: 00000212 ORIG_RAX: 000000000000000c
-  RAX: ffffffffffffffda RBX: 000000000040031b RCX: 0000000000400678
-  RDX: 00000000004006a1 RSI: 00000000007e6000 RDI: 00000000007e7000
-  RBP: 00007ffc77863900 R08: 0000000000000000 R09: 00000000007e6000
-  R10: 00007ffc77863930 R11: 0000000000000212 R12: 00007ffc77863978
-  R13: 00007ffc77863988 R14: 0000000000000000 R15: 0000000000000000
-   </TASK>
-
-Instead, just error out if the original mapping has been removed.
-
-Fixes: 2e7ce7d354f2 ("mm/mmap: change do_brk_flags() to expand existing VMA and add do_brk_munmap()")
-Cc: Liam R. Howlett <Liam.Howlett@Oracle.com>
-Cc: Yu Zhao <yuzhao@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: SeongJae Park <sj@kernel.org>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Will Deacon <will@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- mm/mmap.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index c3c5c1d6103d..f5a37fe9a19e 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -226,8 +226,7 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
- 		/* Search one past newbrk */
- 		mas_set(&mas, newbrk);
- 		brkvma = mas_find(&mas, oldbrk);
--		BUG_ON(brkvma == NULL);
--		if (brkvma->vm_start >= oldbrk)
-+		if (!brkvma || brkvma->vm_start >= oldbrk)
- 			goto out; /* mapping intersects with an existing non-brk vma. */
- 		/*
- 		 * mm->brk must be protected by write mmap_lock.
--- 
-2.38.1
-
+> to make it more obvious these are related to SPI only.
+> 
+> Some bitfield defs are also moved to intel-m10-bmc-core which seems
+> more appropriate for them.
+> 
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/mfd/intel-m10-bmc-core.c  | 11 ++++
+>  drivers/mfd/intel-m10-bmc-spi.c   | 87 ++++++++++++++++++++++---------
+>  include/linux/mfd/intel-m10-bmc.h | 46 ----------------
+>  3 files changed, 73 insertions(+), 71 deletions(-)
+> 
+> diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+> index 51b78b868235..50a4ec758bdb 100644
+> --- a/drivers/mfd/intel-m10-bmc-core.c
+> +++ b/drivers/mfd/intel-m10-bmc-core.c
+> @@ -12,6 +12,17 @@
+>  #include <linux/mfd/intel-m10-bmc.h>
+>  #include <linux/module.h>
+>  
+> +/* Register fields of system registers */
+> +#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
+> +#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
+> +#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
+> +#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
+> +#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
+> +#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
+> +#define M10BMC_MAC_COUNT		GENMASK(23, 16)
+> +#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
+> +#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
+> +
+>  static ssize_t bmc_version_show(struct device *dev,
+>  				struct device_attribute *attr, char *buf)
+>  {
+> diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
+> index 611a4ab42717..e99fe7c43314 100644
+> --- a/drivers/mfd/intel-m10-bmc-spi.c
+> +++ b/drivers/mfd/intel-m10-bmc-spi.c
+> @@ -13,10 +13,47 @@
+>  #include <linux/regmap.h>
+>  #include <linux/spi/spi.h>
+>  
+> +#define M10BMC_SPI_LEGACY_BUILD_VER	0x300468
+> +#define M10BMC_SPI_SYS_BASE		0x300800
+> +#define M10BMC_SPI_SYS_END		0x300fff
+> +#define M10BMC_SPI_FLASH_BASE		0x10000000
+> +#define M10BMC_SPI_FLASH_END		0x1fffffff
+> +#define M10BMC_SPI_MEM_END		M10BMC_SPI_FLASH_END
+> +
+> +/* Register offset of system registers */
+> +#define NIOS2_FW_VERSION		0x0
+> +#define M10BMC_SPI_MAC_LOW		0x10
+> +#define M10BMC_SPI_MAC_HIGH		0x14
+> +#define M10BMC_SPI_TEST_REG		0x3c
+> +#define M10BMC_SPI_BUILD_VER		0x68
+> +#define M10BMC_SPI_VER_LEGACY_INVALID	0xffffffff
+> +
+> +/* Secure update doorbell register, in system register region */
+> +#define M10BMC_SPI_DOORBELL		0x400
+> +
+> +/* Authorization Result register, in system register region */
+> +#define M10BMC_SPI_AUTH_RESULT		0x404
+> +
+> +/* Addresses for security related data in FLASH */
+> +#define M10BMC_SPI_BMC_REH_ADDR		0x17ffc004
+> +#define M10BMC_SPI_BMC_PROG_ADDR	0x17ffc000
+> +#define M10BMC_SPI_BMC_PROG_MAGIC	0x5746
+> +
+> +#define M10BMC_SPI_SR_REH_ADDR		0x17ffd004
+> +#define M10BMC_SPI_SR_PROG_ADDR		0x17ffd000
+> +#define M10BMC_SPI_SR_PROG_MAGIC	0x5253
+> +
+> +#define M10BMC_SPI_PR_REH_ADDR		0x17ffe004
+> +#define M10BMC_SPI_PR_PROG_ADDR		0x17ffe000
+> +#define M10BMC_SPI_PR_PROG_MAGIC	0x5250
+> +
+> +/* Address of 4KB inverted bit vector containing staging area FLASH count */
+> +#define M10BMC_SPI_STAGING_FLASH_COUNT	0x17ffb000
+> +
+>  static const struct regmap_range m10bmc_regmap_range[] = {
+> -	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+> -	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+> -	regmap_reg_range(M10BMC_FLASH_BASE, M10BMC_FLASH_END),
+> +	regmap_reg_range(M10BMC_SPI_LEGACY_BUILD_VER, M10BMC_SPI_LEGACY_BUILD_VER),
+> +	regmap_reg_range(M10BMC_SPI_SYS_BASE, M10BMC_SPI_SYS_END),
+> +	regmap_reg_range(M10BMC_SPI_FLASH_BASE, M10BMC_SPI_FLASH_END),
+>  };
+>  
+>  static const struct regmap_access_table m10bmc_access_table = {
+> @@ -30,7 +67,7 @@ static struct regmap_config intel_m10bmc_regmap_config = {
+>  	.reg_stride = 4,
+>  	.wr_table = &m10bmc_access_table,
+>  	.rd_table = &m10bmc_access_table,
+> -	.max_register = M10BMC_MEM_END,
+> +	.max_register = M10BMC_SPI_MEM_END,
+>  };
+>  
+>  static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> @@ -41,16 +78,16 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+>  	/*
+>  	 * This check is to filter out the very old legacy BMC versions. In the
+>  	 * old BMC chips, the BMC version info is stored in the old version
+> -	 * register (M10BMC_LEGACY_BUILD_VER), so its read out value would have
+> -	 * not been M10BMC_VER_LEGACY_INVALID (0xffffffff). But in new BMC
+> +	 * register (M10BMC_SPI_LEGACY_BUILD_VER), so its read out value would have
+> +	 * not been M10BMC_SPI_VER_LEGACY_INVALID (0xffffffff). But in new BMC
+>  	 * chips that the driver supports, the value of this register should be
+> -	 * M10BMC_VER_LEGACY_INVALID.
+> +	 * M10BMC_SPI_VER_LEGACY_INVALID.
+>  	 */
+> -	ret = m10bmc_raw_read(ddata, M10BMC_LEGACY_BUILD_VER, &v);
+> +	ret = m10bmc_raw_read(ddata, M10BMC_SPI_LEGACY_BUILD_VER, &v);
+>  	if (ret)
+>  		return -ENODEV;
+>  
+> -	if (v != M10BMC_VER_LEGACY_INVALID) {
+> +	if (v != M10BMC_SPI_VER_LEGACY_INVALID) {
+>  		dev_err(ddata->dev, "bad version M10BMC detected\n");
+>  		return -ENODEV;
+>  	}
+> @@ -92,23 +129,23 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  }
+>  
+>  static const struct m10bmc_csr_map m10bmc_spi_csr_map = {
+> -	.base = M10BMC_SYS_BASE,
+> -	.build_version = M10BMC_BUILD_VER,
+> +	.base = M10BMC_SPI_SYS_BASE,
+> +	.build_version = M10BMC_SPI_BUILD_VER,
+>  	.fw_version = NIOS2_FW_VERSION,
+> -	.mac_low = M10BMC_MAC_LOW,
+> -	.mac_high = M10BMC_MAC_HIGH,
+> -	.doorbell = M10BMC_DOORBELL,
+> -	.auth_result = M10BMC_AUTH_RESULT,
+> -	.bmc_prog_addr = BMC_PROG_ADDR,
+> -	.bmc_reh_addr = BMC_REH_ADDR,
+> -	.bmc_magic = BMC_PROG_MAGIC,
+> -	.sr_prog_addr = SR_PROG_ADDR,
+> -	.sr_reh_addr = SR_REH_ADDR,
+> -	.sr_magic = SR_PROG_MAGIC,
+> -	.pr_prog_addr = PR_PROG_ADDR,
+> -	.pr_reh_addr = PR_REH_ADDR,
+> -	.pr_magic = PR_PROG_MAGIC,
+> -	.rsu_update_counter = STAGING_FLASH_COUNT,
+> +	.mac_low = M10BMC_SPI_MAC_LOW,
+> +	.mac_high = M10BMC_SPI_MAC_HIGH,
+> +	.doorbell = M10BMC_SPI_DOORBELL,
+> +	.auth_result = M10BMC_SPI_AUTH_RESULT,
+> +	.bmc_prog_addr = M10BMC_SPI_BMC_PROG_ADDR,
+> +	.bmc_reh_addr = M10BMC_SPI_BMC_REH_ADDR,
+> +	.bmc_magic = M10BMC_SPI_BMC_PROG_MAGIC,
+> +	.sr_prog_addr = M10BMC_SPI_SR_PROG_ADDR,
+> +	.sr_reh_addr = M10BMC_SPI_SR_REH_ADDR,
+> +	.sr_magic = M10BMC_SPI_SR_PROG_MAGIC,
+> +	.pr_prog_addr = M10BMC_SPI_PR_PROG_ADDR,
+> +	.pr_reh_addr = M10BMC_SPI_PR_REH_ADDR,
+> +	.pr_magic = M10BMC_SPI_PR_PROG_MAGIC,
+> +	.rsu_update_counter = M10BMC_SPI_STAGING_FLASH_COUNT,
+>  };
+>  
+>  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index 91567375f1bf..71ace732bb48 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -9,39 +9,9 @@
+>  
+>  #include <linux/regmap.h>
+>  
+> -#define M10BMC_LEGACY_BUILD_VER		0x300468
+> -#define M10BMC_SYS_BASE			0x300800
+> -#define M10BMC_SYS_END			0x300fff
+> -#define M10BMC_FLASH_BASE		0x10000000
+> -#define M10BMC_FLASH_END		0x1fffffff
+> -#define M10BMC_MEM_END			M10BMC_FLASH_END
+> -
+>  #define M10BMC_STAGING_BASE		0x18000000
+>  #define M10BMC_STAGING_SIZE		0x3800000
+>  
+> -/* Register offset of system registers */
+> -#define NIOS2_FW_VERSION		0x0
+> -#define M10BMC_MAC_LOW			0x10
+> -#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
+> -#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
+> -#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
+> -#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
+> -#define M10BMC_MAC_HIGH			0x14
+> -#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
+> -#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
+> -#define M10BMC_MAC_COUNT		GENMASK(23, 16)
+> -#define M10BMC_TEST_REG			0x3c
+> -#define M10BMC_BUILD_VER		0x68
+> -#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
+> -#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
+> -#define M10BMC_VER_LEGACY_INVALID	0xffffffff
+> -
+> -/* Secure update doorbell register, in system register region */
+> -#define M10BMC_DOORBELL			0x400
+> -
+> -/* Authorization Result register, in system register region */
+> -#define M10BMC_AUTH_RESULT		0x404
+> -
+>  /* Doorbell register fields */
+>  #define DRBL_RSU_REQUEST		BIT(0)
+>  #define DRBL_RSU_PROGRESS		GENMASK(7, 4)
+> @@ -102,22 +72,6 @@
+>  #define RSU_COMPLETE_INTERVAL_MS	1000
+>  #define RSU_COMPLETE_TIMEOUT_MS		(40 * 60 * 1000)
+>  
+> -/* Addresses for security related data in FLASH */
+> -#define BMC_REH_ADDR	0x17ffc004
+> -#define BMC_PROG_ADDR	0x17ffc000
+> -#define BMC_PROG_MAGIC	0x5746
+> -
+> -#define SR_REH_ADDR	0x17ffd004
+> -#define SR_PROG_ADDR	0x17ffd000
+> -#define SR_PROG_MAGIC	0x5253
+> -
+> -#define PR_REH_ADDR	0x17ffe004
+> -#define PR_PROG_ADDR	0x17ffe000
+> -#define PR_PROG_MAGIC	0x5250
+> -
+> -/* Address of 4KB inverted bit vector containing staging area FLASH count */
+> -#define STAGING_FLASH_COUNT	0x17ffb000
+> -
+>  /**
+>   * struct m10bmc_csr_map - Intel MAX 10 BMC CSR register map
+>   */
+> -- 
+> 2.30.2
+> 
