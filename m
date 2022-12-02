@@ -2,157 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC01640FC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C622E640FC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiLBVDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
+        id S234306AbiLBVG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234190AbiLBVDs (ORCPT
+        with ESMTP id S234139AbiLBVGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:03:48 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B519D80C7;
-        Fri,  2 Dec 2022 13:03:46 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2IWQgL019814;
-        Fri, 2 Dec 2022 21:03:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=l3YF7d7Osha4HUveR4HvX/7HD6zwUOSpMIQU9u+UtZc=;
- b=mKsYTYr37ehS3zXP91idG9z9wLRV2TKwsxw+gihdb1OPxKe+XPlnNw7v5XAfYEhooHRe
- GmhgyRbM/DI7FJ5hYIHntmf/w8yiQzYcDUu7HzmWjcc2raGT9TzSAWBakrXa8lEU6RVx
- rYah4wRfh5P3FDQMoflcMWA3djz0EtK5qg4SIdlr8i/yi6Iu1bFGQ0N5/ZUYM+bQ0uLE
- XEQ+UCVLwXkY99bsY2UeuX8Ei6VLHQrZfFmF84zs1t/u+5RSHYLKaK1Dkuy7+tFoNTlS
- ySF35F8ot6BOPyLY2dRHod/zByDtiOo6MNL1hpTD/PUqzy3l5PPAJD7Egs5wUxhSFsrW iw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7pqwtuam-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 21:03:17 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B2Krx5O004621;
-        Fri, 2 Dec 2022 21:03:16 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7pqwtua6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 21:03:16 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B2Kp5MW009983;
-        Fri, 2 Dec 2022 21:03:15 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02wdc.us.ibm.com with ESMTP id 3m3aeam324-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 21:03:15 +0000
-Received: from b03ledav004.gho.boulder.ibm.com ([9.17.130.235])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B2L3EuJ34931234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 2 Dec 2022 21:03:14 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D5B67805E;
-        Fri,  2 Dec 2022 22:13:21 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42E997805C;
-        Fri,  2 Dec 2022 22:13:18 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.181])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  2 Dec 2022 22:13:17 +0000 (GMT)
-Message-ID: <6f66f174af92a9b23bddd72945e94e888b0c9420.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
- data
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-integrity@vger.kernel.org,
-        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Fri, 02 Dec 2022 16:03:09 -0500
-In-Reply-To: <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
-         <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
-         <Y3FfhrgvBNey6T7V@sol.localdomain>
-         <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
-         <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com>
-         <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
-         <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
-         <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zHzyh_mb8TepzfPQ11qtRN52QY2r-J1v
-X-Proofpoint-ORIG-GUID: sPQup2CTJfvDp6URQ1pmFgRxtBqWs-WP
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 2 Dec 2022 16:06:25 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564B2EAB42
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:06:24 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so6210602pjm.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 13:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b+Cwu0oORJoqtBf3SwedAguHYFCuhYbPDgOJRY8RxDc=;
+        b=eTjCt2wyDeZrFaTFP2qLMErlY0YdrzSBrPZhKR0WLOuKHEKfcJBdp7tFzCGtTSLbh1
+         kmDWxQa18M/FQqLL+dqsSTz0qVBAp8o1fc833wIKkIqXjXnvUGMEzIdo5hdEwQzR3PuH
+         Vyzb1d4jqy1v0Va24229nMjG1lyIWKPucvJrc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b+Cwu0oORJoqtBf3SwedAguHYFCuhYbPDgOJRY8RxDc=;
+        b=WZgnxqmU6ybETC9kAczCQ5iDL+AhItuakxvIw1PLKx/z2zEs9Mz4cJ+Murc2IQ6irR
+         PU//7Hhmlm+WQggBxz91d5MHXUFogmSAR+HMmWos0ys8s+caMyaTUdesiIUmlgye2K+J
+         HROgH4W2TobeRg0wb1PeYvLdT8pYNk7rOl3q4HvRiqA25U7Neki4vEfG1kSBC6QVxuhS
+         MSQ8Z7TC8MU4pvfOt5zLHVWkXDWYzRTGzPyzOyWDlmsPVltqDnzdITaoiR0mApJlHzIb
+         Cs/SacltwvirfJu3eAIfzFNq012tQ9VAIwlonS8W8YiwJSMzgukm+WvyHQ3c7wESm+fq
+         F0vQ==
+X-Gm-Message-State: ANoB5pk4kbR2NYgp1+f+a4MOrOsp7OjF/JXuYkSa33ZK32x+D/twdFbR
+        Yn5AaX2JuQd3o+pqIbdv80A7Fg==
+X-Google-Smtp-Source: AA0mqf4zpsh2KC/91qSTab1MJ4Ka12sB7hBmIJ2N8rQQU05wAOJlARV/Zb9E6UOyKlO8/S0IrUq3/w==
+X-Received: by 2002:a17:902:da82:b0:189:adf8:54f8 with SMTP id j2-20020a170902da8200b00189adf854f8mr13076731plx.81.1670015183731;
+        Fri, 02 Dec 2022 13:06:23 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e9-20020aa79809000000b0056d98e31439sm5703448pfl.140.2022.12.02.13.06.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 13:06:23 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Huang Ying <ying.huang@intel.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] exit: Allow oops_limit to be disabled
+Date:   Fri,  2 Dec 2022 13:06:21 -0800
+Message-Id: <20221202210617.never.105-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-02_12,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxlogscore=371 spamscore=0 phishscore=0 clxscore=1011 lowpriorityscore=0
- suspectscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212020169
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2081; h=from:subject:message-id; bh=T618w/j0axgITyjfLRoHa8B3lQ31JWaln373s8Gn90k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjimjM6qX21BtN+gD442We20DY1hyv1ftI0+cWAqVS K5tQeg6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4pozAAKCRCJcvTf3G3AJghuD/ 9UFGZVzFXoKQtfKm4Z7rtqz7Bk0KS/u8l0ck+I/oBsHNXXAjV+6tN2P2nqF0DQl3da32+fwwQHh0i6 Z6ZKIDsRx7EBxTEYlabrnE7QECT185s0e/iICdJgafEOPopGz+Bl774b/2pOGTJ0uQu6nGP2SqQIPt Wmv4NiR8DEpWPrXyZND8eT51yallcOhfqfR6xkLc522a9eOxUWcucdx/gedtRqTknHTQ/i/dV6hzOK GXrZ8QM51UOYjbd46kEemIUjC8/qTk98x1fPszQ0/qV1NZN8LMLTRXd1W7hSXcL+lQ9QVcvIL2kRGi KahFf4+aZVlmGDa94Gd7LWcPrHjjhH+TiVr+xB1OewiC8A37NCf2XiH20uH9M4CYw2UZkc6V2CbBGi qwXUYkk2uK+QAc/h5o0a/cwYfLjAlCBeZHEGJlTCVno2PXrOugFNJWPuvhtiWEtklH9Bpz348otyIi xyDnD4fpFIvgGtNUHo+SuP4jp0a9XiATdUBsE9nDsT9U1jnALIdN2rX9xxRPpvTJpwgpHJHokmpXkP 0vScld0Rz0VVyCwok2o560CtbEUjtN9H3D27q9uq26BIIbBtxMeY+LmPKBxN1xLMGiQsunmP5DPYKi Vkf5P1XIF/5L19BTArdDGeArZNtd78UqtHN1iXYTeSny1jM65A8zU9w/Ua1g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-11-14 at 13:00 -0500, James Bottomley wrote:
-> On Mon, 2022-11-14 at 09:43 -0800, Evan Green wrote:
-> > On Mon, Nov 14, 2022 at 8:56 AM James Bottomley
-> > <jejb@linux.ibm.com>
-> > wrote:
-> [...]
-> > > Of course, since openssl_tpm2_engine is the complete reference
-> > > implementation that means I'll have to add the creation PCRs
-> > > implementation to it ... unless you'd like to do it?
-> > 
-> > I am willing to help as I'm the one making the mess. How does it
-> > sequence along with your draft submission (before, after,
-> > simultaneous)?
-> 
-> At the moment, just send patches.  The openssl_tpm2_engine is
-> developed on a groups.io mailing list:
-> 
-> https://groups.io/g/openssl-tpm2-engine/
-> 
-> You need an IETF specific tool (xml2rfc) to build the rfc from the
-> xml, but it's available in most distros as python3-xml2rfc.  If you
-> don't want to learn the IETF XML I can help you code up the patch to
-> add that to the draft spec.
+In preparation for keeping oops_limit logic in sync with warn_limit,
+have oops_limit == 0 disable checking the Oops counter.
 
-Just as a heads up, the patch series implementing signed policy (and
-thus taking option [3]) is on the mailing list for review:
+Cc: Jann Horn <jannh@google.com>
+Cc: Seth Jenkins <sethjenkins@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Eric Biggers <ebiggers@google.com>
+Cc: Huang Ying <ying.huang@intel.com>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-doc@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+I've changed the warn_limit logic to match...
+---
+ Documentation/admin-guide/sysctl/kernel.rst | 5 +++--
+ kernel/exit.c                               | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-https://groups.io/g/openssl-tpm2-engine/message/296
-
-With apologies for the awful lack of threading in the groups.io
-interface.
-
-So you don't have to build the RFC yourself, I published the proposed
-update on my website:
-
-https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
-https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.txt
-
-If you want to use option [4] for the creation data, it's available.
-
-Regards,
-
-James
-
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index 09f3fb2f8585..a31d8d81ea07 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -671,8 +671,9 @@ oops_limit
+ ==========
+ 
+ Number of kernel oopses after which the kernel should panic when
+-``panic_on_oops`` is not set. Setting this to 0 or 1 has the same effect
+-as setting ``panic_on_oops=1``.
++``panic_on_oops`` is not set. Setting this to 0 disables checking
++the count. Setting this to  1 has the same effect as setting
++``panic_on_oops=1``. The default value is 10000.
+ 
+ 
+ osrelease, ostype & version
+diff --git a/kernel/exit.c b/kernel/exit.c
+index dc1a32149f94..deffb8e4b1b2 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -954,7 +954,7 @@ void __noreturn make_task_dead(int signr)
+ 	 * To make sure this can't happen, place an upper bound on how often the
+ 	 * kernel may oops without panic().
+ 	 */
+-	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit))
++	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit) && oops_limit)
+ 		panic("Oopsed too often (kernel.oops_limit is %d)", oops_limit);
+ 
+ 	/*
+-- 
+2.34.1
 
