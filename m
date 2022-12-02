@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E51F63FF8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0681A63FF8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 05:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiLBEqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 23:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S231533AbiLBEqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 23:46:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiLBEqJ (ORCPT
+        with ESMTP id S231578AbiLBEqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 23:46:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AA8D679E;
-        Thu,  1 Dec 2022 20:46:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 070DFB820A9;
-        Fri,  2 Dec 2022 04:46:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C05CC433D7;
-        Fri,  2 Dec 2022 04:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669956364;
-        bh=UiL3Tb7gm2PApOES13tLz7BW0HNCgZohBDZDdYDnv8U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mn+IoppK2cJtLbsEBVYor4VjYEz8274Q3NzRMoaK75dOsjyxAIMQgU+70Nd8qHqsY
-         +EnNTsSDLBYJAfaBPo2X7MfvhxeJF0dEsKTUymSFMtLBfTqGSxXEfNG9Pb2WAyc5kV
-         N6Y8fA2M5HwoSv2ps/kwe1W7SMyANeC5nGk/FLsygm0/bnOFTFCYf56Eg8d78p6RvG
-         4SIIHtdfZ5H2BJNjtp8rScqGhQQ6kdgZg95UjrsMSCvqedboTIOcEA6j0c9iSLpyqW
-         6fhMgAVrqKlSp8XD2jmyglAEOER0pp9DVsXb05VTbUTrivOggCpzD1GRtFYlYuY2d2
-         j01YCVtLo/5EA==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     bpf@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: [PATCH] panic: Taint kernel if fault injection has been used
-Date:   Fri,  2 Dec 2022 13:45:59 +0900
-Message-Id: <166995635931.455067.17768077948832448089.stgit@devnote3>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-User-Agent: StGit/0.19
+        Thu, 1 Dec 2022 23:46:51 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7199ED6791
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 20:46:50 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id h28so3848476pfq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 20:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ToAtkmB3UW/Z4QJiw4Bpk2zHiZGqtOKBNj//sKNA6ok=;
+        b=XU/BGI/X6BKC5tjX50ll8ytZwymHQDMQoO03htc8KgB6bNGoVlvWdy0Yva+aEYFRGS
+         1TtOwkr7rsikZMvvSWFPel0mTobZhkeMNNmn/Kp0/NemQPJ8sAO1znbTfkZETg2jCIlv
+         x/eiVULjiqpKrpOqTT60kdGbOiTXqnb1+RtAo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ToAtkmB3UW/Z4QJiw4Bpk2zHiZGqtOKBNj//sKNA6ok=;
+        b=zaPDb2iaKHDOduc6GgfvvMB31bfLvzouRuZ2nbcp+AvuY8atQtqdgR5hIrRjBLQBkK
+         9r9XWBSqJQ7SkIpvFC9lq3x9Ix2mxWLOngI1+DWeTHYMcBeLz9zIeYEwvI7i69aQa/MT
+         NJ2yAPSciKD2PLw9A6dc1G8ywQKOAQ5Cv3Mjq/JXCUZWLnnKSjJJOZEgUmqjFodBud0c
+         kUCHDKyHJfyZuKVQ1W7riDn8Lt9dvuunFaxuFphLz2BpH8vL1o0iz50xE/mZ8A4e6B5O
+         1beittK6xP/xF7wlAFqnwZqvDnE4yflpbnzN33Bq5YkTyvqyBFkQqMmGCVYUGTZ6zLwK
+         Fpng==
+X-Gm-Message-State: ANoB5plZjlmDuamvSttrkpBv7B0+GJ/Ep80S2HT/O57O/zYzyGH6GyX2
+        cPNVhVaO0OWLOlU62Na6csUQOA==
+X-Google-Smtp-Source: AA0mqf4U0bjGUApaDsyQLPrBCs0HpmHPmifKlyra3wRhE/eJwL1VLH75z53Ep2l9GtPyqeIEScUkUQ==
+X-Received: by 2002:a63:2001:0:b0:477:b0d0:bbee with SMTP id g1-20020a632001000000b00477b0d0bbeemr42114357pgg.51.1669956409938;
+        Thu, 01 Dec 2022 20:46:49 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k27-20020aa7973b000000b0057610894c71sm2460656pfg.209.2022.12.01.20.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 20:46:48 -0800 (PST)
+Date:   Thu, 1 Dec 2022 20:46:47 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Daniel Palmer <daniel@thingy.jp>,
+        kernel test robot <lkp@intel.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] rtc: msc313: Fix function prototype mismatch in
+ msc313_rtc_probe()
+Message-ID: <202212012043.C4ED0824@keescook>
+References: <20221118233101.never.215-kees@kernel.org>
+ <ef3c1a62-029e-ffae-8a37-fde35a8235d5@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <ef3c1a62-029e-ffae-8a37-fde35a8235d5@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,107 +80,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Sat, Nov 19, 2022 at 09:05:28AM +0100, Christophe JAILLET wrote:
+> Le 19/11/2022 à 00:31, Kees Cook a écrit :
+> > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> > indirect call targets are validated against the expected function
+> > pointer prototype to make sure the call target is valid to help mitigate
+> > ROP attacks. If they are not identical, there is a failure at run time,
+> > which manifests as either a kernel panic or thread getting killed.
+> > 
+> > msc313_rtc_probe() was passing clk_disable_unprepare() directly, which
+> > did not have matching prototypes for devm_add_action_or_reset()'s callback
+> > argument. Add a wrapper and remove the cast.
+> > 
+> > This was found as a result of Clang's new -Wcast-function-type-strict
+> > flag, which is more sensitive than the simpler -Wcast-function-type,
+> > which only checks for type width mismatches.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
+> > Cc: Daniel Palmer <daniel@thingy.jp>
+> > Cc: Romain Perier <romain.perier@gmail.com>
+> > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-rtc@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >   drivers/rtc/rtc-msc313.c | 9 ++++++++-
+> >   1 file changed, 8 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+> > index f3fde013c4b8..36e3e77f303e 100644
+> > --- a/drivers/rtc/rtc-msc313.c
+> > +++ b/drivers/rtc/rtc-msc313.c
+> > @@ -177,6 +177,13 @@ static irqreturn_t msc313_rtc_interrupt(s32 irq, void *dev_id)
+> >   	return IRQ_HANDLED;
+> >   }
+> > +static void msc313_clk_disable_unprepare(void *data)
+> > +{
+> > +	struct clk *clk = data;
+> > +
+> > +	clk_disable_unprepare(clk);
+> > +}
+> > +
+> >   static int msc313_rtc_probe(struct platform_device *pdev)
+> >   {
+> >   	struct device *dev = &pdev->dev;
+> > @@ -224,7 +231,7 @@ static int msc313_rtc_probe(struct platform_device *pdev)
+> >   		return ret;
+> >   	}
+> > -	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
+> > +	ret = devm_add_action_or_reset(dev, msc313_clk_disable_unprepare, clk);
+> >   	if (ret)
+> >   		return ret;
+> 
+> Hi,
+> 
+> another way to fix it, is to use devm_clk_get_enabled().
+> 
+> It removes some LoC instead of introducing some new ones and saves a few
+> bytes of memory.
 
-Since the function error injection framework in the fault injection
-subsystem can change the function code flow forcibly, it may cause
-unexpected behavior (and that is the purpose of this feature) even
-if it is applied to the ALLOW_ERROR_INJECTION functions.
-So this feature must be used only for debugging or testing purpose.
+Hrm, I'm not familiar with the clk stuff here -- how do I use it? Should
+it just be like this? (The NULL argument is ok?)
 
-To identify this in the kernel oops message, add a new taint flag
-for the fault injection. This taint flag will be set by either
-function error injection is used or the BPF use the kprobe_override
-on error injectable functions (identified by ALLOW_ERROR_INJECTION).
-
-Link: https://lore.kernel.org/all/20221121104403.1545f9b5@gandalf.local.home/T/#u
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Documentation/admin-guide/tainted-kernels.rst |    5 +++++
- include/linux/panic.h                         |    3 ++-
- kernel/fail_function.c                        |    2 ++
- kernel/panic.c                                |    1 +
- kernel/trace/bpf_trace.c                      |    2 ++
- 5 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-index 92a8a07f5c43..63d7cd4f6250 100644
---- a/Documentation/admin-guide/tainted-kernels.rst
-+++ b/Documentation/admin-guide/tainted-kernels.rst
-@@ -101,6 +101,7 @@ Bit  Log  Number  Reason that got the kernel tainted
-  16  _/X   65536  auxiliary taint, defined for and used by distros
-  17  _/T  131072  kernel was built with the struct randomization plugin
-  18  _/N  262144  an in-kernel test has been run
-+ 19  _/J  524288  a function-level error has been injected
- ===  ===  ======  ========================================================
- 
- Note: The character ``_`` is representing a blank in this table to make reading
-@@ -182,3 +183,7 @@ More detailed explanation for tainting
-      produce extremely unusual kernel structure layouts (even performance
-      pathological ones), which is important to know when debugging. Set at
-      build time.
-+
-+ 19) ``J`` if a function-level error has been injected and the code path was
-+     forcibly changed by either function error injection framework or BPF's
-+     function override feature.
-diff --git a/include/linux/panic.h b/include/linux/panic.h
-index c7759b3f2045..2b03a02d86be 100644
---- a/include/linux/panic.h
-+++ b/include/linux/panic.h
-@@ -69,7 +69,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
- #define TAINT_AUX			16
- #define TAINT_RANDSTRUCT		17
- #define TAINT_TEST			18
--#define TAINT_FLAGS_COUNT		19
-+#define TAINT_FAULT_INJECTED		19
-+#define TAINT_FLAGS_COUNT		20
- #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
- 
- struct taint_flag {
-diff --git a/kernel/fail_function.c b/kernel/fail_function.c
-index a7ccd2930c5f..80a743f14a2c 100644
---- a/kernel/fail_function.c
-+++ b/kernel/fail_function.c
-@@ -9,6 +9,7 @@
- #include <linux/kprobes.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/panic.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- 
-@@ -298,6 +299,7 @@ static ssize_t fei_write(struct file *file, const char __user *buffer,
- 		fei_attr_free(attr);
- 		goto out;
+diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+index f3fde013c4b8..8d7737e0e2e0 100644
+--- a/drivers/rtc/rtc-msc313.c
++++ b/drivers/rtc/rtc-msc313.c
+@@ -212,22 +212,12 @@ static int msc313_rtc_probe(struct platform_device *pdev)
+ 		return ret;
  	}
-+	add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
- 	fei_debugfs_add_attr(attr);
- 	list_add_tail(&attr->list, &fei_attr_list);
- 	ret = count;
-diff --git a/kernel/panic.c b/kernel/panic.c
-index da323209f583..e396a5fd9bb6 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -426,6 +426,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
- 	[ TAINT_AUX ]			= { 'X', ' ', true },
- 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
- 	[ TAINT_TEST ]			= { 'N', ' ', true },
-+	[ TAINT_FAULT_INJECTED ]	= { 'J', ' ', false },
- };
  
- /**
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 1ed08967fb97..de0614d9796c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2137,6 +2137,8 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
- 		goto unlock;
+-	clk = devm_clk_get(dev, NULL);
++	clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(dev, "No input reference clock\n");
+ 		return PTR_ERR(clk);
+ 	}
  
- 	/* set the new array to event->tp_event and set event->prog */
-+	if (prog->kprobe_override)
-+		add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
- 	event->prog = prog;
- 	event->bpf_cookie = bpf_cookie;
- 	rcu_assign_pointer(event->tp_event->prog_array, new_array);
+-	ret = clk_prepare_enable(clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to enable the reference clock, %d\n", ret);
+-		return ret;
+-	}
+-
+-	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
+-	if (ret)
+-		return ret;
+-
+ 	rate = clk_get_rate(clk);
+ 	writew(rate & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_L);
+ 	writew((rate >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_H);
 
+-- 
+Kees Cook
