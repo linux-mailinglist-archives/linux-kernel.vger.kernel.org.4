@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB85364065A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5F964065B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbiLBMFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S232476AbiLBMGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiLBMFp (ORCPT
+        with ESMTP id S233362AbiLBMF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:05:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F049B22288
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:05:44 -0800 (PST)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1p14nO-0006vf-Jk; Fri, 02 Dec 2022 13:05:34 +0100
-Message-ID: <94f5f20b-f7c9-b9b5-1b49-3c4366b47370@pengutronix.de>
-Date:   Fri, 2 Dec 2022 13:05:31 +0100
+        Fri, 2 Dec 2022 07:05:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A18DD15B8
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:05:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1CA262292
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 12:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD70C433D6;
+        Fri,  2 Dec 2022 12:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669982755;
+        bh=//XNj4SQWZKKZVQhTBw0rAdtdWRbsJy4awbNElMStmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CvSIA7M+NRUw1gvLeZsCoPN8umCo/3oxrkiu5SgPBbQP7+xaEa7e9jHTJQXEaagZd
+         GpsDTgYSDCYPmaYXh3EerXoYBbZm/a0di/JaSrpmn0AAOXTVC8wTm6CEpQXqRa5lyW
+         C3Xl2yASx3mC64f20WmYFSjE4YISQ981r35gsjwr3e8hTvU4S+TQ0dwY+aYkLCV6eN
+         7SrqL4nlT7y55xEUCMbhs6NRMySUrTMXAcNIXPUNPOBXsiT02VmaObkh5dqVvsH3Vv
+         /RKCABP3kVULp/Dgz+CXxcqCaBZTjXlMnD8oJPViR6CsP7lJI3r/untmvMevpjvD5H
+         y2ORkRS1W4MdQ==
+Date:   Fri, 2 Dec 2022 12:05:50 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     tglx@linutronix.de, Conor Dooley <conor.dooley@microchip.com>,
+        samuel@sholland.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
+        dmitriy@oss-tech.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com
+Subject: Re: [PATCH] Revert "clocksource/drivers/riscv: Events are stopped
+ during CPU suspend"
+Message-ID: <Y4nqHl8mjbsRj7On@spud>
+References: <20221023185444.678573-1-conor@kernel.org>
+ <9d0211d8-eefe-9464-940f-ac113ddbb0a7@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3] crypto: caam: blob_gen.c: warn if key is insecure
-Content-Language: en-US
-To:     Nikolaus Voss <nikolaus.voss@haag-streit.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Gstir <david@sigma-star.at>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Nikolaus Voss <nv@vosn.de>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221121141929.2E36427E9@mail.steuer-voss.de>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20221121141929.2E36427E9@mail.steuer-voss.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Hd4ZDEpuaruNBLYK"
+Content-Disposition: inline
+In-Reply-To: <9d0211d8-eefe-9464-940f-ac113ddbb0a7@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 21.11.22 15:12, Nikolaus Voss wrote:
-> +	ctrlpriv = dev_get_drvdata(jrdev->parent);
-> +	moo = FIELD_GET(CSTA_MOO, ioread32(&ctrlpriv->ctrl->perfmon.status));
+--Hd4ZDEpuaruNBLYK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for not having spotted this the first time, but ioread32 is not
-completely correct here as the CAAM may be big endian while the CPU is
-little endian.
+On Fri, Dec 02, 2022 at 01:02:20PM +0100, Daniel Lezcano wrote:
+> On 23/10/2022 20:54, Conor Dooley wrote:
+> > From: Conor Dooley <conor.dooley@microchip.com>
+> >=20
+> > This reverts commit 232ccac1bd9b5bfe73895f527c08623e7fa0752d.
+> > If an AXI read to the PCIe controller on PolarFire SoC times out, the
+> > system will stall,
+>=20
+> Applied, thanks
 
-You should be using rd_reg32 here.
+Hey Daniel,
 
-Cheers,
-Ahmad
+Looks like Thomas already took the v2 of this patch:
+https://lore.kernel.org/all/166989319052.4906.3934360150862233210.tip-bot2@=
+tip-bot2/
 
-> +	if (moo != CSTA_MOO_SECURE && moo != CSTA_MOO_TRUSTED)
-> +		dev_warn(jrdev,
-> +			 "using insecure test key, enable HAB to use unique device key!\n");
-> +
->  	/*
->  	 * A data blob is encrypted using a blob key (BK); a random number.
->  	 * The BK is used as an AES-CCM key. The initial block (B0) and the
-> diff --git a/drivers/crypto/caam/regs.h b/drivers/crypto/caam/regs.h
-> index 66d6dad841bb2..66928f8a0c4b1 100644
-> --- a/drivers/crypto/caam/regs.h
-> +++ b/drivers/crypto/caam/regs.h
-> @@ -426,6 +426,9 @@ struct caam_perfmon {
->  	u32 rsvd2;
->  #define CSTA_PLEND		BIT(10)
->  #define CSTA_ALT_PLEND		BIT(18)
-> +#define CSTA_MOO		GENMASK(9, 8)
-> +#define CSTA_MOO_SECURE	1
-> +#define CSTA_MOO_TRUSTED	2
->  	u32 status;		/* CSTA - CAAM Status */
->  	u64 rsvd3;
->  
+Thanks,
+Conor.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
+--Hd4ZDEpuaruNBLYK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY4nqHgAKCRB4tDGHoIJi
+0hauAP9F1ohXKqCSFx1Z2po98FplDIMdOAERbdzx5pVGdHRBPgEApvII36TFxMd3
+ku3gTocQLCjVmYIy5pNqlffPHUyySQo=
+=3uew
+-----END PGP SIGNATURE-----
+
+--Hd4ZDEpuaruNBLYK--
