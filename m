@@ -2,131 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F359641098
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA1664109A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234407AbiLBW2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S234510AbiLBW3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234555AbiLBW2A (ORCPT
+        with ESMTP id S234555AbiLBW24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:28:00 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B9B37F8C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:27:58 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id b21so5882984plc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:27:58 -0800 (PST)
+        Fri, 2 Dec 2022 17:28:56 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308FCE2A86
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:28:55 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id z14so2265485pfr.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:28:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ALZWGLHwa13YfXZGkxW0FB63ANWeHG5fPT+X9QnIXNE=;
-        b=X3/Ygkl9QthpO86CXg54X6whNZrFQqYUC0a1gJ7z1caR4J8jEDl6DfVlTLaBNivhcY
-         NiphJrlOXZlUsJ+SpV9Zi/OaCqZQmF+w8BKtnwGuplrgBPudjQNAGaFRELzlURBACYjN
-         fvskVx3RWz/t+JrUbcEZFBXzzW/hbUS1lG/vc=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mA7EbMY6jYQnBQ5a2EEJbPnWMt0mwJ2NvlH1bqAlVdY=;
+        b=V060CW+9WaoNQd3JTJUfI6o9UkdRjdDPq8YkiSwizBRy26ilkRnNGJAXE7Vg9+lNlI
+         2yoV5EBEzLEz03OO4J7or/HgCgJhox9GCPQSTfFmJl/8RH2WoDN4tpDIVB7c6tjjj1zw
+         XpjdStemOWcnPqOer1QKZhSsCMKZ9rlqrOhavARkgcl9n0wfWmf1fpSwL9hSldz9SS2Q
+         +S7s7eeJ4gTCgWzPJGljpfxS1WzJ/geX0nebjxdSA3dsEksaWk7t/oR7BC5dd7KrrXeT
+         /mq07VibZtN+GbzY1ouUXHt/a9xxG1DhUAugzfWTojM3VFVZG3IlSe9RUyAoBjjhaMIa
+         fEXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ALZWGLHwa13YfXZGkxW0FB63ANWeHG5fPT+X9QnIXNE=;
-        b=glVpMiN2v52IB2FQwYRUK4ZtTIAGHzuvhuOCXBJgcS9o8/bfHfOg6JSaa31ifrS4PI
-         Mu/Y9mh026WdaGZAFmnLSzFHNAlIH0tVt6NliMB+k1j1epEr4DrdtBr+lz5CxMkPv915
-         9bu4Ygu6DgvKHA0paUE1ETIyzTBUxIryWgNUIGXAfauRXPXZyYPwedo/4pqJysOaTwMn
-         lGP3ukCR5jg1gfYbu0rLCpo5DTDdnTRyZoLkNs9kRmJuaXGI9JSeeBf1r7pI4t5zBxiq
-         SLVeaop/BW2nicMMe2R/+V/5tR/vfFM0yuzfwkQcM6IptEHkR0MYE4vqFHYMU97alG8T
-         KvXQ==
-X-Gm-Message-State: ANoB5pnTErKrObvQEMc0BFKgsPeUV5JCU5n+prpSkPVpWfuLvRRDcdyd
-        l0vOzy6yQTSyxgLmG5RMff4cfQ==
-X-Google-Smtp-Source: AA0mqf5jLuXI/3izYGoUxy610VM/+FmgD12XJpKjAnMQ9yTLUWnTyNdgZ4kJJE+Exwk0YwLhcYT/sQ==
-X-Received: by 2002:a17:90b:3608:b0:219:6b1b:63d8 with SMTP id ml8-20020a17090b360800b002196b1b63d8mr14207707pjb.143.1670020078378;
-        Fri, 02 Dec 2022 14:27:58 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b00189ac5a2340sm5734186pln.124.2022.12.02.14.27.57
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mA7EbMY6jYQnBQ5a2EEJbPnWMt0mwJ2NvlH1bqAlVdY=;
+        b=HhdFNwxR5JZSDzoThdgqWDkGuFCBnRocJiFjJe2NHJu8skTw7HMdLtVByp/JMItptV
+         InVlWe7kFTT8Vj+miavKBiKnwdRGDypPqGVUANeF+3iSv3ynONZHnbj3cji3ZYCkKFEN
+         veaytIWUSSy6MJsc8dTR0+mMNzbplFAAhCm8Zapsg1u2oXUWbtQO6R0CLAErlJYiwLNV
+         fJix3QbLOlScNiftI0yoIw/COwsbjSlNfgYINj9nV6dJtUPOrVpC2w1Lk0SWU+l++pEO
+         p+z/qIZHp/S/3FRBT4Gh0rlQgeevMYHHeAuaq57rjrqma0YhgiEAm3Tb6yk5VL4ExjuD
+         IppA==
+X-Gm-Message-State: ANoB5plErMk+z+/fY78jII5F6qzdEkEDCXcXl+S3XIAKcBHX3dMreJyt
+        1lu61HTHUItVHynJYswyhDrhyw==
+X-Google-Smtp-Source: AA0mqf6uOp6LmsnTWIxJT0V0ir4lkWZqK0a+pL6GlLby9cQ/1qUsKnNUB7NKDQOcF0qmJT4HSWMCOw==
+X-Received: by 2002:a63:e74a:0:b0:478:42f:5a3d with SMTP id j10-20020a63e74a000000b00478042f5a3dmr27833890pgk.3.1670020134604;
+        Fri, 02 Dec 2022 14:28:54 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902710800b001891ad6eadasm5994649pll.251.2022.12.02.14.28.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:27:57 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 2 Dec 2022 14:27:57 -0800
-To:     Shayne Chen <shayne.chen@mediatek.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        StanleyYP Wang <StanleyYP.Wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Chiu <chui-hao.chiu@mediatek.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Money Wang <Money.Wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Howard Hsu <howard-yh.hsu@mediatek.com>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        "David S. Miller" <davem@davemloft.net>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        MeiChia Chiu <meichia.chiu@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Bo Jiao <Bo.Jiao@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: mt7996_mcu_ie_countdown(): Insecure data handling
-Message-ID: <202212021427.3A86EE0@keescook>
+        Fri, 02 Dec 2022 14:28:54 -0800 (PST)
+Date:   Fri, 2 Dec 2022 22:28:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com
+Subject: Re: [PATCH v2 05/18] x86/sgx: Track epc pages on reclaimable or
+ unreclaimable lists
+Message-ID: <Y4p8IuxyVLw2YPNy@google.com>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-6-kristen@linux.intel.com>
+ <1dccd2ec-cad8-b9d2-d66b-aebad21cdb44@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1dccd2ec-cad8-b9d2-d66b-aebad21cdb44@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Fri, Dec 02, 2022, Dave Hansen wrote:
+> On 12/2/22 10:36, Kristen Carlson Accardi wrote:
+> > Replace functions sgx_mark_page_reclaimable() and
+> > sgx_unmark_page_reclaimable() with sgx_record_epc_page() and
+> > sgx_drop_epc_page(). sgx_record_epc_page() wil add the epc_page
+> > to the correct "reclaimable" or "unreclaimable" list in the
+> > sgx_epc_lru_lists struct. sgx_drop_epc_page() will delete the page
+> > from the LRU list. Tracking pages that are not tracked by
+> > the reclaimer in the sgx_epc_lru_lists "unreclaimable" list allows
+> > an OOM event to cause all the pages in use by an enclave to be freed,
+> > regardless of whether they were reclaimable pages or not.
+> 
+> This might be more a comment about Sean's stuff
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221202 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
-
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
-
-  Thu Dec 1 17:29:14 2022 +0100
-    98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
-
-Coverity reported the following:
-
-*** CID 1527797:  Insecure data handling  (TAINTED_SCALAR)
-drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:415 in mt7996_mcu_ie_countdown()
-409     	struct mt76_phy *mphy = &dev->mt76.phy;
-410     	struct mt7996_mcu_rxd *rxd = (struct mt7996_mcu_rxd *)skb->data;
-411     	const char *data = (char *)&rxd[1], *tail;
-412     	struct header *hdr = (struct header *)data;
-413     	struct tlv *tlv = (struct tlv *)(data + 4);
-414
-vvv     CID 1527797:  Insecure data handling  (TAINTED_SCALAR)
-vvv     Using tainted variable "hdr->band" as an index into an array "(*dev).mt76.phys".
-415     	if (hdr->band && dev->mt76.phys[hdr->band])
-416     		mphy = dev->mt76.phys[hdr->band];
-417
-418     	tail = skb->data + le16_to_cpu(rxd->len);
-419     	while (data + sizeof(struct tlv) < tail && le16_to_cpu(tlv->len)) {
-420     		switch (le16_to_cpu(tlv->tag)) {
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527797 ("Insecure data handling")
-Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+Anything with a single space after a period wasn't written by me, I'm a devout
+believer of two spaces :-)
