@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893DE640AAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106FC640AB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233844AbiLBQ0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
+        id S233858AbiLBQ11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:27:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbiLBQ0r (ORCPT
+        with ESMTP id S233758AbiLBQ1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:26:47 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CAE2ACE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:26:46 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id z24so5975846ljn.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:26:46 -0800 (PST)
+        Fri, 2 Dec 2022 11:27:24 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412AECE05
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:27:23 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id cg5so5820609qtb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0UF5I9xvAaNLvIJujC4MXTflu00bNErvoIoO/UHyR+U=;
-        b=MMHLX/rYkTO6DNuNz5CGYYz2/LRrC4kK+iaqOPC2lld4zqAcWZQDW9JwxgFmSRVK43
-         soc+3LnasSwCmZV7er/Eqp1x3hFIeaWBgKheWS1ih+GwvTD4TZvvfhl3ob/nnmvy1Bog
-         H7cx9W3Vmz/F6Rg98rPxb9KwGI0qaHciECzbf4lfz/g0Bc9l9AKDlD45Q+7iigmTuW3R
-         hRPxDRPD20+Ypn73lFvbQgkklMQR13Mhd/qTXcU2nzVRNTkdJ5CsuNZGetmyW9YHMiuL
-         VeAn9Gx0J4vlJKVBA1S+VA+igDqwMTawlKO9Em6bbnmNcR50RQygshB0pw+R/NKo3cpy
-         GCww==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gP/2RrbBINHs0AluywNvaZMiu07gERJD3ysXTDCWXck=;
+        b=twtpopHQp0767kfvrjHHaajrLQU0rxdc8bCqpTfQWbnvgiS0g/ZDUt0fyZDlbZroIp
+         86OVRoZkw1NX+wHchEgzib54lmZxyEo9fSDuB2MS7+UoRyK0t3RUNr69fN0EbLlO8Ujt
+         3Jxk9fr9bDcfHxCRPUweUidhdxGdGcZ8Kck6M2ae13+8kMSpOdfEMmlHDA8vj2MQcFfL
+         9M52M2PCAishs8Sp6tMG0lAvA4Mn1btLMQ7isJwk5u30C+ktct8L8RHDHjpKK+ebl039
+         vphWVAu3nv7QmUYkHS58vzJZo3Xpdoza1E/iH8b0CeutedAplOT4fICrPofiKDOw3M28
+         fQ2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0UF5I9xvAaNLvIJujC4MXTflu00bNErvoIoO/UHyR+U=;
-        b=waSzBjFsH+Vx0cyiQoAZ++UGrVh7RkAwCBN6K/RxnrJBa4imaP92BX/UcCXM7GKG05
-         06uvGpr82pt3LBYfe1FA71lzxVPZT6Cje9w4NlspPuWKdcZOGZatsCEhxd71Yw8ZJ0y4
-         B6UfqBTMTFQiiWeG60fmmxHL7ox93Dd0Rbz+NvT3cue9bTzFPp0hMQ+S5gf9dXNAjHxC
-         G9aZDOtcAWiijHdy+LkdCW1Y+KfVvT60tBRbcmniNIIm0/exneoZMPkdF2ytCiPy4LVs
-         BOAhi7zgfZNEtMIq3SzLhmb/W0KhYqoOeOQQcYgipScwmDwtzen09xuUXw1VqKLIK9Z8
-         DmKg==
-X-Gm-Message-State: ANoB5pmTAvEi8htdpENfCy+/K6vYVa8ZShQPWWbG6gmqvHcmFzVnAdAn
-        iCHGnFg5AiQEn2XRUsaOPjQNyQ==
-X-Google-Smtp-Source: AA0mqf5lCR6dD2t++a9tnKVO+0/luzxPDifl4p+kmYbtSEFfuYBxDaWMLm1Fiibk9ZBslnwyiuaqqw==
-X-Received: by 2002:a2e:b90a:0:b0:278:ec8b:4783 with SMTP id b10-20020a2eb90a000000b00278ec8b4783mr18134537ljb.91.1669998404415;
-        Fri, 02 Dec 2022 08:26:44 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05651c03ce00b0027998486803sm661724ljp.130.2022.12.02.08.26.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 08:26:43 -0800 (PST)
-Message-ID: <875a9a21-1cb7-3708-30f1-af6dd48e4f20@linaro.org>
-Date:   Fri, 2 Dec 2022 17:26:42 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gP/2RrbBINHs0AluywNvaZMiu07gERJD3ysXTDCWXck=;
+        b=d28+iTbiS+Dpv60aAY/ZQdwSnkx91heNx+P9OPKMfaP9xP8bdube/KVTzvm5knfD8N
+         7SgCKce5NF2kaclJF1a6zuRdzZdOetExdCqlzX7raHAnh3G+kEqj2fA1GNT8yh5utDSY
+         fl8iA77Ndy4YojG1XVVq6NncA8lBNuALBEgFSfzL15qlNGGOVDJJ4deUJ3tqGsKLz0C2
+         lA0REQTeRK7vaUl1wFpVnbhEc+0xb5v+Ru7CKBXHwCL4FRHcODVQAIAGWLFI++JWMNy9
+         viNaQ8OTQN38IlyWCddqJYOF9PHL6+WpSm/4rclx/XZ2q57lEcNmVSV1ggLnRALcofWN
+         gzsw==
+X-Gm-Message-State: ANoB5pkpsepnqpmfWnUTevCnxgcKdfwiXSkucVJanqkGbw2wzjf+6Ka6
+        17yndhQ7cdjoktUDqksaFUQ49ewed03lgeha
+X-Google-Smtp-Source: AA0mqf6MR7ftSsfsq3Q9C1yEnOIwqAcQnSaFaSy8WPU63qQFCQPCJsHQSobZZlKPhxbbAHgz16oj7Q==
+X-Received: by 2002:ae9:ed47:0:b0:6fa:15e3:3507 with SMTP id c68-20020ae9ed47000000b006fa15e33507mr47613881qkg.673.1669998442334;
+        Fri, 02 Dec 2022 08:27:22 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id fp38-20020a05622a50a600b00343057845f7sm4391887qtb.20.2022.12.02.08.27.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 08:27:21 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, michael@walle.cc, broonie@kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH v4 0/9] Migrate i8255 GPIO drivers to regmap API
+Date:   Fri,  2 Dec 2022 11:27:06 -0500
+Message-Id: <cover.1669996866.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 1/3] arm64: dts: qcom: sdm845-db845c: fix audio codec
- interrupt pin name
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
- <CAD=FV=U86PyVQP4wbhwEkzYprJxz2-S3ooniuYKJBNQOudx2uA@mail.gmail.com>
- <CAD=FV=VjfFx_GBNh9zC=fdV5gUBHww+4BhSSpAq0iq-72i62TQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=VjfFx_GBNh9zC=fdV5gUBHww+4BhSSpAq0iq-72i62TQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,42 +70,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 17:18, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Dec 2, 2022 at 8:08 AM Doug Anderson <dianders@chromium.org> wrote:
->>
->> Hi,
->>
->> On Fri, Dec 2, 2022 at 7:57 AM Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> The pin config entry should have a string, not number, for the GPIO used
->>> as WCD9340 audio codec interrupt.
->>>
->>> Reported-by: Doug Anderson <dianders@chromium.org>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> ---
->>>
->>> Cc: Doug Anderson <dianders@chromium.org>
->>>
->>> Changes since v2:
->>> 1. New patch.
->>> ---
->>>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> Presumably should have a "Fixes" tag since this is likely a true bug.
->>
->> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> FWIW, this got copy-pasta-ed to another place, which I just noticed as
-> I'm looking at your v3. So while your change is correct, it'd be
-> better to also fix "sdm845-xiaomi-beryllium-common.dtsi"
+Changes in v4:
+ - Align trailing '\' characters in macros to same column in 104-dio-48e
+   and 104-idi-48
+ - Remove superfluous trailing commas in macros in 104-dio-48e and
+   104-idi-48
+ - Simplify dio48e_handle_mask_sync() regmap_* calls error checks to
+   return error codes directly
+ - Refactor dio48e_irq_init_hw() for regmap and comment about spurious
+   interrupts; in theory this should be enough to prevent spurious
+   interrupts before the system is ready, but we can pass this function
+   as a callback where needed in the future
+ - Cleanup '{0}' as '{}' in probe() callbacks for 104-dio-48e,
+   104-idi-48, and gpio-mm
+ - Utilize dev_err_probe() in probe() callbacks for 104-dio-48e and
+   104-idi-48
+ - Provide convenience comments for idi48_regmap_irqs initialization
+   list
+ - Replace header includes with forward declarations in gpio-i8255.h
 
-Yep...
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver. The 104-dio-48e and gpio-mm modules depend on
+the i8255 library and are thus updated accordingly.
 
-Best regards,
-Krzysztof
+The 104-IDI-48 is hardwired as an input-only device. Because the i8255
+control registers are not exposed on the 104-IDI-48, the i8255 library
+doesn't provide much benefit here. In this case it's simpler to utilize
+the gpio_regmap API directly, so this patch series does such and removes
+the i8255 library dependency from the 104-idi-48 module.
+
+The first patch in this series adjusts gpio_regmap to always set
+gpio_chip get_direction. This patch is mostly independent of the rest of
+the patches in the series and can be picked up separately if desired.
+I'm including it here because it allows the input-only 104-idi-48 driver
+to continue reporting offset directions after migrating to gpio_regmap.
+
+A handle_mask_sync() callback is introduced for the regmap_irq API. This
+is used by the 104-dio-48e driver to handle its enable/disable interrupt
+functionality. The 104-DIO-48E has a single register to handle
+enabling/disabling interrupts: a write of any value to this register
+enables interrupts, while any read disables interrupts.
+
+By leveraging the gpio_regmap API, the i8255 library is reduced to
+simply a devm_i8255_regmap_register() function, a configuration
+structure struct i8255_regmap_config, and a helper macro
+i8255_volatile_regmap_range() provided to simplify volatile PPI register
+hinting for the regmap.
+
+The regmap_irq API is leveraged by the 104-idi-48 and 104-dio-48e
+modules to support their IRQ functionality. Do their respective regmap
+configurations need use_hwlock set to true in this case, or is adequate
+locking already handled by the regmap_irq API?
+
+William Breathitt Gray (9):
+  gpio: regmap: Always set gpio_chip get_direction
+  regmap-irq: Add handle_mask_sync() callback
+  gpio: 104-dio-48e: Migrate to the regmap-irq API
+  gpio: 104-idi-48: Migrate to the regmap-irq API
+  gpio: 104-idi-48: Migrate to gpio-regmap API
+  gpio: i8255: Migrate to gpio-regmap API
+  gpio: 104-dio-48e: Migrate to regmap API
+  gpio: gpio-mm: Migrate to regmap API
+  gpio: i8255: Remove unused legacy interface
+
+ drivers/base/regmap/regmap-irq.c |  44 +++-
+ drivers/gpio/Kconfig             |   5 +-
+ drivers/gpio/gpio-104-dio-48e.c  | 391 ++++++++++---------------------
+ drivers/gpio/gpio-104-idi-48.c   | 336 +++++++++-----------------
+ drivers/gpio/gpio-gpio-mm.c      | 154 +++---------
+ drivers/gpio/gpio-i8255.c        | 320 +++++++------------------
+ drivers/gpio/gpio-i8255.h        |  54 ++---
+ drivers/gpio/gpio-regmap.c       |   7 +-
+ include/linux/regmap.h           |   5 +
+ 9 files changed, 416 insertions(+), 900 deletions(-)
+
+
+base-commit: 3b7c7478eda00945987d45f902bc3942c89243d3
+-- 
+2.38.1
 
