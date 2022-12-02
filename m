@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5C1640AB8
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1CC640AB7
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbiLBQ1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S234140AbiLBQ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiLBQ11 (ORCPT
+        with ESMTP id S234083AbiLBQ12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:27:27 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A025F5A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:27:25 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id a27so5822890qtw.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:27:25 -0800 (PST)
+        Fri, 2 Dec 2022 11:27:28 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48EF55A2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:27:26 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id a27so5822967qtw.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:27:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UKtlFXr176GJYCzoa4Vyjc+Z42gzySzS09ojrolPXIA=;
-        b=e/z/hOLnU+Bpqaj/AKDp7maZZH23+zf/WlC78dTvzOQr5sibcw0uP5vZj8Fitoqqgf
-         S58NsewSZz3Js2lmnUHzgbhD8FmOCRNI9JLV8wZ9uplMeLePpOmGGbvhngB0T04wGpNo
-         7Ey40FzTDLcdo0XDTg8offbDL9psBRh+orF5dGm0v0mll3Qm317DmmFcwy7vBS6/fchk
-         4mnL5Gmkd+QfEdf8s4ycgCzAunQyy0b2caaXun9G7EtZ43iO0v8DyIZFbUag9NeFfVwZ
-         4HvsF1O7UfO659O8kdm7/ooKKrMjQCGAXTTYv0xUjSmxN2HsptSmfDTjhWWe5b//WGYZ
-         G8XQ==
+        bh=TqC2qQi/m5/bMJ/IGRccY1o0CwWxGaNKxplVl7YEMaw=;
+        b=wPPUf/BHvj30vXef1lm0dCJkD7yMNhgG2baLoK/EHeIgFd4T0Uhrm4FwCK52WA2rql
+         GsNTvwSl3ewCLeDfPuLbP2A5pQ+RdqnoFLqqbsDYCGBhbJjI1eAUNqeGMlfPxvOv8y1b
+         bNnor8sLxEkEQtLE6sUSPitHDZF+c1OIZvgrTfXJS9nYNfy7EmNBYicn3PXZ8Ct7K51j
+         OZu7/9eV8zAmtyjWWuJep570zduIxLd5ilYL0BUMYjlsQb0hQo2pcSkSM9Bc1m0DMGz5
+         sKOTO1of9ku5Qq9qoE2mxFJudM1ZTcBY7w3RajHAsusGmOMlZhgk3dsga+z5qIoszlmV
+         14YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UKtlFXr176GJYCzoa4Vyjc+Z42gzySzS09ojrolPXIA=;
-        b=cB2otvCM9oosubLnYxqZlgdrT9/gNH4xk0Ja5B0MKA4s7JbnjiNSQPIuaAy+brPgX6
-         Gd/M0GRjOmbkKg0ea5jSpKn6j3ei1379iwSz+J3q11zso/RgYomeJ87VK93pmUoH/qpT
-         BTCEpFrvycGJgvEYfM5nIE6pgpQx9rs92xeoz+E0DjJoMXm1kwFAdAMeUscFxwL6pSvb
-         zrERUPxAyFE38wSumyduVo1STfYjUTSJFMYcbsGLsiA5ZurQpduwFTpJAxN9J6eH4yzA
-         bZFtl0S/D7FUG1SyL9jKGQDYee3Tr8ryqCyXT20cOxP61twrODgfq0xHNkM71wA6Jmip
-         bgsw==
-X-Gm-Message-State: ANoB5plKKLQZwxrYJtJ4uXDY1ay90P21UGXPyfegkPVNiqmlL6nFsNEe
-        1nr8yNTZFJc7h4BWHFgEckqUqA==
-X-Google-Smtp-Source: AA0mqf6FsERuh+PRNH0PmM+rTEv3s5EKgxtrEykmUH1NvSkmR9Wjs0YbkFEpd2Fu9v+1yRQBzDbehg==
-X-Received: by 2002:a37:2dc7:0:b0:6ce:2d77:92d0 with SMTP id t190-20020a372dc7000000b006ce2d7792d0mr63426075qkh.713.1669998444937;
-        Fri, 02 Dec 2022 08:27:24 -0800 (PST)
+        bh=TqC2qQi/m5/bMJ/IGRccY1o0CwWxGaNKxplVl7YEMaw=;
+        b=P54hoUV5cjkdfAc6r4nS78MSvYjv6XyEvp1VFMtPJBMd1Ifpe4a81LBy8PTeH4D/6n
+         LAx5A8EUpKFQmErsO0vAOoZu1rSTKI7pOH8v3xNKAyU8axpybl/3M3jHBiNqB1sWfKVY
+         XF21RLniEMMCHO7mEvURjoKtmWsasAYCD23MdzQUXoV5jI+F8WXwHtbjWXSOTU7lUI8R
+         wAC3i4Gs6Zf6le1Ft7YwLQdzj+p1tVi4t82xFELvQW1MsijxWygNXiIhoGTXlPExZdrf
+         QCTtMP2PtAr1S/Vy6+vxriT2ZqQ6KyjQojj2LYqZkzaCOgIM+1idc2ELCRwzBCZqEyeq
+         tZYw==
+X-Gm-Message-State: ANoB5pkNk83soc4bOS9H5u/+jLxBJTMD8J1HhJdyQ+2O/6pkMNBP+3tQ
+        H3IEvpP0f5XWFvIHZ2HhykthkQ==
+X-Google-Smtp-Source: AA0mqf5nUbbBG7b2QOept4qBOv9VyVG+IdOWD0nL/8G5FOaZebJG34AXSk2bWu8XKq1NNO5ph25lsw==
+X-Received: by 2002:a05:620a:22a2:b0:6fa:2ec7:3e0 with SMTP id p2-20020a05620a22a200b006fa2ec703e0mr47349417qkh.392.1669998445892;
+        Fri, 02 Dec 2022 08:27:25 -0800 (PST)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id fp38-20020a05622a50a600b00343057845f7sm4391887qtb.20.2022.12.02.08.27.24
+        by smtp.gmail.com with ESMTPSA id fp38-20020a05622a50a600b00343057845f7sm4391887qtb.20.2022.12.02.08.27.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 08:27:24 -0800 (PST)
+        Fri, 02 Dec 2022 08:27:25 -0800 (PST)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linus.walleij@linaro.org, brgl@bgdev.pl
 Cc:     andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, michael@walle.cc, broonie@kernel.org,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v4 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
-Date:   Fri,  2 Dec 2022 11:27:09 -0500
-Message-Id: <be8ddc3befbcce31546d64f70523d08b3e1e0070.1669996867.git.william.gray@linaro.org>
+Subject: [PATCH v4 4/9] gpio: 104-idi-48: Migrate to the regmap-irq API
+Date:   Fri,  2 Dec 2022 11:27:10 -0500
+Message-Id: <ee81eff1736903e444f89e88b83205eb3fadaf3a.1669996867.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1669996866.git.william.gray@linaro.org>
 References: <cover.1669996866.git.william.gray@linaro.org>
@@ -65,8 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,40 +76,41 @@ The regmap API supports IO port accessors so we can take advantage of
 regmap abstractions rather than handling access to the device registers
 directly in the driver.
 
-For the 104-dio-48e we have the following IRQ registers (0xB and 0xF):
+For the 104-idi-48, we get an IRQ register with some status information
+and basic masking, but it's broken down by banks rather than individual
+GPIO. There are six banks (8 GPIO lines each) that correspond to the
+lower six bits of the IRQ register (bits 0-5):
 
-    Base Address +B (Write): Enable Interrupt
-    Base Address +B (Read): Disable Interrupt
-    Base Address +F (Read/Write): Clear Interrupt
-
-Any write to 0xB will enable interrupts, while any read will disable
-interrupts. Interrupts are cleared by a read or any write to 0xF.
-There's no IRQ status register, so software has to assume that if an
-interrupt is raised then it was for the 104-DIO-48E device.
+    Base Address + 7 (Read): IRQ Status Register/IRQ Clear
+        Bit 0-5: Respective Bank IRQ Statuses
+        Bit 6: IRQ Status (Active Low)
+        Bit 7: IRQ Enable Status
+    Base Address + 7 (Write): IRQ Enable/Disable
+        Bit 0-5: Respective Bank IRQ Enable/Disable
 
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
- drivers/gpio/Kconfig            |   1 +
- drivers/gpio/gpio-104-dio-48e.c | 268 +++++++++++++++-----------------
- 2 files changed, 127 insertions(+), 142 deletions(-)
+ drivers/gpio/Kconfig           |   1 +
+ drivers/gpio/gpio-104-idi-48.c | 249 ++++++++++++---------------------
+ 2 files changed, 92 insertions(+), 158 deletions(-)
 
 diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index ec7cfd4f52b1..b62bef4e563d 100644
+index b62bef4e563d..6892979e511a 100644
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -845,6 +845,7 @@ config GPIO_104_DIO_48E
- 	tristate "ACCES 104-DIO-48E GPIO support"
+@@ -871,6 +871,7 @@ config GPIO_104_IDI_48
+ 	tristate "ACCES 104-IDI-48 GPIO support"
  	depends on PC104
  	select ISA_BUS_API
 +	select REGMAP_IRQ
  	select GPIOLIB_IRQCHIP
  	select GPIO_I8255
  	help
-diff --git a/drivers/gpio/gpio-104-dio-48e.c b/drivers/gpio/gpio-104-dio-48e.c
-index 7b8829c8e423..4c3660d5dea5 100644
---- a/drivers/gpio/gpio-104-dio-48e.c
-+++ b/drivers/gpio/gpio-104-dio-48e.c
-@@ -8,17 +8,15 @@
+diff --git a/drivers/gpio/gpio-104-idi-48.c b/drivers/gpio/gpio-104-idi-48.c
+index c5e231fde1af..f936e3e0ff12 100644
+--- a/drivers/gpio/gpio-104-idi-48.c
++++ b/drivers/gpio/gpio-104-idi-48.c
+@@ -8,17 +8,16 @@
   */
  #include <linux/bits.h>
  #include <linux/device.h>
@@ -118,9 +118,10 @@ index 7b8829c8e423..4c3660d5dea5 100644
 +#include <linux/err.h>
  #include <linux/gpio/driver.h>
 -#include <linux/io.h>
- #include <linux/ioport.h>
--#include <linux/interrupt.h>
+-#include <linux/ioport.h>
+ #include <linux/interrupt.h>
 -#include <linux/irqdesc.h>
++#include <linux/ioport.h>
 +#include <linux/irq.h>
  #include <linux/isa.h>
  #include <linux/kernel.h>
@@ -131,281 +132,252 @@ index 7b8829c8e423..4c3660d5dea5 100644
  #include <linux/types.h>
  
  #include "gpio-i8255.h"
-@@ -38,46 +36,30 @@ static unsigned int num_irq;
+@@ -38,6 +37,9 @@ static unsigned int num_irq;
  module_param_hw_array(irq, uint, irq, &num_irq, 0);
- MODULE_PARM_DESC(irq, "ACCES 104-DIO-48E interrupt line numbers");
+ MODULE_PARM_DESC(irq, "ACCES 104-IDI-48 interrupt line numbers");
  
-+#define DIO48E_ENABLE_INTERRUPT 0xB
-+#define DIO48E_DISABLE_INTERRUPT DIO48E_ENABLE_INTERRUPT
-+#define DIO48E_CLEAR_INTERRUPT 0xF
++#define IDI48_IRQ_STATUS 0x7
++#define IDI48_IRQ_ENABLE IDI48_IRQ_STATUS
 +
- #define DIO48E_NUM_PPI 2
- 
  /**
-  * struct dio48e_reg - device register structure
-  * @ppi:		Programmable Peripheral Interface groups
-- * @enable_buffer:	Enable/Disable Buffer groups
-- * @unused1:		Unused
-- * @enable_interrupt:	Write: Enable Interrupt
-- *			Read: Disable Interrupt
-- * @unused2:		Unused
-- * @enable_counter:	Write: Enable Counter/Timer Addressing
-- *			Read: Disable Counter/Timer Addressing
-- * @unused3:		Unused
-- * @clear_interrupt:	Clear Interrupt
-  */
- struct dio48e_reg {
- 	struct i8255 ppi[DIO48E_NUM_PPI];
--	u8 enable_buffer[DIO48E_NUM_PPI];
--	u8 unused1;
--	u8 enable_interrupt;
--	u8 unused2;
--	u8 enable_counter;
--	u8 unused3;
--	u8 clear_interrupt;
- };
- 
+  * struct idi_48_reg - device register structure
+  * @port0:	Port 0 Inputs
+@@ -56,17 +58,11 @@ struct idi_48_reg {
  /**
-  * struct dio48e_gpio - GPIO device private data structure
-  * @chip:		instance of the gpio_chip
-  * @ppi_state:		PPI device states
-- * @lock:		synchronization lock to prevent I/O race conditions
-  * @reg:		I/O address offset for the device registers
-- * @irq_mask:		I/O bits affected by interrupts
+  * struct idi_48_gpio - GPIO device private data structure
+  * @chip:	instance of the gpio_chip
+- * @lock:	synchronization lock to prevent I/O race conditions
+- * @irq_mask:	input bits affected by interrupts
+  * @reg:	I/O address offset for the device registers
+- * @cos_enb:	Change-Of-State IRQ enable boundaries mask
   */
- struct dio48e_gpio {
+ struct idi_48_gpio {
  	struct gpio_chip chip;
- 	struct i8255_state ppi_state[DIO48E_NUM_PPI];
--	raw_spinlock_t lock;
- 	struct dio48e_reg __iomem *reg;
--	unsigned char irq_mask;
+-	spinlock_t lock;
+-	unsigned char irq_mask[6];
+ 	struct idi_48_reg __iomem *reg;
+-	unsigned char cos_enb;
  };
  
- static int dio48e_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
-@@ -144,106 +126,90 @@ static void dio48e_gpio_set_multiple(struct gpio_chip *chip,
- 			   bits, chip->ngpio);
+ static int idi_48_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
+@@ -98,125 +94,65 @@ static int idi_48_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
+ 	return 0;
  }
  
--static void dio48e_irq_ack(struct irq_data *data)
+-static void idi_48_irq_ack(struct irq_data *data)
 -{
 -}
 -
--static void dio48e_irq_mask(struct irq_data *data)
+-static void idi_48_irq_mask(struct irq_data *data)
 -{
 -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
--	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
--	const unsigned long offset = irqd_to_hwirq(data);
+-	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
+-	const unsigned int offset = irqd_to_hwirq(data);
+-	const unsigned long boundary = offset / 8;
+-	const unsigned long mask = BIT(offset % 8);
 -	unsigned long flags;
 -
--	/* only bit 3 on each respective Port C supports interrupts */
--	if (offset != 19 && offset != 43)
--		return;
+-	spin_lock_irqsave(&idi48gpio->lock, flags);
 -
--	raw_spin_lock_irqsave(&dio48egpio->lock, flags);
--
--	if (offset == 19)
--		dio48egpio->irq_mask &= ~BIT(0);
--	else
--		dio48egpio->irq_mask &= ~BIT(1);
+-	idi48gpio->irq_mask[boundary] &= ~mask;
 -	gpiochip_disable_irq(chip, offset);
 -
--	if (!dio48egpio->irq_mask)
--		/* disable interrupts */
--		ioread8(&dio48egpio->reg->enable_interrupt);
+-	/* Exit early if there are still input lines with IRQ unmasked */
+-	if (idi48gpio->irq_mask[boundary])
+-		goto exit;
 -
--	raw_spin_unlock_irqrestore(&dio48egpio->lock, flags);
+-	idi48gpio->cos_enb &= ~BIT(boundary);
+-
+-	iowrite8(idi48gpio->cos_enb, &idi48gpio->reg->irq);
+-
+-exit:
+-	spin_unlock_irqrestore(&idi48gpio->lock, flags);
 -}
 -
--static void dio48e_irq_unmask(struct irq_data *data)
+-static void idi_48_irq_unmask(struct irq_data *data)
 -{
 -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
--	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
--	const unsigned long offset = irqd_to_hwirq(data);
+-	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
+-	const unsigned int offset = irqd_to_hwirq(data);
+-	const unsigned long boundary = offset / 8;
+-	const unsigned long mask = BIT(offset % 8);
+-	unsigned int prev_irq_mask;
 -	unsigned long flags;
 -
--	/* only bit 3 on each respective Port C supports interrupts */
--	if (offset != 19 && offset != 43)
--		return;
+-	spin_lock_irqsave(&idi48gpio->lock, flags);
 -
--	raw_spin_lock_irqsave(&dio48egpio->lock, flags);
-+static const struct regmap_range dio48e_wr_ranges[] = {
-+	regmap_reg_range(0x0, 0x9), regmap_reg_range(0xB, 0xB),
-+	regmap_reg_range(0xD, 0xD), regmap_reg_range(0xF, 0xF),
+-	prev_irq_mask = idi48gpio->irq_mask[boundary];
+-
+-	gpiochip_enable_irq(chip, offset);
+-	idi48gpio->irq_mask[boundary] |= mask;
+-
+-	/* Exit early if IRQ was already unmasked for this boundary */
+-	if (prev_irq_mask)
+-		goto exit;
+-
+-	idi48gpio->cos_enb |= BIT(boundary);
+-
+-	iowrite8(idi48gpio->cos_enb, &idi48gpio->reg->irq);
+-
+-exit:
+-	spin_unlock_irqrestore(&idi48gpio->lock, flags);
+-}
+-
+-static int idi_48_irq_set_type(struct irq_data *data, unsigned int flow_type)
+-{
+-	/* The only valid irq types are none and both-edges */
+-	if (flow_type != IRQ_TYPE_NONE &&
+-		(flow_type & IRQ_TYPE_EDGE_BOTH) != IRQ_TYPE_EDGE_BOTH)
+-		return -EINVAL;
+-
+-	return 0;
+-}
+-
+-static const struct irq_chip idi_48_irqchip = {
+-	.name = "104-idi-48",
+-	.irq_ack = idi_48_irq_ack,
+-	.irq_mask = idi_48_irq_mask,
+-	.irq_unmask = idi_48_irq_unmask,
+-	.irq_set_type = idi_48_irq_set_type,
+-	.flags = IRQCHIP_IMMUTABLE,
+-	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++static const struct regmap_range idi_48_wr_ranges[] = {
++	regmap_reg_range(0x0, 0x6),
 +};
-+static const struct regmap_range dio48e_rd_ranges[] = {
-+	regmap_reg_range(0x0, 0x2), regmap_reg_range(0x4, 0x6),
-+	regmap_reg_range(0xB, 0xB), regmap_reg_range(0xD, 0xD),
-+	regmap_reg_range(0xF, 0xF),
++static const struct regmap_range idi_48_rd_ranges[] = {
++	regmap_reg_range(0x0, 0x2), regmap_reg_range(0x4, 0x7),
 +};
-+static const struct regmap_range dio48e_volatile_ranges[] = {
-+	i8255_volatile_regmap_range(0x0), i8255_volatile_regmap_range(0x4),
-+	regmap_reg_range(0xB, 0xB), regmap_reg_range(0xD, 0xD),
-+	regmap_reg_range(0xF, 0xF),
++static const struct regmap_range idi_48_precious_ranges[] = {
++	regmap_reg_range(0x7, 0x7),
 +};
-+static const struct regmap_range dio48e_precious_ranges[] = {
-+	regmap_reg_range(0xB, 0xB), regmap_reg_range(0xD, 0xD),
-+	regmap_reg_range(0xF, 0xF),
++static const struct regmap_access_table idi_48_wr_table = {
++	.no_ranges = idi_48_wr_ranges,
++	.n_no_ranges = ARRAY_SIZE(idi_48_wr_ranges),
 +};
-+static const struct regmap_access_table dio48e_wr_table = {
-+	.yes_ranges = dio48e_wr_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(dio48e_wr_ranges),
++static const struct regmap_access_table idi_48_rd_table = {
++	.yes_ranges = idi_48_rd_ranges,
++	.n_yes_ranges = ARRAY_SIZE(idi_48_rd_ranges),
 +};
-+static const struct regmap_access_table dio48e_rd_table = {
-+	.yes_ranges = dio48e_rd_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(dio48e_rd_ranges),
++static const struct regmap_access_table idi_48_precious_table = {
++	.yes_ranges = idi_48_precious_ranges,
++	.n_yes_ranges = ARRAY_SIZE(idi_48_precious_ranges),
 +};
-+static const struct regmap_access_table dio48e_volatile_table = {
-+	.yes_ranges = dio48e_volatile_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(dio48e_volatile_ranges),
-+};
-+static const struct regmap_access_table dio48e_precious_table = {
-+	.yes_ranges = dio48e_precious_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(dio48e_precious_ranges),
-+};
-+static const struct regmap_config dio48e_regmap_config = {
++static const struct regmap_config idi48_regmap_config = {
 +	.reg_bits = 8,
 +	.reg_stride = 1,
 +	.val_bits = 8,
 +	.io_port = true,
-+	.max_register = 0xF,
-+	.wr_table = &dio48e_wr_table,
-+	.rd_table = &dio48e_rd_table,
-+	.volatile_table = &dio48e_volatile_table,
-+	.precious_table = &dio48e_precious_table,
-+	.cache_type = REGCACHE_FLAT,
-+};
++	.max_register = 0x6,
++	.wr_table = &idi_48_wr_table,
++	.rd_table = &idi_48_rd_table,
++	.precious_table = &idi_48_precious_table,
+ };
  
--	if (!dio48egpio->irq_mask) {
--		/* enable interrupts */
--		iowrite8(0x00, &dio48egpio->reg->clear_interrupt);
--		iowrite8(0x00, &dio48egpio->reg->enable_interrupt);
-+/* only bit 3 on each respective Port C supports interrupts */
-+#define DIO48E_REGMAP_IRQ(_ppi)						\
-+	[19 + (_ppi) * 24] = {						\
-+		.mask = BIT(_ppi),					\
-+		.type = { .types_supported = IRQ_TYPE_EDGE_RISING },	\
+-static irqreturn_t idi_48_irq_handler(int irq, void *dev_id)
+-{
+-	struct idi_48_gpio *const idi48gpio = dev_id;
+-	unsigned long cos_status;
+-	unsigned long boundary;
+-	unsigned long irq_mask;
+-	unsigned long bit_num;
+-	unsigned long gpio;
+-	struct gpio_chip *const chip = &idi48gpio->chip;
+-
+-	spin_lock(&idi48gpio->lock);
+-
+-	cos_status = ioread8(&idi48gpio->reg->irq);
+-
+-	/* IRQ Status (bit 6) is active low (0 = IRQ generated by device) */
+-	if (cos_status & BIT(6)) {
+-		spin_unlock(&idi48gpio->lock);
+-		return IRQ_NONE;
+-	}
+-
+-	/* Bit 0-5 indicate which Change-Of-State boundary triggered the IRQ */
+-	cos_status &= 0x3F;
+-
+-	for_each_set_bit(boundary, &cos_status, 6) {
+-		irq_mask = idi48gpio->irq_mask[boundary];
+-
+-		for_each_set_bit(bit_num, &irq_mask, 8) {
+-			gpio = bit_num + boundary * 8;
++#define IDI48_NGPIO 48
+ 
+-			generic_handle_domain_irq(chip->irq.domain,
+-						  gpio);
+-		}
++#define IDI48_REGMAP_IRQ(_id)						\
++	[_id] = {							\
++		.mask = BIT((_id) / 8),					\
++		.type = { .types_supported = IRQ_TYPE_EDGE_BOTH },	\
  	}
  
--	gpiochip_enable_irq(chip, offset);
--	if (offset == 19)
--		dio48egpio->irq_mask |= BIT(0);
--	else
--		dio48egpio->irq_mask |= BIT(1);
+-	spin_unlock(&idi48gpio->lock);
 -
--	raw_spin_unlock_irqrestore(&dio48egpio->lock, flags);
--}
--
--static int dio48e_irq_set_type(struct irq_data *data, unsigned int flow_type)
--{
--	const unsigned long offset = irqd_to_hwirq(data);
--
--	/* only bit 3 on each respective Port C supports interrupts */
--	if (offset != 19 && offset != 43)
--		return -EINVAL;
--
--	if (flow_type != IRQ_TYPE_NONE && flow_type != IRQ_TYPE_EDGE_RISING)
--		return -EINVAL;
--
--	return 0;
--}
--
--static const struct irq_chip dio48e_irqchip = {
--	.name = "104-dio-48e",
--	.irq_ack = dio48e_irq_ack,
--	.irq_mask = dio48e_irq_mask,
--	.irq_unmask = dio48e_irq_unmask,
--	.irq_set_type = dio48e_irq_set_type,
--	.flags = IRQCHIP_IMMUTABLE,
--	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+static const struct regmap_irq dio48e_regmap_irqs[] = {
-+	DIO48E_REGMAP_IRQ(0), DIO48E_REGMAP_IRQ(1),
- };
- 
--static irqreturn_t dio48e_irq_handler(int irq, void *dev_id)
-+static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
-+				   const unsigned int mask_buf_def,
-+				   const unsigned int mask_buf,
-+				   void *const irq_drv_data)
- {
--	struct dio48e_gpio *const dio48egpio = dev_id;
--	struct gpio_chip *const chip = &dio48egpio->chip;
--	const unsigned long irq_mask = dio48egpio->irq_mask;
--	unsigned long gpio;
-+	unsigned int *const irq_mask = irq_drv_data;
-+	const unsigned int prev_mask = *irq_mask;
-+	const unsigned int all_masked = 0x3;
-+	unsigned int val;
- 
--	for_each_set_bit(gpio, &irq_mask, 2)
--		generic_handle_domain_irq(chip->irq.domain,
--					  19 + gpio*24);
-+	/* exit early if no change since the previous mask */
-+	if (mask_buf == prev_mask)
-+		return 0;
- 
--	raw_spin_lock(&dio48egpio->lock);
-+	/* remember the current mask for the next mask sync */
-+	*irq_mask = mask_buf;
- 
--	iowrite8(0x00, &dio48egpio->reg->clear_interrupt);
-+	/* if all previously masked, enable interrupts when unmasking */
-+	if (prev_mask == all_masked)
-+		return regmap_write(map, DIO48E_ENABLE_INTERRUPT, 0x00);
- 
--	raw_spin_unlock(&dio48egpio->lock);
-+	/* if all are currently masked, disable interrupts */
-+	if (mask_buf == all_masked)
-+		return regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
- 
 -	return IRQ_HANDLED;
-+	return 0;
- }
+-}
++static const struct regmap_irq idi48_regmap_irqs[IDI48_NGPIO] = {
++	IDI48_REGMAP_IRQ(0), IDI48_REGMAP_IRQ(1), IDI48_REGMAP_IRQ(2), /* 0-2 */
++	IDI48_REGMAP_IRQ(3), IDI48_REGMAP_IRQ(4), IDI48_REGMAP_IRQ(5), /* 3-5 */
++	IDI48_REGMAP_IRQ(6), IDI48_REGMAP_IRQ(7), IDI48_REGMAP_IRQ(8), /* 6-8 */
++	IDI48_REGMAP_IRQ(9), IDI48_REGMAP_IRQ(10), IDI48_REGMAP_IRQ(11), /* 9-11 */
++	IDI48_REGMAP_IRQ(12), IDI48_REGMAP_IRQ(13), IDI48_REGMAP_IRQ(14), /* 12-14 */
++	IDI48_REGMAP_IRQ(15), IDI48_REGMAP_IRQ(16), IDI48_REGMAP_IRQ(17), /* 15-17 */
++	IDI48_REGMAP_IRQ(18), IDI48_REGMAP_IRQ(19), IDI48_REGMAP_IRQ(20), /* 18-20 */
++	IDI48_REGMAP_IRQ(21), IDI48_REGMAP_IRQ(22), IDI48_REGMAP_IRQ(23), /* 21-23 */
++	IDI48_REGMAP_IRQ(24), IDI48_REGMAP_IRQ(25), IDI48_REGMAP_IRQ(26), /* 24-26 */
++	IDI48_REGMAP_IRQ(27), IDI48_REGMAP_IRQ(28), IDI48_REGMAP_IRQ(29), /* 27-29 */
++	IDI48_REGMAP_IRQ(30), IDI48_REGMAP_IRQ(31), IDI48_REGMAP_IRQ(32), /* 30-32 */
++	IDI48_REGMAP_IRQ(33), IDI48_REGMAP_IRQ(34), IDI48_REGMAP_IRQ(35), /* 33-35 */
++	IDI48_REGMAP_IRQ(36), IDI48_REGMAP_IRQ(37), IDI48_REGMAP_IRQ(38), /* 36-38 */
++	IDI48_REGMAP_IRQ(39), IDI48_REGMAP_IRQ(40), IDI48_REGMAP_IRQ(41), /* 39-41 */
++	IDI48_REGMAP_IRQ(42), IDI48_REGMAP_IRQ(43), IDI48_REGMAP_IRQ(44), /* 42-44 */
++	IDI48_REGMAP_IRQ(45), IDI48_REGMAP_IRQ(46), IDI48_REGMAP_IRQ(47), /* 45-47 */
++};
  
- #define DIO48E_NGPIO 48
-@@ -266,14 +232,12 @@ static const char *dio48e_names[DIO48E_NGPIO] = {
- 	"PPI Group 1 Port C 5", "PPI Group 1 Port C 6", "PPI Group 1 Port C 7"
+-#define IDI48_NGPIO 48
+ static const char *idi48_names[IDI48_NGPIO] = {
+ 	"Bit 0 A", "Bit 1 A", "Bit 2 A", "Bit 3 A", "Bit 4 A", "Bit 5 A",
+ 	"Bit 6 A", "Bit 7 A", "Bit 8 A", "Bit 9 A", "Bit 10 A", "Bit 11 A",
+@@ -228,22 +164,14 @@ static const char *idi48_names[IDI48_NGPIO] = {
+ 	"Bit 18 B", "Bit 19 B", "Bit 20 B", "Bit 21 B", "Bit 22 B", "Bit 23 B"
  };
  
--static int dio48e_irq_init_hw(struct gpio_chip *gc)
-+static int dio48e_irq_init_hw(struct regmap *const map)
- {
--	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(gc);
-+	unsigned int val;
- 
- 	/* Disable IRQ by default */
--	ioread8(&dio48egpio->reg->enable_interrupt);
+-static int idi_48_irq_init_hw(struct gpio_chip *gc)
+-{
+-	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(gc);
+-
+-	/* Disable IRQ by default */
+-	iowrite8(0, &idi48gpio->reg->irq);
+-	ioread8(&idi48gpio->reg->irq);
 -
 -	return 0;
-+	return regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
- }
- 
- static void dio48e_init_ppi(struct i8255 __iomem *const ppi,
-@@ -295,8 +259,12 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+-}
+-
+ static int idi_48_probe(struct device *dev, unsigned int id)
  {
- 	struct dio48e_gpio *dio48egpio;
+ 	struct idi_48_gpio *idi48gpio;
  	const char *const name = dev_name(dev);
 -	struct gpio_irq_chip *girq;
 +	void __iomem *regs;
 +	struct regmap *map;
- 	int err;
 +	struct regmap_irq_chip *chip;
-+	unsigned int irq_mask;
 +	struct regmap_irq_chip_data *chip_data;
+ 	int err;
  
- 	dio48egpio = devm_kzalloc(dev, sizeof(*dio48egpio), GFP_KERNEL);
- 	if (!dio48egpio)
-@@ -308,9 +276,43 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 	idi48gpio = devm_kzalloc(dev, sizeof(*idi48gpio), GFP_KERNEL);
+@@ -256,9 +184,32 @@ static int idi_48_probe(struct device *dev, unsigned int id)
  		return -EBUSY;
  	}
  
--	dio48egpio->reg = devm_ioport_map(dev, base[id], DIO48E_EXTENT);
--	if (!dio48egpio->reg)
-+	regs = devm_ioport_map(dev, base[id], DIO48E_EXTENT);
+-	idi48gpio->reg = devm_ioport_map(dev, base[id], IDI_48_EXTENT);
+-	if (!idi48gpio->reg)
++	regs = devm_ioport_map(dev, base[id], IDI_48_EXTENT);
 +	if (!regs)
  		return -ENOMEM;
-+	dio48egpio->reg = regs;
++	idi48gpio->reg = regs;
 +
-+	map = devm_regmap_init_mmio(dev, regs, &dio48e_regmap_config);
++	map = devm_regmap_init_mmio(dev, regs, &idi48_regmap_config);
 +	if (IS_ERR(map))
 +		return dev_err_probe(dev, PTR_ERR(map),
 +				     "Unable to initialize register map\n");
@@ -414,68 +386,56 @@ index 7b8829c8e423..4c3660d5dea5 100644
 +	if (!chip)
 +		return -ENOMEM;
 +
-+	chip->irq_drv_data = devm_kzalloc(dev, sizeof(irq_mask), GFP_KERNEL);
-+	if (!chip->irq_drv_data)
-+		return -ENOMEM;
-+
 +	chip->name = name;
-+	/* No IRQ status register so use CLEAR_INTERRUPT register instead */
-+	chip->status_base = DIO48E_CLEAR_INTERRUPT;
-+	chip->mask_base = DIO48E_ENABLE_INTERRUPT;
++	chip->status_base = IDI48_IRQ_STATUS;
++	chip->unmask_base = IDI48_IRQ_ENABLE;
 +	chip->clear_on_unmask = true;
-+	chip->status_invert = true;
 +	chip->num_regs = 1;
-+	chip->irqs = dio48e_regmap_irqs;
-+	chip->num_irqs = ARRAY_SIZE(dio48e_regmap_irqs);
-+	chip->handle_mask_sync = dio48e_handle_mask_sync;
++	chip->irqs = idi48_regmap_irqs;
++	chip->num_irqs = ARRAY_SIZE(idi48_regmap_irqs);
 +
-+	/* Initialize to prevent spurious interrupts before we're ready */
-+	err = dio48e_irq_init_hw(map);
-+	if (err)
-+		return err;
-+
-+	err = devm_regmap_add_irq_chip(dev, map, irq[id], 0, 0, chip, &chip_data);
++	err = devm_regmap_add_irq_chip(dev, map, irq[id], IRQF_SHARED, 0, chip,
++				       &chip_data);
 +	if (err)
 +		return dev_err_probe(dev, err, "IRQ registration failed\n");
  
- 	dio48egpio->chip.label = name;
- 	dio48egpio->chip.parent = dev;
-@@ -326,18 +328,6 @@ static int dio48e_probe(struct device *dev, unsigned int id)
- 	dio48egpio->chip.set = dio48e_gpio_set;
- 	dio48egpio->chip.set_multiple = dio48e_gpio_set_multiple;
+ 	idi48gpio->chip.label = name;
+ 	idi48gpio->chip.parent = dev;
+@@ -271,32 +222,14 @@ static int idi_48_probe(struct device *dev, unsigned int id)
+ 	idi48gpio->chip.get = idi_48_gpio_get;
+ 	idi48gpio->chip.get_multiple = idi_48_gpio_get_multiple;
  
--	girq = &dio48egpio->chip.irq;
--	gpio_irq_chip_set_chip(girq, &dio48e_irqchip);
+-	girq = &idi48gpio->chip.irq;
+-	gpio_irq_chip_set_chip(girq, &idi_48_irqchip);
 -	/* This will let us handle the parent IRQ in the driver */
 -	girq->parent_handler = NULL;
 -	girq->num_parents = 0;
 -	girq->parents = NULL;
 -	girq->default_type = IRQ_TYPE_NONE;
 -	girq->handler = handle_edge_irq;
--	girq->init_hw = dio48e_irq_init_hw;
+-	girq->init_hw = idi_48_irq_init_hw;
 -
--	raw_spin_lock_init(&dio48egpio->lock);
+-	spin_lock_init(&idi48gpio->lock);
 -
- 	i8255_state_init(dio48egpio->ppi_state, DIO48E_NUM_PPI);
- 	dio48e_init_ppi(dio48egpio->reg->ppi, dio48egpio->ppi_state);
- 
-@@ -347,14 +337,8 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 	err = devm_gpiochip_add_data(dev, &idi48gpio->chip, idi48gpio);
+ 	if (err) {
+ 		dev_err(dev, "GPIO registering failed (%d)\n", err);
  		return err;
  	}
  
--	err = devm_request_irq(dev, irq[id], dio48e_irq_handler, 0, name,
--		dio48egpio);
+-	err = devm_request_irq(dev, irq[id], idi_48_irq_handler, IRQF_SHARED,
+-		name, idi48gpio);
 -	if (err) {
 -		dev_err(dev, "IRQ handler registering failed (%d)\n", err);
 -		return err;
 -	}
 -
 -	return 0;
-+	return gpiochip_irqchip_add_domain(&dio48egpio->chip,
++	return gpiochip_irqchip_add_domain(&idi48gpio->chip,
 +					   regmap_irq_get_domain(chip_data));
  }
  
- static struct isa_driver dio48e_driver = {
+ static struct isa_driver idi_48_driver = {
 -- 
 2.38.1
 
