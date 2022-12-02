@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30823641076
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC92641079
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbiLBWPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S234677AbiLBWRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234191AbiLBWPa (ORCPT
+        with ESMTP id S234191AbiLBWR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:15:30 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBC0B5D84;
-        Fri,  2 Dec 2022 14:15:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670019329; x=1701555329;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=92uGNmRJkAcu57w2u9eAhtAlnFIYwslsgNeTh2w/P8s=;
-  b=jHYIrC2FZXxCgEPS1UltEJXS9yJAr0ZpaAdvHjE3MjfGj2Bu0+CVP6ME
-   0E1U037CNfNzFk0uEM+unJrrODtH4dsb01Xr6wrAHwxdsIPa/tlUl6HHl
-   y+5VxM+QWkTiTweAODveTjxgmL7tLYODYQOdCuTsvtXXHcfZQHshZFqD9
-   Scmw+kZodetL7Of5MukXd5TN30N90QS+6E2EIIZQeykgJe24maEkJ8jjM
-   DbfFk2DunMv8vJlwBiAacZLtoOMt9Wgzz3O0NbrHqt85RZizrbHmruBAT
-   AIIgjZs2fMAL23Dx8uE0qkcGfuN4fpDl/aR+Y1Hq5hkeh4Nv5PootzT6K
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="296414586"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="296414586"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:15:29 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="647325647"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="647325647"
-Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:15:28 -0800
-Message-ID: <371249f3-88b6-0bb0-ac69-0cf28f006da0@intel.com>
-Date:   Fri, 2 Dec 2022 14:15:27 -0800
+        Fri, 2 Dec 2022 17:17:28 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B979F336
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:17:27 -0800 (PST)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2K4QG5003678
+        for <linux-kernel@vger.kernel.org>; Fri, 2 Dec 2022 14:17:27 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=tkcwT+C1QJRCBRNZjxv8bkSy4fjZd/2B22bsUXK/XN4=;
+ b=Cqw34lx1D1HQV4uU6zRPhfMngTh3xwLmC6tG8ilLLJ4Lw+hsUH2hvOV6lNr53VisNLQw
+ XoXRmmfjj30ynAUtgbjjebl2T+eI7GmeCoalptmlt3z5VBaXgtAO84flvFh5sPg5K5qh
+ rwn247PU/+d2cld7ftXsz7D9U7Nj9M8bN8r7q6XM9QNS+Ygm4GBJzO1Lr7zOcGG8TeVw
+ JSdye0+Rs0ux9szEvDlg2lnfUGhhy5LaOm7okbH2zMYtDCR0NDZqbhSpHiv85JjLheHR
+ P1MRLTgKSqO+HHb7qVsywt9p2CZT6tTeFWnnK1E+p2Mg865DQTZTjkISKB5om3Ynu4zg oA== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m7gqn502h-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:17:26 -0800
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub104.TheFacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 2 Dec 2022 14:17:25 -0800
+Received: from twshared4568.42.prn1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 2 Dec 2022 14:17:25 -0800
+Received: by devvm11876.prn0.facebook.com (Postfix, from userid 343873)
+        id 4CEB34052A38; Fri,  2 Dec 2022 14:17:20 -0800 (PST)
+From:   Sreevani Sreejith <ssreevani@meta.com>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
+        <psreep@gmail.com>
+CC:     <void@manifault.com>, <yhs@meta.com>, <mykolal@meta.com>,
+        Sreevani <ssreevani@meta.com>
+Subject: [PATCH v2 bpf-next 0/1] BPF Iterator Document
+Date:   Fri, 2 Dec 2022 14:17:09 -0800
+Message-ID: <20221202221710.320810-1-ssreevani@meta.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 06/18] x86/sgx: Introduce RECLAIM_IN_PROGRESS flag for
- EPC pages
-Content-Language: en-US
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
- <20221202183655.3767674-7-kristen@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221202183655.3767674-7-kristen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: VP9zXM_PGrVm11ZPXFZjck2xvvpWtA37
+X-Proofpoint-GUID: VP9zXM_PGrVm11ZPXFZjck2xvvpWtA37
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-02_12,2022-12-01_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 10:36, Kristen Carlson Accardi wrote:
-> When selecting pages to be reclaimed from the page pool (sgx_global_lru),
-> the list of reclaimable pages is walked, and any page that is both
-> reclaimable and not in the process of being freed is added to a list of
-> potential candidates to be reclaimed. After that, this separate list is
-> further examined and may or may not ultimately be reclaimed. In order
-> to prevent this page from being removed from the sgx_epc_lru_lists
-> struct in a separate thread by sgx_drop_epc_page(), keep track of
-> whether the EPC page is in the middle of being reclaimed with
-> the addtion of a RECLAIM_IN_PROGRESS flag, and do not delete the page
-> off the LRU in sgx_drop_epc_page() if it has not yet finished being
-> reclaimed.
+From: Sreevani <ssreevani@meta.com>
 
-This never really comes out and tells us what problem is being addressed.
+Removed SVG image file.
+
+Sreevani Sreejith (1):
+  bpf, docs: BPF Iterator Document
+
+ Documentation/bpf/bpf_iterators.rst | 485 ++++++++++++++++++++++++++++
+ Documentation/bpf/index.rst         |   1 +
+ 2 files changed, 486 insertions(+)
+ create mode 100644 Documentation/bpf/bpf_iterators.rst
+
+--=20
+2.30.2
+
