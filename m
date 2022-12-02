@@ -2,135 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934E1640E92
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65018640E91
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbiLBTgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbiLBTgA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234795AbiLBTgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 2 Dec 2022 14:36:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04AFF28B6;
-        Fri,  2 Dec 2022 11:35:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BFA2B81C27;
-        Fri,  2 Dec 2022 19:35:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB759C433D6;
-        Fri,  2 Dec 2022 19:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670009756;
-        bh=UzDWbYXlCGyLM2eIK2tt5Fzt85naQob+4laVVNHKsTs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IzHfAHRFLGd9i1ue3fBcAuKoV2DWdzUnPqcNy2txJ2VgI1YcTpyKFADMU/Cb7fENu
-         gDu/23dkXvEnI0IZAcNnIpVNX7IxZOwwPHF3JwDmqqBAyFx7XPmiWLefroY+Hnmdps
-         HcHh+mHr3LJKRPwwWzChEMg/ujLayEEFHkxv3HIz1PDTV2NKNgJhX4nuzrJWRfzjao
-         14ZoVPjGVDU9zWI91EZxMVHHgrkCFk7FlnjNkSAEm6rbGPtRXhvc9i96WC33yKAE7R
-         Cha65nEPaNuvXVTjkii8vwWkY82HNNfTK+Xo1YdUKKhvdAOQwIXZ9hfFwgu2hz8zXy
-         Jgsoomp79kveQ==
-Received: by pali.im (Postfix)
-        id DE23587A; Fri,  2 Dec 2022 20:35:52 +0100 (CET)
-Date:   Fri, 2 Dec 2022 20:35:52 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Subject: Re: [PATCH 5/5] powerpc: dts: remove label = "cpu" from DSA
- dt-binding
-Message-ID: <20221202193552.vehqk6u53n36zxwl@pali>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com>
- <20221130141040.32447-6-arinc.unal@arinc9.com>
- <87a647s8zg.fsf@mpe.ellerman.id.au>
- <20221201173902.zrtpeq4mkk3i3vpk@pali>
- <20221201234400.GA1692656-robh@kernel.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbiLBTf7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 2 Dec 2022 14:35:59 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B1FD80EB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 11:35:57 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id c7so2426052pfc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 11:35:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EXLe4AcieipOgmpyanQu8zzMg2qhrzhfuhvzqnhslJw=;
+        b=evwD0fS0pXDFe1tsORxOMMXoQD5AV4Psap6kmuMWWk81iWpXFJLdxivtmCE/jBFQO2
+         yeTuZNMJA2bv076C7c8IQVsJJASFjqUFRAV6D5qtcTPAyRMd+5uQFKmDzNJ58b90lr4l
+         pUD2dP22qqSjXi9NDoOAuJEIqHBh5IpDtNFFrLz4qLWCJiUqUa9R1rNpgofVS3XE9+jQ
+         4Jk2USIlix1B2KnDK13YbLazuKaVCjbyY/V25AqBQkMjiTkT/LkSDXMYQZ1rlf8GKYIR
+         iWFIY04Lnv1mFU5/oBHFdleDpTZAjPi4HWtW7auL43VCdxoYvxoRQgIW4Mot+mkiKql/
+         t6zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EXLe4AcieipOgmpyanQu8zzMg2qhrzhfuhvzqnhslJw=;
+        b=USXICnvh3W+RolnnmIxHABnJ0V8hRs0v9ol6TjMemwjtCyopFIjMFYxgl1inHAA0T+
+         7cB0nycFBMNTElsEOX6LX0Pzia+sQx4ETYgfXT/Jks41uYhtvbDDKyWAUei0oHzbMFz7
+         u8BzoHzD5sxC/TTEoE/rX91rQG15wJsj9/LWxjLLlRmo57JK1YJ8ftCiC8MJIUI49zOX
+         bwmdg1Ly81krwIppSBYrOMzfRVzBlH0+MU7duLS+FW4EIHoMc9N53q4eqmbgXQpJ4rSi
+         SLkP04sTHvTTlUw0a1TfuODvYbIvaf2vs7Zn88p6aiAUu36dRx7Y9k+DYmVrgO7NAr6o
+         spow==
+X-Gm-Message-State: ANoB5pmv4oKviuG+3u8NVEEU6Ep/CNb5cYInqmuw5yCeIqBxOqf+adLP
+        9h5qarXln9K3qminPPD3ltNeOQ==
+X-Google-Smtp-Source: AA0mqf4g6gzRFmPZif4Mg9zZwILm88jWN4WgiKf4IcKDWlLGDKhoxfmGDBbPhbDlshcx4MQ+LwF+aw==
+X-Received: by 2002:a05:6a00:1d81:b0:571:ea17:e111 with SMTP id z1-20020a056a001d8100b00571ea17e111mr53786630pfw.25.1670009757265;
+        Fri, 02 Dec 2022 11:35:57 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c1-20020a63d501000000b004351358f056sm4454617pgg.85.2022.12.02.11.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 11:35:56 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Thomas Maier <balagi@justmail.de>,
+        Peter Osterlund <petero2@telia.com>,
+        linux-block@vger.kernel.org
+In-Reply-To: <20221202182758.1339039-1-gregkh@linuxfoundation.org>
+References: <20221202182758.1339039-1-gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] pktcdvd: remove driver.
+Message-Id: <167000975630.934246.12888337558390915330.b4-ty@kernel.dk>
+Date:   Fri, 02 Dec 2022 12:35:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221201234400.GA1692656-robh@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.0-dev-50ba3
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 01 December 2022 17:44:00 Rob Herring wrote:
-> On Thu, Dec 01, 2022 at 06:39:02PM +0100, Pali Rohár wrote:
-> > On Thursday 01 December 2022 21:40:03 Michael Ellerman wrote:
-> > > Arınç ÜNAL <arinc.unal@arinc9.com> writes:
-> > > > This is not used by the DSA dt-binding, so remove it from all devicetrees.
-> > > >
-> > > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > > ---
-> > > >  arch/powerpc/boot/dts/turris1x.dts | 2 --
-> > > >  1 file changed, 2 deletions(-)
-> > > 
-> > > Adding Pali to Cc.
-> > > 
-> > > These were only recently updated in commit:
-> > > 
-> > >   8bf056f57f1d ("powerpc: dts: turris1x.dts: Fix labels in DSA cpu port nodes")
-> > > 
-> > > Which said:
-> > > 
-> > >   DSA cpu port node has to be marked with "cpu" label.
-> > > 
-> > > But if the binding doesn't use them then I'm confused why they needed to
-> > > be updated.
-> > > 
-> > > cheers
-> > 
-> > I was told by Marek (CCed) that DSA port connected to CPU should have
-> > label "cpu" and not "cpu<number>". Modern way for specifying CPU port is
-> > by defining reference to network device, which there is already (&enet1
-> > and &enet0). So that change just "fixed" incorrect naming cpu0 and cpu1.
-> > 
-> > So probably linux kernel does not need label = "cpu" in DTS anymore. But
-> > this is not the reason to remove this property. Linux kernel does not
-> > use lot of other nodes and properties too... Device tree should describe
-> > hardware and not its usage in Linux. "label" property is valid in device
-> > tree and it exactly describes what or where is this node connected. And
-> > it may be used for other systems.
-> > 
-> > So I do not see a point in removing "label" properties from turris1x.dts
-> > file, nor from any other dts file.
+
+On Fri, 02 Dec 2022 19:27:58 +0100, Greg Kroah-Hartman wrote:
+> Way back in 2016 in commit 5a8b187c61e9 ("pktcdvd: mark as unmaintained
+> and deprecated") this driver was marked as "will be removed soon".  5
+> years seems long enough to have it stick around after that, so finally
+> remove the thing now.
 > 
-> Well, it seems like a bit of an abuse of 'label' to me. 'label' should 
-> be aligned with a sticker or other identifier identifying something to a 
-> human. Software should never care what the value of 'label' is.
 > 
-> Rob
 
-But it already does. "label" property is used for setting (initial)
-network interface name for DSA drivers. And you can try to call e.g.
-git grep '"cpu"' net/dsa drivers/net/dsa to see that cpu is still
-present on some dsa places (probably relict or backward compatibility
-before eth reference).
+Applied, thanks!
 
-I agree with you that in this case it is abuse. But I would not say that
-software should not care about "label". I think that software should
-care about "label" but only in situation in which it presents
-information to user. So if user wants to see device with labels *ABC*
-(meaning show me anything which stickers contains substring ABC) then
-software should filter devices and turns that with asked label.
+[1/1] pktcdvd: remove driver.
+      commit: f40eb99897af665f11858dd7b56edcb62c3f3c67
 
-The main problem here is _existing_ software. New software should really
-do not use cpu label for deciding if network port is connected to cpu or
-not and it should be designed correctly. But you cannot change nor fix
-old / existing software...
+Best regards,
+-- 
+Jens Axboe
 
-The worst thing which can be done is breaking updated version of (old)
-software. Prevention is always testing software and in this case testing
-on the real hardware. I know, it is hard as developers do not have
-such lot of hardware devices and configurations.
+
