@@ -2,119 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77CB640665
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743BB64066B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiLBMI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S232937AbiLBMKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233256AbiLBMIY (ORCPT
+        with ESMTP id S233096AbiLBMKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:08:24 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5952A246
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:08:23 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id f13so7094197lfa.6
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 04:08:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aduZyZsfoBSNeS7PUzHQe3IQH2NBuBYUfQB0aJd37+E=;
-        b=vZYgHHxJgzG7uGa8/l+TR4Sys+oq5ytJ9eFelFwVpL5EFD54fCjgS+0UxakUpZYF6B
-         pCc6dINKs8kjbILfld67LYdMEOBWPpPXGIApYs2Mg4d+Fz22ePwuIZGZJGbx7CaFXxRK
-         6I9c+omo2pVqiwKrDXkapRG46Dj3hDD0JZqur4i82ogXIT8azPVl3P/YM/E0zleJ/isw
-         p9A4+OkYK6aRhb1f/C+4TP/G9eq5w9XgLJ6IEeOpRguQQ3T11G0FJcwcGTFeRDaYrG9F
-         V/xgtlYGqFHWecxcqf7ovrBXi4A+hbCCi4RRZ6orbQQ3SA75AVi7OcULKH40bJB1hPr+
-         RKdw==
+        Fri, 2 Dec 2022 07:10:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E9A3C6E0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:09:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669982968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QDs0C2fmxqmYDWtpSHD/g/vXtX88DZ2gNF8Y6fio0uk=;
+        b=UJ9lAdM4NVBdvGXkmh68QNIoClp/8Nfcy/vNtG63sZFmsSRQzsvJyGzblDD2oynyHz5OIF
+        E60wz0F43au+YyxCT9tzNxWhQWn978N3M6uSwtP9zYI8Vak50HJJp4Hcy8r8ATQBwLdcPR
+        bKLC+u6+m5NgpuV6vAG+qKNz0/7GD9g=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-422-AAoeAptbM5u8UosBRi2QyA-1; Fri, 02 Dec 2022 07:09:27 -0500
+X-MC-Unique: AAoeAptbM5u8UosBRi2QyA-1
+Received: by mail-qt1-f200.google.com with SMTP id s14-20020a05622a1a8e00b00397eacd9c1aso17622107qtc.21
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 04:09:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aduZyZsfoBSNeS7PUzHQe3IQH2NBuBYUfQB0aJd37+E=;
-        b=2rngBlG7s0kgnXSxN67AHOjmRGF5Gk/SoGCN0VoBLTpoTYqlO8t9dIV2yQndbAoCLH
-         +NHdYE5sIIVDzb6RJrPqLxJeHUjKzpKMDEH5Ci4kdozXXoTE/XiGPfYlvv3lFF+X7LOH
-         +hojYBlvp8bkYt00l3LjALB9AGelQYIakzs7pn7j9yNI2Kd9H5zr2ni4TOnZprg92JgR
-         rRjx3K9dXFqzLpwfPArmgXP4m762ZhedCbeHQwhmvBhwy8j+lRVWN3E7rlmecAKmQbbS
-         uWT0HXh2wpZPzuKCbpW3OnX/Hb9rOG4DwsOiVcZgBLgRRfFkIje3To0g7aTtFNx+Vbp3
-         pZVw==
-X-Gm-Message-State: ANoB5pmGgaWSi3rTUlh46LyTIbMiM+kUbdexnuS4HlXbor/vIt/0anve
-        6Cv6L4tKU14r6XFuWIZ33Uh47w==
-X-Google-Smtp-Source: AA0mqf7zq3pmBogeq/BXvzyr/S6ku4C+ro/un1B7bvvRgBTagttqVf4EMSjp0gZD7ymuiLT4pSW4jg==
-X-Received: by 2002:a05:6512:12d5:b0:4b5:f51:aa72 with SMTP id p21-20020a05651212d500b004b50f51aa72mr5518700lfg.371.1669982902095;
-        Fri, 02 Dec 2022 04:08:22 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05651205c600b004917a30c82bsm992831lfo.153.2022.12.02.04.08.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 04:08:21 -0800 (PST)
-Message-ID: <4345f968-8c2b-6c54-7f2c-81effaba3ab2@linaro.org>
-Date:   Fri, 2 Dec 2022 13:08:20 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QDs0C2fmxqmYDWtpSHD/g/vXtX88DZ2gNF8Y6fio0uk=;
+        b=c9TeAramYPsAB+aa89rK452P16GpID3WmFb2Ab+nDdyjPeRGKtmP0KXrJc3Bud/PS0
+         8onPmVW+BlSN6bBiXOGuxyGvonvqpP9uxSkKW/mMA2HqEynlITk5lZOux7g5vJPwx+QG
+         QQbGr7jNF04cwDfNFwDnv6Z3CM/O6kxQQ8tIlHeD0T2CPqsshYwaoPmD7TXF3WJ71XSd
+         LefCb0pWlFUxlKDfjQnWhdwVQ4k7jIrJUhkvlWCuzI61Or2JnFfAodGm2/FbKlbxfgwL
+         U/EnHbXeUCjLDJyi9r+O9dnSvTjmSIaFkG/u8KAeSLUfmA/lBz3l0wRgGPsl4p7Q6IX4
+         qpfA==
+X-Gm-Message-State: ANoB5pkHqaXq8ppqbpLDGIi+q1Qf3p8WWk5dUEM5nGY2bpJWyWoWSvNY
+        KJ2cfLLNsLzABVf7pUnQRA7WchxLPFPCPdCoaego0OnLvA4Yjij9LoBgbG2PWfigLEuZXSGFtVG
+        bh97V6TO8ic3UH5B38p6ZXVHk
+X-Received: by 2002:a05:620a:1905:b0:6fa:6636:a7b0 with SMTP id bj5-20020a05620a190500b006fa6636a7b0mr45631027qkb.55.1669982967000;
+        Fri, 02 Dec 2022 04:09:27 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5YjcswExkGO5i/b6YuVbtoxUr2ScSuUSv0DFJoBnnNxIWpoRhXwG58o2w4w5CQEhpadbF0RQ==
+X-Received: by 2002:a05:620a:1905:b0:6fa:6636:a7b0 with SMTP id bj5-20020a05620a190500b006fa6636a7b0mr45631006qkb.55.1669982966736;
+        Fri, 02 Dec 2022 04:09:26 -0800 (PST)
+Received: from x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id f21-20020a05620a409500b006b953a7929csm5515218qko.73.2022.12.02.04.09.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 04:09:26 -0800 (PST)
+From:   Brian Masney <bmasney@redhat.com>
+To:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_shazhuss@quicinc.com,
+        psodagud@quicinc.com, ahalaney@redhat.com, echanude@redhat.com
+Subject: [PATCH v3] arm64: dts: qcom: sa8540p-ride: enable PCIe support
+Date:   Fri,  2 Dec 2022 07:09:18 -0500
+Message-Id: <20221202120918.2252647-1-bmasney@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 8/8] dt-bindings: soc: socionext: Add UniPhier AHCI glue
- layer
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221129103509.9958-1-hayashi.kunihiko@socionext.com>
- <20221129103509.9958-9-hayashi.kunihiko@socionext.com>
- <33ca35f4-acee-6b2b-1a73-41ed5882819e@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <33ca35f4-acee-6b2b-1a73-41ed5882819e@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 10:30, Kunihiko Hayashi wrote:
-> Hi Krzysztof,
-> 
-> On 2022/11/29 19:35, Kunihiko Hayashi wrote:
->> Add DT binding schema for components belonging to the platform-specific
->> AHCI glue layer implemented in UniPhier SoCs.
->>
->> This AHCI glue layer works as a sideband logic for the host controller,
->> including core reset, PHYs, and some signals to the controller.
->>
->> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> 
-> (snip)
-> 
->> +examples:
->> +  - |
->> +    sata-controller@65700000 {
->> +        compatible = "socionext,uniphier-pxs3-ahci-glue", "simple-mfd";
->> +        reg = <0x65b00000 0x400>;
->> +        #address-cells = <1>;
->> +        #size-cells = <1>;
->> +        ranges = <0 0x65700000 0x100>;
-> 
-> In PATCH 7/8, you suggested that the node name of "USB glue layer" should
-> changes to the generic node name "usb@...".
-> 
-> However, in case of this "AHCI glue layer", I can't change "sata-controller"
-> to the generic node name "sata@...", because ata/sata-common.yaml has pattern
-> "^sata(@.*)?$", and the changed node matches this pattern unintentionally.
-> 
-> This layer isn't a sata host controller, so it's hard to give a generic name
-> to this node. I'd like you opinion.
+Add the vreg_l11a, pcie3a, pcie3a_phy, and tlmm nodes that are necessary
+in order to get PCIe working on the QDrive3.
 
-Yeah, I think it's fine. We do not have good names for such nodes.
+This patch also increases the width of the ranges property for the PCIe
+switch that's found on this platform. Note that this change requires
+the latest trustzone (TZ) firmware that's available from Qualcomm as
+of November 2022. If this is used against a board with the older
+firmware, then the board will go into ramdump mode when PCIe is probed
+on startup.
 
-Best regards,
-Krzysztof
+The ranges property is overridden in this sa8540p-ride.dts file since
+this is what's used to describe the QDrive3 variant with dual SoCs.
+There's another variant of this board that only has a single SoC where
+this change is not applicable, and hence why this specific change was
+not done in sa8540p.dtsi.
+
+These changes were derived from various patches that Qualcomm
+delivered to Red Hat in a downstream kernel.
+
+Signed-off-by: Brian Masney <bmasney@redhat.com>
+---
+Changes since v2:
+- Dropped regulator-allow-set-load (Bjorn)
+- Updated first member of ranges property to match downstream:
+  s/0x32200000/0x40200000/ (Andrew)
+
+Changes since v1:
+- Add -state and -pins suffixes to tlmm (Krzysztof)
+
+This patch depends on the following series that hasn't made it's way
+into linux-next yet:
+
+[PATCH v10 0/2] arm64: dts: qcom: add dts for sa8540p-ride board
+https://lore.kernel.org/lkml/20221118025158.16902-1-quic_ppareek@quicinc.com/
+
+I can't find the specific TZ firmware version that we have so that's why
+I included the date instead.
+
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 53 +++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+index a5f87a8629d6..a638e3784543 100644
+--- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+@@ -51,6 +51,13 @@ vreg_l7a: ldo7 {
+ 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+ 		};
+ 
++		vreg_l11a: ldo11 {
++			regulator-name = "vreg_l11a";
++			regulator-min-microvolt = <880000>;
++			regulator-max-microvolt = <880000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
+ 		vreg_l13a: ldo13 {
+ 			regulator-name = "vreg_l13a";
+ 			regulator-min-microvolt = <3072000>;
+@@ -139,6 +146,27 @@ vreg_l8g: ldo8 {
+ 	};
+ };
+ 
++&pcie3a {
++	ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
++	         <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x20000000>,
++	         <0x03000000 0x6 0x00000000 0x6 0x00000000 0x2 0x00000000>;
++
++	perst-gpios = <&tlmm 151 GPIO_ACTIVE_LOW>;
++	wake-gpios = <&tlmm 56 GPIO_ACTIVE_HIGH>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie3a_default>;
++
++	status = "okay";
++};
++
++&pcie3a_phy {
++	vdda-phy-supply = <&vreg_l11a>;
++	vdda-pll-supply = <&vreg_l3a>;
++
++	status = "okay";
++};
++
+ &qup2 {
+ 	status = "okay";
+ };
+@@ -158,6 +186,31 @@ &remoteproc_nsp1 {
+ 	status = "okay";
+ };
+ 
++&tlmm {
++	pcie3a_default: pcie3a-default-state {
++		perst-pins {
++			pins = "gpio151";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-down;
++		};
++
++		clkreq-pins {
++			pins = "gpio150";
++			function = "pcie3a_clkreq";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++
++		wake-pins {
++			pins = "gpio56";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++	};
++};
++
+ &ufs_mem_hc {
+ 	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
+ 
+-- 
+2.38.1
 
