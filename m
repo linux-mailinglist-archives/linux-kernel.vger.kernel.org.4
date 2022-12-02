@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F50640A4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AEF640A4E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbiLBQJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
+        id S233633AbiLBQKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbiLBQJD (ORCPT
+        with ESMTP id S232315AbiLBQKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:09:03 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2149ACA6B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:09:02 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id b2so12606330eja.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:09:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Lv5UzsGC5MNuyMX51lzq8lQHZSD5qCFW0KbPV3N8yA=;
-        b=dHkIQtDWVxEzkcR9PWkORdgWl8wQJYfleFiUtDlLhO2HldA84X5tRjuMoTlAAEsMGo
-         Qulu3evExmDVuVSuIYaMi5eDn18ElcfYbcklsiHd1mLy48yHzoBKd4YfJgIutpRBcYz4
-         L2xut/t837fa812aTvn25G+M4SLiEhL47Vxhc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9Lv5UzsGC5MNuyMX51lzq8lQHZSD5qCFW0KbPV3N8yA=;
-        b=11X0gWDcIWKHP8IwYNU4rNLVpUFpJsuty419dA95Sh5lVFE/ft+5u9D2WppciwlRCK
-         AgqjoFDo5e+l35rEhJr8Us5/eE/rqHl1KjgHMXrtIJhKRCBtsyqVy7j4V6o9k//ezEhX
-         sshiO2oACc/ci0szKw68QtZDJlbpk5yYPfsGN6bhlNYRaOr5Ly0ulzsyhAvAL0hTawRa
-         M7kUwMhzNGKL7QvAIOUysjO9ukcL7fRd59vEBEVyRHa5qG7bqqJzn2FQXbx6LqH/NauX
-         lZz55wYXFTI65rTml92Yj+/TKjFH2NHeZv4VmEX4iX/lclu6QWOTfGOV+3ywpzfJgdPF
-         Cp3Q==
-X-Gm-Message-State: ANoB5pmGX2uX2uPVgHyZh6Qj8d4TYEScvmm4rfDlziSfvDhDaABEKXtK
-        5Q+JhEgHemCVZSmpQkiTcKvs+GoKi2OUxg9azyg=
-X-Google-Smtp-Source: AA0mqf5rGuR6A19R+4UMtmBLU7egZTeVEig5R6C5FGeR/tVNROQ2OS1ljq8l0rbKNLm7IXSFP8AFlQ==
-X-Received: by 2002:a17:906:6809:b0:7c0:cd95:bbaf with SMTP id k9-20020a170906680900b007c0cd95bbafmr1538563ejr.460.1669997341317;
-        Fri, 02 Dec 2022 08:09:01 -0800 (PST)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id d13-20020a17090694cd00b007c0b28b85c5sm1976895ejy.138.2022.12.02.08.08.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 08:08:59 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id o30so3860901wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:08:59 -0800 (PST)
-X-Received: by 2002:a1c:cc04:0:b0:3cf:7716:8954 with SMTP id
- h4-20020a1ccc04000000b003cf77168954mr52698641wmb.57.1669997339063; Fri, 02
- Dec 2022 08:08:59 -0800 (PST)
+        Fri, 2 Dec 2022 11:10:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92AACA5C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:10:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E2FDB821E6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2FCC433D6;
+        Fri,  2 Dec 2022 16:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669997410;
+        bh=pY7GxkPoYDDAU3TZ6koKkSzCTbxeST3lXEvYEd5lxqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2iz181rBBRvc23kA2L1olkpMyRP2SNz+tVYU+5vXH9vDD1q5YMzFYv+wAlPxdaqfM
+         umrK2KdRvxPxb9mZf65PwgfIG1gkRsud0Y93/MeYQA1ZaZ7aIOWlUEyxCCEY1+pAk6
+         dEecQvwg8Qc1zo9nKRfVkna20J+Obh+1wURMz5Qk=
+Date:   Fri, 2 Dec 2022 17:10:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Will Deacon <will@kernel.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>, andersson@kernel.org,
+        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hch@lst.de
+Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
+ arch_dma_prep_coherent()"
+Message-ID: <Y4ojXyXMX2p+RVBR@kroah.com>
+References: <20221118123349.GC3697@willie-the-truck>
+ <20221121064224.GB11945@thinkpad>
+ <018517b8-0ae0-54f5-f342-dcf1b3330a13@quicinc.com>
+ <Y39blgEueyegkz6C@arm.com>
+ <6d637906-e1d5-c481-a73d-2b2b845e223b@leemhuis.info>
+ <Y4joR2sQMMjIt+yE@arm.com>
+ <CAMi1Hd2wM5MLsjkx0HAWKkswzTDACb0C4tsPymNrRa0ariWsww@mail.gmail.com>
+ <f98d163b-3410-9cf7-7d98-0f7640f4aa1f@leemhuis.info>
+ <20221202100357.GB29396@willie-the-truck>
+ <92a148a3-a8ac-4065-123c-99b72ac3ebeb@leemhuis.info>
 MIME-Version: 1.0
-References: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 2 Dec 2022 08:08:46 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=U86PyVQP4wbhwEkzYprJxz2-S3ooniuYKJBNQOudx2uA@mail.gmail.com>
-Message-ID: <CAD=FV=U86PyVQP4wbhwEkzYprJxz2-S3ooniuYKJBNQOudx2uA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] arm64: dts: qcom: sdm845-db845c: fix audio codec
- interrupt pin name
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <92a148a3-a8ac-4065-123c-99b72ac3ebeb@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Dec 02, 2022 at 11:34:30AM +0100, Thorsten Leemhuis wrote:
+> On 02.12.22 11:03, Will Deacon wrote:
+> > On Fri, Dec 02, 2022 at 09:54:05AM +0100, Thorsten Leemhuis wrote:
+> >> On 02.12.22 09:26, Amit Pundir wrote:
+> >>> On Thu, 1 Dec 2022 at 23:15, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> >>>>
+> >>>> On Thu, Dec 01, 2022 at 10:29:39AM +0100, Thorsten Leemhuis wrote:
+> >>>>> Has any progress been made to fix this regression? It afaics is not a
+> >>>>> release critical issue, but well, it still would be nice to get this
+> >>>>> fixed before 6.1 is released.
+> >>>>
+> >>>> The only (nearly) risk-free "fix" for 6.1 would be to revert the commit
+> >>>> that exposed the driver bug. It doesn't fix the actual bug, it only
+> >>>> makes it less likely to happen.
+> >>>>
+> >>>> I like the original commit removing the cache invalidation as it shows
+> >>>> drivers not behaving properly
+> >>
+> >> Yeah, I understand that, but I guess it's my job to ask at this point:
+> >> "is continuing to live with the old behavior for one or two more cycles"
+> >> that much of a problem"?
+> > 
+> > That wouldn't be a problem. The problem is that I haven't see any efforts
+> > from the Qualcomm side to actually fix the drivers [...]
+> 
+> Thx for sharing the details. I can fully understand your pain. But well,
+> in the end it looks to me like this commit it intentionally breaking
+> something that used to work -- which to my understanding of the "no
+> regression rule" is not okay, even if things only worked by chance and
+> not flawless.
 
-On Fri, Dec 2, 2022 at 7:57 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> The pin config entry should have a string, not number, for the GPIO used
-> as WCD9340 audio codec interrupt.
->
-> Reported-by: Doug Anderson <dianders@chromium.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> Cc: Doug Anderson <dianders@chromium.org>
->
-> Changes since v2:
-> 1. New patch.
-> ---
->  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+"no regressions" for userspace code, this is broken, out-of-tree driver
+code, right?  I do not think any in-kernel drivers have this issue today
+from what I can tell, but if I am wrong here, please let me know.
 
-Presumably should have a "Fixes" tag since this is likely a true bug.
+We don't keep stable apis, or even functionality, for out-of-tree kernel
+code as that would be impossible for us to do for obvious reasons.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+thanks,
+
+greg kh
