@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFEE7640B8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7851640B8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiLBRBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S234228AbiLBRBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbiLBRA5 (ORCPT
+        with ESMTP id S234114AbiLBRBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:00:57 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0A6E0771
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:00:45 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id s7so5160146plk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:00:45 -0800 (PST)
+        Fri, 2 Dec 2022 12:01:16 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C32FAB2FC
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:01:13 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x2so7316043edd.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:01:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xyTIyEMVlwgZq2rM7w209h8Hdpm+1DB4EPixVA3vlTk=;
-        b=NBPMQ7HPa2s9Qver+tuGkfT6bxv1SlXuw6uiM3kaBhKJHPSBgsH+PQDwJASmMKJ2rl
-         YWuKuDvsDdYJbTJMa6dVw2CW01SWyZcpPHMiyVB1PqEy2KUGfpbRRXETfebtXrU7EWtl
-         KBubpJZzol6K5o9dYwwk4XIaRkyghT8eYSbze69n7vXEIrAoFr2RYEozPjsZLa/myYpW
-         X8yXcmNu8srGwbtl/NxAG12+PFtGRnruQSiyIzSz7vN7Tq1gFmOUR9cdSRaktkSd0zed
-         tgxPrMbLzAU0o0xSAl2noZOkum80jNxC7yBru1mmuZ5XcURNfEa8ef3wH9OoWI8UqHir
-         5Tlw==
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0sIUmdJ7DFvd8F2b99tqP9bH5MN6eyMo2GF/GHFz9Yk=;
+        b=ISUcs9i/0M/8hqqlPWXiI0BQVt86asWYB1JMJuiiqyCmkhg5i9g4/6hDwXewwgaec5
+         IzvcCyaiA7sdZcUuz58xJt+49xqiyFQKy0ZGfNScddAMIx0I6Qkg3135ZlZ7OI+zH8+r
+         A7KJyuuzi66sUWuMHdUGSNt/ycZ479iAf6d8g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xyTIyEMVlwgZq2rM7w209h8Hdpm+1DB4EPixVA3vlTk=;
-        b=2HAX+KiKJ4/zJxRbw+hOhPJBuSv9Ayn+YTlpvrgYWE72UJ4cPuoZNlXDqqZwtk36iT
-         QzI2UAmqYBfeW7MlrN1/XGXz5aygFFkFy3OkUhWGb0anZa5zARmw0/bLbs9k7IdKUe3y
-         jCgUg1a+GAR+cqtajEWuh2ktZ93sichcnACh1ldKBbTRaqLrGoIWuIKt3GWTDOCeXdN/
-         bcNCWFSsNN8bGRyJXXy0wuTn56MWEPYhWChMtRp7maeFS8+jEETr2nmBY1n8pCe0lGDc
-         SVxMYkdxI4oBxvy+jy7tyxY5+7KF9w2q08jEGKXpsI8l4gD2MlRisEAY5EnpZTh8TUVW
-         56zQ==
-X-Gm-Message-State: ANoB5pkdfANQ2cy2Omim5ft8TXCPpO2AbplABgIMLEtixC6pHR/dm1R/
-        p20R8alLv6asPKeSveX33Zuh4jg3e4M9BoQy
-X-Google-Smtp-Source: AA0mqf4FjagDx8emkOO+pyp69cANsJmhy9xKUNfvFjaXuSNOavu8/8gZbTw6JDM6pGH2jq14X1FOyg==
-X-Received: by 2002:a17:90a:e28d:b0:219:26b6:e8d8 with SMTP id d13-20020a17090ae28d00b0021926b6e8d8mr32313389pjz.74.1670000444890;
-        Fri, 02 Dec 2022 09:00:44 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:a85e:8886:e9cb:3b71])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170902f54b00b00177faf558b5sm5811939plf.250.2022.12.02.09.00.43
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0sIUmdJ7DFvd8F2b99tqP9bH5MN6eyMo2GF/GHFz9Yk=;
+        b=YK/cHb7aeIFkE36o8XSBClDScS3lWlkFCiotS5Avp/HtFvxKL7lgh1Sag10oQ1NeD7
+         cEnvZeYgpRZWIxoYoqpUf3WK6BwmSMX3N536Sf007UF8t7I0YdZGDGm9IhBJFxoSacWu
+         2x5MVDQqlX6kbloWzxJ/caCQMS3f7JGMvuwC9z60URP5Tb1xcjhJnZTbQaXmP91NFcMS
+         ou14KKrXYVcNBgNI8VAh6J7A4gfaov/QEDKqVb9r9bXpCHXn9bPrYCVoy/J3nTbo9YYh
+         OUI3M3UYtLyslq8TQfvDroIyF3KZKukCQQcVDCPbtxb4GiejpT0bZvuCXIv7VmHSqWGj
+         u3ew==
+X-Gm-Message-State: ANoB5plX5i28L1iAr84ife1z8+fAxzoGh69UxNCRzHUk/i9Kb9lcCfiw
+        zqozwIeX7PyQbdWtue88sj679A==
+X-Google-Smtp-Source: AA0mqf5zzAP88qRuwlLS4mgDoF5OWl54ir7l99FJY2ZvfaT39fQ7SazCQQzc22sg4W30tgLN+Mp5fA==
+X-Received: by 2002:a05:6402:361:b0:46c:25ea:731 with SMTP id s1-20020a056402036100b0046c25ea0731mr3819687edw.194.1670000472413;
+        Fri, 02 Dec 2022 09:01:12 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id m10-20020aa7c48a000000b0045b3853c4b7sm3111528edq.51.2022.12.02.09.01.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:00:43 -0800 (PST)
-Date:   Fri, 2 Dec 2022 10:00:42 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Levinsky, Ben" <ben.levinsky@amd.com>
-Cc:     "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        "bill.mills@linaro.com" <bill.mills@linaro.com>,
-        "Shah, Tanmay" <tanmay.shah@amd.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/1] remoteproc: Introduce rproc_get_by_id API
-Message-ID: <20221202170042.GA165812@p14s>
-References: <20221115153753.2065803-1-ben.levinsky@xilinx.com>
- <20221115153753.2065803-2-ben.levinsky@xilinx.com>
- <20221125180509.GA622847@p14s>
- <C981698C-5B9B-49B6-9EC2-CC7A0737B155@amd.com>
+        Fri, 02 Dec 2022 09:01:12 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 02 Dec 2022 18:01:07 +0100
+Subject: [PATCH v2] media: uvcvideo: Recover stalled ElGato devices
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <C981698C-5B9B-49B6-9EC2-CC7A0737B155@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20220920-resend-elgato-v2-0-06b48b3b486a@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3562; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=Yd9dIG/JiyCXqVOfCELBolrMGzArptXcaP/svlsJG2g=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjii9VlLRoLlAgECDFoybg7+F8l22YZbz6mRXcEHok
+ PObjDhWJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ovVQAKCRDRN9E+zzrEiIxOEA
+ CY/TFzXhV/Enno/NNx6IwrrRYQvaq5APqxIKfuX1gJQr0Plv9Eet+ncRtptywVr/UiRMway8/LeeEA
+ KL9fS8j+2UC26ui4xRnWCdWXi3hCwH+I4LibzxnUJgkIbsgc9AUBrZHP6+IOTNfn6ku8+fOyHDsbPS
+ FVwUjf8707/Gd9cNsWByQcscVMt7xpkbnudFSXqu37aa6B+C7JagGDAEwj/aLvb5Ddd76ucq0Htw6O
+ lcGbVnfvSx7FsZMu6YbLFUNB9kf4xDL9X5bKDLGOXgbVwf9x+LrGAvNKadDD4kkpvaOmo5/smtDiT9
+ GqqTLm85JCtJqhNzFe/mVuqeSOH3AH6MH3U7f2MBSyEbMNM6pLnv0yHQntwclwITCQUEEGHxYGAHf3
+ FwWPl48DfhqsT0BboW4h6iADrghckuWoAd7e1WR1M7in8/4C8zwOD8Tsy0IrHf6n+LiKbKbCYp8tx4
+ MSQW50JCCyfGpz/k3lM9CARe5qEWIiLeia/qnQrq30uWbj+l0jV+c/GwVfFxfxsn48qc7eCxzAZhtv
+ mawm7Y3K5JHf3k5Q0gtruGnF0ME8evJkLzq7sh4L3PpK/rVKlzvr2k/GkiNGABEEquMbtIHkZNWb/G
+ qRcYOlwlt2QFMyyTdRy+vco365cnumdWVP8aNsyNGKWUrdcp1kr15SPLuYjA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,199 +84,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 09:39:33PM +0000, Levinsky, Ben wrote:
-> Hi Mathieu,
-> 
-> Thank you for your review. Please see my reply inline.
-> 
-> Thanks
-> Ben
-> 
-> ﻿On 11/25/22, 10:05 AM, "Mathieu Poirier" <mathieu.poirier@linaro.org> wrote:
-> 
->     CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
-> 
-> 
->     Hi Ben,
-> 
->     On Tue, Nov 15, 2022 at 07:37:53AM -0800, Ben Levinsky wrote:
->     > Allow users of remoteproc the ability to get a handle to an rproc by
->     > passing in node that has parent rproc device and an ID that matches
->     > an expected rproc struct's index field.
->     >
->     > This enables to get rproc structure for remoteproc drivers that manage
->     > more than 1 remote processor (e.g. TI and Xilinx R5 drivers).
->     >
->     > Signed-off-by: Ben Levinsky <ben.levinsky@xilinx.com>
->     > ---
->     >  drivers/remoteproc/remoteproc_core.c | 64 +++++++++++++++++++++++++++-
->     >  include/linux/remoteproc.h           |  1 +
->     >  2 files changed, 64 insertions(+), 1 deletion(-)
->     >
->     > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
->     > index 775df165eb45..6f7058bcc80c 100644
->     > --- a/drivers/remoteproc/remoteproc_core.c
->     > +++ b/drivers/remoteproc/remoteproc_core.c
->     > @@ -40,6 +40,7 @@
->     >  #include <linux/virtio_ring.h>
->     >  #include <asm/byteorder.h>
->     >  #include <linux/platform_device.h>
->     > +#include <linux/of_platform.h>
->     >
->     >  #include "remoteproc_internal.h"
->     >
->     > @@ -2203,13 +2204,74 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
->     >
->     >       return rproc;
->     >  }
->     > +
->     > +/**
->     > + * rproc_get_by_id() - find a remote processor by ID
->     > + * @phandle: phandle to the rproc
->     > + * @id: Index into rproc list that uniquely identifies the rproc struct
->     > + *
->     > + * Finds an rproc handle using the remote processor's index, and then
->     > + * return a handle to the rproc. Before returning, ensure that the
->     > + * parent node's driver is still loaded.
->     > + *
->     > + * This function increments the remote processor's refcount, so always
->     > + * use rproc_put() to decrement it back once rproc isn't needed anymore.
->     > + *
->     > + * Return: rproc handle on success, and NULL on failure
->     > + */
->     > +
->     > +struct rproc *rproc_get_by_id(phandle phandle, unsigned int id)
->     > +{
->     > +     struct rproc *rproc = NULL, *r;
->     > +     struct platform_device *parent_pdev;
->     > +     struct device_node *np;
->     > +
->     > +     np = of_find_node_by_phandle(phandle);
->     > +     if (!np)
->     > +             return NULL;
->     > +
->     > +     parent_pdev = of_find_device_by_node(np->parent);
->     > +     if (!parent_pdev) {
->     > +             dev_err(&parent_pdev->dev,
->     > +                     "no platform device for node %pOF\n", np);
->     > +             of_node_put(np);
->     > +             return NULL;
->     > +     }
->     > +
->     > +     /* prevent underlying implementation from being removed */
->     > +     if (!try_module_get(parent_pdev->dev.driver->owner)) {
->     > +             dev_err(&parent_pdev->dev, "can't get owner\n");
->     > +             of_node_put(np);
->     > +             return NULL;
->     > +     }
->     > +
->     > +     rcu_read_lock();
->     > +     list_for_each_entry_rcu(r, &rproc_list, node) {
->     > +             if (r->index == id) {
->     > +                     rproc = r;
->     > +                     get_device(&rproc->dev);
->     > +                     break;
->     > +             }
->     > +     }
-> 
->     This won't work because several remote processors can be on the list.  If
->     another remote processor was discovered before the one @phandle is associated
->     with, the remote processor pertaining to that previous one will returned.
-> 
-> I didn't understand. From my point of view passing in the phandle of the child-platform device here will work because each child-platform will have its own entry in the remoteproc list.
+Elgato Cam Link 4k can be in a stalled state if the resolution of
+the external source has changed while the firmware initializes.
+Once in this state, the device is useless until it receives a
+USB reset. It has even been observed that the stalled state will
+continue even after unplugging the device.
 
-You are correct, each child platform device will have its own entry in
-@rproc_list.  The problem is that r->index may not match @id that is passed as a
-parameter.  
+lsusb -v
 
-> 
-> Also " If    another remote processor was discovered before the one" Here this prevented from what I can see because the remoteproc_list is protected by a mutex_lock. See https://github.com/torvalds/linux/blob/master/drivers/remoteproc/remoteproc_core.c#L2288 for the mutex_lock. 
-> 
-> Additionally the calls to zynqmp_r5_add_rproc_core() are called sequentially so this also prevents the race condition.
-> 
-> I think I am missing something in your paragraph above. Can you expand on this issue?
+Bus 002 Device 002: ID 0fd9:0066 Elgato Systems GmbH Cam Link 4K
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0         9
+  idVendor           0x0fd9 Elgato Systems GmbH
+  idProduct          0x0066
+  bcdDevice            0.00
+  iManufacturer           1 Elgato
+  iProduct                2 Cam Link 4K
+  iSerial                 4 0005AC52FE000
+  bNumConfigurations      1
 
-As explained above, the issue is not about race conditions but the value of
-r->index and @id.  
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Recover stalled ElGato devices
 
-> 
->  Do you mean to say that if we use the cluster platform device you think using one of the existing APIs will work? For example rproc_get_by_child() or rproc_get_by_phandle() 
-> 
-> At https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/tree/drivers/remoteproc/xlnx_r5_remoteproc.c?h=rproc-next#n923 " zynqmp_r5_add_rproc_core(&child_pdev->dev);" Here if we use cluster->dev this will work? To dig deeper into this for both the Xilinx and TI R5 remoteproc drivers, I think this proposed solution will create an issue in that for Split modes, the existing getter APIs will not be able to return one of the corresponding rproc instances because both cores will refer to the same platform-device structure. 
-> 
-> I can bring up the above in the community call.
-> 
->     There is also an issue with rproc_put().
-> 
-> If passing the cluster platform device works for the above then rproc_put() should work correct? We can test this on our side as well. That being said I can bring this up in the community call 
+Just a resend of this hw fix.
 
-Yes, using the cluster platform device will work with rproc_put(). 
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Yunke Cao <yunkec@chromium.org>
+---
+Changes in v2:
+- Remove info from lsusb 
+- Link to v1: https://lore.kernel.org/r/20220920-resend-elgato-v1-0-8672a2380e3d@chromium.org
+---
+ drivers/media/usb/uvc/uvc_video.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-> 
-> 
->     I think your description of the problem is mostly correct.  The intermediate
->     devices created by the cascading entries for individual remote processors in the
->     device tree are causing an issue.  The "compatible" string for each remote
->     processor can't be handled by any platform drivers (as it should be), which
->     makes try_module_get() fail because r->dev.parent->driver is not bound to
->     anything.
-> 
->     Looking at the code for Xilinx's R5F support that I just queued[1], the simplest
->     solution may be to pass @dev, which is in fact @cluster->dev, to
->     zynqmp_r5_add_rproc_core() rather than the device associated with the
->     intermediate platform device.
-> 
->     That _should_ work.  It is hard for me to know for sure since I don't have a
->     platform that has dual core remote processor to test with.
-> 
->     Get back to me with how that turned out and we'll go from there.
-> 
->     Thanks,
->     Mathieu
-> 
-> 
-> 
-> 
->     [1]. https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/tree/drivers/remoteproc/xlnx_r5_remoteproc.c?h=rproc-next#n923
-> 
->     > +     rcu_read_unlock();
->     > +
->     > +     of_node_put(np);
->     > +
->     > +     return rproc;
->     > +}
->     > +EXPORT_SYMBOL(rproc_get_by_id);
->     >  #else
->     >  struct rproc *rproc_get_by_phandle(phandle phandle)
->     >  {
->     >       return NULL;
->     >  }
->     > -#endif
->     >  EXPORT_SYMBOL(rproc_get_by_phandle);
->     > +struct rproc *rproc_get_by_id(phandle phandle, unsigned int id)
->     > +{
->     > +     return NULL;
->     > +}
->     > +EXPORT_SYMBOL(rproc_get_by_id);
->     > +#endif
->     >
->     >  /**
->     >   * rproc_set_firmware() - assign a new firmware
->     > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->     > index 3cde845ba26e..10961fae0f77 100644
->     > --- a/include/linux/remoteproc.h
->     > +++ b/include/linux/remoteproc.h
->     > @@ -645,6 +645,7 @@ struct rproc_vdev {
->     >  };
->     >
->     >  struct rproc *rproc_get_by_phandle(phandle phandle);
->     > +struct rproc *rproc_get_by_id(phandle phandle, unsigned int id);
->     >  struct rproc *rproc_get_by_child(struct device *dev);
->     >
->     >  struct rproc *rproc_alloc(struct device *dev, const char *name,
->     > --
->     > 2.25.1
->     >
-> 
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 170a008f4006..ad1762b66c4c 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -129,12 +129,12 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+ 	return -EPIPE;
+ }
+ 
++static const struct usb_device_id elgato_cam_link_4k = {
++						USB_DEVICE(0x0fd9, 0x0066)};
++
+ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+ 	struct uvc_streaming_control *ctrl)
+ {
+-	static const struct usb_device_id elgato_cam_link_4k = {
+-		USB_DEVICE(0x0fd9, 0x0066)
+-	};
+ 	struct uvc_format *format = NULL;
+ 	struct uvc_frame *frame = NULL;
+ 	unsigned int i;
+@@ -297,7 +297,7 @@ static int uvc_get_video_ctrl(struct uvc_streaming *stream,
+ 		dev_err(&stream->intf->dev,
+ 			"Failed to query (%u) UVC %s control : %d (exp. %u).\n",
+ 			query, probe ? "probe" : "commit", ret, size);
+-		ret = -EIO;
++		ret = (ret == -EPROTO) ? -EPROTO : -EIO;
+ 		goto out;
+ 	}
+ 
+@@ -2121,6 +2121,20 @@ int uvc_video_init(struct uvc_streaming *stream)
+ 	 * request on the probe control, as required by the UVC specification.
+ 	 */
+ 	ret = uvc_get_video_ctrl(stream, probe, 1, UVC_GET_CUR);
++
++	/*
++	 * Elgato Cam Link 4k can be in a stalled state if the resolution of
++	 * the external source has changed while the firmware initializes.
++	 * Once in this state, the device is useless until it receives a
++	 * USB reset. It has even been observed that the stalled state will
++	 * continue even after unplugging the device.
++	 */
++	if (usb_match_one_id(stream->dev->intf, &elgato_cam_link_4k) &&
++	    (ret == -EPROTO)) {
++		usb_reset_device(stream->dev->udev);
++		dev_err(&stream->intf->dev, "Restarting Elgato Cam Link 4K\n");
++	}
++
+ 	if (ret < 0)
+ 		return ret;
+ 
 
+---
+base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+change-id: 20220920-resend-elgato-a845482bdd02
 
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
