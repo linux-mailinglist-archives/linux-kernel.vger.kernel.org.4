@@ -2,82 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2453B6406A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CB36406AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbiLBMUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S233368AbiLBMVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiLBMUh (ORCPT
+        with ESMTP id S233206AbiLBMVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:20:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65D9B0A0D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 04:20:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 2 Dec 2022 07:21:37 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3973865A5;
+        Fri,  2 Dec 2022 04:21:36 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 86B2421C56;
+        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669983695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d49Oc3S+6muyb1GOiqMcaSOmUuf1KCcSk2Xm3eq+yyg=;
+        b=XnuckT+/lzXYI4qDySsV8Hxn7menm+zUi52vv7O/r7vdGLdiqdO47blqVwleNUjU/cEfgB
+        Bwq3VsB7Uc7SrPfdrrEwqeA6gvttsjhdLQir6Jap3oEnhALiTLCvSr2aNGZXQHcyhCPqL8
+        omMnUHann3fVoS+UBEqAWLzB8gQkLvU=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69976B82157
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 12:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134B8C433B5;
-        Fri,  2 Dec 2022 12:20:29 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 07:20:28 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Karol Herbst <kherbst@redhat.com>
-Subject: Re: [BUG] lockdep splat using mmio tracer
-Message-ID: <20221202072028.40b62728@gandalf.local.home>
-In-Reply-To: <20221202104334.649dacdf@eldfell>
-References: <20221201213126.620b7dd3@gandalf.local.home>
-        <20221202104334.649dacdf@eldfell>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by relay2.suse.de (Postfix) with ESMTPS id 0CEEF2C142;
+        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 13:21:34 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Joe Perches <joe@perches.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
+Message-ID: <Y4ntzmsvsr7gU8x0@alley>
+References: <20221125190948.2062-1-linux@weissschuh.net>
+ <20221125190948.2062-2-linux@weissschuh.net>
+ <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
+ <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
+ <Y4dhs1G3mcX/YraJ@alley>
+ <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Dec 2022 10:43:34 +0200
-Pekka Paalanen <ppaalanen@gmail.com> wrote:
-
-> On Thu, 1 Dec 2022 21:31:26 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed 2022-11-30 15:50:55, Thomas Weißschuh wrote:
+> On 2022-11-30 14:59+0100, Petr Mladek wrote:
+> > On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
+> >> On 2022-11-25 12:18-0800, Joe Perches wrote:
+> >>> On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
+> >>>> These macros emit continuation messages with explicit levels.
+> >>>> In case the continuation is logged separately from the original message
+> >>>> it will retain its level instead of falling back to KERN_DEFAULT.
+> >>>> 
+> >>>> This remedies the issue that logs filtered by level contain stray
+> >>>> continuation messages without context.
+> >>>> 
+> >>>> --- a/include/linux/printk.h
+> >>>> +++ b/include/linux/printk.h
+> >>>> @@ -701,6 +703,27 @@ do {									\
+> >>>>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+> >>>>  #endif
+> >>>>  
+> >>>> +/*
+> >>>> + * Print a continuation message with level. In case the continuation is split
+> >>>> + * from the main message it preserves the level.
+> >>>> + */
+> >>>> +
+> >>>> +#define pr_emerg_cont(fmt, ...)					\
+> >>>> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+> >>> 
+> >>> Aren't this rather backwards?
+> >>> KERN_CONT KERN_<LEVEL> seems to make more sense to me.
+> >> 
+> >> If nobody else disagrees I'll do this for v3.
+> > 
+> > I slightly prefer the way how it is now. IMHO, it makes it easier
+> > to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
+> > 
+> > <6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
+> > <6,c> kernel/power/process.c:218 thaw_processes "done.\n"
+> > <6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
+> > <6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
+> > <6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
+> > <6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
+> > <6,c> kernel/power/process.c:140 freeze_processes "\n"
+> > <6,c> kernel/power/process.c:138 freeze_processes "done."
+> > <6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
+> > <6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
 > 
-> > I hit this while testing ftrace on an x86 32 bit VM (I've just started
-> > converting my tests to run on a VM, which is find new found bugs).  
+> I did not test it (will do so later) but it seems to me that the code in
+> kernel/printk/index.c should do this correctly in either case. At least it
+> tries to:
 > 
-> Hi Steven,
-> 
-> sorry, I don't think I know anymore how mmiotrace works. Surely the
-> kernel has changed in those more than 10 years since I last looked at
-> it. If I'm still listed as a contact for mmiotrace somewhere, maybe it
-> would be best to drop me?
+> if (flags & LOG_CONT) {
+> 	/*
+> 	 * LOGLEVEL_DEFAULT here means "use the same level as the
+> 	 * message we're continuing from", not the default message
+> 	 * loglevel, so don't display it as such.
+> 	 */
+> 	if (level == LOGLEVEL_DEFAULT)
+> 		seq_puts(s, "<c>");
+> 		else
+> 		seq_printf(s, "<%d,c>", level);
+> 	} else
+> 		seq_printf(s, "<%d>", level);
+> 	}
 
-You're still listed as a Reviewer in the MAINTAINERS file. Which means you
-only want to see patches (and possibly review them), but doesn't mean you
-have to fix them ;-)
+Great. It makes the index consistent. I should have checked the code ;-)
 
-> 
-> I don't mind the emails, it's nice to see people hit or touch it, but
-> I'm afraid I can't help.
-> 
+I do not mind then about the ordering in the macro definitions.
+It really seems to be only an implementation detail.
 
-Nice hearing from you too :-) I'll only drop you if you ask.
-
-For now, I just don't test mmiotrace with lockdep on. But if I get some
-cycles, I may try to figure out what's going on.
-
-Cheers,
-
--- Steve
+Best Regards,
+Petr
