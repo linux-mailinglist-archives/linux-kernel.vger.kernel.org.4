@@ -2,109 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8456408E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A6E6408EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbiLBPC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S233688AbiLBPFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLBPCZ (ORCPT
+        with ESMTP id S233712AbiLBPFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:02:25 -0500
-Received: from outbound-smtp15.blacknight.com (outbound-smtp15.blacknight.com [46.22.139.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0910BE2543
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:02:22 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp15.blacknight.com (Postfix) with ESMTPS id A700E1C4395
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:02:20 +0000 (GMT)
-Received: (qmail 20000 invoked from network); 2 Dec 2022 15:02:20 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Dec 2022 15:02:20 -0000
-Date:   Fri, 2 Dec 2022 15:01:58 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>, Jan Kara <jack@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-RT <linux-rt-users@vger.kernel.org>
-Subject: Re: [PATCH] rtmutex: Add acquire semantics for rtmutex lock
- acquisition
-Message-ID: <20221202150158.xzgovoy7wuic6vvk@techsingularity.net>
-References: <20221202100223.6mevpbl7i6x5udfd@techsingularity.net>
- <Y4nfopZfBxR4lJ6G@linutronix.de>
+        Fri, 2 Dec 2022 10:05:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F273E37F83
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:05:23 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p17as-0004iX-Qd; Fri, 02 Dec 2022 16:04:50 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 135E2131753;
+        Fri,  2 Dec 2022 15:04:48 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 16:04:39 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vivek Yadav <vivek.2311@samsung.com>
+Cc:     rcsekar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
+        wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, alim.akhtar@samsung.com,
+        linux-fsd@tesla.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        aswani.reddy@samsung.com, sriranjani.p@samsung.com
+Subject: Re: RE: RE: [PATCH v3 1/2] can: m_can: Move mram init to mcan device
+ setup
+Message-ID: <20221202150439.dmt7omdck7wdjpbv@pengutronix.de>
+References: <20221122105455.39294-1-vivek.2311@samsung.com>
+ <CGME20221122105022epcas5p3f5db1c5790b605bac8d319fe06ad915b@epcas5p3.samsung.com>
+ <20221122105455.39294-2-vivek.2311@samsung.com>
+ <20221123224146.iic52cuhhnwqk2te@pengutronix.de>
+ <01a101d8ffe4$1797f290$46c7d7b0$@samsung.com>
+ <20221124145405.d67cb6xmoiqfdsq3@pengutronix.de>
+ <01f901d9053a$f138bdd0$d3aa3970$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nnzicvks5gam4beu"
 Content-Disposition: inline
-In-Reply-To: <Y4nfopZfBxR4lJ6G@linutronix.de>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <01f901d9053a$f138bdd0$d3aa3970$@samsung.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 12:21:06PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2022-12-02 10:02:23 [+0000], Mel Gorman wrote:
-> > The lock owner is updated with an IRQ-safe raw spinlock held but the
-> > spin_unlock does not provide acquire semantics which are needed when
-> > acquiring a mutex. This patch adds the necessary acquire semantics for a
-> > lock operation when the lock owner is updated. It successfully completed
-> > 10 iterations of the dbench workload while the vanilla kernel fails on
-> > the first iteration.
-> 
-> I *think* it is
-> 
-> Fixes: 700318d1d7b38 ("locking/rtmutex: Use acquire/release semantics")
-> 
 
-Adding Davidlohr to cc.
+--nnzicvks5gam4beu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It might have made the problem worse but even then rt_mutex_set_owner was
-just a plain assignment and while I didn't check carefully, at a glance
-try_to_take_rt_mutex didn't look like it guaranteed ACQUIRE semantics.
+On 01.12.2022 09:40:50, Vivek Yadav wrote:
+> > That probably depends on you power management. If I add a regulator
+> > to power the external tcan4x5x chip and power it up during open(), I
+> > need to initialize the RAM.
+> >=20
+> Thanks for the clarification,
+>
+> There is one doubt for which I need clarity if I add ram init in
+> m_can_chip_config.
+>=20
+> In the current implementation, m_can_ram_init is added in the probe
+> and m_can_class_resume function.
+>
+> If I add the ram init function in chip_config which is getting called
+> from m_can_start, then m_can_init_ram will be called two times, once
+> in resume and next from m_can_start also.
 
-> Before that, it did cmpxchg() which should be fine.
-> 
-> Regarding mark_rt_mutex_waiters(). Isn't acquire semantic required in
-> order for the lock-owner not perform the fastpath but go to the slowpath
-> instead?
-> 
+As m_can_start() is called from resume, remove the direct call to
+m_can_init_ram() from m_can_class_resume().
 
-Good spot, it does. While the most straight-forward solution is to use
-cmpxchg_acquire, I think it is overkill because it could incur back-to-back
-ACQUIRE operations in the event of contention. There could be a smp_wmb
-after the cmpxchg_relaxed but that impacts all arches and a non-paired
-smp_wmb is generally frowned upon.
+> Can we add ram init inside the m_can_open function itself? Because it
+> is independent of m_can resume functionality.
 
-I'm thinking this on top of the patch should be sufficient even though
-it's a heavier operation than is necesary for ACQUIRE as well as being
-"not typical" according to Documentation/atomic_t.txt. Will, as this
-affects ARM primarily do you have any preference?
+See above.
 
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 35212f260148..af0dbe4d5e97 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -238,6 +238,13 @@ static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base *lock)
- 		owner = *p;
- 	} while (cmpxchg_relaxed(p, owner,
- 				 owner | RT_MUTEX_HAS_WAITERS) != owner);
-+
-+	/*
-+	 * The cmpxchg loop above is relaxed to avoid back-to-back ACQUIRE
-+	 * operations in the event of contention. Ensure the successful
-+	 * cmpxchg is visible.
-+	 */
-+	smp_mb__after_atomic();
- }
- 
- /*
+mainline implementation:
+
+m_can_class_resume()
+        -> m_can_init_ram()
+
+m_can_open()
+        -> m_can_start()
+        -> m_can_chip_config()
+        -> ops->init
+                m_can_init_ram() (for tcan only)
+
+
+proposed:
+
+m_can_class_resume()
+        -> m_can_start()
+        -> m_can_chip_config()
+        -> m_can_init_ram()
+
+m_can_open()
+        -> m_can_start()
+        -> m_can_chip_config()
+        -> m_can_init_ram()
+
+In mainline m_can_init_ram() is called for the tcan during open(). So if
+you call m_can_init_ram() from m_can_chip_config(), remove it from the
+tcan's tcan4x5x_init() functions, and from m_can_class_resume() it
+should only be called once for open and once for resume.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--nnzicvks5gam4beu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKFAUACgkQrX5LkNig
+011Q9Af8D5n0O+psn9BhVDedhpW//hB/XQMMH7zksV1ocaFaqRhrKndNq/6VxvaQ
+76p0XvaMDoItxBNZOQPFCNibWg8okFne0hyy1QiFmAxzxstuitQJmdsdRAAFZ3Sd
+wheA/xiL2BYQtbRgDkK2ANmQawU9+tOyRmIRRWCki9vcZ4J346uhAzRs6G7BShOr
+w1KH/8oTD5dDIwoyAXvaFeGKNgaf/YDV4JUhwrjFr9dpX4g7HrVsacPxD0V9gyVX
+nI8hamSZM4JAB5tN16hCIsUlnejUHR7QRPy+/q88HyvULstvXWZJ64OERksd++7G
+TCm0ycMZAmZ8WzJmxhCKz01go341Zg==
+=1sZ5
+-----END PGP SIGNATURE-----
+
+--nnzicvks5gam4beu--
