@@ -2,170 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7F6641067
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4643764106B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234843AbiLBWMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
+        id S233977AbiLBWNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234191AbiLBWMX (ORCPT
+        with ESMTP id S234844AbiLBWMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:12:23 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53807F9304
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:12:22 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id 67-20020a621946000000b00575f8210320so6107618pfz.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:12:22 -0800 (PST)
+        Fri, 2 Dec 2022 17:12:49 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C221F2D4
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:12:44 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id z9so2649372ilu.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:12:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RxFknGyAkcIOOsCgLG6r1err07+MBrN/SSNfaLXlwhg=;
-        b=dB0yZm0vtYjeMx8aJ36Rn/NpjR0HOQmUVA3aFPdVivS5kxj7wKoAsTcPNoAT8arhsA
-         mQ+6r2J7uLpsNM8NKQTyTNs2dq7CwDZ+Weqd9hrvp/SKJTIFJHtCid/SZc3i8gTmyvQu
-         C7aJm96Wbv/dWI2bZdS7+Yt72IEFTOLcuNOol3UVrk2PpZhu6wBtUMy6AzH0T59kGjbk
-         8d3jHrPMVbv0y2Wjpq8abKjL0TqRYfkNXrjHpFKLSIKysLF2EKnhVQX9dOYMbLlW1ssP
-         QfeaS1GnYMTpnZsw7unZNrZUy9WZ21Su51G8exq8HfqMVSO9Tf4q2MU4/zRNq8crE6y6
-         W72Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MZRQ27iiIlmC3Mofd++eqe24lVJKTTth6Ng6tJK9AsA=;
+        b=qOLSu1CwE7LSryMVEdLpxMcW2u2rN8DJ2Y0evJB9pQ6GNkz3YF+yUdNLUg61fnjeYK
+         bbgwmb0i2+h2jsPKY3/sKTqpNwpwRcsAJo92O3xXcktEZ+lwz6celntYxHJ9LzDpgPy2
+         ujUiBhEPGmcP8cnsNgBwBoCDZtV2tXMhAI7eLeIWcvkcxlzr/WgtLkVz5Eo3eSoAOSqx
+         dLMss4s6xlI/IjEDEge1hAgk5kt7d9vQ7ah6xX94RRlTwLfLpkUCxzZkMdjv7AB2pErj
+         J4KtBxtcBN1oy1/MOQl9p4QiVHcSy5Z2wPKs6O9BMXFSvafw2PmyGacdxWBmT5OOVI+j
+         z7zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RxFknGyAkcIOOsCgLG6r1err07+MBrN/SSNfaLXlwhg=;
-        b=FjEQjOzyJPdOSOmdaSkHlHnCeeA20ysHFOg4dK3FVtmNaqB7bBcpQCxfI/38vlseTP
-         bOPLedjLjyjTdZAWWMgJagVc9+Ex8uTEMR53Sjzz19ZSjUlybFuHyaWl3GpTvYoIpc2n
-         WFKZ9DqSUjMwCAY/V/BYbzWdQH1e+sm0rQ+jjXpo6SKmyMftrKilvGAPfI2VWp5N5DCd
-         2M+08mW+pdPd/tuAsAajKz1+821Z63yFACLbE7qMO/xVXY1AM1xmLALA0P9W2jk4zwnO
-         8BHegjK4qnszQgpwSnPjl0bH0L55Gzon6jBtcquxUclb/8Ca5u2GX86pMMTFG7KzDlBr
-         ZOfA==
-X-Gm-Message-State: ANoB5pmeuGQ8fPIslyLMOObdT08kGzDCwUruZttmFhf6WkgMMz2iwnKU
-        tyoMCp1U2ZK1Gzu3N8uX3JXrm7PgJx4u+0w=
-X-Google-Smtp-Source: AA0mqf5wXcrw5d0m1tnOeS4rkHBJ8FcNfWgR5Eu3EYiFy6/85Conhs0C0zQcUP87be5oqcekRI5FcuNccvMcJ8Y=
-X-Received: from lixiaoyan-desktop.svl.corp.google.com ([2620:15c:2c4:201:806c:1abb:ce24:13cf])
- (user=lixiaoyan job=sendgmr) by 2002:a05:6a00:2183:b0:574:2104:5657 with SMTP
- id h3-20020a056a00218300b0057421045657mr51866119pfi.58.1670019141829; Fri, 02
- Dec 2022 14:12:21 -0800 (PST)
-Date:   Fri,  2 Dec 2022 14:12:13 -0800
-In-Reply-To: <20221202221213.236564-1-lixiaoyan@google.com>
-Mime-Version: 1.0
-References: <20221202221213.236564-1-lixiaoyan@google.com>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221202221213.236564-2-lixiaoyan@google.com>
-Subject: [RFC net-next v4 2/2] bnxt: Use generic HBH removal helper in tx path
-From:   Coco Li <lixiaoyan@google.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <michael.chan@broadcom.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Coco Li <lixiaoyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MZRQ27iiIlmC3Mofd++eqe24lVJKTTth6Ng6tJK9AsA=;
+        b=XMQkeqvuec7GYDP5N4fQ0fFVkMmLmqpO6eBfNRy6/SctPUqBJWBLXUBAU+aZNChk2j
+         sc21VyIEvRLZAlwE55/+yvhosa+Pz1JI4aCD+IiKm9kVGWglVQgFjzTAGKPoBOQP+LiN
+         IN/An70pvYgU8ba/OXxNjyO7YBbmFnDoWR9fUK8rJ+dHt8CA3C9TrTcTC8uKwusmVilM
+         dJ/dgcukh2ZLnsH9sCwgBMrryxH5cfDSxrUFZlqmr6o5V3/hzH+i1ZMLMpNhLaGTforv
+         dSYUE7SwEHB/H6EIfZLLpp1s5SNp9BGXSPSilk8P2UWztpAFjFlCdqdXogmrn4x4pEH5
+         Yx5A==
+X-Gm-Message-State: ANoB5pnW+vZopjUbRP9YKJQW1/kHItZV2ydTwOOyK1K8x9x+jZ4j/qTg
+        9C7zqa2OGRHsJV2rSYHe/c/pHg==
+X-Google-Smtp-Source: AA0mqf7NKDHBCcqWsoB1rFTu+fH2wPlTnoaZdsz+IBreYBWOuQssiA+mjnuS6vQqA48/SHCp9hujpA==
+X-Received: by 2002:a05:6e02:dc5:b0:302:e604:f814 with SMTP id l5-20020a056e020dc500b00302e604f814mr21154766ilj.113.1670019163812;
+        Fri, 02 Dec 2022 14:12:43 -0800 (PST)
+Received: from localhost.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id r26-20020a02aa1a000000b003633848da58sm3162404jam.41.2022.12.02.14.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 14:12:43 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     sboyd@kernel.org, mturquette@baylibre.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, agross@kernel.org
+Cc:     Luca Weiss <luca.weiss@fairphone.com>, dmitry.baryshkov@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] clk: qcom: rpmh: add support for SM6350 rpmh IPA clock
+Date:   Fri,  2 Dec 2022 16:12:40 -0600
+Message-Id: <20221202221240.225720-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
-for IPv6 traffic. See patch series:
-'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+From: Luca Weiss <luca.weiss@fairphone.com>
 
-This reduces the number of packets traversing the networking stack and
-should usually improves performance. However, it also inserts a
-temporary Hop-by-hop IPv6 extension header.
+The IPA core clock is required for SM6350.  Define it.
 
-Using the HBH header removal method in the previous path, the extra header
-be removed in bnxt drivers to allow it to send big TCP packets (bigger
-TSO packets) as well.
-
-Tested:
-Compiled locally
-
-To further test functional correctness, update the GSO/GRO limit on the
-physical NIC:
-
-ip link set eth0 gso_max_size 181000
-ip link set eth0 gro_max_size 181000
-
-Note that if there are bonding or ipvan devices on top of the physical
-NIC, their GSO sizes need to be updated as well.
-
-Then, IPv6/TCP packets with sizes larger than 64k can be observed.
-
-Big TCP functionality is tested by Michael, feature checks not yet.
-
-Tested by Michael:
-I've confirmed with our hardware team that this is supported by our
-chips, and I've tested it up to gso_max_size of 524280.  Thanks.
-
-Tested-by: Michael Chan <michael.chan@broadcom.com>
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Coco Li <lixiaoyan@google.com>
+[elder@linaro.org: rebased with Dmitry's changes]
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 26 ++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+v2: This is now based on qualcomm/for-next.
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 0fe164b42c5d..c2713cb5debd 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
- 			return NETDEV_TX_BUSY;
- 	}
+ drivers/clk/qcom/clk-rpmh.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+index 2c2ef4b6d130e..586a810c682ca 100644
+--- a/drivers/clk/qcom/clk-rpmh.c
++++ b/drivers/clk/qcom/clk-rpmh.c
+@@ -606,6 +606,7 @@ static struct clk_hw *sm6350_rpmh_clocks[] = {
+ 	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_ln_bb_clk3_g4_ao.hw,
+ 	[RPMH_QLINK_CLK]	= &clk_rpmh_qlink_div4.hw,
+ 	[RPMH_QLINK_CLK_A]	= &clk_rpmh_qlink_div4_ao.hw,
++	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+ };
  
-+	if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
-+		goto tx_free;
-+
- 	length = skb->len;
- 	len = skb_headlen(skb);
- 	last_frag = skb_shinfo(skb)->nr_frags;
-@@ -11342,9 +11345,28 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
- 
- 		if (hdrlen > 64)
- 			return false;
-+
-+		/* The ext header may be a hop-by-hop header inserted for
-+		 * big TCP purposes. This will be removed before sending
-+		 * from NIC, so do not count it.
-+		 */
-+		if (*nexthdr == NEXTHDR_HOP) {
-+			if (likely(skb->len <= GRO_LEGACY_MAX_SIZE))
-+				goto increment_hdr;
-+
-+			struct hop_jumbo_hdr *jhdr = (struct hop_jumbo_hdr *)(nexthdr + hdrlen);
-+
-+			if (jhdr->tlv_type != IPV6_TLV_JUMBO || jhdr->hdrlen != 0 ||
-+			    (jhdr->nexthdr != IPPROTO_TCP && jhdr->nexthdr != IPPROTO_UDP))
-+				goto increment_hdr;
-+
-+			goto next_hdr;
-+		}
-+increment_hdr:
-+		hdr_count++;
-+next_hdr:
- 		nexthdr = &hp->nexthdr;
- 		start += hdrlen;
--		hdr_count++;
- 	}
- 	if (nextp) {
- 		/* Caller will check inner protocol */
-@@ -13657,6 +13679,8 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		dev->features &= ~NETIF_F_LRO;
- 	dev->priv_flags |= IFF_UNICAST_FLT;
- 
-+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
-+
- #ifdef CONFIG_BNXT_SRIOV
- 	init_waitqueue_head(&bp->sriov_cfg_wait);
- #endif
+ static const struct clk_rpmh_desc clk_rpmh_sm6350 = {
 -- 
-2.39.0.rc0.267.gcb52ba06e7-goog
+2.34.1
 
