@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D406404C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4F56404C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbiLBKfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S233071AbiLBKfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232800AbiLBKfD (ORCPT
+        with ESMTP id S232415AbiLBKfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:35:03 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA62C1BFB;
-        Fri,  2 Dec 2022 02:35:02 -0800 (PST)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NNq7F5ljmz15N2v;
-        Fri,  2 Dec 2022 18:34:17 +0800 (CST)
-Received: from [10.174.176.189] (10.174.176.189) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Dec 2022 18:34:59 +0800
-Message-ID: <52a15a3f-a288-7a7f-e9b3-1096d108e4a3@huawei.com>
-Date:   Fri, 2 Dec 2022 18:34:58 +0800
+        Fri, 2 Dec 2022 05:35:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F6AC4CDE;
+        Fri,  2 Dec 2022 02:35:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D07166222D;
+        Fri,  2 Dec 2022 10:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A634BC433D6;
+        Fri,  2 Dec 2022 10:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669977328;
+        bh=gy4BSJ76mh0HAcCurbowxB8Nozc4FwfIp6+iriE3IcY=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=TFDHsTSV63ZHWA+a23ObzI3TB0iF2nAR6DIY2CdrxIJTyxBhG+TFfoj7+khPxCPvY
+         UTRIh1CnqeQ5OwxFjKirUvSvBj16lRSy8mnH/wBZm5gtY6NCFzNev6X1Et37H9ygoB
+         SIyfjs4qfBeyYEhUF2mhzkHu7TyJCWM9XlSlZOMDFDaf88Y+Uq1Mm7m5XoT5X3bHWA
+         77f94e64K13ROczPc16BVrhrM9zcv+zYNsWQZZTPDNVSyl8Fqcac9bXQyDRIRQ6qHj
+         5aqo66RA7JeW+ydCYQEH4o6BjhriwIAVk3raDG29rZN8SpHBzP26b+IwMIM9nkJq14
+         4mT7XHDsPOTzw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Youghandhar Chintala <quic_youghand@quicinc.com>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_mpubbise@quicinc.com,
+        rameshn@qti.qualcomm.com
+Subject: Re: [PATCH v4] wifi: ath10k: Store WLAN firmware version in SMEM image table
+References: <20221117180534.2267-1-quic_youghand@quicinc.com>
+        <Y4YsyaIW+CPdHWv3@dev-arch.thelio-3990X> <87sfi13tya.fsf@kernel.org>
+Date:   Fri, 02 Dec 2022 12:35:24 +0200
+In-Reply-To: <87sfi13tya.fsf@kernel.org> (Kalle Valo's message of "Wed, 30 Nov
+        2022 07:14:05 +0200")
+Message-ID: <877cza3xg3.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] net: microchip: sparx5: Fix missing destroy_workqueue of
- mact_queue
-To:     Pavan Chebbi <pavan.chebbi@broadcom.com>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <lars.povlsen@microchip.com>,
-        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221201134717.25750-1-linqiheng@huawei.com>
- <CALs4sv36FCT6uUAHM8KTGX5GwgeZGNTSLxB2cq7h-K3jxuK+HQ@mail.gmail.com>
- <CALs4sv3w4Gjs2JGr-hHh_XEXoVWJm3t27O=ezy6HEzRXuk2TwA@mail.gmail.com>
-From:   Qiheng Lin <linqiheng@huawei.com>
-In-Reply-To: <CALs4sv3w4Gjs2JGr-hHh_XEXoVWJm3t27O=ezy6HEzRXuk2TwA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.189]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/12/2 18:02, Pavan Chebbi 写道:
-> On Fri, Dec 2, 2022 at 1:36 PM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
+Kalle Valo <kvalo@kernel.org> writes:
+
+> Nathan Chancellor <nathan@kernel.org> writes:
+>
+>> On Thu, Nov 17, 2022 at 11:35:34PM +0530, Youghandhar Chintala wrote:
 >>
->> On Thu, Dec 1, 2022 at 6:57 PM Qiheng Lin <linqiheng@huawei.com> wrote:
->>>
->>> The mchp_sparx5_probe() won't destroy workqueue created by
->>> create_singlethread_workqueue() in sparx5_start() when later
->>> inits failed. Add destroy_workqueue in the cleanup_ports case,
->>> also add it in mchp_sparx5_remove()
->>>
->>> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
+>>> In a SoC based solution, it would be useful to know the versions of the
+>>> various binary firmware blobs the system is running on. On a QCOM based
+>>> SoC, this info can be obtained from socinfo debugfs infrastructure. For
+>>> this to work, respective subsystem drivers have to export the firmware
+>>> version information to an SMEM based version information table.
+>>> 
+>>> Having firmware version information at one place will help quickly
+>>> figure out the firmware versions of various subsystems on the device
+>>> instead of going through builds/logs in an event of a system crash.
+>>> 
+>>> Fill WLAN firmware version information in SMEM version table to be
+>>> printed as part of socinfo debugfs infrastructure on a Qualcomm based
+>>> SoC.
+>>> 
+>>> This change is applicable only for SNOC/QMI based targets.
+>>> 
+>>> Example:
+>>> cat /sys/kernel/debug/qcom_socinfo/cnss/name
+>>> QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+>>> 
+>>> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+>>> 
+>>> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
 >>> ---
->>>   drivers/net/ethernet/microchip/sparx5/sparx5_main.c | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.c b/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
->>> index eeac04b84638..b6bbb3c9bd7a 100644
->>> --- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
->>> +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.c
->>> @@ -887,6 +887,8 @@ static int mchp_sparx5_probe(struct platform_device *pdev)
->>>
->>>   cleanup_ports:
->>>          sparx5_cleanup_ports(sparx5);
->>> +       if (sparx5->mact_queue)
->>> +               destroy_workqueue(sparx5->mact_queue);
+>>> Changes from v3:
+>>>  - Changed patch title
+>>>  - Changed naming conventions
+>>>  - Removed MAX_BUILD_ID_LEN usuage
+>>>  - Added condition to call API
+>>>  - Changed depends on QCOM_SMEM to select QCOM_SMEM
 >>
->> Would be better if you destroy inside sparx5_start() before returning failure.
+>> You cannot blindly select user configurable symbols that have
+>> dependencies, otherwise you end up with Kconfig warnings. I see the
+>> following warning in -next when CONFIG_HWSPINLOCK is disabled:
 >>
-> 
-> Alternatively you could add the destroy inside sparx5_cleanup_ports()
-> that will cover all error exits?
+>>   WARNING: unmet direct dependencies detected for QCOM_SMEM
+>>     Depends on [n]: (ARCH_QCOM [=y] || COMPILE_TEST [=n]) && HWSPINLOCK [=n]
+>>     Selected by [m]:
+>>     - ATH10K_SNOC [=m] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ATH [=y] && ATH10K [=m] && (ARCH_QCOM [=y] || COMPILE_TEST [=n])
+>>
+>> That should likely be changed back to 'depends on'. The reason the other
+>> QCOM symbols are selected is because they are not user-selectable, so
+>> they have to be selected by the configurations that need them.
+>
+> Thanks, I didn't realise this. I'll send a patch changing it to 'depends
+> on'.
 
-That works functionally, I have considered this modification as well. 
-Since I'm not quite sure on the naming, destroying the mact_queue 
-belongs to sparx5_cleanup_ports, which they don't contain now.
+Here's the patch:
 
-> 
->>>   cleanup_config:
->>>          kfree(configs);
->>>   cleanup_pnode:
->>> @@ -911,6 +913,7 @@ static int mchp_sparx5_remove(struct platform_device *pdev)
->>>          sparx5_cleanup_ports(sparx5);
->>>          /* Unregister netdevs */
->>>          sparx5_unregister_notifier_blocks(sparx5);
->>> +       destroy_workqueue(sparx5->mact_queue);
->>>
->>>          return 0;
->>>   }
->>> --
->>> 2.32.0
->>>
+https://patchwork.kernel.org/project/linux-wireless/patch/20221202103027.25974-1-kvalo@kernel.org/
 
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
