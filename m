@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B785B64107C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAEB641080
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbiLBWRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
+        id S234826AbiLBWUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbiLBWRh (ORCPT
+        with ESMTP id S234461AbiLBWUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:17:37 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DD02721;
-        Fri,  2 Dec 2022 14:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670019457; x=1701555457;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=woJvw+26RYRp5fwYNc0dyE37E+dcjcSWCS7ZFowb7NY=;
-  b=X2xtfO+TIVNNuxP1SyuVsbQa+6NVlQvN3eVgHqY5D5392IFpqYHUBTnq
-   MlbfPlwtXm3BMmGv7RkzSqBhD+cO6P9l0ppJHtSkHzQwcLg6u35ucIFVy
-   WkES56pdMBhl9AN0E3KKCNQEoaCUv8IKYSykDJEEKItlYyF/T4ItxsEL7
-   iImSSVD+W0QKTA44E1tu0KEWkygp2rFEpiW9AaViADhwOmmYAQLpkhGno
-   mMBULPjPYKW8c2GgflXmDItYj83HGtlbCKDQGBlGlUEdVKk8mlh4Jjd0d
-   jZhR2t7+ohKNk/pe+E9VJrbcuOO4H7MKssECUXhF013IeB1c/UT5m0fs9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="314764568"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="314764568"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:17:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="677752478"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="677752478"
-Received: from kcaskeyx-mobl1.amr.corp.intel.com (HELO [10.251.1.207]) ([10.251.1.207])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:17:34 -0800
-Message-ID: <307b43aa5908c489913110287044e611f574db0a.camel@linux.intel.com>
-Subject: Re: [PATCH v2 01/18] x86/sgx: Call cond_resched() at the end of
- sgx_reclaim_pages()
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, jarkko@kernel.org,
-        dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Date:   Fri, 02 Dec 2022 14:17:33 -0800
-In-Reply-To: <746adf31-e70c-e32d-a35d-72d352af613b@intel.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
-         <20221202183655.3767674-2-kristen@linux.intel.com>
-         <37de083d-a63b-b2ff-d00a-e890a1ba5eea@intel.com>
-         <da690a45a36038399c63ddac8f0efed9872ec13e.camel@linux.intel.com>
-         <746adf31-e70c-e32d-a35d-72d352af613b@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 2 Dec 2022 17:20:20 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C2BE8E26
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:20:19 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id d14so2647410ilq.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:20:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XbwRRbO5HZ0texwF0dw1j20ewkIulyg4TI01mh2rWro=;
+        b=UnWWPkF2gG/H6UzceaTgRb3H4v/Sj333aGQxNdrY4fxU0neTBgS3ZijUOjusHqlUcx
+         PRzFvPo6moBkGak0jupft9RW6lA+neAII1uIsya4wAStFRHJYdb2YdjUkoWbiXHDnTla
+         NwgISB3mGIgyfXTKM2/j46dinSLTPjsIIhyus=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XbwRRbO5HZ0texwF0dw1j20ewkIulyg4TI01mh2rWro=;
+        b=sQaWzQNssa5BURnjo0OQqkCBAJXIoATrL6nXp9K6N7gz2P0y7DfUazLfoXf0Jjtdpj
+         WeY4yrqTIXazvR/STMSgp0QHsKRNctCE17Y7daozGSmZrXDmAKYAvh2cTq6/SxmUZ5O8
+         EHFVq03uBx+JSEQUrRIGEcKQvFEDfsIxPAl0WeEeuCGtrePd81pKhsfNbkl+a+TXyK9r
+         AeuD4xZk1kZLuCiC3M8LlpqGP9nJXRkJYnEDYSMVZpYtDWA2WMU9taYmT46wTc74tEym
+         wNsHuRoOv1/6eIoUMUjMm8QtdRRaOyZqVacXlb9GzauCNM73AHKYspUOPIFRgDZaGx9P
+         WsAQ==
+X-Gm-Message-State: ANoB5pl64kiuacVUNNcfWSzhl4KOQRt+F5zxowe6Zi8lcxvJx5XSyZbh
+        bwlOtYcMsc3IEI6ID9hhNiigUw==
+X-Google-Smtp-Source: AA0mqf7OvUqnk6aSmqTB+dIl8bs8dlsLWuzc24wNmTgp6rltz6BAC/fLnhVBabmRTetHJPoniu7Itg==
+X-Received: by 2002:a92:c5c5:0:b0:303:1215:ea9d with SMTP id s5-20020a92c5c5000000b003031215ea9dmr12824454ilt.242.1670019618260;
+        Fri, 02 Dec 2022 14:20:18 -0800 (PST)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id cn23-20020a0566383a1700b00374bf3b62a0sm3099678jab.99.2022.12.02.14.20.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 14:20:17 -0800 (PST)
+Message-ID: <ff01f296-f3bb-4fdf-d57f-8dd14f1b61d2@ieee.org>
+Date:   Fri, 2 Dec 2022 16:20:16 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] net: ipa: use sysfs_emit() to instead of scnprintf()
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, davem@davemloft.net
+Cc:     elder@kernel.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202212021642142044742@zte.com.cn>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <202212021642142044742@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-02 at 13:45 -0800, Dave Hansen wrote:
-> On 12/2/22 13:37, Kristen Carlson Accardi wrote:
-> > > > +static void sgx_reclaim_pages(void)
-> > > > +{
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0__sgx_reclaim_pages();
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cond_resched();
-> > > > +}
-> > > Why bother with the wrapper?=C2=A0 Can't we just put cond_resched() i=
-n
-> > > the
-> > > existing sgx_reclaim_pages()?
-> > Because sgx_reclaim_direct() needs to call sgx_reclaim_pages() but
-> > not
-> > do the cond_resched(). It was this or add a boolean or something to
-> > let
-> > caller's opt out of the resched.
->=20
-> Is there a reason sgx_reclaim_direct() *can't* or shouldn't call
-> cond_resched()?
+On 12/2/22 2:42 AM, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
 
-Yes, it is due to performance concerns. It is explained most succinctly
-by Reinette here:
+The buffer passed is non-null and the existing code properly
+limits the buffer to PAGE_SIZE.
 
-https://lore.kernel.org/linux-sgx/a4eb5ab0-bf83-17a4-8bc0-a90aaf438a8e@inte=
-l.com/
+But... OK.
+
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>   drivers/net/ipa/ipa_sysfs.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ipa/ipa_sysfs.c b/drivers/net/ipa/ipa_sysfs.c
+> index 5cbc15a971f9..14bd2f903045 100644
+> --- a/drivers/net/ipa/ipa_sysfs.c
+> +++ b/drivers/net/ipa/ipa_sysfs.c
+> @@ -46,7 +46,7 @@ version_show(struct device *dev, struct device_attribute *attr, char *buf)
+>   {
+>   	struct ipa *ipa = dev_get_drvdata(dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", ipa_version_string(ipa));
+> +	return sysfs_emit(buf, "%s\n", ipa_version_string(ipa));
+>   }
+> 
+>   static DEVICE_ATTR_RO(version);
+> @@ -70,7 +70,7 @@ static ssize_t rx_offload_show(struct device *dev,
+>   {
+>   	struct ipa *ipa = dev_get_drvdata(dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", ipa_offload_string(ipa));
+> +	return sysfs_emit(buf, "%s\n", ipa_offload_string(ipa));
+>   }
+> 
+>   static DEVICE_ATTR_RO(rx_offload);
+> @@ -80,7 +80,7 @@ static ssize_t tx_offload_show(struct device *dev,
+>   {
+>   	struct ipa *ipa = dev_get_drvdata(dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", ipa_offload_string(ipa));
+> +	return sysfs_emit(buf, "%s\n", ipa_offload_string(ipa));
+>   }
+> 
+>   static DEVICE_ATTR_RO(tx_offload);
 
