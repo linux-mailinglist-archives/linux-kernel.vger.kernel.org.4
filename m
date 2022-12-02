@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842F1640BBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FA6640BC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiLBRHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S234339AbiLBRIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbiLBRHF (ORCPT
+        with ESMTP id S234134AbiLBRId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:07:05 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8313D6782
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:06:57 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id x11so1479512ilo.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:06:57 -0800 (PST)
+        Fri, 2 Dec 2022 12:08:33 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738CEC8D2A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:08:30 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id fc4so6036426ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z13o93FN7D1j2NkYRyzv9m7Pw23zMPbciB0POjT5L7A=;
-        b=bP+UQd/6n708vkEXktjaqMOGhcISnVo7L1NghuYqEUABmfP7jUxc7cMm/aIRqYZUnH
-         i3g8dM6PGFZXxAZ0re3tM8O7sjjgwmnc/kMZvPZEHbg25u9ueBSqjnFmTMugoe8SYo2Z
-         0zvAexNicdokiPwRVC3fjlbAIx/P6FB2BihFM=
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=8e6/xEdGfO2q8PFDjOCWiWUmQhOjfRbND0AvATMyTXk=;
+        b=N/vF1ukPZIOeU+nn/grMVfizomwwC+fkYuIUsLLhdbDHhEaWqW378EIfTq0+FPWNeH
+         O3R8JqR+26HP5xyOkIsXOdVPmbdA21xFJQ2MXdHw65ihPH8ZXdB+DAcxT18Mo2cqB8PK
+         cgJBc6sjJQk1YQrQKDmwF3z9wlCJSa04bwLY0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z13o93FN7D1j2NkYRyzv9m7Pw23zMPbciB0POjT5L7A=;
-        b=rR2B4tPW0fcouo5phGwEJ0M+mGshLkv6DB8cOKjGcPnjWAezHDvnYnvSKEjKUjWr8C
-         5G578igjKcvjGu8ExRr52Gv7MxFjrFQwNbYmir8xoJB8+lGgPFG3uYx7wpA17AYGuZvu
-         X70w4xLlDxUiuimN491VS4EtaNe3LOirGNK6U+5JITFGVfFJHGunvQEniV+TGtPpLBIp
-         utk03HDN5qQVng6Gx5CGr57KOKHPDCD2KpN17cY+ipVlNanASFTDGMoWBOdwpHjhT2HI
-         3kDpc2LF5VIw/xqY/Ra+DeAAp6reLKYXgWrx293vNtTkFlkA8vst5jIJe71Px+uw/jyi
-         eXhA==
-X-Gm-Message-State: ANoB5pmSLykRYrPwXTAyqzuFUUJJl+4jTllmTRu0h3wJ5gCjvs+bYgfP
-        OeSWwLcXR8W2ivDpPumKEWEvkA==
-X-Google-Smtp-Source: AA0mqf48QzHDoEWHCPSfK02Fd7BSl0j7k3rTKbOMcsXna7b3Nd6um2r6wF8Ji6z3+VaUYkhrrEuW0Q==
-X-Received: by 2002:a05:6e02:152c:b0:303:a2:5654 with SMTP id i12-20020a056e02152c00b0030300a25654mr16509329ilu.203.1670000817219;
-        Fri, 02 Dec 2022 09:06:57 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id x14-20020a0566022c4e00b006a102cb4900sm2870557iov.39.2022.12.02.09.06.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 09:06:56 -0800 (PST)
-Date:   Fri, 2 Dec 2022 17:06:56 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Di Shen <di.shen@unisoc.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com
-Subject: Re: [PATCH V2] thermal/of: Allow users to set governor for a thermal
- zone in DT
-Message-ID: <Y4owsFhh7OWGwrbr@google.com>
-References: <202212020239.CufwkKiR-lkp@intel.com>
- <20221202091111.1682-1-di.shen@unisoc.com>
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8e6/xEdGfO2q8PFDjOCWiWUmQhOjfRbND0AvATMyTXk=;
+        b=zcpfQ818Nun7S5iPf0nQSgDoiKpSkSiQzhm6cn3aZiQhKdQndR9dFnWy1411iEfQi6
+         fvvonETBiLgy2quKy0hwl8y9x8OW+C39AprBzilrAUDf/TaJoOyDIdLDHWfDzuxPBz14
+         COPcVpEIEwJ5gboJyxoWVLbNUhhON4jp76ynrUHHc4Yg4ypBQQCCGp1gBIKnOAktcScS
+         XJopZh25ZMyiObIYmknqEymPdV3YH8lBPTCnhd6/jz4MrnO45WVF4zkFkK4nt8Egowd/
+         mBn1wSQ47IFhgMjg1m+oO+0rfS/k4yutQacEE87sjGRU1dhOU5/lnmQi3vhuqeDm85Cp
+         PYvw==
+X-Gm-Message-State: ANoB5pnjRP2IZ0Jwcj0WTdsNXcllrpPHA2i3RLWfP2z9M0gj1zA8IPbe
+        axnNIajSpg8gI4iucKG9km0J9Q==
+X-Google-Smtp-Source: AA0mqf4Ipyre/1uHT4giSVABOVaYnQh3XWF9QR5AhAZQ8wgv36NZJ1zZtLaCA0FK1qma2Jyxo0RiYQ==
+X-Received: by 2002:a17:906:a0d9:b0:78d:b912:6a6c with SMTP id bh25-20020a170906a0d900b0078db9126a6cmr62026281ejb.124.1670000908639;
+        Fri, 02 Dec 2022 09:08:28 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 09:08:28 -0800 (PST)
+Subject: [PATCH v4 0/3] Add Meta: to Metadata devices
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221202091111.1682-1-di.shen@unisoc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAximMC/22NwQqDMBBEf0X23C1r1EN76n+UHmJcTUAT2GigSP
+ 692557GubBvDkhswTOcG9OEC4hhxS19JcGnLdxYQyTdjBkDN0MoXDmOOHGu8W+G1xHX94NoIvRZs
+ ZRbHReN/FYV4U+5D3J+/dQWo3nf1lpkXCa3Txa9RnqH85L2sKxXZMs8Kq1fgBwy4oargAAAA==
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 02 Dec 2022 18:08:16 +0100
+Message-Id: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
+To:     Yunke Cao <yunkec@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1479; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=LW+YCLH6/51gvCjG3C+b0rUFF/hKAINhoJrPn2BRST8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEEfGkkfeYEtkDGFVlGPk2dZS0LOIYaDm1KKYSB
+ zfA8WuSJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxBAAKCRDRN9E+zzrEiB+cEA
+ CVIAwH1oJV8K/bHdwKL/obk2QagHri47Aq0xk/MYxwpYsY4nJryLoFRLB2m6voNiNfry8kaAGWFVTP
+ srpMEy4FOJVS6Mz+MdjTNim/g/AWcYnniSfm3exWztdOkkglfAEAh9uZ0cdNOHPQ/27kNgDrF3DSuB
+ o6p7o3BVjOtuW2jTdAdD6R+2UK2alVlTu3JSK3WcbKgb323N4QfP6vLZw2eCbYcrruyTrJ8izWRo15
+ r6HTkWfsuqbCwACePalicT7h/uyD8Fyl9mC4HK6Aut8RJno2dMaiSB9UKY+XnxE/PBhYoGX/Jz2n7r
+ y6AylHE/AGNuX+DWvn8i/FcjsyXny3kuYg9KjVXXyec7CuJ9thl5gcJCHLbyDjp4X190YmVlbyFg+C
+ +KFrtyTtU/XI74kCrnb+2GL6pp5I1oXJOftfqLApj96vaIWNhblUpbRYtAEk8BUM3ZG1ou3YR6D+gr
+ YY96jKHTJeiVnnkoQq0NS9AdSpqkLUE8ThHPOc3Pr3zktPEFKqpxSoj0oKTH5HZ+GzVv0ZcC1CSl4A
+ CfyMu4IzWpF74svrWtiKysQPqhUl+9N4e6ASlZfrxzaldWxoA76iw7ypTYU7uiVgQUEEOPcc3mXl4y
+ ecQJe0Zhm/eaG0dcEYJvR8r4vYXAoPDb3pZFnAFlNQLE8wBzEQem/lE4ldEA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 05:11:11PM +0800, Di Shen wrote:
-> The governor of all thermal zones can be initialized in
-> thermal_zone_device_register_with_trips(), but it is always the
-> def_governor, this means the governor of all thermal zones are
-> the same.
-> 
-> Allow users to set governor for a specific thermal zone in DT, in
-> this way, users can use different policies for thermal management.
+Metadata devices usually companion "real" devices. In order to
+distinguish them properly, add the Meta: prefix to their names.
 
-There have been other attempts in the past of adding this to the
-device tree (e.g. [1]), which were rejected since the DT should
-describe the hardware, not policy. Userspace can configure thermal
-zones to use a non-default governor through sysfs.
+Also, add a unique suffix to all the uvc devices, to multisensor cameras
+do not show the same names for all their devices (IR, RBG....).
 
-[1] https://lore.kernel.org/all/3b80853abb45a9e067cf7a16754b07bb67712457.1520274879.git.amit.kucheria@linaro.org/
+v4:
+- Rebase to latest master
 
+v3:
 
-> 
-> Signed-off-by: Di Shen <di.shen@unisoc.com>
-> ---
->  drivers/thermal/thermal_of.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index d4b6335ace15..4a29ac3be2ac 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -355,6 +355,7 @@ static struct thermal_zone_params *thermal_of_parameters_init(struct device_node
->  	int coef[2];
->  	int ncoef = ARRAY_SIZE(coef);
->  	int prop, ret;
-> +	const char *governor_name;
->  
->  	tzp = kzalloc(sizeof(*tzp), GFP_KERNEL);
->  	if (!tzp)
-> @@ -365,6 +366,11 @@ static struct thermal_zone_params *thermal_of_parameters_init(struct device_node
->  	if (!of_property_read_u32(np, "sustainable-power", &prop))
->  		tzp->sustainable_power = prop;
->  
-> +	if (!of_property_read_string(np, "policy", &governor_name)) {
-> +		strncpy(tzp->governor_name, governor_name, THERMAL_NAME_LENGTH - 1);
-> +		tzp->governor_name[THERMAL_NAME_LENGTH - 1] = '\0';
-> +	}
-> +
->  	/*
->  	 * For now, the thermal framework supports only one sensor per
->  	 * thermal zone. Thus, we are considering only the first two
-> -- 
-> 2.17.1
-> 
+- Add the meta logic to the core
+
+v2: uvc: Restore old vdev name
+
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Yunke Cao <yunkec@chromium.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+---
+Changes in v4:
+- Link to v3: https://lore.kernel.org/r/20220920-resend-meta-v1-0-dfcfba923204@chromium.org
+
+---
+Ricardo Ribalda (3):
+      media: v4l2-dev.c: Add Meta: to the name of metadata devices
+      media: Documentation/driver-api: Document device name
+      media: uvcvideo: Add a unique suffix to camera names
+
+ Documentation/driver-api/media/v4l2-dev.rst | 4 +++-
+ drivers/media/usb/uvc/uvc_driver.c          | 3 ++-
+ drivers/media/v4l2-core/v4l2-dev.c          | 9 +++++++++
+ 3 files changed, 14 insertions(+), 2 deletions(-)
+---
+base-commit: a4412fdd49dc011bcc2c0d81ac4cab7457092650
+change-id: 20220920-resend-meta-435c30209235
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
