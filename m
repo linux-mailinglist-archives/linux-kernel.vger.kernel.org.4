@@ -2,204 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B769A6400B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4676400B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbiLBGxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 01:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S232447AbiLBGyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 01:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbiLBGxn (ORCPT
+        with ESMTP id S232394AbiLBGyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 01:53:43 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2254BB7C1;
-        Thu,  1 Dec 2022 22:53:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669964022; x=1701500022;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=hsL57ikcNVoLHdsSPb/2quBPJAcrsHQWRoxcjDJhwfk=;
-  b=eT0WFURXcMGeVYPNWIXxRON88XkgDgnK57MP8L9HBxKxsLmaAF3wJG7q
-   rnDKkrgZoX9TcVbQjFOyiHKO0gbbZ9fcMwwssDAXYyl0WJvN4OeI0hfn/
-   Kn0FuzeN0TDa37Lo4FaguVQsHPwL8t1p0mbouzgGyTeMfR+/WJw28w2b8
-   rh2r81QD8/4ACEi8dpcM54W2kVY5TcI1TPegcZnSzlgwg7wDRxmJr7X5t
-   P2v2sBsKA3vddkTIPlScUBDZCzecu1t1zNo639kpdVQMg7YY5Tl2lDL/u
-   KEf8CmRexAJLimiQPuCvaGZlDcib1wrhzm98hW6Vv0ekfUBtGpO0LdthQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="299253379"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="299253379"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 22:53:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="708374082"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="708374082"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Dec 2022 22:53:30 -0800
-Date:   Fri, 2 Dec 2022 14:49:09 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221202064909.GA1070297@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <CAGtprH9Qu==pohH9ZSTzX9rZWSO0QWJ9rGK6NRGaiDetWAPLYg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGtprH9Qu==pohH9ZSTzX9rZWSO0QWJ9rGK6NRGaiDetWAPLYg@mail.gmail.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 01:54:11 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D21BC58E;
+        Thu,  1 Dec 2022 22:54:08 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNkFB1c7xz4xVnH;
+        Fri,  2 Dec 2022 14:54:06 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2B26rtMr007050;
+        Fri, 2 Dec 2022 14:53:55 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Fri, 2 Dec 2022 14:53:57 +0800 (CST)
+Date:   Fri, 2 Dec 2022 14:53:57 +0800 (CST)
+X-Zmail-TransId: 2af96389a105fffffffff3915876
+X-Mailer: Zmail v1.0
+Message-ID: <202212021453578171100@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <dmitry.torokhov@gmail.com>
+Cc:     <jiangjian@cdjrlc.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jeff@labundy.com>
+Subject: =?UTF-8?B?W1BBVENIIHYyXSBJbnB1dDogbW91c2U6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B26rtMr007050
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6389A10E.000 by FangMail milter!
+X-FangMail-Envelope: 1669964046/4NNkFB1c7xz4xVnH/6389A10E.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6389A10E.000/4NNkFB1c7xz4xVnH
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 06:16:46PM -0800, Vishal Annapurve wrote:
-> On Tue, Oct 25, 2022 at 8:18 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> >
-...
-> > +}
-> > +
-> > +SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
-> > +{
-> 
-> Looking at the underlying shmem implementation, there seems to be no
-> way to enable transparent huge pages specifically for restricted memfd
-> files.
-> 
-> Michael discussed earlier about tweaking
-> /sys/kernel/mm/transparent_hugepage/shmem_enabled setting to allow
-> hugepages to be used while backing restricted memfd. Such a change
-> will affect the rest of the shmem usecases as well. Even setting the
-> shmem_enabled policy to "advise" wouldn't help unless file based
-> advise for hugepage allocation is implemented.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Had a look at fadvise() and looks it does not support HUGEPAGE for any
-filesystem yet.
+Replace the open-code with sysfs_emit() to simplify the code.
 
-> 
-> Does it make sense to provide a flag here to allow creating restricted
-> memfds backed possibly by huge pages to give a more granular control?
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+v1 -> v2
+fix the code style.
+ drivers/input/mouse/cyapa.c      | 17 ++++++++---------
+ drivers/input/mouse/cyapa_gen3.c |  2 +-
+ drivers/input/mouse/cyapa_gen5.c |  2 +-
+ drivers/input/mouse/cyapa_gen6.c |  2 +-
+ 4 files changed, 11 insertions(+), 12 deletions(-)
 
-We do have a unused 'flags' can be extended for such usage, but I would
-let Kirill have further look, perhaps need more discussions.
+diff --git a/drivers/input/mouse/cyapa.c b/drivers/input/mouse/cyapa.c
+index 77cc653edca2..897f0c2c9a05 100644
+--- a/drivers/input/mouse/cyapa.c
++++ b/drivers/input/mouse/cyapa.c
+@@ -756,15 +756,15 @@ static ssize_t cyapa_show_suspend_scanrate(struct device *dev,
 
-Chao
-> 
-> > +       struct file *file, *restricted_file;
-> > +       int fd, err;
-> > +
-> > +       if (flags)
-> > +               return -EINVAL;
-> > +
-> > +       fd = get_unused_fd_flags(0);
-> > +       if (fd < 0)
-> > +               return fd;
-> > +
-> > +       file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-> > +       if (IS_ERR(file)) {
-> > +               err = PTR_ERR(file);
-> > +               goto err_fd;
-> > +       }
-> > +       file->f_mode |= FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE;
-> > +       file->f_flags |= O_LARGEFILE;
-> > +
-> > +       restricted_file = restrictedmem_file_create(file);
-> > +       if (IS_ERR(restricted_file)) {
-> > +               err = PTR_ERR(restricted_file);
-> > +               fput(file);
-> > +               goto err_fd;
-> > +       }
-> > +
-> > +       fd_install(fd, restricted_file);
-> > +       return fd;
-> > +err_fd:
-> > +       put_unused_fd(fd);
-> > +       return err;
-> > +}
-> > +
-> > +void restrictedmem_register_notifier(struct file *file,
-> > +                                    struct restrictedmem_notifier *notifier)
-> > +{
-> > +       struct restrictedmem_data *data = file->f_mapping->private_data;
-> > +
-> > +       mutex_lock(&data->lock);
-> > +       list_add(&notifier->list, &data->notifiers);
-> > +       mutex_unlock(&data->lock);
-> > +}
-> > +EXPORT_SYMBOL_GPL(restrictedmem_register_notifier);
-> > +
-> > +void restrictedmem_unregister_notifier(struct file *file,
-> > +                                      struct restrictedmem_notifier *notifier)
-> > +{
-> > +       struct restrictedmem_data *data = file->f_mapping->private_data;
-> > +
-> > +       mutex_lock(&data->lock);
-> > +       list_del(&notifier->list);
-> > +       mutex_unlock(&data->lock);
-> > +}
-> > +EXPORT_SYMBOL_GPL(restrictedmem_unregister_notifier);
-> > +
-> > +int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> > +                          struct page **pagep, int *order)
-> > +{
-> > +       struct restrictedmem_data *data = file->f_mapping->private_data;
-> > +       struct file *memfd = data->memfd;
-> > +       struct page *page;
-> > +       int ret;
-> > +
-> > +       ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       *pagep = page;
-> > +       if (order)
-> > +               *order = thp_order(compound_head(page));
-> > +
-> > +       SetPageUptodate(page);
-> > +       unlock_page(page);
-> > +
-> > +       return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(restrictedmem_get_page);
-> > --
-> > 2.25.1
-> >
+ 	switch (pwr_cmd) {
+ 	case PWR_MODE_BTN_ONLY:
+-		len = scnprintf(buf, PAGE_SIZE, "%s\n", BTN_ONLY_MODE_NAME);
++		len = sysfs_emit(buf, "%s\n", BTN_ONLY_MODE_NAME);
+ 		break;
+
+ 	case PWR_MODE_OFF:
+-		len = scnprintf(buf, PAGE_SIZE, "%s\n", OFF_MODE_NAME);
++		len = sysfs_emit(buf, "%s\n", OFF_MODE_NAME);
+ 		break;
+
+ 	default:
+-		len = scnprintf(buf, PAGE_SIZE, "%u\n",
++		len = sysfs_emit(buf, "%u\n",
+ 				cyapa->gen == CYAPA_GEN3 ?
+ 					cyapa_pwr_cmd_to_sleep_time(pwr_cmd) :
+ 					sleep_time);
+@@ -877,8 +877,8 @@ static ssize_t cyapa_show_rt_suspend_scanrate(struct device *dev,
+
+ 	mutex_unlock(&cyapa->state_sync_lock);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n",
+-			 cyapa->gen == CYAPA_GEN3 ?
++	return sysfs_emit(buf, "%u\n",
++			cyapa->gen == CYAPA_GEN3 ?
+ 				cyapa_pwr_cmd_to_sleep_time(pwr_cmd) :
+ 				sleep_time);
+ }
+@@ -988,8 +988,7 @@ static ssize_t cyapa_show_fm_ver(struct device *dev,
+ 	error = mutex_lock_interruptible(&cyapa->state_sync_lock);
+ 	if (error)
+ 		return error;
+-	error = scnprintf(buf, PAGE_SIZE, "%d.%d\n", cyapa->fw_maj_ver,
+-			 cyapa->fw_min_ver);
++	error = sysfs_emit(buf, "%d.%d\n", cyapa->fw_maj_ver, cyapa->fw_min_ver);
+ 	mutex_unlock(&cyapa->state_sync_lock);
+ 	return error;
+ }
+@@ -1004,7 +1003,7 @@ static ssize_t cyapa_show_product_id(struct device *dev,
+ 	error = mutex_lock_interruptible(&cyapa->state_sync_lock);
+ 	if (error)
+ 		return error;
+-	size = scnprintf(buf, PAGE_SIZE, "%s\n", cyapa->product_id);
++	size = sysfs_emit(buf, "%s\n", cyapa->product_id);
+ 	mutex_unlock(&cyapa->state_sync_lock);
+ 	return size;
+ }
+@@ -1209,7 +1208,7 @@ static ssize_t cyapa_show_mode(struct device *dev,
+ 	if (error)
+ 		return error;
+
+-	size = scnprintf(buf, PAGE_SIZE, "gen%d %s\n",
++	size = sysfs_emit(buf, "gen%d %s\n",
+ 			cyapa->gen, cyapa_state_to_string(cyapa));
+
+ 	mutex_unlock(&cyapa->state_sync_lock);
+diff --git a/drivers/input/mouse/cyapa_gen3.c b/drivers/input/mouse/cyapa_gen3.c
+index a97f4acb6452..60c83bc71d84 100644
+--- a/drivers/input/mouse/cyapa_gen3.c
++++ b/drivers/input/mouse/cyapa_gen3.c
+@@ -860,7 +860,7 @@ static ssize_t cyapa_gen3_show_baseline(struct device *dev,
+
+ 	dev_dbg(dev, "Baseline report successful. Max: %d Min: %d\n",
+ 		max_baseline, min_baseline);
+-	ret = scnprintf(buf, PAGE_SIZE, "%d %d\n", max_baseline, min_baseline);
++	ret = sysfs_emit(buf, "%d %d\n", max_baseline, min_baseline);
+
+ out:
+ 	return ret;
+diff --git a/drivers/input/mouse/cyapa_gen5.c b/drivers/input/mouse/cyapa_gen5.c
+index abf42f77b4c5..4c57036e4281 100644
+--- a/drivers/input/mouse/cyapa_gen5.c
++++ b/drivers/input/mouse/cyapa_gen5.c
+@@ -2418,7 +2418,7 @@ static ssize_t cyapa_gen5_show_baseline(struct device *dev,
+ 		return resume_error ? resume_error : error;
+
+ 	/* 12. Output data strings */
+-	size = scnprintf(buf, PAGE_SIZE, "%d %d %d %d %d %d %d %d %d %d %d ",
++	size = sysfs_emit(buf, "%d %d %d %d %d %d %d %d %d %d %d ",
+ 		gidac_mutual_min, gidac_mutual_max, gidac_mutual_ave,
+ 		lidac_mutual_min, lidac_mutual_max, lidac_mutual_ave,
+ 		gidac_self_rx, gidac_self_tx,
+diff --git a/drivers/input/mouse/cyapa_gen6.c b/drivers/input/mouse/cyapa_gen6.c
+index 0caaf3e64215..b6f7c77c96c2 100644
+--- a/drivers/input/mouse/cyapa_gen6.c
++++ b/drivers/input/mouse/cyapa_gen6.c
+@@ -629,7 +629,7 @@ static ssize_t cyapa_gen6_show_baseline(struct device *dev,
+ 	if (error)
+ 		goto resume_scanning;
+
+-	size = scnprintf(buf, PAGE_SIZE, "%d %d %d %d %d %d ",
++	size = sysfs_emit(buf, "%d %d %d %d %d %d ",
+ 			data[0],  /* RX Attenuator Mutual */
+ 			data[1],  /* IDAC Mutual */
+ 			data[2],  /* RX Attenuator Self RX */
+-- 
+2.25.1
