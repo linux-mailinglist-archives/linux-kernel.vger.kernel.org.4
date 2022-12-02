@@ -2,217 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5474564033B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BD364033D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbiLBJYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
+        id S232732AbiLBJZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiLBJYW (ORCPT
+        with ESMTP id S233049AbiLBJYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:24:22 -0500
-Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36E1BD8BD;
-        Fri,  2 Dec 2022 01:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1669973008; i=@fujitsu.com;
-        bh=MH3WZcJVYCwNNo6ke4z/7i9M7MvmuAOO+p63FGtt8bE=;
-        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=fpIcmHabA79RXZZi6H0iB8hyyLZpXHKPhEuGhz8J1l5ki4fA1P8D3ppjPRW+KBeEh
-         BaGK8w6CxjVKqMmNcQc47bdXXca+XWx2/SO6S6qvB3xstFCSqZ49hCjt2sNXcetx3o
-         uF1vQuWYJsLQRyk9vuOhhbSyxb2r9C9SzIh4lolboQuAfvYkOsa+2PcziK4OTsKce1
-         elY6f1W9fUscdb0gxuytL3s9CkDKW+wQgexFZiujoiBnzKv3iLrZxPABZx/xjkrWVC
-         9kCTTsDqd7wGmg1gkKYJqdG/SWHbkvt6uRc6ao1x8x+bLOIJukkgM9ATa78EbTw9lH
-         nO/Vf44Ejwesg==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLIsWRWlGSWpSXmKPExsViZ8MxSZf/SGe
-  ywf+VQhZz1q9hs5g+9QKjxZZj9xgtLj/hs9iz9ySLxeVdc9gsdv3ZwW6x8scfVgcOj1OLJDwW
-  73nJ5LFpVSebx4kZv1k8XmyeyejxeZNcAFsUa2ZeUn5FAmvGuV1H2QuWK1d82WLXwLhCtouRi
-  0NIYAujxJrvn1khnOVMEuuOrWeGcPYwSlx8epOti5GTg01AR+LCgr9AVRwcIgLVEreWgoWZBT
-  Ikjl/5wwxiCwsESPx8MYcJxGYRUJFomPINrIZXwFVi1d17rCC2hICCxJSH78HqOYHiBx49ZAS
-  xhQRcJL69nccKUS8ocXLmExaI+RISB1+8YAZZKyGgJDGzOx5iTIXErFltTBC2msTVc5uYJzAK
-  zkLSPQtJ9wJGplWMZsWpRWWpRbqGFnpJRZnpGSW5iZk5eolVuol6qaW65anFJbpGeonlxXqpx
-  cV6xZW5yTkpenmpJZsYgbGSUqx+cgfjhmV/9A4xSnIwKYnyvlrWmSzEl5SfUpmRWJwRX1Sak1
-  p8iFGGg0NJgpf1AFBOsCg1PbUiLTMHGLcwaQkOHiUR3vd7gdK8xQWJucWZ6RCpU4yKUuK8uw4
-  BJQRAEhmleXBtsFRxiVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5Iwb/U+oCk8mXklcNNfAS1m
-  AlocKdYGsrgkESEl1cDkfLycXSV36WLB+UskLrabi2d86HF0We0jpxOXmup5zv95+tXFnUvm6
-  FzZFb0hdqKy9CWGozWPLQxPcHO7vmBbd/BZ/s4LD2fn2Tg0LOA0u7ziSeLSoq5738771W6RrT
-  mqbqaq6aH3+dySVbIT1GwlvTwNL+7XC6sIXLv1RJrbl6MiG24/PnvgUNjVdO31bxX2dO1T1+A
-  w4m1o+G7hcGZqxYXueb7t0myhpvVCavKBdsdn6AstFPo2ZcX6rfOvpnNPnbj9+ApHho1r1Tft
-  D03tYCwrYGZqfaF5TLbx7ZeAd8fVbmVHLN3Q1BmjcEDQo9GwySqDvSyuq51H7YHtHn+tIle72
-  v+NISeVjnBc/KTEUpyRaKjFXFScCADwne0JkAMAAA==
-X-Env-Sender: ruansy.fnst@fujitsu.com
-X-Msg-Ref: server-10.tower-548.messagelabs.com!1669973007!186501!1
-X-Originating-IP: [62.60.8.146]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.101.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 14904 invoked from network); 2 Dec 2022 09:23:27 -0000
-Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
-  by server-10.tower-548.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 2 Dec 2022 09:23:27 -0000
-Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id EA6DE1000E7;
-        Fri,  2 Dec 2022 09:23:26 +0000 (GMT)
-Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id E76E11000DB;
-        Fri,  2 Dec 2022 09:23:26 +0000 (GMT)
-Received: from localhost.localdomain (10.167.225.141) by
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
- (TLS) id 15.0.1497.42; Fri, 2 Dec 2022 09:23:23 +0000
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>
-CC:     <djwong@kernel.org>, <david@fromorbit.com>,
-        <dan.j.williams@intel.com>, <akpm@linux-foundation.org>
-Subject: [PATCH v2.1 1/8] fsdax: introduce page->share for fsdax in reflink mode
-Date:   Fri, 2 Dec 2022 09:23:11 +0000
-Message-ID: <1669972991-246-1-git-send-email-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
-References: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.167.225.141]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 04:24:49 -0500
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C211E3;
+        Fri,  2 Dec 2022 01:24:14 -0800 (PST)
+X-QQ-SSF: 0040000000B00080
+X-QQ-FEAT: C46Rb8GPIEeJThy4ybpU5KHg+3YJ4oOCdEdnlYvxq/hvyYyTy5yQxd9V406Mw
+        31Zb8AGLr72mqVVD3cmthQqWCDAu6kZIbp3PCcwH7WQQCjUK0vJGDwY7T9W0eMQ1/+Vp+i7
+        IZudxB73QwdZYVaIfi3WfF0tKtJHyA9I58fw+PvjMHkvvonF8Zuy7jyVryGIHDLQBXlNrSS
+        +60de1m/4zHXEpKmPR7VJ3y63r+LUDmKa1/R329Hqr4XxI8KUr0/cypgDNcJlF5TJszSFdB
+        xcSnMRBPxhUiFx8Gbizggc+lqFE2O7rXc9ckc4Zgg/oEX8gAwE6quIHVa/suA/Nid9rfFwD
+        thNxdn4
+X-QQ-BUSINESS-ORIGIN: 1
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 117.136.163.169
+X-QQ-STYLE: 
+X-QQ-mid: qywaplogic4t1669973020t984265
+From:   "=?gb18030?B?zfW66bvU?=" <honghui.wang@ucas.com.cn>
+To:     "=?gb18030?B?S3J6eXN6dG9mIEtvemxvd3NraQ==?=" 
+        <krzysztof.kozlowski@linaro.org>,
+        "=?gb18030?B?Q2F0YWxpbiBNYXJpbmFz?=" <catalin.marinas@arm.com>,
+        "=?gb18030?B?V2lsbCBEZWFjb24=?=" <will@kernel.org>,
+        "=?gb18030?B?QXJuZCBCZXJnbWFubg==?=" <arnd@arndb.de>,
+        "=?gb18030?B?T2xvZiBKb2hhbnNzb24=?=" <olof@lixom.net>,
+        "=?gb18030?B?c29j?=" <soc@kernel.org>,
+        "=?gb18030?B?Um9iIEhlcnJpbmc=?=" <robh+dt@kernel.org>,
+        "=?gb18030?B?S3J6eXN6dG9mIEtvemxvd3NraQ==?=" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "=?gb18030?B?U3VkZWVwIEhvbGxh?=" <sudeep.holla@arm.com>,
+        "=?gb18030?B?Q3Jpc3RpYW4gTWFydXNzaQ==?=" <cristian.marussi@arm.com>,
+        "=?gb18030?B?bGludXgtYXJtLWtlcm5lbA==?=" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "=?gb18030?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
+        "=?gb18030?B?ZGV2aWNldHJlZQ==?=" <devicetree@vger.kernel.org>
+Subject: =?gb18030?B?UmWjulJlOiBbUEFUQ0hdIGFybTY0L2Jvb3QvZHRz?=
+ =?gb18030?B?IGFuZCBhcm1fc2NwaTogYWRkIHRvIHN1cHBvcnQg?=
+ =?gb18030?B?UGh5dGl1bSBGVDIwMDQgQ1BV?=
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="gb18030"
+Content-Transfer-Encoding: base64
+Date:   Fri, 2 Dec 2022 17:23:40 +0800
+X-Priority: 3
+Message-ID: <tencent_12CFBB7717187D6F2B9A3246@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-QQ-ReplyHash: 1410768324
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1])
+        by smtp.qq.com (ESMTP) with SMTP
+        id ; Fri, 02 Dec 2022 17:23:41 +0800 (CST)
+Feedback-ID: qywaplogic:ucas.com.cn:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_NONE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fsdax page is used not only when CoW, but also mapread. To make the it
-easily understood, use 'share' to indicate that the dax page is shared
-by more than one extent.  And add helper functions to use it.
-
-Also, the flag needs to be renamed to PAGE_MAPPING_DAX_SHARED.
-
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
----
- fs/dax.c                   | 38 ++++++++++++++++++++++----------------
- include/linux/mm_types.h   |  5 ++++-
- include/linux/page-flags.h |  2 +-
- 3 files changed, 27 insertions(+), 18 deletions(-)
-
-diff --git a/fs/dax.c b/fs/dax.c
-index 1c6867810cbd..edbacb273ab5 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -334,35 +334,41 @@ static unsigned long dax_end_pfn(void *entry)
- 	for (pfn = dax_to_pfn(entry); \
- 			pfn < dax_end_pfn(entry); pfn++)
- 
--static inline bool dax_mapping_is_cow(struct address_space *mapping)
-+static inline bool dax_page_is_shared(struct page *page)
- {
--	return (unsigned long)mapping == PAGE_MAPPING_DAX_COW;
-+	return (unsigned long)page->mapping == PAGE_MAPPING_DAX_SHARED;
- }
- 
- /*
-- * Set the page->mapping with FS_DAX_MAPPING_COW flag, increase the refcount.
-+ * Set the page->mapping with PAGE_MAPPING_DAX_SHARED flag, increase the
-+ * refcount.
-  */
--static inline void dax_mapping_set_cow(struct page *page)
-+static inline void dax_page_bump_sharing(struct page *page)
- {
--	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_COW) {
-+	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_SHARED) {
- 		/*
- 		 * Reset the index if the page was already mapped
- 		 * regularly before.
- 		 */
- 		if (page->mapping)
--			page->index = 1;
--		page->mapping = (void *)PAGE_MAPPING_DAX_COW;
-+			page->share = 1;
-+		page->mapping = (void *)PAGE_MAPPING_DAX_SHARED;
- 	}
--	page->index++;
-+	page->share++;
-+}
-+
-+static inline unsigned long dax_page_drop_sharing(struct page *page)
-+{
-+	return --page->share;
- }
- 
- /*
-- * When it is called in dax_insert_entry(), the cow flag will indicate that
-+ * When it is called in dax_insert_entry(), the shared flag will indicate that
-  * whether this entry is shared by multiple files.  If so, set the page->mapping
-- * FS_DAX_MAPPING_COW, and use page->index as refcount.
-+ * PAGE_MAPPING_DAX_SHARED, and use page->share as refcount.
-  */
- static void dax_associate_entry(void *entry, struct address_space *mapping,
--		struct vm_area_struct *vma, unsigned long address, bool cow)
-+		struct vm_area_struct *vma, unsigned long address, bool shared)
- {
- 	unsigned long size = dax_entry_size(entry), pfn, index;
- 	int i = 0;
-@@ -374,8 +380,8 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
- 	for_each_mapped_pfn(entry, pfn) {
- 		struct page *page = pfn_to_page(pfn);
- 
--		if (cow) {
--			dax_mapping_set_cow(page);
-+		if (shared) {
-+			dax_page_bump_sharing(page);
- 		} else {
- 			WARN_ON_ONCE(page->mapping);
- 			page->mapping = mapping;
-@@ -396,9 +402,9 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
- 		struct page *page = pfn_to_page(pfn);
- 
- 		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
--		if (dax_mapping_is_cow(page->mapping)) {
--			/* keep the CoW flag if this page is still shared */
--			if (page->index-- > 0)
-+		if (dax_page_is_shared(page)) {
-+			/* keep the shared flag if this page is still shared */
-+			if (dax_page_drop_sharing(page) > 0)
- 				continue;
- 		} else
- 			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 500e536796ca..f46cac3657ad 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -103,7 +103,10 @@ struct page {
- 			};
- 			/* See page-flags.h for PAGE_MAPPING_FLAGS */
- 			struct address_space *mapping;
--			pgoff_t index;		/* Our offset within mapping. */
-+			union {
-+				pgoff_t index;		/* Our offset within mapping. */
-+				unsigned long share;	/* share count for fsdax */
-+			};
- 			/**
- 			 * @private: Mapping-private opaque data.
- 			 * Usually used for buffer_heads if PagePrivate.
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 0b0ae5084e60..c8a3aa02278d 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -641,7 +641,7 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
-  * Different with flags above, this flag is used only for fsdax mode.  It
-  * indicates that this page->mapping is now under reflink case.
-  */
--#define PAGE_MAPPING_DAX_COW	0x1
-+#define PAGE_MAPPING_DAX_SHARED	0x1
- 
- static __always_inline bool folio_mapping_flags(struct folio *folio)
- {
--- 
-2.38.1
+VGhlIGFwcHJvYWNoIGlzIHBhc3NlZCB0aGUgdGVzdCBhbmQgdmVyaWZpY2F0aW9uIG9uIEZU
+MjAwNCBERVYgYm9hcmQuDQoNClRoYW5rIHlvdSBmb3IgeW91ciBkZXRhaWxlZCBhbmFseXNp
+cy4NCg0KSSdsbCB0cnkgYWdhaW4uDQoNCkJlc3QgUmVnYXJkcyENCg0KLS0tLS0tLS0tLS0t
+LS0tLS0tDQpXYW5nIEhvbmdodWkNCg0KDQoNCg0KDQoNCg0KDQogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAtLS3Urcq808q8/i0tLQ0Kt6K8/sjLOiJLcnp5c3p0b2YgS296bG93
+c2tpIjxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQq3osvNyrG85DoyMDIyxOox
+MtTCMsjVKNDHxtrO5Skgz8LO5zQ6NTANCsrVvP7IyzoiV2FuZyBIb25naHVpIjxob25naHVp
+LndhbmdAdWNhcy5jb20uY24+OyJDYXRhbGluIE1hcmluYXMiPGNhdGFsaW4ubWFyaW5hc0Bh
+cm0uY29tPjsiV2lsbCBEZWFjb24iPHdpbGxAa2VybmVsLm9yZz47IkFybmQgQmVyZ21hbm4i
+PGFybmRAYXJuZGIuZGU+OyJPbG9mIEpvaGFuc3NvbiI8b2xvZkBsaXhvbS5uZXQ+OyJzb2Mi
+PHNvY0BrZXJuZWwub3JnPjsiUm9iIEhlcnJpbmciPHJvYmgrZHRAa2VybmVsLm9yZz47Ikty
+enlzenRvZiBLb3psb3dza2kiPGtyenlzenRvZi5rb3psb3dza2krZHRAbGluYXJvLm9yZz47
+IlN1ZGVlcCBIb2xsYSI8c3VkZWVwLmhvbGxhQGFybS5jb20+OyJDcmlzdGlhbiBNYXJ1c3Np
+IjxjcmlzdGlhbi5tYXJ1c3NpQGFybS5jb20+OyJsaW51eC1hcm0ta2VybmVsIjxsaW51eC1h
+cm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc+OyJsaW51eC1rZXJuZWwiPGxpbnV4LWtl
+cm5lbEB2Z2VyLmtlcm5lbC5vcmc+OyJkZXZpY2V0cmVlIjxkZXZpY2V0cmVlQHZnZXIua2Vy
+bmVsLm9yZz47DQrW98ziOiBbUEFUQ0hdIGFybTY0L2Jvb3QvZHRzIGFuZCBhcm1fc2NwaTog
+YWRkIHRvIHN1cHBvcnQgUGh5dGl1bSBGVDIwMDQgQ1BVDQpPbiAwICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIA==
 
