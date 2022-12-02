@@ -2,95 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0A0640CE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF48640CE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234168AbiLBSOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S234207AbiLBSPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:15:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbiLBSOy (ORCPT
+        with ESMTP id S233993AbiLBSPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:14:54 -0500
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E05E8035;
-        Fri,  2 Dec 2022 10:14:53 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id ay27-20020a05600c1e1b00b003d070f4060bso4945095wmb.2;
-        Fri, 02 Dec 2022 10:14:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+t5abKsTpKqgREaQhXCGjROpUVw3tlvXQ+X6G/BuMsw=;
-        b=OkCFw94tfw104Feoiiwjib2moOr5F2SQFUizEIUE+uExNEA41T/4wdbD1c8++0Csdt
-         4fhQHp5us8Fh+KuM1ii/9vgMOaW9gnAHEfmuuwo7N6FnYrP0A+ei/LnJGOyrFAI9E5CJ
-         6+HGyfzxhvicqgEQXV5tfTost2lrCtSKJE9fAZ8R6YbcjIpxra+Bqkd5H2lCYQJWwRRj
-         5w5SGjnexg+qqy2VjwW5zxvdw7vGwv7Oc1/mFY8r7fTKvvN7Tg/DaU9p0KuFxU8k6q12
-         STkP5t8Sz7r3ZS0MIlSfov9/DIzGOthvPkYV0nf/VsJM/zAPKsuWB1YzFr4hiboL9kVe
-         gBSw==
-X-Gm-Message-State: ANoB5plaBJlpvUPDCRg7p4+tmrSUFc1IABQWJAwjl85mb6rGrGvVShV1
-        HOJhh9BFR5avQQxXsNVpVlg=
-X-Google-Smtp-Source: AA0mqf5Un+XibMAB03hU0daYbZ1uI1ijYaDjvNf8tXvR0wxo5R2Y6uMG0rkC1MRApKdKoeZ5TMwYsw==
-X-Received: by 2002:a05:600c:358c:b0:3c6:c089:9810 with SMTP id p12-20020a05600c358c00b003c6c0899810mr54908739wmq.60.1670004891715;
-        Fri, 02 Dec 2022 10:14:51 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id x11-20020adfec0b000000b00241f029e672sm7432081wrn.107.2022.12.02.10.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 10:14:50 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:14:49 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clocksource/drivers/hyperv: use Hyper-V's page size to
- calculate PFN
-Message-ID: <Y4pAmUQZuSP9MMiu@liuwe-devbox-debian-v2>
-References: <20221103152338.2926983-1-anrayabh@linux.microsoft.com>
- <BYAPR21MB1688743DD4507008D33499B0D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y2PiyAEJZitd3LS8@liuwe-devbox-debian-v2>
- <ab0e318d-0840-a76f-bf34-73db659eef63@linaro.org>
+        Fri, 2 Dec 2022 13:15:41 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3C8E8E27;
+        Fri,  2 Dec 2022 10:15:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=1ti/qyo5qklWndJLHHVQcO1yO/QDBA0ukHTNb4AcUME=; b=jRZWWuoBmAbaHUbxgjYwdPwNio
+        896Qhrl0LmvhSvm0f62oou/Bed+MSqI396mm8ZUuZzpb4LnEt1yXSrhI7cP2UJaNX5W6hxcK0r4Oc
+        Er4kkzi6l0ohUeu1sYpr7IOmibgWOT0WQWvbKJkkT1G+THqzj4crUZ/4ivYEpPKFIgsg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p1AZ5-004Cib-NM; Fri, 02 Dec 2022 19:15:11 +0100
+Date:   Fri, 2 Dec 2022 19:15:11 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Xu Liang <lxu@maxlinear.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: phy: mxl-gpy: rename MMD_VEND1 macros to
+ match datasheet
+Message-ID: <Y4pAr5o4RNbl3Q9k@lunn.ch>
+References: <20221202144900.3298204-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ab0e318d-0840-a76f-bf34-73db659eef63@linaro.org>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221202144900.3298204-1-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 01:33:17PM +0100, Daniel Lezcano wrote:
+On Fri, Dec 02, 2022 at 03:49:00PM +0100, Michael Walle wrote:
+> Rename the temperature sensors macros to match the names in the
+> datasheet.
 > 
-> Hi,
-> 
-> On 03/11/2022 16:48, Wei Liu wrote:
-> 
-> [ ... ]
-> 
-> > > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> > 
-> > Thank you both for the quick turnaround. I will just squash this patch
-> > into the previous one.
-> 
-> Can you point to the mailing list the squashed version ?
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-The squashed patch is this one:
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ad1aa571214e8d6468a1806794d987b374b5a08
-
-Thanks,
-Wei.
+    Andrew
