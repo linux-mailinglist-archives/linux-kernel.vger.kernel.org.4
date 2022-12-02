@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB31F640407
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F93640463
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbiLBKE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S233186AbiLBKSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbiLBKEY (ORCPT
+        with ESMTP id S232841AbiLBKSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:04:24 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660217AB2;
-        Fri,  2 Dec 2022 02:04:24 -0800 (PST)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NNpN145WtzqSv2;
-        Fri,  2 Dec 2022 18:00:17 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Dec 2022 18:04:21 +0800
-From:   Qiheng Lin <linqiheng@huawei.com>
-To:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Qiheng Lin <linqiheng@huawei.com>
-Subject: [PATCH v3] media: platform: mtk-mdp3: Fix return value check in mdp_probe()
-Date:   Fri, 2 Dec 2022 18:18:36 +0800
-Message-ID: <20221202101836.19858-1-linqiheng@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 2 Dec 2022 05:18:44 -0500
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C53788DBD0;
+        Fri,  2 Dec 2022 02:18:42 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 9F8871E80D27;
+        Fri,  2 Dec 2022 18:14:37 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0MNc3Rl89av0; Fri,  2 Dec 2022 18:14:34 +0800 (CST)
+Received: from [172.30.38.124] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 465691E80CCF;
+        Fri,  2 Dec 2022 18:14:34 +0800 (CST)
+Subject: Re: [PATCH] ipvs: initialize 'ret' variable in do_ip_vs_set_ctl()
+To:     Dan Carpenter <error27@gmail.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        coreteam@netfilter.org, Yu Zhe <yuzhe@nfschina.com>
+References: <20221202032511.1435-1-liqiong@nfschina.com>
+ <Y4nORiViTw0XlU2a@kadam>
+From:   liqiong <liqiong@nfschina.com>
+Message-ID: <9bc0af1a-3cf0-de4e-7073-0f7895b7f6eb@nfschina.com>
+Date:   Fri, 2 Dec 2022 18:18:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4nORiViTw0XlU2a@kadam>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case of error, the function mtk_mutex_get()
-returns ERR_PTR() and never returns NULL. The NULL test in the
-return value check should be replaced with IS_ERR().
-And also fix the err_free_mutex case.
 
-Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
-Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
----
 
-v3:
- - rebase on top of media_stage tree.
-v2:
- - Add fix the err_return case.
+在 2022年12月02日 18:07, Dan Carpenter 写道:
+> On Fri, Dec 02, 2022 at 11:25:11AM +0800, Li Qiong wrote:
+>> The 'ret' should need to be initialized to 0, in case
+>> return a uninitialized value because no default process
+>> for "switch (cmd)".
+>>
+>> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> If this is a real bug, then it needs a fixes tag.  The fixes tag helps
+> us know whether to back port or not and it also helps in reviewing the
+> patch.  Also get_maintainer.pl will CC the person who introduced the
+> bug so they can review it.  They are normally the best person to review
+> their own code.
+>
+> Here it would be:
+> Fixes: c5a8a8498eed ("ipvs: Fix uninit-value in do_ip_vs_set_ctl()")
+>
+> Which is strange...  Also it suggest that the correct value is -EINVAL
+> and not 0.
+>
+> The thing about uninitialized variable bugs is that Smatch and Clang
+> both warn about them so they tend to get reported pretty quick.
+> Apparently neither Nathan nor I sent forwarded this static checker
+> warning.  :/
+>
+> regards,
+> dan carpenter
 
- drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index 2d1f6ae9f080..97edcd9d1c81 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -207,8 +207,8 @@ static int mdp_probe(struct platform_device *pdev)
- 	}
- 	for (i = 0; i < MDP_PIPE_MAX; i++) {
- 		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
--		if (!mdp->mdp_mutex[i]) {
--			ret = -ENODEV;
-+		if (IS_ERR(mdp->mdp_mutex[i])) {
-+			ret = PTR_ERR(mdp->mdp_mutex[i]);
- 			goto err_free_mutex;
- 		}
- 	}
-@@ -289,7 +289,8 @@ static int mdp_probe(struct platform_device *pdev)
- 	mdp_comp_destroy(mdp);
- err_free_mutex:
- 	for (i = 0; i < MDP_PIPE_MAX; i++)
--		mtk_mutex_put(mdp->mdp_mutex[i]);
-+		if (!IS_ERR_OR_NULL(mdp->mdp_mutex[i]))
-+			mtk_mutex_put(mdp->mdp_mutex[i]);
- err_destroy_device:
- 	kfree(mdp);
- err_return:
--- 
-2.32.0
-
+It is not a real bug,   I  use tool (eg: smatch, sparse) to audit the code,  got this warning and check it,
+found may be a real problem.
