@@ -2,141 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C0E640ECD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7684640ED0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbiLBTyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:54:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
+        id S234449AbiLBT51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbiLBTyv (ORCPT
+        with ESMTP id S229554AbiLBT5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:54:51 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29078BEE0C;
-        Fri,  2 Dec 2022 11:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=T2YfCnfEWemlLWCsHybL4TuoCsjshhXfCn1RZG9CK+Q=; b=s6xguxGgJR/gCcDIJPLArLDmO6
-        T0pBwqISRqlZQNSKzQt9NhpCqBhQtQFB24VBbLWkeDLTZsT0iy5qAawp/LxQImG1/N6pRd9NHpkIK
-        oQ2M8gNM7GpTy5vr/+sQlLD9ewoqO3d/5pH1gYKt9t7ZdG66UcqM180IMNEhZu15A7J1vvvz1U3N5
-        /qvkspOTtVxROy/1J7LftPWFVjlmFHHkyWtmnQfPbRmiEqI7XMnrOx0ktPLrBWw23CIUGMKSC4T6A
-        TOEXxe+62PvU0mfXnbGiUfrH44LB/yrEiRmNISfvF2SjdV1LbklvkkoFZW7IfwRHsLIN3TMwGOnCA
-        JaDkAI9A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35540)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p1C7N-0004Wy-8Q; Fri, 02 Dec 2022 19:54:42 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p1C7L-0004f4-T9; Fri, 02 Dec 2022 19:54:39 +0000
-Date:   Fri, 2 Dec 2022 19:54:39 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jerry Ray <jerry.ray@microchip.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Fri, 2 Dec 2022 14:57:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC51BEE958;
+        Fri,  2 Dec 2022 11:57:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EB1F62237;
+        Fri,  2 Dec 2022 19:57:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E890C433D6;
+        Fri,  2 Dec 2022 19:57:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670011043;
+        bh=acLl0i6Ws/i0Io5d6dMkIRF0Fh8/UGGdP7tcPSuvFLY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=eE+VVFxQskQjOSvQjiHlUv7GnJBc3WzIHD9IvX9jEmiW6lSuVvwOOWniGONNE6OUv
+         QTKkN1oV6OHMvbTA3R7XkaPz//JcrhMiSVi/HOX+Zy8OxAjCng+T7TfLMDhSQSi2Bt
+         L4mNRSWFL8pBM+n/1r+NcRpK9HphWyVd1ddQE4koOhh9zz1sxU30rdVo5OU0ntHrIz
+         HkfedLIflKQXGmcliYo1DWKBmLEj52FPq1ITp9Oz3NblXMUXIKbbnSh11YNxMwBgDk
+         0ZZ3HsZhvaHfuwGDGF3DKX8IB3fGFuMP6nu3AjWFPL2GKdl0eN7qmXVo6d1Tgxk2WG
+         3FIOAGVK+rBGw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 39B795C095D; Fri,  2 Dec 2022 11:57:23 -0800 (PST)
+Date:   Fri, 2 Dec 2022 11:57:23 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] dsa: lan9303: Move to PHYLINK
-Message-ID: <Y4pX//cG2Hq8NvbM@shell.armlinux.org.uk>
-References: <20221202191749.27437-1-jerry.ray@microchip.com>
- <20221202191749.27437-3-jerry.ray@microchip.com>
+Subject: Re: [PATCH] rcu-tasks: Make shrink down to a single callback queue
+ safely
+Message-ID: <20221202195723.GB4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221130051253.1884572-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221202191749.27437-3-jerry.ray@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221130051253.1884572-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jerry,
+On Wed, Nov 30, 2022 at 01:12:53PM +0800, Zqiang wrote:
+> Assume that the current RCU-task belongs to per-CPU callback queuing
+> mode and the rcu_task_cb_adjust is true.
+> 
+>       CPU0					CPU1
+> 
+> rcu_tasks_need_gpcb()
+>   ncbsnz == 0 and
+>   ncbs < rcu_task_collapse_lim
+> 
+> 					      invoke call_rcu_tasks_generic()
+> 						 enqueue callback to CPU1
+> 					        (CPU1 n_cbs not equal zero)
+> 
+>   if (rcu_task_cb_adjust &&
+>   ncbs <= rcu_task_collapse_lim)
+>     if (rtp->percpu_enqueue_lim > 1)
+>       rtp->percpu_enqueue_lim = 1;
+>       rtp->percpu_dequeue_gpseq =
+>       get_state_synchronize_rcu();
+> 
+> 
+>   A full RCU grace period has passed
 
-On Fri, Dec 02, 2022 at 01:17:49PM -0600, Jerry Ray wrote:
-> -static void lan9303_adjust_link(struct dsa_switch *ds, int port,
-> -				struct phy_device *phydev)
-> -{
-> -	struct lan9303 *chip = ds->priv;
-> -	int ctl;
-> -
-> -	if (!phy_is_pseudo_fixed_link(phydev))
-> -		return;
-> -
-> -	ctl = lan9303_phy_read(ds, port, MII_BMCR);
-> -
-> -	ctl &= ~BMCR_ANENABLE;
-> -
-> -	if (phydev->speed == SPEED_100)
-> -		ctl |= BMCR_SPEED100;
-> -	else if (phydev->speed == SPEED_10)
-> -		ctl &= ~BMCR_SPEED100;
-> -	else
-> -		dev_err(ds->dev, "unsupported speed: %d\n", phydev->speed);
-> -
-> -	if (phydev->duplex == DUPLEX_FULL)
-> -		ctl |= BMCR_FULLDPLX;
-> -	else
-> -		ctl &= ~BMCR_FULLDPLX;
-> -
-> -	lan9303_phy_write(ds, port, MII_BMCR, ctl);
-> -
-> -	if (port == chip->phy_addr_base) {
-> -		/* Virtual Phy: Remove Turbo 200Mbit mode */
-> -		lan9303_read(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, &ctl);
-> -
-> -		ctl &= ~LAN9303_VIRT_SPECIAL_TURBO;
-> -		regmap_write(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, ctl);
-> -	}
-> -}
+I don't see how this grace period can elapse.  The rcu_tasks_need_gpcb()
+function is invoked only from rcu_tasks_one_gp(), and while holding
+->tasks_gp_mutex.
 
-Is this functionality no longer necessary? For example, I don't see
-anywhere else in the driver that this turbo mode is disabled.
+What am I missing here?
 
-I'm guessing the above code writing MII_BMCR is to force the
-configuration of integrated PHYs to be the fixed-link settings?
-How is that dealt with after the removal of the above code?
+							Thanx, Paul
 
+>   if (rcu_task_cb_adjust && !ncbsnz &&
+>   poll_state_synchronize_rcu(
+>     rtp->percpu_dequeue_gpseq) == true
+>     if (rtp->percpu_enqueue_lim <
+> 	rtp->percpu_dequeue_lim)
+>         rtp->percpu_dequeue_lim = 1
+>     for (cpu = rtp->percpu_dequeue_lim;
+>         cpu < nr_cpu_ids; cpu++)
+>         find CPU1 n_cbs is not zero
+>         trigger warning
+> 
+> The above scenario will not only trigger WARN_ONCE(), but also set the
+> rcu_tasks structure's->percpu_dequeue_lim is one when CPU1 still have
+> callbacks, which will cause the callback of CPU1 to have no chance to be
+> called.
+> 
+> This commit add per-cpu callback check(except CPU0) before set the rcu_tasks
+> structure's->percpu_dequeue_lim to one, if other CPUs(except CPU0) still have
+> callback, not set the rcu_tasks structure's->percpu_dequeue_lim to one, set it
+> until the all CPUs(except CPU0) has no callback.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tasks.h | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> index e4f7d08bde64..690af479074f 100644
+> --- a/kernel/rcu/tasks.h
+> +++ b/kernel/rcu/tasks.h
+> @@ -433,14 +433,17 @@ static int rcu_tasks_need_gpcb(struct rcu_tasks *rtp)
+>  	    poll_state_synchronize_rcu(rtp->percpu_dequeue_gpseq)) {
+>  		raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
+>  		if (rtp->percpu_enqueue_lim < rtp->percpu_dequeue_lim) {
+> +			for (cpu = rtp->percpu_enqueue_lim; cpu < nr_cpu_ids; cpu++) {
+> +				struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, cpu);
+> +
+> +				if(rcu_segcblist_n_cbs(&rtpcp->cblist)) {
+> +					raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
+> +					return needgpcb;
+> +				}
+> +			}
+>  			WRITE_ONCE(rtp->percpu_dequeue_lim, 1);
+>  			pr_info("Completing switch %s to CPU-0 callback queuing.\n", rtp->name);
+>  		}
+> -		for (cpu = rtp->percpu_dequeue_lim; cpu < nr_cpu_ids; cpu++) {
+> -			struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rtp->rtpcpu, cpu);
 > -
->  static int lan9303_port_enable(struct dsa_switch *ds, int port,
->  			       struct phy_device *phy)
->  {
-> @@ -1279,6 +1243,41 @@ static int lan9303_port_mdb_del(struct dsa_switch *ds, int port,
->  	return 0;
->  }
+> -			WARN_ON_ONCE(rcu_segcblist_n_cbs(&rtpcp->cblist));
+> -		}
+>  		raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
+>  	}
 >  
-> +static void lan9303_phylink_get_caps(struct dsa_switch *ds, int port,
-> +				     struct phylink_config *config)
-> +{
-> +	struct lan9303 *chip = ds->priv;
-> +
-> +	dev_dbg(chip->dev, "%s(%d) entered.", __func__, port);
-> +
-> +	config->mac_capabilities = MAC_10 | MAC_100 | MAC_ASYM_PAUSE |
-> +				   MAC_SYM_PAUSE;
-> +
-> +	if (dsa_port_is_cpu(dsa_to_port(ds, port))) {
-> +		/* cpu port */
-> +		phy_interface_empty(config->supported_interfaces);
-
-This should not be necessary - the supported_interfaces member should
-already be zero.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> -- 
+> 2.25.1
+> 
