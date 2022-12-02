@@ -2,308 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89F463FD0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BC363FD16
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbiLBA3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 19:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S232132AbiLBAbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 19:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiLBA2t (ORCPT
+        with ESMTP id S231894AbiLBAbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 19:28:49 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AEDCD78D;
-        Thu,  1 Dec 2022 16:23:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669940631; x=1701476631;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=jx08TtEYNeYqM65uIb6Fo6H1XybhlChNwaglLtx7E0I=;
-  b=EujZTfHWQFCPxMlp2keaeFFiHN4zGO3+2Iyce3Ao4obJmbBzUFwbfzMc
-   jGZVt5BzUytEIF1ZVqvG5eh0y34b8SAcb3HXacC4v296D7heOFDPAwbIh
-   sxcsa+28ioZ4wKKmHl1qwV5bY2TfwsKiPqeq0rSy1HNS4K5xZxayKEA7V
-   sFFTMCsiCwob2DaQqQmVGeVndUxYRTr63QxDgqeKOrQNqVweICUSxa/ht
-   h/AcImNnTN8/ZnsCYHM/N0oRNYayB12t/4FuwLRdXjIgZwFmiX74mu3eV
-   wmmAdlzkwJaejuPb6LKJjDa3Yb9rTbDP/AYy/Q2vtGEG76lojzhdgrnfi
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="296186568"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="296186568"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 16:23:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="713422754"
-X-IronPort-AV: E=Sophos;i="5.96,210,1665471600"; 
-   d="scan'208";a="713422754"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Dec 2022 16:23:39 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 1 Dec 2022 16:23:39 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 1 Dec 2022 16:23:38 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 1 Dec 2022 16:23:38 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.40) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 1 Dec 2022 16:23:32 -0800
+        Thu, 1 Dec 2022 19:31:18 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D0A167FF;
+        Thu,  1 Dec 2022 16:26:59 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ie1CXF2vJ8IqsrLkIEAoXkjLxasqJxNCk4Abcf73Jl/Sq987Pk3Go2NzjWOQAdBd7NhvVrEpWKh3LbaD3pM0TJSTmktxhz6ClsLKx/NFSf8dZKDsIe47YvZ7ueAi37SGGQyfwXY5kdkKEinb/AQWE9eojP6IpOG70k0U4wrwz1wjchOCxWyt7G9GKbBG6Ip46vJVJXuOLWwkvC4k8sQk6jZa4jmOqH4qAqqH/3wnIdth16FcM35rpdvz/kvTZNoiXCoTFubdeG1cDm1EYxl6wvTO2VhMVoJsSvIRNy6aYKEPVQpLRedXYy7FxK1xs4u+WSdr/N69609jByHCQMfiFw==
+ b=E2dY3JAbIiIjuuMcx2DeNesb+NeuIsA0QCjpBYCCfdElLT4hW4nITNytfS/7kw8o1aNF4eSon4zKptAmM4VZBsf/IqO1E95p07MM9/eCVHrZgDrRXnekq662rpl0I7d0p9cQMGWoJssSIEJwzWOTsqtYacYVuPfsud41qzqihsUc1yOt702EL7CjS3RUVwS9JVLmLjYZjfPK6hxXGcppsE8NyEvjnxWQn1LMwkSJIXx2QgCR9iG2EYHOxWJVqFeuWXbW/PWPPtLzCNM5d3ERxINbHHlO1KyiTSew5S7333Kiq9Ox2Ur3AldRRebCNm9+KIvNWuQFgPM8Q36NRmdaRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=brV9GKBx6NgLJCM3L9OG0MqK9RKHgg7nguJpOuxXmcI=;
- b=OGsNtJsU3MaJBvseeky31oVL1AIpCg9Jm8SROjKgILRywlahvFOK5JOMrC8SWSg1PKjNSdjGtO3tijc7DpWbU2yWjmceCvOvqPjMXS/CN6mcCEn6crg+E1/VIwFBZDg05FrkC8K28cpvvZApSPg1TH/pMJCT7g1OR2o2eq8gvbLWfZU/dP67MhETVEpao+hv5n2GR9YgtHSsjYAxHferOMGilTJ5w+TauYyWYpDNxNLvuAoWYSgoycdLAgEjCPVDasAdFQNpgEsBYScmmN3k+Ke8uitAX7/24TsyHzBMLNbnaDddH3Kq4ycWElKYukPciTrW2irncpIFJOxm/Hk9VQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by CH0PR11MB5457.namprd11.prod.outlook.com
- (2603:10b6:610:d0::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Fri, 2 Dec
- 2022 00:23:29 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.008; Fri, 2 Dec 2022
- 00:23:29 +0000
-Date:   Thu, 1 Dec 2022 16:23:21 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>
-CC:     Davidlohr Bueso <dave@stgolabs.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: RE: [PATCH V2 01/11] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <63894579bf550_3cbe029458@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
- <20221201002719.2596558-2-ira.weiny@intel.com>
+ bh=/3AeYI3Jwn+HDz/2sUS8t5Z5+0tdUvkDPqtG1PVOo04=;
+ b=MtjlY2zd2KzTVeqJWJIjLG5i3SuTmGekh98MKIoWkVyl9aBXBeJvN3aC0RvqRkjxx/pnvN33aEDLAfSj3r3WMprOF/zcxT4sY2Z42ok5Yrzaq8TCZyhKBs1D4N1T7OIXcFHNTzT32tsd4AwSbc3DX/UUVsOZ09y3IxXPmXserJm+vyafIpzio8uxehxiarUav61/OQWEXIoVyDIZbSr5IMmp7QcFe9qp84PocZVWkCOqK0DTeOqZMv1Y90yLv1uF6yOnMhFjCo3B+zbHMtdj5Gvq4Bavrg2gIL2wWptVa+ItOvsd9DzFZIeZqFGsqOPRL94F97PJCDf0xDOw6Nswig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/3AeYI3Jwn+HDz/2sUS8t5Z5+0tdUvkDPqtG1PVOo04=;
+ b=u7iG3eei/XJe49F8raFF/ZOeu2CJ9LAE0rrgCT92tw5yo3ap4smJQiuHiuLrbt6f7p07lkDERsrVXCi1u+3HAUIVOlASFotlwRNbzK2hyi3xH9F4V+Us9zM1oyUVZr7sULKx5wRXdhra72vQK4LEzNnBEW2Qnli2UaFpkcvK2lw=
+Received: from MW4PR03CA0156.namprd03.prod.outlook.com (2603:10b6:303:8d::11)
+ by PH7PR12MB7354.namprd12.prod.outlook.com (2603:10b6:510:20d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Fri, 2 Dec
+ 2022 00:26:55 +0000
+Received: from CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8d:cafe::1) by MW4PR03CA0156.outlook.office365.com
+ (2603:10b6:303:8d::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8 via Frontend
+ Transport; Fri, 2 Dec 2022 00:26:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT064.mail.protection.outlook.com (10.13.175.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5880.8 via Frontend Transport; Fri, 2 Dec 2022 00:26:55 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Dec
+ 2022 18:26:50 -0600
+Date:   Thu, 1 Dec 2022 18:26:35 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>, <x86@kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <pbonzini@redhat.com>,
+        <vkuznets@redhat.com>, <wanpengli@tencent.com>,
+        <jmattson@google.com>, <joro@8bytes.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <hpa@zytor.com>, <shuah@kernel.org>, <yang.zhong@intel.com>,
+        <ricarkol@google.com>, <aaronlewis@google.com>,
+        <wei.w.wang@intel.com>, <kirill.shutemov@linux.intel.com>,
+        <corbet@lwn.net>, <hughd@google.com>, <jlayton@kernel.org>,
+        <bfields@fieldses.org>, <akpm@linux-foundation.org>,
+        <yu.c.zhang@linux.intel.com>, <jun.nakajima@intel.com>,
+        <dave.hansen@intel.com>, <qperret@google.com>,
+        <steven.price@arm.com>, <ak@linux.intel.com>, <david@redhat.com>,
+        <luto@kernel.org>, <vbabka@suse.cz>, <marcorr@google.com>,
+        <erdemaktas@google.com>, <pgonda@google.com>, <nikunj@amd.com>,
+        <diviness@google.com>, <maz@kernel.org>, <dmatlack@google.com>,
+        <axelrasmussen@google.com>, <maciej.szmigiero@oracle.com>,
+        <mizhang@google.com>, <bgardon@google.com>,
+        <ackerleytng@google.com>
+Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
+Message-ID: <20221202002635.bkhs3h7skd7igtpr@amd.com>
+References: <20221111014244.1714148-1-vannapurve@google.com>
+ <20221111014244.1714148-2-vannapurve@google.com>
+ <20221122100705.GA619277@chaop.bj.intel.com>
+ <Y30rqWwDRbH7nQaQ@google.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20221201002719.2596558-2-ira.weiny@intel.com>
-X-ClientProxiedBy: SJ0PR03CA0172.namprd03.prod.outlook.com
- (2603:10b6:a03:338::27) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
-MIME-Version: 1.0
+In-Reply-To: <Y30rqWwDRbH7nQaQ@google.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|CH0PR11MB5457:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ad93b26-b386-4d77-90d1-08dad3fb6fd6
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT064:EE_|PH7PR12MB7354:EE_
+X-MS-Office365-Filtering-Correlation-Id: f05f1855-ab26-4cc8-b41c-08dad3fbea96
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4xjexBOXYShUikgnCyZAB7kzZ7xfLm9Yg28sHedQcQbsecb1SfHXwIca9/fPjyey5xVYn78KswONic5Fx5tsk2MD83D+4K9DB/kOMMQEb94BB6PJ2VmL8cbzjX93kXabTFyPZdQwvCWYaRWpcgrVaHv5py/3VIvRMToxoXLx71ovlsmOmRtwW+Vm2d+iSHpam1O1jpNudTDWNNzoXm7FxUYOiD88r9/bm3350si+elXpXiEL11hFBTjBXorvcvVa4QuxunV+NFYuyBgLwcEF9HcjSRtODkzWKSz8fsftqSNoVv0zbqm01F1p5kZVpKHD+diYPGmzRfROCyBrXJ6OBDbxjAgKUGcoddiM277WgveeHqkEXDMSwT+c7SdZB6U8OwCcEyQC8h5cF5+w/iI8YuTETVt/UIP/EHcLfzAFvBBt6lcNh0cYQxB5OaRbooxSPt6XwsFeX8g7gJy4+0FqCZ6wy1skTijm+VRXlMhL/BKrhNJqRlu2oT14xpgciYjPMu67FQPSRS19HbpnR+5vFmFuO0ukd1A269LdJ7E+tX5FG2bMW2EToV5LgXe3oocIfexAXeHW/Q9A67x1TKr6s4VqY4Lq/F6X8Yss+ZSqFP7B6nB3p5q0VZpnGO4DS2AbUpKqHHRsTlQssxxgN3Y99KeK6eVDG4uIE/JU5wdJnHboxgrb4YT/QfB5iTAJn4Cv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(346002)(39860400002)(376002)(451199015)(66899015)(83380400001)(6512007)(86362001)(6200100001)(9686003)(6506007)(6486002)(38100700002)(82960400001)(186003)(5660300002)(41300700001)(26005)(6666004)(478600001)(66946007)(8676002)(66556008)(66476007)(4326008)(6862004)(8936002)(54906003)(316002)(2906002)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e5+qfybx51vk803eXqY2G21yCjWtm6xYYDb2+FESuwnEX9QW87bpUCiACX3e?=
- =?us-ascii?Q?5jBGcBiNAVqEpCM/h/knQwdoBckEeSdq/J42EM4lZ4nM8R2sluFuSW45hDIu?=
- =?us-ascii?Q?5KeMJ2Rdstn72BSMCfJbYgv54QTqLFSqkyeR+g+SZITmlEambVDLNtkh0+wu?=
- =?us-ascii?Q?NujQE9npwc43WIO88mDBWAb5UqyyfwsU59cLx2o/HF2NNeuxGpr7uD4tpqA6?=
- =?us-ascii?Q?dQciBfZ7psQpRxU+AL0gzTpyFs/t6i8RL35stdNtJskDKNCWY0Dp3qSJD5aD?=
- =?us-ascii?Q?rIburv4TY5SdOhESKikXoluEp4ah2N1BRtDrMJKUW/JxUuRZDNLOVmmrtZeW?=
- =?us-ascii?Q?wgUKcOIC/NrUuoTyoFSJJnGrUgDC5fjZdtn0m7SPgBTb28le4txMJ3ue1Enx?=
- =?us-ascii?Q?Ddce0lqUqJdbuydQiuP5n7SyB2tVk9N69+49FbcfNOb56+5aCMhi5dFc3QZo?=
- =?us-ascii?Q?L0/Smn7fSihWnqb3z8TmvwG1yljBORj/bkmGWQKPwwoEVlOZIOM56Cw5T2Cw?=
- =?us-ascii?Q?2t81OGhRWmPxOCNoiQ/46yTCSAoZ5F7v9DCn++rlZ3SfvUPyJcBhGLf7DWs9?=
- =?us-ascii?Q?pT0awEzhxxE5P/ernKwC5zMWfAXerMLDtwBxGGKhthlVlMdC9FOTDJxDmvJo?=
- =?us-ascii?Q?K7HQ2yUeqh7sDHi1sUzquc8eW+36eG1nwdrgKw7gTgwIr11uWs1T0+LhqdnB?=
- =?us-ascii?Q?GM7emi9qZ50P688xvkPkYgpLG12Z5h8y0ZwFAGag5lRtS0n3trbMljGYCSkt?=
- =?us-ascii?Q?4Cc2muZVb7RWGjCztoBhz97tSxwST+HHGVeAHV0A+lp8AU71DQP/E+BFBa0J?=
- =?us-ascii?Q?hzla/1CqfEA8t5vbEgg5BTsBKfjD7+xSe4t3ME2LK/OaUAwqcL4AawGoCgu6?=
- =?us-ascii?Q?WNF6+0bMZpWv31sUw4MsWTLIgm4f6XcxYzsQYgqt3TTo4b6TqCuprMUTN00P?=
- =?us-ascii?Q?82UnonZLN5uKxFHV/Xgp20hkoEJs30mXd7KDT5BHiCb+iH1j3OMZj2R50X19?=
- =?us-ascii?Q?yEh8ao3g36ayNcUWHhXqQy+3e6NPiuZC7BD/fPfsGUEddAqDMFgNjtUPJg0M?=
- =?us-ascii?Q?gN6jV425agGPJvH1cj2DdRpmWWDJGLH9aT5rjOtmuHOiX7ikc4ATPF2LD/QU?=
- =?us-ascii?Q?3qzWyy3t+rNB0Mk2+xXPXKmbHh7S6S0z2i2H+QEs79Rd1edN8/+TfQw94Hl9?=
- =?us-ascii?Q?x2GDinrPpPR2kEwXfUg9e8VGQgc42sVDbGPJ2Pc8KbpDR/rGWbPrk5KQjE4e?=
- =?us-ascii?Q?sEiYGksF9FKoBJKBMKn3u0GcC9tgX6oijtZBgiZlwYoWg4/41im3eA2S1MnB?=
- =?us-ascii?Q?yqtDp1DwCqjBAzzbqwB6b33Rt6WBqYbr9jQorSl3p26xNrwFI3pEg8RCPZD+?=
- =?us-ascii?Q?Zrs/QkrmFQP+0h7gu6uoCX+HZQ6Hj87sFZwHZySPFCG4bZPIPmKoxUAh86mC?=
- =?us-ascii?Q?WbJL3622pB/1F6eS6oV9658KRDeMzQ8AOqQBk714fuZBqtBu9xE1jExvo/+o?=
- =?us-ascii?Q?xW7/v3llGmgmbFXZEvFu+D6d1juxxfBjG4T1fFpnpsUzHZxtimLB6Km01IHI?=
- =?us-ascii?Q?1N3oTJtGlyNQ8rCDjAanIXd8RFWMGg2ZjQAFYRYi5Mmec9lSp1893k1RrhW8?=
- =?us-ascii?Q?xA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ad93b26-b386-4d77-90d1-08dad3fb6fd6
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 00:23:29.6368
+X-Microsoft-Antispam-Message-Info: f2xTWzJUZJNKiRpihyPypvxmM87Yaaj2BatnFnHIm+jxlZImNxUUFW3tXyLddx3twUYahI6VWZUzsh48apzq/G5yOJ32HlK0n5pepoBOFljjA/1WwP6C28RtuulyYLH49IIt5gFk6HGvY5BU+1+H+NSoCAz4vM3Roigvwd7QDr7NVvLEv5qEYIZCS2t5yWbTQljxIvDlLSZ4HjyH8CvvbbRKn1cqQRVhb4/Bp6s3AtCtNz9iLeRYQ8dgGDwJMXHCspoBNu2sVvnna8xs+XbOXDo37TuBb/dYusSY972Xp7iREGZ02hGP+qEZh34PO4D/ejZRdJg/3OomMNCHhnT/4uA32rj8CwaKz2+Uvi1gHkFjHg9PugGbES0acHPc4oAGX6IHL5hOnQ3WkaN20eKvAPMKRb18choWL+h6awH3JSKGMQEzrtKj0hBuPnDZWkTG6cmf3jTSzN3bQ8MGJ8ziL6Gi3MvfP9dEfvRQaEZkFtDq/R4ab1KdBSrY5Lza5QcT3YxsphMsLBtXy+Pq05iTmeHVO3XUpRQcnE2CR4DTLwFHtG6ZJwpoxtbZR8Oc6cSUkf/ERFaA9YLLlq4AmgHI8v28GUe3A2L0dJcqI/OeLugfmyxfwJVH6DZWVAQGD2E9QXgjRu4dplEY8ojLZmQqf1zDVSfhTs00yfCpF35grChwim0qA0/EVViJpaZaW9+fZ8pJdTReB+eRqjV0yesfUjlDFMnhg909fXBhlOLKGPjFQNUUazeVNufJ72+D9NnRUMC/ZUs1DJgAUt1jSEQe7Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(396003)(451199015)(40470700004)(46966006)(36840700001)(2906002)(478600001)(316002)(70586007)(70206006)(1076003)(40460700003)(356005)(81166007)(45080400002)(36756003)(54906003)(426003)(82740400003)(26005)(6666004)(82310400005)(40480700001)(47076005)(16526019)(36860700001)(2616005)(86362001)(966005)(186003)(336012)(6916009)(7416002)(44832011)(5660300002)(7406005)(41300700001)(8936002)(8676002)(4326008)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 00:26:55.0937
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oMuECQauUQxeuEoNaJPp65JWfzr4c54QsL2pCer1Rh18jtL2FtBywedMWUZ0A9tQk6dOAz1vuNPxeMTT+qX8COEDKuPJOZWDWZZ4nL/Lkqk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5457
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: f05f1855-ab26-4cc8-b41c-08dad3fbea96
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7354
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ira.weiny@ wrote:
-> From: Davidlohr Bueso <dave@stgolabs.net>
+On Tue, Nov 22, 2022 at 08:06:01PM +0000, Sean Christopherson wrote:
+> On Tue, Nov 22, 2022, Chao Peng wrote:
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 10017a9f26ee..b3118d00b284 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -4280,6 +4280,10 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> > >  
+> > >  	fault->gfn = fault->addr >> PAGE_SHIFT;
+> > >  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
+> > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
+> > > +	fault->is_private = kvm_slot_can_be_private(fault->slot) &&
+> > > +			kvm_mem_is_private(vcpu->kvm, fault->gfn);
+> > > +#endif
+> > >  
+> > >  	if (page_fault_handle_page_track(vcpu, fault))
+> > >  		return RET_PF_EMULATE;
+> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> > > index 5cdff5ca546c..2e759f39c2c5 100644
+> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
+> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> > > @@ -188,7 +188,6 @@ struct kvm_page_fault {
+> > >  
+> > >  	/* Derived from mmu and global state.  */
+> > >  	const bool is_tdp;
+> > > -	const bool is_private;
+> > >  	const bool nx_huge_page_workaround_enabled;
+> > >  
+> > >  	/*
+> > > @@ -221,6 +220,9 @@ struct kvm_page_fault {
+> > >  	/* The memslot containing gfn. May be NULL. */
+> > >  	struct kvm_memory_slot *slot;
+> > >  
+> > > +	/* Derived from encryption bits of the faulting GPA for CVMs. */
+> > > +	bool is_private;
+> > 
+> > Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
+> > it looks ugly I can remove the "const" in my code.
 > 
-> Currently the only CXL features targeted for irq support require their
-> message numbers to be within the first 16 entries.  The device may
-> however support less than 16 entries depending on the support it
-> provides.
+> Hmm, I think we can keep the const.  Similar to the bug in kvm_faultin_pfn()[*],
+> the kvm_slot_can_be_private() is bogus.  A fault should be considered private if
+> it's marked as private, whether or not userspace has configured the slot to be
+> private is irrelevant.  I.e. the xarray is the single source of truth, memslots
+> are just plumbing.
+
+I've been looking at pulling this series into our SNP+UPM patchset (and
+replacing the UPM selftests that were including with UPMv9). We ended up
+with something similar to what you've suggested, but instead of calling
+kvm_mem_is_private() directly we added a wrapper in mmu_internal.h that's
+called via:
+
+kvm_mmu_do_page_fault():
+  struct kvm_page_fault fault = {
+    ...
+    .is_private = kvm_mmu_fault_is_private()
+
+where kvm_mmu_fault_is_private() is defined something like:
+
+static bool kvm_mmu_fault_is_private(struct kvm *kvm, gpa_t gpa, u64 err)
+{
+        struct kvm_memory_slot *slot;
+        gfn_t gfn = gpa_to_gfn(gpa);
+        bool private_fault = false;
+
+        slot = gfn_to_memslot(kvm, gpa_to_gfn(gpa));
+        if (!slot)
+                goto out;
+
+        if (!kvm_slot_can_be_private(slot))
+                goto out;
+
+		/* If platform hook returns 1 then use it's determination of private_fault */
+        if (static_call(kvm_x86_fault_is_private)(kvm, gpa, err, &private_fault) == 1)
+                goto out;
+
+        /*
+         * Handling below is for guests that rely on the VMM to control when a fault
+         * should be treated as private or not via KVM_MEM_ENCRYPT_{REG,UNREG}_REGION.
+         * This is mainly for the KVM self-tests for restricted memory.
+         */
+#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
+        private_fault = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa);
+#endif
+
+out:
+        return private_fault;
+}
+
+I tried removing kvm_slot_can_be_private() based on your comments, but
+we ended up hitting a crash in restrictedmem_get_page(). I think this is
+because the xarray currently defaults to 'private', so when KVM MMU relies
+only on xarray it can hit cases where it thinks a GPA should be backed
+by a restricted page, but when it calls kvm_restrictedmem_get_pfn() a
+null slot->restricted_file gets passed to restricted_get_page() and it
+blows up.
+
+I know Chao mentioned they were considering switching to 'shared' as the
+default xarray value, which might fix this issue, but until then we've
+left these checks in place.
+
+Just figured I'd mention this in case Vishal hits similar issues.
+
+-Mike
+
 > 
-> Attempt to allocate these 16 irq vectors.  If the device supports less
-> then the PCI infrastructure will allocate that number.
-
-What happens if the device supports 16, but irq-core allocates less? I
-believe the answer is with the first user, but this patch does not
-include a user.
-
-> Store the number of vectors actually allocated in the device state for
-> later use by individual functions.
-
-The patch does not do that.
-
-I know this patch has gone through a lot of discussion, but this
-mismatch shows it should really be squashed with the first user because
-it does not stand on its own anymore.
-
-> Upon successful allocation, users can plug in their respective isr at
-> any point thereafter, for example, if the irq setup is not done in the
-> PCI driver, such as the case of the CXL-PMU.
+> Then kvm_mmu_do_page_fault() can do something like:
 > 
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> ---
-> Changes from V1:
-> 	Jonathan
-> 		pci_alloc_irq_vectors() cleans up the vectors automatically
-> 		use msi_enabled rather than nr_irq_vecs
-> 
-> Changes from Ira
-> 	Remove reviews
-> 	Allocate up to a static 16 vectors.
-> 	Change cover letter
-> ---
->  drivers/cxl/cxlmem.h |  3 +++
->  drivers/cxl/cxlpci.h |  6 ++++++
->  drivers/cxl/pci.c    | 23 +++++++++++++++++++++++
->  3 files changed, 32 insertions(+)
-> 
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 88e3a8e54b6a..cd35f43fedd4 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
->   * @info: Cached DVSEC information about the device.
->   * @serial: PCIe Device Serial Number
->   * @doe_mbs: PCI DOE mailbox array
-> + * @msi_enabled: MSI-X/MSI has been enabled
->   * @mbox_send: @dev specific transport for transmitting mailbox commands
->   *
->   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> @@ -247,6 +248,8 @@ struct cxl_dev_state {
->  
->  	struct xarray doe_mbs;
->  
-> +	bool msi_enabled;
-> +
-
-This goes unused in this patch and it also duplicates what the core
-offers with pdev->{msi,msix}_enabled.
-
->  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->  };
->  
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index eec597dbe763..b7f4e2f417d3 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -53,6 +53,12 @@
->  #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
->  #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
->  
-> +/*
-> + * NOTE: Currently all the functions which are enabled for CXL require their
-> + * vectors to be in the first 16.  Use this as the max.
-> + */
-> +#define CXL_PCI_REQUIRED_VECTORS 16
-> +
->  /* Register Block Identifier (RBI) */
->  enum cxl_regloc_type {
->  	CXL_REGLOC_RBI_EMPTY = 0,
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index faeb5d9d7a7a..8f86f85d89c7 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -428,6 +428,27 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->  	}
->  }
->  
-> +static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	int nvecs;
-> +
-> +	/*
-> +	 * NOTE: pci_alloc_irq_vectors() handles calling pci_free_irq_vectors()
-> +	 * automatically despite not being called pcim_*.  See
-> +	 * pci_setup_msi_context().
-> +	 */
-> +	nvecs = pci_alloc_irq_vectors(pdev, 1, CXL_PCI_REQUIRED_VECTORS,
-> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-
-clang-format would scooch that second line in for you.
-
-Might also be worth a comment for the next person that goes looking for
-why this isn't PCI_IRQ_ALL_TYPES.
-
-From CXL 3.0 3.1.1 CXL.io Endpoint:
-A Function on a CXL device must not generate INTx messages if that
-Function participates in CXL.cache protocol or CXL.mem protocols.
-
-
-> +	if (nvecs < 0) {
-> +		dev_dbg(dev, "Failed to alloc irq vectors; use polling instead.\n");
-> +		return;
-> +	}
-> +
-> +	cxlds->msi_enabled = true;
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index dbaf6755c5a7..456a9daa36e5 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -260,6 +260,8 @@ enum {
+>  static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>                                         u32 err, bool prefetch)
 >  {
->  	struct cxl_register_map map;
-> @@ -494,6 +515,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> +	cxl_pci_alloc_irq_vectors(cxlds);
+> +       bool is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault);
 > +
->  	cxlmd = devm_cxl_add_memdev(cxlds);
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
-> -- 
-> 2.37.2
+>         struct kvm_page_fault fault = {
+>                 .addr = cr2_or_gpa,
+>                 .error_code = err,
+> @@ -269,13 +271,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>                 .rsvd = err & PFERR_RSVD_MASK,
+>                 .user = err & PFERR_USER_MASK,
+>                 .prefetch = prefetch,
+> -               .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
+> +               .is_tdp = is_tdp,
+>                 .nx_huge_page_workaround_enabled =
+>                         is_nx_huge_page_enabled(vcpu->kvm),
+>  
+>                 .max_level = KVM_MAX_HUGEPAGE_LEVEL,
+>                 .req_level = PG_LEVEL_4K,
+>                 .goal_level = PG_LEVEL_4K,
+> +               .private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
+> +                          kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
+>         };
+>         int r;
 > 
-
-
+> [*] https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2FY3Vgc5KrNRA8r6vh%40google.com&amp;data=05%7C01%7CMichael.Roth%40amd.com%7Cc65b2b9b200e41f189ff08daccc4ffdc%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638047443786540517%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Oajn46ulTFXBh0nIx61YmbbMAqW64EqKRniZJwLfXLs%3D&amp;reserved=0
