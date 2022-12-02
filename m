@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100026404E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119646404E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbiLBKkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S232728AbiLBKl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbiLBKkf (ORCPT
+        with ESMTP id S232881AbiLBKlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:40:35 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14656CEFBF
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:40:31 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id be13so6795623lfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:40:30 -0800 (PST)
+        Fri, 2 Dec 2022 05:41:13 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FCDD11DE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:40:50 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id l8so4935847ljh.13
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:40:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TPk3ApbRCS0/4hhMFJ/d7DRNyPwO/DR9Aal7CDZHgzk=;
-        b=HEiPaeK82n8UhnGfAkC3Ydjm03bumfbVLUgTH1il6UfUvynI2T3gUniZgCOp+PROe8
-         +oAFrM3Xl4qkJRsGqLZ6jmHVDk/BHtAi8WteHEfOdlMfmuzppFHUSk2TOSkGHX2RDM/4
-         F9hzOPgWwLl3vrVFTuM+6wB5B4vpuS3uSaz6nhGDksqtXs8u2AxTU8QapxZmwAOVQZvd
-         /L0n7ivXdQ9BmSVqY7tidcdCt8+uWlfA/G6gWvKu0zXfuf7n3F6OGX78JRcj+J0f+Xts
-         XaHLzli5Rjry5b4JHkVlvBTFzGvWHA5+NhqkeDHHPsIJVHNquIJYjj2lg4oQ/U/AEACN
-         Q7OQ==
+        bh=+MXYguyjssptA8DU77l67l2AFn1VS80LiknP4/TOsmc=;
+        b=IEJtlvVdwgQCZC8vt/M9I0Kyxqy96Uybos+AsQychnP3fbYugkDJhzyjElPLuGU/d0
+         3TmbP6wuyBB/tQTr3fL2/1y5DotifCT+UCxav/w4tWZP4FoNyQGLmHqjn9obnBVLmBGu
+         LDTs9KHzTiA+4SWcR51brofVIm8ORVh7YaXp0BceeQULu/OMw8yGbRc2fbOhHzU+KJow
+         cdRFBJoMVneUnSarWpNuk9cpPhr3lqhqUl40wp6VEoo+o78WHOSHWAa0+gcyNYQEPnq/
+         r+8BJTSyUc6kPLF7prLWPjQEaWAK5izSTxdaT82Y3xxpo8MYfPxQ0uAfCUNNTvkIp16l
+         DpXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TPk3ApbRCS0/4hhMFJ/d7DRNyPwO/DR9Aal7CDZHgzk=;
-        b=uzVYI2RF82YvVT6js4+vysPZqKpfMBJrXeWvNzju/pgwyd3ofDdNrC2KBou44Yykk0
-         RBnawMn8RobD5tAW/tdydR/nq+sPhuP2rBN2quqIKV1kVOYNGyy98esN35GjWq1ADhVN
-         pWnxALTLBz0dvyWtYKhRcb2clinhEIOBQa6ixFWUeXF1pqGht1rFqLAH6iJAvxt2ST5e
-         SNObyC2k3xKXR1OcJ2Zu6FJ7IfExa4M/Fvdm87SUTgFgM1wb4xBLENd8dL+og8fi3a81
-         aMBTxnKlct2eC99R34uhYCMau30PfCQSVh0dNVqvPqsrUMDJrp68gS3ePTHOFdr0doDH
-         Hdng==
-X-Gm-Message-State: ANoB5pkIscRr9bN/x+91MqGWx33uJZO7QiglD9tvWLWygePBGGiJXKEY
-        VxF9hQ7Ak2y8QgLUQZJH/LAK3Q==
-X-Google-Smtp-Source: AA0mqf7w4T+ArramDxaYnxkQZkngy0bGcYs96DDb75oY+RO84Yx8wbbk5xolu8+QOpXawniNAqT39g==
-X-Received: by 2002:a19:2d0a:0:b0:4ac:e5ff:d1d8 with SMTP id k10-20020a192d0a000000b004ace5ffd1d8mr22660150lfj.304.1669977629431;
-        Fri, 02 Dec 2022 02:40:29 -0800 (PST)
+        bh=+MXYguyjssptA8DU77l67l2AFn1VS80LiknP4/TOsmc=;
+        b=3KUAjE7NdFcC9g6C894upqAVQJ9JpVN/q3o30ZfMI0RgZ6C1EjdZ4k/Z3Dlw3XgB1n
+         nSG5nMmJXcPAfpJGg1ZbwnY8C63k5beitM5eSkaYugPkdn1rc03/bcr7GQeqHQ8jbNky
+         7XMR8N6voTy/ZQ8b7hYLRlTgFAN3ntZW7Vpi+A56tx/bbsmdBq3ZHknRpIzFBbI3Dwjg
+         wRJ7goO62hmCDLrgjFLedcg08rQK3ODLGJZ6craRRRVYiGBz7XVQXkftMT8FgCHcMl2t
+         Feb6upLi7VF1qogcSVkMaJKk+IxDP+y9RRzn00mQ7KB7mFaVjenXzGgGRIosNeMUEgNx
+         Up1g==
+X-Gm-Message-State: ANoB5plyp0zkUksS3VOGlxTIeoHWD+sryHAWPqCio368nbQmAo5BGfwQ
+        HtYotmmPXufOhJYGHG78tr7dsA==
+X-Google-Smtp-Source: AA0mqf6G7NS1s2BlL4nzio2zY8DUUfrHcznNa5otERS9Z2UdUD5OSMEGq62r4PCDY+cYyJuggsMIHw==
+X-Received: by 2002:a2e:a806:0:b0:277:4b35:d94a with SMTP id l6-20020a2ea806000000b002774b35d94amr14436143ljq.21.1669977648518;
+        Fri, 02 Dec 2022 02:40:48 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e4-20020a05651236c400b00485caa0f5dfsm981818lfs.44.2022.12.02.02.40.27
+        by smtp.gmail.com with ESMTPSA id f7-20020a05651c02c700b002772414817esm597103ljo.1.2022.12.02.02.40.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 02:40:28 -0800 (PST)
-Message-ID: <05cadb7d-2087-a507-f33d-c4501361175f@linaro.org>
-Date:   Fri, 2 Dec 2022 11:40:26 +0100
+        Fri, 02 Dec 2022 02:40:47 -0800 (PST)
+Message-ID: <3a6bc7ea-284d-27f0-104c-51a326d07d27@linaro.org>
+Date:   Fri, 2 Dec 2022 11:40:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v8 08/11] dt-bindings: clock: meson: fixup A1 PLL clkc
- dtb_check errors
+Subject: Re: [PATCH v8 10/11] dt-bindings: clock: meson: fixup A1 peripherals
+ clkc dtb_check errors
 Content-Language: en-US
 To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
         neil.armstrong@linaro.org, jbrunet@baylibre.com,
@@ -68,14 +68,15 @@ Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-9-ddrokosov@sberdevices.ru>
+ <20221201225703.6507-11-ddrokosov@sberdevices.ru>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221201225703.6507-9-ddrokosov@sberdevices.ru>
+In-Reply-To: <20221201225703.6507-11-ddrokosov@sberdevices.ru>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,35 +87,31 @@ On 01/12/2022 23:57, Dmitry Rokosov wrote:
 > During running dtbs_check and dt_binding_check checkers the following
 > problems were found and resolved:
 >     - $id is not correct, it has wrong url path
+>     - no base offset in the dt node definition
 >     - CLKIDs aren't applied by names, just magic int constants there
 >     - address and size cells are required for long reg definition
 >     - wrong indentations
 > 
-> Also this patch adds new A1 clk controllers dt bindings to MAINTAINERS.
-> 
 > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 > ---
->  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 27 ++++++++++++-------
->  MAINTAINERS                                   |  1 +
->  2 files changed, 18 insertions(+), 10 deletions(-)
+>  .../bindings/clock/amlogic,a1-clkc.yaml       | 36 +++++++++++--------
+>  1 file changed, 22 insertions(+), 14 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> index d67250fbeece..83f98a73c04e 100644
-> --- a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+> index 7729850046cf..b0249ab21466 100644
+> --- a/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
 > @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> -#SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 >  %YAML 1.2
 >  ---
-> -$id: "http://devicetree.org/schemas/amlogic,a1-pll-clkc.yaml#"
-> +$id: "http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#"
+> -$id: "http://devicetree.org/schemas/amlogic,a1-clkc.yaml#"
+> +$id: "http://devicetree.org/schemas/clock/amlogic,a1-clkc.yaml#"
 >  $schema: "http://devicetree.org/meta-schemas/core.yaml#"
 >  
->  title: Amlogic Meson A/C serials PLL Clock Control Unit Device Tree Bindings
 
-NAK.
-
-This must be squashed.
+NAK. This must be squashed.
 
 Best regards,
 Krzysztof
