@@ -2,162 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C92640286
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2243640288
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiLBIxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S232277AbiLBIxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiLBIw6 (ORCPT
+        with ESMTP id S231449AbiLBIx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:52:58 -0500
-X-Greylist: delayed 87075 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 00:52:56 PST
-Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F956B7F0;
-        Fri,  2 Dec 2022 00:52:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1669971176;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=qqj1QKn9p38OC5FgLpJnXTkkTnf1m/IVXt+K5+MGMhU=;
-  b=ccc3R9EYwdHXh2fyCMWREzYeeGUkI725+ogBMQOv8xSksgF/kw9Wb37B
-   IcL0mN89JUtZJ4C/317hvS1Lf7wgKViVRT7E8+MrCsS4VqVxVAMqCxBwJ
-   eTngOQ//vaFGwgJEuQqtgPk0/BWjhvvN9DCydcXSCJYK9rXONMXfYkGPd
-   4=;
-Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-X-SBRS: 4.0
-X-MesageID: 88748218
-X-Ironport-Server: esa4.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.83
-X-Policy: $RELAYED
-IronPort-Data: A9a23:pNlVkqj+rGQ4NdwFl5KpzKjPX1610xAKZh0ujC45NGQN5FlHY01je
- htvWzvVbP6CazT8c9EgO4qyph4Gu5bdn9FiSVRkr3hgHn8b9cadCdqndUqhZCn6wu8v7q5Ex
- 55HNoSfdpBcolv0/ErF3m3J9CEkvU2wbuOgTrWCYmUpH1QMpB4J0XpLg/Q+jpNjne+3CgaMv
- cKai8DEMRqu1iUc3lg8sspvkzsy+qWs0N8klgZmP6oS5geEzyB94K83fsldEVOpGuG4IcbiL
- wrz5OnR1n/U+R4rFuSknt7TGqHdauePVeQmoiM+t5mK2nCulARrukoIHKN0hXNsoyeIh7hMJ
- OBl7vRcf+uL0prkw4zxWzEAe8130DYvFLXveRBTuuTLp6HKnueFL1yDwyjaMKVBktubD12i+
- tRHNRczPz+4m9mu3ayCSvUwjMQpAuDkadZ3VnFIlVk1DN4jSJHHBa7L+cVZzHE7gcUm8fT2P
- pRDL2A1NVKZPkMJagx/5JEWxY9EglH7cjserFOIjaE2/3LS3Ep6172F3N/9KozVGZUPxxbwS
- mTu4nznMDA6KO6k8Tei4FKSlPPAhg7JR9dHfFG/3qEz2wDCroAJMzUOXFG2p/iRkEOyW9tDb
- UcT/0IGrrU4/WSoQ8P7Uhn+p2SL1jYMVtwVH+Ak5QWlzqvP/x3fFmUCViRGatEtqIkxXzNC/
- luImc75QD9iqruYTVqD+bqO6zC/Iy4YKSkFfyBsZQ0I/9XuvqktgR/VCNVuCqi4ipvyAz6Y6
- z2GsS03lbgPpcEM0Kq/8BbMhDfEjprGVAku/S3MQ3moqAh+YeaNfJe04FLW6fJBKoexTVSbu
- nUA3c+E44gmAZiTmSmlTOwTEbSt4PiZdjvRnTZHGJ0s9C+k/XK5SpxB+zF1JEpvMcEsdCfgZ
- QnYvgY52XNIFCL0N+ktOdv3Upl0i/i7fTj4ahzKRoVTRaYgWzSbxzlze3eQwzznkEICuK5qb
- P93bv2QJXodDK1myh+/SOEczaIny0gC+I/DeXzo50/5iOTDPRZ5XZ9AaQLTNb5hsMtotS2Pq
- 75i2922JwKzuQEUSg3e6sYtIF8DNhDX7rim+pUMJoZvzueLcVzN6sM9I5t7I+SJfIwPzI8kG
- 01RvWcGoGcTfVWddW23holLMdsDp6pXo3MhJjALNl21wXUlaovHxP5BKcpmJOh5rbc9lKMco
- xw5lyKoW6Qnd9g6025FMcmVQHJKK3xHej5izwL6OWNiLvaMtiTC+8P+fxuHycX9JnPfiCfKm
- JX5jlmzacNaF2xf4DP+NKrHI6WZ4SJMx4qfniLgfrFuRakb2NMzcHyq16BueZFkxNeq7mLy6
- jt6yCww/YHly7LZOvGQ7UxYh+9Fy9dDI3c=
-IronPort-HdrOrdr: A9a23:fNU3xKx4vlslGeBNzlgOKrPxaeskLtp133Aq2lEZdPU1SL3sqy
- nKpp906faaslYssQ4b6Ky90cW7IE80lqQFkrX5Q43SPjUO0VHAROtfBODZsl7d8kPFh4tgPa
- wJSdkANDWZZ2IXsS6QijPWLz7uquPrzImYwd77i1NRZUVSbadkhj0JeDpy0CdNNXd77V5SLu
- vt2iKDzQDQCEj/Ff7LYkUtbqz4vtjWk5CjSQcebiRXkTWmvHeT8bvnFBrd9QsfVj4n+8ZezU
- H11zbh47mlsbWdwhvRvlWjiKh+qZ/a095eA87JrNYTJi6EsHfPWK1RH4eauSwzoqWUyHtCqq
- i1nz4Qe/5r7m/XfCWOrQDz1xLG2DIjgkWSsmOwsD/YuMnkQzB/NMZbn4JedXLimjAdgO0=
-X-IronPort-AV: E=Sophos;i="5.96,210,1665460800"; 
-   d="scan'208";a="88748218"
-From:   Lin Liu <lin.liu@citrix.com>
-CC:     Lin Liu <lin.liu@citrix.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] xen-netfront: Fix NULL sring after live migration
-Date:   Fri, 2 Dec 2022 08:52:48 +0000
-Message-ID: <7ae75e4582993c6d3e89511aec9c84426405f6a4.1669960461.git.lin.liu@citrix.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 2 Dec 2022 03:53:26 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C045A2408B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:53:24 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id bg10so3056884wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 00:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=QxYMAsGyR71I9W5SUgkWB+llmDVJb8G0ACBqsOItD8w=;
+        b=VWWxBi/mto+dbgJ+YJ7AJhtfhqMmQVeNQL9WGGDcTlx+jwxapK3HeUhhq7B3+P9MIH
+         4KAQaQ1imzwCLnTirIDeQE/0DdAfCP9zK04WuufUJLgPb7GdmxrWdUn1ZWyWlbmMN686
+         nN1vUTPTRicwxC5Fw5+o+PK2nfNtX5IYgaWQMiFL6mJsMrqJ5FA6Vwfn/CayGreDm71D
+         8RqkEba2tBVAcx6JY/WWnoPuZ+SGts6CoBuLiH1giBZb/PbFI9TUeIb8m2+SJGzZUlck
+         gwKGVu4/Kj+uK78efWmT+uVcZJRlAr6v5FJ8ZOyTTV+YjJ7Tuv3ZAmTEPVnuSdVOZ0m3
+         T91w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QxYMAsGyR71I9W5SUgkWB+llmDVJb8G0ACBqsOItD8w=;
+        b=gJAcVgnG3932CCCKZwWT121xwmIbiDpOal1noeRvJBMEIdgKttVyW579G7YdVzlZDs
+         D6pkUJ9dxVvGjxS7g1j7PNWm9X3Vof+NyDl1Huf7hHvDZP1aD5fZTRaWPb1doFGS0A6q
+         UKW/RIRMUeUPvFirmYSnqDI2GE6XkI4SqiGOWcgx/J9FZ/ByEmo7/rXhRH3vhI6faamG
+         U4hnJIb3LPZbsHlz87yhfeMvmiV+OIuxZwaDGsLu1dn+K1O18qHho+c9tsDD0ZOCNqr0
+         I9nD50BEfiJa4K3a+ZzaF8fyUOwg6bNiBr3AMUs6FuHAslLt8Ka1AJwGT6mqyjBkJm0R
+         Holw==
+X-Gm-Message-State: ANoB5pmExmvM5HXFjvTAWF8KLyRiQdxzJh832mL9Vez3TJS0FHqQbEEd
+        IRW9WTLi+4VVlbzGmFb/37Lmng==
+X-Google-Smtp-Source: AA0mqf76iCLnpL4DNa1AXxs+nKSmcg+KY3QSSiwfiuYE8GJ1CwfTAQCHoz170ug0rrN6daek6w1AmA==
+X-Received: by 2002:a05:600c:4f01:b0:3cf:8952:2fd2 with SMTP id l1-20020a05600c4f0100b003cf89522fd2mr42157915wmq.9.1669971203363;
+        Fri, 02 Dec 2022 00:53:23 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:c6e:eb0:b551:55ee? ([2a01:e0a:982:cbb0:c6e:eb0:b551:55ee])
+        by smtp.gmail.com with ESMTPSA id h12-20020a05600c314c00b003cfa81e2eb4sm8969203wmo.38.2022.12.02.00.53.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 00:53:22 -0800 (PST)
+Message-ID: <f1eeffde-3940-4daa-0307-68ebc0485228@linaro.org>
+Date:   Fri, 2 Dec 2022 09:53:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
-        TO_EQ_FM_DIRECT_MX autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v5 3/7] soc: amlogic: meson-pwrc: Add NNA power domain for
+ A311D
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     italonicola@collabora.com, Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        "moderated list:ARM/Amlogic Meson SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221201103026.53234-1-tomeu.vizoso@collabora.com>
+ <20221201103026.53234-4-tomeu.vizoso@collabora.com>
+ <CAFBinCB1pZm0AaJq4_dsVksdp7RP+aTiXK04wFeLQ9vChbkYCQ@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CAFBinCB1pZm0AaJq4_dsVksdp7RP+aTiXK04wFeLQ9vChbkYCQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A NAPI is setup for each network sring to poll data to kernel
-The sring with source host is destroyed before live migration and
-new sring with target host is setup after live migration.
-The NAPI for the old sring is not deleted until setup new sring
-with target host after migration. With busy_poll/busy_read enabled,
-the NAPI can be polled before got deleted when resume VM.
+On 01/12/2022 23:43, Martin Blumenstingl wrote:
+> On Thu, Dec 1, 2022 at 11:30 AM Tomeu Vizoso <tomeu.vizoso@collabora.com> wrote:
+>>
+>> Based on power initialization sequence in downstream driver.
+>>
+>> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+>> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> 
+> [...]
+>> +static struct meson_ee_pwrc_mem_domain g12a_pwrc_mem_nna[] = {
+>> +       { G12A_HHI_NANOQ_MEM_PD_REG0, GENMASK(31, 0) },
+>> +       { G12A_HHI_NANOQ_MEM_PD_REG1, GENMASK(23, 0) },
+> I noticed the discussion in v1 of this series where Neil noted that
+> you should change GENMASK(31, 0) to GENMASK(23, 0) (for
+> G12A_HHI_NANOQ_MEM_PD_REG1).
+> This is all a bit confusing because the S905D3 datasheet mentions that
+> the HHI_NANOQ_MEM_PD_REG1 register uses the full 32 bits.
+> I'm still fine with the way it is right now because the datasheets are
+> not always perfect.
 
-BUG: unable to handle kernel NULL pointer dereference at
-0000000000000008
-IP: xennet_poll+0xae/0xd20
-PGD 0 P4D 0
-Oops: 0000 [#1] SMP PTI
-Call Trace:
- finish_task_switch+0x71/0x230
- timerqueue_del+0x1d/0x40
- hrtimer_try_to_cancel+0xb5/0x110
- xennet_alloc_rx_buffers+0x2a0/0x2a0
- napi_busy_loop+0xdb/0x270
- sock_poll+0x87/0x90
- do_sys_poll+0x26f/0x580
- tracing_map_insert+0x1d4/0x2f0
- event_hist_trigger+0x14a/0x260
+Yes they're different in G12B & SM1
+Neil
 
- finish_task_switch+0x71/0x230
- __schedule+0x256/0x890
- recalc_sigpending+0x1b/0x50
- xen_sched_clock+0x15/0x20
- __rb_reserve_next+0x12d/0x140
- ring_buffer_lock_reserve+0x123/0x3d0
- event_triggers_call+0x87/0xb0
- trace_event_buffer_commit+0x1c4/0x210
- xen_clocksource_get_cycles+0x15/0x20
- ktime_get_ts64+0x51/0xf0
- SyS_ppoll+0x160/0x1a0
- SyS_ppoll+0x160/0x1a0
- do_syscall_64+0x73/0x130
- entry_SYSCALL_64_after_hwframe+0x41/0xa6
-...
-RIP: xennet_poll+0xae/0xd20 RSP: ffffb4f041933900
-CR2: 0000000000000008
----[ end trace f8601785b354351c ]---
-
-xen frontend should remove the NAPIs for the old srings before live
-migration as the bond srings are destroyed
-
-There is a tiny window between the srings are set to NULL and
-the NAPIs are disabled, It is safe as the NAPI threads are still
-frozen at that time
-
-Signed-off-by: Lin Liu <lin.liu@citrix.com>
-Fixes: 4ec2411980d0 ([NET]: Do not check netif_running() and carrier state in ->poll())
----
- drivers/net/xen-netfront.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
-index 9af2b027c19c..dc404e05970c 100644
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -1862,6 +1862,12 @@ static int netfront_resume(struct xenbus_device *dev)
- 	netif_tx_unlock_bh(info->netdev);
- 
- 	xennet_disconnect_backend(info);
-+
-+	rtnl_lock();
-+	if (info->queues)
-+		xennet_destroy_queues(info);
-+	rtnl_unlock();
-+
- 	return 0;
- }
- 
--- 
-2.17.1
+> 
+> 
+> Best regards,
+> Martin
 
