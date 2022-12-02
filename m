@@ -2,125 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF6264061A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAEF640625
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbiLBLvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        id S233374AbiLBLwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbiLBLvE (ORCPT
+        with ESMTP id S233366AbiLBLwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:51:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2597C1263D;
-        Fri,  2 Dec 2022 03:51:04 -0800 (PST)
-Date:   Fri, 02 Dec 2022 11:51:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669981862;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PYx/N7VkLi9cbwQkwAJUfl0UrZSPQe3r5BCoHYTbRH8=;
-        b=KpafTXJXaztJBJbDl9tnm1/AT6mTWHf4Fnqu+kjhE4fnt8oNV3EkiUHL7Qf2OwcYrd8A6F
-        h4rlldWZFUzLXQs1A1O15WNNQmAYjpMiWYyAbw4pW+DKKvv3W8faqTowC0pGjKMXJFuMV1
-        qr9FW/ZuMKl/lVaNbVQOTkVSuyTltAVJyq+HziqHAo+d/ozrjoXMGtW/SkGD6+PtpZLFG+
-        yHBrBqzxbPG21ooA4SMKavOztlKmvK2xZ2SWHNyGL3raHcLtewZ1DZAWB+tdtSTzMWPuBf
-        j+JUjVIp53XNFmf/j5nwhDVbPq1o0HXeUGxXX85+LhyLwo3VjQgT/jzCsz8EcA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669981862;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PYx/N7VkLi9cbwQkwAJUfl0UrZSPQe3r5BCoHYTbRH8=;
-        b=3isjQppUJqNrN9+T3eb93rnSU/gPzhzIy6zjMcxcLoohe2uafWkfMixPJ3hM8ZvzV4tgqT
-        5h8jPlCldzupdxBg==
-From:   "tip-bot2 for Phil Auld" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] cpu/hotplug: Make target_store() a nop when target == state
-Cc:     Phil Auld <pauld@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221117162329.3164999-2-pauld@redhat.com>
-References: <20221117162329.3164999-2-pauld@redhat.com>
+        Fri, 2 Dec 2022 06:52:40 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEF21019;
+        Fri,  2 Dec 2022 03:52:36 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id z20so6100901edc.13;
+        Fri, 02 Dec 2022 03:52:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=V7DGE39pLfDtpE6nfiaaKVKzntw4VUS/Inc+Ohx4WpQ=;
+        b=SwYGBT2S6+aQVfMDUC6h/9BMQR7Aa/rv/nZKofiHLvTU/0Q4vEdenr2xH0AK90Iu3N
+         Q3c4Rzoy1RPYQPbuhxIHjA2D6XXPWzkdpKFqM8lSRvv9+Ts7pEVAbvC0ujDR3hSQ5ZxN
+         vD3uurUCf7q8gTLZVVLJ+a+GBp5jmkXigxdaU6jT1DHYEUuZHb5oDdpzCP5CgF6Z7B5O
+         u7NAxl3AwQzRLkzS/byhochh/uO28yZGlEcUMh6vQnzjLqxrytmc3WlVT4i235L7vWAd
+         0gGeloQm/h47sHWQc73VFtu7SAPAB5bpqEY5keAo9pYSeCsiCSyH8qJzZFh0BdC5Wlh+
+         A8gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V7DGE39pLfDtpE6nfiaaKVKzntw4VUS/Inc+Ohx4WpQ=;
+        b=D/pQgzduuNDMeuITvbTTfc0fz2HM1Mr/R/yDr+ZX5OARUu6bYYL6F2intTTklsPlQp
+         a4aVVN/pc9HVBjSm8ZLmivAnc0VMTYk4d0wzBKGiSVMl5nKvagM+DSaE5a8KcqDTw854
+         EEPL+UQeOPK7YACoW+pxRWxQMQLalTpizLWmpKsNASRLJwmaKpctdi595mB5daNFVqFb
+         9y4pbcw7hCImKigV2BhODT2Sa4vYQtWpnmht7x3lVNOO86ddJSj6KjYGf0dDms08sYQb
+         z3oog9a9hlhUUUNM68bvUoTFsYkcOFj7qRf0HlBApRNrmVz6mB7O5Pgdyij/xM6jq1+q
+         RezA==
+X-Gm-Message-State: ANoB5pmuckgeOyp17ERcVQub4I53xfLoY3FHbRf1TPTkDuhbL53CawTq
+        Soh3Z5w86CSQLOG8m91IP7c=
+X-Google-Smtp-Source: AA0mqf4pKF+GIFOv0aOMCQp58IrKzGzJId6KW1UCp0ZSXlFh3tlc5fcL6ng1NZL1EdK19TM8zWr5uA==
+X-Received: by 2002:a05:6402:24a0:b0:458:ad54:20d5 with SMTP id q32-20020a05640224a000b00458ad5420d5mr62176585eda.86.1669981954534;
+        Fri, 02 Dec 2022 03:52:34 -0800 (PST)
+Received: from cizrna.home (cst-prg-44-69.cust.vodafone.cz. [46.135.44.69])
+        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b007c0bb571da5sm1206762ejb.41.2022.12.02.03.52.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 03:52:33 -0800 (PST)
+Sender: Tomeu Vizoso <tomeu.vizoso@gmail.com>
+From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     italonicola@collabora.com,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
+        IP),
+        etnaviv@lists.freedesktop.org (moderated list:DRM DRIVERS FOR VIVANTE
+        GPU IP), Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-amlogic@lists.infradead.org (open list:ARM/Amlogic Meson SoC
+        support),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Amlogic Meson
+        SoC support), linux-kernel@vger.kernel.org (open list),
+        Lucas Stach <l.stach@pengutronix.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux+etnaviv@armlinux.org.uk>
+Subject: [PATCH v6 0/8] Support for the NPU in Vim3
+Date:   Fri,  2 Dec 2022 12:52:12 +0100
+Message-Id: <20221202115223.39051-1-tomeu.vizoso@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Message-ID: <166998186154.4906.2993867265971193970.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the smp/core branch of tip:
+Hi,
 
-Commit-ID:     64ea6e44f85b9b75925ebe1ba0e6e8430cc4e06f
-Gitweb:        https://git.kernel.org/tip/64ea6e44f85b9b75925ebe1ba0e6e8430cc4e06f
-Author:        Phil Auld <pauld@redhat.com>
-AuthorDate:    Thu, 17 Nov 2022 11:23:28 -05:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 02 Dec 2022 12:43:02 +01:00
+This series adds support for the Verisilicon VIPNano-QI NPU in the A311D
+as in the VIM3 board.
 
-cpu/hotplug: Make target_store() a nop when target == state
+The IP is very closely based on previous Vivante GPUs, so the etnaviv
+kernel driver works basically unchanged.
 
-Writing the current state back in hotplug/target calls cpu_down()
-which will set cpu dying even when it isn't and then nothing will
-ever clear it. A stress test that reads values and writes them back
-for all cpu device files in sysfs will trigger the BUG() in
-select_fallback_rq once all cpus are marked as dying.
+The userspace part of the driver is being reviewed at:
 
-kernel/cpu.c::target_store()
-	...
-        if (st->state < target)
-                ret = cpu_up(dev->id, target);
-        else
-                ret = cpu_down(dev->id, target);
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/18986
 
-cpu_down() -> cpu_set_state()
-	 bool bringup = st->state < target;
-	 ...
-	 if (cpu_dying(cpu) != !bringup)
-		set_cpu_dying(cpu, !bringup);
+v2: Move reference to RESET_NNA to npu node (Neil)
+v3: Fix indentation mistake (Neil)
+v4: Add warning when etnaviv probes on a NPU (Lucas)
+v5: Reorder HWDB commit to be the last (Lucas)
+v6: Add patch to move the power domain to the SoC-specific dtsi (Neil)
 
-Fix this by letting state==target fall through in the target_store()
-conditional. Also make sure st->target == target in that case.
+Regards,
 
-Fixes: 757c989b9994 ("cpu/hotplug: Make target state writeable")
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Link: https://lore.kernel.org/r/20221117162329.3164999-2-pauld@redhat.com
+Tomeu
 
+Tomeu Vizoso (8):
+  dt-bindings: reset: meson-g12a: Add missing NNA reset
+  dt-bindings: power: Add G12A NNA power domain
+  soc: amlogic: meson-pwrc: Add NNA power domain for A311D
+  arm64: dts: Add DT node for the VIPNano-QI on the A311D
+  drm/etnaviv: Add nn_core_count to chip feature struct
+  drm/etnaviv: Warn when probing on NPUs
+  drm/etnaviv: add HWDB entry for VIPNano-QI.7120.0055
+  arm64: dts: Fix NPU power domain references in Amlogic G12-based SoCs
 
----
- kernel/cpu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../boot/dts/amlogic/meson-g12-common.dtsi    |  9 +++++
+ .../amlogic/meson-g12b-a311d-khadas-vim3.dts  |  4 +++
+ arch/arm64/boot/dts/amlogic/meson-g12b.dtsi   |  4 +++
+ arch/arm64/boot/dts/amlogic/meson-sm1.dtsi    |  4 +++
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c         |  4 +++
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.h         |  3 ++
+ drivers/gpu/drm/etnaviv/etnaviv_hwdb.c        | 35 +++++++++++++++++++
+ drivers/soc/amlogic/meson-ee-pwrc.c           | 17 +++++++++
+ include/dt-bindings/power/meson-g12a-power.h  |  1 +
+ .../reset/amlogic,meson-g12a-reset.h          |  4 ++-
+ 10 files changed, 84 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e3..979de99 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2326,8 +2326,10 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
- 
- 	if (st->state < target)
- 		ret = cpu_up(dev->id, target);
--	else
-+	else if (st->state > target)
- 		ret = cpu_down(dev->id, target);
-+	else if (WARN_ON(st->target != target))
-+		st->target = target;
- out:
- 	unlock_device_hotplug();
- 	return ret ? ret : count;
+-- 
+2.38.1
+
