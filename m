@@ -2,102 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A036410BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0705E6410C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiLBWhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S234568AbiLBWlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiLBWhM (ORCPT
+        with ESMTP id S234389AbiLBWlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:37:12 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF20B0DFC;
-        Fri,  2 Dec 2022 14:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670020631; x=1701556631;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fDwnio0U3LHuhov+sUpgA5OaZfMyZJrWLLg1iX6CVrY=;
-  b=DCaujLzmEmaes1iDYCqZKoknKhAaNQHNF7DsUv8LTAdbvBfmdJ1KJFXU
-   5pKwxoiGeHwWTECxG6RDh4PF9VlWL8MKriJpE2BdmSeExmQHekPrvlC06
-   YyPxxVGMs/FK6XT4op1I8zjmfYCdYj+mmP4RM48K0z4wC2XQLhihR63/w
-   M9VeQEWQqH5Z4ZoNKWunxZp5EOevANx7QaSdyqJ+BVgLY0ERlyoZXavBd
-   vFF7F6P7iNUUx8w9A6Zs0w5ZiShiMyo0/ZJSHQQXXc7nW9LohEHUbmB5q
-   Iva1VY+KHM9TmrCWUiN4m2ijvLZYYSROFVMzlYczcJIU46fljm9VDZIx6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="402339708"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="402339708"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:37:11 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="713785122"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="713785122"
-Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:37:10 -0800
-Message-ID: <47799f29-8856-8c87-240b-0667f74a3be8@intel.com>
-Date:   Fri, 2 Dec 2022 14:37:09 -0800
+        Fri, 2 Dec 2022 17:41:40 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C94BF116A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:41:40 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id 140so6202668pfz.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:41:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RPMshK7tVLl5Lle8RoOXHHhv2DXWHlF2R9uHvQRM5Bc=;
+        b=merJ+GaoyeIA1krzJpTvcAlWx2q4jrDPmzZsBdSBPsN2auuRted+2l9PmyqmnDRjMX
+         GwKijFgomVRFjyD8dqtOB/DijExpw/+dFZMDUTxIDeqZC76u/xiWq5r9t0vylHKYxY8l
+         Z7ETLvpzXA2XcSSwRDWGOCSWe5grGDPrOZI9o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RPMshK7tVLl5Lle8RoOXHHhv2DXWHlF2R9uHvQRM5Bc=;
+        b=yiSzrOg5NshSxXMJGN7ZRHhG5GsDTuHpMhz0qhNM4jsF5yldGL1XAWDdp2oYIs3nc+
+         NCRqPpABgTXhZt+aXPod9okJMopsYpYRXoVoQCD6tnRFLUqbDtWIl9D0t6fQIceRqzBV
+         LLrL1O9hFNGd6Q6K5Eu79cT7RLmuFsF65ad9weoBJnUDr1kpfoOOB2U/2J/SzpdZVebt
+         g1GnQroxsB+oM1sFOF25UouTbMpH6SyA3P3fANsQk8/CroZfbp65T14rw8ZKHsyeNE56
+         aIxt7eWR4h2KPej73EyJDc0HkFWGDIQUyJ2psOSWCCVln2S7I/DfeL7T0tl8ywehFf+d
+         geFg==
+X-Gm-Message-State: ANoB5plgG9PY6+NxjGvy5Ljxz6gb7ekwn3XZkxWu5iqrcvdfNYagJezl
+        +cLXBnieJ9EUrde+39ijPk/u7g==
+X-Google-Smtp-Source: AA0mqf4SuLL8KvtdI3fAxn2zB2XRgbdM9yw+U277XBIdZDVunRVgl+uywFPSqtnji0ZuzQi358w7CQ==
+X-Received: by 2002:aa7:810e:0:b0:56b:f23a:7854 with SMTP id b14-20020aa7810e000000b0056bf23a7854mr59505812pfi.66.1670020899834;
+        Fri, 02 Dec 2022 14:41:39 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z20-20020a63c054000000b00439c6a4e1ccsm4475973pgi.62.2022.12.02.14.41.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 14:41:39 -0800 (PST)
+Date:   Fri, 2 Dec 2022 14:41:38 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     jeffxu@chromium.org
+Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jeffxu@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3] mm/memfd: MFD_NOEXEC_SEAL and MFD_EXEC
+Message-ID: <202212021437.C1FCD63D@keescook>
+References: <20221202013404.163143-1-jeffxu@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 01/18] x86/sgx: Call cond_resched() at the end of
- sgx_reclaim_pages()
-Content-Language: en-US
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
- <20221202183655.3767674-2-kristen@linux.intel.com>
- <37de083d-a63b-b2ff-d00a-e890a1ba5eea@intel.com>
- <da690a45a36038399c63ddac8f0efed9872ec13e.camel@linux.intel.com>
- <746adf31-e70c-e32d-a35d-72d352af613b@intel.com>
- <307b43aa5908c489913110287044e611f574db0a.camel@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <307b43aa5908c489913110287044e611f574db0a.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202013404.163143-1-jeffxu@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 14:17, Kristen Carlson Accardi wrote:
-> On Fri, 2022-12-02 at 13:45 -0800, Dave Hansen wrote:
->> On 12/2/22 13:37, Kristen Carlson Accardi wrote:
->>>>> +static void sgx_reclaim_pages(void)
->>>>> +{
->>>>> +       __sgx_reclaim_pages();
->>>>> +       cond_resched();
->>>>> +}
->>>> Why bother with the wrapper?  Can't we just put cond_resched() in
->>>> the
->>>> existing sgx_reclaim_pages()?
->>> Because sgx_reclaim_direct() needs to call sgx_reclaim_pages()
->>> but not do the cond_resched(). It was this or add a boolean or
->>> something to let caller's opt out of the resched.
->>
->> Is there a reason sgx_reclaim_direct() *can't* or shouldn't call
->> cond_resched()?
-> 
-> Yes, it is due to performance concerns. It is explained most succinctly
-> by Reinette here:
-> 
-> https://lore.kernel.org/linux-sgx/a4eb5ab0-bf83-17a4-8bc0-a90aaf438a8e@intel.com/
+On Fri, Dec 02, 2022 at 01:33:58AM +0000, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@chromium.org>
 
-I think I'd much rather have 3 cond_resched()s in the code that
-effectively self-document than one __something() in there that's a bit
-of a mystery.
+Hi! Thanks for this update! For future versions, please also use "-n"
+with "git format-patch" so the patches are numbered, otherwise it's more
+difficult to figure out what order they should be applied in, etc.
 
-Everyone knows what cond_resched() means.
+-- 
+Kees Cook
