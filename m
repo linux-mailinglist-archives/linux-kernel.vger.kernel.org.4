@@ -2,123 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D3C640BCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310FB640BC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbiLBRIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:08:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S234354AbiLBRIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234211AbiLBRIe (ORCPT
+        with ESMTP id S234179AbiLBRIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Dec 2022 12:08:34 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6734D15AC
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:08:32 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id n20so13078954ejh.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:08:32 -0800 (PST)
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741F1CC67B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:08:30 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id jr1so6015987qtb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wtZA1IbfmQV1q6JbQ4L1axaQ6pL7lh9jXHUHF+NGf+s=;
-        b=XpikTCNVTwEOA5uF8nNd5n/17A51tYzKCsH3sFvNsx7NQIlGfqeYPmt+MPPTil0B9c
-         HoA1iwi/zEldKG9JkeVX+amy3q/vGckf4YOJJZq6aKxUtcpQqtvsP97cy1tjVEwII11V
-         nOqCsWmk2LGIUPqE1HZG8UiN0l0cJKQvaKSjY=
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ijOKz8foluJ3i9Qm1oJ9IBp26bq+WaSPlqT8hTWxtV0=;
+        b=YjE8l/XLABJabG+MbrNIKMporuqCCJXq9OxoKQAhTn3vy8sXljxVYu+mGGu5N0M5Nb
+         x8GKTwyLsZt5qEv9LAttCXY+8SQ9pnaCk5/brVhdee7W0b0H6jx2XaAqmmxZf/m3MCIJ
+         wllLpSOlER6qjdRH4HPejMUXHFzRuDor/6YeQbHY70nVr3Wcqy891t0upjZcm+HK5I4S
+         Cza/ZjriXje6CnYhCvaa/dfnXlMDqcXpWdLUivJ5t5Gp1XnAHv055LZ3XT3WJ4k9RgOC
+         ss2NUJr+VK1ZmTwIgu/AesP9ufnGEi3idAy6QDmfXHp4t3mQcig7Ky37IcEzUEdv2IcV
+         L/4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wtZA1IbfmQV1q6JbQ4L1axaQ6pL7lh9jXHUHF+NGf+s=;
-        b=ERKZq23HCDfjemzOtv+HS/5uSbloHuwrZcHJNyYj6ViWrvLe/bq1bMUJWTI/HEv76q
-         arSHFe57aOG+QQOXceU/61g1wfmynRRCpsTG7YG9r9jUx7FVBGwD7hDqrDYmTVxhnIV+
-         OhZ1H6Z7uqhw4AcNrtMOzEEKeILfGvDwpFOy8u1te/jg4x2MYGxqYjanhNoiePdHJySc
-         vXq9ySDuvSbX7EIRHEIKYN9O8b5y/KIV1313vc8i2u9hrtysW/6nju77ieZExbSo6XCi
-         kh5QZg7u4RMFwZz6Gmptw7cCgpxmivoI1+WbHymYts0X1+fKvCiauFtTMr5sdXakDV6k
-         AbNQ==
-X-Gm-Message-State: ANoB5plpJGSLSshRRGwlbCbyKk6kY3VmCA1jCCYlndxR75Uf2y9osLhq
-        5Yn2HEQV/plCrQ1ksndiXs3Z1Q==
-X-Google-Smtp-Source: AA0mqf5dJzt7LrpazmQka4+jBMsdtoK0r3QFvYdUKX1Vh8sKmomDA3k5HIQLxQG/VkNHAbFh65F7bg==
-X-Received: by 2002:a17:906:c303:b0:7ad:95d2:9df2 with SMTP id s3-20020a170906c30300b007ad95d29df2mr14266490ejz.607.1670000910978;
-        Fri, 02 Dec 2022 09:08:30 -0800 (PST)
-Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:08:30 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:08:19 +0100
-Subject: [PATCH v4 3/3] media: uvcvideo: Add a unique suffix to camera names
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ijOKz8foluJ3i9Qm1oJ9IBp26bq+WaSPlqT8hTWxtV0=;
+        b=x2/GB/YMBGIOQRtw/gIG7f0Oc9S8BCJKZahDWKVp+Yk0ifvrBnF7DZeP6/VSKJY5wv
+         yqUfm73MydhQ0zlB6H0XuM26eP8l/AAVzT+i8OxbuaVLu518J2GwYAfzXquDRuGLh4rD
+         +zeBpxEVfzg8ZW/YZRPfwOZUxGoUxcreDFj3IB2x2gSvp63BDk/8sbRjLtt3O09c4PZx
+         DaNHuGj/trZohLpt311Ul1e0lCWuw2R+RIaIrBVCAMwSxhpzum+MvSAYIYyHRqlJzrRU
+         ZyvaYxAqIsEEN/LjDQMbihfdoTfRf/XkEValpVt7WRbcN5+vDXTuvm7ZGReNx81nH/Ep
+         n+KA==
+X-Gm-Message-State: ANoB5pnwZPwS54t1l0KWgsz6fAs60dhH/W0MTZgDyeZaw2Qea3gGe3Ck
+        zlx5cH38WtO/NxQzsSWh4ZJ9MQ==
+X-Google-Smtp-Source: AA0mqf4h7uhYKeeaEd4CL1ukDcn287yUwTC3NimzxXhpwcJi51og7aL4TE0nKoepn9D9ljldF7tqEA==
+X-Received: by 2002:a05:622a:260d:b0:3a5:829a:7e92 with SMTP id ci13-20020a05622a260d00b003a5829a7e92mr51804046qtb.528.1670000909654;
+        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
+Received: from [192.168.1.31] (d-216-10-177-134.nh.cpe.atlanticbb.net. [216.10.177.134])
+        by smtp.gmail.com with ESMTPSA id de7-20020a05620a370700b006b615cd8c13sm5895455qkb.106.2022.12.02.09.08.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
+Message-ID: <8d146099-a12a-c5a1-4829-dec95497fdca@google.com>
+Date:   Fri, 2 Dec 2022 12:08:27 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.0
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, pjt@google.com, derkling@google.com,
+        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
+From:   Barret Rhoden <brho@google.com>
+In-Reply-To: <20221130082313.3241517-15-tj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-meta-v4-3-3ac355b66723@chromium.org>
-References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
-In-Reply-To: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
-To:     Yunke Cao <yunkec@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1196; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=nncAxgIlMLPqi8B4D2XzAtMUAbjMzg6DbKN4jx7ltvo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEKf6IQrPsYfpx8DB/t21WB2f//wrtkc3pBusyj
- OJet42yJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxCgAKCRDRN9E+zzrEiEf9EA
- CQ4I7QGoNfJc9SX11wg89UhJOeSV96QkPThsmoSd+ZSPI54GSWuTIU5scGGnYkXaCUoMlZh0UUvz2Q
- aIq7bDEfpmwCV6ioehV41ihZyXx3jAk8hHwjArKCdkvjxXL3qcBuYBvqDnNhPDufiMbdt020JrednB
- SlFrEa9DrGYNGERL7H5gyh60gLTxvT6i3TNP+8Q4+cgnXkMYDwTWXZ2Qgc5WY8ULBtXzWW8/BxNocr
- yVr3Lh795K3zVpg/AEiG+ZseaV9I5VTc5NzMDwAwEzOS66uLFPBNYuN67PlW/WO354hOJw8hdkgZqu
- nyem3E/OvSF6k5Je/csoQ3OUJFbw0b657ilB4bOQy/BL7yH6MYQPRfziUKJkLi4z+H7FdbuFZwpWEK
- EgdH9jGHSGYUD+ePn1TGzttAah24E17G4QOWGt2a23um4b00eIMvXZcYap/n6BfO6jDiJpMYiyfqZN
- swe6t1+t0zmKdYVcznkLD7F8Mj+WmkwYcQQrphdjKlQN8NsuSi2lXExVumSnGRNT3CahDuqovBw/Bq
- vJ187rhlO897Szhl+WuAzg1quLkKQ9J6sXb9M3Exexs3r1hdyg3alVYAjzxAFARErx9E4Y8C7HWJjG
- To1sxIYs0gyIO7Zacp/WnYB3q6NuiAnaIjJrWXFe32Bp18lk1ikY4VrFPJsg==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
-append a unique number to the device name.
+hi -
 
-Fixes v4l2-compliance:
-    Media Controller ioctls:
-         fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-       test MEDIA_IOC_G_TOPOLOGY: FAIL
-         fail: v4l2-test-media.cpp(394): num_data_links != num_links
-       test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+On 11/30/22 03:22, Tejun Heo wrote:
+[...]
+> +static bool consume_dispatch_q(struct rq *rq, struct rq_flags *rf,
+> +			       struct scx_dispatch_q *dsq)
+> +{
+> +	struct scx_rq *scx_rq = &rq->scx;
+> +	struct task_struct *p;
+> +	struct rq *task_rq;
+> +	bool moved = false;
+> +retry:
+> +	if (list_empty(&dsq->fifo))
+> +		return false;
+> +
+> +	raw_spin_lock(&dsq->lock);
+> +	list_for_each_entry(p, &dsq->fifo, scx.dsq_node) {
+> +		task_rq = task_rq(p);
+> +		if (rq == task_rq)
+> +			goto this_rq;
+> +		if (likely(rq->online) && !is_migration_disabled(p) &&
+> +		    cpumask_test_cpu(cpu_of(rq), p->cpus_ptr))
+> +			goto remote_rq;
+> +	}
+> +	raw_spin_unlock(&dsq->lock);
+> +	return false;
+> +
+> +this_rq:
+> +	/* @dsq is locked and @p is on this rq */
+> +	WARN_ON_ONCE(p->scx.holding_cpu >= 0);
+> +	list_move_tail(&p->scx.dsq_node, &scx_rq->local_dsq.fifo);
+> +	dsq->nr--;
+> +	scx_rq->local_dsq.nr++;
+> +	p->scx.dsq = &scx_rq->local_dsq;
+> +	raw_spin_unlock(&dsq->lock);
+> +	return true;
+> +
+> +remote_rq:
+> +#ifdef CONFIG_SMP
+> +	/*
+> +	 * @dsq is locked and @p is on a remote rq. @p is currently protected by
+> +	 * @dsq->lock. We want to pull @p to @rq but may deadlock if we grab
+> +	 * @task_rq while holding @dsq and @rq locks. As dequeue can't drop the
+> +	 * rq lock or fail, do a little dancing from our side. See
+> +	 * move_task_to_local_dsq().
+> +	 */
+> +	WARN_ON_ONCE(p->scx.holding_cpu >= 0);
+> +	list_del_init(&p->scx.dsq_node);
+> +	dsq->nr--;
+> +	p->scx.holding_cpu = raw_smp_processor_id();
+> +	raw_spin_unlock(&dsq->lock);
+> +
+> +	rq_unpin_lock(rq, rf);
+> +	double_lock_balance(rq, task_rq);
+> +	rq_repin_lock(rq, rf);
+> +
+> +	moved = move_task_to_local_dsq(rq, p);
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+you might be able to avoid the double_lock_balance() by using 
+move_queued_task(), which internally hands off the old rq lock and 
+returns with the new rq lock.
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 215fb483efb0..f4032ebb3689 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1963,7 +1963,8 @@ int uvc_register_video_device(struct uvc_device *dev,
- 		break;
- 	}
- 
--	strscpy(vdev->name, dev->name, sizeof(vdev->name));
-+	snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
-+		 stream->header.bTerminalLink);
- 
- 	/*
- 	 * Set the driver data before calling video_register_device, otherwise
+the pattern for consume_dispatch_q() would be something like:
 
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
+- kfunc from bpf, with this_rq lock held
+- notice p isn't on this_rq, goto remote_rq:
+- do sched_ext accounting, like the this_rq->dsq->nr--
+- unlock this_rq
+- p_rq = task_rq_lock(p)
+- double_check p->rq didn't change to this_rq during that unlock
+- new_rq = move_queued_task(p_rq, rf, p, new_cpu)
+- do sched_ext accounting like new_rq->dsq->nr++
+- unlock new_rq
+- relock the original this_rq
+- return to bpf
+
+you still end up grabbing both locks, but just not at the same time.
+
+plus, task_rq_lock() takes the guesswork out of whether you're getting 
+p's rq lock or not.  it looks like you're using the holding_cpu to 
+handle the race where p moves cpus after you read task_rq(p) but before 
+you lock that task_rq.  maybe you can drop the whole concept of the 
+holding_cpu?
+
+thanks,
+barret
+
+
+> +
+> +	double_unlock_balance(rq, task_rq);
+> +#endif /* CONFIG_SMP */
+> +	if (likely(moved))
+> +		return true;
+> +	goto retry;
+> +}
+
+
