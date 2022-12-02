@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E798F640D9C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F91640DAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbiLBSmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S234565AbiLBSok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234512AbiLBSle (ORCPT
+        with ESMTP id S234477AbiLBSnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:41:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB082F4EB0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:39:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E7E623A9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB72C433C1;
-        Fri,  2 Dec 2022 18:39:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670006389;
-        bh=BleIvxODy6ciEnk+PuCyneMSnGiwb5+/ySNjeEHNJkc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LJUwhG4CRx8Ozeh7tSuc48PznuxPcM+We5TOZo/7oRcm/2mkD1+QBUDWQDCO9Ljk9
-         Qq8O1oAa2r4z01tL12S4XiE8d+bKhkQF1POhEPbTudpw8sN/2SbKdhUnJQI4oEh7cD
-         uLZigFpldlNU+3f0rR/22kr/AK2ZSbGLshxlUxmhT5bTAd8iyDPVEhqKZOicSB2HlV
-         DcW6KfEaVAVcYYbhenC1fj5zop65p0oIiwAGNQy4ZmLp69KvxYFCxt76OXC790lxkN
-         8HzTTArSJ5S+1+ARm9H/O5uW/J5lxO9VEOXH62Ama4ZB89hANTfwjEzyDHKXrgmphD
-         MdwucQPzlQLbA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 03D564034E; Fri,  2 Dec 2022 15:39:46 -0300 (-03)
-Date:   Fri, 2 Dec 2022 15:39:46 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Hans-Peter Nilsson <hp@axis.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kim Phillips <kim.phillips@arm.com>
-Subject: Re: [PATCH] perf arm64: Fix mksyscalltbl, don't lose syscalls due to
- sort -nu
-Message-ID: <Y4pGchpqZCaWhPQg@kernel.org>
-References: <20201228023941.E0DE2203B5@pchp3.se.axis.com>
- <20201229030933.GC28115@leoy-ThinkPad-X240s>
- <Y4Cspv98j8TqwCqZ@axis.com>
- <Y4C66dg+9wwiXdVs@leoy-yangtze.lan>
- <98978f82-eb78-4fa7-901e-76c3070362e3@app.fastmail.com>
+        Fri, 2 Dec 2022 13:43:46 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32F9E2ABF;
+        Fri,  2 Dec 2022 10:42:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=wYScWJRTbZ+Jo4q46g59cBC6C79TnJL57TW21p2LlK8=; b=XCrX21p1lFdgoWEka+Vo2zvWh2
+        hv/4fOJtdJzFhbx4LVzVHc6UuOoMb3yFAcXdYusVQm06cH6/RxdZTWG482md+6crHUDhph/ElmTWp
+        Hg1TArPDttvVQ4Xs/y0NTiSAcB5rKHw8TpTxO2gbopkIRb/3VR+xAXDHHDL+JlmmMjso=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p1AzJ-004Cu4-3m; Fri, 02 Dec 2022 19:42:17 +0100
+Date:   Fri, 2 Dec 2022 19:42:17 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Xu Liang <lxu@maxlinear.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 4/4] net: phy: mxl-gpy: disable interrupts on
+ GPY215 by default
+Message-ID: <Y4pHCQrDbXXmOT+A@lunn.ch>
+References: <20221202151204.3318592-1-michael@walle.cc>
+ <20221202151204.3318592-5-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <98978f82-eb78-4fa7-901e-76c3070362e3@app.fastmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221202151204.3318592-5-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Nov 25, 2022 at 02:56:31PM +0100, Arnd Bergmann escreveu:
-> On Fri, Nov 25, 2022, at 13:54, Leo Yan wrote:
-> > On Fri, Nov 25, 2022 at 12:53:10PM +0100, Vincent Whitchurch wrote:
+On Fri, Dec 02, 2022 at 04:12:04PM +0100, Michael Walle wrote:
+> The interrupts on the GPY215B and GPY215C are broken and the only viable
+> fix is to disable them altogether. There is still the possibilty to
+> opt-in via the device tree.
 > 
-> >> It looks like this patch was never applied?  AFAICS it is still needed
-> >> on current HEAD and it still applies cleanly.
-> >
-> > Thanks a lot for bringing up this.
-> >
-> > Before there have a discussion [1] for refactoring Arm64 system call
-> > table but it didn't really happen.
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/net/phy/mxl-gpy.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> I actually worked on this last week and did a new series to convert
-> the old asm-generic/unistd.h header into the syscall.tbl format,
-> and change arm64 to use that.
-> 
-> You can find my work in the 'syscall-tbl' branch of my asm-generic
-> tree [1]. This has only seen light build testing so far, and is
-> probably still buggy, but most of the work is there. The missing
-> bits are the Makefiles for the other seven architectures using
-> asm-generic/unistd.h, and checking the output to ensure the
-> contents are still the same.
-> 
-> > I think it's the right thing to merge
-> > this patch, @Arnaldo, could you pick up this patch?
-> 
-> That sounds fine to me.
+> diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
+> index 20e610dda891..edb8cd8313b0 100644
+> --- a/drivers/net/phy/mxl-gpy.c
+> +++ b/drivers/net/phy/mxl-gpy.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/phy.h>
+>  #include <linux/polynomial.h>
+> +#include <linux/property.h>
+>  #include <linux/netdevice.h>
+>  
+>  /* PHY ID */
+> @@ -290,6 +291,10 @@ static int gpy_probe(struct phy_device *phydev)
+>  	phydev->priv = priv;
+>  	mutex_init(&priv->mbox_lock);
+>  
+> +	if (gpy_has_broken_mdint(phydev) &&
+> +	    !device_property_present(dev, "maxlinear,use-broken-interrupts"))
+> +		phydev->irq = PHY_POLL;
+> +
 
-Sure, and adding an Acked-by: Arnd
- 
->     Arnd
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/
+I'm not sure of ordering here. It could be phydev->irq is set after
+probe. The IRQ is requested as part of phy_connect_direct(), which is
+much later.
 
--- 
+I think a better place for this test is in gpy_config_intr(), return
+-EOPNOTSUPP. phy_enable_interrupts() failing should then cause
+phy_request_interrupt() to use polling.
 
-- Arnaldo
+	Andrew
