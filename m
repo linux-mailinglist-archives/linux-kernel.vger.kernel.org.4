@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFAB64087B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829E064083D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbiLBOdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S233526AbiLBOSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbiLBOdC (ORCPT
+        with ESMTP id S232953AbiLBOSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:33:02 -0500
-X-Greylist: delayed 909 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 06:32:56 PST
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8050CBA4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:32:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hvSPr
-        d8e1jZNisych/qs2alwu9oiP/IbUd6p6D4TfuQ=; b=ldylrim+FuGDvRYRKF7FH
-        o0DBfyK0jSm0EI9165nFFpxnfolRTb1c7B/XU9/hapv51bC91/k9HhZjn19QqhHS
-        DSEBff9YReE9iqxJ26tQUtMpncVtSACc7e+GGqtT6CHP6w0hCtyOIFNVHBB4uCLU
-        KZXbWqx8MDYe8gseH1oZWI=
-Received: from localhost.localdomain (unknown [123.52.25.162])
-        by zwqz-smtp-mta-g2-3 (Coremail) with SMTP id _____wBn9rLlCIpjEUxkAA--.43988S4;
-        Fri, 02 Dec 2022 22:17:10 +0800 (CST)
-From:   tzm <tcm1030@163.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        tzm <tcm1030@163.com>
-Subject: [PATCH] mm/mempolicy: failed to disable numa balancing
-Date:   Fri,  2 Dec 2022 22:16:30 +0800
-Message-Id: <20221202141630.41220-1-tcm1030@163.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 2 Dec 2022 09:18:09 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D484D7BC1E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:18:08 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p16rc-0007hV-3u; Fri, 02 Dec 2022 15:18:04 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 60B521316F4;
+        Fri,  2 Dec 2022 14:18:02 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 15:17:56 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 12/15] can: tcan4x5x: Remove invalid write in
+ clear_interrupts
+Message-ID: <20221202141756.tmgn2brrzfxz3wio@pengutronix.de>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-13-msp@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBn9rLlCIpjEUxkAA--.43988S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtr1fCr43CFy8ZF1fZFW7twb_yoWDKFb_Wr
-        n7tryIqrsxJrWruw42yF1xAF1rWw1j93W7Wr40g3yayryxu348XrWrtF4xursFqw17Ka9r
-        KF9xWr1rAr47AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUc4S7UUUUU==
-X-Originating-IP: [123.52.25.162]
-X-CM-SenderInfo: pwfpiiitq6il2tof0z/1tbiGAfLyFv2jwJ-UwAAsQ
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tjjtkhgzls42vba2"
+Content-Disposition: inline
+In-Reply-To: <20221116205308.2996556-13-msp@baylibre.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,29 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It will be failed to  disable numa balancing policy permanently by passing
-<numa_balancing=disable> to boot cmdline parameters.
-The numabalancing_override variable is int and 1 for enable -1 for disable.
-So, !enumabalancing_override will always be true, which cause this bug.
 
-Signed-off-by: tzm <tcm1030@163.com>
----
- mm/mempolicy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--tjjtkhgzls42vba2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 61aa9aedb728..2789c0920293 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -2865,7 +2865,7 @@ static void __init check_numabalancing_enable(void)
- 	if (numabalancing_override)
- 		set_numabalancing_state(numabalancing_override == 1);
- 
--	if (num_online_nodes() > 1 && !numabalancing_override) {
-+	if (num_online_nodes() > 1 && (numabalancing_override == 1)) {
- 		pr_info("%s automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl\n",
- 			numabalancing_default ? "Enabling" : "Disabling");
- 		set_numabalancing_state(numabalancing_default);
--- 
-2.27.0
+On 16.11.2022 21:53:05, Markus Schneider-Pargmann wrote:
+> Register 0x824 TCAN4X5X_MCAN_INT_REG is a read-only register. Any writes
+> to this register do not have any effect.
+>=20
+> Remove this write. The m_can driver aldready clears the interrupts in
+> m_can_isr() by writing to M_CAN_IR which is translated to register
+> 0x1050 which is a writable version of this register.
+>=20
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
+Please add a fixes tag.
+
+Marc
+
+> ---
+>  drivers/net/can/m_can/tcan4x5x-core.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>=20
+> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_ca=
+n/tcan4x5x-core.c
+> index 41645a24384c..1fec394b3517 100644
+> --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> @@ -204,11 +204,6 @@ static int tcan4x5x_clear_interrupts(struct m_can_cl=
+assdev *cdev)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	ret =3D tcan4x5x_write_tcan_reg(cdev, TCAN4X5X_MCAN_INT_REG,
+> -				      TCAN4X5X_ENABLE_MCAN_INT);
+> -	if (ret)
+> -		return ret;
+> -
+>  	ret =3D tcan4x5x_write_tcan_reg(cdev, TCAN4X5X_INT_FLAGS,
+>  				      TCAN4X5X_CLEAR_ALL_INT);
+>  	if (ret)
+> --=20
+> 2.38.1
+>=20
+>=20
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--tjjtkhgzls42vba2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKCRIACgkQrX5LkNig
+010QRQgAlebC0+TGnpSKg603pRTk0d9B/O8c7/5XdIPh/LwjCzsvTEMqrf5htK+q
+vtfGcWjxwYXXGpntx6xVfBR5gYrcfDMLeT90Xno6BoigsMdajRN7YAcJ0MjNY4EW
+jZNhyotXhs+fU2eJv48+Z6y31qTyDLIMkmbu1EOjyzX5/qJbRdJ6wq5gFgBYkNFF
+YaJnXWlWq3utr/FwXENNp5H3z6FwUmgb1i21tpLZabWxJijGFnf4ZXtqJXmP1iN6
+k0jsjqD+uvIUdkFSPRU69CfUjBpnTi07Zfmx6S0x19RJp9F4P3ZKIPq7XfSgvKTF
+GYFHmf1dGNiVKOUZvoGePApB/+T7lQ==
+=Nb9w
+-----END PGP SIGNATURE-----
+
+--tjjtkhgzls42vba2--
