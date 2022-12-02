@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E223640A5C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E96640A5B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233866AbiLBQPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S233825AbiLBQP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbiLBQPs (ORCPT
+        with ESMTP id S233774AbiLBQPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:15:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF77BF672;
-        Fri,  2 Dec 2022 08:15:39 -0800 (PST)
+        Fri, 2 Dec 2022 11:15:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03BEBBBD0;
+        Fri,  2 Dec 2022 08:15:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A77AAB82149;
-        Fri,  2 Dec 2022 16:15:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90A5C433B5;
-        Fri,  2 Dec 2022 16:15:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E208622E3;
+        Fri,  2 Dec 2022 16:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E44DC433D6;
+        Fri,  2 Dec 2022 16:15:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669997737;
-        bh=KgBgOHXymfu3Q4eF7TqCl7XFCIPthuyaHkGisjhFOJU=;
+        s=k20201202; t=1669997740;
+        bh=4UfoqML4L3IukWfvADvLkrtuQak85Ze14tDrzQ5hdwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HvSJwTYwz3NOYYnSx08OJX8VHQx7tH1bvPKzRc+tiNRu91a1p/z9Uql8RBXudanLJ
-         4G5wCXmEDEm62GzPAo84iWJEBbOOiNt/cNgJ6S5WMmGJwANNpyN9dRtEoUifRyWzw1
-         fkJlOEQ+uz6rVdyfVKfl5nijV1E9j6BeFfODghP0anUI86dh/7koMb5+rIAElNmjuk
-         5wd/Wf+tNLyUFQrIDrmHCdKNTafdFDpf95szcMXEPe10AIdzW9cIIUbIZA7tqGgb1p
-         gaJ37RnxKVm87j+LwSNJ7DwInuaLhZrhPNdoX51idPSSPEjiB7bs4COzUFHqWiS8at
-         Z9imFPWsKyLGA==
+        b=GBYta338nXNnuzZG7GDNq9PFxhM/cX92DH2AzsBGFI4iTieKuu1DUqzMRXV+nPWx5
+         7R/fiPYF8cjZQY36+UqacdBwgSgQQg8aQPTpxZ81tcSCjr4EUnhk3eo4ZZH9zDCkK+
+         2o9va6KpTYjHgLKtiqZX8PwfW8wL5dc6ZsRkqTeyqU0fEC6mNzgZrod0nhUCv3WHrJ
+         keudAiAD7Yx7UHhrOkYIUuYwdwQV+NaM+BFydjaZSSLC4hm0c/dQ0x97GqrkVCjo+K
+         4ZdmEA4t2NyS9PXASMMZYYPSd/cAu1gKw747T1i81cuvJX3084NFbeAAD2SyY0jlCC
+         GFTdyIQCe2oqQ==
 From:   ojeda@kernel.org
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,13 +39,13 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Adam Bratschi-Kaye <ark.email@gmail.com>,
+        patches@lists.linux.dev, Finn Behrens <me@kloenk.dev>,
         Wei Liu <wei.liu@kernel.org>,
         =?UTF-8?q?Sergio=20Gonz=C3=A1lez=20Collado?= 
         <sergio.collado@gmail.com>
-Subject: [PATCH v2 03/28] rust: print: add `pr_cont!` macro
-Date:   Fri,  2 Dec 2022 17:14:34 +0100
-Message-Id: <20221202161502.385525-4-ojeda@kernel.org>
+Subject: [PATCH v2 04/28] rust: samples: add `rust_print` example
+Date:   Fri,  2 Dec 2022 17:14:35 +0100
+Message-Id: <20221202161502.385525-5-ojeda@kernel.org>
 In-Reply-To: <20221202161502.385525-1-ojeda@kernel.org>
 References: <20221202161502.385525-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -62,185 +62,112 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miguel Ojeda <ojeda@kernel.org>
 
-This level is a bit different from the rest since it does not
-pass the module name to the `_printk()` call.
+Add example to exercise the printing macros (`pr_*!`) introduced
+in the previous patches.
 
-Thus add a new parameter to the general `print_macro!` to
-handle it differently.
-
-Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-Co-developed-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-Co-developed-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Gary Guo <gary@garyguo.net>
+Reviewed-by: Finn Behrens <me@kloenk.dev>
 Reviewed-by: Wei Liu <wei.liu@kernel.org>
-Reviewed-by: Sergio González Collado <sergio.collado@gmail.com>
+Tested-by: Sergio González Collado <sergio.collado@gmail.com>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/print.rs | 72 ++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 63 insertions(+), 9 deletions(-)
+ samples/rust/Kconfig       | 10 +++++++
+ samples/rust/Makefile      |  1 +
+ samples/rust/rust_print.rs | 54 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 65 insertions(+)
+ create mode 100644 samples/rust/rust_print.rs
 
-diff --git a/rust/kernel/print.rs b/rust/kernel/print.rs
-index 694f51c6da5c..29bf9c2e8aee 100644
---- a/rust/kernel/print.rs
-+++ b/rust/kernel/print.rs
-@@ -81,6 +81,7 @@ pub mod format_strings {
-     pub static NOTICE: [u8; LENGTH] = generate(false, bindings::KERN_NOTICE);
-     pub static INFO: [u8; LENGTH] = generate(false, bindings::KERN_INFO);
-     pub static DEBUG: [u8; LENGTH] = generate(false, bindings::KERN_DEBUG);
-+    pub static CONT: [u8; LENGTH] = generate(true, bindings::KERN_CONT);
- }
+diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
+index 841e0906e943..b0f74a81c8f9 100644
+--- a/samples/rust/Kconfig
++++ b/samples/rust/Kconfig
+@@ -20,6 +20,16 @@ config SAMPLE_RUST_MINIMAL
  
- /// Prints a message via the kernel's [`_printk`].
-@@ -111,6 +112,26 @@ pub unsafe fn call_printk(
-     }
- }
+ 	  If unsure, say N.
  
-+/// Prints a message via the kernel's [`_printk`] for the `CONT` level.
-+///
-+/// Public but hidden since it should only be used from public macros.
-+///
-+/// [`_printk`]: ../../../../include/linux/printk.h
-+#[doc(hidden)]
-+#[cfg_attr(not(CONFIG_PRINTK), allow(unused_variables))]
-+pub fn call_printk_cont(args: fmt::Arguments<'_>) {
-+    // `_printk` does not seem to fail in any path.
-+    //
-+    // SAFETY: The format string is fixed.
-+    #[cfg(CONFIG_PRINTK)]
-+    unsafe {
-+        bindings::_printk(
-+            format_strings::CONT.as_ptr() as _,
-+            &args as *const _ as *const c_void,
-+        );
++config SAMPLE_RUST_PRINT
++	tristate "Printing macros"
++	help
++	  This option builds the Rust printing macros sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_print.
++
++	  If unsure, say N.
++
+ config SAMPLE_RUST_HOSTPROGS
+ 	bool "Host programs"
+ 	help
+diff --git a/samples/rust/Makefile b/samples/rust/Makefile
+index 1daba5f8658a..03086dabbea4 100644
+--- a/samples/rust/Makefile
++++ b/samples/rust/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ obj-$(CONFIG_SAMPLE_RUST_MINIMAL)		+= rust_minimal.o
++obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust_print.o
+ 
+ subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)		+= hostprogs
+diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
+new file mode 100644
+index 000000000000..09f737790f3f
+--- /dev/null
++++ b/samples/rust/rust_print.rs
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust printing macros sample.
++
++use kernel::pr_cont;
++use kernel::prelude::*;
++
++module! {
++    type: RustPrint,
++    name: b"rust_print",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust printing macros sample",
++    license: b"GPL",
++}
++
++struct RustPrint;
++
++impl kernel::Module for RustPrint {
++    fn init(_module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust printing macros sample (init)\n");
++
++        pr_emerg!("Emergency message (level 0) without args\n");
++        pr_alert!("Alert message (level 1) without args\n");
++        pr_crit!("Critical message (level 2) without args\n");
++        pr_err!("Error message (level 3) without args\n");
++        pr_warn!("Warning message (level 4) without args\n");
++        pr_notice!("Notice message (level 5) without args\n");
++        pr_info!("Info message (level 6) without args\n");
++
++        pr_info!("A line that");
++        pr_cont!(" is continued");
++        pr_cont!(" without args\n");
++
++        pr_emerg!("{} message (level {}) with args\n", "Emergency", 0);
++        pr_alert!("{} message (level {}) with args\n", "Alert", 1);
++        pr_crit!("{} message (level {}) with args\n", "Critical", 2);
++        pr_err!("{} message (level {}) with args\n", "Error", 3);
++        pr_warn!("{} message (level {}) with args\n", "Warning", 4);
++        pr_notice!("{} message (level {}) with args\n", "Notice", 5);
++        pr_info!("{} message (level {}) with args\n", "Info", 6);
++
++        pr_info!("A {} that", "line");
++        pr_cont!(" is {}", "continued");
++        pr_cont!(" with {}\n", "args");
++
++        Ok(RustPrint)
 +    }
 +}
 +
- /// Performs formatting and forwards the string to [`call_printk`].
- ///
- /// Public but hidden since it should only be used from public macros.
-@@ -120,7 +141,7 @@ pub unsafe fn call_printk(
- #[allow(clippy::crate_in_macro_def)]
- macro_rules! print_macro (
-     // The non-continuation cases (most of them, e.g. `INFO`).
--    ($format_string:path, $($arg:tt)+) => (
-+    ($format_string:path, false, $($arg:tt)+) => (
-         // SAFETY: This hidden macro should only be called by the documented
-         // printing macros which ensure the format string is one of the fixed
-         // ones. All `__LOG_PREFIX`s are null-terminated as they are generated
-@@ -134,6 +155,13 @@ macro_rules! print_macro (
-             );
-         }
-     );
-+
-+    // The `CONT` case.
-+    ($format_string:path, true, $($arg:tt)+) => (
-+        $crate::print::call_printk_cont(
-+            format_args!($($arg)+),
-+        );
-+    );
- );
- 
- /// Stub for doctests
-@@ -174,7 +202,7 @@ macro_rules! print_macro (
- #[macro_export]
- macro_rules! pr_emerg (
-     ($($arg:tt)*) => (
--        $crate::print_macro!($crate::print::format_strings::EMERG, $($arg)*)
-+        $crate::print_macro!($crate::print::format_strings::EMERG, false, $($arg)*)
-     )
- );
- 
-@@ -198,7 +226,7 @@ macro_rules! pr_emerg (
- #[macro_export]
- macro_rules! pr_alert (
-     ($($arg:tt)*) => (
--        $crate::print_macro!($crate::print::format_strings::ALERT, $($arg)*)
-+        $crate::print_macro!($crate::print::format_strings::ALERT, false, $($arg)*)
-     )
- );
- 
-@@ -222,7 +250,7 @@ macro_rules! pr_alert (
- #[macro_export]
- macro_rules! pr_crit (
-     ($($arg:tt)*) => (
--        $crate::print_macro!($crate::print::format_strings::CRIT, $($arg)*)
-+        $crate::print_macro!($crate::print::format_strings::CRIT, false, $($arg)*)
-     )
- );
- 
-@@ -246,7 +274,7 @@ macro_rules! pr_crit (
- #[macro_export]
- macro_rules! pr_err (
-     ($($arg:tt)*) => (
--        $crate::print_macro!($crate::print::format_strings::ERR, $($arg)*)
-+        $crate::print_macro!($crate::print::format_strings::ERR, false, $($arg)*)
-     )
- );
- 
-@@ -270,7 +298,7 @@ macro_rules! pr_err (
- #[macro_export]
- macro_rules! pr_warn (
-     ($($arg:tt)*) => (
--        $crate::print_macro!($crate::print::format_strings::WARNING, $($arg)*)
-+        $crate::print_macro!($crate::print::format_strings::WARNING, false, $($arg)*)
-     )
- );
- 
-@@ -294,7 +322,7 @@ macro_rules! pr_warn (
- #[macro_export]
- macro_rules! pr_notice (
-     ($($arg:tt)*) => (
--        $crate::print_macro!($crate::print::format_strings::NOTICE, $($arg)*)
-+        $crate::print_macro!($crate::print::format_strings::NOTICE, false, $($arg)*)
-     )
- );
- 
-@@ -319,7 +347,7 @@ macro_rules! pr_notice (
- #[doc(alias = "print")]
- macro_rules! pr_info (
-     ($($arg:tt)*) => (
--        $crate::print_macro!($crate::print::format_strings::INFO, $($arg)*)
-+        $crate::print_macro!($crate::print::format_strings::INFO, false, $($arg)*)
-     )
- );
- 
-@@ -346,7 +374,33 @@ macro_rules! pr_info (
- macro_rules! pr_debug (
-     ($($arg:tt)*) => (
-         if cfg!(debug_assertions) {
--            $crate::print_macro!($crate::print::format_strings::DEBUG, $($arg)*)
-+            $crate::print_macro!($crate::print::format_strings::DEBUG, false, $($arg)*)
-         }
-     )
- );
-+
-+/// Continues a previous log message in the same line.
-+///
-+/// Use only when continuing a previous `pr_*!` macro (e.g. [`pr_info!`]).
-+///
-+/// Equivalent to the kernel's [`pr_cont`] macro.
-+///
-+/// Mimics the interface of [`std::print!`]. See [`core::fmt`] and
-+/// `alloc::format!` for information about the formatting syntax.
-+///
-+/// [`pr_cont`]: https://www.kernel.org/doc/html/latest/core-api/printk-basics.html#c.pr_cont
-+/// [`std::print!`]: https://doc.rust-lang.org/std/macro.print.html
-+///
-+/// # Examples
-+///
-+/// ```
-+/// # use kernel::pr_cont;
-+/// pr_info!("hello");
-+/// pr_cont!(" {}\n", "there");
-+/// ```
-+#[macro_export]
-+macro_rules! pr_cont (
-+    ($($arg:tt)*) => (
-+        $crate::print_macro!($crate::print::format_strings::CONT, true, $($arg)*)
-+    )
-+);
++impl Drop for RustPrint {
++    fn drop(&mut self) {
++        pr_info!("Rust printing macros sample (exit)\n");
++    }
++}
 -- 
 2.38.1
 
