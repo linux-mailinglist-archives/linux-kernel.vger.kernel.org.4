@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328C5640325
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473C1640327
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbiLBJVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S233090AbiLBJVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiLBJVL (ORCPT
+        with ESMTP id S233030AbiLBJVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:21:11 -0500
+        Fri, 2 Dec 2022 04:21:15 -0500
 Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20853BE4ED;
-        Fri,  2 Dec 2022 01:21:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887E3BD89A;
+        Fri,  2 Dec 2022 01:21:10 -0800 (PST)
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
         by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1p12E1-003AoY-9l; Fri, 02 Dec 2022 17:20:54 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Dec 2022 17:20:53 +0800
+        id 1p12E3-003Aoj-Cn; Fri, 02 Dec 2022 17:20:56 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Dec 2022 17:20:55 +0800
 From:   "Herbert Xu" <herbert@gondor.apana.org.au>
-Date:   Fri, 02 Dec 2022 17:20:53 +0800
-Subject: [PATCH 4/10] crypto: chelsio - Set DMA alignment explicitly
+Date:   Fri, 02 Dec 2022 17:20:55 +0800
+Subject: [PATCH 5/10] crypto: hisilicon/hpre - Set DMA alignment explicitly
 References: <Y4nDL50nToBbi4DS@gondor.apana.org.au>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
@@ -35,7 +35,7 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Message-Id: <E1p12E1-003AoY-9l@formenos.hmeau.com>
+Message-Id: <E1p12E3-003Aoj-Cn@formenos.hmeau.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,186 +54,162 @@ the Crypto API.
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 ---
 
- drivers/crypto/chelsio/chcr_algo.c |   43 ++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 21 deletions(-)
+ drivers/crypto/hisilicon/hpre/hpre_crypto.c |   40 +++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/crypto/chelsio/chcr_algo.c b/drivers/crypto/chelsio/chcr_algo.c
-index 6933546f87b1..2158bc237dbb 100644
---- a/drivers/crypto/chelsio/chcr_algo.c
-+++ b/drivers/crypto/chelsio/chcr_algo.c
-@@ -210,7 +210,7 @@ static inline int chcr_handle_aead_resp(struct aead_request *req,
- 					 unsigned char *input,
- 					 int err)
- {
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct chcr_dev *dev = a_ctx(tfm)->dev;
+diff --git a/drivers/crypto/hisilicon/hpre/hpre_crypto.c b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
+index 5f6d363c9435..8ede77310dc5 100644
+--- a/drivers/crypto/hisilicon/hpre/hpre_crypto.c
++++ b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
+@@ -147,6 +147,16 @@ struct hpre_asym_request {
+ 	struct timespec64 req_time;
+ };
  
-@@ -718,7 +718,7 @@ static inline int get_qidxs(struct crypto_async_request *req,
- 	{
- 		struct aead_request *aead_req =
- 			container_of(req, struct aead_request, base);
--		struct chcr_aead_reqctx *reqctx = aead_request_ctx(aead_req);
-+		struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(aead_req);
- 		*txqidx = reqctx->txqidx;
- 		*rxqidx = reqctx->rxqidx;
- 		break;
-@@ -2362,7 +2362,7 @@ static void chcr_hmac_cra_exit(struct crypto_tfm *tfm)
++static inline unsigned int hpre_align_sz(void)
++{
++	return ((crypto_dma_align() - 1) | (HPRE_ALIGN_SZ - 1)) + 1;
++}
++
++static inline unsigned int hpre_align_pd(void)
++{
++	return (hpre_align_sz() - 1) & ~(crypto_tfm_ctx_alignment() - 1);
++}
++
+ static int hpre_alloc_req_id(struct hpre_ctx *ctx)
+ {
+ 	unsigned long flags;
+@@ -517,7 +527,7 @@ static int hpre_msg_request_set(struct hpre_ctx *ctx, void *req, bool is_rsa)
+ 		}
  
- inline void chcr_aead_common_exit(struct aead_request *req)
- {
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct uld_ctx *u_ctx = ULD_CTX(a_ctx(tfm));
+ 		tmp = akcipher_request_ctx(akreq);
+-		h_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++		h_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 		h_req->cb = hpre_rsa_cb;
+ 		h_req->areq.rsa = akreq;
+ 		msg = &h_req->req;
+@@ -531,7 +541,7 @@ static int hpre_msg_request_set(struct hpre_ctx *ctx, void *req, bool is_rsa)
+ 		}
  
-@@ -2373,7 +2373,7 @@ static int chcr_aead_common_init(struct aead_request *req)
- {
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(a_ctx(tfm));
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	unsigned int authsize = crypto_aead_authsize(tfm);
- 	int error = -EINVAL;
+ 		tmp = kpp_request_ctx(kreq);
+-		h_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++		h_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 		h_req->cb = hpre_dh_cb;
+ 		h_req->areq.dh = kreq;
+ 		msg = &h_req->req;
+@@ -582,7 +592,7 @@ static int hpre_dh_compute_value(struct kpp_request *req)
+ 	struct crypto_kpp *tfm = crypto_kpp_reqtfm(req);
+ 	struct hpre_ctx *ctx = kpp_tfm_ctx(tfm);
+ 	void *tmp = kpp_request_ctx(req);
+-	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 	struct hpre_sqe *msg = &hpre_req->req;
+ 	int ret;
  
-@@ -2417,7 +2417,7 @@ static int chcr_aead_fallback(struct aead_request *req, unsigned short op_type)
+@@ -740,7 +750,7 @@ static int hpre_dh_init_tfm(struct crypto_kpp *tfm)
  {
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(a_ctx(tfm));
--	struct aead_request *subreq = aead_request_ctx(req);
-+	struct aead_request *subreq = aead_request_ctx_dma(req);
+ 	struct hpre_ctx *ctx = kpp_tfm_ctx(tfm);
  
- 	aead_request_set_tfm(subreq, aeadctx->sw_cipher);
- 	aead_request_set_callback(subreq, req->base.flags,
-@@ -2438,7 +2438,7 @@ static struct sk_buff *create_authenc_wr(struct aead_request *req,
- 	struct uld_ctx *u_ctx = ULD_CTX(ctx);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(ctx);
- 	struct chcr_authenc_ctx *actx = AUTHENC_CTX(aeadctx);
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct sk_buff *skb = NULL;
- 	struct chcr_wr *chcr_req;
- 	struct cpl_rx_phys_dsgl *phys_cpl;
-@@ -2576,7 +2576,7 @@ int chcr_aead_dma_map(struct device *dev,
- 		      unsigned short op_type)
- {
- 	int error;
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	unsigned int authsize = crypto_aead_authsize(tfm);
- 	int src_len, dst_len;
-@@ -2637,7 +2637,7 @@ void chcr_aead_dma_unmap(struct device *dev,
- 			 struct aead_request *req,
- 			 unsigned short op_type)
- {
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	unsigned int authsize = crypto_aead_authsize(tfm);
- 	int src_len, dst_len;
-@@ -2678,7 +2678,7 @@ void chcr_add_aead_src_ent(struct aead_request *req,
- 			   struct ulptx_sgl *ulptx)
- {
- 	struct ulptx_walk ulp_walk;
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
+-	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + HPRE_ALIGN_SZ);
++	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + hpre_align_pd());
  
- 	if (reqctx->imm) {
- 		u8 *buf = (u8 *)ulptx;
-@@ -2704,7 +2704,7 @@ void chcr_add_aead_dst_ent(struct aead_request *req,
- 			   struct cpl_rx_phys_dsgl *phys_cpl,
- 			   unsigned short qid)
- {
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct dsgl_walk dsgl_walk;
- 	unsigned int authsize = crypto_aead_authsize(tfm);
-@@ -2894,7 +2894,7 @@ static int generate_b0(struct aead_request *req, u8 *ivptr,
- 	unsigned int l, lp, m;
- 	int rc;
- 	struct crypto_aead *aead = crypto_aead_reqtfm(req);
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	u8 *b0 = reqctx->scratch_pad;
- 
- 	m = crypto_aead_authsize(aead);
-@@ -2932,7 +2932,7 @@ static int ccm_format_packet(struct aead_request *req,
- 			     unsigned short op_type,
- 			     unsigned int assoclen)
- {
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(a_ctx(tfm));
- 	int rc = 0;
-@@ -2963,7 +2963,7 @@ static void fill_sec_cpl_for_aead(struct cpl_tx_sec_pdu *sec_cpl,
- 	struct chcr_context *ctx = a_ctx(tfm);
- 	struct uld_ctx *u_ctx = ULD_CTX(ctx);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(ctx);
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	unsigned int cipher_mode = CHCR_SCMD_CIPHER_MODE_AES_CCM;
- 	unsigned int mac_mode = CHCR_SCMD_AUTH_MODE_CBCMAC;
- 	unsigned int rx_channel_id = reqctx->rxqidx / ctx->rxq_perchan;
-@@ -3036,7 +3036,7 @@ static struct sk_buff *create_aead_ccm_wr(struct aead_request *req,
- {
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(a_ctx(tfm));
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct sk_buff *skb = NULL;
- 	struct chcr_wr *chcr_req;
- 	struct cpl_rx_phys_dsgl *phys_cpl;
-@@ -3135,7 +3135,7 @@ static struct sk_buff *create_gcm_wr(struct aead_request *req,
- 	struct chcr_context *ctx = a_ctx(tfm);
- 	struct uld_ctx *u_ctx = ULD_CTX(ctx);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(ctx);
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct sk_buff *skb = NULL;
- 	struct chcr_wr *chcr_req;
- 	struct cpl_rx_phys_dsgl *phys_cpl;
-@@ -3255,9 +3255,10 @@ static int chcr_aead_cra_init(struct crypto_aead *tfm)
- 					       CRYPTO_ALG_ASYNC);
- 	if  (IS_ERR(aeadctx->sw_cipher))
- 		return PTR_ERR(aeadctx->sw_cipher);
--	crypto_aead_set_reqsize(tfm, max(sizeof(struct chcr_aead_reqctx),
--				 sizeof(struct aead_request) +
--				 crypto_aead_reqsize(aeadctx->sw_cipher)));
-+	crypto_aead_set_reqsize_dma(
-+		tfm, max(sizeof(struct chcr_aead_reqctx),
-+			 sizeof(struct aead_request) +
-+			 crypto_aead_reqsize(aeadctx->sw_cipher)));
- 	return chcr_device_init(a_ctx(tfm));
+ 	return hpre_ctx_init(ctx, HPRE_V2_ALG_TYPE);
  }
+@@ -785,7 +795,7 @@ static int hpre_rsa_enc(struct akcipher_request *req)
+ 	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
+ 	struct hpre_ctx *ctx = akcipher_tfm_ctx(tfm);
+ 	void *tmp = akcipher_request_ctx(req);
+-	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 	struct hpre_sqe *msg = &hpre_req->req;
+ 	int ret;
  
-@@ -3735,7 +3736,7 @@ static int chcr_aead_op(struct aead_request *req,
- 			create_wr_t create_wr_fn)
+@@ -833,7 +843,7 @@ static int hpre_rsa_dec(struct akcipher_request *req)
+ 	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
+ 	struct hpre_ctx *ctx = akcipher_tfm_ctx(tfm);
+ 	void *tmp = akcipher_request_ctx(req);
+-	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 	struct hpre_sqe *msg = &hpre_req->req;
+ 	int ret;
+ 
+@@ -1168,7 +1178,7 @@ static int hpre_rsa_init_tfm(struct crypto_akcipher *tfm)
+ 	}
+ 
+ 	akcipher_set_reqsize(tfm, sizeof(struct hpre_asym_request) +
+-				  HPRE_ALIGN_SZ);
++				  hpre_align_pd());
+ 
+ 	ret = hpre_ctx_init(ctx, HPRE_V2_ALG_TYPE);
+ 	if (ret)
+@@ -1490,7 +1500,7 @@ static int hpre_ecdh_msg_request_set(struct hpre_ctx *ctx,
+ 	}
+ 
+ 	tmp = kpp_request_ctx(req);
+-	h_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++	h_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 	h_req->cb = hpre_ecdh_cb;
+ 	h_req->areq.ecdh = req;
+ 	msg = &h_req->req;
+@@ -1571,7 +1581,7 @@ static int hpre_ecdh_compute_value(struct kpp_request *req)
+ 	struct hpre_ctx *ctx = kpp_tfm_ctx(tfm);
+ 	struct device *dev = ctx->dev;
+ 	void *tmp = kpp_request_ctx(req);
+-	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 	struct hpre_sqe *msg = &hpre_req->req;
+ 	int ret;
+ 
+@@ -1622,7 +1632,7 @@ static int hpre_ecdh_nist_p192_init_tfm(struct crypto_kpp *tfm)
+ 
+ 	ctx->curve_id = ECC_CURVE_NIST_P192;
+ 
+-	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + HPRE_ALIGN_SZ);
++	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + hpre_align_pd());
+ 
+ 	return hpre_ctx_init(ctx, HPRE_V3_ECC_ALG_TYPE);
+ }
+@@ -1633,7 +1643,7 @@ static int hpre_ecdh_nist_p256_init_tfm(struct crypto_kpp *tfm)
+ 
+ 	ctx->curve_id = ECC_CURVE_NIST_P256;
+ 
+-	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + HPRE_ALIGN_SZ);
++	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + hpre_align_pd());
+ 
+ 	return hpre_ctx_init(ctx, HPRE_V3_ECC_ALG_TYPE);
+ }
+@@ -1644,7 +1654,7 @@ static int hpre_ecdh_nist_p384_init_tfm(struct crypto_kpp *tfm)
+ 
+ 	ctx->curve_id = ECC_CURVE_NIST_P384;
+ 
+-	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + HPRE_ALIGN_SZ);
++	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + hpre_align_pd());
+ 
+ 	return hpre_ctx_init(ctx, HPRE_V3_ECC_ALG_TYPE);
+ }
+@@ -1802,7 +1812,7 @@ static int hpre_curve25519_msg_request_set(struct hpre_ctx *ctx,
+ 	}
+ 
+ 	tmp = kpp_request_ctx(req);
+-	h_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++	h_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 	h_req->cb = hpre_curve25519_cb;
+ 	h_req->areq.curve25519 = req;
+ 	msg = &h_req->req;
+@@ -1923,7 +1933,7 @@ static int hpre_curve25519_compute_value(struct kpp_request *req)
+ 	struct hpre_ctx *ctx = kpp_tfm_ctx(tfm);
+ 	struct device *dev = ctx->dev;
+ 	void *tmp = kpp_request_ctx(req);
+-	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, HPRE_ALIGN_SZ);
++	struct hpre_asym_request *hpre_req = PTR_ALIGN(tmp, hpre_align_sz());
+ 	struct hpre_sqe *msg = &hpre_req->req;
+ 	int ret;
+ 
+@@ -1972,7 +1982,7 @@ static int hpre_curve25519_init_tfm(struct crypto_kpp *tfm)
  {
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
--	struct chcr_aead_reqctx  *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct chcr_context *ctx = a_ctx(tfm);
- 	struct uld_ctx *u_ctx = ULD_CTX(ctx);
- 	struct sk_buff *skb;
-@@ -3785,7 +3786,7 @@ static int chcr_aead_op(struct aead_request *req,
- static int chcr_aead_encrypt(struct aead_request *req)
- {
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	struct chcr_context *ctx = a_ctx(tfm);
- 	unsigned int cpu;
+ 	struct hpre_ctx *ctx = kpp_tfm_ctx(tfm);
  
-@@ -3816,7 +3817,7 @@ static int chcr_aead_decrypt(struct aead_request *req)
- 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
- 	struct chcr_context *ctx = a_ctx(tfm);
- 	struct chcr_aead_ctx *aeadctx = AEAD_CTX(ctx);
--	struct chcr_aead_reqctx *reqctx = aead_request_ctx(req);
-+	struct chcr_aead_reqctx *reqctx = aead_request_ctx_dma(req);
- 	int size;
- 	unsigned int cpu;
+-	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + HPRE_ALIGN_SZ);
++	kpp_set_reqsize(tfm, sizeof(struct hpre_asym_request) + hpre_align_pd());
  
+ 	return hpre_ctx_init(ctx, HPRE_V3_ECC_ALG_TYPE);
+ }
