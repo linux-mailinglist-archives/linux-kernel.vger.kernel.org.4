@@ -2,134 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14A76406AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A726406B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233085AbiLBMVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S233422AbiLBMXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiLBMVf (ORCPT
+        with ESMTP id S233332AbiLBMXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:21:35 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2321865A5;
-        Fri,  2 Dec 2022 04:21:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669983694; x=1701519694;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=RCNCqkazhFBYrQaykaK4k78oh0l+6rQ5XaKkf5iBXLo=;
-  b=St31RbfvJnvwS2xlikxiTbRCnTxYavzCnp3NNhpeiK0axAoTkv9Ggtyf
-   7napnRMgATF0F8XOUBkPvBPcEylPTAEwMeSPSyFG3wODhFiRkz+ES2nDy
-   fAPNTVLtfGUtMcWBgl8LQHp5LYhjBnaBJ4Rx4L6yVeIwdypZCjVgwX4A7
-   FGDEgHNVSF29eA3nYpHt6yDLNe2O5+SlLMJHr00VANQ1SlJTRgWPe68Eo
-   ix1x9ql9IdycSf/iD6/lLiqFjqHa+cPcR6iOvfJOl1bda0che50Im4sI+
-   ZSh4eIuDhylx/5E0GWQ1BzkndBOJ/IPgdGAiTi5Zu/P+3shpoymC3v9ko
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="317091090"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="317091090"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 04:21:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="645012213"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="645012213"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2022 04:21:23 -0800
-Message-ID: <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
-Date:   Fri, 2 Dec 2022 14:22:39 +0200
+        Fri, 2 Dec 2022 07:23:10 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0817BF013;
+        Fri,  2 Dec 2022 04:23:09 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2AresJ010708;
+        Fri, 2 Dec 2022 12:23:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cQZvQoTwciKJEJStvGK0dTVTwyNTXTDVMusv/IDHPdI=;
+ b=N9Oz15O0Kz/yCT/evWuqRfYB/ack3SRNrukhp3XUD7zDi1vMcW/XPQRfKDa2v07T2xV3
+ vHFXvHVjdN5zWRqvxk/Kn7h7qHeMD4KcUtz8gEPsbsLV1Ris5nqBU7TlHTVwVPm14Zf8
+ o2rSq3sNa48P/9Janv8MyY+w/71+IcCY3ZQNjwCy4svaS+L27QRbJ1g9xpVSn1Na7h1y
+ wQ1RMaWvV9O/ZZdfATAOkMjQVc3rdL4GSPoGdSlqwdnThZlJNBCIahK6SI7Cm9MsiUNn
+ KRR7pa/s+PEV2qyOmBvoZolN02KMJf87uY/w2TIlMRTVQZOx3JmaETIHX25VHo21O58o gA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7c22172v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 12:23:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B2CMxOk026345
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 2 Dec 2022 12:22:59 GMT
+Received: from [10.216.7.250] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 2 Dec 2022
+ 04:22:55 -0800
+Message-ID: <5f129a61-0311-0b80-2e74-8425650bbd26@quicinc.com>
+Date:   Fri, 2 Dec 2022 17:52:41 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Artur Bujdoso <artur.bujdoso@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
-        eomji.oh@samsung.com
-References: <1669860811-171746-1-git-send-email-dh10.jung@samsung.com>
- <CGME20221201021942epcas2p2429ed37e1f6146b6e1a5bef23141b3f7@epcas2p2.samsung.com>
- <1669860811-171746-3-git-send-email-dh10.jung@samsung.com>
- <Y4hgnxGMEuizJumr@kroah.com>
- <c524cba6-4438-461a-ab05-9325fe09f832@app.fastmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: PM-runtime: supplier looses track of consumer during probe
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        <linux-pm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        <bjorn.andersson@kernel.org>, <quic_mkshah@quicinc.com>,
+        <quic_lsrao@quicinc.com>, <bvanassche@acm.org>,
+        Peter Wang <peter.wang@mediatek.com>
+References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
+ <20aae21e-62d2-8fdb-b57a-7b5a180266d8@intel.com>
+ <CAJZ5v0gdg=PUz-j0yd_QJRPmjhZ7pCuRrHt30U60H4QyTHCmdA@mail.gmail.com>
+ <12104185.O9o76ZdvQC@kreacher>
 Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH v1 2/2] usb: host: add xhci-exynos to support Exynos
- SOCs
-In-Reply-To: <c524cba6-4438-461a-ab05-9325fe09f832@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+In-Reply-To: <12104185.O9o76ZdvQC@kreacher>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6zxY9HzKvhb9W5GVdFFZEfdDwCzu4vQS
+X-Proofpoint-GUID: 6zxY9HzKvhb9W5GVdFFZEfdDwCzu4vQS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-02_05,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ adultscore=0 phishscore=0 mlxscore=0 impostorscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212020096
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1.12.2022 11.01, Arnd Bergmann wrote:
-> On Thu, Dec 1, 2022, at 09:06, Greg Kroah-Hartman wrote:
->> On Thu, Dec 01, 2022 at 11:13:31AM +0900, Daehwan Jung wrote:
->>> This driver works with xhci platform driver. It needs to override
->>> functions of xhci_plat_hc_driver. Wakelocks are used for sleep/wakeup
->>> scenario of system.
+Thanks Adrian and Rafael,
+We are trying both patches separately. And will update result once we get.
+
+Thanks,
+Tushar Nimkar
+
+On 12/2/2022 1:14 AM, Rafael J. Wysocki wrote:
+> On Thursday, December 1, 2022 8:28:25 PM CET Rafael J. Wysocki wrote:
+>> On Thu, Dec 1, 2022 at 2:10 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>
+>>> On 29/11/22 18:56, Nitin Rawat wrote:
+>>>> Hi Adrian,
+>>>>
+>>>> On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
+>>>>> Hi Adrian,
+>>>>>
+>>>>> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
+>>>>>> On 4/11/22 11:19, Tushar Nimkar wrote:
+>>>>>>> Hi linux-pm/linux-scsi,
+>>>>>
+>>>>>>>> Process -1
+>>>>>>>> ufshcd_async_scan context (process 1)
+>>>>>>>> scsi_autopm_put_device() //0:0:0:0
+>>>>>>
+>>>>>> I am having trouble following your description.  What function is calling
+>>>>>> scsi_autopm_put_device() here?
+>>>>>>
+>>>>> Below is flow which calls scsi_autopm_put_device()
+>>>>> Process -1
+>>>>> ufshcd_async_scan()
+>>>>>       scsi_probe_and_add_lun()
+>>>>>           scsi_add_lun()
+>>>>>               slave_configure()
+>>>>>                   scsi_sysfs_add_sdev()
+>>>>>                       scsi_autopm_get_device()
+>>>>>                           device_add()     <- invoked [Process 2] sd_probe()
+>>>>>                               scsi_autopm_put_device()
+>>>>>
+>>>>>>>> pm_runtime_put_sync()
+>>>>>>>> __pm_runtime_idle()
+>>>>>>>> rpm_idle() -- RPM_GET_PUT(4)
+>>>>>>>>        __rpm_callback
+>>>>>>>>            scsi_runtime_idle()
+>>>>>>>>                pm_runtime_mark_last_busy()
+>>>>>>>>                pm_runtime_autosuspend()  --[A]
+>>>>>>>>                    rpm_suspend() -- RPM_AUTO(8)
+>>>>>>>>                        pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
+>>>>>>>>                            __update_runtime_status to RPM_SUSPENDING
+>>>>>>>>                        __rpm_callback()
+>>>>>>>>                            __rpm_put_suppliers(dev, false)
+>>>>>>>>                        __update_runtime_status to RPM_SUSPENDED
+>>>>>>>>                    rpm_suspend_suppliers()
+>>>>>>>>                        rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
+>>>>>>>>                    rpm_suspend() – END with return=0
+>>>>>>>>            scsi_runtime_idle() END return (-EBUSY) always.
+>>>>>>
+>>>>>> Not following here either.  Which device is EBUSY and why?
+>>>>>
+>>>>> scsi_runtime_idle() return -EBUSY always [3]
+>>>>> Storage/scsi team can better explain -EBUSY implementation.
+>>>>
+>>>> EBUSY is returned from below code for consumer dev 0:0:0:0.
+>>>> scsi_runtime_idle is called from scsi_autopm_put_device which inturn is called from ufshcd_async_scan (Process 1 as per above call stack)
+>>>> static int scsi_runtime_idle(struct device *dev)
+>>>> {
+>>>>      :
+>>>>
+>>>>      if (scsi_is_sdev_device(dev)) {
+>>>>          pm_runtime_mark_last_busy(dev);
+>>>>          pm_runtime_autosuspend(dev);
+>>>>          return -EBUSY; ---> EBUSY returned from here.
+>>>>      }
+>>>>
+>>>>
+>>>> }
+>>>>
+>>>>>
+>>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
+>>>>>
+>>>>>
+>>>>>>>>
+>>>>>>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
+>>>>>>>> [2]: https://lkml.org/lkml/2022/10/12/259
+>>>
+>>> It looks to me like __rpm_callback() makes assumptions about
+>>> dev->power.runtime_status that are not necessarily true because
+>>> dev->power.lock is dropped.
 >>
->> So this means that no other platform xhci driver can be supported in the
->> same system at the same time.
+>> Well, this happens because rpm_idle() calls __rpm_callback() and
+>> allows it to run concurrently with rpm_suspend() and rpm_resume(), so
+>> one of them may change runtime_status to RPM_SUSPENDING or
+>> RPM_RESUMING while __rpm_callback() is running.
 >>
->> Which kind of makes sense as that's not anything a normal system would
->> have, BUT it feels very odd.  This whole idea of "override the platform
->> driver" feels fragile, why not make these just real platform drivers and
->> have the xhci platform code be a library that the other ones can use?
->> That way you have more control overall, right?
-
-Agree that overriding the generic platform driver xhci_hc_platform_driver
-from this exynos driver is odd.
-
-But I don't understand how this works.
-Where are the hcds created and added when this xhci-exonys driver binds to
-the device? all this driver does in probe is the overriding?
-
-Am I missing something here?
-
+>> It is somewhat questionable whether or not this should be allowed to
+>> happen, but since it is generally allowed to suspend the device from
+>> its .runtime_idle callback, there is not too much that can be done
+>> about it.
 > 
-> Agreed, having another layer here (hcd -> xhci -> xhcd_platform ->
-> xhcd_exynos) would fit perfectly well into how other SoC specific
-> drivers are abstracted. This could potentially also help reduce
-> the amount of code duplication between other soc specific variants
-> (mtk, tegra, mvebu, ...) that are all platform drivers but don't
-> share code with xhci-plat.c.
+> But this means that the patch below should help too.
 > 
-> Alternatively, it seems that all of the xhci-exynos support could
-> just be part of the generic xhci-platform driver: as far as I can
-> tell, none of the added code is exynos specific at all, instead it
-> is a generic xhci that is using the wakeup_source framework.
-
-Sounds reasonable as well, and if some exynos specific code is needed
-then just create a xhci_plat_priv struct for exynos and pass it in
-of_device_id data like other vendors that use the generic
-xhci-platform driver do.
-
--Mathias
-
+> I actually think that we can do both, because rpm_idle() doesn't have to do
+> the whole device links dance and the fact that it still calls __rpm_callback()
+> is a clear oversight.
+> 
+> ---
+>   drivers/base/power/runtime.c |   12 +++++++++++-
+>   1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> Index: linux-pm/drivers/base/power/runtime.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/runtime.c
+> +++ linux-pm/drivers/base/power/runtime.c
+> @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
+>   
+>   	dev->power.idle_notification = true;
+>   
+> -	retval = __rpm_callback(callback, dev);
+> +	if (dev->power.irq_safe)
+> +		spin_unlock(&dev->power.lock);
+> +	else
+> +		spin_unlock_irq(&dev->power.lock);
+> +
+> +	retval = callback(dev);
+> +
+> +	if (dev->power.irq_safe)
+> +		spin_lock(&dev->power.lock);
+> +	else
+> +		spin_lock_irq(&dev->power.lock);
+>   
+>   	dev->power.idle_notification = false;
+>   	wake_up_all(&dev->power.wait_queue);
+> 
+> 
+> 
