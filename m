@@ -2,204 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BA0640221
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173FE640225
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232887AbiLBIa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S232661AbiLBIb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiLBI3W (ORCPT
+        with ESMTP id S232622AbiLBI3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:29:22 -0500
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861382CE0B;
-        Fri,  2 Dec 2022 00:27:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1669969654; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Um7bLjMJkRzzGMWjDwOiZM7Q4Zr7Ff+nuz5l/iFK/JNF+0ZovQCa1Kbjs8pkQIt0dTDRsRvQAJWDQq8e/rEKwoRzdxvBOrNJ4NQiQ+Wum9zcGwvPS8jWeSWo+wTrhD0w1S97+qSCP51YXzX+AQkMU1I6YXsdcw3ydjSp+0trONE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1669969654; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=QKJjRg+TFMrDUXn3W6BnSgamQp8z40egqO35KV5JwBc=; 
-        b=kZo75enxAj+NBcU0ug9nHc7X7z1QXllK2apZH9Qvc4cRbREFPe+CUAeNHJ0WqJ3HRCbFW5LYRcQ3YsGWc+TwzqbFzAv6+9Y3//EjS4y0MNPOlzPopqF5XlX9Yc+tE8x9f/wAIzXkjL3puamR3r7jRQYk2nFV+j3Nf5dxIN7uChs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669969654;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=QKJjRg+TFMrDUXn3W6BnSgamQp8z40egqO35KV5JwBc=;
-        b=fRboHy8wzAAEegZvuWhEkMLFDSeDl+tcJjEVq2ywfQ8zEUM7A8Q2yYc/DOY5CW3H
-        TlxIaKCqNMyiePJGCVBqBuFx2Od557WAjw7N2hxXliBJXKmZJSAR44ILLskFDueGv1k
-        RZjkF4GpphuSII4YU6X89wqgQZKaze+E68G1+lSo=
-Received: from edelgard.fodlan.icenowy.me (120.85.99.229 [120.85.99.229]) by mx.zohomail.com
-        with SMTPS id 1669969653716805.4032075516008; Fri, 2 Dec 2022 00:27:33 -0800 (PST)
-Message-ID: <a2441e5ca47ff90474cd844801e6c7c43af91f50.camel@icenowy.me>
-Subject: Re: [PATCH v2 04/12] riscv: dts: allwinner: Add the D1/D1s SoC
- devicetree
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Conor Dooley <conor@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>
-Date:   Fri, 02 Dec 2022 16:27:25 +0800
-In-Reply-To: <Y4I45Uu6eFKUo69B@spud>
-References: <20221125234656.47306-1-samuel@sholland.org>
-         <20221125234656.47306-5-samuel@sholland.org> <Y4I45Uu6eFKUo69B@spud>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Fri, 2 Dec 2022 03:29:46 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2044.outbound.protection.outlook.com [40.92.52.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F101B9DD;
+        Fri,  2 Dec 2022 00:29:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h45j8ak8pCMvptvI54apD+z4bL7vyr+EAoJkHF83PIGWhLI9KY5h5XNSGynQXkctg8S9GQhUyix9FhtK/BGOQzJbYi8Qy1Zjijw+VrO6vDdPtQGBvKFZRWRVYGDYRmY/asRA4fj5LUh8P0pfrnBVH4fkT6H8Kvww2SCLYWaufVQffyAUSs6Ef+y8mcEyy6uHefEfskGSX08lqqrY7rOKY/hGCezDXDRDk1seZoQ/5h2JWn2k/bgCH22uQbebembjDcYJaETt3PfvBd3ygRMtP/bw5kxjuu2LsqeqJMHfElQRxYL7VOSnvpopz4fzMbktRvOxYylPF3c6w0fFktnpcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9HcybZ2vfQ+EwoEYW4hg8k8tIiUXVbxURLLrGUvdwNY=;
+ b=GTnOYSgYTJ5v8XBOar5pgpBASuBLVthYlsGapl+gwcLixGbiJD0d42dP47aDHkePYWntrpkzYFLFFFe7Jz0Si8gf7x2/ISLTyxJFe7ohuwLf9HLdOBma2hd6yClzV+44YaubHlqLo4kxiWVaaMxLxzSanqfsoMUL/I2A8oYz2IeS4pe8mD3Z0b/MkW/8i8yafkJ/UA4TkBkQaKWXaW16fsBX22cGiVmeQZNP1q7fDMBqppWp2gngy/ox1u0rjA9+UcYYqdKQ1eI3wrldF0jPfv1rURDZROHylfV7931Xo1wU5wrqvbtYQjKc/1ckox/KW+Hhjokoyj62PTouS84ghw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9HcybZ2vfQ+EwoEYW4hg8k8tIiUXVbxURLLrGUvdwNY=;
+ b=YZrgIQq+1c4SDuGhqzajKt+DeA52mJuGAd8IGQIaZMqMSrARIh7lXJw4BPDmmsmcmS1cFVNu5V0fMK9OtDrxDZ/h2r04uA8znXkzeqqhILI3bjav7XYRpNm19e3bwwJzpGsTX8hsjE8YUm2E1q9HGGO0+9WhUJysGPI/FqhPWtcT2bnzUAHWNjEYrWY+nqHHwaH+qDPFWcrlwRaKdZ95zq34WkDzDSp0xQguS8bpPzivJhVP6J/i/0/OrMbjcXNY773vpQJ0tdKav+moRJGnYZhH05n7O0m76+eAPPOv1UvwRGXLXBp4nQZt2Krux9adHeT8s4eWyINkk1l4SOTr2Q==
+Received: from SG2PR02MB5878.apcprd02.prod.outlook.com (2603:1096:4:1d2::9) by
+ SI2PR02MB4522.apcprd02.prod.outlook.com (2603:1096:4:109::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.21; Fri, 2 Dec 2022 08:29:29 +0000
+Received: from SG2PR02MB5878.apcprd02.prod.outlook.com
+ ([fe80::2c81:c803:d49b:eebb]) by SG2PR02MB5878.apcprd02.prod.outlook.com
+ ([fe80::2c81:c803:d49b:eebb%4]) with mapi id 15.20.5880.010; Fri, 2 Dec 2022
+ 08:29:28 +0000
+From:   Dicheng Wang <wangdicheng123@hotmail.com>
+To:     perex@perex.cz, tiwai@suse.com, sdoregor@sdore.me,
+        john-linux@pelago.org.uk, hahnjo@hahnjo.de, wangdicheng@kylinos.cn,
+        connerknoxpublic@gmail.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH -next] The USB audio driver does not contain the VID and PID of this sound card, so the driver is not loaded.
+Date:   Fri,  2 Dec 2022 16:29:08 +0800
+Message-ID: <SG2PR02MB5878D3E800F2D571A7C2234F8A179@SG2PR02MB5878.apcprd02.prod.outlook.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [456Z0W/WKjSUg/mAEv8OI1fVDlW5lOi65hvD1mi52zI=]
+X-ClientProxiedBy: SI2PR02CA0029.apcprd02.prod.outlook.com
+ (2603:1096:4:195::6) To SG2PR02MB5878.apcprd02.prod.outlook.com
+ (2603:1096:4:1d2::9)
+X-Microsoft-Original-Message-ID: <20221202082908.290632-1-wangdicheng123@hotmail.com>
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR02MB5878:EE_|SI2PR02MB4522:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9c38405-167d-4915-c8e0-08dad43f5427
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2vEaOTpHPClu+fGxcvAMh2DUqh/pddLKzjOb9LJg8Qhgq1r9yMhrGdmKMbhLnQutCBl7YZCQO/cvPWU7cmE0zdg7FFHpe4hS569FKUQBKcrhUpiw18f1WwKsjnaXCUbHnYBD3k+Dl/xGYyAxum750XfrYmhglb7YWjzpEQ7Wm+yjbb9Sj3RB2WSlDn2CbzF4foXkRMw5ztA8dOeS/3mwPrcxI22CX1gdUYxcK7Q0Ffdt95OHDJMNCkxEOFCzgaTP5WhStT/q8XkAlHGCBGl1cARJIvfekPKzaf8no7KMYpthdrx0UtC2m0mTZqIiOcUVHrqDkQdbQunZBW5TnLY5bycWoq6OeEaeT330JGMyzEtd+i7bThdJk/meiIcpZqAiyTi3j04KwFgCtCglfgQUzi+78Wo2tvqPpisFRlWgJhY4gJvv6rdJdxYSS5g+mEQtVfRQlClP62h+stay/0dFkkxcRkBGHkXDdc8SPlfpJaN64aLcDlFoXv2iQTmKcoqdfyZCaTepqqof3HHAnE2wV5z/mHoBBEmuLa+6PLnq2H0fEjX77u9eRZWxtyn7+NM5QOdj4wANLBTXdQ3SBjDz8p+R+PDuDR+b0ykbTDTt4j8=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VUOn0T5R7Z76wQE/lCxtAexn31SPkWYwCW/LbYJEHlW+jAW7umvlumvyA138?=
+ =?us-ascii?Q?AWsCZjq816U2jnGH3GUvpif8eU+0U+9BYiViE3irlKk6zXRyuSTdm3PDkO2I?=
+ =?us-ascii?Q?djl4PrYlW0ApOms48gXL/FgcBhrrvhgmXEL6F67KBfGmPT1yOcNJnI9JQiBo?=
+ =?us-ascii?Q?BhouX9eYEm9cFAF66eMKS14t2AFzZwAh2TUOVowvjkVPuQlKGVsEUJFPagdC?=
+ =?us-ascii?Q?CR+Hb6N/+ObsEHln5ttcdCHdcOGmzG2BHbkOfBYr8HDqK+KnXcpkc1CCiecz?=
+ =?us-ascii?Q?Nn/mEQznbUApYcjOLsjv+jRJfNS+e7UBQ62edAGe3FmXs10PcMg/hdSfA0nX?=
+ =?us-ascii?Q?zykUqMmEkCYBiWbcCZxEN5z6s4a8//Bq/VdbjpdOb5BOpGDi/PJ6sSnv8GHU?=
+ =?us-ascii?Q?xS0ZqXZLwau2GDUHOJYWoZcjzYQofiKfK44joRi7CfMvigLgdLYR16f8oOM4?=
+ =?us-ascii?Q?do5M5K5phJGnq0i9gqQX8Zbprus/lghhZ/3eMsGQHjFEq6P6ZStmN7AOiTC8?=
+ =?us-ascii?Q?QR+jNVVClGpjHkz6iYVs+tkbAyVdX730G2plVJrnXD0nQp2k9MQMOAdueEPB?=
+ =?us-ascii?Q?+5EZpAnZRk/EupzlkQr/B1TYMS/4E0DJzLIeTKVynMzZDv5emtmDIwa8mj/2?=
+ =?us-ascii?Q?iacozFTIWDSV1uOnLS3bCn4yr1gxDNy7DmyWPUdWkFvSWaJgecUgNMhBC18S?=
+ =?us-ascii?Q?uPotbN+W9cKUU52sEm54wnXftgSoEBMazAxfK+93cyy9CWvnEWZ1lQkHoWxk?=
+ =?us-ascii?Q?RIvdreoiFHvQMekQRIqlZtLbHhKCZmpqlHy8zzqfycosmQ04e2BBDqnzNjV4?=
+ =?us-ascii?Q?yFGqcl5KfWlJr8pSTEBdjCAhZUlQXBFLA+cgAZAkeP285HprDz4VRPaA3voW?=
+ =?us-ascii?Q?NmH0236gwYkmv0pKG7wdFbgc+9ssfIyfinsoo11xY4baTYa2NbHnGOihNOb7?=
+ =?us-ascii?Q?yrbfl61f3KnhDCpkLE+VSq7i6Au22zsEfBuLurl+umfSxfE+yHYrLjVXjae5?=
+ =?us-ascii?Q?uJcPvXmw8Zp5JJRCoflQuVxkgCM0/CwsCae9WB/Lled6biBuHpOaCWkUAGmx?=
+ =?us-ascii?Q?rw01uO1FPltRnN8AEvhGBQgLD/YNq0QEjhtzm8L3USE9T8YNNIs9A8KgwQOJ?=
+ =?us-ascii?Q?BOZIe6WOic/tv0I3diUM6tjQzrf576POo0Clmukk53iQiQ3R7B2QGKJlQoUX?=
+ =?us-ascii?Q?ih0f75RJqb5dLg4dztPbL52hu3m1gHnMoWO/jM2kI0McHrUJordo73lxFK2L?=
+ =?us-ascii?Q?A9OoHjUFgsoEm/pMe/Tvb/BxIuoPirhEylJWGoZi9+3VPWHebHO/JXQpPdG2?=
+ =?us-ascii?Q?KJc=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-20e34.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9c38405-167d-4915-c8e0-08dad43f5427
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR02MB5878.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 08:29:28.9236
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR02MB4522
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-11-26=E6=98=9F=E6=9C=9F=E5=85=AD=E7=9A=84 16:03 +0000=EF=BC=
-=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
-> On Fri, Nov 25, 2022 at 05:46:48PM -0600, Samuel Holland wrote:
-> > D1 (aka D1-H), D1s (aka F133), R528, and T113 are a family of SoCs
-> > based
-> > on a single die, or at a pair of dies derived from the same design.
-> >=20
-> > D1 and D1s contain a single T-HEAD Xuantie C906 CPU, whereas R528
-> > and
-> > T113 contain a pair of Cortex-A7's.
->=20
-> Is this "additionally contain" or a case of the D1 is the R528 but
-> with
-> s/arm/riscv/? It's the latter, right?
+From: wangdicheng <wangdicheng@kylinos.cn>
 
-Technically they're the same die, but the CPU cores are selectively
-enabled, and at least what Allwinner says is that D1 contains only RV
-and R528 contains only ARM.
+Add relevant information to the quirks-table.h file.
+The test passes and the sound source file plays normally.
 
->=20
-> > D1 and R528 are the full version of
-> > the chip with a BGA package, whereas D1s and T113 are low-pin-count
-> > QFP
-> > variants.
-> >=20
-> > Because the original design supported both ARM and RISC-V CPUs,
-> > some
-> > peripherals are duplicated. In addition, all variants except D1s
-> > contain
-> > a HiFi 4 DSP with its own set of peripherals.
-> >=20
-> > The devicetrees are organized to minimize duplication:
-> > =C2=A0- Common perhiperals are described in sunxi-d1s-t113.dtsi
-> > =C2=A0- DSP-related peripherals are described in sunxi-d1-t113.dtsi
-> > =C2=A0- RISC-V specific hardware is described in sun20i-d1s.dtsi
-> > =C2=A0- Functionality unique to the D1 variant is described in sun20i-
-> > d1.dtsi
-> >=20
-> > The SOC_PERIPHERAL_IRQ macro handles the different #interrupt-cells
-> > values between the ARM (GIC) and RISC-V (PLIC) versions of the SoC.
->=20
-> Modulo the warnings I replied to the cover with & one minor comment
-> below:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> > Signed-off-by: Samuel Holland <samuel@sholland.org>
-> > ---
-> >=20
-> > Changes in v2:
-> > =C2=A0- Split into separate files for sharing with D1s/R528/T113
-> > =C2=A0- Use SOC_PERIPHERAL_IRQ macro for interrupts
-> > =C2=A0- Rename osc24M to dcxo and move the frequency to the board DTs
-> > =C2=A0- Drop analog LDOs due to the missing binding
-> > =C2=A0- Correct tcon_top DSI clock reference
-> > =C2=A0- Add DMIC, DSI controller, and DPHY (bindings are in linux-next)
-> > =C2=A0- Add CPU OPP table
-> >=20
-> > =C2=A0arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi=C2=A0 |=C2=A0 66 ++
-> > =C2=A0arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi |=C2=A0 76 ++
-> > =C2=A0.../boot/dts/allwinner/sunxi-d1-t113.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 15 +
-> > =C2=A0.../boot/dts/allwinner/sunxi-d1s-t113.dtsi=C2=A0=C2=A0=C2=A0 | 84=
-4
-> > ++++++++++++++++++
-> > =C2=A04 files changed, 1001 insertions(+)
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1-
-> > t113.dtsi
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1s-
-> > t113.dtsi
->=20
->=20
-> > diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> > b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> > new file mode 100644
-> > index 000000000000..c8815cbf0b46
-> > --- /dev/null
-> > +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> > @@ -0,0 +1,844 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> > +// Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
-> > +
-> > +#include <dt-bindings/clock/sun6i-rtc.h>
-> > +#include <dt-bindings/clock/sun8i-de2.h>
-> > +#include <dt-bindings/clock/sun8i-tcon-top.h>
-> > +#include <dt-bindings/clock/sun20i-d1-ccu.h>
-> > +#include <dt-bindings/clock/sun20i-d1-r-ccu.h>
-> > +#include <dt-bindings/interrupt-controller/irq.h>
-> > +#include <dt-bindings/reset/sun8i-de2.h>
-> > +#include <dt-bindings/reset/sun20i-d1-ccu.h>
-> > +#include <dt-bindings/reset/sun20i-d1-r-ccu.h>
-> > +
-> > +/ {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#address-cells =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#size-cells =3D <1>;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dcxo: dcxo-clk {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0compatible =3D "fixed-clock";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0/* This value must be overridden by the board */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0clock-frequency =3D <0>;
->=20
-> Since this is a "must", can you drop the clock-frequency =3D <0> here
-> so
-> that if someone doesn't override it in their board dt-validate
-> complains?
->=20
-> Thanks,
-> Conor.
->=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0clock-output-names =3D "dcxo";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0#clock-cells =3D <0>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> > +
-> =C2=A0
->=20
+Cc: stable@vger.kernel.org
+Signed-off-by: wangdicheng <wangdicheng@kylinos.cn>
+---
+ sound/usb/quirks-table.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/sound/usb/quirks-table.h b/sound/usb/quirks-table.h
+index 874fcf245747..1fb183895da0 100644
+--- a/sound/usb/quirks-table.h
++++ b/sound/usb/quirks-table.h
+@@ -2802,6 +2802,13 @@ YAMAHA_DEVICE(0x7010, "UB99"),
+ 	.idProduct = 0x1020,
+ },
+ 
++/* Ktmicro Usb_audio device */
++{
++	.match_flags = USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor = 0x31b2,
++	.idProduct = 0x0011,
++},
++
+ /* QinHeng devices */
+ {
+ 	USB_DEVICE(0x1a86, 0x752d),
+-- 
+2.25.1
 
