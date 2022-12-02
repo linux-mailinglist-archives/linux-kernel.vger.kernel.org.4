@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BB96410AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2636410B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234924AbiLBWeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S234946AbiLBWeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234786AbiLBWdr (ORCPT
+        with ESMTP id S234894AbiLBWdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:33:47 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7811AECA1B;
-        Fri,  2 Dec 2022 14:33:43 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id d20so8324568edn.0;
-        Fri, 02 Dec 2022 14:33:43 -0800 (PST)
+        Fri, 2 Dec 2022 17:33:51 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA7FF81B5;
+        Fri,  2 Dec 2022 14:33:45 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id e13so8205981edj.7;
+        Fri, 02 Dec 2022 14:33:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JJBRCJuPeD4sVOppZ4nKmrCrzkzn8rXvXzlwDq8fCmI=;
-        b=GGe+iTwGyOOaFKNTDlCAjR6dKR8wb5gMcZ/dMjIhA46ZT6K3stZiPKFn9fWRmgFGb3
-         FLAJj/dwDbeywMhmpk36ITl9i7nP2/mPrUuzzQwlTfFwcWJkE0X9G0nJRyGa+DzvIkY1
-         pqBYLiaXsGTGJ1X+RcZnEmnYsyF5e4Nphz2CpKT1zcLyvGlAoqJEwBryRTiZDJDfccH2
-         wvbdTjZNf29D6bae/165/3v0hU39Xw6nlBi0y+wm/yD9Fl1lqKBNOJDMRZoa7L7vpB+5
-         lP/wMW2xkGOADRNqRu6nf0IiwYg+Cm1C0xqV5DdKnmpTxk3TP/gsdre3tfwJ67wCePai
-         Q8pQ==
+        bh=o4RJx9RRdpMAE8kiYEvU6NCFJlSYb1Rttu5ZW2+HQ2Q=;
+        b=aemu7vqZtiB00kfnuBczj8M5Jjt6opfkZZiQURopS8WTh114XJm+FB1JHceAShBaLB
+         ZgkdiGRyKQJ7NG/+ABojtF6sHjopjfHz0hqlqVEz0Ha71rcdNwSGh96VcEL/hhplEwaj
+         q6bb2yWb+i2mQ0Am2ALMVma3hb62djZuahu1oTM7LugrcvTBjhyAzH0pwHImNuzCRnzN
+         gBkfnFW10oLo6tUDpxsoyhaFC5ZTbf3l8lP0j3TnZeU6x+eGrNWuCiiboFgLN/up/GTY
+         j09AG3V7u/HWVLNvGCFstqSpqDcfzJiwktht/1ckQOXGSoqs1Cbbi90tVh7P2B2EDcHy
+         f7Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JJBRCJuPeD4sVOppZ4nKmrCrzkzn8rXvXzlwDq8fCmI=;
-        b=7/SOencGnXoZm2TI246WLw1Bg3vgNfzNZOR9XpYn405safYP48ssmqqE/nDZzlooS1
-         7xMBuzuj7ipNYDo4Zkaka+OTrkL0dLfO9deK2RIaA1NBYRl3YK2n29ngyXUOpbYzf0ar
-         khWPAE9da0d5zTCnwlwe5g2cc6y5NCnnCAEWERoML9uZtJzWYjw48lw2bb+Oq/i0zrq0
-         j/QPw7Qdp6bL+4Zkzv3Bwq4bHN6frR+zBcNkFIYyq8OtHWTTmm3RCvgSMKJ10RE7a0Ug
-         sv7hUvnaHx+nHwKISz3NnWEmzc0bY+u4AM4L+0gOaifHCqk2y7lXCfHiXRWn0OUJo3vP
-         q1uA==
-X-Gm-Message-State: ANoB5plOLDXRPKlAkwkvEXsx3effW2+MwqOBESKDZJexeM8pMYGVgbsz
-        fbfTawXzS3glPVrTroaWqFs=
-X-Google-Smtp-Source: AA0mqf6bUwpCibxdfNg2Qs6jac/cuNOb/Eb0NpNvR+lvblsUC5blc8pJCASp7sxHiFwcgkapDtGiXQ==
-X-Received: by 2002:a05:6402:144f:b0:46b:51e5:832a with SMTP id d15-20020a056402144f00b0046b51e5832amr21328502edx.331.1670020423103;
-        Fri, 02 Dec 2022 14:33:43 -0800 (PST)
+        bh=o4RJx9RRdpMAE8kiYEvU6NCFJlSYb1Rttu5ZW2+HQ2Q=;
+        b=My/4YTbkufUYN9kIMlNtKTPV6FDwJ3ZaEZ1Md+Ljv4I80Odmm8ndbzpmkdxMrlbAf5
+         YcyztF55l76srjrMVY0eTlMqaCkwb+N1H1Xw1MjLmV26en2F2OHh35MIJ88PPR8g6/XH
+         MvkHZpDIz9TY/2TBfYWX8fIh/q+DrvcJaHYughl9lEzX555CwILQ2vEAhdxBMKOLCgof
+         BshQKAwbg5ktYNflLzePesOV81oS7zJBUvaMTI6ktZsOwp07UFsUYroR6B6nr1Tw0FTH
+         RBOvnQWaKIkEle49jiXROZxGfhLuQONbQew89I94pJaoZX03Jit/NysUVDvCr7cFlT08
+         2Oiw==
+X-Gm-Message-State: ANoB5pkdyGCeeis1ZfaCiIwk5EH2eJuXjNuUClf852IwsFmP5wAkxy20
+        s/KX2BydJ6hGiqfbLVvVdHA=
+X-Google-Smtp-Source: AA0mqf7wXaMMfGRLuwREOFjkgkFZ6IZXzOPzfj9OQ11nAL5J6EfNgWPJ2KqQCzwzbJkwkKfBRQb0ww==
+X-Received: by 2002:aa7:cd04:0:b0:46b:34c:5574 with SMTP id b4-20020aa7cd04000000b0046b034c5574mr27293913edw.175.1670020424225;
+        Fri, 02 Dec 2022 14:33:44 -0800 (PST)
 Received: from xws.localdomain ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b007c0d0dad9c6sm575340ejg.108.2022.12.02.14.33.42
+        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b007c0d0dad9c6sm575340ejg.108.2022.12.02.14.33.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:33:42 -0800 (PST)
+        Fri, 02 Dec 2022 14:33:43 -0800 (PST)
 From:   Maximilian Luz <luzmaximilian@gmail.com>
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
         Mark Gross <markgross@kernel.org>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/9] platform/surface: aggregator_tabletsw: Use target-ID enum instead of hard-coding values
-Date:   Fri,  2 Dec 2022 23:33:23 +0100
-Message-Id: <20221202223327.690880-6-luzmaximilian@gmail.com>
+Subject: [PATCH 6/9] platform/surface: dtx: Use target-ID enum instead of hard-coding values
+Date:   Fri,  2 Dec 2022 23:33:24 +0100
+Message-Id: <20221202223327.690880-7-luzmaximilian@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221202223327.690880-1-luzmaximilian@gmail.com>
 References: <20221202223327.690880-1-luzmaximilian@gmail.com>
@@ -78,38 +78,84 @@ ssam_ssh_tid value.
 
 Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
- drivers/platform/surface/surface_aggregator_tabletsw.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/platform/surface/surface_dtx.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/platform/surface/surface_aggregator_tabletsw.c b/drivers/platform/surface/surface_aggregator_tabletsw.c
-index 27d95a6a7851..bd8cd453c393 100644
---- a/drivers/platform/surface/surface_aggregator_tabletsw.c
-+++ b/drivers/platform/surface/surface_aggregator_tabletsw.c
-@@ -247,7 +247,7 @@ static bool ssam_kip_cover_state_is_tablet_mode(struct ssam_tablet_sw *sw, u32 s
+diff --git a/drivers/platform/surface/surface_dtx.c b/drivers/platform/surface/surface_dtx.c
+index ed36944467f9..0de76a784a35 100644
+--- a/drivers/platform/surface/surface_dtx.c
++++ b/drivers/platform/surface/surface_dtx.c
+@@ -71,63 +71,63 @@ static_assert(sizeof(struct ssam_bas_base_info) == 2);
  
- SSAM_DEFINE_SYNC_REQUEST_R(__ssam_kip_get_cover_state, u8, {
- 	.target_category = SSAM_SSH_TC_KIP,
+ SSAM_DEFINE_SYNC_REQUEST_N(ssam_bas_latch_lock, {
+ 	.target_category = SSAM_SSH_TC_BAS,
 -	.target_id       = 0x01,
 +	.target_id       = SSAM_SSH_TID_SAM,
- 	.command_id      = 0x1d,
+ 	.command_id      = 0x06,
  	.instance_id     = 0x00,
  });
-@@ -371,7 +371,7 @@ static int ssam_pos_get_sources_list(struct ssam_tablet_sw *sw, struct ssam_sour
- 	int status;
  
- 	rqst.target_category = SSAM_SSH_TC_POS;
--	rqst.target_id = 0x01;
-+	rqst.target_id = SSAM_SSH_TID_SAM;
- 	rqst.command_id = 0x01;
- 	rqst.instance_id = 0x00;
- 	rqst.flags = SSAM_REQUEST_HAS_RESPONSE;
-@@ -430,7 +430,7 @@ static int ssam_pos_get_source(struct ssam_tablet_sw *sw, u32 *source_id)
- 
- SSAM_DEFINE_SYNC_REQUEST_WR(__ssam_pos_get_posture_for_source, __le32, __le32, {
- 	.target_category = SSAM_SSH_TC_POS,
+ SSAM_DEFINE_SYNC_REQUEST_N(ssam_bas_latch_unlock, {
+ 	.target_category = SSAM_SSH_TC_BAS,
 -	.target_id       = 0x01,
 +	.target_id       = SSAM_SSH_TID_SAM,
- 	.command_id      = 0x02,
+ 	.command_id      = 0x07,
+ 	.instance_id     = 0x00,
+ });
+ 
+ SSAM_DEFINE_SYNC_REQUEST_N(ssam_bas_latch_request, {
+ 	.target_category = SSAM_SSH_TC_BAS,
+-	.target_id       = 0x01,
++	.target_id       = SSAM_SSH_TID_SAM,
+ 	.command_id      = 0x08,
+ 	.instance_id     = 0x00,
+ });
+ 
+ SSAM_DEFINE_SYNC_REQUEST_N(ssam_bas_latch_confirm, {
+ 	.target_category = SSAM_SSH_TC_BAS,
+-	.target_id       = 0x01,
++	.target_id       = SSAM_SSH_TID_SAM,
+ 	.command_id      = 0x09,
+ 	.instance_id     = 0x00,
+ });
+ 
+ SSAM_DEFINE_SYNC_REQUEST_N(ssam_bas_latch_heartbeat, {
+ 	.target_category = SSAM_SSH_TC_BAS,
+-	.target_id       = 0x01,
++	.target_id       = SSAM_SSH_TID_SAM,
+ 	.command_id      = 0x0a,
+ 	.instance_id     = 0x00,
+ });
+ 
+ SSAM_DEFINE_SYNC_REQUEST_N(ssam_bas_latch_cancel, {
+ 	.target_category = SSAM_SSH_TC_BAS,
+-	.target_id       = 0x01,
++	.target_id       = SSAM_SSH_TID_SAM,
+ 	.command_id      = 0x0b,
+ 	.instance_id     = 0x00,
+ });
+ 
+ SSAM_DEFINE_SYNC_REQUEST_R(ssam_bas_get_base, struct ssam_bas_base_info, {
+ 	.target_category = SSAM_SSH_TC_BAS,
+-	.target_id       = 0x01,
++	.target_id       = SSAM_SSH_TID_SAM,
+ 	.command_id      = 0x0c,
+ 	.instance_id     = 0x00,
+ });
+ 
+ SSAM_DEFINE_SYNC_REQUEST_R(ssam_bas_get_device_mode, u8, {
+ 	.target_category = SSAM_SSH_TC_BAS,
+-	.target_id       = 0x01,
++	.target_id       = SSAM_SSH_TID_SAM,
+ 	.command_id      = 0x0d,
+ 	.instance_id     = 0x00,
+ });
+ 
+ SSAM_DEFINE_SYNC_REQUEST_R(ssam_bas_get_latch_status, u8, {
+ 	.target_category = SSAM_SSH_TC_BAS,
+-	.target_id       = 0x01,
++	.target_id       = SSAM_SSH_TID_SAM,
+ 	.command_id      = 0x11,
  	.instance_id     = 0x00,
  });
 -- 
