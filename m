@@ -2,320 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66B5640AF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3169A640ACC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234053AbiLBQiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:38:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S234110AbiLBQbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:31:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbiLBQiF (ORCPT
+        with ESMTP id S233779AbiLBQah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:38:05 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B48773F48;
-        Fri,  2 Dec 2022 08:38:01 -0800 (PST)
+        Fri, 2 Dec 2022 11:30:37 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2622CA3239;
+        Fri,  2 Dec 2022 08:29:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669999081; x=1701535081;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hGNc1g82zkLmEWQsUiwpumdAF8Ff8s0nd725mUW+1ko=;
-  b=fwRtPbkF5g3cbjLofDjfaFjG2bUx7kSS3gVf37f/qWuBhtdWU2qQn1S/
-   OZtONTKgdMMrSoaFJljooFHn4bgEc8Jkb9UmI7X36mqfkjRzfwJNyjnMz
-   cQeoTC8rmtzIzlwnNAw0ZUu+zBff9YHPMZE4hZefjTNYciOVyY8FQU0mc
-   mdXbn1EcwybNZoe4CiVveNkYuz+U0xgFinmsjKIwzNvfuuCEvIHK6h1Rs
-   dsuz+2LtsTYn91d0PmjSJzyoKifZ9yFB1kep6tjzXlFYZmYOKHtO4y3qi
-   JSRZ+JdJnrihx9LnWamioDl36hW4xyGjJH37ftl/dCuTBOhF2VAk+SzPR
+  t=1669998572; x=1701534572;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=5WEWQ182tijciZhJEHbE6U7O4aW1+eanu0nh4FpV95E=;
+  b=M151U2VRqa1tLxK7bjVQxdWSqKy1OIuS17Q8mDqYZ6qJeFlLxNkWhXxX
+   SMY2ZINBs/C+QhmjBth+FJfi26Q3Cs/klQSqjUWwMVtuvvqb9zxfg2lRa
+   064B7n8u3ID3oX7oRLAqtNTKiCuF1kgGQOdWMc+UkfTmTkmCDQYRiiZCl
+   NRy6MkyMScC8cXMJ9fWuaPRjd+YXaTe0l7GQPofWQe4LMqRHI8t1PWXSv
+   v6KDw5udzOxfMrjRvE2WLESSRaFE7xStMtY9x9X0wqulxUrmDy9CUTpH8
+   woiAlP+k8zJLqz11tKgYBs2HV52sCSacXUjEhAZjnOWqDNcJOvOQsA8h7
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="316015898"
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="317842198"
 X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="316015898"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 08:38:00 -0800
+   d="scan'208";a="317842198"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 08:29:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="769653874"
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="622748479"
 X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="769653874"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 02 Dec 2022 08:37:52 -0800
-Date:   Sat, 3 Dec 2022 00:28:11 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 6/9] mfd: intel-m10-bmc: Downscope SPI defines &
- prefix with M10BMC_SPI
-Message-ID: <Y4onmwWT8duVV0Sv@yilunxu-OptiPlex-7050>
-References: <20221202100841.4741-1-ilpo.jarvinen@linux.intel.com>
- <20221202100841.4741-7-ilpo.jarvinen@linux.intel.com>
+   d="scan'208";a="622748479"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 02 Dec 2022 08:29:24 -0800
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 2 Dec 2022 08:29:23 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 2 Dec 2022 08:29:23 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.42) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 2 Dec 2022 08:29:23 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aN9y+DSCzo4fE8rB2Y72HjXqSojT1tvlH7XxMhxznZj6TSO0S2myhrkzPsdq+39DQPg8suW1s+XkDBXwp1gcwGbGQx/A0c8pmGM0Kluom3vktWHyoTTIQNOp/tlahdctNlE7Z1h7qcD+fKrMdcGmXInHDoA5fhvcfYsitL2+2xnC3F6tPW5tcvCJvsCObDbC3DAaESCetnuhZnNyk8WMe5+ANUmogtvygRD+kzjWnBI/fGH0xWQUMZC7jE+E3qjfyWrY2VmX5IbwclWTeYuHtfCEf2AkwA0Q0frjDLyphgtRZHv2snzZU4xWHphdEiUvgGlcMmKpx5ohMMXIPjz5mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+qoI3yJB2odRtQnfdBswF4h7KYt8xFBHttgAtWlQsdk=;
+ b=ofkDZBqb9s5vuO//fhs6xBRzgVz4SNYYroii4jmoBmf5BfIBgP43UuwHxzEoheKoygv+hEPqqin5smahj8N7UgxDGdSHNYyKuRZ0GwmYAp9ikfNBHiPoqRzgWA9zfCHXbnDQuujLkEK8iwdXfro4iegNGqued0mRTOqL3vSkPz6dxWyphiZgYnH4f+k4rc3K20o2U8pDn9H3s7avnyxN+TIWYDIAkhf7Oj7DBQnXo7D6klwPvrqa/5Vccvsfe/6lMBX/VSdSijbgC+dPC4i/igLzLyi3CBbDwuEOwvwdlrRrMYgZpQkt95aiaJ+vcd0hhf0jGl3HPFWj2+6SmCGeDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
+ by MN2PR11MB4711.namprd11.prod.outlook.com (2603:10b6:208:24e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Fri, 2 Dec
+ 2022 16:29:21 +0000
+Received: from DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::eead:b901:ac48:7680]) by DM5PR11MB1899.namprd11.prod.outlook.com
+ ([fe80::eead:b901:ac48:7680%9]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
+ 16:29:21 +0000
+Message-ID: <4e5bbaf8-58ea-5ebe-a585-496ee7b51bce@intel.com>
+Date:   Fri, 2 Dec 2022 08:29:15 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: fw_fallback.sh test failed in Debian 11
+Content-Language: en-US
+To:     "Zhou, Jie2X" <jie2x.zhou@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "shuah@kernel.org" <shuah@kernel.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "Zhang, Tianfei" <tianfei.zhang@intel.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Li, Philip" <philip.li@intel.com>
+References: <CY4PR11MB1320DAA7D7972E738EDA754EC5129@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <Y4W+/TfM4F9TdSnZ@kroah.com>
+ <CY4PR11MB132092589F9270FB559B01D8C5159@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <0e688462-7f22-118e-6cb1-de8b582e3973@intel.com>
+ <CY4PR11MB13205F799D0A30BB011E4334C5149@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <217b7959-facc-1028-19be-1040898a705c@intel.com>
+ <CY4PR11MB13206A6918FFDEB5B3D3794BC5149@CY4PR11MB1320.namprd11.prod.outlook.com>
+ <57b8f45b-da8c-e9ae-6b3f-ba82f936c9b2@intel.com>
+ <CY4PR11MB132068A19AF9704D1B14814FC5179@CY4PR11MB1320.namprd11.prod.outlook.com>
+From:   Russ Weight <russell.h.weight@intel.com>
+In-Reply-To: <CY4PR11MB132068A19AF9704D1B14814FC5179@CY4PR11MB1320.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4P221CA0025.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:303:8b::30) To DM5PR11MB1899.namprd11.prod.outlook.com
+ (2603:10b6:3:10b::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221202100841.4741-7-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1899:EE_|MN2PR11MB4711:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9cbf2e98-79d5-45c5-4c0b-08dad4825d0f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: E1oF/wBKH/dwTJ/hwsNcSTNzzsb7BprTyEQkgy1tmg7Wp3ZxJi89x4TPkSJEB2NGUbDhs2Y99BHklei1lldJyD5uRQP+yL5HQPFa843cYg6xt4755spUUllBehH2aKfIgZNgjT0ui4LQP9slaiUIYYm4w31PcCEiRVt5A5P4iGNJ1W9qs76YBZerR6dZLi5QEb8OMXGW7qyhfwaOjgzVUv/bf7cYujG9t/WdCahVw++xaKIdhoiRck70h98+fpyFCGjDeevATd6uqfLb+FjjTK5oikq1AHuaRLUO09YVJapPR82Tgde0LVKNfRT06xjXhzcc+EweGFqRfvezNqdyQDVSeg5FU9YhRKDjyIjHBZS1gtiZlPFHXAVZ5CUFMVb58zPFA8+oRkMyJluJ7QvsW/5lErVPoMP8cqlejQexd0ODTqHfYKtokAhJwjhz9pZ8ZP5IPbh1LkwtwUZeugy+ng9gJSjsev7a6xGnUPYhtGv1OQcVnFfqWQk90h7mKDJtVKjqYdYODmWuuOPru0paYmhLFTsz3NftPPoqEehu3QkaDPEyYqkl5deEaFfgdRY9os1ypJywujL/T2yOeCWJ4t9IksY07fobvYo6HxbvOdweoHgAFLJgHrMkEcvStXwyxVdH4Lk8D4sIb8owHdCRAuRA5+wa6KmUzzXBwePRLNJi/WMAunZ4meBIK322hPGoGPoHZcthyH7C7pTxZB9obBpnGU1Sxl/vpTXV06EsNP7dyMrJ2mtQiJRZttBD9LL/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199015)(66946007)(66476007)(5660300002)(2906002)(8676002)(66556008)(31686004)(8936002)(41300700001)(4326008)(316002)(54906003)(110136005)(966005)(6486002)(478600001)(36756003)(53546011)(26005)(6666004)(6512007)(6506007)(107886003)(83380400001)(186003)(2616005)(82960400001)(31696002)(38100700002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cXhLWjZPVkpiNHRxRnNnNGlpb3VhUXhPZVlLd2NkK0NZdU9rM3k1alpZZ2lp?=
+ =?utf-8?B?bndTYlFBUjVNbHhqeGg0Q3VlaXRCU0VOOFFLbzdqZ1NkTTZoY3FkdXZlSEJK?=
+ =?utf-8?B?TVFRUWdhR21peldzRHhGZWh4OGFVSHNxc2QxaXVGK25IQ0lSOVBDajVxc3Uz?=
+ =?utf-8?B?WVNPVkVIVDFUNVk3Y0Z6MXdYb2JJZGxkZnlDWnFDNnBJVU1xRWJWM2VUemo4?=
+ =?utf-8?B?ZEFvejlQaklpSWJWS2JueG1KamRyVVFFZ3plRG9oMjFGdnc1eVNDNUN6UW9i?=
+ =?utf-8?B?YkNHVU04cUpBSVIwNTlsVjNoQXhucTZLOFJsWHFDTzc0dUVPMmx6Z0VPNUpz?=
+ =?utf-8?B?MFl3aTVLMWhlTEkvWFdYQlhBeDdXQTRBUEI5d2wyMXlyVmVYRGpRcjIxODVm?=
+ =?utf-8?B?OEYyUkpoWHNlY1hhVzNxbFFCd3VJT1pvUEZwYnh1eVU4c2lXNGFZRmp4M09L?=
+ =?utf-8?B?NXRXMHR3VklDRkZWMnM1MmFBQ0xiemFIdngvK3JQelFLODZKNlFEN2xUamxk?=
+ =?utf-8?B?WEZPRjgvbmhuWjk5dW1RV0U1RXBFTmdyYUpTRk0vZ3Nib3VtVUljVGJuMTFZ?=
+ =?utf-8?B?blFETXdsZ21xeXF5b1dGWVU5S01BWDY4VEFQejR4dTJqWGdBT1FCTVF3OVdv?=
+ =?utf-8?B?VmpXWXlidmZJeGE2S1phWU1ybDUxcjhOcERON0dodm11SDE5ZEdOd0dzbUNi?=
+ =?utf-8?B?NTRhR0E2QzN6NEE2RmIvL244SFI0R3g4YklFWDdicy9UU3d3LzFHN1dDWk1N?=
+ =?utf-8?B?THhmOVRqUnBKN1hNanQwMFIzbWxUNUJseHcyVlBudkRPREhZQ0tCK2dmL253?=
+ =?utf-8?B?U09kQUhwRE9QQ1ErWDVNaFhOZDV5UVppYnNHYzJDdWhENHc1R3JJOUdya0RT?=
+ =?utf-8?B?ZmtPKzdpQ2tSSWN0ckowMXQwTVEweWpudlNwK00vOEtEbCtQNUQvVndnU1Jz?=
+ =?utf-8?B?TDFSZlM4SU5SL1YwVXI5VWN4b28rek05aExIdFJVMTJDNERFdXdSTU1oQldk?=
+ =?utf-8?B?QitXTk5CaTdBMWtsbTJnU09ZZEhOV2VEaEk3N3BDSldWaktzYnl6VVZyNytp?=
+ =?utf-8?B?anBUcFJTRUJDS2RqMUdqK0dTNFRIamxpOUZuV2pmNFhrbkZmdzlHMTk3eWRZ?=
+ =?utf-8?B?aHIyK2pYNEM3UW9jbEVwZXgwTnA1cU1NRDlzT3pXVi9WSmx0MldOckhHTnlB?=
+ =?utf-8?B?M21ma3FSeEs3ZDlnSzR5eGlpQkduMmprb05yUUFMYVRPWU1MQXpRZ3JrS2hT?=
+ =?utf-8?B?ZTRTMndZejNZZDZZR0xKVGtvTHBZR2VobEZ4NUgvMjZ5bVZ1SU43a2NxU0Rn?=
+ =?utf-8?B?dXRCM3Q4Tm9qR2t6MGFQblVBZUE4YUxFSWE4bmlIZXUvTU15L200SnE0dk9s?=
+ =?utf-8?B?Q1h2YU1TZCtPTDRCWHJhWTh0a1kwNG8waGk1blJJKzdkUTdDU0dwb0JHTmd6?=
+ =?utf-8?B?VzJSd1ltTzlKR082RjRBcHh0V1l1VDZZNXRNejlxK0Nlb0U3NkZ5Z21oNzBr?=
+ =?utf-8?B?NTRIRXBnMkkyUzdxZ0R6dkhJd0FobUJlKzF3U0x1Nnlja3pGTGlsVGpvWVoy?=
+ =?utf-8?B?UmZKY1RranQ5d0I0aWNuT0VMZmNDVk5uUXcrNmw1a1pqc3UxS3RUM1V6WFhp?=
+ =?utf-8?B?L1BGdys0L2dnYUdTYXM0dHRiVzljTCtjdTNkYXhUYk9CaHNPTTJybUV1SmVa?=
+ =?utf-8?B?WWZCckhhaGNndGNINnV3YklHSEIyVndsbkpEaHpTNGh1UWFVUkF0M0tQSFdI?=
+ =?utf-8?B?Vnd4TEw1WVNENFBxd3hqN3prQ1FnV3gzR1dONklWVGFta3R0RVJRNnhoenNw?=
+ =?utf-8?B?M1Q0ampESnBMbkZmdkNLUzVuL0xsU2piNlVRUXlqeDZJL3ZaVXczMlhMOXJF?=
+ =?utf-8?B?RjRCRXZlYlYvTHRoN09oKytGanpZNmV0TnE2RWxLN2g3ZXJGSnViNlB5RXh6?=
+ =?utf-8?B?Z2M5V0RwMjVkbWpMVkRNTEFWTHlKMCtnUTd0Q0hKUFA1ZEIrcnBYcUtmdGU4?=
+ =?utf-8?B?QnhLSHlXTlRvNE84S1IxRFNJNDA4UkdPQ2NkYlU3R3liV295bUszOCt5bUZw?=
+ =?utf-8?B?cWJSMVZKMFhQd0FsbFczUVV2QzJDME41MlU3S2VvU0JlbnNYWGl0VFFzb1FS?=
+ =?utf-8?B?RVZpMkxmUnU1RDl3WnV0YzUrdDVJbXZxQVh0eXhQRjBqWENzamxBYUF6SUgw?=
+ =?utf-8?B?a3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cbf2e98-79d5-45c5-4c0b-08dad4825d0f
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 16:29:21.2059
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IxFtCP3bkwlJrb48akbROJAeClnWSeKj7Seb+Sg04mQK/cab1DcMGHGxKlLehAXN35hc44bRjO7JMFKSzC7Y15TkN9/99DC8hzOAIa9vlqs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4711
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-02 at 12:08:38 +0200, Ilpo Järvinen wrote:
-> Move SPI based board definitions to per interface file from the global
-> header. This makes it harder to use them accidently in the
-> generic/interface agnostic code. Prefix the defines with M10BMC_SPI
 
-I'm not sure if the register layout is actually bound to the bus
-interface. My experience is the register layout is always decided by
-board type. Is it possible there will be a new SPI based board but
-has different register layout in future?
+On 12/1/22 22:02, Zhou, Jie2X wrote:
+>> The above message looks like the problem. Firmware sysfs fallback has been turned off
+>> on this system using sysctl. Can you try turning it on and rerunning the test?
+> Sorry, I don't know how to turn on firmware sysfs fallback.
+> Could you tell me?
 
-So is M10BMC_SPI_XXX a good name?
+Take a look at the kernel documentation (https://www.kernel.org/doc/html/v5.0/driver-api/firmware/fallback-mechanisms.html) which says, "This syfs fallback mechanism may be disabled completely on a system by setting the proc sysctl value ignore_sysfs_fallback to true."
 
-The same concern for PMCI in patch #7.
+Also refer to the sysctl man page: https://manpages.debian.org/testing/procps/sysctl.8.en.html.
 
-Thanks,
-Yilun
+- Russ
 
-> to make it more obvious these are related to SPI only.
-> 
-> Some bitfield defs are also moved to intel-m10-bmc-core which seems
-> more appropriate for them.
-> 
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/mfd/intel-m10-bmc-core.c  | 11 ++++
->  drivers/mfd/intel-m10-bmc-spi.c   | 87 ++++++++++++++++++++++---------
->  include/linux/mfd/intel-m10-bmc.h | 46 ----------------
->  3 files changed, 73 insertions(+), 71 deletions(-)
-> 
-> diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-> index 51b78b868235..50a4ec758bdb 100644
-> --- a/drivers/mfd/intel-m10-bmc-core.c
-> +++ b/drivers/mfd/intel-m10-bmc-core.c
-> @@ -12,6 +12,17 @@
->  #include <linux/mfd/intel-m10-bmc.h>
->  #include <linux/module.h>
->  
-> +/* Register fields of system registers */
-> +#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-> +#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-> +#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-> +#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-> +#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-> +#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-> +#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-> +#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-> +#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
-> +
->  static ssize_t bmc_version_show(struct device *dev,
->  				struct device_attribute *attr, char *buf)
->  {
-> diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-> index 611a4ab42717..e99fe7c43314 100644
-> --- a/drivers/mfd/intel-m10-bmc-spi.c
-> +++ b/drivers/mfd/intel-m10-bmc-spi.c
-> @@ -13,10 +13,47 @@
->  #include <linux/regmap.h>
->  #include <linux/spi/spi.h>
->  
-> +#define M10BMC_SPI_LEGACY_BUILD_VER	0x300468
-> +#define M10BMC_SPI_SYS_BASE		0x300800
-> +#define M10BMC_SPI_SYS_END		0x300fff
-> +#define M10BMC_SPI_FLASH_BASE		0x10000000
-> +#define M10BMC_SPI_FLASH_END		0x1fffffff
-> +#define M10BMC_SPI_MEM_END		M10BMC_SPI_FLASH_END
-> +
-> +/* Register offset of system registers */
-> +#define NIOS2_FW_VERSION		0x0
-> +#define M10BMC_SPI_MAC_LOW		0x10
-> +#define M10BMC_SPI_MAC_HIGH		0x14
-> +#define M10BMC_SPI_TEST_REG		0x3c
-> +#define M10BMC_SPI_BUILD_VER		0x68
-> +#define M10BMC_SPI_VER_LEGACY_INVALID	0xffffffff
-> +
-> +/* Secure update doorbell register, in system register region */
-> +#define M10BMC_SPI_DOORBELL		0x400
-> +
-> +/* Authorization Result register, in system register region */
-> +#define M10BMC_SPI_AUTH_RESULT		0x404
-> +
-> +/* Addresses for security related data in FLASH */
-> +#define M10BMC_SPI_BMC_REH_ADDR		0x17ffc004
-> +#define M10BMC_SPI_BMC_PROG_ADDR	0x17ffc000
-> +#define M10BMC_SPI_BMC_PROG_MAGIC	0x5746
-> +
-> +#define M10BMC_SPI_SR_REH_ADDR		0x17ffd004
-> +#define M10BMC_SPI_SR_PROG_ADDR		0x17ffd000
-> +#define M10BMC_SPI_SR_PROG_MAGIC	0x5253
-> +
-> +#define M10BMC_SPI_PR_REH_ADDR		0x17ffe004
-> +#define M10BMC_SPI_PR_PROG_ADDR		0x17ffe000
-> +#define M10BMC_SPI_PR_PROG_MAGIC	0x5250
-> +
-> +/* Address of 4KB inverted bit vector containing staging area FLASH count */
-> +#define M10BMC_SPI_STAGING_FLASH_COUNT	0x17ffb000
-> +
->  static const struct regmap_range m10bmc_regmap_range[] = {
-> -	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
-> -	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
-> -	regmap_reg_range(M10BMC_FLASH_BASE, M10BMC_FLASH_END),
-> +	regmap_reg_range(M10BMC_SPI_LEGACY_BUILD_VER, M10BMC_SPI_LEGACY_BUILD_VER),
-> +	regmap_reg_range(M10BMC_SPI_SYS_BASE, M10BMC_SPI_SYS_END),
-> +	regmap_reg_range(M10BMC_SPI_FLASH_BASE, M10BMC_SPI_FLASH_END),
->  };
->  
->  static const struct regmap_access_table m10bmc_access_table = {
-> @@ -30,7 +67,7 @@ static struct regmap_config intel_m10bmc_regmap_config = {
->  	.reg_stride = 4,
->  	.wr_table = &m10bmc_access_table,
->  	.rd_table = &m10bmc_access_table,
-> -	.max_register = M10BMC_MEM_END,
-> +	.max_register = M10BMC_SPI_MEM_END,
->  };
->  
->  static int check_m10bmc_version(struct intel_m10bmc *ddata)
-> @@ -41,16 +78,16 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
->  	/*
->  	 * This check is to filter out the very old legacy BMC versions. In the
->  	 * old BMC chips, the BMC version info is stored in the old version
-> -	 * register (M10BMC_LEGACY_BUILD_VER), so its read out value would have
-> -	 * not been M10BMC_VER_LEGACY_INVALID (0xffffffff). But in new BMC
-> +	 * register (M10BMC_SPI_LEGACY_BUILD_VER), so its read out value would have
-> +	 * not been M10BMC_SPI_VER_LEGACY_INVALID (0xffffffff). But in new BMC
->  	 * chips that the driver supports, the value of this register should be
-> -	 * M10BMC_VER_LEGACY_INVALID.
-> +	 * M10BMC_SPI_VER_LEGACY_INVALID.
->  	 */
-> -	ret = m10bmc_raw_read(ddata, M10BMC_LEGACY_BUILD_VER, &v);
-> +	ret = m10bmc_raw_read(ddata, M10BMC_SPI_LEGACY_BUILD_VER, &v);
->  	if (ret)
->  		return -ENODEV;
->  
-> -	if (v != M10BMC_VER_LEGACY_INVALID) {
-> +	if (v != M10BMC_SPI_VER_LEGACY_INVALID) {
->  		dev_err(ddata->dev, "bad version M10BMC detected\n");
->  		return -ENODEV;
->  	}
-> @@ -92,23 +129,23 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
->  }
->  
->  static const struct m10bmc_csr_map m10bmc_spi_csr_map = {
-> -	.base = M10BMC_SYS_BASE,
-> -	.build_version = M10BMC_BUILD_VER,
-> +	.base = M10BMC_SPI_SYS_BASE,
-> +	.build_version = M10BMC_SPI_BUILD_VER,
->  	.fw_version = NIOS2_FW_VERSION,
-> -	.mac_low = M10BMC_MAC_LOW,
-> -	.mac_high = M10BMC_MAC_HIGH,
-> -	.doorbell = M10BMC_DOORBELL,
-> -	.auth_result = M10BMC_AUTH_RESULT,
-> -	.bmc_prog_addr = BMC_PROG_ADDR,
-> -	.bmc_reh_addr = BMC_REH_ADDR,
-> -	.bmc_magic = BMC_PROG_MAGIC,
-> -	.sr_prog_addr = SR_PROG_ADDR,
-> -	.sr_reh_addr = SR_REH_ADDR,
-> -	.sr_magic = SR_PROG_MAGIC,
-> -	.pr_prog_addr = PR_PROG_ADDR,
-> -	.pr_reh_addr = PR_REH_ADDR,
-> -	.pr_magic = PR_PROG_MAGIC,
-> -	.rsu_update_counter = STAGING_FLASH_COUNT,
-> +	.mac_low = M10BMC_SPI_MAC_LOW,
-> +	.mac_high = M10BMC_SPI_MAC_HIGH,
-> +	.doorbell = M10BMC_SPI_DOORBELL,
-> +	.auth_result = M10BMC_SPI_AUTH_RESULT,
-> +	.bmc_prog_addr = M10BMC_SPI_BMC_PROG_ADDR,
-> +	.bmc_reh_addr = M10BMC_SPI_BMC_REH_ADDR,
-> +	.bmc_magic = M10BMC_SPI_BMC_PROG_MAGIC,
-> +	.sr_prog_addr = M10BMC_SPI_SR_PROG_ADDR,
-> +	.sr_reh_addr = M10BMC_SPI_SR_REH_ADDR,
-> +	.sr_magic = M10BMC_SPI_SR_PROG_MAGIC,
-> +	.pr_prog_addr = M10BMC_SPI_PR_PROG_ADDR,
-> +	.pr_reh_addr = M10BMC_SPI_PR_REH_ADDR,
-> +	.pr_magic = M10BMC_SPI_PR_PROG_MAGIC,
-> +	.rsu_update_counter = M10BMC_SPI_STAGING_FLASH_COUNT,
->  };
->  
->  static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> index 91567375f1bf..71ace732bb48 100644
-> --- a/include/linux/mfd/intel-m10-bmc.h
-> +++ b/include/linux/mfd/intel-m10-bmc.h
-> @@ -9,39 +9,9 @@
->  
->  #include <linux/regmap.h>
->  
-> -#define M10BMC_LEGACY_BUILD_VER		0x300468
-> -#define M10BMC_SYS_BASE			0x300800
-> -#define M10BMC_SYS_END			0x300fff
-> -#define M10BMC_FLASH_BASE		0x10000000
-> -#define M10BMC_FLASH_END		0x1fffffff
-> -#define M10BMC_MEM_END			M10BMC_FLASH_END
-> -
->  #define M10BMC_STAGING_BASE		0x18000000
->  #define M10BMC_STAGING_SIZE		0x3800000
->  
-> -/* Register offset of system registers */
-> -#define NIOS2_FW_VERSION		0x0
-> -#define M10BMC_MAC_LOW			0x10
-> -#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-> -#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-> -#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-> -#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-> -#define M10BMC_MAC_HIGH			0x14
-> -#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-> -#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-> -#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-> -#define M10BMC_TEST_REG			0x3c
-> -#define M10BMC_BUILD_VER		0x68
-> -#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-> -#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
-> -#define M10BMC_VER_LEGACY_INVALID	0xffffffff
-> -
-> -/* Secure update doorbell register, in system register region */
-> -#define M10BMC_DOORBELL			0x400
-> -
-> -/* Authorization Result register, in system register region */
-> -#define M10BMC_AUTH_RESULT		0x404
-> -
->  /* Doorbell register fields */
->  #define DRBL_RSU_REQUEST		BIT(0)
->  #define DRBL_RSU_PROGRESS		GENMASK(7, 4)
-> @@ -102,22 +72,6 @@
->  #define RSU_COMPLETE_INTERVAL_MS	1000
->  #define RSU_COMPLETE_TIMEOUT_MS		(40 * 60 * 1000)
->  
-> -/* Addresses for security related data in FLASH */
-> -#define BMC_REH_ADDR	0x17ffc004
-> -#define BMC_PROG_ADDR	0x17ffc000
-> -#define BMC_PROG_MAGIC	0x5746
-> -
-> -#define SR_REH_ADDR	0x17ffd004
-> -#define SR_PROG_ADDR	0x17ffd000
-> -#define SR_PROG_MAGIC	0x5253
-> -
-> -#define PR_REH_ADDR	0x17ffe004
-> -#define PR_PROG_ADDR	0x17ffe000
-> -#define PR_PROG_MAGIC	0x5250
-> -
-> -/* Address of 4KB inverted bit vector containing staging area FLASH count */
-> -#define STAGING_FLASH_COUNT	0x17ffb000
-> -
->  /**
->   * struct m10bmc_csr_map - Intel MAX 10 BMC CSR register map
->   */
-> -- 
-> 2.30.2
-> 
+>
+> I search the firmware fallback options in kernel config.
+> CONFIG_FW_LOADER_USER_HELPER=y
+> # CONFIG_FW_LOADER_USER_HELPER_FALLBACK is not set
+>
+> best regards,
+>
+> ________________________________________
+> From: Weight, Russell H <russell.h.weight@intel.com>
+> Sent: Thursday, December 1, 2022 10:37 AM
+> To: Zhou, Jie2X; gregkh@linuxfoundation.org
+> Cc: shuah@kernel.org; mcgrof@kernel.org; Zhang, Tianfei; linux-kselftest@vger.kernel.org; linux-kernel@vger.kernel.org; Li, Philip
+> Subject: Re: fw_fallback.sh test failed in Debian 11
+>
+>
+>
+> On 11/30/22 17:28, Zhou, Jie2X wrote:
+>>> How much of this path exists on your machine?
+>>> /sys/devices/virtual/misc/test_firmware/trigger_request
+>> This path exists.
+>>
+>>> And is there anything in the dmesg output that indicates a failure associated with
+>>> the test_firmware device?
+>> Yes.
+>>
+>> kern  :info  : [   77.858068] test_firmware: loading 'test-firmware.bin'
+>> kern  :info  : [   77.864705] test_firmware: loaded: 8
+>> kern  :info  : [   77.874250] test_firmware: loading 'test-firmware.bin'
+>> kern  :warn  : [   77.880672] misc test_firmware: Direct firmware load for test-firmware.bin failed with error -2
+>> kern  :info  : [   77.890106] test_firmware: load of 'test-firmware.bin' failed: -2
+>> kern  :info  : [   78.896662] test_firmware: loading ''
+>> kern  :info  : [   78.901059] test_firmware: load of '' failed: -22
+>> kern  :info  : [   78.907422] test_firmware: loading ''
+>> kern  :err   : [   78.912278] test_firmware: failed to async load firmware
+>> kern  :info  : [   78.918594] test_firmware: loading 'nope-test-firmware.bin'
+>> kern  :warn  : [   78.925405] misc test_firmware: Direct firmware load for nope-test-firmware.bin failed with error -2
+>> kern  :info  : [   78.935260] Ignoring firmware sysfs fallback due to sysctl knob
+> The above message looks like the problem. Firmware sysfs fallback has been turned off
+> on this system using sysctl. Can you try turning it on and rerunning the test?
+>
+> Thanks,
+> - Russ
+>
+>> kern  :info  : [   78.941934] test_firmware: load of 'nope-test-firmware.bin' failed: -2
+>> kern  :info  : [   78.962155] test_firmware: loading 'test-firmware.bin'
+>> kern  :info  : [   78.968232] test_firmware: loaded: 9
+>> kern  :info  : [   78.986063] test_firmware: loading 'test-firmware.bin'
+>> kern  :info  : [   78.992269] test_firmware: loaded: 9
+>> kern  :info  : [   79.023611] test_firmware: reset
+>> kern  :info  : [   79.028466] test_firmware: batched sync firmware loading 'test-firmware.bin' 4 times
+>>
+>> best regards,
+
