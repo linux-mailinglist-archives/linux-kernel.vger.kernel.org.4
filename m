@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE29E6403C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921D16403C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiLBJvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S233095AbiLBJvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiLBJvH (ORCPT
+        with ESMTP id S233039AbiLBJv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:51:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE444C868A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:51:04 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669974663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ar2q+838KTHdpHcfF+Mqs2PKITZg5yuDz+eUw9tEx7o=;
-        b=Hz7ys8gJDOaoLb1SeF9fMCcTTlda+gdJJx/TTGnaVnwHjrL4OYg663DpgDeijsJh51N/Vp
-        Dxcm3m3QNxO0clfdkOAZJFrQrsS1M4siElyoyUMOzVpn3bg+PZHUDWFfeKvrA89Eqd0JHl
-        HTrYgqIGhmG5lpVRWmb4dOPi3TrzgSkZ4kKXhs48ozDk41l5BGxosgaWKK657NkPYprAl4
-        3ik7AM4ik5No63iGGY8qUMQdaZ0WIt8v8KLfizbfKtOknAaBgsym+NW8FoxfNMOrNROp4q
-        kED6EgiYRjjNawAvYJ16a+rQUQdeTji+Kes+FFyFIfbKQv5L4C0T9fOlArp8GA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669974663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ar2q+838KTHdpHcfF+Mqs2PKITZg5yuDz+eUw9tEx7o=;
-        b=N0gp+Go0MpnPaykTOChv9gdinMHnKjtxTGdIiJIWV10sDFR21Kuu4rQUdFT67dWt8efGOR
-        VSte3QRFhzPK12BA==
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Pekka Paalanen <ppaalanen@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: Re: [BUG] lockdep splat using mmio tracer
-In-Reply-To: <20221201213126.620b7dd3@gandalf.local.home>
-References: <20221201213126.620b7dd3@gandalf.local.home>
-Date:   Fri, 02 Dec 2022 10:51:02 +0100
-Message-ID: <875yeuqgl5.ffs@tglx>
+        Fri, 2 Dec 2022 04:51:29 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F987CAF89;
+        Fri,  2 Dec 2022 01:51:26 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id D13BF5FD0B;
+        Fri,  2 Dec 2022 12:51:24 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1669974684;
+        bh=72VVTkRY9DjXgUjSD9VXksh7Od+zuedUupDyk8ZPL64=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Ud3M/0dAGTjSPWCJ4qDcqnrloGRDW4WyDNac2USRNB1fBT0jW82Aagmxt+Imnip4B
+         zpGE9qStbUJLOpbGVZZR7Ksa3sdzYFNee1SYP2uDfwQt/T4deWBHFyHULhK2dQ6ixH
+         9DvfRo3qDQwt1dpvlZRknRuT5NCArqi98n2vb4Ja+w6CCDfPeejQOtYVfrVorbQmaw
+         l8WkEuaZxJJxEBuZdaWVCy3mEA4TORauZczB4vpdYNyHkDXhz41yyoUzBTN6Fyejxn
+         szgQlsAAE53MM/dnECSed+OhqBqBK8mNTAPCel9vx2pgk3WU15JgPUSTmRYDZn9xWU
+         Z3MTXLbQa/tMg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri,  2 Dec 2022 12:51:24 +0300 (MSK)
+Date:   Fri, 2 Dec 2022 12:51:24 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <sboyd@kernel.org>,
+        <khilman@baylibre.com>, <kernel@sberdevices.ru>,
+        <robh+dt@kernel.org>, <martin.blumenstingl@googlemail.com>,
+        <linux-arm-kernel@lists.infradead.org>, <jian.hu@amlogic.com>,
+        <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-amlogic@lists.infradead.org>, <jbrunet@baylibre.com>,
+        <rockosov@gmail.com>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>, <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v8 01/11] dt-bindings: clock: meson: add A1 PLL clock
+ controller bindings
+Message-ID: <20221202095124.4ecpfqhtzf34lwbf@CAB-WSD-L081021>
+References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
+ <20221201225703.6507-2-ddrokosov@sberdevices.ru>
+ <166995398251.2089685.16059995540663317860.robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <166995398251.2089685.16059995540663317860.robh@kernel.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/02 07:44:00 #20636821
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01 2022 at 21:31, Steven Rostedt wrote:
-> I hit this while testing ftrace on an x86 32 bit VM (I've just started
-> converting my tests to run on a VM, which is find new found bugs).
+On Thu, Dec 01, 2022 at 10:10:04PM -0600, Rob Herring wrote:
+> 
+> On Fri, 02 Dec 2022 01:56:53 +0300, Dmitry Rokosov wrote:
+> > From: Jian Hu <jian.hu@amlogic.com>
+> > 
+> > Add the documentation to support Amlogic A1 PLL clock driver,
+> > and add A1 PLL clock controller bindings.
+> > 
+> > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 52 +++++++++++++++++++
+> >  include/dt-bindings/clock/a1-pll-clkc.h       | 16 ++++++
+> >  2 files changed, 68 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> >  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml:26:6: [warning] wrong indentation: expected 6 but found 5 (indentation)
+> 
+> dtschema/dtc warnings/errors:
+> ./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml: $id: relative path/filename doesn't match actual path or filename
+> 	expected: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.example.dtb: pll-clock-controller@7c80: reg: [[0, 31872], [0, 396]] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201225703.6507-2-ddrokosov@sberdevices.ru
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
 
-Which is find new found grammar twists for the english language :)
+Please find all fixes of above warnings and errors in the my patch
+located at the link:
 
-> [ 1111.130669] ================================   
-> [ 1111.130670] WARNING: inconsistent lock state   
-> [ 1111.130672] 6.1.0-rc6-test-00020-gbc591e45c100-dirty #245 Not tainted
-> [ 1111.130674] --------------------------------   
-> [ 1111.130675] inconsistent {INITIAL USE} -> {IN-NMI} usage.
-> [ 1111.130676] kworker/0:0/3433 [HC1[1]:SC0[0]:HE0:SE1] takes:
-> [ 1111.130679] d3dc2b90 (kmmio_lock){....}-{2:2}, at: kmmio_die_notifier+0x70/0x140
-> [ 1111.130690] {INITIAL USE} state was registered at:
-> [ 1111.130691]   lock_acquire+0xa2/0x2b0
-> [ 1111.130696]   _raw_spin_lock_irqsave+0x36/0x60 
-> [ 1111.130701]   register_kmmio_probe+0x43/0x210  
-> [ 1111.130704]   mmiotrace_ioremap+0x188/0x1b0
-> [ 1111.130706]   __ioremap_caller.constprop.0+0x257/0x340
-> [ 1111.130711]   ioremap_wc+0x12/0x20
+https://lore.kernel.org/linux-amlogic/20221201225703.6507-9-ddrokosov@sberdevices.ru/
 
-That's regular task context, while the int3, which is raised by the
-actual MMIO access, is considered to be NMI context. int3 has to be
-considered an NMI type exception because int3 can be hit anywhere, even
-in actual NMI context.
 
-> [ 1111.130924]  lock_acquire.cold+0x31/0x37
-> [ 1111.130927]  ? kmmio_die_notifier+0x70/0x140   
-> [ 1111.130935]  ? get_ins_imm_val+0xf0/0xf0
-> [ 1111.130938]  _raw_spin_lock+0x2a/0x40
-> [ 1111.130942]  ? kmmio_die_notifier+0x70/0x140   
-> [ 1111.130945]  kmmio_die_notifier+0x70/0x140
-> [ 1111.130948]  ? arm_kmmio_fault_page+0xa0/0xa0  
-> [ 1111.130951]  atomic_notifier_call_chain+0x75/0x120
-> [ 1111.130955]  notify_die+0x44/0x90
-> [ 1111.130959]  exc_debug+0xd0/0x2a0
-> [ 1111.130965]  ? exc_int3+0x100/0x100
-> [ 1111.130968]  handle_exception+0x133/0x133
-> [ 1111.130970] EIP: qxl_draw_dirty_fb+0x2ae/0x440 [qxl]
-
-So for the mmio tracer there is no way that this happens:
-
-> [ 1111.130788]   lock(kmmio_lock);
-> [ 1111.130789]   <Interrupt>
-> [ 1111.130790]     lock(kmmio_lock);
-
-but obviously lockdep cannot know that :)
-
-The quick and dirty, but IMO safe way out of this, is to convert that
-lock to an arch_spinlock and evade lockdep.
-
-> I never hit this before, but then again, mmio tracer is showing output on
-> the VM which it did not do on the baremetal machine.
-
-It's exactly the same problem on bare metal.
-
-Thanks,
-
-        tglx
+-- 
+Thank you,
+Dmitry
