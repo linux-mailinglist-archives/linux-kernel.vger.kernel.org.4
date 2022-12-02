@@ -2,131 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2664A641070
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD55641073
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbiLBWNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S234790AbiLBWNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234860AbiLBWNG (ORCPT
+        with ESMTP id S234598AbiLBWNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:13:06 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BA9BC5A4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:13:04 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 62so5444813pgb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:13:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
-        b=GAXzEoo+S14lTK4cD0oXTEUsG2k/16arWIJHGYDGGoAITzPptHOYra+4PIZqAMKrAp
-         0tB61+aGUNfbM+CwM2yGVn+YfT1RARaHjexCaAWA6Kq22roouKhqhimPBUwevE+wG2Sg
-         ZdiVdxiW6gDD6Q9OAe7rXSCASwOhwS+nWPyfQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
-        b=nzBBsMhyFiwgVe4dq4hg0CT8kac++wR3q+teMJ4AWSzPPGweQpfGL0LkV0usOuB0/7
-         +fwyCM7znF03w27q9pDNZsErOHxIpUHLDzaQ/PKlocNdY55mTXIOaps3BWRSGRPXfed6
-         z++NY/dmgQblYPfY/3nRDe14sZa5a4/x9r2IPk19OWoqU03uQ61xEu1aQL124S0VNPfw
-         bZsT9z69IVjGy61RbcxWuf9zQT7RAALCUqMCzQp+kVP9CuvhfwY+w2BhuqzEIP7Zsa0S
-         XW4W+Ql/Kyb/WLqMQegEcLqiSvT7EDH/syf6VrwmaDqFsh8HqAzKAe7jn0knkTu1kZu3
-         yF3Q==
-X-Gm-Message-State: ANoB5pl9lCuhHyjf0G7ZcdAiSvX3ZUcVeoGUEM8c1wLoxMrSI+UWB/1G
-        NfUHXZ1Cg3xbD1Auh8Csr1xt9g==
-X-Google-Smtp-Source: AA0mqf4yMGLxJ4yzBzgABiEyiOC9Cw7v89H4Mg51yU3dIagFC0iIYu5hjOGUJWotx3YNlubWgYaiJQ==
-X-Received: by 2002:a63:dd16:0:b0:476:d2d9:5151 with SMTP id t22-20020a63dd16000000b00476d2d95151mr45023874pgg.487.1670019184321;
-        Fri, 02 Dec 2022 14:13:04 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f205-20020a6238d6000000b00574679561b4sm5563234pfa.134.2022.12.02.14.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:13:03 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 2 Dec 2022 14:13:02 -0800
-To:     Shayne Chen <shayne.chen@mediatek.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        StanleyYP Wang <StanleyYP.Wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Chiu <chui-hao.chiu@mediatek.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Money Wang <Money.Wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Howard Hsu <howard-yh.hsu@mediatek.com>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        "David S. Miller" <davem@davemloft.net>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        MeiChia Chiu <meichia.chiu@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Bo Jiao <Bo.Jiao@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: mt7996_mcu_rx_radar_detected(): Insecure data handling
-Message-ID: <202212021413.392BADAF@keescook>
+        Fri, 2 Dec 2022 17:13:23 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCE8E8E12;
+        Fri,  2 Dec 2022 14:13:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670019200; x=1701555200;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Tc0Asi9Ns/Uw80N6VM1uFJ98uRlF+kEfqeF5kPM3m/M=;
+  b=n02GLvs84dzVV6fFBHSt2M5wLkwPLNR6SSwh9B1xW7w14Ax+WEt+wqAh
+   lmbVakgBmrEty0YacXH7iQzP6DqaFlcLBWOHuELkwaCz7DxsWIPsuKufy
+   kFrV0KJv/JyqdONyTEjUZavVmRbl1b4lKgIrhFT8q6SI3gMpNEHtdjdNW
+   7Zs6FrxJzsPeREjUO4k545q4C7sulnLExzjp0M8uNDVgm4qh+gYG0o+e/
+   oEVAXoETJUmR+Q6kqV1hoSE6QVEh4SWIdEKEdH/HTgUnhgcdPHqRQ54N0
+   e7bzmvoIt+ZiDtqubYshBp255YWu4a4jVqi0C+58oKDsglfX1Kl9uWF4+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="316082121"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="316082121"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:13:20 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="638891537"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="638891537"
+Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 14:13:20 -0800
+Message-ID: <1dccd2ec-cad8-b9d2-d66b-aebad21cdb44@intel.com>
+Date:   Fri, 2 Dec 2022 14:13:19 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 05/18] x86/sgx: Track epc pages on reclaimable or
+ unreclaimable lists
+Content-Language: en-US
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-6-kristen@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221202183655.3767674-6-kristen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On 12/2/22 10:36, Kristen Carlson Accardi wrote:
+> Replace functions sgx_mark_page_reclaimable() and
+> sgx_unmark_page_reclaimable() with sgx_record_epc_page() and
+> sgx_drop_epc_page(). sgx_record_epc_page() wil add the epc_page
+> to the correct "reclaimable" or "unreclaimable" list in the
+> sgx_epc_lru_lists struct. sgx_drop_epc_page() will delete the page
+> from the LRU list. Tracking pages that are not tracked by
+> the reclaimer in the sgx_epc_lru_lists "unreclaimable" list allows
+> an OOM event to cause all the pages in use by an enclave to be freed,
+> regardless of whether they were reclaimable pages or not.
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221202 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+This might be more a comment about Sean's stuff, but could you please
+start using paragraphs in these changelogs?
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+Also, on the content, I really prefer that patches start off talking in
+English as much as possible and not just talk about the code.
 
-  Thu Dec 1 17:29:14 2022 +0100
-    98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+	Right now, SGX has a single LRU list.  The code is transitioning
+	over to use multiple LRU lists.
 
-Coverity reported the following:
+I'd also prefer that _this_ patch do the:
 
-*** CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
-drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:338 in mt7996_mcu_rx_radar_detected()
-332     {
-333     	struct mt76_phy *mphy = &dev->mt76.phy;
-334     	struct mt7996_mcu_rdd_report *r;
-335
-336     	r = (struct mt7996_mcu_rdd_report *)skb->data;
-337
-vvv     CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
-vvv     Using tainted variable "r->band_idx" as an index into an array "(*dev).mt76.phys".
-338     	mphy = dev->mt76.phys[r->band_idx];
-339     	if (!mphy)
-340     		return;
-341
-342     	if (r->band_idx == MT_RX_SEL2)
-343     		cfg80211_background_radar_event(mphy->hw->wiphy,
+> -	sgx_mark_page_reclaimable(entry->epc_page);
+> +	sgx_record_epc_page(entry->epc_page, SGX_EPC_PAGE_RECLAIMER_TRACKED);
 
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
+bits and then *another* patch do the unreclaimable side.  This patch
+could be a straight replacement which is easy to audit.  The
+unreclaimable one needs more thought.
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527812 ("Insecure data handling")
-Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+I also think this ends up looking a bit weird:
 
-Thanks for your attention!
+> -	sgx_epc_push_reclaimable(&sgx_global_lru, page);
+> +	WARN_ON(page->flags & SGX_EPC_PAGE_RECLAIMER_TRACKED);
+> +	page->flags |= flags;
+> +	if (flags & SGX_EPC_PAGE_RECLAIMER_TRACKED)
+> +		sgx_epc_push_reclaimable(&sgx_global_lru, page);
+> +	else
+> +		sgx_epc_push_unreclaimable(&sgx_global_lru, page);
+>  	spin_unlock(&sgx_global_lru.lock);
+>  }
 
--- 
-Coverity-bot
+I think that would be better with a single "push" helper and then let
+the callers specify the list:
+
+	if (flags & SGX_EPC_PAGE_RECLAIMER_TRACKED)
+		sgx_lru_push(&sgx_global_lru.reclaimable, page);
+	else
+		sgx_lru_push(&sgx_global_lru.unreclaimable, page);
