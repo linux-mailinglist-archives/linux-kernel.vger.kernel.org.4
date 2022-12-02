@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D645D640BC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D3C640BCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbiLBRIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S234376AbiLBRIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbiLBRIe (ORCPT
+        with ESMTP id S234211AbiLBRIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Dec 2022 12:08:34 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFB1D11FD
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:08:31 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id b2so12988357eja.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:08:31 -0800 (PST)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6734D15AC
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:08:32 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id n20so13078954ejh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:08:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TCQ9M8MyOEnK5pTEhdeO3mymMoTWGn8RzIavHlNHD6M=;
-        b=R/oMM0lWUbfpFHh0O9/+DBNeQs4nbkDIDSrNwITxX3+i2Myafv0d25iU65xGMgf4IW
-         XKMysLO0P36sYbZ+nT5P+83p3R96mmLyFvA9BKQ5cmt16CFcazjSE3qiUF2E4Nv6vZos
-         HxqQPrOoyOiv43k+qZMxhGjrFKrW92au0ZVYc=
+        bh=wtZA1IbfmQV1q6JbQ4L1axaQ6pL7lh9jXHUHF+NGf+s=;
+        b=XpikTCNVTwEOA5uF8nNd5n/17A51tYzKCsH3sFvNsx7NQIlGfqeYPmt+MPPTil0B9c
+         HoA1iwi/zEldKG9JkeVX+amy3q/vGckf4YOJJZq6aKxUtcpQqtvsP97cy1tjVEwII11V
+         nOqCsWmk2LGIUPqE1HZG8UiN0l0cJKQvaKSjY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TCQ9M8MyOEnK5pTEhdeO3mymMoTWGn8RzIavHlNHD6M=;
-        b=4N2uYmzBeAsOKaxrHs8B5dynsQsf7/ubBCDyWgXA0cZgk8Mdt9nQZR4ACaQlIwvW7B
-         HsntTiXbEdqySj9qVPXyw3c4SQGOFEculveyPIy27kayU3mOtrQtSafUqezFKlKfzThy
-         yLT5+qiNbpv7+s3qdhyVwvycWHpmok/CnygE+V3lo5kkmXOnFUsaQgTQKKsDhaGTMPc5
-         ebFswj1AN3xomeaS8BKo7D/TcRpefWNamK10cG5rVPRsIgob0ItAWLLrp9ZnAJ+o34ur
-         yDXHzpP+ULZLwdcmHjvMCyfUWm3dBodMRCunuXTb3lrapkSrQWMdl4fndvWO70DXPRRU
-         GsFQ==
-X-Gm-Message-State: ANoB5pn62pNgWjfBA/wwWCeUwYKF3Dy3+kIPbkFCYGy2HDZ/ga76fRHY
-        mCiqbgKEPz+7us3lSm+91/gCTA==
-X-Google-Smtp-Source: AA0mqf5qFfbKizkTww9gVuZZ6Lx0NduaYRmhqu+8NUTsfvjbqXxLawqkwYIEziC8u0/Af27zMXSlkA==
-X-Received: by 2002:a17:907:77ce:b0:7c0:8225:54d with SMTP id kz14-20020a17090777ce00b007c08225054dmr16814628ejc.286.1670000910178;
+        bh=wtZA1IbfmQV1q6JbQ4L1axaQ6pL7lh9jXHUHF+NGf+s=;
+        b=ERKZq23HCDfjemzOtv+HS/5uSbloHuwrZcHJNyYj6ViWrvLe/bq1bMUJWTI/HEv76q
+         arSHFe57aOG+QQOXceU/61g1wfmynRRCpsTG7YG9r9jUx7FVBGwD7hDqrDYmTVxhnIV+
+         OhZ1H6Z7uqhw4AcNrtMOzEEKeILfGvDwpFOy8u1te/jg4x2MYGxqYjanhNoiePdHJySc
+         vXq9ySDuvSbX7EIRHEIKYN9O8b5y/KIV1313vc8i2u9hrtysW/6nju77ieZExbSo6XCi
+         kh5QZg7u4RMFwZz6Gmptw7cCgpxmivoI1+WbHymYts0X1+fKvCiauFtTMr5sdXakDV6k
+         AbNQ==
+X-Gm-Message-State: ANoB5plpJGSLSshRRGwlbCbyKk6kY3VmCA1jCCYlndxR75Uf2y9osLhq
+        5Yn2HEQV/plCrQ1ksndiXs3Z1Q==
+X-Google-Smtp-Source: AA0mqf5dJzt7LrpazmQka4+jBMsdtoK0r3QFvYdUKX1Vh8sKmomDA3k5HIQLxQG/VkNHAbFh65F7bg==
+X-Received: by 2002:a17:906:c303:b0:7ad:95d2:9df2 with SMTP id s3-20020a170906c30300b007ad95d29df2mr14266490ejz.607.1670000910978;
         Fri, 02 Dec 2022 09:08:30 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.29
+        by smtp.gmail.com with ESMTPSA id p23-20020aa7d317000000b00461cdda400esm3168080edq.4.2022.12.02.09.08.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:08:29 -0800 (PST)
+        Fri, 02 Dec 2022 09:08:30 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 18:08:18 +0100
-Subject: [PATCH v4 2/3] media: Documentation/driver-api: Document device name
+Date:   Fri, 02 Dec 2022 18:08:19 +0100
+Subject: [PATCH v4 3/3] media: uvcvideo: Add a unique suffix to camera names
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-meta-v4-2-3ac355b66723@chromium.org>
+Message-Id: <20220920-resend-meta-v4-3-3ac355b66723@chromium.org>
 References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
 In-Reply-To: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
 To:     Yunke Cao <yunkec@chromium.org>,
@@ -65,19 +65,19 @@ Cc:     linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1173; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=SfUbFly0L3KPaCuRZ5w00Du+lIHrvLRHPtWI2RZZpxM=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEJTiEOmUITGiLvUCgkbCs81Q810EX+dXH3NyaT
- mXwvuGGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxCQAKCRDRN9E+zzrEiH+6D/
- 4yIlInPaIUb3c4STKRJvD4EWozBosI6T/1nKVk3G6TFxnh9oizy6AXNbJLZrwtOJpKqkj9Ks5ICQ6B
- lqFTWpjvhnfKcrVV0ToMygkwju67mqgUSm6PfTUhWhLbxk25i6+luvVtnkJfunw6W46/rU+9YNFs5c
- w08uwPEckBTM6bciZkTrY7F27fpe6Hf7nW6J/a6gScSnQh7es6pdBrK/xAncOGTE9+SsQJPVvu0LvO
- tDVnhPz1aV+BYYUCLE+Es/rJcGVBnxw+a+kZXQDqKQBCq2h6m1yThavXXHOh061luADcr0d6wHaIgY
- g8OoMWu9bnT2QQmADG4cmgTDcM1OfBDXZhDzD/CCuCUEAhiqVYAOB/urPfyIfrFHq8jPhgVv3ws1T6
- FPTJj7yvCgHG2tL4oSTVRFX46NiEm/311whLXSBchnQ0zg8VS3paWWhJy5/G/l6lE8tf7yZ37kmf12
- 6kTAd5Q/WHYXdblAs3uFZs1+Z9NN0VNNJGVmek4sEyv9IrDtAopL2DqRjTxlY8iY8rHsD1hdag7ssg
- +K+3ZLlfdwsRZyQtHdf1KwYxZrqRzq4wfL1u+Ds+hs5IkmIAlCWQFJyB9chP271obMkui7lUoKlJe+
- XehpqL57Kfg8oqOuCmImjeMkOVT8RdJWrmv7yMKLImBs+fvBpOT0Oe6kH62w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1196; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=nncAxgIlMLPqi8B4D2XzAtMUAbjMzg6DbKN4jx7ltvo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijEKf6IQrPsYfpx8DB/t21WB2f//wrtkc3pBusyj
+ OJet42yJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4oxCgAKCRDRN9E+zzrEiEf9EA
+ CQ4I7QGoNfJc9SX11wg89UhJOeSV96QkPThsmoSd+ZSPI54GSWuTIU5scGGnYkXaCUoMlZh0UUvz2Q
+ aIq7bDEfpmwCV6ioehV41ihZyXx3jAk8hHwjArKCdkvjxXL3qcBuYBvqDnNhPDufiMbdt020JrednB
+ SlFrEa9DrGYNGERL7H5gyh60gLTxvT6i3TNP+8Q4+cgnXkMYDwTWXZ2Qgc5WY8ULBtXzWW8/BxNocr
+ yVr3Lh795K3zVpg/AEiG+ZseaV9I5VTc5NzMDwAwEzOS66uLFPBNYuN67PlW/WO354hOJw8hdkgZqu
+ nyem3E/OvSF6k5Je/csoQ3OUJFbw0b657ilB4bOQy/BL7yH6MYQPRfziUKJkLi4z+H7FdbuFZwpWEK
+ EgdH9jGHSGYUD+ePn1TGzttAah24E17G4QOWGt2a23um4b00eIMvXZcYap/n6BfO6jDiJpMYiyfqZN
+ swe6t1+t0zmKdYVcznkLD7F8Mj+WmkwYcQQrphdjKlQN8NsuSi2lXExVumSnGRNT3CahDuqovBw/Bq
+ vJ187rhlO897Szhl+WuAzg1quLkKQ9J6sXb9M3Exexs3r1hdyg3alVYAjzxAFARErx9E4Y8C7HWJjG
+ To1sxIYs0gyIO7Zacp/WnYB3q6NuiAnaIjJrWXFe32Bp18lk1ikY4VrFPJsg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -90,28 +90,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document how the name of the metadata devices is modified.
+Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
+append a unique number to the device name.
+
+Fixes v4l2-compliance:
+    Media Controller ioctls:
+         fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
+       test MEDIA_IOC_G_TOPOLOGY: FAIL
+         fail: v4l2-test-media.cpp(394): num_data_links != num_links
+       test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- Documentation/driver-api/media/v4l2-dev.rst | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_driver.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/media/v4l2-dev.rst b/Documentation/driver-api/media/v4l2-dev.rst
-index 99e3b5fa7444..935a46e29c5e 100644
---- a/Documentation/driver-api/media/v4l2-dev.rst
-+++ b/Documentation/driver-api/media/v4l2-dev.rst
-@@ -42,7 +42,9 @@ You should also set these fields of :c:type:`video_device`:
- - :c:type:`video_device`->v4l2_dev: must be set to the :c:type:`v4l2_device`
-   parent device.
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 215fb483efb0..f4032ebb3689 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1963,7 +1963,8 @@ int uvc_register_video_device(struct uvc_device *dev,
+ 		break;
+ 	}
  
--- :c:type:`video_device`->name: set to something descriptive and unique.
-+- :c:type:`video_device`->name: set to something descriptive and unique. If the
-+  device has the `V4L2_CAP_META_CAPTURE` or `V4L2_CAP_META_OUTPUT` capabilities,
-+  the string `Meta:` will be inserted before the original name.
+-	strscpy(vdev->name, dev->name, sizeof(vdev->name));
++	snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
++		 stream->header.bTerminalLink);
  
- - :c:type:`video_device`->vfl_dir: set this to ``VFL_DIR_RX`` for capture
-   devices (``VFL_DIR_RX`` has value 0, so this is normally already the
+ 	/*
+ 	 * Set the driver data before calling video_register_device, otherwise
 
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
