@@ -2,154 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BE4640BDD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA4A640BDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233821AbiLBROs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S234338AbiLBRO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiLBROq (ORCPT
+        with ESMTP id S234184AbiLBROz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:14:46 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B158C461D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:14:45 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id g10so5180526plo.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:14:45 -0800 (PST)
+        Fri, 2 Dec 2022 12:14:55 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E73E074B;
+        Fri,  2 Dec 2022 09:14:54 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id m14so8764889wrh.7;
+        Fri, 02 Dec 2022 09:14:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=m4uN/3QFi8U1HGcJEDQxrHZlZaj2vYk4vsDWe2Gzo9A=;
-        b=gw3Bk31An4CPLvLHcrZwgA3ulM0t1laovibt4xreGiXJhi5SsmanZ26daeps6erfOt
-         p3gTz6tRRQrR2LTY2iZmAAkZVp8HkVlofw2GcG4byuSLWxr60XEXRzFyCtr5BLoVtguN
-         yTN1J/nYyRkxp8ln0yuBXvroFp6aDsYoKkJIyhpBlzeyY2lTntw/p1DGsWc/s7bX8VpE
-         WFCBv1+lriReT36Jxcet8ZLVI4/gMda0ZOpGdU0HhnVE7ddgEp9tyw4iLuStdVzvN5ez
-         H9l6NUiN9Nign9PrdfDQzyXh+v4Xzbm+rhSfERgJoiIWr+UVeCBiYyma0tQ2sfr+9EVL
-         UiHw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B8v9XTf3vXMWdEj7JPZSNyX2wl94/lt81sDZmVmnAZk=;
+        b=REs7QLBqW5J5VrEbzEthHZE1wfZSrK3cW5zRoKBqN3bvl3pN/pCfDR+um1uJkzTC/4
+         JP9Dm4H+19RXZnkU+om7Nn9lCfBSX27Iae2tITdSutf8C/usQe5SB7bN+p5H5mZePrz6
+         xndHgU5Igr91sHK3NScswZ91dHpRQWOKaTVtWu0aVehvkf3z0jVrCHSTPeoDmyD1mXOg
+         s5/jy3ze5ZJtuLi2dMj61QW6WtkG+PjeOLTtMjLv/dplZiuw7apog/3pgaruv+HnkuB5
+         rJJJN7yYn/kiuaZsCf45/24G4dGrrZJpFF0sGgAGNUunAwBd4ZAEIwHyGUnNveDJTBoy
+         k4xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m4uN/3QFi8U1HGcJEDQxrHZlZaj2vYk4vsDWe2Gzo9A=;
-        b=DuZQblzSb8F/7w5sFqTMKg+POY8qSPYfqFvmy2pZXcyQjrlYI2oTI1o3LVNqBN2c71
-         npos95fSew/VYvw4FqlDriYmGMWp1PGtcviR2NnzXrV+nqE5FR4inrUYQywla8pkraje
-         d71YaHuUXua1ZnKgdUWuBzXk9bfM3+GRqYTNZQpvsAFI2PVf86XoOgKgfbpowUL7GVAW
-         XHamAMFB9HO5cXkRZ/99+YAaZhaw8gRXPTgNHDhjiC547YOmqITvCCHmfuuHXLYPT+3+
-         /tIQDXaHzxOPpbea3AXDYdpV4YTMUHtRBmmMzu5tljTpooZimdehB1tVRbk/kniIqbWN
-         GmpQ==
-X-Gm-Message-State: ANoB5pnXXsvJxfrJaO8k8uABu7PfiYgyyPFf1uQWqOtNezDmqISV2yCe
-        SepvAGfuynwmygpVqsowVgQu
-X-Google-Smtp-Source: AA0mqf4ci+QJTB8JEwIUkumxLgkarjQyEKIS9UcJ/kSPVAkdJMVAO4Pxlnx9DArniUhgy93AEUn1Mw==
-X-Received: by 2002:a17:90b:30c6:b0:219:11ae:265f with SMTP id hi6-20020a17090b30c600b0021911ae265fmr37795485pjb.194.1670001285029;
-        Fri, 02 Dec 2022 09:14:45 -0800 (PST)
-Received: from thinkpad ([27.111.75.154])
-        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b00186b7443082sm5811742plb.195.2022.12.02.09.14.39
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B8v9XTf3vXMWdEj7JPZSNyX2wl94/lt81sDZmVmnAZk=;
+        b=VFz5qyAVhmIDE+9vZZjOi4rzFB6fIB1KAQJimDIEkc2EMX5KsFup7AwIJoP2LPKRmP
+         fXreVc6MkGKZFmjdCEkWRRptkLUcwsPVZfwvrWLKnCW3rtCEpZdXxAYmXA2amStk7f+G
+         t6LZ/HvXiwZFS1Z2rAMs9xicmYwKpg2okm7MD0ZifGDe6mrPwFEcLLJBJ7hmZMf1yCTq
+         S2RfodKcXVVHellT2e/CkEhEHkitXXIo/HoZzTLL2SkAAB1W+m3FQq6Y3raKQFyqvMux
+         9460/QHqKIoHKtTPPoGeUe7Cj8GjNUUNzRT4gcQUUovadQ61nMlpsPxqfK34Pz+XtBLU
+         BF8Q==
+X-Gm-Message-State: ANoB5pmNj/NHf/UwELLXNV4NG2gwNOoEEn/V/ndibFngbKxXmDeF1Wwd
+        V/kBwoz0ihSzEdH/9uPcXPA=
+X-Google-Smtp-Source: AA0mqf7V00hqex6XhkoCKa3wTyxa3SNkDDr8CfdyWdN/p7w47wrcrprI66nTe6Gqv77wmWQs7pXSBA==
+X-Received: by 2002:adf:f54d:0:b0:242:9e6:ea4d with SMTP id j13-20020adff54d000000b0024209e6ea4dmr20929160wrp.251.1670001292663;
+        Fri, 02 Dec 2022 09:14:52 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id k12-20020adfe8cc000000b00241b5af8697sm7651532wrn.85.2022.12.02.09.14.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:14:43 -0800 (PST)
-Date:   Fri, 2 Dec 2022 22:44:37 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Will Deacon <will@kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Robin Murphy <robin.murphy@arm.com>, andersson@kernel.org,
-        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, hch@lst.de
-Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
- arch_dma_prep_coherent()"
-Message-ID: <20221202171437.GH5356@thinkpad>
-References: <Y39blgEueyegkz6C@arm.com>
- <6d637906-e1d5-c481-a73d-2b2b845e223b@leemhuis.info>
- <Y4joR2sQMMjIt+yE@arm.com>
- <CAMi1Hd2wM5MLsjkx0HAWKkswzTDACb0C4tsPymNrRa0ariWsww@mail.gmail.com>
- <f98d163b-3410-9cf7-7d98-0f7640f4aa1f@leemhuis.info>
- <20221202100357.GB29396@willie-the-truck>
- <92a148a3-a8ac-4065-123c-99b72ac3ebeb@leemhuis.info>
- <Y4ojXyXMX2p+RVBR@kroah.com>
- <395ad6ef-eb54-ec7e-e131-714f23c84d7a@leemhuis.info>
- <Y4oos/xXL+tLT7E7@kroah.com>
+        Fri, 02 Dec 2022 09:14:51 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] ASoC: rt715: Make read-only arrays capture_reg_H and capture_reg_L static const
+Date:   Fri,  2 Dec 2022 17:14:50 +0000
+Message-Id: <20221202171450.1815346-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y4oos/xXL+tLT7E7@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 05:32:51PM +0100, Greg KH wrote:
-> On Fri, Dec 02, 2022 at 05:27:24PM +0100, Thorsten Leemhuis wrote:
-> > 
-> > 
-> > On 02.12.22 17:10, Greg KH wrote:
-> > > On Fri, Dec 02, 2022 at 11:34:30AM +0100, Thorsten Leemhuis wrote:
-> > >> On 02.12.22 11:03, Will Deacon wrote:
-> > >>> On Fri, Dec 02, 2022 at 09:54:05AM +0100, Thorsten Leemhuis wrote:
-> > >>>> On 02.12.22 09:26, Amit Pundir wrote:
-> > >>>>> On Thu, 1 Dec 2022 at 23:15, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > >>>>>>
-> > >>>>>> On Thu, Dec 01, 2022 at 10:29:39AM +0100, Thorsten Leemhuis wrote:
-> > >>>>>>> Has any progress been made to fix this regression? It afaics is not a
-> > >>>>>>> release critical issue, but well, it still would be nice to get this
-> > >>>>>>> fixed before 6.1 is released.
-> > >>>>>>
-> > >>>>>> The only (nearly) risk-free "fix" for 6.1 would be to revert the commit
-> > >>>>>> that exposed the driver bug. It doesn't fix the actual bug, it only
-> > >>>>>> makes it less likely to happen.
-> > >>>>>>
-> > >>>>>> I like the original commit removing the cache invalidation as it shows
-> > >>>>>> drivers not behaving properly
-> > >>>>
-> > >>>> Yeah, I understand that, but I guess it's my job to ask at this point:
-> > >>>> "is continuing to live with the old behavior for one or two more cycles"
-> > >>>> that much of a problem"?
-> > >>>
-> > >>> That wouldn't be a problem. The problem is that I haven't see any efforts
-> > >>> from the Qualcomm side to actually fix the drivers [...]
-> > >>
-> > >> Thx for sharing the details. I can fully understand your pain. But well,
-> > >> in the end it looks to me like this commit it intentionally breaking
-> > >> something that used to work -- which to my understanding of the "no
-> > >> regression rule" is not okay, even if things only worked by chance and
-> > >> not flawless.
-> > > 
-> > > "no regressions" for userspace code, this is broken, out-of-tree driver
-> > > code, right?
-> > 
-> > If so: apologies. But that's not the impression I got, as Amit wrote "I
-> > can reproduce this crash on vanilla v6.1-rc1 as well with no out-of-tree
-> > drivers." here:
-> > https://lore.kernel.org/linux-arm-kernel/CAMi1Hd3H2k1J8hJ6e-Miy5+nVDNzv6qQ3nN-9929B0GbHJkXEg@mail.gmail.com/
-> 
-> Ah, I missed that.
-> 
-> Ok, what in-tree drivers are having problems being buggy?  I can't seem
-> to figure that out from that report at all.  Does anyone know?
-> 
+Don't populate the read-only arrays capture_reg_H and capture_reg_L
+on the stack but instead make them static const. Also makes the
+object code a little smaller.
 
-It is the Qualcomm Q6V5_MSS remoteproc driver:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/remoteproc/qcom_q6v5_mss.c
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ sound/soc/codecs/rt715.c | 48 ++++++++++++++++++++--------------------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
 
-Qualcomm is working on the fix but the patches are not ready yet. So if we can
-get this patch reverted in the meantime, that would be helpful.
-
-Thanks,
-Mani
-
-> thanks,
-> 
-> greg k-h
-
+diff --git a/sound/soc/codecs/rt715.c b/sound/soc/codecs/rt715.c
+index 917a04092da2..1a2036ccfbac 100644
+--- a/sound/soc/codecs/rt715.c
++++ b/sound/soc/codecs/rt715.c
+@@ -204,12 +204,12 @@ static int rt715_set_main_switch_put(struct snd_kcontrol *kcontrol,
+ 	struct snd_soc_dapm_context *dapm =
+ 		snd_soc_component_get_dapm(component);
+ 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
+-	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
+-		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
+-		RT715_SET_GAIN_MIX_ADC2_H};
+-	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
+-		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
+-		RT715_SET_GAIN_MIX_ADC2_L};
++	static const unsigned int capture_reg_H[] = {
++		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
++		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
++	static const unsigned int capture_reg_L[] = {
++		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
++		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L };
+ 	unsigned int addr_h, addr_l, val_h = 0x0, val_ll, val_lr;
+ 	unsigned int k_shift = RT715_DIR_IN_SFT, k_changed = 0;
+ 	unsigned int read_ll, read_rl, i, j, loop_cnt = 4;
+@@ -284,12 +284,12 @@ static int rt715_set_main_switch_get(struct snd_kcontrol *kcontrol,
+ {
+ 	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
+ 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
+-	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
+-		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
+-		RT715_SET_GAIN_MIX_ADC2_H};
+-	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
+-		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
+-		RT715_SET_GAIN_MIX_ADC2_L};
++	static const unsigned int capture_reg_H[] = {
++		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
++		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
++	static const unsigned int capture_reg_L[] = {
++		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
++		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L };
+ 	unsigned int addr_h, addr_l, val_h = 0x0, i, loop_cnt = 4;
+ 	unsigned int read_ll, read_rl;
+ 
+@@ -312,12 +312,12 @@ static int rt715_set_main_vol_put(struct snd_kcontrol *kcontrol,
+ 	struct snd_soc_dapm_context *dapm =
+ 		snd_soc_component_get_dapm(component);
+ 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
+-	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
+-		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
+-		RT715_SET_GAIN_MIX_ADC2_H};
+-	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
+-		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
+-		RT715_SET_GAIN_MIX_ADC2_L};
++	static const unsigned int capture_reg_H[] = {
++		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
++		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
++	static const unsigned int capture_reg_L[] = {
++		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
++		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L};
+ 	unsigned int addr_h, addr_l, val_h = 0x0, val_ll, val_lr;
+ 	unsigned int read_ll, read_rl, i, j, loop_cnt = 4, k_changed = 0;
+ 	unsigned int k_shift = RT715_DIR_IN_SFT, k_max = 0x3f;
+@@ -393,12 +393,12 @@ static int rt715_set_main_vol_get(struct snd_kcontrol *kcontrol,
+ {
+ 	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
+ 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
+-	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
+-		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
+-		RT715_SET_GAIN_MIX_ADC2_H};
+-	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
+-		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
+-		RT715_SET_GAIN_MIX_ADC2_L};
++	static const unsigned int capture_reg_H[] = {
++		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
++		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
++	static const unsigned int capture_reg_L[] = {
++		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
++		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L };
+ 	unsigned int addr_h, addr_l, val_h = 0x0, i, loop_cnt = 4;
+ 	unsigned int read_ll, read_rl;
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.38.1
+
