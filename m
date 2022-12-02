@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A925640093
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEA5640098
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 07:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbiLBGdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 01:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S232376AbiLBGhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 01:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiLBGdS (ORCPT
+        with ESMTP id S232392AbiLBGhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 01:33:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012A991350;
-        Thu,  1 Dec 2022 22:33:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8930361263;
-        Fri,  2 Dec 2022 06:33:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 569D4C433D6;
-        Fri,  2 Dec 2022 06:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669962794;
-        bh=Yv0oeZfvoloe2s8/P9d5XMpUMasrNBnv39bbXAx17jI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p41ZSnI7xof4Vfjd+ZhXN99ojeePR16sjvm0Vhl1AqeofeJRfiS7hV4g2MITSZUfl
-         OjzFphelA+l10EJRKjdLGQlYZqpmp7iW5w0tmofh2XCWg0EvYylrSK0UsqcWY9d3uO
-         0n0+/JhA2IxxqvqmaUs41Aq+qTCbf/bsJTJyndUQ=
-Date:   Fri, 2 Dec 2022 07:33:11 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [PATCH] panic: Taint kernel if fault injection has been used
-Message-ID: <Y4mcJ61TPBgvBEWr@kroah.com>
-References: <166995635931.455067.17768077948832448089.stgit@devnote3>
+        Fri, 2 Dec 2022 01:37:33 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC8C9FAAD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 22:37:31 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id 189so4913844ybe.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 22:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0wfEd2nWOXAO99iFpiBOMFcG5XXUey3320YsBWB09fg=;
+        b=jFJ4DgR1mw8gmitD91EYQR8V2dTecvm+fCgN3hozlyfXTme06epJkMemsY3PXuijA7
+         ulxTLXteH0Scra0uw3JVMjptiyPGSqlZmHmzXaiaKXpBjvJH/7V2rVWHEjezf620hjgg
+         4ZIUZ5H2HiXD1S0Dck8Eyi25QRUa2qKzVHwqjCGGRef3WC4ADwUzvUnQOeYqJnTQqbsE
+         ZsxFE7r39pgcKHhe3M5h1re2Ceg+AuogoE9nWu6pXnlAP5XRxdc3Axd/wNghCIL47JQ7
+         vlaEUMYQ5FGb7+aUBhZ5/Bm45GmBX5116JUgYKrxiJlxtUyC4PMdERcvDPe/Tx/8L/4S
+         lfqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0wfEd2nWOXAO99iFpiBOMFcG5XXUey3320YsBWB09fg=;
+        b=U8xv+vHW/zeMKL1cjgSC4RhNrNdmU0ljzW77zTuQqelTj5UmqVx8bt5hGwRgTADAB1
+         MzdmUMdtFVfILPsuvg0xg7ks3Axfp6NMzyzAUaDQxkVsUDPmERQdWZdilTwqPbsJkiwX
+         PJjfeWMQk4OjuWlouMoIbESoLjURc3tEnthpYdSD8+yRFVRpCQksDUgwo1vxK82Z9Et7
+         EeQQ7P8giPk3dO9c4EHAf9Y2slRhM7V8QFB/3xCXHM+qSMfnAypO7zqFICkT8Ype9c/A
+         9M1fm4M9cdEeICdiFhjz/Pm+mBrC3FNtSP59a4BNfoLM+HmFcj2uadJER3gXH41egdch
+         M1jg==
+X-Gm-Message-State: ANoB5pmmoETcVVSLfpNV9Elxmli8Lzt0Z/j9keiBzm//SSGHBZBgnCZk
+        rdPWiQjWhQUGwKqzRwkRQY8+AE7Jm3mvOjj/QmduQg==
+X-Google-Smtp-Source: AA0mqf5QVMYfhTVBjiGucrxQENphP17XxGjPMOmH9tIM/Dg4DQPed1xX3OPXqHQIOqNSQENnhEfG//n32gRE2RNYwcg=
+X-Received: by 2002:a5b:f0f:0:b0:6d2:5835:301f with SMTP id
+ x15-20020a5b0f0f000000b006d25835301fmr56739938ybr.336.1669963050439; Thu, 01
+ Dec 2022 22:37:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166995635931.455067.17768077948832448089.stgit@devnote3>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221201131113.897261583@linuxfoundation.org>
+In-Reply-To: <20221201131113.897261583@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 2 Dec 2022 12:07:18 +0530
+Message-ID: <CA+G9fYtM6EQh+Qg=bWD5DZeCmWsFuNPVh5tTEq2VD4dEWtqH2Q@mail.gmail.com>
+Subject: Re: [PATCH 6.0 000/280] 6.0.11-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,31 +70,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 01:45:59PM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Since the function error injection framework in the fault injection
-> subsystem can change the function code flow forcibly, it may cause
-> unexpected behavior (and that is the purpose of this feature) even
-> if it is applied to the ALLOW_ERROR_INJECTION functions.
-> So this feature must be used only for debugging or testing purpose.
-> 
-> To identify this in the kernel oops message, add a new taint flag
-> for the fault injection. This taint flag will be set by either
-> function error injection is used or the BPF use the kprobe_override
-> on error injectable functions (identified by ALLOW_ERROR_INJECTION).
-> 
-> Link: https://lore.kernel.org/all/20221121104403.1545f9b5@gandalf.local.home/T/#u
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  Documentation/admin-guide/tainted-kernels.rst |    5 +++++
->  include/linux/panic.h                         |    3 ++-
->  kernel/fail_function.c                        |    2 ++
->  kernel/panic.c                                |    1 +
->  kernel/trace/bpf_trace.c                      |    2 ++
->  5 files changed, 12 insertions(+), 1 deletion(-)
+On Thu, 1 Dec 2022 at 18:41, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.0.11 release.
+> There are 280 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 03 Dec 2022 13:10:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I think you forgot to also update tools/debugging/kernel-chktaint with
-this new entry :(
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.0.11-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.0.y
+* git commit: 7a60d1d7c4cda7564a42dca46c0a1e358ae4b887
+* git describe: v6.0.9-595-g7a60d1d7c4cd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.9-595-g7a60d1d7c4cd
+
+## Test Regressions (compared to v6.0.9)
+
+## Metric Regressions (compared to v6.0.9)
+
+## Test Fixes (compared to v6.0.9)
+
+## Metric Fixes (compared to v6.0.9)
+
+## Test result summary
+total: 151978, pass: 129230, fail: 7393, skip: 14991, xfail: 364
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 147 total, 144 passed, 3 failed
+* arm64: 45 total, 45 passed, 0 failed
+* i386: 35 total, 34 passed, 1 failed
+* mips: 26 total, 26 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 34 total, 30 passed, 4 failed
+* riscv: 12 total, 12 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 38 total, 38 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-lib
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-openat2
+* kselftest-seccomp
+* kselftest-timens
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cv
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simpl
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* ltpa-5904873/0/tests/4_ltp-fsx
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
