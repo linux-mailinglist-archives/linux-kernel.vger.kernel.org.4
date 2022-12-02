@@ -2,122 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E269640804
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12A9640805
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbiLBNyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 08:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
+        id S233396AbiLBNzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 08:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233542AbiLBNyO (ORCPT
+        with ESMTP id S233589AbiLBNyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 08:54:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D148DA22A;
-        Fri,  2 Dec 2022 05:54:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A12F2B82172;
-        Fri,  2 Dec 2022 13:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D1CEC433D6;
-        Fri,  2 Dec 2022 13:54:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669989250;
-        bh=RFXCeixnCunq7uJ4AjC78qdV2fWmcwMrZZsz81rWnIM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=SPfxmdxf9gwCFoh//pEuYmUPLbbBzxchJnkaB8/P9bagFZFkCT3YUalsgfm3eu9ta
-         qLrwpQ0FYMdGUlrXgFXrDIzeWS8MCI1Cc3RSga9uYWqGjSLrCi1lDo48dv21iuLnlE
-         kJv1h1FSSCkgpp9rZ7hqMttcfQSazDd/zUk50Do6FQpBM+i8t8EnUTE21DpdyG3dMU
-         rm2Amo6XlIM3Qh0F7G7pVQjEAaEW9aif51+fOJS3d1CNO7HeEilmg4kBqkMlrlQmE1
-         sCc2zKbgGc/7pObJV0p4z8cIs9Zyqxn7ymDwd3OtPb1KPrDktOqdFESfXhaoq3WllD
-         RXCBy0KDBOrLQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-leds@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>
-In-Reply-To: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
-References: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
-Subject: Re: (subset) [PATCH v7 0/8] Add MediaTek MT6357 PMIC support
-Message-Id: <166998924420.1252747.5635155323391634201.b4-ty@kernel.org>
-Date:   Fri, 02 Dec 2022 13:54:04 +0000
+        Fri, 2 Dec 2022 08:54:18 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35BFB0A36
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 05:54:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669989257; x=1701525257;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RuoiChgynWYwC9FY/B75XMRI15E8yWs09qhxYV7dsIY=;
+  b=G9EyT7t0aL48PhhTf2HtFXuLXaZmWiofBbY6ofNlFrkktsDMU5INzFIU
+   yggsMGbwyz/8pyLGfUftfYvpjKsc52AkGQ9UnzoPw9Jaq79JdBb3EFdfp
+   IDKvl2/3Hn0N4EZFqFsmuYqwnLp2mnoBChYk5J0b3F9CUSKCTsJR1du6f
+   QbcNKC3OJz9zwkAaIaKICHGnzLGz/535V6WjG92Vv2yJU7yIt5fwHJUvJ
+   iqTVYo5d9WV4fIkvTiLgaTnDoh1ROpYYgwe6rFw8r7XO8N+FZ0VEKI2PQ
+   ngBosfiz20U+OUhQPwmdK/vjltnsOzRfz3O9CMZgqnIQPAgjrZiMkhpto
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="315983467"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="315983467"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 05:54:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="708482267"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="708482267"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Dec 2022 05:54:15 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p16UZ-000Dib-0S;
+        Fri, 02 Dec 2022 13:54:15 +0000
+Date:   Fri, 02 Dec 2022 21:54:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 6885a2611073edaed81bfcbf39be39843c723bd2
+Message-ID: <638a0383.02QVzKowh97moGDj%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 16:56:59 +0100, Alexandre Mergnat wrote:
-> This patch series adds MFD, PMIC keys, and regulator support for MT6357.
-> MT6357 is a MediaTek PMIC very similar to MT6358.
-> 
-> Currently, MTK bindings related to the PMICs are not converted yet (still .txt):
-> 
-> soc/mediatek/pwrap.txt (all PMIC parent)
->       |
->       V
-> mfd/mt6397.txt (support lot of mt63XX PMIC)
->       +---------------+----------------+---...
->       V               V                V
-> regulator/...      rtc/...          codec/...
-> 
-> [...]
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 6885a2611073edaed81bfcbf39be39843c723bd2  Merge branch into tip/master: 'x86/tdx'
 
-Applied to
+elapsed time: 1372m
 
-   broonie/regulator.git for-next
+configs tested: 52
+configs skipped: 2
 
-Thanks!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-[2/8] regulator: dt-bindings: Add binding schema for mt6357 regulators
-      commit: b4387db19d7f1caf166852782a5f0e5a393bdf24
-[7/8] regulator: add mt6357 regulator
-      commit: dafc7cde23dca239987d3cd000b11cdccc3728ea
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+ia64                             allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                              defconfig
+sh                               allmodconfig
+x86_64                               rhel-8.3
+mips                             allyesconfig
+x86_64                           allyesconfig
+x86_64                        randconfig-a013
+powerpc                          allmodconfig
+x86_64                        randconfig-a011
+arc                  randconfig-r043-20221201
+x86_64                        randconfig-a015
+s390                 randconfig-r044-20221201
+riscv                randconfig-r042-20221201
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                                defconfig
+i386                             allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+clang tested configs:
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20221201
+hexagon              randconfig-r045-20221201
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
