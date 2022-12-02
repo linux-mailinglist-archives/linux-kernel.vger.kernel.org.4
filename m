@@ -2,83 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9345E64100E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622EE641010
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiLBVgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S234600AbiLBVgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233821AbiLBVgB (ORCPT
+        with ESMTP id S234591AbiLBVgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:36:01 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AC0EF8B0;
-        Fri,  2 Dec 2022 13:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670016960; x=1701552960;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jbDqvFAgp4MnB8B6YQ5sRiaoj/wEsc4ByhyQ4FcZagQ=;
-  b=V57rmamKXdp95ydSpJ/UyI6ToOS3DFrg1O4Vwta/3Ev19FACW6+tdp4y
-   bEbEq3wgrfzAzaeT3UgbbzNfDAdMhYGWy/BLNzOdn6dkIWiXF5Ob+fpFI
-   99sJK7/QqgqaTp2CkXxoR33wbFeb1hsCMCfmW/XIX7KSWsaC8DKEPqU7k
-   +ag0BpP9V52jpD3UvQbCqUvV046TWptD6PhpmkM3S3Pw7FZWVMFaQ2bqr
-   L1LuVfNa9T+mnfO5QfIUQ5ZNMCiQHNv/Tn4SK6607lWtpOnQMaMkKIWlU
-   LEkbadXKjA4z8/P3TO6Ydfz8ee3uv7Gri46cYOMh1RAn3bY3KWhACJ3zk
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="295744092"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="295744092"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:36:00 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="713767380"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="713767380"
-Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:35:58 -0800
-Message-ID: <3a789b1c-4c70-158b-d764-daec141a5816@intel.com>
-Date:   Fri, 2 Dec 2022 13:35:58 -0800
+        Fri, 2 Dec 2022 16:36:40 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F43EF8AF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:36:39 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id k7so5786690pll.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 13:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wureQ2qHtZ8FEnEt+jaoug1YKpvv7rP1J/7SReRkYJ8=;
+        b=QDIGjmAmOXPF7Ul3FS6FHx0iflkF4dMQa6d5IBEKy0f+NWJ/mYld/Kxxq+UK8Lf8f0
+         hnfjuIVAUEtzd0WhDYa9+dHkhiQILUm9Eg7cnsW3khT/Px5R/DZShw4Ts+vvXCyjELY5
+         YKhUChcsQsV4STCBIuD/bLL7asv0VCZ4dIW7o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wureQ2qHtZ8FEnEt+jaoug1YKpvv7rP1J/7SReRkYJ8=;
+        b=uROIt8xg9RZW9/Nx8xL8awd+z36qDOFqtBQHp4NMrgw+krFReUfmcTNw7PiH2E7kYo
+         IPn0WqsueVcKpHyT2pfFhptiJ3+KhKZsxT933Cz/V9oa2wu2FK6GG6WJ+lLCq7JyBBQm
+         OYZZaBGR1Ekngwb4guiBb8zatSAacvaWo+diBFdnVnNhZtON2/TMBWA/PPFQdtm3bxir
+         +pyhtVEFAAOUy+2XMEzzOGfsH0HjATjzjiyLPQQXn7wOoVh6BA8/5LqnXg2SJ9Hm1IrR
+         ZiDYl043aepxA2zVh5FsAheBS2Vnj6LSVuewKoqv2ynA4WHAaHGsri0CQfiG4ZPYpDNl
+         5xmA==
+X-Gm-Message-State: ANoB5pmAX2alszc1VtrWeDCEFcxXQuPUfV9Jzc3eq66PN6UuYCfwZmQ3
+        UK4kslm5CSyKdCJ/QDja6zwzRHyx6YPZVlp5
+X-Google-Smtp-Source: AA0mqf7xIkA06KJ6zAQvMBTblrXeAA8mcfDvwaXgp5RxM2ObJLfP1rkRxV2DUg8hZxWRO4VKsZ67WQ==
+X-Received: by 2002:a17:902:ce90:b0:187:19c4:373a with SMTP id f16-20020a170902ce9000b0018719c4373amr66948843plg.163.1670016988822;
+        Fri, 02 Dec 2022 13:36:28 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e1-20020a621e01000000b0057621a437d7sm3546989pfe.116.2022.12.02.13.36.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 13:36:28 -0800 (PST)
+Date:   Fri, 2 Dec 2022 13:36:27 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     syzbot <syzbot+210e196cef4711b65139@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in nci_add_new_protocol
+Message-ID: <202212021327.FEABB55@keescook>
+References: <0000000000001c590f05ee7b3ff4@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 02/18] x86/sgx: Store struct sgx_encl when allocating
- new VA pages
-Content-Language: en-US
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
- <20221202183655.3767674-3-kristen@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221202183655.3767674-3-kristen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001c590f05ee7b3ff4@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 10:36, Kristen Carlson Accardi wrote:
-> When allocating new Version Array (VA) pages, pass the struct sgx_encl
-> of the enclave that is allocating the page. sgx_alloc_epc_page() will
-> store this value in the encl_owner field of the struct sgx_epc_page. In
-> a later patch, VA pages will be placed in an unreclaimable queue,
-> and then when the cgroup max limit is reached and there are no more
-> reclaimable pages and the enclave must be oom killed, all the
-> VA pages associated with that enclave can be uncharged and freed.
+On Sun, Nov 27, 2022 at 02:26:30PM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    4312098baf37 Merge tag 'spi-fix-v6.1-rc6' of git://git.ker..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12e25bb5880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b1129081024ee340
+> dashboard link: https://syzkaller.appspot.com/bug?extid=210e196cef4711b65139
+> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+210e196cef4711b65139@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 7843 at net/nfc/nci/ntf.c:260 nci_add_new_protocol+0x268/0x30c net/nfc/nci/ntf.c:260
+> memcpy: detected field-spanning write (size 129) of single field "target->sensf_res" at net/nfc/nci/ntf.c:260 (size 18)
 
-What does this have to do with the 'encl' that is being passed, though?
+This looks like a legitimate overflow flaw to me. Likely introduced with
+commit 019c4fbaa790 ("NFC: Add NCI multiple targets support").
 
-In other words, why is this new sgx_epc_page-to-encl mapping needed for
-VA pages now, but it wasn't before?
+These appear to be explicitly filling fixed-size arrays:
+
+struct nfc_target {
+        u32 idx;
+        u32 supported_protocols;
+        u16 sens_res;
+        u8 sel_res;
+        u8 nfcid1_len;
+        u8 nfcid1[NFC_NFCID1_MAXSIZE];
+        u8 nfcid2_len;
+        u8 nfcid2[NFC_NFCID2_MAXSIZE];
+        u8 sensb_res_len;
+        u8 sensb_res[NFC_SENSB_RES_MAXSIZE];
+        u8 sensf_res_len;
+        u8 sensf_res[NFC_SENSF_RES_MAXSIZE];
+        u8 hci_reader_gate;
+        u8 logical_idx;
+        u8 is_iso15693;
+        u8 iso15693_dsfid;
+        u8 iso15693_uid[NFC_ISO15693_UID_MAXSIZE];
+};
+
+static int nci_add_new_protocol(..., struct nfc_target *target, ...)
+{
+	...
+        } else if (rf_tech_and_mode == NCI_NFC_B_PASSIVE_POLL_MODE) {
+                nfcb_poll = (struct rf_tech_specific_params_nfcb_poll *)params;
+
+                target->sensb_res_len = nfcb_poll->sensb_res_len;
+                if (target->sensb_res_len > 0) {
+                        memcpy(target->sensb_res, nfcb_poll->sensb_res,
+                               target->sensb_res_len);
+                }
+        } else if (rf_tech_and_mode == NCI_NFC_F_PASSIVE_POLL_MODE) {
+                nfcf_poll = (struct rf_tech_specific_params_nfcf_poll *)params;
+
+                target->sensf_res_len = nfcf_poll->sensf_res_len;
+                if (target->sensf_res_len > 0) {
+                        memcpy(target->sensf_res, nfcf_poll->sensf_res,
+                               target->sensf_res_len);
+                }
+        } else if (rf_tech_and_mode == NCI_NFC_V_PASSIVE_POLL_MODE) {
+                nfcv_poll = (struct rf_tech_specific_params_nfcv_poll *)params;
+
+                target->is_iso15693 = 1;
+                target->iso15693_dsfid = nfcv_poll->dsfid;
+                memcpy(target->iso15693_uid, nfcv_poll->uid, NFC_ISO15693_UID_MAXSIZE);
+	}
+	...
+
+But the sizes are unbounds-checked, which means the buffers can be
+overwritten (as seen with the syzkaller report).
+
+Perhaps this to fix it?
+
+diff --git a/net/nfc/nci/ntf.c b/net/nfc/nci/ntf.c
+index 282c51051dcc..3a79f07bfea7 100644
+--- a/net/nfc/nci/ntf.c
++++ b/net/nfc/nci/ntf.c
+@@ -240,6 +240,8 @@ static int nci_add_new_protocol(struct nci_dev *ndev,
+ 		target->sens_res = nfca_poll->sens_res;
+ 		target->sel_res = nfca_poll->sel_res;
+ 		target->nfcid1_len = nfca_poll->nfcid1_len;
++		if (target->nfcid1_len > ARRAY_SIZE(target->target->nfcid1))
++			return -EPROTO;
+ 		if (target->nfcid1_len > 0) {
+ 			memcpy(target->nfcid1, nfca_poll->nfcid1,
+ 			       target->nfcid1_len);
+@@ -248,6 +250,8 @@ static int nci_add_new_protocol(struct nci_dev *ndev,
+ 		nfcb_poll = (struct rf_tech_specific_params_nfcb_poll *)params;
+ 
+ 		target->sensb_res_len = nfcb_poll->sensb_res_len;
++		if (target->sensb_res_len > ARRAY_SIZE(target->sensb_res))
++			return -EPROTO;
+ 		if (target->sensb_res_len > 0) {
+ 			memcpy(target->sensb_res, nfcb_poll->sensb_res,
+ 			       target->sensb_res_len);
+@@ -256,6 +260,8 @@ static int nci_add_new_protocol(struct nci_dev *ndev,
+ 		nfcf_poll = (struct rf_tech_specific_params_nfcf_poll *)params;
+ 
+ 		target->sensf_res_len = nfcf_poll->sensf_res_len;
++		if (target->sensf_res_len > ARRAY_SIZE(target->sensf_res))
++			return -EPROTO;
+ 		if (target->sensf_res_len > 0) {
+ 			memcpy(target->sensf_res, nfcf_poll->sensf_res,
+ 			       target->sensf_res_len);
+
+
+-- 
+Kees Cook
