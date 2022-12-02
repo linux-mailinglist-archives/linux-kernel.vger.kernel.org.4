@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47817640E2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D434640E2E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234553AbiLBTE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S234628AbiLBTEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:04:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234422AbiLBTEY (ORCPT
+        with ESMTP id S234497AbiLBTEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:04:24 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDC4DEA5C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 11:04:23 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id k79so5732010pfd.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 11:04:23 -0800 (PST)
+        Fri, 2 Dec 2022 14:04:52 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243EEE2545;
+        Fri,  2 Dec 2022 11:04:52 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so9148417pjc.3;
+        Fri, 02 Dec 2022 11:04:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=imr/GnqPcqLqa9JjMVgPxbyj/eiQHdpFYtFNeUfm5rU=;
-        b=gjGe+7auDv+ZXu6qt73zTRHUZnU4jIZZDL8KgYXKoGC8YpiLul81hfXyWSVs8xKDya
-         t46krBPFaRKw9a19sjeRINFTz7UVLN6gOzU36gNecQUBhsUnE22CNUE+K4xhyRNaUBM+
-         p8I9Og0ekoekO2mPafx4QjwACLsfml6Z6s+j2L61u/ZKeaPYRl7AEEFelJj6Whh8nNXV
-         eiye/7Dl58HiuzcKADeL0yHqi6QrhQKHVwgx/vxEkwSdfKEsTmTgqLl0LRZATTbULKB3
-         p0QOn4w0Sg5f7gdC2LWyBahjjxFDIiqEIMv8r9AJNnux9OJVgDNi5yAS6L2MvsVP94Qb
-         Fd3w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=GpCCioLM9L47vHsyUU0BFPjstz/YfKaTI+OyQ8H60AQ=;
+        b=SBv7vN5F83mWZfY6RlGdDBnby3yPJ/hp3wy0pAFNvBUn87UE0bDK/Onk50IPd8skFi
+         3LND9ztwqJgBiwNpR5auGoLGWI3oezYu6CKeOpeVM1INsclgFIK0Ft2ZjISzjXHK6tYX
+         WyaDw2bj4Eab+EDabRP3jg2DA3uZAxJW0upZ9JdBYkTMjpAtJ4fKtR6zAZtX3Q22n3vf
+         7gkM9e+4Nczz4zjRh6ItgIK+HbuRw2ZP+2Xju5R2z2ntrC1C2qFw1PXbQPrPDLgIGsdy
+         kK0Up0g77AfQh1nZkNRLd9PP7GXrM1pZ+27ZI4yomDQirVs9jzk2ibxqhAeNeVlAThNF
+         abqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=imr/GnqPcqLqa9JjMVgPxbyj/eiQHdpFYtFNeUfm5rU=;
-        b=eJ/OiG9EtrK2wCh4zsNGx135RVwLtydx6Q6QOg5NDaRXWQOMOu/wkuNhIZKsy3igt5
-         2pDJMt8uDVgAs+R8P+1C0ao79tqLd0qRU009iYhb4hMzUCm+WYSMHm3vxlmdrwzUeqHD
-         6Ua2cJYch9KZza75WfqkVExWZWk2tb0AnL+Zd3bJ5O0FUXoIlB0RiUhG4tUhpX+34E39
-         ZQoPixLX7KIezUQ2SqdWeTzyR1cSIfS/T69QqoYD7w3Z6Nzrp2lQnpyCP5Id2EwiyRYF
-         VzOoCGxuaepf021i4IYsAPBNJqDNltVsDVOYkHWSphTmNtUnxqQ6aly4ZcrbtmN5m1Jl
-         W2Fg==
-X-Gm-Message-State: ANoB5pkBBnSaYm5SX8JU9Oh9UV3IIBbOW0GZyQzXK2Votxzlu4cKG5Yj
-        66gUKQhhbonbBaEesAPZWWRO2A==
-X-Google-Smtp-Source: AA0mqf6FmyD0wOrbzu3xmRH000pMYIZ+lhNtF3BHMD8wby88YkYEyGqw52oKyOS+R5dIP4i/6feQ8w==
-X-Received: by 2002:a65:588b:0:b0:456:f7bd:a1 with SMTP id d11-20020a65588b000000b00456f7bd00a1mr64729248pgu.79.1670007862734;
-        Fri, 02 Dec 2022 11:04:22 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id pl11-20020a17090b268b00b001faafa42a9esm5104893pjb.26.2022.12.02.11.04.22
+        bh=GpCCioLM9L47vHsyUU0BFPjstz/YfKaTI+OyQ8H60AQ=;
+        b=wy7NtkBtpWliSHNMGAG0toubrYynTcfpNiBaoaD/Lvzdewu7lbS2SLmuloY2bv5wZv
+         po9QqWTrMEalHaUfLx4EADrpF4BHThEcdEBF+yuogbQy94aXU8lwCkBjGYgthiw3/kBx
+         7i+uBRpF+7btERp75LSQ+hIpPO1RPQ7VxOJPqZOAb7je68k6jP88KVyCne/RHnAOX2v3
+         2SAsknek7y75Pn2aK382tVRipnBu6qAXV12ccx8CyMxKMCd8X2Wpnu0gHimcRsbv0MDj
+         93/wD5KcnTsveXmOzVrnCWjsJxfORGjd38YDYZxK1Ii0bWQ4XgswpAV5ToMTFRmqlSWe
+         oZYQ==
+X-Gm-Message-State: ANoB5plkXle5nmUVzg5PStxwttakY0S6EpHv4A1L0ZsVQ07W/+a6K/J8
+        yWrnpqJ6vxTOnCN74EBWNKUQG7DckU8=
+X-Google-Smtp-Source: AA0mqf6oQPE3WCcPYd0XtRo7kWWXhwSYNADZG0hb0w7qUerD/Af0gDxpiWKSz7AWaJg8ATOU0uovxw==
+X-Received: by 2002:a17:902:8503:b0:188:e49e:2668 with SMTP id bj3-20020a170902850300b00188e49e2668mr57385385plb.125.1670007891546;
+        Fri, 02 Dec 2022 11:04:51 -0800 (PST)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:8a28:738d:8b4c:8dca])
+        by smtp.gmail.com with ESMTPSA id w6-20020a170902a70600b0018862bb3976sm5842570plq.308.2022.12.02.11.04.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 11:04:22 -0800 (PST)
-Date:   Fri, 02 Dec 2022 11:04:22 -0800 (PST)
-X-Google-Original-Date: Fri, 02 Dec 2022 11:04:12 PST (-0800)
-Subject:     Re: [PATCH v2 0/8] Basic device tree support for StarFive JH7110 RISC-V SoC
-In-Reply-To: <167000761729.13669.16471163583440376052.git-patchwork-notify@kernel.org>
-CC:     hal.feng@starfivetech.com, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, ben.dooks@sifive.com, tglx@linutronix.de,
-        Marc Zyngier <maz@kernel.org>, sboyd@kernel.org,
-        mturquette@baylibre.com, p.zabel@pengutronix.de,
-        linus.walleij@linaro.org, emil.renner.berthing@canonical.com,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     patchwork-bot+linux-riscv@kernel.org
-Message-ID: <mhng-9bf55be8-1ce6-4f4d-91ef-7a18f694d8da@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Fri, 02 Dec 2022 11:04:51 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        "Wang, Weilin" <weilin.wang@intel.com>
+Subject: [PATCH] perf stat: Fix multi-line metric output in JSON
+Date:   Fri,  2 Dec 2022 11:04:47 -0800
+Message-Id: <20221202190447.1588680-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 02 Dec 2022 11:00:17 PST (-0800), patchwork-bot+linux-riscv@kernel.org wrote:
-> Hello:
->
-> This series was applied to riscv/linux.git (for-next)
-> by Palmer Dabbelt <palmer@rivosinc.com>:
->
-> On Fri, 18 Nov 2022 09:17:06 +0800 you wrote:
->> The original patch series "Basic StarFive JH7110 RISC-V SoC support" [1]
->> is split into 3 patch series. They respectively add basic clock&reset,
->> pinctrl and device tree support for StarFive JH7110 SoC. These patch
->> series are independent, but the Visionfive2 board can boot up successfully
->> only if all these patches series applied. This one adds basic device
->> tree support. This patch series is pulled out from the patch 1~6 and
->> patch 27~30 of v1 [1]. You can simply get or review the patches at the
->> link [2].
->>
->> [...]
->
-> Here is the summary with links:
->   - [v2,1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and VisionFive2 board
->     (no matching commit)
->   - [v2,2/8] dt-bindings: timer: Add StarFive JH7110 clint
->     (no matching commit)
->   - [v2,3/8] dt-bindings: interrupt-controller: Add StarFive JH7110 plic
->     (no matching commit)
->   - [v2,4/8] dt-bindings: sifive,ccache0: Support StarFive JH7110 SoC
->     (no matching commit)
->   - [v2,5/8] soc: sifive: ccache: Add StarFive JH7110 support
->     (no matching commit)
->   - [v2,6/8] riscv: dts: starfive: Add initial StarFive JH7110 device tree
->     (no matching commit)
->   - [v2,7/8] riscv: dts: starfive: Add StarFive JH7110 VisionFive2 board device tree
->     (no matching commit)
->   - [v2,8/8] RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
->     https://git.kernel.org/riscv/c/6925ba3d9b8c
->
-> You are awesome, thank you!
+When a metric produces more than one values, it missed to print the opening
+bracket.
 
-Looks like the bot is a little confused here, it's just that last patch 
-that's been merged.
+Fixes: ab6baaae2735 ("perf stat: Fix JSON output in metric-only mode")
+Reported-by: "Wang, Weilin" <weilin.wang@intel.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+Weilin, could you please verify it fixes your problem?
+
+ tools/perf/util/stat-display.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index f1ee4b052198..8d0bdd57163d 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -440,7 +440,7 @@ static void new_line_json(struct perf_stat_config *config, void *ctx)
+ {
+ 	struct outstate *os = ctx;
+ 
+-	fputc('\n', os->fh);
++	fputs("\n{", os->fh);
+ 	if (os->prefix)
+ 		fprintf(os->fh, "%s", os->prefix);
+ 	aggr_printout(config, os->evsel, os->id, os->nr);
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
