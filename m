@@ -2,103 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FCC640911
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D57964091C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiLBPOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S233763AbiLBPPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbiLBPNg (ORCPT
+        with ESMTP id S233455AbiLBPPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:13:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58076D7E8
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:13:33 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p17jG-0005zw-Mv; Fri, 02 Dec 2022 16:13:30 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5D0E413176E;
-        Fri,  2 Dec 2022 15:13:29 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 16:13:20 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] can: esd_usb: Allow REC and TEC to return to zero
-Message-ID: <20221202151320.7pimdtgqehi4x77k@pengutronix.de>
-References: <20221130202242.3998219-1-frank.jungclaus@esd.eu>
- <20221130202242.3998219-2-frank.jungclaus@esd.eu>
+        Fri, 2 Dec 2022 10:15:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9616D7C3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:14:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669994045;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ahQ65RRmP8j5XsQcDv9WbM62Muh/lrt7zDJJlU3D5Bo=;
+        b=OQJDM14UyuumSLciCuqDR8+QHz4Dm2T9XjTsTQpOaro4cvjWtZu1srHCQwWTSqZ4E+0iTr
+        tjhrX2iOeUHiimXsN/t/a/4tYwYRTzBCx+bNgp+oVkQrChXGn1DmKlseMjcT++8/CIomoe
+        eTen80q9Wlu9rJQriORHPt8SR6zbgXY=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-616-EuXOUsJiPEmCvpygCltSxA-1; Fri, 02 Dec 2022 10:14:04 -0500
+X-MC-Unique: EuXOUsJiPEmCvpygCltSxA-1
+Received: by mail-qt1-f197.google.com with SMTP id ay12-20020a05622a228c00b003a52bd33749so17645308qtb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:14:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ahQ65RRmP8j5XsQcDv9WbM62Muh/lrt7zDJJlU3D5Bo=;
+        b=aCqaVcWDZyce3jdn0x3EtZHtEHhmOO0no+dNfuUS7ZmkjiQCfmcdDv7ZT5Z/QRF8V1
+         CFllnQXTKF9zlw6/v0P+tApOFe0iVNOMqoO4PgBJDT3B2Kp1mipKD/SsLfMLP7UyBPue
+         ZZja12xeMmtqgz0nnHY4yxDgTi4+yfc3fWiK5GcqYGI3GlBW+uD8kVXS0NN/SzcSQUPw
+         x5gCFrPc9TCTRFFJTwSNkACwAwxy9mjS87Sa7qutusBYq6FBo1/7f/6ALkYN1jhAYaUv
+         gEjqHQ7nbjvpyRYtuFJk+6tLOYgKSqQ+o/Onld/Y5xHbrWHNCmHd9M5/bJimOch6Slzf
+         sb8g==
+X-Gm-Message-State: ANoB5pnsgb3a63WFda8cg+SrdKoT0TDhnXGA0NPiCuHFt8J8F3HO/D7U
+        ajht57ky3FmHW+EGmU+D0gaKC6BdqxJs+sT2IrN+nUiY+EEJsSJSdZuBjoPstlZRzHqkOqOkmQy
+        8NMfl21UKx8PTb8tV3PBfOaIA
+X-Received: by 2002:a05:620a:4eb:b0:6fa:4d19:2419 with SMTP id b11-20020a05620a04eb00b006fa4d192419mr50852255qkh.61.1669994044261;
+        Fri, 02 Dec 2022 07:14:04 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5FF1pskZWE9dalQ9sJf17+xlWPRCU9XXWbrDM3qWCXQGYi6Kdf1YSkh3DemfGUs8F6PP+8wQ==
+X-Received: by 2002:a05:620a:4eb:b0:6fa:4d19:2419 with SMTP id b11-20020a05620a04eb00b006fa4d192419mr50852226qkh.61.1669994043900;
+        Fri, 02 Dec 2022 07:14:03 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id i13-20020ac84f4d000000b0039492d503cdsm4296805qtw.51.2022.12.02.07.14.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 07:14:03 -0800 (PST)
+Date:   Fri, 2 Dec 2022 10:14:02 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+Message-ID: <Y4oWOqgqmv1BFAFx@x1n>
+References: <20221114000447.1681003-1-peterx@redhat.com>
+ <20221114000447.1681003-2-peterx@redhat.com>
+ <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
+ <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
+ <Y4jIHureiOd8XjDX@x1n>
+ <a215fe2f-ef9b-1a15-f1c2-2f0bb5d5f490@redhat.com>
+ <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
+ <fc3e3497-053d-8e50-a504-764317b6a49a@redhat.com>
+ <222fc0b2-6ec0-98e7-833f-ea868b248446@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zbmgx7pa7b3psdf2"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221130202242.3998219-2-frank.jungclaus@esd.eu>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <222fc0b2-6ec0-98e7-833f-ea868b248446@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 02, 2022 at 01:07:02PM +0100, David Hildenbrand wrote:
+> On 02.12.22 12:03, David Hildenbrand wrote:
+> > On 01.12.22 23:30, Andrew Morton wrote:
+> > > On Thu, 1 Dec 2022 16:42:52 +0100 David Hildenbrand <david@redhat.com> wrote:
+> > > 
+> > > > On 01.12.22 16:28, Peter Xu wrote:
+> > > > > 
+> > > > > I didn't reply here because I have already replied with the question in
+> > > > > previous version with a few attempts.  Quotting myself:
+> > > > > 
+> > > > > https://lore.kernel.org/all/Y3KgYeMTdTM0FN5W@x1n/
+> > > > > 
+> > > > >            The thing is recovering the pte into its original form is the
+> > > > >            safest approach to me, so I think we need justification on why it's
+> > > > >            always safe to set the write bit.
+> > > > > 
+> > > > > I've also got another longer email trying to explain why I think it's the
+> > > > > other way round to be justfied, rather than justifying removal of the write
+> > > > > bit for a read migration entry, here:
+> > > > > 
+> > > > 
+> > > > And I disagree for this patch that is supposed to fix this hunk:
+> > > > 
+> > > > 
+> > > > @@ -243,11 +243,15 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
+> > > >                    entry = pte_to_swp_entry(*pvmw.pte);
+> > > >                    if (is_write_migration_entry(entry))
+> > > >                            pte = maybe_mkwrite(pte, vma);
+> > > > +               else if (pte_swp_uffd_wp(*pvmw.pte))
+> > > > +                       pte = pte_mkuffd_wp(pte);
+> > > >                    if (unlikely(is_zone_device_page(new))) {
+> > > >                            if (is_device_private_page(new)) {
+> > > >                                    entry = make_device_private_entry(new, pte_write(pte));
+> > > >                                    pte = swp_entry_to_pte(entry);
+> > > > +                               if (pte_swp_uffd_wp(*pvmw.pte))
+> > > > +                                       pte = pte_mkuffd_wp(pte);
+> > > >                            }
+> > > >                    }
+> > > 
+> > > David, I'm unclear on what you mean by the above.  Can you please
+> > > expand?
+> > > 
+> > > > 
+> > > > There is really nothing to justify the other way around here.
+> > > > If it's broken fix it independently and properly backport it independenty.
+> > > > 
+> > > > But we don't know about any such broken case.
+> > > > 
+> > > > I have no energy to spare to argue further ;)
+> > > 
+> > > This is a silent data loss bug, which is about as bad as it gets.
+> > > Under obscure conditions, fortunately.  But please let's keep working
+> > > it.  Let's aim for something minimal for backporting purposes.  We can
+> > > revisit any cleanliness issues later.
+> > 
+> > Okay, you activated my energy reserves.
+> > 
+> > > 
+> > > David, do you feel that the proposed fix will at least address the bug
+> > > without adverse side-effects?
+> > 
+> > Usually, when I suspect something is dodgy I unconsciously push back
+> > harder than I usually would.
 
---zbmgx7pa7b3psdf2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please consider using unconsciousness only for self guidance, figuring out
+directions, or making decisions on one's own.
 
-On 30.11.2022 21:22:42, Frank Jungclaus wrote:
-> We don't get any further EVENT from an esd CAN USB device for changes
-> on REC or TEC while those counters converge to 0 (with ecc =3D=3D 0).
-> So when handling the "Back to Error Active"-event force
-> txerr =3D rxerr =3D 0, otherwise the berr-counters might stay on
-> values like 95 forever ...
->=20
-> Also, to make life easier during the ongoing development a
-> netdev_dbg() has been introduced to allow dumping error events send by
-> an esd CAN USB device.
->=20
-> Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+For discussions on the list which can get more than one person involved, we
+do need consciousness and reasonings.
 
-Added to linux-can. It will go into the net/master after v6.1.
+Thanks for the reproducer, that's definitely good reasonings.  Do you have
+other reproducer that can trigger an issue without mprotect()?
 
-Marc
+As I probably mentioned before in other threads mprotect() is IMHO
+conceptually against uffd-wp and I don't yet figured out how to use them
+all right.  For example, we can uffd-wr-protect a pte in uffd-wp range,
+then if we do "mprotect(RW)" it's hard to tell whether the user wants it
+write or not.  E.g., using mprotect(RW) to resolve page faults should be
+wrong because it'll not touch the uffd-wp bit at all.  I confess I never
+thought more on how we should define the interactions between uffd-wp and
+mprotect.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+In short, it'll be great if you have other reproducers for any uffd-wp
+issues other than mprotect().
 
---zbmgx7pa7b3psdf2
-Content-Type: application/pgp-signature; name="signature.asc"
+I said that also because I just got another message from Ives privately
+that there _seems_ to have yet another even harder to reproduce bug here
+(Ives, feel free to fill in any more information if you got it).  So if you
+can figure out what's missing and already write a reproducer, that'll be
+perfect.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKFg0ACgkQrX5LkNig
-010xqQf+KEMYSuEJz87Zms6RXIkVZFKmW8TXTACOZazR4adl2kyi+FwSwp3TmD1a
-hurLZLlXR6v475v0rdPebdtUpEk/glg9FfdHhQuCUL+eHEUEkOC0Ou/Yrqsnkl75
-25k/+qzmXKo4Wcf1g5lRCRku76kybdbkPyhlLzqx9qzuZREkZ1vjXGFYTFbBYnTJ
-XOeCDKqker45QQ2Zh7pQjxI8Alg/CGOGpkgpUhZBohWpS5Vcmric2t7Le10Dnikd
-BB3vion2stmKazY3iK6SeihDp4EkvbT08V05ptnD1EJ77FlAaX+AAXegKSIeDXmG
-91o3GwICCcr6tWeKDBNu88/HE1sLUQ==
-=48WK
------END PGP SIGNATURE-----
+> > 
+> > I just looked into the issue once again and realized that this patch
+> > here (and also my alternative proposal) most likely tackles the
+> > more-generic issue from the wrong direction. I found yet another such
+> > bug (most probably two, just too lazy to write another reproducer).
+> > Migration code does the right thing here -- IMHO -- and the issue should
+> > be fixed differently.
+> > 
+> > I'm testing an alternative patch right now and will share it later
+> > today, along with a reproducer.
+> > 
+> 
+> mprotect() reproducer attached.
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
 
---zbmgx7pa7b3psdf2--
+> #define _GNU_SOURCE
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <string.h>
+> #include <fcntl.h>
+> #include <unistd.h>
+> #include <errno.h>
+> #include <poll.h>
+> #include <pthread.h>
+> #include <sys/mman.h>
+> #include <sys/syscall.h>
+> #include <sys/ioctl.h>
+> #include <linux/memfd.h>
+> #include <linux/userfaultfd.h>
+> 
+> size_t pagesize;
+> int uffd;
+> 
+> static void *uffd_thread_fn(void *arg)
+> {
+> 	static struct uffd_msg msg;
+> 	ssize_t nread;
+> 
+> 	while (1) {
+> 		struct pollfd pollfd;
+> 		int nready;
+> 
+> 		pollfd.fd = uffd;
+> 		pollfd.events = POLLIN;
+> 		nready = poll(&pollfd, 1, -1);
+> 		if (nready == -1) {
+> 			fprintf(stderr, "poll() failed: %d\n", errno);
+> 			exit(1);
+> 		}
+> 
+> 		nread = read(uffd, &msg, sizeof(msg));
+> 		if (nread <= 0)
+> 			continue;
+> 
+> 		if (msg.event != UFFD_EVENT_PAGEFAULT ||
+> 		    !(msg.arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WP)) {
+> 			printf("FAIL: wrong uffd-wp event fired\n");
+> 			exit(1);
+> 		}
+> 
+> 		printf("PASS: uffd-wp fired\n");
+> 		exit(0);
+> 	}
+> }
+> 
+> static int setup_uffd(char *map)
+> {
+> 	struct uffdio_api uffdio_api;
+> 	struct uffdio_register uffdio_register;
+> 	struct uffdio_range uffd_range;
+> 	pthread_t thread;
+> 
+> 	uffd = syscall(__NR_userfaultfd,
+> 		       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> 	if (uffd < 0) {
+> 		fprintf(stderr, "syscall() failed: %d\n", errno);
+> 		return -errno;
+> 	}
+> 
+> 	uffdio_api.api = UFFD_API;
+> 	uffdio_api.features = UFFD_FEATURE_PAGEFAULT_FLAG_WP;
+> 	if (ioctl(uffd, UFFDIO_API, &uffdio_api) < 0) {
+> 		fprintf(stderr, "UFFDIO_API failed: %d\n", errno);
+> 		return -errno;
+> 	}
+> 
+> 	if (!(uffdio_api.features & UFFD_FEATURE_PAGEFAULT_FLAG_WP)) {
+> 		fprintf(stderr, "UFFD_FEATURE_WRITEPROTECT missing\n");
+> 		return -ENOSYS;
+> 	}
+> 
+> 	uffdio_register.range.start = (unsigned long) map;
+> 	uffdio_register.range.len = pagesize;
+> 	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
+> 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) < 0) {
+> 		fprintf(stderr, "UFFDIO_REGISTER failed: %d\n", errno);
+> 		return -errno;
+> 	}
+> 
+> 	pthread_create(&thread, NULL, uffd_thread_fn, NULL);
+> 
+> 	return 0;
+> }
+> 
+> int main(int argc, char **argv)
+> {
+> 	struct uffdio_writeprotect uffd_writeprotect;
+> 	char *map;
+> 	int fd;
+> 
+> 	pagesize = getpagesize();
+> 	fd = memfd_create("test", 0);
+> 	if (fd < 0) {
+> 		fprintf(stderr, "memfd_create() failed\n");
+> 		return -errno;
+> 	}
+> 	if (ftruncate(fd, pagesize)) {
+> 		fprintf(stderr, "ftruncate() failed\n");
+> 		return -errno;
+> 	}
+> 
+> 	/* Start out without write protection. */
+> 	map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+> 	if (map == MAP_FAILED) {
+> 		fprintf(stderr, "mmap() failed\n");
+> 		return -errno;
+> 	}
+> 
+> 	if (setup_uffd(map))
+> 		return 1;
+> 
+> 	/* Populate a page ... */
+> 	memset(map, 0, pagesize);
+> 
+> 	/* ... and write-protect it using uffd-wp. */
+> 	uffd_writeprotect.range.start = (unsigned long) map;
+> 	uffd_writeprotect.range.len = pagesize;
+> 	uffd_writeprotect.mode = UFFDIO_WRITEPROTECT_MODE_WP;
+> 	if (ioctl(uffd, UFFDIO_WRITEPROTECT, &uffd_writeprotect)) {
+> 		fprintf(stderr, "UFFDIO_WRITEPROTECT failed: %d\n", errno);
+> 		return -errno;
+> 	}
+> 
+> 	/* Write-protect the whole mapping temporarily. */
+> 	mprotect(map, pagesize, PROT_READ);
+> 	mprotect(map, pagesize, PROT_READ|PROT_WRITE);
+> 
+> 	/* Test if uffd-wp fires. */
+> 	memset(map, 1, pagesize);
+> 
+> 	printf("FAIL: uffd-wp did not fire\n");
+> 	return 1;
+> }
+
+
+-- 
+Peter Xu
+
