@@ -2,106 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE586410FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFC164114D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbiLBW61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S234469AbiLBXFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 18:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbiLBW6Y (ORCPT
+        with ESMTP id S233742AbiLBXEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:58:24 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB32EC097;
-        Fri,  2 Dec 2022 14:58:23 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id q71so5527724pgq.8;
-        Fri, 02 Dec 2022 14:58:23 -0800 (PST)
+        Fri, 2 Dec 2022 18:04:55 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D687DB0F4
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:04:51 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id q1so5528924pgl.11
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 15:04:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=cy2UtKleeLZ3kCTVt2gRSimuxqebF9iiFVLTLadXDP0=;
-        b=Z1NtWfRJ2Pg7CemAZIzrFBOCWuPIn7RSMFi6RoAzeS6olRw6B1f3Nlpu2Wht+Qh+gQ
-         yWoK0RSdew+BIImtaRtQUmXluVvcoMiVRx+yjNtdg6xfZHm4zDjfoqybZDUqNI4i/9i/
-         JTVgzBWqg20OfeBxeUNwb2ELA+GDZb136x3bmuoR5BCpXvtElO49HCmJQ9GttD6mNZCq
-         wryJ1JfKxqVymMOMOC4wFrhA+V4QuFAqKmJyLRJ3LSeJCsGUAb+wwslbbDQ7KXzlSpdN
-         afrEahOpAt+BMZSglyKz0gpICPWkLsSzjq4WDii6fuCJhcp/VlLo7pTDZgknxYNyg/Op
-         JhoQ==
+        bh=3eWdYeAABAMnoEoSZbvIqfAvjGuNN+NLL8O7DVcc5tw=;
+        b=LPDjcXKRkJF0ChWSvwqdMs4z+WaNIJwO0yY5Q59nGeM3pDMHVwIb6cPYLQgWVJguAB
+         ciAtCM4G0YFdDjeGOSSxDSrCrEHGWnroQqTT/uQy4yjM39FpLTUwFW+H4Sr88a8juay4
+         4lauU6rk4+hFPwNW6zqanjTHmoMbiFkIJBgIM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cy2UtKleeLZ3kCTVt2gRSimuxqebF9iiFVLTLadXDP0=;
-        b=xhXKqWpE0YrsGO6DzbS3UfZbkidrzQWoIPu9ZJvKtDD7Wb8eQ8BhLcaB56EUyDgooo
-         +M6vFpvSAUmg4JzpRw+e84+H/TGU2q3E5/xF2DfN20fYX2rP3eLlGNcSSSss2EeOcJgF
-         /ZADkC4Tesei1pWFDNyhfjUAL53a8MRuB7qMd4ZsTinMKT1mK0WWJFnSIlMucQOYs5BL
-         bVayWnmGEumbx4SgnqLbE7TQuzHfPtYzjasFoqj9xDnqpsObwwcLux9hR2LJ5FLBUU18
-         6Kdy6iYJkRgnwkmqiCknMBCwgjovCnw+aoDoL54txNr9EzvsCp+rBLtQXBl7bpCNMm7B
-         c9TQ==
-X-Gm-Message-State: ANoB5pkryg2Div36FhQ/EA4zLYrYGeUsflfTsF99zh00nFpfvkO738Uo
-        nbrrOwXcdWwjZBfxIPucoEA=
-X-Google-Smtp-Source: AA0mqf6iGptzkPyylz5aXaFP3Ox5LMMp7TxyY6+R8g9aDxlFLJAXywByHeKCQ6VpzuUiFaybEDPLfA==
-X-Received: by 2002:a05:6a00:2ad:b0:575:3987:ea4f with SMTP id q13-20020a056a0002ad00b005753987ea4fmr25893916pfs.80.1670021902930;
-        Fri, 02 Dec 2022 14:58:22 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:cc0e:e156:5def:3b2e])
-        by smtp.gmail.com with ESMTPSA id c29-20020aa7953d000000b0057524960947sm5608419pfp.39.2022.12.02.14.58.21
+        bh=3eWdYeAABAMnoEoSZbvIqfAvjGuNN+NLL8O7DVcc5tw=;
+        b=ORu8OSOl2KEJlgvv951sqyjQULCsnLZLPAETQ0zQRdQb/VobJsLAn/VN9gmHOQocrr
+         kafilLmVk7kPZgqkI7OpwBAl5a9V7+gaWstdM/nA69Szlg+rf/j/qGn0EHLPk7uJH1YD
+         TWOeS7td6uErKnGKrCp5D2oU24v7C0KeYSCx1UU7Z4kPnS5QKaFWnjea2mldmUOa/pz+
+         0ZKwR8u8PYEi112CNZC2Z6p1GYXuhHEUmahldn9HMHv3NHEjD9sAvQ8qYxhOHBZ1ExZP
+         vDw6BlkyLHDEzreMfxtmpm/nrokkPUsMgDsD0rWtnhAP9AfXFxQcpPdLVZJXb48NbdgF
+         W5gw==
+X-Gm-Message-State: ANoB5ploXM4HWD+G7DnaittEDCCw9msRTuv+j3BcNnglNGhE1VPbK/SQ
+        fNOOp+UXwIWjWuwptNcllqA3sA==
+X-Google-Smtp-Source: AA0mqf6wCldb+aTkXQCqBjXUJrvffCgFhxrhyXTrWtI0GxUZ1d4eeeVzDPxJ8FdEPH3kPGZuS+RPDw==
+X-Received: by 2002:a63:e34b:0:b0:477:de0a:3233 with SMTP id o11-20020a63e34b000000b00477de0a3233mr34109179pgj.467.1670022291026;
+        Fri, 02 Dec 2022 15:04:51 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c3-20020a17090a4d0300b00218998eb828sm7058622pjg.45.2022.12.02.15.04.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:58:22 -0800 (PST)
-Date:   Fri, 2 Dec 2022 14:58:19 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 192/606] Input: adp5588-keys - Convert to i2c's
- .probe_new()
-Message-ID: <Y4qDCwlohCFroCUE@google.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-193-uwe@kleine-koenig.org>
- <20221202105227.r3qhia3lgd6ee765@pengutronix.de>
+        Fri, 02 Dec 2022 15:04:50 -0800 (PST)
+Date:   Fri, 2 Dec 2022 15:04:49 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Ryder Lee <Ryder.Lee@mediatek.com>
+Cc:     Bo Jiao =?utf-8?B?KOeEpuazoik=?= <Bo.Jiao@mediatek.com>,
+        MeiChia Chiu =?utf-8?B?KOmCsee+juWYiSk=?= 
+        <MeiChia.Chiu@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        Shayne Chen =?utf-8?B?KOmZs+i7kuS4nik=?= 
+        <Shayne.Chen@mediatek.com>, "nbd@nbd.name" <nbd@nbd.name>,
+        "lorenzo@kernel.org" <lorenzo@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        Sean Wang <Sean.Wang@mediatek.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Sujuan Chen =?utf-8?B?KOmZiOe0oOWonyk=?= 
+        <Sujuan.Chen@mediatek.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+Subject: Re: Coverity: mt7915_mcu_get_chan_mib_info(): Memory - illegal
+ accesses
+Message-ID: <202212021504.A1942911@keescook>
+References: <202212021424.34C0F695E4@keescook>
+ <1a16599dd5e4eed86bae112a232a3599af43a5f2.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221202105227.r3qhia3lgd6ee765@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1a16599dd5e4eed86bae112a232a3599af43a5f2.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 11:52:27AM +0100, Uwe Kleine-König wrote:
-> Hello Dmitry,
-> 
-> On Fri, Nov 18, 2022 at 11:38:46PM +0100, Uwe Kleine-König wrote:
-> > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Fri, Dec 02, 2022 at 10:56:19PM +0000, Ryder Lee wrote:
+> On Fri, 2022-12-02 at 14:24 -0800, coverity-bot wrote:
+> > Hello!
 > > 
-> > The probe function doesn't make use of the i2c_device_id * parameter so it
-> > can be trivially converted.
+> > This is an experimental semi-automated report about issues detected
+> > by
+> > Coverity from a scan of next-20221202 as part of the linux-next scan
+> > project:
 > > 
-> > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> https://urldefense.com/v3/__https://scan.coverity.com/projects/linux-next-weekly-scan__;!!CTRNKA9wMg0ARbw!j7j_C0KpO4VD2yMOodvpeIexTGq4fhy2yq6nokNua9u4LToiUOLk4ou8JFFNrXkrh80d5BK2k44faRQstHE9$ 
+> >  
+> > 
+> > You're getting this email because you were associated with the
+> > identified
+> > lines of code (noted below) that were touched by commits:
+> > 
+> >   Thu Feb 3 13:57:56 2022 +0100
+> >     417a4534d223 ("mt76: mt7915: update mt7915_chan_mib_offs for
+> > mt7916")
+> > 
+> > Coverity reported the following:
+> > 
+> > *** CID 1527801:  Memory - illegal accesses  (OVERRUN)
+> > drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:3005 in
+> > mt7915_mcu_get_chan_mib_info()
+> > 2999     		start = 5;
+> > 3000     		ofs = 0;
+> > 3001     	}
+> > 3002
+> > 3003     	for (i = 0; i < 5; i++) {
+> > 3004     		req[i].band = cpu_to_le32(phy->mt76->band_idx);
+> > vvv     CID 1527801:  Memory - illegal accesses  (OVERRUN)
+> > vvv     Overrunning array "offs" of 9 4-byte elements at element
+> > index 9 (byte offset 39) using index "i + start" (which evaluates to
+> > 9).
+> > 3005     		req[i].offs = cpu_to_le32(offs[i + start]);
+> > 3006
+> > 3007     		if (!is_mt7915(&dev->mt76) && i == 3)
+> > 3008     			break;
+> > 3009     	}
+> > 3010
+> > 
+> > If this is a false positive, please let us know so we can mark it as
+> > such, or teach the Coverity rules to be smarter. If not, please make
+> > sure fixes get into linux-next. :) For patches fixing this, please
+> > include these lines (but double-check the "Fixes" first):
+> > 
 > 
-> I didn't get any feedback from your side about this patch set.
-> 
-> In case the problem is "only" to get the input patches out of this
-> series, I recommend:
-> 
-> 	b4 am -l -s -P191-267 20221118224540.619276-1-uwe@kleine-koenig.org
+> I think this is a false postive as the subsequent check 'if
+> (!is_mt7915(&dev->mt76) && i == 3)' should break array "offs" of 8.
 
-Thanks, I was trying to figure out how to consume the relevant portion.
-Applied now.
+Ah, okay. What if is_mt7915(&dev->mt76) is always true?
+
+-Kees
+
+> 
+> Ryder
+> 
+> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> > Addresses-Coverity-ID: 1527801 ("Memory - illegal accesses")
+> > Fixes: 417a4534d223 ("mt76: mt7915: update mt7915_chan_mib_offs for
+> > mt7916")
+> > 
+> > Thanks for your attention!
+> > 
 
 -- 
-Dmitry
+Kees Cook
