@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EB164053C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61547640529
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbiLBKvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S233071AbiLBKvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbiLBKvb (ORCPT
+        with ESMTP id S232911AbiLBKvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:51:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FE8D0391
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:50:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669978233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=01EVu86F03ZVkaisaIA8aOhxapK6bD5iJUUbcQRNmys=;
-        b=gRBpVn4XFihIn5sMWZ7vHPj7PrTqcPk7f3MON2lpeIUdwZDH/iz1Zp1x2Rx6qagylD8apH
-        jj/4jxKXIM+n0hu4onVD7EoxT0wcrykZ2IOaLze5fo44iNwf4gLwW6ziBSjZpN/MB/+yz7
-        gi/YUlstB6B/dNnINKtWBpK/A9f8Bvk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-221-RHzUfQalMWCr7IQNpp64HQ-1; Fri, 02 Dec 2022 05:50:32 -0500
-X-MC-Unique: RHzUfQalMWCr7IQNpp64HQ-1
-Received: by mail-wr1-f71.google.com with SMTP id d6-20020adfa346000000b0024211c0f988so972651wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:50:32 -0800 (PST)
+        Fri, 2 Dec 2022 05:51:20 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058CAD039E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:50:53 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id b9so4988301ljr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:50:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aUa/VqnmfOXM9528l3SlSKgYGZjywEB8U8BxliATOOw=;
+        b=VFw82rS8XMajD7JLPjZ+OrY2yzep2Gk0Guq0onC/auwfDMFkEMBSJJx0LP3b4ROEyM
+         2x3u8HkPtMufM29Iq9RK8weMrGcVDy/xOxXIpnO5gchMRnIkz9XuuvErWhRoxKUkLKVb
+         iZ8pqsFFDI13GWdDwYvRk/NinjvRI7NcQoS88pEGR1eiHd+jOPwSuxn434tG0RgAtWo5
+         2QpjE8VMyjSbugZmbk4n7RCYbqKN9dr0LBsqTKnbTzspVVZ4nSA3PsLaM5T3X5/PEiel
+         Ymb4nUB3J5/loHSM/+OQieYDX2c6bUPKBYsnYIucB+ujPfnCgTFJRRYKGrqYfkVR7yDk
+         SWwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=01EVu86F03ZVkaisaIA8aOhxapK6bD5iJUUbcQRNmys=;
-        b=Kagl/86lgZyTjuVJiPq13W4Fj/2iNdBQxby9IOt/Nmv5568v118ym8jlrbMt1WMfYa
-         Uxel41PANXqvLiPY+W1x8DiItSPJIZqnIUShV0oeh08dxz+ljXQSKXvxxrETpy9G5WVr
-         w237G8zDeWg1aRIXHbSORAZY8+GLQKLQCBIlrux/6Yjf1nyaf7IHd3YDeHaHC/qfpaOF
-         U03OjhTACydC8L7sZo6reTXJUhocbYmzgftXECfaw46HkA07H5UdocEuZ/sTD481o9YP
-         nuICUYC4veYeHYCcZXhJUV4Bcq9fbjpEiM3DKBw6MLRcFKL/wHcD9QvfYvM4RV6zyz0Y
-         n9Ag==
-X-Gm-Message-State: ANoB5pnw1I3yKUMLqpvsEAqzZ0u88XqDwfNpK7xRP7dFm5ghlEGBN+i2
-        rr56EpC6NQ/7ThX9NA5FkGBDK2BR8FjCl3VQ6Voscj/EiqYwgVvEksmjugAOmzN+5cjMcAe3Nui
-        e4MsAT0ecYQWLb4jb36rBU5reiW5sYBDJbbKCdh3VgALaaLjojlF+3Rpe73qGvt6+MlbxTOK1aH
-        g=
-X-Received: by 2002:adf:e105:0:b0:236:73af:f9ad with SMTP id t5-20020adfe105000000b0023673aff9admr42046594wrz.225.1669978230908;
-        Fri, 02 Dec 2022 02:50:30 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5gKhowvqyk/ROz6Tub/sMJPyTW0HCi4czVL2HWfKAPTpnGRqZYvsKYMG8CpBMMwJo8CzalVg==
-X-Received: by 2002:adf:e105:0:b0:236:73af:f9ad with SMTP id t5-20020adfe105000000b0023673aff9admr42046575wrz.225.1669978230635;
-        Fri, 02 Dec 2022 02:50:30 -0800 (PST)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bg2-20020a05600c3c8200b003a3170a7af9sm9728818wmb.4.2022.12.02.02.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 02:50:29 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sergio Lopez Pascual <slp@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v2 4/4] KVM: Add missing arch for KVM_CREATE_DEVICE and KVM_{SET,GET}_DEVICE_ATTR
-Date:   Fri,  2 Dec 2022 11:50:11 +0100
-Message-Id: <20221202105011.185147-5-javierm@redhat.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221202105011.185147-1-javierm@redhat.com>
-References: <20221202105011.185147-1-javierm@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aUa/VqnmfOXM9528l3SlSKgYGZjywEB8U8BxliATOOw=;
+        b=LeXvR6ogYFGupUkW0AFC5VOKF/uj/WSXQ+bcDMmPMEUwy+rX+tXDhVvnKktjNRX+ub
+         C5kQUU8arKfuzHTC7/fqiiweXOzDBWm1xQbkItGEQTOUVFJ5p4gtujjOunnuGFimSv1i
+         FynlIZ6z/euoO7QPWpU/hZN12RtrsR1ZsCMvy1QKxXj95IaXWvx0I6tNWnw09bRsmest
+         LLoV0Y7X/yCYuZU4Bo7XHYSMQ4UdtM0QGmWag8FU1gqBtx2nrfRxeI29wURgmFZcvTUa
+         h182Srq8A5GGwHOMM2q0kpqiokcwCrPFP5vSFreq+f4mpUYcgb7qBVFuTdVSgXQGzbCp
+         JJNw==
+X-Gm-Message-State: ANoB5pkWa7jEevHRfBnUcSXD5cqd5kc7gJRJQE9DzUN5m083Z12zN5Mm
+        nUlENCZ2PCSgVCwTOtPmfpR3lg==
+X-Google-Smtp-Source: AA0mqf69Td280s1XXMPVErEzICrOPlatkrfekwHdq7BevjGZeeR2/YEfCma2e9rB3r0TZ9CLNv+Ehw==
+X-Received: by 2002:a05:651c:1070:b0:276:ac05:b821 with SMTP id y16-20020a05651c107000b00276ac05b821mr24330666ljm.84.1669978251393;
+        Fri, 02 Dec 2022 02:50:51 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c20-20020a056512075400b004a25bb4494fsm974799lfs.178.2022.12.02.02.50.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 02:50:51 -0800 (PST)
+Message-ID: <1b2ae3ef-a27e-accf-4533-66916fe59773@linaro.org>
+Date:   Fri, 2 Dec 2022 11:50:49 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: =?UTF-8?Q?Re=3a_Re=ef=bc=9aRe=3a_=5bPATCH=5d_arm64/boot/dts_and_arm?=
+ =?UTF-8?Q?=5fscpi=3a_add_to_support_Phytium_FT2004_CPU?=
+Content-Language: en-US
+To:     =?UTF-8?B?546L5rSq6L6J?= <honghui.wang@ucas.com.cn>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+References: <tencent_12CFBB7717187D6F2B9A3246@qq.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <tencent_12CFBB7717187D6F2B9A3246@qq.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ioctls are missing an architecture property that is present in others.
+On 02/12/2022 10:23, 王洪辉 wrote:
+> The approach is passed the test and verification on FT2004 DEV board.
 
-Suggested-by: Sergio Lopez Pascual <slp@redhat.com>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+I don't know what does it mean but for sure you did not run dtbs_check.
+Whether it works on your board is different story.
 
-(no changes since v1)
+Please also do not top-post and respond to comments inline.
 
- Documentation/virt/kvm/api.rst | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index b15ea129f9cf..1db60cd9e1ba 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -3266,6 +3266,7 @@ valid entries found.
- ----------------------
- 
- :Capability: KVM_CAP_DEVICE_CTRL
-+:Architectures: all
- :Type: vm ioctl
- :Parameters: struct kvm_create_device (in/out)
- :Returns: 0 on success, -1 on error
-@@ -3306,6 +3307,7 @@ number.
- :Capability: KVM_CAP_DEVICE_CTRL, KVM_CAP_VM_ATTRIBUTES for vm device,
-              KVM_CAP_VCPU_ATTRIBUTES for vcpu device
-              KVM_CAP_SYS_ATTRIBUTES for system (/dev/kvm) device (no set)
-+:Architectures: x86, arm64, s390
- :Type: device ioctl, vm ioctl, vcpu ioctl
- :Parameters: struct kvm_device_attr
- :Returns: 0 on success, -1 on error
--- 
-2.38.1
+Best regards,
+Krzysztof
 
