@@ -2,75 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1A16411A4
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A776411A6
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234851AbiLBXpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 18:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
+        id S234270AbiLBXsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 18:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbiLBXpm (ORCPT
+        with ESMTP id S229657AbiLBXsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 18:45:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7303DFA479
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:45:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1518FB82303
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 23:45:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8246C433C1;
-        Fri,  2 Dec 2022 23:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670024738;
-        bh=UAErkwDGe/jS1dv9QXF4vNE2WMUm6h+F/WR+dJAFzvM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LSIcRqGLm5YPV2BQXsnRUseNLHh0dzhhts90NazS6m9wvcMNqyZ3xEYMhuQzgNM7k
-         sEvYEEQgQRMI+8xpA/bcR1B3wvS9c/EhS65Oh2BacglgwXCHbdzCR1KxEiSqRXdxAE
-         THKtJlaMFzR3bnpjxYyR1Re1uKEemjAc1RrAYC39UXczqO1Lo8QajwaFp6cPZlqVVH
-         2jwpR5LGXlunYEiboYiEIs+Ym70RKiF/ZSbjE3U2svok3tGAtlOY6NhYwBdIVM8NgA
-         2rcg7boc1imHtyj2k/1FRketVYWvDu50e5pn9Um2gkPuHMX02Z7ZuO23wvL3fH92vO
-         I5NRH5L7pfj6A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6BA8C395EC;
-        Fri,  2 Dec 2022 23:45:38 +0000 (UTC)
-Subject: Re: [GIT PULL] sound fixes for 6.1-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <87mt86kxa7.wl-tiwai@suse.de>
-References: <87mt86kxa7.wl-tiwai@suse.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <87mt86kxa7.wl-tiwai@suse.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.1-rc8
-X-PR-Tracked-Commit-Id: b47068b4aa53a57552398e3f60d0ed1918700c2b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a1e9185d20b56af04022d2e656802254f4ea47eb
-Message-Id: <167002473874.10636.13334900101983934948.pr-tracker-bot@kernel.org>
-Date:   Fri, 02 Dec 2022 23:45:38 +0000
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 18:48:36 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C712DFD0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:48:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670024916; x=1701560916;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=og9WnZkvyARYlApB0bi0VbNSMYykjGgD9xMSZ3JjhDc=;
+  b=FTROh0XAupQl9QQud2yJvvxGCCKjahViGfsrgD6mk8Z8ZDrsUMALO5TH
+   bDJvdngDEPYrx8AFd+w8k9bG45yyUROB+ZaKkPFMQtWpWdy2CfMuAzt4T
+   gxzwEu5vHZEieToK5ewm89d7c7eLJK3H2WGWbZ3+nmAk9VFgWQMCb4Q95
+   jrE6oQkzLVP3b+KdDKLCk/K/fxijWrzcSKiCzg2n3ps3/2dWqzDCxMC3j
+   9Je0pPMnsDoLKeU7JaM6nib+LFj/DB2BA/IK6bih7rgZWsxJ4xeqkhyWV
+   od2GwgExlTbRE95gS4fOUzdHdOGskKAsU0/CoxdSP12oJue/eoio6tXtd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="295762119"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="295762119"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 15:48:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="819601642"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="819601642"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2022 15:48:33 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p1Flg-000E7n-13;
+        Fri, 02 Dec 2022 23:48:32 +0000
+Date:   Sat, 03 Dec 2022 07:47:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:core/debugobjects] BUILD SUCCESS
+ c4db2d3b70e586c7c856c891f4f7052e8d789a06
+Message-ID: <638a8e9e.1AHQ0ce6vGMzxy+x%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 02 Dec 2022 09:46:56 +0100:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/debugobjects
+branch HEAD: c4db2d3b70e586c7c856c891f4f7052e8d789a06  debugobjects: Print object pointer in debug_print_object()
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.1-rc8
+elapsed time: 723m
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a1e9185d20b56af04022d2e656802254f4ea47eb
+configs tested: 67
+configs skipped: 2
 
-Thank you!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+sh                               allmodconfig
+x86_64                           rhel-8.3-syz
+arc                  randconfig-r043-20221201
+x86_64                         rhel-8.3-kunit
+s390                 randconfig-r044-20221201
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+mips                             allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+arc                                 defconfig
+x86_64                               rhel-8.3
+alpha                               defconfig
+ia64                             allmodconfig
+powerpc                          allmodconfig
+riscv                randconfig-r042-20221201
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+s390                             allmodconfig
+x86_64                        randconfig-a015
+s390                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+s390                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+i386                                defconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                             allyesconfig
+x86_64                            allnoconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arc                        vdk_hs38_defconfig
+arm                           stm32_defconfig
+powerpc                 mpc834x_itx_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r045-20221201
+hexagon              randconfig-r041-20221201
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-k001
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp
