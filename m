@@ -2,138 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A09640BF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5A1640BFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbiLBRSv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Dec 2022 12:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
+        id S234241AbiLBRUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbiLBRSX (ORCPT
+        with ESMTP id S234187AbiLBRUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:18:23 -0500
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671565BD74;
-        Fri,  2 Dec 2022 09:18:21 -0800 (PST)
-Received: by mail-lj1-f176.google.com with SMTP id n1so6125694ljg.3;
-        Fri, 02 Dec 2022 09:18:21 -0800 (PST)
+        Fri, 2 Dec 2022 12:20:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6089D2C3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670001544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5GkID1iP9MpgW84ysmyy3u1ZrLSvXrRGMbe9Yjus3rw=;
+        b=F8N8I3H4a6MO2eN2xCehMTF1ljbKYLN7o5Ph8GjeZN9YUVl2UU0GLE7371YXalW0NLW91f
+        rNmkc43NQfu/OXsesEx0eKSksr1xOclK5u5wZQimvKOvOUoh329q+vkcD950D4GQAKxI7s
+        wLeRC6xcXAr50lD7rLj1GWT+RXipeW8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-342-ewYLWIxIMOSe5xpQx1SThw-1; Fri, 02 Dec 2022 12:19:01 -0500
+X-MC-Unique: ewYLWIxIMOSe5xpQx1SThw-1
+Received: by mail-wm1-f72.google.com with SMTP id z15-20020a1c4c0f000000b003cf6f80007cso2174112wmf.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:19:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9GdwYktE3SJ00+EzqM3Nkk4pKYtF1FV5Z9anlWL/Lco=;
-        b=iUeI5HpurfpaM6B9dh/gPa5uKtSvwyHHOoe/0o68Sl7L+IEvXV3hWoyCRUA0KJ/JBb
-         I/w5FH4gUd/eOAfeBXoxCQI1sQWBsCJTcP/Htdg7PfZm5mMY10rg+B5aoag0qav6x8lB
-         ZuaP2PO9QBCbsAgdSyI5h91EApR+A9q/CN7m/L6qTAwg/n1mRwkuvR4VJ5AHgMbXw3oL
-         CGa8FbjDsjPklTFac4ysAtT+4mzyvH6D/YcwoZhqU8AJvyQTYBJqqm2oZwGObp8DGYoC
-         mQMD0O/I/nsBOtSzulkO7lJfGYy/TIex5Yna/+e1e7j7Pk34RyKOFSUy0QhUSvxNpC64
-         zUbA==
-X-Gm-Message-State: ANoB5pmULHehCTCJ4I4Q7w9H47Oov5FeYHEFrh+qJNVWwFpXbEfDAH96
-        jCm8DpK8ps2LAx/HegUdihHgKoohv8JgxMT9bAE=
-X-Google-Smtp-Source: AA0mqf6Ixf5KE4K3HzvCHs9+2md4zU+Ibf4J/03MJ7mAN0kNY9SU3CPWK3WOuRJjsR8P5ZNeHZcPkA==
-X-Received: by 2002:a05:651c:c97:b0:277:13ef:53ab with SMTP id bz23-20020a05651c0c9700b0027713ef53abmr24476126ljb.328.1670001498587;
-        Fri, 02 Dec 2022 09:18:18 -0800 (PST)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id g3-20020ac25383000000b00492dba3c85asm1074415lfh.220.2022.12.02.09.18.16
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5GkID1iP9MpgW84ysmyy3u1ZrLSvXrRGMbe9Yjus3rw=;
+        b=JR7Hxhu3Lr1e4ldSa4/c8kS45tj5EN0rjiRv0YcOqXIUWlx1Tl/K+nWhV1o+v9RddX
+         TOhbXcgw5CW/Sv9UuRMJqhEmxq4LrMKax1S4IGbN/PLeTuSWeSgoz5rMjaowpfvaMD8U
+         Ip9+vZgFO3nJVp7qmJpoZ/+aq7R1XsIps9PnzTzmbpY9toCyDtIrXkNMDTQEjDHRIs95
+         clJm1t7UZYjfZU5xVY5mU2sP0dhaxcuSEdVVWW/62N+6U49NGMw8RAdvg6M8hB8uh6tz
+         HUEQkrpMjXM3APb+XSLw3b3L42uMEfqYYOYyyBCwYs92ewMEyG3uhL5FVxZyS531vZ4q
+         0TMg==
+X-Gm-Message-State: ANoB5pk7Qxqp3+givIffYesU1ejP5CV3rs7ajOiYg3qOlDAyCxeznWMd
+        M5peCJyDy33sA81RqgVlH2MAv+NPldfaH6rUqVM1FxdNcBzR9u3YPnafaEAJmX2XUyYsSUxa3sg
+        gnzv9BsvLcSs1Sq+alnoYQm0U
+X-Received: by 2002:a05:6000:983:b0:236:aacc:ea07 with SMTP id by3-20020a056000098300b00236aaccea07mr45987390wrb.36.1670001539882;
+        Fri, 02 Dec 2022 09:18:59 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7d0QCwkPBB+T+LF+MwVIetNIwUyQxWiCZhfVtlyYOjSUZtlBtkvsrxrWul3G0QGWU2WGjstA==
+X-Received: by 2002:a05:6000:983:b0:236:aacc:ea07 with SMTP id by3-20020a056000098300b00236aaccea07mr45987372wrb.36.1670001539508;
+        Fri, 02 Dec 2022 09:18:59 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:7a00:852e:72cd:ed76:d72f? (p200300cbc7037a00852e72cded76d72f.dip0.t-ipconnect.de. [2003:cb:c703:7a00:852e:72cd:ed76:d72f])
+        by smtp.gmail.com with ESMTPSA id p18-20020adfce12000000b00242271fd2besm7431353wrn.89.2022.12.02.09.18.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 09:18:17 -0800 (PST)
-Received: by mail-lf1-f54.google.com with SMTP id g7so8381811lfv.5;
-        Fri, 02 Dec 2022 09:18:16 -0800 (PST)
-X-Received: by 2002:a19:f010:0:b0:4a2:2e81:9be5 with SMTP id
- p16-20020a19f010000000b004a22e819be5mr25394338lfc.486.1670001495941; Fri, 02
- Dec 2022 09:18:15 -0800 (PST)
+        Fri, 02 Dec 2022 09:18:59 -0800 (PST)
+Message-ID: <efc5f0c3-bfb7-e36e-fa5b-60f94b49b7d4@redhat.com>
+Date:   Fri, 2 Dec 2022 18:18:58 +0100
 MIME-Version: 1.0
-References: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
- <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
- <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
- <9a03c244-adff-afaf-7385-d8e89cd3f338@leemhuis.info> <02F8DDF1-EC0D-4EBD-88F5-7E000841C337@holtmann.org>
-In-Reply-To: <02F8DDF1-EC0D-4EBD-88F5-7E000841C337@holtmann.org>
-From:   Dave Chiluk <chiluk@ubuntu.com>
-Date:   Fri, 2 Dec 2022 11:18:03 -0600
-X-Gmail-Original-Message-ID: <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com>
-Message-ID: <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com>
-Subject: Re: [regression] Bug 216753 - 6e 6 ghz bands are disabled since 5.16
- on intel ax211
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        "Coelho, Luciano" <luciano.coelho@intel.com>,
-        "Greenman, Gregory" <gregory.greenman@intel.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
+References: <20221114000447.1681003-1-peterx@redhat.com>
+ <20221114000447.1681003-2-peterx@redhat.com>
+ <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
+ <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
+ <Y4jIHureiOd8XjDX@x1n> <a215fe2f-ef9b-1a15-f1c2-2f0bb5d5f490@redhat.com>
+ <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+In-Reply-To: <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Running
-$ iw reg set US
-or
-$ iw reg set DE
-do not result in the bands becoming enabled.  I should have included
-that in the initial bug report.   Additionally shouldn't the country
-code should be getting gathered through 802.11d from the broadcast APs
-within region?
+On 01.12.22 23:30, Andrew Morton wrote:
+> On Thu, 1 Dec 2022 16:42:52 +0100 David Hildenbrand <david@redhat.com> wrote:
+> 
+>> On 01.12.22 16:28, Peter Xu wrote:
+>>>
+>>> I didn't reply here because I have already replied with the question in
+>>> previous version with a few attempts.  Quotting myself:
+>>>
+>>> https://lore.kernel.org/all/Y3KgYeMTdTM0FN5W@x1n/
+>>>
+>>>           The thing is recovering the pte into its original form is the
+>>>           safest approach to me, so I think we need justification on why it's
+>>>           always safe to set the write bit.
+>>>
+>>> I've also got another longer email trying to explain why I think it's the
+>>> other way round to be justfied, rather than justifying removal of the write
+>>> bit for a read migration entry, here:
+>>>
+>>
+>> And I disagree for this patch that is supposed to fix this hunk:
+>>
+>>
+>> @@ -243,11 +243,15 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
+>>                   entry = pte_to_swp_entry(*pvmw.pte);
+>>                   if (is_write_migration_entry(entry))
+>>                           pte = maybe_mkwrite(pte, vma);
+>> +               else if (pte_swp_uffd_wp(*pvmw.pte))
+>> +                       pte = pte_mkuffd_wp(pte);
+>>    
+>>                   if (unlikely(is_zone_device_page(new))) {
+>>                           if (is_device_private_page(new)) {
+>>                                   entry = make_device_private_entry(new, pte_write(pte));
+>>                                   pte = swp_entry_to_pte(entry);
+>> +                               if (pte_swp_uffd_wp(*pvmw.pte))
+>> +                                       pte = pte_mkuffd_wp(pte);
+>>                           }
+>>                   }
+> 
+> David, I'm unclear on what you mean by the above.  Can you please
+> expand?
+> 
+>>
+>> There is really nothing to justify the other way around here.
+>> If it's broken fix it independently and properly backport it independenty.
+>>
+>> But we don't know about any such broken case.
+>>
+>> I have no energy to spare to argue further ;)
+> 
+> This is a silent data loss bug, which is about as bad as it gets.
+> Under obscure conditions, fortunately.  But please let's keep working
+> it.  Let's aim for something minimal for backporting purposes.  We can
+> revisit any cleanliness issues later.
+> 
+> David, do you feel that the proposed fix will at least address the bug
+> without adverse side-effects?
 
-Also crda is now disabled in both debian and Ubuntu.
-https://bugs.debian.org/1003903
-https://bugs.launchpad.net/ubuntu/jammy/+source/crda/+bug/1958918
+Just to answer that question clearly: it will fix this bug, but it's 
+likely that other similar bugs remain (suspecting NUMA hinting).
 
-I'm specifically on 22.04, and the 6ghz band works on the 5.15 ubuntu
-kernel and the 5.15.79 linux-stable kernel.
-The 6ghz band becomes disabled as soon as I upgrade to the 5.16+
-linux-stable kernels. So from a user perspective this really is a case
-of a kernel upgrade breaking user-space.  This is what led me down
-this rabbit hole here.
+Adverse side effect will be that some PTEs that could we writable won't 
+be writable. I assume it's not too bad in practice for this particular case.
 
-If there's something that needs to be done differently from a
-userspace perspective I'm all ears, but this seems as if it's a hard
-disable by the above mentioned commit.
+I proposed an alternative fix and identified other possible broken 
+cases. Again, I don't NAK this patch as is, it just logically doesn't 
+make sense to me to handle this case differently to the other 
+vma->vm_page_prot users. (more details in the other thread)
 
+-- 
 Thanks,
 
-On Fri, Dec 2, 2022 at 10:46 AM Marcel Holtmann <marcel@holtmann.org> wrote:
->
-> Hi Thorsten,
->
-> >> The other possibility is that this is actually a bios bug, as the DSM
-> >> is being read out of ACPI.  In which case that would be Dell's fault.
-> >
-> > Yes and no, but no:
-> >
-> > A kernel change exposed this problem, hence it doesn't matter if the
-> > BIOS is faulty: it's makes it a kernel regression and those are not
-> > allowed. For more on this see
-> > https://docs.kernel.org/admin-guide/reporting-issues.html
-> >
-> > That at least would be the normal approach. But the thing is: the legal
-> > implications when it comes to things like wifi make this somewhat
-> > trickier. :-/
->
-> so you need to set your country code first before any of the regulatory
-> enabled channels on 6Ghz get used. Otherwise you are stuck in the world
-> domain that doesn’t allow 6Ghz at all.
->
-> Two choices, either you run iwd and just set Country=DE where this than
-> would be persistent; see iwd.config(5). Or you do this via iw reg set DE
-> manually. wpa_supplicant has a set_country wrapper, but I don’t see it
-> being used anywhere, so I assume you have to do this manually when using
-> wpa_supplicant.
->
-> And of course tools like crda etc. need to be fully functional to load
-> the appropriate regulatory information. Since any 6Ghz operation is
-> blocked by default.
->
-> Regards
->
-> Marcel
->
+David / dhildenb
+
