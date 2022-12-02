@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CCC6404EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3D06404ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbiLBKmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
+        id S232988AbiLBKnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232477AbiLBKmt (ORCPT
+        with ESMTP id S232608AbiLBKm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:42:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF99CB232
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:41:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669977704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7inndMjOBrLRGUmBgQUowET7Apw9wH9HxqWv64ItOyE=;
-        b=X3fETG/T4IsnCj05rLo807aF9uEwg03tpOIk2ruOwmbwDSROwiK48uFGkykzo/VIH2ym5F
-        8kS1OFkgs+1uBvBSscNFTMKd7ZGXlzaFQv5q6plkQdNezZymMJebN4VOkRnvlu0ON4EOHY
-        9KyCKWpStaG1VPeFtn3aqoGQ8OjXaK0=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-647-zlyIM3gsP22MX_sdzXJLmA-1; Fri, 02 Dec 2022 05:41:42 -0500
-X-MC-Unique: zlyIM3gsP22MX_sdzXJLmA-1
-Received: by mail-ej1-f72.google.com with SMTP id qb2-20020a1709077e8200b007bf01e43797so3122999ejc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:41:41 -0800 (PST)
+        Fri, 2 Dec 2022 05:42:59 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC48122B04
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:42:56 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13bd19c3b68so5157250fac.7
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:42:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N2WWZGY2UJ6Mw5pzN1Rzf/WQxo3MIjGeO42YFmnTP+o=;
+        b=jMsvyUVpYL2bPwRFxgiDVHjZTql3DcreownCQb70DjED+4zoKCtik0aqLBvWs02Fi5
+         Rv9ZfsWPgRXTahK+cD+eAx9Eo4lsE8EW+BdG93RAVXgloC4mtEdvYT0ExA2WdvPPa86D
+         ulXRBJCISn/uUoKJpErahP6EzFOZ6dBl/3dW85PtWAx02cn/oUOWpM61w8CQ8LM6IdkV
+         m+SZJdLm43J/7MNWK7B8ADbfXFYUHnlvzrhO67A+OhM1y1skRmH2JL1LcKHHTIX2FIf5
+         zRG5pFZZleJclV6n2XwFk8JlEeHbh+JlQQPwqmm80yA+VO6CWRk62YHU8wGgiZqkwtGR
+         QDzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7inndMjOBrLRGUmBgQUowET7Apw9wH9HxqWv64ItOyE=;
-        b=Rce+43XIKEI6/qAlV+VIRnMNqhNxENQ+crybrFkFHGLCSXJ7yvNnXfRc+di8KwWIwN
-         58pj46ghCgGSqNIKB3xcw9GTkjQt2nSSn0qX/xeDNvI+nM8/5a5Phg5qcuyxhKEOYxF/
-         o0KJ1VZE6OTLx37O03wuRuPU3j3wU3euAQDtfA4YUlgAlmdNeH4V8ivpHfXMJ4W7cXDB
-         CFBTyLy32DVJwxcBqMYfaAAy/+gZM+pXP7on0WJDdtNA3xCLcIaXk4WRViu/LTfgYMEq
-         1/9r9F6YVIlX/h3QQCPPOBRcJGrgaDJW9CGXRsCZ3/7pc8Em2AzSL5036rpKip6aUfvd
-         4pCw==
-X-Gm-Message-State: ANoB5pmoZucvUmXETHIzRLFKw+jOtzKIVj9f0AqrlEQ+LXAFGywDvdGT
-        4lFPjz0pkWbadA+WpEeceSUTqmCbxg2hOcVg3Wz7fkkwdlnzKW/t4B1IUKJXvi19APkj+INh0H6
-        +Y54Dk5j8lsOWTwNyba4OkaNg
-X-Received: by 2002:a17:906:694a:b0:7c0:9d50:5144 with SMTP id c10-20020a170906694a00b007c09d505144mr10434410ejs.590.1669977700866;
-        Fri, 02 Dec 2022 02:41:40 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7+S/Q8qJrE4rDCkdM755RBM1CMlr9K196vXtcWgIi8Rc+wHqfO8U6ZbGL43GC4vFp4lDZgGQ==
-X-Received: by 2002:a17:906:694a:b0:7c0:9d50:5144 with SMTP id c10-20020a170906694a00b007c09d505144mr10434387ejs.590.1669977700505;
-        Fri, 02 Dec 2022 02:41:40 -0800 (PST)
-Received: from [169.254.186.115] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1709063d2900b0073d71792c8dsm2840532ejf.180.2022.12.02.02.41.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 02 Dec 2022 02:41:39 -0800 (PST)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     wangchuanlei <wangchuanlei@inspur.com>
-Cc:     alexandr.lobakin@intel.com, pabeni@redhat.com, pshelar@ovn.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        wangpeihui@inspur.com, netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [PATCH v6 net-next] net: openvswitch: Add support to
- count upcall packets
-Date:   Fri, 02 Dec 2022 11:41:38 +0100
-X-Mailer: MailMate (1.14r5929)
-Message-ID: <49192F43-A12C-4392-AC4E-CF70A749BAB7@redhat.com>
-In-Reply-To: <20221130091559.1120493-1-wangchuanlei@inspur.com>
-References: <20221130091559.1120493-1-wangchuanlei@inspur.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N2WWZGY2UJ6Mw5pzN1Rzf/WQxo3MIjGeO42YFmnTP+o=;
+        b=sTwz4i4ah6pwvQFWLxV+J8JMRWjG8crUNWZSXmcM46NgifJ1Zh+GISFLvTERMJYGm4
+         rdbxC4s66Cr5fWuuzPiqJJ3ceT0rICcKKWKTSKzFBAFX7Ch2Xf2Mf0ryUMni3P09W22l
+         Ays+IIRhqLrVvCtQQNBM3A+nM7Hm1RksWlaEUYRNTDwOy2nBfjjL6x8gEQ6ACtWKndKE
+         yvO/pCl07Qxl9+lXWLJow1E4d8+Jp/A9TZjBGOTOxp/1t77JDcgKUafOGrc0XiGhVKHM
+         jHnYe7DZKl5MSNsgVrqlgzu5ZODrMlqWnyazlrkDIahdVE0u92I5rTN3Y73FCy+cRA5G
+         q+UA==
+X-Gm-Message-State: ANoB5pmvOKPDb6zUNKHea5CJY4zaa9j0NZSL1h0NuPS2oda7T1JKB5WR
+        Nap+3RnBFyOYq83kVM1aHQVh1JaL+Rzvgq5cYECGtA==
+X-Google-Smtp-Source: AA0mqf76xg7PzPODHSLv4uGxeInCDy5Qp4osAqpm4SubRvSowlLlA1KZ+OcDeDApEFEC1PFjmL1sqTJHHWRQ+L+KSjU=
+X-Received: by 2002:a05:6871:404e:b0:144:4546:61e7 with SMTP id
+ ky14-20020a056871404e00b00144454661e7mr453286oab.282.1669977775906; Fri, 02
+ Dec 2022 02:42:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <000000000000ceb65c05ee4beb9d@google.com> <f853d5a8-1e31-419a-a6a5-a1f9c7dbd897n@googlegroups.com>
+In-Reply-To: <f853d5a8-1e31-419a-a6a5-a1f9c7dbd897n@googlegroups.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 2 Dec 2022 11:42:44 +0100
+Message-ID: <CACT4Y+Zw8f982C-qgvjkUuEtuw2UZApT6J18NfF8oE6S+EgvJA@mail.gmail.com>
+Subject: Re: [syzbot] kernel BUG in __clear_extent_bit
+To:     Pawel Suchanecki <subdcc@gmail.com>
+Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        linux-btrfs@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,335 +69,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 1 Dec 2022 at 23:48, Pawel Suchanecki <subdcc@gmail.com> wrote:
+>
+>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit: c3eb11fbb826 Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
+>> git tree: upstream
+>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1675aebb880000
+>> kernel config: https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=5338ef8374ed180ba281
+>> compiler: Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+>> syz repro: https://syzkaller.appspot.com/x/repro.syz?x=103324e3880000
+>> C reproducer: https://syzkaller.appspot.com/x/repro.c?x=12e7e1c9880000
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/d81ac029767f/disk-c3eb11fb.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/b68346b5b73c/vmlinux-c3eb11fb.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/410a61724587/bzImage-c3eb11fb.xz
+>> mounted in repro: https://storage.googleapis.com/syzbot-assets/c27a26bacb83/mount_0.gz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+5338ef...@syzkaller.appspotmail.com
+>>
+>> ------------[ cut here ]------------
+>> kernel BUG at fs/btrfs/extent-io-tree.c:639!
+>> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+>> CPU: 0 PID: 3632 Comm: syz-executor118 Not tainted 6.1.0-rc6-syzkaller-00015-gc3eb11fbb826 #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>> RIP: 0010:__clear_extent_bit+0xbbb/0xc60 fs/btrfs/extent-io-tree.c:639
+>> Code: 1c 2f fe e9 cf fe ff ff 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c 0e ff ff ff 48 89 ef e8 5f 1c 2f fe e9 01 ff ff ff e8 05 04 db fd <0f> 0b e8 fe 03 db fd 48 8b 44 24 08 48 83 c0 08 48 89 c5 48 c1 e8
+>> RSP: 0018:ffffc90003c7f7a8 EFLAGS: 00010293
+>> RAX: ffffffff83af946b RBX: 0000000000000000 RCX: ffff88807de80000
+>> RDX: 0000000000000000 RSI: ffffffff8aedc420 RDI: ffffffff8b4b3ae0
+>> RBP: 0000000000002fff R08: 00000000ffffffff R09: fffffbfff1a42e97
+>> R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: 000000000004ffff
+>> R13: ffff88807eb05b40 R14: 1ffff1100fd60b68 R15: 0000000000002000
+>> FS: 0000555557044300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+>> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 0000000020002000 CR3: 000000007e9f2000 CR4: 00000000003506f0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>> <TASK>
+>> try_release_extent_state fs/btrfs/extent_io.c:3391 [inline]
+>> try_release_extent_mapping+0x4e5/0x560 fs/btrfs/extent_io.c:3487
+>> __btrfs_release_folio fs/btrfs/inode.c:8175 [inline]
+>> btrfs_release_folio+0x126/0x340 fs/btrfs/inode.c:8188
+>> mapping_evict_folio+0x24d/0x570 mm/truncate.c:279
+>> invalidate_mapping_pagevec+0x37d/0x7c0 mm/truncate.c:528
+>> btrfs_direct_write fs/btrfs/file.c:1917 [inline]
+>> btrfs_do_write_iter+0x112e/0x1260 fs/btrfs/file.c:1980
+>> call_write_iter include/linux/fs.h:2191 [inline]
+>> new_sync_write fs/read_write.c:491 [inline]
+>> vfs_write+0x7dc/0xc50 fs/read_write.c:584
+>> ksys_write+0x177/0x2a0 fs/read_write.c:637
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> RIP: 0033:0x7fcc98e18a19
+>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007fffcb04cad8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+>> RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fcc98e18a19
+>> RDX: 0000000000000004 RSI: 0000000020000000 RDI: 0000000000000004
+>> RBP: 00007fffcb04cb00 R08: 0000000000000002 R09: 00007fffcb04cb10
+>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000005
+>> R13: 00007fffcb04cb40 R14: 00007fffcb04cb20 R15: 0000000000000000
+>> </TASK>
+>> Modules linked in:
+>> ---[ end trace 0000000000000000 ]---
+>> RIP: 0010:__clear_extent_bit+0xbbb/0xc60 fs/btrfs/extent-io-tree.c:639
+>> Code: 1c 2f fe e9 cf fe ff ff 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c 0e ff ff ff 48 89 ef e8 5f 1c 2f fe e9 01 ff ff ff e8 05 04 db fd <0f> 0b e8 fe 03 db fd 48 8b 44 24 08 48 83 c0 08 48 89 c5 48 c1 e8
+>> RSP: 0018:ffffc90003c7f7a8 EFLAGS: 00010293
+>> RAX: ffffffff83af946b RBX: 0000000000000000 RCX: ffff88807de80000
+>> RDX: 0000000000000000 RSI: ffffffff8aedc420 RDI: ffffffff8b4b3ae0
+>> RBP: 0000000000002fff R08: 00000000ffffffff R09: fffffbfff1a42e97
+>> R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: 000000000004ffff
+>> R13: ffff88807eb05b40 R14: 1ffff1100fd60b68 R15: 0000000000002000
+>> FS: 0000555557044300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+>> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 0000000020002000 CR3: 000000007e9f2000 CR4: 00000000003506f0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>
+>>
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzk...@googlegroups.com.
+>>
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>> syzbot can test patches for this issue, for details see:
+>> https://goo.gl/tpsmEJ#testing-patches
+>
+>
+> Hi,
+>
+> This bug is to be fixed by recently published patch by Josef Bacik, named: [PATCH 3/3] btrfs: do not panic if we can't allocate a prealloc extent state [1].
+>
+> [1] https://lore.kernel.org/all/97fb0828deb341efe99ef2bc35cda0eccc5963de.1665755095.git.josef@toxicpanda.com
+>
+> Thanks,
+> Pawel
 
+Let's tell syzbot about the fix so that it reports similar bugs in future:
 
-On 30 Nov 2022, at 10:15, wangchuanlei wrote:
-
-> Add support to count upall packets, when kmod of openvswitch
-> upcall to userspace , here count the number of packets for
-> upcall succeed and failed, which is a better way to see how
-> many packets upcalled to userspace(ovs-vswitchd) on every
-> interfaces.
->
-> Here modify format of code used by comments of v6.
->
-> Changes since v4 & v5:
-> - optimize the function used by comments
->
-> Changes since v3:
-> - use nested NLA_NESTED attribute in netlink message
->
-> Changes since v2:
-> - add count of upcall failed packets
->
-> Changes since v1:
-> - add count of upcall succeed packets
->
-> Signed-off-by: wangchuanlei <wangchuanlei@inspur.com>
-> ---
->  include/uapi/linux/openvswitch.h | 14 +++++++++
->  net/openvswitch/datapath.c       | 50 ++++++++++++++++++++++++++++++++=
-
->  net/openvswitch/vport.c          | 44 ++++++++++++++++++++++++++++
->  net/openvswitch/vport.h          | 24 +++++++++++++++
->  4 files changed, 132 insertions(+)
->
-> diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/open=
-vswitch.h
-> index 94066f87e9ee..8422ebf6885b 100644
-> --- a/include/uapi/linux/openvswitch.h
-> +++ b/include/uapi/linux/openvswitch.h
-> @@ -277,11 +277,25 @@ enum ovs_vport_attr {
->  	OVS_VPORT_ATTR_PAD,
->  	OVS_VPORT_ATTR_IFINDEX,
->  	OVS_VPORT_ATTR_NETNSID,
-> +	OVS_VPORT_ATTR_UPCALL_STATS,
->  	__OVS_VPORT_ATTR_MAX
->  };
->
->  #define OVS_VPORT_ATTR_MAX (__OVS_VPORT_ATTR_MAX - 1)
->
-> +/**
-> + * enum ovs_vport_upcall_attr - attributes for %OVS_VPORT_UPCALL* comm=
-ands
-> + * @OVS_VPORT_UPCALL_SUCCESS: 64-bit upcall success packets.
-> + * @OVS_VPORT_UPCALL_FAIL: 64-bit upcall fail packets.
-> + */
-> +enum ovs_vport_upcall_attr {
-> +	OVS_VPORT_UPCALL_SUCCESS,
-> +	OVS_VPORT_UPCALL_FAIL,
-> +	__OVS_VPORT_UPCALL_MAX
-> +};
-> +
-> +#define OVS_VPORT_UPCALL_MAX (__OVS_VPORT_UPCALL_MAX - 1)
-> +
->  enum {
->  	OVS_VXLAN_EXT_UNSPEC,
->  	OVS_VXLAN_EXT_GBP,	/* Flag or __u32 */
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index c8a9075ddd0a..f9279aee2adb 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
-> @@ -209,6 +209,26 @@ static struct vport *new_vport(const struct vport_=
-parms *parms)
->  	return vport;
->  }
->
-> +static void ovs_vport_upcalls(struct sk_buff *skb,
-
-This function name does not really represent what this function does.
-It=E2=80=99s only taking care of statistics, so it should probably be cal=
-led something like:
-
-  ovs_vport_update_upcall_stats() or ovs_vport_inc_upcall_stats()
-
-> +			      const struct dp_upcall_info *upcall_info,
-> +			      bool upcall_result)
-> +{
-> +	struct vport *p =3D OVS_CB(skb)->input_vport;
-> +	struct vport_upcall_stats_percpu *vport_stats;
-
-If you just call vport_stats, stats, the reverse Christmas tree order is =
-achieved.
-
-> +
-> +	if (upcall_info->cmd !=3D OVS_PACKET_CMD_MISS &&
-> +	    upcall_info->cmd !=3D OVS_PACKET_CMD_ACTION)
-> +		return;
-> +
-> +	vport_stats =3D this_cpu_ptr(p->upcall_stats);
-> +	u64_stats_update_begin(&vport_stats->syncp);
-> +	if (upcall_result)
-> +		u64_stats_inc(&vport_stats->n_success);
-> +	else
-> +		u64_stats_inc(&vport_stats->n_fail);
-> +	u64_stats_update_end(&vport_stats->syncp);
-> +}
-> +
->  void ovs_dp_detach_port(struct vport *p)
->  {
->  	ASSERT_OVSL();
-> @@ -216,6 +236,9 @@ void ovs_dp_detach_port(struct vport *p)
->  	/* First drop references to device. */
->  	hlist_del_rcu(&p->dp_hash_node);
->
-> +	/* Free percpu memory */
-> +	free_percpu(p->upcall_stats);
-> +
->  	/* Then destroy it. */
->  	ovs_vport_del(p);
->  }
-> @@ -305,6 +328,8 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_bu=
-ff *skb,
->  		err =3D queue_userspace_packet(dp, skb, key, upcall_info, cutlen);
->  	else
->  		err =3D queue_gso_packets(dp, skb, key, upcall_info, cutlen);
-> +
-> +	ovs_vport_upcalls(skb, upcall_info, !err);
->  	if (err)
->  		goto err;
->
-> @@ -1825,6 +1850,12 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, s=
-truct genl_info *info)
->  		goto err_destroy_portids;
->  	}
->
-> +	vport->upcall_stats =3D netdev_alloc_pcpu_stats(struct vport_upcall_s=
-tats_percpu);
-> +	if (!vport->upcall_stats) {
-> +		err =3D -ENOMEM;
-> +		goto err_destroy_portids;
-> +	}
-> +
->  	err =3D ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
->  				   info->snd_seq, 0, OVS_DP_CMD_NEW);
->  	BUG_ON(err < 0);
-> @@ -2068,6 +2099,8 @@ static int ovs_vport_cmd_fill_info(struct vport *=
-vport, struct sk_buff *skb,
->  {
->  	struct ovs_header *ovs_header;
->  	struct ovs_vport_stats vport_stats;
-> +	struct ovs_vport_upcall_stats stat;
-> +	struct nlattr *nla;
->  	int err;
->
->  	ovs_header =3D genlmsg_put(skb, portid, seq, &dp_vport_genl_family,
-> @@ -2097,6 +2130,15 @@ static int ovs_vport_cmd_fill_info(struct vport =
-*vport, struct sk_buff *skb,
->  			  OVS_VPORT_ATTR_PAD))
->  		goto nla_put_failure;
->
-> +	nla =3D nla_nest_start_noflag(skb, OVS_VPORT_ATTR_UPCALL_STATS);
-> +	if (!nla)
-> +		goto nla_put_failure;
-> +
-> +	ovs_vport_get_upcall_stats(vport, &stat);
-> +	if (ovs_vport_put_upcall_stats(skb, &stat))
-> +		goto nla_put_failure;
-> +	nla_nest_end(skb, nla);
-> +
-
-See the comment below, as I think this all should be wrapped in ovs_vport=
-_get_upcall_stats(vport, skb).
-
->  	if (ovs_vport_get_upcall_portids(vport, skb))
->  		goto nla_put_failure;
->
-> @@ -2278,6 +2320,13 @@ static int ovs_vport_cmd_new(struct sk_buff *skb=
-, struct genl_info *info)
->  		goto exit_unlock_free;
->  	}
->
-> +	vport->upcall_stats =3D netdev_alloc_pcpu_stats(struct vport_upcall_s=
-tats_percpu);
-> +
-
-nit: I think the extra new line is not needed.
-
-> +	if (!vport->upcall_stats) {
-> +		err =3D -ENOMEM;
-> +		goto exit_unlock_free;
-> +	}
-> +
->  	err =3D ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
->  				      info->snd_portid, info->snd_seq, 0,
->  				      OVS_VPORT_CMD_NEW, GFP_KERNEL);
-> @@ -2507,6 +2556,7 @@ static const struct nla_policy vport_policy[OVS_V=
-PORT_ATTR_MAX + 1] =3D {
->  	[OVS_VPORT_ATTR_OPTIONS] =3D { .type =3D NLA_NESTED },
->  	[OVS_VPORT_ATTR_IFINDEX] =3D { .type =3D NLA_U32 },
->  	[OVS_VPORT_ATTR_NETNSID] =3D { .type =3D NLA_S32 },
-> +	[OVS_VPORT_ATTR_UPCALL_STATS] =3D { .type =3D NLA_NESTED },
->  };
->
->  static const struct genl_small_ops dp_vport_genl_ops[] =3D {
-> diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
-> index 82a74f998966..fd95536b35ef 100644
-> --- a/net/openvswitch/vport.c
-> +++ b/net/openvswitch/vport.c
-> @@ -284,6 +284,50 @@ void ovs_vport_get_stats(struct vport *vport, stru=
-ct ovs_vport_stats *stats)
->  	stats->tx_packets =3D dev_stats->tx_packets;
->  }
->
-> +/**
-> + *	ovs_vport_get_upcall_stats - retrieve upcall stats
-> + *
-> + * @vport: vport from which to retrieve the stats
-> + * @ovs_vport_upcall_stats: location to store stats
-> + *
-> + * Retrieves upcall stats for the given device.
-> + *
-> + * Must be called with ovs_mutex or rcu_read_lock.
-> + */
-> +void ovs_vport_get_upcall_stats(struct vport *vport, struct ovs_vport_=
-upcall_stats *stats)
-> +{
-> +	int i;
-> +
-> +	stats->tx_success =3D 0;
-> +	stats->tx_fail =3D 0;
-> +
-> +	for_each_possible_cpu(i) {
-> +		const struct vport_upcall_stats_percpu *upcall_stats;
-> +		unsigned int start;
-> +
-> +		upcall_stats =3D per_cpu_ptr(vport->upcall_stats, i);
-> +		do {
-> +			start =3D u64_stats_fetch_begin(&upcall_stats->syncp);
-> +			stats->tx_success +=3D u64_stats_read(&upcall_stats->n_success);
-> +			stats->tx_fail +=3D u64_stats_read(&upcall_stats->n_fail);
-> +		} while (u64_stats_fetch_retry(&upcall_stats->syncp, start));
-> +	}
-> +}
-> +
-> +int ovs_vport_put_upcall_stats(struct sk_buff *skb,
-> +			       struct ovs_vport_upcall_stats *stats)
-> +{
-> +	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_SUCCESS, stats->tx_succes=
-s,
-> +			      OVS_VPORT_ATTR_PAD))
-> +		return -EMSGSIZE;
-> +
-> +	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_FAIL, stats->tx_fail,
-> +			      OVS_VPORT_ATTR_PAD))
-> +		return -EMSGSIZE;
-> +
-> +	return 0;
-> +}
-
-I think we should wrap ovs_vport_put_upcall_stats() into ovs_vport_get_up=
-call_stats(), so we have a single function. This would be similar to ovs_=
-vport_get_options(). This way we will also get rid of the extra =E2=80=9C=
-struct ovs_vport_upcall_stats=E2=80=9D definition, i.e.,
-
-  ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb)
-
-> +
->  /**
->   *	ovs_vport_get_options - retrieve device options
->   *
-> diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
-> index 7d276f60c000..5ba9f14df55a 100644
-> --- a/net/openvswitch/vport.h
-> +++ b/net/openvswitch/vport.h
-> @@ -32,6 +32,16 @@ struct vport *ovs_vport_locate(const struct net *net=
-, const char *name);
->
->  void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
->
-> +struct ovs_vport_upcall_stats {
-> +	__u64   tx_success;	/* total packets upcalls succeed */
-> +	__u64   tx_fail;	/* total packets upcalls failed  */
-> +};
-> +
-> +void ovs_vport_get_upcall_stats(struct vport *vport,
-> +				struct ovs_vport_upcall_stats *stats);
-> +int ovs_vport_put_upcall_stats(struct sk_buff *skb,
-> +			       struct ovs_vport_upcall_stats *stats);
-> +
->  int ovs_vport_set_options(struct vport *, struct nlattr *options);
->  int ovs_vport_get_options(const struct vport *, struct sk_buff *);
->
-> @@ -65,6 +75,7 @@ struct vport_portids {
->   * @hash_node: Element in @dev_table hash table in vport.c.
->   * @dp_hash_node: Element in @datapath->ports hash table in datapath.c=
-=2E
->   * @ops: Class structure.
-> + * @upcall_stats: Upcall stats of every ports.
->   * @detach_list: list used for detaching vport in net-exit call.
->   * @rcu: RCU callback head for deferred destruction.
->   */
-> @@ -78,6 +89,7 @@ struct vport {
->  	struct hlist_node hash_node;
->  	struct hlist_node dp_hash_node;
->  	const struct vport_ops *ops;
-> +	struct vport_upcall_stats_percpu __percpu *upcall_stats;
->
->  	struct list_head detach_list;
->  	struct rcu_head rcu;
-> @@ -137,6 +149,18 @@ struct vport_ops {
->  	struct list_head list;
->  };
->
-> +/**
-> + * struct vport_upcall_stats_percpu - per-cpu packet upcall statistics=
- for
-> + * a given vport.
-> + * @n_success: Number of packets that upcall to userspace succeed.
-> + * @n_fail:    Number of packets that upcall to userspace failed.
-> + */
-> +struct vport_upcall_stats_percpu {
-> +	struct u64_stats_sync syncp;
-> +	u64_stats_t n_success;
-> +	u64_stats_t n_fail;
-> +};
-> +
->  struct vport *ovs_vport_alloc(int priv_size, const struct vport_ops *,=
-
->  			      const struct vport_parms *);
->  void ovs_vport_free(struct vport *);
-> -- =
-
-> 2.27.0
-
+#syz fix:
+btrfs: do not panic if we can't allocate a prealloc extent state
