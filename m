@@ -2,63 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CB36406AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9036406B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiLBMVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S233408AbiLBMWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiLBMVh (ORCPT
+        with ESMTP id S233146AbiLBMWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:21:37 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3973865A5;
-        Fri,  2 Dec 2022 04:21:36 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 86B2421C56;
-        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669983695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d49Oc3S+6muyb1GOiqMcaSOmUuf1KCcSk2Xm3eq+yyg=;
-        b=XnuckT+/lzXYI4qDySsV8Hxn7menm+zUi52vv7O/r7vdGLdiqdO47blqVwleNUjU/cEfgB
-        Bwq3VsB7Uc7SrPfdrrEwqeA6gvttsjhdLQir6Jap3oEnhALiTLCvSr2aNGZXQHcyhCPqL8
-        omMnUHann3fVoS+UBEqAWLzB8gQkLvU=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0CEEF2C142;
-        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 13:21:34 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Joe Perches <joe@perches.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <Y4ntzmsvsr7gU8x0@alley>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <20221125190948.2062-2-linux@weissschuh.net>
- <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
- <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
- <Y4dhs1G3mcX/YraJ@alley>
- <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Fri, 2 Dec 2022 07:22:37 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2055.outbound.protection.outlook.com [40.92.52.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3B725D;
+        Fri,  2 Dec 2022 04:22:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KKiQ07o/gz/RRCKUfsW4BK1XCzsDTbZxzdrwP6oh4OKa/sOR96Fr2UGlygQsJeVQnPQYOeMw5ChXmI02bX3XjOnkGqqp13lElq2whn17u9txpwdDqYFl678MxYEAI0Z6hEPne93UNO9WEyL816EEijsFbMcc7S9wEj2YydwnRqa21rB7lUI1g5H3N2ON6ulkG+t0Tgr04C9m6PcNrz5YGH2yJInra0vjPqJAifYeJNurKesb63DT9+Kh592B+vAXMGa1h3mCThXE/T9gxNJgwg769zblW7/gPjHXI1QGPcZmOzbW0z3YRCnT0VIq6DxzA75zlemkzZsaGDPf8JZ6/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1WqgbUK4y3F2PeihNirmZKZ8VKhipAeDycKft22Sl6I=;
+ b=VxIpXrZhA+TSO4tdxPbkIdyZVl7gpIO8E4X1rwPkZdDU7Yj7YygV9jmcNmf1gzestaHmN11+vZc1m5WSR1rg6NyrK10g18lvgHDAOv6Jcno0V3vVPYKWTc0EoZ5wU3afUpb2YbDsToe2Jr4RG2w8G+e2bbK4ijohKyLjmD+/E0yv1u91jCaDAVpK1tAPNogNAP2L6LJhwYBk2i7eEUlKyFCBYMer0SSqu4wAOwf0Hre0VfJ8IhgX4VoTqLfnOn3Qi/jLtHtf8hlFx33ZSxXQQg2TVDmUGgPRFGWoj6Y73S3Agiq3UPlY6COB9UDN91ee/34ApcCmK4sZ4AJWcheEHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1WqgbUK4y3F2PeihNirmZKZ8VKhipAeDycKft22Sl6I=;
+ b=Z1jUktNMjtWx91k00rgjsItP5HDuEsqADaINaVwWRgBhyRv555rrnuFUEh2ZIR/Kz+DW6IE/58POvoFnFv+l31Mj8vf3rbJuOHqTDPmw8VrmbOFRPYm5vkMc8/w6U+wLOrSqeCgMFmNSH/0KqPTjOKceZ1YvP5K41X1a3bkfKNePkyL1Kqg4yB0dbefeNYvP4P6DGaYZFwwkgqi9+tFflI3n605yU9B9rRcRFGddzTN1YZYJ3I2WQQC+KSqQtcOYP7JCGPsauQ0dAwia2ljRgbKKrT71NVk1p0bDAQBFSg8aOsaOlyrCLxPUD+5BY0z6TIB5UKkDoobYMV4FVycc7g==
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:95::22) by SI2PR01MB4177.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:1a8::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Fri, 2 Dec
+ 2022 12:22:30 +0000
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::483e:25f7:b655:9528]) by HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::483e:25f7:b655:9528%6]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
+ 12:22:30 +0000
+From:   Kushagra Verma <kushagra765@outlook.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: Fixed a typo in bootconfig.rst
+Date:   Fri,  2 Dec 2022 17:52:03 +0530
+Message-ID: <HK0PR01MB2801DA243B726141A97FE92EF8179@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+X-Mailer: git-send-email 2.38.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain
+X-TMN:  [koO9s4oCpu2uDj7W1SoYwMckAFvfKXh+Bgfu0nq2R2vU1lGftbbLjidYkfCxEmogU6S9uycLyGo=]
+X-ClientProxiedBy: PN3PR01CA0111.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:96::10) To HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:95::22)
+X-Microsoft-Original-Message-ID: <20221202122203.7219-1-kushagra765@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK0PR01MB2801:EE_|SI2PR01MB4177:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a1cedd2-a788-4366-f322-08dad45fe13a
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l14s3v+HFpbrbMc1a2rEfEYpynndN6sDdEauSokdLGuQwdltbgYpJJ76tI4FDd7K6JH/okFN/mEA4euNflC/RdK4LeJqOkrH4ZqD5GWLmMvVDKXCcd3GB2B+1XSGh3OFxJtxLtf4IaUdE6qR1TrWPjRP79zKElZeR4NNytWR5W/fZTNxtlq8zLrXa6BFI5rvduWlcTVWriZVVGb9hcrXpyMUchFZ+HxUKGC/+8eocvm2ifZSTVPwi1jE1U72Wese6btygwQx3v1DX32HRCwK+eiC1DHyhm7cV8qsInl8cflp1HHh2Xk/vvYdGVUG+oprV4ze7vXTYHtvzYsmd/UxrLr8kpF0983WaBTu60chN2ljM2Re/mglecn69ttUBH+ycGnSV+uqcA2NprKwwa6JKgIpH0i3iezxDa7Vi+PgoQ72lf33aool6VdRPUOLUHVz9iPAOaREfbTLM/tjusFLpTt5zAAMeSO8RItQ4JjCE+bYpnVp8qe9DSwskEWegupfwkibO/Si6u0TTZ0VXKrbLrhotrdLoYAPNzkvP21ykU/4Z+3Y6Y+CuayBwdze7DFXR2c1Wz3i8P3VsvzOqcMaZmLmPT/5lcXg0OgL4seNeiY=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fNHlY/FvcJR6sj9y1fXEjX/c5oOtq2Ns0VVVPA7/wegtnWxETZvXwHgjqr43?=
+ =?us-ascii?Q?AeEzOJ8gaOJdiHxom+vIILqwpd0tYG9mdFcmrw+NFP5c+6PbMMV28yiuafnb?=
+ =?us-ascii?Q?E5ZlXnwn+CM6iKpAkmdEQCjLc8sFRjZVyCsP225FtsZvZWfDfLDl1fgQhAhJ?=
+ =?us-ascii?Q?DrZ3pJVUJkRQlmbg4Mz3PhSsRJVjNc9VTIeGcuzuVcqNpG18LjD9z+CevaZL?=
+ =?us-ascii?Q?/yKefbG49+zMFZ57iHAbV1SFPLoc5AEm1fq3qrxbpNsR7K8iTa0Csei56gIK?=
+ =?us-ascii?Q?NCyQqDuqlUiORXMo+O0n8tf2/4U7mUZ6Hls8I2d8yRAzRFXyGF9qplNX5ajW?=
+ =?us-ascii?Q?Nn2G+7biBQ+OstDpDBupdYfe3xe3sw2NeQhZFGA1csS9Wv6AlCI6aYVr/4sI?=
+ =?us-ascii?Q?UyMoWcCxVzxpbLdgwTuYZj17rcuNsnOn9pQ0V7JYg/Nf/+1PzXwFGDJWLiGy?=
+ =?us-ascii?Q?1GPvhjzhJryt3A7XgxnKRlP8koFKFBAQAEUWuxhiNrt9N+6AulAcDjviO++y?=
+ =?us-ascii?Q?sIrPOrZk6wNKHsQR5o/asaESVmfw1XBIdW5cQuokEat3y24htqkX46CIe3DK?=
+ =?us-ascii?Q?gCiALJEPtcszLykdTa4aUkLNTlVp1ijEMIQKbN5BKVbBbyYhYyUO17SD0vJb?=
+ =?us-ascii?Q?UHsyIe03dYkXSH+Tze5IH2Qe6G7wyv2Wd6FAP3vvAyklzKI1dNRBTTKw9l69?=
+ =?us-ascii?Q?kd+9+0jHwpytJSBSVl7Pf0022IpnhcSpnfD1mxwzNyPf5OhnAlmj5nPJWVyK?=
+ =?us-ascii?Q?3rUZcMkIfZj6xVM6zd0u4R9xefN2amwedWdqC9mk/Y9KACIj3W9Ijplfm+mC?=
+ =?us-ascii?Q?JjDhjC1TN2FFDvCuw5moER5cAmmaI99y7puzXMG5a/LEGtf1UVDwEC+rQkZy?=
+ =?us-ascii?Q?kV7G/GFCopzhX5IQD53uoT/X290fuLa6JHwdCKgZL/MYH3kkAYbXrvWTrkUS?=
+ =?us-ascii?Q?NleZDcSrU0eADLrI2LbSAFZG+dU72PTM4PDTWJXUjtsOehPlPMsqrQkSdxN4?=
+ =?us-ascii?Q?+P/BG1zGpWUhYYzY7cIlllO9mqDy/1IhUh89eT/aQT/s0jOWxFax1SNf7IPu?=
+ =?us-ascii?Q?y3Ml6jQhw/Q4CqLwDQQ/6MyqTw+f7S7oj/d73VAWeVR6y+HCYy7NF20pEHpH?=
+ =?us-ascii?Q?6aKZycvYF5IsRZhnle0OTjal7RExWgXTTm53nGiZxlvlHKGDrek1xCtMK5UO?=
+ =?us-ascii?Q?vcvfcyLBcAWWne/S2w+6HSQAJYeVV7l04DEaZQtRtfOJkU0p9TVIrxD9JYIJ?=
+ =?us-ascii?Q?/qtXwAlQ/1R2kNIU3kSku9q9+FfcCtHRaWWTvWlI0QxBBG++E6UAU0gMKURZ?=
+ =?us-ascii?Q?5X1Ge9EilMVoIA0dGhErvWlrOHZlrXQ6L9IzolOvf/Y8UizIwKmzIRliOZyx?=
+ =?us-ascii?Q?JJQ/Ppc=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a1cedd2-a788-4366-f322-08dad45fe13a
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 12:22:30.3158
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR01MB4177
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,73 +105,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-11-30 15:50:55, Thomas Weißschuh wrote:
-> On 2022-11-30 14:59+0100, Petr Mladek wrote:
-> > On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
-> >> On 2022-11-25 12:18-0800, Joe Perches wrote:
-> >>> On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
-> >>>> These macros emit continuation messages with explicit levels.
-> >>>> In case the continuation is logged separately from the original message
-> >>>> it will retain its level instead of falling back to KERN_DEFAULT.
-> >>>> 
-> >>>> This remedies the issue that logs filtered by level contain stray
-> >>>> continuation messages without context.
-> >>>> 
-> >>>> --- a/include/linux/printk.h
-> >>>> +++ b/include/linux/printk.h
-> >>>> @@ -701,6 +703,27 @@ do {									\
-> >>>>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> >>>>  #endif
-> >>>>  
-> >>>> +/*
-> >>>> + * Print a continuation message with level. In case the continuation is split
-> >>>> + * from the main message it preserves the level.
-> >>>> + */
-> >>>> +
-> >>>> +#define pr_emerg_cont(fmt, ...)					\
-> >>>> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >>> 
-> >>> Aren't this rather backwards?
-> >>> KERN_CONT KERN_<LEVEL> seems to make more sense to me.
-> >> 
-> >> If nobody else disagrees I'll do this for v3.
-> > 
-> > I slightly prefer the way how it is now. IMHO, it makes it easier
-> > to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
-> > 
-> > <6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
-> > <6,c> kernel/power/process.c:218 thaw_processes "done.\n"
-> > <6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
-> > <6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
-> > <6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
-> > <6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
-> > <6,c> kernel/power/process.c:140 freeze_processes "\n"
-> > <6,c> kernel/power/process.c:138 freeze_processes "done."
-> > <6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
-> > <6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
-> 
-> I did not test it (will do so later) but it seems to me that the code in
-> kernel/printk/index.c should do this correctly in either case. At least it
-> tries to:
-> 
-> if (flags & LOG_CONT) {
-> 	/*
-> 	 * LOGLEVEL_DEFAULT here means "use the same level as the
-> 	 * message we're continuing from", not the default message
-> 	 * loglevel, so don't display it as such.
-> 	 */
-> 	if (level == LOGLEVEL_DEFAULT)
-> 		seq_puts(s, "<c>");
-> 		else
-> 		seq_printf(s, "<%d,c>", level);
-> 	} else
-> 		seq_printf(s, "<%d>", level);
-> 	}
+Fixed a typo in the word 'concatenated'.
 
-Great. It makes the index consistent. I should have checked the code ;-)
+Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
+---
+ Documentation/admin-guide/bootconfig.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I do not mind then about the ordering in the macro definitions.
-It really seems to be only an implementation detail.
+diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
+index d99994345d41..9355c525fbe0 100644
+--- a/Documentation/admin-guide/bootconfig.rst
++++ b/Documentation/admin-guide/bootconfig.rst
+@@ -229,7 +229,7 @@ In addition to the kernel command line, the boot config can be used for
+ passing the kernel parameters. All the key-value pairs under ``kernel``
+ key will be passed to kernel cmdline directly. Moreover, the key-value
+ pairs under ``init`` will be passed to init process via the cmdline.
+-The parameters are concatinated with user-given kernel cmdline string
++The parameters are concatenated with user-given kernel cmdline string
+ as the following order, so that the command line parameter can override
+ bootconfig parameters (this depends on how the subsystem handles parameters
+ but in general, earlier parameter will be overwritten by later one.)::
+-- 
+2.38.1
 
-Best Regards,
-Petr
