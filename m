@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A32640819
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA64064081B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbiLBOED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        id S233413AbiLBOEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiLBOEB (ORCPT
+        with ESMTP id S233203AbiLBOEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:04:01 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3599BCCFF0;
-        Fri,  2 Dec 2022 06:04:00 -0800 (PST)
-Date:   Fri, 02 Dec 2022 14:03:57 -0000
+        Fri, 2 Dec 2022 09:04:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640C3CCFC6;
+        Fri,  2 Dec 2022 06:04:01 -0800 (PST)
+Date:   Fri, 02 Dec 2022 14:03:58 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669989838;
+        s=2020; t=1669989840;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=v9/VVB6YB4wgZHpv4JxrSHkdVN43DQfG6ar/1FBDzPY=;
-        b=ayIxdckXlrlkUKiQek92NRftJ2jIVde3UnRJl+Pg522qr3Rw35u0mn0YHUJxHBjCHkr0/g
-        szYakWh5ofW43NieOlXNxw4yJu9gaWwG2CYGKgg9mCmUtPaSZMXzMXsRWzlF8inQWUCTN/
-        i3ZJD3iftxvY25AQDCMUVrx9VqOUDCIrrJfwklinzBV6phvGSEduzUrUGav36RXcbqpUw7
-        wJ6ZSy8woaLi0MuTfTLKOOsd3CEWt81TFVzQuHXrKXVvrVbWcfThnakJjF+0yW6oYVhq+i
-        pNOWzo3EeOmr0wTWpGs3CSHaAxBtU3w+jGMrJ05sdzmejvRrDhkdF89jjhw5cA==
+        bh=9iVzQvZbEt7yaSBsiDKwN4A1tJdmjDFR+KuFuuwSQic=;
+        b=0vJ7OIzB9yib9Vifjs8v6pUrj3TYVOXQJYeqnH7asfkSCDEmSoK9PVYriSN8/ZSUyi5PZ4
+        c1QhJSh/Qw70+hR1IjfvR6n22w1/NCingU/0JZ+TNRrmswKyZhvjrODh9q1ZUHSQSLotYW
+        FABZN+3in10tg/8D10pTWBhnNcd3W8+3UT9Ppch3dTNPt6ov6IuHUKrsGhWVo+b9fpw/5f
+        ecYpfZaj5haOxh15FkcRK78SOLPpindbCM4DT8bV8WwE/8puC/a1Cy8QtUziLTQVzTUGt0
+        dVelHqZvPgmDtCuOYIA+IqLi+Rw2g3aOuLxqG0PdYRKHa5rT/4x1Zr+a8hxTtw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669989838;
+        s=2020e; t=1669989840;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=v9/VVB6YB4wgZHpv4JxrSHkdVN43DQfG6ar/1FBDzPY=;
-        b=7CCHGJkvu2uuSpyJRgmyCXEOHi6FQoqWux2FM3sHlmA9UxBgVJxpZv1GTJQEx8PqXTJVOc
-        SG8rNbtlcXzkKdCw==
+        bh=9iVzQvZbEt7yaSBsiDKwN4A1tJdmjDFR+KuFuuwSQic=;
+        b=7PZ03XTUOp8fPRgrWPS93owWiMe5ZqRYreb9YqKBxeVNc//pYWA8BHicepjVowt3MB1Tha
+        afb/OFD6svWT1tAQ==
 From:   "tip-bot2 for Rahul Tanwar" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/apic] x86/of: Add support for boot time interrupt delivery
- mode configuration
-Cc:     Rahul Tanwar <rtanwar@maxlinear.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221124084143.21841-5-rtanwar@maxlinear.com>
-References: <20221124084143.21841-5-rtanwar@maxlinear.com>
+Subject: [tip: x86/apic] x86/of: Replace printk(KERN_LVL) with pr_lvl()
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221124084143.21841-4-rtanwar@maxlinear.com>
+References: <20221124084143.21841-4-rtanwar@maxlinear.com>
 MIME-Version: 1.0
-Message-ID: <166998983740.4906.7393408926569297500.tip-bot2@tip-bot2>
+Message-ID: <166998983862.4906.5810287160268183726.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,56 +67,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/apic branch of tip:
 
-Commit-ID:     2833275568755eb937a52c358bf8bfa7125a463e
-Gitweb:        https://git.kernel.org/tip/2833275568755eb937a52c358bf8bfa7125a463e
+Commit-ID:     535403323b4dcdc363e7ea265df62481b903826b
+Gitweb:        https://git.kernel.org/tip/535403323b4dcdc363e7ea265df62481b903826b
 Author:        Rahul Tanwar <rtanwar@maxlinear.com>
-AuthorDate:    Thu, 24 Nov 2022 16:41:43 +08:00
+AuthorDate:    Thu, 24 Nov 2022 16:41:42 +08:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Fri, 02 Dec 2022 14:57:14 +01:00
 
-x86/of: Add support for boot time interrupt delivery mode configuration
+x86/of: Replace printk(KERN_LVL) with pr_lvl()
 
-Presently, init/boot time interrupt delivery mode is enumerated only for
-ACPI enabled systems by parsing MADT table or for older systems by parsing
-MP table. But for OF based x86 systems, it is assumed & hardcoded to be
-legacy PIC mode. This causes a boot time crash for platforms which do not
-provide a 8259 compliant legacy PIC.
+Use pr_lvl() instead of the deprecated printk(KERN_LVL).
 
-Add support for configuration of init time interrupt delivery mode for x86
-OF based systems by introducing a new optional boolean property
-'intel,virtual-wire-mode' for the local APIC interrupt-controller
-node. This property emulates IMCRP Bit 7 of MP feature info byte 2 of MP
-floating pointer structure.
+Just a upgrade of print utilities usage. no functional changes.
 
-Defaults to legacy PIC mode if absent. Configures it to virtual wire
-compatibility mode if present.
-
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20221124084143.21841-5-rtanwar@maxlinear.com
+Link: https://lore.kernel.org/r/20221124084143.21841-4-rtanwar@maxlinear.com
 
 ---
- arch/x86/kernel/devicetree.c |  9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ arch/x86/kernel/devicetree.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index 484783f..28da5dd 100644
+index 59438d2..484783f 100644
 --- a/arch/x86/kernel/devicetree.c
 +++ b/arch/x86/kernel/devicetree.c
-@@ -162,7 +162,14 @@ static void __init dtb_lapic_setup(void)
- 			return;
- 	}
- 	smp_found_config = 1;
--	pic_mode = 1;
-+	if (of_property_read_bool(dn, "intel,virtual-wire-mode")) {
-+		pr_info("Virtual Wire compatibility mode.\n");
-+		pic_mode = 0;
-+	} else {
-+		pr_info("IMCR and PIC compatibility mode.\n");
-+		pic_mode = 1;
-+	}
-+
- 	register_lapic_address(lapic_addr);
- }
+@@ -243,7 +243,7 @@ static void __init dtb_add_ioapic(struct device_node *dn)
  
+ 	ret = of_address_to_resource(dn, 0, &r);
+ 	if (ret) {
+-		printk(KERN_ERR "Can't obtain address from device node %pOF.\n", dn);
++		pr_err("Can't obtain address from device node %pOF.\n", dn);
+ 		return;
+ 	}
+ 	mp_register_ioapic(++ioapic_id, r.start, gsi_top, &cfg);
+@@ -260,7 +260,7 @@ static void __init dtb_ioapic_setup(void)
+ 		of_ioapic = 1;
+ 		return;
+ 	}
+-	printk(KERN_ERR "Error: No information about IO-APIC in OF.\n");
++	pr_err("Error: No information about IO-APIC in OF.\n");
+ }
+ #else
+ static void __init dtb_ioapic_setup(void) {}
