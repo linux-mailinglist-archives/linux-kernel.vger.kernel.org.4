@@ -2,130 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60D0640DC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DE0640DC6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234564AbiLBSqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S234718AbiLBSqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:46:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbiLBSq2 (ORCPT
+        with ESMTP id S233073AbiLBSqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:46:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17785DBF7C;
-        Fri,  2 Dec 2022 10:46:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDFA6B82242;
-        Fri,  2 Dec 2022 18:46:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EEC0C433D6;
-        Fri,  2 Dec 2022 18:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670006771;
-        bh=YtK9Rbdr1BlS3FSUUNTiCqS+imWPNk+kOo2kMIyNNM8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Veqd9XW81oxxEbsNRNDEgPtmBM9t3alXRz/iHXbDe4SWPYL2PPtB5DMMcTRheaVZF
-         +VilR/FjgxMTuvnFaDiupnkksVg3HFcAHryuyd3raOqRHML2mD0Ts637Hg3+Ejktvw
-         3TkMfjqKTcazHdLwsix/z/CoXD+IQP3ZgGogrRc8kV7vrHNCKtMQlRvlU3nB51RTWm
-         PtbeYo0L8yloL0W3oSV6U3TnT2l7hqgGDJQNfm/kGslt+6omGXCkeLqWsCRF/1Kfdf
-         Wxoi2iBDnXUNRwM1k9kxKgb/la0iFU5f/EL5CZo1TKdaymorgi2gc/LHeNpgrcjvFl
-         kdOwdUGHqtyqQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CFAA34034E; Fri,  2 Dec 2022 15:46:08 -0300 (-03)
-Date:   Fri, 2 Dec 2022 15:46:08 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, namhyung@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH 1/2] perf tests: Fix "perf stat JSON output linter" test
- for new output
-Message-ID: <Y4pH8NEzfAPGkyW7@kernel.org>
-References: <20221130111521.334152-1-james.clark@arm.com>
- <CAP-5=fXAhs-xgOo9GPH-w5f1QxNBCt5pdzpC5Cr7K+ovPzdgzw@mail.gmail.com>
+        Fri, 2 Dec 2022 13:46:32 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2055.outbound.protection.outlook.com [40.107.9.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A160E2AA8
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:46:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ekOPUcMLA0OBLQL4JmGJoU5tmWG+GBZ/87IvWgoCftAuXViUlp1BEkCfuYg/ubgZI87/gl1RGaGSAlXsCqrkr+TB5J0sufASg6BBZnneTq+nyE9+NlgVfZXFVQCoFq71+evkFQMjVWt6KF7/8x9iMfKcHHQ2ehlMLKbIB7LAPv0dbGtVVFwf0ZpNr/KXZV822JckYxsXlzLQyWR8VDRtmUCwxQV5BpIL66yO/+x4z5ACaGl0VKNriNhfgxzroWh06hv28WRHb7Q+RHnG5bDOkB0Aa9wxQxF3GPs3uqPB8EMlJ3qrSQrFBuv1UUK7D7xE+SwoD8Pmclc8rxL4gDLq9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3EM6Ql/NoP43Wnft8I0jTdiFlwcni8B2x5lRKLEIZhY=;
+ b=Ma2Pg5/LtGdfix+WtMGFH3MAS14p1jKB/bFjFzMig2AV29LFCq6ZB/M/5ixmRCcnfycvCOcfRvblXH5iJb0PxZZeAvi7+gmI2AWXcsGbP/w0S8or6mHE5tqAeXcZXIWrxSyeokP/Y2UYlXVGD0MFJok2Sq7kXWVHErCGq1ojEDBnsJTjwsN3UJm8fg3eyvIb7crPTlOQ6lY8rd/3QXES3fl/9TqPQWwJ+x6ypHetqhP+YKSm//aawYmnErXA7/luSD6D7MnmudLDHLGVHlZeqEAayiEvjSOrlyAii9E5xYJ3xktW3DF6ZmGA5SHpOau0XOPIR/nnyg9GLTUC/lezpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3EM6Ql/NoP43Wnft8I0jTdiFlwcni8B2x5lRKLEIZhY=;
+ b=p0kjIs8T1TsXPHzNmcS6GE3o9zmAx5omr3DLiGB9GQBtfBdZ0VyKDsT0QEkwRpZzXnJZQl+zv7+0rE4kp7/pCb1WtOQlkHqGgLGSFDJVpwmFFR2mpnO9fMT4WnrAfbmWQKBrEu40INlZ/G+0g2/hjlY7167aYZ+6VWSyLXyzwbe6KFNepZAl1zF/dgGj4Cbm3wRFdUNTHG0146Hl/Fnp3AQWcixoJ/dL7oiaaNyk3ON13W2WbHhrwIcwpaZz/P3Jw/IkM021iFup1ZPrK/L4QwngXnDCi623TZ6mlzlvwPjPCCrtFMHClVm7L6ddbZ+ukPzZy8zX0/GrRdIzsEphDQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB2419.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:34::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Fri, 2 Dec
+ 2022 18:46:18 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5880.010; Fri, 2 Dec 2022
+ 18:46:18 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>
+CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
+Thread-Topic: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
+Thread-Index: AQHYtABEs/XtKdJlskKmHA1duRa+Xq3xsPoAgAAA5QCAH4SHgIAAYvgAgBmQ94CAJtUoAIAJlT2A
+Date:   Fri, 2 Dec 2022 18:46:18 +0000
+Message-ID: <5bf1f2fc-a1de-d873-7d1b-0058ff8b9aa2@csgroup.eu>
+References: <20220819191557.28116-1-pali@kernel.org>
+ <20220819191557.28116-3-pali@kernel.org>
+ <fd9c174e-2c89-7e11-9e68-d6044b7eab21@csgroup.eu>
+ <20220926094706.km22rqzuuulvfssq@pali> <20221016110529.76bcgq2v2h4pg2of@pali>
+ <3111f16b-2e6d-c46f-67e9-6cb5fada4cc7@csgroup.eu>
+ <20221101232503.qymzj7dypsehafvj@pali> <20221126162550.r4rhg5ud2e5vxzot@pali>
+In-Reply-To: <20221126162550.r4rhg5ud2e5vxzot@pali>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB2419:EE_
+x-ms-office365-filtering-correlation-id: 53d1b751-0fd0-4e68-a5da-08dad4958003
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JcBzO8eV0esb6or+PdOb/VMprf1fiIeTY3/sQSY8/ZDXFUt6yIkuCIdF+oIR2W2Mas+SeK62OjOu7kqko9VnJpToqBe5O5/82OQhuf8yCzO60CSQJKn7hImgLj6rwPpjajhfXZQE46tFelXV7uzVvoEyaujLd2DFbUbVJOmYsVmcvCmDmNCrseZUoUkvAS14iGwFWOXnUSvhuW350B4rpYhfTHv5iAvPReepXPGf9+z9Lw2b5FfiIyl6akEE/DA4HBEdKVNNcYkHUiSNiJ85iCppTdButlJAlfKCODvJISkSNQIFLHinEaUhjSQJdXgfDon5aBmv7pzpgVwxnlOH8Ejdj2g7WiwB+irl9pXC9PCI3Gnt3DjAl+JwAMhc/mfAkepHvaTggNAaR6ghhx9/OpcaLFyJnQ/HVzgqldq1LXlAAO/M/KIBjy1qvjMhJGLAkQ24ufJrZqzhSDHUWbgjEVJaLo7fgsTCJBtclrHHtk+ijNoTweTKQzRAHu6EO5oyq8NzTCap8GO3Snj/EOxjZNSBjKgLBmeYR4bH+yZf7EsNcJw4TS24NkhhUmrQf3GpxgQ069aKPrP+dwi9r0/3f5Mpznt9IUdgjGDuAwxzyfcx52D3uBUYzdCfF5R6ckZvllwNRCNFFxVHbGcEJbvipXVsY5X7hFMGRTZIYLiZNG3l9fBQlOtStj8MtQY0ygYgAFpMUzklqXmF6nkVt3OKVDpWlGSh5v3ubD4JtfsA+QzzQt1RmfIpFv/CGOvuzXGG
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(451199015)(36756003)(38100700002)(38070700005)(86362001)(31696002)(6916009)(54906003)(316002)(31686004)(8676002)(71200400001)(478600001)(91956017)(6486002)(26005)(6512007)(6506007)(83380400001)(122000001)(64756008)(186003)(41300700001)(2906002)(76116006)(66556008)(66476007)(2616005)(66446008)(5660300002)(4326008)(66946007)(44832011)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?amFva2VjNGI4SjlwWlZwdzJKK3QxYjVGS0N1RnR1YWZrZEgyV25NZzYzelhK?=
+ =?utf-8?B?TnBRa2pUU0dSblkwMWdBRnB5eEsyVkgxVkRuWlJ4dURONTA3S0V5RzE4RmZW?=
+ =?utf-8?B?U3kyeDdwaGhtbkRlNEZ1RVpMbktIeUxWTWhDdjNPS3NLVitGM211b3FlYXkv?=
+ =?utf-8?B?OTR6NzJsWkxjc0tWR1BOUEhnZkhmK0JydUNZUytydjhQK2RBTTdnSlVTbVZU?=
+ =?utf-8?B?TUtDZlA3c0x6NGV4SytFQ3pkazNQd1VKQitJQk5zY29nVWtoeGNjSGVpdXoz?=
+ =?utf-8?B?VTFWdzVxdVBVVFpXcFUvQndkRTQvT2J1SXBUa3JrZmp1bmlTVGxld01wVC9J?=
+ =?utf-8?B?aXQxZG5NRDZYMG9NRkVLRGJ6RlJFUHJrQ3BKL2FrUjBEZ0Fmek1BbXZjYUVw?=
+ =?utf-8?B?VlZYZjRBQWRxanZxTkdYYnMyMUpla0JoVXdGT3BZZjNBaGR3YzRnaGFiVUxu?=
+ =?utf-8?B?dE9CTXg1ZEJyUjVjRUVBUk9UdktQL1MrUnNZN0ViVHY4YzJBSHpreDJxYTMx?=
+ =?utf-8?B?dmF1MkFxeEZ5ckd4ajBwZVB3NkI4UXQwNWFCTUVGKzdadDdDWDFNd0Z4VUF2?=
+ =?utf-8?B?UmlyNnFLQnR4SHd4MWhSV1BHeStMT1FvSTNBOEJLVHZPZUxoZzZ3QW4zSDlY?=
+ =?utf-8?B?WTFnbkgzTm1GNWFRNjU0N0lOVUhJUFphdFd1bEFlMGdDM3BRc3VxTWJEM3FT?=
+ =?utf-8?B?c1J0blpxa3VJYnp6dk9GODlSaWt0ZERVampKRlNFTS9UcDZMQ2htSXZTMmlX?=
+ =?utf-8?B?TlgrSUNzV2s5azZBektXaG5uRnF4bHMzaUF1K2VkT3FTZUJVNnlBQjlyRW04?=
+ =?utf-8?B?L1FlL2I5K1h5MndlTmZPZE13aVZRS3BRSUFGZmMwbzdISGhBS01RcHBmNzha?=
+ =?utf-8?B?UTZTajF3bFlIbmlOcWorWkppTHF2UDVudE1xU3NXVmlKOVU0MG5BUngvanh3?=
+ =?utf-8?B?Vzd0dlU1d3pVT2pGRXhzY1RnUTZFY1VWMnh5aDhJQXAvZmd4Y05KZUZCVEow?=
+ =?utf-8?B?VUFLYXhIQVdueUtsMlJJK0hUZjZrUkR6Slo2UWtrU1dtK3RLRzFRSVREeHlY?=
+ =?utf-8?B?Ym1qMk0zTHN4cHNTOElVRlZYdE9vSVpmTGszaUxhNnlwYUNiTis5ZVVlV3ZD?=
+ =?utf-8?B?aC9LcDhDS2E5TjV0NmpxejdrT0JjemsyN2FvbmhQMUFHenZsbUl3ZTRhaDJP?=
+ =?utf-8?B?WjBxNWVmTDZNVXd3TlBUMzB4UElSa2FVMVhLRGJ0ejVlY3lWdWt0K0Yvek9Z?=
+ =?utf-8?B?aWNJemUxOWNmSGQ0bjg5SmJwMU5uQzQ5bVExZmNYRHQ3UFFQOU9KMEJ4cjha?=
+ =?utf-8?B?UmNiR2RwbUJxMHh5ZTBnMm1tYUlrVkFROEc3dEdqNXBrZDhxL04xaEtCeUtD?=
+ =?utf-8?B?K3ZDd2pIYkFEQ2hXRTJnRjZSSkhaVGQvdTNwNDhReEw3U21NYndxclRtVlUr?=
+ =?utf-8?B?Q2dVdjZobnhuSjJFdmo4UENxWFZtRDYvU1lITmlzcnIwSjBTQ2NzRU9ra1k1?=
+ =?utf-8?B?MmdydEpYZ2l0R0U2ZjZ2ZHVvSVFUcnZwNGM0SS9qalpjTnhTRnRWb0p0eENm?=
+ =?utf-8?B?aGNCL3ptMmZmcHVkZFNFRWxYVEZqOHZvbitzUTBDeVplRHE3MWxnejY4elI2?=
+ =?utf-8?B?ZytQYWYwY1lqb0p3MTZYdUZudTkvT29JYW1vaGxnc083YWFESkd4NzhoWCty?=
+ =?utf-8?B?RVZrckl0aTd4dTZKS084Rkl0cjI3RE5kN3pKR2ZMNXh3ZWcwc3RDUENKNDJV?=
+ =?utf-8?B?Nm9mWkZFVnB5ZVorcHhQSVYrWmloRWxtcUswWWtMYXN3Sy82bldyN3NkRHhR?=
+ =?utf-8?B?T2dGakN0a3ZkWE55bEhNbEV2aDhWVHo3STJNUmcwRDZXalVIS0RmbEs3SVJQ?=
+ =?utf-8?B?VUZMWWtudnNCR0w0VHVpQnRjSG4rNTFNQ3l6dVNFakJ0ZFluWENxNDhxeFJ1?=
+ =?utf-8?B?WXhYRnc0bSswQ3NWZ0RPVDlzVGxkS29pVDU0MHNneUZOek45eFN5TFhwN091?=
+ =?utf-8?B?M2VIZFZSYWNVY0lTWXpBWnMxSklnRjJXZUE4OGsyZFpGTzhlaWpTVmJVb2ZY?=
+ =?utf-8?B?MG5jTkVYMGlOZW5CUThmc3REKzBFTjdqclh2RERZenp4TjVTQVN1YkZ1SHpS?=
+ =?utf-8?B?MndEZTN1VkQ1djBBeUZMUUQ5Z0wydWNTNmxtUklKN1IwWVNYYTBaWlQ4S0Zq?=
+ =?utf-8?B?Q0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <037E6C4B9F4F744FA485ADCDF8177DF1@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fXAhs-xgOo9GPH-w5f1QxNBCt5pdzpC5Cr7K+ovPzdgzw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53d1b751-0fd0-4e68-a5da-08dad4958003
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 18:46:18.9128
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dIt7A1fq7gBkTJi8XVbXXGlXItb5ZW8XuciFwhUxItd7+PT1LjPQWbTLutfauujWkork/jRZUYPi4LUMk6ALTh68G7wz1ASZO/VJYQNx1Hk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2419
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Nov 30, 2022 at 10:18:49AM -0800, Ian Rogers escreveu:
-> On Wed, Nov 30, 2022 at 3:15 AM James Clark <james.clark@arm.com> wrote:
-> >
-> > Commit c4b41b83c250 ("perf stat: Rename "aggregate-number" to
-> > "cpu-count" in JSON") renamed a field, so update the tests to reflect
-> > this.
-> >
-> > This fixes the following failure:
-> >
-> >   $ sudo ./perf test "json output" -vvv
-> >    96: perf stat JSON output linter                                    :
-> >   --- start ---
-> >   test child forked, pid 327720
-> >   Checking json output: no args [Success]
-> >   Checking json output: system wide [Success]
-> >   Checking json output: interval [Success]
-> >   Checking json output: event [Success]
-> >   Checking json output: per thread [Success]
-> >   Checking json output: per node Test failed for input:
-> >   ...
-> >   Traceback (most recent call last):
-> >     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 93, in <module>
-> >       check_json_output(expected_items)
-> >     File "./tools/perf/tests/shell/lib/perf_json_output_lint.py", line 78, in check_json_output
-> >       raise RuntimeError(f'Unexpected key: key={key} value={value}')
-> >   RuntimeError: Unexpected key: key=cpu-count value=16
-> >   test child finished with -1
-> >   ---- end ----
-> >   perf stat JSON output linter: FAILED!
-> >
-> > Fixes: c4b41b83c250 ("perf stat: Rename "aggregate-number" to "cpu-count" in JSON")
-> > Signed-off-by: James Clark <james.clark@arm.com>
-> 
-> Namhyung mentioned reverting change c4b41b83c250, in which case
-> merging this would break the test again. I think the revert is better.
-
-Applied the revert, with an Acked-by: you.
- 
-> Thanks,
-> Ian
-> 
-> > ---
-> >  tools/perf/tests/shell/lib/perf_json_output_lint.py | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> > index d90f8d102eb9..9c073e257d33 100644
-> > --- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> > +++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> > @@ -54,7 +54,7 @@ def check_json_output(expected_items):
-> >            raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
-> >                               f' in \'{line}\'')
-> >    checks = {
-> > -      'aggregate-number': lambda x: isfloat(x),
-> > +      'cpu-count': lambda x: isfloat(x),
-> >        'core': lambda x: True,
-> >        'counter-value': lambda x: is_counter_value(x),
-> >        'cgroup': lambda x: True,
-> > --
-> > 2.25.1
-> >
-
--- 
-
-- Arnaldo
+DQoNCkxlIDI2LzExLzIwMjIgw6AgMTc6MjUsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IE9u
+IFdlZG5lc2RheSAwMiBOb3ZlbWJlciAyMDIyIDAwOjI1OjAzIFBhbGkgUm9ow6FyIHdyb3RlOg0K
+Pj4gT24gU3VuZGF5IDE2IE9jdG9iZXIgMjAyMiAxNjo1OTo1MyBDaHJpc3RvcGhlIExlcm95IHdy
+b3RlOg0KPj4+IEhlbGxvLA0KPj4+DQo+Pj4gTGUgMTYvMTAvMjAyMiDDoCAxMzowNSwgUGFsaSBS
+b2jDoXIgYSDDqWNyaXTCoDoNCj4+Pj4gSGVsbG8gQ2hyaXN0b3BoZSEgRG8geW91IGhhdmUgYW55
+IG90aGVyIGNvbW1lbnRzIGZvciB0aGlzIHBhdGNoIHNlcmllcz8NCj4+Pg0KPj4+IEknbSBBRksg
+Zm9yIHR3byB3ZWVrcywgYnV0IGFzIGZhciBhcyBJIHJlbWVtYmVyIEkgZG9uJ3QgaGF2ZSBhbnkg
+bW9yZQ0KPj4+IGNvbW1lbnRzLg0KPj4NCj4+IEhlbGxvISBXaGVuIHlvdSBhcmUgYmFjaywgY291
+bGQgeW91IGxvb2sgYXQgbXkgZmVlZGJhY2sgdG8geW91ciBjb21tZW50cz8NCj4gDQo+IFBJTkc/
+DQo+IA0KPj4+Pg0KPj4+PiBPbiBNb25kYXkgMjYgU2VwdGVtYmVyIDIwMjIgMTE6NDc6MDYgUGFs
+aSBSb2jDoXIgd3JvdGU6DQo+Pj4+PiBPbiBNb25kYXkgMjYgU2VwdGVtYmVyIDIwMjIgMDk6NDM6
+NTUgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+Pj4+PiBMZSAxOS8wOC8yMDIyIMOgIDIxOjE1
+LCBQYWxpIFJvaMOhciBhIMOpY3JpdMKgOg0KPj4+Pj4+PiBGdW5jdGlvbiBtcGM4NXh4X2RzX3Bp
+Y19pbml0KCkgaXMgbm90IHVzZWQgb3V0IG9mIHRoZSBtcGM4NXh4X2RzLmMgZmlsZS4NCj4+Pj4+
+Pj4NCj4+Pj4+Pj4gU2lnbmVkLW9mZi1ieTogUGFsaSBSb2jDoXIgPHBhbGlAa2VybmVsLm9yZz4N
+Cj4+Pj4+Pg0KPj4+Pj4+IFRoaXMgcGF0Y2ggc2hvdWxkIGJlIHNxdWFzaGVkIGludG8gcGF0Y2gg
+MS4NCj4+Pj4+DQo+Pj4+PiBObyBwcm9ibGVtLiBKdXN0IHRvIGV4cGxhaW4gdGhhdCBJIHNwbGl0
+IHRob3NlIGNoYW5nZXMgaW50byBkaWZmZXJlbnQNCj4+Pj4+IHBhdGNoZXMgYmVjYXVzZSB0aGV5
+IHRvdWNoIGRpZmZlcmVudCBmaWxlcyBhbmQgZGlmZmVyZW50IGJvYXJkIGNvZGUuDQo+Pj4+PiBB
+bmQgSSB0aG91Z2h0IHRoYXQgZGlmZmVyZW50IHRoaW5ncyBzaG91bGQgYmUgaW4gZGlmZmVyZW50
+IHBhdGNoZXMuDQoNCkl0J3MgZmluZSBmb3IgbWUgaWYgeW91IHByZWZlciBrZWVwaW5nIHRoZW0g
+c2VwYXJhdGUsIHVwIHRvIHlvdS4NCg0KQ2hyaXN0b3BoZQ0K
