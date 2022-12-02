@@ -2,130 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76655641052
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C611B641057
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbiLBWFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S234696AbiLBWHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiLBWFq (ORCPT
+        with ESMTP id S234369AbiLBWHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:05:46 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6443F00D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:05:45 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id 140so6132564pfz.6
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YGmhfz9LKketteJ29KbDn67sA38cLHNS36kuvwxlMm8=;
-        b=TSqUQgbjbBdg6dvDWR1KVKuTEI3gAe6/W+8DLD7nw2mWi+QX+pcwtPxwJFoxQmJGEe
-         uNxgwfWgkBGeh75QcHsRkRMQfxOkr6GVNv7M9DU6N537BAZNupUYZmYR8DdUZWlAAwbR
-         KMF3Htct7RWcrCqmWw5tW/Ic0PXvyQHTzFYVE=
+        Fri, 2 Dec 2022 17:07:42 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFDFE02F;
+        Fri,  2 Dec 2022 14:07:39 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id a27so7121218qtw.10;
+        Fri, 02 Dec 2022 14:07:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGmhfz9LKketteJ29KbDn67sA38cLHNS36kuvwxlMm8=;
-        b=rpgcNqEo1RBptJJuH1COEYtLscn5+X+zK4OQmYKRW90s0rtnS/0+JjN4YPeAlTrZ4j
-         47Fmg1jMrL9o18B10IVIGfh/e8Nzy5btGh+m+RVWwZ29IixfMlvKJLXefkmNbA0JqHyj
-         Zvwghi7fu8fbBDZz4pXsl6qK6+7lrHVhDaGWMf6/RLRy3MrcUsVovnBFEt7xSYAPqyJt
-         DH4IeZt63q9GUXhbPf09PsBS5KYmvNRJyEFG5lKUniwuzJ/MbqZqjGb9C3vJUxHH2END
-         74wV1E09vb3T7Nw2eNVCUzXhNUThTabR7TaxckvTBsKb2o2tZFaIo0zHcTjzJHuqG1v0
-         KhrA==
-X-Gm-Message-State: ANoB5pnY15USWUOASSFub7pCwS1SuHncqyuW10C4s/vvqhSwfn6J2DU1
-        v3ypQjbHIZy/0ay2c/ohWQTaGA==
-X-Google-Smtp-Source: AA0mqf5DhG6zysI+aj3WH5KAazaNoxWHCLIcnDeHYGVOYKMWwq4jAur5eQGJ0+dbDGN2a+EriUvEoA==
-X-Received: by 2002:a05:6a00:4009:b0:563:2ada:30a3 with SMTP id by9-20020a056a00400900b005632ada30a3mr55402742pfb.27.1670018745233;
-        Fri, 02 Dec 2022 14:05:45 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s24-20020a17090ad49800b00210125b789dsm5170014pju.54.2022.12.02.14.05.44
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lkTcKNMIja3P0DZgrqBZsD+lkTUQzIAo4sE7fLKbeNA=;
+        b=pm5n4aLa3Bm1V9CrTYzDs8FeMzPzxrDNEa+E6jKdvB2ZSqt3mDpP1t3jh/eYTZHwuA
+         4lsAb+KErcKNUN3FMQoe78JbEzONi7h9hYXppEu8xa5nDKXQBqBeab1kll4CbYciKIiK
+         CPa0/cPT+mUolkJy1UtFR6CxT7yYI3wKhrsQ/07wsrZN6rU8SP/r4SpQtmyDfyyAI1D4
+         zXL9PRgY/fRy+dgbwbaCjvw4GeZ/JIQyiSGagXz0PcVh9Zk9G+DsL6zpbQYSF0Cd0d+p
+         ekqQTUHqMmnlWBqaXORvmrot/vhRsPO5pcJlw1VggV3hoNntILzdDW5Q55l56mOc6Cql
+         o0fQ==
+X-Gm-Message-State: ANoB5pklXwNaJhuCAZO9xLMwVR3GFBss74jzqOvgbhhc9N+ct18/i2HB
+        vOFgmMn29TLUtVIAAhZzRvtUo+5gvRUHa6bs
+X-Google-Smtp-Source: AA0mqf7dI94abK6G2EtGz9/cIoAc+IZNkkKPqmr7Cvj7t49xVsPGant49Sg2Xu4Qdraq8FmVo+rIZw==
+X-Received: by 2002:a05:622a:13d3:b0:3a6:8f93:11e with SMTP id p19-20020a05622a13d300b003a68f93011emr11357735qtk.474.1670018858009;
+        Fri, 02 Dec 2022 14:07:38 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:6d2e])
+        by smtp.gmail.com with ESMTPSA id p26-20020ac8461a000000b003a50d92f9b4sm4912630qtn.1.2022.12.02.14.07.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:05:44 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 2 Dec 2022 14:05:43 -0800
-To:     Shayne Chen <shayne.chen@mediatek.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        StanleyYP Wang <StanleyYP.Wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Chiu <chui-hao.chiu@mediatek.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Money Wang <Money.Wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Howard Hsu <howard-yh.hsu@mediatek.com>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        "David S. Miller" <davem@davemloft.net>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        MeiChia Chiu <meichia.chiu@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Bo Jiao <Bo.Jiao@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: mt7996_rf_regval_set(): Integer handling issues
-Message-ID: <202212021405.93CF11D2A@keescook>
+        Fri, 02 Dec 2022 14:07:37 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next 0/2] Document some recent core kfunc additions
+Date:   Fri,  2 Dec 2022 16:07:34 -0600
+Message-Id: <20221202220736.521227-1-void@manifault.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+A series of recent patch sets introduced kfuncs that allowed struct
+task_struct and struct cgroup objects to be used as kptrs. These were
+introduced in [0], [1], and [2].
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221202 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+[0]: https://lore.kernel.org/lkml/20221120051004.3605026-1-void@manifault.com/
+[1]: https://lore.kernel.org/lkml/20221122145300.251210-2-void@manifault.com/T/
+[2]: https://lore.kernel.org/lkml/20221122055458.173143-1-void@manifault.com/
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+These are "core" kfuncs, in that they may be used by a wide variety of
+possible BPF tracepoint or struct_ops programs, and are defined in
+kernel/bpf/helpers.c. Even though as kfuncs they have no ABI stability
+guarantees, they should still be properly documented. This patch set
+adds that documentation.
 
-  Thu Dec 1 17:29:14 2022 +0100
-    98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+Some other kfuncs were added recently as well, such as
+bpf_rcu_read_lock() and bpf_rcu_read_unlock(). Those could and should be
+added to this "Core kfuncs" section as well in other patch sets.
 
-Coverity reported the following:
+David Vernet (2):
+  bpf/docs: Document struct task_struct * kfuncs
+  bpf/docs: Document struct cgroup * kfuncs
 
-*** CID 1527816:  Integer handling issues  (INCOMPATIBLE_CAST)
-drivers/net/wireless/mediatek/mt76/mt7996/debugfs.c:657 in mt7996_rf_regval_set()
-651
-652     static int
-653     mt7996_rf_regval_set(void *data, u64 val)
-654     {
-655     	struct mt7996_dev *dev = data;
-656
-vvv     CID 1527816:  Integer handling issues  (INCOMPATIBLE_CAST)
-vvv     Pointer "&val" points to an object whose effective type is "unsigned long long" (64 bits, unsigned) but is dereferenced as a narrower "unsigned int" (32 bits, unsigned). This may lead to unexpected results depending on machine endianness.
-657     	return mt7996_mcu_rf_regval(dev, dev->mt76.debugfs_reg, (u32 *)&val, true);
-658     }
-659
-660     DEFINE_DEBUGFS_ATTRIBUTE(fops_rf_regval, mt7996_rf_regval_get,
-661     			 mt7996_rf_regval_set, "0x%08llx\n");
-662
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527816 ("Integer handling issues")
-Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
-
-Thanks for your attention!
+ Documentation/bpf/kfuncs.rst | 198 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/helpers.c         |  10 +-
+ 2 files changed, 203 insertions(+), 5 deletions(-)
 
 -- 
-Coverity-bot
+2.38.1
+
