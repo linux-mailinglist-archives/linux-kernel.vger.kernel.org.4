@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D7164078A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5D064078C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbiLBNOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 08:14:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S233331AbiLBNPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 08:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbiLBNOs (ORCPT
+        with ESMTP id S232011AbiLBNPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 08:14:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4CC2D34;
-        Fri,  2 Dec 2022 05:14:46 -0800 (PST)
-Date:   Fri, 02 Dec 2022 13:14:43 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669986885;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 2 Dec 2022 08:15:17 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B45C2D34;
+        Fri,  2 Dec 2022 05:15:16 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8026121B98;
+        Fri,  2 Dec 2022 13:15:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669986915; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=h+p2fu6JSCcHY0+/+EgBDL3llyV9MW691Es3BXXbOoA=;
-        b=V5rT8kblTn0wGD71Q6TbK7hSlbNG/8Mo3Be3SGLDQmD3haAkUZhav1D52Z6SIqSN05VRfY
-        46bpuGHep3wfZdQiFIoShYtBQqPAQpBQnZF0e911wVBjkoh0MdB5C/sw16HYwJSultteUM
-        HMztnTn1hMDeJHo76w7V6iA4xUeFeq8FBo6V7F4WQ13KJD+rCy361Zy0CNHxHd6jyCh0cX
-        WSgsQL3t6SlHBlMbsmiqp0UJc4eS8OLNFBm7Hu/eLMWV20fper2ZiuClCbEpwYgvLJLcmT
-        waxFl1oFhRDTD3k038a9imMPPb/GCztgUkNYkuoeTbyhZ0G2kRnpSO52gvvckA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669986885;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        bh=ziDC4wku+9nZYy20pOYDbXvY6zGCI5yr6NmjzJA9rks=;
+        b=bBJTOHNxINOaPLEQSsBGm6AQOJZyLuQBIyAT81NugBzo70N/7g3d7so0VuUGMnuFpElFoR
+        qA2Jf7GnRu+kXBmgtETBirnrqQjNHVngI5UJClOb5Fb1PvemjgHG60pjEGt+NzsiKiIYQF
+        w8pYL9OW+G1QlbLdSaMla/inT8rmZFo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669986915;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=h+p2fu6JSCcHY0+/+EgBDL3llyV9MW691Es3BXXbOoA=;
-        b=slJ/mJ+I3cZUWlsJOiQhQgNXk9NEzXEABOwkoFv68OKnxRrTPv6HlD5vTY7jBx/KHbcF6g
-        Dzzv79lGg5gS8lAA==
-From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/asm/32: Remove setup_once()
-Cc:     Brian Gerst <brgerst@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221115184328.70874-1-brgerst@gmail.com>
-References: <20221115184328.70874-1-brgerst@gmail.com>
-MIME-Version: 1.0
-Message-ID: <166998688334.4906.16854290928005814272.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        bh=ziDC4wku+9nZYy20pOYDbXvY6zGCI5yr6NmjzJA9rks=;
+        b=mAu6xNLHYwcLYVwbWUg/9bBzYlUOdO60N/rEJuQlCY7Mu5iFfKCHTt5a5SSRkOhFMxIQmE
+        CAzqpVk3blgdkQCA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 51ADB133DE;
+        Fri,  2 Dec 2022 13:15:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id 1OtNE2P6iWPURQAAGKfGzw
+        (envelope-from <tiwai@suse.de>); Fri, 02 Dec 2022 13:15:15 +0000
+Date:   Fri, 02 Dec 2022 14:15:14 +0100
+Message-ID: <87iliuoskd.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Dicheng Wang <wangdicheng123@hotmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, sdoregor@sdore.me,
+        john-linux@pelago.org.uk, hahnjo@hahnjo.de, wangdicheng@kylinos.cn,
+        connerknoxpublic@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH -next] The USB audio driver does not contain the VID and PID of this sound card, so the driver is not loaded.
+In-Reply-To: <SG2PR02MB5878D3E800F2D571A7C2234F8A179@SG2PR02MB5878.apcprd02.prod.outlook.com>
+References: <SG2PR02MB5878D3E800F2D571A7C2234F8A179@SG2PR02MB5878.apcprd02.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,73 +70,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+On Fri, 02 Dec 2022 09:29:08 +0100,
+Dicheng Wang wrote:
+> 
+> From: wangdicheng <wangdicheng@kylinos.cn>
+> 
+> Add relevant information to the quirks-table.h file.
+> The test passes and the sound source file plays normally.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: wangdicheng <wangdicheng@kylinos.cn>
 
-Commit-ID:     ff4c85c05333c6f24d3fe0a344c6dacd18a7ee49
-Gitweb:        https://git.kernel.org/tip/ff4c85c05333c6f24d3fe0a344c6dacd18a7ee49
-Author:        Brian Gerst <brgerst@gmail.com>
-AuthorDate:    Tue, 15 Nov 2022 13:43:28 -05:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 02 Dec 2022 14:06:34 +01:00
+The code change itself looks good, but could you fix the patch subject
+line?  It should have the proper prefix (in this case something like
+"ALSA: usb-audio: Blah blah..."), and the text is unnecessarily long.
+Please make it concise.
 
-x86/asm/32: Remove setup_once()
+Also, could you give the lsusb -v output of the corresponding device?
+Just to make sure.  If possible, it'd be better to use the existing
+macro like USB_DEVICE_VENDOR_SPEC() or USB_AUDIO_DEVICE() instead.
 
-After the removal of the stack canary segment setup code, this function
-does nothing.
 
-Signed-off-by: Brian Gerst <brgerst@gmail.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20221115184328.70874-1-brgerst@gmail.com
+thanks,
 
----
- arch/x86/kernel/head_32.S | 22 ----------------------
- 1 file changed, 22 deletions(-)
+Takashi
 
-diff --git a/arch/x86/kernel/head_32.S b/arch/x86/kernel/head_32.S
-index 9b7acc9..67c8ed9 100644
---- a/arch/x86/kernel/head_32.S
-+++ b/arch/x86/kernel/head_32.S
-@@ -261,16 +261,6 @@ SYM_FUNC_START(startup_32_smp)
- 	addl $__PAGE_OFFSET, %esp
- 
- /*
-- * start system 32-bit setup. We need to re-do some of the things done
-- * in 16-bit mode for the "real" operations.
-- */
--	movl setup_once_ref,%eax
--	andl %eax,%eax
--	jz 1f				# Did we do this already?
--	call *%eax
--1:
--
--/*
-  * Check if it is 486
-  */
- 	movb $4,X86			# at least 486
-@@ -331,18 +321,7 @@ SYM_FUNC_END(startup_32_smp)
- 
- #include "verify_cpu.S"
- 
--/*
-- *  setup_once
-- *
-- *  The setup work we only want to run on the BSP.
-- *
-- *  Warning: %esi is live across this function.
-- */
- __INIT
--setup_once:
--	andl $0,setup_once_ref	/* Once is enough, thanks */
--	RET
--
- SYM_FUNC_START(early_idt_handler_array)
- 	# 36(%esp) %eflags
- 	# 32(%esp) %cs
-@@ -458,7 +437,6 @@ SYM_DATA(early_recursion_flag, .long 0)
- __REFDATA
- 	.align 4
- SYM_DATA(initial_code,		.long i386_start_kernel)
--SYM_DATA(setup_once_ref,	.long setup_once)
- 
- #ifdef CONFIG_PAGE_TABLE_ISOLATION
- #define	PGD_ALIGN	(2 * PAGE_SIZE)
+
+> ---
+>  sound/usb/quirks-table.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/sound/usb/quirks-table.h b/sound/usb/quirks-table.h
+> index 874fcf245747..1fb183895da0 100644
+> --- a/sound/usb/quirks-table.h
+> +++ b/sound/usb/quirks-table.h
+> @@ -2802,6 +2802,13 @@ YAMAHA_DEVICE(0x7010, "UB99"),
+>  	.idProduct = 0x1020,
+>  },
+>  
+> +/* Ktmicro Usb_audio device */
+> +{
+> +	.match_flags = USB_DEVICE_ID_MATCH_DEVICE,
+> +	.idVendor = 0x31b2,
+> +	.idProduct = 0x0011,
+> +},
+> +
+>  /* QinHeng devices */
+>  {
+>  	USB_DEVICE(0x1a86, 0x752d),
+> -- 
+> 2.25.1
+> 
