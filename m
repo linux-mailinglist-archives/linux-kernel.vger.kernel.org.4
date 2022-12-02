@@ -2,156 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479F9640879
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB15640880
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233505AbiLBOcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:32:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S233553AbiLBOdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbiLBOc1 (ORCPT
+        with ESMTP id S233602AbiLBOdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:32:27 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9C8BDB;
-        Fri,  2 Dec 2022 06:32:26 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 9a89291df2bf92d8; Fri, 2 Dec 2022 15:32:23 +0100
-Received: from kreacher.localnet (unknown [213.134.188.181])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 371D52602969;
-        Fri,  2 Dec 2022 15:32:22 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v1 2/2] PM: runtime: Relocate rpm_callback() right after __rpm_callback()
-Date:   Fri, 02 Dec 2022 15:32:09 +0100
-Message-ID: <2264402.ElGaqSPkdT@kreacher>
-In-Reply-To: <5627469.DvuYhMxLoT@kreacher>
-References: <5627469.DvuYhMxLoT@kreacher>
+        Fri, 2 Dec 2022 09:33:12 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D446637C;
+        Fri,  2 Dec 2022 06:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669991591; x=1701527591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/6k6mNVmtzB/jl/p5N0Wi6v2aL60rnZtwGnJuRkORpM=;
+  b=m3HphLeUYR0TDa0tPexFXL7fTQIMlB2d0qZJh2NtqqGFjxcjav6mRGYz
+   0RcIYSwBJwD/0ceNpif10LMCR9wpae3zDcVwD5MWsK96gXqSPWGa4Hswp
+   HLJIttK79jaN8Ab5aiGTVqYr0e21N9IorB3OWqBrN7hu2Jxt2wLXsiPl9
+   BaVgbtpBLM/RbdoheQ+iQWelkZFhGtKoFTRKIOLYm+6uZRJ5ywxmJhWYu
+   9U1Ns1xYnhQmjvchz6ymyJ2TeAFQrOXGj9BM8qRhk8LJglEP2OhRRYuYy
+   lS4yTVKo7BQxYZC8/ZQmjxdS8JDOY5A4b9kHnLaDl/dgDHY0LnW/RDWYn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="317109989"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="317109989"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 06:33:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="890164985"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="890164985"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Dec 2022 06:33:08 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p176B-003Vr6-0q;
+        Fri, 02 Dec 2022 16:33:07 +0200
+Date:   Fri, 2 Dec 2022 16:33:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Nick Hainke <vincent@systemli.org>
+Cc:     linux-next@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpiolib: fix compiling when CONFIG_GPIO_CDEV_V1 is not
+ defined
+Message-ID: <Y4oMolxWW7H15ayK@smile.fi.intel.com>
+References: <20221202140454.273333-1-vincent@systemli.org>
+ <Y4oMCYksMaQ6KYwU@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.181
-X-CLIENT-HOSTNAME: 213.134.188.181
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrtdekgdegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekkedrudekudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeekrddukedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghtnhhimhhkrghrsehquhhitghinhgtrdgtohhmpdhrtghpthhtoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtphht
- thhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghnihhtihhrrgifrgesqhhuihgtihhntgdrtghomhdprhgtphhtthhopehpvghtvghrrdifrghnghesmhgvughirghtvghkrdgtohhmpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4oMCYksMaQ6KYwU@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Dec 02, 2022 at 04:30:33PM +0200, Andy Shevchenko wrote:
+> On Fri, Dec 02, 2022 at 03:04:54PM +0100, Nick Hainke wrote:
 
-Because rpm_callback() is a wrapper around __rpm_callback(), and the
-only caller of it after the change eliminating an invocation of it
-from rpm_idle(), move the former next to the latter to make the code
-a bit easier to follow.
+...
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/runtime.c |   64 +++++++++++++++++++++----------------------
- 1 file changed, 32 insertions(+), 32 deletions(-)
 
-Index: linux-pm/drivers/base/power/runtime.c
-===================================================================
---- linux-pm.orig/drivers/base/power/runtime.c
-+++ linux-pm/drivers/base/power/runtime.c
-@@ -422,6 +422,38 @@ fail:
- }
- 
- /**
-+ * rpm_callback - Run a given runtime PM callback for a given device.
-+ * @cb: Runtime PM callback to run.
-+ * @dev: Device to run the callback for.
-+ */
-+static int rpm_callback(int (*cb)(struct device *), struct device *dev)
-+{
-+	int retval;
-+
-+	if (dev->power.memalloc_noio) {
-+		unsigned int noio_flag;
-+
-+		/*
-+		 * Deadlock might be caused if memory allocation with
-+		 * GFP_KERNEL happens inside runtime_suspend and
-+		 * runtime_resume callbacks of one block device's
-+		 * ancestor or the block device itself. Network
-+		 * device might be thought as part of iSCSI block
-+		 * device, so network device and its ancestor should
-+		 * be marked as memalloc_noio too.
-+		 */
-+		noio_flag = memalloc_noio_save();
-+		retval = __rpm_callback(cb, dev);
-+		memalloc_noio_restore(noio_flag);
-+	} else {
-+		retval = __rpm_callback(cb, dev);
-+	}
-+
-+	dev->power.runtime_error = retval;
-+	return retval != -EACCES ? retval : -EIO;
-+}
-+
-+/**
-  * rpm_idle - Notify device bus type if the device can be suspended.
-  * @dev: Device to notify the bus type about.
-  * @rpmflags: Flag bits.
-@@ -505,38 +537,6 @@ static int rpm_idle(struct device *dev,
- }
- 
- /**
-- * rpm_callback - Run a given runtime PM callback for a given device.
-- * @cb: Runtime PM callback to run.
-- * @dev: Device to run the callback for.
-- */
--static int rpm_callback(int (*cb)(struct device *), struct device *dev)
--{
--	int retval;
--
--	if (dev->power.memalloc_noio) {
--		unsigned int noio_flag;
--
--		/*
--		 * Deadlock might be caused if memory allocation with
--		 * GFP_KERNEL happens inside runtime_suspend and
--		 * runtime_resume callbacks of one block device's
--		 * ancestor or the block device itself. Network
--		 * device might be thought as part of iSCSI block
--		 * device, so network device and its ancestor should
--		 * be marked as memalloc_noio too.
--		 */
--		noio_flag = memalloc_noio_save();
--		retval = __rpm_callback(cb, dev);
--		memalloc_noio_restore(noio_flag);
--	} else {
--		retval = __rpm_callback(cb, dev);
--	}
--
--	dev->power.runtime_error = retval;
--	return retval != -EACCES ? retval : -EIO;
--}
--
--/**
-  * rpm_suspend - Carry out runtime suspend of given device.
-  * @dev: Device to suspend.
-  * @rpmflags: Flag bits.
+> > drivers/gpio/gpiolib-cdev.c:1468:16: error: implicit declaration of
+> >  function 'call_ioctl_locked' [-Werror=implicit-function-declaration]
 
+> > drivers/gpio/gpiolib-cdev.c:1503:16: error: implicit declaration of
+> >  function 'call_poll_locked'; did you mean 'wake_up_all_locked'?
+> >  [-Werror=implicit-function-declaration]
+
+> > drivers/gpio/gpiolib-cdev.c:1566:16: error: implicit declaration of
+> >  function 'call_read_locked'; did you mean 'xa_head_locked'?
+> >  [-Werror=implicit-function-declaration]
+
+> Above is a bit too noisy for the commit message. It can be trimmed 3x times.
+
+To be precise leave only the above and make them as is (i.e. unwrapped even
+if they are so long), because it's a citation from the compiler.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
