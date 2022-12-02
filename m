@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA4A640BDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F971640BE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbiLBRO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S234295AbiLBRRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiLBROz (ORCPT
+        with ESMTP id S234046AbiLBRRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:14:55 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E73E074B;
-        Fri,  2 Dec 2022 09:14:54 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m14so8764889wrh.7;
-        Fri, 02 Dec 2022 09:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B8v9XTf3vXMWdEj7JPZSNyX2wl94/lt81sDZmVmnAZk=;
-        b=REs7QLBqW5J5VrEbzEthHZE1wfZSrK3cW5zRoKBqN3bvl3pN/pCfDR+um1uJkzTC/4
-         JP9Dm4H+19RXZnkU+om7Nn9lCfBSX27Iae2tITdSutf8C/usQe5SB7bN+p5H5mZePrz6
-         xndHgU5Igr91sHK3NScswZ91dHpRQWOKaTVtWu0aVehvkf3z0jVrCHSTPeoDmyD1mXOg
-         s5/jy3ze5ZJtuLi2dMj61QW6WtkG+PjeOLTtMjLv/dplZiuw7apog/3pgaruv+HnkuB5
-         rJJJN7yYn/kiuaZsCf45/24G4dGrrZJpFF0sGgAGNUunAwBd4ZAEIwHyGUnNveDJTBoy
-         k4xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B8v9XTf3vXMWdEj7JPZSNyX2wl94/lt81sDZmVmnAZk=;
-        b=VFz5qyAVhmIDE+9vZZjOi4rzFB6fIB1KAQJimDIEkc2EMX5KsFup7AwIJoP2LPKRmP
-         fXreVc6MkGKZFmjdCEkWRRptkLUcwsPVZfwvrWLKnCW3rtCEpZdXxAYmXA2amStk7f+G
-         t6LZ/HvXiwZFS1Z2rAMs9xicmYwKpg2okm7MD0ZifGDe6mrPwFEcLLJBJ7hmZMf1yCTq
-         S2RfodKcXVVHellT2e/CkEhEHkitXXIo/HoZzTLL2SkAAB1W+m3FQq6Y3raKQFyqvMux
-         9460/QHqKIoHKtTPPoGeUe7Cj8GjNUUNzRT4gcQUUovadQ61nMlpsPxqfK34Pz+XtBLU
-         BF8Q==
-X-Gm-Message-State: ANoB5pmNj/NHf/UwELLXNV4NG2gwNOoEEn/V/ndibFngbKxXmDeF1Wwd
-        V/kBwoz0ihSzEdH/9uPcXPA=
-X-Google-Smtp-Source: AA0mqf7V00hqex6XhkoCKa3wTyxa3SNkDDr8CfdyWdN/p7w47wrcrprI66nTe6Gqv77wmWQs7pXSBA==
-X-Received: by 2002:adf:f54d:0:b0:242:9e6:ea4d with SMTP id j13-20020adff54d000000b0024209e6ea4dmr20929160wrp.251.1670001292663;
-        Fri, 02 Dec 2022 09:14:52 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id k12-20020adfe8cc000000b00241b5af8697sm7651532wrn.85.2022.12.02.09.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 09:14:51 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] ASoC: rt715: Make read-only arrays capture_reg_H and capture_reg_L static const
-Date:   Fri,  2 Dec 2022 17:14:50 +0000
-Message-Id: <20221202171450.1815346-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 2 Dec 2022 12:17:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63370DA7F5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:16:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670001379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yKke9EW2oGA8ByDm6GYJX6e3Hk5NSm64Il6UHZTRwa8=;
+        b=GI4jiMDsiKqtnYp56JkWZQKWAibAl/YnZlSH0EUXq4/U22KgRoMAMa0UQfLFgqAsR7Vhg3
+        EQ/NEP/vEvH1cKahtxkLSKu+0hPagOpzqchfRjqcMFNrfXf0AgQ1saZKcaWxiRgYJk0ml6
+        eIeP7coww05K5ir+ETG1YjEQ7wPdH3M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-vjZ491oLOVi0QDHOSxrY_w-1; Fri, 02 Dec 2022 12:16:15 -0500
+X-MC-Unique: vjZ491oLOVi0QDHOSxrY_w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F1DBE185A78F;
+        Fri,  2 Dec 2022 17:16:14 +0000 (UTC)
+Received: from bfoster.redhat.com (unknown [10.22.8.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AE2C740C947B;
+        Fri,  2 Dec 2022 17:16:14 +0000 (UTC)
+From:   Brian Foster <bfoster@redhat.com>
+To:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ikent@redhat.com, onestero@redhat.com, willy@infradead.org,
+        ebiederm@redhat.com
+Subject: [PATCH v3 0/5] proc: improve root readdir latency with many threads
+Date:   Fri,  2 Dec 2022 12:16:15 -0500
+Message-Id: <20221202171620.509140-1-bfoster@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,95 +59,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the read-only arrays capture_reg_H and capture_reg_L
-on the stack but instead make them static const. Also makes the
-object code a little smaller.
+Hi all,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- sound/soc/codecs/rt715.c | 48 ++++++++++++++++++++--------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+Here's v3 of the /proc readdir optimization patches. See v1 for the full
+introductary cover letter.
 
-diff --git a/sound/soc/codecs/rt715.c b/sound/soc/codecs/rt715.c
-index 917a04092da2..1a2036ccfbac 100644
---- a/sound/soc/codecs/rt715.c
-+++ b/sound/soc/codecs/rt715.c
-@@ -204,12 +204,12 @@ static int rt715_set_main_switch_put(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_dapm_context *dapm =
- 		snd_soc_component_get_dapm(component);
- 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
--	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
--		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
--		RT715_SET_GAIN_MIX_ADC2_H};
--	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
--		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
--		RT715_SET_GAIN_MIX_ADC2_L};
-+	static const unsigned int capture_reg_H[] = {
-+		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
-+		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
-+	static const unsigned int capture_reg_L[] = {
-+		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
-+		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L };
- 	unsigned int addr_h, addr_l, val_h = 0x0, val_ll, val_lr;
- 	unsigned int k_shift = RT715_DIR_IN_SFT, k_changed = 0;
- 	unsigned int read_ll, read_rl, i, j, loop_cnt = 4;
-@@ -284,12 +284,12 @@ static int rt715_set_main_switch_get(struct snd_kcontrol *kcontrol,
- {
- 	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
- 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
--	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
--		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
--		RT715_SET_GAIN_MIX_ADC2_H};
--	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
--		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
--		RT715_SET_GAIN_MIX_ADC2_L};
-+	static const unsigned int capture_reg_H[] = {
-+		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
-+		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
-+	static const unsigned int capture_reg_L[] = {
-+		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
-+		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L };
- 	unsigned int addr_h, addr_l, val_h = 0x0, i, loop_cnt = 4;
- 	unsigned int read_ll, read_rl;
- 
-@@ -312,12 +312,12 @@ static int rt715_set_main_vol_put(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_dapm_context *dapm =
- 		snd_soc_component_get_dapm(component);
- 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
--	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
--		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
--		RT715_SET_GAIN_MIX_ADC2_H};
--	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
--		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
--		RT715_SET_GAIN_MIX_ADC2_L};
-+	static const unsigned int capture_reg_H[] = {
-+		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
-+		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
-+	static const unsigned int capture_reg_L[] = {
-+		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
-+		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L};
- 	unsigned int addr_h, addr_l, val_h = 0x0, val_ll, val_lr;
- 	unsigned int read_ll, read_rl, i, j, loop_cnt = 4, k_changed = 0;
- 	unsigned int k_shift = RT715_DIR_IN_SFT, k_max = 0x3f;
-@@ -393,12 +393,12 @@ static int rt715_set_main_vol_get(struct snd_kcontrol *kcontrol,
- {
- 	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
- 	struct rt715_priv *rt715 = snd_soc_component_get_drvdata(component);
--	unsigned int capture_reg_H[] = {RT715_SET_GAIN_MIC_ADC_H,
--		RT715_SET_GAIN_LINE_ADC_H, RT715_SET_GAIN_MIX_ADC_H,
--		RT715_SET_GAIN_MIX_ADC2_H};
--	unsigned int capture_reg_L[] = {RT715_SET_GAIN_MIC_ADC_L,
--		RT715_SET_GAIN_LINE_ADC_L, RT715_SET_GAIN_MIX_ADC_L,
--		RT715_SET_GAIN_MIX_ADC2_L};
-+	static const unsigned int capture_reg_H[] = {
-+		RT715_SET_GAIN_MIC_ADC_H, RT715_SET_GAIN_LINE_ADC_H,
-+		RT715_SET_GAIN_MIX_ADC_H, RT715_SET_GAIN_MIX_ADC2_H };
-+	static const unsigned int capture_reg_L[] = {
-+		RT715_SET_GAIN_MIC_ADC_L, RT715_SET_GAIN_LINE_ADC_L,
-+		RT715_SET_GAIN_MIX_ADC_L, RT715_SET_GAIN_MIX_ADC2_L };
- 	unsigned int addr_h, addr_l, val_h = 0x0, i, loop_cnt = 4;
- 	unsigned int read_ll, read_rl;
- 
+Most of the feedback received to this point has been around switching
+the pid code over to use the xarray api instead of the idr. Matt Wilcox
+posted most of the code to do that. I cleaned it up a bit and posted a
+standalone series for that here [1], but didn't receive any feedback.
+Patches 1-3 of this series are essentially a repost of [1].
+
+Patches 4-5 are otherwise mostly the same as v2 outside of switching
+over to use the xarray bits instead of the idr/radix-tree.
+
+Thoughts, reviews, flames appreciated.
+
+Brian
+
+[1] https://lore.kernel.org/linux-mm/20220715113349.831370-1-bfoster@redhat.com/
+
+v3:
+- Drop radix-tree fixups.
+- Convert pid idr usage to xarray.
+- Replace tgid radix-tree tag set/lookup to use xarray mark.
+v2: https://lore.kernel.org/linux-fsdevel/20220711135237.173667-1-bfoster@redhat.com/
+- Clean up idr helpers to be more generic.
+- Use ->idr_base properly.
+- Lift tgid iteration helper into pid.c to abstract tag logic from
+  users.
+v1: https://lore.kernel.org/linux-fsdevel/20220614180949.102914-1-bfoster@redhat.com/
+
+Brian Foster (5):
+  pid: replace pidmap_lock with xarray lock
+  pid: split cyclic id allocation cursor from idr
+  pid: switch pid_namespace from idr to xarray
+  pid: mark pids associated with group leader tasks
+  procfs: use efficient tgid pid search on root readdir
+
+ arch/powerpc/platforms/cell/spufs/sched.c |   2 +-
+ fs/proc/base.c                            |  17 +--
+ fs/proc/loadavg.c                         |   2 +-
+ include/linux/pid.h                       |   3 +-
+ include/linux/pid_namespace.h             |   9 +-
+ include/linux/threads.h                   |   2 +-
+ init/main.c                               |   3 +-
+ kernel/fork.c                             |   2 +-
+ kernel/pid.c                              | 177 +++++++++++++---------
+ kernel/pid_namespace.c                    |  23 ++-
+ 10 files changed, 132 insertions(+), 108 deletions(-)
+
 -- 
-2.38.1
+2.37.3
 
