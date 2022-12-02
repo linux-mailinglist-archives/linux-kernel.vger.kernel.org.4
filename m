@@ -2,85 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DDC640B07
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70BE640B0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbiLBQpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S234046AbiLBQrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:47:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbiLBQpT (ORCPT
+        with ESMTP id S233375AbiLBQrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:45:19 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB54C7267
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:45:18 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id l11so7231478edb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 08:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sWhyuOgAR3tJq3LBvDj1lg7AzkgIK7zVd0B6OOAMYrY=;
-        b=AL1rW8hDe+2RKMwRiTR/ZNF/A2WEZBPkWHi+/CSPJfeph6tMJsbJnA1lfzQqk1P8eM
-         hOqPlGXy+U8VAUnbjqrWymUMrFyVF+SgPeHO/eFaj7pZcFqKCcuA2K19KNx/W2m0m4yf
-         kjSmhsRtyrOl5eFNywQAllUboagtfP92WQYTE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sWhyuOgAR3tJq3LBvDj1lg7AzkgIK7zVd0B6OOAMYrY=;
-        b=yWBTp728+4N9lweXDGiAmX3O1Rr6WhCHCZXDoox8ukgYKfPYpDVF38QL7EoTk3u1CW
-         KUPa6kqiOBEGjhcBWuZhDM4Ml/V34IGUEd4ZXjdBWvWGnuG5rhOTZLKCzeACaUJwxFCY
-         83416H/ykD5xvNcmtQP4J7xuQdMdXQWb3qhbHQ0GVVE2Etcjt7c6yfMdwVunAyR0Jsiw
-         3ofR/oxdFv6yBcGPSmJjdFKYWpJuUYZm7aXdAxxvQ0wBmsr3Vr9wHm3vBnr2M4i1FaAS
-         u9aDBARLun54+pnigLdaLbEX2+2sFvnEc3RM5tXJxGutzPcafqd003OwI/7ViF+vS7gK
-         syBg==
-X-Gm-Message-State: ANoB5pkuY0U/KHxoAwPShToQToYA0JvwUxgJzjtVng/ne2r3ym5wX1mm
-        s5L0HpnIEyk1O5a9CRJyFhcQShKHlYPA2bEGInE=
-X-Google-Smtp-Source: AA0mqf7lNjEvvs8jGNFvAsLuQXF6RZVHwpRRANujMCTbcveNhpdvovCHVLkVPx3jYI+5uqlQ7IFPTg==
-X-Received: by 2002:aa7:d7d4:0:b0:46b:7f11:10a4 with SMTP id e20-20020aa7d7d4000000b0046b7f1110a4mr15910247eds.59.1669999516951;
-        Fri, 02 Dec 2022 08:45:16 -0800 (PST)
-Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id t15-20020aa7d4cf000000b0046c53c3b2dfsm111981edr.38.2022.12.02.08.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 08:45:16 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 02 Dec 2022 17:45:07 +0100
-Subject: [PATCH RESEND v2 2/2] media: uvcvideo: Limit power line control for
- Lenovo Integrated Camera
+        Fri, 2 Dec 2022 11:47:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C664C82DE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 08:46:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669999581;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bDZB9/UWBP2K8rOod3EiStKnFBOCd1JU4UtUL2I7L4s=;
+        b=ANqPx6KZdDKdJh9GaI+ZanZMIhX2k/k50sI9kA+Xz4cOVKW80za4iXAj3Go8oroqArsDES
+        19AowtL1AKAb9XZlV/y4gQw3RV12KzVf2Ui+ZTgOGKw26CmfqixzQ4DOqoroelHDIBRElQ
+        +BYnixGxJSpWafv1TjF5u5PO040+Fck=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-Qi2ujFK3NKW2JVwfSMsgOw-1; Fri, 02 Dec 2022 11:46:18 -0500
+X-MC-Unique: Qi2ujFK3NKW2JVwfSMsgOw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 216C41C06EE6;
+        Fri,  2 Dec 2022 16:46:18 +0000 (UTC)
+Received: from [172.30.42.193] (unknown [10.22.33.192])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 63EDD1410DDA;
+        Fri,  2 Dec 2022 16:46:17 +0000 (UTC)
+Subject: [PATCH] vfio/ap/ccw/samples: Fix device_register() unwind path
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     alex.williamson@redhat.com
+Cc:     ruanjinjie <ruanjinjie@huawei.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Eric Farman <farman@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 02 Dec 2022 09:46:15 -0700
+Message-ID: <166999942139.645727.12439756512449846442.stgit@omen>
+User-Agent: StGit/1.5.dev2+g9ce680a52bd9
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221101-easycam-v2-2-ffe3e3a152df@chromium.org>
-References: <20221101-easycam-v2-0-ffe3e3a152df@chromium.org>
-In-Reply-To: <20221101-easycam-v2-0-ffe3e3a152df@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2864; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=C/uBBpj4LsicA+QlhxpKIRS8BFwjHReaadkNXEaD+Nc=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjiiuZJWESF3BxOdqAjgp0C3Jsv6F0jNqcC1ZU4CdH
- UUdkhGWJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ormQAKCRDRN9E+zzrEiPK9D/
- 9QeMT7lYBXRdBOQ812IZfZQ0GVB0/83V8HrFXZf+B2xf9CAfZXwv59wrGhz9FhIqCKD9ki3N+JLUEq
- rSbqtGSRrrg1OJPdbx/l+zSVK0sOTXr71SV8Ep4OkXLDcWWocJZoBF2Q6KOOOxgIyK4A6/z5ElGh3s
- sm/WldlblGSZUceINf6J1PA5WODq6E+5MVzwtdltP+MjfPQreQkt9DQyZIXfklKtTCVOg8W+TdELvE
- 2AFVe/8qb2PBGLCEuo6XVk1rdDzxKdaXt6nxBxCgbOIu49//z69Br89jdwVEbCkMvHrx38Fzt7/l2v
- V08DvYdIUYLuMQh2271aZSGSfdGSMXctQrxvRw4zvCTwDxXmeJzMBJgJSzXZmD8QagIFsK8yocGNK4
- MOKiJa6KYuOfXox6mBD/Utiq1x3GChBAJingbKnAlZuuVr2+rZcbkWASI0ZCdWZ53VUKBDKX64qevX
- mTgIW9CkcLaLLtVmlaXJ6C9ecP6tafkjNTYydi7uqTSIAXWog2JWomusA9H0MN6epYW2QlS0PJZHWG
- Vau9N5BJqi05wdyjBtNoTMt5z61HJoTs9mouqat7tyIhDQXaeNAYt+zziV/3TyG0T6uSv7iDNTpoin
- bloE9k7OCFhyFWjLJ8gd9f43oQLxgKcQrNEkYWOaqlAV25xp8utKGU36xFLw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJECT_DRUG_GAP_L autolearn=no
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,82 +65,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device does not implement the power line control correctly. Add a
-corresponding control mapping override.
+We always need to call put_device() if device_register() fails.
+All vfio drivers calling device_register() include a similar unwind
+stack via gotos, therefore split device_unregister() into its
+device_del() and put_device() components in the unwind path, and
+add a goto target to handle only the put_device() requirement.
 
-Bus 003 Device 002: ID 30c9:0093 Lenovo Integrated Camera
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.01
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x30c9
-  idProduct          0x0093
-  bcdDevice            0.07
-  iManufacturer           3 Lenovo
-  iProduct                1 Integrated Camera
-  iSerial                 2 8SSC21J75356V1SR2830069
-  bNumConfigurations      1
-
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reported-by: Ruan Jinjie <ruanjinjie@huawei.com>
+Link: https://lore.kernel.org/all/20221118032827.3725190-1-ruanjinjie@huawei.com
+Fixes: d61fc96f47fd ("sample: vfio mdev display - host device")
+Fixes: 9d1a546c53b4 ("docs: Sample driver to demonstrate how to use Mediated device framework.")
+Fixes: a5e6e6505f38 ("sample: vfio bochs vbe display (host device for bochs-drm)")
+Fixes: 9e6f07cd1eaa ("vfio/ccw: create a parent struct")
+Fixes: 36360658eb5a ("s390: vfio_ap: link the vfio_ap devices to the vfio_ap bus subsystem")
+Cc: Tony Krowiak <akrowiak@linux.ibm.com>
+Cc: Halil Pasic <pasic@linux.ibm.com>
+Cc: Jason Herne <jjherne@linux.ibm.com>
+Cc: Kirti Wankhede <kwankhede@nvidia.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Eric Farman <farman@linux.ibm.com>
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index cca3012c8912..e0bb21f2e133 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2373,6 +2373,30 @@ MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
-  * Driver initialization and cleanup
-  */
+I didn't intend to usurp Ruan's patch, but since the inline version is
+collecting reviews, formally post it and include additional fixes tags
+for vfio-ccw and vfio-ap.
+
+ drivers/s390/cio/vfio_ccw_drv.c   |    3 ++-
+ drivers/s390/crypto/vfio_ap_drv.c |    2 +-
+ samples/vfio-mdev/mbochs.c        |    7 ++++---
+ samples/vfio-mdev/mdpy.c          |    7 ++++---
+ samples/vfio-mdev/mtty.c          |    7 ++++---
+ 5 files changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/s390/cio/vfio_ccw_drv.c b/drivers/s390/cio/vfio_ccw_drv.c
+index c2a65808605a..54aba7cceb33 100644
+--- a/drivers/s390/cio/vfio_ccw_drv.c
++++ b/drivers/s390/cio/vfio_ccw_drv.c
+@@ -199,8 +199,9 @@ static int vfio_ccw_sch_probe(struct subchannel *sch)
+ 	return 0;
  
-+static const struct uvc_menu_info power_line_frequency_controls_uvc11[] = {
-+	{ 0, "Disabled" },
-+	{ 1, "50 Hz" },
-+	{ 2, "60 Hz" },
-+};
-+
-+static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_uvc11 = {
-+	.id		= V4L2_CID_POWER_LINE_FREQUENCY,
-+	.entity		= UVC_GUID_UVC_PROCESSING,
-+	.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
-+	.size		= 2,
-+	.offset		= 0,
-+	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
-+	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-+	.menu_info	= power_line_frequency_controls_uvc11,
-+	.menu_count	= ARRAY_SIZE(power_line_frequency_controls_uvc11),
-+};
-+
-+static const struct uvc_device_info uvc_ctrl_power_line_uvc11 = {
-+	.mappings = (const struct uvc_control_mapping *[]) {
-+		&uvc_ctrl_power_line_mapping_uvc11,
-+		NULL, /* Sentinel */
-+	},
-+};
- static const struct uvc_menu_info power_line_frequency_controls_limited[] = {
- 	{ 1, "50 Hz" },
- 	{ 2, "60 Hz" },
-@@ -2976,6 +3000,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
-+	/* Lenovo Integrated Camera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x30c9,
-+	  .idProduct		= 0x0093,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
-+	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_uvc11 },
- 	/* Sonix Technology USB 2.0 Camera */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
+ out_unreg:
+-	device_unregister(&parent->dev);
++	device_del(&parent->dev);
+ out_free:
++	put_device(&parent->dev);
+ 	dev_set_drvdata(&sch->dev, NULL);
+ 	return ret;
+ }
+diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
+index f43cfeabd2cc..997b524bdd2b 100644
+--- a/drivers/s390/crypto/vfio_ap_drv.c
++++ b/drivers/s390/crypto/vfio_ap_drv.c
+@@ -122,7 +122,7 @@ static int vfio_ap_matrix_dev_create(void)
+ 	return 0;
+ 
+ matrix_drv_err:
+-	device_unregister(&matrix_dev->device);
++	device_del(&matrix_dev->device);
+ matrix_reg_err:
+ 	put_device(&matrix_dev->device);
+ matrix_alloc_err:
+diff --git a/samples/vfio-mdev/mbochs.c b/samples/vfio-mdev/mbochs.c
+index 8b5a3a778a25..e54eb752e1ba 100644
+--- a/samples/vfio-mdev/mbochs.c
++++ b/samples/vfio-mdev/mbochs.c
+@@ -1430,7 +1430,7 @@ static int __init mbochs_dev_init(void)
+ 
+ 	ret = device_register(&mbochs_dev);
+ 	if (ret)
+-		goto err_class;
++		goto err_put;
+ 
+ 	ret = mdev_register_parent(&mbochs_parent, &mbochs_dev, &mbochs_driver,
+ 				   mbochs_mdev_types,
+@@ -1441,8 +1441,9 @@ static int __init mbochs_dev_init(void)
+ 	return 0;
+ 
+ err_device:
+-	device_unregister(&mbochs_dev);
+-err_class:
++	device_del(&mbochs_dev);
++err_put:
++	put_device(&mbochs_dev);
+ 	class_destroy(mbochs_class);
+ err_driver:
+ 	mdev_unregister_driver(&mbochs_driver);
+diff --git a/samples/vfio-mdev/mdpy.c b/samples/vfio-mdev/mdpy.c
+index 721fb06c6413..e8400fdab71d 100644
+--- a/samples/vfio-mdev/mdpy.c
++++ b/samples/vfio-mdev/mdpy.c
+@@ -717,7 +717,7 @@ static int __init mdpy_dev_init(void)
+ 
+ 	ret = device_register(&mdpy_dev);
+ 	if (ret)
+-		goto err_class;
++		goto err_put;
+ 
+ 	ret = mdev_register_parent(&mdpy_parent, &mdpy_dev, &mdpy_driver,
+ 				   mdpy_mdev_types,
+@@ -728,8 +728,9 @@ static int __init mdpy_dev_init(void)
+ 	return 0;
+ 
+ err_device:
+-	device_unregister(&mdpy_dev);
+-err_class:
++	device_del(&mdpy_dev);
++err_put:
++	put_device(&mdpy_dev);
+ 	class_destroy(mdpy_class);
+ err_driver:
+ 	mdev_unregister_driver(&mdpy_driver);
+diff --git a/samples/vfio-mdev/mtty.c b/samples/vfio-mdev/mtty.c
+index 3c2a421b9b69..e887de672c52 100644
+--- a/samples/vfio-mdev/mtty.c
++++ b/samples/vfio-mdev/mtty.c
+@@ -1330,7 +1330,7 @@ static int __init mtty_dev_init(void)
+ 
+ 	ret = device_register(&mtty_dev.dev);
+ 	if (ret)
+-		goto err_class;
++		goto err_put;
+ 
+ 	ret = mdev_register_parent(&mtty_dev.parent, &mtty_dev.dev,
+ 				   &mtty_driver, mtty_mdev_types,
+@@ -1340,8 +1340,9 @@ static int __init mtty_dev_init(void)
+ 	return 0;
+ 
+ err_device:
+-	device_unregister(&mtty_dev.dev);
+-err_class:
++	device_del(&mtty_dev.dev);
++err_put:
++	put_device(&mtty_dev.dev);
+ 	class_destroy(mtty_dev.vd_class);
+ err_driver:
+ 	mdev_unregister_driver(&mtty_driver);
 
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
+
