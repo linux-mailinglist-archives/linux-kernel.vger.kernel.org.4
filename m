@@ -2,198 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37300640E07
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8BC640E01
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234024AbiLBS63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
+        id S234171AbiLBS6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbiLBS6X (ORCPT
+        with ESMTP id S233882AbiLBS6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:58:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A1F73F6D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:57:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670007443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DgA3IhSBPj4Imfd6KCWYhNIYfzdHmYrptZ0mA7KYHf8=;
-        b=P/3GOvYqOXjr8qNYNUXP4X9BQgX5CYqNJimoHl0oJPKxL2WuOWQ+wofaNpfqf/ZzdVgocR
-        tgJDZ5yFRNg7kNx0VllRoOQX9ehKsUrzWfuH9vRN37n08zwPcu7NLPoyBMXYTFC2qCnPQJ
-        aZtr8vGmZtsXgRZrjMAtCAPcus66Yew=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-106-own5CE17N6-jm3j7HhgLlQ-1; Fri, 02 Dec 2022 13:57:22 -0500
-X-MC-Unique: own5CE17N6-jm3j7HhgLlQ-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-143d68edfa1so2474148fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:57:22 -0800 (PST)
+        Fri, 2 Dec 2022 13:58:15 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DC392FD7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:58:13 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id l127so5086294pfl.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hPdGcOCEsG7lUmArEzStFj43mzNWvKg2+Ebw16M3TCY=;
+        b=PU3gDK3JBsY8Izq24LkRkMa24eKn0Mu0dmVHTCV4yTEpqX6bxxHxWKaBIDHx0HnqeJ
+         jhExXB/Ex03vAiF69WJEpsCl4UWQ9Tovfwyo9wxw+NkZDdH0KfetQa679Ugg8duke325
+         KxFZeqdCU9j9zaf0rQ4JEC0LZDDu0WcfjaHss=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DgA3IhSBPj4Imfd6KCWYhNIYfzdHmYrptZ0mA7KYHf8=;
-        b=YJ0aS8H5S4bOmGLKbOoWunrzey3H/OloQYNlSy06WSA7c9b0NaGK4Wpfl3RAom7Jqh
-         3tNMzmwTt4BZ4YUOZmBQ4YGMbM0wjL83mp7C5I51PHo4YYOAyuiEdraXIHf1SwDRLyHi
-         heZd/NHUhUYffdB+w5yzvuvQG3USCNMJB1FAIVC0+ScqmObVsJzpRxDgIdLD1vtB23fs
-         tB0yHXFtREeOCOilZ/5BiqHoDFYTyEBuQqa6UnYUFJcd77oE0WAwgKZx60J20HF0PIkP
-         GlGXWZoLEcoX1SNC8DgA6q6rVWjNPDN3qa6mEiFSdEULePFupMPtFvd9Yj0kpgsxJiRW
-         wwGg==
-X-Gm-Message-State: ANoB5pkThj1NyhsJlCAWGvUrpIPpdBHN1kupwBkLwMTQZ2vLfne0aFUH
-        StGoZjGgKXCvT6CG2NUsNrJ4d9CcZi7wO5cGW4jK+1TvrltIZx/c1UAkp7cUyb/c9rnoDcz9+tN
-        p3iyKgvnZOZ08gCeF6Us+4FmGn012nbNFaDVAaEEg
-X-Received: by 2002:a05:6808:11c9:b0:35a:9331:8cbb with SMTP id p9-20020a05680811c900b0035a93318cbbmr25135377oiv.201.1670007440227;
-        Fri, 02 Dec 2022 10:57:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4+QBH4NKfXwt+rwbDH8EDMZTMI/ywj1GnqoWIdGc65h9lmK7OCGcS1VxiuBwQuXM9EyfPgDr5VxfIBVUHu2UA=
-X-Received: by 2002:a05:6808:11c9:b0:35a:9331:8cbb with SMTP id
- p9-20020a05680811c900b0035a93318cbbmr25135366oiv.201.1670007439961; Fri, 02
- Dec 2022 10:57:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hPdGcOCEsG7lUmArEzStFj43mzNWvKg2+Ebw16M3TCY=;
+        b=YOuhGmrG3SBhX9Gu5rctSrmFC/mk0+q6RuQV+7go8bGzZPSCASPZzFw3es97Jjpy2T
+         E+iPdBvKAF6ctwFEBSRqgONmZvwWdoiaQ3u0ydyuGM1HP+/39duWKPv/IHXXd4WOcZCe
+         HD2swc/dDiyPFr0l4pc4zpjYU9X1S5USrUVUco77eDnVnQJ9BmwdJfTr5dqrjwAtioAR
+         gyYqiqMv8q5PeQGNuQxxfw87Iwe3u3oiy2sSHLN3TiopbSY2jm4cCFOq+9EALdSMhKqX
+         IxwKEFXBE7s0yKb9gc8gCkJR+83/pnEm0KnwUNkEKMOTss89tE2QoyNeOkAWAzjwDu9J
+         kyPw==
+X-Gm-Message-State: ANoB5pl0EAw3oK8lnwH0x1FkeJgYOfD4B362MjYurDnVmf96bSjyfPvQ
+        igrw6ocYURtpff2pPrlDDjm4iQ==
+X-Google-Smtp-Source: AA0mqf48V3uHLmY0yySTaOoB/FYAXZPXo2e4ikb3ZgTnAR9y+ke4PQBq1FnMqulyBpKVV19bLfFIbA==
+X-Received: by 2002:a62:65c3:0:b0:562:ce80:1417 with SMTP id z186-20020a6265c3000000b00562ce801417mr53353551pfb.19.1670007492560;
+        Fri, 02 Dec 2022 10:58:12 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c9e5f291bsm5948660plh.111.2022.12.02.10.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 10:58:11 -0800 (PST)
+Date:   Fri, 2 Dec 2022 10:58:11 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Anders Roxell' <anders.roxell@linaro.org>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH] crypto/caam: Avoid GCC constprop bug warning
+Message-ID: <202212021057.B1B1BDE380@keescook>
+References: <20221028210527.never.934-kees@kernel.org>
+ <20221202005814.GD69385@mutt>
+ <4f7ffdd948a84013a0e84876b3e3944b@AcuMS.aculab.com>
 MIME-Version: 1.0
-References: <20221201030050.978595-1-koba.ko@canonical.com>
-In-Reply-To: <20221201030050.978595-1-koba.ko@canonical.com>
-From:   Joel Savitz <jsavitz@redhat.com>
-Date:   Fri, 2 Dec 2022 14:57:03 -0400
-Message-ID: <CAL1p7m6HzAt18EFMbr8CwTG+3Jz19Tb18iaFpsUOc7JF=oNhNQ@mail.gmail.com>
-Subject: Re: [PATCH V3] dmaengine: Fix double increment of client_count in dma_chan_get()
-To:     Koba Ko <koba.ko@canonical.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Jie Hai <haijie1@huawei.com>, Dave Jiang <dave.jiang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4f7ffdd948a84013a0e84876b3e3944b@AcuMS.aculab.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:01 PM Koba Ko <koba.ko@canonical.com> wrote:
->
-> The first time dma_chan_get() is called for a channel the channel
-> client_count is incorrectly incremented twice for public channels,
-> first in balance_ref_count(), and again prior to returning. This
-> results in an incorrect client count which will lead to the
-> channel resources not being freed when they should be. A simple
->  test of repeated module load and unload of async_tx on a Dell
->  Power Edge R7425 also shows this resulting in a kref underflow
->  warning.
->
-> [  124.329662] async_tx: api initialized (async)
-> [  129.000627] async_tx: api initialized (async)
-> [  130.047839] ------------[ cut here ]------------
-> [  130.052472] refcount_t: underflow; use-after-free.
-> [  130.057279] WARNING: CPU: 3 PID: 19364 at lib/refcount.c:28
-> refcount_warn_saturate+0xba/0x110
-> [  130.065811] Modules linked in: async_tx(-) rfkill intel_rapl_msr
-> intel_rapl_common amd64_edac edac_mce_amd ipmi_ssif kvm_amd dcdbas kvm
-> mgag200 drm_shmem_helper acpi_ipmi irqbypass drm_kms_helper ipmi_si
-> syscopyarea sysfillrect rapl pcspkr ipmi_devintf sysimgblt fb_sys_fops
-> k10temp i2c_piix4 ipmi_msghandler acpi_power_meter acpi_cpufreq vfat
-> fat drm fuse xfs libcrc32c sd_mod t10_pi sg ahci crct10dif_pclmul
-> libahci crc32_pclmul crc32c_intel ghash_clmulni_intel igb megaraid_sas
-> i40e libata i2c_algo_bit ccp sp5100_tco dca dm_mirror dm_region_hash
-> dm_log dm_mod [last unloaded: async_tx]
-> [  130.117361] CPU: 3 PID: 19364 Comm: modprobe Kdump: loaded Not
-> tainted 5.14.0-185.el9.x86_64 #1
-> [  130.126091] Hardware name: Dell Inc. PowerEdge R7425/02MJ3T, BIOS
-> 1.18.0 01/17/2022
-> [  130.133806] RIP: 0010:refcount_warn_saturate+0xba/0x110
-> [  130.139041] Code: 01 01 e8 6d bd 55 00 0f 0b e9 72 9d 8a 00 80 3d
-> 26 18 9c 01 00 75 85 48 c7 c7 f8 a3 03 9d c6 05 16 18 9c 01 01 e8 4a
-> bd 55 00 <0f> 0b e9 4f 9d 8a 00 80 3d 01 18 9c 01 00 0f 85 5e ff ff ff
-> 48 c7
-> [  130.157807] RSP: 0018:ffffbf98898afe68 EFLAGS: 00010286
-> [  130.163036] RAX: 0000000000000000 RBX: ffff9da06028e598 RCX: 0000000000000000
-> [  130.170172] RDX: ffff9daf9de26480 RSI: ffff9daf9de198a0 RDI: ffff9daf9de198a0
-> [  130.177316] RBP: ffff9da7cddf3970 R08: 0000000000000000 R09: 00000000ffff7fff
-> [  130.184459] R10: ffffbf98898afd00 R11: ffffffff9d9e8c28 R12: ffff9da7cddf1970
-> [  130.191596] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [  130.198739] FS:  00007f646435c740(0000) GS:ffff9daf9de00000(0000)
-> knlGS:0000000000000000
-> [  130.206832] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  130.212586] CR2: 00007f6463b214f0 CR3: 00000008ab98c000 CR4: 00000000003506e0
-> [  130.219729] Call Trace:
-> [  130.222192]  <TASK>
-> [  130.224305]  dma_chan_put+0x10d/0x110
-> [  130.227988]  dmaengine_put+0x7a/0xa0
-> [  130.231575]  __do_sys_delete_module.constprop.0+0x178/0x280
-> [  130.237157]  ? syscall_trace_enter.constprop.0+0x145/0x1d0
-> [  130.242652]  do_syscall_64+0x5c/0x90
-> [  130.246240]  ? exc_page_fault+0x62/0x150
-> [  130.250178]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [  130.255243] RIP: 0033:0x7f6463a3f5ab
-> [  130.258830] Code: 73 01 c3 48 8b 0d 75 a8 1b 00 f7 d8 64 89 01 48
-> 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00
-> 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 45 a8 1b 00 f7 d8 64 89
-> 01 48
-> [  130.277591] RSP: 002b:00007fff22f972c8 EFLAGS: 00000206 ORIG_RAX:
-> 00000000000000b0
-> [  130.285164] RAX: ffffffffffffffda RBX: 000055b6786edd40 RCX: 00007f6463a3f5ab
-> [  130.292303] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055b6786edda8
-> [  130.299443] RBP: 000055b6786edd40 R08: 0000000000000000 R09: 0000000000000000
-> [  130.306584] R10: 00007f6463b9eac0 R11: 0000000000000206 R12: 000055b6786edda8
-> [  130.313731] R13: 0000000000000000 R14: 000055b6786edda8 R15: 00007fff22f995f8
-> [  130.320875]  </TASK>
-> [  130.323081] ---[ end trace eff7156d56b5cf25 ]---
->
-> cat /sys/class/dma/dma0chan*/in_use would get the wrong result.
-> 2
-> 2
-> 2
->
-> Fixes: d2f4f99db3e9 ("dmaengine: Rework dma_chan_get")
-> Signed-off-by: Koba Ko <koba.ko@canonical.com>
-> Reviewed-by: Jie Hai <haijie1@huawei.com>
-> Test-by: Jie Hai <haijie1@huawei.com>
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
->
-> ---
-> V2: Remove [3/3] on subject.
-> V3: Refine title and comments as per suggestions.
-> Ref: https://patchwork.kernel.org/project/linux-dmaengine/patch/20220930173652.1251349-1-koba.ko@canonical.com/
-> ---
->  drivers/dma/dmaengine.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
-> index 2cfa8458b51be..78f8a9f3ad825 100644
-> --- a/drivers/dma/dmaengine.c
-> +++ b/drivers/dma/dmaengine.c
-> @@ -451,7 +451,8 @@ static int dma_chan_get(struct dma_chan *chan)
->         /* The channel is already in use, update client count */
->         if (chan->client_count) {
->                 __module_get(owner);
-> -               goto out;
-> +               chan->client_count++;
-> +               return 0;
->         }
->
->         if (!try_module_get(owner))
-> @@ -470,11 +471,11 @@ static int dma_chan_get(struct dma_chan *chan)
->                         goto err_out;
->         }
->
-> +       chan->client_count++;
-> +
->         if (!dma_has_cap(DMA_PRIVATE, chan->device->cap_mask))
->                 balance_ref_count(chan);
->
-> -out:
-> -       chan->client_count++;
->         return 0;
->
->  err_out:
-> --
-> 2.25.1
->
-Tested-by: Joel Savitz <jsavitz@redhat.com>
+On Fri, Dec 02, 2022 at 10:01:50AM +0000, David Laight wrote:
+> From: Anders Roxell
+> > Sent: 02 December 2022 00:58
+> > 
+> > On 2022-10-28 14:05, Kees Cook wrote:
+> > > GCC 12 appears to perform constant propagation incompletely(?) and can
+> > > no longer notice that "len" is always 0 when "data" is NULL. Expand the
+> > > check to avoid warnings about memcpy() having a NULL argument:
+> > >
+> > >    ...
+> > >                     from drivers/crypto/caam/key_gen.c:8:
+> > >    drivers/crypto/caam/desc_constr.h: In function 'append_data.constprop':
+> > >    include/linux/fortify-string.h:48:33: warning: argument 2 null where non-null expected [-
+> > Wnonnull]
+> > >       48 | #define __underlying_memcpy     __builtin_memcpy
+> > >          |                                 ^
+> > >    include/linux/fortify-string.h:438:9: note: in expansion of macro '__underlying_memcpy'
+> > >      438 |         __underlying_##op(p, q, __fortify_size);                        \
+> > >          |         ^~~~~~~~~~~~~
+> ...
+> 
+> Is this really a bug in the fortify-string wrappers?
+> IIRC the call is memcpy(NULL, ptr, 0) (or maybe memcpy(ptr, NULL, 0).
+> In either case call can be removed at compile time.
+> 
+> I'd bet that the constant propagation of 'len' fails because
+> of all the intermediate variables that get used in order to
+> avoid multiple evaluation.
+> 
+> The some 'tricks' that are used in min() (see minmax.h) to
+> generate a constant output for constant input could be
+> use to detect a compile-time zero length.
+> 
+> Something like:
+> #define memcpy(dst, src, len) \
+> 	(__is_constzero(len) ? (dst) : memcpy_check(dst, src, len))
+> 
+> With:
+> #define __is_constzero(x) sizeof(*(1 ? (void *)(x) : (int *)0) != 1)
+> Which could go into const.h and used in the definition of __is_constexpr().
 
+While it could be possible to strip the nonnull attribute, I think it's
+not an unreasonable check to have. This is literally the only case in
+the entire kernel that is tripped, for example.
+
+-- 
+Kees Cook
