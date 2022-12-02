@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC130640FEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200BF640FEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiLBVUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S234270AbiLBVWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234530AbiLBVTv (ORCPT
+        with ESMTP id S229500AbiLBVWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:19:51 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209AA9D2E6;
-        Fri,  2 Dec 2022 13:19:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=oV6byBYn0tYljp79kb76vPExm6qPuaFXLFbzIN1Gi3c=; b=lnJcPZFJS0R/dpvl0Gq+K5lQSR
-        YmE2/eMHy0Y8CPju06DjtzSTvdcfzjDWl9/42ArRjqWkNLYlUnHaqldz/k/hvFkHAg0Z0I0uQplpo
-        TMwbvD9pjvr8iPdEv/YtwLMgRf38lM0dcer5EYpq5KuZwUMAd18+79Dza6xICzBqczHxV0nw+n+D5
-        QRFpFbtq5MTJJTHRY6luSsVrGWtZVWcRPCFI/GvClnINnKe7dShzFjnHj1pcGLZqdlBlTH3O+j3HP
-        3n6YSaFFQHFVXpp8492HMQ+jtTAfk6SER0KdDMI7FWNfw8i37o8k7R8nLjNbkez2Uz6lahb95DKdP
-        lTkOALHg==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p1DRp-000X5k-Sp; Fri, 02 Dec 2022 21:19:54 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-rdma@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org
-Subject: [PATCH v2] infiniband: disable IB HW for UML
-Date:   Fri,  2 Dec 2022 13:19:40 -0800
-Message-Id: <20221202211940.29111-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 16:22:45 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DA723160;
+        Fri,  2 Dec 2022 13:22:43 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o12so6056780pjo.4;
+        Fri, 02 Dec 2022 13:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S5nNMX1EahXRoqcP+r5gLnG0D7xor4fKiUSWKgh5Q/4=;
+        b=iF6aQCrc27Tg12HtqUiR1ke6C24qgHRrOpSxTml+BlnWk/RPCOeiPl+y0Xl0hXWseR
+         gt9uX0ElepD+ehy2efag1UlINkEnUEf7loh/3eoX5DMWE4Tkczjvh4Uv2FS0AIuoQkvA
+         G4J7mu2VZ6va38Dy4PfNUtRfOYoNhI20+iSRA76vgVf+coD5J33U/wOXQi0h6M6IbfBU
+         fIsCbWZObsNYxFQIGrccDztO/Xn8ZaHl289Uwvxa1emcI7k61K+riaoBYtjy7M9SBX2C
+         3DeFYEiYmZfZgNEbzX4k290tl13wpText2g5lEawkBbaOT6j47fN2HSxvT3rqq+wkC/S
+         sWFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S5nNMX1EahXRoqcP+r5gLnG0D7xor4fKiUSWKgh5Q/4=;
+        b=GyHW/5X63Ku/dLZt+r+GLUevPYg4tDUwa1AP6QLyi2mm2XoW3AxZfKX1XBFCvt8a6w
+         hpPUJXHPbRH+vcp35dY2W/7pmexOIt2Er6LLBohsjcg1IKE+SIv0cjUFTO/loHpgcAMp
+         IUCRE/nUgE7yOCR3COcvHu/vBwC9K9rgo4d6weiu/KlwyyRfVz+m4XdcLtamvV4g4dXm
+         uICgsvHawitt8a9nNGihHixE1MELvdfaZigO7b4wd/AagL8fN3bG/iETrQ7oSOHDbyWh
+         bKeFbeBwBHk0pteemFpdJQL4cYw1mJ8i7RHhAVNlI0jHZ54C7+sQHtGl2YHVg9BLkwSm
+         kp3g==
+X-Gm-Message-State: ANoB5pnZWs1YjknMq3bSzWoucBvwXeLc/v1a7zygvISUQKdwRTdpKxvN
+        io/3nmHcxn7CHhScbhyaMtk=
+X-Google-Smtp-Source: AA0mqf4FDRZuxra7lB45oD3I+9L9Kg8sy7m0uGhT6+vY4pHnr6PBBshURE48ehMWbiyvnO3YMokcnw==
+X-Received: by 2002:a17:902:cf02:b0:186:c372:72d6 with SMTP id i2-20020a170902cf0200b00186c37272d6mr67178115plg.25.1670016162652;
+        Fri, 02 Dec 2022 13:22:42 -0800 (PST)
+Received: from mail.broadcom.net ([192.19.144.250])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa79a49000000b0056e0ff577edsm5514703pfj.43.2022.12.02.13.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 13:22:42 -0800 (PST)
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+To:     ulf.hansson@linaro.org, linux-kernel@vger.kernel.org,
+        alcooperx@gmail.com, linux-arm-kernel@lists.infradead.org,
+        adrian.hunter@intel.com, linux-mmc@vger.kernel.org
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: [PATCH] MAINTAINERS: Update maintainer for SDHCI Broadcom BRCMSTB driver
+Date:   Fri,  2 Dec 2022 16:21:19 -0500
+Message-Id: <20221202212119.43214-1-kdasu.kdev@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable all of drivers/infiniband/hw/ for UML builds until someone
-needs it and provides patches to support it.
+Taking over as upstream maintainer for Broadcom SDHCI
+driver from Al Cooper.
 
-This prevents build errors in hw/qib/qib_wc_x86_64.c.
-
-Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Suggested-by: Leon Romanovsky <leon@kernel.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: linux-rdma@vger.kernel.org
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: linux-um@lists.infradead.org
+Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
 ---
-v2: just disable infiniband/hw/, not all of infiniband.
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/infiniband/Kconfig |    2 ++
- 1 file changed, 2 insertions(+)
-
-diff -- a/drivers/infiniband/Kconfig b/drivers/infiniband/Kconfig
---- a/drivers/infiniband/Kconfig
-+++ b/drivers/infiniband/Kconfig
-@@ -78,6 +78,7 @@ config INFINIBAND_VIRT_DMA
- 	def_bool !HIGHMEM
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1daadaa4d48b..90beddcf84b0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18497,6 +18497,7 @@ K:	\bsecure_computing
+ K:	\bTIF_SECCOMP\b
  
- if INFINIBAND_USER_ACCESS || !INFINIBAND_USER_ACCESS
-+if !UML
- source "drivers/infiniband/hw/bnxt_re/Kconfig"
- source "drivers/infiniband/hw/cxgb4/Kconfig"
- source "drivers/infiniband/hw/efa/Kconfig"
-@@ -94,6 +95,7 @@ source "drivers/infiniband/hw/qedr/Kconf
- source "drivers/infiniband/hw/qib/Kconfig"
- source "drivers/infiniband/hw/usnic/Kconfig"
- source "drivers/infiniband/hw/vmw_pvrdma/Kconfig"
-+endif # !UML
- source "drivers/infiniband/sw/rdmavt/Kconfig"
- source "drivers/infiniband/sw/rxe/Kconfig"
- source "drivers/infiniband/sw/siw/Kconfig"
+ SECURE DIGITAL HOST CONTROLLER INTERFACE (SDHCI) Broadcom BRCMSTB DRIVER
++M:	Kamal Dasu <kdasu.kdev@gmail.com>
+ M:	Al Cooper <alcooperx@gmail.com>
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+ L:	linux-mmc@vger.kernel.org
+-- 
+2.17.1
+
