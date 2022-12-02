@@ -2,99 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A0963FD65
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0D963FD67
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 01:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiLBA5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 19:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
+        id S231961AbiLBA6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 19:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiLBA52 (ORCPT
+        with ESMTP id S231591AbiLBA6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 19:57:28 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30919CB23E;
-        Thu,  1 Dec 2022 16:57:27 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NNZKX70b5z4f3kKc;
-        Fri,  2 Dec 2022 08:57:20 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP2 (Coremail) with SMTP id Syh0CgCXrLdwTYljf+TsBQ--.3634S2;
-        Fri, 02 Dec 2022 08:57:22 +0800 (CST)
-Subject: Re: [PATCH 1/5] sbitmap: don't consume nr for inactive waitqueue to
- avoid lost wakeups
-To:     Gabriel Krisman Bertazi <krisman@suse.de>,
-        Kemeng Shi <shikemeng@huawei.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linfeilong@huawei.com,
-        liuzhiqiang@huawei.com
-References: <20221201045408.21908-1-shikemeng@huawei.com>
- <20221201045408.21908-2-shikemeng@huawei.com> <87y1rrmeq3.fsf@suse.de>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <20551512-a703-9637-29d8-931f5a76e392@huaweicloud.com>
-Date:   Fri, 2 Dec 2022 08:57:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Thu, 1 Dec 2022 19:58:20 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F215C0C0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 16:58:19 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g7so5141483lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 16:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MxkuzgUgTifQFdxhVWtsmKUpSCQdyimcV2FkUnufBLc=;
+        b=hEKWleQh2i+coIcgnXZbCte2WweMX/4rdEPNBC4I72YPpG558YYdUC4fOePrPsorTm
+         EHPrqFfQsXLYlxX2BcJfTnzEoMNfkMDARFrw9zWcv2rvRuq47qOzVq7h3tzi2rM6UrgV
+         T9I/XGQ8zYHn5ePdix76dWi26hvtQt9cjY26rSG+R7eRGCwqy7Pibsgxy+XiDgud+2RW
+         6DloAOKq3Cn5k/2bNPsTZMwO9Gf5PVje3i79eHmMzYCh0Y5K7DH2ImTv54BklKMpeY6/
+         DIs5AhoOB3wOf+bQNB+nAi48QTPsPJ2I5r1Xw8Nj5Ixxawy26rPBYAGupqgVqXkouDHC
+         xzTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MxkuzgUgTifQFdxhVWtsmKUpSCQdyimcV2FkUnufBLc=;
+        b=liiQDsFWZ5isZ8yKHMS2szqSC5jysZhUU/j3cQkaCB+Nd+37k3qaUQlUGuttI6Z6xW
+         Kmh88PJ7ByB2k4Ce/DTJ3R77yiD1NRvn91Vqoq5m2OgJYN3WAUUVX29DExUy4gmrrCR4
+         cGfz36UM7bEi8GP0akFwXpva3gxz0Iip2e9u8sBMrH288xF1z1Pa6K2aprjKNwXGchBF
+         xKxY7ALnycBhIptfyqPfUJDdJzEJfA0HxHh9Q64a4mk3JW0eT9WWH2sJE3VOwYbooaO9
+         jc4wkMJXm37BXtLUMNQY4PoLsJMTLF4MqqXP/I60U3Wk1XPoJJ5Tg44U6jAGzFRchVyO
+         yA3Q==
+X-Gm-Message-State: ANoB5pmvevIuJas+x+5QjnABpY8CePYeqF2ENsgPO/A2XwtTxD01k28X
+        Hy+tE8UCxoGD7F1Hx52CCAMv+Q==
+X-Google-Smtp-Source: AA0mqf7ugLlYgzqNY4td3eTdffNA1JNbGconIkradRBMScyhPpphWZqVWKGCXfhlAfixQHasGwz7Fw==
+X-Received: by 2002:ac2:558c:0:b0:4a2:4b78:a8e8 with SMTP id v12-20020ac2558c000000b004a24b78a8e8mr19587673lfg.292.1669942697389;
+        Thu, 01 Dec 2022 16:58:17 -0800 (PST)
+Received: from mutt (c-e429e555.07-21-73746f28.bbcust.telenor.se. [85.229.41.228])
+        by smtp.gmail.com with ESMTPSA id s22-20020a056512315600b004979e1ff641sm815816lfi.115.2022.12.01.16.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 16:58:16 -0800 (PST)
+Date:   Fri, 2 Dec 2022 01:58:14 +0100
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] crypto/caam: Avoid GCC constprop bug warning
+Message-ID: <20221202005814.GD69385@mutt>
+References: <20221028210527.never.934-kees@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <87y1rrmeq3.fsf@suse.de>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: Syh0CgCXrLdwTYljf+TsBQ--.3634S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFy5Jw4UtF43JrWDAFW3trb_yoWDZFb_Kw
-        4vgFWay39agFnrWw1Yka17uFnxGFW8Gw1kCr40qF9ayF1ftrs3AFsxCrZ5uF4xG34kAFnY
-        gFn0v34vvr429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzkYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-        0EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
-        7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221028210527.never.934-kees@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-10-28 14:05, Kees Cook wrote:
+> GCC 12 appears to perform constant propagation incompletely(?) and can
+> no longer notice that "len" is always 0 when "data" is NULL. Expand the
+> check to avoid warnings about memcpy() having a NULL argument:
+> 
+>    ...
+>                     from drivers/crypto/caam/key_gen.c:8:
+>    drivers/crypto/caam/desc_constr.h: In function 'append_data.constprop':
+>    include/linux/fortify-string.h:48:33: warning: argument 2 null where non-null expected [-Wnonnull]
+>       48 | #define __underlying_memcpy     __builtin_memcpy
+>          |                                 ^
+>    include/linux/fortify-string.h:438:9: note: in expansion of macro '__underlying_memcpy'
+>      438 |         __underlying_##op(p, q, __fortify_size);                        \
+>          |         ^~~~~~~~~~~~~
+> 
+> The NULL was being propagated from:
+> 
+>         append_fifo_load_as_imm(desc, NULL, 0, LDST_CLASS_2_CCB |
+>                                 FIFOLD_TYPE_MSG | FIFOLD_TYPE_LAST2);
+> ...
+> static inline void append_##cmd##_as_imm(u32 * const desc, const void *data, \
+>                                          unsigned int len, u32 options) \
+> { \
+>         PRINT_POS; \
+>         append_cmd_data(desc, data, len, CMD_##op | options); \
+> }
+> ...
+> APPEND_CMD_PTR_TO_IMM(fifo_load, FIFO_LOAD);
+> ...
+> static inline void append_cmd_data(u32 * const desc, const void *data, int len,
+>                                    u32 command)
+> {
+>         append_cmd(desc, command | IMMEDIATE | len);
+>         append_data(desc, data, len);
+> }
+> 
+> Cc: "Horia Geantă" <horia.geanta@nxp.com>
+> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Cc: Gaurav Jain <gaurav.jain@nxp.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-crypto@vger.kernel.org
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/lkml/202210290446.qBayTfzl-lkp@intel.com
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
 
-on 12/1/2022 9:32 PM, Gabriel Krisman Bertazi wrote:
-> Kemeng Shi <shikemeng@huawei.com> writes:
-> 
->> If we decremented queue without waiters, we should not decremente freed
->> bits number "nr", or all "nr" could be consumed in a empty queue and no
->> wakeup will be called.
->> Currently, for case "wait_cnt > 0", "nr" will not be decremented if we
->> decremented queue without watiers and retry is returned to avoid lost
->> wakeups. However for case "wait_cnt == 0", "nr" will be decremented
->> unconditionally and maybe decremented to zero. Although retry is
->> returned by active state of queue, it's not actually executed for "nr"
->> is zero.
->>
-> 
-> Hi Kemeng,
-> 
-> Fwiw, I sent a patch rewriting this algorithm which is now merged in
-> axboe/for-next.  It drops the per-waitqueue wait_cnt entirely.  You can
-> find it here:
-> 
-> https://lore.kernel.org/lkml/20221110153533.go5qs3psm75h27mx@quack3/T/
-> 
-> Thanks!
-Hi Gabriel,
-Thanks for remind me of this, I will recheck my patches in the
-axboe/for-next branch.
+Tested-by: Anders Roxell <anders.roxell@linaro.org>
 
--- 
-Best wishes
-Kemeng Shi
+> ---
+>  drivers/crypto/caam/desc_constr.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/crypto/caam/desc_constr.h b/drivers/crypto/caam/desc_constr.h
+> index 62ce6421bb3f..ddbba8b00ab7 100644
+> --- a/drivers/crypto/caam/desc_constr.h
+> +++ b/drivers/crypto/caam/desc_constr.h
+> @@ -163,7 +163,7 @@ static inline void append_data(u32 * const desc, const void *data, int len)
+>  {
+>  	u32 *offset = desc_end(desc);
+>  
+> -	if (len) /* avoid sparse warning: memcpy with byte count of 0 */
+> +	if (data && len) /* avoid sparse warning: memcpy with byte count of 0 */
 
+Maybe we should update the comment, since newer releases of sparse
+doesn't warn about this.
+
+
+Cheers,
+Anders
