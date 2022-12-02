@@ -2,86 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D18641026
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8090C64102B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234698AbiLBVpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
+        id S234730AbiLBVqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiLBVpX (ORCPT
+        with ESMTP id S234678AbiLBVqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:45:23 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE541DB6B4;
-        Fri,  2 Dec 2022 13:45:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670017522; x=1701553522;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=f+JtP3YBSpbvSEOM6o4SFDk1XVrfF1sDpnt2nGAMCzw=;
-  b=LKeXG9zKM2kRPWsXOBmdL133hb4AaMTPH/9JBpT1FbCTqubKjfYHEv6h
-   J6cWBrscLuahh1GhOYAtmBLVR+hPM6JoSdHens8mfd5Eqzv1kdbkLXsYI
-   JsAwuh9snxv0O7EX07gjfnL+XxKZTpFcWLkcCoSH/o5MWrsfyvFZHxXIs
-   SNkQMWR+seDc5AU/U7/GXMW/sepadsCLz+VoBRaUB/xjfY5WHlTGouvzo
-   +zgdF3x5huJDzqP7NQyxiJlb0D19cJjvOnFLIJDqZgTz2X7huU7GVKEBd
-   lX4+kGu34THQwnoJxpQtKH7/qPfcshIH/u6hca1b70L7kk7c6sz9qcAZh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313689059"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="313689059"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:45:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="733955426"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="733955426"
-Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 13:45:21 -0800
-Message-ID: <746adf31-e70c-e32d-a35d-72d352af613b@intel.com>
-Date:   Fri, 2 Dec 2022 13:45:20 -0800
+        Fri, 2 Dec 2022 16:46:38 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FDFF1CF9;
+        Fri,  2 Dec 2022 13:46:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670017546; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=DnXhT2OUlhlC5DwILJKEz4FKOfX14rJuU1Z5pzoNKTHRt0IUEa9cKCxGC4LhhHuaTHuIVkQLu9THL5C9MN53zX4Lw32mj3sFgx+Ie6bN410Bu32ZGi8nu3VMyzkgRbo05Xn8LajJ48A+CPQiVZ0T9zuAwYnAJANtBLQAwfNb/ZY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670017546; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=JTgtnJqoI3mBOnlXVRuirNE3H0rwkt9IzKJ3dXVz2R0=; 
+        b=UQF4RXBepui+yim0KwIXhj7dIhvabk1ebfPx5aBM/OJRRVD6h9B8XSbiylbUJV+tZHQL36Y4iJfWYF+VdvHoF1PXZ7gMR8OXrmh3SCTSa4m6FYGWRfT2VZbwTMq6/KIDyBCGu6sJHv5q6FsnmmHLdUsfXpwsDfS1Q21BO4D0uhQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670017546;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=JTgtnJqoI3mBOnlXVRuirNE3H0rwkt9IzKJ3dXVz2R0=;
+        b=bFc/Twx+wSKbN8cptiRq7XpT5s0ryu0P35a+jvbqT8ZRJwgPIDEnK6Ps6plwEu81
+        w0cLAsN8BAPiqk64Tf8fnP6ZotcTzZJaT2y0LQeZqZ/qb55X7oq1a6rVSyUT44eQhXw
+        Igl7pFg4wtB7Ywjk7u/WCAm/0bsT69eVVbU85i2c=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1670017543642787.7203324647592; Fri, 2 Dec 2022 13:45:43 -0800 (PST)
+Message-ID: <bfc6810b-3c21-201b-3c4f-a0def3928597@arinc9.com>
+Date:   Sat, 3 Dec 2022 00:45:34 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 01/18] x86/sgx: Call cond_resched() at the end of
- sgx_reclaim_pages()
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 net-next 3/9] dt-bindings: net: dsa: utilize base
+ definitions for standard dsa switches
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Cc:     John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>,
+        Rob Herring <robh@kernel.org>
+References: <20221202204559.162619-1-colin.foster@in-advantage.com>
+ <20221202204559.162619-4-colin.foster@in-advantage.com>
 Content-Language: en-US
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
- <20221202183655.3767674-2-kristen@linux.intel.com>
- <37de083d-a63b-b2ff-d00a-e890a1ba5eea@intel.com>
- <da690a45a36038399c63ddac8f0efed9872ec13e.camel@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <da690a45a36038399c63ddac8f0efed9872ec13e.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20221202204559.162619-4-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 13:37, Kristen Carlson Accardi wrote:
->>> +static void sgx_reclaim_pages(void)
->>> +{
->>> +       __sgx_reclaim_pages();
->>> +       cond_resched();
->>> +}
->> Why bother with the wrapper?  Can't we just put cond_resched() in the
->> existing sgx_reclaim_pages()?
-> Because sgx_reclaim_direct() needs to call sgx_reclaim_pages() but not
-> do the cond_resched(). It was this or add a boolean or something to let
-> caller's opt out of the resched.
+On 2.12.2022 23:45, Colin Foster wrote:
+> DSA switches can fall into one of two categories: switches where all ports
+> follow standard '(ethernet-)?port' properties, and switches that have
+> additional properties for the ports.
+> 
+> The scenario where DSA ports are all standardized can be handled by
+> swtiches with a reference to the new 'dsa.yaml#/$defs/ethernet-ports'.
+> 
+> The scenario where DSA ports require additional properties can reference
+> '$dsa.yaml#' directly. This will allow switches to reference these standard
+> defitions of the DSA switch, but add additional properties under the port
+> nodes.
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> Acked-by: Alvin Šipraga <alsi@bang-olufsen.dk> # realtek
+> ---
+> 
+> v3 -> v4
+>    * Rename "$defs/base" to "$defs/ethernet-ports" to avoid implication of a
+>      "base class" and fix commit message accordingly
+>    * Add the following to the common etherent-ports node:
+>        "additionalProperties: false"
+>        "#address-cells" property
+>        "#size-cells" property
+>    * Fix "etherenet-ports@[0-9]+" to correctly be "ethernet-port@[0-9]+"
+>    * Remove unnecessary newline
+>    * Apply changes to mediatek,mt7530.yaml that were previously in a separate patch
+>    * Add Reviewed and Acked tags
+> 
+> v3
+>    * New patch
+> 
+> ---
+>   .../bindings/net/dsa/arrow,xrs700x.yaml       |  2 +-
+>   .../devicetree/bindings/net/dsa/brcm,b53.yaml |  2 +-
+>   .../devicetree/bindings/net/dsa/dsa.yaml      | 25 ++++++++++++++++---
+>   .../net/dsa/hirschmann,hellcreek.yaml         |  2 +-
+>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 16 +++---------
+>   .../bindings/net/dsa/microchip,ksz.yaml       |  2 +-
+>   .../bindings/net/dsa/microchip,lan937x.yaml   |  2 +-
+>   .../bindings/net/dsa/mscc,ocelot.yaml         |  2 +-
+>   .../bindings/net/dsa/nxp,sja1105.yaml         |  2 +-
+>   .../devicetree/bindings/net/dsa/realtek.yaml  |  2 +-
+>   .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  2 +-
+>   11 files changed, 35 insertions(+), 24 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml b/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
+> index 259a0c6547f3..5888e3a0169a 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>   title: Arrow SpeedChips XRS7000 Series Switch Device Tree Bindings
+>   
+>   allOf:
+> -  - $ref: dsa.yaml#
+> +  - $ref: dsa.yaml#/$defs/ethernet-ports
+>   
+>   maintainers:
+>     - George McCollister <george.mccollister@gmail.com>
+> diff --git a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
+> index 1219b830b1a4..5bef4128d175 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
+> @@ -66,7 +66,7 @@ required:
+>     - reg
+>   
+>   allOf:
+> -  - $ref: dsa.yaml#
+> +  - $ref: dsa.yaml#/$defs/ethernet-ports
+>     - if:
+>         properties:
+>           compatible:
+> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> index b9d48e357e77..b9e366e46aed 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> @@ -19,9 +19,6 @@ description:
+>   select: false
+>   
+>   properties:
+> -  $nodename:
+> -    pattern: "^(ethernet-)?switch(@.*)?$"
+> -
+>     dsa,member:
+>       minItems: 2
+>       maxItems: 2
+> @@ -58,4 +55,26 @@ oneOf:
+>   
+>   additionalProperties: true
+>   
+> +$defs:
+> +  ethernet-ports:
+> +    description: A DSA switch without any extra port properties
+> +    $ref: '#/'
+> +
+> +    patternProperties:
+> +      "^(ethernet-)?ports$":
+> +        type: object
+> +        additionalProperties: false
+> +
+> +        properties:
+> +          '#address-cells':
+> +            const: 1
+> +          '#size-cells':
+> +            const: 0
+> +
+> +        patternProperties:
+> +          "^(ethernet-)?port@[0-9]+$":
+> +            description: Ethernet switch ports
+> +            $ref: dsa-port.yaml#
+> +            unevaluatedProperties: false
+> +
+>   ...
+> diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+> index 73b774eadd0b..748ef9983ce2 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>   title: Hirschmann Hellcreek TSN Switch Device Tree Bindings
+>   
+>   allOf:
+> -  - $ref: dsa.yaml#
+> +  - $ref: dsa.yaml#/$defs/ethernet-ports
+>   
+>   maintainers:
+>     - Andrew Lunn <andrew@lunn.ch>
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index f2e9ff3f580b..b815272531fa 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -156,17 +156,6 @@ patternProperties:
+>   
+>       patternProperties:
+>         "^(ethernet-)?port@[0-9]+$":
+> -        type: object
+> -        description: Ethernet switch ports
+> -
+> -        unevaluatedProperties: false
+> -
+> -        properties:
+> -          reg:
+> -            description:
+> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
+> -              for user ports.
 
-Is there a reason sgx_reclaim_direct() *can't* or shouldn't call
-cond_resched()?
+This shouldn't be moved. Please reread our conversation on the previous 
+version.
+
+> -
+>           allOf:
+>             - $ref: dsa-port.yaml#
+>             - if:
+> @@ -174,6 +163,9 @@ patternProperties:
+>               then:
+>                 properties:
+>                   reg:
+> +                  description:
+> +                    Port address described must be 5 or 6 for CPU port and from
+> +                    0 to 5 for user ports
+
+Arınç
