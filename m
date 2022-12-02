@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6889663FDCF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F42563FDCE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiLBBpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 20:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S230043AbiLBBpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 20:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiLBBo5 (ORCPT
+        with ESMTP id S231845AbiLBBow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 20:44:57 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EFBD3A30
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 17:44:56 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id fp23so3112232qtb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 17:44:55 -0800 (PST)
+        Thu, 1 Dec 2022 20:44:52 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B97D3A21;
+        Thu,  1 Dec 2022 17:44:49 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id n186so3962926oih.7;
+        Thu, 01 Dec 2022 17:44:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4bLTeJ6YrAnPFThGmSk8KJr4jyMAp7UgMPl4HksAp44=;
-        b=aYnKhSCrjGtm4vsnysotoMASKnP3QdutT10q95EHppyvQSaq+DReRl5xi3hLy8/BhZ
-         rtgSvW4+3qLgaDKOKDzuUNLjCAAcxbIno2CMQqCHj7lOHHwp0cus7lB3/XjLNsKwieIK
-         XkVO85CkwFx+bOAPmUjNBTzjtOfY1+t3ZLy+ujcXOaIKoqfvIZTbL+dIcZAoA+qVcbUI
-         70B1MKIjbkLSsROBp1SBUCPXupuCCMx0TOHUzvKTMLfjBQDrCR0Qk9OkdAP2UTWJswU3
-         EWBRoo8GV8xra9RLb9YtgwXY/sF4I4DYChHlYweI7Eb0QBRbtHi7m/OQVNQ0mQbJdGgn
-         GBAQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hvv9FXRsemW4l4PI8H5cpdCXf8vmtqJ7GI82fIK6u4o=;
+        b=PKiIUIpGAFOfhhBaT8KJAuT9pkwk93cvcGzaJtFpLZUJF70Zv2fJDVc9qwuc6qr1OI
+         WjRNy/ZmJtDIXrWNJSdpPGGcubnY2qSxNIkoPqQu0QSQ9QI6+NxtotZ2lj4lwsYytWxA
+         RbzSVODbUVVNDMNefGRPppaWp6m2CcvVDg/usXYTWngWX1H+wy3WwbaAeSHH+gUMe3X5
+         AibEVd3pXFnpOpRF/ZInKk3lj3SVKgiakgGR49RHxLQYUisjdie0pV2xp5KuHtzcrAbm
+         Kj5rjiXJRJywaBiR6wvioNJ7ugWen3LZGmTKRuDWT8KOaTjednTOhEDAhhRZr6PXy4TQ
+         EP+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4bLTeJ6YrAnPFThGmSk8KJr4jyMAp7UgMPl4HksAp44=;
-        b=B46Rjuo6KcVWVTIfSuQyg81EUfXYlPagLWqqW2P1p7lErfceLXLZUcH8sO7bsdcht/
-         13FKli6tRC9UpFRhKcztwoeM27EWeDek3ixXCsLEwYKKA5cIcTsi3XG0xF4u/n4vxral
-         b0pPsrVNHvxiFs1/N9Ie8iGfo20mZDPnpiF3NRoAfAEpa3Evv+K75/sbUaJwX0ydVFLI
-         BznYBhFJD4AqKKM/y/XGhARAaVrblQX+aOuu3QcOLeuwQ/M/EfClJHmurEXPW8Rchuxg
-         xuUm2dzBsEcQ1M3Yn2HSeWkhHIfJpY2M0HaN9H6ke3hc1Czjf7Tivg+mCnTDFMKn0VIA
-         X3VA==
-X-Gm-Message-State: ANoB5pmHn+jn+95szU4GIqiOUObXcKuBmLS9UwoHq4DXwPuI3yd+3DLP
-        HKicpkKgzrC8y7Fg3LGE8bNSuXKRxr2Lb94E073pPRKY448=
-X-Google-Smtp-Source: AA0mqf7/5LFh9irixKD6uvk05eIdlWzoStuesK1CKS2LvZB029c9+SxpcPE39deP4kMGA+0L0RS0akdEqi50xaJdd7g=
-X-Received: by 2002:ae9:d846:0:b0:6ec:5332:6ebd with SMTP id
- u67-20020ae9d846000000b006ec53326ebdmr62506616qkf.0.1669945495063; Thu, 01
- Dec 2022 17:44:55 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hvv9FXRsemW4l4PI8H5cpdCXf8vmtqJ7GI82fIK6u4o=;
+        b=lIMDiIYcuuqwBps7xOP02V1nMliXOCy5Ay+L5BdDJlklBKilMnSP7aLq+TeUAuh5UQ
+         dwGYpOWNfLT7tFCcxwCHOitYtw/yhL2zXZZsrStcw+7bbmIXkFhP/aLaBZTP+bY1lQJE
+         lETXe9eCLoqDQLGOE/XKuRZslDxVRPvlJHFQ3ONnFnUji5fcPePVX23aWty1gn4IkNXb
+         QLWmUogHiuaoscikNOnsBu599Kyz1gYc7VsR6FweJP74qJyc9/MjfEwtbQ8Xn8L3BOSe
+         Zbp/tE5f4cigpJ8I9d3D3p7De0/yd5QfJKrwEQKlQMl8XfBqkmE6oreGQJ6y0fd5QXZ1
+         qCdw==
+X-Gm-Message-State: ANoB5pkqXHg5Ox2bmRPbQTEVbDunKu2Lma2sP6PMUOYapbaqujJ36acw
+        MNJJ6fH7Uk2AsqDUGQgP4PU=
+X-Google-Smtp-Source: AA0mqf4H7tZ+qhYY4A8AFKeW70Jbj/ilQpfMxewTYF7ODE2Dx5NyfcWB3E0hJ8I4FtZ8AHyRrhdlYQ==
+X-Received: by 2002:a05:6808:138a:b0:35b:29de:da29 with SMTP id c10-20020a056808138a00b0035b29deda29mr24974660oiw.55.1669945489271;
+        Thu, 01 Dec 2022 17:44:49 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o6-20020acad706000000b003549db40f38sm2441136oig.46.2022.12.01.17.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 17:44:49 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 1 Dec 2022 17:44:48 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/162] 5.10.157-rc1 review
+Message-ID: <20221202014448.GC2255418@roeck-us.net>
+References: <20221130180528.466039523@linuxfoundation.org>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 2 Dec 2022 11:44:43 +1000
-Message-ID: <CAPM=9tzKpUGHMEw3aN43b+P3+WwAtZGia190JktnB163TvVjCw@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.1-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130180528.466039523@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,75 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, Nov 30, 2022 at 07:21:21PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.157 release.
+> There are 162 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> Anything received after that time might be too late.
+> 
 
-Things do seem to have finally settled down, just 4 i915 and one
-amdgpu this week. Probably won't have much for next week if you do
-push rc8 out.
+Build results:
+	total: 162 pass: 162 fail: 0
+Qemu test results:
+	total: 475 pass: 475 fail: 0
 
-Dave.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-drm-fixes-2022-12-02:
-drm fixes for 6.1-rc8
-
-i915:
-- Fix dram info readout
-- Remove non-existent pipes from bigjoiner pipe mask
-- Fix negative value passed as remaining time
-- Never return 0 if not all requests retired
-
-amdgpu:
-- VCN fix for vangogh
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d=
-:
-
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-12-02
-
-for you to fetch changes up to c082fbd687ad70a92e0a8be486a7555a66f03079:
-
-  Merge tag 'amd-drm-fixes-6.1-2022-12-01' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2022-12-02
-09:12:46 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.1-rc8
-
-i915:
-- Fix dram info readout
-- Remove non-existent pipes from bigjoiner pipe mask
-- Fix negative value passed as remaining time
-- Never return 0 if not all requests retired
-
-amdgpu:
-- VCN fix for vangogh
-
-----------------------------------------------------------------
-Dave Airlie (2):
-      Merge tag 'drm-intel-fixes-2022-12-01' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'amd-drm-fixes-6.1-2022-12-01' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-
-Janusz Krzysztofik (2):
-      drm/i915: Fix negative value passed as remaining time
-      drm/i915: Never return 0 if not all requests retired
-
-Leo Liu (1):
-      drm/amdgpu: enable Vangogh VCN indirect sram mode
-
-Radhakrishna Sripada (1):
-      drm/i915/mtl: Fix dram info readout
-
-Ville Syrj=C3=A4l=C3=A4 (1):
-      drm/i915: Remove non-existent pipes from bigjoiner pipe mask
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c      |  3 +++
- drivers/gpu/drm/i915/display/intel_display.c | 10 +++++++---
- drivers/gpu/drm/i915/gt/intel_gt.c           |  9 +++++++--
- drivers/gpu/drm/i915/gt/intel_gt_requests.c  |  2 +-
- drivers/gpu/drm/i915/intel_dram.c            |  3 +--
- 5 files changed, 19 insertions(+), 8 deletions(-)
+Guenter
