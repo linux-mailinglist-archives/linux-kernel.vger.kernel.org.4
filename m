@@ -2,187 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E471640827
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232D0640828
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbiLBOFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
+        id S233648AbiLBOFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbiLBOEr (ORCPT
+        with ESMTP id S233683AbiLBOFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:04:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CC0DFB73;
-        Fri,  2 Dec 2022 06:04:29 -0800 (PST)
-Date:   Fri, 02 Dec 2022 14:04:25 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669989867;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgesFIhirQ56l6RZnTYg9BoZk9NoSnbAmIIs3vJGpqU=;
-        b=uGTPyOCWEdXhqUisMdVRn8ldi5QoWIAX3Gv5c+hyy+76Lr/aJHZBLpbSITBHE++Cryn7qz
-        8TxkDZHkvtT6fNp51o030iEf2ByVr27Lx4/WcdhsSxpl/STTRiZ1kN1v1NIQXhI1EUMg21
-        sW8Sgn6NCF+qweWltvXjGWJthO3C8wOSYSidusZsADgzcEj5nzK10g1kYbLeDMzTnJySJj
-        lByyxK6OylV6fuFLcEJmgqw42WaRNmeVDG//SRmK42l5GUZhlvOW0WDroDdaPevNGGnez9
-        hc3P/be814l6ZBPF/FiXN8N8XeViPgMkF5MIY6rsU7fNw6dLLeJZ0kpaauT5Pw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669989867;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bgesFIhirQ56l6RZnTYg9BoZk9NoSnbAmIIs3vJGpqU=;
-        b=PrUj5jKTr4CfVnuyUqm2TzZlOFO5fPXhvqfxg1R1JkHNADLDaoIU6posKH4XsgmdC6nwQB
-        Xk66uycU6tvsGlAw==
-From:   "tip-bot2 for Kristen Carlson Accardi" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sgx] x86/sgx: Replace kmap/kunmap_atomic() calls
-Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221115161627.4169428-1-kristen@linux.intel.com>
-References: <20221115161627.4169428-1-kristen@linux.intel.com>
+        Fri, 2 Dec 2022 09:05:03 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04CFCDC4C3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:04:35 -0800 (PST)
+Received: from 8bytes.org (p200300c27724780086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7724:7800:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id B52D72A0CAB;
+        Fri,  2 Dec 2022 15:04:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1669989874;
+        bh=kShbm2DVbDLM8u7qiGKqyBr7ML2l9/8XDIaiynzASyM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kZ8sqEUGGOXDfecl8FKT+J87xKayhmlT85v1d8TcHUpxhs6Mpw5ab6VfT82ym4Sdu
+         oWvH27JjSEfC1rHkF6kizgZBmq/jQmDSYxFz5tGIUGgXHwo8OxAylkKwy6nu2NCaNE
+         F0fYVZLQQyGj4eh5/cuEVcz9KEIi/iht3Bdp8idV17iNPm/6SH0TqxhIIpIo9l6cyh
+         ODAT8cfYa1OSSKMqI1F6gW1hjjKATaVwFtmcFlfu2yhIEpZsTguGcV2e1GIu0Mgq3U
+         hJPj1b2z9JiQ4i+jDJR0Cq7w8LWuLa7Yd0VJqoGGW8QWcU9AAbtCuwT/C87jzQB06m
+         pRR5rB07DR81g==
+Date:   Fri, 2 Dec 2022 15:04:33 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: [git pull] IOMMU Fixes for Linux v6.1-rc7
+Message-ID: <Y4oF8e7quzjm2kzD@8bytes.org>
 MIME-Version: 1.0
-Message-ID: <166998986573.4906.1118337438012920133.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mAB3ZrP845gYXOu9"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sgx branch of tip:
 
-Commit-ID:     89e927bbcd45d507e5612ef72fda04182e544a38
-Gitweb:        https://git.kernel.org/tip/89e927bbcd45d507e5612ef72fda04182e544a38
-Author:        Kristen Carlson Accardi <kristen@linux.intel.com>
-AuthorDate:    Tue, 15 Nov 2022 08:16:26 -08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 02 Dec 2022 14:59:56 +01:00
+--mAB3ZrP845gYXOu9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-x86/sgx: Replace kmap/kunmap_atomic() calls
+Hi Linus,
 
-kmap_local_page() is the preferred way to create temporary mappings when it
-is feasible, because the mappings are thread-local and CPU-local.
+The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
 
-kmap_local_page() uses per-task maps rather than per-CPU maps. This in
-effect removes the need to disable preemption on the local CPU while the
-mapping is active, and thus vastly reduces overall system latency. It is
-also valid to take pagefaults within the mapped region.
+  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
 
-The use of kmap_atomic() in the SGX code was not an explicit design choice
-to disable page faults or preemption, and there is no compelling design
-reason to using kmap_atomic() vs. kmap_local_page().
+are available in the Git repository at:
 
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Link: https://lore.kernel.org/linux-sgx/Y0biN3%2FJsZMa0yUr@kernel.org/
-Link: https://lore.kernel.org/r/20221115161627.4169428-1-kristen@linux.intel.com
----
- arch/x86/kernel/cpu/sgx/encl.c  | 12 ++++++------
- arch/x86/kernel/cpu/sgx/ioctl.c |  4 ++--
- arch/x86/kernel/cpu/sgx/main.c  |  8 ++++----
- 3 files changed, 12 insertions(+), 12 deletions(-)
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v6.1-rc7
 
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 2c25825..68f8b18 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -160,8 +160,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 		return ret;
- 
- 	pginfo.addr = encl_page->desc & PAGE_MASK;
--	pginfo.contents = (unsigned long)kmap_atomic(b.contents);
--	pcmd_page = kmap_atomic(b.pcmd);
-+	pginfo.contents = (unsigned long)kmap_local_page(b.contents);
-+	pcmd_page = kmap_local_page(b.pcmd);
- 	pginfo.metadata = (unsigned long)pcmd_page + b.pcmd_offset;
- 
- 	if (secs_page)
-@@ -187,8 +187,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 	 */
- 	pcmd_page_empty = !memchr_inv(pcmd_page, 0, PAGE_SIZE);
- 
--	kunmap_atomic(pcmd_page);
--	kunmap_atomic((void *)(unsigned long)pginfo.contents);
-+	kunmap_local(pcmd_page);
-+	kunmap_local((void *)(unsigned long)pginfo.contents);
- 
- 	get_page(b.pcmd);
- 	sgx_encl_put_backing(&b);
-@@ -197,10 +197,10 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 
- 	if (pcmd_page_empty && !reclaimer_writing_to_pcmd(encl, pcmd_first_page)) {
- 		sgx_encl_truncate_backing_page(encl, PFN_DOWN(page_pcmd_off));
--		pcmd_page = kmap_atomic(b.pcmd);
-+		pcmd_page = kmap_local_page(b.pcmd);
- 		if (memchr_inv(pcmd_page, 0, PAGE_SIZE))
- 			pr_warn("PCMD page not empty after truncate.\n");
--		kunmap_atomic(pcmd_page);
-+		kunmap_local(pcmd_page);
- 	}
- 
- 	put_page(b.pcmd);
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index ef87482..03c50f1 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -221,11 +221,11 @@ static int __sgx_encl_add_page(struct sgx_encl *encl,
- 	pginfo.secs = (unsigned long)sgx_get_epc_virt_addr(encl->secs.epc_page);
- 	pginfo.addr = encl_page->desc & PAGE_MASK;
- 	pginfo.metadata = (unsigned long)secinfo;
--	pginfo.contents = (unsigned long)kmap_atomic(src_page);
-+	pginfo.contents = (unsigned long)kmap_local_page(src_page);
- 
- 	ret = __eadd(&pginfo, sgx_get_epc_virt_addr(epc_page));
- 
--	kunmap_atomic((void *)pginfo.contents);
-+	kunmap_local((void *)pginfo.contents);
- 	put_page(src_page);
- 
- 	return ret ? -EIO : 0;
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 0aad028..e5a37b6 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -165,17 +165,17 @@ static int __sgx_encl_ewb(struct sgx_epc_page *epc_page, void *va_slot,
- 	pginfo.addr = 0;
- 	pginfo.secs = 0;
- 
--	pginfo.contents = (unsigned long)kmap_atomic(backing->contents);
--	pginfo.metadata = (unsigned long)kmap_atomic(backing->pcmd) +
-+	pginfo.contents = (unsigned long)kmap_local_page(backing->contents);
-+	pginfo.metadata = (unsigned long)kmap_local_page(backing->pcmd) +
- 			  backing->pcmd_offset;
- 
- 	ret = __ewb(&pginfo, sgx_get_epc_virt_addr(epc_page), va_slot);
- 	set_page_dirty(backing->pcmd);
- 	set_page_dirty(backing->contents);
- 
--	kunmap_atomic((void *)(unsigned long)(pginfo.metadata -
-+	kunmap_local((void *)(unsigned long)(pginfo.metadata -
- 					      backing->pcmd_offset));
--	kunmap_atomic((void *)(unsigned long)pginfo.contents);
-+	kunmap_local((void *)(unsigned long)pginfo.contents);
- 
- 	return ret;
- }
+for you to fetch changes up to 4bedbbd782ebbe7287231fea862c158d4f08a9e3:
+
+  iommu/vt-d: Fix PCI device refcount leak in dmar_dev_scope_init() (2022-12-02 11:45:33 +0100)
+
+----------------------------------------------------------------
+IOMMU Fixes for Linux v6.1-rc7
+
+Including:
+
+	- Intel VT-d fixes:
+	  - IO/TLB flush fix
+	  - Various pci_dev refcount fixes
+
+----------------------------------------------------------------
+Jacob Pan (1):
+      iommu/vt-d: Add a fix for devices need extra dtlb flush
+
+Xiongfeng Wang (2):
+      iommu/vt-d: Fix PCI device refcount leak in has_external_pci()
+      iommu/vt-d: Fix PCI device refcount leak in dmar_dev_scope_init()
+
+Yang Yingliang (1):
+      iommu/vt-d: Fix PCI device refcount leak in prq_event_thread()
+
+ drivers/iommu/intel/dmar.c  |  1 +
+ drivers/iommu/intel/iommu.c | 73 +++++++++++++++++++++++++++++++++++++++++++--
+ drivers/iommu/intel/iommu.h |  4 +++
+ drivers/iommu/intel/svm.c   | 19 ++++++++----
+ 4 files changed, 88 insertions(+), 9 deletions(-)
+
+Please pull.
+
+Thanks,
+
+	Joerg
+
+--mAB3ZrP845gYXOu9
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmOKBfEACgkQK/BELZcB
+GuMU+Q//cN2dE+o7jdl4uPrfxBCn5MkdejyVcv88I2r3I97ewFcBqRi0ziVSAz8R
+BFekWcpiaAH9ZrqtS0e455xqsIvZLZVaxjgrltW9biYi+1EfBfMnS+Hp9YHOth9M
+rFdLfbHJLVEqgX0PZx3Z69Twp8SpxAmChN77kL+9HQbB809HjIYkSHMYwfOPaI+X
+YVynPd7E/1IbvdMZn242WK4fXBJKkA2zgq99sDwt9L++viTfgxEmmirRNVOcT032
+O/7hdTItNqCZCbbFXUKvNecjDOgeI7JQGDSUXlm1OfzFkp636PZkSEEom6LI/DwM
+zjx7TfpBh5JTr9oIpK9vGP0Ltq/G10jMfrHBTi1+GC8GUwbaT7enJOe9mthWpH+Z
+TeJvnlGltDQrChWof/JYNVfBpsVz/RRYWxEWyBHPYRxJW6L1hkvgtCROVDCar/6G
+i52ELEz56aAMAt7wtO/Jsa5nEhRn2jrfeym++JHNu+ks05y46xjUIDZm8bCBOtJj
+mOS5/FY4Nui05OGPzBX4/FLV+kAx5yrd5psYZPF0mOOMGLKNV4xqyiCRnxW85H/F
+k2l7qXe8LFucM+i6lNj9mTDkKMDbalWhSAobPrJYQPZuGMJDMBa76KxVWFfKtTEu
+LBAi0LZrVSMRtA2mGrlz7cdaefcz5LKDE0K8GogkSyBeKATRAiA=
+=62iX
+-----END PGP SIGNATURE-----
+
+--mAB3ZrP845gYXOu9--
