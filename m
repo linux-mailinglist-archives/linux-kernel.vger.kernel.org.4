@@ -2,84 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6A6640E8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E18D640E8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234515AbiLBTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S234600AbiLBTe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbiLBTec (ORCPT
+        with ESMTP id S229506AbiLBTe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:34:32 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AECA6074
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 11:34:31 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id cm20so5857004pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 11:34:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LKH0NEh77yV4wvtLOjJVTi1i8AQWY9dex+H1W1Fhwq0=;
-        b=RbUskjKOUqkcXYUt9KFHk3fKCe1SFqqeB2yqAarXXdadL4QLZq3X8CuBmgo8K4Qb+M
-         41dfcu2idcceThfdOToVv7KCKT1Hm6DzE7fQTwQDfd1+OrHlQ8hOdFirKgXdvciLTqOG
-         Q3bqK3YA0hfAuQKuf+WwKpefQPSuwP4bJIsVs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LKH0NEh77yV4wvtLOjJVTi1i8AQWY9dex+H1W1Fhwq0=;
-        b=YhSR/kRqpmHD2Aa5QLH988sKKHg9QAbKx5paGLL1fMpKcjeyGiK6xeB3UsUF8ORfI3
-         AMSOHV44Slitp5auxQqCQRjDOLpPbXdM/EH4FTN3oeelDdTDGMv09xA3cdKwkLPPv09q
-         ssw5pX5Enc5Q+LqeHDRyXlaQfbi5dU44qenb8r/bU570hYhEDT96aN4xgvs5b9oquinw
-         Fn20aFCYmtd2gy4TQ+lB5rPPQGsDDV14dFWhqplkduei+YGr+2Ibzzfy6aYai1URXOWJ
-         EwRm/VLJKGeuqZ1UMD9aMzXxV4ap/1yfHwZmWuxSIJwyV6D4l+YDoJ9VNauG4FLZbPvI
-         FU1g==
-X-Gm-Message-State: ANoB5pmDtE5eMEzdvp/KzODq5Kwx+go1oMubgPA24hjJJsI4pImRCURF
-        f7sFNkUZ5EvgqFqT/sKK4puECA==
-X-Google-Smtp-Source: AA0mqf6NLNcreee2Iv8UHP6rKGe1f/bh9BAAa7Cg25bGvqECDiPCfVXZko3mLikadl1YGB4moEMRtg==
-X-Received: by 2002:a17:90b:3944:b0:214:1df0:fe53 with SMTP id oe4-20020a17090b394400b002141df0fe53mr81731724pjb.214.1670009671487;
-        Fri, 02 Dec 2022 11:34:31 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i17-20020a170902c95100b00189847cd4acsm6014347pla.237.2022.12.02.11.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 11:34:30 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     rdunlap@infradead.org, linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] seccomp: document the "filter_count" field
-Date:   Fri,  2 Dec 2022 11:34:28 -0800
-Message-Id: <167000966716.1833843.16909918406362671977.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221202073953.14677-1-rdunlap@infradead.org>
-References: <20221202073953.14677-1-rdunlap@infradead.org>
+        Fri, 2 Dec 2022 14:34:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90769A6074;
+        Fri,  2 Dec 2022 11:34:55 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9136923A;
+        Fri,  2 Dec 2022 11:35:01 -0800 (PST)
+Received: from bogus (unknown [10.57.5.79])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A467B3F67D;
+        Fri,  2 Dec 2022 11:34:52 -0800 (PST)
+Date:   Fri, 2 Dec 2022 19:34:49 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Wang Honghui <honghui.wang@ucas.com.cn>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] arm64/boot/dts and arm_scpi: add to support Phytium
+ FT2004 CPU
+Message-ID: <20221202193449.vhmta6oou7oxf7gp@bogus>
+References: <0D48D1B7AC373F2F+Y4l+EOBIC9SmZD2A@TP-P15V>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0D48D1B7AC373F2F+Y4l+EOBIC9SmZD2A@TP-P15V>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 23:39:53 -0800, Randy Dunlap wrote:
-> Add missing kernel-doc for the 'filter_count' field in struct seccomp.
-> 
-> seccomp.h:40: warning: Function parameter or member 'filter_count' not described in 'seccomp'
-> 
-> 
+On Fri, Dec 02, 2022 at 12:24:48PM +0800, Wang Honghui wrote:
+> arm64/boot/dts and arm_scpi: add to support Phytium FT2004 CPU.
+>
 
-Applied to for-next/seccomp, thanks!
+Krzysztof had commented pointing out some of the issues already. I will
+skip those. I am surprised as you seem to still post patches when there
+was ongoing discussions on SCPI compatibles on the other thread[1].
 
-[1/1] seccomp: document the "filter_count" field
-      https://git.kernel.org/kees/c/b9069728a70c
+> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
+> ---
+>  arch/arm64/Kconfig.platforms                  |   5 +
+>  arch/arm64/boot/dts/Makefile                  |   1 +
+>  arch/arm64/boot/dts/phytium/Makefile          |   5 +
+>  .../dts/phytium/ft2004-devboard-d4-dsk.dts    |  73 +++
+>  .../dts/phytium/ft2004-generic-psci-soc.dtsi  | 469 ++++++++++++++++++
+>  drivers/firmware/arm_scpi.c                   |   1 +
+
+You didn't respond with the reason for the need to use extra compatible
+when you can manage with generic compatible. I still think you must not
+need this change in arm_scpi as you simply can use existing compatible.
+Also if you need, it needs to be separate patch, I have already pointed
+out that.
+
+> diff --git a/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi b/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi
+> new file mode 100644
+> index 000000000000..80d64e17899b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi
+> @@ -0,0 +1,469 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * dts file for FT-2000/4 SoC
+> + *
+> + * Copyright (C) 2018-2019, Phytium Technology Co., Ltd.
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +/ {
+> +	compatible = "phytium,ft2004";
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	aliases {
+> +		ethernet0 = &gmac0;
+> +		ethernet1 = &gmac1;
+> +	};
+> +
+> +	psci {
+> +		compatible   = "arm,psci-1.0";
+> +		method       = "smc";
+
+Drop all the below properties they are needed only for v0.1. For v0.2 and
+above it is fixed and don't need to be described in the DTS.
+
+> +		cpu_suspend  = <0xc4000001>;
+> +		cpu_off      = <0x84000002>;
+> +		cpu_on       = <0xc4000003>;
+> +		sys_poweroff = <0x84000008>;
+> +		sys_reset    = <0x84000009>;
+> +	};
+> +
+> +	cpus {
+> +		#address-cells = <0x2>;
+> +		#size-cells = <0x0>;
+> +
+> +		cpu0: cpu@0 {
+> +			device_type = "cpu";
+> +			compatible = "arm,armv8";
+
+I assume this is not model and it is real platform in which case it must
+have real processor compatible like "arm,cortex-a57" or whatever it is.
+
+> +
+> +		sram: sram@2a006000 {
+> +			compatible = "phytium,ft2004-sram-ns","mmio-sram";
+> +			reg = <0x0 0x2a006000 0x0 0x2000>;
+> +
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0x0 0x2a006000 0x2000>;
+> +
+> +			scpi_lpri: scpi-shmem@0 {
+> +				compatible = "phytium,ft2004-scpi-shmem";
+
+As mentioned multiple times, use the generic compatible "arm,scp-shmem"
+unless you need it for some specific reason in which case I would expect
+associated changes in the driver.
+
+> +				reg = <0x1000 0x800>;
+> +			};
+> +		};
+> +
+> +};
+> diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
+> index 435d0e2658a4..876eb2f9ff81 100644
+> --- a/drivers/firmware/arm_scpi.c
+> +++ b/drivers/firmware/arm_scpi.c
+> @@ -904,6 +904,7 @@ static const struct of_device_id shmem_of_match[] __maybe_unused = {
+>  	{ .compatible = "amlogic,meson-axg-scp-shmem", },
+>  	{ .compatible = "arm,juno-scp-shmem", },
+>  	{ .compatible = "arm,scp-shmem", },
+> +	{ .compatible = "phytium,ft2004-scpi-shmem", },
+
+Drop the above if there is no other change need in the driver which means
+you are compatible with std. SCPI spec and need nothing different meaning
+no need for this extra compatible.
 
 -- 
-Kees Cook
+Regards,
+Sudeep
+
+[1] https://lore.kernel.org/all/20221201114107.2ig6pdncekzlpdq2@bogus
 
