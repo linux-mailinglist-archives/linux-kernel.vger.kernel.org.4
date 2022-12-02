@@ -2,82 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A711640CA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31466640BD7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234262AbiLBRzG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Dec 2022 12:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S234422AbiLBRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbiLBRzB (ORCPT
+        with ESMTP id S234184AbiLBRLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:55:01 -0500
-Received: from slot0.krrombacher.com (slot0.krrombacher.com [185.246.220.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D00EE11A4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:54:55 -0800 (PST)
-Reply-To: sales.reitangroup3@outlook.com
-From:   sales.reitangroup4@outlook.com
-To:     linux-kernel@vger.kernel.org
-Subject: General Enquiries
-Date:   30 Nov 2022 23:01:34 -0800
-Message-ID: <20221130230134.8ACAEA4B118F5B40@outlook.com>
+        Fri, 2 Dec 2022 12:11:03 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C09DEC821
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:11:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670001062; x=1701537062;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PTM4jMqtGOe4MZYpr8xDoOQAr18vNvgRXmZGINsD4lQ=;
+  b=Opl/6fgL0aVLb1SHyuvKw52Gs/veaoDzKK8gdKhStoAJkwPYtbY3VtJr
+   1jEeEd2T7iBjMskj69g5MpbC0BQ68ZWPebWMfIqBQwnG1NEnLz30QgyV+
+   Ntf589MNu61yQds+TIfjzve0QEcv6VxRaSrqoIF73fg0kFzvsSR1J1pk2
+   h0BddSlfWI9/+fLlVExoU8ZZuE5BPZizYkvzHoL0JmagTLehcDBhVEJQV
+   5rDwNSPyHufy7QR7BMZroz4AD8xcy3DlhOgfHGymO+Q2+pbpWwZmIJpRO
+   Px+yWNS3xouf0aevz4OtB6Ae2RFppZK7srEEvffIRPYSY5tvtoFpe935P
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="380286121"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="380286121"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 09:11:01 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="645091211"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="645091211"
+Received: from ofaiz-mobl1.amr.corp.intel.com (HELO [10.212.59.186]) ([10.212.59.186])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 09:11:00 -0800
+Message-ID: <08b9871d-54fa-bbef-a5ca-0be888312645@linux.intel.com>
+Date:   Fri, 2 Dec 2022 10:45:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_50,DATE_IN_PAST_24_48,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,
-        SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOFED_FREEM_REPTO autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [185.246.220.71 listed in bl.score.senderscore.com]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5177]
-        *  1.3 DATE_IN_PAST_24_48 Date: is 24 to 48 hours before Received:
-        *      date
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [sales.reitangroup3[at]outlook.com]
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [sales.reitangroup4[at]outlook.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [sales.reitangroup4[at]outlook.com]
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 SPOOFED_FREEMAIL No description available.
-        *  0.7 SPOOFED_FREEM_REPTO Forged freemail sender with freemail
-        *      reply-to
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 0/2] soundwire: Remove redundant zeroing of page registers
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org
+Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org, sanyog.r.kale@intel.com,
+        yung-chuan.liao@linux.intel.com
+References: <20221201140813.4062146-1-rf@opensource.cirrus.com>
+ <002826da-f22f-9ce2-1688-345fe4e3c7ed@linux.intel.com>
+ <266bf397-4395-873b-c933-73a9e28f463c@opensource.cirrus.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <266bf397-4395-873b-c933-73a9e28f463c@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are a procuring Branch of Reitan Groups. A Retail and Trading 
-company located in Norway and newly now in USA. This is one of 
-our procuring services, hence will like to order your Product.
-
-Please provide us with your offers, catalog so we can choose 
-precisely the needed products required by our client. 
-
-Advise if you can as well Ship to USA and Europe.
-
-Your prompt response will be well appreciated.
-
-Thank You,
-
-Kriston Jentes
 
 
-Oversea Marketing Manager
-REMA 1000 REMA 1000 Norge
-+47 24 09 85 00Gladengveien 2, 0661, Oslo
-Postboks 6428 Etterstad, 0605 Oslo
-https://www.reitangruppen.no
+On 12/2/22 05:26, Richard Fitzgerald wrote:
+> On 01/12/2022 18:31, Pierre-Louis Bossart wrote:
+>>
+>>
+>> On 12/1/22 08:08, Richard Fitzgerald wrote:
+>>> Writing zero to the page registers after each message transaction can
+>>> add
+>>> up to a lot of overhead for codecs that need to transfer large amount of
+>>> data - for example a firmware download.
+>>>
+>>> There's no spec reason I can see for this zeroing. The page registers
+>>> are
+>>> only used for a paged address. The bus code uses a non-paged address for
+>>> registers in page 0. It always writes the page registers at the start of
+>>> a paged transaction.
+>>>
+>>> If this zeroing was a workaround for anything, let me know and I will
+>>> re-implement the zeroing as a quirk that can be enabled only when it is
+>>> necessary.
+>>
+>> It's a feature, not a bug :-)
+>>
+>> The page registers have to be zeroed out so that any bus-management
+>> command hits the page0 instead of using a value that was set by codec
+>> driver for vendor-specific configurations.
+>>
+> 
+> Why would these bus management commands set bit 15 to indicate a paged
+> access? If they don't set bit 15 the page registers are not used and
+> bits 15..31 of the register address must be 0. Table 78 in the Soundwire
+> 1.2 spec. Table 71 in the 1.0 spec. Table 43 in the 0.6 draft spec.
+
+I forgot about this magic BIT(15) and indeed the Addr_page1/2 values are
+ignored when issuing non-paged register access. There's really no need
+to zero-out the page registers, it's completely unnecessary. Nice catch!
+
+For the series:
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+
+
+>> The implementation is far from optimal though, and indeed if we have
+>> long transactions that are not interrupted by anything else we could
+>> avoid resetting the page registers.
+>>
+>> I tried to implement a 'lazy approach' some time back, but at the time I
+>> didn't see any benefits due to the limited number of configurations.
+>>
+>> I can't remember where the code is, but the initial enhancement was
+>> listed here: https://github.com/thesofproject/linux/issues/2881
+>>
+>>>
+>>> Richard Fitzgerald (2):
+>>>    soundwire: bus: Don't zero page registers after every transaction
+>>>    soundwire: bus: Remove unused reset_page_addr() callback
+>>>
+>>>   drivers/soundwire/bus.c             | 23 -----------------------
+>>>   drivers/soundwire/cadence_master.c  | 14 --------------
+>>>   drivers/soundwire/cadence_master.h  |  3 ---
+>>>   drivers/soundwire/intel_auxdevice.c |  1 -
+>>>   include/linux/soundwire/sdw.h       |  3 ---
+>>>   5 files changed, 44 deletions(-)
+>>>
