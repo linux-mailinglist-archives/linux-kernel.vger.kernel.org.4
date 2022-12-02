@@ -2,238 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0851B6405F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC68A6405E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiLBLlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S232584AbiLBLhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbiLBLlO (ORCPT
+        with ESMTP id S232511AbiLBLhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:41:14 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F01CE43D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:41:13 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so6290657wma.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:41:13 -0800 (PST)
+        Fri, 2 Dec 2022 06:37:13 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D2BD49D9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:37:12 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id z92so6158715ede.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:37:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=U4oz8SSnE2zH+GohF5+iQafg1aGfg/iY/5Nv8cvrkb4=;
-        b=aP1kbEov8QRDX8CAf0EiKIgSjoR9E59RSNGByUUnbzuCe5ru95AQQZhUmETCxsJAdF
-         AWYfsLOpV7WDn5Dm53BiK5EXZpqOTUSj8STjci6i185es4QllvkolJ53m/mB7gIUPLZY
-         uwklyYypa5zI+6TabQjjd1GLvNoQ3UvEW76sAl8RqAf4L6wHqeEN+JY2Tfy4HunyesXI
-         gnBmQOlX595zGMJoHtwDDTNkdUl8L0GmNvY34NglMgZef7k1qEhKl7Ff7Qm+mxZuZeXN
-         85yBSRaRHMg0JYQyN0U2IOsITzL6XDTSLnq8uGU6YJ8Hqr5TN3R/Azd+cNJuTSEQTrep
-         7Fkg==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rXJtcqlaLP6+CXKylmb2agaWv2f+EorxGkZEJux5MAQ=;
+        b=m3A7Keo5juBqmOvK9e2K7vrkdIzRp8ZeONbcC9AaOtt7dD5zMiho+D+Rb+7BcWH7zK
+         wCHZZvYKzIlLqX/qa/QyQuVyyGiM9ds4R/TMZlA89JRPFAiA0L4WU5oqKb8lsa8UWqIy
+         UCB18q8yokXiy1dnruy7KFzjojODvo0UYzHCaJVXuapZx1aAYdUORCA/TzCLeaAbwl4/
+         J3HGB/zpAWqfWY0w+zEAfZWlm3Nlg0TNvwnlN52XYBqes1bn2NRIb2TKBYmWNJHXxZe7
+         Uvnag4VE+kqlcL24TVT0vBpPqAOZ9ilA3O72FU2enShTDSwugAtQdWMT7I+jgKltq1tg
+         euIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U4oz8SSnE2zH+GohF5+iQafg1aGfg/iY/5Nv8cvrkb4=;
-        b=Xao/VEqF9B2G9gUbSma2jzqmCfS8YpHEXskuIqvDKYQ1Qhq/YsTYJvXe/2oXhkyj4b
-         Bom0L/5ymsBv/EDgF2CDLiSLQASH82ffX6NXmM0fbgj6u5hD2XFFygswq58bI8MU87up
-         +xL1iWj2V4+VLmvZOR79IcwuoB4u7OMkCFtccodvXILbGMXRCY5UBx3cVShDZYfznbAz
-         Zlxq8Msqma/FXWBww6mARyQgJpGhYNLto3Zs+VPEIBLLQl5/c/bOdf2k7wbwHt3k6h63
-         wYonT6I3Vk/BEXkPePlTKst3TI24FjGreibOd2V7k8eYr98SIDKcDnAULMwlC8trfoyv
-         IUeg==
-X-Gm-Message-State: ANoB5pnueNiITHC3St1RpALZTdViL2C8zoKYtOlH5UkoCXxwyg4sfQDA
-        mdAPRhxYX6mpgEgN8u0fYu/4yQ==
-X-Google-Smtp-Source: AA0mqf7sJS6oRW+XfXeDsK6+elCMZNU62vpBmLcePkew8oXw+ClGBjbQ2rPmqjjQkhYcIVYNKacaUQ==
-X-Received: by 2002:a05:600c:a56:b0:3cf:77a6:2c2e with SMTP id c22-20020a05600c0a5600b003cf77a62c2emr37078202wmq.179.1669981271603;
-        Fri, 02 Dec 2022 03:41:11 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id n14-20020a05600c4f8e00b003c6f3f6675bsm13381928wmq.26.2022.12.02.03.41.10
+        bh=rXJtcqlaLP6+CXKylmb2agaWv2f+EorxGkZEJux5MAQ=;
+        b=HGB/LlHjjxFvDVF28dG2a/Sj0mJazSVDQhz7AevaOfXzetiqRiz2+xUispmd/7Yfqz
+         72rkrIkRmTAsadMv4BAo3mva81cNEY/ddFiHb0059mkQLc3Wo8hTzMwn5WGSZxlD+lH0
+         plVuQrO7GaJ7+0edVZcGjwbUMavVonP0uZcEEH36bUUTnItTbbJIR5f2r2+cpxB7tfsM
+         /qlnULz0uuVSl3+oUIsMVhGFRVCSpJ5+lUCZ0/YFa1vtQ+VPxbLQ+HtUxp4kWCbghW28
+         ZgwkUUBc/wj0ixaNeaDOivsc/Zeme8SvGbRHh+HLur0iAtJEAamBCHu/McOD8GdA1Qxx
+         YREQ==
+X-Gm-Message-State: ANoB5pkHdpJQxfR8Vom+ANOWgCy8kwcQD1fkm5UKIqPFQRy0TkyO6zVL
+        xwjB07hG9rQiTFjSxWgp3st0Ag==
+X-Google-Smtp-Source: AA0mqf4vGDG5MvIu6ojxnSaD8jSD5VdO9onQvOnqVlrAB81uoG+eg7B8tFXlyEbBfddbRf+dGtA+Ng==
+X-Received: by 2002:aa7:c44c:0:b0:46b:3549:f7ef with SMTP id n12-20020aa7c44c000000b0046b3549f7efmr20909889edr.225.1669981030864;
+        Fri, 02 Dec 2022 03:37:10 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id bm14-20020a0564020b0e00b0046bf4935323sm427781edb.30.2022.12.02.03.37.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 03:41:11 -0800 (PST)
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-7-ddrokosov@sberdevices.ru>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        neil.armstrong@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 06/11] clk: meson: introduce a1-clkc common driver
- for all A1 clock controllers
-Date:   Fri, 02 Dec 2022 12:36:50 +0100
-In-reply-to: <20221201225703.6507-7-ddrokosov@sberdevices.ru>
-Message-ID: <1jy1rq6nje.fsf@starbuckisacylon.baylibre.com>
+        Fri, 02 Dec 2022 03:37:10 -0800 (PST)
+Date:   Fri, 2 Dec 2022 12:37:08 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [RFC 8/9] RISC-V: KVM: Implement perf support
+Message-ID: <20221202113708.5sxbpnayj75xg6jp@kamzik>
+References: <20220718170205.2972215-1-atishp@rivosinc.com>
+ <20220718170205.2972215-9-atishp@rivosinc.com>
+ <20221101153112.hpst2bohsdvqours@kamzik>
+ <CAOnJCU++M5jd6toy1J8T+FPGJWSUaw8s9X7sxZY25naPoZeJJw@mail.gmail.com>
+ <20221123142254.2mc3j27kgw37jblv@kamzik>
+ <CAOnJCULCHZXLG18BNw=Fn8UaNb8hSMuvLAsA+j_4mX+_B27MYg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOnJCULCHZXLG18BNw=Fn8UaNb8hSMuvLAsA+j_4mX+_B27MYg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 02, 2022 at 01:08:47AM -0800, Atish Patra wrote:
+> On Wed, Nov 23, 2022 at 6:22 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> > On Tue, Nov 22, 2022 at 04:45:16PM -0800, Atish Patra wrote:
+> > ...
+> > > This brings up another generic error returning problem in KVM SBI
+> > > land. Usually, SBI error code numbers do not
+> > > align with Linux error codes to accommodate other operating systems.
+> > > However, most of the SBI error codes
+> > > have 1-1 relationship with the Linux error code.
+> > > Thus, kvm internal code returns a Linux specific error code and
+> > > vcpu_sbi will map those to SBI error code using
+> > > kvm_linux_err_map_sbi.
+> > >
+> > > However, this will not work for SBI_ERR_ALREADY_STARTED/STOPPED as
+> > > there are no corresponding
+> > > Linux specific error codes. We can directly return the SBI error codes
+> > > from vcpu_pmu.c and modify the
+> > > kvm_linux_err_map_sbi to pass through those. In that case, we can't
+> > > map any linux error code that
+> > > collides with SBI error code. Any other ideas to handle this case ?
+> > >
+> >
+> > It seems like we should drop kvm_linux_err_map_sbi() and add another
+> > parameter to kvm_vcpu_sbi_extension.handler for the SBI error. Another
+> 
+> That will just move the problem from the generic SBI layer to
+> extension specific layer.
+> The root problem remains the same as we can't expect the individual
+> extension to return
+> a valid linux specific error code.
 
-On Fri 02 Dec 2022 at 01:56, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+I'm saying we return both from the extension specific layer, particularly
+because only the extension specific layer knows what it should return.
+KVM's SBI handlers currently have a return value and *out_val. *out_val
+maps directly to SBI's sbiret.value, but the return value does not map to
+SBI's sbiret.error. But, all we have to do is add *error_val to the
+parameters for the extension handler to get it. Then, cp->a0 should be set
+to that, not the return value.
 
-> Generally, A1 SoC has four clock controllers on the board: PLL,
-> Peripherals, CPU, and Audio. The audio clock controller is different
-> from others, but the rest are very similar from a functional and regmap
-> point of view. So a it's good idea to generalize some routines for all
-> of them. Exactly, meson-a1-clkc driver contains the common probe() flow.
->
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> 
+> Maybe we can relax that requirement. Thus, any extension that has
+> additional SBI error codes
+> may opt to return SBI error codes directly. For example, PMU extension
+> implementation will
+> directly SBI specific error codes from arch/riscv/kvm/vcpu_pmu.c. In
+> future, there will be other
+> extensions (e.g TEE) will have many more error codes that can leverage
+> this as well.
+> 
+> Does that sound reasonable ?
 
-I think you should leave this out for the initial submission. It makes
-harder to review.
+I think we need both the Linux return and sbiret.error. The return value
+indicates a problem *with* the emulation, while the new parameter I'm
+proposing (*error_val) is the return value *of* the emulation. Normally
+the Linux return value will be zero (a successful Linux call) even when
+emulating a failure (*error_val != SBI_SUCCESS). When the return value
+is not zero, then there's something wrong in KVM and the return value
+should be propagated to userspace. We could also set the exit_reason to
+KVM_EXIT_INTERNAL_ERROR, but KVM_EXIT_UNKNOWN is probably fine too.
 
-In some case, these factorizations actually the maitenance harder.
+> 
+> > option is to continue mapping SBI errors to Linux errors, e.g.
+> > SBI_ERR_ALREADY_STARTED == EBUSY, but that may not be too easy in
+> > all cases and the errors become ambiguous, as we can't tell if the
+> > Linux implementation generated the error or if the SBI call did.
+> >
+> 
+> We can't distinguish between SBI_ERR_ALREADY_STARTED/STOPPED in that case.
 
-There is also the s4 that is coming up. It looks similar to the A1 as
-well.
+That's why I only suggested using EBUSY for STARTED. Mapping STOPPED
+was left as an exercise for the reader :-)
 
-Let's wait for both them to land, see how it goes and then we'll decide
-if a factorization is appropriate.
-
-> ---
->  drivers/clk/meson/Kconfig         |  4 ++
->  drivers/clk/meson/Makefile        |  1 +
->  drivers/clk/meson/meson-a1-clkc.c | 63 +++++++++++++++++++++++++++++++
->  drivers/clk/meson/meson-a1-clkc.h | 25 ++++++++++++
->  4 files changed, 93 insertions(+)
->  create mode 100644 drivers/clk/meson/meson-a1-clkc.c
->  create mode 100644 drivers/clk/meson/meson-a1-clkc.h
->
-> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-> index bd44ba47200e..1c885541c3a9 100644
-> --- a/drivers/clk/meson/Kconfig
-> +++ b/drivers/clk/meson/Kconfig
-> @@ -43,6 +43,10 @@ config COMMON_CLK_MESON_CPU_DYNDIV
->  	tristate
->  	select COMMON_CLK_MESON_REGMAP
->  
-> +config COMMON_CLK_MESON_A1_CLKC
-> +	tristate
-> +	select COMMON_CLK_MESON_REGMAP
-> +
->  config COMMON_CLK_MESON8B
->  	bool "Meson8 SoC Clock controller support"
->  	depends on ARM
-> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
-> index 0e6f293c05d4..15136d861a65 100644
-> --- a/drivers/clk/meson/Makefile
-> +++ b/drivers/clk/meson/Makefile
-> @@ -11,6 +11,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_PLL) += clk-pll.o
->  obj-$(CONFIG_COMMON_CLK_MESON_REGMAP) += clk-regmap.o
->  obj-$(CONFIG_COMMON_CLK_MESON_SCLK_DIV) += sclk-div.o
->  obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) += vid-pll-div.o
-> +obj-$(CONFIG_COMMON_CLK_MESON_A1_CLKC) += meson-a1-clkc.o
->  
->  # Amlogic Clock controllers
->  
-> diff --git a/drivers/clk/meson/meson-a1-clkc.c b/drivers/clk/meson/meson-a1-clkc.c
-> new file mode 100644
-> index 000000000000..2fe320a0e16e
-> --- /dev/null
-> +++ b/drivers/clk/meson/meson-a1-clkc.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Amlogic Meson-A1 Clock Controller Driver
-> + *
-> + * Copyright (c) 2022, SberDevices. All Rights Reserved.
-> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> + */
-> +
-> +#include <linux/of_device.h>
-> +#include "meson-a1-clkc.h"
-> +
-> +static struct regmap_config clkc_regmap_config = {
-> +	.reg_bits   = 32,
-> +	.val_bits   = 32,
-> +	.reg_stride = 4,
-> +};
-> +
-> +int meson_a1_clkc_probe(struct platform_device *pdev)
-> +{
-> +	struct meson_a1_clkc_data *clkc;
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	void __iomem *base;
-> +	struct regmap *map;
-> +	int clkid, i, err;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res)
-> +		return dev_err_probe(dev, -ENXIO, "can't get IO resource\n");
-> +
-> +	base = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(base))
-> +		return dev_err_probe(dev, PTR_ERR(base),
-> +				     "can't ioremap resource %pr\n", res);
-> +
-> +	map = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
-> +	if (IS_ERR(map))
-> +		return dev_err_probe(dev, PTR_ERR(map),
-> +				     "can't init regmap mmio region\n");
-> +
-> +	clkc = (struct meson_a1_clkc_data *)of_device_get_match_data(dev);
-> +	if (!clkc)
-> +		return dev_err_probe(dev, -ENODEV,
-> +				     "can't get A1 clkc driver data\n");
-> +
-> +	/* Populate regmap for the regmap backed clocks */
-> +	for (i = 0; i < clkc->num_regs; i++)
-> +		clkc->regs[i]->map = map;
-> +
-> +	for (clkid = 0; clkid < clkc->hw->num; clkid++) {
-> +		err = devm_clk_hw_register(dev, clkc->hw->hws[clkid]);
-> +		if (err)
-> +			return dev_err_probe(dev, err,
-> +					     "clock registration failed\n");
-> +	}
-> +
-> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-> +					   (void *)clkc->hw);
-> +}
-> +EXPORT_SYMBOL_GPL(meson_a1_clkc_probe);
-> +
-> +MODULE_AUTHOR("Dmitry Rokosov <ddrokosov@sberdevices.ru>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/clk/meson/meson-a1-clkc.h b/drivers/clk/meson/meson-a1-clkc.h
-> new file mode 100644
-> index 000000000000..503eca0f6cb5
-> --- /dev/null
-> +++ b/drivers/clk/meson/meson-a1-clkc.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Amlogic Meson-A1 Clock Controller driver
-> + *
-> + * Copyright (c) 2022, SberDevices. All Rights Reserved.
-> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> + */
-> +
-> +#ifndef __MESON_A1_CLKC_H__
-> +#define __MESON_A1_CLKC_H__
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#include "clk-regmap.h"
-> +
-> +struct meson_a1_clkc_data {
-> +	const struct clk_hw_onecell_data *hw;
-> +	struct clk_regmap *const *regs;
-> +	size_t num_regs;
-> +};
-> +
-> +int meson_a1_clkc_probe(struct platform_device *pdev);
-> +#endif
-
+Thanks,
+drew
