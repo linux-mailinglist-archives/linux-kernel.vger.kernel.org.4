@@ -2,98 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E83640FB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC01640FC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbiLBVDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
+        id S234319AbiLBVDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLBVD3 (ORCPT
+        with ESMTP id S234190AbiLBVDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:03:29 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C762CBA4F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:03:27 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id a9so5712000pld.7
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 13:03:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NKNPL0gFXJWzgjoUQUUlKaMR1OadcdNig+zrCqluUos=;
-        b=KYJAgnLoMBpwFobGI4tq+NzE5ExvyBMduQqBVu/Lb98EtbdGuHmyCO8NQXu3CZHW0R
-         0V6DueE2dXyQtt8hm+mEiouw0qItMJ7nj9s+QUM75fk8gk2jcOf3VUOHz7jSrEAq1jp5
-         ez5m02ladx1OxheZEOznd79clQks4O/+SK28vMorHyg6G9aKNIuJORxZeGkr0qTbp5b/
-         3G0jL+qZ5pr5o4VEcvIQfPzTV4x1ebR2nfay15mMG6fA5CXsLp3S5ffKDzaKTd7pyTNA
-         3Lh7ITyGI4ulywkcfvVwsNNa7AfGRwlpj8oxnnhvcfnpHD+nelMv0jG4timCLDBeWbQr
-         /tew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NKNPL0gFXJWzgjoUQUUlKaMR1OadcdNig+zrCqluUos=;
-        b=Tdtm+HiCsaapQw/j+zV3MvU53KBGuwBfWNyoibY2f5wZB7dP6chCOUxlw02S5HxhYs
-         i80fdK/2ThFEU2rTFZ/ZdoLqmCIeDrxG1KAm2hnnupHBXj6nQ5n3f/Hgq2lTBKtQLczX
-         YmmRIIxz7dGfJGjcyshVgZ4bGAKhtSYvI3REyM6lZ1+YRU7m+PtolisluTfrQ5PfHgnR
-         Cu1HdtyotkIJeJMO6ZR/M7UJP6AbOrsa10iT4LQfwmG1pVoaRNI05GPHc2hudAsQ8+PB
-         42Q9upAfn4JxK77256ZXVOEGjA2O2APCZMy1R/F5KDYLWkhCPbF8bunvn7gzfnhRNjul
-         WJlg==
-X-Gm-Message-State: ANoB5pn4aLZvlYkeFImOOmg+9rcFCodCIHc5DBvrS0z2vkigwieQI91u
-        J8+7f0alGs7SocHGrQJ8rhGI1rigaqk06heS
-X-Google-Smtp-Source: AA0mqf5dA+RuYdi4h3k9FHaZsXm3v3kMmx7jTBqXxze55tfyneQvhH6wbRdXpIyFAOlEfATCfwR7eA==
-X-Received: by 2002:a17:903:2290:b0:189:93bf:b5d5 with SMTP id b16-20020a170903229000b0018993bfb5d5mr23593776plh.145.1670015007023;
-        Fri, 02 Dec 2022 13:03:27 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id k60-20020a17090a14c200b00219220edf0dsm5102107pja.48.2022.12.02.13.03.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 13:03:26 -0800 (PST)
-In-Reply-To: <20221024094725.3054311-1-tongtiangen@huawei.com>
-References: <20221024094725.3054311-1-tongtiangen@huawei.com>
-Subject: Re: [PATCH -next 0/2]riscv/mm: two modifications on hugepage
-Message-Id: <167001498712.10811.4574922810264344403.b4-ty@rivosinc.com>
-Date:   Fri, 02 Dec 2022 13:03:07 -0800
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Fri, 2 Dec 2022 16:03:48 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B519D80C7;
+        Fri,  2 Dec 2022 13:03:46 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2IWQgL019814;
+        Fri, 2 Dec 2022 21:03:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=l3YF7d7Osha4HUveR4HvX/7HD6zwUOSpMIQU9u+UtZc=;
+ b=mKsYTYr37ehS3zXP91idG9z9wLRV2TKwsxw+gihdb1OPxKe+XPlnNw7v5XAfYEhooHRe
+ GmhgyRbM/DI7FJ5hYIHntmf/w8yiQzYcDUu7HzmWjcc2raGT9TzSAWBakrXa8lEU6RVx
+ rYah4wRfh5P3FDQMoflcMWA3djz0EtK5qg4SIdlr8i/yi6Iu1bFGQ0N5/ZUYM+bQ0uLE
+ XEQ+UCVLwXkY99bsY2UeuX8Ei6VLHQrZfFmF84zs1t/u+5RSHYLKaK1Dkuy7+tFoNTlS
+ ySF35F8ot6BOPyLY2dRHod/zByDtiOo6MNL1hpTD/PUqzy3l5PPAJD7Egs5wUxhSFsrW iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7pqwtuam-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 21:03:17 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B2Krx5O004621;
+        Fri, 2 Dec 2022 21:03:16 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7pqwtua6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 21:03:16 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B2Kp5MW009983;
+        Fri, 2 Dec 2022 21:03:15 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02wdc.us.ibm.com with ESMTP id 3m3aeam324-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 21:03:15 +0000
+Received: from b03ledav004.gho.boulder.ibm.com ([9.17.130.235])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B2L3EuJ34931234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Dec 2022 21:03:14 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D5B67805E;
+        Fri,  2 Dec 2022 22:13:21 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 42E997805C;
+        Fri,  2 Dec 2022 22:13:18 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.181])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  2 Dec 2022 22:13:17 +0000 (GMT)
+Message-ID: <6f66f174af92a9b23bddd72945e94e888b0c9420.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
+ data
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, linux-integrity@vger.kernel.org,
+        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Fri, 02 Dec 2022 16:03:09 -0500
+In-Reply-To: <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+         <Y3FfhrgvBNey6T7V@sol.localdomain>
+         <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
+         <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com>
+         <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
+         <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
+         <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zHzyh_mb8TepzfPQ11qtRN52QY2r-J1v
+X-Proofpoint-ORIG-GUID: sPQup2CTJfvDp6URQ1pmFgRxtBqWs-WP
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-e660e
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        wangkefeng.wang@huawei.com, Guohanjun <guohanjun@huawei.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-02_12,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxlogscore=371 spamscore=0 phishscore=0 clxscore=1011 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212020169
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 09:47:23 +0000, Tong Tiangen wrote:
-> Tong Tiangen (2):
->   riscv/mm: hugepage's PG_dcache_clean flag is only set in head page
->   riscv/mm: add arch hook arch_clear_hugepage_flags
-> 
-> arch/riscv/include/asm/cacheflush.h | 7 +++++++
->  arch/riscv/include/asm/hugetlb.h    | 6 ++++++
->  arch/riscv/mm/cacheflush.c          | 7 +++++++
->  3 files changed, 20 insertions(+)
-> 
+On Mon, 2022-11-14 at 13:00 -0500, James Bottomley wrote:
+> On Mon, 2022-11-14 at 09:43 -0800, Evan Green wrote:
+> > On Mon, Nov 14, 2022 at 8:56 AM James Bottomley
+> > <jejb@linux.ibm.com>
+> > wrote:
 > [...]
+> > > Of course, since openssl_tpm2_engine is the complete reference
+> > > implementation that means I'll have to add the creation PCRs
+> > > implementation to it ... unless you'd like to do it?
+> > 
+> > I am willing to help as I'm the one making the mess. How does it
+> > sequence along with your draft submission (before, after,
+> > simultaneous)?
+> 
+> At the moment, just send patches.  The openssl_tpm2_engine is
+> developed on a groups.io mailing list:
+> 
+> https://groups.io/g/openssl-tpm2-engine/
+> 
+> You need an IETF specific tool (xml2rfc) to build the rfc from the
+> xml, but it's available in most distros as python3-xml2rfc.  If you
+> don't want to learn the IETF XML I can help you code up the patch to
+> add that to the draft spec.
 
-Applied, thanks!
+Just as a heads up, the patch series implementing signed policy (and
+thus taking option [3]) is on the mailing list for review:
 
-[1/2] riscv/mm: hugepage's PG_dcache_clean flag is only set in head page
-      https://git.kernel.org/palmer/c/d33deda095d3
-[2/2] riscv/mm: add arch hook arch_clear_hugepage_flags
-      https://git.kernel.org/palmer/c/d8bf77a1dc30
+https://groups.io/g/openssl-tpm2-engine/message/296
 
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+With apologies for the awful lack of threading in the groups.io
+interface.
+
+So you don't have to build the RFC yourself, I published the proposed
+update on my website:
+
+https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.txt
+
+If you want to use option [4] for the creation data, it's available.
+
+Regards,
+
+James
+
+
