@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0731D640C1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D6D640C21
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbiLBR0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S234153AbiLBR0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbiLBRZ6 (ORCPT
+        with ESMTP id S233772AbiLBR0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:25:58 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F5310A1;
-        Fri,  2 Dec 2022 09:25:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670001957; x=1701537957;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UAxenKvkDH4wwIwcRyi4RJ3isQRBDPM97pG5KlxBFRI=;
-  b=BuqcTn23yL+2Nua+JdsV9MJnJWaDlZfl/+Yjy7YedpNFl3/ZHYEIWFJJ
-   UOz2BZaz/PjOlZjiQpOik0qwobA7CHUzgOO1CGPrVstc33TruzZoxgBYn
-   ZlZbE5AaWUXx4Y+T5yHf1w6stEGrKWekIta+IFm+YwbHxXud7QEmMj5v/
-   B5EvOLSkyV0p1ROkRM7hXjxJp81S3uJ/6hshVQKNSg7wTdFOqyFmqBYuS
-   J59CqPghzEdg97EKnwzUhbO/lUdJF46vAAVLAmZcXRQaQ5lZLHMmx1l7a
-   zsh89pMN9Af6ueNzqpgMemdr+QQKwi38/YOWhAFeeNlcWljJa3RAuzihY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="402282411"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="402282411"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 09:25:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="638813719"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="638813719"
-Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 09:25:56 -0800
-Message-ID: <0decd051-a247-3f92-2df7-c7684ed18c75@intel.com>
-Date:   Fri, 2 Dec 2022 09:25:56 -0800
+        Fri, 2 Dec 2022 12:26:14 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC6711145
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:26:12 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id d20so7431534edn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=cMIEC+/8gNosY0ckhHMIkQhSMNNRlILZApKp3aKWkGk=;
+        b=ZFv1dqJrGN+88HGF5328gY5aGuDl++9QYQHXkAwVOYw9LZPRkFdvZYtFRIRpPmhHBb
+         t5NJtTCrjrm1W/ixCcxFXKv9McvWY4fUw/+4XsvGZBFSAZiqyhc4QTBiO4t0X03TATCF
+         5KRuAsGxr7Ac3PXPCNsC6GV7wL+soeg8/eys4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cMIEC+/8gNosY0ckhHMIkQhSMNNRlILZApKp3aKWkGk=;
+        b=aVCJ+SNQphVoeQfmOPJRoNyVX0OyEX065NZEGvjgFnChNAPsbioA/Nt9ZZINWQOkXZ
+         FAP41VKa+HK8FcMtFrCP0sTDl6VDJLcFQLxf2FJGioPlGEtJNR+xfuEe3ElLurb/qNQE
+         iTheufMINJTSHgzPIsYoZroNx6tWRmYG1WcK1bhWuYa2gUEWYeNSqWGrBRdHXZku4uYP
+         PkHP0RVPN0NFEDA0NWV5756UZM9pzpKUaHZtO8kYFoWV3eJ6M3de/DHEQsm2gedczscx
+         /4rdigJHMYyE0rgH+IWFFmyAyjyVLxvituLDamicb8YdCJ2CBP3pGe3YffZCOS5e4nai
+         K17A==
+X-Gm-Message-State: ANoB5pnfbaxu0/F3UmT+4raltMPcLjzFYgsHFRfBZlzMhLtPZeOsTeHp
+        IlkLLx6A1fteIn18ycJNvXiTGg==
+X-Google-Smtp-Source: AA0mqf50mIO4md8hTYtU2u+ukjAOIuR1Mdxj17ANZWY0LhqPqbyN23e82n3Anx0TSrJMtonRxHTgJw==
+X-Received: by 2002:aa7:c055:0:b0:45a:1af2:ed6d with SMTP id k21-20020aa7c055000000b0045a1af2ed6dmr49338379edo.364.1670001970834;
+        Fri, 02 Dec 2022 09:26:10 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id p9-20020a17090653c900b00782e3cf7277sm3202546ejo.120.2022.12.02.09.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 09:26:10 -0800 (PST)
+Subject: [PATCH RESEND v2 0/2] media: uvc: Get menu names from framework
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 09/20] x86/virt/tdx: Get information about TDX module
- and TDX-capable memory
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <cd23a9583edcfa85e11612d94ecfd2d5e862c1d5.1668988357.git.kai.huang@intel.com>
- <850e0899-d54e-6a49-851e-56f4d353905c@intel.com>
- <57af0b96f8a827828b1d64031774962972bfb060.camel@intel.com>
- <1c6580f7-3abb-03ba-dd98-367ddb9bf23b@intel.com>
- <a5e0f218e911a4ad207da55e21fdeb6d8035fed0.camel@intel.com>
- <7be59cd82bc3f3c26e835980eb74a8d92c6d67d6.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <7be59cd82bc3f3c26e835980eb74a8d92c6d67d6.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 02 Dec 2022 18:26:01 +0100
+Message-Id: <20220920-standard-menues-v2-0-323be5539c22@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1128; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=VMy89JO7FygCS8BFCye9k25GaVr7pUaGnXwG39WZsA8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijUrNQnsXT/uQHFhYwg011uDBmLZPtkOnKpQyYM7
+ NFaUQpuJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4o1KwAKCRDRN9E+zzrEiHhFD/
+ 9yq2cXKngNwXG5PP57o3AlUfHk3Blqe2A0A9AG116meFK4k2aGYLxhcPXcxcrDmtmH9gHkdt2TMpV2
+ s99pJdVuaWxr8Jh0sUipHwQDamgQYTp+JUthF1syG+xFByhrOgDt+JXk+firiOT3qtqsXvAKiv8QJB
+ lH1DQ4x26ucKdePio7jyGReGF6I6lTRjjfSibJW9kmalOXxVikE/qPs63f5XGvVvx+yOs02apX4gCf
+ AM+nvHDyqE6FVwg4KHN236r/gio9nL+tAPS/4syZYYynNbRa9yWzACO0mgFyibav7GqwEQhcB1qiGU
+ NobqdcfWvEnL+UCrqWBK/zRqFNi0ROiNDTo8IjBnx9fe1VCVOyCmpJqYe+i6/Yk5SvSsLb41qGhDhk
+ L+4rmgW/ZhieIZarcbXfKpBT9BsyQvgLAPz62k7gZjm5TnA7YpG9DeHgu9cOeKpdhzBt8/IAaBB7mJ
+ WpnW6s2NqnsA5ir+iOBJEtBReBxGTj/SuOlIk8ZYVWwDTgi4f+E+0h4J2O1HwHKnzizSoh1JYkLXtj
+ sVJzXU28g06pY+G7MdTc7Wg3MTlo6N2B5bf5KkNJFyivFrBBney51IU96TeMQMrtuOEwWCQeGH4NuM
+ AJNsaMUOGhcBgLmFaYhmV1su1sUICJC8wm2p67ym1S1x+CYXrdLYEmBhGjlg==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 03:19, Huang, Kai wrote:
-> Probably I forgot to mention the "r9" in practice always returns 32, so there
-> will be empty CMRs at the tail of the cmr_array[].
+Do not have a local copy of the item names. Instead use the ones from the
+v4l2 framework.
 
-Right, so the r9 value is basically useless.  I bet the code gets
-simpler if you just ignore it.
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
->> But we can also do nothing here, but just skip empty CMRs when comparing the
->> memory region to it (in next patch).
->>
->> Or, we don't even need to explicitly check memory region against CMRs. If the
->> memory regions that we provided in the TDMR doesn't fall into CMR, then
->> TDH.SYS.CONFIG will fail. We can just depend on the SEAMCALL to do that.
-> 
-> Sorry to ping, but do you have any comments here?
-> 
-> How about we just don't do any check of TDX memory regions against CMRs, but
-> just let the TDH.SYS.CONFIG SEAMCALL to determine?
+---
+Changes in v2:
+- Remove unused variables
+- Link to v1: https://lore.kernel.org/r/20220920-standard-menues-v1-0-839799192e9d@chromium.org
 
-Right, if we screw it up TDH.SYS.CONFIG SEAMCALL will fail.  We don't
-need to add more code to detect that failure ourselves.  TDX is screwed
-either way.
+---
+Ricardo Ribalda (2):
+      media: uvcvideo: Implement mask for V4L2_CTRL_TYPE_MENU
+      media: uvcvideo: Use standard names for menus
+
+ drivers/media/usb/uvc/uvc_ctrl.c   | 136 +++++++++++++++++++++++++------------
+ drivers/media/usb/uvc/uvc_driver.c |   8 +--
+ drivers/media/usb/uvc/uvc_v4l2.c   |  81 ++++++++++++++++------
+ drivers/media/usb/uvc/uvcvideo.h   |   5 +-
+ include/uapi/linux/uvcvideo.h      |   3 +-
+ 5 files changed, 162 insertions(+), 71 deletions(-)
+---
+base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+change-id: 20220920-standard-menues-6d703c57f231
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
