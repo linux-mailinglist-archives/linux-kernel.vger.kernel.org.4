@@ -2,148 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9E163FECE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 04:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B0963FEDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 04:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbiLBDb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 22:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S232153AbiLBDcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 22:32:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbiLBDbX (ORCPT
+        with ESMTP id S231400AbiLBDcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 22:31:23 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A723BD9B13;
-        Thu,  1 Dec 2022 19:31:20 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 1 Dec 2022 22:32:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C69ADA20C;
+        Thu,  1 Dec 2022 19:32:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NNdl54qh8z4x1V;
-        Fri,  2 Dec 2022 14:31:13 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669951875;
-        bh=dGmf72ncD/4NdOoAGiGfp2ldEHsmrOX7GeYxxIlw1iI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IqwSsQevBvTlcZghD8RrbvK/OS1wagK/DoQO2amlxJp9gve2/yirsqhJvflP01OMy
-         O+JRzcYLYc63mCysVf2ase6i7kAOk15Nn73eaedITQEohbVom+5XlHXx+fcPgMIq/w
-         jemmvGcw3801mcrgqjyv6aU27PvYQSWDEU28hZGWvbn0mB1pQJymPLXYNEx3STmHJC
-         pyYWKTW01v0zFiG6b94/nl0l61JYWlDcCMzHke7kcCQKN33YMs6dtTytyVKWNGBn41
-         tp9v7a1eO7g0AcRjqXF1OubW1kiqhMX/bNi8/cB9jc+PTfuQz6sMl5x1lbYxGFGky2
-         9AWg/asmYeY/Q==
-Date:   Fri, 2 Dec 2022 14:31:10 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     "Christopher M. Riedl" <cmr@bluescreens.de>,
-        Benjamin Gray <bgray@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: boot failure after merge of the powerpc tree
-Message-ID: <20221202143110.0f00c3e5@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A100B8201F;
+        Fri,  2 Dec 2022 03:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9403DC433D7;
+        Fri,  2 Dec 2022 03:32:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669951933;
+        bh=TzW6W5n83OUhOwvDj7dVuruK703j88Q3wD8ZFJxahUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BovuxiCSMtogBUe/MBKnqXMCKjOId+m+hb2B14Zl610M6z2RiDdX4toN2rh2Iwj3f
+         lqeChZsy+c9sUV5DwxxTyK9DyDnEvRetLxLLNZ4ZsA/L6zl+adZpKMoR1RC5kvRau7
+         cIxP3XY0fd0zXLDGok2JqSfL4iM9YVtRghip3a+RXFZbqh4smOnMujM4xsRmjipt9D
+         mbffXasJG4a/UuK4tE1XH3BVUuo3zdgL+cwHs2zk//m2J7R/W12+47kdLucPJpvoms
+         58CDyTEZAMJ6S8dDriryA7wL/9nhRh3JfdzfO40YJzhswslBa2R28PBOz5l6h1MtoY
+         xrCW5/fmUSYZw==
+Date:   Thu, 1 Dec 2022 19:32:11 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] crypto/caam: Avoid GCC constprop bug warning
+Message-ID: <Y4lxu+6BQJ5uVhCg@sol.localdomain>
+References: <20221202010410.gonna.444-kees@kernel.org>
+ <Y4ludwin631WFhcG@sol.localdomain>
+ <202212011920.A6648E9B@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BjbHU/pbGfn0Mh7nb5lWnVd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212011920.A6648E9B@keescook>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BjbHU/pbGfn0Mh7nb5lWnVd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Dec 01, 2022 at 07:23:49PM -0800, Kees Cook wrote:
+> I think it's a dumb
+> limitation, given that "zero size to/from NULL" is perfectly valid.
 
-Hi all,
+No, that is undefined behavior.  Which is presumably the reason for the nonnull
+annotation.  Anyway, it is silly, which is why I'd hope that someone would have
+added an option to disable this C standard bug by now...
 
-After merging all the trees, today's linux-next qemu run (powerpc
-pseries_le_defconfig with kvm) crashed like this:
-
-Memory: 2029504K/2097152K available (14592K kernel code, 2944K rwdata, 1817=
-6K rodata, 5120K init, 1468K bss, 67648K reserved, 0K cma-reserved)
-SLUB: HWalign=3D128, Order=3D0-3, MinObjects=3D0, CPUs=3D1, Nodes=3D1
-BUG: Kernel NULL pointer dereference on read at 0x0000001c
-Faulting instruction address: 0xc00000000047e9bc
-Oops: Kernel access of bad area, sig: 7 [#1]
-LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeries
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc7 #1
-Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1202 0xf0000=
-05 of:SLOF,HEAD hv:linux,kvm pSeries
-NIP:  c00000000047e9bc LR: c000000000e06718 CTR: c00000000047e970
-REGS: c000000002773770 TRAP: 0300   Not tainted  (6.1.0-rc7)
-MSR:  8000000002001033 <SF,VEC,ME,IR,DR,RI,LE>  CR: 22004220  XER: 00000000
-CFAR: c000000000070508 DAR: 000000000000001c DSISR: 00080000 IRQMASK: 3=20
-GPR00: c000000000e06718 c000000002773a10 c00000000116fc00 0000000000000000=
-=20
-GPR04: 0000000000002900 0000000000002800 0000000000000000 0000000000000000=
-=20
-GPR08: 000000000000000e c0000000027afc00 0000000000000000 0000000000004000=
-=20
-GPR12: c00000000047e970 c000000002950000 0000000000000000 00000000013c8ff0=
-=20
-GPR16: 000000000000000d 0000000002be00d0 0000000000000001 00000000013c8e60=
-=20
-GPR20: 00000000013c8fa8 00000000013c8d90 c0000000027b2160 0000000000000000=
-=20
-GPR24: 0000000000000005 c0000000027b3568 c000000000e06718 0000000000002900=
-=20
-GPR28: 0000000000002900 0000000007fff33f 0000000000000000 c000000002773bc8=
-=20
-NIP [c00000000047e9bc] kmem_cache_alloc+0x5c/0x610
-LR [c000000000e06718] mas_alloc_nodes+0xe8/0x350
-Call Trace:
-[c000000002773a10] [0040000000000000] 0x40000000000000 (unreliable)
-[c000000002773a70] [c000000000e06718] mas_alloc_nodes+0xe8/0x350
-[c000000002773ad0] [c000000000e0f7f4] mas_expected_entries+0x94/0x110
-[c000000002773b10] [c00000000012cc44] dup_mmap+0x194/0x730
-[c000000002773c80] [c00000000012d260] dup_mm+0x80/0x180
-[c000000002773cc0] [c00000000008e7c0] text_area_cpu_up_mm+0x20/0x1a0
-[c000000002773d20] [c00000000013367c] cpuhp_invoke_callback+0x15c/0x810
-[c000000002773db0] [c0000000001348dc] cpuhp_issue_call+0x28c/0x2a0
-[c000000002773e00] [c000000000134e44] __cpuhp_setup_state_cpuslocked+0x154/=
-0x3e0
-[c000000002773eb0] [c000000000135180] __cpuhp_setup_state+0xb0/0x1d0
-[c000000002773f10] [c000000002016f9c] poking_init+0x40/0x9c
-[c000000002773f30] [c00000000200434c] start_kernel+0x598/0x914
-[c000000002773fe0] [c00000000000d990] start_here_common+0x1c/0x20
-Code: fb81ffe0 7c9b2378 3b293968 fbc1fff0 f8010010 7c7e1b78 fba1ffe8 fbe1ff=
-f8 91610008 f821ffa1 f8410018 83b90000 <83e3001c> 7fbd2038 7bbc0020 7f84e37=
-8=20
----[ end trace 0000000000000000 ]---
-
-Kernel panic - not syncing: Attempted to kill the idle task!
-
-Reverting commits
-
-  55a02e6ea958 ("powerpc/code-patching: Use temporary mm for Radix MMU")
-  d0462ee02fdd ("powerpc/code-patching: Consolidate and cache per-cpu patch=
-ing context")
-(this second just because it follows the other and modifies the same file)
-
-fixes the panic.  I have done that in linux-next today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BjbHU/pbGfn0Mh7nb5lWnVd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOJcX4ACgkQAVBC80lX
-0GwWOwgAjqKajQf1EBA6Y9xvIrOMk/sU97LDyRymafQAqS80fWM650XoDOfaJR4v
-PwvLMBEXnXJKqf3Flhr2GxDC0o6SuSRm2oK7/DnPovpyZgnxatLq4wfpGF3YWIlj
-D9EfIgNXzt78xTMrDu2O9oFnso1m4WSzQa+FqMm0DFZNRCIkqLMOv3BPqn48ofD3
-3rtrk5xuShrqxnHtdyUXBO/C9IB9dSHW6OLCECBipVUATQEjcDkavogDkNpIMeWk
-bXO/CiZDphejKIP8W003wuVbHXwy5SkvxrLv86/xjQpTwKM81vuIfZPNJ+XjagJ0
-+SA9Dd10CDQLrPgsNnA4RO9XLE6eyQ==
-=NakJ
------END PGP SIGNATURE-----
-
---Sig_/BjbHU/pbGfn0Mh7nb5lWnVd--
+- Eric
