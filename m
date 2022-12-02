@@ -2,168 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5A1640BFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA763640BF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234241AbiLBRUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S233734AbiLBRTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbiLBRUH (ORCPT
+        with ESMTP id S233760AbiLBRTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:20:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6089D2C3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:19:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670001544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5GkID1iP9MpgW84ysmyy3u1ZrLSvXrRGMbe9Yjus3rw=;
-        b=F8N8I3H4a6MO2eN2xCehMTF1ljbKYLN7o5Ph8GjeZN9YUVl2UU0GLE7371YXalW0NLW91f
-        rNmkc43NQfu/OXsesEx0eKSksr1xOclK5u5wZQimvKOvOUoh329q+vkcD950D4GQAKxI7s
-        wLeRC6xcXAr50lD7rLj1GWT+RXipeW8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-342-ewYLWIxIMOSe5xpQx1SThw-1; Fri, 02 Dec 2022 12:19:01 -0500
-X-MC-Unique: ewYLWIxIMOSe5xpQx1SThw-1
-Received: by mail-wm1-f72.google.com with SMTP id z15-20020a1c4c0f000000b003cf6f80007cso2174112wmf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:19:00 -0800 (PST)
+        Fri, 2 Dec 2022 12:19:47 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF11E785B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:19:45 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id ml11so13068729ejb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:19:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/RdQpRDc/P3p5PuMcx3RxG10Ut5U2wPQz1yCcrQs0Q=;
+        b=HzxHuLouTRvA3KjA2OBUGJkyjrJsTTCyeds0LYUc4MEDNmtV4h1eSfqOa4jK6SWkqX
+         zT7TdZry17LePKM+EvXbOs5xTw19lJEFcUWIPbNyboDMq14qQninfXyWf5BjAFyXIgpG
+         Z6VUGquxvE2DzNiryD+Jfj/yagd+CKvckd2nA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5GkID1iP9MpgW84ysmyy3u1ZrLSvXrRGMbe9Yjus3rw=;
-        b=JR7Hxhu3Lr1e4ldSa4/c8kS45tj5EN0rjiRv0YcOqXIUWlx1Tl/K+nWhV1o+v9RddX
-         TOhbXcgw5CW/Sv9UuRMJqhEmxq4LrMKax1S4IGbN/PLeTuSWeSgoz5rMjaowpfvaMD8U
-         Ip9+vZgFO3nJVp7qmJpoZ/+aq7R1XsIps9PnzTzmbpY9toCyDtIrXkNMDTQEjDHRIs95
-         clJm1t7UZYjfZU5xVY5mU2sP0dhaxcuSEdVVWW/62N+6U49NGMw8RAdvg6M8hB8uh6tz
-         HUEQkrpMjXM3APb+XSLw3b3L42uMEfqYYOYyyBCwYs92ewMEyG3uhL5FVxZyS531vZ4q
-         0TMg==
-X-Gm-Message-State: ANoB5pk7Qxqp3+givIffYesU1ejP5CV3rs7ajOiYg3qOlDAyCxeznWMd
-        M5peCJyDy33sA81RqgVlH2MAv+NPldfaH6rUqVM1FxdNcBzR9u3YPnafaEAJmX2XUyYsSUxa3sg
-        gnzv9BsvLcSs1Sq+alnoYQm0U
-X-Received: by 2002:a05:6000:983:b0:236:aacc:ea07 with SMTP id by3-20020a056000098300b00236aaccea07mr45987390wrb.36.1670001539882;
-        Fri, 02 Dec 2022 09:18:59 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7d0QCwkPBB+T+LF+MwVIetNIwUyQxWiCZhfVtlyYOjSUZtlBtkvsrxrWul3G0QGWU2WGjstA==
-X-Received: by 2002:a05:6000:983:b0:236:aacc:ea07 with SMTP id by3-20020a056000098300b00236aaccea07mr45987372wrb.36.1670001539508;
-        Fri, 02 Dec 2022 09:18:59 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:7a00:852e:72cd:ed76:d72f? (p200300cbc7037a00852e72cded76d72f.dip0.t-ipconnect.de. [2003:cb:c703:7a00:852e:72cd:ed76:d72f])
-        by smtp.gmail.com with ESMTPSA id p18-20020adfce12000000b00242271fd2besm7431353wrn.89.2022.12.02.09.18.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 09:18:59 -0800 (PST)
-Message-ID: <efc5f0c3-bfb7-e36e-fa5b-60f94b49b7d4@redhat.com>
-Date:   Fri, 2 Dec 2022 18:18:58 +0100
+        bh=r/RdQpRDc/P3p5PuMcx3RxG10Ut5U2wPQz1yCcrQs0Q=;
+        b=vbsb1/NfjN/YzdexIuDqRRxBuE6z3yM1o9MWHlUkJgGSpOuyENvrzMidRigFNwCXa6
+         cn3MweEAV7OOQn28+A4JLKT+mcKqQ/hUfL5+v2VOWPFvWyCZOYovcb/pvudPoJ1X0F6e
+         3MmB5kq/3G+CuJyaU7/rlQvzBd+ZymT7pKVFkC+ULPor3+fJrGbKvL4A4Rbv6f4nVJ/3
+         B/vUO6QV7MAWcy2TRBsdzOgvW9U2XpEVnbtFBVTh3aEt4//KeHFMhc0a2lCAOL88dkdt
+         n7irEhSly/tpF9A42QNHj3Fm1gxP3Vzj1jlB60qd+6++7HeudKnfknMHsAbt8NjuUjpe
+         gEWQ==
+X-Gm-Message-State: ANoB5pnVMLYg9XHqb1Uyt6QIJQI5nNFQS4bgZ105aYtYO+C7fsPfjJYr
+        NzAbxmfQT/V3CTqs4KMC5v5b3A==
+X-Google-Smtp-Source: AA0mqf6c9wbxGNnv16nmDSnRa3AMqPPV1Kw4oGHEw+22EO8NTOtinsOXsGc0Dt1L1CQA5n29ygSn+g==
+X-Received: by 2002:a17:906:39c8:b0:7ad:79c0:5482 with SMTP id i8-20020a17090639c800b007ad79c05482mr51357594eje.730.1670001584143;
+        Fri, 02 Dec 2022 09:19:44 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id l4-20020aa7c304000000b00458dc7e8ecasm3117864edq.72.2022.12.02.09.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 09:19:43 -0800 (PST)
+Subject: [PATCH v4 0/2] media: uvcvideo: Implement granular power management
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
-References: <20221114000447.1681003-1-peterx@redhat.com>
- <20221114000447.1681003-2-peterx@redhat.com>
- <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
- <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
- <Y4jIHureiOd8XjDX@x1n> <a215fe2f-ef9b-1a15-f1c2-2f0bb5d5f490@redhat.com>
- <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
-In-Reply-To: <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAKIzimMC/4XNTQrCMBAF4KtI1kaaSdOkrryHuMjPYAOaSGIjUn
+ p3B5ciuhreg/fNwiqWiJXtNwsr2GKNOVHotxvmJ5vOyGOgzKAD6EboeMGKKfBbfmCptiFXoxFajB
+ hg0IxmzlbkrtjkJxqm+XKhcor1nsvz/aYJOscfYhO84wKkteCsNHI4+Knka5yvu1zO7EReg38GkK
+ GEVEE4J7w0Xwz5z5Bk+F4bNQSjlcYPY13XF0lCe9xAAQAA
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 02 Dec 2022 18:19:30 +0100
+Message-Id: <20220920-resend-powersave-v4-0-47484ae40761@chromium.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
+        Max Staudt <mstaudt@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1945; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=kciBkpg9OytuPzxiqiWfbkAo1WlMycZv7Sn0Qh/anFY=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjijOlKg2WE+mgx19kj8BfWLXFrt21VuBIwjiigxpp
+ S4ciJfCJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4ozpQAKCRDRN9E+zzrEiGlND/
+ 9de/F0ouT85wAcxMUsezJriMfv2tJLWDFZA0+HYtzm3cgRovk/352X+3fEv8WQTgLNmJsl1hbQFK2g
+ 8iNOjYeW/O0HciAtITljyDQi1udgCvcIOcAVv3gLXlUClMNQHJYhC96lysYhMCh9OOi/1R4a5G3TbN
+ yVjiU5gQR2hCDVfdHlqo25XKTpXrFl+MDm7btoJN9JcIOA5xP0wJqZocICS3yt9TYhjBJESSV/KZLX
+ HEdMKKVZ3tmK3xnyOrbcJK1o7McsrgHVu/kc3Kte1Urfqd/by4DDyoWSZnCXYltBjmgWElAJh5POVp
+ 1xFPCtKiVqNQTnMZmLeKQVoP+UewDxg6pg1b35psB5Slha75rjhSVmPBCrhuATsx/b2aNmjZk/x/xI
+ ZOtNOZTs3L4Wail5H2NIfgr8dL8HDdE1zOT82msp2/siKWkJVc8Qk6y/pdXOYfPQP4eNQPEXpsRdeF
+ eFmNXtBZr3UcjlDFzDh/oXlkdhOsDn9pbcWwXoM6ksjAau7mZqIC8I0PlVA3bbxTgnMhc/Mx7VBszz
+ qpnj8VIaP1t5Ab3M3RfQZDA+T6nfuq5uPLh2fBgXtk7YMvOMXQtSRsUsSTUNdRJhP1ZiRZnmqtHf2g
+ pfOHt6aQGfnmIu0dZsSucura6lggiY5b+gLWp+YOfN4dMOwGncEgfqID2N1w==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.12.22 23:30, Andrew Morton wrote:
-> On Thu, 1 Dec 2022 16:42:52 +0100 David Hildenbrand <david@redhat.com> wrote:
-> 
->> On 01.12.22 16:28, Peter Xu wrote:
->>>
->>> I didn't reply here because I have already replied with the question in
->>> previous version with a few attempts.  Quotting myself:
->>>
->>> https://lore.kernel.org/all/Y3KgYeMTdTM0FN5W@x1n/
->>>
->>>           The thing is recovering the pte into its original form is the
->>>           safest approach to me, so I think we need justification on why it's
->>>           always safe to set the write bit.
->>>
->>> I've also got another longer email trying to explain why I think it's the
->>> other way round to be justfied, rather than justifying removal of the write
->>> bit for a read migration entry, here:
->>>
->>
->> And I disagree for this patch that is supposed to fix this hunk:
->>
->>
->> @@ -243,11 +243,15 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
->>                   entry = pte_to_swp_entry(*pvmw.pte);
->>                   if (is_write_migration_entry(entry))
->>                           pte = maybe_mkwrite(pte, vma);
->> +               else if (pte_swp_uffd_wp(*pvmw.pte))
->> +                       pte = pte_mkuffd_wp(pte);
->>    
->>                   if (unlikely(is_zone_device_page(new))) {
->>                           if (is_device_private_page(new)) {
->>                                   entry = make_device_private_entry(new, pte_write(pte));
->>                                   pte = swp_entry_to_pte(entry);
->> +                               if (pte_swp_uffd_wp(*pvmw.pte))
->> +                                       pte = pte_mkuffd_wp(pte);
->>                           }
->>                   }
-> 
-> David, I'm unclear on what you mean by the above.  Can you please
-> expand?
-> 
->>
->> There is really nothing to justify the other way around here.
->> If it's broken fix it independently and properly backport it independenty.
->>
->> But we don't know about any such broken case.
->>
->> I have no energy to spare to argue further ;)
-> 
-> This is a silent data loss bug, which is about as bad as it gets.
-> Under obscure conditions, fortunately.  But please let's keep working
-> it.  Let's aim for something minimal for backporting purposes.  We can
-> revisit any cleanliness issues later.
-> 
-> David, do you feel that the proposed fix will at least address the bug
-> without adverse side-effects?
+Instead of suspending/resume the USB device at open()/close(), do it
+when the device is actually used.
 
-Just to answer that question clearly: it will fix this bug, but it's 
-likely that other similar bugs remain (suspecting NUMA hinting).
+This way we can reduce the power consumption when a service is holding
+the video device and leaving it in an idle state.
 
-Adverse side effect will be that some PTEs that could we writable won't 
-be writable. I assume it's not too bad in practice for this particular case.
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Max Staudt <mstaudt@chromium.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Yunke Cao <yunkec@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v4:
+- Remove patches to avoid crashes during device removal
+- Link to v3: https://lore.kernel.org/r/20220920-resend-powersave-v3-0-c47856d8757e@chromium.org
 
-I proposed an alternative fix and identified other possible broken 
-cases. Again, I don't NAK this patch as is, it just logically doesn't 
-make sense to me to handle this case differently to the other 
-vma->vm_page_prot users. (more details in the other thread)
+Changes in v3:
+- Rebase on top of uvc/next
+- Reorder series, and put "controversial" patches at the end.
+- Fix "use-before-set" bug. Thanks Max!
+- Link to v2: https://lore.kernel.org/r/20220920-resend-powersave-v2-0-5135d1bb1c38@chromium.org
 
+Changes in v2:
+- Make access to uvc_status contitional
+- Merge with Guenter race condition patchset: https://lore.kernel.org/lkml/20200917022547.198090-1-linux@roeck-us.net/
+- Link to v1: https://lore.kernel.org/r/20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org
+
+---
+Ricardo Ribalda (2):
+      media: uvcvideo: Refactor streamon/streamoff
+      media: uvcvideo: Do power management granularly
+
+ drivers/media/usb/uvc/uvc_v4l2.c | 193 ++++++++++++++++++++++++++++++++-------
+ drivers/media/usb/uvc/uvcvideo.h |   1 +
+ 2 files changed, 159 insertions(+), 35 deletions(-)
+---
+base-commit: 58540610e464d8b2ba46a11b81c3e6fcc4118fae
+change-id: 20220920-resend-powersave-5981719ed267
+
+Best regards,
 -- 
-Thanks,
-
-David / dhildenb
-
+Ricardo Ribalda <ribalda@chromium.org>
