@@ -2,76 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244B363FFB5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 06:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D331363FFB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 06:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiLBFFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 00:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S232252AbiLBFFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 00:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiLBFFa (ORCPT
+        with ESMTP id S231904AbiLBFFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 00:05:30 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A30CFE40;
-        Thu,  1 Dec 2022 21:05:28 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1p0yEe-00371q-Db; Fri, 02 Dec 2022 13:05:17 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Dec 2022 13:05:16 +0800
-Date:   Fri, 2 Dec 2022 13:05:16 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] crypto/caam: Avoid GCC constprop bug warning
-Message-ID: <Y4mHjKXnF/4Pfw5I@gondor.apana.org.au>
-References: <20221202010410.gonna.444-kees@kernel.org>
- <Y4loCFGhxecG6Ta0@gondor.apana.org.au>
- <202212011928.97A43D01@keescook>
+        Fri, 2 Dec 2022 00:05:41 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EEFCFE57
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 21:05:40 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id c140so4722313ybf.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 21:05:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vhe0TmBmcMpXBlfJ6TPbqd5wC4r2cqoonsCw7lEpw8w=;
+        b=SP1VJ/q9/KT7X5Cgea3OTjfkzFzENKi5KluDmlkz0dWtDcTRLPiMYS1k/kldX5gDLC
+         NJX9aPJWSG7yOEMvLW0xz7KOoDkmAgeNgglXF+t7hBT89ZL3Mbsv1TcZoN6W5WWg7AFS
+         2AS5N9Wb5dpFos2BFs7b8QAnBxqyL6HXJASbIMOrtolVnUzOg4jidbP/v09pk2n1ThVI
+         kVUp2RRV9HiBb96RpKGlTKCDdiGNM/BdImF3a1TjfqmPciO4VgZ+u0fGgHMa2jx4uSnD
+         9kzioZ/sFe3QHOaYq2y30dfKGbG75cWV/3MhJfayDAsWbtPfzFM2OseY52KmjiniEXPT
+         8M+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vhe0TmBmcMpXBlfJ6TPbqd5wC4r2cqoonsCw7lEpw8w=;
+        b=AFY8QmmUESt67nax0IPgQlpBGFIVJr1ft0reqXtxLw9PXZiP0fXJr9zBUTaKuFlAsv
+         0cBl2uWGhcG+dwan9DLWMkreIb9bMrUDdUNXYL8Xm6jLwChrELY5n4RtcGdibBhUjM51
+         yBJp0d+DpGGO20GOAFVqV1GzSKYMWUiyJ6lf7tyQBQBtKBg3y6SXak1HiNtF4FwCup4J
+         jB0qSSpmrje409bd5jLskViy3HDAe6lzKk/a5DxbaVUuJrT711mATq9Q2iNG/KG6yQfG
+         MLgoVjnnOypFCOTWKvNfCKG4gAvDwFTMI5Hl1xJyn+nZlzlMIg5Who04OLYe2DhYYVYO
+         WD0w==
+X-Gm-Message-State: ANoB5pnU+/g3n08oi1NQADdV3PF9gulRudphh8gHUIb3xuLU42SamKHu
+        OvED0HanvpxEjwE22zOvvkvFHYMHKf1ca6vamOBzL4abJwTeFSZs
+X-Google-Smtp-Source: AA0mqf4kHPlsC8WkHLl8Dp2kIV/cYi+4qqMe55OQD2v6YGezKpR75AWPN6HsqPXzmLyLsvvfWndsMFjyOv/Gpomuav0=
+X-Received: by 2002:a25:d655:0:b0:6fc:1c96:c9fe with SMTP id
+ n82-20020a25d655000000b006fc1c96c9femr5314859ybg.36.1669957539732; Thu, 01
+ Dec 2022 21:05:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212011928.97A43D01@keescook>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221123173859.473629-1-dima@arista.com> <20221123173859.473629-4-dima@arista.com>
+ <CANn89iJEYhTFsF8vqe6enE7d107HfXZvgxN=iLGQj21sx9gwcQ@mail.gmail.com>
+In-Reply-To: <CANn89iJEYhTFsF8vqe6enE7d107HfXZvgxN=iLGQj21sx9gwcQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 2 Dec 2022 06:05:28 +0100
+Message-ID: <CANn89i+6dKFvBRHNyfSbZ6e+Azjz-x48D1um0qrKVRw0xoUquA@mail.gmail.com>
+Subject: Re: [PATCH v6 3/5] net/tcp: Disable TCP-MD5 static key on
+ tcp_md5sig_info destruction
+To:     Dmitry Safonov <dima@arista.com>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 07:30:22PM -0800, Kees Cook wrote:
+On Thu, Dec 1, 2022 at 8:38 PM Eric Dumazet <edumazet@google.com> wrote:
 >
-> Getting rid of the if doesn't solve the warning. I can switch it to just
-> "if (data)", though. That keeps GCC happy.
+> On Wed, Nov 23, 2022 at 6:39 PM Dmitry Safonov <dima@arista.com> wrote:
+> >
+> > To do that, separate two scenarios:
+> > - where it's the first MD5 key on the system, which means that enabling
+> >   of the static key may need to sleep;
+> > - copying of an existing key from a listening socket to the request
+> >   socket upon receiving a signed TCP segment, where static key was
+> >   already enabled (when the key was added to the listening socket).
+> >
+> > Now the life-time of the static branch for TCP-MD5 is until:
+> > - last tcp_md5sig_info is destroyed
+> > - last socket in time-wait state with MD5 key is closed.
+> >
+> > Which means that after all sockets with TCP-MD5 keys are gone, the
+> > system gets back the performance of disabled md5-key static branch.
+> >
+> > While at here, provide static_key_fast_inc() helper that does ref
+> > counter increment in atomic fashion (without grabbing cpus_read_lock()
+> > on CONFIG_JUMP_LABEL=y). This is needed to add a new user for
+> > a static_key when the caller controls the lifetime of another user.
+> >
+> > Signed-off-by: Dmitry Safonov <dima@arista.com>
+> > Acked-by: Jakub Kicinski <kuba@kernel.org>
+>
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-OK I misread the thread.
+Hmm, I missed two kfree_rcu(key) calls, I will send the following fix:
 
-Anyhow, it appears that this warning only occurs due to a debug
-printk in caam.  So how about something like this?
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 7fae586405cfb10011a0674289280bf400dfa8d8..8320d0ecb13ae1e3e259f3c13a4c2797fbd984a5
+100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -1245,7 +1245,7 @@ int tcp_md5_do_add(struct sock *sk, const union
+tcp_md5_addr *addr,
 
-diff --git a/drivers/crypto/caam/desc_constr.h b/drivers/crypto/caam/desc_constr.h
-index 62ce6421bb3f..b49c995e1cc6 100644
---- a/drivers/crypto/caam/desc_constr.h
-+++ b/drivers/crypto/caam/desc_constr.h
-@@ -163,7 +163,7 @@ static inline void append_data(u32 * const desc, const void *data, int len)
- {
- 	u32 *offset = desc_end(desc);
- 
--	if (len) /* avoid sparse warning: memcpy with byte count of 0 */
-+	if (!IS_ENABLED(CONFIG_CRYPTO_DEV_FSL_CAAM_DEBUG) || data)
- 		memcpy(offset, data, len);
- 
- 	(*desc) = cpu_to_caam32(caam32_to_cpu(*desc) +
-
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+                        md5sig =
+rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk));
+                        rcu_assign_pointer(tp->md5sig_info, NULL);
+-                       kfree_rcu(md5sig);
++                       kfree_rcu(md5sig, rcu);
+                        return -EUSERS;
+                }
+        }
+@@ -1271,7 +1271,7 @@ int tcp_md5_key_copy(struct sock *sk, const
+union tcp_md5_addr *addr,
+                        md5sig =
+rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk));
+                        net_warn_ratelimited("Too many TCP-MD5 keys in
+the system\n");
+                        rcu_assign_pointer(tp->md5sig_info, NULL);
+-                       kfree_rcu(md5sig);
++                       kfree_rcu(md5sig, rcu);
+                        return -EUSERS;
+                }
+        }
