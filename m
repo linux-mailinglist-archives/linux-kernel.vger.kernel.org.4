@@ -2,95 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00AC63FD75
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C92A63FD77
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiLBBEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 20:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
+        id S231511AbiLBBEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 20:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiLBBEC (ORCPT
+        with ESMTP id S231989AbiLBBET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 20:04:02 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBF5C4CC4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 17:04:01 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso5375547wme.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 17:04:01 -0800 (PST)
+        Thu, 1 Dec 2022 20:04:19 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8072CB20E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 17:04:17 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so6855118pjc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 17:04:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wkMHgcMC23NVa3D2o+z4LWRbMMOwhIymRRz6fV+SEC0=;
-        b=xSb0XCTl+9oPa+7SNjxPGux1Cm2JA/M4JvzVL3OAQb67v2s6vgBRONUvl5ObHW0X6A
-         35YlZnUBqnyzUDM8TgNebrg0fPlCsUJw/oTmulC+NR5gLtHXbXyB+Kq8Ad3nX+wjf3bc
-         z53kt9Hvaafe76f2N3c/Ht4I92+uUDQAlbMF0GBDxePgk1KRXuiSpS7r46EkQ/uaO324
-         +8XELzuhJZdj01V8ba1gBnlFpNj/Q009DQvusyaJBSW71T4RHnq1zWUuDR25s/d+lbqj
-         m3QnjerAminA96a1hhCj4XaK1OYGUDUi3vQ3NtSJYZSOoO0MxcXHL04P9PwDOiJYt1zW
-         aCEQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mgD8FhgaFk9oCftVcbd5rE8c85Ck+hk9NaPIDPM9D7Y=;
+        b=aXrpwNbgm5OLZXe+psbrCgfJS4wj+DxUnSQ11xpRLZp40aoUthPqou72FOg4Nk2znH
+         WQrtt3K6jfLcVlpWIHtisgX0R7aWBFh2i7PfSELXEFP/a6bue3UTlFtiw48XuH4WDtc0
+         F8Xh1TTkIXfh1heg7JV6bZrQ7+BE0SvwOoZaQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wkMHgcMC23NVa3D2o+z4LWRbMMOwhIymRRz6fV+SEC0=;
-        b=GL7XBKb4/6L5Ou0VrpZyIpbcJ8HYjNUCm0HjhOq6IboBt4p88Lc1z5+8QlZ26ZdlU7
-         Qt4tEUdjVJzu31vgAxFsn8BuhLVMN7Hl+tLCVQpv2d/uUH5iAeu8s49X2K2F2uNiuvIO
-         CicxyF86buocnervkElD/edwkZc74IyYm9nNen84M/rHcw7aJZiYfeYLF6ta0mrBRi4+
-         yOGji1f/88T57bsboEtryusSvgy/NuwwdDjeljFFdZDe33da47MFmM1rzjV0+xSI6SEs
-         KoLhcWnaIgqHwIP4pSj3TuAS+sDrOIQKBVELJMOIxwCdv1pm4JN9odwsJ1S+TRulz5gk
-         rhjQ==
-X-Gm-Message-State: ANoB5plN9aO4OWVcjLk3sIifzqAnGh3CX9i0D1Em6iTN0eNTj3yFcMIX
-        dPz0uGIdnrjT1txvAaYXjBA8e37/f6Am3YcE
-X-Google-Smtp-Source: AA0mqf53U8lRH4PvxGNMIqTcDVRfwFkVaMUq7tC+6q/2YssQgJw5lBFGdUf4iWIFDxp29KnWGuAfiQ==
-X-Received: by 2002:a05:600c:348d:b0:3cf:88d3:5685 with SMTP id a13-20020a05600c348d00b003cf88d35685mr43915981wmq.38.1669943040153;
-        Thu, 01 Dec 2022 17:04:00 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05600c424800b003c5571c27a1sm8026676wmm.32.2022.12.01.17.03.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 17:03:58 -0800 (PST)
-Message-ID: <be362066-520a-b0d1-0313-3dbc867b561b@nexus-software.ie>
-Date:   Fri, 2 Dec 2022 01:03:58 +0000
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mgD8FhgaFk9oCftVcbd5rE8c85Ck+hk9NaPIDPM9D7Y=;
+        b=TU91tIEWkRSRc9KxLYTrR9D0fyeu+vxnuBWLDqJMZZWkEDRIBN+tk4mQ8u/vKI3hNJ
+         5bUoovwKYUbKLBXHQrLFbrkp4Am3E6CgipA3VA7eeg2OI0kEK0+ciG1hfaYUlwzZ7a+k
+         ODUTFuvxgQYhFTvHEztCceEandlraXyxFn/Wk/IvIThxJeQWLIoUv2F1zIVkLvjlkN5D
+         EbWmpfLbqhU7TJws5DCMmgV/dUENG7tghNK7knSn7u2rfuk+bWRjrwVpUaNvRmcNAjP1
+         65oAJf8bcqgxIX/aVlWXnDw1x8cHQcjg7s14wnSPVh/FjFZdFICA+kV+LUWbLuebp0AQ
+         Qy/w==
+X-Gm-Message-State: ANoB5pmNoil1nhIV+Yzlc6093VdIFPawvUt6eih+jWv82nJB3aOLAJcz
+        SDigByKUrWz3tGPjNXEBAsLC7Q==
+X-Google-Smtp-Source: AA0mqf5o3BeIFoW83AbmXDjzB9oWBsGdeQwe595mOIjOvfykNr4VKujP0z1ZS/WKspE1J6UFVJIEgA==
+X-Received: by 2002:a17:902:bd04:b0:189:38a1:30fe with SMTP id p4-20020a170902bd0400b0018938a130femr47006070pls.47.1669943057301;
+        Thu, 01 Dec 2022 17:04:17 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w81-20020a627b54000000b0057255b7c8easm3839384pfc.33.2022.12.01.17.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 17:04:16 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] crypto/caam: Avoid GCC constprop bug warning
+Date:   Thu,  1 Dec 2022 17:04:14 -0800
+Message-Id: <20221202010410.gonna.444-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/1] venus: Enable sufficient sequence change support for
- sc7180 and Fix for Decoder STOP command issue.
-Content-Language: en-US
-To:     quic_vboma@quicinc.com,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@qti.qualcomm.com>
-References: <20221115121237.28361-1-quic_vboma@quicinc.com>
- <20221115121237.28361-2-quic_vboma@quicinc.com>
-From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <20221115121237.28361-2-quic_vboma@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2834; h=from:subject:message-id; bh=xh4MxFL84Wy20TxfRpoAzNdIE896T/TUz2F6Ru6YtCM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjiU8Nv8CsDf2sTBuvc9KYWF5qFW721OEsR46gpWiR MEbbVnOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4lPDQAKCRCJcvTf3G3AJlVYD/ 9v+qIE/EyYegIvaxfV8obcYEMuN3x9SF+CAa68Qd6JGjXbCipnKim4YNCrlIhsmVwE/tO06p+LJk2S kHXAL6vsoN8TZnp6ByyH6NeLmuftpptVBT6wu4lxkXmBjJQzuYtlgAkRDOgOq9Wm0D+ly2MlMJW9h2 bKGxJY8YkYWTDT9OzSKuQLpU6y5kVkfDiGDP7QKRkpk7buT2aQa0xHRZTZY7MFutfNstcw+XeL8e5C 5DFuHMKzZQtXsN9p9O5QsBFqsphVli3xl34t3YDd9c4uyhL8mdl6ahVQeOYmu8tr+6a+OShw+WEi1b nGhekoLQM5CB6XTAfmvV2XIMVgfpb0c2zR16DGGCqgKDZKfe2ZgCyywnkt7MN6aVc9+Y66GkgZ1kEV 7pSNjP3T+YYOiWVM/52S6yQna03IBCV9ls5bEO32XUxOniZWb1JxXCyjQ+w6DfISBx8Rl5zjNq1Fz0 KRlV6zqUf0PO65GGn1POuty8nOLxPQ6hbt6PylPrXDbBGkRq7Cjcc6K70xyNWWxCeHgm+f7uVqmdoX 7RdOXI8r5s+3uFH+cSuH2dawHfH/sLmip+qlNnjFG83BrSygx0nb1kYoWmEXcdc4ZR4iFVaD8GZshx JBcSKCu2FceYBBugRUkJC/L2PFrEceTaJS/hTlK+dX1X8pnHU6o06gAjfBVQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 12:12, quic_vboma@quicinc.com wrote:
-> From: Viswanath Boma <quic_vboma@quicinc.com>
-> 
-> For VP9 bitstreams, there could be a change in resolution at interframe,
-> for driver to get notified of such resolution change, enable the property in video firmware.
-> Also, EOS handling is now made same in video firmware across all V6 SOCs,
-> hence above a certain firmware version, the driver handling is made generic for all V6s
+GCC 12 appears to perform constant propagation incompletely(?) and can
+no longer notice that "len" is always 0 when "data" is NULL. Expand the
+check to avoid warnings about memcpy() having a NULL argument:
 
-Could you figure out the right Fixes: and Cc: stable to add here ?
+   ...
+                    from drivers/crypto/caam/key_gen.c:8:
+   drivers/crypto/caam/desc_constr.h: In function 'append_data.constprop':
+   include/linux/fortify-string.h:48:33: warning: argument 2 null where non-null expected [-Wnonnull]
+      48 | #define __underlying_memcpy     __builtin_memcpy
+         |                                 ^
+   include/linux/fortify-string.h:438:9: note: in expansion of macro '__underlying_memcpy'
+     438 |         __underlying_##op(p, q, __fortify_size);                        \
+         |         ^~~~~~~~~~~~~
 
+The NULL was being propagated from:
+
+        append_fifo_load_as_imm(desc, NULL, 0, LDST_CLASS_2_CCB |
+                                FIFOLD_TYPE_MSG | FIFOLD_TYPE_LAST2);
+...
+static inline void append_##cmd##_as_imm(u32 * const desc, const void *data, \
+                                         unsigned int len, u32 options) \
+{ \
+        PRINT_POS; \
+        append_cmd_data(desc, data, len, CMD_##op | options); \
+}
+...
+APPEND_CMD_PTR_TO_IMM(fifo_load, FIFO_LOAD);
+...
+static inline void append_cmd_data(u32 * const desc, const void *data, int len,
+                                   u32 command)
+{
+        append_cmd(desc, command | IMMEDIATE | len);
+        append_data(desc, data, len);
+}
+
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "Horia Geantă" <horia.geanta@nxp.com>
+Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+Cc: Gaurav Jain <gaurav.jain@nxp.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: linux-crypto@vger.kernel.org
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202210290446.qBayTfzl-lkp@intel.com
+Tested-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-bod
+v1: https://lore.kernel.org/lkml/20221028210527.never.934-kees@kernel.org/
+v2: update comment (anders)
+Note that this is about GCC, not sparse (any more).
+---
+ drivers/crypto/caam/desc_constr.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/caam/desc_constr.h b/drivers/crypto/caam/desc_constr.h
+index 62ce6421bb3f..d9da4173af9d 100644
+--- a/drivers/crypto/caam/desc_constr.h
++++ b/drivers/crypto/caam/desc_constr.h
+@@ -163,7 +163,8 @@ static inline void append_data(u32 * const desc, const void *data, int len)
+ {
+ 	u32 *offset = desc_end(desc);
+ 
+-	if (len) /* avoid sparse warning: memcpy with byte count of 0 */
++	/* Avoid GCC warning: memcpy with NULL dest (but byte count of 0). */
++	if (data && len)
+ 		memcpy(offset, data, len);
+ 
+ 	(*desc) = cpu_to_caam32(caam32_to_cpu(*desc) +
+-- 
+2.34.1
 
