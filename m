@@ -2,94 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B63463FDFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 03:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C957D63FE02
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 03:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbiLBCJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 21:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
+        id S231904AbiLBCN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 21:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbiLBCJG (ORCPT
+        with ESMTP id S230170AbiLBCNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 21:09:06 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C4BB3933
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 18:09:05 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669946944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=chh0G08/xLk5pzy1L0Ry5SpkFEB3qVhaXDAsS5cW5fs=;
-        b=L0E7sVyXw6Jblb0n5un5BreQdt4t9bg+f6AbFVIwch5tO/p7/v/6ezmKLmT+d0U7IIXZX/
-        YlAgyNIpBX7wL5RuPYhq3r17HBE4V/2WMiOEm2ux+QUFGqsXHevHU5fO1iB5N5ieUJhAkE
-        ZQd3hk+wmotVsMxBsqpZwocbPbR90jaz3dVjR24pYwOGG3+Cr3Zkd3xkmGmbUaQXbapxhW
-        bRyPfurZkZ/mjwGxDXVkq6cBDF5NAfSE4BaiZ3ypdhh/LVXAwzifTXapMBxyAgds6DxpdI
-        HiMvuPGCu7yKRJ5X1CgoACn7mnXUtGkBhX6/lMqoHTffsC6OqFPWtGJVQtfF1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669946944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=chh0G08/xLk5pzy1L0Ry5SpkFEB3qVhaXDAsS5cW5fs=;
-        b=Lwd+x2kzC4/ZmsV/t8MGhzJYxEo68p+5PgJlbQB65r9+GRtwHW0l3RjbRPJiu+Bo6gYCi8
-        cEfMNp0XEBWYvtCw==
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v14 3/8] genirq: Add mechanism to multiplex a single HW IPI
-In-Reply-To: <CAK9=C2WN57hHUz=3SDruyWPdAobn+QP8uGwugjPAobeFG7dBkw@mail.gmail.com>
-References: <20221201130135.1115380-1-apatel@ventanamicro.com>
- <20221201130135.1115380-4-apatel@ventanamicro.com> <87v8mvqbvq.ffs@tglx>
- <CAK9=C2WN57hHUz=3SDruyWPdAobn+QP8uGwugjPAobeFG7dBkw@mail.gmail.com>
-Date:   Fri, 02 Dec 2022 03:09:03 +0100
-Message-ID: <87h6yer1z4.ffs@tglx>
+        Thu, 1 Dec 2022 21:13:25 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFD68B390;
+        Thu,  1 Dec 2022 18:13:24 -0800 (PST)
+Received: from dggpeml500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NNc0R4YFlzmWPt;
+        Fri,  2 Dec 2022 10:12:39 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 2 Dec
+ 2022 10:13:21 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <andrii.nakryiko@gmail.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <haoluo@google.com>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kongweibin2@huawei.com>, <kpsingh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <liuxin350@huawei.com>,
+        <martin.lau@linux.dev>, <sdf@google.com>, <song@kernel.org>,
+        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
+        <yanan@huawei.com>, <yhs@fb.com>, <zhangmingyi5@huawei.com>
+Subject: Re: [PATCH] Improved usability of the Makefile in libbpf
+Date:   Fri, 2 Dec 2022 10:13:23 +0800
+Message-ID: <20221202021323.121416-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <CAEf4BzZ8z9yKwkbQthaNPR9HJDqq77EJwHaEqqwQ3qYjKWTRAQ@mail.gmail.com>
+References: <CAEf4BzZ8z9yKwkbQthaNPR9HJDqq77EJwHaEqqwQ3qYjKWTRAQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anup!
+On Wed, 30 Nov 2022 at 00:42:09 AM Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> On Mon, Nov 28, 2022 at 11:42 PM Xin Liu <liuxin350@huawei.com> wrote:
+> >
+> > Current libbpf Makefile does not contain the help command, which
+> > is inconvenient to use. A help command is provided to list the
+> > commands supported by libbpf make and the functions of the commands.
+> ...
+> > +       @echo '  make prefix=/path      [install targets] use prefix for installing'
+> > +       @echo '                                           into a user defined prefix path'
+> 
+> 
+> I'm a bit hesitant about adding all this. Most of those targets are
+> not intended to be used directly, only "all", "clean", and "install"
+> are supposed to be used by end-users (maybe also "install_headers").
+> And those seems to be pretty typical and straightforward targets.
+> 
+> I actually didn't even know about `make help`, but I checked perf's
+> `make help` and it's way more succinct, let's try modeling it here?
+> 
+> Also, please use [PATCH bpf-next] (with v2 in between them) for next
+> submission to point that this is meant for bpf-next tree.
 
-On Thu, Dec 01 2022 at 23:30, Anup Patel wrote:
-> On Thu, Dec 1, 2022 at 10:50 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> > irqchip driver and it is shared by various RISC-V irqchip drivers.
->>
->> Sure, but now we have two copies of this. One in the Apple AIC and one
->> here. The obvious thing to do is:
->>
->>    1) Provide generic infrastructure
->>
->>    2) Convert AIC to use it
->
-> Mark Z already has a converted version of AIC driver.
-> https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/ipi-mux
+Thanks to andrii's reply, I'll try to simplify the help command.
 
-You are submitting generic infrastructure which is supposed to go
-through the relevant maintainer tree and not be funneled through some
-riscv branch.
-
-So obviously this very maintainer asks the predictable question and also
-wants to see the Acked/Tested-by of the folks who maintain apple-AIC.
-
-How is that supposed to work without integrating this patch into your
-series and without having the apple-AIC folks on cc?
-
-You did not start kernel development as of yesterday, right?
-
-Thanks,
-
-        tglx
+The original purpose of adding this is that when I use libbpf, libbpf installs
+the file in /usr/local by default, and I didn't read the makefile carefully
+before, so I need to open the makefile to read the code. Determine which
+parameter is used to define the path that I want to customize. The makefile
+of the kernel provides a make help instruction, which is much more convenient
+to use.
