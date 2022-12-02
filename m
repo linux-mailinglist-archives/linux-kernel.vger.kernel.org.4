@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58426404BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5916D6404CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbiLBKdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S233162AbiLBKfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbiLBKdi (ORCPT
+        with ESMTP id S232723AbiLBKeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:33:38 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B829C4CF5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:33:36 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id s5so5854874edc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:33:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/e58gZBtEpImuaapH5z3ZZXyBnJ+7CtdRYYz6q6IemE=;
-        b=FBEXuKdH6DfRsx/hPmSsGMAoEqRA85szN/9ar3oRgmjZKJSW0qhSTMipDJfm2YOWoQ
-         aWCWj3YaFHriFVFVuqIBHBXtPSRJz901i+Ix+WOHoKB1VeZHk0CAHkNfH9Smf9l9Rrvo
-         IM7L/PfDnCGhkeVRsZpsK5387PYAMfyEO9yXca3u/33VOejA35Y3GUqR26S+Fq+2fXAs
-         7prhT/G8V2D2zcr13/2W37SvVVSd/K4e//HKKA00PKCpBfAe/bn3D9M/KjmGI+m+j4uk
-         sMW66RUtnuKD1kEyUEwzuxEJ6wQ1LSgsuwNLLnkK8vqBclsIMWz3KBejJw9PelhZCz0P
-         Oexw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/e58gZBtEpImuaapH5z3ZZXyBnJ+7CtdRYYz6q6IemE=;
-        b=EYCyMCHDwgY8w2EV31apUb2XN8iLyqYOlrFBpwoMIV/8jAL/fodlZyWmWlEaLUbC68
-         t/qQF7qIC1/hSWVcUu/jn64J51hIE1YpFBuuxxVKAmUUglbe/0efLFtuLJJgChm9VMSJ
-         dxXb/YqcrtBJ8rSLM5lNIy8eg/Er9OE2IYoOTknEcpRXwdvwc3Ge6EOCoZqvlx6uEFdC
-         u3+3oGZQunqGE3BVsLXmMmXdY3Wyl+Uac7qcS9csOlSqpHXN67L0kBTu3U2ebkv6WgxV
-         PqDJuJYZIrndfucME3VBGkNAGXurCM17P2BvWnzdybWfMIOSQdS9/jMk5ql6tTSbKGWI
-         hK7g==
-X-Gm-Message-State: ANoB5pmav4FngCiqde1TliGR268VO3X5TJjCTjzlbbx2n+LoZO+XHHJR
-        c4xFjCJ0KUsBc8YkGKYBnTTCMw==
-X-Google-Smtp-Source: AA0mqf62g7tL05/yrH9Nmc/hP4lJkxbx6iU2/cPHDSx5Oqj8j6hZK8YiIPj5dHAh++pcOEG7PBPo0w==
-X-Received: by 2002:a05:6402:528d:b0:468:dc9:ec08 with SMTP id en13-20020a056402528d00b004680dc9ec08mr49095306edb.17.1669977214833;
-        Fri, 02 Dec 2022 02:33:34 -0800 (PST)
-Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
-        by smtp.gmail.com with ESMTPSA id q18-20020a1709066b1200b007bf988ce9f7sm2876728ejr.38.2022.12.02.02.33.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 02:33:34 -0800 (PST)
-Message-ID: <fc48c2e1-1df2-c636-bfa4-621148790133@tessares.net>
-Date:   Fri, 2 Dec 2022 11:33:33 +0100
+        Fri, 2 Dec 2022 05:34:36 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84360BF90B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:34:35 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p13NH-0008Fn-9b; Fri, 02 Dec 2022 11:34:31 +0100
+Message-ID: <92a148a3-a8ac-4065-123c-99b72ac3ebeb@leemhuis.info>
+Date:   Fri, 2 Dec 2022 11:34:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH net-next 00/11] mptcp: PM listener events + selftests
- cleanup
-Content-Language: en-GB
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        mptcp@lists.linux.dev, netdev@vger.kernel.org
-References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
- <20221201200953.2944415e@kernel.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20221201200953.2944415e@kernel.org>
+Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
+ arch_dma_prep_coherent()"
+Content-Language: en-US, de-DE
+To:     Will Deacon <will@kernel.org>
+Cc:     Amit Pundir <amit.pundir@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>, andersson@kernel.org,
+        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hch@lst.de,
+        gregkh@linuxfoundation.org
+References: <Y3J8+O7Y3f3onH0P@arm.com> <20221118105402.GA184726@thinkpad>
+ <20221118123349.GC3697@willie-the-truck> <20221121064224.GB11945@thinkpad>
+ <018517b8-0ae0-54f5-f342-dcf1b3330a13@quicinc.com> <Y39blgEueyegkz6C@arm.com>
+ <6d637906-e1d5-c481-a73d-2b2b845e223b@leemhuis.info>
+ <Y4joR2sQMMjIt+yE@arm.com>
+ <CAMi1Hd2wM5MLsjkx0HAWKkswzTDACb0C4tsPymNrRa0ariWsww@mail.gmail.com>
+ <f98d163b-3410-9cf7-7d98-0f7640f4aa1f@leemhuis.info>
+ <20221202100357.GB29396@willie-the-truck>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20221202100357.GB29396@willie-the-truck>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669977275;1ced93a9;
+X-HE-SMSGID: 1p13NH-0008Fn-9b
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
-
-On 02/12/2022 05:09, Jakub Kicinski wrote:
-> On Wed, 30 Nov 2022 15:06:22 +0100 Matthieu Baerts wrote:
->> Thanks to the patch 6/11, the MPTCP path manager now sends Netlink events when
->> MPTCP listening sockets are created and closed. The reason why it is needed is
->> explained in the linked ticket [1]:
+On 02.12.22 11:03, Will Deacon wrote:
+> On Fri, Dec 02, 2022 at 09:54:05AM +0100, Thorsten Leemhuis wrote:
+>> On 02.12.22 09:26, Amit Pundir wrote:
+>>> On Thu, 1 Dec 2022 at 23:15, Catalin Marinas <catalin.marinas@arm.com> wrote:
+>>>>
+>>>> On Thu, Dec 01, 2022 at 10:29:39AM +0100, Thorsten Leemhuis wrote:
+>>>>> Has any progress been made to fix this regression? It afaics is not a
+>>>>> release critical issue, but well, it still would be nice to get this
+>>>>> fixed before 6.1 is released.
+>>>>
+>>>> The only (nearly) risk-free "fix" for 6.1 would be to revert the commit
+>>>> that exposed the driver bug. It doesn't fix the actual bug, it only
+>>>> makes it less likely to happen.
+>>>>
+>>>> I like the original commit removing the cache invalidation as it shows
+>>>> drivers not behaving properly
 >>
->>   MPTCP for Linux, when not using the in-kernel PM, depends on the userspace PM
->>   to create extra listening sockets before announcing addresses and ports. Let's
->>   call these "PM listeners".
->>
->>   With the existing MPTCP netlink events, a userspace PM can create PM listeners
->>   at startup time, or in response to an incoming connection. Creating sockets in
->>   response to connections is not optimal: ADD_ADDRs can't be sent until the
->>   sockets are created and listen()ed, and if all connections are closed then it
->>   may not be clear to the userspace PM daemon that PM listener sockets should be
->>   cleaned up.
->>
->>   Hence this feature request: to add MPTCP netlink events for listening socket
->>   close & create, so PM listening sockets can be managed based on application
->>   activity.
->>
->>   [1] https://github.com/multipath-tcp/mptcp_net-next/issues/313
->>
->> Selftests for these new Netlink events have been added in patches 9,11/11.
->>
->> The remaining patches introduce different cleanups and small improvements in
->> MPTCP selftests to ease the maintenance and the addition of new tests.
+>> Yeah, I understand that, but I guess it's my job to ask at this point:
+>> "is continuing to live with the old behavior for one or two more cycles"
+>> that much of a problem"?
 > 
-> Also could you warp you cover letters at 72 characters?
-> I need to reflow them before I can read them :(
+> That wouldn't be a problem. The problem is that I haven't see any efforts
+> from the Qualcomm side to actually fix the drivers [...]
 
-Oops, my bad, I'm sorry for that! Thank you for having reported the issue!
+Thx for sharing the details. I can fully understand your pain. But well,
+in the end it looks to me like this commit it intentionally breaking
+something that used to work -- which to my understanding of the "no
+regression rule" is not okay, even if things only worked by chance and
+not flawless.
 
-I didn't notice I didn't set the limit to 72 chars for the
-"gitsendemail" file type like I did for "gitcommit" in my current vim
-config. Done now, next cover-letter should be properly formatted! :)
+But well, as with every rule there are misunderstandings, grey areas,
+and situations where judgement calls have to be made. Then it's up to
+Linus to decide how to handle things. Hence I'll just point him to this
+thread and then he can decide. No biggie. And sorry if I'm being a PITA
+here, I just thing doing that is my duty as regression tracker in
+situations like this. Hope your won't mind.
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
