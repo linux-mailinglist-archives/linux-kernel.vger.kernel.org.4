@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A82640841
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3936640843
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbiLBOTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
+        id S233631AbiLBOTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiLBOTH (ORCPT
+        with ESMTP id S233593AbiLBOTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:19:07 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F301693828;
-        Fri,  2 Dec 2022 06:19:05 -0800 (PST)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNw2x5Cz0z689QP;
-        Fri,  2 Dec 2022 22:15:53 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Fri, 2 Dec 2022 15:19:02 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 2 Dec
- 2022 14:19:02 +0000
-Date:   Fri, 2 Dec 2022 14:19:01 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     <ira.weiny@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 08/11] cxl/mem: Wire up event interrupts
-Message-ID: <20221202141901.00003016@Huawei.com>
-In-Reply-To: <6389ab5156083_c9572947c@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-9-ira.weiny@intel.com>
-        <6389ab5156083_c9572947c@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 2 Dec 2022 09:19:49 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18969D2D1
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:19:48 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p16tE-0007l3-Cg; Fri, 02 Dec 2022 15:19:44 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D1EC01316F9;
+        Fri,  2 Dec 2022 14:19:43 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 15:19:35 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/15] can: tcan4x5x: Fix use of register error status
+ mask
+Message-ID: <20221202141935.u6flbbsewkh6nrzw@pengutronix.de>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-14-msp@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n6qgkc23p3snkvok"
+Content-Disposition: inline
+In-Reply-To: <20221116205308.2996556-14-msp@baylibre.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,64 +58,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> > +int cxl_event_config_msgnums(struct cxl_dev_state *cxlds,
-> > +			     struct cxl_event_interrupt_policy *policy)
-> > +{
-> > +	int rc;
-> > +
-> > +	policy->info_settings = CXL_INT_MSI_MSIX;
-> > +	policy->warn_settings = CXL_INT_MSI_MSIX;
-> > +	policy->failure_settings = CXL_INT_MSI_MSIX;
-> > +	policy->fatal_settings = CXL_INT_MSI_MSIX;  
-> 
-> I think this needs to be careful not to undo events that the BIOS
-> steered to itself in firmware-first mode, which raises another question,
-> does firmware-first mean more the OS needs to backoff on some event-log
-> handling as well?
+--n6qgkc23p3snkvok
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hmm. Does the _OSC cover these.  There is one for Memory error reporting
-that I think covers it (refers to 12.2.3.2)
+On 16.11.2022 21:53:06, Markus Schneider-Pargmann wrote:
+> TCAN4X5X_ERROR_STATUS is not a status register that needs clearing
+> during interrupt handling. Instead this is a masking register that masks
+> error interrupts. Writing TCAN4X5X_CLEAR_ALL_INT to this register
+> effectively masks everything.
+>=20
+> Rename the register and mask all error interrupts only once by writing
+> to the register in tcan4x5x_init.
+>=20
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Note that should cover any means of obtaining these, not just interrupt
-driven - so including the initial record clear.
+please add a fixes tag.
 
-..
+Marc
 
-> > +
-> > +static irqreturn_t cxl_event_failure_thread(int irq, void *id)
-> > +{
-> > +	struct cxl_dev_state *cxlds = id;
-> > +
-> > +	cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
-> > +	return IRQ_HANDLED;
-> > +}  
-> 
-> So I think one of the nice side effects of moving log priorty handling
-> inside of cxl_mem_get_records_log() and looping through all log types in
-> priority order until all status is clear is that an INFO interrupt also
-> triggers a check of the FATAL status for free.
-> 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-I go the opposite way on this in thinking that an interrupt should only
-ever be used to handle the things it was registered for - so we should
-not be clearing fatal records in the handler triggered for info events.
+--n6qgkc23p3snkvok
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Doing other actions like this relies on subtlies of the generic interrupt
-handling code which happens to force interrupt threads on a shared interrupt
-line to be serialized.  I'm not sure we are safe at all the interrupt
-isn't shared unless we put a lock around the whole thing (we have one
-because of the buffer mutex though).
+-----BEGIN PGP SIGNATURE-----
 
-If going this way I think the lock needs a rename.
-It's not just protecting the buffer used, but also serialize multiple
-interrupt threads.
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKCXQACgkQrX5LkNig
+0124tAgAmx7mMTaphzkAQxeXrb68161432MibY4wOa5grbtKCQj5/iizK4iwwr2U
+knODf0OszEeAyp4Vg045biSnbYbgq8CATeJiLao6kmj6+iCaDm9Z7fETrSCDBS2X
+Ax8Q94KKMU23V3Dd2MVgOUl79MJhRuCTlf/I9c/3sSvXqq/bvs6QxXUdsvdqo2N1
+mVDzuRXbERcRNcscZvEhmkIYVJI0fuLH6X/KEbuCiBsr7fvLNhJXlKHqiiaIl450
+Yi+7KXbuj4of7rBfXvs7svp39fkIbeheCxKKr5g+KhN8Rpuz07+k+WXaFqLLcO/D
+d6znj1yhT5XTEM9qNIwgcGrf+2tIpA==
+=uJCO
+-----END PGP SIGNATURE-----
 
-Jonathan
-
-> You likely do not even need to do the status read in hardirq part of the
-> handler, just unconditionally wake the event handler thread. I.e. just
-> pass NULL for @handler to devm_request_threaded_irq() and let the
-> thread_fn figure it all out in priority order.
-
-
-
+--n6qgkc23p3snkvok--
