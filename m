@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E80A640274
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18567640276
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiLBIq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:46:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S232449AbiLBIrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiLBIqy (ORCPT
+        with ESMTP id S232606AbiLBIrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:46:54 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B472C8EE51
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:46:53 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NNmfb1Rn3zqSxN;
-        Fri,  2 Dec 2022 16:42:47 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Dec 2022 16:46:51 +0800
-Subject: Re: [PATCH v2] x86/alternative: fix undefined reference to
- __ibt_endbr_seal[_end]
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>
-CC:     <hpa@zytor.com>, <x86@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221011113803.956808-1-linmiaohe@huawei.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c2cd42c3-1957-0229-1c84-278532103767@huawei.com>
-Date:   Fri, 2 Dec 2022 16:46:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20221011113803.956808-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 03:47:00 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B813C8EE51
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:46:58 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5B40721BAB;
+        Fri,  2 Dec 2022 08:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669970817; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=cv/gi1EENqVdNlHjYt7ER3xgAksnraa4trU4Wq8VixM=;
+        b=zTWE+wnJnAGslUdTtwfazd7vPc7LOAB0sEMhxU7yN3mvJmQRC1VONmFmZ0keRTmcAnY5Yr
+        3FCX+HXVpaKzTuahcFaiPCu6bOSNeITLMNOkEp4HfSnawxHVsfjQfUcjFttkyRxPD9cyfy
+        Sz7k2J6VM3T8ADtPN2Z5wFATp08nEGw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669970817;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=cv/gi1EENqVdNlHjYt7ER3xgAksnraa4trU4Wq8VixM=;
+        b=ZU4flGz4UaQd2i/thkm661WY8KoDad07nKzatOVQjO2d6EKqwTzThnY/oOJ4bX/fUfrQM7
+        9KCe2rom+qmcySAA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 2B7BA133DE;
+        Fri,  2 Dec 2022 08:46:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id 9X3mB4G7iWM2MAAAGKfGzw
+        (envelope-from <tiwai@suse.de>); Fri, 02 Dec 2022 08:46:57 +0000
+Date:   Fri, 02 Dec 2022 09:46:56 +0100
+Message-ID: <87mt86kxa7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.1-rc8
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping ;)
+Linus,
 
-On 2022/10/11 19:38, Miaohe Lin wrote:
-> Due to the explicit 'noinline' GCC-7.3 is not able to optimize away the
-> argument setup of:
-> 
-> 	apply_ibt_endbr(__ibt_endbr_seal, __ibt_enbr_seal_end);
-> 
-> even when X86_KERNEL_IBT=n and the function is an empty stub which leads
-> to link errors due to missing __ibt_endbr_seal* symbols like below:
-> 
-> ld: arch/x86/kernel/alternative.o: in function
-> `alternative_instructions':
-> alternative.c:(.init.text+0x15d): undefined reference to
-> `__ibt_endbr_seal_end'
-> ld: alternative.c:(.init.text+0x164): undefined reference to
-> `__ibt_endbr_seal'
-> 
-> Remove explicit 'noinline' to help gcc optimize them away.
-> [Thanks Peter Zijlstra for tweaking the commit log.]
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  arch/x86/kernel/alternative.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index 5cadcea035e0..beaf9fc44e2f 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -624,7 +624,7 @@ void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end)
->  
->  #else
->  
-> -void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end) { }
-> +void __init_or_module apply_ibt_endbr(s32 *start, s32 *end) { }
->  
->  #endif /* CONFIG_X86_KERNEL_IBT */
->  
-> 
+please pull sound fixes for v6.1-rc8 from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.1-rc8
+
+The topmost commit is b47068b4aa53a57552398e3f60d0ed1918700c2b
+
+----------------------------------------------------------------
+
+sound fixes for 6.1-rc8
+
+Likely the last piece for 6.1; the only significant fixes are ASoC
+core ops fixes, while others are device-specific (rather minor)
+fixes in ASoC and FireWire drivers.
+
+All appear safe enough to take as a late-stage material.
+
+----------------------------------------------------------------
+
+Charles Keepax (2):
+      ASoC: ops: Correct bounds check for second channel on SX controls
+      ASoC: cs42l51: Correct PGA Volume minimum value
+
+Hui Tang (1):
+      ASoC: tlv320adc3xxx: Fix build error for implicit function declaration
+
+Mark Brown (2):
+      ASoC: ops: Fix bounds check for _sx controls
+      ASoC: ops: Check bounds for second channel in snd_soc_put_volsw_sx()
+
+Shengjiu Wang (2):
+      ASoC: fsl_micfil: explicitly clear software reset bit
+      ASoC: fsl_micfil: explicitly clear CHnF flags
+
+Takashi Sakamoto (1):
+      ALSA: dice: fix regression for Lexicon I-ONIX FW810S
+
+---
+ sound/firewire/dice/dice-stream.c | 12 +++++++-----
+ sound/soc/codecs/cs42l51.c        |  2 +-
+ sound/soc/codecs/tlv320adc3xxx.c  |  3 +++
+ sound/soc/fsl/fsl_micfil.c        | 19 +++++++++++++++++++
+ sound/soc/soc-ops.c               | 11 ++++++++---
+ 5 files changed, 38 insertions(+), 9 deletions(-)
 
