@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5711B63FDCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6889663FDCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 02:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbiLBBoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Dec 2022 20:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S231626AbiLBBpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Dec 2022 20:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbiLBBof (ORCPT
+        with ESMTP id S231749AbiLBBo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Dec 2022 20:44:35 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBD3D2DA7;
-        Thu,  1 Dec 2022 17:44:33 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NNbM76HkfzHw22;
-        Fri,  2 Dec 2022 09:43:47 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Dec 2022 09:44:31 +0800
-Subject: Re: [PATCH net 1/2] octeontx2-pf: Fix possible memory leak in
- otx2_probe()
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        <sunil.kovvuri@gmail.com>, <sgoutham@marvell.com>
-CC:     <gakula@marvell.com>, <sbhatta@marvell.com>, <hkelam@marvell.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <naveenm@marvell.com>, <rsaladi2@marvell.com>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1669253985.git.william.xuanziyang@huawei.com>
- <e024450cf08f469fb1e0153b78a04a54829dfddb.1669253985.git.william.xuanziyang@huawei.com>
- <Y4DHHUUbGl5wWGQ+@boxer> <f4bb4aa5-08cc-4a4d-76cf-46bda5c6de59@huawei.com>
-Message-ID: <538c8b9a-7d6c-69f8-9e14-45436446127e@huawei.com>
-Date:   Fri, 2 Dec 2022 09:44:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 1 Dec 2022 20:44:57 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EFBD3A30
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Dec 2022 17:44:56 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id fp23so3112232qtb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Dec 2022 17:44:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4bLTeJ6YrAnPFThGmSk8KJr4jyMAp7UgMPl4HksAp44=;
+        b=aYnKhSCrjGtm4vsnysotoMASKnP3QdutT10q95EHppyvQSaq+DReRl5xi3hLy8/BhZ
+         rtgSvW4+3qLgaDKOKDzuUNLjCAAcxbIno2CMQqCHj7lOHHwp0cus7lB3/XjLNsKwieIK
+         XkVO85CkwFx+bOAPmUjNBTzjtOfY1+t3ZLy+ujcXOaIKoqfvIZTbL+dIcZAoA+qVcbUI
+         70B1MKIjbkLSsROBp1SBUCPXupuCCMx0TOHUzvKTMLfjBQDrCR0Qk9OkdAP2UTWJswU3
+         EWBRoo8GV8xra9RLb9YtgwXY/sF4I4DYChHlYweI7Eb0QBRbtHi7m/OQVNQ0mQbJdGgn
+         GBAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4bLTeJ6YrAnPFThGmSk8KJr4jyMAp7UgMPl4HksAp44=;
+        b=B46Rjuo6KcVWVTIfSuQyg81EUfXYlPagLWqqW2P1p7lErfceLXLZUcH8sO7bsdcht/
+         13FKli6tRC9UpFRhKcztwoeM27EWeDek3ixXCsLEwYKKA5cIcTsi3XG0xF4u/n4vxral
+         b0pPsrVNHvxiFs1/N9Ie8iGfo20mZDPnpiF3NRoAfAEpa3Evv+K75/sbUaJwX0ydVFLI
+         BznYBhFJD4AqKKM/y/XGhARAaVrblQX+aOuu3QcOLeuwQ/M/EfClJHmurEXPW8Rchuxg
+         xuUm2dzBsEcQ1M3Yn2HSeWkhHIfJpY2M0HaN9H6ke3hc1Czjf7Tivg+mCnTDFMKn0VIA
+         X3VA==
+X-Gm-Message-State: ANoB5pmHn+jn+95szU4GIqiOUObXcKuBmLS9UwoHq4DXwPuI3yd+3DLP
+        HKicpkKgzrC8y7Fg3LGE8bNSuXKRxr2Lb94E073pPRKY448=
+X-Google-Smtp-Source: AA0mqf7/5LFh9irixKD6uvk05eIdlWzoStuesK1CKS2LvZB029c9+SxpcPE39deP4kMGA+0L0RS0akdEqi50xaJdd7g=
+X-Received: by 2002:ae9:d846:0:b0:6ec:5332:6ebd with SMTP id
+ u67-20020ae9d846000000b006ec53326ebdmr62506616qkf.0.1669945495063; Thu, 01
+ Dec 2022 17:44:55 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <f4bb4aa5-08cc-4a4d-76cf-46bda5c6de59@huawei.com>
-Content-Type: text/plain; charset="gbk"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 2 Dec 2022 11:44:43 +1000
+Message-ID: <CAPM=9tzKpUGHMEw3aN43b+P3+WwAtZGia190JktnB163TvVjCw@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.1-rc8
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,68 +67,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> On Thu, Nov 24, 2022 at 09:56:43AM +0800, Ziyang Xuan wrote:
->>> In otx2_probe(), there are several possible memory leak bugs
->>> in exception paths as follows:
->>> 1. Do not release pf->otx2_wq when excute otx2_init_tc() failed.
->>> 2. Do not shutdown tc when excute otx2_register_dl() failed.
->>> 3. Do not unregister devlink when initialize SR-IOV failed.
->>>
->>> Fixes: 1d4d9e42c240 ("octeontx2-pf: Add tc flower hardware offload on ingress traffic")
->>> Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
->>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->>> ---
->>>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 5 ++++-
->>>  1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->>> index 303930499a4c..8d7f2c3b0cfd 100644
->>> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->>> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->>> @@ -2900,7 +2900,7 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>  
->>>  	err = otx2_register_dl(pf);
->>>  	if (err)
->>> -		goto err_mcam_flow_del;
->>> +		goto err_register_dl;
->>>  
->>>  	/* Initialize SR-IOV resources */
->>>  	err = otx2_sriov_vfcfg_init(pf);
->>> @@ -2919,8 +2919,11 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>  	return 0;
->>
->> If otx2_dcbnl_set_ops() fails at the end then shouldn't we also call
->> otx2_sriov_vfcfg_cleanup() ?
-> 
-> I think it does not need. This is the probe process. PF and VF are all not ready to work,
-> so pf->vf_configs[i].link_event_work does not scheduled. And pf->vf_configs memory resource will
-> be freed by devm subsystem if probe failed. There are not memory leak and other problems.
-> 
-Hello Sunil Goutham, Maciej Fijalkowski,
+Hi Linus,
 
-What do you think about my analysis? Look forward to your reply.
+Things do seem to have finally settled down, just 4 i915 and one
+amdgpu this week. Probably won't have much for next week if you do
+push rc8 out.
 
-Thank you!
+Dave.
 
-> @Sunil Goutham, Please help to confirm.
-> 
-> Thanks.
-> 
->>
->>>  
->>>  err_pf_sriov_init:
->>> +	otx2_unregister_dl(pf);
->>> +err_register_dl:
->>>  	otx2_shutdown_tc(pf);
->>>  err_mcam_flow_del:
->>> +	destroy_workqueue(pf->otx2_wq);
->>>  	otx2_mcam_flow_del(pf);
->>>  err_unreg_netdev:
->>>  	unregister_netdev(netdev);
->>> -- 
->>> 2.25.1
->>>
->> .
->>
-> .
-> 
+drm-fixes-2022-12-02:
+drm fixes for 6.1-rc8
+
+i915:
+- Fix dram info readout
+- Remove non-existent pipes from bigjoiner pipe mask
+- Fix negative value passed as remaining time
+- Never return 0 if not all requests retired
+
+amdgpu:
+- VCN fix for vangogh
+The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d=
+:
+
+  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-12-02
+
+for you to fetch changes up to c082fbd687ad70a92e0a8be486a7555a66f03079:
+
+  Merge tag 'amd-drm-fixes-6.1-2022-12-01' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2022-12-02
+09:12:46 +1000)
+
+----------------------------------------------------------------
+drm fixes for 6.1-rc8
+
+i915:
+- Fix dram info readout
+- Remove non-existent pipes from bigjoiner pipe mask
+- Fix negative value passed as remaining time
+- Never return 0 if not all requests retired
+
+amdgpu:
+- VCN fix for vangogh
+
+----------------------------------------------------------------
+Dave Airlie (2):
+      Merge tag 'drm-intel-fixes-2022-12-01' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'amd-drm-fixes-6.1-2022-12-01' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+
+Janusz Krzysztofik (2):
+      drm/i915: Fix negative value passed as remaining time
+      drm/i915: Never return 0 if not all requests retired
+
+Leo Liu (1):
+      drm/amdgpu: enable Vangogh VCN indirect sram mode
+
+Radhakrishna Sripada (1):
+      drm/i915/mtl: Fix dram info readout
+
+Ville Syrj=C3=A4l=C3=A4 (1):
+      drm/i915: Remove non-existent pipes from bigjoiner pipe mask
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c      |  3 +++
+ drivers/gpu/drm/i915/display/intel_display.c | 10 +++++++---
+ drivers/gpu/drm/i915/gt/intel_gt.c           |  9 +++++++--
+ drivers/gpu/drm/i915/gt/intel_gt_requests.c  |  2 +-
+ drivers/gpu/drm/i915/intel_dram.c            |  3 +--
+ 5 files changed, 19 insertions(+), 8 deletions(-)
