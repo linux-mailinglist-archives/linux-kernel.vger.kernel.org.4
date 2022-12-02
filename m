@@ -2,104 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B40640E21
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EC6640E26
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiLBTA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S234472AbiLBTBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbiLBTAT (ORCPT
+        with ESMTP id S234557AbiLBTBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:00:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94543DBF75;
-        Fri,  2 Dec 2022 11:00:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EC7F61C35;
-        Fri,  2 Dec 2022 19:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67320C433B5;
-        Fri,  2 Dec 2022 19:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670007617;
-        bh=If0m8v1brmMDcVp3BHUNVEs197Sy9gAdV8ES1Njbxbs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rJh7egSiMtfUfFIs91xYk+l3hKxnd1GXELQk1R9dC1GQQphG4vVtfKCcCUQr2+kN1
-         dMgZ5UmA+bZ/XyK+5Q51yIuBxfG72EcOkwyRR8aY3611VZQW9T8PAvrTGsZcDr/+Um
-         E/Wc025NTyytX6J++VFok3M54wX7UE9+WYrU6K5TEPPtqWuSASJFhRvGvdYf3fEOoT
-         uDWwI4SBJxOUK0tiAmJzi0MIT0egfjjAAknm84lswIhVoVJSD8/1fllCa6SXvMBp9Y
-         NocHDIKg4f1kFtMU7wz9IlasEga19MqPrQK3C+dU6oYsXVbsaYegNZuoAlyMMSz4KR
-         tSTGVE4GGTH4g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 480C2E21EEF;
-        Fri,  2 Dec 2022 19:00:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 2 Dec 2022 14:01:02 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A87BE345D;
+        Fri,  2 Dec 2022 11:01:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9weWN0J9UlP3f78JROiu0G5wNY7vMBJUXZpIa0yvM1w=; b=yz/5laJq2eltamPH2JgAHpEag+
+        Rfbg2bEzQyVhzXqphIxnwVAzuBFeGfxejG70bpNrc+7RkmWdW+YT+kzEbWQL8wX4gCFjG489ZOeXh
+        +jyCUhedl5hxUeyDD+dTnOwnJmFDRxdP34AX2sNK+lE4XMAeI9CI7Ic6XJUXDCAaC7J675v4Wu+T3
+        ZOSPjwXW2YFf4u0L50L0Yf3DzLul1FachcxPlGfNBSmLhp9LfwGtuhv/2qzdPNye+tFMRCVC5QlbR
+        +ZmItZYwvU9fbUV2tP2zDurj8pGhfLHUJ85rsGbp3GNaaEpptyNcl3r5dR+QNDgGH0jTy5tUH8UFn
+        qfb7+TBg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35538)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p1BHO-0004UF-5i; Fri, 02 Dec 2022 19:00:58 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p1BHN-0004d4-EM; Fri, 02 Dec 2022 19:00:57 +0000
+Date:   Fri, 2 Dec 2022 19:00:57 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH net-next v3 2/3] net: mdio: Update speed register bits
+Message-ID: <Y4pLaQ4EB5jSuX5d@shell.armlinux.org.uk>
+References: <20221202181719.1068869-1-sean.anderson@seco.com>
+ <20221202181719.1068869-3-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/8] Basic device tree support for StarFive JH7110 RISC-V
- SoC
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167000761729.13669.16471163583440376052.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Dec 2022 19:00:17 +0000
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
-In-Reply-To: <20221118011714.70877-1-hal.feng@starfivetech.com>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        conor@kernel.org, palmer@dabbelt.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, ben.dooks@sifive.com, tglx@linutronix.de,
-        maz@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, linus.walleij@linaro.org,
-        emil.renner.berthing@canonical.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202181719.1068869-3-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, Dec 02, 2022 at 01:17:17PM -0500, Sean Anderson wrote:
+> This updates the speed register bits to the 2018 revision of 802.3. It
+> also splits up the definitions to prevent confusion in casual observers.
 
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+Are you going to do it for the other registers so that there is
+consistency?
 
-On Fri, 18 Nov 2022 09:17:06 +0800 you wrote:
-> The original patch series "Basic StarFive JH7110 RISC-V SoC support" [1]
-> is split into 3 patch series. They respectively add basic clock&reset,
-> pinctrl and device tree support for StarFive JH7110 SoC. These patch
-> series are independent, but the Visionfive2 board can boot up successfully
-> only if all these patches series applied. This one adds basic device
-> tree support. This patch series is pulled out from the patch 1~6 and
-> patch 27~30 of v1 [1]. You can simply get or review the patches at the
-> link [2].
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and VisionFive2 board
-    (no matching commit)
-  - [v2,2/8] dt-bindings: timer: Add StarFive JH7110 clint
-    (no matching commit)
-  - [v2,3/8] dt-bindings: interrupt-controller: Add StarFive JH7110 plic
-    (no matching commit)
-  - [v2,4/8] dt-bindings: sifive,ccache0: Support StarFive JH7110 SoC
-    (no matching commit)
-  - [v2,5/8] soc: sifive: ccache: Add StarFive JH7110 support
-    (no matching commit)
-  - [v2,6/8] riscv: dts: starfive: Add initial StarFive JH7110 device tree
-    (no matching commit)
-  - [v2,7/8] riscv: dts: starfive: Add StarFive JH7110 VisionFive2 board device tree
-    (no matching commit)
-  - [v2,8/8] RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
-    https://git.kernel.org/riscv/c/6925ba3d9b8c
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
