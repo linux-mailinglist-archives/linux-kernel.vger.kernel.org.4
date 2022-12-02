@@ -2,139 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BE7641176
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9122964117F
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbiLBXYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 18:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S234390AbiLBX3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 18:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbiLBXYL (ORCPT
+        with ESMTP id S233221AbiLBX3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 18:24:11 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03CDC2D33
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:24:10 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id k5so6268415pjo.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 15:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ofSHfJEl53nBxTKL7kEN4Zg0gZG24eP3ZO/twC4u+1k=;
-        b=HeigGMHv29ce9DCaTPYVM3dw6G+hA6RazCRkjT3KQZLg25j/kXIJzVk1CREUf4Tnjy
-         ObHsN/+LfiA+cHa5FGu5yq1n8lo5ofkI8FlaEx18YFuhsuonRWe5rGWezpeJ+mAErWcz
-         bONfAWoJMb2gN0IP5FjGges9W5cH/wdhI0L3s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ofSHfJEl53nBxTKL7kEN4Zg0gZG24eP3ZO/twC4u+1k=;
-        b=A+yIRsxRM+G3X44Se45X2dXU6fW8Avfq2POtPp+xzpImTS02OUoLoZsYkt8ZgypBsD
-         IE4wC5lPjYBBcBaigv5j/waJDz7ea0DsDweKRBAtJc7QnFRWN5vhfY2Tsp8hpm3VV67w
-         8VLX3I4jrNBXNBAFSPlc20xtqjMMHJKFv1XRgqILkPnT5Py6xX970gd2Gueyrz14DTEK
-         3+rbHZ/OnlTikaLbvrHD/V1H7LCHgucWu7YtqJ/+J7uoP4GC4eHC+DoTmxC4d2U72pW0
-         Y7BRIVXB4n2s7PwU4GDspGb+CgrKW75YRUuXFy16yLfOvFkEfXzb6f+3KR+HKAWqrUf0
-         28uw==
-X-Gm-Message-State: ANoB5pmJmNZDLZHjAIY2nNqIycYA+qEDO77MOM381145qmHscAisdDc3
-        mX8qObSGuYyVDdULzgfFwYRGZfBXKrv9HPMJ
-X-Google-Smtp-Source: AA0mqf6KGtZFiMFs9gt0r0c40J5xP+ofrGJNRafedHD8hbV4hbQyZdq1T9Jw+I42P9d+kdDUXkDLEQ==
-X-Received: by 2002:a17:90b:258:b0:219:396f:8a09 with SMTP id fz24-20020a17090b025800b00219396f8a09mr27633434pjb.20.1670023450256;
-        Fri, 02 Dec 2022 15:24:10 -0800 (PST)
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com. [209.85.216.53])
-        by smtp.gmail.com with ESMTPSA id q4-20020aa78424000000b00575bab45644sm5610286pfn.61.2022.12.02.15.24.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 15:24:08 -0800 (PST)
-Received: by mail-pj1-f53.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so6419972pjd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 15:24:08 -0800 (PST)
-X-Received: by 2002:a17:902:e807:b0:189:117c:fcfe with SMTP id
- u7-20020a170902e80700b00189117cfcfemr54885077plg.124.1670023447808; Fri, 02
- Dec 2022 15:24:07 -0800 (PST)
+        Fri, 2 Dec 2022 18:29:35 -0500
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1A1E1746;
+        Fri,  2 Dec 2022 15:29:34 -0800 (PST)
+Received: from in02.mta.xmission.com ([166.70.13.52]:51516)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1p1FTG-006kVV-Oy; Fri, 02 Dec 2022 16:29:30 -0700
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:45068 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1p1FTF-00HPxw-Mn; Fri, 02 Dec 2022 16:29:30 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
+References: <20221125135500.1653800-1-frederic@kernel.org>
+        <20221125135500.1653800-4-frederic@kernel.org>
+        <871qpkqof8.fsf@email.froward.int.ebiederm.org>
+        <20221202225428.GA1754872@lothringen>
+Date:   Fri, 02 Dec 2022 17:28:54 -0600
+In-Reply-To: <20221202225428.GA1754872@lothringen> (Frederic Weisbecker's
+        message of "Fri, 2 Dec 2022 23:54:28 +0100")
+Message-ID: <87ilitpeq1.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20221202013404.163143-1-jeffxu@google.com> <20221202013404.163143-7-jeffxu@google.com>
-In-Reply-To: <20221202013404.163143-7-jeffxu@google.com>
-From:   Daniel Verkamp <dverkamp@chromium.org>
-Date:   Fri, 2 Dec 2022 15:23:41 -0800
-X-Gmail-Original-Message-ID: <CABVzXAkoGoypAs86EG5RsJZ=CXPu3NtTHb7_2=byQt7A7p7krQ@mail.gmail.com>
-Message-ID: <CABVzXAkoGoypAs86EG5RsJZ=CXPu3NtTHb7_2=byQt7A7p7krQ@mail.gmail.com>
-Subject: Re: [PATCH v3] mm/memfd: Add write seals when apply SEAL_EXEC to
- executable memfd
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        hughd@google.com, jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1p1FTF-00HPxw-Mn;;;mid=<87ilitpeq1.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX18ScrhFGE1qiUX6HuHOf/JWfT6PWoVERUE=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Frederic Weisbecker <frederic@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 540 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 10 (1.9%), b_tie_ro: 9 (1.6%), parse: 0.85 (0.2%),
+         extract_message_metadata: 3.6 (0.7%), get_uri_detail_list: 1.56
+        (0.3%), tests_pri_-1000: 3.8 (0.7%), tests_pri_-950: 1.28 (0.2%),
+        tests_pri_-900: 0.99 (0.2%), tests_pri_-200: 0.80 (0.1%),
+        tests_pri_-100: 3.3 (0.6%), tests_pri_-90: 58 (10.8%), check_bayes: 57
+        (10.6%), b_tokenize: 7 (1.3%), b_tok_get_all: 8 (1.5%), b_comp_prob:
+        2.6 (0.5%), b_tok_touch_all: 36 (6.7%), b_finish: 0.76 (0.1%),
+        tests_pri_0: 439 (81.4%), check_dkim_signature: 0.54 (0.1%),
+        check_dkim_adsp: 2.9 (0.5%), poll_dns_idle: 0.33 (0.1%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 7 (1.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 3/3] rcu-tasks: Fix synchronize_rcu_tasks() VS
+ zap_pid_ns_processes()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 5:36 PM <jeffxu@chromium.org> wrote:
+Frederic Weisbecker <frederic@kernel.org> writes:
+
+> On Wed, Nov 30, 2022 at 12:37:15PM -0600, Eric W. Biederman wrote:
+>> Frederic Weisbecker <frederic@kernel.org> writes:
+>> Two questions.
+>> 
+>> 1) Is there any chance you need the exit_task_rcu_stop() and
+>>    exit_tasks_rcu_start() around schedule in the part of this code that
+>>    calls kernel_wait4.
 >
-> From: Jeff Xu <jeffxu@chromium.org>
+> Indeed it could be relaxed there too if necessary.
+
+I was just wondering how you tell if it is necessary and if perhaps
+the kernel_wait4 was overlooked.
+
+>> 2) I keep thinking zap_pid_ns_processes() should be changed so that
+>>    after it sends SIGKILL to all of the relevant processes to not wait,
+>>    and instead have wait_consider_task simply not allow the 
+>>    init process of the pid namespace to be reaped.
+>> 
+>>    Am I right in thinking that such a change were to be made it would
+>>    make remove the deadlock without having to have any special code?
+>> 
+>>    It is just tricky enough to do that I don't want to discourage your
+>>    simpler change but this looks like a case that makes the pain of
+>>    changing zap_pid_ns_processes worthwhile in the practice.
 >
-> When apply F_SEAL_EXEC to an executable memfd, add write seals also to
-> prevent modification of memfd.
+> So you mean it still reaps those that were EXIT_ZOMBIE before ignoring
+> SIGCHLD (the kernel_wait4() call) but it doesn't sleep anymore on those
+> that autoreap (or get reaped by a parent outside that namespace) after
+> ignoring SIGCHLD? Namely it doesn't do the schedule() loop I'm working
+> around here and proceeds with exit_notify() and notifies its parent?
+
+Yes.  A change to make it work like when the thread group leader exits
+before the other threads.  So any actual sleeping happens in the reaper
+of the init process when the reaper calls wait(2).
+
+> And then in this case the responsibility of sleeping, until the init_process
+> of the namespace is the last task in the namespace, goes to the parent while
+> waiting that init_process, right?
 >
-> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-> ---
->  mm/memfd.c                                 |  3 +++
->  tools/testing/selftests/memfd/memfd_test.c | 25 ++++++++++++++++++++++
->  2 files changed, 28 insertions(+)
->
-> diff --git a/mm/memfd.c b/mm/memfd.c
-> index 96dcfbfed09e..3a04c0698957 100644
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -222,6 +222,9 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
->                 }
->         }
->
-> +       if (seals & F_SEAL_EXEC && inode->i_mode & 0111)
-> +               seals |= F_ALL_SEALS;
-> +
->         *file_seals |= seals;
->         error = 0;
->
+> But what if the init_process of the given namespace autoreaps? Should it then
+> wait itself until the namespace is empty? And then aren't we back to the initial
+> issue?
 
-Hi Jeff,
+The idea is that we only care when the userspace cares.  I don't think
+there is any kernel code that fundamentally cares.  There might be a few
+bits that accidentally care and those would need to be take care of when
+making the proposed change.  The wait would only exist for userspace so
+the same semantics are observed.
 
-(Following up on some discussion on the original review, sorry for any
-duplicate comments.)
-
-Making F_SEAL_EXEC imply all seals (including F_SEAL_SEAL) seems a bit
-confusing. This at least needs documentation to make it clear.
-
-Rather than silently adding other seals, perhaps we could return an
-error if the caller requests F_SEAL_EXEC but not the write seals, so
-the other seals would have to be explicitly listed in the application
-code. This would have the same net effect without making the
-F_SEAL_EXEC operation too magical.
-
-Additionally, if the goal is to enforce W^X, I don't think this
-completely closes the gap. There will always be a period where it is
-both writable and executable with this API:
-
-1. memfd_create(MFD_EXEC). Can't use MFD_NOEXEC since that would seal
-chmod(+x), so the memfd is W + X here.
-2. write() code to the memfd.
-3. fcntl(F_ADD_SEALS, F_SEAL_EXEC) to convert the memfd to !W + X.
-
-I think one of the attack vectors involved the attacker waiting for
-another process to create a memfd, pausing/delaying the victim
-process, overwriting the memfd with their own code, and calling exec()
-on it, which is still possible in the window between steps 1 and 3
-with this design.
-
-Thanks,
--- Daniel
+Eric
