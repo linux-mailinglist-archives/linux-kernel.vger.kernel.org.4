@@ -2,157 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCFE640981
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13E7640987
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233768AbiLBPlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S232678AbiLBPoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbiLBPln (ORCPT
+        with ESMTP id S232723AbiLBPoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:41:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FFCC4609
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:40:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669995651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ukZurXWBYF9XacBE0s0LYySmWKNtgdpXiH8C9SL7Axg=;
-        b=fVNlgw8LliFz07cPxPWzMVZE4/FnWOFrOLlG5aNNyBd1h6l6n8XzcixTR/NeUXLP9bK6nE
-        1Ix6j8oVxUY/MbQCukojIhDTu7O/C4jjXTkBZGIYIjuAT5kuIYhQDjSTQCqeLN9M+kkKiu
-        tcG6pVgzPD0h7EUsaDoJRFHSmVoGMls=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-189-0GSF3-fRPS2slxirSH7v7Q-1; Fri, 02 Dec 2022 10:40:50 -0500
-X-MC-Unique: 0GSF3-fRPS2slxirSH7v7Q-1
-Received: by mail-wm1-f69.google.com with SMTP id z15-20020a1c4c0f000000b003cf6f80007cso2072945wmf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:40:49 -0800 (PST)
+        Fri, 2 Dec 2022 10:44:12 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393A1D4AF0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:44:10 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id d3so4957261plr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uXUuqbYPWAo0e3SfziJ9q3Uvez640/WBQSFJuuCG+jA=;
+        b=KjipsMnKbBOqlmR9iEYkjoW1t+nkBJuZnixDinUZqw7JWWIxWGcuL7cN3ZoaGkrjO/
+         cEfYg48wEe4ZNPurP83hila+K8klWIcJ1bO+ATwT/5EnivKUTZHKHIPv1Jg0Rh3+Yp9S
+         2M7wmP3U3PFF+1vwZvNAdgY3Hd4NwdT/Jyh2HRunQFk4Tqm6ZXGF0N99icZtSOI3NczZ
+         qZSYmdQQclv1Hmh+57Y/a1+hsPl+WJi2j1fqq98S6UcYaktFoenD+71UAdIyAVHAreJt
+         NIOyxjEQI1ialks3HJ5R/oZzmZR1nO9TousAOhXig05OiYg8YwTtvf+r0WXZHQ52/Bn6
+         Smpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ukZurXWBYF9XacBE0s0LYySmWKNtgdpXiH8C9SL7Axg=;
-        b=TretLy+09efiDLPda9f06ODk3sLC1YnMt/7oEB71Jl5GAhfAQUgfxFwmaGhs4QIk2S
-         uTyXrwWD/Hm7PHnesGDcag2CbNq1p2vAP/906tyrvPv9qPdExDtzwKVeHREEkeAKEZUD
-         l3D6iGA0hvlbiAp+rSt3XEV/4rOH9Kh8v8eLSQ89Mbqr82ipJm2onPZsiqa/zITUeVXk
-         75FLPuo66/3RcESJLU538iHbBU9XcrK2j9yx1PiFUcaaHvmxlK/JHvhJ35Qx6s/UhLig
-         O1kWhihgQUWzLW1USQSqnyGmx5f4FPj/7Dzp4O7B21ksrpTmJPB8qfSawP/pnitV40Bo
-         q9tA==
-X-Gm-Message-State: ANoB5pkSqCtT2uDQV0R7rG/salWt+Scq7CMfmSQQTYAAbr73VP/DR1dX
-        50hkiTCxU8o+8ZGPqAnSfS1+KqbN6uOWVkisfrc+divSxOR9AJQ/H7kRl6/ZJq8tiLwfnk9D4yI
-        cP04RJicyhuarc9L2fOOhJkUA
-X-Received: by 2002:a1c:f015:0:b0:3cf:7818:b123 with SMTP id a21-20020a1cf015000000b003cf7818b123mr56155922wmb.8.1669995648915;
-        Fri, 02 Dec 2022 07:40:48 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6XWXVf4E+myn6zx3UJjMA1ITegc4vnWDGw2UgAobBJt+oz3eX0LXIw1B+lzdUlHUDFdcID6w==
-X-Received: by 2002:a1c:f015:0:b0:3cf:7818:b123 with SMTP id a21-20020a1cf015000000b003cf7818b123mr56155902wmb.8.1669995648619;
-        Fri, 02 Dec 2022 07:40:48 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:7a00:852e:72cd:ed76:d72f? (p200300cbc7037a00852e72cded76d72f.dip0.t-ipconnect.de. [2003:cb:c703:7a00:852e:72cd:ed76:d72f])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05600c4f5500b003b4fe03c881sm14181214wmq.48.2022.12.02.07.40.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 07:40:48 -0800 (PST)
-Message-ID: <0e864a86-040b-810d-86ee-f702604e7f5f@redhat.com>
-Date:   Fri, 2 Dec 2022 16:40:47 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uXUuqbYPWAo0e3SfziJ9q3Uvez640/WBQSFJuuCG+jA=;
+        b=gtzLcqIe6hNdfgQIdqJi/lVW7YYk16kAI/1sS6yTLYqN5iYFwHvM3urs31bIR0qLLG
+         gfHqGyJYtvO9R1o+q0lGcCw2AnMuFCjF7ukejN90jWWn5uqGLOc29YW2M5Eq7DrTy/BZ
+         VvYVoMKxwo4ixvE2x1/wk1p/Y5i1VnbRzTE9qysnM1Hg9dJN9cDNsD5q6bLGtTZNfbvK
+         D+jF4nmtbXY4IlgA6l32dk7Jdg5GGpAUAf0CeHZ8ZDtDdpIy26aZqbcNSPtdPFSHaD7j
+         3cSkBgRU0DTLJB8FAszFIHYhkKeH5X8FUp4a//dqBgOfb8YuQa9eL4C911/NNA3v4kt/
+         QLjw==
+X-Gm-Message-State: ANoB5pmq1qq1mfvmqTMNehJ18OAQow6SePJRyy9BRdwqsj3zhcsBOe+6
+        vLFHRRW8visDfagoZsR1T6QfMg==
+X-Google-Smtp-Source: AA0mqf6lG8zpsfXSEo+gd8HtX4QQl0A/muxZY7NjcwlZU/V3DYzO3fMLcI5A1qZ10aIlPO2rRm6mdw==
+X-Received: by 2002:a17:902:ab5e:b0:189:56ab:ab69 with SMTP id ij30-20020a170902ab5e00b0018956abab69mr45367903plb.106.1669995849555;
+        Fri, 02 Dec 2022 07:44:09 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b10-20020a170902d88a00b001868981a18esm5754075plz.6.2022.12.02.07.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 07:44:07 -0800 (PST)
+Date:   Fri, 2 Dec 2022 15:44:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        coverity-bot <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: hyper-v: Fix 'using uninitialized value'
+ Coverity warning
+Message-ID: <Y4odRLlFRj17tUNE@google.com>
+References: <20221202105856.434886-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
-References: <20221114000447.1681003-1-peterx@redhat.com>
- <20221114000447.1681003-2-peterx@redhat.com>
- <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
- <20221130142425.6a7fdfa3e5954f3c305a77ee@linux-foundation.org>
- <Y4jIHureiOd8XjDX@x1n> <a215fe2f-ef9b-1a15-f1c2-2f0bb5d5f490@redhat.com>
- <20221201143058.80296541cc6802d1e5990033@linux-foundation.org>
- <fc3e3497-053d-8e50-a504-764317b6a49a@redhat.com>
- <222fc0b2-6ec0-98e7-833f-ea868b248446@redhat.com> <Y4oWOqgqmv1BFAFx@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
-In-Reply-To: <Y4oWOqgqmv1BFAFx@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202105856.434886-1-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>
->>>> David, do you feel that the proposed fix will at least address the bug
->>>> without adverse side-effects?
->>>
->>> Usually, when I suspect something is dodgy I unconsciously push back
->>> harder than I usually would.
-> 
-> Please consider using unconsciousness only for self guidance, figuring out
-> directions, or making decisions on one's own.
+On Fri, Dec 02, 2022, Vitaly Kuznetsov wrote:
+> In kvm_hv_flush_tlb(), 'data_offset' and 'consumed_xmm_halves' variables
+> are used in a mutually exclusive way: in 'hc->fast' we count in 'XMM
+> halves' and increase 'data_offset' otherwise. Coverity discovered, that in
+> one case both variables are incremented unconditionally. This doesn't seem
+> to cause any issues as the only user of 'data_offset'/'consumed_xmm_halves'
+> data is kvm_hv_get_tlb_flush_entries() ->  kvm_hv_get_hc_data() which also
+> takes into account 'hc->fast' but is still worth fixing.
 
-Yeah, sorry about my communication. I expressed that this approach felt 
-wrong to me, I just wasn't able to phrase exactly why I thought 
-migration is doing the right thing and didn't have a lot of time to look 
-into the details.
+If those calls aren't inlined, then 32-bit Hyper-V will be "consuming" uninitialized
+data when pushing parameters onto the stack.  It won't cause real problems, but
+checkers might complain.
 
-Now I dedicated some time and realized that mproctect() is doing the 
-exact same thing, it became clearer to me why migration code wasn't 
-broken before.
-
-> 
-> For discussions on the list which can get more than one person involved, we
-> do need consciousness and reasonings.
-
-Yeah, I need vacation.
-
-> 
-> Thanks for the reproducer, that's definitely good reasonings.  Do you have
-> other reproducer that can trigger an issue without mprotect()?
-
-As noted in the RFC patch I sent, I suspect NUMA hinting page remapping 
-might similarly trigger it. I did not try reproducing it, though.
-
-> 
-> As I probably mentioned before in other threads mprotect() is IMHO
-> conceptually against uffd-wp and I don't yet figured out how to use them
-> all right.  For example, we can uffd-wr-protect a pte in uffd-wp range,
-> then if we do "mprotect(RW)" it's hard to tell whether the user wants it
-> write or not.  E.g., using mprotect(RW) to resolve page faults should be
-> wrong because it'll not touch the uffd-wp bit at all.  I confess I never
-> thought more on how we should define the interactions between uffd-wp and
-> mprotect.
-> 
-> In short, it'll be great if you have other reproducers for any uffd-wp
-> issues other than mprotect().
-> 
-> I said that also because I just got another message from Ives privately
-> that there _seems_ to have yet another even harder to reproduce bug here
-> (Ives, feel free to fill in any more information if you got it).  So if you
-> can figure out what's missing and already write a reproducer, that'll be
-> perfect.
-
-Maybe NUMA hitning on the fallback path, when we didn't migrate or 
-migration failed?
-
--- 
-Thanks,
-
-David / dhildenb
-
+What about shoving this metadata into "struct kvm_hv_hcall" as a union?  That'd
+help convey that the two are mutually exclusive, would provide a place to document
+said exclusion, and would yield a nice cleanup too by eliminating multiple params
+from various functions.
