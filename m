@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8B464104E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76655641052
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 23:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234816AbiLBWCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 17:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S234797AbiLBWFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 17:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiLBWCC (ORCPT
+        with ESMTP id S229550AbiLBWFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:02:02 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E52F88A1;
-        Fri,  2 Dec 2022 14:02:01 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id y15so7118107qtv.5;
-        Fri, 02 Dec 2022 14:02:01 -0800 (PST)
+        Fri, 2 Dec 2022 17:05:46 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6443F00D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 14:05:45 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id 140so6132564pfz.6
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 14:05:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ijnpZ07hK4ahXelPeyrccDJp/vFZrgPBzvgzRVSPwcQ=;
-        b=YcUBMxflyK9rsYXMpcZMWjZti1O7PMbXZ8xFQZyxkNNwkTcGoZh8LKARWMdXn32XFr
-         A87vCVV7s8Gj75k/77gr0gy5uhjOWV3Cl7Xp5VrkjymO7FbPa9+l+263wbHMjvODowBt
-         cwc0aY8IVFB69AWe7WIIbXuOVU5HITCPWK9o9elFR+wNXf3bS4OmxGGxBFBxoyVpjDXR
-         0it/J3eXMGiGjvRJSPhmBf7AOmkXCxGHlxNsBc8tmaXOwhXRgQfZuvaChsiwOCMVi7wk
-         JLrvezqCcbayicLo+TAyDuo2ai7ue4WX2AjzyH75O+ZWGdqKdBIYv+1xBm/cAv/4wiRb
-         GOLg==
+        bh=YGmhfz9LKketteJ29KbDn67sA38cLHNS36kuvwxlMm8=;
+        b=TSqUQgbjbBdg6dvDWR1KVKuTEI3gAe6/W+8DLD7nw2mWi+QX+pcwtPxwJFoxQmJGEe
+         uNxgwfWgkBGeh75QcHsRkRMQfxOkr6GVNv7M9DU6N537BAZNupUYZmYR8DdUZWlAAwbR
+         KMF3Htct7RWcrCqmWw5tW/Ic0PXvyQHTzFYVE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ijnpZ07hK4ahXelPeyrccDJp/vFZrgPBzvgzRVSPwcQ=;
-        b=ghzlwriKz+OMqcmC6y3AVYiLItgcbzvijDq8bwZ6/fPIjK4xS3S9nphbykMfI0vKBO
-         4Wea7YMdDegUk6XKYmgW8bXdxPbwCFRtB5lkTi2lEnU4XtSQqFMn3zuyigfFk4jZYhA3
-         RqUQdptFz9MlJWJ+0GcLN07+UcIH/pUkCD1eMW1S6yJqkZB6SqtLs3VmJ0lTzmssQyUS
-         oIP5UCPZjWZBeD+3T8aKJaBchXn5EZdVwG8UBcO5I1bS0yZ2PD60lLxhWIf9MaI8P070
-         5vXzFZGxiRcwy49F4ABM6NKEYbdqt9D7InOFQV/zyuCUZWnUnbvMW6Zdm3uuVNSzRbj3
-         rOEw==
-X-Gm-Message-State: ANoB5pl3Ujp9pJi0slXaxQCGgFI2vPmEPKECw+1JdrJ9tgU0N/dx7V0G
-        Cl0CTqs9ajZ/qX+M9b5Xaqc=
-X-Google-Smtp-Source: AA0mqf791z95i5H75aVgSKh3ytyxoUf5EHk6btym+i3slF6UmZIrfdzjZSLDGyvOdJVWBYS0hEqAlg==
-X-Received: by 2002:ae9:f103:0:b0:6fc:9709:4b69 with SMTP id k3-20020ae9f103000000b006fc97094b69mr15582829qkg.148.1670018520357;
-        Fri, 02 Dec 2022 14:02:00 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k17-20020ac84791000000b003a50c9993e1sm4923477qtq.16.2022.12.02.14.01.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 14:01:59 -0800 (PST)
-Message-ID: <e1eb7d12-5fd0-4d7b-6009-d8cbbc6eb3ad@gmail.com>
-Date:   Fri, 2 Dec 2022 14:01:57 -0800
+        bh=YGmhfz9LKketteJ29KbDn67sA38cLHNS36kuvwxlMm8=;
+        b=rpgcNqEo1RBptJJuH1COEYtLscn5+X+zK4OQmYKRW90s0rtnS/0+JjN4YPeAlTrZ4j
+         47Fmg1jMrL9o18B10IVIGfh/e8Nzy5btGh+m+RVWwZ29IixfMlvKJLXefkmNbA0JqHyj
+         Zvwghi7fu8fbBDZz4pXsl6qK6+7lrHVhDaGWMf6/RLRy3MrcUsVovnBFEt7xSYAPqyJt
+         DH4IeZt63q9GUXhbPf09PsBS5KYmvNRJyEFG5lKUniwuzJ/MbqZqjGb9C3vJUxHH2END
+         74wV1E09vb3T7Nw2eNVCUzXhNUThTabR7TaxckvTBsKb2o2tZFaIo0zHcTjzJHuqG1v0
+         KhrA==
+X-Gm-Message-State: ANoB5pnY15USWUOASSFub7pCwS1SuHncqyuW10C4s/vvqhSwfn6J2DU1
+        v3ypQjbHIZy/0ay2c/ohWQTaGA==
+X-Google-Smtp-Source: AA0mqf5DhG6zysI+aj3WH5KAazaNoxWHCLIcnDeHYGVOYKMWwq4jAur5eQGJ0+dbDGN2a+EriUvEoA==
+X-Received: by 2002:a05:6a00:4009:b0:563:2ada:30a3 with SMTP id by9-20020a056a00400900b005632ada30a3mr55402742pfb.27.1670018745233;
+        Fri, 02 Dec 2022 14:05:45 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s24-20020a17090ad49800b00210125b789dsm5170014pju.54.2022.12.02.14.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 14:05:44 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Fri, 2 Dec 2022 14:05:43 -0800
+To:     Shayne Chen <shayne.chen@mediatek.com>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        StanleyYP Wang <StanleyYP.Wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Chiu <chui-hao.chiu@mediatek.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Money Wang <Money.Wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Howard Hsu <howard-yh.hsu@mediatek.com>,
+        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
+        "David S. Miller" <davem@davemloft.net>,
+        Evelyn Tsai <evelyn.tsai@mediatek.com>,
+        linux-kernel@vger.kernel.org,
+        MeiChia Chiu <meichia.chiu@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Bo Jiao <Bo.Jiao@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sujuan Chen <sujuan.chen@mediatek.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: mt7996_rf_regval_set(): Integer handling issues
+Message-ID: <202212021405.93CF11D2A@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer for SDHCI Broadcom BRCMSTB
- driver
-Content-Language: en-US
-To:     Kamal Dasu <kdasu.kdev@gmail.com>, ulf.hansson@linaro.org,
-        linux-kernel@vger.kernel.org, alcooperx@gmail.com,
-        linux-arm-kernel@lists.infradead.org, adrian.hunter@intel.com,
-        linux-mmc@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com
-References: <20221202212119.43214-1-kdasu.kdev@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221202212119.43214-1-kdasu.kdev@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 13:21, Kamal Dasu wrote:
-> Taking over as upstream maintainer for Broadcom SDHCI
-> driver from Al Cooper.
-> 
-> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+Hello!
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221202 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-Thanks Kamal!
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
+
+  Thu Dec 1 17:29:14 2022 +0100
+    98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+
+Coverity reported the following:
+
+*** CID 1527816:  Integer handling issues  (INCOMPATIBLE_CAST)
+drivers/net/wireless/mediatek/mt76/mt7996/debugfs.c:657 in mt7996_rf_regval_set()
+651
+652     static int
+653     mt7996_rf_regval_set(void *data, u64 val)
+654     {
+655     	struct mt7996_dev *dev = data;
+656
+vvv     CID 1527816:  Integer handling issues  (INCOMPATIBLE_CAST)
+vvv     Pointer "&val" points to an object whose effective type is "unsigned long long" (64 bits, unsigned) but is dereferenced as a narrower "unsigned int" (32 bits, unsigned). This may lead to unexpected results depending on machine endianness.
+657     	return mt7996_mcu_rf_regval(dev, dev->mt76.debugfs_reg, (u32 *)&val, true);
+658     }
+659
+660     DEFINE_DEBUGFS_ATTRIBUTE(fops_rf_regval, mt7996_rf_regval_get,
+661     			 mt7996_rf_regval_set, "0x%08llx\n");
+662
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527816 ("Integer handling issues")
+Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+
+Thanks for your attention!
+
 -- 
-Florian
-
+Coverity-bot
