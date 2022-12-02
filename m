@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3175664079A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99EA640799
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 14:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbiLBNSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 08:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S232954AbiLBNSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 08:18:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiLBNSq (ORCPT
+        with ESMTP id S232562AbiLBNSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Dec 2022 08:18:46 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC55A1C3A;
-        Fri,  2 Dec 2022 05:18:42 -0800 (PST)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NNtmL5LLfz6J68q;
-        Fri,  2 Dec 2022 21:18:10 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Fri, 2 Dec 2022 14:18:40 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 2 Dec
- 2022 13:18:40 +0000
-Date:   Fri, 2 Dec 2022 13:18:36 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     <ira.weiny@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 03/11] cxl/mem: Implement Clear Event Records command
-Message-ID: <20221202131836.00000f35@Huawei.com>
-In-Reply-To: <6389630036769_3cbe02947d@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-4-ira.weiny@intel.com>
-        <6389630036769_3cbe02947d@dwillia2-xfh.jf.intel.com.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6102EA1C1C;
+        Fri,  2 Dec 2022 05:18:41 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id b2so11487105eja.7;
+        Fri, 02 Dec 2022 05:18:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Ca6QPpKTJOWP49HF+iF94/pyngRqhYtlzDQu2E2Km0=;
+        b=Z7HcHw8RkcKlHeBQl1aaAPXZP1bfk+tKpSphCq5YjLX2nfaYrF6775w8wv+218FTuq
+         Tx9wjQON91rEhZf87KfCyeN7GVE6V+JozIxJdYjRfcfqkUt/C01GxSBRbgDDN8Gdefi7
+         NGxz5Jt7xIon0I9pz72f6/ZLLdWbs8Z6UdjIjJskx1QxiIrUThMk5ailM6gPQwXH/pDw
+         QwqgO8uFITcBgPwKaRY6Tm3w34lm5ARN+t9r09daZf8KtSaeav0h1aeLYfLYFyGoKgwI
+         rt3uoORjBPD9EuNjGG7fX6iiovn0TiLqhb6hkjIRapqLZxKE3ooLi9mpVeTuMNhtyzIH
+         sitA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8Ca6QPpKTJOWP49HF+iF94/pyngRqhYtlzDQu2E2Km0=;
+        b=r4fL8v82dn3bWe9mljsz3lU0S0/OtwM2tYHOVjqe4msPftrK/4zy9i57agG0tWff9c
+         QIICOLvRX6g9c+Srxy/4lBbe9TXyEfeDVeNMJk98HsEGR7lauwC2Ty2V7DCqh3IGL4Wo
+         YEldtlmFTjvJPciZzOxqCy4MaqWHGO2sMEoraADa5Nkt3Au3IY/wL35HWomAtOzj2xjM
+         c23T7APxGVLrpQhiiY+CiqHujzyfl7NukYwJJbDwbXW0rCNGdZCVkKg5cMmgsyqmifvs
+         8BZnEmfujkMiSZW3vK49/TT+bMsFPOKjp6GGo1cWE8YlDTeNcoiEn/v3Wm2gNlaR+RF9
+         qSWg==
+X-Gm-Message-State: ANoB5plZjk1WHJZqSWVEF9vtghwvGM4KX6TINq5peGHpoPssuRInw/Do
+        J5ITMA8ssGWwhWYyLQ5OEV8h+WtBIAA=
+X-Google-Smtp-Source: AA0mqf7ULWzC5JKX52czQP93Fd7QkmK0RbAObRCCjzci++TGCUeb9XRDe6+4VRUSt3LW3L5fgDeWmQ==
+X-Received: by 2002:a17:906:a20f:b0:7bf:f0e9:1cde with SMTP id r15-20020a170906a20f00b007bff0e91cdemr20338412ejy.512.1669987119944;
+        Fri, 02 Dec 2022 05:18:39 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b007ad9c826d75sm2980336ejf.61.2022.12.02.05.18.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 05:18:39 -0800 (PST)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH 1/1] rcu/kvfree: Use READ_ONCE() when access to krcp->head
+Date:   Fri,  2 Dec 2022 14:18:37 +0100
+Message-Id: <20221202131837.375341-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,67 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+A need_offload_krc() function is now lock-free. A compiler
+can optimize readers in way that they see an old value even
+though writers already updated the krcp->head from another
+path.
 
-> > +static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
-> > +				  enum cxl_event_log_type log,
-> > +				  struct cxl_get_event_payload *get_pl,
-> > +				  u16 total)
-> > +{
-> > +	struct cxl_mbox_clear_event_payload payload = {
-> > +		.event_log = log,
-> > +	};
-> > +	int cnt;
-> > +
-> > +	/*
-> > +	 * Clear Event Records uses u8 for the handle cnt while Get Event
-> > +	 * Record can return up to 0xffff records.
-> > +	 */
-> > +	for (cnt = 0; cnt < total; /* cnt incremented internally */) {
-> > +		u8 nr_recs = min_t(u8, (total - cnt),
-> > +				   CXL_CLEAR_EVENT_MAX_HANDLES);  
-> 
-> This seems overly complicated. @total is a duplicate of
-> @get_pl->record_count, and the 2 loops feel like it could be cut
-> down to one.
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ kernel/rcu/tree.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-You could do something nasty like
-	for (i = 0; i < total; i++) {
-
-		...
-		payload.handle[i % CLEAR_EVENT_MAX_HANDLES] = ...
-		if (i % CXL_CLEAR_EVENT_MAX_HANDLES == CXL_CLEAR_EVENT_MAX_HANDLE - 1) {
-			send command.
-		}
-	}
-
-but that looks worse to me than the double loop.
-
-Making outer loop
-	for (j = 0; j <= total / CXL_CLEAR_EVENT_MAX_HANDLES; j++)
-might bet clearer but then you'd have to do
-records[j * CXL_CLEAR_EVENT_MAX_HANDLES + i] which isn't nice.
-
-Ah well, Ira gets to try and find a happy compromise.
-
-
-...
-
-> > diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
-> > index 70459be5bdd4..7c1ad8062792 100644
-> > --- a/include/uapi/linux/cxl_mem.h
-> > +++ b/include/uapi/linux/cxl_mem.h
-> > @@ -25,6 +25,7 @@
-> >  	___C(RAW, "Raw device command"),                                  \
-> >  	___C(GET_SUPPORTED_LOGS, "Get Supported Logs"),                   \
-> >  	___C(GET_EVENT_RECORD, "Get Event Record"),                       \
-> > +	___C(CLEAR_EVENT_RECORD, "Clear Event Record"),                   \
-> >  	___C(GET_FW_INFO, "Get FW Info"),                                 \
-> >  	___C(GET_PARTITION_INFO, "Get Partition Information"),            \
-> >  	___C(GET_LSA, "Get Label Storage Area"),                          \  
-> 
-> Same, "yikes" / "must be at the end of the enum" feedback.
-
-Macro magic makes that non obvious.. Not that I'd ever said I thought this trick
-was a bad idea ;) 
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index efc79f942b30..d155f2594317 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3029,7 +3029,7 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
+ 		if (!list_empty(&krcp->bulk_head[i]))
+ 			return true;
+ 
+-	return !!krcp->head;
++	return !!READ_ONCE(krcp->head);
+ }
+ 
+ static void
+@@ -3070,7 +3070,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
+ 		// in that case the monitor work is rearmed.
+ 		if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
+ 			(!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
+-				(krcp->head && !krwp->head_free)) {
++				(READ_ONCE(krcp->head) && !krwp->head_free)) {
+ 
+ 			// Channel 1 corresponds to the SLAB-pointer bulk path.
+ 			// Channel 2 corresponds to vmalloc-pointer bulk path.
+-- 
+2.30.2
 
