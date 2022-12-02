@@ -2,164 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFC164114D
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043C064114F
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 00:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbiLBXFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 18:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S234268AbiLBXFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 18:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbiLBXEz (ORCPT
+        with ESMTP id S232011AbiLBXFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 18:04:55 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D687DB0F4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 15:04:51 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id q1so5528924pgl.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 15:04:51 -0800 (PST)
+        Fri, 2 Dec 2022 18:05:37 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CDBD96B3;
+        Fri,  2 Dec 2022 15:05:36 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id k79so6230134pfd.7;
+        Fri, 02 Dec 2022 15:05:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3eWdYeAABAMnoEoSZbvIqfAvjGuNN+NLL8O7DVcc5tw=;
-        b=LPDjcXKRkJF0ChWSvwqdMs4z+WaNIJwO0yY5Q59nGeM3pDMHVwIb6cPYLQgWVJguAB
-         ciAtCM4G0YFdDjeGOSSxDSrCrEHGWnroQqTT/uQy4yjM39FpLTUwFW+H4Sr88a8juay4
-         4lauU6rk4+hFPwNW6zqanjTHmoMbiFkIJBgIM=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xoKGdyet0PQObJj6Xh0zsA2f36Pp85EMjbnYEnvmUQM=;
+        b=fD0j8/NbOIYsu1b4LsqR19QLAAU7FAD8DTiDm65Mre41p1On8RUqOMsCRmJEWSTiAj
+         kekt7P6VcIXmTxawyoMYYylhh8C7C6byqIGrsUa6Qv3R50VkDha0NMgqrAMOiEseP27P
+         Kx8hwqLBvOb7OkhotbqBDZbRFyRIiqE98+bHrSxJCeMD7qjGfCwFl7SxgKWjEhkqcib6
+         OIV5RlARpikUqdNKX7nXQPwv7bgUrMGWhozi0XhKJ137iGZwB4wMu8HSn/ec/bWCERaz
+         s6HqsH87QsbvNnK25zSJibAl5Samwe1cYd5vaeabtsjLWV02dJFqkgieCdQ3Pt+O2kAG
+         gDjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eWdYeAABAMnoEoSZbvIqfAvjGuNN+NLL8O7DVcc5tw=;
-        b=ORu8OSOl2KEJlgvv951sqyjQULCsnLZLPAETQ0zQRdQb/VobJsLAn/VN9gmHOQocrr
-         kafilLmVk7kPZgqkI7OpwBAl5a9V7+gaWstdM/nA69Szlg+rf/j/qGn0EHLPk7uJH1YD
-         TWOeS7td6uErKnGKrCp5D2oU24v7C0KeYSCx1UU7Z4kPnS5QKaFWnjea2mldmUOa/pz+
-         0ZKwR8u8PYEi112CNZC2Z6p1GYXuhHEUmahldn9HMHv3NHEjD9sAvQ8qYxhOHBZ1ExZP
-         vDw6BlkyLHDEzreMfxtmpm/nrokkPUsMgDsD0rWtnhAP9AfXFxQcpPdLVZJXb48NbdgF
-         W5gw==
-X-Gm-Message-State: ANoB5ploXM4HWD+G7DnaittEDCCw9msRTuv+j3BcNnglNGhE1VPbK/SQ
-        fNOOp+UXwIWjWuwptNcllqA3sA==
-X-Google-Smtp-Source: AA0mqf6wCldb+aTkXQCqBjXUJrvffCgFhxrhyXTrWtI0GxUZ1d4eeeVzDPxJ8FdEPH3kPGZuS+RPDw==
-X-Received: by 2002:a63:e34b:0:b0:477:de0a:3233 with SMTP id o11-20020a63e34b000000b00477de0a3233mr34109179pgj.467.1670022291026;
-        Fri, 02 Dec 2022 15:04:51 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c3-20020a17090a4d0300b00218998eb828sm7058622pjg.45.2022.12.02.15.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 15:04:50 -0800 (PST)
-Date:   Fri, 2 Dec 2022 15:04:49 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Ryder Lee <Ryder.Lee@mediatek.com>
-Cc:     Bo Jiao =?utf-8?B?KOeEpuazoik=?= <Bo.Jiao@mediatek.com>,
-        MeiChia Chiu =?utf-8?B?KOmCsee+juWYiSk=?= 
-        <MeiChia.Chiu@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Shayne Chen =?utf-8?B?KOmZs+i7kuS4nik=?= 
-        <Shayne.Chen@mediatek.com>, "nbd@nbd.name" <nbd@nbd.name>,
-        "lorenzo@kernel.org" <lorenzo@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        Sean Wang <Sean.Wang@mediatek.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Sujuan Chen =?utf-8?B?KOmZiOe0oOWonyk=?= 
-        <Sujuan.Chen@mediatek.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Subject: Re: Coverity: mt7915_mcu_get_chan_mib_info(): Memory - illegal
- accesses
-Message-ID: <202212021504.A1942911@keescook>
-References: <202212021424.34C0F695E4@keescook>
- <1a16599dd5e4eed86bae112a232a3599af43a5f2.camel@mediatek.com>
+        bh=xoKGdyet0PQObJj6Xh0zsA2f36Pp85EMjbnYEnvmUQM=;
+        b=3oB4eWFiDht3Hy8oyghCgKEEc8pXc28FUtUEqDXo6KUEFlGrBxzj0OuIvPr7rCW40q
+         YuK02VMxMCrG8YkRYE4FELJv0uCPCDSsh7y+hsKkJQd+M2uX3qPIjINtlqMdAyR/2jsL
+         PMsD4/gX4AdDX7UfwojPbhW7VF2lclKvnKgwoGLEJCRsHPUfFjki+l6UX5zgYc3TaJgQ
+         /Urfj35ZJredD9Wu0w1QFBbWXS3u8hm441w4YiTQnZau1zpjGmktTLxgXGrXgvPyBwpc
+         9yY6jBPKZ3MX4GDtKskjydxTtEEcANh8q5EZykhA/yEXcGge40VOeF0IkVznlEfpFcdj
+         Sobg==
+X-Gm-Message-State: ANoB5pnPjreXWhe8rpZrXydlshYw4IPqYWWjvPa6mR2jzX2rsjmXUcUn
+        7E4K51/Y5Lk20ZqEqE9IS+rf5w+Vh0YDkQ==
+X-Google-Smtp-Source: AA0mqf6EbrtO+qzxMt/ip1UyDT+37W0dLxgRtcEst9/PNbIagRnYgmCD7sp6jsb7Y8V7vMu6GLrWsA==
+X-Received: by 2002:a63:d34e:0:b0:477:650a:705c with SMTP id u14-20020a63d34e000000b00477650a705cmr45779060pgi.588.1670022335839;
+        Fri, 02 Dec 2022 15:05:35 -0800 (PST)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id 3-20020a631543000000b0044ed37dbca8sm4590059pgv.2.2022.12.02.15.05.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 15:05:35 -0800 (PST)
+Message-ID: <462db4cd-24d0-7541-1a7c-e4a87d69c217@gmail.com>
+Date:   Sat, 3 Dec 2022 08:05:31 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a16599dd5e4eed86bae112a232a3599af43a5f2.camel@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] PM / devfreq: Use device_match_of_node()
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, cw00.choi@samsung.com
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <202211251516222787845@zte.com.cn>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <202211251516222787845@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 10:56:19PM +0000, Ryder Lee wrote:
-> On Fri, 2022-12-02 at 14:24 -0800, coverity-bot wrote:
-> > Hello!
-> > 
-> > This is an experimental semi-automated report about issues detected
-> > by
-> > Coverity from a scan of next-20221202 as part of the linux-next scan
-> > project:
-> > 
-> https://urldefense.com/v3/__https://scan.coverity.com/projects/linux-next-weekly-scan__;!!CTRNKA9wMg0ARbw!j7j_C0KpO4VD2yMOodvpeIexTGq4fhy2yq6nokNua9u4LToiUOLk4ou8JFFNrXkrh80d5BK2k44faRQstHE9$ 
-> >  
-> > 
-> > You're getting this email because you were associated with the
-> > identified
-> > lines of code (noted below) that were touched by commits:
-> > 
-> >   Thu Feb 3 13:57:56 2022 +0100
-> >     417a4534d223 ("mt76: mt7915: update mt7915_chan_mib_offs for
-> > mt7916")
-> > 
-> > Coverity reported the following:
-> > 
-> > *** CID 1527801:  Memory - illegal accesses  (OVERRUN)
-> > drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:3005 in
-> > mt7915_mcu_get_chan_mib_info()
-> > 2999     		start = 5;
-> > 3000     		ofs = 0;
-> > 3001     	}
-> > 3002
-> > 3003     	for (i = 0; i < 5; i++) {
-> > 3004     		req[i].band = cpu_to_le32(phy->mt76->band_idx);
-> > vvv     CID 1527801:  Memory - illegal accesses  (OVERRUN)
-> > vvv     Overrunning array "offs" of 9 4-byte elements at element
-> > index 9 (byte offset 39) using index "i + start" (which evaluates to
-> > 9).
-> > 3005     		req[i].offs = cpu_to_le32(offs[i + start]);
-> > 3006
-> > 3007     		if (!is_mt7915(&dev->mt76) && i == 3)
-> > 3008     			break;
-> > 3009     	}
-> > 3010
-> > 
-> > If this is a false positive, please let us know so we can mark it as
-> > such, or teach the Coverity rules to be smarter. If not, please make
-> > sure fixes get into linux-next. :) For patches fixing this, please
-> > include these lines (but double-check the "Fixes" first):
-> > 
+On 22. 11. 25. 16:16, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> I think this is a false postive as the subsequent check 'if
-> (!is_mt7915(&dev->mt76) && i == 3)' should break array "offs" of 8.
-
-Ah, okay. What if is_mt7915(&dev->mt76) is always true?
-
--Kees
-
+> Replace the open-code with device_match_of_node().
 > 
-> Ryder
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/devfreq/devfreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> > Addresses-Coverity-ID: 1527801 ("Memory - illegal accesses")
-> > Fixes: 417a4534d223 ("mt76: mt7915: update mt7915_chan_mib_offs for
-> > mt7916")
-> > 
-> > Thanks for your attention!
-> > 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 8c5f6f7fca11..817c71da391a 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -1057,7 +1057,7 @@ struct devfreq *devfreq_get_devfreq_by_node(struct device_node *node)
+>  	mutex_lock(&devfreq_list_lock);
+>  	list_for_each_entry(devfreq, &devfreq_list, node) {
+>  		if (devfreq->dev.parent
+> -			&& devfreq->dev.parent->of_node == node) {
+> +			&& device_match_of_node(devfreq->dev.parent, node)) {
+>  			mutex_unlock(&devfreq_list_lock);
+>  			return devfreq;
+>  		}
+
+Applied it.
 
 -- 
-Kees Cook
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
