@@ -2,174 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E624C640E5A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BFF640E55
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbiLBTVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S234694AbiLBTVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234378AbiLBTVY (ORCPT
+        with ESMTP id S234520AbiLBTVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:21:24 -0500
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADF6EF8B3;
-        Fri,  2 Dec 2022 11:21:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=0NUu4ctHIlOxLau4TIcj+Sj7pIi/v+JOenF17DqHjZQ=; b=iSRBv/TWo0zdYt2Uko8NDseLAg
-        jPbzfbBU9FPjf4MmG+1kiEz4Eu4gFoxlMNgt6e80tdC0woxsEJLWb72ZLr0Iicss49YjgqrvGzt65
-        6GbXFVfCQQOPeZSRJT1bI7AENvEJbka+icCHmED7OvyAYBOOHCHbRo70f11BbRNBd7kVf/bw6rIGc
-        sX0Xdb3M6T2Cnw3nEvdVs0kU89A2D43/LTj81k4zrxr8Enn1PgETTx4O+fS91odU1aN3V7cWEBtb5
-        jvq9gNbHS+FWD1VG+mgWQ6AJfq3brAO6oBhmvjEiLoIwsOOgTiC2wqmx/BzRv+dQSEbghWKZ+Tx6P
-        gLedwFjg==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1p1Bak-0098Qj-Hm; Fri, 02 Dec 2022 20:20:58 +0100
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1p1Baj-00Ex9e-3A;
-        Fri, 02 Dec 2022 20:20:57 +0100
-Date:   Fri, 2 Dec 2022 20:20:57 +0100
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lin Jinhan <troy.lin@rock-chips.com>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: RNG: Add Rockchip RNG bindings
-Message-ID: <Y4pQGRMzILrkRP/2@aurel32.net>
-Mail-Followup-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lin Jinhan <troy.lin@rock-chips.com>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" <linux-crypto@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221128184718.1963353-1-aurelien@aurel32.net>
- <20221128184718.1963353-2-aurelien@aurel32.net>
- <89b16ec5-f9a5-f836-f51a-8325448e4775@linaro.org>
+        Fri, 2 Dec 2022 14:21:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FFBF1156;
+        Fri,  2 Dec 2022 11:21:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0523B8223F;
+        Fri,  2 Dec 2022 19:20:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6811CC433D6;
+        Fri,  2 Dec 2022 19:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670008858;
+        bh=TEIw1cUY2lL5Hetl818aWjhxu/AHsDNsxwU9jftNBDY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ajegUGXgCAj8lULf+7C5iA1QhBhCf/V7xkPU80JXTF6SMXZG5hlSvmr6sm3LGbHE3
+         PwtNlnGaJwXbSPYUdj4baBNACRXaKE4TdSl1PosPZJVdTMg/+5OVvGzxcV0CZ+E8Ou
+         O6DXmeSCPn0BYp/kjyjvQbcRm9WZBNjag4oWUvUt7VxGOXd75tR3dRPLNsJu6cHO8U
+         zbmSLRdOFJPgPYNgM93D2QdcLZUxsgbgavuwTVmFt/xI1y9o3Ji5ZCSTX/P1GOZZwL
+         K4vm+HUNEvClSJ3m/CAQY6ubdMaii+I80NXgXPHpfHqUVx2EDDc91boUCQs4kUelsy
+         2fgUO8CxrwTiQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 06CD15C095D; Fri,  2 Dec 2022 11:20:58 -0800 (PST)
+Date:   Fri, 2 Dec 2022 11:20:58 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 1/1] rcu/kvfree: Use READ_ONCE() when access to krcp->head
+Message-ID: <20221202192058.GV4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221202131837.375341-1-urezki@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <89b16ec5-f9a5-f836-f51a-8325448e4775@linaro.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221202131837.375341-1-urezki@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Thanks for your feedback.
-
-On 2022-11-29 10:24, Krzysztof Kozlowski wrote:
-> On 28/11/2022 19:47, Aurelien Jarno wrote:
-> > Add the RNG bindings for the RK3568 SoC from Rockchip
+On Fri, Dec 02, 2022 at 02:18:37PM +0100, Uladzislau Rezki (Sony) wrote:
+> A need_offload_krc() function is now lock-free. A compiler
+> can optimize readers in way that they see an old value even
+> though writers already updated the krcp->head from another
+> path.
 > 
-> Use subject prefixes matching the subsystem (git log --oneline -- ...),
-> so it is rng, not RNG. Also, you are not adding all-Rockhip RNG but a
-> specific device.
-> 
-> Subject: drop second, redundant "bindings".
-> 
-> > 
-> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> > ---
-> >  .../bindings/rng/rockchip,rk3568-rng.yaml     | 60 +++++++++++++++++++
-> >  1 file changed, 60 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml b/Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml
-> > new file mode 100644
-> > index 000000000000..c2f5ef69cf07
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rng/rockchip,rk3568-rng.yaml
-> > @@ -0,0 +1,60 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rng/rockchip,rk3568-rng.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Rockchip TRNG
-> > +
-> > +description: True Random Number Generator for some Rockchip SoCs
-> 
-> s/for some Rockchip SoCs/on Rokchip RK3568 SoC/
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-My point there is that this driver should also work for other Rockchip
-SoCs like the RK3588, but 1) it support for this SoC is being added and
-not yet available in the Linux kernel 2) it hasn't been tested.
+Queued, thank you!!!
 
-Should we mark it as RK3568 specific (or rather RK356x) and change that
-once a compatible entry is added for the RK3588?
+With the usual wordsmithing, so please let me know if I messed something
+up.
 
-> > +
-> > +maintainers:
-> > +  - Aurelien Jarno <aurelien@aurel32.net>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - rockchip,rk3568-rng
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: TRNG clock
-> > +      - description: TRNG AHB clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: trng_clk
-> > +      - const: trng_hclk
-> 
-> These are too vague names. Everything is a clk in clock-names, so no
-> need usually to add it as name suffix. Give them some descriptive names,
-> e.g. core and ahb.
+							Thanx, Paul
 
-Those names are based on <include/dt-bindings/clock/rk3568-cru.h> and
-other drivers seems to have used those for the names. But I understand
-that broken things could have been merged, so I am fine changing that to
-core and ahb.
+------------------------------------------------------------------------
 
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +
+commit 9615ca28bc2c94cf2e092f06baace941fbf3b7e8
+Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Date:   Fri Dec 2 14:18:37 2022 +0100
 
-Regards
-Aurelien
+    rcu/kvfree: Use READ_ONCE() when access to krcp->head
+    
+    The need_offload_krc() function is now lock-free, which gives the
+    compiler freedom to load old values from plain C-language loads from
+    the kfree_rcu_cpu struture's ->head pointer.  This commit therefore
+    applied READ_ONCE() to these loads.
+    
+    Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                 http://www.aurel32.net
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 2d16a0eee792d..ee8a6a711719a 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3029,7 +3029,7 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
+ 		if (!list_empty(&krcp->bulk_head[i]))
+ 			return true;
+ 
+-	return !!krcp->head;
++	return !!READ_ONCE(krcp->head);
+ }
+ 
+ static void
+@@ -3070,7 +3070,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
+ 		// in that case the monitor work is rearmed.
+ 		if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp->bulk_head_free[0])) ||
+ 			(!list_empty(&krcp->bulk_head[1]) && list_empty(&krwp->bulk_head_free[1])) ||
+-				(krcp->head && !krwp->head_free)) {
++				(READ_ONCE(krcp->head) && !krwp->head_free)) {
+ 
+ 			// Channel 1 corresponds to the SLAB-pointer bulk path.
+ 			// Channel 2 corresponds to vmalloc-pointer bulk path.
