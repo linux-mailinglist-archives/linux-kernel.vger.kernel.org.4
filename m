@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1EC640CAB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751A7640CAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234312AbiLBR4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
+        id S234216AbiLBR5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbiLBR4U (ORCPT
+        with ESMTP id S234368AbiLBR46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:56:20 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0869EE11AE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:56:20 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id x12so2382814ilg.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:56:20 -0800 (PST)
+        Fri, 2 Dec 2022 12:56:58 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E02E1190
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 09:56:55 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id h33so4954502pgm.9
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 09:56:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nVoAug5gtejJ7/IIk4d5/d0qHj9yVDsmAukGbbYb1cA=;
-        b=E07yENdBA00zt//BbQlbasnVIc0xyAswa76oEqdXbhsEAURO/LuHpFMUlXgWEYe9Yz
-         QnlwfyBzNr9hiREgzpQpSmu0b+EV0vGXb7EwNlBRJ7bqzAfK71E20I0RrZaJ7JOjwlYk
-         hkpr1T57uA8sQjmSrazUJh73SvMtrFdp23eDs=
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fScTfgURmwWT7H6zKPrxCgIY6rjNdptOvR99AIwlkJg=;
+        b=qb6MUvwgM++qnYXsfWIMcG9mXhaGG+7+W1fGbdBit0a6xA/KVfOeb0AjU4ykvOVMiE
+         F/4LeYBBOxx7tr90Hg3fFY+tVhWWKzQfFcgnR9USKBMhG6/HeAwJYgGBzpFscpdhRoxy
+         eLI7faRS9qoVUi6eRfdJ9Ip/4/x6Gb9giuxyuyAapHWfIQAsfoAoikO/quYMHq94fzgj
+         HFY+5Il1GRVaAUWc+k+Ev8DXlXAXTOS0xSgGiq7k1yhVeYkNct8C6uOB97oG1XKnL8dQ
+         U9D3yFpqWxlmwu332bMtPAFiStjDXK/9KHKn7pC5k5PQdlXGZiYHAOAWTMX+D+VBJy4D
+         MOKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nVoAug5gtejJ7/IIk4d5/d0qHj9yVDsmAukGbbYb1cA=;
-        b=SaznEEwxUQGyJTqBU0zSJuL/ZdlEqrslP/VHuK3VGATLsE8pOWzmg1r6V8JRgws5S/
-         jehzyEhKEmM6G1vTutvVfKoAtw4sdAIWldX3zPvZQDvl1fUeCeL0YCqxJAvR9knSDict
-         dq5oS0QtYhjFT1rsDskhHdmGWkg832RTkAmWB8BHin4N+kZFJ5/uV7FvuInrDfwI31Qx
-         lQxA9lpvQ390L5mR8yCiOR427Wp5vbXwcsAGYWawswFPUTOK10R+5P4JMLqwdCefh11I
-         rJlp/E0wRFD50qmfeqCdJNjqgdRyl+TZnCz38Z82/82y3jKNIiEIShISKZu7VHpvHN3b
-         oX5w==
-X-Gm-Message-State: ANoB5pnlZ3M93p4bO+OUyHnUhYFcaiv3Tr4/wJgWQpWANmmaACywOX8g
-        nyULJ/odk7dBeCvtYUl2jmPLkw==
-X-Google-Smtp-Source: AA0mqf7fs6vkd4J//JOhif7iVzs8494VtF07NA9AMLmqJ2gEGD7iBnwcqaZNp3LsGelk4gMMUisFlQ==
-X-Received: by 2002:a92:c004:0:b0:303:42f5:4268 with SMTP id q4-20020a92c004000000b0030342f54268mr1165054ild.205.1670003779347;
-        Fri, 02 Dec 2022 09:56:19 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id l18-20020a026a12000000b0038826e709e2sm2871976jac.111.2022.12.02.09.56.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 09:56:18 -0800 (PST)
-Message-ID: <ef842cd8-1228-54e2-c298-f524be7abc59@linuxfoundation.org>
-Date:   Fri, 2 Dec 2022 10:56:18 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests/ftrace: Use long for synthetic event probe test
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221202120331.343a821d@gandalf.local.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221202120331.343a821d@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fScTfgURmwWT7H6zKPrxCgIY6rjNdptOvR99AIwlkJg=;
+        b=GDYvi8o1Uv9jDrc9Wk8KdwHgQtp7cySMDqCpF2So9NXbLXAWw+NEZYDpFclqBuv6XX
+         7aSEH/OPDcjJm+WxwynvuPLwc9+8rlGXLfEIXs4QBvsgjQVlR9lVHa52UFelWB8bgEVJ
+         Ux6MeBcGAtCm3bxUhpk/YajQ2rpGRIXU4yF2Dr+hF3MEnPFO/7rExUgba/QWqLO5iqjj
+         hez/5RsM1C6mExoM3e5r5x1uZ4dsXXA/L7XSTOvHuU2zLFRVHTJ0vpIOiM2hXKPKWI/7
+         6mSdWvPdoqDO88lqNsZ+XP3+xfz3Zs7kCcZmCiQpCPGckqcLD1lkWmQ2Yl8Vfv5T+7TX
+         Tt0A==
+X-Gm-Message-State: ANoB5pkWZQHVbb3r9u2J8m96sNTKLc0y04AOMD2OyBfofbgC8FBBX1fT
+        0y1q0ZQ/MxYw/1iU53JIis0cYQ==
+X-Google-Smtp-Source: AA0mqf7BpcQXuIBwLb9SatLFLu0m0DKBXhr2dsQifXx6G9te8219mc7G41HgJyuAzCPt6gBvjrti9A==
+X-Received: by 2002:a63:d356:0:b0:477:1a2:390e with SMTP id u22-20020a63d356000000b0047701a2390emr64563485pgi.83.1670003814551;
+        Fri, 02 Dec 2022 09:56:54 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id mt12-20020a17090b230c00b002135e8074b1sm6920965pjb.55.2022.12.02.09.56.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 09:56:54 -0800 (PST)
+Date:   Fri, 02 Dec 2022 09:56:54 -0800 (PST)
+X-Google-Original-Date: Fri, 02 Dec 2022 09:56:41 PST (-0800)
+Subject:     Re: [PATCH v2 1/5] kbuild: add test-{le,ge,lt,gt} macros
+In-Reply-To: <20221123151828.509565-1-masahiroy@kernel.org>
+CC:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        masahiroy@kernel.org, aou@eecs.berkeley.edu, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, mingo@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
+        Paul Walmsley <paul.walmsley@sifive.com>, tglx@linutronix.de,
+        trix@redhat.com, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev, x86@kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     masahiroy@kernel.org
+Message-ID: <mhng-0ed46e51-0907-46b5-9dc8-90a3fd3762c6@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,19 +76,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 10:03, Steven Rostedt wrote:
->  From 8bb1734388b89bdb2ac176882786dc02b7df92c2 Mon Sep 17 00:00:00 2001
+On Wed, 23 Nov 2022 07:18:24 PST (-0800), masahiroy@kernel.org wrote:
+> Because GNU Make is only able to handle strings, it is very hard to
+> perform arighmetic in Makefiles.
+>
+> When we compare two integers, we invokes shell. One example is in the
+> top Makefile:
+>
+>   ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
+>
+> This is more expensive than using built-in functions since it forks a
+> process.
+>
+> If we know the two have the same number of digits, we can do better.
+>
+> This commit adds four macros, test-le, test-ge, test-lt, test-gt.
+>
+> $(call test-lt, A, B) is evaluated to 'y' if A is less than B, or
+> empty otherwise. This will replace $(call shell test A -lt B).
+>
+> Again, the limitation is that A and B must have the same number of
+> digits because these macros are based on $(sort ) function.
+>
+>   $(call test-lt, 1, 9)    -->  y        (Works!)
+>   $(call test-lt, 10, 9)   -->  y        (Not work...)
+>
+> To make the latter work, you need to add '0' prefix to align the number
+> of digits:
+>
+>   $(call test-lt, 10, 09)  -->  empty    (Works!)
+>
+> Actually, we can live with this limitation in many places. As for the
+> example above, we know $(CONFIG_LLD_VERSION) is 6-digits because the
+> minimal supported version of LLVM is 11.0.0.
+>
+> So, the shell invocation can be replaced with more efficient code:
+>
+>   ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+>
+> Of course, this assumption will break when LLVM 100 is released, but it
+> will be far in the future.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+> (no changes since v1)
+>
+>  Makefile               |  2 +-
+>  arch/riscv/Makefile    |  2 +-
+>  arch/x86/Makefile      |  2 +-
+>  scripts/Kbuild.include | 10 ++++++++++
+>  4 files changed, 13 insertions(+), 3 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 6f846b1f2618..eb80332f7b51 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -986,7 +986,7 @@ KBUILD_LDFLAGS += -mllvm -import-instr-limit=5
+>  # Check for frame size exceeding threshold during prolog/epilog insertion
+>  # when using lld < 13.0.0.
+>  ifneq ($(CONFIG_FRAME_WARN),0)
+> -ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
+> +ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+>  KBUILD_LDFLAGS	+= -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
+>  endif
+>  endif
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 0d13b597cb55..faf2c2177094 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -37,7 +37,7 @@ else
+>  endif
+>
+>  ifeq ($(CONFIG_LD_IS_LLD),y)
+> -ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
+> +ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
+>  	KBUILD_CFLAGS += -mno-relax
+>  	KBUILD_AFLAGS += -mno-relax
+>  ifndef CONFIG_AS_IS_LLVM
 
-Steve,
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
 
-git am doesn't like the line above and I get "Patch is empty"
-error.
-
-I had to manually remove this to apply the patch to linux-kselftest
-next for the merge window.
-
-Please check if there is something in your workflow that adds this
-problematic line.
-
-thanks,
--- Shuah
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 415a5d138de4..e72c7a49cd59 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -211,7 +211,7 @@ endif
+>  KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
+>
+>  ifdef CONFIG_LTO_CLANG
+> -ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
+> +ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+>  KBUILD_LDFLAGS	+= -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
+>  endif
+>  endif
+> diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+> index cbe28744637b..9996f34327cb 100644
+> --- a/scripts/Kbuild.include
+> +++ b/scripts/Kbuild.include
+> @@ -11,6 +11,16 @@ space   := $(empty) $(empty)
+>  space_escape := _-_SPACE_-_
+>  pound := \#
+>
+> +###
+> +# Comparison macros.
+> +# Usage: $(call test-le, A, B)
+> +# works like shell's "test A -le B", but A and B must have the same number of
+> +# digits since it is just ASCII sort.
+> +test-le = $(if $(filter $1, $(firstword $(sort $1 $2))),y)
+> +test-ge = $(call test-le, $2, $1)
+> +test-lt = $(if $(filter-out $2, $(firstword $(sort $1 $2))),y)
+> +test-gt = $(call test-lt, $2, $1)
+> +
+>  ###
+>  # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
+>  dot-target = $(dir $@).$(notdir $@)
