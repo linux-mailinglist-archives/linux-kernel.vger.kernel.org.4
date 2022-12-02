@@ -2,137 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E756402E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929486402F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbiLBJFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S232798AbiLBJLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiLBJFb (ORCPT
+        with ESMTP id S231933AbiLBJLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:05:31 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FB525CC;
-        Fri,  2 Dec 2022 01:05:30 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNn8n16BMz5BNS0;
-        Fri,  2 Dec 2022 17:05:29 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B295Avb031743;
-        Fri, 2 Dec 2022 17:05:10 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 2 Dec 2022 17:05:12 +0800 (CST)
-Date:   Fri, 2 Dec 2022 17:05:12 +0800 (CST)
-X-Zmail-TransId: 2af96389bfc805f2c885
-X-Mailer: Zmail v1.0
-Message-ID: <202212021705128095546@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <hdegoede@redhat.com>
-Cc:     <justin.ernst@hpe.com>, <markgross@kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBwbGF0Zm9ybS94ODY6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B295Avb031743
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6389BFD9.001 by FangMail milter!
-X-FangMail-Envelope: 1669971929/4NNn8n16BMz5BNS0/6389BFD9.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6389BFD9.001/4NNn8n16BMz5BNS0
+        Fri, 2 Dec 2022 04:11:20 -0500
+X-Greylist: delayed 317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 01:11:18 PST
+Received: from out-124.mta0.migadu.com (out-124.mta0.migadu.com [IPv6:2001:41d0:1004:224b::7c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74F99950E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:11:18 -0800 (PST)
+Date:   Fri, 2 Dec 2022 17:05:54 +0800
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     Bough Chen <haibo.chen@nxp.com>
+Cc:     Frank Li <frank.li@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+Subject: Re: [PATCH v2 1/1] iio: imx8qxp-adc: fix irq flood when call
+ imx8qxp_adc_read_raw()
+Message-ID: <20221202090554.GA10754@chq-T47>
+References: <20221201140110.2653501-1-Frank.Li@nxp.com>
+ <DB7PR04MB401084C620570D234A535EE990179@DB7PR04MB4010.eurprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DB7PR04MB401084C620570D234A535EE990179@DB7PR04MB4010.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
-
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/platform/x86/uv_sysfs.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/platform/x86/uv_sysfs.c b/drivers/platform/x86/uv_sysfs.c
-index 625b0b79d185..73fc38ee7430 100644
---- a/drivers/platform/x86/uv_sysfs.c
-+++ b/drivers/platform/x86/uv_sysfs.c
-@@ -119,12 +119,12 @@ struct uv_hub {
-
- static ssize_t hub_name_show(struct uv_bios_hub_info *hub_info, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "%s\n", hub_info->name);
-+	return sysfs_emit(buf, "%s\n", hub_info->name);
- }
-
- static ssize_t hub_location_show(struct uv_bios_hub_info *hub_info, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "%s\n", hub_info->location);
-+	return sysfs_emit(buf, "%s\n", hub_info->location);
- }
-
- static ssize_t hub_partition_show(struct uv_bios_hub_info *hub_info, char *buf)
-@@ -460,12 +460,12 @@ struct uv_pci_top_obj {
-
- static ssize_t uv_pci_type_show(struct uv_pci_top_obj *top_obj, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "%s\n", top_obj->type);
-+	return sysfs_emit(buf, "%s\n", top_obj->type);
- }
-
- static ssize_t uv_pci_location_show(struct uv_pci_top_obj *top_obj, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "%s\n", top_obj->location);
-+	return sysfs_emit(buf, "%s\n", top_obj->location);
- }
-
- static ssize_t uv_pci_iio_stack_show(struct uv_pci_top_obj *top_obj, char *buf)
-@@ -475,7 +475,7 @@ static ssize_t uv_pci_iio_stack_show(struct uv_pci_top_obj *top_obj, char *buf)
-
- static ssize_t uv_pci_ppb_addr_show(struct uv_pci_top_obj *top_obj, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "%s\n", top_obj->ppb_addr);
-+	return sysfs_emit(buf, "%s\n", top_obj->ppb_addr);
- }
-
- static ssize_t uv_pci_slot_show(struct uv_pci_top_obj *top_obj, char *buf)
-@@ -737,7 +737,7 @@ static ssize_t coherence_id_show(struct kobject *kobj,
- static ssize_t uv_type_show(struct kobject *kobj,
- 			struct kobj_attribute *attr, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "%s\n", uv_type_string());
-+	return sysfs_emit(buf, "%s\n", uv_type_string());
- }
-
- static ssize_t uv_archtype_show(struct kobject *kobj,
-@@ -749,13 +749,13 @@ static ssize_t uv_archtype_show(struct kobject *kobj,
- static ssize_t uv_hub_type_show(struct kobject *kobj,
- 			struct kobj_attribute *attr, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "0x%x\n", uv_hub_type());
-+	return sysfs_emit(buf, "0x%x\n", uv_hub_type());
- }
-
- static ssize_t uv_hubless_show(struct kobject *kobj,
- 			struct kobj_attribute *attr, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "0x%x\n", uv_get_hubless_system());
-+	return sysfs_emit(buf, "0x%x\n", uv_get_hubless_system());
- }
-
- static struct kobj_attribute partition_id_attr =
--- 
-2.25.1
+On 02 12月 22 03:23:55, Bough Chen wrote:
+> > -----Original Message-----
+> > From: Frank Li <frank.li@nxp.com>
+> > Sent: 2022年12月1日 22:01
+> > To: Bough Chen <haibo.chen@nxp.com>
+> > Cc: cai.huoqing@linux.dev; festevam@gmail.com; Frank Li <frank.li@nxp.com>;
+> > imx@lists.linux.dev; jic23@kernel.org; kernel@pengutronix.de;
+> > lars@metafoo.de; linux-arm-kernel@lists.infradead.org;
+> > linux-iio@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>;
+> > linux-kernel@vger.kernel.org; s.hauer@pengutronix.de; shawnguo@kernel.org
+> > Subject: [PATCH v2 1/1] iio: imx8qxp-adc: fix irq flood when call
+> > imx8qxp_adc_read_raw()
+> > 
+> > irq flood happen when run
+> >     cat /sys/bus/iio/devices/iio:device0/in_voltage1_raw
+> > 
+> > imx8qxp_adc_read_raw()
+> > {
+> > 	...
+> > 	enable irq
+> > 	/* adc start */
+> > 	writel(1, adc->regs + IMX8QXP_ADR_ADC_SWTRIG);
+> > 	^^^^ trigger irq flood.
+> > 	wait_for_completion_interruptible_timeout();
+> > 	readl(adc->regs + IMX8QXP_ADR_ADC_RESFIFO);
+> > 	^^^^ clear irq here.
+> > 	...
+> > }
+> > 
+> > There is only FIFO watermark interrupt at this ADC controller.
+> > IRQ line will be assert until software read data from FIFO.
+> > So IRQ flood happen during wait_for_completion_interruptible_timeout().
+> > 
+> > Move FIFO read into irq handle to avoid irq flood.
+> > 
+> > Fixes: 1e23dcaa1a9f ("iio: imx8qxp-adc: Add driver support for NXP IMX8QXP
+> > ADC")
+> > Cc: stable@vger.kernel.org
+> > 
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> 
+> Thanks for the quick fix. The total read count in irq handler is fifo_count which is read from register, this is reasonable.
+> 
+> Reviewed-by: Haibo Chen <haibo.chen@nxp.com>
+The same, thanks.
+Reviewed-by: Cai Huoqing <cai.huoqing@linux.dev>
+> 
+> Best Regards
+> Haibo Chen
+> > ---
+> > Change from v1 to v2
+> >  - move complete() after read fifo
+> > 
+> > 
+> >  drivers/iio/adc/imx8qxp-adc.c | 11 +++++++++--
+> >  1 file changed, 9 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/imx8qxp-adc.c b/drivers/iio/adc/imx8qxp-adc.c index
+> > 36777b827165..f5a0fc9e64c5 100644
+> > --- a/drivers/iio/adc/imx8qxp-adc.c
+> > +++ b/drivers/iio/adc/imx8qxp-adc.c
+> > @@ -86,6 +86,8 @@
+> > 
+> >  #define IMX8QXP_ADC_TIMEOUT		msecs_to_jiffies(100)
+> > 
+> > +#define IMX8QXP_ADC_MAX_FIFO_SIZE		16
+> > +
+> >  struct imx8qxp_adc {
+> >  	struct device *dev;
+> >  	void __iomem *regs;
+> > @@ -95,6 +97,7 @@ struct imx8qxp_adc {
+> >  	/* Serialise ADC channel reads */
+> >  	struct mutex lock;
+> >  	struct completion completion;
+> > +	u32 fifo[IMX8QXP_ADC_MAX_FIFO_SIZE];
+> >  };
+> > 
+> >  #define IMX8QXP_ADC_CHAN(_idx) {				\
+> > @@ -238,8 +241,7 @@ static int imx8qxp_adc_read_raw(struct iio_dev
+> > *indio_dev,
+> >  			return ret;
+> >  		}
+> > 
+> > -		*val = FIELD_GET(IMX8QXP_ADC_RESFIFO_VAL_MASK,
+> > -				 readl(adc->regs + IMX8QXP_ADR_ADC_RESFIFO));
+> > +		*val = adc->fifo[0];
+> > 
+> >  		mutex_unlock(&adc->lock);
+> >  		return IIO_VAL_INT;
+> > @@ -265,10 +267,15 @@ static irqreturn_t imx8qxp_adc_isr(int irq, void
+> > *dev_id)  {
+> >  	struct imx8qxp_adc *adc = dev_id;
+> >  	u32 fifo_count;
+> > +	int i;
+> > 
+> >  	fifo_count = FIELD_GET(IMX8QXP_ADC_FCTRL_FCOUNT_MASK,
+> >  			       readl(adc->regs + IMX8QXP_ADR_ADC_FCTRL));
+> > 
+> > +	for (i = 0; i < fifo_count; i++)
+> > +		adc->fifo[i] = FIELD_GET(IMX8QXP_ADC_RESFIFO_VAL_MASK,
+> > +				readl_relaxed(adc->regs + IMX8QXP_ADR_ADC_RESFIFO));
+> > +
+> >  	if (fifo_count)
+> >  		complete(&adc->completion);
+> > 
+> > --
+> > 2.34.1
+> 
