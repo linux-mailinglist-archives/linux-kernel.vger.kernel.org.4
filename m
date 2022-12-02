@@ -2,165 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E18D640E8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 934E1640E92
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 20:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiLBTe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 14:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S234803AbiLBTgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 14:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLBTe5 (ORCPT
+        with ESMTP id S234204AbiLBTgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 14:34:57 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90769A6074;
-        Fri,  2 Dec 2022 11:34:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9136923A;
-        Fri,  2 Dec 2022 11:35:01 -0800 (PST)
-Received: from bogus (unknown [10.57.5.79])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A467B3F67D;
-        Fri,  2 Dec 2022 11:34:52 -0800 (PST)
-Date:   Fri, 2 Dec 2022 19:34:49 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Wang Honghui <honghui.wang@ucas.com.cn>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64/boot/dts and arm_scpi: add to support Phytium
- FT2004 CPU
-Message-ID: <20221202193449.vhmta6oou7oxf7gp@bogus>
-References: <0D48D1B7AC373F2F+Y4l+EOBIC9SmZD2A@TP-P15V>
+        Fri, 2 Dec 2022 14:36:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04AFF28B6;
+        Fri,  2 Dec 2022 11:35:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BFA2B81C27;
+        Fri,  2 Dec 2022 19:35:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB759C433D6;
+        Fri,  2 Dec 2022 19:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670009756;
+        bh=UzDWbYXlCGyLM2eIK2tt5Fzt85naQob+4laVVNHKsTs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IzHfAHRFLGd9i1ue3fBcAuKoV2DWdzUnPqcNy2txJ2VgI1YcTpyKFADMU/Cb7fENu
+         gDu/23dkXvEnI0IZAcNnIpVNX7IxZOwwPHF3JwDmqqBAyFx7XPmiWLefroY+Hnmdps
+         HcHh+mHr3LJKRPwwWzChEMg/ujLayEEFHkxv3HIz1PDTV2NKNgJhX4nuzrJWRfzjao
+         14ZoVPjGVDU9zWI91EZxMVHHgrkCFk7FlnjNkSAEm6rbGPtRXhvc9i96WC33yKAE7R
+         Cha65nEPaNuvXVTjkii8vwWkY82HNNfTK+Xo1YdUKKhvdAOQwIXZ9hfFwgu2hz8zXy
+         Jgsoomp79kveQ==
+Received: by pali.im (Postfix)
+        id DE23587A; Fri,  2 Dec 2022 20:35:52 +0100 (CET)
+Date:   Fri, 2 Dec 2022 20:35:52 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Subject: Re: [PATCH 5/5] powerpc: dts: remove label = "cpu" from DSA
+ dt-binding
+Message-ID: <20221202193552.vehqk6u53n36zxwl@pali>
+References: <20221130141040.32447-1-arinc.unal@arinc9.com>
+ <20221130141040.32447-6-arinc.unal@arinc9.com>
+ <87a647s8zg.fsf@mpe.ellerman.id.au>
+ <20221201173902.zrtpeq4mkk3i3vpk@pali>
+ <20221201234400.GA1692656-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0D48D1B7AC373F2F+Y4l+EOBIC9SmZD2A@TP-P15V>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221201234400.GA1692656-robh@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 12:24:48PM +0800, Wang Honghui wrote:
-> arm64/boot/dts and arm_scpi: add to support Phytium FT2004 CPU.
->
+On Thursday 01 December 2022 17:44:00 Rob Herring wrote:
+> On Thu, Dec 01, 2022 at 06:39:02PM +0100, Pali Rohár wrote:
+> > On Thursday 01 December 2022 21:40:03 Michael Ellerman wrote:
+> > > Arınç ÜNAL <arinc.unal@arinc9.com> writes:
+> > > > This is not used by the DSA dt-binding, so remove it from all devicetrees.
+> > > >
+> > > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> > > > ---
+> > > >  arch/powerpc/boot/dts/turris1x.dts | 2 --
+> > > >  1 file changed, 2 deletions(-)
+> > > 
+> > > Adding Pali to Cc.
+> > > 
+> > > These were only recently updated in commit:
+> > > 
+> > >   8bf056f57f1d ("powerpc: dts: turris1x.dts: Fix labels in DSA cpu port nodes")
+> > > 
+> > > Which said:
+> > > 
+> > >   DSA cpu port node has to be marked with "cpu" label.
+> > > 
+> > > But if the binding doesn't use them then I'm confused why they needed to
+> > > be updated.
+> > > 
+> > > cheers
+> > 
+> > I was told by Marek (CCed) that DSA port connected to CPU should have
+> > label "cpu" and not "cpu<number>". Modern way for specifying CPU port is
+> > by defining reference to network device, which there is already (&enet1
+> > and &enet0). So that change just "fixed" incorrect naming cpu0 and cpu1.
+> > 
+> > So probably linux kernel does not need label = "cpu" in DTS anymore. But
+> > this is not the reason to remove this property. Linux kernel does not
+> > use lot of other nodes and properties too... Device tree should describe
+> > hardware and not its usage in Linux. "label" property is valid in device
+> > tree and it exactly describes what or where is this node connected. And
+> > it may be used for other systems.
+> > 
+> > So I do not see a point in removing "label" properties from turris1x.dts
+> > file, nor from any other dts file.
+> 
+> Well, it seems like a bit of an abuse of 'label' to me. 'label' should 
+> be aligned with a sticker or other identifier identifying something to a 
+> human. Software should never care what the value of 'label' is.
+> 
+> Rob
 
-Krzysztof had commented pointing out some of the issues already. I will
-skip those. I am surprised as you seem to still post patches when there
-was ongoing discussions on SCPI compatibles on the other thread[1].
+But it already does. "label" property is used for setting (initial)
+network interface name for DSA drivers. And you can try to call e.g.
+git grep '"cpu"' net/dsa drivers/net/dsa to see that cpu is still
+present on some dsa places (probably relict or backward compatibility
+before eth reference).
 
-> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
-> ---
->  arch/arm64/Kconfig.platforms                  |   5 +
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  arch/arm64/boot/dts/phytium/Makefile          |   5 +
->  .../dts/phytium/ft2004-devboard-d4-dsk.dts    |  73 +++
->  .../dts/phytium/ft2004-generic-psci-soc.dtsi  | 469 ++++++++++++++++++
->  drivers/firmware/arm_scpi.c                   |   1 +
+I agree with you that in this case it is abuse. But I would not say that
+software should not care about "label". I think that software should
+care about "label" but only in situation in which it presents
+information to user. So if user wants to see device with labels *ABC*
+(meaning show me anything which stickers contains substring ABC) then
+software should filter devices and turns that with asked label.
 
-You didn't respond with the reason for the need to use extra compatible
-when you can manage with generic compatible. I still think you must not
-need this change in arm_scpi as you simply can use existing compatible.
-Also if you need, it needs to be separate patch, I have already pointed
-out that.
+The main problem here is _existing_ software. New software should really
+do not use cpu label for deciding if network port is connected to cpu or
+not and it should be designed correctly. But you cannot change nor fix
+old / existing software...
 
-> diff --git a/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi b/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi
-> new file mode 100644
-> index 000000000000..80d64e17899b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi
-> @@ -0,0 +1,469 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * dts file for FT-2000/4 SoC
-> + *
-> + * Copyright (C) 2018-2019, Phytium Technology Co., Ltd.
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +/ {
-> +	compatible = "phytium,ft2004";
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	aliases {
-> +		ethernet0 = &gmac0;
-> +		ethernet1 = &gmac1;
-> +	};
-> +
-> +	psci {
-> +		compatible   = "arm,psci-1.0";
-> +		method       = "smc";
-
-Drop all the below properties they are needed only for v0.1. For v0.2 and
-above it is fixed and don't need to be described in the DTS.
-
-> +		cpu_suspend  = <0xc4000001>;
-> +		cpu_off      = <0x84000002>;
-> +		cpu_on       = <0xc4000003>;
-> +		sys_poweroff = <0x84000008>;
-> +		sys_reset    = <0x84000009>;
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <0x2>;
-> +		#size-cells = <0x0>;
-> +
-> +		cpu0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-
-I assume this is not model and it is real platform in which case it must
-have real processor compatible like "arm,cortex-a57" or whatever it is.
-
-> +
-> +		sram: sram@2a006000 {
-> +			compatible = "phytium,ft2004-sram-ns","mmio-sram";
-> +			reg = <0x0 0x2a006000 0x0 0x2000>;
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0x0 0x2a006000 0x2000>;
-> +
-> +			scpi_lpri: scpi-shmem@0 {
-> +				compatible = "phytium,ft2004-scpi-shmem";
-
-As mentioned multiple times, use the generic compatible "arm,scp-shmem"
-unless you need it for some specific reason in which case I would expect
-associated changes in the driver.
-
-> +				reg = <0x1000 0x800>;
-> +			};
-> +		};
-> +
-> +};
-> diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
-> index 435d0e2658a4..876eb2f9ff81 100644
-> --- a/drivers/firmware/arm_scpi.c
-> +++ b/drivers/firmware/arm_scpi.c
-> @@ -904,6 +904,7 @@ static const struct of_device_id shmem_of_match[] __maybe_unused = {
->  	{ .compatible = "amlogic,meson-axg-scp-shmem", },
->  	{ .compatible = "arm,juno-scp-shmem", },
->  	{ .compatible = "arm,scp-shmem", },
-> +	{ .compatible = "phytium,ft2004-scpi-shmem", },
-
-Drop the above if there is no other change need in the driver which means
-you are compatible with std. SCPI spec and need nothing different meaning
-no need for this extra compatible.
-
--- 
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/all/20221201114107.2ig6pdncekzlpdq2@bogus
-
+The worst thing which can be done is breaking updated version of (old)
+software. Prevention is always testing software and in this case testing
+on the real hardware. I know, it is hard as developers do not have
+such lot of hardware devices and configurations.
