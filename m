@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E645F640265
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E4F64026A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbiLBImd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S232228AbiLBInJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiLBImc (ORCPT
+        with ESMTP id S232490AbiLBInF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:42:32 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91550100;
-        Fri,  2 Dec 2022 00:42:29 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Fri, 2 Dec 2022 03:43:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8B945EDE;
+        Fri,  2 Dec 2022 00:43:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NNmfD01Zpz501Qh;
-        Fri,  2 Dec 2022 16:42:28 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B28gCQX002973;
-        Fri, 2 Dec 2022 16:42:12 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 2 Dec 2022 16:42:14 +0800 (CST)
-Date:   Fri, 2 Dec 2022 16:42:14 +0800 (CST)
-X-Zmail-TransId: 2af96389ba667b8f7013
-X-Mailer: Zmail v1.0
-Message-ID: <202212021642142044742@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <davem@davemloft.net>
-Cc:     <elder@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBuZXQ6IGlwYTogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B28gCQX002973
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6389BA73.002 by FangMail milter!
-X-FangMail-Envelope: 1669970548/4NNmfD01Zpz501Qh/6389BA73.002/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6389BA73.002/4NNmfD01Zpz501Qh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0970461FCD;
+        Fri,  2 Dec 2022 08:43:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3080C433D6;
+        Fri,  2 Dec 2022 08:43:00 +0000 (UTC)
+Message-ID: <4f4b9ff6-73e3-a8b3-1d1c-e1d0a0b9b38c@xs4all.nl>
+Date:   Fri, 2 Dec 2022 09:42:59 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] media: platform: mtk-mdp3: Fix return value check in
+ mdp_probe()
+Content-Language: en-US
+To:     Qiheng Lin <linqiheng@huawei.com>, mchehab@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221201023505.48015-1-linqiheng@huawei.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20221201023505.48015-1-linqiheng@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hi Qiheng,
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+Can you rebase on top of the latest staging tree? (https://git.linuxtv.org/media_stage.git/)
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/net/ipa/ipa_sysfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This patch no longer applies.
 
-diff --git a/drivers/net/ipa/ipa_sysfs.c b/drivers/net/ipa/ipa_sysfs.c
-index 5cbc15a971f9..14bd2f903045 100644
---- a/drivers/net/ipa/ipa_sysfs.c
-+++ b/drivers/net/ipa/ipa_sysfs.c
-@@ -46,7 +46,7 @@ version_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct ipa *ipa = dev_get_drvdata(dev);
+Thanks!
 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", ipa_version_string(ipa));
-+	return sysfs_emit(buf, "%s\n", ipa_version_string(ipa));
- }
+	Hans
 
- static DEVICE_ATTR_RO(version);
-@@ -70,7 +70,7 @@ static ssize_t rx_offload_show(struct device *dev,
- {
- 	struct ipa *ipa = dev_get_drvdata(dev);
+On 01/12/2022 03:35, Qiheng Lin wrote:
+> In case of error, the function mtk_mutex_get()
+> returns ERR_PTR() and never returns NULL. The NULL test in the
+> return value check should be replaced with IS_ERR().
+> And also fix the err_return case.
+> 
+> Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
+> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
+> ---
+> 
+> v2:
+>  - Add fix the err_return case.
+> 
+>  drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+> index c413e59d4286..48f3e32fe54e 100644
+> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+> @@ -207,8 +207,8 @@ static int mdp_probe(struct platform_device *pdev)
+>  	}
+>  	for (i = 0; i < MDP_PIPE_MAX; i++) {
+>  		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
+> -		if (!mdp->mdp_mutex[i]) {
+> -			ret = -ENODEV;
+> +		if (IS_ERR(mdp->mdp_mutex[i])) {
+> +			ret = PTR_ERR(mdp->mdp_mutex[i]);
+>  			goto err_return;
+>  		}
+>  	}
+> @@ -288,9 +288,10 @@ static int mdp_probe(struct platform_device *pdev)
+>  err_deinit_comp:
+>  	mdp_comp_destroy(mdp);
+>  err_return:
+> -	for (i = 0; i < MDP_PIPE_MAX; i++)
+> -		if (mdp)
+> -			mtk_mutex_put(mdp->mdp_mutex[i]);
+> +	if (mdp)
+> +		for (i = 0; i < MDP_PIPE_MAX; i++)
+> +			if (!IS_ERR_OR_NULL(mdp->mdp_mutex[i]))
+> +				mtk_mutex_put(mdp->mdp_mutex[i]);
+>  	kfree(mdp);
+>  	dev_dbg(dev, "Errno %d\n", ret);
+>  	return ret;
 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", ipa_offload_string(ipa));
-+	return sysfs_emit(buf, "%s\n", ipa_offload_string(ipa));
- }
-
- static DEVICE_ATTR_RO(rx_offload);
-@@ -80,7 +80,7 @@ static ssize_t tx_offload_show(struct device *dev,
- {
- 	struct ipa *ipa = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%s\n", ipa_offload_string(ipa));
-+	return sysfs_emit(buf, "%s\n", ipa_offload_string(ipa));
- }
-
- static DEVICE_ATTR_RO(tx_offload);
--- 
-2.25.1
