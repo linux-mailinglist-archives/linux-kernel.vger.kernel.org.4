@@ -2,127 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF82F640475
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7366403DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiLBKUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S233128AbiLBJ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbiLBKUk (ORCPT
+        with ESMTP id S232214AbiLBJ6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:20:40 -0500
-Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DACCCEF8
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:20:38 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="86207382"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665414000"; 
-   d="scan'208";a="86207382"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP; 02 Dec 2022 19:20:36 +0900
-Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
-        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 6EAC3CC157
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 19:20:35 +0900 (JST)
-Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
-        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id AD723D8C3A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 19:20:34 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.125.5.220])
-        by m3003.s.css.fujitsu.com (Postfix) with ESMTP id 7BFEC200B41D;
-        Fri,  2 Dec 2022 19:20:34 +0900 (JST)
-From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-To:     tglx@linutronix.de
-Cc:     geert+renesas@glider.be, linux-kernel@vger.kernel.org,
-        yamamoto.rei@jp.fujitsu.com
-Subject: Re: [PATCH] hrtimer: CPU and entry_time is added to a warning message in hrtimer_interrupt()
-Date:   Fri,  2 Dec 2022 18:55:44 +0900
-Message-Id: <20221202095544.487487-1-yamamoto.rei@jp.fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <87sfhyrev2.ffs@tglx>
-References: <87sfhyrev2.ffs@tglx>
+        Fri, 2 Dec 2022 04:58:10 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94177DA51;
+        Fri,  2 Dec 2022 01:58:08 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NNpKQ3nBCz4f3rVZ;
+        Fri,  2 Dec 2022 17:58:02 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+        by APP2 (Coremail) with SMTP id Syh0CgCXrLcrzIljyuECBg--.34797S2;
+        Fri, 02 Dec 2022 17:58:05 +0800 (CST)
+Message-ID: <85c21f52-2059-f6bb-bbc1-d610cb107995@huaweicloud.com>
+Date:   Fri, 2 Dec 2022 17:58:03 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH bpf] riscv, bpf: Emit fixed-length imm64 for
+ BPF_PSEUDO_FUNC
+Content-Language: en-US
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>
+References: <20221130033806.2967822-1-pulehui@huaweicloud.com>
+ <87h6yg1xlo.fsf@all.your.base.are.belong.to.us>
+From:   Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <87h6yg1xlo.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: Syh0CgCXrLcrzIljyuECBg--.34797S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw15ZF4xKry3WrWUXF1xGrg_yoW5XF13pF
+        WUKw4fCF4kXr1xKr1aqr4Yqr1YyF40qF47Wr1aqay5Kryj9Fn29F1DKws8KasxZry8GF13
+        JFyjgrnxCa4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUFDGOUUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas Gleixner,
 
-Thanks for your reply.
 
-On  Thu, 01 Dec 2022 22:30:41, Thomas Gleixner wrote:
-> On Fri, Jun 24 2022 at 16:00, Rei Yamamoto wrote:
->> A warning message in hrtimer_interrupt() is output up to 5 times
->> by default, and CPU and entry_time are also shown.
+On 2022/11/30 19:38, Björn Töpel wrote:
+> Pu Lehui <pulehui@huaweicloud.com> writes:
 > 
-> This describes to some extent _what_ the patch is doing, but not the
-> why.
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
+>> correct addresses of bpf_calls and then run last pass of JIT.
+>> Since the emit_imm of RV64 is variable-length, which will emit
+>> appropriate length instructions accorroding to the imm, it may
+>> broke ctx->offset, and lead to unpredictable problem, such as
+>> inaccurate jump. So let's fix it with fixed-length imm64 insns.
 > 
->> These changes are helpful that the function spending a lot of time is clear
->> by using ftrace:
+> Ah, nice one! So, the the invariant doesn't hold (the image grow in the
+> last pass).
 > 
-> That's a constructed case. There are multiple reasons why this can
-> happen, not just because a single hrtimer callback misbehaves.
+>> Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
 > 
->> @@ -2038,6 +2039,15 @@ static struct ctl_table kern_table[] = {
->>  		.extra1		= SYSCTL_ONE,
->>  		.extra2		= SYSCTL_INT_MAX,
->>  	},
->> +#endif
->> +#ifdef CONFIG_HIGH_RES_TIMERS
->> +	{
->> +		.procname       = "hrtimer_interrupt_warnings",
->> +		.data           = &sysctl_hrtimer_interrupt_warnings,
->> +		.maxlen         = sizeof(int),
->> +		.mode           = 0644,
->> +		.proc_handler   = proc_dointvec,
->> +	},
+> This is odd? This can't be the right Fixes-tag...
 > 
-> So this adds a new sysctl, but the changelog does not tell anything
-> about it. Aside of the dubious value of this sysctl, this lacks the
-> required documentation for new sysctls.
-> 
->> +	/*
->> +	 * If a message is output many times, the delayed funciton
->> +	 * may be identified by resetting sysctl_hrtimer_interrupt_warnings
->> +	 * and enabling ftrace.
-> 
-> What has the reset of sysctl_hrtimer_interrupt_warnings to do with
-> ftrace and how is that reset helpful to identify the root cause?
->
-> Also repeating the printk 5 times does not add any value at all. The
-> runaway detection already has logic to supress spurious events and if
-> the problem persists then it can be observed by ftrace without any of
-> these changes.
 
-If the system performance degradation exists and this message is output
-some times at the same time, my idea was that the reset of
-sysctl_hrtimer_interrupt_warnings helps to check whether hrtimer event
-is related to the degradation.
-However, as you said, it can be observed by ftrace.
-Therefore, I withdraw an opinion to add hrtimer_interrupt_warnings as
-the sysctl parameter.
+Only BPF_PSEUDO_FUNC instruction need extra jit pass after refill imm in 
+jit_subprogs. Others, like bpf helper call, will update ctx->offset in 
+jit iterations. So the fixes-tag is 69c087ba6225.
 
-> I assume - because you did not tell so - that you try to have a
-> correlation between ftrace and dmesg via the entry timestamp output,
-> right?
-
-Yes, that's right.
-
-> That's just a half thought out debug bandaid, really.
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>>   arch/riscv/net/bpf_jit_comp64.c | 31 ++++++++++++++++++++++++++++++-
+>>   1 file changed, 30 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+>> index eb99df41fa33..f984d5fa014b 100644
+>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>> @@ -139,6 +139,30 @@ static bool in_auipc_jalr_range(s64 val)
+>>   		val < ((1L << 31) - (1L << 11));
+>>   }
+>>   
+>> +/* Emit fixed-length instructions for 32-bit imm */
+>> +static void emit_fixed_imm32(u8 rd, s32 val, struct rv_jit_context *ctx)
+>> +{
+>> +	s32 upper = (val + (1U << 11)) >> 12;
+>> +	s32 lower = ((val & 0xfff) << 20) >> 20;
+>> +
+>> +	emit(rv_lui(rd, upper), ctx);
+>> +	emit(rv_addi(rd, rd, lower), ctx);
+>> +}
+>> +
+>> +/* Emit fixed-length instructions for 64-bit imm */
+>> +static void emit_fixed_imm64(u8 rd, s64 val, struct rv_jit_context *ctx)
+>> +{
+>> +	/* Compensation for sign-extension of rv_addi */
+>> +	s32 imm_hi = (val + (1U << 31)) >> 32;
+>> +	s32 imm_lo = val;
+>> +
+>> +	emit_fixed_imm32(rd, imm_hi, ctx);
+>> +	emit_fixed_imm32(RV_REG_T1, imm_lo, ctx);
+>> +	emit(rv_slli(rd, rd, 32), ctx);
+>> +	emit(rv_add(rd, rd, RV_REG_T1), ctx);
+>> +}
 > 
-> You can provide a way better mechanism by adding a tracepoint right at
-> the pr_warn_once(), which emits information for correlation right into
-> the trace.
+> Hmm, will this really be fixed? We can end up with compressed
+> instructions, which can then be a non-compressed in the last pass, and
+> we have the same problem?
 > 
-> That allows you to stop the trace once the tracepoint is emitted instead
-> of having to do all of this including the correlation manually.
+> The range of valid address for RV64 (sv39 to sv57) are
+> 0xffffffff00000000 to 0xffffffffffffffff, so I think we can do better
+> than 6 insn, no? My gut feeling (I need to tinker a bit) is that 4
+> should be sufficient.
+> 
+> Note that worst case for a imm64 load are 8 instructions, but this is
+> not the general case.
+> 
+> 
+> Björn
 
-OK, I will recreate the patch with following your idea.
-
-Thanks.
-Rei
