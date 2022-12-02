@@ -2,136 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22C364066A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F568640671
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiLBMJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S233372AbiLBMKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbiLBMJf (ORCPT
+        with ESMTP id S233206AbiLBMKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:09:35 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2043.outbound.protection.outlook.com [40.107.14.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A58ED290F;
-        Fri,  2 Dec 2022 04:09:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BatkSqOM64yprHis5qmODyfgw0nSFCgLQyMU3qj+kfPYQGqq8zm6cR49BaRchq7dcNnF4LYYpp5mSWFwo/jTl9vEBvttp7rKmNW7UBAa5vM0GVn8WA8NZPhQOUt5hgxZWmMVR+hH1d7oZn5YZY6BO7A28QPqAcNfCjiYqxYkkbYhfZH98T5vgrpFo+dy/65GgzqDJtU3AZOY5hwIAc7Z+ptxwkDlKmNAo+CGP+1rEsKRRTKQkF+1ONs52ERE72xkEpBl2C0UBhv1/IxLOKmCIt22XIsAf99YuSu9t0f8enST4tF4YYR33ddq1ADUqs9ShUBe7myzRzMBWIsiEuKE4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yDXjTGjlMnodrPakueu0nVcuXCzvv2UOGq+MGvvaJ4A=;
- b=eXH/ea2uBjzI62CGN2NFHfcoRhWJXrlVxqQJUpU5nXy+MeYpv/4CN5hFRsepOyVwEAIBXQTqo5Fr5gVA0U/MqbD2HhzeqWbV9YGlfsuYl7+maHwhVCScyHE51lilvWKm/mPs9f3DvIadvpnOE2xsLipiTu/DJH09OVs3E5xxjIDQcoLMhgMvWiKjp/HSxAbN2iO43okzKfJfIF2zwXTj8JiiMiHFqnYzNL7dmgwRvG63l0NWibXLCz2z7DZ6K2t4v/Mp0iunPnQlJKGU7Os0xhzjk0h7vhQp2C1/vHWlhoYj8TUuaxpMCe3bDsLf98ezYRwramw2oe0+tJpZg+rHag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kococonnector.com; dmarc=pass action=none
- header.from=kococonnector.com; dkim=pass header.d=kococonnector.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=KoCoConnector.onmicrosoft.com; s=selector2-KoCoConnector-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yDXjTGjlMnodrPakueu0nVcuXCzvv2UOGq+MGvvaJ4A=;
- b=P50nMfSEMFU9ZJjJlnsgrUAfpO/LgZ6uds70t7ePCog3vdE1Rti3fSNT7Agaanp47XmsOQXEKy4EqkHQAbPcs/sCvtwlRB/DpsnWMbtuzoxkFCqYyhLObKz/FOPSgoCKEDEIPUVUcopu5yBKb/rTEBkWrLrSkj/HvG3KAYbGgnQ=
-Received: from AM9PR09MB4884.eurprd09.prod.outlook.com (2603:10a6:20b:281::9)
- by VI1PR09MB4317.eurprd09.prod.outlook.com (2603:10a6:800:158::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Fri, 2 Dec
- 2022 12:09:30 +0000
-Received: from AM9PR09MB4884.eurprd09.prod.outlook.com
- ([fe80::707e:3312:93f6:f84f]) by AM9PR09MB4884.eurprd09.prod.outlook.com
- ([fe80::707e:3312:93f6:f84f%9]) with mapi id 15.20.5880.010; Fri, 2 Dec 2022
- 12:09:30 +0000
-From:   Oliver Graute <oliver.graute@kococonnector.com>
-To:     "ye.xingchen@zte.com.cn" <ye.xingchen@zte.com.cn>
-CC:     "jeff@labundy.com" <jeff@labundy.com>,
-        "nick@shmanahar.org" <nick@shmanahar.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "giulio.benetti@benettiengineering.com" 
-        <giulio.benetti@benettiengineering.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        "michael@amarulasolutions.com" <michael@amarulasolutions.com>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "johan@kernel.org" <johan@kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?utf-8?B?UmU6IFtQQVRDSCB2M10gSW5wdXQ6IHRvdWNoc2NyZWVuOiB1c2Ugc3lzZnNf?=
- =?utf-8?B?ZW1pdCgpIHRvIGluc3RlYWQgb2bCoHNjbnByaW50Zigp?=
-Thread-Topic: =?utf-8?B?W1BBVENIIHYzXSBJbnB1dDogdG91Y2hzY3JlZW46IHVzZSBzeXNmc19lbWl0?=
- =?utf-8?B?KCkgdG8gaW5zdGVhZCBvZsKgc2NucHJpbnRmKCk=?=
-Thread-Index: AQHZBfrTblKfCCV2rUKZmnorTq+cy65agdmA
-Date:   Fri, 2 Dec 2022 12:09:30 +0000
-Message-ID: <C2D744D5-0DB6-4396-953F-9322DDDDA6E2@kococonnector.com>
-References: <202212021104265067026@zte.com.cn>
-In-Reply-To: <202212021104265067026@zte.com.cn>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.200.110.1.12)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kococonnector.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR09MB4884:EE_|VI1PR09MB4317:EE_
-x-ms-office365-filtering-correlation-id: bb33e008-5235-4d8d-5292-08dad45e10ec
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LiiEqlIWIbpbFlamL72fxOYqLXmfG0WYUjy4HiBOWVxZ+Bque+DjM6bz+llv43ODfythtcu9jshZBpb8OB+wzZSQ7/tmw3UDpbMYuv4l5jEGwoaorVe1vxPTYhpEt+jJ72Sth2bzd529mp5K/e7Cfae0AU+cQuOygNjtaibynexztdSmqJ4rHscIjCO6OexoFsuMHF70Ul2a4BQx/pknX17bf8LY9WEznT9+fhS3Tcc7OHFqCdzgneNM5ltXQVh2iaFEmftff6+nsdhUi4EYk4MmrgeTIYZsmmo+K3JNMvYVdqw6cHz4rrTYXFAbcORw+owzX53eq9OYrEsj/W2otR8AEkzMQ/gsoYL4u//M4MAh6F7RrabUcRN5LlRE9fMlhRXPM1zolOLJt4DlRpqzBVFgDWqm0lTjwLjyKHRGnx2ARFSDCqrnHwWg88xcMXrafs9Di692JWxpGsZ8xuh6+Z4bRGjRYce4V9MNcGZT0nH0kWX7K4w6rHVl6qrtYR1UkwFvhN0gmvZJ4zzahx60Xv1o1Yhv+U8GIPEIacp43xvmwUnQGVIOn/BnykGd7LWA2dkh4yLwir2lDn4x2h51zLx3FYyoWImEouH/ecx0gG+NBtSI4MgUCgTaaBVJAu3G4fnEeW7cFXImHcTD13yAMHU5Y+mk0D4qESKN7+i+1+oqJn53E5fpmHZz7KkfJzR5soPb0SZb8dBDDa9QxbvSEt0cvt4mGQ8EjT2nhR3guss=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR09MB4884.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(376002)(366004)(136003)(39830400003)(451199015)(6506007)(66946007)(6486002)(54906003)(316002)(26005)(6916009)(6512007)(478600001)(4326008)(64756008)(71200400001)(91956017)(66446008)(66556008)(76116006)(66476007)(33656002)(8936002)(2616005)(5660300002)(44832011)(186003)(2906002)(36756003)(41300700001)(122000001)(38100700002)(38070700005)(7416002)(86362001)(558084003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YWxNKzJYcm1JWFVQcXVzMUxkbFZsT1lYcWhhZHorNXo1d0NuNTNDTEdBWW55?=
- =?utf-8?B?WlhKMTV3ZXRtQjFsWmNCNTRPallkQWhaeXBPL3dxcmZrdUFUWTZoaVlUR0to?=
- =?utf-8?B?ekJvQTRlMUhjb05zOWI4TTdiTGdyWUcrRnFNbHFLaXc5dXFybFFtbzRCbSsv?=
- =?utf-8?B?anVlNFpNODJHcEQ2L2dmYi9mS3M1cG1IQkNGM0kwc1A0L2JEcnI3SEk2ek9X?=
- =?utf-8?B?TTZkVks3YUNOcHZONkhVcFlvbDU3elFTaHVEVUZGaW91cXRIUU1xdEF6YnBB?=
- =?utf-8?B?SGY2em1hTjRaUENYQ085VzlKeUM1QWJ1ZEJCcjR0RUNReDROMTY1VG9YcGZt?=
- =?utf-8?B?cUhpRzhjbTJ3aGRrUFl1Mk1Rb0Y3ZVA2eWpjMWVOdUs2cE13S0Y0WDFJdHdH?=
- =?utf-8?B?YUFqMVo0Y24wcXJ1Tm4yUzR3aENPWDBicXQyZ2xUem1qcDdNcTdpY1FpeUNk?=
- =?utf-8?B?R0dJaFN0ajJpNGRwN2J0dzR4SjZtTisrM24wUEE0UWQvQXdacDFmVHY4Q3BN?=
- =?utf-8?B?c0s2b3ZKK1FjTkZYZXhCNUhWWlI3R3NpVTJXQ0xja0ZPbHMyWkJ2bHNscWtU?=
- =?utf-8?B?WVhUVWRKMW9uVC85cEl1V09OSEJsMHBSNmlXWk8rbUFFTlQvT1l5Q0VGREpF?=
- =?utf-8?B?RndyM24yRE4vbFNkZW5UTmdaR2VIOXJXMWt3Q3BwMUt4Zk51Wi85MVJPamxy?=
- =?utf-8?B?TDBFb3QzcVFqdUlWZXYzZklmbE0zSjByQzQveFNrZ2lXbjRPdFpkaUF3V2Ra?=
- =?utf-8?B?MXptRiszMXJOYTAvNzU3NGloZmcxRnpGZ3Y5N3Q4RS9HMlI4aUtnMHdoK2dm?=
- =?utf-8?B?cWkvNnZJV3NKNGZZN3VKK0FpKzVrMmlGR0RsZU9KT2R5NGNOME1HODNPRmdu?=
- =?utf-8?B?YkJhRUQ2TS9kcEJld2NaYVZUeWZSVDhUQ1MyUEQzUWp5WENOTlYrWC9iMEhw?=
- =?utf-8?B?UnhIV0tNY0NiQU41R3owcXcxQWRvc25KVjU2b2xTWmtaMzEwOGhxQUIzWVV1?=
- =?utf-8?B?QWpGdUppdkNYYkJ0Yzh1WmsyMHBBRjRESW9rREtZb2I0TWw4NCt5VGc0TzVX?=
- =?utf-8?B?YldJa1E0QUUrTlhCQ1FnSGhVeEdkeEZIR3VEdjVncnQvK21zTTFwaDlUdFJk?=
- =?utf-8?B?djVjRzg2anlnV0M3OEVGcXFVQU5nQ3VMZFUxamxnY0pHT1YxMkErMTlxUERQ?=
- =?utf-8?B?Y09UVndsQVhIeWNWNHJ2amlRNWNNMnU4Q05tRUsyY29yaHdWaStwVGt5YSsv?=
- =?utf-8?B?R0gySEtZYTBVdjdJSUtYeFQ4UU9qNUFPOWIxRnIwRStYbUsrVkNkc1M2ejBk?=
- =?utf-8?B?K0lOM0dOeGFlQnV3eFRMQlBFdzZvUVFDNWM4SEdaR0tXWmZJRldycWtuYVJS?=
- =?utf-8?B?NE5hSEFMVGpSdWRDTWpuVUFPYlJHZHAwZFlrZGF6NU5CaUc2VTl5Q21pQ09a?=
- =?utf-8?B?eGg5Ym9BdnRQWlpVSjVTYmZFS01wQzY0TTE5YThQWEdGNG56VU5vMmxodldD?=
- =?utf-8?B?NXQwekQxUldDZFBraks1bElhVFpUQ3U0bG9LV0NodEJ3YUN4d05pTFcrRmNK?=
- =?utf-8?B?K251Y1lmRldKQSszM29MMGNOZ08rQmRIOG1UODJ4SnJkeGtVTzFxOGhVWWdh?=
- =?utf-8?B?RitFc01RVWNSREl0S2NBUU9peTZMWkNWNWlsdURrMHcvNVkybjJlUUIzU0Jv?=
- =?utf-8?B?K1paSXZsRGl2MlczTWw3ZGxJQk8xYlgwN1VFbyt6OHJlOXZtRWxFb1J3UGFN?=
- =?utf-8?B?OUlIYUdiSGNBTGtGd2trcUxNT1ovdElXa2pzamtpSzBnd1prdGNzeHlLbGRR?=
- =?utf-8?B?R2lZbkRPVWxBSHJvU2pjUmx0M3hlVG9ralo4cS8reUttY2h1MDNFZjY3aER6?=
- =?utf-8?B?SEU4NUo0YkhZUXB2ZDlzVGhvWFpBblRJS1JlZGV4MHFIczUrT2xIK0JGZFpa?=
- =?utf-8?B?NTlkM3lpUjdBbFNVOW9WNE9IOGJJU1NsR0VUYmZwTXlJNzAwWnJSV0M2Unha?=
- =?utf-8?B?K2ZtY2h4M0luaVFySkNLdElEVnFSbTNETCtyMHg4OXNBT2Z4UU9iWS92dWVY?=
- =?utf-8?B?SGVkRzlJeVZwaVBVdGNjakxEMXpIUHBPSmlJR0tMVXMralVyVWpvQkVrWEt0?=
- =?utf-8?B?M3UrTUNvL3pWdC8zNkUrRnFMTVY4ZVVGb2d4T21rbmFnTzlyTGxxVlhKVUhw?=
- =?utf-8?Q?9iI3H8NnQvhBsqXD6TnYSlM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <007D4CA75B1DAA4581814D66B0F1972C@eurprd09.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 2 Dec 2022 07:10:43 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A1D50D67;
+        Fri,  2 Dec 2022 04:10:41 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5DAC42D8;
+        Fri,  2 Dec 2022 13:10:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669983039;
+        bh=tBxt39g+/iAmrlOK7z3NMOVnY0Tim7HEsMAT0lxXRhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l8cTekkx+EmR45I5QJyR1UvCcKx+pSd4pR8TMD+Mgf+8SwYxSxCfL25goPRdKv66r
+         ZQVKSGcqGbFVMYbloMgFhFucDe7t9H3n3HjZFgsGFeQuOI9EfyPThVJtqIfqZ20Z9v
+         dJx8VWGsF3M27NHeTS0m7e3b78Z52EXA7N5VdM4E=
+Date:   Fri, 2 Dec 2022 14:10:38 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Umang Jain <umang.jain@ideasonboard.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        David Plowman <david.plowman@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH 00/14] staging: vc04_services: bcm2835-isp support
+Message-ID: <Y4nrPuq0OjWKCzfS@pendragon.ideasonboard.com>
+References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
+ <fc2fb888-7742-123c-69c9-cdb156ff2d9f@i2se.com>
+ <a56d7687-ee44-629c-1a9d-fa34e65e847f@ideasonboard.com>
+ <bb16004f-8d5b-5794-8445-aa7e1a758ffa@i2se.com>
+ <c73f7261-ec33-ec88-df3e-a34cf9b8015c@ideasonboard.com>
+ <0f683076-43e6-3f65-e5e1-052059ce7c86@i2se.com>
+ <910dbd8f-85f2-4979-49ee-6d760e89af84@ideasonboard.com>
+ <Y4nCnEwqs69QezPn@pendragon.ideasonboard.com>
+ <CAPY8ntAK9yh6ZQkuOrZqUn2GC2=qGaJrcxEjWyGep7KcWvxkhQ@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: kococonnector.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR09MB4884.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb33e008-5235-4d8d-5292-08dad45e10ec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 12:09:30.1971
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 59845429-0644-4099-bd7e-17fba65a2f2b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MM6M52V8q//BS9gqnBAxLF2PguNhE+Gxsu/Wb965+Yg3msIeLyBxVV8fg3qcsfSx0nZh7uuIzjSkkQhewXvNGeOY8xIZLWNn2fek1hQZjN4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR09MB4317
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPY8ntAK9yh6ZQkuOrZqUn2GC2=qGaJrcxEjWyGep7KcWvxkhQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,10 +64,247 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBBbSAwMi4xMi4yMDIyIHVtIDA0OjA0IHNjaHJpZWIgeWUueGluZ2NoZW5AenRlLmNvbS5jbjoN
-Cj4gDQo+IEZyb206IHllIHhpbmdjaGVuIDx5ZS54aW5nY2hlbkB6dGUuY29tLmNuPg0KPiANCj4g
-UmVwbGFjZSB0aGUgb3Blbi1jb2RlIHdpdGggc3lzZnNfZW1pdCgpIHRvIHNpbXBsaWZ5IHRoZSBj
-b2RlLg0KPiANCj4gQWNrZWQtYnk6IFV3ZSBLbGVpbmUtS8O2bmlnIDx1LmtsZWluZS1rb2VuaWdA
-cGVuZ3V0cm9uaXguZGU+DQo+IFNpZ25lZC1vZmYtYnk6IHllIHhpbmdjaGVuIDx5ZS54aW5nY2hl
-bkB6dGUuY29tLmNuPg0KDQpBY2tlZC1ieTogT2xpdmVyIEdyYXV0ZSA8b2xpdmVyLmdyYXV0ZUBr
-b2NvY29ubmVjdG9yLmNvbT4=
+Hi Dave,
+
+On Fri, Dec 02, 2022 at 11:23:29AM +0000, Dave Stevenson wrote:
+> On Fri, 2 Dec 2022 at 09:17, Laurent Pinchart wrote:
+> > On Fri, Dec 02, 2022 at 11:57:18AM +0800, Umang Jain wrote:
+> > > On 12/2/22 6:45 AM, Stefan Wahren wrote:
+> > > > Am 30.11.22 um 11:58 schrieb Umang Jain:
+> > > >> On 11/27/22 6:56 AM, Stefan Wahren wrote:
+> > > >>> Am 26.11.22 um 17:26 schrieb Umang Jain:
+> > > >>>> On 11/26/22 8:12 PM, Stefan Wahren wrote:
+> > > >>>>> Am 21.11.22 um 22:47 schrieb Umang Jain:
+> > > >>>>>> This series aims to upport bcm2835-isp from the RPi kernel [1] and is a
+> > > >>>>>> independent subset of earlier series [2] posted to upport CSI-2/CCP2
+> > > >>>>>> receiver IP core("Unicam) + the ISP driver found in BCM283x and compatible
+> > > >>>>>> SoCs (namely BCM2711). Unicam is still under active development to work
+> > > >>>>>> with multistream support to get into mainline. Hence only the ISP driver
+> > > >>>>>> will remain the primary area of this series.
+> > > >>>>>
+> > > >>>>> thanks for working on this. But honestly i would prefer that vchiq
+> > > >>>>> comes out of staging before adding more features. As Greg said
+> > > >>>>> some time ago staging is not a place to "dump code and run away".
+> > > >>>>> These new files are in the same bad shape as the rest of vc04
+> > > >>>>> before the clean-up here in staging started.
+> > > >>>>
+> > > >>>> Certainly, I am not here to do that - but I am still learning the ropes.
+> > > >>>
+> > > >>> no problem.
+> > > >>>
+> > > >>>> If the staging issue is becoming a blocker for bcm2835-isp going
+> > > >>>> upstream, I would be happy to help here! Though I must mention that
+> > > >>>> I still have limited visibility so my aim would be to chart out a
+> > > >>>> plan of things needed to be done to get vc04_services out of staging!
+> > > >>>
+> > > >>> The vchiq driver is in staging since 2016, so every step forwards is
+> > > >>> good. Unfortunately all of the low hanging fruits has been gathered.
+> > > >>>
+> > > >>> For me the most important, but not to tricky steps to get vchiq out
+> > > >>> of staging would be:
+> > > >>>
+> > > >>> * Cleanup logging mechanism
+> > > >>>
+> > > >>> * Get rid of custom function return values
+> > > >>>
+> > > >>> There was already an attempt for this [1]
+> > > >>>
+> > > >>> * Get rid of all non essential global structures and create a proper per
+> > > >>> device structure
+> > > >>>
+> > > >>>>> I agree that VCSM is on the TODO list for vchiq, but this driver
+> > > >>>>> is not necessary for making bcm2835-audio & bcm2835-camera leave
+> > > >>>>> staging. It just binds more resources on a new feature.
+> > > >>
+> > > >> bcm2835-camera is the legacy camera stack which probably need to be
+> > > >> dropped from hereon...
+> > > >
+> > > > I don't not know if there any users left, so i would be careful here.
+> > > > Can bcm2835-isp completely replace bcm2835-camera? Sorry, for this
+> > > > dumb question but i'm not expert here.
+> > >
+> > > I am careful too here and probably need Input from RaspberryPi in order
+> > > to proceed to drop it. But from my perspective - bcm2835-camera is _not_
+> > > going out of staging - it'll either sit here (or probably dropped) as
+> > > statied from [1]
+> > >
+> > > ```
+> > > + * There are two camera drivers in the kernel for BCM283x - this one
+> > > + * and bcm2835-camera (currently in staging).
+> > > ```
+> > >
+> > > The bcm2835-camera is meant to be replaced by unicam [1] , but the ISP
+> > > (bcm2835-isp) is meant to be worked with unicam [1]. In fact, I have
+> > > mentioned in my cover the testing of bcm2835-isp happened on top of
+> > > unicam patches.
+> >
+> > To be accurate, the bcm2835-camera driver supports the VC4
+> > firmware-based camera stack. In that setup, the camera sensors (OV5647
+> > or IMX219), CSI-2 receiver (Unicam) and ISP are all controlled by the
+> > firmware, which provides a high-level interface towards the kernel. This
+> > architecture has been replaced by Linux-side control of the camera
+> > sensors (through existing drivers in drivers/media/i2c/), Unicam
+> > (through the driver from [1]) and ISP (through this driver). Moving
+> > control to the Linux side requires complex processing in userspace,
+> > handled by libcamera.
+> >
+> > bcm2835-camera is thus replaced by multiple drivers combined with
+> > libcamera, and that is the camera stack that is shipped by Raspberry Pi
+> > these days. While this may affect some userspace use cases), we will not
+> > work on destaging bcm2835-camera, and as far as I'm aware, nobody else
+> > is planning to do so either. I don't mind much if the driver stays in
+> > staging for some more time, but I'd rather drop it if possible.
+> 
+> It would be reasonable to drop it at the point that Libcamera can work
+> to a similar level with at least the following list of applications:
+> - FFmpeg
+> - Gstreamer
+> - Chromium
+> - Firefox
+> - Motion
+> And that still leaves a huge number of existing V4L2 apps out in the cold.
+
+That's exactly the kind of input we were looking for, thanks.
+
+GStreamer is already addressed.
+
+Chromium and Firefox will go through PipeWire. There is a working
+implementation in libwebrtc, Kieran may be able to comment on the
+upstreaming state. It will take some time for distributions to switch,
+and I can't predict the time line, but that seems to clearly be the
+direction the Linux desktop is taking.
+
+I haven't looked at FFmpeg yet (maybe someone has ?). It probably makes
+sense to add native libcamera support to FFmpeg, even if PipeWire
+support could also make sense. It could also make sense to expose in the
+libcamera V4L2 compat layer the libv4l2 API functions, as that would
+allow linking FFmpeg (when compiled with CONFIG_LIBV4L2) to libcamera
+instead of libv4l2, but Debian doesn't set CONFIG_LIBV4L2, so this isn't
+an immediate solution to the problem.
+
+Same thing for motion, except it has no libv4l2 support. The V4L2 compat
+layer could still be used with LD_PRELOAD, but that's not a great
+solution. Native libcamera support would make more sense (or possibly
+even GStreamer support, I don't know if upstream would accept that).
+
+In a side note, how do the above applications work today on Raspberry Pi
+platforms that use a sensor not supported by the legacy camera stack ?
+
+> Do you wish to make any predictions as to when that would be
+> achievable? Or even when a v1.0 release of libcamera is going to
+> happen?
+
+Now that we have started tagging releases, we've also decided to publish
+a roadmap with the development still needed to stabilize the API. We'll
+likely start working on it this month.
+
+> Dropping anything prior to those points would be rather premature in my book.
+
+Something I forgot to mention is that there should be no issue at all
+keeping bcm2835-camera fully supported in the Raspberry Pi downstream
+kernel for a longer period of time. It's in upstream that I don't think
+it should be destaged, as it's already considered legacy and should be
+phased out. Do you know if there are users of that driver with a
+mainline kernel ?
+
+> The TODOs on bcm2835-camera are:
+> 1) Zero copy. That comes almost for free as bcm2835-isp already does
+> this, but it does rely on vcsm-cma.
+> The main reason I haven't pushed it is that it then requires
+> reasonable amounts of CMA heap for all the buffers, which until
+> recently haven't been present in the default configurations. With the
+> vc4 DRM driver now being default (at least for the vendor kernel) and
+> also requiring CMA, making the change makes more sense.
+> AFAIK there is no easy way to have one driver choosing between using
+> vb2_vmalloc_memops and vb2_dma_contig_memops at runtime, but I may be
+> wrong.
+
+Some drivers use a module parameter for that, but that's not great.
+
+> Actually bcm2835_defconfig appears to only allocate a 32MB CMA heap,
+> so perhaps we don't get very far.
+> 
+> 2) This isn't workable within the current V4L2 frameworks. The
+> multi-planar V4L2 pixel formats are currently allocated as independent
+> buffers for each plane, whereas the firmware needs a single buffer
+> with (currently) specific offsets for the chroma planes. The
+> V4L2/videobuf2 core changes required to implement that are going to be
+> significant, and have minimal gain.
+> The specific stride handling is already dealt with (set bytesperline
+> appropriately), it's the padding of the height to a multiple of 16
+> before the chroma planes on YUV420 and NV12 formats that require the
+> firmware to do a small amount of repacking. The performance hit is
+> actually minimal anyway.
+> 
+> If bcm2835-camera is the only thing holding back vc04_services, then I
+> can have a look at it.
+
+I'll let Umang comment on whether it's holding vc04_services back, but
+my understanding it that we could destage vc04_services while keeping
+bcm2835-camera in staging for the time being. If anyone disagrees with
+that, please let me know.
+
+> > > [1]: https://lore.kernel.org/linux-media/20220208155027.891055-5-jeanmichel.hautbois@ideasonboard.com/
+> > >
+> > > >>>>
+> > > >>>> I see two TODO files in vc04_services:
+> > > >>>>     ./bcm2835-camera/TODO
+> > > >>>>     ./interface/TODO
+> > > >>>>
+> > > >>>> One of the bcm2835-camera TODO points to the vc-sm-cma driver
+> > > >>>> itself. So that's address in the series. The other remaining one -
+> > > >>>> I will need to take a deeper look before commenting on it.
+> > > >>>>
+> > > >>>> The main chunk of TODO are in vc04_services/interfaces/TODO. Doing
+> > > >>>> a cursory reading of them suggests that these apply to *all*
+> > > >>>> vc04_services components? Am I right?
+> > > >>>
+> > > >>> Actually these applies just for the interfaces directory. Some of
+> > > >>> them could apply to the services, but this is no priority.
+> > > >>
+> > > >> By no priority, you mean this doesn't affect the criteria required to
+> > > >> ful-fill to get these out of staging?
+> > > >
+> > > > Correct
+> > > >
+> > > >>>> Are these are the specific bits of cleanup you are referring to in
+> > > >>>> your comment?
+> > > >>>
+> > > >>> You mean about bcm2835-isp? There were too many changes to vchiq
+> > > >>> that i don't remember them all. The first that come to my mind was
+> > > >>> those fancy comment sections which is not kernel coding style. It
+> > > >>> has been removed.
+> > > >>
+> > > >> No, I don't mean the bcm2835-isp changes (those are upcoming /
+> > > >> out-of-tree still so...). I mean what are the specific bits / points
+> > > >> that needs to be addressed to get vc04_services out of the staging.
+> > > >
+> > > > These were the points which i mentioned in my last email. They came
+> > > > from interface/TODO.
+> > > >
+> > > >> You have mentioned it above now, so I'll follow up on those.
+> > > >
+> > > > That would be great :)
+> > > >
+> > > >> The many vchiq changes you referred to above comment (that you don't
+> > > >> remember) are from [1] as well or some other series ?
+> > > >
+> > > > Sorry, for the confusing. The many changes i refer were the dozens of
+> > > > clean up patches for vc04_interfaces in mainline staging since the
+> > > > last years. [1] was just a single patch which has been accepted yet.
+> > >
+> > > Ah I see. There are many others that I've to dig out then. Thanks for
+> > > clarifying!
+> > >
+> > > >>> [1] -
+> > > >>> https://lore.kernel.org/linux-staging/20220712181928.17547-1-jslebodn@redhat.com/
+> > > >>>
+> > > >>>>> Unfortuntately i hadn't much time to work on vchiq by myself.
+> > > >>>>>
+> > > >>>>> Just my two cents
+> > > >>>>> Stefan
+
+-- 
+Regards,
+
+Laurent Pinchart
