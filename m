@@ -2,167 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C5D640D89
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D356640D8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 19:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234617AbiLBSjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 13:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S234195AbiLBSjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 13:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234571AbiLBSiz (ORCPT
+        with ESMTP id S233877AbiLBSjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:38:55 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244A81B7BD;
-        Fri,  2 Dec 2022 10:37:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670006270; x=1701542270;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rCrTrxnacTNys7o3ZdRVf0ByGL11XnpENVPAAjiGcmg=;
-  b=XJHMzZBbYbSEjBNhuqCxyjaASKLb1LTnWrYJ7Pp5szrBE+009Gquzvkh
-   46pLGwsIQe0tv2xAVu+zPP9R5gffCN45eS5yjmnY9sa8pn8uk2xmhuEd0
-   sLA+swaeuh6NbsHHafqzgB/RNTFTLPLVBY/Qs0eePbiifNU83ppz6TvkK
-   7yUVuRQTqu1Ur4tpUShj2QGArMtuWdNsGj9JPFq4Rax0S3WQRv+h5JaDk
-   tCDoZyqiaaKr8dSUKC2epqvBzh4uaKsMcSGrIs4tO4XrTp2mKvb4+YWYz
-   j9ntrNM7yUn+e8e/sE8W7CTHqAYnmE2Tb9LWiKqDZkqXd6kX5N2itpSTY
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="314724704"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="314724704"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 10:37:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="713717597"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="713717597"
-Received: from kcaskeyx-mobl1.amr.corp.intel.com (HELO kcaccard-desk.amr.corp.intel.com) ([10.251.1.207])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 10:37:38 -0800
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     jarkko@kernel.org, dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     zhiquan1.li@intel.com,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
-Subject: [PATCH v2 18/18] Docs/x86/sgx: Add description for cgroup support
-Date:   Fri,  2 Dec 2022 10:36:54 -0800
-Message-Id: <20221202183655.3767674-19-kristen@linux.intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221202183655.3767674-1-kristen@linux.intel.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
+        Fri, 2 Dec 2022 13:39:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C531EED69A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:37:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670006249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZRCCAO836Dkk36/ISmrsSydPeXHNO72rUKzm2SjpIeo=;
+        b=ct6cx4aHmh55hmcuAhojeFZzUGOjrw/Y5i97dnMtrqnFgSLeRiGn3cweYnVtND/Hw9fWnp
+        XDAFmBAhI596zrGHR2gnBmKoVeiuQgMpdpLe/MdgAj51R/jClJsRSb3FJTRCHKOfvL+FWx
+        4VqQNqlciXRbLreY5VyKiYga8aDlLjM=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-407-SrThCbDRPsWW-sUYDr6_Vw-1; Fri, 02 Dec 2022 13:37:27 -0500
+X-MC-Unique: SrThCbDRPsWW-sUYDr6_Vw-1
+Received: by mail-wm1-f72.google.com with SMTP id bi19-20020a05600c3d9300b003cf9d6c4016so4501053wmb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 10:37:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZRCCAO836Dkk36/ISmrsSydPeXHNO72rUKzm2SjpIeo=;
+        b=VfoT2TjRebICLun8Szm6b1eNoGk5FZTWk6lRiIcer41iC3l+PxsWG8ZYufCmojmt0R
+         g7pu0Le8FhOxe2/ihz1y9EaWx1EWOn+soMflgWi+YOCRUU2S3t0wnJcNGrE6tBlqCrlS
+         5Om4A50OMs9/Q6qvcn4cH8YFhmAnS3VbfHmvyozI60MpcOcpgaIf4C4PLJOP+cxSi9fI
+         fdX/mI5v2UiWherT5/DZh2a00dc5zevaspV/NOWRAhjdAcOumqPbwUGvgfaO8wCFA3ch
+         3Ud3STcCL3eLwwpuWfV3ejR+uP+T3yw/tpzWQXkBIrdBw4rKKjWDmLf+XIItdgAzboLo
+         diLw==
+X-Gm-Message-State: ANoB5pkuPV3suEo8MiViwv8olKfXIERe1zZ7z6QxXb98ZkkWS8LbzuA4
+        FW44fxJBO6aU0zrJ6g7B38inC7Va7JxoLAK1dNkXA1YJcPtWSW6/jFagXuQ+hA83jnjEH/IMvCc
+        ZNL/l5Buv+YtsazHdAgAqR7Yl
+X-Received: by 2002:a5d:65c9:0:b0:241:bd29:6a73 with SMTP id e9-20020a5d65c9000000b00241bd296a73mr43031888wrw.499.1670006246603;
+        Fri, 02 Dec 2022 10:37:26 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5bDxlHPeOMTNDdfeXqolK1EsQa6JCzP6RbCTWC2p3Ob+s87IOgv7n0zbGEsBosGljKzxlI0A==
+X-Received: by 2002:a5d:65c9:0:b0:241:bd29:6a73 with SMTP id e9-20020a5d65c9000000b00241bd296a73mr43031885wrw.499.1670006246340;
+        Fri, 02 Dec 2022 10:37:26 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id z2-20020a5d4402000000b00226dba960b4sm7559791wrq.3.2022.12.02.10.37.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 10:37:25 -0800 (PST)
+Message-ID: <95374a64-47fc-ae25-d54e-8200671acacc@redhat.com>
+Date:   Fri, 2 Dec 2022 19:37:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 00/14] KVM: x86: Remove unnecessary exported symbols
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114095606.39785-1-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221114095606.39785-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial documentation of how to regulate the distribution of
-SGX Enclave Page Cache (EPC) memory via the Miscellaneous cgroup
-controller.
+On 11/14/22 10:55, Like Xu wrote:
+> Inspired by the Sean's minor fix [1], more unnecessary (from a GPL
+> developer's perspective) exported symbols could be cleaned up
+> (automation to find out true positives is possible). This move helps reduce
+> the attack surface of KVM modules and guides more developers to practice
+> the principle of low coupling in the KVM context.
+> 
+> [1] https://lore.kernel.org/kvm/20221110010354.1342128-1-seanjc@google.com/
 
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/x86/sgx.rst | 77 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+I'll squash everything in a single patch and limit the change to just 
+removing EXPORT_SYMBOL_GPL().
 
-diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
-index 2bcbffacbed5..f6ca5594dcf2 100644
---- a/Documentation/x86/sgx.rst
-+++ b/Documentation/x86/sgx.rst
-@@ -300,3 +300,80 @@ to expected failures and handle them as follows:
-    first call.  It indicates a bug in the kernel or the userspace client
-    if any of the second round of ``SGX_IOC_VEPC_REMOVE_ALL`` calls has
-    a return code other than 0.
-+
-+
-+Cgroup Support
-+==============
-+
-+The "sgx_epc" resource within the Miscellaneous cgroup controller regulates
-+distribution of SGX EPC memory, which is a subset of system RAM that
-+is used to provide SGX-enabled applications with protected memory,
-+and is otherwise inaccessible, i.e. shows up as reserved in
-+/proc/iomem and cannot be read/written outside of an SGX enclave.
-+
-+Although current systems implement EPC by stealing memory from RAM,
-+for all intents and purposes the EPC is independent from normal system
-+memory, e.g. must be reserved at boot from RAM and cannot be converted
-+between EPC and normal memory while the system is running.  The EPC is
-+managed by the SGX subsystem and is not accounted by the memory
-+controller.  Note that this is true only for EPC memory itself, i.e.
-+normal memory allocations related to SGX and EPC memory, e.g. the
-+backing memory for evicted EPC pages, are accounted, limited and
-+protected by the memory controller.
-+
-+Much like normal system memory, EPC memory can be overcommitted via
-+virtual memory techniques and pages can be swapped out of the EPC
-+to their backing store (normal system memory allocated via shmem).
-+The SGX EPC subsystem is analogous to the memory subsytem, and
-+it implements limit and protection models for EPC memory.
-+
-+SGX EPC Interface Files
-+-----------------------
-+
-+For a generic description of the Miscellaneous controller interface
-+files, please see Documentation/admin-guide/cgroup-v2.rst
-+
-+All SGX EPC memory amounts are in bytes unless explicitly stated
-+otherwise.  If a value which is not PAGE_SIZE aligned is written,
-+the actual value used by the controller will be rounded down to
-+the closest PAGE_SIZE multiple.
-+
-+  misc.capacity
-+        A read-only flat-keyed file shown only in the root cgroup.
-+        The sgx_epc resource will show the total amount of EPC
-+        memory available on the platform.
-+
-+  misc.current
-+        A read-only flat-keyed file shown in the non-root cgroups.
-+        The sgx_epc resource will show the current active EPC memory
-+        usage of the cgroup and its descendants. EPC pages that are
-+        swapped out to backing RAM are not included in the current count.
-+
-+  misc.max
-+        A read-write single value file which exists on non-root
-+        cgroups. The sgx_epc resource will show the EPC usage
-+        hard limit. The default is "max".
-+
-+        If a cgroup's EPC usage reaches this limit, EPC allocations,
-+        e.g. for page fault handling, will be blocked until EPC can
-+        be reclaimed from the cgroup.  If EPC cannot be reclaimed in
-+        a timely manner, reclaim will be forced, e.g. by ignoring LRU.
-+
-+  misc.events
-+	A read-write flat-keyed file which exists on non-root cgroups.
-+	Writes to the file reset the event counters to zero.  A value
-+	change in this file generates a file modified event.
-+
-+	  max
-+		The number of times the cgroup has triggered a reclaim
-+		due to its EPC usage approaching (or exceeding) its max
-+		EPC boundary.
-+
-+Migration
-+---------
-+
-+Once an EPC page is charged to a cgroup (during allocation), it
-+remains charged to the original cgroup until the page is released
-+or reclaimed.  Migrating a process to a different cgroup doesn't
-+move the EPC charges that it incurred while in the previous cgroup
-+to its new cgroup.
--- 
-2.38.1
+Paolo
+
+> Like Xu (13):
+>    KVM: x86: Remove unnecessary export of kvm_inject_pending_timer_irqs()
+>    KVM: x86: Remove unnecessary export of kvm_get_apic_base()
+>    KVM: x86: Remove unnecessary export of kvm_set_apic_base()
+>    KVM: x86: Remove unnecessary export of kvm_inject_page_fault()
+>    KVM: x86: Remove unnecessary export of kvm_inject_nmi()
+>    KVM: x86: Remove unnecessary export of kvm_require_cpl()
+>    KVM: x86: Remove unnecessary export of kvm_emulate_as_nop()
+>    KVM: x86: Remove unnecessary export of kvm_scale_tsc()
+>    KVM: x86: Remove unnecessary export of kvm_vcpu_is_reset_bsp()
+>    KVM: x86: Remove unnecessary export of kvm_hv_assist_page_enabled()
+>    KVM: x86: Remove unnecessary export of kvm_can_use_hv_timer()
+>    KVM: x86: Remove unnecessary export of kvm_lapic_hv_timer_in_use()
+>    KVM: x86: Remove unnecessary export of kvm_apic_update_apicv()
+> 
+> Sean Christopherson (1):
+>    KVM: x86: Remove unnecessary export of kvm_cpu_has_pending_timer()
+> 
+>   arch/x86/kvm/hyperv.c |  1 -
+>   arch/x86/kvm/irq.c    |  2 --
+>   arch/x86/kvm/lapic.c  |  3 ---
+>   arch/x86/kvm/x86.c    | 18 +++++-------------
+>   arch/x86/kvm/x86.h    |  2 ++
+>   5 files changed, 7 insertions(+), 19 deletions(-)
+> 
 
