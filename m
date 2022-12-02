@@ -2,129 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB2F64092F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C491D640935
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiLBPUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S233357AbiLBPVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbiLBPUu (ORCPT
+        with ESMTP id S233403AbiLBPVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:20:50 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C759BB393D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:20:49 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id B14B388;
-        Fri,  2 Dec 2022 16:20:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669994447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qwzgqDrqryim/NXtkdBjmmP6OU79ug3+PLqn4ekooRM=;
-        b=sV4anxgk90bSg8dMdOUUaUopcb9+aNEeAq/Fpw5HR1ui7sUGqHoZwDC3QzsxEtFw5Op+G3
-        1+UBIMsw53W2vx5VmXVv41STRsQQoG+YEFzeOmOcgWdfN2dCOR2j62hhO62rzkuPbh5jyE
-        KfzPrsAS5vdSPJkohJxkK3x+54mEMdTSWN+1tQrUEZUaOGJm6XWio1hLhtK6cwEgEQA15A
-        uP9MRtI3NM75QB1jrSDYQ8ZolqTbbVShGCsIA5ui+TVsRK1Neqm3C3t3p5j4hxcd32lAdn
-        xOoYeL/wuKCKwapeEr8q2YHtslb90UmL3bokofYEY//Q0qp/wN+w82L+IfUxWw==
+        Fri, 2 Dec 2022 10:21:05 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279F2B43C3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 07:21:02 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id b9so5765158ljr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 07:21:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cbWFszEMmqGUPOEqPZjBaUL8KEVz70KD/aIBGs3YtpM=;
+        b=QEMgeicpAWtxBjZB9F45ICXguszrCK92n+ifZv+DOFuuiOgxVEVBCxjaM0xPhcQuQX
+         /f400DEkYgfAkOa+SBfiqcqjqftnNidNqGI4G6vkBGC66lrdjZW7jdIc9jIBpfVWSCig
+         uOb3DqjCbsMiPRbDdNmg2UvP+ciE2i45eOQyUsGPLlNH/UsMfaQ6oB3h9U1NxmgwH8Cj
+         zdS/wcwUCNjNBPDkpO0uNT5bk0fhHBq8Yqnea43hNVyuwNwhHIPuGGH/k0omkyJEd9G9
+         hICNytiWhM3KKrQIXj092/jJY4arApprR866l3fUicNtXpGpwzz3rgAtEEQ0DgHnJOO1
+         w54Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cbWFszEMmqGUPOEqPZjBaUL8KEVz70KD/aIBGs3YtpM=;
+        b=G5dSyY9lN2Yg/Am9X4Mf3eRSvnF+6KTfqSmiiSvbljvmz+Luudig+M0Zi6njPxaCc2
+         M65ZiUiimu5n7rxR+LiQKwTDl1LGV8L6NubBW+EMzhRjQHfAFOzYqcSfEHtW/1DTCStn
+         Ihul9rd71czSGPBA6P8uk9wiZaNwSR+POZTWuZ/nJIXz/G+QqTddQHwYDOmqXFNXiuL5
+         7HMHpEuur+TBmb0T+k8dAkl8YRzEjP1jGSGtml3Tj0MReXlULDg3uL5T32ubmFJGldB1
+         lvpiaSMPN+FnPc2nK9U3U3KGPFzRcex2qjPxNLn1usXJssjLrd41RY8hlfsLvGFNLuuj
+         lKKQ==
+X-Gm-Message-State: ANoB5pkdIgFy8hQjjvDq9jTydBHvH9YME2Xsv/dJsSL3xOuOVj4V2jJi
+        MFLLR81s6whmc3s8+BAq5kyTvAF6/GNv5yXlaak=
+X-Google-Smtp-Source: AA0mqf4zL9HhbU7DlgQ/axTl96ilZ3+BVJIm9yx+hcCe3RM/4AAR4LLky5meEeDbmUocr3t/RAzGvw==
+X-Received: by 2002:a05:651c:1796:b0:26c:3ec4:b71e with SMTP id bn22-20020a05651c179600b0026c3ec4b71emr24203042ljb.193.1669994460459;
+        Fri, 02 Dec 2022 07:21:00 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id l16-20020ac24310000000b00498f871f33fsm1043273lfh.86.2022.12.02.07.20.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 07:20:59 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v6 0/3] arm64: dts: qcom: sm8450-hdk: add sound support
+Date:   Fri,  2 Dec 2022 16:20:51 +0100
+Message-Id: <20221202152054.357316-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Fri, 02 Dec 2022 16:20:47 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     greg.malysa@timesys.com,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] mtd: spi-nor: Add support for IS25LX256 operating
- in 1S-8S-8S octal read mode
-In-Reply-To: <20221202135539.271936-4-nathan.morrison@timesys.com>
-References: <20221202135539.271936-1-nathan.morrison@timesys.com>
- <20221202135539.271936-4-nathan.morrison@timesys.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <fa6f089e529b649603db4cf7024ae59b@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-12-02 14:55, schrieb Nathan Barrett-Morrison:
-> This adds the IS25LX256 chip into the ISSI flash_info parts table
-> 
-> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> ---
->  drivers/mtd/spi-nor/issi.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
-> index 89a66a19d754..362bc3603d8f 100644
-> --- a/drivers/mtd/spi-nor/issi.c
-> +++ b/drivers/mtd/spi-nor/issi.c
-> @@ -29,6 +29,35 @@ static const struct spi_nor_fixups is25lp256_fixups 
-> = {
->  	.post_bfpt = is25lp256_post_bfpt_fixups,
->  };
-> 
-> +static int
-> +is25lx256_post_bfpt_fixups(struct spi_nor *nor,
-> +			   const struct sfdp_parameter_header *bfpt_header,
-> +			   const struct sfdp_bfpt *bfpt)
-> +{
-> +	/*
-> +	 * IS25LX256 supports both 1S-1S-8S and 1S-8S-8S.
-> +	 * However, the BFPT does not contain any information denoting this
-> +	 * functionality, so the proper fast read opcodes are never setup.
-> +	 * We're correcting this issue via the fixup below.  Page program
-> +	 * commands are detected and setup properly via the 4BAIT lookup.
-> +	 */
-> +	params->hwcaps.mask |= SNOR_HWCAPS_READ_1_1_8;
-> +	spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_1_1_8],
-> +				  0, 8, SPINOR_OP_READ_1_1_8,
-> +				  SNOR_PROTO_1_1_8);
-> +
-> +	params->hwcaps.mask |= SNOR_HWCAPS_READ_1_8_8;
-> +	spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_1_8_8],
-> +				  0, 16, SPINOR_OP_READ_1_8_8,
-> +				  SNOR_PROTO_1_8_8);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct spi_nor_fixups is25lx256_fixups = {
-> +	.post_bfpt = is25lx256_post_bfpt_fixups,
-> +};
-> +
->  static void pm25lv_nor_late_init(struct spi_nor *nor)
->  {
->  	struct spi_nor_erase_map *map = &nor->params->erase_map;
-> @@ -74,6 +103,9 @@ static const struct flash_info issi_nor_parts[] = {
->  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
->  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
->  		.fixups = &is25lp256_fixups },
-> +	{ "is25lx256", INFO(0x9d5a19, 0, 0, 0)
-> +		PARSE_SFDP
-> +		.fixups = &is25lx256_fixups },
+Hi,
 
-Very nice!
+Changes since v5
+================
+1. Patch 2:
+   - Use different clocks (codec@31e0000, codec@3240000).
+   - Order LPASS pinctrl nodes by GPIO number.
+   - Add dmic01-default-state and dmic02-default-state to LPASS pinctrl.
+2. Patch 3:
+   - Use TX_CODEC_DMA_TX_3 for VA capture.
+   - Reverse order of speakers (left/right).
+   - Drop duplicated wcd-playback-dai-link and add wcd-capture-dai-link.
 
-Subject is slightly wrong because you fix up the BFPT to get
-correct 1-1-8 and 1-8-8 read modes.
+Changes since v4
+================
+1. Patch 2:
+   - Re-order few properties between Soundwire nodes, to keep them ordered
+     consistently.
+   - Drop unsupported qcom,port-offset.
 
-With that fixed:
-Reviewed-by: Michael Walle <michael@walle.cc>
+Changes since v3
+================
+1. Re-order reg and sound-dai-cells.
+
+Changes since v2
+================
+1. Patch 2: Use lower-case hex.
+2. Patch 3: Use ACTIVE_LOW for qcom,wcd9380-codec reset-gpios.
+   https://lore.kernel.org/all/20221116053817.2929810-11-dmitry.torokhov@gmail.com
+3. Add Rb tags.
+
+Changes since v1
+================
+1. Patch 2:
+   - Whitespace cleanups.
+   - Correct include - do not use deprecated one.
+2. Patch 3:
+   - Sort.
+   - Add Rb tag.
+   - Correct include - do not use deprecated one and drop q6asm.h (not used).
+
+Description
+===========
+Initial work (still partially in progress) adding audio to HDK8450 board.
+
+Working/tested:
+ - speakers
+ - one channel of headset
+
+The DTS patches do not have particular dependencies, however they:
+1. Use updated ASoC bindings:
+   https://lore.kernel.org/linux-arm-msm/20221111113547.100442-1-krzysztof.kozlowski@linaro.org/T/#t
+
+2. For full operation need changes in Soundwire and Qualcomm ASoC drivers, not
+   yet upstreamed:
+   https://github.com/krzk/linux/commits/wip/sm8450
+   Booting remoteproc without these changes will report errors, but these are
+   expected at this stage.
+
+Best regards,
+Krzysztof
+
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+Srinivas Kandagatla (3):
+  arm64: dts: qcom: sm8450: add GPR node
+  arm64: dts: qcom: sm8450: add Soundwire and LPASS
+  arm64: dts: qcom: sm8450-hdk: add sound support
+
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 186 ++++++++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi    | 364 ++++++++++++++++++++++++
+ 2 files changed, 550 insertions(+)
+
+-- 
+2.34.1
+
