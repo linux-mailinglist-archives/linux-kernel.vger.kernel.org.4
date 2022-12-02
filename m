@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3939A640564
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3EA64056A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbiLBK6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
+        id S232745AbiLBLAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbiLBK6r (ORCPT
+        with ESMTP id S230094AbiLBLAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:58:47 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21799381B;
-        Fri,  2 Dec 2022 02:58:38 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id CB99C5FD0B;
-        Fri,  2 Dec 2022 13:58:35 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669978715;
-        bh=bmtQOp0MHFjIRwhVsuo8y6uKrcRollt9lDuoEi9K2Ns=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=sDgpn/xX2RPFtFDVGuLMmeVg7uLVdiBcZaROU6x3DAGgZM0FchEFeCx3JRUpYdwY9
-         y0yN84dSkfMyxuZZx5BqNzh6pjlUzcngmgoy7o3gSei2fdiZaCs5SqM1MiSuh8ENyr
-         4Q9BGy/bvHKtkCPe7M+FE2HhijT3NzguM1r8bkpMBxuUn6oTb13fzxElpr6Z+ihNdV
-         Si1fMikx9d8XNdgMs5pwxrKkmv/S6Y8nd2pIjbIHKLXOO4BCi17f5m7qlR9lQNN8gJ
-         QU0PJlCJ7QtMAGiuJKKIh9fzjGqMACArv3WmsnL7QrIZdZBOGAbqvVkBYxf+aXuCrG
-         nVZ6pfv+kampw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Dec 2022 13:58:35 +0300 (MSK)
-Date:   Fri, 2 Dec 2022 13:58:34 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Rob Herring <robh@kernel.org>,
-        <martin.blumenstingl@googlemail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <jian.hu@amlogic.com>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <linux-amlogic@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <rockosov@gmail.com>,
-        <kernel@sberdevices.ru>, <neil.armstrong@linaro.org>,
-        <robh+dt@kernel.org>, <sboyd@kernel.org>
-Subject: Re: [PATCH v8 03/11] dt-bindings: clock: meson: add A1 peripheral
- clock controller bindings
-Message-ID: <20221202105834.4avip2trjbm3tpn7@CAB-WSD-L081021>
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-4-ddrokosov@sberdevices.ru>
- <166995398331.2089708.18189499743713568568.robh@kernel.org>
- <20221202094940.elhjbz7tbgxesr52@CAB-WSD-L081021>
- <640ad325-91c4-109a-5ccd-05ac653a29bb@linaro.org>
+        Fri, 2 Dec 2022 06:00:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CCA7BC0C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:59:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669978749;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hJSM4gVvibFGELZBTl77hUPT9yZlZqQ7ZzM552mEWO0=;
+        b=RbszEByY14J0HX5nzoTwIpNxOM1DfzSZwWJ1XozWyvtabDXQKZt0Z8iXvX1l9FT+2ytgxF
+        1sEvOBbC3a5pPioGLvv6EwLB5EFad6IKFNJhHi6DcyrVei81H1NjjGhIhR6Oz1VawWBCea
+        5//rj6XFVNHqO5aS9pJRZzOuWoZQpbA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-Q0X0gSc_PSy_bl-R3uZVhA-1; Fri, 02 Dec 2022 05:59:01 -0500
+X-MC-Unique: Q0X0gSc_PSy_bl-R3uZVhA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F4E729324B7;
+        Fri,  2 Dec 2022 10:59:01 +0000 (UTC)
+Received: from ovpn-192-33.brq.redhat.com (ovpn-192-33.brq.redhat.com [10.40.192.33])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 89580C16922;
+        Fri,  2 Dec 2022 10:58:57 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        coverity-bot <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: hyper-v: Fix 'using uninitialized value' Coverity warning
+Date:   Fri,  2 Dec 2022 11:58:56 +0100
+Message-Id: <20221202105856.434886-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <640ad325-91c4-109a-5ccd-05ac653a29bb@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/02 07:44:00 #20636821
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=no
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,88 +62,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+In kvm_hv_flush_tlb(), 'data_offset' and 'consumed_xmm_halves' variables
+are used in a mutually exclusive way: in 'hc->fast' we count in 'XMM
+halves' and increase 'data_offset' otherwise. Coverity discovered, that in
+one case both variables are incremented unconditionally. This doesn't seem
+to cause any issues as the only user of 'data_offset'/'consumed_xmm_halves'
+data is kvm_hv_get_tlb_flush_entries() ->  kvm_hv_get_hc_data() which also
+takes into account 'hc->fast' but is still worth fixing.
 
-Thank you for quick review. Let me explain you why I sent Jian broken
-patches and applied my fixup patches above.
+While on it, drop the unneeded 'consumed_xmm_halves' initializer. In
+'hc->fast' case the variable is always initialized and is not used
+otherwise, 'data_offset' is not being initialized either.
 
-I've found several versions of A1 clkc drivers from Jian Hu Amlogic engineer,
-the last one version was a couple years ago.
-I've reworked the last (v7) version and didn't know the correct way to apply
-all fixes.
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527764 ("Uninitialized variables")
+Fixes: 260970862c88 ("KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/hyperv.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-From my point of view I thought about two options:
-1) Merge all my changes with Jian Hu patches and leave Jian Hu SoB
-2) Don't touch Jian Hu v7 patches and apply my changes above.
-
-I have chosen the second option, because it looks like respect Jian Hu's
-effort. I don't want to "stealing" his patches, just want to fix all
-broken things.
-
-So I'm sorry for misunderstanding here and please correct
-me what's right workflow in such situation.
-
-On Fri, Dec 02, 2022 at 11:39:47AM +0100, Krzysztof Kozlowski wrote:
-> On 02/12/2022 10:49, Dmitry Rokosov wrote:
-> > On Thu, Dec 01, 2022 at 10:10:04PM -0600, Rob Herring wrote:
-> >>
-> >> On Fri, 02 Dec 2022 01:56:55 +0300, Dmitry Rokosov wrote:
-> >>> From: Jian Hu <jian.hu@amlogic.com>
-> >>>
-> >>> Add the documentation to support Amlogic A1 peripheral clock driver,
-> >>> and add A1 peripheral clock controller bindings.
-> >>>
-> >>> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> >>> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> >>> ---
-> >>>  .../bindings/clock/amlogic,a1-clkc.yaml       | 65 ++++++++++++
-> >>>  include/dt-bindings/clock/a1-clkc.h           | 98 +++++++++++++++++++
-> >>>  2 files changed, 163 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> >>>  create mode 100644 include/dt-bindings/clock/a1-clkc.h
-> >>>
-> >>
-> >> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >>
-> >> yamllint warnings/errors:
-> >>
-> >> dtschema/dtc warnings/errors:
-> >> ./Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml: $id: relative path/filename doesn't match actual path or filename
-> >> 	expected: http://devicetree.org/schemas/clock/amlogic,a1-clkc.yaml#
-> >> Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts:18.48-30.11: Warning (unit_address_vs_reg): /example-0/periphs-clock-controller: node has a reg or ranges property, but no unit name
-> >> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dtb: periphs-clock-controller: reg: [[0, 2048], [0, 260]] is too long
-> >> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> >>
-> >> doc reference errors (make refcheckdocs):
-> >>
-> >> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201225703.6507-4-ddrokosov@sberdevices.ru
-> >>
-> >> The base for the series is generally the latest rc1. A different dependency
-> >> should be noted in *this* patch.
-> >>
-> >> If you already ran 'make dt_binding_check' and didn't see the above
-> >> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> >> date:
-> >>
-> >> pip3 install dtschema --upgrade
-> >>
-> >> Please check and re-submit after running the above command yourself. Note
-> >> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> >> your schema. However, it must be unset to test all examples with your schema.
-> >>
-> > 
-> > That's totally right warnings and errors. All of them are fixed in the
-> > my "fixup" patch of Jian's original dt_binding schema:
-> > 
-> > https://lore.kernel.org/linux-amlogic/20221201225703.6507-11-ddrokosov@sberdevices.ru/
-> 
-> No, this patch must be fixed. It's not correct.
-> 
-> Best regards,
-> Krzysztof
-> 
-
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 2c7f2a26421e..dee4961ad8ff 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1926,7 +1926,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	struct kvm_vcpu *v;
+ 	unsigned long i;
+ 	bool all_cpus;
+-	int consumed_xmm_halves = 0;
++	int consumed_xmm_halves;
+ 	gpa_t data_offset;
+ 
+ 	/*
+@@ -2021,8 +2021,10 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		 * consumed_xmm_halves to make sure TLB flush entries are read
+ 		 * from the correct offset.
+ 		 */
+-		data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
+-		consumed_xmm_halves += hc->var_cnt;
++		if (hc->fast)
++			consumed_xmm_halves += hc->var_cnt;
++		else
++			data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
+ 	}
+ 
+ 	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
 -- 
-Thank you,
-Dmitry
+2.38.1
+
