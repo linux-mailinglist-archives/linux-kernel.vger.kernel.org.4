@@ -2,308 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319DA64071A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF045640726
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 13:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbiLBMsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 07:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S233590AbiLBMtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 07:49:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiLBMsI (ORCPT
+        with ESMTP id S233587AbiLBMtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 07:48:08 -0500
-X-Greylist: delayed 630 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 04:48:03 PST
-Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE202494E;
-        Fri,  2 Dec 2022 04:47:56 -0800 (PST)
-Message-ID: <b525cb57-7f21-fb23-1b15-9560f4685cdd@systemli.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
-        s=default; t=1669985274;
-        bh=6o9KP6kk5p2qtH3EKpvc3oXBWluqaPokZJCRc6pucdk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Sav1K2dr+Fe+ZJblCqzRzKIAxb7Z9mQbTT+C9VM8f4VilNbSjT7cpqWNHz6TZpI72
-         c91l7HUr4aFLJyV3Rz1BSq+HppZ1xelUfeOBtz8Zx+Pt8NTiRJYHHb8Wo0yGixTF1H
-         jm2XnE+PxTD3fj8VajoWqZNCWFxmNGXbIh0DywvVfsZBim3y2jgjUdnzxEXSPkr02m
-         NicVaWEvgZHjqimlrOT1OTwpSbFn3Bat449Ot79AK9Z8ycHBKkQ6siE9wxVSWb+BIj
-         9Br/TadK9URtjB6gPfoqAQbOnZpixt8YZTeLt/Yn/5NUmrXg7hgAJunrKyRLsuQO1I
-         vUfrTH7ndOung==
-Date:   Fri, 2 Dec 2022 13:47:51 +0100
-MIME-Version: 1.0
-Subject: Re: [PATCH] Revert "cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()"
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        regressions@leemhuis.info, daniel@makrotopia.org,
-        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
- <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
-From:   Nick <vincent@systemli.org>
-In-Reply-To: <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 2 Dec 2022 07:49:05 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2064.outbound.protection.outlook.com [40.107.220.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBE2A5546;
+        Fri,  2 Dec 2022 04:49:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cIFfCto08oO3pN4qw4Fuj08r4njMNNGNFzOECRBBcTQiIl5KvQnBXecXndbs+rC/OCBTnNzDP/nnoacAWyAdw9zpTrJM+RF6akU2nRNChcGSuPjzydK/uZ/HBIxCMCeLkgxsKpFcsbPFgwq92UUq6vcl4MSMGDPCxDyv8L5qya3iggZnVk9uqzXU2LzfKaiQUbvC9PNRj0H1BkTcIysTRmKbedfQ7S5fjPd7/dX+s45aUqNWyxORX64/P8wTWocOe70FcV8CTITxl6O1epHyGeolnVhnxx16G6DjL2VBiS5RfjgTg8GnvtCZ8+r6Wf4l5vYaT+ZHYMjJo3kVHwuAgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OBuQDotrn4MCzg8Qu22M7BnMSSHdOq5ZOWLrqnB21Aw=;
+ b=XZTNu3a+jRrk/KFXzxeoKjmGEM3n8ZTL0LzSGDWdp2V/Yz4MxGvLtL+ZlY6KKMVWWi7Gpza8e1vMWix68FXF2BmXtCgY4OuRcbP4jgzORNvsAAFSB8/XzNp02j0qBBPqacj/gBd8TMZASiJ2JpYp0I0/DT2fn+JHHRBFFLI3MKDiZ+Njbwtidpxtq7d0VUEmwfq1SeAwj389UTVnoRXkIgbvCSA2a0beseRbybJyyxnMg0tfDauvon8pjWO55WZH2bfX0rc8e+jqunghXPluAyhCp1qHHEPT9XBtNJFuv5n0BM7QWFnpAPHeNo8FrZKnYwgc/iCe5YGwPbCXYXwoFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OBuQDotrn4MCzg8Qu22M7BnMSSHdOq5ZOWLrqnB21Aw=;
+ b=P1Ti4q9TTJalba2JcQ6B4Y0fsWY0CeVL8s2AFEPsjvTE7XOAkNs/9Ai9WxXaKETSbVlJFL6gNrFKmBTYoHFI2tsLcsDMSt010RPuqCpGuQTY6JzirJEflSee7jJJV4EEYznbGJW2lkI2ms6tXlvU4j0qJ0top0bT9GdCVpE9S/90Ili1EKh9Z3x8/fg0sDbdSfcviDDMtlKzXIV5zbHmoPknQIVUuxl2sAvnGetT9WDZrTfIsJBs+tlkmRFC1qFySd8EgFi8YOIPSiaOxd6x21uwiirkzp8rVshmWZAQI4PIIceE8wBf0maBs2IOyfuJoNNK5nQj5ZX9S9Co046C9w==
+Received: from BN9P223CA0021.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::26)
+ by BL1PR12MB5128.namprd12.prod.outlook.com (2603:10b6:208:316::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Fri, 2 Dec
+ 2022 12:49:02 +0000
+Received: from BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10b:cafe::2) by BN9P223CA0021.outlook.office365.com
+ (2603:10b6:408:10b::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10 via Frontend
+ Transport; Fri, 2 Dec 2022 12:49:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT069.mail.protection.outlook.com (10.13.176.152) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.8 via Frontend Transport; Fri, 2 Dec 2022 12:49:01 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 2 Dec 2022
+ 04:48:51 -0800
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 2 Dec 2022 04:48:50 -0800
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Fri, 2 Dec 2022 04:48:50 -0800
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 5.15 000/206] 5.15.81-rc1 review
+In-Reply-To: <20221130180532.974348590@linuxfoundation.org>
+References: <20221130180532.974348590@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Message-ID: <c51d36b9-bf00-4850-bbd6-8b0ab3a2c2bc@drhqmail202.nvidia.com>
+Date:   Fri, 2 Dec 2022 04:48:50 -0800
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT069:EE_|BL1PR12MB5128:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8504959b-a0a2-43f9-6263-08dad463969f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WAtLooIeiSnP1ZPca99m2h+Mr942QBJyk/uAHd0jcIxOFJ22QJBdTMbW2/qSpgGl5Boe2EMPJw9sn45F8IaRJckb5EkLT6P8TpcdIQ68KRKldGTw1zk9rqf+FIBVpuKHQWaG7EPH9IRftMNSX6ZY6/bR3gljyamrkC5mJOnOPaQWLLn0TwWLRJN6pYgiOh19P7jpz66omxgqtek80IJ7Kb6Khm6JnGXjW6Ilb1YqAe2Lg6jlB1DRXk999uhe2r8REgxvpogHE11pM9R7DzW0fIAEAGwTzBEABe8N7Vicc5+ejRZ59TJQ14GBhXoPKMmr+Fhn/1JbvKVKjI3Dxrcv/MscJeKkQPso4t4bT/LyhcCFGEP8OTQuuHJUUQ4wnBV1dJCSbUZkwbWlOirQViZvEKUYPHvaRmwaIbSQeX9LN7t1R2V3Msw7mOH9QwGovG3z5ydeC4Cd52y/24dxyccmS8/1Gb2HJBdRUPuTbdDKP9PCT/p/nIPc93QIBWbgJ44fthIT853SqaDaE3EzysDk7SKMx5/dvI10U5W2KpJik4zDI1v69II58hQJ6WVSz9fYw1VMYCwQ1eODa6RjK5Lsdc4ApieAtGQdSrPBHL5Tq2fl2ndORWk4c3qPmqy8UU4r08bwjTXUy8v8IuPAd2SvNCKhJIfbkKDtocF4Q2p8YH44WXupqCCUSd8I55eoscO39WpTULP7Q0g9rv8wu16qD8Y5bEHSGB/Y8NjbTyoJ6jYyUlNtyq0Lw8ByuaQ5ik4AroZv4HNlsGTNw3iBd+xe1Gfe2edLKJOiQFPwFIcFF/E=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(136003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(426003)(47076005)(31686004)(40460700003)(86362001)(31696002)(478600001)(966005)(40480700001)(7636003)(356005)(186003)(82740400003)(82310400005)(336012)(36860700001)(5660300002)(7416002)(41300700001)(26005)(8676002)(70586007)(6916009)(4326008)(316002)(8936002)(54906003)(70206006)(2906002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 12:49:01.8193
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8504959b-a0a2-43f9-6263-08dad463969f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5128
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I tested this again on linux/master on the Banana Pi R64 (mt7622). Seems 
-to work fine:
-https://gist.githubusercontent.com/PolynomialDivision/5022dec1874a1c411ece6c9dabec59b5/raw/7ac62b38d10e41a56ff1db3142571117ee6f4c26/mt7622-cpufreq-revert.log
+On Wed, 30 Nov 2022 19:20:52 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.81 release.
+> There are 206 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.81-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-So if you want you can add:
-Reported-by: Nick Hainke <vincent@systemli.org>
-Tested-by: Nick Hainke <vincent@systemli.org>
+All tests passing for Tegra ...
 
-Bests
-Nick
+Test results for stable-v5.15:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    114 tests:	114 pass, 0 fail
 
-On 12/2/22 06:26, Viresh Kumar wrote:
-> This reverts commit 6a17b3876bc8303612d7ad59ecf7cbc0db418bcd.
->
-> This commit caused regression on Banana Pi R64 (MT7622), revert until
-> the problem is identified and fixed properly.
->
-> Link: https://lore.kernel.org/all/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
-> Cc: v5.19+ <stable@vger.kernel.org> # v5.19+
-> Reported-by: Nick <vincent@systemli.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/mediatek-cpufreq.c | 147 +++++++++++++++++++----------
->   1 file changed, 96 insertions(+), 51 deletions(-)
->
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 7f2680bc9a0f..4466d0c91a6a 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -8,7 +8,6 @@
->   #include <linux/cpu.h>
->   #include <linux/cpufreq.h>
->   #include <linux/cpumask.h>
-> -#include <linux/minmax.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/of_platform.h>
-> @@ -16,6 +15,8 @@
->   #include <linux/pm_opp.h>
->   #include <linux/regulator/consumer.h>
->   
-> +#define VOLT_TOL		(10000)
-> +
->   struct mtk_cpufreq_platform_data {
->   	int min_volt_shift;
->   	int max_volt_shift;
-> @@ -55,7 +56,6 @@ struct mtk_cpu_dvfs_info {
->   	unsigned int opp_cpu;
->   	unsigned long current_freq;
->   	const struct mtk_cpufreq_platform_data *soc_data;
-> -	int vtrack_max;
->   	bool ccifreq_bound;
->   };
->   
-> @@ -82,7 +82,6 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->   	struct regulator *proc_reg = info->proc_reg;
->   	struct regulator *sram_reg = info->sram_reg;
->   	int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
-> -	int retry = info->vtrack_max;
->   
->   	pre_vproc = regulator_get_voltage(proc_reg);
->   	if (pre_vproc < 0) {
-> @@ -90,44 +89,91 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->   			"invalid Vproc value: %d\n", pre_vproc);
->   		return pre_vproc;
->   	}
-> +	/* Vsram should not exceed the maximum allowed voltage of SoC. */
-> +	new_vsram = min(new_vproc + soc_data->min_volt_shift,
-> +			soc_data->sram_max_volt);
-> +
-> +	if (pre_vproc < new_vproc) {
-> +		/*
-> +		 * When scaling up voltages, Vsram and Vproc scale up step
-> +		 * by step. At each step, set Vsram to (Vproc + 200mV) first,
-> +		 * then set Vproc to (Vsram - 100mV).
-> +		 * Keep doing it until Vsram and Vproc hit target voltages.
-> +		 */
-> +		do {
-> +			pre_vsram = regulator_get_voltage(sram_reg);
-> +			if (pre_vsram < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vsram value: %d\n", pre_vsram);
-> +				return pre_vsram;
-> +			}
-> +			pre_vproc = regulator_get_voltage(proc_reg);
-> +			if (pre_vproc < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vproc value: %d\n", pre_vproc);
-> +				return pre_vproc;
-> +			}
->   
-> -	pre_vsram = regulator_get_voltage(sram_reg);
-> -	if (pre_vsram < 0) {
-> -		dev_err(info->cpu_dev, "invalid Vsram value: %d\n", pre_vsram);
-> -		return pre_vsram;
-> -	}
-> +			vsram = min(new_vsram,
-> +				    pre_vproc + soc_data->min_volt_shift);
->   
-> -	new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
-> -			  soc_data->sram_min_volt, soc_data->sram_max_volt);
-> +			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
-> +				vsram = soc_data->sram_max_volt;
->   
-> -	do {
-> -		if (pre_vproc <= new_vproc) {
-> -			vsram = clamp(pre_vproc + soc_data->max_volt_shift,
-> -				      soc_data->sram_min_volt, new_vsram);
-> -			ret = regulator_set_voltage(sram_reg, vsram,
-> -						    soc_data->sram_max_volt);
-> +				/*
-> +				 * If the target Vsram hits the maximum voltage,
-> +				 * try to set the exact voltage value first.
-> +				 */
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram);
-> +				if (ret)
-> +					ret = regulator_set_voltage(sram_reg,
-> +							vsram - VOLT_TOL,
-> +							vsram);
->   
-> -			if (ret)
-> -				return ret;
-> -
-> -			if (vsram == soc_data->sram_max_volt ||
-> -			    new_vsram == soc_data->sram_min_volt)
->   				vproc = new_vproc;
-> -			else
-> +			} else {
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram + VOLT_TOL);
-> +
->   				vproc = vsram - soc_data->min_volt_shift;
-> +			}
-> +			if (ret)
-> +				return ret;
->   
->   			ret = regulator_set_voltage(proc_reg, vproc,
-> -						    soc_data->proc_max_volt);
-> +						    vproc + VOLT_TOL);
->   			if (ret) {
->   				regulator_set_voltage(sram_reg, pre_vsram,
-> -						      soc_data->sram_max_volt);
-> +						      pre_vsram);
->   				return ret;
->   			}
-> -		} else if (pre_vproc > new_vproc) {
-> +		} while (vproc < new_vproc || vsram < new_vsram);
-> +	} else if (pre_vproc > new_vproc) {
-> +		/*
-> +		 * When scaling down voltages, Vsram and Vproc scale down step
-> +		 * by step. At each step, set Vproc to (Vsram - 200mV) first,
-> +		 * then set Vproc to (Vproc + 100mV).
-> +		 * Keep doing it until Vsram and Vproc hit target voltages.
-> +		 */
-> +		do {
-> +			pre_vproc = regulator_get_voltage(proc_reg);
-> +			if (pre_vproc < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vproc value: %d\n", pre_vproc);
-> +				return pre_vproc;
-> +			}
-> +			pre_vsram = regulator_get_voltage(sram_reg);
-> +			if (pre_vsram < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vsram value: %d\n", pre_vsram);
-> +				return pre_vsram;
-> +			}
-> +
->   			vproc = max(new_vproc,
->   				    pre_vsram - soc_data->max_volt_shift);
->   			ret = regulator_set_voltage(proc_reg, vproc,
-> -						    soc_data->proc_max_volt);
-> +						    vproc + VOLT_TOL);
->   			if (ret)
->   				return ret;
->   
-> @@ -137,24 +183,32 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->   				vsram = max(new_vsram,
->   					    vproc + soc_data->min_volt_shift);
->   
-> -			ret = regulator_set_voltage(sram_reg, vsram,
-> -						    soc_data->sram_max_volt);
-> +			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
-> +				vsram = soc_data->sram_max_volt;
-> +
-> +				/*
-> +				 * If the target Vsram hits the maximum voltage,
-> +				 * try to set the exact voltage value first.
-> +				 */
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram);
-> +				if (ret)
-> +					ret = regulator_set_voltage(sram_reg,
-> +							vsram - VOLT_TOL,
-> +							vsram);
-> +			} else {
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram + VOLT_TOL);
-> +			}
-> +
->   			if (ret) {
->   				regulator_set_voltage(proc_reg, pre_vproc,
-> -						      soc_data->proc_max_volt);
-> +						      pre_vproc);
->   				return ret;
->   			}
-> -		}
-> -
-> -		pre_vproc = vproc;
-> -		pre_vsram = vsram;
-> -
-> -		if (--retry < 0) {
-> -			dev_err(info->cpu_dev,
-> -				"over loop count, failed to set voltage\n");
-> -			return -EINVAL;
-> -		}
-> -	} while (vproc != new_vproc || vsram != new_vsram);
-> +		} while (vproc > new_vproc + VOLT_TOL ||
-> +			 vsram > new_vsram + VOLT_TOL);
-> +	}
->   
->   	return 0;
->   }
-> @@ -250,8 +304,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->   	 * If the new voltage or the intermediate voltage is higher than the
->   	 * current voltage, scale up voltage first.
->   	 */
-> -	target_vproc = max(inter_vproc, vproc);
-> -	if (pre_vproc <= target_vproc) {
-> +	target_vproc = (inter_vproc > vproc) ? inter_vproc : vproc;
-> +	if (pre_vproc < target_vproc) {
->   		ret = mtk_cpufreq_set_voltage(info, target_vproc);
->   		if (ret) {
->   			dev_err(cpu_dev,
-> @@ -513,15 +567,6 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->   	 */
->   	info->need_voltage_tracking = (info->sram_reg != NULL);
->   
-> -	/*
-> -	 * We assume min voltage is 0 and tracking target voltage using
-> -	 * min_volt_shift for each iteration.
-> -	 * The vtrack_max is 3 times of expeted iteration count.
-> -	 */
-> -	info->vtrack_max = 3 * DIV_ROUND_UP(max(info->soc_data->sram_max_volt,
-> -						info->soc_data->proc_max_volt),
-> -					    info->soc_data->min_volt_shift);
-> -
->   	return 0;
->   
->   out_disable_inter_clock:
+Linux version:	5.15.81-rc1-g516c2740a2a1
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
+
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+
+Jon
