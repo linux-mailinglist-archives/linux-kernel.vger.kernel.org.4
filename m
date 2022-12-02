@@ -2,92 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA11640AC5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0165E640A80
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbiLBQ22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:28:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S233844AbiLBQVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234170AbiLBQ2I (ORCPT
+        with ESMTP id S234015AbiLBQUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:28:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BB7B4A7;
-        Fri,  2 Dec 2022 08:27:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0AF2B821E6;
-        Fri,  2 Dec 2022 16:27:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E34C433B5;
-        Fri,  2 Dec 2022 16:27:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669998456;
-        bh=kZpD9Zd8fK5FsBNX8yWTE04dqx5btwD+2Ef6ipOw9BU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Rm0yQzBdKVK1FBZNHoIlyZG39wuLaY4SGohEy613Qrb9ahp8keVOgCj/k2xJxhYkS
-         MKcrfYV+i7fCxBF+ez0fPKXH/mE8UAtn4Uj6GgdleLLwf5onAwtGru5dZz0ZQNYM5U
-         NUM7hC9Qf76HUOqtV3AeG0wE5IzOye3kMgR5CIaPf6sBQUCHkR2yduwkCzJUVLzMZN
-         S73vEeRGZveehiko234vPUyNWKsUgZcSVu7W9WfgqwP/gGIQP4O4y26OabDBvvfvVK
-         q6at7Gk5LYxvwT6JGOn1EHElynaez0C4U8T3dX0mZMkPAKOKXbnZou/icapxATcr2u
-         CD3pGvrDTPbDA==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: stmmac: fix "snps,axi-config" node property parsing
-Date:   Sat,  3 Dec 2022 00:17:39 +0800
-Message-Id: <20221202161739.2203-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Fri, 2 Dec 2022 11:20:54 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83074ECE60;
+        Fri,  2 Dec 2022 08:18:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669997914; x=1701533914;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7kU26MIub+cu0n7tSsFLX1XdaUFcNgPBdV26TZeWYFY=;
+  b=AU2ei758bfK60quDnQQa1GBEtu8uYf2Y321bLfHv6MlhKbWiobiXzdjx
+   fcq/3L7WOccKokMDzrF3FnJg4wl2jputZkjLJBgoBApbWp6vfyEan7H1P
+   EQdp3KbpH2HxXalk/8RJYjlC8Z6Ln24HsFytyK0AxGiWcuFgx+MKWaxWE
+   HWgTcj0E5D1pgErVyk8yqjtsWp3EedNMTDDX8aIAdISDkAZsA3NTtGoBN
+   6jL09Izd9GXQeRXAn65XhMSfSKCxxtV9vCQdPvkBnqY0hJFsD/UjXNUhJ
+   iP0Mr9mOzNnKYyL5X7rKLiOAtGlIrcBF+y4BQF8VJjaZoUR9Ercl2vDpj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="380274543"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="380274543"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 08:17:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="595493381"
+X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
+   d="scan'208";a="595493381"
+Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 08:17:57 -0800
+Message-ID: <93fd7ed0-5311-d6db-4d8b-b992a8f78ada@intel.com>
+Date:   Fri, 2 Dec 2022 08:17:56 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/3] acpi/processor: fix evaluating _PDC method when
+ running as Xen dom0
+Content-Language: en-US
+To:     =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        jgross@suse.com, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Alex Chiang <achiang@hp.com>,
+        Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>,
+        linux-acpi@vger.kernel.org
+References: <20221121102113.41893-1-roger.pau@citrix.com>
+ <20221121102113.41893-2-roger.pau@citrix.com>
+ <6b212148-4e3f-3ef6-7922-901175746d44@intel.com>
+ <Y4d8cm97hn5zuRQ1@Air-de-Roger>
+ <4a0e9f91-8d8b-84bc-c9db-7265f5b65b63@intel.com>
+ <Y4nugxKV1J/BqhBt@Air-de-Roger>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y4nugxKV1J/BqhBt@Air-de-Roger>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In dt-binding snps,dwmac.yaml, some properties under "snps,axi-config"
-node are named without "axi_" prefix, but the driver expects the
-prefix. Since the dt-binding has been there for a long time, we'd
-better make driver match the binding for compatibility.
+On 12/2/22 04:24, Roger Pau Monné wrote:
+> On the implementation side, is the proposed approach acceptable?
+> Mostly asking because it adds Xen conditionals to otherwise generic
+> ACPI code.
 
-Fixes: afea03656add ("stmmac: rework DMA bus setting and introduce new platform AXI structure")
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+That's a good Rafael question.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 50f6b4a14be4..eb6d9cd8e93f 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -108,10 +108,10 @@ static struct stmmac_axi *stmmac_axi_setup(struct platform_device *pdev)
- 
- 	axi->axi_lpi_en = of_property_read_bool(np, "snps,lpi_en");
- 	axi->axi_xit_frm = of_property_read_bool(np, "snps,xit_frm");
--	axi->axi_kbbe = of_property_read_bool(np, "snps,axi_kbbe");
--	axi->axi_fb = of_property_read_bool(np, "snps,axi_fb");
--	axi->axi_mb = of_property_read_bool(np, "snps,axi_mb");
--	axi->axi_rb =  of_property_read_bool(np, "snps,axi_rb");
-+	axi->axi_kbbe = of_property_read_bool(np, "snps,kbbe");
-+	axi->axi_fb = of_property_read_bool(np, "snps,fb");
-+	axi->axi_mb = of_property_read_bool(np, "snps,mb");
-+	axi->axi_rb =  of_property_read_bool(np, "snps,rb");
- 
- 	if (of_property_read_u32(np, "snps,wr_osr_lmt", &axi->axi_wr_osr_lmt))
- 		axi->axi_wr_osr_lmt = 1;
--- 
-2.38.1
-
+But, how do other places in the ACPI code handle things like this?
