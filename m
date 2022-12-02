@@ -2,251 +2,569 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574DA640594
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDB06405A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiLBLOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S233242AbiLBLSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbiLBLOI (ORCPT
+        with ESMTP id S233115AbiLBLSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:14:08 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3E1CEF92
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:14:07 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id j4so6954204lfk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:14:06 -0800 (PST)
+        Fri, 2 Dec 2022 06:18:13 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59008A9E89
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 03:18:09 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id t1so3286345wmi.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 03:18:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kfh2uEkgJYQbt4ZY05bMmlo4I+toC+Od514z9x7yJ0k=;
-        b=SkmDWVnXOjLeqsSC4ZOtRofWVZ93d6mCs/ekDDHIWFooXvfvs6MfRpGlopzHiWAlr6
-         Vk4ZfEiyCFPmwf2t+Hb85BEHKcebyK5qr6DF6LU5+WvXkXPF08YdyngSQx/E2rWDf1Ut
-         KJRDJ/dYf6DnvxnR+Sy3L0/eGdsRGVMqj9KcPoTBUFGCfj+WOlPh3N+t2M/AMR1ubXa5
-         rmvbCly7HbX2OK87ZOjEiajksvErHyDoo90irw+OSM1cwxFikrPlXdE8BJsrCBLlV93K
-         rScWtvq23c38FdMGoOBTYWNWVM4s5YieLhID7kg5qGzd3pQU9ydjbTPnqPqE8V7AcN0n
-         IvLg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZRUxz+2oeV4H1MQgImrONOfTACg5vH21fQewg5fziY=;
+        b=68zhrre/NqRRPetK2lPHVnMEDS+iV8bejCIsSaLXRXCvuSxu/lRSYxf76IIE2tLmcN
+         XlXvFgvyy0iEk4pyHGaRLgMLkYYLSMq64vVaGKs04ejoOSmuopq2+SXMIRZB/twCMaWo
+         Tgl1kayBu6z5ulwQ8IDfz7qg562dI003ZdSjJhFf3t1HC8GGbQyk//vxuQ4oS6fwnLmR
+         xy8qrgDxHVtbmvMGK3vEqDTphRS2mfY0ejBL1UqDwof1IK0VDUv6Oowp1p5ZrDFuRv4G
+         mTidcMZ/z7mqkprcSC7wTzF77waXxPshtFANSvoPjvmv/lSzVlOGtMzfD80ddbjyIESA
+         CI1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kfh2uEkgJYQbt4ZY05bMmlo4I+toC+Od514z9x7yJ0k=;
-        b=3WVUN7g1M0voVWeOKL/0pohb9bjipwTtlNyF5IlWHrE1Ad8uKqq3UOPDY7ORT+Oqn5
-         ILJEUHtIQAcsF2xyCitLzbqHAffMTurvS3X9Jr62QeHzCaaWqrLmp6PPMYbGG/Qg3Lof
-         E3mf7Ah/+s7DucvdT2Bu7Z24sda+3ymKJPsvSVr6NDpXXFqMmuCh27eeXna9dzSRMK8W
-         ICWlHscazAS+zKYrXZ9Q5qKPIoz1sVjOs4jWeCkrr4kmWyMy/pTiT9wK7RXngQkUe3Uo
-         YU6TRint8zIz+j6PYD8MSsL4MdDAfvoLpweS/FxNo70qeeM6w5o1fEoQNQyn3KW5rwzC
-         dTPQ==
-X-Gm-Message-State: ANoB5plSgjXwCY9PJJSvgPpM4heLTrt5W8YxvN9TAgJqnPEB3/Qwe+Mt
-        xiahuWxi7Z6eVaLtwVgMidaYNQ==
-X-Google-Smtp-Source: AA0mqf7mJhhZCg+x1t1Y5hOsdmMcgg0eIKKgvFfGcYURBsM7OgPVL6InsNZyygYH0zfQsxsaDdpGqg==
-X-Received: by 2002:ac2:5326:0:b0:4b1:5bf0:df51 with SMTP id f6-20020ac25326000000b004b15bf0df51mr26269906lfh.674.1669979645249;
-        Fri, 02 Dec 2022 03:14:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s15-20020a056512214f00b004a6f66eed7fsm979178lfr.165.2022.12.02.03.14.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 03:14:04 -0800 (PST)
-Message-ID: <df8a683a-0df9-c32a-4272-19e7313ef7d7@linaro.org>
-Date:   Fri, 2 Dec 2022 12:14:02 +0100
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DZRUxz+2oeV4H1MQgImrONOfTACg5vH21fQewg5fziY=;
+        b=av/spGEl+51U0d9dV+aj9r38nWmCkywrwo3KhbgPCWIkDn92foFiCP7fuRxhg1Kf0B
+         95Kerg9Eca7qO1fuRcVp5KcrtNkjcp/Ba6dJW/jNw7cRCE0FdMrHztT4kcul1haPsDIR
+         A+GgxaQ3Ga7YpCEMxo/6WOhKHCQ8OmMxC+5iZ0I4auhLCQ0qV/VvBw9KCQUzN9BrtMBw
+         3moPEn/5Zf1p6jfre+3/7WDJtUWQGlZFKxNYjzA43nCU+VlInJVAgFj490CDi+wSFpNa
+         rdXsixHksnS+zVHHtYPOP7IHrnnI3jdGaJ6qdalyoAtcu1UB365QDsRP/25+20LmvdRN
+         fJhA==
+X-Gm-Message-State: ANoB5pkUx/Fz2twrLWlc1HoTdoFhYObq3AuL8EE86eB33sAGI2aUs+PR
+        kMdV7lZTDoJN9QsWcMoLQdzqhg==
+X-Google-Smtp-Source: AA0mqf4h5FG/KgQS7jyCqdyinrM9iQDiP64AcZB9EtNcAaCR6AfeJXSZagJCN0ax7i52XhC/Y1fa3Q==
+X-Received: by 2002:a05:600c:1c9a:b0:3cf:7514:a806 with SMTP id k26-20020a05600c1c9a00b003cf7514a806mr40880268wms.116.1669979888132;
+        Fri, 02 Dec 2022 03:18:08 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id az39-20020a05600c602700b003cf78aafdd7sm8484809wmb.39.2022.12.02.03.18.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 03:18:07 -0800 (PST)
+References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
+ <20221201225703.6507-3-ddrokosov@sberdevices.ru>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 02/11] clk: meson: a1: add support for Amlogic A1 PLL
+ clock driver
+Date:   Fri, 02 Dec 2022 12:16:12 +0100
+In-reply-to: <20221201225703.6507-3-ddrokosov@sberdevices.ru>
+Message-ID: <1j7cza8368.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: leds: add dt schema for
- worldsemi,ws2812b-spi
-Content-Language: en-US
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-leds@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221202034240.455831-1-gch981213@gmail.com>
- <20221202034240.455831-3-gch981213@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221202034240.455831-3-gch981213@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 04:42, Chuanhong Guo wrote:
-> This patch adds dt binding schema for WorldSemi WS2812B driven using SPI
-> bus.
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+On Fri 02 Dec 2022 at 01:56, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
-> 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> From: Jian Hu <jian.hu@amlogic.com>
+>
+> The Amlogic A1 clock includes three drivers:
+> pll clocks, peripheral clocks, CPU clocks.
+> sys pll and CPU clocks will be sent in next patch.
+>
+> Unlike the previous series, there is no EE/AO domain
+> in A1 CLK controllers.
+>
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 > ---
-> Changes since v1:
-> remove linux driver reference from description
-> remove some obvious descriptions
-> fix unit address regex in multi-led property
-> drop various minItems
-> add maxItems = 1 to reg
-> fix node names and property orders in binding example
-> drop -spi from compatible string
-> add default-brightness
-> 
->  .../bindings/leds/worldsemi,ws2812b.yaml      | 138 ++++++++++++++++++
->  1 file changed, 138 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+>  drivers/clk/meson/Kconfig  |   9 +
+>  drivers/clk/meson/Makefile |   1 +
+>  drivers/clk/meson/a1-pll.c | 360 +++++++++++++++++++++++++++++++++++++
+>  drivers/clk/meson/a1-pll.h |  56 ++++++
+>  4 files changed, 426 insertions(+)
+>  create mode 100644 drivers/clk/meson/a1-pll.c
+>  create mode 100644 drivers/clk/meson/a1-pll.h
+>
+> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> index fc002c155bc3..ab34662b24f0 100644
+> --- a/drivers/clk/meson/Kconfig
+> +++ b/drivers/clk/meson/Kconfig
+> @@ -99,6 +99,15 @@ config COMMON_CLK_AXG_AUDIO
+>  	  Support for the audio clock controller on AmLogic A113D devices,
+>  	  aka axg, Say Y if you want audio subsystem to work.
+>  
+> +config COMMON_CLK_A1_PLL
+> +	bool
+
+Could you add a tristate with some text please ?
+
+> +	depends on ARCH_MESON
+> +	select COMMON_CLK_MESON_REGMAP
+> +	select COMMON_CLK_MESON_PLL
+> +	help
+> +	  Support for the PLL clock controller on Amlogic A113L device,
+> +	  aka a1. Say Y if you want PLL to work.
+> +
+>  config COMMON_CLK_G12A
+>  	tristate "G12 and SM1 SoC clock controllers support"
+>  	depends on ARM64
+> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+> index 6eca2a406ee3..2f17f475a48f 100644
+> --- a/drivers/clk/meson/Makefile
+> +++ b/drivers/clk/meson/Makefile
+> @@ -16,6 +16,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) += vid-pll-div.o
+>  
+>  obj-$(CONFIG_COMMON_CLK_AXG) += axg.o axg-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_AXG_AUDIO) += axg-audio.o
+> +obj-$(CONFIG_COMMON_CLK_A1_PLL) += a1-pll.o
+>  obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o meson8-ddr.o
+> diff --git a/drivers/clk/meson/a1-pll.c b/drivers/clk/meson/a1-pll.c
 > new file mode 100644
-> index 000000000000..f91908d0acef
+> index 000000000000..69c1ca07d041
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> @@ -0,0 +1,138 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/worldsemi,ws2812b.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/clk/meson/a1-pll.c
+> @@ -0,0 +1,360 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + * Author: Jian Hu <jian.hu@amlogic.com>
+> + */
 > +
-> +title: WS2812B LEDs driven using SPI
+> +#include <linux/clk-provider.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include "a1-pll.h"
+> +#include "clk-pll.h"
+> +#include "clk-regmap.h"
 > +
-> +maintainers:
-> +  - Chuanhong Guo <gch981213@gmail.com>
+> +static struct clk_regmap a1_fixed_pll_dco = {
+> +	.data = &(struct meson_clk_pll_data){
+> +		.en = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 28,
+> +			.width   = 1,
+> +		},
+> +		.m = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 0,
+> +			.width   = 8,
+> +		},
+> +		.n = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 10,
+> +			.width   = 5,
+> +		},
+> +		.frac = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 19,
+> +		},
+> +		.l = {
+> +			.reg_off = ANACTRL_FIXPLL_STS,
+> +			.shift   = 31,
+> +			.width   = 1,
+> +		},
+> +		.rst = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 29,
+> +			.width   = 1,
+> +		},
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fixed_pll_dco",
+> +		.ops = &meson_clk_pll_ro_ops,
+> +		.parent_data = &(const struct clk_parent_data) {
+> +			.fw_name = "xtal_fixpll",
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
 > +
-> +description: |
-> +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
-> +  together and controlled individually using a single wire.
-> +  This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
-> +  Typical setups includes connecting the data pin of the LED chain to MOSI as
-> +  the only device or using CS and MOSI with a tri-state voltage-level shifter
-> +  for the data pin.
-> +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
-> +  and the controller needs to send all the bytes continuously.
+> +static struct clk_regmap a1_fixed_pll = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL0,
+> +		.bit_idx = 20,
+> +	},
+> +	.hw.init = &(struct clk_init_data) {
+> +		.name = "fixed_pll",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fixed_pll_dco.hw
+> +		},
+> +		.num_parents = 1,
+> +		/*
+> +		 * It is enough that the fdiv leaf has critical flag,
+> +		 * No critical or unused flag here.
+> +		 */
+> +	},
+> +};
 > +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +static const struct pll_mult_range a1_hifi_pll_mult_range = {
+> +	.min = 32,
+> +	.max = 64,
+> +};
 > +
-> +properties:
-> +  compatible:
-> +    const: worldsemi,ws2812b
+> +static const struct reg_sequence a1_hifi_init_regs[] = {
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL1, .def = 0x01800000 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL2, .def = 0x00001100 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL3, .def = 0x100a1100 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL4, .def = 0x00302000 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL0, .def = 0x01f18440 },
+> +};
 > +
-> +  reg:
-> +    maxItems: 1
+> +static struct clk_regmap a1_hifi_pll = {
+> +	.data = &(struct meson_clk_pll_data){
+> +		.en = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 28,
+> +			.width   = 1,
+> +		},
+> +		.m = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 0,
+> +			.width   = 8,
+> +		},
+> +		.n = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 10,
+> +			.width   = 5,
+> +		},
+> +		.frac = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 19,
+> +		},
+> +		.l = {
+> +			.reg_off = ANACTRL_HIFIPLL_STS,
+> +			.shift   = 31,
+> +			.width   = 1,
+> +		},
+> +		.current_en = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 26,
+> +			.width   = 1,
+> +		},
+> +		.l_detect = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL2,
+> +			.shift   = 6,
+> +			.width   = 1,
+> +		},
+> +		.range = &a1_hifi_pll_mult_range,
+> +		.init_regs = a1_hifi_init_regs,
+> +		.init_count = ARRAY_SIZE(a1_hifi_init_regs),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "hifi_pll",
+> +		.ops = &meson_clk_pll_ops,
+> +		.parent_data = &(const struct clk_parent_data) {
+> +			.fw_name = "xtal_hifipll",
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
 > +
-> +  spi-max-frequency:
-> +    minimum: 2105000
-> +    maximum: 2850000
+> +static struct clk_fixed_factor a1_fclk_div2_div = {
+> +	.mult = 1,
+> +	.div = 2,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div2_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fixed_pll.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
 > +
-> +  "#address-cells":
-> +    const: 1
+> +static struct clk_regmap a1_fclk_div2 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL0,
+> +		.bit_idx = 21,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div2",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fclk_div2_div.hw
+> +		},
+> +		.num_parents = 1,
+> +		/*
+> +		 * This clock is used by DDR clock in BL2 firmware
+> +		 * and is required by the platform to operate correctly.
+> +		 * Until the following condition are met, we need this clock to
+> +		 * be marked as critical:
+> +		 * a) Mark the clock used by a firmware resource, if possible
+> +		 * b) CCF has a clock hand-off mechanism to make the sure the
+> +		 *    clock stays on until the proper driver comes along
+> +		 */
+> +		.flags = CLK_IS_CRITICAL,
+> +	},
+> +};
 > +
-> +  "#size-cells":
-> +    const: 0
+> +static struct clk_fixed_factor a1_fclk_div3_div = {
+> +	.mult = 1,
+> +	.div = 3,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div3_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fixed_pll.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
 > +
-> +patternProperties:
-> +  "^multi-led@[0-9a-f]+$":
-> +    type: object
-> +    $ref: leds-class-multicolor.yaml#
-> +    unevaluatedProperties: false
+> +static struct clk_regmap a1_fclk_div3 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL0,
+> +		.bit_idx = 22,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div3",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fclk_div3_div.hw
+> +		},
+> +		.num_parents = 1,
+> +		/*
+> +		 * This clock is used by APB bus which is set in boot ROM code
+> +		 * and is required by the platform to operate correctly.
+> +		 * About critical, refer to a1_fclk_div2.
+> +		 */
+> +		.flags = CLK_IS_CRITICAL,
+> +	},
+> +};
 > +
-> +    properties:
-> +      color-index:
-> +        description: |
-> +          A 3-item array specifying color of each components in this LED. It
-> +          should be one of the LED_COLOR_ID_* prefixed definitions from the
-> +          header include/dt-bindings/leds/common.h. Defaults to
-> +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
-> +          if unspecified.
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        maxItems: 3
+> +static struct clk_fixed_factor a1_fclk_div5_div = {
+> +	.mult = 1,
+> +	.div = 5,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div5_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fixed_pll.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
 > +
-> +      default-brightness:
-> +        description:
-> +          The default brightness that should be applied to the LED by the operating
-> +          system on start-up. The brightness should not exceed the brightness the
-> +          LED can provide.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        minimum: 0
-> +        maximum: 255
-> +        default: 0
+> +static struct clk_regmap a1_fclk_div5 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL0,
+> +		.bit_idx = 23,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div5",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fclk_div5_div.hw
+> +		},
+> +		.num_parents = 1,
+> +		/*
+> +		 * This clock is used by AXI bus which setted in Romcode
+> +		 * and is required by the platform to operate correctly.
+> +		 * About critical, refer to a1_fclk_div2.
+> +		 */
+> +		.flags = CLK_IS_CRITICAL,
+> +	},
+> +};
 > +
-> +      default-intensity:
-> +        description: |
-> +          An array of 3 integer specifying the default intensity of each color
-> +          components in this LED. <255 255 255> if unspecified.
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> +static struct clk_fixed_factor a1_fclk_div7_div = {
+> +	.mult = 1,
+> +	.div = 7,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div7_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fixed_pll.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap a1_fclk_div7 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL0,
+> +		.bit_idx = 24,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div7",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&a1_fclk_div7_div.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +/* Array of all clocks provided by this provider */
+> +static struct clk_hw_onecell_data a1_pll_hw_onecell_data = {
+> +	.hws = {
+> +		[CLKID_FIXED_PLL_DCO]		= &a1_fixed_pll_dco.hw,
+> +		[CLKID_FIXED_PLL]		= &a1_fixed_pll.hw,
+> +		[CLKID_HIFI_PLL]		= &a1_hifi_pll.hw,
+> +		[CLKID_FCLK_DIV2]		= &a1_fclk_div2.hw,
+> +		[CLKID_FCLK_DIV3]		= &a1_fclk_div3.hw,
+> +		[CLKID_FCLK_DIV5]		= &a1_fclk_div5.hw,
+> +		[CLKID_FCLK_DIV7]		= &a1_fclk_div7.hw,
+> +		[CLKID_FCLK_DIV2_DIV]		= &a1_fclk_div2_div.hw,
+> +		[CLKID_FCLK_DIV3_DIV]		= &a1_fclk_div3_div.hw,
+> +		[CLKID_FCLK_DIV5_DIV]		= &a1_fclk_div5_div.hw,
+> +		[CLKID_FCLK_DIV7_DIV]		= &a1_fclk_div7_div.hw,
+> +		[NR_PLL_CLKS]			= NULL,
+> +	},
+> +	.num = NR_PLL_CLKS,
+> +};
+> +
+> +static struct clk_regmap *const a1_pll_regmaps[] = {
+> +	&a1_fixed_pll_dco,
+> +	&a1_fixed_pll,
+> +	&a1_hifi_pll,
+> +	&a1_fclk_div2,
+> +	&a1_fclk_div3,
+> +	&a1_fclk_div5,
+> +	&a1_fclk_div7,
+> +};
+> +
+> +static struct regmap_config clkc_regmap_config = {
+> +	.reg_bits       = 32,
+> +	.val_bits       = 32,
+> +	.reg_stride     = 4,
+> +};
+> +
+> +static int meson_a1_pll_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	void __iomem *base;
+> +	struct regmap *map;
+> +	int ret, i;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +
+> +	base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
 
-I am still not convinced these two properties are correct. Why this LED
-is special and defines default brightness and intensity and other LEDs
-do not? You explained you are doing it for user-space which is usually
-not a valid reason for changes specific to one binding. Either all
-bindings should support it or none.
+devm_platform_ioremap_resource ?
 
-> +        maxItems: 3
-> +        items:
-> +          minimum: 0
-> +          maximum: 255
 > +
-> +      reg:
-> +        description: |
-> +          Which LED this node represents. The reg of the first LED on the chain
-> +          is 0.
-> +        maxItems: 1
+> +	map = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
+> +	if (IS_ERR(map))
+> +		return PTR_ERR(map);
 > +
-> +    required:
-> +      - reg
-> +      - color
-> +      - function
+> +	/* Populate regmap for the regmap backed clocks */
+> +	for (i = 0; i < ARRAY_SIZE(a1_pll_regmaps); i++)
+> +		a1_pll_regmaps[i]->map = map;
 > +
-> +required:
-> +  - compatible
+> +	for (i = 0; i < a1_pll_hw_onecell_data.num; i++) {
+> +		/* array might be sparse */
+> +		if (!a1_pll_hw_onecell_data.hws[i])
+> +			continue;
 > +
-> +additionalProperties: false
+> +		ret = devm_clk_hw_register(dev, a1_pll_hw_onecell_data.hws[i]);
+> +		if (ret) {
+> +			dev_err(dev, "Clock registration failed\n");
+> +			return ret;
+> +		}
+> +	}
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
+> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+> +					   &a1_pll_hw_onecell_data);
+> +}
 > +
-> +        leds@0 {
-
-git grep leds@ -- Documentation/devicetree/ | wc -l
-1
-git grep led@ -- Documentation/devicetree/ | wc -l
-165
-
-so rather not the first one ("leds").
-
-There is also:
-git grep led-controller@ -- Documentation/devicetree/ | wc -l
-30
-
-
-> +            compatible = "worldsemi,ws2812b";
-> +            reg = <0>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            spi-max-frequency = <2850000>;
-> +            multi-led@0 {
-> +                reg = <0>;
-
-Best regards,
-Krzysztof
+> +static const struct of_device_id clkc_match_table[] = {
+> +	{ .compatible = "amlogic,a1-pll-clkc", },
+> +	{}
+> +};
+> +
+> +static struct platform_driver a1_pll_driver = {
+> +	.probe		= meson_a1_pll_probe,
+> +	.driver		= {
+> +		.name	= "a1-pll-clkc",
+> +		.of_match_table = clkc_match_table,
+> +	},
+> +};
+> +
+> +builtin_platform_driver(a1_pll_driver);
+> diff --git a/drivers/clk/meson/a1-pll.h b/drivers/clk/meson/a1-pll.h
+> new file mode 100644
+> index 000000000000..8ded267061ad
+> --- /dev/null
+> +++ b/drivers/clk/meson/a1-pll.h
+> @@ -0,0 +1,56 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> +/*
+> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef __A1_PLL_H
+> +#define __A1_PLL_H
+> +
+> +/* PLL register offset */
+> +#define ANACTRL_FIXPLL_CTRL0		0x0
+> +#define ANACTRL_FIXPLL_CTRL1		0x4
+> +#define ANACTRL_FIXPLL_CTRL2		0x8
+> +#define ANACTRL_FIXPLL_CTRL3		0xc
+> +#define ANACTRL_FIXPLL_CTRL4		0x10
+> +#define ANACTRL_FIXPLL_STS		0x14
+> +#define ANACTRL_SYSPLL_CTRL0		0x80
+> +#define ANACTRL_SYSPLL_CTRL1		0x84
+> +#define ANACTRL_SYSPLL_CTRL2		0x88
+> +#define ANACTRL_SYSPLL_CTRL3		0x8c
+> +#define ANACTRL_SYSPLL_CTRL4		0x90
+> +#define ANACTRL_SYSPLL_STS		0x94
+> +#define ANACTRL_HIFIPLL_CTRL0		0xc0
+> +#define ANACTRL_HIFIPLL_CTRL1		0xc4
+> +#define ANACTRL_HIFIPLL_CTRL2		0xc8
+> +#define ANACTRL_HIFIPLL_CTRL3		0xcc
+> +#define ANACTRL_HIFIPLL_CTRL4		0xd0
+> +#define ANACTRL_HIFIPLL_STS		0xd4
+> +#define ANACTRL_AUDDDS_CTRL0		0x100
+> +#define ANACTRL_AUDDDS_CTRL1		0x104
+> +#define ANACTRL_AUDDDS_CTRL2		0x108
+> +#define ANACTRL_AUDDDS_CTRL3		0x10c
+> +#define ANACTRL_AUDDDS_CTRL4		0x110
+> +#define ANACTRL_AUDDDS_STS		0x114
+> +#define ANACTRL_MISCTOP_CTRL0		0x140
+> +#define ANACTRL_POR_CNTL		0x188
+> +
+> +/*
+> + * CLKID index values
+> + *
+> + * These indices are entirely contrived and do not map onto the hardware.
+> + * It has now been decided to expose everything by default in the DT header:
+> + * include/dt-bindings/clock/a1-pll-clkc.h. Only the clocks ids we don't want
+> + * to expose, such as the internal muxes and dividers of composite clocks,
+> + * will remain defined here.
+> + */
+> +#define CLKID_FIXED_PLL_DCO		0
+> +#define CLKID_FCLK_DIV2_DIV		2
+> +#define CLKID_FCLK_DIV3_DIV		3
+> +#define CLKID_FCLK_DIV5_DIV		4
+> +#define CLKID_FCLK_DIV7_DIV		5
+> +#define NR_PLL_CLKS			11
+> +
+> +/* include the CLKIDs that have been made part of the DT binding */
+> +#include <dt-bindings/clock/a1-pll-clkc.h>
+> +
+> +#endif /* __A1_PLL_H */
 
