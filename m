@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D1564024D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34601640257
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbiLBIgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S232576AbiLBIjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbiLBIfn (ORCPT
+        with ESMTP id S232574AbiLBIih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:35:43 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAB7CE1A;
-        Fri,  2 Dec 2022 00:34:26 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NNmND0lS9zqT1Z;
-        Fri,  2 Dec 2022 16:30:20 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Dec 2022 16:34:24 +0800
-Subject: Re: [EXT] Re: [PATCH net 1/2] octeontx2-pf: Fix possible memory leak
- in otx2_probe()
-To:     Geethasowjanya Akula <gakula@marvell.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "sunil.kovvuri@gmail.com" <sunil.kovvuri@gmail.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>
-CC:     Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
-        Hariprasad Kelam <hkelam@marvell.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Naveen Mamindlapalli <naveenm@marvell.com>,
-        Rakesh Babu Saladi <rsaladi2@marvell.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1669253985.git.william.xuanziyang@huawei.com>
- <e024450cf08f469fb1e0153b78a04a54829dfddb.1669253985.git.william.xuanziyang@huawei.com>
- <Y4DHHUUbGl5wWGQ+@boxer> <f4bb4aa5-08cc-4a4d-76cf-46bda5c6de59@huawei.com>
- <538c8b9a-7d6c-69f8-9e14-45436446127e@huawei.com>
- <DM6PR18MB26020F45167434B409A32AA7CD179@DM6PR18MB2602.namprd18.prod.outlook.com>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <97439096-aeab-f24a-1767-b535cf29b49a@huawei.com>
-Date:   Fri, 2 Dec 2022 16:34:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 2 Dec 2022 03:38:37 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A58C10FF3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:37:43 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id bg10so3031685wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 00:37:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/xIgmLq/C17zsRVPkarsENL7GSZIci+87q7Y9/uooIw=;
+        b=1uOrZ8sJ+PUYOTzvGs7uUF7vsYQs+WGpstKt6MC1HMItS/GAt+aHFnMkKpmjT9sgZZ
+         847FWIlH3ePBuRhq4Eq0ZSHytatsrdHwQ0oCPKxOhikB6wBRdkjlKKwoCBqLG7WFseiO
+         X0ta0WXs0VDBJMKNGldtPEmE8p8Eo6W7h9w677Y5lJfdesMJwZTi+q3Cw1kaFldOSamb
+         hwm3Kt8mqJO8Tobt6cF1JR3dweBM4GZquziZayrw02hJjNKdxxreNigjQvurqttedJe3
+         2YPJO1NJZKNMtit6TAWRZLV6nALKySXjSGOjZzpuRhHKO1iU4tAp6//PLPKMfF9Is71Q
+         aiCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/xIgmLq/C17zsRVPkarsENL7GSZIci+87q7Y9/uooIw=;
+        b=fVYFeeMqgT8sS6vka1DbyY/iYKlfVMhyAB9mOOSuR9DZWhjU4p2FaJQq2H8PcGihNZ
+         j77tQRKVG2xtksVfdBJap66Xuhu1Hbf1OVcUDYmTp531FTwvvAX78LScPRjKKMXItDgm
+         1VF6ztMBrymJ943pkeivgpgHZcsJR94aM7pog2CvOK+tO/5kyRh2rwTpEysM+L98+rmE
+         tL6UlrBjjfYfxafRegud/imD9z1uzj4qo0A1KZuWmtYGrnpxKES4nxcDchm7StJ5afdG
+         eJmo/EJiQoEuMdxEE4Z+/ZlQPlvuWRHV++TW4Peo2gk6rOfBFKU9Zlza1pzVH7DMbaJu
+         Nq6A==
+X-Gm-Message-State: ANoB5pkN9P7C9Z8AfF7C9uASYLhh5H0+8Gy4ZoCCSUDA+P34mzV8Vero
+        xxOoq2MHeKxXPLZDay7kMRs46Q==
+X-Google-Smtp-Source: AA0mqf7nzU7iZ6L5WcgsuHh7L6H7KyqvASHV+E3NzK4ANsBmu7fRw/+rARI/Q5oyv3SzYTVTF/nQtQ==
+X-Received: by 2002:a7b:cb83:0:b0:3cf:96da:3846 with SMTP id m3-20020a7bcb83000000b003cf96da3846mr53105100wmi.10.1669970261507;
+        Fri, 02 Dec 2022 00:37:41 -0800 (PST)
+Received: from blmsp ([185.238.219.82])
+        by smtp.gmail.com with ESMTPSA id l22-20020a05600c4f1600b003cf54b77bfesm12948650wmq.28.2022.12.02.00.37.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 00:37:41 -0800 (PST)
+Date:   Fri, 2 Dec 2022 09:37:40 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
+Message-ID: <20221202083740.moa7whqd52oasbar@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-4-msp@baylibre.com>
+ <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <DM6PR18MB26020F45167434B409A32AA7CD179@DM6PR18MB2602.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset="gbk"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,90 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> ________________________________________
-> From: Ziyang Xuan (William) <william.xuanziyang@huawei.com>
-> Sent: Friday, December 2, 2022 7:14 AM
-> To: Maciej Fijalkowski; sunil.kovvuri@gmail.com; Sunil Kovvuri Goutham
-> Cc: Geethasowjanya Akula; Subbaraya Sundeep Bhatta; Hariprasad Kelam; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com; netdev@vger.kernel.org; Naveen Mamindlapalli; Rakesh Babu Saladi; linux-kernel@vger.kernel.org
-> Subject: [EXT] Re: [PATCH net 1/2] octeontx2-pf: Fix possible memory leak in otx2_probe()
-> 
-> External Email
-> 
-> ----------------------------------------------------------------------
->>>> On Thu, Nov 24, 2022 at 09:56:43AM +0800, Ziyang Xuan wrote:
->>>>> In otx2_probe(), there are several possible memory leak bugs
->>>>> in exception paths as follows:
->>>>> 1. Do not release pf->otx2_wq when excute otx2_init_tc() failed.
->>>>> 2. Do not shutdown tc when excute otx2_register_dl() failed.
->>>>> 3. Do not unregister devlink when initialize SR-IOV failed.
->>>>>
->>>>> Fixes: 1d4d9e42c240 ("octeontx2-pf: Add tc flower hardware offload on ingress traffic")
->>>>> Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
->>>>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->>>>> ---
->>>>>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 5 ++++-
->>>>>  1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->>>>> index 303930499a4c..8d7f2c3b0cfd 100644
->>>>> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->>>>> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->>>>> @@ -2900,7 +2900,7 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>>>
->>>>>     err = otx2_register_dl(pf);
->>>>>     if (err)
->>>>> -           goto err_mcam_flow_del;
->>>>> +           goto err_register_dl;
->>>>>
->>>>>     /* Initialize SR-IOV resources */
->>>>>     err = otx2_sriov_vfcfg_init(pf);
->>>>> @@ -2919,8 +2919,11 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>>>     return 0;
->>>>
->>>> If otx2_dcbnl_set_ops() fails at the end then shouldn't we also call
->>>> otx2_sriov_vfcfg_cleanup() ?
->>>
->>> I think it does not need. This is the probe process. PF and VF are all not ready to work,
->>> so pf->vf_configs[i].link_event_work does not scheduled. And pf->vf_configs memory resource will
->>> be freed by devm subsystem if probe failed. There are not memory leak and other problems.
->>>
->> Hello Sunil Goutham, Maciej Fijalkowski,
-> 
->> What do you think about my analysis? Look forward to your >reply.
-> otx2_sriov_vfcfg_cleanup() is not required. Since PF probe is failed, link event won't get triggered.
-> 
-Hello Geetha,
+Hi Marc,
 
-If there is not any other question, can you add "Reviewed-by" for my patchset?
-
-Thank you!
-
-> Thanks,
-> Geetha.
->> Thank you!
+On Thu, Dec 01, 2022 at 12:14:50PM +0100, Marc Kleine-Budde wrote:
+> On 16.11.2022 21:52:56, Markus Schneider-Pargmann wrote:
+> > On peripheral chips every read/write can be costly. Avoid reading easily
+> > trackable information and cache them internally. This saves multiple
+> > reads.
+> > 
+> > Transmit FIFO put index is cached, this is increased for every time we
+> > enqueue a transmit request.
+> > 
+> > The transmits in flight is cached as well. With each transmit request it
+> > is increased when reading the finished transmit event it is decreased.
+> > 
+> > A submit limit is cached to avoid submitting too many transmits at once,
+> > either because the TX FIFO or the TXE FIFO is limited. This is currently
+> > done very conservatively as the minimum of the fifo sizes. This means we
+> > can reach FIFO full events but won't drop anything.
 > 
->>> @Sunil Goutham, Please help to confirm.
->>>
->>> Thanks.
->>>
->>>>
->>>>>
->>>>>  err_pf_sriov_init:
->>>>> +   otx2_unregister_dl(pf);
->>>>> +err_register_dl:
->>>>>     otx2_shutdown_tc(pf);
->>>>>  err_mcam_flow_del:
->>>>> +   destroy_workqueue(pf->otx2_wq);
->>>>>     otx2_mcam_flow_del(pf);
->>>>>  err_unreg_netdev:
->>>>>     unregister_netdev(netdev);
->>>>> --
->>>>> 2.25.1
->>>>>
->>>> .
->>>>
->>> .
->>>
-> .
+> You have a dedicated in_flight variable, which is read-modify-write in 2
+> different code path, i.e. this looks racy.
+
+True, of course, thank you. Yes I have to redesign this a bit for
+concurrency.
+
+> If you allow only power-of-two FIFO size, you can use 2 unsigned
+> variables, i.e. a head and a tail pointer. You can apply a mask to get
+> the index to the FIFO. The difference between head and tail is the fill
+> level of the FIFO. See mcp251xfd driver for this.
+
+Maybe that is a trivial question but what's wrong with using atomics
+instead?
+
+The tcan mram size is limited to 2048 so I would like to avoid limiting
+the possible sizes of the tx fifos.
+
+Best,
+Markus
+
 > 
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
