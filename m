@@ -2,308 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEADF640C4B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AE8640C4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233936AbiLBRhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S233676AbiLBRjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 12:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiLBRhR (ORCPT
+        with ESMTP id S232993AbiLBRjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:37:17 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C501BECE57;
-        Fri,  2 Dec 2022 09:37:14 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2Fn9xN025312;
-        Fri, 2 Dec 2022 17:37:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=nLuJYlUdgqeoAFaxbHZW8sNgxRvH8gdJDXsdBrG1C0Y=;
- b=gSSM4d6cYPKpuXi6S7y936/vrOwm8yh2fcovvkKgFUq2GGEujC3kZqWdAJR5dFymjs8t
- jgzUk/cHleHT1NzfBlxJfNrfJYHnlT2rcZ1/EI1bi2scJEab2M2EjIbxKubUfXniNKw9
- 91y7v1xYoSLSJ++GKT2kCDzmYiHG9rVUG/USGVD9rwGjBUaTZpclbgKGO2uTQidFYRAF
- ldFQO8VH0j98Hl9SeO/w99egV0ujRa1EsovZoI0TgjWoC9A3JJwJgWGnBnbR6gDMYcvm
- MvT/hCB2TQC8/AFG5MEEEeRe1Z7L3cZTDtYYkh9Lgcls/Pyn/ipQnQMTk3n66eBnWXvP Jg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m6k3ynv1k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 17:37:08 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B2Hb7EV011570
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Dec 2022 17:37:07 GMT
-Received: from [10.216.34.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 2 Dec 2022
- 09:37:02 -0800
-Message-ID: <4fcee4ed-1f6e-7fa6-32cc-8f91aca3855c@quicinc.com>
-Date:   Fri, 2 Dec 2022 23:06:59 +0530
+        Fri, 2 Dec 2022 12:39:31 -0500
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02olkn2079.outbound.protection.outlook.com [40.92.49.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179CED827E;
+        Fri,  2 Dec 2022 09:39:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ImZJTIGBjAgHSH+eAnWReGW+lDoSCHqSUzrdRsdLa/eCy5KkVRf8rcDWypJqUoPZThEXGgIu6yLdF43FQ8dIH3vIMIqjhQLptApKF6W0m+IbMOt0VKobaY5p0c9LQxFpN3cj1XXhFNfKSqBpAoI/7Ks88qpfwVLiM65u4Fl5KOcJ0HlAQXaeQQUkeUO2FWJvvC+YqoEy+QU52ZdWZ7MM4FGjQGQMfr0OO1bqkQ5rwM2ZikHZq6IsH6IGVnKrmlBeOeLqiW6kh/EZ32nNA9JliUcnrRLYfQo+I/uw/gLysOa+2c43gctdJdVPnt7XKF8KdTQecN7ogQ4YoIMwCuX9Xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gB3WI+kY2EdrfAsx3eK7GyxVFSRbYxd1mNrRaZIuIO4=;
+ b=na5OITDPXj3GaRVr16am8hDj5tt6fUbEaLBTlsa1yWyCS1QkgxkTQgBzX/iGCj4MvD/CoabZqNYNeoVkMq5r9MMhBc7ss2J3UJyCGRCqMJrbtqYcqXu3IJMdThPIeqfwlg8LXuUXGfhtqQLEAWz9GoebClYokdiRsdEsWONlLWx+LUeDg5gQSA7fPMJxHDC1Gg4m2CuFZ7GR4SIuzWhA9RVMqsR0Oqlp4UDi5TXfjQP3ifCX8Yk5VslAEuC1F0IezPWKGOlMlDkST8oBLLDeura6auXQTUxbjrgsM+eDhH1n5nZDIlzt1aYkX33gn9Pfet5wWVf8Slx41244uycMPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gB3WI+kY2EdrfAsx3eK7GyxVFSRbYxd1mNrRaZIuIO4=;
+ b=OYrsRjc0Q7NXjQRHX310bKoF+iWgVbIWP5R391K25D2d0sz7r8Kt57s9Aa8twk7NabwJyKa9RZGXQ0N6y60r95yB5DcyDZtoBxDGbilpAkUDm0mmDUeNS+rx6h1I8UNYcllzojJZ1y1tdV4728LcWPCb8wtWoIoZECU3vn1eAdW0/B+36jijLfqHdcksArJoGpcpa7wkY7rYUtUS7gkMPPXqHBhWF2aJJ9jjAdgJEwjTojOAocg8lxUg3x27xqXUsiE8z/MUtjQNuhfw47jFgBwhS/3Jh9ztJOr4WEsMnaHT4RyXkfD9cBybAR2DS2Nk1bkSbsU51euPhgO63ue/GA==
+Received: from DU0P192MB1547.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:34b::15)
+ by PR3P192MB0571.EURP192.PROD.OUTLOOK.COM (2603:10a6:102:43::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Fri, 2 Dec
+ 2022 17:39:27 +0000
+Received: from DU0P192MB1547.EURP192.PROD.OUTLOOK.COM
+ ([fe80::a67b:5da2:88f8:f28b]) by DU0P192MB1547.EURP192.PROD.OUTLOOK.COM
+ ([fe80::a67b:5da2:88f8:f28b%9]) with mapi id 15.20.5857.023; Fri, 2 Dec 2022
+ 17:39:27 +0000
+From:   Ji Rongfeng <SikoJobs@outlook.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     martin.lau@linux.dev, daniel@iogearbox.net,
+        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        Ji Rongfeng <SikoJobs@outlook.com>
+Subject: [PATCH bpf-next v2] bpf: Upgrade bpf_{g,s}etsockopt return values
+Date:   Sat,  3 Dec 2022 01:39:10 +0800
+Message-ID: <DU0P192MB1547FE6F35CC1A3EEA1AFDECD6179@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [DnY83tEvg6Pw9ly1i7loIYJ9eCexNFj/]
+X-ClientProxiedBy: SG2PR06CA0190.apcprd06.prod.outlook.com (2603:1096:4:1::22)
+ To DU0P192MB1547.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:34b::15)
+X-Microsoft-Original-Message-ID: <20221202173910.11601-1-SikoJobs@outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [V3] spi: spi-geni-qcom: Add support for SE DMA mode
-Content-Language: en-CA
-To:     Doug Anderson <dianders@chromium.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
-        <mka@chromium.org>, <swboyd@chromium.org>,
-        <quic_vtanuku@quicinc.com>, <vkoul@kernel.org>
-References: <1669713814-28876-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=WW-YttMn2+_6MdKwVDQO2stHjiisSdX8vFoOFBMnsjRA@mail.gmail.com>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <CAD=FV=WW-YttMn2+_6MdKwVDQO2stHjiisSdX8vFoOFBMnsjRA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ANXl5PpFUhsbpAMshzUn4fbI_Q6kuoAx
-X-Proofpoint-ORIG-GUID: ANXl5PpFUhsbpAMshzUn4fbI_Q6kuoAx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-02_10,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212020139
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0P192MB1547:EE_|PR3P192MB0571:EE_
+X-MS-Office365-Filtering-Correlation-Id: a11e5515-d7e6-4637-1bdb-08dad48c28d8
+X-MS-Exchange-SLBlob-MailProps: 70qbaZjg4ms0xzfAGVOuKXynl8t5bcZkmjml5R49hQJeKseRJSf+ksbNRryIv/WNfr88IhuSzMaEf+Abh2HsSlfgxYwRjPRYRe2audmJyEuA7vFdmxZuKlWVBFn1ofBDvtqYphmYehbznu7g0Pko7A3WbtlK1zRc2Tm+cco+h5HP7GVp+TxdUP4RDOnGWEbBv7OgBZY9c6an8dAjbS3bouA3R/bi0+puU9c+x7hO7OEtJLpBUDx+pzJnfIlIfnQIBuLle3th3Z1jbTaRN0O9dgoMVmxAitIrBQD5PvQJJN0lQ/e0ASUjMjomgjr7wLsf4byyy/tNquBLs9yvPOmFxvkh4TsSofE6h0IVMOUwYeedHIl0bEBddLtmhu9KYyZqihOUEHM52JfVvKlz4dEuBdgeZkHmRn5w4DVnW7xyYNhdlvPVP/MecKO9Dfq0pmWuGOej+4gYzLU89mFv7Tv+zClwdyVjvVbJZNQ0ENwO0dj9JMp/GjilsE2+IHVwc1NpwUsA12Slny96krGNmSz8EvPIqD6B3OGTJRu0HAaTqupJpbDMpJM9ZF6XFJYVwHQ+LVI2Sr4JVpJrP5dpNd9NMJEy93nVQuwBNjrbQIM/A4neA+AIjrYRJvUd+h/x7Tl3oj0QyH67n2YbL+iawgEXBJGc6cliQZR9XEHwJRC19otGqZW06SOnfRzWYOcBB1hiQeESqlH/G1zGFPLU1hg3xmAsLxbR+QcF9ynFXQbzHh7wy4DoJ3vsIQ==
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZwinNcKySa5+I23QwAsaamHtCJ+Ln2j5rMIqJLTr0WV6fs0q+q7JjD0bqwy7Egz0oma3UokmP/RvZbAWHvyeLeG5bfPeEKulqKuXe0cDD4WDFkNELCCPTHNEaBy3C9WrnMaW3NlDO3OYh/Y8/ncKA+sehFtn83sC39WkXq6yq9PlzUn/6XBuqMseZXyReCdiLBzrCY/wbLwVQ0jEetHxvR0f4q6N4fDxjYi2ZjoiGGUn9EQBuXGxz1L5KgtE2ksy+miulHtnFOUp+SJM2js3tYQd1tsGB/wkuwWlZs8C8CA2tlP4Jfq9w2YU3H44aZJzVWKGhhsaTMkOfoEoECdmA/TmHzFvoyZTCcNuwuK4QT1vfw0dLrIz0Te9RjI5RKsmdqVUBzHgHjPXak/6iux3ISCIZQ77w7kF5LykWKWflJaUSEEDMSoQ4cIR4+R5S4ywd2Fyjp3Rdso8rit7kbo4egtQYH7KgVpi6dfw9LBjuYIoKNeO5eGthe5HuAn2kqVO1Twnl8sfZeUecgNxRB0B8qagDwZVG0L4zHE7nCn/NVO45Nw6A0MOzxf7Ots7BvQeI208jsR2HobG7cB6CnkJyMbC3azarHtgbHSm9BqSjMAEBMKjJBJtx8t08/ZiCMaSKtZoANQ0KR4rG53G5LJFSQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OxrWzM4jyEb/Jx3dKk1ZhttIKCk+gJuTkAPws84lIEd9IF2BgFOF9JD9H8RU?=
+ =?us-ascii?Q?FhgnXUWZDjLlWyGLxxK64BKIJ/TVvXVAGQtTfDOVvMFbUhp0eUDbJeQ2n4KN?=
+ =?us-ascii?Q?BQHe73iJpnmjuwlviSb6t1wUN0n1KRCGEn6AoRWw6RVXDEbIJpwSfO6D3Vy9?=
+ =?us-ascii?Q?5rwyVT7+1AQAzMxwNYvjbbD19AK3WBNEOI+hpTs0p+8x2LQuEJlOeaeqGvRb?=
+ =?us-ascii?Q?eMv4TkypL7EB42K6rHQe9FULCffD4dyOEYVsTQHZ1vgBqOcczAD1fAYFdSq4?=
+ =?us-ascii?Q?fFZs6zix546L+1GcLa1N5hAqjq4RJ30g/uGNZ6oO+wItT74GKh+NRCXHh4Lu?=
+ =?us-ascii?Q?MKTPj4DI534x6OewaLXT/H0g13bNzylFA/+zT23uJy7F1S5ohgcWP/ozhiSR?=
+ =?us-ascii?Q?c3r8MzR84hpfXstGOmMK+7yYLq69OTfN8yqmvR2S+0D1vdgW0kFQXYjIRGPB?=
+ =?us-ascii?Q?o8wESUB+UCQAHVW9HQMA69w9BRIvfvWJqPF821ZGLycVPyCEAw0JgRCZ0Yrw?=
+ =?us-ascii?Q?AM2GtB+PJAJGdi2EjWtzGKvFmRPwCooealAJPS4FrLFslSP5yMuMTIFHwKVd?=
+ =?us-ascii?Q?8jwGT8Cx7GimDWKcRxxiZ0ahFObXPYA/cBoaB7St8ALv1ICOpns6adFGiTg7?=
+ =?us-ascii?Q?t12hp/UX/nd9iJiP3eyRM9rvdJlXRFCAGoeEYR8KX4OJOJBB2pHvm9XCQ2TI?=
+ =?us-ascii?Q?zWtuR4NMZJxF2FK9NTr2pEG7ioXw0BR7L8+zVJm7JfKgW4ep6UOPeO0EqC/2?=
+ =?us-ascii?Q?Xp/JN1FYIheQzrJiHvrS9FoUd0CK40klkwGfHpsyU/7EC+RKRul363tBFsGi?=
+ =?us-ascii?Q?B1RWvyP3ZkyRt0at4HxQYpVEd+6/cIwnDnIgX0mXlu+kuCxhvN9biGWyQwHV?=
+ =?us-ascii?Q?HUD15jcehTzupne95jXxWTVDQ4feyT/QeTCv54OzaxwyaiZ3scUcugE5vZRq?=
+ =?us-ascii?Q?c8/nvDICjnWRsKEBJzHKWj6yNNAsGu2WG1lLLT6u7xj2ZH8UiYmqjHpX3faa?=
+ =?us-ascii?Q?YNQPaT6xjwI0Iz+JoJD6n4c+PYiw+rKSR8IHrbTRV+LMVk8IZaNBvXPCJGKp?=
+ =?us-ascii?Q?OKW5zMZP9B+jhRAvE6u1uNbLLjXxGRYKkQiObwFLdZn8RfWDqrOlWqYmUArB?=
+ =?us-ascii?Q?M6ow+G3Fe8oTc16Yd6cPHP966Tfg8oLImOXSiGh7jly/+OX49N7OHHhyJkZu?=
+ =?us-ascii?Q?BbnHCkeFgqUqXjhiwBp4ADEKHfvylkawZ7SUQ4p4sihlEy1dKv6NqVfxX3pW?=
+ =?us-ascii?Q?+qLLeBgUm2erDgPJu9qCSUJdW6q0c70zrXjrYCJdJg=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a11e5515-d7e6-4637-1bdb-08dad48c28d8
+X-MS-Exchange-CrossTenant-AuthSource: DU0P192MB1547.EURP192.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2022 17:39:27.5718
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P192MB0571
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Returning -EINVAL almost all the time when error occurs is not very
+helpful for the bpf prog to figure out what is wrong. This patch
+upgrades some return values so that they will be much more helpful.
 
+* return -ENOPROTOOPT when optname is unsupported
 
-On 12/2/2022 4:10 AM, Doug Anderson wrote:
-> Hi,
->
-> On Tue, Nov 29, 2022 at 1:23 AM Vijaya Krishna Nivarthi
-> <quic_vnivarth@quicinc.com> wrote:
->> @@ -95,6 +97,7 @@ struct spi_geni_master {
->>          struct dma_chan *tx;
->>          struct dma_chan *rx;
->>          int cur_xfer_mode;
->> +       u32 cur_m_cmd;
-> In v1, I said: "I don't think you need to store "cur_m_cmd" ..."
-> ...you responded: Please note that cur_xfer can be NULL. Added further
-> to comments."
->
-> I don't see any comments about this.
->
-> In any case, I'm still unclear about why this is needed. I guess
-> you're looking at the code in handle_se_timeout(). I'll comment there.
->
->
->> @@ -162,6 +169,45 @@ static void handle_fifo_timeout(struct spi_master *spi,
->>                   */
->>                  mas->abort_failed = true;
->>          }
->> +
->> +unmap_if_dma:
->> +       if (mas->cur_xfer_mode == GENI_SE_DMA) {
->> +               if (mas->cur_m_cmd & SPI_TX_ONLY) {
->> +                       spin_lock_irq(&mas->lock);
->> +                       reinit_completion(&mas->tx_reset_done);
->> +                       writel(1, se->base + SE_DMA_TX_FSM_RST);
->> +                       spin_unlock_irq(&mas->lock);
->> +                       time_left = wait_for_completion_timeout(&mas->tx_reset_done, HZ);
->> +                       if (!time_left)
->> +                               dev_err(mas->dev, "DMA TX RESET failed\n");
->> +               }
->> +               if (mas->cur_m_cmd & SPI_RX_ONLY) {
->> +                       spin_lock_irq(&mas->lock);
->> +                       reinit_completion(&mas->rx_reset_done);
->> +                       writel(1, se->base + SE_DMA_RX_FSM_RST);
->> +                       spin_unlock_irq(&mas->lock);
->> +                       time_left = wait_for_completion_timeout(&mas->rx_reset_done, HZ);
->> +                       if (!time_left)
->> +                               dev_err(mas->dev, "DMA RX RESET failed\n");
->> +               }
->> +
->> +               if (xfer) {
->> +                       if (xfer->tx_buf && xfer->tx_dma)
->> +                               geni_se_tx_dma_unprep(se, xfer->tx_dma, xfer->len);
->> +                       if (xfer->rx_buf && xfer->rx_dma)
->> +                               geni_se_rx_dma_unprep(se, xfer->rx_dma, xfer->len);
->> +               } else {
->> +                       /*
->> +                        * This can happen if a timeout happened and we had to wait
->> +                        * for lock in this function because isr was holding the lock
->> +                        * and handling transfer completion at that time.
->> +                        * isr will set cur_xfer to NULL when done.
->> +                        * Unnecessary error but cannot be helped.
->> +                        * Only do reset, dma_unprep is already done by isr.
->> +                        */
->> +                       dev_err(mas->dev, "Cancel/Abort on completed SPI transfer\n");
->> +               }
-> For the above block of code, if "xfer" is NULL then do we actually
-> need to issue the DMA TX Reset and the DMA RX Reset? As per your
-> comments, the only case "xfer" can be NULL is if the ISR was holding
-> the lock and handling the transfer completion at that time. If the ISR
-> handled the transfer completion then we're not actually in a bad
-> state, right? Thus, couldn't you do:
->
-> if (xfer) {
->    if (xfer->tx_buf && xfer->tx_dma) {
->      // Do the FSM reset
->      // Unprepare the DMA
->    }
->    if (xfer->rx_buf && xfer->rx_dma) {
->      // Do the FSM reset
->      // Unprepare the DMA
->    }
-> } else {
->    dev_err(...);
-> }
->
-> That should be fine, right? ...and then we can get rid of the need for
-> "cur_m_cmd" as per my previous comment, right?
->
-> I'll also ask if we can downgrade the "dev_err" to a "dev_warn". I
-> usually reserve dev_err for things that are fatal. Here we think we'll
-> probably recover, right?
+  The same as {g,s}etsockopt() syscall does. Before this patch,
+  bpf_setsockopt(TCP_SAVED_SYN) already returns -ENOPROTOOPT, which
+  may confuse the user, as -EINVAL is returned on other unsupported
+  optnames. This patch also rejects TCP_SAVED_SYN right in
+  sol_tcp_sockopt() when getopt is false, since do_tcp_setsockopt()
+  is just the executor and it's not its duty to discover such error
+  in bpf. We should maintain a precise allowlist to control whether
+  an optname is supported and allowed to enter the executor or not.
+  Functions like do_tcp_setsockopt(), their behaviour are not fully
+  controllable by bpf. Imagine we let an optname pass, expecting
+  -ENOPROTOOPT will be returned, but someday that optname is
+  actually processed and unfortunately causes deadlock when calling
+  from bpf. Thus, precise access control is essential.
 
-Agree. Will test this change and apply for next version.
+* return -EOPNOTSUPP on level-related errors
 
->> @@ -778,11 +836,39 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
->>           */
->>          spin_lock_irq(&mas->lock);
->>          geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
->> -       if (m_cmd & SPI_TX_ONLY) {
->> +
->> +       if (mas->cur_xfer_mode == GENI_SE_DMA) {
->> +               if (m_cmd & SPI_RX_ONLY) {
->> +                       ret =  geni_se_rx_dma_prep(se, xfer->rx_buf,
->> +                               xfer->len, &xfer->rx_dma);
-> In response to v1 I asked if it's really OK to use "xfer->rx_dma" for
-> your purposes since it's supposed to be managed by the SPI framework.
->
-> It still makes me nervous to use it, even though it seems to work.
-> Since we're using it in an undocumented way, I'd be nervous that the
-> SPI framework might change what it's doing and break us in the future.
->
-> We can only have one TX and one RX transfer at a time anyway. Why
-> don't we just have our own "rx_dma" and "tx_dma" in "struct
-> spi_geni_master". It's only 16 extra bytes of data and it would make
-> me feel less nervous.
->
-> It still would be nice to eventually use the SPI framework to manage
-> the mapping, but I agree that can be a future task.
->
-Agree. Will add xx_dma to spi_geni_master and use same instead of dmas 
-in xfer.
+  In do_ip_getsockopt(), -EOPNOTSUPP will be returned if level !=
+  SOL_IP. In ipv6_getsockopt(), -ENOPROTOOPT will be returned if
+  level != SOL_IPV6. To be distinguishable, the former is chosen.
 
-Next step would be to move mapping to framework and remove the xx_dma 
-from spi_geni_master.
+* return -EBADFD when sk is not a full socket
 
->> +                       if (ret) {
->> +                               dev_err(mas->dev, "Failed to setup Rx dma %d\n", ret);
->> +                               xfer->rx_dma = 0;
->> +                               goto unlock_and_return;
->> +                       }
->> +               }
->> +               if (m_cmd & SPI_TX_ONLY) {
->> +                       ret =  geni_se_tx_dma_prep(se, (void *)xfer->tx_buf,
->> +                               xfer->len, &xfer->tx_dma);
-> In v1 I asked about the above "void *" cast. You pointed out that it
-> was to cast away constness. So I agree that you can keep it here for
-> now, but could you also post a patch to change geni_se_tx_dma_prep()
-> to take a "const void *"? You'll need a cast in _that_ function to
-> remove the constness (since dma_map_single() is generic for both TX
-> and RX), but it seems like a better place for it. Then a later patch
-> could remove the cast here.
->
-Agree.
+  -EPERM or -EBUSY was an option, but in many cases one of them
+  will be returned, especially under level SOL_TCP. -EBADFD is the
+  better choice, since it is hardly returned in all cases. The bpf
+  prog will be able to recognize it and decide what to do next.
 
-Will post next patches as suggested, actually will probably raise a bug 
-to track feedback for this patch.
+Signed-off-by: Ji Rongfeng <SikoJobs@outlook.com>
 
->> +                       if (ret) {
->> +                               dev_err(mas->dev, "Failed to setup Tx dma %d\n", ret);
->> +                               xfer->tx_dma = 0;
->> +                               if (m_cmd & SPI_RX_ONLY && xfer->rx_dma) {
-> Don't need "&& xfer->rx_dma". You _just_ mapped it above and if it had
-> failed it would have returned an error. you don't need to
-> double-check. You can trust that the framework knows what it's doing
-> and won't return NULL to you. If it did return NULL to you because of
-> a bug, it's not necessarily better to just silently skip unpreparing
-> anyway.
-Agree, will remove.
->> @@ -823,39 +913,66 @@ static irqreturn_t geni_spi_isr(int irq, void *data)
->>
->>          spin_lock(&mas->lock);
->>
->> -       if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
->> -               geni_spi_handle_rx(mas);
->> -
->> -       if (m_irq & M_TX_FIFO_WATERMARK_EN)
->> -               geni_spi_handle_tx(mas);
->> -
->> -       if (m_irq & M_CMD_DONE_EN) {
->> -               if (mas->cur_xfer) {
->> +       if (mas->cur_xfer_mode == GENI_SE_FIFO) {
->> +               if ((m_irq & M_RX_FIFO_WATERMARK_EN) || (m_irq & M_RX_FIFO_LAST_EN))
->> +                       geni_spi_handle_rx(mas);
->> +
->> +               if (m_irq & M_TX_FIFO_WATERMARK_EN)
->> +                       geni_spi_handle_tx(mas);
->> +
->> +               if (m_irq & M_CMD_DONE_EN) {
->> +                       if (mas->cur_xfer) {
->> +                               spi_finalize_current_transfer(spi);
->> +                               mas->cur_xfer = NULL;
->> +                               /*
->> +                                * If this happens, then a CMD_DONE came before all the
->> +                                * Tx buffer bytes were sent out. This is unusual, log
->> +                                * this condition and disable the WM interrupt to
->> +                                * prevent the system from stalling due an interrupt
->> +                                * storm.
->> +                                *
->> +                                * If this happens when all Rx bytes haven't been
->> +                                * received, log the condition. The only known time
->> +                                * this can happen is if bits_per_word != 8 and some
->> +                                * registers that expect xfer lengths in num spi_words
->> +                                * weren't written correctly.
->> +                                */
->> +                               if (mas->tx_rem_bytes) {
->> +                                       writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
->> +                                       dev_err(mas->dev, "Premature done. tx_rem = %d bpw%d\n",
->> +                                               mas->tx_rem_bytes, mas->cur_bits_per_word);
->> +                               }
->> +                               if (mas->rx_rem_bytes)
->> +                                       dev_err(mas->dev, "Premature done. rx_rem = %d bpw%d\n",
->> +                                               mas->rx_rem_bytes, mas->cur_bits_per_word);
->> +                       } else {
->> +                               complete(&mas->cs_done);
-> Question: did you try actually using the chip select with your new
-> GENI_SE_DMA? Does it work? I ask because I don't see anything that
-> completes the "cs_done" in the DMA case of the ISR and I don't see
-> anything in spi_geni_set_cs() that forces it to FIFO mode. Note: if
-> you're only testing on trogdor/herobrine boards, you'd have to change
-> them to not use a GPIO for chip select.
->
-No I did not test it with chip select as I was using herobrine.
+From my point of view, changing these return values is acceptable,
+because most of them are designed to be shown to the bpf prog
+developer only and rarely shown in production environment.
 
-Agreed that it would be broken for a board which doesn't use GPIO for cs.
+I'll send another patch to update documentation in a proper way
+after this patch is accepted, and add some tests if necessary.
+---
+ net/core/filter.c | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
 
-Will apply cs_done for SE_DMA mode as well, test it with change to not 
-use GPIO for cs and upload next version.
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 37baaa6b8fc3..44440b7d430c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5050,12 +5050,12 @@ static int sol_socket_sockopt(struct sock *sk, int optname,
+ 	case SO_BINDTODEVICE:
+ 		break;
+ 	default:
+-		return -EINVAL;
++		return -ENOPROTOOPT;
+ 	}
+ 
+ 	if (getopt) {
+ 		if (optname == SO_BINDTODEVICE)
+-			return -EINVAL;
++			return -ENOPROTOOPT;
+ 		return sk_getsockopt(sk, SOL_SOCKET, optname,
+ 				     KERNEL_SOCKPTR(optval),
+ 				     KERNEL_SOCKPTR(optlen));
+@@ -5105,7 +5105,7 @@ static int bpf_sol_tcp_setsockopt(struct sock *sk, int optname,
+ 		inet_csk(sk)->icsk_rto_min = timeout;
+ 		break;
+ 	default:
+-		return -EINVAL;
++		return -ENOPROTOOPT;
+ 	}
+ 
+ 	return 0;
+@@ -5169,7 +5169,7 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
+ 			   bool getopt)
+ {
+ 	if (sk->sk_prot->setsockopt != tcp_setsockopt)
+-		return -EINVAL;
++		return -EOPNOTSUPP;
+ 
+ 	switch (optname) {
+ 	case TCP_NODELAY:
+@@ -5194,7 +5194,7 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
+ 		break;
+ 	default:
+ 		if (getopt)
+-			return -EINVAL;
++			return -ENOPROTOOPT;
+ 		return bpf_sol_tcp_setsockopt(sk, optname, optval, *optlen);
+ 	}
+ 
+@@ -5215,6 +5215,9 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
+ 		return do_tcp_getsockopt(sk, SOL_TCP, optname,
+ 					 KERNEL_SOCKPTR(optval),
+ 					 KERNEL_SOCKPTR(optlen));
++	} else {
++		if (optname == TCP_SAVED_SYN)
++			return -ENOPROTOOPT;
+ 	}
+ 
+ 	return do_tcp_setsockopt(sk, SOL_TCP, optname,
+@@ -5226,7 +5229,7 @@ static int sol_ip_sockopt(struct sock *sk, int optname,
+ 			  bool getopt)
+ {
+ 	if (sk->sk_family != AF_INET)
+-		return -EINVAL;
++		return -EOPNOTSUPP;
+ 
+ 	switch (optname) {
+ 	case IP_TOS:
+@@ -5234,7 +5237,7 @@ static int sol_ip_sockopt(struct sock *sk, int optname,
+ 			return -EINVAL;
+ 		break;
+ 	default:
+-		return -EINVAL;
++		return -ENOPROTOOPT;
+ 	}
+ 
+ 	if (getopt)
+@@ -5251,7 +5254,7 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
+ 			    bool getopt)
+ {
+ 	if (sk->sk_family != AF_INET6)
+-		return -EINVAL;
++		return -EOPNOTSUPP;
+ 
+ 	switch (optname) {
+ 	case IPV6_TCLASS:
+@@ -5260,7 +5263,7 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
+ 			return -EINVAL;
+ 		break;
+ 	default:
+-		return -EINVAL;
++		return -ENOPROTOOPT;
+ 	}
+ 
+ 	if (getopt)
+@@ -5276,7 +5279,7 @@ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			    char *optval, int optlen)
+ {
+ 	if (!sk_fullsock(sk))
+-		return -EINVAL;
++		return -EBADFD;
+ 
+ 	if (level == SOL_SOCKET)
+ 		return sol_socket_sockopt(sk, optname, optval, &optlen, false);
+@@ -5287,7 +5290,7 @@ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 	else if (IS_ENABLED(CONFIG_INET) && level == SOL_TCP)
+ 		return sol_tcp_sockopt(sk, optname, optval, &optlen, false);
+ 
+-	return -EINVAL;
++	return -EOPNOTSUPP;
+ }
+ 
+ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
+@@ -5304,7 +5307,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
+ 	int err, saved_optlen = optlen;
+ 
+ 	if (!sk_fullsock(sk)) {
+-		err = -EINVAL;
++		err = -EBADFD;
+ 		goto done;
+ 	}
+ 
+@@ -5317,7 +5320,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
+ 	else if (IS_ENABLED(CONFIG_IPV6) && level == SOL_IPV6)
+ 		err = sol_ipv6_sockopt(sk, optname, optval, &optlen, true);
+ 	else
+-		err = -EINVAL;
++		err = -EOPNOTSUPP;
+ 
+ done:
+ 	if (err)
+-- 
+2.30.2
 
-Thank you very much.
-
--Vijay/
-
-
-> -Doug
