@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F09640FD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EC1640FE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 22:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiLBVR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 16:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S234482AbiLBVTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 16:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234408AbiLBVRW (ORCPT
+        with ESMTP id S234242AbiLBVSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:17:22 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1663ED690
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 13:17:21 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so9421648pje.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 13:17:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWCytxw2GwvkIRyjMsGItc6tSPW6eIa2hCojgQ491Zo=;
-        b=bajllRR0W9wmzd4Nw2CalvIXB2XPAXMdlanCcbLZbvVXt1B1Pl6NTxmK3wxwqtM7kV
-         CxHsUVrEXom1EL5rOfhhLf59se6NhxPVGd5NRmcIbnlGtNCpS088grJYnYJ0D+/YJFti
-         6DL7+PfEWKWxxy02Ch2OcVaic0rs/mH/oVaMg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CWCytxw2GwvkIRyjMsGItc6tSPW6eIa2hCojgQ491Zo=;
-        b=UQWYb14AAr9t1Y5SpqR75un5+v4+8v0/pOVzxo4y3PahH0YnDslWnwfb8yDIEZ0XGy
-         c+5hyXlWx5vlwwbZxwqd5emJ+TU55Qdv6dn2FT/SiS40naolDnW0tticNIY84LQFkSVK
-         uDtrKrIKfueICEQvwmIqubrUNx38Bt6OZfiwhahLezkqR8rvIZmGS4p/YezraqOPffDc
-         rbTXQnNU406KKN6sTj1Fc87tTTtwl5XDdVhuqDyDnElXS6jOgqawQUfjei6HDD63QbR3
-         wx5P8IHcINdz3hHJiIgWqu5c5hP8VQCLT/76jWEqhJ+0h5ct27HF+2ckAJXmwZfMsJAi
-         KZ6w==
-X-Gm-Message-State: ANoB5pmLgiwetzI8I2cZaauOe2wtYnzQ+XeFETq/VPuN6AiwZ1bdTBbB
-        wedx5wxJAGV0VUZJdWLIx4xEgA==
-X-Google-Smtp-Source: AA0mqf4yK8k4jj9BxYD7YjYVNBTxiTDeEOIyTukBKrDUunylOzFFlU/7UtMvczkInCXPtJNqJ5N5zw==
-X-Received: by 2002:a17:90a:b703:b0:20d:7716:b05f with SMTP id l3-20020a17090ab70300b0020d7716b05fmr38392031pjr.104.1670015841306;
-        Fri, 02 Dec 2022 13:17:21 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f88-20020a17090a28e100b001f94d25bfabsm7005868pjd.28.2022.12.02.13.17.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 13:17:20 -0800 (PST)
-Date:   Fri, 2 Dec 2022 13:17:19 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Jason@zx2c4.com, kuba@kernel.org, tytso@mit.edu, elver@google.com,
-        yury.norov@gmail.com, linux@dominikbrodowski.net,
-        gregkh@linuxfoundation.org, pmladek@suse.com,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] random: Include <linux/once.h> in the right header
-Message-ID: <202212021317.80F5899CBD@keescook>
-References: <212adb212cb0234a7d395daf31b2578b9409d492.1670015476.git.christophe.jaillet@wanadoo.fr>
+        Fri, 2 Dec 2022 16:18:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867F65915A;
+        Fri,  2 Dec 2022 13:18:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 900C8623D6;
+        Fri,  2 Dec 2022 21:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA10C433D6;
+        Fri,  2 Dec 2022 21:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670015925;
+        bh=2rrX47NWa70VI8AqxvMAoJDdj+in56xV4jYSGcyJcbo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=d4qTFc/f72OMYxi/1HZE0CdQFKVlgLXIQsf6tAbNbpLXfL/lJBiriy9Skujf59U/l
+         UTDzQnx5ZAY1+ZeCHAeTueZVZwJG3MpPXzmAnjFtm+rxxzsWuPtng1ikgX6s9D1U9k
+         7tk1HQdZIhZCURQkfR9xlVfsZ1IxOZXND7fKXaLauWlAtasxRdI0t762JdMwYay7Mv
+         SYxaVcGFm9XnsMlsPSCdH59mEBmngBdsR2ynwvKt3bV6FQI6t+PVDg7NmhkA0VveWW
+         3tzTlcIsad84rsaDJJd9vI4bQ+Wwa+xJHXHXiqGi+V6pauXAyoXc4qTuK4jI8VPOf8
+         Sz/xgLOG0MGig==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        =?UTF-8?q?Benoit=20Gr=C3=A9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
+Date:   Fri,  2 Dec 2022 15:18:34 -0600
+Message-Id: <20221202211838.1061278-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <212adb212cb0234a7d395daf31b2578b9409d492.1670015476.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,21 +59,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 10:13:36PM +0100, Christophe JAILLET wrote:
-> <linux/prandom.h> uses DO_ONCE(). So it should include <linux/once.h>
-> directly.
-> 
-> On the contrary, <linux/random.h> doesn't use functionalities from
-> <linux/once.h>, so it should be removed.
-> 
-> All this is true since commit c0842fbc1b18 ("random32: move the
-> pseudo-random 32-bit definitions to prandom.h")
-> 
-> Move the #include <linux/once.h> in the right file.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+When allocating space for PCI BARs, Linux avoids allocating space mentioned
+in the E820 map.  This was originally done by 4dc2287c1805 ("x86: avoid
+E820 regions when allocating address space") to work around BIOS defects
+that included unusable space in host bridge _CRS.
+
+Some recent machines use EfiMemoryMappedIO for PCI MMCONFIG and host bridge
+apertures, and bootloaders and EFI stubs convert those to E820 regions,
+which means we can't allocate space for hot-added PCI devices (often a
+dock) or for devices the BIOS didn't configure (often a touchpad)
+
+The current strategy is to add DMI quirks that disable the E820 filtering
+on these machines and to disable it entirely starting with 2023 BIOSes:
+
+  d341838d776a ("x86/PCI: Disable E820 reserved region clipping via quirks")
+  0ae084d5a674 ("x86/PCI: Disable E820 reserved region clipping starting in 2023")
+
+But the quirks are problematic because it's really hard to list all the
+machines that need them.
+
+This series is an attempt at a more generic approach.  I'm told by firmware
+folks that EfiMemoryMappedIO means "the OS should map this area so EFI
+runtime services can use it in virtual mode," but does not prevent the OS
+from using it.
+
+The first patch removes any EfiMemoryMappedIO areas from the E820 map.
+This doesn't affect any virtual mapping of those areas (that would have to
+be done directly from the EFI memory map) but it means Linux can allocate
+space for PCI MMIO.
+
+The rest are basically cosmetic log message changes.
+
+Bjorn Helgaas (4):
+  efi/x86: Remove EfiMemoryMappedIO from E820 map
+  PCI: Skip allocate_resource() if too little space available
+  x86/PCI: Tidy E820 removal messages
+  x86/PCI: Fix log message typo
+
+ arch/x86/kernel/resource.c  |  7 +++++--
+ arch/x86/pci/acpi.c         |  2 +-
+ arch/x86/platform/efi/efi.c | 36 ++++++++++++++++++++++++++++++++++++
+ drivers/pci/bus.c           |  4 ++++
+ 4 files changed, 46 insertions(+), 3 deletions(-)
 
 -- 
-Kees Cook
+2.25.1
+
