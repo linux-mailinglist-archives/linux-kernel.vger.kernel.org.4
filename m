@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E9E640A63
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314AD640A67
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 17:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiLBQQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 11:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        id S233838AbiLBQQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 11:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233877AbiLBQQK (ORCPT
+        with ESMTP id S233941AbiLBQQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 11:16:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF46BF67C;
-        Fri,  2 Dec 2022 08:15:53 -0800 (PST)
+        Fri, 2 Dec 2022 11:16:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C83DFB59;
+        Fri,  2 Dec 2022 08:15:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E7EF62331;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7085262333;
+        Fri,  2 Dec 2022 16:15:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F36C43146;
         Fri,  2 Dec 2022 16:15:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB730C433D7;
-        Fri,  2 Dec 2022 16:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669997752;
-        bh=3ozUOhrx52YHTps33arj4MB6UyVgxyGlHJRWzGu7eJ0=;
+        s=k20201202; t=1669997754;
+        bh=8fgcMdAohdJYjCkWzYvRkRAqAWDQxKAVkDLoxRdowB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XrlQLClCl6lfpp1Axk7H9bFmwhtWQUtAGk45+2MVLgUfucuVL18toqPILDZqakMEa
-         q4xgxTxkPKcVEnR0ei12ZpVF5v/5KQJN95pGG057rOFV8OHNC0F1sCPQYCUL7Gm2aC
-         wKGHcsNz8rLyKzXdBcbB4tfsWHLI1dZ+DsoEJA8Uw9htPCOgbyRp3UmA90bFBysBvU
-         06Fuw2TDtnG1pWBBPQkchyWi6t9Mkz6GNIVDFQs4S90BBbDjn3cPwJktAlOd/3AcOZ
-         G/J0pvRKUlBjyAtKsYF/bPGO74BvwLz1phTne5YnvFDUZ4jhXZ/mMbf683kZjvaJlN
-         emn0duyZHTbug==
+        b=YYwF93ZCf7UzzXELsUSmRSnkfBJntXg8aLS8HuPV3a2J+ECFCY4+zLfWSyTjUBbV9
+         mZu5WpsHUtugXp36Jntkp3lfpE9LfC2GoSA9wID41WKDBmeNor1D8dm5lDkqEOjn71
+         x7fESbWVL3HkGd/xljpCodYSqtujtN16IbAID2aPCoPT2/PuMEqtF/Yj4DJcKCUZZL
+         Qk7cXQf7FiwsrgXAaWpWyOPvTJx2COYvaGQXhyHiwnGsAP+HQyAUZ9JSDBpN8lQb+8
+         IZJ4pBSL2MDljf1Pvo0z4TfbWyBDCzvtNexWqV8QHlrbFEn4wyLl+MNx9eOCCBOLZW
+         rSvYxHlQuZ8yA==
 From:   ojeda@kernel.org
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,10 +39,10 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Finn Behrens <me@kloenk.dev>
-Subject: [PATCH v2 08/28] rust: error: declare errors using macro
-Date:   Fri,  2 Dec 2022 17:14:39 +0100
-Message-Id: <20221202161502.385525-9-ojeda@kernel.org>
+        patches@lists.linux.dev, Viktor Garske <viktor@v-gar.de>
+Subject: [PATCH v2 09/28] rust: error: add codes from `errno-base.h`
+Date:   Fri,  2 Dec 2022 17:14:40 +0100
+Message-Id: <20221202161502.385525-10-ojeda@kernel.org>
 In-Reply-To: <20221202161502.385525-1-ojeda@kernel.org>
 References: <20221202161502.385525-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -56,40 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Finn Behrens <me@kloenk.dev>
+From: Viktor Garske <viktor@v-gar.de>
 
-Add a macro to declare errors, which simplifies the work needed to
-add each one, avoids repetition of the code and makes it easier to
-change the way they are declared.
+Only a few codes were added so far. With the `declare_err!`
+macro in place, add the remaining ones (which is most of them)
+from `include/uapi/asm-generic/errno-base.h`.
 
-Signed-off-by: Finn Behrens <me@kloenk.dev>
+Co-developed-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+Signed-off-by: Viktor Garske <viktor@v-gar.de>
 Reviewed-by: Gary Guo <gary@garyguo.net>
 [Reworded, adapted for upstream and applied latest changes]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/error.rs | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ rust/kernel/error.rs | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
 diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-index 466b2a8fe569..b843f3445483 100644
+index b843f3445483..861746f2422d 100644
 --- a/rust/kernel/error.rs
 +++ b/rust/kernel/error.rs
-@@ -8,8 +8,16 @@ use alloc::collections::TryReserveError;
+@@ -17,7 +17,40 @@ pub mod code {
+         };
+     }
  
- /// Contains the C-compatible error codes.
- pub mod code {
--    /// Out of memory.
--    pub const ENOMEM: super::Error = super::Error(-(crate::bindings::ENOMEM as i32));
-+    macro_rules! declare_err {
-+        ($err:tt $(,)? $($doc:expr),+) => {
-+            $(
-+            #[doc = $doc]
-+            )*
-+            pub const $err: super::Error = super::Error(-(crate::bindings::$err as i32));
-+        };
-+    }
-+
-+    declare_err!(ENOMEM, "Out of memory.");
++    declare_err!(EPERM, "Operation not permitted.");
++    declare_err!(ENOENT, "No such file or directory.");
++    declare_err!(ESRCH, "No such process.");
++    declare_err!(EINTR, "Interrupted system call.");
++    declare_err!(EIO, "I/O error.");
++    declare_err!(ENXIO, "No such device or address.");
++    declare_err!(E2BIG, "Argument list too long.");
++    declare_err!(ENOEXEC, "Exec format error.");
++    declare_err!(EBADF, "Bad file number.");
++    declare_err!(ECHILD, "Exec format error.");
++    declare_err!(EAGAIN, "Try again.");
+     declare_err!(ENOMEM, "Out of memory.");
++    declare_err!(EACCES, "Permission denied.");
++    declare_err!(EFAULT, "Bad address.");
++    declare_err!(ENOTBLK, "Block device required.");
++    declare_err!(EBUSY, "Device or resource busy.");
++    declare_err!(EEXIST, "File exists.");
++    declare_err!(EXDEV, "Cross-device link.");
++    declare_err!(ENODEV, "No such device.");
++    declare_err!(ENOTDIR, "Not a directory.");
++    declare_err!(EISDIR, "Is a directory.");
++    declare_err!(EINVAL, "Invalid argument.");
++    declare_err!(ENFILE, "File table overflow.");
++    declare_err!(EMFILE, "Too many open files.");
++    declare_err!(ENOTTY, "Not a typewriter.");
++    declare_err!(ETXTBSY, "Text file busy.");
++    declare_err!(EFBIG, "File too large.");
++    declare_err!(ENOSPC, "No space left on device.");
++    declare_err!(ESPIPE, "Illegal seek.");
++    declare_err!(EROFS, "Read-only file system.");
++    declare_err!(EMLINK, "Too many links.");
++    declare_err!(EPIPE, "Broken pipe.");
++    declare_err!(EDOM, "Math argument out of domain of func.");
++    declare_err!(ERANGE, "Math result not representable.");
  }
  
  /// Generic integer kernel error.
