@@ -2,115 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E62064097D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4DE64097F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 16:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233768AbiLBPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 10:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S233773AbiLBPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 10:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbiLBPjH (ORCPT
+        with ESMTP id S233357AbiLBPjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 10:39:07 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A609BE6B3;
-        Fri,  2 Dec 2022 07:39:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.ch; s=s31663417;
-        t=1669995523; bh=ldG0fzm6Qem0Pfa6GXvE+somhuAXUV/Lz5s/EE/u7EU=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=FwbQ27KZcoVQ67aMcSqdAPD+8ALJiPA+vNIE2krhZB0EuucO6VfV7+wVGMkq0Oq2M
-         Y9esfsDr91p3srfVAQ0/3eYQ5q98qsfnbrWJ0HsGPKvnGruvcLFq1ZEqN6nlgv97OM
-         2pDTzcDdpD5eLvbKl9Odlt5ccqVW7znk4ZLSyfFR4KNTh9VI85kNZMnBmnQLbCVFWh
-         qp+A65OmvVhRktZ9mEXvsF0ug3naIJ8iJ7jxHs3Xl5Jaq96joqyLuvAT9eC6dKQQ5s
-         +MbIvrYuU9rK0jNpsGwVgmFLeirudl6IzxesHH6a8dlnvej2RoYrNpE49pu9hOLVSP
-         s2hvlEGy/d4SQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from x1c6.fritz.box ([185.76.96.75]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mqs4f-1ofYxe2J61-00muzS; Fri, 02
- Dec 2022 16:38:43 +0100
-From:   Timo Hunziker <timo.hunziker@gmx.ch>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@google.com, linux-kernel@vger.kernel.org,
-        Timo Hunziker <timo.hunziker@gmx.ch>
-Subject: [PATCH bpf-next] libbpf: parse usdt args without offset on x86 (e.g. 8@(%rsp))
-Date:   Fri,  2 Dec 2022 16:38:16 +0100
-Message-Id: <20221202153816.1180450-1-timo.hunziker@gmx.ch>
-MIME-Version: 1.0
+        Fri, 2 Dec 2022 10:39:43 -0500
+Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2049.outbound.protection.outlook.com [40.92.102.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967D5C4609;
+        Fri,  2 Dec 2022 07:39:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PJ0hCCzu6XvhrLBmo1AohcJwsSr2DEUAivDHu37fJxx9cTqtyEq6cUp4Mdo6oc+Sx0v90jWYlXEeod+ne9FUIfH1j8Y/dxSmtbOKPHZluGgJzydDs6QBgbKj+7qZxIfupwMQ0JH70NZtikttkETHZQejY6Xnl9zTguSUE5neYndS9eYgrO2Jl6QkraKU9GLdmyaA4iKOvnTqbFqxDRSlu65HTyGIsQOvj3xMxAT7kkMhcJTB6E4BPw2Cu746xaxVt60myleGKpGwQSif+DMw0aHTkAph9NKIh+AapnhhGY2Epancz8s9mlzf0PRVVn6b0iIyHR2KIvUIEUVcmg8kBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KMShO0wb+udI2OuRox1Tjsmtmz2Vph9zoShFXdn8JTM=;
+ b=EkYJ9T64lgHFFzDy1gu38hCsLhTffdqghI0/qmLS0j7EikG+RXcqlh4JuYeb4IGW6cySSuLHiuaMTIaF38rY+oUr6LYqFexEKwxPIUNATvY/ODTTjqS0zt2pAJx/LAsddwiLI53OwS/Z6Yk4nVXkBFdLUm+iTIOA3IHl6EzL1NBAzuKgcWnN2Yn/c3Iet+tgUTmk/2uBb+pZrLPtmdYxDRk4cAw1KIb2mwXuj0jIMb8Yb5xzOGvOZrlDCTM4IorswIWfFzICTxwyUtptQ6xBbseDOvhfFSJFscYTzzczV1XVrdNZAxNIc6qhIm/BKLvrFKFWSHS9YXb9QE3aMqYYrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KMShO0wb+udI2OuRox1Tjsmtmz2Vph9zoShFXdn8JTM=;
+ b=AN9m3pFJNmww5HGfZdoc45s0n4wjAaudhuENqGhf91WsvhwVgbZF9DRg+hgVjFNmCWCmBHCa+TB0qijN+mX6L33skzD1z26I0Kpe3+EAwUMNfITG5P0nR45reY8eVb3QUQh9i41U8CaRgPMI/Q9CPmQsWlCuLcNLAhwb0hSAhv4WVQpqPEskS1rSVulXXzZRyC2AP9XEehFbEEai9VuZMiImoQlaC7d2upd30KFCA+iQQllCEMT5YZ6BOGgBBRQWJNyJlbBdj5QMFIbh4UvWtucE8JD/o2zzURrdJvJHFTTve60NyT6DT+dbvbSq7sjyKhZ9x9N230VWn4WaWiUvEg==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ MA0PR01MB5699.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:6e::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.10; Fri, 2 Dec 2022 15:39:36 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1%4]) with mapi id 15.20.5880.008; Fri, 2 Dec 2022
+ 15:39:36 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     "willy@infradead.org" <willy@infradead.org>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "slava@dubeyko.com" <slava@dubeyko.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] hfsplus: Fix bug causing custom uid and gid being unable to
+ be assigned with mount
+Thread-Topic: [PATCH] hfsplus: Fix bug causing custom uid and gid being unable
+ to be assigned with mount
+Thread-Index: AQHZBmRIDbExT15kfkG02K9S1mwlSg==
+Date:   Fri, 2 Dec 2022 15:39:36 +0000
+Message-ID: <93F5197D-2B61-4129-B5D4-771934F70577@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [qGIcFsK2jAfZEIJCdv6HbjZ2pJiz5h5vkEt+XfEQqHNrEaoAE7QLvsB2bKXt36Fm]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MA0PR01MB5699:EE_
+x-ms-office365-filtering-correlation-id: 10179672-6efe-4560-80d1-08dad47b6acc
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YynlAkdcoBt80rcsAoVg2cSDxl++TfMReX3Pyuuf/YYaK9XrBHvGXDG2DNA1VL54nkTjP9ZeqZL/3OqYk+bOeZitf+Y5Nw8O0yShEKXY60vkqFc5XHs1ZokoSCKxEkGaPjVleGaW+xFzk7sWrz61nvKivijkYqck4Ti5lUY6uVD6jCInd0eAIL0uJ6O+pT4G4PUN6UUQtFoW8aPn5uESKQn0WfIuZ45bIk3TUVwiybupocN0pGyQkgI8Y4l/J9Rr3eQ9hfUJpko7LRCIlmf0BIHkTHsUYqz3zacl76oYrMtjfjoGQCqAudx3gX6+XsxVEHRDRwD+iLfcQrRUiAUMaIysUBS7CFkI+hqx/JES+EVfaLHuvArxIqHqrJz4mTUbPVTCK75JKEDA/6/qBjFuQRCAy4rEjk/Tcr5+rTXQukSKdd88896As1fpR4Bgg7Tj5GmzuyPb46S4Ycd+E1y5qPRiYsZ0ocqeDJsbdkeHSdWRTnE9Xyt5N0ZcpvWn0RUEYNEMh4fN0vcBBZffAkD+TIcF+2InJCL4uKi0zjClezG5i0RiZw89W1ERBzJn0yo8qk8m9Irf7HhgI8vqf+BY+48nqT8qRZBYIYPdH1zW4ow=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?b1xeTkTd0FJ+eAu7N2QdH+AjlCHO+nNRg1nSFHfIBd8Car5CJmBXMuhv0i+X?=
+ =?us-ascii?Q?Webm0J5dpwFHZA6A+anbS/GiQs/8SV+jOr+CNLw4mLlhUIddCeeQb05i1vAO?=
+ =?us-ascii?Q?TRlSVnqOB2r4hyjnsoAxTNIuLMlQ6TwjLdPgqhyDaS84hPjdDRmpmDoVHS9K?=
+ =?us-ascii?Q?p5cdx2YPdfIqrIiNe3OS7UsJJ7nLAbo8kqG+slH2XtsfLDS/mQKvhIB+Bwku?=
+ =?us-ascii?Q?ufoz4+3huvXh8vHu9cwVAzEK2354gCa5xVHJssYfkKwNYv/iJiyhj/WPScrW?=
+ =?us-ascii?Q?JUY8wJ4eHQR/u5LEefeizSiMQrr1vNYkMjwxHJrcikjiB91rtykt1m1VfqmZ?=
+ =?us-ascii?Q?zyMzSdxmqR26OAMrrjl2O8MyGCJ9Ru/0ZyS93yxJJKz3ZryaArNMmJlbjv9d?=
+ =?us-ascii?Q?FhWozBoojijiy46CmTp23dU3Cie4Iur465zSejD5wvOYt3N/egrcLJz6MqhG?=
+ =?us-ascii?Q?8LAv/zGNiWvmCftN2ZtNkcFqLB7ju0/KmNlFHcVZ0vnEMpWz/1KfDHISpb47?=
+ =?us-ascii?Q?trcBhhu3mco8IG8er/BtLUtn85d4NHUILQFejfxd+edd1DO/QwW+/1CZsMzo?=
+ =?us-ascii?Q?6oLKF8mW6ydK39U/olL/B/D6FAcsu9q49wP+Ipn6dw4vZMyNMPMcoUVQ7hEr?=
+ =?us-ascii?Q?SgIev4GBc9/FmLEJkhyykiEqMI71WYHKRWaTpRy4GHlZI3FYkNvEBd4JNEiS?=
+ =?us-ascii?Q?R9kvTT+25ncJ2GfN3Yx08qInG9f9AV4rJ+vnFmRie+vUV4L3Mx8BRN6PRpE1?=
+ =?us-ascii?Q?f368Mw0C1ikrfAXmBhXXy6b85tj/YehE0yj5IY1h5rnsdMZrCgb0HchfjKvj?=
+ =?us-ascii?Q?zfkfnpPQZhkcVKXpWSNrXuJHPu+45/bTcQAHlp8q0Oj3OL30pYzcaezBO5w+?=
+ =?us-ascii?Q?LdE3nRAM5LcYXyBWCUeSpc/rmNCtnLlVECWGP2cFRxpgWsiNSvuPxC965juE?=
+ =?us-ascii?Q?ofl6D2DJD/I8FMks/Tpmuzi+nPezPodsX2cE9WFngd+VUda078Lpl8DumE9d?=
+ =?us-ascii?Q?bkBVXbNz+MyHduFhMsRjxe9pB2Ab4oq52+YD+/EVVDugk/bbQH9VBzDS+fwY?=
+ =?us-ascii?Q?Hk5QUJCrT51sp/kGdT3p95OTgw/eqErSzb9khqTLB6xwAfCdCZoSDFsmuuKx?=
+ =?us-ascii?Q?2DxEupHr5n1Wo7lFiuccopN3a+nlA1G6SBvxtA5ZJPUCVlFXTQey1NRYOHNx?=
+ =?us-ascii?Q?fG/t0F0ZuBl5pIIB9g+QwK55MPhR+Ltudm4x3VTo+xb5Vu0ImZzaSW88z7b4?=
+ =?us-ascii?Q?otUsdoKcqTr7b4W+NDHfnGHdB5aZChg3zITwD4ZOcMjo8nz8v5quNiL4V3Vv?=
+ =?us-ascii?Q?IAv/hFR2HKm5hwolUTYrZ7EPokSQH66xogHNT6Dn+TeSDQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <AC3588D4EC5A6146B45E333C6E927F49@INDPRD01.PROD.OUTLOOK.COM>
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:iHEIR/r7nBpuEQBqpUIq+/Y5by8Fmo14yoHvLmB2k7rtJJNeMIx
- glfIQ9h8LYddQqnoX/WTe9YZ6H+lQxxKrpgBoEa/GfneQK2Nw+bgm8ZUIWUwQzY/YKfgDe+
- 2xD2GdG8HahVd+pDY/PFDjFQA1MaFFzoNmsfiRVZoCzl1s5Vf3ijw5sc87w4iThmngEDX2p
- 3HUwG1a1ol5DZ3nU/z3gA==
-UI-OutboundReport: notjunk:1;M01:P0:8shPd3u1qR0=;z5Myn1tE+QAb72nrUcKTqW+liYq
- ucRGQlRe4QaHCQWXCLKUWMGqqBVfYn+Da96FO+hQjozzgJvDEPx3LVDCXjBfygnNxp4xMsr8x
- YXiX89jApej6HZl+DRvlA5DCU8S1YjiTavDyR+qb4luWGp5MQ8lnXMSUZkIe7YRRdSKqoHn5+
- AWizaJGDkgQWvuvAXwdCMAxDJWkT9tWwieLl31D6S61HjmgT62p511edlT7z9YGSqDB5Zvpju
- S2xoUdTK8y4Z78u0Na1R7Jf2/zC87rQJRqwjT8XM1AVsH/pLN9ayUpgZj8dX/o/aMLiSEbzsV
- LabclslBOgHGzOwfLD9vpjuqyBPA99TriD/U5/ZoEImO60Qmpn+YUA2G0MmWogaumkGvY1uKq
- cjBGNbO4wlgUq27ThNcEw5JJXx4dKHTsKoFRG7AD50TIZUm5gZt3DJBwanOAvwK0tENYTj328
- cNAa5akFBeu9jaCpvRAcbmGqcnIDuN1kxpH1d3futiRZvHkoJrof9J3Y2puvQKJRj6kXS4zLh
- V0+WehPmuy+vx2YZ+2PITZ0GQ9JNQAuNlckRwAfzTGntQV3QdFV3A+XnXeRYYqPfaY0jQIDQA
- MjZEuv32wFgUbWqqYdIsU+E8W1Q1hBQYMtM0Hf7JW+FX13+eXRV7h0wgb7opdpv+kxJr6eKG8
- b4Pfhnjpm3j2erLK6aB7DlckqI6GSEdsgtCVAZ2Jgu28xaDGYZwl4ybiSn4gicuesP1mReBXE
- VWQLElGkiNzXDKzOLWMroPEE7ZzdleQ5NZhxwvBTP8w+tW5o4VGSQMCYs3VhwKeba1Nujn3gg
- X/QgFZVv4veyIwGSqDiqsa1Gr4JvfW8e4+x9IlBTugeCH4ldFpQf1AbuVc90hKoF4g7CP46ut
- tbkKcYlrUuskNHM5F4HmtdJnLt7EfWismnAj+9OKvoSSobFfl2j73qkfQcEjplEhxfrz54mA1
- WbPgnJX98ljEa233twKCCxforig=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10179672-6efe-4560-80d1-08dad47b6acc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2022 15:39:36.3730
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB5699
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parse USDT arguments like "8@(%rsp)" on x86. These are emmited by
-systemtap. The syntax is a mixture between the "memory dereference
-case" and the "register read case" as the offset is zero but the
-register is wrapped in parentheses. We treat them the same as the
-the "register read case".
+From: Aditya Garg <gargaditya08@live.com>
 
-I've tested that this fixes the "unrecognized arg #N spec: 8@(%rsp).."
-error I've run into when attaching to a probe with such an argument.
-Attaching and reading the arguments works.
+Inspite of specifying UID and GID in mount command, the specified UID and
+GID was not being assigned. This patch fixes this issue.
 
-Something similar might be needed for the other supported
-architectures.
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+---
+ fs/hfsplus/hfsplus_fs.h | 2 ++
+ fs/hfsplus/inode.c      | 4 ++--
+ fs/hfsplus/options.c    | 2 ++
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-ref: https://github.com/libbpf/libbpf/issues/559
-
-Signed-off-by: Timo Hunziker <timo.hunziker@gmx.ch>
-=2D--
- tools/lib/bpf/usdt.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index b8daae265f99..5e7ec7ad8ad7 100644
-=2D-- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -1233,6 +1233,14 @@ static int parse_usdt_arg(const char *arg_str, int =
-arg_num, struct usdt_arg_spec
- 		if (reg_off < 0)
- 			return reg_off;
- 		arg->reg_off =3D reg_off;
-+	} else if (sscanf(arg_str, " %d @ ( %%%15[^)] ) %n", &arg_sz, reg_name, =
-&len) =3D=3D 2) {
-+		/* Register read case with parentheses, e.g., 8@(%rsp) */
-+		arg->arg_type =3D USDT_ARG_REG;
-+		arg->val_off =3D 0;
-+		reg_off =3D calc_pt_regs_off(reg_name);
-+		if (reg_off < 0)
-+			return reg_off;
-+		arg->reg_off =3D reg_off;
- 	} else if (sscanf(arg_str, " %d @ %%%15s %n", &arg_sz, reg_name, &len) =
-=3D=3D 2) {
- 		/* Register read case, e.g., -4@%eax */
- 		arg->arg_type =3D USDT_ARG_REG;
-=2D-
-2.36.2
+diff --git a/fs/hfsplus/hfsplus_fs.h b/fs/hfsplus/hfsplus_fs.h
+index a5db2e3b2..6aa919e59 100644
+--- a/fs/hfsplus/hfsplus_fs.h
++++ b/fs/hfsplus/hfsplus_fs.h
+@@ -198,6 +198,8 @@ struct hfsplus_sb_info {
+ #define HFSPLUS_SB_HFSX		3
+ #define HFSPLUS_SB_CASEFOLD	4
+ #define HFSPLUS_SB_NOBARRIER	5
++#define HFSPLUS_SB_UID		6
++#define HFSPLUS_SB_GID		7
+=20
+ static inline struct hfsplus_sb_info *HFSPLUS_SB(struct super_block *sb)
+ {
+diff --git a/fs/hfsplus/inode.c b/fs/hfsplus/inode.c
+index aeab83ed1..4d1077db8 100644
+--- a/fs/hfsplus/inode.c
++++ b/fs/hfsplus/inode.c
+@@ -192,11 +192,11 @@ static void hfsplus_get_perms(struct inode *inode,
+ 	mode =3D be16_to_cpu(perms->mode);
+=20
+ 	i_uid_write(inode, be32_to_cpu(perms->owner));
+-	if (!i_uid_read(inode) && !mode)
++	if (test_bit(HFSPLUS_SB_UID, &sbi->flags))
+ 		inode->i_uid =3D sbi->uid;
+=20
+ 	i_gid_write(inode, be32_to_cpu(perms->group));
+-	if (!i_gid_read(inode) && !mode)
++	if (test_bit(HFSPLUS_SB_GID, &sbi->flags))
+ 		inode->i_gid =3D sbi->gid;
+=20
+ 	if (dir) {
+diff --git a/fs/hfsplus/options.c b/fs/hfsplus/options.c
+index 047e05c57..10a0bdacb 100644
+--- a/fs/hfsplus/options.c
++++ b/fs/hfsplus/options.c
+@@ -137,6 +137,7 @@ int hfsplus_parse_options(char *input, struct hfsplus_s=
+b_info *sbi)
+ 				return 0;
+ 			}
+ 			sbi->uid =3D make_kuid(current_user_ns(), (uid_t)tmp);
++			set_bit(HFSPLUS_SB_UID, &sbi->flags);
+ 			if (!uid_valid(sbi->uid)) {
+ 				pr_err("invalid uid specified\n");
+ 				return 0;
+@@ -148,6 +149,7 @@ int hfsplus_parse_options(char *input, struct hfsplus_s=
+b_info *sbi)
+ 				return 0;
+ 			}
+ 			sbi->gid =3D make_kgid(current_user_ns(), (gid_t)tmp);
++			set_bit(HFSPLUS_SB_GID, &sbi->flags);
+ 			if (!gid_valid(sbi->gid)) {
+ 				pr_err("invalid gid specified\n");
+ 				return 0;
+--=20
+2.38.1
 
