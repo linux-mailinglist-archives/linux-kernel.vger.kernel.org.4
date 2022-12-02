@@ -2,135 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646C1640404
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D196064040A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbiLBKEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
+        id S233217AbiLBKFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbiLBKEG (ORCPT
+        with ESMTP id S233223AbiLBKFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:04:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4726112AA1
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:04:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 2 Dec 2022 05:05:02 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D3E391FD;
+        Fri,  2 Dec 2022 02:05:01 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D23E662240
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 10:04:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A6FDC433D6;
-        Fri,  2 Dec 2022 10:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669975444;
-        bh=rjqoFQfT51QM7OSsPhsfBZCaCoI/Gtou7tN2REaATcI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yd8QO8dca29gFjr8o0TcQQLD4EpMrueXx+HhKYqIC8k2L41lSK4rm8wCMoetISe5s
-         0Iq1DzC0TuoDpfhRT1p7nnPQdjRyP6xSRPua+1DOxVtL6aoIwJGcAtA8DZL3LHU+V3
-         TDamfp9WERl+1qtmx/wfbXSpqCgUHgY9NWrVZlssPpfESl8bkJET5ZWcYnh6njsBn7
-         gkEKcc3y6lGb4jmAELp1xrDsxWK6pXTcmJ+k3mwHQJi21/WgTW15LRi3++c9C2k645
-         yzNacAgy0NHS+UXGybFfnH4kz9uYxnpG7lIzeZfGCwBcuLj/8cWDWrvces2J0ojK7H
-         pBSe1EM/Lbf6A==
-Date:   Fri, 2 Dec 2022 10:03:58 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Amit Pundir <amit.pundir@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>, andersson@kernel.org,
-        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, hch@lst.de,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
- arch_dma_prep_coherent()"
-Message-ID: <20221202100357.GB29396@willie-the-truck>
-References: <Y3J8+O7Y3f3onH0P@arm.com>
- <20221118105402.GA184726@thinkpad>
- <20221118123349.GC3697@willie-the-truck>
- <20221121064224.GB11945@thinkpad>
- <018517b8-0ae0-54f5-f342-dcf1b3330a13@quicinc.com>
- <Y39blgEueyegkz6C@arm.com>
- <6d637906-e1d5-c481-a73d-2b2b845e223b@leemhuis.info>
- <Y4joR2sQMMjIt+yE@arm.com>
- <CAMi1Hd2wM5MLsjkx0HAWKkswzTDACb0C4tsPymNrRa0ariWsww@mail.gmail.com>
- <f98d163b-3410-9cf7-7d98-0f7640f4aa1f@leemhuis.info>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D1846601811;
+        Fri,  2 Dec 2022 10:04:59 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669975499;
+        bh=qXooxeaYPL0DnLqOyBm5Di9kxLBGZnJQo6KXGjxoNM8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dCrSK40tOhEvndX0TcUkgQZ3tWruAWImx9aV5SS84xfjEhMgqsJjo91NpTc7Y+VzO
+         CWpltP1YsvzKD9lYDuWqBq/z6V6MIHhQOnLYVbXDOhzx/HyuAgdxkrCqMou6hWDg7o
+         JMxNCbipyYUYQISFWijvcvH5qFiDb3tO2yIuYVxvzyarPTNF2FPZGELUyvLCAW9HwE
+         5lYWpEiilJOiq9BjLh3yHFoTvSTJB6pjgTqKrSX4docMHOlvPxRfAROjSqwWCyv94P
+         b7szNmDxMNBgDhE6fNx58arGrxwxPogDy2MNWitrFi6jHIWasoYJitRXHov0d4Wvh4
+         imJQRznN8IWuA==
+Message-ID: <64ac15de-3324-6d48-5199-587f01b565e0@collabora.com>
+Date:   Fri, 2 Dec 2022 11:04:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f98d163b-3410-9cf7-7d98-0f7640f4aa1f@leemhuis.info>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] cpufreq: mediatek: Raise proc and sram max voltage for
+ MT7622/7623
+Content-Language: en-US
+To:     vincent@systemli.org
+Cc:     rafael@kernel.org, matthias.bgg@gmail.com,
+        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, frank-w@public-files.de,
+        daniel@makrotopia.org, viresh.kumar@linaro.org
+References: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 09:54:05AM +0100, Thorsten Leemhuis wrote:
-> On 02.12.22 09:26, Amit Pundir wrote:
-> > On Thu, 1 Dec 2022 at 23:15, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> >>
-> >> On Thu, Dec 01, 2022 at 10:29:39AM +0100, Thorsten Leemhuis wrote:
-> >>> Has any progress been made to fix this regression? It afaics is not a
-> >>> release critical issue, but well, it still would be nice to get this
-> >>> fixed before 6.1 is released.
-> >>
-> >> The only (nearly) risk-free "fix" for 6.1 would be to revert the commit
-> >> that exposed the driver bug. It doesn't fix the actual bug, it only
-> >> makes it less likely to happen.
-> >>
-> >> I like the original commit removing the cache invalidation as it shows
-> >> drivers not behaving properly
+Il 02/12/22 10:52, AngeloGioacchino Del Regno ha scritto:
+> During the addition of SRAM voltage tracking for CCI scaling, this
+> driver got some voltage limits set for the vtrack algorithm: these
+> were moved to platform data first, then enforced in a later commit
+> 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> using these as max values for the regulator_set_voltage() calls.
 > 
-> Yeah, I understand that, but I guess it's my job to ask at this point:
-> "is continuing to live with the old behavior for one or two more cycles"
-> that much of a problem"?
-
-That wouldn't be a problem. The problem is that I haven't see any efforts
-from the Qualcomm side to actually fix the drivers so what makes you think
-the issue will be addressed in one or two more cycles? On the other hand, if
-there were patches out there trying to fix the drivers and we just needed to
-revert this change to buy them some time, then that would obviously be the
-right thing to do.
-
-> >> but, as a workaround, we could add a
-> >> command line option to force back the old behaviour (defaulting to the
-> >> new one) until the driver is fixed.
+> In this case, the vsram/vproc constraints for MT7622 and MT7623
+> were supposed to be the same as MT2701 (and a number of other SoCs),
+> but that turned out to be a mistake because the aforementioned two
+> SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
 > 
-> Well, sometimes that approach is fine to fix a regression, but I'm not
-> sure this is one of those situations, as this...
+> Fix that by adding new platform data for MT7622/7623 declaring the
+> right {proc,sram}_max_volt parameter.
 > 
-> > We use DB845c extensively for mainline and android-mainline[1] testing
-> > with AOSP, and it is broken for weeks now. So be it a temporary
-> > workaround or a proper driver fix in place, we'd really appreciate a
-> > quick fix here.
+> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
+> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Hello Vincent,
+in regard to the regression that you've (not so) recently reported, can you please
+give this commit a try and check if this helps resolving your issue?
+
+Many thanks,
+Angelo
+
+> ---
+>   drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> ...doesn't sound like we are not talking about some odd corner case
-> here. But in the end that would be up to Linus to decide.
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 7f2680bc9a0f..f9a9f08c75c4 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -695,6 +695,15 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
+>   	.ccifreq_supported = false,
+>   };
+>   
+> +static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
+> +	.min_volt_shift = 100000,
+> +	.max_volt_shift = 200000,
+> +	.proc_max_volt = 1360000,
+> +	.sram_min_volt = 0,
+> +	.sram_max_volt = 1360000,
+> +	.ccifreq_supported = false,
+> +};
+> +
+>   static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
+>   	.min_volt_shift = 100000,
+>   	.max_volt_shift = 200000,
+> @@ -717,8 +726,8 @@ static const struct mtk_cpufreq_platform_data mt8186_platform_data = {
+>   static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+>   	{ .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
+> +	{ .compatible = "mediatek,mt7623", .data = &mt7622_platform_data },
+>   	{ .compatible = "mediatek,mt8167", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
 
-The issue is that these drivers are abusing the DMA API to manage buffers
-which are being transferred to trustzone. Even with the revert, this is
-broken (the CPU can speculate from the kernel's cacheable linear mapping
-of memory), it just appears to be less likely with the CPUs on this SoC.
-So we end up in a situation where the kernel is flakey on these devices
-but with even less incentive for the drivers to be fixed.
-
-As well as broken drivers, the patch has also identified broken device-tree
-files where DMA-coherent devices weher incorrectly being treated as
-non-coherent:
-
-https://lore.kernel.org/linux-arm-kernel/20221124142501.29314-1-johan+linaro@kernel.org/
-
-so I do think it's something that's worth having as the default behaviour.
-
-> I'll point him to this thread once more in my weekly report anyway.
-> Maybe I'll even suggest to revert this change, not sure yet.
-
-As I said above, I think the revert makes sense if the drivers are actually
-being fixed, but I'm not seeing any movement at all on that front.
-
-Will
