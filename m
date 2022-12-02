@@ -2,179 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5373064087F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59CC640864
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 15:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiLBOd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 09:33:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S233073AbiLBO22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 09:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbiLBOdU (ORCPT
+        with ESMTP id S229489AbiLBO2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 09:33:20 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D60D388C;
-        Fri,  2 Dec 2022 06:33:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669991599; x=1701527599;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n2a/CpHAAbyq8nKYEBLb4Z+TMWPhb76u70lEuNyc05Y=;
-  b=URtaxaqGFZltZ8Yn7PQfqcCXVd9C+u25zAtpIGicWBrtJGxzipzXDPMk
-   q9lDVL28bvoEdY1m3oPxR4whJtV84/Ue5WctraId/CiFwdFMAQPY07Fel
-   IjAuR+zM6SWFphKUl36qn+cuQzRELoRcG29OIVEzqqLP6LTZCILbAaRnu
-   YVeaYagK19+t3WfwVMySru1UDRupySiE9fJeVkIwxLzK/AQDlR+zZXkHV
-   dpn5QL8iXM7bsaHF8oSxC9KYozQdAlh0GBAKe/28SDGpuoGVo8STobEqh
-   jxpAf+pN3dzwRpzsJUgBDX8RtaZPdbT+I7fDE5Rn57dCWqGt03fq3sH/H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="314665456"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="314665456"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 06:33:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="677614996"
-X-IronPort-AV: E=Sophos;i="5.96,212,1665471600"; 
-   d="scan'208";a="677614996"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 06:33:14 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id F0A3220363;
-        Fri,  2 Dec 2022 16:24:28 +0200 (EET)
-Date:   Fri, 2 Dec 2022 14:24:28 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Jammy Huang <jammy_huang@aspeedtech.com>
-Cc:     eajames@linux.ibm.com, mchehab@kernel.org, joel@jms.id.au,
-        andrew@aj.id.au, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, xavier.roumegue@oss.nxp.com,
-        ezequiel@vanguardiasur.com.ar, stanimir.varbanov@linaro.org,
-        nicolas.dufresne@collabora.com, ming.qian@nxp.com,
-        andrzej.p@collabora.com, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 3/5] media: Documentation: aspeed-video: Add user
- documentation for the aspeed-video driver
-Message-ID: <Y4oKnBDnvliD8cJb@paasikivi.fi.intel.com>
-References: <20221028023554.928-1-jammy_huang@aspeedtech.com>
- <20221028023554.928-4-jammy_huang@aspeedtech.com>
+        Fri, 2 Dec 2022 09:28:25 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2103AC10
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 06:28:24 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p171Y-0000GT-6M; Fri, 02 Dec 2022 15:28:20 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D4B5B131705;
+        Fri,  2 Dec 2022 14:28:18 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 15:28:10 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
+Message-ID: <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-15-msp@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="afldurfie5cbuheh"
 Content-Disposition: inline
-In-Reply-To: <20221028023554.928-4-jammy_huang@aspeedtech.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221116205308.2996556-15-msp@baylibre.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jammy,
 
-On Fri, Oct 28, 2022 at 10:35:52AM +0800, Jammy Huang wrote:
-> Add user documentation for the aspeed-video driver.
-> 
-> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-> ---
-> v11:
->   - update the way to change format
-> v10:
->   - new
-> ---
->  .../media/drivers/aspeed-video.rst            | 61 +++++++++++++++++++
->  .../userspace-api/media/drivers/index.rst     |  1 +
->  2 files changed, 66 insertions(+)
->  create mode 100644 Documentation/userspace-api/media/drivers/aspeed-video.rst
-> 
-> diff --git a/Documentation/userspace-api/media/drivers/aspeed-video.rst b/Documentation/userspace-api/media/drivers/aspeed-video.rst
-> new file mode 100644
-> index 000000000000..e5656a8d990e
-> --- /dev/null
-> +++ b/Documentation/userspace-api/media/drivers/aspeed-video.rst
-> @@ -0,0 +1,65 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +.. include:: <isonum.txt>
-> +
-> +ASPEED video driver
-> +===================
-> +
-> +ASPEED Video Engine found on AST2400/2500/2600 SoC supports high performance
-> +video compressions with a wide range of video quality and compression ratio
-> +options. The adopted compressing algorithm is a modified JPEG algorithm.
-> +
-> +There are 2 types of compressions in this IP.
-> +
-> +* JPEG JFIF standard mode: for single frame and management compression
-> +* ASPEED proprietary mode: for multi-frame and differential compression.
-> +  Support 2-pass (high quality) video compression scheme (Patent pending by
-> +  ASPEED). Provide visually lossless video compression quality or to reduce
-> +  the network average loading under intranet KVM applications.
-> +
-> +VIDIOC_S_FMT can be used to choose which format you want. V4L2_PIX_FMT_JPEG
-> +stands for JPEG JFIF standard mode; V4L2_PIX_FMT_AJPG stands for ASPEED
-> +proprietary mode.
-> +
-> +More details on the ASPEED video hardware operations can be found in
-> +*chapter 6.2.16 KVM Video Driver* of SDK_User_Guide which available on
-> +AspeedTech-BMC/openbmc/releases.
+--afldurfie5cbuheh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Same comment on this, what does this refer to?
+On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
+> According to the datasheet 0x1c is the last register in the first block,
+> not register 0x2c.
 
-> +
-> +The ASPEED video driver implements the following driver-specific control:
-> +
-> +``V4L2_CID_ASPEED_HQ_MODE``
-> +-------------------------------
-> +    Enable/Disable ASPEED's High quality mode. This is a private control
-> +    that can be used to enable high quality for aspeed proprietary mode.
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +    :widths:       1 4
-> +
-> +    * - ``(0)``
-> +      - ASPEED HQ mode is disabled.
-> +    * - ``(1)``
-> +      - ASPEED HQ mode is enabled.
-> +
-> +``V4L2_CID_ASPEED_HQ_JPEG_QUALITY``
-> +-------------------------------
-> +    Define the quality of ASPEED's High quality mode. This is a private control
-> +    that can be used to decide compression quality if High quality mode enabled
-> +    . Higher the value, better the quality and bigger the size.
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +    :widths:       1 4
-> +
-> +    * - ``(1)``
-> +      - minimum
-> +    * - ``(12)``
-> +      - maximum
-> +    * - ``(1)``
-> +      - step
-> +    * - ``(1)``
-> +      - default
-> +
-> +**Copyright** |copy| 2022 ASPEED Technology Inc.
-> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-> index 32f82aed47d9..46a494e00b72 100644
-> --- a/Documentation/userspace-api/media/drivers/index.rst
-> +++ b/Documentation/userspace-api/media/drivers/index.rst
-> @@ -31,6 +31,7 @@ For more details see the file COPYING in the source distribution of Linux.
->  	:maxdepth: 5
->  	:numbered:
->  
-> +	aspeed-video
->  	ccs
->  	cx2341x-uapi
->  	dw100
+The datasheet "SLLSF91A =E2=80=93 DECEMBER 2018 =E2=80=93 REVISED JANUARY 2=
+020" says:
 
--- 
-Kind regards,
+| 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
+| 16'h002F
 
-Sakari Ailus
+While the last described register is at 0xc.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--afldurfie5cbuheh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKC3gACgkQrX5LkNig
+013FEQf/TUDXQbVkafJGyol7PjWr8gxAcdLLY5RI5HqBOAZk6TB4z141GP1ovuJ5
+WebBj6CkO4Og2oqTXB0XM1My+lnu6pRxo9Z1vVKnJ9vf0OEgdxA/Wi6pbyAp+VP4
+kvpMv1GI8YbpQ4SHLGhb8kb59Jmio2Re+AX4TazHVlhe4ceGeJ3Q0m3sMSB+D6Jq
+rp45EM6kcewzRD5V1ZaHJv8ArXd52G9QIZIuiEFPPalck+U21tcsFZ1lKKr+sh+d
+Ao0s43vQoXCZjxIYK0lJxvhBhpJWNKmbVivFn2WIY4VUfwl8WWfOJxqMryV1vEJw
+HjSm5dcTYBVVEe7Sc/T3+feRHrn3/g==
+=kbtm
+-----END PGP SIGNATURE-----
+
+--afldurfie5cbuheh--
