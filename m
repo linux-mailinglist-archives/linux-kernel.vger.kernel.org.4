@@ -2,113 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F2E640216
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BA0640221
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 09:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbiLBI37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 03:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S232887AbiLBIa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 03:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbiLBI3M (ORCPT
+        with ESMTP id S232446AbiLBI3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:29:12 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4A8A9CFF
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 00:26:40 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so2496866otl.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 00:26:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BX5+MEEseekCjj2jUHYbfIzY5jOJRklKg97H+PQks68=;
-        b=OVzPNFpeqRPpm2Sdd/f9dyIxjlS7vt9MVTzzyd6r85ie2ehKngICz0UrOwttda4ssx
-         BJxvyqhN8GSxz3FBn0X6pjXStHnPNHsUzCCoB0KbriWxxpGcCCtix8XTe3yRvVm2EWfT
-         GlX1NqmYmo1QZmC+7rJnfe4AsG0wOStcDnxaFs+hUSiuf3RuK8gTJaZrPexFvxitA15o
-         gvqQgQRTyZn5vFZ+xzz03pfVHl5Ad8nPzubS5pfiE0n+5O7HohGLXb5qHyzVAufA0OLr
-         4f+B3ugzqjNitv3XTVblAQTjqFPltWnv1g5VKohanq46WaNNhJcLIOjIU7aVsPIegKvn
-         AZdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BX5+MEEseekCjj2jUHYbfIzY5jOJRklKg97H+PQks68=;
-        b=ug8Ue+ym8vbeT/nI7iYdIMknTqfYnGLRSaICSpbcU8YfhV3vO+4q0D4wEAfKoXfQPE
-         RiiRRcQx4hJe4SXWwu7WzQ2aN32LbNEMlwKIzP423kD9gokbKeV2qeYL+rNA3e5JglFA
-         1QTUvbDPOB+ypVHH7cp4QLFWwytQ2yKSwzxQG/im0tXxg2wxCWUKBgpMYrzlRdD/Bq64
-         H4PfRTpKJR0/YlLV6pXxx7EHd7ED865BX+ZZW5wi1Id42RrefEEcnfiNb3Ebx6OeFibe
-         FledngENWMlNY506gNQYi1P8yDB4/KImdTFVWbTxgA5sZJZkNRM3aPykhWuhlS39JJyb
-         HhoQ==
-X-Gm-Message-State: ANoB5pmhXOMWN3yoItHi2rgqjCynVqTYI7+LdpHylcRwx55efrXdMsCs
-        hqv0xuf8+UMeAf/Scy0IKGQ2DQbJ4CKjoa37d0YfEA==
-X-Google-Smtp-Source: AA0mqf44KccBETiwP8cR42tdieoh2XIyfwVble6BCh+8Slrcw23IhVuC0hOFaWY1mJnjptMOrsTRYwH0ivmee3+D9vw=
-X-Received: by 2002:a05:6830:1007:b0:66e:7583:ab4c with SMTP id
- a7-20020a056830100700b0066e7583ab4cmr3395774otp.332.1669969599378; Fri, 02
- Dec 2022 00:26:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20221114110329.68413-1-manivannan.sadhasivam@linaro.org>
- <20221114141109.GG30263@willie-the-truck> <1659929b-1372-cea6-5840-c58369a4252d@arm.com>
- <Y3J8+O7Y3f3onH0P@arm.com> <20221118105402.GA184726@thinkpad>
- <20221118123349.GC3697@willie-the-truck> <20221121064224.GB11945@thinkpad>
- <018517b8-0ae0-54f5-f342-dcf1b3330a13@quicinc.com> <Y39blgEueyegkz6C@arm.com>
- <6d637906-e1d5-c481-a73d-2b2b845e223b@leemhuis.info> <Y4joR2sQMMjIt+yE@arm.com>
-In-Reply-To: <Y4joR2sQMMjIt+yE@arm.com>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Fri, 2 Dec 2022 13:56:03 +0530
-Message-ID: <CAMi1Hd2wM5MLsjkx0HAWKkswzTDACb0C4tsPymNrRa0ariWsww@mail.gmail.com>
-Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()"
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, andersson@kernel.org,
-        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        Fri, 2 Dec 2022 03:29:22 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861382CE0B;
+        Fri,  2 Dec 2022 00:27:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669969654; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Um7bLjMJkRzzGMWjDwOiZM7Q4Zr7Ff+nuz5l/iFK/JNF+0ZovQCa1Kbjs8pkQIt0dTDRsRvQAJWDQq8e/rEKwoRzdxvBOrNJ4NQiQ+Wum9zcGwvPS8jWeSWo+wTrhD0w1S97+qSCP51YXzX+AQkMU1I6YXsdcw3ydjSp+0trONE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1669969654; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=QKJjRg+TFMrDUXn3W6BnSgamQp8z40egqO35KV5JwBc=; 
+        b=kZo75enxAj+NBcU0ug9nHc7X7z1QXllK2apZH9Qvc4cRbREFPe+CUAeNHJ0WqJ3HRCbFW5LYRcQ3YsGWc+TwzqbFzAv6+9Y3//EjS4y0MNPOlzPopqF5XlX9Yc+tE8x9f/wAIzXkjL3puamR3r7jRQYk2nFV+j3Nf5dxIN7uChs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669969654;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=QKJjRg+TFMrDUXn3W6BnSgamQp8z40egqO35KV5JwBc=;
+        b=fRboHy8wzAAEegZvuWhEkMLFDSeDl+tcJjEVq2ywfQ8zEUM7A8Q2yYc/DOY5CW3H
+        TlxIaKCqNMyiePJGCVBqBuFx2Od557WAjw7N2hxXliBJXKmZJSAR44ILLskFDueGv1k
+        RZjkF4GpphuSII4YU6X89wqgQZKaze+E68G1+lSo=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.229 [120.85.99.229]) by mx.zohomail.com
+        with SMTPS id 1669969653716805.4032075516008; Fri, 2 Dec 2022 00:27:33 -0800 (PST)
+Message-ID: <a2441e5ca47ff90474cd844801e6c7c43af91f50.camel@icenowy.me>
+Subject: Re: [PATCH v2 04/12] riscv: dts: allwinner: Add the D1/D1s SoC
+ devicetree
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Conor Dooley <conor@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>
+Date:   Fri, 02 Dec 2022 16:27:25 +0800
+In-Reply-To: <Y4I45Uu6eFKUo69B@spud>
+References: <20221125234656.47306-1-samuel@sholland.org>
+         <20221125234656.47306-5-samuel@sholland.org> <Y4I45Uu6eFKUo69B@spud>
+Organization: Anthon Open-Source Community
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 at 23:15, Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Thu, Dec 01, 2022 at 10:29:39AM +0100, Thorsten Leemhuis wrote:
-> > Has any progress been made to fix this regression? It afaics is not a
-> > release critical issue, but well, it still would be nice to get this
-> > fixed before 6.1 is released.
->
-> The only (nearly) risk-free "fix" for 6.1 would be to revert the commit
-> that exposed the driver bug. It doesn't fix the actual bug, it only
-> makes it less likely to happen.
->
-> I like the original commit removing the cache invalidation as it shows
-> drivers not behaving properly but, as a workaround, we could add a
-> command line option to force back the old behaviour (defaulting to the
-> new one) until the driver is fixed.
+=E5=9C=A8 2022-11-26=E6=98=9F=E6=9C=9F=E5=85=AD=E7=9A=84 16:03 +0000=EF=BC=
+=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
+> On Fri, Nov 25, 2022 at 05:46:48PM -0600, Samuel Holland wrote:
+> > D1 (aka D1-H), D1s (aka F133), R528, and T113 are a family of SoCs
+> > based
+> > on a single die, or at a pair of dies derived from the same design.
+> >=20
+> > D1 and D1s contain a single T-HEAD Xuantie C906 CPU, whereas R528
+> > and
+> > T113 contain a pair of Cortex-A7's.
+>=20
+> Is this "additionally contain" or a case of the D1 is the R528 but
+> with
+> s/arm/riscv/? It's the latter, right?
 
-We use DB845c extensively for mainline and android-mainline[1] testing
-with AOSP, and it is broken for weeks now. So be it a temporary
-workaround or a proper driver fix in place, we'd really appreciate a
-quick fix here.
+Technically they're the same die, but the CPU cores are selectively
+enabled, and at least what Allwinner says is that D1 contains only RV
+and R528 contains only ARM.
 
-I understand that the revert doesn't fix the actual driver bug, but we
-were very very lucky so far that we had never hit this issue before.
-So at this point I'll take the revert of the upstream commit as well,
-while a proper fix is being worked upon.
+>=20
+> > D1 and R528 are the full version of
+> > the chip with a BGA package, whereas D1s and T113 are low-pin-count
+> > QFP
+> > variants.
+> >=20
+> > Because the original design supported both ARM and RISC-V CPUs,
+> > some
+> > peripherals are duplicated. In addition, all variants except D1s
+> > contain
+> > a HiFi 4 DSP with its own set of peripherals.
+> >=20
+> > The devicetrees are organized to minimize duplication:
+> > =C2=A0- Common perhiperals are described in sunxi-d1s-t113.dtsi
+> > =C2=A0- DSP-related peripherals are described in sunxi-d1-t113.dtsi
+> > =C2=A0- RISC-V specific hardware is described in sun20i-d1s.dtsi
+> > =C2=A0- Functionality unique to the D1 variant is described in sun20i-
+> > d1.dtsi
+> >=20
+> > The SOC_PERIPHERAL_IRQ macro handles the different #interrupt-cells
+> > values between the ARM (GIC) and RISC-V (PLIC) versions of the SoC.
+>=20
+> Modulo the warnings I replied to the cover with & one minor comment
+> below:
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+> > ---
+> >=20
+> > Changes in v2:
+> > =C2=A0- Split into separate files for sharing with D1s/R528/T113
+> > =C2=A0- Use SOC_PERIPHERAL_IRQ macro for interrupts
+> > =C2=A0- Rename osc24M to dcxo and move the frequency to the board DTs
+> > =C2=A0- Drop analog LDOs due to the missing binding
+> > =C2=A0- Correct tcon_top DSI clock reference
+> > =C2=A0- Add DMIC, DSI controller, and DPHY (bindings are in linux-next)
+> > =C2=A0- Add CPU OPP table
+> >=20
+> > =C2=A0arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi=C2=A0 |=C2=A0 66 ++
+> > =C2=A0arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi |=C2=A0 76 ++
+> > =C2=A0.../boot/dts/allwinner/sunxi-d1-t113.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
+ |=C2=A0 15 +
+> > =C2=A0.../boot/dts/allwinner/sunxi-d1s-t113.dtsi=C2=A0=C2=A0=C2=A0 | 84=
+4
+> > ++++++++++++++++++
+> > =C2=A04 files changed, 1001 insertions(+)
+> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
+> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1-
+> > t113.dtsi
+> > =C2=A0create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1s-
+> > t113.dtsi
+>=20
+>=20
+> > diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> > b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> > new file mode 100644
+> > index 000000000000..c8815cbf0b46
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> > @@ -0,0 +1,844 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> > +// Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
+> > +
+> > +#include <dt-bindings/clock/sun6i-rtc.h>
+> > +#include <dt-bindings/clock/sun8i-de2.h>
+> > +#include <dt-bindings/clock/sun8i-tcon-top.h>
+> > +#include <dt-bindings/clock/sun20i-d1-ccu.h>
+> > +#include <dt-bindings/clock/sun20i-d1-r-ccu.h>
+> > +#include <dt-bindings/interrupt-controller/irq.h>
+> > +#include <dt-bindings/reset/sun8i-de2.h>
+> > +#include <dt-bindings/reset/sun20i-d1-ccu.h>
+> > +#include <dt-bindings/reset/sun20i-d1-r-ccu.h>
+> > +
+> > +/ {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#address-cells =3D <1>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#size-cells =3D <1>;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dcxo: dcxo-clk {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0compatible =3D "fixed-clock";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0/* This value must be overridden by the board */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0clock-frequency =3D <0>;
+>=20
+> Since this is a "must", can you drop the clock-frequency =3D <0> here
+> so
+> that if someone doesn't override it in their board dt-validate
+> complains?
+>=20
+> Thanks,
+> Conor.
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0clock-output-names =3D "dcxo";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0#clock-cells =3D <0>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> > +
+> =C2=A0
+>=20
 
-Regards,
-Amit Pundir
-[1] https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline
-
-
-
-
->
-> --
-> Catalin
