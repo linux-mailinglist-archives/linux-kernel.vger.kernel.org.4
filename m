@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CF76405D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EBB6405DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 12:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiLBLbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 06:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S232700AbiLBLca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 06:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiLBLbL (ORCPT
+        with ESMTP id S232313AbiLBLc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 06:31:11 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CABD3DF9;
-        Fri,  2 Dec 2022 03:31:10 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E9A9E5FD0C;
-        Fri,  2 Dec 2022 14:31:08 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669980669;
-        bh=gUwn4rgw/3aJmLAswDc3LzNzhfrHmZOgM875DBVbpAc=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=XGyZdqRXwz2PxRkJNwfZSoNCSfGDhus0I1vEL7cbMnV8+FsGo+A3SvzQe9cnc7SzW
-         1hLaBgaL2BcBlepqocMiYJw584LlYyPuEl4yolnIldOEFA1uQPYbrIgrZvs4nQM9FA
-         yKjGAWOA47MRsNulb+a/MpT/dVHB+nSHfVl+Z/MEYLZWvsjpr2TIwypLyPH1hrReF8
-         +Y9qolJbnWOaWg34cLllhhcYMObceltpeueE0JmI8YAqm8z3oP4e6zNidNgw7zFJny
-         UetZFTW+5iAVlDR0+udXcKFN0OVMPmd3XnazM9U9yCJ1uNPXOKx6mvSmESSt7in96I
-         KGEUel/ByZAfw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Dec 2022 14:31:08 +0300 (MSK)
-Date:   Fri, 2 Dec 2022 14:31:08 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v8 02/11] clk: meson: a1: add support for Amlogic A1 PLL
- clock driver
-Message-ID: <20221202113108.netb53ajd4ayqnfy@CAB-WSD-L081021>
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-3-ddrokosov@sberdevices.ru>
- <1j7cza8368.fsf@starbuckisacylon.baylibre.com>
+        Fri, 2 Dec 2022 06:32:29 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE7A9854C;
+        Fri,  2 Dec 2022 03:32:28 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id c14so3241901qvq.0;
+        Fri, 02 Dec 2022 03:32:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kKMmcMkr+j9BB+n8Fm2ml56npFsgtQtlINX/YhhToLk=;
+        b=X95XJiV6MMyJnPyOY2F5zvNYMMJ0xjdXsvtJ8JBGkzMeaIAGMLZsnclKiiCpPB8gcU
+         tpAqtTeN3xTKacRPkIDmNF/2zgOQm2aAiu2rE44OhOxNWXa004rtu/iIZ26Pc9fqeE1/
+         NNjChcOSbPJ3Mu7pru9XoFd6OeMLGEuzGSEp/6FWvQAvaNMBIMhwhoZGmdunJk012iqz
+         wcbh92FuKyfrB6kR20vJQZdtLmPBvSqTopVz/qtgRU1S7aRqIWdxUdJI4AoVzuuKoKtY
+         /WJ+1TT7EkMHuQsKBgjirfymnBqlsOV/Not06zlkDy9I1IJcOCU0TFepmVErJF2pa2ch
+         BG2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kKMmcMkr+j9BB+n8Fm2ml56npFsgtQtlINX/YhhToLk=;
+        b=klEcZPYtkKMAUNXfDZbA+e5SjGy6pxFaGQZd93FPY5dZ4K3OrZd/2Czfxa4fEfIJ9p
+         KIdM7UpwvoD8wqcy8LvsVYmhsK0qH9YLZVcI36aVFK4+/k6V0puUG6BHKbmR9erRetkA
+         6rtQj7RVtbKJSmrCDlLmHhQijbDcnk2naOD86dv5/SFbIdjLRo6MOjdZuYPuFkY7irjS
+         n7Cmfm3LOFMXwbmjf8QlNMpcADBfplG0bVLC68UyAnYUiQcYTSdqLc8mzRr+ead8KjPz
+         3t1/mD7h1vbctFx4JyiByDJeKeKBw/23CjMfFYI7K0HfvmhtWaPnzeWhxfXojsH4Abfi
+         5FAA==
+X-Gm-Message-State: ANoB5pl9niY07WtwfQh4fbb957iKhSbp+8QIbKqMrQhUZLmMzusAP0Wb
+        M4Jz9pKUJS4X9RvGWugY2I4vrCe+aFE=
+X-Google-Smtp-Source: AA0mqf40s/y25dCbY2LYIFM2o0OtbxByBlz0Fo4ZzjflEFdFt5yZx6Ha4X3P6h5vX84X1ZmjKtxZVw==
+X-Received: by 2002:a0c:fde3:0:b0:4c6:5908:84f0 with SMTP id m3-20020a0cfde3000000b004c6590884f0mr63424362qvu.9.1669980747169;
+        Fri, 02 Dec 2022 03:32:27 -0800 (PST)
+Received: from jesse-desktop.jtp-bos.lab ([96.237.180.62])
+        by smtp.gmail.com with ESMTPSA id x9-20020ac85389000000b003a530a32f67sm3904772qtp.65.2022.12.02.03.32.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 03:32:26 -0800 (PST)
+From:   Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-input@vger.kernel.org, lee@kernel.org, lee.jones@linaro.org,
+        Mr.Bossman075@gmail.com
+Subject: [PATCH v2] drivers/mfd: simple-mfd-i2c: Add generic compatible
+Date:   Fri,  2 Dec 2022 06:32:26 -0500
+Message-Id: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1j7cza8368.fsf@starbuckisacylon.baylibre.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/02 07:44:00 #20636821
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 12:16:12PM +0100, Jerome Brunet wrote:
-> >  drivers/clk/meson/Kconfig  |   9 +
-> >  drivers/clk/meson/Makefile |   1 +
-> >  drivers/clk/meson/a1-pll.c | 360 +++++++++++++++++++++++++++++++++++++
-> >  drivers/clk/meson/a1-pll.h |  56 ++++++
-> >  4 files changed, 426 insertions(+)
-> >  create mode 100644 drivers/clk/meson/a1-pll.c
-> >  create mode 100644 drivers/clk/meson/a1-pll.h
-> >
-> > diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-> > index fc002c155bc3..ab34662b24f0 100644
-> > --- a/drivers/clk/meson/Kconfig
-> > +++ b/drivers/clk/meson/Kconfig
-> > @@ -99,6 +99,15 @@ config COMMON_CLK_AXG_AUDIO
-> >  	  Support for the audio clock controller on AmLogic A113D devices,
-> >  	  aka axg, Say Y if you want audio subsystem to work.
-> >  
-> > +config COMMON_CLK_A1_PLL
-> > +	bool
-> 
-> Could you add a tristate with some text please ?
-> 
+Some devices may want to use this driver without having a specific
+compatible string. Add a generic compatible string to allow this.
 
-Yep... I did it in my fixup patches :-) Looks like it's better to review
-the next version with already squashed patches.
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+---
+ drivers/mfd/simple-mfd-i2c.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+index f4c8fc3ee463..0bda0dd9276e 100644
+--- a/drivers/mfd/simple-mfd-i2c.c
++++ b/drivers/mfd/simple-mfd-i2c.c
+@@ -73,6 +73,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
+ };
+ 
+ static const struct of_device_id simple_mfd_i2c_of_match[] = {
++	{ .compatible = "simple-mfd-i2c-generic" },
+ 	{ .compatible = "kontron,sl28cpld" },
+ 	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
+ 	{}
 -- 
-Thank you,
-Dmitry
+2.38.1
+
