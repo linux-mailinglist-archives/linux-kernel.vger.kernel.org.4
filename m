@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97E96403A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57295640396
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 10:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiLBJpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 04:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S232931AbiLBJn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 04:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiLBJoy (ORCPT
+        with ESMTP id S231833AbiLBJnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:44:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D281D0FF
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:43:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669974231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=coJ6ZwB6vq1bKOKZ1ImRVDxiA5RDC8EMY0DOiTntObo=;
-        b=LcdHltPErcGKeTrj1OaToUHJkYWvqLuB99K1nOlmF5t8fmKMzGdgE8svrogWiKjHK7I3bJ
-        4B6vQUgnM1SDRvvyMBx36caDtocOk7dyu5KD5UsBtSYI7qz3maRZ/49jw8ZN9sMHT580KR
-        1KHqwaTRbY3pGJMAhDgECA5nPE3S1FI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-153-M1MJ7vYqMjSJfcdU7hUj3A-1; Fri, 02 Dec 2022 04:43:50 -0500
-X-MC-Unique: M1MJ7vYqMjSJfcdU7hUj3A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F337738173D2;
-        Fri,  2 Dec 2022 09:43:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.116])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 618F5492B06;
-        Fri,  2 Dec 2022 09:43:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 3/4] netfs: Add a function to extract a UBUF or IOVEC into
- a BVEC iterator
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jeff Layton <jlayton@kernel.org>, Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dhowells@redhat.com,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 02 Dec 2022 09:43:45 +0000
-Message-ID: <166997422579.9475.12101700945635692496.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk>
-References: <166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Fri, 2 Dec 2022 04:43:52 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98A2C23FA
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 01:43:50 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id o5so6984389wrm.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 01:43:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c7jlww+YwvtAfoXwz8qUgfga6wLFv4byhYCz3Q0szb8=;
+        b=UUc5j3AY/8JQw+2iT1LRk0y67Zdou18oQp+qMNiQ5HQ2ZM7wjqAqK+J0bA0SVzPl1m
+         uhLopuQ7wySKWej1bxdYuxwkfM/zbXDRzaYKHXEfUbjQo4aPkNsWSJJL1EIY+RRNF2yb
+         qRF64ISg2W7145G7j8/5wfzG2Ktx8O9JBzgSGYZfF0+Z5whK4hQMe/07xss/gbfFjGXj
+         6CoT9Y0iev91zqQYyOveRkI95p7oP2h50Jn2/F70Pj/TJ7LbnUWyaDUD3WhDVYz9E06G
+         itm/c6NrQoXxBfm37yjjjZPXUdv/sQQoZ9fX1ip9k84iN1UzkLc+3FyYCFqi2UbVAdIg
+         e55w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c7jlww+YwvtAfoXwz8qUgfga6wLFv4byhYCz3Q0szb8=;
+        b=ojT/QBa2vrTy9Mz80VYs+cPSR4uGBp7NEv2oklMgVD0YvH6hi7ZYmS3cAt+gzTp/BK
+         up2azPjX6qhkBchs6s7Kf8pzfbOXiTYgmGyI5I5c7sMHDrR4/PCBcoqjWYOxIkOmehS2
+         UpKdkYHLr2haYsPFGS1voUHrFZR7tycXmCG8IxQJvgD56fNgNXdb0pk9FrIl2oiGluoI
+         xjczUcZ9TzWsgZx3aVq172rp3YDvkEiJpGxuZNnOBtKE/V5uhH+JvVyCKwmqepyscs8i
+         hb+Y0AzFUjpjWwI4TNBWjnbmSgV5DzctMM+R4g1keEERGRfdYnjXqktwWIhUiIt7stvT
+         ZnLQ==
+X-Gm-Message-State: ANoB5plj99s3uPtMXuu7YQEE8ugqLu8AJ1qYNUPC7R00KO3xnLyMy4b6
+        QmnsTo/o4HRog3ydgBL+9fYnCw==
+X-Google-Smtp-Source: AA0mqf5PU3+l+PWDbIeocGDkvLX8GPrawrhlnnw5BkWigrAwIkUb2MEgKnEa5yha97IhUbU+4a9aAQ==
+X-Received: by 2002:a5d:5952:0:b0:241:a79b:3c41 with SMTP id e18-20020a5d5952000000b00241a79b3c41mr42208065wri.22.1669974229202;
+        Fri, 02 Dec 2022 01:43:49 -0800 (PST)
+Received: from blmsp ([185.238.219.119])
+        by smtp.gmail.com with ESMTPSA id j3-20020adfd203000000b002366c3eefccsm6661799wrh.109.2022.12.02.01.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 01:43:48 -0800 (PST)
+Date:   Fri, 2 Dec 2022 10:43:46 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
+ level interrupt
+Message-ID: <20221202094346.u2nasxlcwh7llwe5@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-5-msp@baylibre.com>
+ <20221130171715.nujptzwnut7silbm@pengutronix.de>
+ <20221201082521.3tqevaygz4nhw52u@blmsp>
+ <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
+ <20221201101220.r63fvussavailwh5@blmsp>
+ <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
+ <20221201165951.5a4srb7zjrsdr3vd@blmsp>
+ <20221202092306.7p3r4yuauwjj5xaj@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221202092306.7p3r4yuauwjj5xaj@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,186 +81,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to extract the pages from a user-space supplied iterator
-(UBUF- or IOVEC-type) into a BVEC-type iterator, retaining the pages by
-getting a ref on them (WRITE) or pinning them (READ) as we go.
+On Fri, Dec 02, 2022 at 10:23:06AM +0100, Marc Kleine-Budde wrote:
+...
+> > > > > The configuration for the mcp251xfd looks like this:
+> > > > > 
+> > > > > - First decide for classical CAN or CAN-FD mode
+> > > > > - configure RX and TX ring size
+> > > > >   9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurable RX/TX ring parameters")
+> > > > >   For TX only a single FIFO is used.
+> > > > >   For RX up to 3 FIFOs (up to a depth of 32 each).
+> > > > >   FIFO depth is limited to power of 2.
+> > > > >   On the mcan cores this is currently done with a DT property.
+> > > > >   Runtime configurable ring size is optional but gives more flexibility
+> > > > >   for our use-cases due to limited RAM size.
+> > > > > - configure RX and TX coalescing via ethtools
+> > > > >   Set a timeout and the max CAN frames to coalesce.
+> > > > >   The max frames are limited to half or full FIFO.
+> > > > 
+> > > > mcan can offer more options for the max frames limit fortunately.
+> > > > 
+> > > > > 
+> > > > > How does coalescing work?
+> > > > > 
+> > > > > If coalescing is activated during reading of the RX'ed frames the FIFO
+> > > > > not empty IRQ is disabled (the half or full IRQ stays enabled). After
+> > > > > handling the RX'ed frames a hrtimer is started. In the hrtimer's
+> > > > > functions the FIFO not empty IRQ is enabled again.
+> > > > 
+> > > > My rx path patches are working similarly though not 100% the same. I
+> > > > will adopt everything and add it to the next version of this series.
+> > > > 
+> > > > > 
+> > > > > I decided not to call the IRQ handler from the hrtimer to avoid
+> > > > > concurrency, but enable the FIFO not empty IRQ.
+> > > > 
+> > > > mcan uses a threaded irq and I found this nice helper function I am
+> > > > currently using for the receive path.
+> > > > 	irq_wake_thread()
+> > > > 
+> > > > It is not widely used so I hope this is fine. But this hopefully avoids
+> > > > the concurrency issue. Also I don't need to artificially create an IRQ
+> > > > as you do.
+> > > 
+> > > I think it's Ok to use the function. Which IRQs are enabled after you
+> > > leave the RX handler? The mcp251xfd driver enables only a high watermark
+> > > IRQ and sets up the hrtimer. Then we have 3 scenarios:
+> > > - high watermark IRQ triggers -> IRQ is handled,
+> > > - FIFO level between 0 and high water mark -> no IRQ triggered, but
+> > >   hrtimer will run, irq_wake_thread() is called, IRQ is handled
+> > > - FIFO level 0 -> no IRQ triggered, hrtimer will run. What do you do in
+> > >   the IRQ handler? Check if FIFO is empty and enable the FIFO not empty
+> > >   IRQ?
+> > 
+> > I am currently doing the normal IRQ handler run. It checks the
+> > "Interrupt Register" at the beginning. This register does not show the
+> > interrupts that fired, it shows the status. So even though the watermark
+> > interrupt didn't trigger when called by a timer, RF0N 'new message'
+> > status bit is still set if there is something new in the FIFO.
+> 
+> That covers scenario 2 from above.
+> 
+> > Of course it is the same for the transmit status bits.
+> 
+> ACK - The TX complete event handling is a 95% copy/paste of the RX
+> handling.
+> 
+> > So there is no need to read the FIFO fill levels directly, just the
+> > general status register.
+> 
+> What do you do if the hrtimer fires and there's no CAN frame waiting in
+> the FIFO?
 
-This is useful in three situations:
+Just enabling the 'new item' interrupt again and keep the hrtimer
+disabled.
 
- (1) A userspace thread may have a sibling that unmaps or remaps the
-     process's VM during the operation, changing the assignment of the
-     pages and potentially causing an error.  Retaining the pages keeps
-     some pages around, even if this occurs; futher, we find out at the
-     point of extraction if EFAULT is going to be incurred.
-
- (2) Pages might get swapped out/discarded if not retained, so we want to
-     retain them to avoid the reload causing a deadlock due to a DIO
-     from/to an mmapped region on the same file.
-
- (3) The iterator may get passed to sendmsg() by the filesystem.  If a
-     fault occurs, we may get a short write to a TCP stream that's then
-     tricky to recover from.
-
-We don't deal with other types of iterator here, leaving it to other
-mechanisms to retain the pages (eg. PG_locked, PG_writeback and the pipe
-lock).
-
-Changes:
-========
-ver #3)
- - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
-   to get/pin_user_pages_fast()[1].
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: linux-cachefs@redhat.com
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
-Link: https://lore.kernel.org/r/166697255265.61150.6289490555867717077.stgit@warthog.procyon.org.uk/ # rfc
-Link: https://lore.kernel.org/r/166732026503.3186319.12020462741051772825.stgit@warthog.procyon.org.uk/ # rfc
-Link: https://lore.kernel.org/r/166869690376.3723671.8813331570219190705.stgit@warthog.procyon.org.uk/ # rfc
----
-
- fs/netfs/Makefile     |    1 
- fs/netfs/iterator.c   |   99 +++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/netfs.h |    3 +
- 3 files changed, 103 insertions(+)
- create mode 100644 fs/netfs/iterator.c
-
-diff --git a/fs/netfs/Makefile b/fs/netfs/Makefile
-index f684c0cd1ec5..386d6fb92793 100644
---- a/fs/netfs/Makefile
-+++ b/fs/netfs/Makefile
-@@ -3,6 +3,7 @@
- netfs-y := \
- 	buffered_read.o \
- 	io.o \
-+	iterator.o \
- 	main.o \
- 	objects.o
- 
-diff --git a/fs/netfs/iterator.c b/fs/netfs/iterator.c
-new file mode 100644
-index 000000000000..82a691b233ef
---- /dev/null
-+++ b/fs/netfs/iterator.c
-@@ -0,0 +1,99 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/* Iterator helpers.
-+ *
-+ * Copyright (C) 2022 Red Hat, Inc. All Rights Reserved.
-+ * Written by David Howells (dhowells@redhat.com)
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/slab.h>
-+#include <linux/uio.h>
-+#include <linux/netfs.h>
-+#include "internal.h"
-+
-+/**
-+ * netfs_extract_user_iter - Extract the pages from a user iterator into a bvec
-+ * @orig: The original iterator
-+ * @orig_len: The amount of iterator to copy
-+ * @new: The iterator to be set up
-+ * @cleanup_mode: Where to indicate the cleanup mode
-+ *
-+ * Extract the page fragments from the given amount of the source iterator and
-+ * build up a second iterator that refers to all of those bits.  This allows
-+ * the original iterator to disposed of.
-+ *
-+ * On success, the number of elements in the bvec is returned, the original
-+ * iterator will have been advanced by the amount extracted and @*cleanup_mode
-+ * will have been set to FOLL_GET, FOLL_PIN or 0.
-+ */
-+ssize_t netfs_extract_user_iter(struct iov_iter *orig, size_t orig_len,
-+				struct iov_iter *new, unsigned int *cleanup_mode)
-+{
-+	struct bio_vec *bv = NULL;
-+	struct page **pages;
-+	unsigned int cur_npages;
-+	unsigned int max_pages;
-+	unsigned int npages = 0;
-+	unsigned int i;
-+	ssize_t ret;
-+	size_t count = orig_len, offset, len;
-+	size_t bv_size, pg_size;
-+
-+	if (WARN_ON_ONCE(!iter_is_ubuf(orig) && !iter_is_iovec(orig)))
-+		return -EIO;
-+
-+	max_pages = iov_iter_npages(orig, INT_MAX);
-+	bv_size = array_size(max_pages, sizeof(*bv));
-+	bv = kvmalloc(bv_size, GFP_KERNEL);
-+	if (!bv)
-+		return -ENOMEM;
-+
-+	*cleanup_mode = 0;
-+
-+	/* Put the page list at the end of the bvec list storage.  bvec
-+	 * elements are larger than page pointers, so as long as we work
-+	 * 0->last, we should be fine.
-+	 */
-+	pg_size = array_size(max_pages, sizeof(*pages));
-+	pages = (void *)bv + bv_size - pg_size;
-+
-+	while (count && npages < max_pages) {
-+		ret = iov_iter_extract_pages(orig, &pages, count,
-+					     max_pages - npages, &offset,
-+					     cleanup_mode);
-+		if (ret < 0) {
-+			pr_err("Couldn't get user pages (rc=%zd)\n", ret);
-+			break;
-+		}
-+
-+		if (ret > count) {
-+			pr_err("get_pages rc=%zd more than %zu\n", ret, count);
-+			break;
-+		}
-+
-+		count -= ret;
-+		ret += offset;
-+		cur_npages = DIV_ROUND_UP(ret, PAGE_SIZE);
-+
-+		if (npages + cur_npages > max_pages) {
-+			pr_err("Out of bvec array capacity (%u vs %u)\n",
-+			       npages + cur_npages, max_pages);
-+			break;
-+		}
-+
-+		for (i = 0; i < cur_npages; i++) {
-+			len = ret > PAGE_SIZE ? PAGE_SIZE : ret;
-+			bv[npages + i].bv_page	 = *pages++;
-+			bv[npages + i].bv_offset = offset;
-+			bv[npages + i].bv_len	 = len - offset;
-+			ret -= len;
-+			offset = 0;
-+		}
-+
-+		npages += cur_npages;
-+	}
-+
-+	iov_iter_bvec(new, iov_iter_rw(orig), bv, npages, orig_len - count);
-+	return npages;
-+}
-+EXPORT_SYMBOL_GPL(netfs_extract_user_iter);
-diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-index f2402ddeafbf..eed84474e4cf 100644
---- a/include/linux/netfs.h
-+++ b/include/linux/netfs.h
-@@ -288,6 +288,9 @@ void netfs_get_subrequest(struct netfs_io_subrequest *subreq,
- void netfs_put_subrequest(struct netfs_io_subrequest *subreq,
- 			  bool was_async, enum netfs_sreq_ref_trace what);
- void netfs_stats_show(struct seq_file *);
-+ssize_t netfs_extract_user_iter(struct iov_iter *orig, size_t orig_len,
-+				struct iov_iter *new,
-+				unsigned int *cleanup_mode);
- 
- /**
-  * netfs_inode - Get the netfs inode context from the inode
-
-
+Best,
+Markus
