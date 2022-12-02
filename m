@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB956404F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA22A6404F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 11:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiLBKnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 05:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S232805AbiLBKoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 05:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiLBKne (ORCPT
+        with ESMTP id S232705AbiLBKnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 05:43:34 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB86BE4C9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:43:23 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id n1so4971662ljg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:43:23 -0800 (PST)
+        Fri, 2 Dec 2022 05:43:40 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1CDB3908
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 02:43:39 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso3937885wmo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 02:43:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=d+0ulguKeXm/n7vuYd1eLCO9MpBSp6kkQ2zGIF22QHY=;
-        b=plS6eIMbW/mDhBfftfW1Z8n7t5W9K5Mmg9a6PoOhB/Gv/GCVNDZBWq26hnL+vr589I
-         0bl7zWf5dtuyyFwWRzdML1dSlMQfjDfYElaHi30+0izuSYsRmfV+OdnGo4sDV8jfjBr+
-         5QQWmvwcfw97JBtAlIz6I5kZa3lyTQvKQUU6MMlS32xbu3yqsqLiVDMuyh6wqEgWw6LI
-         ENuAwratBd1coZ4BX8QWVAVgYUhoFV3Pi0lVCjTc3nlVqvxFa/KBhtd9xrYzCdkjij9/
-         2ZGyfMXdq3s4lTjyWkanpPmyR5jl6JDm5AoAKS1MVgfCsgtxwpVdUTtWUWOorcod/CPw
-         T+Kg==
+        bh=fT/vQ1+9LdOSyeDNiP63ONcd4GJxKkdd47jOzWA5GqI=;
+        b=XIuIUTgWX9l84mEOdSgTCkD/Sl0N3998Tim762gAVJ1fEvYWw0MZZ/rszQymsiPaSp
+         96zDtSOrHdpSZBNbJYm3ZGrg2NbP14XOEK24mhnsXmNsAhIUlnl4cQe5g4ayHorM7hug
+         azO5yZxcw2/uEqsc8zh7Fwm/7fDWqrvMQ+49pJ657cshyuXrxiBURxqOpJL2Wkt2Oo0/
+         MN9IA4GuzDtBX/el4mi60OoCA8Hgq1Eqi/w0trtHvz9qUBwTqM3QHl/w15AHIXq63IGC
+         Rljg77zxIlJps54xPaBw+5fT5rCPfq30sR4Qvgd4rczzRxxv5EJI+tcgLtk9XSSTLQff
+         5GNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+0ulguKeXm/n7vuYd1eLCO9MpBSp6kkQ2zGIF22QHY=;
-        b=RskdBnmmGe3PXyZgvBXIgouibeX7YJwpoe/IinoVPgcFdtBpg+TfLU+DQtXkEiSZxG
-         sj7e95d6Jrcq9jqxtm0idipfwP8iutHi1uAWwfIp0i8FBkZmSSzZ+ZcrfYfZN21RlTck
-         TJ+UIBlMaC7lZUwt4rVvkW/yfpbQgtDCUVU1GIJRVlzKubsk5OZepkSfz9fgfJAK7aMd
-         VJorKHc9JCtuFgZWp47i77/FGdUnFOUehzqeXPWK/iDuFgxxXj29PI4zpD1Yeyda/qJ6
-         CNUz+P36r7Qkbk/mml89OXEYIjJyfE8v7KI2lA5IuID3zGmwftPCgNkflN4tZ15iR0Xi
-         Ck1g==
-X-Gm-Message-State: ANoB5pn2wLj18hf7NzZFmNNRp0e9G/ZDYoYK2n4rjSa/x6ERfYWnb0NV
-        KzyjjLRZyLJtkXwGwkLBY2nFTQ==
-X-Google-Smtp-Source: AA0mqf4RmALN2uJz6Yih1UczV5VibEASyt5/O2GGhNQ/c1rtTmGSmJJA71Hj6QLdVDxJtW/rqtQOVg==
-X-Received: by 2002:a2e:8888:0:b0:279:ca3e:69f5 with SMTP id k8-20020a2e8888000000b00279ca3e69f5mr3666255lji.391.1669977801676;
-        Fri, 02 Dec 2022 02:43:21 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c1-20020a19e341000000b00492b494c4e8sm971845lfk.298.2022.12.02.02.43.19
+        bh=fT/vQ1+9LdOSyeDNiP63ONcd4GJxKkdd47jOzWA5GqI=;
+        b=5mClKjUNd8IvEdkK1XwZxr90KuF1OknxjejcCgLF0sV6rmzeDfi77+OxJzj9/6TEzJ
+         FNO5rtgvXpn5n0UUOX4tYbIdRf5JeJHoSqPkZMi4YqqdaFZFFKKr3c780wgA297rcgBq
+         f/Nt+YM4ZgWATMRlT0F+axKhEMXApWp7MYop/i/MliWa2spK8GcO9kPvc9bA8da5m9PN
+         1hXEuNKWuGS/5gcgnZpBx53rsyDl/RRjhd4Rj4fUCPP6MZ3K1Y1kZTUXE9JZwiL1SysF
+         FUopR3wCj2s/GQYtB11WoCmOcLcVjWghLDVtQvZpdRP7WoPrSPcnEBkE/TJtUswu4BQj
+         7LsQ==
+X-Gm-Message-State: ANoB5pmft7pkFRNS3Ko9jd8VU8YJAjweh8c+MWIhP//d9DI5eKxq31tA
+        iCIpRo5vw+YY5fmrZjfx4oS9+w==
+X-Google-Smtp-Source: AA0mqf5qRV0FocAQp2TyfozCqQTvmq2wdFfZ8YKeDB6alkOVU34wx0xq8rlSjS159IYtdAQWM9Yv/w==
+X-Received: by 2002:a05:600c:2159:b0:3d0:7865:e2db with SMTP id v25-20020a05600c215900b003d07865e2dbmr7025751wml.70.1669977817934;
+        Fri, 02 Dec 2022 02:43:37 -0800 (PST)
+Received: from [192.168.30.216] ([81.0.6.76])
+        by smtp.gmail.com with ESMTPSA id bg9-20020a05600c3c8900b003cf483ee8e0sm12929809wmb.24.2022.12.02.02.43.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 02:43:20 -0800 (PST)
-Message-ID: <9e40f25b-3223-2fa2-6f33-fe91871aed1f@linaro.org>
-Date:   Fri, 2 Dec 2022 11:43:19 +0100
+        Fri, 02 Dec 2022 02:43:37 -0800 (PST)
+Message-ID: <5db3dc91-e302-945e-25e5-c4a9840d26e8@linaro.org>
+Date:   Fri, 2 Dec 2022 11:43:35 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v8 03/11] dt-bindings: clock: meson: add A1 peripheral
- clock controller bindings
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH linux-next v2] mips/pci: use
+ devm_platform_ioremap_resource()
 Content-Language: en-US
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        neil.armstrong@linaro.org, jbrunet@baylibre.com,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-4-ddrokosov@sberdevices.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221201225703.6507-4-ddrokosov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     zhang.songyi@zte.com.cn, tsbogend@alpha.franken.de
+Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <202212021028158035876@zte.com.cn>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <202212021028158035876@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -83,38 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2022 23:56, Dmitry Rokosov wrote:
-> From: Jian Hu <jian.hu@amlogic.com>
+On 2/12/22 03:28, zhang.songyi@zte.com.cn wrote:
+> From: zhang songyi <zhang.songyi@zte.com.cn>
 > 
-> Add the documentation to support Amlogic A1 peripheral clock driver,
-> and add A1 peripheral clock controller bindings.
+> Use the devm_platform_ioremap_resource() helper instead of
+> calling platform_get_resource() and devm_ioremap_resource()
+> separately
 > 
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
 > ---
->  .../bindings/clock/amlogic,a1-clkc.yaml       | 65 ++++++++++++
->  include/dt-bindings/clock/a1-clkc.h           | 98 +++++++++++++++++++
->  2 files changed, 163 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/a1-clkc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> new file mode 100644
-> index 000000000000..7729850046cf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> @@ -0,0 +1,65 @@
-> +#SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/amlogic,a1-clkc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Amlogic Meson A/C serials Peripheral Clock Control Unit Device Tree Bindings
+>   arch/mips/pci/pci-rt3883.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
 
-Same comments as with previous patch. All of them.
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
