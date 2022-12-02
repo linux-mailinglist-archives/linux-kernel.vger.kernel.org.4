@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC63640BD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33528640BBB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Dec 2022 18:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbiLBRKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 12:10:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S233643AbiLBRGv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Dec 2022 12:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234422AbiLBRKH (ORCPT
+        with ESMTP id S233835AbiLBRGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 12:10:07 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42157E7853;
-        Fri,  2 Dec 2022 09:10:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670001006; x=1701537006;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Bc7pDOCSVt6BMMxZ2t1mYgmI78+hnoS9G21qkQu3Alg=;
-  b=TSosnfjcjzlXRKss1354fnzbOCssLC9rQ/2rrTor2+4fMh/NI02WL6Wm
-   lJfIe+a17j5I8SDAsaP2NDfORBRFdnXkjSIIyPHgRioAN5PLSJzgF7Ldz
-   TlGGidcaV7tyL/DgAv0PI5hi5piAAiKHA/FyfmJkB1UQQEqyzMwN5yew/
-   XC5eDNEYBVKgt77EsgToMFcSQnynIYf59GLCdUNKRDoWpRVeEaPaEIR3E
-   i2RfJlFo+ysbJj8D040ayg2C9FdUA8O6kSQCuDtfGodTgL4JrqDkIYSRY
-   t0w/FpS0a52HghVrnmpULT1t4EVmf8QsQKggKIzORyWlxUCtYdL+8ekIK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="303602798"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="303602798"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 09:06:05 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="675889323"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="675889323"
-Received: from rsnyder-mobl.amr.corp.intel.com (HELO [10.209.68.71]) ([10.209.68.71])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 09:06:04 -0800
-Message-ID: <21b43adc-37aa-bac3-0615-4703438ea4a1@intel.com>
-Date:   Fri, 2 Dec 2022 09:06:04 -0800
+        Fri, 2 Dec 2022 12:06:40 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C351934D4;
+        Fri,  2 Dec 2022 09:06:39 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id jr1so6007638qtb.7;
+        Fri, 02 Dec 2022 09:06:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xh9kgJLINYmxV8g3qTi7szoV+9siNmymyIdCpJv+cBQ=;
+        b=6vI2rMG1ROoB06Hf8KsxEZfXgrYNKGnZCqppEg40H+4nQO9/S9pmOGmi6yPurt/GRa
+         8cKsg4fgakuR6v7+EIZYCcgnhlLGuqj4Aa3afbsSCkG4hQS9hLMyNVTVQYFCb4gp5W/1
+         Es2BqX0rDY5JYjqHJUdwy50NI3zhZbD8n44mULw2W+J7N3jeXXVx5Mf64xkMZL3pQYWR
+         qj1zWWGGolA9v8b8cGmqq4X8PXGTcSpB2QGRKL9es4z6cuCztwN2N5I5EsGmr4YhjPfT
+         gXSLEA1Z6G0Yqu0exmOOCBUivBdsbTNX8ExA+ptfKNvtmJ5Kgf5ZbgnHUFV7n01A1Ueu
+         Y6zA==
+X-Gm-Message-State: ANoB5pnQ1+Iz0IIi6hTFNeFDDB94mE157XszYhOfaSXAPnmwhlFkHcSY
+        o8i31BdvbFKyZtb3IvoU9bHpf0u0959EMr/DXNI=
+X-Google-Smtp-Source: AA0mqf7fLL+ryfJc9gdlygwZFMKAW1X4WWvlOUNEoVLLyu7iJ7lEwsoaHA2t1RhbtGz9hRYHOwN5y8/jp/Ex9zi8Yls=
+X-Received: by 2002:ac8:4818:0:b0:3a6:a0d7:e1f7 with SMTP id
+ g24-20020ac84818000000b003a6a0d7e1f7mr1208911qtq.153.1670000798144; Fri, 02
+ Dec 2022 09:06:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 09/20] x86/virt/tdx: Get information about TDX module
- and TDX-capable memory
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <cd23a9583edcfa85e11612d94ecfd2d5e862c1d5.1668988357.git.kai.huang@intel.com>
- <850e0899-d54e-6a49-851e-56f4d353905c@intel.com>
- <8f3b1492aefc37f6bdcd8a10051af57c7deb4430.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <8f3b1492aefc37f6bdcd8a10051af57c7deb4430.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121102113.41893-1-roger.pau@citrix.com> <20221121102113.41893-2-roger.pau@citrix.com>
+ <6b212148-4e3f-3ef6-7922-901175746d44@intel.com> <Y4d8cm97hn5zuRQ1@Air-de-Roger>
+ <4a0e9f91-8d8b-84bc-c9db-7265f5b65b63@intel.com> <Y4nugxKV1J/BqhBt@Air-de-Roger>
+ <93fd7ed0-5311-d6db-4d8b-b992a8f78ada@intel.com> <Y4opuLnLIT3v9Aa7@Air-de-Roger>
+In-Reply-To: <Y4opuLnLIT3v9Aa7@Air-de-Roger>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Dec 2022 18:06:26 +0100
+Message-ID: <CAJZ5v0hrdwUNOELXM5zxtTeavp+_o7TbkCRBjZVqvQVxt4QBnA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] acpi/processor: fix evaluating _PDC method when
+ running as Xen dom0
+To:     =?UTF-8?Q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        jgross@suse.com, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <lenb@kernel.org>,
+        Alex Chiang <achiang@hp.com>,
+        Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/22 03:11, Huang, Kai wrote:
-> And also to address you concern that not all 892 bytes are reserved, how about
-> below:
-> 
->         union {
-> -               struct cpuid_config     cpuid_configs[0];
-> -               u8                      reserved5[892];
-> +               DECLARE_FLEX_ARRAY(struct cpuid_config, cpuid_configs);
-> +               u8 padding[892];
->         };
->  } __packed __aligned(TDSYSINFO_STRUCT_ALIGNMENT);
-> 
-> The goal is to make the size of 'struct tdsysinfo_struct' to be 1024B so we can
-> use a static variable for it, and at the meantime, it can still have 1024B
-> (enough space) for the TDH.SYS.INFO to write to.
+On Fri, Dec 2, 2022 at 5:37 PM Roger Pau Monné <roger.pau@citrix.com> wrote:
+>
+> On Fri, Dec 02, 2022 at 08:17:56AM -0800, Dave Hansen wrote:
+> > On 12/2/22 04:24, Roger Pau Monné wrote:
+> > > On the implementation side, is the proposed approach acceptable?
+> > > Mostly asking because it adds Xen conditionals to otherwise generic
+> > > ACPI code.
+> >
+> > That's a good Rafael question.
 
-I just don't like the open-coded sizes.
+Sorry for joining late, but first off _PDC has been deprecated since
+ACPI 3.0 (2004) and it is not even present in ACPI 6.5 any more.
 
-For instance, wouldn't it be great if you didn't have to know the size
-of *ANYTHING* else to properly size the '892'?
+It follows from your description that _PDC is still used in the field,
+though, after 18 years of deprecation.  Who uses it, if I may know?
 
-Maybe we just need some helpers to hide the gunk:
+> > But, how do other places in the ACPI code handle things like this?
+>
+> Hm, I don't know of other places in the Xen case, the only resource
+> in ACPI AML tables managed by Xen are Processor objects/devices AFAIK.
+> The rest of devices are fully managed by the dom0 guest.
+>
+> I think such special handling is very specific to Xen, but maybe I'm
+> wrong and there are similar existing cases in ACPI code already.
+>
+> We could add some kind of hook (iow: a function pointer in some struct
+> that could be filled on a implementation basis?) but I didn't want
+> overengineering this if adding a conditional was deemed OK.
 
-#define DECLARE_PADDED_STRUCT(type, name, alignment) 	\
-struct type##_padded {					\
-	union {						\
-		struct type name;			\
-		u8 padding[alignment];			\
-	}						\
-} name##_padded;
+What _PDC capabilities specifically do you need to pass to the
+firmware for things to work correctly?
 
-#define PADDED_STRUCT(name)	(name##_padded.name)
-
-That can get used like this:
-
-DECLARE_PADDED_STRUCT(struct tdsysinfo_struct, tdsysinfo,
-		      TDSYSINFO_STRUCT_ALIGNMENT);
-
-
-	struct tdsysinfo_struct sysinfo = PADDED_STRUCT(tdsysinfo)
+What platforms are affected?
