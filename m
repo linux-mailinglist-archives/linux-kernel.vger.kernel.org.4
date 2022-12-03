@@ -2,110 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF62D641372
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97666641375
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbiLCCde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S234993AbiLCCeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235149AbiLCCdc (ORCPT
+        with ESMTP id S234949AbiLCCeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:33:32 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E175D2084
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:33:29 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so9943994pjh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UQHpdcG0W3UOHn08MSLP1Hn9wMHJIZSaG2NLULB4U7o=;
-        b=E3bdGTvQFJOu55KJyamBSJ4T9NSqfMM5Csnbxgq36xtAGpgkHrj/bujWh1mOR7TYN8
-         w9hvOgwZSBtg9CIC6o64G1mfBhzL8E6UCAO5O3zJFxZgKtNAMkoa0XsW6kX7wn5wqlWs
-         OaqF8Uxv3zj9vtEdDaJG6lGtv3V4g96YLmq84=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UQHpdcG0W3UOHn08MSLP1Hn9wMHJIZSaG2NLULB4U7o=;
-        b=FJtJapaFDFvU7TMi1rQaonhnn0OiWP9Al6VKRsRE8lHgjtPqFqP1tKDnogjtIie5NX
-         24gyFku/pEzIO5NSdPxIdDOhZGtpUwQmi4k2ywtdquM8Yt04sECFfKjCGCtORIVCt3h9
-         TSs1AN3zStgLMhgs2acvEfte5xg4lEjjxzFN1o9wwsAYPworO+KWfmHN9zzeqDvQaNrv
-         fiwE+s9Pwkl6Ishy9NCSNhZ55Eh8ISmRElXtz1H0/wcPxNf3wpsczsdhm3Isxx2MCWJc
-         Oo1RHgMoA9nzvGtT7oFf0leZZTbKbQMVkecdPEIPW+4g2ZBhnz8dvsWU6sJgdaSaC1Mf
-         0w6Q==
-X-Gm-Message-State: ANoB5pmaL46kAp8+b2+6HU+Hjz7AP7cPdB8kIOuiNpt0cFk6+ob+ZGxV
-        2/prTkR/I1uwfOqpyqpG8w+BBQ==
-X-Google-Smtp-Source: AA0mqf4geVaa0a643GENg2McukE2oodkrSBYzsuzasDBLw/p2NXrif8eGSQbP+ryc5PiIYw/fBbkSQ==
-X-Received: by 2002:a17:90a:8b18:b0:219:1897:f72b with SMTP id y24-20020a17090a8b1800b002191897f72bmr36568022pjn.141.1670034808999;
-        Fri, 02 Dec 2022 18:33:28 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e68-20020a621e47000000b00574db8ca00fsm5706861pfe.185.2022.12.02.18.33.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:33:28 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:33:27 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 13/39] x86/mm: Start actually marking _PAGE_COW
-Message-ID: <202212021833.58C233E5@keescook>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-14-rick.p.edgecombe@intel.com>
+        Fri, 2 Dec 2022 21:34:08 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C32E177C;
+        Fri,  2 Dec 2022 18:34:06 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NPDPq0scJzFqk9;
+        Sat,  3 Dec 2022 10:33:19 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 3 Dec 2022 10:34:03 +0800
+Subject: Re: [PATCH v2 1/3] ext4: fix incorrect calculate 'reserved' in
+ '__es_remove_extent' when enable bigalloc feature
+To:     Eric Whitney <enwlinux@gmail.com>, Ye Bin <yebin@huaweicloud.com>
+References: <20221121121434.1061725-1-yebin@huaweicloud.com>
+ <20221121121434.1061725-2-yebin@huaweicloud.com>
+ <Y4ko3OL57iyiRC0W@debian-BULLSEYE-live-builder-AMD64>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jack@suse.cz>,
+        <syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <638AB59B.2030505@huawei.com>
+Date:   Sat, 3 Dec 2022 10:34:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-14-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y4ko3OL57iyiRC0W@debian-BULLSEYE-live-builder-AMD64>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:40PM -0800, Rick Edgecombe wrote:
-> The recently introduced _PAGE_COW should be used instead of the HW Dirty
-> bit whenever a PTE is Write=0, in order to not inadvertently create
-> shadow stack PTEs. Update pte_mk*() helpers to do this, and apply the same
-> changes to pmd and pud.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
 
--- 
-Kees Cook
+On 2022/12/2 6:21, Eric Whitney wrote:
+> * Ye Bin <yebin@huaweicloud.com>:
+>> From: Ye Bin <yebin10@huawei.com>
+>>
+>> Syzbot report issue as follows:
+>> EXT4-fs error (device loop0): ext4_validate_block_bitmap:398: comm rep: bg 0: block 5: invalid block bitmap
+>> EXT4-fs (loop0): Delayed block allocation failed for inode 18 at logical offset 0 with max blocks 32 with error 28
+>> EXT4-fs (loop0): This should not happen!! Data will be lost
+>>
+>> EXT4-fs (loop0): Total free blocks count 0
+>> EXT4-fs (loop0): Free/Dirty block details
+>> EXT4-fs (loop0): free_blocks=0
+>> EXT4-fs (loop0): dirty_blocks=32
+>> EXT4-fs (loop0): Block reservation details
+>> EXT4-fs (loop0): i_reserved_data_blocks=2
+>> EXT4-fs (loop0): Inode 18 (00000000845cd634): i_reserved_data_blocks (1) not cleared!
+>>
+>> Above issue happens as follows:
+>> Assume:
+>> sbi->s_cluster_ratio = 16
+>> Step1: Insert delay block [0, 31] -> ei->i_reserved_data_blocks=2
+>> Step2:
+>> ext4_writepages
+>>    mpage_map_and_submit_extent -> return failed
+>>    mpage_release_unused_pages -> to release [0, 30]
+>>      ext4_es_remove_extent -> remove lblk=0 end=30
+>>        __es_remove_extent -> len1=0 len2=31-30=1
+>>   __es_remove_extent:
+>>   ...
+>>   if (len2 > 0) {
+>>    ...
+>> 	  if (len1 > 0) {
+>> 		  ...
+>> 	  } else {
+>> 		es->es_lblk = end + 1;
+>> 		es->es_len = len2;
+>> 		...
+>> 	  }
+>>    	if (count_reserved)
+>> 		count_rsvd(inode, lblk, orig_es.es_len - len1 - len2, &orig_es, &rc);
+>> 	goto out; -> will return but didn't calculate 'reserved'
+>>   ...
+>> Step3: ext4_destroy_inode -> trigger "i_reserved_data_blocks (1) not cleared!"
+>>
+>> To solve above issue if 'len2>0' call 'get_rsvd()' before goto out.
+>>
+>> Reported-by: syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>> ---
+>>   fs/ext4/extents_status.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
+>> index cd0a861853e3..4684eaea9471 100644
+>> --- a/fs/ext4/extents_status.c
+>> +++ b/fs/ext4/extents_status.c
+>> @@ -1371,7 +1371,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
+>>   		if (count_reserved)
+>>   			count_rsvd(inode, lblk, orig_es.es_len - len1 - len2,
+>>   				   &orig_es, &rc);
+>> -		goto out;
+>> +		goto count;
+>>   	}
+>>   
+>>   	if (len1 > 0) {
+>> @@ -1413,6 +1413,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
+>>   		}
+>>   	}
+>>   
+>> +count:
+>>   	if (count_reserved)
+>>   		*reserved = get_rsvd(inode, end, es, &rc);
+>>   out:
+>> -- 
+>> 2.31.1
+>>
+> I'm unable to find the sysbot report for this patch, so I can't verify that
+> this fix works.  The more serious problem would be whatever is causing
+As I reproduce "[syzbot] memory leak in __insert_pending" issue , after 
+merge my previous
+patch 1b8f787ef547 "ext4: fix warning in 'ext4_da_release_space'", I 
+found there is no memleak
+but report  "i_reserved_data_blocks not cleared".
+You can use C  reproducer on linux-next to reproduce this issue.
+
+  C reproducer:https://syzkaller.appspot.com/x/repro.c?x=13a9300a880000
+
+> the invalid block bitmap and delayed allocation failure messages before the
+> i_reserved_data_blocks message.  Perhaps that's simply what syzkaller set
+> up, but it's not clear from this posting.  Have you looked for the cause
+> of those first two messages?
+>
+> However, by inspection this patch should fix an obvious bug causing that last
+> message, introduced by 8fcc3a580651 ("ext4: rework reserved cluster accounting
+> when invalidating pages").  A Fixes tag should be added to the patch.  Also,
+> the readability of the code should be improved by changing the label "count" to
+> the more descriptive "out_get_reserved".
+>
+> With those two changes, feel free to add:
+>
+> Reviewed-by: Eric Whitney <enwlinux@gmail.com>
+>
+> Eric
+> .
+>
+
