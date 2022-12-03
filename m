@@ -2,239 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777416416A9
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E246416AE
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiLCM0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 07:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S229629AbiLCM2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 07:28:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLCM0Q (ORCPT
+        with ESMTP id S229462AbiLCM2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 07:26:16 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344A910A9
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 04:26:14 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e766329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e766:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A55BF1EC0622;
-        Sat,  3 Dec 2022 13:26:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670070372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rPVN6m3qIHKCJVTyQj6CWw40yJUK2VfroWKDAdNkbyY=;
-        b=ehB7UkY3DhaLGbyBNjoo/HWkFAa3TOT5lEUPD+KPh3JrCbBkJMWnEYHB51YCXSm5jnoZb6
-        tCBdab34BfgS9chGe2AfyP8miTQ+wIcTIRbzuw/ifgtFKbdSFJKUFInSlXexDmPqzioMoq
-        u7PQQvfKmTUSt/Imctc22GJnYRCuaQ0=
-Date:   Sat, 3 Dec 2022 13:26:07 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dionna Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Andy Lutomirsky <luto@kernel.org>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v8 1/4] crypto: ccp - Name -1 return value as
- SEV_RET_NO_FW_CALL
-Message-ID: <Y4tAX580jEGHOU9d@zn.tnic>
-References: <20221104230040.2346862-1-dionnaglaze@google.com>
- <20221104230040.2346862-2-dionnaglaze@google.com>
+        Sat, 3 Dec 2022 07:28:30 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE481CFC4;
+        Sat,  3 Dec 2022 04:28:29 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id fu10so46397qtb.0;
+        Sat, 03 Dec 2022 04:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RF3ZWqhHQIklzTK83GUliMYJndHCzHZBEbNUYH/QgQE=;
+        b=hXpUXQQIEnDwmKjz3tn/JHSgz9IxaQRjLHzgFXT0CJsFCLVMYd3+R8kNQ/zbyPTS5G
+         LDL9Mw/ubGH77oMPRB3MEqRx5Ko3h5rCR5frnAi0YJlSI7Klaf1W4hgMV+emkjkDIbjR
+         5W76Y4k9iRPf/R9dciePhRz7cJu7Er9BAhvIBqXXWxyBisQlPNqxEqWTI6olcaIx8DT1
+         yA3E49Ed5Lf16JHp/uZcV9uK42YX52xZavAF3oBWBpoDJgfRyLONhXHYTAlEjWG1g+CB
+         /toIwLRmi6iXJ9jhKSL5qVtA5S7h0En6l8oTzIjVQE4ZhVqsOg8nqDr/UDYSTHCILwT8
+         l0LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RF3ZWqhHQIklzTK83GUliMYJndHCzHZBEbNUYH/QgQE=;
+        b=diXc6PauNn1FzFYz3NG2bTIQSyUN2ZusA1SuTajXikUisTTfCsXbQLpoa9gIg1f3Zf
+         +QiTTIALSEHDgbWttjN56xAOdK5pTW9wBD9mNWJuLzXKvTI0jyeZHOzVQ8OUyrYhrmNL
+         PPSfYYmxKkKaqINWKE+FUPqcI45y7IISQ8zg9NynSPqpiySvhTxiipvFActTCBaBgoP3
+         7V1jd789XZSnj7DS2gW/0G7kdGt7W2Z8NIrza7bpVN4RZJTeJ64fX96osT+aUIgt2ZUj
+         q1UqW4002f3VjFp39eJR3yyYLas3a2VVCYjgjmwfKnEjuH+ub2ggGyzPzUMH0JHp+cDb
+         k8ew==
+X-Gm-Message-State: ANoB5pmUFvIfLgmk8DKn53UhRt8ePJY6VVU6fVG2Y4fyn8N5268yMgZ4
+        wCHflvUqYjQtV7fxFynnW9T8EDzkXXtgnBzmfxg=
+X-Google-Smtp-Source: AA0mqf4NPt/Spc1Ig8VW/MvuvVBQJCyzbU+MANuMhxBDD67944mizuF34t8xOE9ttNR5NEvEEc01WnQFWRBR3NJFkMg=
+X-Received: by 2002:a05:622a:2489:b0:3a6:8c87:e15e with SMTP id
+ cn9-20020a05622a248900b003a68c87e15emr14943702qtb.481.1670070508755; Sat, 03
+ Dec 2022 04:28:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221104230040.2346862-2-dionnaglaze@google.com>
+References: <20211015164809.22009-1-asmaa@nvidia.com> <20211015164809.22009-3-asmaa@nvidia.com>
+ <CACRpkdagKTDgUYBkF3hdE69Zew22uOpN9Ojsqwc=BrKpFOehNA@mail.gmail.com>
+In-Reply-To: <CACRpkdagKTDgUYBkF3hdE69Zew22uOpN9Ojsqwc=BrKpFOehNA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 3 Dec 2022 14:27:52 +0200
+Message-ID: <CAHp75VeQTPsVbEfYe6FHzE=5QKRGQuEQSbnLrTKV+Sbssm3JeQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] net: mellanox: mlxbf_gige: Replace non-standard
+ interrupt handling
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Asmaa Mnebhi <asmaa@nvidia.com>, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, andrew@lunn.ch, kuba@kernel.org,
+        bgolaszewski@baylibre.com, davem@davemloft.net, rjw@rjwysocki.net,
+        davthompson@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 11:00:37PM +0000, Dionna Glaze wrote:
-> From: Peter Gonda <pgonda@google.com>
-> 
-> The PSP can return a "firmware error" code of -1 in circumstances where
-> the PSP is not actually called. To make this protocol unambiguous, we
+On Sat, Dec 3, 2022 at 12:13 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Fri, Oct 15, 2021 at 6:48 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
+>
+> > Since the GPIO driver (gpio-mlxbf2.c) supports interrupt handling,
+> > replace the custom routine with simple IRQ request.
+> >
+> > Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+>
+> Should this also be merged into the GPIO tree with patch 1?
 
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
-
-> add a constant naming the return value.
-> 
-> Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Andy Lutomirsky <luto@kernel.org>
-> Cc: John Allen <john.allen@amd.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> 
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
-> ---
->  drivers/crypto/ccp/sev-dev.c | 2 +-
->  include/uapi/linux/psp-sev.h | 7 +++++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> index 06fc7156c04f..97eb3544ab36 100644
-> --- a/drivers/crypto/ccp/sev-dev.c
-> +++ b/drivers/crypto/ccp/sev-dev.c
-> @@ -444,7 +444,7 @@ static int __sev_platform_init_locked(int *error)
->  {
->  	struct psp_device *psp = psp_master;
->  	struct sev_device *sev;
-> -	int rc = 0, psp_ret = -1;
-> +	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
->  	int (*init_function)(int *error);
->  
->  	if (!psp || !psp->sev_data)
-
-Ok, lemme chase down this flow here:
-
-__sev_platform_init_locked() calls that automatic variable function
-pointer ->init_function which already looks funky. See the end of this
-mail for a diff removing it and making the code more readable.
-
-The called function can be one of two and both get the pointer to
-psp_ret as its only argument.
-
-1. __sev_init_ex_locked() calls __sev_do_cmd_locked() and passes down
-*psp_ret.
-
-or
-
-2. __sev_init_locked(). Ditto.
-
-Now, __sev_do_cmd_locked() will overwrite psp_ret when
-sev_wait_cmd_ioc() fails. So far so good.
-
-In the case __sev_do_cmd_locked() succeeds, it'll put there something
-else:
-
-        if (psp_ret)
-                *psp_ret = reg & PSP_CMDRESP_ERR_MASK;
-
-So no caller will ever see SEV_RET_NO_FW_CALL, as far as I can tell.
-
-And looking further through the rest of the set, nothing tests
-SEV_RET_NO_FW_CALL - it only gets assigned.
-
-So why are we even bothering with this?
-
-You can hand in *psp_ret uninitialized and you'll get a value in all
-cases. Unless I'm missing an angle.
-
-> diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
-> index 91b4c63d5cbf..1ad7f0a7e328 100644
-> --- a/include/uapi/linux/psp-sev.h
-> +++ b/include/uapi/linux/psp-sev.h
-> @@ -36,6 +36,13 @@ enum {
->   * SEV Firmware status code
->   */
->  typedef enum {
-> +	/*
-> +	 * This error code is not in the SEV spec but is added to convey that
-> +	 * there was an error that prevented the SEV Firmware from being called.
-> +	 * This is (u32)-1 since the firmware error code is represented as a
-> +	 * 32-bit integer.
-> +	 */
-> +	SEV_RET_NO_FW_CALL = 0xffffffff,
-
-What's wrong with having -1 here?
-
->  	SEV_RET_SUCCESS = 0,
->  	SEV_RET_INVALID_PLATFORM_STATE,
->  	SEV_RET_INVALID_GUEST_STATE,
-> -- 
-
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 97eb3544ab36..8bc4209b338b 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -440,12 +440,20 @@ static int __sev_init_ex_locked(int *error)
- 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
- }
- 
-+static inline int __sev_do_init_locked(int *psp_ret)
-+{
-+	if (sev_init_ex_buffer)
-+		return __sev_init_ex_locked(psp_ret);
-+	else
-+
-+		return __sev_init_locked(psp_ret);
-+}
-+
- static int __sev_platform_init_locked(int *error)
- {
- 	struct psp_device *psp = psp_master;
- 	struct sev_device *sev;
--	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
--	int (*init_function)(int *error);
-+	int rc = 0, psp_ret;
- 
- 	if (!psp || !psp->sev_data)
- 		return -ENODEV;
-@@ -456,15 +464,12 @@ static int __sev_platform_init_locked(int *error)
- 		return 0;
- 
- 	if (sev_init_ex_buffer) {
--		init_function = __sev_init_ex_locked;
- 		rc = sev_read_init_ex_file();
- 		if (rc)
- 			return rc;
--	} else {
--		init_function = __sev_init_locked;
- 	}
- 
--	rc = init_function(&psp_ret);
-+	rc = __sev_do_init_locked(&psp_ret);
- 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
- 		/*
- 		 * Initialization command returned an integrity check failure
-@@ -473,9 +478,12 @@ static int __sev_platform_init_locked(int *error)
- 		 * initialization function should succeed by replacing the state
- 		 * with a reset state.
- 		 */
--		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
--		rc = init_function(&psp_ret);
-+		dev_err(sev->dev,
-+"SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
-+
-+		rc = __sev_do_init_locked(&psp_ret);
- 	}
-+
- 	if (error)
- 		*error = psp_ret;
- 
-diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
-index 1ad7f0a7e328..a9ed9e846cd2 100644
---- a/include/uapi/linux/psp-sev.h
-+++ b/include/uapi/linux/psp-sev.h
-@@ -42,7 +42,7 @@ typedef enum {
- 	 * This is (u32)-1 since the firmware error code is represented as a
- 	 * 32-bit integer.
- 	 */
--	SEV_RET_NO_FW_CALL = 0xffffffff,
-+	SEV_RET_NO_FW_CALL = -1,
- 	SEV_RET_SUCCESS = 0,
- 	SEV_RET_INVALID_PLATFORM_STATE,
- 	SEV_RET_INVALID_GUEST_STATE,
+Blast from the past?
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+With Best Regards,
+Andy Shevchenko
