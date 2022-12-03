@@ -2,140 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45746641536
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 10:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C118164153B
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 10:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiLCJVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 04:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S231659AbiLCJXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 04:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiLCJVr (ORCPT
+        with ESMTP id S231594AbiLCJW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 04:21:47 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96195A6C0
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 01:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670059306; x=1701595306;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rtlCrZEnKVZN9COBpHEYIQcCM7QH1RMMGwpU/Ltmnm0=;
-  b=K+xCKW4LKgytnJ/q17nkUAqOx81QXYiqDvUj/rP4r6JGHcmA/fRaQjX3
-   IU5ElL8CVEmMII37CW4NfZLmwUTWJ2rzlvJFJYzVHj6foPMHuuKX+R7pk
-   GmN+hbcTXMyehrntWKOLVorGuNUC3Odt8/RhuBQCvn9tmkTvGtfyhmXDn
-   lLSyy/f9pS8fiYjiNz1kvtjNAg2xRECbXerVssGizrTmxmiAUA+mt5aiP
-   ZINicOlg+mvi9jxFWkssqDzAWzoQDa3B2sfiHxW4pIjNw+Wcm2T8sepTr
-   jDb7CDmy5QnGBOwwcy02wFAx0zqPqjBp9Pg7cM7JUc3K2mLGvsFiU8AER
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="296464627"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="296464627"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2022 01:21:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="751571988"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="751571988"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Dec 2022 01:21:45 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p1OiO-000ER9-24;
-        Sat, 03 Dec 2022 09:21:44 +0000
-Date:   Sat, 03 Dec 2022 17:21:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 3170a767052ac5432547a2d8c9d4753d82b45f38
-Message-ID: <638b150b.eHMsockB9kIG0KJi%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 3 Dec 2022 04:22:59 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C2212A88
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 01:22:58 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 189so8750840ybe.8
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 01:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MQEVpJWky6tIJ89XqczxI7S0ZUfSn6CIT0hg/X+OSlY=;
+        b=Rgbj5fbB+ubXc5lxB75411Bq0YmdYG16G6Y4s8Bew+CQGHNAiOQfiXNuLqe7UTm8rJ
+         DOZ9Pa8SlSBOucCgI358McADb8KVdwQOPUXPEmJInzjAs5sghOG1QuDuAsaDlEPn/f29
+         oOAov/y1c9gnUiqembRyjEXpk47JHllvwX4bxUcXP3YAfbG+ji8sqfi9v8ZiZaOgZhMK
+         Ez1ejr1CKCwK1iGF+dRePOkFRuQsU971NosoDjxupXHgb5WdafzCOLqNkATzIo5/nbeY
+         xZBo0BhSHDTV5YdM/on3vlA+1/WnKfbvvCU1xkHiRMN7bEQ93FmQLnsZKxYLYGgIkIle
+         qWUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MQEVpJWky6tIJ89XqczxI7S0ZUfSn6CIT0hg/X+OSlY=;
+        b=1WGRtjrKQ9WxKl2OVU6cJob3PuK1Fvt1FPBCOVXIuOz+pFEKBcrSsLTeiIPbHbGx2r
+         ttTMq6nLzNve91qLkB1jGmuK2MqO0x59EDfH+dYVIsIKz4aXak55g4f2L2e7g/LfNZlD
+         o44kaPqyRT/i/aPaiVM8+ARRKlENc1vPvlVaBfiqBYY4F28CSRnLXxBIf8f92AteAzoe
+         auQ1xKKHYXEGbO5V69AtlMK6RkmzUuBfhvRL6qWez0A2w6BCzp1yy5risIMVXx9ycBdV
+         IxRqcpla4fCv8rpE4/RxnKP1eaNRVV4vhgsZp7icK9kQZYG+P+hz8LHxDibRh+Kc+GTY
+         GIaQ==
+X-Gm-Message-State: ANoB5pnOSslxzi4pzUgmkSlnG3HZ4r0B5qqXC96lwteGcyVMwrApO8/Z
+        JHhUiU5Knmn4qN7Y7oSO41rLFxmAk7kQ37vXBaWbqg==
+X-Google-Smtp-Source: AA0mqf5ZQfNSD0/07kd5VFeFh5McEsaO3GSOFBR7Nh6mdhMxqXu71Xyg3wJZ63scyLjajbGzBwDjWGjBa0hVSp8aKBc=
+X-Received: by 2002:a25:bc8a:0:b0:6ee:e865:c2e2 with SMTP id
+ e10-20020a25bc8a000000b006eee865c2e2mr8564584ybk.206.1670059377999; Sat, 03
+ Dec 2022 01:22:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129023401.278780-1-bero@baylibre.com>
+In-Reply-To: <20221129023401.278780-1-bero@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 3 Dec 2022 10:22:47 +0100
+Message-ID: <CACRpkda75U=b50rK=WecNvaEoTdN2UzGyEwfPRaO6jG9FGyWhw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] Remove the pins-are-numbered DT property
+To:     =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        krzysztof.kozlowski@linaro.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, khilman@baylibre.com,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 3170a767052ac5432547a2d8c9d4753d82b45f38  Merge x86/sgx into tip/master
+Hi Bero,
 
-elapsed time: 725m
+long time no see!
 
-configs tested: 58
-configs skipped: 2
+On Tue, Nov 29, 2022 at 3:34 AM Bernhard Rosenkr=C3=A4nzer <bero@baylibre.c=
+om> wrote:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> During the review of my MT8365 support patchset
+> (https://lore.kernel.org/linux-mediatek/20221117210356.3178578-1-bero@bay=
+libre.com/),
+> the issue of the "pins-are-numbered" DeviceTree property has come up.
 
-gcc tested configs:
-arc                                 defconfig
-um                             i386_defconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-um                           x86_64_defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-s390                                defconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-s390                             allmodconfig
-arc                              allyesconfig
-mips                             allyesconfig
-x86_64                              defconfig
-powerpc                          allmodconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-ia64                             allmodconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-s390                             allyesconfig
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                           rhel-8.3-kvm
-arc                  randconfig-r043-20221201
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-riscv                randconfig-r042-20221201
-x86_64                        randconfig-a006
-s390                 randconfig-r044-20221201
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                             allyesconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
+(...)
+> This patchset removes all uses of pins-are-numbered and marks the
+> property as deprecated.
 
-clang tested configs:
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20221201
-x86_64                        randconfig-a001
-hexagon              randconfig-r041-20221201
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
+I don't remember any more why this property was introduced, but
+I am happy to see it go.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Bernhard Rosenkr=C3=A4nzer (7):
+>   pinctrl: mediatek: common: Remove check for pins-are-numbered
+>   pinctrl: stm32: Remove check for pins-are-numbered
+>   dt-bindings: pinctrl: mediatek,mt65xx: Deprecate pins-are-numbered
+>   dt-bindings: pinctrl: st,stm32: Deprecate pins-are-numbered
+
+I applied patches 1-4 to the pin control tree for v6.2,
+please funnel the rest through mediatek/stm32 and
+SoC trees!
+
+Yours,
+Linus Walleij
