@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D2F6416B7
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF376416BF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiLCMgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 07:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S229717AbiLCMnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 07:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiLCMgi (ORCPT
+        with ESMTP id S229671AbiLCMnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 07:36:38 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E14D2FC08;
-        Sat,  3 Dec 2022 04:36:37 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id g10so1752603qkl.6;
-        Sat, 03 Dec 2022 04:36:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zyo55RdF12Oshfuf3anRJy4vhxaURJFlQu/s5gweHZ0=;
-        b=NY02Mmc0Nh8rO1KBj+bnqsrvonxkvcC8zCanAt3zxl28feFnqNLOul/6njS088eTqE
-         iFYnRxtL7zGarfWRurTJiH0bLMOahLDg1Vajsu69Vmdwp/oXtsu1D7212P3vBwKg5wuJ
-         jR423R8QurvnLSMWBWxFEubfF+TpWQGajN8aoDSnjxUkfC3j4wqe5ZXfAHsy1XIEAUMt
-         sXtybIPY93mg0vT5B8fpWhoXCxDJadvNizXVuJcmunWEq5LA5zicEuwvHi5znnzqntiq
-         3Ar8EfJTGAL64cKBaIxh8wubYOWcFH7KexuZiGN4wwUBlqA1/5zrhhsG7lRtwd2yqDyi
-         Eiww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zyo55RdF12Oshfuf3anRJy4vhxaURJFlQu/s5gweHZ0=;
-        b=WeE65VDigfyGxNNiN6CPhhym5YoLPmBA+vpcV86tNK6JY5x06kLNa9TrPX+9s5Zie4
-         IG9HjPmssWeTZVg0L/FOgVLsL8+nesY5cyXPpyIIboucdVUAAVvYeUASBm34VCIIuI1v
-         pzV7MDr8EM4KQiJHbS6xJI8BcUcMDazTuF6PCtGn04XikHcYvU5gVv1784fM/IJ8xv7+
-         FxccDuoIliT8IPrmSYRmIJS0U1wAI8/5vrP6GemZEmSZvX5MfZ/26PQD5tkZ1jZONDFL
-         xvwYy/I3WQNn0QTxeJMYMdy6MVX/mi3BgeJf9cOsa0BE3notOWw+W9crfgKk4nUVJSUz
-         ZM/g==
-X-Gm-Message-State: ANoB5pnIXRNjvFxfDrjtsqSmUOmwodIk/RteUfo0yLgzy7WS/fK7/R35
-        DUNfnuPXVtva61q4esyhhZFFXTECrz0Ht5iGM5M=
-X-Google-Smtp-Source: AA0mqf4CuxmqO0vLrdefK9yfCZYY2Fi7D9QJghNcIlStaWHAAXcABy2XcQ1vTHvl22jwWjsQGQxKd7Ugk/GLElBQT8I=
-X-Received: by 2002:a37:f504:0:b0:6cf:5fa1:15f8 with SMTP id
- l4-20020a37f504000000b006cf5fa115f8mr67062663qkk.748.1670070996109; Sat, 03
- Dec 2022 04:36:36 -0800 (PST)
+        Sat, 3 Dec 2022 07:43:00 -0500
+X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Dec 2022 04:42:56 PST
+Received: from mail.eclipso.de (mail.eclipso.de [217.69.254.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215C9FCF2
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 04:42:54 -0800 (PST)
+X-ESMTP-Authenticated-User: 000A371C
+From:   timo.hunziker@eclipso.ch
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eclipso.de; s=mail;
+        t=1670071068; bh=lP/iR/9kH0H2mP4iM34RnJp4Hb5MiVEHAyM5XTGyc0g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RZrIH5Ne3uMkZvT8DMT6l8njPYolVWZqh5oPwwwvnP2dOJ97aVy5qYqlB1s4vHDV+
+         JBhqTwrSg6PsH7fh5qqeSf2+Xp8+RXQadRnvmK9a4W+Fpg1SmLdmegpn2o29UYqkFU
+         ilkWhXeuhjhvJLes+pTRBbTLZBSZVtSx/Y6DRSZksDegbE/ZhSK67tsaApeRQ+wFjE
+         h62+94c+RgnOvx5x4vb8/cRwOCkhZtRgM/SMy1qRIFuaaIWAHO0DODyDBvoQCY4A8P
+         qzTf9TQdmWUP02XJgSStEtsIdZqtsIwttjpnSadPmrnOJhN26d7EqWHdmt6IAhWqYf
+         26wZOdAvX0PQQ==
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, sdf@google.com, song@kernel.org,
+        timo.hunziker@gmx.ch, yhs@fb.com
+Subject: [PATCH bpf-next v2] libbpf: parse usdt args without offset on x86 (e.g. 8@(%rsp))
+Date:   Sat,  3 Dec 2022 12:37:46 +0000
+Message-Id: <20221203123746.2160-1-timo.hunziker@eclipso.ch>
+In-Reply-To: <CAEf4BzbzgDfkvEtcQbCE1wZ4YHOTTWwr3rfX3D63RfD08qGj-Q@mail.gmail.com>
+References: <CAEf4BzbzgDfkvEtcQbCE1wZ4YHOTTWwr3rfX3D63RfD08qGj-Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211015164809.22009-1-asmaa@nvidia.com> <20211015164809.22009-2-asmaa@nvidia.com>
- <CACRpkdbvR0+5gKUH7eE2tZ1H9DR-WiYyh9KSnUTesYiZ=AezNw@mail.gmail.com>
-In-Reply-To: <CACRpkdbvR0+5gKUH7eE2tZ1H9DR-WiYyh9KSnUTesYiZ=AezNw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 3 Dec 2022 14:35:59 +0200
-Message-ID: <CAHp75VfaoS4yu0UOJj4V2N+4tWdD0JF47TFgfKCGt7SC-Uhfaw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] gpio: mlxbf2: Introduce IRQ support
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, andrew@lunn.ch, kuba@kernel.org,
-        bgolaszewski@baylibre.com, davem@davemloft.net, rjw@rjwysocki.net,
-        davthompson@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 3, 2022 at 12:14 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Fri, Oct 15, 2021 at 6:48 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
->
-> > Introduce standard IRQ handling in the gpio-mlxbf2.c
-> > driver.
-> >
-> > Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
->
-> Looks good to me!
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+From: Timo Hunziker <timo.hunziker@gmx.ch>
 
-It was more than a year ago :-)
+Parse USDT arguments like "8@(%rsp)" on x86. These are emmited by
+SystemTap. The argument syntax is similar to the existing "memory
+dereference case" but the offset left out as it's zero (i.e. read
+the value from the address in the register). We treat it the same
+as the the "memory dereference case", but set the offset to 0.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I've tested that this fixes the "unrecognized arg #N spec: 8@(%rsp).."
+error I've run into when attaching to a probe with such an argument.
+Attaching and reading the correct argument values works.
+
+Something similar might be needed for the other supported
+architectures.
+
+ref: https://github.com/libbpf/libbpf/issues/559
+
+Signed-off-by: Timo Hunziker <timo.hunziker@gmx.ch>
+---
+
+Ugh, you're right. Thanks for catching this. I've changed it to
+USDT_ARG_REG_DEREF and double checked that the values in the
+arguments are the expected values for my test case.
+
+ tools/lib/bpf/usdt.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index b8daae265f99..75b411fc2c77 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -1233,6 +1233,14 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+ 		if (reg_off < 0)
+ 			return reg_off;
+ 		arg->reg_off = reg_off;
++	} else if (sscanf(arg_str, " %d @ ( %%%15[^)] ) %n", &arg_sz, reg_name, &len) == 2) {
++		/* Memory dereference case without offset, e.g., 8@(%rsp) */
++		arg->arg_type = USDT_ARG_REG_DEREF;
++		arg->val_off = 0;
++		reg_off = calc_pt_regs_off(reg_name);
++		if (reg_off < 0)
++			return reg_off;
++		arg->reg_off = reg_off;
+ 	} else if (sscanf(arg_str, " %d @ %%%15s %n", &arg_sz, reg_name, &len) == 2) {
+ 		/* Register read case, e.g., -4@%eax */
+ 		arg->arg_type = USDT_ARG_REG;
+--
+2.36.2
+
+_________________________________________________________________
+________________________________________________________
+Your E-Mail. Your Cloud. Your Office. eclipso Mail & Cloud. https://www.eclipso.de
+
+
