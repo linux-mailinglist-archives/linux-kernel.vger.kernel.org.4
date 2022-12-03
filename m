@@ -2,114 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083306418A5
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB88D6418A8
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiLCUPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 15:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S229679AbiLCUTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 15:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLCUPu (ORCPT
+        with ESMTP id S229469AbiLCUTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 15:15:50 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558881C431
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 12:15:47 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id ay32so921308qtb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 12:15:47 -0800 (PST)
+        Sat, 3 Dec 2022 15:19:21 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791B61D0F7;
+        Sat,  3 Dec 2022 12:19:20 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id x28so7885049qtv.13;
+        Sat, 03 Dec 2022 12:19:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/AEv8iOuQcHXjiDxVYoVxL1UQJyViE9h9B1gaIqSa0=;
-        b=Cx/n/Xr8KSW6ERq+sGaS1PpfNqfNITiNFLNfdP0bHEu5mS15d8EB/GfgCq/+8atMB5
-         twQto8mQPQbDmNu4HBYnqgF46LG/YrE+IRLZ8Qlzb3hHMHbh/BqOy1508TvH+q1E5o66
-         8p2bAKFbOgUX8ZqGGp9Prkvjmqa/b1zTN0JJUawuCQezi4AyOy+vmeY0vbjPncLBnuzO
-         GVVNw0pm3+dbbGv1pLgwqN7/nJRRFQ80TqDgqiY14ueon3nO0MZjFAXUsfB5hT7/79Zk
-         QfsGBG2zHgZrHJw0HRLtVvkf9OerobadcMHCsKPOj5cxSfx2Ofa7xG+MIuNkPVr69Qfe
-         cWzQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwdVJg7raQtnjUVRTztYGrA3fr8psFlvQUt/25nfn4s=;
+        b=WzLBmwlI1VsY9pLVdmvIIscYxAaSw0leKqrziMvspNKdRtaVFiKGz5oF6ueg/cY0LW
+         l96OVkH1wweauJNckxTpChAsBFcS7GuFde6QC4W99mA701J85sBJn78wB2pvZj7KPLIC
+         ObN79bsGiq1tKb0F0Vs81amOrwQLWIZMax/sar/VhlxtN6UpqpphIXHEqMSY9vek5L7H
+         cHHCF7Gn17hmVsGUPrCO8Tlwf9Whueuy8rhV2QLw6nqaGAQABr9YIYmdXPhOYGswM3LU
+         4RvOV8Wh5g6ZPXms89eUIkRVryrxOCmYl2XPDFH4qKuotb45pS41TMEVRqxJ+KiUKUgl
+         CC+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B/AEv8iOuQcHXjiDxVYoVxL1UQJyViE9h9B1gaIqSa0=;
-        b=7gO9YgtvaTBD49MgMBV6FbqkcXyUfxsgQ9B239VICKvQ5XbSwJVEnZp1VN9IGTCK4u
-         D6Lt8vDnhjKEPo2eszXG2q37RAD7FyJwcN0feVOfTzEj28qY3tNyHJ1JA0EsKzCEyQFI
-         vjzm48TboasB2mrviRWN30KtmrKV0IekN284/oY4ZWhttHBV0ir5liP0rREnyK89SLdp
-         ghhOq91CSgLgJ3i0D8IMU7n/h2RzMGKRBhXEslLpdY35dImJlp3UMffwYdK2tG+GwahJ
-         rMtRXSRK5KFdyQkBaQW4mAD8imEc+JzMHbZVHvu5Jn6c7EXx4asB1/iXsSEnbDPR1Xm+
-         koIQ==
-X-Gm-Message-State: ANoB5pn6vD8fpTBrG2ponVAkbczr6xKo3XO++pwD1o6AqSqV6LWmRqD5
-        4J02NQMwEnqvzsTbhw44mKQ=
-X-Google-Smtp-Source: AA0mqf50a2vkWerBtBV/3hecxcLLFnJJBfICx/iNwiSw/lYlHfxRLocCKu44T0YFclV99J4e72btgA==
-X-Received: by 2002:ac8:743:0:b0:397:92e9:a517 with SMTP id k3-20020ac80743000000b0039792e9a517mr69414151qth.56.1670098546413;
-        Sat, 03 Dec 2022 12:15:46 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id bi13-20020a05620a318d00b006fb0e638f12sm8772687qkb.4.2022.12.03.12.15.45
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UwdVJg7raQtnjUVRTztYGrA3fr8psFlvQUt/25nfn4s=;
+        b=JywyRRcNpPDIVHlnWj5LRDN7hLWLrTGy9fNqYN5tDY2xRdR//mSVFi46TsKJ61h9kh
+         E+EApgOaCyW+SgV78LPYrnSZgH/julENME2V029FZhDOWatv5Lu9mT28wSfXhdqtbPif
+         UAuBKX5TKDHC/SbE9Skb2uMZq57Z3vbgewWxsdR66+KJatTM0GQbuGuMuB8Cci1lyyad
+         oYQzd97J4InT9/V8CVoTE6Fp0v1677QpvlGPwUXjpWk3TpMuQBfzcAPcg2WAi4YcgFlK
+         zWYQHBUx2x1Ig4h8fl1mwWYDa4Sc5cw5EGQbgdlx9KF7O1mdHJvCemeSuDeynkVTbYdh
+         7NYQ==
+X-Gm-Message-State: ANoB5pk/Y7FxMpBGEbu6zdII4vfxO8WwngFUp5P+R3s0zVeEJfv+BkfY
+        i9zBUe8GP3RzP6oRKJniSjU=
+X-Google-Smtp-Source: AA0mqf6MG+LmSJ702t7xq9r75ifeYqi0z0yUywrEmEClXAn4mixMcjsVyvqJY7yRPz34fWa8DP9GpQ==
+X-Received: by 2002:a05:622a:228c:b0:3a5:c024:7f31 with SMTP id ay12-20020a05622a228c00b003a5c0247f31mr71054100qtb.311.1670098759600;
+        Sat, 03 Dec 2022 12:19:19 -0800 (PST)
+Received: from localhost ([2600:1700:65a0:ab60:150b:cfdc:d3ab:f038])
+        by smtp.gmail.com with ESMTPSA id w18-20020a05620a425200b006cfc9846594sm8666021qko.93.2022.12.03.12.19.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 12:15:45 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 2017227C0054;
-        Sat,  3 Dec 2022 15:15:44 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 03 Dec 2022 15:15:45 -0500
-X-ME-Sender: <xms:b66LY7FwAbVA3uvmoqApWlyfrRbb1_bcbpEMY4ySG9Wr-joeR-pzSw>
-    <xme:b66LY4Ud_gXCqv1PfM4zdREg6XJ8cFAQ2jV79bi01Umct78uqq4r6FDONA7GLI6yg
-    casPXzs1v-HwIcBJA>
-X-ME-Received: <xmr:b66LY9JntF8S1io1_YTAhI8B8ZZyLdo4RBANJQ14WBg9KhnSOOLSYdHTvw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtgddufeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhepfffhkeekvdelkeffkeffteeljedvhedvgedtueehudfhveetledvteff
-    veffhfevnecuffhomhgrihhnpehstghhvggurdgtohhmpdihohhuthhusggvrdgtohhmne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhu
-    nhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqdduje
-    ejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdr
-    nhgrmhgv
-X-ME-Proxy: <xmx:b66LY5FMkusmKIIGqC7r6KIw6bQUsm9VcSEEVxS5rp1LcZF8BDGrZA>
-    <xmx:b66LYxWkBE4bTvG23PHF5EImO73_2lJCSyddViAfq0wVj3u1CMqxMw>
-    <xmx:b66LY0NXp12k_hzETFIWsXZBlQ8tFRqZlz7yfxF3lpx3HIJSnT6nsg>
-    <xmx:cK6LY7ZtfdmlhL8GfhfDgs9No67sbB-ZchMJt4DgwDNLL5bpfj_mhg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 3 Dec 2022 15:15:42 -0500 (EST)
-Date:   Sat, 3 Dec 2022 12:14:29 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tools: memory-model: Make plain accesses carry
- dependencies
-Message-ID: <Y4uuJS6dAuRT7t6r@boqun-archlinux>
-References: <20221202125100.30146-1-jonas.oberhauser@huaweicloud.com>
- <Y4pIwqK7SWft1xCl@boqun-archlinux>
- <4262e55407294a5989e766bc4dc48293@huawei.com>
- <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
+        Sat, 03 Dec 2022 12:19:18 -0800 (PST)
+Date:   Sat, 3 Dec 2022 12:19:12 -0800
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, 18801353760@163.com,
+        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com,
+        Cong Wang <cong.wang@bytedance.com>,
+        Dmitry Vyukov <dvyukov@google.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] net: sched: fix memory leak in tcindex_set_parms
+Message-ID: <Y4uvQA2xxtJXltSM@pop-os.localdomain>
+References: <20221129025249.463833-1-yin31149@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20221129025249.463833-1-yin31149@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -120,43 +79,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 11:02:26AM -0800, Paul E. McKenney wrote:
-> On Sat, Dec 03, 2022 at 11:58:36AM +0000, Jonas Oberhauser wrote:
-> > 
-> > 
-> > -----Original Message-----
-> > From: Boqun Feng [mailto:boqun.feng@gmail.com] 
-> > Sent: Friday, December 2, 2022 7:50 PM
-> > 
-> > > > Reviewed-by: Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> > 
-> > > s/Reviewed-by: Reviewed-by:/Reviewed-by:^2 to save some space ? ;-)
-> > 
-> > 
-> > Oh, I didn't know I'm allowed to compress things like that! Can I use ² as well to save another character?
+On Tue, Nov 29, 2022 at 10:52:49AM +0800, Hawkins Jiawei wrote:
+> Kernel uses tcindex_change() to change an existing
+> filter properties. During the process of changing,
+> kernel uses tcindex_alloc_perfect_hash() to newly
+> allocate filter results, uses tcindex_filter_result_init()
+> to clear the old filter result.
 > 
-> Heh!  I might miss that, and who knows?  The bots might think that "²"
-> was the first letter of your name.  ;-)
+> Yet the problem is that, kernel clears the old
+> filter result, without destroying its tcf_exts structure,
+> which triggers the above memory leak.
 > 
-> > > I wonder is this patch a first step to solve the OOTA problem you reported in OSS:
-> > >	https://static.sched.com/hosted_files/osseu2022/e1/oss-eu22-jonas.pdf
-> > > If so maybe it's better to put the link in the commit log I think.
-> > 
-> > It's not directly related to that specific problem, it does solve some other OOTA issues though.
-> > If you think we should link to the talk, there's also a video with slightly more updated slides from the actual talk: https://www.youtube.com/watch?v=iFDKhIxKhoQ
-> > do you think I should link to both then?
-> 
-> It is not hard for me to add that in if people believe that it should be
-> included.  But default is lazy in this case.  ;-)
-> 
+> Considering that there already extis a tc_filter_wq workqueue
+> to destroy the old tcindex_data by tcindex_partial_destroy_work()
+> at the end of tcindex_set_parms(), this patch solves this memory
+> leak bug by removing this old filter result clearing part,
+> and delegating it to the tc_filter_wq workqueue.
 
-I brought this up because, as we recently experience in RCU code, we
-need answers of "why we did this?" to the future us ;-)
+Hmm?? The tcindex_partial_destroy_work() is to destroy 'oldp' which is
+different from 'old_r'. I mean, you seem assuming that struct
+tcindex_filter_result is always from struct tcindex_data, which is not
+true, check the following tcindex_lookup() which retrieves tcindex_filter_result
+from struct tcindex_filter.
 
-I agree with Alan, this seems like a good idea, but having some big
-picture of why we do this may be better.
+static struct tcindex_filter_result *tcindex_lookup(struct tcindex_data *p,
+                                                    u16 key)
+{
+        if (p->perfect) {
+                struct tcindex_filter_result *f = p->perfect + key;
 
-Regards,
-Boqun
+                return tcindex_filter_is_set(f) ? f : NULL;
+        } else if (p->h) {
+                struct tcindex_filter __rcu **fp;
+                struct tcindex_filter *f;
 
-> 							Thanx, Paul
+                fp = &p->h[key % p->hash];
+                for (f = rcu_dereference_bh_rtnl(*fp);
+                     f;
+                     fp = &f->next, f = rcu_dereference_bh_rtnl(*fp))
+                        if (f->key == key)
+                                return &f->result;
+        }
+
+        return NULL;
+}
+
+ 
+> diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
+> index 1c9eeb98d826..3f4e7a6cdd96 100644
+> --- a/net/sched/cls_tcindex.c
+> +++ b/net/sched/cls_tcindex.c
+> @@ -478,14 +478,6 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
+>  		tcf_bind_filter(tp, &cr, base);
+>  	}
+>  
+> -	if (old_r && old_r != r) {
+> -		err = tcindex_filter_result_init(old_r, cp, net);
+> -		if (err < 0) {
+> -			kfree(f);
+> -			goto errout_alloc;
+> -		}
+> -	}
+> -
+
+Even if your above analysis is correct, 'old_r' becomes unused (set but not used)
+now, I think you should get some compiler warning.
+
+Thanks.
