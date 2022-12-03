@@ -2,124 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B06A6413FC
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 04:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BBF641404
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 04:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiLCDXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 22:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S230247AbiLCDhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 22:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiLCDXM (ORCPT
+        with ESMTP id S229706AbiLCDhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 22:23:12 -0500
-X-Greylist: delayed 337 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 19:23:10 PST
-Received: from out-17.mta0.migadu.com (out-17.mta0.migadu.com [91.218.175.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9450627F7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 19:23:08 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670037449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yB//b1EitRmLn+k+QyZlckrtyNyeyMWH9FzHsotPYVg=;
-        b=ubL93lHJgSTgz+3zzH+QSRUgMV/lU7i9P2hA234RwUQaM5sly2K9vbBgeWb0vwoGJBxdx/
-        glDZK10V70CZbf0v9q9CummWFes9OBw5TNB9xxhy8eM0hCnc5G10YopaPIL8WS7DzpnGzu
-        9hsfB3qvJ5n8shNfCGlcwXzjKpvzL18=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20221202223533.1785418-1-almasrymina@google.com>
-Date:   Sat, 3 Dec 2022 11:17:10 +0800
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, Michal Hocko <mhocko@suse.com>,
-        bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EC963F6F-75C3-4168-97B3-544C36C2600A@linux.dev>
-References: <20221202223533.1785418-1-almasrymina@google.com>
-To:     Mina Almasry <almasrymina@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 22:37:31 -0500
+Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FC8A0557;
+        Fri,  2 Dec 2022 19:37:27 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="86269280"
+X-IronPort-AV: E=Sophos;i="5.96,214,1665414000"; 
+   d="scan'208";a="86269280"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP; 03 Dec 2022 12:37:24 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+        by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id CED8BD3EA3;
+        Sat,  3 Dec 2022 12:37:23 +0900 (JST)
+Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
+        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 1B3F0F0A2D;
+        Sat,  3 Dec 2022 12:37:23 +0900 (JST)
+Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
+        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id 2C75D23406A1;
+        Sat,  3 Dec 2022 12:37:22 +0900 (JST)
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     leon@kernel.org, jgg@ziepe.ca
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li Zhijian <lizhijian@fujitsu.com>
+Subject: [PATCH] RDMA/mlx5: no need to kfree NULL pointer
+Date:   Sat,  3 Dec 2022 11:37:14 +0800
+Message-Id: <20221203033714.25870-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27300.005
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27300.005
+X-TMASE-Result: 10--5.794900-10.000000
+X-TMASE-MatchedRID: rWcK0WiM0yyjC979w1k7DErOO5m0+0gEmSLeIgEDej/AuQ0xDMaXkH4q
+        tYI9sRE/ZNUDHbPZ5K3LtJAGcfCTs8QmX0k7dptpngIgpj8eDcAZ1CdBJOsoY9mzcdRxL+xwKra
+        uXd3MZDUaA0E8UdrP6nF6eQOQrAVPaaC7MUsggjz+CsA1rmXCp5RZ3pKiHPN/
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Goto label 'free' where it will kfree the 'in' is not needed though
+it's safe to kfree NULL. Return err code directly to simplify the code.
 
+1973 free:
+1974         kfree(in);
+1975         return err;
 
-> On Dec 3, 2022, at 06:35, Mina Almasry <almasrymina@google.com> wrote:
->=20
-> The nodes=3D arg instructs the kernel to only scan the given nodes for
-> proactive reclaim. For example use cases, consider a 2 tier memory =
-system:
->=20
-> nodes 0,1 -> top tier
-> nodes 2,3 -> second tier
->=20
-> $ echo "1m nodes=3D0" > memory.reclaim
->=20
-> This instructs the kernel to attempt to reclaim 1m memory from node 0.
-> Since node 0 is a top tier node, demotion will be attempted first. =
-This
-> is useful to direct proactive reclaim to specific nodes that are under
-> pressure.
->=20
-> $ echo "1m nodes=3D2,3" > memory.reclaim
->=20
-> This instructs the kernel to attempt to reclaim 1m memory in the =
-second tier,
-> since this tier of memory has no demotion targets the memory will be
-> reclaimed.
->=20
-> $ echo "1m nodes=3D0,1" > memory.reclaim
->=20
-> Instructs the kernel to reclaim memory from the top tier nodes, which =
-can
-> be desirable according to the userspace policy if there is pressure on
-> the top tiers. Since these nodes have demotion targets, the kernel =
-will
-> attempt demotion first.
->=20
-> Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> reclaim""), the proactive reclaim interface memory.reclaim does both
-> reclaim and demotion. Reclaim and demotion incur different latency =
-costs
-> to the jobs in the cgroup. Demoted memory would still be addressable
-> by the userspace at a higher latency, but reclaimed memory would need =
-to
-> incur a pagefault.
->=20
-> The 'nodes' arg is useful to allow the userspace to control demotion
-> and reclaim independently according to its policy: if the =
-memory.reclaim
-> is called on a node with demotion targets, it will attempt demotion =
-first;
-> if it is called on a node without demotion targets, it will only =
-attempt
-> reclaim.
->=20
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+---
+I stumbled across this little defect.
+---
+ drivers/infiniband/hw/mlx5/mr.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Acked-by: Muchun Song <songmuchun@bytedance.com>
+diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
+index 410cc5fd2523..053fe946e45a 100644
+--- a/drivers/infiniband/hw/mlx5/mr.c
++++ b/drivers/infiniband/hw/mlx5/mr.c
+@@ -1929,10 +1929,8 @@ int mlx5_ib_alloc_mw(struct ib_mw *ibmw, struct ib_udata *udata)
+ 	ndescs = req.num_klms ? roundup(req.num_klms, 4) : roundup(1, 4);
+ 
+ 	in = kzalloc(inlen, GFP_KERNEL);
+-	if (!in) {
+-		err = -ENOMEM;
+-		goto free;
+-	}
++	if (!in)
++		return -ENOMEM;
+ 
+ 	mkc = MLX5_ADDR_OF(create_mkey_in, in, memory_key_mkey_entry);
+ 
+-- 
+2.38.1
 
-Thanks.=
