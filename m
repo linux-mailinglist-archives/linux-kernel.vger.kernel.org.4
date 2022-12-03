@@ -2,83 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AEC64155B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 10:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6AE64155C
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 10:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiLCJli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 04:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
+        id S229565AbiLCJls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 04:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiLCJlf (ORCPT
+        with ESMTP id S229571AbiLCJlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 04:41:35 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4422537C3;
-        Sat,  3 Dec 2022 01:41:34 -0800 (PST)
-Received: from dggpeml500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NPPv53dn1z15Lxj;
-        Sat,  3 Dec 2022 17:40:49 +0800 (CST)
-Received: from huawei.com (10.175.112.125) by dggpeml500005.china.huawei.com
- (7.185.36.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 3 Dec
- 2022 17:41:32 +0800
-From:   Yongqiang Liu <liuyongqiang13@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <vlomovtsev@marvell.com>,
-        <zhangxiaoxu5@huawei.com>, <liuyongqiang13@huawei.com>,
-        <weiyongjun1@huawei.com>, <sgoutham@marvell.com>
-Subject: [PATCH] net: thunderx: Fix missing destroy_workqueue of nicvf_rx_mode_wq
-Date:   Sat, 3 Dec 2022 09:41:25 +0000
-Message-ID: <20221203094125.602812-1-liuyongqiang13@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 3 Dec 2022 04:41:44 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E705FBBE
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 01:41:40 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id o127so8789137yba.5
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 01:41:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GDK0G8ouGBOV5VO6vGZyWeQ21uSYq0BpFxpQ1NWHPuY=;
+        b=jDNDOI2qnx6ltpJ7lB0lWzcQYwX+zN+xmC0k2auhAF/ysf+2Nll5l2PXe68Mdvca8R
+         Nqk2Zy9MPHZ1NJmKSBwFAGM/CK6AiFI/R682ZKcnGJ0N5fVnYV939ZdcZjEIifFF6aVR
+         nEQQlymGlo7JfubHTkPR+Q5UbB8Pmv5sU4Pe/2sObCE41eEMDMnQNmE4GnrL6kJxkNSi
+         KqsnBdUkmABQT3a0/NK8waBuuhxM98MyPzoZwBww03pTPoScfbzNF7/J0RnOV/UwA90+
+         OeunyTSxlcShD+2agZALl62zRjoEtYd1GUzeue/jcBS2BQiIgcnRoCjkw28n4fvrpF5f
+         QBag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GDK0G8ouGBOV5VO6vGZyWeQ21uSYq0BpFxpQ1NWHPuY=;
+        b=5cVAVIa0uFAELPE0mcxxh10oq0THATBKUryA7IX9Lytew/AvMRogpIm7+3NA7IYjwA
+         oktKgxyk5Ato0/z1VwyLlrbaiDknNLC/oFTS4tWhBkXCOnJlkQvF1fRckcFk5zB8JFd+
+         obLzvQRFveVBvqHgQ2oFp1ZWJHMN+3hV9lGkUCL0qxiSyZkdtcoz/cQsEXm8hj4b82N1
+         NJu4ikhqTqQtiuDikz6YLlnVILYGBKW+xLQSj33dqlNflmdupMOu/1aXX9cjkSpUfTlx
+         v8CBcgpfONZi4ReL3M5Cy9cCtOrGsiheOX+Q+tQ655b0nlLdDU7HaHHzcybzP8TOgsaG
+         rnnA==
+X-Gm-Message-State: ANoB5pkF9GXVIoPhfa0fTa9dJACKkAvUjKxQJzm4gXt3nPhMNt8PY8Bw
+        6yk2D1InZ6SPzuW9Rz2vfEu/LyPSSOBiO6EdblsbSLP7yXZc0A==
+X-Google-Smtp-Source: AA0mqf6OeYSlNYdwJZi7N49Ddks0I5RlLP1DORD/D7oglSBgyyJXrHThcCYGJ21kpF6TYn9POuzl4+8Qm6/n0InBSmI=
+X-Received: by 2002:a25:d8d4:0:b0:6f0:36e2:5fc2 with SMTP id
+ p203-20020a25d8d4000000b006f036e25fc2mr46458083ybg.52.1670060499565; Sat, 03
+ Dec 2022 01:41:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500005.china.huawei.com (7.185.36.59)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221202012126.246953-1-yiyang13@huawei.com>
+In-Reply-To: <20221202012126.246953-1-yiyang13@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 3 Dec 2022 10:41:28 +0100
+Message-ID: <CACRpkdYqQDSpHQyTaAY4H_9jX03d6oJKOu-zDvx0iJmTE3-jiw@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: fotg210-udc: fix potential memory leak in fotg210_udc_probe()
+To:     Yi Yang <yiyang13@huawei.com>
+Cc:     gregkh@linuxfoundation.org, andrzej.p@collabora.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nicvf_probe() won't destroy workqueue when register_netdev()
-failed. Add destroy_workqueue err handle case to fix this issue.
+On Fri, Dec 2, 2022 at 2:25 AM Yi Yang <yiyang13@huawei.com> wrote:
 
-Fixes: 2ecbe4f4a027 ("net: thunderx: replace global nicvf_rx_mode_wq work queue for all VFs to private for each of them.")
-Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
----
- drivers/net/ethernet/cavium/thunder/nicvf_main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> In fotg210_udc_probe(), if devm_clk_get() or clk_prepare_enable()
+> fails, 'fotg210' will not be freed, which will lead to a memory leak.
+> Fix it by moving kfree() to a proper location.
+>
+> In addition=EF=BC=8Cwe can use "return -ENOMEM" instead of "goto err"
+> to simplify the code.
+>
+> Fixes: 718a38d092ec ("fotg210-udc: Handle PCLK")
+> Signed-off-by: Yi Yang <yiyang13@huawei.com>
+> Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-index 98f3dc460ca7..f2f95493ec89 100644
---- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-+++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-@@ -2239,7 +2239,7 @@ static int nicvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	err = register_netdev(netdev);
- 	if (err) {
- 		dev_err(dev, "Failed to register netdevice\n");
--		goto err_unregister_interrupts;
-+		goto err_destroy_workqueue;
- 	}
- 
- 	nic->msg_enable = debug;
-@@ -2248,6 +2248,8 @@ static int nicvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	return 0;
- 
-+err_destroy_workqueue:
-+	destroy_workqueue(nic->nicvf_rx_mode_wq);
- err_unregister_interrupts:
- 	nicvf_unregister_interrupts(nic);
- err_free_netdev:
--- 
-2.27.0
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+I have some cleanup patches switching around to devm* handling
+cooking for v6.3, but let's do this for now.
+
+Yours,
+Linus Walleij
