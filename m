@@ -2,262 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A186414A3
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 08:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0545D6414A6
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 08:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiLCHLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 02:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
+        id S231388AbiLCHO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 02:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLCHLS (ORCPT
+        with ESMTP id S230232AbiLCHOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 02:11:18 -0500
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2083.outbound.protection.outlook.com [40.92.102.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4F77F892;
-        Fri,  2 Dec 2022 23:11:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j+GexYbov08ie+pOTm9ptIXGAHJwQnzOTmqcGUnn0m3mkW/1QV4o7r16H37cOiJ4LdQXwXk1vY+GPOH/ueYSoQEP6LCPmSWXmKR727VpxdWl+R8aaUS1gX5VGzXtU4lWLaxXRo2mG/4DQTa/VwXlQ9/d7WgWQ3PT8AKd3VZLldtMKDORQYqv9O0omDIytneRSEDwM3sdhvu1fFTlOxk1M81bsPX1V7/ZxGTX6qUQNVdK51TrFtLZQQ2oo4hhyq0PqTDAwoOX3LDBu+EwAOcRRxoGE8hS49Ap1u8zMU81uxQV3YHK3p11gx6edd/V9Qv+1U/TsK12N6pUVibZ6JSDww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+U5fkHI4TQuAxE2JZf+ItwbgrXEkHo+MR32tMV+2Y20=;
- b=jF6oicP7rw8PKdTvyM2A1PJZpGq8bhmmtTAvS1m9RXEFXwN/ey3A8G59PwM00KVIeLdOUfk1Agatv+NWK2SkYBeits5ZAW9QOsa3KGBJ2/jPoKSanAKrvXO6DHp0SZmeCfL4OISkyE/PkAFaUimM5xu+StBZizQqDbQxTtNvJy7q4OjxPr7XxF/Gr64uvWs7IpLGgwolCXI9zmdpWLDBxd67OnMx5kgX/HcqRveRe9s1IP4RV7wnq64mpPcqjbibJqRuS0ypNkhDlayjJ5M3u6cr6H0wfC8EJmxI4yFICUBoJ1uDFfT5C7euuvyS0QHJYWYlkyQzVcI/V06qg9PrZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+U5fkHI4TQuAxE2JZf+ItwbgrXEkHo+MR32tMV+2Y20=;
- b=SGd3vikKPp7o6XJPD2WGa5ly99Q2aKddZyd7QYJDj2S9P1pvdG79bLVKb/Wd0B/gHvYc3WoQ4bjENpO7Z5ZKEqQ+CG2jqgDV9Fzxqj63osv5kqOlGlF9BnncQvBR2HvQKIN4GZMtXEqgYr6znvscXLxh7gDEky3tYK9ojBfIolWHCYttkbrl9qR5n47qOaq8fcrHhS3ln17NxqEXVepXJiWVqNf1kvGvsPSyuNwsh7dv7dCZwae9O2v1YhrAofEw5R46f/lSXd0ga1FaNtMLjh1MJeKwJJBUQxTnB/tIhgDYSEISE2OWsPvzJ7gLdnb237ylmiFpVkrZsbFSRlVvLA==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- MAZPR01MB5639.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:62::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.11; Sat, 3 Dec 2022 07:11:08 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::68ba:5320:b72:4b1]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::68ba:5320:b72:4b1%4]) with mapi id 15.20.5880.011; Sat, 3 Dec 2022
- 07:11:08 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "willy@infradead.org" <willy@infradead.org>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "slava@dubeyko.com" <slava@dubeyko.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] hfsplus: Add module parameter to enable force writes
-Thread-Topic: [PATCH v2] hfsplus: Add module parameter to enable force writes
-Thread-Index: AQHZBuZqqiAp/Y+oEE6UMaTrbebMmQ==
-Date:   Sat, 3 Dec 2022 07:11:07 +0000
-Message-ID: <79C58B25-8ECF-432B-AE90-2194921DB797@live.com>
-References: <53821C76-DAFE-4505-9EC8-BE4ACBEA9DD9@live.com>
-In-Reply-To: <53821C76-DAFE-4505-9EC8-BE4ACBEA9DD9@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [PUYnsE624PIMRn3+XQbHAKLNEfZcWrwD]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MAZPR01MB5639:EE_
-x-ms-office365-filtering-correlation-id: 54a63288-d88b-4479-ad3c-08dad4fd8cbe
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sIoX3RkA8mHjJfKV/xLAFv8ZyywbI+HDqj0xj00788XTCQxSB9+/0sRSvtwNZj0dqbmjv/Zo3JglQHd4efGnRYS8pOT/VbpQEQVbHjFAKupglfrNAei1zwbif3mX2OQsWIsOhtfAS7CF1CjT3nZ/mfZYAqbX3whmRI2byX+hlD+pydVyLC2gAI+rfCDxmqJsB/cH/f8Wmvanhvq9B5oqXTklNxQOQoWmft9A4gKiweyZp/DVHI/foWwcfHxfHKLRvDGtsby85ppB4bySvd98xZKWBNxZpUQetErXH4/9vzL3a10yFE6SENOnx9cPhiqM7xd37UNgG3qO5/PoJA1ffjEwY8IQz6XNUInXbHsTFpJ1AkIMI5qAosqceYUvrBQDuIEFElcnXlf/z13JRspLpSNaIOjUJFLRdRtBM4ZLRtZPp0jb2aMLf8amnUJtU8/hLqQWBcRvSMl4FR/treW2vRV5F3gfeXeOlf/+FqQwM5G15/NLyqy0SDb+5h7qtzVxH0uck5ZUZMVx0iv9Fqv7KGDC2eBNPyS3Fjjqd+P/KEjw9owDuXWsLIU9vGtJvjf2LHMspv/GgOZuq7hIVkN53+r9YJjzXQSluNb/lozbg1I=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?k2e0XGXipVuYXi/RBTRUttKccvjNcHrP7bkw7HhiBZH3LkzPoht04gDSSq0q?=
- =?us-ascii?Q?UQPShl+tcv5pyrdBTuPHbVy95gpvHfjJwap0p6PRWE0nMxKMbt6D8s6Vb9sp?=
- =?us-ascii?Q?0mUl3vbSi7pmxdKT6TvqFA8myLLMk51FgLYaPUt34NiNZTfpReqLiIZuz/Ma?=
- =?us-ascii?Q?kb8JCNWlbPGv7FAwVo7TXtR/XK/CYlbleIXtSrmmY7dR7uaEdaDZyIJXhQfo?=
- =?us-ascii?Q?kDB5wKuHFC3qFTFQ85tjIEbVraJRsZoXaPSpdPHlgp1OOwS0ABkH90sSAObb?=
- =?us-ascii?Q?9VfAxvegmbZvSq5yS0i4jGx7Oz4lzY0OaBzMA04Y4qoHPDeYn4+5bMWOyMPz?=
- =?us-ascii?Q?xETkPFQPEO+424dyLn0KLdermdEYytTGKm7eM6krvCYNOIZJqO+L3No4ryNg?=
- =?us-ascii?Q?66mi/OweP9jOdlIQXmJhyRBk+YKcOsnoJMFNISe9CgHfif7AUNyQTeQOGEge?=
- =?us-ascii?Q?d3Pkoi9PHXmvupGAlJPx1R+6YUvFmqibbt32y2uQkAYUy5R99ptQF9ceNrne?=
- =?us-ascii?Q?dT3zT/Fjfd7eA/iIqFuxIiijyqwGvGcU//1bLQa4u64j9K55W/6lhmfTicF4?=
- =?us-ascii?Q?ptLdmrc0/kfnivY62iH67mJctGnsDn3pG/x6+WIvPQB4E7rNh1e8AEuIrya1?=
- =?us-ascii?Q?WTrtXDBMAk6CY2GNvMIS8q7bxeRo9QX9+JVksdlA2+r2q8ALWErpSooe6D8T?=
- =?us-ascii?Q?Ygh0hJLISbzZQP9rsWNW5R5IEb2hC0FYXrnJ/XT+C/yiCaPFFp5Wf5wYdbxd?=
- =?us-ascii?Q?MN+tqcev7+G3IYbuhY5O3pD7LBlU056MyhOEoHHHZUfiN7QHiNZHF/zQ1/Ii?=
- =?us-ascii?Q?GZ+u629XbF+8CpEaRKvb+37rSSPHTNmHkNnjMNhlWgGEmGSm1LzMmm0cki+Q?=
- =?us-ascii?Q?ACr+g6ew9BQmJ8IgZXMcu5OHMP2Nga0IhHGUHddldhs4fzLXPmJavIDi8K9E?=
- =?us-ascii?Q?Lq+xSzSjPOZzAsANvhpkLwBZfY3ixgh7cdZksYt47DM4YnTULOxBvFABovpf?=
- =?us-ascii?Q?f2wNRLTOeNZH8JpiqseGxU8PYqLl84pXWcqFAlD8mosHxiiHgWdIyq+GKAZ4?=
- =?us-ascii?Q?vnQYx7TNHAl0FUhmmfgeHbpKWeZrXxCW3e7UigDqsXZv2GwapjELRI5D0oEO?=
- =?us-ascii?Q?Qt4809aB/SEU7cpUHbTmYp19FqYDOGzKPZqRMZNjDkjPEfCGKjnRSICoSrAr?=
- =?us-ascii?Q?Iy6DJ4+5gfS9m8VKMtVhqB7Q5hqsAMrOrgRX8v0Mbq7JqCOQQmPyGd7MJYoW?=
- =?us-ascii?Q?Qumv03hCLn1EPmo5+S7z5Vkim6EqRlROGMzOBcKuWw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <20448BA4EDBDB84491D409D3550DCC7D@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Sat, 3 Dec 2022 02:14:25 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FF61741B;
+        Fri,  2 Dec 2022 23:14:23 -0800 (PST)
+Received: from dggpemm500015.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NPLdF6b48z15N2q;
+        Sat,  3 Dec 2022 15:13:37 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
+ (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 3 Dec
+ 2022 15:14:21 +0800
+From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
+CC:     <liwei391@huawei.com>, <sameo@linux.intel.com>, <kuba@kernel.org>,
+        <davem@davemloft.net>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bobo.shaobowang@huawei.com>,
+        <pabeni@redhat.com>
+Subject: [PATCH v2] nfc: llcp: Fix race in handling llcp_devices
+Date:   Sat, 3 Dec 2022 15:12:18 +0800
+Message-ID: <20221203071218.3817593-1-bobo.shaobowang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54a63288-d88b-4479-ad3c-08dad4fd8cbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2022 07:11:07.8998
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB5639
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500015.china.huawei.com (7.185.36.181)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+There are multiple path operate llcp_devices list without protection:
 
-This patch enables users to permanently enable writes of HFS+ locked
-and/or journaled volumes using a module parameter.
+         CPU0                        CPU1
 
-Why module parameter?
-Reason being, its not convenient to manually mount the volume with force
-everytime. There are use cases which are fine with force enabling writes
-on journaled volumes. I've seen many on various online forums and I am one
-of them as well.
+nfc_unregister_device()        nfc_register_device()
+ nfc_llcp_unregister_device()    nfc_llcp_register_device() //no lock
+    ...                            list_add(local->list, llcp_devices)
+    local_release()
+      list_del(local->list)
 
-Isn't it risky?
-Yes obviously it is, as the driver itself warns users for the same. But
-any user using the parameter obviously shall be well aware of the risks
-involved. To be honest, I've been writing on a 100Gb journaled volume for
-a few days, including both large and small files, and haven't faced any
-corruption yet.
+        CPU2
+...
+ nfc_llcp_find_local()
+   list_for_each_entry(,&llcp_devices,)
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
+So reach race condition if two of the three occur simultaneously, like
+following crash report, although there is no reproduction script in
+syzbot currently, our artificially constructed use cases can also
+reproduce it.
+
+list_del corruption. prev->next should be ffff888060ce7000, but was ffff88802a0ad000. (prev=ffffffff8e536240)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:59!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 16622 Comm: syz-executor.5 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__list_del_entry_valid.cold+0x12/0x72 lib/list_debug.c:59
+Code: f0 ff 0f 0b 48 89 f1 48 c7 c7 60 96 a6 8a 4c 89 e6 e8 4b 29 f0 ff 0f 0b 4c 89 e1 48 89 ee 48 c7 c7 c0 98 a6 8a e8 37 29 f0 ff <0f> 0b 48 89 ee 48 c7 c7 a0 97 a6 8a e8 26 29 f0 ff 0f 0b 4c 89 e2
+RSP: 0018:ffffc900151afd58 EFLAGS: 00010282
+RAX: 000000000000006d RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801e7eba80 RSI: ffffffff8166001c RDI: fffff52002a35f9d
+RBP: ffff888060ce7000 R08: 000000000000006d R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8e536240
+R13: ffff88801f3f3000 R14: ffff888060ce1000 R15: ffff888079d855f0
+FS:  0000555556f57400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f095d5ad988 CR3: 000000002155a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ local_release net/nfc/llcp_core.c:171 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ nfc_llcp_local_put net/nfc/llcp_core.c:181 [inline]
+ nfc_llcp_local_put net/nfc/llcp_core.c:176 [inline]
+ nfc_llcp_unregister_device+0xb8/0x260 net/nfc/llcp_core.c:1619
+ nfc_unregister_device+0x196/0x330 net/nfc/core.c:1179
+ virtual_ncidev_close+0x52/0xb0 drivers/nfc/virtual_ncidev.c:163
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+This patch add llcp_devices_list_lock lock to make it safe to process
+llcp_devices list.
+
+Fixes: 30cc4587659e ("NFC: Move LLCP code to the NFC top level diirectory")
+Reported-by: syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com
+Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
 ---
-v2 :- Add Documentation and split long lines across multiple lines.
- Documentation/filesystems/hfsplus.rst | 15 +++++++-
- fs/hfsplus/super.c                    | 49 +++++++++++++++++++++------
- 2 files changed, 53 insertions(+), 11 deletions(-)
+v2:
+- replace mutex lock with spin lock
 
-diff --git a/Documentation/filesystems/hfsplus.rst b/Documentation/filesyst=
-ems/hfsplus.rst
-index f02f4f5fc..85feca0b0 100644
---- a/Documentation/filesystems/hfsplus.rst
-+++ b/Documentation/filesystems/hfsplus.rst
-@@ -46,13 +46,26 @@ When mounting an HFSPlus filesystem, the following opti=
-ons are accepted:
- 	Do not decompose file name characters.
-=20
-   force
--	Used to force write access to volumes that are marked as journalled
-+	Used to force write access to volumes that are marked as journaled
- 	or locked.  Use at your own risk.
-=20
-   nls=3Dcccc
- 	Encoding to use when presenting file names.
-=20
-=20
-+Module Parameters
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+The HFSPlus module supports the following module parameters:
-+
-+  force_journaled_rw=3Dn, force_locked_rw=3Dn
-+	Used to force enable writes on volumes marked as journaled/locked.
-+	Its risky to use them as they may cause data corruption.
-+	Accepted values:
-+		0 (default): Disables writes
-+		1: Enables writes
-+
-+
- References
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
-index 122ed89eb..91812c4c3 100644
---- a/fs/hfsplus/super.c
-+++ b/fs/hfsplus/super.c
-@@ -24,6 +24,16 @@ static void hfsplus_free_inode(struct inode *inode);
- #include "hfsplus_fs.h"
- #include "xattr.h"
-=20
-+static unsigned int force_journaled_rw;
-+module_param(force_journaled_rw, uint, 0644);
-+MODULE_PARM_DESC(force_journaled_rw, "Force enable writes on Journaled HFS=
-+ volumes. "
-+		"([0] =3D disabled, 1 =3D enabled)");
-+
-+static unsigned int force_locked_rw;
-+module_param(force_locked_rw, uint, 0644);
-+MODULE_PARM_DESC(force_locked_rw, "Force enable writes on locked HFS+ volu=
-mes. "
-+		"([0] =3D disabled, 1 =3D enabled)");
-+
- static int hfsplus_system_read_inode(struct inode *inode)
+ net/nfc/llcp_core.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/net/nfc/llcp_core.c b/net/nfc/llcp_core.c
+index 3364caabef8b..b2161f6b92ae 100644
+--- a/net/nfc/llcp_core.c
++++ b/net/nfc/llcp_core.c
+@@ -17,6 +17,7 @@
+ static u8 llcp_magic[3] = {0x46, 0x66, 0x6d};
+ 
+ static LIST_HEAD(llcp_devices);
++static DEFINE_SPINLOCK(llcp_devices_list_lock);
+ 
+ static void nfc_llcp_rx_skb(struct nfc_llcp_local *local, struct sk_buff *skb);
+ 
+@@ -168,7 +169,9 @@ static void local_release(struct kref *ref)
+ 
+ 	local = container_of(ref, struct nfc_llcp_local, ref);
+ 
++	spin_lock(&llcp_devices_list_lock);
+ 	list_del(&local->list);
++	spin_unlock(&llcp_devices_list_lock);
+ 	local_cleanup(local);
+ 	kfree(local);
+ }
+@@ -282,9 +285,13 @@ struct nfc_llcp_local *nfc_llcp_find_local(struct nfc_dev *dev)
  {
- 	struct hfsplus_vh *vhdr =3D HFSPLUS_SB(inode->i_sb)->s_vhdr;
-@@ -346,14 +356,22 @@ static int hfsplus_remount(struct super_block *sb, in=
-t *flags, char *data)
- 			/* nothing */
- 		} else if (vhdr->attributes &
- 				cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) {
--			pr_warn("filesystem is marked locked, leaving read-only.\n");
--			sb->s_flags |=3D SB_RDONLY;
--			*flags |=3D SB_RDONLY;
-+			if (force_locked_rw) {
-+				pr_warn("filesystem is marked locked, but writes have been force enabl=
-ed.\n");
-+			} else {
-+				pr_warn("filesystem is marked locked, leaving read-only.\n");
-+				sb->s_flags |=3D SB_RDONLY;
-+				*flags |=3D SB_RDONLY;
-+			}
- 		} else if (vhdr->attributes &
- 				cpu_to_be32(HFSPLUS_VOL_JOURNALED)) {
--			pr_warn("filesystem is marked journaled, leaving read-only.\n");
--			sb->s_flags |=3D SB_RDONLY;
--			*flags |=3D SB_RDONLY;
-+			if (force_journaled_rw) {
-+				pr_warn("filesystem is marked journaled, but writes have been force en=
-abled.\n");
-+			} else {
-+				pr_warn("filesystem is marked journaled, leaving read-only.\n");
-+				sb->s_flags |=3D SB_RDONLY;
-+				*flags |=3D SB_RDONLY;
-+			}
- 		}
- 	}
+ 	struct nfc_llcp_local *local;
+ 
++	spin_lock(&llcp_devices_list_lock);
+ 	list_for_each_entry(local, &llcp_devices, list)
+-		if (local->dev == dev)
++		if (local->dev == dev) {
++			spin_unlock(&llcp_devices_list_lock);
+ 			return local;
++		}
++	spin_unlock(&llcp_devices_list_lock);
+ 
+ 	pr_debug("No device found\n");
+ 
+@@ -1600,7 +1607,9 @@ int nfc_llcp_register_device(struct nfc_dev *ndev)
+ 	timer_setup(&local->sdreq_timer, nfc_llcp_sdreq_timer, 0);
+ 	INIT_WORK(&local->sdreq_timeout_work, nfc_llcp_sdreq_timeout_work);
+ 
++	spin_lock(&llcp_devices_list_lock);
+ 	list_add(&local->list, &llcp_devices);
++	spin_unlock(&llcp_devices_list_lock);
+ 
  	return 0;
-@@ -459,12 +477,23 @@ static int hfsplus_fill_super(struct super_block *sb,=
- void *data, int silent)
- 	} else if (test_and_clear_bit(HFSPLUS_SB_FORCE, &sbi->flags)) {
- 		/* nothing */
- 	} else if (vhdr->attributes & cpu_to_be32(HFSPLUS_VOL_SOFTLOCK)) {
--		pr_warn("Filesystem is marked locked, mounting read-only.\n");
--		sb->s_flags |=3D SB_RDONLY;
-+		if (force_locked_rw) {
-+			pr_warn("Filesystem is marked locked, but writes have been force enable=
-d.\n");
-+		} else {
-+			pr_warn("Filesystem is marked locked, mounting read-only.\n");
-+			sb->s_flags |=3D SB_RDONLY;
-+		}
- 	} else if ((vhdr->attributes & cpu_to_be32(HFSPLUS_VOL_JOURNALED)) &&
- 			!sb_rdonly(sb)) {
--		pr_warn("write access to a journaled filesystem is not supported, use th=
-e force option at your own risk, mounting read-only.\n");
--		sb->s_flags |=3D SB_RDONLY;
-+		if (force_journaled_rw) {
-+			pr_warn("write access to a journaled filesystem is "
-+				"not supported, but has been force enabled.\n");
-+		} else {
-+			pr_warn("write access to a journaled filesystem is "
-+				"not supported, use the force option at your "
-+				"own risk, mounting read-only.\n");
-+			sb->s_flags |=3D SB_RDONLY;
-+		}
- 	}
-=20
- 	err =3D -EINVAL;
---=20
-2.34.1
+ }
+-- 
+2.25.1
 
