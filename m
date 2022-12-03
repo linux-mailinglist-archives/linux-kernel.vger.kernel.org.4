@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189B76415C1
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B08FE6415C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiLCKZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 05:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
+        id S229636AbiLCK0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 05:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiLCKZc (ORCPT
+        with ESMTP id S229501AbiLCK0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 05:25:32 -0500
-Received: from out203-205-251-66.mail.qq.com (out203-205-251-66.mail.qq.com [203.205.251.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A789333
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 02:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1670063125;
-        bh=kjhHL5Y9sg0vFwa2Ffv/y68ja0+Pkp5Gy+WmvouEaXs=;
-        h=From:To:Cc:Subject:Date;
-        b=T8ZazCWM5O1DExBJtnHYBP40ZAOFIxIpwNfGAEhwOTx0/6R49DuSD4BCBylN2HbUX
-         bae+9hgOGpob+y34SLsaMR7RrwciY1jjGp6ztIr8bWD4YSsfp1a1/AYZkLwmTVPpwF
-         cAGsUbhu3I9Wq+x8NiwBUNyHbJhegTnhXzZrlSww=
-Received: from rtoax.. ([111.199.188.128])
-        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
-        id 657AD691; Sat, 03 Dec 2022 18:25:23 +0800
-X-QQ-mid: xmsmtpt1670063123t00503lin
-Message-ID: <tencent_922CA94B789587D79FD154445D035AA19E07@qq.com>
-X-QQ-XMAILINFO: Mm/8i8/T4yne99HUiRiR+7VHSIfb9B6KG4/kMJ956O6iWoBr0lzjkRVw5BOQt8
-         lly3r7XEeO2nB4Ah1Ins8CUyyHCTwADPbYKsg4dLFLtuMZu3xo4xxhhzOVhrfBVCzufA2A3y8uHx
-         a3m4q/8AEcX/OXxx78c/5PVJTvntV0HVXbZuoI6e6jpPBSPDBmiOUB80HppIbjOuAhVym8akXpSu
-         JIW1whbTl1iPHaYuZitQmX4FSlbC60YJjyyOcv3FG4s/NLC09999Y94F0fHefpzYHjQg2cQ+Szb8
-         S+B/DZST0RZIS0ULdUaNREQWP4/Dg20NmnFzBoKfium47pkiW+eHFBcW2WaDHsBD5C2KbxnziL7Z
-         LWHJ9Q3Yl0F170d2LFTygeVKFP+lVt3zLzkjrU5s2nQ5sAZUQvFsfU9ul5ltKDeC/GrmGBgSknUB
-         229kOrpL4xyUa3kez6D9zKQLrZ+sFo6PEy5SQB1gncFqZIjGTPXTqv/w1zgQLiAOlRe1MC0v318M
-         Uez2pRvXlHb2yFwhlutf04IMYlpfqS2BCF+oEOHsETQucMoIwsyngmssS7uTCWVh4wDquA921qYU
-         UvBrC26CUdkj5R1Iz4zaTXcBilO5bDkkQjWvvwDW2oXST6Ex6z/WVMfyCH5pu/n5qblq+Cw2H3Vn
-         lZgZHQa31ZPeGsZITP8ubynwZZB605vnqHAIBTBjkUUQUJBx1qIwqJXvrMO4+HmHpx4OoodiHKC9
-         WVDprKp2yYh5ZR2CB4NtWcod1h2P3Q8L0ucZQohjyHOKLzQcKzvkXkVozyF6nZlPawdUJCi5QKN2
-         LeNe13LI6hjQbkc78pb7rVvhp4NUUzEBhpMoi05Qvq6WIg0ixvrBhiEd0/tkZcCrgVhVNPV843lS
-         hqsvPUk823GSzlUc6PblRmgPpIV1e8ebMXXpywwEsNidbkCtawTrNsx0p7nv+itpi94Ajlhi4LMh
-         2NiY6HDwoM3fBMARifsEJayMDhlDWAvJfIIU13FOo=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     dvyukov@google.com
-Cc:     Rong Tao <rongtao@cestc.cn>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        kasan-dev@googlegroups.com (open list:KCOV),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] kcov: fix spelling typos in comments
-Date:   Sat,  3 Dec 2022 18:25:21 +0800
-X-OQ-MSGID: <20221203102522.25347-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.38.1
+        Sat, 3 Dec 2022 05:26:11 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADEA4F1BF
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 02:26:10 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id s8so11104712lfc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 02:26:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ra8ag5JwGsu2n/PMLBQp2/vWbrz0PvsAVwA6vwQLOS4=;
+        b=NHi8006d3FnCHxbww8DsOpg4rQuKLDlAStzF+l9dtdTiSdLuPraja8rIEVuFPpWjfh
+         cDFU/DcEHkrvqeNfceRat7Edxewe9+YkPFVr1McPTCjonnyEJSEmDJQpsdCVTaZSs1+A
+         33tS4lQpxn7Okzq4o1gqyoSGdWbwVRsX/Y+fx2BgDxdn4qkDb8ybqYNQBjOB5Fqt+geH
+         aE8w9iUhvbNZS/SYllxlvF60YK+QslhrOI+5AF66MrfhfMkUVsjXdAsAf5su9NBEI2ls
+         0aAjH6w47n4UtwQgpn39TMPQHlbVbHZOMiH8jL2FsuTlnrAo+lWcNGB+/h/ngnibOuso
+         Nh0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ra8ag5JwGsu2n/PMLBQp2/vWbrz0PvsAVwA6vwQLOS4=;
+        b=shD9eKO2x+ba4+jecdzOczUJXxe4Y93RLQEvd6e/ae2i1MUFc46sGxms8LpSdjnXfv
+         N8RdhIrFhZANRx8Zei1AQKBYV5xkhGp1SUyQ+5cQRUmG/khMxW2tNxQHCLixeNZxtqMV
+         o5Wj8qaC4oW2d1oOVnpt7/os8th24Pa5yKnBTGpJK3fBvwF/MHQhP1oz2pi5mdC0fYJW
+         7OEH8txvmd3NFtAVQM6waeAa//IJA2iaTgKOxiAsgVCORCNrYyWU2RjCG1jm4oxbQPeQ
+         JdIHLcjH9JFF9KH2NRC3RVceOGpDv/n5BY03IkvOpGLZuQ11BfH894wvTwLq0zastF9L
+         LiQA==
+X-Gm-Message-State: ANoB5plB7G0b923+leMCUHCZDpdnhhBCYwZKn4Uhn3PUkUYY8rCbROAz
+        jWkmu/IJFRP26AySncHf1riiAj8tqoiowLmcY1kj2t1jYh4=
+X-Google-Smtp-Source: AA0mqf7Yvj3iFaxRiegH/05vvWCCjPrgIJT2hiylFuT3M1TXQL/yLXyx+YOc9TAgNmXznmZVu7k5uksnORdU8KP0pNI=
+X-Received: by 2002:a05:6512:23a5:b0:4a4:7e77:664f with SMTP id
+ c37-20020a05651223a500b004a47e77664fmr19328765lfv.603.1670063168333; Sat, 03
+ Dec 2022 02:26:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <2d54b0bb-9252-a4be-7de5-a5b1bf7f2c37@gmail.com> <Y4sc1NXmKKnl8rSv@kroah.com>
+In-Reply-To: <Y4sc1NXmKKnl8rSv@kroah.com>
+Reply-To: cwchoi00@gmail.com
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Date:   Sat, 3 Dec 2022 19:25:31 +0900
+Message-ID: <CAGTfZH0Tk1uKCx=+K-oVRe0ns=qLYatMM-GHDESO9yNW0oGwaA@mail.gmail.com>
+Subject: Re: [GIT PULL] extcon next for 6.2
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Dear Greg,
 
-Fix the typo of 'suport' in kcov.h
+On Sat, Dec 3, 2022 at 6:54 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sat, Dec 03, 2022 at 03:17:00PM +0900, Chanwoo Choi wrote:
+> > Dear Greg,
+> >
+> > This is extcon-next pull request for v6.2. I add detailed description of
+> > this pull request on below. Please pull extcon with following updates.
+> >
+> > I'm sorry for late pull request. If possible, could you apply this pull request?
+> >
+> > Best Regards,
+> > Chanwoo Choi
+> >
+> > The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
+> >
+> >   Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git tags/extcon-next-for-6.2
+>
+> The key you have used to sign this has expired, I get this warning when
+> pulling:
+>
+> # gpg: Good signature from "Chanwoo Choi (Personal) <cwchoi00@gmail.com>" [expired]
+> # gpg:                 aka "Chanwoo Choi <cw00.choi@samsung.com>" [expired]
+> # gpg:                 aka "Chanwoo Choi <chanwoo@kernel.org>" [expired]
+> # gpg: Note: This key has expired!
+>
+> I'll take this now, but please update your key in the kernel.org gpg
+> keyring.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- include/linux/kcov.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm sorry to bother you.  I'll use the updated key on next time.
+Thanks.
 
-diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-index 55dc338f6bcd..ee04256f28af 100644
---- a/include/linux/kcov.h
-+++ b/include/linux/kcov.h
-@@ -56,7 +56,7 @@ static inline void kcov_remote_start_usb(u64 id)
- /*
-  * The softirq flavor of kcov_remote_*() functions is introduced as a temporary
-  * work around for kcov's lack of nested remote coverage sections support in
-- * task context. Adding suport for nested sections is tracked in:
-+ * task context. Adding support for nested sections is tracked in:
-  * https://bugzilla.kernel.org/show_bug.cgi?id=210337
-  */
- 
 -- 
-2.38.1
-
+Best Regards,
+Chanwoo Choi
