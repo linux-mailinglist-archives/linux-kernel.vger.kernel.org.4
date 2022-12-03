@@ -2,321 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9CC641496
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 07:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF6B641498
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 07:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiLCGsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 01:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S231793AbiLCGtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 01:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiLCGrn (ORCPT
+        with ESMTP id S231722AbiLCGtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 01:47:43 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAF95FA0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 22:47:37 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d3so6543493plr.10
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 22:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3+y5lNDUnw4uQBrajobLH9mJrPY1sMzOJOF/tF/7n3g=;
-        b=ATt6rq5dOTA8oWxpEJCQqPS1kcIRpCjbuC+ESsUaESQuQw5ldHrGr5re1LLhoQZsOm
-         wvZMeYAC4vCciqOguGuMlVN/kIRqM7ivwi7QQ3CQ+R06EuxxnfznKals6Mj4kQ0D6ohx
-         ijvgrIMP5Y1skdHnfanyVaE0fMLSfjLudifJtGSz/0Z94l8UngRaH9YVguYVclfDpWap
-         Vn+B3ASFTLAadqoMz53aPRFfqsmvPDlL4Gbv10ZajdnaEDigqZ4cM5BGevwdSMZE+IPP
-         ZSpCpTLp9+kSXZeetwWRon7zFPAMayKKZoDgGajwboWELYYRzedc2oqOc3qOtyPshcyz
-         hXqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3+y5lNDUnw4uQBrajobLH9mJrPY1sMzOJOF/tF/7n3g=;
-        b=N5E9rTKtPaK6GHxvliYWCtCMN5UX7QHiSyadqjIX1PETPaCUsn50SLLMPzvizi4pCV
-         FVAOyZDppXTDvOVUf4AtzrTk12jSRSaQr5Xdbo192D+AsgWIcr7bKkfD4Y6sOKH/aa5u
-         gcqIf5ZTKYiJFM+7NMNoXCPqMrzxipu0ukhk8rBTI8p/UnAAtgHTcbbPYa1enmGBypEl
-         AILPL9VGU/3yfQS2GDLN9GqH1x8p1lwBLpfphxv11yW8xt7gIbDQDtg7/TCt0nmXZKd5
-         uapfL/OX5OUvY2DeLjIDXKz2Oy7Rhv3w8/PUmf+Kody8BCIXStjL5BxVcHh6WoD2a1il
-         WPuw==
-X-Gm-Message-State: ANoB5plLwIQQWj/8hRH5zFkY9CNqV8Zkwzb/+r49cA8T555E4z2iIGeH
-        /q1KkCiC6jQ7CdivVud75Mu1Yg==
-X-Google-Smtp-Source: AA0mqf781B6PjmzZj9tFyg3PitYH5rgYx7rEfiA9nYItVnbShX8E1YMGaVw5XcMVFp/W8qePYyjN0A==
-X-Received: by 2002:a17:902:cacb:b0:189:c19a:2ccf with SMTP id y11-20020a170902cacb00b00189c19a2ccfmr4412743pld.91.1670050057037;
-        Fri, 02 Dec 2022 22:47:37 -0800 (PST)
-Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id t17-20020aa79471000000b00575c8242849sm6102091pfq.69.2022.12.02.22.47.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 22:47:36 -0800 (PST)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Subject: [PATCH v15 9/9] irqchip/apple-aic: Move over to core ipi-mux
-Date:   Sat,  3 Dec 2022 12:16:29 +0530
-Message-Id: <20221203064629.1601299-10-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221203064629.1601299-1-apatel@ventanamicro.com>
-References: <20221203064629.1601299-1-apatel@ventanamicro.com>
+        Sat, 3 Dec 2022 01:49:24 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7DEDF633;
+        Fri,  2 Dec 2022 22:48:36 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NPL0N3tGdzpW3f;
+        Sat,  3 Dec 2022 14:45:08 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 3 Dec 2022 14:48:34 +0800
+Subject: Re: [PATCH] mce: fix missing stack-dumping in mce_panic()
+To:     Tony Luck <tony.luck@intel.com>
+CC:     "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+References: <20221202163728.392509-1-linmiaohe@huawei.com>
+ <SJ1PR11MB60830CE8C3F79C9531C8567AFC179@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <5cf492bf-9807-a091-6ac2-a953fce276da@huawei.com>
+ <Y4rO9KYNSHDY5Y1d@agluck-desk3.sc.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <128427de-22b6-eb18-b95a-acb3007f48e6@huawei.com>
+Date:   Sat, 3 Dec 2022 14:48:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4rO9KYNSHDY5Y1d@agluck-desk3.sc.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+On 2022/12/3 12:22, Tony Luck wrote:
+> On Sat, Dec 03, 2022 at 10:19:32AM +0800, Miaohe Lin wrote:
+>> So I think it's better to have at least one stack dumps. Also what the commit
+>> 6e6f0a1f0fa6 ("panic: don't print redundant backtraces on oops") and commit
+>> 026ee1f66aaa ("panic: fix stack dump print on direct call to panic()") want
+>> to do is avoiding nested stack-dumping to have the original oops data being
+>> scrolled away on a 80x50 screen but to have *at least one backtraces*. So
+>> this patch acts more like a BUGFIX to ensure having at least one backtraces
+>> in mce_panic(). What's your thought, Luck?
+> 
+> I tried out your patch with the ras-tools test:
 
-Now that the complexity of the AIC IPI mux has been copied into
-the core code for the benefit of the riscv architecture,
-shrink the AIC driver by the same amount by using that infrastructure.
+ras-tool is really convenient. :)
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/irqchip/Kconfig         |   1 +
- drivers/irqchip/irq-apple-aic.c | 161 ++------------------------------
- 2 files changed, 9 insertions(+), 153 deletions(-)
+> 
+> # ./einj_mem_uc -f copyout
+> 
+> which currently causes a panic from the "recoverable" machine check.
+> 
+> Your patch worked fine:
+> 
+> [  112.457735] stack backtrace:
+> [  112.457736] CPU: 124 PID: 3401 Comm: einj_mem_uc Not tainted 6.1.0-rc7+ #41
+> [  112.457738] Hardware name: Intel Corporation PURLEY/PURLEY, BIOS PLYDCRB1.86B.0154.R04.1804231104 04/23/2018
+> [  112.457739] Call Trace:
+> [  112.457740]  <#MC>
+> [  112.457742]  dump_stack_lvl+0x5a/0x78
+> [  112.457746]  dump_stack+0x10/0x16
+> [  112.457748]  print_usage_bug.part.0+0x1ad/0x1c4
+> [  112.457755]  lock_acquire.cold+0x16/0x47
+> [  112.457759]  ? down_trylock+0x14/0x40
+> [  112.457762]  ? panic+0x180/0x2b9
+> [  112.457766]  _raw_spin_lock_irqsave+0x4e/0x70
+> [  112.457768]  ? down_trylock+0x14/0x40
+> [  112.457771]  down_trylock+0x14/0x40
+> [  112.457772]  ? panic+0x180/0x2b9
+> [  112.457775]  __down_trylock_console_sem+0x34/0xc0
+> [  112.457778]  console_unblank+0x1d/0x90
+> [  112.457781]  panic+0x180/0x2b9
+> [  112.457788]  mce_panic+0x118/0x1e0
+> [  112.457794]  do_machine_check+0x79a/0x890
+> [  112.457800]  ? copy_user_enhanced_fast_string+0xa/0x50
+> [  112.457810]  exc_machine_check+0x76/0xb0
+> [  112.457813]  asm_exc_machine_check+0x1a/0x40
+> [  112.457816] RIP: 0010:copy_user_enhanced_fast_string+0xa/0x50
+> [  112.457819] Code: d1 f3 a4 31 c0 0f 01 ca c3 cc cc cc cc 8d 0c ca 89 ca eb 2c 66 66 2e 0f 1f 84 00 00 00 00 00 90 0f 01 cb 83 fa 40 72 48 89 d1 <f3> a4 31 c0 0f 01 ca c3 cc cc cc cc 89 ca eb 06 66 0f 1f 44 00 00
+> [  112.457820] RSP: 0018:ffffb140f789bbd8 EFLAGS: 00050206
+> [  112.457822] RAX: 0000000000001000 RBX: ffffb140f789be58 RCX: 0000000000000c00
+> [  112.457824] RDX: 0000000000001000 RSI: ffff9133eb3f0400 RDI: 000055c1a36986c0
+> [  112.457825] RBP: ffffb140f789bc68 R08: 00000000f789be01 R09: 0000000000001000
+> [  112.457827] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000001000
+> [  112.457828] R13: ffff9133eb3f0000 R14: 0000000000001000 R15: 0000000000000000
+> [  112.457837]  </#MC>
+> [  112.457838]  <TASK>
+> [  112.457838]  ? _copy_to_iter+0xc3/0x6f0
+> [  112.457843]  ? filemap_get_pages+0x9b/0x670
+> [  112.457851]  copy_page_to_iter+0x7c/0x1f0
+> [  112.457854]  ? find_held_lock+0x31/0x90
+> [  112.457858]  filemap_read+0x1ec/0x390
+> [  112.457865]  ? __fsnotify_parent+0x10f/0x310
+> [  112.457867]  ? aa_file_perm+0x1ab/0x610
+> [  112.457875]  generic_file_read_iter+0xf4/0x170
+> [  112.457879]  ext4_file_read_iter+0x5b/0x1e0
+> [  112.457881]  ? security_file_permission+0x4e/0x60
+> [  112.457886]  vfs_read+0x208/0x2e0
+> [  112.457895]  ksys_read+0x6d/0xf0
+> [  112.457900]  __x64_sys_read+0x19/0x20
+> [  112.457902]  do_syscall_64+0x38/0x90
+> [  112.457906]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> 
+> Tested-by: Tony Luck <tony.luck@intel.com>
+> 
+> -Tony
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 131379aa8424..0fd452b49ed9 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -675,6 +675,7 @@ config APPLE_AIC
- 	bool "Apple Interrupt Controller (AIC)"
- 	depends on ARM64
- 	depends on ARCH_APPLE || COMPILE_TEST
-+	select GENERIC_IRQ_IPI_MUX
- 	help
- 	  Support for the Apple Interrupt Controller found on Apple Silicon SoCs,
- 	  such as the M1.
-diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index 1c2813ad8bbe..1fa81fcff788 100644
---- a/drivers/irqchip/irq-apple-aic.c
-+++ b/drivers/irqchip/irq-apple-aic.c
-@@ -292,7 +292,6 @@ struct aic_irq_chip {
- 	void __iomem *base;
- 	void __iomem *event;
- 	struct irq_domain *hw_domain;
--	struct irq_domain *ipi_domain;
- 	struct {
- 		cpumask_t aff;
- 	} *fiq_aff[AIC_NR_FIQ];
-@@ -307,9 +306,6 @@ struct aic_irq_chip {
- 
- static DEFINE_PER_CPU(uint32_t, aic_fiq_unmasked);
- 
--static DEFINE_PER_CPU(atomic_t, aic_vipi_flag);
--static DEFINE_PER_CPU(atomic_t, aic_vipi_enable);
--
- static struct aic_irq_chip *aic_irqc;
- 
- static void aic_handle_ipi(struct pt_regs *regs);
-@@ -751,98 +747,8 @@ static void aic_ipi_send_fast(int cpu)
- 	isb();
- }
- 
--static void aic_ipi_mask(struct irq_data *d)
--{
--	u32 irq_bit = BIT(irqd_to_hwirq(d));
--
--	/* No specific ordering requirements needed here. */
--	atomic_andnot(irq_bit, this_cpu_ptr(&aic_vipi_enable));
--}
--
--static void aic_ipi_unmask(struct irq_data *d)
--{
--	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
--	u32 irq_bit = BIT(irqd_to_hwirq(d));
--
--	atomic_or(irq_bit, this_cpu_ptr(&aic_vipi_enable));
--
--	/*
--	 * The atomic_or() above must complete before the atomic_read()
--	 * below to avoid racing aic_ipi_send_mask().
--	 */
--	smp_mb__after_atomic();
--
--	/*
--	 * If a pending vIPI was unmasked, raise a HW IPI to ourselves.
--	 * No barriers needed here since this is a self-IPI.
--	 */
--	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit) {
--		if (static_branch_likely(&use_fast_ipi))
--			aic_ipi_send_fast(smp_processor_id());
--		else
--			aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
--	}
--}
--
--static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
--{
--	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
--	u32 irq_bit = BIT(irqd_to_hwirq(d));
--	u32 send = 0;
--	int cpu;
--	unsigned long pending;
--
--	for_each_cpu(cpu, mask) {
--		/*
--		 * This sequence is the mirror of the one in aic_ipi_unmask();
--		 * see the comment there. Additionally, release semantics
--		 * ensure that the vIPI flag set is ordered after any shared
--		 * memory accesses that precede it. This therefore also pairs
--		 * with the atomic_fetch_andnot in aic_handle_ipi().
--		 */
--		pending = atomic_fetch_or_release(irq_bit, per_cpu_ptr(&aic_vipi_flag, cpu));
--
--		/*
--		 * The atomic_fetch_or_release() above must complete before the
--		 * atomic_read() below to avoid racing aic_ipi_unmask().
--		 */
--		smp_mb__after_atomic();
--
--		if (!(pending & irq_bit) &&
--		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
--			if (static_branch_likely(&use_fast_ipi))
--				aic_ipi_send_fast(cpu);
--			else
--				send |= AIC_IPI_SEND_CPU(cpu);
--		}
--	}
--
--	/*
--	 * The flag writes must complete before the physical IPI is issued
--	 * to another CPU. This is implied by the control dependency on
--	 * the result of atomic_read_acquire() above, which is itself
--	 * already ordered after the vIPI flag write.
--	 */
--	if (send)
--		aic_ic_write(ic, AIC_IPI_SEND, send);
--}
--
--static struct irq_chip ipi_chip = {
--	.name = "AIC-IPI",
--	.irq_mask = aic_ipi_mask,
--	.irq_unmask = aic_ipi_unmask,
--	.ipi_send_mask = aic_ipi_send_mask,
--};
--
--/*
-- * IPI IRQ domain
-- */
--
- static void aic_handle_ipi(struct pt_regs *regs)
- {
--	int i;
--	unsigned long enabled, firing;
--
- 	/*
- 	 * Ack the IPI. We need to order this after the AIC event read, but
- 	 * that is enforced by normal MMIO ordering guarantees.
-@@ -857,27 +763,7 @@ static void aic_handle_ipi(struct pt_regs *regs)
- 		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_OTHER);
- 	}
- 
--	/*
--	 * The mask read does not need to be ordered. Only we can change
--	 * our own mask anyway, so no races are possible here, as long as
--	 * we are properly in the interrupt handler (which is covered by
--	 * the barrier that is part of the top-level AIC handler's readl()).
--	 */
--	enabled = atomic_read(this_cpu_ptr(&aic_vipi_enable));
--
--	/*
--	 * Clear the IPIs we are about to handle. This pairs with the
--	 * atomic_fetch_or_release() in aic_ipi_send_mask(), and needs to be
--	 * ordered after the aic_ic_write() above (to avoid dropping vIPIs) and
--	 * before IPI handling code (to avoid races handling vIPIs before they
--	 * are signaled). The former is taken care of by the release semantics
--	 * of the write portion, while the latter is taken care of by the
--	 * acquire semantics of the read portion.
--	 */
--	firing = atomic_fetch_andnot(enabled, this_cpu_ptr(&aic_vipi_flag)) & enabled;
--
--	for_each_set_bit(i, &firing, AIC_NR_SWIPI)
--		generic_handle_domain_irq(aic_irqc->ipi_domain, i);
-+	ipi_mux_process();
- 
- 	/*
- 	 * No ordering needed here; at worst this just changes the timing of
-@@ -887,55 +773,24 @@ static void aic_handle_ipi(struct pt_regs *regs)
- 		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
- }
- 
--static int aic_ipi_alloc(struct irq_domain *d, unsigned int virq,
--			 unsigned int nr_irqs, void *args)
-+static void aic_ipi_send_single(unsigned int cpu)
- {
--	int i;
--
--	for (i = 0; i < nr_irqs; i++) {
--		irq_set_percpu_devid(virq + i);
--		irq_domain_set_info(d, virq + i, i, &ipi_chip, d->host_data,
--				    handle_percpu_devid_irq, NULL, NULL);
--	}
--
--	return 0;
--}
--
--static void aic_ipi_free(struct irq_domain *d, unsigned int virq, unsigned int nr_irqs)
--{
--	/* Not freeing IPIs */
-+	if (static_branch_likely(&use_fast_ipi))
-+		aic_ipi_send_fast(cpu);
-+	else
-+		aic_ic_write(aic_irqc, AIC_IPI_SEND, AIC_IPI_SEND_CPU(cpu));
- }
- 
--static const struct irq_domain_ops aic_ipi_domain_ops = {
--	.alloc = aic_ipi_alloc,
--	.free = aic_ipi_free,
--};
--
- static int __init aic_init_smp(struct aic_irq_chip *irqc, struct device_node *node)
- {
--	struct irq_domain *ipi_domain;
- 	int base_ipi;
- 
--	ipi_domain = irq_domain_create_linear(irqc->hw_domain->fwnode, AIC_NR_SWIPI,
--					      &aic_ipi_domain_ops, irqc);
--	if (WARN_ON(!ipi_domain))
--		return -ENODEV;
--
--	ipi_domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
--	irq_domain_update_bus_token(ipi_domain, DOMAIN_BUS_IPI);
--
--	base_ipi = __irq_domain_alloc_irqs(ipi_domain, -1, AIC_NR_SWIPI,
--					   NUMA_NO_NODE, NULL, false, NULL);
--
--	if (WARN_ON(!base_ipi)) {
--		irq_domain_remove(ipi_domain);
-+	base_ipi = ipi_mux_create(AIC_NR_SWIPI, aic_ipi_send_single);
-+	if (WARN_ON(base_ipi <= 0))
- 		return -ENODEV;
--	}
- 
- 	set_smp_ipi_range(base_ipi, AIC_NR_SWIPI);
- 
--	irqc->ipi_domain = ipi_domain;
--
- 	return 0;
- }
- 
--- 
-2.34.1
+Many thanks for your test, Tony!
+
+Thanks,
+Miaohe Lin
 
