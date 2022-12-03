@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2603A6411F2
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 819926411F8
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234369AbiLCAX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 19:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S233561AbiLCAYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 19:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbiLCAXX (ORCPT
+        with ESMTP id S234242AbiLCAYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 19:23:23 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7E891352
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:23:22 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id w2-20020a17090a8a0200b002119ea856edso11191422pjn.5
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 16:23:22 -0800 (PST)
+        Fri, 2 Dec 2022 19:24:10 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E239DD80E9;
+        Fri,  2 Dec 2022 16:24:09 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id o13so15111106ejm.1;
+        Fri, 02 Dec 2022 16:24:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ckYytnVepoWbimE5xbgdrdPOmCNvH6nlU8CJOTSK59I=;
-        b=AP2QhyJjEnq1NfXdCq5GJzqo/eyTwtvHuv53zolMCj3Hhx0DpJARPIek3x1v2zrpl+
-         tKrE/iQh0D51pFvtUw3y9iiZqqzOH9eECRf0tljCZHxmvY3oOi97LxNgc6fmW/ly7i7z
-         NEOlL1JPir1fl9Pr9TVSl8pbIcJrfrE8Z3SpuL9SUBC6u83i2dvinSMQTndUCOq60ZoD
-         HCBDIeYKFMzCs5nT8xGMbHiSgm0j+f70d+tQdelf8btJqPXOMnnNOP/szMI5DrMuZqTq
-         BfPZhT+xMLYjuhTMfAiijZ+vooyKLFXtPlmAZapo2GcOZUYgFhdQQDcCYazRLwgZcD4A
-         DvYw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2loMqsiSWHn8Spuu+M+LHawRFTbsBo2tswnPTtpYUgE=;
+        b=oEOyOdmw9oXfAXVgrnKHoZpyVBKl25HYQWqdZuGfQDFG7N0K8/urjETgEQQ8/B7kAQ
+         WwJ+6Y7kS9fyqQLSNl+d4gMnoiuLAdvYPib8d2LjV6Xl2oBEvGFy6SJC8xb4dOL4lusb
+         YQoA1tvWXqOOOnx9DMvoZo1MZRwupg/1B1l55TpQgwWEa+9eOMOgORJr3kHgGAgZzbUj
+         DI/QC+rpDzE/MZdTnsG2KSLHgn4CxuT3LMK17YMZiAaLw5++zQLWKDxDwROT0DaQoGMY
+         D0g3ItYXXtLKg36vbgcF8wIXr/QVDsXDSDOCNLWC95JSyJc193kG/zXPEcLH2eG2WXk1
+         8ySQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ckYytnVepoWbimE5xbgdrdPOmCNvH6nlU8CJOTSK59I=;
-        b=LEGNXmXyRWuXUTTEfPro8YhmGdD85f83W1bg85T4wv13OCijbTyTRCQje/twvJvBk7
-         qpHUtjOWlsXWf5IsBTg+4DwRC+y+HnVCSICTE9G/VSiMBS/bk/DtSFtYUHWoAVsJ2mOL
-         YNmIVScoWQ+msbn0V+HK4KE/yzS7+PkM28gSUrTy+tEeyz6rjB9e1xnTgqQe2KMK983y
-         4K/zs0qnLSWpBvtDPEw5RCSDICt7u0nQgb2vIaHxVarAZ5JMEWHrFWyQuXIylJyMJws5
-         RCWOmP9I+INF6m72H1YyakC7YCt+/0PKXyfpq7dfHnSWSa8gWLXV3BukKDcwKKDJFIkb
-         XtBQ==
-X-Gm-Message-State: ANoB5pkYfNQsy8/PGrZuDptPmu3qZkMi+6cT8hioUXGlWkgDHVGjyyyU
-        OUKz8kqLV6VKmIkwVb24WFC+zFYP/aYSOw==
-X-Google-Smtp-Source: AA0mqf5FLpxaeAUlECyuixx/9UtFbHUy3NZB8q/YFzDXHiW9Q/SRa3bZUzJNss5DBiNM89zzDNtRsKiqTDumYQ==
-X-Received: from skhawaja-linux-us.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f34])
- (user=skhawaja job=sendgmr) by 2002:a17:902:e849:b0:186:dd96:ce45 with SMTP
- id t9-20020a170902e84900b00186dd96ce45mr54603645plg.73.1670027002387; Fri, 02
- Dec 2022 16:23:22 -0800 (PST)
-Date:   Sat,  3 Dec 2022 00:23:05 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221203002305.1203792-1-skhawaja@google.com>
-Subject: [PATCH] io_uring: don't hold uring_lock when calling io_run_task_work*
-From:   Samiullah Khawaja <skhawaja@google.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, io-uring@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Hao Xu <haoxu@linux.alibaba.com>,
-        Abaci <abaci@linux.alibaba.com>,
-        Samiullah Khawaja <skhawaja@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2loMqsiSWHn8Spuu+M+LHawRFTbsBo2tswnPTtpYUgE=;
+        b=GHQHPM6b/2BJCA/MW+vaL2maKeCIiKOptEbN06Pgg99GamIQf2IlO7kaLsJHeRJaUQ
+         UD6uErtBOGoieTDefus2ASKeAW8LMdCcH3CVu+PpMLT0ua73uZIlc2maLB1gGbfqBqXR
+         h1wT97oFjktigAxBg4tQGG/mMa4v3bG9g4AZI24eFpfMp6e+bNcPzjBfPZP2KBSnssAE
+         W31po5qcjaTVEVVB9bUgG5ex5JPfhUkuDNHq6CILCALC6yNcPbD3Sq6V791//a8sPJca
+         ylo4GlARxfIf/QZzVQHsnvq6AMDmTsqYmXue+YkY3xm9oEArN2usunl+i/uFzL58IGam
+         n0nA==
+X-Gm-Message-State: ANoB5pkaIwxPT0RMK6NR+EJ5KC247p4u8qo6hnUQq8E96zeAdGB4kw/X
+        11kY16xhOCmKShscHD2W1QeneElQ9JTa5jxaQ0yg8noq
+X-Google-Smtp-Source: AA0mqf7MkmI6dUUsU+TjHt/xRpAIK7q5M76t3VO2Jxz169ZnhRM1BefPvXBatpjSkL0fm2OIScX9tO8uN5mxAVM1wqY=
+X-Received: by 2002:a17:907:80cd:b0:7bb:35b4:777d with SMTP id
+ io13-20020a17090780cd00b007bb35b4777dmr4471082ejc.302.1670027048471; Fri, 02
+ Dec 2022 16:24:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20221201190939.3230513-1-james.hilliard1@gmail.com>
+In-Reply-To: <20221201190939.3230513-1-james.hilliard1@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 2 Dec 2022 16:23:56 -0800
+Message-ID: <CAEf4BzYrT1VGj43A3Xg60cSMSX658iL2+yp8a5Xk=8Ez3sj_Ew@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: add GCC compatible builtins to bpf_legacy.h
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org,
+        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+        David Faust <david.faust@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,231 +82,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Xu <haoxu@linux.alibaba.com>
+On Thu, Dec 1, 2022 at 11:10 AM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> The bpf_legacy.h header uses llvm specific load functions, add
+> GCC compatible variants as well to fix tests using these functions
+> under GCC.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
+> Cc: David Faust <david.faust@oracle.com>
+> ---
 
-commit 8bad28d8a305b0e5ae444c8c3051e8744f5a4296 upstream.
+Please use [PATCH bpf-next] prefix to target patches for bpf-next
+tree. This helps some of our automation.
 
-[Backported on top of stable 5.10 since the issue was introduced into it
-with commit referred in Fixes tag below. The backport is done without
-`file` to `rsrc` refactoring since it is not in 5.10].
+>  tools/testing/selftests/bpf/bpf_legacy.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_legacy.h b/tools/testing/selftests/bpf/bpf_legacy.h
+> index 845209581440..256c2a90aa20 100644
+> --- a/tools/testing/selftests/bpf/bpf_legacy.h
+> +++ b/tools/testing/selftests/bpf/bpf_legacy.h
+> @@ -2,6 +2,15 @@
+>  #ifndef __BPF_LEGACY__
+>  #define __BPF_LEGACY__
+>
+> +#if __GNUC__ && !__clang__
+> +/* Functions to emit BPF_LD_ABS and BPF_LD_IND instructions.  We
+> + * provide the "standard" names as synonyms of the corresponding GCC
+> + * builtins.  Note how the SKB argument is ignored.
+> + */
+> +#define load_byte(skb,off) __builtin_bpf_load_byte((off))
+> +#define load_half(skb,off) __builtin_bpf_load_half((off))
+> +#define load_word(skb,off) __builtin_bpf_load_word((off))
 
-Abaci reported the below issue:
-[  141.400455] hrtimer: interrupt took 205853 ns
-[  189.869316] process 'usr/local/ilogtail/ilogtail_0.16.26' started with executable stack
-[  250.188042]
-[  250.188327] ============================================
-[  250.189015] WARNING: possible recursive locking detected
-[  250.189732] 5.11.0-rc4 #1 Not tainted
-[  250.190267] --------------------------------------------
-[  250.190917] a.out/7363 is trying to acquire lock:
-[  250.191506] ffff888114dbcbe8 (&ctx->uring_lock){+.+.}-{3:3}, at: __io_req_task_submit+0x29/0xa0
-[  250.192599]
-[  250.192599] but task is already holding lock:
-[  250.193309] ffff888114dbfbe8 (&ctx->uring_lock){+.+.}-{3:3}, at: __x64_sys_io_uring_register+0xad/0x210
-[  250.194426]
-[  250.194426] other info that might help us debug this:
-[  250.195238]  Possible unsafe locking scenario:
-[  250.195238]
-[  250.196019]        CPU0
-[  250.196411]        ----
-[  250.196803]   lock(&ctx->uring_lock);
-[  250.197420]   lock(&ctx->uring_lock);
-[  250.197966]
-[  250.197966]  *** DEADLOCK ***
-[  250.197966]
-[  250.198837]  May be due to missing lock nesting notation
-[  250.198837]
-[  250.199780] 1 lock held by a.out/7363:
-[  250.200373]  #0: ffff888114dbfbe8 (&ctx->uring_lock){+.+.}-{3:3}, at: __x64_sys_io_uring_register+0xad/0x210
-[  250.201645]
-[  250.201645] stack backtrace:
-[  250.202298] CPU: 0 PID: 7363 Comm: a.out Not tainted 5.11.0-rc4 #1
-[  250.203144] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-[  250.203887] Call Trace:
-[  250.204302]  dump_stack+0xac/0xe3
-[  250.204804]  __lock_acquire+0xab6/0x13a0
-[  250.205392]  lock_acquire+0x2c3/0x390
-[  250.205928]  ? __io_req_task_submit+0x29/0xa0
-[  250.206541]  __mutex_lock+0xae/0x9f0
-[  250.207071]  ? __io_req_task_submit+0x29/0xa0
-[  250.207745]  ? 0xffffffffa0006083
-[  250.208248]  ? __io_req_task_submit+0x29/0xa0
-[  250.208845]  ? __io_req_task_submit+0x29/0xa0
-[  250.209452]  ? __io_req_task_submit+0x5/0xa0
-[  250.210083]  __io_req_task_submit+0x29/0xa0
-[  250.210687]  io_async_task_func+0x23d/0x4c0
-[  250.211278]  task_work_run+0x89/0xd0
-[  250.211884]  io_run_task_work_sig+0x50/0xc0
-[  250.212464]  io_sqe_files_unregister+0xb2/0x1f0
-[  250.213109]  __io_uring_register+0x115a/0x1750
-[  250.213718]  ? __x64_sys_io_uring_register+0xad/0x210
-[  250.214395]  ? __fget_files+0x15a/0x260
-[  250.214956]  __x64_sys_io_uring_register+0xbe/0x210
-[  250.215620]  ? trace_hardirqs_on+0x46/0x110
-[  250.216205]  do_syscall_64+0x2d/0x40
-[  250.216731]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[  250.217455] RIP: 0033:0x7f0fa17e5239
-[  250.218034] Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05  3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 ec 2c 00 f7 d8 64 89 01 48
-[  250.220343] RSP: 002b:00007f0fa1eeac48 EFLAGS: 00000246 ORIG_RAX: 00000000000001ab
-[  250.221360] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fa17e5239
-[  250.222272] RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000008
-[  250.223185] RBP: 00007f0fa1eeae20 R08: 0000000000000000 R09: 0000000000000000
-[  250.224091] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-[  250.224999] R13: 0000000000021000 R14: 0000000000000000 R15: 00007f0fa1eeb700
+added space between skb, and off. And we don't need those extra ()
+around off, right? I stripped them away, but let me know if that's
+wrong.
 
-This is caused by calling io_run_task_work_sig() to do work under
-uring_lock while the caller io_sqe_files_unregister() already held
-uring_lock.
-To fix this issue, briefly drop uring_lock when calling
-io_run_task_work_sig(), and there are two things to concern:
-
-- hold uring_lock in io_ring_ctx_free() around io_sqe_files_unregister()
-    this is for consistency of lock/unlock.
-- add new fixed rsrc ref node before dropping uring_lock
-    it's not safe to do io_uring_enter-->percpu_ref_get() with a dying one.
-- check if rsrc_data->refs is dying to avoid parallel io_sqe_files_unregister
-
-Reported-by: Abaci <abaci@linux.alibaba.com>
-Fixes: ce00a7d0d9523 ("io_uring: fix io_sqe_files_unregister() hangs")
-Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Hao Xu <haoxu@linux.alibaba.com>
-[axboe: fixes from Pavel folded in]
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
----
- fs/io_uring.c | 82 ++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 61 insertions(+), 21 deletions(-)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index d1cb1addea96..c5c22b067cd8 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -217,6 +217,7 @@ struct fixed_file_data {
- 	struct completion		done;
- 	struct list_head		ref_list;
- 	spinlock_t			lock;
-+	bool				quiesce;
- };
- 
- struct io_buffer {
-@@ -7105,41 +7106,79 @@ static void io_sqe_files_set_node(struct fixed_file_data *file_data,
- 	percpu_ref_get(&file_data->refs);
- }
- 
--static int io_sqe_files_unregister(struct io_ring_ctx *ctx)
--{
--	struct fixed_file_data *data = ctx->file_data;
--	struct fixed_file_ref_node *backup_node, *ref_node = NULL;
--	unsigned nr_tables, i;
--	int ret;
- 
--	if (!data)
--		return -ENXIO;
--	backup_node = alloc_fixed_file_ref_node(ctx);
--	if (!backup_node)
--		return -ENOMEM;
-+static void io_sqe_files_kill_node(struct fixed_file_data *data)
-+{
-+	struct fixed_file_ref_node *ref_node = NULL;
- 
- 	spin_lock_bh(&data->lock);
- 	ref_node = data->node;
- 	spin_unlock_bh(&data->lock);
- 	if (ref_node)
- 		percpu_ref_kill(&ref_node->refs);
-+}
-+
-+static int io_file_ref_quiesce(struct fixed_file_data *data,
-+			       struct io_ring_ctx *ctx)
-+{
-+	int ret;
-+	struct fixed_file_ref_node *backup_node;
- 
--	percpu_ref_kill(&data->refs);
-+	if (data->quiesce)
-+		return -ENXIO;
- 
--	/* wait for all refs nodes to complete */
--	flush_delayed_work(&ctx->file_put_work);
-+	data->quiesce = true;
- 	do {
-+		backup_node = alloc_fixed_file_ref_node(ctx);
-+		if (!backup_node)
-+			break;
-+
-+		io_sqe_files_kill_node(data);
-+		percpu_ref_kill(&data->refs);
-+		flush_delayed_work(&ctx->file_put_work);
-+
- 		ret = wait_for_completion_interruptible(&data->done);
- 		if (!ret)
- 			break;
-+
-+		percpu_ref_resurrect(&data->refs);
-+		io_sqe_files_set_node(data, backup_node);
-+		backup_node = NULL;
-+		reinit_completion(&data->done);
-+		mutex_unlock(&ctx->uring_lock);
- 		ret = io_run_task_work_sig();
--		if (ret < 0) {
--			percpu_ref_resurrect(&data->refs);
--			reinit_completion(&data->done);
--			io_sqe_files_set_node(data, backup_node);
--			return ret;
--		}
-+		mutex_lock(&ctx->uring_lock);
-+
-+		if (ret < 0)
-+			break;
-+		backup_node = alloc_fixed_file_ref_node(ctx);
-+		ret = -ENOMEM;
-+		if (!backup_node)
-+			break;
- 	} while (1);
-+	data->quiesce = false;
-+
-+	if (backup_node)
-+		destroy_fixed_file_ref_node(backup_node);
-+	return ret;
-+}
-+
-+static int io_sqe_files_unregister(struct io_ring_ctx *ctx)
-+{
-+	struct fixed_file_data *data = ctx->file_data;
-+	unsigned nr_tables, i;
-+	int ret;
-+
-+	/*
-+	 * percpu_ref_is_dying() is to stop parallel files unregister
-+	 * Since we possibly drop uring lock later in this function to
-+	 * run task work.
-+	 */
-+	if (!data || percpu_ref_is_dying(&data->refs))
-+		return -ENXIO;
-+	ret = io_file_ref_quiesce(data, ctx);
-+	if (ret)
-+		return ret;
- 
- 	__io_sqe_files_unregister(ctx);
- 	nr_tables = DIV_ROUND_UP(ctx->nr_user_files, IORING_MAX_FILES_TABLE);
-@@ -7150,7 +7189,6 @@ static int io_sqe_files_unregister(struct io_ring_ctx *ctx)
- 	kfree(data);
- 	ctx->file_data = NULL;
- 	ctx->nr_user_files = 0;
--	destroy_fixed_file_ref_node(backup_node);
- 	return 0;
- }
- 
-@@ -8444,7 +8482,9 @@ static void io_ring_ctx_free(struct io_ring_ctx *ctx)
- 		css_put(ctx->sqo_blkcg_css);
- #endif
- 
-+	mutex_lock(&ctx->uring_lock);
- 	io_sqe_files_unregister(ctx);
-+	mutex_unlock(&ctx->uring_lock);
- 	io_eventfd_unregister(ctx);
- 	io_destroy_buffers(ctx);
- 
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
-
+> +#else
+>  /* llvm builtin functions that eBPF C program may use to
+>   * emit BPF_LD_ABS and BPF_LD_IND instructions
+>   */
+> @@ -11,6 +20,7 @@ unsigned long long load_half(void *skb,
+>                              unsigned long long off) asm("llvm.bpf.load.half");
+>  unsigned long long load_word(void *skb,
+>                              unsigned long long off) asm("llvm.bpf.load.word");
+> +#endif
+>
+>  #endif
+>
+> --
+> 2.34.1
+>
