@@ -2,148 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29BB641350
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EE2641333
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235124AbiLCCYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
+        id S235016AbiLCCTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbiLCCYq (ORCPT
+        with ESMTP id S234936AbiLCCTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:24:46 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748C7BDCE2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:24:44 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id c15so6501086pfb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sycaKxrnAspMqyMU77ofh2U6+r7smc986YIDXo/lwrY=;
-        b=IZNU2dMUs6dvRCVJt3dLZHnp6oLw0v5rzZGKA6Kd8bm4NsBjo1K2kKghVQvOMP5i79
-         V5hckw+Ac+GOxd2xVatczR8mFDBRoQEA/NmtdC3AfnW+31NXeBuq84WimyN5Nqyd8TDC
-         +oYC0Sul0eoDxnpiV5qkpFYReUt5JMZM+klbA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sycaKxrnAspMqyMU77ofh2U6+r7smc986YIDXo/lwrY=;
-        b=yN/i5cbHbSkIa6jY0lkebxjspLFBPxstlZwT7cn7nG6TWzW12iFa6Dd3X6oFwfRIbe
-         aypxAuyBe72DJqmaPsGuS8lBCw89laOG384JeiG7fTkfymDNBj23TjisMekt/vQufAtU
-         BuoRV7J2nROiwGTA38xKPbudkDaD0/Ux2r5C95U7X88ivCN2FYOf+l7zlsNclQDPq+Yn
-         vf25sicfWJlmPwZliUdfzoCP8OqQmDgCPUoXyIBNB8I2Uu1lq/cVIRhL9Euh1BrWfHs8
-         FycT1/K0OmT04eCR6uUSnQrnygx9YUXxyzhnsWqvV1x7SGFLPUXZ6R+CAmhPa1NGUy/E
-         MXsA==
-X-Gm-Message-State: ANoB5plBgzWQ2uJvUL+2PHHCPst1Nym+lSKS+VQt22Iy60XIiqaMup8E
-        8jeW03wOtqx8GNqYrOrqnsQNkw==
-X-Google-Smtp-Source: AA0mqf6ecGDellGthenD6ceIHI53cmnvUC0Mod6jRuSERrc/xcY+2kDsyICXdTabTZG7Un5WGhNfAw==
-X-Received: by 2002:a63:1655:0:b0:478:4cf6:d01 with SMTP id 21-20020a631655000000b004784cf60d01mr17112608pgw.279.1670034283967;
-        Fri, 02 Dec 2022 18:24:43 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 74-20020a62164d000000b0056c0d129edfsm5718087pfw.121.2022.12.02.18.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:24:43 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:24:42 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-Message-ID: <202212021824.8EE4948F9@keescook>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-6-rick.p.edgecombe@intel.com>
+        Fri, 2 Dec 2022 21:19:21 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE2C98E9F;
+        Fri,  2 Dec 2022 18:19:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670033960; x=1701569960;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6ntn3zRMxIwgdUpPp1JYwUPfmJv8sbId8mHHuUAb1xg=;
+  b=UaHz6/XjMZ2h4wT6xpEZ2TP+DdzCu42RzcWmv757r3zARxZ/K5+yc6dc
+   tNxAZw/XUtHstrQi0Xlu2bxX590yvT3VKuqZhkxpt5lnGEZN8Mb2JzwDW
+   Li1p2oOKq6KNhdaIQ6kMwiZttYCBxlhtlcj9lIXOp5o/66+lpcp4zS0KT
+   FZdZkmYd0iPKOng9oS+cDaePKRR1v/a9wLxW0d28EPdpkry9xgJPC+R+E
+   t1rjVlP9qkdYbLpE3mm3KbSlLb88lK+Dy4/mG/K2qO2GwxUHnQyp8o2g2
+   rxubZBi2YEeoIbxncWyRYz/GZGZAKlka/uNd+gByBlGNQeSSaj667sUnd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="378238268"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="378238268"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 18:19:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="713829673"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="713829673"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 18:19:17 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rcu-tasks: Make shrink down to a single callback queue safely
+Date:   Sat,  3 Dec 2022 10:25:03 +0800
+Message-Id: <20221203022503.2227023-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-6-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:32PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> Shadow stack register state can be managed with XSAVE. The registers
-> can logically be separated into two groups:
->         * Registers controlling user-mode operation
->         * Registers controlling kernel-mode operation
-> 
-> The architecture has two new XSAVE state components: one for each group
-> of those groups of registers. This lets an OS manage them separately if
-> it chooses. Future patches for host userspace and KVM guests will only
-> utilize the user-mode registers, so only configure XSAVE to save
-> user-mode registers. This state will add 16 bytes to the xsave buffer
-> size.
-> 
-> Future patches will use the user-mode XSAVE area to save guest user-mode
-> CET state. However, VMCS includes new fields for guest CET supervisor
-> states. KVM can use these to save and restore guest supervisor state, so
-> host supervisor XSAVE support is not required.
-> 
-> Adding this exacerbates the already unwieldy if statement in
-> check_xstate_against_struct() that handles warning about un-implemented
-> xfeatures. So refactor these check's by having XCHECK_SZ() set a bool when
-> it actually check's the xfeature. This ends up exceeding 80 chars, but was
-> better on balance than other options explored. Pass the bool as pointer to
-> make it clear that XCHECK_SZ() can change the variable.
-> 
-> While configuring user-mode XSAVE, clarify kernel-mode registers are not
-> managed by XSAVE by defining the xfeature in
-> XFEATURE_MASK_SUPERVISOR_UNSUPPORTED, like is done for XFEATURE_MASK_PT.
-> This serves more of a documentation as code purpose, and functionally,
-> only enables a few safety checks.
-> 
-> Both XSAVE state components are supervisor states, even the state
-> controlling user-mode operation. This is a departure from earlier features
-> like protection keys where the PKRU state is a normal user
-> (non-supervisor) state. Having the user state be supervisor-managed
-> ensures there is no direct, unprivileged access to it, making it harder
-> for an attacker to subvert CET.
-> 
-> To facilitate this privileged access, define the two user-mode CET MSRs,
-> and the bits defined in those MSRs relevant to future shadow stack
-> enablement patches.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Assume that the current RCU-task belongs to per-CPU callback queuing
+mode. the 'rcu_task_cb_adjust' variable is true and the conditions for
+converting to a single CPU-0 queue mode have been met.
+(ncbsnz == 0 && ncbs < rcu_task_collapse_lim)
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+	   CPU0                                          CPU1
+rcu_tasks_one_gp()
+  rcu_tasks_need_gpcb()
 
+                                            invoke call_rcu_tasks_generic()
+                                            enqueue callback to CPU1
+                                            (CPU1 n_cbs not equal zero)
+
+  if (rcu_task_cb_adjust &&
+  ncbs <= rcu_task_collapse_lim)
+    if (rtp->percpu_enqueue_lim > 1)
+      rtp->percpu_enqueue_lim = 1;
+      rtp->percpu_dequeue_gpseq =
+      get_state_synchronize_rcu();
+
+  A full RCU grace period has passed
+  (it means that poll_state_synchronize_rcu
+  rtp->percpu_dequeue_gpseq) maybe return true)
+
+  if (rcu_task_cb_adjust && !ncbsnz &&
+  poll_state_synchronize_rcu(
+    rtp->percpu_dequeue_gpseq) {
+
+    if (rtp->percpu_enqueue_lim <
+        rtp->percpu_dequeue_lim)
+        rtp->percpu_dequeue_lim = 1
+    for (cpu = rtp->percpu_dequeue_lim;
+        cpu < nr_cpu_ids; cpu++)
+        find CPU1 n_cbs is not zero
+        trigger warning
+  }
+
+The above scenario will not only trigger WARN_ONCE(), but also set the
+rcu_tasks structure's->percpu_dequeue_lim is one when CPU1 still have
+callbacks, which will cause the callback of CPU1 to have no chance to
+be called.
+
+This commit put get_state_synchronize_rcu() and poll_state_synchronize_rcu()
+into a RCU read critical section. it means that current readers will block
+completion of the current or next RCU grace period. this ensures that after
+we snapshot current RCU gp number and then polling it will return false.
+
+This will lead us to judge per-CPU callback numbers again after a grace
+period of RCU tasks, until the callbacks of other CPUs(except CPU0) are
+executed and the specified RCU grace period has completed, we have just
+completed the conversion of single queue.
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tasks.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index d845723c1af4..26f67d8220ec 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -419,6 +419,7 @@ static int rcu_tasks_need_gpcb(struct rcu_tasks *rtp)
+ 	// if there has not been an increase in callbacks, limit dequeuing
+ 	// to CPU 0.  Note the matching RCU read-side critical section in
+ 	// call_rcu_tasks_generic().
++	rcu_read_lock();
+ 	if (rcu_task_cb_adjust && ncbs <= rcu_task_collapse_lim) {
+ 		raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
+ 		if (rtp->percpu_enqueue_lim > 1) {
+@@ -443,6 +444,7 @@ static int rcu_tasks_need_gpcb(struct rcu_tasks *rtp)
+ 		}
+ 		raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
+ 	}
++	rcu_read_unlock();
+ 
+ 	return needgpcb;
+ }
 -- 
-Kees Cook
+2.25.1
+
