@@ -2,165 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC7B641991
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 23:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C28A641998
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 23:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiLCWme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 17:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S229597AbiLCWuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 17:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiLCWmS (ORCPT
+        with ESMTP id S229503AbiLCWuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 17:42:18 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6CF1C920;
-        Sat,  3 Dec 2022 14:42:17 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B3MgEfL015253;
-        Sat, 3 Dec 2022 22:42:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=CRiOFceBSHcccdzlP0WNsBunBsJJJm6wdP4oqKzJiyI=;
- b=eJb8tQsebkwxN3R4fD2f58vsZ193cP+n1Q3XhVCX4Fk1VsDYZr/vGD8cz3GIS2Umnj/4
- qz7JhFi0ozX9hlAp5coi7GVCFaK6b56DBnzC56SV1W8q3Bhq95aM90jFV2PdNrIEBmpe
- mYtLmu0Am4s4Mbo3G/HfahT73JcAp56W6SUZrCPCTVEu7sB0rmOfKqgBrrHOsZXTUfSP
- 0ykjAinK7asVaQo8oqrSjP80yko2JX0zvrF4OAFAb3SGjvutMA1vjeDRbmAyHV5tY9q7
- JS+DCcE+nXAs1gjHiWMBL81nfObCS7oVDTA7xoqgZ7ywExA3APqXWLhrKIF/9cvJdK3s FA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7xp8h819-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 03 Dec 2022 22:42:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B3MgDVh014607
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 3 Dec 2022 22:42:13 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sat, 3 Dec 2022 14:42:10 -0800
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>
-CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Rob Clark" <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4/4] drm/msm/a6xx: Update ROQ size in coredump
-Date:   Sun, 4 Dec 2022 04:11:44 +0530
-Message-ID: <20221204040946.4.I07f22966395eb045f6b312710f53890d5d7e69d4@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20221204040946.1.Ib978de92c4bd000b515486aad72e96c2481f84d0@changeid>
-References: <20221204040946.1.Ib978de92c4bd000b515486aad72e96c2481f84d0@changeid>
+        Sat, 3 Dec 2022 17:50:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713851DF1C
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 14:50:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A79F60C94
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 22:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52FB6C43147
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 22:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670107811;
+        bh=dx6i/zBU0ZeE6IVzzhxnvcG/T5ZK/6cVLN8A6gKBAIg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hiZpKaTHtcLBdst55X3naUv/ClQHZ2BdUxGzuJRGTVMWhuCLxN913I0WbfEOw28LQ
+         ZX+DHCRTnE+lLS5czSOtX5Fgcay9LdjulUN0LK3X8eVMM6Q/b3NjnqmVr5QIkLtK4F
+         yCXadkL+rKLUlskBP3MZ9+hqukUAXq4R/A+8SWEYbOQu9HhEI7fEUSIhqqDDobrN7A
+         gH2phXjsOpPjjstuMQyDhwsp/nlkSzYnpXYox7KEhSsCnevvB3LjfWD9bb7KkvHROQ
+         btMlseOHA8ME9Splkm/iliED3Ymt/1xY59hLKqAON28JDb+8HR2BTJZrTFrlIKFExb
+         rjqv4bHAwt6DA==
+Received: by mail-ed1-f49.google.com with SMTP id d20so11044179edn.0
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 14:50:11 -0800 (PST)
+X-Gm-Message-State: ANoB5pkub7TzEPYVVBUif9XZyVzyNaC5G+31bzy/eFF5bKswVCOKmvOr
+        QgO93yHkvX04D2fWdtTH7SV1cBVdnEBkRe50nUvOig==
+X-Google-Smtp-Source: AA0mqf6IMKgvOHkA5/c+9soSeuwZRc+52Mb9yRpznfgn0cMyx+TzFtyUF1PqLc7pfmdr25nJCy6wV1Whkg3Cmb9CDSY=
+X-Received: by 2002:a05:6402:3c1:b0:46b:2d74:d970 with SMTP id
+ t1-20020a05640203c100b0046b2d74d970mr26185821edw.138.1670107809384; Sat, 03
+ Dec 2022 14:50:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: a-cVsWgVR8zG49UQN33PCsqFr5u87vQp
-X-Proofpoint-GUID: a-cVsWgVR8zG49UQN33PCsqFr5u87vQp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-03_12,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=846 malwarescore=0 bulkscore=0
- impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2212030202
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com> <20221203003606.6838-34-rick.p.edgecombe@intel.com>
+In-Reply-To: <20221203003606.6838-34-rick.p.edgecombe@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Sat, 3 Dec 2022 14:49:34 -0800
+X-Gmail-Original-Message-ID: <CALCETrVMY4UadSrn3fTim5iCzPVf+XXnkyq57wjvnhVUNV1V5w@mail.gmail.com>
+Message-ID: <CALCETrVMY4UadSrn3fTim5iCzPVf+XXnkyq57wjvnhVUNV1V5w@mail.gmail.com>
+Subject: Re: [PATCH v4 33/39] x86: Prevent 32 bit operations for 64 bit shstk tasks
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since RoQ size differs between generations, calculate dynamically the
-RoQ size while capturing coredump.
+On Fri, Dec 2, 2022 at 4:44 PM Rick Edgecombe
+<rick.p.edgecombe@intel.com> wrote:
+>
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
+> So since 32 bit is not easy to support, and there are likely not many
+> users. More cleanly don't support 32 bit signals in a 64 bit address
+> space by not allowing 32 bit ABI signal handlers when shadow stack is
+> enabled. Do this by clearing any 32 bit ABI signal handlers when shadow
+> stack is enabled, and disallow any further 32 bit ABI signal handlers.
+> Also, return an error code for the clone operations when in a 32 bit
+> syscall.
+>
 
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c | 11 ++++++++++-
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.h | 17 ++++++++++-------
- 2 files changed, 20 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-index da190b6ddba0..80e60e34ce7d 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-@@ -939,15 +939,24 @@ static void a6xx_get_registers(struct msm_gpu *gpu,
- 			dumper);
- }
- 
-+static u32 a6xx_get_cp_roq_size(struct msm_gpu *gpu)
-+{
-+	/* The value at [16:31] is in 4dword units. Convert it to dwords */
-+	return gpu_read(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2) >> 14;
-+}
-+
- /* Read a block of data from an indexed register pair */
- static void a6xx_get_indexed_regs(struct msm_gpu *gpu,
- 		struct a6xx_gpu_state *a6xx_state,
--		const struct a6xx_indexed_registers *indexed,
-+		struct a6xx_indexed_registers *indexed,
- 		struct a6xx_gpu_state_obj *obj)
- {
- 	int i;
- 
- 	obj->handle = (const void *) indexed;
-+	if (indexed->count_fn)
-+		indexed->count = indexed->count_fn(gpu);
-+
- 	obj->data = state_kcalloc(a6xx_state, indexed->count, sizeof(u32));
- 	if (!obj->data)
- 		return;
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.h
-index 808121c88662..790f55e24533 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.h
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.h
-@@ -383,25 +383,28 @@ static const struct a6xx_registers a6xx_gmu_reglist[] = {
- 	REGS(a6xx_gmu_gx_registers, 0, 0),
- };
- 
--static const struct a6xx_indexed_registers {
-+static u32 a6xx_get_cp_roq_size(struct msm_gpu *gpu);
-+
-+static struct a6xx_indexed_registers {
- 	const char *name;
- 	u32 addr;
- 	u32 data;
- 	u32 count;
-+	u32 (*count_fn)(struct msm_gpu *gpu);
- } a6xx_indexed_reglist[] = {
- 	{ "CP_SQE_STAT", REG_A6XX_CP_SQE_STAT_ADDR,
--		REG_A6XX_CP_SQE_STAT_DATA, 0x33 },
-+		REG_A6XX_CP_SQE_STAT_DATA, 0x33, NULL },
- 	{ "CP_DRAW_STATE", REG_A6XX_CP_DRAW_STATE_ADDR,
--		REG_A6XX_CP_DRAW_STATE_DATA, 0x100 },
-+		REG_A6XX_CP_DRAW_STATE_DATA, 0x100, NULL },
- 	{ "CP_UCODE_DBG_DATA", REG_A6XX_CP_SQE_UCODE_DBG_ADDR,
--		REG_A6XX_CP_SQE_UCODE_DBG_DATA, 0x6000 },
-+		REG_A6XX_CP_SQE_UCODE_DBG_DATA, 0x8000, NULL },
- 	{ "CP_ROQ", REG_A6XX_CP_ROQ_DBG_ADDR,
--		REG_A6XX_CP_ROQ_DBG_DATA, 0x400 },
-+		REG_A6XX_CP_ROQ_DBG_DATA, 0, a6xx_get_cp_roq_size},
- };
- 
--static const struct a6xx_indexed_registers a6xx_cp_mempool_indexed = {
-+static struct a6xx_indexed_registers a6xx_cp_mempool_indexed = {
- 	"CP_MEMPOOL", REG_A6XX_CP_MEM_POOL_DBG_ADDR,
--		REG_A6XX_CP_MEM_POOL_DBG_DATA, 0x2060,
-+		REG_A6XX_CP_MEM_POOL_DBG_DATA, 0x2060, NULL,
- };
- 
- #define DEBUGBUS(_id, _count) { .id = _id, .name = #_id, .count = _count }
--- 
-2.7.4
-
+This seems unfortunate.  The result will be a highly incomprehensible
+crash.  Maybe instead deny enabling shadow stack in the first place?
+Or at least pr_warn_once if anything gets flushed.
