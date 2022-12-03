@@ -2,147 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD5B64151B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 09:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3D2641520
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 10:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiLCI6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 03:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
+        id S231523AbiLCJAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 04:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiLCI6O (ORCPT
+        with ESMTP id S229872AbiLCJAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 03:58:14 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC09E17AB0;
-        Sat,  3 Dec 2022 00:58:12 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 4so6741398pli.0;
-        Sat, 03 Dec 2022 00:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/sadz1/CeqA5zMnNYCqP/lEzSjdg/kLkwU3QYovJoVo=;
-        b=TCH+a02ERdRFnTf642Vs6jq9crhRaRo1PkxlU1yySN11VeAP+j9DkZ/e3z5G/uoeVs
-         bOXCEs9OBEwem0ZKkvw6e6dmOY/iAHDTJqLxF//foTdrbbbqR/UqTJbNa45Rz86iZJ1R
-         ZT98xw8b7fqFWyQM2gjHgoumxJpOwE6xg0CX0U7h3UN66Ti2+nvlttY14rX3zqCrb5B/
-         Cf6iz0g2o4R2gKRPU1i6PhbrO3LuOXeXc/ADnGNxfFw17De1vpwVriU4QVvjKk8Ne5Bq
-         YwKibxAOf1SMhiAtO206DGehkxjJRZanOsHbiwQEds3kLa+H3Ti+2JKipcb0AVdMsR0E
-         75bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/sadz1/CeqA5zMnNYCqP/lEzSjdg/kLkwU3QYovJoVo=;
-        b=ujDGxkvV+4THvn137bFSrM7s6HFnCHdd51PE1WvnSGlhMAJ3+bTxQzqSS3sxZb5axC
-         l9j/1TeD0jdwJW/6CChZ9HZiH0DvXtRLOEkoBYBLFFMXSwSDLeL+q4Mn2hi5DjfODEmc
-         GI+Ygvi42AFRK+Lt0kcwxJw6mcZQ5DfoIwdLi3nAfjZbCucrR9GClJi2OdJjkMix5JVd
-         Vr5gzhDX2gEgJCm39I/UrC+RV0MB9euBM424kCq+afVAIxepegtp4p5l+yiqh7S+kBnK
-         5AXav5b1013WT4m0AnMN9/7Q0AqU286g0Vt90OCJUpW59xXuq9BCcBC7+95e2ozY48zc
-         fgXg==
-X-Gm-Message-State: ANoB5pnPkTjDCuo6ldBxH4/u6JYAN3cQxju2XxU3xRe5yJNf50wWHdRq
-        i2+ylgDXwOvGUQ56A2Kgi4U=
-X-Google-Smtp-Source: AA0mqf557Tf4hQ3ox+4h4L3bKmykRUVeioIulyBl3fgPqFmNheBWGxzj30flo9/NXH+QYMoZKV/pzQ==
-X-Received: by 2002:a17:90a:a616:b0:219:6afd:24be with SMTP id c22-20020a17090aa61600b002196afd24bemr16172106pjq.0.1670057892468;
-        Sat, 03 Dec 2022 00:58:12 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-30.three.co.id. [180.214.233.30])
-        by smtp.gmail.com with ESMTPSA id o8-20020a17090a420800b0020a7d076bfesm5848220pjg.2.2022.12.03.00.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 00:58:11 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 3CEE4104547; Sat,  3 Dec 2022 15:58:08 +0700 (WIB)
-Date:   Sat, 3 Dec 2022 15:58:07 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 01/39] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <Y4sPn/EQgqQI/sSN@debian.me>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-2-rick.p.edgecombe@intel.com>
+        Sat, 3 Dec 2022 04:00:50 -0500
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637F517A81;
+        Sat,  3 Dec 2022 01:00:48 -0800 (PST)
+Received: from amadeus-VLT-WX0.lan (unknown [218.85.118.194])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 61A7280008A;
+        Sat,  3 Dec 2022 17:00:42 +0800 (CST)
+From:   Chukun Pan <amadeus@jmu.edu.cn>
+To:     heiko@sntech.de
+Cc:     alexandre.torgue@foss.st.com, amadeus@jmu.edu.cn,
+        davem@davemloft.net, david.wu@rock-chips.com,
+        devicetree@vger.kernel.org, edumazet@google.com,
+        joabreu@synopsys.com, krzysztof.kozlowski+dt@linaro.org,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, peppe.cavallaro@st.com,
+        robh+dt@kernel.org
+Subject: Re: Re: [PATCH 1/2] dt-bindings: net: rockchip-dwmac: add rk3568 xpcs compatible
+Date:   Sat,  3 Dec 2022 17:00:15 +0800
+Message-Id: <20221203090015.16132-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <3689593.Mh6RI2rZIc@diego>
+References: <3689593.Mh6RI2rZIc@diego>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4Y6TcVcN9xovNDyq"
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-2-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCH0pJVksaHk5DGUlNS0hOT1UTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlKQ1VDTlVKSkNVSkJPWVdZFhoPEhUdFFlBWU9LSFVKSktPS0NVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mxw6ARw*IT0uMApMFiwDAzgV
+        TywwCypVSlVKTUxLS05DS09IT0hDVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlK
+        Q1VDTlVKSkNVSkJPWVdZCAFZQUlCSEM3Bg++
+X-HM-Tid: 0a84d73765e6b03akuuu61a7280008a
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Actually looking deeper in the TRM, having these registers "just" written
+> to from the dwmac-glue-layer feels quite a bit like a hack.
 
---4Y6TcVcN9xovNDyq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The "pcs" thingy referenced in patch2 actually looks more like a real device
+> with its own section in the TRM and own iomem area. This pcs device then
+> itself has some more settings stored in said pipe-grf.
 
-On Fri, Dec 02, 2022 at 04:35:28PM -0800, Rick Edgecombe wrote:
-> +An application's CET capability is marked in its ELF note and can be ver=
-ified
-> +from readelf/llvm-readelf output:
-> +
-> +    readelf -n <application> | grep -a SHSTK
-> +        properties: x86 feature: SHSTK
+> So this looks more like it wants to be an actual phy-driver.
 
-Shell commands should be inside literal code block (try double colon).
-Above is rendered as definition lists instead.
+> @Chukun Pan: plase take a look at something like
+> https://elixir.bootlin.com/linux/latest/source/drivers/phy/mscc/phy-ocelot-serdes.c#L398
+> on how phy-drivers for ethernets could look like.
 
-> +The return values are as following:
-> +    On success, return 0. On error, errno can be::
+> Aquiring such a phy from the dwmac-glue and calling phy_set_mode after
+> moving the xpcs_setup to a phy-driver shouldn't be too hard I think.
 
-Drop indentation on the second line, or better yet, continue the line,
-like "... as following. On success, ..."
+Thanks for pointing that out.
+The patch2 is come from the sdk kernel of rockchip.
+The sgmii-phy of RK3568 is designed on nanning combo phy.
+In the sdk kernel, if we want to use sgmii mode, we need
+to modify the device tree in the gmac section like this:
 
-Otherwise LGTM, thanks for review.=20
+```
+&gmac0 {
+	power-domains = <&power RK3568_PD_PIPE>;
+	phys = <&combphy1_usq PHY_TYPE_SGMII>;
+	phy-handle = <&sgmii_phy>;
+	phy-mode = "sgmii";
+	rockchip,pipegrf = <&pipegrf>;
+	rockchip,xpcs = <&xpcs>;
+	status = "okay";
+};
+```
 
-In any case,
+I'm not sure how to write this on the mainline kernel.
+Any hint will be appreciated.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+--
+Thanks,
+Chukun
 
---=20
-An old man doll... just what I always wanted! - Clara
+-- 
+2.25.1
 
---4Y6TcVcN9xovNDyq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4sPlAAKCRD2uYlJVVFO
-oxZmAQCvIsfDFABxypzVEB2ZMvgJzikdcI86EKjquJjkppkMVgD+INIDFYBh7cJP
-AirZ9vPVfvl8ojgt9fx0uXFCNhiUvgA=
-=CHdF
------END PGP SIGNATURE-----
-
---4Y6TcVcN9xovNDyq--
