@@ -2,111 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A016412CD
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913656412D9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbiLCAyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 19:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S234965AbiLCAzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 19:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiLCAyF (ORCPT
+        with ESMTP id S235054AbiLCAzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 19:54:05 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665472E0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:50:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670028617; x=1701564617;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9vIXaYbbqArKlbNUcGZT4O2VFsT2UZnPQbUk/fLylKA=;
-  b=P6komMzgbJ6EE+TCdD8dNX87ykh7stt9YIltvJhgnfAZZe39duArx24o
-   nCybUDPnvE7UVc+0xDeSqcVhMO/Gf6bKlj1psR0vBjQCUvJjSjfj0jUCE
-   5Uwp8hEe6Z9HyQ/zogqDHhiKv+dwHqGbUIwf8R+BzPQggC0B0LsuCYy6S
-   8KRt6/ykLeiKAQlNWXex1eGe/Nzubz3g2LCDZjtbu4b2A8QwlMKv8ott3
-   Vcq7iuo5zuX5dfQjKAMoHwDe1qnRas+B8wMnbGsxJ4b7cC4ieb1+AICHs
-   4sGVGcUJscdfvlsz1DevdHlxthtWHdXggXmEqe61sUE/c9ZWtQMM9LUGs
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="295769886"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="295769886"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:50:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="708670328"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="708670328"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:50:11 -0800
-Date:   Fri, 2 Dec 2022 16:54:05 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 0/4] [PULL REQUEST] iommu/vt-d: Fixes for v6.1-rc8
-Message-ID: <20221202165405.50be86a6@jacob-builder>
-In-Reply-To: <Y4nXu9uBwXZFwjq2@8bytes.org>
-References: <20221201040127.1962750-1-baolu.lu@linux.intel.com>
-        <Y4nXu9uBwXZFwjq2@8bytes.org>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Fri, 2 Dec 2022 19:55:19 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF56101D3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:55:12 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id 21so6411016pfw.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 16:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MYhOSAAecw5hMoG44eS+mB/LIIFEkB0A8/BXG3TWxmw=;
+        b=gWZT/4OZ9cDZ4JFrR8F90PCn8KydHDcemskto7lMnUujpX0OnOktV2KWL360pPMsUs
+         WqiVpJcCNBK47h5SBYeOeZIMiUSgDLQrOC0nIxHlXFtAqh2dgQY3vITG0Mg2hGvigiSF
+         p8iF4r2Kebkar9gzUA5lWix+HvENA6dBoXtMQcgx8SDCBbekZrDRu0X6IL5PNv9ad0wX
+         UDApnGl0qtrq/MBxiUFoTStXBSRmMXF3lRqVrhqV0cMTb2EOZCtwDkZwxAMyj+xexgmw
+         FQ+mRzRej8wFWx/hVfzlNxqi2fCAn6eJtR0Eoepm0CxQIdeFae7SpLk5ouxGbOzTO4dn
+         wTKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MYhOSAAecw5hMoG44eS+mB/LIIFEkB0A8/BXG3TWxmw=;
+        b=az5iRYG38YBZUchRIoU9fGc1eVI8gaNDUHZG5E2NYb2GqaiqfOkbehXj9cpOBQhiHK
+         Bh3BAC70YgpfUY927Pxi2Llsy/lmR7GzyaOjiXd20D/tLqO6j3ng3lgwsW+Npgy+SjeR
+         xPKHKZhyja/DCLL+rLS4RGe9wOTLVla3LP6IW62CTz3w5YVRUYZhv2BjadLfsG7H0/o7
+         pR60NAX8ONl+REvefJyOnOdl20t6p2DSo6SdZZYYc+xxHAteXSjdtqsx/TlPw+wTrHo2
+         efQvo3FUvquq0RpHbaWyNn3JLnOFzFRjsDTKPufZyyT+FQ95UPlVk21ESXH6Qpu35uPy
+         riUg==
+X-Gm-Message-State: ANoB5pmCXJrpNK8LkjkQIj9SSQeWu+1A4f/ao9nZIS0LhhoLcPuVO9+I
+        WbVRnoahhlnQwZGw3CCOsrte2htRfyA=
+X-Google-Smtp-Source: AA0mqf647S6/Dv4OVsVyRWyYx5WoG0UCJUpqaTLGlL0AtJ2l351/zGCa72SY0bd/9h11gpRtEe2Ahw==
+X-Received: by 2002:a63:5802:0:b0:46f:59af:c1f4 with SMTP id m2-20020a635802000000b0046f59afc1f4mr47473044pgb.344.1670028911589;
+        Fri, 02 Dec 2022 16:55:11 -0800 (PST)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:c181])
+        by smtp.gmail.com with ESMTPSA id ik25-20020a170902ab1900b001869b988d93sm6081148plb.187.2022.12.02.16.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 16:55:10 -0800 (PST)
+Date:   Fri, 2 Dec 2022 16:55:07 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chris Mason <clm@meta.com>, Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH] error-injection: Add prompt for function error injection
+Message-ID: <20221203005507.szqy2o7sogqmfjsz@macbook-pro-6.dhcp.thefacebook.com>
+References: <3fa8ec60-dd96-c41f-ea46-8856bf855949@meta.com>
+ <20221122132905.12a8d5ad@gandalf.local.home>
+ <a53e8c6d-b0e5-72bf-1aba-07609c9cf1bf@meta.com>
+ <20221130143719.07e36277d1471b83e9a1b627@linux-foundation.org>
+ <CAADnVQ+KLXPhowdBZq0PvGOq5tv4ovNtNCvGBXHQBkVbz4UVkg@mail.gmail.com>
+ <CAHk-=wjeq1m=9mU17WzfRQ1W6N0SgKHY-e2J35SpppWwUUBFbQ@mail.gmail.com>
+ <20221202014129.n5lmvzsy436ebo4b@macbook-pro-6.dhcp.thefacebook.com>
+ <Y4ogRH7zWLpmVXzJ@mit.edu>
+ <20221202212711.5ot66apmazm4yz6y@macbook-pro-6.dhcp.thefacebook.com>
+ <20221202181724.4ec93cf0@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202181724.4ec93cf0@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joerg,
+On Fri, Dec 02, 2022 at 06:17:24PM -0500, Steven Rostedt wrote:
+> On Fri, 2 Dec 2022 13:27:11 -0800
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> 
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -1874,8 +1874,12 @@ config NETDEV_NOTIFIER_ERROR_INJECT
+> >  	  If unsure, say N.
+> >  
+> >  config FUNCTION_ERROR_INJECTION
+> 
+> Why not just call this "ERROR_INJECTION" having this be FUNCTION and the
+> one for functions be FUNC is confusing.
 
-On Fri, 2 Dec 2022 11:47:23 +0100, Joerg Roedel <joro@8bytes.org> wrote:
+That's what I had initially, but it causes plenty of churn to arch/*/Makefile
+and a bunch of .h-s.
+Keeping it as FUNCTION_ERROR_INJECTION removes all that noise from the diff.
 
-> On Thu, Dec 01, 2022 at 12:01:23PM +0800, Lu Baolu wrote:
-> > Jacob Pan (1):
-> >   iommu/vt-d: Add a fix for devices need extra dtlb flush
-There is a bug in this patch, I will send a fix patch. Or can you squash the
-fix below?
+> > +        bool
+> > +
+> > +config FUNC_ERROR_INJECTION
+> >  	bool "Fault-injections of functions"
+> >  	depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
+> > +	select FUNCTION_ERROR_INJECTION
+> >  	help
+> >  	  Add fault injections into various functions that are annotated with
+> >  	  ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
+> > @@ -1883,6 +1887,17 @@ config FUNCTION_ERROR_INJECTION
+> >  
+> >  	  If unsure, say N
+> >  
+> > +config SYSCALL_ERROR_INJECTION
+> > +	bool "Error injections in syscalls"
+> > +	depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
+> > +	select FUNCTION_ERROR_INJECTION
+> > +	default y
+> 
+> IIUC, Linus prefers everything to be "default n" unless there's a really
+> good reason for it. Like only making other options available, but not doing
+> anything to the kernel. I do have DYNAMIC_FTRACE as "default y" but that's
+> only because it depends on CONFIG_FUNCTION_TRACER and nobody that enables
+> that should have DYNAMIC_FTRACE off (except for academia).
 
+The FUNCTION_ERROR_INJECTION used to be "def_bool y" for ~5 years.
+BTW the macro was called BPF_ALLOW_ERROR_INJECTION() when Josef initially implemented it.
+Massami later renamed it ALLOW_ERROR_INJECTION() and allowed kprobes to use it.
+Today there is a user expectation that this feature is available in the kernel.
+We can do "default n" here, let distros decide and potentially upset users.
+I don't feel strongly about that.
 
-From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Date: Fri, 2 Dec 2022 16:22:42 -0800
-Subject: [PATCH] iommu/vt-d: Fix buggy QAT device mask
+> 
+> > +	help
+> > +	  Allows error injection framework to return errors from syscalls.
+> > +	  BPF may modify return values of syscalls as well.
+> 
+> And here's the thing. If BPF returns anything *but* an error, then this is
+> a misnomer and incorrect. Name it something else like "HIJACK_SYSCALLS".
 
-Impacted QAT device IDs that need extra dtlb flush quirk is ranging
-from 0x4940 to 0x4943. After bitwise AND device ID with 0xfffc the
-result should be 0x4940 instead of 0x494c to identify these devices.
+The bpf prog must return errno. No doubt about that.
+Today the verifier validates return values whenever is necessary.
+When original bpf_override_return was added the verifier wasn't that smart.
+Since then we added return value checks pretty much everywhere.
+Looks like the check is still missing bpf_override_return.
+We will fix it asap.
 
-Reported-by: Raghunathan Srinivasan <raghunathan.srinivasan@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
----
- drivers/iommu/intel/iommu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +	  If unsure, say Y
+> 
+> And I'm curious, why Y if unsure?
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index d8759f445aff..0b10104c4b99 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1401,7 +1401,7 @@ static void domain_update_iotlb(struct dmar_domain *domain)
-  * This quirk is exempted from risky_device() check because it applies only
-  * to the built-in QAT devices and it doesn't grant additional privileges.
-  */
--#define BUGGY_QAT_DEVID_MASK 0x494c
-+#define BUGGY_QAT_DEVID_MASK 0x4940
- static bool dev_needs_extra_dtlb_flush(struct pci_dev *pdev)
- {
-        if (pdev->vendor != PCI_VENDOR_ID_INTEL)
-
-sorry about that,
-
-
-Thanks,
-
-Jacob
+Copy-paste. I can remove that line.
