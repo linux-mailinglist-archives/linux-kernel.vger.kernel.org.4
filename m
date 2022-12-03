@@ -2,47 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9356641554
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 10:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E670641557
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 10:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiLCJhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 04:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S229532AbiLCJjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 04:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiLCJho (ORCPT
+        with ESMTP id S229542AbiLCJjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 04:37:44 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC5310063;
-        Sat,  3 Dec 2022 01:37:42 -0800 (PST)
-Received: from dggpeml500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NPPpd32B9z15Lxj;
-        Sat,  3 Dec 2022 17:36:57 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 3 Dec
- 2022 17:37:40 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yanan@huawei.com>, <wuchangye@huawei.com>,
-        <xiesongyang@huawei.com>, <kongweibin2@huawei.com>,
-        <liuxin350@huawei.com>, <zhangmingyi5@huawei.com>
-Subject: [PATCH bpf-next] libbpf: Optimized return value in libbpf_strerror when errno is libbpf errno
-Date:   Sat, 3 Dec 2022 17:37:40 +0800
-Message-ID: <20221203093740.218935-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 3 Dec 2022 04:39:00 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB7E5A6ED
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 01:38:57 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3c21d6e2f3aso71478267b3.10
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 01:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r1oGywp14JWZ15FPL7OnZRGPM4ko/b7n8s59nLxtj8U=;
+        b=s9QB5ECunL2ghBjfUzx+lJx+SxjrYch/xmnA+GUEUXdT8mq8nvvxfX3V1ncfLSXyHe
+         EQOqbDQ88d8lyvV1TSdn7VjZkbgpDWeN9lOYQjn19674NnrhsA9QU1m9+6hWIHpNqIjs
+         /qSJL5/81qi9XrhCqCFN7kc7oNTk+G/hxvRyKrjnr3XN7MslAb42mzzDBMWkYrAeu4ZE
+         4MqoxvWsuWKzhMqfsOmyEzzEvGYzVR9Tq6HuAtgOtYOg0wI8AKtPJTSmhLvlSRiJE+CB
+         p0kIIf8tMgwDo8sdm0KWuiz/RB3GEkpWpnz1jFYWbMsfMToAY0S7h/PD1aRE5ZxfhEdq
+         6CnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r1oGywp14JWZ15FPL7OnZRGPM4ko/b7n8s59nLxtj8U=;
+        b=ADPdgU7MP8Pv8vWg26aX+yEeOY4SgF+IgNagb26lMKN61VR1nDi4eHmD5vmmo62xot
+         LBkAcWbw34Ci/Z8R6XZ3F8xWs3FVE47DpoHGBtJN7nyiqn/yyc8mcCzLzc+tJ0ld4CNw
+         PrxkMWNJn77nXHkasnEh91po0lOxTksdihvVRu5H+jpVMZ5khkZc5mNj6JZYcuA7TPBs
+         nL3yYUoWuKiHewxWxGf97xj+exdw9NAO0HUf4Nw78xxHqX4CSzwLUJBNeHkJ9Y08RDtN
+         SuY3DzwsrtyNhgtH3HtOUVt0+jyYI9ELECng0pmMzgohBR2g9GsKCY0pJiOfV2deqV64
+         0gYw==
+X-Gm-Message-State: ANoB5plduhbVWG7q4MXoqHsIhVJZlWE00hUORQh0fHi05JifUKHpuiSC
+        rQ+ccg+0leh/CpgAqMssjm+I6wBKT9kIzBuxtWJ9PA==
+X-Google-Smtp-Source: AA0mqf6rtGoiX62tAlxDjk/WCyDBCu/w/wp+MD9OtLZHeHdONq/EZ7raekDVvTX5ZPXLENYFYKZblujPRMvOkyzLEmk=
+X-Received: by 2002:a81:7909:0:b0:36f:d2d9:cdc4 with SMTP id
+ u9-20020a817909000000b0036fd2d9cdc4mr54837574ywc.380.1670060336538; Sat, 03
+ Dec 2022 01:38:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221130155519.20362-1-andriy.shevchenko@linux.intel.com> <20221130155519.20362-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221130155519.20362-2-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 3 Dec 2022 10:38:45 +0100
+Message-ID: <CACRpkdaQWZE6=BNEh5hSH9=jBK=TcLoD1uUb=JyNYmHFvaSAfg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] Documentation: gpio: Add a section on what to
+ return in ->get() callback
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kent Gibson <warthog618@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,42 +71,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a small improvement in libbpf_strerror. When libbpf_strerror
-is used to obtain the system error description, if the length of the
-buf is insufficient, libbpf_sterror returns ERANGE and sets errno to
-ERANGE.
+On Wed, Nov 30, 2022 at 4:55 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-However, this processing is not performed when the error code
-customized by libbpf is obtained. Make some minor improvements here,
-return -ERANGE and set errno to ERANGE when buf is not enough for
-custom description.
+> +The below table gathered the most used cases.
+> +
+> +==========  ==========  ===============  =======================
+> +  Input       Output         State        What value to return?
+> +==========  ==========  ===============  =======================
+> + Disabled    Disabled    Hi-Z             input buffer
+> + Disabled    OS/OD/etc   Single ended     [cached] output buffer
+> +    x        Push-Pull   Out              [cached] output buffer
+> + Enabled     Disabled    In               input buffer
+> + Enabled     OS/OD/etc   Bidirectional    input buffer
+> +==========  ==========  ===============  =======================
 
-Signed-off-by: Xin Liu <liuxin350@huawei.com>
----
- tools/lib/bpf/libbpf_errno.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+This looks about right to me, but we need more input, Kent?
 
-diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errno.c
-index 96f67a772a1b..48ce7d5b5bf9 100644
---- a/tools/lib/bpf/libbpf_errno.c
-+++ b/tools/lib/bpf/libbpf_errno.c
-@@ -54,10 +54,16 @@ int libbpf_strerror(int err, char *buf, size_t size)
- 
- 	if (err < __LIBBPF_ERRNO__END) {
- 		const char *msg;
-+		size_t msg_size;
- 
- 		msg = libbpf_strerror_table[ERRNO_OFFSET(err)];
- 		snprintf(buf, size, "%s", msg);
- 		buf[size - 1] = '\0';
-+
-+		msg_size = strlen(msg);
-+		if (msg_size >= size)
-+			return libbpf_err(-ERANGE);
-+
- 		return 0;
- 	}
- 
--- 
-2.33.0
-
+Yours,
+Linus Walleij
