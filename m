@@ -2,200 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B57D6412C4
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECD46412CB
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiLCArx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 19:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S235259AbiLCAuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 19:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235541AbiLCAr2 (ORCPT
+        with ESMTP id S235246AbiLCAtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 19:47:28 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FBD10CB40;
-        Fri,  2 Dec 2022 16:41:02 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id e2-20020a4ac3c2000000b004a092c9ddecso507871ooq.13;
-        Fri, 02 Dec 2022 16:41:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgtFpNRH5AFLrx9UWVJAkL2FwXwekeUpezsVyYLL5Sc=;
-        b=T9hc+jnDeHfGqmnI60UPi73AzAq5K0iH23yDAt+ql5SovUeP1UNaHI2a+GsHtBfLOa
-         hMOQPvm1FIVjSs524eEp/yP//EGhUsInpNWW5CE25g26pnEo9+4PqwR151+iBU7+QjH6
-         xnKpi5v8wO2Fawu1Q8iqPd6+8PgHe0r9qf1ggiua7JZ6ElJaUPHOC0dLXZt8vp7rU4eD
-         fWCmN12jAZ31Kl+59DogGXuZQP5ahwnZ4suyR6bDPV0y6QAnNn2fL4EquFsISXE8hFvR
-         IyEGRzVrqTG6wXn4qSjp2ipw5VPZvGWapAYZfWRL58e5BZoPMWmerzYG1nmifpjBf0p7
-         dyXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kgtFpNRH5AFLrx9UWVJAkL2FwXwekeUpezsVyYLL5Sc=;
-        b=dQl7lkodPp5vzoR5d2ZKtO1k1FAYJjDbrDS/SXDRGgMAlE1VY7QXl3yJO+Wd1bOEtQ
-         tWavkrAWMs3pFa6FmrX7JBLAWKGS4v3AmlZw6ikLE7nd74aHicVqIGgE0BWvKTEtLOCx
-         s3qlM0AnkVH9YhiJzbsR2hQVPfwQSSdnc3YZ0vGPJRtyFPKsJS5Y2JJp8m5sjjRF1/iv
-         4qyp/ubT0l2yngw5Y9pqWmjS/saiwUcLhMn05vYnrYBLxdDCMcyqnwU05qVKJEnM3M+z
-         rMm48hy88KeEWOluBJ29rhhZQ8s7iYT0IkCyTFHbtD+DLx52JgzAhGZCvRXoy+k6ifsj
-         IG5Q==
-X-Gm-Message-State: ANoB5pmJJH8vD5gYq8IKqHyy5XeKiI8Ugl2UUwvvpPXTZP0HoHq31hBB
-        JteeBii8TvTbmv60eV65NT4cJOzeQhxSOz6WIOI=
-X-Google-Smtp-Source: AA0mqf59EO8Jhf8nVuUwbNPV9lpUW5YNjz4AxWYOID4n4XwvJsBv1uRmt9o9VJZyylsUNus8xDOcCLc1qvyLICtMUn8=
-X-Received: by 2002:a4a:ab4a:0:b0:480:7fd1:1875 with SMTP id
- j10-20020a4aab4a000000b004807fd11875mr23464626oon.24.1670028061923; Fri, 02
- Dec 2022 16:41:01 -0800 (PST)
+        Fri, 2 Dec 2022 19:49:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CD861F60F;
+        Fri,  2 Dec 2022 16:42:42 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E724023A;
+        Fri,  2 Dec 2022 16:42:47 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 437743F73B;
+        Fri,  2 Dec 2022 16:42:39 -0800 (PST)
+Date:   Sat, 3 Dec 2022 00:40:53 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Fabien Poussin <fabien.poussin@gmail.com>
+Subject: Re: [PATCH 5/5] clk: sunxi-ng: d1: Add CAN bus gates and resets
+Message-ID: <20221203004053.1be69003@slackpad.lan>
+In-Reply-To: <20221126191319.6404-6-samuel@sholland.org>
+References: <20221126191319.6404-1-samuel@sholland.org>
+        <20221126191319.6404-6-samuel@sholland.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-References: <20220826012614.552860-1-james.hilliard1@gmail.com>
- <CAEf4BzahSjt1huoJXAxSj-ycVjGKJm_dFinsZFBHtRGj7apiUQ@mail.gmail.com>
- <CADvTj4p8pykr4Vy-YSLcaXsfmuWAmZ9ay-np6mxTdwOT1LBnXw@mail.gmail.com> <CAEf4BzbhH9DtBsen8x9BUrAZy0d-osK57Zg=Cor-BmLyvAX+jg@mail.gmail.com>
-In-Reply-To: <CAEf4BzbhH9DtBsen8x9BUrAZy0d-osK57Zg=Cor-BmLyvAX+jg@mail.gmail.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Fri, 2 Dec 2022 20:40:50 -0400
-Message-ID: <CADvTj4qrNnrqfDxPTyjMQ2ezs5BRouuLE9961bSbdtkAAXoZrA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix conflicts with built-in functions in bpf_iter_ksym
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 1:08 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sat, Aug 27, 2022 at 3:47 AM James Hilliard
-> <james.hilliard1@gmail.com> wrote:
-> >
-> > On Fri, Aug 26, 2022 at 10:55 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Thu, Aug 25, 2022 at 6:26 PM James Hilliard
-> > > <james.hilliard1@gmail.com> wrote:
-> > > >
-> > > > Both tolower and toupper are built in c functions, we should not
-> > >
-> > > Really? How come? Can you point out where this is specified in C
-> > > standard? From what I can tell you have to include <ctype.h> to get
-> > > toupper()/tolower().
-> >
-> > See background on this sort of issue:
-> > https://stackoverflow.com/a/20582607
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=12213
-> >
-> > (C99, 7.1.3p1) "All identifiers with external linkage in any of the following
-> > subclauses (including the future library directions) are always reserved
-> > for use as identifiers with external linkage."
-> >
->
-> Sigh, ok. Ghost functions: you can't use them without ctype.h, but you
-> can't define your own either. Very nice.
->
-> Can you please put all these details into a commit for the future? With that:
+On Sat, 26 Nov 2022 13:13:19 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-Sure
+Hi,
 
->
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> From: Fabien Poussin <fabien.poussin@gmail.com>
+> 
+> The D1 CCU contains gates and resets for two CAN buses. While the CAN
+> bus controllers are only documented for the T113 SoC, the CCU is the
+> same across all SoC variants.
 
-Is this good to apply or should I send a v2?
+So my version of the T113 manual only barely mentions the existence of
+CAN controllers, but doesn't list any details, not even a base address
+or those clock gates.
+However I can confirm that the two lowest bits are implemented in
++0x92c. I also verified that the bits and numbers below match up.
 
->
-> > >
-> > > This seems like yet another GCC-BPF quirk?
-> >
-> > Seems GCC takes a stricter interpretation of the standard here than
-> > llvm.
-> >
-> > It's also documented behavior in GCC:
-> > https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-std-2
-> >
-> > See:
-> > The ISO C90 functions abort, abs, acos, asin, atan2, atan, calloc, ceil,
-> > cosh, cos, exit, exp, fabs, floor, fmod, fprintf, fputs, free, frexp, fscanf,
-> > isalnum, isalpha, iscntrl, isdigit, isgraph, islower, isprint, ispunct, isspace,
-> > isupper, isxdigit, tolower, toupper, labs, ldexp, log10, log, malloc, memchr,
-> > memcmp, memcpy, memset, modf, pow, printf, putchar, puts, realloc,
-> > scanf, sinh, sin, snprintf, sprintf, sqrt, sscanf, strcat, strchr,
-> > strcmp, strcpy,
-> > strcspn, strlen, strncat, strncmp, strncpy, strpbrk, strrchr, strspn, strstr,
-> > tanh, tan, vfprintf, vprintf and vsprintf are all recognized as
-> > built-in functions
-> > unless -fno-builtin is specified (or -fno-builtin-function is specified for an
-> > individual function).
-> >
-> > We could disable builtin functions but it seems more correct to just
-> > rename it so that it doesn't conflict.
-> >
-> > >
-> > > > redefine them as this can result in a build error.
-> > > >
-> > > > Fixes the following errors:
-> > > > progs/bpf_iter_ksym.c:10:20: error: conflicting types for built-in function 'tolower'; expected 'int(int)' [-Werror=builtin-declaration-mismatch]
-> > > >    10 | static inline char tolower(char c)
-> > > >       |                    ^~~~~~~
-> > > > progs/bpf_iter_ksym.c:5:1: note: 'tolower' is declared in header '<ctype.h>'
-> > > >     4 | #include <bpf/bpf_helpers.h>
-> > > >   +++ |+#include <ctype.h>
-> > > >     5 |
-> > > > progs/bpf_iter_ksym.c:17:20: error: conflicting types for built-in function 'toupper'; expected 'int(int)' [-Werror=builtin-declaration-mismatch]
-> > > >    17 | static inline char toupper(char c)
-> > > >       |                    ^~~~~~~
-> > > > progs/bpf_iter_ksym.c:17:20: note: 'toupper' is declared in header '<ctype.h>'
-> > > >
-> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > > ---
-> > > >  tools/testing/selftests/bpf/progs/bpf_iter_ksym.c | 6 +++---
-> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-> > > > index 285c008cbf9c..9ba14c37bbcc 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-> > > > @@ -7,14 +7,14 @@ char _license[] SEC("license") = "GPL";
-> > > >
-> > > >  unsigned long last_sym_value = 0;
-> > > >
-> > > > -static inline char tolower(char c)
-> > > > +static inline char to_lower(char c)
-> > > >  {
-> > > >         if (c >= 'A' && c <= 'Z')
-> > > >                 c += ('a' - 'A');
-> > > >         return c;
-> > > >  }
-> > > >
-> > > > -static inline char toupper(char c)
-> > > > +static inline char to_upper(char c)
-> > > >  {
-> > > >         if (c >= 'a' && c <= 'z')
-> > > >                 c -= ('a' - 'A');
-> > > > @@ -54,7 +54,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
-> > > >         type = iter->type;
-> > > >
-> > > >         if (iter->module_name[0]) {
-> > > > -               type = iter->exported ? toupper(type) : tolower(type);
-> > > > +               type = iter->exported ? to_upper(type) : to_lower(type);
-> > > >                 BPF_SEQ_PRINTF(seq, "0x%llx %c %s [ %s ] ",
-> > > >                                value, type, iter->name, iter->module_name);
-> > > >         } else {
-> > > > --
-> > > > 2.34.1
-> > > >
+> Signed-off-by: Fabien Poussin <fabien.poussin@gmail.com>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+
+Cheers,
+Andre
+
+> ---
+> 
+>  drivers/clk/sunxi-ng/ccu-sun20i-d1.c      | 11 +++++++++++
+>  drivers/clk/sunxi-ng/ccu-sun20i-d1.h      |  2 +-
+>  include/dt-bindings/clock/sun20i-d1-ccu.h |  2 ++
+>  include/dt-bindings/reset/sun20i-d1-ccu.h |  2 ++
+>  4 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun20i-d1.c b/drivers/clk/sunxi-ng/ccu-sun20i-d1.c
+> index c5a7df93602c..48a8fb2c43b7 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun20i-d1.c
+> +++ b/drivers/clk/sunxi-ng/ccu-sun20i-d1.c
+> @@ -469,6 +469,11 @@ static SUNXI_CCU_GATE_HWS(bus_i2c2_clk, "bus-i2c2", apb1_hws,
+>  static SUNXI_CCU_GATE_HWS(bus_i2c3_clk, "bus-i2c3", apb1_hws,
+>  			  0x91c, BIT(3), 0);
+>  
+> +static SUNXI_CCU_GATE_HWS(bus_can0_clk, "bus-can0", apb1_hws,
+> +			  0x92c, BIT(0), 0);
+> +static SUNXI_CCU_GATE_HWS(bus_can1_clk, "bus-can1", apb1_hws,
+> +			  0x92c, BIT(1), 0);
+> +
+>  static const struct clk_parent_data spi_parents[] = {
+>  	{ .fw_name = "hosc" },
+>  	{ .hw = &pll_periph0_clk.hw },
+> @@ -997,6 +1002,8 @@ static struct ccu_common *sun20i_d1_ccu_clks[] = {
+>  	&bus_i2c1_clk.common,
+>  	&bus_i2c2_clk.common,
+>  	&bus_i2c3_clk.common,
+> +	&bus_can0_clk.common,
+> +	&bus_can1_clk.common,
+>  	&spi0_clk.common,
+>  	&spi1_clk.common,
+>  	&bus_spi0_clk.common,
+> @@ -1147,6 +1154,8 @@ static struct clk_hw_onecell_data sun20i_d1_hw_clks = {
+>  		[CLK_BUS_I2C1]		= &bus_i2c1_clk.common.hw,
+>  		[CLK_BUS_I2C2]		= &bus_i2c2_clk.common.hw,
+>  		[CLK_BUS_I2C3]		= &bus_i2c3_clk.common.hw,
+> +		[CLK_BUS_CAN0]		= &bus_can0_clk.common.hw,
+> +		[CLK_BUS_CAN1]		= &bus_can1_clk.common.hw,
+>  		[CLK_SPI0]		= &spi0_clk.common.hw,
+>  		[CLK_SPI1]		= &spi1_clk.common.hw,
+>  		[CLK_BUS_SPI0]		= &bus_spi0_clk.common.hw,
+> @@ -1252,6 +1261,8 @@ static struct ccu_reset_map sun20i_d1_ccu_resets[] = {
+>  	[RST_BUS_I2C1]		= { 0x91c, BIT(17) },
+>  	[RST_BUS_I2C2]		= { 0x91c, BIT(18) },
+>  	[RST_BUS_I2C3]		= { 0x91c, BIT(19) },
+> +	[RST_BUS_CAN0]		= { 0x92c, BIT(16) },
+> +	[RST_BUS_CAN1]		= { 0x92c, BIT(17) },
+>  	[RST_BUS_SPI0]		= { 0x96c, BIT(16) },
+>  	[RST_BUS_SPI1]		= { 0x96c, BIT(17) },
+>  	[RST_BUS_EMAC]		= { 0x97c, BIT(16) },
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun20i-d1.h b/drivers/clk/sunxi-ng/ccu-sun20i-d1.h
+> index e303176f0d4e..b14da36e2537 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun20i-d1.h
+> +++ b/drivers/clk/sunxi-ng/ccu-sun20i-d1.h
+> @@ -10,6 +10,6 @@
+>  #include <dt-bindings/clock/sun20i-d1-ccu.h>
+>  #include <dt-bindings/reset/sun20i-d1-ccu.h>
+>  
+> -#define CLK_NUMBER		(CLK_FANOUT2 + 1)
+> +#define CLK_NUMBER		(CLK_BUS_CAN1 + 1)
+>  
+>  #endif /* _CCU_SUN20I_D1_H_ */
+> diff --git a/include/dt-bindings/clock/sun20i-d1-ccu.h b/include/dt-bindings/clock/sun20i-d1-ccu.h
+> index e3ac53315e1a..e143b9929763 100644
+> --- a/include/dt-bindings/clock/sun20i-d1-ccu.h
+> +++ b/include/dt-bindings/clock/sun20i-d1-ccu.h
+> @@ -152,5 +152,7 @@
+>  #define CLK_FANOUT0		142
+>  #define CLK_FANOUT1		143
+>  #define CLK_FANOUT2		144
+> +#define CLK_BUS_CAN0		145
+> +#define CLK_BUS_CAN1		146
+>  
+>  #endif /* _DT_BINDINGS_CLK_SUN20I_D1_CCU_H_ */
+> diff --git a/include/dt-bindings/reset/sun20i-d1-ccu.h b/include/dt-bindings/reset/sun20i-d1-ccu.h
+> index de9ff5203239..f8001cf50bf1 100644
+> --- a/include/dt-bindings/reset/sun20i-d1-ccu.h
+> +++ b/include/dt-bindings/reset/sun20i-d1-ccu.h
+> @@ -73,5 +73,7 @@
+>  #define RST_BUS_DSP_CFG		63
+>  #define RST_BUS_DSP_DBG		64
+>  #define RST_BUS_RISCV_CFG	65
+> +#define RST_BUS_CAN0		66
+> +#define RST_BUS_CAN1		67
+>  
+>  #endif /* _DT_BINDINGS_RST_SUN20I_D1_CCU_H_ */
+
