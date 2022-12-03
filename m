@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B60641472
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 07:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080A7641475
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 07:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiLCGNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 01:13:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S230142AbiLCGRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 01:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLCGNG (ORCPT
+        with ESMTP id S229522AbiLCGRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 01:13:06 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CDB9D2EC
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 22:13:05 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso10266566pjt.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 22:13:05 -0800 (PST)
+        Sat, 3 Dec 2022 01:17:06 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E88140B1
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 22:17:05 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so10209704pje.5
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 22:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5yDOHLL9ze+d0HRPvZyCxALaBNkR8+lAJSzL28YezYA=;
-        b=iWHWjx91hVGItCFd5fzXv0MHJpDwn2f/kM3pQtwchQVVHbgS+UrtapZV+klTJ5sCuc
-         er1qccXL27ysHwjZsxnAZLByvb2GS5TRbBFy3SzzvYGXdwn9SUeKWJFx26upSNfk0fxZ
-         bKpRpQGROVLlQTzENKRIaJp6sKiLzCY++c935r5c8M0P7HtEhAqBBfYZTxnFiwzpMrjD
-         KDg+iBptE49jbO1TKjEx0+IXNmGodrTnPixOIv8SvFPtuBuEvT9f6xmfd6xGlb/mYzM0
-         P3/fSlwYgOZXzblioDiZc6+nnwTs4DZve0RS5AxncFunZH4jU8Kgu5wd/h9WCY1GvuI2
-         ya5A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:cc:to:content-language:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iWHy4LSWfbG3UbLnEYU1lddWQD7NxoRBXBkZf7NJaq0=;
+        b=Y8mIF98OAkQn1548VV0fJrwva7hbWILj1DDI8/FZ8U4mognnaifodvSjq9k5OtVywn
+         XlY+DNTWFUFOkcXDU5yf8eqJQJlE7bpj63vDYSE3Symp2wf9HlbVWdEWDaskcjO5DVBc
+         ByWTPFSZiwrQotHzc+bA3tjCerzcWGdIFF/O8cku1qkn9pZtI9EjFkInfsgP16qnVsgh
+         pjeb8yjZ/hebennxOwWoVVcPodk/RwjhZf8xIsS9JIrgM2OlmVAs82yKM2lMxk6HXJma
+         JOVX40yCu5NrCU2qbxX4kpX+jaGate+MUTXabn0SdKbgL7AewqD+6Y9dWzSRD/RVookB
+         UuJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5yDOHLL9ze+d0HRPvZyCxALaBNkR8+lAJSzL28YezYA=;
-        b=T7tSSufyBPBD+BCbyzK1z6x8zNpbfFjj9vCMmq6Psv9E0q3wdpygsogum4HIcJbJ34
-         gHNgO24UHYBX6/eSJ6W/1JDUFhwmZWDf56acIDuHiu86RwG+XhmQ9YwcMWgZvdkgQdNU
-         fX+jgEB12XH06a9Wxf15IxCqIhAUK9CoXzR1vDCIBh4lv61p/b7Ch4z53fs2mMqAWR92
-         J+tvNbMCQNl9Y++x2lLqDNTrivoks106RtvL777LugbikcFN8Bq/zjTDSLHEM5B7bQ4C
-         p0NiL6mPkID6UiDnfitFQB0FMJ6vdgz+DPtSxG6kaMG1wtablWdFvtfSWYdu30yPt8oX
-         eaaw==
-X-Gm-Message-State: ANoB5pmi1g3Or6Fnzg68LTxpNbZ6Vga6TWKJH6WdusZMRyy911nNab5M
-        FO+ha2PgFPBQI1Y5i/eE/BO7DS/YgFKFExhaqq52BQ==
-X-Google-Smtp-Source: AA0mqf6v3t9HXTieHg3WKAbD67/H3agkd58t6kzZXqP1QYEy5B0yFlLTC2Bv9w7z7DsDo4k8htRHSVD3WI5KnbEFaLU=
-X-Received: by 2002:a17:902:6a86:b0:188:cfc6:31fb with SMTP id
- n6-20020a1709026a8600b00188cfc631fbmr67931214plk.150.1670047985006; Fri, 02
- Dec 2022 22:13:05 -0800 (PST)
+        h=content-transfer-encoding:subject:cc:to:content-language:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iWHy4LSWfbG3UbLnEYU1lddWQD7NxoRBXBkZf7NJaq0=;
+        b=SX7kHQ00QpmBLRl+bIkR1IK1X9THmJ3q7aaBrOOP7Z8zQy8Eb5uGpeGG7H0LJE67sN
+         N16CTNMsFklEQVgeLe+3MuViXrjB77YcjCbFWC1ZuZkcpQ2cpSionnnsNFFDo9eRUMfM
+         BMKYcMHoR/tqL2atge1oH3cLYFFhd6WfJEqayIDjwDF3qfdLFvUw30LqI+MWDA4hKzmL
+         +LZDXSj16ZxI66n0tZqAVLbIHmiq7qT7AnNwKVLJ5nwMSnCxp32ShR7fLP1m3dpW/Kv3
+         FFWx70yPVkCPWwboY0EiDO5mDZb/ATQ6eaq/cJIHBV9WRDfmdIfsL46TKSOmh6iFNopU
+         PtdA==
+X-Gm-Message-State: ANoB5pl6xLNqcN221SB00qbhzI6EK7JHwK91O7StAa3ROqp1QP3TZGH6
+        wZKCGtvrxz4BA8Fyu+Pl9R8=
+X-Google-Smtp-Source: AA0mqf4U3a61fhwVJZmegC9LzWWxUr0Ji7q4jwJbYu+txOORBjAPXhu/DaT21It5ScCayY/I2f9nOQ==
+X-Received: by 2002:a17:902:ecd2:b0:189:5f79:6ac2 with SMTP id a18-20020a170902ecd200b001895f796ac2mr43665887plh.132.1670048224818;
+        Fri, 02 Dec 2022 22:17:04 -0800 (PST)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id v7-20020a631507000000b004788780dd8esm1778313pgl.63.2022.12.02.22.17.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 22:17:04 -0800 (PST)
+Message-ID: <2d54b0bb-9252-a4be-7de5-a5b1bf7f2c37@gmail.com>
+Date:   Sat, 3 Dec 2022 15:17:00 +0900
 MIME-Version: 1.0
-References: <20221114090536.1662624-1-apatel@ventanamicro.com>
-In-Reply-To: <20221114090536.1662624-1-apatel@ventanamicro.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Sat, 3 Dec 2022 11:42:52 +0530
-Message-ID: <CAK9=C2VZTJC=OMc5=erf2MNZXRG99AiuGz6RAFw+c3vdKcha9Q@mail.gmail.com>
-Subject: Re: [PATCH v6 0/3] Add PMEM support for RISC-V
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>
+Subject: [GIT PULL] extcon next for 6.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+Dear Greg,
 
-On Mon, Nov 14, 2022 at 2:36 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> The Linux NVDIMM PEM drivers require arch support to map and access the
-> persistent memory device. This series adds RISC-V PMEM support using
-> recently added Svpbmt and Zicbom support.
->
-> First two patches are fixes and remaining two patches add the required
-> PMEM support for Linux RISC-V.
->
-> These patches can also be found in riscv_pmem_v6 branch at:
-> https://github.com/avpatel/linux.git
->
-> Changes since v5:
->  - Rebased on Linux-6.1-rc5
->  - Directly add pmem.o in obj-y of PATCH3
->  - Dropped PATCH1 since this is already merged.
->
-> Changes since v4:
->  - Simplify PATCH2 by implementing RISC-V specific arch_memremap_wb()
->
-> Changes since v3:
->  - Pickup correct version of Drew's patch as PATCH1
->
-> Changes since v2:
->  - Rebased on Linux-6.1-rc1
->  - Replaced PATCH1 with the patch proposed by Drew
->
-> Changes since v1:
->  - Fix error reported by test bot
->    https://lore.kernel.org/all/202208272028.IwrNZ0Ur-lkp@intel.com/
->
-> Anup Patel (3):
->   RISC-V: Fix MEMREMAP_WB for systems with Svpbmt
->   RISC-V: Implement arch specific PMEM APIs
->   RISC-V: Enable PMEM drivers
+This is extcon-next pull request for v6.2. I add detailed description of
+this pull request on below. Please pull extcon with following updates.
 
-Can this series be considered for Linux-6.2 ?
+I'm sorry for late pull request. If possible, could you apply this pull request?
 
-Regards,
-Anup
+Best Regards,
+Chanwoo Choi
 
->
->  arch/riscv/Kconfig           |  1 +
->  arch/riscv/configs/defconfig |  1 +
->  arch/riscv/include/asm/io.h  |  5 +++++
->  arch/riscv/mm/Makefile       |  1 +
->  arch/riscv/mm/pmem.c         | 21 +++++++++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 arch/riscv/mm/pmem.c
->
-> --
-> 2.34.1
->
+The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
+
+  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git tags/extcon-next-for-6.2
+
+for you to fetch changes up to 5313121b22fd11db0d14f305c110168b8176efdc:
+
+  extcon: usbc-tusb320: Convert to i2c's .probe_new() (2022-12-03 15:03:40 +0900)
+
+----------------------------------------------------------------
+
+Update extcon next for v6.2
+
+Detailed description for this pull request:
+- Replace irqchip mask_invert with unmask_base
+  to remove deprecated mask_invert flag for extcon-max77843.c
+
+- Convert to i2c's .probe_new style for extcon-fsa9480,
+  extcon-rt8973 and extcon-usbc-uusb320.c
+
+----------------------------------------------------------------
+
+Aidan MacDonald (1):
+      extcon: max77843: Replace irqchip mask_invert with unmask_base
+
+Uwe Kleine-König (3):
+      extcon: fsa9480: Convert to i2c's .probe_new()
+      extcon: rt8973: Convert to i2c's .probe_new()
+      extcon: usbc-tusb320: Convert to i2c's .probe_new()
+
+ drivers/extcon/extcon-fsa9480.c      | 5 ++---
+ drivers/extcon/extcon-max77843.c     | 3 +--
+ drivers/extcon/extcon-rt8973a.c      | 5 ++---
+ drivers/extcon/extcon-usbc-tusb320.c | 5 ++---
+ 4 files changed, 7 insertions(+), 11 deletions(-)
