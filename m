@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7DA641344
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CB1641348
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbiLCCUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:20:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S234931AbiLCCWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbiLCCUu (ORCPT
+        with ESMTP id S234930AbiLCCWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:20:50 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401AEACA74
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:20:50 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id a14so2477724pfa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:20:50 -0800 (PST)
+        Fri, 2 Dec 2022 21:22:09 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8049DDB61F
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:22:08 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id 4so6273411pli.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:22:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pdj4rQnZt3ghY0JYsDbW8G29zmubdAJq8qnfUhP1bDw=;
-        b=gsBDlFYIA6+ssXAuRQnSCJpEb8pM4SDnpeDeLeFetrTCxdejKvNiZg4cCs8RzVeSVR
-         aCDxlveDMDqzJ0/uwkJSoqvEnryHxT4HvfWZkKCjiqK9uowsLom9/PdT5VLwDe7XrNm0
-         QZiu0h6AvVRpdlpM9Nd8QSrYGdi9ypFGXRNzQ=
+        bh=TaBD+K8vuSmT+9I8IhibTBAr2KH9ByAD3wUnDitrKaU=;
+        b=kzuyfeQoSyAUG8+Imi6tO8JNZ9YWhAvNTmNhd180HVAkqGC4AP/R8m6q61VMEcHQRG
+         p7cLD+caVlXkQdtHDCF/fuJIF24rqo9qnNke7raYkP2CANUAw0h9aTVF44y5HmBXRc/r
+         wccuXLJp0VZqNK1XcjzQ/6hC6bpV87Q28yJHo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pdj4rQnZt3ghY0JYsDbW8G29zmubdAJq8qnfUhP1bDw=;
-        b=Sh9rOmlj/fqUOOBNBtJvpRW503Ci73DrAeWsrCm4UaOtYP/iRe1or8UcKd7aoeniNj
-         sZHYso5UjFQ6pRKsKMHwNSKnhpqQZ8qs0q0OcxM4GeAchvZcYz57JL3p9ZWyRJlRbu9M
-         QMnIVwtcVcElRbZN7RC4VuNLkRO2A3AYwJxp952tpB9wrsDDQXbBjZVb4F2Xavctu8FT
-         Z416kRYVHtsItgzExZpo3xC6lYQRKuhm8wVtOYD1cq0ccBDjpkjMzT6QuFkp3IYhl1eT
-         sHLf573PUpFYNPsOlTMkASZ1LmyyZiMujyq+EUyRzMtzCYd4L8B1fS1RKnIU//YmWjPK
-         cssA==
-X-Gm-Message-State: ANoB5plrGxFOh0biCd4hvvXWrA+sdqOHcBTL5JAN7cyIH7bQ8dasZX9y
-        EYLxNgAxVuYur06IOtU5tCb8gg==
-X-Google-Smtp-Source: AA0mqf4mF13JhpORx1pjJYPRNcogO+X7Oh29vGm+VcX+eNni2cgUCbmjN8FPxQdYEN/m921aEDZQ9A==
-X-Received: by 2002:a62:5b43:0:b0:573:6cfc:2210 with SMTP id p64-20020a625b43000000b005736cfc2210mr57434898pfb.55.1670034049745;
-        Fri, 02 Dec 2022 18:20:49 -0800 (PST)
+        bh=TaBD+K8vuSmT+9I8IhibTBAr2KH9ByAD3wUnDitrKaU=;
+        b=qK1bYH89FNgz4ytRYpe/DE9fqhRXmDlkmOM3X6X857lzEEq87XOrPsna+XpwNQt61u
+         rt2CXjQJrEgwco9Mj25jxhUzgOc97ThvtBmln4GF7jAmUfqSLjzB7pwjhKiLd6Q8AVA0
+         HOMhQhEG/nRXW329M98tnL+5G4QC9BvOYS70GYEW27KDdDRrFQoeY/tYxK4+cq6iE5Mf
+         p3eNgu9HetkKMEv2Y4z7G1Vnsj5ejN4HO4qcfDG/lSPWFOwoNvRxMohYcwEV/2IpC09u
+         jS0DX0PhfaOs6FZmHsIh5fhtC3wJ3oM7e9Jtk91SxZYuCMQrAqHFAFkrQJHerdbrN9+w
+         LHUA==
+X-Gm-Message-State: ANoB5pm37/Elu4RoWAzWNDEqiR20/xWW0NUaV4m21S0MUj5GBsJNvIBP
+        rCY+nnDoU0dVmdHbJjyV5VO+yg==
+X-Google-Smtp-Source: AA0mqf7RlLfxZY8tl49/Cmo2Vk4zDlapekvLt7FYfPvAGMMifNLP7nDG6LQK1uvuLIe2NY1n6ig04Q==
+X-Received: by 2002:a17:902:e807:b0:189:117c:fcfe with SMTP id u7-20020a170902e80700b00189117cfcfemr55432765plg.124.1670034128032;
+        Fri, 02 Dec 2022 18:22:08 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z19-20020aa79493000000b00576670cc170sm1903619pfk.93.2022.12.02.18.20.48
+        by smtp.gmail.com with ESMTPSA id ju2-20020a170903428200b00174d9bbeda4sm6187424plb.197.2022.12.02.18.22.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:20:49 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:20:48 -0800
+        Fri, 02 Dec 2022 18:22:07 -0800 (PST)
+Date:   Fri, 2 Dec 2022 18:22:06 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -76,36 +76,47 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 02/39] x86/shstk: Add Kconfig option for Shadow Stack
-Message-ID: <202212021820.72F8CAE9E@keescook>
+Subject: Re: [PATCH v4 03/39] x86/cpufeatures: Add CPU feature flags for
+ shadow stacks
+Message-ID: <202212021822.79D8BD1@keescook>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-3-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-4-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-3-rick.p.edgecombe@intel.com>
+In-Reply-To: <20221203003606.6838-4-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:29PM -0800, Rick Edgecombe wrote:
+On Fri, Dec 02, 2022 at 04:35:30PM -0800, Rick Edgecombe wrote:
 > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Shadow Stack provides protection for applications against function return
-> address corruption. It is active when the processor supports it, the
-> kernel has CONFIG_X86_SHADOW_STACK enabled, and the application is built
-> for the feature. This is only implemented for the 64-bit kernel. When it
-> is enabled, legacy non-Shadow Stack applications continue to work, but
-> without protection.
+> The Control-Flow Enforcement Technology contains two related features,
+> one of which is Shadow Stacks. Future patches will utilize this feature
+> for shadow stack support in KVM, so add a CPU feature flags for Shadow
+> Stacks (CPUID.(EAX=7,ECX=0):ECX[bit 7]).
 > 
-> Since there is another feature that utilizes CET (Kernel IBT) that will
-> share implementation with Shadow Stacks, create CONFIG_CET to signify
-> that at least one CET feature is configured.
+> To protect shadow stack state from malicious modification, the registers
+> are only accessible in supervisor mode. This implementation
+> context-switches the registers with XSAVES. Make X86_FEATURE_SHSTK depend
+> on XSAVES.
+> 
+> The shadow stack feature, enumerated by the CPUID bit described above,
+> encompasses both supervisor and userspace support for shadow stack. In
+> near future patches, only userspace shadow stack will be enabled. In
+> expectation of future supervisor shadow stack support, create a software
+> CPU capability to enumerate kernel utilization of userspace shadow stack
+> support. This will also allow for userspace shadow stack to be disabled,
+> while leaving the shadow stack hardware capability exposed in the cpuinfo
+> proc. This user shadow stack bit should depend on the HW "shstk"
+> capability and that logic will be implemented in future patches.
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
