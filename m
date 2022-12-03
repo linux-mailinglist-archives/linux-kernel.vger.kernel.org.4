@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80FF6414F4
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 09:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D556414FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 09:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiLCId1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 03:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
+        id S231618AbiLCIhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 03:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiLCIdX (ORCPT
+        with ESMTP id S229781AbiLCIhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 03:33:23 -0500
-Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D753209A9;
-        Sat,  3 Dec 2022 00:33:22 -0800 (PST)
-Received: from localhost.biz (unknown [10.81.81.211])
-        by gw.red-soft.ru (Postfix) with ESMTPA id 209713E479A;
-        Sat,  3 Dec 2022 11:33:20 +0300 (MSK)
-From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
-To:     Vishnu Dasa <vdasa@vmware.com>, Bryan Tan <bryantan@vmware.com>
-Cc:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH v2] net: vmw_vsock: vmci: Check memcpy_from_msg()
-Date:   Sat,  3 Dec 2022 11:33:12 +0300
-Message-Id: <20221203083312.923029-1-artem.chernyshev@red-soft.ru>
-X-Mailer: git-send-email 2.30.3
-In-Reply-To: <702BBCBE-6E80-4B12-A996-4A2CB7C66D70@vmware.com>
-References: 
+        Sat, 3 Dec 2022 03:37:20 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5792183E
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 00:37:19 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m19so5142024wms.5
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 00:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YQS61NX1Em5a//DyKuM2uuh+62pP/e6si2f0EakzPms=;
+        b=Yv/Sj45myY9Eit4EqdZPMgKDWHOuN0KlxU948jv96xEj9zWcgJeYTHwSdELzVIiYJ4
+         sThn21T727f7KcV6LBlVOYDaakFD/CCqNIxPnkWMLd7ph63rkkoH1SDm5trhTPoSZjpo
+         zclEvVban/0BEU3LcqOUlITBwJ1j/Z0OhVbRfXlZGQyQqhMSO6XWoK6Pm5vl323A9S65
+         fXmXZSPjThLu1Gu7v2P+rPyW00mb2jwkmWSRg41mRRw5kBp45XErVzOMfiE3JHS07dUx
+         /kXcvqpVej2TrPqNcsHh2xoqWy6dHqLfJCsFOmlp2pkvO0P8zxiZ63MM7A16zIPn5p3T
+         ZNuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YQS61NX1Em5a//DyKuM2uuh+62pP/e6si2f0EakzPms=;
+        b=yq1iLYZRY0C/Cay6kED6YV/Yip2XkehjygMIoOm6ki3ulxU1777RClRDrxPJq5iyJ0
+         Ezw+kruU94vtQ9JDyHY9pvZHr3/NCYzLZitrhXfcJ9b3RG6ysSWk9JOgvE31A5bBiqKL
+         knDeA1hF48ycUjVeDwVb3zk0Z0slmUp0RrEHetYqS3oBAJrY+TADq19KfMSGmQJrA5jm
+         35s2ux4AdelYSfxxlss7i50cy29MwRgKHeSRkFBLOv9OXlCdhB1n6iELPeoaEEfjxMd2
+         gErdRKbXm6u+1gwOu/G51hCA1ldlG+TgcOUuzYc+hDvrepgTRKpyq0Z7lbcfv62giR0e
+         9s8g==
+X-Gm-Message-State: ANoB5plyMJXV8SqxO95lwWR+Z7UT2PF0Hl+rEQLn+H1Ejxn0b7K/GPb3
+        9/cU+7Q8HFILVJRgp3c8my1sdMZtJIJzGw==
+X-Google-Smtp-Source: AA0mqf6Y6TXvMtIrlRMjQMb5ja6ZOaIAq0Y8Q1pUS5ChZzfJvtfPL4kPWzRUeoHPLRP8hm28zT4zfQ==
+X-Received: by 2002:a05:600c:538d:b0:3d0:47c:b2ac with SMTP id hg13-20020a05600c538d00b003d0047cb2acmr41051027wmb.52.1670056637511;
+        Sat, 03 Dec 2022 00:37:17 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bs4-20020a056000070400b0023677081f3asm9022986wrb.42.2022.12.03.00.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Dec 2022 00:37:17 -0800 (PST)
+Date:   Sat, 3 Dec 2022 11:37:14 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Joe Peterson <jwp.linux@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: board: Remove control flow from macro
+Message-ID: <Y4sKulRutmI+ESrB@kadam>
+References: <20221203030544.11543-1-jwp.linux@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 173907 [Dec 02 2022]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, red-soft.ru:7.1.1;localhost.biz:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2022/12/03 07:58:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2022/12/03 05:27:00 #20641058
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221203030544.11543-1-jwp.linux@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmci_transport_dgram_enqueue() does not check the return value
-of memcpy_from_msg(). Return with an error if the memcpy fails.
+On Fri, Dec 02, 2022 at 09:05:44PM -0600, Joe Peterson wrote:
+> Adhere to Linux coding style
+> 
+> Reported by checkpatch:
+> 
+> WARNING: Macros with flow control statements should be avoided
+> 
+> There is only one return value possible. Remove the checkpatch warning
+> without effecting functionality.
+> 
+> Signed-off-by: Joe Peterson <jwp.linux@gmail.com>
+> ---
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Does this break the build?
 
-Fixes: 0f7db23a07af ("vmci_transport: switch ->enqeue_dgram, ->enqueue_stream and ->dequeue_stream to msghdr")
-Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
----
-V1->V2 Fix memory leaking and updates for description
+Anyway, checkpatch is wrong here.  Just ignore checkpatch if it says
+silly stuff.
 
- net/vmw_vsock/vmci_transport.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
-index 842c94286d31..c94c3deaa09d 100644
---- a/net/vmw_vsock/vmci_transport.c
-+++ b/net/vmw_vsock/vmci_transport.c
-@@ -1711,7 +1711,10 @@ static int vmci_transport_dgram_enqueue(
- 	if (!dg)
- 		return -ENOMEM;
- 
--	memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len);
-+	if (memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len)) {
-+		kfree(dg);
-+		return -EFAULT;
-+	}
- 
- 	dg->dst = vmci_make_handle(remote_addr->svm_cid,
- 				   remote_addr->svm_port);
--- 
-2.30.3
+regards,
+dan carpenter
 
