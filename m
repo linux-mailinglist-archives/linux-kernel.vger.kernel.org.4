@@ -2,351 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0496413BB
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A562F6413CC
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbiLCCvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:51:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
+        id S234989AbiLCCzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiLCCvN (ORCPT
+        with ESMTP id S234944AbiLCCzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:51:13 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79194FD0F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:51:11 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id t17so6548992pjo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:51:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dFa9wOyNkjOu3wfCu+8VdnDJI7y7l4XWc1FYOJwGpZ4=;
-        b=MwXxQx4ch7cB9jSlFLmDT0N2Y+Ipy0C0qW3vi2Yec7LRae1mKWT0hUhw++ETkd1tDD
-         qLrQGaPTwOVb+5Ppyte36QwiJau/skp/BHnbVO3tNgZxW0RYx/1iqQzvCX/WbYPszyMk
-         8A3Xki9QsSgaEIenI9mO2tmYhcHvYZX/9Mqxk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dFa9wOyNkjOu3wfCu+8VdnDJI7y7l4XWc1FYOJwGpZ4=;
-        b=MBo0uPNzShkSXHYtHn7lZElbfeMPf+cCzvc2jvdlxMf3QdqLW69Pxf7FMOuyYczxeZ
-         L6cYYEnEbMFx/r/ienrI7/9LfwWI/FDyp7nEuTnqPl+Yrf40bA9OL/esbsfG7ZVuxgtA
-         DdcupeqXkIgJEZfz31umStYge8Cd537SoWtebRQoshr4KJnYmeu0nqlUg+fP4Gct7yOG
-         DP/ahgrgTiEr+hMjU/X4alFIMZKx6ZLgWcGdbIjt+RHmTmO0bWg/rqg9xt4ri60Fo/Iw
-         nCdfMJuBKdMATKIs/w0aKDHwyoODzDqh5ypX1Hy6YygcqNawUUlgqazKT2FFlzx/ZA3L
-         stPA==
-X-Gm-Message-State: ANoB5pm2GJXpZQFGSvr7ucumydO9v6VFAEiOE7cLOu6HUWeZf9169rnX
-        QioIeI/TOCANA7wkn1vZeOx0qg==
-X-Google-Smtp-Source: AA0mqf7SH+F7LKTBiFUzgZQQ6ur0ObRkDRQBwN/2rgLDHgZEfyIb9IMJkbjc5SN+oT2XbWNyLsDlFA==
-X-Received: by 2002:a17:90a:9f09:b0:218:6158:b081 with SMTP id n9-20020a17090a9f0900b002186158b081mr80915815pjp.66.1670035870894;
-        Fri, 02 Dec 2022 18:51:10 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g17-20020a17090a7d1100b00218c5bdb983sm5372466pjl.22.2022.12.02.18.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:51:10 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:51:09 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Subject: Re: [PATCH v4 30/39] x86/shstk: Introduce map_shadow_stack syscall
-Message-ID: <202212021848.B6277C86@keescook>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-31-rick.p.edgecombe@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Fri, 2 Dec 2022 21:55:06 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E2EBB7E4
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670036105; x=1701572105;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=T+zIuyg2dUKUSn6KuVvaqh1iYNyilMlvSS2pOHJb8AE=;
+  b=Dqs3twGUye7HhlcHwNIrs2530+g5FvX1cPL0iyjvUKC0nuAUokfq1Tk+
+   W+fZfa51z38cktmddiw9xgW7mXpVTWkgxLlb+WEPDUhXvYXR+6aG44HNe
+   A+mV7qmySN5iei1wx9qKUFOLliBTJzency9S6R0erFVjqCbficFab85gK
+   CwnZDwGo7sdpzewPkN/PX9t6q99G9zJWdAcyQzgQtyEjmCe5U7REUcxOM
+   tI/7UBJrl/IFA3kFMXBIRJSXHY7F5NK2K12QdtQsxyQclhjMucSeRQ0ZC
+   L7OyymZb/lOLhyeOzCJsRveaU8+dfhLKsKoMPednJnjphi7Y6DVfZZL0N
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="343062335"
+X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
+   d="scan'208";a="343062335"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 18:55:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="974124821"
+X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
+   d="scan'208";a="974124821"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Dec 2022 18:55:04 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 2 Dec 2022 18:55:04 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 2 Dec 2022 18:55:03 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 2 Dec 2022 18:55:03 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 2 Dec 2022 18:55:02 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fnIjJMRnJfoWhzToSMByoKedPMLg7XMVLdJuHZWfcKRDVlqZrsh5xG3WXiHoczFswHOqZy7hTh7HosEiuGlRkuTt1agdWQa6cSIScFJDnVyFN5p428d9cpQslKijA9W63qzwcZ0WJmX88HzG0jFIPh/heXnTrO0z4XCIbF5LgUtV+WKelF9rhbQRI2g7tqbAtR3N4nompODSDxmQ92DzCXMpSxpYLzPSMeh1lOkVfeLgU2VlsY1v+VQB4iOMyJBigTZy95fEuEIRMVY8pSlFHYgIs/dHiWgGA2nCPBS6AyI8kdMlGJ7erzLvIgb+NzVd6MyIv7J/21XuZZ761JyXJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tSh4eREHBD+H8b9K3ahfXp0f3lrc+/6Vo/7jzaZjfmY=;
+ b=DSzex0dp15kFYQMpE/FlLaeywGrDjwWxbx0cgmgCFdP2wRJFit1pgm8E3nAzIvUelv522FPYibdCxoIGet/1rK8vTwT4rEUbiDmUMlfP5EXK210U22Spimk6kdDV21TfaZkuQxn/Vm/SmAoNMvJ3/HIWMkPdwop8kGBBv4vaBvx7bPAG4p2xXov0dMFnGB3/WQW6iEmZxFEEZpC4SH/TP72TbAgodyvUgpOaAyptczo95HnSFPkspOy7te1jtRPRV/cyk8cSuVzRd5NkssYKyU6qPhsiil5/oKau0fU7ZHx7ABAKPS0czkPP/NhPkaWJ9C1CL8TFj8dVyIh9v9scIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by MW4PR11MB6958.namprd11.prod.outlook.com (2603:10b6:303:229::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Sat, 3 Dec
+ 2022 02:54:55 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb%6]) with mapi id 15.20.5880.008; Sat, 3 Dec 2022
+ 02:54:53 +0000
+Date:   Sat, 3 Dec 2022 10:51:48 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, <sboyd@kernel.org>,
+        <corbet@lwn.net>, <Mark.Rutland@arm.com>, <maz@kernel.org>,
+        <kernel-team@meta.com>, <ak@linux.intel.com>,
+        <zhengjun.xing@intel.com>, Chris Mason <clm@meta.com>,
+        John Stultz <jstultz@google.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
+ clocksource measurements
+Message-ID: <Y4q5xObZ4JYIqZ6x@feng-clx>
+References: <Y4bg1H/HLRLfucNO@feng-clx>
+ <20221130051600.GL4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4brjD/xUDlzJ4v7@feng-clx>
+ <20221130055024.GM4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4bxZCEAmPnALsRV@feng-clx>
+ <20221201172405.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4lQdKaKh2P7eLBG@feng-clx>
+ <20221202014428.GN4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4lc04C6KqYUG5lf@feng-clx>
+ <20221202222402.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-31-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221202222402.GI4001@paulmck-ThinkPad-P17-Gen-1>
+X-ClientProxiedBy: SI2PR06CA0004.apcprd06.prod.outlook.com
+ (2603:1096:4:186::20) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|MW4PR11MB6958:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a94705e-12fa-4ec6-0611-08dad4d9c0e5
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d0WhM+Ng4TAyuPwlBGVITTaGTff7yK7Hmy64NROrOP70gwu5/ySTO1ui+fuMbBSHxtyVCdYWDEZYKnsiQOpoybTUqEoWgNcym+uyncwS7Muj7pYZb994pm4BZlXJNZHTAqgEMUGH/rHY8KzREVGOAZHJUn5YRkdqFgwUIx5Q30/JdUrnH0w4lUnlRYegtx7LcX4clEaxtDIjl/5e5szjdB+GBeB8xoEUdH+/LT6mQvY+YxkDzuQHBQq4qg4Hakma9GxjK3ApXvlhQ8wE9mtNEXZyW3euXplwj52bOIDqb8DDoXLYXcQWJMvC5D6yXxWSxPN//akaAzQcunLYktFcw42j83f//hMFG5nrvLTrgtUdIM2TFEBmoxiJ8bC6ib4uXtxDpMTHl/YqOfSzk/exV92ZZwy/UbDyOOhpBqI7kK/CApcfUfUAceaacd7EYZOKPlsRLyezbmBDOfUMSCdao9h4pYJPqzN+C6FVJMEPlxQBrxH2jRPwuTyihhk1qeWFJ4Hvrqj/75CgyyMXRJ5+nICMWsVGR3XBxv4f6GVXq1iJWQwIV6P0lRJsOYQZ+9JJh28oc5nYWaU3xqQ1DWFQobnPWOErZ33S/fgtsjm0z5b6bwCVvDq+tdO9hMpiVS4BWZVq4C0ZDTfoxA8tlnBPXQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199015)(6512007)(26005)(6486002)(6506007)(66556008)(478600001)(6666004)(4326008)(66946007)(41300700001)(5660300002)(66476007)(186003)(8936002)(7416002)(44832011)(2906002)(8676002)(83380400001)(82960400001)(38100700002)(54906003)(6916009)(316002)(9686003)(33716001)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWZOdzY5N2lBam4wMlBFZkExa1VrOVhmU1BpVCt2MGpNdndhUkVPMHgzb2I1?=
+ =?utf-8?B?aWFCaHZOM0dHclBSeWlaUkhRRk1rZEVnbjB2T0gyT3VpcjBRZ3NIUldyaTJD?=
+ =?utf-8?B?M0RVZTRBN2doSnVORGo4OEVjc0hraGFtTkI0cmN3M0dJcHBoRnk5dEtYT0Y5?=
+ =?utf-8?B?ZkptaHkyYlJ0YkxmYzdQVnZ6UW1GVmVic3g4YzlZcmZpVkRQVkNoVHRMT05G?=
+ =?utf-8?B?VDRjNkpqYVZVMkFuY0NxdEMwa1lQZTQyUllYd3B3dzJHbEltQXdFRkJaazhS?=
+ =?utf-8?B?OVYrSTM4ZVVMUlFVVCtBc2RseHFHa3J0MzA0V3c4aHVoMm40dSttU0d6ekpM?=
+ =?utf-8?B?eVdKTDZDVGNoZVdsUkFPMDY0TlRFWEtaWE5KbFZMRWJKSDRZM0JXTFg1dUFv?=
+ =?utf-8?B?NGZtTXdwUCtzZVdMUGU1SkxlKzJWZjZ5SXp3SU5ERDV1N2xLa2lMbVpXVW9H?=
+ =?utf-8?B?Ni9CdnU2bG1RNXJkdjhuZXZXQmd6cHUxYjVVNlhnajk4bDJsMmZDZDYwdG1S?=
+ =?utf-8?B?aVRKYytnbU02YUJ2anV5KzQrVi9zZDBibWE1THNwdzVvWE1RSUhKTlUzRk5I?=
+ =?utf-8?B?TC8vVjBnNVJVVGpiSUYzQ3RTZ0FuY1ZCS0VUK3pIMGJKckt5dXRPeWN4Wlgr?=
+ =?utf-8?B?RkVBampvWE9lekVqQnpkeDc4c1FrMVJQQkY2MHhFNm5JM1lBdTcyeVYrcm1z?=
+ =?utf-8?B?d3lWbXpEM3drSmkyUE1VcVFQRCtnZkhXQ21PTmowZEdSWjJqTm5nWnczQ0Nn?=
+ =?utf-8?B?L285RWNwSWlMRmYxV2N1VjE5bHpnbUZZbm1Fc3hoSU1ZY2djaVAxdUZOeERQ?=
+ =?utf-8?B?dXNRSkplS3ZIWWRPTFBKejdNR3pSKzFZeHRBbU1wYU9URnl4dWEzSDlrUVlj?=
+ =?utf-8?B?dHFKQkM3cC90RDBFeWxFOHhEcnBvam11b3lQOGZFeHVqWXVWa003TDRNVlAy?=
+ =?utf-8?B?TUVRNGRxWGpxQWZzNksxb0xDdjVwREVwWGJqTm9mUnhZYlFJMVNwVUdZNHJ2?=
+ =?utf-8?B?eDROa0wzODZCSlRId0xibW9mRUxLa2psUVpXNXNyMzVGcUtXaXBYQkVJOTVv?=
+ =?utf-8?B?K0Y2Ky9TTTZhcXQ1Z1dVakF3QzJBSEVrVFd2bDVzaVJpb3FKRWMxWGhYcEtT?=
+ =?utf-8?B?bG9EcDlJOUtZcS9NaGtSZkZEUzRUWnVDZUVUKzhJV2V4ZnBtSFhjd3c3QllW?=
+ =?utf-8?B?RHJUY2dvWEFPVlprSVpMUU8rbWxIZGVHMHB6Wk53SllVTjhuZUdmTzJ6SjJZ?=
+ =?utf-8?B?UGhsUGdERXJUVjBxUnNLV0U0a3c5dTl3MmJyaVBWK2Zvc2QzU3QzMWk4aHNq?=
+ =?utf-8?B?SnZiTW9UUGk0RmZha3ZhdXlPUGM1NG9xKyt6TXJuTnNNTnAwK3AzZlZoTERh?=
+ =?utf-8?B?enFUWG9US3NNQTRmMXd6UmpjOGt2ckx6VU5PZS96QnFsNkF3Kzh1RXZwNGlC?=
+ =?utf-8?B?UEIyOWxLeElTSHZYQW9GdU5jKzFlN2dDYk0xYXFhWUxJTWxyNElVWmx4NElW?=
+ =?utf-8?B?cUVhdkJXN2lyWVlpbytzY3dvVzdpZE5zNW1tZnl6Q08vVVJZVEpVcjNJdUVr?=
+ =?utf-8?B?N0ZyWUxWdXd3NFRSL2RBVDdXZ3RLNFM5dFhFSEFIWkNGZTJ0R0N2b2xHUmRx?=
+ =?utf-8?B?c2ZWQytQTUY2akgxMy8rT0VPVm5KNWtzVFA0VlFodFlLVC80OUlFU0twWHpP?=
+ =?utf-8?B?REZNS0dmdlBHbkxCQllKTXp0UUVQaVVqc3RZWHBVU3pyWUZuYjdXVEx0ZDFu?=
+ =?utf-8?B?QkhOcGFIOWFjUEcvUWdJVklmbWRjcjcyNEtKR0hUYzVteERwaldmMjhjZzJR?=
+ =?utf-8?B?ckJyVi9pR0p6QjNBbzB2K2lNVUEycjZObFgyQS8vMjJxNnM1N3l4VDJzVGlx?=
+ =?utf-8?B?eDc0dkZYc2hWWmdLRWlEczRJc3RrS1lBQjZnNTJsZEhZYW1OYUUrNHFKd0Vu?=
+ =?utf-8?B?QTBLajB5anNnS0Q3dzhkMm04UkhYS1k1QlRNWGkrOVYyTzc3aERURnlZV2Ji?=
+ =?utf-8?B?aXpOSHYvNi9yNUVhZGhUTE1iS3RMZUY0L1VwVjVCK0ZIZE95dDlnOXFXbS94?=
+ =?utf-8?B?T0VCUHpucmkweTJqS04ycTlwL2V1RDYweGwvWjJhd1dvSW5oM2tWUFlORzFs?=
+ =?utf-8?Q?WDXvC7vUoudYM9mJQacKUTqh7?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a94705e-12fa-4ec6-0611-08dad4d9c0e5
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2022 02:54:53.7135
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YgdMYENCDJC7owjeBb9TT0ArGQuGkvA4gSL7wkJCRIlfx36bdv1nq/D5oGEHHqE/LPsWao8wkui5h3dkJtW+6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6958
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:57PM -0800, Rick Edgecombe wrote:
-> When operating with shadow stacks enabled, the kernel will automatically
-> allocate shadow stacks for new threads, however in some cases userspace
-> will need additional shadow stacks. The main example of this is the
-> ucontext family of functions, which require userspace allocating and
-> pivoting to userspace managed stacks.
+On Fri, Dec 02, 2022 at 02:24:02PM -0800, Paul E. McKenney wrote:
+[...]
+> > > > > > > (My next step involves a pillow, but will follow up tomorrow morning
+> > > > > > > Pacific Time.)
+> > > > > >  
+> > > > > > Really thanks for checking this through late night!
+> > > > > 
+> > > > > No problem, and I guess it is instead the day after tomorrow, but
+> > > > > I thought you might be interested in chronyd's opinion:
+> > > > > 
+> > > > > [root@rtptest1029.snc8 ~]# cat /var/lib/chrony/drift
+> > > > >         40001.074911             0.002098
+> > > > > 
+> > > > > In contrast, on my Fedora laptop:
+> > > > > 
+> > > > > $ sudo cat /var/lib/chrony/drift
+> > > > >             2.074313             0.186606
+> > > > > 
+> > > > > I am (perhaps incorrectly) taking this to indicate that TSC is in fact
+> > > > > drifting with respect to standard time.
+> > > >  
+> > > > This info is very useful! It further confirms the CPUID(0x15) gave
+> > > > the wrong frequency info. 
+> > > 
+> > > So the TSC is just doing what it is told.  ;-)
+> > > 
+> > > This indicates a firmware problem?
+> > > 
+> > > > Also I don't think TSC itself is drifting, and the drift some from
+> > > > the wrong match calculation(1896 MHz), if we give it the correct
+> > > > number (likely 1975 MHz here), there shouldn't be big chrony drift
+> > > > like your Fedora laptop.
+> > > 
+> > > Resetting so that the clocksource watchdog once again gets rid of TSC,
+> > > but leaving nohpet:
+> > > 
+> > > [    0.000000] tsc: using CPUID[0x15] crystal_khz= 24000 kHz ebx=158 eax=2
+> > > [    0.000000] tsc: Detected 1900.000 MHz processor
+> > > [    0.000000] tsc: Detected 1896.000 MHz TSC
+> > > [    5.287750] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+> > > [   17.963947] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x36a8d32ce31, max_idle_ns: 881590731004 ns
+> > > [   19.996287] clocksource: timekeeping watchdog on CPU3: Marking clocksource 'tsc-early' as unstable because the skew is too large:
+> > > [   20.040287] clocksource:                       'refined-jiffies' wd_nsec: 503923392 wd_now: fffb73f8 wd_last: fffb7200 mask: ffffffff
+> > > [   20.067286] clocksource:                       'tsc-early' cs_nsec: 588021368 cs_now: 581c1eb378 cs_last: 57d9aad9e8 mask: ffffffffffffffff
+> > >  [   20.096286] clocksource:                       No current clocksource.
+> > >  [   20.111286] tsc: Marking TSC unstable due to clocksource watchdog
+> > >  [   24.582541] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+> > >  [   49.739301] clocksource: Switched to clocksource refined-jiffies
+> > >  [   50.046356] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+> > >  [   50.066475] clocksource: Switched to clocksource acpi_pm
+> > > 
+> > > # cat /var/lib/chrony/drift 
+> > >             1.372570             0.020049
+> > > 
+> > > I interpret this to mean that acpi_pm (and thus from prior observations,
+> > > HPET as well) are counting at the correct rate.
+> > 
+> > Correct. And this is a good news! that 1975 MHz seems to be the right
+> > number.
+> > 
+> > Could you try below patch, it should override the CPUID calculation
+> > and forced to use HW timer calibrated number:
+> > 
+> > ---
+> > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> > index a78e73da4a74..68a2fea4961d 100644
+> > --- a/arch/x86/kernel/tsc.c
+> > +++ b/arch/x86/kernel/tsc.c
+> > @@ -1417,7 +1417,8 @@ static int __init init_tsc_clocksource(void)
+> >  	 * When TSC frequency is known (retrieved via MSR or CPUID), we skip
+> >  	 * the refined calibration and directly register it as a clocksource.
+> >  	 */
+> > -	if (boot_cpu_has(X86_FEATURE_TSC_KNOWN_FREQ)) {
+> > +//	if (boot_cpu_has(X86_FEATURE_TSC_KNOWN_FREQ)) {
+> > +	if (false) {
+> >  		if (boot_cpu_has(X86_FEATURE_ART))
+> >  			art_related_clocksource = &clocksource_tsc;
+> >  		clocksource_register_khz(&clocksource_tsc, tsc_khz);
+> > ---
+> > 
+> > And together with b50db7095fe0 "x86/tsc: Disable clocksource watchdog
+> > for TSC on qualified platorms". I assume this will tell TSC to use
+> > 1975 MHZ as its frequency.
 > 
-> Unlike most other user memory permissions, shadow stacks need to be
-> provisioned with special data in order to be useful. They need to be setup
-> with a restore token so that userspace can pivot to them via the RSTORSSP
-> instruction. But, the security design of shadow stack's is that they
-> should not be written to except in limited circumstances. This presents a
-> problem for userspace, as to how userspace can provision this special
-> data, without allowing for the shadow stack to be generally writable.
-> 
-> Previously, a new PROT_SHADOW_STACK was attempted, which could be
-> mprotect()ed from RW permissions after the data was provisioned. This was
-> found to not be secure enough, as other thread's could write to the
-> shadow stack during the writable window.
-> 
-> The kernel can use a special instruction, WRUSS, to write directly to
-> userspace shadow stacks. So the solution can be that memory can be mapped
-> as shadow stack permissions from the beginning (never generally writable
-> in userspace), and the kernel itself can write the restore token.
-> 
-> First, a new madvise() flag was explored, which could operate on the
-> PROT_SHADOW_STACK memory. This had a couple downsides:
-> 1. Extra checks were needed in mprotect() to prevent writable memory from
->    ever becoming PROT_SHADOW_STACK.
-> 2. Extra checks/vma state were needed in the new madvise() to prevent
->    restore tokens being written into the middle of pre-used shadow stacks.
->    It is ideal to prevent restore tokens being added at arbitrary
->    locations, so the check was to make sure the shadow stack had never been
->    written to.
-> 3. It stood out from the rest of the madvise flags, as more of direct
->    action than a hint at future desired behavior.
-> 
-> So rather than repurpose two existing syscalls (mmap, madvise) that don't
-> quite fit, just implement a new map_shadow_stack syscall to allow
-> userspace to map and setup new shadow stacks in one step. While ucontext
-> is the primary motivator, userspace may have other unforeseen reasons to
-> setup it's own shadow stacks using the WRSS instruction. Towards this
-> provide a flag so that stacks can be optionally setup securely for the
-> common case of ucontext without enabling WRSS. Or potentially have the
-> kernel set up the shadow stack in some new way.
-> 
-> The following example demonstrates how to create a new shadow stack with
-> map_shadow_stack:
-> void *shstk = map_shadow_stack(addr, stack_size, SHADOW_STACK_SET_TOKEN);
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> ---
-> 
-> v3:
->  - Change syscall common -> 64 (Kees)
->  - Use bit shift notation instead of 0x1 for uapi header (Kees)
->  - Call do_mmap() with MAP_FIXED_NOREPLACE (Kees)
->  - Block unsupported flags (Kees)
->  - Require size >= 8 to set token (Kees)
-> 
-> v2:
->  - Change syscall to take address like mmap() for CRIU's usage
-> 
-> v1:
->  - New patch (replaces PROT_SHADOW_STACK).
-> 
->  arch/x86/entry/syscalls/syscall_64.tbl |  1 +
->  arch/x86/include/uapi/asm/mman.h       |  3 ++
->  arch/x86/kernel/shstk.c                | 56 ++++++++++++++++++++++----
->  include/linux/syscalls.h               |  1 +
->  include/uapi/asm-generic/unistd.h      |  2 +-
->  kernel/sys_ni.c                        |  1 +
->  6 files changed, 55 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> index c84d12608cd2..f65c671ce3b1 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -372,6 +372,7 @@
->  448	common	process_mrelease	sys_process_mrelease
->  449	common	futex_waitv		sys_futex_waitv
->  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
-> +451	64	map_shadow_stack	sys_map_shadow_stack
->  
->  #
->  # Due to a historical design error, certain syscalls are numbered differently
-> diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
-> index 775dbd3aff73..15c5a1c4fc29 100644
-> --- a/arch/x86/include/uapi/asm/mman.h
-> +++ b/arch/x86/include/uapi/asm/mman.h
-> @@ -12,6 +12,9 @@
->  		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
->  #endif
->  
-> +/* Flags for map_shadow_stack(2) */
-> +#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)	/* Set up a restore token in the shadow stack */
-> +
->  #include <asm-generic/mman.h>
->  
->  #endif /* _ASM_X86_MMAN_H */
-> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-> index e53225a8d39e..8f329c22728a 100644
-> --- a/arch/x86/kernel/shstk.c
-> +++ b/arch/x86/kernel/shstk.c
-> @@ -17,6 +17,7 @@
->  #include <linux/compat.h>
->  #include <linux/sizes.h>
->  #include <linux/user.h>
-> +#include <linux/syscalls.h>
->  #include <asm/msr.h>
->  #include <asm/fpu/xstate.h>
->  #include <asm/fpu/types.h>
-> @@ -71,19 +72,31 @@ static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
->  	return 0;
->  }
->  
-> -static unsigned long alloc_shstk(unsigned long size)
-> +static unsigned long alloc_shstk(unsigned long addr, unsigned long size,
-> +				 unsigned long token_offset, bool set_res_tok)
->  {
->  	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
->  	struct mm_struct *mm = current->mm;
-> -	unsigned long addr, unused;
-> +	unsigned long mapped_addr, unused;
->  
-> -	mmap_write_lock(mm);
-> -	addr = do_mmap(NULL, 0, size, PROT_READ, flags,
-> -		       VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
-> +	if (addr)
-> +		flags |= MAP_FIXED_NOREPLACE;
->  
-> +	mmap_write_lock(mm);
-> +	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
-> +			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
->  	mmap_write_unlock(mm);
->  
-> -	return addr;
-> +	if (!set_res_tok || IS_ERR_VALUE(addr))
+> This did not change things,
 
-Should this be IS_ERR_VALUE(mapped_addr) (i.e. the result of the
-do_mmap)?
+Maybe the kernel is with the tsc reclibrate patch? it will not use
+the reclibrated frequency for a KNOWN_FREQ case, but just print
+out the info. Anyway this doesn't matter, as it's just for debug,
+and your way already proved the 1975 MHz is the right number :)
 
-> +		goto out;
-> +
-> +	if (create_rstor_token(mapped_addr + token_offset, NULL)) {
-> +		vm_munmap(mapped_addr, size);
-> +		return -EINVAL;
-> +	}
-> +
-> +out:
-> +	return mapped_addr;
->  }
->  
->  static unsigned long adjust_shstk_size(unsigned long size)
-> @@ -134,7 +147,7 @@ static int shstk_setup(void)
->  		return -EOPNOTSUPP;
->  
->  	size = adjust_shstk_size(0);
-> -	addr = alloc_shstk(size);
-> +	addr = alloc_shstk(0, size, 0, false);
->  	if (IS_ERR_VALUE(addr))
->  		return PTR_ERR((void *)addr);
->  
-> @@ -179,7 +192,7 @@ int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
->  
->  
->  	size = adjust_shstk_size(stack_size);
-> -	addr = alloc_shstk(size);
-> +	addr = alloc_shstk(0, size, 0, false);
->  	if (IS_ERR_VALUE(addr))
->  		return PTR_ERR((void *)addr);
->  
-> @@ -373,6 +386,33 @@ static int shstk_disable(void)
->  	return 0;
->  }
->  
-> +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
-> +{
-> +	bool set_tok = flags & SHADOW_STACK_SET_TOKEN;
-> +	unsigned long aligned_size;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
-> +		return -ENOSYS;
-
-Using -ENOSYS means there's no way to tell the difference between
-"kernel doesn't support it" and "CPU doesn't support it". Should this,
-perhaps return -ENOTSUP?
-
-> +
-> +	if (flags & ~SHADOW_STACK_SET_TOKEN)
-> +		return -EINVAL;
-> +
-> +	/* If there isn't space for a token */
-> +	if (set_tok && size < 8)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * An overflow would result in attempting to write the restore token
-> +	 * to the wrong location. Not catastrophic, but just return the right
-> +	 * error code and block it.
-> +	 */
-> +	aligned_size = PAGE_ALIGN(size);
-> +	if (aligned_size < size)
-> +		return -EOVERFLOW;
-> +
-> +	return alloc_shstk(addr, aligned_size, size, set_tok);
-> +}
-> +
->  long shstk_prctl(struct task_struct *task, int option, unsigned long features)
->  {
->  	if (option == ARCH_SHSTK_LOCK) {
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index 33a0ee3bcb2e..392dc11e3556 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -1058,6 +1058,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
->  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
->  					    unsigned long home_node,
->  					    unsigned long flags);
-> +asmlinkage long sys_map_shadow_stack(unsigned long addr, unsigned long size, unsigned int flags);
->  
->  /*
->   * Architecture-specific system calls
-> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> index 45fa180cc56a..b12940ec5926 100644
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -887,7 +887,7 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
->  
->  #undef __NR_syscalls
-> -#define __NR_syscalls 451
-> +#define __NR_syscalls 452
->  
->  /*
->   * 32 bit systems traditionally used different
-> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-> index 860b2dcf3ac4..cb9aebd34646 100644
-> --- a/kernel/sys_ni.c
-> +++ b/kernel/sys_ni.c
-> @@ -381,6 +381,7 @@ COND_SYSCALL(vm86old);
->  COND_SYSCALL(modify_ldt);
->  COND_SYSCALL(vm86);
->  COND_SYSCALL(kexec_file_load);
-> +COND_SYSCALL(map_shadow_stack);
->  
->  /* s390 */
->  COND_SYSCALL(s390_pci_mmio_read);
-> -- 
-> 2.17.1
+> but when I hardcoded tsc_khz to 1975, the
+> clocksource watchdog no longer disables TSC and chrony shows drifts of
+> less than 2.0.  (As opposed to about 40,000 without the hardcoding.)
 > 
+> So yes, forcing 1975 makes TSC work nicely.  Yay!  ;-)
 
-Otherwise, looks good!
+Great to know it works and we have some workaround before a final
+solution :)
 
--- 
-Kees Cook
+Thanks,
+Feng
+
+> 							Thanx, Paul
