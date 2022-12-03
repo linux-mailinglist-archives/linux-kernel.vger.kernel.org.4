@@ -2,190 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBECB641331
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFC4641332
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235119AbiLCCRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:17:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S234578AbiLCCSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbiLCCRc (ORCPT
+        with ESMTP id S229664AbiLCCSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:17:32 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A98DBF6D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:17:31 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q71so5807385pgq.8
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:17:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KslJTB66xKixbMkJwqpVpZSA0E9W1pT9X9b2hTanY44=;
-        b=FdRPAwVZYUKWI0GixKt1/Mt+MzbcNPYjYP0eTaKVlj9agMe+JiJxyY5avV9WtorCm+
-         EK+OYvzUfadggHErH3DkUit8KsSW1LwHMxmJnXE6B74hzYeyVOXZyI2rEJGSVj+Q7E1e
-         1/TvPb0HpDfja1G3IDLH+2UgTDmiIMikYkJLc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KslJTB66xKixbMkJwqpVpZSA0E9W1pT9X9b2hTanY44=;
-        b=34hXVuEipcFpn6Bo/93u9xLZEIoTJcB8y5fWNW9EEHJwqd9f/IJ8IEdUfXg5qIVRw6
-         jIGYNL8S6LgrtkoIMs8o3QEY2rywzkggIh8MJm4/rEfBKpiThPpAhM2U9K79yCiY+MtV
-         VHwlKE4L9pplSG0l+dLZQwXwatwTTpjYYMbaPRa8zr6KWnOWVOAv8yMaOroY+9vOQKcP
-         RHaZ43NpsKsXdTB9PrzFRGsf9MUDXM2UgRXtI12pzllWJ2DqSq3yP9xoYGGJFQXMjaUG
-         JQnU1dme0tfGsSAUeMoWldpDcighI68BxqQyeSySL348DdfYZVvceZG05i7CjEmWsmpV
-         pJFw==
-X-Gm-Message-State: ANoB5pmHy6GyWz0uZvdMoq89YR4+8WwXslYG1BF1GoxzoqLvz9dFnyB1
-        iIOFNBU0Q98/8un6Spy5Bj4IeQ==
-X-Google-Smtp-Source: AA0mqf5Xy39Vb8BDohYQdotTcroYHHMKN0SWFeCLIULcJFfsg4B5WlYx3CbASMwsZUX/N56aaa5Rzw==
-X-Received: by 2002:a05:6a00:1409:b0:56b:e1d8:e7a1 with SMTP id l9-20020a056a00140900b0056be1d8e7a1mr54566551pfu.28.1670033850672;
-        Fri, 02 Dec 2022 18:17:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y69-20020a62ce48000000b00571bdf45888sm2157422pfg.154.2022.12.02.18.17.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:17:29 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:17:28 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Ryder Lee <Ryder.Lee@mediatek.com>
-Cc:     MeiChia Chiu =?utf-8?B?KOmCsee+juWYiSk=?= 
-        <MeiChia.Chiu@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Shayne Chen =?utf-8?B?KOmZs+i7kuS4nik=?= 
-        <Shayne.Chen@mediatek.com>, "nbd@nbd.name" <nbd@nbd.name>,
-        "lorenzo@kernel.org" <lorenzo@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        Sean Wang <Sean.Wang@mediatek.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Sujuan Chen =?utf-8?B?KOmZiOe0oOWonyk=?= 
-        <Sujuan.Chen@mediatek.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Bo Jiao =?utf-8?B?KOeEpuazoik=?= <Bo.Jiao@mediatek.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Subject: Re: Coverity: mt7915_mcu_get_chan_mib_info(): Memory - illegal
- accesses
-Message-ID: <202212021817.E35115E1@keescook>
-References: <202212021424.34C0F695E4@keescook>
- <1a16599dd5e4eed86bae112a232a3599af43a5f2.camel@mediatek.com>
- <202212021504.A1942911@keescook>
- <6285b967a37d7f641b13ba73c10033450ee8ea7f.camel@mediatek.com>
+        Fri, 2 Dec 2022 21:18:39 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9FEB872
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:18:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670033917; x=1701569917;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tai9s9abLMyRt6llymFlICWWTfK91dG/L8Vw8AnhCOM=;
+  b=XMM3ajz/jf7IGW89mjKaSYkVDqtYspaboWS59X1Ml4tsBLaPTNXHEdUw
+   D55WZw6O29Zv86uOXqtTfLWSj0pv9fyweLe+z9ocTCNOiUWM4cAUTrHa8
+   Px+4f/OEm3QMA5zQoLYIsPr+esM6RpnWtTkqC52ivazwCpWCwafFU3JPl
+   v/sZFTqCUBOp4u+TKUFvxkGlBSbIlH8S72lluTiBTQ5rg+Qqzyk9tYiCM
+   gcjNNNKg4LAlqvfiOx4gwT0cwNZphrsh4J4mudlsy3Xde9m3s3WIueoSH
+   RrBh0UF+PqRwq1BXeom9zm6DRrIL8090kKF3LzU4+TEpqQmT9FaBNhP2Z
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="380378549"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="380378549"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 18:18:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="647380504"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="647380504"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Dec 2022 18:18:36 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p1I6t-000ECo-1Z;
+        Sat, 03 Dec 2022 02:18:35 +0000
+Date:   Sat, 03 Dec 2022 10:18:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sgx] BUILD SUCCESS
+ 89e927bbcd45d507e5612ef72fda04182e544a38
+Message-ID: <638ab1e0.L31nLi8SQ7SYItem%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6285b967a37d7f641b13ba73c10033450ee8ea7f.camel@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 11:42:36PM +0000, Ryder Lee wrote:
-> On Fri, 2022-12-02 at 15:04 -0800, Kees Cook wrote:
-> > > 
-> > On Fri, Dec 02, 2022 at 10:56:19PM +0000, Ryder Lee wrote:
-> > > On Fri, 2022-12-02 at 14:24 -0800, coverity-bot wrote:
-> > > > Hello!
-> > > > 
-> > > > This is an experimental semi-automated report about issues
-> > > > detected
-> > > > by
-> > > > Coverity from a scan of next-20221202 as part of the linux-next
-> > > > scan
-> > > > project:
-> > > > 
-> > > 
-> > > 
-> https://urldefense.com/v3/__https://scan.coverity.com/projects/linux-next-weekly-scan__;!!CTRNKA9wMg0ARbw!j7j_C0KpO4VD2yMOodvpeIexTGq4fhy2yq6nokNua9u4LToiUOLk4ou8JFFNrXkrh80d5BK2k44faRQstHE9$
-> > >  
-> > > >  
-> > > > 
-> > > > You're getting this email because you were associated with the
-> > > > identified
-> > > > lines of code (noted below) that were touched by commits:
-> > > > 
-> > > >   Thu Feb 3 13:57:56 2022 +0100
-> > > >     417a4534d223 ("mt76: mt7915: update mt7915_chan_mib_offs for
-> > > > mt7916")
-> > > > 
-> > > > Coverity reported the following:
-> > > > 
-> > > > *** CID 1527801:  Memory - illegal accesses  (OVERRUN)
-> > > > drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:3005 in
-> > > > mt7915_mcu_get_chan_mib_info()
-> > > > 2999     		start = 5;
-> > > > 3000     		ofs = 0;
-> > > > 3001     	}
-> > > > 3002
-> > > > 3003     	for (i = 0; i < 5; i++) {
-> > > > 3004     		req[i].band = cpu_to_le32(phy->mt76->band_idx);
-> > > > vvv     CID 1527801:  Memory - illegal accesses  (OVERRUN)
-> > > > vvv     Overrunning array "offs" of 9 4-byte elements at element
-> > > > index 9 (byte offset 39) using index "i + start" (which evaluates
-> > > > to
-> > > > 9).
-> > > > 3005     		req[i].offs = cpu_to_le32(offs[i + start]);
-> > > > 3006
-> > > > 3007     		if (!is_mt7915(&dev->mt76) && i == 3)
-> > > > 3008     			break;
-> > > > 3009     	}
-> > > > 3010
-> > > > 
-> > > > If this is a false positive, please let us know so we can mark it
-> > > > as
-> > > > such, or teach the Coverity rules to be smarter. If not, please
-> > > > make
-> > > > sure fixes get into linux-next. :) For patches fixing this,
-> > > > please
-> > > > include these lines (but double-check the "Fixes" first):
-> > > > 
-> > > 
-> > > I think this is a false postive as the subsequent check 'if
-> > > (!is_mt7915(&dev->mt76) && i == 3)' should break array "offs" of 8.
-> > 
-> > Ah, okay. What if is_mt7915(&dev->mt76) is always true?
-> > 
-> > -Kees
-> 
-> 	int start = 0;
-> 
-> 	if (!is_mt7915(&dev->mt76)) {
-> 		start = 5;
-> 		ofs = 0;
-> 	}
-> 
-> 	for (i = 0; i < 5; i++) {
-> 		req[i].band = cpu_to_le32(phy->band_idx);
-> 		req[i].offs = cpu_to_le32(offs[i + start]);
-> 
-> 		if (!is_mt7915(&dev->mt76) && i == 3) //
-> 			break;
-> 	}
-> 
-> For 'is_mt7915' case, start:0 and i: 0 1 2 3 4, whereas !is_mt7915'
-> case, start:5 and i: 0 1 2 3 (then break).
-> 
-> I know it's a bit tricky. This is used to differentiate chipset
-> revision.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sgx
+branch HEAD: 89e927bbcd45d507e5612ef72fda04182e544a38  x86/sgx: Replace kmap/kunmap_atomic() calls
 
-Ah-ha! Gotcha now. Thanks for the details and sorry for the noise! :)
+elapsed time: 723m
 
--Kees
+configs tested: 59
+configs skipped: 66
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                              defconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64                           allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                            allnoconfig
+arc                  randconfig-r043-20221201
+riscv                randconfig-r042-20221201
+s390                 randconfig-r044-20221201
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+ia64                             allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-k001
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
