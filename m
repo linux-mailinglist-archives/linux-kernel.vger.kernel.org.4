@@ -2,206 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7556412D8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A016412CD
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbiLCAzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 19:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S235301AbiLCAyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 19:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiLCAyf (ORCPT
+        with ESMTP id S235082AbiLCAyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 19:54:35 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A418B1FB;
-        Fri,  2 Dec 2022 16:53:58 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id fc4so8224749ejc.12;
-        Fri, 02 Dec 2022 16:53:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wCAULVZ3kXh3arFt940euBarohCCAdayTSGVr11UNQE=;
-        b=o1UYvdMwwEDE3C8NpaeVcrWPOlcHesZjhpAL2qKoF7Zowpb/3VstnMBHy7bmeQt93K
-         A5xqoq/9cXrWv+lQl5AVP1s1cO3kwnr6Hm7vpKLlz1PA3cbi2w8h6SyuGrVV7pDna2wP
-         MdNQwp7QOPYavOIZysXnAZvrtAiHwXusFnDVIYizoS3qtTBdsbAjBqMcF8XI1dAkCV1j
-         XUnJ9EPjfCMZbpBDVNmXENkdiQ1nCbeNV2q9MXdLFgqJ5/bWUOaMYPoIqfLqbgL8oidf
-         7QQSxuLnWau9qcMyx2hPBFapgIzbs05X+AbRs58IP2kZApKmCWdSmJgBUPfVA/kgORPk
-         0D7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wCAULVZ3kXh3arFt940euBarohCCAdayTSGVr11UNQE=;
-        b=vcXviy86SwG/FivDH7UQCOR7Q2I94dTzZI88bsNbutB0Shb4b7Cwg5tHkHAIvCVFXu
-         TnGQGWJzBcjld/cvph0GZ2q2qFknrVsVttcxOQmsYogf74+M+6K5IFVLH2T5X/dsFxi/
-         TC5w/szu0k5YGeoMzHq0MNLy1+X3g4FvZ21szzH9AJB3BRTSOv3ZGMCmSfMZuRebs+6N
-         CwKwRZ0LFu5ZKbeTf00KRg8DSaf4oIiDcY1LNvM6TwhV6ST45sHpkg8IqjluuB4CBYJt
-         rjZxPiFeJ8OGwUWEN3y3Mf02d/SzvoMoK8D9f8c8GQOiQM9pA5qbOFxURa9LoTdDq4CI
-         8hMQ==
-X-Gm-Message-State: ANoB5pkyxe5MvP/qA+JNqoQO6+lw7N1OxX8wrT73AtKdljnvDO+HE0OJ
-        30+DbtkLc8EW6XPEp96QRTy6/CbTtfRZotQoHZA=
-X-Google-Smtp-Source: AA0mqf5bomkE/+53IaY5j6ZsOzruwSTr4Og0SeFLtALu0xcg9797psXGWRcqGdRsncDXw3JHfdW9Jk05pMjSczPeGb8=
-X-Received: by 2002:a17:906:414c:b0:7a9:ecc1:2bd2 with SMTP id
- l12-20020a170906414c00b007a9ecc12bd2mr50745008ejk.545.1670028837001; Fri, 02
- Dec 2022 16:53:57 -0800 (PST)
+        Fri, 2 Dec 2022 19:54:05 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665472E0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:50:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670028617; x=1701564617;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9vIXaYbbqArKlbNUcGZT4O2VFsT2UZnPQbUk/fLylKA=;
+  b=P6komMzgbJ6EE+TCdD8dNX87ykh7stt9YIltvJhgnfAZZe39duArx24o
+   nCybUDPnvE7UVc+0xDeSqcVhMO/Gf6bKlj1psR0vBjQCUvJjSjfj0jUCE
+   5Uwp8hEe6Z9HyQ/zogqDHhiKv+dwHqGbUIwf8R+BzPQggC0B0LsuCYy6S
+   8KRt6/ykLeiKAQlNWXex1eGe/Nzubz3g2LCDZjtbu4b2A8QwlMKv8ott3
+   Vcq7iuo5zuX5dfQjKAMoHwDe1qnRas+B8wMnbGsxJ4b7cC4ieb1+AICHs
+   4sGVGcUJscdfvlsz1DevdHlxthtWHdXggXmEqe61sUE/c9ZWtQMM9LUGs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="295769886"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="295769886"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:50:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="708670328"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="708670328"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:50:11 -0800
+Date:   Fri, 2 Dec 2022 16:54:05 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 0/4] [PULL REQUEST] iommu/vt-d: Fixes for v6.1-rc8
+Message-ID: <20221202165405.50be86a6@jacob-builder>
+In-Reply-To: <Y4nXu9uBwXZFwjq2@8bytes.org>
+References: <20221201040127.1962750-1-baolu.lu@linux.intel.com>
+        <Y4nXu9uBwXZFwjq2@8bytes.org>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220826012614.552860-1-james.hilliard1@gmail.com>
- <CAEf4BzahSjt1huoJXAxSj-ycVjGKJm_dFinsZFBHtRGj7apiUQ@mail.gmail.com>
- <CADvTj4p8pykr4Vy-YSLcaXsfmuWAmZ9ay-np6mxTdwOT1LBnXw@mail.gmail.com>
- <CAEf4BzbhH9DtBsen8x9BUrAZy0d-osK57Zg=Cor-BmLyvAX+jg@mail.gmail.com> <CADvTj4qrNnrqfDxPTyjMQ2ezs5BRouuLE9961bSbdtkAAXoZrA@mail.gmail.com>
-In-Reply-To: <CADvTj4qrNnrqfDxPTyjMQ2ezs5BRouuLE9961bSbdtkAAXoZrA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 2 Dec 2022 16:53:44 -0800
-Message-ID: <CAEf4BzYru_TVNjh4+brf_6akL+WyozTQtxz=RoR1eLvXy49xpw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix conflicts with built-in functions in bpf_iter_ksym
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 4:41 PM James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> On Sat, Aug 27, 2022 at 1:08 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Sat, Aug 27, 2022 at 3:47 AM James Hilliard
-> > <james.hilliard1@gmail.com> wrote:
-> > >
-> > > On Fri, Aug 26, 2022 at 10:55 PM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Thu, Aug 25, 2022 at 6:26 PM James Hilliard
-> > > > <james.hilliard1@gmail.com> wrote:
-> > > > >
-> > > > > Both tolower and toupper are built in c functions, we should not
-> > > >
-> > > > Really? How come? Can you point out where this is specified in C
-> > > > standard? From what I can tell you have to include <ctype.h> to get
-> > > > toupper()/tolower().
-> > >
-> > > See background on this sort of issue:
-> > > https://stackoverflow.com/a/20582607
-> > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=12213
-> > >
-> > > (C99, 7.1.3p1) "All identifiers with external linkage in any of the following
-> > > subclauses (including the future library directions) are always reserved
-> > > for use as identifiers with external linkage."
-> > >
-> >
-> > Sigh, ok. Ghost functions: you can't use them without ctype.h, but you
-> > can't define your own either. Very nice.
-> >
-> > Can you please put all these details into a commit for the future? With that:
->
-> Sure
->
-> >
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
->
-> Is this good to apply or should I send a v2?
+Hi Joerg,
 
-please add those details and resend v2?
+On Fri, 2 Dec 2022 11:47:23 +0100, Joerg Roedel <joro@8bytes.org> wrote:
 
->
-> >
-> > > >
-> > > > This seems like yet another GCC-BPF quirk?
-> > >
-> > > Seems GCC takes a stricter interpretation of the standard here than
-> > > llvm.
-> > >
-> > > It's also documented behavior in GCC:
-> > > https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-std-2
-> > >
-> > > See:
-> > > The ISO C90 functions abort, abs, acos, asin, atan2, atan, calloc, ceil,
-> > > cosh, cos, exit, exp, fabs, floor, fmod, fprintf, fputs, free, frexp, fscanf,
-> > > isalnum, isalpha, iscntrl, isdigit, isgraph, islower, isprint, ispunct, isspace,
-> > > isupper, isxdigit, tolower, toupper, labs, ldexp, log10, log, malloc, memchr,
-> > > memcmp, memcpy, memset, modf, pow, printf, putchar, puts, realloc,
-> > > scanf, sinh, sin, snprintf, sprintf, sqrt, sscanf, strcat, strchr,
-> > > strcmp, strcpy,
-> > > strcspn, strlen, strncat, strncmp, strncpy, strpbrk, strrchr, strspn, strstr,
-> > > tanh, tan, vfprintf, vprintf and vsprintf are all recognized as
-> > > built-in functions
-> > > unless -fno-builtin is specified (or -fno-builtin-function is specified for an
-> > > individual function).
-> > >
-> > > We could disable builtin functions but it seems more correct to just
-> > > rename it so that it doesn't conflict.
-> > >
-> > > >
-> > > > > redefine them as this can result in a build error.
-> > > > >
-> > > > > Fixes the following errors:
-> > > > > progs/bpf_iter_ksym.c:10:20: error: conflicting types for built-in function 'tolower'; expected 'int(int)' [-Werror=builtin-declaration-mismatch]
-> > > > >    10 | static inline char tolower(char c)
-> > > > >       |                    ^~~~~~~
-> > > > > progs/bpf_iter_ksym.c:5:1: note: 'tolower' is declared in header '<ctype.h>'
-> > > > >     4 | #include <bpf/bpf_helpers.h>
-> > > > >   +++ |+#include <ctype.h>
-> > > > >     5 |
-> > > > > progs/bpf_iter_ksym.c:17:20: error: conflicting types for built-in function 'toupper'; expected 'int(int)' [-Werror=builtin-declaration-mismatch]
-> > > > >    17 | static inline char toupper(char c)
-> > > > >       |                    ^~~~~~~
-> > > > > progs/bpf_iter_ksym.c:17:20: note: 'toupper' is declared in header '<ctype.h>'
-> > > > >
-> > > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > > > ---
-> > > > >  tools/testing/selftests/bpf/progs/bpf_iter_ksym.c | 6 +++---
-> > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-> > > > > index 285c008cbf9c..9ba14c37bbcc 100644
-> > > > > --- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-> > > > > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-> > > > > @@ -7,14 +7,14 @@ char _license[] SEC("license") = "GPL";
-> > > > >
-> > > > >  unsigned long last_sym_value = 0;
-> > > > >
-> > > > > -static inline char tolower(char c)
-> > > > > +static inline char to_lower(char c)
-> > > > >  {
-> > > > >         if (c >= 'A' && c <= 'Z')
-> > > > >                 c += ('a' - 'A');
-> > > > >         return c;
-> > > > >  }
-> > > > >
-> > > > > -static inline char toupper(char c)
-> > > > > +static inline char to_upper(char c)
-> > > > >  {
-> > > > >         if (c >= 'a' && c <= 'z')
-> > > > >                 c -= ('a' - 'A');
-> > > > > @@ -54,7 +54,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
-> > > > >         type = iter->type;
-> > > > >
-> > > > >         if (iter->module_name[0]) {
-> > > > > -               type = iter->exported ? toupper(type) : tolower(type);
-> > > > > +               type = iter->exported ? to_upper(type) : to_lower(type);
-> > > > >                 BPF_SEQ_PRINTF(seq, "0x%llx %c %s [ %s ] ",
-> > > > >                                value, type, iter->name, iter->module_name);
-> > > > >         } else {
-> > > > > --
-> > > > > 2.34.1
-> > > > >
+> On Thu, Dec 01, 2022 at 12:01:23PM +0800, Lu Baolu wrote:
+> > Jacob Pan (1):
+> >   iommu/vt-d: Add a fix for devices need extra dtlb flush
+There is a bug in this patch, I will send a fix patch. Or can you squash the
+fix below?
+
+
+From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Date: Fri, 2 Dec 2022 16:22:42 -0800
+Subject: [PATCH] iommu/vt-d: Fix buggy QAT device mask
+
+Impacted QAT device IDs that need extra dtlb flush quirk is ranging
+from 0x4940 to 0x4943. After bitwise AND device ID with 0xfffc the
+result should be 0x4940 instead of 0x494c to identify these devices.
+
+Reported-by: Raghunathan Srinivasan <raghunathan.srinivasan@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+---
+ drivers/iommu/intel/iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index d8759f445aff..0b10104c4b99 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -1401,7 +1401,7 @@ static void domain_update_iotlb(struct dmar_domain *domain)
+  * This quirk is exempted from risky_device() check because it applies only
+  * to the built-in QAT devices and it doesn't grant additional privileges.
+  */
+-#define BUGGY_QAT_DEVID_MASK 0x494c
++#define BUGGY_QAT_DEVID_MASK 0x4940
+ static bool dev_needs_extra_dtlb_flush(struct pci_dev *pdev)
+ {
+        if (pdev->vendor != PCI_VENDOR_ID_INTEL)
+
+sorry about that,
+
+
+Thanks,
+
+Jacob
