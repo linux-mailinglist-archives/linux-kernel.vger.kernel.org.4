@@ -2,152 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A70C6415FD
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451596415BF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiLCKiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 05:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
+        id S229699AbiLCKZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 05:25:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLCKiw (ORCPT
+        with ESMTP id S229541AbiLCKZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 05:38:52 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C708858BDC
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 02:38:51 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670063930;
+        Sat, 3 Dec 2022 05:25:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8825E4A05A;
+        Sat,  3 Dec 2022 02:25:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28C76B802BE;
+        Sat,  3 Dec 2022 10:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93045C433C1;
+        Sat,  3 Dec 2022 10:25:09 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OE1z0XMB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1670063106;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wKli1j81Mt49ShJw5xd91e0oo3zditEnNv2n0wOvdeE=;
-        b=ojrwLtOP+27fz8furSw/BrnhDyU9SyFLG5HmTcnR6uECEOqEUxnvAXjLxVj3U7baiA6AcO
-        nT6hqkEv/Ju7oezuVImVIXVizp0ucN06v76v73MFqRYAXWhAO7OI9TsMtsoQVakRo/6v9f
-        LAIbSC7ku46kr7+jzWB/zGYsCmLyZsY=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     tzimmermann@suse.de
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Danilo Krummrich <dakr@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [RESEND PATCH linux-next v2 10/10] MAINTAINERS: Remove some obsolete drivers info(tdfx, mga, i810, savage, r128, sis)
-Date:   Sat,  3 Dec 2022 18:23:01 +0800
-Message-Id: <20221203102502.3185-11-cai.huoqing@linux.dev>
-In-Reply-To: <20221203102502.3185-1-cai.huoqing@linux.dev>
-References: <20221203102502.3185-1-cai.huoqing@linux.dev>
+        bh=B99/rGGxOgBt2SCG0ilJmP42Uqhic94NePrcyql2Y30=;
+        b=OE1z0XMB2PBjouhlOhHQ1424GlPkFJvMb4D+3b+9O03547ABcw8eq7lOWNL27O9hAAzN8E
+        e/THcxh1t18VPT9Uzst/p2p5xJ+MpjH2Km7wJtEjXNVf6QMvuPJvCop2WIM76zxmER/cBa
+        MLrdEdSPaW+11jEn7cc8GHuhP/j+e4Q=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6d6b524c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 3 Dec 2022 10:25:06 +0000 (UTC)
+Date:   Sat, 3 Dec 2022 11:25:02 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        torvalds@linux-foundation.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de,
+        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        linux-integrity@vger.kernel.org, jgg@ziepe.ca,
+        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
+        timvp@google.com, apronin@google.com, mw@semihalf.com,
+        upstream@semihalf.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
+Message-ID: <Y4sj/knxLqqF2Tqr@zx2c4.com>
+References: <20221128195651.322822-1-Jason@zx2c4.com>
+ <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 399516ab0fee ("MAINTAINERS: Add a bunch of legacy (UMS) DRM drivers")
-marked these drivers obsolete 7 years ago.
-And the mesa UMD of this drm driver already in deprecated list
-in the link: https://docs.mesa3d.org/systems.html
-3dfx Glide-->driver/gpu/drm/tdfx
-Matrox-->driver/gpu/drm/mga
-Intel i810-->driver/gpu/drm/i810
-S3 Savage-->drivers/gpu/drm/savage
-ATI Rage 128->drivers/gpu/drm/r128
-Silicon Integrated Systems->drivers/gpu/drm/sis
+Hi Thorsten / Linus,
 
-It's time to remove these drivers.
+On Fri, Dec 02, 2022 at 10:32:31AM +0100, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker.
+> 
+> On 28.11.22 20:56, Jason A. Donenfeld wrote:
+> 
+> BTW, many thx for taking care of this Jason!
+> 
+> > From: Jan Dabros <jsd@semihalf.com>
+> > 
+> > Currently tpm transactions are executed unconditionally in
+> > tpm_pm_suspend() function, which may lead to races with other tpm
+> > accessors in the system. Specifically, the hw_random tpm driver makes
+> > use of tpm_get_random(), and this function is called in a loop from a
+> > kthread, which means it's not frozen alongside userspace, and so can
+> > race with the work done during system suspend:
+> 
+> Peter, Jarkko, did you look at this patch or even applied it already to
+> send it to Linus soon? Doesn't look like it from here, but maybe I
+> missed something.
+> 
+> Thing is: the linked regression afaics is overdue fixing (for details
+> see "Prioritize work on fixing regressions" in
+> https://www.kernel.org/doc/html/latest/process/handling-regressions.html
+> ). Hence if this doesn't make any progress I'll likely have to point
+> Linus to this patch and suggest to apply it directly if it looks okay
+> from his perspective.
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
----
- MAINTAINERS | 29 -----------------------------
- 1 file changed, 29 deletions(-)
+I'm very concerned about this. Jan posted the original fix a month ago,
+and then it fizzled out. Then I got word of the bug last week and
+revived the fix [1], while also figuring out how to reproduce it
+together with the reporter. I emailed the tpm maintainers offlist to
+poke them, and nobody woke up. And tomorrow is rc8 day. Given that this
+patch is pretty simple, has been tested to fix an annoying regression,
+and that neither of the three maintainers has popped up this week to get
+things rolling, I think we should just commit this now anyway, to make
+sure it gets in for rc8. This way there's still a solid week of testing.
+I'm in general not a big fan of the "nuclear option" of not waiting for
+out to lunch maintainers, but given that it is now December 3, it seems
+like the right decision.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9d023bb9445d..5a33e34d35a9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6569,11 +6569,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/ilitek,ili9486.yaml
- F:	drivers/gpu/drm/tiny/ili9486.c
- 
--DRM DRIVER FOR INTEL I810 VIDEO CARDS
--S:	Orphan / Obsolete
--F:	drivers/gpu/drm/i810/
--F:	include/uapi/drm/i810_drm.h
--
- DRM DRIVER FOR JADARD JD9365DA-H3 MIPI-DSI LCD PANELS
- M:	Jagan Teki <jagan@edgeble.ai>
- S:	Maintained
-@@ -6602,11 +6597,6 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/display/panel/mantix,mlaf057we51-x.yaml
- F:	drivers/gpu/drm/panel/panel-mantix-mlaf057we51.c
- 
--DRM DRIVER FOR MATROX G200/G400 GRAPHICS CARDS
--S:	Orphan / Obsolete
--F:	drivers/gpu/drm/mga/
--F:	include/uapi/drm/mga_drm.h
--
- DRM DRIVER FOR MGA G200 GRAPHICS CHIPS
- M:	Dave Airlie <airlied@redhat.com>
- R:	Thomas Zimmermann <tzimmermann@suse.de>
-@@ -6725,11 +6715,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	drivers/gpu/drm/qxl/
- F:	include/uapi/drm/qxl_drm.h
- 
--DRM DRIVER FOR RAGE 128 VIDEO CARDS
--S:	Orphan / Obsolete
--F:	drivers/gpu/drm/r128/
--F:	include/uapi/drm/r128_drm.h
--
- DRM DRIVER FOR RAYDIUM RM67191 PANELS
- M:	Robert Chiras <robert.chiras@nxp.com>
- S:	Maintained
-@@ -6757,11 +6742,6 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.yaml
- F:	drivers/gpu/drm/panel/panel-sitronix-st7703.c
- 
--DRM DRIVER FOR SAVAGE VIDEO CARDS
--S:	Orphan / Obsolete
--F:	drivers/gpu/drm/savage/
--F:	include/uapi/drm/savage_drm.h
--
- DRM DRIVER FOR FIRMWARE FRAMEBUFFERS
- M:	Thomas Zimmermann <tzimmermann@suse.de>
- M:	Javier Martinez Canillas <javierm@redhat.com>
-@@ -6777,11 +6757,6 @@ F:	include/drm/drm_aperture.h
- F:	include/linux/aperture.h
- F:	include/video/nomodeset.h
- 
--DRM DRIVER FOR SIS VIDEO CARDS
--S:	Orphan / Obsolete
--F:	drivers/gpu/drm/sis/
--F:	include/uapi/drm/sis_drm.h
--
- DRM DRIVER FOR SITRONIX ST7586 PANELS
- M:	David Lechner <david@lechnology.com>
- S:	Maintained
-@@ -6809,10 +6784,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/ste,mcde.yaml
- F:	drivers/gpu/drm/mcde/
- 
--DRM DRIVER FOR TDFX VIDEO CARDS
--S:	Orphan / Obsolete
--F:	drivers/gpu/drm/tdfx/
--
- DRM DRIVER FOR TI DLPC3433 MIPI DSI TO DMD BRIDGE
- M:	Jagan Teki <jagan@amarulasolutions.com>
- S:	Maintained
--- 
-2.25.1
+[1] https://lore.kernel.org/all/20221128195651.322822-1-Jason@zx2c4.com/ 
 
+Jason
