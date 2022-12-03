@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451596415BF
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 189B76415C1
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiLCKZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 05:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S229450AbiLCKZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 05:25:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiLCKZP (ORCPT
+        with ESMTP id S229708AbiLCKZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 05:25:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8825E4A05A;
-        Sat,  3 Dec 2022 02:25:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28C76B802BE;
-        Sat,  3 Dec 2022 10:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93045C433C1;
-        Sat,  3 Dec 2022 10:25:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OE1z0XMB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670063106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B99/rGGxOgBt2SCG0ilJmP42Uqhic94NePrcyql2Y30=;
-        b=OE1z0XMB2PBjouhlOhHQ1424GlPkFJvMb4D+3b+9O03547ABcw8eq7lOWNL27O9hAAzN8E
-        e/THcxh1t18VPT9Uzst/p2p5xJ+MpjH2Km7wJtEjXNVf6QMvuPJvCop2WIM76zxmER/cBa
-        MLrdEdSPaW+11jEn7cc8GHuhP/j+e4Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6d6b524c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 3 Dec 2022 10:25:06 +0000 (UTC)
-Date:   Sat, 3 Dec 2022 11:25:02 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        torvalds@linux-foundation.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        linux-integrity@vger.kernel.org, jgg@ziepe.ca,
-        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
-        timvp@google.com, apronin@google.com, mw@semihalf.com,
-        upstream@semihalf.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
-Message-ID: <Y4sj/knxLqqF2Tqr@zx2c4.com>
-References: <20221128195651.322822-1-Jason@zx2c4.com>
- <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
+        Sat, 3 Dec 2022 05:25:32 -0500
+Received: from out203-205-251-66.mail.qq.com (out203-205-251-66.mail.qq.com [203.205.251.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A789333
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 02:25:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1670063125;
+        bh=kjhHL5Y9sg0vFwa2Ffv/y68ja0+Pkp5Gy+WmvouEaXs=;
+        h=From:To:Cc:Subject:Date;
+        b=T8ZazCWM5O1DExBJtnHYBP40ZAOFIxIpwNfGAEhwOTx0/6R49DuSD4BCBylN2HbUX
+         bae+9hgOGpob+y34SLsaMR7RrwciY1jjGp6ztIr8bWD4YSsfp1a1/AYZkLwmTVPpwF
+         cAGsUbhu3I9Wq+x8NiwBUNyHbJhegTnhXzZrlSww=
+Received: from rtoax.. ([111.199.188.128])
+        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
+        id 657AD691; Sat, 03 Dec 2022 18:25:23 +0800
+X-QQ-mid: xmsmtpt1670063123t00503lin
+Message-ID: <tencent_922CA94B789587D79FD154445D035AA19E07@qq.com>
+X-QQ-XMAILINFO: Mm/8i8/T4yne99HUiRiR+7VHSIfb9B6KG4/kMJ956O6iWoBr0lzjkRVw5BOQt8
+         lly3r7XEeO2nB4Ah1Ins8CUyyHCTwADPbYKsg4dLFLtuMZu3xo4xxhhzOVhrfBVCzufA2A3y8uHx
+         a3m4q/8AEcX/OXxx78c/5PVJTvntV0HVXbZuoI6e6jpPBSPDBmiOUB80HppIbjOuAhVym8akXpSu
+         JIW1whbTl1iPHaYuZitQmX4FSlbC60YJjyyOcv3FG4s/NLC09999Y94F0fHefpzYHjQg2cQ+Szb8
+         S+B/DZST0RZIS0ULdUaNREQWP4/Dg20NmnFzBoKfium47pkiW+eHFBcW2WaDHsBD5C2KbxnziL7Z
+         LWHJ9Q3Yl0F170d2LFTygeVKFP+lVt3zLzkjrU5s2nQ5sAZUQvFsfU9ul5ltKDeC/GrmGBgSknUB
+         229kOrpL4xyUa3kez6D9zKQLrZ+sFo6PEy5SQB1gncFqZIjGTPXTqv/w1zgQLiAOlRe1MC0v318M
+         Uez2pRvXlHb2yFwhlutf04IMYlpfqS2BCF+oEOHsETQucMoIwsyngmssS7uTCWVh4wDquA921qYU
+         UvBrC26CUdkj5R1Iz4zaTXcBilO5bDkkQjWvvwDW2oXST6Ex6z/WVMfyCH5pu/n5qblq+Cw2H3Vn
+         lZgZHQa31ZPeGsZITP8ubynwZZB605vnqHAIBTBjkUUQUJBx1qIwqJXvrMO4+HmHpx4OoodiHKC9
+         WVDprKp2yYh5ZR2CB4NtWcod1h2P3Q8L0ucZQohjyHOKLzQcKzvkXkVozyF6nZlPawdUJCi5QKN2
+         LeNe13LI6hjQbkc78pb7rVvhp4NUUzEBhpMoi05Qvq6WIg0ixvrBhiEd0/tkZcCrgVhVNPV843lS
+         hqsvPUk823GSzlUc6PblRmgPpIV1e8ebMXXpywwEsNidbkCtawTrNsx0p7nv+itpi94Ajlhi4LMh
+         2NiY6HDwoM3fBMARifsEJayMDhlDWAvJfIIU13FOo=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     dvyukov@google.com
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        kasan-dev@googlegroups.com (open list:KCOV),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] kcov: fix spelling typos in comments
+Date:   Sat,  3 Dec 2022 18:25:21 +0800
+X-OQ-MSGID: <20221203102522.25347-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thorsten / Linus,
+From: Rong Tao <rongtao@cestc.cn>
 
-On Fri, Dec 02, 2022 at 10:32:31AM +0100, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> On 28.11.22 20:56, Jason A. Donenfeld wrote:
-> 
-> BTW, many thx for taking care of this Jason!
-> 
-> > From: Jan Dabros <jsd@semihalf.com>
-> > 
-> > Currently tpm transactions are executed unconditionally in
-> > tpm_pm_suspend() function, which may lead to races with other tpm
-> > accessors in the system. Specifically, the hw_random tpm driver makes
-> > use of tpm_get_random(), and this function is called in a loop from a
-> > kthread, which means it's not frozen alongside userspace, and so can
-> > race with the work done during system suspend:
-> 
-> Peter, Jarkko, did you look at this patch or even applied it already to
-> send it to Linus soon? Doesn't look like it from here, but maybe I
-> missed something.
-> 
-> Thing is: the linked regression afaics is overdue fixing (for details
-> see "Prioritize work on fixing regressions" in
-> https://www.kernel.org/doc/html/latest/process/handling-regressions.html
-> ). Hence if this doesn't make any progress I'll likely have to point
-> Linus to this patch and suggest to apply it directly if it looks okay
-> from his perspective.
+Fix the typo of 'suport' in kcov.h
 
-I'm very concerned about this. Jan posted the original fix a month ago,
-and then it fizzled out. Then I got word of the bug last week and
-revived the fix [1], while also figuring out how to reproduce it
-together with the reporter. I emailed the tpm maintainers offlist to
-poke them, and nobody woke up. And tomorrow is rc8 day. Given that this
-patch is pretty simple, has been tested to fix an annoying regression,
-and that neither of the three maintainers has popped up this week to get
-things rolling, I think we should just commit this now anyway, to make
-sure it gets in for rc8. This way there's still a solid week of testing.
-I'm in general not a big fan of the "nuclear option" of not waiting for
-out to lunch maintainers, but given that it is now December 3, it seems
-like the right decision.
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ include/linux/kcov.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1] https://lore.kernel.org/all/20221128195651.322822-1-Jason@zx2c4.com/ 
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index 55dc338f6bcd..ee04256f28af 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -56,7 +56,7 @@ static inline void kcov_remote_start_usb(u64 id)
+ /*
+  * The softirq flavor of kcov_remote_*() functions is introduced as a temporary
+  * work around for kcov's lack of nested remote coverage sections support in
+- * task context. Adding suport for nested sections is tracked in:
++ * task context. Adding support for nested sections is tracked in:
+  * https://bugzilla.kernel.org/show_bug.cgi?id=210337
+  */
+ 
+-- 
+2.38.1
 
-Jason
