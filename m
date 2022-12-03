@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6498B6417B6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 17:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 339E96417AD
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 17:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiLCQTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 11:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S229819AbiLCQH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 11:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiLCQTn (ORCPT
+        with ESMTP id S229542AbiLCQHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 11:19:43 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40986B865
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 08:19:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:Cc:
-        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=rU8hhiprT8CYsbXv+YRlVVvrMt5l/XRlgxYcVoRn68w=; b=PKwq7R/CyL+ykC+SRCuDyQwh+T
-        iyS9DtYqmKQxDFutA3NkPJuQdgO+gAHhhdgCP6iF1qx2iyusvlmP985SqsE0GtTl9jmHvV/NRN9n9
-        pxa2zWi/mkB5hSoQgcHY2q6eAe+dZaoq4r7Ioh7nrwNfUMp2vjBh1V79SLLe45Q5Vsm30fvDy8PUY
-        CVT2T3KvRWmuUC72EnBnZgWyxrDd/Rzl6JwHVuIKCKYO5NodWdNA8kZ8Xji4NRXS44l2wOg5+exXs
-        +VTl3eNJbsScTsCkuy5wWcwvVwqm8kXpvP7BoWguf2KpPXHK25kP981xlw2s31Fr/W2bA6laDJIgA
-        egcEHxWw==;
-Received: from [2a01:799:95e:1700:6395:ccbd:d000:d42b] (port=57034)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1p1VEp-0003Ix-4J; Sat, 03 Dec 2022 17:19:39 +0100
-Message-ID: <b3d762e7-0541-18b9-ed5e-e9aef788dae8@tronnes.org>
-Date:   Sat, 3 Dec 2022 17:19:36 +0100
+        Sat, 3 Dec 2022 11:07:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCD91EAF4;
+        Sat,  3 Dec 2022 08:07:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43F0860B1A;
+        Sat,  3 Dec 2022 16:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB2F4C433C1;
+        Sat,  3 Dec 2022 16:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670083643;
+        bh=Cxm5cX1/vRr6rTVftoIlwySvdfgJ/QgkmcVNP/aI/3s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rZxwQvjDdNkLrpGiIC1dofLAzcSqRi2r+jlxMyuBRKl9bCsujpO+QhkAC5XndgNh6
+         oz2RBT5LJwCuqzg3S1tmbbMJBgM4gkTbu5plpNTfdfjQyxy5GmNWFF/BTytFREh7ya
+         X6w7Du1Y3o1u5XqVaHuKyebCjTCAm9GBkaXrkyBBhNFQEFr64LR7blH8/Z9Z2DAFFb
+         BpIfc7CNKJ4VJ3Dm/ZRONw8MaKayBodAcE7llWu6FHQsD2WZ7J0YwD0oFhtYeY8q0Q
+         5yMWH4B6CZfP5jlgfHts1bhjUq3r4otcHjraXOUDstOe0GIfmVzwxpUSEFg6rzNRg7
+         vTHyQtftG4RLA==
+Date:   Sat, 3 Dec 2022 16:20:08 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, lars@metafoo.de,
+        benjamin.gaignard@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: Removing the last of IIO_COUNT (stm32-timer-trigger)
+Message-ID: <20221203162008.007df587@jic23-huawei>
+In-Reply-To: <Y4KuBicVeRAsfqxq@fedora>
+References: <Y0vzlOmFrVCQVXMq@fedora>
+        <ec6b8983-1567-92c8-f1cd-baf970ca4046@foss.st.com>
+        <Y4KuBicVeRAsfqxq@fedora>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 1/3] drm/mipi-dbi: Support separate I/O regulator
-To:     =?UTF-8?Q?Otto_Pfl=c3=bcger?= <otto.pflueger@abscue.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221201160245.2093816-1-otto.pflueger@abscue.de>
- <20221201160245.2093816-2-otto.pflueger@abscue.de>
-Cc:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20221201160245.2093816-2-otto.pflueger@abscue.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,19 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+...
 
-
-Den 01.12.2022 17.02, skrev Otto Pflüger:
-> The MIPI DBI specification defines separate vdd (panel power) and
-> vddi (I/O voltage) supplies. Displays that require different voltages
-> for the different supplies do exist, so the supplies cannot be
-> combined into one as they are now. Add a new io_regulator property to
-> the mipi_dbi_dev struct which can be set by the panel driver along
-> with the regulator property.
+> > ---
+> > To conclude, there some open items here, but hopefully nothing blocking.
+> > In case we sort all these, this will allow to remove the IIO_COUNT
+> > channel (along with the IIO device) being registered.  
 > 
-> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
-> ---
+> I'm certain Jonathan will want some sort of deprecation schedule first
+> to make sure any existing users have time to migrate to the Counter
+> interface before we remove the IIO one, but it will give me a nice
+> feeling of completion to see the last of IIO_COUNT superceded by the
+> Counter interface. ;-)
 
-Thanks for fixing this, I'll apply the patches in a few days.
+If there is nothing in tree, I'm fine 'removing' it. However, note
+that we'll have to keep a placeholder for some of the defines to avoid
+renumbering other types etc.  So probably just stick a couple of underscores
+in front to make it __IIO_COUNT and add a comment to say it should not be used.
 
-Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
+Jonathan
+
+> 
