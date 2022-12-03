@@ -2,91 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C796412E1
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 02:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CC26412E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 02:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbiLCBAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 20:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
+        id S234966AbiLCBDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 20:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233990AbiLCBAS (ORCPT
+        with ESMTP id S232011AbiLCBDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 20:00:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28648567A;
-        Fri,  2 Dec 2022 17:00:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 2 Dec 2022 20:03:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089E37B57C;
+        Fri,  2 Dec 2022 17:03:07 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45AB862477;
-        Sat,  3 Dec 2022 01:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 91984C433B5;
-        Sat,  3 Dec 2022 01:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670029216;
-        bh=MGsPTcfIDMe8NsW+WgRecjSM7wji1B+lYnN8B7L988E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DnOIfI/oz3QrsMN5TuUpL4+k48Cgf1oo2sPSBBvl6Mo2HqJPMaI4tz0CSTIIMRaIS
-         SRZTLFxi/xfJ97DlMF+60OXNAFRBpTu16M8+4yWIsMp2wnMsFUhHyGQTVDuhRpOfzE
-         aUSYPDS3QoRdCA/VDPMI1Q+qjhIi8g4eU32SuTTunZnYJI54tig6yhCL3uTtsnPWSv
-         wXKqPBGKxfustW6KDKNC461eKxZ/w+M8KuoeYuT3g0KVrPZcvtEG8p2A4AjKoB+AEI
-         h8MyMtL+i41gbjgKPFmN0FJVqltNSLhB0aKd0g8xHKHlUREnuYDKx8nlGNgSd3saoC
-         CvQZOE7R7ptAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75819C395EC;
-        Sat,  3 Dec 2022 01:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB6666602BC4;
+        Sat,  3 Dec 2022 01:03:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670029385;
+        bh=RPzrkCAEPQfXJKn3vlW1rRB5Paq8qy2yzBRMuA91aro=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YYl9EBhdamrmdZ5isDmggxdedUwh1pOFlx4pjxLaszlup3Vgye+CZt7Vcov1FO/iy
+         HH4XttI7mqu5cpk3WEZo1+GTzjcpqDTmjikvgpp5OzCeaD1UQw4Sd67WkyZ37YoxYe
+         SbwvPabiKz+gVgc7o1jPj/hS3XLwyO9gnLDMUHGnIXYkHcuJV9JwUXPLu3t+ZvvkMu
+         o6VTqsCo570eDSun6TZvptTkaEeTJFpT0X8OkXPKrWFezr87I9IDzObcbEiZONyvXv
+         BynUabe/B95dUW46/WlMUt3NVQmCJ/HZddHWKGnVI5W06BmqaE52M9dYdUp/XAMhnb
+         xWYAYFcsIsvxA==
+Received: by mercury (Postfix, from userid 1000)
+        id 2525D1060E96; Sat,  3 Dec 2022 02:03:03 +0100 (CET)
+Date:   Sat, 3 Dec 2022 02:03:03 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hermes Zhang <Hermes.Zhang@axis.com>
+Cc:     kernel <kernel@axis.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] power: supply: bq256xx: Remove init ichg/vbat with max
+ value
+Message-ID: <20221203010303.it5urfo2i7pj4n3n@mercury.elektranox.org>
+References: <20221129090112.3451501-1-chenhuiz@axis.com>
+ <20221129152715.4hwtobuv57hrndzu@mercury.elektranox.org>
+ <60ca0aa6-508a-4350-f892-98d1368e3783@axis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V5 0/2] Support VMCOREINFO export for RISCV64
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167002921647.19521.1698989789137180552.git-patchwork-notify@kernel.org>
-Date:   Sat, 03 Dec 2022 01:00:16 +0000
-References: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
-In-Reply-To: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        heiko@sntech.de, guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        bagasdotme@gmail.com, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
-        k-hagio-ab@nec.com, hschauhan@nulltrace.org, yixun.lan@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="e73lyxseft2hv73d"
+Content-Disposition: inline
+In-Reply-To: <60ca0aa6-508a-4350-f892-98d1368e3783@axis.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+--e73lyxseft2hv73d
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 26 Oct 2022 22:42:06 +0800 you wrote:
-> As disscussed in below patch set, the patch of 'describe VMCOREINFO export in Documentation'
-> need to update according to Bagas's comments.
-> https://lore.kernel.org/linux-riscv/22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org/
-> 
-> As others patches in above patch set already applied, so this patch set only contains below two
-> patches.
-> 
-> [...]
+Hi,
 
-Here is the summary with links:
-  - [V5,1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
-    https://git.kernel.org/riscv/c/649d6b1019a2
-  - [V5,2/2] Documentation: kdump: describe VMCOREINFO export for RISCV64
-    https://git.kernel.org/riscv/c/c5b4216929eb
+On Wed, Nov 30, 2022 at 09:27:42AM +0000, Hermes Zhang wrote:
+> Hi,
+>=20
+> =E5=9C=A8 2022/11/29 23:27, Sebastian Reichel =E5=86=99=E9=81=93:
+> > Hi,
+> >
+> > On Tue, Nov 29, 2022 at 05:01:12PM +0800, Hermes Zhang wrote:
+> >> Init the ichg and vbat reg with max value is not good. First the chip
+> >> already has a default value for ichg and vbat (small value). Init these
+> >> two reg with max value will result an unsafe case (e.g. battery is over
+> >> charging in a hot environment) if no user space change them later.
+> >>
+> >> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+> >> ---
+> > It's the driver's task to setup safe initial maximum values.
+> > Pre-kernel values may or may not be safe if you consider things
+> > like kexec. If you get unsafe values programmed, then fix the
+> > values instead.
+> >
+> > -- Sebastian
+>=20
+> The constant_charge_current_max_ua is either from dts or default value=20
+> for each chip in the code, but I guess I could ot change them because it=
+=20
+> has their own meaning (it will be used to check if the setting is valid=
+=20
+> or not). Do you mean I can set some other value here instead of=20
+> constant_xxx_max?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You can just change the DT value to something safe as it is meant to be?
 
+-- Sebastian
 
+--e73lyxseft2hv73d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOKoD8ACgkQ2O7X88g7
++poN4w//QbZtCLgYYjGGtlCJ6WSd02LPonSwrZrDsr3f06OMvpyP5c0WPNMJw1DV
+j4JtAwI7w3kn+rGU7STFImF4I+Hjwq2k8u2I+hbTm/OhIkr9/nPR/Hvon2xDmDoL
+Q73EI9x90KLCzkS/UfySp9/nGOnZfUkYauiZnPDroJk79mBLqwtxIq1qUboSygi/
+D/0laui233oH8kZXwb14xndhfsECNTHHw1yENh5WYhbuLW/Uk3aT5utTty06Hgnk
+6aGzW8s8WbzK7nWRICdmEJaMdqBdbxhmNSI6HY6+Zkel2+8q9bfXQZB0BplVSk0j
+y9bW5eb7bB9widLVkYnfga61uCfGJNfVkvWgHoCn/bP2Xipy0oRmCFofqFAXRIMc
+wgZ9+1NtRteEhRzJjoLXyu6e8w0HOaMZG5PQs67eTo4vDRa3YgXbaBFUaH32M8LA
+N7iC19znDIRJ80YzhmAkAQmZSVOP0qy3t7nvl+gAHd9ZeHLHeuvoH7cTFNTtykBv
+v7mh3NujnyD+mbg7xwY9qH5PxetwPcq/vAnfg2ZvIbw+dwZ8hz0QpKkCm1Vgt+h2
+IpPs6OGbNjVlDqBzui64rYqS3CAlB40MC9mhPh/L9kBB7gf5yZTakA3AE/HnJDVj
+77ceCPaEp9pPf+QyzjjySp/vFpLL1LsDAhw5IKDB1tJry4nzBEY=
+=EH02
+-----END PGP SIGNATURE-----
+
+--e73lyxseft2hv73d--
