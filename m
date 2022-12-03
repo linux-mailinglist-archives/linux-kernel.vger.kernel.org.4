@@ -2,191 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7126413B6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0496413BB
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbiLCCsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S234670AbiLCCvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234490AbiLCCsL (ORCPT
+        with ESMTP id S234804AbiLCCvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:48:11 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D830DBF4E;
-        Fri,  2 Dec 2022 18:48:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670035690; x=1701571690;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=khdP+3y1X7d3LGZlC+MWbwP5uE0P00l3WNKMqFynptI=;
-  b=JaYqubMLrkot4F8GypDZjB2r8PjqRMvWn02upEVzvx99SlAcsntPNDet
-   RbY2MM/4fkN5AXbZKhtr0WGd5YmnoMAIphSoi/onU0A6CQp1Smt68PZUW
-   8pXfJuA8fVvJOYAyuexCY3orNqtY/7EWAix1/inLp9Fh+tW6NssVYfGJI
-   RtiHxK82ZoNU62IqwL6467P1phL+ww2DcDDGvvnDGXkUCTasYXtjyId2d
-   Hb+d6k5pgdunatQwzvgRUZ6zlZEmBu3o8TKLL6VtpsuJUfc6pgiO+RIjg
-   IpxJhMNU6+/EU0+SVNm5b2SYUj3Nk0zNHVgaWLSH/3z0J06YMbD6uGTRt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="317946361"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="317946361"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 18:48:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787504420"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="787504420"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Dec 2022 18:48:09 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 2 Dec 2022 18:48:09 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 2 Dec 2022 18:48:09 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 2 Dec 2022 18:48:08 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kzQ+JHEG6NJkh4cT2MNEpZaPyfvsAjC6W41w1vb123uriwEjmeU5hJFhRkzwavFNMR9Be+8wOWsnLFW6laArLOS93KUmh9G62sD8ud/ziwzn4Epb5zMPzBPjW7VlKSxAZ/AZVY+IsdBXYNKhO4lGaeX0hXi7dLwXzVTR9ybKHwtOsEZv/ZZLMf8yb+r+oY+4wJTey4gbHcAOgcw4HGetIjK9PkB6ALXA39gbVH/ITfxTVm9I3q6oGTuFJnjXYuuLvlbUUZUdOZ4MXJfseKLWS2gw5Yn9zqBk6QYubrojmds9Aijqp75x/dIk1yuIOT7P4jPxqDMN0dyB8fbE54eL0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=daNcA3TVzwyaHtsUi+u0vhv54WZBcPBVB44UwTou+DQ=;
- b=GLLlctfSPTS0cxQiE0P18L2DqAxdOhvrSO917q2zcB4/sa0dYRrgs2QGVFWEjYVME1rG10PBcwHvqlDsX4/CFYHCsIlXQKXheaqQEJGKiCW5QUO6S8cqXrbE6tGMwtyXziGaV7QdJ9Enq86XEmHryjCEsgKvZ3+G4Rp2uKdPIWZHNFfhuuiRgEPv2TYfWwNLtHXQqKjqQmsLsEdTLieDcsbSsTygthhO49G5cL55qUYvawyW791b/v+AdmIts998sw7iV3lsCcRPdMCMBfthNd2TieCxGcmd37wXGYwdbjVNZY4tPS/Myz5w4EroSXfTPrAVDM54H+IAOjVqL8EM4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by DM6PR11MB4737.namprd11.prod.outlook.com
- (2603:10b6:5:2a2::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Sat, 3 Dec
- 2022 02:48:06 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.008; Sat, 3 Dec 2022
- 02:48:06 +0000
-Date:   Fri, 2 Dec 2022 18:48:02 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     <torvalds@linux-foundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-mm@kvack.org>, <nvdimm@lists.linux.dev>
-Subject: [GIT PULL] DAX and HMAT fixes for v6.1-rc8
-Message-ID: <638ab8e291345_c95729417@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: SJ0PR05CA0097.namprd05.prod.outlook.com
- (2603:10b6:a03:334::12) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Fri, 2 Dec 2022 21:51:13 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79194FD0F
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:51:11 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id t17so6548992pjo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dFa9wOyNkjOu3wfCu+8VdnDJI7y7l4XWc1FYOJwGpZ4=;
+        b=MwXxQx4ch7cB9jSlFLmDT0N2Y+Ipy0C0qW3vi2Yec7LRae1mKWT0hUhw++ETkd1tDD
+         qLrQGaPTwOVb+5Ppyte36QwiJau/skp/BHnbVO3tNgZxW0RYx/1iqQzvCX/WbYPszyMk
+         8A3Xki9QsSgaEIenI9mO2tmYhcHvYZX/9Mqxk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dFa9wOyNkjOu3wfCu+8VdnDJI7y7l4XWc1FYOJwGpZ4=;
+        b=MBo0uPNzShkSXHYtHn7lZElbfeMPf+cCzvc2jvdlxMf3QdqLW69Pxf7FMOuyYczxeZ
+         L6cYYEnEbMFx/r/ienrI7/9LfwWI/FDyp7nEuTnqPl+Yrf40bA9OL/esbsfG7ZVuxgtA
+         DdcupeqXkIgJEZfz31umStYge8Cd537SoWtebRQoshr4KJnYmeu0nqlUg+fP4Gct7yOG
+         DP/ahgrgTiEr+hMjU/X4alFIMZKx6ZLgWcGdbIjt+RHmTmO0bWg/rqg9xt4ri60Fo/Iw
+         nCdfMJuBKdMATKIs/w0aKDHwyoODzDqh5ypX1Hy6YygcqNawUUlgqazKT2FFlzx/ZA3L
+         stPA==
+X-Gm-Message-State: ANoB5pm2GJXpZQFGSvr7ucumydO9v6VFAEiOE7cLOu6HUWeZf9169rnX
+        QioIeI/TOCANA7wkn1vZeOx0qg==
+X-Google-Smtp-Source: AA0mqf7SH+F7LKTBiFUzgZQQ6ur0ObRkDRQBwN/2rgLDHgZEfyIb9IMJkbjc5SN+oT2XbWNyLsDlFA==
+X-Received: by 2002:a17:90a:9f09:b0:218:6158:b081 with SMTP id n9-20020a17090a9f0900b002186158b081mr80915815pjp.66.1670035870894;
+        Fri, 02 Dec 2022 18:51:10 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g17-20020a17090a7d1100b00218c5bdb983sm5372466pjl.22.2022.12.02.18.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 18:51:10 -0800 (PST)
+Date:   Fri, 2 Dec 2022 18:51:09 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
+Subject: Re: [PATCH v4 30/39] x86/shstk: Introduce map_shadow_stack syscall
+Message-ID: <202212021848.B6277C86@keescook>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-31-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|DM6PR11MB4737:EE_
-X-MS-Office365-Filtering-Correlation-Id: fa6082b7-cdf4-4a34-6a66-08dad4d8cdf3
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wu5SC1ujnaKR3soyDjLkj1vgNe/+YVOKDJm7f9vqoqQJytucqXiE9dcFLeF1wbN+4mVPHOdVXPhXfQHRJincI5vMkUTxhV990G04vrUaWnughAxPzpZv6XXqBZau+mTecbNEAPtba2FsS8nBLNGrF7rxMvZmbc0Uw64IkJwB9lMlqYcmAU0dWr/cr3LKwi63L7kqayvq3qh8C6EuztW6fNbgTXzvzR0ax7lYgZ1ef8147VoKjTQc9TuUKm3/6Y0qAW3/zLlm59JyjeuG2fy+Y+mtUH15moqaqs1uAc/UA9BW0o4VIHGtRxWNQX7JXS65j/OCB2IxEPCJd0SGoM6a6lebXAOhHbmeaE9Kh/2A/pDH7vQye8xR8vKcTVQg4xmVK68R4lZ8IQ87v+fkw8gSfGpPCuhRrgHpdrKuMRdInsv7rEBpI/BXHtdb6lT8g6o73+Dv2wOdprmvZLzajp8yHEdsrDLw6swE3gQPLCPpttLVXJhgs99mg1S9CVvPuRk2OncIuJze/zhKG+rPDA2+fy27VT3ZZwRiw+2mY5cLWf1uZ7LDUsGRWbDtH03AxLmC9S0DrPnQuBlMByIZ7RD+lr8B7QNfSOpQeo+P5NQfCbqPzAXZUBMnh0/3Xzbn/hjqe/+bcCmXe/hK539jV79UFA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199015)(8676002)(4326008)(41300700001)(2906002)(316002)(6916009)(4001150100001)(66946007)(8936002)(66556008)(66476007)(6486002)(478600001)(38100700002)(6666004)(9686003)(6506007)(6512007)(186003)(5660300002)(83380400001)(26005)(86362001)(82960400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RJG9rKey1epG7dp6ldiRHhv3YM6Hk0ACdS7TwDSz3wdrBuP3NZW94/4TJksd?=
- =?us-ascii?Q?aAfnUTYtFHhHPkolhwk8DFyoqHgRkruG7eSmtiR5i0lTfOexlmRF+aIFinoq?=
- =?us-ascii?Q?dpmAIo6KTBJz7x3oVD+ChlPZQsnUpdXmH0GJwT6Afw60x5dQWoR3d4/Y9JTz?=
- =?us-ascii?Q?6uiy0hrXFH4Pn/VFJzDFNmh+W1RhEv1IpfiQ30Y5x3OOIPsAacya9X10kcDm?=
- =?us-ascii?Q?8clLdRYojB/bR7emlAv04b0JHO50qr3GtxmE9xW/Vs7kC4dJzXGknCanAWVB?=
- =?us-ascii?Q?oyRsm/6ax+Fayg4xF/0cgUys9jKvn1W1SNWx/xkB4lw3eu81OToYhTpgHBRE?=
- =?us-ascii?Q?bSb0VTd4a4NisjS7AHkuwPMq7jfxFZd5d4I9+d3mgtyyPqsZEsfYmYl0KxrA?=
- =?us-ascii?Q?bKULWGQo7J/MVnbRbB1FB7n3V7xT3PfEnxX/YksPqmtxF8QnGbjg/pvoB+P5?=
- =?us-ascii?Q?niu/9C/GKCMQf3r+8aXLj2nF+4g2Y71t/P/+frGNgKy90l2BMvRioA0q6mn+?=
- =?us-ascii?Q?jgxKNOYyH6nJHUg7zoUAbWdJ1AN/47hTkocgRydIhNq7qjq3/71KAUygTkOx?=
- =?us-ascii?Q?fajNSbVHHS7ivTMqjIzhXpMNnlFcvKiWUIPb+73i9MUgYUnM389Dl1x6+gRw?=
- =?us-ascii?Q?xwjtJDx5BV27xtvFMkEdWkoqzOWgfOMNmIzUpzL44geKDopG/qIAzTHVppg9?=
- =?us-ascii?Q?8cosS7XgL3rl9d7pL7BmqYjyNxeaIoY/7M3Ln92CWoT4DKbfjpk0UGlqLBi/?=
- =?us-ascii?Q?Q+LYVJ21WKrig0mHUL7MIQ+C+QoGFWW2JpmlrGBVedGck4q8ezt+snB/2ae7?=
- =?us-ascii?Q?YHKNggbzKTsgAfMzCykgYg80NgQ0vxPIDGGZNQCAT6b/NpQBqZrik+hcqYgG?=
- =?us-ascii?Q?OjhDUQ+tzNuWDCzB9j5OzFAikpZTTjzdBTw3gTVuwLjKAUFO/SGbGORgtm6S?=
- =?us-ascii?Q?dLcsgr5CkRpk7M7sLNuDHz0e+AhCv0xp39JiYLwlsLh4IQz8pMwV5PluHK13?=
- =?us-ascii?Q?9TUHK957Uxgl6nhqU1mSQJ3hErPesm8Jcc6p8ZrQnvIdrh3eeLlQTglibH26?=
- =?us-ascii?Q?qE+1+TeOyEn6BMCwpVW0j+0oFIWizBaOH7qt/+yh7kUAfR6e1r9EBrpxT3qG?=
- =?us-ascii?Q?p/0sWF+jf6ObLr6R1mIaZEH3/4Vro3IUb/sL1T712zira+ODVj3sLXom8orc?=
- =?us-ascii?Q?Ju0qP4V0FfHTPMfWS9jZ8vqSr5jd5HRkkUlu4CZposc1+is5hG2crbYdYBG4?=
- =?us-ascii?Q?gQfOTeK1NmlEBACkweol3HBXbt8vIFJ45FaNKsZ9Xvz01Aa43/KFSSpqeJRA?=
- =?us-ascii?Q?eFgdP0BNmAe1vXQZNUQmLAI9nZS4SFmOjhJ/QtsVzxU/xYSvLnCO97diFpLf?=
- =?us-ascii?Q?Pz0PWEZ9QgakkHYZ6lRIZwNHk9VKj94oPVKvuHyl/fqdBahxpHnge6x9F49K?=
- =?us-ascii?Q?2f8lQTVt6eE9+Ynvtl5lF7aJATy8Bc2yzWtxFtkCOIif2+QH9f+Pmz4HYFtd?=
- =?us-ascii?Q?Q+Be7qjOCoOCsmb4Xx2YWAhSYUKBH7Qng1CiHaDUokPlIm5myMXNqRuJl0r8?=
- =?us-ascii?Q?8vGH6VVsCl2bJAce/DM1fnMewVPrJUk0mCtWhsSLont5AjU2p6jNk+IAVrGg?=
- =?us-ascii?Q?rw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa6082b7-cdf4-4a34-6a66-08dad4d8cdf3
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2022 02:48:06.1058
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V4MPQxy6o//fTbIzS9qtesUWnjDfaOHyWt5Jt525YPSA/JsUkUVg6r+RBgSmzT9vIUytK+uuVPTsMkCGByaq3zq/AhXnvswR3szB0uO9nHU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4737
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221203003606.6838-31-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, please pull from:
+On Fri, Dec 02, 2022 at 04:35:57PM -0800, Rick Edgecombe wrote:
+> When operating with shadow stacks enabled, the kernel will automatically
+> allocate shadow stacks for new threads, however in some cases userspace
+> will need additional shadow stacks. The main example of this is the
+> ucontext family of functions, which require userspace allocating and
+> pivoting to userspace managed stacks.
+> 
+> Unlike most other user memory permissions, shadow stacks need to be
+> provisioned with special data in order to be useful. They need to be setup
+> with a restore token so that userspace can pivot to them via the RSTORSSP
+> instruction. But, the security design of shadow stack's is that they
+> should not be written to except in limited circumstances. This presents a
+> problem for userspace, as to how userspace can provision this special
+> data, without allowing for the shadow stack to be generally writable.
+> 
+> Previously, a new PROT_SHADOW_STACK was attempted, which could be
+> mprotect()ed from RW permissions after the data was provisioned. This was
+> found to not be secure enough, as other thread's could write to the
+> shadow stack during the writable window.
+> 
+> The kernel can use a special instruction, WRUSS, to write directly to
+> userspace shadow stacks. So the solution can be that memory can be mapped
+> as shadow stack permissions from the beginning (never generally writable
+> in userspace), and the kernel itself can write the restore token.
+> 
+> First, a new madvise() flag was explored, which could operate on the
+> PROT_SHADOW_STACK memory. This had a couple downsides:
+> 1. Extra checks were needed in mprotect() to prevent writable memory from
+>    ever becoming PROT_SHADOW_STACK.
+> 2. Extra checks/vma state were needed in the new madvise() to prevent
+>    restore tokens being written into the middle of pre-used shadow stacks.
+>    It is ideal to prevent restore tokens being added at arbitrary
+>    locations, so the check was to make sure the shadow stack had never been
+>    written to.
+> 3. It stood out from the rest of the madvise flags, as more of direct
+>    action than a hint at future desired behavior.
+> 
+> So rather than repurpose two existing syscalls (mmap, madvise) that don't
+> quite fit, just implement a new map_shadow_stack syscall to allow
+> userspace to map and setup new shadow stacks in one step. While ucontext
+> is the primary motivator, userspace may have other unforeseen reasons to
+> setup it's own shadow stacks using the WRSS instruction. Towards this
+> provide a flag so that stacks can be optionally setup securely for the
+> common case of ucontext without enabling WRSS. Or potentially have the
+> kernel set up the shadow stack in some new way.
+> 
+> The following example demonstrates how to create a new shadow stack with
+> map_shadow_stack:
+> void *shstk = map_shadow_stack(addr, stack_size, SHADOW_STACK_SET_TOKEN);
+> 
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> ---
+> 
+> v3:
+>  - Change syscall common -> 64 (Kees)
+>  - Use bit shift notation instead of 0x1 for uapi header (Kees)
+>  - Call do_mmap() with MAP_FIXED_NOREPLACE (Kees)
+>  - Block unsupported flags (Kees)
+>  - Require size >= 8 to set token (Kees)
+> 
+> v2:
+>  - Change syscall to take address like mmap() for CRIU's usage
+> 
+> v1:
+>  - New patch (replaces PROT_SHADOW_STACK).
+> 
+>  arch/x86/entry/syscalls/syscall_64.tbl |  1 +
+>  arch/x86/include/uapi/asm/mman.h       |  3 ++
+>  arch/x86/kernel/shstk.c                | 56 ++++++++++++++++++++++----
+>  include/linux/syscalls.h               |  1 +
+>  include/uapi/asm-generic/unistd.h      |  2 +-
+>  kernel/sys_ni.c                        |  1 +
+>  6 files changed, 55 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+> index c84d12608cd2..f65c671ce3b1 100644
+> --- a/arch/x86/entry/syscalls/syscall_64.tbl
+> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
+> @@ -372,6 +372,7 @@
+>  448	common	process_mrelease	sys_process_mrelease
+>  449	common	futex_waitv		sys_futex_waitv
+>  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+> +451	64	map_shadow_stack	sys_map_shadow_stack
+>  
+>  #
+>  # Due to a historical design error, certain syscalls are numbered differently
+> diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
+> index 775dbd3aff73..15c5a1c4fc29 100644
+> --- a/arch/x86/include/uapi/asm/mman.h
+> +++ b/arch/x86/include/uapi/asm/mman.h
+> @@ -12,6 +12,9 @@
+>  		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
+>  #endif
+>  
+> +/* Flags for map_shadow_stack(2) */
+> +#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)	/* Set up a restore token in the shadow stack */
+> +
+>  #include <asm-generic/mman.h>
+>  
+>  #endif /* _ASM_X86_MMAN_H */
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index e53225a8d39e..8f329c22728a 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/compat.h>
+>  #include <linux/sizes.h>
+>  #include <linux/user.h>
+> +#include <linux/syscalls.h>
+>  #include <asm/msr.h>
+>  #include <asm/fpu/xstate.h>
+>  #include <asm/fpu/types.h>
+> @@ -71,19 +72,31 @@ static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
+>  	return 0;
+>  }
+>  
+> -static unsigned long alloc_shstk(unsigned long size)
+> +static unsigned long alloc_shstk(unsigned long addr, unsigned long size,
+> +				 unsigned long token_offset, bool set_res_tok)
+>  {
+>  	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+>  	struct mm_struct *mm = current->mm;
+> -	unsigned long addr, unused;
+> +	unsigned long mapped_addr, unused;
+>  
+> -	mmap_write_lock(mm);
+> -	addr = do_mmap(NULL, 0, size, PROT_READ, flags,
+> -		       VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
+> +	if (addr)
+> +		flags |= MAP_FIXED_NOREPLACE;
+>  
+> +	mmap_write_lock(mm);
+> +	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
+> +			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
+>  	mmap_write_unlock(mm);
+>  
+> -	return addr;
+> +	if (!set_res_tok || IS_ERR_VALUE(addr))
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm tags/dax-fixes-6.1-rc8
+Should this be IS_ERR_VALUE(mapped_addr) (i.e. the result of the
+do_mmap)?
 
-...to receive a few bug fixes around the handling of "Soft Reserved"
-memory and memory tiering information. Linux is starting to enounter
-more real world systems that deploy an ACPI HMAT to describe different
-performance classes of memory, as well the "special purpose" (Linux
-"Soft Reserved") designation from EFI. These fixes result from that
-testing.
+> +		goto out;
+> +
+> +	if (create_rstor_token(mapped_addr + token_offset, NULL)) {
+> +		vm_munmap(mapped_addr, size);
+> +		return -EINVAL;
+> +	}
+> +
+> +out:
+> +	return mapped_addr;
+>  }
+>  
+>  static unsigned long adjust_shstk_size(unsigned long size)
+> @@ -134,7 +147,7 @@ static int shstk_setup(void)
+>  		return -EOPNOTSUPP;
+>  
+>  	size = adjust_shstk_size(0);
+> -	addr = alloc_shstk(size);
+> +	addr = alloc_shstk(0, size, 0, false);
+>  	if (IS_ERR_VALUE(addr))
+>  		return PTR_ERR((void *)addr);
+>  
+> @@ -179,7 +192,7 @@ int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
+>  
+>  
+>  	size = adjust_shstk_size(stack_size);
+> -	addr = alloc_shstk(size);
+> +	addr = alloc_shstk(0, size, 0, false);
+>  	if (IS_ERR_VALUE(addr))
+>  		return PTR_ERR((void *)addr);
+>  
+> @@ -373,6 +386,33 @@ static int shstk_disable(void)
+>  	return 0;
+>  }
+>  
+> +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
+> +{
+> +	bool set_tok = flags & SHADOW_STACK_SET_TOKEN;
+> +	unsigned long aligned_size;
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
+> +		return -ENOSYS;
 
-It has all appeared in -next for a while with no known issues.
+Using -ENOSYS means there's no way to tell the difference between
+"kernel doesn't support it" and "CPU doesn't support it". Should this,
+perhaps return -ENOTSUP?
 
----
+> +
+> +	if (flags & ~SHADOW_STACK_SET_TOKEN)
+> +		return -EINVAL;
+> +
+> +	/* If there isn't space for a token */
+> +	if (set_tok && size < 8)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * An overflow would result in attempting to write the restore token
+> +	 * to the wrong location. Not catastrophic, but just return the right
+> +	 * error code and block it.
+> +	 */
+> +	aligned_size = PAGE_ALIGN(size);
+> +	if (aligned_size < size)
+> +		return -EOVERFLOW;
+> +
+> +	return alloc_shstk(addr, aligned_size, size, set_tok);
+> +}
+> +
+>  long shstk_prctl(struct task_struct *task, int option, unsigned long features)
+>  {
+>  	if (option == ARCH_SHSTK_LOCK) {
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index 33a0ee3bcb2e..392dc11e3556 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1058,6 +1058,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+>  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+>  					    unsigned long home_node,
+>  					    unsigned long flags);
+> +asmlinkage long sys_map_shadow_stack(unsigned long addr, unsigned long size, unsigned int flags);
+>  
+>  /*
+>   * Architecture-specific system calls
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> index 45fa180cc56a..b12940ec5926 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -887,7 +887,7 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+>  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+>  
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 451
+> +#define __NR_syscalls 452
+>  
+>  /*
+>   * 32 bit systems traditionally used different
+> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+> index 860b2dcf3ac4..cb9aebd34646 100644
+> --- a/kernel/sys_ni.c
+> +++ b/kernel/sys_ni.c
+> @@ -381,6 +381,7 @@ COND_SYSCALL(vm86old);
+>  COND_SYSCALL(modify_ldt);
+>  COND_SYSCALL(vm86);
+>  COND_SYSCALL(kexec_file_load);
+> +COND_SYSCALL(map_shadow_stack);
+>  
+>  /* s390 */
+>  COND_SYSCALL(s390_pci_mmio_read);
+> -- 
+> 2.17.1
+> 
 
-The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
+Otherwise, looks good!
 
-  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm tags/dax-fixes-6.1-rc8
-
-for you to fetch changes up to 472faf72b33d80aa8e7a99c9410c1a23d3bf0cd8:
-
-  device-dax: Fix duplicate 'hmem' device registration (2022-11-21 15:34:40 -0800)
-
-----------------------------------------------------------------
-dax fixes for v6.1-rc8
-
-- Fix duplicate overlapping device-dax instances for HMAT described
-  "Soft Reserved" Memory
-
-- Fix missing node targets in the sysfs representation of memory tiers
-
-- Remove a confusing variable initialization
-
-----------------------------------------------------------------
-Dan Williams (1):
-      device-dax: Fix duplicate 'hmem' device registration
-
-Vishal Verma (2):
-      ACPI: HMAT: remove unnecessary variable initialization
-      ACPI: HMAT: Fix initiator registration for single-initiator systems
-
- drivers/acpi/numa/hmat.c  | 27 ++++++++++++++++++++-------
- drivers/dax/hmem/device.c | 24 +++++++++++++++---------
- 2 files changed, 35 insertions(+), 16 deletions(-)
+-- 
+Kees Cook
