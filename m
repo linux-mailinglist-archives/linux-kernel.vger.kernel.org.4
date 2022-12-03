@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6BC641899
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 20:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59CB64189D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 20:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiLCTiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 14:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S229894AbiLCTqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 14:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiLCTiA (ORCPT
+        with ESMTP id S229469AbiLCTqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 14:38:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBE61145C
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 11:37:58 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e766329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e766:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 44B2C1EC06AC;
-        Sat,  3 Dec 2022 20:37:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670096276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=51jhFlXJaAwTYZ4hjT4NE5fe0FNuTRMhfglVIz/F+xw=;
-        b=ovEuVdEn0wpQRN1l61ZfkaESeMe+W2+dQyZyTlPSCNFv3uXa+2PRunLSvxtHW55fY/aC0x
-        befweI7vryo/xMfheEzgXSn0KUsgndqO0P5vvmqwBZKOIBoeZMB5qrBQlGcLf8ykQSFaHl
-        l6FHn3mC+ApQ84aMOuxb7Q5YTrK+1lo=
-Date:   Sat, 3 Dec 2022 20:37:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Andy Lutomirsky <luto@kernel.org>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v8 1/4] crypto: ccp - Name -1 return value as
- SEV_RET_NO_FW_CALL
-Message-ID: <Y4ulj38eMr1NiRdX@zn.tnic>
-References: <20221104230040.2346862-1-dionnaglaze@google.com>
- <20221104230040.2346862-2-dionnaglaze@google.com>
- <Y4tAX580jEGHOU9d@zn.tnic>
- <CAAH4kHYz-46syE4wKPzo1N9P34wLHcs85obOCjqb6eQ=iv=n3w@mail.gmail.com>
+        Sat, 3 Dec 2022 14:46:22 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9548A1DDF6;
+        Sat,  3 Dec 2022 11:46:21 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id o12so5653389qvn.3;
+        Sat, 03 Dec 2022 11:46:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kw32GtcdYT+/3M7KAcFKseRuBAPGHWVZRfO1RmOAVrQ=;
+        b=MO9oOOjXlvvcYCfPnHhSUGW0EpetHuljZlJeTFNtKf7/VMKhCGvr0dK83AK2jFZzth
+         PpUNjqw8QftBwQPhYZ9NJXlyJcZiEpVQVfYBR+X3qTp4ejBnQrkji2mfimV4Ht5Sw7JK
+         hezMzwkwHdLPmEvKw+THShCMfnJMTyJwD+9LjJ8S7sX01mKcfNoaUjukiU2bbYO6EwJD
+         hzs8K3ATKDKd5JG8cDF40BMPHXWGJmD3344iCK+HPtrOaVq6c9FDKfNRtHykrvEzaDFY
+         klZM1JkNXo2AabLdSOUus3loArrrPBNtTOULXLj9ZRiZqrb7ukRULpdowWm815nRdw+E
+         JqOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kw32GtcdYT+/3M7KAcFKseRuBAPGHWVZRfO1RmOAVrQ=;
+        b=vSeelhDWpb1FES4mOx6RYX/5Y9SyxV7IgdqQgFYngGSeQQ9em8ohGmV7hrx9ln06xI
+         DhEUE6PVSBViIHscnTw3aAmbpfztjOlTXZfLrwS20EyAsRLXMViS5P4kFkyGlQ0nxQ1y
+         qDPuAGb769Nfs/RATWlOkIp2aQ2knv+mBrZNZXSc3ZDyn9jZVtWighg0j51QoCqJoPrO
+         tXY2XXrbKA97hYSuv7ZA6fgGZgZjFDJHZlnKKfIZPuyecL7IOlasckY0GlH6qI5rfqf3
+         YZIWxT77FMFI/lFbd5khQX55Bbk0rYZo5NH7nLr2BSLEw/n1R1tTve0P4+HMnNlw7ZkD
+         Z1NQ==
+X-Gm-Message-State: ANoB5pkfZgLJLOydXc7zWLKUGtGo0j0qGGirhBgX0MeO7Pc+eUZLtXW0
+        ThB1CczkVKDQAvSX0J6zhA4=
+X-Google-Smtp-Source: AA0mqf7yGv1fep2limqh63esDr1KlIb2GrAgzVxJsFz97UJ1nKa1srUii1Bw4hv4F5WYE4QKq7LCGw==
+X-Received: by 2002:a0c:f911:0:b0:4c7:4cb1:6754 with SMTP id v17-20020a0cf911000000b004c74cb16754mr6125691qvn.71.1670096780745;
+        Sat, 03 Dec 2022 11:46:20 -0800 (PST)
+Received: from localhost ([2600:1700:65a0:ab60:150b:cfdc:d3ab:f038])
+        by smtp.gmail.com with ESMTPSA id b11-20020ac812cb000000b003a530a32f67sm24656qtj.65.2022.12.03.11.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Dec 2022 11:46:19 -0800 (PST)
+Date:   Sat, 3 Dec 2022 11:46:18 -0800
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Li Qiong <liqiong@nfschina.com>
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
+Subject: Re: [PATCH] net: sched: fix a error path in fw_change()
+Message-ID: <Y4unik6y8a0MuoFt@pop-os.localdomain>
+References: <20221201151532.25433-1-liqiong@nfschina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAH4kHYz-46syE4wKPzo1N9P34wLHcs85obOCjqb6eQ=iv=n3w@mail.gmail.com>
+In-Reply-To: <20221201151532.25433-1-liqiong@nfschina.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 10:58:39AM -0800, Dionna Amalie Glaze wrote:
-> It doesn't always overwrite psp_ret, such as the initial error checking.
-> The value remains uninitialized for -ENODEV, -EBUSY, -EINVAL.
-> Thus *error in __sev_platform_init_locked can be set to uninitialized
-> memory if psp_ret is not first initialized.
+On Thu, Dec 01, 2022 at 11:15:32PM +0800, Li Qiong wrote:
+> The 'pfp' pointer could be null if can't find the target filter.
+> Check 'pfp' pointer and fix this error path.
 
-Lemme see if I understand it correctly: you wanna signal that all early
-return cases in __sev_do_cmd_locked() are such that no firmware was
-called?
+Did you see any actual kernel crash? And do you have a reproducer too?
+Please include them if you do.
 
-I.e., everything before the first iowrite into the command buffer?
+> 
+> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> ---
+>  net/sched/cls_fw.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/net/sched/cls_fw.c b/net/sched/cls_fw.c
+> index a32351da968c..b898e4a81146 100644
+> --- a/net/sched/cls_fw.c
+> +++ b/net/sched/cls_fw.c
+> @@ -289,6 +289,12 @@ static int fw_change(struct net *net, struct sk_buff *in_skb,
+>  			if (pfp == f)
+>  				break;
+>  
+> +		if (!pfp) {
+> +			tcf_exts_destroy(&fnew->exts);
+> +			kfree(fnew);
+> +			return err;
 
-But then the commit message says:
 
-"The PSP can return a "firmware error" code of -1 in circumstances where
-the PSP is not actually called."
+BTW, err is 0 here, you have to set some error here.
 
-which is confusing. How can the PSP return something if it wasn't called?
-
-Or you mean those cases above where it would fail on some of the checks
-before issuing a SEV command? I think you do...
-
-So I see Tom has ACKed this but I have to ask: is the SEV spec not going
-to use -1 ever?
-
-Also, if this behavior is going to be user-visible, where are we
-documenting it? Especially if nothing in the kernel is looking at
-that value but only assigning it to a retval which gets looked at by
-userspace. Especially then this should be documented.
-
-Dunno, maybe somewhere in Documentation/x86/amd-memory-encryption.rst or
-maybe Tom would have a better idea.
-
-> That error points to the kernel copy of the user's argument struct,
-> which the ioctl always copies back. In the case of those error codes
-> then, without SEV_RET_NO_FW_CALL, user space will get uninitialized
-> kernel memory.
-
-Right, but having a return value which means "firmware wasn't called"
-sounds weird. Why does userspace care?
-
-I mean, you can just as well return any of the negative values -ENODEV,
--EBUSY, -EINVAL too, depending on where you exit. Having three different
-retvals could tell you where exactly it failed, even.
-
-But the question remains: why does userspace needs to know that the
-failure happened and firmware wasn't called, as long as it is getting
-something negative to signal an error?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks.
