@@ -2,64 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D436D64142E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 05:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAE1641435
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 06:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiLCE7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 23:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S229578AbiLCFGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 00:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiLCE7u (ORCPT
+        with ESMTP id S229458AbiLCFF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 23:59:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3527C5E00;
-        Fri,  2 Dec 2022 20:59:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E3E260F7D;
-        Sat,  3 Dec 2022 04:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737D9C433D6;
-        Sat,  3 Dec 2022 04:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670043588;
-        bh=iDabNK+qHFzYeXCjIx3inwDEOC5l3HWEnuS+ahRLzLk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=A7XUbRZJj38kac+2/ow9JcavYG1D5Mw5WfPFDDus4nvPfAxLnyoRD3rDa/92VpbJ+
-         zPuPOLx3aGYY3eLmvf7r2nR2P1cFSldaBwrWPa0LomXXvhX1Ns64zrcdEhy9Ow0Z3k
-         guRDUO7FWRJaE/FQeJ/s2a0qASAEYVXvylMYOI/ghUCg3Nz7ZOEdivHsh4ArRYLjyE
-         7eZx5MorWcmys4rRTPc1Zl6y4S7r1m8sNzqEyB49G66sLy5CtotPg1qWu09qlAQWd+
-         VO6Clqfq5ZmBYySDnJHnEgmOwIHEKkpIuBgPk2M86BzmtcW1J4X9tVYYmW+kgq4Ayj
-         okAkLpU21j4Ug==
-Date:   Fri, 2 Dec 2022 20:59:47 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Li Qiong <liqiong@nfschina.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
-Subject: Re: [PATCH] net: sched: fix a error path in fw_change()
-Message-ID: <20221202205947.7175aad1@kernel.org>
-In-Reply-To: <20221201151532.25433-1-liqiong@nfschina.com>
-References: <20221201151532.25433-1-liqiong@nfschina.com>
+        Sat, 3 Dec 2022 00:05:57 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A13BBBF8;
+        Fri,  2 Dec 2022 21:05:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670043956; x=1701579956;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MUai+TNjC0Cx5KqQvcNQnHWoy9M6SukRcdTK0bFEnI0=;
+  b=XFSkGINMSBldSTaD6zHQtF8DlMktC9Hu/6hI/Jl/z/wN9X97h3To+KY6
+   bcyMiu034d2ZWOfR8jkxq6aq8rb1O/9gsj03xHj2GQl+eVwIHnrbb38sh
+   Mg0q8z8k+7FabV1Vajv8eMaDxuGsDAvO4wXmejaGqYqSK3cCM0XWt2VAd
+   RUb+PuDY5jAYV6euOsdH55kOi/7KfTAr5GvIh55AMP6pq6Kv2rhHHzQX7
+   /NbxqZa60QkB/DNnFZaT5EAN7WzmhJF+EV4ekf9w6R6RRz301baAEq7Ic
+   j25gXFHGKqTRBmHJM5+mf+xH8k5eYBeucS5r8FI0vbPyWT5M4MMb+RFmD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="295789950"
+X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
+   d="scan'208";a="295789950"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:05:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="751524149"
+X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
+   d="scan'208";a="751524149"
+Received: from jithujos.sc.intel.com ([172.25.103.66])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:05:55 -0800
+From:   Jithu Joseph <jithu.joseph@intel.com>
+To:     bp@suse.de
+Cc:     rdunlap@infradead.org, jithu.joseph@intel.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, ashok.raj@intel.com, tony.luck@intel.com
+Subject: [PATCH] platform/x86/intel/ifs: Add missing documentation entry
+Date:   Fri,  2 Dec 2022 21:04:28 -0800
+Message-Id: <20221203050428.502264-1-jithu.joseph@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org>
+References: <774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  1 Dec 2022 23:15:32 +0800 Li Qiong wrote:
-> The 'pfp' pointer could be null if can't find the target filter.
-> Check 'pfp' pointer and fix this error path.
+Documentation for test_num member of struct ifs_data is missing [1].
 
-Sounds like a fix, we need a Fixes tag.
+Link: https://lore.kernel.org/lkml/774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org/ [1]
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
+---
+ drivers/platform/x86/intel/ifs/ifs.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
+index da1474e1d8eb..046e39304fd5 100644
+--- a/drivers/platform/x86/intel/ifs/ifs.h
++++ b/drivers/platform/x86/intel/ifs/ifs.h
+@@ -208,6 +208,7 @@ union ifs_status {
+  * @status: it holds simple status pass/fail/untested
+  * @scan_details: opaque scan status code from h/w
+  * @cur_batch: number indicating the currently loaded test file
++ * @test_num: number indicating the test type
+  */
+ struct ifs_data {
+ 	int	integrity_cap_bit;
+
+base-commit: 1a63b58082869273bfbab1b945007193f7bd3a78
+-- 
+2.25.1
+
