@@ -2,191 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0430A641773
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 16:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07014641775
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 16:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiLCPPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 10:15:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S229784AbiLCPPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 10:15:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiLCPPF (ORCPT
+        with ESMTP id S229521AbiLCPPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 10:15:05 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DA41F2CB
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 07:15:03 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id v206so9369711ybv.7
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 07:15:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GeZvyXJY/Xole7nOnezSG4gOdDXw0MMzYkKKQyxCBIw=;
-        b=X4DGGPYRUCpZhlVebM6gPXgcenRWYCFkWLbqrJua69FhxqVfNXU8kyDNC83urMQ7Vw
-         yR3sc1OeusTkV1gxP2NPdw5oQ9km9KmsG07MogaLqL07L+WGu0QI3aNwqlLwmtJ1ivGh
-         QJZZ7K5ZlDoZ5o6IxcdcFRDtXW/wraeLaHQQo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GeZvyXJY/Xole7nOnezSG4gOdDXw0MMzYkKKQyxCBIw=;
-        b=3f62EX21I7Bwd2faGaLrXfoZk7QT7KwZ4MCZ6vV4w3sZXhP4Gs8gFvyFpEsDPdN88p
-         UfUa2TyMP+6ALtSWQkEhZri6fF85yx4AH5HAWhxV9uDhUPwblWR1P2FWpCWCD+da/CM0
-         4lNkzTwGrr6N1Xgw8TALOOFpg6kUb6NHgbTuYkX18+9aHnAnD65OQXseKEO7lZLVVRHc
-         4wS0zWBlj9kWPmS1RtGgAqg9curf4P1Kybzqwes6qP3rSLEDKWXGBwB7lnV5iwQ0RhpU
-         eF42jz0+GyHf2VmC6kvnYIZpWfvAWk0p4jkmcJ3HQ17mhRLwWQKk1ng3ruOfm1SS/ZOt
-         leyQ==
-X-Gm-Message-State: ANoB5pk/I4DJ4pfG4G4tqkVPDz6jbVnoVZUPc9Nn0Vx7UBuiDXbYWtIS
-        WSlaubtRJG8SqmTIKS3ShmFCO8Bon2Lwt29kDvyeiQ==
-X-Google-Smtp-Source: AA0mqf5aqKzttjrnb1OqvrG8kkaEEKNzEoqCcvs4iNMNIbXy21HLZHeOxKS9r/iLT7Q1DHMLtmZiuFuwFQoJhRb9n/I=
-X-Received: by 2002:a25:2c6:0:b0:6fb:42d2:69e4 with SMTP id
- 189-20020a2502c6000000b006fb42d269e4mr14292885ybc.436.1670080502548; Sat, 03
- Dec 2022 07:15:02 -0800 (PST)
+        Sat, 3 Dec 2022 10:15:09 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85C521E2E
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 07:15:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YEFazOz/ybXhrqWDMD9+d5nwEAPlV6fbo9e0IfyimTMXTdXsuDPx4gcwGm4ZzVwhm9AvzDT9w6+6OYZ4A9eRVAKKnmJVYtzRXlPNOIfvjBqLVmLsvYB1CLYUccfJMxU0MloYbHlNoBX5NtV7qYouhonaf65SR1WiE7TFCHdEYtZSau1FgXvVUA0RUMtamqI0hhcNI1VbZxMNJjBoCUVjCrmDQblRCPMPPvi34GeXVCaxbwfk62qBWE6A5dCgvCBz6jPme6XfEMO3FaDd2VA4jwbJHbxDT/uKZ62hRakjsQw1B4e9nOCxzflYr66QaI8WCuMkRwapYNLAyCzUhWZf4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lQh0oTcQNs5hszR8v76miAb2s59UAMgvm1oTMqQo348=;
+ b=CFeSWQJbri2d2m8LnDtcAwZGcjMiDUdWJXq1nDlrEBSjNtta2P+eJiWkNnaBH2wlbiyJrL2mnPdeT5S3PhZ+YB/sd5mdSsZQZHDTqqWPJrHMEpzMgsG59cD4ZiXxecD6pENNkyI29E3l8lMiya5HGyM2BmWauix5fPUmQc8CKk5f0muS8meIJ5JVMhpCdkNMpszNp2wOApVGbXXyaIoeY91R26f7lPad1+yV1H5saBK8uV8qKU+X6+k7X/FbOcLPXHeGakakscieeORMRrBTUlMvJUMXEdfgRHZVuH1hUv3Gnd7fxhP0yKr5ZqAy8ap31A4WXHNdVVmoG77xj59WjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lQh0oTcQNs5hszR8v76miAb2s59UAMgvm1oTMqQo348=;
+ b=K2hhiYdi5pvYOBmzZW+g7sCnfbvh+uIkc1e9Yj3iWOb0VFyuMyETrJsUDWVHCkJFyn7+wfcZ/q/0JWGU9Vt3t7HLlGBQHX9xiWZQDnCDHWAaLeO9tZ4E+kfQ85hJIuCNVZ7qPSM4jskLtVDr66yx5sNuJht/t24Up+ClRH1ESXg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MN0PR12MB6221.namprd12.prod.outlook.com (2603:10b6:208:3c3::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Sat, 3 Dec
+ 2022 15:15:05 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5880.010; Sat, 3 Dec 2022
+ 15:15:05 +0000
+Message-ID: <ccc81e11-e1e1-557b-6777-c1ed109c0e83@amd.com>
+Date:   Sat, 3 Dec 2022 16:15:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] Revert "drm/sched: Use parent fence instead of finished"
+Content-Language: en-US
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Andy.Dong@amd.com
+References: <20221202172330.39219-1-Arvind.Yadav@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20221202172330.39219-1-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0163.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:99::6) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <20221203094125.602812-1-liuyongqiang13@huawei.com>
-In-Reply-To: <20221203094125.602812-1-liuyongqiang13@huawei.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Sat, 3 Dec 2022 20:44:51 +0530
-Message-ID: <CALs4sv2DR2yoUi07aTsMVHiTCNPSBZXWsZOTKsBfLRfgUbOH=g@mail.gmail.com>
-Subject: Re: [PATCH] net: thunderx: Fix missing destroy_workqueue of nicvf_rx_mode_wq
-To:     Yongqiang Liu <liuyongqiang13@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        vlomovtsev@marvell.com, zhangxiaoxu5@huawei.com,
-        weiyongjun1@huawei.com, sgoutham@marvell.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000020555e05eeedeba9"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MN0PR12MB6221:EE_
+X-MS-Office365-Filtering-Correlation-Id: df498334-a6ad-4f46-d3a6-08dad5412862
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Z96MuehnEHKMkDHAXb0sAuQdLAI3QlltuAIdsbGduvRs8nUKvGaEf1FSAplUJEXFJyiHG9utFIwGoxRSkxaLQbi6BvbTrM7xT8fylogRrh8frFxgASyvrRrzUiBvkZ4AKtxq0WCcJZH1BZdVqhTJOl5P/TTve9RdnaY3gbDK22ETnmCyXoWsdUduSiEbv7FMOcOlrclxreiJIWVqzjFhOryBacyXGVH3SsmVOXpU3EerJhOjVS8I6SMzecxbOcvOPZ9QvvSJbS8a3wgRpVCg1zzva1KnKBfpWw9BTdbRUFSrkgGPtq4jDkqM8gvw+7/C3yr39XPCwVScwli9t7VSaBM2m7evhDM57hN2UPWEmsC1Qd08fWKCl43KxQ+3smCTe+c0MYT1gZktkmbCGlRv86OA4iAa9R6p5nIwH+JFmp63w3cquF6XUH33EC2Ta/HRD1SdwxRY8gVkcncQ+ojl8VF1yQsEKS7dIPz2V9kilkdzPbs90+6mZ+MCEnLyDKDKoFIrH6oiHkxvNGtPOv1G0Iacc7bTb1XTICOZmMsjePIK2gbGgtXtMv7pQCYV6yz34+Pm+fGuWj1eusmG+HM0fYwEBfLDoeiaFzARjoj+OfcbqZtguTxfzm04pjqskNDb0z3WC2KTTvv7VGef+P15A6sN2+RsNBUl6v1XvH5aqoGT+YA97ENXDY8mRvix7RvMfubjFlUaWAnw7tmnwkG5pBpFh9AtCZ4gL677wf5GOO8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(136003)(396003)(376002)(346002)(451199015)(2616005)(31696002)(2906002)(186003)(86362001)(5660300002)(6506007)(6666004)(38100700002)(36756003)(316002)(6486002)(478600001)(8936002)(6636002)(6512007)(66574015)(31686004)(41300700001)(83380400001)(66556008)(66476007)(8676002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2Q2bWZoUUUzcmt1QVY0dVhCUkZuYXMwOG50c0l1SnVrZXltZDRQQXpXWUhu?=
+ =?utf-8?B?YXRZaFpoUlBLNmhJS2x6U0xnRG5uMXZQSWVmUnYzTWc0S21Bd1Y4ejl6MW9U?=
+ =?utf-8?B?bzVjd25XY0NLc2s4Q3l3N2hFRktaeDZyeURqR0toMndyVWFwQWZzM3NPalFw?=
+ =?utf-8?B?bmpEaEZSeTFoeTdua3p1bGtteG5CdWJaaXhtQk9hdDFZdUFZWkdSYlFTTHlZ?=
+ =?utf-8?B?NFdabVFObFBFb09RZkVmdWo3aFQ2c0FFeksrWmtMNXYzME0yNnBOOXlmdGFi?=
+ =?utf-8?B?VDJ3Q2hlVlNUU2JnUGt4Sk0zMWZuWWdJRjhMSGJMTmFuZkIvYUtBV1R6MXEw?=
+ =?utf-8?B?TlRnQzhLOHFmeDZnb3g2T3p3ejBNeTdvRm00UE82eHp1dFVDQWszN2M5TEU1?=
+ =?utf-8?B?VmdjY3l2WGdKSlJWRXlvQWdSakxibnN5aU42S2hzdUFJTjBLSVZNR1hBWk5m?=
+ =?utf-8?B?T3pia1ZScVh4T3ZaclNGU3RwVUFqemx3djZYVVNaZGV0V2Nmc1FuMmJzd3lO?=
+ =?utf-8?B?NmZqVlJqT3o2eHpUSFpzcXNRSmNDWUpzMGV0cVZVSTIrczZDR0JacTFEektL?=
+ =?utf-8?B?RDFzWDI3Qit4WSszSHRHeGdYcURkUUI3amtEUm9sZWdWNGNKSDFEbEo1TGwr?=
+ =?utf-8?B?NS9vUTdHdmErL3REbHN1M3RaNzZrRU12QkhUNTJJK05CbkM3UzNJaElHSUhS?=
+ =?utf-8?B?WHZXWWo2aFM3bmNvbU43em5oaG42V2lweGZPMFFhM0VuUjhDM2ZNRjN4ejV1?=
+ =?utf-8?B?UlRtRU1Rb0NrQ09jVGh1elRHVS9aMCtJTm44eThmTGRXb2V1WHFocFNnTytu?=
+ =?utf-8?B?a2xqQVZmdmhCbGQvY3FxVVViUlNvbGVBK0dWUkNadXR5ZlJaMnM3OFo0My94?=
+ =?utf-8?B?bXNXVTNwYjY5Y1hDMG1lYmZJS0w4SUJydTMrNDF0ZkRMSHg0SG5iWERqSDJN?=
+ =?utf-8?B?bnFJaHNIbUM5N2tBV0JHcVFJNGJQdDlVNnpkOHl0aC9XdG1CQ21sOEwxNXlq?=
+ =?utf-8?B?NHYxa3F1OFhYSU56d2lpMlRySFRkWjNqTWQ5WWRxemp2bjdQd09JUW1LUUww?=
+ =?utf-8?B?ZnYzdExjdHpuYVFMbWFCSmFKWjVTZjhncVFSYjhnblRNVUN5amNSTHh5anVn?=
+ =?utf-8?B?YWpVbmtZRWxWMHZQRFp2YU5NZFFDazdXVnNpVHIzM1JpekpZSWc1OWxTSHQ4?=
+ =?utf-8?B?Q2J5YmJmQmJLRCsvUzUyaEJhODFKYmczUHVVWmlsZDhrTE9RTEdUTWsxK2NL?=
+ =?utf-8?B?Y3cxWjFIZEh6TEhFQW5sSk9uT1g5RXErM0h1RGN0TVl0aWVMQkRXaWdpekVE?=
+ =?utf-8?B?RStrcmhyNWpoR0RXd1dXTGhlYlZvN1RYaEdZT2l4TkRpSDMwTnhzaDhGVito?=
+ =?utf-8?B?N0xnZXIzWGU4eVVnNk9TQnRyKzduNXdVc1g5K0p3SVhRTnFjZnVUZ3VVRUdL?=
+ =?utf-8?B?ZzVNdmpqV0s3NGNtZVB6Y2RZOVhiQngybXcydFBhUjJXVmFuM1c3Q2xOQi9x?=
+ =?utf-8?B?ZVlKcGVpM2xXU1Nkd0Nrem83Y1FGZjhqYkZBM0doUGxia2JyRHJ0THpVRTFr?=
+ =?utf-8?B?MUdNZUFMN3NiVUJDWEFCS0VHWXJINlNaUEhkK2VMSzh0Z3pkNnArQmhPejI4?=
+ =?utf-8?B?UFZuOGQyb3VnM0NPUm1MSk9CQVFmdXFzdlZUQ0R5UkU3OEtPeGhwNDlUNzdN?=
+ =?utf-8?B?L2FLbW9Vc0g2Rm1jNjkvc0FVN3pyOTJzYVpBbFA4amtqNC9vdkgzQnFzUno4?=
+ =?utf-8?B?cTZRYktxdDc0ZnhuclYxc0MrK0RwTVpKTk5ONUJMWE1IcFRiYUZ5bWE1R0FP?=
+ =?utf-8?B?S1J1a0VVaUxEV0U2UVVLNklKdTdrVDY5dnFWaVgwaTR6K2g2LzhiKzJCaXB3?=
+ =?utf-8?B?WGYzRFJObWtBckp4TUxXUUROK04veE9NaEcvNzlIRUJicFFSaHgzN1A1eVRQ?=
+ =?utf-8?B?dERWQVZFcjNqZi9rL2tKdU9vQmZ0TWJENUlwTC9SVWg5NitXN0Y3dkdCeFdN?=
+ =?utf-8?B?YVE2TGNQSWx6UEFOSVJSZEx4SmM3dFdqTkxNRSs5aWZTU21CVFZtejg0ODFr?=
+ =?utf-8?B?SEYxZm5MUEtXWFpmR1BvRlUrcFo1THhTeDRqTWxMU29HeHVPUkYzMXZBczRr?=
+ =?utf-8?B?aCtJZStHVktibGhjdWduMTU4RjVtTDRCdEYzd0pSMGEvbnNMUk9HS3VhZU9D?=
+ =?utf-8?Q?Fm0RkG4TvhR5FQNPRw4e92iOUqd4IRk7wK26ipKGktbv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df498334-a6ad-4f46-d3a6-08dad5412862
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2022 15:15:05.5064
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FlYJ6Dczbbu7F1M71uQrh0psL+SZAEwG5fxFpeDaYzdeAx9P/3Zwc6tQH8yQNo4S
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6221
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000020555e05eeedeba9
-Content-Type: text/plain; charset="UTF-8"
+Am 02.12.22 um 18:23 schrieb Arvind Yadav:
+> This reverts commit e4dc45b1848bc6bcac31eb1b4ccdd7f6718b3c86.
+>
+>      This is causing instability on Linus' desktop, and Observed System
+>      hung  when running MesaGL benchmark or VK CTS runs.
+>
+>      netconsole got me the following oops:
+>      [ 1234.778760] BUG: kernel NULL pointer dereference, address: 0000000000000088
+>      [ 1234.778782] #PF: supervisor read access in kernel mode
+>      [ 1234.778787] #PF: error_code(0x0000) - not-present page
+>      [ 1234.778791] PGD 0 P4D 0
+>      [ 1234.778798] Oops: 0000 [#1] PREEMPT SMP NOPTI
+>      [ 1234.778803] CPU: 7 PID: 805 Comm: systemd-journal Not tainted 6.0.0+ #2
+>      [ 1234.778809] Hardware name: System manufacturer System Product
+>      Name/PRIME X370-PRO, BIOS 5603 07/28/2020
+>      [ 1234.778813] RIP: 0010:drm_sched_job_done.isra.0+0xc/0x140 [gpu_sched]
+>      [ 1234.778828] Code: aa 0f 1d ce e9 57 ff ff ff 48 89 d7 e8 9d 8f 3f
+>      ce e9 4a ff ff ff 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 54 55 53
+>      48 89 fb <48> 8b af 88 00 00 00 f0 ff 8d f0 00 00 00 48 8b 85 80 01 00
+>      00 f0
+>      [ 1234.778834] RSP: 0000:ffffabe680380de0 EFLAGS: 00010087
+>      [ 1234.778839] RAX: ffffffffc04e9230 RBX: 0000000000000000 RCX: 0000000000000018
+>      [ 1234.778897] RDX: 00000ba278e8977a RSI: ffff953fb288b460 RDI: 0000000000000000
+>      [ 1234.778901] RBP: ffff953fb288b598 R08: 00000000000000e0 R09: ffff953fbd98b808
+>      [ 1234.778905] R10: 0000000000000000 R11: ffffabe680380ff8 R12: ffffabe680380e00
+>      [ 1234.778908] R13: 0000000000000001 R14: 00000000ffffffff R15: ffff953fbd9ec458
+>      [ 1234.778912] FS:  00007f35e7008580(0000) GS:ffff95428ebc0000(0000)
+>      knlGS:0000000000000000
+>      [ 1234.778916] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>      [ 1234.778919] CR2: 0000000000000088 CR3: 000000010147c000 CR4: 00000000003506e0
+>      [ 1234.778924] Call Trace:
+>      [ 1234.778981]  <IRQ>
+>      [ 1234.778989]  dma_fence_signal_timestamp_locked+0x6a/0xe0
+>      [ 1234.778999]  dma_fence_signal+0x2c/0x50
+>      [ 1234.779005]  amdgpu_fence_process+0xc8/0x140 [amdgpu]
+>      [ 1234.779234]  sdma_v3_0_process_trap_irq+0x70/0x80 [amdgpu]
+>      [ 1234.779395]  amdgpu_irq_dispatch+0xa9/0x1d0 [amdgpu]
+>      [ 1234.779609]  amdgpu_ih_process+0x80/0x100 [amdgpu]
+>      [ 1234.779783]  amdgpu_irq_handler+0x1f/0x60 [amdgpu]
+>      [ 1234.779940]  __handle_irq_event_percpu+0x46/0x190
+>      [ 1234.779946]  handle_irq_event+0x34/0x70
+>      [ 1234.779949]  handle_edge_irq+0x9f/0x240
+>      [ 1234.779954]  __common_interrupt+0x66/0x100
+>      [ 1234.779960]  common_interrupt+0xa0/0xc0
+>      [ 1234.779965]  </IRQ>
+>      [ 1234.779968]  <TASK>
+>      [ 1234.779971]  asm_common_interrupt+0x22/0x40
+>      [ 1234.779976] RIP: 0010:finish_mkwrite_fault+0x22/0x110
+>      [ 1234.779981] Code: 1f 84 00 00 00 00 00 90 0f 1f 44 00 00 41 55 41
+>      54 55 48 89 fd 53 48 8b 07 f6 40 50 08 0f 84 eb 00 00 00 48 8b 45 30
+>      48 8b 18 <48> 89 df e8 66 bd ff ff 48 85 c0 74 0d 48 89 c2 83 e2 01 48
+>      83 ea
+>      [ 1234.779985] RSP: 0000:ffffabe680bcfd78 EFLAGS: 00000202
+>
+>      Revert it for now and figure it out later.
+>
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
 
-On Sat, Dec 3, 2022 at 3:11 PM Yongqiang Liu <liuyongqiang13@huawei.com> wrote:
->
-> The nicvf_probe() won't destroy workqueue when register_netdev()
-> failed. Add destroy_workqueue err handle case to fix this issue.
->
-> Fixes: 2ecbe4f4a027 ("net: thunderx: replace global nicvf_rx_mode_wq work queue for all VFs to private for each of them.")
-> Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+
 > ---
->  drivers/net/ethernet/cavium/thunder/nicvf_main.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>   drivers/gpu/drm/scheduler/sched_main.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-> index 98f3dc460ca7..f2f95493ec89 100644
-> --- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-> +++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-> @@ -2239,7 +2239,7 @@ static int nicvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->         err = register_netdev(netdev);
->         if (err) {
->                 dev_err(dev, "Failed to register netdevice\n");
-> -               goto err_unregister_interrupts;
-> +               goto err_destroy_workqueue;
->         }
->
->         nic->msg_enable = debug;
-> @@ -2248,6 +2248,8 @@ static int nicvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->
->         return 0;
->
-> +err_destroy_workqueue:
-> +       destroy_workqueue(nic->nicvf_rx_mode_wq);
->  err_unregister_interrupts:
->         nicvf_unregister_interrupts(nic);
->  err_free_netdev:
-> --
-> 2.27.0
->
-Looks good to me.
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index 820c0c5544e1..ea7bfa99d6c9 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -790,7 +790,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>   	job = list_first_entry_or_null(&sched->pending_list,
+>   				       struct drm_sched_job, list);
+>   
+> -	if (job && dma_fence_is_signaled(job->s_fence->parent)) {
+> +	if (job && dma_fence_is_signaled(&job->s_fence->finished)) {
+>   		/* remove job from pending_list */
+>   		list_del_init(&job->list);
+>   
+> @@ -802,7 +802,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>   
+>   		if (next) {
+>   			next->s_fence->scheduled.timestamp =
+> -				job->s_fence->parent->timestamp;
+> +				job->s_fence->finished.timestamp;
+>   			/* start TO timer for next job */
+>   			drm_sched_start_timeout(sched);
+>   		}
 
---00000000000020555e05eeedeba9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKRibDU2SltuHobBJU2e5M5LENUK63BM
-eTijJzGH5R9FMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIw
-MzE1MTUwMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQBuV3u25qI0frBZFFxj7NsXCOkwEscWr6ieGuBD3/oeL8+mMCNT
-54x8hOhru4HT2xCwoiqjzjvXGb5AFU9IQ79UuK0weWQ4o8yAH1nKlYZg3Gf8HgYTyt9W3bY5oYTO
-tHbI6hMKFVilckSAw9SLGP+0TJJWYE5xuk6PK5a/Gs5A/8RCNn6JhGeLb8SHsnra2zyllAA504Jp
-yNCNDdUX+F007yKd/rPqOgZTSWTwv3BQGv1kfC7eFv/1lu0eUqCycv3iYH3qqKywHkMLJ+V91I1/
-TCEZiKhD0FkGYpxBdzkSEShWjOfTeKrkc9m9GMwM1jA4wtHRxsaTmfgqhcv3yzUD
---00000000000020555e05eeedeba9--
