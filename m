@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FADC6414EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 09:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66956414EF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 09:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbiLCIMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 03:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S231547AbiLCI3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 03:29:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiLCIMP (ORCPT
+        with ESMTP id S229781AbiLCI3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 03:12:15 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E153115730;
-        Sat,  3 Dec 2022 00:12:12 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NPMwp4Gt0z4y0v8;
-        Sat,  3 Dec 2022 16:12:10 +0800 (CST)
-Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
-        by mse-fl1.zte.com.cn with SMTP id 2B38C3OV026108;
-        Sat, 3 Dec 2022 16:12:03 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Sat, 3 Dec 2022 16:12:05 +0800 (CST)
-Date:   Sat, 3 Dec 2022 16:12:05 +0800 (CST)
-X-Zmail-TransId: 2b04638b04d5ffffffffba98b1a0
-X-Mailer: Zmail v1.0
-Message-ID: <202212031612057505056@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>
-Cc:     <pabeni@redhat.com>, <bigeasy@linutronix.de>,
-        <imagedong@tencent.com>, <kuniyu@amazon.com>, <petrm@nvidia.com>,
-        <liu3101@purdue.edu>, <wujianguo@chinatelecom.cn>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG5ldDogcmVjb3JkIHRpbWVzIG9mIG5ldGRldl9idWRnZXQgZXhoYXVzdGVk?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B38C3OV026108
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638B04DA.000 by FangMail milter!
-X-FangMail-Envelope: 1670055130/4NPMwp4Gt0z4y0v8/638B04DA.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638B04DA.000/4NPMwp4Gt0z4y0v8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 3 Dec 2022 03:29:37 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630B4537DD
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 00:29:36 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q7so11270399wrr.8
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 00:29:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=++FsqaVqwJx6XYFbJqgrWmLCuJt14qXZ43q8ET3YWf4=;
+        b=HhfB9e8o57PE+BDcjO4D+jMa9L2vT2zeY2txxBD+V5LKRTWgFJVzBkl5jHWXj1bCDW
+         QVKgDv85lfi2w043G+9Gi25eC0dyUzBLrL5JPfHyfU+e/1pfMR1WONQke/2Q6IraVpLc
+         2s9FHnav4wzkVHIdgCN1COw8oCcN2D+05RgdcXi3Nub2a1K9zM9XGoyU/75s7nLCuVJK
+         G9nxsa6POuXVHIIRB60+QGpjDv2jxAu7+zDi5qy8y0YIvxQHyphjhC9VKVhabDEybyCo
+         lSqFFem87i7NJ9CMH2uRp35qLFqHGYruXb2F2AiVcgdFOW9Q1fgBAO+5VXaGhpNprclJ
+         ghLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=++FsqaVqwJx6XYFbJqgrWmLCuJt14qXZ43q8ET3YWf4=;
+        b=KBH8lyWSONXQjoH6G1mpojUcSsj1zfmGU6adjzWCnZVbQMLYtaQENzKErWkDlMN0zv
+         r9CvILOoc6HEIcHrWlMMW8rejqPMCWut1Lxr/2Cg1zm0jzFASfz/VHBx28kh2WeHXlGo
+         lyFNwkCsnJBxthqsB3mVjYUi5TWhBD7H/RE3llACCZZJ7fBMmEiHrSLm7D9NQgO4aDXD
+         QFAsCZDzrjZRNq83UVyMxcFTfCKHPPnrMbw01KjTMAzmQD4PkujVmeV2wL5fqvzVzPs5
+         fZoNGuMBja6kQPgGRwwcMk3NZ49YRtqBUtrW17nBzaJgeVEe3rHSNEiPgnlqschZy60V
+         keVw==
+X-Gm-Message-State: ANoB5pmga2LccqWZ8XKKz8WMjNt+GovuswgKm6kWHpoZnCo0wbx0nk/h
+        EXQBapJ2xxLYE3MFmucgGKA=
+X-Google-Smtp-Source: AA0mqf5psme3doI+eE0Qu5GiQ8w8heQyM/BTczlkyI/94oO5q37sIh7C9m/7yqsfMCCRQxuohNF6mA==
+X-Received: by 2002:adf:ea4e:0:b0:242:1d48:e043 with SMTP id j14-20020adfea4e000000b002421d48e043mr15623224wrn.498.1670056174834;
+        Sat, 03 Dec 2022 00:29:34 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id d14-20020adff2ce000000b00241fab5a296sm9025238wrp.40.2022.12.03.00.29.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Dec 2022 00:29:34 -0800 (PST)
+Date:   Sat, 3 Dec 2022 11:29:31 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>, lkp@intel.com
+Cc:     oe-kbuild@lists.linux.dev, Florian Westphal <fw@strlen.de>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, mptcp@lists.linux.dev,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: Re: net/mptcp/pm_netlink.c:1169 mptcp_pm_parse_pm_addr_attr() warn:
+ missing error code? 'err'
+Message-ID: <Y4sI65oadrVtBlnR@kadam>
+References: <202212021422.Uh5cCKY2-lkp@intel.com>
+ <f0722fd5-af12-4cff-9ffa-38b9e8d23313@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0722fd5-af12-4cff-9ffa-38b9e8d23313@linux.intel.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com>
+On Fri, Dec 02, 2022 at 03:38:01PM -0800, Mat Martineau wrote:
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1158  	/* no validation needed - was already done via nested policy */
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1159  	err = nla_parse_nested_deprecated(tb, MPTCP_PM_ADDR_ATTR_MAX, attr,
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1160  					  mptcp_pm_addr_policy, info->extack);
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1161  	if (err)
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1162  		return err;
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1163
+> > 982f17ba1a2534 Florian Westphal 2022-05-03  1164  	if (tb[MPTCP_PM_ADDR_ATTR_ID])
+> > 982f17ba1a2534 Florian Westphal 2022-05-03  1165  		addr->id = nla_get_u8(tb[MPTCP_PM_ADDR_ATTR_ID]);
+> > 982f17ba1a2534 Florian Westphal 2022-05-03  1166
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1167  	if (!tb[MPTCP_PM_ADDR_ATTR_FAMILY]) {
+> > 01cacb00b35cb6 Paolo Abeni      2020-03-27  1168  		if (!require_family)
+> > 982f17ba1a2534 Florian Westphal 2022-05-03 @1169  			return err;
+> > 
+> > "err" is zero at this point.  Presumably a negative error code was
+> > intended.
+> 
+> Hi Dan -
+> 
+> The intended error code is 0 here: the return happens if no
+> MPTCP_PM_ADDR_ATTR_FAMILY value is present and require_family is false.
+> 
+> It would be clearer to "return 0;", but the code is working as expected.
+> 
+> 
+> Could you be sure to cc mptcp@lists.linux.dev and
+> matthieu.baerts@tessares.net for future MPTCP issues?
 
-A long time ago time_squeeze was used to only record netdev_budget
-exhausted[1]. Then we added netdev_budget_usecs to enable softirq
-tuning[2]. And when polling elapsed netdev_budget_usecs, it's also
-record by time_squeeze.
-For tuning netdev_budget and netdev_budget_usecs respectively, we'd
-better distinguish netdev_budget exhausted from netdev_budget_usecs
-elapsed, so add a new recorder to record netdev_budget exhausted.
+These emails are automatically generated by the kbuild team.  I don't
+know what kind of heuristics they use...  I've put them on the To
+header.  There is probably a reason why they don't just use
+get_maintainer.pl...
 
-[1] commit 1da177e4c3f4("Linux-2.6.12-rc2")
-[2] commit 7acf8a1e8a28("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
+regards,
+dan carpenter
 
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- include/linux/netdevice.h |  1 +
- net/core/dev.c            | 11 +++++++----
- net/core/net-procfs.c     |  5 +++--
- 3 files changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 5aa35c58c342..a77719b956a6 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3135,6 +3135,7 @@ struct softnet_data {
- 	/* stats */
- 	unsigned int		processed;
- 	unsigned int		time_squeeze;
-+	unsigned int		budget_exhaust;
- #ifdef CONFIG_RPS
- 	struct softnet_data	*rps_ipi_list;
- #endif
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 7627c475d991..42ae2dc62661 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6663,11 +6663,14 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
- 		budget -= napi_poll(n, &repoll);
-
- 		/* If softirq window is exhausted then punt.
--		 * Allow this to run for 2 jiffies since which will allow
--		 * an average latency of 1.5/HZ.
-+		 * The window is controlled by time and packet budget.
-+		 * See Documentation/admin-guide/sysctl/net.rst for details.
- 		 */
--		if (unlikely(budget <= 0 ||
--			     time_after_eq(jiffies, time_limit))) {
-+		if (unlikely(budget <= 0)) {
-+			sd->budget_exhaust++;
-+			break;
-+		}
-+		if (unlikely(time_after_eq(jiffies, time_limit))) {
- 			sd->time_squeeze++;
- 			break;
- 		}
-diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-index 1ec23bf8b05c..e09e245125f0 100644
---- a/net/core/net-procfs.c
-+++ b/net/core/net-procfs.c
-@@ -169,12 +169,13 @@ static int softnet_seq_show(struct seq_file *seq, void *v)
- 	 * mapping the data a specific CPU
- 	 */
- 	seq_printf(seq,
--		   "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
-+		   "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
- 		   sd->processed, sd->dropped, sd->time_squeeze, 0,
- 		   0, 0, 0, 0, /* was fastroute */
- 		   0,	/* was cpu_collision */
- 		   sd->received_rps, flow_limit_count,
--		   softnet_backlog_len(sd), (int)seq->index);
-+		   softnet_backlog_len(sd), (int)seq->index
-+		   sd->budget_exhaust);
- 	return 0;
- }
-
--- 
-2.15.2
