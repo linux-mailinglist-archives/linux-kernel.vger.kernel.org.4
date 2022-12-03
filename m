@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D066264173E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 15:20:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA1164174D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 15:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiLCOT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 09:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S229481AbiLCOcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 09:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiLCOT4 (ORCPT
+        with ESMTP id S229698AbiLCOcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 09:19:56 -0500
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193BF2018D;
-        Sat,  3 Dec 2022 06:19:53 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id o5-20020a4aa805000000b004a020f841cbso1092461oom.3;
-        Sat, 03 Dec 2022 06:19:53 -0800 (PST)
+        Sat, 3 Dec 2022 09:32:21 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B06920F69
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 06:32:20 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h10so2571829wrx.3
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 06:32:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8QjdvcBfpY62HjxgDg6d8xd9Ur3ryWmHVOJJHV4pl8o=;
+        b=i+YT32mwJOa7srtTEon4jLCGGthL7khqDRCB8hLwQKxDeqrwVBVqNpIFtF2q9DQUT7
+         d+dTN8UhbnJrjIAP4DD4mHBadMnss56aJM+4KpRbtUvOsTjtNp573o7Lmf91gp6NG4Yw
+         Nwqu5+eAKl2EbUBs3BbURkpcX9895p5zPUhAQFQyQa7+UOLh7mGk7b0NZ1c+TynzTGr0
+         Bpz+qNlkhJWABWkwYcmcYM7Dimau0tgVa08RLmDYe3AWrBFtWNoOYyoi+SQMk8a8X+Yc
+         +JKh9NMjWiJRinJxfH8GMen1SHxdk8t2/BSboLJe5QCaFdQM/PUaL4kwHEIdFgNa92Tk
+         eT5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MTgd+n7LWusiGOC/Gub2PoyKrV2kI0pnTuI95oFDai0=;
-        b=BDVneJCxIrMna9yC+EpEf1j1Hbqu3pcPoJi5CMWgTijdGMglsyuYUONh3qkwJQ+5jw
-         VcoBTNQf1629Ds1Z/Hj/GCHPi2xJ6OjCT8d9Ol73ipsxN39ZLolMjFAFrW62/7P1reDb
-         OGLb3pw/zJqS7dIvSSnQkMVaSjezbxRSpzruNUfQ25Q1N+X7U52WapD8lspytaiCKR6y
-         NsIOv4fwCbwr29rM/7Kqje00KEPeQHjoqIqOTE1R/xYyIaZtey+876irAaYGPEyVUN0V
-         CO3rZ/viqCelPJgNoo/5L6niZPMqpxwm7JhseYGszV6ixGKxfQkndcNwj2cmWWugnrTr
-         qRjg==
-X-Gm-Message-State: ANoB5pmzGw0meUQhbSYYkbQMxuATFK+TnwgF+LckpMkMiwEmWnv5eGQB
-        SZNNsfrhG4fAyoe8yRzHdSQ+IY5/lw==
-X-Google-Smtp-Source: AA0mqf6Ehf7v80eg1GhYvnEpyx8HUbLu9JP+5En8/00R6WxVWYs8KVfvWUUSlsVbZ3BaLed0gqqgNw==
-X-Received: by 2002:a4a:b813:0:b0:49f:8d3:14f4 with SMTP id g19-20020a4ab813000000b0049f08d314f4mr32275886oop.80.1670077192169;
-        Sat, 03 Dec 2022 06:19:52 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t4-20020a4adbc4000000b0049f5ce88583sm4105243oou.7.2022.12.03.06.19.51
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8QjdvcBfpY62HjxgDg6d8xd9Ur3ryWmHVOJJHV4pl8o=;
+        b=jCRnuoNVHFCuO+iXuRXN31LcDQWRJSKapBtNkrW2ip2JrINSRdFAPHEoWjp5RP+Oy+
+         j8HqfGxmMagzQt6H9Kwj7WX+q8DEZTYdXVLuqFSOGcXzF1u8pCVRO+Xh7n3VCFM9ggAz
+         Zih/31//E6mAP3ut+y8Pru3+dypgXI2usfG1jgSDABbxULV+Y3kJwWNbHOWlCiGq5YlG
+         t2EU9yVgNXPCxPNGlpbgt6/LfajWImZTFXO9kwuoX4UG++Lk4jbr5BgqwbpsU3t1a2/2
+         wMUmGeNyKVK3WNvTkzHWY9hOD7dWaTEt+bAJaKdz4O9810LC6g8ndaua4Xvdr5j0/76+
+         ydTw==
+X-Gm-Message-State: ANoB5plsxsuAjA70OyICiXpPAwK/ZG9LF3uHo6FxlBBisZ8XJy79Iuzb
+        7qq7rz/3ht+BSUM3xvDfLZhi3w==
+X-Google-Smtp-Source: AA0mqf5NQRPKlfSryMZww1AyP9jTO5a0yDUixPctCLCktjrEFR4gnc6+jwzHMn5lW8pX3In+gvw0ag==
+X-Received: by 2002:adf:ba87:0:b0:241:c471:72b4 with SMTP id p7-20020adfba87000000b00241c47172b4mr37412701wrg.238.1670077938687;
+        Sat, 03 Dec 2022 06:32:18 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id c14-20020a05600c0a4e00b003cffd3c3d6csm11668898wmq.12.2022.12.03.06.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 06:19:51 -0800 (PST)
-Received: (nullmailer pid 1270254 invoked by uid 1000);
-        Sat, 03 Dec 2022 14:19:51 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Sat, 03 Dec 2022 06:32:18 -0800 (PST)
+Date:   Sat, 3 Dec 2022 14:32:16 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+Message-ID: <20221203143216.oezd2u6dpxodpuc3@airbuntu>
+References: <20221127141742.1644023-1-qyousef@layalina.io>
+ <20221127141742.1644023-4-qyousef@layalina.io>
+ <CAJZ5v0iew=_pTq-v-2EdZN==8QY3donu9YUBtRYWdL18KBxs4Q@mail.gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-In-Reply-To: <20221202232054.2666830-2-abel.vesa@linaro.org>
-References: <20221202232054.2666830-1-abel.vesa@linaro.org>
- <20221202232054.2666830-2-abel.vesa@linaro.org>
-Message-Id: <167007709608.1267842.9280978291039468846.robh@kernel.org>
-Subject: Re: [PATCH v5 1/2] dt-bindings: interconnect: Add Qualcomm SM8550
-Date:   Sat, 03 Dec 2022 08:19:51 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iew=_pTq-v-2EdZN==8QY3donu9YUBtRYWdL18KBxs4Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,53 +81,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/30/22 19:27, Rafael J. Wysocki wrote:
 
-On Sat, 03 Dec 2022 01:20:53 +0200, Abel Vesa wrote:
-> The Qualcomm SM8550 SoC has several bus fabrics that could be
-> controlled and tuned dynamically according to the bandwidth demand.
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 7c0dd57e562a..4bbbca85134b 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+> >          *   * Thermal pressure will impact all cpus in this perf domain
+> >          *     equally.
+> >          */
+> > -       if (sched_energy_enabled()) {
+> > +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+> >                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> > -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
+> > +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
+> >
+> >                 rq->cpu_capacity_inverted = 0;
+> >
+> > -               SCHED_WARN_ON(!rcu_read_lock_held());
+> > -
+> > -               for (; pd; pd = pd->next) {
+> > -                       struct cpumask *pd_span = perf_domain_span(pd);
+> > +               for_each_active_policy_safe(policy, policy_n) {
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> 
-> Changes since v4:
->  * Added Krzysztof's R-b tag
-> 
->  .../interconnect/qcom,sm8550-rpmh.yaml        | 139 +++++++++++++
->  .../interconnect/qcom,sm8550-rpmh.h           | 190 ++++++++++++++++++
->  2 files changed, 329 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sm8550-rpmh.h
-> 
+> 1. Is the "safe" part sufficient for protection against concurrent
+> deletion and freeing of list entries?  cpufreq driver removal can do
+> that AFAICS.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The freeing part is not safe probably. I need to research this more. Do you
+have issues against the exportation of this traversal in principle?
 
-yamllint warnings/errors:
+Switching them to be RCU protected could be the best safe option, anything
+against that too? I might not end up needing that. I need to dig more.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.example.dts:18:18: fatal error: dt-bindings/clock/qcom,sm8550-gcc.h: No such file or directory
-   18 |         #include <dt-bindings/clock/qcom,sm8550-gcc.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1492: dt_binding_check] Error 2
+> 2. For a casual reader of this code it may not be clear why cpufreq
+> policies matter here.
 
-doc reference errors (make refcheckdocs):
+I'm looking for a way to traverse the list of capacities of the system and
+know their related CPUs.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221202232054.2666830-2-abel.vesa@linaro.org
+AFAICT this information already exists in the performance domains and
+cpufreq_policy. Performance domains are conditional to energy model and
+schedutil. So trying to switch to cpufreq_policy.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Assuming this question wasn't a request to add a comment :-)
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
 
-pip3 install dtschema --upgrade
+Thanks!
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--
+Qais Yousef
