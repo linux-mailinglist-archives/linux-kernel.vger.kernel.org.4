@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00A86413EC
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 04:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A6F6413EE
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 04:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbiLCDF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 22:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S235204AbiLCDGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 22:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiLCDFq (ORCPT
+        with ESMTP id S232120AbiLCDFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 22:05:46 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAE2F7A09
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 19:05:45 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id t17so6566275pjo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 19:05:45 -0800 (PST)
+        Fri, 2 Dec 2022 22:05:47 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D26F818F
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 19:05:46 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id b21so6278773plc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 19:05:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OhR/DvZbp+3vR9eB4A5wFYKGQTjA+LqOJxd/xHKwNw4=;
-        b=KpJKmzUqKuY7RNz1zoEByIJW90y1Livh3n8yRVCtF7Wr2SNUWd5EFqo0EjjNi6loJv
-         TlFuL2eEbd8DZ8FBCGv2ReWj958YzPC2Tt8AZagpgWofFTbPz3N9Aoss5wquaRZv35pt
-         zf534yNV0g0gfKF8Bxz3qsNDzOBS2wJGcO2gP6yGN2p/yU3fATEm0f/qdKSMHwBwAsqk
-         jnSfc+OaPsVevmGerR1dP9afYP2sPSSOlwlnAwWpFHuq0XqOLftSexffps5iSRlfBRFT
-         fJHeyOjJR8qw7F5Bxhqn6UBDRAZfg680T48PHv4bOtksy7UlERFx7XNKzkB4IIToom71
-         zAjg==
+        bh=nXyyhDtl8c7AV1KDvPOaTLsEEraDYLnRgQTRKevMxLE=;
+        b=J9nA5zFzEgIt8zsxxMPn+sGlIH86WVlgcK5M4y+MnARF9MADgB6h9QisIFpQgAX5Xc
+         gT+JZZbSYIwNPr5lPusi+V73ZxiVkLhM81QZ6t8o4/bUs0p7dwivbSNGIto+U0W3vJje
+         odd1RyOpgxE8uPgVe+OvIiemZQ8s/XdQJhhr+yDr90iN2d2hOZAsbJWqu8yYBosqrxer
+         9lITxlUrsZAUjRZJKcN0IbJ2m0ZjxM8c9gapj57wHECA6g4hNRl0vKRmp3L5kzuNEkTN
+         fw8pU5isxRHsgpJlmPJcoUscGfiLE65hETmvjd9z7oAjQb+boL6+grwCz+iNw1swFZvZ
+         utXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OhR/DvZbp+3vR9eB4A5wFYKGQTjA+LqOJxd/xHKwNw4=;
-        b=6hGSSc3B9W/YmCf5gzPEt1BodrV9mmHMMi44eTptWOm6CP29zqcErMdxnft5TufPg0
-         8Dl8f11to1O66c6Rvhy8/9sDmoktsjgHc/ogw2ylV1N7IdX+df6uBvDRkVsh1lQEtLOa
-         hol61lnyrCi9FXeJ+HS2kIxA3fcLopOK6K/Q5Thc6TfVhmagobIpV8kFGz7eESfoSp+n
-         O6Gkr5XhCjk2KFyNSqaypFzaaWdXBlfNZDq1O3ceRtEFe6woZ3NefVlfGmroiPVW5zzX
-         BFI3gHB2cI+HFuFMBmkCj7lHOrzJnYQqKtQO8wnUpwMqGHil0nvD9eq4sHSSc+SwLkX5
-         iWHg==
-X-Gm-Message-State: ANoB5pmP7KA45H/q1MMVl6dyifvr3v6wc7G31RvMYG98Cbc9EQhy/Bek
-        wlkflafdOodNlLTOaQEh5amnfA==
-X-Google-Smtp-Source: AA0mqf7bOAyepA04ituLKXHZJH3uQ4cqneDkfqNEF7GDlldsPNuzsJMKn7BDVi7Zx/YGZ+BpcYq8AA==
-X-Received: by 2002:a17:902:bf06:b0:188:d3b1:dbfc with SMTP id bi6-20020a170902bf0600b00188d3b1dbfcmr57933988plb.127.1670036744950;
-        Fri, 02 Dec 2022 19:05:44 -0800 (PST)
+        bh=nXyyhDtl8c7AV1KDvPOaTLsEEraDYLnRgQTRKevMxLE=;
+        b=aX2yIjfH0BQ5S9aoy9quAdlRisfkERl1WQdVaHt7ITyC/Ry2AEh06PpiTj22x7ENgA
+         j6q/cinqp7xya/Sv4oAmQ+osC19z28mrhh1IB7kLEef08p6pDJlPEyQlUOUUFyPWN9TY
+         6ct9Rcb3xQj5V1uZQPq2CPJnZ1JYgvJ+k57zj+xdLNMmjyPHIK1yzdp1BW+zJ74WWAVu
+         FJQX4tKYoSZWSygeKFEHStbapty7pgfKBBFvCHi0OseeNstFsnvbnqNtoKj65Jcr4+bQ
+         McUtiUv928w3BiTrFGUVDA3KIE1xkSPHTSSewgJnAgEgcNd4uAmhA1hWv1SfXbbpkHFg
+         u+FQ==
+X-Gm-Message-State: ANoB5pmsaTuhs19pGqtl89fzqVvhZG4Ay1J4ZmcIzuQX1CzN31MJklTe
+        lMvpin7/jy6l+72u48D5foe+og==
+X-Google-Smtp-Source: AA0mqf7g0g8qmEYMQvaaJVG+LEYazPjzCbvT60LuJ6AU8Q984Tt5DyiX5U2wTDFpAbMwx/ydl7UUTA==
+X-Received: by 2002:a17:902:ce8e:b0:174:b537:266d with SMTP id f14-20020a170902ce8e00b00174b537266dmr54845874plg.144.1670036746128;
+        Fri, 02 Dec 2022 19:05:46 -0800 (PST)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id c11-20020a170903234b00b00186c3afb49esm6182561plh.209.2022.12.02.19.05.44
+        by smtp.gmail.com with ESMTPSA id b12-20020a1709027e0c00b001886ff822ffsm6147005plm.186.2022.12.02.19.05.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 19:05:44 -0800 (PST)
-Subject: [PATCH 3/5] arm: fault: Convert to VM_FAULT_ARCH_* codes
-Date:   Fri,  2 Dec 2022 19:03:54 -0800
-Message-Id: <20221203030356.3917-4-palmer@rivosinc.com>
+        Fri, 02 Dec 2022 19:05:45 -0800 (PST)
+Subject: [PATCH 4/5] s390: fault: Convert to VM_FAULT_ARCH_* codes
+Date:   Fri,  2 Dec 2022 19:03:55 -0800
+Message-Id: <20221203030356.3917-5-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221203030356.3917-1-palmer@rivosinc.com>
 References: <20221203030356.3917-1-palmer@rivosinc.com>
@@ -76,24 +76,30 @@ arch-specific values.
 
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/arm/mm/fault.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/s390/mm/fault.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/mm/fault.c b/arch/arm/mm/fault.c
-index 46cccd6bf705..7063b875b05f 100644
---- a/arch/arm/mm/fault.c
-+++ b/arch/arm/mm/fault.c
-@@ -201,8 +201,8 @@ void do_bad_area(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
- }
+diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
+index 9649d9382e0a..464a74e52465 100644
+--- a/arch/s390/mm/fault.c
++++ b/arch/s390/mm/fault.c
+@@ -46,11 +46,11 @@
+ #define __SUBCODE_MASK 0x0600
+ #define __PF_RES_FIELD 0x8000000000000000ULL
  
- #ifdef CONFIG_MMU
--#define VM_FAULT_BADMAP		((__force vm_fault_t)0x010000)
--#define VM_FAULT_BADACCESS	((__force vm_fault_t)0x020000)
-+#define VM_FAULT_BADMAP		VM_FAULT_ARCH_0
-+#define VM_FAULT_BADACCESS	VM_FAULT_ARCH_1
+-#define VM_FAULT_BADCONTEXT	((__force vm_fault_t) 0x010000)
+-#define VM_FAULT_BADMAP		((__force vm_fault_t) 0x020000)
+-#define VM_FAULT_BADACCESS	((__force vm_fault_t) 0x040000)
+-#define VM_FAULT_SIGNAL		((__force vm_fault_t) 0x080000)
+-#define VM_FAULT_PFAULT		((__force vm_fault_t) 0x100000)
++#define VM_FAULT_BADCONTEXT	VM_FAULT_ARCH_0
++#define VM_FAULT_BADMAP		VM_FAULT_ARCH_1
++#define VM_FAULT_BADACCESS	VM_FAULT_ARCH_2
++#define VM_FAULT_SIGNAL		VM_FAULT_ARCH_3
++#define VM_FAULT_PFAULT		VM_FAULT_ARCH_4
  
- static inline bool is_permission_fault(unsigned int fsr)
- {
+ enum fault_type {
+ 	KERNEL_FAULT,
 -- 
 2.38.1
 
