@@ -2,289 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6751164132B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBECB641331
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235115AbiLCCPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S235119AbiLCCRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbiLCCPG (ORCPT
+        with ESMTP id S234934AbiLCCRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:15:06 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E638DB6BB;
-        Fri,  2 Dec 2022 18:15:05 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 6so5809023pgm.6;
-        Fri, 02 Dec 2022 18:15:05 -0800 (PST)
+        Fri, 2 Dec 2022 21:17:32 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A98DBF6D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:17:31 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id q71so5807385pgq.8
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Vep6IUB7ai0bh6PtCGcGOQtXg6nOVxsrlqgL1oOPeU=;
-        b=QjJKYcAp71jYjH4LMC4sjaEQdEw8hjlQZUbKHprV4EF3K0JxbZXPOJtgDD9w3wI+ej
-         z6x9n/lysIDW9OR9mYvCJVo2jz4hx0VNd2O9nIe669j5xpLGrSvzRx1GiNKDiRLdYkxm
-         0I+BS3GdYyOjw0hqkNJgJb69JJJ+h8+PgptBcqiQ28wVM6Bf3d5XI3pFd6upzrmAd4+X
-         X64eZ0OjyYYCdHBAve2Q77Qj+Zi6Hzem0X2HQLvjcNFwiziqW0oays7TewHYU6lXdl72
-         JlxXvSftzd4EpOJGspPyzhQN9cQ4d9Z+b4mxcwEtKuH0IuasEIeY1p52oUHl8ZUi8pvD
-         spcQ==
+        bh=KslJTB66xKixbMkJwqpVpZSA0E9W1pT9X9b2hTanY44=;
+        b=FdRPAwVZYUKWI0GixKt1/Mt+MzbcNPYjYP0eTaKVlj9agMe+JiJxyY5avV9WtorCm+
+         EK+OYvzUfadggHErH3DkUit8KsSW1LwHMxmJnXE6B74hzYeyVOXZyI2rEJGSVj+Q7E1e
+         1/TvPb0HpDfja1G3IDLH+2UgTDmiIMikYkJLc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5Vep6IUB7ai0bh6PtCGcGOQtXg6nOVxsrlqgL1oOPeU=;
-        b=AK2AmLycdFL4fKC/TpMJYd0zKQFQ2Yu4Fm02sGvv0bY8rsxEEBQdZBk+p2d0+PBJKV
-         tuzJfIKVcPDW2B/ifxylSgj+lIF7iExVfRlRAxpUXyZIR1z11VQmKafrfPQLZ6IgJD1D
-         eUNUk7WjJp6zEFYcqIpUs6PIFiI85SwseUDeDM3hx3KGVZG1j9D5MJhOY/v65up/EIMV
-         wzLI7uWDllP0XNF5dV5UoupVufTRoDqOqTcUNgeo+PSrd1khPUioH1JkU4oW/dmi44sK
-         qNp9hL2da9tflLF6ip+iCF61ZRkgLdacz5UlOQo1IaTiMpE3BBbNBS5yXmKMfyJB5Gbv
-         Ha1A==
-X-Gm-Message-State: ANoB5plcdd6CoqjwoIeJKuOm4xhZdNBzl0Qx8Yk3DSWhU4l9p/YvJ7w5
-        gbmRPWcvm6nVtpOrCLacSk8=
-X-Google-Smtp-Source: AA0mqf71q0dRxzym4uE3tTAA0mBcKI/VX/vAi8u7TAuKmz865r33xWXiycgLr2Ax95mjo24fnn8Eow==
-X-Received: by 2002:a63:4908:0:b0:477:e0b4:3f5 with SMTP id w8-20020a634908000000b00477e0b403f5mr34585532pga.265.1670033704604;
-        Fri, 02 Dec 2022 18:15:04 -0800 (PST)
-Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:c181])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001872999f58esm6194253plk.189.2022.12.02.18.15.02
+        bh=KslJTB66xKixbMkJwqpVpZSA0E9W1pT9X9b2hTanY44=;
+        b=34hXVuEipcFpn6Bo/93u9xLZEIoTJcB8y5fWNW9EEHJwqd9f/IJ8IEdUfXg5qIVRw6
+         jIGYNL8S6LgrtkoIMs8o3QEY2rywzkggIh8MJm4/rEfBKpiThPpAhM2U9K79yCiY+MtV
+         VHwlKE4L9pplSG0l+dLZQwXwatwTTpjYYMbaPRa8zr6KWnOWVOAv8yMaOroY+9vOQKcP
+         RHaZ43NpsKsXdTB9PrzFRGsf9MUDXM2UgRXtI12pzllWJ2DqSq3yP9xoYGGJFQXMjaUG
+         JQnU1dme0tfGsSAUeMoWldpDcighI68BxqQyeSySL348DdfYZVvceZG05i7CjEmWsmpV
+         pJFw==
+X-Gm-Message-State: ANoB5pmHy6GyWz0uZvdMoq89YR4+8WwXslYG1BF1GoxzoqLvz9dFnyB1
+        iIOFNBU0Q98/8un6Spy5Bj4IeQ==
+X-Google-Smtp-Source: AA0mqf5Xy39Vb8BDohYQdotTcroYHHMKN0SWFeCLIULcJFfsg4B5WlYx3CbASMwsZUX/N56aaa5Rzw==
+X-Received: by 2002:a05:6a00:1409:b0:56b:e1d8:e7a1 with SMTP id l9-20020a056a00140900b0056be1d8e7a1mr54566551pfu.28.1670033850672;
+        Fri, 02 Dec 2022 18:17:30 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y69-20020a62ce48000000b00571bdf45888sm2157422pfg.154.2022.12.02.18.17.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:15:03 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:15:00 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@meta.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 1/2] bpf/docs: Document struct task_struct *
- kfuncs
-Message-ID: <20221203021500.okerdcfwhgykrxxg@macbook-pro-6.dhcp.thefacebook.com>
-References: <20221202220736.521227-1-void@manifault.com>
- <20221202220736.521227-2-void@manifault.com>
+        Fri, 02 Dec 2022 18:17:29 -0800 (PST)
+Date:   Fri, 2 Dec 2022 18:17:28 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Ryder Lee <Ryder.Lee@mediatek.com>
+Cc:     MeiChia Chiu =?utf-8?B?KOmCsee+juWYiSk=?= 
+        <MeiChia.Chiu@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        Shayne Chen =?utf-8?B?KOmZs+i7kuS4nik=?= 
+        <Shayne.Chen@mediatek.com>, "nbd@nbd.name" <nbd@nbd.name>,
+        "lorenzo@kernel.org" <lorenzo@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        Sean Wang <Sean.Wang@mediatek.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Sujuan Chen =?utf-8?B?KOmZiOe0oOWonyk=?= 
+        <Sujuan.Chen@mediatek.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Bo Jiao =?utf-8?B?KOeEpuazoik=?= <Bo.Jiao@mediatek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+Subject: Re: Coverity: mt7915_mcu_get_chan_mib_info(): Memory - illegal
+ accesses
+Message-ID: <202212021817.E35115E1@keescook>
+References: <202212021424.34C0F695E4@keescook>
+ <1a16599dd5e4eed86bae112a232a3599af43a5f2.camel@mediatek.com>
+ <202212021504.A1942911@keescook>
+ <6285b967a37d7f641b13ba73c10033450ee8ea7f.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221202220736.521227-2-void@manifault.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6285b967a37d7f641b13ba73c10033450ee8ea7f.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:07:35PM -0600, David Vernet wrote:
-> bpf_task_acquire(), bpf_task_release(), bpf_task_kptr_get(), and
-> bpf_task_from_pid() are kfuncs that were recently added to
-> kernel/bpf/helpers.c. These are "core" kfuncs in that they're available
-> for use for any tracepoint or struct_ops BPF program. Though they have
-> no ABI stability guarantees, we should still document them. This patch
-> adds a new Core kfuncs section to the BPF kfuncs doc, and adds entries
-> for all of these task kfuncs.
+On Fri, Dec 02, 2022 at 11:42:36PM +0000, Ryder Lee wrote:
+> On Fri, 2022-12-02 at 15:04 -0800, Kees Cook wrote:
+> > > 
+> > On Fri, Dec 02, 2022 at 10:56:19PM +0000, Ryder Lee wrote:
+> > > On Fri, 2022-12-02 at 14:24 -0800, coverity-bot wrote:
+> > > > Hello!
+> > > > 
+> > > > This is an experimental semi-automated report about issues
+> > > > detected
+> > > > by
+> > > > Coverity from a scan of next-20221202 as part of the linux-next
+> > > > scan
+> > > > project:
+> > > > 
+> > > 
+> > > 
+> https://urldefense.com/v3/__https://scan.coverity.com/projects/linux-next-weekly-scan__;!!CTRNKA9wMg0ARbw!j7j_C0KpO4VD2yMOodvpeIexTGq4fhy2yq6nokNua9u4LToiUOLk4ou8JFFNrXkrh80d5BK2k44faRQstHE9$
+> > >  
+> > > >  
+> > > > 
+> > > > You're getting this email because you were associated with the
+> > > > identified
+> > > > lines of code (noted below) that were touched by commits:
+> > > > 
+> > > >   Thu Feb 3 13:57:56 2022 +0100
+> > > >     417a4534d223 ("mt76: mt7915: update mt7915_chan_mib_offs for
+> > > > mt7916")
+> > > > 
+> > > > Coverity reported the following:
+> > > > 
+> > > > *** CID 1527801:  Memory - illegal accesses  (OVERRUN)
+> > > > drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:3005 in
+> > > > mt7915_mcu_get_chan_mib_info()
+> > > > 2999     		start = 5;
+> > > > 3000     		ofs = 0;
+> > > > 3001     	}
+> > > > 3002
+> > > > 3003     	for (i = 0; i < 5; i++) {
+> > > > 3004     		req[i].band = cpu_to_le32(phy->mt76->band_idx);
+> > > > vvv     CID 1527801:  Memory - illegal accesses  (OVERRUN)
+> > > > vvv     Overrunning array "offs" of 9 4-byte elements at element
+> > > > index 9 (byte offset 39) using index "i + start" (which evaluates
+> > > > to
+> > > > 9).
+> > > > 3005     		req[i].offs = cpu_to_le32(offs[i + start]);
+> > > > 3006
+> > > > 3007     		if (!is_mt7915(&dev->mt76) && i == 3)
+> > > > 3008     			break;
+> > > > 3009     	}
+> > > > 3010
+> > > > 
+> > > > If this is a false positive, please let us know so we can mark it
+> > > > as
+> > > > such, or teach the Coverity rules to be smarter. If not, please
+> > > > make
+> > > > sure fixes get into linux-next. :) For patches fixing this,
+> > > > please
+> > > > include these lines (but double-check the "Fixes" first):
+> > > > 
+> > > 
+> > > I think this is a false postive as the subsequent check 'if
+> > > (!is_mt7915(&dev->mt76) && i == 3)' should break array "offs" of 8.
+> > 
+> > Ah, okay. What if is_mt7915(&dev->mt76) is always true?
+> > 
+> > -Kees
 > 
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
->  Documentation/bpf/kfuncs.rst | 148 +++++++++++++++++++++++++++++++++++
->  kernel/bpf/helpers.c         |   8 +-
->  2 files changed, 152 insertions(+), 4 deletions(-)
+> 	int start = 0;
 > 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 90774479ab7a..b0c35ad6fad4 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -213,3 +213,151 @@ type. An example is shown below::
->                  return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_task_kfunc_set);
->          }
->          late_initcall(init_subsystem);
-> +
-> +3. Core kfuncs
-> +==============
-> +
-> +The BPF subsystem provides a number of "core" kfuncs that are potentially
-> +applicable to a wide variety of different possible use cases and programs.
-> +Those kfuncs are documented here.
-> +
-> +3.1 struct task_struct * kfuncs
-> +-------------------------------
-> +
-> +There are a number of kfuncs that allow ``struct task_struct *`` objects to be
-> +used as kptrs:
-> +
-> +.. kernel-doc:: kernel/bpf/helpers.c
-> +   :identifiers: bpf_task_acquire bpf_task_release
-> +
-> +These kfuncs are useful when you want to acquire or release a reference to a
-> +``struct task_struct *`` that was passed as e.g. a tracepoint arg, or a
-> +struct_ops callback arg. For example:
-> +
-> +.. code-block:: c
-> +
-> +	/**
-> +	 * A trivial example tracepoint program that shows how to
-> +	 * acquire and release a struct task_struct * pointer.
-> +	 */
-> +	SEC("tp_btf/task_newtask")
-> +	int BPF_PROG(task_acquire_release_example, struct task_struct *task, u64 clone_flags)
-> +	{
-> +		struct task_struct *acquired;
-> +
-> +		acquired = bpf_task_acquire(task);
-> +
-> +		/*
-> +		 * In a typical program you'd do something like store
-> +		 * the task in a map. Here, we just release it.
-
-There is a sentence later in this patch about what happens with the pointer
-that was stored in a map, but I would add some part of it here as well. Like:
-
- * In a typical program you'd do something like store
- * the task in a map and the map will automatically release it later.
- * Here, we release it manually.
-
-> +		 */
-> +		bpf_task_release(acquired);
-> +		return 0;
-> +	}
-> +
-> +If you want to acquire a reference to a ``struct task_struct`` kptr that's
-> +already stored in a map, you can use bpf_task_kptr_get():
-> +
-> +.. kernel-doc:: kernel/bpf/helpers.c
-> +   :identifiers: bpf_task_kptr_get
-> +
-> +Here's an example of how it can be used:
-> +
-> +.. code-block:: c
-> +
-> +	/* struct containing the struct task_struct kptr which is actually stored in the map. */
-> +	struct __tasks_kfunc_map_value {
-> +		struct task_struct __kptr_ref * task;
-> +	};
-> +
-> +	/* The map containing struct __tasks_kfunc_map_value entries. */
-> +	struct hash_map {
-> +		__uint(type, BPF_MAP_TYPE_HASH);
-> +		__type(key, int);
-> +		__type(value, struct __tasks_kfunc_map_value);
-> +		__uint(max_entries, 1);
-> +	} __tasks_kfunc_map SEC(".maps");
-> +
-> +	/* ... */
-> +
-> +	/**
-> +	 * A simple example tracepoint program showing how a
-> +	 * struct task_struct kptr that is stored in a map can
-> +	 * be acquired using the bpf_task_kptr_get() kfunc.
-> +	 */
-> +	 SEC("tp_btf/task_newtask")
-> +	 int BPF_PROG(task_kptr_get_example, struct task_struct *task, u64 clone_flags)
-> +	 {
-> +		struct task_struct *kptr;
-> +		struct __tasks_kfunc_map_value *v;
-> +		s32 pid;
-> +		long status;
-> +
-> +		status = bpf_probe_read_kernel(&pid, sizeof(pid), &task->pid);
-
-why use the slow bpf_probe_read_kernel() here?
-I think the example should follow modern coding practices.
-Just: pid = task->pid; instead ?
-
-> +		if (status)
-> +			return status;
-> +
-> +		/* Assume a task kptr was previously stored in the map. */
-> +		v = bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
-> +		if (!v)
-> +			return -ENOENT;
-> +
-> +		/* Acquire a reference to the task kptr that's already stored in the map. */
-> +		kptr = bpf_task_kptr_get(&v->task);
-> +		if (!kptr)
-> +			/* If no task was present in the map, it's because
-> +			 * we're racing with another CPU that removed it with
-> +			 * bpf_kptr_xchg() between the bpf_map_lookup_elem()
-> +			 * above, and our call to bpf_task_kptr_get().
-> +			 * bpf_task_kptr_get() internally safely handles this
-> +			 * race, and will return NULL if the task is no longer
-> +			 * present in the map by the time we invoke the kfunc.
-> +			 */
-> +			return -EBUSY;
-> +
-> +		/* Free the reference we just took above. Note that the
-> +		 * original struct task_struct kptr is still in the map.
-> +		 * It will be freed either at a later time if another
-> +		 * context deletes it from the map, or automatically by
-> +		 * the BPF subsystem if it's still present when the map
-> +		 * is destroyed.
-> +		 */
-> +		bpf_task_release(kptr);
-> +
-> +		return 0;
-> +        }
-> +
-> +Finally, a BPF program can also look up a task from a pid. This can be useful
-> +if the caller doesn't have a trusted pointer to a ``struct task_struct *``
-> +object that it can acquire a reference on with bpf_task_acquire().
-> +
-> +.. kernel-doc:: kernel/bpf/helpers.c
-> +   :identifiers: bpf_task_from_pid
-> +
-> +Here is an example of it being used:
-> +
-> +.. code-block:: c
-> +
-> +	SEC("tp_btf/task_newtask")
-> +	int BPF_PROG(task_get_pid_example, struct task_struct *task, u64 clone_flags)
-> +	{
-> +		struct task_struct *lookup;
-> +
-> +		lookup = bpf_task_from_pid(task->pid);
-> +		if (!lookup)
-> +			/* A task should always be found, as %task is a tracepoint arg. */
-> +			return -ENOENT;
-> +
-> +		if (lookup->pid != task->pid) {
-> +			/* The pid of the lookup task should be the same as the input task. */
-
-I suspect both "errors" are actually possible in practice,
-since bpf_task_from_pid is using init_pid_ns.
-But this taskd might be in different pid_ns. See task_active_pid_ns.
-Probably worth mentioning this aspect of bpf_task_from_pid.
-
-> +			bpf_task_release(lookup);
-> +			return -EINVAL;
-> +		}
-> +
-> +		/* bpf_task_from_pid() returns an acquired reference,
-> +		 * so it must be dropped before returning from the
-> +		 * tracepoint handler.
-> +		 */
-> +		bpf_task_release(lookup);
-> +		return 0;
-> +	}
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index a5a511430f2a..004afbc14bbf 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1868,10 +1868,10 @@ struct task_struct *bpf_task_kptr_get(struct task_struct **pp)
->  }
->  
->  /**
-> - * bpf_task_release - Release the reference acquired on a struct task_struct *.
-> - * If this kfunc is invoked in an RCU read region, the task_struct is
-> - * guaranteed to not be freed until the current grace period has ended, even if
-> - * its refcount drops to 0.
-> + * bpf_task_release - Release the reference acquired on a task.  If this kfunc
-> + * is invoked in an RCU read region, the task_struct is guaranteed to not be
-> + * freed until the current grace period has ended, even if its refcount drops
-> + * to 0.
->   * @p: The task on which a reference is being released.
->   */
->  void bpf_task_release(struct task_struct *p)
-> -- 
-> 2.38.1
+> 	if (!is_mt7915(&dev->mt76)) {
+> 		start = 5;
+> 		ofs = 0;
+> 	}
 > 
+> 	for (i = 0; i < 5; i++) {
+> 		req[i].band = cpu_to_le32(phy->band_idx);
+> 		req[i].offs = cpu_to_le32(offs[i + start]);
+> 
+> 		if (!is_mt7915(&dev->mt76) && i == 3) //
+> 			break;
+> 	}
+> 
+> For 'is_mt7915' case, start:0 and i: 0 1 2 3 4, whereas !is_mt7915'
+> case, start:5 and i: 0 1 2 3 (then break).
+> 
+> I know it's a bit tricky. This is used to differentiate chipset
+> revision.
+
+Ah-ha! Gotcha now. Thanks for the details and sorry for the noise! :)
+
+-Kees
+
+-- 
+Kees Cook
