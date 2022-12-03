@@ -2,174 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1148C6412EF
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 02:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2053B6412F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 02:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiLCBLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 20:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S235221AbiLCBLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 20:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234966AbiLCBLh (ORCPT
+        with ESMTP id S235219AbiLCBLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 20:11:37 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41F5BE4F4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 17:11:35 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 203-20020a2502d4000000b006f94ab02400so6824138ybc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 17:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/nFR+wx3fDh2jF+K9/Q6SHeUTNnF6C4ZtCGpq7JUDE0=;
-        b=MeZG/Gqxyp/tTgTVrJI9XN6sIrGfZKGsvwpnx4AHGwBdG+OWLYFHLJhw0cd8K8Ef+0
-         yG81P7JvXIEbTXa1zJvjOPe4Bbs36R3mIFG4v1l3Bq++h8W3bHcV/drAXV3VmlO7KD5e
-         IIwSUyBd6u/VJXBWUAO1/RGXFgsXcdq3canItaKNtl+Ff7RMbc+r5pkcmwyPD2/LQCLI
-         2gu8lfvDfWwUOlxiX1mdcXb+hbaX/xI94k3LOAvwt98TVZ+BL4e7jFpYYlFFMuWLljQi
-         Dmhi562LLY4/Y1igpOaRFei7nukuzmBdpzsOcB6wB0yQMJBXMGxz6p3fU5Nes+fXgea9
-         vtsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/nFR+wx3fDh2jF+K9/Q6SHeUTNnF6C4ZtCGpq7JUDE0=;
-        b=elNiXna3rfvT5ZRKMm3Ht0+DGaocaKbvDWOGoougYOQhCBoVfYD072Nc82vzJ2z0ES
-         FHiSxLduf8PGfqIWUWmtM6VHOVNgyEnXE8a44FIBltzdCuROVMky0sLphuIpuSlmh0uZ
-         osusJn3p2vYpk06ovE0OhoAOPYZNuz1mzVDXU+XGBkZFHQuU05WXdQfV9SmpN2lYeoGn
-         cbz6YegpsOqyVCGhDSwzMZnbN2g56WvY1MCgGI4u8XLZoLh5mZHFpyrQmxJFB5964ZPp
-         squF7PjT+TtF84mXgVc1sd4kQXarXXhtoMm7ApXqZcWqkq70Qm0J/7GVwlAKxmXEsbEe
-         raUQ==
-X-Gm-Message-State: ANoB5pmtVU1lsIiotca2V1QtDLIKHUTX94p0jhY+dB3WdUfVSCP3Z/2t
-        7YXI1mOUEZtm8awNyEdv4QbTf0TZn9BS2YpiIA==
-X-Google-Smtp-Source: AA0mqf6E37hjDbRWoBovKVGFhOxSdBTvuUVJhtHQ9SzNJkbMeXEp28FeVH4fAGLQ+4QVoYUWusCkN8UEjWGYGUfPPg==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:e655:31e2:2ad4:2421])
- (user=almasrymina job=sendgmr) by 2002:a25:3504:0:b0:6ee:984b:3d08 with SMTP
- id c4-20020a253504000000b006ee984b3d08mr52761857yba.116.1670029895188; Fri,
- 02 Dec 2022 17:11:35 -0800 (PST)
-Date:   Fri,  2 Dec 2022 17:11:19 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221203011120.2361610-1-almasrymina@google.com>
-Subject: [PATCH v1] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
-From:   Mina Almasry <almasrymina@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, Mina Almasry <almasrymina@google.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 20:11:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA7BD20A9;
+        Fri,  2 Dec 2022 17:11:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFC1F6247A;
+        Sat,  3 Dec 2022 01:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3053EC433D6;
+        Sat,  3 Dec 2022 01:11:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670029908;
+        bh=eZp9JU1cNITlKz5eTnc4xE9oQLxGs+SZmnkZbiNAp8k=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=FaAUezm9H8AWnJ+v5HmK6gWVlk838Y+KbrgY2o+DvOgjDJKlW/X+IXxh7F3Dhew1r
+         lis1gKzzj5SJ4pz/D6JJF1TuSGPr4yWchXYDjOxzUDfzst2iOr7m/4NlPmdO1mbWAM
+         yki1nuOxaiPFYEdcHgvUTWyaBiGQG2KxfQn20+2fgvO8z+RPzQGiMGgzzGPvtV7zDt
+         MlqX9Val8SunWJbUIi156vuYRC4SVFkmeB7svxjD5MSFfasdA+kLdO/B8jU7R6BxVa
+         S9MJzGOHBdEYB8cRGYzAIy60WiEO+aaE55Sy0loVhWiPXSdJQR1vZsgU5/75BfZ9Zb
+         ZqXukkDwpI7lw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C0C215C095D; Fri,  2 Dec 2022 17:11:47 -0800 (PST)
+Date:   Fri, 2 Dec 2022 17:11:47 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        rcu@vger.kernel.org, kernel-team@meta.com
+Subject: [GIT PULL] RCU changes for v6.2
+Message-ID: <20221203011147.GA1815487@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-reclaim"") enabled demotion in memcg reclaim, which is the right thing
-to do, however, I suspect it introduced a regression in the behavior of
-try_to_free_mem_cgroup_pages().
+Hello, Linus,
 
-The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
-reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
-of the cgroup should reduce by nr_pages. The callers expect
-try_to_free_mem_cgroup_pages() to also return the number of pages
-reclaimed, not demoted.
+Once the merge window opens, please pull the latest RCU git tree from:
 
-However, what try_to_free_mem_cgroup_pages() actually does is it
-unconditionally counts demoted pages as reclaimed pages. So in practice
-when it is called it will often demote nr_pages and return the number of
-demoted pages to the caller. Demoted pages don't lower the memcg usage,
-and so I think try_to_free_mem_cgroup_pages() is not actually doing what
-the callers want it to do.
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2022.12.02a
+  # HEAD: 87492c06e68d802852c7ba76b4d3fde50807d72a Merge branches 'doc.2022.10.20a', 'fixes.2022.10.21a', 'lazy.2022.11.30a', 'srcunmisafe.2022.11.09a', 'torture.2022.10.18c' and 'torturescript.2022.10.20a' into HEAD (2022-11-30 13:20:05 -0800)
 
-I suspect various things work suboptimally on memory systems or don't
-work at all due to this:
+----------------------------------------------------------------
+RCU pull request for v6.2
 
-- memory.high enforcement likely doesn't work (it just demotes nr_pages
-  instead of lowering the memcg usage by nr_pages).
-- try_charge_memcg() will keep retrying the charge while
-  try_to_free_mem_cgroup_pages() is just demoting pages and not actually
-  making any room for the charge.
-- memory.reclaim has a wonky interface. It advertises to the user it
-  reclaims the provided amount but it will actually demote that amount.
+This pull request contains the following branches:
 
-There may be more effects to this issue.
+doc.2022.10.20a: Documentation updates.  This is the second
+	in a series from an ongoing review of the RCU documentation.
 
-To fix these issues I propose shrink_folio_list() to only count pages
-demoted from inside of sc->nodemask to outside of sc->nodemask as
-'reclaimed'.
+fixes.2022.10.21a: Miscellaneous fixes.
 
-For callers such as reclaim_high() or try_charge_memcg() that set
-sc->nodemask to NULL, try_to_free_mem_cgroup_pages() will try to
-actually reclaim nr_pages and return the number of pages reclaimed. No
-demoted pages would count towards the nr_pages requirement.
+lazy.2022.11.30a: Introduces a default-off Kconfig option that depends
+	on RCU_NOCB_CPU that, on CPUs mentioned in the nohz_full or
+	rcu_nocbs boot-argument CPU lists, causes call_rcu() to introduce
+	delays.  These delays result in significant power savings on
+	nearly idle Android and ChromeOS systems.  These savings range
+	from a few percent to more than ten percent.
 
-For callers such as memory_reclaim() that set sc->nodemask,
-try_to_free_mem_cgroup_pages() will free nr_pages from that nodemask
-with either reclaim or demotion.
+	This series also includes several commits that change call_rcu()
+	to a new call_rcu_hurry() function that avoids these delays in
+	a few cases, for example, where timely wakeups are required.
+	Several of these are outside of RCU and thus have acks and
+	reviews from the relevant maintainers.
 
-Tested this change using memory.reclaim interface. With this change,
+srcunmisafe.2022.11.09a: Creates an srcu_read_lock_nmisafe() and an
+	srcu_read_unlock_nmisafe() for architectures that support NMIs,
+	but which do not provide NMI-safe this_cpu_inc().  These NMI-safe
+	SRCU functions are required by the upcoming lockless printk()
+	work by John Ogness et al.
 
-	echo "1m" > memory.reclaim
+	That printk() series depends on these commits, so if you pull
+	the printk() series before this one, you will have already
+	pulled in this branch, plus two more SRCU commits:
 
-Will cause freeing of 1m of memory from the cgroup regardless of the
-demotions happening inside.
+	0cd7e350abc4 ("rcu: Make SRCU mandatory")
+	51f5f78a4f80 ("srcu: Make Tiny synchronize_srcu() check for readers")
 
-	echo "1m nodes=0" > memory.reclaim
+	These two commits appear to work well, but do not have
+	sufficient testing exposure over a long enough time for me to
+	feel comfortable pushing them unless something in mainline is
+	definitely going to use them immediately, and currently only
+	the new printk() work uses them.
 
-Will cause freeing of 1m of node 0 by demotion if a demotion target is
-available, and by reclaim if no demotion target is available.
+torture.2022.10.18c: Changes providing minor but important increases
+	in test coverage for the new RCU polled-grace-period APIs.
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
+torturescript.2022.10.20a: Changes that avoid redundant kernel builds,
+	thus providing about a 30% speedup for the torture.sh acceptance
+	test.
 
----
+----------------------------------------------------------------
+Eric Dumazet (1):
+      net: devinet: Reduce refcount before grace period
 
-This is developed on top of mm-unstable largely because I need the
-memory.reclaim nodes= arg to test it properly.
----
- mm/vmscan.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Frederic Weisbecker (4):
+      rcu: Fix missing nocb gp wake on rcu_barrier()
+      srcu: Warn when NMI-unsafe API is used in NMI
+      srcu: Explain the reason behind the read side critical section on GP start
+      srcu: Debug NMI safety even on archs that don't require it
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 2b42ac9ad755..8f6e993b870d 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1653,6 +1653,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
- 	LIST_HEAD(free_folios);
- 	LIST_HEAD(demote_folios);
- 	unsigned int nr_reclaimed = 0;
-+	unsigned int nr_demoted = 0;
- 	unsigned int pgactivate = 0;
- 	bool do_demote_pass;
- 	struct swap_iocb *plug = NULL;
-@@ -2085,7 +2086,17 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
- 	/* 'folio_list' is always empty here */
+Joel Fernandes (Google) (10):
+      rcu: Use READ_ONCE() for lockless read of rnp->qsmask
+      rcu: Fix late wakeup when flush of bypass cblist happens
+      rcu: Make call_rcu() lazy to save power
+      rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
+      rcuscale: Add laziness and kfree tests
+      rcu/sync: Use call_rcu_hurry() instead of call_rcu
+      rcu/rcuscale: Use call_rcu_hurry() for async reader test
+      rcu/rcutorture: Use call_rcu_hurry() where needed
+      percpu-refcount: Use call_rcu_hurry() for atomic switch
+      net: Use call_rcu_hurry() for dst_release()
 
- 	/* Migrate folios selected for demotion */
--	nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
-+	nr_demoted = demote_folio_list(&demote_folios, pgdat);
-+
-+	/*
-+	 * Only count demoted folios as reclaimed if we demoted them from
-+	 * inside of the nodemask to outside of the nodemask, hence reclaiming
-+	 * pages in the nodemask.
-+	 */
-+	if (sc->nodemask && node_isset(pgdat->node_id, *sc->nodemask) &&
-+	    !node_isset(next_demotion_node(pgdat->node_id), *sc->nodemask))
-+		nr_reclaimed += nr_demoted;
-+
- 	/* Folios that could not be demoted are still in @demote_folios */
- 	if (!list_empty(&demote_folios)) {
- 		/* Folios which weren't demoted go back on @folio_list */
---
-2.39.0.rc0.267.gcb52ba06e7-goog
+John Ogness (1):
+      rcu: Implement lockdep_rcu_enabled for !CONFIG_DEBUG_LOCK_ALLOC
+
+Paul E. McKenney (25):
+      srcu: Convert ->srcu_lock_count and ->srcu_unlock_count to atomic
+      doc: Remove arrayRCU.rst
+      doc: Update checklist.txt
+      rcutorture: Verify NUM_ACTIVE_RCU_POLL_FULL_OLDSTATE
+      rcutorture: Verify NUM_ACTIVE_RCU_POLL_OLDSTATE
+      rcutorture: Add --bootargs parameter to kvm-again.sh
+      torture: Use mktemp instead of guessing at unique names
+      rcutorture: Make kvm-test-1-run-qemu.sh check for alternative output
+      rcutorture: Make kvm-recheck.sh export TORTURE_SUITE
+      rcutorture: Add --datestamp parameter to kvm-again.sh
+      rcutorture: Avoid redundant builds for rcuscale and refscale in torture.sh
+      doc: Update listRCU.rst
+      doc: Update RCU's lockdep.rst
+      srcu: Create an srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe()
+      srcu: Check for consistent per-CPU per-srcu_struct NMI safety
+      srcu: Check for consistent global per-srcu_struct NMI safety
+      arch/x86: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
+      arch/arm64: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
+      rcutorture: Avoid torture.sh compressing identical files
+      torture: Make torture.sh create a properly formatted log file
+      slab: Explain why SLAB_TYPESAFE_BY_RCU reference before locking
+      rcu-tasks: Make grace-period-age message human-readable
+      arch/loongarch: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
+      arch/s390: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
+      Merge branches 'doc.2022.10.20a', 'fixes.2022.10.21a', 'lazy.2022.11.30a', 'srcunmisafe.2022.11.09a', 'torture.2022.10.18c' and 'torturescript.2022.10.20a' into HEAD
+
+Pingfan Liu (1):
+      rcu: Synchronize ->qsmaskinitnext in rcu_boost_kthread_setaffinity()
+
+Uladzislau Rezki (2):
+      scsi/scsi_error: Use call_rcu_hurry() instead of call_rcu()
+      workqueue: Make queue_rcu_work() use call_rcu_hurry()
+
+Vineeth Pillai (1):
+      rcu: Shrinker for lazy rcu
+
+Yipeng Zou (1):
+      rcu: Remove rcu_is_idle_cpu()
+
+Zeng Heng (1):
+      rcu: Remove unused 'cpu' in rcu_virt_note_context_switch()
+
+Zhen Lei (1):
+      rcu: Simplify rcu_init_nohz() cpumask handling
+
+Zqiang (2):
+      rcu: Remove duplicate RCU exp QS report from rcu_report_dead()
+      rcu: Fix __this_cpu_read() lockdep warning in rcu_force_quiescent_state()
+
+ Documentation/RCU/arrayRCU.rst                     | 165 -------------
+ Documentation/RCU/checklist.rst                    | 244 +++++++++++--------
+ Documentation/RCU/index.rst                        |   1 -
+ Documentation/RCU/listRCU.rst                      | 174 ++++++++------
+ Documentation/RCU/lockdep.rst                      |   4 +
+ arch/Kconfig                                       |   3 +
+ arch/arm64/Kconfig                                 |   1 +
+ arch/loongarch/Kconfig                             |   1 +
+ arch/s390/Kconfig                                  |   1 +
+ arch/x86/Kconfig                                   |   1 +
+ drivers/scsi/scsi_error.c                          |   2 +-
+ include/linux/kvm_host.h                           |   2 +-
+ include/linux/rcupdate.h                           |  14 ++
+ include/linux/rcutiny.h                            |   4 +-
+ include/linux/rcutree.h                            |   4 +-
+ include/linux/slab.h                               |  11 +
+ include/linux/srcu.h                               |  63 +++++
+ include/linux/srcutree.h                           |   5 +-
+ kernel/rcu/Kconfig                                 |  11 +
+ kernel/rcu/rcu.h                                   |   8 +
+ kernel/rcu/rcuscale.c                              |  69 +++++-
+ kernel/rcu/rcutorture.c                            |  72 ++++--
+ kernel/rcu/srcutree.c                              | 100 ++++++--
+ kernel/rcu/sync.c                                  |   2 +-
+ kernel/rcu/tasks.h                                 |   2 +-
+ kernel/rcu/tiny.c                                  |   2 +-
+ kernel/rcu/tree.c                                  | 152 +++++++-----
+ kernel/rcu/tree.h                                  |  12 +-
+ kernel/rcu/tree_exp.h                              |   2 +-
+ kernel/rcu/tree_nocb.h                             | 259 ++++++++++++++++-----
+ kernel/rcu/tree_plugin.h                           |   5 +-
+ kernel/workqueue.c                                 |   2 +-
+ lib/percpu-refcount.c                              |   3 +-
+ net/core/dst.c                                     |   2 +-
+ net/ipv4/devinet.c                                 |  19 +-
+ .../testing/selftests/rcutorture/bin/config2csv.sh |   3 +-
+ .../selftests/rcutorture/bin/config_override.sh    |   3 +-
+ .../selftests/rcutorture/bin/configcheck.sh        |   3 +-
+ .../testing/selftests/rcutorture/bin/configinit.sh |   3 +-
+ .../testing/selftests/rcutorture/bin/kvm-again.sh  |  49 +++-
+ .../selftests/rcutorture/bin/kvm-assign-cpus.sh    |   3 +-
+ .../testing/selftests/rcutorture/bin/kvm-build.sh  |   3 +-
+ .../selftests/rcutorture/bin/kvm-end-run-stats.sh  |   3 +-
+ .../selftests/rcutorture/bin/kvm-recheck.sh        |   2 +-
+ .../testing/selftests/rcutorture/bin/kvm-remote.sh |  13 +-
+ .../rcutorture/bin/kvm-test-1-run-batch.sh         |   3 +-
+ .../rcutorture/bin/kvm-test-1-run-qemu.sh          |   5 +-
+ .../selftests/rcutorture/bin/kvm-test-1-run.sh     |   3 +-
+ .../selftests/rcutorture/bin/kvm-transform.sh      |  68 +++++-
+ tools/testing/selftests/rcutorture/bin/kvm.sh      |   3 +-
+ .../selftests/rcutorture/bin/parse-build.sh        |   3 +-
+ tools/testing/selftests/rcutorture/bin/torture.sh  | 145 ++++++++++--
+ 52 files changed, 1159 insertions(+), 578 deletions(-)
+ delete mode 100644 Documentation/RCU/arrayRCU.rst
