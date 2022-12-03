@@ -2,121 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0796412EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 02:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF746412EE
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 02:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234966AbiLCBHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 20:07:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S235157AbiLCBJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 20:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiLCBHf (ORCPT
+        with ESMTP id S235054AbiLCBJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 20:07:35 -0500
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FC3E02EA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 17:07:31 -0800 (PST)
-Date:   Sat, 03 Dec 2022 01:07:24 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nereid.pl;
-        s=protonmail; t=1670029649; x=1670288849;
-        bh=JVHmBYchUr1KxB+Mt4xsuL7U1ILvPgm6Rr3YJ82DeAA=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=Q7JGx/OneIOjAHFwLBXKLL19kkqzNHrYnFsI0VplzYkBgivRJXEoVmD1TOpJGCHJP
-         b4fEvGU08QuWCc8MbiXwdqt8zYnqiCwHLY66mnnCm5bcVW36svw3ZGvYrWJsK/Gqn6
-         aWU8mi4tiyWvdlC2xeUYT/dPQg1uW2IWZDBNJ2bjftZYQKAjkMkF4ekcTEo2ZslZn6
-         EqF8HH47ZDhaMjmMrVD1m76djkjF7hNPpH0DckvJ7EsziBgnCYo5dE+UpfgpytAlPA
-         ij58xx7C8/OCW8Zk/msEHV08mvun7/TXxhpqkKXGJzWAZ375wRVwqhyXeQiTChx556
-         9W4dMRJZteuVw==
-To:     Jan Kara <jack@suse.com>
-From:   Bartosz Taudul <wolf@nereid.pl>
-Cc:     linux-kernel@vger.kernel.org, Bartosz Taudul <wolf@nereid.pl>
-Subject: [PATCH] udf: Increase UDF_MAX_READ_VERSION to 0x0260
-Message-ID: <20221203010658.247048-1-wolf@nereid.pl>
-Feedback-ID: 31273341:user:proton
+        Fri, 2 Dec 2022 20:09:17 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9976398EB1;
+        Fri,  2 Dec 2022 17:09:16 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id e189so4192514iof.1;
+        Fri, 02 Dec 2022 17:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k515FecbjI08DAyTf4c8VtdjGdTjE71XYVDsJ0hdO0g=;
+        b=ChioXhnbIHyu9u/s1gWmLLEN943wPZCRReMjzOzlQx2IkbVO6AgiHfd9l7iDWHUEP4
+         wQs4+HsCMHiDvxF5bQDHBhV6FOIQMIkwVVhdKF2UUGGm/wuAKFrq6L0mmpPhhVI4vCZB
+         zr77/IoqV1hGK/zRS9hhZ+28ZJtXiR16EmbSoL0jbWALV+QSRKKux/hKZF6nlTocZOVm
+         x4vsxsPtogzAXlj5/PSftOmPwu4FXLIyMnTF9k2bQ7KRkrCb2AK1MuEgEPLcpjXNIYe/
+         DJBPfHrU9RYlRf1vQIE3CShOtzx9AI8NTBlEmFpEPqO3m7QmuZA3IZaw5zeHak9SDJUQ
+         EKHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k515FecbjI08DAyTf4c8VtdjGdTjE71XYVDsJ0hdO0g=;
+        b=U5oHO62mETxjlZjmDqlogtoiFVgKDgIYOFtoylafChf5Jw+11Vl38G8NUACsHPLEod
+         slRK7yZa8S0svobRP9u/+E4TSVK5LHu2LHD982wRz5d4g3OriWD6n0x78MKuXVCiw0NF
+         Ctes9AJ92W+J8WkL/8qPh5baqs9+NW6H1HECV0IAmcE8dwDvB5cPdmSEvwYvr3hS2oti
+         MCxYdX1zcgVj6DnkVN59CCZ6paFmYExCGaB/3uv4n/BhRhTrlt+cO1lMMAX6Jx+Nz9FH
+         XT/akffO4TgyC/hgT5MD9DRxqc6ke8sv8MoLsZnHI24P3C9rrShpKfNP1YhgSpQDYKQO
+         cnWQ==
+X-Gm-Message-State: ANoB5plNzdnJeNewBxOUIoYHr+PW1LXAetFpHkB8m7z86XFtbn2m40e9
+        78PQEq9Xt/7gEQLMT7jo3saBYBjWMOXOzuFt0jo=
+X-Google-Smtp-Source: AA0mqf4dd+jnIlXSjkVK2wK/y3vx8duHXJiqTpw8nY0vU9MXgUH9eZmqPGBQYExL4NPcFyuWsuwcVQ==
+X-Received: by 2002:a05:6602:220c:b0:6df:3e12:b640 with SMTP id n12-20020a056602220c00b006df3e12b640mr18142155ion.124.1670029755746;
+        Fri, 02 Dec 2022 17:09:15 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net. [71.33.132.231])
+        by smtp.gmail.com with ESMTPSA id k17-20020a0566022d9100b006a129b10229sm3252210iow.31.2022.12.02.17.09.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 17:09:15 -0800 (PST)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2] selftests/bpf: Fix conflicts with built-in functions in bpf_iter_ksym
+Date:   Fri,  2 Dec 2022 18:08:44 -0700
+Message-Id: <20221203010847.2191265-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha256; boundary="------9d048d0e0cb399a0645404c5cb1bce9a441fd0e2f0446c7feb16e2cc0383f481"; charset=utf-8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------9d048d0e0cb399a0645404c5cb1bce9a441fd0e2f0446c7feb16e2cc0383f481
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-From: Bartosz Taudul <wolf@nereid.pl>
-To: Jan Kara <jack@suse.com>
-Cc: linux-kernel@vger.kernel.org,
-	Bartosz Taudul <wolf@nereid.pl>
-Subject: [PATCH] udf: Increase UDF_MAX_READ_VERSION to 0x0260
-Date: Sat,  3 Dec 2022 02:06:58 +0100
-Message-Id: <20221203010658.247048-1-wolf@nereid.pl>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
+Both tolower and toupper are built in c functions, we should not
+redefine them as this can result in a build error.
 
-Some discs containing the UDF file system are unable to be mounted,
-failing with the following message:
+Fixes the following errors:
+progs/bpf_iter_ksym.c:10:20: error: conflicting types for built-in function 'tolower'; expected 'int(int)' [-Werror=builtin-declaration-mismatch]
+   10 | static inline char tolower(char c)
+      |                    ^~~~~~~
+progs/bpf_iter_ksym.c:5:1: note: 'tolower' is declared in header '<ctype.h>'
+    4 | #include <bpf/bpf_helpers.h>
+  +++ |+#include <ctype.h>
+    5 |
+progs/bpf_iter_ksym.c:17:20: error: conflicting types for built-in function 'toupper'; expected 'int(int)' [-Werror=builtin-declaration-mismatch]
+   17 | static inline char toupper(char c)
+      |                    ^~~~~~~
+progs/bpf_iter_ksym.c:17:20: note: 'toupper' is declared in header '<ctype.h>'
 
-  UDF-fs: error (device sr0): udf_fill_super: minUDFReadRev=260
-    (max is 250)
+See background on this sort of issue:
+https://stackoverflow.com/a/20582607
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=12213
 
-The UDF 2.60 specification [0] states in the section Basic Restrictions
-& Requirements (page 10):
+(C99, 7.1.3p1) "All identifiers with external linkage in any of the
+following subclauses (including the future library directions) are
+always reserved for use as identifiers with external linkage."
 
-  The Minimum UDF Read Revision value shall be at most #0250 for all
-  media with a UDF 2.60 file system. This indicates that a UDF 2.50
-  implementation can read all UDF 2.60 media. Media that do not have a
-  Metadata Partition may use a value lower than #250.
+This is documented behavior in GCC:
+https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-std-2
 
-The conclusion is that the discs failing to mount were burned with a
-faulty software, which didn't follow the specification. This can be
-worked around by increasing UDF_MAX_READ_VERSION to 0x260, to match the
-Minimum Read Revision. No other changes are required, as reading UDF
-2.60 is backward compatible with UDF 2.50.
-
-[0] http://www.osta.org/specs/pdf/udf260.pdf
-
-Signed-off-by: Bartosz Taudul <wolf@nereid.pl>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- fs/udf/
-udf_sb.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v2:
+  - add more details
+---
+ tools/testing/selftests/bpf/progs/bpf_iter_ksym.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/udf/udf_sb.h b/fs/udf/udf_sb.h
-index 4fa620543d30..09d62bf1f5fb 100644
---- a/fs/udf/udf_sb.h
-+++ b/fs/udf/udf_sb.h
-@@ -6,7 +6,7 @@
- #include <linux/bitops.h>
- #include <linux/magic.h>
-
--#define UDF_MAX_READ_VERSION		0x0250
-+#define UDF_MAX_READ_VERSION		0x0260
- #define UDF_MAX_WRITE_VERSION		0x0201
-
- #define UDF_FLAG_USE_EXTENDED_FE	0
---
-2.38.1
-
-
---------9d048d0e0cb399a0645404c5cb1bce9a441fd0e2f0446c7feb16e2cc0383f481
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: ProtonMail
-
-wnUEARYIACcFAmOKoUkJkLf+IAi3V13zFiEE74scJSwatDjGrwLOt/4gCLdX
-XfMAABlcAQDpSRM4ItstpNQTJQlbvnTVurWBWiXOL6uxA7CGOqbJtAD7BXs+
-edwluN4w9GwXxi915tUn08bFtOO20eMLHYWG2QA=
-=wzwB
------END PGP SIGNATURE-----
-
-
---------9d048d0e0cb399a0645404c5cb1bce9a441fd0e2f0446c7feb16e2cc0383f481--
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+index 285c008cbf9c..9ba14c37bbcc 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+@@ -7,14 +7,14 @@ char _license[] SEC("license") = "GPL";
+ 
+ unsigned long last_sym_value = 0;
+ 
+-static inline char tolower(char c)
++static inline char to_lower(char c)
+ {
+ 	if (c >= 'A' && c <= 'Z')
+ 		c += ('a' - 'A');
+ 	return c;
+ }
+ 
+-static inline char toupper(char c)
++static inline char to_upper(char c)
+ {
+ 	if (c >= 'a' && c <= 'z')
+ 		c -= ('a' - 'A');
+@@ -54,7 +54,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
+ 	type = iter->type;
+ 
+ 	if (iter->module_name[0]) {
+-		type = iter->exported ? toupper(type) : tolower(type);
++		type = iter->exported ? to_upper(type) : to_lower(type);
+ 		BPF_SEQ_PRINTF(seq, "0x%llx %c %s [ %s ] ",
+ 			       value, type, iter->name, iter->module_name);
+ 	} else {
+-- 
+2.34.1
 
