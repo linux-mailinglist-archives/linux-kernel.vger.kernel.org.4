@@ -2,281 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06FE6411FD
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB0A641200
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbiLCA0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 19:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S234968AbiLCA1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 19:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234865AbiLCA0r (ORCPT
+        with ESMTP id S234931AbiLCA1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 19:26:47 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7F3F233E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:26:42 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id l15so7493515qtv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 16:26:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H6oyGA7JzpPsUWYTAA2/030qT9cSN6sDgncpoKJKE2Q=;
-        b=T/LJJSaG/DQqkLUJQqoGkGenM5T0SxLC+y8PG0mxyXIbqMneGDZsXXtKhbUxZFNFdq
-         Z/SOhxajUjNeQd2Rgk7LnQOuCraoycMgNxLaCAKgQOQ1z2C/Elnpe1X15FOoKm+TInrL
-         ORj8fsMsRU+cxnX2dL1bwtIUPvYQghJhJ0PtMboqR5YAMAdQJm15FbQDwr96Nf22SVbm
-         JzqdKhKWQeF58j5QH0XN9VfbbsLcP3OLxllwNSEarsReojQdu6jp9XlgUAsFph2vgDMI
-         /q0RthXA4swaWpKFBkcdiQpIZOExhPzLsZiYMUJrQS6qSl2NdtHv3LM1jjlOQ+FfY0+J
-         L8hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H6oyGA7JzpPsUWYTAA2/030qT9cSN6sDgncpoKJKE2Q=;
-        b=15UAhTjf3T/Lr9uNr5UZhkhNPsg0jeqQYAk5zGQ8JfGbdc8+9fhAcrlGwOwUeQQCbP
-         3dp/g4kQkqSGg/+3wo2GacLzPSOqaeO5fF48ZFav/EiTVS6vYyqgYbeWYJ371lwT9s1z
-         xGGfMVt/qc/zxzELiAn2Mr/R++dOvSd3Y1Tik5vIswLM8/TdrraJzWrHItcapB5i5pfe
-         FOk2T7V8Ceq5mvW+EGuOO1pXZ5wo2mCc3mnDYSvhyjQkWe0SS+JDeyamQuRekueEzJWP
-         Gp/cupHZHHVF1PTxd1X0o8298XiFKBlXiTnnJqEDD7E9IOP3ot57Iq6Ratc4PLdgwKni
-         mxyg==
-X-Gm-Message-State: ANoB5pkuyK6UiNOgX68rRZw/saKJAmBaInHaIoTyefoAposHQAc+nNqN
-        R5RyJWZ8GIvAxg5E/LblLkgaFCnsB4ueEyfqxPwMJA==
-X-Google-Smtp-Source: AA0mqf6epze0fKqzBEapqtULsddckDJB9LkpGiF4LjVms4jK3h6u+84RunBv9T7dWcM92U81yT95Vb6jTvm6IyzuSsQ=
-X-Received: by 2002:a05:622a:6022:b0:398:5f25:649 with SMTP id
- he34-20020a05622a602200b003985f250649mr69017714qtb.673.1670027200882; Fri, 02
- Dec 2022 16:26:40 -0800 (PST)
+        Fri, 2 Dec 2022 19:27:11 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE77F37E9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670027225; x=1701563225;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=hmVOZYYzKne42okVvFPsEfB/c5ZW77QuseNyn/+M7Bs=;
+  b=ZT16u1137ttk0zvMqwm2qKvRtBzPs3bH8jbLSSyh1G0+rw02M45fzzQm
+   9oTywx3B4xsktV2Dd9XialxAdkkxNclS4hv3kq8Ro0qp+ITULWXkmq7ft
+   9YXUfDzTCdZFTHWggdOLZ1jp9t0dzmezhZkQx1aa+fiUpd4DBf250zxOq
+   Y9IFqueR0ndkUJ0HpunomzU4R6AtaG7jJjC5ytCNghhQUFh9GJUP4MOKv
+   guLljgzI7B4ug3NNFFGRN+XVGb7+Z1+cCGgheq4R8jdMwKEBdXxjSk9q+
+   GB4We2G87BFR47P2hL8lIMJ3PwA5Y9yIOHMB2i3wh3yUH5/6Q1u5AB9Ot
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="402352852"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="402352852"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:27:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="733996326"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="733996326"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Dec 2022 16:27:05 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 2 Dec 2022 16:27:04 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 2 Dec 2022 16:27:04 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 2 Dec 2022 16:27:04 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e67xH8VozAUiZqJSRJpaxYjamJcMvP46fgpGiFSqwB0/8CtBLNx/fHtcVDMCfd/pYV+B2ZyjUH7cdmtipwm0U6d9WFOMdvhB1ae3qZVag3gwPeVkLVA/jCFNk2L8I1ksNvNkLJDa7h/aQ97/vzGKXnscsgvZ7MGztKQYKgQl7buDsG9bBLMytxNu5ZPGOH1ziwst+SW3E5ZpwJVp5LPQht/B3oa0DD1h6+A+Vdyy8nFhM/WfsH0C28sSuNmi8bzDnj1Xjhc7gk6wroEDQn8l1hViT4mDlynQiInr/mPRqdYsC2Hue1xwYRA3XCvCv7py2Py+HzdocqWN3fh/dYmtGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IF8H6rMfN3Az7pFlv3RG7gK6pcKVeeIL2ylHKtQayZM=;
+ b=OIYWesoAlbv7ocrE0jJLwOeRa3buNWseikK8eLiP7pO9PaQdDyv1Qz7AulwA/2m2+BR+VwdiUu1l/cCRYNAZ166RK8+mFE7ohvSEFBSW3Ppxoq6rRWFQWd+OLI7HSfrahVCMeaCqM2EZzX9WJ/d4eu2AbYoBaL6k14gzkN5yPzmzKmtLdSGfAYnvxru3lDXjan37tmewcZHs3d1S16Zl4yFnCdD3IPtSGLru7B4CXQFZysLfnXqnFNqTMcegLsCal37aEQgbgEaZ6oIrpaKq5p3Ip7ZbRgDTWWmg3Pg3iSQlaTbgc51IQX1ba1Ow2988SkkXQLOBtEFoPeM9ADDKnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ by DS0PR11MB7334.namprd11.prod.outlook.com (2603:10b6:8:11d::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Sat, 3 Dec
+ 2022 00:27:01 +0000
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad]) by SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad%4]) with mapi id 15.20.5880.011; Sat, 3 Dec 2022
+ 00:27:01 +0000
+Date:   Fri, 2 Dec 2022 16:26:58 -0800
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     Borislav Petkov <bp@alien8.de>, X86-kernel <x86@kernel.org>,
+        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>, <alison.schofield@intel.com>,
+        <reinette.chatre@intel.com>, Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [Patch V1 1/7] x86/microcode/intel: Remove redundant microcode
+ rev pr_info()s
+Message-ID: <Y4qX0uGWhqWO3vee@a4bf019067fa.jf.intel.com>
+References: <20221129210832.107850-1-ashok.raj@intel.com>
+ <20221129210832.107850-2-ashok.raj@intel.com>
+ <87cz91pr8d.ffs@tglx>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <87cz91pr8d.ffs@tglx>
+X-ClientProxiedBy: BY5PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::22) To SJ1PR11MB6201.namprd11.prod.outlook.com
+ (2603:10b6:a03:45c::14)
 MIME-Version: 1.0
-References: <20221202031512.1365483-1-yosryahmed@google.com> <20221202031512.1365483-2-yosryahmed@google.com>
-In-Reply-To: <20221202031512.1365483-2-yosryahmed@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 2 Dec 2022 16:26:05 -0800
-Message-ID: <CAJD7tkZouk+r=Qk554AOk1-3eYy-gTC8KC+OJQY13ZkNZ9Qe+Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] mm: memcg: fix stale protection of reclaim target memcg
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Tejun Heo <tj@kernel.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chris Down <chris@chrisdown.name>,
-        David Rientjes <rientjes@google.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|DS0PR11MB7334:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9cb10b3-29fb-4bcd-cd15-08dad4c518a2
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7lQ/eCu7s7JPTcHfFfrKWNwI37yEqo8wz5kaH1XYuywPuoR5+gNNCZhiIrZDoiD8tNSlM6Y+lmGfnYSREO2ga2W9wQteGRpQONUCAwgPnLdTkPitaTxX+SXa7Q9mBlDHIUNgTLr2+MZJRwc+c8bP9vWOQjPFVD0HXkxYqDuYSutfnWKmZzVP6x2YOzzJyfWWHd9ivWNU+lECrjHQy9mv9IKgbNC8BZX0V3MbXiZNgLFhKHtgtSSODd9PxY/5LqFZ+Q5guBwFMzYVRGC2frWgzgyN/JaZsZYvLvniKxDm6BlhgoRGmbyfNgqTLrxEfPU8EwVX+Fns93d2NLBsgA6ZpnRzkKFp/kyP1u89CTtQJYytgRQH9vWPQ+A0LFTavDpZ+C0LAu3VAYwW9F96eHRZLmHXFWykF0YZOgMHjHp6yuDZ07nCgS9lx0hvA2uV7jSDyx82ACPBtLTm6y5FoprZr0Ww25fso6g4Xj92CR5pMnP7GP82v6Qs77c3J2p6iplFwgz2mezOPm8yTNqHjgOSBajikNkzgEmxLZ0gxOri6TNxkJpnLiPCMOzcFAJz7BvruyZjV+oZDDfIapixM/ANoPyJWXAyJs+XYFYgjlRNwtbXWM1qzTMuX3Wn4SYZIw7agi1C/UW6pe6oGrt3WpR9rw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(396003)(136003)(366004)(346002)(451199015)(82960400001)(26005)(38100700002)(6916009)(86362001)(5660300002)(6512007)(316002)(66556008)(66946007)(4326008)(66476007)(54906003)(8936002)(107886003)(6666004)(8676002)(44832011)(2906002)(83380400001)(6506007)(478600001)(6486002)(186003)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qzyLV/zH6vbU9GETdvNQ9vwlgXY+sM3fPDarLnBT/YUiqmo2p2KkvmiMlra0?=
+ =?us-ascii?Q?Hk8TAnNDLJoxLrh9c608Fc7Tw1/XNCa8M5cWqlsX1hXfqkE7XgaEW7QfGGyX?=
+ =?us-ascii?Q?c5sse9iyx1q9B9NUCH6n4Aw0xIirY5gf3ddxEa7rdBMklhkDD617um6m7FBL?=
+ =?us-ascii?Q?Y02AHzSmLfpIBRJd+7UsgZw8mtUSExza5s1oUwc1BqSpcjkU2a5cnQMHt0c7?=
+ =?us-ascii?Q?RIDIZDR1LggPEne1UC4vc7U4fYVINf5oq5KjNTEThGGqv8V5dsces2AWslvy?=
+ =?us-ascii?Q?mdurwQe5fIrZ+Yj4OKTF1c0kKPJmAhlom/L3gQo7P++Ac84fepZdkU1GM3wY?=
+ =?us-ascii?Q?VyMKu5EB3Jx8sBzQ1QN3iMGSgnmFv7VNxFl3G0mBrVXmZszAr3D4Cu78bK9I?=
+ =?us-ascii?Q?6b14A4b0Ps5du8LgCxeTX5nd0foEzSyw3aXytZ9Qe7bI8e4XKLIkVH1gN0Xh?=
+ =?us-ascii?Q?gn0qe2aOFSEgUH41KifxvYdCsgINm7r9M1UGOvpd9dgJjTUPp1/jL6rLqF40?=
+ =?us-ascii?Q?RSaZZ/m01Vf4HKQiu0V/teZeKeOLk6IL/LPjYXET/FiiQ0GMGnWSeRoHcVBS?=
+ =?us-ascii?Q?3hvHtc58TMuEdCN7sPh8WoLirb08bcSxyF+bbZScF2UKPZLA9U5H6u5+g3qY?=
+ =?us-ascii?Q?WDG4i8T/B/1m02+A6S6YCbfgp4hoKgPDuGYVZx0AExOzi2jdowgvh3jGMLAp?=
+ =?us-ascii?Q?kfepkJ0ObMG2jwmEa2uN/I5AGLYS9kc9DfmZ1E0tUtTnxEG48zilFtH8goo1?=
+ =?us-ascii?Q?S3qhQnt0tgKcqgCoz+6hSxRlVR8zZjobWcW78rkiXrmX9/lslplU77MV6oqF?=
+ =?us-ascii?Q?gDDXMcLWymu+pRamp+s4lje9VzUqi92P455c7IGI8wLt6qARGujycct/27nR?=
+ =?us-ascii?Q?SYaKby7evzYTA1Kfh6sFphX23msXRtt5jgELgZIQp0l3Cp8+nyDk2seAAh61?=
+ =?us-ascii?Q?iFjnW9vRnf/fwtO2/cDR2XkbxWUSH5rUzZQlv+KC8d6LZG4SkHDYdNyVC2cn?=
+ =?us-ascii?Q?fRXEFS1WrH9B2EZTPG062+1dzITvNyJOOFizqfuGb8wlV3lVkZv2FvhBDdmU?=
+ =?us-ascii?Q?fqmolNHJNsU+2kB12hTwKoXCMtBGDYOofuC1hK2DwGKHOWQb1m2IXcwJjS+O?=
+ =?us-ascii?Q?frM6h3a6ip8Gl3P9oqbkjlfK+9tI6wpV8IU8MZwZS3xTv6wUtb/Gk259YL3y?=
+ =?us-ascii?Q?K2D3hY6F+opHq7e1/WnOMw5T9oqpc5vd4BRhg3z9uXSvLM3q0BWCejkfJwk0?=
+ =?us-ascii?Q?NM95bv/IOH3rAyQY5XBQqGwKAWc8/QyVRi29232gSvqP1yBcJN/uPYFpV+71?=
+ =?us-ascii?Q?pilyu+MkynkTD6bFM7hKDvQHnR8UgkIiLJhk+bi1xUSEwHTu7/w57UzySJdu?=
+ =?us-ascii?Q?0jO9NdiDJKlHqdLsJW7qo7ak+Z54BMpw5aLXMpiBGX8x2rCHZ6gMhJZrTmJR?=
+ =?us-ascii?Q?KFcz8oQm0hLBVMV1RqCv8M6GVjhDPYgpn6nP7SxfVCi0hBlkRhXOgh1hnyRX?=
+ =?us-ascii?Q?ARH5IDZxZ/x2Lidno1jWAiZ2fOam40qK0O9V2X8EdDMlhNNsd06VD2TOXsy3?=
+ =?us-ascii?Q?ApUFfai7sXrcCCifVF3/2qmEaCoig+952BUVVjjg4E7h14kTMlS0uct/kHsQ?=
+ =?us-ascii?Q?nw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9cb10b3-29fb-4bcd-cd15-08dad4c518a2
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2022 00:27:01.4877
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DOrSCIC/U3wpct236FZvJou9Z3bvrR0TZi7r7WoI1sVhTmGTR0xPgYr2MrN0alYS1AHhePBrHfZQV4lgV6Xugw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7334
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew, does this need to be picked up by stable branches?
+On Fri, Dec 02, 2022 at 07:58:42PM +0100, Thomas Gleixner wrote:
+> Ashok!
+> 
+> On Tue, Nov 29 2022 at 13:08, Ashok Raj wrote:
+> > There is a pr_info() to dump information about newly loaded microcode.
+> 
+> There... Somewhere, right?
 
-On Thu, Dec 1, 2022 at 7:15 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> During reclaim, mem_cgroup_calculate_protection() is used to determine
-> the effective protection (emin and elow) values of a memcg. The
-> protection of the reclaim target is ignored, but we cannot set their
-> effective protection to 0 due to a limitation of the current
-> implementation (see comment in mem_cgroup_protection()). Instead,
-> we leave their effective protection values unchaged, and later ignore it
-> in mem_cgroup_protection().
->
-> However, mem_cgroup_protection() is called later in
-> shrink_lruvec()->get_scan_count(), which is after the
-> mem_cgroup_below_{min/low}() checks in shrink_node_memcgs(). As a
-> result, the stale effective protection values of the target memcg may
-> lead us to skip reclaiming from the target memcg entirely, before
-> calling shrink_lruvec(). This can be even worse with recursive
-> protection, where the stale target memcg protection can be higher than
-> its standalone protection. See two examples below (a similar version of
-> example (a) is added to test_memcontrol in a later patch).
->
-> (a) A simple example with proactive reclaim is as follows. Consider the
-> following hierarchy:
-> ROOT
->  |
->  A
->  |
->  B (memory.min = 10M)
->
-> Consider the following scenario:
-> - B has memory.current = 10M.
-> - The system undergoes global reclaim (or memcg reclaim in A).
-> - In shrink_node_memcgs():
->   - mem_cgroup_calculate_protection() calculates the effective min (emin)
->     of B as 10M.
->   - mem_cgroup_below_min() returns true for B, we do not reclaim from B.
-> - Now if we want to reclaim 5M from B using proactive reclaim
->   (memory.reclaim), we should be able to, as the protection of the
->   target memcg should be ignored.
-> - In shrink_node_memcgs():
->   - mem_cgroup_calculate_protection() immediately returns for B without
->     doing anything, as B is the target memcg, relying on
->     mem_cgroup_protection() to ignore B's stale effective min (still 10M).
->   - mem_cgroup_below_min() reads the stale effective min for B and we
->     skip it instead of ignoring its protection as intended, as we never
->     reach mem_cgroup_protection().
->
-> (b) An more complex example with recursive protection is as follows.
-> Consider the following hierarchy with memory_recursiveprot:
-> ROOT
->  |
->  A (memory.min = 50M)
->  |
->  B (memory.min = 10M, memory.high = 40M)
->
-> Consider the following scenario:
-> - B has memory.current = 35M.
-> - The system undergoes global reclaim (target memcg is NULL).
-> - B will have an effective min of 50M (all of A's unclaimed protection).
-> - B will not be reclaimed from.
-> - Now allocate 10M more memory in B, pushing it above it's high limit.
-> - The system undergoes memcg reclaim from B (target memcg is B).
-> - Like example (a), we do nothing in mem_cgroup_calculate_protection(),
->   then call mem_cgroup_below_min(), which will read the stale effective
->   min for B (50M) and skip it. In this case, it's even worse because we
->   are not just considering B's standalone protection (10M), but we are
->   reading a much higher stale protection (50M) which will cause us to not
->   reclaim from B at all.
->
-> This is an artifact of commit 45c7f7e1ef17 ("mm, memcg: decouple
-> e{low,min} state mutations from protection checks") which made
-> mem_cgroup_calculate_protection() only change the state without
-> returning any value. Before that commit, we used to return
-> MEMCG_PROT_NONE for the target memcg, which would cause us to skip the
-> mem_cgroup_below_{min/low}() checks. After that commit we do not return
-> anything and we end up checking the min & low effective protections for
-> the target memcg, which are stale.
->
-> Update mem_cgroup_supports_protection() to also check if we are
-> reclaiming from the target, and rename it to mem_cgroup_unprotected()
-> (now returns true if we should not protect the memcg, much simpler logic).
->
-> Fixes: 45c7f7e1ef17 ("mm, memcg: decouple e{low,min} state mutations from protection checks")
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  include/linux/memcontrol.h | 31 +++++++++++++++++++++----------
->  mm/vmscan.c                | 11 ++++++-----
->  2 files changed, 27 insertions(+), 15 deletions(-)
->
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index e1644a24009c..d3c8203cab6c 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -615,28 +615,32 @@ static inline void mem_cgroup_protection(struct mem_cgroup *root,
->  void mem_cgroup_calculate_protection(struct mem_cgroup *root,
->                                      struct mem_cgroup *memcg);
->
-> -static inline bool mem_cgroup_supports_protection(struct mem_cgroup *memcg)
-> +static inline bool mem_cgroup_unprotected(struct mem_cgroup *target,
-> +                                         struct mem_cgroup *memcg)
->  {
->         /*
->          * The root memcg doesn't account charges, and doesn't support
-> -        * protection.
-> +        * protection. The target memcg's protection is ignored, see
-> +        * mem_cgroup_calculate_protection() and mem_cgroup_protection()
->          */
-> -       return !mem_cgroup_disabled() && !mem_cgroup_is_root(memcg);
-> -
-> +       return mem_cgroup_disabled() || mem_cgroup_is_root(memcg) ||
-> +               memcg == target;
->  }
->
-> -static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-> +static inline bool mem_cgroup_below_low(struct mem_cgroup *target,
-> +                                       struct mem_cgroup *memcg)
->  {
-> -       if (!mem_cgroup_supports_protection(memcg))
-> +       if (mem_cgroup_unprotected(target, memcg))
->                 return false;
->
->         return READ_ONCE(memcg->memory.elow) >=
->                 page_counter_read(&memcg->memory);
->  }
->
-> -static inline bool mem_cgroup_below_min(struct mem_cgroup *memcg)
-> +static inline bool mem_cgroup_below_min(struct mem_cgroup *target,
-> +                                       struct mem_cgroup *memcg)
->  {
-> -       if (!mem_cgroup_supports_protection(memcg))
-> +       if (mem_cgroup_unprotected(target, memcg))
->                 return false;
->
->         return READ_ONCE(memcg->memory.emin) >=
-> @@ -1209,12 +1213,19 @@ static inline void mem_cgroup_calculate_protection(struct mem_cgroup *root,
->  {
->  }
->
-> -static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-> +static inline bool mem_cgroup_unprotected(struct mem_cgroup *target,
-> +                                         struct mem_cgroup *memcg)
-> +{
-> +       return true;
-> +}
-> +static inline bool mem_cgroup_below_low(struct mem_cgroup *target,
-> +                                       struct mem_cgroup *memcg)
->  {
->         return false;
->  }
->
-> -static inline bool mem_cgroup_below_min(struct mem_cgroup *memcg)
-> +static inline bool mem_cgroup_below_min(struct mem_cgroup *target,
-> +                                       struct mem_cgroup *memcg)
->  {
->         return false;
->  }
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 04d8b88e5216..79ef0fe67518 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -4486,7 +4486,7 @@ static bool age_lruvec(struct lruvec *lruvec, struct scan_control *sc, unsigned
->
->         mem_cgroup_calculate_protection(NULL, memcg);
->
-> -       if (mem_cgroup_below_min(memcg))
-> +       if (mem_cgroup_below_min(NULL, memcg))
->                 return false;
->
->         need_aging = should_run_aging(lruvec, max_seq, min_seq, sc, swappiness, &nr_to_scan);
-> @@ -5047,8 +5047,9 @@ static unsigned long get_nr_to_scan(struct lruvec *lruvec, struct scan_control *
->         DEFINE_MAX_SEQ(lruvec);
->         DEFINE_MIN_SEQ(lruvec);
->
-> -       if (mem_cgroup_below_min(memcg) ||
-> -           (mem_cgroup_below_low(memcg) && !sc->memcg_low_reclaim))
-> +       if (mem_cgroup_below_min(sc->target_mem_cgroup, memcg) ||
-> +           (mem_cgroup_below_low(sc->target_mem_cgroup, memcg) &&
-> +            !sc->memcg_low_reclaim))
->                 return 0;
->
->         *need_aging = should_run_aging(lruvec, max_seq, min_seq, sc, can_swap, &nr_to_scan);
-> @@ -6048,13 +6049,13 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
->
->                 mem_cgroup_calculate_protection(target_memcg, memcg);
->
-> -               if (mem_cgroup_below_min(memcg)) {
-> +               if (mem_cgroup_below_min(target_memcg, memcg)) {
->                         /*
->                          * Hard protection.
->                          * If there is no reclaimable memory, OOM.
->                          */
->                         continue;
-> -               } else if (mem_cgroup_below_low(memcg)) {
-> +               } else if (mem_cgroup_below_low(target_memcg, memcg)) {
->                         /*
->                          * Soft protection.
->                          * Respect the protection only as long as
-> --
-> 2.39.0.rc0.267.gcb52ba06e7-goog
->
+I'll make it clear, updated commit log below.
+
+> 
+> > The code intends this pr_info() to be just once, but the check to ensure
+> > is racy. Unfortunately this happens quite often in with this new change
+> > resulting in multiple redundant prints on the console.
+> 
+> -ENOPARSE. Can you try to express that in coherent sentences please?
+
+:-)
+
+> 
+> > microcode_init()->schedule_on_each_cpu(setup_online_cpu)->collect_cpu_info
+> >
+> > [   33.688639] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+> > [   33.688659] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+> > [   33.688660] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+> >
+> > There is already a pr_info() in microcode/core.c as shown below:
+> >
+> > microcode: Reload completed, microcode revision: 0x2b000041 -> 0x2b000070
+> 
+> There are quite some pr_info()'s in microcode/core.c...
+> 
+> $function_name() prints the new and the previous microcode revision once
+> when the load has completed:
+> 
+>   microcode: Reload completed, microcode revision: 0x2b000041 -> 0x2b000070
+> 
+> Hmm?
+
+Agreed!
+
+> 
+> > The sig and pf aren't that useful to end user, they are available via
+> 
+> The sig and pf ?!? Come on, you really can do better.
+> 
+> > /proc/cpuinfo and this never changes between microcode loads.
+> >
+> > Remove the redundant pr_info() and the racy single print checks. This
+> > removes the race entirely, zap the duplicated pr_info() spam and
+> > simplify the code.
+> 
+> The last sentence does not qualify as coherent either.
+> 
+> Other than that. Nice cleanup.
+> 
+Thanks!. I'll try to get better at the commit log stuff 
+
+Updated commit log looks like below. Hope it doesn't get a -ENOPARSE this
+time. :-)
+
+------------------------
+
+This code in collect_cpu_info() simply checks with a static variable "prev",
+but when multiple CPUs are running this in parallel it is racy and we notice
+the pr_info() couple times. The original intend was to print this just once.
+
+New sequence shown below:
+
+microcode_init()->schedule_on_each_cpu(setup_online_cpu)->collect_cpu_info
+
+Resulting multiple prints below:
+
+[   33.688639] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+[   33.688659] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+[   33.688660] microcode: sig=0x50654, pf=0x80, revision=0x2006e05
+
+There is already a pr_info() in microcode_reload_late() that shows both the
+old and new revisions as shown below.
+
+microcode: Reload completed, microcode revision: 0x2b000041 -> 0x2b000070
+
+The CPU signature (sig=0x50654) and Processor Flags (pf=0x80) above aren't
+that useful to end user, they are available via /proc/cpuinfo and this never
+changes between microcode loads.
+
+Remove the redundant pr_info().
