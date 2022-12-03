@@ -2,199 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191F46412BA
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B2264125F
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbiLCAoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 19:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S235057AbiLCAkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 19:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbiLCAmJ (ORCPT
+        with ESMTP id S234955AbiLCAkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 19:42:09 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54E4FB88D;
-        Fri,  2 Dec 2022 16:38:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670027918; x=1701563918;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=IEms/ukaJcEhqIOw9O3rDng3eVx/Cw+mUObHcCDOvMo=;
-  b=VmQJtG/wplIYftv8Ytm+ntwscUXvPWhieTMLJyZCffG6GL3nu9bSQ4Jo
-   3vxLsJnGI5GailneJC/yTjN9tZDrBWZZ+vOUx86a9pFROW4Mi+Z1pTzlK
-   tX7VXFa6watwdEDg81CLlG8TpFOdxYPPqJlU3iTHP0CFX8frGYH3ebKow
-   Vn5JEHJSLUx1uX/pbcZB8nC2zRqTWu7+gb+vgkw+ZRnWf25y2sOSmKh7p
-   AzJgZE0NXzYk2OFO2i3H8eymO3auO3LUXKLP38EbLUsempZrYecGsF8hY
-   biUSfCpvAWJ1aIyhiGviwry0BQha6zfZcX39vDqAcJRVsdYA7YP6d9M0p
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313711706"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="313711706"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787480082"
-X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="787480082"
-Received: from bgordon1-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.211.211])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:55 -0800
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v4 39/39] x86/shstk: Add ARCH_SHSTK_STATUS
-Date:   Fri,  2 Dec 2022 16:36:06 -0800
-Message-Id: <20221203003606.6838-40-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 19:40:04 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566A41E702
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 16:37:49 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id o8-20020a170902d4c800b001898ea5e030so8022267plg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 16:37:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5cHO8TZ/NgQcG2/A3zvYgffqJLlGYe3zpPYcN2k37Z8=;
+        b=pJ5S5cEuTvr85SuayQOIMCDdKWDVpy5OfbTE8O7P7h6XgCY255xnijRFmkiZ6EEcfK
+         0lvECxqT6/3GkdRxF/jHKq5xohT1ObE6VE0Eibrb61uGMu6SUgQDwJD5BuPCdzjGOn9q
+         w8WhVgihJlIX8q2tXFA/U3boujzOhTlnSt7t24WoG1kH8y5WTsMub2143mrSyJaF1X6l
+         mC5lwHiuvETDepkPUjzzNhWRnRMTvjaZGwHXXtOJReduP/6a2VVdSn9f2Ujf2Bk4ahPE
+         Yy2xn+kT64NeaqpZCY6OxKsq6xl3GXNm/57OWtp2FfrcJS4USF+4PvWMehUxpEoBYyFU
+         UI0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5cHO8TZ/NgQcG2/A3zvYgffqJLlGYe3zpPYcN2k37Z8=;
+        b=xQeu1zJSE1VNcz00gGtAvUws/bMC5kIPy3xxVOIxu8GWnGM23n1gXt1eU60h6N5Hhz
+         DkvPzQtlNOUdGWLv/T4sW7bwdabjToKAx2RJoIYqj+fDJhUYGBj+IAcoAgTFvU+Q7ZiW
+         gl3NqTLMImfUbOInOFIzchjCyhEnm9LWgwrWu5CKaXjMPlgAGpokVxQti2X+tFxOc7W4
+         PRpzDn2UtoxxwFk8cQGpOl3s9/6fowAVHEhwUdMqXGeq/xDhkgvaEyMikdwNJ0KdcLkx
+         etuWl8/TyFepmGIRaxNEAER5XKFfG1FB/x5o2100+oxOdKbfl9KitfNTJ0QCInO9AbA9
+         1R6A==
+X-Gm-Message-State: ANoB5pkypEU282zX7twDeAO1akr/VwvSJhxKBuFBy9ZEJiB9jNpq8zbQ
+        FeJk0/C8x8qbUQOZe/V0n0biJY+GIc4=
+X-Google-Smtp-Source: AA0mqf7/Ed+dwcaWqhy6TT5UzFpiCfj7GO7PwtVZkzR3c7Pc0vUlcNewIK1n6B82nA+cULogbBYGuW/XRTU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:4946:0:b0:477:7c87:1087 with SMTP id
+ y6-20020a634946000000b004777c871087mr52392327pgk.452.1670027868906; Fri, 02
+ Dec 2022 16:37:48 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Sat,  3 Dec 2022 00:37:42 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221203003745.1475584-1-seanjc@google.com>
+Subject: [PATCH 0/3] x86/cpu: KVM: Make SGX and VMX depend on FEAT_CTL
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CRIU and GDB need to get the current shadow stack and WRSS enablement
-status. This information is already available via /proc/pid/status, but
-this is incovienent for CRIU because it involves parsing the text output
-in an area of the code where this is difficult. Provide a status
-arch_prctl(), ARCH_SHSTK_STATUS for retrieving the status. Have arg2 be a
-userspace address, and make the new arch_prctl simply copy the features
-out to userspace.
+"Officially" make SGX and VMX depend on X86_FEATURE_MSR_IA32_FEAT_CTL,
+and drop manual checks on X86_FEATURE_MSR_IA32_FEAT_CTL when querying
+VMX support.
 
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-Requested-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
----
+To make dependencies on MSR_IA32_FEAT_CTL work as expected, process all
+CPUID dependencies at the end of CPU indentification.  Because
+MSR_IA32_FEAT_CTL is a synthetic flag, it is effectively off-by-default,
+and thus may never be unset via clear_cpu_cap(), i.e. never triggers
+processing of its dependents.
 
-v4:
- - New patch
+The obvious alternative would be to explicitly clear MSR_IA32_FEAT_CTL if
+the MSR is unsupported, but that ends up being rather ugly as it would
+require clearing the flag in default_init() to handle the scenario where
+hardware supports the MSR, but the kernel was built without support for the
+CPU vendor.  E.g. running on an Intel CPU with CPU_SUP_INTEL=n.  This edge
+case is also why the existing manual checks in KVM are necessary; KVM_INTEL
+effectively depends on any of CPU_SUP_{INTEL,CENATUR,ZHAOXIN}.
 
- Documentation/x86/shstk.rst       | 6 ++++++
- arch/x86/include/asm/shstk.h      | 4 ++--
- arch/x86/include/uapi/asm/prctl.h | 1 +
- arch/x86/kernel/process_64.c      | 1 +
- arch/x86/kernel/shstk.c           | 8 +++++++-
- 5 files changed, 17 insertions(+), 3 deletions(-)
+Processing all dependencies also seems like the correct thing to do across
+the board, e.g. if the kernel ends up with more synthetic features with
+dependents.
 
-diff --git a/Documentation/x86/shstk.rst b/Documentation/x86/shstk.rst
-index 0d7d1ccfff06..b3eb87046c27 100644
---- a/Documentation/x86/shstk.rst
-+++ b/Documentation/x86/shstk.rst
-@@ -77,6 +77,11 @@ arch_prctl(ARCH_SHSTK_UNLOCK, unsigned long features)
-     Unlock features. 'features' is a mask of all features to unlock. All
-     bits set are processed, unset bits are ignored. Only works via ptrace.
- 
-+arch_prctl(ARCH_SHSTK_STATUS, unsigned long addr)
-+    Copy the currently enabled features to the address passed in addr. The
-+    features are described using the bits passed into the others in
-+    'features'.
-+
- The return values are as following:
-     On success, return 0. On error, errno can be::
- 
-@@ -84,6 +89,7 @@ The return values are as following:
-         -EOPNOTSUPP if the feature is not supported by the hardware or
-          disabled by kernel parameter.
-         -EINVAL arguments (non existing feature, etc)
-+        -EFAULT if could not copy information back to userspace
- 
- The feature's bits supported are::
- 
-diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-index c82f22fd5e6d..23bfb63c597d 100644
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -15,7 +15,7 @@ struct thread_shstk {
- 	u64	size;
- };
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features);
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2);
- void reset_thread_features(void);
- int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
- 			     unsigned long stack_size,
-@@ -31,7 +31,7 @@ static inline bool shstk_enabled(void)
- }
- #else
- static inline long shstk_prctl(struct task_struct *task, int option,
--			     unsigned long features) { return -EINVAL; }
-+			     unsigned long arg2) { return -EINVAL; }
- static inline void reset_thread_features(void) {}
- static inline int shstk_alloc_thread_stack(struct task_struct *p,
- 					   unsigned long clone_flags,
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 0c95688cf58e..abe3fe6db6d2 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -31,6 +31,7 @@
- #define ARCH_SHSTK_DISABLE		0x5002
- #define ARCH_SHSTK_LOCK			0x5003
- #define ARCH_SHSTK_UNLOCK		0x5004
-+#define ARCH_SHSTK_STATUS		0x5005
- 
- /* ARCH_SHSTK_ features bits */
- #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 2be6e01fb144..5dcf5426241b 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -922,6 +922,7 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_SHSTK_DISABLE:
- 	case ARCH_SHSTK_LOCK:
- 	case ARCH_SHSTK_UNLOCK:
-+	case ARCH_SHSTK_STATUS:
- 		return shstk_prctl(task, option, arg2);
- 	default:
- 		ret = -EINVAL;
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index 95579f7bace3..05f8dcc19dbc 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -448,8 +448,14 @@ SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsi
- 	return alloc_shstk(addr, aligned_size, size, set_tok);
- }
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features)
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2)
- {
-+	unsigned long features = arg2;
-+
-+	if (option == ARCH_SHSTK_STATUS) {
-+		return put_user(task->thread.features, (unsigned long __user *)arg2);
-+	}
-+
- 	if (option == ARCH_SHSTK_LOCK) {
- 		task->thread.features_locked |= features;
- 		return 0;
+The placement of the call to apply_cpuid_deps() isn't super scientific.  I
+placed it after, AFAICT, the overwhelming majority of cpu cap updates had
+already been done, but before anything was likely to want the dependencies
+to be processed.  Specifically, I couldn't find any set_cpu_caps() in the
+machine check code, but there are definitely cpu_has() calls under
+mcheck_cpu_init().
+
+Last thought, patch 3 will conflict with at least one in-flight KVM series[*].
+The conflict should be straightfoward to resolve, but at the same time this
+is far from urgent, i.e. kicking this series down the road until KVM settles
+down is totally ok.
+
+[*] https://lore.kernel.org/all/20221130230934.1014142-1-seanjc@google.com
+
+Sean Christopherson (3):
+  x86/cpu: Process all CPUID dependencies after identifying CPU info
+  x86/cpu: Mark SGX and VMX as being dependent on MSR_IA32_FEAT_CTL
+  KVM: VMX: Drop manual checks on X86_FEATURE_MSR_IA32_FEAT_CTL
+
+ arch/x86/include/asm/cpufeature.h |  1 +
+ arch/x86/kernel/cpu/bugs.c        |  3 +--
+ arch/x86/kernel/cpu/common.c      |  6 ++++++
+ arch/x86/kernel/cpu/cpuid-deps.c  | 12 ++++++++++++
+ arch/x86/kernel/cpu/feat_ctl.c    |  3 +--
+ arch/x86/kvm/vmx/vmx.c            |  6 ++----
+ 6 files changed, 23 insertions(+), 8 deletions(-)
+
+
+base-commit: d800169041c0e035160c8b81f30d4b7e8f8ef777
 -- 
-2.17.1
+2.39.0.rc0.267.gcb52ba06e7-goog
 
