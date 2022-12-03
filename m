@@ -2,219 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8236413D8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CABF6413DC
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbiLCC5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S235143AbiLCC6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234876AbiLCC53 (ORCPT
+        with ESMTP id S234876AbiLCC6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:57:29 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898E0E8E3A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:57:28 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so6750420pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:57:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iYhtF06rN01RiKVEwYrT8rPN0UmjLM22d78NkfSy5+o=;
-        b=K2FfUaFyurPTkWOam4j+V72ut4fmD7TRNO64G3a4dBllPRstKCKXLTONhpMSIHWNfh
-         LU0I4KJfF6+4lY1r3y7ihKn16vV3SDNcKKijAo6PGaXpzrMiVHhu40kJavVZbq6IYVBF
-         n65aP1y46hMojSq8pi5plIXamOGD1p/1n4EWs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iYhtF06rN01RiKVEwYrT8rPN0UmjLM22d78NkfSy5+o=;
-        b=sQSphK8sYt3pyosvPb2taV/R8Wiu5WznlN7zQMyJLzZUa5jVfIS4175BifYS0HOGA3
-         s++B7kg9jx3RLl0iWMLwaXva7EQMrD8kc194wtbArke2m6bzbZja5DVaL1sczVJOB9QX
-         NsoHhx7l1X8+dcmCbzlwSta2I+yqiSTD5VVPCHq+0CabT6zKeO/3IY0fC7ctTsZtzadg
-         c9yObRKT7XC77kWY55+GCAuvBkoekY6n5NJotuv0yuyLdpSE7Cm5SoYA4fyWpdOJeoWG
-         NcDWKZdwcqbr9akopgyme3g4vB1u1dI9OSuZfXUwb5Q6FRwOHhk+PAT+J9FBKS9CtuTw
-         DOYA==
-X-Gm-Message-State: ANoB5plpUSYHuxYJ6tCSY36mXTmMQ/7hwtDnym+9EXkFB1GiGHD9OUbu
-        HrTnQpc1JK/0ZWQBGyUsv2YHeQ==
-X-Google-Smtp-Source: AA0mqf4ghrT/87SBIW4BkPBsnLTei7c1aVwVG1GGksav+yaMNE43gjtLSRrT7w5HIU312oIjd2vtlA==
-X-Received: by 2002:a17:902:7604:b0:189:c380:7c8d with SMTP id k4-20020a170902760400b00189c3807c8dmr3103679pll.136.1670036248021;
-        Fri, 02 Dec 2022 18:57:28 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q100-20020a17090a17ed00b002196b5a0efesm4692751pja.47.2022.12.02.18.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:57:27 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:57:26 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Subject: Re: [PATCH v4 39/39] x86/shstk: Add ARCH_SHSTK_STATUS
-Message-ID: <202212021857.938659D@keescook>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-40-rick.p.edgecombe@intel.com>
+        Fri, 2 Dec 2022 21:58:50 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570AEEE94D;
+        Fri,  2 Dec 2022 18:58:48 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NPDyK1nTszFprd;
+        Sat,  3 Dec 2022 10:58:01 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 3 Dec 2022 10:58:44 +0800
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Adapt 32-bit return value kfunc for
+ 32-bit ARM when zext extension
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        <colin.i.king@gmail.com>, Artem Savkov <asavkov@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>, bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20221126094530.226629-1-yangjihong1@huawei.com>
+ <20221126094530.226629-2-yangjihong1@huawei.com>
+ <20221128015758.aekybr3qlahfopwq@MacBook-Pro-5.local>
+ <dc9d1823-80f2-e2d9-39a8-c39b6f52dec5@huawei.com>
+ <CAADnVQJPRCnESmJ92W39bo-btqNbYaNsGQO0is6FD3JLU_mSjQ@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <8cb54255-4dce-6d50-d6f0-ac9af0e56f37@huawei.com>
+Date:   Sat, 3 Dec 2022 10:58:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-40-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAADnVQJPRCnESmJ92W39bo-btqNbYaNsGQO0is6FD3JLU_mSjQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:36:06PM -0800, Rick Edgecombe wrote:
-> CRIU and GDB need to get the current shadow stack and WRSS enablement
-> status. This information is already available via /proc/pid/status, but
-> this is incovienent for CRIU because it involves parsing the text output
-> in an area of the code where this is difficult. Provide a status
-> arch_prctl(), ARCH_SHSTK_STATUS for retrieving the status. Have arg2 be a
-> userspace address, and make the new arch_prctl simply copy the features
-> out to userspace.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Requested-by: Mike Rapoport <rppt@kernel.org>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> ---
-> 
-> v4:
->  - New patch
-> 
->  Documentation/x86/shstk.rst       | 6 ++++++
->  arch/x86/include/asm/shstk.h      | 4 ++--
->  arch/x86/include/uapi/asm/prctl.h | 1 +
->  arch/x86/kernel/process_64.c      | 1 +
->  arch/x86/kernel/shstk.c           | 8 +++++++-
->  5 files changed, 17 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/x86/shstk.rst b/Documentation/x86/shstk.rst
-> index 0d7d1ccfff06..b3eb87046c27 100644
-> --- a/Documentation/x86/shstk.rst
-> +++ b/Documentation/x86/shstk.rst
-> @@ -77,6 +77,11 @@ arch_prctl(ARCH_SHSTK_UNLOCK, unsigned long features)
->      Unlock features. 'features' is a mask of all features to unlock. All
->      bits set are processed, unset bits are ignored. Only works via ptrace.
->  
-> +arch_prctl(ARCH_SHSTK_STATUS, unsigned long addr)
-> +    Copy the currently enabled features to the address passed in addr. The
-> +    features are described using the bits passed into the others in
-> +    'features'.
-> +
->  The return values are as following:
->      On success, return 0. On error, errno can be::
->  
-> @@ -84,6 +89,7 @@ The return values are as following:
->          -EOPNOTSUPP if the feature is not supported by the hardware or
->           disabled by kernel parameter.
->          -EINVAL arguments (non existing feature, etc)
-> +        -EFAULT if could not copy information back to userspace
->  
->  The feature's bits supported are::
->  
-> diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-> index c82f22fd5e6d..23bfb63c597d 100644
-> --- a/arch/x86/include/asm/shstk.h
-> +++ b/arch/x86/include/asm/shstk.h
-> @@ -15,7 +15,7 @@ struct thread_shstk {
->  	u64	size;
->  };
->  
-> -long shstk_prctl(struct task_struct *task, int option, unsigned long features);
-> +long shstk_prctl(struct task_struct *task, int option, unsigned long arg2);
->  void reset_thread_features(void);
->  int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
->  			     unsigned long stack_size,
-> @@ -31,7 +31,7 @@ static inline bool shstk_enabled(void)
->  }
->  #else
->  static inline long shstk_prctl(struct task_struct *task, int option,
-> -			     unsigned long features) { return -EINVAL; }
-> +			     unsigned long arg2) { return -EINVAL; }
->  static inline void reset_thread_features(void) {}
->  static inline int shstk_alloc_thread_stack(struct task_struct *p,
->  					   unsigned long clone_flags,
-> diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-> index 0c95688cf58e..abe3fe6db6d2 100644
-> --- a/arch/x86/include/uapi/asm/prctl.h
-> +++ b/arch/x86/include/uapi/asm/prctl.h
-> @@ -31,6 +31,7 @@
->  #define ARCH_SHSTK_DISABLE		0x5002
->  #define ARCH_SHSTK_LOCK			0x5003
->  #define ARCH_SHSTK_UNLOCK		0x5004
-> +#define ARCH_SHSTK_STATUS		0x5005
->  
->  /* ARCH_SHSTK_ features bits */
->  #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> index 2be6e01fb144..5dcf5426241b 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -922,6 +922,7 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
->  	case ARCH_SHSTK_DISABLE:
->  	case ARCH_SHSTK_LOCK:
->  	case ARCH_SHSTK_UNLOCK:
-> +	case ARCH_SHSTK_STATUS:
->  		return shstk_prctl(task, option, arg2);
->  	default:
->  		ret = -EINVAL;
-> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-> index 95579f7bace3..05f8dcc19dbc 100644
-> --- a/arch/x86/kernel/shstk.c
-> +++ b/arch/x86/kernel/shstk.c
-> @@ -448,8 +448,14 @@ SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsi
->  	return alloc_shstk(addr, aligned_size, size, set_tok);
->  }
->  
-> -long shstk_prctl(struct task_struct *task, int option, unsigned long features)
-> +long shstk_prctl(struct task_struct *task, int option, unsigned long arg2)
->  {
-> +	unsigned long features = arg2;
-> +
-> +	if (option == ARCH_SHSTK_STATUS) {
-> +		return put_user(task->thread.features, (unsigned long __user *)arg2);
-> +	}
 
-Doesn't need the braces, but that's fine by me.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
-> +
->  	if (option == ARCH_SHSTK_LOCK) {
->  		task->thread.features_locked |= features;
->  		return 0;
-> -- 
-> 2.17.1
+On 2022/11/29 0:41, Alexei Starovoitov wrote:
+> On Mon, Nov 28, 2022 at 4:40 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>
+>>
+>>
+>> On 2022/11/28 9:57, Alexei Starovoitov wrote:
+>>> On Sat, Nov 26, 2022 at 05:45:27PM +0800, Yang Jihong wrote:
+>>>> For ARM32 architecture, if data width of kfunc return value is 32 bits,
+>>>> need to do explicit zero extension for high 32-bit, insn_def_regno should
+>>>> return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
+>>>> opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
+>>>>
+>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>>>> ---
+>>>>    kernel/bpf/verifier.c | 44 ++++++++++++++++++++++++++++++++++++++++---
+>>>>    1 file changed, 41 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>>> index 264b3dc714cc..193ea927aa69 100644
+>>>> --- a/kernel/bpf/verifier.c
+>>>> +++ b/kernel/bpf/verifier.c
+>>>> @@ -1927,6 +1927,21 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
+>>>>                      sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
+>>>>    }
+>>>>
+>>>> +static int kfunc_desc_cmp_by_imm(const void *a, const void *b);
+>>>> +
+>>>> +static const struct bpf_kfunc_desc *
+>>>> +find_kfunc_desc_by_imm(const struct bpf_prog *prog, s32 imm)
+>>>> +{
+>>>> +    struct bpf_kfunc_desc desc = {
+>>>> +            .imm = imm,
+>>>> +    };
+>>>> +    struct bpf_kfunc_desc_tab *tab;
+>>>> +
+>>>> +    tab = prog->aux->kfunc_tab;
+>>>> +    return bsearch(&desc, tab->descs, tab->nr_descs,
+>>>> +                   sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm);
+>>>> +}
+>>>> +
+>>>>    static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+>>>>                                        s16 offset)
+>>>>    {
+>>>> @@ -2342,6 +2357,13 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>>>                        */
+>>>>                       if (insn->src_reg == BPF_PSEUDO_CALL)
+>>>>                               return false;
+>>>> +
+>>>> +                    /* Kfunc call will reach here because of insn_has_def32,
+>>>> +                     * conservatively return TRUE.
+>>>> +                     */
+>>>> +                    if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
+>>>> +                            return true;
+>>>> +
+>>>>                       /* Helper call will reach here because of arg type
+>>>>                        * check, conservatively return TRUE.
+>>>>                        */
+>>>> @@ -2405,10 +2427,26 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>>>    }
+>>>>
+>>>>    /* Return the regno defined by the insn, or -1. */
+>>>> -static int insn_def_regno(const struct bpf_insn *insn)
+>>>> +static int insn_def_regno(struct bpf_verifier_env *env, const struct bpf_insn *insn)
+>>>>    {
+>>>>       switch (BPF_CLASS(insn->code)) {
+>>>>       case BPF_JMP:
+>>>> +            if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>>>> +                    const struct bpf_kfunc_desc *desc;
+>>>> +
+>>>> +                    /* The value of desc cannot be NULL */
+>>>> +                    desc = find_kfunc_desc_by_imm(env->prog, insn->imm);
+>>>> +
+>>>> +                    /* A kfunc can return void.
+>>>> +                     * The btf type of the kfunc's return value needs
+>>>> +                     * to be checked against "void" first
+>>>> +                     */
+>>>> +                    if (desc->func_model.ret_size == 0)
+>>>> +                            return -1;
+>>>> +                    else
+>>>> +                            return insn->dst_reg;
+>>>> +            }
+>>>> +            fallthrough;
+>>>
+>>> I cannot make any sense of this patch.
+>>> insn->dst_reg above is 0.
+>>> The kfunc call doesn't define a register from insn_def_regno() pov.
+>>>
+>>> Are you hacking insn_def_regno() to return 0 so that
+>>> if (WARN_ON(load_reg == -1)) {
+>>>     verbose(env, "verifier bug. zext_dst is set, but no reg is defined\n");
+>>>     return -EFAULT;
+>>> }
+>>> in opt_subreg_zext_lo32_rnd_hi32() doesn't trigger ?
+>>>
+>>> But this verifier message should have been a hint that you need
+>>> to analyze why zext_dst is set on this kfunc call.
+>>> Maybe it shouldn't ?
+>>> Did you analyze the logic of mark_btf_func_reg_size() ?
+>> make r0 zext is not caused by mark_btf_func_reg_size.
+>>
+>> This problem occurs when running the kfunc_call_test_ref_btf_id test
+>> case in the 32-bit ARM environment.
 > 
+> Why is it not failing on x86-32 ?
+Use the latest mainline kernel code to test on the x86_32 machine. The 
+test also fails:
 
--- 
-Kees Cook
+   # ./test_progs -t kfunc_call/kfunc_call_test_ref_btf_id
+   Failed to load bpf_testmod.ko into the kernel: -8
+   WARNING! Selftests relying on bpf_testmod.ko will be skipped.
+   libbpf: prog 'kfunc_call_test_ref_btf_id': BPF program load failed: 
+Bad address
+   libbpf: prog 'kfunc_call_test_ref_btf_id': -- BEGIN PROG LOAD LOG --
+   processed 25 insns (limit 1000000) max_states_per_insn 0 total_states 
+2 peak_states 2 mark_read 1
+   -- END PROG LOAD LOG --
+   libbpf: prog 'kfunc_call_test_ref_btf_id': failed to load: -14
+   libbpf: failed to load object 'kfunc_call_test'
+   libbpf: failed to load BPF skeleton 'kfunc_call_test': -14
+   verify_success:FAIL:skel unexpected error: -14
+
+Therefore, this problem also exists on x86_32:
+"verifier bug. zext_dst is set, but no reg is defined"
+
+> 
+>> The bpf prog is as follows:
+>> int kfunc_call_test_ref_btf_id(struct __sk_buff *skb)
+>> {
+>> struct prog_test_ref_kfunc *pt;
+>> unsigned long s = 0;
+>> int ret = 0;
+>>
+>> pt = bpf_kfunc_call_test_acquire(&s);
+>> if (pt) {
+>>        // here, do_check clears the upper 32bits of r0 through:
+>>        // check_alu_op
+>>        //   ->check_reg_arg
+>>        //    ->mark_insn_zext
+>> if (pt->a != 42 || pt->b != 108)
+>> ret = -1;
+>> bpf_kfunc_call_test_release(pt);
+>> }
+>> return ret;
+>> }
+>>
+>>>
+>>> Before producing any patches please understand the logic fully.
+>>> Your commit log
+>>> "insn_def_regno should
+>>>    return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL."
+>>>
+>>> Makes no sense to me, since dst_reg is unused in JMP insn.
+>>> There is no concept of a src or dst register in a JMP insn.
+>>>
+>>> 32-bit x86 supports calling kfuncs. See emit_kfunc_call().
+>>> And we don't have this "verifier bug. zext_dst is set" issue there, right?
+>>> But what you're saying in the commit log:
+>>> "if data width of kfunc return value is 32 bits"
+>>> should have been applicable to x86-32 as well.
+>>> So please start with a test that demonstrates the issue on x86-32 and
+>>> then we can discuss the way to fix it.
+>>>
+>>> The patch 2 sort-of makes sense.
+>>>
+>>> For patch 3 pls add new test funcs to bpf_testmod.
+>>> We will move all of them from net/bpf/test_run.c to bpf_testmod eventually.
+>>> .
+>>>
+> .
+> 
