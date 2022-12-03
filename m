@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D51D641919
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D6964191C
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiLCUoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 15:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        id S229802AbiLCUsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 15:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiLCUoN (ORCPT
+        with ESMTP id S229450AbiLCUsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 15:44:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1341B783
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 12:44:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C68DB8074C
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 20:44:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12941C433C1;
-        Sat,  3 Dec 2022 20:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670100246;
-        bh=a6sSeO9Fi0kBAh8kX/DYgBkC7uzxBTpsrsgIgsKcnSs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=awbXa8im7Dxz5yyeU6Sy40ZKJil74E9cydPOcJl8eZJVs9cVljHIMiVcXduDK82/Q
-         +Nrr6npx7gN2eyMIwqZTfowklWixgLrF87iIRq2KcE1vwztOHlkJIbqQwseSXXQ2/q
-         N1fw5yoEnTfERgtDBjsKT0E7sAa5b4WpSUSw+oF9ep/brUQm9n0f3rxIQf+inPSe56
-         qHBCROlhGU60FEfKkxE0az8SaRl8OvAC7ypjEXbbFux1DQ4tLseFZvh8Iqe0EMRvkZ
-         rzv09oIpWI+cvmfDkZo+mg2SinMEDq9B0Je+LlJCyAs9Fdk4liQMg/P3h7ixEk/DzP
-         +OyP5d79qaPvg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B50715C115F; Sat,  3 Dec 2022 12:44:05 -0800 (PST)
-Date:   Sat, 3 Dec 2022 12:44:05 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tools: memory-model: Make plain accesses carry
- dependencies
-Message-ID: <20221203204405.GW4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221202125100.30146-1-jonas.oberhauser@huaweicloud.com>
- <Y4pIwqK7SWft1xCl@boqun-archlinux>
- <4262e55407294a5989e766bc4dc48293@huawei.com>
- <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4uyzDl49Zm3TSLh@rowland.harvard.edu>
+        Sat, 3 Dec 2022 15:48:01 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C457564E3;
+        Sat,  3 Dec 2022 12:48:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=nrIUiqu0rhHfNsiWFPaaq3UEuLRQT2XtfSlEcQWCe80=; b=AofCRjqnSYXZ8feR+kEmJkOUC2
+        MZqTyRCe/KBWz+8IvZVZ6dP9aoc32d9xigxVoFXBUvYAM5W/tqxdMQ/Wg7ysLy9nBa63WByVgYLZn
+        BtjSVsFqoOMwaBUNqIAEf14fT/gtqQn9eua1PyIk//lpbk6Hc0JuppW6HfrnwQMPNGLk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p1ZQE-004HrO-Th; Sat, 03 Dec 2022 21:47:42 +0100
+Date:   Sat, 3 Dec 2022 21:47:42 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Frank <Frank.Sae@motor-comm.com>, Peter Geis <pgwipeout@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2] net: phy: Add driver for Motorcomm yt8531
+ gigabit ethernet phy
+Message-ID: <Y4u17vz20EemzxEB@lunn.ch>
+References: <20221202073648.3182-1-Frank.Sae@motor-comm.com>
+ <Y4n9T+KGj/hX3C0e@lunn.ch>
+ <Y4n+2Ehvp6SInxUw@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y4uyzDl49Zm3TSLh@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4n+2Ehvp6SInxUw@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 03:34:20PM -0500, stern@rowland.harvard.edu wrote:
-> On Sat, Dec 03, 2022 at 11:02:26AM -0800, Paul E. McKenney wrote:
-> > On Sat, Dec 03, 2022 at 11:58:36AM +0000, Jonas Oberhauser wrote:
-> > > 
-> > > 
-> > > -----Original Message-----
-> > > From: Boqun Feng [mailto:boqun.feng@gmail.com] 
-> > > Sent: Friday, December 2, 2022 7:50 PM
+On Fri, Dec 02, 2022 at 01:34:16PM +0000, Russell King (Oracle) wrote:
+> On Fri, Dec 02, 2022 at 02:27:43PM +0100, Andrew Lunn wrote:
+> > > +static bool mdio_is_locked(struct phy_device *phydev)
+> > > +{
+> > > +	return mutex_is_locked(&phydev->mdio.bus->mdio_lock);
+> > > +}
+> > > +
+> > > +#define ASSERT_MDIO(phydev) \
+> > > +	WARN_ONCE(!mdio_is_locked(phydev), \
+> > > +		  "MDIO: assertion failed at %s (%d)\n", __FILE__,  __LINE__)
+> > > +
 > > 
-> > > > I wonder is this patch a first step to solve the OOTA problem you reported in OSS:
-> > > >	https://static.sched.com/hosted_files/osseu2022/e1/oss-eu22-jonas.pdf
-> > > > If so maybe it's better to put the link in the commit log I think.
-> > > 
-> > > It's not directly related to that specific problem, it does solve some other OOTA issues though.
-> > > If you think we should link to the talk, there's also a video with slightly more updated slides from the actual talk: https://www.youtube.com/watch?v=iFDKhIxKhoQ
-> > > do you think I should link to both then?
+> > Hi Frank
 > > 
-> > It is not hard for me to add that in if people believe that it should be
-> > included.  But default is lazy in this case.  ;-)
+> > You are not the only one who gets locking wrong. This could be used in
+> > other drivers. Please add it to include/linux/phy.h,
 > 
-> I don't think there's any need to mention that video in the commit log.  
-> It's an introductory talk, and it's pretty safe to assume that anyone 
-> reading the commit because they are interested in the LKMM in great 
-> detail is already beyond the introductory level.
+> That placement doesn't make much sense.
 > 
-> On the other hand, it wouldn't hurt to include a Link: tag to an 
-> appropriate message in this email thread.  (I leave it up to Paul to 
-> decide which message is most "appropriate" -- there may not be a good 
-> candidate, because a lot of the messages were not CC'ed to LKML.)
+> As I already said, we have lockdep checks in drivers/net/phy/mdio_bus.c,
+> and if we want to increase their effectiveness, then that's the place
+> that it should be done.
 
-For this approach, I would add this:
+I was following the ASSERT_RTNL model, but that is used in quite deep
+and complex call stacks, and it is useful to scatter the macro in lots
+of places. PHY drivers are however very shallow, so yes, putting them
+in mdio_bus.c makes a lot of sense.
 
-Link: https://lore.kernel.org/all/4262e55407294a5989e766bc4dc48293@huawei.com/
+> I don't see any point in using __FILE__ and __LINE__ in the above
+> macro either. Firstly, WARN_ONCE() already includes the file and line,
+> and secondly, the backtrace is more useful than the file and line where
+> the assertion occurs especially if it's placed in mdio_bus.c
 
-I could of course do both the extra paragraph -and- the Link:.  ;-)
+And PHY driver functions are simpler, there is a lot less inlining
+going on, so the function name is probably all you need to know to
+find where you messed up the locking. So i agree, they can be removed.
 
-Thoughts?
-
-							Thanx, Paul
+     Andrew
