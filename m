@@ -2,226 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800B56416A8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777416416A9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiLCMZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 07:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
+        id S229602AbiLCM0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 07:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLCMZm (ORCPT
+        with ESMTP id S229462AbiLCM0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 07:25:42 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FCEB4A9
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 04:25:41 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so11445165lfk.0
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 04:25:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SwSyqwMrqrfu5+iUWNYzC2nuUqa64qi42sFtQj9PwvI=;
-        b=VCyv+3d27kBLhKGX9jxgmtiPVmQF6JwKORk4eVgQheDTEH8w3JTBpwh5FwFoMRqhm0
-         x2djCBEv/3/dxW3LwYBvBaEMz03x1g7hCbf3xyyRAPOCU/XkRfRo2HynDlw3P/hs64UH
-         xQvQd01q8HK27q5fAM7uSOIuMX3jgeWkO38TM+4FeTZmmOWg6Hwj+lmBL2U+kYXB9SQq
-         kZZVjP0W1ZWoKaxwfV0Um1wQC+wI6F3tpCeNleiMMqmEpecZh5AgxTLy+JpqFzYQsHTb
-         niMlUBZEgjgQBQ7crZ0wFwd6gxah8hiAuOcXjRualZbz6azICQls5tSQDpdU7AgZjv/w
-         cPGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SwSyqwMrqrfu5+iUWNYzC2nuUqa64qi42sFtQj9PwvI=;
-        b=nZWcqVlaVIScUuKAOawbwbhF5vnVWxTf0uIykErT3Bc5BPa1vQmQE4LhNuoQfIQqvs
-         BzzwmtN2zN+Il7Tbz4VkMjdfTZVEu3pBAItxZMXVNlJEnCIvbJJS0o12Ms3X1GqiimC1
-         8QPyrOSasjXNNbzGqS0brxjmF2egdBkcvU35mPfdvrlQV9IUJhrEkpuriNbaQbn022g0
-         IqzZD5T8FdaEX/+Rr44HRjyOU+nV7APPCCIjCcwAqJLhGn2XvYCK0MUD04muOvovRcQy
-         BP5JctcJ6y+S/e55TsDhhmo3tWFJep/7WBQquH3787Q5OF/5Qz0xe4pjJOGz3dfzNOiA
-         a1SQ==
-X-Gm-Message-State: ANoB5plZ9rWiqbs1l1jBzIymxT1W7qqWR9gkTRAj6DjAk0gggF+JuZE9
-        xZAKTqzXzS90aiMr4RZV27koHg==
-X-Google-Smtp-Source: AA0mqf5DFmukO5xtLWbUtNv4B2+qvLLV4rqxjVHTkkEEzcDCtp/Waa2l/ufMTOfMZro9HbxdJX8BOw==
-X-Received: by 2002:a05:6512:a93:b0:4a2:6337:872d with SMTP id m19-20020a0565120a9300b004a26337872dmr19950566lfu.35.1670070339102;
-        Sat, 03 Dec 2022 04:25:39 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u11-20020a2e9b0b000000b0027712379ec8sm854541lji.28.2022.12.03.04.25.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Dec 2022 04:25:38 -0800 (PST)
-Message-ID: <b4f881aa-a0a6-1ee1-5346-cfc31ab6c1e7@linaro.org>
-Date:   Sat, 3 Dec 2022 13:25:37 +0100
+        Sat, 3 Dec 2022 07:26:16 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344A910A9
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 04:26:14 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e766329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e766:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A55BF1EC0622;
+        Sat,  3 Dec 2022 13:26:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670070372;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rPVN6m3qIHKCJVTyQj6CWw40yJUK2VfroWKDAdNkbyY=;
+        b=ehB7UkY3DhaLGbyBNjoo/HWkFAa3TOT5lEUPD+KPh3JrCbBkJMWnEYHB51YCXSm5jnoZb6
+        tCBdab34BfgS9chGe2AfyP8miTQ+wIcTIRbzuw/ifgtFKbdSFJKUFInSlXexDmPqzioMoq
+        u7PQQvfKmTUSt/Imctc22GJnYRCuaQ0=
+Date:   Sat, 3 Dec 2022 13:26:07 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dionna Glaze <dionnaglaze@google.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Andy Lutomirsky <luto@kernel.org>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v8 1/4] crypto: ccp - Name -1 return value as
+ SEV_RET_NO_FW_CALL
+Message-ID: <Y4tAX580jEGHOU9d@zn.tnic>
+References: <20221104230040.2346862-1-dionnaglaze@google.com>
+ <20221104230040.2346862-2-dionnaglaze@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: leds: add dt schema for
- worldsemi,ws2812b-spi
-Content-Language: en-US
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221202034240.455831-1-gch981213@gmail.com>
- <20221202034240.455831-3-gch981213@gmail.com>
- <df8a683a-0df9-c32a-4272-19e7313ef7d7@linaro.org>
- <CAJsYDVLwyCG2xnWXDo72H-T4Tk7Edxmv_GSfJFvvWKrXZgBtCA@mail.gmail.com>
- <783fd2ff-cf7a-d820-6be7-9863e1786349@linaro.org>
- <CAJsYDVLuXG9UiOixxs997QdfeQVitFhhRDRbJ-uQ4Agz7LuMAQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAJsYDVLuXG9UiOixxs997QdfeQVitFhhRDRbJ-uQ4Agz7LuMAQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221104230040.2346862-2-dionnaglaze@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/12/2022 13:11, Chuanhong Guo wrote:
-> Hi!
+On Fri, Nov 04, 2022 at 11:00:37PM +0000, Dionna Glaze wrote:
+> From: Peter Gonda <pgonda@google.com>
 > 
-> On Sat, Dec 3, 2022 at 6:52 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 02/12/2022 13:55, Chuanhong Guo wrote:
->>>>> +
->>>>> +      default-brightness:
->>>>> +        description:
->>>>> +          The default brightness that should be applied to the LED by the operating
->>>>> +          system on start-up. The brightness should not exceed the brightness the
->>>>> +          LED can provide.
->>>>> +        $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +        minimum: 0
->>>>> +        maximum: 255
->>>>> +        default: 0
->>>>> +
->>>>> +      default-intensity:
->>>>> +        description: |
->>>>> +          An array of 3 integer specifying the default intensity of each color
->>>>> +          components in this LED. <255 255 255> if unspecified.
->>>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
->>>>
->>>> I am still not convinced these two properties are correct. Why this LED
->>>> is special and defines default brightness and intensity and other LEDs
->>>> do not? You explained you are doing it for user-space which is usually
->>>> not a valid reason for changes specific to one binding. Either all
->>>> bindings should support it or none.
->>>
->>> There's already a default-state for simple LEDs without brightness
->>> control so I think it makes sense to add default-brightness for LEDs
->>> with brightness control and default-intensity for colored LEDs.
->>> The default-state seems to be implemented in various LED drivers,
->>> so I implemented these two properties in my LED driver.
->>> There's nothing device-specific about these two properties.
->>
->> default-state has a bit different purpose - to prevent any
->> glitches/changes when probing driver.
-> 
-> OK. I didn't know that property is used in this way.
-> I can live without them. I'll drop it in the next version.
-> 
->>
->>>>
->>>>> +        maxItems: 3
->>>>> +        items:
->>>>> +          minimum: 0
->>>>> +          maximum: 255
->>>>> +
->>>>> +      reg:
->>>>> +        description: |
->>>>> +          Which LED this node represents. The reg of the first LED on the chain
->>>>> +          is 0.
->>>>> +        maxItems: 1
->>>>> +
->>>>> +    required:
->>>>> +      - reg
->>>>> +      - color
->>>>> +      - function
->>>>> +
->>>>> +required:
->>>>> +  - compatible
->>>>> +
->>>>> +additionalProperties: false
->>>>> +
->>>>> +examples:
->>>>> +  - |
->>>>> +    #include <dt-bindings/leds/common.h>
->>>>> +    spi {
->>>>> +        #address-cells = <1>;
->>>>> +        #size-cells = <0>;
->>>>> +
->>>>> +        leds@0 {
->>>>
->>>> git grep leds@ -- Documentation/devicetree/ | wc -l
->>>> 1
->>>> git grep led@ -- Documentation/devicetree/ | wc -l
->>>> 165
->>>>
->>>> so rather not the first one ("leds").
->>>
->>> As you can see, this node describes a chain of LEDs, not
->>> a single LED, so the plural form is more appropriate than
->>> the singular form.
->>>
->>>>
->>>> There is also:
->>>> git grep led-controller@ -- Documentation/devicetree/ | wc -l
->>>> 30
->>>
->>> This also isn't appropriate. WS2812B is a single LED package
->>> of 3 diodes and a microcontroller. If we treat every package
->>> as a LED, the SPI MOSI is connected directly to the LED
->>> packages themselves with no controller in between.
->>> If we treat the microcontroller as a led-controller, every
->>> LED contains its own controller, instead of one controller
->>> controlling all LEDs, and the parent node still shouldn't
->>> be called a led-controller.
->>>
->>> Here's a picture of the WS2812B LED package:
->>> https://cdn-shop.adafruit.com/970x728/1655-00.jpg
->>> and a chain of them:
->>> https://cdn-shop.adafruit.com/970x728/1463-00.jpg
->>
->> Then your bindings and DTS do not represent the hardware.
-> 
-> How should this hardware be represented, then?
-> 
-> The connection can be:
-> 
-> SPI-MOSI---LED1---LED2---LED3---...---LEDN
-> 
-> or
-> 
-> SPI-MOSI---Tri-state signal gate---LED1---LED2---LED3---...---LEDN
-> SPI-CS-----|
+> The PSP can return a "firmware error" code of -1 in circumstances where
+> the PSP is not actually called. To make this protocol unambiguous, we
 
-I would look at it this as either of:
-1. serially linked separate LED controllers (so multiple device nodes)
+Please use passive voice in your commit message: no "we" or "I", etc,
+and describe your changes in imperative mood.
 
-2. one LED controller handling the entire LED system of many
-sub-controllers.
+> add a constant naming the return value.
+> 
+> Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Joerg Roedel <jroedel@suse.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Andy Lutomirsky <luto@kernel.org>
+> Cc: John Allen <john.allen@amd.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> 
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+> ---
+>  drivers/crypto/ccp/sev-dev.c | 2 +-
+>  include/uapi/linux/psp-sev.h | 7 +++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 06fc7156c04f..97eb3544ab36 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -444,7 +444,7 @@ static int __sev_platform_init_locked(int *error)
+>  {
+>  	struct psp_device *psp = psp_master;
+>  	struct sev_device *sev;
+> -	int rc = 0, psp_ret = -1;
+> +	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
+>  	int (*init_function)(int *error);
+>  
+>  	if (!psp || !psp->sev_data)
 
-For the (2) I proposed the name led-controller. If you think this is not
-(2), then looks like (1) and you should have many devices... which
-probably is not doable on itself. And how to call this entire set of
-separate LED controllers? Heh, can be also some controller, like
-led-controller.
+Ok, lemme chase down this flow here:
 
-Best regards,
-Krzysztof
+__sev_platform_init_locked() calls that automatic variable function
+pointer ->init_function which already looks funky. See the end of this
+mail for a diff removing it and making the code more readable.
 
+The called function can be one of two and both get the pointer to
+psp_ret as its only argument.
+
+1. __sev_init_ex_locked() calls __sev_do_cmd_locked() and passes down
+*psp_ret.
+
+or
+
+2. __sev_init_locked(). Ditto.
+
+Now, __sev_do_cmd_locked() will overwrite psp_ret when
+sev_wait_cmd_ioc() fails. So far so good.
+
+In the case __sev_do_cmd_locked() succeeds, it'll put there something
+else:
+
+        if (psp_ret)
+                *psp_ret = reg & PSP_CMDRESP_ERR_MASK;
+
+So no caller will ever see SEV_RET_NO_FW_CALL, as far as I can tell.
+
+And looking further through the rest of the set, nothing tests
+SEV_RET_NO_FW_CALL - it only gets assigned.
+
+So why are we even bothering with this?
+
+You can hand in *psp_ret uninitialized and you'll get a value in all
+cases. Unless I'm missing an angle.
+
+> diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
+> index 91b4c63d5cbf..1ad7f0a7e328 100644
+> --- a/include/uapi/linux/psp-sev.h
+> +++ b/include/uapi/linux/psp-sev.h
+> @@ -36,6 +36,13 @@ enum {
+>   * SEV Firmware status code
+>   */
+>  typedef enum {
+> +	/*
+> +	 * This error code is not in the SEV spec but is added to convey that
+> +	 * there was an error that prevented the SEV Firmware from being called.
+> +	 * This is (u32)-1 since the firmware error code is represented as a
+> +	 * 32-bit integer.
+> +	 */
+> +	SEV_RET_NO_FW_CALL = 0xffffffff,
+
+What's wrong with having -1 here?
+
+>  	SEV_RET_SUCCESS = 0,
+>  	SEV_RET_INVALID_PLATFORM_STATE,
+>  	SEV_RET_INVALID_GUEST_STATE,
+> -- 
+
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 97eb3544ab36..8bc4209b338b 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -440,12 +440,20 @@ static int __sev_init_ex_locked(int *error)
+ 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
+ }
+ 
++static inline int __sev_do_init_locked(int *psp_ret)
++{
++	if (sev_init_ex_buffer)
++		return __sev_init_ex_locked(psp_ret);
++	else
++
++		return __sev_init_locked(psp_ret);
++}
++
+ static int __sev_platform_init_locked(int *error)
+ {
+ 	struct psp_device *psp = psp_master;
+ 	struct sev_device *sev;
+-	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
+-	int (*init_function)(int *error);
++	int rc = 0, psp_ret;
+ 
+ 	if (!psp || !psp->sev_data)
+ 		return -ENODEV;
+@@ -456,15 +464,12 @@ static int __sev_platform_init_locked(int *error)
+ 		return 0;
+ 
+ 	if (sev_init_ex_buffer) {
+-		init_function = __sev_init_ex_locked;
+ 		rc = sev_read_init_ex_file();
+ 		if (rc)
+ 			return rc;
+-	} else {
+-		init_function = __sev_init_locked;
+ 	}
+ 
+-	rc = init_function(&psp_ret);
++	rc = __sev_do_init_locked(&psp_ret);
+ 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
+ 		/*
+ 		 * Initialization command returned an integrity check failure
+@@ -473,9 +478,12 @@ static int __sev_platform_init_locked(int *error)
+ 		 * initialization function should succeed by replacing the state
+ 		 * with a reset state.
+ 		 */
+-		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
+-		rc = init_function(&psp_ret);
++		dev_err(sev->dev,
++"SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
++
++		rc = __sev_do_init_locked(&psp_ret);
+ 	}
++
+ 	if (error)
+ 		*error = psp_ret;
+ 
+diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
+index 1ad7f0a7e328..a9ed9e846cd2 100644
+--- a/include/uapi/linux/psp-sev.h
++++ b/include/uapi/linux/psp-sev.h
+@@ -42,7 +42,7 @@ typedef enum {
+ 	 * This is (u32)-1 since the firmware error code is represented as a
+ 	 * 32-bit integer.
+ 	 */
+-	SEV_RET_NO_FW_CALL = 0xffffffff,
++	SEV_RET_NO_FW_CALL = -1,
+ 	SEV_RET_SUCCESS = 0,
+ 	SEV_RET_INVALID_PLATFORM_STATE,
+ 	SEV_RET_INVALID_GUEST_STATE,
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
