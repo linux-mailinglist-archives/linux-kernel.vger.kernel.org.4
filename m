@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188376418EE
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F186418EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiLCUZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 15:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S230177AbiLCUZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 15:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiLCUYe (ORCPT
+        with ESMTP id S229736AbiLCUYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 15:24:34 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BAC1EEEF;
-        Sat,  3 Dec 2022 12:23:41 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id w15so12943390wrl.9;
+        Sat, 3 Dec 2022 15:24:31 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E71DF3E;
+        Sat,  3 Dec 2022 12:23:40 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso8935117wme.5;
         Sat, 03 Dec 2022 12:23:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J0s52S2JC0MhYvepWYRB9l+MR5Vkzxl4dABEchKbHOA=;
-        b=CfWxpFIZ8beGlD5DkhvO0TDb0uK2IMQANInbZzHPv2sfp2/kcvif1potOYzU7GMJ2w
-         OKQKJm8QsjgzhxmDZ+x5hkNfAqffJVTmlg0VorrSGWKkKdAkZ4E2UO4p4u98JffUwE/Q
-         EJiYzqXf74xBEybyhKVKvXG3dOEksSMp2gufe5EdZCRDW40SfYMe+VfD0/LQmcnM8AN0
-         PtqgbFvY6p7yDPS4TNzSMFKWu9p205Bp4LYX8HLh7svuY+dQYBhAdQxHCUf/P/uabspy
-         gW7NfZ0RV3oWaxzMZih/9bu/bGRZby1m1h8D43aHk2tbIiwl+rm5j8RLM/LY0aSCjIlk
-         6ihA==
+        bh=K72bk8ch74Z9wRgp/NDEAG/pkbMJvv5eJRt1Gu/GiLI=;
+        b=lJq+NL/N49FP0i8FtUHq+hQA+zZFC4y8rTABZuWIxEzM6Gn5q3VyohVcTtl2yhOX6N
+         C7T1BvxCqoYeFdjPf/u4TWGdg388lXeL+NM5nVqZVWMtUtAnjCBhYrrIoL1pnvtiuKPu
+         PstjY4o82bts8Rwa9aMFGFMEI2qY5fdRLoWtaJpcjwpXTfCDYT9zo08cb51THLvR8r63
+         0TeZTRgTfsNonQYppb4VNMzP0Fn8nDaEU6dDL1TMsOCc3JQzwN+bIStDf0XF6ACl8s6v
+         MiV/huhUd75LZhqChH4H57b56g141zK3Ymd78EBdQf3rLeQEmwrGtD3MNhA3IN5VnJie
+         cMNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J0s52S2JC0MhYvepWYRB9l+MR5Vkzxl4dABEchKbHOA=;
-        b=6i1Zsflz2WgKk6vWBZU5Zn66Toot660ESL9zCb7eJOrYkDmt5eaE7Fb6BhH/oRGfdj
-         en+ybMX/u8Ul8iFPxqzbnpSYM8F1L5DdbJXCwAr2tqzT0+uDAmQGI+2b8/aAHUT5HYuP
-         ys+ytYfzzWmZ8+0XjlZXAsD1IhG8xJAm/OV9cK9SPDmI9jdtrjbTPSdAWs1r1Z9PZG8q
-         ukneb2qjZJUqlpfMtffm8JbmIc1MJgdsQOgOAFsht6PvdDgThzthbBobh5mtSVrnXnke
-         AH30/JqAgteP3zfEr02GGBv19JFNdjUI4h9tai5ITcKPqLGz87rm40OiO1RA1hgIc7FW
-         VjWw==
-X-Gm-Message-State: ANoB5pkJZua04T2zPaRmqRSOAEI249ip08kfJ8wRFbq0NyK9VS1omHRa
-        +h1wqPiJ2p9EEQH8BkzIbCmf8vvQLCc=
-X-Google-Smtp-Source: AA0mqf5niEBsMCravbQnU8BH58Z4oxQDHIqElPGuhhEcDX2WxnCUEQanZR3ee8rWwPCBk62oBhThEQ==
-X-Received: by 2002:a5d:4247:0:b0:241:a82b:5dee with SMTP id s7-20020a5d4247000000b00241a82b5deemr35311654wrr.425.1670099019511;
-        Sat, 03 Dec 2022 12:23:39 -0800 (PST)
+        bh=K72bk8ch74Z9wRgp/NDEAG/pkbMJvv5eJRt1Gu/GiLI=;
+        b=Yw89kaQJqURE6IWCBeS0plfenKU3MROKpY0Fjp4k/iRXLdYdVHdXCe0gWo8THTZ84s
+         jkr++gMAJhGIa5uWoJJ3NGxI8VLlTOxHVdMywR1vTi3CmSJ6nU+JOpvtne8pdzBQuB3a
+         CkYE0SXjvSYAsj9YByryNQHFPQKxJonoe35eUKY9NWgbQgPm4jTP5sc0N7Nk5GACoTJO
+         pfspIcxf0ytDwLfJwsQH5+m1lqB8QGStRwDMlXmewcp3iaCjFcaVE8MYNFN2D5xemBV7
+         P2cnqz5T6yhGat5xzPiVNyXY2CBSiYmiHOlnBy7Q8j4S+9EMFnGvuCiHGS3Z+PIgRC5/
+         tL2A==
+X-Gm-Message-State: ANoB5pkLxYMM47CxU8G9/qR8lUYV7FlcEOBbTLk5Y/Ris7oFUxdhYvTY
+        ocEPQdVapOIYl5Ypy+z1C7FH9/ZxhQM=
+X-Google-Smtp-Source: AA0mqf6rsTwV7xkalhEXWb7tLJe5FcTJQrrz4M7EfA+HCxJR9Ct54dPdmGmPbpdYHgPJVMIhTxsZCw==
+X-Received: by 2002:a05:600c:5113:b0:3cf:77c0:48ea with SMTP id o19-20020a05600c511300b003cf77c048eamr58295605wms.130.1670099020214;
+        Sat, 03 Dec 2022 12:23:40 -0800 (PST)
 Received: from asus5775.alejandro-colomar.es ([170.253.36.171])
-        by smtp.googlemail.com with ESMTPSA id p17-20020a5d68d1000000b002420cfcd13dsm10064481wrw.105.2022.12.03.12.23.38
+        by smtp.googlemail.com with ESMTPSA id p17-20020a5d68d1000000b002420cfcd13dsm10064481wrw.105.2022.12.03.12.23.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 03 Dec 2022 12:23:39 -0800 (PST)
 From:   Alejandro Colomar <alx.manpages@gmail.com>
@@ -55,9 +55,9 @@ X-Google-Original-From: Alejandro Colomar <alx@kernel.org>
 To:     linux-man@vger.kernel.org
 Cc:     Alejandro Colomar <alx@kernel.org>, libc-alpha@sourceware.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 27/41] sendfile.2: SYNOPSIS: Add _Nullable
-Date:   Sat,  3 Dec 2022 21:23:03 +0100
-Message-Id: <20221203202317.252789-28-alx@kernel.org>
+Subject: [PATCH 28/41] shmop.2: SYNOPSIS: Add _Nullable
+Date:   Sat,  3 Dec 2022 21:23:04 +0100
+Message-Id: <20221203202317.252789-29-alx@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221203202317.252789-1-alx@kernel.org>
 References: <20221203202317.252789-1-alx@kernel.org>
@@ -75,25 +75,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Alejandro Colomar <alx@kernel.org>
 ---
- man2/sendfile.2 | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ man2/shmop.2 | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/man2/sendfile.2 b/man2/sendfile.2
-index a50f2797a..9dbe1691c 100644
---- a/man2/sendfile.2
-+++ b/man2/sendfile.2
-@@ -26,8 +26,9 @@ .SH SYNOPSIS
+diff --git a/man2/shmop.2 b/man2/shmop.2
+index e5a0ae814..cd91c9931 100644
+--- a/man2/shmop.2
++++ b/man2/shmop.2
+@@ -27,7 +27,8 @@ .SH SYNOPSIS
  .nf
- .B #include <sys/sendfile.h>
+ .B #include <sys/shm.h>
  .PP
--.BI "ssize_t sendfile(int" " out_fd" ", int" " in_fd" ", off_t *" \
--                      offset ", size_t" " count" );
-+.BI "ssize_t sendfile(int" " out_fd" ", int" " in_fd" ", \
-+off_t *_Nullable " offset ,
-+.BI "                 size_t" " count" );
- .\" The below is too ugly. Comments about glibc versions belong
- .\" in the notes, not in the header.
- .\"
+-.BI "void *shmat(int " shmid ", const void *" shmaddr ", int " shmflg );
++.BI "void *shmat(int " shmid ", const void *_Nullable " shmaddr ", \
++int " shmflg );
+ .BI "int shmdt(const void *" shmaddr );
+ .fi
+ .SH DESCRIPTION
 -- 
 2.38.1
 
