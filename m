@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5F764188C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 20:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CBF64188E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 20:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLCTCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 14:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S229848AbiLCTE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 14:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiLCTCa (ORCPT
+        with ESMTP id S229829AbiLCTE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 14:02:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9961BE86
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 11:02:29 -0800 (PST)
+        Sat, 3 Dec 2022 14:04:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C1D1D678
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 11:04:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 552A3B807E5
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 19:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E84C433C1;
-        Sat,  3 Dec 2022 19:02:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A728960C22
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 19:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F72C433C1;
+        Sat,  3 Dec 2022 19:04:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670094147;
-        bh=8dkLM7M1P2wZj0MlM9RjgcTcPtk8HlDDb1lmRYvte4w=;
+        s=k20201202; t=1670094293;
+        bh=3AwdSHXnpRZyvP1HR2jenkFii0Q4NqtArbfX1c3WRzQ=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=R52709+kB7Ix490kdmBH+LTiTRF+OuF0ddO2roWUDKO/fTNuxDTt82Op7If+yAUst
-         dHVtJwhgnClbve7h0/+tJrY2PkoLek8dcMqtNH6X1Vu8VBrXwviY6eGgASSes7V8+B
-         VmJ/aHbNCsnRefZ4e7nwVI4rL/ewmX6ZrufJ5eSco2SsM/1Hff+FwnyiFeIarji1Y/
-         lgsC0nStHMaQfOahtzNw+cU5AhrjbYBifGMLWC2bsONVNB9yYtwoeFb1TVe+/YEPWu
-         WbDKXdHyPHIszzepBq54ZWuscOizzkg+f+whMpSDP8oRhUph5ex0LHAERj+h3CZ/1L
-         3kTHqxG1+dG8Q==
+        b=KeLGHLpfE/7rC6NhVvL8cXjvMs/UBupXzr1dcTx2wAtrlCoPgLQ9iofEQOgpNEFSk
+         3pJJBoP/tQOq7wIbckkvdw1e5qlnhBAJng5QwjkiPMi96o5TPFpa9qM/Ws7K9BWpTc
+         RDm1wHnHYRoMA/15GWjAKsD6ywvJFFv50xy/zkkGXUPlOCRgGblmfv9DryxxqwTruK
+         inhKlbLTBBEG+pGzm5mEOSgSZ0ScoG/URGyBj6yYoNqVIXWl290TRrbwJ2uGKz8HXC
+         CBXDPKjwPnWUpJcUvRlsE1tAwLGW5BB+WL1aiIcQ99PA58eFch3HYCOwYf3WDb399b
+         EWFpvIbTnv9MA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id ADE895C03F8; Sat,  3 Dec 2022 11:02:26 -0800 (PST)
-Date:   Sat, 3 Dec 2022 11:02:26 -0800
+        id 9A7425C03F8; Sat,  3 Dec 2022 11:04:52 -0800 (PST)
+Date:   Sat, 3 Dec 2022 11:04:52 -0800
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
         "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
         "will@kernel.org" <will@kernel.org>,
         "peterz@infradead.org" <peterz@infradead.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
         "npiggin@gmail.com" <npiggin@gmail.com>,
         "dhowells@redhat.com" <dhowells@redhat.com>,
         "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
@@ -54,18 +54,21 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>,
         "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
         "frederic@kernel.org" <frederic@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tools: memory-model: Make plain accesses carry
+Subject: Re: [PATCH] tools: memory-model: Make plain accesses carry
  dependencies
-Message-ID: <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
+Message-ID: <20221203190452.GS4001@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <20221202125100.30146-1-jonas.oberhauser@huaweicloud.com>
- <Y4pIwqK7SWft1xCl@boqun-archlinux>
- <4262e55407294a5989e766bc4dc48293@huawei.com>
+References: <20221201121808.20785-1-jonas.oberhauser@huaweicloud.com>
+ <Y4jQC9ejAQqJFTo+@rowland.harvard.edu>
+ <6abbb72eef6149eb842a3351ecea7af5@huawei.com>
+ <Y4kMskpQGOvlPyYf@rowland.harvard.edu>
+ <4905c14d2bc547a391d626416a20a2e9@huawei.com>
+ <Y4pec7lfQHwmH4V/@rowland.harvard.edu>
+ <bcacee1a2ce84123a664d783d108050e@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4262e55407294a5989e766bc4dc48293@huawei.com>
+In-Reply-To: <bcacee1a2ce84123a664d783d108050e@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,32 +78,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 11:58:36AM +0000, Jonas Oberhauser wrote:
+On Sat, Dec 03, 2022 at 11:47:06AM +0000, Jonas Oberhauser wrote:
 > 
 > 
 > -----Original Message-----
-> From: Boqun Feng [mailto:boqun.feng@gmail.com] 
-> Sent: Friday, December 2, 2022 7:50 PM
+> From: Alan Stern [mailto:stern@rowland.harvard.edu] 
+> Sent: Friday, December 2, 2022 9:22 PM
 > 
-> > > Reviewed-by: Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+> > > void *y[2];
+> > > void *x[2] = { (void*)&y[1], (void*)&y[0] };
+> > > 
+> > > P0() {
+> > >     void **t = (void**)(x[0]);
 > 
-> > s/Reviewed-by: Reviewed-by:/Reviewed-by:^2 to save some space ? ;-)
+> > Now t holds a pointer to y[1].
+> 
+> Unfortunately, this kind of inductive reasoning (arguing about what happens based on what happened "before") is not possible with memory models that allow OOTA; as you put it, one must allow for loads reading from stores that haven't happened yet.
+> One such store (I promise!(*)) is a store to x[0] which writes &x[1]. Let's consider the alternative universe where we read from this future store, so now t holds a pointer to x[1].
+> 
+> > >     *t = (void*)(t-1);
+> 
+> > And now y[1] holds a pointer to y[0].
+> 
+> In our alternative universe, x[1] now holds a pointer to x[0].
 > 
 > 
-> Oh, I didn't know I'm allowed to compress things like that! Can I use ² as well to save another character?
+> > > }
+> > > P1() {
+> > >     void **u = (void**)(x[1]);	
+> 
+> > Now u holds a pointer to y[0].
+> 
+> In our alternative universe, u holds the pointer to x[0] stored by P0().
+> 
+> > >     *u = (void*)(u+1);
+> 
+> > And now y[0] holds a pointer to y[1].
+> 
+> In our alternative universe, now x[0] holds a pointer to x[1]. Behold, the store I promised would happen!
+> 
+> > > }
+> 
+> > The contents of x[] never get changed, so there's no question about the values of t and u.
+> 
+> They might get changed, by the stores *t=... and *u=...
+> 
+> Have fun,
+> Jonas
+> 
+> (*= because this example is provided free of charge, there is no actual promise, to the extent permitted by applicable law)
 
-Heh!  I might miss that, and who knows?  The bots might think that "²"
-was the first letter of your name.  ;-)
-
-> > I wonder is this patch a first step to solve the OOTA problem you reported in OSS:
-> >	https://static.sched.com/hosted_files/osseu2022/e1/oss-eu22-jonas.pdf
-> > If so maybe it's better to put the link in the commit log I think.
-> 
-> It's not directly related to that specific problem, it does solve some other OOTA issues though.
-> If you think we should link to the talk, there's also a video with slightly more updated slides from the actual talk: https://www.youtube.com/watch?v=iFDKhIxKhoQ
-> do you think I should link to both then?
-
-It is not hard for me to add that in if people believe that it should be
-included.  But default is lazy in this case.  ;-)
+And another reason why I tend to err on marking more accesses rather
+than marking fewer.  You never know when some "clever" compiler writer
+might add a really strange optimization...
 
 							Thanx, Paul
