@@ -2,147 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB88D6418A8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630D06418B0
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiLCUTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 15:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
+        id S229737AbiLCUVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 15:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLCUTV (ORCPT
+        with ESMTP id S229469AbiLCUVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 15:19:21 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791B61D0F7;
-        Sat,  3 Dec 2022 12:19:20 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id x28so7885049qtv.13;
-        Sat, 03 Dec 2022 12:19:20 -0800 (PST)
+        Sat, 3 Dec 2022 15:21:33 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341F81D329
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 12:21:33 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id c7so5130817iof.13
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 12:21:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwdVJg7raQtnjUVRTztYGrA3fr8psFlvQUt/25nfn4s=;
-        b=WzLBmwlI1VsY9pLVdmvIIscYxAaSw0leKqrziMvspNKdRtaVFiKGz5oF6ueg/cY0LW
-         l96OVkH1wweauJNckxTpChAsBFcS7GuFde6QC4W99mA701J85sBJn78wB2pvZj7KPLIC
-         ObN79bsGiq1tKb0F0Vs81amOrwQLWIZMax/sar/VhlxtN6UpqpphIXHEqMSY9vek5L7H
-         cHHCF7Gn17hmVsGUPrCO8Tlwf9Whueuy8rhV2QLw6nqaGAQABr9YIYmdXPhOYGswM3LU
-         4RvOV8Wh5g6ZPXms89eUIkRVryrxOCmYl2XPDFH4qKuotb45pS41TMEVRqxJ+KiUKUgl
-         CC+w==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=OjLbk44Au+Sdmiq/+s+1/FHnlE/VSjCTCYggWoHGmsAetgZc/TOjRukNwaVxUz7ExO
+         wTizLz2s1JOzUQEKbydJ05TXEMS3STEuNqTIZmcA6lukr57+LaX6MU2qMvAo6xKDNvkR
+         iHoo1vqy7tPgshtfde787TfQfmMIGxyrRDeMb88Mq+ZVjhGrw/nY8v7+TRsTfHwvcRUt
+         ZGMKOiBYS2F+yryG2bPCWTxyozuVrzpy2d1r8v4z1cxdhEcwjMCe5jmdbpiGtjuVzsEH
+         x7J8UgWEc5D3O1bs/nWdkQhWa/96maKaz5DABfMnJKSw3dfPcR++ciATwByL0uHNsJiZ
+         6Mdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UwdVJg7raQtnjUVRTztYGrA3fr8psFlvQUt/25nfn4s=;
-        b=JywyRRcNpPDIVHlnWj5LRDN7hLWLrTGy9fNqYN5tDY2xRdR//mSVFi46TsKJ61h9kh
-         E+EApgOaCyW+SgV78LPYrnSZgH/julENME2V029FZhDOWatv5Lu9mT28wSfXhdqtbPif
-         UAuBKX5TKDHC/SbE9Skb2uMZq57Z3vbgewWxsdR66+KJatTM0GQbuGuMuB8Cci1lyyad
-         oYQzd97J4InT9/V8CVoTE6Fp0v1677QpvlGPwUXjpWk3TpMuQBfzcAPcg2WAi4YcgFlK
-         zWYQHBUx2x1Ig4h8fl1mwWYDa4Sc5cw5EGQbgdlx9KF7O1mdHJvCemeSuDeynkVTbYdh
-         7NYQ==
-X-Gm-Message-State: ANoB5pk/Y7FxMpBGEbu6zdII4vfxO8WwngFUp5P+R3s0zVeEJfv+BkfY
-        i9zBUe8GP3RzP6oRKJniSjU=
-X-Google-Smtp-Source: AA0mqf6MG+LmSJ702t7xq9r75ifeYqi0z0yUywrEmEClXAn4mixMcjsVyvqJY7yRPz34fWa8DP9GpQ==
-X-Received: by 2002:a05:622a:228c:b0:3a5:c024:7f31 with SMTP id ay12-20020a05622a228c00b003a5c0247f31mr71054100qtb.311.1670098759600;
-        Sat, 03 Dec 2022 12:19:19 -0800 (PST)
-Received: from localhost ([2600:1700:65a0:ab60:150b:cfdc:d3ab:f038])
-        by smtp.gmail.com with ESMTPSA id w18-20020a05620a425200b006cfc9846594sm8666021qko.93.2022.12.03.12.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 12:19:18 -0800 (PST)
-Date:   Sat, 3 Dec 2022 12:19:12 -0800
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, 18801353760@163.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        Dmitry Vyukov <dvyukov@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] net: sched: fix memory leak in tcindex_set_parms
-Message-ID: <Y4uvQA2xxtJXltSM@pop-os.localdomain>
-References: <20221129025249.463833-1-yin31149@gmail.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=OfENG2+5EHzMJ+Z6OZCsb9yfWSsl5bbYyNvhJFOA5dTa8ylh27H8RA6H6YKX8wbuos
+         0TRPNeEE4EwO/ap5loOyt4/VCV0tk0FV6gfpkit/JTm0zqHbHjGar/7ClIBO+jhOqmhd
+         3u3wEZDlGw/zPm1FyPAAmo1tcz6ESpU7/887D2c26W2qppmOOcIwVnt76B/T3lKwG0Io
+         9SqJAliSyZtyOi71cHI0gueXWH4uTnkgbFBfROA8UpzICzWZbSZHvQ+jdhrkszNKUGW/
+         Yi94mJs8mghel0lWr0haeakBsledEPL8Xdubkf6Ffs5uC79kSS8B+h5PczUVUvumsuwp
+         lDRg==
+X-Gm-Message-State: ANoB5pl0J3n4gHrkKCI65eM0VwqPy+v1XYSHARD5AoqZIGMK1ihGiUXT
+        9P2tIlHEeWThXp3E7As++FxBRVjNzz7bGqK8aiQ=
+X-Google-Smtp-Source: AA0mqf58V3kscjtrt6gBlthrN1I1F9/e3zcb8BnSI0WRmKGzO+L3LAfl2kc55zMo1175Blvh8WfytHUK/59UG2m1/ls=
+X-Received: by 2002:a02:cc2a:0:b0:372:bf99:b645 with SMTP id
+ o10-20020a02cc2a000000b00372bf99b645mr27868827jap.278.1670098892175; Sat, 03
+ Dec 2022 12:21:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129025249.463833-1-yin31149@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:1e02:0:0:0:0 with HTTP; Sat, 3 Dec 2022 12:21:31
+ -0800 (PST)
+Reply-To: dravasmith27@gmail.com
+From:   Dr Ava Smith <tracywi178@gmail.com>
+Date:   Sat, 3 Dec 2022 12:21:31 -0800
+Message-ID: <CAAxj-_gA1LcTMuN4=2mDf_xuJ9cXU9FrUmEb63mewaYS=67ChQ@mail.gmail.com>
+Subject: GREETINGS FROM DR AVA SMITH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d34 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [tracywi178[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tracywi178[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dravasmith27[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 10:52:49AM +0800, Hawkins Jiawei wrote:
-> Kernel uses tcindex_change() to change an existing
-> filter properties. During the process of changing,
-> kernel uses tcindex_alloc_perfect_hash() to newly
-> allocate filter results, uses tcindex_filter_result_init()
-> to clear the old filter result.
-> 
-> Yet the problem is that, kernel clears the old
-> filter result, without destroying its tcf_exts structure,
-> which triggers the above memory leak.
-> 
-> Considering that there already extis a tc_filter_wq workqueue
-> to destroy the old tcindex_data by tcindex_partial_destroy_work()
-> at the end of tcindex_set_parms(), this patch solves this memory
-> leak bug by removing this old filter result clearing part,
-> and delegating it to the tc_filter_wq workqueue.
-
-Hmm?? The tcindex_partial_destroy_work() is to destroy 'oldp' which is
-different from 'old_r'. I mean, you seem assuming that struct
-tcindex_filter_result is always from struct tcindex_data, which is not
-true, check the following tcindex_lookup() which retrieves tcindex_filter_result
-from struct tcindex_filter.
-
-static struct tcindex_filter_result *tcindex_lookup(struct tcindex_data *p,
-                                                    u16 key)
-{
-        if (p->perfect) {
-                struct tcindex_filter_result *f = p->perfect + key;
-
-                return tcindex_filter_is_set(f) ? f : NULL;
-        } else if (p->h) {
-                struct tcindex_filter __rcu **fp;
-                struct tcindex_filter *f;
-
-                fp = &p->h[key % p->hash];
-                for (f = rcu_dereference_bh_rtnl(*fp);
-                     f;
-                     fp = &f->next, f = rcu_dereference_bh_rtnl(*fp))
-                        if (f->key == key)
-                                return &f->result;
-        }
-
-        return NULL;
-}
-
- 
-> diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
-> index 1c9eeb98d826..3f4e7a6cdd96 100644
-> --- a/net/sched/cls_tcindex.c
-> +++ b/net/sched/cls_tcindex.c
-> @@ -478,14 +478,6 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
->  		tcf_bind_filter(tp, &cr, base);
->  	}
->  
-> -	if (old_r && old_r != r) {
-> -		err = tcindex_filter_result_init(old_r, cp, net);
-> -		if (err < 0) {
-> -			kfree(f);
-> -			goto errout_alloc;
-> -		}
-> -	}
-> -
-
-Even if your above analysis is correct, 'old_r' becomes unused (set but not used)
-now, I think you should get some compiler warning.
-
-Thanks.
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava
