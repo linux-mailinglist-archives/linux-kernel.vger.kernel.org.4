@@ -2,100 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3382464169A
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFCB641698
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiLCMQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 07:16:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S229623AbiLCMPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 07:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiLCMQU (ORCPT
+        with ESMTP id S229450AbiLCMPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 07:16:20 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF092B255;
-        Sat,  3 Dec 2022 04:16:19 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id a27so8473946qtw.10;
-        Sat, 03 Dec 2022 04:16:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h70TBke2aedZh5TRlzmm86xQSiyKUCTbsGye69uQbfc=;
-        b=NIkPiX6SYMKIpWDkM71wQJEknqTrJzZw5L7HgIGRrU6NwirQ26wXQalq2Xj/4s2X4E
-         WkaOsZHLQ/a9c28tYXVWMRo1G1EZwMlL1FY2LELfyp+yah/ejHprJMlyhp/QFD7nwKB/
-         zMl3giAKCBMEEgSVfw2Hh7kmaDfGKHf7vBe4WZlI2XhNZjAUwS4tqypvzBz/LHNCD5EG
-         Y4S/K1vfA5Vi3kDeJpFgCAr7tF7ql07N+7xF5lux5eFTDL6sabNmAj65pBDxkWMAIH02
-         xhmck6ZkNslD7azACPIh0Y7ytwnRwA1EsWjvbkUNuN+aj99s9ECAJu383UYiKMoRgQvD
-         89og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h70TBke2aedZh5TRlzmm86xQSiyKUCTbsGye69uQbfc=;
-        b=wRBywX3dMNKR3zi1nf8+K3MseXzm/7r4Ikv3Ja+dO6iiqlifTSi5G5uG/4mEweccvv
-         FukVHwSNlmLyOqsTCBw606coeMQoHfreBsdXpwuPTLABb0uv2hjifNFCzmh/Gx11yxKc
-         lJIMDONat9RdOCMe1hO6zJ+VCe1GwOJKnFYiaxvSl5LDFjG9cKKFqBnIN/g0DBzkz0C1
-         bT4rJen5n/MQcZn+D19VL22EfeqiMFfLjkGZJ12F3RwVri7A6USt8BWWqO5AKCXo0n51
-         DFGZ86Hx+G+QumL0lxQZutUxqEqNcmlUbHdUj+esNeMu9Y6GUERdEN2rQ8liSjyGbmU1
-         vRNA==
-X-Gm-Message-State: ANoB5pl3GooVgyUNS8lY36XHOY5MtWg5tkmw2FqP+ZxDM2+LFpaqHt/Y
-        ZsAD2COc0/8NQCMwUVGwla6pGW6Wizi/k9MOgIs=
-X-Google-Smtp-Source: AA0mqf5dYkXi1ZQZe3/WFNLoLQJYSmQkNHK+zvh7h340dLM7xX6dcybpsQYVQ3oOikieiB33kLdUw/0/OzLlxVpmp04=
-X-Received: by 2002:ac8:7eeb:0:b0:3a5:2615:5694 with SMTP id
- r11-20020ac87eeb000000b003a526155694mr53700676qtc.429.1670069778762; Sat, 03
- Dec 2022 04:16:18 -0800 (PST)
+        Sat, 3 Dec 2022 07:15:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3332B255;
+        Sat,  3 Dec 2022 04:15:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A262B81BEA;
+        Sat,  3 Dec 2022 12:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EAA2C433C1;
+        Sat,  3 Dec 2022 12:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670069747;
+        bh=FA/FXwkV3yMNIZNWRRooladDMk/8jvBZ9yNQ26r2y30=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D9qtJzyMeu6TWO8GaBUDPEkOkSfuyFWWUtes5iPKfxsr2PcVT7UuAdNac6PQV3OFg
+         A6ZEwYnUzPKTdRjceF3dr8ODjJW3FLDxAx557Yx46L0cgcC7e8zxb3GvX1ZDACnQkk
+         yMnfAGGQqdRwmsY3Pfa1sVoUjeA3LTu8MBNgxcNg=
+Date:   Sat, 3 Dec 2022 13:15:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     arun.r.murthy@intel.com, tvrtko.ursulin@intel.com,
+        ville.syrjala@linux.intel.com, stable-commits@vger.kernel.org
+Subject: Re: Patch "drm/i915: Remove non-existent pipes from bigjoiner pipe
+ mask" has been added to the 6.0-stable tree
+Message-ID: <Y4s98APBEmpaAKZd@kroah.com>
+References: <1670066627221113@kroah.com>
 MIME-Version: 1.0
-References: <202212031424175433783@zte.com.cn>
-In-Reply-To: <202212031424175433783@zte.com.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 3 Dec 2022 14:15:42 +0200
-Message-ID: <CAHp75Vch84NZhZa_Gy4qNO1-6ZJq3GBGmJXHSDurW5jeoYzhdQ@mail.gmail.com>
-Subject: Re: [PATCH linux-next] x86/platform/uv: use strscpy to instead of strncpy()
-To:     yang.yang29@zte.com.cn
-Cc:     steve.wahl@hpe.com, mike.travis@hpe.com, dimitri.sivanich@hpe.com,
-        russ.anderson@hpe.com, dvhart@infradead.org, andy@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1670066627221113@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 3, 2022 at 8:24 AM <yang.yang29@zte.com.cn> wrote:
+On Sat, Dec 03, 2022 at 12:23:47PM +0100, gregkh@linuxfoundation.org wrote:
+> 
+> This is a note to let you know that I've just added the patch titled
+> 
+>     drm/i915: Remove non-existent pipes from bigjoiner pipe mask
+> 
+> to the 6.0-stable tree which can be found at:
+>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+> 
+> The filename of the patch is:
+>      drm-i915-remove-non-existent-pipes-from-bigjoiner-pipe-mask.patch
+> and it can be found in the queue-6.0 subdirectory.
+> 
+> If you, or anyone else, feels it should not be added to the stable tree,
+> please let <stable@vger.kernel.org> know about it.
 
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL terminated strings.
-
-...
-
->         /* (remove possible '\n') */
-> -       strncpy(arg, val, ACTION_LEN - 1);
-> -       arg[ACTION_LEN - 1] = '\0';
-> +       strscpy(arg, val, ACTION_LEN - 1);
-
-Should be ACTION_LEN here, no?
-
->         p = strchr(arg, '\n');
->         if (p)
->                 *p = '\0';
-
-Wouldn't be better to refactor this
-
-p = strnchrnul(val, ACTION_LEN, '\n');
-strscpy(arg, val, p - val);
-
-?
-
--- 
-With Best Regards,
-Andy Shevchenko
+Nope, this breaks the build, now dropped.
