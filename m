@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACB56418E9
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2E36418E3
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 21:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiLCUZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 15:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S230149AbiLCUZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 15:25:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiLCUYa (ORCPT
+        with ESMTP id S230044AbiLCUY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 15:24:30 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4CE1EEC0;
+        Sat, 3 Dec 2022 15:24:27 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DB91EC74;
         Sat,  3 Dec 2022 12:23:39 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n16-20020a05600c3b9000b003d08febff59so2234358wms.3;
+Received: by mail-wm1-x32a.google.com with SMTP id m19so5926355wms.5;
         Sat, 03 Dec 2022 12:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2GaIXDtBbV20KozeERajGOhceV7IwDabqvs06lwVtd8=;
-        b=nu4M1blYUkxqL3Lx1EqkpSLHQE2NReYKQubtMQkQskf+RrVAhMo9rNNbN7HWRCsnWS
-         1AeCKZsmJsgzckfS32UTR+50xQs32/Bg26GG0TnLXmdEdOD245nwd0gmbDUjtej2lBH/
-         yfITEN3foxvKAac0drIEejY649wX7kbtmz6FjMmKU5/tG1H0hHRV07BfeH1yCyWaod2S
-         /Bdy47+D5yFSCKImcZdB6amJbanH1aSrc3ZZMP90buW66KOrU+xPSQl8dDn6lUXY+cd9
-         RW+MsHCofcd+/F1/kIm64PNikcsh5RuLqkG/Yufn6HMULavtk37o+rajmT4PpFiyQ9A0
-         /xNw==
+        bh=qoA34bqEZjRu4E0ep4uC+eC6OuqLa9/6w768Dcdm9MY=;
+        b=XJZofP72mBmvGm7sd6DGSdOc8QdtLFwcUyrew+c4SDRoCphT8qyRvSVXlZRowu3+lL
+         sNew/YOk+b/JnbNag8RSAF2Vra/rPy5giw7NNBIjI8R4r9yRynAQ4jdn8QFpeiNt/WqW
+         sRFVLgKuya1nh7EN9L4Cv4sdBh0qxDylw8q2VXMdC47Lt4WgTKnyGkD4YkB3Dm3l5Ed2
+         RzMXyghK55Xxq9cSSR0V/4D7FP/9W37lUBFqZ33OBnkHIPO0Go/VKg3mXeNchb8y98Ea
+         frwJtJPh45Q9gME+V5kvipn4kYOLBqHoLzLE6Fou6lqAqHPyiSL8xmQfBS1QNvrUOn51
+         wiGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2GaIXDtBbV20KozeERajGOhceV7IwDabqvs06lwVtd8=;
-        b=Nk1bMSxNsQKTQvlrd9H++7uK8NDleaqDtjhy488uRlVpmR59/lk2D06EbQilA1MAFM
-         i0ngKPbOY9RaVkA6E40oKEYVkEjd4aDcBZozeA5wWHHxgKGVIM3vyGEqpGRHKxN0H26L
-         Mh0neRJihZsveS5JvYsucvSaKLx4AL3hQd+7r99bfOVGB2MAjl8ZA51d3X+yNR/A9ZHQ
-         YOM32RIAC2O4yLuF2LZg/aRe9z0MZm4gK2DIiDQ6jDnos4GVQNmiIV4HGTkPdj7p4lLl
-         OILhqJ8nu7OKKs3qFy5URohoxF1z55P+zpvGHNV9Hm8wJ1ujGodqA3PDtUTvXsMzoNY5
-         4RzA==
-X-Gm-Message-State: ANoB5pnJwys/VfoPzEtTFFV5dD/Xg1LAFeggbugZpkH16j6MmrDAfbYu
-        goB9QZlcpTU7CnpICC7Mr/OL+CZeCkk=
-X-Google-Smtp-Source: AA0mqf6VusSEH+u/4XLTl27yYNFxs9L8PyuYvOCR2UeLQPe9FkKW7I/8BqhX2uCP2MVyHbkNaMyU5g==
-X-Received: by 2002:a05:600c:31a3:b0:3cf:4757:fc3 with SMTP id s35-20020a05600c31a300b003cf47570fc3mr56710605wmp.172.1670099018096;
+        bh=qoA34bqEZjRu4E0ep4uC+eC6OuqLa9/6w768Dcdm9MY=;
+        b=W5W3mwrDMxV/5PB2R9bP6Qu2ceq0JyKdgtqIMFbZzjCYE+6+d1US3Auuw6QXhKNwiG
+         15N9rQXbcKvia3zPJtYVTwlZoU2KRouyS6FMmlhSBrV9CfvdHTXoyYioii7YTGGBiBjR
+         3aNoGiNMxnB3ftAJWHJ5FPeqbsGbis9+xP70xtyHugtL9xUH7miEC+CYD+fQthmSx4pl
+         oqxzpu7PntRzb1mJO9iP/7B6rtyPCemagNNjlzn/tSqb8UUge32hX3KUWXD0O0fxzUFR
+         mOt2Y1OjzxsMUpw2kA8fY6eR2AJrlaSLxXaMkvJVtgCik0KWPYNvurkXgUpZqCJ05IxD
+         BJOg==
+X-Gm-Message-State: ANoB5plD58yuQAbCKcglthFNf/mkKdBCM1xwCg98bon70gxXXbOpNrKI
+        R2xzw/K13LaWaNXEjhPyPMc1EAJ+h3g=
+X-Google-Smtp-Source: AA0mqf7I+bCR/5EL+immDyRLMaGJK7BsKtsJhp1TSVZHe2N4wgUiKUAX6cgONnotU5J9YVYxCYc9nQ==
+X-Received: by 2002:a05:600c:4f44:b0:3b4:7a99:b22c with SMTP id m4-20020a05600c4f4400b003b47a99b22cmr18395260wmq.11.1670099018801;
         Sat, 03 Dec 2022 12:23:38 -0800 (PST)
 Received: from asus5775.alejandro-colomar.es ([170.253.36.171])
-        by smtp.googlemail.com with ESMTPSA id p17-20020a5d68d1000000b002420cfcd13dsm10064481wrw.105.2022.12.03.12.23.37
+        by smtp.googlemail.com with ESMTPSA id p17-20020a5d68d1000000b002420cfcd13dsm10064481wrw.105.2022.12.03.12.23.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 12:23:37 -0800 (PST)
+        Sat, 03 Dec 2022 12:23:38 -0800 (PST)
 From:   Alejandro Colomar <alx.manpages@gmail.com>
 X-Google-Original-From: Alejandro Colomar <alx@kernel.org>
 To:     linux-man@vger.kernel.org
 Cc:     Alejandro Colomar <alx@kernel.org>, libc-alpha@sourceware.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 25/41] select.2: SYNOPSIS: Add _Nullable
-Date:   Sat,  3 Dec 2022 21:23:01 +0100
-Message-Id: <20221203202317.252789-26-alx@kernel.org>
+Subject: [PATCH 26/41] semop.2: SYNOPSIS: Add _Nullable
+Date:   Sat,  3 Dec 2022 21:23:02 +0100
+Message-Id: <20221203202317.252789-27-alx@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221203202317.252789-1-alx@kernel.org>
 References: <20221203202317.252789-1-alx@kernel.org>
@@ -75,39 +75,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Alejandro Colomar <alx@kernel.org>
 ---
- man2/select.2 | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ man2/semop.2 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/man2/select.2 b/man2/select.2
-index 199522a01..f13d20420 100644
---- a/man2/select.2
-+++ b/man2/select.2
-@@ -30,19 +30,21 @@ .SH SYNOPSIS
+diff --git a/man2/semop.2 b/man2/semop.2
+index ebe37a55c..ad184829e 100644
+--- a/man2/semop.2
++++ b/man2/semop.2
+@@ -24,7 +24,7 @@ .SH SYNOPSIS
  .PP
- .BR typedef " /* ... */ " fd_set;
- .PP
--.BI "int select(int " nfds ", fd_set *restrict " readfds ,
--.BI "           fd_set *restrict " writefds ", fd_set *restrict " exceptfds ,
--.BI "           struct timeval *restrict " timeout );
-+.BI "int select(int " nfds ", fd_set *_Nullable restrict " readfds ,
-+.BI "           fd_set *_Nullable restrict " writefds ,
-+.BI "           fd_set *_Nullable restrict " exceptfds ,
-+.BI "           struct timeval *_Nullable restrict " timeout );
- .PP
- .BI "void FD_CLR(int " fd ", fd_set *" set );
- .BI "int  FD_ISSET(int " fd ", fd_set *" set );
- .BI "void FD_SET(int " fd ", fd_set *" set );
- .BI "void FD_ZERO(fd_set *" set );
- .PP
--.BI "int pselect(int " nfds ", fd_set *restrict " readfds ,
--.BI "           fd_set *restrict " writefds ", fd_set *restrict " exceptfds ,
--.BI "           const struct timespec *restrict " timeout ,
--.BI "           const sigset_t *restrict " sigmask );
-+.BI "int pselect(int " nfds ", fd_set *_Nullable restrict " readfds ,
-+.BI "           fd_set *_Nullable restrict " writefds ,
-+.BI "           fd_set *_Nullable restrict " exceptfds ,
-+.BI "           const struct timespec *_Nullable restrict " timeout ,
-+.BI "           const sigset_t *_Nullable restrict " sigmask );
+ .BI "int semop(int " semid ", struct sembuf *" sops ", size_t " nsops );
+ .BI "int semtimedop(int " semid ", struct sembuf *" sops ", size_t " nsops ,
+-.BI "               const struct timespec *" timeout );
++.BI "               const struct timespec *_Nullable " timeout );
  .fi
  .PP
  .RS -4
