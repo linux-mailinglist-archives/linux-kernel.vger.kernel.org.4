@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76716413E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 04:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095466413E6
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 04:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiLCDFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 22:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S231909AbiLCDFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 22:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiLCDFn (ORCPT
+        with ESMTP id S230321AbiLCDFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 22:05:43 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84239F7A09
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 19:05:42 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id z14so2665331pfr.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 19:05:42 -0800 (PST)
+        Fri, 2 Dec 2022 22:05:44 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FBEF7A0F
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 19:05:43 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so9974138pjs.4
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 19:05:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=MlD/Jt4lEh7hCsdG4GrZC5S+VkhD7NzUj5refRzoYlM=;
-        b=izvAm0VDDUI8l/g0FySHjcna49MAYiOl2i2nsHUCSKpwH56Ir0FhArtL4lxajgpkXU
-         q1iMarjU2+4l78dL0ag6d1NvQOqww04i5UnypzOB7uiJNMdv6ZNzb7EMxtmw5MZyE7FS
-         bThPfxkT785nXJba2CClXZ8fuV2fw9cigmtlu8HPoTnQiyjsAVLVsY+Z6ZgI5QpnZlNS
-         ohghGfzoUn9u90kZ6rVg/9evUP6bC3tPDT6pLi+TdYbrAm2TFz5GcZZc1u/bdGibPp/B
-         2n2b2AfXkggu33bWgZZ5liaNgIt/NwMzjqmw4UnUUdoXbVq6av/nJ7otAE/nEGEaYUqj
-         79LA==
+        h=to:from:cc:content-transfer-encoding:mime-version:references
+         :in-reply-to:message-id:date:subject:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0od2UA8BjfVP9H3ox8w77ADIivJIw8By1NOK2zw+FrE=;
+        b=KE60HFRJtajGozkhN1G07j7c4EziYG6716Pa6R9qKsnbLrhO3hCPHcTangQUHJQ3GY
+         X2rbnjn7S4+RLLyhk83PlpuLOfyJhKoBVtlxnkZuvLLT1Dy0XXbzHJO+Zb1syJAyiJwK
+         1HzKJ8H9/hEF3GYwFmyWk0Q0HJt299gtgQDCfvuWmd4WQ04k7q85X+2UiGbQp6C3N8eC
+         JB+LwQRi4zg/FQlDJbAjSfuyM8ImcVmPJAoCvFAWZxvGbIfyu5saspnbFUHqAR9GovKz
+         bu7+YMpT1y/VmhmBNOg6RXvDyiXtw3R2OK3M9Gt60B1+AIpI/MivGoMygnXM/C8pBqnw
+         RD8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:message-id:date
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MlD/Jt4lEh7hCsdG4GrZC5S+VkhD7NzUj5refRzoYlM=;
-        b=NEJaHO30m4VfC4VGujx338Tz1JcDm3708XNTm1BMosEkKHDey1duuh+BtY0EqKT1MZ
-         H3FeZq62NxNEyVUxORrXbgQyQ8jcpZ6Y6YKrcJddl0WEmszlnK0OsQvcIwVk6cdWx7XY
-         KgfZ0WXYAJ9u0unixBtwUmZgxc3QVak2fBxUTNYNIj3JxwiWo06OfrdX7xSPYZNWUFk2
-         /qty2ktc+1tvS7YL+e465Kk7jjOqO9tZlEx9nFH1ll1Dps0KWDe7srCHKGCBi/r0sYQH
-         +isZH8acrNAkuZjOutZQSwFiw0gAz4WKQdkek5JmQ3WJ1XnV2CKzsjXzIjYKU5Mt5mxp
-         KE2Q==
-X-Gm-Message-State: ANoB5plkEgAPpKjXhpkWKkD3VvqymJvOMq88FO9Rhk12X9eGcmj1b/cY
-        l1Xu4Zt9z3NXDddO6yX2Wwy/7So7P+Qpa+/2
-X-Google-Smtp-Source: AA0mqf64+QPycPCkazRrryQxpdG0UWxw0OahAJX32vqLElr+emlYUBPO7ldr1//HTp+r6hNM6u2ung==
-X-Received: by 2002:a63:d34e:0:b0:477:650a:705c with SMTP id u14-20020a63d34e000000b00477650a705cmr46384100pgi.588.1670036741697;
-        Fri, 02 Dec 2022 19:05:41 -0800 (PST)
+        h=to:from:cc:content-transfer-encoding:mime-version:references
+         :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0od2UA8BjfVP9H3ox8w77ADIivJIw8By1NOK2zw+FrE=;
+        b=SRkvaeDkWIqmxEBGDcrcxclXkRQIoipcOqDP2pguIwIm8tv2/BHxZ4VuiuPqtolrnu
+         3pFzlRMg3ugj0LORK/zNrBkBTG4ATEZ/5912Y8dRz5DdBCd8RVBs+rq6+54iWXNqHgiV
+         ZiOtlYJ6PJCJ3t5tX1Gz72oCf0cu7jwVtKegN/8kFpEZRzHXINXg7IJpa/oKN7thLT3L
+         IXghDrd/hZIm70VDaaLu7mzCd91YeRrmkLpkEoQh4d6LTpe4oXwng1b2YADYtHVFKekF
+         nvYkEya3mP5oi0yP2+AxEDpv7P9GRWBnHkNvb05J+55K9mLcRpPhk3kLsm3MkjFzcIJI
+         Z+sQ==
+X-Gm-Message-State: ANoB5pmy35SsGKAzTFr8GBwolSolQ7BpPbLRmwx1er61fFuLN9gKEXIL
+        iHdoheZnvhIsjiAJyNeumm/Mfw==
+X-Google-Smtp-Source: AA0mqf7I3UiJ8c0sc3B4EdMW1XbN/zXhNbb6fQTziUJ0tB9x01rO25QtP9NFuONupmrWTY1OWyBuOA==
+X-Received: by 2002:a17:90a:be02:b0:219:8199:ef57 with SMTP id a2-20020a17090abe0200b002198199ef57mr9335059pjs.129.1670036742753;
+        Fri, 02 Dec 2022 19:05:42 -0800 (PST)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id q24-20020aa78438000000b00576984617b1sm287450pfn.60.2022.12.02.19.05.40
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090264c200b001873aa85e1fsm6182904pli.305.2022.12.02.19.05.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 19:05:41 -0800 (PST)
-Subject: [PATCH 0/5] mm: Stop alaising VM_FAULT_HINDEX_MASK in arch code
-Date:   Fri,  2 Dec 2022 19:03:51 -0800
-Message-Id: <20221203030356.3917-1-palmer@rivosinc.com>
+        Fri, 02 Dec 2022 19:05:42 -0800 (PST)
+Subject: [PATCH 1/5] mm: Add a leading 0 to the VM_FAULT_* types
+Date:   Fri,  2 Dec 2022 19:03:52 -0800
+Message-Id: <20221203030356.3917-2-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221203030356.3917-1-palmer@rivosinc.com>
+References: <20221203030356.3917-1-palmer@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
 To:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
            linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org
@@ -67,15 +71,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When reviewing
-<https://lore.kernel.org/r/20221029084715.3669204-1-tongtiangen@huawei.com>
-I noticed that the arch-specific VM_FAULT flags used by arm and s390
-alias with VM_FAULT_HINDEX_MASK.  I'm not sure if it's possible to
-manifest this as a bug, but it certainly seems fragile.
+The next patch will add enough codes to need another character, this
+adds the 0 to all the existing codes to keep alignment.
 
-The RISC-V patch is on top of the linked patch above, which isn't in any
-proper tree yet.  Everything else should apply to 6.1-rc1, but I'm in no
-particular rush to get that cleanup in so rush on my end for 6.2.  That
-said I figured it would be easier to send along this now, just in case
-someone who knows the MM code better thinks it can manifest as a bug.
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ include/linux/mm_types.h | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 500e536796ca..758eb70829cb 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -862,24 +862,24 @@ typedef __bitwise unsigned int vm_fault_t;
+  *				in DAX)
+  * @VM_FAULT_COMPLETED:		->fault completed, meanwhile mmap lock released
+  * @VM_FAULT_HINDEX_MASK:	mask HINDEX value
+- *
++ * @VM_FAULT_ARCH_*:		Architecture-specific VM fault codes.
+  */
+ enum vm_fault_reason {
+-	VM_FAULT_OOM            = (__force vm_fault_t)0x000001,
+-	VM_FAULT_SIGBUS         = (__force vm_fault_t)0x000002,
+-	VM_FAULT_MAJOR          = (__force vm_fault_t)0x000004,
+-	VM_FAULT_WRITE          = (__force vm_fault_t)0x000008,
+-	VM_FAULT_HWPOISON       = (__force vm_fault_t)0x000010,
+-	VM_FAULT_HWPOISON_LARGE = (__force vm_fault_t)0x000020,
+-	VM_FAULT_SIGSEGV        = (__force vm_fault_t)0x000040,
+-	VM_FAULT_NOPAGE         = (__force vm_fault_t)0x000100,
+-	VM_FAULT_LOCKED         = (__force vm_fault_t)0x000200,
+-	VM_FAULT_RETRY          = (__force vm_fault_t)0x000400,
+-	VM_FAULT_FALLBACK       = (__force vm_fault_t)0x000800,
+-	VM_FAULT_DONE_COW       = (__force vm_fault_t)0x001000,
+-	VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x002000,
+-	VM_FAULT_COMPLETED      = (__force vm_fault_t)0x004000,
+-	VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x0f0000,
++	VM_FAULT_OOM            = (__force vm_fault_t)0x0000001,
++	VM_FAULT_SIGBUS         = (__force vm_fault_t)0x0000002,
++	VM_FAULT_MAJOR          = (__force vm_fault_t)0x0000004,
++	VM_FAULT_WRITE          = (__force vm_fault_t)0x0000008,
++	VM_FAULT_HWPOISON       = (__force vm_fault_t)0x0000010,
++	VM_FAULT_HWPOISON_LARGE = (__force vm_fault_t)0x0000020,
++	VM_FAULT_SIGSEGV        = (__force vm_fault_t)0x0000040,
++	VM_FAULT_NOPAGE         = (__force vm_fault_t)0x0000100,
++	VM_FAULT_LOCKED         = (__force vm_fault_t)0x0000200,
++	VM_FAULT_RETRY          = (__force vm_fault_t)0x0000400,
++	VM_FAULT_FALLBACK       = (__force vm_fault_t)0x0000800,
++	VM_FAULT_DONE_COW       = (__force vm_fault_t)0x0001000,
++	VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x0002000,
++	VM_FAULT_COMPLETED      = (__force vm_fault_t)0x0004000,
++	VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x00f0000,
+ };
+ 
+ /* Encode hstate index for a hwpoisoned large page */
+-- 
+2.38.1
 
