@@ -2,125 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A41E6419FB
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 00:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E074641A0A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 00:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiLCXLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 18:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S229608AbiLCX4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 18:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiLCXLm (ORCPT
+        with ESMTP id S229498AbiLCX4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 18:11:42 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF2A1E3DA;
-        Sat,  3 Dec 2022 15:11:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BSib87Wzk9UgbhDr56LizA537ubyMSycrTdcN/aCqKYUABWu3zjb8EaiUYyCN05r/yx0BIBz83ufBQY+kRFWwHHWlgfJLTQSMlSoRKveZvcIBF17dkNXhtzn7qWSyW3sEXdg7+WyrVqj1HyvAry5zoXuXQqu/spFmzIM983BOPdozdT/FowV1tZOplxGIu2twQxIeB4sG0GOor1z6qfCzrvjRVQffEtbgNGqhYlQ5RnUZjqjMU42MbPX2n5lZDHjLV27s1s8Sxvusu87Fr32P/phTnHtPv72YYB7GsTBn1txm/7FniVQ/zzEUyWwEbBhl+AFEYA19fyiyfHITLTC1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8F69XYNTkAgrF+T29XEsqpnQsmfaSY3N5Mxuna1TWRE=;
- b=nZvWOCKICxOWVpzmjoORYyvR0PftUSKGREwJopjzdhSUSwskKL46iwCo4oEA29W7McLKn7ds+wMlRw5EI4JJUDPBjxiPKUAqtPVE8UO5Gyqa0yippcJi+qpaRojY7R7amcQHj1Lh6HN6wSPX9OdhOTX+cbNWjcqY23HyI//gQKVQ/wIIA3J4u0mjotGJw7rFWUq2xzlYBzPcIDb7nhMO/VlbMoPHb8NU9AVgQW3m4kVN7p56mH/kFBFKzUh0tPgBilDro8X08u4Q7caTqUHfTt0m9sqCWf1/LaNhy9fmUfXXnr/8g7uMe4zri9QnoYM7rfLNKM5CLp8R/tcoT5NM3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8F69XYNTkAgrF+T29XEsqpnQsmfaSY3N5Mxuna1TWRE=;
- b=UJs2g+1ir1GOSyaYTQseEeJoWczQIQwWLsAZh+60llKlgg8w5Uw8gZrlCB+jcjLtKRZ5ygbZYLCdqIp4P4701Sf+PvEaOQBc1Ztky9NjbWqdQ/h2ry0tcYZvEPQCt3Lk6TMMwE1b23wSYchApY+fWsspKv6tmB4q9WE/L3m2kXE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
- by IA1PR12MB8333.namprd12.prod.outlook.com (2603:10b6:208:3fe::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Sat, 3 Dec
- 2022 23:11:37 +0000
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::45b1:34fb:e14d:96e4]) by BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::45b1:34fb:e14d:96e4%4]) with mapi id 15.20.5880.008; Sat, 3 Dec 2022
- 23:11:36 +0000
-Message-ID: <a3ea1633-98bd-0748-e5a0-774dfe8875d9@amd.com>
-Date:   Sat, 3 Dec 2022 17:11:33 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH v2] docs/sp_SP: Add memory-barriers.txt Spanish
- translation
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        bilbao@vt.edu
-References: <6b1d95ed-3000-3baf-81ae-7794c9515e3b@amd.com>
- <20221128152323.4080455-1-carlos.bilbao@amd.com>
- <878rjoohy2.fsf@meer.lwn.net>
-Content-Language: en-US
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-In-Reply-To: <878rjoohy2.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR13CA0012.namprd13.prod.outlook.com
- (2603:10b6:806:130::17) To BL1PR12MB5874.namprd12.prod.outlook.com
- (2603:10b6:208:396::17)
+        Sat, 3 Dec 2022 18:56:08 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A4E1B9DC;
+        Sat,  3 Dec 2022 15:56:04 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1433ef3b61fso9474127fac.10;
+        Sat, 03 Dec 2022 15:56:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ETXpmKpQVgocnPdi/24YXX1tYt8gxVsCCwAQr1IY9L4=;
+        b=MLyfaFFIf0oGl96WWIeGX2wKpEEDxEqSQhufwCsv3JVBMHrfLCCxaMUw67P/0LDekU
+         HR8hWeWiF73r/u9aDhg/1qY09bPZ/fEpccPkwon3xGjiTcGaGpMaVUk+BdQzI/pUwiRI
+         I2FnxYSdnBPDeGOAwOOY709/DfF2hDSF6x+DErc9DgbJq6PIWP/fMmGPenVM/c2r48jv
+         2mQgHUMqmoTEbz+66/kdGQ6xSX7pTf7mIEdhfKe71OvDVTC/dAyS/FwZ8qyxxGLvNTT9
+         GHY2KJls4Xjle2O5aqYC4DA7Oa/0FsKjfwKdj8rv4uCnASP2zle2avr4cRQD1+tSlsYM
+         kekA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ETXpmKpQVgocnPdi/24YXX1tYt8gxVsCCwAQr1IY9L4=;
+        b=HLzgu6zG05v28WePTaCSVsne2iOg533UrMeUEIDYdxQ+LHeN/IaWSvZ1DCjTIwRG4k
+         SMpKbrYuvDMWKSiaLl0D11BzcWyPV8+JfYqlmXkJambyLDVe64O9ZfWTZssKE87gdd3t
+         2VkDL82wMTdwMBJ+a6kr61mzMbij59C8Eb4YmDqa9RtTBI3lxnvWe5yWgJHfDxtSzSI4
+         ZhdkXb0Kb0WFvmmNWeDgSx333hS3/sMDso10MMq99Qh/MALM+jgh8v6bkeZfVEIlU3Q+
+         gtyZECE/XqMQJOKoHtlvl5Be5diB45VW3M8yFV4BfBLKS1y1JOA7x/wMSlApz5WpIKhC
+         ly8w==
+X-Gm-Message-State: ANoB5pmGVNgmZyCTLu8HpnPRt3qPwspKHo88H+uWzp7omPyhDRJ21XMH
+        iZqBO6JOpn8JAvszOKrMexZLRrfkxu7HVhduqnQ=
+X-Google-Smtp-Source: AA0mqf5WliMK8CJ6jOK2VuuxvJcek1/mSYdXz+AVjTt4folo1Qxzhvdz66FMjuQJUzpJwEpkDxQnPy98dLJQnZ+laho=
+X-Received: by 2002:a05:6870:aa9b:b0:133:1686:385 with SMTP id
+ gr27-20020a056870aa9b00b0013316860385mr31113865oab.110.1670111763677; Sat, 03
+ Dec 2022 15:56:03 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|IA1PR12MB8333:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7ff0334-f949-4f2c-049f-08dad583b9e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VKXzscbZqRIr/h1TkrqQBq+OcrWsz5X+kZGLe342FsuJNhcscQV8GJTzUAMPP8OHfgWtpwU5f214V9nH5cm86OCeJp0E67v5b/ujRFcyavWaXaFrUybOg+n5VvSq9yy5P02IRDLIh+M49zurNzDtGS50lhi+6fcxP6hjlJILaNpj1dlchePLrPePtCtLd7QaAEf83Mw4jX0UmhetyXJ1UZWt4Ay79gskQc0UGmZiYx1KAsa5Fw4nPTLEY8G5abLF6hbwjpIAmXbmaqJjpK/qdqfAyU6Ci0E/zvGpKC/x/tyLEvMJFoDu94gjTzNqEdcfPaPsN/T4BI/zahOs5oNnEN875XQRyvXjZ7Po4C00D3Etf2Z6PAeT50t+k/v9MUotwr9NMnpsAfbDK2pYJVX2b3zBBTCN/beaaWuDG//HIGl9EeOvhKo+IwN8h7VUaPOeG4ycQGK9bBjn2uS7OZgvGlxXjuVwKYD+qauA6BRAsaPDbrSZ3TtJkb4eYFv7E8hSWz5e1nYlvZk6nF6+TNEvg1aHYfe106A2fxfWXOzlWYnKPe3y3Srm77ac9Z1/tyFXcpjWwW4PWMGP2m4ftJ3aip3hSppxRCiqi8sJTRC//czuMESXpJkHwdFFTql0JHZ7BN0sYPnRXUSiUn+TlTYVHWo8aPKFwKTgmYzpw63EAVTUOu2sUANCqbWbqIkKf//HsS1Xy6yMXXMPrJTGSnl7eGKqro+wMDDfDYsv8Ld1USE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(396003)(39860400002)(136003)(346002)(451199015)(2906002)(31696002)(86362001)(316002)(6916009)(6666004)(53546011)(6512007)(6506007)(186003)(6486002)(2616005)(478600001)(41300700001)(5660300002)(4744005)(44832011)(8936002)(38100700002)(4326008)(66946007)(66556008)(66476007)(8676002)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SytNV1FyODR5UjFDcG9OOUVBR0F2NnJkNlRLZkJDQkFCTmp1eEQxTjdZNHNp?=
- =?utf-8?B?U2htenBzSTNZNUdKTW9CY2lRaTduTmFDTHVCWStSbnZxZ2JsclFLTFVDRzNy?=
- =?utf-8?B?VkZibERoMUkyR0pmb3ZXM3ZQZWVEUWV0S0RIcnAybkRoYk96NnQrRGovRnNC?=
- =?utf-8?B?Q3RwZGNSZ1g1cFdqWUozT1YzQzUvVjM1bGNadUxOYWQyOEtpY1lDTG9jMDNz?=
- =?utf-8?B?TVllM1BRam9iaVRwdnNGV0wrd3N2a1FzT2ZiUU1pV3lHNVE0QzhnRG8zUDVm?=
- =?utf-8?B?RmZwMjVRU0JoSlhmYXVVcGpyd21IaDhyWjNsMDZPalk2M0RVbnlhK2owd1NH?=
- =?utf-8?B?bENBcXk1UDFiQ1ZNNUVxRE56VVovWUpveVFuZ2dXY3pneUFYYklycHFGNHlF?=
- =?utf-8?B?ZkU3d2hReVMvMEhjeUI4K21ib01HTWN1dkJOY25OYklIcTJsRU9vVFNQSkE3?=
- =?utf-8?B?dndneU9EdUd0MFZCSjlFWGEvK0RHQXRwTmU5dS9Gck45cThOK1BUU2dVUmg1?=
- =?utf-8?B?T01adEYrKzgrd2M5TXNKbzMwNWRKZy9HQkRWMGZoQ0F4MndxeitlSlJaeGQ4?=
- =?utf-8?B?ZW1QQkdETXZlVjYySFNZTm02YmFUemQzOFJVVDkrK2U2QTBtVnVsK0dKc1Q4?=
- =?utf-8?B?T1J0S1FSd0dpQkl5cVd2ZnJPeEFCNXRqbU0rOUZ3WmhqWFA5NEpqR01wWk96?=
- =?utf-8?B?Z25RNVNJalhCN1k0eWFXMWp2L0JSa3MwbDVuMHVoaWFhQzBnanRnY2FlN0lx?=
- =?utf-8?B?a2FEaG9aZDE3MVprT1dHdVVwY2ptTEpGVFRWSVdLanVjSDhUV3NiVHkrTXVl?=
- =?utf-8?B?T09qZjFYREJCa2JvdXMwN3krdVdpMVZCcVU4TjZwS2l2T05SVDQvYzJFaW1E?=
- =?utf-8?B?Tit1dEQ1YjhySUs3Z0lPSHhaZUxyS2xBaGFlYnZZU3RzMXJVMnlNNEkyWG1v?=
- =?utf-8?B?dENFVExwNVRBVjJSRitrVGRiQXBaWm9Za2M4VGVXOWR5QUpUMTZ2ejhRWkZX?=
- =?utf-8?B?UDM3U1lQVzNZMER3dmk4N1lGSitzSkFUUGxJTEFteW1NbzlsRDJENE9qbUtE?=
- =?utf-8?B?THJ0MTU5Y0JPNXNzaDF2NnZVTjYwTjhtbm5IcmtZbGpTYTJvT2N4WDNlUTZp?=
- =?utf-8?B?NG9tNlNOWUpxajFubnZMYmdPNkdER2Q1QWlxc2htQkxsRW9raGh4MFE2Ni9v?=
- =?utf-8?B?WE9rcDZHM0VRL09mWHRCUGlnNG9TclNIYzRYSlpyUFdMd1dTTVFYOHoyM0V6?=
- =?utf-8?B?VjRiTE1PM2hTQnJYb1gxbzRsVU1aYmlKQ3EyOVZkWlFhTUJoYkJXU3F1NUVj?=
- =?utf-8?B?R2phdFpBSlhwUmR6ajNlNnhscW81NWdTbnVqM0Q2TU9HQTdiaDl5bHplQ3JZ?=
- =?utf-8?B?dWdEQjh5WTRKVHBXR3J4NE40dVNGUElvMWRQUm94YVIwSk1JRWllbVF2TUQr?=
- =?utf-8?B?QkZpNlRZZTVrekUzNVVQRVhJeFBQMDk5dnlMQWMvbTRpZS90SldCanM2QlVh?=
- =?utf-8?B?L3pQUkdEUjBFU0Yvei82cnlHSXNhT2pqOTZGc1FQOWppTkQ0Mi9YUmdMNDVs?=
- =?utf-8?B?THFQemFTU0FodnJpaW5LTTR0WER0S3NKcitWMWpyTDZTbWp4NENiMk5hWHhI?=
- =?utf-8?B?OFJpbGg2WDBaT095NW1jamJwRlptZkxFazA2UVJXR3VxKzJGYzFLNnY1ZkM4?=
- =?utf-8?B?aUMxRGcvUW1DaHg5NHpjYzhqU3V5OGl3MFNXZkN2enNvdjNqZkhtMDNKaXVV?=
- =?utf-8?B?YkRQc0JpZXhObHZoWGpwbmhCNGxWS0ZtektKcnAzKy80cE8zaURvbUFQdlNW?=
- =?utf-8?B?aG1WSTV4RWR1bTZUUTFHSDdIb0ozV0RUaXRJRytDZW1QdDhNNXE5dWlDN1pl?=
- =?utf-8?B?QlhFQjJsa21lVllQYzgrbHlYSTN4aEwrblVJTy9xcnd2ZmN3OWIrUEg4N1Fa?=
- =?utf-8?B?Q0w3bEFIZ29GZTNYMlA4Rnh5MjdNc0xjRWRrUVFvOFRCVnN1NW8rNyszbmFB?=
- =?utf-8?B?eTdLN2dOTFBwVzlYZlpIckdpYllhZmJRekVPWFpJeVFacFNlck1paThUa1Ex?=
- =?utf-8?B?NG8yamRXUkNQQzl1eU9qY1AzNG8rRE9JcU92bTZMZ3NtZXRZclhXQllpV3l5?=
- =?utf-8?B?dXNyUmhCVlJ1UkYrK09lYVJXVWM2Zk5HMkFoV05ERWZRc0RyRU1uVmhhcktF?=
- =?utf-8?Q?2r3M6smYl8Y0LTu4zcLjcRprlG+Nvx8cnlsU5Aaqwt84?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7ff0334-f949-4f2c-049f-08dad583b9e8
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2022 23:11:36.5424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VvqSwLnX8FpCO1FB8i0vbmv2mo9OeePkCg9OqigtRi3/jx1MJt3FYDBwIQADfTwJ51nQShlfLrqSKhXd5KZs1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8333
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <yq15zo86nvk.fsf@oracle.com> <20190819163546.915-1-khorenko@virtuozzo.com>
+ <CADvTj4rVS-wJy1B=dgEO1AOADNYgL3XkZ01Aq=RTfPGEZC+VMA@mail.gmail.com>
+ <ffdb2223-eed3-75b4-a003-4e4c96b49947@grossegger.com> <yq135kacnny.fsf@ca-mkp.ca.oracle.com>
+ <CADvTj4qfPhEKy2V0crGs+Hc_fq=P5OKWFohG9QbTHK3i+GWc=Q@mail.gmail.com>
+ <106f384f-d9e2-905d-5ac5-fe4ffd962122@virtuozzo.com> <CADvTj4rd+Z8S8vwnsmn2a7BXDPBwx1iqWRmE+SbtWep=Lnr20g@mail.gmail.com>
+ <BYAPR11MB36066925274C38555F20FB17FA339@BYAPR11MB3606.namprd11.prod.outlook.com>
+ <CADvTj4qH5xuK9ecEPi3Pm9t962E=nnH0oTBqWv4UPmibeASqdQ@mail.gmail.com>
+ <BYAPR11MB36065EE0321C0AE6A4A3ECC7FA049@BYAPR11MB3606.namprd11.prod.outlook.com>
+ <CADvTj4oej_E3tHm6tzOAhA=n2WughvDfQsaxKbP5Sxb+CeZu=w@mail.gmail.com> <BYAPR11MB360625E5945D5D3B29571857FA099@BYAPR11MB3606.namprd11.prod.outlook.com>
+In-Reply-To: <BYAPR11MB360625E5945D5D3B29571857FA099@BYAPR11MB3606.namprd11.prod.outlook.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Sat, 3 Dec 2022 19:55:52 -0400
+Message-ID: <CADvTj4oNCrwHBRu-rUZtnxoqVkvyxG_Cg07RTAuwpNsGfjWKcw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405 constantly
+ resets under high io load
+To:     Sagar.Biradar@microchip.com
+Cc:     martin.petersen@oracle.com, khorenko@virtuozzo.com,
+        christian@grossegger.com, aacraid@microsemi.com,
+        Don.Brace@microchip.com, Tom.White@microchip.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,36 +80,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/22 5:16 AM, Jonathan Corbet wrote:
-> Carlos Bilbao <carlos.bilbao@amd.com> writes:
-> 
->> Translate the following documents into Spanish:
->>
->> - memory-barriers.txt
->>
->> using the wrapper documents system.
->>
->> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
->> ---
->>  Documentation/translations/sp_SP/index.rst    |    1 +
->>  .../translations/sp_SP/memory-barriers.txt    | 3134 +++++++++++++++++
->>  .../sp_SP/wrappers/memory-barriers.rst        |   19 +
->>  3 files changed, 3154 insertions(+)
->>  create mode 100644 Documentation/translations/sp_SP/memory-barriers.txt
->>  create mode 100644 Documentation/translations/sp_SP/wrappers/memory-barriers.rst
-> 
-> I've applied this, thanks.
-> 
-> For future reference, it would make life just a little easier if you'd
-> put patches inline rather than as attachments.
+On Thu, Nov 17, 2022 at 11:36 PM <Sagar.Biradar@microchip.com> wrote:
+>
+> Hi James,
+> Thanks for your response.
+> This issue seems to be slightly different and may have been originating f=
+rom the drive itself (not too sure).
 
-That's weird, I just used git send-email. Maybe it showed up as an
-attachment due to its large size.
+Yeah, the drive was having hardware issues, although it does sound like a
+potential error condition that's not being correctly handled by aacraid.
 
-> 
-> Thanks,
-> 
-> jon
+>
+> The original issue I was talking about would still occur with the missing=
+ legacy interrupt on certain processors.
+> We are still actively looking into the old "int-x missing" issue that we =
+suspect might possibly originate from the patch.
 
-Thanks,
-Carlos
+Hmm, are there any available details on this "int-x missing" issue, I
+couldn't find
+any public details/reports relating to that.
+
+Is there a list of CPU's known to be affected?
+
+Does it occur in the vendor aacraid release that has this patch merged?
+
+>
+>
+>
+> -----Original Message-----
+> From: James Hilliard <james.hilliard1@gmail.com>
+> Sent: Thursday, November 17, 2022 3:26 AM
+> To: Sagar Biradar - C34249 <Sagar.Biradar@microchip.com>
+> Cc: martin.petersen@oracle.com; khorenko@virtuozzo.com; christian@grosseg=
+ger.com; aacraid@microsemi.com; Don Brace - C33706 <Don.Brace@microchip.com=
+>; Tom White - C33503 <Tom.White@microchip.com>; linux-scsi@vger.kernel.org=
+; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405 constantly=
+ resets under high io load
+>
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e content is safe
+>
+> On Tue, Nov 15, 2022 at 10:05 AM <Sagar.Biradar@microchip.com> wrote:
+> >
+> > Hi James,
+> > I have looked into the patch thoroughly.
+> > We suspect this change might expose an old legacy interrupt issue on so=
+me processors.
+>
+> I did see this error once with this patch when a drive was having issues:
+> [ 4306.357531] aacraid: Host adapter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 4335.030025] aacraid: Host adapter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 4335.030111] aacraid: Host adapter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 4335.030172] aacraid: Host adapter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 4335.189886] aacraid: Host bus reset request. SCSI hang ?
+> [ 4335.189951] aacraid 0000:81:00.0: outstanding cmd: midlevel-0 [ 4335.1=
+89989] aacraid 0000:81:00.0: outstanding cmd: lowlevel-0 [ 4335.190101] aac=
+raid 0000:81:00.0: outstanding cmd: error handler-3 [ 4335.190141] aacraid =
+0000:81:00.0: outstanding cmd: firmware-0 [ 4335.190177] aacraid 0000:81:00=
+.0: outstanding cmd: kernel-0 [ 4335.274070] aacraid 0000:81:00.0: Controll=
+er reset type is 3 [ 4335.274142] aacraid 0000:81:00.0: Issuing IOP reset [=
+ 4365.862127] aacraid 0000:81:00.0: IOP reset succeeded [ 4365.895079] aacr=
+aid: Comm Interface type2 enabled [ 4374.938119] aacraid 0000:81:00.0: Sche=
+duling bus rescan [ 4387.022913] sd 0:1:41:0: [sdi] 27344764928 512-byte lo=
+gical blocks:
+> (14.0 TB/12.7 TiB)
+> [ 4387.022988] sd 0:1:41:0: [sdi] 4096-byte physical blocks [ 5643.714301=
+] aacraid: Host adapter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 5672.349423] BUG: kernel NULL pointer dereference, address: 00000000000=
+00018 [ 5672.351532] #PF: supervisor read access in kernel mode [ 5672.3532=
+62] #PF: error_code(0x0000) - not-present page [ 5672.354860] PGD 8000007ad=
+6ac7067 P4D 8000007ad6ac7067 PUD 7af0892067 PMD 0 [ 5672.356444] Oops: 0000=
+ [#1] SMP PTI
+> [ 5672.358075] CPU: 9 PID: 644201 Comm: cc1plus Tainted: P           O
+>      5.15.64-1-pve #1
+> [ 5672.359749] Hardware name: Supermicro Super Server/X10DRC, BIOS 3.4
+> 05/21/2021
+> [ 5672.361465] RIP: 0010:dma_direct_unmap_sg+0x49/0x1a0
+> [ 5672.363223] Code: ec 20 89 4d d4 4c 89 45 c8 85 d2 0f 8e bb 00 00
+> 00 49 89 fe 49 89 f7 89 d3 45 31 ed 4c 8b 05 ae fd b0 01 49 8b be 60
+> 02 00 00 <45> 8b 4f 18 49 8b 77 10 49 f7 d0 48 85 ff 0f 84 06 01 00 00 4c=
+ 8b [ 5672.367024] RSP: 0000:ffffa4ff58c7cde0 EFLAGS: 00010046 [ 5672.36902=
+0] RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000001 [ 5672=
+.371073] RDX: 0000000000000003 RSI: 0000000000000000 RDI: 0000000000000000 =
+[ 5672.373007] RBP: ffffa4ff58c7ce28 R08: 0000000000000000 R09: 00000000000=
+00001 [ 5672.374795] R10: 0000000000000000 R11: ffffa4ff58c7cff8 R12: 00000=
+00000000000 [ 5672.376418] R13: 0000000000000000 R14: ffff88968e1ec0d0 R15:=
+ 0000000000000000 [ 5672.378136] FS:  00007ff103d25ac0(0000) GS:ffff89547fa=
+c0000(0000)
+> knlGS:0000000000000000
+> [ 5672.379760] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [ 5672.3=
+81402] CR2: 0000000000000018 CR3: 0000007ae90cc004 CR4: 00000000001706e0 [ =
+5672.383023] Call Trace:
+> [ 5672.384673]  <IRQ>
+> [ 5672.386282]  ? task_tick_fair+0x88/0x530 [ 5672.386469] aacraid: Host =
+adapter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 5672.387921]  dma_unmap_sg_attrs+0x32/0x50 [ 5672.391431] aacraid: Host=
+ adapter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 5672.393273]  scsi_dma_unmap+0x3b/0x50 [ 5672.397079] aacraid: Host ada=
+pter abort request.
+>                aacraid: Outstanding commands on (0,1,41,0):
+> [ 5672.398180]  aac_srb_callback+0x88/0x3c0 [aacraid]
+>
+> Does that look related?
+>
+> >
+> > We are currently debugging and digging further details to be able to ex=
+plain it in much detailed fashion.
+> > I will keep you the thread posted as soon as we have something interest=
+ing.
+> >
+> > Sagar
+> >
+> > -----Original Message-----
+> > From: James Hilliard <james.hilliard1@gmail.com>
+> > Sent: Monday, November 14, 2022 12:13 AM
+> > To: Sagar Biradar - C34249 <Sagar.Biradar@microchip.com>
+> > Cc: martin.petersen@oracle.com; khorenko@virtuozzo.com;
+> > christian@grossegger.com; aacraid@microsemi.com; Don Brace - C33706
+> > <Don.Brace@microchip.com>; Tom White - C33503
+> > <Tom.White@microchip.com>; linux-scsi@vger.kernel.org; Linux Kernel
+> > Mailing List <linux-kernel@vger.kernel.org>
+> > Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405
+> > constantly resets under high io load
+> >
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> > the content is safe
+> >
+> > On Thu, Oct 27, 2022 at 1:17 PM <Sagar.Biradar@microchip.com> wrote:
+> > >
+> > > Hi James and Konstantin,
+> > >
+> > > *Limiting the audience to avoid spamming*
+> > >
+> > > Sorry for delayed response as I was on vacation.
+> > > This one got missed somehow as someone else was looking into this and=
+ is no longer with the company.
+> > >
+> > > I will look into this, meanwhile I wanted to check if you (or someone=
+ else you know) had a chance to test this thoroughly with the latest kernel=
+?
+> > > I will get back to you with some more questions or the confirmation i=
+n a day or two max.
+> >
+> > Did this ever get looked at?
+> >
+> > As this exact patch was merged into the vendor aacraid a while ago I'm =
+not sure why it wouldn't be good to merge to mainline as well.
+> >
+> > Vendor aacraid release with this patch merged:
+> > https://download.adaptec.com/raid/aac/linux/aacraid-linux-src-1.2.1-60
+> > 001.tgz
+> >
+> > >
+> > >
+> > > Thanks for your patience.
+> > > Sagar
+> > >
+> > >
+> > > -----Original Message-----
+> > > From: James Hilliard <james.hilliard1@gmail.com>
+> > > Sent: Thursday, October 27, 2022 1:40 AM
+> > > To: Martin K. Petersen <martin.petersen@oracle.com>
+> > > Cc: Konstantin Khorenko <khorenko@virtuozzo.com>; Christian
+> > > Gro=C3=9Fegger <christian@grossegger.com>; linux-scsi@vger.kernel.org=
+;
+> > > Adaptec OEM Raid Solutions <aacraid@microsemi.com>; Sagar Biradar -
+> > > C34249 <Sagar.Biradar@microchip.com>; Linux Kernel Mailing List
+> > > <linux-kernel@vger.kernel.org>; Don Brace - C33706
+> > > <Don.Brace@microchip.com>
+> > > Subject: Re: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405
+> > > constantly resets under high io load
+> > >
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you
+> > > know the content is safe
+> > >
+> > > On Wed, Oct 19, 2022 at 2:03 PM Konstantin Khorenko <khorenko@virtuoz=
+zo.com> wrote:
+> > > >
+> > > > On 10.10.2022 14:31, James Hilliard wrote:
+> > > > > On Tue, Feb 22, 2022 at 10:41 PM Martin K. Petersen
+> > > > > <martin.petersen@oracle.com> wrote:
+> > > > >>
+> > > > >>
+> > > > >> Christian,
+> > > > >>
+> > > > >>> The faulty patch (Commit: 395e5df79a9588abf) from 2017 should
+> > > > >>> be repaired with Konstantin Khorenko (1):
+> > > > >>>
+> > > > >>>    scsi: aacraid: resurrect correct arc ctrl checks for
+> > > > >>> Series-6
+> > > > >>
+> > > > >> It would be great to get this patch resubmitted by Konstantin
+> > > > >> and acked by Microchip.
+> > >
+> > > Can we merge this as is since microchip does not appear to be maintai=
+ning this driver any more or responding?
+> > >
+> > > > >
+> > > > > Does the patch need to be rebased?
+> > > >
+> > > > James, i have just checked - the old patch (v3) applies cleanly ont=
+o latest master branch.
+> > > >
+> > > > > Based on this it looks like someone at microchip may have already=
+ reviewed:
+> > > > > v3 changes:
+> > > > >   * introduced another wrapper to check for devices except for Se=
+ries 6
+> > > > >     controllers upon request from Sagar Biradar (Microchip)
+> > > >
+> > > > Well, back in the year 2019 i've created a bug in RedHat bugzilla
+> > > > https://bugzilla.redhat.com/show_bug.cgi?id=3D1724077
+> > > > (the bug is private, this is default for Redhat bugs)
+> > > >
+> > > > In this bug Sagar Biradar (with the email @microchip.com)
+> > > > suggested me to rework the patch - i've done that and sent the v3.
+> > > >
+> > > > And nothing happened after that, but in a ~year (2020-06-19) the
+> > > > bug was closed with the resolution NOTABUG and a comment that S6 us=
+ers will find the patch useful.
+> > > >
+> > > > i suppose S6 is so old that RedHat just does not have customers
+> > > > using it and Microchip company itself is also not that interested i=
+n handling so old hardware issues.
+> > > >
+> > > > Sorry, i was unable to get a final ack from Microchip, i've
+> > > > written direct emails to the addresses which is found in the
+> > > > internet, tried to connect via linkedin, no luck.
+> > > >
+> > > > --
+> > > > Konstantin Khorenko
