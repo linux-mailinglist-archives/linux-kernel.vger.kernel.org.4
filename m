@@ -2,196 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D3B6414AD
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 08:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6972E6414CD
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 08:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiLCH2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 02:28:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S231594AbiLCHm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 02:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbiLCH2F (ORCPT
+        with ESMTP id S230233AbiLCHmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 02:28:05 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744A0632E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 23:28:03 -0800 (PST)
-Received: from dggpemm500015.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NPLx20plSz15Myn;
-        Sat,  3 Dec 2022 15:27:18 +0800 (CST)
-Received: from [10.174.177.133] (10.174.177.133) by
- dggpemm500015.china.huawei.com (7.185.36.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 3 Dec 2022 15:28:01 +0800
-Subject: Re: [RFC PATCH] gfs2: Fix missing cleanup quota in gfs2_put_super()
-CC:     <liwei391@huawei.com>, <rpeterso@redhat.com>,
-        <agruenba@redhat.com>, <cluster-devel@redhat.com>,
-        <syzkaller-bugs@googlegroups.com>, <linux-kernel@vger.kernel.org>
-References: <20221201115032.3540859-1-bobo.shaobowang@huawei.com>
-From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
-Message-ID: <5c66dbe3-5701-ba42-7933-73a31c2dc891@huawei.com>
-Date:   Sat, 3 Dec 2022 15:28:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        Sat, 3 Dec 2022 02:42:15 -0500
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288F792FC7;
+        Fri,  2 Dec 2022 23:42:11 -0800 (PST)
+Received: from amadeus-VLT-WX0.lan (unknown [218.85.118.194])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 60E89800082;
+        Sat,  3 Dec 2022 15:42:07 +0800 (CST)
+From:   Chukun Pan <amadeus@jmu.edu.cn>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chukun Pan <amadeus@jmu.edu.cn>
+Subject: [PATCH v2 0/2] arm64: dts: rockchip: rk3328: Add Orange Pi R1 Plus
+Date:   Sat,  3 Dec 2022 15:41:47 +0800
+Message-Id: <20221203074149.11543-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20221201115032.3540859-1-bobo.shaobowang@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.133]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500015.china.huawei.com (7.185.36.181)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,MISSING_HEADERS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZS09KVk5ISB1MTRkeGkhOSVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlKQ1VDTlVKSkNVSkJPWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OQg6Gio5Ez0eMAohVjYCAyxO
+        Fy8KCyNVSlVKTUxLS05ISElMQk1MVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlK
+        Q1VDTlVKSkNVSkJPWVdZCAFZQUpOS003Bg++
+X-HM-Tid: 0a84d6ef72d2b03akuuu60e89800082
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Changes from v2:
+> * Add regulator suffix.
+> * Collected acked-by.
 
+Chukun Pan (2):
+  dt-bindings: arm: rockchip: Add Orange Pi R1 Plus
+  arm64: dts: rockchip: rk3328: Add Orange Pi R1 Plus
 
-ÔÚ 2022/12/1 19:50, Wang ShaoBo Ð´µÀ:
-> syzbot has reported an interesting issue:
-> 
-> INFO: task syz-executor888:3126 blocked for more than 143 seconds.
->        Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:syz-executor888 state:D stack:0     pid:3126  ppid:3124   flags:0x00000000
-> Call trace:
->   __switch_to+0x180/0x298 arch/arm64/kernel/process.c:553
->   context_switch kernel/sched/core.c:5209 [inline]
->   __schedule+0x408/0x594 kernel/sched/core.c:6521
->   schedule+0x64/0xa4 kernel/sched/core.c:6597
->   schedule_timeout+0x108/0x1b4 kernel/time/timer.c:1935
->   gfs2_gl_hash_clear+0xd4/0x1b0 fs/gfs2/glock.c:2263
->   gfs2_put_super+0x318/0x390 fs/gfs2/super.c:620
->   generic_shutdown_super+0x94/0x198 fs/super.c:492
->   kill_block_super+0x30/0x78 fs/super.c:1428
->   gfs2_kill_sb+0x68/0x78
->   deactivate_locked_super+0x70/0xe8 fs/super.c:332
->   deactivate_super+0xd0/0xd4 fs/super.c:363
->   cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
->   __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
->   task_work_run+0x100/0x148 kernel/task_work.c:179
->   resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->   do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
->   prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
->   exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
->   el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
->   el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
->   el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-> 
-> Showing all locks held in the system:
-> 1 lock held by rcu_tasks_kthre/11:
->   #0: ffff80000d4a4768 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
-> 1 lock held by rcu_tasks_trace/12:
->   #0: ffff80000d4a4db8 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
-> 1 lock held by khungtaskd/27:
->   #0: ffff80000d4a4640 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:303
-> 2 locks held by getty/2759:
->   #0: ffff0000c7d7e098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
->   #1: ffff80000f6be2f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x89c drivers/tty/n_tty.c:2177
-> 1 lock held by syz-executor888/3126:
->   #0: ffff0000cae680e0 (&type->s_umount_key#41){+.+.}-{3:3}, at: deactivate_super+0xc8/0xd4 fs/super.c:362
-> 
-> =============================================
-> 
-> One task blocked after executing gfs2_gl_hash_clear(), it looks
-> like go to sleep for waiting the condition (&sdp->sd_glock_disposal == 0),
-> this field sd_glock_disposal is used to count the getting times
-> that calling gfs2_glock_get() success, In most cases, when we operate
-> the mount interface, we will finally call this function:
-> 
->                                do_mount()
->                                path_mount()
->                                vfs_get_tree()
->                                gfs2_get_tree()
->                                get_tree_bdev()
->                                gfs2_fill_super()
->                       ________ init_inodes()_____________
->                      V                                   V
->         gfs2_lookup_simple()                         gfs2_rindex_update()
->         gfs2_lookupi()                               gfs2_ri_update()
->         gfs2_dir_search()                         -> read_rindex_entry() //*gfs2_rgrpd->rd_gl
->      -> gfs2_inode_lookup() //*gfs2_inode->i_gl  |__ gfs2_glock_get()
->     |__gfs2_glock_get()
-> 
-> Correspondingly, release this glock's reference and decrease
-> sdp->sd_glock_disposal through this path when umount:
-> 
->                                cleanup_mnt()
->                                deactivate_super()
->                                deactivate_locked_super()
->                                gfs2_kill_sb()
->                                kill_block_super()
->                                generic_shutdown_super()
->            _gfs2_rgrpd->rd_gl__gfs2_put_super()__gfs2_inode->i_gl__
->           V                                                        V
-> 	gfs2_clear_rgrpd()                           gfs2_put_super()
-> 	gfs2_glock_put()                             iput()
->          gfs2_glock_free()                            evict()
->                                                       gfs2_evict_inode()
->                                                       gfs2_glock_put_eventually()
->                                                       gfs2_glock_put()
->                                                       gfs2_glock_free()
-> 
-> But if calling reconfigure_super() from sysfs between mount and umount,
-> this path will also take the glock lock and increase sdp->sd_glock_disposal
-> as it also call gfs2_glock_get():
-> 
->     reconfigure_super()
->      gfs2_reconfigure()
->        gfs2_make_fs_rw() //remount filesystem read-write
->         gfs2_quota_init()
->       -> qd_alloc()      //*gfs2_quota_data->qd_gl
->      |___ gfs2_glock_get()
-> 
-> This relies on gfs2_quota_cleanup() that is eventually called by
-> gfs2_make_fs_ro() to clean up but unfortunately the file system
-> has not been remounted at this time, the condition (!sb_rdonly(sb))
-> is false and gfs2_make_fs_ro() can not be called, ultimately makes
-> sdp->sd_glock_disposal never be 0.
-> 
-> This add calling gfs2_quota_cleanup() when this filesystem remains
-> readOnly, in this case we don't need sync quota or other operation
-> otherwise the filesystem was really remounted.
-> 
-> But this modification will trigger this warning:
-> 
->     WARNING: CPU: 7 PID: 2595 at include/linux/backing-dev.h:246 __folio_mark_dirty+0x559/0x7b0
-I paste wrong, the warning is:
-gfs2: fsid=mounts.0: warning: assertion "!qd->qd_change" failed at 
-function = gfs2_quota_cleanup, file = fs/gfs2/quota.c, line = 1474
+ .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+ .../dts/rockchip/rk3328-orangepi-r1-plus.dts  | 373 ++++++++++++++++++
+ 3 files changed, 379 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3328-orangepi-r1-plus.dts
 
-qd->qd_change has been changed in gfs2_quota_init(), but it looks
-we don't need to do anything before remounting the file system as 
-read-write.
-> 
-> We can filter this warning with adding a parameter as it doesn't
-> really make sense here.
-> 
-> Fixes: 9e6e0a128bca ("GFS2: Merge mount.c and ops_super.c into super.c")
-> Reported-by: syzbot+ed7d0f71a89e28557a77@syzkaller.appspotmail.com
-> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
-> ---
->   fs/gfs2/super.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
-> index b018957a1bb2..9a3c6da8db55 100644
-> --- a/fs/gfs2/super.c
-> +++ b/fs/gfs2/super.c
-> @@ -586,7 +586,10 @@ static void gfs2_put_super(struct super_block *sb)
->   
->   	if (!sb_rdonly(sb)) {
->   		gfs2_make_fs_ro(sdp);
-> +	} else {
-> +		gfs2_quota_cleanup(sdp);
->   	}
-> +
->   	WARN_ON(gfs2_withdrawing(sdp));
->   
->   	/*  At this point, we're through modifying the disk  */
-> 
+-- 
+2.25.1
+
