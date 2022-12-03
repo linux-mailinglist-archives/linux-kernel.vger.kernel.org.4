@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFCB641698
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65EA64169E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 13:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiLCMPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 07:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S229668AbiLCMTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 07:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiLCMPu (ORCPT
+        with ESMTP id S229623AbiLCMTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 07:15:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3332B255;
-        Sat,  3 Dec 2022 04:15:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A262B81BEA;
-        Sat,  3 Dec 2022 12:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EAA2C433C1;
-        Sat,  3 Dec 2022 12:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670069747;
-        bh=FA/FXwkV3yMNIZNWRRooladDMk/8jvBZ9yNQ26r2y30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D9qtJzyMeu6TWO8GaBUDPEkOkSfuyFWWUtes5iPKfxsr2PcVT7UuAdNac6PQV3OFg
-         A6ZEwYnUzPKTdRjceF3dr8ODjJW3FLDxAx557Yx46L0cgcC7e8zxb3GvX1ZDACnQkk
-         yMnfAGGQqdRwmsY3Pfa1sVoUjeA3LTu8MBNgxcNg=
-Date:   Sat, 3 Dec 2022 13:15:44 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     arun.r.murthy@intel.com, tvrtko.ursulin@intel.com,
-        ville.syrjala@linux.intel.com, stable-commits@vger.kernel.org
-Subject: Re: Patch "drm/i915: Remove non-existent pipes from bigjoiner pipe
- mask" has been added to the 6.0-stable tree
-Message-ID: <Y4s98APBEmpaAKZd@kroah.com>
-References: <1670066627221113@kroah.com>
+        Sat, 3 Dec 2022 07:19:03 -0500
+Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F2C1D0FD
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 04:18:59 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 1RTspiirkpJKl1RTtpLW6C; Sat, 03 Dec 2022 13:18:58 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 03 Dec 2022 13:18:58 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jonathan Derrick <jonathan.derrick@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-block@vger.kernel.org
+Subject: [PATCH] block: sed-opal: Don't include <linux/kernel.h>
+Date:   Sat,  3 Dec 2022 13:18:49 +0100
+Message-Id: <a2de79b3de30fe70c457953af935dadd49441f00.1670069909.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1670066627221113@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 12:23:47PM +0100, gregkh@linuxfoundation.org wrote:
-> 
-> This is a note to let you know that I've just added the patch titled
-> 
->     drm/i915: Remove non-existent pipes from bigjoiner pipe mask
-> 
-> to the 6.0-stable tree which can be found at:
->     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-> 
-> The filename of the patch is:
->      drm-i915-remove-non-existent-pipes-from-bigjoiner-pipe-mask.patch
-> and it can be found in the queue-6.0 subdirectory.
-> 
-> If you, or anyone else, feels it should not be added to the stable tree,
-> please let <stable@vger.kernel.org> know about it.
+There is no need to include <linux/kernel.h> here.
 
-Nope, this breaks the build, now dropped.
+Prefer the less invasive <linux/types.h> and <linux/compiler_types.h>
+which are needed in this .h file itself.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Let see if build-bots agree with me!
+---
+ include/linux/sed-opal.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/sed-opal.h b/include/linux/sed-opal.h
+index 6f837bb6c715..87f981c70894 100644
+--- a/include/linux/sed-opal.h
++++ b/include/linux/sed-opal.h
+@@ -11,7 +11,9 @@
+ #define LINUX_OPAL_H
+ 
+ #include <uapi/linux/sed-opal.h>
+-#include <linux/kernel.h>
++
++#include <linux/compiler_types.h>		/* for __user */
++#include <linux/types.h>
+ 
+ struct opal_dev;
+ 
+-- 
+2.34.1
+
