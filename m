@@ -2,73 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FE66411D3
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5546411DB
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 01:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbiLCAKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 19:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
+        id S234200AbiLCAQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 19:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234894AbiLCAKl (ORCPT
+        with ESMTP id S234369AbiLCAQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 19:10:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08541E5A95;
-        Fri,  2 Dec 2022 16:10:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98E0462444;
-        Sat,  3 Dec 2022 00:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D8E5C433C1;
-        Sat,  3 Dec 2022 00:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670026240;
-        bh=hb2BkYSv1mgd0Ayr7pCnUPQnFfEY1gfc1QGUMfV0LLs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=A7KvQ0muglL9LW6mmxsk0ScC5mLvZp6qrBYEhuN8rxpnma8a57zNUGWWYmyQxg+Gh
-         Nt/o14+BIz8ovf1RtAAInvPI+Ig45tQrLXH68712jsl/4y49J/Z7QVMMP9tfgGAHrE
-         pe4HT3FmtWwDUoHFqEPX59i1OE2KQEH4DeouQM1pIVmLKLLiEWQkZrEv8KrWhExqqR
-         lrO0iypoHimKH//RVKQ65OoJfQ07mfacWSDJAFLLAwfV4uqn9OiGHFK305vFmt0Hz9
-         JIbVdkubiGRW9omNHcECq1ydK0uEJ2H/9+Y3EboZxz2BUQ7+Xyoq3GZFH91yN+f1Om
-         ptORiZzhUWNRg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0B7AC395EC;
-        Sat,  3 Dec 2022 00:10:39 +0000 (UTC)
-Subject: Re: [GIT PULL] MMC fixes for v6.1-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221202083310.136427-1-ulf.hansson@linaro.org>
-References: <20221202083310.136427-1-ulf.hansson@linaro.org>
-X-PR-Tracked-List-Id: <linux-mmc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221202083310.136427-1-ulf.hansson@linaro.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.1-rc5-2
-X-PR-Tracked-Commit-Id: dd30dcfa7a74a06f8dcdab260d8d5adf32f17333
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2df2adc3e69d32751eb534ed55c591854260c4a3
-Message-Id: <167002623998.23477.4811013471866866486.pr-tracker-bot@kernel.org>
-Date:   Sat, 03 Dec 2022 00:10:39 +0000
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Dec 2022 19:16:42 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EFA9D80E6;
+        Fri,  2 Dec 2022 16:16:41 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2D2423A;
+        Fri,  2 Dec 2022 16:16:47 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 299303F73B;
+        Fri,  2 Dec 2022 16:16:39 -0800 (PST)
+Date:   Sat, 3 Dec 2022 00:14:57 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/5] clk: sunxi-ng: Remove duplicate ARCH_SUNXI
+ dependencies
+Message-ID: <20221203001439.64284671@slackpad.lan>
+In-Reply-To: <20221126191319.6404-2-samuel@sholland.org>
+References: <20221126191319.6404-1-samuel@sholland.org>
+        <20221126191319.6404-2-samuel@sholland.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri,  2 Dec 2022 09:33:10 +0100:
+On Sat, 26 Nov 2022 13:13:15 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.1-rc5-2
+Hi,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2df2adc3e69d32751eb534ed55c591854260c4a3
+thanks for addressing this!
 
-Thank you!
+> SUNXI_CCU already depends on ARCH_SUNXI, so adding the dependency to
+> individual SoC drivers is redundant.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  drivers/clk/sunxi-ng/Kconfig | 43 ++++++++++++++++++------------------
+>  1 file changed, 21 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/clk/sunxi-ng/Kconfig b/drivers/clk/sunxi-ng/Kconfig
+> index 461537679c04..64cfa022e320 100644
+> --- a/drivers/clk/sunxi-ng/Kconfig
+> +++ b/drivers/clk/sunxi-ng/Kconfig
+> @@ -14,43 +14,43 @@ config SUNIV_F1C100S_CCU
+>  
+>  config SUN20I_D1_CCU
+>  	tristate "Support for the Allwinner D1 CCU"
+> -	default RISCV && ARCH_SUNXI
+> -	depends on (RISCV && ARCH_SUNXI) || COMPILE_TEST
+> +	default RISCV
+> +	depends on RISCV || COMPILE_TEST
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+I agree on the "depends" part: Indeed the guard symbol already covers
+that, so it's redundant.
+However I am not so sure about the "default" part: When ARCH_SUNXI is
+deselected, but COMPILE_TEST in enabled, we default to every CCU driver
+being built-in. I am not sure this is the intention, or at least
+expected when doing compile testing?
+
+>  
+>  config SUN20I_D1_R_CCU
+>  	tristate "Support for the Allwinner D1 PRCM CCU"
+> -	default RISCV && ARCH_SUNXI
+> -	depends on (RISCV && ARCH_SUNXI) || COMPILE_TEST
+> +	default RISCV
+> +	depends on RISCV || COMPILE_TEST
+>  
+>  config SUN50I_A64_CCU
+>  	tristate "Support for the Allwinner A64 CCU"
+> -	default ARM64 && ARCH_SUNXI
+> -	depends on (ARM64 && ARCH_SUNXI) || COMPILE_TEST
+> +	default ARM64
+> +	depends on ARM64 || COMPILE_TEST
+
+I wonder if this "depends" line was always wrong and should be fixed:
+We can compile a 32-bit ARM kernel and run it on an A64. Granted this
+requires a special bootloader or a hacked U-Boot (tried that), and
+reveals some other issues with the decompressor, but technically there
+is no 64-bit dependency in here.
+The same goes for all the other ARM64 CCUs: Cortex-A53s can run AArch32
+in all exception levels.
+So shall we just completely remove the "depends" line for those, and
+let SUNXI_CCU do that job? Or use use !RISCV || COMPILE_TEST?
+
+Cheers,
+Andre
+
+>  
+>  config SUN50I_A100_CCU
+>  	tristate "Support for the Allwinner A100 CCU"
+> -	default ARM64 && ARCH_SUNXI
+> -	depends on (ARM64 && ARCH_SUNXI) || COMPILE_TEST
+> +	default ARM64
+> +	depends on ARM64 || COMPILE_TEST
+>  
+>  config SUN50I_A100_R_CCU
+>  	tristate "Support for the Allwinner A100 PRCM CCU"
+> -	default ARM64 && ARCH_SUNXI
+> -	depends on (ARM64 && ARCH_SUNXI) || COMPILE_TEST
+> +	default ARM64
+> +	depends on ARM64 || COMPILE_TEST
+>  
+>  config SUN50I_H6_CCU
+>  	tristate "Support for the Allwinner H6 CCU"
+> -	default ARM64 && ARCH_SUNXI
+> -	depends on (ARM64 && ARCH_SUNXI) || COMPILE_TEST
+> +	default ARM64
+> +	depends on ARM64 || COMPILE_TEST
+>  
+>  config SUN50I_H616_CCU
+>  	tristate "Support for the Allwinner H616 CCU"
+> -	default ARM64 && ARCH_SUNXI
+> -	depends on (ARM64 && ARCH_SUNXI) || COMPILE_TEST
+> +	default ARM64
+> +	depends on ARM64 || COMPILE_TEST
+>  
+>  config SUN50I_H6_R_CCU
+>  	tristate "Support for the Allwinner H6 and H616 PRCM CCU"
+> -	default ARM64 && ARCH_SUNXI
+> -	depends on (ARM64 && ARCH_SUNXI) || COMPILE_TEST
+> +	default ARM64
+> +	depends on ARM64 || COMPILE_TEST
+>  
+>  config SUN4I_A10_CCU
+>  	tristate "Support for the Allwinner A10/A20 CCU"
+> @@ -71,8 +71,7 @@ config SUN6I_A31_CCU
+>  
+>  config SUN6I_RTC_CCU
+>  	tristate "Support for the Allwinner H616/R329 RTC CCU"
+> -	default ARCH_SUNXI
+> -	depends on ARCH_SUNXI || COMPILE_TEST
+> +	default y
+>  
+>  config SUN8I_A23_CCU
+>  	tristate "Support for the Allwinner A23 CCU"
+> @@ -91,8 +90,8 @@ config SUN8I_A83T_CCU
+>  
+>  config SUN8I_H3_CCU
+>  	tristate "Support for the Allwinner H3 CCU"
+> -	default MACH_SUN8I || (ARM64 && ARCH_SUNXI)
+> -	depends on MACH_SUN8I || (ARM64 && ARCH_SUNXI) || COMPILE_TEST
+> +	default MACH_SUN8I || ARM64
+> +	depends on MACH_SUN8I || ARM64 || COMPILE_TEST
+>  
+>  config SUN8I_V3S_CCU
+>  	tristate "Support for the Allwinner V3s CCU"
+> @@ -101,7 +100,7 @@ config SUN8I_V3S_CCU
+>  
+>  config SUN8I_DE2_CCU
+>  	tristate "Support for the Allwinner SoCs DE2 CCU"
+> -	default MACH_SUN8I || (ARM64 && ARCH_SUNXI)
+> +	default MACH_SUN8I || ARM64
+>  
+>  config SUN8I_R40_CCU
+>  	tristate "Support for the Allwinner R40 CCU"
+> @@ -115,6 +114,6 @@ config SUN9I_A80_CCU
+>  
+>  config SUN8I_R_CCU
+>  	tristate "Support for Allwinner SoCs' PRCM CCUs"
+> -	default MACH_SUN8I || (ARCH_SUNXI && ARM64)
+> +	default MACH_SUN8I || ARM64
+>  
+>  endif
+
