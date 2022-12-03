@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26620641354
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D936641356
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 03:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiLCCZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Dec 2022 21:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        id S235135AbiLCC1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Dec 2022 21:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbiLCCZ1 (ORCPT
+        with ESMTP id S235098AbiLCC1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:25:27 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6EEBDCE2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:25:26 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q1so5807814pgl.11
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Dec 2022 18:25:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qe3Kot75P0ehlOAWJ+W2KaYDqgt2hyWIV3bO0GRxNwM=;
-        b=QWQVuu2sfyBztLQQwqQPFN02JvATwjtE5qID6YEDN+72UodsQlyHEPyGRaWgZFRTTR
-         uRnWK+9DpdqcQ25oen3icozFeCSxWxy6xZiD+z7PSYoGKo04INcqhg2+kviq+7In2pJR
-         YEAqcsASnvC7DF9yDgA3BOfeKmOiA1tv+CaRs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qe3Kot75P0ehlOAWJ+W2KaYDqgt2hyWIV3bO0GRxNwM=;
-        b=aJ23nkKhgV7OhDkNsiWy4C8IqXa4ByZUq2wDcPlRhVw/cFu/CTm2WCjEHdsa+v1qpe
-         8ocxNzX6o2aB/ipY30yZtDP/34a8c/JKY8VACDQf6/ynluAQjd5mivPlNwiQcBr1YqO8
-         vQkWaZmrTpExvf1Rc0Z0X6sQo5aw4Jle4RIiqD3mqjV8JLJd2Rps4HwpgzbpE0MBCovB
-         avX1g24LAp5MIzBZGoOn9mF1AqtAQ92nBM6joddTgXghq0Co3pSJxsBQmaFSjiR/8aW5
-         BE8OV09vyLUf5wapqDCP8vW+S4IGN2ajyKF2/lEMWNBp8pbhMQ8btLoVKvEatiDCRuC5
-         VKKQ==
-X-Gm-Message-State: ANoB5pmsMMabw4GLAkQDc2svvN5S7WhRLcNM6U5jSdhnt77K+3vq5B8x
-        43P6ixiCxDbc4oyhU3TWxrFcPA==
-X-Google-Smtp-Source: AA0mqf4jgpifGJAXMClGoBCX78UAFNY/rPQyAwu9YUGBBvgEisZM5G6+77aK1xBoA4eCWNPz1o8blQ==
-X-Received: by 2002:a63:d946:0:b0:477:af25:38c8 with SMTP id e6-20020a63d946000000b00477af2538c8mr45480936pgj.392.1670034326231;
-        Fri, 02 Dec 2022 18:25:26 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 127-20020a620485000000b00576670cc16dsm1843999pfe.197.2022.12.02.18.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:25:25 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:25:25 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Subject: Re: [PATCH v4 06/39] x86/fpu: Add helper for modifying xstate
-Message-ID: <202212021825.4A1B632FD@keescook>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-7-rick.p.edgecombe@intel.com>
+        Fri, 2 Dec 2022 21:27:38 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD27658D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 18:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670034458; x=1701570458;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2c3hf/HHfr577jmshikdBUjbXYPD2FvwfDeEvYKmb/M=;
+  b=YC2zSspQuXE4MK+IsTRyhwPxcEpSb8G8frezMppALtZmKy6ctA9yudnN
+   pRFQ+ou3aKR+fC1ygYXa9A/X494GEyLnDlMl7x5DQVXS6IYELsrXlcy0M
+   ZF6/hNTbb116kAg/7sPG96oXjllewusq3NO5r8RtSWOEnk4nlL0bwGkQQ
+   ngK/ZaZX+u6unHmoq0BeaZgpd8vD4YAEbdQqtbIP31OQY+2wjmzTULL6t
+   26baFtYJ/eKL9dYpqgxgYkEA1kl2WhHqOZQ9Q6NW3QzpW3gHbuI0rPrOY
+   8UYpyj0LfIkTezKnRg/oV/Ps4eoEwDpJuiVTsiXVCh4V2Dlm3DVN1nTol
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="314793921"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="314793921"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 18:27:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="645231545"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="645231545"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2022 18:27:36 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p1IFb-000EDH-2L;
+        Sat, 03 Dec 2022 02:27:35 +0000
+Date:   Sat, 03 Dec 2022 10:27:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/apic] BUILD SUCCESS
+ 2833275568755eb937a52c358bf8bfa7125a463e
+Message-ID: <638ab401.4D/DJxiD1+Z2BTry%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-7-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:33PM -0800, Rick Edgecombe wrote:
-> Just like user xfeatures, supervisor xfeatures can be active in the
-> registers or present in the task FPU buffer. If the registers are
-> active, the registers can be modified directly. If the registers are
-> not active, the modification must be performed on the task FPU buffer.
-> 
-> When the state is not active, the kernel could perform modifications
-> directly to the buffer. But in order for it to do that, it needs
-> to know where in the buffer the specific state it wants to modify is
-> located. Doing this is not robust against optimizations that compact
-> the FPU buffer, as each access would require computing where in the
-> buffer it is.
-> 
-> The easiest way to modify supervisor xfeature data is to force restore
-> the registers and write directly to the MSRs. Often times this is just fine
-> anyway as the registers need to be restored before returning to userspace.
-> Do this for now, leaving buffer writing optimizations for the future.
-> 
-> Add a new function fpregs_lock_and_load() that can simultaneously call
-> fpregs_lock() and do this restore. Also perform some extra sanity
-> checks in this function since this will be used in non-fpu focused code.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/apic
+branch HEAD: 2833275568755eb937a52c358bf8bfa7125a463e  x86/of: Add support for boot time interrupt delivery mode configuration
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+elapsed time: 734m
+
+configs tested: 60
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                            allyesconfig
+alpha                               defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+s390                                defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                              defconfig
+s390                             allyesconfig
+sh                               allmodconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a004
+powerpc                          allmodconfig
+x86_64                        randconfig-a002
+mips                             allyesconfig
+ia64                             allmodconfig
+x86_64                           allyesconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+arc                  randconfig-r043-20221201
+i386                          randconfig-a005
+riscv                randconfig-r042-20221201
+s390                 randconfig-r044-20221201
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                            allnoconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+hexagon              randconfig-r045-20221201
+hexagon              randconfig-r041-20221201
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-k001
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
