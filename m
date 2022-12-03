@@ -2,100 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD32641812
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 18:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A82641822
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 18:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiLCRXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 12:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S229737AbiLCRgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 12:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiLCRXv (ORCPT
+        with ESMTP id S229481AbiLCRgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 12:23:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246FE1E700;
-        Sat,  3 Dec 2022 09:23:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9812B80689;
-        Sat,  3 Dec 2022 17:23:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 218F0C433C1;
-        Sat,  3 Dec 2022 17:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670088226;
-        bh=iTtdW6gDpKHLLzKCX31xhKgEEH+3KoFhhXGmXIO5ZP8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u+BEgHWXH5ITAwz3jXgk74FH9/Gb25v/9qpiVZjuhkSjkKCCxC0WqKDHhfSoEehp0
-         OZR+rOagvJcew3j4vmZSM4+bXjb44hWLLYp5W9SgnLMUea/u2PVqKFbuJ1WbqjyD9v
-         8YHVekiyvg5oxz6p5rgsajsL1shvgSj9ilzlnJFuQIRbY0bIRbnN8JjkknRMP7NaoI
-         fhYr3xyvOh55rHcRYWzoDVHeRmKhy6s2bRAK+Z2Uju2lXLMYZAB63RdZ9isq36WIge
-         IVwx0U+Uwaz/b7vRn57R4wyFtsKEa42bvqhHfIPNKklNf1Hvrzyza9XEAW23Fv8JYE
-         RjDy6sNGMXfgg==
-Date:   Sat, 3 Dec 2022 17:36:30 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Olivier Moysan <olivier.moysan@foss.st.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Arnaud Pouliquen" <arnaud.pouliquen@st.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        <linux-iio@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] iio: adc: stm32-dfsdm: fill module aliases
-Message-ID: <20221203173630.4b4de6c7@jic23-huawei>
-In-Reply-To: <20221202152848.45585-1-olivier.moysan@foss.st.com>
-References: <20221202152848.45585-1-olivier.moysan@foss.st.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 3 Dec 2022 12:36:36 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C861EAC6
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Dec 2022 09:36:35 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id p8so12146209lfu.11
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Dec 2022 09:36:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/ctzesBDdhC+Y3n4ElDRulMMltmusXqIbDihrEfQDM=;
+        b=OHEnnX0jGp1638H8u/uZ4bJNDPcFOPpcFpgi9tHunQXqIcHfPKsunadfrRXgNy1bQx
+         tcPJcmRNAfbIoNlPJDsWRQoM2yal6JT1Ueuxl0p6Yb0rXkZqvEtg9Mx0pD5wH5dv10ia
+         uST3PM08GV8MchAP5QsTvQ9xWnyDP2FD6SbeIIWNjJOy647+st3/5+4YyoEXWqAqoGYF
+         z2OTM4x4GAqulvap35qdWrkRWjD6RhuC3oFQDJ0h40irrmnp1QhtuuTpUTEe1ISprqc3
+         gP50ZBi8Qg4uigx8MKz/eJD7FXShSV+ziGYp6dS8rfgrLpFbEKw0i+I3/RW6GbH8UNJR
+         C2ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r/ctzesBDdhC+Y3n4ElDRulMMltmusXqIbDihrEfQDM=;
+        b=1sEz2mrAEqEXdmvrfAk9pYf7O0mbfwt0DnKtxSjp7wDvXJIrkNTkKLr2gZykxEFPgr
+         y1eyvl55xMvrH8sddVmiaxvw+UhV1T/q/3buOODuHeKKU3AD2oapwdz5JGSL8JZZuVrx
+         m4k6k6wr0yppmBYqAybnW9WUvnD0w+mOA2TCUEuckot2SiWcJ/ajXBbXRrOdbza5MKe7
+         1caxLnPajvnvAEVG5NwyM88FriBakZN8Y2mY+OGENuEnuC2JdBf6yts6AH+kd82zd66Y
+         TtIPuDKhgUlj/incrWAjkRPB4d0Zdn0c7ZxrkgnMzDFxVOgr0VHJOBMJanHfxfli2taM
+         77yg==
+X-Gm-Message-State: ANoB5pmMt5sIQse0F+gkx1ScxzzatSLg6/TP+zbdhhbLff+LlEi/AqUW
+        AcEmbht2h5jOC/fxhR0rHUc/9qpCwrd4/70S1Ig=
+X-Google-Smtp-Source: AA0mqf7V2EiYLQhuJdG5Kw6yb99BKQmFThgOfAm3yATQDN2bBOnJUNdUqnMZ2BN6nAuJzHt8e0BfpA3oc04rSzUjHZk=
+X-Received: by 2002:a05:6512:4cd:b0:4a2:c2cf:a297 with SMTP id
+ w13-20020a05651204cd00b004a2c2cfa297mr23780329lfq.286.1670088993299; Sat, 03
+ Dec 2022 09:36:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6022:5653:b0:33:7b6f:7092 with HTTP; Sat, 3 Dec 2022
+ 09:36:32 -0800 (PST)
+Reply-To: Gregdenzell9@gmail.com
+From:   Greg Denzell <incceisabit@gmail.com>
+Date:   Sat, 3 Dec 2022 17:36:32 +0000
+Message-ID: <CAJu2LG8XQ07qu_bRvm1CgyEsMAXh6N-zgORqsoXzF_mfD57VdA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Dec 2022 16:28:48 +0100
-Olivier Moysan <olivier.moysan@foss.st.com> wrote:
+Ahoj,
 
-> When STM32 DFSDM driver is built as module, no modalias information
-> is available. This prevents module to be loaded by udev.
-> Add MODULE_DEVICE_TABLE() to fill module aliases.
-> 
-> Fixes: e2e6771c6462 ("IIO: ADC: add STM32 DFSDM sigma delta ADC support")
-> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
-Applied to the fixes-togreg branch of iio.git.
-
-Note this will probably go upstream just after the merge window closes
-now.
-
-Thanks,
-
-Jonathan
-
-> ---
-> Changes in v2: Add Fixes tag
-> ---
->  drivers/iio/adc/stm32-dfsdm-adc.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/iio/adc/stm32-dfsdm-adc.c b/drivers/iio/adc/stm32-dfsdm-adc.c
-> index 6d21ea84fa82..a428bdb567d5 100644
-> --- a/drivers/iio/adc/stm32-dfsdm-adc.c
-> +++ b/drivers/iio/adc/stm32-dfsdm-adc.c
-> @@ -1520,6 +1520,7 @@ static const struct of_device_id stm32_dfsdm_adc_match[] = {
->  	},
->  	{}
->  };
-> +MODULE_DEVICE_TABLE(of, stm32_dfsdm_adc_match);
->  
->  static int stm32_dfsdm_adc_probe(struct platform_device *pdev)
->  {
-
+Toto je moja druh=C3=A1 spr=C3=A1va pre v=C3=A1s t=C3=BDkaj=C3=BAca sa fina=
+n=C4=8Dn=C3=BDch prostriedkov
+v=C3=A1=C5=A1ho zosnul=C3=A9ho pr=C3=ADbuzn=C3=A9ho. Podrobnosti v=C3=A1m p=
+o=C5=A1lem po prijat=C3=AD va=C5=A1ej
+odpovede.
