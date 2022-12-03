@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C05164162C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FD3641635
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 11:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiLCK46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 05:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S229772AbiLCK6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 05:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiLCK45 (ORCPT
+        with ESMTP id S229608AbiLCK6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 05:56:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C143D907;
-        Sat,  3 Dec 2022 02:56:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 728F660B9D;
-        Sat,  3 Dec 2022 10:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88071C433C1;
-        Sat,  3 Dec 2022 10:56:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670065015;
-        bh=rPBLAbIQU5/KfDfhpmV4aB0A37Grw8nWz3gWe/n2IIA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aUaIqTomeftDAKUaiw2KZ7m+Rp/8vsvmFj+DsFn7RYJ8gDFwi7uAPW9z9RlIxa2iy
-         lP85bWV9vnGFdwBKuUSFY2fg6ts+L2KnctqLU0V8AXsH0MJw2W3M+33nQmy0x3W60v
-         rYg0/dWBHQSrhTZ/vsKcBFnf/hrHsUWUe+bddhAFfbo3SOrYsf0Z61HuCwmZYTd6yu
-         ZAM6dpHs5R2xLxzLB4Pcg3tPAD4id8Mc6jKSk8y2VvAOtHA+5VY9H68/Yv7n1poo6Q
-         8ZKjI4ku6raLVgFS6d1Jq2z+4qHH7BHXrwSlYpa8d/lTSetDRXm+sSsbs1eHFmzCii
-         vv4H3dlZdwnRg==
-Date:   Sat, 3 Dec 2022 10:56:52 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: riscv: note that counter access is part
- of the uABI
-Message-ID: <Y4srdBCmYJFx+ypW@spud>
-References: <mhng-72f383f6-a85f-4587-9fa6-f85fb9f27ec8@palmer-ri-x1c9a>
- <87359wpy9y.fsf@meer.lwn.net>
- <87y1rooje8.fsf@meer.lwn.net>
+        Sat, 3 Dec 2022 05:58:38 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F5574FFB7;
+        Sat,  3 Dec 2022 02:58:33 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8Cx7+vYK4tjv_cCAA--.7097S3;
+        Sat, 03 Dec 2022 18:58:32 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+DSK4tj5QYlAA--.26430S2;
+        Sat, 03 Dec 2022 18:58:32 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v1] gpio: loongson: enable irqdomain hierarchy config
+Date:   Sat,  3 Dec 2022 18:58:25 +0800
+Message-Id: <20221203105825.15886-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cIOy0Str+DzswXPd"
-Content-Disposition: inline
-In-Reply-To: <87y1rooje8.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxr+DSK4tj5QYlAA--.26430S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Wry5CF1fZFW5GrykGw1UGFg_yoWxZrc_C3
+        sFqFn3Wr1UCF9F9rWavr4fZry2ka1UWr1ru3Z2qw13Zw17Za15uw15ua1DWw17Wr47WFWr
+        ZrWfJFyjvr4xWjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        X7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07j1SoXUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The loongson gpio driver need select IRQ_DOMAIN_HIERARCHY and add
+such support.
 
---cIOy0Str+DzswXPd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ drivers/gpio/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Sat, Dec 03, 2022 at 03:45:35AM -0700, Jonathan Corbet wrote:
-> Jonathan Corbet <corbet@lwn.net> writes:
->=20
-> > Palmer Dabbelt <palmer@dabbelt.com> writes:
-> >> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >>
-> >> I think I merged the last one of these, but if the doc folks pick it u=
-p=20
-> >> that's fine with me.  Otherwise I'll take it when it comes back around=
-,=20
-> >> so folks have time to take a look.
-> >
-> > "Doc folks" applied it, thanks. :)
->=20
-> Actually, I take that back.  I'd missed this part from the patch:
->=20
-> > Based on an, as yet, unsent v2 of my other uABI changes. I don't expect
-> > it to be applicable, just getting a patch into patchwork while I don't
-> > forget about this.
->=20
-> ...but b4 happily picked up a couple of *other* patches from this thread
-> and applied them instead; I've now undone that.  Sorry for the noise.
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 55b7c5bae4aa..0f014411703e 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -395,6 +395,7 @@ config GPIO_LOONGSON_64BIT
+ 	depends on LOONGARCH || COMPILE_TEST
+ 	select GPIO_GENERIC
+ 	select GPIOLIB_IRQCHIP
++	select IRQ_DOMAIN_HIERARCHY
+ 	help
+ 	  Say yes here to support the GPIO functionality of a number of
+ 	  Loongson series of chips. The Loongson GPIO controller supports
+-- 
+2.20.1
 
-Huh, I accidentally put an "in-reply-to" header on this patch. I have
-been updating some of my submission helper scripts & I must have left
-the field populated from sending another set by accident:
-https://lore.kernel.org/linux-riscv/20221129144742.2935581-1-conor.dooley@m=
-icrochip.com/
-
-Apologies!
-
-
---cIOy0Str+DzswXPd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY4srawAKCRB4tDGHoIJi
-0iG/AP0XmMTWGZ5BNQ5fse4/Pi6ZWZLGRKm/cu2uJJeL1h5nvgD+LoVTVJjfsNBo
-t+SdsF9w9KgG8q1LbGORN3MvXU0uQAQ=
-=hMHg
------END PGP SIGNATURE-----
-
---cIOy0Str+DzswXPd--
