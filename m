@@ -2,99 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CF864146E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 07:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60F5641471
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Dec 2022 07:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbiLCGJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Dec 2022 01:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S231151AbiLCGLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Dec 2022 01:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiLCGJm (ORCPT
+        with ESMTP id S229665AbiLCGLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Dec 2022 01:09:42 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAB713E39;
-        Fri,  2 Dec 2022 22:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=Vxr1BilUXwzDdnzrGNUD0GN+KKUJxwsmIbzziZmyjCA=; b=Xk3ColPdsycTXJhkAUS6OmurZW
-        T+nCYLuJCXP1v8JR6Q2epHI11hTB3WKced4aO6pVCjI7C6BHnmKbeF3EWpa+JriiQkQtqB4ADkT8z
-        H+xfcYwKsJm4hD3jYsh4QvJIDHyYhJjfGNW7fhp3TGNI80yNI9r5Y0KpN0DUE+i/mzZclNTD0Cc2X
-        LJt8RrQOvThAqTWKGFEDQNKEDMWfntp3OyeAXIzdG6lkoHQqeF+Zn6ERjA0dr5+1j6f/oIuA0haBa
-        ITTCa7BppfO1f7D9tJhKV1k7YiOTZjO7bo85JqKHU7RjomiDQVpNc1wKZmxLYIPaBnb6P/2X+J9Xg
-        HvkP8qdw==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p1LiZ-000vxr-UL; Sat, 03 Dec 2022 06:09:44 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Lin Ma <linma@zju.edu.cn>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH] media: dvbdev.h: fix kernel-doc warnings
-Date:   Fri,  2 Dec 2022 22:09:31 -0800
-Message-Id: <20221203060931.19953-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 3 Dec 2022 01:11:08 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149A9BEE1C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Dec 2022 22:11:02 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NPKF10MTrz4y0v7;
+        Sat,  3 Dec 2022 14:11:01 +0800 (CST)
+Received: from szxlzmapp07.zte.com.cn ([10.5.230.251])
+        by mse-fl1.zte.com.cn with SMTP id 2B36As15085164;
+        Sat, 3 Dec 2022 14:10:54 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Sat, 3 Dec 2022 14:10:56 +0800 (CST)
+Date:   Sat, 3 Dec 2022 14:10:56 +0800 (CST)
+X-Zmail-TransId: 2b04638ae870232ee8c4
+X-Mailer: Zmail v1.0
+Message-ID: <202212031410566533649@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <geert@linux-m68k.org>
+Cc:     <gerg@linux-m68k.org>, <linux-m68k@lists.linux-m68k.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG02OGs6IHVzZSBzdHJzY3B5KCkgdG8gaW5zdGVhZCBvZiBzdHJuY3B5KCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B36As15085164
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638AE875.000 by FangMail milter!
+X-FangMail-Envelope: 1670047861/4NPKF10MTrz4y0v7/638AE875.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638AE875.000/4NPKF10MTrz4y0v7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix kernel-doc warnings in <media/dvbdev.h> that were recently introduced.
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Quietens these warnings:
+The implementation of strscpy() is more robust and safer.
 
-../include/media/dvbdev.h:193: warning: Function parameter or member 'ref' not described in 'dvb_device'
-../include/media/dvbdev.h:207: warning: expecting prototype for dvb_device_get(). Prototype was for dvb_device_put() instead
-dvbdev.h:257: warning: contents before sections
-
-Fixes: 0fc044b2b5e2 ("media: dvbdev: adopts refcnt to avoid UAF")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Lin Ma <linma@zju.edu.cn>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
- include/media/dvbdev.h |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ arch/m68k/kernel/setup_no.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff -- a/include/media/dvbdev.h b/include/media/dvbdev.h
---- a/include/media/dvbdev.h
-+++ b/include/media/dvbdev.h
-@@ -130,6 +130,7 @@ struct dvb_adapter {
-  * struct dvb_device - represents a DVB device node
-  *
-  * @list_head:	List head with all DVB devices
-+ * @ref:	reference count for this device
-  * @fops:	pointer to struct file_operations
-  * @adapter:	pointer to the adapter that holds this device node
-  * @type:	type of the device, as defined by &enum dvb_device_type.
-@@ -200,7 +201,7 @@ struct dvb_device {
- struct dvb_device *dvb_device_get(struct dvb_device *dvbdev);
- 
- /**
-- * dvb_device_get - Decrease dvb_device reference
-+ * dvb_device_put - Decrease dvb_device reference
-  *
-  * @dvbdev:	pointer to struct dvb_device
-  */
-@@ -250,10 +251,10 @@ int dvb_register_device(struct dvb_adapt
- /**
-  * dvb_remove_device - Remove a registered DVB device
-  *
-+ * @dvbdev:	pointer to struct dvb_device
-+ *
-  * This does not free memory. dvb_free_device() will do that when
-  * reference counter is empty
-- *
-- * @dvbdev:	pointer to struct dvb_device
-  */
- void dvb_remove_device(struct dvb_device *dvbdev);
- 
+diff --git a/arch/m68k/kernel/setup_no.c b/arch/m68k/kernel/setup_no.c
+index cb6def585851..37fb663559b4 100644
+--- a/arch/m68k/kernel/setup_no.c
++++ b/arch/m68k/kernel/setup_no.c
+@@ -90,8 +90,7 @@ void __init setup_arch(char **cmdline_p)
+ 	config_BSP(&command_line[0], sizeof(command_line));
+
+ #if defined(CONFIG_BOOTPARAM)
+-	strncpy(&command_line[0], CONFIG_BOOTPARAM_STRING, sizeof(command_line));
+-	command_line[sizeof(command_line) - 1] = 0;
++	strscpy(&command_line[0], CONFIG_BOOTPARAM_STRING, sizeof(command_line));
+ #endif /* CONFIG_BOOTPARAM */
+
+ 	process_uboot_commandline(&command_line[0], sizeof(command_line));
+-- 
+2.15.2
