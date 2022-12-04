@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1224A641C10
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A232641C12
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiLDJek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 04:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
+        id S229983AbiLDJhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 04:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiLDJei (ORCPT
+        with ESMTP id S229834AbiLDJhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 04:34:38 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AD339D
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 01:34:33 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id 125so8518098vsi.9
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 01:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WDZCPeHF38SRI2PhowrQk3SQC9N/a7ammpRRQqsEwNs=;
-        b=AbRL9P6Qn3/xgQIx/pr3LG8cbkJVDfT9OVAUbK6KrzlboQqDcc5qDyhnDPrkt6l479
-         6rRzZRyqU1Zjr9waeEtgH95w2xviLHF3x7b/3+9n7GZJkghEhGItfl4JBU2S3yMof1PM
-         l9KrRyak1Z5nTAZsL+zcloajEUiDOTf8EJm5qoPrmDDyKJF1iwwojBjKm0wxkTy/aG3M
-         Y2PpV2hwM/46KrZUUTf9iLgA6DcgX7p8dwjTIEI3v8H1W++FnQOVGWQqKNXvBO8lraGt
-         +awKel+zwyFLh6+hxXcmHIMCL0DfwS+eqD46uh25JWEaEhjR3kdZLRDep073ioU5+Fys
-         a5/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WDZCPeHF38SRI2PhowrQk3SQC9N/a7ammpRRQqsEwNs=;
-        b=hC2hLvfLsJO6tO/iY5Equvfk0G6V+lZ61FXwgUpSZY5JIVITu6P7WEcDWuKK+dDznW
-         jlD7bxRMCk9NexePyvOlNEuuIrMyTmzK6CGEOGIprHDJACf4MPMdNFIEHpDuPv4dB//i
-         1TE0DMp+ozuPAnUod5p79Bzs27KdVXJlKPw3+7nw/sR6VThoNKzA2WR6PMkdTo2wns9H
-         HHgPWuOUnyp1LswMtG6G7tJ35fWlDSo3g6ofNQQxYTTV3Bvhvf5Opi1p+rmrWBhXFtD4
-         Ztk3ouvh/qRt3D5vzmq4XMxNmPX8PV+2Cr4iwUAnLAUiTbkyYMA+SRkkSDOkK0PrwTco
-         nG3Q==
-X-Gm-Message-State: ANoB5pl9Z3sQOVW6TPLaQof3uiC0rHxW4FI5rqYqgtkVj9hjpSRvdi5s
-        4CcjDyKquk6VQQ38HDonbXOuTpG4wHbzkOl4hocQTUmG14z/UTPH
-X-Google-Smtp-Source: AA0mqf6odUcczZRCsSLrEvyEneoIneIZ0eqanYuxkKWHUX3keeCnDUzxCsHAEQ+wk1zEFWUiilitWrSHk8Yh/i5MNC0=
-X-Received: by 2002:a67:ea04:0:b0:3a7:d7bc:c2e9 with SMTP id
- g4-20020a67ea04000000b003a7d7bcc2e9mr34388799vso.61.1670146472628; Sun, 04
- Dec 2022 01:34:32 -0800 (PST)
+        Sun, 4 Dec 2022 04:37:51 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6425BE0D;
+        Sun,  4 Dec 2022 01:37:47 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p1lRP-0005zX-FS; Sun, 04 Dec 2022 10:37:43 +0100
+Message-ID: <0611323c-2088-e6f3-1c38-7cf742dfb60d@leemhuis.info>
+Date:   Sun, 4 Dec 2022 10:37:42 +0100
 MIME-Version: 1.0
-References: <20221203011120.2361610-1-almasrymina@google.com> <CAAPL-u_e7-4BT20Z9atTXFgeZSnGXWM2uX0r+2GrBqXk8RmX2Q@mail.gmail.com>
-In-Reply-To: <CAAPL-u_e7-4BT20Z9atTXFgeZSnGXWM2uX0r+2GrBqXk8RmX2Q@mail.gmail.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Sun, 4 Dec 2022 01:34:20 -0800
-Message-ID: <CAHS8izMA2zaadio1ezXXW9vq1L16MwNkQxHv3HJgN=LU0n4Eug@mail.gmail.com>
-Subject: Re: [PATCH v1] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
-To:     Wei Xu <weixugc@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, fvdl@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [regression] Bug 216753 - 6e 6 ghz bands are disabled since 5.16
+ on intel ax211
+Content-Language: en-US, de-DE
+To:     mbizon@freebox.fr, Dave Chiluk <chiluk@ubuntu.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Cc:     "Coelho, Luciano" <luciano.coelho@intel.com>,
+        "Greenman, Gregory" <gregory.greenman@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
+ <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
+ <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
+ <9a03c244-adff-afaf-7385-d8e89cd3f338@leemhuis.info>
+ <02F8DDF1-EC0D-4EBD-88F5-7E000841C337@holtmann.org>
+ <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com>
+ <19ea39c87df3c54cbc487466f806bc157d0bf563.camel@freebox.fr>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <19ea39c87df3c54cbc487466f806bc157d0bf563.camel@freebox.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670146668;829b5fee;
+X-HE-SMSGID: 1p1lRP-0005zX-FS
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,124 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 8:14 PM Wei Xu <weixugc@google.com> wrote:
->
-> On Fri, Dec 2, 2022 at 5:11 PM Mina Almasry <almasrymina@google.com> wrote:
-> >
-> > commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> > reclaim"") enabled demotion in memcg reclaim, which is the right thing
-> > to do, however, I suspect it introduced a regression in the behavior of
-> > try_to_free_mem_cgroup_pages().
-> >
-> > The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
-> > reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
-> > of the cgroup should reduce by nr_pages. The callers expect
-> > try_to_free_mem_cgroup_pages() to also return the number of pages
-> > reclaimed, not demoted.
-> >
-> > However, what try_to_free_mem_cgroup_pages() actually does is it
-> > unconditionally counts demoted pages as reclaimed pages. So in practice
-> > when it is called it will often demote nr_pages and return the number of
-> > demoted pages to the caller. Demoted pages don't lower the memcg usage,
-> > and so I think try_to_free_mem_cgroup_pages() is not actually doing what
-> > the callers want it to do.
-> >
-> > I suspect various things work suboptimally on memory systems or don't
-> > work at all due to this:
-> >
-> > - memory.high enforcement likely doesn't work (it just demotes nr_pages
-> >   instead of lowering the memcg usage by nr_pages).
-> > - try_charge_memcg() will keep retrying the charge while
-> >   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
-> >   making any room for the charge.
-> > - memory.reclaim has a wonky interface. It advertises to the user it
-> >   reclaims the provided amount but it will actually demote that amount.
-> >
-> > There may be more effects to this issue.
-> >
-> > To fix these issues I propose shrink_folio_list() to only count pages
-> > demoted from inside of sc->nodemask to outside of sc->nodemask as
-> > 'reclaimed'.
-> >
-> > For callers such as reclaim_high() or try_charge_memcg() that set
-> > sc->nodemask to NULL, try_to_free_mem_cgroup_pages() will try to
-> > actually reclaim nr_pages and return the number of pages reclaimed. No
-> > demoted pages would count towards the nr_pages requirement.
-> >
-> > For callers such as memory_reclaim() that set sc->nodemask,
-> > try_to_free_mem_cgroup_pages() will free nr_pages from that nodemask
-> > with either reclaim or demotion.
-> >
-> > Tested this change using memory.reclaim interface. With this change,
-> >
-> >         echo "1m" > memory.reclaim
-> >
-> > Will cause freeing of 1m of memory from the cgroup regardless of the
-> > demotions happening inside.
-> >
-> >         echo "1m nodes=0" > memory.reclaim
-> >
-> > Will cause freeing of 1m of node 0 by demotion if a demotion target is
-> > available, and by reclaim if no demotion target is available.
-> >
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >
-> > ---
-> >
-> > This is developed on top of mm-unstable largely because I need the
-> > memory.reclaim nodes= arg to test it properly.
-> > ---
-> >  mm/vmscan.c | 13 ++++++++++++-
-> >  1 file changed, 12 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 2b42ac9ad755..8f6e993b870d 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -1653,6 +1653,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
-> >         LIST_HEAD(free_folios);
-> >         LIST_HEAD(demote_folios);
-> >         unsigned int nr_reclaimed = 0;
-> > +       unsigned int nr_demoted = 0;
-> >         unsigned int pgactivate = 0;
-> >         bool do_demote_pass;
-> >         struct swap_iocb *plug = NULL;
-> > @@ -2085,7 +2086,17 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
-> >         /* 'folio_list' is always empty here */
-> >
-> >         /* Migrate folios selected for demotion */
-> > -       nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
-> > +       nr_demoted = demote_folio_list(&demote_folios, pgdat);
-> > +
-> > +       /*
-> > +        * Only count demoted folios as reclaimed if we demoted them from
-> > +        * inside of the nodemask to outside of the nodemask, hence reclaiming
-> > +        * pages in the nodemask.
-> > +        */
-> > +       if (sc->nodemask && node_isset(pgdat->node_id, *sc->nodemask) &&
-> > +           !node_isset(next_demotion_node(pgdat->node_id), *sc->nodemask))
->
-> next_demotion_node() is just the first demotion target node. Demotion
-> can fall back to other allowed target nodes returned by
-> node_get_allowed_targets().  When the page is demoted to a fallback
-> node and this fallback node is in sc->nodemask, nr_demoted should not
-> be added into nr_reclaimed, either.
->
+On 02.12.22 18:42, Maxime Bizon wrote:
+> On Fri, 2022-12-02 at 11:18 -0600, Dave Chiluk wrote:
+> 
+>> The 6ghz band becomes disabled as soon as I upgrade to the 5.16+
+>> linux-stable kernels. So from a user perspective this really is a
+>> case of a kernel upgrade breaking user-space.  This is what led me
+>> down this rabbit hole here.
+>  
+> FWIW
+> 
+> I have the same issue on a Lenovo T14 gen2 laptop with built-in ax210
+> card, and sold as Wifi-6E compliant.
+> 
+> The exact patch you mention causes the issue, so it seems my bios does
+> not return the correct values either.
 
-Thanks for reviewing Wei, I did indeed miss this.
+That makes me (as a outsider that has no real knowledge about the inner
+workings of the Linux Wifi subsystem) wonder: Does it work in Windows?
+Because if that's the case I wonder how Windows ensures everything
+confirms to regulatory requirements & standards. If that handled on the
+software level if the info is missing in the firmware? Or is there a
+another place in the firmware structures where Windows looks for details
+(and we don't).
 
-> One way to address this issue is to pass sc->nodemask into
-> demote_folio_list() and exclude sc->nodemask from the allowed target
-> demotion nodes.
->
+Or is that a Linux-only machine that might even use a different firmware?
 
-This makes sense to me. Applied this change and uploaded v2:
-https://lore.kernel.org/linux-mm/20221204093008.2620459-1-almasrymina@google.com/T/#u
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-> > +               nr_reclaimed += nr_demoted;
-> > +
-> >         /* Folios that could not be demoted are still in @demote_folios */
-> >         if (!list_empty(&demote_folios)) {
-> >                 /* Folios which weren't demoted go back on @folio_list */
-> > --
-> > 2.39.0.rc0.267.gcb52ba06e7-goog
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
