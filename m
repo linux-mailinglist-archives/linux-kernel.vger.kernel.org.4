@@ -2,69 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15A964208F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 00:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5BE642095
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 00:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiLDXea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 18:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
+        id S230498AbiLDXsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 18:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiLDXe2 (ORCPT
+        with ESMTP id S229954AbiLDXsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 18:34:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1A9101D7;
-        Sun,  4 Dec 2022 15:34:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B679B80B4E;
-        Sun,  4 Dec 2022 23:34:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EE3C433C1;
-        Sun,  4 Dec 2022 23:34:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670196863;
-        bh=0cK0lUJ9KkiCl80pkQTKTOocwELvWyVAqXmQVTnv1c0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lovS8maHB9ktQb+Ww5yw81rPcCZRXSE1XC/6VM5+f/JzRlywQpDbXevjsTf3XGvwo
-         hscWSSHlMxx3ebYCbnH326mOeJsoC5YYQGGFW6Ht9lcNBlPL24prA8E9YlkLl0+iXS
-         gT7b/JylxCuJNt1lrjulIfpbqQbDa8QczvHB3edaPIrjidCAFPcARr2CadVdz3r0S9
-         gA6chTikmaPXADK1iQkCKLL6y6E5g3Csy8L2MmjmnSKtZKyAcXC6nAplTg1PCwNide
-         61gS7CsPom3Y5PON4htb0C6MeaLRDxBTApvUrtVGdJQwIChLQAb1g1+of2ruMJFfSA
-         5pm8SjNmeoAgg==
-Date:   Sun, 4 Dec 2022 23:34:17 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>,
-        Rob Herring <robh@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v5 3/3] clocksource: timer-riscv: Set
- CLOCK_EVT_FEAT_C3STOP based on DT
-Message-ID: <Y40ueQiTZK6hi7RS@spud>
-References: <20221201123954.1111603-1-apatel@ventanamicro.com>
- <20221201123954.1111603-4-apatel@ventanamicro.com>
- <20221202000603.GA1720201-robh@kernel.org>
- <CAK9=C2VbM+CP0Y9Xx-SM9O4TFrQmOKvVWy-u5mxdPxrhacK4JQ@mail.gmail.com>
+        Sun, 4 Dec 2022 18:48:05 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC47E95B2;
+        Sun,  4 Dec 2022 15:48:04 -0800 (PST)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B4LTLCj007670;
+        Sun, 4 Dec 2022 15:47:49 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=TxljiuZ46n4rLhgMo4G7sSasanRHrceLXGLRI4zr2NM=;
+ b=frbtgx4xGChmM/HbKA+uKjgETJ81A8g/2SdqRQ4JIaATcM1Dxh9YX/SVUru+TXRS6+ot
+ 2c+UPVJnHPvg/vJoUypJ1Y5JVhTfYXiv0UjwnAVbxktbBj+jWtg8xRxo6YG3YpATGrgP
+ EQbNC915yeFAKKg51M/AjtRVWNqJcUXsxjRNe44iYLEVmjcgKF6lpkffR+UpWo9xPK/y
+ 8FYKhUcxUbvJPi1gtRnb8CV7jShg2WJ/IG1smKeYZdKAXlQq5z11xLtQlJLJnl5KuoSC
+ 0uW67maWpTwGutnmh2AMlhkYdmlXxIR0afFsOZ74OAIN0CCOUv2sWh2iK/2DZLx5jE/Z 5g== 
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2045.outbound.protection.outlook.com [104.47.57.45])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m8534mwe1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 04 Dec 2022 15:47:49 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PvrYStJ5zB7yriv/btgI4o33nPuy4+fIilOyqiduyt5kP1dJ5DZnakUJyXqX4cdJYo09YN1KyJSvNSivhK39R7hf0CfItgWp43eaKR4PJHqI3YN0MRjO7mXtBA5VsJCWfTPb0fj8rcY0J9V9GMhyzWkaU4huAeWMN56AhXdCSUZjtpR1x71lLWy1Q9M6QZ0exQNVNCkT2uXvDMCvtGVhduCV+XM64i5evfBwmvj/7PBnvQGvU9KgH1uv7sGUNGC9AsRL505dIAbo9aIYQPoyrTSc5LCSeRAjM8Y0ucddirdoAnxAmZlRJPe8rujtOC4vKhg4G+Rf5M74JLgyJAKAiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TxljiuZ46n4rLhgMo4G7sSasanRHrceLXGLRI4zr2NM=;
+ b=j1m1Lu0VGcNxRJcxZizN2ke3dh5OdPb97u0dWL7VnGAcS7OmrYzTwXYOKVlpLtlisDJyadicXkPTUbG0QknKzzz8fW+xaf9+otJamxs+ykBhPHiIYf/GqGUHwXRabu7obop6gbnDpywdAJc/KEbXmc14qBiF2gicCuDFrk+qttm3l/XsZmZaYjJnYO9Eqa3/MyehskmYu/aBqXQr2dVASzjYxt3HlCGv64pfOBS0OWZbvO3/JUPd3+niXKc40NOzHhMOzCLgWVtSLzDWEc6wdPMcdLhIR9zxS2vHtt9dA//Dtgdj01InIjYg2ajs42/T4S96FsKvWaSF38rRWLABeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by DS0PR15MB5623.namprd15.prod.outlook.com (2603:10b6:8:11e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Sun, 4 Dec
+ 2022 23:47:47 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::d665:7e05:61d1:aebf]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::d665:7e05:61d1:aebf%7]) with mapi id 15.20.5880.013; Sun, 4 Dec 2022
+ 23:47:46 +0000
+Message-ID: <cbe896ff-9693-a834-939d-be97ae7ff7bd@meta.com>
+Date:   Sun, 4 Dec 2022 15:47:43 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v2 bpf-next 1/1] bpf, docs: BPF Iterator Document
+To:     Sreevani Sreejith <ssreevani@meta.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, psreep@gmail.com
+Cc:     void@manifault.com, mykolal@meta.com
+References: <20221202221710.320810-1-ssreevani@meta.com>
+ <20221202221710.320810-2-ssreevani@meta.com>
+Content-Language: en-US
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20221202221710.320810-2-ssreevani@meta.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0088.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::33) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HlfaDJpKZhs96dAp"
-Content-Disposition: inline
-In-Reply-To: <CAK9=C2VbM+CP0Y9Xx-SM9O4TFrQmOKvVWy-u5mxdPxrhacK4JQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DS0PR15MB5623:EE_
+X-MS-Office365-Filtering-Correlation-Id: 089343d1-0abf-4774-838d-08dad651f1bd
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lPdRODr2hPZ3myc013PPh2JzDAjF8Ooo6AiDX2FDRny0N7ZUWG91Uhy0gBbj1Vxhv3iURAL/t7G5k/K8fHNcaRRDsBhacamm77gR5nHVibVs2CJ8zF9dF8D6MFTimRMAMCgVTEEQKxzp8Wwb29/lpUi01I85ApTCy5ejTr7DcPNzCdSeNjzWPcX7neIdK5mLWoDdLsOD0x4sD+sVXftpr4RE0Z/Lq37lC+wm+ZQbA+U9UaEEdyZZL+ohUy29sHh09Rpb1XydqwRdDi2iR+Imqln1ER5dyrYcqiGBFbjt5MzgMcKuRXPIeGuyhjkRJ9zIt+vbgG/dkmkTK0rwG99qIlUbPUyKGugDISQ3zrjbanZUTIcSKGbQEShjRI6dz3VE5as6oc8fKSzczz98S9z1JQSzVmy1r0/vQWrWMdWrl3hgZf0zRM7BAy+U+ifMLMswVcdtR5oOkrieerO1S6qSfAqjNpyc0YkUPZmwBPDSRdbAlj5LC0BAxv/j4DtkriPi6oSNMoFbJs4gZNB78lTcfeOoMst/5sQJlEZ2SIB5uAx2HWCfRcw2VArUmkSQXD/mUXvc0nKYMzoBo01f9Kfcm6+wZa+4s7T4yr/i289uhvW/fL/Jk7jq0FHa/uC7VBLv8QYKruDW0fbAMYJIk6cBIL0oCDu6u9eu0qS3G4LLk/cNstGG31d1cBBF1br1cW5HVju6yndIlqk7HtDvbNGCLhun49UmuX7o7izeOY0j0gM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(376002)(136003)(366004)(451199015)(478600001)(6486002)(53546011)(186003)(2616005)(6512007)(107886003)(6506007)(6666004)(36756003)(66556008)(41300700001)(8676002)(8936002)(66946007)(316002)(66476007)(4326008)(31686004)(2906002)(4744005)(5660300002)(38100700002)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djFPdDdYcnlyRmZCUDVhZVJ3V0JBYTY0d0xIYmhQMW9xb0RXdFB5cUN4ekhn?=
+ =?utf-8?B?VmF3UE9RVDZhWW5FaXVHa0FlVFdMSzc2TlVlR0EzUGV0c3ZFczRXeU53dkpJ?=
+ =?utf-8?B?d1J6bXArd0ZQZGxXeHdENlpDd1VibEd3eFR2dERvd3NFM2s3WC9xdU1Wc3Qv?=
+ =?utf-8?B?TWxrZW5TSWU0WCtDb2FYTjN2Q2V3QkdwbWxCL0lRZitLMDNLaDdMQnRSeXZQ?=
+ =?utf-8?B?eVc3aDhlRVJhWXB4SWdvUjUydDBEVmVWdEl5MjliclpRRFY2MzBVZkJOaWxG?=
+ =?utf-8?B?ZDhXbnlNclAzT1pyQ0NjejdYbFpsQURmd2QxOGc1MzBJRmNHZENmM0VjcDQv?=
+ =?utf-8?B?Z3NEbFlwOU5ud2VBTVpRL3EyUDlGU3BWelJFZHprYkJpaFVNN0J6RVhRRWVa?=
+ =?utf-8?B?MWppM05id3NacXVqTVYwUGNnTTNYMklxVlJaUjZpVzZZVnJmTFQ2MktjWGFS?=
+ =?utf-8?B?eEhvRU9PRjJUYTJjdllpMkl5SnFXQmdTT0hSYnNmOFVIYm5yNlM0aXUrMklG?=
+ =?utf-8?B?U2ZaWVI1L1lra3hKb2JGaWNDRlpNZmJhVkRGUE1BcXFMb3lDcHNFQUZGVllH?=
+ =?utf-8?B?d2phYll1a0VMdk0xUEt1S3l0RlV6Ri9Rb1lRSnU2WVV3VHczTGFjZjJwTEdN?=
+ =?utf-8?B?aGRTTzJTSVJuSVo0OXJkMTNzMTkyUHduQXlpRXlyMk84Y0xmZ3lobE1GS3hq?=
+ =?utf-8?B?SG9MaGJXZzdOZTJOS0lqVDBJSStXbFgzSGpWVUtiZm1LR0FlMUhOK3grOTRu?=
+ =?utf-8?B?QjlBL0pvZkN6M1p3Mzh5Rk5VbWRyYS9PZERxbVVvYlpKdW5DbXVZenZvN1la?=
+ =?utf-8?B?NzI2Rm93Z2pSaTZoZGJXUlc3V293Y3BRNnJMYkZmYyt5ckV6amxnQ1NYNHlK?=
+ =?utf-8?B?VVppUUtjbEVjdzcwZURzOXFCeGxaR1FReUdiemFEV3lGSENkY2cxbFBTYnVj?=
+ =?utf-8?B?MU9yVkhrOEpWRG1JbGRXNmVuMHUrcEhiVVVHZkpldURUZ200R0NTTWQzK0NL?=
+ =?utf-8?B?UHVRbWFtRk1GRmErTGhUeTMxTEpvaDc0UlVsMmYrNTVxa0hKS2JvMjdVMks5?=
+ =?utf-8?B?d0laN09nOW02RFN2MWlXU0tVS1Q4cXJZWW9nNGRqb1lGcFRYelVZSi9ibU5a?=
+ =?utf-8?B?MnRFQkdBcmRUcElWZ29KNkZkejhGcUtudVI5dml5bDYyRy9XTkxBWXI3UlpR?=
+ =?utf-8?B?WVFCWnNFVkFXbnlzR2VOWXBEU0NBSjdCMjVsWGVVMVVPUW1ITitaK0NmZVhm?=
+ =?utf-8?B?TnZRTUprck9lM1BBL2xyRXlDVmtnT21KMm1HSTg2Y1dyQWJMQzByY1g5cnVS?=
+ =?utf-8?B?dUVNOGtGcmRJQlFSMHhFUjZHMm1WT2xHZlo4RkVwMElocGoyeU1sbjg5S2VC?=
+ =?utf-8?B?NFhrOXpCbUp1ZE9pWkZWYUdNRnY3NUR0c2Z3RDd1aEFLeW9TYzZHTE9TaGRN?=
+ =?utf-8?B?RGxpdnlUZEFzdHlhZ1NPbFFRRkk0ZC9iazF6OUV4NGhBYjN4dGl5cjNSOXA3?=
+ =?utf-8?B?eFVmMjAvZVBSWHlCS2VaSVllN2w1YmIrRVVFNTNsWGRBWnlBSEs3R2RtcHJz?=
+ =?utf-8?B?QmRuTzZaRWEyQnVTbmxUNjJpVE1Zemo2ZjFYaEFlVXYxcjRvbXhEUlF5bFZT?=
+ =?utf-8?B?bS9IZkhablQ4K0VIREdwWnI0S29xN1lyT1V2QXRNYU1IbC9xMXJ5VnJrVEkv?=
+ =?utf-8?B?VXlWRHEraUEwa2NtNCsvL0laZzQxOGFDSUNHZEtqWGtuTnJHVmNaQXRsTXRt?=
+ =?utf-8?B?dDI4NkhGdWozaGZsYzZWeDliTUI4WVZkZC9abjF0UldKZEZvRzloVHZqVVBj?=
+ =?utf-8?B?VnYxaHFjRGNCNkYwSkZJRDQyRFpUcFN4Y3pZNWZZL3QrajJCTGU4WXlDVFBS?=
+ =?utf-8?B?dkRsNVZLMmxIY0w3Nml5WnZKZWNiZDRHTmZzRHI3SjR6U2NQZUhlSG5VdzlR?=
+ =?utf-8?B?YXVRMll0OGZ1dU5QY2VwUlVrd3haU3ZJV0QyMDYvU291NVdEdXNRMFZ1RkpM?=
+ =?utf-8?B?ZkFtRXJ5eE9zT3orV1JxemhCeWVablVVN0pSbGkrTWY3aUtqNzlhcW5BQVZO?=
+ =?utf-8?B?S25lTW5QSTJudmkvL0NyQ1QyNUZsZkt4K251MXVadkdUMTk5NWdMSkN2aFdY?=
+ =?utf-8?B?Y1pNbVZlcEI1SFZJQmp2dVJscko5bk5mV3Z1U2J1QzZMd2tid0VvR0lxbGVJ?=
+ =?utf-8?B?aVE9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 089343d1-0abf-4774-838d-08dad651f1bd
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2022 23:47:46.5270
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u/A9fABHkLD+xv+vh6JlEu343onpS3QOe5wEYzUX/p1T7mr9FtSgQu915W3yzqoR
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR15MB5623
+X-Proofpoint-GUID: 1j2pyF_hBCPCSlMmFrPwhbEvfaFLxaZo
+X-Proofpoint-ORIG-GUID: 1j2pyF_hBCPCSlMmFrPwhbEvfaFLxaZo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-04_16,2022-12-01_01,2022-06-22_01
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,119 +144,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---HlfaDJpKZhs96dAp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey Rob, Anup, Prabhakar,
+On 12/2/22 2:17 PM, Sreevani Sreejith wrote:
+> From: Sreevani Sreejith <psreep@gmail.com>
+> 
+> Document that describes how BPF iterators work, how to use iterators,
+> and how to pass parameters in BPF iterators.
+> 
+> Acked-by: David Vernet <void@manifault.com>
+> Signed-off-by: Sreevani Sreejith <psreep@gmail.com>
 
-On Fri, Dec 02, 2022 at 12:03:05PM +0530, Anup Patel wrote:
-> On Fri, Dec 2, 2022 at 5:36 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Thu, Dec 01, 2022 at 06:09:54PM +0530, Anup Patel wrote:
-> > > We should set CLOCK_EVT_FEAT_C3STOP for a clock_event_device only
-> > > when riscv,timer-cannot-wake-cpu DT property is present in the RISC-V
-> > > timer DT node.
-> > >
-> > > This way CLOCK_EVT_FEAT_C3STOP feature is set for clock_event_device
-> > > based on RISC-V platform capabilities rather than having it set for
-> > > all RISC-V platforms.
-> > >
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > ---
-> > >  drivers/clocksource/timer-riscv.c | 12 +++++++++++-
-> > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/=
-timer-riscv.c
-> > > index 969a552da8d2..1b4b36df5484 100644
-> > > --- a/drivers/clocksource/timer-riscv.c
-> > > +++ b/drivers/clocksource/timer-riscv.c
-> > > @@ -28,6 +28,7 @@
-> > >  #include <asm/timex.h>
-> > >
-> > >  static DEFINE_STATIC_KEY_FALSE(riscv_sstc_available);
-> > > +static bool riscv_timer_cannot_wake_cpu;
-> > >
-> > >  static int riscv_clock_next_event(unsigned long delta,
-> > >               struct clock_event_device *ce)
-> > > @@ -51,7 +52,7 @@ static int riscv_clock_next_event(unsigned long del=
-ta,
-> > >  static unsigned int riscv_clock_event_irq;
-> > >  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) =
-=3D {
-> > >       .name                   =3D "riscv_timer_clockevent",
-> > > -     .features               =3D CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_=
-FEAT_C3STOP,
-> > > +     .features               =3D CLOCK_EVT_FEAT_ONESHOT,
-> >
-> > A platform that depended on CLOCK_EVT_FEAT_C3STOP being set will break
-> > with this change because its existing DT will not have the new property.
-> >
-> > It needs to be the other way around which would effectively be the
-> > existing 'always-on' property.
->=20
-> There are no RISC-V platforms using C3STOP. The patch which
-> added C3STOP has been reverted.
-> (Refer, https://lore.kernel.org/lkml/a218ebf8-0fba-168d-6598-c970bbff5faf=
-@sholland.org/T/)
->=20
-> I just need to rebase this patch upon the C3STOP revert patch.
-
-I guess you could say that the C3STOP addition was done spec-ulatively*,
-as the platform that actually exhibits that behaviour does not use the
-riscv-timer & its maintainer acked the revert (allwinner d1 family).
-
-*The spec does not make any guarantees about whether events arrive
-during suspend, only the behaviour *if* they arrive.
-
-Switching the property to "always-on" would require retrofitting that
-property to every other existing platform (and therefore regressing some
-behaviour there, no?).
-
-Most of the existing platforms are "toys" or demo platforms though, so
-it would not, I guess, be the end of the world to do so. Doubly so since
-none of them actually implement any sleep states that making it an
-"always-on" property.
-
-I've said since the start that defaulting to C3STOP is the "safer" thing
-to do, and although we disagreed on this last time Anup, I think the
-better outcome of someone missing a DT property is inaccessible sleep
-states rather than going into sleep states they cannot get out of.
-
-For PolarFire SoC, which I guess is one of the few "commerical"
-platforms, I'd be willing to accept retrofitting, since we have not yet
-implemented such sleep states yet.
-
-Maybe Prabhakar knows whether the RZ/Five has either a) implemented
-sleep states and b) which side of the "timer events arrive in suspend"
-divide their platform lies on.
-I'm particular interested here since that is not a SiFive core complex.
-
-I would like to get DT maintainer approval of an approach here soon-ish
-so that we can something sorted for the jh7110 stuff and for the
-bouffalolabs SoC - the latter of which may very well be in the "no
-events in suspend" camp as it also uses thead stuff.
-
-Sorry for kinda rowing back on my previous acceptance of the approach,
-but I am really between two minds on this.
-
-Thanks,
-Conor.
-
-
---HlfaDJpKZhs96dAp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY40uVQAKCRB4tDGHoIJi
-0iXwAQDvaIbyKF4NJU9VaT5Lh4McyjHE+Y8vdOlJksMvF+Hc1AEA60gVnGIV8CWe
-iMzMzE7jeqmjP23QMLt5HftoInManQg=
-=ydQx
------END PGP SIGNATURE-----
-
---HlfaDJpKZhs96dAp--
+LGTM. Thanks!
+Acked-by: Yonghong Song <yhs@fb.com>
