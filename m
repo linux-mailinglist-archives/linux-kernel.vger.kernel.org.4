@@ -2,89 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E087641D92
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 16:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC1B641DAE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 16:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiLDPIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 10:08:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S230129AbiLDPlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 10:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiLDPIe (ORCPT
+        with ESMTP id S229917AbiLDPlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 10:08:34 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A3D13E1D;
-        Sun,  4 Dec 2022 07:08:32 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 96AB11883F96;
-        Sun,  4 Dec 2022 15:08:29 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 87D1025003AB;
-        Sun,  4 Dec 2022 15:08:29 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 776059EC0020; Sun,  4 Dec 2022 15:08:29 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sun, 4 Dec 2022 10:41:35 -0500
+Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DB411A1B
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 07:41:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=+wJRlMho2FnAbXYg6+mlmNW9Tp+g4pBu1hc7038i/W8=; b=k5+S41vpJRy8VXu9WSCdXEzK4K
+        sgBVsnQrNv2MMxOxy6/uVkCuQPy40UNA0LQkWR/V9cD510olMOCkUBARvmaOqY5yW8YA/lQEPflyX
+        NW8yYNz6GWZBb4JQMc/4IYpt0r/FQXkvcJhorct2DxoouGaM3uzXGxQmncgt6A7r9Vvnd1XHJ5X8U
+        GjJd1/u7trHt+WctKwPirpyB+c2viPYvpoxaCMQPPU6gYqqHgj54IbmVIfHJpbKrzlTRfua4mHWPy
+        stbf6IxtUcLlhs8Wc5KfS3Igb5TIhDAMit1s9ZbrCry474WOClCNu435InNED9vWvLAEDPCmDFmmA
+        3OyWdGFQ==;
+Received: from dg by mx.treblig.org with local (Exim 4.94.2)
+        (envelope-from <dg@treblig.org>)
+        id 1p1r7K-0052UU-UT; Sun, 04 Dec 2022 15:41:22 +0000
+Date:   Sun, 4 Dec 2022 15:41:22 +0000
+From:   "Dr. David Alan Gilbert" <dave@treblig.org>
+To:     ojeda@kernel.org
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Adam Bratschi-Kaye <ark.email@gmail.com>
+Subject: Re: [PATCH v2 20/28] rust: str: add `Formatter` type
+Message-ID: <Y4y/ovfF3len/22J@gallifrey>
+References: <20221202161502.385525-1-ojeda@kernel.org>
+ <20221202161502.385525-21-ojeda@kernel.org>
 MIME-Version: 1.0
-Date:   Sun, 04 Dec 2022 16:08:27 +0100
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 2/2] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221120150018.qupfa3flq6hoapgj@skbuf>
-References: <20221112203748.68995-1-netdev@kapio-technology.com>
- <20221112203748.68995-1-netdev@kapio-technology.com>
- <20221112203748.68995-3-netdev@kapio-technology.com>
- <20221112203748.68995-3-netdev@kapio-technology.com>
- <20221115222312.lix6xpvddjbsmoac@skbuf>
- <6c77f91d096e7b1eeaa73cd546eb6825@kapio-technology.com>
- <20221120150018.qupfa3flq6hoapgj@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <4e098ca82ce29fa0c534a1aa18f72eea@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20221202161502.385525-21-ojeda@kernel.org>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/5.10.0-12-amd64 (x86_64)
+X-Uptime: 15:37:53 up 268 days,  2:03,  2 users,  load average: 0.00, 0.01,
+ 0.00
+User-Agent: Mutt/2.0.5 (2021-01-21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-20 16:00, Vladimir Oltean wrote:
-> On Sun, Nov 20, 2022 at 11:21:08AM +0100, netdev@kapio-technology.com 
-> wrote:
->> I have something like this, using 'mvls vtu' from
->> https://github.com/wkz/mdio-tools:
->>  VID   FID  SID  P  Q  F  0  1  2  3  4  5  6  7  8  9  a
->>    0     0    0  y  -  -  =  =  =  =  =  =  =  =  =  =  =
->>    1     2    0  -  -  -  u  u  u  u  u  u  u  u  u  u  =
->> 4095     1    0  -  -  -  =  =  =  =  =  =  =  =  =  =  =
->> 
->> as a vtu table. I don't remember exactly the consequences, but I am 
->> quite
->> sure that fid=0 gave
->> incorrect handling, but there might be something that I have missed as 
->> to
->> other setups.
+* ojeda@kernel.org (ojeda@kernel.org) wrote:
+> From: Wedson Almeida Filho <wedsonaf@gmail.com>
 > 
-> Can you please find out? There needs to be an answer as to why 
-> something
-> which shouldn't happen happens.
+> Add the `Formatter` type, which leverages `RawFormatter`,
+> but fails if callers attempt to write more than will fit
+> in the buffer.
+> 
+> In order to so, implement the `RawFormatter::from_buffer()`
+> constructor as well.
+> 
+> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> [Reworded, adapted for upstream and applied latest changes]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  rust/kernel/str.rs | 57 ++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
+> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> index a995db36486f..ce207d1b3d2a 100644
+> --- a/rust/kernel/str.rs
+> +++ b/rust/kernel/str.rs
+> @@ -406,6 +406,23 @@ impl RawFormatter {
+>          }
+>      }
+>  
+> +    /// Creates a new instance of [`RawFormatter`] with the given buffer.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+> +    /// for the lifetime of the returned [`RawFormatter`].
+> +    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+> +        let pos = buf as usize;
+> +        // INVARIANT: We ensure that `end` is never less then `buf`, and the safety requirements
+> +        // guarantees that the memory region is valid for writes.
+> +        Self {
+> +            pos,
+> +            beg: pos,
+> +            end: pos.saturating_add(len),
+> +        }
+> +    }
+> +
+>      /// Returns the current insert position.
+>      ///
+>      /// N.B. It may point to invalid memory.
+> @@ -439,3 +456,43 @@ impl fmt::Write for RawFormatter {
+>          Ok(())
+>      }
+>  }
+> +
+> +/// Allows formatting of [`fmt::Arguments`] into a raw buffer.
+> +///
+> +/// Fails if callers attempt to write more than will fit in the buffer.
+> +pub(crate) struct Formatter(RawFormatter);
+> +
+> +impl Formatter {
+> +    /// Creates a new instance of [`Formatter`] with the given buffer.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+> +    /// for the lifetime of the returned [`Formatter`].
+> +    #[allow(dead_code)]
+> +    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+> +        // SAFETY: The safety requirements of this function satisfy those of the callee.
+> +        Self(unsafe { RawFormatter::from_buffer(buf, len) })
+> +    }
+> +}
+> +
+> +impl Deref for Formatter {
+> +    type Target = RawFormatter;
+> +
+> +    fn deref(&self) -> &Self::Target {
+> +        &self.0
+> +    }
+> +}
+> +
+> +impl fmt::Write for Formatter {
+> +    fn write_str(&mut self, s: &str) -> fmt::Result {
+> +        self.0.write_str(s)?;
+> +
+> +        // Fail the request if we go past the end of the buffer.
 
-Just an update on this, as when running the selftests now, I have 
-experienced
-the case where fid=0 in the interrupt handler. The reported mac is the 
-same
-as the one where the handling was successful in the selftest.
+Reading this for the first time, I'm surprised by this, perhaps a
+bit more comment is needed?  I was expecting that nothing would
+let pos pass end.
 
-So I don't know what causes this fid=0 event, maybe some timing with the 
-chip
-op when stressed resulting in erroneous reading of fid?
+Dave
+
+> +        if self.0.pos > self.0.end {
+> +            Err(fmt::Error)
+> +        } else {
+> +            Ok(())
+> +        }
+> +    }
+> +}
+> -- 
+> 2.38.1
+> 
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
