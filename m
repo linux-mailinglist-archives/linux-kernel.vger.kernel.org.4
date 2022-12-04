@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CD3641F8F
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A373C641F9A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiLDUdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 15:33:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
+        id S230352AbiLDUpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 15:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiLDUdp (ORCPT
+        with ESMTP id S229949AbiLDUph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 15:33:45 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3FE1114B;
-        Sun,  4 Dec 2022 12:33:44 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qk9so5612587ejc.3;
-        Sun, 04 Dec 2022 12:33:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Grs/zW/Yy+MbYuU5nZpAnOLbGwu+GK+N8WBWWWD6HNA=;
-        b=Q2tDROKUxutVdCFxgnmx/2gntq0AtTIYYyZXVjePpwBnV5rpa3gxG1fFW2570Z99Rd
-         eSbr/4WI8hyd9X5WOQvuhRoZbs/Ypi5eYBB0dEO8KMeMKhdO3iDx1qmfrtEKvv93p3NL
-         yd7FdWKG8CZZ0ZPlNNrnuDtqSXac6qVBWvNaeTDo+1kGyflbNirW8+sgW5l3BPSYiWxv
-         1PV0Z6TWxixjeQHqEnn4Dc4xnq6vjuGU6F7AZt2StrHkKeOaVmtccKnLKytOwS0PYH/1
-         zkNRg1f23ywb+Lpx5PAGxR+N5rKX1pWtida6q6JKW96iL4cN2EvQR2S9G5VhGQFgVhvM
-         aJWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Grs/zW/Yy+MbYuU5nZpAnOLbGwu+GK+N8WBWWWD6HNA=;
-        b=l6uUyi7LUWdiK9eU+9VOD4RAfuYioa+5y2AbR1xVZFpMk0H4CqGhpB+xSYG6V2j/I9
-         pLW6aFwJ8iJLeQco+OZ4mEK3xOkVP7xtEaCBRMkpm4bmSLqAS0Au9abldqz/cP44sd4v
-         tMetjjDD5Wbwjvn9rkBHcpr04gFrF7dRlLDt+E8T1G511w9q1HLo3EZ7WrFVxXwu/p8B
-         rQlVOiqDxFPu0XU9AFZjngyEFWYo5rRn/RTQS7HQyu0pOGI4WtK19NoQkitVImd1AWm3
-         Gi4thJbHgOAx+xzs5ExOJKydh8ITVHDaq7LsgDkgJlL+Q1bXneAmTxw4UKLGONUnwaN/
-         2Cog==
-X-Gm-Message-State: ANoB5pmf4zEXcRk0hFwxbIG7bH/uH9mcq/anfORDjDAjlQvVbNmmu5sE
-        yWmnUiPTgJEDpHTuEhUNYyo=
-X-Google-Smtp-Source: AA0mqf7NdX5FJzVjrzn0F8B6sfQURLjP9m6l8fayKc0GWR7XeMLRw59JHWTzl4Qw7x4pSH07k96WxA==
-X-Received: by 2002:a17:906:2854:b0:7ae:3684:84b0 with SMTP id s20-20020a170906285400b007ae368484b0mr58571379ejc.622.1670186023252;
-        Sun, 04 Dec 2022 12:33:43 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id 7-20020a170906300700b007af105a87cbsm5399403ejz.152.2022.12.04.12.33.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 12:33:42 -0800 (PST)
-Date:   Sun, 4 Dec 2022 21:33:51 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next 4/4] driver/ncn26000: add PLCA support
-Message-ID: <Y40ELzDwMjGy66gU@gvm01>
-References: <cover.1670119328.git.piergiorgio.beruto@gmail.com>
- <38623984f6235a1521e6b0ad2ea958abc84ad708.1670119328.git.piergiorgio.beruto@gmail.com>
- <Y4zTqvSxLJG+G8V+@shell.armlinux.org.uk>
- <Y4zreLCwdx+fyuCe@lunn.ch>
- <Y4z+ZKZh4c14mFzA@gvm01>
- <Y40BkLMOhk8qR2IC@shell.armlinux.org.uk>
+        Sun, 4 Dec 2022 15:45:37 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D55B11C23;
+        Sun,  4 Dec 2022 12:45:35 -0800 (PST)
+Received: from [192.168.2.103] (109-252-124-61.nat.spd-mgts.ru [109.252.124.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5C5D6660035C;
+        Sun,  4 Dec 2022 20:45:32 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670186733;
+        bh=UMQoP9W0p04vTQUQWO237zkx10mRI/dKkIw7Lig3+Kc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P78D5QejvBCnU95dIIBU2WXl6Y/iMoyzuJoF+NatKvsMyvwrDBD5o/N4WFQifIVaB
+         Jxb5iwKC7SUiUyWiaFzTbw04in4CDe/uC8+3un87bqKREnzMMsfm4Vgfp811B9Qr7s
+         EL/5hBesdvE0ONOBqssdnuJUc+U1fzPUjQ2NJBA43X5vD5zpqp6MTNq5qXTzuqefBH
+         lYBp9BZ5qUZhgaEb9K+TeRK8i8Ooano/6isOBSuC8dVv9VJQbfouTUIJ3Yiq3ZgYYE
+         NLuTSbzWwZIHU2mTJPcFMEsMG2t3vBXrK1KVkfeJPhqGyjC79HlE4qkLuPM94ZDicR
+         tDR7M5h7cTk+A==
+Message-ID: <3e9e157d-e740-ee5b-b8d3-07822b2c9a9b@collabora.com>
+Date:   Sun, 4 Dec 2022 23:45:26 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y40BkLMOhk8qR2IC@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 1/2] drm/shmem-helper: Remove errant put in error path
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, Eric Anholt <eric@anholt.net>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com
+References: <20221130185748.357410-1-robdclark@gmail.com>
+ <20221130185748.357410-2-robdclark@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20221130185748.357410-2-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 08:22:40PM +0000, Russell King (Oracle) wrote:
-> On Sun, Dec 04, 2022 at 09:09:08PM +0100, Piergiorgio Beruto wrote:
-> > On Sun, Dec 04, 2022 at 07:48:24PM +0100, Andrew Lunn wrote:
-> > > On Sun, Dec 04, 2022 at 05:06:50PM +0000, Russell King (Oracle) wrote:
-> > > > On Sun, Dec 04, 2022 at 03:32:06AM +0100, Piergiorgio Beruto wrote:
-> > > > > --- a/include/uapi/linux/mdio.h
-> > > > > +++ b/include/uapi/linux/mdio.h
-> > > > > @@ -26,6 +26,7 @@
-> > > > >  #define MDIO_MMD_C22EXT		29	/* Clause 22 extension */
-> > > > >  #define MDIO_MMD_VEND1		30	/* Vendor specific 1 */
-> > > > >  #define MDIO_MMD_VEND2		31	/* Vendor specific 2 */
-> > > > > +#define MDIO_MMD_OATC14		MDIO_MMD_VEND2
-> > > > 
-> > > > If this is in the vendor 2 register set, I doubt that this is a feature
-> > > > described by IEEE 802.3, since they allocated the entirety of this MMD
-> > > > over to manufacturers to do whatever they please with this space.
-> > > > 
-> > > > If this is correct, then these definitions have no place being in this
-> > > > generic header file, since they are likely specific to the vendors PHY.
-> > > 
-> > > Piergiorgio can give you the full details.
-> > > 
-> > > As i understand it, IEEE 802.3 defines the basic functionality, but
-> > > did not extend the standard to define the registers.
-> > > 
-> > > The Open Alliance member got together and added the missing parts, and
-> > > published an Open Alliance document.
-> > > 
-> > > Piergiorgio, i suggest you add a header file for these defines, named
-> > > to reflect that the Open Alliance defined them. And put in a comment,
-> > > explaining their origin, maybe a link to the standard. I also don't
-> > > think this needs to be a uapi header, they are not needed outside of
-> > > the kernel.
-> > > 
-> > > I also would not use MDIO_MMD_OATC14, but rather MDIO_MMD_VEND2. There
-> > > is no guarantee they are not being used for other things, and
-> > > MDIO_MMD_VEND2 gives a gentle warning about this.
-> > Thanks Andrew for commenting on this one. This is right, in the IEEE
-> > 802.3cg group we could not allocate an MMD for the PLCA reconciliation
-> > sublayer because of an 'unfriendly' wording in Clause 45 ruling out
-> > Reconciliation Sublayers from what can be configured via registers.
-> > Clause 45 says you can have registers for the PHY, while it should have
-> > said 'Physical Layer" and there is a subtle difference between the two
-> > words. PLCA, for example, is part of the Physical Layer but not of the
-> > PHY. Since we could not change that wording, we had to define
-> > configuration parameters in Clause 30, and let organizations outside the
-> > IEEE define memory maps for PHYs that integrate PLCA.
-> > 
-> > The OPEN Alliance SIG (see the reference in the patches) defined
-> > registers for the PLCA RS in MMD31, which is in fact vendor-specific
-> > from an IEEE perspective, but part of it is now standardized in the OPEN
-> > Alliance. So unfortunately we have to live with this somehow.
-> > 
-> > So ok, I can separate these definitions into a different non-UAPI header
-> > as Andrew is suggesting. I'll do this in the next patchset.
+On 11/30/22 21:57, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 > 
-> Sounds like yet another clause 45 mess :(
-I'm really sorry for this, I can assure you I personally pushed very
-hard to get this through, but eventually we got an hard stop. The IEEE
-has very strict formal rules too, and we were not allowed to change that
-portion of the specs. To get permission we should have delayed the
-standard by one year, and that would have upset many people from
-different industries...
+> drm_gem_shmem_mmap() doesn't own this reference, resulting in the GEM
+> object getting prematurely freed leading to a later use-after-free.
+> 
+> Link: https://syzkaller.appspot.com/bug?extid=c8ae65286134dd1b800d
+> Reported-by: syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com
+> Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> ---
+>  drivers/gpu/drm/drm_gem_shmem_helper.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> index 35138f8a375c..3b7b71391a4c 100644
+> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> @@ -622,10 +622,8 @@ int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_area_struct
+>  	}
+>  
+>  	ret = drm_gem_shmem_get_pages(shmem);
+> -	if (ret) {
+> -		drm_gem_vm_close(vma);
+> +	if (ret)
+>  		return ret;
+> -	}
+>  
+>  	vma->vm_flags |= VM_PFNMAP | VM_DONTEXPAND | VM_DONTDUMP;
+>  	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
 
-Thanks for your understanding.
-Piergiorgio
+AFAICS, the dmabuf mmaping code path needs a similar fix, isn't it?
+
+-		/* Drop the reference drm_gem_mmap_obj() acquired.*/
+-		drm_gem_object_put(obj);
+		vma->vm_private_data = NULL;
+
+-		return dma_buf_mmap(obj->dma_buf, vma, 0);
++		ret = dma_buf_mmap(obj->dma_buf, vma, 0);
++
++		/* Drop the reference drm_gem_mmap_obj() acquired.*/
++		if (!ret)
++			drm_gem_object_put(obj);
++
++		return ret;
+
+
+-- 
+Best regards,
+Dmitry
+
