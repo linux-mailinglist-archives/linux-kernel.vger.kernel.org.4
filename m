@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2B7641D74
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 15:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F086641D89
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 15:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLDOXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 09:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S230050AbiLDO6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 09:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiLDOXd (ORCPT
+        with ESMTP id S229892AbiLDO57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 09:23:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116D617418;
-        Sun,  4 Dec 2022 06:23:31 -0800 (PST)
+        Sun, 4 Dec 2022 09:57:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0CBDFD1
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 06:57:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC9A2B80A49;
-        Sun,  4 Dec 2022 14:23:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9EBC433D6;
-        Sun,  4 Dec 2022 14:23:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31B4C60EA1
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 14:57:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EAC0C433C1;
+        Sun,  4 Dec 2022 14:57:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670163808;
-        bh=0jPUnNObV3bkM2t/29uwKFNurRLeu5QoW7vFZFxlKpA=;
+        s=k20201202; t=1670165877;
+        bh=Cgm74NkKEZ/DK5RPHt06OPQZsab/+7Dm33HMyFy16EQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NOajA0zJ41WVM6sdybnbEvWqDT5dhMEmKpL/JL5eG+qWGfyx377FzXvS7sCMmvwtg
-         uzu86D5+Fg4bBJrUPu+lfCAQAhWF69b3hUDcl7kbK/SEcwApbiliwU0M2oJjdKMc0K
-         gMY/b0S1NWgP9KSJeYIsvGPtpb3z7pq37jewfM0xYjgJyPqyKbv8+xqB3tIu5RLPA1
-         bXTt58dbX8Jx/xhk9p1UJCYxdPX1VYwCJKO+iMPMlL4NZMDThiShP81KgzBo52+rdD
-         sLFOW4MD0zQSjTTlFYG1OaFgto5AVg3tnSjRQTICkPK7HiCO5doGAAx4qPCH4j7jrD
-         BM7ZPjDMfKLrw==
-Date:   Sun, 4 Dec 2022 14:36:13 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     Marco Pagani <marpagan@redhat.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: [PATCH] iio: adc: xilinx-ams: fix devm_krealloc() return value
- check
-Message-ID: <20221204143613.310ed016@jic23-huawei>
-In-Reply-To: <7127c7f4-89b3-31f8-cabc-43f955eded64@amd.com>
-References: <20221125113112.219290-1-marpagan@redhat.com>
-        <7127c7f4-89b3-31f8-cabc-43f955eded64@amd.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        b=IBbWkhGldTnPxTm2GnBQewKJxktXrW8xPU5icmaUJHIc6PcgSX9oSrvnxV9D8cLcl
+         jPYkNrjmWwB3TIlWFYT28Jv8O5lZHK/R3WTQP7i+bwz+oasHthcsKkk2XFtg+IVVZa
+         Xc1hn1YayMhURTJIVCoswxTnOiAJv2JLbOegzL1Dix3VwQXPka+7IUorL1/j11AV0W
+         W0VXR3DgPel2+vk7UyFeUKTOq9+TnNDLS8nmmDXYz0+Rztow0DSCl9KLFTWNPT8H0F
+         FOE8A8wVMGTr68t9Hi23GWKt1E7EcQMEjzKRI0ZkwI3LRCfezpbpTS/zIx0DGQtycg
+         u0GvX8eDS/veQ==
+Received: from [82.141.251.28] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p1qRG-00AP6F-Pg;
+        Sun, 04 Dec 2022 14:57:54 +0000
+Date:   Sun, 04 Dec 2022 14:57:53 +0000
+Message-ID: <87bkojtdvy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     Akihiko Odaki <akihiko.odaki@daynix.com>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
+In-Reply-To: <d54e7e38-cdf6-ef5d-a6e6-e30ad8a59034@gmail.com>
+References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+        <867czbmlh1.wl-maz@kernel.org>
+        <50499ee9-33fe-4f5d-9d0a-76ceef038333@daynix.com>
+        <87lenqu37t.wl-maz@kernel.org>
+        <525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com>
+        <87h6yeta8b.wl-maz@kernel.org>
+        <d54e7e38-cdf6-ef5d-a6e6-e30ad8a59034@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 82.141.251.28
+X-SA-Exim-Rcpt-To: akihiko.odaki@gmail.com, akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,52 +83,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 18:04:26 +0100
-Michal Simek <michal.simek@amd.com> wrote:
+On Fri, 02 Dec 2022 09:55:24 +0000,
+Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
+>=20
+> On 2022/12/02 18:40, Marc Zyngier wrote:
+> > On Fri, 02 Dec 2022 05:17:12 +0000,
+> > Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> >>=20
+> >>>> On M2 MacBook Air, I have seen no other difference in standard ID
+> >>>> registers and CCSIDRs are exceptions. Perhaps Apple designed this way
+> >>>> so that macOS's Hypervisor can freely migrate vCPU, but I can't assu=
+re
+> >>>> that without more analysis. This is still enough to migrate vCPU
+> >>>> running Linux at least.
+> >>>=20
+> >>> I guess that MacOS hides more of the underlying HW than KVM does. And
+> >>> KVM definitely doesn't hide the MIDR_EL1 registers, which *are*
+> >>> different between the two clusters.
+> >>=20
+> >> It seems KVM stores a MIDR value of a CPU and reuse it as "invariant"
+> >> value for ioctls while it exposes the MIDR value each physical CPU
+> >> owns to vCPU.
+> >=20
+> > This only affects the VMM though, and not the guest which sees the
+> > MIDR of the CPU it runs on. The problem is that at short of pinning
+> > the vcpus, you don't know where they will run. So any value is fair
+> > game.
+>=20
+> Yes, my concern is that VMM can be confused if it sees something
+> different from what the guest on the vCPU sees.
 
-> On 11/25/22 12:31, Marco Pagani wrote:
-> > CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
-> > 
-> > 
-> > The clang-analyzer reported a warning: "Value stored to 'ret'
-> > is never read".
-> > 
-> > Fix the return value check if devm_krealloc() fails to resize
-> > ams_channels.
-> > 
-> > Fixes: d5c70627a794 ("iio: adc: Add Xilinx AMS driver")
-> > Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> > ---
-> >   drivers/iio/adc/xilinx-ams.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-> > index 5b4bdf3a26bb..a507d2e17079 100644
-> > --- a/drivers/iio/adc/xilinx-ams.c
-> > +++ b/drivers/iio/adc/xilinx-ams.c
-> > @@ -1329,7 +1329,7 @@ static int ams_parse_firmware(struct iio_dev *indio_dev)
-> > 
-> >          dev_channels = devm_krealloc(dev, ams_channels, dev_size, GFP_KERNEL);
-> >          if (!dev_channels)
-> > -               ret = -ENOMEM;
-> > +               return -ENOMEM;
-> > 
-> >          indio_dev->channels = dev_channels;
-> >          indio_dev->num_channels = num_channels;
-> > --
-> > 2.38.1
-> >   
-> 
-> Acked-by: Michal Simek <michal.simek@amd.com>
+Well, this has been part of the ABI for about 10 years, since Rusty
+introduced this notion of invariant, so userspace is already working
+around it if that's an actual issue.
 
-Applied to the fixes-togreg branch of iio.git.  Given merge window opening soon
-it might be a few weeks before this goes upstream.
+This would be easily addressed though, and shouldn't result in any
+issue. The following should do the trick (only lightly tested on an
+M1).
 
 Thanks,
 
-Jonathan
+	M.
 
-> 
-> Thanks,
-> Michal
+=46rom f1caacb89eb8ae40dc38669160a2f081f87f4b15 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Sun, 4 Dec 2022 14:22:22 +0000
+Subject: [PATCH] KVM: arm64: Return MIDR_EL1 to userspace as seen on the vc=
+pu
+ thread
 
+When booting, KVM sample the MIDR of the CPU it initialises on,
+and keep this as the value that will forever be exposed to userspace.
+
+However, this has nothing to do with the value that the guest will
+see. On an asymetric system, this can result in userspace observing
+weird things, specially if it has pinned the vcpus on a *different*
+set of CPUs.
+
+Instead, return the MIDR value for the vpcu we're currently on and
+that the vcpu will observe if it has been pinned onto that CPU.
+
+For symmetric systems, this changes nothing. For asymmetric machines,
+they will observe the correct MIDR value at the point of the call.
+
+Reported-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ arch/arm64/kvm/sys_regs.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index f4a7c5abcbca..f6bcf8ba9b2e 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1246,6 +1246,22 @@ static int set_id_reg(struct kvm_vcpu *vcpu, const s=
+truct sys_reg_desc *rd,
+ 	return 0;
+ }
+=20
++static int get_midr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
++		    u64 *val)
++{
++	*val =3D read_sysreg(midr_el1);
++	return 0;
++}
++
++static int set_midr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
++		    u64 val)
++{
++	if (val !=3D read_sysreg(midr_el1))
++		return -EINVAL;
++
++	return 0;
++}
++
+ static int get_raz_reg(struct kvm_vcpu *vcpu, const struct sys_reg_desc *r=
+d,
+ 		       u64 *val)
+ {
+@@ -1432,6 +1448,7 @@ static const struct sys_reg_desc sys_reg_descs[] =3D {
+=20
+ 	{ SYS_DESC(SYS_DBGVCR32_EL2), NULL, reset_val, DBGVCR32_EL2, 0 },
+=20
++	{ SYS_DESC(SYS_MIDR_EL1), .get_user =3D get_midr, .set_user =3D set_midr =
+},
+ 	{ SYS_DESC(SYS_MPIDR_EL1), NULL, reset_mpidr, MPIDR_EL1 },
+=20
+ 	/*
+@@ -2609,7 +2626,6 @@ id_to_sys_reg_desc(struct kvm_vcpu *vcpu, u64 id,
+ 		((struct sys_reg_desc *)r)->val =3D read_sysreg(reg);	\
+ 	}
+=20
+-FUNCTION_INVARIANT(midr_el1)
+ FUNCTION_INVARIANT(revidr_el1)
+ FUNCTION_INVARIANT(clidr_el1)
+ FUNCTION_INVARIANT(aidr_el1)
+@@ -2621,7 +2637,6 @@ static void get_ctr_el0(struct kvm_vcpu *v, const str=
+uct sys_reg_desc *r)
+=20
+ /* ->val is filled in by kvm_sys_reg_table_init() */
+ static struct sys_reg_desc invariant_sys_regs[] =3D {
+-	{ SYS_DESC(SYS_MIDR_EL1), NULL, get_midr_el1 },
+ 	{ SYS_DESC(SYS_REVIDR_EL1), NULL, get_revidr_el1 },
+ 	{ SYS_DESC(SYS_CLIDR_EL1), NULL, get_clidr_el1 },
+ 	{ SYS_DESC(SYS_AIDR_EL1), NULL, get_aidr_el1 },
+--=20
+2.34.1
+
+
+--=20
+Without deviation from the norm, progress is not possible.
