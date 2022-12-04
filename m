@@ -2,294 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F088C641E3B
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9D1641E3C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiLDR0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 12:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S230262AbiLDR1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 12:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiLDR0N (ORCPT
+        with ESMTP id S229985AbiLDR1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 12:26:13 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B8C10FE4
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 09:26:11 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id n16-20020a05600c3b9000b003d08febff59so3472914wms.3
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 09:26:10 -0800 (PST)
+        Sun, 4 Dec 2022 12:27:07 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4603A10FE4;
+        Sun,  4 Dec 2022 09:27:06 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id n186so10602262oih.7;
+        Sun, 04 Dec 2022 09:27:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IyVxjv62ICSdTmYSJi3Pk6d9R9ZML1anTEBMQvI7O98=;
-        b=ZchEcdQe+WoS+hV2IegjeHkiuZJHTsYsZQBliOfBF7yCt8VaH5piuSwzb+ecMWiq9D
-         YI4UTS3680++QmeX3hvanqiK3/eBiucfVgE50qKCn4/tTNgqQCnfcWMSYBeU8LDugw/E
-         HvVjQ4mLSv03zy6Xcqyeb0I+cNyYWXKIyAu84px63RDwvCIBVfNx3rxvCq1SS8h6CsGQ
-         utp6zgTKgOhQsFl+x99BhMkDLK4N63DVM4pCSUL+Elmg0mAbTP7VXP0JkOPFqMGm+E2v
-         XNzcHTh1ZWS6kVvMbimUVE5YWFHL2o14A54fpOj409LZ75qRPIl/8IWwWmjaStZY4hEv
-         dF+w==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CkwAPeoCUs3lm02qIrL4crb0Gr5/YPZRr/bbYFtEjJM=;
+        b=BToVcvWVqt9/dfNi5D4HDFG8I8T1lfwFvGoyJmi++n51KK7MBib3/9z31yn7jRS4uJ
+         79lNNS3qbDNxkZ4Ph2vPwmDS/DEfVp3RXu7sZ52MH40JjkjPLOUUyYn08wv6AKJBnYLY
+         LERgDaCM4FeyvqtmUMhubj2De1IzVMXsM+ZxlU+tedPEY7r8hsQXhOeKafNDAbtIlq7G
+         30F3Rv5YzL5idkpFXBR1zEByZowe3iROUkILvgxC+KChDIn2gMtR2NLNzF6kLSxmazt2
+         x/9UnoWzn5I//QHkG//pYu1ujugrCDWBjM2hWmzKWIQvj21NtQYdjKv2STDUe7I718y/
+         eQww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IyVxjv62ICSdTmYSJi3Pk6d9R9ZML1anTEBMQvI7O98=;
-        b=Ry9t4TDuS1oGR0AsQjMWAIEEbqjlzTS6ogH4rN7UR2C9hPv2Q/WxJmnENVmVcvAdAQ
-         EShGSyE52pGmaLf20R05YC6HZGt8z3FUPvrUbufS6fPTnOX1ZY7DP0jCx+gZXZEjenV9
-         vKuvnnhcP5wZuXBVUlARnotM56w7u2YpsjouPsVhhxxdXeH/sDdgfJLR63Pe/Ye9xlbF
-         szMVdUaFPPu+E4K/GNXsJwwhn9wVgfw+T8FKLGPdrFeK7hgfav5XG8uWNSIyB+ySePEV
-         V6/8YLENMiozz/lpEVBpW+Q88xpOU987H9m6yyeeh62797Wrxiq28Y63D3grDaIeQRfn
-         gHjg==
-X-Gm-Message-State: ANoB5pnFJCYpdZjYTtQneSLkBNYHxxQ9sEofJ3oLvjI1HLXLA/lXekMT
-        FFxRiL+uNQv+PyERAjXKVEemWg==
-X-Google-Smtp-Source: AA0mqf4Dmk6Xhul/0QDQbwXSSkgcxM2Nco1IWbx4FTjdbxA83oGpudrXdh2T3PP9My4vswF6zfR4Uw==
-X-Received: by 2002:a05:600c:4386:b0:3cf:a4a6:a048 with SMTP id e6-20020a05600c438600b003cfa4a6a048mr43362304wmn.202.1670174769498;
-        Sun, 04 Dec 2022 09:26:09 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l28-20020a05600c1d1c00b003c6b7f5567csm24874714wms.0.2022.12.04.09.26.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 09:26:09 -0800 (PST)
-Message-ID: <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
-Date:   Sun, 4 Dec 2022 18:26:07 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CkwAPeoCUs3lm02qIrL4crb0Gr5/YPZRr/bbYFtEjJM=;
+        b=yH8e9BI/O+Ya/0la5VtuR4iDrQEigyXeSuAAi0Zo8Rn/7vvctXzMCLFb/63SNn0rbX
+         DSaz+C3hNWJQGUowWMxhK9b1lL+CIY0x9DBen2MDrY1OJRb8Zgs3bEznsJ+mQtp1uKiT
+         PhCWPNYL9kaOuSeq/geRF1ml7zOxhqBgt5RxDz8auLWdM9dxFS3gENeEqrJXqCfF7RQb
+         2w2VUahnPlGvPYA6Ag2y4FFOgRwln36vlhc5kVJY5ZiTJ2nCeOG9kpCHgl9/0Rgkz6ak
+         La7Cpt27hmFTh1c/5cLzAvTzCTAgIxA2anJ4vdKKEdodVYLWD+NFpCCQ6PJZCnuZJtPz
+         G7sA==
+X-Gm-Message-State: ANoB5pl2Txukjh8YnqrhN1sOTC/kHL4POhW+SiIThiA90No9XrVjUIgg
+        iQ5LimyEqH2PHAlQmKb30DdT++j+spHWOa+e+7CCtQm+/i8=
+X-Google-Smtp-Source: AA0mqf4h+bzPRaf0PWI9aa0KezTRo2S2If1j3UH0ur7AeUbJWwysICYOSoL1ykwETMU6PNiPG+d7IwV9JoGpjdYFSvQ=
+X-Received: by 2002:a05:6808:1705:b0:359:c652:ff7e with SMTP id
+ bc5-20020a056808170500b00359c652ff7emr29267495oib.254.1670174825561; Sun, 04
+ Dec 2022 09:27:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20221202161502.385525-1-ojeda@kernel.org> <20221202161502.385525-21-ojeda@kernel.org>
+ <Y4y/ovfF3len/22J@gallifrey>
+In-Reply-To: <Y4y/ovfF3len/22J@gallifrey>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Sun, 4 Dec 2022 17:26:54 +0000
+Message-ID: <CANeycqrT69HJWEBZwbuhTehSy1qFF7A4q38cb5TqU1yf=nMLOQ@mail.gmail.com>
+Subject: Re: [PATCH v2 20/28] rust: str: add `Formatter` type
+To:     "Dr. David Alan Gilbert" <dave@treblig.org>
+Cc:     ojeda@kernel.org, Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Adam Bratschi-Kaye <ark.email@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 12:04, Amjad Ouled-Ameur wrote:
-> Provide thermal zone to read thermal sensor in the SoC. We can read all the
-> thermal sensors value in the SoC by the node /sys/class/thermal/
-> 
-> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-> on the first read of sensor that often are bogus values.
-> This can avoid following warning on boot:
-> 
->    thermal thermal_zone6: failed to read out thermal zone (-13)
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   drivers/thermal/mtk_thermal.c | 99 ++++++++++++++++++++++++++++++++-----------
->   1 file changed, 74 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 3a5df1440822..b1f4d19edd4f 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
->   
->   struct mtk_thermal;
->   
-> +struct mtk_thermal_zone {
-> +	struct mtk_thermal *mt;
-> +	int id;
-> +};
-> +
->   struct thermal_bank_cfg {
->   	unsigned int num_sensors;
->   	const int *sensors;
-> @@ -307,6 +312,8 @@ struct mtk_thermal {
->   
->   	const struct mtk_thermal_data *conf;
->   	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
-> +
-> +	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
->   };
->   
->   /* MT8183 thermal sensor data */
-> @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->   		mutex_unlock(&mt->lock);
->   }
->   
-> +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
-> +{
-> +	u32 raw;
-> +	int temp;
-> +
-> +	const struct mtk_thermal_data *conf = mt->conf;
-> +
-> +	raw = readl(mt->thermal_base + conf->msr[id]);
-> +
-> +	temp = mt->raw_to_mcelsius(mt, id, raw);
-> +
-> +	/*
-> +	 * The first read of a sensor often contains very high bogus
-> +	 * temperature value. Filter these out so that the system does
-> +	 * not immediately shut down.
-> +	 */
-> +
-> +	if (temp > 200000)
-> +		return -EAGAIN;
-> +	else
-> +		return temp;
-> +}
-> +
->   /**
->    * mtk_thermal_bank_temperature - get the temperature of a bank
->    * @bank:	The bank
-> @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   	struct mtk_thermal *mt = bank->mt;
->   	const struct mtk_thermal_data *conf = mt->conf;
->   	int i, temp = INT_MIN, max = INT_MIN;
-> -	u32 raw;
->   
->   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
-> -		raw = readl(mt->thermal_base + conf->msr[i]);
-> -
-> -		if (mt->conf->version == MTK_THERMAL_V1) {
-> -			temp = raw_to_mcelsius_v1(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		} else {
-> -			temp = raw_to_mcelsius_v2(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		}
-> -
-> -		/*
-> -		 * The first read of a sensor often contains very high bogus
-> -		 * temperature value. Filter these out so that the system does
-> -		 * not immediately shut down.
-> -		 */
-> -		if (temp > 200000)
-> -			temp = 0;
-> +		temp = _get_sensor_temp(mt, i);
->   
->   		if (temp > max)
->   			max = temp;
-> @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   	return max;
->   }
->   
-> -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
-> +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
->   {
-> -	struct mtk_thermal *mt = tz->devdata;
-> +	struct mtk_thermal_zone *tz = tzdev->devdata;
-> +	struct mtk_thermal *mt = tz->mt;
->   	int i;
->   	int tempmax = INT_MIN;
->   
-> @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->   	return 0;
->   }
->   
-> +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
-> +{
-> +	struct mtk_thermal_zone *tz = tzdev->devdata;
-> +	struct mtk_thermal *mt = tz->mt;
-> +	int id = tz->id - 1;
-> +
-> +	if (id < 0)
-> +		return -EACCES;
-> +
-> +	*temperature = _get_sensor_temp(mt, id);
-> +
-> +	return 0;
-> +}
-> +
->   static const struct thermal_zone_device_ops mtk_thermal_ops = {
->   	.get_temp = mtk_read_temp,
->   };
->   
-> +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
-> +	.get_temp = mtk_read_sensor_temp,
-> +};
-> +
->   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
->   				  int ctrl_id)
-> @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   	u64 auxadc_phys_base, apmixed_phys_base;
->   	struct thermal_zone_device *tzdev;
->   	void __iomem *apmixed_base, *auxadc_base;
-> +	struct mtk_thermal_zone *tz;
->   
->   	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->   	if (!mt)
-> @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	mtk_thermal_turn_on_buffer(mt, apmixed_base);
->   
-> +	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
-> +				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
-> +
->   	if (mt->conf->version == MTK_THERMAL_V2) {
->   		mtk_thermal_release_periodic_ts(mt, auxadc_base);
->   	}
-> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	platform_set_drvdata(pdev, mt);
->   
-> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
-> -					      &mtk_thermal_ops);
-> -	if (IS_ERR(tzdev)) {
-> -		ret = PTR_ERR(tzdev);
-> -		goto err_disable_clk_peri_therm;
-> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-> +		if (!tz)
-> +			return -ENOMEM;
-> +
-> +		tz->mt = mt;
-> +		tz->id = i;
-> +
-> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
-> +							     &mtk_thermal_ops :
-> +							     &mtk_thermal_sensor_ops);
+On Sun, 4 Dec 2022 at 15:41, Dr. David Alan Gilbert <dave@treblig.org> wrote:
+>
+> * ojeda@kernel.org (ojeda@kernel.org) wrote:
+> > From: Wedson Almeida Filho <wedsonaf@gmail.com>
+> >
+> > Add the `Formatter` type, which leverages `RawFormatter`,
+> > but fails if callers attempt to write more than will fit
+> > in the buffer.
+> >
+> > In order to so, implement the `RawFormatter::from_buffer()`
+> > constructor as well.
+> >
+> > Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> > Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> > Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> > Reviewed-by: Gary Guo <gary@garyguo.net>
+> > [Reworded, adapted for upstream and applied latest changes]
+> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > ---
+> >  rust/kernel/str.rs | 57 ++++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 57 insertions(+)
+> >
+> > diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> > index a995db36486f..ce207d1b3d2a 100644
+> > --- a/rust/kernel/str.rs
+> > +++ b/rust/kernel/str.rs
+> > @@ -406,6 +406,23 @@ impl RawFormatter {
+> >          }
+> >      }
+> >
+> > +    /// Creates a new instance of [`RawFormatter`] with the given buffer.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+> > +    /// for the lifetime of the returned [`RawFormatter`].
+> > +    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+> > +        let pos = buf as usize;
+> > +        // INVARIANT: We ensure that `end` is never less then `buf`, and the safety requirements
+> > +        // guarantees that the memory region is valid for writes.
+> > +        Self {
+> > +            pos,
+> > +            beg: pos,
+> > +            end: pos.saturating_add(len),
+> > +        }
+> > +    }
+> > +
+> >      /// Returns the current insert position.
+> >      ///
+> >      /// N.B. It may point to invalid memory.
+> > @@ -439,3 +456,43 @@ impl fmt::Write for RawFormatter {
+> >          Ok(())
+> >      }
+> >  }
+> > +
+> > +/// Allows formatting of [`fmt::Arguments`] into a raw buffer.
+> > +///
+> > +/// Fails if callers attempt to write more than will fit in the buffer.
+> > +pub(crate) struct Formatter(RawFormatter);
 
-Here you use again the aggregation
+Here we mention that `Formatter` fails if callers attempt to write
+more than will fit in the buffer.
 
-> +
-> +		if (IS_ERR(tzdev)) {
-> +			ret = PTR_ERR(tzdev);
-> +			if (ret == -ENODEV)
-> +				continue;
-> +			goto err_disable_clk_peri_therm;
-> +		}
->   	}
->   
->   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
-> 
+This is in contrast with `RawFormatter`, which doesn't fail in such
+cases. There's also a comment there explaining it (not visible in this
+patch because it's already there), but I reproduce below:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+/// Allows formatting of [`fmt::Arguments`] into a raw buffer.
+///
+/// It does not fail if callers write past the end of the buffer so
+that they can calculate the
+/// size required to fit everything.
+///
+/// # Invariants
+///
+/// The memory region between `pos` (inclusive) and `end` (exclusive)
+is valid for writes if `pos`
+/// is less than `end`.
+pub(crate) struct RawFormatter {
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+`RawFormatter` is used to implement the "%pA" printf specifier, which
+requires this behaviour.
 
+> > +
+> > +impl Formatter {
+> > +    /// Creates a new instance of [`Formatter`] with the given buffer.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+> > +    /// for the lifetime of the returned [`Formatter`].
+> > +    #[allow(dead_code)]
+> > +    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+> > +        // SAFETY: The safety requirements of this function satisfy those of the callee.
+> > +        Self(unsafe { RawFormatter::from_buffer(buf, len) })
+> > +    }
+> > +}
+> > +
+> > +impl Deref for Formatter {
+> > +    type Target = RawFormatter;
+> > +
+> > +    fn deref(&self) -> &Self::Target {
+> > +        &self.0
+> > +    }
+> > +}
+> > +
+> > +impl fmt::Write for Formatter {
+> > +    fn write_str(&mut self, s: &str) -> fmt::Result {
+> > +        self.0.write_str(s)?;
+> > +
+> > +        // Fail the request if we go past the end of the buffer.
+>
+> Reading this for the first time, I'm surprised by this, perhaps a
+> bit more comment is needed?  I was expecting that nothing would
+> let pos pass end.
+
+Given the comments I highlight above, do you think we still need more?
+
+(My impression is that you're reading this without the context I tried
+to explain above, and this context may perhaps be sufficient.)
+
+Thanks,
+-Wedson
