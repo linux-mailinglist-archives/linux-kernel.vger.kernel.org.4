@@ -2,144 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19861641BAB
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 09:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1277F641BAD
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 09:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiLDIqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 03:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S230001AbiLDIrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 03:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiLDIqW (ORCPT
+        with ESMTP id S229983AbiLDIrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 03:46:22 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C941788D
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 00:46:20 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b3so14070176lfv.2
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 00:46:20 -0800 (PST)
+        Sun, 4 Dec 2022 03:47:16 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4141611C1E
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 00:47:16 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id 124so8732961pfy.0
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 00:47:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5JSgb59n7yt285OgnTxrX5jNyxDnhai9FpL9TwOkiUQ=;
-        b=E8VTCpcK8U1SYdCoZDpb8MUs+oDGPLLSRjA9wrjxylnZsd1deUIKA/05f4FwxXgDzq
-         dFp1FlNdOVBwbv7nXas8aD2swC8DZGkoHZjs5WmLt+HBwwjNVUVAhCegzoFJ9Rk58rb+
-         Xk1JnQJnfwRHTpvbRbNFkNIW7uWaS7igIJ/xD7rynjjXFF+QxIODoVOLl3mzg8bOrBuS
-         pj2NcN4aG0lDpqLV0R+zMnHCwrxNxtvZGBqPcpjtcjdnTAfyinmiK+k6aLZrmo/0srEg
-         lRDMCt9a/OzwmFX5ukqbGVjFMt3YyFLO4YeNrYaXaH8E4Cp2i9boQvTguwZYlA708RWy
-         o7uA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QutOAL+nMDB4Cb3AtDiIQ2iv82OlmswSDdCAvRLXxpo=;
+        b=jEUgJbFkejprgcotd3OgshHJzjqLYMr1//21XcDrGTPmwsKzQs67SalriJk5yogCZD
+         naMHk25OwpidKgNZsfrNIfa+8KIHp+Fed3d1ByUN8hbyMCMKMsCsW/xCpWzbn22gYWdX
+         gcktV1BGgq9UA1HLNUsUqCB3LAlewBtqotoqkhBdreR0e6SusnF/Y15UoSeGNjAAtcsU
+         gQ0PXxwqX9Vfq0U48pbgEl04VdmQB3jvH4XBD10Ms61v25i7z2Jd2LNKLSIaHIFJws6O
+         uKyOiJRhKT5mzT+GA22MIVTOPd5gU5+wXdjlmyotkLAE2HNhkykDA0OjmWt+VAHOYiFF
+         oynw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5JSgb59n7yt285OgnTxrX5jNyxDnhai9FpL9TwOkiUQ=;
-        b=RW6JLqs935IIpvi3x0SbVRa2RdVcJSJmoMTgGuUIe1ITBK3lmkHpnhuzEfqLZY1btH
-         wvFHpPhBypoJTTpwGeFD7RGEiI6lxbABVKxOFSS5gJnN+Z+TD9z5Y3zk+3/pFNBthG19
-         3ql/4HjQseXj7iydXcJf/V+rPoKoywSBUOWlECOBG+X3j+4tQP+bCc0N7Tec66Ov35xO
-         c71zBIvHmvlzVs7F1Z9URNQcWWdAUVaaDcuhqqCqGjqp6WkgSw4OI/u4if4C/swgmZfj
-         kgmKv7lchG4+p2e1qaR9C57QlK5qYYP5u+FgVdUdYVfYD1WFlgblLw0WeQEgQOYN2D2I
-         kTpA==
-X-Gm-Message-State: ANoB5pmCj8YM2TU6rCejsZUA6Xvo83FWfeXdkmmlaqZbkRA2h3Up5NYk
-        KRsFicdV0Ji/W16phwAlOm52iQ==
-X-Google-Smtp-Source: AA0mqf62jLndMfJoLDbjXQ3MjgTBCmWaLCceq3cMUMzDVMw+TCy28658Vo2EzqROT9uvquszoXhoTg==
-X-Received: by 2002:ac2:4bd4:0:b0:4b4:aed7:4aa5 with SMTP id o20-20020ac24bd4000000b004b4aed74aa5mr19490634lfq.447.1670143578832;
-        Sun, 04 Dec 2022 00:46:18 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f20-20020ac25cd4000000b004b4bae1a05asm1680759lfq.293.2022.12.04.00.46.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 00:46:18 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] ARM: dts: qcom: apq8084-ifc6540: fix overriding SDHCI
-Date:   Sun,  4 Dec 2022 09:46:14 +0100
-Message-Id: <20221204084614.12193-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=QutOAL+nMDB4Cb3AtDiIQ2iv82OlmswSDdCAvRLXxpo=;
+        b=Hw2Sv/3b2gOdND6bPrUaldzohOnv373BCzhgrvcnEWl5HrbT0hhhAI71RpeCs5hG5n
+         o/zBmp+YCaQ3HI4Fp8ZouenVR5uiPCijirLEU/FsFOZpCEqNNnW7Zefg39rL3+UM4wvc
+         DRI4gTz6Z7lgXfMIxQrK9arW+VhxOvp1J/Ve7nbz/lQ4dZEQvajQ3fT0o4FtdumCcRo/
+         8yU7WF1A7lGbfFMvYZfe6F4a2zImVQZDGtszZtbkMnST2sOVt2whDtbX3rhs85v4EDMO
+         p592SuaBUwEjA+s1KVWWQYmbXaKHR6zerdj/C+5c6F5tWnaKD2evJ8m0N0aqsGL8yjjM
+         KOfw==
+X-Gm-Message-State: ANoB5pkXk8D8qJlkcuDmOuHjUp6YYaoPWDXwJy8rVldB4noJ2e35DE5e
+        cV+TPDwKIiC5Fiv/RZDKrkEXAXtxr11yXRo0arZpwUS9Kief1Jt0
+X-Google-Smtp-Source: AA0mqf6R+Tp4dvP/ZzQ9B2oqndBCvDq8NSf+W9/couiaPGS+SwR5sgWtCCN8VoBu0aTxsUBc4fXXJx7mHHcJ94WiuWQ=
+X-Received: by 2002:a63:eb01:0:b0:477:5a8f:8037 with SMTP id
+ t1-20020a63eb01000000b004775a8f8037mr51393130pgh.227.1670143635576; Sun, 04
+ Dec 2022 00:47:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220831001555.285081-1-badhri@google.com> <Yw90JmdIxg/YdUYH@kuha.fi.intel.com>
+ <7bf33aaa-11d3-2ff2-8c32-70e11340a3a9@roeck-us.net>
+In-Reply-To: <7bf33aaa-11d3-2ff2-8c32-70e11340a3a9@roeck-us.net>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Sun, 4 Dec 2022 00:46:38 -0800
+Message-ID: <CAPTae5JmtEGyDV0ZUn3x_yOmRu8bWE6zuZ5vqSFqGFJOdHHzoA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] usb: typec: tcpm: Add callbacks to mitigate
+ wakeups due to contaminant
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While changing node names of APQ8084 SDHCI, the ones in IFC6540 board
-were not updated leading to disabled and misconfigured SDHCI.
+Thanks for taking the time out to review !
+Circling back to address  the feedback here in Version 3 of the patchset.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 2477d81901a2 ("ARM: dts: qcom: Fix sdhci node names - use 'mmc@'")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/qcom-apq8084-ifc6540.dts | 20 ++++++++++----------
- arch/arm/boot/dts/qcom-apq8084.dtsi        |  4 ++--
- 2 files changed, 12 insertions(+), 12 deletions(-)
+I was able to move the logic around  disconnect_while_debounce to the
+lower level maxim tcpc driver.
+However, I couldn't incorporate a callback as generic as run_state_machine.
+Instead I have added a callback, is_potential_contaminant, which calls
+the lower tcpc driver for every state transition in the TCPM state
+machine.
+This is somewhat similar to what Heikki had suggested but instead of
+calling it at the end, had to call the is_potential_contaminant at the
+beginning.
+is_potential_contaminant would allow the lower level tcpc driver to
+determine presence of potential contaminant.
+The CHECK_CONTAMINANT state in TCPM had to be retained as TCPM should
+not be reacting to changes in the system while the lower level tcpc
+driver is waiting for the port to be clean.
 
-diff --git a/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts b/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts
-index 44cd72f1b1be..116e59a3b76d 100644
---- a/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts
-+++ b/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts
-@@ -19,16 +19,16 @@ soc {
- 		serial@f995e000 {
- 			status = "okay";
- 		};
-+	};
-+};
- 
--		sdhci@f9824900 {
--			bus-width = <8>;
--			non-removable;
--			status = "okay";
--		};
-+&sdhc_1 {
-+	bus-width = <8>;
-+	non-removable;
-+	status = "okay";
-+};
- 
--		sdhci@f98a4900 {
--			cd-gpios = <&tlmm 122 GPIO_ACTIVE_LOW>;
--			bus-width = <4>;
--		};
--	};
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 122 GPIO_ACTIVE_LOW>;
-+	bus-width = <4>;
- };
-diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index fe30abfff90a..4b0d2b4f4b6a 100644
---- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -421,7 +421,7 @@ blsp2_uart2: serial@f995e000 {
- 			status = "disabled";
- 		};
- 
--		mmc@f9824900 {
-+		sdhc_1: mmc@f9824900 {
- 			compatible = "qcom,apq8084-sdhci", "qcom,sdhci-msm-v4";
- 			reg = <0xf9824900 0x11c>, <0xf9824000 0x800>;
- 			reg-names = "hc", "core";
-@@ -434,7 +434,7 @@ mmc@f9824900 {
- 			status = "disabled";
- 		};
- 
--		mmc@f98a4900 {
-+		sdhc_2: mmc@f98a4900 {
- 			compatible = "qcom,apq8084-sdhci", "qcom,sdhci-msm-v4";
- 			reg = <0xf98a4900 0x11c>, <0xf98a4000 0x800>;
- 			reg-names = "hc", "core";
--- 
-2.34.1
+Sending out the Version 3 of the patchset.
 
+Thanks,
+Badhri
+
+
+On Wed, Aug 31, 2022 at 10:51 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 8/31/22 07:45, Heikki Krogerus wrote:
+> > Hi Badhri,
+> >
+> > On Tue, Aug 30, 2022 at 05:15:53PM -0700, Badhri Jagan Sridharan wrote:
+> >> On some of the TCPC implementations, when the Type-C port is exposed
+> >> to contaminants, such as water, TCPC stops toggling while reporting OPEN
+> >> either by the time TCPM reads CC pin status or during CC debounce
+> >> window. This causes TCPM to be stuck in TOGGLING state. If TCPM is made
+> >> to restart toggling, the behavior recurs causing redundant CPU wakeups
+> >> till the USB-C port is free of contaminant.
+> >>
+> >> [206199.287817] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> >> [206199.640337] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> >> [206199.985789] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> >> ...
+> >>
+> >> To mitigate redundant TCPM wakeups, TCPCs which do have the needed hardware
+> >> can implement the check_contaminant callback which is invoked by TCPM
+> >> to evaluate for presence of contaminant. Lower level TCPC driver can
+> >> restart toggling through TCPM_PORT_CLEAN event when the driver detects
+> >> that USB-C port is free of contaminant. check_contaminant callback also passes
+> >> the disconnect_while_debounce flag which when true denotes that the CC pins
+> >> transitioned to OPEN state during the CC debounce window.
+> >
+> > I'm a little bit concerned about the size of the state machine. I
+> > think this is a special case that at least in the beginning only the
+> > Maxim port controller can support, but it's still mixed into the
+> > "generic" state machine.
+> >
+> > How about if we just add "run_state_machine" callback for the port
+> > controller drivers so they can handle this kind of special cases on
+> > their own - they can then also add custom states?
+> >
+>
+> Same concern here. I would very much prefer an approach as suggested below,
+> especially since the changes around the added disconnect_while_debounce flag
+> are extensive and difficult to verify.
+>
+> Thanks,
+> Guenter
+>
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 904c7b4ce2f0c..91c22945ba258 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -4858,9 +4858,11 @@ static void run_state_machine(struct tcpm_port *port)
+> >                  tcpm_set_state(port, port->pwr_role == TYPEC_SOURCE ? SRC_READY : SNK_READY, 0);
+> >                  break;
+> >          default:
+> > -               WARN(1, "Unexpected port state %d\n", port->state);
+> >                  break;
+> >          }
+> > +
+> > +       if (port->tcpc->run_state_machine)
+> > +               port->tcpc->run_state_machine(port->tcpc);
+> >   }
+> >
+> >   static void tcpm_state_machine_work(struct kthread_work *work)
+> >
+> > thanks,
+> >
+>
