@@ -2,72 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020BA641C22
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CE8641C23
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiLDJoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 04:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S230029AbiLDJom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 04:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiLDJoX (ORCPT
+        with ESMTP id S230044AbiLDJoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 04:44:23 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74413183AF
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 01:44:22 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id x6so10270644lji.10
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 01:44:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wtJKcyxwDvq9qgEjmDbPlDRvijSJxXZOGygNNguodnA=;
-        b=VXY0Nlh7/hmKXvXJZD5XeoOyzFGJWJQLK9ucwJfCzorxcG4oqKcyMYGhovziRLKAu6
-         ZEZk4Wh2VnA2NYezQjbAHMZ0QNTNC20tbSBx21D6ImRp5kF0wCHe7IlCEIqZKe/IPUIZ
-         Sleu/4so1sNse8P7Eg/HZFbEZvsfwoev3al9dQGosf7xipVw6cpUCfcJCEvsIaNbpzQ9
-         S2JDNB+0A0B65zDGwlWeIY8iXjfKxcskie6GsvvG+jrVsGpWlsMaig5JaH65jtbP/LRN
-         LrE+WMCkB7kro5bbxIsNYdZDKW3m8/xhhx99MSL8BFutqpFBCs+gTRf7H8xgOEt+3W+Q
-         kNYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wtJKcyxwDvq9qgEjmDbPlDRvijSJxXZOGygNNguodnA=;
-        b=ffj4icxIRaK4i4Ufje6ETaXam7FfKKltlc6E6HR5I+xuLX6YAtrZsYVDIE04jk3qjQ
-         gkm9NRPxztMcif3EpD49I1tgOZjKtXBr467t57hspYiPTkL9jSfHy3YXdiSe4LAxju0k
-         QbUIx/StAflbQjIuuz8pUwbZx4zN6MB1C2jZkrlNQaecRuClYFY6oIHAX/Yuz7JiZ1E2
-         19eqV6wgHF3WXcFMn1Yxl6NKpPEDl1cirWzQ7rhJC9yFa4UrPlTpydND4zOnqISEVrPH
-         Irkl2tcgYwjqeGG7I6MTf8Quvz17rkbApHz2Xk+VrZwat3Yfo8wyIJGSxWnj0JNUnZyA
-         DpzQ==
-X-Gm-Message-State: ANoB5pnRzLKSh9TjLoo4X71n2VVd9pnulXtBslF7MVI56G6bOay843Jg
-        XwY1t3+3121/SL9wIGjmyMuifg==
-X-Google-Smtp-Source: AA0mqf77TkHL8dDO5U0wkIZcE6eOL3a0Z26EM9z2cngeOHG9ZPN4yXmiXCUTlhwx0z8Ti/bglTyBfw==
-X-Received: by 2002:a2e:bd07:0:b0:277:31b0:8ba3 with SMTP id n7-20020a2ebd07000000b0027731b08ba3mr26550590ljq.290.1670147060826;
-        Sun, 04 Dec 2022 01:44:20 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m2-20020a056512358200b004aac3944314sm1724833lfr.249.2022.12.04.01.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 01:44:20 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sun, 4 Dec 2022 04:44:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845BF186C7;
+        Sun,  4 Dec 2022 01:44:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20058B80813;
+        Sun,  4 Dec 2022 09:44:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB880C433D6;
+        Sun,  4 Dec 2022 09:44:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670147070;
+        bh=EZT67/m18c2otgDWsLEQDZEinTscEZxP03Tjfwybbwk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r7CwKuivyjZxBtQjwQjV5P8lpVHTFhVHSNJTM+YygtEIEVEKZN6MKZc2Na3lYojPJ
+         9tkVZReH+dcMCgxgv3lvmKOwVoPY2wiV6d9V/HIBSoiyOfZFF+PEy+o+S6Sib5o/nb
+         ONieB93kYA7A96zGIkn8J7XdyrwLY017s8hsYyrg=
+Date:   Sun, 4 Dec 2022 10:44:26 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: imx8mq-thor96: fix no-mmc property for SDHCI
-Date:   Sun,  4 Dec 2022 10:44:17 +0100
-Message-Id: <20221204094417.73171-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH v3 9/9] mfd: intel-m10-bmc: Change MODULE_LICENSE() to GPL
+Message-ID: <Y4xr+nmx7m66+KsL@kroah.com>
+References: <20221202100841.4741-1-ilpo.jarvinen@linux.intel.com>
+ <20221202100841.4741-10-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221202100841.4741-10-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,36 +59,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no "no-emmc" property, so intention for SD/SDIO only nodes was
-to use "no-mmc".
+On Fri, Dec 02, 2022 at 12:08:41PM +0200, Ilpo Järvinen wrote:
+> "GPL v2" should not be used as MODULE_LICENSE(). "GPL" is enough, see
+> commit bf7fbeeae6db ("module: Cure the MODULE_LICENSE "GPL" vs. "GPL
+> v2" bogosity") for more details.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/freescale/imx8mq-thor96.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+And that commit says that leaving "GPL v2" is just fine and dandy and
+should not be an issue at all.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq-thor96.dts b/arch/arm64/boot/dts/freescale/imx8mq-thor96.dts
-index 5d5aa6537225..6e6182709d22 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq-thor96.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mq-thor96.dts
-@@ -339,7 +339,7 @@ &usdhc1 {
- 	bus-width = <4>;
- 	non-removable;
- 	no-sd;
--	no-emmc;
-+	no-mmc;
- 	status = "okay";
- 
- 	brcmf: wifi@1 {
-@@ -359,7 +359,7 @@ &usdhc2 {
- 	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
- 	bus-width = <4>;
- 	no-sdio;
--	no-emmc;
-+	no-mmc;
- 	disable-wp;
- 	status = "okay";
- };
--- 
-2.34.1
+Please do not change the license for no good reason.  That commit is NOT
+a good reason to change it at all.
 
+so NAK on this patch, sorry.
+
+greg k-h
