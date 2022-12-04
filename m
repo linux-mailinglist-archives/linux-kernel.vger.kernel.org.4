@@ -2,260 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877DD641F59
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F7E641F62
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiLDUAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 15:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
+        id S230184AbiLDUIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 15:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiLDT75 (ORCPT
+        with ESMTP id S229970AbiLDUIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 14:59:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC6ADE3
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 11:59:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670183942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k+Xxg8uhswu5HIgcU93w0LlXzjBwKe9B2QvaYaf61/I=;
-        b=cRChGrSSyNMa20r2O1YnhWaY7q1x5epIBL5DRv0iqZA5ay3kvJaR9cdh7orW4y+hAX0qvj
-        QxHhGu4tgeDhn8litbzHhPK3E3v53V+ZQ7nXGFIWyxHhmmTl+CvWw84eDZBParek4mGzAT
-        1Jmen5wSNbWnbDXKUGFa/FLByOMK7Tc=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-10-ef4ii8jEN7K2PwtBYWIbhg-1; Sun, 04 Dec 2022 14:59:00 -0500
-X-MC-Unique: ef4ii8jEN7K2PwtBYWIbhg-1
-Received: by mail-qk1-f200.google.com with SMTP id bs7-20020a05620a470700b006fac7447b1cso14162759qkb.17
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 11:59:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+Xxg8uhswu5HIgcU93w0LlXzjBwKe9B2QvaYaf61/I=;
-        b=GzJ6cOORR2cQd85qXcGeqL5QNQEn/E0uVM4SrX40ygpU9Z3Ci6868XvVkyvzFboQ+r
-         wcIpog3HBHRipZnX+7HUWVzY/GmxyYiZn5akpCCvfOxfhy4HTSQJ1IweME1WdQCx83HF
-         iMDNjA80fr+qn3g6/r0eLbbcsjrWG+NHS+Ft0XPDWlDpV3tmAFQ/k1LJ7v4w4h6DNbLJ
-         SjWYJGKg/4caGxqrSKmkJX2U9aeUF8fWBAhIprdC1B3MIZ4ArELdoymuSEFO7tUIYQEX
-         5FxWUbIenI5/L9DA7i1Uj3DWPmh7+V0prefS6S0kpBvv+1EIOjWGA4a02BJ/yPmS2NOT
-         oQ/w==
-X-Gm-Message-State: ANoB5pmAcgTr/+imXginv5JFPa8+H/w3Et08+qzprcU8GGEX4H90Pfwi
-        1roZ4kPvtH+1ss0k0NdOq/lDSo0sXO0uzhhNncH/IRLCkwXfxcpblKo0nTl8lnc2xfIXIY3R33j
-        qu0TVqb7oqeBtSF8Eeg0XRRF9
-X-Received: by 2002:a05:620a:c95:b0:6fa:91f9:c84d with SMTP id q21-20020a05620a0c9500b006fa91f9c84dmr70166621qki.724.1670183939724;
-        Sun, 04 Dec 2022 11:58:59 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6ocALL1kW9Lv9jBeG6FMHM3AxkSQ33fz4VAP8mHiltB4pOd2COcH0m9Sd7xfcK+zXpKHC6UA==
-X-Received: by 2002:a05:620a:c95:b0:6fa:91f9:c84d with SMTP id q21-20020a05620a0c9500b006fa91f9c84dmr70166611qki.724.1670183939348;
-        Sun, 04 Dec 2022 11:58:59 -0800 (PST)
-Received: from [10.16.222.26] (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id ey24-20020a05622a4c1800b0039a55f78792sm8297539qtb.89.2022.12.04.11.58.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 11:58:58 -0800 (PST)
-Message-ID: <e8fdb1ec-c912-7cb1-578b-8308f155f6fa@redhat.com>
-Date:   Sun, 4 Dec 2022 14:58:57 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Content-Language: en-US
-To:     Petr Pavlu <petr.pavlu@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
- <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
- <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
- <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
- <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
- <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
- <5467e66d-55de-ca8f-c1ae-ffe6efe7290d@redhat.com>
- <94cd5565-1058-2c97-57bb-0ddf12416cd6@redhat.com>
- <2ac0b871-60d0-c535-3fe0-bfaa0d9f7685@suse.com>
-From:   Prarit Bhargava <prarit@redhat.com>
-In-Reply-To: <2ac0b871-60d0-c535-3fe0-bfaa0d9f7685@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 4 Dec 2022 15:08:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE10BE0FF
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 12:08:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8966960E9E
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 20:08:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D03C433D6;
+        Sun,  4 Dec 2022 20:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670184487;
+        bh=2IUepaiX4/rLisJ0SF09nBLSmvA7az6kaoTt9mpv+d8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S1XGWycFdJAsFu9YHUFi7TqHNyh+gApmV9H0IGi5dTmdBIsuT/x9opsQ6j7Qk0bJg
+         x44dZGLcIKGwvwdiS082beCzv4FrXVXqi2YFr30TmrwesElLdx1c7P5txDvyc4G8Kj
+         1pZWn0sDO/3a7iauD+I4Doe7i2pMFVnTZHt/Xr2IlBMkKKoYsVlnXNHXrCWSe9uAtN
+         CyjgvUYEbDFUajJlzwT9zUSxetiuELYPN3gjyOxH86qbb9ZcrMeusHTHFUl2JrGYM7
+         fQKcnOCqpYZt1H/LZ9Wv5vp352qdBonUxI5iu2ftjzUyNsgy4RESDZe7E9lmgPYElv
+         cp02uTfw9idtg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p1vHR-00ARer-At;
+        Sun, 04 Dec 2022 20:08:05 +0000
+Date:   Sun, 04 Dec 2022 20:08:00 +0000
+Message-ID: <87a643szj3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] KVM: arm64: Always mask CCSIDR associativity bits
+In-Reply-To: <20221202091856.104868-1-akihiko.odaki@daynix.com>
+References: <20221202091856.104868-1-akihiko.odaki@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 08:13, Petr Pavlu wrote:
-> On 11/28/22 17:29, Prarit Bhargava wrote:
->> On 11/14/22 10:45, David Hildenbrand wrote:
->>> On 14.11.22 16:38, Luis Chamberlain wrote:
->>>> On Mon, Nov 14, 2022 at 09:57:56AM +0100, David Hildenbrand wrote:
->>>>> On 12.11.22 02:47, Luis Chamberlain wrote:
->>>>>> On Wed, Oct 19, 2022 at 02:00:55PM +0200, Petr Pavlu wrote:
->>>>>>> On 10/18/22 20:33, Luis Chamberlain wrote:
->>>>>>>> On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
->>>>>>>>> The patch does address a regression observed after commit
->>>>>>>>> 6e6de3dee51a
->>>>>>>>> ("kernel/module.c: Only return -EEXIST for modules that have
->>>>>>>>> finished
->>>>>>>>> loading"). I guess it can have a Fixes tag added to the patch.
->>>>>>>>>
->>>>>>>>> I think it is hard to split this patch into parts because the
->>>>>>>>> implemented
->>>>>>>>> "optimization" is the fix.
->>>>>>>>
->>>>>>>> git describe --contains 6e6de3dee51a
->>>>>>>> v5.3-rc1~38^2~6
->>>>>>>>
->>>>>>>> I'm a bit torn about this situation. Reverting 6e6de3dee51a would
->>>>>>>> be the
->>>>>>>> right thing to do, but without it, it still leaves the issue reported
->>>>>>>> by Prarit Bhargava. We need a way to resolve the issue on stable and
->>>>>>>> then your optimizations can be applied on top.
->>>>>>>
->>>>>>> Simpler could be to do the following:
->>>>>>>
->>>>>>> diff --git a/kernel/module/main.c b/kernel/module/main.c
->>>>>>> index d02d39c7174e..0302ac387e93 100644
->>>>>>> --- a/kernel/module/main.c
->>>>>>> +++ b/kernel/module/main.c
->>>>>>> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->>>>>>>         sched_annotate_sleep();
->>>>>>>         mutex_lock(&module_mutex);
->>>>>>>         mod = find_module_all(name, strlen(name), true);
->>>>>>> -    ret = !mod || mod->state == MODULE_STATE_LIVE;
->>>>>>> +    ret = !mod || mod->state == MODULE_STATE_LIVE
->>>>>>> +        || mod->state == MODULE_STATE_GOING;
->>>>>>>         mutex_unlock(&module_mutex);
->>>>>>>         return ret;
->>>>>>> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module
->>>>>>> *mod)
->>>>>>>         mutex_lock(&module_mutex);
->>>>>>>         old = find_module_all(mod->name, strlen(mod->name), true);
->>>>>>>         if (old != NULL) {
->>>>>>> -        if (old->state != MODULE_STATE_LIVE) {
->>>>>>> +        if (old->state == MODULE_STATE_COMING
->>>>>>> +            || old->state == MODULE_STATE_UNFORMED) {
->>>>>>>                 /* Wait in case it fails to load. */
->>>>>>>                 mutex_unlock(&module_mutex);
->>>>>>>                 err = wait_event_interruptible(module_wq,
->>>>>>> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module
->>>>>>> *mod)
->>>>>>>                     goto out_unlocked;
->>>>>>>                 goto again;
->>>>>>>             }
->>>>>>> -        err = -EEXIST;
->>>>>>> +        err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
->>>>>>>             goto out;
->>>>>>>         }
->>>>>>>         mod_update_bounds(mod);
->>>>>>
->>>>>>
->>>>>> Prarit, can you verify this still does not break the issue you
->>>>>> reported?
->>>>>> David, does this also fix your issue?
->>>>>
->>>>> I didn't try, but from a quick glimpse I assume no. Allocating module
->>>>> space
->>>>> happens before handling eventual duplicates right now, before a
->>>>> module even
->>>>> is "alive" and in the MODULE_STATE_UNFORMED state.
->>>>
->>>> The first two hunks are a revert of commit 6e6de3dee51a and I'm under
->>>> the impression that cauased your issues as *more* modules states are
->>>> allowed through.
->>>>
->>>> The last hunk tries to fix what 6e6de3dee51a wanted to do.
->>>>
->>>
->>> Note that I don't think the issue I raised is due to 6e6de3dee51a.
->>>
->>>>> But maybe I am missing something important.
->>>>
->>>> Please do test if you can.
->>>
->>> I don't have the machine at hand right now. But, again, I doubt this
->>> will fix it.
->>>
->>>
->>> The flow is in load_module():
->>>
->>>       mod = layout_and_allocate(info, flags);
->>>       if (IS_ERR(mod)) {
->>>           ...
->>>       }
->>>
->>>       audit_log_kern_module(mod->name);
->>>
->>>       /* Reserve our place in the list. */
->>>       err = add_unformed_module(mod);
->>>       if (err)
->>>           goto free_module;
->>>
->>>
->>> You can have 400 threads in layout_and_allocate() loading the same
->>> module at the same time and running out of module space. Any changes to
->>> add_unformed_module() and finished_loading() won't change that, because
->>> they are not involved before the module space allocations happened.
->>>
->>
->> I'd like to see a refreshed patch but I tested the latest version and
->> see that the boot time is LONGER with the change
->>
->> Before:
->>
->> [11:17 AM root@intel-eaglestream-spr-15 kernel-ark]# systemd-analyze
->> Startup finished in 55.418s (firmware) + 22.766s (loader) + 35.856s
->> (kernel) + 5.830s (initrd) + 15.671s (userspace) = 2min 15.542s
->> multi-user.target reached after 15.606s in userspace.
->>
->> After:
->>
->> Startup finished in 55.314s (firmware) + 23.033s (loader) + 35.331s
->> (kernel) + 5.176s (initrd) + 23.465s (userspace) = 2min 22.320s
->> multi-user.target reached after 23.093s in userspace.
->>
->> Subsequent reboots also indicate that userspace boot time is longer
->> after the change.
-> 
-> Thanks for testing this patch, that is an interesting result.
-> 
-> I see the following dependency chain on my system (openSUSE Tumbleweed):
-> multi-user.target -> basic.target -> sysinit.target -> systemd-udev-trigger.service.
-> 
-> My understanding is that the udev trigger service only performs the trigger
-> operation but does not actually wait on all devices to be processed by udevd.
-> In other words, handling of the forced udev events can still be in progress
-> after multi-user.target is reached.
-> 
-> The current serialization of same-name module loads can result in many udev
-> workers sleeping in add_unformed_module() and hence creating at that point
-> less pressure on the CPU time from udevd. I wonder if this then maybe allows
-> other work needed to reach multi-user.target to proceed faster.
-> 
-> Could you please boot the machine with 'udev.log_level=debug' and provide me
-> logs ('journalctl -b -o short-monotonic') from a run with the vanilla kernel
-> and with the discussed patch?
+Hey Akihiko,
 
-Petr, I haven't missed your request.  I'm waiting for the system to 
-become free (I'm running a week long test on it).  Hopefully I can get 
-this data to you tomorrow AM.
+Thanks for having had a look at this. A bunch of comments below.
 
-My apologies for the wait,
+On Fri, 02 Dec 2022 09:18:56 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> 
+> M2 MacBook Air has mismatched CCSIDR associativity bits among physical
+> CPUs, which makes the bits a KVM vCPU sees inconsistent when migrating
+> among them.
 
-P.
+Your machine *does not* have any mismatched CCSIDR. By definition, any
+CPU can have any cache hierarchy, and there is no architectural
+requirement that they are all the same.
+
+I'd rather you describe this in architectural terms, and simply point
+out that KVM exposes the physical topology of the CPU the vcpu runs
+on (including across migration, which is a problem), and that
+userspace sees some arbitrary topology that has been sampled at boot
+time. And both behaviours are a bit wrong in an asymmetric system.
+
+This also break live migration for something that should never be a
+concern of non-secure SW.
 
 > 
-> Thanks,
-> Petr
-> 
+> While it is possible to detect CCSIDR associativity bit mismatches and
+> mask them with that condition, it requires mismatch detection and
+> increases complexity. Instead, always mask the CCSIDR associativity bits
+> to keep the code simple.
 
+Given the above, this paragraph doesn't make much sense.
+
+> 
+> Also, allow the userspace to overwrite the bits with arbitrary values so
+> that it can restore a vCPU state saved with an older kernel.
+> 
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  arch/arm64/include/asm/kvm_arm.h     |   3 +-
+>  arch/arm64/include/asm/kvm_emulate.h |   4 -
+>  arch/arm64/include/asm/kvm_host.h    |   4 +
+>  arch/arm64/include/asm/sysreg.h      |   3 +
+>  arch/arm64/kvm/sys_regs.c            | 146 ++++++++++++++-------------
+>  5 files changed, 87 insertions(+), 73 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
+> index 8aa8492dafc0..f69cd96a65ab 100644
+> --- a/arch/arm64/include/asm/kvm_arm.h
+> +++ b/arch/arm64/include/asm/kvm_arm.h
+> @@ -81,11 +81,12 @@
+>   * SWIO:	Turn set/way invalidates into set/way clean+invalidate
+>   * PTW:		Take a stage2 fault if a stage1 walk steps in device memory
+>   * TID3:	Trap EL1 reads of group 3 ID registers
+> + * TID2:	Trap CCSIDR_EL1
+
+Not only that, but also CTR_EL0, CCSIDR2_EL1, CLIDR_EL1, and
+CSSELR_EL1 if the guest is using AArch64, and CCSELR if the guest is
+using AArch32.
+
+>   */
+>  #define HCR_GUEST_FLAGS (HCR_TSC | HCR_TSW | HCR_TWE | HCR_TWI | HCR_VM | \
+>  			 HCR_BSU_IS | HCR_FB | HCR_TACR | \
+>  			 HCR_AMO | HCR_SWIO | HCR_TIDCP | HCR_RW | HCR_TLOR | \
+> -			 HCR_FMO | HCR_IMO | HCR_PTW | HCR_TID3 )
+> +			 HCR_FMO | HCR_IMO | HCR_PTW | HCR_TID3 | HCR_TID2)
+>  #define HCR_VIRT_EXCP_MASK (HCR_VSE | HCR_VI | HCR_VF)
+>  #define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
+>  #define HCR_HOST_NVHE_PROTECTED_FLAGS (HCR_HOST_NVHE_FLAGS | HCR_TSC)
+> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
+> index 9bdba47f7e14..30c4598d643b 100644
+> --- a/arch/arm64/include/asm/kvm_emulate.h
+> +++ b/arch/arm64/include/asm/kvm_emulate.h
+> @@ -88,10 +88,6 @@ static inline void vcpu_reset_hcr(struct kvm_vcpu *vcpu)
+>  	if (vcpu_el1_is_32bit(vcpu))
+>  		vcpu->arch.hcr_el2 &= ~HCR_RW;
+>  
+> -	if (cpus_have_const_cap(ARM64_MISMATCHED_CACHE_TYPE) ||
+> -	    vcpu_el1_is_32bit(vcpu))
+> -		vcpu->arch.hcr_el2 |= HCR_TID2;
+> -
+>  	if (kvm_has_mte(vcpu->kvm))
+>  		vcpu->arch.hcr_el2 |= HCR_ATA;
+>  }
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 45e2136322ba..cc051cd56179 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -53,6 +53,9 @@
+>  
+>  #define KVM_HAVE_MMU_RWLOCK
+>  
+> +/* CSSELR values; used to index KVM_REG_ARM_DEMUX_ID_CCSIDR */
+> +#define CSSELR_MAX 14
+> +
+>  /*
+>   * Mode of operation configurable with kvm-arm.mode early param.
+>   * See Documentation/admin-guide/kernel-parameters.txt for more information.
+> @@ -266,6 +269,7 @@ struct kvm_cpu_context {
+>  	struct user_fpsimd_state fp_regs;
+>  
+>  	u64 sys_regs[NR_SYS_REGS];
+> +	u32 ccsidr[CSSELR_MAX + 1];
+
+kvm_cpu_context is the wrong location for this stuff. We use it for
+things that get actively context-switched. No such thing here, as this
+is RO data as far as the guest is concerned.
+
+Also, it would probably make some sense to only allocate this memory
+if the vcpu is not using the default synthesised topology, but
+something that userspace has restored.
+
+>
+>  	struct kvm_vcpu *__hyp_running_vcpu;
+>  };
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 7d301700d1a9..0c5f3675b4c2 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -941,6 +941,9 @@
+>  #define HFGxTR_EL2_nSMPRI_EL1_SHIFT	54
+>  #define HFGxTR_EL2_nSMPRI_EL1_MASK	BIT_MASK(HFGxTR_EL2_nSMPRI_EL1_SHIFT)
+>  
+> +/* CCSIDR_EL1 bit definitions */
+> +#define CCSIDR_EL1_ASSOCIATIVITY_BITS	GENMASK(27, 3)
+> +
+>  #define ARM64_FEATURE_FIELD_BITS	4
+>  
+>  /* Create a mask for the feature bits of the specified feature. */
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index f4a7c5abcbca..3518d021d3a0 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -84,24 +84,6 @@ void vcpu_write_sys_reg(struct kvm_vcpu *vcpu, u64 val, int reg)
+>  /* 3 bits per cache level, as per CLIDR, but non-existent caches always 0 */
+>  static u32 cache_levels;
+>  
+> -/* CSSELR values; used to index KVM_REG_ARM_DEMUX_ID_CCSIDR */
+> -#define CSSELR_MAX 14
+> -
+> -/* Which cache CCSIDR represents depends on CSSELR value. */
+> -static u32 get_ccsidr(u32 csselr)
+> -{
+> -	u32 ccsidr;
+> -
+> -	/* Make sure noone else changes CSSELR during this! */
+> -	local_irq_disable();
+> -	write_sysreg(csselr, csselr_el1);
+> -	isb();
+> -	ccsidr = read_sysreg(ccsidr_el1);
+> -	local_irq_enable();
+> -
+> -	return ccsidr;
+> -}
+> -
+>  /*
+>   * See note at ARMv7 ARM B1.14.4 (TL;DR: S/W ops are not easily virtualized).
+>   */
+> @@ -1300,25 +1282,76 @@ static bool access_ccsidr(struct kvm_vcpu *vcpu, struct sys_reg_params *p,
+>  		return write_to_read_only(vcpu, p, r);
+>  
+>  	csselr = vcpu_read_sys_reg(vcpu, CSSELR_EL1);
+> -	p->regval = get_ccsidr(csselr);
+> +	p->regval = vcpu->arch.ctxt.ccsidr[csselr];
+>  
+> -	/*
+> -	 * Guests should not be doing cache operations by set/way at all, and
+> -	 * for this reason, we trap them and attempt to infer the intent, so
+> -	 * that we can flush the entire guest's address space at the appropriate
+> -	 * time.
+> -	 * To prevent this trapping from causing performance problems, let's
+> -	 * expose the geometry of all data and unified caches (which are
+> -	 * guaranteed to be PIPT and thus non-aliasing) as 1 set and 1 way.
+> -	 * [If guests should attempt to infer aliasing properties from the
+> -	 * geometry (which is not permitted by the architecture), they would
+> -	 * only do so for virtually indexed caches.]
+> -	 */
+> -	if (!(csselr & 1)) // data or unified cache
+> -		p->regval &= ~GENMASK(27, 3);
+
+See my early comment about not allocating that memory if we get a
+chance to always return the default view.
+
+>  	return true;
+>  }
+>  
+> +static bool is_valid_cache(u32 val)
+> +{
+> +	u32 level, ctype;
+> +
+> +	if (val >= CSSELR_MAX)
+> +		return false;
+> +
+> +	/* Bottom bit is Instruction or Data bit.  Next 3 bits are level. */
+> +	level = (val >> 1);
+> +	ctype = (cache_levels >> (level * 3)) & 7;
+
+Err, I didn't expect this, see below.
+
+> +
+> +	switch (ctype) {
+> +	case 0: /* No cache */
+> +		return false;
+> +	case 1: /* Instruction cache only */
+> +		return (val & 1);
+> +	case 2: /* Data cache only */
+> +	case 4: /* Unified cache */
+> +		return !(val & 1);
+> +	case 3: /* Separate instruction and data caches */
+> +		return true;
+> +	default: /* Reserved: we can't know instruction or data. */
+> +		return false;
+> +	}
+> +}
+> +
+> +static void reset_ccsidr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *r)
+> +{
+> +	u32 ccsidr;
+> +	int i;
+> +
+> +	/* Make sure noone else changes CSSELR during this! */
+> +	local_irq_disable();
+> +
+> +	for (i = 0; i < CSSELR_MAX; i++) {
+> +		if (!is_valid_cache(i))
+> +			continue;
+
+So you still base the default guest topology on the HW one. This
+wasn't what I had in mind. I really want KVM to expose something that
+is totally decoupled from the HW topology.
+
+I was thinking of a very basic two level hierarchy:
+
+- L0 instruction
+- L0 data
+- L1 unified
+
+with everything being one set, one way. And that's it.
+
+The advantage of such a hierarchy is that it works with both
+situations where CLIDR_EL1.LoC==0 or CLIDR_EL1.{LoUU,LoUIS}={0,0} and
+those that are less able, as long as CLIDR_EL1 and CTR_EL0 don't
+over-promise.
+
+Of course, it means that you need to make CLIDR_EL1 consistent with
+this hierarchy while respecting what the HW offers.
+
+> +
+> +		/* Which cache CCSIDR represents depends on CSSELR value. */
+> +		write_sysreg(i, csselr_el1);
+> +		isb();
+> +		ccsidr = read_sysreg(ccsidr_el1);
+> +
+> +		/*
+> +		 * Guests should not be doing cache operations by set/way at
+> +		 * all, and for this reason, we trap them and attempt to infer
+> +		 * the intent, so that we can flush the entire guest's address
+> +		 * space at the appropriate time.
+> +		 * To prevent this trapping from causing performance problems,
+> +		 * let's expose the geometry of all data and unified caches
+> +		 * (which are guaranteed to be PIPT and thus non-aliasing) as
+> +		 * 1 set and 1 way.
+> +		 * [If guests should attempt to infer aliasing properties from
+> +		 * the geometry (which is not permitted by the architecture),
+> +		 * they would only do so for virtually indexed caches.]
+> +		 *
+> +		 * This also make sure vCPU see the consistent geometry even if
+> +		 * it migrates among phyiscal CPUs with different geometries.
+> +		 */
+> +		vcpu->arch.ctxt.ccsidr[i] = ccsidr & ~CCSIDR_EL1_ASSOCIATIVITY_BITS;
+> +	}
+> +
+> +	local_irq_enable();
+> +}
+> +
+>  static unsigned int mte_visibility(const struct kvm_vcpu *vcpu,
+>  				   const struct sys_reg_desc *rd)
+>  {
+> @@ -1603,7 +1636,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  
+>  	{ SYS_DESC(SYS_CNTKCTL_EL1), NULL, reset_val, CNTKCTL_EL1, 0},
+>  
+> -	{ SYS_DESC(SYS_CCSIDR_EL1), access_ccsidr },
+> +	{ SYS_DESC(SYS_CCSIDR_EL1), access_ccsidr, reset_ccsidr },
+
+You also need to handle CCSIDR2_EL1/CCSIDR2 and make them UNDEF. This
+probably also mean you need to mask out FEAT_CCIDX from the relevant
+ID registers.
+
+>  	{ SYS_DESC(SYS_CLIDR_EL1), access_clidr },
+
+CLIDR_EL1 needs some extra love to return something that is consistent
+with whatever has been restored. Which mean it must now be handled as
+something userspace can write to. There is also some subtleties around
+the handling of MTE caches (I think we can make that "Unified
+Allocation Tag and Data cache, Allocation Tags and Data in separate
+lines.").
+
+I appreciate this is probably a bit (a lot?) more than what you had in
+mind, but please hang in there. We'll help you along the way. And if
+anything seem odd, please shout. I'll do my best to make it clearer.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
