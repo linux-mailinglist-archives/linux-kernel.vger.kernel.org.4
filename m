@@ -2,169 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15B5641E32
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAB4641E35
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiLDRQO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 4 Dec 2022 12:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S230090AbiLDRUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 12:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiLDRQL (ORCPT
+        with ESMTP id S229985AbiLDRUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 12:16:11 -0500
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BF413E26;
-        Sun,  4 Dec 2022 09:16:10 -0800 (PST)
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 151DE1A0AB6;
-        Sun,  4 Dec 2022 17:16:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 6E15E20025;
-        Sun,  4 Dec 2022 17:15:58 +0000 (UTC)
-Message-ID: <c78a28f429beccef0941be90957e2549ea39cbd0.camel@perches.com>
-Subject: Re: [PATCH] init_task: Include <linux/rbtree.h> in the right file
-From:   Joe Perches <joe@perches.com>
-To:     Marco Elver <elver@google.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     paulmck@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>
-Date:   Sun, 04 Dec 2022 09:16:03 -0800
-In-Reply-To: <Y4ymv/BxtulPrM47@elver.google.com>
-References: <f06e810735c49a611e7dc75715f0689b5f7e87c6.1670153931.git.christophe.jaillet@wanadoo.fr>
-         <Y4ymv/BxtulPrM47@elver.google.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 4 Dec 2022 12:20:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA71C13D44
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 09:19:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670174346;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=20fyC3YFTPB+g5WEoCeX3R3U2nsrMQs9BQj6BjFEsrg=;
+        b=RHaIEt4drJj/qZk6E5gFoiNynKPLe5c0TTYQFSfhGj6IlGoRM/Q5qPKkeBF/iZQDTbbITF
+        eFmoskyMlK7RJup0paFXArnbYOOMl2mLh+TlQsDBGS0CvTB9egAkE2/lfzgRSxonuALhAj
+        F1bVW1i5WQwctK1+Jv0lCw1l5MmYsgU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-400-TrlZGUC5MeSkNTsMiRRCJg-1; Sun, 04 Dec 2022 12:19:01 -0500
+X-MC-Unique: TrlZGUC5MeSkNTsMiRRCJg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C339A811E67;
+        Sun,  4 Dec 2022 17:19:00 +0000 (UTC)
+Received: from starship (unknown [10.35.206.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A9A463A55;
+        Sun,  4 Dec 2022 17:18:56 +0000 (UTC)
+Message-ID: <c7629b0b246593ccf71661f2f8989e3a3acc3cbe.camel@redhat.com>
+Subject: Re: [PATCH v2 10/11] KVM: SVM: implement support for vNMI
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Santosh Shukla <santosh.shukla@amd.com>
+Date:   Sun, 04 Dec 2022 19:18:55 +0200
+In-Reply-To: <20221129193717.513824-11-mlevitsk@redhat.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+         <20221129193717.513824-11-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 6E15E20025
-X-Stat-Signature: y44oiop5a53cqwtk798gq9ox5wbbozu4
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_FILL_THIS_FORM_SHORT,UNPARSEABLE_RELAY autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX182QPKfG0oLlS7HH44DolJF2hPJI6KnYL0=
-X-HE-Tag: 1670174158-38091
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-12-04 at 14:55 +0100, Marco Elver wrote:
-> [+Cc Ingo, who had been working on lots of include improvements.]
+On Tue, 2022-11-29 at 21:37 +0200, Maxim Levitsky wrote:
+> This patch implements support for injecting pending
+> NMIs via the .kvm_x86_set_hw_nmi_pending using new AMD's vNMI
+> feature.
 > 
-> The Cc list is odd -- it appears that get_maintainers.pl is broken on
-> init_task.c:
+> Note that the vNMI can't cause a VM exit, which is needed
+> when a nested guest intercepts NMIs.
 > 
-> 	$> ./scripts/get_maintainer.pl init/init_task.c
-> 	Mark Rutland <mark.rutland@arm.com> (commit_signer:1/1=100%)
-> 	"Paul E. McKenney" <paulmck@kernel.org> (commit_signer:1/1=100%)
-> 	Marco Elver <elver@google.com> (commit_signer:1/1=100%,authored:1/1=100%,removed_lines:5/5=100%)
-> 	linux-kernel@vger.kernel.org (open list)
+> Therefore to avoid breaking nesting, the vNMI is inhibited while
+> a nested guest is running and instead, the legacy NMI window
+> detection and delivery method is used.
 > 
-> What's going on here?
+> While it is possible to passthrough the vNMI if a nested guest
+> doesn't intercept NMIs, such usage is very uncommon, and it's
+> not worth to optimize for.
+> 
+> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/svm/nested.c |  42 +++++++++++++++
+>  arch/x86/kvm/svm/svm.c    | 111 ++++++++++++++++++++++++++++++--------
+>  arch/x86/kvm/svm/svm.h    |  10 ++++
+>  3 files changed, 140 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index e891318595113e..5bea672bf8b12d 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -623,6 +623,42 @@ static bool is_evtinj_nmi(u32 evtinj)
+>  	return type == SVM_EVTINJ_TYPE_NMI;
+>  }
 
-No one claims to be a maintainer of any init/ files
-($ git grep "^F:.*init" MAINTAINERS)
-so by default it merely shows the people that have patched the
-particular file in the last year.
 
-You could perhaps see this better by adding --no-git --no-gitfallback
-to the get_maintainer.pl command line
+Tiny bits of self review, I noticed some mistakes:
 
-$ ./scripts/get_maintainer.pl --nogit --nogit-fallback init/init_task.c
-linux-kernel@vger.kernel.org (open list)
+>  
+> +static void nested_svm_save_vnmi(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb01 = svm->vmcb01.ptr;
+> +
+> +	/*
+> +	 * Copy the vNMI state back to software NMI tracking state
+> +	 * for the duration of the nested run
+> +	 */
+> +
+> +	svm->nmi_masked = vmcb01->control.int_ctl & V_NMI_MASK;
+> +	svm->vcpu.arch.nmi_pending += vmcb01->control.int_ctl & V_NMI_PENDING;
+Sorry for a mistake here - this should be converted to a boolean first, something like that:
 
-see the --help option for details
 
-$ ./scripts/get_maintainer.pl --help
-usage: ./scripts/get_maintainer.pl [options] patchfile
-       ./scripts/get_maintainer.pl [options] -f file|directory
-version: 0.26
+if (vmcb01->control.int_ctl & V_NMI_PENDING)
+	svm->vcpu.arch.nmi_pending++;
 
-MAINTAINER field selection options:
-  --email => print email address(es) if any
-    --git => include recent git *-by: signers
-    --git-all-signature-types => include signers regardless of signature type
-        or use only (Signed-off-by:|Reviewed-by:|Acked-by:) signers (default: 0)
-    --git-fallback => use git when no exact MAINTAINERS pattern (default: 1)
-    --git-chief-penguins => include (Linus Torvalds)
-    --git-min-signatures => number of signatures required (default: 1)
-    --git-max-maintainers => maximum maintainers to add (default: 5)
-    --git-min-percent => minimum percentage of commits required (default: 5)
-    --git-blame => use git blame to find modified commits for patch or file
-    --git-blame-signatures => when used with --git-blame, also include all commit signers
-    --git-since => git history to use (default: 1-year-ago)
-    --hg-since => hg history to use (default: -365)
-    --interactive => display a menu (mostly useful if used with the --git option)
-    --m => include maintainer(s) if any
-    --r => include reviewer(s) if any
-    --n => include name 'Full Name <addr@domain.tld>'
-    --l => include list(s) if any
-    --moderated => include moderated lists(s) if any (default: true)
-    --s => include subscriber only list(s) if any (default: false)
-    --remove-duplicates => minimize duplicate email names/addresses
-    --roles => show roles (status:subsystem, git-signer, list, etc...)
-    --rolestats => show roles and statistics (commits/total_commits, %)
-    --file-emails => add email addresses found in -f file (default: 0 (off))
-    --fixes => for patches, add signatures of commits with 'Fixes: <commit>' (default: 1 (on))
-  --scm => print SCM tree(s) if any
-  --status => print status if any
-  --subsystem => print subsystem name if any
-  --web => print website(s) if any
 
-Output type options:
-  --separator [, ] => separator for multiple entries on 1 line
-    using --separator also sets --nomultiline if --separator is not [, ]
-  --multiline => print 1 entry per line
 
-Other options:
-  --pattern-depth => Number of pattern directory traversals (default: 0 (all))
-  --keywords => scan patch for keywords (default: 1)
-  --sections => print all of the subsystem sections with pattern matches
-  --letters => print all matching 'letter' types from all matching sections
-  --mailmap => use .mailmap file (default: 1)
-  --no-tree => run without a kernel tree
-  --self-test => show potential issues with MAINTAINERS file content
-  --version => show version
-  --help => show this help information
+> +}
+> +
+> +static void nested_svm_restore_vnmi(struct vcpu_svm *svm)
+> +{
+> +	struct kvm_vcpu *vcpu = &svm->vcpu;
+> +	struct vmcb *vmcb01 = svm->vmcb01.ptr;
+> +
+> +	/*
+> +	 * Restore the vNMI state from the software NMI tracking state
+> +	 * after a nested run
+> +	 */
+> +
+> +	if (svm->nmi_masked)
+> +		vmcb01->control.int_ctl |= V_NMI_MASK;
+> +	else
+> +		vmcb01->control.int_ctl &= ~V_NMI_MASK;
+> +
+> +	if (vcpu->arch.nmi_pending) {
+> +		vcpu->arch.nmi_pending--;
+> +		vmcb01->control.int_ctl |= V_NMI_PENDING;
+> +	} else
+> +		vmcb01->control.int_ctl &= ~V_NMI_PENDING;
+> +}
+> +
+> +
+>  static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+>  					  unsigned long vmcb12_rip,
+>  					  unsigned long vmcb12_csbase)
+> @@ -646,6 +682,9 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+>  	else
+>  		int_ctl_vmcb01_bits |= (V_GIF_MASK | V_GIF_ENABLE_MASK);
+>  
+> +	if (vnmi)
+> +		nested_svm_save_vnmi(svm);
+> +
+>  	/* Copied from vmcb01.  msrpm_base can be overwritten later.  */
+>  	vmcb02->control.nested_ctl = vmcb01->control.nested_ctl;
+>  	vmcb02->control.iopm_base_pa = vmcb01->control.iopm_base_pa;
+> @@ -1049,6 +1088,9 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+>  		svm_update_lbrv(vcpu);
+>  	}
+>  
+> +	if (vnmi)
+> +		nested_svm_restore_vnmi(svm);
+> +
+>  	/*
+>  	 * On vmexit the  GIF is set to false and
+>  	 * no event can be injected in L1.
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index cfed6ab29c839a..bf10adcf3170a8 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -230,6 +230,8 @@ module_param(dump_invalid_vmcb, bool, 0644);
+>  bool intercept_smi = true;
+>  module_param(intercept_smi, bool, 0444);
+>  
+> +bool vnmi = true;
+> +module_param(vnmi, bool, 0444);
+>  
+>  static bool svm_gp_erratum_intercept = true;
+>  
+> @@ -1299,6 +1301,9 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+>  	if (kvm_vcpu_apicv_active(vcpu))
+>  		avic_init_vmcb(svm, vmcb);
+>  
+> +	if (vnmi)
+> +		svm->vmcb->control.int_ctl |= V_NMI_ENABLE;
+> +
+>  	if (vgif) {
+>  		svm_clr_intercept(svm, INTERCEPT_STGI);
+>  		svm_clr_intercept(svm, INTERCEPT_CLGI);
+> @@ -3487,6 +3492,39 @@ static void svm_inject_nmi(struct kvm_vcpu *vcpu)
+>  	++vcpu->stat.nmi_injections;
+>  }
+>  
+> +
+> +static bool svm_get_hw_nmi_pending(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (!is_vnmi_enabled(svm))
+> +		return false;
+> +
+> +	return !!(svm->vmcb->control.int_ctl & V_NMI_MASK);
+> +}
+> +
+> +static bool svm_set_hw_nmi_pending(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (!is_vnmi_enabled(svm))
+> +		return false;
+> +
+> +	if (svm->vmcb->control.int_ctl & V_NMI_PENDING)
+> +		return false;
+> +
+> +	svm->vmcb->control.int_ctl |= V_NMI_PENDING;
+> +	vmcb_mark_dirty(svm->vmcb, VMCB_INTR);
 
-Default options:
-  [--email --tree --nogit --git-fallback --m --r --n --l --multiline
-   --pattern-depth=0 --remove-duplicates --rolestats]
+vmcb_mark_dirty is not needed I think now, as KVM always leaves the VMCB_INTR dirty bit
+due to vTPR update.
 
-Notes:
-  Using "-f directory" may give unexpected results:
-      Used with "--git", git signators for _all_ files in and below
-          directory are examined as git recurses directories.
-          Any specified X: (exclude) pattern matches are _not_ ignored.
-      Used with "--nogit", directory is used as a pattern match,
-          no individual file within the directory or subdirectory
-          is matched.
-      Used with "--git-blame", does not iterate all files in directory
-  Using "--git-blame" is slow and may add old committers and authors
-      that are no longer active maintainers to the output.
-  Using "--roles" or "--rolestats" with git send-email --cc-cmd or any
-      other automated tools that expect only ["name"] <email address>
-      may not work because of additional output after <email address>.
-  Using "--rolestats" and "--git-blame" shows the #/total=% commits,
-      not the percentage of the entire file authored.  # of commits is
-      not a good measure of amount of code authored.  1 major commit may
-      contain a thousand lines, 5 trivial commits may modify a single line.
-  If git is not installed, but mercurial (hg) is installed and an .hg
-      repository exists, the following options apply to mercurial:
-          --git,
-          --git-min-signatures, --git-max-maintainers, --git-min-percent, and
-          --git-blame
-      Use --hg-since not --git-since to control date selection
-  File ".get_maintainer.conf", if it exists in the linux kernel source root
-      directory, can change whatever get_maintainer defaults are desired.
-      Entries in this file can be any command line argument.
-      This file is prepended to any additional command line arguments.
-      Multiple lines and # comments are allowed.
-  Most options have both positive and negative forms.
-      The negative forms for --<foo> are --no<foo> and --no-<foo>.
+
+Best regards,
+	Maxim Levitsky
+
+> +
+> +	/*
+> +	 * NMI isn't yet technically injected but
+> +	 * this rough estimation should be good enough
+> +	 */
+> +	++vcpu->stat.nmi_injections;
+> +
+> +	return true;
+> +}
+> +
+>  static void svm_inject_irq(struct kvm_vcpu *vcpu, bool reinjected)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -3582,11 +3620,38 @@ static void svm_update_cr8_intercept(struct kvm_vcpu *vcpu, int tpr, int irr)
+>  		svm_set_intercept(svm, INTERCEPT_CR8_WRITE);
+>  }
+>  
+> +static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (is_vnmi_enabled(svm))
+> +		return svm->vmcb->control.int_ctl & V_NMI_MASK;
+> +	else
+> +		return svm->nmi_masked;
+> +}
+> +
+> +static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (is_vnmi_enabled(svm)) {
+> +		if (masked)
+> +			svm->vmcb->control.int_ctl |= V_NMI_MASK;
+> +		else
+> +			svm->vmcb->control.int_ctl &= ~V_NMI_MASK;
+> +	} else {
+> +		svm->nmi_masked = masked;
+> +		if (masked)
+> +			svm_enable_iret_interception(svm);
+> +		else
+> +			svm_disable_iret_interception(svm);
+> +	}
+> +}
+> +
+>  bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  	struct vmcb *vmcb = svm->vmcb;
+> -	bool ret;
+>  
+>  	if (!gif_set(svm))
+>  		return true;
+> @@ -3594,10 +3659,10 @@ bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
+>  	if (is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
+>  		return false;
+>  
+> -	ret = (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK) ||
+> -	      (svm->nmi_masked);
+> +	if (svm_get_nmi_mask(vcpu))
+> +		return true;
+>  
+> -	return ret;
+> +	return vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK;
+>  }
+>  
+>  static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> @@ -3615,24 +3680,6 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>  	return 1;
+>  }
+>  
+> -static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> -{
+> -	return to_svm(vcpu)->nmi_masked;
+> -}
+> -
+> -static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+> -{
+> -	struct vcpu_svm *svm = to_svm(vcpu);
+> -
+> -	if (masked) {
+> -		svm->nmi_masked = true;
+> -		svm_enable_iret_interception(svm);
+> -	} else {
+> -		svm->nmi_masked = false;
+> -		svm_disable_iret_interception(svm);
+> -	}
+> -}
+> -
+>  bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -3725,10 +3772,16 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+>  	/*
+>  	 * Something prevents NMI from been injected. Single step over possible
+>  	 * problem (IRET or exception injection or interrupt shadow)
+> +	 *
+> +	 * With vNMI we should never need an NMI window
+> +	 * (we can always inject vNMI either by setting VNMI_PENDING or by EVENTINJ)
+>  	 */
+> +	if (WARN_ON_ONCE(is_vnmi_enabled(svm)))
+> +		return;
+> +
+>  	svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
+> -	svm->nmi_singlestep = true;
+>  	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+> +	svm->nmi_singlestep = true;
+>  }
+>  
+>  static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
+> @@ -4770,6 +4823,8 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.patch_hypercall = svm_patch_hypercall,
+>  	.inject_irq = svm_inject_irq,
+>  	.inject_nmi = svm_inject_nmi,
+> +	.get_hw_nmi_pending = svm_get_hw_nmi_pending,
+> +	.set_hw_nmi_pending = svm_set_hw_nmi_pending,
+>  	.inject_exception = svm_inject_exception,
+>  	.cancel_injection = svm_cancel_injection,
+>  	.interrupt_allowed = svm_interrupt_allowed,
+> @@ -5058,6 +5113,16 @@ static __init int svm_hardware_setup(void)
+>  			pr_info("Virtual GIF supported\n");
+>  	}
+>  
+> +
+> +	vnmi = vgif && vnmi && boot_cpu_has(X86_FEATURE_AMD_VNMI);
+> +	if (vnmi)
+> +		pr_info("Virtual NMI enabled\n");
+> +
+> +	if (!vnmi) {
+> +		svm_x86_ops.get_hw_nmi_pending = NULL;
+> +		svm_x86_ops.set_hw_nmi_pending = NULL;
+> +	}
+> +
+>  	if (lbrv) {
+>  		if (!boot_cpu_has(X86_FEATURE_LBRV))
+>  			lbrv = false;
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 587ddc150f9f34..0b7e1790fadde1 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -35,6 +35,7 @@ extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+>  extern bool npt_enabled;
+>  extern int vgif;
+>  extern bool intercept_smi;
+> +extern bool vnmi;
+>  
+>  enum avic_modes {
+>  	AVIC_MODE_NONE = 0,
+> @@ -553,6 +554,15 @@ static inline bool is_x2apic_msrpm_offset(u32 offset)
+>  	       (msr < (APIC_BASE_MSR + 0x100));
+>  }
+>  
+> +static inline bool is_vnmi_enabled(struct vcpu_svm *svm)
+> +{
+> +	/* L1's vNMI is inhibited while nested guest is running */
+> +	if (is_guest_mode(&svm->vcpu))
+> +		return false;
+> +
+> +	return !!(svm->vmcb01.ptr->control.int_ctl & V_NMI_ENABLE);
+> +}
+> +
+>  /* svm.c */
+>  #define MSR_INVALID				0xffffffffU
+>  
 
 
