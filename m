@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B38641F88
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C190641F8D
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiLDU34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 15:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S230352AbiLDUac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 15:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiLDU3y (ORCPT
+        with ESMTP id S229949AbiLDUaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 15:29:54 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09B4FCDE;
-        Sun,  4 Dec 2022 12:29:52 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id c17so4676271edj.13;
-        Sun, 04 Dec 2022 12:29:52 -0800 (PST)
+        Sun, 4 Dec 2022 15:30:30 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870C412A99
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 12:30:29 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id x18so3628890qki.4
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 12:30:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=laxafo8uC4rkzdSgjCnYmmKTnlF+IZZI8yRD7k1sH00=;
-        b=G8kFF2yF+9LrtdLLFVWXTiH3a34n50+ByKWLyzeJTgNRAf4umANALmf+Tot9Q1l9Pq
-         catRFFN9XcCHMyVGlLSLWJZn8gf7z7xdgBc2LBAEA0sjxCa003VeQVt505zEIrnrk/kv
-         xZPeGhIC9MYTZpLuJoPKCrvxY/l/vww9TqMJrzynfkN2eEXO3Zsmc4Ap6I61ugtH4t/x
-         etbrVqpyzR1g+dOSrJGkjfqzuXlxm4ZS4RqWiG6CmRGV6H1bUuODjDrSSniSemfypgNT
-         +iPPiaHwBTZ4ikmfA+tFFKFuo4WU+xdNN9j1jgTrRj7Q4xeslUqc0+8Yu3V8aZy3CN8Y
-         rGjA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UmoVJWMPojvTnASsj0qBJ0Rwkisp9Ussgz9gl66R+uI=;
+        b=Glx1PI7Z6KX+LjJjPgG4GzP3mkpTet7G6g45kXQ8yRcUaUUqP7nqETBkyBdtWC15Pk
+         v2ilbTuSNI3QExsCeOFWbdhkEJw93RnxY/Ls7NBu/2l3cBwAwHGskESwGLcYtVMWdcSg
+         TBKRf5SceUHD/yU/D2DCSmiZoV/NY252r4YiA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=laxafo8uC4rkzdSgjCnYmmKTnlF+IZZI8yRD7k1sH00=;
-        b=x1PPel2R65Q9MDIz7SIhs/nXJaMHAmTSNvuc66vP0crUwIOeVmW3UPZKj5p4nu2P3b
-         Cp7to870uWoDlDHadlI6/ksr8D0iO9OZBT+8aIzu4G3HJi7DDeavoE49SFItMWKND3Dt
-         QjyYDc6Vw7euS+Mgbk+/6hogemG9KEBqqfAQWMEnYCSGsR0OpWyyrRSX0QIOyCCQKm1Q
-         M/FH65aUdB+wbHR8BpYV95G6c88t1JXkQv3P4UEYOyPPgLy3z9Lh3+2f87iZoY1wY8Zj
-         2zQZymPeLwmDgXZ5D7qY+FSmEPVetcPZ3SlEO9iyYDy1mAF2C0OTFEkHVxMlJ2iSAnQw
-         w4hA==
-X-Gm-Message-State: ANoB5pmN58fO+t+qe20CKk5+9J8EXJXLWpmcqoVlR7/bzG+QQTxKgQWk
-        VEgjMFfxYOSQHX0GwIoOeCU=
-X-Google-Smtp-Source: AA0mqf5f1LymchuG5Y1i+UGHSkzN6cY+oQiv1IACjPoa7mGmMKZX4dtJV9ZXu0SwInG6g17eXFOR0g==
-X-Received: by 2002:aa7:dbd8:0:b0:467:60fa:b629 with SMTP id v24-20020aa7dbd8000000b0046760fab629mr69933310edt.281.1670185791413;
-        Sun, 04 Dec 2022 12:29:51 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b007bd15e582a3sm5403556ejh.181.2022.12.04.12.29.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 12:29:50 -0800 (PST)
-Date:   Sun, 4 Dec 2022 21:29:59 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next 4/4] driver/ncn26000: add PLCA support
-Message-ID: <Y40DR1nsF1wIxnXh@gvm01>
-References: <cover.1670119328.git.piergiorgio.beruto@gmail.com>
- <38623984f6235a1521e6b0ad2ea958abc84ad708.1670119328.git.piergiorgio.beruto@gmail.com>
- <Y4zTqvSxLJG+G8V+@shell.armlinux.org.uk>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UmoVJWMPojvTnASsj0qBJ0Rwkisp9Ussgz9gl66R+uI=;
+        b=KC2cABuG6Ce96wXznJF9qWsHUZpY9167GdCFdjhk62TPyXQIPqMZFSJns0iOxf+uDK
+         lfQ7Y55+L60UCPbuKhYBVppj0qtKHDlAeY5fcU2reJVyIg2D22VLSmFvJNNSGK4Iyvf9
+         Dhgu/kBkvD42vtgn9D6fdfDbX+yfOAy8Jju95U3kikkXIdi8X9yOKqxyA71ko+iRaR3F
+         ndAJ5+9noH+IXjsFPuHByt6TZYJa2t/Efd/VOrDKAMTGEb6GcQEFse32c55DIDuRYvuR
+         1FFaSxSXVg4VswAEgQiw44OGigQSPgmtTIQz7KUsnygxGgWOCsKwTaFmveotT+2OYNRU
+         er7w==
+X-Gm-Message-State: ANoB5pm1FSbHEe1CYPdGtfIIrnXCs0cDTKz6M/tervS382sfzSJjquiO
+        rQTkZi+r52tuoX2JL74rRAZ+O5Joy1V0Yh7u
+X-Google-Smtp-Source: AA0mqf704+6rb75Rf80W2MdhKiSK7qiQ18qt2u2Zq7ubRx+A/lLLs2m6NefG3tiHfXSOkqMg49x/Hg==
+X-Received: by 2002:a37:9186:0:b0:6fc:86ec:6c53 with SMTP id t128-20020a379186000000b006fc86ec6c53mr27175848qkd.487.1670185828442;
+        Sun, 04 Dec 2022 12:30:28 -0800 (PST)
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com. [209.85.160.170])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006fc5a1d9cd4sm10836793qko.34.2022.12.04.12.30.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Dec 2022 12:30:26 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id l15so10218914qtv.4
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 12:30:26 -0800 (PST)
+X-Received: by 2002:ac8:688:0:b0:3a5:122:fb79 with SMTP id f8-20020ac80688000000b003a50122fb79mr63347496qth.452.1670185826082;
+ Sun, 04 Dec 2022 12:30:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4zTqvSxLJG+G8V+@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221203150539.11483-1-brgl@bgdev.pl> <CAHk-=wjD8+XZyO4H1STwXte6x1UcYsiHKaQ4OQF5ucssY=uT8g@mail.gmail.com>
+In-Reply-To: <CAHk-=wjD8+XZyO4H1STwXte6x1UcYsiHKaQ4OQF5ucssY=uT8g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 4 Dec 2022 12:30:10 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi1jC=9FGA4haX0UrAthqFL7rAFHU=0O00L3_ECQLgoCQ@mail.gmail.com>
+Message-ID: <CAHk-=wi1jC=9FGA4haX0UrAthqFL7rAFHU=0O00L3_ECQLgoCQ@mail.gmail.com>
+Subject: Re: [GIT PULL] gpio: fixes for v6.1-rc8 - take 2
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,140 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 05:06:50PM +0000, Russell King (Oracle) wrote:
-> On Sun, Dec 04, 2022 at 03:32:06AM +0100, Piergiorgio Beruto wrote:
-> > +	/* HW bug workaround: the default value of the PLCA TO_TIMER should be
-> > +	 * 32, where the current version of NCN26000 reports 24. This will be
-> > +	 * fixed in future PHY versions. For the time being, we force the right
-> > +	 * default here.
-> > +	 */
-> > +	ret = phy_write_mmd(phydev,
-> > +			    MDIO_MMD_OATC14,
-> > +			    MDIO_OATC14_PLCA_TOTMR,
-> > +			    TO_TMR_DEFAULT);
-> 
-> Better formatting please.
-> 
-> 	return phy_write_mmd(phydev, MDIO_MMD_OATC14, MDIO_OATC14_PLCA_TOTMR,
-> 			     TO_TMR_DEFAULT);
-> 
-> is sufficient. No need for "ret" (and there are folk who will create a
-> cleanup patch to do this, so might as well get it right on submission.)
-Ok, I will change the formatting.
-On the use of ret, I did that just because I was planning to add more
-features to be pre-configured in the future. But for the time being I
-can do it as you suggest.
- 
-> > +/**
-> > + * genphy_c45_plca_get_cfg - get PLCA configuration from standard registers
-> > + * @phydev: target phy_device struct
-> > + * @plca_cfg: output structure to store the PLCA configuration
-> > + *
-> > + * Description: if the PHY complies to the Open Alliance TC14 10BASE-T1S PLCA
-> > + *   Management Registers specifications, this function can be used to retrieve
-> > + *   the current PLCA configuration from the standard registers in MMD 31.
-> > + */
-> > +int genphy_c45_plca_get_cfg(struct phy_device *phydev,
-> > +			    struct phy_plca_cfg *plca_cfg)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = phy_read_mmd(phydev, MDIO_MMD_OATC14, MDIO_OATC14_PLCA_IDVER);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	plca_cfg->version = (u32)ret;
+On Sun, Dec 4, 2022 at 12:17 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> ->version has type s32, so is signed. Clearly, from the above code, it
-> can't be negative (since negative integer values are an error.) So why
-> is ->version declared in patch 1 as signed? The cast here to u32 also
-> seems strange.
-> 
-> Also, since the register you're reading can be no more than 16 bits
-> wide, using s32 seems like a waste.
-Please, see the discussion I had with Andrew on this topic.
+> And again - if the trylock is there because 'gdev' itself might go
+> away at any time and you can't afford to wait on the lock, then it's
+> broken regardless (and the above suggestion won't help either)
 
-> > +
-> > +	ret = phy_read_mmd(phydev, MDIO_MMD_OATC14, MDIO_OATC14_PLCA_CTRL0);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	plca_cfg->enabled = !!(((u16)ret) & MDIO_OATC14_PLCA_EN);
-> 
-> ->enabled has type s16, but it clearly boolean in nature. It could be
-> a u8 instead. No need for that u16 cast either.
-I'll remove all the casts. I apologize, but in some environments the
-coding rules may be different, requiring unnecessary casts for
-safety/verification reasons. So I still need to adapt my style to match
-the kernel's. Please, have patience with me...
+.. another reason I can see is that you are holding other locks, and
+the trylock is either for deadlock avoidance or because the other
+locks are spinning locks and you cannot sleep.
 
-> > +
-> > +	// first of all, disable PLCA if required
-> > +	if (plca_cfg->enabled == 0) {
-> > +		ret = phy_clear_bits_mmd(phydev,
-> > +					 MDIO_MMD_OATC14,
-> > +					 MDIO_OATC14_PLCA_CTRL0,
-> > +					 MDIO_OATC14_PLCA_EN);
-> > +
-> > +		if (ret < 0)
-> > +			return ret;
-> > +	}
-> 
-> Does this need to be disabled when making changes? Just wondering
-> why you handle this disable explicitly early.
-It is just a way to avoig configuration glitches. If we need to disable
-PLCA, it is better to do it before changing any other parameter, so that
-you don't disturb the other nodes on the multi-drop network.
+But if that's the case, then the trylock is basically a hacky
+workaround for broken locking, together with a "I know the only reason
+it fails is because we've already entered the shutdown phase".
 
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(genphy_c45_plca_get_status);
-> > +
-> >  struct phy_driver genphy_c45_driver = {
-> >  	.phy_id         = 0xffffffff,
-> >  	.phy_id_mask    = 0xffffffff,
-> > diff --git a/include/linux/phy.h b/include/linux/phy.h
-> > index 2dfb85c6e596..4548c8e8f6a9 100644
-> > --- a/include/linux/phy.h
-> > +++ b/include/linux/phy.h
-> > @@ -811,7 +811,7 @@ struct phy_plca_cfg {
-> >   * struct phy_plca_status - Status of the PLCA (Physical Layer Collision
-> >   * Avoidance) Reconciliation Sublayer.
-> >   *
-> > - * @status: The PLCA status as reported by the PST bit in the PLCA STATUS
-> > + * @pst: The PLCA status as reported by the PST bit in the PLCA STATUS
-> >   *	register(31.CA03), indicating BEACON activity.
-> >   *
-> >   * A structure containing status information of the PLCA RS configuration.
-> > @@ -819,7 +819,7 @@ struct phy_plca_cfg {
-> >   * what is actually used.
-> >   */
-> >  struct phy_plca_status {
-> > -	bool status;
-> > +	bool pst;
-> >  };
-> 
-> Shouldn't this be in patch 1?
-I thought to first promote the changes to the "higher layers" of
-ethtool/netlink, then create the appropriate interface towards phylib.
-Are you suggesting to merge patches 1 & 2?
+Again, that kind of hacky thing is not for this late in the rc game.
 
-> > +
-> >  #endif /* _UAPI__LINUX_MDIO_H__ */
-> > diff --git a/net/ethtool/plca.c b/net/ethtool/plca.c
-> > index 371d8098225e..ab50d8b48bd6 100644
-> > --- a/net/ethtool/plca.c
-> > +++ b/net/ethtool/plca.c
-> > @@ -269,7 +269,7 @@ static int plca_get_status_fill_reply(struct sk_buff *skb,
-> >  				      const struct ethnl_reply_data *reply_base)
-> >  {
-> >  	const struct plca_reply_data *data = PLCA_REPDATA(reply_base);
-> > -	const u8 status = data->plca_st.status;
-> > +	const u8 status = data->plca_st.pst;
-> 
-> Shouldn't this be in a different patch?
-Ah, logically, yes. I thought since it is an aesthetic change to leave
-it there. But if you like I can try to merge it with patch 2.
+It might be an acceptable workaround for backporting if it has *huge*
+comments about why it's done that way, but it's not acceptable as some
+kind of fix without that kind of documentation for why it's done that
+hacky way rather than with proper locking.
 
-Thanks,
-Piergiorgio
+               Linus
