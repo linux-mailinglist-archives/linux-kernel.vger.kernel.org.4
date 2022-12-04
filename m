@@ -2,224 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B73641ED7
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E805B641EA3
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbiLDSaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 13:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S230246AbiLDS3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 13:29:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiLDS3d (ORCPT
+        with ESMTP id S229834AbiLDS3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 13:29:33 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE61413D2C
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 10:29:30 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id f21so14475864lfm.9
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 10:29:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9aazsYiCUK+hhkaN7DSb9BXLEifN4Vj66BPeUPEEPTM=;
-        b=sSRku4Abu4TUaaSejWrqY4U2E+YKf38PkhQg7Na1Bm47oQYnpZAGAQbDgfOtnzbwxI
-         trEp6uS5wDke6RK9pH9vquIxLjo7Kc1apCRrqGlSaFBDZ52Oo4kCD6nwxjIH6fY9g/bv
-         4PXYVD3QKo8J+qGvu42EvRRoEUKgvNbwl+7ntPkS3NzXisMxcbXzrOv2mMEj3cskeKK4
-         B/+cblGTNaXQRS7ZNl4BbMgdp0m9I9nfbmRsz7NfCjtnJZ/mCLAd8RjqXB/saPPkp4OI
-         nYJecI7/PDqQVLpEJHktPEJfXLiB73KDmAvPxBH1CmxHhQJ+7aPVgeyZFp4pyBCQqoaG
-         M6Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9aazsYiCUK+hhkaN7DSb9BXLEifN4Vj66BPeUPEEPTM=;
-        b=2VGQ1yo68Y6ylRxocEBgUyriF5qnYzlH/HOQr3N/qxa2csPe5vy9bIpXdOWAkJ92Of
-         Z4ylH5NZ5Gaq4W3jm6fwoQUmg2klxqNLI/yXk41wLFVW7PjTa2fY0tM3TrZu1Sv9VPgU
-         9WyGQg9zJXQvLo5mpmCuSkcig761/nsU8+om7xrflD+v7iuQcxu10Xt4jIBDZWTbVPbN
-         eT18u8OboV23RMNQeLgAq4G+QOI3yLfgV+wZ19oK3AdeIP0IcFka31W7fIVNJi9khoi5
-         EeL6ukw89RaLZPlat3nnkBEqSVMJNPehK3MYdAJhdcjI6n14JnwBML+tb2UMmZuEX/8P
-         uPmg==
-X-Gm-Message-State: ANoB5pnMHDE/1JSCAQoF6IWJoHWtnMPuyuJL7icC2d4bpGW80WjzudcA
-        oGTeAZI4M2eeWH9/OqzFUoXe6Q==
-X-Google-Smtp-Source: AA0mqf7mde+fLncLGsqsu74oY7mom6NfLqupJzr3yJpn1m89tEjsfinULx30yTOV4PY+XU3wyD2ilw==
-X-Received: by 2002:a05:6512:16a4:b0:4b2:5c79:ae9c with SMTP id bu36-20020a05651216a400b004b25c79ae9cmr25280095lfb.619.1670178570118;
-        Sun, 04 Dec 2022 10:29:30 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id i15-20020a056512340f00b004b3b2a9f506sm1838996lfr.4.2022.12.04.10.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 10:29:29 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Joe Tessler <jrt@google.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 9/9] media: dt-bindings: st,stih-cec: convert to DT schema
-Date:   Sun,  4 Dec 2022 19:29:08 +0100
-Message-Id: <20221204182908.138910-9-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221204182908.138910-1-krzysztof.kozlowski@linaro.org>
-References: <20221204182908.138910-1-krzysztof.kozlowski@linaro.org>
+        Sun, 4 Dec 2022 13:29:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8730112A9B;
+        Sun,  4 Dec 2022 10:29:16 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e799329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e799:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 755611EC0662;
+        Sun,  4 Dec 2022 19:29:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670178554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lN8frKuhbaasaQJGEoiPgCA0LmRdK0VQNNyuQB2MjRA=;
+        b=lozCNi0LBzmr7CUeSL4cou2nl9OvNILUvzB3GVvOsT9ipRAQtwJUuTW8PtWXidk8f2iOY+
+        enYjO4utqS2T0OIq/jYTGYu11SgE2LUFQpxUV9gYqXtWgVBdq2en3lVhfCpbDM1TU5lOC6
+        kLlZZ9FKrjAts/rT747ygAescekIKfA=
+Date:   Sun, 4 Dec 2022 19:29:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: acpi: Defer setting boost MSRs
+Message-ID: <Y4zm9T+WYmyWwik4@zn.tnic>
+References: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+ <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert ST STIH4xx HDMI CEC bindings to DT schema.
+On Thu, Nov 03, 2022 at 07:19:47PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Nov 2, 2022 at 9:01 PM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
+> >
+> > When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
+> > MSR) before the driver is registered with cpufreq.  This can be very time
+> > consuming, because it is done with a CPU hotplug startup callback, and
+> > cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
+> > on each CPU one at a time, waiting for each to run before calling the next.
+> >
+> > If cpufreq_register_driver() fails--if, for example, there are no ACPI
+> > P-states present--this is wasted time.
+> >
+> > Since cpufreq already sets up a CPU hotplug startup callback if and when
+> > acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
+> > which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
+> > exit quickly if it is loaded but not needed.
+> >
+> > On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
+> >
+> > Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> > ---
+> >  drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
+> >  1 file changed, 3 insertions(+), 28 deletions(-)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/media/cec/st,stih-cec.yaml       | 66 +++++++++++++++++++
- .../devicetree/bindings/media/stih-cec.txt    | 27 --------
- MAINTAINERS                                   |  2 +-
- 3 files changed, 67 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/stih-cec.txt
+...
 
-diff --git a/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml b/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
-new file mode 100644
-index 000000000000..aeddf16ed339
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/cec/st,stih-cec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STIH4xx HDMI CEC
-+
-+maintainers:
-+  - Alain Volmat <alain.volmat@foss.st.com>
-+
-+allOf:
-+  - $ref: cec-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: st,stih-cec
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: cec-clk
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    items:
-+      - const: cec-irq
-+
-+  resets:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - clocks
-+  - hdmi-phandle
-+  - interrupts
-+  - resets
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/reset/stih407-resets.h>
-+
-+    cec@94a087c {
-+        compatible = "st,stih-cec";
-+        reg = <0x94a087c 0x64>;
-+
-+        clocks = <&clk_sysin>;
-+        clock-names = "cec-clk";
-+        hdmi-phandle = <&sti_hdmi>;
-+        interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "cec-irq";
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_cec0_default>;
-+        resets = <&softreset STIH407_LPM_SOFTRESET>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/stih-cec.txt b/Documentation/devicetree/bindings/media/stih-cec.txt
-deleted file mode 100644
-index ece0832fdeaf..000000000000
---- a/Documentation/devicetree/bindings/media/stih-cec.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
--STMicroelectronics STIH4xx HDMI CEC driver
--
--Required properties:
-- - compatible : value should be "st,stih-cec"
-- - reg : Physical base address of the IP registers and length of memory
--	 mapped region.
-- - clocks : from common clock binding: handle to HDMI CEC clock
-- - interrupts : HDMI CEC interrupt number to the CPU.
-- - pinctrl-names: Contains only one value - "default"
-- - pinctrl-0: Specifies the pin control groups used for CEC hardware.
-- - resets: Reference to a reset controller
-- - hdmi-phandle: Phandle to the HDMI controller, see also cec.txt.
--
--Example for STIH407:
--
--sti-cec@94a087c {
--	compatible = "st,stih-cec";
--	reg = <0x94a087c 0x64>;
--	clocks = <&clk_sysin>;
--	clock-names = "cec-clk";
--	interrupts = <GIC_SPI 140 IRQ_TYPE_NONE>;
--	interrupt-names = "cec-irq";
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_cec0_default>;
--	resets = <&softreset STIH407_LPM_SOFTRESET>;
--	hdmi-phandle = <&hdmi>;
--};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dee3f776be32..5bf8879b4a59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19924,7 +19924,7 @@ F:	sound/soc/sti/
- STI CEC DRIVER
- M:	Alain Volmat <alain.volmat@foss.st.com>
- S:	Maintained
--F:	Documentation/devicetree/bindings/media/stih-cec.txt
-+F:	Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
- F:	drivers/media/cec/platform/sti/
- 
- STK1160 USB VIDEO CAPTURE DRIVER
+> Applied as 6.2 material, thanks!
+
+My 32-bit Atom doesn't like this one. Reverting fixes it ofc.
+
+[   22.780260] unchecked MSR access error: WRMSR to 0x1a0 (tried to write 0x0000004364950488) at rIP: 0xf80b37d4 (boost_set_msr.isra.0+0x9c/0x114 [acpi_cpufreq])
+[   22.781186] Call Trace:
+[   22.781186]  boost_set_msr_each+0x15/0x1c [acpi_cpufreq]
+[   22.781186]  __flush_smp_call_function_queue+0x132/0x1cc
+[   22.781186]  ? sysvec_call_function+0x30/0x30
+[   22.781186]  generic_smp_call_function_single_interrupt+0x12/0x18
+[   22.781186]  __sysvec_call_function_single.constprop.0+0x43/0x1d8
+[   22.781186]  sysvec_call_function_single+0x18/0x30
+[   22.781186]  handle_exception+0x133/0x133
+[   22.781186] EIP: finish_task_switch.isra.0+0x124/0x3a8
+[   22.781186] Code: d8 e8 8c 16 92 00 85 f6 75 e8 a1 04 24 6c c2 85 c0 0f 8f 9b 00 00 00 89 d8 e8 e4 02 92 00 e8 53 9e 0b 00 fb 64 a1 40 f9 69 c2 <8b> 80 5c 0f 00 00 85 c0 0f 85 72 01 00 00 a1 28 24 6c c2 64 8b 15
+[   22.781186] EAX: c32e2700 EBX: f748af40 ECX: 00000000 EDX: c1c3876e
+[   22.781186] ESI: 00000000 EDI: 00000000 EBP: c3241f90 ESP: c3241f78
+[   22.781186] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00000206
+[   22.781186]  ? uevent_seqnum_show+0x1b/0x28
+[   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+[   22.781186]  ? sysvec_call_function+0x30/0x30
+[   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+[   22.781186]  ? sysvec_call_function+0x30/0x30
+[   22.781186]  ? finish_task_switch.isra.0+0x124/0x3a8
+[   22.781186]  schedule_tail+0x12/0x78
+[   22.781186]  schedule_tail_wrapper+0x9/0x10
+[   22.781186]  ret_from_fork+0x5/0x28
+[   22.781186] EIP: 0xb7fba549
+[   22.781186] Code: Unable to access opcode bytes at 0xb7fba51f.
+[   22.781186] EAX: 00000000 EBX: 01200011 ECX: 00000000 EDX: 00000000
+[   22.781186] ESI: 00000000 EDI: b7bfe868 EBP: 00000000 ESP: bfcfedc0
+[   22.781186] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
