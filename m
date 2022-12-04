@@ -2,172 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B564641CA1
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 12:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A984641CCE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 13:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiLDL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 06:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S230054AbiLDMFW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 4 Dec 2022 07:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLDL22 (ORCPT
+        with ESMTP id S229753AbiLDMFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 06:28:28 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098AF164A9;
-        Sun,  4 Dec 2022 03:28:27 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id x6so10433370lji.10;
-        Sun, 04 Dec 2022 03:28:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dlASmsVVlIAawOyrYJeITNTPMdDfsPV+VZ2ZrkYJC7Y=;
-        b=moPrFkOZYf5LNJBN0/oMqqx4uPpfxMyZw/cl1PiKjfMGljcjqM1c4A0Q10ksxLtO0j
-         D8IiGe792U06UA85nItW/E7ItcjQ1/1eBLEvmvEGF7cWElkJZ2tTr8c5eCkm42h79CwJ
-         +QaTDchUKzBWtGjmCoYTKgQZnbKe41TKBZ1vzL7Y+hBUuZK7lOHI9osS+l8XLwF6lSoF
-         vaOg91FjxV0C4iBDbLZpZpQZJFJuKWhIzfNkFtgs4h9H+rKzTgXfOZY5vjjLsZKsZF30
-         cGv5PoRvkSfSpcX0l537JA9r5GekerLZPO11IpErdr6I9lJBlrBi3PewbBEHSfHFyaE2
-         q+RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dlASmsVVlIAawOyrYJeITNTPMdDfsPV+VZ2ZrkYJC7Y=;
-        b=Aa05Trbar7y+/dezAm56i52Si1sYLkpjhq4ToWuG6S4SQBOzXbWVHHZO/k2eSQo3UE
-         ud9tY81JWdibIEq6m1FXLEzlYscrTqx2wSYaNCwRFt9UHU1fZa8/1YkA4gNuzwykqbsW
-         0bF2q5GivTYRkPK1R9uvaM5CVSlzTminDgWT+AmquMv+IOLvZzRzzW5Eiq5APf1I1ONq
-         h7BCb6OWf9rAd65yl9rxh1Kbn1nuCGtGrMqkpoSX5hki2jlQMlG3/P3rToxcdqqNrQAr
-         p8zNG+l8l6hyDWStjqNZsrYut6zYF6CjfcusLkUEVAqjwxV9VffU0/kOZUdAQW5cbzeK
-         qKbg==
-X-Gm-Message-State: ANoB5pnIpJu7GgkPPvLs6a2xHygX/rFOEYgyQGWTtOdFs2kZAivQZAPo
-        Pym4i2Z8O00sHQ/fc71hkA83xADqxSMIZszEepM=
-X-Google-Smtp-Source: AA0mqf67qlul+nzl9WXyoO+z3yIXlr8GwaC1mMyospYAePxhQLm8xslW6KkAghrvhrumIJLs/opwZfWejis3GQtmL9o=
-X-Received: by 2002:a2e:a37c:0:b0:26e:93:980d with SMTP id i28-20020a2ea37c000000b0026e0093980dmr26277436ljn.488.1670153305285;
- Sun, 04 Dec 2022 03:28:25 -0800 (PST)
+        Sun, 4 Dec 2022 07:05:19 -0500
+X-Greylist: delayed 915 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Dec 2022 04:05:17 PST
+Received: from baidu.com (mx20.baidu.com [111.202.115.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34519175A8
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 04:05:16 -0800 (PST)
+From:   "Li,Rongqing" <lirongqing@baidu.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wyes.karny@amd.com" <wyes.karny@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>
+Subject: RE: [PATCH][RFC] x86: override prefer_mwait_c1_over_halt to avoid
+ loading cpuidle-haltpoll driver
+Thread-Topic: [PATCH][RFC] x86: override prefer_mwait_c1_over_halt to avoid
+ loading cpuidle-haltpoll driver
+Thread-Index: AQHZBn6jYStMiLz0YUyj1x+4POZvoq5dmZ8g
+Date:   Sun, 4 Dec 2022 11:31:27 +0000
+Message-ID: <aaac1d016a32407e9c1300283a60664f@baidu.com>
+References: <1669952252-32710-1-git-send-email-lirongqing@baidu.com>
+ <87fsdxprpr.ffs@tglx>
+In-Reply-To: <87fsdxprpr.ffs@tglx>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.14.117.44]
+x-baidu-bdmsfe-datecheck: 1_BJHW-Mail-Ex15_2022-12-04 19:31:27:660
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20221130150857.67113-1-tmaimon77@gmail.com> <20221130150857.67113-2-tmaimon77@gmail.com>
- <20221201234954.GA1704219-robh@kernel.org>
-In-Reply-To: <20221201234954.GA1704219-robh@kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Sun, 4 Dec 2022 13:28:14 +0200
-Message-ID: <CAP6Zq1iou=ViB_N+wE_3O6HO7FNEArhebpcbXuBsz4oRxdqXVQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: mmc: npcm,sdhci: Document NPCM SDHCI controller
-To:     Rob Herring <robh@kernel.org>
-Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, adrian.hunter@intel.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, andy.shevchenko@gmail.com,
-        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-FEAS-Client-IP: 10.127.64.38
+X-FE-Last-Public-Client-IP: 100.100.100.38
+X-FE-Policy-ID: 15:10:21:SYSTEM
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
 
-Thanks for your comments.
 
-Your comments will be addressed next version.
-
-On Fri, 2 Dec 2022 at 01:49, Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Nov 30, 2022 at 05:08:56PM +0200, Tomer Maimon wrote:
-> > Add binding for Nuvoton NPCM SDHCI controller.
+> -----Original Message-----
+> From: Thomas Gleixner <tglx@linutronix.de>
+> Sent: Saturday, December 3, 2022 2:48 AM
+> To: Li,Rongqing <lirongqing@baidu.com>; mingo@redhat.com; bp@alien8.de;
+> dave.hansen@linux.intel.com; x86@kernel.org; peterz@infradead.org;
+> tony.luck@intel.com; wyes.karny@amd.com; linux-kernel@vger.kernel.org;
+> rafael.j.wysocki@intel.com
+> Subject: Re: [PATCH][RFC] x86: override prefer_mwait_c1_over_halt to avoid
+> loading cpuidle-haltpoll driver
+> 
+> Li!
+> 
+> On Fri, Dec 02 2022 at 11:37, lirongqing@baidu.com wrote:
+> > From: Li RongQing <lirongqing@baidu.com>
 > >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  .../devicetree/bindings/mmc/npcm,sdhci.yaml   | 47 +++++++++++++++++++
-> >  1 file changed, 47 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml b/Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml
-> > new file mode 100644
-> > index 000000000000..38409272807a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml
-> > @@ -0,0 +1,47 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mmc/npcm,sdhci.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: NPCM SDHCI Controller
-> > +
-> > +maintainers:
-> > +  - Tomer Maimon <tmaimon77@gmail.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - nuvoton,npcm750-sdhci
-> > +      - nuvoton,npcm845-sdhci
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +patternProperties:
-> > +  "^sdhci@[0-9a-f]+$":
-> > +    type: object
->
-> sdhci is a child node of the nuvoton,npcm750-sdhci node?
-No, will be removed
->
-> > +    $ref: mmc-controller.yaml
->
-> I think you want:
->
-> allOf:
->   - $ref: mmc-controller.yaml#
->
-> And then you will have some errors in the example to fix.
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    sdhci0: sdhci@f0840000 {
->
-> Drop unused labels.
->
-> Node name should be 'mmc'
->
-> > +      compatible = "nuvoton,npcm750-sdhci";
->
-> Indent by 4 spaces.
->
-> > +      reg = <0xf0840000 0x200>;
-> > +      interrupts = <0 27 4>;
-> > +      clocks = <&clk 4>;
-> > +    };
-> > --
-> > 2.33.0
-> >
-> >
+> > x86 KVM guests with MWAIT can load cpuidle-haltpoll driver, and will
+> > cause performance degradation, so override prefer_mwait_c1_over_halt
+> > to a new value, aviod loading cpuidle-haltpoll driver
+> 
+> Neither the subject line nor the above makes any sense to me.
+> 
+> prefer_mwait_c1_over_halt() is a function which is invoked and when it returns
+> true then the execution ends up in the code path you are patching.
+> 
+> > @@ -889,6 +889,7 @@ void select_idle_routine(const struct cpuinfo_x86 *c)
+> >  	} else if (prefer_mwait_c1_over_halt(c)) {
+> >  		pr_info("using mwait in idle threads\n");
+> >  		x86_idle = mwait_idle;
+> > +		boot_option_idle_override = IDLE_PREF_MWAIT;
+> 
+> What you do is setting boot_option_idle_override to a new value, but that has
+> nothing to do with prefer_mwait_c1_over_halt() at all.
+> 
+> So how are you overriding that function to a new value?
+> 
+> But that's just a word smithing problem.
+> 
+> The real and way worse problem is that you pick a variable, which has the
+> purpose to capture the idle override on the kernel command line, and modify it
+> as you see fit, just to prevent that driver from loading.
+> 
+> select_idle_routine() reads it to check whether there was a command line
+> override or not. But it is not supposed to write it. Why?
+> 
+> Have you checked what else evaluates that variable? Obviously not, because a
+> simple grep would have told you:
+> 
+> drivers/cpuidle/cpuidle-haltpoll.c:     if (boot_option_idle_override !=
+> IDLE_NO_OVERRIDE)
+> drivers/idle/intel_idle.c:      if (boot_option_idle_override !=
+> IDLE_NO_OVERRIDE)
+> 
+> Congratulations!
+> 
+> Your patch breaks the default setup of every recent Intel system on the planet
+> because it not only prevents the cpuidle-haltpoll, but also the intel_idle driver
+> from loading.
+> 
+> Seriously. It's not too much asked to do at least a simple grep and look at all
+> _nine_ places which evaluate boot_option_idle_override.
+> 
 
-Best regards,
+Sorry for the careless
 
-Tomer
+Thanks for the review, I will send a new version, which export a function to tell haltpoll driver whether or not mwait is used, like below
+
+
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 67c9d73..159ef33 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -862,4 +862,6 @@ bool arch_is_platform_page(u64 paddr);
+ #define arch_is_platform_page arch_is_platform_page
+ #endif
+
++bool is_mwait_idle(void);
++
+ #endif /* _ASM_X86_PROCESSOR_H */
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index c21b734..330972c 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -896,6 +896,12 @@ void select_idle_routine(const struct cpuinfo_x86 *c)
+                x86_idle = default_idle;
+ }
+
++bool is_mwait_idle(void)
++{
++       return x86_idle == mwait_idle;
++}
++EXPORT_SYMBOL_GPL(is_mwait_idle);
++
+ void amd_e400_c1e_apic_setup(void)
+ {
+        if (boot_cpu_has_bug(X86_BUG_AMD_APIC_C1E)) {
+diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+index 3a39a7f..8cf1ddf 100644
+--- a/drivers/cpuidle/cpuidle-haltpoll.c
++++ b/drivers/cpuidle/cpuidle-haltpoll.c
+@@ -17,6 +17,7 @@
+ #include <linux/sched/idle.h>
+ #include <linux/kvm_para.h>
+ #include <linux/cpuidle_haltpoll.h>
++#include <linux/processor.h>
+
+ static bool force __read_mostly;
+ module_param(force, bool, 0444);
+@@ -111,6 +112,9 @@ static int __init haltpoll_init(void)
+        if (!kvm_para_available() || !haltpoll_want())
+                return -ENODEV;
+
++       if (is_mwait_idle())
++               return -ENODEV;
++
+        cpuidle_poll_state_init(drv);
+
+        ret = cpuidle_register_driver(drv);
+
+
+
+Thanks
+
+-Li
