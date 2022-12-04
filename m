@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEFA641F6E
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D584641F73
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 21:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiLDUOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 15:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S230117AbiLDUSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 15:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiLDUOe (ORCPT
+        with ESMTP id S230184AbiLDUR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 15:14:34 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AA73B8;
-        Sun,  4 Dec 2022 12:14:33 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id n20so23355698ejh.0;
-        Sun, 04 Dec 2022 12:14:33 -0800 (PST)
+        Sun, 4 Dec 2022 15:17:58 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86603B02
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 12:17:56 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id l15so10206193qtv.4
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 12:17:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BD9By0sbbXx7eEv5KIzc2aW+ORKfInejUSsJnw8xnc8=;
-        b=gETbXTd9kgtgL3naXxHYrPziiXr8yB+83dhdSKHjxNq50rNvJT9hdeHMmW2IygYZpW
-         LUElxsQb/P7fkaLHplQvlzcCFWEXLDlkG6T9XJFRCVgMo0Kp2k9Qp3u3MpbtrGZf/R3g
-         wGQaPvLVOqmn29Td+8pQCfMPEancFQjmPlF2Ro2MB9agm/t2Z+3KHsLsEQT6g7vl2spO
-         8H+cb2OLcQYrPJOFL4EYAlKxqDL+ku5mRRjQfFSIDXM+Ge/kjjcxM97uhxZvhfr98X+R
-         EA1Je7ofGTHbrvDDTch2Wyp1LIhOVl/xF6Vr0/CxKXr5qsRTHZqpWIaBiNZwbB8QWofZ
-         eTfw==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f8NYc7EM2IXtxuh3+i3Wr2qsy0YCzgxsK6G124ZiKxs=;
+        b=QNyR8J4FWGkJDH1uMJUuRQ7dYv+ynzw21s/LyMWN1Pg8knCFhy7FW7VhlPZ2xQZs2b
+         AL54p6NWnznEEGxyV4ZGDXhtz6/Qe3Y43lHdXVHyAeNc6GV+dy1XTlKXMrew3ztdKOXX
+         KD+LWsnzq/ol6XAvzctbIk6ZUts1AVsyn95yo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BD9By0sbbXx7eEv5KIzc2aW+ORKfInejUSsJnw8xnc8=;
-        b=7BGCgnPvlSUQPneVPEw2SotzRBtSZ1y8pFqHdGD9NlnJJe9tmO5UwxKvJKTUT5HiCq
-         jLsu1KV4sjZJQHIVWN34kg67QmKj4B6WSy+czQFeftGb/8DB70JrFfAzn6yeKgquH2qB
-         55zJZluqox7SM/RfQMeopcQctB5WLNaHqX5s+YTtm6I66Am9Oax+Kw2q9DIfUIpE0zrj
-         NieVSy2230Ys5c4SAIyAU57tVpJfo86tqunS/LqejmWvb0lqwq6pXjE1kq6Dg8WokC6A
-         zYTyIkUP2WcayLOQqzzvEDImOPBmeAEUTiWWdrH8cejMa1fV1ykp94AICVSKR8/b3G8n
-         8W8w==
-X-Gm-Message-State: ANoB5pm/NwE7Mj9T0DuEaQHflwbfckJBBGCJsNw28+RlB7385XMPHgVI
-        jLcTajXuVK2QYfdv76KyGt0=
-X-Google-Smtp-Source: AA0mqf669Db7y6J+1qS+v5b5UuWUfJQ4qMhIHtJHNxkV0j/Njo8QASBKvHLR0+2l8Mb3/j2Pt9ECOQ==
-X-Received: by 2002:a17:906:3411:b0:7c0:d3e6:cce with SMTP id c17-20020a170906341100b007c0d3e60ccemr6376921ejb.742.1670184871710;
-        Sun, 04 Dec 2022 12:14:31 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id e21-20020a170906315500b007bed316a6d9sm5472857eje.18.2022.12.04.12.14.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 12:14:31 -0800 (PST)
-Date:   Sun, 4 Dec 2022 21:14:39 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next 1/2] ethtool: update UAPI files
-Message-ID: <Y4z/r7z2a0sDWgtf@gvm01>
-References: <cover.1670121214.git.piergiorgio.beruto@gmail.com>
- <0f7042bc6bcd59b37969d10a40e65d705940bee0.1670121214.git.piergiorgio.beruto@gmail.com>
- <Y4zVMj7rOkyA12uA@shell.armlinux.org.uk>
- <Y4zduT5aHd4vxQZL@lunn.ch>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f8NYc7EM2IXtxuh3+i3Wr2qsy0YCzgxsK6G124ZiKxs=;
+        b=xjPZhWlRvQhHAecl+bKEPox3hPJs4cogaRiMgwJe4iKAfbOfAlQt30h6EOTGNwf3+M
+         mg/wqCABH8G5P8PHjhSqTjnyJQ6hmxbinRuahtATIyzdx27QRoVbWCCy8+WBy+TGF8KG
+         64Jy1tqN95V3HnsEv6k0J7AE8jJXtiELQN9TVSGCAC9hAOvEx+RLt6Vk7idOVDKEvK/x
+         JeJQX3tHWjGKFk51ri8yvTODBppn+cg5kM4B6Lanhkj6IVfvFTJoAkNcx7YjFL+VLjS3
+         GQSKpwktyLZvAetZoShEeYP3LOWao90BTpgXpeQ8MJ2zLaBzBL66UAsKMfMwxGtEaYlD
+         nTDA==
+X-Gm-Message-State: ANoB5pmcgU4KZMI63K4zQs7fiYYUWE4FnJMe//raBd7mHC3ScgluAF4D
+        czKktW5hyVUB+CnJCjPAvqmRVs/ktWprWHcx
+X-Google-Smtp-Source: AA0mqf6oDV4hufbRK3fS8qqPYO8YOIV/yfx4qqTyhHH8nHS7Q2pWVdLGVnw64ayki0XmxxiNweK6kA==
+X-Received: by 2002:ac8:4918:0:b0:35b:b345:cf5f with SMTP id e24-20020ac84918000000b0035bb345cf5fmr74002313qtq.566.1670185075248;
+        Sun, 04 Dec 2022 12:17:55 -0800 (PST)
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com. [209.85.222.179])
+        by smtp.gmail.com with ESMTPSA id cj5-20020a05622a258500b00397e97baa96sm8533180qtb.0.2022.12.04.12.17.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Dec 2022 12:17:54 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id c2so3624212qko.1
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 12:17:53 -0800 (PST)
+X-Received: by 2002:a37:54e:0:b0:6fc:c48b:8eab with SMTP id
+ 75-20020a37054e000000b006fcc48b8eabmr5679851qkf.216.1670185073545; Sun, 04
+ Dec 2022 12:17:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4zduT5aHd4vxQZL@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221203150539.11483-1-brgl@bgdev.pl>
+In-Reply-To: <20221203150539.11483-1-brgl@bgdev.pl>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 4 Dec 2022 12:17:37 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjD8+XZyO4H1STwXte6x1UcYsiHKaQ4OQF5ucssY=uT8g@mail.gmail.com>
+Message-ID: <CAHk-=wjD8+XZyO4H1STwXte6x1UcYsiHKaQ4OQF5ucssY=uT8g@mail.gmail.com>
+Subject: Re: [GIT PULL] gpio: fixes for v6.1-rc8 - take 2
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,49 +76,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 06:49:45PM +0100, Andrew Lunn wrote:
-> On Sun, Dec 04, 2022 at 05:13:22PM +0000, Russell King (Oracle) wrote:
-> > On Sun, Dec 04, 2022 at 03:38:37AM +0100, Piergiorgio Beruto wrote:
-> > 
-> > NAK. No description of changes.
-> 
-> Hi Piergiorgio
-> 
-> Look at the previous examples of this:
-> 
-> commit 41fddc0eb01fcd8c5a47b415d3faecd714652513
-> Author: Michal Kubecek <mkubecek@suse.cz>
-> Date:   Mon Jun 13 23:50:26 2022 +0200
-> 
->     update UAPI header copies
->     
->     Update to kernel v5.18.
->     
->     Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
-> 
-> > > diff --git a/uapi/linux/ethtool.h b/uapi/linux/ethtool.h
-> > > index 944711cfa6f6..5f414deacf23 100644
-> > > --- a/uapi/linux/ethtool.h
-> > > +++ b/uapi/linux/ethtool.h
-> > > @@ -11,14 +11,16 @@
-> > >   * Portions Copyright (C) Sun Microsystems 2008
-> > >   */
-> > >  
-> > > -#ifndef _LINUX_ETHTOOL_H
-> > > -#define _LINUX_ETHTOOL_H
-> > > +#ifndef _UAPI_LINUX_ETHTOOL_H
-> > > +#define _UAPI_LINUX_ETHTOOL_H
-> 
-> Maybe ask Michal Kubecek how he does this. It does not appear to be a
-> straight copy of the headers.
-Yes, to be fully honest with you guys, I had this impression, however I
-could not find any directive in how to do this, and it was blocking my
-development. So I apologise, but I just made a raw copy, then I forgot
-to look back into this.
+On Sat, Dec 3, 2022 at 7:05 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> Here's a fixed PR from the GPIO subsystem for the next rc.
 
-Please, if anyone could help me understanding what's the right procedure
-for "importing" the UAPI headers from the kernel, I would greatly
-appreciate this.
+No, this cannot be right.
 
-Thanks,
-Piergiorgio
+That last commit seems *very* dubious, and in particular all those
+
+        if (!down_read_trylock(&gdev->sem))
+                return EPOLLHUP | EPOLLERR;
+
+are a sign that something is very very wrong there.
+
+Either the lock is necessary or it isn't, and "trylock" isn't the way
+to deal with it, with random failures if you cannot take the lock.
+
+If you are using "trylock" because the data structure might go away
+from under you, you have already lost, and the code is buggy.
+
+And if the data structure cannot go away from under  you,  you should
+do an unconditional lock, and then check "gdev->chip" for being NULL
+once you have gotten the lock (the same way you did in open()).
+
+But a "trylock and return error if it failed" just means that now you
+are randomly returning errors to user space, which is entirely
+undebuggable and makes no sense.
+
+Or, alternatively, the trylock succeeds - because it hits fully
+*after* gpiochip_remove() has finished, and now ->chip is NULL anyway,
+which is what you claim to protect against.
+
+End result: "trylock" can never be right in this kind of context.
+
+That "call_locked() helper might make sense more along the lines of
+
+        ret = -ENODEV;
+
+        down_read(&gdev->sem))
+        // Does the device still exist?
+        if (gdev->chip)
+                ret = func(file, cmd, arg);
+        up_read(&gdev->sem);
+
+        return ret;
+
+or similar. Not with that odd "try to lock, and if that fails, assume error".
+
+And again - if the trylock is there because 'gdev' itself might go
+away at any time and you can't afford to wait on the lock, then it's
+broken regardless (and the above suggestion won't help either)
+
+Anyway: the end result of this all is that I think this is a
+fundamental bug in the gpio layer, and rc7 (soon to be rc8) is too
+late to try these kinds of unfinished games.
+
+Fix it properly for 6.2, and make it back-portable, because I'm not
+pulling something like this right now.
+
+               Linus
