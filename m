@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F904641FFB
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 23:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6253A642000
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 23:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiLDWPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 17:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S230446AbiLDWWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 17:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiLDWPo (ORCPT
+        with ESMTP id S229949AbiLDWW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 17:15:44 -0500
-Received: from mail.cock.li (unknown [37.120.193.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D24F589
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 14:15:40 -0800 (PST)
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tfwno.gf; s=mail;
-        t=1670192137; bh=3oqF4dzN41HMYjT9vl0o2CmZ5wATpqP5E46+SXGrtJE=;
-        h=Date:From:To:Subject:From;
-        b=l+dh3uB0wLBCF4bU2St/fj/lQDCeup/hJYgMddgSpTk2EgVvBo5vKxZ2D2zfrr6/z
-         98+Y7nCSkRgmWFlQnvy0yXViCiFlJ2oKUhw9cpgg4vmgbUkAFr036UctTFumQiiql7
-         YA2c1Uq1SXSPrgovEmztnUHZfTRmMZNUxFMCjt0bxGK4KGH1V/NpKtCTkk21AMNWpK
-         qAAxIaqlv2r5huUArJ8eyBZrSK8e2tm2P3Cdx1wmLGd/ptBwmPX1H5/0wTHa/Pe3Ij
-         VB1OsHQAZwOCmLJktInSW4fYdLDMjeM0+21sV+F+wA8rI8XQmkFgYAy+9u3MQyEjEy
-         xgh+4BhYmtPQQ==
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+        Sun, 4 Dec 2022 17:22:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AF31208E;
+        Sun,  4 Dec 2022 14:22:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC5C860F17;
+        Sun,  4 Dec 2022 22:22:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AD06C433C1;
+        Sun,  4 Dec 2022 22:22:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670192546;
+        bh=WPtcDEfHJt/O7gAG5TXEo2xTN4qotOLlkgPOPqlvdqc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Cn4QF8BqPRA76+1gVVayfuGcTbj6ApXIe5pHlvxGFfBbX9jbY8A9+SCEpF4C60hbd
+         OTdj5JtJ3oLO2EfjN84acKqM/SIuSz3fRiu05/n7inknrzc9oXvMhKRUv/kg6TIhs2
+         8woF5y/iFXXI+54qQ+4riYl+UPNzA63jXB4HmRPCQM5FFdUKS5yWpzZ8gFn2cZNrAR
+         Rah88wYUr3nNvydQeECS48PqlUtlTSx/oS3Ssc02U3vkZkKuB95oiVWDaO58Ky0eE2
+         xNjPQFdUA2NbP5rzXulVx+MHdxhyjWODXTU52EzIByBHcFhDHKkJDpfPXYr+185qAu
+         bG19P6APltV2w==
+Date:   Mon, 5 Dec 2022 07:22:21 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH] panic: Taint kernel if fault injection has been used
+Message-Id: <20221205072221.63e14cfb08531fc418ab6d1d@kernel.org>
+In-Reply-To: <Y4mcJ61TPBgvBEWr@kroah.com>
+References: <166995635931.455067.17768077948832448089.stgit@devnote3>
+        <Y4mcJ61TPBgvBEWr@kroah.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Date:   Sun, 04 Dec 2022 22:15:37 +0000
-From:   ns@tfwno.gf
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Bug: atkbd partially stops working after using raw input
-Message-ID: <e37a43eb03aca34b8ea3e8755f6b46b9@tfwno.gf>
-X-Sender: ns@tfwno.gf
-User-Agent: Roundcube Webmail/1.3.17
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On Fri, 2 Dec 2022 07:33:11 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-The builtin keyboard on my laptop (a ThinkPad T480), which is driven by
-the atkbd driver, can occasionally stop working after I use the
-application prboom-plus[1] for a few minutes. As the title suggests, it
-doesn't entirely stop working, but rather some keys like g, h, the up
-arrow, & Escape (on ANSI QWERTY, & might be worth mentioning that it is
-these keys specifically that get screwed up every time; maybe some
-others I'm not aware of, but it's always the same ones) simply do not do
-anything. The problem persists after I exit prboom-plus, in all
-applications, including Wayland but also even fbcon & kmscon[2].
+> On Fri, Dec 02, 2022 at 01:45:59PM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Since the function error injection framework in the fault injection
+> > subsystem can change the function code flow forcibly, it may cause
+> > unexpected behavior (and that is the purpose of this feature) even
+> > if it is applied to the ALLOW_ERROR_INJECTION functions.
+> > So this feature must be used only for debugging or testing purpose.
+> > 
+> > To identify this in the kernel oops message, add a new taint flag
+> > for the fault injection. This taint flag will be set by either
+> > function error injection is used or the BPF use the kprobe_override
+> > on error injectable functions (identified by ALLOW_ERROR_INJECTION).
+> > 
+> > Link: https://lore.kernel.org/all/20221121104403.1545f9b5@gandalf.local.home/T/#u
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  Documentation/admin-guide/tainted-kernels.rst |    5 +++++
+> >  include/linux/panic.h                         |    3 ++-
+> >  kernel/fail_function.c                        |    2 ++
+> >  kernel/panic.c                                |    1 +
+> >  kernel/trace/bpf_trace.c                      |    2 ++
+> >  5 files changed, 12 insertions(+), 1 deletion(-)
+> 
+> I think you forgot to also update tools/debugging/kernel-chktaint with
+> this new entry :(
 
-Sometimes the keys start working again practically randomly after some
-30 minutes (average) of continued use of the machine after I have closed
-prboom-plus. Why this happens is utterly beyond me. When it starts
-working again I sometimes hold the key, & this results in my (very fast)
-autorepeat being much slower than usual, which I think is an indication
-of randomly dropped inputs. Whether I rapidly press a key or just give
-it a single press every 5 seconds, it doesn't seem to make a difference
-(basically just starts working again whenever it feels like it).
+Oops, thanks for pointing!
+Let me update the patch.
 
-I use this machine for many hours at a time under Wayland (so libinput
-for the input stuff), & I was not able to reproduce this without running
-prboom-plus, ever. A reboot always fixes this issue, which is the only
-consistent way of fixing it I've found; IOW if you run prboom-plus on
-that boot, your keyboard is screwed the entire time until you reboot,
-or if the keyboard is feeling in the mood to fix itself up (as detailed
-in the last paragraph). So I'm somewhat convinced this is
 
-  - a kernel issue
-  - a problem that occurs when using raw input, which I imagine
-    prboom-plus, an SDL2-based application, does.
-
-Also, do note that evdev access is still mediated. Maybe I'm not using
-the right terms for this, so what I mean is:
-
-  % cat /dev/input/event4 # my keyboard
-  coreutils: /dev/input/event4: Permission denied
-
-Despite this, I don't think it's a problem with my userspace, because
-again, it affects fbcon too, even when you kill any other userspace
-using the input device.
-
-Other notes:
-  - I cannot trigger the bug immediately; you've gotta keep using
-    prboom-plus for (AFAIK) at least 2m up to potentially 7m before it
-    happens.
-  - prboom-plus suffers from the bug just as much as every application,
-    made very obvious when it becomes impossible to pause the game (yup,
-    that's Escape not delivering any inputs)
-  - other inputs like USB HID devices (USB keyboards, as well as USB mice
-    & so on) are not affected by this at all; I cannot reproduce this bug
-    with them even if I follow the reproducer entirely on the USB
-    keyboard instead of the builtin keyboard. Well, precisely, the bug
-    will still hit the builtin keyboard even though I didn't use it,
-    but the USB keyboard's inputs will still be unaffected.
-  - I have not been able to find a simpler reproducer yet; part of it is
-    that it takes so long to hit the bug to begin with
-
-Kernel version is c2bf05db6c78f53ca5cd4b48f3b9b71f78d215f1 on
-torvalds/linux.git, but I can reproduce this bug even on mainline 5.19.
-
-I can patch my kernel & tweak its configuration pretty easily, so I am
-very much open to experimental patches & using testing subsystems to
-obtain any information you might need.
-
-[1]: https://github.com/coelckers/prboom-plus
-[2]: https://github.com/Aetf/kmscon
-
-Regards,
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
