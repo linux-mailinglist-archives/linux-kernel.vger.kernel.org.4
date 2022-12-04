@@ -2,178 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07430641C0B
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116F2641C0C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiLDJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 04:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S229982AbiLDJaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 04:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLDJaP (ORCPT
+        with ESMTP id S229834AbiLDJaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 04:30:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4057812D1F
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 01:29:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670146160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FKzg6vXZ9C5N30cmZGMkFXevDmG/puHgCUnXYbnQxtw=;
-        b=LLUd8ow7w1Z2PMGYXausxOeWyAhKSR8lTSf8nd2ofKPq+FULEvWkgDPILf23kJyOHjdnb6
-        Er7RML5GR7obXb1IIzPtNZ51MvG3z+lrAPLvTUBOvCqJBaQYx3F5e4WBZK2wJaP2lU5aL2
-        m7EC+QLxL4m/eQD3aueyHfi6V+++cjE=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-307-UlR5zDlAOGGTv_Hb9JqpXA-1; Sun, 04 Dec 2022 04:29:19 -0500
-X-MC-Unique: UlR5zDlAOGGTv_Hb9JqpXA-1
-Received: by mail-ed1-f69.google.com with SMTP id i2-20020a05640242c200b0046c66305ebaso947030edc.15
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 01:29:18 -0800 (PST)
+        Sun, 4 Dec 2022 04:30:19 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C345112D29
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 01:30:17 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3c44ac82606so94520417b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 01:30:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OaLjpR/QVt3hQbpdZlq+Q/65ck99KOIfezFgNLpv2/M=;
+        b=jTqf8mCrAhYdbQXet7tnzjdA4IOXTGDFOyvIOTyDJDCAH0yNC5q95Z6bT5WYF8q2a0
+         GBkyNHGwVngkLcFbXsseKJl42kkpXy+cck1DIAKSpPpUgBmRrico0VnE4Gjwm4izpa6X
+         wBxVDUYrRfPV4iwrFSYnwJBc3veHTwcBOMaXprk1cNKhTt2PkugHq2xNOmmcdtrIOctd
+         VHcwn6p+I2JL2cKt5zz1+BOnmH5vrl+O2GKDU08xKZx79XPpljVqCJt1IIFDPRTVNDEn
+         bYgovauUQXITwD1kAox3GoUvdzbqgWanMPS0Di0vgx8pt5wZM+WHpopY35RsbwM0/JtL
+         wcdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKzg6vXZ9C5N30cmZGMkFXevDmG/puHgCUnXYbnQxtw=;
-        b=AJksQlM9liZWv0wQaLH5Soccy5WHfhUIf5OdKQy/SDyCaFREHeKUyKqW9QyJIDALIV
-         LxXtvlq/irt+oN9VX8IuNVpwIPgWEEnY8DTuDg82ld1NiqtFYnI45V49HoDookTt2479
-         W9lrGWT6nLARD+m3F8hDjs694pw/W76TEuk6aV2Aj2z5h2CLTlnicTI/WeLRmnH0F6ln
-         WbYQmhoHK7X7SAiHMTEzy15vO16Nwdsj56s2Q9GeeR1pzuRkmaLCQTKeECfOdUkLybWr
-         8hSJa9uNuYLngBMr+og4/w7joDzA0smE1UsXixlkN+5EP5IAHIwyDnflNcft6eHRl6cS
-         TpMg==
-X-Gm-Message-State: ANoB5pkDYlsM4xkI0V/zCnfm52OwISa5SdLYUlhFbV0IaMJANdrqQOU3
-        1XJmEflcjKzHFUUwvXcc6fD2GpcUjS1PjFXi4tnjDvU6F9zhkRz50QYjVlr6MoADkMJhQcbMeOi
-        VacufZ6Z2zp8r/ApiP4V6TFu8
-X-Received: by 2002:a17:906:49c4:b0:7c0:d23c:ead5 with SMTP id w4-20020a17090649c400b007c0d23cead5mr5686043ejv.606.1670146157889;
-        Sun, 04 Dec 2022 01:29:17 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4smoqW25qmUG2KNrkGsrSTypZrUKtKaVVMmBLHcucGrDwdD+o9xBeI8qM1Q0IWf3YNrgixPw==
-X-Received: by 2002:a17:906:49c4:b0:7c0:d23c:ead5 with SMTP id w4-20020a17090649c400b007c0d23cead5mr5686032ejv.606.1670146157696;
-        Sun, 04 Dec 2022 01:29:17 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id cn7-20020a0564020ca700b0045ce419ecffsm4970915edb.58.2022.12.04.01.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 01:29:17 -0800 (PST)
-Message-ID: <d7f1408d-ae9f-ad55-5fc9-9d9886384a3d@redhat.com>
-Date:   Sun, 4 Dec 2022 10:29:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
-Content-Language: en-US, nl
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221203175743.GA1121812@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221203175743.GA1121812@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OaLjpR/QVt3hQbpdZlq+Q/65ck99KOIfezFgNLpv2/M=;
+        b=O8sKyfxLq7Rd6mamggrQho5rPtp5guwlaDT3d33tKGidAxklNiKxVoDaZ8XCr2wlN0
+         XAPD9N3DWwGAdH8PnvfPiQem+sPYHT45YjyFEkQ6mUDz6SbLJQJpgVESZjEVf7vStAqd
+         3eFNCUXBtVQGzWL0Z21XIxsONNc3Hb0mi+fpREgCVpQmIDnrnrEiy3g9YaRBx8IMsDJN
+         UqaB/wOGp9kVskdSjRlV/08lS3nXfLx1n08qoL6RGxm7/p6ONESvFbLiT6qN1XPxxnpK
+         Kx5LXw48lOjCNHYOmdJyildTbFElxH89mJm42Vx6inWg9WG/6poHy6WtNDhlFyQXm3Et
+         wFdA==
+X-Gm-Message-State: ANoB5pnbddAv+9Ul1ThSG579EHzMDuaVJs886qLqJdXKIs7FCi7Nw3uc
+        KW5WPshTCyu+bpjX740M2GWohwKk8weonVVXAQ==
+X-Google-Smtp-Source: AA0mqf42y9I7uXztT0FS34KLkixeTnSfbwsr3AolFQbkLL5vqRufMVL512qBUwGDSZR/RruLkiNKK9Y+mTxSVXliTg==
+X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:8120:ce77:bb35:7eba])
+ (user=almasrymina job=sendgmr) by 2002:a25:5d3:0:b0:6fe:f001:b029 with SMTP
+ id 202-20020a2505d3000000b006fef001b029mr4468732ybf.324.1670146217039; Sun,
+ 04 Dec 2022 01:30:17 -0800 (PST)
+Date:   Sun,  4 Dec 2022 01:30:06 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221204093008.2620459-1-almasrymina@google.com>
+Subject: [PATCH v2] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
+From:   Mina Almasry <almasrymina@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, Mina Almasry <almasrymina@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+reclaim"") enabled demotion in memcg reclaim, which is the right thing
+to do, but introduced a regression in the behavior of
+try_to_free_mem_cgroup_pages().
 
-On 12/3/22 18:57, Bjorn Helgaas wrote:
-> On Sat, Dec 03, 2022 at 01:44:10PM +0100, Hans de Goede wrote:
->> Hi Bjorn,
->>
->> On 12/2/22 22:18, Bjorn Helgaas wrote:
->>> From: Bjorn Helgaas <bhelgaas@google.com>
->>>
->>> When allocating space for PCI BARs, Linux avoids allocating space mentioned
->>> in the E820 map.  This was originally done by 4dc2287c1805 ("x86: avoid
->>> E820 regions when allocating address space") to work around BIOS defects
->>> that included unusable space in host bridge _CRS.
->>>
->>> Some recent machines use EfiMemoryMappedIO for PCI MMCONFIG and host bridge
->>> apertures, and bootloaders and EFI stubs convert those to E820 regions,
->>> which means we can't allocate space for hot-added PCI devices (often a
->>> dock) or for devices the BIOS didn't configure (often a touchpad)
->>>
->>> The current strategy is to add DMI quirks that disable the E820 filtering
->>> on these machines and to disable it entirely starting with 2023 BIOSes:
->>>
->>>   d341838d776a ("x86/PCI: Disable E820 reserved region clipping via quirks")
->>>   0ae084d5a674 ("x86/PCI: Disable E820 reserved region clipping starting in 2023")
->>>
->>> But the quirks are problematic because it's really hard to list all the
->>> machines that need them.
->>>
->>> This series is an attempt at a more generic approach.  I'm told by firmware
->>> folks that EfiMemoryMappedIO means "the OS should map this area so EFI
->>> runtime services can use it in virtual mode," but does not prevent the OS
->>> from using it.
->>>
->>> The first patch removes any EfiMemoryMappedIO areas from the E820 map.
->>> This doesn't affect any virtual mapping of those areas (that would have to
->>> be done directly from the EFI memory map) but it means Linux can allocate
->>> space for PCI MMIO.
->>>
->>> The rest are basically cosmetic log message changes.
->>
->> Thank you for working on this. I'm a bit worried about this series though.
->>
->> The 2 things which I worry about are:
->>
->>
->> 1. I think this will not help when people boot in BIOS (CSM) mode rather
->> then UEFI mode which quite a few Linux users still do because they learned
->> to do this years ago when Linux EFI support (and EFI fw itself) was still
->> a bit in flux.
->>
->> IIRC from the last time we looked at this in CSM mode the BIOS itself
->> translates the EfiMemoryMappedIO areas to reserved E820 regions. So when
->> people use the BIOS CSM mode to boot, then this patch will not help
->> since the kernel lacks the info to do the translation.
-> 
-> Right, if BIOS CSM puts EfiMemoryMappedIO in the E820 map the same way
-> bootloaders do, and the kernel doesn't have the EFI memory map, this
-> series won't help.
+The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
+reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
+of the cgroup should reduce by nr_pages. The callers expect
+try_to_free_mem_cgroup_pages() to also return the number of pages
+reclaimed, not demoted.
 
-So I just got the requested dmesg in BIOS CSM mode from:
-https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+However, try_to_free_mem_cgroup_pages() actually unconditionally counts
+demoted pages as reclaimed pages. So in practice when it is called it will
+often demote nr_pages and return the number of demoted pages to the caller.
+Demoted pages don't lower the memcg usage as the caller requested.
 
-And it says:
+I suspect various things work suboptimally on memory systems or don't
+work at all due to this:
 
-[    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
-[    0.316140] pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+- memory.high enforcement likely doesn't work (it just demotes nr_pages
+  instead of lowering the memcg usage by nr_pages).
+- try_charge_memcg() will keep retrying the charge while
+  try_to_free_mem_cgroup_pages() is just demoting pages and not actually
+  making any room for the charge.
+- memory.reclaim has a wonky interface. It advertises to the user it
+  reclaims the provided amount but it will actually demote that amount.
 
-So I'm afraid that I remembered correctly and the CSM adds
-the EfiMemoryMappedIO regions to the E820 map as reserved :(
+There may be more effects to this issue.
 
-So as you said, this series won't help for people booting in
-BIOS compatibility mode. Which means that we should at least keep
-the current list of no_e820 quirks to avoid regressing those models
-when booted in BIOS compatibility mode.
+To fix these issues I propose shrink_folio_list() to only count pages
+demoted from inside of sc->nodemask to outside of sc->nodemask as
+'reclaimed'.
 
-And maybe still add at least the Clevo model for which I recently
-submitted a new no_e820 quirk so that that will work in BIOS CSM
-mode too ?
+For callers such as reclaim_high() or try_charge_memcg() that set
+sc->nodemask to NULL, try_to_free_mem_cgroup_pages() will try to
+actually reclaim nr_pages and return the number of pages reclaimed. No
+demoted pages would count towards the nr_pages requirement.
 
-Note I know you did not propose to drop the quirks in this series,
-just covering all the bases here.
+For callers such as memory_reclaim() that set sc->nodemask,
+try_to_free_mem_cgroup_pages() will free nr_pages from that nodemask
+with either demotion or reclaim.
 
-Regards,
+Tested this change using memory.reclaim interface. With this change,
 
-Hans
+	echo "1m" > memory.reclaim
 
+Will cause freeing of 1m of memory from the cgroup regardless of the
+demotions happening inside.
 
+	echo "1m nodes=0" > memory.reclaim
 
+Will cause freeing of 1m of node 0 by demotion if a demotion target is
+available, and by reclaim if no demotion target is available.
 
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+
+---
+
+This is developed on top of mm-unstable largely to test with memory.reclaim
+nodes= arg and ensure the fix is compatible with that.
+
+v2:
+- Shortened the commit message a bit.
+- Fixed issue when demotion falls back to other allowed target nodes returned by
+  node_get_allowed_targets() as Wei suggested.
+
+Cc: weixugc@google.com
+---
+ include/linux/memory-tiers.h |  7 +++++--
+ mm/memory-tiers.c            | 10 +++++++++-
+ mm/vmscan.c                  | 20 +++++++++++++++++---
+ 3 files changed, 31 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+index fc9647b1b4f9..f3f359760fd0 100644
+--- a/include/linux/memory-tiers.h
++++ b/include/linux/memory-tiers.h
+@@ -38,7 +38,8 @@ void init_node_memory_type(int node, struct memory_dev_type *default_type);
+ void clear_node_memory_type(int node, struct memory_dev_type *memtype);
+ #ifdef CONFIG_MIGRATION
+ int next_demotion_node(int node);
+-void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets);
++void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets,
++			      nodemask_t *demote_from_targets);
+ bool node_is_toptier(int node);
+ #else
+ static inline int next_demotion_node(int node)
+@@ -46,7 +47,9 @@ static inline int next_demotion_node(int node)
+ 	return NUMA_NO_NODE;
+ }
+
+-static inline void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets)
++static inline void node_get_allowed_targets(pg_data_t *pgdat,
++					    nodemask_t *targets,
++					    nodemask_t *demote_from_targets)
+ {
+ 	*targets = NODE_MASK_NONE;
+ }
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index c734658c6242..7f8f0b5de2b3 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -264,7 +264,8 @@ bool node_is_toptier(int node)
+ 	return toptier;
+ }
+
+-void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets)
++void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets,
++			      nodemask_t *demote_from_targets)
+ {
+ 	struct memory_tier *memtier;
+
+@@ -280,6 +281,13 @@ void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets)
+ 	else
+ 		*targets = NODE_MASK_NONE;
+ 	rcu_read_unlock();
++
++	/*
++	 * Exclude the demote_from_targets from the allowed targets if we're
++	 * trying to demote from a specific set of nodes.
++	 */
++	if (demote_from_targets)
++		nodes_andnot(*targets, *targets, *demote_from_targets);
+ }
+
+ /**
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 2b42ac9ad755..97ca0445b5dc 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1590,7 +1590,8 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
+  * Folios which are not demoted are left on @demote_folios.
+  */
+ static unsigned int demote_folio_list(struct list_head *demote_folios,
+-				     struct pglist_data *pgdat)
++				      struct pglist_data *pgdat,
++				      nodemask_t *demote_from_nodemask)
+ {
+ 	int target_nid = next_demotion_node(pgdat->node_id);
+ 	unsigned int nr_succeeded;
+@@ -1614,7 +1615,7 @@ static unsigned int demote_folio_list(struct list_head *demote_folios,
+ 	if (target_nid == NUMA_NO_NODE)
+ 		return 0;
+
+-	node_get_allowed_targets(pgdat, &allowed_mask);
++	node_get_allowed_targets(pgdat, &allowed_mask, demote_from_nodemask);
+
+ 	/* Demotion ignores all cpuset and mempolicy settings */
+ 	migrate_pages(demote_folios, alloc_demote_page, NULL,
+@@ -1653,6 +1654,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+ 	LIST_HEAD(free_folios);
+ 	LIST_HEAD(demote_folios);
+ 	unsigned int nr_reclaimed = 0;
++	unsigned int nr_demoted = 0;
+ 	unsigned int pgactivate = 0;
+ 	bool do_demote_pass;
+ 	struct swap_iocb *plug = NULL;
+@@ -2085,7 +2087,19 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+ 	/* 'folio_list' is always empty here */
+
+ 	/* Migrate folios selected for demotion */
+-	nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
++	nr_demoted = demote_folio_list(&demote_folios, pgdat, sc->nodemask);
++
++	/*
++	 * Only count demoted folios as reclaimed if the caller has requested
++	 * demotion from a specific nodemask. In this case pages inside the
++	 * noedmask have been demoted to outside the nodemask and we can count
++	 * these pages as reclaimed. If no nodemask is passed, then the caller
++	 * is requesting reclaim from all memory, which should not count
++	 * demoted pages.
++	 */
++	if (sc->nodemask)
++		nr_reclaimed += nr_demoted;
++
+ 	/* Folios that could not be demoted are still in @demote_folios */
+ 	if (!list_empty(&demote_folios)) {
+ 		/* Folios which weren't demoted go back on @folio_list */
+--
+2.39.0.rc0.267.gcb52ba06e7-goog
