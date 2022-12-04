@@ -2,178 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08954641B9D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 09:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19861641BAB
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 09:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiLDIdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 03:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S229984AbiLDIqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 03:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiLDIdM (ORCPT
+        with ESMTP id S229983AbiLDIqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 03:33:12 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4B511803
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 00:33:11 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id h24so9544598qta.9
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 00:33:11 -0800 (PST)
+        Sun, 4 Dec 2022 03:46:22 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C941788D
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 00:46:20 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b3so14070176lfv.2
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 00:46:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E51rwtqdWfTEHC0Ucie+676M3PpLjwYDNxb1JD0wnhk=;
-        b=Sh0Fl423xm5ZvkqEMLKn0ScprV1NQS0cuv999y/ZVOCRpFaLdfdoONWw+PrjJ87z5c
-         YYgHArabE0CupsoHIEAf+zbP9wzQyOIAxTUtIlDUcDP2S2fhsxm+e/ZVf/BvdiK8Gj5l
-         DQDmRQtpmCues/z81YTMYcsKfjXirDawoRrMJtViJbLpqbne4lhAdDy3Cx1p84LPbbPj
-         CoQOZWW37JEUDNhRyC35XQVGTjkm4J4D7/6s3IIQ8QUIGpshRf2G7oSjIAL6StjBHmEn
-         FmthQMXlO5JmfIIqclvAjvmMZiqPX4+sQWnuAKkIAHARMbExXN95CDIvKZ7mUiNVdx0X
-         08qA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5JSgb59n7yt285OgnTxrX5jNyxDnhai9FpL9TwOkiUQ=;
+        b=E8VTCpcK8U1SYdCoZDpb8MUs+oDGPLLSRjA9wrjxylnZsd1deUIKA/05f4FwxXgDzq
+         dFp1FlNdOVBwbv7nXas8aD2swC8DZGkoHZjs5WmLt+HBwwjNVUVAhCegzoFJ9Rk58rb+
+         Xk1JnQJnfwRHTpvbRbNFkNIW7uWaS7igIJ/xD7rynjjXFF+QxIODoVOLl3mzg8bOrBuS
+         pj2NcN4aG0lDpqLV0R+zMnHCwrxNxtvZGBqPcpjtcjdnTAfyinmiK+k6aLZrmo/0srEg
+         lRDMCt9a/OzwmFX5ukqbGVjFMt3YyFLO4YeNrYaXaH8E4Cp2i9boQvTguwZYlA708RWy
+         o7uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E51rwtqdWfTEHC0Ucie+676M3PpLjwYDNxb1JD0wnhk=;
-        b=C1S35uu1Gf3M2wgighx+2QYstXLe3L2QNXvvAM0elfVq4tbeIxuA2ABvqZVHRhHrGN
-         eCVUQpk6xKgc03u0qXbmhJcMEBRJ2NgYBkJkXAI67y1pK15r7J/PXOy+gXeabazdiQq8
-         BY4tmH/OzV+PRVHQ8bJYlo5Si5raKRYHwu15RAUV2BxFtK1bO5GEglRBxOhne3RAxJHX
-         mnJCOHrD30mrxPBACMpuivy+m0wninbUnYZRCmQoIddePAWpxaAZBzYI8vLNRewbWmdo
-         EGT1Q06bj+61y/Elcue3pKhLVsLnLAA8ecY6gSFCaHFDFfrSVkFN5YLvEwL0/8owaLhe
-         zzdQ==
-X-Gm-Message-State: ANoB5plkhLYnUWRyNAKTXN0i/Go8sEe5gdkDTwh3Me4S+o+Arnwo3BWX
-        breiu9fOOHxE1wkIoeZba7g=
-X-Google-Smtp-Source: AA0mqf6dW1msh6KXkGNJ7hnzBDUROyFAifqIlcIXLpBSBMZSb2aqkBmNEcjbd5rOBm4+4qZ2UHGCng==
-X-Received: by 2002:a05:622a:2488:b0:39c:de22:9ae9 with SMTP id cn8-20020a05622a248800b0039cde229ae9mr73781576qtb.668.1670142790411;
-        Sun, 04 Dec 2022 00:33:10 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id j13-20020a05620a288d00b006fbbdc6c68fsm9973441qkp.68.2022.12.04.00.33.09
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5JSgb59n7yt285OgnTxrX5jNyxDnhai9FpL9TwOkiUQ=;
+        b=RW6JLqs935IIpvi3x0SbVRa2RdVcJSJmoMTgGuUIe1ITBK3lmkHpnhuzEfqLZY1btH
+         wvFHpPhBypoJTTpwGeFD7RGEiI6lxbABVKxOFSS5gJnN+Z+TD9z5Y3zk+3/pFNBthG19
+         3ql/4HjQseXj7iydXcJf/V+rPoKoywSBUOWlECOBG+X3j+4tQP+bCc0N7Tec66Ov35xO
+         c71zBIvHmvlzVs7F1Z9URNQcWWdAUVaaDcuhqqCqGjqp6WkgSw4OI/u4if4C/swgmZfj
+         kgmKv7lchG4+p2e1qaR9C57QlK5qYYP5u+FgVdUdYVfYD1WFlgblLw0WeQEgQOYN2D2I
+         kTpA==
+X-Gm-Message-State: ANoB5pmCj8YM2TU6rCejsZUA6Xvo83FWfeXdkmmlaqZbkRA2h3Up5NYk
+        KRsFicdV0Ji/W16phwAlOm52iQ==
+X-Google-Smtp-Source: AA0mqf62jLndMfJoLDbjXQ3MjgTBCmWaLCceq3cMUMzDVMw+TCy28658Vo2EzqROT9uvquszoXhoTg==
+X-Received: by 2002:ac2:4bd4:0:b0:4b4:aed7:4aa5 with SMTP id o20-20020ac24bd4000000b004b4aed74aa5mr19490634lfq.447.1670143578832;
+        Sun, 04 Dec 2022 00:46:18 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f20-20020ac25cd4000000b004b4bae1a05asm1680759lfq.293.2022.12.04.00.46.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 00:33:09 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id D16DC27C0054;
-        Sun,  4 Dec 2022 03:33:08 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 04 Dec 2022 03:33:08 -0500
-X-ME-Sender: <xms:RFuMYyxJlUBfbb52k8wPSHV74ava6rmbfvNdxUd6iBwpyi0YsJrC3g>
-    <xme:RFuMY-TL04MOEYk7FODghCFH6b9VzqLLDZXN7Y8DPLY0Tq2yknhvfjSuqcOnmrHWV
-    TszHb-vMqnv97EXjg>
-X-ME-Received: <xmr:RFuMY0UA7Q-kD-_V8C4RYmuO-uLbB64pgC2xHSwf_YPCQreF8bYdJPVTszdRVxJQQIQ6syaCEyeKdFbKLvmhe6Ma57SuC2jOYlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddugdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:RFuMY4iHphAmT-TKBXH4yq0Ekvu1TiP_dxWyNyYgdjU7uBAKOHHwgw>
-    <xmx:RFuMY0CpT9KKb-5fOfefa7iGoIaq4ng-s20lDElJR3YZs6c3o65FlA>
-    <xmx:RFuMY5Is4SUPgrfyzbrd43d3-2fuwCBuJtnSbs0mH9FPEFywmSuiXA>
-    <xmx:RFuMY-yCvFzAMCJ2ORxh-48Pz3ES8ohL33OvnqHk06dhOn5D7SPwrg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 4 Dec 2022 03:33:07 -0500 (EST)
-Date:   Sun, 4 Dec 2022 00:33:06 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tools: memory-model: Make plain accesses carry
- dependencies
-Message-ID: <Y4xbQmnDEbFTvgQ/@Boquns-Mac-mini.local>
-References: <20221202125100.30146-1-jonas.oberhauser@huaweicloud.com>
- <Y4pIwqK7SWft1xCl@boqun-archlinux>
- <4262e55407294a5989e766bc4dc48293@huawei.com>
- <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4uyzDl49Zm3TSLh@rowland.harvard.edu>
- <20221203204405.GW4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4vAYzJTTQtNkXFh@rowland.harvard.edu>
- <20221203231122.GZ4001@paulmck-ThinkPad-P17-Gen-1>
- <43c7ea9ebdd14497b85633950b014240@huawei.com>
+        Sun, 04 Dec 2022 00:46:18 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] ARM: dts: qcom: apq8084-ifc6540: fix overriding SDHCI
+Date:   Sun,  4 Dec 2022 09:46:14 +0100
+Message-Id: <20221204084614.12193-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43c7ea9ebdd14497b85633950b014240@huawei.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 12:15:27AM +0000, Jonas Oberhauser wrote:
-> 
-> 
-> -----Original Message-----
-> From: Paul E. McKenney [mailto:paulmck@kernel.org] 
-> Sent: Sunday, December 4, 2022 12:11 AM
-> To: stern@rowland.harvard.edu
-> > On Sat, Dec 03, 2022 at 04:32:19PM -0500, stern@rowland.harvard.edu wrote:
-> > > My advice: Omit them both.
-> > It would be good to reference something or another.  ;-)
-> 
-> I also prefer to not refer to that presentation. 
-> If there is a feeling that more context is needed, I would first
-> prefer to enhance the commit message itself in some way. (Personally I
-> don't feel that this is needed, and the imho the issue stands by
-> itself even without reference to OOTA, which could be resolved fully
-> independently e.g. by Viktor's suggestion to just axiomatically forbid
-> OOTA --- the issue addressed by this patch would still exist). If
+While changing node names of APQ8084 SDHCI, the ones in IFC6540 board
+were not updated leading to disabled and misconfigured SDHCI.
 
-The reason that I'm gving you a hard time is that I haven't seen a real
-world code usage that needs this fix, maybe there is one and I'm just
-stupid and not knowing about. Your litmus explains the problem very well
-but it's better if there is real world code expecting this ordering.
+Cc: <stable@vger.kernel.org>
+Fixes: 2477d81901a2 ("ARM: dts: qcom: Fix sdhci node names - use 'mmc@'")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm/boot/dts/qcom-apq8084-ifc6540.dts | 20 ++++++++++----------
+ arch/arm/boot/dts/qcom-apq8084.dtsi        |  4 ++--
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-Not saying real world code is essential for memory model changes, but
-without it, I guess the rationale of this patch is "plain accesses
-shouldn't be weaker than registers" or "This (plain accesses don't
-provide dependencies) is too conservative", and these don't seem very
-strong without a bigger motivation behind it.
+diff --git a/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts b/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts
+index 44cd72f1b1be..116e59a3b76d 100644
+--- a/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts
++++ b/arch/arm/boot/dts/qcom-apq8084-ifc6540.dts
+@@ -19,16 +19,16 @@ soc {
+ 		serial@f995e000 {
+ 			status = "okay";
+ 		};
++	};
++};
+ 
+-		sdhci@f9824900 {
+-			bus-width = <8>;
+-			non-removable;
+-			status = "okay";
+-		};
++&sdhc_1 {
++	bus-width = <8>;
++	non-removable;
++	status = "okay";
++};
+ 
+-		sdhci@f98a4900 {
+-			cd-gpios = <&tlmm 122 GPIO_ACTIVE_LOW>;
+-			bus-width = <4>;
+-		};
+-	};
++&sdhc_2 {
++	cd-gpios = <&tlmm 122 GPIO_ACTIVE_LOW>;
++	bus-width = <4>;
+ };
+diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
+index fe30abfff90a..4b0d2b4f4b6a 100644
+--- a/arch/arm/boot/dts/qcom-apq8084.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
+@@ -421,7 +421,7 @@ blsp2_uart2: serial@f995e000 {
+ 			status = "disabled";
+ 		};
+ 
+-		mmc@f9824900 {
++		sdhc_1: mmc@f9824900 {
+ 			compatible = "qcom,apq8084-sdhci", "qcom,sdhci-msm-v4";
+ 			reg = <0xf9824900 0x11c>, <0xf9824000 0x800>;
+ 			reg-names = "hc", "core";
+@@ -434,7 +434,7 @@ mmc@f9824900 {
+ 			status = "disabled";
+ 		};
+ 
+-		mmc@f98a4900 {
++		sdhc_2: mmc@f98a4900 {
+ 			compatible = "qcom,apq8084-sdhci", "qcom,sdhci-msm-v4";
+ 			reg = <0xf98a4900 0x11c>, <0xf98a4000 0x800>;
+ 			reg-names = "hc", "core";
+-- 
+2.34.1
 
-Also I'm in the impression that people love to put
-READ_ONCE()/WRITE_ONCE() when they have some ordering issues (in real
-world or with LKMM). Although I don't like this, but you cannot blame
-people who just want more guarantee allowing their code to work ;-( This
-is also another reason that I'd like to see strong reasoning of this
-change.
-
-Besides, could you also explain a little bit why only "data;rfi" can be
-"carry-dep" but "ctrl;rfi" and "addr;rfi" cannot? I think it's because
-there are special cases when compilers can figure out a condition being
-true or an address being constant therefore break the dependency? But
-maybe I'm wrong or missing something. Thank you!
-
-(Please don't be mad at me, sometimes I'm just slow to understand things
-;-))
-
-Regards,
-Boqun
-
-> that's not satisfactory, I would also consent to publishing the
-> e-mails from the thread starting where I relayed Viktor's observation
-> of the relaxed accesses, but I don't recall it saying anything
-> substantially beyond the current commit log + the documentation
-> included in the patch.
-> 
-> best wishes, jonas
