@@ -2,143 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0FC641F32
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 20:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89602641F38
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 20:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiLDTOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 14:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        id S230390AbiLDTRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 14:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbiLDTOn (ORCPT
+        with ESMTP id S230297AbiLDTRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 14:14:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D571DDB;
-        Sun,  4 Dec 2022 11:14:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FF1E60EE2;
-        Sun,  4 Dec 2022 19:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BD1C433D6;
-        Sun,  4 Dec 2022 19:14:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AVlqJxBZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670181276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c8/OiJnXeAAW5RqxKEnU+8MYk+oKnoN126NTwylqEOY=;
-        b=AVlqJxBZck/d09jS3B5UpI2Cmq3WNR3sPRLYsHKUEKEYsphHmwNUkWG+y4tFoly504I6E4
-        4CQErqsqR9TZgqsZ7TNB98QdAimM/SBYbGFGDCNyNHzS65w8vLT+DvPVuHPQ1LU7wyQYFO
-        sND2duUyxwu2yrP9aleXVOxflJRCwvs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a74ea920 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 4 Dec 2022 19:14:35 +0000 (UTC)
-Date:   Sun, 4 Dec 2022 20:14:31 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
-        timvp@google.com, apronin@google.com, mw@semihalf.com,
-        upstream@semihalf.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
-Message-ID: <Y4zxly0XABDg1OhU@zx2c4.com>
-References: <20221128195651.322822-1-Jason@zx2c4.com>
- <Y4zTnhgunXuwVXHe@kernel.org>
- <Y4zUotH0UeHlRBGP@kernel.org>
+        Sun, 4 Dec 2022 14:17:38 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDF6A4;
+        Sun,  4 Dec 2022 11:17:33 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 47B145FD03;
+        Sun,  4 Dec 2022 22:17:30 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1670181450;
+        bh=skgE35J6ivY87+2f87J3uueS/nxNIyBMux3LvAvSxgE=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=iAiB/r6g7k1wjBR8TbIf2K/PCAzvPZKkxMGCuJjXp8f81xu7YNSSb/jdRhYcMq1rd
+         N8rwl+SuiOVxlG4UlM7vFbNHVFa3Bpe52O1HsM/QJrdYDll0GHiBjk2RMzjWj+ssxw
+         o0nE3er86ZHSgt3hg8BTYEAykac8BT3z1j7AVbS/yRtRoOFR21mEuzoLX2McUK3uiQ
+         Jkx9PV27K9mCJ8FsksfTZzeRdWjWLbQJ8ZaC1s8KLQDImFqyu6fUrJL6MSk/hJIUds
+         yhrXZEZ13OOkO20SFtAKCechZQEfuEbHZl4NDxLUAm6dmsLoU4i9XjM0C4UyW0rETp
+         jmG9IaG3FFANg==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sun,  4 Dec 2022 22:17:27 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v3 0/4] vsock: update tools and error handling
+Thread-Topic: [RFC PATCH v3 0/4] vsock: update tools and error handling
+Thread-Index: AQHZCBUL8pVjCcixh0a5TtqWHSqeyw==
+Date:   Sun, 4 Dec 2022 19:17:26 +0000
+Message-ID: <6bd77692-8388-8693-f15f-833df1fa6afd@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <050CC44EF805B848BA74D7739AAF9FF5@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y4zUotH0UeHlRBGP@kernel.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/12/04 13:44:00 #20647742
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 05:10:58PM +0000, Jarkko Sakkinen wrote:
-> On Sun, Dec 04, 2022 at 05:06:41PM +0000, Jarkko Sakkinen wrote:
-> > On Mon, Nov 28, 2022 at 08:56:51PM +0100, Jason A. Donenfeld wrote:
-> > > From: Jan Dabros <jsd@semihalf.com>
-> > > 
-> > > Currently tpm transactions are executed unconditionally in
-> > > tpm_pm_suspend() function, which may lead to races with other tpm
-> > > accessors in the system. Specifically, the hw_random tpm driver makes
-> > > use of tpm_get_random(), and this function is called in a loop from a
-> > > kthread, which means it's not frozen alongside userspace, and so can
-> > > race with the work done during system suspend:
-> > > 
-> > > [    3.277834] tpm tpm0: tpm_transmit: tpm_recv: error -52
-> > > [    3.278437] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
-> > > [    3.278445] CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc5+ #135
-> > > [    3.278450] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-> > > [    3.278453] Call Trace:
-> > > [    3.278458]  <TASK>
-> > > [    3.278460]  dump_stack_lvl+0x34/0x44
-> > > [    3.278471]  tpm_tis_status.cold+0x19/0x20
-> > > [    3.278479]  tpm_transmit+0x13b/0x390
-> > > [    3.278489]  tpm_transmit_cmd+0x20/0x80
-> > > [    3.278496]  tpm1_pm_suspend+0xa6/0x110
-> > > [    3.278503]  tpm_pm_suspend+0x53/0x80
-> > > [    3.278510]  __pnp_bus_suspend+0x35/0xe0
-> > > [    3.278515]  ? pnp_bus_freeze+0x10/0x10
-> > > [    3.278519]  __device_suspend+0x10f/0x350
-> > > 
-> > > Fix this by calling tpm_try_get_ops(), which itself is a wrapper around
-> > > tpm_chip_start(), but takes the appropriate mutex.
-> > > 
-> > > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > > Reported-by: Vlastimil Babka <vbabka@suse.cz>
-> > > Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > Tested-by: Vlastimil Babka <vbabka@suse.cz>
-> > > Link: https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
-> > > [Jason: reworked commit message, added metadata]
-> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > ---
-> > >  drivers/char/tpm/tpm-interface.c | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> > > index 1621ce818705..d69905233aff 100644
-> > > --- a/drivers/char/tpm/tpm-interface.c
-> > > +++ b/drivers/char/tpm/tpm-interface.c
-> > > @@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
-> > >  	    !pm_suspend_via_firmware())
-> > >  		goto suspended;
-> > >  
-> > > -	if (!tpm_chip_start(chip)) {
-> > > +	rc = tpm_try_get_ops(chip);
-> > > +	if (!rc) {
-> > >  		if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > >  			tpm2_shutdown(chip, TPM2_SU_STATE);
-> > >  		else
-> > >  			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
-> > >  
-> > > -		tpm_chip_stop(chip);
-> > > +		tpm_put_ops(chip);
-> > >  	}
-> > >  
-> > >  suspended:
-> > > -- 
-> > > 2.38.1
-> > > 
-> > 
-> > Hi, sorry for the latency.
-> > 
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> Applied to  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-
-Oh thank goodness. You'll send this in for rc8 today?
-
-Jason
+UGF0Y2hzZXQgY29uc2lzdHMgb2YgdHdvIHBhcnRzOg0KDQoxKSBLZXJuZWwgcGF0Y2gNCk9uZSBw
+YXRjaCBmcm9tIEJvYmJ5IEVzaGxlbWFuLiBJIHRvb2sgc2luZ2xlIHBhdGNoIGZyb20gQm9iYnk6
+DQpodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sL2Q4MTgxOGI4NjgyMTZjNzc0NjEzZGQwMzY0
+MWZjZmU2M2NjNTVhNDUNCi4xNjYwMzYyNjY4LmdpdC5ib2JieS5lc2hsZW1hbkBieXRlZGFuY2Uu
+Y29tLyBhbmQgdXNlIG9ubHkgcGFydCBmb3INCmFmX3Zzb2NrLmMsIGFzIFZNQ0kgYW5kIEh5cGVy
+LVYgcGFydHMgd2VyZSByZWplY3RlZC4NCg0KSSB1c2VkIGl0LCBiZWNhdXNlIGZvciBTT0NLX1NF
+UVBBQ0tFVCBiaWcgbWVzc2FnZXMgaGFuZGxpbmcgd2FzIGJyb2tlbiAtDQpFTk9NRU0gd2FzIHJl
+dHVybmVkIGluc3RlYWQgb2YgRU1TR1NJWkUuIEFuZCBhbnl3YXksIGN1cnJlbnQgbG9naWMgd2hp
+Y2gNCmFsd2F5cyByZXBsYWNlcyBhbnkgZXJyb3IgY29kZSByZXR1cm5lZCBieSB0cmFuc3BvcnQg
+dG8gRU5PTUVNIGxvb2tzDQpzdHJhbmdlIGZvciBtZSBhbHNvKGZvciBleGFtcGxlIGluIEVNU0dT
+SVpFIGNhc2UgaXQgd2FzIGNoYW5nZWQgdG8NCkVOT01FTSkuDQoNCjIpIFRvb2wgcGF0Y2hlcw0K
+U2luY2UgdGhlcmUgaXMgd29yayBvbiBzZXZlcmFsIHNpZ25pZmljYW50IHVwZGF0ZXMgZm9yIHZz
+b2NrKHZpcnRpby8NCnZzb2NrIGVzcGVjaWFsbHkpOiBza2J1ZmYsIERHUkFNLCB6ZXJvY29weSBy
+eC90eCwgc28gSSB0aGluayB0aGF0IHRoaXMNCnBhdGNoc2V0IHdpbGwgYmUgdXNlZnVsLg0KDQpU
+aGlzIHBhdGNoc2V0IHVwZGF0ZXMgdnNvY2sgdGVzdHMgYW5kIHRvb2xzIGEgbGl0dGxlIGJpdC4g
+Rmlyc3Qgb2YgYWxsDQppdCB1cGRhdGVzIHRlc3Qgc3VpdGU6IHR3byBuZXcgdGVzdHMgYXJlIGFk
+ZGVkLiBPbmUgdGVzdCBpcyByZXdvcmtlZA0KbWVzc2FnZSBib3VuZCB0ZXN0LiBOb3cgaXQgaXMg
+bW9yZSBjb21wbGV4LiBJbnN0ZWFkIG9mIHNlbmRpbmcgMSBieXRlDQptZXNzYWdlcyB3aXRoIG9u
+ZSBNU0dfRU9SIGJpdCwgaXQgc2VuZHMgbWVzc2FnZXMgb2YgcmFuZG9tIGxlbmd0aChvbmUNCmhh
+bGYgb2YgbWVzc2FnZXMgYXJlIHNtYWxsZXIgdGhhbiBwYWdlIHNpemUsIHNlY29uZCBoYWxmIGFy
+ZSBiaWdnZXIpDQp3aXRoIHJhbmRvbSBudW1iZXIgb2YgTVNHX0VPUiBiaXRzIHNldC4gUmVjZWl2
+ZXIgYWxzbyBkb24ndCBrbm93IHRvdGFsDQpudW1iZXIgb2YgbWVzc2FnZXMuIE1lc3NhZ2UgYm91
+bmRzIGNvbnRyb2wgaXMgbWFpbnRhaW5lZCBieSBoYXNoIHN1bQ0Kb2YgbWVzc2FnZXMgbGVuZ3Ro
+IGNhbGN1bGF0aW9uLiBTZWNvbmQgdGVzdCBpcyBmb3IgU09DS19TRVFQQUNLRVQgLSBpdA0KdHJp
+ZXMgdG8gc2VuZCBtZXNzYWdlIHdpdGggbGVuZ3RoIG1vcmUgdGhhbiBhbGxvd2VkLiBJIHRoaW5r
+IGJvdGggdGVzdHMNCndpbGwgYmUgdXNlZnVsIGZvciBER1JBTSBzdXBwb3J0IGFsc28uDQoNClRo
+aXJkIHRoaW5nIHRoYXQgdGhpcyBwYXRjaHNldCBhZGRzIGlzIHNtYWxsIHV0aWxpdHkgdG8gdGVz
+dCB2c29jaw0KcGVyZm9ybWFuY2UgZm9yIGJvdGggcnggYW5kIHR4LiBJIHRoaW5rIHRoaXMgdXRp
+bCBjb3VsZCBiZSB1c2VmdWwgYXMNCidpcGVyZicsIGJlY2F1c2U6DQoxKSBJdCBpcyBzbWFsbCBj
+b21wYXJpbmcgdG8gJ2lwZXJmKCknLCBzbyBpdCB2ZXJ5IGVhc3kgdG8gYWRkIG5ldw0KICAgbW9k
+ZSBvciBmZWF0dXJlIHRvIGl0KGVzcGVjaWFsbHkgdnNvY2sgc3BlY2lmaWMpLg0KMikgSXQgaXMg
+bG9jYXRlZCBpbiBrZXJuZWwgc291cmNlIHRyZWUsIHNvIGl0IGNvdWxkIGJlIHVwZGF0ZWQgYnkg
+dGhlDQogICBzYW1lIHBhdGNoc2V0IHdoaWNoIGNoYW5nZXMgcmVsYXRlZCBrZXJuZWwgZnVuY3Rp
+b25hbGl0eSBpbiB2c29jay4NCg0KSSB1c2VkIHRoaXMgdXRpbCB2ZXJ5IG9mdGVuIHRvIGNoZWNr
+IHBlcmZvcm1hbmNlIG9mIG15IHJ4IHplcm9jb3B5DQpzdXBwb3J0KHRoaXMgdG9vbCBoYXMgcngg
+emVyb2NvcHkgc3VwcG9ydCwgYnV0IG5vdCBpbiB0aGlzIHBhdGNoc2V0KS4NCg0KUGF0Y2hzZXQg
+d2FzIHJlYmFzZWQgYW5kIHRlc3RlZCBvbiBza2J1ZmYgdjUgcGF0Y2ggZnJvbSBCb2JieSBFc2hs
+ZW1hbjoNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL25ldGRldi8yMDIyMTIwMjE3MzUyMC4xMDQy
+OC0xLWJvYmJ5LmVzaGxlbWFuQGJ5dGVkYW5jZS5jb20vDQoNCkNoYW5nZWxvZzoNCiB2MiAtPiB2
+MzoNCiAtIFBhdGNoZXMgZm9yIFZNQ0kgYW5kIEh5cGVyLVYgd2VyZSByZW1vdmVkIGZyb20gcGF0
+Y2hzZXQoY29tbWVudGVkIGJ5DQogICBWaXNobnUgRGFzYSBhbmQgRGV4dWFuIEN1aSkNCiAtIElu
+IG1lc3NhZ2UgYm91bmRzIHRlc3QgaGFzaCBpcyBjb21wdXRlZCBmcm9tIGRhdGEgYnVmZmVyIHdp
+dGggcmFuZG9tDQogICBjb250ZW50KGluIHYyIGl0IHdhcyBzaXplIG9ubHkpLiBUaGlzIGFwcHJv
+YWNoIGNvbnRyb2xzIGJvdGggZGF0YQ0KICAgaW50ZWdyaXR5IGFuZCBtZXNzYWdlIGJvdW5kcy4N
+CiAtIHZzb2NrX3BlcmY6DQogICAtIGdyYW1tYXIgZml4ZXMNCiAgIC0gb25seSBsb25nIHBhcmFt
+ZXRlcnMgc3VwcG9ydGVkKGluc3RlYWQgb2Ygb25seSBzaG9ydCkNCiB2MSAtPiB2MjoNCiAtIFRo
+cmVlIG5ldyBwYXRjaGVzIGZyb20gQm9iYnkgRXNobGVtYW4gdG8ga2VybmVsIHBhcnQNCiAtIE1l
+c3NhZ2UgYm91bmRzIHRlc3Q6IHNvbWUgcmVmYWN0b3JpbmcgYW5kIGFkZCBjb21tZW50IHRvIGRl
+c2NyaWJlDQogICBoYXNoaW5nIHB1cnBvc2UNCiAtIEJpZyBtZXNzYWdlIHRlc3Q6IGNoZWNrICdl
+cnJubycgZm9yIEVNU0dTSVpFIGFuZCAgbW92ZSBuZXcgdGVzdCB0bw0KICAgdGhlIGVuZCBvZiB0
+ZXN0cyBhcnJheQ0KIC0gdnNvY2tfcGVyZjoNCiAgIC0gdXBkYXRlIFJFQURNRSBmaWxlDQogICAt
+IGFkZCBzaW1wbGUgdXNhZ2UgZXhhbXBsZSB0byBjb21taXQgbWVzc2FnZQ0KICAgLSB1cGRhdGUg
+Jy1oJyAoaGVscCkgb3V0cHV0DQogICAtIHVzZSAnc3Rkb3V0JyBmb3Igb3V0cHV0IGluc3RlYWQg
+b2YgJ3N0ZGVycicNCiAgIC0gdXNlICdzdHJ0b2wnIGluc3RlYWQgb2YgJ2F0b2knDQoNCkJvYmJ5
+IEVzaGxlbWFuKDEpOg0KIHZzb2NrOiByZXR1cm4gZXJyb3JzIG90aGVyIHRoYW4gLUVOT01FTSB0
+byBzb2NrZXQNCg0KQXJzZW5peSBLcmFzbm92KDMpOg0KIHRlc3QvdnNvY2s6IHJld29yayBtZXNz
+YWdlIGJvdW5kIHRlc3QNCiB0ZXN0L3Zzb2NrOiBhZGQgYmlnIG1lc3NhZ2UgdGVzdA0KIHRlc3Qv
+dnNvY2s6IHZzb2NrX3BlcmYgdXRpbGl0eQ0KDQogbmV0L3Ztd192c29jay9hZl92c29jay5jICAg
+ICAgICAgfCAgIDMgKy0NCiB0b29scy90ZXN0aW5nL3Zzb2NrL01ha2VmaWxlICAgICB8ICAgMSAr
+DQogdG9vbHMvdGVzdGluZy92c29jay9SRUFETUUgICAgICAgfCAgMzQgKysrDQogdG9vbHMvdGVz
+dGluZy92c29jay9jb250cm9sLmMgICAgfCAgMjggKysrDQogdG9vbHMvdGVzdGluZy92c29jay9j
+b250cm9sLmggICAgfCAgIDIgKw0KIHRvb2xzL3Rlc3RpbmcvdnNvY2svdXRpbC5jICAgICAgIHwg
+IDEzICsrDQogdG9vbHMvdGVzdGluZy92c29jay91dGlsLmggICAgICAgfCAgIDEgKw0KIHRvb2xz
+L3Rlc3RpbmcvdnNvY2svdnNvY2tfcGVyZi5jIHwgNDQ5ICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKw0KIHRvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdC5jIHwgMTkz
+ICsrKysrKysrKysrKysrKy0tDQogOSBmaWxlcyBjaGFuZ2VkLCA3MTAgaW5zZXJ0aW9ucygrKSwg
+MTQgZGVsZXRpb25zKC0pDQotLSANCjIuMjUuMQ0K
