@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEBB641EF5
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD47641EFA
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiLDSkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 13:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S230234AbiLDSnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 13:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiLDSkQ (ORCPT
+        with ESMTP id S230110AbiLDSns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 13:40:16 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7801613E04;
-        Sun,  4 Dec 2022 10:40:15 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a16so12977721edb.9;
-        Sun, 04 Dec 2022 10:40:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=06uzwItCKtLQhJwsAfieSH/ejbn0aRznZcwD5Bpm90c=;
-        b=CIwhYJMTdg9v6i4Xa1XBgRknR11vg+gYAuG/y5e2AiQiAZfdCMtrOyDD1NmVs6K9hH
-         UIkHnY32pb1hF1kuZYffWwPyPvfuEGul2EJU/VRIMqb5qEmSf3XdzVqAASyV8OkUQMIj
-         tibTwZopWNPffbVqKtCCw4DrnPkVs6q8HaYCjtE5u6nUJFiSgh8Nn2RKjxPsVeMrbnm0
-         483KJSfLLp8YmZa2netolE+laDeY2Z2M7t6Jz5zUKEQ3TpYRgL+hcc6RQHkxlL6E0/vN
-         E4EEtqRMouen3BOz3xsJXshOPhTakKz6P+Kw2RauOg5nh+DABK0ipJYLuX9yaRrBGqLz
-         LhNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=06uzwItCKtLQhJwsAfieSH/ejbn0aRznZcwD5Bpm90c=;
-        b=wZgy1VxIqiIgnO/SHTHRNF5qmtU/pOYIx7aY0sBrljksMCae2564f3whopgRLXSeow
-         +8Uo6yIaulmaq7nCgw1FeHQxalfjqCwr6OXNuUvy4OVDYK7bOUtBg+HTFKG9wSZcByw+
-         AHMXbmFercMG6ZIY6WMkD7cZM3q/E4ELtIENB8m7dhuab+59aBmwGyTgqzvJ00gNDrbw
-         voDj7sSaWdG2mZd88mYfEAn20BG+GUe+8fQ9v5PuIiSINSbAOMKxhXpMolNFTJld3CxT
-         UxKLZJ8LLpRzCyGeZR7xmlfQMhVukjBFdNJqIP0nIFxdvVlypsKAIwpxdgHBu6P0b/T7
-         7pIg==
-X-Gm-Message-State: ANoB5pnPyLfZh7PJpYpsBr2VctkfPbZ4uhd4XBGPJJ8BH1xwRe+5GF8H
-        GfCoolNJe5JXA1GmBCgVZ0E=
-X-Google-Smtp-Source: AA0mqf6HwRb4GREYbKyfjN7Mm2DiZ7lWHyUdc011s09zwYnov0wwzndT2ZDlm6sZemUgNMKpbc6NdQ==
-X-Received: by 2002:a05:6402:28c4:b0:469:ee21:16d4 with SMTP id ef4-20020a05640228c400b00469ee2116d4mr33487226edb.315.1670179213991;
-        Sun, 04 Dec 2022 10:40:13 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b007ad9c826d75sm5334184ejf.61.2022.12.04.10.40.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 10:40:13 -0800 (PST)
-Date:   Sun, 4 Dec 2022 19:40:22 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next 3/4] drivers/net/phy: Add driver for the onsemi
- NCN26000 10BASE-T1S PHY
-Message-ID: <Y4zplu5hdrh8CvZ5@gvm01>
-References: <cover.1670119328.git.piergiorgio.beruto@gmail.com>
- <834be48779804c338f00f03002f31658d942546b.1670119328.git.piergiorgio.beruto@gmail.com>
- <Y4zQNHEkWQG+C/Oj@shell.armlinux.org.uk>
+        Sun, 4 Dec 2022 13:43:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4037646
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 10:42:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670179371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zJM7gWWE8oaqNQCZTj0dpP5SKnEO8umjmhxbd+TV4fU=;
+        b=JWbCZLdZ4F08yyV21be/08shhcL+MCHQhQfKVBYVa3tMVat9InNGcoxTWNN4et0r8/totF
+        LTxfEH57mQfQhOu8wdrbtsbm2/t9GoRoBuUNQqrbJ71q05gyObWujO6msQoGorvpZB+/J3
+        ArQYagQSApEBrh3xmmrj3L2aPJNlWis=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-76-To-hb9q5M768IYHmluoJpg-1; Sun, 04 Dec 2022 13:42:47 -0500
+X-MC-Unique: To-hb9q5M768IYHmluoJpg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53722811E67;
+        Sun,  4 Dec 2022 18:42:46 +0000 (UTC)
+Received: from starship (unknown [10.35.206.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 874F91121331;
+        Sun,  4 Dec 2022 18:42:42 +0000 (UTC)
+Message-ID: <5bde88433d6962e38a4c2ddad778395cea98d13b.camel@redhat.com>
+Subject: Re: [PATCH 07/13] KVM: SVM: Add VNMI support in get/set_nmi_mask
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Babu Moger <babu.moger@amd.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>
+Date:   Sun, 04 Dec 2022 20:42:41 +0200
+In-Reply-To: <Y3aDTvglaSfhG8Tg@google.com>
+References: <20221117143242.102721-1-mlevitsk@redhat.com>
+         <20221117143242.102721-8-mlevitsk@redhat.com> <Y3aDTvglaSfhG8Tg@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4zQNHEkWQG+C/Oj@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,233 +78,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 04:52:04PM +0000, Russell King (Oracle) wrote:
-> Hi,
+On Thu, 2022-11-17 at 18:54 +0000, Sean Christopherson wrote:
+> On Thu, Nov 17, 2022, Maxim Levitsky wrote:
+> > From: Santosh Shukla <santosh.shukla@amd.com>
+> > 
+> > VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
+> > NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK
+> > as read-only in the hypervisor except for the SMM case where hypervisor
+> > before entring and after leaving SMM mode requires to set and unset
+> > V_NMI_MASK.
+> > 
+> > Adding API(get_vnmi_vmcb) in order to return the correct vmcb for L1 or
+> > L2.
+> > 
+> > Maxim:
+> >    - made set_vnmi_mask/clear_vnmi_mask/is_vnmi_mask warn if called
+> >      without vNMI enabled
+> >    - clear IRET intercept in svm_set_nmi_mask even with vNMI
+> > 
+> > Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/kvm/svm/svm.c | 18 ++++++++++++++-
+> >  arch/x86/kvm/svm/svm.h | 52 ++++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 69 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index 08a7b2a0a29f3a..c16f68f6c4f7d7 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -3618,13 +3618,29 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> >  
+> >  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> >  {
+> > -	return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> > +	struct vcpu_svm *svm = to_svm(vcpu);
+> > +
+> > +	if (is_vnmi_enabled(svm))
+> > +		return is_vnmi_mask_set(svm);
+> > +	else
+> > +		return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> >  }
+> >  
+> >  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+> >  {
+> >  	struct vcpu_svm *svm = to_svm(vcpu);
+> >  
+> > +	if (is_vnmi_enabled(svm)) {
+> > +		if (masked)
+> > +			set_vnmi_mask(svm);
 > 
-> On Sun, Dec 04, 2022 at 03:31:33AM +0100, Piergiorgio Beruto wrote:
-> > diff --git a/drivers/net/phy/ncn26000.c b/drivers/net/phy/ncn26000.c
-> > new file mode 100644
-> > index 000000000000..65a34edc5b20
-> > --- /dev/null
-> > +++ b/drivers/net/phy/ncn26000.c
-> > @@ -0,0 +1,193 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-> > +/*
-> > + *  Driver for Analog Devices Industrial Ethernet T1L PHYs
-> > + *
-> > + * Copyright 2020 Analog Devices Inc.
-> > + */
-> > +#include <linux/kernel.h>
-> > +#include <linux/bitfield.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/errno.h>
-> > +#include <linux/init.h>
-> > +#include <linux/module.h>
-> > +#include <linux/mii.h>
-> > +#include <linux/phy.h>
-> > +#include <linux/property.h>
-> > +
-> > +#define PHY_ID_NCN26000				0x180FF5A1
-> > +
-> > +#define NCN26000_REG_IRQ_CTL                    ((u16)16)
-> > +#define NCN26000_REG_IRQ_STATUS                 ((u16)17)
-> > +
-> > +#define NCN26000_IRQ_LINKST_BIT                 ((u16)1)
-> > +#define NCN26000_IRQ_PLCAST_BIT                 ((u16)(1 << 1))
-> > +#define NCN26000_IRQ_LJABBER_BIT                ((u16)(1 << 2))
-> > +#define NCN26000_IRQ_RJABBER_BIT                ((u16)(1 << 3))
-> > +#define NCN26000_IRQ_RJABBER_BIT                ((u16)(1 << 3))
-> > +#define NCN26000_IRQ_PLCAREC_BIT                ((u16)(1 << 4))
-> > +#define NCN26000_IRQ_PHYSCOL_BIT                ((u16)(1 << 5))
+> I believe not setting INTERCEPT_IRET is correct, but only because the existing
+> code is unnecessary.  And this all very subtly relies on KVM_REQ_EVENT being set
+> and/or KVM already being in kvm_check_and_inject_events().
+
+Actually after thinking about this again, I am almost sure that you are wrong about this:
+
+KVM sets INTERCEPT_IRET not only because of detection of NMI window but to know
+when the NMI handler execution ended.
+
+Even if no additional NMI arrives, if you don't intercept IRET, KVM will think that
+NMI are never unmasked, and in particular when another NMI arrives, KVM will
+try to open an NMI window while it is already open.
+
+Now the svm_set_nmi_mask masks NMI either when it is called by SMM entry point,
+or on migaration.
+
+On SMM entry point, most of the time the NMIs will be unmasked by RSM, but
+unsoliced IRET is also an (official) way to unmask NMI, which we will miss
+if we don't intercept IRET.
+
+On migartion, also, if it happened during NMI, we also have to intercept IRET once loading the
+migration stream so that we can know when NMI ended in the same way.
+
+All of this is of course only true for !vNMI case.
+
+For vNMI case it turns out that we don't need to intercept IRET at all after all:
+
+Turns out that when vNMI is pending, you can still EVENTINJ another NMI, and the pending
+vNMI will be kept pending, vNMI will became masked due to EVENTINJ, and on IRET the pending vNMI
+will be serviced as well, so in total both NMIs will be serviced.
+
+I confirmed this with Santosh Shukla, and in my patch series I take an advantage of
+this by failing the delayed NMI injection, and making KVM fail back to EVENTINJ.
+
+If NMIs are blocked (VNMI_MASKED bit set) on the other hand, and a vNMI is pending, 
+then we can't use EVENTINJ to inject the second NMI, but in this case KVM drops
+the second NMI anyway.
+
+It all seems to add up very nicely, please take a look at the patch series
+([PATCH v2 00/11] SVM: vNMI (with my fixes))
+
+
+Best regards,
+	Maxim Levitsky 
+
 > 
-> There isn't much point in having the casts to u16 here. Also,
-> BIT() is useful for identifying single bits.
-Ok, I'll fix, thanks.
-
-> > +static int ncn26000_enable(struct phy_device *phydev)
-> > +{
+> When NMIs become unblocked, INTERCEPT_IRET can be cleared, but KVM should also
+> pending KVM_REQ_EVENT.  AFAICT, that doesn't happen when this is called via the
+> emulator.  Ah, because em_iret() only handles RM for Intel's restricted guest
+> crap.  I.e. it "works" only because it never happens.  All other flows set
+> KVM_REQ_EVENT when toggling NMI blocking, e.g. the RSM path of kvm_smm_changed().
 > 
-> This is actually the config_aneg() implementation, it should be named
-> as such.
-I can certainly rename it, however I did this for a reason. The NCN26000
-only supports P2MP mode. Therefore, it does not support AN (this is
-clearly indicated in the IEEE specifications as well).
-
-However, it is my understanding that the config_aneg() callback is
-invoked also for PHYs that do not support AN, and this is actually the
-only way to set a link_control bit to have the PHY enable the PMA/PCS
-functions. So I thought to call this function "enable" to make it clear
-we're not really implementing autoneg, but link_control.
-
-But as I said, I am not strongly biased towards this name, I just wanted
-to let you know the rationale behind my choice.
-
-Please let me know if you wish to reconsider or you still prefer to
-rename it.
-
-> > +	phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
-> > +	phydev->mdix = ETH_TP_MDI;
-> > +	phydev->pause = 0;
-> > +	phydev->asym_pause = 0;
-> > +	phydev->speed = SPEED_10;
-> > +	phydev->duplex = DUPLEX_HALF;
+> And when NMIs become blocked, there's no need to force INTERCEPT_IRET in this
+> code because kvm_check_and_inject_events() will request an NMI window and set the
+> intercept if necessary, and all paths that set NMI blocking are guaranteed to
+> reach kvm_check_and_inject_events() before entering the guest.
 > 
-> Is this initialisation actually necessary?
-To be honest, I am not sure. Reading the code for genphy_c45_read_pma()
-and genphy_c45_read_status() I can see those variables are set. In my
-case, the driver is -not- invoking those functions, therefore I thought
-this initialization should be needed. If not, I can certainly remove it.
-Advices?
- 
-> > +
-> > +	// bring up the link (link_ctrl is mapped to BMCR_ANENABLE)
-> > +	// clear also ISOLATE mode and Collision Test
-> > +	return phy_write(phydev, MII_BMCR, BMCR_ANENABLE);
+>   1. RSM => kvm_smm_changed() sets KVM_REQ_EVENT
+>   2. enter_smm() is only called from within kvm_check_and_inject_events(),
+>      before pending NMIs are processed (yay priority)
+>   3. emulator_set_nmi_mask() never blocks NMIs, only does the half-baked IRET emulation
+>   4. kvm_vcpu_ioctl_x86_set_vcpu_event() sets KVM_REQ_EVENT
 > 
-> You always use AN even when ethtool turns off AN? If AN is mandatory,
-> it seems there should be some way that phylib can force that to be
-> the case.
-I need to explain this better. The NCN26000, as I said earlier, does
--not- support AN. However, it re-uses the AN bit to implement the
-link_control function (described in the IEEE specifications). Therefore,
-setting AN on this PHY actually means bringing up the link.
-
-I don't know if it could be better to add a define (specific for this
-PHY) for the link_control bit and set it == BMCR_ANENABLE? Would that be
-more clear for the reader?
-
-> > +}
-> > +
-> > +static int ncn26000_soft_reset(struct phy_device *phydev)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = phy_set_bits(phydev, MII_BMCR, BMCR_RESET);
-> > +
-> > +	if (ret != 0)
-> > +		return ret;
-> > +
-> > +	return phy_read_poll_timeout(phydev,
-> > +				     MII_BMCR,
-> > +				     ret,
-> > +				     !(ret & BMCR_RESET),
-> > +				     500,
-> > +				     20000,
-> > +				     true);
+> So, can you add a prep patch to drop the forced INTERCEPT_IRET?  That way the
+> logic for vNMI and !vNMI is the same.
 > 
-> Isn't this just genphy_reset() ?
-Right, this was a leftover. I substituted with genphy_soft_reset() and
-indeed it works just fine. Thanks for noticing.
-
-> > +}
-> > +
-> > +static int ncn26000_get_features(struct phy_device *phydev)
-> > +{
-> > +	linkmode_zero(phydev->supported);
-> > +	linkmode_set_bit(ETHTOOL_LINK_MODE_MII_BIT, phydev->supported);
-> > +
-> > +	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT,
-> > +			 phydev->supported);
-> > +
-> > +	linkmode_copy(phydev->advertising, phydev->supported);
-> > +	return 0;
-> > +}
-> > +
-> > +static irqreturn_t ncn26000_handle_interrupt(struct phy_device *phydev)
-> > +{
-> > +	const struct ncn26000_priv *const priv = phydev->priv;
-> > +	u16 events;
-> > +	int ret;
-> > +
-> > +	// read and aknowledge the IRQ status register
-> > +	ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
-> > +
-> > +	if (unlikely(ret < 0))
-> > +		return IRQ_NONE;
-> > +
-> > +	events = (u16)ret & priv->enabled_irqs;
-> > +	if (events == 0)
-> > +		return IRQ_NONE;
-> > +
-> > +	if (events & NCN26000_IRQ_LINKST_BIT) {
-> > +		ret = phy_read(phydev, MII_BMSR);
-> > +
-> > +		if (unlikely(ret < 0)) {
-> > +			phydev_err(phydev,
-> > +				   "error reading the status register (%d)\n",
-> > +				   ret);
-> > +
-> > +			return IRQ_NONE;
+> > +		else {
+> > +			clear_vnmi_mask(svm);
+> 
+> This is the only code that sets/clears the vNMI mask, so rather than have set/clear
+> helpers, what about a single helper to do the dirty work? 
+> 
+> > +			if (!sev_es_guest(vcpu->kvm))
+> > +				svm_clr_intercept(svm, INTERCEPT_IRET);
 > > +		}
+> > +		return;
+> > +	}
 > > +
-> > +		phydev->link = ((u16)ret & BMSR_ANEGCOMPLETE) ? 1 : 0;
+> >  	if (masked) {
+> >  		vcpu->arch.hflags |= HF_NMI_MASK;
+> >  		if (!sev_es_guest(vcpu->kvm))
+> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > index f5383104d00580..bf7f4851dee204 100644
+> > --- a/arch/x86/kvm/svm/svm.h
+> > +++ b/arch/x86/kvm/svm/svm.h
+> > @@ -35,6 +35,7 @@ extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+> >  extern bool npt_enabled;
+> >  extern int vgif;
+> >  extern bool intercept_smi;
+> > +extern bool vnmi;
+> >  
+> >  enum avic_modes {
+> >  	AVIC_MODE_NONE = 0,
+> > @@ -531,6 +532,57 @@ static inline bool is_x2apic_msrpm_offset(u32 offset)
+> >  	       (msr < (APIC_BASE_MSR + 0x100));
+> >  }
+> >  
+> > +static inline struct vmcb *get_vnmi_vmcb(struct vcpu_svm *svm)
+> > +{
+> > +	if (!vnmi)
+> > +		return NULL;
+> > +
+> > +	if (is_guest_mode(&svm->vcpu))
+> > +		return svm->nested.vmcb02.ptr;
+> > +	else
+> > +		return svm->vmcb01.ptr;
+> > +}
+> > +
+> > +static inline bool is_vnmi_enabled(struct vcpu_svm *svm)
+> > +{
+> > +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> > +
+> > +	if (vmcb)
+> > +		return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
+> > +	else
+> > +		return false;
 > 
-> 1. aneg_complete shouldn't be used to set phydev->link.
-> 2. phydev->link should be updated in the read_status() function, which
-> the state machine will call. Setting it here without taking the lock
-> introduces races.
-Same as before. AN complete is used as an extended link status
-indication for this PHY, considering the PLCA status as well. It is not
-the result of AN (which is not supported).
+> Maybe just this?
+> 
+> 	return vmcb && (vmcb->control.int_ctl & V_NMI_ENABLE);
+> 
+> Or if an inner helper is added:
+> 
+> 	return vmcb && __is_vnmi_enabled(vmcb);
+> 
+> > +}
+> > +
+> > +static inline bool is_vnmi_mask_set(struct vcpu_svm *svm)
+> > +{
+> > +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> > +
+> > +	if (!WARN_ON_ONCE(!vmcb))
+> 
+> Rather than WARN, add an inner __is_vnmi_enabled() that takes the vnmi_vmcb.
+> Actually, if you do that, the test/set/clear helpers can go away entirely.
+> 
+> > +		return false;
+> > +
+> > +	return !!(vmcb->control.int_ctl & V_NMI_MASK);
+> > +}
+> > +
+> > +static inline void set_vnmi_mask(struct vcpu_svm *svm)
+> > +{
+> > +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> > +
+> > +	if (!WARN_ON_ONCE(!vmcb))
+> > +		return;
+> > +
+> > +	vmcb->control.int_ctl |= V_NMI_MASK;
+> > +}
+> > +
+> > +static inline void clear_vnmi_mask(struct vcpu_svm *svm)
+> > +{
+> > +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> > +
+> > +	if (!WARN_ON_ONCE(!vmcb))
+> > +		return;
+> > +
+> > +	vmcb->control.int_ctl &= ~V_NMI_MASK;
+> > +}
+> 
+> These helpers can all go in svm.  There are no users oustide of svm.c, and
+> unless I'm misunderstanding how nested works, there should never be oustide users.
+> 
+> E.g. with HF_NMI_MASK => svm->nmi_masked, the end result can be something like:
+> 
+> static bool __is_vnmi_enabled(struct *vmcb)
+> {
+> 	return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
+> }
+> 
+> static bool is_vnmi_enabled(struct vcpu_svm *svm)
+> {
+> 	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> 
+> 	return vmcb && __is_vnmi_enabled(vmcb);
+> }
+> 
+> static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> {
+> 	struct vcpu_svm *svm = to_svm(vcpu);
+> 	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> 
+> 	if (vmcb && __is_vnmi_enabled(vmcb))
+> 		return !!(vmcb->control.int_ctl & V_NMI_MASK);
+> 	else
+> 		return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> }
+> 
+> static void svm_set_or_clear_vnmi_mask(struct vmcb *vmcb, bool set)
+> {
+> 	if (set)
+> 		vmcb->control.int_ctl |= V_NMI_MASK;
+> 	else
+> 		vmcb->control.int_ctl &= ~V_NMI_MASK;
+> }
+> 
+> static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+> {
+> 	struct vcpu_svm *svm = to_svm(vcpu);
+> 	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> 
+> 	if (vmcb && __is_vnmi_enabled(vmcb)) {
+> 		if (masked)
+> 			vmcb->control.int_ctl |= V_NMI_MASK;
+> 		else
+> 			vmcb->control.int_ctl &= ~V_NMI_MASK;
+> 	} else {
+> 		svm->nmi_masked = masked;
+> 	}
+> 
+> 	if (!masked)
+> 		svm_disable_iret_interception(svm);
+> }
+> 
 
-> > +	}
-> > +
-> > +	// handle more IRQs here
-> > +
-> > +	phy_trigger_machine(phydev);
-> > +	return IRQ_HANDLED;
-> > +}
-> > +
-> > +static int ncn26000_config_intr(struct phy_device *phydev)
-> > +{
-> > +	int ret;
-> > +	struct ncn26000_priv *priv = phydev->priv;
-> > +
-> > +	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-> > +		// acknowledge IRQs
-> > +		ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		// get link status notifications
-> > +		priv->enabled_irqs = NCN26000_IRQ_LINKST_BIT;
-> > +	} else {
-> > +		// disable all IRQs
-> > +		priv->enabled_irqs = 0;
-> > +	}
-> > +
-> > +	ret = phy_write(phydev, NCN26000_REG_IRQ_CTL, priv->enabled_irqs);
-> > +	if (ret != 0)
-> > +		return ret;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ncn26000_probe(struct phy_device *phydev)
-> > +{
-> > +	struct device *dev = &phydev->mdio.dev;
-> > +	struct ncn26000_priv *priv;
-> > +
-> > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
-> > +		return -ENOMEM;
-> > +
-> > +	phydev->priv = priv;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void ncn26000_remove(struct phy_device *phydev)
-> > +{
-> > +	struct device *dev = &phydev->mdio.dev;
-> > +	struct ncn26000_priv *priv = phydev->priv;
-> > +
-> > +	// free the private structure pointer
-> > +	devm_kfree(dev, priv);
-> 
-> No need to call devm_kfree() - the point of devm_*() is that resources
-> are automatically released.
-> 
-> Thanks.
-Got it, Thanks!
 
