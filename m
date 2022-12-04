@@ -2,77 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A931641FC4
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6030B641FC8
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiLDVP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 16:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S230235AbiLDVRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 16:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiLDVP4 (ORCPT
+        with ESMTP id S229949AbiLDVRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 16:15:56 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FE511A39;
-        Sun,  4 Dec 2022 13:15:55 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id n20so23558760ejh.0;
-        Sun, 04 Dec 2022 13:15:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N5myqd35peHqRERs7SmCBzUjy0wB0kxxoMubeKrt2TY=;
-        b=ATY1DPJCFZqkeMnAEGSp93oAPvjniFLiMEYs88vBr9/r64UsR1p3BDUP5ffo3fmIa8
-         c8rsTo6ENU18EL09G/IUgvFJ6FqKv7CsCN1vTSIOMEnuvX6fBD/kwm5Pjfey0daigRTS
-         gdHkXYjgGEYg2joO5msm5DHP+L2iEduA09RZe4pdnOMMTjXAqNcmZF62j+K4OmJl7ICE
-         KoDCGWxLrB7MmJ8KjEtawA1FXpGRBK5zF51y14YFotuPshhrXBNC2vwSFzzoLzb+Jmh2
-         4NLj7ye3A05K52XSQdgrKczL64HNLoUDuZ92OL2NB1KBbWd0jhlmdhkhk5pwVLByvuls
-         CX/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N5myqd35peHqRERs7SmCBzUjy0wB0kxxoMubeKrt2TY=;
-        b=pFCSZxzN5GXVMqzX7YmLWYpVpc+ht9rjcv34dIyfxs1HvOMIfFAnddAnJpzCx05nqg
-         jrO4OHYVR2QmRlSFQZqWeovKVRrkV29mfvXBGy8QAjFh4rqIdN6bErcP8+v/EWWhRQKb
-         32+q8f7711mqiKvJ0L5cwWRM/0yGF1xY3rIMMHZHrPQf1HYBbo9OKUf0fouwOZx3eGfH
-         CSkx2yW1iqtLWhGX9heKnCRlSnrOedT9EOkW8MTFcX6PEmglgYPXVDUYsQ605R4mEsIC
-         C/2DlR790YP6wQB9WaJKRR+6wUTVvZMWOHQt89I2GsarwDDDa/rfQphovQfEX+qjWYwX
-         8UUw==
-X-Gm-Message-State: ANoB5plVoiMY7cAmeCF8P5LT/X8Oe9NwQVWzwizfCL9tcaJ/FQ8G1yga
-        I3eEicBpTBxVR+PXJ9OxvmA=
-X-Google-Smtp-Source: AA0mqf4DRSiZgoJ3b9GddzakpIr3VKP2LhrCT0ROq909oX2idu93YHvR0ROf0XDAZWzAW8A6EVOO+g==
-X-Received: by 2002:a17:907:591:b0:7c0:a997:2298 with SMTP id vw17-20020a170907059100b007c0a9972298mr15424761ejb.430.1670188553765;
-        Sun, 04 Dec 2022 13:15:53 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1709063d2900b0073d71792c8dsm5468226ejf.180.2022.12.04.13.15.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 13:15:53 -0800 (PST)
-Date:   Sun, 4 Dec 2022 22:16:01 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     mkubecek@suse.cz
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        andrew@lunn.ch
-Subject: Re: [PATCH net-next 1/2] ethtool: update UAPI files
-Message-ID: <Y40OEbeI3AuZ5hH2@gvm01>
-References: <cover.1670121214.git.piergiorgio.beruto@gmail.com>
- <0f7042bc6bcd59b37969d10a40e65d705940bee0.1670121214.git.piergiorgio.beruto@gmail.com>
- <Y4zVMj7rOkyA12uA@shell.armlinux.org.uk>
- <Y4zduT5aHd4vxQZL@lunn.ch>
+        Sun, 4 Dec 2022 16:17:21 -0500
+Received: from BL0PR02CU005-vft-obe.outbound.protection.outlook.com (mail-eastusazon11022017.outbound.protection.outlook.com [52.101.53.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED1A11C07;
+        Sun,  4 Dec 2022 13:17:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MPcZdlBLgG66gm9SZurWPKHoaFSE8ERahtHRnAUPUaYRVhvB7mHcivokUwODLrt8K9A3Y3d+x9TVOXLZWuDDOfbxLv9v6zzhSIPYZpn//D2YpLUpCNJplRwFhh88EINWP20cicv0sxbqo6jzdT0HRIO9cED6i843nSgSh1vLSnnYF77d/Ne54xetIDasWdOW5zyXeOpnn3QblsOEf/0gR1blFJgT0z47laLA+buBH3Qc8XHbD6lVd+gxSqQu16+Mkda87iE5Pdt3x+qZjyBGXSGcfugCyi92YXMTpnTI1mK3/y2CccZ8+P0+LJbZR9Z3ISuYs7EaS9zRdZcjqhFBgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=atqMNlWX+T+eqfwkAYlvlYOcevIm2TENAWd92L1IQQo=;
+ b=KryGD6UDAssKwc8LzV+DcsZrmfgoN51jYgUl+45UJtjI1iMkTQSaoqzGxsxMrJL6hrfbLDZKRhoRg99jr9ZNx3yG0qHif5SEdXYQZi9WpgEhGbQlIuFVCBApsk6LMsvJdJ9+FU/JcUqEeFgH46g4tr3corXfRtXQLhnMrjCUv5CXTTa9ONSbTUOoZKUQkfbFCkHwFAusV9z3EpFhVKgCGUkdwLObPcoROTpVdz6/dnPzKfOPeFt4G2/Jj/y0sMC4LCsX4v5m4egSs+vDYivyd6ELspGXnAXNPPvcDNJLd4Zwsyr+s2junjOaObtCpqvCgV8Bpgolcs6MWhN/I+RcEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=atqMNlWX+T+eqfwkAYlvlYOcevIm2TENAWd92L1IQQo=;
+ b=YhGVR3TrBAoayVgvuBJI182vY6Ac+gemiQERuVCV8ii3OzeqzbLbPKkt8ulLjW4oz/03uCb3uH+EdJGzkc/SiWxhKthqAgmwmxvWvgHNEP5cRqFWkQeDh3vQb/yrmYE/pueE3gSVpmsK9ow0ITAeJFE/V06xt6eXYAg8HTIlwLQ=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by CY5PR21MB3759.namprd21.prod.outlook.com (2603:10b6:930:c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.3; Sun, 4 Dec
+ 2022 21:17:16 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817%4]) with mapi id 15.20.5924.004; Sun, 4 Dec 2022
+ 21:17:16 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        Long Li <longli@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: RE: [PATCH 1/1] scsi: storvsc: Fix swiotlb bounce buffer leak in
+ confidential VM
+Thread-Topic: [PATCH 1/1] scsi: storvsc: Fix swiotlb bounce buffer leak in
+ confidential VM
+Thread-Index: AQHZCBou05HjnyHB20+V5Kk6vu6BPq5eOq9A
+Date:   Sun, 4 Dec 2022 21:17:16 +0000
+Message-ID: <SA1PR21MB13353917AEDF678F5D3204B4BF199@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <1670183564-76254-1-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1670183564-76254-1-git-send-email-mikelley@microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=3a25623d-b338-4019-bede-5f023d1a5ed6;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-04T21:14:49Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|CY5PR21MB3759:EE_
+x-ms-office365-filtering-correlation-id: 16b2fa96-bea1-49a6-d30a-08dad63ceb74
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 95mB5vXfLNxj2YlxGM+t5taMlBlUpV0MsPQy9ewpm3u3R60yHPEjX4QRdEGTBGRWdls/w/2e2cYeJXyDuYmQ4B3EtHiP/YXniPNtkv2WQf4CpTlB7aF29srdNGIs4Ph6C5HuSDDFsLBZK6m/kQwR0G3Yh8/lDdIzYz7HylWKTW0BAoPCO5N1eoFRAb8ScSe0h5TiZHI3dInJbJu8SCiYfJYVRo7cm1y25RxGnSHo4s1woCyeT4pEvBkeAIndQ/ZDcdk6kZPkmp69gISggOCauyKqhatLWCbTf3EJHFVlNAGV0JLDn9nfLubcqFRq4rQTT2RqcrQHjCiI5DiQijKVjHepX/i6EmmRGHp+qx8VF/voVGhRde6ZA2efv1dUzOZ8FTfGMaYfYfNv0KWPZbsJolJ897mVtpU/N0VVJhF351vuuh4DEpGOqpTsFhRTcqfMiCE9Q5nnqh+7aZFjnCsXJby38nbuCbxcoh9E1yUaTcpMN0Tb+fZey4jXzNVgP2UQg9JFEacMTu7gnvdICEcZERwQ5CsusYyjl6YhSu4UaRk33/89MM4PrvCzpPKW7hjb0OearAA2jYZjQhBs6kWJU6ZAJxzEg1AwZT4efCz+5zErNart8gmcBjCUC425laqkJkd9bkilNNnNPICp/dwcfU4CnsKpTPhY3EbeoyW1fA3VLsIB1CveGS0O2qAYTg6AP/DbqB9f/9Rv5MWAaPyGNCvJLhILYSH3enL2gfY9ge/4P0FaYG/KTerSNwY6rt4L
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(366004)(136003)(396003)(376002)(451199015)(38100700002)(82960400001)(86362001)(8990500004)(41300700001)(5660300002)(8936002)(2906002)(38070700005)(82950400001)(122000001)(83380400001)(33656002)(76116006)(66476007)(66946007)(66446008)(478600001)(66556008)(316002)(110136005)(71200400001)(10290500003)(55016003)(8676002)(52536014)(186003)(7696005)(9686003)(6506007)(64756008)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RkfnvFALipoV3XgdiLxM/AXuR14B+O+fTlize+XvN09iU3BMdp4ynwJ6DBeu?=
+ =?us-ascii?Q?XR6kK1QOGzhAHt8ER1Sj5COCrwxuf0YT0W4MN4wiEf3t7bzcd5SYNkWtILu/?=
+ =?us-ascii?Q?JP+4CUXX7ef1MhPqYzX0qJQmdd4g8s3oXcF0i4XHPkuFHoeIwyVrkfLLh9Wa?=
+ =?us-ascii?Q?MLJGdLtZybVvOqgbWZUdY4K5th/lERHLKNXVcUXh79z6t+7d3nxZMVTZF48M?=
+ =?us-ascii?Q?9EYNjjySdaZQiOdCAVsADWFQpQsHwnf4tpyX/hpU5mdPjEaFmpExyfSIyTL3?=
+ =?us-ascii?Q?Bwnfc++n3cc1WK9VhdzHO6/ZG+oLPdgsva/mR0OQWiG8Onwx/+oClqIYvRTc?=
+ =?us-ascii?Q?HTgPbzhS51vp5L4PtnYnvJHD0r90zSjP9JC1ojcuRSIr3QlHWkufGTehCu4R?=
+ =?us-ascii?Q?pR7NxI41cfBpklEXc6t3/cqLAnmk9lmIM1BHnXIsrstAc1I1jlc3Rqld0mlO?=
+ =?us-ascii?Q?VNQblFo5QbD0eiAUW+wA1QFOLYB6yS+aizoMfZO2MrZssS2fQYV/jzl8trAZ?=
+ =?us-ascii?Q?nnmYY/REgl4Fifz+PJyHeWaQwGR7fXG6lb28XUYebxIvx/OOUNHIY6cvLkEb?=
+ =?us-ascii?Q?L2MwTB6PRjG07EiccWTXTP4iTnBTxiReFocFxEcL4c6guk79AYxBsTouj5sJ?=
+ =?us-ascii?Q?WxHhYxI7y8OX3fvP6puI5QZ5w/mCFO9Fcx4JluIqQ3SyTzcvomlbdZt5PGXx?=
+ =?us-ascii?Q?kblCzKdde864uOXTaPJoYD8bdl7m6pIBVj1wXifXwFWZaG50a/zZL0S66HCr?=
+ =?us-ascii?Q?3zdEG8rQNj7itdOSyYQPSg9CLmUoguEXmcxknUs+8Amv0KUrp47DlEsiiygB?=
+ =?us-ascii?Q?f6SXjQGtNDzcCYs/WYigSft1DIPWn7tj3tdSwD6UGvAh8vro+GPSjlgR5vyV?=
+ =?us-ascii?Q?SYcLZVtW5uS3V198Qd1SbqeCtVN/ERW3kfYHr3OTe59Ql6oa+NoZSMT6z+Nq?=
+ =?us-ascii?Q?7AEQtueaUcr3vTnffGYJJ8xoqxONHci1o7vPWg4e9HzleX70n0R0NtINRwuB?=
+ =?us-ascii?Q?X4/t40C93TCn1y62Sim+fMmc+QX+7A85DTPqtjhXZGdG99eoVO3nw4Ii5ICp?=
+ =?us-ascii?Q?qmguJG9ZQ2P/gRPmlyBRd8uqejz+saFUHX5eAipkNPVLFpDqp12Vvk45WAbb?=
+ =?us-ascii?Q?zR0QtZ3HnRwIdmmipCn/DTtA9JNC6sHb0qQHe8YZSESyl8fDul8PKj4CDJc7?=
+ =?us-ascii?Q?kqhDGCv0b72L5xKpvn3M4550l1Uj/WRUtJ1iz/DXyK65tP3QXriWGf5avsfb?=
+ =?us-ascii?Q?FVRa5c+e5O74wMPkljjNxI4JKgmyN6a09YTuYwJtoGFSAUA5d+g3MYbBFhCg?=
+ =?us-ascii?Q?D5RpGCLaG2/UfoY+SCEpA6aHmDaonKCwlmRDHomsWOZAFBc/YnGKLs+Dalx9?=
+ =?us-ascii?Q?m3ZSPZaGsPiHgYiZJhe53HDOrshe0MZWVIrxlnBRKGjteHj5T1fhmGWY+oWc?=
+ =?us-ascii?Q?0byl3mank64eDi4guB0F1YrjwgpBM521htFyDTeq5vyBBg4VtX909b8lFPWr?=
+ =?us-ascii?Q?Hd5EUFXCTS/TaMuX34wjKIHv4jA7GsFQ5/0FCrp7vffnouZkMWNIy1B3fgE7?=
+ =?us-ascii?Q?7aH8aFmtvwd+3ioaMI0HTFnuVmr8pnrH1gLTX+n0?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4zduT5aHd4vxQZL@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16b2fa96-bea1-49a6-d30a-08dad63ceb74
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2022 21:17:16.2717
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tUuMlbElI7XbtWVJqujXrBK/j98U3HEfcOVt6wy65pxZyKI2hR4r4zMOkM07QthwH5BHcXg8PNhbNX8j/O7Jsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR21MB3759
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,62 +125,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Michal,
-I was wondering if you could help me with the issue below.
+> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
+> Sent: Sunday, December 4, 2022 11:53 AM
+>=20
+> storvsc_queuecommand() maps the scatter/gather list using scsi_dma_map(),
+> which in a confidential VM allocates swiotlb bounce buffers. If the
+> I/O submission fails in storvsc_do_io(), the I/O is typically retried
+> by higher level code, but the bounce buffer memory is never freed.
+> The mostly like cause of I/O submission failure is a full VMBus
+> channel ring buffer, which is not uncommon under high I/O loads.
+> Eventually enough bounce buffer memory leaks that the confidential
+> VM can't do any I/O. The same problem can arise in a non-confidential
+> VM with kernel boot parameter swiotlb=3Dforce.
+>=20
+> Fix this by doing scsi_dma_unmap() in the case of an I/O submission
+> error, which frees the bounce buffer memory.
+>=20
+> Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for storvsc
+> driver")
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
 
-In short, I'm trying to add a new feature to netlink / ethtool that
-requires changes to the UAPI headers. I therefore need to update these
-headers in the ethtool userland program as well.
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
+Tested-by: Dexuan Cui <decui@microsoft.com>
 
-The problem I'm having is that I don't know the procedure for updating
-the headers, which is something I need to build my patch to ethtool on.
-
-I understand now this is not a straight copy of the kernel headers to
-the ethtool repository.
-
-Should I use some script / procedure / else?
-Or should I just post my patch without the headers? (I wonder how we can
-verify it though?)
-
-Any help on the matter would be very appreciated.
-
-Kind Regards,
-Piergiorgio
-
-On Sun, Dec 04, 2022 at 06:49:45PM +0100, Andrew Lunn wrote:
-> On Sun, Dec 04, 2022 at 05:13:22PM +0000, Russell King (Oracle) wrote:
-> > On Sun, Dec 04, 2022 at 03:38:37AM +0100, Piergiorgio Beruto wrote:
-> > 
-> > NAK. No description of changes.
-> 
-> Hi Piergiorgio
-> 
-> Look at the previous examples of this:
-> 
-> commit 41fddc0eb01fcd8c5a47b415d3faecd714652513
-> Author: Michal Kubecek <mkubecek@suse.cz>
-> Date:   Mon Jun 13 23:50:26 2022 +0200
-> 
->     update UAPI header copies
->     
->     Update to kernel v5.18.
->     
->     Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
-> 
-> > > diff --git a/uapi/linux/ethtool.h b/uapi/linux/ethtool.h
-> > > index 944711cfa6f6..5f414deacf23 100644
-> > > --- a/uapi/linux/ethtool.h
-> > > +++ b/uapi/linux/ethtool.h
-> > > @@ -11,14 +11,16 @@
-> > >   * Portions Copyright (C) Sun Microsystems 2008
-> > >   */
-> > >  
-> > > -#ifndef _LINUX_ETHTOOL_H
-> > > -#define _LINUX_ETHTOOL_H
-> > > +#ifndef _UAPI_LINUX_ETHTOOL_H
-> > > +#define _UAPI_LINUX_ETHTOOL_H
-> 
-> Maybe ask Michal Kubecek how he does this. It does not appear to be a
-> straight copy of the headers.
-> 
-> 	 Andrew
+I hope this fix can be included in v6.1.
