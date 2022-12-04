@@ -2,73 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681D8641FD6
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3D0641FDD
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiLDVZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 16:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
+        id S230343AbiLDVaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 16:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiLDVZk (ORCPT
+        with ESMTP id S229949AbiLDVax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 16:25:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B2013CD2
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 13:25:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E58EB60F0B
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 21:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D41DC4347C;
-        Sun,  4 Dec 2022 21:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670189137;
-        bh=Bi/TRXssAwVsJltOWPA8sXA9cwUUdSfeP8tnEuvZVPw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=qRpKoCM4Uwv/DACgaT9hfy3vX7t87xeOQMYtzuw6bTVK2rfz9z4pt9xwnL3a7xSFN
-         jIdEOSps113UvROo1YGZGXnsOpmQm9XZPR6MFiDAWKoLa56nzK0/qcllZUDOjIYCjn
-         iX2aRfDW+f0BXT1PpNd2wo4Fo9UNhzfZm3opVOtadgqTtgs+v9jxYViBKsacTcIoEn
-         mU2AjVtUH4R2pm1cqv76D16yoXMcyEex7rJUG0zHsg5dwvyrzR+Si07syK6ateaZHe
-         oJuq9L/vUDQ9HjrLZ++JttOEKNsyT/rs3SXCHfcRMir80rw9lHMzBB81QE0P0KLmFV
-         9QMKFSL6AhUsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A1EDC395EE;
-        Sun,  4 Dec 2022 21:25:37 +0000 (UTC)
-Subject: Re: [GIT PULL] perf/urgent for 6.1-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y4yo4EiAIGASFgX1@zn.tnic>
-References: <Y4yo4EiAIGASFgX1@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y4yo4EiAIGASFgX1@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v6.1_rc8
-X-PR-Tracked-Commit-Id: 517e6a301f34613bff24a8e35b5455884f2d83d8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0c3b5bcb484a659dd14466f92a073b57b2d3c1a5
-Message-Id: <167018913723.1549.5949629667762666402.pr-tracker-bot@kernel.org>
-Date:   Sun, 04 Dec 2022 21:25:37 +0000
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 4 Dec 2022 16:30:53 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E482E13E05;
+        Sun,  4 Dec 2022 13:30:52 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id gu23so23495016ejb.10;
+        Sun, 04 Dec 2022 13:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hF6oJVjQzaqdi8lDZeW1Bgv7sJLTmHA998bisnVrQiQ=;
+        b=DEqPrzaWmNjsFqVoVtTW6n0kjsZ383G6bN7tyytn+Hih9R0Vn62GZkHQ5UDEeYdQ81
+         wgx62Z1vyjeoSR/4B2QCefFayq8GTE+Lf4Sls9UPn31zZYwNYX7/IXImudOWaz5QfttW
+         bv20F/1qJieUe8EzjgzeQz9osMwe3W3MkI9Kec6RqcrO9HF748K4Ytul/Rpoo2q1xCYo
+         7BxYdQFx6aOZs+mf2Dj5mRLP706QIE77L7UXkfFcKTRmQ1aS9zoIzGiJnjWDnppdTbms
+         2uBbKsFe8V+htrIElFed53g4BpsC08Y3VcdAV6wZvNsjZf+eAmiCA0uFM4cxYbnhxXre
+         rrcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hF6oJVjQzaqdi8lDZeW1Bgv7sJLTmHA998bisnVrQiQ=;
+        b=o3sbx61oPnAkdmq3JqCqIOgK6FPQLK7A65AwyU7x8UpCY/75WR3i9cGx+7QopP2bVP
+         W51ulYcpQiXc7mEiUBh77GGnn94cSQCw2IBWJwhwtsEMItXbWS8N3HoKqj8l1h0AfNow
+         2YZB+I+NRJjUOLzp23utUc5KMT0z3qIHkagDvd3a9bbHsESVKy8Z21vfDfr/F/yihtY3
+         cYrW5EV83MZe1/Qibtt1vXWbGzsO51f7jNXPZtt516I5gLPQ6ZqWvWMNNAhHcpAcBoyF
+         IeSlYIwQoyfPGjneCx3+kivQjmjs7/iWNb1/RHAaGMo8fmCILHM2itx5In5ivn6Lsjhu
+         k24w==
+X-Gm-Message-State: ANoB5pkZMN5vMB9EgUrn/8VG8GCROThxJQhaG/fQgUTRH7Y9DlvuO0m4
+        GHlwQbxc99NjPMOdvl25/9g=
+X-Google-Smtp-Source: AA0mqf7wr8KOhAJiJRT5t2Zp8AH6w98wpfiQsrcLCNqg37TObbVqp6Kc9m1FAY8vCu/9d0TBTtfhxg==
+X-Received: by 2002:a17:906:b7c8:b0:7be:1164:2695 with SMTP id fy8-20020a170906b7c800b007be11642695mr33432645ejb.280.1670189451235;
+        Sun, 04 Dec 2022 13:30:51 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id n22-20020a05640206d600b0046bada4b121sm5528911edy.54.2022.12.04.13.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Dec 2022 13:30:50 -0800 (PST)
+Date:   Sun, 4 Dec 2022 22:30:59 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Michal Kubecek <mkubecek@suse.cz>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        andrew@lunn.ch
+Subject: Re: [PATCH net-next 1/2] ethtool: update UAPI files
+Message-ID: <Y40Rk6iIj6AnwKuY@gvm01>
+References: <cover.1670121214.git.piergiorgio.beruto@gmail.com>
+ <0f7042bc6bcd59b37969d10a40e65d705940bee0.1670121214.git.piergiorgio.beruto@gmail.com>
+ <Y4zVMj7rOkyA12uA@shell.armlinux.org.uk>
+ <Y4zduT5aHd4vxQZL@lunn.ch>
+ <Y40OEbeI3AuZ5hH2@gvm01>
+ <20221204212521.rjo5hgkmsq3spxzv@lion.mk-sys.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221204212521.rjo5hgkmsq3spxzv@lion.mk-sys.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 4 Dec 2022 15:04:16 +0100:
+On Sun, Dec 04, 2022 at 10:25:21PM +0100, Michal Kubecek wrote:
+> On Sun, Dec 04, 2022 at 10:16:01PM +0100, Piergiorgio Beruto wrote:
+> > Hello Michal,
+> > I was wondering if you could help me with the issue below.
+> > 
+> > In short, I'm trying to add a new feature to netlink / ethtool that
+> > requires changes to the UAPI headers. I therefore need to update these
+> > headers in the ethtool userland program as well.
+> > 
+> > The problem I'm having is that I don't know the procedure for updating
+> > the headers, which is something I need to build my patch to ethtool on.
+> > 
+> > I understand now this is not a straight copy of the kernel headers to
+> > the ethtool repository.
+> > 
+> > Should I use some script / procedure / else?
+> > Or should I just post my patch without the headers? (I wonder how we can
+> > verify it though?)
+> > 
+> > Any help on the matter would be very appreciated.
+> 
+> See https://www.kernel.org/pub/software/network/ethtool/devel.html for
+> guidelines (section "Submitting patches"). What we need are so-called
+> sanitized kernel headers, created by "make headers_install". The easiest
+> way to update them is using the ethtool-import-uapi script linked from
+> that page, usually "master" or "net-next" is the most appropriate
+> argument, depending on your target branch.
+> 
+> Michal
+Great, thank you Michal! That is exactly what I was looking for.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v6.1_rc8
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0c3b5bcb484a659dd14466f92a073b57b2d3c1a5
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kind Regards,
+Piergiorgio
