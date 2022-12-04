@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD6B642028
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 23:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CD0642029
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 23:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiLDW5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 17:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S230472AbiLDW7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 17:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiLDW5u (ORCPT
+        with ESMTP id S230161AbiLDW7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 17:57:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B459A6441;
-        Sun,  4 Dec 2022 14:57:46 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQMX32vyJz4wgq;
-        Mon,  5 Dec 2022 09:57:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670194662;
-        bh=5ZVv8riquE9NPFCtnSWv7/c+zCS9MBzN3Jm91GdcjPk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pkLVGdXiYF1K/B9wgTo0J9cC7+4tI1fXpi7PAVK84t7Ko9yOc2WFgEzrdvca+vq2e
-         8MQrweA68Ll79+UZYuEurTwN8zpFUhrU8nZPIgHvuECMoMq49DjWRpzYO5ihI+0gt0
-         8+r4oIfd6Wdxa31Bx0DMVqkbTj2XO64cOFOCgIhVQx4wwpEGFzrsxGPGxyXjIPRbaj
-         YFVwwypbXb4aBsgNnsxyjXrNlI12RmfBoUGCZjBqHrHl72ZP/J6+TtHLXtmRekdOeC
-         qH3MzbkOFilmZi8i0HMCgvwmWCaRdyrUFsea9qxL2MKKIJaZrQgC5QDiuvP27KhNFj
-         T5XkPPKdLpXOg==
-Date:   Mon, 5 Dec 2022 09:57:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Thierry Reding <treding@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>
-Subject: linux-next: manual merge of the pci tree with the arm-soc tree
-Message-ID: <20221205095738.607b9551@canb.auug.org.au>
+        Sun, 4 Dec 2022 17:59:24 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEAA10048
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 14:59:23 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id z23so622293vkb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 14:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U1YCWugnt7NNcwN1mLvIio05PcYTCT5nH/7JzPuEAF4=;
+        b=MeZNB9/YoNEJG11VARRGWae/1ItbIoyRu5aQ36YsOEIFBl+tv4RFRIPPcSVlt4uXg+
+         rBrzktWDyGBkjcPeDJ64CNwJLYUUJAPYYhQ+0+hNxEodZIcyakPwB+BPPUtg6a+6G1+g
+         X/pFg3jK9Cz1QBxXG1EQ65sMn80ePUeIXRqRGnuD/MUZBu/Fb+X8MqICRHfKLCcfPlMx
+         f7Xdk9fvcyi73Bc6oycAEBanlqELODr6wnMTmzr3+jxo96XQuFg2ns+XsOG2Vtd+d46r
+         34TyTzhfzWAPa3QPp5oRqSxIlKxM3VxCKph8Nwm64PySn+1p9w8HApHiwNEbuUNoSaVB
+         tGIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U1YCWugnt7NNcwN1mLvIio05PcYTCT5nH/7JzPuEAF4=;
+        b=Kes9rCieLM2uF/5GAlGppEIoCULA6/H38/0BujEMwIOkp9ZpBPsd41kKgmQ2vbN2kI
+         74X/wb5vmf7SrTQ2fJHOFBMM7Zi8N9yJXj3SfiLkQ1YP6U8j6/Ah1oLWiNLdXhxd8+R+
+         Nx6cX8Dv6F+J7MoZ4z0TzZAYYKK7h3cS/kMBW7HVq5+4P5+CuIACB1nmO/thA6Szzrsd
+         BW3cZ2+PIC31OCOrEbWRFwz3qi/0gsdg6OKbkRSIij90g4lHfNhZKJqovlFpeutVEEMh
+         dNR9DvLOiU/0+vduM2lr3symeJlWYBiPuTMu5PEBoGhSoVa64QVJFvrGke+i6fvshJeG
+         aIww==
+X-Gm-Message-State: ANoB5pmcqpwuB178WLrLGFQYznLnMiMAk6io4TYT8O0udEv7bVLYkTqY
+        mX60C33ghORbvVg5D6/DgiKx5iPSpzoMjv/6pbDLA3XncDhBPQ==
+X-Google-Smtp-Source: AA0mqf5x2PSpwgMuZHGI0b78Lrjpb6NlNe7Isuc6zHyZXrqZoLLufMiKNgYIEa8SLzR7fGAdy8XyYE8dK+xh80zTF9s=
+X-Received: by 2002:a05:6122:1243:b0:3bd:730b:ef5a with SMTP id
+ b3-20020a056122124300b003bd730bef5amr4334490vkp.29.1670194762270; Sun, 04 Dec
+ 2022 14:59:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wV==IJ36Bzw3DIqig+HF4rM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221202141630.41220-1-tcm1030@163.com> <20221202115954.a226f8ef3051266d04caff54@linux-foundation.org>
+In-Reply-To: <20221202115954.a226f8ef3051266d04caff54@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sun, 4 Dec 2022 15:58:46 -0700
+Message-ID: <CAOUHufZaL2S6Aa1ey3Mk+h+bGr2Tbg_LxOkjbuj87psukPe-gQ@mail.gmail.com>
+Subject: Re: [PATCH] mm/mempolicy: failed to disable numa balancing
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     tzm <tcm1030@163.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,48 +69,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wV==IJ36Bzw3DIqig+HF4rM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Dec 2, 2022 at 1:00 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Fri,  2 Dec 2022 22:16:30 +0800 tzm <tcm1030@163.com> wrote:
+>
+> > It will be failed to  disable numa balancing policy permanently by passing
+> > <numa_balancing=disable> to boot cmdline parameters.
+> > The numabalancing_override variable is int and 1 for enable -1 for disable.
+> > So, !enumabalancing_override will always be true, which cause this bug.
 
-Hi all,
+!enumabalancing_override is false when enumabalancing_override = -1
+(numa_balancing=disable).
 
-Today's linux-next merge of the pci tree got a conflict in:
+> That's really old code!
+>
+> > --- a/mm/mempolicy.c
+> > +++ b/mm/mempolicy.c
+> > @@ -2865,7 +2865,7 @@ static void __init check_numabalancing_enable(void)
+> >       if (numabalancing_override)
+> >               set_numabalancing_state(numabalancing_override == 1);
+> >
+> > -     if (num_online_nodes() > 1 && !numabalancing_override) {
+> > +     if (num_online_nodes() > 1 && (numabalancing_override == 1)) {
+> >               pr_info("%s automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl\n",
+> >                       numabalancing_default ? "Enabling" : "Disabling");
+> >               set_numabalancing_state(numabalancing_default);
+>
+> Looks right to me.  Mel?
+>
+> After eight years, I wonder if we actually need this.
 
-  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+NAK.
 
-between commit:
-
-  5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
-
-from the arm-soc tree and commit:
-
-  4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties=
-")
-
-from the pci tree.
-
-I didn't know how to fix this up, so I just used the latter (and so lost
-the addition of "ecam").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wV==IJ36Bzw3DIqig+HF4rM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONJeIACgkQAVBC80lX
-0GzWJwgAg3BG3dPKwiYyWDTU7i9vg+7PqA+23Qi7+tQTPxRGmUoMgk2CMmcyQWBn
-U4f+0eUOuwkXwEkIAplqnLnYoDBY4ELgybevgjZBArVWdCxAWTbAHEB20nIgvDin
-W49tsV2K6aG0nxV12BQkZ65441CogKFci934bDa9Mv5z4TZGAZxbxMavWsEq+0rn
-dsbKmtyUeBlDDUHZR8MQLcGCw9WeBPHjBW3xvj+0VbhoVbe0LD/wBn/DCmiDOIfU
-ukxxmhdtyCU/f3xMO+TKvbnO+/Vwu4ZshVsRRStRXX2LigMA0Gvs87E8U3kK2Thy
-ZKllvGxaSyWN29MFe3xvBgbvBv3WPA==
-=LVF7
------END PGP SIGNATURE-----
-
---Sig_/wV==IJ36Bzw3DIqig+HF4rM--
+The original code works as intended. This patch breaks my test with
+CONFIG_NUMA_BALANCING_DEFAULT_ENABLED=n and numa_balancing=enable.
