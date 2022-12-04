@@ -2,109 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BAB641E8D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AF5641E8E
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiLDSE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 13:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S230201AbiLDSFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 13:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiLDSEZ (ORCPT
+        with ESMTP id S230042AbiLDSFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 13:04:25 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7C7DECF;
-        Sun,  4 Dec 2022 10:04:24 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id n20so22930486ejh.0;
-        Sun, 04 Dec 2022 10:04:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bu3XWy6tub93+8T28fZ7KSUsVBshY587isxVpnn55EE=;
-        b=UtKQZXi7Ap5M4KANnUEzQMSXEXuyj+u8ba+yNcErwnODuM8Mr20LjlrNNnquWwQ6z0
-         ZRehkxNUu1iuI+wStiLwIgHTQuM7hCNADYqTPBR0avWh8bzboydHYHzLR+UFjUXyuqYp
-         GkVaAymjVTefP0NRgRblHBA1S7fEduITNLesYmUne0/etUtnp3S6Guj/GFdFWitCGE7g
-         0UzIl0Y1tuHYhczDq2Ow7L5nPr07CrrkTkUiNBtshF1PNTR5PqwScRsckjoPmZOIkfBE
-         09PD0t/ccPNDLF+/wvcFgPmzIQDw8nNArb/QjFLRYdYeP9YmVighEvWxplbtQwB6QISp
-         CaEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bu3XWy6tub93+8T28fZ7KSUsVBshY587isxVpnn55EE=;
-        b=bklDs3RODF6nuaNFNS5qFHtw0wROmbi05Be4I5z0bKbH2QsOZ5yFYo8NIniE/zIqfM
-         RhAdWA8J3Eo/lM0T+kyKI+/yAcbbhpe7ci58a0uyWVTTMT9+UEq2oUZ1QMYhc0hVmv7w
-         2oLFWGBxiPLLISss2nSyhDZWXKMZAGyX0JF08tdUaFLetG23E/mQ2uorwZslsgzEncnq
-         Fv4qTw8lFUogugH3xSiAuxyAYMfKFH47qw3etzb9gHGJUrS381iKZe+K/9T0WOCRZy8h
-         SuxvTzeBAFxp/z1jjWz9YQHQJbPY99JgOsCPbgs2y7C9x0+dhmBvP/9WBHQ36VeHh2J8
-         JHdA==
-X-Gm-Message-State: ANoB5pnuWjJ/3eIxFzkDiaQHsNSuILxEJ3BuhOvyoMmWo0LV92AMh7nF
-        fuNOFY+pbna3QXzMZP/pNeY=
-X-Google-Smtp-Source: AA0mqf7L2Yg49E7u1rwzidOIgrO9fy1zgNHiWQhYCZ8hCS5nrHUwv2yYhccJdXh6QcB0yewOnPzlIQ==
-X-Received: by 2002:a17:906:a1d6:b0:7c0:b284:13f6 with SMTP id bx22-20020a170906a1d600b007c0b28413f6mr13563772ejb.149.1670177063521;
-        Sun, 04 Dec 2022 10:04:23 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709060a1600b007c07dfb0816sm5340303ejf.215.2022.12.04.10.04.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 10:04:23 -0800 (PST)
-Date:   Sun, 4 Dec 2022 19:04:31 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next 2/4] phylib: Add support for 10BASE-T1S link
- modes and PLCA config
-Message-ID: <Y4zhL3AWfIx5pBoy@gvm01>
-References: <cover.1670119328.git.piergiorgio.beruto@gmail.com>
- <b2fffe32ffb0f6a6b4547e2e115bfad6c1139f70.1670119328.git.piergiorgio.beruto@gmail.com>
- <Y4zOok/KQPATE8+/@shell.armlinux.org.uk>
+        Sun, 4 Dec 2022 13:05:30 -0500
+Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63733DECF;
+        Sun,  4 Dec 2022 10:05:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=y7n0hCnLGy1zh+SrdpqxlWp8vDHcKpVOgMWTyUVHEaQ=; b=A0wRDCpBFBt2mvSCaPYoSuQcDN
+        f4aaXk7mu1f+GHWPClZ9jdgaDwmwCuXkI1ApIeFXaEbPbPK/GZZLJ/Y5BOqixCD5OtV3pk4wM1WbN
+        MjLtH98IEOFFlw43yueO0Df4gFwGrQ1PmS2tBNobhLGAiwNViNJqKptN1OWXiwoFI+sk97L681aP9
+        lUEaQ9RyUF1mulgo3Mcmip8YPYu4jC7Irq/q/QTbIn9i7rb6hFueWUZpUv4aDn5GMxaKV55QWgS5X
+        WhvGUoE9ktjMC5IENU0wefbFz5v9pM1jXBjUWukP+gzsHtKY5wkJ3PAtzg9K2WYjNmK42mgwGBn47
+        KPOxGklg==;
+Received: from dg by mx.treblig.org with local (Exim 4.94.2)
+        (envelope-from <dg@treblig.org>)
+        id 1p1tMf-00534x-B2; Sun, 04 Dec 2022 18:05:21 +0000
+Date:   Sun, 4 Dec 2022 18:05:21 +0000
+From:   "Dr. David Alan Gilbert" <dave@treblig.org>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     ojeda@kernel.org, Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Adam Bratschi-Kaye <ark.email@gmail.com>
+Subject: Re: [PATCH v2 20/28] rust: str: add `Formatter` type
+Message-ID: <Y4zhYWNIaGtOH5u6@gallifrey>
+References: <20221202161502.385525-1-ojeda@kernel.org>
+ <20221202161502.385525-21-ojeda@kernel.org>
+ <Y4y/ovfF3len/22J@gallifrey>
+ <CANeycqrT69HJWEBZwbuhTehSy1qFF7A4q38cb5TqU1yf=nMLOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y4zOok/KQPATE8+/@shell.armlinux.org.uk>
+In-Reply-To: <CANeycqrT69HJWEBZwbuhTehSy1qFF7A4q38cb5TqU1yf=nMLOQ@mail.gmail.com>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/5.10.0-12-amd64 (x86_64)
+X-Uptime: 17:58:55 up 268 days,  4:24,  1 user,  load average: 0.18, 0.09,
+ 0.03
+User-Agent: Mutt/2.0.5 (2021-01-21)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 04:45:22PM +0000, Russell King (Oracle) wrote:
-> Hi,
+* Wedson Almeida Filho (wedsonaf@gmail.com) wrote:
+> On Sun, 4 Dec 2022 at 15:41, Dr. David Alan Gilbert <dave@treblig.org> wrote:
+> >
+> > * ojeda@kernel.org (ojeda@kernel.org) wrote:
+> > > From: Wedson Almeida Filho <wedsonaf@gmail.com>
+> > >
+> > > Add the `Formatter` type, which leverages `RawFormatter`,
+> > > but fails if callers attempt to write more than will fit
+> > > in the buffer.
+> > >
+> > > In order to so, implement the `RawFormatter::from_buffer()`
+> > > constructor as well.
+> > >
+> > > Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> > > Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> > > Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> > > Reviewed-by: Gary Guo <gary@garyguo.net>
+> > > [Reworded, adapted for upstream and applied latest changes]
+> > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > > ---
+> > >  rust/kernel/str.rs | 57 ++++++++++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 57 insertions(+)
+> > >
+> > > diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> > > index a995db36486f..ce207d1b3d2a 100644
+> > > --- a/rust/kernel/str.rs
+> > > +++ b/rust/kernel/str.rs
+> > > @@ -406,6 +406,23 @@ impl RawFormatter {
+> > >          }
+> > >      }
+> > >
+> > > +    /// Creates a new instance of [`RawFormatter`] with the given buffer.
+> > > +    ///
+> > > +    /// # Safety
+> > > +    ///
+> > > +    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+> > > +    /// for the lifetime of the returned [`RawFormatter`].
+> > > +    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+> > > +        let pos = buf as usize;
+> > > +        // INVARIANT: We ensure that `end` is never less then `buf`, and the safety requirements
+> > > +        // guarantees that the memory region is valid for writes.
+> > > +        Self {
+> > > +            pos,
+> > > +            beg: pos,
+> > > +            end: pos.saturating_add(len),
+> > > +        }
+> > > +    }
+> > > +
+> > >      /// Returns the current insert position.
+> > >      ///
+> > >      /// N.B. It may point to invalid memory.
+> > > @@ -439,3 +456,43 @@ impl fmt::Write for RawFormatter {
+> > >          Ok(())
+> > >      }
+> > >  }
+> > > +
+> > > +/// Allows formatting of [`fmt::Arguments`] into a raw buffer.
+> > > +///
+> > > +/// Fails if callers attempt to write more than will fit in the buffer.
+> > > +pub(crate) struct Formatter(RawFormatter);
 > 
-> On Sun, Dec 04, 2022 at 03:30:52AM +0100, Piergiorgio Beruto wrote:
-> > diff --git a/drivers/net/phy/phy-core.c b/drivers/net/phy/phy-core.c
-> > index 5d08c627a516..5d8085fffffc 100644
-> > --- a/drivers/net/phy/phy-core.c
-> > +++ b/drivers/net/phy/phy-core.c
-> > @@ -13,7 +13,7 @@
-> >   */
-> >  const char *phy_speed_to_str(int speed)
-> >  {
-> > -	BUILD_BUG_ON_MSG(__ETHTOOL_LINK_MODE_MASK_NBITS != 99,
-> > +	BUILD_BUG_ON_MSG(__ETHTOOL_LINK_MODE_MASK_NBITS != 102,
-> >  		"Enum ethtool_link_mode_bit_indices and phylib are out of sync. "
-> >  		"If a speed or mode has been added please update phy_speed_to_str "
-> >  		"and the PHY settings array.\n");
+> Here we mention that `Formatter` fails if callers attempt to write
+> more than will fit in the buffer.
 > 
-> I think you need to update settings[] in this file as well.
-Oh, sure. I've just added the following:
+> This is in contrast with `RawFormatter`, which doesn't fail in such
+> cases. There's also a comment there explaining it (not visible in this
+> patch because it's already there), but I reproduce below:
+> 
+> /// Allows formatting of [`fmt::Arguments`] into a raw buffer.
+> ///
+> /// It does not fail if callers write past the end of the buffer so
+> that they can calculate the
+> /// size required to fit everything.
+> ///
+> /// # Invariants
+> ///
+> /// The memory region between `pos` (inclusive) and `end` (exclusive)
+> is valid for writes if `pos`
+> /// is less than `end`.
+> pub(crate) struct RawFormatter {
+> 
+> `RawFormatter` is used to implement the "%pA" printf specifier, which
+> requires this behaviour.
+> 
+> > > +
+> > > +impl Formatter {
+> > > +    /// Creates a new instance of [`Formatter`] with the given buffer.
+> > > +    ///
+> > > +    /// # Safety
+> > > +    ///
+> > > +    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+> > > +    /// for the lifetime of the returned [`Formatter`].
+> > > +    #[allow(dead_code)]
+> > > +    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+> > > +        // SAFETY: The safety requirements of this function satisfy those of the callee.
+> > > +        Self(unsafe { RawFormatter::from_buffer(buf, len) })
+> > > +    }
+> > > +}
+> > > +
+> > > +impl Deref for Formatter {
+> > > +    type Target = RawFormatter;
+> > > +
+> > > +    fn deref(&self) -> &Self::Target {
+> > > +        &self.0
+> > > +    }
+> > > +}
+> > > +
+> > > +impl fmt::Write for Formatter {
+> > > +    fn write_str(&mut self, s: &str) -> fmt::Result {
+> > > +        self.0.write_str(s)?;
+> > > +
+> > > +        // Fail the request if we go past the end of the buffer.
+> >
+> > Reading this for the first time, I'm surprised by this, perhaps a
+> > bit more comment is needed?  I was expecting that nothing would
+> > let pos pass end.
+> 
+> Given the comments I highlight above, do you think we still need more?
+> 
+> (My impression is that you're reading this without the context I tried
+> to explain above, and this context may perhaps be sufficient.)
 
-	PHY_SETTING(     10, FULL,     10baseT1S_Full		),
-	PHY_SETTING(     10, HALF,     10baseT1S_Half		),
-	PHY_SETTING(     10, HALF,     10baseT1S_P2MP_Half	),
+Thanks for the pointer; I guess I find it trickier when I can't see the
+type in self.0 to immediately see it's RawFormatter, and 'Raw' is
+abstract enough to need to go hunt to see it's behaviour.
 
-I will amend the patch after I reviewed all the feedback.
+With that context, I wouldn't object to what's there, but how about
+something like:
 
-Thanks,
-Piergiorgio
+      // RawFormatter (self.0) still updates pos if the buffer
+      // is too small, but doesn't fail - we want to fail the request.
+
+Dave
+
+> Thanks,
+> -Wedson
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
