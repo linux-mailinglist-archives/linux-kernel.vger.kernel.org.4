@@ -2,108 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E193641CD4
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 13:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0398641CDE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 13:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiLDMMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 07:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S230106AbiLDMTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 07:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiLDMMh (ORCPT
+        with ESMTP id S229959AbiLDMTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 07:12:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926AF17ABA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 04:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670155894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1JxOufhWg2/q5pW/704na++qHz+lwSgqzP8cOwq2c60=;
-        b=fDR4FQpwWwC9cbu6tG7AKw4SqKzP341qBxFy7XBiyefoC9Dfs+9KFiaqKn7Q20wjyVeUgP
-        sUCoNQKMp64vno1lwjq0/hZNjES7KjPYCBEP8ns2cMEmhBGSNRdzvC1YCAT4geilC2NAiA
-        o8Fe3AZKu2efEx3KGaorrKtlhswGALQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-75-5Kn7jIqNMaOlqQDvhbxhBg-1; Sun, 04 Dec 2022 07:11:29 -0500
-X-MC-Unique: 5Kn7jIqNMaOlqQDvhbxhBg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90F9F3C0D181;
-        Sun,  4 Dec 2022 12:11:28 +0000 (UTC)
-Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 96A6E2166B29;
-        Sun,  4 Dec 2022 12:11:27 +0000 (UTC)
-Date:   Sun, 4 Dec 2022 20:11:23 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Wupeng Ma <mawupeng1@huawei.com>
-Cc:     akpm@linux-foundation.org, tj@kernel.org, dennis@kernel.org,
-        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next 1/1] percpu: cleanup invalid assignment to err in
- pcpu_alloc
-Message-ID: <Y4yOMmnrT772wFSL@MiWiFi-R3L-srv>
-References: <20221204031430.662169-1-mawupeng1@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221204031430.662169-1-mawupeng1@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 4 Dec 2022 07:19:15 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7879413F7E;
+        Sun,  4 Dec 2022 04:19:12 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxSuk+kIxjLxYDAA--.4064S3;
+        Sun, 04 Dec 2022 20:19:10 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbuA8kIxjkmMlAA--.26442S2;
+        Sun, 04 Dec 2022 20:19:08 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     loongarch@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] docs: Correct the arch name of LoongArch
+Date:   Sun,  4 Dec 2022 20:18:45 +0800
+Message-Id: <1670156327-9631-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxbuA8kIxjkmMlAA--.26442S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZrW7Zry8XFW7KFyxtr4ruFg_yoW5trW8pa
+        s7Zrnxtrn8Ar1qk34kXFnrXF4UJa98Wa1qgr1jyw10gF4kCF13Aa1ayFs8Z3Z5XrWxXFW8
+        Wrs2qryYyF1UA3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
+        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/22 at 11:14am, Wupeng Ma wrote:
-> From: Ma Wupeng <mawupeng1@huawei.com>
-> 
-> Assignment to err if is_atomic is true will never be used since warn
-> message can only be shown if is_atomic is false after label fail. So drop
-> it.
-> 
-> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-> ---
->  mm/percpu.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/mm/percpu.c b/mm/percpu.c
-> index acd78da0493b..df86d79325b2 100644
-> --- a/mm/percpu.c
-> +++ b/mm/percpu.c
-> @@ -1817,10 +1817,8 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
->  
->  	spin_unlock_irqrestore(&pcpu_lock, flags);
->  
-> -	if (is_atomic) {
-> -		err = "atomic alloc failed, no space left";
-> +	if (is_atomic)
->  		goto fail;
-> -	}
+Based on git.lwn.net/linux.git docs-next
 
-This is good catch. But I think Dennis may not like this way because he
-added the message intentionally in commit 11df02bf9bc1 ("percpu: resolve
-err may not be initialized in pcpu_alloc").
+Tiezhu Yang (2):
+  Documentation/features-refresh.sh: Only sed the beginning "arch" of
+    ARCH_DIR
+  Documentation/features: Use loongarch instead of loong
 
-Can we change the conditional checking in fail part as below?
+ Documentation/features/core/cBPF-JIT/arch-support.txt              | 2 +-
+ Documentation/features/core/eBPF-JIT/arch-support.txt              | 2 +-
+ Documentation/features/core/generic-idle-thread/arch-support.txt   | 2 +-
+ Documentation/features/core/jump-labels/arch-support.txt           | 2 +-
+ Documentation/features/core/thread-info-in-task/arch-support.txt   | 2 +-
+ Documentation/features/core/tracehook/arch-support.txt             | 2 +-
+ Documentation/features/debug/KASAN/arch-support.txt                | 2 +-
+ Documentation/features/debug/debug-vm-pgtable/arch-support.txt     | 2 +-
+ Documentation/features/debug/gcov-profile-all/arch-support.txt     | 2 +-
+ Documentation/features/debug/kcov/arch-support.txt                 | 2 +-
+ Documentation/features/debug/kgdb/arch-support.txt                 | 2 +-
+ Documentation/features/debug/kmemleak/arch-support.txt             | 2 +-
+ Documentation/features/debug/kprobes-on-ftrace/arch-support.txt    | 2 +-
+ Documentation/features/debug/kprobes/arch-support.txt              | 2 +-
+ Documentation/features/debug/kretprobes/arch-support.txt           | 2 +-
+ Documentation/features/debug/optprobes/arch-support.txt            | 2 +-
+ Documentation/features/debug/stackprotector/arch-support.txt       | 2 +-
+ Documentation/features/debug/uprobes/arch-support.txt              | 2 +-
+ Documentation/features/debug/user-ret-profiler/arch-support.txt    | 2 +-
+ Documentation/features/io/dma-contiguous/arch-support.txt          | 2 +-
+ Documentation/features/locking/cmpxchg-local/arch-support.txt      | 2 +-
+ Documentation/features/locking/lockdep/arch-support.txt            | 2 +-
+ Documentation/features/locking/queued-rwlocks/arch-support.txt     | 2 +-
+ Documentation/features/locking/queued-spinlocks/arch-support.txt   | 2 +-
+ Documentation/features/perf/kprobes-event/arch-support.txt         | 2 +-
+ Documentation/features/perf/perf-regs/arch-support.txt             | 2 +-
+ Documentation/features/perf/perf-stackdump/arch-support.txt        | 2 +-
+ Documentation/features/sched/membarrier-sync-core/arch-support.txt | 2 +-
+ Documentation/features/sched/numa-balancing/arch-support.txt       | 2 +-
+ Documentation/features/scripts/features-refresh.sh                 | 2 +-
+ Documentation/features/seccomp/seccomp-filter/arch-support.txt     | 2 +-
+ Documentation/features/time/arch-tick-broadcast/arch-support.txt   | 2 +-
+ Documentation/features/time/clockevents/arch-support.txt           | 2 +-
+ Documentation/features/time/context-tracking/arch-support.txt      | 2 +-
+ Documentation/features/time/irq-time-acct/arch-support.txt         | 2 +-
+ Documentation/features/time/virt-cpuacct/arch-support.txt          | 2 +-
+ Documentation/features/vm/ELF-ASLR/arch-support.txt                | 2 +-
+ Documentation/features/vm/PG_uncached/arch-support.txt             | 2 +-
+ Documentation/features/vm/THP/arch-support.txt                     | 2 +-
+ Documentation/features/vm/TLB/arch-support.txt                     | 2 +-
+ Documentation/features/vm/huge-vmap/arch-support.txt               | 2 +-
+ Documentation/features/vm/ioremap_prot/arch-support.txt            | 2 +-
+ Documentation/features/vm/pte_special/arch-support.txt             | 2 +-
+ 43 files changed, 43 insertions(+), 43 deletions(-)
 
-diff --git a/mm/percpu.c b/mm/percpu.c
-index 27697b2429c2..0ac55500fad9 100644
---- a/mm/percpu.c
-+++ b/mm/percpu.c
-@@ -1897,7 +1897,7 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
- fail:
- 	trace_percpu_alloc_percpu_fail(reserved, is_atomic, size, align);
- 
--	if (!is_atomic && do_warn && warn_limit) {
-+	if (do_warn && warn_limit) {
- 		pr_warn("allocation failed, size=%zu align=%zu atomic=%d, %s\n",
- 			size, align, is_atomic, err);
- 		dump_stack();
+-- 
+2.1.0
 
