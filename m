@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB04641DFC
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 17:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B392641DFF
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 17:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiLDQn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 11:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
+        id S230201AbiLDQnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 11:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiLDQnZ (ORCPT
+        with ESMTP id S230184AbiLDQn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 11:43:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A4815707;
-        Sun,  4 Dec 2022 08:43:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C740B80ACA;
-        Sun,  4 Dec 2022 16:43:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 719BFC433D6;
-        Sun,  4 Dec 2022 16:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670172201;
-        bh=gqymyFsKgInak7fZfK0hJ85X9i/0voKikaTVsDdR+dc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GU12FKoaaDigDDtDEnc9weZ1yNQGiAb+0gMBpgPsyzXTvDhYFkygaUYM+6WB1XYpt
-         IjJ5Wd+yxlOgS55PiAvOFCnuXkuCIeLqIDbLD5q62CXTF2071yUkbR87xO6YgcjIkI
-         UhgjmALKKl9wZGusu8BquXmEtXFTvQVKXHl3OUbbtaV90qqcZKYcTjIJWMOk+2q4Ie
-         xLof8fuVF5dChZb/35ZAcUlA2PQzGQ2EWxdllMKmS2q+60r0kq6a+8NT4ZDT/7MrTq
-         0dkRxnVQFg23z1tG/GBr4Be7xE/Cjbq2K4BargyHtO+Xj6am+1wSVoNfaEPTGRrxoB
-         3BLgKdA/9njSQ==
-Date:   Sun, 4 Dec 2022 16:43:21 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: edt-ft5x06 - always do msleep(300) during
- initialization
-Message-ID: <Y4zOKRhE1SY6NeD7@sirena.org.uk>
-References: <20221202105800.653982-1-linux@rasmusvillemoes.dk>
- <Y4pCtm4J3HWhYl8/@nixie71>
+        Sun, 4 Dec 2022 11:43:29 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D9C15710
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 08:43:28 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id bs21so15329918wrb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 08:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gT/B/EAWvvQ3x+0gmDPuocEhB6PCpHAkErzF+d1wppY=;
+        b=GZ1kDmpbbIPKd0G/oggHqKbaOzNeRecnfrW9VNrGs/KovxgXNa2vcg/54YMCTO2Xai
+         pI96qy/5HEI/+1OEPKKQPGrTKkCuPipVBy5gMXKeI9K5J2f/Jyo6G1p1U2O9QOKG7wKE
+         P4XqqO4dkq8KBeql5lJa1NWUBNZl+mQCWqbc1whrC5nA4giONxRyIzIUuYx7VnCnrboJ
+         Sm93EcBT7B8RCSH5v+IZF5Bwfa4yfnD4UsK7QCI/W0B/KOqU0pNcJFtl6iuyjx5T7B8V
+         fKPy5ReHyk9AAFDcx9/CMoGJ1XKEImc0Rc8SlYM61N9nEIE0IyDRCwR9fMbI6nVQ9nX8
+         JFnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gT/B/EAWvvQ3x+0gmDPuocEhB6PCpHAkErzF+d1wppY=;
+        b=FLMostMaRq9QzVxriPVBh7+pQO4gdyvSpvQsExwsuSRmqOCWwDFykzIKAna3uP0er1
+         jiacuYPvGyKpKmvC1gYQOTo8yXgbz3o7jS5NVJDQnE/9FCC7d4XbpWYmyLFtNZLtTHbJ
+         GiZIYBel9XFLroKxP1qoLxkUcYrG74EZXdAGR7pKMlGvGo8918Ysr/yzKsoqFdsaKSZF
+         zIBzaH9Mm+uZ+BDhSbS1MkkYLhDB/SfhHVuj9bqeAXYgLCxlHr8rVbjNOAbNig72iUvr
+         D9AXqXZ6aFz+h8LrXVCyajCYtJg4LSCj3fB/XUtznGBOFZMZW75PgbkvC5VhpmUvi4pN
+         Bc1g==
+X-Gm-Message-State: ANoB5pnWBLucwUX+RdS8pH3ssGucj6SzwWtDBJ4t9iq83nOe+CnSqPTu
+        3qy+8cWgWLW0NmO5M9xGfjnaAQ==
+X-Google-Smtp-Source: AA0mqf4sAuxjvaOBDZhtrGGYt7BstKJKEBiKdUr3ZkgAhbTJspC6aS7UljKY//5yJR5pedqGj15Pqw==
+X-Received: by 2002:adf:f5c9:0:b0:242:10ac:e8c with SMTP id k9-20020adff5c9000000b0024210ac0e8cmr22318955wrp.67.1670172207444;
+        Sun, 04 Dec 2022 08:43:27 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bs4-20020a056000070400b0023677081f3asm12202573wrb.42.2022.12.04.08.43.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Dec 2022 08:43:26 -0800 (PST)
+Message-ID: <0a91ac56-f888-8127-8a1e-69519223177c@linaro.org>
+Date:   Sun, 4 Dec 2022 17:43:25 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oH7nLYaKaHj5K9Ew"
-Content-Disposition: inline
-In-Reply-To: <Y4pCtm4J3HWhYl8/@nixie71>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: narrow interrupts for
+ SC8280XP, SM6350 and SM8450
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>
+References: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16/11/2022 12:31, Krzysztof Kozlowski wrote:
+> Narrow number of interrupts per variants: SC8280XP, SM6350 and SM8450.
+> The compatibles are already used and described.  They only missed the
+> constraints of number of interrupts.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---oH7nLYaKaHj5K9Ew
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied, thanks
 
-On Fri, Dec 02, 2022 at 12:23:50PM -0600, Jeff LaBundy wrote:
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> I think the right solution is to introduce a variant of regulator_enable()
-> which does not return until a delay passes, where that delay is specified
-> in the regulator's child node. Unless something like this exists?
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-regulator_enable() does not return until the regulator is ready,
-if it returns earlier that is a bug in the driver for the
-regulator or how it is configured on the board.
-
---oH7nLYaKaHj5K9Ew
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOMziUACgkQJNaLcl1U
-h9DBfgf+I3lx2DKSUXu8lTOnmId6zd5lL/YcTthMgwjcx3+ga6Bv8jdTSzBvDqX1
-ED8HFf/e6cK2Dh9qs60vSw35qQsjO9cd0PcBVRqTRF9jec5ROznyvWxsHEmOzSQx
-frsQGz4udnMGFe12oQT/NVNhL1iJecgSuNDQBzHMOVqfFqwNnT8o9br3hNvjMABc
-C3bEDDzeVjaSDtYHA8kK4pxFq3eHylOsmOSpHgpgigegzyUgEF1j+nLwUpWaEthv
-Z97p5+33LiFCHqaDPOlfvv0PMbuOueDqytqmIlLD1VoJKLqFwqxdkB+7brHRIr4I
-haAFV1hqJmuERoASif1M3rK0qmYkyA==
-=3Mqy
------END PGP SIGNATURE-----
-
---oH7nLYaKaHj5K9Ew--
