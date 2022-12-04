@@ -2,104 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0B8641D2F
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 14:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A55641D32
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 14:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiLDNT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 08:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S229986AbiLDNWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 08:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiLDNT5 (ORCPT
+        with ESMTP id S229539AbiLDNWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 08:19:57 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88BE175B1
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 05:19:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 4 Dec 2022 08:22:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DF4175B3;
+        Sun,  4 Dec 2022 05:22:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQ6jL2GR1z4wgr;
-        Mon,  5 Dec 2022 00:19:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1670159990;
-        bh=O6WIIUv4HAQEWxuJH3CwIfKqhsQR7d/ljcXdPZYuOVE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jeb2GVqo//4HfOkaxp4/iSYycoFPN2jVnxhOLq0IM9tMWEOQrpu6SSoSqLmCy7P9v
-         UlyLLxy22Q9/aLLFeIGsGoKH/twMufWsinXLm3YALRYEL/1jNGpR6NIKGq8M2/WyN0
-         7YAbXzjXuPZ+hWOIEJJtbiY08vrC8FxDSGHSpjTCSovLzySBIAqURj0dSwWtM9kbuH
-         ecGkmeA7nQB/oPfFkkxuH9ObUKxQygk2Bbcd7jiBjzz3Cw/LyJWVa9VYsQx0oYXwG/
-         sh43eJzIeadF56bDu/K4dD5QtQRK8WnZKJrGlZHsVu3eCwganuCw9BRRFSFlsh4or3
-         pWx/w3heERBGQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-6 tag
-Date:   Mon, 05 Dec 2022 00:19:45 +1100
-Message-ID: <87sfhvs3v2.fsf@mpe.ellerman.id.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B1C160DEB;
+        Sun,  4 Dec 2022 13:22:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B45C433D6;
+        Sun,  4 Dec 2022 13:22:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670160123;
+        bh=/N4+1ICTq4Tnoftodb+i7fsD1R/4aMkMhsB2THYI6d4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KTAOHpmKu5V1ZB3eUCqaBq7rVAEbxd+dr3k0cJ8pp9eU57ovrJPpnMQ1dk0/JCBi7
+         sPWz5mdX/g9FbtC+Fxslg9dttAi1Xl7wCDcd9JEmcs9XRIvMIsiEQ7DOHN+XWa23If
+         MDHCW39VeWfw88R3YiHVR29F9NIqnu12fqRbP/b3392+w87qxembDatMRzqTr+sctJ
+         ZHJZ7kXkfQ8n7Li/gZC0RBtoBrllDLkYtd7u1DAyOIPdNOUYUUVgYBxJBz4/XtKh8+
+         DbC1NNP2wdu3Ps0qgV7WO8vuKT6gBRfj9U/q2P9+qwG0TO5JREX1YJrXv/zLHjmC/k
+         DevFwms+FRPWg==
+Date:   Sun, 4 Dec 2022 15:21:53 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-rdma@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Subject: Re: [PATCH v2] infiniband: disable IB HW for UML
+Message-ID: <Y4ye8YOWk0V/BqKL@unreal>
+References: <20221202211940.29111-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202211940.29111-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+On Fri, Dec 02, 2022 at 01:19:40PM -0800, Randy Dunlap wrote:
+> Disable all of drivers/infiniband/hw/ for UML builds until someone
+> needs it and provides patches to support it.
+> 
+> This prevents build errors in hw/qib/qib_wc_x86_64.c.
+> 
+> Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Suggested-by: Leon Romanovsky <leon@kernel.org>
+> Cc: Jason Gunthorpe <jgg@nvidia.com>
+> Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+> Cc: Christoph Hellwig <hch@infradead.org>
+> Cc: linux-rdma@vger.kernel.org
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: linux-um@lists.infradead.org
+> ---
+> v2: just disable infiniband/hw/, not all of infiniband.
+> 
+>  drivers/infiniband/Kconfig |    2 ++
+>  1 file changed, 2 insertions(+)
 
-Hi Linus,
+I added rdmavt to the mix and applied.
+https://lore.kernel.org/linux-rdma/20221130200958.25305-1-rdunlap@infradead.org/
 
-Please pull some more powerpc fixes for 6.1:
-
-The following changes since commit eb761a1760bf30cf64e98ee8d914866e62ec9e8a:
-
-  powerpc: Fix writable sections being moved into the rodata region (2022-11-16 21:37:14 +1100)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.1-6
-
-for you to fetch changes up to 2e7ec190a0e38aaa8a6d87fd5f804ec07947febc:
-
-  powerpc/64s: Add missing declaration for machine_check_early_boot() (2022-11-26 00:25:32 +1100)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.1 #6
-
- - Fix oops in 32-bit BPF tail call tests
- - Add missing declaration for machine_check_early_boot()
-
-Thanks to: Christophe Leroy, Naveen N. Rao.
-
-- ------------------------------------------------------------------
-Christophe Leroy (1):
-      powerpc/bpf/32: Fix Oops on tail call tests
-
-Michael Ellerman (1):
-      powerpc/64s: Add missing declaration for machine_check_early_boot()
+diff --git a/drivers/infiniband/Kconfig b/drivers/infiniband/Kconfig
+index 6ee97c898231..a5827d11e934 100644
+--- a/drivers/infiniband/Kconfig
++++ b/drivers/infiniband/Kconfig
+@@ -95,8 +95,8 @@ source "drivers/infiniband/hw/qedr/Kconfig"
+ source "drivers/infiniband/hw/qib/Kconfig"
+ source "drivers/infiniband/hw/usnic/Kconfig"
+ source "drivers/infiniband/hw/vmw_pvrdma/Kconfig"
+-endif # !UML
+ source "drivers/infiniband/sw/rdmavt/Kconfig"
++endif # !UML
+ source "drivers/infiniband/sw/rxe/Kconfig"
+ source "drivers/infiniband/sw/siw/Kconfig"
+ endif
+(END)
 
 
- arch/powerpc/include/asm/interrupt.h |  1 +
- arch/powerpc/net/bpf_jit_comp32.c    | 52 ++++++++------------
- 2 files changed, 22 insertions(+), 31 deletions(-)
------BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmOMnkwACgkQUevqPMjh
-pYC6iA//cPx4MT/SddmFB4bC9Vxp0lBUxu9zcepbWdsvVK/X1+eSHtPVFdfXdxYq
-DhfHuEHizo6pKGYZnSYXjAG8/0pUQrKvnopgX0dNHtPvXSyRdeMyW10oiaweUa5v
-WSRhKf6Uy+9cw1ZS9wwAAtssiLXt2rmV/xEGb9hs7o8NAW27067LKfntCkd8++9M
-bs5V74c4X1WY1iJ86lxH3CYvOasZ/R7f46FeAu8KXX2n7+rlt1SOEnA2zaYtPYZ0
-00dOCQpN5RuwCEjixJ9mFUZIJ+gL9AgjoOVF3lAGE6Ro2fyy/XRrh4BDnUCpfLhY
-vylKDdy6BACz9vxQiY/phvWn//66GaLb2wbf5vhbH7Wc91ouMJlwh9g0JvD6ViRb
-tAt4OOvRuOgenmpeigWUpJGpvX71Ib+sfPxpnmEwZDgTvt+aIxb0bgbEewgU/9Fz
-BD89DxjS3lsj+B9vUYhXOSdkKbJg3B4MLcQP//0E2QWiHMTvCSuB8xoWNK68J6/D
-3DnMVJkbvb0IrF0Q0rTXBzj1aMosc3dbwM/ezu5Zs3DK7/GWcRw4noKyWUXI6/NF
-XB/R2xhxDnOyT/oZF0ssQzbA4rh1E4m9zj/RTrgn12SprT67p1sKQ5ppWPTTyd65
-x3pCgocIzZvJc9S1ExmpZ9Seo9LQZxqXEsIzTqVU+5UjzFYC6tk=
-=3xA+
------END PGP SIGNATURE-----
+
+> 
+> diff -- a/drivers/infiniband/Kconfig b/drivers/infiniband/Kconfig
+> --- a/drivers/infiniband/Kconfig
+> +++ b/drivers/infiniband/Kconfig
+> @@ -78,6 +78,7 @@ config INFINIBAND_VIRT_DMA
+>  	def_bool !HIGHMEM
+>  
+>  if INFINIBAND_USER_ACCESS || !INFINIBAND_USER_ACCESS
+> +if !UML
+>  source "drivers/infiniband/hw/bnxt_re/Kconfig"
+>  source "drivers/infiniband/hw/cxgb4/Kconfig"
+>  source "drivers/infiniband/hw/efa/Kconfig"
+> @@ -94,6 +95,7 @@ source "drivers/infiniband/hw/qedr/Kconf
+>  source "drivers/infiniband/hw/qib/Kconfig"
+>  source "drivers/infiniband/hw/usnic/Kconfig"
+>  source "drivers/infiniband/hw/vmw_pvrdma/Kconfig"
+> +endif # !UML
+>  source "drivers/infiniband/sw/rdmavt/Kconfig"
+>  source "drivers/infiniband/sw/rxe/Kconfig"
+>  source "drivers/infiniband/sw/siw/Kconfig"
