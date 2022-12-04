@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BC0641DB1
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 16:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970AA641DA8
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 16:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiLDPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 10:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
+        id S230110AbiLDPdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 10:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiLDPmN (ORCPT
+        with ESMTP id S229986AbiLDPdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 10:42:13 -0500
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F20E11175;
-        Sun,  4 Dec 2022 07:42:12 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id n7so7036788wms.3;
-        Sun, 04 Dec 2022 07:42:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :reply-to:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ARJr/vQ/Knp4FhLBG/R5CG9hyKkb4Kf7wc8CtCdE9MA=;
-        b=OdTvFkBOe2smg8eLEgGUrKf8uAot3y1J750clEheB+bhRL4XlV+6OtN9IOZicNVswS
-         EmZvhfxfJ/Pfm7QJmQ6ul4t2w1uEKtYlY9+Zyg7ZLpSpKMAEQ+v+X1FUZzkoKJuzurlW
-         cmi+ggbScdntpurIEwkJ1Tuvngyo/0Wan09IucYZGqeT6yiehOH3lV4g34sOMtti1UuE
-         05EON0Kh/zfLd5I5wtyafkS3zT2siaZg0A18PHVoB7MqOy1kl9H+/kCzsgCKfeN6hMWn
-         QtoL15Jhqe7jMkqeT46rj68a0azH+wutCLmzqKmbD8MHuHx95LfuuzFieFioOxiHPacA
-         nBYQ==
-X-Gm-Message-State: ANoB5plnOuoFXyvF6eiT5yzZQ829btm7aAGfobRb6QQ3oelBnZ84BP4o
-        AGJlyMP4mJu50wAqmt63jqahJj0Ppz8=
-X-Google-Smtp-Source: AA0mqf6E4NIoyZEUI5UzMZ/4uFr9cNIRBVcplhRTvgLrFrjXryAvJ17+72A0HoBTfD74xwp1mwkW2Q==
-X-Received: by 2002:a1c:6a13:0:b0:3cf:7801:c780 with SMTP id f19-20020a1c6a13000000b003cf7801c780mr58335691wmc.29.1670168530698;
-        Sun, 04 Dec 2022 07:42:10 -0800 (PST)
-Received: from [192.168.1.243] ([5.30.201.27])
-        by smtp.gmail.com with ESMTPSA id v128-20020a1cac86000000b003cfa80443a0sm14927961wme.35.2022.12.04.07.42.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 07:42:10 -0800 (PST)
-Message-ID: <805d7405-2e2f-ddda-8e17-97ac1934738c@linux.com>
-Date:   Sun, 4 Dec 2022 19:42:07 +0400
+        Sun, 4 Dec 2022 10:33:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E49120AD;
+        Sun,  4 Dec 2022 07:33:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 461D0B80184;
+        Sun,  4 Dec 2022 15:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C36C433C1;
+        Sun,  4 Dec 2022 15:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670168015;
+        bh=yxKf05+cFmoyI5uei5HHUeN5U35ydw6bkv8/4NHs5O8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ELgifSQkKU4A+1JzRiGvD7bTznHKS72pg+BDZRe4cUG0R6dKmwqMCgMiXTpXHMTCn
+         bDTmrpgfrr1w07AMOJGAJhASWZ38b889pBJgAiDFlMFTsmA7ISUdkh+SAvaZ/210FU
+         CCDCGV0jaSugJdN514xNHZuP3kh9tKyy/S4sQx2CWGIEFsPH0xaSDPlEroPufnQfNz
+         I5TudLa8nQigMXTR2muAA/2w5iqPDnDt8nhSs/VMUvvma1WA9aR20mZ7a/4Id1XZCX
+         wcgngIuRezRpHbLU0g3JXzbZLtaW5L/f/itoehO1Z1a2/C6NvW8NUTluwaK3vroyB7
+         vFZD80jO4Xq9g==
+Date:   Sun, 4 Dec 2022 15:46:21 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <ye.xingchen@zte.com.cn>
+Cc:     <eugen.hristev@microchip.com>, <lars@metafoo.de>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] iio: adc: at91-sama5d2_adc: use sysfs_emit() to instead
+ of   scnprintf()
+Message-ID: <20221204154621.3b76d888@jic23-huawei>
+In-Reply-To: <202212011142333790361@zte.com.cn>
+References: <202212011142333790361@zte.com.cn>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Reply-To: efremov@linux.com
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org,
-        Linux-kernel <linux-kernel@vger.kernel.org>
-From:   Denis Efremov <efremov@linux.com>
-Subject: [GIT PULL] Floppy changes for 6.2
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 85d6ce58e493ac8b7122e2fbe3f41b94d6ebdc11:
+On Thu, 1 Dec 2022 11:42:33 +0800 (CST)
+<ye.xingchen@zte.com.cn> wrote:
 
-  block: remove devnode callback from struct block_device_operations (2022-12-03 09:19:48 -0700)
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Replace the open-code with sysfs_emit() to simplify the code.
+> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Applied. 
 
-are available in the Git repository at:
+Thanks,
 
-  https://github.com/evdenis/linux-floppy tags/floppy-for-6.2
+Jonathan
 
-for you to fetch changes up to f8ace2e304c5dd8a7328db9cd2b8a4b1b98d83ec:
+> ---
+>  drivers/iio/adc/at91-sama5d2_adc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+> index ed4f8501bda8..50d02e5fc6fc 100644
+> --- a/drivers/iio/adc/at91-sama5d2_adc.c
+> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+> @@ -2181,7 +2181,7 @@ static ssize_t at91_adc_get_fifo_state(struct device *dev,
+>  	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+>  	struct at91_adc_state *st = iio_priv(indio_dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", !!st->dma_st.dma_chan);
+> +	return sysfs_emit(buf, "%d\n", !!st->dma_st.dma_chan);
+>  }
+> 
+>  static ssize_t at91_adc_get_watermark(struct device *dev,
+> @@ -2190,7 +2190,7 @@ static ssize_t at91_adc_get_watermark(struct device *dev,
+>  	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+>  	struct at91_adc_state *st = iio_priv(indio_dev);
+> 
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", st->dma_st.watermark);
+> +	return sysfs_emit(buf, "%d\n", st->dma_st.watermark);
+>  }
+> 
+>  static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
 
-  floppy: Fix memory leak in do_floppy_init() (2022-12-04 18:03:41 +0400)
-
-----------------------------------------------------------------
-Floppy patch for 6.2
-
-The patch from Yuan Can fixes a memory leak in floppy init code.
-
-Signed-off-by: Denis Efremov <efremov@linux.com>
-
-----------------------------------------------------------------
-Yuan Can (1):
-      floppy: Fix memory leak in do_floppy_init()
-
- drivers/block/floppy.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
