@@ -2,139 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6B4641CD1
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 13:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E193641CD4
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 13:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiLDMKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 07:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S230090AbiLDMMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 07:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiLDMKn (ORCPT
+        with ESMTP id S229753AbiLDMMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 07:10:43 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EAF17AB8;
-        Sun,  4 Dec 2022 04:10:42 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 284E55C00FF;
-        Sun,  4 Dec 2022 07:10:40 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 04 Dec 2022 07:10:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1670155840; x=1670242240; bh=CoGojBldvp
-        8vts1WXDufl3QTeeG6RrXZWoBhB7qP5HI=; b=Bt3t+pCvXTostL74alusXgNN2I
-        oLhoOcA34WlUK1HpM8zYrIq09NT6vJeDNBj/QdZnjHPCSY+ZUy+12uImKcNpjSPM
-        o0Qr+CIcrehvro9ebDcKpmBO8KNVO0BSLyVsZqv9jkmom0XPxGpvLeiycBhyso/8
-        pWUyCCDG5sY1PPjQhiPvm7NU5068KCV9X/PWB2P1GHq+0C96bygXAKrn+V5Ukhl7
-        s7lNWObcsg2gwh4/61eV3/1UOs8rIoQb6FB3dYEy/Ck7h0skHoTgrMXUYD92caiH
-        LVymfXQoewwpqSKzAiqVC6quJzrOTZYuY02ME7g19RNKqeqgpVhO3za9ITpg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670155840; x=1670242240; bh=CoGojBldvp8vts1WXDufl3QTeeG6
-        RrXZWoBhB7qP5HI=; b=DxeCgNBVAAMM2gNNTDGahzTQIA8E/3lkh9laTq8iI5JI
-        oocBov/dRgohjG7gGHMhodEsrIvcUGfX70TlrC5hErvHwlfTVVTfGqKcTDhS329l
-        rD+FaM0sMNpM3jsx9euuXm8KFkx502Dwdn3v5snXh5/yrmCGjVUmHg4VFsC3IQOm
-        rLgVcc1ZcgdX7GJ2QRCaCaXSBBv1eAIhu8iM2xjO6xiG+7n3ECRMdG0oJq9aKmiI
-        6SG12snIId67D0+6rJud3wzLSmPtuY+EFsHc/yywdYZFUwR088jM6Mk0ITGUNKvn
-        qf3WI/ip6fDNv+zXdoNPQCXdP6unHlzazkw2UySLnA==
-X-ME-Sender: <xms:P46MYzvkUIE9aAbyhKZ5xYdb6E_zNjnLgcSXVed3u_JPDYFlalAFUA>
-    <xme:P46MY0dL2JSgQQQFPD_QnBCs9YwuQ0hZCxxxWbYhrsT-7PbvOO3waNCDVA8UBJ5Jd
-    sc6wTVP5DdQ_oSIErY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:P46MY2wvjqIL0WULSDsDjK2-iWTcNk577njI8u8urdyWK-INhkIjdw>
-    <xmx:P46MYyOlmJlUGLbTFFm1o1B00hIvptlHzyHb1bGuRvSjePi_cyJwKw>
-    <xmx:P46MYz-G41yzfBtB2Sie70DPf6o0D0uviTpg1dU4jIB6f2uxc1rpew>
-    <xmx:QI6MY_TKF5dWc-RYdd4P32M5mWDH0VGUvz1FAOLC-6R8Be_t2ivPsQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 623A3B60086; Sun,  4 Dec 2022 07:10:39 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <81a7715b-559f-4c5c-bdb6-1aa00d409155@app.fastmail.com>
-In-Reply-To: <Y4wnGgMLOr04RwvU@google.com>
-References: <Y4wnGgMLOr04RwvU@google.com>
-Date:   Sun, 04 Dec 2022 13:10:19 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, soc@kernel.org
-Cc:     "Li Yang" <leoyang.li@nxp.com>, "Qiang Zhao" <qiang.zhao@nxp.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 4 Dec 2022 07:12:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926AF17ABA
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 04:11:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670155894;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1JxOufhWg2/q5pW/704na++qHz+lwSgqzP8cOwq2c60=;
+        b=fDR4FQpwWwC9cbu6tG7AKw4SqKzP341qBxFy7XBiyefoC9Dfs+9KFiaqKn7Q20wjyVeUgP
+        sUCoNQKMp64vno1lwjq0/hZNjES7KjPYCBEP8ns2cMEmhBGSNRdzvC1YCAT4geilC2NAiA
+        o8Fe3AZKu2efEx3KGaorrKtlhswGALQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-75-5Kn7jIqNMaOlqQDvhbxhBg-1; Sun, 04 Dec 2022 07:11:29 -0500
+X-MC-Unique: 5Kn7jIqNMaOlqQDvhbxhBg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90F9F3C0D181;
+        Sun,  4 Dec 2022 12:11:28 +0000 (UTC)
+Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 96A6E2166B29;
+        Sun,  4 Dec 2022 12:11:27 +0000 (UTC)
+Date:   Sun, 4 Dec 2022 20:11:23 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Wupeng Ma <mawupeng1@huawei.com>
+Cc:     akpm@linux-foundation.org, tj@kernel.org, dennis@kernel.org,
+        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next 1/1] percpu: cleanup invalid assignment to err in
+ pcpu_alloc
+Message-ID: <Y4yOMmnrT772wFSL@MiWiFi-R3L-srv>
+References: <20221204031430.662169-1-mawupeng1@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221204031430.662169-1-mawupeng1@huawei.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 4, 2022, at 05:50, Dmitry Torokhov wrote:
->
-> SoC team, the problematic patch has been in next for a while and it
-> would be great to get the fix in to make sure the driver is not broken
-> in 6.2. Thanks!
+On 12/04/22 at 11:14am, Wupeng Ma wrote:
+> From: Ma Wupeng <mawupeng1@huawei.com>
+> 
+> Assignment to err if is_atomic is true will never be used since warn
+> message can only be shown if is_atomic is false after label fail. So drop
+> it.
+> 
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> ---
+>  mm/percpu.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/mm/percpu.c b/mm/percpu.c
+> index acd78da0493b..df86d79325b2 100644
+> --- a/mm/percpu.c
+> +++ b/mm/percpu.c
+> @@ -1817,10 +1817,8 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
+>  
+>  	spin_unlock_irqrestore(&pcpu_lock, flags);
+>  
+> -	if (is_atomic) {
+> -		err = "atomic alloc failed, no space left";
+> +	if (is_atomic)
+>  		goto fail;
+> -	}
 
-I have no problem taking thsi patch, but I get a merge conflict that
-I'm not sure how to resolve:
+This is good catch. But I think Dennis may not like this way because he
+added the message intentionally in commit 11df02bf9bc1 ("percpu: resolve
+err may not be initialized in pcpu_alloc").
 
+Can we change the conditional checking in fail part as below?
 
-@@@ -186,23 -182,27 +180,43 @@@ struct qe_pin *qe_pin_request(struct de
-        if (WARN_ON(!gc)) {
-                err = -ENODEV;
-                goto err0;
-++<<<<<<< HEAD
- +      }
- +      qe_pin->gpiod = gpiod;
- +      qe_pin->controller = gpiochip_get_data(gc);
- +      /*
- +       * FIXME: this gets the local offset on the gpio_chip so that the driver
- +       * can manipulate pin control settings through its custom API. The real
- +       * solution is to create a real pin control driver for this.
- +       */
- +      qe_pin->num = gpio_chip_hwgpio(gpiod);
- +
- +      if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
- +              pr_debug("%s: tried to get a non-qe pin\n", __func__);
- +              gpiod_put(gpiod);
-++=======
-+       } else if (!fwnode_device_is_compatible(gc->fwnode,
-+                                               "fsl,mpc8323-qe-pario-bank")) {
-+               dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
-++>>>>>>> soc: fsl: qe: request pins non-exclusively
-                err = -EINVAL;
--               goto err0;
-+       } else {
-+               qe_pin->controller = gpiochip_get_data(gc);
-+               /*
-+                * FIXME: this gets the local offset on the gpio_chip so that
-+                * the driver can manipulate pin control settings through its
-+                * custom API. The real solution is to create a real pin control
-+                * driver for this.
-+                */
-+               qe_pin->num = desc_to_gpio(gpiod) - gc->base;
-        }
+diff --git a/mm/percpu.c b/mm/percpu.c
+index 27697b2429c2..0ac55500fad9 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -1897,7 +1897,7 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
+ fail:
+ 	trace_percpu_alloc_percpu_fail(reserved, is_atomic, size, align);
+ 
+-	if (!is_atomic && do_warn && warn_limit) {
++	if (do_warn && warn_limit) {
+ 		pr_warn("allocation failed, size=%zu align=%zu atomic=%d, %s\n",
+ 			size, align, is_atomic, err);
+ 		dump_stack();
 
-Could you rebase the patch on top of the soc/driver branch in the
-soc tree and send the updated version?
-
-       Arnd
