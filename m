@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F56641FCF
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50B8641FD2
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiLDVYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 16:24:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S230320AbiLDVZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 16:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiLDVYV (ORCPT
+        with ESMTP id S229949AbiLDVZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 16:24:21 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0203312D34
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 13:24:19 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id l15so10270472qtv.4
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 13:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HolxdYhsC6PPIuSCF4IWrRxJ55WK09MiKQKgTRRQ1u4=;
-        b=LgrZIBNgjv+lshYOLGa+M54L/9z3KlJ+3Wa0Eftxr5t5Rh+W3izppj/A+bJmEPNgwj
-         OC0C13AtDgJryL6ona35BuMC4+ZK/vgtrqYxVOuwTAMzgdVFBLuDFi8Xe2Oqo6y9pLdH
-         WLfa94Ocazgs1GdbZ1XsvCsX0WJ2xvKuWczHg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HolxdYhsC6PPIuSCF4IWrRxJ55WK09MiKQKgTRRQ1u4=;
-        b=2+zmWY7lvtqtPQP53RjZh4a0NrtMxVtFQ4fd6dNr1i1L+qNY+0hRQ8x/uyn7ZlUfbT
-         qbluvCaPwkK7z064iqKWZCk15arzQV6vpTTJfD9qJcZg/2K/E7iZvy7MzWXgyKZs/ypm
-         REVLU3pgAltDtU04Dzrx9df3g2bneiRp5x3CWT8Phpn0oYUUzig+P7fKCDwg9kGZinDc
-         QdgW3jZaxuYDnJNvQmHt7Tag/qkYsEO+9JRVCm2O/Wj/c0Ax8WE771Hng4KblmDHvoQX
-         98jaorhGOWUe4d2R+M+e0FSCupFmjQz4/iTx5V8o0mvDfyqIu+TaDqyB5UHqf8AEgbw+
-         w0Ww==
-X-Gm-Message-State: ANoB5pkdN8X/ahAYSQrmTf9cEW3q8u9E/BpActO1rCtCEkrt1HUH4F2X
-        LOaBHXPoGaereBLn6aoJqdQ2LjDbV0RM8dEp
-X-Google-Smtp-Source: AA0mqf42CW/hlACDP+PTUaXdF/u/CyCAFMEeWhNC6dtSfFs5N0yyJvNDDWH1vKs5H4bb7UVnW7IA8g==
-X-Received: by 2002:ac8:687:0:b0:3a5:41fd:2216 with SMTP id f7-20020ac80687000000b003a541fd2216mr75783162qth.338.1670189057569;
-        Sun, 04 Dec 2022 13:24:17 -0800 (PST)
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com. [209.85.222.173])
-        by smtp.gmail.com with ESMTPSA id r16-20020ac87ef0000000b003a7e25a10easm1428169qtc.72.2022.12.04.13.24.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 13:24:16 -0800 (PST)
-Received: by mail-qk1-f173.google.com with SMTP id m5so2145446qkg.0
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 13:24:16 -0800 (PST)
-X-Received: by 2002:ae9:e00c:0:b0:6f8:1e47:8422 with SMTP id
- m12-20020ae9e00c000000b006f81e478422mr71801248qkk.72.1670189055913; Sun, 04
- Dec 2022 13:24:15 -0800 (PST)
+        Sun, 4 Dec 2022 16:25:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA1712D34;
+        Sun,  4 Dec 2022 13:25:26 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 88E6A1FD77;
+        Sun,  4 Dec 2022 21:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670189125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bsz01VJIuUQ0mC3I2VX+QCIPQRKPDYB/XAPjTNya8AY=;
+        b=AFXqTzENJfRnmjWK7r3VV2zsuECch1Ho9LTVtZ5MjAQgqjRajbuqCj6AeRuqwtHFrqYsVI
+        pBDm6rAgCjvPijukD7IyelDN1U9P1KFCb7Vs+UoB8jRzc/ByxmmfT/eCYWbVCGMQroBZRK
+        pFJGnuWxlCA0yZWVO6faivcvLyW01zc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670189125;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bsz01VJIuUQ0mC3I2VX+QCIPQRKPDYB/XAPjTNya8AY=;
+        b=rU5udh2hX5ynJUTMHrfmI9oeCf8+p7xtG1V9xKwI+Ijt9lSL9Z/qOuUGZ1OBZEovFgD28q
+        MGNc1axXry6SbIDg==
+Received: from lion.mk-sys.cz (unknown [10.100.225.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D23212C141;
+        Sun,  4 Dec 2022 21:25:24 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id A2E776032F; Sun,  4 Dec 2022 22:25:21 +0100 (CET)
+Date:   Sun, 4 Dec 2022 22:25:21 +0100
+From:   Michal Kubecek <mkubecek@suse.cz>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        andrew@lunn.ch
+Subject: Re: [PATCH net-next 1/2] ethtool: update UAPI files
+Message-ID: <20221204212521.rjo5hgkmsq3spxzv@lion.mk-sys.cz>
+References: <cover.1670121214.git.piergiorgio.beruto@gmail.com>
+ <0f7042bc6bcd59b37969d10a40e65d705940bee0.1670121214.git.piergiorgio.beruto@gmail.com>
+ <Y4zVMj7rOkyA12uA@shell.armlinux.org.uk>
+ <Y4zduT5aHd4vxQZL@lunn.ch>
+ <Y40OEbeI3AuZ5hH2@gvm01>
 MIME-Version: 1.0
-References: <20221203150539.11483-1-brgl@bgdev.pl> <CAHk-=wjD8+XZyO4H1STwXte6x1UcYsiHKaQ4OQF5ucssY=uT8g@mail.gmail.com>
- <CAMRc=Me--X58j+tLn50osPRXSsJeqms8m=aYDcwMwktfZvFQow@mail.gmail.com>
-In-Reply-To: <CAMRc=Me--X58j+tLn50osPRXSsJeqms8m=aYDcwMwktfZvFQow@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 4 Dec 2022 13:24:00 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi+7kAEK9f+t=z5B39bASzswNCVE+ZJKnDPjAHM_FoRNg@mail.gmail.com>
-Message-ID: <CAHk-=wi+7kAEK9f+t=z5B39bASzswNCVE+ZJKnDPjAHM_FoRNg@mail.gmail.com>
-Subject: Re: [GIT PULL] gpio: fixes for v6.1-rc8 - take 2
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="axjmhhdgc3jec5yx"
+Content-Disposition: inline
+In-Reply-To: <Y40OEbeI3AuZ5hH2@gvm01>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 4, 2022 at 12:47 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> No, the data can't be removed with these locks in place. It's just to
-> avoid going into the callbacks if gpiochip_remove() is already in
-> progress (the only reason why trylock would fail).
 
-That "the only reason why trylock would fail" may be true in practice,
-but it's really just an implementation detail.
+--axjmhhdgc3jec5yx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Other issues *could* make a trylock fail.
+On Sun, Dec 04, 2022 at 10:16:01PM +0100, Piergiorgio Beruto wrote:
+> Hello Michal,
+> I was wondering if you could help me with the issue below.
+>=20
+> In short, I'm trying to add a new feature to netlink / ethtool that
+> requires changes to the UAPI headers. I therefore need to update these
+> headers in the ethtool userland program as well.
+>=20
+> The problem I'm having is that I don't know the procedure for updating
+> the headers, which is something I need to build my patch to ethtool on.
+>=20
+> I understand now this is not a straight copy of the kernel headers to
+> the ethtool repository.
+>=20
+> Should I use some script / procedure / else?
+> Or should I just post my patch without the headers? (I wonder how we can
+> verify it though?)
+>=20
+> Any help on the matter would be very appreciated.
 
-For example, assuming the trylock is just implemented as a non-looping
-"cmpxchg" (which may or may not be the case), even another reader
-coming in and racing with a trylock could make the cmpxchg fail.
+See https://www.kernel.org/pub/software/network/ethtool/devel.html for
+guidelines (section "Submitting patches"). What we need are so-called
+sanitized kernel headers, created by "make headers_install". The easiest
+way to update them is using the ethtool-import-uapi script linked from
+that page, usually "master" or "net-next" is the most appropriate
+argument, depending on your target branch.
 
-That "do one single cmpxchg" is what the spinlock trylock code does,
-for example.
+Michal
 
-Now, that's not actually what we do for the down_read_trylock() case -
-we will actually loop over it - but locking is complicated and you
-absolutely should not make assumptions about the exact implementation
-details.
+--axjmhhdgc3jec5yx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-And even with the loop, if you ever have *any* other reason to get the
-write-lock (or even just do a "try_write", suddenly the details of
-when the trylock fails changes entirely.
+-----BEGIN PGP SIGNATURE-----
 
-So that's why I really don't want some random driver layer to depend
-on some semantics for trylock that aren't actually guaranteed in the
-bigger picture.
+iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmONED0ACgkQ538sG/LR
+dpVK9wf9HCOgTQG+DztE/vCAYnl0fxpxkyGH6oyG37Ks1/5zOZ2FNPBRYQ6HbGoy
+JMendxXW/t4bK0TopPSe0do10cLQaKGR3+IEdlK7YPvaeNRuFgByCQjApj0/PYOX
++Oa65uk+iL5NHyaDScoyxmjeE2zBOTv1ZcENRWkVOifzVS2/R8BVP5MSC3ytLAow
+NTopGuMT8VJxUdYHM/3cybp6ivGERFpw4kEGNIaS2ADwsyTHTIm7VGcES9Xtzmlf
+PDZ5I4mXi978suQG5mq3G5anowQpVDvoV/18BGG5QE9E3kiz0xwu3ywX78J1WcNz
+701bPaZNdaSU0RRfE9GiOgtHQdnOJg==
+=AoLx
+-----END PGP SIGNATURE-----
 
-The only thing "trylock" says is "I tried to get the lock". It really
-could easily fail for random reasons that aren't about actual writers.
-
-For example, even aside from any "do a single cmpxchg" issue: a
-sleeping lock could be implemented using a spinlock to protect the
-"real" locking data. That kind of implementation is particularly
-likely for debugging.
-
-And then, in order to be usable in a recursive environment, a
-"trylock" would quite likely be implemented without spinning on that
-spinlock, even before it gets to the actual lock internal
-implementation. So just contention on the spinlock - by other readers,
-not writers - could make the trylock fail.
-
-See?
-
-             Linus
+--axjmhhdgc3jec5yx--
