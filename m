@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970AA641DA8
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 16:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DB7641DAA
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 16:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLDPdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 10:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S230115AbiLDPgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 10:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiLDPdj (ORCPT
+        with ESMTP id S229917AbiLDPgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 10:33:39 -0500
+        Sun, 4 Dec 2022 10:36:23 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E49120AD;
-        Sun,  4 Dec 2022 07:33:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE1A120AD;
+        Sun,  4 Dec 2022 07:36:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 461D0B80184;
-        Sun,  4 Dec 2022 15:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C36C433C1;
-        Sun,  4 Dec 2022 15:33:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97FAFB8069A;
+        Sun,  4 Dec 2022 15:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA343C433D6;
+        Sun,  4 Dec 2022 15:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670168015;
-        bh=yxKf05+cFmoyI5uei5HHUeN5U35ydw6bkv8/4NHs5O8=;
+        s=k20201202; t=1670168180;
+        bh=O1qz95Pb9I33OjCFKXFJFaZ1swHQCaILsdIKSNUsTXQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ELgifSQkKU4A+1JzRiGvD7bTznHKS72pg+BDZRe4cUG0R6dKmwqMCgMiXTpXHMTCn
-         bDTmrpgfrr1w07AMOJGAJhASWZ38b889pBJgAiDFlMFTsmA7ISUdkh+SAvaZ/210FU
-         CCDCGV0jaSugJdN514xNHZuP3kh9tKyy/S4sQx2CWGIEFsPH0xaSDPlEroPufnQfNz
-         I5TudLa8nQigMXTR2muAA/2w5iqPDnDt8nhSs/VMUvvma1WA9aR20mZ7a/4Id1XZCX
-         wcgngIuRezRpHbLU0g3JXzbZLtaW5L/f/itoehO1Z1a2/C6NvW8NUTluwaK3vroyB7
-         vFZD80jO4Xq9g==
-Date:   Sun, 4 Dec 2022 15:46:21 +0000
+        b=AcdaVFn+XsCZU68UuyVbj1DApCZlidCw051GrEbvZJkN96yChqqMbapkEWDWHcNnq
+         3lE0zYNmltqurZCfKQ+LLS5wCk/5jqCxiIa2UdBbkjrqeGmh6hN/BSGKEbboRQCYXV
+         7UKc9mrT6Klha7FKcr9BR7EjnkRZs3uRsGN6RYgBOd6txTUFJyZxKk85jXH5TAcO2X
+         Cya/98xgxMlwbaONATZu2plgZ4b0ZXUAUqRieVPqlmaYtRgfvxl4yKdzbahb3ulQme
+         P4nZODS2GeM5vI8h+qcm7vojQFPdbl5x1+XW/Q1xiPG7t1Tj/jho5hIgu+2Sth3rTe
+         57xG8XyCUKAbA==
+Date:   Sun, 4 Dec 2022 15:49:06 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     <ye.xingchen@zte.com.cn>
-Cc:     <eugen.hristev@microchip.com>, <lars@metafoo.de>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iio: adc: at91-sama5d2_adc: use sysfs_emit() to instead
- of   scnprintf()
-Message-ID: <20221204154621.3b76d888@jic23-huawei>
-In-Reply-To: <202212011142333790361@zte.com.cn>
-References: <202212011142333790361@zte.com.cn>
+Cc:     <jbhayana@google.com>, <lars@metafoo.de>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: Re: [PATCH] iio: common: scmi_iio: use sysfs_emit() to instead of 
+  scnprintf()
+Message-ID: <20221204154906.163c9c02@jic23-huawei>
+In-Reply-To: <202212011156314630626@zte.com.cn>
+References: <202212011156314630626@zte.com.cn>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,7 +57,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 11:42:33 +0800 (CST)
+On Thu, 1 Dec 2022 11:56:31 +0800 (CST)
 <ye.xingchen@zte.com.cn> wrote:
 
 > From: ye xingchen <ye.xingchen@zte.com.cn>
@@ -66,36 +65,30 @@ On Thu, 1 Dec 2022 11:42:33 +0800 (CST)
 > Replace the open-code with sysfs_emit() to simplify the code.
 > 
 > Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-Applied. 
+Applied. Cc'd scmi people as well just in case they are interested.
 
-Thanks,
-
-Jonathan
 
 > ---
->  drivers/iio/adc/at91-sama5d2_adc.c | 4 ++--
+>  drivers/iio/common/scmi_sensors/scmi_iio.c | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
-> index ed4f8501bda8..50d02e5fc6fc 100644
-> --- a/drivers/iio/adc/at91-sama5d2_adc.c
-> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
-> @@ -2181,7 +2181,7 @@ static ssize_t at91_adc_get_fifo_state(struct device *dev,
->  	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
->  	struct at91_adc_state *st = iio_priv(indio_dev);
-> 
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", !!st->dma_st.dma_chan);
-> +	return sysfs_emit(buf, "%d\n", !!st->dma_st.dma_chan);
->  }
-> 
->  static ssize_t at91_adc_get_watermark(struct device *dev,
-> @@ -2190,7 +2190,7 @@ static ssize_t at91_adc_get_watermark(struct device *dev,
->  	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
->  	struct at91_adc_state *st = iio_priv(indio_dev);
-> 
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", st->dma_st.watermark);
-> +	return sysfs_emit(buf, "%d\n", st->dma_st.watermark);
->  }
-> 
->  static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
+> diff --git a/drivers/iio/common/scmi_sensors/scmi_iio.c b/drivers/iio/common/scmi_sensors/scmi_iio.c
+> index d92f7f651f7b..0c2caf3570db 100644
+> --- a/drivers/iio/common/scmi_sensors/scmi_iio.c
+> +++ b/drivers/iio/common/scmi_sensors/scmi_iio.c
+> @@ -400,12 +400,12 @@ static ssize_t scmi_iio_get_raw_available(struct iio_dev *iio_dev,
+>  			rem = do_div(resolution,
+>  				     int_pow(10, abs(exponent))
+>  				     );
+> -			len = scnprintf(buf, PAGE_SIZE,
+> +			len = sysfs_emit(buf,
+>  					"[%lld %llu.%llu %lld]\n", min_range,
+>  					resolution, rem, max_range);
+>  		} else {
+>  			resolution = resolution * int_pow(10, exponent);
+> -			len = scnprintf(buf, PAGE_SIZE, "[%lld %llu %lld]\n",
+> +			len = sysfs_emit(buf, "[%lld %llu %lld]\n",
+>  					min_range, resolution, max_range);
+>  		}
+>  	}
 
