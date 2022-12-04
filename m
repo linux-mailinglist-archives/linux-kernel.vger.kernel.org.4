@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C18C641C44
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C6D641C47
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 10:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiLDJro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 04:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S230045AbiLDJry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 04:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiLDJrh (ORCPT
+        with ESMTP id S230137AbiLDJrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 04:47:37 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA94AE
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 01:47:32 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id p8so14166768lfu.11
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 01:47:32 -0800 (PST)
+        Sun, 4 Dec 2022 04:47:39 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4D73BF
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 01:47:33 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id c1so14187077lfi.7
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 01:47:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=janko4BgJGtkNL8mFckP2GXu+qyT3OukB4Vav5ERFlI=;
-        b=TtfIZK00X69U8N7vJ76x9AKxq4Au2EonaQTQS244qskV0JbfPwZWKNum52oRCrHbjN
-         F/G7VIwn9c+W4nmwga39MRt3aGUzU35rkNKfyXtIfAoAvauhyT/h0Sxo0gUCf2OrRfju
-         623UhVKeej8b10C0sZhM1dTdT2pf6j11GLAtFpKSvKmt1ZLFGJdYHybX+mNaOR+8DcGP
-         5LinRJ3wYjR7HOWhMaDoHKI6cYPxzoGsA8Hmlzsl2ij5+o/Uoi9UKtAq2eYeUthkA3Pv
-         qWGfK3UacKPbifbDNWz4EqavTdVqcoa0g8i+F/CoXuD8ejbjjiliXW3hRB0WdVBgwoXm
-         vYCQ==
+        bh=HV9iDq9ASawaJ80Vnkd4V2c06IYqg91+S5dBHxjopKQ=;
+        b=Ywq8JTIppvGS+u73xDuB2V1FMFl9uieH9iGsVs28JoExEMBFJRczI3+P86bLxbCzE8
+         1aEy646UPgd2Af8q09vFWDK+vbEWz478Sv6T21j93UhiqDsFsIc5o+3VkgP1SzSyoy++
+         3/SKzQl2i12sDhxT9eWoPrRbmhD11ABYZQA3dCwC9qkEETnI1VG739LObJQvmgNy+6oF
+         pCkeNNF71XO/BPFx3NapEsof0aCLPfeOx4PXiCSArGNwD99ODDQAt08kW2PinqtZ3Sit
+         npa0cK3x+3NSGnzrjgIa+NLTNf4/domrz0P4dODoSnRdmczWxgZQxC3eD5k7qwrL/lSf
+         Tv0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=janko4BgJGtkNL8mFckP2GXu+qyT3OukB4Vav5ERFlI=;
-        b=u1tVDn/KCoryNSxZSiJryEELEzRLgyh/BVwPovKvLUU2pRiX6DcZZ5mI4u2+TT/4z/
-         tYTfe+Ae6lpbXG0KJcm2zv1kSLBnJwHEtB+aqwiv7VwlG6xmLt9GpEwrbq/lJ65Xx8bW
-         +MBKAuyW/Xw1uKLMYwmGAFimIM1Z3NN72ttrgAtRq/Ytse94v2I3itDtzKzl21Ncs2bs
-         3Io7hGDu5fYz/TwVu5Ke+BXi3njL0foYWCDQfI9h0TKXFUxXOqO524fgxWH9sG9kDIwH
-         BaaJpFx87oJQ8SB9qccOuXVBHenpjugxL1vNa9f7KBY0JQkWuoSyV9mnIi0VW/QJP3ni
-         BZvA==
-X-Gm-Message-State: ANoB5pnYvBMXWqkN70wU306hpRHVZc2gTW4JUAIgS4byrzjUmdyO5MWG
-        DsAYPsN3/tL2owntW4VG7RwESg==
-X-Google-Smtp-Source: AA0mqf70DTCspnTZa1ay9+Qc++Song3setHNd0YTNsFVECp207Nslru7RAQM+uUhDMMRdNdgYgeVHg==
-X-Received: by 2002:a05:6512:3983:b0:4b4:f88:90d3 with SMTP id j3-20020a056512398300b004b40f8890d3mr27581895lfu.37.1670147250857;
-        Sun, 04 Dec 2022 01:47:30 -0800 (PST)
+        bh=HV9iDq9ASawaJ80Vnkd4V2c06IYqg91+S5dBHxjopKQ=;
+        b=TTUt4E5UFPYj60UC6Ntvt9HbAJKvAGT051lLgnWANdAx79RE1i+y3jY+mL4tr2dpI+
+         jONDZeJ4q1N9hgJNEtH6Y5sZCX9xZvLD3t9SMgQm2V+lHopELzH6Ltq7+EjZY5pefaVW
+         XNS67LLZImMQ2ATnnpqNPVBDrff5VD+PwxAfUjUasb+Ny+5WUdGg2UF2kiPk3vQFj28Y
+         TYn0aPDLzuY7/pHYrokqrPnE83miEEPfMVrBllXpOSqYn8BAa2xqHg3eqFP1EUfbtf2d
+         rMlw06WLsy7xe5WlCOsCZAxi2YqyrZK1Qd5luVD81p6RlLOA5henFCnu06IWqGR9O/4o
+         o4MA==
+X-Gm-Message-State: ANoB5pn6eHfN56hK3tE1S52yD6SKiliUlN8e9UWydyXtCsE99Dk3vFnw
+        OTfZchotxETv4bRuRc/45y6SDA==
+X-Google-Smtp-Source: AA0mqf4NXpqkpNJWIOCVpnhjza3+x2Mh1nBOpGFv66z4tTQHVxxOKG6fb3yuxq20BEQywA/02mkD8g==
+X-Received: by 2002:a05:6512:3153:b0:4a2:da6:d969 with SMTP id s19-20020a056512315300b004a20da6d969mr23719756lfi.671.1670147251886;
+        Sun, 04 Dec 2022 01:47:31 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e18-20020a056512091200b00498f00420e9sm1706703lft.194.2022.12.04.01.47.29
+        by smtp.gmail.com with ESMTPSA id e18-20020a056512091200b00498f00420e9sm1706703lft.194.2022.12.04.01.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 01:47:30 -0800 (PST)
+        Sun, 04 Dec 2022 01:47:31 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>, abel.vesa@linaro.org,
         Johan Hovold <johan+linaro@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/5] dt-bindings: mmc: sdhci-msm: drop properties mentioned in common MMC
-Date:   Sun,  4 Dec 2022 10:47:16 +0100
-Message-Id: <20221204094717.74016-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 5/5] dt-bindings: mmc: sdhci-msm: allow dma-coherent
+Date:   Sun,  4 Dec 2022 10:47:17 +0100
+Message-Id: <20221204094717.74016-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221204094717.74016-1-krzysztof.kozlowski@linaro.org>
 References: <20221204094717.74016-1-krzysztof.kozlowski@linaro.org>
@@ -80,36 +80,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to explicitly list properties already brought by
-mmc-controller.yaml schema.
+SM8350, SM8450 and SM8550 SDHCI controllers for SD card are marked with
+dma-coherent, so allow it.
 
-Fixes: 8574adf5222d ("dt-bindings: mmc: sdhci-msm: Fix issues in yaml bindings")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 10 ----------
- 1 file changed, 10 deletions(-)
+
+dma-coherent was first added to SM8450... then to SM8350 (not merged
+yet) and now it appeared in SM8550 patches, but I actually do not know
+if this is copy-paste or real need.
+---
+ Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-index 9e7c0e3803c6..39e303468bc4 100644
+index 39e303468bc4..6b89238f0565 100644
 --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
 +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-@@ -136,16 +136,6 @@ properties:
-     description: A phandle to sdhci power domain node
-     maxItems: 1
+@@ -83,6 +83,8 @@ properties:
+       - const: cal
+       - const: sleep
  
--  mmc-ddr-1_8v: true
--
--  mmc-hs200-1_8v: true
--
--  mmc-hs400-1_8v: true
--
--  bus-width: true
--
--  max-frequency: true
--
-   operating-points-v2: true
++  dma-coherent: true
++
+   interrupts:
+     maxItems: 2
  
- patternProperties:
 -- 
 2.34.1
 
