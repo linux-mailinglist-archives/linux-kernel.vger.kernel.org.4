@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40180641EDF
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1B1641EE1
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiLDSdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 13:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S230143AbiLDSdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 13:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiLDSdd (ORCPT
+        with ESMTP id S230298AbiLDSds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 13:33:33 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661BB5FBF
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 10:33:32 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id s8so15356783lfc.8
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 10:33:32 -0800 (PST)
+        Sun, 4 Dec 2022 13:33:48 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF0612D23
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 10:33:46 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id d6so15339707lfs.10
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 10:33:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p4HiZrmP91AmMj4d8UedSi3BmABLAWdvsExg9IBBapU=;
-        b=kQkwigcLVDD4q086rMvI559/ptg+3bu09/+yhIn7hJTF9nfRU2bZZZhxSE+cXpCes0
-         6zdbGfizeRvWP7LzJBR7Kq30Yc8lyIPO1QN0mGhFc6/x2TNnXDqD7nFe+iCWtXELKrsk
-         0r+rgxtvbBSvxYymvSBW+OjBApmyFtno8zrORqvYLGUVqsU6tR2fxCWd+q6NlIJczSub
-         LqpDeu8Z6KvfPXZHLaUm9yYJMUyK1eg5aBJ46aggu1+XWpGnGQHGXmDcUhhCIqHdLDAE
-         DHiieNZlwrSYrrVTdOcIVhTJd+X0/3GudVK3pQxRczBerqNm/YCRntNKnD8xqG9GdzET
-         PVUw==
+        bh=Xhyv5obJO05pgLR8K6bKL4W/XWvPLVM9OMLPNej/i4s=;
+        b=D6DItwIylWFUvf6qAi7r7s7S2xPsf3J5mgFJFrSeGyMxiEFCyxJ/w9inu5R1slLLDN
+         2agPAZ3zb5tkvMqGA73PEJT0Yo6DhE3fO+MRvcPmrw77yeKkP6du414lnRktouE4QwHk
+         v3EJ7+8gfm3q2Ijvf6rPL0ULxJSz6cPxShFKcR2B//+rpQ6t+/qnNvKKSme61ZXrDV3+
+         exKLFL3Axiw/5evjgRooib4DOKGvGkEJcYo3oQ5R2XbQL21VpjxZbAtOYPGaUN2U0O7B
+         WVklTL404hwDf/HCqTKQMMXxHkp/b1LKN/wiKWbLKpvHlDA4Bc8hASFTGfjAB/YACroT
+         c4OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p4HiZrmP91AmMj4d8UedSi3BmABLAWdvsExg9IBBapU=;
-        b=Q1greuDaK75M+twaF8KBzM4Il5RiZADV7E20i6541zm5HFdMu5N0EX14+MqjiCo3Al
-         EVU4woKKgZtWYNizPo2Xf+RrjSM0YJiNJZFn08Xp05Ab5EwN+vhoIKci0JRWMv+TFUvh
-         h3DN4icBmy8hAn7UgsM4Req3BYxyYYKRRKdLmfKvOk3aHsdsy6PuAYf15d8GZRaluAMV
-         Dk1SI6eRyt0sPy8w9rLnoP3Vn2HnHMPpOTIm+PQX823rkzoF/XHt7PUUPlyD+Ql6yRHr
-         rKnuJHVXsiTpVugQRN/knvFBxCs/8AEEPMFz76QJ+OuT1/q5iX9zgNYvZBBuWs876iOC
-         HBsA==
-X-Gm-Message-State: ANoB5pmSphZwkr5hw2lCiaUpyRHw+nBZYPnMghEAz4BfdeBcVx9MlgH6
-        4Dpl2zlUZqSHwL/TVbNGGkwAEw==
-X-Google-Smtp-Source: AA0mqf5moR5qk2MbOUrHN9+Z5FjC6mU34oMB2642J9yC2PKvMo8TCGuiGmwoBdWY7Q2L6eU2cs9S5g==
-X-Received: by 2002:a19:501c:0:b0:4b1:82c6:295b with SMTP id e28-20020a19501c000000b004b182c6295bmr24947891lfb.67.1670178810840;
-        Sun, 04 Dec 2022 10:33:30 -0800 (PST)
+        bh=Xhyv5obJO05pgLR8K6bKL4W/XWvPLVM9OMLPNej/i4s=;
+        b=IZFH6dqAydr6Q/JPJoJYwnl2mbM1RSM27VY/5P5CxQSZCuDLbrwc8VRlNu+FQFH3iI
+         lWKh0hLh3i3Xe7zIZuTkiL/0OE6/u5bpY69jVjVlNI3cA1hi2dNR/dbS7BQn9L6n+wM8
+         XsliiRbaynVSkzl0gFpZqAFX62DWLZrdKn5uW1EutemWuxbyDl0VovHq+ovMtRdHvA7j
+         hDYeNyymZiTZ/3ho2gyTXhSLLnVmz61xTo33rrQ9MD4ZMzDU39q6BlqoqqPDyXTA24Kr
+         EGWUTKhmcEFXRSAePHpr+5kL8KZDVhnYq9e//w6YTKP3lX591xmwmTHeJfn1v5f747hT
+         iuww==
+X-Gm-Message-State: ANoB5pne3yEkhvp3MCHtcUzYMQxruhQvkfsXiQfvo2CKxFc0yrUT56ix
+        dIE2WF1rVaJbl1TrUL+tI8/ENg==
+X-Google-Smtp-Source: AA0mqf5OecpLenAlLa+W0DN996G16//de1xxTcSQAySGFZ/MZwJBK376I/ToiMFM/z60GTYZPXRoVQ==
+X-Received: by 2002:a05:6512:3090:b0:4b4:f33e:8628 with SMTP id z16-20020a056512309000b004b4f33e8628mr15585253lfd.189.1670178825178;
+        Sun, 04 Dec 2022 10:33:45 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b8-20020a2eb908000000b00279c4736f51sm1191529ljb.127.2022.12.04.10.33.30
+        by smtp.gmail.com with ESMTPSA id w15-20020a056512098f00b004947984b385sm1835878lft.87.2022.12.04.10.33.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 10:33:30 -0800 (PST)
+        Sun, 04 Dec 2022 10:33:44 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] docs: admin-guide: media: align HDMI CEC node names with dtschema
-Date:   Sun,  4 Dec 2022 19:33:26 +0100
-Message-Id: <20221204183326.139876-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: sun8i: h3-beelink-x2: align HDMI CEC node names with dtschema
+Date:   Sun,  4 Dec 2022 19:33:41 +0100
+Message-Id: <20221204183341.139946-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,30 +82,22 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 See also:
 https://lore.kernel.org/all/20221204182908.138910-3-krzysztof.kozlowski@linaro.org/
 ---
- Documentation/admin-guide/media/cec.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/sun8i-h3-beelink-x2.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/media/cec.rst b/Documentation/admin-guide/media/cec.rst
-index 5c7259371494..14ec3ff317c2 100644
---- a/Documentation/admin-guide/media/cec.rst
-+++ b/Documentation/admin-guide/media/cec.rst
-@@ -340,14 +340,14 @@ and IO24. Monitoring the HPD an 5V lines is not necessary, but it is helpful.
- This kernel patch will hook up the cec-gpio driver correctly to
- e.g. ``arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts``::
- 
--	cec-gpio@7 {
-+	cec@7 {
- 		compatible = "cec-gpio";
- 		cec-gpios = <&gpio 7 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
- 		hpd-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
- 		v5-gpios = <&gpio 22 GPIO_ACTIVE_HIGH>;
+diff --git a/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts b/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts
+index 27a0d51289dd..a6d38ecee141 100644
+--- a/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts
++++ b/arch/arm/boot/dts/sun8i-h3-beelink-x2.dts
+@@ -57,7 +57,7 @@ aliases {
+ 		ethernet1 = &sdiowifi;
  	};
  
--	cec-gpio@8 {
-+	cec@8 {
+-	cec-gpio {
++	cec {
  		compatible = "cec-gpio";
- 		cec-gpios = <&gpio 8 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
- 		hpd-gpios = <&gpio 27 GPIO_ACTIVE_HIGH>;
+ 		cec-gpios = <&pio 0 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>; /* PA14 */
+ 		hdmi-phandle = <&hdmi>;
 -- 
 2.34.1
 
