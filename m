@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C547641D21
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 13:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0B8641D2F
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 14:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiLDM4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 07:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S229977AbiLDNT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 08:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiLDMz6 (ORCPT
+        with ESMTP id S229539AbiLDNT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 07:55:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9DE1648E;
-        Sun,  4 Dec 2022 04:55:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 4 Dec 2022 08:19:57 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88BE175B1
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 05:19:55 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17D04B80918;
-        Sun,  4 Dec 2022 12:55:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C2D2C433C1;
-        Sun,  4 Dec 2022 12:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670158554;
-        bh=8yRgtw2sqbmn0sbuN2uygsx/CmEH3xWVwet848rkPeM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oe73S5CnLcYVnjryVw5zKzNeITWOUd6MAR9WezfDI7EZNvRnTwQsM1muhe7F4yp11
-         sUE/OoTwBZ+id9Y9+bInvHLCGeGytmEZ3AvtbtddbK44gAO9XG5bdWNLsLckg9bCtu
-         Dgtg9NAKqB+5ldcvzbnJmcYhSyy5tJWxqM2UbQR822fFEqkLAlIYfQ8lLcFDUYT1Yj
-         LAHx5MXsrzDpbMLhSQ57R8wCf2vlLcjqKTPcrCniEGimkc1W4SD/qaI5o+2F5XTdZe
-         9py2XIebbQHY4sgwm9R6PYfbJ3QL2CO7CKvO88/2GWNOnkNr3V1f0D9HSMvhY7hIS6
-         lT9O4Yxkz38UA==
-Date:   Sun, 4 Dec 2022 14:55:42 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
-        hkelam@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] octeontx2-pf: Fix potential memory leak in
- otx2_init_tc()
-Message-ID: <Y4yYzlzPKix6VloH@unreal>
-References: <20221202110430.1472991-1-william.xuanziyang@huawei.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQ6jL2GR1z4wgr;
+        Mon,  5 Dec 2022 00:19:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1670159990;
+        bh=O6WIIUv4HAQEWxuJH3CwIfKqhsQR7d/ljcXdPZYuOVE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jeb2GVqo//4HfOkaxp4/iSYycoFPN2jVnxhOLq0IM9tMWEOQrpu6SSoSqLmCy7P9v
+         UlyLLxy22Q9/aLLFeIGsGoKH/twMufWsinXLm3YALRYEL/1jNGpR6NIKGq8M2/WyN0
+         7YAbXzjXuPZ+hWOIEJJtbiY08vrC8FxDSGHSpjTCSovLzySBIAqURj0dSwWtM9kbuH
+         ecGkmeA7nQB/oPfFkkxuH9ObUKxQygk2Bbcd7jiBjzz3Cw/LyJWVa9VYsQx0oYXwG/
+         sh43eJzIeadF56bDu/K4dD5QtQRK8WnZKJrGlZHsVu3eCwganuCw9BRRFSFlsh4or3
+         pWx/w3heERBGQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-6 tag
+Date:   Mon, 05 Dec 2022 00:19:45 +1100
+Message-ID: <87sfhvs3v2.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202110430.1472991-1-william.xuanziyang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 07:04:30PM +0800, Ziyang Xuan wrote:
-> In otx2_init_tc(), if rhashtable_init() failed, it does not free
-> tc->tc_entries_bitmap which is allocated in otx2_tc_alloc_ent_bitmap().
-> 
-> Fixes: 2e2a8126ffac ("octeontx2-pf: Unify flow management variables")
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> ---
-> v2:
->   - Remove patch 2 which is not a problem, see the following link:
->     https://www.spinics.net/lists/netdev/msg864159.html
-> ---
->  drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> index e64318c110fd..6a01ab1a6e6f 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> @@ -1134,7 +1134,12 @@ int otx2_init_tc(struct otx2_nic *nic)
->  		return err;
->  
->  	tc->flow_ht_params = tc_flow_ht_params;
-> -	return rhashtable_init(&tc->flow_table, &tc->flow_ht_params);
-> +	err = rhashtable_init(&tc->flow_table, &tc->flow_ht_params);
-> +	if (err) {
-> +		kfree(tc->tc_entries_bitmap);
-> +		tc->tc_entries_bitmap = NULL;
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-Why do you set NULL here? All callers of otx2_init_tc() unwind error
-properly.
+Hi Linus,
 
-> +	}
-> +	return err;
->  }
->  EXPORT_SYMBOL(otx2_init_tc);
->  
-> -- 
-> 2.25.1
-> 
+Please pull some more powerpc fixes for 6.1:
+
+The following changes since commit eb761a1760bf30cf64e98ee8d914866e62ec9e8a:
+
+  powerpc: Fix writable sections being moved into the rodata region (2022-11-16 21:37:14 +1100)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.1-6
+
+for you to fetch changes up to 2e7ec190a0e38aaa8a6d87fd5f804ec07947febc:
+
+  powerpc/64s: Add missing declaration for machine_check_early_boot() (2022-11-26 00:25:32 +1100)
+
+- ------------------------------------------------------------------
+powerpc fixes for 6.1 #6
+
+ - Fix oops in 32-bit BPF tail call tests
+ - Add missing declaration for machine_check_early_boot()
+
+Thanks to: Christophe Leroy, Naveen N. Rao.
+
+- ------------------------------------------------------------------
+Christophe Leroy (1):
+      powerpc/bpf/32: Fix Oops on tail call tests
+
+Michael Ellerman (1):
+      powerpc/64s: Add missing declaration for machine_check_early_boot()
+
+
+ arch/powerpc/include/asm/interrupt.h |  1 +
+ arch/powerpc/net/bpf_jit_comp32.c    | 52 ++++++++------------
+ 2 files changed, 22 insertions(+), 31 deletions(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmOMnkwACgkQUevqPMjh
+pYC6iA//cPx4MT/SddmFB4bC9Vxp0lBUxu9zcepbWdsvVK/X1+eSHtPVFdfXdxYq
+DhfHuEHizo6pKGYZnSYXjAG8/0pUQrKvnopgX0dNHtPvXSyRdeMyW10oiaweUa5v
+WSRhKf6Uy+9cw1ZS9wwAAtssiLXt2rmV/xEGb9hs7o8NAW27067LKfntCkd8++9M
+bs5V74c4X1WY1iJ86lxH3CYvOasZ/R7f46FeAu8KXX2n7+rlt1SOEnA2zaYtPYZ0
+00dOCQpN5RuwCEjixJ9mFUZIJ+gL9AgjoOVF3lAGE6Ro2fyy/XRrh4BDnUCpfLhY
+vylKDdy6BACz9vxQiY/phvWn//66GaLb2wbf5vhbH7Wc91ouMJlwh9g0JvD6ViRb
+tAt4OOvRuOgenmpeigWUpJGpvX71Ib+sfPxpnmEwZDgTvt+aIxb0bgbEewgU/9Fz
+BD89DxjS3lsj+B9vUYhXOSdkKbJg3B4MLcQP//0E2QWiHMTvCSuB8xoWNK68J6/D
+3DnMVJkbvb0IrF0Q0rTXBzj1aMosc3dbwM/ezu5Zs3DK7/GWcRw4noKyWUXI6/NF
+XB/R2xhxDnOyT/oZF0ssQzbA4rh1E4m9zj/RTrgn12SprT67p1sKQ5ppWPTTyd65
+x3pCgocIzZvJc9S1ExmpZ9Seo9LQZxqXEsIzTqVU+5UjzFYC6tk=
+=3xA+
+-----END PGP SIGNATURE-----
