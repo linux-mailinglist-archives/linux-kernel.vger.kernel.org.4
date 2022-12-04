@@ -2,75 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25061641E41
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67654641E3F
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiLDRg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 12:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        id S230268AbiLDRgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 12:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiLDRgX (ORCPT
+        with ESMTP id S229938AbiLDRgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 12:36:23 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84A514098;
-        Sun,  4 Dec 2022 09:36:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=goCKq7mAuByd5SSoRQGXzt0RnvurUSfN5w+L4Gwa7R4=; b=BTDGf0ap+wRBoIiQRHnNB6t325
-        BH7iuUtPxiJjY4Q6rgoiPEEvX7Pfw0U6k+eQzNz1/qCabG+di2a16fp/nOGb/FpNGd5wR3nTYa7XL
-        FTyIcnTisvIBOPJSJjjwk5MWNYHSb/cfS2UX5myzFYExc/X/uMSOd8cltbJEwoMg6EJM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p1suL-004Kfz-2v; Sun, 04 Dec 2022 18:36:05 +0100
-Date:   Sun, 4 Dec 2022 18:36:05 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH net-next 4/4] driver/ncn26000: add PLCA support
-Message-ID: <Y4zahWebzRhun2IP@lunn.ch>
-References: <cover.1670119328.git.piergiorgio.beruto@gmail.com>
- <38623984f6235a1521e6b0ad2ea958abc84ad708.1670119328.git.piergiorgio.beruto@gmail.com>
- <Y4zTqvSxLJG+G8V+@shell.armlinux.org.uk>
+        Sun, 4 Dec 2022 12:36:21 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F43E14096;
+        Sun,  4 Dec 2022 09:36:20 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-14455716674so4867806fac.7;
+        Sun, 04 Dec 2022 09:36:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TXEZvr3bKu2vBIW+lpuSVItbWZwpWlZ50nx9XuTinWU=;
+        b=K5E0+LOnggn/gYMPFlw4zI4PSzD+JHSdGy4UU6wttfDL2DlzF3ueIgIOWR7oRXgHct
+         xh9/3Brq5EmMilnZRjlVNdphsZo4PWHbyyb/k6XiLdDRWtE6JynFvaohTeAc9fSEii3/
+         O/cJm1NIlZq/KdCpD/QjSgbxheAoTFj8fsV9nL/J0zC0HAwKKezkr0ZseQAaU0n9/BBJ
+         xMdieALMDasrbQlarT2uBdq5jLLcve65SIkefFLHCVyhwxyGzH4ePF+6ikpWycWuWATh
+         XP5BoyplLSdQ/zWMjnzqnSv5Vl3OeM3M9Lsn+L0yP14j8Ftd9RDrKoOmoHz0LwrkqcoQ
+         AIDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TXEZvr3bKu2vBIW+lpuSVItbWZwpWlZ50nx9XuTinWU=;
+        b=Ibq8XhiRu4yKwKUoleDS78llmAwgua7rD4Nl1ozubPkoPjo9soYavhRgH17R+xQlkt
+         16NCGui+TCZAplJ9d8z77bPe+3vZZ02ivcwm0sDUqOsrQvUAAy/xGFtlr+kdRgOnpOoj
+         5DMTz70rH6QrTQ1Wq9reXE8miYzo6klMWCb5K0LaNc7ffeHtcZfsZ0PKyqDAhV52IRuj
+         dOeCmOStUW9dCf4jNJ+IJjM2wBXTOUPIi/C/LRDPr6jGInTsyJyKcorKonhWyrAD9V0u
+         EwTgtPP+7sYvm7U1zU5j2C8ukyfPTefVB03axP9Z69In1jBf3OrTE/4pdTT72qU4oN5M
+         K8Aw==
+X-Gm-Message-State: ANoB5pk7R6IKjsq+JgJMU/F3wZtFTv7VE0hpRrHElvt62x3JnMpDAvBp
+        sdnjBGwokH2UsnEgPpQluUH+C1f/7Tv78YcG/NI=
+X-Google-Smtp-Source: AA0mqf5xGkkp4TyK3rNiEGg6B2v4wlLttK5ZifOyxNPE9HKBFN7/u15rFv7uwOIrxKmrz2YDbDeQ4YFqtbIlts4XwsA=
+X-Received: by 2002:a05:6870:6c02:b0:143:80af:e36a with SMTP id
+ na2-20020a0568706c0200b0014380afe36amr22895324oab.254.1670175379350; Sun, 04
+ Dec 2022 09:36:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4zTqvSxLJG+G8V+@shell.armlinux.org.uk>
+References: <20221202161502.385525-1-ojeda@kernel.org> <20221202161502.385525-28-ojeda@kernel.org>
+ <Y4qNR+Nn9utDftHq@localhost> <20221204103153.117675b1@GaryWorkstation>
+In-Reply-To: <20221204103153.117675b1@GaryWorkstation>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Sun, 4 Dec 2022 17:36:08 +0000
+Message-ID: <CANeycqpNW0E5fQqD1Qzqr0p-3cgs5k5KgLusragaSWbrmcx2Nw@mail.gmail.com>
+Subject: Re: [PATCH v2 27/28] rust: types: add `Either` type
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Josh Triplett <josh@joshtriplett.org>, ojeda@kernel.org,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Wei Liu <wei.liu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> It also seems odd to have this "positive numbers mean update" thing
-> when every other ethtool API just programs whatever is passed. It seems
-> to be a different API theory to the rest of the ethtool established
-> principle that if one wishes to modify, one calls the _GET followed
-> by a _SET. This applies throughout this function.
+On Sun, 4 Dec 2022 at 10:31, Gary Guo <gary@garyguo.net> wrote:
+>
+> On Fri, 2 Dec 2022 15:41:59 -0800
+> Josh Triplett <josh@joshtriplett.org> wrote:
+>
+> > On Fri, Dec 02, 2022 at 05:14:58PM +0100, ojeda@kernel.org wrote:
+> > > From: Wedson Almeida Filho <wedsonaf@gmail.com>
+> > >
+> > > Introduce the new `types` module of the `kernel` crate with
+> > > `Either` as its first type.
+> > >
+> > > `Either<L, R>` is a sum type that always holds either a value
+> > > of type `L` (`Left` variant) or `R` (`Right` variant).
+> > >
+> > > For instance:
+> > >
+> > >     struct Executor {
+> > >         queue: Either<BoxedQueue, &'static Queue>,
+> > >     }
+> >
+> > This specific example seems like it would be better served by the
+> > existing `Cow` type.
+>
+> We use `no_global_oom_handling`, which gates most `ToOwned`
+> implementations (e.g. `str` cannot implement `to_owned()` because it
+> cannot guarantee allocation success).
+>
+> So the Rust `Cow` is pretty much useless in the kernel.
 
-Hi Russell
+It's also implemented in `std`, which the kernel doesn't include.
+(Which is actually good for us, since we can't really use it.)
 
-That was my idea. This is a netlink only API, which gives some
-flexibility which the old ioctl interface did not. With netlink
-attributes, we can pass only the attributes we want to change.
-
-The question then is, what is the interface between the netlink code
-and the PHY driver. How do you express what attributes were in the
-request? I suggested -1 for not present.
-
-We could keep with the old read/modify/write model, but then we are
-not making use of what netlink actually offers.
-
-    Andrew
+Josh, how do you feel about adding a `TryToOwned` trait to
+`core::borrow`? This would be similar to the precedent of `TryFrom` in
+addition to `From` for the fallible case, and would be usable by the
+kernel.
