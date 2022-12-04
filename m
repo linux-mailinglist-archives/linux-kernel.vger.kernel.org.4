@@ -2,106 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D9E641CB4
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 12:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAC5641CBA
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 12:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiLDLjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 06:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S230015AbiLDLls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 06:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiLDLis (ORCPT
+        with ESMTP id S229928AbiLDLlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 06:38:48 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BFE17AAE
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 03:38:46 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id a19so10515605ljk.0
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 03:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A/pyD6f/Bd5araMX2BGAQkyHpIILubF0UH36/Nqyung=;
-        b=pw+/weV8273mc7WQRhOCz/fEmRatku/+mzB7uNOZ2IgDyxteXWbePyBdLhwP5Ky4GZ
-         WvYGMOmrTOnelA+B6wKLGtkoy7R0aoCBtiqwwWQ3CLSowrMihPQKhUsbHHQZGLt3T7d9
-         05z9BJFi9WffNpdIO0N7D4F9buOBtSfQsHFRhN1L0xgo+ki0OHFqRI+7Px1i3oPJCTt1
-         8X6CjYppXj+cekpDrUasxP/IVLKAuOk01pw/dz+89sLkJdjqFSETPdNUUsj8pLvjFC07
-         o7oiztrKS7KG2V7ATFuy6K1CNVaHkC/MINf3U1aGo1EHrXO5kRgKcND2whFi8k6icmUR
-         dX5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A/pyD6f/Bd5araMX2BGAQkyHpIILubF0UH36/Nqyung=;
-        b=ST2/Znl09ruz5GvdrNvEyuQ99Xl/M9FmXDn6qilt3nrAo9MLq6hGFG9I7Yxle6uOfl
-         bnYP0aPjZxPpyZRYrt6VZn/vBT/yn3a5jwMAIwI3k+YwPAabrNjYFyhp5dtH1SA/sCag
-         zGZJAm5+luRd5qhogPrAziw5wp0QC9DHG+jHV26lIgK9bT9X6Bwf6uDwtxTfps6Gt7sm
-         v3bNlS9I2u0NP+XNqv3F4d5S+3IoIu+Zhe2YS5Zt5p3tA4uGHW8VB0daO92g/HmdrI/J
-         k6oyKGtGkwux/9pNAUMN9+1tSoXZy1gGeUH7BS+LG+aLthU6CufvnRagMZQpdSoby36f
-         +43Q==
-X-Gm-Message-State: ANoB5pnc8woOQw7euWjMqizPYJuKON9RXdlEiKa1wkR87tXLl6kLwFDL
-        Q4HjkSshSQRdG0Pi67o9VKDQ/A==
-X-Google-Smtp-Source: AA0mqf4/SRU0PT5ngN26z9s2HHADkNm5cfxKllkHevCCEQyyIIa4Qu5B/KQUe2w5hnwORb6RgA2Fjw==
-X-Received: by 2002:a05:651c:905:b0:26d:d0d2:2ef5 with SMTP id e5-20020a05651c090500b0026dd0d22ef5mr26291598ljq.369.1670153924584;
-        Sun, 04 Dec 2022 03:38:44 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a11-20020ac25e6b000000b0048a9e899693sm1762826lfr.16.2022.12.04.03.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 03:38:44 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH RFT 3/3] arm64: dts: exynos: correct properties of MAX98504 in TM2
-Date:   Sun,  4 Dec 2022 12:38:39 +0100
-Message-Id: <20221204113839.151816-3-krzysztof.kozlowski@linaro.org>
+        Sun, 4 Dec 2022 06:41:07 -0500
+Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA1C186C5
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 03:39:51 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 1nLYpvyXGap0Y1nLYp173T; Sun, 04 Dec 2022 12:39:49 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 04 Dec 2022 12:39:49 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     paulmck@kernel.org, elver@google.com, mark.rutland@arm.com
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] init_task: Include <linux/rbtree.h> in the right file
+Date:   Sun,  4 Dec 2022 12:39:47 +0100
+Message-Id: <f06e810735c49a611e7dc75715f0689b5f7e87c6.1670153931.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221204113839.151816-1-krzysztof.kozlowski@linaro.org>
-References: <20221204113839.151816-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop unused and unsupported MAX98504 amplifier properties (maxim,rx-path
-and similar) and add two supplies.
+There is no need to include <linux/rbtree.h> in init_task.h.
+Move it to the right place, in kernel/cred.c which uses RB_ROOT_CACHED.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This is a follow-up of commit 4e7e3adbba52 ("Expand various INIT_* macros
+and remove") which moved things from init_task.h to init_task.c
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Let see if build-bots agree with me!
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-index a8224b3123d4..6f701297a665 100644
---- a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
-@@ -96,10 +96,10 @@ i2c_max98504: i2c-gpio-0 {
- 		max98504: amplifier@31 {
- 			compatible = "maxim,max98504";
- 			reg = <0x31>;
--			maxim,rx-path = <1>;
--			maxim,tx-path = <1>;
--			maxim,tx-channel-mask = <3>;
--			maxim,tx-channel-source = <2>;
-+
-+			DIOVDD-supply = <&ldo3_reg>;
-+			DVDD-supply = <&ldo3_reg>;
-+			/* PVDD-supply to VPH_PWR */
- 		};
- 	};
- 
+This patch depends on [1] and [2].
+All these patches are related to init_task.h simplification.
+
+They are unrelated and can be applied separately, but as they modify more
+or less the same place in the same file, there may be some merge conflict.
+
+[1]: https://lore.kernel.org/all/1a3d5bd51b7807471a913f8fa621e5a4ecd08e6a.1670100520.git.christophe.jaillet@wanadoo.fr/
+[2]: https://lore.kernel.org/all/94c8f2123a8833b61d84a662ec35f9c070cdf4dd.1670147823.git.christophe.jaillet@wanadoo.fr/
+---
+ include/linux/init_task.h | 1 -
+ init/init_task.c          | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/init_task.h b/include/linux/init_task.h
+index 6d2c4ea4c97a..e18a6c6f6fd9 100644
+--- a/include/linux/init_task.h
++++ b/include/linux/init_task.h
+@@ -9,7 +9,6 @@
+ #include <linux/ipc.h>
+ #include <linux/user_namespace.h>
+ #include <linux/seqlock.h>
+-#include <linux/rbtree.h>
+ #include <linux/refcount.h>
+ #include <linux/sched/autogroup.h>
+ #include <net/net_namespace.h>
+diff --git a/init/init_task.c b/init/init_task.c
+index ff6c4b9bfe6b..2392c0a67fb7 100644
+--- a/init/init_task.c
++++ b/init/init_task.c
+@@ -2,6 +2,7 @@
+ #include <linux/init_task.h>
+ #include <linux/export.h>
+ #include <linux/mqueue.h>
++#include <linux/rbtree.h>
+ #include <linux/sched.h>
+ #include <linux/sched/sysctl.h>
+ #include <linux/sched/rt.h>
 -- 
 2.34.1
 
