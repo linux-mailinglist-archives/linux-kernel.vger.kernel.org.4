@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3F5641EEA
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01E5641EF1
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 19:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiLDSfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 13:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S230320AbiLDShP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 13:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiLDSfA (ORCPT
+        with ESMTP id S230143AbiLDShM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 13:35:00 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EBBE0E6
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 10:34:59 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g7so15380632lfv.5
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 10:34:58 -0800 (PST)
+        Sun, 4 Dec 2022 13:37:12 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4BAD137;
+        Sun,  4 Dec 2022 10:37:11 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-142b72a728fso11097934fac.9;
+        Sun, 04 Dec 2022 10:37:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZXDIa9UwvSD086fb2VJXxmq1AAaUlSCfibRS/MrNCTA=;
-        b=RVCxVJ/WfAGpijugf/2vENKLmV3+cAqHJAJFJV2gz7ZfmFlahpjgmZuB1Ado17KzwQ
-         XnZ+liQ9ysrI/UErelM8Nt+gRq+zDDh0wkake5dJCg9ouDmHz9DRPThRbBlgQt8vzi6O
-         3wLgPWVvOzpVVt4fcWdu2v1AkFRKno+fdaIhoamT61piYLu2r8W+EeWb+8t7qFSNXS6B
-         udionCKJCsrHoKR7wcuJ63nsyDXr75b4t7DMk/SxXAScvUdgLzWbmh4QSNO2ysIOveuI
-         c899lTcbrNDCAi6VZFbYqPb3+98UR+HQvZNZTFGbXcBTI0OnXO3e4jlu9MkJaOs9BS5+
-         t8+A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nLHKRMLDqOO1KM87cuPtuUoe7rvxHP3VMMZRkQ7/sIc=;
+        b=BaaSBPfdiKkfFDor5PXCyMtDHBQBmx8FMH8wjnFx6WPpAvzNAX4xieVnNqNm2YeIj8
+         xHDP0OLpPcx+zcNCCGFUHj//ZtVrMiTY+14Z42yAMjAkrK91ipPtxh1x/ApzajBPvE2y
+         7NTtzjWM7p5bpEoLiE9W3LYIT6D0Ilcw+e8VPQWOpAlPOkyR2ogCbraVuQR0eXMgmSa5
+         KIO3BBP5W26cHuLHVubO9pGxnGf4jsAvehETpwnqo7ab6JcJ0MxyM6pN4x47M3MQ8lmx
+         9HeWcE5hKVeEFOdmmzNENA7XptMmDzMOf9Rc4REmJpGZb7I2nkDWHb9MBU35IHPs/97Y
+         H8lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZXDIa9UwvSD086fb2VJXxmq1AAaUlSCfibRS/MrNCTA=;
-        b=XivFl0nhy6jSXoOCrAT1BCuEPU0se863YFM5H/S5l2nYx762viPHgM0x5XCz0ioVfg
-         oaLhw4X+J6G8jbSRr/TGB85bKNYR/qc89dtnOb2Ug1FwskDk38GoyCWEYZaPb+P7NcgA
-         YjmDa/iAI+qHT/WJw543KKeE5YfnaP/toHL1+X8ed7kEXMSBpRQsfaTUFXKXvouuLVI2
-         d4mAu+Zeyzsz0LnGUPF2P9HNlTRQBdRDkmq5lYrtNdpeyqdFn7xzCLd1+eJ7GeJwBaab
-         Z04lt/kRROgxekKk/ERLeVAEngSj0CXrA0G4oIXvaDta2vlwPEfMKzjKfF1FK96Ff+th
-         Xs4Q==
-X-Gm-Message-State: ANoB5pn6uWIghTbR/Y5vfCIsNsjfTxNSxZylZWZBi5irHPRg59swyw11
-        D/LIUsjrPf4tRCseZR3ysQM77Q==
-X-Google-Smtp-Source: AA0mqf7/2oiaAA24E++y7ORCv8tDZhvGJ2X1DsTKc1u/CeUCOOUSgVvSg0TOI49fHgC4WxlRzC5X/Q==
-X-Received: by 2002:a05:6512:33ce:b0:4b5:ff:4050 with SMTP id d14-20020a05651233ce00b004b500ff4050mr15391733lfg.476.1670178897416;
-        Sun, 04 Dec 2022 10:34:57 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05651c03ce00b0027998486803sm1183079ljp.130.2022.12.04.10.34.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 10:34:57 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: exynos4-is: drop unused pctrl field and headers
-Date:   Sun,  4 Dec 2022 19:34:55 +0100
-Message-Id: <20221204183455.140337-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nLHKRMLDqOO1KM87cuPtuUoe7rvxHP3VMMZRkQ7/sIc=;
+        b=cKpFHnuW64l622U2EjSbLfnLXy3UpyxjQ3BJRLlGr4fZOQKM+UXeYPJbdqCwy+O8el
+         DmbSPEuKQY5zOURrN88a2H5HJAE3gIcdlKQnIhVYDah+bc5JuAVGFY3WvoaMEgVAgXz1
+         Hd9Pi3E3C0SYUlMsKcoxhtYQlgR32bvj0595HoahYquN9k6A8GgUt05vySkWSMleiFB5
+         KwlzNAI2jnNwnT+4d0Daad1oOzc8Hc3eSrADRbdhS3HSm6S1Mj4XHlbVXkqV1KAaP1uw
+         FzA/fyQEiUa42+JSw6WLKoVz6qCk1qHhso3IcxVBw2zPuolZwCrsRdLlxZAmBsBtg8jq
+         qwVQ==
+X-Gm-Message-State: ANoB5pnFem21A3a/UqOCbENGFgmElREDH22dDb6QKSXXn/+zUJC2Buqb
+        VycjP03WlhiRC0JlrQ5KTcM=
+X-Google-Smtp-Source: AA0mqf6igFWzCvqDbbN43mS1E+lmTn7sGnFTxwrbYBXMnPfV6JjxAmAtNy/grUeY0o2zrCN5rf+V8Q==
+X-Received: by 2002:a05:6871:a691:b0:143:c3bf:be6d with SMTP id wh17-20020a056871a69100b00143c3bfbe6dmr16738733oab.103.1670179031179;
+        Sun, 04 Dec 2022 10:37:11 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m24-20020a056870a11800b001447d74a58esm2144294oae.8.2022.12.04.10.37.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Dec 2022 10:37:10 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1085cc7c-00af-83f3-7da6-7820143b162e@roeck-us.net>
+Date:   Sun, 4 Dec 2022 10:37:09 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Eddie James <eajames@linux.vnet.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+References: <Y4zfBRahZJ0QM758@zn.tnic>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: CONFIG_SENSORS_OCC_P8_I2C
+In-Reply-To: <Y4zfBRahZJ0QM758@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The field 'pctrl' in 'struct fimc_is' is not used, just like
-linux/pinctrl/consumer.h headers in the headers.
+On 12/4/22 09:55, Borislav Petkov wrote:
+> Hi,
+> 
+> make oldconfig asks me here on a x86 machine about this below and it
+> looks like this should depend on some P8 config item so that it doesn't
+> show on other architectures.
+> 
+> Right?
+> 
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/media/platform/samsung/exynos4-is/fimc-is.h   | 3 ---
- drivers/media/platform/samsung/exynos4-is/media-dev.h | 1 -
- 2 files changed, 4 deletions(-)
+I don't immediately see why this should depend on a P8 configuration.
+The driver runs on a BMC, after all. My understanding is that a BMC can be
+of any architecture. Is there a guarantee that there are and never will be
+any x86 BMCs, and/or that BMCs are limited to a certain subset of
+architectures ?
 
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is.h b/drivers/media/platform/samsung/exynos4-is/fimc-is.h
-index 06586e455b1d..c126b779aafc 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-is.h
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-is.h
-@@ -14,7 +14,6 @@
- #include <linux/clk.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
--#include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/sizes.h>
- #include <linux/spinlock.h>
-@@ -231,7 +230,6 @@ struct chain_config {
- /**
-  * struct fimc_is - fimc-is data structure
-  * @pdev: pointer to FIMC-IS platform device
-- * @pctrl: pointer to pinctrl structure for this device
-  * @v4l2_dev: pointer to the top level v4l2_device
-  * @fw: data structure describing the FIMC-IS firmware binary
-  * @memory: memory region assigned for the FIMC-IS (firmware)
-@@ -262,7 +260,6 @@ struct chain_config {
-  */
- struct fimc_is {
- 	struct platform_device		*pdev;
--	struct pinctrl			*pctrl;
- 	struct v4l2_device		*v4l2_dev;
- 
- 	struct fimc_is_firmware		fw;
-diff --git a/drivers/media/platform/samsung/exynos4-is/media-dev.h b/drivers/media/platform/samsung/exynos4-is/media-dev.h
-index 62ad5d7e035a..079105d88bab 100644
---- a/drivers/media/platform/samsung/exynos4-is/media-dev.h
-+++ b/drivers/media/platform/samsung/exynos4-is/media-dev.h
-@@ -11,7 +11,6 @@
- #include <linux/platform_device.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
--#include <linux/pinctrl/consumer.h>
- #include <media/media-device.h>
- #include <media/media-entity.h>
- #include <media/v4l2-device.h>
--- 
-2.34.1
+Thanks,
+Guenter
+
+> Thx.
+> 
+> CONFIG_SENSORS_OCC_P8_I2C:
+> 
+> This option enables support for monitoring sensors provided by the
+> On-Chip Controller (OCC) on a POWER8 processor. However, this driver
+> can only run on a baseboard management controller (BMC) connected to
+> the P8, not the POWER processor itself. Communications with the OCC are
+> established through I2C bus.
+> 
+> This driver can also be built as a module. If so, the module will be
+> called occ-p8-hwmon.
+> 
+> Symbol: SENSORS_OCC_P8_I2C [=n]
+> Type  : tristate
+> Defined at drivers/hwmon/occ/Kconfig:6
+>    Prompt: POWER8 OCC through I2C
+>    Depends on: HWMON [=y] && I2C [=y]
+>    Location:
+>      -> Device Drivers
+>        -> Hardware Monitoring support (HWMON [=y])
+>          -> POWER8 OCC through I2C (SENSORS_OCC_P8_I2C [=n])
+> Selects: SENSORS_OCC [=n]
+> 
 
