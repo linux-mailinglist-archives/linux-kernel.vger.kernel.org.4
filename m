@@ -2,186 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6BF641E14
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 17:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69A0641E19
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiLDQ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 11:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S230208AbiLDRCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 12:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiLDQ7J (ORCPT
+        with ESMTP id S229785AbiLDRCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 11:59:09 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2074.outbound.protection.outlook.com [40.107.9.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A2E25F9;
-        Sun,  4 Dec 2022 08:58:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e2CFlN/frUyykZTxHO0odZo5P8x+pDo8rJwpJlstYX0zAkhjzRDacbimtqWJgFUP8mKDv6HCDv5vJCLF+0p8hWo4ZHU6Q+LZ5Gl3WHdUFeCf+4/LoP0DM2BzKSOnf1DscUTrC1l+V8kCfeiiTaFh9HvXFzVSBnvWnXMENKWrpkDUG+XDBDa8938vUCrLtbP7VmeHEQ1sCaD7rsl32zSF5tQD6hXKFmE++coV8UnnNBSj55OzFsxSl0S16IsR4WORHiMRF0Hg4XCNHhYQ+znkGp/ccYpiZ7C8UWySqnUL7i0RFLfVoeUbItHUzesd/Yw/J/+5Z0VKuLj8abUrmdPOcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uiTlKtmrCEbTyTIEo/VtHtESVFh23ooKH8nOyPuBupw=;
- b=YQT807CWFRHcMkm952FniEIeO2ywzjU3wW6grHyigx46mKzD05atl7C64unJBGrBCK8ZboJnZjP9M10PZwV/qmG4F2u2sTE5cpNkXk4wDHONFlaZC8HCVmPRko3Ze/h+PbuaPz5dF9J4WAOF5SKqXct92BPByZRyHHcgQaDm0f6LbfpN6opAUiQGa1/J0VNeEV3txIHqF80b8uYvAScjWXYDlUdmfJk+9nzJSlaAE6VbmVLZq0PAQ7vStn2wWwmDV+FyQ7EKQMCeHFvxbJk5cDukRvW6mrnamyJxDOtOc7hUPilv025aZa3TceQeJkqjeWyqBVEwSvL3/WbcpPwDdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uiTlKtmrCEbTyTIEo/VtHtESVFh23ooKH8nOyPuBupw=;
- b=1Zo+HcTJbHIApBhtQX3b+lMSBTlak687uQJ+kWopkU58/BnmaAZ/m0HRb3cB5WuDnYYVdDhcixz/bLZ4pBbcaoyNoVjMS8J6aVpwVjdZNrXOr/gz3ivWk27ZfFWcVtZQZHyFh0asT2hSl/RbL/V79z9fZgOVkWv3FVceHkXb8CkaOW4+8Bs8JmQUdL5FMh1UiR1r2+MGLF+h5Zn96W3IN/ZFyYbBKwytTISpT2teh5THz/7hhjsAWQHsRckVBlxBDTmVOiTiw5S0Mn4z0hPNAGA83ou0Lu7o8FoS07g6VZzBPozrq2hNWJNf55TC3kkMUyzz3B8jufXr5ShNmeL27A==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2922.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:18::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Sun, 4 Dec
- 2022 16:58:53 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5880.013; Sun, 4 Dec 2022
- 16:58:53 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Fangrui Song <maskray@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andy Lutomirski <luto@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic
- relocations
-Thread-Topic: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic
- relocations
-Thread-Index: AQHYvKf5WSu8dJNxYk+eVO8ie3qNK63YW3QAgBwgtICASlSggIAAzUiAgB4gigCAAMt2gA==
-Date:   Sun, 4 Dec 2022 16:58:53 +0000
-Message-ID: <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
-References: <20220830193701.1702962-1-maskray@google.com>
- <20220910075316.no72fdyqjvunomwm@google.com>
- <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
- <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu>
- <20221115004625.x4wl6zbg4iiuxl5t@google.com>
- <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
-In-Reply-To: <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB2922:EE_
-x-ms-office365-filtering-correlation-id: 6dffa5e2-b34c-4d31-aec4-08dad618d2eb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s5srBfTcZSQqhCsk4pkNeLGiyT8kdkasof6tJAFsXH6tw2p4unC+33ChkDLe380wbd9FaxCHwlNwKONZGGI5wsARl3vdK3ox+WsCVkR76QyGWWDkb9WbafmfrKzd+30JqCK1khWyJtJtZtri5NFwBLsaVUbL/E6P6D/RO7OIZm0tpowKFfcuydEiNpv1fTSfiDh8FEyt4lDuqlNu0v3Ohy6jta9yMfkSo5ZFbxfAvELuIAAx2svyzK0WRrRhSHHcThTJUlfqyMR3MYoOri9+mnAHZGt4iVvG+d1XZftDGNshi+kMQSWzvQSenPFXsdvOFecOA6wX/rKeP89XxPXwlyjSvpTW+SyqghbAQwjyTFQkaWdnmBRp4C7gCyFcbieG16YyUv75IH5RJYC/UGvPs9pkGQQ/1amoz3kkovEsjQPbPFDCjxziN28gVHFN983Ia3yjtO+QiZB4C1b/Y0hvsidKVlU3bYAFezQ2Rbbq7dOzqwcCgQ2xE76sP/Q8fRP/p2FhFuVY/4Fd7lfVlMcWepYkJkRtibTFRsU+J6qbin/ALDrmMyrRMkozNmEhmzxbd5ynEAXuT17hLVefp8b9/Q7mB8j+PtaVz2y8bMwd5/ZlLbYxl3+dj8AUn08duX5LTk41VFl/TB5xCO0nfHQ4uqlDkUPheQzhdnYKycEAsVmBKXsmNiRzZEguwot0EjNQk+X3DoWKc+41hVJVMAIaW36tcixKTR5otCRge23RHnsSvvhR/wEDFUucliTpNgWBWetWwdiIqzRW7UY8TGsxpA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39840400004)(346002)(376002)(136003)(451199015)(71200400001)(53546011)(6506007)(186003)(2616005)(83380400001)(66574015)(38100700002)(66946007)(122000001)(6486002)(66446008)(66556008)(76116006)(64756008)(86362001)(7416002)(66476007)(4326008)(8676002)(41300700001)(8936002)(54906003)(110136005)(316002)(5660300002)(31686004)(478600001)(44832011)(91956017)(6512007)(38070700005)(4001150100001)(31696002)(2906002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?czdzdDF6Zk9BUXd2ZlgyNm45WTAvZ2pkS3pmQ3hvc2lHWjA3WHIzcGhzSkhF?=
- =?utf-8?B?cm9ZNGxZTHQ3SHhRbXkzbnZ6ZUNaY3E4MEZTdU5zaGc4ekg4RllZdHhlTjZZ?=
- =?utf-8?B?S1JSU0ZXMDA5TnlWVThMeWJ1ck9OSElJMEVDNGxHbU54alp1czh1dnhJZjRr?=
- =?utf-8?B?bzBFWm1kNEE3WEpxWVBKNHlDUjB2SnJ6N0g1T1kzeWE5bktTeEZGRUFlVk5v?=
- =?utf-8?B?WTlaYUViTUpuZ0hTcFRKUGtTUGFnQndqOU9XbisvMnp2VHF4VTM4ZG44NVdM?=
- =?utf-8?B?Wm12TlcwckhDNXRPdE9KSEVQWUN4S3oveFo2TUFlZCtTaXk4VmJFUTA5QkZk?=
- =?utf-8?B?OGtjVEt1Rjc3M1pjTkIzVlc2bTAyWkRobDhWVUZHbElHUXR3elFsYWszQ2c3?=
- =?utf-8?B?cEJYczdkSzVuY05nZk9WVXcxZEZUWW52QTlvYXFQK0pReGtVd1RnMUVZOE1a?=
- =?utf-8?B?K2ZoeTVVOEJsQzlYZnA1akZNMHpOaTZXQjNpenNmRVNNdmVhNzFlbUtpS1pT?=
- =?utf-8?B?WHkzRlJITkd2ZmoyR2NVcmZKVjVkNHlBVHFWM05GdGxPc05uMVkwVmZRb1Bp?=
- =?utf-8?B?d01SdnRpMzl2RWpuQ1FjeWNianJOTkRKUnJpWXNzQThjajIzY2VLOWljRXhE?=
- =?utf-8?B?RmJhNW1EMHhoRlNHV1U4NXVxSldRUU9RK3NhWCtwYThybkZ3Nm9QMndiQzRO?=
- =?utf-8?B?aytTbjE4NVdtWHoybjM2QWpUTVN5SUNGcklka09Mbm14cTFabHNFVlNqSTlQ?=
- =?utf-8?B?M29GdlVDdkJ0RldKM1dLSVNETk11Vk54dHNBMUVRNWpOcEpBTm53cDdVbWxB?=
- =?utf-8?B?cENxQ3dGRzhaWVhEcEJ0amFNY1ZINldPWmxhaVE5MnBwNldEaFpkZEZqTWNh?=
- =?utf-8?B?MXdJK2FBTGZNMU53c21JM2pBL29ZTXBEVGRXaHlQM1NYNzRPL0RxcFNndTRM?=
- =?utf-8?B?SFRGQUQrZk5QTml6b3NtVGJYTUJrdXM3VExLODBHQnpIRk9paE91alF6Ymxn?=
- =?utf-8?B?eitsUkhsczQ0aUx0dmU5VmYyeWNjSE4xanJZeVB2MWNHYWhGVDdzMmpXbU9y?=
- =?utf-8?B?bWQzMU5uMlFTTnE0aDRXQkV4azdTWkwvZjBZenhwWHNyc3dBL3R4RzBPaUFT?=
- =?utf-8?B?WStxalZXazZhM0RFejRqdmhMVFdRNWtvdnZSWC9tajZTWmJqM0Rhb2JycUUz?=
- =?utf-8?B?M0NLMmF3b01pVGM4V2RDVktkWndvbFViclhjdUI4RUtVOGtxaWFnRDhIVno4?=
- =?utf-8?B?dW9JS2pvcXJXUHIxUEZDbkt5elo3aEtxZE1KTUM0TjNFOFg2OHVTZ2hPR1lu?=
- =?utf-8?B?NXBSYzlEYkZ3QkM3OUpXeE9FWXFGb3JzNEE5aENwTHg0M3ZQMDdzNGhsK0cy?=
- =?utf-8?B?OE9TSHB4TzhZS2ZDNnNMcDUzdU13Vy9RZy9td3FiUW8rZHdKVVBHVTh6NmRS?=
- =?utf-8?B?TVBuY0NZMVJqNTh3VzlJMlJaOFZiM1pJWlIxMkc4d0ZWNzlXSVlHemFTNnd4?=
- =?utf-8?B?ZDlFYkF4VWFoNm1YNjBZL2pDRThDRXlnVURQWktMNklvYnFWQkREdHJnS2ZO?=
- =?utf-8?B?QWNnY2NoSmR6L0d6ekxPaTNBeXNTeVFQQXNvTWRYSkdlNVVoZ0JxbXZ3RXVr?=
- =?utf-8?B?MVc0aE1EeUN1TWxYSkp2c0JoL0NBNjlCT0h2U2Jqc2lIelNQdWN1UWdiYlRW?=
- =?utf-8?B?SC9sZU1oNE8zQm9jVUlJYVlTMjFxNGk1K0p6K0tvb2o1Rjg3TnQ1a2REeWxo?=
- =?utf-8?B?T09jdVA5eFVBMWphQVNCKzRscWdCeWJsOHY5RGN5cXA2ejE1Vy9YL01Ic21Q?=
- =?utf-8?B?MU9XM1puWHJXbU9BeG43R253eG9LNHBmUG9XdzBwNkltMGxzZFJuV21XaHRq?=
- =?utf-8?B?TjFFdWQwWjhKdHBoQlhMb3VEZEtnTVcvbFQxKzhFSDlseXVyKzdUTHJvYmFp?=
- =?utf-8?B?a1c1blhmc2paWXNrdjZjRkdJU0NIOGFpVDhEY0c2RHdNMXFncDFkajc5RW1o?=
- =?utf-8?B?bjI4YlRRWlpYQ3Ntekt4MWxaWjlVZ2haeTNjNXBLWWdBR0lRWVVmeERIMjFm?=
- =?utf-8?B?UzJTYzRycnBaT1NGTTBXUGlUd21uNFBqd0xqSURuUlJOa2RyYlp6cFRiL2JS?=
- =?utf-8?B?VkkvR0wwRlk3WmVHMjFIcW0rTVNHTlMwZlRWdzFDYU03VWRoWUZ5M0V2ZU1u?=
- =?utf-8?B?czhzSitnWjRZVHJmcElKYnh2OW80dkZObUdxMTdWLzduUVF0aEQyRDIrbmpk?=
- =?utf-8?B?NmZ3OVJ1WGQxeWI2Y3orRkFDUUhnPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C2B1CC23DAF1C04DB7526A2D63E0D88F@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sun, 4 Dec 2022 12:02:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A0525F9;
+        Sun,  4 Dec 2022 09:02:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2602660EB7;
+        Sun,  4 Dec 2022 17:02:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F76C433C1;
+        Sun,  4 Dec 2022 17:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670173320;
+        bh=qzIh5lYDbuWNcCiYp8t2nrrPpr4S52NNRYnpTEYgCSc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kH2oAviqxL46MHZpQ731QJCNCu9f/D3QfimG5ibVgi4wiW6mPB53e/GUwaoZ2leR4
+         PxVrG9wnKe+uveeFbF6jHbrE+4XcDLf7N5t0YysBu5365vJSHuLwgkDKG9y2jVIZx2
+         VRt4F5wdhBh19s+3R/vNncnSFAu5OplNlW+wzjbqoBZdfqQtGC/rLxMi3U8YRqIrBZ
+         6kMik7nAnp/4WxIlShkWD0nVeeNo+gyk+f4wuUq0W4ux/JiuqWL+GBv2jtMNTKuBGU
+         +fRqRCv8gMOsdX2mJz0ky/Ndwzld3CF8SpPPyqqI6FoztFS4175x9vKI4SZPnLH1bL
+         F0iv5qwyWg6EA==
+Date:   Sun, 4 Dec 2022 17:01:56 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jandryuk@gmail.com,
+        pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+Subject: Re: [PATCH v11 13/14] tpm, tpm_tis: startup chip before testing for
+ interrupts
+Message-ID: <Y4zSbKvNa6S5kIYJ@kernel.org>
+References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+ <20221124135538.31020-14-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dffa5e2-b34c-4d31-aec4-08dad618d2eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2022 16:58:53.2253
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qI7O9H5NmOmoLFFz3nzw4piuIMZtIgaNTcglG/xvWeK5J6HBygei7E8vVFrcMDza8Ecs4NOtbUXReM8Pi4miY+HMQtMJaXtGnLMtesF9gzk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2922
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124135538.31020-14-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA0LzEyLzIwMjIgw6AgMDU6NTAsIEZhbmdydWkgU29uZyBhIMOpY3JpdMKgOg0KPiBP
-biBNb24sIE5vdiAxNCwgMjAyMiBhdCA0OjQ2IFBNIEZhbmdydWkgU29uZyA8bWFza3JheUBnb29n
-bGUuY29tPiB3cm90ZToNCj4+DQo+PiBPbiAyMDIyLTExLTE0LCBDaHJpc3RvcGhlIExlcm95IHdy
-b3RlOg0KPj4+DQo+Pj4NCj4+PiBMZSAyOC8wOS8yMDIyIMOgIDA3OjI1LCBGYW5ncnVpIFNvbmcg
-YSDDqWNyaXQgOg0KPj4+PiBPbiBTYXQsIFNlcCAxMCwgMjAyMiBhdCAxMjo1MyBBTSBGYW5ncnVp
-IFNvbmcgPG1hc2tyYXlAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+Pj4+Pg0KPj4+Pj4gT24gMjAyMi0w
-OC0zMCwgRmFuZ3J1aSBTb25nIHdyb3RlOg0KPj4+Pj4+IFRoZSBhY3R1YWwgaW50ZW50aW9uIGlz
-IHRoYXQgbm8gZHluYW1pYyByZWxvY2F0aW9uIGV4aXN0cy4gSG93ZXZlciwgc29tZQ0KPj4+Pj4+
-IEdOVSBsZCBwb3J0cyBwcm9kdWNlIHVubmVlZGVkIFJfKl9OT05FLiAoSWYgYSBwb3J0IGlzIG5v
-dCBjYXJlIGVub3VnaCB0bw0KPj4+Pj4+IGRldGVybWluZSB0aGUgZXhhY3QgLnJlbFthXS5keW4g
-c2l6ZSwgdGhlIHRyYWlsaW5nIHplcm9zIGJlY29tZSBSXypfTk9ORQ0KPj4+Pj4+IHJlbG9jYXRp
-b25zLiBFLmcuIHBvd2VycGM2NGxlIGxkIGFzIG9mIDIuMzggaGFzIHRoZSBpc3N1ZSB3aXRoDQo+
-Pj4+Pj4gZGVmY29uZmlnLikgUl8qX05PTkUgYXJlIGdlbmVyYWxseSBuby1vcCBpbiB0aGUgZHlu
-YW1pYyBsb2FkZXJzLiBTbyBqdXN0DQo+Pj4+Pj4gaWdub3JlIHRoZW0uDQo+Pj4+Pj4NCj4+Pj4+
-PiBXaXRoIHRoZSBjaGFuZ2UsIHdlIGNhbiByZW1vdmUgQVJDSF9SRUxfVFlQRV9BQlMuIEFSQ0hf
-UkVMX1RZUEVfQUJTIGlzIGENCj4+Pj4+PiBiaXQgbWlzbm9tZXIgYXMgcG9ydHMgbWF5IGNoZWNr
-IFJFTEFWRVRJVkUvR0xPQl9EQVQvSlVNUF9TTE9UIHdoaWNoIGFyZQ0KPj4+Pj4+IG5vdCBjYWxs
-ZWQgImFic29sdXRlIHJlbG9jYXRpb25zIi4gKFRoZSBwYXRjaCBpcyBtb3RpdmF0ZWQgYnkgdGhl
-IGFybTY0DQo+Pj4+Pj4gcG9ydCBtaXNzaW5nIFJfQUFSQ0g2NF9SRUxBVElWRS4pDQo+Pj4+Pj4N
-Cj4+Pj4+PiBXaGlsZSBoZXJlLCByZXBsYWNlICJlZ3JlcCIgd2l0aCAiZ3JlcCIgYXMgImVncmVw
-IiBpcyBkZXByZWNhdGVkIGluIEdOVQ0KPj4+Pj4+IGdyZXAgMy43Lg0KPj4+Pj4+DQo+Pj4+Pj4g
-U2lnbmVkLW9mZi1ieTogRmFuZ3J1aSBTb25nIDxtYXNrcmF5QGdvb2dsZS5jb20+DQo+Pj4+Pj4g
-LS0tDQo+Pj4+Pj4gWy4uLl0NCj4+Pj4+Pg0KPj4+Pj4NCj4+Pj4+IFBpbmcuDQo+Pj4+DQo+Pj4+
-IFBpbmdeMiA6KQ0KPj4+DQo+Pj4gQ2FuIHlvdSBleHBsYWluIHdoaWNoIEFSQ0hfUkVMX1RZUEVf
-QUJTIGNhbiBiZSByZW1vdmVkIHdpdGggdGhpcyBjaGFuZ2UgPw0KPj4+IEhvdyBpcyB0aGUgdmVy
-aWZpY2F0aW9uIGRvbmUgaWYgQVJDSF9SRUxfVFlQRV9BQlMgaXMgcmVtb3ZlZCA/DQo+Pg0KPj4g
-QWxsIEFSQ0hfUkVMX1RZUEVfQUJTIHJlbG9jYXRpb24gdHlwZXMgY2FuIGJlIHJlbW92ZWQuIEFz
-IGV4cGxhaW5lZCwgdGhlDQo+PiByZWFsIGludGVudGlvbiBpcyB0byBjaGVjayBubyBkeW5hbWlj
-IHJlbG9jYXRpb24sIGFuZCB0aGlzIGlzIGRvbmUgYnkNCj4+IHRoZSBuZXcNCg0KV2VsbCwgdGhl
-cmUgd2FzIGEgdHlwbyBpbiBteSBxdWVzdGlvbiwgSSB3YW50ZWQgdG8gYXNrICd3aHknLCBub3Qg
-J3doaWNoJy4NCg0KPj4NCj4+ICAgICBjbWRfdmRzb19jaGVjayA9IGlmICQoUkVBREVMRikgLXJX
-ICRAIHwgZ3JlcCAtdiBfTk9ORSB8IGdyZXAgLXEgIlJfXHcqXyI7IFwNCj4+DQo+PiBpbiB0aGlz
-IHBhdGNoLg0KPj4NCj4+IGdyZXAgLXYgX05PTkUgaXMgdG8gd29yayBhcm91bmQgc29tZSBHTlUg
-bGQgcG9ydHMgKGFuZCBsaWtlbHkgb2xkZXIgcmVsZWFzZXMNCj4+IG9mIHNvbWUgcG9ydHMgZXZl
-biBpZiB0aGVpciBsYXRlc3QgdmVyc2lvbnMgYXJlIGZpeGVkKSB3aGljaCBwcm9kdWNlDQo+PiB1
-bm5lZWRlZCBSXypfTk9ORSBkeW5hbWljIHJlbG9jYXRpb25zLg0KPiANCj4gUGluZyA6KQ0KDQpP
-aywgdGhhdCBzZWVtcyB0byB3b3JrIG9uIHBvd2VycGMuDQoNClJldmlld2VkLWJ5OiBDaHJpc3Rv
-cGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQo=
+On Thu, Nov 24, 2022 at 02:55:37PM +0100, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> In tpm_tis_gen_interrupt() a request for a property value is sent to the
+> TPM to test if interrupts are generated. However after a power cycle the
+> TPM responds with TPM_RC_INITIALIZE which indicates that the TPM is not
+> yet properly initialized.
+> Fix this by first starting the TPM up before the request is sent. For this
+> the startup implementation is removed from tpm_chip_register() and put
+> into the new function tpm_chip_startup() which is called before the
+> interrupts are tested.
+> 
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c     | 38 +++++++++++++++++++++------------
+>  drivers/char/tpm/tpm.h          |  1 +
+>  drivers/char/tpm/tpm_tis_core.c |  5 +++++
+>  3 files changed, 30 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 783d65fc71f0..370aa1f529f2 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -543,6 +543,30 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
+>  	return rc;
+>  }
+>  
+> +/*
+> + * tpm_chip_startup() - performs auto startup and allocates the PCRs
+> + * @chip: TPM chip to use.
+> + */
+> +int tpm_chip_startup(struct tpm_chip *chip)
+> +{
+> +	int rc;
+> +
+> +	rc = tpm_chip_start(chip);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = tpm_auto_startup(chip);
+> +	if (rc)
+> +		goto stop;
+> +
+> +	rc = tpm_get_pcr_allocation(chip);
+> +stop:
+> +	tpm_chip_stop(chip);
+> +
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(tpm_chip_startup);
+> +
+>  /*
+>   * tpm_chip_register() - create a character device for the TPM chip
+>   * @chip: TPM chip to use.
+> @@ -558,20 +582,6 @@ int tpm_chip_register(struct tpm_chip *chip)
+>  {
+>  	int rc;
+>  
+> -	rc = tpm_chip_start(chip);
+> -	if (rc)
+> -		return rc;
+> -	rc = tpm_auto_startup(chip);
+> -	if (rc) {
+> -		tpm_chip_stop(chip);
+> -		return rc;
+> -	}
+> -
+> -	rc = tpm_get_pcr_allocation(chip);
+> -	tpm_chip_stop(chip);
+> -	if (rc)
+> -		return rc;
+> -
+>  	tpm_sysfs_add_device(chip);
+>  
+>  	tpm_bios_log_setup(chip);
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 24ee4e1cc452..919bb0b88b12 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -190,6 +190,7 @@ static inline void tpm_msleep(unsigned int delay_msec)
+>  		     delay_msec * 1000);
+>  };
+>  
+> +int tpm_chip_startup(struct tpm_chip *chip);
+>  int tpm_chip_start(struct tpm_chip *chip);
+>  void tpm_chip_stop(struct tpm_chip *chip);
+>  struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index ddaf362e62c1..94a2bfb244b3 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -1129,6 +1129,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	/* INTERRUPT Setup */
+>  	init_waitqueue_head(&priv->read_queue);
+>  	init_waitqueue_head(&priv->int_queue);
+> +
+> +	rc = tpm_chip_startup(chip);
+> +	if (rc)
+> +		goto out_err;
+> +
+>  	if (irq != -1) {
+>  		/*
+>  		 * Before doing irq testing issue a command to the TPM in polling mode
+> -- 
+> 2.36.1
+> 
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
