@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99044641FB9
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A931641FC4
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 22:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiLDVD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 16:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S230177AbiLDVP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 16:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiLDVDZ (ORCPT
+        with ESMTP id S229954AbiLDVP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 16:03:25 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D58FF58E
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 13:03:24 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id u10so7072277qvp.4
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 13:03:24 -0800 (PST)
+        Sun, 4 Dec 2022 16:15:56 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FE511A39;
+        Sun,  4 Dec 2022 13:15:55 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id n20so23558760ejh.0;
+        Sun, 04 Dec 2022 13:15:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rKd7A2ySfckvcP/WSPOwepMQ4TZ0rFcNRmP+2MvjT4A=;
-        b=XnfhUClfXXxSzRvNxJMqANfGlMdg+aWxnIGjQQjSdkLEcMH5jf2oJ4VjtiTUtKP7Zf
-         JrIy1duQqMiXakjzyJSwOhxEC2ceVsoSnon2ncSf6bUed65NwhuzL0sBBMHvfVD8msZH
-         edqW1lUF5hfB/SpOPxFKHU+w8jnTfDNfs96NI=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N5myqd35peHqRERs7SmCBzUjy0wB0kxxoMubeKrt2TY=;
+        b=ATY1DPJCFZqkeMnAEGSp93oAPvjniFLiMEYs88vBr9/r64UsR1p3BDUP5ffo3fmIa8
+         c8rsTo6ENU18EL09G/IUgvFJ6FqKv7CsCN1vTSIOMEnuvX6fBD/kwm5Pjfey0daigRTS
+         gdHkXYjgGEYg2joO5msm5DHP+L2iEduA09RZe4pdnOMMTjXAqNcmZF62j+K4OmJl7ICE
+         KoDCGWxLrB7MmJ8KjEtawA1FXpGRBK5zF51y14YFotuPshhrXBNC2vwSFzzoLzb+Jmh2
+         4NLj7ye3A05K52XSQdgrKczL64HNLoUDuZ92OL2NB1KBbWd0jhlmdhkhk5pwVLByvuls
+         CX/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rKd7A2ySfckvcP/WSPOwepMQ4TZ0rFcNRmP+2MvjT4A=;
-        b=FFZzBgOsf9HIRxP0ch+n4XU2pDINjhEjBYysq9YRg+jlwHgWVe8SutMq/rfRszOtt7
-         YWTONHGHtDxRHDSllt0XBiFPmt359QZLpA19EYTAXATBoZs0yG+0QwqJLCuRAc+bTo7X
-         zDa/ATT5QnF7XEcZbE1CtoZNEk9vBw3dq4zoIa71lmOjlWp2J/tpAWO5IZXSsARk18T7
-         aOtI6uE9jmUQUWG+c0htWtG3NbwiHtm61F1dI1xeAHGY/c6sbHoleUeb4cZqcIaBH/HG
-         vYBCqPAPGtQw198AYmZqmV0qXgQcd3kLxEX9kZfjf+3QWOPLJMqaz313B5v+NMyHvcIj
-         6cSA==
-X-Gm-Message-State: ANoB5plZAoFHPJgyTLZUb+9cnoDr9tDARwFiPxmwAYKkB4ric20R68LU
-        +vZFsKbICWSSo6x07mPS6SFcrO6ZGzrHARAf
-X-Google-Smtp-Source: AA0mqf5Bqn/E0OpKB4k5jX0zyHqk65Jrbe01kqv0BeCFijngH7uIUROPzvsHXSgfPnUPmuDgBdaUaA==
-X-Received: by 2002:a05:6214:3981:b0:4c6:a9fa:47f7 with SMTP id ny1-20020a056214398100b004c6a9fa47f7mr60778422qvb.34.1670187802875;
-        Sun, 04 Dec 2022 13:03:22 -0800 (PST)
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
-        by smtp.gmail.com with ESMTPSA id f4-20020ac80684000000b0039cc64bcb53sm8365589qth.27.2022.12.04.13.03.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 13:03:22 -0800 (PST)
-Received: by mail-qv1-f43.google.com with SMTP id p12so7052754qvu.5
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 13:03:21 -0800 (PST)
-X-Received: by 2002:a05:6214:390c:b0:4c7:7282:5817 with SMTP id
- nh12-20020a056214390c00b004c772825817mr542557qvb.94.1670187801671; Sun, 04
- Dec 2022 13:03:21 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N5myqd35peHqRERs7SmCBzUjy0wB0kxxoMubeKrt2TY=;
+        b=pFCSZxzN5GXVMqzX7YmLWYpVpc+ht9rjcv34dIyfxs1HvOMIfFAnddAnJpzCx05nqg
+         jrO4OHYVR2QmRlSFQZqWeovKVRrkV29mfvXBGy8QAjFh4rqIdN6bErcP8+v/EWWhRQKb
+         32+q8f7711mqiKvJ0L5cwWRM/0yGF1xY3rIMMHZHrPQf1HYBbo9OKUf0fouwOZx3eGfH
+         CSkx2yW1iqtLWhGX9heKnCRlSnrOedT9EOkW8MTFcX6PEmglgYPXVDUYsQ605R4mEsIC
+         C/2DlR790YP6wQB9WaJKRR+6wUTVvZMWOHQt89I2GsarwDDDa/rfQphovQfEX+qjWYwX
+         8UUw==
+X-Gm-Message-State: ANoB5plVoiMY7cAmeCF8P5LT/X8Oe9NwQVWzwizfCL9tcaJ/FQ8G1yga
+        I3eEicBpTBxVR+PXJ9OxvmA=
+X-Google-Smtp-Source: AA0mqf4DRSiZgoJ3b9GddzakpIr3VKP2LhrCT0ROq909oX2idu93YHvR0ROf0XDAZWzAW8A6EVOO+g==
+X-Received: by 2002:a17:907:591:b0:7c0:a997:2298 with SMTP id vw17-20020a170907059100b007c0a9972298mr15424761ejb.430.1670188553765;
+        Sun, 04 Dec 2022 13:15:53 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id l9-20020a1709063d2900b0073d71792c8dsm5468226ejf.180.2022.12.04.13.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Dec 2022 13:15:53 -0800 (PST)
+Date:   Sun, 4 Dec 2022 22:16:01 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     mkubecek@suse.cz
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        andrew@lunn.ch
+Subject: Re: [PATCH net-next 1/2] ethtool: update UAPI files
+Message-ID: <Y40OEbeI3AuZ5hH2@gvm01>
+References: <cover.1670121214.git.piergiorgio.beruto@gmail.com>
+ <0f7042bc6bcd59b37969d10a40e65d705940bee0.1670121214.git.piergiorgio.beruto@gmail.com>
+ <Y4zVMj7rOkyA12uA@shell.armlinux.org.uk>
+ <Y4zduT5aHd4vxQZL@lunn.ch>
 MIME-Version: 1.0
-References: <167016324121.413036.10816787460130337195@leemhuis.info>
-In-Reply-To: <167016324121.413036.10816787460130337195@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 4 Dec 2022 13:03:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgCHBWN5VbCAc6=bKMnEBjdumqDGYG=X1E27VWG2H_WQQ@mail.gmail.com>
-Message-ID: <CAHk-=wgCHBWN5VbCAc6=bKMnEBjdumqDGYG=X1E27VWG2H_WQQ@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2022-12-04]
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4zduT5aHd4vxQZL@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,17 +80,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 4, 2022 at 6:16 AM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> Hi Linus! Below you'll find regzbot's report about regression from this
-> cycle the bot and I became aware of. But first let me highlight a few:
+Hello Michal,
+I was wondering if you could help me with the issue below.
 
-Ack. I fast-tracked the tpm fix and the mm performance regression
-revert that everybody seemed to agree on, so that they will be in rc8.
+In short, I'm trying to add a new feature to netlink / ethtool that
+requires changes to the UAPI headers. I therefore need to update these
+headers in the ethtool userland program as well.
 
-The others end up being less clear-cut and remain.
+The problem I'm having is that I don't know the procedure for updating
+the headers, which is something I need to build my patch to ethtool on.
 
-Thanks,
+I understand now this is not a straight copy of the kernel headers to
+the ethtool repository.
 
-               Linus
+Should I use some script / procedure / else?
+Or should I just post my patch without the headers? (I wonder how we can
+verify it though?)
+
+Any help on the matter would be very appreciated.
+
+Kind Regards,
+Piergiorgio
+
+On Sun, Dec 04, 2022 at 06:49:45PM +0100, Andrew Lunn wrote:
+> On Sun, Dec 04, 2022 at 05:13:22PM +0000, Russell King (Oracle) wrote:
+> > On Sun, Dec 04, 2022 at 03:38:37AM +0100, Piergiorgio Beruto wrote:
+> > 
+> > NAK. No description of changes.
+> 
+> Hi Piergiorgio
+> 
+> Look at the previous examples of this:
+> 
+> commit 41fddc0eb01fcd8c5a47b415d3faecd714652513
+> Author: Michal Kubecek <mkubecek@suse.cz>
+> Date:   Mon Jun 13 23:50:26 2022 +0200
+> 
+>     update UAPI header copies
+>     
+>     Update to kernel v5.18.
+>     
+>     Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+> 
+> > > diff --git a/uapi/linux/ethtool.h b/uapi/linux/ethtool.h
+> > > index 944711cfa6f6..5f414deacf23 100644
+> > > --- a/uapi/linux/ethtool.h
+> > > +++ b/uapi/linux/ethtool.h
+> > > @@ -11,14 +11,16 @@
+> > >   * Portions Copyright (C) Sun Microsystems 2008
+> > >   */
+> > >  
+> > > -#ifndef _LINUX_ETHTOOL_H
+> > > -#define _LINUX_ETHTOOL_H
+> > > +#ifndef _UAPI_LINUX_ETHTOOL_H
+> > > +#define _UAPI_LINUX_ETHTOOL_H
+> 
+> Maybe ask Michal Kubecek how he does this. It does not appear to be a
+> straight copy of the headers.
+> 
+> 	 Andrew
