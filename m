@@ -2,149 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E47641E88
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E02641E49
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 18:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiLDR5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 12:57:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S230282AbiLDRuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 12:50:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiLDR5G (ORCPT
+        with ESMTP id S229999AbiLDRuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 12:57:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4AF140CD;
-        Sun,  4 Dec 2022 09:57:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AF6B60ECE;
-        Sun,  4 Dec 2022 17:57:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820BEC433D7;
-        Sun,  4 Dec 2022 17:57:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670176624;
-        bh=JXzPxvFpWQXfBP14y0JZvUn34ik1sRVmrtRbscUXSzk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7uERDpLmA51CeeeqseZ7VOvhDxV/BnNb89BObR8vFxipu3a7G9ACLphKz1DSAfE0
-         p55xdOiTuLzvwda+mzn/a25lku6qOXof1nFy4S7V/1oI+E6R0qHi2B+8MpRivnagjU
-         Ts4Jpc9lFdfNi93iAXEmcq16W9C5FXQMsKfUDDoCRQjqxBVS4pEpZBKqHTB7zQK8ci
-         DGPBKFKBhnCUe+GOuWkZASE600znmEI5XDrJppmIa6TSXx2teSFTut+vvis/DzalYp
-         hTNgyi7QO2Eyx3nPSmyCHH9zuddIWgo0L1LoN6mnPHnnjBE7UoaVWB70ArhcgLhFkH
-         wBq14VfW2mEZQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: [PATCH v2 13/13] riscv: remove riscv_isa_ext_keys[] array and related usage
-Date:   Mon,  5 Dec 2022 01:46:32 +0800
-Message-Id: <20221204174632.3677-14-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221204174632.3677-1-jszhang@kernel.org>
-References: <20221204174632.3677-1-jszhang@kernel.org>
+        Sun, 4 Dec 2022 12:50:08 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2101413F9C;
+        Sun,  4 Dec 2022 09:50:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=jnWCmLa07Cboorow/ejMSmqioVuXh5OGUyXFM2GYNr0=; b=Zg2wUo7aShYjqEIwFMO0Y5yuyy
+        JEHlwz1SncQIHQ9MbxoXwaA2RPxseYsCOgITQeAXXhR0/wYP1mJ2+BJyrtVoTLJaWU0T/Xwc8wgg8
+        cGbTtK8SX874KzL0pxu0I+tl1bLDUwi6hk8nKddVs35hD+QNlZ8IsNCG5+D12EZ3Qmt4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p1t7Z-004KlS-8i; Sun, 04 Dec 2022 18:49:45 +0100
+Date:   Sun, 4 Dec 2022 18:49:45 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH net-next 1/2] ethtool: update UAPI files
+Message-ID: <Y4zduT5aHd4vxQZL@lunn.ch>
+References: <cover.1670121214.git.piergiorgio.beruto@gmail.com>
+ <0f7042bc6bcd59b37969d10a40e65d705940bee0.1670121214.git.piergiorgio.beruto@gmail.com>
+ <Y4zVMj7rOkyA12uA@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4zVMj7rOkyA12uA@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All users have switched to riscv_has_extension_*, removed unused
-definitions, vars and related setting code.
+On Sun, Dec 04, 2022 at 05:13:22PM +0000, Russell King (Oracle) wrote:
+> On Sun, Dec 04, 2022 at 03:38:37AM +0100, Piergiorgio Beruto wrote:
+> 
+> NAK. No description of changes.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
----
- arch/riscv/include/asm/hwcap.h | 30 ------------------------------
- arch/riscv/kernel/cpufeature.c |  9 ---------
- 2 files changed, 39 deletions(-)
+Hi Piergiorgio
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index e2d3f6df7701..be00a4337578 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -60,18 +60,6 @@ enum {
- 
- extern unsigned long elf_hwcap;
- 
--/*
-- * This enum represents the logical ID for each RISC-V ISA extension static
-- * keys. We can use static key to optimize code path if some ISA extensions
-- * are available.
-- */
--enum riscv_isa_ext_key {
--	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
--	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
--	RISCV_ISA_EXT_KEY_SVINVAL,
--	RISCV_ISA_EXT_KEY_MAX,
--};
--
- struct riscv_isa_ext_data {
- 	/* Name of the extension displayed to userspace via /proc/cpuinfo */
- 	char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-@@ -79,24 +67,6 @@ struct riscv_isa_ext_data {
- 	unsigned int isa_ext_id;
- };
- 
--extern struct static_key_false riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_MAX];
--
--static __always_inline int riscv_isa_ext2key(int num)
--{
--	switch (num) {
--	case RISCV_ISA_EXT_f:
--		return RISCV_ISA_EXT_KEY_FPU;
--	case RISCV_ISA_EXT_d:
--		return RISCV_ISA_EXT_KEY_FPU;
--	case RISCV_ISA_EXT_ZIHINTPAUSE:
--		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
--	case RISCV_ISA_EXT_SVINVAL:
--		return RISCV_ISA_EXT_KEY_SVINVAL;
--	default:
--		return -EINVAL;
--	}
--}
--
- static __always_inline bool
- riscv_has_extension_likely(const unsigned long ext)
- {
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index adeac90b1d8e..3240a2915bf1 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -28,9 +28,6 @@ unsigned long elf_hwcap __read_mostly;
- /* Host ISA bitmap */
- static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
- 
--DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
--EXPORT_SYMBOL(riscv_isa_ext_keys);
--
- /**
-  * riscv_isa_extension_base() - Get base extension word
-  *
-@@ -243,12 +240,6 @@ void __init riscv_fill_hwcap(void)
- 		if (elf_hwcap & BIT_MASK(i))
- 			print_str[j++] = (char)('a' + i);
- 	pr_info("riscv: ELF capabilities %s\n", print_str);
--
--	for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
--		j = riscv_isa_ext2key(i);
--		if (j >= 0)
--			static_branch_enable(&riscv_isa_ext_keys[j]);
--	}
- }
- 
- #ifdef CONFIG_RISCV_ALTERNATIVE
--- 
-2.37.2
+Look at the previous examples of this:
 
+commit 41fddc0eb01fcd8c5a47b415d3faecd714652513
+Author: Michal Kubecek <mkubecek@suse.cz>
+Date:   Mon Jun 13 23:50:26 2022 +0200
+
+    update UAPI header copies
+    
+    Update to kernel v5.18.
+    
+    Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+
+> > diff --git a/uapi/linux/ethtool.h b/uapi/linux/ethtool.h
+> > index 944711cfa6f6..5f414deacf23 100644
+> > --- a/uapi/linux/ethtool.h
+> > +++ b/uapi/linux/ethtool.h
+> > @@ -11,14 +11,16 @@
+> >   * Portions Copyright (C) Sun Microsystems 2008
+> >   */
+> >  
+> > -#ifndef _LINUX_ETHTOOL_H
+> > -#define _LINUX_ETHTOOL_H
+> > +#ifndef _UAPI_LINUX_ETHTOOL_H
+> > +#define _UAPI_LINUX_ETHTOOL_H
+
+Maybe ask Michal Kubecek how he does this. It does not appear to be a
+straight copy of the headers.
+
+	 Andrew
