@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CD0642029
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 23:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BBF64202B
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Dec 2022 23:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiLDW7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 17:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S230480AbiLDW7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 17:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiLDW7Y (ORCPT
+        with ESMTP id S230161AbiLDW71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 17:59:24 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEAA10048
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 14:59:23 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id z23so622293vkb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 14:59:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=U1YCWugnt7NNcwN1mLvIio05PcYTCT5nH/7JzPuEAF4=;
-        b=MeZNB9/YoNEJG11VARRGWae/1ItbIoyRu5aQ36YsOEIFBl+tv4RFRIPPcSVlt4uXg+
-         rBrzktWDyGBkjcPeDJ64CNwJLYUUJAPYYhQ+0+hNxEodZIcyakPwB+BPPUtg6a+6G1+g
-         X/pFg3jK9Cz1QBxXG1EQ65sMn80ePUeIXRqRGnuD/MUZBu/Fb+X8MqICRHfKLCcfPlMx
-         f7Xdk9fvcyi73Bc6oycAEBanlqELODr6wnMTmzr3+jxo96XQuFg2ns+XsOG2Vtd+d46r
-         34TyTzhfzWAPa3QPp5oRqSxIlKxM3VxCKph8Nwm64PySn+1p9w8HApHiwNEbuUNoSaVB
-         tGIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U1YCWugnt7NNcwN1mLvIio05PcYTCT5nH/7JzPuEAF4=;
-        b=Kes9rCieLM2uF/5GAlGppEIoCULA6/H38/0BujEMwIOkp9ZpBPsd41kKgmQ2vbN2kI
-         74X/wb5vmf7SrTQ2fJHOFBMM7Zi8N9yJXj3SfiLkQ1YP6U8j6/Ah1oLWiNLdXhxd8+R+
-         Nx6cX8Dv6F+J7MoZ4z0TzZAYYKK7h3cS/kMBW7HVq5+4P5+CuIACB1nmO/thA6Szzrsd
-         BW3cZ2+PIC31OCOrEbWRFwz3qi/0gsdg6OKbkRSIij90g4lHfNhZKJqovlFpeutVEEMh
-         dNR9DvLOiU/0+vduM2lr3symeJlWYBiPuTMu5PEBoGhSoVa64QVJFvrGke+i6fvshJeG
-         aIww==
-X-Gm-Message-State: ANoB5pmcqpwuB178WLrLGFQYznLnMiMAk6io4TYT8O0udEv7bVLYkTqY
-        mX60C33ghORbvVg5D6/DgiKx5iPSpzoMjv/6pbDLA3XncDhBPQ==
-X-Google-Smtp-Source: AA0mqf5x2PSpwgMuZHGI0b78Lrjpb6NlNe7Isuc6zHyZXrqZoLLufMiKNgYIEa8SLzR7fGAdy8XyYE8dK+xh80zTF9s=
-X-Received: by 2002:a05:6122:1243:b0:3bd:730b:ef5a with SMTP id
- b3-20020a056122124300b003bd730bef5amr4334490vkp.29.1670194762270; Sun, 04 Dec
- 2022 14:59:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20221202141630.41220-1-tcm1030@163.com> <20221202115954.a226f8ef3051266d04caff54@linux-foundation.org>
-In-Reply-To: <20221202115954.a226f8ef3051266d04caff54@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sun, 4 Dec 2022 15:58:46 -0700
-Message-ID: <CAOUHufZaL2S6Aa1ey3Mk+h+bGr2Tbg_LxOkjbuj87psukPe-gQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/mempolicy: failed to disable numa balancing
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     tzm <tcm1030@163.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Sun, 4 Dec 2022 17:59:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D643710064;
+        Sun,  4 Dec 2022 14:59:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A59960F19;
+        Sun,  4 Dec 2022 22:59:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4867AC433C1;
+        Sun,  4 Dec 2022 22:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670194765;
+        bh=LRkUe4XABlC9VBeCPJzhz6PTyyn3i1YDevmOH4lKMA4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GrfY35+txbbtOxDfwufQw7dlLTxFTY+3KB6z9sNdtYva1nDOHkjee4Wk9nsWbugO5
+         ixPxSG4dEr6Cc4u1kX5x1tyCSxS8uW7oC91N0zIarLvzV1kYvCif748THPEv56T0RE
+         XdKtqeG7PwNWWwArWJvWKv0afON+vDCBk1px1t/bpbvVB0nCsM+KsZcH99cWFyq1cf
+         CZPNmdvSlHY3Segr5bYTRrNxZNhU1WTky7QcuUbjh/gp1iUvDt02ZBw3qkGCwj/vAm
+         0dOJCa76tv62JeZBOVrc/8XqwtoKimxloJyOcHi9Z9cJMXuJYPvniV6E+KadXceAx8
+         otxtt0Em9UjPQ==
+Date:   Mon, 5 Dec 2022 07:59:21 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-Id: <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
+In-Reply-To: <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +68,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 1:00 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Fri,  2 Dec 2022 22:16:30 +0800 tzm <tcm1030@163.com> wrote:
->
-> > It will be failed to  disable numa balancing policy permanently by passing
-> > <numa_balancing=disable> to boot cmdline parameters.
-> > The numabalancing_override variable is int and 1 for enable -1 for disable.
-> > So, !enumabalancing_override will always be true, which cause this bug.
+On Sun, 4 Dec 2022 14:30:01 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-!enumabalancing_override is false when enumabalancing_override = -1
-(numa_balancing=disable).
+> On Mon, Dec 05, 2022 at 07:22:44AM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Since the function error injection framework in the fault injection
+> > subsystem can change the function code flow forcibly, it may cause
+> > unexpected behavior (and that is the purpose of this feature) even
+> > if it is applied to the ALLOW_ERROR_INJECTION functions.
+> > So this feature must be used only for debugging or testing purpose.
+> 
+> The whole idea of tainting for kernel debugging is questionable.
+> There are many other *inject* kconfigs and other debug flags
+> for link lists, RCU, sleeping, etc.
+> None of them taint the kernel.
+> 
+> > To identify this in the kernel oops message, add a new taint flag
+> 
+> Have you ever seen a single oops message because of this particular
+> error injection?
 
-> That's really old code!
->
-> > --- a/mm/mempolicy.c
-> > +++ b/mm/mempolicy.c
-> > @@ -2865,7 +2865,7 @@ static void __init check_numabalancing_enable(void)
-> >       if (numabalancing_override)
-> >               set_numabalancing_state(numabalancing_override == 1);
-> >
-> > -     if (num_online_nodes() > 1 && !numabalancing_override) {
-> > +     if (num_online_nodes() > 1 && (numabalancing_override == 1)) {
-> >               pr_info("%s automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl\n",
-> >                       numabalancing_default ? "Enabling" : "Disabling");
-> >               set_numabalancing_state(numabalancing_default);
->
-> Looks right to me.  Mel?
->
-> After eight years, I wonder if we actually need this.
+No, but there is no guarantee that the FEI doesn't cause any issue
+in the future too. If it happens, we need to know the precise
+information about what FEI/bpf does.
+FEI is a kind of temporal Livepatch for testing. If Livepatch taints
+the kernel, why doesn't the FEI taint it too?
 
-NAK.
+> 
+> > for the fault injection. This taint flag will be set by either
+> > function error injection is used or the BPF use the kprobe_override
+> > on error injectable functions (identified by ALLOW_ERROR_INJECTION).
+> 
+> ...
+> 
+> >  	/* set the new array to event->tp_event and set event->prog */
+> > +	if (prog->kprobe_override)
+> > +		add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
+> 
+> Nack for bpf bits.
 
-The original code works as intended. This patch breaks my test with
-CONFIG_NUMA_BALANCING_DEFAULT_ENABLED=n and numa_balancing=enable.
+I think this is needed especially for bpf bits. If we see this flag,
+we can ask reporters to share the bpf programs which they used.
+
+Thank you,
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
