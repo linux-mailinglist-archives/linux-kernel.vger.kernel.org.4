@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A26E642C2D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6712B642C68
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbiLEPoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S230404AbiLEQA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232850AbiLEPnf (ORCPT
+        with ESMTP id S230050AbiLEQA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:43:35 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55C2A1B9;
-        Mon,  5 Dec 2022 07:43:33 -0800 (PST)
-Received: from canpemm500001.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NQnqk5ZDrzRpmX;
-        Mon,  5 Dec 2022 23:42:42 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- canpemm500001.china.huawei.com (7.192.104.163) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Dec 2022 23:43:30 +0800
-From:   Xie XiuQi <xiexiuqi@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <james.morse@arm.com>, <rafael@kernel.org>, <tony.luck@intel.com>,
-        <robert.moore@intel.com>, <bp@alien8.de>, <devel@acpica.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tanxiaofei@huawei.com>, <wangxiongfeng2@huawei.com>,
-        <lvying6@huawei.com>, <naoya.horiguchi@nec.com>,
-        <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3 4/4] arm64: ghes: pass MF_ACTION_REQUIRED to memory_failure when sea
-Date:   Tue, 6 Dec 2022 00:00:43 +0800
-Message-ID: <20221205160043.57465-5-xiexiuqi@huawei.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221205160043.57465-1-xiexiuqi@huawei.com>
-References: <20221205160043.57465-1-xiexiuqi@huawei.com>
+        Mon, 5 Dec 2022 11:00:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8921AF1E;
+        Mon,  5 Dec 2022 08:00:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08740611C5;
+        Mon,  5 Dec 2022 16:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D945AC433B5;
+        Mon,  5 Dec 2022 16:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670256055;
+        bh=trNrKrfKjsfA/iJHoM4RlcQMgCcsX15/LCiL4T/xuJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EXkPiPH9jpu2QDhpC1k592OE6zoYsvZ6Cm6TtkRBZj9flj8DPe/+/ck94MscE/Hy+
+         PVn+ynbqHg6LhzriIAOKH+7f1fPldEuUHPztcK+v0tQmwdicxIaCw7If8OtrPmpjh+
+         OYAzWhpAg9ucHwpcZ/6qG8GRvR0WojmPy76I8FYg=
+Date:   Mon, 5 Dec 2022 17:00:52 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     johannes@sipsolutions.net, robert.jarzmik@free.fr, jgross@suse.com,
+        sstabellini@kernel.org, oleksandr_tyshchenko@epam.com,
+        roger.pau@citrix.com, srinivas.kandagatla@linaro.org,
+        bgoswami@quicinc.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        xen-devel@lists.xenproject.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] Make remove() of any bus based driver void returned
+Message-ID: <Y44VtN/rmjIU6sDC@kroah.com>
+References: <TYCP286MB23234ABCCF40E3FC42FD09A4CA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500001.china.huawei.com (7.192.104.163)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCP286MB23234ABCCF40E3FC42FD09A4CA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,68 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For synchronous external data abort case, pass MF_ACTION_REQUIRED to
-memory_failure, ensure that error recovery is performed before
-return to the user space.
+On Mon, Dec 05, 2022 at 11:36:38PM +0800, Dawei Li wrote:
+> For bus-based driver, device removal is implemented as:
+> device_remove() => bus->remove() => driver->remove()
+> 
+> Driver core needs no feedback from bus driver about the result of
+> remove callback. In which case, commit fc7a6209d571 ("bus: Make
+> remove callback return void") forces bus_type::remove be void-returned.
+> 
+> Now we have the situation that both 1st & 2nd part of calling chain
+> are void returned, so it does not make much sense for the last one
+> (driver->remove) to return non-void to its caller.
+> 
+> So the basic idea behind this patchset is making remove() callback of
+> any bus-based driver to be void returned.
+> 
+> This patchset includes changes for drivers below:
+> 1. hyperv
+> 2. macio
+> 3. apr
+> 4. xen
+> 5. ac87
+> 6. soundbus
 
-Synchronous external data abort happened in current execution context,
-so as the description for 'action required', MF_ACTION_REQUIRED flag
-is needed.
+Then that should be 6 different patchsets going to 6 different
+subsystems.  No need to make this seems like a unified set of patches at
+all.
 
-  ``action optional'' if they are not immediately affected by the error
-  ``action required'' if error happened in current execution context
+> Q: Why not platform drivers?
+> A: Too many of them.(maybe 4K+)
 
-Signed-off-by: Xie XiuQi <xiexiuqi@huawei.com>
----
- drivers/acpi/apei/ghes.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+That will have to be done eventually, right?
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index ddc4da603215..043a91a7dd17 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -463,7 +463,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
- }
- 
- static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
--				       int sev)
-+				       int sev, int notify_type)
- {
- 	int flags = -1;
- 	int sec_sev = ghes_severity(gdata->error_severity);
-@@ -472,6 +472,9 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
- 	if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))
- 		return false;
- 
-+	if (notify_type == ACPI_HEST_NOTIFY_SEA)
-+		flags |= MF_ACTION_REQUIRED;
-+
- 	/* iff following two events can be handled properly by now */
- 	if (sec_sev == GHES_SEV_CORRECTED &&
- 	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
-@@ -513,7 +516,12 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
- 		 * and don't filter out 'corrected' error here.
- 		 */
- 		if (is_cache && has_pa) {
--			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
-+			int flags = 0;
-+
-+			if (notify_type == ACPI_HEST_NOTIFY_SEA)
-+				flags |= MF_ACTION_REQUIRED;
-+
-+			queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
- 			p += err_info->length;
- 			continue;
- 		}
-@@ -657,7 +665,7 @@ static bool ghes_do_proc(struct ghes *ghes,
- 			ghes_edac_report_mem_error(sev, mem_err);
- 
- 			arch_apei_report_mem_error(sev, mem_err);
--			queued = ghes_handle_memory_failure(gdata, sev);
-+			queued = ghes_handle_memory_failure(gdata, sev, notify_type);
- 		}
- 		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
- 			ghes_handle_aer(gdata);
--- 
-2.20.1
+thanks,
 
+greg k-h
