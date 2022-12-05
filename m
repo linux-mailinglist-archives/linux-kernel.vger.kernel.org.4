@@ -2,167 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA1E643198
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3E4643195
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233768AbiLETQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S233745AbiLETQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiLETPI (ORCPT
+        with ESMTP id S233144AbiLETPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:15:08 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131BE222AD;
-        Mon,  5 Dec 2022 11:15:07 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5IQBS8004854;
-        Mon, 5 Dec 2022 19:14:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=BqvH1ztPAkld+QNaf9LMrfSPdVr+UJRpC3ItvXdIn6s=;
- b=GFk564ONa9EW8hzGqaA2fTrniEKAVJTomR8o0Qe6xNG+5TOO52N91sK4gDU8+Gfdk/Km
- 4YKBIhfkF0rM/+FAQCi+J2M6x8QPipDotfBaKo+EhcGV5YHiBnf4MiDlHNvPuLHA2H+a
- K1ZwirdVXHIKmlv8tZndoDR2hHoTLLpls00jmvoKGQa3mZYUYojbpMp28O73E6FdfxYw
- fLOt5qY+zX5Q7Nlbp0oKw3T0JljdTC6dt3c8mAl8NmGAF59nTgV83q4oZ1RrHIeyc/t9
- ns4ejqcFPhNZkZy0Wg1J5B9ht6NWZ9ZhfDSowGxwD2Cg6CqjLASitUApmADXa1oHZW8F 7Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7ymt500w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 19:14:49 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B5JEmMJ020402
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Dec 2022 19:14:48 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 5 Dec 2022 11:14:47 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <airlied@gmail.com>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 4/5] drm/msm/dp: parser link-frequencies as property of dp_out endpoint
-Date:   Mon, 5 Dec 2022 11:14:29 -0800
-Message-ID: <1670267670-15832-5-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VPX6WWZU46rMufwvt6SBlqFhjHFG6xaY
-X-Proofpoint-GUID: VPX6WWZU46rMufwvt6SBlqFhjHFG6xaY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- suspectscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 mlxscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212050160
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Dec 2022 14:15:03 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F4A22521
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 11:15:02 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id m1-20020a170902db0100b00188eec2726cso14289533plx.18
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 11:15:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqdtlwyr+v8G1ddHR3e3M88XUgYFZaKf3P//fSVXjVQ=;
+        b=U9+gDuLRpj8X0uBwWpodlvq9LGm20uFdRJezZJNc0jULKUO19Yg+bRUDdBl5kkl+Tz
+         e/UIakZ4CgAQy3x9g8gPWSC/f9X4gTltnxvS8FnVn9kevBCn0nMHHZpgd2FDi/mZRzRs
+         4nuV407jmqpoQDdGNwoh8fhraAJ/wpw/VVheyb/LLEUlQWDcDVdZSzCZ4/43wwneYAWQ
+         kE6vVJu5SD8NrHgGCgd3wjpcGJzn7kn5kHzF4FI28f3W6BvcSsMgwbgfTRMO3vhOXuDb
+         pMExLcWqFhEdjDE0BZ0m1RUC1RBMJWU8gsTMTXwlC2t65iZf26AqEB5zDUnLSt6Uoitf
+         kc6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqdtlwyr+v8G1ddHR3e3M88XUgYFZaKf3P//fSVXjVQ=;
+        b=W2G1Bz3msgSywSXWdeJw/wi//PbIQtMs3D+Krkp84sXfbzQKeRGy8MPSLT/HRoKWfG
+         d1oiBXraiAY2uYXgVeK06i34yajLGvV5/ImyqZa/lqXyRhYGE/gaBGwyjw+JvdJHPuoh
+         BiY7bnPwMSmqwMCkcy0gFCiM5caKatnSxW26I0MGfVia+wlfS8iuEakaiSl1yNhchUc+
+         VCmR/dZh9GY87/wiHQ1cgfC7TVROrYBBma5fgwNEuhR0Att9hft+StsEM4F4WqRa0QJ4
+         2tEJwD6YIAPYt+p09cLjsPDAoLLIu1AQemasSz51xpz0iFkuuWFN4poBod5oEuUSXSF5
+         idgA==
+X-Gm-Message-State: ANoB5pkJHkuQbMmq7VYrmDOgaJpIb2IXROp0w7ZhjyzJ/o2l/5cM3Ctn
+        HopWj+RIJfj7BIksGW+7dSTcXtEZlJXU
+X-Google-Smtp-Source: AA0mqf5qm/sD7Fvgrx6qOFItxU3U3dSNy18JMdQi2vell6fgv2mxK7W9qMKyoPVhtpsegpoyl/sfwfqmA+1j
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a17:90a:d086:b0:219:227d:d91f with SMTP id
+ k6-20020a17090ad08600b00219227dd91fmr4573263pju.0.1670267701970; Mon, 05 Dec
+ 2022 11:15:01 -0800 (PST)
+Date:   Mon,  5 Dec 2022 11:14:30 -0800
+In-Reply-To: <20221205191430.2455108-1-vipinsh@google.com>
+Mime-Version: 1.0
+References: <20221205191430.2455108-1-vipinsh@google.com>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221205191430.2455108-14-vipinsh@google.com>
+Subject: [Patch v3 13/13] KVM: selftests: Test Hyper-V extended hypercall exit
+ to userspace
+From:   Vipin Sharma <vipinsh@google.com>
+To:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add capability to parser and retrieve max DP link supported rate from
-link-frequencies property of dp_out endpoint.
+Hyper-V extended hypercalls by default exit to userspace. Verify
+userspace gets the call, update the result and then verify in guest
+correct result is received.
 
-Changes in v6:
--- second patch after split parser patch into two patches
-
-Changes in v7:
--- without checking cnt against DP_MAX_NUM_DP_LANES to retrieve link rate
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- drivers/gpu/drm/msm/dp/dp_parser.c | 19 +++++++++++++++++--
- drivers/gpu/drm/msm/dp/dp_parser.h |  2 ++
- 2 files changed, 19 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/.gitignore        |  1 +
+ tools/testing/selftests/kvm/Makefile          |  1 +
+ .../kvm/x86_64/hyperv_extended_hypercalls.c   | 93 +++++++++++++++++++
+ 3 files changed, 95 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-index b5f7e70..037dad8 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.c
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-@@ -94,15 +94,28 @@ static int dp_parser_ctrl_res(struct dp_parser *parser)
- static int dp_parser_misc(struct dp_parser *parser)
- {
- 	struct device_node *of_node = parser->pdev->dev.of_node;
-+	struct device_node *endpoint;
-+	u64 frequency;
- 	int cnt;
- 
- 	/*
- 	 * data-lanes is the property of dp_out endpoint
- 	 */
- 	cnt = drm_of_get_data_lanes_count_ep(of_node, 1, 0, 1, DP_MAX_NUM_DP_LANES);
--	if (cnt > 0)
-+	if (cnt > 0) {
- 		parser->max_dp_lanes = cnt;
--	else {
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 082855d94c72..b17874697d74 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -24,6 +24,7 @@
+ /x86_64/hyperv_clock
+ /x86_64/hyperv_cpuid
+ /x86_64/hyperv_evmcs
++/x86_64/hyperv_extended_hypercalls
+ /x86_64/hyperv_features
+ /x86_64/hyperv_ipi
+ /x86_64/hyperv_svm_test
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 2275ba861e0e..a0e12f5d9835 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -87,6 +87,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_evmcs
++TEST_GEN_PROGS_x86_64 += x86_64/hyperv_extended_hypercalls
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_ipi
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
+new file mode 100644
+index 000000000000..6635f5988d8d
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test Hyper-V extended hypercall, HV_EXT_CALL_QUERY_CAPABILITIES (0x8001),
++ * exit to userspace and receive result in guest.
++ *
++ * Negative tests are present in hyperv_features.c
++ *
++ * Copyright 2022 Google LLC
++ * Author: Vipin Sharma <vipinsh@google.com>
++ */
 +
-+		endpoint = of_graph_get_endpoint_by_regs(of_node, 1, 0); /* port@1 */
-+		cnt = of_property_count_u64_elems(endpoint, "link-frequencies");
-+		if (cnt > 0) {
-+			of_property_read_u64_index(endpoint, "link-frequencies",
-+							cnt - 1, &frequency);
-+			frequency /= 10;	/* from symbol rate to link rate */
-+			parser->max_dp_link_rate = (frequency / 1000); /* kbits */
-+		} else {
-+			parser->max_dp_link_rate = DP_LINK_RATE_HBR2; /* 540000 khz */
-+		}
-+	} else {
- 		/*
- 		 * legacy code, data-lanes is the property of mdss_dp node
- 		 */
-@@ -111,6 +124,8 @@ static int dp_parser_misc(struct dp_parser *parser)
- 			parser->max_dp_lanes = cnt;
- 		else
- 			parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
++#include "kvm_util.h"
++#include "processor.h"
++#include "hyperv.h"
 +
-+		parser->max_dp_link_rate = DP_LINK_RATE_HBR2; /* 540000 khz */
- 	}
- 
- 	return 0;
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-index 866c1a8..3ddf639 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.h
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-@@ -15,6 +15,7 @@
- #define DP_LABEL "MDSS DP DISPLAY"
- #define DP_MAX_PIXEL_CLK_KHZ	675000
- #define DP_MAX_NUM_DP_LANES	4
-+#define DP_LINK_RATE_HBR2       540000
- 
- enum dp_pm_type {
- 	DP_CORE_PM,
-@@ -119,6 +120,7 @@ struct dp_parser {
- 	struct dp_io io;
- 	struct dp_display_data disp_data;
- 	u32 max_dp_lanes;
-+	u32 max_dp_link_rate;
- 	struct drm_bridge *next_bridge;
- 
- 	int (*parse)(struct dp_parser *parser);
++/* Any value is fine */
++#define EXT_CAPABILITIES 0xbull
++
++static void guest_code(vm_vaddr_t in_pg_gpa, vm_vaddr_t out_pg_gpa,
++		       vm_vaddr_t out_pg_gva)
++{
++	uint64_t *output_gva;
++
++	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
++	wrmsr(HV_X64_MSR_HYPERCALL, in_pg_gpa);
++
++	output_gva = (uint64_t *)out_pg_gva;
++
++	hyperv_hypercall(HV_EXT_CALL_QUERY_CAPABILITIES, in_pg_gpa, out_pg_gpa);
++
++	/* TLFS states output will be a uint64_t value */
++	GUEST_ASSERT_EQ(*output_gva, EXT_CAPABILITIES);
++
++	GUEST_DONE();
++}
++
++int main(void)
++{
++	vm_vaddr_t hcall_out_page;
++	vm_vaddr_t hcall_in_page;
++	struct kvm_vcpu *vcpu;
++	struct kvm_run *run;
++	struct kvm_vm *vm;
++	uint64_t *outval;
++	struct ucall uc;
++
++	/* Verify if extended hypercalls are supported */
++	if (!kvm_cpuid_has(kvm_get_supported_hv_cpuid(),
++			   HV_ENABLE_EXTENDED_HYPERCALLS)) {
++		print_skip("Extended calls not supported by the kernel");
++		exit(KSFT_SKIP);
++	}
++
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	run = vcpu->run;
++	vcpu_set_hv_cpuid(vcpu);
++
++	/* Hypercall input */
++	hcall_in_page = vm_vaddr_alloc_pages(vm, 1);
++	memset(addr_gva2hva(vm, hcall_in_page), 0x0, vm->page_size);
++
++	/* Hypercall output */
++	hcall_out_page = vm_vaddr_alloc_pages(vm, 1);
++	memset(addr_gva2hva(vm, hcall_out_page), 0x0, vm->page_size);
++
++	vcpu_args_set(vcpu, 3, addr_gva2gpa(vm, hcall_in_page),
++		      addr_gva2gpa(vm, hcall_out_page), hcall_out_page);
++
++	vcpu_run(vcpu);
++
++	ASSERT_EXIT_REASON(vcpu, KVM_EXIT_HYPERV);
++
++	outval = addr_gpa2hva(vm, run->hyperv.u.hcall.params[1]);
++	*outval = EXT_CAPABILITIES;
++	run->hyperv.u.hcall.result = HV_STATUS_SUCCESS;
++
++	vcpu_run(vcpu);
++
++	ASSERT_EXIT_REASON(vcpu, KVM_EXIT_IO);
++
++	switch (get_ucall(vcpu, &uc)) {
++	case UCALL_ABORT:
++		REPORT_GUEST_ASSERT_2(uc, "arg1 = %ld, arg2 = %ld");
++		break;
++	case UCALL_DONE:
++		break;
++	default:
++		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
++	}
++
++	kvm_vm_free(vm);
++	return 0;
++}
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.39.0.rc0.267.gcb52ba06e7-goog
 
