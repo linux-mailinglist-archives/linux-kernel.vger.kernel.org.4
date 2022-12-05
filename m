@@ -2,76 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB42A642651
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 431F3642654
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiLEKD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 05:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S231574AbiLEKEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 05:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiLEKDy (ORCPT
+        with ESMTP id S230397AbiLEKE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 05:03:54 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A992DE0A2;
-        Mon,  5 Dec 2022 02:03:52 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id x22so4095837ejs.11;
-        Mon, 05 Dec 2022 02:03:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNuRqjS+ZUBnQZsQtw9JGsG30vnh+eH9L7Kxk3ae9cU=;
-        b=N/lgNQNxbBaFWvzq+/n1/EEjJXSaUDWB8X0hkrj5h373512rRZ8YM9l5iTZxjT5Ob9
-         KgkB170/270CKUD/DYA/xZ44O8usdVWs+vb8pc98IjlSSRnQMzSWPiu4GgrDQGPM+jDJ
-         eCnOZub3wwWIJbMkLfjzCy/VWDo+meNe16yQmH2+o6KKAy+dpOkUUtWwHlBieizoQE8b
-         nXcxv5a4jRyHnwaobLH+5Hz6enlO2VRoT1xrDy91V5g2+o65JjO74ZxEOxaTyPQ07+I1
-         7O59lmegW9XUkuZWxaPxkXOf8s2SYNAodXrn34eMpWgPmB8WIMZLvyv42HAxML+o26Tf
-         Tz+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fNuRqjS+ZUBnQZsQtw9JGsG30vnh+eH9L7Kxk3ae9cU=;
-        b=fMmWr4PSoxik9nNAS0qWz363I5WvZnMGv/91xgc9ImJccum7fWtMmUVA3gTb3RvZdJ
-         ES7P7F1koi8QkaE1EVQvqp6+7Y0AzAlIwn1J7hKL+E0sbe30I9dpTTbOi3U3RFtDLX+0
-         ZigjT8t3ej4asjzXLk508CQN6r/ZhTwEVFXuOfJ0wBbGXQzB+IwpOPEqZqVpxzyC5FZG
-         s+Lp4gOSfzZJNIX6WyoVVgg5VlYo7O+xtZ73eG8K+VHNpj1HsrnlSklrXjevHL2alLae
-         SUmC8zjK23NqE1D5tBSosWhgcmVDFefgqb5z+OOvyjMxTpHt+GpAVin4VLP/PLSx7c4z
-         EHVw==
-X-Gm-Message-State: ANoB5pn0RPdMSaomiYJIxEDghfGJk8Qqom5h8nJAWfwTOlRGOg9JFjMj
-        Ty5ykb46R+J8FeZvZxuqy0A=
-X-Google-Smtp-Source: AA0mqf7P7yXlrDkh2Q4jQUFJfLcktNpSvWFwFpCzxv8Qmnke4yB07obT5Zs1utSp18kqB8j/9RV9qQ==
-X-Received: by 2002:a17:906:2e83:b0:78d:b3f0:b5c0 with SMTP id o3-20020a1709062e8300b0078db3f0b5c0mr71533164eji.141.1670234631152;
-        Mon, 05 Dec 2022 02:03:51 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b00779a605c777sm6041797ejg.192.2022.12.05.02.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 02:03:50 -0800 (PST)
-Date:   Mon, 5 Dec 2022 11:03:58 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 1/4] net/ethtool: add netlink interface for
- the PLCA RS
-Message-ID: <Y43CDqAjvlAfLK1v@gvm01>
-References: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
- <20221205060057.GA10297@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205060057.GA10297@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 5 Dec 2022 05:04:28 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFA91151;
+        Mon,  5 Dec 2022 02:04:26 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id F23963200951;
+        Mon,  5 Dec 2022 05:04:22 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 05 Dec 2022 05:04:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670234662; x=1670321062; bh=MRVUFL54lN
+        ZS7+NYJKrB4wUaNpwj6xU2cIPBiaS9V9Q=; b=Cbt8VWFrWRAdKMceDnYy3EPreW
+        ox25Ctgw7ZTObiHEnDtyl0iWK6rQrrZvjjAqfoHh1yWnlEyzSN0ayOy3+pl0td1N
+        M3q9uGJJfApXBLEyOjrIBKLZDkSZ1O+IUGIk+sG9/q9RAHdFoqPDZHGFTs4gTC3T
+        e1GB9Cctn8KWzf6uw7U0dJG2q+0l7SdsjHxHel7y+NOx84aubCn9TKOdb8kkLjN3
+        GltIsCLti/PUAzJG86iZU0fSyl+WVz9edJlaRsAwmBgEFkdf0FcvjAmA7/gixYEZ
+        a1A1eYB/28cGJy3qxWYzqhbIT0lPYtWde8pZETzoP92M+fX1mNZC4q85OXMQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1670234662; x=1670321062; bh=MRVUFL54lNZS7+NYJKrB4wUaNpwj
+        6xU2cIPBiaS9V9Q=; b=o79jNTYwp9sbOUDauYqMu4XA6yCsWEaJH1fzKisSIf5p
+        3OA1yZ5jBfGsyGVBaKwX7HG7xo1KSmclHa05RMt/W3wP3fI43m+ovYIM/5MHoF0S
+        W6lwJ/p18zDbPP4Xy9mdeYEt47zChnItIRPlR8K5w3b72N33SPdReedrqU2FyQbl
+        EspBUP0a0S/GpXmr/g14aSoUXyV1oNOrjJYDEKDcBFwq7N+J8rV7vVw2bnTSJX93
+        mw6gg+aS3IQjoMVBIVsfbV9rV3sDXbNEzg7xPsGT05XuXtBOnPh2s5qRttCRGAan
+        qepv8aaOlNSzg4jbwDmRD6Mno1CGLoWa7Cs2ZlCKOg==
+X-ME-Sender: <xms:JsKNY8Jfp6VZhgpkzNsLWDo0fn3OLOVXLgH_RpukLLAgypcSyOuVsg>
+    <xme:JsKNY8ItGrMcpxzNAzFZEUJSD_haNrqZ_wHFK_jMQuLycPBsBjyhVOXJuYu4o0cJU
+    7gGABDL1xplWh4UV4E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggdduvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:JsKNY8sfeinptuMGHHc31JaHBfhkv5bRv36SOqgJCLMWCYv6Q7OI_A>
+    <xmx:JsKNY5ZXl__pInIAafJ0YQD5zIndXHxufRrkiCN5W13n3s1G3URIxQ>
+    <xmx:JsKNYzbTrNrw2d5sjFLmi6DlGtLmG-g_Ew3XEt6DglBkNcyMwPSvrQ>
+    <xmx:JsKNYyV1n14qmF6vJr725hNAr9AWnjja4TGdv695cO9UUaf34sXxLw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 240B4B60086; Mon,  5 Dec 2022 05:04:22 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <2a3d3359-a5fd-453b-81f1-35c7a35fc12d@app.fastmail.com>
+In-Reply-To: <1670229006-4063-1-git-send-email-chensong_2000@189.cn>
+References: <1670229006-4063-1-git-send-email-chensong_2000@189.cn>
+Date:   Mon, 05 Dec 2022 11:04:01 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Song Chen" <chensong_2000@189.cn>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 3/4] include/asm-generic/io.h: remove performing pointer
+ arithmetic on a null pointer
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,72 +87,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Oleksij, and thank you for your review!
-Please see my comments below.
+On Mon, Dec 5, 2022, at 09:30, Song Chen wrote:
+> kernel test robot reports below warnings:
+>
+>    In file included from kernel/trace/trace_events_synth.c:18:
+>    In file included from include/linux/trace_events.h:9:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic
+> 	on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __raw_readb(PCI_IOBASE + addr);
+>                              ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic
+> 	on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>                                                            ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note:
+> 		expanded from macro '__le16_to_cpu'
+>    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>
+> The reason could be constant literal zero converted to any pointer type decays
+> into the null pointer constant.
+>
+> I'm not sure why those warnings are only triggered when building hexagon instead
+> of x86 or arm, but anyway, i found a work around:
+>
+> 	void *pci_iobase = PCI_IOBASE;
+> 	val = __raw_readb(pci_iobase + addr);
+>
+> The pointer is not evaluated at compile time, so the warnings are removed.
+>
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-On Mon, Dec 05, 2022 at 07:00:57AM +0100, Oleksij Rempel wrote:
-> > diff --git a/include/uapi/linux/ethtool_netlink.h b/include/uapi/linux/ethtool_netlink.h
-> > index aaf7c6963d61..81e3d7b42d0f 100644
-> > --- a/include/uapi/linux/ethtool_netlink.h
-> > +++ b/include/uapi/linux/ethtool_netlink.h
-> > @@ -51,6 +51,9 @@ enum {
-> >  	ETHTOOL_MSG_MODULE_SET,
-> >  	ETHTOOL_MSG_PSE_GET,
-> >  	ETHTOOL_MSG_PSE_SET,
-> > +	ETHTOOL_MSG_PLCA_GET_CFG,
-> > +	ETHTOOL_MSG_PLCA_SET_CFG,
-> > +	ETHTOOL_MSG_PLCA_GET_STATUS,
-> >  
-> >  	/* add new constants above here */
-> >  	__ETHTOOL_MSG_USER_CNT,
-> > @@ -97,6 +100,9 @@ enum {
-> >  	ETHTOOL_MSG_MODULE_GET_REPLY,
-> >  	ETHTOOL_MSG_MODULE_NTF,
-> >  	ETHTOOL_MSG_PSE_GET_REPLY,
-> > +	ETHTOOL_MSG_PLCA_GET_CFG_REPLY,
-> > +	ETHTOOL_MSG_PLCA_GET_STATUS_REPLY,
-> > +	ETHTOOL_MSG_PLCA_NTF,
-> >  
-> >  	/* add new constants above here */
-> >  	__ETHTOOL_MSG_KERNEL_CNT,
-> > @@ -880,6 +886,25 @@ enum {
-> >  	ETHTOOL_A_PSE_MAX = (__ETHTOOL_A_PSE_CNT - 1)
-> >  };
-> >  
-> > +/* PLCA */
-> > +
-> 
-> Please use names used in the specification as close as possible and
-> document in comments real specification names.
-I was actually following the names in the OPEN Alliance SIG
-specifications which I referenced. Additionally, the OPEN names are more
-similar to those that you can find in Clause 147. As I was trying to
-explain in other threads, the names in Clause 30 were sort of a workaround
-because we were not allowed to add registers in Clause 45.
+The code is still wrong, you just hide the warning, so no, this is
+not a correct fix. When PCI_IOBASE is NULL, any call to
+inb() etc is a NULL pointer dereference that immediately crashes
+the kernel, so the correct solution is to not allow building code
+that uses port I/O on kernels that are configured not to
+support port I/O.
 
-I can change the names if you really want to, but I'm inclined to keep
-it simple and "user-friendly". People using this technology are more
-used to these names, and they totally ignore Clause 30.
+We have discussed this bit multiple times, and Niklas Schnelle
+last posted his series to fix this as an RFC in [1].
 
-Please, let me know what you think.
+      Arnd
 
-> > +
-> > +	/* add new constants above here */
-> > +	__ETHTOOL_A_PLCA_CNT,
-> > +	ETHTOOL_A_PLCA_MAX = (__ETHTOOL_A_PLCA_CNT - 1)
-> > +};
-> 
-> Should we have access to 30.16.1.2.2 acPLCAReset in user space?
-I omitted that parameter on purpose. The reason is that again, we were
-"forced" to do this in IEEE802.3cg, but it was a poor choice. I
-understand purity of the specifications, but in the real-world where
-PLCA is implemented in the PHY, resetting the PLCA layer independently
-of the PCS/PMA is all but a good idea: it does more harm than good. As a
-matter of fact, PHY vendors typically map the PLCA reset bit to the PHY
-soft reset bit, or at least to the PCS reset bit.
-
-I'm inclined to keep this as-is and see in the future if and why someone
-would need this feature. What you think?
-
-Thanks,
-Piergiorgio
+[1] https://lore.kernel.org/lkml/20220429135108.2781579-1-schnelle@linux.ibm.com/
