@@ -2,61 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4BC6433F4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE2D643423
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbiLETlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S234940AbiLETmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbiLETke (ORCPT
+        with ESMTP id S234868AbiLETly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:40:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860EC29353;
-        Mon,  5 Dec 2022 11:37:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 174A06131A;
-        Mon,  5 Dec 2022 19:37:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A6CDC433D7;
-        Mon,  5 Dec 2022 19:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670269078;
-        bh=wSny7RERsEy+UvZ++K0y8YLBWfl7nMC8O5faKH/dK5Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BlXA9gT0eqmwlqDoytEbsI9VfOu37m0BZQsf89RKkm4L/X+6Mnsz9vTR0N91jBoLc
-         B3DeAOTuf5KRNarPtvhR7zFXHXsTOLczZljfJPdvFNDzwpxt1xTWBCqQWzxwo09uO2
-         7iHqvay3TvlmYZgAFzglrP6YsOUW+2ZPP2vpQwaX2tnP66jfa2qMavGglFit/xrTMi
-         Uw5Rf76NVuEjBVIPMymjBj1ZfxdXgF80x2TvkAsBmGw0lM3ZDigbbouaIn/6jVH5Sj
-         6I5KCZAKJxfkgq0IPTqM+DLbwatH8e9d0dbd1T/Y37rEy02/PX//xw7H9Q6At/IjHe
-         goPrJDaa2kJGw==
-Date:   Mon, 5 Dec 2022 19:37:53 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 05/13] riscv: cpufeature: extend
- riscv_cpufeature_patch_func to all ISA extensions
-Message-ID: <Y45IkVXYshIciACY@spud>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-6-jszhang@kernel.org>
+        Mon, 5 Dec 2022 14:41:54 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70996DFA8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 11:39:33 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id n7so9581123wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 11:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7pzik94DCRnikniychtCYn/if7UtyQkTWFCyd0BXZAs=;
+        b=mPhxALAdZmhXA3LNUW3pO/6N9g17MLwyztZmXWZVb6a+DOYDAztdnk9+7GRr2lj+ON
+         g3Y0gaqlIYyK/dkcOudswwzJYkV4QDFemDAKFOZfsxvEDrRuEjyHENJguwDr9rneRstQ
+         Ys/AJ4BPPEWzUWUgGjyHCjTxK4WjajfsVRjLXweIKCPHc4b78j6VizaBs97dSVp/C2Wr
+         DutF4W6xrJ9/AQ15NTZHpvCKMvVTx0MJokJnFrUyyrCJn29dWhmWmnTYaJIQAYF8vkik
+         kVbQT0V0Gi2ZLbKIsBVfaoZJYRpYr41h4whRPg/iNg0swzNE/nmLIdcYYFZ9ixr3heC+
+         uHGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7pzik94DCRnikniychtCYn/if7UtyQkTWFCyd0BXZAs=;
+        b=uLIq58/SAWhtSrujkfuYfCiRFH91LnxghhFJoYbMb62EjoCfIZupYxYkxTkJz7IuYr
+         fteJsLZFMnuHMs3fOLgb8nsy5r0TUtSp5DQygFO0C/1hg9VjUepOI1tOpJ+xtemCJCo5
+         btcTjeHOJku91MRCmMLqOyn6cRCJkkW2y4S2v0TofCOG/dvbBqE0A6fReU2KV6gc4M1y
+         ENk/BOiyYgA85EyzkSmytoiW3+3J2GD+O7/ajfqOHWfOf4iRdiGLYpwlRzi/ujk7Qvrq
+         cR/OJ+QVctlV+yoTyKwkyS0B/8stzLoRfhQzAODaT6WKDfyifV0grpqboXi4cv73xlmn
+         lZvw==
+X-Gm-Message-State: ANoB5pna2IYy4EyqTCfCaNpgpsZVNQKVy4meblBf9nzHok7/VKnGu2jz
+        BR0IAsQ84uHscbu0q/XQ2IsSuw==
+X-Google-Smtp-Source: AA0mqf7D6o5HZCbdZtrrkeiqgEkjfSmeglDG8CxGKl4IAXFIfOgqAXoQLydm+9jhl4i4m7nwJHIssA==
+X-Received: by 2002:a05:600c:1da2:b0:3cf:147d:ad9a with SMTP id p34-20020a05600c1da200b003cf147dad9amr48581382wms.33.1670269171966;
+        Mon, 05 Dec 2022 11:39:31 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id v14-20020a05600c444e00b003a1980d55c4sm23867622wmn.47.2022.12.05.11.39.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 11:39:31 -0800 (PST)
+Message-ID: <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
+Date:   Mon, 5 Dec 2022 20:39:29 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BmYcKwzzQlEdZjdk"
-Content-Disposition: inline
-In-Reply-To: <20221204174632.3677-6-jszhang@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Michael Kao <michael.kao@mediatek.com>,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
+ <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
+ <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
+ <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,85 +93,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---BmYcKwzzQlEdZjdk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Dec 05, 2022 at 01:46:24AM +0800, Jisheng Zhang wrote:
-> make the riscv_cpufeature_patch_func() scan all ISA extensions rather
-> than limited feature macros.
-
-Certainly looks like a nice cleanup. Perhaps for the changelog,
-something along the lines of:
-
-"riscv_cpufeature_patch_func() currently only scans a limited set of
-cpufeatures, explicitly defined with macros. Extend it to probe for all
-ISA extensions"
-
->=20
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/include/asm/errata_list.h |  9 ++--
->  arch/riscv/kernel/cpufeature.c       | 73 +++++-----------------------
->  2 files changed, 15 insertions(+), 67 deletions(-)
-
-> @@ -311,25 +264,23 @@ void __init_or_module riscv_cpufeature_patch_func(s=
-truct alt_entry *begin,
->  	for (alt =3D begin; alt < end; alt++) {
->  		if (alt->vendor_id !=3D 0)
->  			continue;
-> -		if (alt->errata_id >=3D CPUFEATURE_NUMBER) {
-> -			WARN(1, "This feature id:%d is not in kernel cpufeature list",
-> +		if (alt->errata_id >=3D RISCV_ISA_EXT_MAX) {
-> +			WARN(1, "This extension id:%d is not in ISA extension list",
->  				alt->errata_id);
->  			continue;
->  		}
-> =20
-> -		tmp =3D (1U << alt->errata_id);
-> -		if (cpu_req_feature & tmp) {
-> -			/* do the basic patching */
-> -			patch_text_nosync(alt->old_ptr, alt->alt_ptr,
-> -					  alt->alt_len);
-> +		if (!__riscv_isa_extension_available(NULL, alt->errata_id))
-> +			continue;
-> =20
-> -			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
-> -							 alt->alt_len,
-> -							 alt->old_ptr - alt->alt_ptr);
-> -			riscv_alternative_fix_jal(alt->old_ptr,
-> -						  alt->alt_len,
-> -						  alt->old_ptr - alt->alt_ptr);
-> -		}
-> +		/* do the basic patching */
-> +		patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> +		riscv_alternative_fix_auipc_jalr(alt->old_ptr,
-> +						 alt->alt_len,
-> +						 alt->old_ptr - alt->alt_ptr);
-> +		riscv_alternative_fix_jal(alt->old_ptr,
-> +					  alt->alt_len,
-> +					  alt->old_ptr - alt->alt_ptr);
-
-nit:
-Now that you've dropped a level of indent, can alt->alt_len move up a
-line?
-
-Thanks,
-Conor.
+Hi Amjad,
 
 
---BmYcKwzzQlEdZjdk
-Content-Type: application/pgp-signature; name="signature.asc"
+On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
 
------BEGIN PGP SIGNATURE-----
+[ ... ]
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY45IkQAKCRB4tDGHoIJi
-0hVgAP0f7h5X+BsSkUkvJUlU5ALjV6I0EekLwH8GeuYfU1EEzQEA9g48tJXXGwRo
-Wncokwq3bL0VVPX5RDCVCBtQ7BgoPws=
-=GI0I
------END PGP SIGNATURE-----
+>>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>>>    
+>>>    	platform_set_drvdata(pdev, mt);
+>>>    
+>>> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+>>> -					      &mtk_thermal_ops);
+>>> -	if (IS_ERR(tzdev)) {
+>>> -		ret = PTR_ERR(tzdev);
+>>> -		goto err_disable_clk_peri_therm;
+>>> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+>>> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
+>>> +		if (!tz)
+>>> +			return -ENOMEM;
+>>> +
+>>> +		tz->mt = mt;
+>>> +		tz->id = i;
+>>> +
+>>> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
+>>> +							     &mtk_thermal_ops :
+>>> +							     &mtk_thermal_sensor_ops);
+>>
+>> Here you use again the aggregation
+> I addressed this concern in V6, could you please take a look and let me
+> know what you think [0].
+> 
+> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
 
---BmYcKwzzQlEdZjdk--
+May I misunderstanding but AFAICS, this patch is setting the 
+mtk_thermal_ops if the sensor id is zero. The get_temp is computing the 
+max temperature in this ops which is what we don't want to do.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
