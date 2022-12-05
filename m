@@ -2,122 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6819F64284B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC37C64284D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiLEMVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S231779AbiLEMWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiLEMVf (ORCPT
+        with ESMTP id S231744AbiLEMWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:21:35 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7A8F5B8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:21:33 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 8B01B320091F;
-        Mon,  5 Dec 2022 07:21:30 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 05 Dec 2022 07:21:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670242890; x=1670329290; bh=8c
-        0wk4OjXRa/QesbL2vsgHn8e80nbdEdde63Cqs79LU=; b=V00lIOL6pRsSMCtU95
-        vKHxeJ4m9ufk9wwAspWvf1e3s6HrMeTbhsuyPc6OenXh52/DZ908dt0LANk8Vx0S
-        rLL/MG16b64cOopmHEBwbZwf2fY4Crqhnv4G3mO4Dwaghlc6Nk32EpzscJS5nLzb
-        LmDjElro2B1yCMpQYu6A8M8cnpWuHfixu1sI/L9Vw2MuimSj7k/HPQLDcuJJo1TQ
-        6SJ45XSBha1WanrCd+qshB+b5VH/9HZvLfuPsOEkX2MblPXwlf4P+e1o0uIF52ev
-        LA0KAkHX6o4Yi2DyTYUTztR2XyNkBMoyNIy7kZsqtk2/qOHQ/dMZxHFoEUVsuDOS
-        SV/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670242890; x=1670329290; bh=8c0wk4OjXRa/QesbL2vsgHn8e80n
-        bdEdde63Cqs79LU=; b=Ymhyjo4CLdPwJWL2RhBjtEKy6dSusKREfgc87T61vKIf
-        CGj+zLKQL3C+rUPN6gxZH/40+YixrKB/OwcIPwFsjI0rVzzjBwMziYyum+ZYeYjz
-        BB/HlkZlyU8usAhwwA3m9FsfripbzN/+jCHvVMxYNx4mOFRstdd8wPippq6Iugtp
-        hU74td094dahVYhv5jS+rBZ3CHooGrUMVfdxIF+k8qH689U3NgXb2sDnjz1mS3+L
-        d7RIYZaJ9VMDu2mt6RTiImlkGH3JH+KyarVKwklBY3FTAuYU8Hxyt1X4gw2SGCfG
-        +Y0tOVnRg/qR+FdmXbGAJK/jAqn3vLXX6d8V6ltdvw==
-X-ME-Sender: <xms:SeKNYwzby81n_Ik1yWuw7FbU6XHj6gT1MpOcxBQo0npxGZ9wJGX8vw>
-    <xme:SeKNY0Qon2VKhKeEy2fsCSX9c2CR5rU7_39FFUaohkiLotopG-xSLIpLq-nYML1yR
-    WUZkWrUez6jMhVYMN0>
-X-ME-Received: <xmr:SeKNYyWVAVFt-7NaJhKpZlsbdJsINfdQjOzw8DIeyhTPx2sPRORC1FWote4m_G-iZaM3Bg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhepfeeileeffeeiteeljeekheetieehhffhfeeuheel
-    tdetgfeuvddvffegvdelhfdunecuffhomhgrihhnpehinhhtvghlrdgtohhmnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehs
-    hhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:SeKNY-gqq8KBVaqdhbT8aLT9CSgceXac2jwCevb7eSxY3VnBOGrWGA>
-    <xmx:SeKNYyB5kaXxPKzax80FocyvquEdW7mtabPwsJWUPYt16T6FS9WJlw>
-    <xmx:SeKNY_LuKRwfZ_PFkXwRtVJngfJ_VhMTDYDsEaR5e1yZKTDkX5lKjw>
-    <xmx:SuKNY-0QBEEogwSFShv4Ahif-Nbx2x2FkaNqRB2FahP8xAb3yYLztA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Dec 2022 07:21:28 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 6994610948F; Mon,  5 Dec 2022 15:21:24 +0300 (+03)
-Date:   Mon, 5 Dec 2022 15:21:24 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v5 13/16] x86: decouple PAT and MTRR handling
-Message-ID: <20221205122124.3sixqn52i4xsdxbt@box.shutemov.name>
-References: <20221102074713.21493-14-jgross@suse.com>
- <20221201162639.omlr5ff55go7uhlf@box.shutemov.name>
- <6d642051-31d8-81d5-f379-568360c5cb60@suse.com>
- <20221201235753.ybfc7gkgj7hlfkru@box.shutemov.name>
- <eded3906-0720-a300-50c7-f8dad61c32c0@suse.com>
- <20221202132701.ymcp7a2yv3st33so@box.shutemov.name>
- <f4e9b9bb-6906-084c-4b9e-144b2abb024b@suse.com>
- <20221202143316.mtjz6dghecshldk2@box.shutemov.name>
- <d7000f26-2640-074e-10f2-c5232feaa9fd@suse.com>
- <cf7db285-deaf-8e3e-2b35-7cecbaff7d61@suse.com>
+        Mon, 5 Dec 2022 07:22:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FF8FADD;
+        Mon,  5 Dec 2022 04:22:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C5461042;
+        Mon,  5 Dec 2022 12:22:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23D6AC4347C;
+        Mon,  5 Dec 2022 12:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670242931;
+        bh=EY31gZtXFQ9Q6DW+KZ7qMsr0g+tEEkIuRpgv0YWsuGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CpAB0i4kbsT7Y1P3bZNUt/IOm/7FOxqBPsBaBJQHsbA29i1ZdTmiWaYTxdFnSZ9BJ
+         imxv8KhjHpEGYe0QMopQ9OgN8JJL0PmDHa4ziXvWv+0OXZ9Y0KR7A0BDgnfHBLDwWK
+         eXP1+qWN85ylSnPMmTuP03Wx1cqh6VVdUsZmy3ACIizkdYeqThDwfBAavsikSyhq2b
+         71p2o2c0p0ybCKIpDpeJG/RId9kuQU+S5PD69+DAuozDXXa68oBZy1zdROVVmJDly3
+         lK8klBNhC9H3ugi5UcVrYLrL5lSm72/IX9aJXdKAVcpYHeCtAr8NUGoBv+vgDKEeHW
+         67RgRK8IMMGEQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C740A40404; Mon,  5 Dec 2022 09:22:07 -0300 (-03)
+Date:   Mon, 5 Dec 2022 09:22:07 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Subject: Re: [PATCH 05/15] perf stat: Remove prefix argument in
+ print_metric_headers()
+Message-ID: <Y43ib0gPvjC1SicU@kernel.org>
+References: <20221123180208.2068936-1-namhyung@kernel.org>
+ <20221123180208.2068936-6-namhyung@kernel.org>
+ <CAP-5=fWZ27QW+XvZx0bzEMmUbyKpmmmZudB9u=SyxiLcH3CCqw@mail.gmail.com>
+ <CAP-5=fXsWfOmavOAmxsUcX+g3cve2r20JmseDF7Bn1jO6tPX-Q@mail.gmail.com>
+ <CAP-5=fUOjSM5HajU9TCD6prY39LbX4OQbkEbtKPPGRBPBN=_VQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf7db285-deaf-8e3e-2b35-7cecbaff7d61@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAP-5=fUOjSM5HajU9TCD6prY39LbX4OQbkEbtKPPGRBPBN=_VQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 08:40:06AM +0100, Juergen Gross wrote:
-> > That's a question for the Intel architects, I guess.
-> > 
-> > I'd just ask them how to setup PAT in TDX guests. Either they need to
-> > change the recommended setup sequence, or the PAT support bit needs to
-> > be cleared IMO.
+Em Tue, Nov 29, 2022 at 09:13:11PM -0800, Ian Rogers escreveu:
+> On Tue, Nov 29, 2022 at 9:09 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Wed, Nov 23, 2022 at 3:23 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Wed, Nov 23, 2022 at 10:02 AM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > >
+> > > > It always passes a whitespace to the function, thus we can just add it to the
+> > > > function body.  Furthermore, it's only used in the normal output mode.
+> > > >
+> > > > Well, actually CSV used it but it doesn't need to since we don't care about the
+> > > > indentation or alignment in the CSV output.
+> > > >
+> > > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > >
+> > > Acked-by: Ian Rogers <irogers@google.com>
+> > >
+> > > Thanks,
+> > > Ian
+> >
+> > I suspect this may be responsible for a metric segv that I'm now
+> > seeing in Arnaldo's tree:
+> >
+> > $ gdb --args perf stat -M Backend true
+> > ...
+> > Performance counter stats for 'true':
+> >
+> >         4,712,355      TOPDOWN.SLOTS                    #     17.3 %
+> > tma_core_bound
+> >
+> > Program received signal SIGSEGV, Segmentation fault.
+> > __strlen_evex () at ../sysdeps/x86_64/multiarch/strlen-evex.S:77
+> > 77      ../sysdeps/x86_64/multiarch/strlen-evex.S: No such file or directory.
+> > (gdb) bt
+> > #0  __strlen_evex () at ../sysdeps/x86_64/multiarch/strlen-evex.S:77
+> > #1  0x00007ffff74749a5 in __GI__IO_fputs (str=0x0, fp=0x7ffff75f5680
+> > <_IO_2_1_stderr_>)
+> >    at ./libio/iofputs.c:33
+> > #2  0x0000555555779f28 in do_new_line_std (config=0x555555e077c0
+> > <stat_config>, os=0x7fffffffbf10)
+> >    at util/stat-display.c:356
+> > #3  0x000055555577a081 in print_metric_std (config=0x555555e077c0
+> > <stat_config>,
+> >    ctx=0x7fffffffbf10, color=0x0, fmt=0x5555558b77b5 "%8.1f",
+> >    unit=0x7fffffffbb10 "%  tma_memory_bound", val=13.165355724442199)
+> > at util/stat-display.c:380
+> > #4  0x00005555557768b6 in generic_metric (config=0x555555e077c0 <stat_config>,
+> >    metric_expr=0x55555593d5b7 "((CYCLE_ACTIVITY.STALLS_MEM_ANY +
+> > EXE_ACTIVITY.BOUND_ON_STORES) / (C
+> > YCLE_ACTIVITY.STALLS_TOTAL + (EXE_ACTIVITY.1_PORTS_UTIL + tma_retiring
+> > * EXE_ACTIVITY.2_PORTS_UTIL)
+> > + EXE_ACTIVITY.BOUND_ON_STORES))"..., metric_events=0x555555f334e0,
+> > metric_refs=0x555555ec81d0,
+> >    name=0x555555f32e80 "TOPDOWN.SLOTS", metric_name=0x555555f26c80
+> > "tma_memory_bound",
+> >    metric_unit=0x55555593d5b1 "100%", runtime=0, map_idx=0,
+> > out=0x7fffffffbd90,
+> >    st=0x555555e9e620 <rt_stat>) at util/stat-shadow.c:934
+> > #5  0x0000555555778cac in perf_stat__print_shadow_stats
+> > (config=0x555555e077c0 <stat_config>,
+> >    evsel=0x555555f289d0, avg=4712355, map_idx=0, out=0x7fffffffbd90,
+> >    metric_events=0x555555e078e8 <stat_config+296>, st=0x555555e9e620 <rt_stat>)
+> >    at util/stat-shadow.c:1329
+> > #6  0x000055555577b6a0 in printout (config=0x555555e077c0
+> > <stat_config>, os=0x7fffffffbf10,
+> >    uval=4712355, run=325322, ena=325322, noise=4712355, map_idx=0) at
+> > util/stat-display.c:741
+> > #7  0x000055555577bc74 in print_counter_aggrdata
+> > (config=0x555555e077c0 <stat_config>,
+> >    counter=0x555555f289d0, s=0, os=0x7fffffffbf10) at util/stat-display.c:838
+> > #8  0x000055555577c1d8 in print_counter (config=0x555555e077c0 <stat_config>,
+> >    counter=0x555555f289d0, os=0x7fffffffbf10) at util/stat-display.c:957
+> > #9  0x000055555577dba0 in evlist__print_counters (evlist=0x555555ec3610,
+> >    config=0x555555e077c0 <stat_config>, _target=0x555555e01c80
+> > <target>, ts=0x0, argc=1,
+> >    argv=0x7fffffffe450) at util/stat-display.c:1413
+> > #10 0x00005555555fc821 in print_counters (ts=0x0, argc=1, argv=0x7fffffffe450)
+> >    at builtin-stat.c:1040
+> > #11 0x000055555560091a in cmd_stat (argc=1, argv=0x7fffffffe450) at
+> > builtin-stat.c:2665
+> > #12 0x00005555556b1eea in run_builtin (p=0x555555e11f70
+> > <commands+336>, argc=4,
+> >    argv=0x7fffffffe450) at perf.c:322
+> > #13 0x00005555556b2181 in handle_internal_command (argc=4,
+> > argv=0x7fffffffe450) at perf.c:376
+> > #14 0x00005555556b22d7 in run_argv (argcp=0x7fffffffe27c,
+> > argv=0x7fffffffe270) at perf.c:420
+> > #15 0x00005555556b26ef in main (argc=4, argv=0x7fffffffe450) at perf.c:550
+> > (gdb)
+> >
+> > Thanks,
+> > Ian
 > 
-> I've forwarded the question to Intel, BTW.
+> More specifically, I think os->prefix needs testing for NULL:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/stat-display.c?h=perf/core#n356
+> so:
+> fputs(os->prefix, os->fh);
+> should be:
+> if (os->prefix)
+>   fputs(os->prefix, os->fh);
 
-I've initiated the talk internally too.
+Going thru the messages, for now I just added the test.
 
-> Another question to you: where does the initial PAT MSR value come from?
-> I guess from UEFI?
-
-It is set by TDX module on initialization. See section 21.2.4.1.2. "TD
-VMCS Guest MSRs" of TDX module spec[1]
-
-[1] https://cdrdv2.intel.com/v1/dl/getContent/733568
+- Arnaldo
+ 
+> Thanks,
+> Ian
+> 
+> > > > ---
+> > > >  tools/perf/util/stat-display.c | 26 ++++++++++----------------
+> > > >  1 file changed, 10 insertions(+), 16 deletions(-)
+> > > >
+> > > > diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> > > > index 744b7a40f59a..deed6ccf072f 100644
+> > > > --- a/tools/perf/util/stat-display.c
+> > > > +++ b/tools/perf/util/stat-display.c
+> > > > @@ -996,10 +996,9 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+> > > >  }
+> > > >
+> > > >  static void print_metric_headers_std(struct perf_stat_config *config,
+> > > > -                                    const char *prefix, bool no_indent)
+> > > > +                                    bool no_indent)
+> > > >  {
+> > > > -       if (prefix)
+> > > > -               fprintf(config->output, "%s", prefix);
+> > > > +       fputc(' ', config->output);
+> > > >
+> > > >         if (!no_indent) {
+> > > >                 int len = aggr_header_lens[config->aggr_mode];
+> > > > @@ -1012,11 +1011,8 @@ static void print_metric_headers_std(struct perf_stat_config *config,
+> > > >  }
+> > > >
+> > > >  static void print_metric_headers_csv(struct perf_stat_config *config,
+> > > > -                                    const char *prefix,
+> > > >                                      bool no_indent __maybe_unused)
+> > > >  {
+> > > > -       if (prefix)
+> > > > -               fprintf(config->output, "%s", prefix);
+> > > >         if (config->interval)
+> > > >                 fputs("time,", config->output);
+> > > >         if (!config->iostat_run)
+> > > > @@ -1024,7 +1020,6 @@ static void print_metric_headers_csv(struct perf_stat_config *config,
+> > > >  }
+> > > >
+> > > >  static void print_metric_headers_json(struct perf_stat_config *config,
+> > > > -                                     const char *prefix __maybe_unused,
+> > > >                                       bool no_indent __maybe_unused)
+> > > >  {
+> > > >         if (config->interval)
+> > > > @@ -1032,8 +1027,7 @@ static void print_metric_headers_json(struct perf_stat_config *config,
+> > > >  }
+> > > >
+> > > >  static void print_metric_headers(struct perf_stat_config *config,
+> > > > -                                struct evlist *evlist,
+> > > > -                                const char *prefix, bool no_indent)
+> > > > +                                struct evlist *evlist, bool no_indent)
+> > > >  {
+> > > >         struct evsel *counter;
+> > > >         struct outstate os = {
+> > > > @@ -1047,11 +1041,11 @@ static void print_metric_headers(struct perf_stat_config *config,
+> > > >         };
+> > > >
+> > > >         if (config->json_output)
+> > > > -               print_metric_headers_json(config, prefix, no_indent);
+> > > > +               print_metric_headers_json(config, no_indent);
+> > > >         else if (config->csv_output)
+> > > > -               print_metric_headers_csv(config, prefix, no_indent);
+> > > > +               print_metric_headers_csv(config, no_indent);
+> > > >         else
+> > > > -               print_metric_headers_std(config, prefix, no_indent);
+> > > > +               print_metric_headers_std(config, no_indent);
+> > > >
+> > > >         if (config->iostat_run)
+> > > >                 iostat_print_header_prefix(config);
+> > > > @@ -1132,7 +1126,7 @@ static void print_header_interval_std(struct perf_stat_config *config,
+> > > >         }
+> > > >
+> > > >         if (config->metric_only)
+> > > > -               print_metric_headers(config, evlist, " ", true);
+> > > > +               print_metric_headers(config, evlist, true);
+> > > >         else
+> > > >                 fprintf(output, " %*s %*s events\n",
+> > > >                         COUNTS_LEN, "counts", config->unit_width, "unit");
+> > > > @@ -1168,7 +1162,7 @@ static void print_header_std(struct perf_stat_config *config,
+> > > >         fprintf(output, ":\n\n");
+> > > >
+> > > >         if (config->metric_only)
+> > > > -               print_metric_headers(config, evlist, " ", false);
+> > > > +               print_metric_headers(config, evlist, false);
+> > > >  }
+> > > >
+> > > >  static void print_header_csv(struct perf_stat_config *config,
+> > > > @@ -1178,7 +1172,7 @@ static void print_header_csv(struct perf_stat_config *config,
+> > > >                              const char **argv __maybe_unused)
+> > > >  {
+> > > >         if (config->metric_only)
+> > > > -               print_metric_headers(config, evlist, " ", true);
+> > > > +               print_metric_headers(config, evlist, true);
+> > > >  }
+> > > >  static void print_header_json(struct perf_stat_config *config,
+> > > >                               struct target *_target __maybe_unused,
+> > > > @@ -1187,7 +1181,7 @@ static void print_header_json(struct perf_stat_config *config,
+> > > >                               const char **argv __maybe_unused)
+> > > >  {
+> > > >         if (config->metric_only)
+> > > > -               print_metric_headers(config, evlist, " ", true);
+> > > > +               print_metric_headers(config, evlist, true);
+> > > >  }
+> > > >
+> > > >  static void print_header(struct perf_stat_config *config,
+> > > > --
+> > > > 2.38.1.584.g0f3c55d4c2-goog
+> > > >
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+
+- Arnaldo
