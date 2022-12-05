@@ -2,222 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447B7642B2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8D8642B2E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiLEPOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S231262AbiLEPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbiLEPON (ORCPT
+        with ESMTP id S230108AbiLEPQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:14:13 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2085.outbound.protection.outlook.com [40.107.14.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB34E17ABB;
-        Mon,  5 Dec 2022 07:13:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nkO+bZRhbydD8pRG52mrD11MtXYmmKMTNjQrxoiUck+j5JVmN+3ohS2P5DfhQA5w75vH8ovslikn3uF/NcZXvt3Yw6tkOBBDGhxVPHR0cj2GEqPr8DjoMJEo45w4ZQJPvRcXJ9GzS5DrxlfmN/sZgWNY+VBu97ku9mUnp5xlkkBP0r2XUuD7h4hYC/C5O4WenWOBgYrl3TbEjWxTAp4LRszz4aTd7RPTTrPnwq24eNvhI62GqkPcka7wFB1r5hcPeNFj6JPdL6JhD1fayf82ZGMtwi/rsBGBSyyeu6sjwbJIUHlQ++IaFU6a3FmLWQFBNUWZpAQWO7ACXUyKLVEPCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EgF6i5h01XC2Qw/TYvqRwU3kXXsDanA1rAXgaCQe/sI=;
- b=jHUiJVdavpWvznwPIhOkzYvZAjiR1mqm/2Pm4qtpbGgtM3xZDCasOaoqHsLrk8i/KvedHt7VwxIx++63At2PCMA19mKhwBaefzBp5dd/OZZfwejyMVDIzUErLMTxx8HsuA1nsVK+2tMQajJbkIloLI3Ghumpvi8aga7Vof99wjFWCs0v8O2dWkouujL7AFOu6yNhyZAwRnY0aorC3vpMJ9Lc6XwzDb2ntiP9XNI4fzf4qf+Vpq9t1eonCSqnSW9c4wFMAr+fgtaf16vJYZsj5YNGIBjA1Z+XG4lxKeSrFCoqtAl54p5eBPlDTdGJ6eyFK/9zPvOqwHVBFA7t+S6kcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EgF6i5h01XC2Qw/TYvqRwU3kXXsDanA1rAXgaCQe/sI=;
- b=KS3HeOTlUS+zOzToxVUVIviwXuEVnppZLjlvDgyDUtgY/i2+NJ3xncwhfr9IXzQXKCSpz0mlQ56Mgdmo1KvamayLn1ccctoJdl/N/TerBgbvz/O7LDR0+ffFIBLLIsncdWNm9c0QkU8BKhU2l9E4sYpR9fMxm8xIcjYHv5S0QCmglqlV4LnN2oxWj0QTaj0YPXAwrtCY7SKeFAxE2ipBzrJspf+5d7BbadzKu43gRTHflFdOLsZlwm5B0yVkcJVZ4VoUIMjdXE1GLuQviCJhONAw2kMWJA9RzKpVQAZd1NefJLrMulLhBN48qQ3bkprEqmqlCYs5096nufHTpQzyHQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by DU0PR03MB9032.eurprd03.prod.outlook.com (2603:10a6:10:47f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Mon, 5 Dec
- 2022 15:13:57 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::2b95:1fe4:5d8f:22fb%7]) with mapi id 15.20.5880.011; Mon, 5 Dec 2022
- 15:13:57 +0000
-Message-ID: <14b50035-c080-2471-7bc3-967fe73357d0@seco.com>
-Date:   Mon, 5 Dec 2022 10:13:50 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] rtc: abx80x: Add nvmem support
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20221201230208.713118-1-sean.anderson@seco.com>
- <202212031600.ua4R64Lx-lkp@intel.com>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <202212031600.ua4R64Lx-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR12CA0005.namprd12.prod.outlook.com
- (2603:10b6:208:a8::18) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Mon, 5 Dec 2022 10:16:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B681AD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:14:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670253293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qdxwu4XlDRxq860G3kMMYQjg4/qpmpIJsM1zb2hWpeQ=;
+        b=Y8au+g22L4tcFeN1styCyYgzvTal2w0JKDlDiCXKwxVxckqoC9sOUJxa3TbVwmiYKgyuxH
+        D5Jrd4IBpdsyo4bIqM/MAqNhCqkuEr23YlWNoRlIeNIsGXpLAYDh/NrzNv1jvaqOcqYeXd
+        acOfbnBUCF3pdhD3Uax5xO0o0ceII/M=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-452-XE8S19xBMu-PIQ9zpW5vTQ-1; Mon, 05 Dec 2022 10:14:44 -0500
+X-MC-Unique: XE8S19xBMu-PIQ9zpW5vTQ-1
+Received: by mail-wm1-f71.google.com with SMTP id r203-20020a1c44d4000000b003d153a83d27so2871688wma.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:14:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qdxwu4XlDRxq860G3kMMYQjg4/qpmpIJsM1zb2hWpeQ=;
+        b=j5onDAytxvPaunUU6WN2f61wHU7KDcGRTpVKMT54B+skW/aJ06r77Ep6ZlGHny/LAG
+         D8v/BhIENbKVJsFqR0FrgXM7QEKgJBIZ87/5Cpu7Bkgx6/OxeYb04Yz2WUs7S4PwNnn0
+         Ki4ZZgshBucjn8OLldCLUS9ihG8qh5l51jdrWUts8SE6TxVSF549seWvGYtkKaXMNmU+
+         /LwfhP42BouQdo1r5QayYHCQRWXTDQ5XEE18Yv29gSN/fWoEpClnLmXNNEoNZBk3kumE
+         bl6L1BLwwHqpuLCY7LZQBAzC9ZOyHr9Kkc7TVf21dsmLOoi8O9Cr6lQL9Mz+vxf4kbf+
+         U/Bg==
+X-Gm-Message-State: ANoB5plyY09fHjTVNzsJz5wDK9yRnFGnbYtDp3INizj6nK3bkwNFTggR
+        FMggrWk7zkFEiqUDRM42wECZG+5vqulq5LDqnJsau9XvkwudWD2bsjkoiQr8ES1MspNd52sWn2g
+        a5nzbAaz9IZoIfaS2twkevy8s
+X-Received: by 2002:adf:e848:0:b0:242:11f1:ed1 with SMTP id d8-20020adfe848000000b0024211f10ed1mr24219042wrn.61.1670253283633;
+        Mon, 05 Dec 2022 07:14:43 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5YvFEY4qNMf64qDbJhVXGIii+o6kcyhJuhUeNMVtQtP7V+u/pu0i+Rd3Tx9HyqTHTVsIlT4g==
+X-Received: by 2002:adf:e848:0:b0:242:11f1:ed1 with SMTP id d8-20020adfe848000000b0024211f10ed1mr24219014wrn.61.1670253283255;
+        Mon, 05 Dec 2022 07:14:43 -0800 (PST)
+Received: from ?IPV6:2003:cb:c701:fe00:a7c9:b0d6:909d:124a? (p200300cbc701fe00a7c9b0d6909d124a.dip0.t-ipconnect.de. [2003:cb:c701:fe00:a7c9:b0d6:909d:124a])
+        by smtp.gmail.com with ESMTPSA id m41-20020a05600c3b2900b003d1e3b1624dsm1222401wms.2.2022.12.05.07.14.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 07:14:42 -0800 (PST)
+Message-ID: <3b75765f-d4d7-fd0e-366d-59e18ab42766@redhat.com>
+Date:   Mon, 5 Dec 2022 16:14:41 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DU0PR03MB9032:EE_
-X-MS-Office365-Filtering-Correlation-Id: fade3307-4908-460e-924f-08dad6d35360
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aslRlLSXAktcV/H5ObRdK/3pQjjByZTQWhBxlUITZjkw+8qXO6PBUAbArHOU2dG7K/DBZwbUXLOPCzvQ5k9c300KonyyEuKM+KefVW2NlhBmlo3V5ueuBNlbhj3VOGhWJS7cW5Ar9gcVOBBToHN8ekb5SvWLiP7IO80S/dB6KGdQv6eag3qCEathVUrLDtvmdiw5wTnhTTWriC4vhXt5LWSqY7kzjGrGwiwRH54klPHY81mVrEmJkHR2Ve5vukq/KHwL7l2Oo4hT94XrFAqD2uVtZTDM2wA7VfS9+z+Tts90MTZOFBjUe4qA/FwPIRLA9oEOCbkWd43hqtcbzodNYfMiQNnp2lfPHFkCRgUWG7Xrwi7QNS4bMg0MH0ZRscgGWUv8MGMfPhHsdvEM+EuHPG4aQ6ORbCYmTdOI7ZUyZ682XbeMzEFaOGcDZmndUOq4RsGYSKXRLOZNGLtxdHCecDfmyz9d/cWmboKls8lwtESC0/kQdnlCOpUzUQqm6/pIEXqYJGyTJyp5YLdz5+bNKRlGoIuue9eAaJHnz/qp92V2OZRR1f7tPb+Drpi8DHi2aGeSmB49CIE+eaO2ZLvQBSiwLurDF1/hMmQubSmmMd/b8DhqzMjMZmO24VEgKD0Dyrk+EINc5KSEPk7vWvGGtTWl7vM3zLQUwB0qXQUUMQ+lW3qHneRWbfuxw/iLf5uMwfi18icMi8l+puMuZz2ezLe++abY94N3x2VDl5FRhBxuKhTzKSLS292/OUJgkok41UkgG8UkrkhPcG7yTI8J4PkQJ+OeJeMX7sKkMkINQEE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(366004)(376002)(346002)(396003)(136003)(451199015)(36756003)(38100700002)(31696002)(86362001)(38350700002)(41300700001)(2906002)(8936002)(4326008)(44832011)(5660300002)(83380400001)(66556008)(66946007)(66476007)(6486002)(966005)(478600001)(316002)(110136005)(2616005)(31686004)(8676002)(6666004)(52116002)(186003)(53546011)(6506007)(6512007)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NXIyRVQvN0dKSlBJWnhXU3E4Q1NUbGwwblNXaS94V1NwZUJEV0dCSWMwazA5?=
- =?utf-8?B?S2Z6c0JIQ0tGTEIvNDd1dDhYSE9oM0hhK1ByZGtRYzArVktlUGl6aVAzNUFa?=
- =?utf-8?B?SHRIbTl3d0xBOS80TkpVN3VmLzFLa3B2WEhLckI5UWprWUVrZzJiWklGTlU5?=
- =?utf-8?B?REloQk5Md243WUw0VmtZdzluMmZ2UHNRTjZUUEdVc0VqNkJiYWtkS3cwa2la?=
- =?utf-8?B?d1E2a1Y2Y242TERzdjdsOVh5NXRlc0FzbUxwWENaOFJTUjNoMWxlTm94SVFh?=
- =?utf-8?B?a3JWaE1pR2NVVEdwYUxPbEtiVkZ4c1ZIV0Y4d3Zlb2hmdmd6eTBqWnhYKy8v?=
- =?utf-8?B?bDlGL3RxMmVSTjkvdzlXUzFUbmZkb094Q3NqbDE5emVEUFpkMGxQbUtaQW1k?=
- =?utf-8?B?Zkh5SnJrbGRqb2xEK2ljZ1FwVGg0dVk4RTJmUkNmS1dyTW5rNkxGWVNlUXFR?=
- =?utf-8?B?OVNGT1VMdkRLRXMrSE5xUTdlRWRxT3V2VUNnQS9tSm4yWis3UnpPaDcxVDF1?=
- =?utf-8?B?YVF6dkJramREbCtoM1Z2NkVqeUpIbHh5N0dQVllGQlZtV1pMdnY1ayszcFRh?=
- =?utf-8?B?aHBxWTRJWGY4UTZRS1NSOGIyUkJxUEZyMDZIbHB5QWgyYm52cXZGSGNPK0tF?=
- =?utf-8?B?WGRBRTY3RnRHY3o5YjhVcFh4eVM1WXhCUDNOaXUvbHdGM255cGRyQmozWTdT?=
- =?utf-8?B?VE15dVhmWGh3U01Hei9CUzVMdlIxU0RhcFBlTllOVFZ1WlIzcEV2aUZ5UDVa?=
- =?utf-8?B?NllxNmdCTnhpR3dFMjI0ZFFJUVZiQ1RJVnZmd0hFZzdxUHNCY3dXdEFqOXI1?=
- =?utf-8?B?aXNldkdTMElhc0YzbFRVSmNrM2lrUjlvbndibGdLL1liQVVia1lyaHNlRlh2?=
- =?utf-8?B?R2VDaGRCS3hlNnZFZHd0OThFb2o0ZlFEdGNvSUhGQnlqbjk4bkhmbElEZXF3?=
- =?utf-8?B?RlF6OUhEYnFLKzVnaUJtb05qdXZrVVRWaGV1T1pPdUZOeTlqU2dKOHJ0U0Zq?=
- =?utf-8?B?di9nREkrTXFYTERNb2N4NzZyNjNKZ2hmUy9yWEp2YVRkcTVqRnFqWTJnaEY5?=
- =?utf-8?B?SmRkM29reUtpTVo0bHhlaVFROHBKYi81L0swNTZwb2JpbUdia0NoN3g4VXJn?=
- =?utf-8?B?Mi9HTENGWHVBTkQ4aHBPVTREVVFQTzhMZWNhZG9ETmFGR0YybFQ1WTU3dFpk?=
- =?utf-8?B?WkV4SFg2WjJPLzdldHFOZ2tjaUFld0VlQ0s5a2NIcEl3ZHIwZklRUFY0bThj?=
- =?utf-8?B?dUdnV25ManhmSGNvekM3VDVHUE12cktLckMxNkUvWkJ2cEtHNzROQmlKVkNP?=
- =?utf-8?B?NG9XZEM2TlVlNmJTR3dzb2pVQkU1UVBpRjUyNDlrOGZkL2VGeVRMSEIvekJF?=
- =?utf-8?B?UGloNnoyRGJ0M1hiSzM4WmZSSDIwUzZxdlpNQlNrazhhTUF0cUNPM01qVThV?=
- =?utf-8?B?SU01WkFQc2FXUWsvb1R4b2FYWEgySXlFTnY2eDlRTVBCZUtOYS8ySGthQWdP?=
- =?utf-8?B?WDhIbDZZd24rZkV6MWlVS1FKRDZyanBWbXJGVFA5a3gxa25Lais4S0ZLemlj?=
- =?utf-8?B?Y1pteHVtMXVrZDh1QktHd2RGMDN3SFgrUkVmN0dhMTdrVjVqYnc2ZjErMENL?=
- =?utf-8?B?T3Q4ZmhlcTRpZktwTno0TzZabjFCVmdpenc1QXJSVnRkNHhtTUszM1RPaElZ?=
- =?utf-8?B?d3JhK21Fb2c1cGp3TTRGVnZ3ZmVMRjZxelZ5d3N6MjJIYnFvdzZocklEL2Rw?=
- =?utf-8?B?M2lqRXVVc2E0bElpSTZUTTNUN1hsM0JRVmpSMlNBcHZmUXlRc0kyR2J1NW5Y?=
- =?utf-8?B?eCt2czd4WDRiVzFuMjZ1bXhyZ0tyWWluRXViZGdNM2lWcHcrTkc3U01Na25m?=
- =?utf-8?B?anRvcjFINGJtTkwxWFRMK21CMk9IMFVHSVltQmp1RDFjRjJKVUNGVEYxQkpn?=
- =?utf-8?B?VzRKc09QT0hQUkdtTHlCaElBZE5lUVF4V2ZjSUo5QTRhbGJkOUd2dmRPYVlP?=
- =?utf-8?B?V0RZSEVjVjlzcVJHdU1VZGZQRnRFbVZic2lLUzF3VGM2QlF3V1QxOHVRbWFu?=
- =?utf-8?B?UC9VNnVBbnpud2xVckozVjcwempGSjNvS1VuQ1RoZUxQdjI0WWVVcW5DeGo3?=
- =?utf-8?B?YVZSdzhIRW54R0ZsQzlVYXZ0S2F5cWNBVmFtNVFRdm15YXNrVVl5T1IxZlIy?=
- =?utf-8?B?NFE9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fade3307-4908-460e-924f-08dad6d35360
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 15:13:57.2523
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 88LsSEAKpCUtpumIhZ1BtEKyhP2W0UV6ARzHYTLYMnvh+vOIDi0PH+nJugQobJq1zS+VI0+AX/ipwfIXPCjLeQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB9032
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: kernel BUG at include/linux/swapops.h:497!
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>
+References: <0efeec33-8030-df1e-b055-2e0748fab4e0@redhat.com>
+ <CAHbLzkpW6zg_bY5MZ4FFyw6TKC1MyBk7RsxB2LCHC7X9Ek439g@mail.gmail.com>
+ <CAHbLzkp095z5vSLYAiD4Fy_W0=1zXk3uY1k0hYOA7Tq2y9=bZQ@mail.gmail.com>
+ <082e64a7-7340-b1fb-b819-43bc4df0584f@redhat.com>
+Organization: Red Hat
+In-Reply-To: <082e64a7-7340-b1fb-b819-43bc4df0584f@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/22 03:45, kernel test robot wrote:
-> Hi Sean,
+On 02.12.22 13:36, David Hildenbrand wrote:
+> On 01.12.22 19:14, Yang Shi wrote:
+>> On Thu, Dec 1, 2022 at 9:48 AM Yang Shi <shy828301@gmail.com> wrote:
+>>>
+>>> On Thu, Dec 1, 2022 at 8:58 AM David Hildenbrand <david@redhat.com> wrote:
+>>>>
+>>>> Hi,
+>>>>
+>>>> running COW tests (in mm-unstable) on x86-pae with 8GiB, I am able to trigger the
+>>>> following BUG on latest upstream:
+>>>>
+>>>> root@debian:/mnt/scratch/linux/tools/testing/selftests/vm# ./cow
+>>>> # [INFO] detected THP size: 2048 KiB
+>>>> # [INFO] detected hugetlb size: 2048 KiB
+>>>> # [INFO] huge zeropage is enabled
+>>>> TAP version 13
+>>>> 1..147
+>>>> # [INFO] Anonymous memory tests in private mappings
+>>>> # [RUN] Basic COW after fork() ... with base page
+>>>> ok 1 No leak from parent into child
+>>>> # [RUN] Basic COW after fork() ... with swapped out base page
+>>>> ok 2 No leak from parent into child
+>>>> # [RUN] Basic COW after fork() ... with THP
+>>>> ok 3 No leak from parent into child
+>>>> # [RUN] Basic COW after fork() ... with swapped-out THP
+>>>> Segmentation fault
+>>>>
+>>>>
+>>>> [  879.314600] kernel BUG at include/linux/swapops.h:497!
+>>>> [  879.314615] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+>>>> [  879.314624] CPU: 7 PID: 746 Comm: cow Tainted: G            E      6.1.0-rc7+ #5
+>>>> [  879.314631] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
+>>>> [  879.314634] EIP: pagemap_pmd_range+0x644/0x650
+>>>> [  879.314645] Code: 00 00 00 00 66 90 89 ce b9 00 f0 ff ff e9 ff fb ff ff 89 d8 31 db e8 1b c2 52 00 e9 23 fb ff ff e8 51 80 56 00 e9 b6 fe ff ff <0f> 0b bf 00 f0 ff ff e9 38 fa ff ff 3e 8d 74 26 00 55 89 e5 57 31
+>>>> [  879.314651] EAX: ee2bd000 EBX: 00000002 ECX: ee2bd000 EDX: 00000000
+>>>> [  879.314656] ESI: f54b9ed4 EDI: 0001f400 EBP: f54b9db4 ESP: f54b9d68
+>>>> [  879.314660] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010246
+>>>> [  879.314670] CR0: 80050033 CR2: b7a00000 CR3: 357452a0 CR4: 00350ef0
+>>>> [  879.314675] Call Trace:
+>>>> [  879.314681]  ? madvise_free_pte_range+0x720/0x720
+>>>> [  879.314689]  ? smaps_pte_range+0x4b0/0x4b0
+>>>> [  879.314694]  walk_pgd_range+0x325/0x720
+>>>> [  879.314701]  ? mt_find+0x1d6/0x3a0
+>>>> [  879.314710]  __walk_page_range+0x164/0x170
+>>>> [  879.314716]  walk_page_range+0xf9/0x170
+>>>> [  879.314720]  ? __kmem_cache_alloc_node+0x2a8/0x340
+>>>> [  879.314729]  pagemap_read+0x124/0x280
+>>>> [  879.314738]  ? default_llseek+0xf1/0x160
+>>>> [  879.314747]  ? smaps_account+0x1d0/0x1d0
+>>>> [  879.314754]  vfs_read+0x90/0x290
+>>>> [  879.314760]  ? do_madvise.part.0+0x24b/0x390
+>>>> [  879.314765]  ? debug_smp_processor_id+0x12/0x20
+>>>> [  879.314773]  ksys_pread64+0x58/0x90
+>>>> [  879.314778]  __ia32_sys_ia32_pread64+0x1b/0x20
+>>>> [  879.314787]  __do_fast_syscall_32+0x4c/0xc0
+>>>> [  879.314796]  do_fast_syscall_32+0x29/0x60
+>>>> [  879.314803]  do_SYSENTER_32+0x15/0x20
+>>>> [  879.314809]  entry_SYSENTER_32+0x98/0xf1
+>>>> [  879.314815] EIP: 0xb7f36559
+>>>> [  879.314820] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90 8d 76
+>>>> [  879.314825] EAX: ffffffda EBX: 00000003 ECX: bff00a50 EDX: 00000008
+>>>> [  879.314829] ESI: 005bd000 EDI: 00000000 EBP: b7f1c000 ESP: bff00a00
+>>>> [  879.314833] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
+>>>> [  879.314840] Modules linked in: intel_rapl_msr(E) intel_rapl_common(E) intel_pmc_core(E) kvm_intel(E) kvm(E) irqbypass(E) aesni_intel(E) libaes(E) crypto_simd(E) cryptd(E) rfkill(E) snd_pcm(E) snd_timer(E) joydev(E) snd(E) soundcore(E) sg(E) evdev(E) pcspkr(E) serio_raw(E) qemu_fw_cfg(E) parport_pc(E) ppdev(E) lp(E) parport(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc32c_generic(E) crc16(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(E) crc_t10dif(E) sr_mod(E) crct10dif_generic(E) cdrom(E) crct10dif_common(E) bochs(E) drm_vram_helper(E) drm_ttm_helper(E) ttm(E) drm_kms_helper(E) ata_generic(E) ata_piix(E) crc32_pclmul(E) libata(E) crc32c_intel(E) drm(E) e1000(E) scsi_mod(E) psmouse(E) i2c_piix4(E) scsi_common(E) floppy(E) button(E)
+>>>> [  879.314936] ---[ end trace 0000000000000000 ]---
+>>>> [  879.314940] EIP: pagemap_pmd_range+0x644/0x650
+>>>> [  879.314944] Code: 00 00 00 00 66 90 89 ce b9 00 f0 ff ff e9 ff fb ff ff 89 d8 31 db e8 1b c2 52 00 e9 23 fb ff ff e8 51 80 56 00 e9 b6 fe ff ff <0f> 0b bf 00 f0 ff ff e9 38 fa ff ff 3e 8d 74 26 00 55 89 e5 57 31
+>>>> [  879.314949] EAX: ee2bd000 EBX: 00000002 ECX: ee2bd000 EDX: 00000000
+>>>> [  879.314953] ESI: f54b9ed4 EDI: 0001f400 EBP: f54b9db4 ESP: f54b9d68
+>>>> [  879.314957] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010246
+>>>> [  879.314961] CR0: 80050033 CR2: b7a00000 CR3: 357452a0 CR4: 00350ef0
+>>>>
+>>>>
+>>>> Reading /proc/self/pagemap in THP test case seems to trigger the
+>>>>      BUG_ON(is_migration_entry(entry) && !PageLocked(p));
+>>>> in pfn_swap_entry_to_page().
+>>>>
+>>>> I did not have time to cherry pick (slow machine) or look into details.
+>>>> And I don't remember seeing that BUG 64bit yet during my tests.
+>>>>
+>>>> Having a migration entry in the swap testcase is kind-of weird. But maybe it's
+>>>> related to THP splitting (which would, however, also be weird). I'd have expected
+>>>> a swap entry ... hopefully our swap type doesn't get corrupted.
+>>>
+>>> I'm on a slow machine too... anyway some hints off the top of my head.
+>>>
+>>> First of all, I don't think we will see a real swap PMD entry since
+>>> even though THP swap is supported the transhuge PMD is split by
+>>> try_to_unmap() if I remember correctly. So we should just be able to
+>>> see a regular PMD, a transhuge PMD, a migration PMD or a PROT_NONE PMD
+>>> (if autonuma is on).
 > 
-> I love your patch! Yet something to improve:
+> Yes.
 > 
-> [auto build test ERROR on v6.1-rc7]
-> [also build test ERROR on linus/master]
-> [cannot apply to abelloni/rtc-next next-20221202]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>
+>>> Secondly, THP splitting doesn't convert transhuge PMD to migration PMD
+>>> either, it just splits transhuge PMD then converts every single PTEs
+>>> to migration PTEs.
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/rtc-abx80x-Add-nvmem-support/20221202-070301
-> patch link:    https://lore.kernel.org/r/20221201230208.713118-1-sean.anderson%40seco.com
-> patch subject: [PATCH] rtc: abx80x: Add nvmem support
-> config: x86_64-randconfig-a014
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/6dbbdf7eef71cb4255c6751bc9762cf02a0f53b6
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Sean-Anderson/rtc-abx80x-Add-nvmem-support/20221202-070301
->         git checkout 6dbbdf7eef71cb4255c6751bc9762cf02a0f53b6
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> Right.
 > 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> Thirdly, before pfn_swap_entry_to_page() is called, it does check
+>>> whether the swap PMD is migration PMD or not, if it is not a VM_BUG is
+>>> triggered.
+>>>
+>>> So it seems like a migration PMD is fine. The problem seems like the
+>>> page is not locked when doing migration IIUC.
+>>
+>> A quick look at the migration code, I don't see the page is unlocked
+>> if I don't miss something. So it may be helpful to dump the page.
 > 
-> All errors (new ones prefixed by >>):
+> It is highly unlikely that we have migration happening here, because
 > 
->>> drivers/rtc/rtc-abx80x.c:695:11: error: implicit declaration of function 'FIELD_GET' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
->                    lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
->                            ^
->>> drivers/rtc/rtc-abx80x.c:697:12: error: implicit declaration of function 'FIELD_PREP' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
->                    extram = FIELD_PREP(ABX8XX_EXTRAM_XADS, upper);
->                             ^
->    drivers/rtc/rtc-abx80x.c:697:12: note: did you mean 'FIELD_GET'?
->    drivers/rtc/rtc-abx80x.c:695:11: note: 'FIELD_GET' declared here
->                    lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
->                            ^
->    2 errors generated.
+> 1) This triggers 100% on the first try
+> 2) The machine is essentially idle with 7 GiB of free memory.
 > 
-> 
-> vim +/FIELD_GET +695 drivers/rtc/rtc-abx80x.c
-> 
->    685	
->    686	#ifdef CONFIG_NVMEM
->    687	static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
->    688				     void *val, size_t bytes, bool write)
->    689	{
->    690		int ret;
->    691	
->    692		while (bytes) {
->    693			u8 extram, reg, len, lower, upper;
->    694	
->  > 695			lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
->    696			upper = FIELD_GET(NVMEM_ADDR_UPPER, offset);
->  > 697			extram = FIELD_PREP(ABX8XX_EXTRAM_XADS, upper);
->    698			reg = ABX8XX_SRAM_BASE + lower;
->    699			len = min(lower + bytes, (size_t)ABX8XX_SRAM_WIN_SIZE) - lower;
->    700			len = min_t(u8, len, I2C_SMBUS_BLOCK_MAX);
->    701	
->    702			ret = i2c_smbus_write_byte_data(priv->client, ABX8XX_REG_EXTRAM,
->    703							extram);
->    704			if (ret)
->    705				return ret;
->    706	
->    707			if (write)
->    708				ret = i2c_smbus_write_i2c_block_data(priv->client, reg,
->    709								     len, val);
->    710			else
->    711				ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
->    712								    len, val);
->    713			if (ret)
->    714				return ret;
->    715	
->    716			offset += len;
->    717			val += len;
->    718			bytes -= len;
->    719		}
->    720	
->    721		return 0;
->    722	}
->    723	
-> 
+> I'll try digging a bit what exactly is happening here, dumping the PMD
+> entry first.
 
-Ah, the ARM64 bitfield inclusion strikes again...
+Turns out that 32bit x86 doesn't even support PMD migration. We're 
+stumbling over a PTE holding a migration entry and the underlying page 
+was indeed unlocked. Turns out we fail to remove the migration entries 
+we temporarily installed while splitting the THP. Splitting code 
+doesn't/cannot notice that and unlocks the now-split page(s).
 
---Sean
+I just sent a fix.
+-- 
+Thanks,
+
+David / dhildenb
+
