@@ -2,132 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E5D642A9B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E582642A93
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiLEOqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 09:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S232016AbiLEOqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 09:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbiLEOqY (ORCPT
+        with ESMTP id S231516AbiLEOqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 09:46:24 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1F51B788;
-        Mon,  5 Dec 2022 06:46:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670251584; x=1701787584;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xa3lQ5br274pHlzqKFXObTMHjy86GvzTLCwrJSJFAKA=;
-  b=mshFdZZvsdpyH+TXzhniEQuHZl2sUUW1EBmLfZxio/WcDoVpwNqAUGpl
-   Pl+KNrO+7DWQ2m98pEbs+V4H+NJCaXLbOFQWqfbbHUH5c1qh5BmdduxAs
-   F/Z8BSpanbtH/w/rU1qAzjVrOXJ4ssvT2Hf0UwfVYS9e6Mhl87gX3gQ8s
-   Zx7t8xLQrtH+PcIeclo+6yzQPi/CCPTnU1ED0n5lRBsDa4MVU1Sd18IDW
-   9GK3n+scoFQh3Ohv1GR8YggehZx+5COOxf1jrUnjt+WI0S8FZDrNVykev
-   PiqiCXL14IGa95xQdYtgXyrCYLpLOb4IEaAYPl3065nac/CC7/9PgtsuQ
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="202640941"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Dec 2022 07:46:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 5 Dec 2022 07:46:19 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Mon, 5 Dec 2022 07:46:17 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        <ajones@ventanamicro.com>, <aou@eecs.berkeley.edu>,
-        <conor@kernel.org>, <corbet@lwn.net>, <guoren@kernel.org>,
-        <heiko@sntech.de>, <paul.walmsley@sifive.com>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-Subject: [PATCH v2 3/3] Documentation: riscv: add a section about ISA string ordering in /proc/cpuinfo
-Date:   Mon, 5 Dec 2022 14:45:26 +0000
-Message-ID: <20221205144525.2148448-4-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221205144525.2148448-1-conor.dooley@microchip.com>
-References: <20221205144525.2148448-1-conor.dooley@microchip.com>
+        Mon, 5 Dec 2022 09:46:09 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891191B1EC;
+        Mon,  5 Dec 2022 06:46:06 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id jr1so11514357qtb.7;
+        Mon, 05 Dec 2022 06:46:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mmxDQWz1OcZRQLIrCnyf8KKp2sa+/PYHinAmiEwEu/g=;
+        b=FM99B8CouUiddxogTCWpQuQ94b0HLoazU4Kp7W8pEEJZicQYzgBYs1cVLlJU83NILW
+         6mwhnnDFNWV0qk3qzQk0h9quqR99lVlByWUXSYuKYa5Ch8m1ShgHb+MVltQICFJ0zXGQ
+         IfmYiyRVe7YUSeqF3zL7XavktRG6itll/9JGcf/ut7jHysJwfwCU9ovYFWvNT5+aNtlP
+         0bUsFUmfWI4ZvHWKe7TpQYF73oGI+SUPyAIujcFUbBYUOFaRKdB4mYPBLU7e0VAjbcqJ
+         H/KfTZPi2BnSnPwK4UydHFHdv39SqFv2bC0VwRkHc7ckMP95OkMwQXSlaZw4BGQsZXbE
+         mw9Q==
+X-Gm-Message-State: ANoB5pktNt07pTn5oru8uzdHnMviiCjimcT0M3VIw7n/RQAfahN/1PSN
+        sEjwgWotNlkz6V0VG+vFpFy2NKAhpvCkxAC9MSs=
+X-Google-Smtp-Source: AA0mqf7DDT4tYCBIU2TNsN3S/z4/mO02Nkn32IClzk+wQYzJ5Daq4v+49NfbxXpuawqkSFlin+aDhwiCk8lCFtWBOJU=
+X-Received: by 2002:a05:622a:410a:b0:3a5:5987:42c6 with SMTP id
+ cc10-20020a05622a410a00b003a5598742c6mr76491917qtb.147.1670251565666; Mon, 05
+ Dec 2022 06:46:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <5627469.DvuYhMxLoT@kreacher> <4789678.31r3eYUQgx@kreacher> <cea65857-071f-e68e-9825-b88d64eeca81@intel.com>
+In-Reply-To: <cea65857-071f-e68e-9825-b88d64eeca81@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Dec 2022 15:45:54 +0100
+Message-ID: <CAJZ5v0hsT3j=DBcV6nwG1AMKDu7QiO=FoQhNOC6GFVAC46uMtw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] PM: runtime: Do not call __rpm_callback() from rpm_idle()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tushar Nimkar <quic_tnimkar@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RISC-V specs are permissive in what they allow as the ISA string,
-but how we output this to userspace in /proc/cpuinfo is quasi uABI.
+On Mon, Dec 5, 2022 at 8:45 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 2/12/22 16:30, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Calling __rpm_callback() from rpm_idle() after adding device links
+> > support to the former is a clear mistake.
+> >
+> > Not only it causes rpm_idle() to carry out unnecessary actions, but it
+> > is also against the assumption regarding the stability of PM-runtime
+> > status accross __rpm_callback() invocations, because rpm_suspend() and
+>
+> accross -> across
 
-Formalise this as part of the uABI, by documenting the list of rules
-we use at this point in time.
+Fixed whey applying the patch.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- Documentation/riscv/uabi.rst | 42 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+> > rpm_resume() may run in parallel with __rpm_callback() when it is called
+> > by rpm_idle() and the device's PM-runtime status can be updated by any
+> > of them.
+> >
+> > Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
+>
+> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-diff --git a/Documentation/riscv/uabi.rst b/Documentation/riscv/uabi.rst
-index 21a82cfb6c4d..2ebec4c52230 100644
---- a/Documentation/riscv/uabi.rst
-+++ b/Documentation/riscv/uabi.rst
-@@ -3,4 +3,46 @@
- RISC-V Linux User ABI
- =====================
- 
-+ISA string ordering in /proc/cpuinfo
-+------------------------------------
-+
-+The canonical order of ISA extension names in the ISA string is defined in
-+chapter 27 of the unprivileged specification.
-+The specification uses vague wording, such as should, when it comes to ordering,
-+so for our purposes the following rules apply:
-+
-+#. Single-letter extensions come first, in canonical order.
-+   The canonical order is "IMAFDQLCBKJTPVH".
-+
-+#. All multi-letter extensions will be separated from other extensions by an
-+   underscore.
-+
-+#. Additional standard extensions (starting with 'Z') will be sorted after
-+   single-letter extensions and before any higher-privileged extensions.
-+
-+#. For additional standard extensions, the first letter following the 'Z'
-+  conventionally indicates the most closely related alphabetical
-+  extension category. If multiple 'Z' extensions are named, they will be ordered
-+  first by category, in canonical order, as listed above, then alphabetically
-+  within a category.
-+
-+#. Standard supervisor-level extensions (starting with 'S') will be listed
-+   after standard unprivileged extensions.  If multiple supervisor-level
-+   extensions are listed, they will be ordered alphabetically.
-+
-+#. Standard machine-level extensions (starting with 'Zxm') will be listed
-+   after any lower-privileged, standard extensions. If multiple machine-level
-+   extensions are listed, they will be ordered alphabetically.
-+
-+#. Non-standard extensions (starting with 'X') will be listed after all standard
-+   extensions. If multiple non-standard extensions are listed, they will be
-+   ordered alphabetically.
-+
-+An example string following the order is::
-+
-+   rv64imadc_zifoo_zigoo_zafoo_sbar_scar_zxmbaz_xqux_xrux
-+
-+Misaligned accesses
-+-------------------
-+
- Misaligned accesses are supported in userspace, but they may perform poorly.
--- 
-2.38.1
+Thank you!
 
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/base/power/runtime.c |   12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> > Index: linux-pm/drivers/base/power/runtime.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/power/runtime.c
+> > +++ linux-pm/drivers/base/power/runtime.c
+> > @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
+> >
+> >       dev->power.idle_notification = true;
+> >
+> > -     retval = __rpm_callback(callback, dev);
+> > +     if (dev->power.irq_safe)
+> > +             spin_unlock(&dev->power.lock);
+> > +     else
+> > +             spin_unlock_irq(&dev->power.lock);
+> > +
+> > +     retval = callback(dev);
+> > +
+> > +     if (dev->power.irq_safe)
+> > +             spin_lock(&dev->power.lock);
+> > +     else
+> > +             spin_lock_irq(&dev->power.lock);
+> >
+> >       dev->power.idle_notification = false;
+> >       wake_up_all(&dev->power.wait_queue);
+> >
+> >
+> >
+>
