@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C6F642914
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 035BA642918
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiLENQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S230437AbiLENQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiLENQ0 (ORCPT
+        with ESMTP id S232172AbiLENQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:16:26 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9824C11C0A;
-        Mon,  5 Dec 2022 05:16:25 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e72f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 97C481EC0531;
-        Mon,  5 Dec 2022 14:16:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670246183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LebK9vlxoxcDxyhwhYhootxASRZx+GLX1jsVAwpEJA0=;
-        b=cwR7RWJXOTlMHRiqIiOkofWod1zLKpp2yvb22/rbqlSzCUZBZimjsdqGDrBt2LpjyO9tUZ
-        d3V2YPZzwSIriARxl9aDB7BUXKi6P9t44BJQl7KgvnwpysEOsx2EpaIQFU9V/yo8MrorfS
-        /b1jp8OZSqoI5lx+l5T9sjaVGmg/jdE=
-Date:   Mon, 5 Dec 2022 14:16:20 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "saikrishna12468@gmail.com" <saikrishna12468@gmail.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 2/2] EDAC/zynqmp: Add EDAC support for Xilinx ZynqMP
- OCM
-Message-ID: <Y43vJECWJI99tc1x@zn.tnic>
-References: <20221102070655.247511-1-sai.krishna.potthuri@amd.com>
- <20221102070655.247511-3-sai.krishna.potthuri@amd.com>
- <Y4DbXaan258cZK+q@zn.tnic>
- <BY5PR12MB42582EA4A4ACEA56367544E6DB189@BY5PR12MB4258.namprd12.prod.outlook.com>
+        Mon, 5 Dec 2022 08:16:42 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42631BE89
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:16:38 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id m4so11004839vsc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:16:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y/p1hDW7ZZDwcpl9SouWaIuS+vAB+pZ2gQFNYRUeUUs=;
+        b=DlpXt/t3tTdMuZI6iiWADkIbwv1tHDPp333a6ikJcx+rw40UTir9i379/vBSnQ64qZ
+         q8/oVbk8QgDontVXlTCGrT14n94z+V6nCrON9jT0+XUCY0gbQeGEbzi2dEWjrQixXWy3
+         +I9W6UYMztLGUWirMoxSnjwFqe6vXXvn7GOZ3kEwe584Alk9XEJL8d/SuIZ5CcqZLuHJ
+         9GQi76mcpWkjZjREQT2ZWIa7Uik8QlEFfE7jEuZY9DaTHEWOZg/h5lr5EZUsV8OhwwxD
+         FRdYLHQiKXAoPZNpuPk9qbizfvB09oGjIl1JbIb6fGaFoPMql1ETPB54fDpok3Jub0mg
+         ewkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y/p1hDW7ZZDwcpl9SouWaIuS+vAB+pZ2gQFNYRUeUUs=;
+        b=FmAwmO5L7Wuh+tjysI9GSo7iQYzsgAqP1W87JU6icmIiOamo+GX7dO4pKnppzB44bG
+         eTLcn4QfiP5yk1vlFWHbaFuvpBCF1HLoK1UrqZTskaObctIgmB/spt1uQc0gvErF638b
+         /SjRrS/iyQ61Z0O1q6g2zaBlhqKJ15lbNmjPv2gbIDJd/WuhPj7isi5W16EmmOW9O6NW
+         c60Lt1HOhb7XCmEL2L3iW2Q2tVYHufzi5YZPF6tgxgykw/OlWwY8qRG1Qu4OzTqI/NwA
+         ckLdbMWLyabcKd5EhBrp0esNLd04GW7DV2Lw49Fvn/KASKEnILFLe/vQQc76bfC7YGb1
+         9xSg==
+X-Gm-Message-State: ANoB5plH5Qn74cx4SY7fINLvy07OTIp439yoExR6GOESJlHmEJQus9AO
+        10NmDWqmRQF7ipli9DhcULNeHcLSFw5FXGECV9qEsQ==
+X-Google-Smtp-Source: AA0mqf5udK6VHhJT64GdXLx8okLYpi7z+fD8F9Z+74IvXw4xVWh4ZF1gOkXilOTBwD94sXzWtwqWo3kCpDtrCkrDyP0=
+X-Received: by 2002:a67:fc4b:0:b0:3b1:298c:45f9 with SMTP id
+ p11-20020a67fc4b000000b003b1298c45f9mr4265344vsq.61.1670246197822; Mon, 05
+ Dec 2022 05:16:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BY5PR12MB42582EA4A4ACEA56367544E6DB189@BY5PR12MB4258.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205123903.159838-1-brgl@bgdev.pl> <Y43rPdus/9INC390@smile.fi.intel.com>
+ <Y43rmRW1S8PvMJW4@smile.fi.intel.com>
+In-Reply-To: <Y43rmRW1S8PvMJW4@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 5 Dec 2022 14:16:27 +0100
+Message-ID: <CAMRc=MchVprffNyue_ATaTr10xLTfRMjDXxK_DxSufNSg6LwzA@mail.gmail.com>
+Subject: Re: [PATCH v8 0/2] gpiolib: don't allow user-space to crash the
+ kernel with hot-unplugs
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nick Hainke <vincent@systemli.org>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 10:20:11AM +0000, Potthuri, Sai Krishna wrote:
-> As we communicated earlier for ZynqMP platform we have both Synopsys
-> (for DDRMC) and zynqmp_ocm_edac (for OCM) drivers. Just to be clear
-> about what this driver is targeted for, we used ocm as part of file
-> name. Ok, zynqmp_edac.c looks fine, will update.
+On Mon, Dec 5, 2022 at 2:01 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Dec 05, 2022 at 02:59:42PM +0200, Andy Shevchenko wrote:
+> > On Mon, Dec 05, 2022 at 01:39:01PM +0100, Bartosz Golaszewski wrote:
+> > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > >
+> > > Linus Torvalds pointed out that using trylock here is wrong. This iteration
+> > > drops it in favor of unconditional locks but keeps all the fixes that came
+> > > later.
+> > >
+> > > I will also not send it for this release but make it part of the updates PR
+> > > for v6.2 to give it some time in next.
+> > >
+> > > v7 -> v8:
+> > > - don't use down_read_trylock(), just go straight for a full lock
+> >
+> > Yep, it was a good wrap-up explanation.
+>
+> But he also suggested to fold NULL check into call_*_locked(). Any points why
+> you decided not to go that way?
+>
 
-Yeah, we can always rename later, when another driver is needed. For
-now, let's keep things simple.
+Yes! Every read(), ioctl() and poll() variant extract a different
+structure from file->private_data. I'm afraid we need to keep those in
+the callbacks down the stack. I too thought it was a good idea but
+that won't work.
 
-> Ok, will update API documentation like below.
-> echo <fault_injection count> > /sys/kernel/debug/edac/ff960000.memory-controller/inject_fault_count
-							^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Any particular reason this should not be called simply "mc0" or so?
-
-At least this is how we call them on x86...
-
-> echo <bit pos0> <bit pos1> > /sys/kernel/debug/edac/ff960000.memory-controller/inject_ue_bitpos
-
-echo <bit0>,<bit1> > ...
-
-I guess.
-
-The ',' or ':' or some other separator which is not blank space would
-make it more obvious that the two bits belong together and you won't
-have to scan further for the second value but simply have a single
-string which you split at the separator.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Bart
