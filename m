@@ -2,169 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25833642BF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3E8642BFD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbiLEPh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S232082AbiLEPiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:38:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiLEPhp (ORCPT
+        with ESMTP id S232372AbiLEPic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:37:45 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2024.outbound.protection.outlook.com [40.92.98.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7748F2735;
-        Mon,  5 Dec 2022 07:37:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g4qbe3q5GUm3+djFxGLY0FHhc1fl94A/l/I18KWxQS6c5a7kO2tpTyGpSuie1zbjsCQNn9dbs9uVCDgPdyDRtrHBT48xOFmFULzB1Qc9MfzUMJkxMp7o+Lqz3/LHrrkp7lymZSVecOjeMEHb98xgQBYeeGsqDpECIFDY92iLZi5ypPKyF7w0DZIOrwWhAest8gN6Xf5p7fK7MSNJVAMT2nXGsBpQricxVYTvq4V7zt3II+puSDAHPigVsDKWQfJlNr3SCWIKUw3QeNVoNC5pJaBhC7Un6kKmWhw1pueqR2djj4K6NNsOud6KyMjwv5Q/ZCpDGqYNZqAqmtYcRY2zyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C8XYQmGsFxifbE4krxLLsTBSxb5z+JZd35HhshTCv/A=;
- b=PVbUPuKlXpU8REE3ZpCaUjuZ3sBGMksG2vWr0nZGL5vng74+f1al3/NJnthVtJQH4ErDvVCcCFdulvDhhvtIzYqyokZlyOJPJT6C8l4NNiXs+7vhqjLRLAl1HDCzPMS+vlJMs6sU4+2/or7kU48KLVJrEEOxN4LVvE8pJyeWjlIq3boBxodptcvcHM2xw/6/XGVRaNnCilHUUSDhF88k6xR6PdX+CLixqd4syZu47HCz7cAKGexnIUqV+rcHGpvd/XHt4CuLT5xc84+m4NqtbvHacQhb5zXSwKgPSPWChHS//jX5EbTPQEiQXi7cJUjka0CPd5zwH53chDLTeNB0ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C8XYQmGsFxifbE4krxLLsTBSxb5z+JZd35HhshTCv/A=;
- b=goRXTvDYD25aH8m7HwC2u7COsS9oiRP7W8ZY6/pyNbXG1qxHyqFZQwXHuW9vCqxYezW91VzZ3LjTmPMOxBsD7Ojn18A0wfTrpiETCol9gT+xBDNiC/lWBeklU50P4qKYWXA8wjFpvQ0eCY9agiB/mr6uTf6dJ9h6y8TeEKHwmbe7ZfB3Z9lia5TSzgICj/PX9WXukyPMrabJs+2zVk1uCfav3TIr2k/yuKa7Y6Y+ERPaECEWYU8LIRnXz09J0f0c2JRMKMy6edQv71wUvf2am/5gh+OgUCaqS/ynTQNr2tvWZugwLZLjAbi8oDCkGoy9lXof5+JzIbDEIULQhux2Wg==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TYYP286MB1787.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:f9::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
- 2022 15:37:22 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ff96:9cb6:e047:c605%5]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
- 15:37:22 +0000
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     gregkh@linuxfoundation.org
-Cc:     johannes@sipsolutions.net, robert.jarzmik@free.fr, jgross@suse.com,
-        sstabellini@kernel.org, oleksandr_tyshchenko@epam.com,
-        roger.pau@citrix.com, srinivas.kandagatla@linaro.org,
-        bgoswami@quicinc.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        xen-devel@lists.xenproject.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
-Subject: [PATCH 6/6] soundbus: make remove callback of soundbus driver void returned
-Date:   Mon,  5 Dec 2022 23:36:44 +0800
-Message-ID: <TYCP286MB2323BBFCE929111043E60D3BCA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221205153644.60909-1-set_pte_at@outlook.com>
-References: <20221205153644.60909-1-set_pte_at@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [WWyl4X8Xy2TdiUTL3/a5BJJAkOeQUgge]
-X-ClientProxiedBy: SG2PR02CA0046.apcprd02.prod.outlook.com
- (2603:1096:3:18::34) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20221205153644.60909-7-set_pte_at@outlook.com>
+        Mon, 5 Dec 2022 10:38:32 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9298255
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1670254693; x=1701790693;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=p5Y08WCauCkKV8rGN0y/sAMyI/lEE0FyECSha1h2tSI=;
+  b=ctJ9TovAwOIFj1nAj6Y7SywP6uPHrM7HKBFwt/FraLrfSD0oyAnyxH67
+   RJ8LvuqFzeq0W5Zb7n5nqFmVPRlgQvuEyH5aPEmH17nq1vVP5QV9tOFaY
+   p6Pmk4P8ljkP+u4nz5cyS6clqnCg7S6iqV+04X4uRRME66sypy8AUf+1Y
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.96,219,1665446400"; 
+   d="scan'208";a="158006298"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-245b69b1.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 15:38:09 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-m6i4x-245b69b1.us-east-1.amazon.com (Postfix) with ESMTPS id 6B29E341E4A;
+        Mon,  5 Dec 2022 15:38:06 +0000 (UTC)
+Received: from EX19D003UWC001.ant.amazon.com (10.13.138.144) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Mon, 5 Dec 2022 15:38:05 +0000
+Received: from [192.168.4.128] (10.43.162.134) by
+ EX19D003UWC001.ant.amazon.com (10.13.138.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
+ Mon, 5 Dec 2022 15:38:04 +0000
+Date:   Mon, 5 Dec 2022 09:38:02 -0600
+From:   Geoff Blake <blakgeof@amazon.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+CC:     <will@kernel.org>, <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/2] perf/arm-cmn: Cope with spurious IRQs better
+In-Reply-To: <83d16969-9d23-1dc5-c9dd-03542b43a52e@arm.com>
+Message-ID: <2bb86e97-6cef-700e-70ed-4f303da10fd9@amazon.com>
+References: <bc8183fcd7f6ca07b0d56aa8061d816485b84341.1669822447.git.robin.murphy@arm.com> <f41af5cb-7fc7-4bd3-ec9e-53071b9a41f9@amazon.com> <c34db006-4d5b-fb71-f998-63fcdcde6c0b@arm.com> <99fd664c-bf59-b8c0-29d0-6eccfc1c8e80@amazon.com>
+ <83d16969-9d23-1dc5-c9dd-03542b43a52e@arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYYP286MB1787:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54577305-65dd-4f2f-4d1a-08dad6d69a41
-X-MS-Exchange-SLBlob-MailProps: /OoUGmN/RpVKD6y7RJd2fRTadJ6Pq1ot8vlKKmA/hNHf/9uXSEfxNcy1cE9dsFBTSU4rE2OHL/YSf/94pMqv/IC1U95CqFfOvuXoXCzOFsq1S8gJM/GNIgTLxNY8CXbn/hAfm9S8eI+3vaesaIP+Rv2/iB3t3j786KjU5NDoaNXNpP2SfqwiA0VTUzZS9wqefozxmQa1Qfnx/DdA/NqHMzcmb4WkUbWC9wk5Un/UBg4FPZE0RI1leoxhJbyN7vLubLcR9pyi54bq2f0Qx+1nngufqtBcAQWC/XEFeyFrm9j90ixn9rsoofeIhdDAU3WJ3GQ8aGvm2E2lkO37uImtIraQ+SF9JEr45aybi5nuw6je2FgKr0F1u1G5B66PNid6IknTKzvgmHpynLEfl8JgMwOPFymajtHhhrHaDSkSjZSlmgZaI8i4yWBN+5ZNYSW6jlkD2+LtkfwY729x7PCuEDY2sY+b8E7bF/Pbahq5EQtQua8gutUhKL+8ScpGXqtTUvpC2RIm2SWzS3GwqcoPr16SkxnoxAq4cPCQd2/qToH496Br1VWVRnL2YH954QA8uY/qJED2TaQBDuB2WEzI1Gh4LAGBHuBZep9fMGcSvM/KNwkX68Yu4iW/+3gBQ3ItHzISBHDYno5UN09+MGuiOdDR+YAL2/0nFPqB0faWZ/TMrqM9JyEaPIn/UJvkkTxsMULetGzyGgXtsJieSeUYagPJYKaltdxKEYlUJWzsGBlpZv34x1Z4BVYAMdc+GL2U
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0zQ/1p94AxsYQNCIY71ncaAalqnIBL26GIUPx4Nx1LEit8C69gJyGYYfdv5wtBBt/5LkqF7FJ3/HcWJhztDzZQ2Q35BIYgTpl0iz8UnIgLW7OyfElPTusolx1OFrbX1kZjcd5R72BWVnuUdTQhFdQqx6vMUETus0B4h95CTTD4cH+s0bQ4GXl3RdC31Ak1X79Olq5kaKOoBAyooJVJi6ckZV5OC5YjguKt3qhfkpi7Mj50LgYoZx2gVHsz0kUDjQe6AGDaT+eAKXe2wvwfcmk5Vd9rnLS11EN+nFJ6X6lge+q0J3p5vdwNjAqgXc8Vs85E1oevZgHTyGrRIa7DOezgF8c1DaMxwtU3wBGoN0Sjm0FT3Yplzt1SHXnnT4KivFXSysvP71MkgBlY1AEyRx40lKSzI1A39XoRqRsis68LhqxbjdknJgEhpLnP3cpfaLlHcTlfZOTqI/ipvbjUUF8ZgR7cu7rFoyxkj7kSUgWLD+joX/U8N9xbsCrfwVAyWsDB7xfPHmgFuEqolRlfydckcbPtHbTI3/bl6WUqyNc/g/EFPHPoyoMlzv42bNBH+fFPbqgaz3H6DSj/+ViiUy9VPKRMdOMVybBrSWjYorefODeXQ+AiIUSS9Cln3Mf1CtZiPVSXmn4XQ3ADQz9KLoTw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y9FBxjtsf/d3x6C+Cbl4Z7xezNuEyGWC64Z3rvpZ6h12emPWw6ZNgonBCu9j?=
- =?us-ascii?Q?e9hbNhkhGUR6M7gMFntho3lmT+tswhmZW7MuK4Y9iHwcrwikVYr3J/2liZcD?=
- =?us-ascii?Q?BdZuksVpnxij4ZAp2Y2O9V/b4/uuXPp1A1+6Pqj95AMqSO6wKqrTJh8uB0Si?=
- =?us-ascii?Q?LjzDvdXIawHHEAJdMXjPpJORT3pGEnI4YxdtkpRwV/1jXzA+W3oVEBD4tO2S?=
- =?us-ascii?Q?3Ov8wMr10c7FeJhB2E9PDqutd0P9OFwL7brgV1/G7aDSw9POMkACI05CRibc?=
- =?us-ascii?Q?s/YRMi0CQoq67VFzZJeJ/edxKBzbPkjP3RZuGopI8XkQZ5o5lYbIMoZG4Ojn?=
- =?us-ascii?Q?5uJFwfthlCJ1Re6aD3MN/l0m6PaAypeHLQKWwiu5onXx09mmIXOvcjKlEsrg?=
- =?us-ascii?Q?wbIAOvCHcuDOs/NT2OvefotDXZ2pibo+4u9p6arI0UB+S08g9nBOW+rV4YVm?=
- =?us-ascii?Q?Ed6gnoNfL6WDfJCHV3/5TsLAx0d1qbPwykL4KFX13KJZvny4jlUFDk2nLktm?=
- =?us-ascii?Q?HJdnoW77QH+PJxtzPHHADiJNgA4Wa2rNXHrXqaWmjwBrnyWp+/gnyXVBVrwW?=
- =?us-ascii?Q?bxtJwgCxoedb2kc+Y60R304N1GrKNXl8L7skGpf8stX4BLBmzJ4KcjPK0HSP?=
- =?us-ascii?Q?DQZ1ym2KWwhhN7rpWAOui849zmhu6q5EYd7IQo2aZl8SJkB24QRa/TAgfioV?=
- =?us-ascii?Q?gzR3imIJ56iuoD8gMP92WQMVDsvjHmuqFW78TfHl538TuajkgS/cHrNG1Exx?=
- =?us-ascii?Q?10YISMUN0pXgpwS+a92G5+J2cKNwixh6Sn8VQRIGU1dvPQuXO6QEDIcU9pnc?=
- =?us-ascii?Q?wiBpOagdQlA5M01X2pFGX8Nj/pgoZMpXCd8suT5+3kC6rBqNwWzdIfuuvbk4?=
- =?us-ascii?Q?VjRktKthPnjRzj64racXptvKaFtwzpj70v00xypt7i5VHTPO6rmI/Yu8L9yc?=
- =?us-ascii?Q?NP50av5UOZUxDNTxSJVD/UBWo6zwxthv9lWhrktxI+QmmeQJ/6Jaj/lT7aeo?=
- =?us-ascii?Q?h88b0EsOwUoppvWv9kr7bBm/Ls3OkePfn9BueMrX9pwi7QYAJUPZw09CGL9O?=
- =?us-ascii?Q?JTnqBz04wFUogMjBcCjHb1rRnQk57SpdeHwY3aX4sP67vDiHoubFPUp7dQ8d?=
- =?us-ascii?Q?2n7Lbod3N6gvzmJ+FF3hoQG+8RQWCJoIMdfTg63LviXSz0gBiEIeDmCYu2ZK?=
- =?us-ascii?Q?dnlA1vFw5Oxn07Xjd7LV+oXw/Knwqsw4uTgzFtUPw1SnAurDXyXOyzs/Irum?=
- =?us-ascii?Q?HIJHI50/Mb+LGZGpcseB9SNY7nW6fPpSlk/WGTKzAg=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54577305-65dd-4f2f-4d1a-08dad6d69a41
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 15:37:22.8631
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYP286MB1787
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+X-Originating-IP: [10.43.162.134]
+X-ClientProxiedBy: EX13D42UWA004.ant.amazon.com (10.43.160.18) To
+ EX19D003UWC001.ant.amazon.com (10.13.138.144)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit fc7a6209d571 ("bus: Make remove callback return
-void") forces bus_type::remove be void-returned, it doesn't
-make much sense for any bus based driver implementing remove
-callbalk to return non-void to its caller.
+> > > >   From my perspective, this is a worse solution as now we're sweeping an
+> > > > issue under the rug and consuming CPU cycles handling IRQs we should not
+> > > > be getting in the first place.  While an overflow IRQ from the cmn
+> > > > should
+> > > > not be high frequency, there is a non-zero chance in the future it could
+> > > > be and this could lead to a very hard to debug performance issue instead
+> > > > of the current problem, which is discovering we need to clean up better
+> > > > from a noisy kernel message.
+> > > 
+> > > Kexec is not the only possible source of spurious IRQs. If they cause a
+> > > problem for this driver, that cannot be robustly addressed by trying to
+> > > rely on whatever software might happen to run before this driver.
+> > 
+> > Sure, I can agree with the assertion a spurious IRQ could come from
+> > anywhere, in that case though, shouldn't the behavior still be to log
+> > spurious IRQs as a warning instead of silently sinking them?
+> 
+> We still have to handle the interrupt anyway to avoid it getting
+> disabled behind our back, and beyond that it's not really something
+> that's actionable by the user. What would we say?
+> 
+>        dev_warn(dev, "Something harmless, and in some cases expected,
+> happened! If you've just rebooted after a kernel panic, maybe try having
+> the kernel not panic?");
+> 
+> Perhaps that should be a core IRQ helper so that many other drivers can
+> also call it too?
+> 
+> Furthermore if you're worried about performance implications from a
+> theoretical interrupt storm, I can tell you from experience that logging
+> to a serial console from a high-frequency interrupt handler is one of
+> the best ways to cripple a system to the point where reaching for the
+> power switch is the only option.
 
-This change is for soundbus based drivers.
+Logging unexpected events is necessary to give clues of what is going 
+wrong before they implode on fully remote machines.  If you prefer to 
+handle the IRQ here rather than in the bad_irq section, then can we at 
+least have a WARN_ON() in the case where a spurious IRQ happens but no 
+overflow bit is set.  
 
-Signed-off-by: Dawei Li <set_pte_at@outlook.com>
----
- sound/aoa/fabrics/layout.c    | 3 +--
- sound/aoa/soundbus/soundbus.h | 6 +++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+> The DTC_CTL documentation seems fairly unambiguous:
+> 
+> [0]     dt_en   Enables debug, trace, and PMU features
+> 
+> The design intent is that the PMU counters do not count when the entire
+> PMU feature is disabled. I'm pretty sure I did confirm that empirically
+> during development too (I recall the sheer number of different "enable"
+> bits baffled me at the beginning, and there was actually one that did
+> nothing, which I think did eventually get removed from the documentation).
+> 
+> Of course clearing PMCR_PMU_EN is sufficient to simply stop counting,
+> which we also depend on for correct operation, but I believe clearing
+> DT_EN allows it to put all of the DT logic into a quiescent state.
 
-diff --git a/sound/aoa/fabrics/layout.c b/sound/aoa/fabrics/layout.c
-index ec4ef18555bc..850dc8c53e9b 100644
---- a/sound/aoa/fabrics/layout.c
-+++ b/sound/aoa/fabrics/layout.c
-@@ -1094,7 +1094,7 @@ static int aoa_fabric_layout_probe(struct soundbus_dev *sdev)
- 	return -ENODEV;
- }
- 
--static int aoa_fabric_layout_remove(struct soundbus_dev *sdev)
-+static void aoa_fabric_layout_remove(struct soundbus_dev *sdev)
- {
- 	struct layout_dev *ldev = dev_get_drvdata(&sdev->ofdev.dev);
- 	int i;
-@@ -1123,7 +1123,6 @@ static int aoa_fabric_layout_remove(struct soundbus_dev *sdev)
- 	kfree(ldev);
- 	sdev->pcmid = -1;
- 	sdev->pcmname = NULL;
--	return 0;
- }
- 
- #ifdef CONFIG_PM_SLEEP
-diff --git a/sound/aoa/soundbus/soundbus.h b/sound/aoa/soundbus/soundbus.h
-index 3a99c1f1a3ca..230dfa1ba270 100644
---- a/sound/aoa/soundbus/soundbus.h
-+++ b/sound/aoa/soundbus/soundbus.h
-@@ -184,10 +184,10 @@ struct soundbus_driver {
- 
- 	/* we don't implement any matching at all */
- 
--	int	(*probe)(struct soundbus_dev* dev);
--	int	(*remove)(struct soundbus_dev* dev);
-+	int	(*probe)(struct soundbus_dev *dev);
-+	void	(*remove)(struct soundbus_dev *dev);
- 
--	int	(*shutdown)(struct soundbus_dev* dev);
-+	int	(*shutdown)(struct soundbus_dev *dev);
- 
- 	struct device_driver driver;
- };
--- 
-2.25.1
+I took the other patch that writes 0 to DTC_CTL.dt_en only and put it in a 
+loop of kexec'ing when the PMU is active for a few hours, I did not see 
+anymore spurious IRQs (whereas with the stock driver I could reproduce in under 10 tries). 
+You are correct Robin, that is all that is needed, and my code was overly 
+cautious.
 
+- Geoff
