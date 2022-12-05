@@ -2,91 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB79642267
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 05:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0535F64226C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiLEEzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 23:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S231451AbiLEFBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 00:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbiLEEzL (ORCPT
+        with ESMTP id S230327AbiLEFBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 23:55:11 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22306E0BF;
-        Sun,  4 Dec 2022 20:55:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQWSW4THHz4x1V;
-        Mon,  5 Dec 2022 15:55:07 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670216107;
-        bh=zQ8TiCwyeqRDC/ypKGA5ig/pOYTkDt+KNcA+WTAkaF0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=erlp6bxteAHyuXsd3fTeQe4fx3LEkd9QerqnAzLO6ShP+6RIMXMp7Yzxx+jz7Fqoc
-         M9hvQ0bdhsF980CuOxzRGryrvJBBViYLva8KcNR2gMGkaE4WEE22gyc7y3qsee5aT3
-         g2kJKBlweBzo708eYbXgCHryEnJeBtGJ50uWkgas6hm1M6koohybVerj4J8Nb22L9a
-         SPbeCGK4BcFuJI/ktSBAcrqFPSiecUfe28awmkdBHult62RZYvAlrlv1/wZcYYqA2Y
-         zVfnbRJMC98pVRifiFUI7CYwKmW2BiwaRS5JpnzVKJVqv/K7P8D60wu9vDD3folC0S
-         uRTOX/Z+6xQ4g==
-Date:   Mon, 5 Dec 2022 15:55:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the v9fs tree
-Message-ID: <20221205155506.47ba27fc@canb.auug.org.au>
-In-Reply-To: <Y41vKkaH9tvRXCfv@codewreck.org>
-References: <20221205150316.6fac25f2@canb.auug.org.au>
-        <Y41vKkaH9tvRXCfv@codewreck.org>
+        Mon, 5 Dec 2022 00:01:06 -0500
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11735F007;
+        Sun,  4 Dec 2022 21:01:01 -0800 (PST)
+X-QQ-mid: bizesmtp83t1670216440tdylbiir
+Received: from ubuntu.. ( [111.196.135.79])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 05 Dec 2022 13:00:39 +0800 (CST)
+X-QQ-SSF: 01200000000000B0B000000A0000000
+X-QQ-FEAT: PsQCk6chbj5eK9ByDZQ9MzbRQ+lBTauZ/hMtMvyxFIKaWgsW4FUHY+4JhPLWp
+        N8cebpF9TczECdys04OEy9HJn9oZa3VLtz3WoQfuUwnGABxRVV92ZnKGLKSiUNXJ5vOly2i
+        EmIlXEJEYBtM4ApVe9usMvY0zPi/qFYgvjmCUU+0nd4O1v/vE9Ch275x3rBjfwiHDf3A2T1
+        ALae+DDCvEXhohsbyENwZm6hzz3JChV1omL5zQ9O6OghO903vD0KT3kQqoUEiDhoenU0Bhw
+        fitqzjEco1KqPtDZACKdNQMZ2GeNH3iCax7PxJS9Eqz/Xv5K1uxwzC+K3OLB1vn9HYngpfU
+        +ZkRbjl7WKf7o7fqqO6e0i0kHY+jg==
+X-QQ-GoodBg: 0
+From:   Bin Meng <bmeng@tinylab.org>
+To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: [PATCH 1/2] serial: Adapt Arm semihosting earlycon driver to RISC-V
+Date:   Mon,  5 Dec 2022 13:00:37 +0800
+Message-Id: <20221205050038.195746-1-bmeng@tinylab.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eiP2cSB.ubD.Cwp6uIjxVIO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/eiP2cSB.ubD.Cwp6uIjxVIO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Per RISC-V semihosting spec [1], adapt the existing Arm semihosting
+earlycon driver to RISC-V.
 
-Hi Dominique,
+[1] https://github.com/riscv/riscv-semihosting-spec/blob/main/riscv-semihosting-spec.adoc
 
-On Mon, 5 Dec 2022 13:10:18 +0900 Dominique Martinet <asmadeus@codewreck.or=
-g> wrote:
->
-> I've amended the bad commit with this and added a note to the patch
-> thanking you (not quite sure how to express that with xx-by: like tags,
-> it's just words -- if you care and have a suggestion feel free)
+Signed-off-by: Bin Meng <bmeng@tinylab.org>
+---
 
-Looks good to me.
+ drivers/tty/serial/Kconfig                 |  2 +-
+ drivers/tty/serial/earlycon-arm-semihost.c | 17 ++++++++++++++++-
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 434f83168546..e94d1265151c 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -75,7 +75,7 @@ config SERIAL_AMBA_PL011_CONSOLE
+ 
+ config SERIAL_EARLYCON_ARM_SEMIHOST
+ 	bool "Early console using ARM semihosting"
+-	depends on ARM64 || ARM
++	depends on ARM64 || ARM || RISCV
+ 	select SERIAL_CORE
+ 	select SERIAL_CORE_CONSOLE
+ 	select SERIAL_EARLYCON
+diff --git a/drivers/tty/serial/earlycon-arm-semihost.c b/drivers/tty/serial/earlycon-arm-semihost.c
+index fcdec5f42376..25a0f91926a3 100644
+--- a/drivers/tty/serial/earlycon-arm-semihost.c
++++ b/drivers/tty/serial/earlycon-arm-semihost.c
+@@ -6,6 +6,10 @@
+  * Adapted for ARM and earlycon:
+  * Copyright (C) 2014 Linaro Ltd.
+  * Author: Rob Herring <robh@kernel.org>
++ *
++ * Adapted for RISC-V and earlycon:
++ * Copyright (C) 2022 tinylab.org
++ * Author: Bin Meng <bmeng@tinylab.org>
+  */
+ #include <linux/kernel.h>
+ #include <linux/console.h>
+@@ -23,7 +27,18 @@
+  */
+ static void smh_putc(struct uart_port *port, unsigned char c)
+ {
+-#ifdef CONFIG_ARM64
++#if defined(CONFIG_RISCV)
++	asm volatile("addi    a1, %0, 0\n"
++		     "addi    a0, zero, 3\n"
++		     ".balign 16\n"
++		     ".option push\n"
++		     ".option norvc\n"
++		     "slli    zero, zero, 0x1f\n"
++		     "ebreak\n"
++		     "srai    zero, zero, 0x7\n"
++		     ".option pop\n"
++		     : : "r" (&c) : "a0", "a1", "memory");
++#elif defined(CONFIG_ARM64)
+ 	asm volatile("mov  x1, %0\n"
+ 		     "mov  x0, #3\n"
+ 		     "hlt  0xf000\n"
+-- 
+2.34.1
 
---Sig_/eiP2cSB.ubD.Cwp6uIjxVIO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONeaoACgkQAVBC80lX
-0Gzscwf/WRSzofM+94QqtMzU7LZjLnquZAXjWJl6NuSOetHeVYWMtj1mAI0C6df7
-qg6pOo2S/erAwgfFbUeBhZNiyPMf8clAs3xRNiIC+eTlW6i4tzilz0puJAlCjbco
-vnGhnPty8UqecCMV6u6R+StbSac2H+h0OB4VgFtIotz0rV7ww1DdbyjXxKBUUh/3
-Irs0r2dqTa1+cmkIYyn/U/NK4QfTAzTI7wpGmZ6II4nSDSRymZzWNv+YW3bfoGeS
-g/aR0c+cjpLk3/SoQzqMo033iQGhJwc4L48J3bAIisL7JCJiDCp12Wk2k1IP0Hwc
-1+QailTMl9UKNZKbCSK76EhkfkXj7g==
-=Fpw/
------END PGP SIGNATURE-----
-
---Sig_/eiP2cSB.ubD.Cwp6uIjxVIO--
