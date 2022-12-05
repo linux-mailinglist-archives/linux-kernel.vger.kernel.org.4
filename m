@@ -2,160 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7956664271E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F030642721
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiLELD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
+        id S231246AbiLELEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:04:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiLELDx (ORCPT
+        with ESMTP id S230492AbiLELEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:03:53 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B227223
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:03:51 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Mon, 5 Dec 2022 06:04:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0675EB846;
+        Mon,  5 Dec 2022 03:04:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NQgdx22Mbz4y0vM;
-        Mon,  5 Dec 2022 19:03:49 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B5B3b3Y053222;
-        Mon, 5 Dec 2022 19:03:37 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Mon, 5 Dec 2022 19:03:39 +0800 (CST)
-Date:   Mon, 5 Dec 2022 19:03:39 +0800 (CST)
-X-Zmail-TransId: 2af9638dd00b38ebad33
-X-Mailer: Zmail v1.0
-Message-ID: <202212051903396321367@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <hubcap@omnibond.com>
-Cc:     <martin@omnibond.com>, <devel@lists.orangefs.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBvcmFuZ2VmczogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B5B3b3Y053222
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638DD015.001 by FangMail milter!
-X-FangMail-Envelope: 1670238229/4NQgdx22Mbz4y0vM/638DD015.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638DD015.001/4NQgdx22Mbz4y0vM
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7682260E9E;
+        Mon,  5 Dec 2022 11:04:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE185C433C1;
+        Mon,  5 Dec 2022 11:04:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670238280;
+        bh=H+rKPVhj3z6bT5H5+8s6/DTtMo2pxuSSps9lf4p2xrE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a1iBSWJGHPbQDOsfipFUfaeXRa4q7iON1WbwZi5+/gJQO0R2feLJsmRvw3Ao1twN7
+         HHP1upkbSfW+6z0GhD8HZO+Io9klhavqruxZ5vDoZznf4ASNeHKvHgaemgcmQUjrQF
+         IsmESbGfdCKpi0uBFZHoVkuiJvm8ZjQZF9lmMRv1kVFY/6WJSS137Tmg+0EnLdsOVm
+         o1dsjS5yUwXcua4BNTaB1sqVc/Xk1MwlHQQqJU6xnnAAauVCWIitAm8tee7Bs6aqf+
+         g+gl21cppHWgALnyGyHDEO15zGiIztw6OuRuLcYC98V1ASEVY0gBUdEyByMwaIkCmT
+         SL/YDqTvVFAqQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p29H4-00AYHe-AW;
+        Mon, 05 Dec 2022 11:04:38 +0000
+Date:   Mon, 05 Dec 2022 11:04:37 +0000
+Message-ID: <86359um7qy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: Re: [patch V3 00/22] genirq, PCI/MSI: Support for per device MSI and PCI/IMS - Part 2 API rework
+In-Reply-To: <20221124225331.464480443@linutronix.de>
+References: <20221124225331.464480443@linutronix.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, linux-kernel@vger.kernel.org, x86@kernel.org, joro@8bytes.org, will@kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com, gregkh@linuxfoundation.org, jgg@mellanox.com, dave.jiang@intel.com, alex.williamson@redhat.com, kevin.tian@intel.com, dan.j.williams@intel.com, logang@deltatee.com, ashok.raj@intel.com, jdmason@kudzu.us, allenbh@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Thu, 24 Nov 2022 23:24:07 +0000,
+Thomas Gleixner <tglx@linutronix.de> wrote:
+> 
+> This is V3 of the second part of the effort to provide support for per
+> device MSI interrupt domains.
+> 
+> Version 2 of this second part can be found here:
+> 
+>   https://lore.kernel.org/all/20221121083210.309161925@linutronix.de
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+Bandwidth is lacking to review such a series (let alone 3) in details,
+but the direction of travel is the right one (per-device, per-bus MSI
+domains are the natural way to deal with resources managed at the
+device level).
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- fs/orangefs/orangefs-sysfs.c | 45 ++++++++----------------------------
- 1 file changed, 10 insertions(+), 35 deletions(-)
+I'm sure we'll find issues along the way, but this code is better in
+the kernel than outside, so:
 
-diff --git a/fs/orangefs/orangefs-sysfs.c b/fs/orangefs/orangefs-sysfs.c
-index de80b62553bb..c89f16052e92 100644
---- a/fs/orangefs/orangefs-sysfs.c
-+++ b/fs/orangefs/orangefs-sysfs.c
-@@ -217,38 +217,23 @@ static ssize_t sysfs_int_show(struct kobject *kobj,
+Acked-by: Marc Zyngier <maz@kernel.org>
 
- 	if (!strcmp(kobj->name, ORANGEFS_KOBJ_ID)) {
- 		if (!strcmp(attr->attr.name, "op_timeout_secs")) {
--			rc = scnprintf(buf,
--				       PAGE_SIZE,
--				       "%d\n",
--				       op_timeout_secs);
-+			rc = sysfs_emit(buf, "%d\n", op_timeout_secs);
- 			goto out;
- 		} else if (!strcmp(attr->attr.name,
- 				   "slot_timeout_secs")) {
--			rc = scnprintf(buf,
--				       PAGE_SIZE,
--				       "%d\n",
--				       slot_timeout_secs);
-+			rc = sysfs_emit(buf, "%d\n", slot_timeout_secs);
- 			goto out;
- 		} else if (!strcmp(attr->attr.name,
- 				   "cache_timeout_msecs")) {
--			rc = scnprintf(buf,
--				       PAGE_SIZE,
--				       "%d\n",
--				       orangefs_cache_timeout_msecs);
-+			rc = sysfs_emit(buf, "%d\n", orangefs_cache_timeout_msecs);
- 			goto out;
- 		} else if (!strcmp(attr->attr.name,
- 				   "dcache_timeout_msecs")) {
--			rc = scnprintf(buf,
--				       PAGE_SIZE,
--				       "%d\n",
--				       orangefs_dcache_timeout_msecs);
-+			rc = sysfs_emit(buf, "%d\n", orangefs_dcache_timeout_msecs);
- 			goto out;
- 		} else if (!strcmp(attr->attr.name,
- 				   "getattr_timeout_msecs")) {
--			rc = scnprintf(buf,
--				       PAGE_SIZE,
--				       "%d\n",
--				       orangefs_getattr_timeout_msecs);
-+			rc = sysfs_emit(buf, "%d\n", orangefs_getattr_timeout_msecs);
- 			goto out;
- 		} else {
- 			goto out;
-@@ -256,16 +241,10 @@ static ssize_t sysfs_int_show(struct kobject *kobj,
-
- 	} else if (!strcmp(kobj->name, STATS_KOBJ_ID)) {
- 		if (!strcmp(attr->attr.name, "reads")) {
--			rc = scnprintf(buf,
--				       PAGE_SIZE,
--				       "%lu\n",
--				       orangefs_stats.reads);
-+			rc = sysfs_emit(buf, "%lu\n", orangefs_stats.reads);
- 			goto out;
- 		} else if (!strcmp(attr->attr.name, "writes")) {
--			rc = scnprintf(buf,
--				       PAGE_SIZE,
--				       "%lu\n",
--				       orangefs_stats.writes);
-+			rc = sysfs_emit(buf, "%lu\n", orangefs_stats.writes);
- 			goto out;
- 		} else {
- 			goto out;
-@@ -497,21 +476,17 @@ static ssize_t sysfs_service_op_show(struct kobject *kobj,
- 		if (strcmp(kobj->name, PC_KOBJ_ID)) {
- 			if (new_op->upcall.req.param.op ==
- 			    ORANGEFS_PARAM_REQUEST_OP_READAHEAD_COUNT_SIZE) {
--				rc = scnprintf(buf, PAGE_SIZE, "%d %d\n",
-+				rc = sysfs_emit(buf, "%d %d\n",
- 				    (int)new_op->downcall.resp.param.u.
- 				    value32[0],
- 				    (int)new_op->downcall.resp.param.u.
- 				    value32[1]);
- 			} else {
--				rc = scnprintf(buf, PAGE_SIZE, "%d\n",
-+				rc = sysfs_emit(buf, "%d\n",
- 				    (int)new_op->downcall.resp.param.u.value64);
- 			}
- 		} else {
--			rc = scnprintf(
--				buf,
--				PAGE_SIZE,
--				"%s",
--				new_op->downcall.resp.perf_count.buffer);
-+			rc = sysfs_emit(buf, "%s", new_op->downcall.resp.perf_count.buffer);
- 		}
- 	}
+	M.
 
 -- 
-2.25.1
+Without deviation from the norm, progress is not possible.
