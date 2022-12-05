@@ -2,254 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E05E6429DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CDB6429E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiLENvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:51:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S231940AbiLENwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiLENvi (ORCPT
+        with ESMTP id S232422AbiLENwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:51:38 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A0A1D0CE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:51:36 -0800 (PST)
-Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NQlHT3qPGzkXnk;
-        Mon,  5 Dec 2022 21:48:05 +0800 (CST)
-Received: from DESKTOP-27KDQMV.china.huawei.com (10.174.148.223) by
- kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Dec 2022 21:51:33 +0800
-From:   "Longpeng(Mike)" <longpeng2@huawei.com>
-To:     <stefanha@redhat.com>, <mst@redhat.com>, <jasowang@redhat.com>,
-        <sgarzare@redhat.com>, <eperezma@redhat.com>
-CC:     <cohuck@redhat.com>, <arei.gonglei@huawei.com>,
-        <yechuan@huawei.com>, <huangzhichao@huawei.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, Longpeng <longpeng2@huawei.com>
-Subject: [PATCH v2] vdpasim: support doorbell mapping
-Date:   Mon, 5 Dec 2022 21:51:30 +0800
-Message-ID: <20221205135130.2336-1-longpeng2@huawei.com>
-X-Mailer: git-send-email 2.25.0.windows.1
+        Mon, 5 Dec 2022 08:52:12 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B851181E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:52:10 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id d1so18645540wrs.12
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:52:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hU8awQZE7orgladXdlo0GTxR4zpxwbwcESgIpxJ13kM=;
+        b=W3u+C+W4iy5BKYadzGKEwrhnX+WHxjNavB8D/PC0lF1Fg8Pe/ekhb2jrUSCOQBbdxx
+         8N2KRN/GPH3DObr5sim0ov12JwqPrWTJ1o3lzijoudRm1w8LQ45gAXxVBQHn5mnT9oTf
+         OAE1WebEs4Pv5KCp7lu0pAgvuoaQ6FUeIN/KOIIuR+80p/Exr625rhjENGDee28wLqy1
+         Hm3kWYHWdA7ZYksYwPb0aDiA7Q6eQ9wwdFw0jH4N2LruSG//NsoWgDUVA0wMSSstGuhk
+         UVywvmbJ6IMMhvdWY7hKXisfrNCOLpkC3SVBPV6u/z26MHkxZHbGqwfmSFB18vTnhgFw
+         PCNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hU8awQZE7orgladXdlo0GTxR4zpxwbwcESgIpxJ13kM=;
+        b=4SQxUSTyYad+VoSV1Xom/W0j1tO2UuuNUmgBLfYj2Dr7kg4mW0cb71XPN6LYQCLwhY
+         cAVcvmRLBs9W4SfkSYHSa2O5pILd2i+/VTCcpoFS3zanTnJ6rWscEFGZzb7zO83mTA7B
+         jSwkJ05vnYCRYp1YrI2XeD4xW8ztThdDmBoGSXZoXtG74VUJlTwwKkcBJklk4iwpa2VX
+         UJ1jznImyzXXde2ztIlMYPKdNDEnl42GGwLTgFjhhfzUx0aq2XReV9eazTBfMdtH5RZv
+         COAiWaOKVPBbhBFZoWJerKBPxgtFs9amSoEWx3XSmBj9oBIDdFDDrgq8rCoMKxnXD69P
+         X8mg==
+X-Gm-Message-State: ANoB5pnxyEgmgHvdLpClxHWhBtm8KFL/xQOMbCil16Llcb/1kWYS1KJ+
+        2RWmIsYfLhF5w910EOzi4S1VrA==
+X-Google-Smtp-Source: AA0mqf4zO/xd3fS5xAzDq3lcKBOsM7eSke1rV0b1O0YU+j5ch0a7K+qqm+Ozk8+g6W3Ara2pPKMung==
+X-Received: by 2002:adf:ea8f:0:b0:242:5afd:bc5d with SMTP id s15-20020adfea8f000000b002425afdbc5dmr4459827wrm.305.1670248328876;
+        Mon, 05 Dec 2022 05:52:08 -0800 (PST)
+Received: from predatorhelios.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id a3-20020adffac3000000b0024245e543absm9012700wrs.88.2022.12.05.05.52.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 05:52:08 -0800 (PST)
+From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+To:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        krzysztof.kozlowski@linaro.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, khilman@baylibre.com,
+        linux-gpio@vger.kernel.org
+Subject: [PATCH v4 0/3] Remove the pins-are-numbered DT property
+Date:   Mon,  5 Dec 2022 14:51:55 +0100
+Message-Id: <20221205135158.1842465-1-bero@baylibre.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.148.223]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi100025.china.huawei.com (7.221.188.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Longpeng <longpeng2@huawei.com>
+During the review of my MT8365 support patchset
+(https://lore.kernel.org/linux-mediatek/20221117210356.3178578-1-bero@baylibre.com/),
+the issue of the "pins-are-numbered" DeviceTree property has come up.
 
-Support doorbell mapping for vdpasim devices, then we can test the notify
-passthrough feature even if there's no real hardware on hand.
+This property is unique to Mediatek MT65xx and STM32 pinctrls, and
+doesn't seem to serve any purpose (both the Mediatek and STM32 drivers
+simply refuse to deal with a device unless pins-are-numbered is set to
+true).
 
-Allocates a dummy page which is used to emulate the notify page of the device,
-all VQs share the same notify register  that initiated to 0xffff. A  periodic
-work will check whether there're requests need to process ( the value of the
-notify register is 0xffff or not ).
+There is no other use of this property in the kernel or in other projects
+using DeviceTrees (checked u-boot and FreeBSD -- in both of those, the
+flag is present in Mediatek and STM devicetrees, but not used anywhere).
 
-This cap is disabled as default, users can enable it as follow:
-  modprobe vdpa_sim notify_passthrough=true
+There is also no known use in userspace (in fact, a userland application
+relying on the property would be broken because it would get true on
+any Mediatek or STM chipset and false on all others, even though other
+chipsets use numbered pins).
 
-Signed-off-by: Longpeng <longpeng2@huawei.com>
----
-Changes v1->v2:
-  - support both kick mode and passthrough mode. [Jason]
-  - poll the notify register first. [Jason, Michael]
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 77 ++++++++++++++++++++++++++++++++
- drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++
- 2 files changed, 80 insertions(+)
+This patchset removes all uses of pins-are-numbered and marks the
+property as deprecated.
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 7438a89ce939..07096a04dabb 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/sched.h>
- #include <linux/dma-map-ops.h>
-+#include <asm/set_memory.h>
- #include <linux/vringh.h>
- #include <linux/vdpa.h>
- #include <linux/vhost_iotlb.h>
-@@ -36,9 +37,16 @@ module_param(max_iotlb_entries, int, 0444);
- MODULE_PARM_DESC(max_iotlb_entries,
- 		 "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
- 
-+static bool notify_passthrough;
-+module_param(notify_passthrough, bool, 0444);
-+MODULE_PARM_DESC(notify_passthrough,
-+		 "Enable vq notify(doorbell) area mapping. (default: false)");
-+
- #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
- #define VDPASIM_QUEUE_MAX 256
- #define VDPASIM_VENDOR_ID 0
-+#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
-+#define VDPASIM_NOTIFY_DEFVAL 0xffff
- 
- static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
- {
-@@ -246,6 +254,28 @@ static const struct dma_map_ops vdpasim_dma_ops = {
- static const struct vdpa_config_ops vdpasim_config_ops;
- static const struct vdpa_config_ops vdpasim_batch_config_ops;
- 
-+static void vdpasim_notify_work(struct work_struct *work)
-+{
-+	struct vdpasim *vdpasim;
-+	u16 *val;
-+
-+	vdpasim = container_of(work, struct vdpasim, notify_work.work);
-+
-+	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
-+		goto out;
-+
-+	if (!vdpasim->running)
-+		goto out;
-+
-+	val = (u16 *)vdpasim->notify;
-+	if (xchg(val, VDPASIM_NOTIFY_DEFVAL) != VDPASIM_NOTIFY_DEFVAL)
-+		schedule_work(&vdpasim->work);
-+
-+out:
-+	schedule_delayed_work(&vdpasim->notify_work,
-+			      msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
-+}
-+
- struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 			       const struct vdpa_dev_set_config *config)
- {
-@@ -287,6 +317,18 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 	set_dma_ops(dev, &vdpasim_dma_ops);
- 	vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
- 
-+	if (notify_passthrough) {
-+		INIT_DELAYED_WORK(&vdpasim->notify_work, vdpasim_notify_work);
-+
-+		vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
-+		if (!vdpasim->notify)
-+			goto err_iommu;
-+#ifdef CONFIG_X86
-+		set_memory_uc(vdpasim->notify, 1);
-+#endif
-+		*(u16 *)vdpasim->notify = VDPASIM_NOTIFY_DEFVAL;
-+	}
-+
- 	vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
- 	if (!vdpasim->config)
- 		goto err_iommu;
-@@ -495,6 +537,18 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
- 	return status;
- }
- 
-+static void vdpasim_set_notify_work(struct vdpasim *vdpasim, bool start)
-+{
-+	if (!notify_passthrough)
-+		return;
-+
-+	if (start)
-+		schedule_delayed_work(&vdpasim->notify_work,
-+				      msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
-+	else
-+		cancel_delayed_work_sync(&vdpasim->notify_work);
-+}
-+
- static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -502,12 +556,14 @@ static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
- 	spin_lock(&vdpasim->lock);
- 	vdpasim->status = status;
- 	spin_unlock(&vdpasim->lock);
-+	vdpasim_set_notify_work(vdpasim, status & VIRTIO_CONFIG_S_DRIVER_OK);
- }
- 
- static int vdpasim_reset(struct vdpa_device *vdpa, bool clear)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
- 
-+	vdpasim_set_notify_work(vdpasim, false);
- 	spin_lock(&vdpasim->lock);
- 	vdpasim->status = 0;
- 	vdpasim_do_reset(vdpasim);
-@@ -672,11 +728,24 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
- 	return 0;
- }
- 
-+static struct vdpa_notification_area
-+vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	struct vdpa_notification_area notify;
-+
-+	notify.addr = virt_to_phys((void *)vdpasim->notify);
-+	notify.size = PAGE_SIZE;
-+
-+	return notify;
-+}
-+
- static void vdpasim_free(struct vdpa_device *vdpa)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
- 	int i;
- 
-+	vdpasim_set_notify_work(vdpasim, false);
- 	cancel_work_sync(&vdpasim->work);
- 
- 	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
-@@ -693,6 +762,12 @@ static void vdpasim_free(struct vdpa_device *vdpa)
- 	vhost_iotlb_free(vdpasim->iommu);
- 	kfree(vdpasim->vqs);
- 	kfree(vdpasim->config);
-+	if (vdpasim->notify) {
-+#ifdef CONFIG_X86
-+		set_memory_wb(vdpasim->notify, 1);
-+#endif
-+		free_page(vdpasim->notify);
-+	}
- }
- 
- static const struct vdpa_config_ops vdpasim_config_ops = {
-@@ -704,6 +779,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.get_vq_ready           = vdpasim_get_vq_ready,
- 	.set_vq_state           = vdpasim_set_vq_state,
- 	.get_vq_state           = vdpasim_get_vq_state,
-+	.get_vq_notification    = vdpasim_get_vq_notification,
- 	.get_vq_align           = vdpasim_get_vq_align,
- 	.get_vq_group           = vdpasim_get_vq_group,
- 	.get_device_features    = vdpasim_get_device_features,
-@@ -737,6 +813,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_vq_ready           = vdpasim_get_vq_ready,
- 	.set_vq_state           = vdpasim_set_vq_state,
- 	.get_vq_state           = vdpasim_get_vq_state,
-+	.get_vq_notification    = vdpasim_get_vq_notification,
- 	.get_vq_align           = vdpasim_get_vq_align,
- 	.get_vq_group           = vdpasim_get_vq_group,
- 	.get_device_features    = vdpasim_get_device_features,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 0e78737dcc16..0769ccbd3911 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -69,6 +69,9 @@ struct vdpasim {
- 	bool running;
- 	/* spinlock to synchronize iommu table */
- 	spinlock_t iommu_lock;
-+	/* dummy notify page */
-+	unsigned long notify;
-+	struct delayed_work notify_work;
- };
- 
- struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+v4:
+  - The generic pinctrl related patches are now in the pinctrl tree
+    for v6.2 - remove them and repost the remaining bits of the patch
+    set. No other changes.
+
+v3:
+  - No functional changes; add recent Reviewed-Bys and Acked-Bys,
+    add linux-gpio to Cc
+
+v2:
+  - Deprecate the property instead of removing it completely from
+    schemas
+  - squash some related commits
+
+Bernhard Rosenkränzer (3):
+  arm64: dts: mediatek: Remove pins-are-numbered property
+  ARM: dts: mediatek: Remove pins-are-numbered property
+  ARM: dts: stm32: Remove the pins-are-numbered property
+
+ arch/arm/boot/dts/mt2701.dtsi                | 1 -
+ arch/arm/boot/dts/mt7623.dtsi                | 1 -
+ arch/arm/boot/dts/mt8135.dtsi                | 1 -
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi       | 1 -
+ arch/arm/boot/dts/stm32f7-pinctrl.dtsi       | 1 -
+ arch/arm/boot/dts/stm32h743.dtsi             | 1 -
+ arch/arm/boot/dts/stm32mp131.dtsi            | 1 -
+ arch/arm/boot/dts/stm32mp151.dtsi            | 2 --
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi    | 1 -
+ arch/arm64/boot/dts/mediatek/mt8167.dtsi     | 1 -
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 1 -
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi     | 1 -
+ arch/arm64/boot/dts/mediatek/mt8516.dtsi     | 1 -
+ 13 files changed, 14 deletions(-)
+
 -- 
-2.23.0
+2.38.1
 
