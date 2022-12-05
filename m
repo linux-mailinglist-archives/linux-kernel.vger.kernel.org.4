@@ -2,79 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3096427F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E956D6427FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiLEMCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S231190AbiLEMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:05:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiLEMB6 (ORCPT
+        with ESMTP id S229970AbiLEMF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:01:58 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0144C101E8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:01:58 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so14574387pjs.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 04:01:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1ZssqNs7pInPJStfO2e2atX8UAeVUe46DyiwPRJ0RFE=;
-        b=gTBYAJ1Ma45a7BHMHwGS1ZHQV1LzleQ4PEZfCy/Ms1jqJq/R7XCBojvZSjVwDytGBl
-         tN14rL/HENx9Q5LlPX4WuMwJJWzclkPHBO9+LZKJTz/HIKA4jprkU1CfYiI1uAJTkXd7
-         bAgZYDgbFWJKn4v/rY41b572E1K6UC569OXTBdMo7U+3FZQDQEdsTjILrOy+rVYjyOs/
-         YCycs2rfLeKfHd6aBIwTaX0NPMV979GVAoutZb5kZ50M/ShuegX+x0jDvwsyTBcUTBRO
-         ODLrgTt2ljReb36H/LfPWCcaIYRTLWo+a1qfjZdYigWKef8l/KWzX9x0AUIGEgfzvD5G
-         OIuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZssqNs7pInPJStfO2e2atX8UAeVUe46DyiwPRJ0RFE=;
-        b=lvcKmdiqEt8FR1K+eh7XD0f9u1Hp+4y6E9YBGArykkQ75itcNfJWRSPFa3IJAbZQMK
-         mUUPbQrqKei0HknNoTl1Zwfo/FJmBA8OqUz4xpaD/64ia6dTd43Sa/7W3pRmN2S/6Qnx
-         nEzWYcYS+o79291no808dJdk+0cUlORuvLspAz5VmKB4tH6Phz8y7JfD9NVASSJo6x4I
-         PYuMO/wLiw+zt88nLjrnUp12vu4SrFawJyZ7AQLBu2ObUP8xhf3e91nllZXNdw++O/rn
-         wSucH6FrbJtd1nsTqixiIzPFRsIISip3z2RuZkLWEaLQrFrWE+b6tnQtlDbMmDjJXeKz
-         xNBg==
-X-Gm-Message-State: ANoB5pn8xhgC54mJCXW8aZh1QnrByRQ9tySeL+BUfWGqkkRTVigu9BM1
-        HSahnaCjgCdEv0gaHhI/xDIR
-X-Google-Smtp-Source: AA0mqf4DBEnBQ8pyT7ohyPkzU+t1mQ/uJBWCKhtQbdoYDM2WCK+EWk0MTEIdyx8km5XU4ssgP5EsjQ==
-X-Received: by 2002:a17:902:d0c9:b0:189:9cfd:be76 with SMTP id n9-20020a170902d0c900b001899cfdbe76mr30410742pln.21.1670241717355;
-        Mon, 05 Dec 2022 04:01:57 -0800 (PST)
-Received: from thinkpad ([59.92.98.136])
-        by smtp.gmail.com with ESMTPSA id p8-20020aa79e88000000b005743b5ebd7csm3318672pfq.92.2022.12.05.04.01.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 04:01:55 -0800 (PST)
-Date:   Mon, 5 Dec 2022 17:31:48 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
-Message-ID: <20221205120148.GB20192@thinkpad>
-References: <20221205100837.29212-1-johan+linaro@kernel.org>
- <20221205100837.29212-3-johan+linaro@kernel.org>
+        Mon, 5 Dec 2022 07:05:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC96C76A;
+        Mon,  5 Dec 2022 04:05:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B4C7B80EDA;
+        Mon,  5 Dec 2022 12:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA28C433D7;
+        Mon,  5 Dec 2022 12:05:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670241921;
+        bh=Sg7hSBYis/7NJ7gp8kAsTusDuRcfqiLMNUytPo5WSiY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KUW5ObfBGL1ygvaNqOREvi1HSGTyVkGDXPfihbiOoVJkEnAODHZQfvECnAtTB/C9A
+         4MG3Owee35IONtxBdoClACL5KoFCQ28cdlYd6JhUEygbi/OrlU6/40iSz4nz1W1Ml/
+         3rNCpFoLJM74d1PngmDU7bvFmlKpInpTAu/VIczOjym3ep6Nw0o4ahfRiECRVY7OiT
+         p3QoxwnTiZByzTbfa43cr6AgdsZ73JrfUYZAU0OKM7ZxFE5qE52b1QkoC+mtlRs1Le
+         9CcY+5NqKjPqeUHTntKGfAj81lSS/cBBtXfP1YZc5ztLl29782gAnwgoVvTeHo7g2v
+         aNpE5HvA+cCRA==
+Date:   Mon, 5 Dec 2022 12:05:14 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 7/9] mfd: intel-m10-bmc: Add PMCI driver
+Message-ID: <Y43eejWSYIBIlUKB@sirena.org.uk>
+References: <20221202100841.4741-1-ilpo.jarvinen@linux.intel.com>
+ <20221202100841.4741-8-ilpo.jarvinen@linux.intel.com>
+ <Y4ox5J0junaUYyT7@yilunxu-OptiPlex-7050>
+ <855d463e-fb84-1910-f53-58e6b0a633a4@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eKKE6fgqZADZWzdx"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221205100837.29212-3-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <855d463e-fb84-1910-f53-58e6b0a633a4@linux.intel.com>
+X-Cookie: If it ain't broke, don't fix it.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,46 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 11:08:37AM +0100, Johan Hovold wrote:
-> The SC8280XP UFS controllers are cache coherent and must be marked as
-> such in the devicetree to avoid potential data corruption.
-> 
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Cc: stable@vger.kernel.org      # 6.0
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+--eKKE6fgqZADZWzdx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Mani
+On Mon, Dec 05, 2022 at 11:51:15AM +0200, Ilpo J=E4rvinen wrote:
+> On Sat, 3 Dec 2022, Xu Yilun wrote:
+> > On 2022-12-02 at 12:08:39 +0200, Ilpo J=E4rvinen wrote:
 
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index c4947c563099..23d1f51527aa 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1430,6 +1430,7 @@ ufs_mem_hc: ufs@1d84000 {
->  			required-opps = <&rpmhpd_opp_nom>;
->  
->  			iommus = <&apps_smmu 0xe0 0x0>;
-> +			dma-coherent;
->  
->  			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
->  				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> @@ -1491,6 +1492,7 @@ ufs_card_hc: ufs@1da4000 {
->  			power-domains = <&gcc UFS_CARD_GDSC>;
->  
->  			iommus = <&apps_smmu 0x4a0 0x0>;
-> +			dma-coherent;
->  
->  			clocks = <&gcc GCC_UFS_CARD_AXI_CLK>,
->  				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
-> -- 
-> 2.37.4
-> 
+> > > +struct regmap *__devm_m10_regmap_indirect(struct device *dev,
 
--- 
-மணிவண்ணன் சதாசிவம்
+> > We name the file intel-m10-bmc-pmci-xxx.c, and this function
+> > xx_m10_regmap_xx(). But I can see the implementation is just about the =
+indirect
+> > bus which from your commit message could be used by various DFL features
+> > like HSSI or PMCI. So is it better we put the implementation in
+> > drivers/fpga and name the file dfl-indirect-regmap.c and the
+> > initialization function dfl_indirect_regmap_init()?
+
+> I guess that would be doable unless Mark objects. My understanding was=20
+> that he preferred to have in the driver that is currently using it.
+
+> Mark, any opinion on this?
+
+The above does not look good.  As I have said several times now drivers
+implementing their own regmap operations should use the reg_read() and
+reg_write() operations in regmap_config when allocating their regmap
+unless they're doing something unusual.  There are a few cases where it
+makes sense but nothing I've seen here makes it look like this is one of
+them.  Most of the current users don't fit.
+
+Please, just implement a normal driver using a normal regmap_config as
+I've repeatedly said you should if you don't want to provide something
+generic.
+
+--eKKE6fgqZADZWzdx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmON3nkACgkQJNaLcl1U
+h9Co7Qf/eIz7h6ibggGjkJrx3WaPVwE60Kkxjo2FsG52Nc0CbeV9PYzJZD4Y8cTd
+j2GO5Y0k91Sq+K01GdWIUXoBuU6j9cj5PVTh7oSMTLoE9VRgyDKzz8E44heZRdI/
+N1mGPiAykoqoiftA7oD//33t4klMzLdp2Rylg+uFRzOi+U+qdSOHMrAheUQ9U0oh
+miqElD3SlnJCbEIuhP3l0PYmQ0nTi/+GlXIbQWp6LSZeDCpdlQxnDgi/8ObLp4KT
+efZMN6bdv68UcWpNQdbXiwZru1jOs5IGg60MES8gTpQWM4PxVv/uEE1rvAmL9dCp
+jcmtWY37whnNfjf5vUGq4IPMMTy5vw==
+=CtcO
+-----END PGP SIGNATURE-----
+
+--eKKE6fgqZADZWzdx--
