@@ -2,99 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E08642673
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF78F642662
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiLEKKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 05:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S230522AbiLEKJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 05:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiLEKKc (ORCPT
+        with ESMTP id S229985AbiLEKJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 05:10:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E60183B4;
-        Mon,  5 Dec 2022 02:10:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Dec 2022 05:09:19 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90F2183AA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:09:17 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A900B80E5E;
-        Mon,  5 Dec 2022 10:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F25AC433D6;
-        Mon,  5 Dec 2022 10:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670235029;
-        bh=IEH5+SklrZeRvcXZ7x5oYjnP26+lXJJ2RNphQwvxjSM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=it3VXqPNUYO6b3CpFHhBT/sPrSRTn45NGpy3vOHKBgv70rhrrMK10Yb/M6oPvTUsV
-         xIZTgKbm4BoDhrygucNiU+qxsJzo34op+S9z0SHdqA15Zy4JQx0zJrK37jcjOWwVbl
-         i2R4p8MtGE7lQD2lQAPsAdx8j1Nc55kfSSzQ3hztdmwfMH+o/hvdh9bM51mwudHxi/
-         F8XqCAFNW+rJd4Yivw2TPNZbY60iEIg/ZRDbM+QutZcFhczQrn7OSIBroVEfE9kkF3
-         uO5T6rAzwrY1R6Ysp3uWGPpUUYGuyLgeBsQ32eW5xnlQEhrmxYNOwUK/PV9wSqdCTj
-         eruE5i/wBahBw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1p28Qk-0007cA-DB; Mon, 05 Dec 2022 11:10:34 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
-Date:   Mon,  5 Dec 2022 11:08:37 +0100
-Message-Id: <20221205100837.29212-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221205100837.29212-1-johan+linaro@kernel.org>
-References: <20221205100837.29212-1-johan+linaro@kernel.org>
+        (Authenticated sender: sendonly@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DF71242137;
+        Mon,  5 Dec 2022 10:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1670234956; bh=/lyXjIyUIb+1pgEaMmUwZNYl0uV1GrDjGWI2beTmvj0=;
+        h=From:To:Cc:Subject:Date;
+        b=m5sgsXXtSrqefqkY+9rLDHCdHtIuKLYn/OuPT+lybjBXgnPgK4kP9ZReDUcpmDmoS
+         c1/7bQzBphZxXoYjhy/8FMOxpVooUeVACX4o7mCPZ+jfRJoYUMoptCKE8bSspRqQn1
+         G9qJxD3f1sHwP9JbMmaV7DvbMf5WgxYWa+MN/2dyc7ECMe+53CxF/L/2RgEH2evwAh
+         T5erlbKK2tLu4HcbSoBGNiFfR7wnLb2/RGpWWc/zbZOx/+gzTXbCkQg+HSehHcZAEV
+         AeoMO8Mz2cYYR6HWiPgNT6HcU0IK0G7PvYZ/XaA8t2Az8Gi6KSVAGqqZjwgAZRYE23
+         QlU6oP/9NfpVg==
+From:   Hector Martin <marcan@marcan.st>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [PATCH] iommu: dart: Add suspend/resume support
+Date:   Mon,  5 Dec 2022 19:09:07 +0900
+Message-Id: <20221205100907.10230-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SC8280XP UFS controllers are cache coherent and must be marked as
-such in the devicetree to avoid potential data corruption.
+We need to save/restore the TCR/TTBR registers, since they are lost
+on power gate.
 
-Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-Cc: stable@vger.kernel.org      # 6.0
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iommu/apple-dart.c | 50 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index c4947c563099..23d1f51527aa 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1430,6 +1430,7 @@ ufs_mem_hc: ufs@1d84000 {
- 			required-opps = <&rpmhpd_opp_nom>;
+diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+index 4f4a323be0d0..ed524765ad87 100644
+--- a/drivers/iommu/apple-dart.c
++++ b/drivers/iommu/apple-dart.c
+@@ -121,6 +121,9 @@ struct apple_dart {
  
- 			iommus = <&apps_smmu 0xe0 0x0>;
-+			dma-coherent;
+ 	struct iommu_group *sid2group[DART_MAX_STREAMS];
+ 	struct iommu_device iommu;
++
++	u32 save_tcr[DART_MAX_STREAMS];
++	u32 save_ttbr[DART_MAX_STREAMS][DART_MAX_TTBR];
+ };
  
- 			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
- 				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-@@ -1491,6 +1492,7 @@ ufs_card_hc: ufs@1da4000 {
- 			power-domains = <&gcc UFS_CARD_GDSC>;
+ /*
+@@ -932,6 +935,50 @@ static const struct apple_dart_hw apple_dart_hw_t6000 = {
+ 	.fmt = APPLE_DART2,
+ };
  
- 			iommus = <&apps_smmu 0x4a0 0x0>;
-+			dma-coherent;
- 
- 			clocks = <&gcc GCC_UFS_CARD_AXI_CLK>,
- 				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
++#ifdef CONFIG_PM_SLEEP
++static int apple_dart_suspend(struct device *dev)
++{
++	struct apple_dart *dart = dev_get_drvdata(dev);
++	unsigned int sid, idx;
++
++	for (sid = 0; sid < DART_MAX_STREAMS; sid++) {
++		dart->save_tcr[sid] = readl_relaxed(dart->regs + DART_TCR(sid));
++		for (idx = 0; idx < DART_MAX_TTBR; idx++)
++			dart->save_ttbr[sid][idx] =
++				readl_relaxed(dart->regs + DART_TTBR(sid, idx));
++	}
++
++	return 0;
++}
++
++static int apple_dart_resume(struct device *dev)
++{
++	struct apple_dart *dart = dev_get_drvdata(dev);
++	unsigned int sid, idx;
++	int ret;
++
++	ret = apple_dart_hw_reset(dart);
++	if (ret) {
++		dev_err(dev, "Failed to reset DART on resume\n");
++		return ret;
++	}
++
++	for (sid = 0; sid < DART_MAX_STREAMS; sid++) {
++		for (idx = 0; idx < DART_MAX_TTBR; idx++)
++			writel_relaxed(dart->save_ttbr[sid][idx],
++				       dart->regs + DART_TTBR(sid, idx));
++		writel_relaxed(dart->save_tcr[sid], dart->regs + DART_TCR(sid));
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops apple_dart_pm_ops = {
++	.suspend	= apple_dart_suspend,
++	.resume		= apple_dart_resume,
++};
++#endif
++
+ static const struct of_device_id apple_dart_of_match[] = {
+ 	{ .compatible = "apple,t8103-dart", .data = &apple_dart_hw_t8103 },
+ 	{ .compatible = "apple,t6000-dart", .data = &apple_dart_hw_t6000 },
+@@ -944,6 +991,9 @@ static struct platform_driver apple_dart_driver = {
+ 		.name			= "apple-dart",
+ 		.of_match_table		= apple_dart_of_match,
+ 		.suppress_bind_attrs    = true,
++#ifdef CONFIG_PM_SLEEP
++		.pm			= &apple_dart_pm_ops,
++#endif
+ 	},
+ 	.probe	= apple_dart_probe,
+ 	.remove	= apple_dart_remove,
 -- 
-2.37.4
+2.35.1
 
