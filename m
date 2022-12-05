@@ -2,159 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86ADB6431BC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE216431C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiLETQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
+        id S233728AbiLETRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiLETO7 (ORCPT
+        with ESMTP id S233837AbiLETRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:14:59 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC8C24084;
-        Mon,  5 Dec 2022 11:14:59 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5Fu1Ec007124;
-        Mon, 5 Dec 2022 19:14:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=pSnnyqswrXqnqsVTp7FpeVnzPD1GrBLVmOoY+g5lPnw=;
- b=LIu5EVss5+CH64BvbEipbslRyLBFreKgM8umea9GxMz0AZcdi+lvaugO+BSJJ69SXGwL
- cFWaxCLKKvDVg+MzpJA/ErHGePlThFxiHieHDgHv8Pcdwc0qvV6GdSnoX0hEKeewnULO
- 9gDR/w1fdmIhuxz8oPcFAbBnvxzn5546YiGB+ED4zFlRbxaNoP99ovU7zD+hW4QC/3kb
- buQd4V7fyvEaF4HoB5cBo3rZokdaqK1SrxHwwfdP8QFG9YMu9SJYVWSNxrnBnOYtsYJ5
- LmvCr/6eiAm1uVZJJoD2hs2QHJm1BnaUA+UTD18dbH5IAujsv0IRMhHIyj8tBRcLZGZX 8A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7wdxw4ep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 19:14:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B5JEneE026680
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Dec 2022 19:14:49 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 5 Dec 2022 11:14:49 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <airlied@gmail.com>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 5/5] drm/msm/dp: add support of max dp link rate
-Date:   Mon, 5 Dec 2022 11:14:30 -0800
-Message-ID: <1670267670-15832-6-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 5 Dec 2022 14:17:03 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D37264AC;
+        Mon,  5 Dec 2022 11:15:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670267721; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=NP/gnuKezwin1OHhYsmf2ATZliiOCtNCFKoXTYzLH7BFyOXHMSzChcl0T1Aq6Pk013EOTEhIPVieqJNyp/ZJg6CkUw2KbYe8Yo64vRDV1jNfsHr8MQrm2pCXhKvILdIveTXCkSv4z8oUySkngPWB9Aj+wkEduOwp5bjcBSAy3CI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670267721; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=lfH3IahUHjmYwDm63oJKTTzFOCu7YAYcClnY9WZt9/M=; 
+        b=FXv3K4z7UYzBQRGqigcbQsO6xLWN3XHlu+cOWnwRJOjJu1SFe0oJKDsZYueickpcKAvjBEPiXvqafpZvFtlVADDaBNIpaqvIoAaUqMJRQ7woVTe1iw1V4ivnPHuxXQBvvTiyLYF5wCwoE1GkelmMU17vheDC+7Hb2B8/5bj3YT0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670267721;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=lfH3IahUHjmYwDm63oJKTTzFOCu7YAYcClnY9WZt9/M=;
+        b=dsN8wK9uZkXcvK0LcXsBL/whokUfqHcwWsBtyrf7LCsT70tQrOkp9jhT1L/vza5v
+        hhbPaQrT8B7iBg2bkmYRsZ7tdVz2tSl7Eonp9P1UorLvtWlwa4jXRRLcpZ+Ik+CZbb0
+        IhoZEhANl+xsjiDyuKj7y4imOoyytUA0lMvhMrwc=
+Received: from [192.168.100.172] (86.121.172.71 [86.121.172.71]) by mx.zohomail.com
+        with SMTPS id 1670267720324784.9784413037605; Mon, 5 Dec 2022 11:15:20 -0800 (PST)
+Message-ID: <84ce6297-5aff-4d6e-8d31-da3f25dc8690@arinc9.com>
+Date:   Mon, 5 Dec 2022 22:15:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: J-zb-Hko24k3jgXoAYSZp2PjllJgHUkO
-X-Proofpoint-ORIG-GUID: J-zb-Hko24k3jgXoAYSZp2PjllJgHUkO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- clxscore=1015 adultscore=0 mlxscore=0 phishscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212050160
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5/5] powerpc: dts: remove label = "cpu" from DSA
+ dt-binding
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>
+References: <20221130141040.32447-1-arinc.unal@arinc9.com>
+ <20221130141040.32447-6-arinc.unal@arinc9.com>
+ <87a647s8zg.fsf@mpe.ellerman.id.au> <20221201173902.zrtpeq4mkk3i3vpk@pali>
+ <20221201234400.GA1692656-robh@kernel.org>
+ <20221202193552.vehqk6u53n36zxwl@pali>
+ <20221204185924.a4q6cifhpyxaur6f@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20221204185924.a4q6cifhpyxaur6f@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, HBR2 (5.4G) is the max link link be supported. This patch add
-the capability to support max link rate at HBR3 (8.1G).
+On 4.12.2022 21:59, Vladimir Oltean wrote:
+> Hi Pali,
+> 
+> On Fri, Dec 02, 2022 at 08:35:52PM +0100, Pali Rohár wrote:
+>> On Thursday 01 December 2022 17:44:00 Rob Herring wrote:
+>>> On Thu, Dec 01, 2022 at 06:39:02PM +0100, Pali Rohár wrote:
+>>>> I was told by Marek (CCed) that DSA port connected to CPU should have
+>>>> label "cpu" and not "cpu<number>". Modern way for specifying CPU port is
+>>>> by defining reference to network device, which there is already (&enet1
+>>>> and &enet0). So that change just "fixed" incorrect naming cpu0 and cpu1.
+>>>>
+>>>> So probably linux kernel does not need label = "cpu" in DTS anymore. But
+>>>> this is not the reason to remove this property. Linux kernel does not
+>>>> use lot of other nodes and properties too... Device tree should describe
+>>>> hardware and not its usage in Linux. "label" property is valid in device
+>>>> tree and it exactly describes what or where is this node connected. And
+>>>> it may be used for other systems.
+>>>>
+>>>> So I do not see a point in removing "label" properties from turris1x.dts
+>>>> file, nor from any other dts file.
+>>>
+>>> Well, it seems like a bit of an abuse of 'label' to me. 'label' should
+>>> be aligned with a sticker or other identifier identifying something to a
+>>> human. Software should never care what the value of 'label' is.
+>>
+>> But it already does. "label" property is used for setting (initial)
+>> network interface name for DSA drivers. And you can try to call e.g.
+>> git grep '"cpu"' net/dsa drivers/net/dsa to see that cpu is still
+>> present on some dsa places (probably relict or backward compatibility
+>> before eth reference).
+> 
+> Can you try to eliminate the word "probably" from the information you
+> transmit and be specific about when did the DSA binding parse or require
+> the 'label = "cpu"' property for CPU ports in any way?
 
-Changes in v2:
--- add max link rate from dtsi
+As Jonas (on CC) pointed out, I only see this being used in the swconfig 
+b53 driver which uses the label to identify the cpu port.
 
-Changes in v3:
--- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/generic/files/drivers/net/phy/b53/b53_common.c;h=87d731ec3e2a868dc8389f554b1dc9ab42c30be2;hb=HEAD#l1508
 
-Changes in v4:
--- delete unnecessary pr_err
+Maybe this got into DSA dt-bindings unchecked before it was decided to 
+move forward with DSA instead of swconfig on Linux.
 
-Changes in v5:
--- split parser function into different patch
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 4 ++++
- drivers/gpu/drm/msm/dp/dp_panel.c   | 7 ++++---
- drivers/gpu/drm/msm/dp/dp_panel.h   | 1 +
- 3 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index bfd0aef..edee550 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
- 	struct edid *edid;
- 
- 	dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
-+	dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
-+
-+	drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
-+		dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
- 
- 	rc = dp_panel_read_sink_caps(dp->panel, dp->dp_display.connector);
- 	if (rc)
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index 5149ceb..933fa9c 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
- 	link_info->rate = drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
- 	link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & DP_MAX_LANE_COUNT_MASK;
- 
-+	/* Limit data lanes from data-lanes of endpoint properity of dtsi */
- 	if (link_info->num_lanes > dp_panel->max_dp_lanes)
- 		link_info->num_lanes = dp_panel->max_dp_lanes;
- 
--	/* Limit support upto HBR2 until HBR3 support is added */
--	if (link_info->rate >= (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
--		link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
-+	/* Limit link rate from link-frequencies of endpoint properity of dtsi */
-+	if (link_info->rate > dp_panel->max_dp_link_rate)
-+		link_info->rate = dp_panel->max_dp_link_rate;
- 
- 	drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
- 	drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
-index d861197a..f04d021 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.h
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.h
-@@ -50,6 +50,7 @@ struct dp_panel {
- 
- 	u32 vic;
- 	u32 max_dp_lanes;
-+	u32 max_dp_link_rate;
- 
- 	u32 max_bw_code;
- };
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Arınç
