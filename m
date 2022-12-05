@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC797643663
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE88643662
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbiLEVF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
+        id S231694AbiLEVFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbiLEVEs (ORCPT
+        with ESMTP id S233708AbiLEVEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 16:04:48 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEDD2B27C;
-        Mon,  5 Dec 2022 13:04:19 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so4115941pjj.2;
-        Mon, 05 Dec 2022 13:04:19 -0800 (PST)
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173CB10F;
+        Mon,  5 Dec 2022 13:04:21 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id c13so5505490pfp.5;
+        Mon, 05 Dec 2022 13:04:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w6oMfPCt+VzMyZOzVwetr+D2O/Sy+iM3cliiKh9kVZk=;
-        b=JuM7gtZPmUahPjEzpRJ/D0IW/rRSE5knEYmUm5AwygVdwzx6Vg56SynSTVXmZ+YUPy
-         nfCONatVNQI5AHc5dUKtRL5s6hab06jjg07/RSdZptm6KqoYEGdR6ltqROa5On7BN7eY
-         /jUwDaaCcDqABPUXjvKjh8N8RKTSV4m7JdvQQQ+MhBVHZGDPMhx9uLrDJlYkr2rKnHde
-         s4kn+/5GoRHQ3S33uQGqld26AkN7q8BTlQ7wPUkm+oFuAQm1mnzenf/GuHD6B3GI9gaF
-         KsLKeUIU3Fr4CWM6fTDE4jDMKZPPlEpiUEOl23GfmGahGmzVrlcsI9nRtRwwaBdXeuxF
-         8VFA==
+        bh=TpZoCNuVtqWmqXfOBYxoJCLHU/tCYzYlfr7fdZ1HLBU=;
+        b=PC0oDyi/tmGrc1uhDSRSEHyMY+H+R9uB+dmHF3Y35EYWmpVS2VY+Xrv+sssREll6lq
+         KttFq0viN82AH9/OKk8DWaa5QQK5ITu/FGFnPaWo9T5LoNcWu4JgQ/t7xCCmrcFH/YqH
+         ga0N38vcc6CnlDsoxLkPblh8QNaxgUeBdq48dpKPheV6rGGoymBeHbxEYLJykrEqyvnx
+         taVNEOLElceyej6h+5pnu+EXV1mO/UBcm0nW7pzjXmi15UfUryXUkLjuufdfbShiAjYf
+         L++8MxBQTBq4c7EwPMxFF0V1lCVC19SK/3ArAuunrKXHJhV1ub+9rk8sTm/wuR9MxKUV
+         hiMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w6oMfPCt+VzMyZOzVwetr+D2O/Sy+iM3cliiKh9kVZk=;
-        b=Tfh9UeVjGpm3Ti5Kpds7RonyINADtphYhBZfEPHfz7Ew9umeINIwpEHb4yTGQ1v573
-         P0LzlZEcgiqapBDqheCiWcirQX17kIDBFc6srC1mjNhomoeTfMAhEBZy69bTH0X6WOfH
-         cnIyTC+GcEQY/SEwOebtEb27w+m1Pibs9Msmkkw8HUbv/Mkf2iO1LAglPhe2OH8mqZru
-         VxTx1J7f+I991eYHzpNlAUXtacvPhplt3GZlwYaHEeElSA+OneHeRb21mQy5zRFxb8hr
-         RbJ/1hK/31pAF9YRrbA8k/E5B0xwfyv1rcvZFgUGZjuTbsK/hoyFa7J4e+GBWWk4mhzo
-         tDTw==
-X-Gm-Message-State: ANoB5plf2OW33Qaw8xk4PfGSl8QQEDh2Fo1QhOFbJXeqi5ySRvxe0nth
-        y64ts9xSzzRyO4GKXiCSRkPOK9n//Ck=
-X-Google-Smtp-Source: AA0mqf74olyjf+s3Y8t+RD/34XVAbfMxraSD+RW1xhTt1KUdzA0EUKA/dQ0ENsJdBFajU8bQt8yAkQ==
-X-Received: by 2002:a17:902:d550:b0:189:7bfe:1eb5 with SMTP id z16-20020a170902d55000b001897bfe1eb5mr22835674plf.9.1670274258003;
-        Mon, 05 Dec 2022 13:04:18 -0800 (PST)
+        bh=TpZoCNuVtqWmqXfOBYxoJCLHU/tCYzYlfr7fdZ1HLBU=;
+        b=V7MrBsWYPCjhQRkotbS3yDL4rOl1zi4xbIcnf+bVupPNVrvq8i+RPzkmvUXdziyyQU
+         gtXsPuYmnZLw1mi32NPo0AqRpK7jFDPTCQ/LfX5HywOmclwqsDsxPv8fRUryPyjO5aQO
+         UJ/50/LHd/+hDw8FbDn/drycsB+U0mgefWOdYbth6XpXGMnnx1EB8M1FbdNPrht40Fnw
+         Pfl0tEi9RxDMf/yvvtYszg0IA6PR7b2Dh4tGjz9ymBvSALiMjWW5Pp+b41m/HY2+KOn5
+         PfM+DFnZMg8dqNJZMwDSJYBDYmTaV8NOCVTsY+m3J3glwov/XJm7w6wY+ykuJSVE/RFT
+         UobQ==
+X-Gm-Message-State: ANoB5pkpbsOxs55nzua0L2xwpA3PUtFIMoGTUu1IK+/RygB7ADYQJrkI
+        LitVxDpUXgKz3DHmVnl/TvEi+OLBKjM=
+X-Google-Smtp-Source: AA0mqf7BOcx8t21C04DWALOygV4H7r6nlIrgg9PhDxbAEYd1rUS67q8msfI3NTisCzD6lpfLLjlSNQ==
+X-Received: by 2002:a63:ea17:0:b0:477:9a46:f57b with SMTP id c23-20020a63ea17000000b004779a46f57bmr58686536pgi.319.1670274260086;
+        Mon, 05 Dec 2022 13:04:20 -0800 (PST)
 Received: from charizard.lan (c-67-183-167-205.hsd1.wa.comcast.net. [67.183.167.205])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170903228d00b0017ec1b1bf9fsm3209863plh.217.2022.12.05.13.04.16
+        by smtp.gmail.com with ESMTPSA id b13-20020a170903228d00b0017ec1b1bf9fsm3209863plh.217.2022.12.05.13.04.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 13:04:17 -0800 (PST)
+        Mon, 05 Dec 2022 13:04:19 -0800 (PST)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-input@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -57,9 +57,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [RFC PATCH 1/2] HID: uhid: Don't send the report ID if it's zero
-Date:   Mon,  5 Dec 2022 13:03:53 -0800
-Message-Id: <20221205210354.11846-2-andrew.smirnov@gmail.com>
+Subject: [RFC PATCH 2/2] HID: usbhid: Don't include report ID zero into returned data
+Date:   Mon,  5 Dec 2022 13:03:54 -0800
+Message-Id: <20221205210354.11846-3-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221205210354.11846-1-andrew.smirnov@gmail.com>
 References: <20221205210354.11846-1-andrew.smirnov@gmail.com>
@@ -75,12 +75,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Report ID of zero is a special case handling ID-less reports and in
-that case we should omit report ID from the payload being sent to the
-backend.
+Report ID of zero is a special case for ID-less reports, which by
+definition do not have report ID as a part of their payload. Not
+returning an extra zero also matches hidraw documentation,
+specifically:
 
-Without this change UHID_DEV_NUMBERED_{FEATURE,OUTPUT}_REPORTS doesn't
-represent a semantical difference.
+      For devices which do not use numbered reports, set the first
+      byte to 0.  The returned report buffer will contain the report
+      number in the first byte, followed by the report data read from
+      the device.  For devices which do not use numbered reports, the
+      report data will begin at the first byte of the returned buffer.
 
 Cc: David Rheinsberg <david.rheinsberg@gmail.com>
 Cc: Jiri Kosina <jikos@kernel.org>
@@ -90,52 +94,43 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-usb@vger.kernel.org
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- drivers/hid/uhid.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/hid/usbhid/hid-core.c | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-diff --git a/drivers/hid/uhid.c b/drivers/hid/uhid.c
-index 2a918aeb0af1..7551120215e8 100644
---- a/drivers/hid/uhid.c
-+++ b/drivers/hid/uhid.c
-@@ -273,11 +273,11 @@ static int uhid_hid_get_report(struct hid_device *hid, unsigned char rnum,
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index be4c731aaa65..575f09003602 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -874,18 +874,8 @@ static int usbhid_get_raw_report(struct hid_device *hid,
+ 	struct usb_device *dev = hid_to_usb_dev(hid);
+ 	struct usb_interface *intf = usbhid->intf;
+ 	struct usb_host_interface *interface = intf->cur_altsetting;
+-	int skipped_report_id = 0;
+ 	int ret;
+ 
+-	/* Byte 0 is the report number. Report data starts at byte 1.*/
+-	buf[0] = report_number;
+-	if (report_number == 0x0) {
+-		/* Offset the return buffer by 1, so that the report ID
+-		   will remain in byte 0. */
+-		buf++;
+-		count--;
+-		skipped_report_id = 1;
+-	}
+ 	ret = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
+ 		HID_REQ_GET_REPORT,
+ 		USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
+@@ -893,10 +883,6 @@ static int usbhid_get_raw_report(struct hid_device *hid,
+ 		interface->desc.bInterfaceNumber, buf, count,
+ 		USB_CTRL_SET_TIMEOUT);
+ 
+-	/* count also the report id */
+-	if (ret > 0 && skipped_report_id)
+-		ret++;
+-
+ 	return ret;
  }
  
- static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
--			       const u8 *buf, size_t count, u8 rtype)
-+			       u8 *buf, size_t count, u8 rtype)
- {
- 	struct uhid_device *uhid = hid->driver_data;
- 	struct uhid_event *ev;
--	int ret;
-+	int ret, skipped_report_id = 0;
- 
- 	if (!READ_ONCE(uhid->running) || count > UHID_DATA_MAX)
- 		return -EIO;
-@@ -286,6 +286,15 @@ static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
- 	if (!ev)
- 		return -ENOMEM;
- 
-+	/* Byte 0 is the report number. Report data starts at byte 1.*/
-+	buf[0] = rnum;
-+	if (buf[0] == 0x0) {
-+		/* Don't send the Report ID */
-+		buf++;
-+		count--;
-+		skipped_report_id = 1;
-+	}
-+
- 	ev->type = UHID_SET_REPORT;
- 	ev->u.set_report.rnum = rnum;
- 	ev->u.set_report.rtype = rtype;
-@@ -306,7 +315,7 @@ static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
- 	if (uhid->report_buf.u.set_report_reply.err)
- 		ret = -EIO;
- 	else
--		ret = count;
-+		ret = count + skipped_report_id;
- 
- unlock:
- 	mutex_unlock(&uhid->report_lock);
 -- 
 2.34.1
 
