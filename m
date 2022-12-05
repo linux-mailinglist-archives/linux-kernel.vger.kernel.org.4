@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0A564353F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7236643542
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbiLEUF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S232054AbiLEUHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiLEUFW (ORCPT
+        with ESMTP id S231954AbiLEUHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:05:22 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577C11EEEF;
-        Mon,  5 Dec 2022 12:05:19 -0800 (PST)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1p2Hi9-0004RO-UX; Mon, 05 Dec 2022 21:05:10 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1p2Hi9-000GPh-Ee; Mon, 05 Dec 2022 21:05:09 +0100
-Subject: Re: [PATCH] bpftool: Fix memory leak in do_build_table_cb
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221205081300.561974-1-linmq006@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <8d7ac47d-5d76-eaf1-7c1e-a4418d80dac5@iogearbox.net>
-Date:   Mon, 5 Dec 2022 21:05:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 5 Dec 2022 15:07:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E712DFCE5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:06:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670270774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J5OTqoTXPXM33Uzjd4PZuIqIzOIq6qcNx83qgoRc9Nk=;
+        b=ZVBVdXURJ+WwCDVtSh146TCpU39HePE6qDPFhdCJtqkct8llozDDtE3lsnuOHk+rUqpdhM
+        YsDncPC6GxPwoO1lZJnK75pDiiiPvYGl/iuOqOJtMoZ/J30xUW4SBAaK5AkZUq7BPoMLTQ
+        58dnUm14tg9fsGAnc4B9MZBENil3MLs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-v7mHkac9NfG-LNeQV8n2hg-1; Mon, 05 Dec 2022 15:06:13 -0500
+X-MC-Unique: v7mHkac9NfG-LNeQV8n2hg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DEAF23810784;
+        Mon,  5 Dec 2022 20:06:12 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.84])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 93A6D112132D;
+        Mon,  5 Dec 2022 20:06:10 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, tglx@linutronix.de,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v11 1/4] random: add vgetrandom_alloc() syscall
+References: <20221205020046.1876356-1-Jason@zx2c4.com>
+        <20221205020046.1876356-2-Jason@zx2c4.com>
+        <CAG48ez2R=Ov2Z9zn_W9+C3gHqOkPdQKAY=4SMWDUG=NfP=3eJw@mail.gmail.com>
+        <Y45OWhyN+U975vIN@zx2c4.com>
+Date:   Mon, 05 Dec 2022 21:06:06 +0100
+In-Reply-To: <Y45OWhyN+U975vIN@zx2c4.com> (Jason A. Donenfeld's message of
+        "Mon, 5 Dec 2022 21:02:34 +0100")
+Message-ID: <87bkohpqdt.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20221205081300.561974-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26741/Mon Dec  5 09:16:09 2022)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +70,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/22 9:13 AM, Miaoqian Lin wrote:
-> strdup() allocates memory for path. We need to release the memory in
-> the following error paths. Add free() to avoid memory leak.
-> 
-> Fixes: 8f184732b60b ("bpftool: Switch to libbpf's hashmap for pinned paths of BPF objects")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->   tools/bpf/bpftool/common.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-> index 0cdb4f711510..8a820356525e 100644
-> --- a/tools/bpf/bpftool/common.c
-> +++ b/tools/bpf/bpftool/common.c
-> @@ -499,9 +499,11 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
->   	if (err) {
->   		p_err("failed to append entry to hashmap for ID %u, path '%s': %s",
->   		      pinned_info.id, path, strerror(errno));
-> -		goto out_close;
-> +		goto out_free;
->   	}
->   
-> +out_free:
-> +	free(path);
+* Jason A. Donenfeld:
 
-It would be ok if you were to add the free(path) into the err condition, but here you
-also cause the !err to be freed which would trigger as UAF. See the hashmap_insert()
-where just set the pointer entry->value = <path>.. how was this tested before submission?
+> Hi Jann,
+>
+> On Mon, Dec 05, 2022 at 08:13:36PM +0100, Jann Horn wrote:
+>> On Mon, Dec 5, 2022 at 3:01 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>> > +       mm->def_flags |=
+>> > +               /*
+>> > +                * Don't allow state to be written to swap, to preserve forward secrecy.
+>> > +                * This works in conjunction with MAP_LOCKED in do_mmap(), below, which
+>> > +                * actually does the locking (and associated permission check and accounting).
+>> > +                * Here, VM_LOCKONFAULT together with VM_NORESERVE simply make the mlocking
+>> > +                * happen the first time it's actually used, the same as when calling
+>> > +                * mlock2(MLOCK_ONFAULT) from userspace.
+>> > +                */
+>> > +               VM_LOCKONFAULT | VM_NORESERVE |
+>> 
+>> Have you checked the interaction with this line in dup_mmap()?
+>> "tmp->vm_flags &= ~(VM_LOCKED | VM_LOCKONFAULT);"
+>> 
+>> As the mlock.2 manpage says, "Memory locks are not inherited by a
+>> child created via fork(2)". I think the intention here is that the VMA
+>> should stay unswappable after fork(), right?
+>> 
+>> Of course, trying to reserve more mlocked memory in fork() would also
+>> be problematic...
+>
+> Thanks for pointing that out! Indeed that seems problematic.
+> Fortunately, the use of WIPEONFORK at the same time as LOCKONFAULT means
+> that memory doesn't actually need to be reserved in fork() itself. So
+> something like the below seems correct and doable.
+>
+> Jason
+>
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index ec57cae58ff1..cd53ffff615d 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -656,7 +656,9 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+>  			tmp->anon_vma = NULL;
+>  		} else if (anon_vma_fork(tmp, mpnt))
+>  			goto fail_nomem_anon_vma_fork;
+> -		tmp->vm_flags &= ~(VM_LOCKED | VM_LOCKONFAULT);
+> +		if ((tmp->vm_flags & (VM_LOCKONFAULT | VM_WIPEONFORK)) !=
+> +		    (VM_LOCKONFAULT | VM_WIPEONFORK))
+> +			tmp->vm_flags &= ~(VM_LOCKED | VM_LOCKONFAULT);
+>  		file = tmp->vm_file;
+>  		if (file) {
+>  			struct address_space *mapping = file->f_mapping;
 
->   out_close:
->   	close(fd);
->   out_ret:
-> 
+Still it's a bit concerning that calling getrandom (the libc function)
+now apparently can kill the process if the system is under severe memory
+pressure.  In many cases, that's okay, but we wouldn't want that for
+PID 1, for example.  vm.overcommit_memory=2 mode is supposed to prevent
+such crashes, and I think NORESERVE (not shown here) sidesteps that.
+
+Thanks,
+Florian
 
