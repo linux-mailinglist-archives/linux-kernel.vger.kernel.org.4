@@ -2,113 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6078B64244A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB55B64249F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiLEIOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:14:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
+        id S231664AbiLEIbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbiLEIOQ (ORCPT
+        with ESMTP id S231448AbiLEIbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:14:16 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC5F16593
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:14:09 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h7so11337496wrs.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:14:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOAaEDQ/+KQ94HSAsqFzfVKtm6woYUzL9fBYQMgBuLc=;
-        b=e2HPFLjESRMzz+xhAqeTVs6J7M+U5l/REgtnswgMQLAoEHF/udvkXCFDUTJYrrvMGi
-         jHHsPiLyYeKKoRaxUjgoK7P8q2ezNypfzTTxa0qlXXVzoCFdagY3iEM9fu6Pl/3SlkM5
-         kNfB4w+ejaH0GTXmk5Cgws3weouY5xJ4dC82oEfJbV//rO+LNGvQzpbG+y9ly+gIi1d2
-         ejLRyrd3502i1iV1ag9UqznyKebBPAEpbOWpMlg++nslY0vV10UABAICcYEElgww1IRz
-         k3xU+st9iv1wiJ29GiJOjUTyFkkR0atN/Gc/rgw/RldEa7aJdlE5Lm+QB5Jf7FUrW3yh
-         0b7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mOAaEDQ/+KQ94HSAsqFzfVKtm6woYUzL9fBYQMgBuLc=;
-        b=Do9DlKiwNaUnyQsKX+rYv1zW7HXaIrQn05eHxLNeq3XHicpYnhpnhgm+ex67Y/sPsq
-         Z3OVtvdaJJNNNrazWGG1RZq5amVtVz2U8VDowA6f9xWvAELHG7gvxB11kQxaWCSpzb0y
-         WE7zIUkSdvjlJSvtywcjCf+CFSqoa88j2vpWS7qDzvxo2sh6jBqz9pP/aFnxLtgqTbdI
-         8E3ji1efVWmd+sasjGir7gYmN3d7isVO7a86GJv3c0M2lS0efbgCCcpOoO0ilKOQgand
-         EXKoIIu6p2493AV3yc6onNURl+RsWqGpnbc+JQ0q0qzUGMDx09vOw5OYL6k9r4m/gVcs
-         MtIw==
-X-Gm-Message-State: ANoB5pknhufb/1L6GCD2A0ilyqsoxMDJSql4d6FZ7ex1XRW6TkmPWLbV
-        Jp6zAk8FK01/rO7p4S48r6faNA==
-X-Google-Smtp-Source: AA0mqf5Ch2HHmf8vDl45Rz3/ktkKscqe8a3oGxpy7NLT/9M1FQnwqH+PvbPyBevvGm9zi9w+mCtgXw==
-X-Received: by 2002:a5d:5685:0:b0:235:f0a6:fafd with SMTP id f5-20020a5d5685000000b00235f0a6fafdmr50278628wrv.75.1670228048267;
-        Mon, 05 Dec 2022 00:14:08 -0800 (PST)
-Received: from [192.168.7.93] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003c70191f267sm23656674wmp.39.2022.12.05.00.14.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:14:07 -0800 (PST)
-Message-ID: <938d6732-adc8-5e45-6177-33cfe8c1ab70@linaro.org>
-Date:   Mon, 5 Dec 2022 09:14:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 4/9] media: dt-bindings: amlogic,meson-gx-ao-cec:
- reference common CEC properties
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mon, 5 Dec 2022 03:31:21 -0500
+Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57C0167C7;
+        Mon,  5 Dec 2022 00:31:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670228159; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=im1tnFABP6Gq5f5JgX0Hlm4K4O61YYWtd/r1+1NTljCowLPOqjaGZmT6GszUALt805dTNEF2r7u/o2smKe5g0oeSxG+bQ1i9IGj+Z7d33oEVz8AjpPKrOAx1IPqRcsJDpRS8/dnNF1d+vjfjOp0gPCsd5cF/A8U1OSfQpkri4sc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670228159; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=G6hbPiBt/fhMbeRAyCrqatnfivN1dw3GU+vvJg5sKf0=; 
+        b=BqEXUBHV9uCV0MCmPrylLpkyOdC8rz6ABe4X+QtUuxN/TFYBAEB547n+RiWsR3rh/x4uaAlBeFO64HLHNzplClYrNMC9q6XdWAA9q4rnBKqe4Xrop1ussRhaucavhI5ElyELmKyIfQxaKH7oCiyt0YJTvq/MIXdTPhHdE7JipLQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670228159;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=G6hbPiBt/fhMbeRAyCrqatnfivN1dw3GU+vvJg5sKf0=;
+        b=c31wsBQmxQnjKdYlMWxWKqAUw5y7jjGRURbD/homkCVKVSnUSxg92EOmRzTnJwfS
+        a1dNpVsqCrz0nppdUzXbXCJTHHhzWsvgl3KcEhcgk9B53NMX7Js1H3BLjYb9sDs1LOM
+        Olb+D6mIxGOUD1UTFVgmykvqLZc8TX1T3oLIrKlw=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
+        with SMTPS id 1670228157594162.27257640298603; Mon, 5 Dec 2022 00:15:57 -0800 (PST)
+Message-ID: <f5a07ab14341d3a7ce8faf38f1d603eb4aed3c7b.camel@icenowy.me>
+Subject: Re: [PATCH v2 7/9] riscv: dts: bouffalolab: add Sipeed M1s SoM and
+ Dock devicetree
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Samuel Holland <samuel@sholland.org>,
+        Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Joe Tessler <jrt@google.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20221204182908.138910-1-krzysztof.kozlowski@linaro.org>
- <20221204182908.138910-4-krzysztof.kozlowski@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20221204182908.138910-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date:   Mon, 05 Dec 2022 16:15:46 +0800
+In-Reply-To: <91d7eebd-7433-c06d-6d14-a01d11af9df9@sholland.org>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+         <20221127132448.4034-8-jszhang@kernel.org>
+         <91d7eebd-7433-c06d-6d14-a01d11af9df9@sholland.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/12/2022 19:29, Krzysztof Kozlowski wrote:
-> Reference common HDMI CEC adapter properties to simplify the binding and
-> have only one place of definition for common properties.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   .../bindings/media/cec/amlogic,meson-gx-ao-cec.yaml        | 7 ++-----
->   1 file changed, 2 insertions(+), 5 deletions(-)
-> 
+=E5=9C=A8 2022-11-30=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 01:25 -0600=EF=BC=
+=8CSamuel Holland=E5=86=99=E9=81=93=EF=BC=9A
+> On 11/27/22 07:24, Jisheng Zhang wrote:
+> > Sipeed manufactures a M1s system-on-module and dock board, add
+> > basic
+> > support for them.
+> >=20
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> > =C2=A0arch/riscv/boot/dts/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 =
+1 +
+> > =C2=A0arch/riscv/boot/dts/bouffalolab/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 |=C2=A0 2 ++
+> > =C2=A0.../dts/bouffalolab/bl808-sipeed-m1s-dock.dts | 25
+> > +++++++++++++++++++
+> > =C2=A0.../dts/bouffalolab/bl808-sipeed-m1s.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
+ | 21
+> > ++++++++++++++++
+> > =C2=A04 files changed, 49 insertions(+)
+> > =C2=A0create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
+> > =C2=A0create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-
+> > m1s-dock.dts
+> > =C2=A0create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-
+> > m1s.dtsi
+> >=20
+> > diff --git a/arch/riscv/boot/dts/Makefile
+> > b/arch/riscv/boot/dts/Makefile
+> > index ff174996cdfd..b525467152b2 100644
+> > --- a/arch/riscv/boot/dts/Makefile
+> > +++ b/arch/riscv/boot/dts/Makefile
+> > @@ -1,4 +1,5 @@
+> > =C2=A0# SPDX-License-Identifier: GPL-2.0
+> > +subdir-y +=3D bouffalolab
+> > =C2=A0subdir-y +=3D sifive
+> > =C2=A0subdir-y +=3D starfive
+> > =C2=A0subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) +=3D canaan
+> > diff --git a/arch/riscv/boot/dts/bouffalolab/Makefile
+> > b/arch/riscv/boot/dts/bouffalolab/Makefile
+> > new file mode 100644
+> > index 000000000000..5419964e892d
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/bouffalolab/Makefile
+> > @@ -0,0 +1,2 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +dtb-$(CONFIG_SOC_BOUFFALOLAB) +=3D bl808-sipeed-m1s-dock.dtb
+> > diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-
+> > dock.dts b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-
+> > dock.dts
+> > new file mode 100644
+> > index 000000000000..c6b4894a7b88
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
+> > @@ -0,0 +1,25 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> > +/*
+> > + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "bl808-sipeed-m1s.dtsi"
+> > +
+> > +/ {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0model =3D "Sipeed M1s Dock";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "sipeed,m1s-d=
+ock", "sipeed,m1s",
+> > "bouffalolab,bl808";
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0aliases {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0serial0 =3D &uart0;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chosen {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0stdout-path =3D "serial0:2000000n8";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> > +};
+> > +
+> > +&uart0 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0status =3D "okay";
+> > +};
+> > diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+> > b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+> > new file mode 100644
+> > index 000000000000..5026de768534
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+> > @@ -0,0 +1,21 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> > +/*
+> > + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "bl808.dtsi"
+> > +
+> > +/ {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "sipeed,m1s",=
+ "bouffalolab,bl808";
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0memory@50000000 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0device_type =3D "memory";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0reg =3D <0x50000000 0x04000000>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+>=20
+> The PSRAM is part of the BL808, so this should go in the SoC .dtsi
+> file.
+> (Unless I'm missing something and there are BL808 variants with
+> different amounts of memory. The PSRAM init code in the SDK does size
+> detection, so I suppose it is possible.)
 
-<snip>
+I think it really has variants.
 
+>=20
+> Regards,
+> Samuel
+>=20
+> > +};
+> > +
+> > +&xtal {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0clock-frequency =3D <4000000=
+0>;
+> > +};
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
