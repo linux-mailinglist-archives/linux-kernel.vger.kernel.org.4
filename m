@@ -2,179 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2CB643649
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDCA64364D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233823AbiLEVBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:01:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
+        id S233927AbiLEVDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiLEVA1 (ORCPT
+        with ESMTP id S233932AbiLEVCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:00:27 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FE78286D5;
-        Mon,  5 Dec 2022 13:00:26 -0800 (PST)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9192920B83FD;
-        Mon,  5 Dec 2022 13:00:26 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9192920B83FD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1670274026;
-        bh=ucj0phlrsCOCEABbc8SVcAnCMpVQNUXl97uuBXh5AeA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZpW5UiMShhFrc1MZzv+BVEtEbMbF09uVJiIJD+xgp6o799MPeXyg/21r7xHGYAqkA
-         fVFvqkEPeO0bgRyAyJ3ObF0WjYJ/jT7fOWK3tJ0+JMkqOv79612p86F9LTguegWQ7t
-         FN9OEDrfsv6ZPGoow58tSuQzaCwAObTLFgjVLa10=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
-        alanau@linux.microsoft.com, brauner@kernel.org,
-        akpm@linux-foundation.org
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 11/11] tracing/user_events: Limit global user_event count
-Date:   Mon,  5 Dec 2022 13:00:17 -0800
-Message-Id: <20221205210017.23440-12-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221205210017.23440-1-beaub@linux.microsoft.com>
-References: <20221205210017.23440-1-beaub@linux.microsoft.com>
+        Mon, 5 Dec 2022 16:02:38 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07422CDEC;
+        Mon,  5 Dec 2022 13:01:22 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id f7so17565327edc.6;
+        Mon, 05 Dec 2022 13:01:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oR2ojr4E4/FvABpHMdPE1tBl2qE5ugC0vWs+LUlEhI8=;
+        b=VDtbOT60TvVrEjQjbx0WDlRo+AwmdYcjrF1PiLmi4ycg6zyoil32hMK07venuroC8k
+         xQGAzoclaWb1++ZmwD5vfeqyHXv/LoWzHhkd/gI1zSdaxctkeybwYKbwr+JrETj4ZcCG
+         aUc/RL1tAcqdF1eKX6cPpa/aNYuVecrawB6v7Gg9loPpZz0RyEQJbRX9ygvI6goe+Ew9
+         /3TTuHuJyW3iHms/mnGSkhT0U7+fnuctAOZzyBBMj00YYXptDm9dhOACiqJ2M10OMVrx
+         C0mjJn+NENrgAuCkBvybgnWAtAt9eH3lbuo93emLGPkkAJby9m2PYxlA0WUuQTDlmOhD
+         l6uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oR2ojr4E4/FvABpHMdPE1tBl2qE5ugC0vWs+LUlEhI8=;
+        b=FufNX07xauPBpJZ/qLhbTybHm8AuDlT7q6KIjt3do4dNeU8ISZmbx6feBHPpszLYUX
+         jyc4UtIWiezTCC3+8wncurg/8+SR2iGu58pr0pzCADiSGoTDR/1C7hXpQm4P/eWiSq1l
+         k+mXo19J70suZpWJmXpP2z+GsGwiIULiTzV3BxvT8HtQb+72GvcluHYD6m6qHmxuCLIh
+         tBu7i9A/Hti/JIcozqwhDT8XyKV5R2MiOzMA+aXonxmCszq+sBwTbbrl0/aBxhkXHOfg
+         nNNE8sAOriUrIv0j48Z4Haa8MZKCIA/T3mbluy8SxkN7vGs1ycMZVVQ1NHezZ1P1HREW
+         UziA==
+X-Gm-Message-State: ANoB5pk2aMdYUH/zE5oMiHnDagkMIB9AH0cLxvU9E2nPLkn++3rTj3RB
+        FdFNLfpaNePEkGSI43ljJtY=
+X-Google-Smtp-Source: AA0mqf7TE6/gHtnfOWjM/gdQJDtF6FGAYEHlnA9LDGiGZ/bEoqQVQg36nIkcEZaiwGa6wt4FBfx7Jw==
+X-Received: by 2002:a05:6402:4507:b0:467:205b:723d with SMTP id ez7-20020a056402450700b00467205b723dmr17483455edb.69.1670274076195;
+        Mon, 05 Dec 2022 13:01:16 -0800 (PST)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b007b9269a0423sm6634332ejd.172.2022.12.05.13.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 13:01:15 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Subject: Re: [PATCH] media: cedrus: Convert to MPLANE uAPI
+Date:   Mon, 05 Dec 2022 22:01:14 +0100
+Message-ID: <45143854.fMDQidcC6G@kista>
+In-Reply-To: <20221129074530.640251-1-wenst@chromium.org>
+References: <20221129074530.640251-1-wenst@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Operators want to be able to ensure enough tracepoints exist on the
-system for kernel components as well as for user components. Since there
-are only up to 64K events, by default allow up to half to be used by
-user events.
+Hi Chen-Yu!
 
-Add a boot parameter (user_events_max=%d) and a kernel sysctl parameter
-(kernel.user_events_max) to set a global limit that is honored among all
-groups on the system. This ensures hard limits can be setup to prevent
-user processes from consuming all event IDs on the system.
+Dne torek, 29. november 2022 ob 08:45:30 CET je Chen-Yu Tsai napisal(a):
+> The majority of the V4L2 stateless video decoder drivers use the MPLANE
+> interface.
+> 
+> On the userspace side, Gstreamer supports non-MPLANE and MPLANE
+> interfaces. Chromium only supports the MPLANE interface, and is not yet
+> usable with standard desktop Linux. FFmpeg support for either has not
+> landed.
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- kernel/trace/trace_events_user.c | 57 ++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+I don't like fixing userspace issues in kernel, if kernel side works fine. 
+Implementing missing non-MPLANE support in Chromium will also allow it to work 
+with older kernels.
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 36def244a755..754942ba92a1 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -20,6 +20,7 @@
- #include <linux/types.h>
- #include <linux/uaccess.h>
- #include <linux/highmem.h>
-+#include <linux/init.h>
- #include <linux/user_events.h>
- #include "trace.h"
- #include "trace_dynevent.h"
-@@ -61,6 +62,12 @@ struct user_event_group {
- /* Group for init_user_ns mapping, top-most group */
- static struct user_event_group *init_group;
- 
-+/* Max allowed events for the whole system */
-+static unsigned int max_user_events = 32768;
-+
-+/* Current number of events on the whole system */
-+static unsigned int current_user_events;
-+
- /*
-  * Stores per-event properties, as users register events
-  * within a file a user_event might be created if it does not
-@@ -1247,6 +1254,11 @@ static int destroy_user_event(struct user_event *user)
- 	kfree(EVENT_NAME(user));
- 	kfree(user);
- 
-+	if (current_user_events > 0)
-+		current_user_events--;
-+	else
-+		pr_alert("BUG: Bad current_user_events\n");
-+
- 	return ret;
- }
- 
-@@ -1732,6 +1744,11 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 
- 	mutex_lock(&event_mutex);
- 
-+	if (current_user_events >= max_user_events) {
-+		ret = -EMFILE;
-+		goto put_user_lock;
-+	}
-+
- 	ret = user_event_trace_register(user);
- 
- 	if (ret)
-@@ -1743,6 +1760,7 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 	dyn_event_init(&user->devent, &user_event_dops);
- 	dyn_event_add(&user->devent, &user->call);
- 	hash_add(group->register_table, &user->node, key);
-+	current_user_events++;
- 
- 	mutex_unlock(&event_mutex);
- 
-@@ -2369,6 +2387,43 @@ static int create_user_tracefs(void)
- 	return -ENODEV;
- }
- 
-+static int __init set_max_user_events(char *str)
-+{
-+	if (!str)
-+		return 0;
-+
-+	if (kstrtouint(str, 0, &max_user_events))
-+		return 0;
-+
-+	return 1;
-+}
-+__setup("user_events_max=", set_max_user_events);
-+
-+static int set_max_user_events_sysctl(struct ctl_table *table, int write,
-+				      void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	int ret;
-+
-+	mutex_lock(&event_mutex);
-+
-+	ret = proc_douintvec(table, write, buffer, lenp, ppos);
-+
-+	mutex_unlock(&event_mutex);
-+
-+	return ret;
-+}
-+
-+static struct ctl_table user_event_sysctls[] = {
-+	{
-+		.procname	= "user_events_max",
-+		.data		= &max_user_events,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= set_max_user_events_sysctl,
-+	},
-+	{}
-+};
-+
- static int __init trace_events_user_init(void)
- {
- 	int ret;
-@@ -2398,6 +2453,8 @@ static int __init trace_events_user_init(void)
- 	if (dyn_event_register(&user_event_dops))
- 		pr_warn("user_events could not register with dyn_events\n");
- 
-+	register_sysctl_init("kernel", user_event_sysctls);
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+Hans, what's linux-media politics about such changes?
+
+Best regards,
+Jernej
+
+> 
+> A fallback route using libv4l is also available. The library translates
+> MPLANE interface ioctl calls to non-MPLANE ones, provided that the pixel
+> format used is single plane.
+> 
+> Convert the Cedrus driver to the MPLANE interface, while keeping the
+> supported formats single plane. Besides backward compatibility through
+> the plugin, the hardware requires that different planes not be located
+> too far apart in memory. Keeping the single plane pixel format makes
+> this easy to enforce.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+> 
+> This has been tested with Fluster. The score remained the same with or
+> without the patch. This also helps with getting VP8 decoding working
+> with Chromium's in-tree test program "video_decode_accelerator_tests",
+> though Chromium requires other changes regarding buffer allocation and
+> management.
+
 
