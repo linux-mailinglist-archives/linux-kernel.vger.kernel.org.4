@@ -2,71 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2056427E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DFD6427ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiLEL6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S231428AbiLEL7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiLEL63 (ORCPT
+        with ESMTP id S231190AbiLEL7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:58:29 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D3EDFB3;
-        Mon,  5 Dec 2022 03:58:29 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3C3CC660037C;
-        Mon,  5 Dec 2022 11:58:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670241507;
-        bh=iFlO31DNzJvNqG9JtnHjVtb1y6O92a+FI3D/2tE9y3E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=M47wkQX/t+5tOCDoiejCPLRXBIPFZ5c9kjtTBRJW6pDPDaimp/c9C8l54j4FmfgHl
-         Je5rh5jGD1i/q5/pNpe+M1nn9k17eX4ZkUWOUGTujcNthhqsbBdoylsTDzRr2C5q8A
-         ej9jmwe4UhM6nE3cW7GzyJre6wr7anF8WUCv1+xLHjOqce2RPh7sjbGANWQQT7OiJq
-         2yJe7aQN0eMNuaK3TAywORy+LoShkXbw3N2I74a//E14Bs6gyqlyI15jKyetttYNWI
-         c/sNJY4/1Z7qbo2FMv/ZoZvicLOTspxPuxFGkH4c/K29d65QYDh2labymMcqmI584U
-         5N/pCAUGLksjQ==
-Message-ID: <5c5d7bce-b0bf-d1ae-1044-3c3ff20c82d6@collabora.com>
-Date:   Mon, 5 Dec 2022 12:58:24 +0100
+        Mon, 5 Dec 2022 06:59:14 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BA9E034
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:59:13 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id h28so11089354pfq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:59:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JVDnYep+OGuO+Z3tpAIsly50JpE3CrqELGalA8PHONg=;
+        b=N5wjABROTlnOf0xkjlrF9DD5NNlAXltNebNeRxy6Iv6U/IFxnXWNcch0ApbhNbuAXl
+         aq5kgXkOXdXhCSD/TXtuGnck53j8/j46CwFfsglAkBnlBm2YAVb6ZXcTgUafrPfTKQgB
+         7+Xo19wDL124a9m4i+RrLankKSnka65OFqOpGxVwHpl0sPH3U/NyCQFP7kWwfPeH3ykb
+         DBjxyYWknWDfL0DlZr2bnBKKx8PVNOBMwAJ1BU6gQWxIgthRQaQjSFJaAknrZCbfI5ck
+         I/LtR1ye1+e5jEKWC3Jw6EtnuDFfmfv7Ld0QOH9LYL9jlMTJMcD7uJMo9Xp7UUJHnJ4V
+         lFkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JVDnYep+OGuO+Z3tpAIsly50JpE3CrqELGalA8PHONg=;
+        b=1O1NAdTe/9yqMVMow66n8Sa2+5IvxX5QCAwHTIbChPrldceExXB3Q9RfseuIRl3u7l
+         bofmFuu62BwIMnPawhheT/Dj+2alCJTUl3Ezq2CR/SCCHlO9CPGHwxYa4gvx2zZIzlpq
+         5cuUu65inBLq14EtW+zpE4ENuzuji0KMJzRe9aUrKI6kLwZlH8tENLpDbEUsXC1xN2e1
+         u9skspghzz5YSyCgAfy5eQSGmD9CjrY8ciUBKPtKKetLYamlfIROJR0it5Cb8B6EAAI8
+         tnnQFxOGjkztU+zhXzkPmcz4xR4cuhR/7iWWzNmU4LPRki3cbqsbXdAIwbaEElzL9EWJ
+         PqBg==
+X-Gm-Message-State: ANoB5pnidel836yLWW70gJqBvW1PnWiZpB4wLpsSA+35sg5e/zSP1kk6
+        XD+l2byvkTfZHThcIL7WXWKo
+X-Google-Smtp-Source: AA0mqf6j5YhyfdVOKSjtKnCH3MyZNtcxxRSjvEhSz/uAs3E8YB7W4Bx982aZrQIQQ3CVU/0VtFH8dA==
+X-Received: by 2002:a63:570e:0:b0:477:a381:84d with SMTP id l14-20020a63570e000000b00477a381084dmr53526864pgb.207.1670241553326;
+        Mon, 05 Dec 2022 03:59:13 -0800 (PST)
+Received: from thinkpad ([59.92.98.136])
+        by smtp.gmail.com with ESMTPSA id i28-20020a056a00005c00b005771f5ea2ebsm789766pfk.135.2022.12.05.03.59.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 03:59:12 -0800 (PST)
+Date:   Mon, 5 Dec 2022 17:29:06 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: ufs: qcom: allow 'dma-coherent' property
+Message-ID: <20221205115906.GA20192@thinkpad>
+References: <20221205100837.29212-1-johan+linaro@kernel.org>
+ <20221205100837.29212-2-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3] media: platform: mtk-mdp3: Fix return value check in
- mdp_probe()
-Content-Language: en-US
-To:     Qiheng Lin <linqiheng@huawei.com>, mchehab@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221202101836.19858-1-linqiheng@huawei.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221202101836.19858-1-linqiheng@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221205100837.29212-2-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 02/12/22 11:18, Qiheng Lin ha scritto:
-> In case of error, the function mtk_mutex_get()
-> returns ERR_PTR() and never returns NULL. The NULL test in the
-> return value check should be replaced with IS_ERR().
-> And also fix the err_free_mutex case.
+On Mon, Dec 05, 2022 at 11:08:36AM +0100, Johan Hovold wrote:
+> UFS controllers may be cache coherent and must be marked as such in the
+> devicetree to avoid data corruption.
 > 
-> Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
-> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
+> This is specifically needed on recent Qualcomm platforms like SC8280XP.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> index f2d6298d926c..1f1d286749c0 100644
+> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> @@ -44,6 +44,8 @@ properties:
+>      minItems: 8
+>      maxItems: 11
+>  
+> +  dma-coherent: true
+> +
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This property is not applicable to all SoCs. So setting true here will make it
+valid for all.
 
+Thanks,
+Mani
+
+>    interconnects:
+>      minItems: 2
+>      maxItems: 2
+> -- 
+> 2.37.4
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
