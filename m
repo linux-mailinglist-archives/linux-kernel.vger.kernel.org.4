@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3726429EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FB66429F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbiLENyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S232047AbiLEN4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiLENyF (ORCPT
+        with ESMTP id S231814AbiLEN4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:54:05 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36127257;
-        Mon,  5 Dec 2022 05:54:05 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3cbdd6c00adso118244167b3.11;
-        Mon, 05 Dec 2022 05:54:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bc4/MjN/YjTPQ9EZGEra+4fgjSY8zygUtk0AgsersU0=;
-        b=XuY48gARX1ENE547OqGANQPwOeRc2gRM3s9AirKaB5f7QPn2LgH6QY+/p5iN7FiaDR
-         3CGX4FGzaQtIrLyvdndr7xdF/D9mtI9guwQWgJ7AS9Z0fnEYwZi4oCG9mtxDGGH40+vT
-         R8ez7KsxFQtLHrKvTvhJZpskWdlNPMQFy0T5umLohosgOqmBqcHW7gkoRQBnv48EFiks
-         OjzPsJWCMH/PoOktEwc9W5U4Ez6iElLwZTDVmFv8FV7MwlnXHv+h/Dze/3utINPe4Hoo
-         6F7BeH/uSy/1K7myyxp7xfBcKLLyBOWpPBrMr7Gv3VgPkHR+Kg9eJImc6UHoB6fjru2U
-         xCLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bc4/MjN/YjTPQ9EZGEra+4fgjSY8zygUtk0AgsersU0=;
-        b=usuFAR3bafzc05B7OGEGFU/PNjWIyPfFBHO/y4/gvMPudJwBh0wsEobIMu7Es4uDOK
-         z7fLbxcj3z0hK8xbzTQFdpDjiOsvqGKgMwdS1GCEJZHmD0uEnHK0Q4mlDJuBqL7FHQE+
-         rg9oo4XvTbUW8PZcay3cvZhBo6sm2eTaRiM27CNNlQBzxQruVCUAvMGPRVDc0wWbcovJ
-         HRXD/79LtaHHslaEmWrKKYPnV2fFzf+vbPVJ/lA7lJULA97d9fl5IJlWVm3nJ0NBUzO7
-         LzUuFdtTbLNnvH7015qBr33WiDJ82fkVjKolEt5MpFe8QiOcVrKRrND2q4YyVWOldEoI
-         OSWw==
-X-Gm-Message-State: ANoB5pkBvX6yOkdWXFUHE3NVANUl3B0YG3VEeNXwI77cfyB9mJ6nXs6l
-        eQhB8mtfm1ueAhswJl4Na8h9op/HsfTHRg2cg2yTOOhnlqk=
-X-Google-Smtp-Source: AA0mqf57yGmLoBnvvhGrWpWKkOSHlBQkM4Cadv4sz/Tocdkosl6Gp2yYDACuYMlP/LhWj7GpigOHueOZififfQBdTYE=
-X-Received: by 2002:a05:690c:c9a:b0:3ed:90d2:2ab8 with SMTP id
- cm26-20020a05690c0c9a00b003ed90d22ab8mr3864513ywb.67.1670248444418; Mon, 05
- Dec 2022 05:54:04 -0800 (PST)
+        Mon, 5 Dec 2022 08:56:08 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C290A257;
+        Mon,  5 Dec 2022 05:56:06 -0800 (PST)
+Received: from dggpemm500015.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NQlMw6TZ2zqSt9;
+        Mon,  5 Dec 2022 21:51:56 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
+ (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 5 Dec
+ 2022 21:56:04 +0800
+From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
+CC:     <liwei391@huawei.com>, <marcel@holtmann.org>,
+        <luiz.dentz@gmail.com>, <johan.hedberg@gmail.com>,
+        <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bobo.shaobowang@huawei.com>
+Subject: [PATCH] Bluetooth: btintel: Fix missing free skb in btintel_setup_combined()
+Date:   Mon, 5 Dec 2022 21:53:57 +0800
+Message-ID: <20221205135357.3961836-1-bobo.shaobowang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221202161502.385525-1-ojeda@kernel.org> <20221202161502.385525-28-ojeda@kernel.org>
- <Y4qNR+Nn9utDftHq@localhost> <20221204103153.117675b1@GaryWorkstation> <CANeycqpNW0E5fQqD1Qzqr0p-3cgs5k5KgLusragaSWbrmcx2Nw@mail.gmail.com>
-In-Reply-To: <CANeycqpNW0E5fQqD1Qzqr0p-3cgs5k5KgLusragaSWbrmcx2Nw@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 5 Dec 2022 14:53:53 +0100
-Message-ID: <CANiq72ns7U3mWxt=gZVPTHB49as5gaY7=kR5TmxGAoMQx3qgbA@mail.gmail.com>
-Subject: Re: [PATCH v2 27/28] rust: types: add `Either` type
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     Gary Guo <gary@garyguo.net>, Josh Triplett <josh@joshtriplett.org>,
-        ojeda@kernel.org, Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Wei Liu <wei.liu@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500015.china.huawei.com (7.185.36.181)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 4, 2022 at 6:36 PM Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
->
-> It's also implemented in `std`, which the kernel doesn't include.
-> (Which is actually good for us, since we can't really use it.)
+skb allocated by __hci_cmd_sync would not be used whether in checking
+for supported iBT hardware variants or after, we should free it in all
+error branches, this patch makes the case read version failed or default
+error case free skb before return.
 
-We have it around in the kernel (the `std` one is a re-export), so one
-"could" replace the `Either` with `Cow` in the case of the commit
-message via ignoring the to-owned side of it (but I assume Josh didn't
-mean to suggest that).
+Fixes: c86c7285bb08 ("Bluetooth: btintel: Fix the legacy bootloader returns tlv based version")
+Fixes: 019a1caa7fd2 ("Bluetooth: btintel: Refactoring setup routine for bootloader devices")
+Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+---
+ drivers/bluetooth/btintel.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Anyway, it can be easily configured out from our `alloc`, so I will
-send the patch.
+diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
+index a657e9a3e96a..f6b4b7a1be4c 100644
+--- a/drivers/bluetooth/btintel.c
++++ b/drivers/bluetooth/btintel.c
+@@ -2524,7 +2524,7 @@ static int btintel_setup_combined(struct hci_dev *hdev)
+ 		 */
+ 		err = btintel_read_version(hdev, &ver);
+ 		if (err)
+-			return err;
++			break;
+ 
+ 		/* Apply the device specific HCI quirks
+ 		 *
+@@ -2566,7 +2566,8 @@ static int btintel_setup_combined(struct hci_dev *hdev)
+ 	default:
+ 		bt_dev_err(hdev, "Unsupported Intel hw variant (%u)",
+ 			   INTEL_HW_VARIANT(ver_tlv.cnvi_bt));
+-		return -EINVAL;
++		err = -EINVAL;
++		break;
+ 	}
+ 
+ exit_error:
+-- 
+2.25.1
 
-Cheers,
-Miguel
