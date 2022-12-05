@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE3A6429C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70866429CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbiLENnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S231535AbiLENof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbiLENnW (ORCPT
+        with ESMTP id S231906AbiLENoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:43:22 -0500
+        Mon, 5 Dec 2022 08:44:00 -0500
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BA51B1EA;
-        Mon,  5 Dec 2022 05:42:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626E91DF05;
+        Mon,  5 Dec 2022 05:43:25 -0800 (PST)
 Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id E6ABCFF808;
-        Mon,  5 Dec 2022 13:42:40 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 94B6DFF80A;
+        Mon,  5 Dec 2022 13:42:52 +0000 (UTC)
 From:   Quentin Schulz <foss+kernel@0leil.net>
 To:     Samuel Holland <samuel@sholland.org>,
         Bastien Nocera <hadess@hadess.net>,
@@ -54,9 +54,9 @@ Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v3 8/9] arm64: dts: qcom: msm8998-fxtec: fix touchscreen reset GPIO polarity
-Date:   Mon,  5 Dec 2022 14:40:37 +0100
-Message-Id: <20221103-upstream-goodix-reset-v3-8-0975809eb183@theobroma-systems.com>
+Subject: [PATCH v3 9/9] arm64: dts: rockchip: fix touchscreen reset GPIO polarity
+Date:   Mon,  5 Dec 2022 14:40:38 +0100
+Message-Id: <20221103-upstream-goodix-reset-v3-9-0975809eb183@theobroma-systems.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
 References: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
@@ -80,22 +80,50 @@ let's fix the polarity in the Device Tree node.
 
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/px30-evb.dts          | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
-index 429ba57e20f71..8f738cade2652 100644
---- a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
-@@ -249,7 +249,7 @@ touchscreen@14 {
- 		reg = <0x14>;
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <125 IRQ_TYPE_LEVEL_LOW>;
--		reset-gpios = <&tlmm 89 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&tlmm 89 GPIO_ACTIVE_LOW>;
- 		AVDD28-supply = <&vreg_l28_3p0>;
- 		VDDIO-supply = <&ts_vio_vreg>;
- 		pinctrl-names = "active";
+diff --git a/arch/arm64/boot/dts/rockchip/px30-evb.dts b/arch/arm64/boot/dts/rockchip/px30-evb.dts
+index c1bbd555f5f5b..2087dc7299446 100644
+--- a/arch/arm64/boot/dts/rockchip/px30-evb.dts
++++ b/arch/arm64/boot/dts/rockchip/px30-evb.dts
+@@ -420,7 +420,7 @@ touchscreen@14 {
+ 		interrupt-parent = <&gpio0>;
+ 		interrupts = <RK_PA5 IRQ_TYPE_LEVEL_LOW>;
+ 		irq-gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+-		reset-gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_LOW>;
+ 		VDDIO-supply = <&vcc3v3_lcd>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
+index 78157521e9449..e63491fb443be 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
+@@ -588,7 +588,7 @@ touch: touchscreen@5d {
+ 		AVDD28-supply = <&vcc3v0_touch>;
+ 		VDDIO-supply = <&vcc3v0_touch>;
+ 		irq-gpios = <&gpio4 RK_PD5 GPIO_ACTIVE_HIGH>;
+-		reset-gpios = <&gpio4 RK_PD6 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio4 RK_PD6 GPIO_ACTIVE_LOW>;
+ 		status = "disabled";
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+index 674792567fa6e..234531aaa430a 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+@@ -495,7 +495,7 @@ touchscreen0: goodix@14 {
+ 		irq-gpios = <&gpio0 RK_PB5 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&touch_int &touch_rst>;
+-		reset-gpios = <&gpio0 RK_PB6 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio0 RK_PB6 GPIO_ACTIVE_LOW>;
+ 		VDDIO-supply = <&vcc3v3_lcd0_n>;
+ 	};
+ };
 
 -- 
 b4 0.10.1
