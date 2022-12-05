@@ -2,105 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99D064276B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D34F642770
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiLELXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S230348AbiLELZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiLELWx (ORCPT
+        with ESMTP id S230199AbiLELZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:22:53 -0500
-Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C56B8E46;
-        Mon,  5 Dec 2022 03:22:48 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.81.81.211])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by gw.red-soft.ru (Postfix) with ESMTPSA id 65B053E606E;
-        Mon,  5 Dec 2022 14:22:45 +0300 (MSK)
-Date:   Mon, 5 Dec 2022 14:22:44 +0300
-From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Vishnu Dasa <vdasa@vmware.com>, Bryan Tan <bryantan@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] net: vmw_vsock: vmci: Check memcpy_from_msg()
-Message-ID: <Y43UhNq/WQEuTD8V@localhost.localdomain>
-References: <702BBCBE-6E80-4B12-A996-4A2CB7C66D70@vmware.com>
- <20221203083312.923029-1-artem.chernyshev@red-soft.ru>
- <20221205094736.k3yuwk7emijpitvw@sgarzare-redhat>
+        Mon, 5 Dec 2022 06:25:13 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2A518370
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:25:12 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id s7so10492032plk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gzsdjxu1gCYjvJoIlo2hP0aqa93HSENNGWpI+E9CGjY=;
+        b=tpEexnwFRGkb1KbxPqMlTsJTN39PCdViVwSkP+44hJ3ZBeWB0EN2OMM7+5CGpPJwtR
+         /8g29P8Z0iMyn2lm4gpDXh71eHjlPjOqqLtTXXZqBXOHoVnxT/iDSEj7DCWKICi8lJ2K
+         0z6HxAOeG0RZkuAD8nLcc6R8JXTa/uvNfusKhgJAi3PWZ6ei5wLgOa5fGULQd5jQ4fWh
+         LxDbZ4t+mZ/Pn1Tcv3f8IMflRXy6Nwd3Tbg3WX6Ui+2aujxkCWmGEpNvmK6KYUxzTYqs
+         IugI6EY5XKFMmy4QkKNEOSwWTT8MiLGRfiYrOUFLAt8J5Yf+1uj8RhZ9m5PBGx6uHHMw
+         AYHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gzsdjxu1gCYjvJoIlo2hP0aqa93HSENNGWpI+E9CGjY=;
+        b=lXk3UIgdJ0DFewmiL50PfHUmXt6lYbCPMSTdFVoi14IhorKotttD9E2cPaxLVVYoKY
+         Trj6V6MzFN4R0wthLpsECCZDaUlXydGTNQXxIqde00SVRP+11Dz2izzrb0bGKxvPUE9V
+         2+nFyA7AKzPi4quPpFGxSmOtTbiU6vTLk8OBUTcAfXmbxqhytwCycPr0pJ4KEAKP5ONo
+         8jBZgOoIqds/RIQGV1whVoG/9Ono4pVL/Vm7dCorHWvypwJ4jE8HaIwAL5uI2Vn+Ak5Q
+         SkfAJazQ7q0fZNPnhLNmt6t7Ro7H9wzhY/z8wrCHdvQ9x1lgHshMdnZj2U1YqfkCLE6s
+         XGeg==
+X-Gm-Message-State: ANoB5plluq3lKRtlt8XsVU7ZWewN/l9BlWmRWwMcAl3I0HqCOoL8jFxl
+        BcFR57hIYsjJ/NYIkvUW2ubL
+X-Google-Smtp-Source: AA0mqf5ePvaf+hXy28SJC//Y9oswW/nXG7qCNktZ4juFM9qAKAeXrVbbhPSSXUvOrFbS1BFP6RJeNA==
+X-Received: by 2002:a17:902:be17:b0:188:fbc5:b734 with SMTP id r23-20020a170902be1700b00188fbc5b734mr64659678pls.170.1670239511659;
+        Mon, 05 Dec 2022 03:25:11 -0800 (PST)
+Received: from thinkpad ([59.92.98.136])
+        by smtp.gmail.com with ESMTPSA id bd12-20020a170902830c00b001894198d0ebsm10317639plb.24.2022.12.05.03.25.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 03:25:10 -0800 (PST)
+Date:   Mon, 5 Dec 2022 16:55:00 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
+ max latencies
+Message-ID: <20221205112500.GB4514@thinkpad>
+References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221205094736.k3yuwk7emijpitvw@sgarzare-redhat>
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 173924 [Dec 05 2022]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;red-soft.ru:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2022/12/05 07:18:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2022/12/05 09:01:00 #20651080
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-On Mon, Dec 05, 2022 at 10:47:36AM +0100, Stefano Garzarella wrote:
-> On Sat, Dec 03, 2022 at 11:33:12AM +0300, Artem Chernyshev wrote:
-> > vmci_transport_dgram_enqueue() does not check the return value
-> > of memcpy_from_msg(). Return with an error if the memcpy fails.
-> > 
-> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> > 
-> > Fixes: 0f7db23a07af ("vmci_transport: switch ->enqeue_dgram, ->enqueue_stream and ->dequeue_stream to msghdr")
-> > Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
-> > ---
-> > V1->V2 Fix memory leaking and updates for description
-> > 
-> > net/vmw_vsock/vmci_transport.c | 5 ++++-
-> > 1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
-> > index 842c94286d31..c94c3deaa09d 100644
-> > --- a/net/vmw_vsock/vmci_transport.c
-> > +++ b/net/vmw_vsock/vmci_transport.c
-> > @@ -1711,7 +1711,10 @@ static int vmci_transport_dgram_enqueue(
-> > 	if (!dg)
-> > 		return -ENOMEM;
-> > 
-> > -	memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len);
-> > +	if (memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len)) {
-> > +		kfree(dg);
-> > +		return -EFAULT;
+On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
+> In ASPM driver, LTR threshold scale and value are updated based on
+> tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
+> LTR threshold scale and value are greater values than max snoop/non-snoop
+> value.
 > 
-> Since memcpy_from_msg() is a wrapper of copy_from_iter_full() that simply
-> returns -EFAULT in case of an error, perhaps it would be better here to
-> return the value of memcpy_from_msg() instead of wiring the error.
+> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
+> reported snoop/no-snoop values is greater than or equal to
+> LTR_L1.2_THRESHOLD value.
 > 
-> However in the end the behavior is the same, so even if you don't want to
-> change it I'll leave my R-b:
-> 
-> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> Thanks,
-> Stefano
+> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Thank you for review. Sure, I will change that in V3
+I take my Ack back... Sorry that I did not look into this patch closer.
 
-Artem
+> ---
+> 
+> I am taking this patch forward as prasad is no more working with our org.
+> changes since v6:
+> 	- Rebasing with pci/next.
+> changes since v5:
+> 	- no changes, just reposting as standalone patch instead of reply to
+> 	  previous patch.
+> Changes since v4:
+> 	- Replaced conditional statements with min and max.
+> changes since v3:
+> 	- Changed the logic to include this condition "snoop/nosnoop
+> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
+> Changes since v2:
+> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
+> Changes since v1:
+> 	- Added missing variable declaration in v1 patch
+> ---
+>  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index 928bf64..2bb8470 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  {
+>  	struct pci_dev *child = link->downstream, *parent = link->pdev;
+>  	u32 val1, val2, scale1, scale2;
+> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
+>  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+>  	u32 ctl1 = 0, ctl2 = 0;
+>  	u32 pctl1, pctl2, cctl1, cctl2;
+> +	u16 ltr;
+> +	u16 max_snoop_lat, max_nosnoop_lat;
+>  
+>  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+>  		return;
+>  
+> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
+> +	if (!ltr)
+> +		return;
+> +
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+> +
+> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	/* choose the greater max scale value between snoop and no snoop value*/
+> +	max_scale = max(max_snp_scale, max_nsnp_scale);
+> +
+> +	/* choose the greater max value between snoop and no snoop scales */
+> +	max_val = max(max_snp_val, max_nsnp_val);
+> +
+>  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+>  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+>  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  	 */
+>  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
+>  	encode_l12_threshold(l1_2_threshold, &scale, &value);
+> +
+> +	/*
+> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
+> +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
+
+Apart from the bug in calculating the LTR_Threshold as reported by Matthias
+and Bjorn, I'm wondering if we are covering up for the device firmware issue.
+
+As per section 6.18, if the device reports snoop/no-snoop scale/value as 0, then
+it implies that the device won't tolerate any additional delays from the host.
+
+In that case, how can we allow the link to go into L1.2 since that would incur
+high delay compared to L1.1?
+
+Thanks,
+Mani
+
+> +	 */
+> +	scale = min(scale, max_scale);
+> +	value = min(value, max_val);
+> +
+>  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+>  
+>  	/* Some broken devices only support dword access to L1 SS */
+> -- 
+> 2.7.4
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
