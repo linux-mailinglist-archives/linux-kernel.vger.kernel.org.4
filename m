@@ -2,132 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D1A642FA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1A3642FA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiLESOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S231687AbiLESPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiLESOB (ORCPT
+        with ESMTP id S231454AbiLESP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:14:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5402CC30
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:14:00 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2FyS-0002ph-5Y; Mon, 05 Dec 2022 19:13:52 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2FyO-002Wur-Ea; Mon, 05 Dec 2022 19:13:49 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2FyO-002qP9-DL; Mon, 05 Dec 2022 19:13:48 +0100
-Date:   Mon, 5 Dec 2022 19:13:48 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v12 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <20221205181348.3bvugpjr7xgf6uk5@pengutronix.de>
-References: <20221117164950.cssukd63fywzuwua@pengutronix.de>
- <Y3Zxkt3OSPQc46Q2@spud>
- <20221117210433.n5j7upqqksld42mu@pengutronix.de>
- <Y3avobkvYK3ydKTS@spud>
- <Y3uZY5mt/ZIWk3sS@wendy>
- <Y4coL74qQX80TNaT@wendy>
- <20221130103755.lhil2jaw3oufr2sf@pengutronix.de>
- <Y44Mk2nGu1Zeq7QQ@wendy>
- <20221205160328.wn4rcs6uxuuaxftd@pengutronix.de>
- <Y44mxp9Wr/aEdaxE@spud>
+        Mon, 5 Dec 2022 13:15:26 -0500
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC7A2036D;
+        Mon,  5 Dec 2022 10:15:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1670264119; bh=XVPKkuLGeYz5mLqD1WBfE0UuvVM2oX5DVgXJT9tVBkQ=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=Km25UcmR+GYuyNmPwkIUcK26v4T7Pb5bdUehlqxgOfD474bB/nVk08jgTuJFGGRs0
+         d8xVcN0UuEfSNROApkPTRUo2jd1iOtIbqMqHafHlXDtp9WcrgMFsUg/v2zRxY1tBBQ
+         2qWkgeezJdXrgY2Y5groJgpv5zyjaLWiLS8ebypc=
+Date:   Mon, 5 Dec 2022 19:15:19 +0100
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Chukun Pan <amadeus@jmu.edu.cn>
+Cc:     aholmes@omnom.net, devicetree@vger.kernel.org,
+        ezequiel@vanguardiasur.com.ar, frank-w@public-files.de,
+        frattaroli.nicolas@gmail.com, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, macromorgan@hotmail.com,
+        mark.kettenis@xs4all.nl, michael.riesch@wolfvision.net,
+        pgwipeout@gmail.com, robh+dt@kernel.org, robin.murphy@arm.com,
+        s.hauer@pengutronix.de, yifeng.zhao@rock-chips.com
+Subject: Re: [PATCH 1/1] arm64: dts: rockchip: rk356x: Fix PCIe register and
+ range mappings
+Message-ID: <20221205181519.7e5diejvhiynqmv5@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Chukun Pan <amadeus@jmu.edu.cn>, aholmes@omnom.net,
+        devicetree@vger.kernel.org, ezequiel@vanguardiasur.com.ar,
+        frank-w@public-files.de, frattaroli.nicolas@gmail.com,
+        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, macromorgan@hotmail.com,
+        mark.kettenis@xs4all.nl, michael.riesch@wolfvision.net,
+        pgwipeout@gmail.com, robh+dt@kernel.org, robin.murphy@arm.com,
+        s.hauer@pengutronix.de, yifeng.zhao@rock-chips.com
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20221112114125.1637543-2-aholmes@omnom.net>
+ <20221205162322.149967-1-amadeus@jmu.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kjxhhs4q4yv2cfmm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y44mxp9Wr/aEdaxE@spud>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221205162322.149967-1-amadeus@jmu.edu.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 06, 2022 at 12:23:22AM +0800, Chukun Pan wrote:
+> > The register and range mappings for the PCIe controller in Rockchip's
+> > RK356x SoCs are incorrect. Replace them with corrected values from the
+> > vendor BSP sources, updated to match current DT schema.
+> 
+> Hi, Andrew
+> 
+> This patch broken pcie3x2 on my board.
 
---kjxhhs4q4yv2cfmm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's because 32bit mapping for pcie3x2 config should start at 0xf0000000 and
+the patch declares it incorrectly at 0xf2000000.
 
-Hello Conor,
+https://megous.com/dl/tmp/6d1a04195112b1e0.png
 
-On Mon, Dec 05, 2022 at 05:13:42PM +0000, Conor Dooley wrote:
-> Figured I was better off doing something quickly & asking rather than
-> polishing only to find out it was disliked ;)
+> And the wireless card on pcie2x1 is still not working.
 
-:-)
+> [    0.405341] pcieport 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
+> [    0.670522] rockchip-dw-pcie 3c0800000.pcie: can't request region for resource [mem 0xf2000000-0xf2ffffff]
+> [    0.671527] rockchip-dw-pcie: probe of 3c0800000.pcie failed with error -16
+> [    7.354521] pci 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
+> [    7.355116] mt7921e 0000:01:00.0: enabling device (0000 -> 0002)
+> [    7.355812] mt7921e: probe of 0000:01:00.0 failed with error -28
 
-> >  - in .apply() check the current time, add the current period and store
-> >    the result to ddata->updatetimestamp
-> >  - in .get_state do:
-> >      if (current_time >=3D ddata->updatetimestamp)
-> >        process fine
-> >      else:
-> >        timeout (or wait until ddata->updatetimestamp?)
-> >=20
-> > Actually I'd prefer to wait instead of -ETIMEOUT.
->=20
-> Prefer to wait in get_state() or in both it & apply()?
+That's ENOSPC. Who knows where it's comming from. Something for you to debug. ;)
 
-Prefer to wait where it's necessary ...
-
-> Depending on how far away updatetimestamp is, would we still not want to
-> time out if it is going to be a long time, no?
-
-I'd prefer a slow but right value over a quick error.
-
-The sun4i driver has in its .apply():
-
-        /* We need a full period to elapse before disabling the channel. */
-        delay_us =3D DIV_ROUND_UP_ULL(cstate.period, NSEC_PER_USEC);
-        if ((delay_us / 500) > MAX_UDELAY_MS)
-                msleep(delay_us / 1000 + 1);
-        else
-                usleep_range(delay_us, delay_us * 2);
-
-so it's at least not new in general to have a waiting time in O(period).
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kjxhhs4q4yv2cfmm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOONNkACgkQwfwUeK3K
-7AmE2wgAk2sWVpLdReSy1pSzeYCZ6ioUVHCTzslq0tljPK15BnT/FAMYPMhSozRS
-I6ZEmm3iRyJ4TiOgFbUVYIpNIe4UUvrAA8kfQ5zViM3mKKL9zXdpRXaG+cQPwl+p
-RM8KE2Yzd9wJWFCwx951zMBGxCfIqj2I06vCnBbi2rbBUzZbMy5dzFiyw/IKaMiv
-u8ylSqijubQSOQQ7gsZbp2MqpZO2ZH1IAdFyCslAeIoIUo6I9UnGLJS0fYG6fmLX
-2iMjTiml+SfLnob6YfDQiwTLv+WOOVPhDwmx0f/FCeugOftF5jyJyVIy+TJ9EB9m
-/c9nw3rglCUesb6zI6guMd7nlr5ZqQ==
-=OBsk
------END PGP SIGNATURE-----
-
---kjxhhs4q4yv2cfmm--
+regards,
+	o.
+> 
+> --
+> Thanks,
+> Chukun
+> 
+> -- 
+> 2.25.1
+> 
