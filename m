@@ -2,130 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FAC642479
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2D36424A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbiLEIXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S231448AbiLEIcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbiLEIXd (ORCPT
+        with ESMTP id S232090AbiLEIbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:23:33 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 793A1165AD;
-        Mon,  5 Dec 2022 00:23:30 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.41:59286.703431701
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 6D6301002F0;
-        Mon,  5 Dec 2022 16:23:28 +0800 (CST)
-Received: from  ([123.150.8.42])
-        by gateway-153622-dep-6cffbd87dd-5n69v with ESMTP id 6754938087e943759d0a36285b07a169 for rostedt@goodmis.org;
-        Mon, 05 Dec 2022 16:23:29 CST
-X-Transaction-ID: 6754938087e943759d0a36285b07a169
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.42
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     rostedt@goodmis.org, mhiramat@kernel.org, arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v3 4/4] kernel/trace: remove calling regs_* when compiling HEXAGON
-Date:   Mon,  5 Dec 2022 16:30:17 +0800
-Message-Id: <1670229017-4106-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 5 Dec 2022 03:31:51 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8018015FFE;
+        Mon,  5 Dec 2022 00:31:49 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NQcGW6NKcz4xVnH;
+        Mon,  5 Dec 2022 16:31:47 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B58VblG050005;
+        Mon, 5 Dec 2022 16:31:37 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Mon, 5 Dec 2022 16:31:39 +0800 (CST)
+Date:   Mon, 5 Dec 2022 16:31:39 +0800 (CST)
+X-Zmail-TransId: 2af9638dac6bfffffffffe6c3a82
+X-Mailer: Zmail v1.0
+Message-ID: <202212051631391777945@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <deller@gmx.de>
+Cc:     <javierm@redhat.com>, <tzimmermann@suse.de>,
+        <geert+renesas@glider.be>, <linux-fbdev@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjNdIGZiZGV2OiB1c2Ugc3lzZnNfZW1pdCgpIHRvIGluc3RlYWQgb2Ygc2NucHJpbnRmKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B58VblG050005
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 638DAC73.000 by FangMail milter!
+X-FangMail-Envelope: 1670229107/4NQcGW6NKcz4xVnH/638DAC73.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638DAC73.000/4NQcGW6NKcz4xVnH
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot reports below errors:
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-In file included from kernel/trace/trace_events_synth.c:22:
->> kernel/trace/trace_probe_kernel.h:203:9: error: call to
-undeclared function 'regs_get_register'; ISO C99 and later
-do not support implicit function declarations
-[-Wimplicit-function-declaration]
-                   val = regs_get_register(regs, code->param);
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-HEXAGON doesn't define and implement those reg_* functions
-underneath arch/hexagon as well as other archs. To remove
-those errors, i have to include those function calls in
-"CONFIG_HEXAGON"
-
-It looks ugly, but i don't know any other way to fix it,
-this patch can be reverted after reg_* have been in place
-in arch/hexagon.
-
-Signed-off-by: Song Chen <chensong_2000@189.cn>
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- kernel/trace/trace_probe_kernel.h | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+v2 -> v3
+Fix the mistakes in v2.
+ drivers/video/fbdev/sh_mobile_lcdcfb.c |  8 ++++----
+ drivers/video/fbdev/uvesafb.c          | 10 +++++-----
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-index 8c42abe0dacf..7e958b7f07e5 100644
---- a/kernel/trace/trace_probe_kernel.h
-+++ b/kernel/trace/trace_probe_kernel.h
-@@ -130,8 +130,7 @@ probe_mem_read(void *dest, void *src, size_t size)
- 	return copy_from_kernel_nofault(dest, src, size);
+diff --git a/drivers/video/fbdev/sh_mobile_lcdcfb.c b/drivers/video/fbdev/sh_mobile_lcdcfb.c
+index 6d00893d41f4..ad9323ed8e2e 100644
+--- a/drivers/video/fbdev/sh_mobile_lcdcfb.c
++++ b/drivers/video/fbdev/sh_mobile_lcdcfb.c
+@@ -1188,7 +1188,7 @@ overlay_alpha_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->alpha);
++	return sysfs_emit(buf, "%u\n", ovl->alpha);
  }
- 
--static nokprobe_inline unsigned long
--get_event_field(struct fetch_insn *code, void *rec)
-+static unsigned long get_event_field(struct fetch_insn *code, void *rec)
- {
- 	struct ftrace_event_field *field = code->data;
- 	unsigned long val;
-@@ -194,23 +193,41 @@ static int
- process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
- 		   void *base)
- {
-+#ifndef CONFIG_HEXAGON
- 	struct pt_regs *regs = rec;
-+#endif
- 	unsigned long val;
- 
- retry:
- 	/* 1st stage: get value from context */
- 	switch (code->op) {
- 	case FETCH_OP_REG:
-+#ifdef CONFIG_HEXAGON
-+		val = 0;
-+#else
- 		val = regs_get_register(regs, code->param);
-+#endif
- 		break;
- 	case FETCH_OP_STACK:
-+#ifdef CONFIG_HEXAGON
-+		val = 0;
-+#else
- 		val = regs_get_kernel_stack_nth(regs, code->param);
-+#endif
- 		break;
- 	case FETCH_OP_STACKP:
-+#ifdef CONFIG_HEXAGON
-+		val = 0;
-+#else
- 		val = kernel_stack_pointer(regs);
-+#endif
- 		break;
- 	case FETCH_OP_RETVAL:
-+#ifdef CONFIG_HEXAGON
-+		val = 0;
-+#else
- 		val = regs_return_value(regs);
-+#endif
- 		break;
- 	case FETCH_OP_IMM:
- 		val = code->immediate;
+
+ static ssize_t
+@@ -1226,7 +1226,7 @@ overlay_mode_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->mode);
++	return sysfs_emit(buf, "%u\n", ovl->mode);
+ }
+
+ static ssize_t
+@@ -1265,7 +1265,7 @@ overlay_position_show(struct device *dev, struct device_attribute *attr,
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d,%d\n", ovl->pos_x, ovl->pos_y);
++	return sysfs_emit(buf, "%d,%d\n", ovl->pos_x, ovl->pos_y);
+ }
+
+ static ssize_t
+@@ -1306,7 +1306,7 @@ overlay_rop3_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->rop3);
++	return sysfs_emit(buf, "%u\n", ovl->rop3);
+ }
+
+ static ssize_t
+diff --git a/drivers/video/fbdev/uvesafb.c b/drivers/video/fbdev/uvesafb.c
+index 00d789b6c0fa..ba8028a0cc7a 100644
+--- a/drivers/video/fbdev/uvesafb.c
++++ b/drivers/video/fbdev/uvesafb.c
+@@ -1580,7 +1580,7 @@ static ssize_t uvesafb_show_vendor(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_vendor_name_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
++		return sysfs_emit(buf, "%s\n", (char *)
+ 			(&par->vbe_ib) + par->vbe_ib.oem_vendor_name_ptr);
+ 	else
+ 		return 0;
+@@ -1595,7 +1595,7 @@ static ssize_t uvesafb_show_product_name(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_product_name_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
++		return sysfs_emit(buf, "%s\n", (char *)
+ 			(&par->vbe_ib) + par->vbe_ib.oem_product_name_ptr);
+ 	else
+ 		return 0;
+@@ -1610,7 +1610,7 @@ static ssize_t uvesafb_show_product_rev(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_product_rev_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
++		return sysfs_emit(buf, "%s\n", (char *)
+ 			(&par->vbe_ib) + par->vbe_ib.oem_product_rev_ptr);
+ 	else
+ 		return 0;
+@@ -1625,7 +1625,7 @@ static ssize_t uvesafb_show_oem_string(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_string_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n",
++		return sysfs_emit(buf, "%s\n",
+ 			(char *)(&par->vbe_ib) + par->vbe_ib.oem_string_ptr);
+ 	else
+ 		return 0;
+@@ -1639,7 +1639,7 @@ static ssize_t uvesafb_show_nocrtc(struct device *dev,
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct uvesafb_par *par = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", par->nocrtc);
++	return sysfs_emit(buf, "%d\n", par->nocrtc);
+ }
+
+ static ssize_t uvesafb_store_nocrtc(struct device *dev,
 -- 
 2.25.1
-
