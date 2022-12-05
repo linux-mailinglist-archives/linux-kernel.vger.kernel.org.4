@@ -2,81 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D34F642770
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF6064277C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiLELZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S230375AbiLEL24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiLELZN (ORCPT
+        with ESMTP id S229753AbiLEL2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:25:13 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2A518370
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:25:12 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id s7so10492032plk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:25:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gzsdjxu1gCYjvJoIlo2hP0aqa93HSENNGWpI+E9CGjY=;
-        b=tpEexnwFRGkb1KbxPqMlTsJTN39PCdViVwSkP+44hJ3ZBeWB0EN2OMM7+5CGpPJwtR
-         /8g29P8Z0iMyn2lm4gpDXh71eHjlPjOqqLtTXXZqBXOHoVnxT/iDSEj7DCWKICi8lJ2K
-         0z6HxAOeG0RZkuAD8nLcc6R8JXTa/uvNfusKhgJAi3PWZ6ei5wLgOa5fGULQd5jQ4fWh
-         LxDbZ4t+mZ/Pn1Tcv3f8IMflRXy6Nwd3Tbg3WX6Ui+2aujxkCWmGEpNvmK6KYUxzTYqs
-         IugI6EY5XKFMmy4QkKNEOSwWTT8MiLGRfiYrOUFLAt8J5Yf+1uj8RhZ9m5PBGx6uHHMw
-         AYHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzsdjxu1gCYjvJoIlo2hP0aqa93HSENNGWpI+E9CGjY=;
-        b=lXk3UIgdJ0DFewmiL50PfHUmXt6lYbCPMSTdFVoi14IhorKotttD9E2cPaxLVVYoKY
-         Trj6V6MzFN4R0wthLpsECCZDaUlXydGTNQXxIqde00SVRP+11Dz2izzrb0bGKxvPUE9V
-         2+nFyA7AKzPi4quPpFGxSmOtTbiU6vTLk8OBUTcAfXmbxqhytwCycPr0pJ4KEAKP5ONo
-         8jBZgOoIqds/RIQGV1whVoG/9Ono4pVL/Vm7dCorHWvypwJ4jE8HaIwAL5uI2Vn+Ak5Q
-         SkfAJazQ7q0fZNPnhLNmt6t7Ro7H9wzhY/z8wrCHdvQ9x1lgHshMdnZj2U1YqfkCLE6s
-         XGeg==
-X-Gm-Message-State: ANoB5plluq3lKRtlt8XsVU7ZWewN/l9BlWmRWwMcAl3I0HqCOoL8jFxl
-        BcFR57hIYsjJ/NYIkvUW2ubL
-X-Google-Smtp-Source: AA0mqf5ePvaf+hXy28SJC//Y9oswW/nXG7qCNktZ4juFM9qAKAeXrVbbhPSSXUvOrFbS1BFP6RJeNA==
-X-Received: by 2002:a17:902:be17:b0:188:fbc5:b734 with SMTP id r23-20020a170902be1700b00188fbc5b734mr64659678pls.170.1670239511659;
-        Mon, 05 Dec 2022 03:25:11 -0800 (PST)
-Received: from thinkpad ([59.92.98.136])
-        by smtp.gmail.com with ESMTPSA id bd12-20020a170902830c00b001894198d0ebsm10317639plb.24.2022.12.05.03.25.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 03:25:10 -0800 (PST)
-Date:   Mon, 5 Dec 2022 16:55:00 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org, quic_vbadigan@quicinc.com,
-        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
- max latencies
-Message-ID: <20221205112500.GB4514@thinkpad>
-References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Mon, 5 Dec 2022 06:28:54 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6241F10569
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:28:53 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NQhBr0D8xz4xVnH;
+        Mon,  5 Dec 2022 19:28:52 +0800 (CST)
+Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
+        by mse-fl1.zte.com.cn with SMTP id 2B5BShdT045660;
+        Mon, 5 Dec 2022 19:28:43 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Mon, 5 Dec 2022 19:28:46 +0800 (CST)
+Date:   Mon, 5 Dec 2022 19:28:46 +0800 (CST)
+X-Zmail-TransId: 2b04638dd5ee1219271f
+X-Mailer: Zmail v1.0
+Message-ID: <202212051928467539184@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <w.d.hubbs@gmail.com>
+Cc:     <chris@the-brannons.com>, <kirk@reisers.ca>,
+        <samuel.thibault@ens-lyon.org>, <mushi.shar@gmail.com>,
+        <speakup@linux-speakup.org>, <linux-kernel@vger.kernel.org>,
+        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIGFjY2Vzc2liaWxpdHk6IHNwZWFrdXA6IHVzZSBzdHJzY3B5KCkgdG8gaW5zdGVhZCBvZiBzdHJuY3B5KCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B5BShdT045660
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 638DD5F4.000 by FangMail milter!
+X-FangMail-Envelope: 1670239732/4NQhBr0D8xz4xVnH/638DD5F4.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638DD5F4.000/4NQhBr0D8xz4xVnH
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,114 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
-> In ASPM driver, LTR threshold scale and value are updated based on
-> tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
-> LTR threshold scale and value are greater values than max snoop/non-snoop
-> value.
-> 
-> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> reported snoop/no-snoop values is greater than or equal to
-> LTR_L1.2_THRESHOLD value.
-> 
-> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+From: Xu Panda <xu.panda@zte.com.cn>
 
-I take my Ack back... Sorry that I did not look into this patch closer.
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL terminated strings.
+---
+change for v2
+ - fix the mistake of eating one character when len > 250,
+thanks to Samuel Thibault.
+---
 
-> ---
-> 
-> I am taking this patch forward as prasad is no more working with our org.
-> changes since v6:
-> 	- Rebasing with pci/next.
-> changes since v5:
-> 	- no changes, just reposting as standalone patch instead of reply to
-> 	  previous patch.
-> Changes since v4:
-> 	- Replaced conditional statements with min and max.
-> changes since v3:
-> 	- Changed the logic to include this condition "snoop/nosnoop
-> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> Changes since v2:
-> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> Changes since v1:
-> 	- Added missing variable declaration in v1 patch
-> ---
->  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 928bf64..2bb8470 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  {
->  	struct pci_dev *child = link->downstream, *parent = link->pdev;
->  	u32 val1, val2, scale1, scale2;
-> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
->  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
->  	u32 ctl1 = 0, ctl2 = 0;
->  	u32 pctl1, pctl2, cctl1, cctl2;
-> +	u16 ltr;
-> +	u16 max_snoop_lat, max_nosnoop_lat;
->  
->  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
->  		return;
->  
-> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> +	if (!ltr)
-> +		return;
-> +
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> +
-> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> +
-> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> +
-> +	/* choose the greater max scale value between snoop and no snoop value*/
-> +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> +
-> +	/* choose the greater max value between snoop and no snoop scales */
-> +	max_val = max(max_snp_val, max_nsnp_val);
-> +
->  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
->  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  	 */
->  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
->  	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> +
-> +	/*
-> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
+Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+---
+ drivers/accessibility/speakup/kobjects.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Apart from the bug in calculating the LTR_Threshold as reported by Matthias
-and Bjorn, I'm wondering if we are covering up for the device firmware issue.
-
-As per section 6.18, if the device reports snoop/no-snoop scale/value as 0, then
-it implies that the device won't tolerate any additional delays from the host.
-
-In that case, how can we allow the link to go into L1.2 since that would incur
-high delay compared to L1.1?
-
-Thanks,
-Mani
-
-> +	 */
-> +	scale = min(scale, max_scale);
-> +	value = min(value, max_val);
-> +
->  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->  
->  	/* Some broken devices only support dword access to L1 SS */
-> -- 
-> 2.7.4
-> 
-
+diff --git a/drivers/accessibility/speakup/kobjects.c b/drivers/accessibility/speakup/kobjects.c
+index a7522d409802..c1ef48280f3c 100644
+--- a/drivers/accessibility/speakup/kobjects.c
++++ b/drivers/accessibility/speakup/kobjects.c
+@@ -426,8 +426,7 @@ static ssize_t synth_direct_store(struct kobject *kobj,
+ 	spin_lock_irqsave(&speakup_info.spinlock, flags);
+ 	while (len > 0) {
+ 		bytes = min_t(size_t, len, 250);
+-		strncpy(tmp, ptr, bytes);
+-		tmp[bytes] = '\0';
++		strscpy(tmp, ptr, bytes + 1);
+ 		string_unescape_any_inplace(tmp);
+ 		synth_printf("%s", tmp);
+ 		ptr += bytes;
 -- 
-மணிவண்ணன் சதாசிவம்
+2.15.2
