@@ -2,263 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8747642800
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A46642809
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiLEMF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        id S231564AbiLEMHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiLEMFz (ORCPT
+        with ESMTP id S231529AbiLEMHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:05:55 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D918911158
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:05:53 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso14640012pjt.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 04:05:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=je642uC/QM2q2uiJ455cWQgJTQZ2s2VIKEuHkYSqLSY=;
-        b=FEmiEyAfYIdpKkVVrcM2myJBq9Gd26hAz6+4yOpADnvfMVE0aPesCBgx342rXF08lp
-         TCQyXF8GkzmtS6Z9YrWkolPOItK1xsEU+96tzXEDb1AlyAmzgDCo23jDO4Kl30xB1XIr
-         tkvIYPgXOQR4RxorORzC5LorpFYswRYs8vLVc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=je642uC/QM2q2uiJ455cWQgJTQZ2s2VIKEuHkYSqLSY=;
-        b=mRu0EEk8YAtFn3jzBC2G5V/khg9ScTWLer+WBHCWRCXHbZH7oz6aNcr2j40u2bAK3P
-         Q+73qks10QumfP5naD5uWT3cWIE7/m42VswuDKy5dNy2x8Ej1eTA/AciDaBkcSwbDdCJ
-         2V2ELmCakEdTgbnVpUwfndXCtGXp39XGPx7tQ9Llr6Po+oGeCVquoGdCAgkvGcLVDfqQ
-         t0G0W1lM55MuB9haXH84ZWKy5QR0ftDXlTQgfPRGua4laQuy7vv/H0qlu44bWNk5Hy8d
-         HN4T3rY/zm9IfnJQceIqTNXslGs/20TX8KWJQ6cC0L/5Gabsnobw3sp9wMkxrU3CO88q
-         s5xA==
-X-Gm-Message-State: ANoB5pkr5vcWj8cc52AaE0QUM4VURKYCR6KFtek1hYCoywxl/JeqTHQT
-        335tl9zvu+Aq/BYa2MF2DfhMeO9vS8CXmCa7
-X-Google-Smtp-Source: AA0mqf7fGY9tKDIgG5wnhwgCNONfsHChhhemsMKQcbsIRpiqV5wMsrUeGaQVuZ4b8MT6VVkR1gXhNg==
-X-Received: by 2002:a17:902:e544:b0:189:6c9c:259a with SMTP id n4-20020a170902e54400b001896c9c259amr47564536plf.157.1670241953124;
-        Mon, 05 Dec 2022 04:05:53 -0800 (PST)
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com. [209.85.210.170])
-        by smtp.gmail.com with ESMTPSA id 24-20020a631358000000b004393f60db36sm8204174pgt.32.2022.12.05.04.05.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 04:05:52 -0800 (PST)
-Received: by mail-pf1-f170.google.com with SMTP id n3so6865763pfq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 04:05:51 -0800 (PST)
-X-Received: by 2002:a17:902:7d93:b0:186:9cf4:e53b with SMTP id
- a19-20020a1709027d9300b001869cf4e53bmr68703080plm.50.1670241940337; Mon, 05
- Dec 2022 04:05:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
- <20221127-snd-freeze-v8-2-3bc02d09f2ce@chromium.org> <CAJZ5v0jbKSTQopEoXW9FpqDmAqp6Pn=-Om5QP2-7ocuGdq8R9w@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jbKSTQopEoXW9FpqDmAqp6Pn=-Om5QP2-7ocuGdq8R9w@mail.gmail.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 5 Dec 2022 13:05:29 +0100
-X-Gmail-Original-Message-ID: <CANiDSCt2+2EQpXvgQqTA3VwbfwDb=BsXn_YNcc05GK9xdTpVkA@mail.gmail.com>
-Message-ID: <CANiDSCt2+2EQpXvgQqTA3VwbfwDb=BsXn_YNcc05GK9xdTpVkA@mail.gmail.com>
-Subject: Re: [PATCH v8 2/3] freezer: refactor pm_freezing into a function.
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>, Mark Brown <broonie@kernel.org>,
-        Chromeos Kdump <chromeos-kdump@google.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joel Fernandes <joel@joelfernandes.org>,
+        Mon, 5 Dec 2022 07:07:13 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2048.outbound.protection.outlook.com [40.107.101.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE902120A8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:07:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PRAOcUca+ER+7YC1M83kpeE7NJNvYULRKz8pX1pLqXIvT/H1+EHiB87RM87PFSAfKEnyZqW7OfKnZRr85hBvwgrtuvTefyEyJcx7UeLl+6bkjST673VMITg22b1+Jy1h6oslyJ7WLKYkaDC8680410kOq6mTpGDxgm6qE7rCwTUuwqKQDAm2Ld/rlI8YPhAbahY1XyjSQCGx+Y5Q0D9aJLFd6GtwbOl8Lz7p8VSEU3nIpvU2L+bT3i4vafyxYOq981ZthLStMdtoOkdtASntHATZayFECyXSgeDuuH3AlHOSX08WJfu2pZvJvpay3apL+mQyXAzKTvQRdB/TEPR8Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vF/MdoHxIs/dNMRujRZ1nZS3C4cCmscams5Llrr0zHs=;
+ b=bGc79BXOuxhf9xR7k/1aQyeMxeSXaJ8LkuG7MYFa1jW3IPHdtpuCFJBiHF+EpC64fXjNwqtn9OQSSjKAGbJccGIrzD4rl1ypu60a/6joJlrgYelU/2g9UaQ+KqRGrnSQHUJxzLSXuU8ul9VxMC2A0N8tAo69ZMYqX1GJ0POl4moJfTcaTNm9uPEIbPO85qEUeduCPZQJ1tuOCN/Ti+oxwBqK3bKvP130RlEoRPYSn/YBeckF+FP2LAhAQedwUvpu7qSPUplDUq2eK0CPgcRkgwqOl1/WmGveTB3LlGEVab87JyeIlqGWPlrZ1zkSs4U6KNs1wHbLNOIqAmgqYTfJmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vF/MdoHxIs/dNMRujRZ1nZS3C4cCmscams5Llrr0zHs=;
+ b=MivUhBi/2dbvloIonxKTymLC+SgxhVEWwctEij/iVYsvmIQhnjpiyA0ZKnAxLQzoW3/KEM0qtBJZV9bDs04f5EGK84Qp5Av5tjM16lrWdtOmsR9lIFF2JA1tdRgNBuvONqwcWSRQSZnrgM5UIdU0jcbD9nmwFM9EshCqXxtlwc8=
+Received: from BN7PR06CA0052.namprd06.prod.outlook.com (2603:10b6:408:34::29)
+ by DS0PR12MB6533.namprd12.prod.outlook.com (2603:10b6:8:c2::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
+ 2022 12:07:10 +0000
+Received: from BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:34:cafe::ba) by BN7PR06CA0052.outlook.office365.com
+ (2603:10b6:408:34::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
+ Transport; Mon, 5 Dec 2022 12:07:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT048.mail.protection.outlook.com (10.13.177.117) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5880.8 via Frontend Transport; Mon, 5 Dec 2022 12:07:09 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Dec
+ 2022 06:06:52 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Dec
+ 2022 06:06:52 -0600
+Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
+ via Frontend Transport; Mon, 5 Dec 2022 06:06:46 -0600
+From:   V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>, <venkataprasad.potturu@amd.com>,
+        <ssabakar@amd.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
         Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        kexec@lists.infradead.org, alsa-devel@alsa-project.org,
-        stable@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] ASoC: SOF: amd: Use poll function instead to read ACP_SHA_DSP_FW_QUALIFIER
+Date:   Mon, 5 Dec 2022 17:36:48 +0530
+Message-ID: <20221205120649.1950576-2-Vsujithkumar.Reddy@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221205120649.1950576-1-Vsujithkumar.Reddy@amd.com>
+References: <20221205120649.1950576-1-Vsujithkumar.Reddy@amd.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT048:EE_|DS0PR12MB6533:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3685515d-02cc-46da-76cd-08dad6b93c93
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SXOCcG8NgnTSUSnG5j9Czl/TFlZAi7XnRZFw7kvHT02cfjhHHNMotfsPlDnLzaLGYzyPmldaI0Sf78DYeEFcVzxeC4cbt8+RuXnBuTml7cFUa43zOQhXgXBgF9J49PQVuJED612MKKcY5O0mV+8STk+rrVnkyTpZcaBsb/OS38n1+zXFD3dQXZ3Tt6NHij3aUq+p+OGeHpiSwTQ/TX5vON9ZUk2dluWC7VoBenoTwgpDL6Ex2Txc4VfWxi64QcYOuQoooD/u8ZLgaErXnHvHLygRb85CCnJPRyjcG3KbWBw2wtt/8F5++oJPDjYDnqqena7sJTG1qkrv2aSTmz5SrinTtkWfYxZjjdJJwIEEIxjD3lm7e/5SHaKjnqd2t2E3dFCslbTKOCNsAwRpb/IBHnCYLRTfSoxBfCe73B3P4g5G7z5qFLw15y/ZQMEi9CdRequ1quRVZ5Tegn711iDBgT7ntZh5oK+OHP0wdbSROB8e0CiRcaBwR89+GAnDYjMzd65K1kGsbgL7PlBeaPiCSWt5uy99g8S1GLZwpHMsJLlz1GZooy4fLfXa5M8HslgF4epGIg3MYhTik2fhaYgtIRzSzv8c6+T9BHnJkj9BUqqESp9jV3eKjM2ScppbWG4R6BEXnGEpJosObdzTsT2tA1Tpa+GzVGFuHG9edTSlqDIfOd6pvkrjKR2heTVLWSl9yeoAyXYNSIJHPvqxDfCrX7VpQDlXC5oSZg57pE7evt0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(346002)(39860400002)(136003)(451199015)(40470700004)(36840700001)(46966006)(2906002)(1076003)(41300700001)(7416002)(83380400001)(5660300002)(336012)(8936002)(47076005)(426003)(36860700001)(82310400005)(86362001)(40480700001)(36756003)(40460700003)(82740400003)(356005)(81166007)(26005)(316002)(110136005)(54906003)(7696005)(2616005)(186003)(4326008)(70206006)(70586007)(8676002)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 12:07:09.9468
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3685515d-02cc-46da-76cd-08dad6b93c93
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6533
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael
+From: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
 
-On Fri, 2 Dec 2022 at 18:48, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Dec 1, 2022 at 12:08 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
-> >
-> > Add a way to let the drivers know if the processes are frozen.
-> >
-> > This is needed by drivers that are waiting for processes to end on their
-> > shutdown path.
-> >
-> > Convert pm_freezing into a function and export it, so it can be used by
-> > drivers that are either built-in or modules.
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->
-> Why can't you export the original pm_freezing variable and why is this
-> fixing anything?
+The Skyrim project and Whiterun met error when DSP
+loading during device boot.
+Ex, error in kernel log,
+ERR kernel: [   16.124537] snd_sof_amd_rembrandt
+0000:04:00.5: PSP validation failed.
 
-Because then any module will be able to modify the content of the variable.
+Use the snd_sof_dsp_read_poll_timeout function to successfully
+read the FW_QUALIFIER register
 
-The Fixes: is because the last patch on the set is doing a real fix.
-If you only cherry-pick the last patch on a stable branch, the build
-will fail. (Also, the zero-day builder complains)
+Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+---
+ sound/soc/sof/amd/acp.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Anyway, I think we can hold this patch for a bit. The snd people are
-discussing if this the way to handle it, or if we should handle
-.shutdown in a different way.
+diff --git a/sound/soc/sof/amd/acp.c b/sound/soc/sof/amd/acp.c
+index 47115a77c92c..6bd2888fbb66 100644
+--- a/sound/soc/sof/amd/acp.c
++++ b/sound/soc/sof/amd/acp.c
+@@ -255,10 +255,12 @@ int configure_and_run_sha_dma(struct acp_dev_data *adata, void *image_addr,
+ 	if (ret)
+ 		return ret;
+ 
+-	fw_qualifier = snd_sof_dsp_read(sdev, ACP_DSP_BAR, ACP_SHA_DSP_FW_QUALIFIER);
+-	if (!(fw_qualifier & DSP_FW_RUN_ENABLE)) {
++	ret = snd_sof_dsp_read_poll_timeout(sdev, ACP_DSP_BAR, ACP_SHA_DSP_FW_QUALIFIER,
++					    fw_qualifier, fw_qualifier & DSP_FW_RUN_ENABLE,
++					    ACP_REG_POLL_INTERVAL, ACP_DMA_COMPLETE_TIMEOUT_US);
++	if (ret < 0) {
+ 		dev_err(sdev->dev, "PSP validation failed\n");
+-		return -EINVAL;
++		return ret;
+ 	}
+ 
+ 	return 0;
+-- 
+2.25.1
 
-Thanks!
-
-
->
-> > ---
-> >  include/linux/freezer.h |  3 ++-
-> >  kernel/freezer.c        |  3 +--
-> >  kernel/power/process.c  | 24 ++++++++++++++++++++----
-> >  3 files changed, 23 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/include/linux/freezer.h b/include/linux/freezer.h
-> > index b303472255be..3413c869d68b 100644
-> > --- a/include/linux/freezer.h
-> > +++ b/include/linux/freezer.h
-> > @@ -13,7 +13,7 @@
-> >  #ifdef CONFIG_FREEZER
-> >  DECLARE_STATIC_KEY_FALSE(freezer_active);
-> >
-> > -extern bool pm_freezing;               /* PM freezing in effect */
-> > +bool pm_freezing(void);
-> >  extern bool pm_nosig_freezing;         /* PM nosig freezing in effect */
-> >
-> >  /*
-> > @@ -80,6 +80,7 @@ static inline int freeze_processes(void) { return -ENOSYS; }
-> >  static inline int freeze_kernel_threads(void) { return -ENOSYS; }
-> >  static inline void thaw_processes(void) {}
-> >  static inline void thaw_kernel_threads(void) {}
-> > +static inline bool pm_freezing(void) { return false; }
-> >
-> >  static inline bool try_to_freeze(void) { return false; }
-> >
-> > diff --git a/kernel/freezer.c b/kernel/freezer.c
-> > index 4fad0e6fca64..2d3530ebdb7e 100644
-> > --- a/kernel/freezer.c
-> > +++ b/kernel/freezer.c
-> > @@ -20,7 +20,6 @@ EXPORT_SYMBOL(freezer_active);
-> >   * indicate whether PM freezing is in effect, protected by
-> >   * system_transition_mutex
-> >   */
-> > -bool pm_freezing;
-> >  bool pm_nosig_freezing;
-> >
-> >  /* protects freezing and frozen transitions */
-> > @@ -46,7 +45,7 @@ bool freezing_slow_path(struct task_struct *p)
-> >         if (pm_nosig_freezing || cgroup_freezing(p))
-> >                 return true;
-> >
-> > -       if (pm_freezing && !(p->flags & PF_KTHREAD))
-> > +       if (pm_freezing() && !(p->flags & PF_KTHREAD))
-> >                 return true;
-> >
-> >         return false;
-> > diff --git a/kernel/power/process.c b/kernel/power/process.c
-> > index ddd9988327fe..8a4d0e2c8c20 100644
-> > --- a/kernel/power/process.c
-> > +++ b/kernel/power/process.c
-> > @@ -108,6 +108,22 @@ static int try_to_freeze_tasks(bool user_only)
-> >         return todo ? -EBUSY : 0;
-> >  }
-> >
-> > +/*
-> > + * Indicate whether PM freezing is in effect, protected by
-> > + * system_transition_mutex.
-> > + */
-> > +static bool pm_freezing_internal;
-> > +
-> > +/**
-> > + * pm_freezing - indicate whether PM freezing is in effect.
-> > + *
-> > + */
-> > +bool pm_freezing(void)
-> > +{
-> > +       return pm_freezing_internal;
-> > +}
-> > +EXPORT_SYMBOL(pm_freezing);
->
-> Use EXPORT_SYMBOL_GPL() instead, please.
->
-> > +
-> >  /**
-> >   * freeze_processes - Signal user space processes to enter the refrigerator.
-> >   * The current thread will not be frozen.  The same process that calls
-> > @@ -126,12 +142,12 @@ int freeze_processes(void)
-> >         /* Make sure this task doesn't get frozen */
-> >         current->flags |= PF_SUSPEND_TASK;
-> >
-> > -       if (!pm_freezing)
-> > +       if (!pm_freezing())
-> >                 static_branch_inc(&freezer_active);
-> >
-> >         pm_wakeup_clear(0);
-> >         pr_info("Freezing user space processes ... ");
-> > -       pm_freezing = true;
-> > +       pm_freezing_internal = true;
-> >         error = try_to_freeze_tasks(true);
-> >         if (!error) {
-> >                 __usermodehelper_set_disable_depth(UMH_DISABLED);
-> > @@ -187,9 +203,9 @@ void thaw_processes(void)
-> >         struct task_struct *curr = current;
-> >
-> >         trace_suspend_resume(TPS("thaw_processes"), 0, true);
-> > -       if (pm_freezing)
-> > +       if (pm_freezing())
-> >                 static_branch_dec(&freezer_active);
-> > -       pm_freezing = false;
-> > +       pm_freezing_internal = false;
-> >         pm_nosig_freezing = false;
-> >
-> >         oom_killer_enable();
-> >
-> > --
->
-> --
-> You received this message because you are subscribed to the Google Groups "Chromeos Kdump" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to chromeos-kdump+unsubscribe@google.com.
-> To view this discussion on the web, visit https://groups.google.com/a/google.com/d/msgid/chromeos-kdump/CAJZ5v0jbKSTQopEoXW9FpqDmAqp6Pn%3D-Om5QP2-7ocuGdq8R9w%40mail.gmail.com.
-
-
-
---
-Ricardo Ribalda
