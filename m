@@ -2,208 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D51A6436DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8575C6436E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbiLEV15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S231941AbiLEVbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbiLEV1u (ORCPT
+        with ESMTP id S231262AbiLEVbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:27:50 -0500
-X-Greylist: delayed 626 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Dec 2022 13:27:48 PST
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E66565;
-        Mon,  5 Dec 2022 13:27:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1670275665;
-        bh=IForlXy/HN1JxKlZ7ZKBLkhWSJNsqziLiIPYlvcsIxA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=uOs7a9CfXS37lHi9FvVbkGXEunA7XgSgSmgrh7pDGJiiP2LpNCCDVdrMUx8iRsFHT
-         XFiBsfrD1jiaN2TaJ16lbXmvUpfiZZfy8xsSGD25DzSHPmD6aXMn9coSgMGkQ/cbha
-         uM10Oq33zyCHfUupKeG+SqIDX1UMTZ0Qjuhy/CRnE40OvpHDQcxsiSW3csjWlfexQB
-         MN8o2E8AoaG4EHDUOZ2Yr4FK3qhm6LJNKXnH5BFks8mxokZc5D0dcCcnmDlE8ngrNM
-         Gal+jmaxxj3TZUXtt6RljdJeAcNdhdgVj9PnohNDaPDCME6E4A6kYYgLekXNOpwEW4
-         tUkHWaNPIfwxA==
-Received: from [172.16.0.118] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NQxTr5nnNzZr4;
-        Mon,  5 Dec 2022 16:27:44 -0500 (EST)
-Message-ID: <acd9c1b1-e56f-e49c-6092-d53d51cd8d4c@efficios.com>
-Date:   Mon, 5 Dec 2022 16:28:03 -0500
+        Mon, 5 Dec 2022 16:31:38 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7802AE38
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 13:31:36 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id h10so15047897ljk.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 13:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C0rUlmndO2E/ya7/W2kNaF30jIqqkFDuo9iv4n+68BI=;
+        b=RxW2LPMU84D6KH3cYi8+xDXXAUGR5abv2zu/JtpTveZ6kiEd59T6hWVKRKEixh5oMX
+         h3B0AxoWd7g+i5qimYNmIlxmq97nFV5TeWR6e7PmRte5CqOHs7I1ve8DeLy7c2SjVoBr
+         sE5KVPeWjkInZUmVJ+Y5RgYS69G/MD7jLL6pXp1v7Slox6HlGAd7h2Xc1ENSAvU0AG7q
+         4/wb92gupoivat/bvPTrgPbRIyp2LKVEsCtcO0UF9XTDESN4QjJzS/oKtupCwP2waZjJ
+         U3PrHLeeom++gFwllis8I+HXWOVX94tJoOxWzMPRo6J/ZABBcSCc2hhjA3YyuAy7yn1h
+         9nuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C0rUlmndO2E/ya7/W2kNaF30jIqqkFDuo9iv4n+68BI=;
+        b=WkLd12HWN3+7QIFGaHsXo6g8ve+A03APX0fke6Ds6ZQOzQ9aMzZ7cqwt8vhvsDckQO
+         qAfazfQqnL8d4iEUi9hpUxqxvCCHS+TospzEMaYUv6NbGPkkwVSarW6RvfwIr8E21UNh
+         Lrdr7UxlqCHJ4QIhTruFcDTbM1mI5pSzRctQJBCVTfmuZc3r3Gke8cbSVS2pc0o0WiYX
+         hYNoRss4wajkAhm32uZyjFcTXCl5XS7crXZOS/qQI12NQ9iqkMXYwEBvPkfFwWk3cOeR
+         8e2h8uJm60DUb1Xz3bQGzp7jO7WZsfkTt9LAZvZr/KpX9XVCY3fPS1NXtDfKSoFZ/aHM
+         IVyA==
+X-Gm-Message-State: ANoB5pmSskUGe60ylwnMuEeNJBcQZxb1QnmekVvpZ3z4xb6orvQ7ROzz
+        jMdM3yKJMv+SO5LhcjackhbvQg==
+X-Google-Smtp-Source: AA0mqf74e5llFLxTAdly9h6nWapciB9LzijySzvHt6CzTwc3zWYkG3jyEhKRZ/k5Hg3v3CcngE9pkg==
+X-Received: by 2002:a2e:b55a:0:b0:27a:2d4:b641 with SMTP id a26-20020a2eb55a000000b0027a02d4b641mr1422327ljn.129.1670275894453;
+        Mon, 05 Dec 2022 13:31:34 -0800 (PST)
+Received: from [127.0.0.1] ([94.25.229.129])
+        by smtp.gmail.com with ESMTPSA id a27-20020ac2505b000000b004a44ffb1023sm2237293lfm.57.2022.12.05.13.31.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Dec 2022 13:31:34 -0800 (PST)
+Date:   Tue, 06 Dec 2022 00:29:13 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+CC:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 08/13] drm/msm/dp: Implement hpd_notify()
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221205174433.16847-9-quic_bjorande@quicinc.com>
+References: <20221205174433.16847-1-quic_bjorande@quicinc.com> <20221205174433.16847-9-quic_bjorande@quicinc.com>
+Message-ID: <4E586110-168A-4D47-966F-357DF042AFC7@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 03/11] tracing/user_events: Use remote writes for event
- enablement
-Content-Language: en-US
-To:     Beau Belgrave <beaub@linux.microsoft.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, dcook@linux.microsoft.com,
-        alanau@linux.microsoft.com, brauner@kernel.org,
-        akpm@linux-foundation.org
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221205210017.23440-1-beaub@linux.microsoft.com>
- <20221205210017.23440-4-beaub@linux.microsoft.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221205210017.23440-4-beaub@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-05 16:00, Beau Belgrave wrote:
-[...]
->   #ifdef CONFIG_USER_EVENTS
->   struct user_event_mm {
-> +	struct list_head link;
-> +	struct list_head enablers;
-> +	struct mm_struct *mm;
-> +	struct user_event_mm *next;
-> +	refcount_t refcnt;
-> +	refcount_t tasks;
->   };
-> -#endif
->   
-> +extern void user_event_mm_dup(struct task_struct *t,
-> +			      struct user_event_mm *old_mm);
-> +
-> +extern void user_event_mm_remove(struct task_struct *t);
-> +
-> +static inline void user_events_fork(struct task_struct *t,
-> +				    unsigned long clone_flags)
-> +{
-> +	struct user_event_mm *old_mm;
-> +
-> +	if (!t || !current->user_event_mm)
-> +		return;
-> +
-> +	old_mm = current->user_event_mm;
-> +
-> +	if (clone_flags & CLONE_VM) {
-> +		t->user_event_mm = old_mm;
-> +		refcount_inc(&old_mm->tasks);
-> +		return;
-> +	}
-> +
-> +	user_event_mm_dup(t, old_mm);
-> +}
-> +
-> +static inline void user_events_execve(struct task_struct *t)
-> +{
-> +	if (!t || !t->user_event_mm)
-> +		return;
-> +
-> +	user_event_mm_remove(t);
-> +}
-> +
-> +static inline void user_events_exit(struct task_struct *t)
-> +{
-> +	if (!t || !t->user_event_mm)
-> +		return;
-> +
-> +	user_event_mm_remove(t);
-> +}
-
-So this is adding user_event_mm_remove() calls on each execve and each 
-process exit, correct ?
-
-[...]
 
 
-> +
-> +void user_event_mm_remove(struct task_struct *t)
-> +{
-> +	struct user_event_mm *mm;
-> +	unsigned long flags;
-> +
-> +	might_sleep();
-> +
-> +	mm = t->user_event_mm;
-> +	t->user_event_mm = NULL;
-> +
-> +	/* Clone will increment the tasks, only remove if last clone */
-> +	if (!refcount_dec_and_test(&mm->tasks))
-> +		return;
-> +
-> +	/* Remove the mm from the list, so it can no longer be enabled */
-> +	spin_lock_irqsave(&user_event_mms_lock, flags);
-> +	list_del_rcu(&mm->link);
-> +	spin_unlock_irqrestore(&user_event_mms_lock, flags);
-> +
-> +	/*
-> +	 * Put for mm must be done after RCU sync to handle new refs in
-> +	 * between the list_del_rcu() and now. This ensures any get refs
-> +	 * during rcu_read_lock() are accounted for during list removal.
-> +	 *
-> +	 * CPU A			|	CPU B
-> +	 * ---------------------------------------------------------------
-> +	 * user_event_mm_remove()	|	rcu_read_lock();
-> +	 * list_del_rcu()		|	list_for_each_entry_rcu();
-> +	 * synchronize_rcu()		|	refcount_inc();
-> +	 * .				|	rcu_read_unlock();
-> +	 * user_event_mm_put()		|	.
-> +	 */
-> +	synchronize_rcu();
+On 5 December 2022 20:44:28 GMT+03:00, Bjorn Andersson <quic_bjorande@quic=
+inc=2Ecom> wrote:
+>From: Bjorn Andersson <bjorn=2Eandersson@linaro=2Eorg>
+>
+>The DisplayPort controller's hot-plug mechanism is based on pinmuxing a
+>physical signal on a GPIO pin into the controller=2E This is not always
+>possible, either because there aren't dedicated GPIOs available or
+>because the hot-plug signal is a virtual notification, in cases such as
+>USB Type-C=2E
+>
+>For these cases, by implementing the hpd_notify() callback for the
+>DisplayPort controller's drm_bridge, a downstream drm_bridge
+>(next_bridge) can be used to track and signal the connection status
+>changes=2E
+>
+>This makes it possible to use downstream drm_bridges such as
+>display-connector or any virtual mechanism, as long as they are
+>implemented as a drm_bridge=2E
+>
+>Signed-off-by: Bjorn Andersson <bjorn=2Eandersson@linaro=2Eorg>
+>[bjorn: Drop connector->fwnode assignment and dev from struct msm_dp]
+>Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc=2Ecom>
 
-This means a synchronize_rcu() is added on each execve and each process 
-exit ? I am really worried about the performance impact of this big 
-hammer synchronization in those key points of process lifetime.
+Reviewed-by: Dmitry Baryshkov <dmitry=2Ebaryshkov@linaro=2Eorg>
 
-Thanks,
+Minor nit: if for the next revision you reorder the patches to have hpd_en=
+able first, then missing conditions, then this patch, it will look more log=
+ical=2E
 
-Mathieu
+>---
+>
+>Changes since v3:
+>- None
+>
+> drivers/gpu/drm/msm/dp/dp_display=2Ec | 22 ++++++++++++++++++++++
+> drivers/gpu/drm/msm/dp/dp_drm=2Ec     |  1 +
+> drivers/gpu/drm/msm/dp/dp_drm=2Eh     |  2 ++
+> 3 files changed, 25 insertions(+)
+>
+>diff --git a/drivers/gpu/drm/msm/dp/dp_display=2Ec b/drivers/gpu/drm/msm/=
+dp/dp_display=2Ec
+>index 666b45c8ab80=2E=2E17fcf8cd84cd 100644
+>--- a/drivers/gpu/drm/msm/dp/dp_display=2Ec
+>+++ b/drivers/gpu/drm/msm/dp/dp_display=2Ec
+>@@ -1772,3 +1772,25 @@ void dp_bridge_mode_set(struct drm_bridge *drm_bri=
+dge,
+> 	dp_display->dp_mode=2Eh_active_low =3D
+> 		!!(dp_display->dp_mode=2Edrm_mode=2Eflags & DRM_MODE_FLAG_NHSYNC);
+> }
+>+
+>+void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+>+			  enum drm_connector_status status)
+>+{
+>+	struct msm_dp_bridge *dp_bridge =3D to_dp_bridge(bridge);
+>+	struct msm_dp *dp_display =3D dp_bridge->dp_display;
+>+	struct dp_display_private *dp =3D container_of(dp_display, struct dp_di=
+splay_private, dp_display);
+>+
+>+	/* Without next_bridge interrupts are handled by the DP core directly *=
+/
+>+	if (!dp_display->next_bridge)
+>+		return;
+>+
+>+	if (!dp->core_initialized) {
+>+		drm_dbg_dp(dp->drm_dev, "not initialized\n");
+>+		return;
+>+	}
+>+
+>+	if (!dp_display->is_connected && status =3D=3D connector_status_connect=
+ed)
+>+		dp_add_event(dp, EV_HPD_PLUG_INT, 0, 0);
+>+	else if (dp_display->is_connected && status =3D=3D connector_status_dis=
+connected)
+>+		dp_add_event(dp, EV_HPD_UNPLUG_INT, 0, 0);
+>+}
+>diff --git a/drivers/gpu/drm/msm/dp/dp_drm=2Ec b/drivers/gpu/drm/msm/dp/d=
+p_drm=2Ec
+>index 6db82f9b03af=2E=2E3898366ebd5e 100644
+>--- a/drivers/gpu/drm/msm/dp/dp_drm=2Ec
+>+++ b/drivers/gpu/drm/msm/dp/dp_drm=2Ec
+>@@ -102,6 +102,7 @@ static const struct drm_bridge_funcs dp_bridge_ops =
+=3D {
+> 	=2Eget_modes    =3D dp_bridge_get_modes,
+> 	=2Edetect       =3D dp_bridge_detect,
+> 	=2Eatomic_check =3D dp_bridge_atomic_check,
+>+	=2Ehpd_notify   =3D dp_bridge_hpd_notify,
+> };
+>=20
+> struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_=
+device *dev,
+>diff --git a/drivers/gpu/drm/msm/dp/dp_drm=2Eh b/drivers/gpu/drm/msm/dp/d=
+p_drm=2Eh
+>index 82035dbb0578=2E=2E79e6b2cf2d25 100644
+>--- a/drivers/gpu/drm/msm/dp/dp_drm=2Eh
+>+++ b/drivers/gpu/drm/msm/dp/dp_drm=2Eh
+>@@ -32,5 +32,7 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_br=
+idge *bridge,
+> void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
+> 			const struct drm_display_mode *mode,
+> 			const struct drm_display_mode *adjusted_mode);
+>+void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+>+			  enum drm_connector_status status);
+>=20
+> #endif /* _DP_DRM_H_ */
 
-> +
-> +	/*
-> +	 * We need to wait for currently occurring writes to stop within
-> +	 * the mm. This is required since exit_mm() snaps the current rss
-> +	 * stats and clears them. On the final mmdrop(), check_mm() will
-> +	 * report a bug if these increment.
-> +	 *
-> +	 * All writes/pins are done under mmap_read lock, take the write
-> +	 * lock to ensure in-progress faults have completed. Faults that
-> +	 * are pending but yet to run will check the task count and skip
-> +	 * the fault since the mm is going away.
-> +	 */
-> +	mmap_write_lock(mm->mm);
-> +	mmap_write_unlock(mm->mm);
-> +
-> +	/* MM is still alive, but won't be updated anymore */
-> +	user_event_mm_put(mm);
-> +}
-> +
-> +void user_event_mm_dup(struct task_struct *t, struct user_event_mm *old_mm)
->   {
-> -	int i = user->index;
-> +	struct user_event_mm *mm = user_event_mm_create(t);
-> +	struct user_event_enabler *enabler;
-> +
-> +	if (!mm)
-> +		return;
-> +
-> +	rcu_read_lock();
->   
-> -	user->group->register_page_data[MAP_STATUS_BYTE(i)] |= MAP_STATUS_MASK(i);
-> +	list_for_each_entry_rcu(enabler, &old_mm->enablers, link)
-> +		if (!user_event_enabler_dup(enabler, mm))
-> +			goto error;
-> +
-> +	rcu_read_unlock();
-> +
-> +	return;
-> +error:
-> +	rcu_read_unlock();
-> +	user_event_mm_remove(t);
->   }
->   
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+--=20
+With best wishes
+Dmitry
