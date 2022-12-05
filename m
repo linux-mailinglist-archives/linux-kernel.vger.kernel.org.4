@@ -2,798 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF18642CF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA1D642CED
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbiLEQe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:34:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
+        id S232897AbiLEQe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbiLEQds (ORCPT
+        with ESMTP id S232128AbiLEQdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:33:48 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F219B1FCC2;
-        Mon,  5 Dec 2022 08:33:33 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5FlDQl018571;
-        Mon, 5 Dec 2022 16:33:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=ESW/Yjf5FS3Id/vgv6YbnhM53BV7oX8cqgIBpuTM/+g=;
- b=eAPOTHRh7+u9UPebQAYjy22A0NWQLop4Fqh0A44O9UI13n+3FB9UcQjr9KLLrK/3J811
- jMZJhGYUGa5FvF6kgg2IR28JNW78V39EXEP7O0OHDUz5JwhYR0oSxtioPo/IgvfGuwyX
- 0kPb3SudcAUnJJSYGreoej+gCsVv17LiBXpHG72NoLr7UX36vUozMKz+HKoRfPWRD3VW
- zTVr9f/lJdOLEIOwOYKojzWHBdSHDQxlR9Aavr0sUGdQ+xtrLU4ZxUtCQ69cmkCujm/U
- OsxjSudBGUU9XUA9tZpjHekCb4sHyTU6F0zaynLAOix6jhJQotfh7eV/VLqDSJvDA31y Vw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7yb3c9t4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 05 Dec 2022 16:33:27 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B5GQu6r027839;
-        Mon, 5 Dec 2022 16:33:25 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m8ua9dpwh-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 05 Dec 2022 16:33:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XjNfAk9Kupf/ZeWwMx91jpmCUjUTpQ7gESkzocHV0CCAPAnK7B1B8qqy3AlNCk//+vGkD2RV2Xo9G6s28eNsYtSVFfmilcEFlHoLfUrps3X5mVpcSJ6QHaOhgWXMvJ+CFdUBov1Ju8bpRVJ5BD1ajBHmVUDrfIjI93TaPMg8tUMyITeNNbWB2hr6tWXWigh5Jg5rgbzABbLP5sUwtOqDgvtcX2vFkPs6RH78p+dZcim4gBzBN34wvbZ8pjvHZFnR5xUYa5wNEKV+xy28nfg/+XWo1zaV95uhcBWK0IxHLgb2HM136Tf4LNoSZqHMmrxfY0q+zesPPpe0iRCkt70THw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ESW/Yjf5FS3Id/vgv6YbnhM53BV7oX8cqgIBpuTM/+g=;
- b=jFMiviVceju27bD3fT3t4DaegeiNT6uH8OfqvlDNXmEeUGI3HWBzxghxudtoknuq1LhO/WwSJUV8Zhu3dR9ZYdfNMIVSHbewOHkHNMuah+CbmhZL27r+Xh+QAPfNmR+3pUwC4x3sIH3/+tozuduiUJDWc2loaYEppv0bCZye/NlOmkV6b0b6CFBG/IgbkEakRD7BEuJucIDBFP1R725AWS36ixoRbwYSw5qRVJdMNEvADG3q/rwHeb5y9HpvYirEtYLv8SDdQ2wDO/fbNW38r7RhFDXhq9KNYk3rh9ZaAT1tWT5SG6KNu1HYY2fNYGOV4QkcyK87ZXz3WOD9KO3PFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ESW/Yjf5FS3Id/vgv6YbnhM53BV7oX8cqgIBpuTM/+g=;
- b=SSSzK9NA9QNfv8f3msbsE+Fsvj6gbBlXCpZmdURn2wh5npywv5NYszHZX/jYm3N3DtTuIaUTI2IN6DAGN+kAPZ7jyaBfQXfKqfOarddztj2VppxeJN/ARnQkdOZ9vnqaq6AC/yyJSWyagOOZITBt02NwXK2ZHj0q00GlJ5C2HP0=
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by PH7PR10MB5721.namprd10.prod.outlook.com (2603:10b6:510:130::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Mon, 5 Dec
- 2022 16:33:22 +0000
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::6e94:e2a2:ca1f:2a7]) by DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::6e94:e2a2:ca1f:2a7%9]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
- 16:33:22 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
-To:     mcgrof@kernel.org, masahiroy@kernel.org
-Cc:     linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com
-Subject: [PATCH v10 13/13] perf: proof-of-concept kallmodsyms support
-Date:   Mon,  5 Dec 2022 16:31:57 +0000
-Message-Id: <20221205163157.269335-14-nick.alcock@oracle.com>
-X-Mailer: git-send-email 2.38.0.266.g481848f278
-In-Reply-To: <20221205163157.269335-1-nick.alcock@oracle.com>
-References: <20221205163157.269335-1-nick.alcock@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO2P265CA0042.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:61::30) To DS0PR10MB6798.namprd10.prod.outlook.com
- (2603:10b6:8:13c::20)
+        Mon, 5 Dec 2022 11:33:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB2D1DA50;
+        Mon,  5 Dec 2022 08:33:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670258007; x=1701794007;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=1oYt4Oz7HKA2eNOZ+EjSseoEZ6RDlVC/9hOYD/E8fhA=;
+  b=UcONeAgfwYpTrqicrJmk0FT73bnmsQ7vmg1Uo83jEvOxNXx2Hpv52cAr
+   Zl87OAKHGkRZqRtM+2SfSHKHwHjs8dwoOdoprCY85WFgrBrlkSvPglgcD
+   oAUrjAbtjkxfjoSzYodzSWgqbpj5Yppsp149FMK3+z01u0N7wcuRqJmGG
+   PQr9bvD0OkESH4EkRlMV9NCE8S3paTqm7o3Pkd+zB3wsFHhd1Id1C5XfE
+   LFtvlweWtCDQ50dcYAHGkZaOp4XPZTKM9mo+/3excq53fr0JbTEIWfqYm
+   QkEBUT+RMsOjJ5i0Bcwc/T3QA9ZooA6BQtxYAO2ks8K8/XUKd6D8KJu/V
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="296753203"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="296753203"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 08:33:09 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="623563378"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="623563378"
+Received: from almamunm-mobl.amr.corp.intel.com (HELO [10.209.53.139]) ([10.209.53.139])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 08:33:07 -0800
+Message-ID: <931e48dc399eddf8ad9f9dec8783f57df776daa9.camel@linux.intel.com>
+Subject: Re: [PATCH v2 07/18] x86/sgx: Use a list to track to-be-reclaimed
+ pages during reclaim
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, jarkko@kernel.org,
+        dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+Date:   Mon, 05 Dec 2022 08:33:06 -0800
+In-Reply-To: <0646275c-0ab9-2fad-8db1-7098656d6e1d@intel.com>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+         <20221202183655.3767674-8-kristen@linux.intel.com>
+         <0646275c-0ab9-2fad-8db1-7098656d6e1d@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|PH7PR10MB5721:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b0de3a9-11cb-4d2b-ea31-08dad6de645c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7ZuaS7o4syyHesY9W+rHAPGrYjaCwqvDaVWsyPDi2Xlgn89dA+K+q5ASNj/sg+MBICL1ND+XnCfcXXIPpGKHjv2x2gu8xB0dh+PackcGVnXgyGclztWEfJW/2tgnO/tYU/uehjyiRq40rSYg0le400H+9t5xwQ/v8ScN39e+CYzflU5jo8huyDg4sjrz4sglZ7QD+8heRRGpYMoQy+ha13HT4629y2+/Cy56ms//jsoenJr8/zvxBnY49vMsMeiLhVAHRtDsZ5uH4bS8aSYMBiHvbyD9/7O+uIsOzbq6Sb5HzutfrDDE28NCmW2qpLxJ8ARkOZypOlWaNQxm5hqW9+l3onujD+ujIMGwGTsyhSnICZNu6OqTmGcOFUJA2CD6gNeiBaFaTpiHghCQNEpQFCH0TAqeRw9vD7uI8wqWNfPN5pQY0hS3VfVDCTi5s1MRxzKjJgOT7f8kVL3bFQWKPwQBdg1MRCoNwcPPJ9TLZXek2N2H1b3MwjW0nZ85ZQ5p41VWhOlVk2TAbegbhXUT//Bz/3nfQtD59kX/4lAK/n/YhGCFp5ZXpHMla75AZ/SHB4qcbyt2HrrTmmZhMSl+JUPxPozP0eJWUojinuzuS6Djx0dMpIxpeD7aEMkKM8/J2LAr2vAQHEXly6TfrGClug==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(136003)(346002)(396003)(39860400002)(451199015)(316002)(6486002)(107886003)(478600001)(6666004)(6506007)(6512007)(66946007)(8676002)(4326008)(66476007)(66556008)(83380400001)(30864003)(8936002)(5660300002)(44832011)(186003)(41300700001)(2906002)(1076003)(36756003)(2616005)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zfAlLWfbaAxtYmzNagh/Bdxp9Wm8MJhbsFKE7ArTvKJRN/Dko06dq4/vhgn/?=
- =?us-ascii?Q?iVxn0/1Sh1qAheQo41mMby1bwByL1UFlhIY1cMfoahZFoEIl/jue9k2CEhRT?=
- =?us-ascii?Q?PLfk6CK9TnS8mJ3MB8GQbRNduY9jSSBcMdP7pit+6rOcnB8qYW0A0O+UB40r?=
- =?us-ascii?Q?JY9PYXsuARGFDhB/RXQaMPsMvUeGK9tqTMoCZbkWD0exU4v5kdRbdbdpMchd?=
- =?us-ascii?Q?dGClLQCMvDBF+s6WbinnJhtaA3ASQxOvcoMZFX6gs+kUpDh0Qy+Qd7EMcJSL?=
- =?us-ascii?Q?mXurMGAalJNVBgstJqiUm0X3pNnUhRNUYwW/tQcbmS70q0P8TTmZkhfP53NM?=
- =?us-ascii?Q?61FkgkugnEVV15405k+OsB89/wcvivvBxG+HeBtNLKlaFM9VZf+Jd5dgUQIi?=
- =?us-ascii?Q?TX8Y//WdwFYnk82Nrxlh2jOzu8CPOMY0ei1shJSUQhaXYnnX9LnZUwzcutum?=
- =?us-ascii?Q?Ta0h6UEjEM+sBU0RMcFNDgQKcpHCD2sIaT4I2VIdUIOCqUypy6Wwua/ygXRw?=
- =?us-ascii?Q?DAnL6NL0YwsGaLepuMJsuiSvtOFTXrerx8EIGRk89+X/2x+h/Rc5ol61cXcM?=
- =?us-ascii?Q?hiobR2d5YSPeZna0H2ev3VFNklkCE9/NkBOWZkP0ThhnQ86YYa1rUyJKJq5u?=
- =?us-ascii?Q?0HU3052hN4CKoaPTpa6bX/5PlRV7fRXBbBFkgE8aB3fIH4QoB7vPPNFWIvdy?=
- =?us-ascii?Q?iv1i2CTTF3dtRi1p+I0vvbAG/xBpspswVOyYQg4tjgxJCZNJGE7eLbSFW+wF?=
- =?us-ascii?Q?e2U0xlKXvxX6KHW+5qwG24SfuDJxVsbU7zwm3ArGs8hypdVQm1/i75Fk7v95?=
- =?us-ascii?Q?SatBWspnhO+AIHZ8jeLh8rvotWzk2xWMlWEatjhZu30awybaMDNbRHV4HnP5?=
- =?us-ascii?Q?Q275izz2TRBMBnLKk2FWGJcz2tEyWtL0FGW5cnJSDcFs42S7cTjlu1G/+vXY?=
- =?us-ascii?Q?bW6hrgmVmOvYn9pFhU+E+5UeWCwSVX4O782emiBuSXET/j+c1HSA1GiR0xHl?=
- =?us-ascii?Q?kb3dgRdik3TOyeYZjju0J1oxsE02t1brhY5tGZaUmUj2FdGzY+dR0RhkOkh0?=
- =?us-ascii?Q?6ELoBuNbS1iCl5GbswOleX5ciXI1oPulmi6KfhRX05xPKFreUNrUwmAzkSCR?=
- =?us-ascii?Q?h9KHlRpLcE6FpBSkzwcniTXkW/96qNLYjnHUyO4FwvSOTbHOsrEmmQDxhTgK?=
- =?us-ascii?Q?gP8ynN7UNm3Grp2A8wlp+V2TRmiTj61mnbdK2vqLLq0qFBNHMX+K5KbNmRtY?=
- =?us-ascii?Q?6CJ8GEQX+m20S80Wlk8fGgmei09EoJ4W8ZvwxaEN7B2FvMAS1xmM680vr8lc?=
- =?us-ascii?Q?2/2JjJS8mmyTQAfZKSFkmXdEhSME1Uc1rpahNwbkNS0fTScyT1b/Vu1O2Vnm?=
- =?us-ascii?Q?exRQlU2Qiy1X3q5s7KqqnGzl2mdAKOiv0Zy7f8F3F22Ns85S0Kb3XQEgOQtK?=
- =?us-ascii?Q?+qcL459vgr0XhZ9m4RlZ+dGGQytlk7D3yuvPxvc7WNjUtBwna8e1SlQCsL6S?=
- =?us-ascii?Q?mniJjygy+ztw/3YXt4iPjnCHZmx88QZ69qQyZJI58ltLsBH5IsXhL2h3Imld?=
- =?us-ascii?Q?5Subrl5WCdajBAP6ejcVWKLh1w+67rni1ipcSDAr/gPtV2Lt9skyrDqiJrEe?=
- =?us-ascii?Q?Og=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?ics5MmndpIwnwPzKQZiirv4Z0rQ5DsKeULBKMnlk4DFz/X4ksG8kyPex9EW5?=
- =?us-ascii?Q?PtFUPf7IOtANWvKevc/auMi4/lQppUBJwWdm2CcyTlkSVHMgsLQjzmH7nHVm?=
- =?us-ascii?Q?ShQpRk97Nqgbn3o1IqaoIFnrHVAXOQQblEN1PRA55JV0TMN9cfFb02FYMpz8?=
- =?us-ascii?Q?ZA6S5DFywhbuh+LSsUohr7jgAVztUUsluv5nIyhEzCWIkQvLzQQdd22IDfkC?=
- =?us-ascii?Q?CqL4PcCjtpVj9/GB4b77SmuCc0Q37KLQrNf4PqkjBxLw+gXrEr6Zyzd7DNGA?=
- =?us-ascii?Q?fzP4QP75AYLaUXu0tpgoClkEbMkp+5pKgLH3rwDmq9mOS17vvALBM6aMBOQS?=
- =?us-ascii?Q?fjc+i9+h7ADqVe1I1DKdDrn8UEflwWgPhCmRRFKAkhyjW5wGkf0rJ4UULM2Q?=
- =?us-ascii?Q?62rvx5DPHYunBUNJujiBXEBt3h9oqXrrKNkoPfFSv6O1IJZvy+4cvXKbhhII?=
- =?us-ascii?Q?+EMdAYybEy/NW4b6whSmskOmpfb4SS1MWb3p7bTeWqhAWOt44hEl/YGiSe0c?=
- =?us-ascii?Q?F/g3kU4h+EIu7UhlEHvO1X6hDpQiS2TmcOciRLWf72JqxGcvbYYErbuuCfpo?=
- =?us-ascii?Q?7WyJm4ploDjalF/C4HMuKE8Z8AeHdTfvS1h6QhCsViC4T/1zbHwWk2QU3p8e?=
- =?us-ascii?Q?QOn36yDzVm+X6xXfBkWDTkLS+ndHJZDq8AP7Iq66eNneM3VwN4A9aiygfK4Z?=
- =?us-ascii?Q?G/aP4ZUBgP52wAr8ZY2wWall8UA256BXJawqV5aY2FgtOhySz3gKqhh5JmZi?=
- =?us-ascii?Q?Ny2kUoan2i7v4zB3gY3CZ4PSW9Tiytz/BHppU5m2YbYbHKLEREfXl0lI/hYL?=
- =?us-ascii?Q?TpexWAJweXNDkQooJRtOShcO7/+ZdtHmbwx9DKe0bWwOb2w8l12PZfhcNdKe?=
- =?us-ascii?Q?Z/d+LTc4N8luBqbDyJqqmE+fgmWXHNFDHOJ5uTzufmlMGKcEE6+UawKnlZJ2?=
- =?us-ascii?Q?mbVbJI1ABin1cbxHj/YuJaPApa0ln5OsMBRg3kBcsls=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b0de3a9-11cb-4d2b-ea31-08dad6de645c
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 16:33:08.3116
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3jebo8q5r+1vTGHZIDr9cRTWJZHpNJCtsF+hPETuEBYH6QNwwOcpECmsXmOdqQA7z3tHckr6yJiGk/RgiWb4kQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5721
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212050138
-X-Proofpoint-ORIG-GUID: POZJEwmWLamAmJDwRH2CSvf4nERC9JKn
-X-Proofpoint-GUID: POZJEwmWLamAmJDwRH2CSvf4nERC9JKn
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is only very partial: it adds support to 'perf kallsyms', allowing
-you to say, e.g.
-
-% ./perf kallsyms __scsi_device_lookup
-__scsi_device_lookup: scsi_mod (built-in) 0xffffffff9b901de0-0xffffffff9b901e30 (0xffffffff9b901de0-0xffffffff9b901e30)
-
-and get told that this is in a built-in module.  We also handle symbols
-that are in multiple modules at once:
-
-% ./perf kallsyms lio_set_fecparam
-lio_set_fecparam: liquidio, liquidio_vf (built-in) 0xffffffff9b934da0-0xffffffff9b934e10 (0xffffffff9b934da0-0xffffffff9b934e10)
-
-We do this the simplistic way, by augmenting symbols with a module array
-field, the members of which are atoms in a new machine.modules red-black
-tree (structured the same, and managed with the same code, as the
-existing transient tree that is used to compare /proc/modules against
-each other).
-
-kallsyms symbols no longer carry a [module name] around with them that
-needs cutting off whenever it's used (all users that relied on this
-adjusted, I hope) but instead have that name hived off into the
-per-symbol module array, with a new 'built_in' field to tell users
-whether this is a built-in module or not.  Since we cannot use the
-presence of '[' to detect modules any more, we do it at kallmodsyms read
-time by spotting _end and considering it to denote the end of the core
-kernel and the start of the modular range.  (I *think* this works on all
-arches.)
-
-Full perf support probably requires syntactic additions to let you
-specify (and show) translation unit names to disambiguate symbols
-as needed. I'd implement this but I'm not sure what syntax people would
-prefer... whatever the syntax is should probably be shared with ftrace
-and friends as well, and maybe even the kernel oops backtrace printer.
-
-Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-Reviewed-by: Kris Van Hees <kris.van.hees@oracle.com>
----
-
-Notes:
-    v10: Mention in the commit log the need for syntactic enhancements
-         to fully use kallmodsyms to disambiguate symbols.
-
- tools/perf/builtin-kallsyms.c |  35 +++++-
- tools/perf/util/event.c       |  14 ++-
- tools/perf/util/machine.c     |   6 +-
- tools/perf/util/machine.h     |   1 +
- tools/perf/util/symbol.c      | 207 +++++++++++++++++++++++++---------
- tools/perf/util/symbol.h      |  12 +-
- 6 files changed, 211 insertions(+), 64 deletions(-)
-
-diff --git a/tools/perf/builtin-kallsyms.c b/tools/perf/builtin-kallsyms.c
-index c08ee81529e8..6bcec2522d2d 100644
---- a/tools/perf/builtin-kallsyms.c
-+++ b/tools/perf/builtin-kallsyms.c
-@@ -35,10 +35,37 @@ static int __cmd_kallsyms(int argc, const char **argv)
- 			continue;
- 		}
- 
--		printf("%s: %s %s %#" PRIx64 "-%#" PRIx64 " (%#" PRIx64 "-%#" PRIx64")\n",
--			symbol->name, map->dso->short_name, map->dso->long_name,
--			map->unmap_ip(map, symbol->start), map->unmap_ip(map, symbol->end),
--			symbol->start, symbol->end);
-+		if (!symbol->modules) {
-+			printf("%s: %s %s %#" PRIx64 "-%#" PRIx64 " (%#" PRIx64 "-%#" PRIx64")\n",
-+			       symbol->name, map->dso->short_name, map->dso->long_name,
-+			       map->unmap_ip(map, symbol->start), map->unmap_ip(map, symbol->end),
-+			       symbol->start, symbol->end);
-+		} else {
-+			if (!symbol->built_in)
-+				printf("%s: %s %s %#" PRIx64 "-%#" PRIx64 " (%#" PRIx64 "-%#" PRIx64")\n",
-+				       symbol->name, map->dso->short_name, map->dso->long_name,
-+				       map->unmap_ip(map, symbol->start), map->unmap_ip(map, symbol->end),
-+				       symbol->start, symbol->end);
-+			else if (symbol->modules[1] == 0)
-+				printf("%s: %s (built-in) %#" PRIx64 "-%#" PRIx64 " (%#" PRIx64 "-%#" PRIx64")\n",
-+				       symbol->name, symbol->modules[0], map->unmap_ip(map, symbol->start),
-+				       map->unmap_ip(map, symbol->end), symbol->start, symbol->end);
-+			else { /* Symbol in multiple modules at once  */
-+				char **mod;
-+
-+				printf("%s: ", symbol->name);
-+
-+				for (mod = symbol->modules; *mod; mod++) {
-+					if (mod != symbol->modules)
-+						printf(", ");
-+					printf("%s", *mod);
-+				}
-+
-+				printf (" (built-in) %#" PRIx64 "-%#" PRIx64 " (%#" PRIx64 "-%#" PRIx64")\n",
-+				       map->unmap_ip(map, symbol->start), map->unmap_ip(map, symbol->end),
-+					symbol->start, symbol->end);
-+			}
-+		}
- 	}
- 
- 	machine__delete(machine);
-diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-index 1fa14598b916..a344b35f7e38 100644
---- a/tools/perf/util/event.c
-+++ b/tools/perf/util/event.c
-@@ -97,16 +97,28 @@ static int find_symbol_cb(void *arg, const char *name, char type,
- 			  u64 start)
- {
- 	struct process_symbol_args *args = arg;
-+	char *chop, *tmp_alloc = NULL;
-+	const char *tmp = name;
-+
-+	if ((chop = strchr(name, '\t')) != NULL) {
-+		tmp_alloc = strndup(name, name - chop);
-+		if (tmp_alloc == NULL)
-+			return -ENOMEM;
-+		tmp = tmp_alloc;
-+	}
- 
- 	/*
- 	 * Must be a function or at least an alias, as in PARISC64, where "_text" is
- 	 * an 'A' to the same address as "_stext".
- 	 */
- 	if (!(kallsyms__is_function(type) ||
--	      type == 'A') || strcmp(name, args->name))
-+	      type == 'A') || strcmp(tmp, args->name)) {
-+		free(tmp_alloc);
- 		return 0;
-+	}
- 
- 	args->start = start;
-+	free(tmp_alloc);
- 	return 1;
- }
- 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 76316e459c3d..2be5a3c1a267 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -173,7 +173,7 @@ struct machine *machine__new_kallsyms(void)
- 	 *    ask for not using the kcore parsing code, once this one is fixed
- 	 *    to create a map per module.
- 	 */
--	if (machine && machine__load_kallsyms(machine, "/proc/kallsyms") <= 0) {
-+	if (machine && machine__load_kallsyms(machine, "/proc/kallmodsyms") <= 0) {
- 		machine__delete(machine);
- 		machine = NULL;
- 	}
-@@ -237,6 +237,7 @@ void machine__exit(struct machine *machine)
- 	zfree(&machine->mmap_name);
- 	zfree(&machine->current_tid);
- 	zfree(&machine->kallsyms_filename);
-+	modules__delete_modules(&machine->modules);
- 
- 	for (i = 0; i < THREADS__TABLE_SIZE; i++) {
- 		struct threads *threads = &machine->threads[i];
-@@ -1410,7 +1411,8 @@ int machines__create_kernel_maps(struct machines *machines, pid_t pid)
- int machine__load_kallsyms(struct machine *machine, const char *filename)
- {
- 	struct map *map = machine__kernel_map(machine);
--	int ret = __dso__load_kallsyms(map->dso, filename, map, true);
-+	int ret = __dso__load_kallsyms(map->dso, filename, map, &machine->modules,
-+				       true);
- 
- 	if (ret > 0) {
- 		dso__set_loaded(map->dso);
-diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
-index 74935dfaa937..393063840cd1 100644
---- a/tools/perf/util/machine.h
-+++ b/tools/perf/util/machine.h
-@@ -55,6 +55,7 @@ struct machine {
- 	struct dsos	  dsos;
- 	struct maps	  *kmaps;
- 	struct map	  *vmlinux_map;
-+	struct rb_root	  modules;
- 	u64		  kernel_start;
- 	pid_t		  *current_tid;
- 	size_t		  current_tid_sz;
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index a3a165ae933a..aab7ffdd0573 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -41,10 +41,16 @@
- #include <symbol/kallsyms.h>
- #include <sys/utsname.h>
- 
--static int dso__load_kernel_sym(struct dso *dso, struct map *map);
-+static int dso__load_kernel_sym(struct dso *dso, struct map *map,
-+				struct rb_root *modules);
- static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map);
- static bool symbol__is_idle(const char *name);
- 
-+static int read_proc_modules(const char *filename, struct rb_root *modules);
-+static struct module_info *find_module(const char *name,
-+				       struct rb_root *modules);
-+static void add_module(struct module_info *mi, struct rb_root *modules);
-+
- int vmlinux_path__nr_entries;
- char **vmlinux_path;
- 
-@@ -85,6 +91,12 @@ static enum dso_binary_type binary_type_symtab[] = {
- 
- #define DSO_BINARY_TYPE__SYMTAB_CNT ARRAY_SIZE(binary_type_symtab)
- 
-+struct module_info {
-+	struct rb_node rb_node;
-+	char *name;
-+	u64 start;
-+};
-+
- static bool symbol_type__filter(char symbol_type)
- {
- 	symbol_type = toupper(symbol_type);
-@@ -234,15 +246,10 @@ void symbols__fixup_end(struct rb_root_cached *symbols, bool is_kallsyms)
- 		 * kernel text segment and beginning of first module's text
- 		 * segment is very big.  Therefore do not fill this gap and do
- 		 * not assign it to the kernel dso map (kallsyms).
--		 *
--		 * In kallsyms, it determines module symbols using '[' character
--		 * like in:
--		 *   ffffffffc1937000 T hdmi_driver_init  [snd_hda_codec_hdmi]
- 		 */
- 		if (prev->end == prev->start) {
- 			/* Last kernel/module symbol mapped to end of page */
--			if (is_kallsyms && (!strchr(prev->name, '[') !=
--					    !strchr(curr->name, '[')))
-+			if (is_kallsyms && prev->built_in != curr->built_in)
- 				prev->end = roundup(prev->end + 4096, 4096);
- 			else
- 				prev->end = curr->start;
-@@ -301,6 +308,8 @@ struct symbol *symbol__new(u64 start, u64 len, u8 binding, u8 type, const char *
- 	sym->type    = type;
- 	sym->binding = binding;
- 	sym->namelen = namelen - 1;
-+	sym->modules  = NULL;
-+	sym->built_in = 0;
- 
- 	pr_debug4("%s: %s %#" PRIx64 "-%#" PRIx64 "\n",
- 		  __func__, name, start, sym->end);
-@@ -318,6 +327,7 @@ void symbol__delete(struct symbol *sym)
- 			annotation__exit(notes);
- 		}
- 	}
-+	free(sym->modules);
- 	free(((void *)sym) - symbol_conf.priv_size);
- }
- 
-@@ -716,12 +726,37 @@ static bool symbol__is_idle(const char *name)
- 	return strlist__has_entry(idle_symbols_list, name);
- }
- 
--static int map__process_kallsym_symbol(void *arg, const char *name,
-+struct process_kallsym_symbol_arg {
-+	struct dso *dso;
-+	struct rb_root *modules;
-+	int seen_end;
-+};
-+
-+static int map__process_kallsym_symbol(void *arg_, const char *name,
- 				       char type, u64 start)
- {
- 	struct symbol *sym;
--	struct dso *dso = arg;
-+	struct process_kallsym_symbol_arg *arg = arg_;
-+	struct dso *dso = arg->dso;
- 	struct rb_root_cached *root = &dso->symbols;
-+	struct rb_root *modules = arg->modules;
-+	char *module;
-+	const char *modulep;
-+	int counting = 1;
-+	size_t nmods = 0;
-+	char **mods = NULL;
-+	char **modp = NULL;
-+
-+	/*
-+	 * Split off the modules part.
-+	 */
-+	if ((module = strchr(name, '\t')) != NULL) {
-+		*module = 0;
-+		module++;
-+	}
-+
-+	if (strcmp(name, "_end") == 0)
-+		arg->seen_end = 1;
- 
- 	if (!symbol_type__filter(type))
- 		return 0;
-@@ -731,18 +766,88 @@ static int map__process_kallsym_symbol(void *arg, const char *name,
- 		return 0;
- 
- 	/*
--	 * module symbols are not sorted so we add all
--	 * symbols, setting length to 0, and rely on
--	 * symbols__fixup_end() to fix it up.
-+	 * non-builtin module symbols are not sorted so we add all symbols,
-+	 * setting length to 0, and rely on symbols__fixup_end() to fix it up.
- 	 */
- 	sym = symbol__new(start, 0, kallsyms2elf_binding(type), kallsyms2elf_type(type), name);
- 	if (sym == NULL)
- 		return -ENOMEM;
-+
-+	sym->built_in = !arg->seen_end;
-+
-+	/*
-+	 * Pass over the modules list twice: once to count the number of
-+	 * modules this symbol is part of and allocate an array to store their
-+	 * names, then again to fill it out.
-+	 *
-+	 * Arguably inefficient, due to one allocation per built-in symbol, even
-+	 * though many symbols will have the same mods array.  In practice,
-+	 * it's just too small a waste to matter.  The module names are pointers
-+	 * into the machine->modules rb-tree (lazily populated here).
-+	 */
-+
-+fill:
-+	modulep = module;
-+	while (modulep && (modulep = strchr(modulep, '[')) != NULL) {
-+		struct module_info *mi;
-+		const char *end_bra = strchr(modulep, ']');
-+
-+		modulep++;
-+		if (end_bra == NULL || end_bra <= modulep)
-+			continue;
-+
-+		if (counting) {
-+			nmods++;
-+			continue;
-+		}
-+
-+		/*
-+		 * Fill-out phase.
-+		 */
-+
-+		*modp = strndup(modulep, end_bra - modulep);
-+		if (*modp == NULL) {
-+			free(mods);
-+			return -ENOMEM;
-+		}
-+
-+		mi = find_module(*modp, modules);
-+		if (!mi) {
-+			mi = zalloc(sizeof(struct module_info));
-+
-+			if (!mi) {
-+				free (mods);
-+				free (*modp);
-+				return -ENOMEM;
-+			}
-+			mi->name = *modp;
-+		}
-+		else {
-+			free(*modp);
-+			*modp = mi->name;
-+		}
-+
-+		modp++;
-+	}
-+
-+	if (counting && nmods > 0) {
-+		mods = calloc(nmods + 1, sizeof (char *));
-+		if (mods == NULL)
-+			return -ENOMEM;
-+		modp = mods;
-+
-+		counting = 0;
-+		goto fill;
-+	}
-+
-+	sym->modules = mods;
-+
- 	/*
- 	 * We will pass the symbols to the filter later, in
--	 * map__split_kallsyms, when we have split the maps per module
-+	 * map__split_kallsyms, when we have split the maps per
-+	 * (non-built-in) module
- 	 */
--	__symbols__insert(root, sym, !strchr(name, '['));
-+	__symbols__insert(root, sym, !arg->seen_end);
- 
- 	return 0;
- }
-@@ -752,9 +857,11 @@ static int map__process_kallsym_symbol(void *arg, const char *name,
-  * so that we can in the next step set the symbol ->end address and then
-  * call kernel_maps__split_kallsyms.
-  */
--static int dso__load_all_kallsyms(struct dso *dso, const char *filename)
-+static int dso__load_all_kallsyms(struct dso *dso, const char *filename,
-+	struct rb_root *modules)
- {
--	return kallsyms__parse(filename, dso, map__process_kallsym_symbol);
-+	struct process_kallsym_symbol_arg arg = {dso, modules, 0};
-+	return kallsyms__parse(filename, &arg, map__process_kallsym_symbol);
- }
- 
- static int maps__split_kallsyms_for_kcore(struct maps *kmaps, struct dso *dso)
-@@ -766,22 +873,14 @@ static int maps__split_kallsyms_for_kcore(struct maps *kmaps, struct dso *dso)
- 	struct rb_root_cached *root = &dso->symbols;
- 	struct rb_node *next = rb_first_cached(root);
- 
--	if (!kmaps)
--		return -1;
--
- 	*root = RB_ROOT_CACHED;
- 
- 	while (next) {
--		char *module;
--
- 		pos = rb_entry(next, struct symbol, rb_node);
- 		next = rb_next(&pos->rb_node);
- 
- 		rb_erase_cached(&pos->rb_node, &old_root);
- 		RB_CLEAR_NODE(&pos->rb_node);
--		module = strchr(pos->name, '\t');
--		if (module)
--			*module = '\0';
- 
- 		curr_map = maps__find(kmaps, pos->start);
- 
-@@ -830,19 +929,19 @@ static int maps__split_kallsyms(struct maps *kmaps, struct dso *dso, u64 delta,
- 	x86_64 = machine__is(machine, "x86_64");
- 
- 	while (next) {
--		char *module;
--
- 		pos = rb_entry(next, struct symbol, rb_node);
- 		next = rb_next(&pos->rb_node);
- 
--		module = strchr(pos->name, '\t');
--		if (module) {
-+		if (!pos->built_in && pos->modules) {
- 			if (!symbol_conf.use_modules)
- 				goto discard_symbol;
- 
--			*module++ = '\0';
--
--			if (strcmp(curr_map->dso->short_name, module)) {
-+			/*
-+			 * Non-built-in symbols can only be in one module at
-+			 * once.
-+			 */
-+			assert(pos->modules[1] == NULL);
-+			if (strcmp(curr_map->dso->short_name, pos->modules[0])) {
- 				if (curr_map != initial_map &&
- 				    dso->kernel == DSO_SPACE__KERNEL_GUEST &&
- 				    machine__is_default_guest(machine)) {
-@@ -856,12 +955,12 @@ static int maps__split_kallsyms(struct maps *kmaps, struct dso *dso, u64 delta,
- 					dso__set_loaded(curr_map->dso);
- 				}
- 
--				curr_map = maps__find_by_name(kmaps, module);
-+				curr_map = maps__find_by_name(kmaps, pos->modules[0]);
- 				if (curr_map == NULL) {
- 					pr_debug("%s/proc/{kallsyms,modules} "
- 					         "inconsistency while looking "
- 						 "for \"%s\" module!\n",
--						 machine->root_dir, module);
-+						 machine->root_dir, pos->modules[0]);
- 					curr_map = initial_map;
- 					goto discard_symbol;
- 				}
-@@ -971,12 +1070,6 @@ bool symbol__restricted_filename(const char *filename,
- 	return restricted;
- }
- 
--struct module_info {
--	struct rb_node rb_node;
--	char *name;
--	u64 start;
--};
--
- static void add_module(struct module_info *mi, struct rb_root *modules)
- {
- 	struct rb_node **p = &modules->rb_node;
-@@ -995,7 +1088,7 @@ static void add_module(struct module_info *mi, struct rb_root *modules)
- 	rb_insert_color(&mi->rb_node, modules);
- }
- 
--static void delete_modules(struct rb_root *modules)
-+void modules__delete_modules(struct rb_root *modules)
- {
- 	struct module_info *mi;
- 	struct rb_node *next = rb_first(modules);
-@@ -1060,7 +1153,7 @@ static int read_proc_modules(const char *filename, struct rb_root *modules)
- 		return -1;
- 
- 	if (modules__parse(filename, modules, __read_proc_modules)) {
--		delete_modules(modules);
-+		modules__delete_modules(modules);
- 		return -1;
- 	}
- 
-@@ -1101,9 +1194,9 @@ int compare_proc_modules(const char *from, const char *to)
- 	if (!from_node && !to_node)
- 		ret = 0;
- 
--	delete_modules(&to_modules);
-+	modules__delete_modules(&to_modules);
- out_delete_from:
--	delete_modules(&from_modules);
-+	modules__delete_modules(&from_modules);
- 
- 	return ret;
- }
-@@ -1133,7 +1226,7 @@ static int do_validate_kcore_modules(const char *filename, struct maps *kmaps)
- 		}
- 	}
- out:
--	delete_modules(&modules);
-+	modules__delete_modules(&modules);
- 	return err;
- }
- 
-@@ -1467,18 +1560,20 @@ static int kallsyms__delta(struct kmap *kmap, const char *filename, u64 *delta)
- }
- 
- int __dso__load_kallsyms(struct dso *dso, const char *filename,
--			 struct map *map, bool no_kcore)
-+			 struct map *map, struct rb_root *modules,
-+			 bool no_kcore)
- {
- 	struct kmap *kmap = map__kmap(map);
- 	u64 delta = 0;
- 
--	if (symbol__restricted_filename(filename, "/proc/kallsyms"))
-+	if (symbol__restricted_filename(filename, "/proc/kallsyms") &&
-+	    symbol__restricted_filename(filename, "/proc/kallmodsyms"))
- 		return -1;
- 
- 	if (!kmap || !kmap->kmaps)
- 		return -1;
- 
--	if (dso__load_all_kallsyms(dso, filename) < 0)
-+	if (dso__load_all_kallsyms(dso, filename, modules) < 0)
- 		return -1;
- 
- 	if (kallsyms__delta(kmap, filename, &delta))
-@@ -1499,9 +1594,9 @@ int __dso__load_kallsyms(struct dso *dso, const char *filename,
- }
- 
- int dso__load_kallsyms(struct dso *dso, const char *filename,
--		       struct map *map)
-+		       struct map *map, struct rb_root *modules)
- {
--	return __dso__load_kallsyms(dso, filename, map, false);
-+	return __dso__load_kallsyms(dso, filename, map, modules, false);
- }
- 
- static int dso__load_perf_map(const char *map_path, struct dso *dso)
-@@ -1814,12 +1909,13 @@ int dso__load(struct dso *dso, struct map *map)
- 		dso->symtab_type == DSO_BINARY_TYPE__GUEST_KMODULE_COMP;
- 
- 	if (dso->kernel && !kmod) {
-+		machine = map__kmaps(map)->machine;
-+
- 		if (dso->kernel == DSO_SPACE__KERNEL)
--			ret = dso__load_kernel_sym(dso, map);
-+			ret = dso__load_kernel_sym(dso, map, &machine->modules);
- 		else if (dso->kernel == DSO_SPACE__KERNEL_GUEST)
- 			ret = dso__load_guest_kernel_sym(dso, map);
- 
--		machine = map__kmaps(map)->machine;
- 		if (machine__is(machine, "x86_64"))
- 			machine__map_x86_64_entry_trampolines(machine, dso);
- 		goto out;
-@@ -2220,7 +2316,8 @@ static char *dso__find_kallsyms(struct dso *dso, struct map *map)
- 	return strdup(path);
- }
- 
--static int dso__load_kernel_sym(struct dso *dso, struct map *map)
-+static int dso__load_kernel_sym(struct dso *dso, struct map *map,
-+				struct rb_root *modules)
- {
- 	int err;
- 	const char *kallsyms_filename = NULL;
-@@ -2282,7 +2379,7 @@ static int dso__load_kernel_sym(struct dso *dso, struct map *map)
- 	kallsyms_filename = kallsyms_allocated_filename;
- 
- do_kallsyms:
--	err = dso__load_kallsyms(dso, kallsyms_filename, map);
-+	err = dso__load_kallsyms(dso, kallsyms_filename, map, modules);
- 	if (err > 0)
- 		pr_debug("Using %s for symbols\n", kallsyms_filename);
- 	free(kallsyms_allocated_filename);
-@@ -2323,11 +2420,11 @@ static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map)
- 		if (!kallsyms_filename)
- 			return -1;
- 	} else {
--		sprintf(path, "%s/proc/kallsyms", machine->root_dir);
-+		sprintf(path, "%s/proc/kallmodsyms", machine->root_dir);
- 		kallsyms_filename = path;
- 	}
- 
--	err = dso__load_kallsyms(dso, kallsyms_filename, map);
-+	err = dso__load_kallsyms(dso, kallsyms_filename, map, &machine->modules);
- 	if (err > 0)
- 		pr_debug("Using %s for symbols\n", kallsyms_filename);
- 	if (err > 0 && !dso__is_kcore(dso)) {
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index 0b893dcc8ea6..9ca218e09acf 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -66,6 +66,11 @@ struct symbol {
- 	u8		annotate2:1;
- 	/** Architecture specific. Unused except on PPC where it holds st_other. */
- 	u8		arch_sym;
-+	/** Null-terminated array of pointers to names of containing modules in the
-+	    modules red-black tree.  May be NULL for none.  */
-+	char		**modules;
-+	/** Set if this symbol is built in to the core kernel.  */
-+	int		built_in;
- 	/** The name of length namelen associated with the symbol. */
- 	char		name[];
- };
-@@ -137,8 +142,9 @@ int dso__load_vmlinux(struct dso *dso, struct map *map,
- 		      const char *vmlinux, bool vmlinux_allocated);
- int dso__load_vmlinux_path(struct dso *dso, struct map *map);
- int __dso__load_kallsyms(struct dso *dso, const char *filename, struct map *map,
--			 bool no_kcore);
--int dso__load_kallsyms(struct dso *dso, const char *filename, struct map *map);
-+			 struct rb_root *modules, bool no_kcore);
-+int dso__load_kallsyms(struct dso *dso, const char *filename, struct map *map,
-+		       struct rb_root *modules);
- 
- void dso__insert_symbol(struct dso *dso,
- 			struct symbol *sym);
-@@ -161,6 +167,8 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid);
- int modules__parse(const char *filename, void *arg,
- 		   int (*process_module)(void *arg, const char *name,
- 					 u64 start, u64 size));
-+void modules__delete_modules(struct rb_root *modules);
-+
- int filename__read_debuglink(const char *filename, char *debuglink,
- 			     size_t size);
- 
--- 
-2.38.0.266.g481848f278
+T24gRnJpLCAyMDIyLTEyLTAyIGF0IDE0OjMzIC0wODAwLCBEYXZlIEhhbnNlbiB3cm90ZToKPiBP
+biAxMi8yLzIyIDEwOjM2LCBLcmlzdGVuIENhcmxzb24gQWNjYXJkaSB3cm90ZToKPiA+IEZyb206
+IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW4uai5jaHJpc3RvcGhlcnNvbkBpbnRlbC5jb20+Cj4g
+PiAKPiA+IENoYW5nZSBzZ3hfcmVjbGFpbV9wYWdlcygpIHRvIHVzZSBhIGxpc3QgcmF0aGVyIHRo
+YW4gYW4gYXJyYXkgZm9yCj4gPiBzdG9yaW5nIHRoZSBlcGNfcGFnZXMgd2hpY2ggd2lsbCBiZSBy
+ZWNsYWltZWQuIFRoaXMgY2hhbmdlIGlzCj4gPiBuZWVkZWQKPiA+IHRvIHRyYW5zaXRpb24gdG8g
+dGhlIExSVSBpbXBsZW1lbnRhdGlvbiBmb3IgRVBDIGNncm91cCBzdXBwb3J0Lgo+ID4gCj4gPiBU
+aGlzIGNoYW5nZSByZXF1aXJlcyBrZWVwaW5nIHRyYWNrIG9mIHdoZXRoZXIgbmV3bHkgcmVjb3Jk
+ZWQKPiA+IEVQQyBwYWdlcyBhcmUgcGFnZXMgZm9yIFZBIEFycmF5cywgb3IgZm9yIEVuY2xhdmUg
+ZGF0YS4gSW4KPiA+IGFkZGl0aW9uLAo+ID4gaGVscGVyIGZ1bmN0aW9ucyBhcmUgYWRkZWQgdG8g
+bW92ZSBwYWdlcyBmcm9tIG9uZSBsaXN0IHRvIGFub3RoZXIKPiA+IGFuZAo+ID4gZW5mb3JjZSBh
+IGNvbnNpc3RlbnQgcXVldWUgbGlrZSBiZWhhdmlvciBmb3IgdGhlIExSVSBsaXN0cy4KPiAKPiBN
+b3JlIGNoYW5nZWxvZyBuaXQ6IFBsZWFzZSB1c2UgaW1wZXJhdGl2ZSB2b2ljZSwgbm90IHBhc3Np
+dmUgdm9pY2UuCj4gTW92ZSBmcm9tOgo+IAo+IMKgwqDCoMKgwqDCoMKgwqBJbiBhZGRpdGlvbiwg
+aGVscGVyIGZ1bmN0aW9ucyBhcmUgYWRkZWQKPiAKPiB0bzoKPiAKPiDCoMKgwqDCoMKgwqDCoMKg
+SW4gYWRkaXRpb24sIGFkZCBoZWxwZXIgZnVuY3Rpb25zCj4gCj4gPiBkaWZmIC0tZ2l0IGEvYXJj
+aC94ODYva2VybmVsL2NwdS9zZ3gvZW5jbC5jCj4gPiBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4
+L2VuY2wuYwo+ID4gaW5kZXggNDY4M2RhOWVmNGYxLi45ZWUzMDZhYzJhOGUgMTAwNjQ0Cj4gPiAt
+LS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9lbmNsLmMKPiA+ICsrKyBiL2FyY2gveDg2L2tl
+cm5lbC9jcHUvc2d4L2VuY2wuYwo+ID4gQEAgLTI1Miw3ICsyNTIsNyBAQCBzdGF0aWMgc3RydWN0
+IHNneF9lbmNsX3BhZ2UKPiA+ICpfX3NneF9lbmNsX2xvYWRfcGFnZShzdHJ1Y3Qgc2d4X2VuY2wg
+KmVuY2wsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVwY19wYWdlID0gc2d4
+X2VuY2xfZWxkdSgmZW5jbC0+c2VjcywgTlVMTCk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGlmIChJU19FUlIoZXBjX3BhZ2UpKQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9DQVNUKGVwY19wYWdlKTsKPiA+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdlKGVwY19w
+YWdlLCAwKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2Vw
+Y19wYWdlKGVwY19wYWdlLAo+ID4gU0dYX0VQQ19QQUdFX0VOQ0xBVkUpOwo+ID4gwqDCoMKgwqDC
+oMKgwqDCoH0KPiAKPiBUaGlzIGlzIG9uZSBvZiB0aG9zZSBwYXRjaGVzIHdoZXJlIHRoZSBmaXJz
+dCBodW5rIHNlZW1zIGxpa2UgaXQgaXMKPiBlbnRpcmVseSBkaXNjb25uZWN0ZWQgZnJvbSB3aGF0
+IHRoZSBjaGFuZ2Vsb2cgbWFkZSBtZSBleHBlY3QgSSB3b3VsZAo+IHNlZS4KPiAKPiBJIGRvbid0
+IHNlZSBzZ3hfcmVjbGFpbV9wYWdlcygpLCBvciBsaXN0cyBvciBhcnJheXMuCj4gCj4gSWYgeW91
+IG5lZWQgdG8gcGFzcyBhZGRpdGlvbmFsIGRhdGEgZG93biBpbnRvIGEgZnVuY3Rpb24sIHRoZW4g
+ZG8KPiAqdGhhdCoKPiBpbiBhIHNlcGFyYXRlIHBhdGNoLgo+IAo+IEknbSBnbGFkIGl0IGV2ZW50
+dWFsbHkgZ290IGZpeGVkIHVwLCBidXQgSSBkb24ndCByZWFsbHkgZXZlciBsaWtlIHRvCj4gc2Vl
+Cj4gYmFyZSBpbnRlZ2VycyB0aGF0IGRvbid0IGhhdmUgb2J2aW91cyBtZWFuaW5nOgo+IAo+IMKg
+wqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdlKGVwY19wYWdlLCAwKTsKPiAKPiBFdmVu
+IGlmIHlvdSBoYWQ6Cj4gCj4gI2RlZmluZSBTR1hfRVBDX1BBR0VfUkVDTEFJTUVSX1VOVFJBQ0tF
+RCAwCj4gCj4gwqDCoMKgwqDCoMKgwqDCoHNneF9yZWNvcmRfZXBjX3BhZ2UoZXBjX3BhZ2UsCj4g
+U0dYX0VQQ19QQUdFX1JFQ0xBSU1FUl9VTlRSQUNLRUQpOwo+IAo+IG1ha2VzIGEgKkxPVCogb2Yg
+c2Vuc2UgY29tcGFyZWQgdG8gb3RoZXIgY2FsbGVycyB0aGF0IGRvCj4gCj4gwqDCoMKgwqDCoMKg
+wqDCoHNneF9yZWNvcmRfZXBjX3BhZ2UoZXBjX3BhZ2UsCj4gU0dYX0VQQ19QQUdFX1JFQ0xBSU1F
+Ul9UUkFDS0VEKTsKPiAKPiA+IMKgwqDCoMKgwqDCoMKgwqBlcGNfcGFnZSA9IHNneF9lbmNsX2Vs
+ZHUoZW50cnksIGVuY2wtPnNlY3MuZXBjX3BhZ2UpOwo+ID4gQEAgLTI2MCw3ICsyNjAsOCBAQCBz
+dGF0aWMgc3RydWN0IHNneF9lbmNsX3BhZ2UKPiA+ICpfX3NneF9lbmNsX2xvYWRfcGFnZShzdHJ1
+Y3Qgc2d4X2VuY2wgKmVuY2wsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
+dHVybiBFUlJfQ0FTVChlcGNfcGFnZSk7Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoGVuY2wt
+PnNlY3NfY2hpbGRfY250Kys7Cj4gPiAtwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdl
+KGVudHJ5LT5lcGNfcGFnZSwKPiA+IFNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRCk7Cj4g
+PiArwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdlKGVudHJ5LT5lcGNfcGFnZSwKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIChT
+R1hfRVBDX1BBR0VfRU5DTEFWRSB8Cj4gPiBTR1hfRVBDX1BBR0VfUkVDTEFJTUVSX1RSQUNLRUQp
+KTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGVudHJ5Owo+ID4gwqB9Cj4gPiBA
+QCAtMTIyMSw3ICsxMjIyLDcgQEAgc3RydWN0IHNneF9lcGNfcGFnZSAqc2d4X2FsbG9jX3ZhX3Bh
+Z2Uoc3RydWN0Cj4gPiBzZ3hfZW5jbCAqZW5jbCwgYm9vbCByZWNsYWltKQo+ID4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfZW5jbF9mcmVlX2VwY19wYWdlKGVwY19wYWdlKTsK
+PiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9QVFIoLUVGQVVM
+VCk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gLcKgwqDCoMKgwqDCoMKgc2d4X3JlY29yZF9l
+cGNfcGFnZShlcGNfcGFnZSwgMCk7Cj4gPiArwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19w
+YWdlKGVwY19wYWdlLCBTR1hfRVBDX1BBR0VfVkVSU0lPTl9BUlJBWSk7Cj4gPiDCoAo+ID4gwqDC
+oMKgwqDCoMKgwqDCoHJldHVybiBlcGNfcGFnZTsKPiA+IMKgfQo+ID4gZGlmZiAtLWdpdCBhL2Fy
+Y2gveDg2L2tlcm5lbC9jcHUvc2d4L2lvY3RsLmMKPiA+IGIvYXJjaC94ODYva2VybmVsL2NwdS9z
+Z3gvaW9jdGwuYwo+ID4gaW5kZXggYWNhODBhM2YzOGExLi5jM2E5YmZmYmMzN2UgMTAwNjQ0Cj4g
+PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9pb2N0bC5jCj4gPiArKysgYi9hcmNoL3g4
+Ni9rZXJuZWwvY3B1L3NneC9pb2N0bC5jCj4gPiBAQCAtMTE0LDcgKzExNCw3IEBAIHN0YXRpYyBp
+bnQgc2d4X2VuY2xfY3JlYXRlKHN0cnVjdCBzZ3hfZW5jbAo+ID4gKmVuY2wsIHN0cnVjdCBzZ3hf
+c2VjcyAqc2VjcykKPiA+IMKgwqDCoMKgwqDCoMKgwqBlbmNsLT5hdHRyaWJ1dGVzID0gc2Vjcy0+
+YXR0cmlidXRlczsKPiA+IMKgwqDCoMKgwqDCoMKgwqBlbmNsLT5hdHRyaWJ1dGVzX21hc2sgPSBT
+R1hfQVRUUl9ERUJVRyB8IFNHWF9BVFRSX01PREU2NEJJVAo+ID4gfCBTR1hfQVRUUl9LU1M7Cj4g
+PiDCoAo+ID4gLcKgwqDCoMKgwqDCoMKgc2d4X3JlY29yZF9lcGNfcGFnZShlbmNsLT5zZWNzLmVw
+Y19wYWdlLCAwKTsKPiA+ICvCoMKgwqDCoMKgwqDCoHNneF9yZWNvcmRfZXBjX3BhZ2UoZW5jbC0+
+c2Vjcy5lcGNfcGFnZSwKPiA+IFNHWF9FUENfUEFHRV9FTkNMQVZFKTsKPiA+IMKgCj4gPiDCoMKg
+wqDCoMKgwqDCoMKgLyogU2V0IG9ubHkgYWZ0ZXIgY29tcGxldGlvbiwgYXMgZW5jbC0+bG9jayBo
+YXMgbm90IGJlZW4KPiA+IHRha2VuLiAqLwo+ID4gwqDCoMKgwqDCoMKgwqDCoHNldF9iaXQoU0dY
+X0VOQ0xfQ1JFQVRFRCwgJmVuY2wtPmZsYWdzKTsKPiA+IEBAIC0zMjUsNyArMzI1LDggQEAgc3Rh
+dGljIGludCBzZ3hfZW5jbF9hZGRfcGFnZShzdHJ1Y3Qgc2d4X2VuY2wKPiA+ICplbmNsLCB1bnNp
+Z25lZCBsb25nIHNyYywKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGdvdG8gZXJyX291dDsKPiA+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiDCoAo+ID4g
+LcKgwqDCoMKgwqDCoMKgc2d4X3JlY29yZF9lcGNfcGFnZShlbmNsX3BhZ2UtPmVwY19wYWdlLAo+
+ID4gU0dYX0VQQ19QQUdFX1JFQ0xBSU1FUl9UUkFDS0VEKTsKPiA+ICvCoMKgwqDCoMKgwqDCoHNn
+eF9yZWNvcmRfZXBjX3BhZ2UoZW5jbF9wYWdlLT5lcGNfcGFnZSwKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIChTR1hfRVBDX1BBR0VfRU5D
+TEFWRSB8Cj4gPiBTR1hfRVBDX1BBR0VfUkVDTEFJTUVSX1RSQUNLRUQpKTsKPiA+IMKgwqDCoMKg
+wqDCoMKgwqBtdXRleF91bmxvY2soJmVuY2wtPmxvY2spOwo+ID4gwqDCoMKgwqDCoMKgwqDCoG1t
+YXBfcmVhZF91bmxvY2soY3VycmVudC0+bW0pOwo+ID4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiBy
+ZXQ7Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvbWFpbi5jCj4gPiBi
+L2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L21haW4uYwo+ID4gaW5kZXggYmFkNzI0OThiMGE3Li44
+M2FhZjVjZWE3YjkgMTAwNjQ0Cj4gPiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9tYWlu
+LmMKPiA+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L21haW4uYwo+ID4gQEAgLTI4OCwz
+NyArMjg4LDQzIEBAIHN0YXRpYyB2b2lkIHNneF9yZWNsYWltZXJfd3JpdGUoc3RydWN0Cj4gPiBz
+Z3hfZXBjX3BhZ2UgKmVwY19wYWdlLAo+ID4gwqAgKi8KPiA+IMKgc3RhdGljIHZvaWQgX19zZ3hf
+cmVjbGFpbV9wYWdlcyh2b2lkKQo+ID4gwqB7Cj4gPiAtwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qgc2d4
+X2VwY19wYWdlICpjaHVua1tTR1hfTlJfVE9fU0NBTl07Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3Ry
+dWN0IHNneF9iYWNraW5nIGJhY2tpbmdbU0dYX05SX1RPX1NDQU5dOwo+ID4gK8KgwqDCoMKgwqDC
+oMKgc3RydWN0IHNneF9lcGNfcGFnZSAqZXBjX3BhZ2UsICp0bXA7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgc3RydWN0IHNneF9lbmNsX3BhZ2UgKmVuY2xfcGFnZTsKPiA+IC3CoMKgwqDCoMKgwqDCoHN0
+cnVjdCBzZ3hfZXBjX3BhZ2UgKmVwY19wYWdlOwo+ID4gwqDCoMKgwqDCoMKgwqDCoHBnb2ZmX3Qg
+cGFnZV9pbmRleDsKPiA+IC3CoMKgwqDCoMKgwqDCoGludCBjbnQgPSAwOwo+ID4gK8KgwqDCoMKg
+wqDCoMKgTElTVF9IRUFEKGlzbyk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgaW50IHJldDsKPiA+IMKg
+wqDCoMKgwqDCoMKgwqBpbnQgaTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgc3Bpbl9sb2Nr
+KCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqBmb3IgKGkgPSAwOyBp
+IDwgU0dYX05SX1RPX1NDQU47IGkrKykgewo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGVwY19wYWdlID0KPiA+IHNneF9lcGNfcG9wX3JlY2xhaW1hYmxlKCZzZ3hfZ2xvYmFsX2xy
+dSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXBjX3BhZ2UgPQo+ID4gc2d4
+X2VwY19wZWVrX3JlY2xhaW1hYmxlKCZzZ3hfZ2xvYmFsX2xydSk7Cj4gPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGlmICghZXBjX3BhZ2UpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiA+IMKgCj4gPiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVuY2xfcGFnZSA9IGVwY19wYWdlLT5lbmNsX293bmVyOwo+
+ID4gwqAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoV0FSTl9PTl9PTkNF
+KCEoZXBjX3BhZ2UtPmZsYWdzICYKPiA+IFNHWF9FUENfUEFHRV9FTkNMQVZFKSkpCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbnRpbnVlOwo+ID4g
+Kwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoa3JlZl9nZXRfdW5sZXNz
+X3plcm8oJmVuY2xfcGFnZS0+ZW5jbC0KPiA+ID5yZWZjb3VudCkgIT0gMCkgewo+ID4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXBjX3BhZ2UtPmZsYWdz
+IHw9Cj4gPiBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUzsKPiA+IC3CoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2h1bmtbY250KytdID0gZXBjX3Bh
+Z2U7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxp
+c3RfbW92ZV90YWlsKCZlcGNfcGFnZS0+bGlzdCwgJmlzbyk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoH0gZWxzZSB7Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoC8qIFRoZSBvd25lciBpcyBmcmVlaW5nIHRoZSBwYWdlLiBObyBu
+ZWVkCj4gPiB0byBhZGQgdGhlCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCAqIHBhZ2UgYmFjayB0byB0aGUgbGlzdCBvZiByZWNsYWltYWJsZQo+ID4g
+cGFnZXMuCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oC8qIFRoZSBvd25lciBpcyBmcmVlaW5nIHRoZSBwYWdlLCByZW1vdmUgaXQKPiA+IGZyb20gdGhl
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIExS
+VSBsaXN0Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgKi8KPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGVwY19wYWdlLT5mbGFncyAmPQo+ID4gflNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRDsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbGlzdF9k
+ZWxfaW5pdCgmZXBjX3BhZ2UtPmxpc3QpOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqB9Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gwqDCoMKgwqDCoMKgwqDCoHNwaW5fdW5s
+b2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKgwqBmb3Ig
+KGkgPSAwOyBpIDwgY250OyBpKyspIHsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBlcGNfcGFnZSA9IGNodW5rW2ldOwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKGxpc3RfZW1wdHko
+JmlzbykpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuOwo+ID4gKwo+
+ID4gK8KgwqDCoMKgwqDCoMKgaSA9IDA7Cj4gPiArwqDCoMKgwqDCoMKgwqBsaXN0X2Zvcl9lYWNo
+X2VudHJ5X3NhZmUoZXBjX3BhZ2UsIHRtcCwgJmlzbywgbGlzdCkgewo+ID4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBlbmNsX3BhZ2UgPSBlcGNfcGFnZS0+ZW5jbF9vd25lcjsKPiA+
+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghc2d4X3JlY2xhaW1l
+cl9hZ2UoZXBjX3BhZ2UpKQo+ID4gQEAgLTMzMyw2ICszMzksNyBAQCBzdGF0aWMgdm9pZCBfX3Nn
+eF9yZWNsYWltX3BhZ2VzKHZvaWQpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBnb3RvIHNraXA7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoH0KPiA+IMKgCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaSsrOwo+
+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlbmNsX3BhZ2UtPmRlc2MgfD0gU0dY
+X0VOQ0xfUEFHRV9CRUlOR19SRUNMQUlNRUQ7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoG11dGV4X3VubG9jaygmZW5jbF9wYWdlLT5lbmNsLT5sb2NrKTsKPiA+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29udGludWU7Cj4gPiBAQCAtMzQwLDMxICszNDcsMjUg
+QEAgc3RhdGljIHZvaWQgX19zZ3hfcmVjbGFpbV9wYWdlcyh2b2lkKQo+ID4gwqBza2lwOgo+ID4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzcGluX2xvY2soJnNneF9nbG9iYWxfbHJ1
+LmxvY2spOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlcGNfcGFnZS0+Zmxh
+Z3MgJj0KPiA+IH5TR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUzsKPiA+IC3CoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfZXBjX3B1c2hfcmVjbGFpbWFibGUoJnNneF9nbG9i
+YWxfbHJ1LAo+ID4gZXBjX3BhZ2UpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHNneF9lcGNfbW92ZV9yZWNsYWltYWJsZSgmc2d4X2dsb2JhbF9scnUsCj4gPiBlcGNfcGFnZSk7
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNwaW5fdW5sb2NrKCZzZ3hfZ2xv
+YmFsX2xydS5sb2NrKTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGtyZWZfcHV0KCZlbmNsX3BhZ2UtPmVuY2wtPnJlZmNvdW50LAo+ID4gc2d4X2VuY2xfcmVsZWFz
+ZSk7Cj4gPiAtCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2h1bmtbaV0gPSBO
+VUxMOwo+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKgwqBmb3Ig
+KGkgPSAwOyBpIDwgY250OyBpKyspIHsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBlcGNfcGFnZSA9IGNodW5rW2ldOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGlmIChlcGNfcGFnZSkKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgc2d4X3JlY2xhaW1lcl9ibG9jayhlcGNfcGFnZSk7Cj4gPiAtwqDCoMKgwqDCoMKg
+wqB9Cj4gPiAtCj4gPiAtwqDCoMKgwqDCoMKgwqBmb3IgKGkgPSAwOyBpIDwgY250OyBpKyspIHsK
+PiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlcGNfcGFnZSA9IGNodW5rW2ldOwo+
+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghZXBjX3BhZ2UpCj4gPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbnRpbnVlOwo+ID4g
+LQo+ID4gK8KgwqDCoMKgwqDCoMKgbGlzdF9mb3JfZWFjaF9lbnRyeShlcGNfcGFnZSwgJmlzbywg
+bGlzdCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjbGFpbWVyX2Js
+b2NrKGVwY19wYWdlKTsKPiA+ICsgCj4gPiArwqDCoMKgwqDCoMKgwqBpID0gMDsKPiA+ICvCoMKg
+wqDCoMKgwqDCoGxpc3RfZm9yX2VhY2hfZW50cnlfc2FmZShlcGNfcGFnZSwgdG1wLCAmaXNvLCBs
+aXN0KSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVuY2xfcGFnZSA9IGVw
+Y19wYWdlLT5lbmNsX293bmVyOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNn
+eF9yZWNsYWltZXJfd3JpdGUoZXBjX3BhZ2UsICZiYWNraW5nW2ldKTsKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjbGFpbWVyX3dyaXRlKGVwY19wYWdlLCAmYmFja2lu
+Z1tpKytdKTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGtyZWZf
+cHV0KCZlbmNsX3BhZ2UtPmVuY2wtPnJlZmNvdW50LAo+ID4gc2d4X2VuY2xfcmVsZWFzZSk7Cj4g
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVwY19wYWdlLT5mbGFncyAmPSB+KFNH
+WF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRAo+ID4gfAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+
+IFNHWF9FUENfUEFHRV9SRUNMQUlNX0lOX1BST0dSRVNTKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4g
+PiBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUyB8Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBT
+R1hfRVBDX1BBR0VfRU5DTEFWRSB8Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTR1hfRVBDX1BBR0VfVkVS
+U0lPTl9BUlJBWSk7Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBz
+Z3hfZnJlZV9lcGNfcGFnZShlcGNfcGFnZSk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gQEAg
+LTUwNSw2ICs1MDYsNyBAQCBzdHJ1Y3Qgc2d4X2VwY19wYWdlICpfX3NneF9hbGxvY19lcGNfcGFn
+ZSh2b2lkKQo+ID4gwqAvKioKPiA+IMKgICogc2d4X3JlY29yZF9lcGNfcGFnZSgpIC0gQWRkIGEg
+cGFnZSB0byB0aGUgTFJVIHRyYWNraW5nCj4gPiDCoCAqIEBwYWdlOsKgwqDCoMKgwqDCoEVQQyBw
+YWdlCj4gPiArICogQGZsYWdzOsKgwqDCoMKgwqBSZWNsYWltIGZsYWdzIGZvciB0aGUgcGFnZS4K
+PiA+IMKgICoKPiA+IMKgICogTWFyayBhIHBhZ2Ugd2l0aCB0aGUgc3BlY2lmaWVkIGZsYWdzIGFu
+ZCBhZGQgaXQgdG8gdGhlCj4gPiBhcHByb3ByaWF0ZQo+ID4gwqAgKiAodW4pcmVjbGFpbWFibGUg
+bGlzdC4KPiA+IEBAIC01MzUsMTggKzUzNywxOSBAQCB2b2lkIHNneF9yZWNvcmRfZXBjX3BhZ2Uo
+c3RydWN0IHNneF9lcGNfcGFnZQo+ID4gKnBhZ2UsIHVuc2lnbmVkIGxvbmcgZmxhZ3MpCj4gPiDC
+oGludCBzZ3hfZHJvcF9lcGNfcGFnZShzdHJ1Y3Qgc2d4X2VwY19wYWdlICpwYWdlKQo+ID4gwqB7
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3Bpbl9sb2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+
+IC3CoMKgwqDCoMKgwqDCoGlmIChwYWdlLT5mbGFncyAmIFNHWF9FUENfUEFHRV9SRUNMQUlNRVJf
+VFJBQ0tFRCkgewo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC8qIFRoZSBwYWdl
+IGlzIGJlaW5nIHJlY2xhaW1lZC4gKi8KPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBpZiAocGFnZS0+ZmxhZ3MgJiBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUykKPiA+
+IHsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3Bp
+bl91bmxvY2soJnNneF9nbG9iYWxfbHJ1LmxvY2spOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVCVVNZOwo+ID4gLcKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoH0KPiA+IC0KPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBwYWdlLT5mbGFncyAmPSB+U0dYX0VQQ19QQUdFX1JFQ0xBSU1FUl9UUkFDS0VEOwo+ID4g
+K8KgwqDCoMKgwqDCoMKgaWYgKChwYWdlLT5mbGFncyAmIFNHWF9FUENfUEFHRV9SRUNMQUlNRVJf
+VFJBQ0tFRCkgJiYKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoCAocGFnZS0+ZmxhZ3MgJiBTR1hf
+RVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUykpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBzcGluX3VubG9jaygmc2d4X2dsb2JhbF9scnUubG9jayk7Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FQlVTWTsKPiA+IMKgwqDCoMKgwqDCoMKg
+wqB9Cj4gPiDCoMKgwqDCoMKgwqDCoMKgbGlzdF9kZWwoJnBhZ2UtPmxpc3QpOwo+ID4gwqDCoMKg
+wqDCoMKgwqDCoHNwaW5fdW5sb2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKgCj4gPiAr
+wqDCoMKgwqDCoMKgwqBwYWdlLT5mbGFncyAmPSB+KFNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJB
+Q0tFRCB8Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUyB8Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTR1hfRVBDX1BBR0VfRU5DTEFWRSB8Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTR1hfRVBD
+X1BBR0VfVkVSU0lPTl9BUlJBWSk7Cj4gPiArCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7
+Cj4gPiDCoH0KPiA+IMKgCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gv
+c2d4LmgKPiA+IGIvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvc2d4LmgKPiA+IGluZGV4IDM3ZDY2
+YmM2Y2EyNy4uZWM4ZDU2N2NkOTc1IDEwMDY0NAo+ID4gLS0tIGEvYXJjaC94ODYva2VybmVsL2Nw
+dS9zZ3gvc2d4LmgKPiA+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L3NneC5oCj4gPiBA
+QCAtMzIsNiArMzIsOCBAQAo+ID4gwqAjZGVmaW5lIFNHWF9FUENfUEFHRV9LVk1fR1VFU1TCoMKg
+wqDCoMKgwqDCoMKgwqBCSVQoMikKPiA+IMKgLyogcGFnZSBmbGFnIHRvIGluZGljYXRlIHJlY2xh
+aW0gaXMgaW4gcHJvZ3Jlc3MgKi8KPiA+IMKgI2RlZmluZSBTR1hfRVBDX1BBR0VfUkVDTEFJTV9J
+Tl9QUk9HUkVTUyBCSVQoMykKPiA+ICsjZGVmaW5lIFNHWF9FUENfUEFHRV9FTkNMQVZFwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoEJJVCg0KQo+ID4gKyNkZWZpbmUgU0dYX0VQQ19QQUdFX1ZFUlNJT05f
+QVJSQVnCoMKgwqDCoMKgQklUKDUpCj4gCj4gQ291bGQgeW91IHBsZWFzZSBzcGVuZCBzb21lIHRp
+bWUgdG8gY2xlYXJseSBkb2N1bWVudCB3aGF0IGVhY2ggYml0Cj4gbWVhbnM/Cj4gCj4gPiArc3Rh
+dGljIGlubGluZSB2b2lkIF9fc2d4X2VwY19wYWdlX2xpc3RfbW92ZShzdHJ1Y3QgbGlzdF9oZWFk
+Cj4gPiAqbGlzdCwgc3RydWN0IHNneF9lcGNfcGFnZSAqcGFnZSkKPiA+ICt7Cj4gPiArwqDCoMKg
+wqDCoMKgwqBsaXN0X21vdmVfdGFpbCgmcGFnZS0+bGlzdCwgbGlzdCk7Cj4gPiArfQo+IAo+IEkn
+bSBub3Qgc3VyZSBJIGdldCB0aGUgcG9pbnQgb2YgYSBoZWxwZXIgbGlrZSB0aGlzLsKgIFdoeSBu
+b3QganVzdAo+IGhhdmUKPiB0aGUgY2FsbGVyIGNhbGwgbGlzdF9tb3ZlKCkgZGlyZWN0bHk/Cj4g
+Cj4gPiDCoC8qCj4gPiDCoCAqIE11c3QgYmUgY2FsbGVkIHdpdGggcXVldWUgbG9jayBhY3F1aXJl
+ZAo+ID4gwqAgKi8KPiA+IEBAIC0xNTcsNiArMTY3LDM4IEBAIHN0YXRpYyBpbmxpbmUgdm9pZAo+
+ID4gc2d4X2VwY19wdXNoX3VucmVjbGFpbWFibGUoc3RydWN0IHNneF9lcGNfbHJ1X2xpc3RzICps
+cnVzLAo+ID4gwqDCoMKgwqDCoMKgwqDCoF9fc2d4X2VwY19wYWdlX2xpc3RfcHVzaCgmKGxydXMp
+LT51bnJlY2xhaW1hYmxlLCBwYWdlKTsKPiA+IMKgfQo+ID4gwqAKPiA+ICsvKgo+ID4gKyAqIE11
+c3QgYmUgY2FsbGVkIHdpdGggcXVldWUgbG9jayBhY3F1aXJlZAo+ID4gKyAqLwo+ID4gK3N0YXRp
+YyBpbmxpbmUgc3RydWN0IHNneF9lcGNfcGFnZSAqCj4gPiBfX3NneF9lcGNfcGFnZV9saXN0X3Bl
+ZWsoc3RydWN0IGxpc3RfaGVhZCAqbGlzdCkKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBzdHJ1
+Y3Qgc2d4X2VwY19wYWdlICplcGNfcGFnZTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChs
+aXN0X2VtcHR5KGxpc3QpKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
+biBOVUxMOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgZXBjX3BhZ2UgPSBsaXN0X2ZpcnN0X2Vu
+dHJ5KGxpc3QsIHN0cnVjdCBzZ3hfZXBjX3BhZ2UsCj4gPiBsaXN0KTsKPiA+ICvCoMKgwqDCoMKg
+wqDCoHJldHVybiBlcGNfcGFnZTsKPiA+ICt9Cj4gCj4gbGlzdF9maXJzdF9lbnRyeV9vcl9udWxs
+KCkgcGVyaGFwcz8KPiAKPiA+ICtzdGF0aWMgaW5saW5lIHN0cnVjdCBzZ3hfZXBjX3BhZ2UgKgo+
+ID4gK3NneF9lcGNfcGVla19yZWNsYWltYWJsZShzdHJ1Y3Qgc2d4X2VwY19scnVfbGlzdHMgKmxy
+dXMpCj4gPiArewo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIF9fc2d4X2VwY19wYWdlX2xpc3Rf
+cGVlaygmKGxydXMpLT5yZWNsYWltYWJsZSk7Cj4gPiArfQo+ID4gKwo+ID4gK3N0YXRpYyBpbmxp
+bmUgdm9pZCBzZ3hfZXBjX21vdmVfcmVjbGFpbWFibGUoc3RydWN0Cj4gPiBzZ3hfZXBjX2xydV9s
+aXN0cyAqbHJ1LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3Qgc2d4X2Vw
+Y19wYWdlCj4gPiAqcGFnZSkKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBfX3NneF9lcGNfcGFn
+ZV9saXN0X21vdmUoJihscnUpLT5yZWNsYWltYWJsZSwgcGFnZSk7Cj4gPiArfQo+ID4gKwo+ID4g
+K3N0YXRpYyBpbmxpbmUgc3RydWN0IHNneF9lcGNfcGFnZSAqCj4gPiArc2d4X2VwY19wZWVrX3Vu
+cmVjbGFpbWFibGUoc3RydWN0IHNneF9lcGNfbHJ1X2xpc3RzICpscnVzKQo+ID4gK3sKPiA+ICvC
+oMKgwqDCoMKgwqDCoHJldHVybiBfX3NneF9lcGNfcGFnZV9saXN0X3BlZWsoJihscnVzKS0+dW5y
+ZWNsYWltYWJsZSk7Cj4gPiArfQo+IAo+IEluIGdlbmVyYWwsIEknbSBub3QgYmVjb21pbmcgbW9y
+ZSBmb25kIG9mIHRoZXNlIGhlbHBlcnMgYXMgdGhlIHNlcmllcwo+IGdvZXMgYWxvbmcuwqAgTXkg
+d29ycnkgaXMgdGhhdCB0aGV5J3JlIGFuIGFic3RyYWN0aW9uIHdoZXJlIHdlIGRvbid0Cj4gKnJl
+YWxseSogbmVlZCBvbmUuwqAgSSBkb24ndCBzZWVtIHRoZW0gZ3Jvd2luZyBtdWNoIGZ1bmN0aW9u
+YWxpdHkgYXMKPiB0aGUKPiBzZXJpZXMgZ29lcyBhbG9uZy4KPiAKPiBJJ2xsIHJlc2VydmUganVk
+Z2VtZW50IHVudGlsIHRoZSBlbmQgdGhvdWdoLgo+IAoKClRoZSBoZWxwZXJzIHdlcmUgYWRkZWQg
+YmVjYXVzZSBKYXJya28gcmVxdWVzdGVkIGEgcXVldWUgYWJzdHJhY3Rpb24gZm9yCnRoZSBzZ3hf
+ZXBjX2xydV9saXN0cyBkYXRhIHN0cnVjdHVyZSBpbiB0aGUgZmlyc3Qgcm91bmQgb2YgcmV2aWV3
+cy4gdGhlCnNpbXBsZSBvbmUgbGluZSBpbmxpbmVzIGFyZSBlZmZlY3RpdmVseSBqdXN0IHJlbmFt
+aW5nIHRvIG1ha2UgdGhlIHF1ZXVlCmFic3RyYWN0aW9uIG1vcmUgb2J2aW91cyB0byB0aGUgcmVh
+ZGVyLgoK
 
