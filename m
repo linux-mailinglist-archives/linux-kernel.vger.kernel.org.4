@@ -2,81 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75996425A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FCB6425A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbiLEJTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+        id S230415AbiLEJT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiLEJTf (ORCPT
+        with ESMTP id S230484AbiLEJTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:19:35 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB34612D32;
-        Mon,  5 Dec 2022 01:19:31 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NQdKZ1c5Sz4xVng;
-        Mon,  5 Dec 2022 17:19:30 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B59JEZ4022117;
-        Mon, 5 Dec 2022 17:19:14 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Mon, 5 Dec 2022 17:19:16 +0800 (CST)
-Date:   Mon, 5 Dec 2022 17:19:16 +0800 (CST)
-X-Zmail-TransId: 2af9638db79465f1e0a1
-X-Mailer: Zmail v1.0
-Message-ID: <202212051719169589575@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <trond.myklebust@hammerspace.com>
-Cc:     <anna@kernel.org>, <linux-nfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBmczogbmZzOiBzeXNmczogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B59JEZ4022117
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 638DB7A2.000 by FangMail milter!
-X-FangMail-Envelope: 1670231970/4NQdKZ1c5Sz4xVng/638DB7A2.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638DB7A2.000/4NQdKZ1c5Sz4xVng
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Dec 2022 04:19:40 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158FA12A81
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:19:39 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id l21-20020a5d9315000000b006df7697880aso9659163ion.23
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:19:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y468iOysXD5K+EPVXsktOCNRKCYGbdvNvbmnSUju9X4=;
+        b=p3YEMv8AgdVNonVPQAG0kJAmF9O8H5ZjGbAxHxpgPejJ6LVh3F74+EdKynKStJH6iu
+         IfdJt1fLOCxjdy9hXwHK7ZjT8/ff+NnV5yEvMb+HwuIybTy50R83pLkfGw3+ch+zu3hj
+         bIOIDh3KPv393xeaJgqlIB1t6XQOD0COUbsdqsk98oT5ilz3g3+VO9hCcTdWVEuvj7Xi
+         R4McRRIHPFOgeI3Kog1ADmshcMmibeLMUTgShuYxtVxXFoWD0w0CMJxEjBw1BGqV41Ju
+         47KbU1AQBaV4i0OVUOEaQo5fLJ8lr9/af14BvsujMCeRT4gWVsJSXdIwsgQgVswCL5Di
+         csyg==
+X-Gm-Message-State: ANoB5pks4vtJ+xR7S8A/ZJSIU8oZEoJ8bxEWPKKtjOH/FB0ZD9WUGlMY
+        fa8b2ggimj0CkzLsZWJAvSi7JhpfH11C7iKhuXM3CthGvozx
+X-Google-Smtp-Source: AA0mqf5TkxzuRlGJ2PUbvrTX8B++EM+A/hJqV9iALA13YKF0GuS8wkfZPNpEHqFlKNWhx4HdXPxlIZZf3usqk53Ix5qKXM5HQhAl
+MIME-Version: 1.0
+X-Received: by 2002:a6b:e909:0:b0:6e0:19a2:fa1 with SMTP id
+ u9-20020a6be909000000b006e019a20fa1mr591719iof.112.1670231978381; Mon, 05 Dec
+ 2022 01:19:38 -0800 (PST)
+Date:   Mon, 05 Dec 2022 01:19:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c396f805ef112fd3@google.com>
+Subject: [syzbot] KMSAN: uninit-value in hfsplus_delete_cat
+From:   syzbot <syzbot+fdedff847a0e5e84c39f@syzkaller.appspotmail.com>
+To:     glider@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hello,
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+syzbot found the following issue on:
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+HEAD commit:    49a9a20768f5 kmsan: allow using __msan_instrument_asm_stor..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1412684d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d901b2d28729cb6a
+dashboard link: https://syzkaller.appspot.com/bug?extid=fdedff847a0e5e84c39f
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4a944f9f50fb/disk-49a9a207.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a2ec5594e201/vmlinux-49a9a207.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3aafc1a9ba37/bzImage-49a9a207.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fdedff847a0e5e84c39f@syzkaller.appspotmail.com
+
+loop2: detected capacity change from 0 to 1024
+=====================================================
+BUG: KMSAN: uninit-value in hfsplus_subfolders_dec fs/hfsplus/catalog.c:248 [inline]
+BUG: KMSAN: uninit-value in hfsplus_delete_cat+0x1207/0x14d0 fs/hfsplus/catalog.c:419
+ hfsplus_subfolders_dec fs/hfsplus/catalog.c:248 [inline]
+ hfsplus_delete_cat+0x1207/0x14d0 fs/hfsplus/catalog.c:419
+ hfsplus_rmdir+0x141/0x3d0 fs/hfsplus/dir.c:425
+ hfsplus_rename+0x102/0x2e0 fs/hfsplus/dir.c:545
+ vfs_rename+0x1e4c/0x2800 fs/namei.c:4779
+ do_renameat2+0x173d/0x1dc0 fs/namei.c:4930
+ __do_sys_renameat2 fs/namei.c:4963 [inline]
+ __se_sys_renameat2 fs/namei.c:4960 [inline]
+ __ia32_sys_renameat2+0x14b/0x1f0 fs/namei.c:4960
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Uninit was stored to memory at:
+ hfsplus_subfolders_inc fs/hfsplus/catalog.c:232 [inline]
+ hfsplus_create_cat+0x19e3/0x19f0 fs/hfsplus/catalog.c:314
+ hfsplus_mknod+0x1fd/0x560 fs/hfsplus/dir.c:494
+ hfsplus_mkdir+0x54/0x60 fs/hfsplus/dir.c:529
+ vfs_mkdir+0x62a/0x870 fs/namei.c:4036
+ do_mkdirat+0x466/0x7b0 fs/namei.c:4061
+ __do_sys_mkdirat fs/namei.c:4076 [inline]
+ __se_sys_mkdirat fs/namei.c:4074 [inline]
+ __ia32_sys_mkdirat+0xc4/0x120 fs/namei.c:4074
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Uninit was created at:
+ __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5581
+ alloc_pages+0xaae/0xd80 mm/mempolicy.c:2285
+ alloc_slab_page mm/slub.c:1794 [inline]
+ allocate_slab+0x1b5/0x1010 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0x10c3/0x2d60 mm/slub.c:3180
+ __slab_alloc mm/slub.c:3279 [inline]
+ slab_alloc_node mm/slub.c:3364 [inline]
+ slab_alloc mm/slub.c:3406 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+ kmem_cache_alloc_lru+0x6f3/0xb30 mm/slub.c:3429
+ alloc_inode_sb include/linux/fs.h:3125 [inline]
+ hfsplus_alloc_inode+0x56/0xc0 fs/hfsplus/super.c:627
+ alloc_inode+0x83/0x440 fs/inode.c:259
+ iget_locked+0x2a1/0xe20 fs/inode.c:1286
+ hfsplus_iget+0x5f/0xb60 fs/hfsplus/super.c:64
+ hfsplus_btree_open+0x13b/0x1cf0 fs/hfsplus/btree.c:150
+ hfsplus_fill_super+0x12b0/0x2a80 fs/hfsplus/super.c:473
+ mount_bdev+0x508/0x840 fs/super.c:1401
+ hfsplus_mount+0x49/0x60 fs/hfsplus/super.c:641
+ legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
+ vfs_get_tree+0xa1/0x500 fs/super.c:1531
+ do_new_mount+0x694/0x1580 fs/namespace.c:3040
+ path_mount+0x71a/0x1eb0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x734/0x840 fs/namespace.c:3568
+ __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3568
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+CPU: 1 PID: 3898 Comm: syz-executor.2 Not tainted 6.1.0-rc7-syzkaller-63931-g49a9a20768f5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+=====================================================
+
+
 ---
- fs/nfs/sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/fs/nfs/sysfs.c b/fs/nfs/sysfs.c
-index 67a87800b3a9..0cbcd2dfa732 100644
---- a/fs/nfs/sysfs.c
-+++ b/fs/nfs/sysfs.c
-@@ -82,7 +82,7 @@ static ssize_t nfs_netns_identifier_show(struct kobject *kobj,
- 	ssize_t ret;
-
- 	rcu_read_lock();
--	ret = scnprintf(buf, PAGE_SIZE, "%s\n", rcu_dereference(c->identifier));
-+	ret = sysfs_emit(buf, "%s\n", rcu_dereference(c->identifier));
- 	rcu_read_unlock();
- 	return ret;
- }
--- 
-2.25.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
