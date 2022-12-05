@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10248642348
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44814642349
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbiLEHBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 02:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S231533AbiLEHBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 02:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiLEHAv (ORCPT
+        with ESMTP id S231532AbiLEHB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 02:00:51 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9100BF7C
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:00:46 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3704852322fso108443177b3.8
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 23:00:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=coRXOHRNz//WTvn8iz/sAzTb1yJBt0dUNQrHlt2mpPs=;
-        b=cp2c4vLvpDWA0mcSMbgN+VRWTA9DqaDSNKkxVBxIu7MdTZray7sSNLrIl20bdFnlL0
-         KuswNgOgKZuar9qFfg3zDSP4eB3V30hL4u4a+vthyZ1dLzDdOwLeqFzDA1SxC2oD2F/K
-         c5K1UCDm42XTnU8MaTGaMgVCR9zjcLmPb/VNuXAGVsFac9utRPXA7IvkYQ1vxJtAhX/z
-         PkdIujfBoBkGmeir5HfFGNu1a0u5KsmdQEUE0YEc2CvTj7XseBcUhWCeqaREWYmEz8Ow
-         6Hivt5EJmmtmp6I60cJKxtybuRswUNjkPAK69gPiKXRrGAl++llFBfg3Fyh5/C2ZxsSz
-         xquA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=coRXOHRNz//WTvn8iz/sAzTb1yJBt0dUNQrHlt2mpPs=;
-        b=wn/j/c9ZKj7LLnnoYLDmhimvLFdS35WSa0uoYgBrec6IpxNJzRUm5jNKg0ktHVCTqj
-         5m/MHLcTG9Vv0ljVBTd8nbmVTdDjmR1SHmkPgTrNariybnVW5JCUcUr+1PLF/3y7bAH9
-         3QuIVcpXH94XaC7sTPXViqjJtE2ZA+2ZkhnkENhBRRVpHJekal2BpkMCevi1rB3ePbeU
-         diEMoAER+bOKBSQlCEkyvschzm6AcgrpCSjorgusvW60r+PwJtsiqlV3N1JyphYPed2a
-         PYy4Tvd10OQoILelvgJCXU5ReRSp8ANZbuspdZChB4TUOROlEVcUNYTPBcjbw3mG3M8r
-         cn8w==
-X-Gm-Message-State: ANoB5pmXrosFZ2jvAgesAqqr9gojEyKglf/rP89YbUvp5Ndwrxl9xIMS
-        481GMakJNW18DfIz8vQijZvJJQvUpVrUc4M++k6w+g==
-X-Google-Smtp-Source: AA0mqf4ZStaU2n0mz3tYU7jDd0FFF3gERFNnwStcE0ObpDr+z9rd9bCvhr7OcdlOgWqCo28NPuV1ZIRM2HRWjs21t78=
-X-Received: by 2002:a81:1915:0:b0:3bf:9e45:1139 with SMTP id
- 21-20020a811915000000b003bf9e451139mr39230763ywz.267.1670223645646; Sun, 04
- Dec 2022 23:00:45 -0800 (PST)
+        Mon, 5 Dec 2022 02:01:28 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88296A466
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670223685; x=1701759685;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lukaDYMLzzU8O7+ynR8srq7QmQB19CkmS/LulZdvcl8=;
+  b=TjfdJohRhf2fTM32g/hSuM5u23iPZ+xDZDW82WTRXbal2jKC++NQk+L3
+   ygR11XZeYmur7pbAMa5NGkV1AyXPX8zm4Q0P8gFHmLP4oKBJO0DdGhfxu
+   bBmUOd+EtqF4feVJCmZ38tM93YLU8xabtLNQknGCwDNVC1I54jWkvaCtO
+   enaw/4Aw5T7yOMcscDWNU+F1A+Meke+ElHXc8zw95aVhj53DTWJz1u8jH
+   0kQs6SyDeAIWzkqTG41auSxAypjWRXto0WGPtsousIVbzUPqLzf7FoHD3
+   p3680iYmb6Cv4m8NXpKHrp9nhBvkQO8gzVw8O8YtFJuEIBSiqplNhRSB1
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
+   d="scan'208";a="191694346"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Dec 2022 00:01:25 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 5 Dec 2022 00:01:23 -0700
+Received: from virtualbox.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 5 Dec 2022 00:01:21 -0700
+From:   Mihai Sain <mihai.sain@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Mihai Sain <mihai.sain@microchip.com>
+Subject: [PATCH] ARM: at91: add support in soc driver for new SAMA7G54 SiPs
+Date:   Mon, 5 Dec 2022 09:01:08 +0200
+Message-ID: <20221205070108.42624-1-mihai.sain@microchip.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <CA+G9fYsK5WUxs6p9NaE4e3p7ew_+s0SdW0+FnBgiLWdYYOvoMg@mail.gmail.com>
- <CANpmjNOQxZ--jXZdqN3tjKE=sd4X6mV4K-PyY40CMZuoB5vQTg@mail.gmail.com>
- <CA+G9fYs55N3J8TRA557faxvAZSnCTUqnUx+p1GOiCiG+NVfqnw@mail.gmail.com>
- <Y4e3WC4UYtszfFBe@codewreck.org> <CA+G9fYuJZ1C3802+uLvqJYMjGged36wyW+G1HZJLzrtmbi1bJA@mail.gmail.com>
- <Y4ttC/qESg7Np9mR@codewreck.org> <CANpmjNNcY0LQYDuMS2pG2R3EJ+ed1t7BeWbLK2MNxnzPcD=wZw@mail.gmail.com>
- <Y4vW4CncDucES8m+@codewreck.org>
-In-Reply-To: <Y4vW4CncDucES8m+@codewreck.org>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 5 Dec 2022 08:00:00 +0100
-Message-ID: <CANpmjNPXhEB6GeMT70UT1e-8zTHf3gY21E3wx-27VjChQ0x2gA@mail.gmail.com>
-Subject: Re: arm64: allmodconfig: BUG: KCSAN: data-race in p9_client_cb / p9_client_rpc
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        rcu <rcu@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        kunit-dev@googlegroups.com, lkft-triage@lists.linaro.org,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,65 +62,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Dec 2022 at 00:08, Dominique Martinet <asmadeus@codewreck.org> wrote:
->
-> Marco Elver wrote on Sat, Dec 03, 2022 at 05:46:46PM +0100:
-> > > But I can't really find a problem with what KCSAN complains about --
-> > > we are indeed accessing status from two threads without any locks.
-> > > Instead of a lock, we're using a barrier so that:
-> > >  - recv thread/cb: writes to req stuff || write to req status
-> > >  - p9_client_rpc: reads req status || reads other fields from req
-> > >
-> > > Which has been working well enough (at least, without the barrier things
-> > > blow up quite fast).
-> > >
-> > > So can I'll just consider this a false positive, but if someone knows
-> > > how much one can read into this that'd be appreciated.
-> >
-> > The barriers only ensure ordering, but not atomicity of the accesses
-> > themselves (for one, the compiler is well in its right to transform
-> > plain accesses in ways that the concurrent algorithm wasn't designed
-> > for). In this case it looks like it's just missing
-> > READ_ONCE()/WRITE_ONCE().
->
-> Aha! Thanks for this!
->
-> I've always believed plain int types accesses are always atomic and the
-> only thing to watch for would be compilers reordering instrucions, which
-> would be ensured by the barrier in this case, but I guess there are some
-> architectures or places where this isn't true?
->
->
-> I'm a bit confused though, I can only see five places where wait_event*
-> functions use READ_ONCE and I believe they more or less all would
-> require such a marker -- I guess non-equality checks might be safe
-> (waiting for a value to change from a known value) but if non-atomic
-> updates are on the table equality and comparisons checks all would need
-> to be decorated with READ_ONCE; afaiu, unlike usespace loops with
-> pthread_cond_wait there is nothing protecting the condition itself.
->
-> Should I just update the wrapped condition, as below?
->
-> -       err = wait_event_killable(req->wq, req->status >= REQ_STATUS_RCVD);
-> +       err = wait_event_killable(req->wq,
-> +                                 READ_ONCE(req->status) >= REQ_STATUS_RCVD);
+Add detection of new SAMA7G54 System-In-Package (SIP) by the SoC driver:
+SAMA7G54D1G, SAMA7G54D2G, SAMA7G54D4G.
 
-Yes, this looks good!
+Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
+---
+ drivers/soc/atmel/soc.c | 9 +++++++++
+ drivers/soc/atmel/soc.h | 3 +++
+ 2 files changed, 12 insertions(+)
 
-> The writes all are straightforward, there's all the error paths to
-> convert to WRITE_ONCE too but that's not difficult (leaving only the
-> init without such a marker); I'll send a patch when you've confirmed the
-> read looks good.
-> (the other reads are a bit less obvious as some are protected by a lock
-> in trans_fd, which should cover all cases of possible concurrent updates
-> there as far as I can see, but this mixed model is definitely hard to
-> reason with... Well, that's how it was written and I won't ever have time
-> to rewrite any of this. Enough ranting.)
+diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
+index dae8a2e0f745..cc9a3e107479 100644
+--- a/drivers/soc/atmel/soc.c
++++ b/drivers/soc/atmel/soc.c
+@@ -235,6 +235,15 @@ static const struct at91_soc socs[] __initconst = {
+ 	AT91_SOC(SAMA7G5_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
+ 		 AT91_CIDR_VERSION_MASK_SAMA7G5, SAMA7G54_EXID_MATCH,
+ 		 "sama7g54", "sama7g5"),
++	AT91_SOC(SAMA7G5_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
++		 AT91_CIDR_VERSION_MASK_SAMA7G5, SAMA7G54_D1G_EXID_MATCH,
++		 "SAMA7G54 1Gb DDR3L SiP", "sama7g5"),
++	AT91_SOC(SAMA7G5_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
++		 AT91_CIDR_VERSION_MASK_SAMA7G5, SAMA7G54_D2G_EXID_MATCH,
++		 "SAMA7G54 2Gb DDR3L SiP", "sama7g5"),
++	AT91_SOC(SAMA7G5_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
++		 AT91_CIDR_VERSION_MASK_SAMA7G5, SAMA7G54_D4G_EXID_MATCH,
++		 "SAMA7G54 4Gb DDR3L SiP", "sama7g5"),
+ #endif
+ 	{ /* sentinel */ },
+ };
+diff --git a/drivers/soc/atmel/soc.h b/drivers/soc/atmel/soc.h
+index 2ecaa75b00f0..7a9f47ce85fb 100644
+--- a/drivers/soc/atmel/soc.h
++++ b/drivers/soc/atmel/soc.h
+@@ -70,6 +70,9 @@ at91_soc_init(const struct at91_soc *socs);
+ #define SAMA7G52_EXID_MATCH		0x2
+ #define SAMA7G53_EXID_MATCH		0x1
+ #define SAMA7G54_EXID_MATCH		0x0
++#define SAMA7G54_D1G_EXID_MATCH		0x00000018
++#define SAMA7G54_D2G_EXID_MATCH		0x00000020
++#define SAMA7G54_D4G_EXID_MATCH		0x00000028
+ 
+ #define AT91SAM9XE128_CIDR_MATCH	0x329973a0
+ #define AT91SAM9XE256_CIDR_MATCH	0x329a93a0
+-- 
+2.38.1
 
-If the lock-protected accesses indeed are non-racy, they should be
-left unmarked. If some assumption here turns out to be wrong, KCSAN
-would (hopefully) tell us one way or another.
-
-Thanks!
-
--- Marco
