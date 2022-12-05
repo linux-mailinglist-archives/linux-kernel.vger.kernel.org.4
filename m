@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0535F64226C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E72D564226D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbiLEFBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 00:01:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S231469AbiLEFBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 00:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiLEFBG (ORCPT
+        with ESMTP id S230037AbiLEFBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 00:01:06 -0500
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11735F007;
-        Sun,  4 Dec 2022 21:01:01 -0800 (PST)
-X-QQ-mid: bizesmtp83t1670216440tdylbiir
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42425FADF;
+        Sun,  4 Dec 2022 21:01:02 -0800 (PST)
+X-QQ-mid: bizesmtp83t1670216444t8l5fgul
 Received: from ubuntu.. ( [111.196.135.79])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 05 Dec 2022 13:00:39 +0800 (CST)
+        id ; Mon, 05 Dec 2022 13:00:43 +0800 (CST)
 X-QQ-SSF: 01200000000000B0B000000A0000000
-X-QQ-FEAT: PsQCk6chbj5eK9ByDZQ9MzbRQ+lBTauZ/hMtMvyxFIKaWgsW4FUHY+4JhPLWp
-        N8cebpF9TczECdys04OEy9HJn9oZa3VLtz3WoQfuUwnGABxRVV92ZnKGLKSiUNXJ5vOly2i
-        EmIlXEJEYBtM4ApVe9usMvY0zPi/qFYgvjmCUU+0nd4O1v/vE9Ch275x3rBjfwiHDf3A2T1
-        ALae+DDCvEXhohsbyENwZm6hzz3JChV1omL5zQ9O6OghO903vD0KT3kQqoUEiDhoenU0Bhw
-        fitqzjEco1KqPtDZACKdNQMZ2GeNH3iCax7PxJS9Eqz/Xv5K1uxwzC+K3OLB1vn9HYngpfU
-        +ZkRbjl7WKf7o7fqqO6e0i0kHY+jg==
+X-QQ-FEAT: TOO/YuwAHLNsU0I0UDkDXj1aiAPrDdXJhTuoCy6bPBDajHhPYPR1SwPcUNi48
+        hVXep8OiNbPn4Zn65lGbchtJpLbNMBKVt+/em4uIyB4L7sQbYMUfE7CUn9mcORqFxtY4yH9
+        Pdbu0xJVtlJUDBlhdjVnsgQsMXlw6aMZZj1nWdAAAAnlbCPOdPdxuuxBjKq2nPbfgaUEKVn
+        tcSwlg8PCcS2y8pxeMIUpy1LDDgFbvdVRvHxvRmOeL6kirMgkgPgMpgTarbL89YrIGQ6i4t
+        FUPHHXnk6/lhDKO7bpsacw+R8P71ag10HUVeqA9MiwnXaO2TnX1DErGFITGucKpnQpyEYBs
+        fV2OBqVArNAc34+qgyT4i0jG4Vsytk4Fx/QW+JhUcOCur0iq+w=
 X-QQ-GoodBg: 0
 From:   Bin Meng <bmeng@tinylab.org>
 To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-serial@vger.kernel.org
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Subject: [PATCH 1/2] serial: Adapt Arm semihosting earlycon driver to RISC-V
-Date:   Mon,  5 Dec 2022 13:00:37 +0800
-Message-Id: <20221205050038.195746-1-bmeng@tinylab.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH 2/2] serial: Rename earlycon semihost driver
+Date:   Mon,  5 Dec 2022 13:00:38 +0800
+Message-Id: <20221205050038.195746-2-bmeng@tinylab.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221205050038.195746-1-bmeng@tinylab.org>
+References: <20221205050038.195746-1-bmeng@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -51,66 +50,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Per RISC-V semihosting spec [1], adapt the existing Arm semihosting
-earlycon driver to RISC-V.
-
-[1] https://github.com/riscv/riscv-semihosting-spec/blob/main/riscv-semihosting-spec.adoc
+Now that earlycon semihost driver works on RISC-V too, let's use a
+much more generic name for the driver.
 
 Signed-off-by: Bin Meng <bmeng@tinylab.org>
+
 ---
 
- drivers/tty/serial/Kconfig                 |  2 +-
- drivers/tty/serial/earlycon-arm-semihost.c | 17 ++++++++++++++++-
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ drivers/tty/serial/Kconfig                           | 12 ++++++------
+ drivers/tty/serial/Makefile                          |  2 +-
+ .../{earlycon-arm-semihost.c => earlycon-semihost.c} |  0
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+ rename drivers/tty/serial/{earlycon-arm-semihost.c => earlycon-semihost.c} (100%)
 
 diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 434f83168546..e94d1265151c 100644
+index e94d1265151c..a3779472edf6 100644
 --- a/drivers/tty/serial/Kconfig
 +++ b/drivers/tty/serial/Kconfig
-@@ -75,7 +75,7 @@ config SERIAL_AMBA_PL011_CONSOLE
+@@ -73,17 +73,17 @@ config SERIAL_AMBA_PL011_CONSOLE
+ 	  your boot loader (lilo or loadlin) about how to pass options to the
+ 	  kernel at boot time.)
  
- config SERIAL_EARLYCON_ARM_SEMIHOST
- 	bool "Early console using ARM semihosting"
--	depends on ARM64 || ARM
-+	depends on ARM64 || ARM || RISCV
+-config SERIAL_EARLYCON_ARM_SEMIHOST
+-	bool "Early console using ARM semihosting"
++config SERIAL_EARLYCON_SEMIHOST
++	bool "Early console using Arm compatible semihosting"
+ 	depends on ARM64 || ARM || RISCV
  	select SERIAL_CORE
  	select SERIAL_CORE_CONSOLE
  	select SERIAL_EARLYCON
-diff --git a/drivers/tty/serial/earlycon-arm-semihost.c b/drivers/tty/serial/earlycon-arm-semihost.c
-index fcdec5f42376..25a0f91926a3 100644
---- a/drivers/tty/serial/earlycon-arm-semihost.c
-+++ b/drivers/tty/serial/earlycon-arm-semihost.c
-@@ -6,6 +6,10 @@
-  * Adapted for ARM and earlycon:
-  * Copyright (C) 2014 Linaro Ltd.
-  * Author: Rob Herring <robh@kernel.org>
-+ *
-+ * Adapted for RISC-V and earlycon:
-+ * Copyright (C) 2022 tinylab.org
-+ * Author: Bin Meng <bmeng@tinylab.org>
-  */
- #include <linux/kernel.h>
- #include <linux/console.h>
-@@ -23,7 +27,18 @@
-  */
- static void smh_putc(struct uart_port *port, unsigned char c)
- {
--#ifdef CONFIG_ARM64
-+#if defined(CONFIG_RISCV)
-+	asm volatile("addi    a1, %0, 0\n"
-+		     "addi    a0, zero, 3\n"
-+		     ".balign 16\n"
-+		     ".option push\n"
-+		     ".option norvc\n"
-+		     "slli    zero, zero, 0x1f\n"
-+		     "ebreak\n"
-+		     "srai    zero, zero, 0x7\n"
-+		     ".option pop\n"
-+		     : : "r" (&c) : "a0", "a1", "memory");
-+#elif defined(CONFIG_ARM64)
- 	asm volatile("mov  x1, %0\n"
- 		     "mov  x0, #3\n"
- 		     "hlt  0xf000\n"
+ 	help
+-	  Support for early debug console using ARM semihosting. This enables
+-	  the console before standard serial driver is probed. This is enabled
+-	  with "earlycon=smh" on the kernel command line. The console is
+-	  enabled when early_param is processed.
++	  Support for early debug console using Arm compatible semihosting.
++	  This enables the console before standard serial driver is probed.
++	  This is enabled with "earlycon=smh" on the kernel command line.
++	  The console is enabled when early_param is processed.
+ 
+ config SERIAL_EARLYCON_RISCV_SBI
+ 	bool "Early console using RISC-V SBI"
+diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
+index 238a9557b487..cd9afd9e3018 100644
+--- a/drivers/tty/serial/Makefile
++++ b/drivers/tty/serial/Makefile
+@@ -6,7 +6,7 @@
+ obj-$(CONFIG_SERIAL_CORE) += serial_core.o
+ 
+ obj-$(CONFIG_SERIAL_EARLYCON) += earlycon.o
+-obj-$(CONFIG_SERIAL_EARLYCON_ARM_SEMIHOST) += earlycon-arm-semihost.o
++obj-$(CONFIG_SERIAL_EARLYCON_SEMIHOST) += earlycon-semihost.o
+ obj-$(CONFIG_SERIAL_EARLYCON_RISCV_SBI) += earlycon-riscv-sbi.o
+ 
+ # These Sparc drivers have to appear before others such as 8250
+diff --git a/drivers/tty/serial/earlycon-arm-semihost.c b/drivers/tty/serial/earlycon-semihost.c
+similarity index 100%
+rename from drivers/tty/serial/earlycon-arm-semihost.c
+rename to drivers/tty/serial/earlycon-semihost.c
 -- 
 2.34.1
 
