@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806D0642811
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3510642817
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiLEMIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S231307AbiLEMIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbiLEMHh (ORCPT
+        with ESMTP id S231222AbiLEMIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:07:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5C8DF55
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:07:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAC996100F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E08C2C433C1;
-        Mon,  5 Dec 2022 12:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670242050;
-        bh=K+Dd7xGXTDkGOUmFSn+Tmrppo1MrzYY2Lk+azYRrNIg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m1gkj5247+U4OLnyaCx2lbX33R9pdpFcyuxaNcBbQzKrA1hlMuZw7xpg76kPEO27x
-         kUm7v+2SXEaVcuxFuOz86wLmKDzu8jfpk5jdqtYWWkq/1y7iJm+ITBsy+uOXINE5gg
-         D/IlOVOJUaYUQqS9NqMbjywD7kVo4V0mpp0VNEChvkZSJhIffAXsFnv/ZjJ1haKzM9
-         xB9L/3UcEy78yD/SaFiHTyYNCWOhT+r1FIFXZsC54p7ttrL5HoYvAjVP1FUBxLIid3
-         K9TQjW0zvBmMidab5XPUhSr1LVM/uw0Gh5Vounv45TXpabRWy0RSWfyiqpbjOyX1cI
-         LMBCv/rdqg6ww==
-Date:   Mon, 5 Dec 2022 12:07:20 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu =?utf-8?B?KOS/nuWutumRqyk=?= <Jiaxin.Yu@mediatek.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "ajye_huang@compal.corp-partner.google.com" 
-        <ajye_huang@compal.corp-partner.google.com>,
-        Chunxu Li =?utf-8?B?KOadjuaYpeaXrSk=?= <Chunxu.Li@mediatek.com>,
-        Allen-KH Cheng =?utf-8?B?KOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "kuninori.morimoto.gx@renesas.com" <kuninori.morimoto.gx@renesas.com>,
-        "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "robert.foss@linaro.org" <robert.foss@linaro.org>,
-        "Laurent.pinchart@ideasonboard.com" 
-        <Laurent.pinchart@ideasonboard.com>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "nfraprado@collabora.com" <nfraprado@collabora.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH v2 1/3] ASoC: hdmi-codec: Add event handler for hdmi TX
-Message-ID: <Y43e+EsNCrCpZSIH@sirena.org.uk>
-References: <20221125094413.4940-1-jiaxin.yu@mediatek.com>
- <20221125094413.4940-2-jiaxin.yu@mediatek.com>
- <Y4Cysgk5Gic5ae9B@sirena.org.uk>
- <18c82f6f723cd97a9d6b9a7ff16c6ed62fd005d6.camel@mediatek.com>
- <Y4Y/vEWe3dw0FPQH@sirena.org.uk>
- <cf9ea98a3263ffb8fc8b542888ad0ad680facfc7.camel@mediatek.com>
- <Y4jHAJgmz/P58Q/C@sirena.org.uk>
- <7023a2c7b471d6888d9079563a6c01f22599201f.camel@mediatek.com>
+        Mon, 5 Dec 2022 07:08:37 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AD86562
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:08:36 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id t18so790787pfq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 04:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YzA+kzcNiJY0uT8e5WY2pmN89WAQuiOE1BfYZ/zqVSE=;
+        b=FzjLCssB4kY8nE93FwXgrZV4RgdGvrnzWT0IlnuXVLNN/qsp/5YghonYRgUZa/9Ygz
+         sGDL4DEQ7X9kaKEwKHxnmEK+C2i5u6kjQtW/Mh/iVY8LiNyUVMp+M/Yavd9hRj8mSHbX
+         LYRVNFsK/3VukjBEhSWzTZ5V7c/dFt0/XKLwBjrWfcyZrLW0Q+UpskeDVtLo85NfVbRX
+         oCSR7BzX8h89jFnO0V61PO8nXY4KwVS0+RgZssV6+Ghj9R+FDh12R27T+bIAzmSHziZk
+         9wKbIBOhyfqZ5DkuEV2vEBwNv9OExy3MyuOna8Uf3cVLabdOEdNC5PcONGS0yHWtY5cU
+         ZPRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YzA+kzcNiJY0uT8e5WY2pmN89WAQuiOE1BfYZ/zqVSE=;
+        b=rnseEtGGBMJIEHGA51o8ZAJHrUIlvrsFc+Do0ki6k9wMwV1UsM9VUwziuX3bixDZ39
+         8matulzE52kg4+P040VQg/Efne6OuG9e1EwSeWJiOXJ6vN0z8z4JGihiTmc7EoE2wSRp
+         epyDnx6b1segUFMcoz4TKggArzcvKWC+qB/4Ni0QybUDA/uheKKcO0UrPLsvx5QafhOf
+         a/MuVgweJ+nfLXvclHdmnIsCbGyehNPHHstZ4eyK/mFN1EidJ+D9Zx7uUZ/+IJ1s+2R+
+         7G2BiNmAQfWCY8gj2+2ofIzv1iHR8nbvlQ3iU5sZNjMwELWUxzbtKnf41sUgPgTa0cYN
+         n4AQ==
+X-Gm-Message-State: ANoB5pkE3WsmH2n+Bs2+8nuB1Sbqao/HXcA8MEzqN9ZUpDNwOwAVT0Qe
+        sjpsm+3/KKOTLWooG8TCFI3w98VEGUKn3rOpoohRdg==
+X-Google-Smtp-Source: AA0mqf7vN3fErWWmDTm/kGooXVcBnAxCtNzf37QKiSTJHuetaaYEBZ5rNkggiAHrgkwL0Gz3cMspUfOKedNR5BL4EbI=
+X-Received: by 2002:a63:2154:0:b0:477:b650:494b with SMTP id
+ s20-20020a632154000000b00477b650494bmr53261535pgm.434.1670242115671; Mon, 05
+ Dec 2022 04:08:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2Zxw/Hvoq9IhDAxu"
-Content-Disposition: inline
-In-Reply-To: <7023a2c7b471d6888d9079563a6c01f22599201f.camel@mediatek.com>
-X-Cookie: If it ain't broke, don't fix it.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <5627469.DvuYhMxLoT@kreacher> <4789678.31r3eYUQgx@kreacher>
+In-Reply-To: <4789678.31r3eYUQgx@kreacher>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 5 Dec 2022 13:07:59 +0100
+Message-ID: <CAPDyKFqu9-=L9B-Vkzqom6akVpim0R2_DPj__3t3dp9Y_oUEEg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] PM: runtime: Do not call __rpm_callback() from rpm_idle()
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tushar Nimkar <quic_tnimkar@quicinc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,44 +72,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2 Dec 2022 at 15:32, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Calling __rpm_callback() from rpm_idle() after adding device links
+> support to the former is a clear mistake.
+>
+> Not only it causes rpm_idle() to carry out unnecessary actions, but it
+> is also against the assumption regarding the stability of PM-runtime
+> status accross __rpm_callback() invocations, because rpm_suspend() and
+> rpm_resume() may run in parallel with __rpm_callback() when it is called
+> by rpm_idle() and the device's PM-runtime status can be updated by any
+> of them.
 
---2Zxw/Hvoq9IhDAxu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Urgh, that's a nasty bug you are fixing here. Is there perhaps some
+links to some error reports that can make sense to include here?
 
-On Mon, Dec 05, 2022 at 09:34:17AM +0000, Jiaxin Yu (=E4=BF=9E=E5=AE=B6=E9=
-=91=AB) wrote:
+>
+> Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/runtime.c |   12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> Index: linux-pm/drivers/base/power/runtime.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/runtime.c
+> +++ linux-pm/drivers/base/power/runtime.c
+> @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
+>
+>         dev->power.idle_notification = true;
+>
+> -       retval = __rpm_callback(callback, dev);
 
-> 1. I have added a DAPM widget that is "SDB", when we open or close HDMI
-> PIN_SWITCH, the callback 'hdmi_tx_event' registered in the widget will
-> be triggered. Maybe you mean I shouldn't use SNDRV_PCM_TRIGGER_START
-> and SNDRV_PCM_TRIGGER_STOP?
+Couldn't we just extend __rpm_callback() to take another in-parameter,
+rather than open-coding the below?
 
-No, I mean that if you want to control the enable and disable of the
-output path you should implement a DAPM widget.
+Note that, __rpm_callback() already uses a "bool use_links" internal
+variable, that indicates whether the device links should be used or
+not.
 
-> 2. If I don't use hcd.ops->trigger notifies the bridge ic driver to
-> switch the audio, which ops should I use?
-> I actually want to know hdmi-codec.c and it6505.c except
-> hdmi_codec_ops, is there any other way to communicate?
+> +       if (dev->power.irq_safe)
+> +               spin_unlock(&dev->power.lock);
+> +       else
+> +               spin_unlock_irq(&dev->power.lock);
+> +
+> +       retval = callback(dev);
+> +
+> +       if (dev->power.irq_safe)
+> +               spin_lock(&dev->power.lock);
+> +       else
+> +               spin_lock_irq(&dev->power.lock);
+>
+>         dev->power.idle_notification = false;
+>         wake_up_all(&dev->power.wait_queue);
+>
+>
+>
 
-Like I said you should use the event on the DAPM widget.  This will
-require providing operations for the events to the drivers.
-
---2Zxw/Hvoq9IhDAxu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmON3vcACgkQJNaLcl1U
-h9Cbhgf+LMvcJgTpZwsDot1swl9dxC4R5KoASnnVtW3qUnTy6RJishGkt+FKlLX8
-aw/XM5uZSMX1WA040KY4LRSrz/jSPdW2esD5PxtNo7+z87LmRi/AL9539cd8zu89
-jNhbtBAQDyiNp1Y5mNKjEoL6wCbFS7Zt8XMnXHxddRKZClHNgn1q5/ZbfkbNP++Y
-zsXuNSRUT4lzbBlfe2tRMJ1mPdz2R1Is+7sbNZIPIU4t741icrKukcCYPOuYfQeb
-38OZ3gVyERI/AIfp7P0X5SLklXuTFFxAhbg617Bp254suyarICucIyvSvp7iTNxq
-hg3akba+kzI36lZ6YuhE4NvJC589kQ==
-=lrjL
------END PGP SIGNATURE-----
-
---2Zxw/Hvoq9IhDAxu--
+Kind regards
+Uffe
