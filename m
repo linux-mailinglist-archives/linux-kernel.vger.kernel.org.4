@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EB0643112
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5050B64310A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbiLETI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S232709AbiLETIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbiLETIR (ORCPT
+        with ESMTP id S230352AbiLETIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:08:17 -0500
+        Mon, 5 Dec 2022 14:08:15 -0500
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478B5DF36;
-        Mon,  5 Dec 2022 11:08:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2826DDF33;
+        Mon,  5 Dec 2022 11:08:14 -0800 (PST)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 9a9b99851343d4ad; Mon, 5 Dec 2022 20:08:14 +0100
+ id 517f8ee01c49655d; Mon, 5 Dec 2022 20:08:12 +0100
 Received: from kreacher.localnet (unknown [213.134.188.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 01BE02801EA0;
-        Mon,  5 Dec 2022 20:08:13 +0100 (CET)
+        by v370.home.net.pl (Postfix) with ESMTPSA id C38072801EA0;
+        Mon,  5 Dec 2022 20:08:11 +0100 (CET)
 Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
@@ -32,9 +32,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v1 4/5] ACPI: processor: perflib: Rearrange acpi_processor_notify_smm()
-Date:   Mon, 05 Dec 2022 20:07:08 +0100
-Message-ID: <2206087.iZASKD2KPV@kreacher>
+Subject: [PATCH v1 5/5] ACPI: processor: perflib: Adjust acpi_processor_notify_smm() return value
+Date:   Mon, 05 Dec 2022 20:08:00 +0100
+Message-ID: <21694351.EfDdHjke4D@kreacher>
 In-Reply-To: <1836012.tdWV9SEqCh@kreacher>
 References: <1836012.tdWV9SEqCh@kreacher>
 MIME-Version: 1.0
@@ -56,93 +56,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Rearrange the code in acpi_processor_notify_smm() to consolidate error
-handling in it and improve the comments in there while at it.
-
-No expected functional impact.
+Avoid returning a confusing error code from acpi_processor_notify_smm()
+if it is called for the second time in the case when SMM notification
+regarding P-state control is not supported.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/processor_perflib.c |   52 ++++++++++++++++++---------------------
- 1 file changed, 25 insertions(+), 27 deletions(-)
+ drivers/acpi/processor_perflib.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 Index: linux-pm/drivers/acpi/processor_perflib.c
 ===================================================================
 --- linux-pm.orig/drivers/acpi/processor_perflib.c
 +++ linux-pm/drivers/acpi/processor_perflib.c
-@@ -453,7 +453,7 @@ int acpi_processor_pstate_control(void)
- int acpi_processor_notify_smm(struct module *calling_module)
- {
- 	static int is_done;
--	int result;
-+	int result = 0;
- 
- 	if (!acpi_processor_cpufreq_init)
- 		return -EBUSY;
-@@ -461,40 +461,38 @@ int acpi_processor_notify_smm(struct mod
- 	if (!try_module_get(calling_module))
- 		return -EINVAL;
- 
--	/* is_done is set to negative if an error occurred,
--	 * and to postitive if _no_ error occurred, but SMM
--	 * was already notified. This avoids double notification
--	 * which might lead to unexpected results...
-+	/*
-+	 * is_done is set to negative if an error occurs and to 1 if no error 
-+	 * occurrs, but SMM has been notified already. This avoids repeated
-+	 * notification which might lead to unexpected results.
- 	 */
--	if (is_done > 0) {
--		module_put(calling_module);
--		return 0;
--	} else if (is_done < 0) {
--		module_put(calling_module);
--		return is_done;
--	}
-+	if (is_done != 0) {
-+		if (is_done < 0)
-+			result = is_done;
- 
--	is_done = -EIO;
-+		goto out_put;
-+	}
+@@ -475,10 +475,12 @@ int acpi_processor_notify_smm(struct mod
  
  	result = acpi_processor_pstate_control();
--	if (!result) {
--		pr_debug("No SMI port or pstate_control\n");
--		module_put(calling_module);
--		return 0;
--	}
--	if (result < 0) {
--		module_put(calling_module);
--		return result;
-+	if (result <= 0) {
-+		if (!result)
-+			pr_debug("No SMI port or pstate_control\n");
-+
-+		is_done = -EIO;
-+		goto out_put;
- 	}
- 
--	/* Success. If there's no _PPC, we need to fear nothing, so
--	 * we can allow the cpufreq driver to be rmmod'ed. */
- 	is_done = 1;
-+	/*
-+	 * Success. If there _PPC, unloading the cpufreq driver would be risky,
-+	 * so disallow it in that case.
-+	 */
-+	if (acpi_processor_ppc_in_use)
-+		return 0;
- 
--	if (!acpi_processor_ppc_in_use)
--		module_put(calling_module);
+ 	if (result <= 0) {
+-		if (!result)
++		if (result) {
++			is_done = result;
++		} else {
+ 			pr_debug("No SMI port or pstate_control\n");
 -
--	return 0;
-+out_put:
-+	module_put(calling_module);
-+	return result;
- }
- EXPORT_SYMBOL(acpi_processor_notify_smm);
+-		is_done = -EIO;
++			is_done = 1;
++		}
+ 		goto out_put;
+ 	}
  
 
 
