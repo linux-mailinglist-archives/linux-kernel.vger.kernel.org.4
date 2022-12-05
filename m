@@ -2,71 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D749642BAC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488D4642BA3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiLEP11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
+        id S232031AbiLEP0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbiLEP06 (ORCPT
+        with ESMTP id S231802AbiLEP0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:26:58 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00ED1E707;
-        Mon,  5 Dec 2022 07:25:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670253917; x=1701789917;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hSQqL6G6O6dHLpGgvVNcHoOq19ZeyXIBrs3i+gQxqeg=;
-  b=jZUYnoV7hoBjdAbidTLO1Qp7tS3fUEgDUtqjHLdeNgGr7xzSh2uTQPid
-   Q/WwJ+KeIJZ3ABGepCGW4KDgNNk3RjWUG2oyj22G31sBhTVsKHej6lgcr
-   GhVzhK4FlCqZyjT8bnlxBEfvaOLLmMudoesK+pCw+ycvN4+02LFy74hJR
-   KT13NwjdCGdi9W6ItYafv0IrMPXVHjJv2ypXb13CeXJUqGCmtF5o6RwMy
-   pewErT4nS9TifnUPqFE0xtk3tQaF0ptQw4vWyWT1LhHiaNsA2XUB95au1
-   sBsXIqEH4Bl7t4PWdWuM/0BseFr7SkujoS/g1SYzsDfzrDZADOoz62v4a
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="asc'?scan'208";a="191756953"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Dec 2022 08:22:16 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 5 Dec 2022 08:22:15 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 5 Dec 2022 08:22:14 -0700
-Date:   Mon, 5 Dec 2022 15:21:55 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Conor Dooley <conor@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v12 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <Y44Mk2nGu1Zeq7QQ@wendy>
-References: <20221110093512.333881-1-conor.dooley@microchip.com>
- <20221110093512.333881-2-conor.dooley@microchip.com>
- <20221117164950.cssukd63fywzuwua@pengutronix.de>
- <Y3Zxkt3OSPQc46Q2@spud>
- <20221117210433.n5j7upqqksld42mu@pengutronix.de>
- <Y3avobkvYK3ydKTS@spud>
- <Y3uZY5mt/ZIWk3sS@wendy>
- <Y4coL74qQX80TNaT@wendy>
- <20221130103755.lhil2jaw3oufr2sf@pengutronix.de>
+        Mon, 5 Dec 2022 10:26:03 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2059.outbound.protection.outlook.com [40.107.92.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83391209A;
+        Mon,  5 Dec 2022 07:23:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jUPiCQXR7OEAbRxp1cg4Co/bGi9Qby54PRnAK+AaY52hbVmQjrw93qsDkrWsrkiIJoyWK/fmVVxjT5XOlNXnEca0ChKKvwqZOZPruSHAfaZIWIIl42DhIk+tsNst8Ta79uNmZ2nvgO5/Mwe/+Yxg/OYMX5Bov9n7jtNXN21id+l08tYcyaIOVDyYrYTlawEg/2wxsueLcYqcPEsN7HSuyHp/2q1hykLpOPgeSw4N/eQ9U9aSl4x+gJ/RyxAKZmlVwXs9Y9N6oDxa7S9v24sDFyYaEMY/CgjbiI2zZ5KZ2SO2CPAakNBmr+FQR+TRLAnSfOsL3I1PyxJZzBLDzItAXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kPOS/W3JZC0L+ViDiUz/8FapJqA1vexKnuQoirUHiaI=;
+ b=fhIRkBqlTMD0OCJXZ3lIqC1YLLMe9EgYn7KJPFQPv/J1HnNxTtHWlDthsxvHQAD7W9t4mZ48n7mbPd+jW8oe30z1fMNq+cYxzAnAV81DAUpMPJsV3Z8sM/0Yt1fjEiRGZTDnN17pyeze+YW1eNMAC3zGAk6JWT1+ASP4iwYN43VIZ1BLsKhl/ZmA89/I7p7NeED5FC1Z+qARTcM3VbYmFDv1YvA22c1ALT+EwdUgYQrhLcI9uXVn4ixqsXE/1E7KgaTR1yn49GO68QbSysEqmbmjj2sMKTQ9hNrCR+Y6PXFqbV7CP5xP4Wgn2l7l+Wf/1bvgL6ifesaIY0C4ecsCIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kPOS/W3JZC0L+ViDiUz/8FapJqA1vexKnuQoirUHiaI=;
+ b=NisiyGMlriioj2rbcSXvehJLqKuxjeLYPeMlJAwiNn0NMzRuh0VHRPFTXOhmwPgP/jWbZPLyVWl/vt446wohKPk+zRVNe2FQ3fHUGKjG2g6cUvzHXf2ndCzLqsC9168RZIOraWGc0s6BfHfUZsiYUkfdG2TDGbVXkqKoUcfktVk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by CO6PR12MB5492.namprd12.prod.outlook.com (2603:10b6:5:35d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
+ 2022 15:23:20 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::8200:4042:8db4:63d7]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::8200:4042:8db4:63d7%3]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
+ 15:23:20 +0000
+Message-ID: <896d1b00-1602-2a0f-b50c-0582d5219039@amd.com>
+Date:   Mon, 5 Dec 2022 09:23:17 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] x86/sev: Add SEV-SNP guest feature negotiation support
+To:     Borislav Petkov <bp@alien8.de>, Nikunj A Dadhania <nikunj@amd.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
+        seanjc@google.com, pbonzini@redhat.com, michael.roth@amd.com,
+        stable@kernel.org
+References: <20221201100423.7117-1-nikunj@amd.com> <Y44Amf9MJIIi4Ric@zn.tnic>
+Content-Language: en-US
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <Y44Amf9MJIIi4Ric@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0116.namprd13.prod.outlook.com
+ (2603:10b6:208:2b9::31) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="XXSnb1K2Eukxwzpi"
-Content-Disposition: inline
-In-Reply-To: <20221130103755.lhil2jaw3oufr2sf@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CO6PR12MB5492:EE_
+X-MS-Office365-Filtering-Correlation-Id: a67232bb-a0f6-4c8f-a967-08dad6d4a456
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IgH5D54BSA2AiAy6bnvK+xNIfqk+6157S/jfbdQoDkLFSMhLkHHV+QLY4VPJ34Sa9ZqaIroS0cKhygLTlE/s+mR0aukC+TkZnJugJ3hC3yXDn2hc+1Lue9BeNttV4OZCeRILJDmGlxmivgL+03Tb9F4c46x34VYK5gGxmONAvIB/8CKT9Vvs/JJ2JuAG137DHSJIeAZxUhCfXfBnWuJFMfLxOAAbYPXFHfdc97K03bAKVHHJf3yQT/E+jt54noTQkxlqye0odkHQXwISG8HNBnqihcZ1O8utrR3NtO4cuqnH5ijmgo5lDtAkm9vN5AGTb8OCl/Flx5uel2NpnheYCtNb91LPgNW6R2/qWzxSfmN5QX6wPwvOOICuHJ95F2kh++1v4P1/Q8M7YwktWz/tI44dzpuIHUej1aTh8Q3YY5gcW4XSbP1ZLE0Ks3FuhDSMbiSawDWhDMDzY/9UI+fO03986gHA7tVz3wSPkC1CbkllpcrqhPC9LT2ro5xZaP1dY/8DIH8whquC8tAMMkTJmeK1FPEH3kSCN/AmdUPnGPQUe769Dy8DANnCuH5KSwr64KtBCgISaGKwsHFAT5RYiBa/wMhzYvv8WwynzZ+Z6oGPdIGqlWz7kR8BUnjbJNPphEckpr6G5G4yopbLcH8yyAAjrVcd040FIlqvQfFsWFkymEJ0lcT1a2GAcDtg9UFFFY5XrvArILLs16hgvhO0yry5HNi8D1xaENxpqLiY/hs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(366004)(136003)(39860400002)(451199015)(83380400001)(31686004)(2906002)(41300700001)(7416002)(186003)(5660300002)(8936002)(6666004)(478600001)(4326008)(6486002)(2616005)(66556008)(66476007)(66946007)(8676002)(38100700002)(36756003)(316002)(6512007)(6636002)(110136005)(26005)(53546011)(31696002)(86362001)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dXBGMlJlSUg4RzNuT2RZV1U2aGZRWGJxMDVmN1ZwTnZYOGpEMWxNcDlEclFa?=
+ =?utf-8?B?d1N0dWtjUzZreEwxOTFZa09GaGVHczlESnl6MDI4Y2dRSnA5eUFYYXkzTjR3?=
+ =?utf-8?B?UU9pcGNPVnkwYkpKZUREbStqb2FYbW5Lc3dTcXRRMnE5TVlHV1FDRHpGY2dT?=
+ =?utf-8?B?NGNCdTJ3MzZJUE9nNXIzKzF4Yzl0cDhZSjBHb0o5TDhoNkNITVdkYk5SNEhM?=
+ =?utf-8?B?RFd6MkdWTmV4ZFg5ZzJxQlRhVjZ1ZDZhMUZNTTM1enpMVWt5WDNzWmNuR09K?=
+ =?utf-8?B?WmlkRm1VVUxKdUVZbkl2UHRVYWh1UzdOMVYzWVVIYUFuOUl6bnpPTWI4bi9n?=
+ =?utf-8?B?RWIrdjJhTWNMWXNDdmZlYmNkTEJxbDZBTmxLNzZPbzBNR3ZSdHJJR2RhVE9m?=
+ =?utf-8?B?Q0JxSTJxbWVkKzBPMTRSem91bk4zakNFNmxLdXNkb3dTL0dJVHd4Uit5aDV5?=
+ =?utf-8?B?SENrNHpnM2RIbWZhTXplS3FPVkJxZS9LdFJ4WWpjTHpYcWRnL01nSlpHMDJS?=
+ =?utf-8?B?WDFNM2dlM091WThjT1kzUnpwaDcyajdrNEJPbTU0UWpLUzVIK0tIOStxYk1W?=
+ =?utf-8?B?d1Erd2x5S2pRNmt4ZjZTY1ZzNUpid3RlOC9OZ05oT3BRZFcxQ1ZzOUh6YWZz?=
+ =?utf-8?B?SEY2cFBtRUFCL2dKSFZqcnVtbEYyM0dzTFBRdHQrUVJPeXlFL3RkTWFqeVYv?=
+ =?utf-8?B?eXd3UXF4TVhVNElEQVRUWXRRUVkzYVc1S20zT2pCaENhL1BudlpML1lTb1dP?=
+ =?utf-8?B?Y0UvcEI3UUlTajd3RnRLRjQ1OXZ6SmMrSlN2VVB4amVJN2t1SkI0ZE1YOUVT?=
+ =?utf-8?B?TDlDNk16QmpGWDY1VlFDN09GejlJbzYrNEpaYWxLcXlsVmZuY21iV3BOWGht?=
+ =?utf-8?B?dlhmWHhsMEhjd1RRbmYrRXZsWW8vazA1Z3daT21TRVAyRzl2ODdybGhkNENi?=
+ =?utf-8?B?MjVvbThwT1gxZlVDMk56S2dwM1pGQlY5ODUwMktZR3o3aGtYOFVEazQ5THRV?=
+ =?utf-8?B?blppOVhSZ2ZnVXFvSjVHcGprQWJkSjJEb0lEWm1Oa25oSVZ5ODBxYXlDZXpW?=
+ =?utf-8?B?SzFzY2c2ZEhaemQrdklnZnpadGZIRzF5aHJGOVlNUTFzK2ZjTnl1QVRxY2xU?=
+ =?utf-8?B?dU5PTG1Bd1hrVFBDNjZLM2h1bnpPd0F3TWxFYThjQXlsWEhrRU1hRVI4UTl1?=
+ =?utf-8?B?dEZsaUVzbVNhMVB4RmNTbVNXYmtXTFc3bHJoaWlibXFkb1NBVlhrUXRxNXJY?=
+ =?utf-8?B?ZkhvclhnSG9qbFQ4cnlLbU5tanl6TUdkRU9mV25oTEo5Y1k0VjYxNGlGNisv?=
+ =?utf-8?B?b3NhdWVXWmlDOUhBSXp3eTNwTHBlbnE3VnkwMUFmMEZ3djNNSTZQR0NIL0sy?=
+ =?utf-8?B?bGtmYkNJMXF2U1Y4ckpwclhZRElrVFBUcG5xZXVCY0R5WU9oRnFkYTRVN3FL?=
+ =?utf-8?B?Wnp1eUl4TzZYcC80Y2dzWjVDeDJicUVKT01GRVdEOVZtS2Mzck5uR28xaWI0?=
+ =?utf-8?B?cExXd1NzSTFENytxT0dPbzZTNzR4YkdrSzV6ZUZkT3RRUlR0QnpqNGpPbDZM?=
+ =?utf-8?B?YUYvbzl0N0oxNGFPTUl1R2VUTEJGQUcvMVVXV3pkbmNwVkgvWnB5aWk4UzBJ?=
+ =?utf-8?B?UEc1THk0MzJNbUQxT0NvVjZteEVtd0NVTVVkeDYxY2xyZ0JFMlhyYnFlMnpI?=
+ =?utf-8?B?ZW1EZnF1azg2NkJ1aDJlY09aVVY5cmo0YWtvNkw1dFZHRmtJTmJoTThnOGZJ?=
+ =?utf-8?B?SUIxOXpTRExUSklGWnhndzRBOC9EY1V1T2RmQVE3Tmw0SXRGTjllSnRYUHJt?=
+ =?utf-8?B?WTNVbUd4NlZpUnFQY2JGdGpJS3AwYThCSDBVQ0JRdUFpWGw2UFFJbWJIRnRv?=
+ =?utf-8?B?YkdzbU9VS1lVdWNNMUltbk1EcWpwcG1CTDdRZ0ZRQ0I4MXRLQjdNTFBxZUdV?=
+ =?utf-8?B?NmhtVldnQk1PZVNJUFBCQVV2Tko5OCt5WjJ5RjZpRHRHWml1cFlzcDdHZjlM?=
+ =?utf-8?B?aFY4VnZ4ZVljcUNaQmh1US81RDZhazVGV1RGcGZrMC9wZ1kxamhtL1cxbzAw?=
+ =?utf-8?B?RG9NcUxZWGFWdm05ZmNSbXRBZFR4ekNRNy84SFZwb1B2eTBvS3cvUTNVNDRo?=
+ =?utf-8?Q?M5a5uI5JUXygCNSUgwyQuEB80?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a67232bb-a0f6-4c8f-a967-08dad6d4a456
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 15:23:20.6306
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Iox4ZyLH1jfqv+Yf1V2N4CeiTBxJss0QQ5OTXIyt81kz21qw8sW5QEWZ/sfqVHHAKhWWPmJDX7aDoczwY3NPwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5492
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,477 +126,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---XXSnb1K2Eukxwzpi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12/5/22 08:30, Borislav Petkov wrote:
+> On Thu, Dec 01, 2022 at 03:34:23PM +0530, Nikunj A Dadhania wrote:
+>> The hypervisor can enable various new features (SEV_FEATURES[1:63])
+>> and start the SNP guest. Some of these features need guest side
+>> implementation. If any of these features are enabled without guest
+>> side implementation, the behavior of the SNP guest will be undefined.
+>> The SNP guest boot may fail in a non-obvious way making it difficult
+>> to debug.
+>>
+>> Instead of allowing the guest to continue and have it fail randomly
+>> later, detect this early and fail gracefully.
+>>
+>> SEV_STATUS MSR indicates features which hypervisor has enabled. While
+>> booting, SNP guests should ascertain that all the enabled features
+>> have guest side implementation. In case any feature is not implemented
+>> in the guest, the guest terminates booting with SNP feature
+>> unsupported exit code.
+>>
+>> The below table lists the expected guest behavior with various
+>> possible scenarios of guest/hypervisor SNP feature support.
+>>
+>> +---------------+---------------+---------------+---------------+
+>> |Feature Enabled|  Guest needs  |   Guest has   |  Guest boot   |
+>> |     by HV     |implementation |implementation |   behavior    |
+>> +---------------+---------------+---------------+---------------+
+>> |      No       |      No       |      No       |     Boot      |
+>> |               |               |               |               |
+>> +---------------+---------------+---------------+---------------+
+>> |      No       |      Yes      |      No       |     Boot      |
+>> |               |               |               |               |
+>> +---------------+---------------+---------------+---------------+
+>> |      No       |      Yes      |      Yes      |     Boot      |
+>> |               |               |               |               |
+>> +---------------+---------------+---------------+---------------+
+>> |      Yes      |      No       |      No       |   Boot with   |
+>> |               |               |               |feature enabled|
+>> +---------------+---------------+---------------+---------------+
+>> |      Yes      |      Yes      |      No       | Graceful Boot |
+>> |               |               |               |    Failure    |
+>> +---------------+---------------+---------------+---------------+
+>> |      Yes      |      Yes      |      Yes      |   Boot with   |
+>> |               |               |               |feature enabled|
+>> +---------------+---------------+---------------+---------------+
+> 
+> I like this table and I wouldn't want for it to go under in some commit
+> message which is not that easy to retrieve so I'm thinking you should
+> add it along with some blurb to
+> 
+>    Documentation/x86/amd-memory-encryption.rst
+> 
+> instead where it belongs.
+> 
+>> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+>> index c93930d5ccbd..571eb2576475 100644
+>> --- a/arch/x86/boot/compressed/sev.c
+>> +++ b/arch/x86/boot/compressed/sev.c
+>> @@ -270,6 +270,50 @@ static void enforce_vmpl0(void)
+>>   		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_NOT_VMPL0);
+>>   }
+>>   
+>> +/*
+>> + * SNP_FEATURES_NEED_GUEST_IMPLEMENTATION is the mask of SNP features that
+>> + * will need guest side implementation for proper functioning of the guest.
+>> + * If any of these features are enabled without guest side implementation,
+> 
+> "... are enabled in the hypervisor ..."
+> 
+>> + * the behavior of the guest will be undefined. The guest may fail in
+>> + * non-obvious way making it difficult to debug.
+>> + *
+>> + * SNP reserved feature bits may or may not need guest side implementation.
+> 
+> Yah, get rid of that PPR formulation. If you see the verb "may" always
+> run away. :-)
+> 
+>> + * As the behavior of reserved feature bits are unknown, to be on the safer
+>> + * side add them to the NEED_GUEST_IMPLEMENTATION mask.
+> 
+> Yah, that makes sense - you want to protect those for future use. Ack.
+> 
+>> + */
+>> +#define SNP_FEATURES_NEED_GUEST_IMPLEMENTATION (MSR_AMD64_SNP_VTOM |			\
+> 
+> SNP_FEATURES_REQUIRED
 
-Hey Uwe,
+This makes it sound like these features are required to run SNP, which 
+they're not. It's that we can't run SNP with these features without 
+support in the guest. So while the patch name is long, it is accurate.
 
-Preserving the context..
+Maybe SNP_FEATURES_NEED_IMPLEMENTATION if you want to shorten it a little?
 
-On Wed, Nov 30, 2022 at 11:37:55AM +0100, Uwe Kleine-K=F6nig wrote:
-> On Wed, Nov 30, 2022 at 09:53:51AM +0000, Conor Dooley wrote:
-> > On Mon, Nov 21, 2022 at 03:29:39PM +0000, Conor Dooley wrote:
-> > > On Thu, Nov 17, 2022 at 10:03:13PM +0000, Conor Dooley wrote:
-> > > > On Thu, Nov 17, 2022 at 10:04:33PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > > > On Thu, Nov 17, 2022 at 05:38:26PM +0000, Conor Dooley wrote:
-> > > > > > On Thu, Nov 17, 2022 at 05:49:50PM +0100, Uwe Kleine-K=F6nig wr=
-ote:
-> > > > > > > Hello Conor,
-> > > > > >=20
-> > > > > > Hello Uwe,
-> > > > > >=20
-> > > > > > > On Thu, Nov 10, 2022 at 09:35:12AM +0000, Conor Dooley wrote:
-> > > > > > > > [...]
-> > > > > > > > +
-> > > > > > > > +static void mchp_core_pwm_enable(struct pwm_chip *chip, st=
-ruct pwm_device *pwm,
-> > > > > > > > +				 bool enable, u64 period)
-> > > > > > > > +{
-> > > > > > > > +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core=
-_pwm(chip);
-> > > > > > > > +	u8 channel_enable, reg_offset, shift;
-> > > > > > > > +
-> > > > > > > > +	/*
-> > > > > > > > +	 * There are two adjacent 8 bit control regs, the lower r=
-eg controls
-> > > > > > > > +	 * 0-7 and the upper reg 8-15. Check if the pwm is in the=
- upper reg
-> > > > > > > > +	 * and if so, offset by the bus width.
-> > > > > > > > +	 */
-> > > > > > > > +	reg_offset =3D MCHPCOREPWM_EN(pwm->hwpwm >> 3);
-> > > > > > > > +	shift =3D pwm->hwpwm & 7;
-> > > > > > > > +
-> > > > > > > > +	channel_enable =3D readb_relaxed(mchp_core_pwm->base + re=
-g_offset);
-> > > > > > > > +	channel_enable &=3D ~(1 << shift);
-> > > > > > > > +	channel_enable |=3D (enable << shift);
-> > > > > > > > +
-> > > > > > > > +	writel_relaxed(channel_enable, mchp_core_pwm->base + reg_=
-offset);
-> > > > > > > > +	mchp_core_pwm->channel_enabled &=3D ~BIT(pwm->hwpwm);
-> > > > > > > > +	mchp_core_pwm->channel_enabled |=3D enable << pwm->hwpwm;
-> > > > > > > > +
-> > > > > > > > +	/*
-> > > > > > > > +	 * Notify the block to update the waveform from the shado=
-w registers.
-> > > > > > > > +	 * The updated values will not appear on the bus until th=
-ey have been
-> > > > > > > > +	 * applied to the waveform at the beginning of the next p=
-eriod. We must
-> > > > > > > > +	 * write these registers and wait for them to be applied =
-before
-> > > > > > > > +	 * considering the channel enabled.
-> > > > > > > > +	 * If the delay is under 1 us, sleep for at least 1 us an=
-yway.
-> > > > > > > > +	 */
-> > > > > > > > +	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-> > > > > > > > +		u64 delay;
-> > > > > > > > +
-> > > > > > > > +		delay =3D div_u64(period, 1000u) ? : 1u;
-> > > > > > > > +		writel_relaxed(1U, mchp_core_pwm->base + MCHPCOREPWM_SYN=
-C_UPD);
-> > > > > > > > +		usleep_range(delay, delay * 2);
-> > > > > > > > +	}
-> > > > > > >=20
-> > > > > > > In some cases the delay could be prevented. e.g. when going f=
-rom one
-> > > > > > > disabled state to another. If you don't want to complicate th=
-e driver
-> > > > > > > here, maybe point it out in a comment at least?
-> > > > > >=20
-> > > > > > Maybe this is my naivity talking, but I'd rather wait. Is there=
- not the
-> > > > > > chance that we re-enter pwm_apply() before the update has actua=
-lly gone
-> > > > > > through?
-> > > > >=20
-> > > > > My idea was to do something like that:
-> > > > >=20
-> > > > > 	int mchp_core_pwm_apply(....)
-> > > > > 	{
-> > > > > 		if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-> > > > > 			/*
-> > > > > 			 * We're still waiting for an update, don't
-> > > > > 			 * interfer until it's completed.
-> > > > > 			 */
-> > > > > 			while (readl_relaxed(mchp_core_pwm->base + MCHPCOREPWM_SYNC_UP=
-D)) {
-> > > > > 				cpu_relax();
-> > > > > 				if (waited_unreasonably_long())
-> > > > > 					return -ETIMEOUT;
-> > > > > 			}
-> > > > > 		}
-> > > > >=20
-> > > > > 		update_period_and_duty(...);
-> > > > > 		return 0;
-> > > > > 	}
-> > >=20
-> > > So I was doing some fiddling, and the following works reasonably well:
-> > > 	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-> > > 		u32 delay =3D MCHPCOREPWM_TIMEOUT_US;
-> > > 		u32 sync_upd;
-> > > 		int ret;
-> > >=20
-> > > 		writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> > >=20
-> > > 		ret =3D read_poll_timeout(readl, sync_upd, !sync_upd, delay/100, de=
-lay,
-> > > 					false, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> > > 		if (ret)
-> > > 			dev_dbg(mchp_core_pwm->chip.dev,
-> > > 				"timed out waiting for shadow register sync\n");
-> > > 	}
-> > >=20
-> > > but...
-> > >=20
-> > > > > This way you don't have to wait at all if the calls to pwm_apply(=
-) are
-> > > > > infrequent. Of course this only works this way, if you can determ=
-ine if
-> > > > > there is a pending update.
-> > > >=20
-> > > > Ah I think I get what you mean now about waiting for completion &
-> > > > reading the bit. I don't know off the top of my head if that bit is
-> > > > readable. Docs say that they're R/W but I don't know if that means =
-that
-> > > > an AXI read works or if the value is actually readable. I'll try
-> > > > something like this if I can.
-> > >=20
-> > > ...it does not implement what I think you suggested & comes with the
-> > > drawback of inconsistent behaviour depending on whether the timeout is
-> > > hit or not.
-> > >=20
-> > > Instead, waiting in apply(), as you suggested, & get_state() looks to=
- be the
-> > > better option, using the same sort of logic as above, say:
-> > > static int mchp_core_pwm_wait_for_sync_update(struct mchp_core_pwm_ch=
-ip *mchp_core_pwm,
-> > > 					      unsigned int channel)
-> > > {
-> > > 	int ret;
-> > >=20
-> > > 	/*
-> > > 	 * If a shadow register is used for this PWM channel, and iff there =
-is
-> > > 	 * a pending update to the waveform, we must wait for it to be appli=
-ed
-> > > 	 * before attempting to read its state, as reading the registers yie=
-lds
-> > > 	 * the currently implemented settings, the new ones are only readable
-> > > 	 * once the current period has ended.
-> > > 	 *
-> > > 	 * Rather large delays are possible, in the seconds, so to avoid wai=
-ting
-> > > 	 * around for **too** long - cap the wait at 100 ms.
-> > > 	 */
-> > > 	if (mchp_core_pwm->sync_update_mask & (1 << channel)) {
-> > > 		u32 delay =3D MCHPCOREPWM_TIMEOUT_US;
-> > > 		u32 sync_upd;
-> > >=20
-> > > 		writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> > >=20
-> > > 		ret =3D read_poll_timeout(readl, sync_upd, !sync_upd, delay/100, de=
-lay,
-> > > 					false, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-> > > 		if (ret)
-> > > 			return -ETIMEDOUT;
-> > > 	}
-> > >=20
-> > > 	return 0;
-> > > }
-> > >=20
-> > > I think that strikes a good balance? We return quickly & don't blocker
-> > > the caller, but simultaneously try to prevent them from either trying=
- to
-> > > apply new settings or get the current settings until the last request
-> > > has gone though?
-> > >=20
-> > > get_state() returns void though, is it valid behaviour to wait for the
-> > > timeout there?
->=20
-> There was an approach to change that, see
-> https://lore.kernel.org/linux-pwm/20220916151506.298488-1-u.kleine-koenig=
-@pengutronix.de
->=20
-> I need to send a v2.
->=20
-> > > I had a check in the core code and found some places where the call in
-> > > looks like:
-> > > 	struct pwm_state s1, s2;=20
-> > > 	chip->ops->get_state(chip, pwm, &s1);
-> > > In this case, exiting early would leave us with a completely wrong
-> > > idead of the state, if it was to time out.
-> > >=20
-> > > Either way, it seems like either way we would be misleading the caller
-> > > of get_state() - perhaps the way around that is to do the wait & then
-> > > just carry on with get_state()?
-> > > In that scenario, you'd get the new settings where possible and the o=
-ld ones
-> > > otherwise.
-> > > Returning if the timeout is hit would give you the new settings where=
- possible
-> > > & otherwise you'd get whatever was passed to get_state().
-> > > I'm not really sure which of those two situations would be preferred?
->=20
-> Hmm, .get_state should not return the old state. We really want
-> .get_state to return an error code. Maybe postpone that question until
-> we have that?
+Thanks,
+Tom
 
-I came into work today thinking that I could just rebase on top of your
-patchset and send out a v13, but that was unfortunately not the case :/
-
-So uh, it turns out that I was wrong about the behaviour of the
-sync_update register's bit.
-It turns out that that bit holds it's value until the IP block is reset,
-and /does not/ get cleared at the start of the next period.
-I'm really not sure how it worked when I tested the other week [0], so I
-spent the first half of the day trying to figure out what on earth had
-happened to my FPGA image. I must've picked the wrong image when I went
-to test it the other week that had the wrong configuration somehow.
-
-As a result, I've gone and hacked up another way of transferring the
-burden of waiting - setting a timer for the period, backed by a
-completion. get_state() and apply() now both check for the completion
-and time out otherwise. I'm half tempted to tack RFC back onto the
-series as I have not really messed with timers at all before and may
-have done something off the wall.
-
-I pushed it out (see [1] in case you'd like to look) so that the bots
-can have a play with it, since it'll be a few weeks before I'll have a
-chance to properly test that I've broken nothing with this.
-
-It's not nearly as neat or contained, but still benefits from the
-non-void get_state() & doesn't "confuse" a caller of get_state() with
-some potential garbage.
-
-The diff on top of the read_poll_timeout() approach from above is pasted
-here. Hopefully I'll refine it a bit before sending a v13, checkpatch
-may have an aneurysm with what's below. Or have a better idea and throw
-it out..
-
-Thanks again for sending that v2 ~immediately,
-Conor.
-
-0 - https://lore.kernel.org/linux-riscv/Y3uZY5mt%2FZIWk3sS@wendy/
-1 - https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/tree/dr=
-ivers/pwm/pwm-microchip-core.c?h=3Dpwm-dev-v13&id=3Dddbd59fb5480b1be74645f0=
-a84d934b1f91d833d
-
-diff --git a/drivers/pwm/pwm-microchip-core.c b/drivers/pwm/pwm-microchip-c=
-ore.c
-index c88fa8f8d96d..f565e8be46b3 100644
---- a/drivers/pwm/pwm-microchip-core.c
-+++ b/drivers/pwm/pwm-microchip-core.c
-@@ -34,6 +34,7 @@
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pwm.h>
-+#include <linux/timer.h>
-=20
- #define PREG_TO_VAL(PREG) ((PREG) + 1)
-=20
-@@ -47,12 +48,14 @@
- #define MCHPCOREPWM_POSEDGE(i)	(0x10 + 0x08 * (i)) /* 0x10, 0x18, ..., 0x8=
-8 */
- #define MCHPCOREPWM_NEGEDGE(i)	(0x14 + 0x08 * (i)) /* 0x14, 0x1c, ..., 0x8=
-c */
- #define MCHPCOREPWM_SYNC_UPD	0xe4
--#define MCHPCOREPWM_TIMEOUT_US	100000u
-+#define MCHPCOREPWM_TIMEOUT_MS	100u
-=20
- struct mchp_core_pwm_chip {
- 	struct pwm_chip chip;
- 	struct clk *clk;
- 	struct mutex lock; /* protect the shared period */
-+	struct completion sync_update_complete;
-+	struct timer_list sync_update_timer;
- 	void __iomem *base;
- 	u32 sync_update_mask;
- 	u16 channel_enabled;
-@@ -91,9 +94,54 @@ static void mchp_core_pwm_enable(struct pwm_chip *chip, =
-struct pwm_device *pwm,
- 	 * applied to the waveform at the beginning of the next period.
- 	 * This is a NO-OP if the channel does not have shadow registers.
- 	 */
-+	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
-+		u64 delay;
-+
-+		/* Have to convert to jiffies... */
-+		delay =3D div_u64(period, 1000000u) ? : 1u;
-+		reinit_completion(&mchp_core_pwm->sync_update_complete);
-+		mchp_core_pwm->sync_update_timer.expires =3D jiffies + delay;
-+		add_timer(&mchp_core_pwm->sync_update_timer);
-+	}
-+}
-+
-+static int mchp_core_pwm_wait_for_sync_update(struct mchp_core_pwm_chip *m=
-chp_core_pwm,
-+					      unsigned int channel)
-+{
-+	/*
-+	 * If a shadow register is used for this PWM channel, and iff there is
-+	 * a pending update to the waveform, we must wait for it to be applied
-+	 * before attempting to read its state, as reading the registers yields
-+	 * the currently implemented settings, the new ones are only readable
-+	 * once the current period has ended.
-+	 *
-+	 * Rather large delays are possible, in the seconds, so to avoid waiting
-+	 * around for **too** long - cap the wait at 100 ms.
-+	 */
-+	if (!timer_pending(&mchp_core_pwm->sync_update_timer))
-+		return 0;
-+
-+	if (mchp_core_pwm->sync_update_mask & (1 << channel)) {
-+		int ret;
-+		ret =3D wait_for_completion_interruptible_timeout(&mchp_core_pwm->sync_u=
-pdate_complete,
-+								msecs_to_jiffies(MCHPCOREPWM_TIMEOUT_MS));
-+		if (!ret)
-+			return -ETIMEDOUT;
-+
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-=20
--	writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
-+static void mchp_core_pwm_complete_sync_update(struct timer_list *t)
-+{
-+	struct mchp_core_pwm_chip *mchp_core_pwm =3D from_timer(mchp_core_pwm,
-+							      t, sync_update_timer);
-=20
-+	complete(&mchp_core_pwm->sync_update_complete);
-+	del_timer(&mchp_core_pwm->sync_update_timer);
- }
-=20
- static u64 mchp_core_pwm_calc_duty(const struct pwm_state *state, u64 clk_=
-rate,
-@@ -181,35 +229,6 @@ static inline void mchp_core_pwm_apply_period(struct m=
-chp_core_pwm_chip *mchp_co
- 	writel_relaxed(period_steps, mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
- }
-=20
--static int mchp_core_pwm_wait_for_sync_update(struct mchp_core_pwm_chip *m=
-chp_core_pwm,
--					      unsigned int channel)
--{
--	/*
--	 * If a shadow register is used for this PWM channel, and iff there is
--	 * a pending update to the waveform, we must wait for it to be applied
--	 * before attempting to read its state, as reading the registers yields
--	 * the currently implemented settings, the new ones are only readable
--	 * once the current period has ended.
--	 *
--	 * Rather large delays are possible, in the seconds, so to avoid waiting
--	 * around for **too** long - cap the wait at 100 ms.
--	 */
--	if (mchp_core_pwm->sync_update_mask & (1 << channel)) {
--		u32 delay =3D MCHPCOREPWM_TIMEOUT_US;
--		u32 sync_upd;
--		int ret;
--
--		writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
--
--		ret =3D read_poll_timeout(readl, sync_upd, !sync_upd, delay/100, delay,
--					false, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
--		if (ret)
--			return -ETIMEDOUT;
--	}
--
--	return 0;
--}
--
- static int mchp_core_pwm_apply_locked(struct pwm_chip *chip, struct pwm_de=
-vice *pwm,
- 				      const struct pwm_state *state)
- {
-@@ -297,31 +316,37 @@ static int mchp_core_pwm_apply(struct pwm_chip *chip,=
- struct pwm_device *pwm,
- 	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
- 	int ret;
-=20
-+	mutex_lock(&mchp_core_pwm->lock);
-+
- 	ret =3D mchp_core_pwm_wait_for_sync_update(mchp_core_pwm, pwm->hwpwm);
- 	if (ret)
--		return ret;
--
--	mutex_lock(&mchp_core_pwm->lock);
-+		goto exit_unlock;
-=20
- 	ret =3D mchp_core_pwm_apply_locked(chip, pwm, state);
-=20
-+exit_unlock:
- 	mutex_unlock(&mchp_core_pwm->lock);
-=20
- 	return ret;
- }
-=20
--static void mchp_core_pwm_get_state(struct pwm_chip *chip, struct pwm_devi=
-ce *pwm,
--				    struct pwm_state *state)
-+static int mchp_core_pwm_get_state(struct pwm_chip *chip, struct pwm_devic=
-e *pwm,
-+				   struct pwm_state *state)
- {
- 	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
- 	u64 rate;
- 	u16 prescale;
- 	u8 period_steps, duty_steps, posedge, negedge;
--
--	mchp_core_pwm_wait_for_sync_update(mchp_core_pwm, pwm->hwpwm);
-+	int ret;
-=20
- 	mutex_lock(&mchp_core_pwm->lock);
-=20
-+	ret =3D mchp_core_pwm_wait_for_sync_update(mchp_core_pwm, pwm->hwpwm);
-+	if (ret) {
-+		mutex_unlock(&mchp_core_pwm->lock);
-+		return ret;
-+	}
-+
- 	if (mchp_core_pwm->channel_enabled & (1 << pwm->hwpwm))
- 		state->enabled =3D true;
- 	else
-@@ -351,6 +376,8 @@ static void mchp_core_pwm_get_state(struct pwm_chip *ch=
-ip, struct pwm_device *pw
- 	}
-=20
- 	state->polarity =3D negedge < posedge ? PWM_POLARITY_INVERSED : PWM_POLAR=
-ITY_NORMAL;
-+
-+	return 0;
- }
-=20
- static const struct pwm_ops mchp_core_pwm_ops =3D {
-@@ -403,6 +430,10 @@ static int mchp_core_pwm_probe(struct platform_device =
-*pdev)
- 	if (ret < 0)
- 		return dev_err_probe(&pdev->dev, ret, "failed to add PWM chip\n");
-=20
-+	init_completion(&mchp_pwm->sync_update_complete);
-+	timer_setup(&mchp_pwm->sync_update_timer, mchp_core_pwm_complete_sync_upd=
-ate, 0);
-+	writel_relaxed(1U, mchp_pwm->base + MCHPCOREPWM_SYNC_UPD);
-+
- 	return 0;
- }
-
-
-
---XXSnb1K2Eukxwzpi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY44MkwAKCRB4tDGHoIJi
-0mT1AQCpLrbgpStJbvNzUWyuZLWvrAMekvHbHU92X3pi3Tx7KQEA0msCXTompy0X
-GPxXAlniApVqWKn+yW+Fyb6DQ2K6DwA=
-=4TAu
------END PGP SIGNATURE-----
-
---XXSnb1K2Eukxwzpi--
+> 
+> Simpler and shorter.
+> 
+>> +						MSR_AMD64_SNP_REFLECT_VC |		\
+>> +						MSR_AMD64_SNP_RESTRICTED_INJ |		\
+>> +						MSR_AMD64_SNP_ALT_INJ |			\
+>> +						MSR_AMD64_SNP_DEBUG_SWAP |		\
+>> +						MSR_AMD64_SNP_VMPL_SSS |		\
+>> +						MSR_AMD64_SNP_SECURE_TSC |		\
+>> +						MSR_AMD64_SNP_VMGEXIT_PARAM |		\
+>> +						MSR_AMD64_SNP_VMSA_REG_PROTECTION |	\
+>> +						MSR_AMD64_SNP_RESERVED_BIT13 |		\
+>> +						MSR_AMD64_SNP_RESERVED_BIT15 |		\
+>> +						MSR_AMD64_SNP_RESERVED_MASK)
+>> +
+>> +/*
+>> + * SNP_FEATURES_HAS_GUEST_IMPLEMENTATION is the mask of SNP features that are
+>> + * implemented by the guest kernel. As and when a new feature is implemented
+>> + * in the guest kernel, a corresponding bit should be added to the mask.
+> 
+> And there's no way we won't notice that we've forgotten to do so because
+> it'll terminate with the proper error code.
+> 
+>> + */
+>> +#define SNP_FEATURES_HAS_GUEST_IMPLEMENTATION (0)
+> 
+> SNP_FEATURES_PRESENT
+> 
+> And so I've done a couple of changes ontop, here's a diff as it explains
+> a lot better what I mean.
+> 
+> Have a look and let me know if something's wrong.
+> 
+> Thx.
+> 
+> ---
+> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+> index 10272835dfe9..f023d37e2c41 100644
+> --- a/arch/x86/boot/compressed/sev.c
+> +++ b/arch/x86/boot/compressed/sev.c
+> @@ -271,48 +271,35 @@ static void enforce_vmpl0(void)
+>   }
+>   
+>   /*
+> - * SNP_FEATURES_NEED_GUEST_IMPLEMENTATION is the mask of SNP features that
+> - * will need guest side implementation for proper functioning of the guest.
+> - * If any of these features are enabled without guest side implementation,
+> - * the behavior of the guest will be undefined. The guest may fail in
+> - * non-obvious way making it difficult to debug.
+> - *
+> - * SNP reserved feature bits may or may not need guest side implementation.
+> - * As the behavior of reserved feature bits are unknown, to be on the safer
+> - * side add them to the NEED_GUEST_IMPLEMENTATION mask.
+> - */
+> -#define SNP_FEATURES_NEED_GUEST_IMPLEMENTATION (MSR_AMD64_SNP_VTOM |			\
+> -						MSR_AMD64_SNP_REFLECT_VC |		\
+> -						MSR_AMD64_SNP_RESTRICTED_INJ |		\
+> -						MSR_AMD64_SNP_ALT_INJ |			\
+> -						MSR_AMD64_SNP_DEBUG_SWAP |		\
+> -						MSR_AMD64_SNP_VMPL_SSS |		\
+> -						MSR_AMD64_SNP_SECURE_TSC |		\
+> -						MSR_AMD64_SNP_VMGEXIT_PARAM |		\
+> -						MSR_AMD64_SNP_VMSA_REG_PROTECTION |	\
+> -						MSR_AMD64_SNP_RESERVED_BIT13 |		\
+> -						MSR_AMD64_SNP_RESERVED_BIT15 |		\
+> -						MSR_AMD64_SNP_RESERVED_MASK)
+>   
+> -/*
+> - * SNP_FEATURES_HAS_GUEST_IMPLEMENTATION is the mask of SNP features that are
+> - * implemented by the guest kernel. As and when a new feature is implemented
+> - * in the guest kernel, a corresponding bit should be added to the mask.
+> + * SNP_FEATURES_REQUIRED is the mask of SNP features that will need
+> + * guest side implementation for proper functioning of the guest. If any
+> + * of these features are enabled in the hypervisor but are lacking guest
+> + * side implementation, the behavior of the guest will be undefined. The
+> + * guest could fail in non-obvious way making it difficult to debug.
+> + *
+> + * As the behavior of reserved feature bits is unknown to be on the
+> + * safe side add them to the required features mask.
+>    */
+> -#define SNP_FEATURES_HAS_GUEST_IMPLEMENTATION (0)
+> +#define SNP_FEATURES_REQUIRED		(MSR_AMD64_SNP_VTOM |			\
+> +					MSR_AMD64_SNP_REFLECT_VC |		\
+> +					MSR_AMD64_SNP_RESTRICTED_INJ |		\
+> +					MSR_AMD64_SNP_ALT_INJ |			\
+> +					MSR_AMD64_SNP_DEBUG_SWAP |		\
+> +					MSR_AMD64_SNP_VMPL_SSS |		\
+> +					MSR_AMD64_SNP_SECURE_TSC |		\
+> +					MSR_AMD64_SNP_VMGEXIT_PARAM |		\
+> +					MSR_AMD64_SNP_VMSA_REG_PROTECTION |	\
+> +					MSR_AMD64_SNP_RESERVED_BIT13 |		\
+> +					MSR_AMD64_SNP_RESERVED_BIT15 |		\
+> +					MSR_AMD64_SNP_RESERVED_MASK)
+>   
+>   /*
+> - * The hypervisor can enable various features flags (in SEV_FEATURES[1:63]) and
+> - * start the SNP guest. Certain SNP features need guest side implementation.
+> - * Check if the SNP guest has implementation for those features.
+> + * SNP_FEATURES_PRESENT is the mask of SNP features that are implemented
+> + * by the guest kernel. As and when a new feature is implemented in the
+> + * guest kernel, a corresponding bit should be added to the mask.
+>    */
+> -static bool snp_guest_has_features_implemented(void)
+> -{
+> -	u64 guest_features_not_implemented = SNP_FEATURES_NEED_GUEST_IMPLEMENTATION &
+> -		~SNP_FEATURES_HAS_GUEST_IMPLEMENTATION;
+> -
+> -	return !(sev_status & guest_features_not_implemented);
+> -}
+> +#define SNP_FEATURES_PRESENT (0)
+>   
+>   void sev_enable(struct boot_params *bp)
+>   {
+> @@ -383,7 +370,7 @@ void sev_enable(struct boot_params *bp)
+>   		 * Terminate the boot if hypervisor has enabled any feature
+>   		 * missing guest side implementation.
+>   		 */
+> -		if (!snp_guest_has_features_implemented())
+> +		if (sev_status & SNP_FEATURES_REQUIRED & ~SNP_FEATURES_PRESENT)
+>   			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_FEAT_NOT_IMPLEMENTED);
+>   
+>   		enforce_vmpl0();
+> 
