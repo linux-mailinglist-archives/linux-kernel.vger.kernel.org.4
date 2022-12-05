@@ -2,160 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570EA642F71
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8CF642F79
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbiLERsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 12:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S232573AbiLERvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 12:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbiLERr4 (ORCPT
+        with ESMTP id S232541AbiLERv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 12:47:56 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B226B22509;
-        Mon,  5 Dec 2022 09:46:16 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5HEBre020385;
-        Mon, 5 Dec 2022 17:45:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=pSnnyqswrXqnqsVTp7FpeVnzPD1GrBLVmOoY+g5lPnw=;
- b=nUgv2a7otQjGPZSasuG6F5fHk/KhhsCi4gJzhUMTUu4YfMmM3k4p151AnsOojUNEff/D
- 4AagdsLpjj6UKXCIrsLwnIbJR2YSJuXNKsezDOLZttr1ecJLCCSzk+tBpGWHS660oZDT
- 6eIE7qLMH+vFLrlGcWAh/r7SBrcTckb9TDx5d77B1laK2jRK5/sbFzfG6K550M4c23cX
- 6ZJtYSdMRyPBkFF9XUvymlhbW1FHZF8wl8xYOXe1I67vWpI9tzExilUlUexp/nOYOjdb
- 3sVPIMDOAVTm28qMUpQowtTaFhtu959VP9B3jAT9MADIgYvl66quDlHLLlbOHwnuBGiy uA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m9e61h1y7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 17:45:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B5Hjru7002991
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Dec 2022 17:45:53 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 5 Dec 2022 09:45:52 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <airlied@gmail.com>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 5/5] drm/msm/dp: add support of max dp link rate
-Date:   Mon, 5 Dec 2022 09:45:28 -0800
-Message-ID: <1670262328-26870-6-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1670262328-26870-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1670262328-26870-1-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 5 Dec 2022 12:51:29 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEAC20188;
+        Mon,  5 Dec 2022 09:49:28 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2B5Hmp1V006666
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 5 Dec 2022 12:48:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1670262534; bh=EyxV8qZhIzGczmqYjJSp/unx1C6FSCFFVqHS1FGWrSc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=DFmWZlMI8RgxOi8rLeDWHiz7WyxufuRbmz42fSAF2T9p89fGPNnkEL/ygeraPArkM
+         2Ehn8OFIC1QkNzpmQ9SmzOy23xPFjOMOEIpUbibyaLWegYnyLt15O+Ddt/4dtOA0N8
+         7ubNpN2u6JieouauF/rVYGukq1Yj3CHiD3oCh8Qb8EGPLo8ipBO4xYXdHwgyot3474
+         1m05wQ0VCex2QxQ5IEwPy66picVF1bxivFFqZ7//pZCiqG8YZAwQtp2O1Z7+LCr7jT
+         7RF7StYyEU9YkCDwvt839APAqit8o+g6FrSdVR2m9NaS+9oCa+5ioq5hkb7aCYw1Df
+         4Mf2GFYC4IYYg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id D789015C3489; Mon,  5 Dec 2022 12:48:50 -0500 (EST)
+Date:   Mon, 5 Dec 2022 12:48:50 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     zhanchengbin <zhanchengbin1@huawei.com>
+Cc:     Ye Bin <yebin@huaweicloud.com>, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH RFC] ext4:record error information when insert extent
+ failed in 'ext4_split_extent_at'
+Message-ID: <Y44vAjbPtntOHy+M@mit.edu>
+References: <20221024122725.3083432-1-yebin@huaweicloud.com>
+ <2ab8e268-4e1a-8e97-4798-48fcdb651cdf@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: E51WWmKG8JpQAbNucSNVhFdnvDsICiMk
-X-Proofpoint-GUID: E51WWmKG8JpQAbNucSNVhFdnvDsICiMk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- mlxscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0 spamscore=0
- malwarescore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212050146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ab8e268-4e1a-8e97-4798-48fcdb651cdf@huawei.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, HBR2 (5.4G) is the max link link be supported. This patch add
-the capability to support max link rate at HBR3 (8.1G).
+On Fri, Oct 28, 2022 at 09:41:55AM +0800, zhanchengbin wrote:
+> There have been a lot of problems here before, but the problem has not been
+> fundamentally solved.
 
-Changes in v2:
--- add max link rate from dtsi
+Indeed, this only papers only the problem.  The commit description is
+pretty good, in that it describes the the root cause of the problem:
 
-Changes in v3:
--- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+> > If 'ext4_ext_insert_extent' return '-ENOMEM' which will not fix 'ex->ee_len' by
+> > old length. 'ext4_ext_insert_extent' will trigger extent tree merge, fix like
+> > 'ex->ee_len = orig_ex.ee_len' may lead to new issues.
+> > To solve above issue, record error messages when 'ext4_ext_insert_extent' return
+> > 'err' not equal '(-ENOSPC && -EDQUOT)'. If filesysten is mounted with 'errors=continue'
+> > as filesystem is not clean 'fsck' will repair issue. If filesystem is mounted with
+> > 'errors=remount-ro' filesystem will be remounted by read-only.
 
-Changes in v4:
--- delete unnecessary pr_err
+What should actually happen here is that we undo the change in orig_ex
+if ext4_ext_insert_extent fails.  As you point out, in an earlier part
+of the code path, this gets handled by a "goto fix_extent_len".    
 
-Changes in v5:
--- split parser function into different patch
+The problem is that it's possible that the shape of the extent tree
+may have changed before ext4_insert_extent() fails with the ENOMEM.
+So the simplistic fix of just jumping to fix_extent_len isn't going to
+work.  But fixing it by much marking the file system is corrupt is a
+bit of a cop-out.  Consider that if you were running ext4 in a Huawei
+Cloud, and you run into the memory allocation failure, what would you
+prefer?  For the individual system call to fail, and propagating the
+failure to userspace?  Or to leave the file system corrupted?  (And
+then either forcing a reboot so the file system to be fixed, or allow
+the system to stumble along, with further unknown unexpected behaviour
+from userspace?)
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 4 ++++
- drivers/gpu/drm/msm/dp/dp_panel.c   | 7 ++++---
- drivers/gpu/drm/msm/dp/dp_panel.h   | 1 +
- 3 files changed, 9 insertions(+), 3 deletions(-)
+The real correct fix is that ext4_ext_insert_extent() needs to
+rollback any changes to the extent tree that was made, *or* it needs
+to make sure that the operation will succeed before starting to make
+any changes, *or* we need to look up the orig_extent via
+orig_ex->ee_block, and then undo the change.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index bfd0aef..edee550 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
- 	struct edid *edid;
- 
- 	dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
-+	dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
-+
-+	drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
-+		dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
- 
- 	rc = dp_panel_read_sink_caps(dp->panel, dp->dp_display.connector);
- 	if (rc)
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index 5149ceb..933fa9c 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
- 	link_info->rate = drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
- 	link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & DP_MAX_LANE_COUNT_MASK;
- 
-+	/* Limit data lanes from data-lanes of endpoint properity of dtsi */
- 	if (link_info->num_lanes > dp_panel->max_dp_lanes)
- 		link_info->num_lanes = dp_panel->max_dp_lanes;
- 
--	/* Limit support upto HBR2 until HBR3 support is added */
--	if (link_info->rate >= (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
--		link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
-+	/* Limit link rate from link-frequencies of endpoint properity of dtsi */
-+	if (link_info->rate > dp_panel->max_dp_link_rate)
-+		link_info->rate = dp_panel->max_dp_link_rate;
- 
- 	drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
- 	drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
-index d861197a..f04d021 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.h
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.h
-@@ -50,6 +50,7 @@ struct dp_panel {
- 
- 	u32 vic;
- 	u32 max_dp_lanes;
-+	u32 max_dp_link_rate;
- 
- 	u32 max_bw_code;
- };
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+It might be that we can't always reliably rollback the change, or we
+might think that the operation will succeed, but then it fail due to
+an I/O error.  If it's due to an I/O error, then it's fine to bail and
+mark the file system as corrupted.  But if the failure is caused by an
+ENOMEM, we should be able to handle this case more gracefully.
 
+Can you look into a better fix?
+
+Thanks,
+
+						- Ted
