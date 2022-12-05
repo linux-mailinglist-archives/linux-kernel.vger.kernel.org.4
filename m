@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658C4642953
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E86642950
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiLEN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S232235AbiLEN0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:26:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiLEN0c (ORCPT
+        with ESMTP id S230170AbiLEN0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:26:32 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD08F1C915;
-        Mon,  5 Dec 2022 05:26:31 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id r19so11329753qtx.6;
-        Mon, 05 Dec 2022 05:26:31 -0800 (PST)
+        Mon, 5 Dec 2022 08:26:05 -0500
+Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E4C1AF22
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:26:04 -0800 (PST)
+Received: by mail-ej1-x649.google.com with SMTP id sa20-20020a1709076d1400b007bbe8699c2eso7352517ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:26:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fqO7gETqNiqkQHJ70u+gRoEEZZbEF0uchp8/3StvR/w=;
-        b=qC4qOoUiygaHcIcrhaQHV710EKKfWWefLKnQ3oKru+iD1vRQ7OAPRvSKvSYJjLTVEx
-         GB6THHRMOgPyolYORzCLGm1kOMUfPLP2w7pTn59xzaoFM3WfNFpsrUsF8K8eOxlQUyFi
-         k4mqiqqWZTLNiDQbj426UMKLz7jVgRlSivyo6kyG5KbM08UiKPN863qcBfbg+Tb3paQv
-         H7iX82FtdhXY/nHWCwT+cythGxdJDtkkOf888FJmUFEeZ4njbfJvhti18TaGd7g9zZh+
-         Qu6uSWYi5wpwzm9prkw9yAKqBWMgpGOWbmXVbGPHMJciqA5RzTEFcApOrzFPS0ZD82nf
-         J50A==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6Q1FOgaXJCU20iA2bNkMa3PVXV/y1f/l7XBgDZn5WKg=;
+        b=Yhzw2muFhkrSpctjHMrj8SsAHFmyGJCXw6GpFFpUvURi+fmuds1oRDxQ8dgOH2DD4Q
+         ap73GlrkaWuJQxDSzFxkDTSFaj5dZj3G1U3sQBuQkjC9Guoa8p8bjlHn7RcveQWdIC2o
+         VFNSlvksKYP+RcyshKu3SzHfNTYlt+HarAf6plGqFrftjo8al/e47fDFjewh1ch5k280
+         q+NSy4Gc/MFAVWRmK3XBzk1yObLS9EUexj6mLwQF9/38lU/H2eN1ngHaNI7Qm4qTmCji
+         f84MRIQIsobvFVOtgzMkgRh4dzqQPYxncRp+ZeC03VP3KPo5x+Ki+XmF+xzWCd6uMGAe
+         HjPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fqO7gETqNiqkQHJ70u+gRoEEZZbEF0uchp8/3StvR/w=;
-        b=0+6i5dMReb/Hm9L1l/5Erm9UFp+qOwN290tCi9Hs0ibR27IRk5Wzg8NV7t/hJlLRnO
-         tKf2xBfLtiA7MFpk654adG2OVVpsQi39FwBwxc0HcuOah081q63jkJRTashEXfTe3ZWK
-         T/o2YyCvxi/y9E9deA2xoAbhUmEukZyE1doaTCVHJUNbsEv7QdSfUGtfthsFIpQ2aPX+
-         hdXDSjaGRalRKKxPpyaY/PoZMUyQN/Zoj5msPEs9RZcj5iSFxMOpg1nUI+J4JAktzsbi
-         hFOtYIOXIGWXVMOzThVGRM0hHXk/jEOed5g7Q3XazZwoRWow4BrPzhtpNmVqEaEpohIc
-         NZeg==
-X-Gm-Message-State: ANoB5pmA4NocaJLHvrnvfII7ELpseE5NMwn8QNFktCWoV20jJRWNG61B
-        UIRfmFI0paflIQ0mRSrJnlSL74HsIF+sEnYpQBs=
-X-Google-Smtp-Source: AA0mqf4dvL/+Sat88nAYdYD7lP5p89SnGizPGaaXtTpRp9ieg6LHpcABFhjTocjv4QvpR07o/YZlNOMmACR1oMaJBY4=
-X-Received: by 2002:ac8:5501:0:b0:3a5:cb82:109b with SMTP id
- j1-20020ac85501000000b003a5cb82109bmr76982863qtq.61.1670246790901; Mon, 05
- Dec 2022 05:26:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20221205085351.27566-1-tmaimon77@gmail.com> <20221205085351.27566-3-tmaimon77@gmail.com>
- <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com> <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
-In-Reply-To: <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Dec 2022 15:25:55 +0200
-Message-ID: <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, adrian.hunter@intel.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6Q1FOgaXJCU20iA2bNkMa3PVXV/y1f/l7XBgDZn5WKg=;
+        b=qs6RzxzH28Bo14C/qGUII9trAjP0XTXoyNEM/66ssSYbX0mwS+gtDo4NnnYB2DGHR+
+         0sonnWWAmN9yT+eO+tEQ7gm/ohsxiiv+DazCr5jLTBDQ1M1w69njS8rx5rSNXDjjEtFd
+         FfN//YAAl1T6L1D5md8bN77sOpbJEO+ZaEAgmJysSIUv1uaD1RM/jybeoBXAsH733g2Q
+         pHFRK7tu8TxbcicSIPzanc3364DQrOztoHnkuV4gX2uzHAv0gpSM3VkUFpENbvOLKcLt
+         WxgP/I2Jhz9Hw8OscOiTSETeEPK8CH9h0EdP9ZEeeWYI5e0J4hbgi0pKs8SrR4frqQLA
+         mH7w==
+X-Gm-Message-State: ANoB5pkQrcvqO7zXekqPlaD8rvbYcDnRxLeGb9nvQ37sO+xYE3Ei4GHb
+        04fJIKfHb1TNl9qcerGn1R4/UPyKYRM=
+X-Google-Smtp-Source: AA0mqf7+LL7XxZUEb5XnNNcoladIKFWRiEDvClcGAXQbEL4/Xv1kfM4x36B5EWFDxzURqPf8uaOc0T3i24A=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:961a:360d:6816:d7ba])
+ (user=glider job=sendgmr) by 2002:a05:6402:790:b0:46c:cd6e:811a with SMTP id
+ d16-20020a056402079000b0046ccd6e811amr2821841edy.352.1670246762530; Mon, 05
+ Dec 2022 05:26:02 -0800 (PST)
+Date:   Mon,  5 Dec 2022 14:25:58 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221205132558.63484-1-glider@google.com>
+Subject: [PATCH] kmsan: fix memcpy tests
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        elver@google.com, dvyukov@google.com, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,96 +66,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> On Mon, 5 Dec 2022 at 12:54, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Mon, Dec 5, 2022 at 10:54 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
+Recent Clang changes may cause it to delete calls of memcpy(), if the
+source is an uninitialized volatile local.
+This happens because passing a pointer to a volatile local into memcpy()
+discards the volatile qualifier, giving the compiler a free hand to
+optimize the memcpy() call away.
 
-...
+To outsmart the compiler, we call __msan_memcpy() instead of memcpy()
+in test_memcpy_aligned_to_aligned(), test_memcpy_aligned_to_unaligned()
+and test_memcpy_aligned_to_unaligned2(), because it's the behavior of
+__msan_memcpy() we are testing here anyway.
 
-> > > +#include <linux/clk.h>
-> > > +#include <linux/err.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/mmc/host.h>
-> > > +#include <linux/mmc/mmc.h>
-> > > +#include <linux/module.h>
-> >
-> > I guess platform_device.h is missing here.
-> Build and work without platform_device.h, do I need it for module use?
+Signed-off-by: Alexander Potapenko <glider@google.com>
+---
+ mm/kmsan/kmsan_test.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-The rule of thumb is to include headers we are the direct user of. I
-believe you have a data type and API that are defined in that header.
-
-...
-
-> > > +static int npcm_sdhci_probe(struct platform_device *pdev)
-> > > +{
-> > > +       struct sdhci_pltfm_host *pltfm_host;
-> > > +       struct sdhci_host *host;
-> > > +       u32 caps;
-> > > +       int ret;
-> > > +
-> > > +       host = sdhci_pltfm_init(pdev, &npcm_sdhci_pdata, 0);
-> > > +       if (IS_ERR(host))
-> > > +               return PTR_ERR(host);
-> > > +
-> > > +       pltfm_host = sdhci_priv(host);
-> >
-> > > +       pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
-> >
-> > You can't mix devm with non-devm in this way.
-> Can you explain what you mean You can't mix devm with non-devm in this
-> way, where is the mix?
-> In version 1 used devm_clk_get, is it problematic?
-
-devm_ is problematic in your case.
-TL;DR: you need to use clk_get_optional() and clk_put().
-
-Your ->remove() callback doesn't free resources in the reversed order
-which may or, by luck, may not be the case of all possible crashes,
-UAFs, races, etc during removal stage. All the same for error path in
-->probe().
-
-> > > +       if (IS_ERR(pltfm_host->clk))
-> > > +               return PTR_ERR(pltfm_host->clk);
-> > > +
-> > > +       ret = clk_prepare_enable(pltfm_host->clk);
-> > > +       if (ret)
-> > > +               return ret;
-> > > +
-> > > +       caps = sdhci_readl(host, SDHCI_CAPABILITIES);
-> > > +       if (caps & SDHCI_CAN_DO_8BIT)
-> > > +               host->mmc->caps |= MMC_CAP_8_BIT_DATA;
-> > > +
-> > > +       ret = mmc_of_parse(host->mmc);
-> > > +       if (ret)
-> > > +               goto err_sdhci_add;
-> > > +
-> > > +       ret = sdhci_add_host(host);
-> > > +       if (ret)
-> > > +               goto err_sdhci_add;
-> >
-> > Why can't you use sdhci_pltfm_register()?
-> two things are missing in sdhci_pltfm_register
-> 1. clock.
-
-Taking into account the implementation of the corresponding
-_unregister() I would add the clock handling to the _register() one.
-Perhaps via a new member of the platform data that supplies the name
-and index of the clock and hence all clk_get_optional() / clk_put will
-be moved there.
-
-> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
-
-All the same, why can't platform data be utilised for this?
-
-> > > +       return 0;
-> > > +
-> > > +err_sdhci_add:
-> > > +       clk_disable_unprepare(pltfm_host->clk);
-> > > +       sdhci_pltfm_free(pdev);
-> > > +       return ret;
-> > > +}
-
+diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
+index 9a29ea2dbfb9b..8e4f206a900ae 100644
+--- a/mm/kmsan/kmsan_test.c
++++ b/mm/kmsan/kmsan_test.c
+@@ -406,6 +406,16 @@ static void test_printk(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+ }
+ 
++/*
++ * The test_memcpy_xxx tests below should be calling memcpy() to copy an
++ * uninitialized value from a volatile int. But such calls discard the volatile
++ * qualifier, so Clang may optimize them away, breaking the tests.
++ * Because KMSAN instrumentation pass would just replace memcpy() with
++ * __msan_memcpy(), do that explicitly to trick the optimizer into preserving
++ * the calls.
++ */
++void *__msan_memcpy(void *, const void *, size_t);
++
+ /*
+  * Test case: ensure that memcpy() correctly copies uninitialized values between
+  * aligned `src` and `dst`.
+@@ -419,7 +429,7 @@ static void test_memcpy_aligned_to_aligned(struct kunit *test)
+ 	kunit_info(
+ 		test,
+ 		"memcpy()ing aligned uninit src to aligned dst (UMR report)\n");
+-	memcpy((void *)&dst, (void *)&uninit_src, sizeof(uninit_src));
++	__msan_memcpy((void *)&dst, (void *)&uninit_src, sizeof(uninit_src));
+ 	kmsan_check_memory((void *)&dst, sizeof(dst));
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+ }
+@@ -441,7 +451,7 @@ static void test_memcpy_aligned_to_unaligned(struct kunit *test)
+ 	kunit_info(
+ 		test,
+ 		"memcpy()ing aligned uninit src to unaligned dst (UMR report)\n");
+-	memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
++	__msan_memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
+ 	kmsan_check_memory((void *)dst, 4);
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+ }
+@@ -464,7 +474,7 @@ static void test_memcpy_aligned_to_unaligned2(struct kunit *test)
+ 	kunit_info(
+ 		test,
+ 		"memcpy()ing aligned uninit src to unaligned dst - part 2 (UMR report)\n");
+-	memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
++	__msan_memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
+ 	kmsan_check_memory((void *)&dst[4], sizeof(uninit_src));
+ 	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
+2.39.0.rc0.267.gcb52ba06e7-goog
+
