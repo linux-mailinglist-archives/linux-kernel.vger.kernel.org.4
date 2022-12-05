@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B867643935
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C77A64393A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbiLEXJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 18:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
+        id S233668AbiLEXJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 18:09:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiLEXIq (ORCPT
+        with ESMTP id S232499AbiLEXIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 18:08:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA29A1EEFC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:08:42 -0800 (PST)
+        Mon, 5 Dec 2022 18:08:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D741EEF5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:08:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93B90B8111A
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80D22614C0
         for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 23:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F09CDC43141;
-        Mon,  5 Dec 2022 23:08:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC9BC43470;
+        Mon,  5 Dec 2022 23:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1670281720;
-        bh=5gMO8cLybx9rIEkN5/YUfJzDl3RNG0bek/qaVakfGfg=;
+        bh=np2Yu8Q2x8gtS0MXr5n11c7mRGrlDAkmbbQ8z9YhO6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LiP2vcVcBH/ViJzcxFOdvs7s/0ZOLtF88q4fj24PDoJGfxkBZjEF8SXWCNKmTEl2v
-         doSq1h0O0yLwR6AujiHFTLkm2uTaqqpxul11peFqTmBfzkwYqAsM7opXy4CKcP2GZU
-         V0XivkIlN1gRGQk0CakM7U7GSLsyXBq93UQMdhNJ4AsHvYcWhZHuz6ZP6sxGe6AsDG
-         bVhzMIt+5pNU04+9c80VMWLkZ3mfZ+t/ic3yCqjXHIIn0skiSH9EfmNJPrwFvlh0vv
-         D3qPnFwH05tjEQeJo3ZNrv58MvU65bCrn3ha3yrT1Wve2Tk3NOvnin9kCr+R+m8eN6
-         csTQbzfoWVcuQ==
+        b=DP0dV1am6uTMREEzJ9WKKgke+T/riNJL/iI1dDL41RwlOuTyssvVKlRN5qDlJgFwr
+         /N/4QwwW3Ptpb7mmbY6xxlU/g8GUDB3eEs3A5mBxM73fb3VBGYkg94yS2jeBUqmpKu
+         eBOIZS4vKsEhEAqmWEHbPdw3I1HCnbRenBxa5EmjrX6zqG87OsYkQrzP3SIbBuoltz
+         lQvthVZQOyEF7pQMtw/RtE3C7ECAJ7W0zah2+xIH+wEPUfIrA/qeaGjEw/54LeIihb
+         Y0406Rr0xFGm+Nh5fALz77fQ/m/QN7L0mUcBFYdxZvLu0pb2Ay+0WKTwoYR/GrA/Fk
+         kaqY9U/q8wOJw==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 07/11] mm/damon/sysfs-schemes: connect filter directory and filters directory
-Date:   Mon,  5 Dec 2022 23:08:26 +0000
-Message-Id: <20221205230830.144349-8-sj@kernel.org>
+Subject: [PATCH 08/11] mm/damon/sysfs-schemes: implement scheme filters
+Date:   Mon,  5 Dec 2022 23:08:27 +0000
+Message-Id: <20221205230830.144349-9-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221205230830.144349-1-sj@kernel.org>
 References: <20221205230830.144349-1-sj@kernel.org>
@@ -53,129 +53,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement 'nr_filters' file under 'filters' directory, which will be
-used to populate specific number of 'filter' directory under the
-directory, similar to other 'nr_*' files in DAMON sysfs interface.
+Implement scheme filters functionality of DAMON sysfs interface by
+making the code reads the values of files under the filter directories
+and pass that to DAMON using DAMON kernel API.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/sysfs-schemes.c | 68 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ mm/damon/sysfs-schemes.c | 89 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 88 insertions(+), 1 deletion(-)
 
 diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
-index afbfc55a8e84..e79c678a69d5 100644
+index e79c678a69d5..0501862534f2 100644
 --- a/mm/damon/sysfs-schemes.c
 +++ b/mm/damon/sysfs-schemes.c
-@@ -269,6 +269,11 @@ struct damon_sysfs_scheme_filter {
- 	char *memcg_path;
+@@ -1403,6 +1403,75 @@ struct kobj_type damon_sysfs_schemes_ktype = {
+ 	.default_groups = damon_sysfs_schemes_groups,
  };
  
-+static struct damon_sysfs_scheme_filter *damon_sysfs_scheme_filter_alloc(void)
++static bool damon_sysfs_memcg_path_eq(struct mem_cgroup *memcg,
++		char *memcg_path_buf, char *path)
 +{
-+	return kzalloc(sizeof(struct damon_sysfs_scheme_filter), GFP_KERNEL);
++#ifdef CONFIG_MEMCG
++	cgroup_path(memcg->css.cgroup, memcg_path_buf, PATH_MAX);
++	if (sysfs_streq(memcg_path_buf, path))
++		return true;
++#endif /* CONFIG_MEMCG */
++	return false;
 +}
 +
- /* Should match with enum damos_filter_type */
- static const char * const damon_sysfs_scheme_filter_type_strs[] = {
- 	"anon",
-@@ -392,6 +397,7 @@ static struct kobj_type damon_sysfs_scheme_filter_ktype = {
- 
- struct damon_sysfs_scheme_filters {
- 	struct kobject kobj;
-+	struct damon_sysfs_scheme_filter **filters_arr;
- 	int nr;
- };
- 
-@@ -401,6 +407,57 @@ damon_sysfs_scheme_filters_alloc(void)
- 	return kzalloc(sizeof(struct damon_sysfs_scheme_filters), GFP_KERNEL);
- }
- 
-+static void damon_sysfs_scheme_filters_rm_dirs(
-+		struct damon_sysfs_scheme_filters *filters)
++static int damon_sysfs_memcg_path_to_id(char *memcg_path, unsigned short *id)
 +{
-+	struct damon_sysfs_scheme_filter **filters_arr = filters->filters_arr;
-+	int i;
++	struct mem_cgroup *memcg;
++	char *path;
 +
-+	for (i = 0; i < filters->nr; i++)
-+		kobject_put(&filters_arr[i]->kobj);
-+	filters->nr = 0;
-+	kfree(filters_arr);
-+	filters->filters_arr = NULL;
-+}
++	if (!memcg_path)
++		return -EINVAL;
 +
-+static int damon_sysfs_scheme_filters_add_dirs(
-+		struct damon_sysfs_scheme_filters *filters, int nr_filters)
-+{
-+	struct damon_sysfs_scheme_filter **filters_arr, *filter;
-+	int err, i;
-+
-+	damon_sysfs_scheme_filters_rm_dirs(filters);
-+	if (!nr_filters)
-+		return 0;
-+
-+	filters_arr = kmalloc_array(nr_filters, sizeof(*filters_arr),
-+			GFP_KERNEL | __GFP_NOWARN);
-+	if (!filters_arr)
++	path = kmalloc(sizeof(*path) * PATH_MAX, GFP_KERNEL);
++	if (!path)
 +		return -ENOMEM;
-+	filters->filters_arr = filters_arr;
 +
-+	for (i = 0; i < nr_filters; i++) {
-+		filter = damon_sysfs_scheme_filter_alloc();
-+		if (!filter) {
-+			damon_sysfs_scheme_filters_rm_dirs(filters);
++	for (memcg = mem_cgroup_iter(NULL, NULL, NULL); memcg;
++			memcg = mem_cgroup_iter(NULL, memcg, NULL)) {
++		/* skip removed memcg */
++		if (!mem_cgroup_id(memcg))
++			continue;
++		if (damon_sysfs_memcg_path_eq(memcg, path, memcg_path)) {
++			*id = mem_cgroup_id(memcg);
++			break;
++		}
++	}
++
++	kfree(path);
++	return 0;
++}
++
++static int damon_sysfs_set_scheme_filters(struct damos *scheme,
++		struct damon_sysfs_scheme_filters *sysfs_filters)
++{
++	int i;
++	struct damos_filter *filter, *next;
++
++	damos_for_each_filter_safe(filter, next, scheme)
++		damos_destroy_filter(filter);
++
++	for (i = 0; i < sysfs_filters->nr; i++) {
++		struct damon_sysfs_scheme_filter *sysfs_filter =
++			sysfs_filters->filters_arr[i];
++		struct damos_filter *filter =
++			damos_new_filter(sysfs_filter->type,
++					sysfs_filter->matching);
++		int err;
++
++		if (!filter)
 +			return -ENOMEM;
++		if (filter->type == DAMOS_FILTER_TYPE_MEMCG) {
++			err = damon_sysfs_memcg_path_to_id(
++					sysfs_filter->memcg_path,
++					&filter->memcg_id);
++			if (err)
++				return err;
 +		}
-+
-+		err = kobject_init_and_add(&filter->kobj,
-+				&damon_sysfs_scheme_filter_ktype,
-+				&filters->kobj, "%d", i);
-+		if (err) {
-+			kobject_put(&filter->kobj);
-+			damon_sysfs_scheme_filters_rm_dirs(filters);
-+			return err;
-+		}
-+
-+		filters_arr[i] = filter;
-+		filters->nr++;
++		damos_add_filter(scheme, filter);
 +	}
 +	return 0;
 +}
 +
- static ssize_t nr_filters_show(struct kobject *kobj,
- 		struct kobj_attribute *attr, char *buf)
+ static struct damos *damon_sysfs_mk_scheme(
+ 		struct damon_sysfs_scheme *sysfs_scheme)
  {
-@@ -413,6 +470,7 @@ static ssize_t nr_filters_show(struct kobject *kobj,
- static ssize_t nr_filters_store(struct kobject *kobj,
- 		struct kobj_attribute *attr, const char *buf, size_t count)
- {
-+	struct damon_sysfs_scheme_filters *filters;
- 	int nr, err = kstrtoint(buf, 0, &nr);
+@@ -1411,6 +1480,10 @@ static struct damos *damon_sysfs_mk_scheme(
+ 	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
+ 	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
+ 	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
++	struct damon_sysfs_scheme_filters *sysfs_filters =
++		sysfs_scheme->filters;
++	struct damos *scheme;
++	int err;
  
- 	if (err)
-@@ -420,6 +478,15 @@ static ssize_t nr_filters_store(struct kobject *kobj,
- 	if (nr < 0)
- 		return -EINVAL;
+ 	struct damos_access_pattern pattern = {
+ 		.min_sz_region = access_pattern->sz->min,
+@@ -1436,8 +1509,17 @@ static struct damos *damon_sysfs_mk_scheme(
+ 		.low = sysfs_wmarks->low,
+ 	};
  
-+	filters = container_of(kobj, struct damon_sysfs_scheme_filters, kobj);
+-	return damon_new_scheme(&pattern, sysfs_scheme->action, &quota,
++	scheme = damon_new_scheme(&pattern, sysfs_scheme->action, &quota,
+ 			&wmarks);
++	if (!scheme)
++		return NULL;
 +
-+	if (!mutex_trylock(&damon_sysfs_lock))
-+		return -EBUSY;
-+	err = damon_sysfs_scheme_filters_add_dirs(filters, nr);
-+	mutex_unlock(&damon_sysfs_lock);
-+	if (err)
-+		return err;
-+
- 	return count;
++	err = damon_sysfs_set_scheme_filters(scheme, sysfs_filters);
++	if (err) {
++		damon_destroy_scheme(scheme);
++		return NULL;
++	}
++	return scheme;
  }
  
-@@ -1166,6 +1233,7 @@ static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
- 	damon_sysfs_quotas_rm_dirs(scheme->quotas);
- 	kobject_put(&scheme->quotas->kobj);
- 	kobject_put(&scheme->watermarks->kobj);
-+	damon_sysfs_scheme_filters_rm_dirs(scheme->filters);
- 	kobject_put(&scheme->filters->kobj);
- 	kobject_put(&scheme->stats->kobj);
- 	damon_sysfs_scheme_regions_rm_dirs(scheme->tried_regions);
+ static void damon_sysfs_update_scheme(struct damos *scheme,
+@@ -1448,6 +1530,7 @@ static void damon_sysfs_update_scheme(struct damos *scheme,
+ 	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
+ 	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
+ 	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
++	int err;
+ 
+ 	scheme->pattern.min_sz_region = access_pattern->sz->min;
+ 	scheme->pattern.max_sz_region = access_pattern->sz->max;
+@@ -1470,6 +1553,10 @@ static void damon_sysfs_update_scheme(struct damos *scheme,
+ 	scheme->wmarks.high = sysfs_wmarks->high;
+ 	scheme->wmarks.mid = sysfs_wmarks->mid;
+ 	scheme->wmarks.low = sysfs_wmarks->low;
++
++	err = damon_sysfs_set_scheme_filters(scheme, sysfs_scheme->filters);
++	if (err)
++		damon_destroy_scheme(scheme);
+ }
+ 
+ int damon_sysfs_set_schemes(struct damon_ctx *ctx,
 -- 
 2.25.1
 
