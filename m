@@ -2,146 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF77642AEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE72C642B03
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiLEPBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S232331AbiLEPHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiLEPBq (ORCPT
+        with ESMTP id S232295AbiLEPHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:01:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2311D0FE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:01:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFFBD6119A
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B8CC433D6;
-        Mon,  5 Dec 2022 15:01:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="plQ+h37j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670252501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OQxIC/pA5v8LWcdCf8PNcaqz9WcJuyhTrmZzMdlvxGY=;
-        b=plQ+h37jya5m6enDsITZtXKY06/pejo8MOvxzQcSkMkxXsnaKABhfNe7octXQkXsaa3WlI
-        TArg1Yjm55TE77TJMEuaOTk1F8I+aAFo93zefqj8L5m/X320nvC0f+mYjdcQfez8Ksxhmf
-        D8cQlgtDpOsWfh/SstZP3GI9Gs7Y1k0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f18c2b2a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 5 Dec 2022 15:01:40 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] -funsigned-char conversion for 6.2-rc1
-Date:   Mon,  5 Dec 2022 16:01:16 +0100
-Message-Id: <20221205150116.1064295-1-Jason@zx2c4.com>
+        Mon, 5 Dec 2022 10:07:34 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D0C1B8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:07:32 -0800 (PST)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5CVbpF012952
+        for <linux-kernel@vger.kernel.org>; Mon, 5 Dec 2022 07:07:31 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=YU1RvihRnvDJ0EI7aPZRW/ndJTmtKABPXXQKd2XE/QM=;
+ b=h72aB84uF535vhqcSF/upzVkRKlcy1O4YHQ33llTxkXXqGNEv07PJm/9UT0GamvqFm69
+ letw054sf96K2yDECmaBk5enLnO0+h+gBqXZpn3F9n3gVsFu4VqjzsvjyQUHNSWvgrsH
+ ZYetGQPpLXxAeBwNCLvHfg+F6A153f/jl5EwJ17EI7tbQ5br8Zz0ZbAHA16VCXqzRSKp
+ yMbMqL1mylZiV7qWL1Zmk1MRN/59JJuWSaNU8zWZiPNEAKZ11tvspWwFc9X4MX/uo989
+ +XykDO8PcS9Hz6d+i8hEd+kGzILJyBRYQoaU9DJOf749WEbwODmDaNso2QkV4OFWjpcB vA== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m9gqj9dy9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:07:31 -0800
+Received: from twshared16963.27.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Dec 2022 07:07:30 -0800
+Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
+        id C5CE2C6156E0; Mon,  5 Dec 2022 07:00:09 -0800 (PST)
+From:   Keith Busch <kbusch@meta.com>
+To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+CC:     Tony Battersby <tonyb@cybernetics.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: [PATCH 02/11] dmapool: remove checks for dev == NULL
+Date:   Mon, 5 Dec 2022 06:59:28 -0800
+Message-ID: <20221205145937.54367-3-kbusch@meta.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221205145937.54367-1-kbusch@meta.com>
+References: <20221205145937.54367-1-kbusch@meta.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: cQPW7psQfzKzSWz7z0MymjinkwJ0T5k7
+X-Proofpoint-ORIG-GUID: cQPW7psQfzKzSWz7z0MymjinkwJ0T5k7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Tony Battersby <tonyb@cybernetics.com>
 
-Please pull the following tree, which contains the change to use
--funsigned-char, in addition to fixes to code that made different assumptions
-about the signedness of chars.
+dmapool originally tried to support pools without a device because
+dma_alloc_coherent() supports allocations without a device.  But nobody
+ended up using dma pools without a device, and trying to do so will
+result in an oops.  So remove the checks for pool->dev =3D=3D NULL since =
+they
+are unneeded bloat.
 
-During the 6.1 cycle, several patches already made it to your tree, which were
-for code that was already broken on at least one architecture, where the naked
-char had a different sign than the code author anticipated, or were part of
-some bug fix for an existing bug that this initiative unearthed. These 6.1-era
-fixes are:
+Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+[added check for null dev on create]
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+---
+ mm/dmapool.c | 45 ++++++++++++++-------------------------------
+ 1 file changed, 14 insertions(+), 31 deletions(-)
 
-- 648060902aa3 MIPS: pic32: treat port as signed integer
-- 5c26159c97b3 ipvs: use explicitly signed chars
-- e6cb8769452e wifi: airo: do not assign -1 to unsigned char
-- 937ec9f7d5f2 staging: rtl8192e: remove bogus ssid character sign test
-- 677047383296 misc: sgi-gru: use explicitly signed char
-- 50895a55bcfd ALSA: rme9652: use explicitly signed char
-- ee03c0f200eb ALSA: au88x0: use explicitly signed char
-- 835bed1b8395 fbdev: sisfb: use explicitly signed char
-- 50f19697dd76 parisc: Use signed char for hardware path in pdc.h
-- 66063033f77e wifi: rt2x00: use explicitly signed or unsigned types
+diff --git a/mm/dmapool.c b/mm/dmapool.c
+index a7eb5d0eb2da7..559207e1c3339 100644
+--- a/mm/dmapool.c
++++ b/mm/dmapool.c
+@@ -134,6 +134,9 @@ struct dma_pool *dma_pool_create(const char *name, st=
+ruct device *dev,
+ 	size_t allocation;
+ 	bool empty =3D false;
+=20
++	if (!dev)
++		return NULL;
++
+ 	if (align =3D=3D 0)
+ 		align =3D 1;
+ 	else if (align & (align - 1))
+@@ -275,7 +278,7 @@ void dma_pool_destroy(struct dma_pool *pool)
+ 	mutex_lock(&pools_reg_lock);
+ 	mutex_lock(&pools_lock);
+ 	list_del(&pool->pools);
+-	if (pool->dev && list_empty(&pool->dev->dma_pools))
++	if (list_empty(&pool->dev->dma_pools))
+ 		empty =3D true;
+ 	mutex_unlock(&pools_lock);
+ 	if (empty)
+@@ -284,12 +287,8 @@ void dma_pool_destroy(struct dma_pool *pool)
+=20
+ 	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
+ 		if (is_page_busy(page)) {
+-			if (pool->dev)
+-				dev_err(pool->dev, "%s %s, %p busy\n", __func__,
+-					pool->name, page->vaddr);
+-			else
+-				pr_err("%s %s, %p busy\n", __func__,
+-				       pool->name, page->vaddr);
++			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
++				pool->name, page->vaddr);
+ 			/* leak the still-in-use consistent memory */
+ 			list_del(&page->page_list);
+ 			kfree(page);
+@@ -351,12 +350,8 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t me=
+m_flags,
+ 		for (i =3D sizeof(page->offset); i < pool->size; i++) {
+ 			if (data[i] =3D=3D POOL_POISON_FREED)
+ 				continue;
+-			if (pool->dev)
+-				dev_err(pool->dev, "%s %s, %p (corrupted)\n",
+-					__func__, pool->name, retval);
+-			else
+-				pr_err("%s %s, %p (corrupted)\n",
+-					__func__, pool->name, retval);
++			dev_err(pool->dev, "%s %s, %p (corrupted)\n",
++				__func__, pool->name, retval);
+=20
+ 			/*
+ 			 * Dump the first 4 bytes even if they are not
+@@ -411,12 +406,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
+r, dma_addr_t dma)
+ 	page =3D pool_find_page(pool, dma);
+ 	if (!page) {
+ 		spin_unlock_irqrestore(&pool->lock, flags);
+-		if (pool->dev)
+-			dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
+-				__func__, pool->name, vaddr, &dma);
+-		else
+-			pr_err("%s %s, %p/%pad (bad dma)\n",
+-			       __func__, pool->name, vaddr, &dma);
++		dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
++			__func__, pool->name, vaddr, &dma);
+ 		return;
+ 	}
+=20
+@@ -426,12 +417,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
+r, dma_addr_t dma)
+ #ifdef	DMAPOOL_DEBUG
+ 	if ((dma - page->dma) !=3D offset) {
+ 		spin_unlock_irqrestore(&pool->lock, flags);
+-		if (pool->dev)
+-			dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
+-				__func__, pool->name, vaddr, &dma);
+-		else
+-			pr_err("%s %s, %p (bad vaddr)/%pad\n",
+-			       __func__, pool->name, vaddr, &dma);
++		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
++			__func__, pool->name, vaddr, &dma);
+ 		return;
+ 	}
+ 	{
+@@ -442,12 +429,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
+r, dma_addr_t dma)
+ 				continue;
+ 			}
+ 			spin_unlock_irqrestore(&pool->lock, flags);
+-			if (pool->dev)
+-				dev_err(pool->dev, "%s %s, dma %pad already free\n",
+-					__func__, pool->name, &dma);
+-			else
+-				pr_err("%s %s, dma %pad already free\n",
+-				       __func__, pool->name, &dma);
++			dev_err(pool->dev, "%s %s, dma %pad already free\n",
++				__func__, pool->name, &dma);
+ 			return;
+ 		}
+ 	}
+--=20
+2.30.2
 
-Regarding patches in this pull:
-
-- There is one patch in this pull that should have made it to you during 6.1
-  ("media: stv0288: use explicitly signed char"), but the maintainer was MIA
-  during the cycle, so it's in here instead.
-
-- Two patches fix single architecture code affected by -funsigned-char
-  ("perf/x86: Make struct p4_event_bind::cntr signed array" and "sparc: sbus:
-  treat CPU index as integer"), while one patch fixes an unused typedef, in
-  case it's ever used in the future ("media: atomisp: make hive_int8 explictly
-  signed").
-
-- Finally, there's the change to actually enable -funsigned-char ("kbuild:
-  treat char as always unsigned") and then the removal of some no longer
-  useful !__CHAR_UNSIGNED__ selftest code ("lib: assume char is unsigned").
-
-The various fixes were found with a combination of diffing objdump output, a
-large variety of Coccinelle scripts, and plain old grep. In the end, things
-didn't seem as bad as I feared they would. But of course, it's also possible I
-missed things. However, this has been in linux-next for basically an entire
-cycle now, so I'm not overly worried. I've also been daily driving this on my
-laptop for all of 6.1. Still, this series, and the ones sent for 6.1 don't
-total in quantity to what I thought it'd be, so I will be on the lookout for
-breakage.
-
-We could receive a few reports that are quickly fixable. Hopefully we won't
-receive a barrage of reports that would result in a revert. And just maybe we
-won't receive any reports at all and nobody will even notice. Knock on wood.
-
-Please pull!
-
-Thanks,
-Jason
-
-
-The following changes since commit 23a60a03d9a9980d1e91190491ceea0dc58fae62:
-
-  Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux (2022-11-18 14:31:03 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git tags/unsigned-char-6.2-for-linus
-
-for you to fetch changes up to 0445d1bae1cce00ae4e99c8cde33784a8199bad6:
-
-  lib: assume char is unsigned (2022-11-19 00:56:15 +0100)
-
-----------------------------------------------------------------
-Enable -funsigned-char and fix code affected by that flag.
-----------------------------------------------------------------
-
-Alexey Dobriyan (1):
-      perf/x86: Make struct p4_event_bind::cntr signed array
-
-Jason A. Donenfeld (5):
-      sparc: sbus: treat CPU index as integer
-      media: stv0288: use explicitly signed char
-      media: atomisp: make hive_int8 explictly signed
-      kbuild: treat char as always unsigned
-      lib: assume char is unsigned
-
- Makefile                                       |  2 +-
- arch/x86/events/intel/p4.c                     |  2 +-
- drivers/media/dvb-frontends/stv0288.c          |  5 ++---
- drivers/sbus/char/envctrl.c                    |  4 ++--
- drivers/staging/media/atomisp/pci/hive_types.h |  2 +-
- lib/is_signed_type_kunit.c                     |  4 ----
- lib/test_printf.c                              | 12 ------------
- 7 files changed, 7 insertions(+), 24 deletions(-)
