@@ -2,148 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8879164395C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0CB643965
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbiLEXQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 18:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S229456AbiLEXXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 18:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233231AbiLEXQe (ORCPT
+        with ESMTP id S230228AbiLEXXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 18:16:34 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661FDFAC9;
-        Mon,  5 Dec 2022 15:16:33 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id v3so11834285pgh.4;
-        Mon, 05 Dec 2022 15:16:33 -0800 (PST)
+        Mon, 5 Dec 2022 18:23:48 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4A01835A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:23:48 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id z10-20020a170902ccca00b001898329db72so14818951ple.21
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:23:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=l1eMXUb35CswTS4yMhs6a5ng51PFHAvAxv8mok77/yY=;
-        b=bpq4PJbPK9gkYXgRg+nxuqvx2NBP04RUBKdEzYu9tlvBrrJG6sA9KirAUtoNNkrvv7
-         dg1iwSuojPzB5Wqn48xfpWbmGW0ccXkQE4hVBaW4/NWV6+8+KFx3674rt8VAsx5+mIcZ
-         r0Mrl3JZ/f71Ra4lgKzNyLhgN4C3hW/pvWUawAJueSAYrrJO9MSn9e+lGagdU1vPEhZr
-         /WqDbiyDynKbWqPc5lKnTbDdhuwNbPnLW0QxzuWbt0qQe5/WmWgo0wKrXhYwxAi8yFFD
-         g6tt0njpEurEPl+VXk2Xf4rsgbdLLq1DXEsuaRPGInKYL0b66DHwMJxMqODZOuM0NtIh
-         0LYA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iTzvLGTWLJU89YMgwwnvlvr5Kpl1FGcMOvQ/pbHMzbM=;
+        b=KyLc9GV6/CUhfLU9IMoTcRlJBolS4+1t6RFTh27gP6FNWM6iBDARcbicN/NRlkk2pG
+         WNxXokZ7XWgT0JLwBf+ynDuBAueLnOZ5JIBM2uEM3nLhWon+4dRxcWASghQUKXVxDKjH
+         iaKcEiGQOXpuTi5eY8wv7Wwd79mDU7ZiXvV4EMZMOqU6gx6sdNTGEQU418uoFyU/MReQ
+         3x+tGwBIwIcdVA4w8/hE7fxnLR5UqQWJ3W2eLdCCykT3kmulLBLBFnzZskF851JmZWG5
+         ct+FjREgWuWF2RhVDJApm64ZCPyM015zcTrOuq8Y7uQ/+phMgvoX+mLMRifE6uAPHrVL
+         0O4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l1eMXUb35CswTS4yMhs6a5ng51PFHAvAxv8mok77/yY=;
-        b=xsmYGDVKQJ9MO/cpShP7CqJgSLRWroM0Le1IRO9qXE/g20RUoKa7C6lGBcVy+uKtUc
-         OXSEh8zaTwv3Rso7++KuwV54/ERxV7e0iit64r1y/zZgcF+OskPHCzCYMgbzQs1Bv6Lp
-         RFWk2zz4sceMnNbnjMbEEaP4tj795T07yOC6Oi3Ro/I7z6OYW9tgj4i0AnxIHr1tCJhu
-         OvTbBTozwUipDZ5LGidbscjNjIuyvZv3QrhxHe3bDTheyK2+PK7LDmhLNzo/qxVdOhki
-         ZG/HY43bZvl0Lpr/nfMYxErtHeIlC477o1MskW1costn2QfGPw3llJdbyA5GcwmyQNe9
-         jNaw==
-X-Gm-Message-State: ANoB5pmYMV4jOTKoc/KZYFbJi3HkUIUwlQY/mIW+7L32hvcc6hn9xEQZ
-        Kf+HPVw1rgIl3Ddhc8VAVts=
-X-Google-Smtp-Source: AA0mqf7Zt0JiQq/jVcV4BbK4E2NDYPYC4BF9OlA7SzOMkRCGrgqSS1un9XF14Kl3g0spU2YvA+clnw==
-X-Received: by 2002:a62:60c7:0:b0:56b:94f5:400c with SMTP id u190-20020a6260c7000000b0056b94f5400cmr66412045pfb.31.1670282192786;
-        Mon, 05 Dec 2022 15:16:32 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:8f7c:b9c9:e06c:7b30])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902ea0d00b001891b01addfsm11039616plg.274.2022.12.05.15.16.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 15:16:32 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Michael Petlan <mpetlan@redhat.com>
-Subject: [PATCH] perf stat: Update event skip condition
-Date:   Mon,  5 Dec 2022 15:16:30 -0800
-Message-Id: <20221205231630.319759-1-namhyung@kernel.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iTzvLGTWLJU89YMgwwnvlvr5Kpl1FGcMOvQ/pbHMzbM=;
+        b=tgrblKIEIMK9Mus3E9M0QDmapTiFtXLRn2UGysLAO8JBVt4/9TzmpXTWrsxS87a0hr
+         fzPGL/qWpzN5Wvd1/EV4XjBj4NBWn/iI/CtG6fJDZlIcK9p1QBUoYJee5ME2K9QtY8PP
+         2lqZESPOPJjRtt+MNQxQEvddUz0GOWUaP4j7N1CDygbOx4wmCWeUdzoSOgDVTzEIY/rn
+         HYVck+r15rvP7tuvnfNTcYn+c+0f99+lRl6uk1+ZNi9S39gIT/FCd8aJJ1FPt9uDMgaP
+         FP9LExDLnI2BrDPZ2c1lPZrs5e8eS3skSnCS2eE7aJFTouPcVlakh6f9N+OHZPH5eQZm
+         hA9Q==
+X-Gm-Message-State: ANoB5plQV27lY75m1nrHudthCn8M65nDWOA+dMZUwRiKIsmNXglYyt7B
+        UepkwAZ3gEGh9BmtxM3Az/C5vCeDc4O3O9WM
+X-Google-Smtp-Source: AA0mqf5CdXisKqVqfLw5y4zzdp9qmnLMHkYaZESKkO1KmxpM9AyOvGpCtQMPOR8mVUx0v3ibazqfAsfgDQ3kieyR
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:7d0f:b0:218:d50e:5af8 with SMTP
+ id g15-20020a17090a7d0f00b00218d50e5af8mr67751305pjl.26.1670282627518; Mon,
+ 05 Dec 2022 15:23:47 -0800 (PST)
+Date:   Mon,  5 Dec 2022 23:23:35 +0000
+Mime-Version: 1.0
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <20221205232341.4131240-1-vannapurve@google.com>
+Subject: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private memory
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shuah@kernel.org, yang.zhong@intel.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        seanjc@google.com, diviness@google.com, maz@kernel.org,
+        dmatlack@google.com, axelrasmussen@google.com,
+        maciej.szmigiero@oracle.com, mizhang@google.com,
+        bgardon@google.com, ackerleytng@google.com,
+        Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In print_counter_aggrdata(), it skips some events that has no aggregate
-count.  It's actually for system-wide per-thread mode and merged uncore
-and hybrid events.
+This series implements selftests targeting the feature floated by Chao via:
+https://lore.kernel.org/lkml/20221202061347.1070246-10-chao.p.peng@linux.intel.com/T/
 
-Let's update the condition to check them explicitly.
+Below changes aim to test the fd based approach for guest private memory
+in context of normal (non-confidential) VMs executing on non-confidential
+platforms.
 
-Fixes: 91f85f98da7a ("Display event stats using aggr counts")
-Reported-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
-Athira, could you please check this fixes the problem?
+private_mem_test.c file adds selftest to access private memory from the
+guest via private/shared accesses and checking if the contents can be
+leaked to/accessed by vmm via shared memory view before/after conversions.
 
- tools/perf/util/stat-display.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+Updates in V2:
+1) Simplified vcpu run loop implementation API
+2) Removed VM creation logic from private mem library
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 847acdb5dc40..6c0de52ac4be 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -814,7 +814,8 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
- 	os->nr = aggr->nr;
- 	os->evsel = counter;
- 
--	if (counter->supported && aggr->nr == 0)
-+	/* Skip already merged uncore/hybrid events */
-+	if (counter->merged_stat)
- 		return;
- 
- 	uniquify_counter(config, counter);
-@@ -823,6 +824,13 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
- 	ena = aggr->counts.ena;
- 	run = aggr->counts.run;
- 
-+	/*
-+	 * Skip value 0 when enabling --per-thread globally, otherwise it will
-+	 * have too many 0 output.
-+	 */
-+	if (val == 0 && config->aggr_mode == AGGR_THREAD && config->system_wide)
-+		return;
-+
- 	if (!metric_only) {
- 		if (config->json_output)
- 			fputc('{', output);
-@@ -899,9 +907,6 @@ static void print_aggr(struct perf_stat_config *config,
- 		print_metric_begin(config, evlist, os, s);
- 
- 		evlist__for_each_entry(evlist, counter) {
--			if (counter->merged_stat)
--				continue;
--
- 			print_counter_aggrdata(config, counter, s, os);
- 		}
- 		print_metric_end(config, os);
-@@ -928,9 +933,6 @@ static void print_aggr_cgroup(struct perf_stat_config *config,
- 			print_metric_begin(config, evlist, os, s);
- 
- 			evlist__for_each_entry(evlist, counter) {
--				if (counter->merged_stat)
--					continue;
--
- 				if (counter->cgrp != os->cgrp)
- 					continue;
- 
+Updates in V1 (Compared to RFC v3 patches):
+1) Incorporated suggestions from Sean around simplifying KVM changes
+2) Addressed comments from Sean
+3) Added private mem test with shared memory backed by 2MB hugepages.
+
+V1 series:
+https://lore.kernel.org/lkml/20221111014244.1714148-1-vannapurve@google.com/T/
+
+This series has dependency on following patches:
+1) V10 series patches from Chao mentioned above.
+
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_v2
+
+Vishal Annapurve (6):
+  KVM: x86: Add support for testing private memory
+  KVM: Selftests: Add support for private memory
+  KVM: selftests: x86: Add IS_ALIGNED/IS_PAGE_ALIGNED helpers
+  KVM: selftests: x86: Add helpers to execute VMs with private memory
+  KVM: selftests: Add get_free_huge_2m_pages
+  KVM: selftests: x86: Add selftest for private memory
+
+ arch/x86/kvm/mmu/mmu_internal.h               |   6 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/include/kvm_util_base.h     |  15 +-
+ .../testing/selftests/kvm/include/test_util.h |   5 +
+ .../kvm/include/x86_64/private_mem.h          |  24 ++
+ .../selftests/kvm/include/x86_64/processor.h  |   1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  58 ++++-
+ tools/testing/selftests/kvm/lib/test_util.c   |  29 +++
+ .../selftests/kvm/lib/x86_64/private_mem.c    | 139 ++++++++++++
+ .../selftests/kvm/x86_64/private_mem_test.c   | 212 ++++++++++++++++++
+ virt/kvm/Kconfig                              |   4 +
+ virt/kvm/kvm_main.c                           |   3 +-
+ 13 files changed, 490 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/private_mem_test.c
+
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog
 
