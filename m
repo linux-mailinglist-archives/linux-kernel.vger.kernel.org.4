@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CC5643049
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389BC643054
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbiLES2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S233481AbiLES2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbiLESZW (ORCPT
+        with ESMTP id S232576AbiLESZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 13:25:22 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A5120F7A;
-        Mon,  5 Dec 2022 10:25:20 -0800 (PST)
-Date:   Mon, 05 Dec 2022 18:25:18 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC34E2124D;
+        Mon,  5 Dec 2022 10:25:21 -0800 (PST)
+Date:   Mon, 05 Dec 2022 18:25:19 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670264719;
+        s=2020; t=1670264720;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cJrrHyg4sXLGdrkbGJ1IPkHazqtz1E9P+9OoJFqsHQI=;
-        b=tE5GblDAO/usO9576hpI2Xs6w+xAGpLabAQhbtywFamMMNGLuWmnzFcXCCC0I3H0/CYUi4
-        Cv2fQNBKryy50mxvTMRP61qnKgvWQLwbH95zlJ5SGwKLFMqI93rDQw/gW8Z2XYNxUkJ+5s
-        4GqGm09BR7mngD1FOpac7vEyPAIhW8ke96HhoroXO+ikI6L9L9dSkKj4iqrZoa5nLQFqLy
-        B3RVykBYQWq70u+dBhE4OQuGv7i0bIQwM9NbXLW5eFFtwfm7lOsJDZSc8iTQxqnbpBvdJY
-        JIOP1Xzt/7HmwMkUPJ9jNXPuqEcCVaUcmzDkODNMppnMKFbFwgKLXxQ4kxgb9w==
+        bh=8BhJMBOGAfhpi5lKYkdWInx8QY9zmvpuj0sqwlUK/84=;
+        b=1+mTLT8ho0bOb9/lIOBxlLqO9WO2ElaqGrmWthK49NoP3Szew225SxT9N1YvGGMUnctuNM
+        xSoijBIVuR3LZ6dhtslOUelVK+t7xayTRDrXb6JsypnJyffQLzmWGDbEzSUrZl6lwyIVO3
+        XK6J2eanJxs/UmBRVFYhwPwMH4zNRZ9ATOei+RFuJ4P0btv2SLFNhs6qK6CZbDrQtnCZDy
+        kelNmGiYSKiQ+QqzQhdSk/TXxkU+sH270GgQTGZRCcRTSoLK4ob86GEhJ2yBRgP7M8POFy
+        cshcAYxSb6bqi1aW52GjQyViBQRxHeYKcsZW/OkUip013Qity4UNHk8OZ73JUg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670264719;
+        s=2020e; t=1670264720;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cJrrHyg4sXLGdrkbGJ1IPkHazqtz1E9P+9OoJFqsHQI=;
-        b=Bx11QJ4Si0/t0SQz2hAf2npW9UNZU0uDnDj0NlGjGZvKDr/tCMkJXkHHRiqQLNOvcf15hF
-        QFVCSkLBMpwVQTDg==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+        bh=8BhJMBOGAfhpi5lKYkdWInx8QY9zmvpuj0sqwlUK/84=;
+        b=Kz3Jrqqy7c9j5a0xEXiM+1akmMDjd0Km8MM2QZlO5d8CUFrrFZR+gmrTLG2DDe9r9K4+UE
+        K/83YUCD+zBQy/BA==
+From:   "tip-bot2 for Ahmed S. Darwish" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq/msi: Provide new domain id based interfaces
- for freeing interrupts
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+Subject: [tip: irq/core] genirq/msi: Make msi_get_virq() device domain aware
+Cc:     "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Kevin Tian <kevin.tian@intel.com>,
         Marc Zyngier <maz@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221124230314.337844751@linutronix.de>
-References: <20221124230314.337844751@linutronix.de>
+In-Reply-To: <20221124230314.044613697@linutronix.de>
+References: <20221124230314.044613697@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <167026471878.4906.4045436780799669198.tip-bot2@tip-bot2>
+Message-ID: <167026471995.4906.14550334218511486751.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,251 +68,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     4cd5f4403f283766f73749c4c936801f58ffe77a
-Gitweb:        https://git.kernel.org/tip/4cd5f4403f283766f73749c4c936801f58ffe77a
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 25 Nov 2022 00:24:33 +01:00
+Commit-ID:     98043704f375f63a47efeff123ab92fcf34b95e6
+Gitweb:        https://git.kernel.org/tip/98043704f375f63a47efeff123ab92fcf34b95e6
+Author:        Ahmed S. Darwish <darwi@linutronix.de>
+AuthorDate:    Fri, 25 Nov 2022 00:24:25 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 05 Dec 2022 19:21:00 +01:00
+CommitterDate: Mon, 05 Dec 2022 19:20:59 +01:00
 
-genirq/msi: Provide new domain id based interfaces for freeing interrupts
+genirq/msi: Make msi_get_virq() device domain aware
 
-Provide two sorts of interfaces to handle the different use cases:
+In preparation of the upcoming per device multi MSI domain support, change
+the interface to support lookups based on domain id and zero based index
+within the domain.
 
-  - msi_domain_free_irqs_range():
-
-	Handles a caller defined precise range
-
-  - msi_domain_free_irqs_all():
-
-	Frees all interrupts associated to a domain
-
-The latter is useful for device teardown and to handle the legacy MSI support
-which does not have any range information available.
-
+Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221124230314.337844751@linutronix.de
+Link: https://lore.kernel.org/r/20221124230314.044613697@linutronix.de
 
 ---
- include/linux/msi.h |   9 +++-
- kernel/irq/msi.c    | 142 ++++++++++++++++++++++++++++++++++++-------
- 2 files changed, 129 insertions(+), 22 deletions(-)
+ include/linux/msi_api.h | 14 +++++++++++++-
+ kernel/irq/msi.c        | 19 +++++++++++++------
+ 2 files changed, 26 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 23172d6..74cb0a9 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -498,6 +498,15 @@ int msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev,
- 			  int nvec);
- void msi_domain_free_irqs_descs_locked(struct irq_domain *domain, struct device *dev);
- void msi_domain_free_irqs(struct irq_domain *domain, struct device *dev);
-+
-+void msi_domain_free_irqs_range_locked(struct device *dev, unsigned int domid,
-+				       unsigned int first, unsigned int last);
-+void msi_domain_free_irqs_range(struct device *dev, unsigned int domid,
-+				unsigned int first, unsigned int last);
-+
-+void msi_domain_free_irqs_all_locked(struct device *dev, unsigned int domid);
-+void msi_domain_free_irqs_all(struct device *dev, unsigned int domid);
-+
- struct msi_domain_info *msi_get_domain_info(struct irq_domain *domain);
- 
- struct irq_domain *platform_msi_create_irq_domain(struct fwnode_handle *fwnode,
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 64a4cc8..c1ac780 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -545,7 +545,25 @@ static inline void msi_sysfs_remove_desc(struct device *dev, struct msi_desc *de
- #endif /* !CONFIG_SYSFS */
- 
- static int __msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev, int nvec);
--static void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev);
-+
-+static struct irq_domain *msi_get_device_domain(struct device *dev, unsigned int domid)
-+{
-+	struct irq_domain *domain;
-+
-+	lockdep_assert_held(&dev->msi.data->mutex);
-+
-+	if (WARN_ON_ONCE(domid >= MSI_MAX_DEVICE_IRQDOMAINS))
-+		return NULL;
-+
-+	domain = dev->msi.data->__domains[domid].domain;
-+	if (!domain)
-+		return NULL;
-+
-+	if (WARN_ON_ONCE(irq_domain_is_msi_parent(domain)))
-+		return NULL;
-+
-+	return domain;
-+}
- 
- static inline void irq_chip_write_msi_msg(struct irq_data *data,
- 					  struct msi_msg *msg)
-@@ -706,7 +724,6 @@ static struct msi_domain_ops msi_domain_ops_default = {
- 	.msi_prepare		= msi_domain_ops_prepare,
- 	.set_desc		= msi_domain_ops_set_desc,
- 	.domain_alloc_irqs	= __msi_domain_alloc_irqs,
--	.domain_free_irqs	= __msi_domain_free_irqs,
+diff --git a/include/linux/msi_api.h b/include/linux/msi_api.h
+index 4dbbce6..8640171 100644
+--- a/include/linux/msi_api.h
++++ b/include/linux/msi_api.h
+@@ -18,6 +18,18 @@ enum msi_domain_ids {
+ 	MSI_MAX_DEVICE_IRQDOMAINS,
  };
  
- static void msi_domain_update_dom_ops(struct msi_domain_info *info)
-@@ -720,8 +737,6 @@ static void msi_domain_update_dom_ops(struct msi_domain_info *info)
+-unsigned int msi_get_virq(struct device *dev, unsigned int index);
++unsigned int msi_domain_get_virq(struct device *dev, unsigned int domid, unsigned int index);
++
++/**
++ * msi_get_virq - Lookup the Linux interrupt number for a MSI index on the default interrupt domain
++ * @dev:	Device for which the lookup happens
++ * @index:	The MSI index to lookup
++ *
++ * Return: The Linux interrupt number on success (> 0), 0 if not found
++ */
++static inline unsigned int msi_get_virq(struct device *dev, unsigned int index)
++{
++	return msi_domain_get_virq(dev, MSI_DEFAULT_DOMAIN, index);
++}
  
- 	if (ops->domain_alloc_irqs == NULL)
- 		ops->domain_alloc_irqs = msi_domain_ops_default.domain_alloc_irqs;
--	if (ops->domain_free_irqs == NULL)
--		ops->domain_free_irqs = msi_domain_ops_default.domain_free_irqs;
+ #endif
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index ec08d1f..e1593c1 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -337,26 +337,32 @@ struct msi_desc *msi_next_desc(struct device *dev, unsigned int domid,
+ EXPORT_SYMBOL_GPL(msi_next_desc);
  
- 	if (!(info->flags & MSI_FLAG_USE_DEF_DOM_OPS))
- 		return;
-@@ -1073,15 +1088,21 @@ int msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev, int nve
+ /**
+- * msi_get_virq - Return Linux interrupt number of a MSI interrupt
++ * msi_domain_get_virq - Lookup the Linux interrupt number for a MSI index on a interrupt domain
+  * @dev:	Device to operate on
++ * @domid:	Domain ID of the interrupt domain associated to the device
+  * @index:	MSI interrupt index to look for (0-based)
+  *
+  * Return: The Linux interrupt number on success (> 0), 0 if not found
+  */
+-unsigned int msi_get_virq(struct device *dev, unsigned int index)
++unsigned int msi_domain_get_virq(struct device *dev, unsigned int domid, unsigned int index)
+ {
+ 	struct msi_desc *desc;
+ 	unsigned int ret = 0;
++	bool pcimsi = false;
+ 	struct xarray *xa;
+-	bool pcimsi;
+ 
+ 	if (!dev->msi.data)
+ 		return 0;
+ 
+-	pcimsi = dev_is_pci(dev) ? to_pci_dev(dev)->msi_enabled : false;
++	if (WARN_ON_ONCE(index > MSI_MAX_INDEX || domid >= MSI_MAX_DEVICE_IRQDOMAINS))
++		return 0;
++
++	/* This check is only valid for the PCI default MSI domain */
++	if (dev_is_pci(dev) && domid == MSI_DEFAULT_DOMAIN)
++		pcimsi = to_pci_dev(dev)->msi_enabled;
+ 
+ 	msi_lock_descs(dev);
+-	xa = &dev->msi.data->__domains[MSI_DEFAULT_DOMAIN].store;
++	xa = &dev->msi.data->__domains[domid].store;
+ 	desc = xa_load(xa, pcimsi ? 0 : index);
+ 	if (desc && desc->irq) {
+ 		/*
+@@ -371,10 +377,11 @@ unsigned int msi_get_virq(struct device *dev, unsigned int index)
+ 			ret = desc->irq;
+ 		}
+ 	}
++
+ 	msi_unlock_descs(dev);
  	return ret;
  }
+-EXPORT_SYMBOL_GPL(msi_get_virq);
++EXPORT_SYMBOL_GPL(msi_domain_get_virq);
  
--static void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev)
-+static void __msi_domain_free_irqs(struct device *dev, struct irq_domain *domain,
-+				   struct msi_ctrl *ctrl)
- {
-+	struct xarray *xa = &dev->msi.data->__domains[ctrl->domid].store;
- 	struct msi_domain_info *info = domain->host_data;
- 	struct irq_data *irqd;
- 	struct msi_desc *desc;
-+	unsigned long idx;
- 	int i;
- 
--	/* Only handle MSI entries which have an interrupt associated */
--	msi_for_each_desc(desc, dev, MSI_DESC_ASSOCIATED) {
-+	xa_for_each_range(xa, idx, desc, ctrl->first, ctrl->last) {
-+		/* Only handle MSI entries which have an interrupt associated */
-+		if (!msi_desc_match(desc, MSI_DESC_ASSOCIATED))
-+			continue;
-+
- 		/* Make sure all interrupts are deactivated */
- 		for (i = 0; i < desc->nvec_used; i++) {
- 			irqd = irq_domain_get_irq_data(domain, desc->irq + i);
-@@ -1096,11 +1117,99 @@ static void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev
- 	}
- }
- 
--static void msi_domain_free_msi_descs(struct msi_domain_info *info,
--				      struct device *dev)
-+static void msi_domain_free_locked(struct device *dev, struct msi_ctrl *ctrl)
- {
-+	struct msi_domain_info *info;
-+	struct msi_domain_ops *ops;
-+	struct irq_domain *domain;
-+
-+	if (!msi_ctrl_valid(dev, ctrl))
-+		return;
-+
-+	domain = msi_get_device_domain(dev, ctrl->domid);
-+	if (!domain)
-+		return;
-+
-+	info = domain->host_data;
-+	ops = info->ops;
-+
-+	if (ops->domain_free_irqs)
-+		ops->domain_free_irqs(domain, dev);
-+	else
-+		__msi_domain_free_irqs(dev, domain, ctrl);
-+
-+	if (ops->msi_post_free)
-+		ops->msi_post_free(domain, dev);
-+
- 	if (info->flags & MSI_FLAG_FREE_MSI_DESCS)
--		msi_free_msi_descs(dev);
-+		msi_domain_free_descs(dev, ctrl);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_range_locked - Free a range of interrupts from a MSI interrupt domain
-+ *				       associated to @dev with msi_lock held
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	Id of the interrupt domain to operate on
-+ * @first:	First index to free (inclusive)
-+ * @last:	Last index to free (inclusive)
-+ */
-+void msi_domain_free_irqs_range_locked(struct device *dev, unsigned int domid,
-+				       unsigned int first, unsigned int last)
-+{
-+	struct msi_ctrl ctrl = {
-+		.domid	= domid,
-+		.first	= first,
-+		.last	= last,
-+	};
-+	msi_domain_free_locked(dev, &ctrl);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_range - Free a range of interrupts from a MSI interrupt domain
-+ *				associated to @dev
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	Id of the interrupt domain to operate on
-+ * @first:	First index to free (inclusive)
-+ * @last:	Last index to free (inclusive)
-+ */
-+void msi_domain_free_irqs_range(struct device *dev, unsigned int domid,
-+				unsigned int first, unsigned int last)
-+{
-+	msi_lock_descs(dev);
-+	msi_domain_free_irqs_range_locked(dev, domid, first, last);
-+	msi_unlock_descs(dev);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_all_locked - Free all interrupts from a MSI interrupt domain
-+ *				     associated to a device
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	The id of the domain to operate on
-+ *
-+ * Must be invoked from within a msi_lock_descs() / msi_unlock_descs()
-+ * pair. Use this for MSI irqdomains which implement their own vector
-+ * allocation.
-+ */
-+void msi_domain_free_irqs_all_locked(struct device *dev, unsigned int domid)
-+{
-+	msi_domain_free_irqs_range_locked(dev, domid, 0, MSI_MAX_INDEX);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_all - Free all interrupts from a MSI interrupt domain
-+ *			      associated to a device
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	The id of the domain to operate on
-+ */
-+void msi_domain_free_irqs_all(struct device *dev, unsigned int domid)
-+{
-+	msi_lock_descs(dev);
-+	msi_domain_free_irqs_all_locked(dev, domid);
-+	msi_unlock_descs(dev);
- }
- 
- /**
-@@ -1115,18 +1224,7 @@ static void msi_domain_free_msi_descs(struct msi_domain_info *info,
-  */
- void msi_domain_free_irqs_descs_locked(struct irq_domain *domain, struct device *dev)
- {
--	struct msi_domain_info *info = domain->host_data;
--	struct msi_domain_ops *ops = info->ops;
--
--	lockdep_assert_held(&dev->msi.data->mutex);
--
--	if (WARN_ON_ONCE(irq_domain_is_msi_parent(domain)))
--		return;
--
--	ops->domain_free_irqs(domain, dev);
--	if (ops->msi_post_free)
--		ops->msi_post_free(domain, dev);
--	msi_domain_free_msi_descs(info, dev);
-+	msi_domain_free_irqs_range_locked(dev, MSI_DEFAULT_DOMAIN, 0, MSI_MAX_INDEX);
- }
- 
- /**
+ #ifdef CONFIG_SYSFS
+ static struct attribute *msi_dev_attrs[] = {
