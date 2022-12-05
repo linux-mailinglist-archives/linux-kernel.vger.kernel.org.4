@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D89D6430EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568E86430F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiLES6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        id S233320AbiLETAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbiLES6g (ORCPT
+        with ESMTP id S231262AbiLETA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:58:36 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB1634D;
-        Mon,  5 Dec 2022 10:58:34 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 57dcb16a7ec5752c; Mon, 5 Dec 2022 19:58:33 +0100
-Received: from kreacher.localnet (unknown [213.134.188.181])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 55E792801EA8;
-        Mon,  5 Dec 2022 19:58:32 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] ACPI: processor: idle: Drop unnecessary statements and parens
-Date:   Mon, 05 Dec 2022 19:58:25 +0100
-Message-ID: <2262740.ElGaqSPkdT@kreacher>
+        Mon, 5 Dec 2022 14:00:27 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8FA6479;
+        Mon,  5 Dec 2022 11:00:21 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 9D929188385C;
+        Mon,  5 Dec 2022 19:00:18 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 8A83325002E1;
+        Mon,  5 Dec 2022 19:00:18 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 7648F9EC0020; Mon,  5 Dec 2022 19:00:18 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 2AAE391201DF;
+        Mon,  5 Dec 2022 19:00:18 +0000 (UTC)
+From:   "Hans J. Schultz" <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next 0/3] mv88e6xxx: Add MAB offload support
+Date:   Mon,  5 Dec 2022 19:59:05 +0100
+Message-Id: <20221205185908.217520-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.181
-X-CLIENT-HOSTNAME: 213.134.188.181
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddukeekrddukedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudekuddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohep
- shhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This patchset adds MAB [1] offload support in mv88e6xxx.
 
-Drop a redundant "else", a "return" statement at the end of a void
-function and redundant parentheses around an unsigent int variable
-name from the ACPI processor idle driver.
+Patch #1: Fix a problem when reading the FID needed to get the VID.
 
-No expected functional impact.
+Patch #2: Correct default return value for mv88e6xxx_port_bridge_flags.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/processor_idle.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Patch #2: The MAB implementation for mv88e6xxx.
 
-Index: linux-pm/drivers/acpi/processor_idle.c
-===================================================================
---- linux-pm.orig/drivers/acpi/processor_idle.c
-+++ linux-pm/drivers/acpi/processor_idle.c
-@@ -324,7 +324,7 @@ static void acpi_processor_power_verify_
- 	 * the erratum), but this is known to disrupt certain ISA
- 	 * devices thus we take the conservative approach.
- 	 */
--	else if (errata.piix4.fdma) {
-+	if (errata.piix4.fdma) {
- 		acpi_handle_debug(pr->handle,
- 				  "C3 not supported on PIIX4 with Type-F DMA\n");
- 		return;
-@@ -384,8 +384,6 @@ static void acpi_processor_power_verify_
- 	 * handle BM_RLD is to set it and leave it set.
- 	 */
- 	acpi_write_bit_register(ACPI_BITREG_BUS_MASTER_RLD, 1);
--
--	return;
- }
- 
- static int acpi_cst_latency_cmp(const void *a, const void *b)
-@@ -459,7 +457,7 @@ static int acpi_processor_power_verify(s
- 
- 	lapic_timer_propagate_broadcast(pr);
- 
--	return (working);
-+	return working;
- }
- 
- static int acpi_processor_get_cstate_info(struct acpi_processor *pr)
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=a35ec8e38cdd1766f29924ca391a01de20163931
 
+Hans J. Schultz (3):
+  net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
+  net: dsa: mv88e6xxx: change default return of
+    mv88e6xxx_port_bridge_flags
+  net: dsa: mv88e6xxx: mac-auth/MAB implementation
 
+ drivers/net/dsa/mv88e6xxx/Makefile      |  1 +
+ drivers/net/dsa/mv88e6xxx/chip.c        | 20 ++++--
+ drivers/net/dsa/mv88e6xxx/chip.h        | 15 +++++
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 87 +++++++++++++++++++++----
+ drivers/net/dsa/mv88e6xxx/switchdev.c   | 83 +++++++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h   | 19 ++++++
+ 6 files changed, 207 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
+
+-- 
+2.34.1
 
