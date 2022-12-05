@@ -2,129 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712EC642511
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502C9642515
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbiLEIw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S232287AbiLEIyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbiLEItk (ORCPT
+        with ESMTP id S232278AbiLEIxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:49:40 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF556330
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:47:48 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id a7so12672905ljq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:47:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/9KhjDhwpzVfwJmk8owTMTn5ZR3PMrLWiYt5zlM5F/0=;
-        b=O3CtGR6VtitqSLsmiUi+f+GcOKCO8TlT0ZZwMLjgvNUmhl7WQsrEWyKesH6tbG0+3f
-         xqgm7mZAp9eFntv3udW3fMrHoxCwYKelU7VzHBmdr0j41jOMV0tSHXsP8ayCNd8PRtIY
-         ZcggmdY0NLA5drFbUt0a7lOQVnFfGxvqxA213j38Op1NCQJCRQqk5NJZ4w/FMb01fWsm
-         0ozlaFpAgr0ayDrnB8EPAMc0EwK9qd5HZ8blB+13GgVcag9VjIiyfEh2QM3hG0IocjSG
-         k/B7K4xayeXuY7x2/70UnyvfDuUEwk/FJq22L6WU3cEgkBE+VTMYvTBEjXBmzU3ptjt9
-         BxCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/9KhjDhwpzVfwJmk8owTMTn5ZR3PMrLWiYt5zlM5F/0=;
-        b=bc3TKKn5Q+4HIM3b+tmnMGka4VaMa6GpKbDmdznD8p8CStEeGYwUC4TIemGAHvy1ol
-         pKg+a6XvUAtph1aiWwtKkop50p8OZrIY0CuyME9EdUnE93WnMW6c4W28qlhMTfQ2++2v
-         NOcsojssb7sroNDK5WhNBA0HPYsiIMc6D8B9tgXjGU8FQ21C1/39HP3oEpz4ux9+m7hF
-         yiaP5xhMZtbsyCrnH5UIY1Ymnux6aPjLJMZCakPKA+iUknIU6x4NuJumVHOqbMWpF7Um
-         11kirQlFDPrb2WMviAJw53U0noC8eND7g4O1Oa82wK/2W8HMlJI162nIVnqEYbRvheng
-         aJmg==
-X-Gm-Message-State: ANoB5pk3KWrZH0KfkYEnYDoL624OTUCCmdK3h1DXAAh8ZbxhjeMJAoL6
-        HtVpauuMU7z4HlYlEIYZZl4tM6JZj6ZftTSo31c=
-X-Google-Smtp-Source: AA0mqf4cdYkMAb00AOtah3ECLHEou5VsYmwZURrRQriNBXMOG/eGBQirxLEwGkQ4CYihK89wrXYuz0bHEfmIsvFIGSM=
-X-Received: by 2002:a2e:9cd1:0:b0:279:d461:8528 with SMTP id
- g17-20020a2e9cd1000000b00279d4618528mr4971543ljj.389.1670230066729; Mon, 05
- Dec 2022 00:47:46 -0800 (PST)
+        Mon, 5 Dec 2022 03:53:32 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39E22190
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:51:05 -0800 (PST)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NQccl1b4LzkXnx;
+        Mon,  5 Dec 2022 16:47:35 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Dec 2022 16:51:03 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+CC:     <chenzhongjin@huawei.com>, <martyn@welchs.me.uk>,
+        <manohar.vanga@gmail.com>, <gregkh@linuxfoundation.org>,
+        <arnd@arndb.de>
+Subject: [PATCH] vme: Fix error not catched in fake_init()
+Date:   Mon, 5 Dec 2022 16:48:05 +0800
+Message-ID: <20221205084805.147436-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a05:6504:883:b0:200:61cf:e7ad with HTTP; Mon, 5 Dec 2022
- 00:47:45 -0800 (PST)
-From:   secretary inf <bfbsecretary224@gmail.com>
-Date:   Mon, 5 Dec 2022 09:47:45 +0100
-Message-ID: <CAESrDo4Rs7EVWdovVGEMnhwj6xsp+wJnp-YRYuNiS8OxvZuKxg@mail.gmail.com>
-Subject: Hello and congratulations!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.0 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY,
-        XFER_LOTSA_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:243 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5040]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [bfbsecretary224[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [bfbsecretary224[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.0 XFER_LOTSA_MONEY Transfer a lot of money
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fairdesk Bitcoin Exchange Cryptocurrency Exchange.
-Dear email owner!
-Hello and congratulations!
+In fake_init(), __root_device_register() is possible to fail but it's
+ignored, which can cause unregistering vme_root fail when exit.
 
-During our visit to introduce Bitcoin Trade (BTC) to the people of
-Burkina Faso, we pulled the emails only for Burkina Faso, but since
-Google search cannot be accurate,
-your email came out with 5 points of BTC, which was converted to =
-$95,304.00 USD (Ninety-five thousand three hundred and four United
-States dollars) as of September 21, 2022.
+ general protection fault,
+ probably for non-canonical address 0xdffffc000000008c
+ KASAN: null-ptr-deref in range [0x0000000000000460-0x0000000000000467]
+ RIP: 0010:root_device_unregister+0x26/0x60
+ Call Trace:
+  <TASK>
+  __x64_sys_delete_module+0x34f/0x540
+  do_syscall_64+0x38/0x90
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Note / this money is payable through BCB Bank
-from Burkina Faso!
+Return error when __root_device_register() fails.
 
-Your Wallet (BTC)
-Bank check (BCB)
-Bank transfer (VB)
+Fixes: 658bcdae9c67 ("vme: Adding Fake VME driver")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ drivers/staging/vme_user/vme_fake.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Cash payment is only available in Burkina Faso where this
-program took place.
+diff --git a/drivers/staging/vme_user/vme_fake.c b/drivers/staging/vme_user/vme_fake.c
+index dd646b0c531d..1ee432c223e2 100644
+--- a/drivers/staging/vme_user/vme_fake.c
++++ b/drivers/staging/vme_user/vme_fake.c
+@@ -1073,6 +1073,8 @@ static int __init fake_init(void)
+ 
+ 	/* We need a fake parent device */
+ 	vme_root = __root_device_register("vme", THIS_MODULE);
++	if (IS_ERR(vme_root))
++		return PTR_ERR(vme_root);
+ 
+ 	/* If we want to support more than one bridge at some point, we need to
+ 	 * dynamically allocate this so we get one per device.
+-- 
+2.17.1
 
-Please send your claim number (C00005 BTC) to the agent
-of complaint: Mr. Mohammed SY!
-
-Email: agentbfb@post.com
-Cell / .
-
-Payment Valid: 14 days.
-
-Thanks
-Ms SIANA Ahmed.
-Bitcoin Trading
-
-Promoter Mr. Jacky Choi - Co-Founder - Fairdesk Technology Limited
-Singapore Co-Founder Fairdesk Technology Limited. Contact date 26
-September 2022.
