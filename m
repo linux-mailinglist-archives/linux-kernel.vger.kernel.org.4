@@ -2,140 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B179C642227
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 05:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCB464222B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 05:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbiLEEBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 23:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
+        id S231392AbiLEED0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 23:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiLEEBr (ORCPT
+        with ESMTP id S231354AbiLEEDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 23:01:47 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EF2FCD3
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 20:01:45 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id z5-20020a6b5c05000000b006dfeee800aeso5517818ioh.21
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 20:01:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RJhuugiufUiVSBE8bfTAcxgO0Dy3ttVVyszsfrNlcdM=;
-        b=UAAkRzunpjPswOU79zjmfiP7Uc2u2oNhC6WdPJiXL468/5Tu9C05Vv7/2nJTga8iC9
-         Eb8UX0x68L0O0jlHroCkfSzsiS86iSB2nunYuqfHXXmDMqVs6cq2D451g+xdQjuwhz88
-         tzSmVJ0Hefw8661j/DRzs9I53Jf6/LNzM2cWgOGi8yaN1H8rQM9DEbdP4GVneKWwjTiT
-         gF6mIDJWiNd6Awv+NMR/9Jvv4BrZtAxHEnsalXShhWL7mR8I4XvM2T11dZsUPW4AitfC
-         IzF8q8SVdeGGvDSBEVkZpiZbqxMN+Ysibc7VfA+78zfoYWn6xY1q4hxM1ykb5xWat5rb
-         ixQg==
-X-Gm-Message-State: ANoB5pm5s7uY2MlRwctqgLEYj8MTBh4z3meSN3562NF2otCbZ9kPXa5c
-        PMeXFeEQXIWyfmDiJ+JZA6jIMm0j+QBfajNcXcKApOSYF6gz
-X-Google-Smtp-Source: AA0mqf6MTnIM7goxYepJ13+JlmclDcWXRC5IyI2s1gcPioS6KJL819454V0FyJLuy9wNJ4hhWYY8x4WpzBQCGFIP/fXa+gzJ1Qks
+        Sun, 4 Dec 2022 23:03:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158A4E0BE;
+        Sun,  4 Dec 2022 20:03:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQVJk2lxBz4x1V;
+        Mon,  5 Dec 2022 15:03:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670212999;
+        bh=bn+Ynyqonbkxhlxq9RLq/EqIlQxsr9VMxyD6RntrAqU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=moV6G4PPYlMrXZikQmQXGbAMs2IaAVZgfXBoQz12bjMla6cRPQHGQ9ZJ/1F+nQetC
+         fcRpTUb/oMtctGpKVlEC9zliH+a0NTRagwugKpd4SjdT8wHNGaO+g0FOf3j3wcs/yU
+         W0bcq66kcT5mVLcWch2KeGeaTluvT1FpRKLKOwoWZu4UPLaRwk4g3ov43Y9ph5jmkD
+         2XjrRv6o3UkZavJkUO3j7P8A2v7zq9ux4fhsaaveFjJyWt4pb9pOD7BcLaVKEms5FX
+         HKiA0FgZ9g9X+D1z4aPeqX5zk/r+zxGNX3fFJM7cVL47tHQjaJuqDeg+WhsMci9arL
+         5ddiAUBJSMJQw==
+Date:   Mon, 5 Dec 2022 15:03:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the v9fs tree
+Message-ID: <20221205150316.6fac25f2@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a02:c492:0:b0:375:c128:72a6 with SMTP id
- t18-20020a02c492000000b00375c12872a6mr38261968jam.151.1670212904457; Sun, 04
- Dec 2022 20:01:44 -0800 (PST)
-Date:   Sun, 04 Dec 2022 20:01:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000de9b9d05ef0cbe7c@google.com>
-Subject: [syzbot] kernel BUG in hfs_bnode_put
-From:   syzbot <syzbot+5b04b49a7ec7226c7426@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        slava@dubeyko.com, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/K/gVDou+ok0MxDNaJnE=fl8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--Sig_/K/gVDou+ok0MxDNaJnE=fl8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+Hi all,
 
-HEAD commit:    97ee9d1c1696 Merge tag 'block-6.1-2022-12-02' of git://git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1669637b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b04b49a7ec7226c7426
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e8647880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ecd229880000
+After merging the v9fs tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/6a6a9ff34dfa/disk-97ee9d1c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2a01a4182c2b/vmlinux-97ee9d1c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4371158e8c25/bzImage-97ee9d1c.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/1fa884667612/mount_0.gz
+In file included from include/linux/kernel.h:29,
+                 from arch/x86/include/asm/percpu.h:27,
+                 from arch/x86/include/asm/nospec-branch.h:14,
+                 from arch/x86/include/asm/paravirt_types.h:27,
+                 from arch/x86/include/asm/ptrace.h:97,
+                 from arch/x86/include/asm/math_emu.h:5,
+                 from arch/x86/include/asm/processor.h:13,
+                 from arch/x86/include/asm/timex.h:5,
+                 from include/linux/timex.h:67,
+                 from include/linux/time32.h:13,
+                 from include/linux/time.h:60,
+                 from include/linux/stat.h:19,
+                 from include/linux/module.h:13,
+                 from net/9p/client.c:11:
+net/9p/client.c: In function 'p9_check_errors':
+include/linux/kern_levels.h:5:25: error: format '%ld' expects argument of t=
+ype 'long int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wer=
+ror=3Dformat=3D]
+    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+      |                         ^~~~~~
+include/linux/printk.h:429:25: note: in definition of macro 'printk_index_w=
+rap'
+  429 |                 _p_func(_fmt, ##__VA_ARGS__);                      =
+     \
+      |                         ^~~~
+include/linux/printk.h:500:9: note: in expansion of macro 'printk'
+  500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |         ^~~~~~
+include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+   11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+      |                         ^~~~~~~~
+include/linux/printk.h:500:16: note: in expansion of macro 'KERN_ERR'
+  500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |                ^~~~~~~~
+net/9p/client.c:523:17: note: in expansion of macro 'pr_err'
+  523 |                 pr_err(
+      |                 ^~~~~~
+cc1: all warnings being treated as errors
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5b04b49a7ec7226c7426@syzkaller.appspotmail.com
+Caused by commit
 
-------------[ cut here ]------------
-kernel BUG at fs/hfs/bnode.c:466!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 3634 Comm: kworker/u4:5 Not tainted 6.1.0-rc7-syzkaller-00190-g97ee9d1c1696 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: writeback wb_workfn (flush-7:0)
-RIP: 0010:hfs_bnode_put+0x46f/0x480 fs/hfs/bnode.c:466
-Code: 8a 80 ff e9 73 fe ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c a0 fe ff ff 48 89 df e8 db 8a 80 ff e9 93 fe ff ff e8 a1 68 2c ff <0f> 0b e8 9a 68 2c ff 0f 0b 0f 1f 84 00 00 00 00 00 55 41 57 41 56
-RSP: 0018:ffffc90003b4f258 EFLAGS: 00010293
-RAX: ffffffff825e318f RBX: 0000000000000000 RCX: ffff8880739dd7c0
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003b4f430 R08: ffffffff825e2d9b R09: ffffed10045157d1
-R10: ffffed10045157d1 R11: 1ffff110045157d0 R12: ffff8880228abe80
-R13: ffff88807016c000 R14: dffffc0000000000 R15: ffff8880228abe00
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa6ebe88718 CR3: 000000001e93d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- hfs_write_inode+0x1bc/0xb40
- write_inode fs/fs-writeback.c:1440 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1652
- writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1878
- __writeback_inodes_wb+0x125/0x420 fs/fs-writeback.c:1949
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2054
- wb_check_start_all fs/fs-writeback.c:2176 [inline]
- wb_do_writeback fs/fs-writeback.c:2202 [inline]
- wb_workfn+0x827/0xef0 fs/fs-writeback.c:2235
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:hfs_bnode_put+0x46f/0x480 fs/hfs/bnode.c:466
-Code: 8a 80 ff e9 73 fe ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c a0 fe ff ff 48 89 df e8 db 8a 80 ff e9 93 fe ff ff e8 a1 68 2c ff <0f> 0b e8 9a 68 2c ff 0f 0b 0f 1f 84 00 00 00 00 00 55 41 57 41 56
-RSP: 0018:ffffc90003b4f258 EFLAGS: 00010293
-RAX: ffffffff825e318f RBX: 0000000000000000 RCX: ffff8880739dd7c0
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003b4f430 R08: ffffffff825e2d9b R09: ffffed10045157d1
-R10: ffffed10045157d1 R11: 1ffff110045157d0 R12: ffff8880228abe80
-R13: ffff88807016c000 R14: dffffc0000000000 R15: ffff8880228abe00
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa6ebe88718 CR3: 000000001e93d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+  36cd2f80abf8 ("net/9p: fix response size check in p9_check_errors()")
 
+I have applied the following patch for today:
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 5 Dec 2022 14:55:10 +1100
+Subject: [PATCH] net/9p: use %zu to print size_t
+
+Fixes: 36cd2f80abf8 ("net/9p: fix response size check in p9_check_errors()")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ net/9p/client.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/net/9p/client.c b/net/9p/client.c
+index deb7baa178f3..6db5e0c55f9c 100644
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -521,7 +521,7 @@ static int p9_check_errors(struct p9_client *c, struct =
+p9_req_t *req)
+ 	err =3D p9_parse_header(&req->rc, NULL, &type, NULL, 0);
+ 	if (req->rc.size > req->rc.capacity && !req->rc.zc) {
+ 		pr_err(
+-			 "requested packet size too big: %d does not fit %ld (type=3D%d)\n",
++			 "requested packet size too big: %d does not fit %zu (type=3D%d)\n",
+ 			 req->rc.size, req->rc.capacity, req->rc.id);
+ 		return -EIO;
+ 	}
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/K/gVDou+ok0MxDNaJnE=fl8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONbYQACgkQAVBC80lX
+0Gy/rwf/XJjnu0djTWhMmOlluPZjx+Ppnqm917cJ4FiUaquVBOE7xPaklkIpWUZV
+eFAeeJuHzwHy8RESk7+Xmc9tJ5ZIfH7nGhiyQSsfNZq76pHZDrzX0u5yaoOknWjl
+cvwlAHuWJ6Gt3LJRd8zHXahjkHc5588oiUDkuLB0triWSBGWjQC1XOgZbsfWlGxZ
+8BHfkQgaKQDpHCu75gqG5+deuVAkClBBRrq7EhzKy+cTKOUaBvLYSuAcvbUDsjIn
+FCa9fXxYy+RUMl/xwl6WzvHpJ7eLivNvdHnRKBmxz81qlkXU7qjm8qwJWTpv/XH9
+vdQ7c1KXxp9Jrj1vhOmpRjs0MywF3g==
+=OnM1
+-----END PGP SIGNATURE-----
+
+--Sig_/K/gVDou+ok0MxDNaJnE=fl8--
