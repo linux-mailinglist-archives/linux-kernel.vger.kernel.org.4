@@ -2,55 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDB4642733
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EE3642736
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiLELKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S231463AbiLELKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbiLELK1 (ORCPT
+        with ESMTP id S231191AbiLELKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:10:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC26C17412;
-        Mon,  5 Dec 2022 03:10:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63501B80ED6;
-        Mon,  5 Dec 2022 11:10:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E85AC433B5;
-        Mon,  5 Dec 2022 11:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670238623;
-        bh=SGrY2VbBiY8EvXHZCofJcL9wewiXKh5c/vxkaEVzX0o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=doUfkrL/n+6merTwuFKH3n4knBMFUFaP9che/oZyBEt00wqNckzQkyI9csUTHc3xd
-         WUvBq+MegNEY7byrutOkETwXM4uNKYbvUjLKJOLXib3k0H3MheYaNgfJBJqtH8Jf2N
-         pC01rVKd9cG+vIrmtdiaLiuzb8klDZUUMy3AnehmTybiKhWGTajfngZkwOwZ9RPUd2
-         k7RZ14Knge7ckl3tkpjcCBOt7uw8fD2+Aufpq6vQvRZ5Ib/ADIZfWQavWcGDf+ONKk
-         zLxnFLxKBFK9VzYAfGGN3SUbficDAHg6L4W2zKf5na/ypRideEGqOZpszDVUzNhoZn
-         +NjafdEjsnvdg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C65BC395E5;
-        Mon,  5 Dec 2022 11:10:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 5 Dec 2022 06:10:33 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6C61740D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:10:30 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id v8so15278536edi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:10:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AU/76g4brplnYb3ey5gxpSxqgyVW+nANCNKN0JgWmK8=;
+        b=k/O1OZh41TBI5kNXhYT5bzOwbSedegIPUi5Eb3Yxl4uEnf7R4Ob137ils7XNpaUR6U
+         JM3DpM1X/sO0whM/dvTZGQXIKfBNqJvOFc497A6DVLA+dfY4kQbqveaVjJ2pniZqpvDP
+         qpuUDrSTt6YynSupHLM8bUiFcepzBeixu7o1i6T+JUzWt48WSlHwEp+IpKXiPrDIAASa
+         EXwVIB8zz7o+zymWxj0U+DNCuyly9vrri7Q8oZCxGQi7QNqKC8IC2Eci65foeRhnoPQl
+         EanxBMkOG0L0s2CYb1kLTAuNTQEFumC4Z2E4vLbr8FZjM5clGPVvRbr3+JVnETc2pVYP
+         SnBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AU/76g4brplnYb3ey5gxpSxqgyVW+nANCNKN0JgWmK8=;
+        b=dU1qwy7b9fg1DEU2QG645GePA1QSqRc6qEdhBabG6dDanQf5jDL+IlPoJl8HgwgI/Q
+         JOxH8SdckjK49ctPgB9MRa5xm+30IoV4CkgaSMLhwbefFGD1GFjsvU77oWJ+EXnGJ3yN
+         fuTmd0YOXobfUBOUHJkQWinZ3ODHvRlpbOUAhv4Mg3R/4KPqUlZv2vGi2oR+059KkSbg
+         qlhR6qzTlZveZcuSrRwmN/mncwB9NCjHu4jD+E9Od7CgykU1fHsAI89aElyrwIF2NOK+
+         y7pcTUF3HQKIOiWJFalfC+e9fYdMLrzSdxdLUMZ8MqUMceNLaLvKIq8gUdnqJbnURTIB
+         Ckqw==
+X-Gm-Message-State: ANoB5pkfQo5FziUzEUlgmVXgck4/gZxSGDW7iBNGrb9TS6ZWb5Ha4cCz
+        Uq7IpuMKGOslFgEPeIFY0/p+Rg==
+X-Google-Smtp-Source: AA0mqf4hEOOs2fYF8KLQv44pMgB+bl46xD2Ll7qnTKI86c5MjicG1zvWJmGPngeQ+lAkC01kpu9yGA==
+X-Received: by 2002:a05:6402:4445:b0:468:eef6:a83c with SMTP id o5-20020a056402444500b00468eef6a83cmr19094396edb.191.1670238629304;
+        Mon, 05 Dec 2022 03:10:29 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id el7-20020a056402360700b00462e1d8e914sm5966156edb.68.2022.12.05.03.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 03:10:28 -0800 (PST)
+Message-ID: <c3bb0e24-1f07-1c82-7ba8-c83b49cbf757@linaro.org>
+Date:   Mon, 5 Dec 2022 12:10:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 00/36] rxrpc: Increasing SACK size and moving away
- from softirq, parts 2 & 3
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167023862311.18576.967367568555185874.git-patchwork-notify@kernel.org>
-Date:   Mon, 05 Dec 2022 11:10:23 +0000
-References: <166994010342.1732290.13771061038178613124.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166994010342.1732290.13771061038178613124.stgit@warthog.procyon.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-afs@lists.infradead.org,
-        marc.dionne@auristor.com, kuba@kernel.org,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH 2/6] arm64: dts: qcom: qrb5165-rb: fix no-mmc property for
+ SDHCI
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221204094438.73288-1-krzysztof.kozlowski@linaro.org>
+ <20221204094438.73288-2-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221204094438.73288-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,99 +79,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (master)
-by David Howells <dhowells@redhat.com>:
 
-On Fri, 02 Dec 2022 00:15:03 +0000 you wrote:
-> Here are the second and third parts of patches in the process of moving
-> rxrpc from doing a lot of its stuff in softirq context to doing it in an
-> I/O thread in process context and thereby making it easier to support a
-> larger SACK table.
+On 04/12/2022 10:44, Krzysztof Kozlowski wrote:
+> There is no "no-emmc" property, so intention for SD/SDIO only nodes was
+> to use "no-mmc":
 > 
-> The full description is in the description for the first part[1] which is
-> already in net-next.
+>    qcom/qrb5165-rb5.dtb: mmc@8804000: Unevaluated properties are not allowed ('no-emmc' was unexpected)
 > 
-> [...]
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Here is the summary with links:
-  - [net-next,01/36] rxrpc: Fix checker warning
-    https://git.kernel.org/netdev/net-next/c/84924aac08a4
-  - [net-next,02/36] rxrpc: Implement an in-kernel rxperf server for testing purposes
-    https://git.kernel.org/netdev/net-next/c/75bfdbf2fca3
-  - [net-next,03/36] rxrpc: Fix call leak
-    https://git.kernel.org/netdev/net-next/c/49df54a6b295
-  - [net-next,04/36] rxrpc: Remove decl for rxrpc_kernel_call_is_complete()
-    https://git.kernel.org/netdev/net-next/c/2ed83ed2be1b
-  - [net-next,05/36] rxrpc: Remove handling of duplicate packets in recvmsg_queue
-    https://git.kernel.org/netdev/net-next/c/30efa3ce109d
-  - [net-next,06/36] rxrpc: Remove the [k_]proto() debugging macros
-    https://git.kernel.org/netdev/net-next/c/2ebdb26e6abd
-  - [net-next,07/36] rxrpc: Remove the [_k]net() debugging macros
-    https://git.kernel.org/netdev/net-next/c/e969c92ce597
-  - [net-next,08/36] rxrpc: Drop rxrpc_conn_parameters from rxrpc_connection and rxrpc_bundle
-    https://git.kernel.org/netdev/net-next/c/2cc800863c49
-  - [net-next,09/36] rxrpc: Extract the code from a received ABORT packet much earlier
-    https://git.kernel.org/netdev/net-next/c/f14febd8df5a
-  - [net-next,10/36] rxrpc: trace: Don't use __builtin_return_address for rxrpc_local tracing
-    https://git.kernel.org/netdev/net-next/c/0fde882fc9ee
-  - [net-next,11/36] rxrpc: trace: Don't use __builtin_return_address for rxrpc_peer tracing
-    https://git.kernel.org/netdev/net-next/c/47c810a79844
-  - [net-next,12/36] rxrpc: trace: Don't use __builtin_return_address for rxrpc_conn tracing
-    https://git.kernel.org/netdev/net-next/c/7fa25105b2d3
-  - [net-next,13/36] rxrpc: trace: Don't use __builtin_return_address for rxrpc_call tracing
-    https://git.kernel.org/netdev/net-next/c/cb0fc0c9722c
-  - [net-next,14/36] rxrpc: Trace rxrpc_bundle refcount
-    https://git.kernel.org/netdev/net-next/c/fa3492abb64b
-  - [net-next,15/36] rxrpc: trace: Don't use __builtin_return_address for sk_buff tracing
-    https://git.kernel.org/netdev/net-next/c/9a36a6bc22ca
-  - [net-next,16/36] rxrpc: Don't hold a ref for call timer or workqueue
-    https://git.kernel.org/netdev/net-next/c/3feda9d69c83
-  - [net-next,17/36] rxrpc: Don't hold a ref for connection workqueue
-    https://git.kernel.org/netdev/net-next/c/3cec055c5695
-  - [net-next,18/36] rxrpc: Split the receive code
-    https://git.kernel.org/netdev/net-next/c/96b2d69b43a0
-  - [net-next,19/36] rxrpc: Create a per-local endpoint receive queue and I/O thread
-    https://git.kernel.org/netdev/net-next/c/a275da62e8c1
-  - [net-next,20/36] rxrpc: Move packet reception processing into I/O thread
-    https://git.kernel.org/netdev/net-next/c/446b3e14525b
-  - [net-next,21/36] rxrpc: Move error processing into the local endpoint I/O thread
-    https://git.kernel.org/netdev/net-next/c/ff7348254e70
-  - [net-next,22/36] rxrpc: Remove call->input_lock
-    https://git.kernel.org/netdev/net-next/c/4041a8ff653e
-  - [net-next,23/36] rxrpc: Don't use sk->sk_receive_queue.lock to guard socket state changes
-    https://git.kernel.org/netdev/net-next/c/81f2e8adc0fd
-  - [net-next,24/36] rxrpc: Implement a mechanism to send an event notification to a call
-    https://git.kernel.org/netdev/net-next/c/15f661dc95da
-  - [net-next,25/36] rxrpc: Copy client call parameters into rxrpc_call earlier
-    https://git.kernel.org/netdev/net-next/c/f3441d4125fc
-  - [net-next,26/36] rxrpc: Move DATA transmission into call processor work item
-    https://git.kernel.org/netdev/net-next/c/cf37b5987508
-  - [net-next,27/36] rxrpc: Remove RCU from peer->error_targets list
-    https://git.kernel.org/netdev/net-next/c/29fb4ec385f1
-  - [net-next,28/36] rxrpc: Simplify skbuff accounting in receive path
-    https://git.kernel.org/netdev/net-next/c/2d1faf7a0ca3
-  - [net-next,29/36] rxrpc: Reduce the use of RCU in packet input
-    https://git.kernel.org/netdev/net-next/c/cd21effb0552
-  - [net-next,30/36] rxrpc: Extract the peer address from an incoming packet earlier
-    https://git.kernel.org/netdev/net-next/c/393a2a2007d1
-  - [net-next,31/36] rxrpc: Make the I/O thread take over the call and local processor work
-    https://git.kernel.org/netdev/net-next/c/5e6ef4f1017c
-  - [net-next,32/36] rxrpc: Remove the _bh annotation from all the spinlocks
-    https://git.kernel.org/netdev/net-next/c/3dd9c8b5f09f
-  - [net-next,33/36] rxrpc: Trace/count transmission underflows and cwnd resets
-    https://git.kernel.org/netdev/net-next/c/32cf8edb079a
-  - [net-next,34/36] rxrpc: Move the cwnd degradation after transmitting packets
-    https://git.kernel.org/netdev/net-next/c/5086d9a9dfec
-  - [net-next,35/36] rxrpc: Fold __rxrpc_unuse_local() into rxrpc_unuse_local()
-    https://git.kernel.org/netdev/net-next/c/a2cf3264f331
-  - [net-next,36/36] rxrpc: Transmit ACKs at the point of generation
-    https://git.kernel.org/netdev/net-next/c/b0346843b107
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Konrad
+>   arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> index 4c39cec0b13e..8c64cb060e21 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> @@ -904,7 +904,7 @@ &sdhc_2 {
+>   	cd-gpios = <&tlmm 77 GPIO_ACTIVE_LOW>;
+>   	bus-width = <4>;
+>   	no-sdio;
+> -	no-emmc;
+> +	no-mmc;
+>   };
+>   
+>   &sound {
