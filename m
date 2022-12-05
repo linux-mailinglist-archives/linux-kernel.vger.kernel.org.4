@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA09642D33
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBB5642D34
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbiLEQkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S233149AbiLEQkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbiLEQjU (ORCPT
+        with ESMTP id S232831AbiLEQjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:39:20 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5769E20350
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:38:06 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id vv4so29146474ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 08:38:06 -0800 (PST)
+        Mon, 5 Dec 2022 11:39:22 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5C120373
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:38:07 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id m19so16541282edj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 08:38:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ikVD0DfwFm4BefZfjV8KlOgWa9wgGHVQ5qduHZ3YKJI=;
-        b=Tw/QVM0P9PmY/myId1uSMoV/+vdpASaSP247AGtd0Am6EWFgZzPH+GdQvB8mOIQlZO
-         sLZuMfr5anncSiT3AMTjfCN6k9o28ooIGjE9/1155kzFn0icUtygfdTTnsTIfIApKeZc
-         uBOIsjQLeVyRfEkKdUcqWeJVZLCkVyM3Wkn+/XcpkN5ws7dZZg8FPYE4yZ/+YZgsECYj
-         NXE6drlG4IX1jhD5IMbZmVsxX8nWF9KZh9XncckpxzbK/F8HlgoMoQo9IVcsG1rbIV8f
-         J3c+w0zd8oMKXzv47Egqvpl9+OTa0ptqloQuWijvZ6QE/keuu3x4B++TsoXKCv5ZUGcU
-         OTrg==
+        bh=FA6VZLr8EX+1LwmM9brJgk2AqL1UbJ0XsUIaiz9n7JY=;
+        b=tuw0NhESTq3UZ+zy40f7o9AcmkK+r5BotJvqEeJrQPDv77id5pMwvQOHANJ2pRtiTl
+         xfu6zuqe1cvA141nvEgxDsqRM6STYF64bsrkifcmQGHQfR6upjeQ2pNje7FVJr/e3bD/
+         7Q8yXuYkEQkCGpUntC88RpDTIMB7KJ7F4idNK0jBre+Ez8Wn5egIntB5VRXzSDec4ICR
+         xn0GB/c0+JK1b0gWuCkNWcFtQ/QTSlNO8lezjo0kRY1JbCt35Vss2vzU4viHBqOU6Ciy
+         wUKYJF+T/HFTNyQQwori8EBSxhi4ogLMiDJpL5GPTOcJnuPfL2KtbCtqReGC/cMny0BV
+         sPKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ikVD0DfwFm4BefZfjV8KlOgWa9wgGHVQ5qduHZ3YKJI=;
-        b=JfnGYJPI44jycSnAEPcHFGyUc3s8SZ0vKfgoHFcgbOUNFEBq5cU021yGrwjaiN6z/v
-         aE0wHAJQw0kPSgFIWHz2KV7oGfvPqTZvSdfsd/r9E4EHeKdzojLsDoCLU6o9vZKnUQNP
-         BAdMXl2SQ9AVs6W49kWUyF00IZTQVYpopRnhNX7SoffvkHc8mub+P7nxGG0C86XKv1Eb
-         EzO3McyrJnRC7kiyrrs50xH1se5WGaWarR9hEuNKOVYdV/59JGvM4mqZEj5jKowDMF2o
-         CLquSqrM1p2trVAEWKvHNPWe86xFRCgjM6f4p8Rh6Rb1czsHYcliIMeiPx18E6dJqj77
-         MyMA==
-X-Gm-Message-State: ANoB5pkb0HbLPPUhb/ituJln+0N2KRzam4prB602zlWlFfGiUC2IZisS
-        o/2OPYxkHOeNdX7vmfaSBbP0WA==
-X-Google-Smtp-Source: AA0mqf4GCqnjHAkihknASAn0yi5G+Mq3odla2UDNvKPhEwC6fSs2KP4dmfXWt5u/x4RRFQ1j57oPAQ==
-X-Received: by 2002:a17:906:cc92:b0:7c0:beef:79e2 with SMTP id oq18-20020a170906cc9200b007c0beef79e2mr13796496ejb.148.1670258285960;
-        Mon, 05 Dec 2022 08:38:05 -0800 (PST)
+        bh=FA6VZLr8EX+1LwmM9brJgk2AqL1UbJ0XsUIaiz9n7JY=;
+        b=TKaO4nxDy0/n3RhFL1XgPCEW5LsPZziwpc5k5QwXrnSf2VOBmvpSgYqBOvS5VJE3ud
+         2l7tiRzQ3IBH0KlZxyahTrVhehjMWu6DClDzoFAquVKN79aK8orw+bSIHcQhMRZ1t8qo
+         8n/eRapSIsxTYRCKp6DmN75gi61Z/Z56CZGumzbenBy3xfPTUEn4zQXy+bjc2JLdL5bl
+         SLRUpvkms5B2HXci6zwgAK4ZMHUmu/XoQC1vjfwddQsLQzicGyZNKKXPT48C0hX/ERyl
+         vpBWVudG7pEFPECgsH4IUm+K3nm3kVcSYqt//YdNBvnsJQh5grc0tdSRQUS4uyb519HI
+         5I1A==
+X-Gm-Message-State: ANoB5plU7bnirCQJ8z4D7ANe5OyoLuqaisddVbAp0PPwyHfAGY5TvcMK
+        FFGxqd8I/lI9eKYbHXf1FHL5rA==
+X-Google-Smtp-Source: AA0mqf4UTFIOaQqMzS0VIDvYTbzzH/oX2gTN+rgxrjAy0Q4o2IYeg3hUbwZ7Nzsbb/5KoI4Sh/LVdw==
+X-Received: by 2002:aa7:d556:0:b0:45c:6467:94e2 with SMTP id u22-20020aa7d556000000b0045c646794e2mr73784880edr.295.1670258287354;
+        Mon, 05 Dec 2022 08:38:07 -0800 (PST)
 Received: from prec5560.localdomain (ip5f58f364.dynamic.kabel-deutschland.de. [95.88.243.100])
-        by smtp.gmail.com with ESMTPSA id e21-20020a170906315500b007bed316a6d9sm6413610eje.18.2022.12.05.08.38.04
+        by smtp.gmail.com with ESMTPSA id e21-20020a170906315500b007bed316a6d9sm6413610eje.18.2022.12.05.08.38.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 08:38:05 -0800 (PST)
+        Mon, 05 Dec 2022 08:38:06 -0800 (PST)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@linux.ie,
@@ -64,9 +64,9 @@ To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
         quic_jesszhan@quicinc.com, andersson@kernel.org
-Subject: [PATCH v3 04/11] drm/msm/dpu: Add support for SM8350
-Date:   Mon,  5 Dec 2022 17:37:47 +0100
-Message-Id: <20221205163754.221139-5-robert.foss@linaro.org>
+Subject: [PATCH v3 05/11] drm/msm: Add support for SM8350
+Date:   Mon,  5 Dec 2022 17:37:48 +0100
+Message-Id: <20221205163754.221139-6-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221205163754.221139-1-robert.foss@linaro.org>
 References: <20221205163754.221139-1-robert.foss@linaro.org>
@@ -74,32 +74,41 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatibles string, "qcom,sm8350-dpu", for the display processing unit
-used on Qualcomm SM8350 platform.
+Add compatibles string, "qcom,sm8350-mdss", for the multimedia display
+subsystem unit used on Qualcomm SM8350 platform.
 
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/msm_mdss.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 9827914dc096..6048bfae0824 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -1322,6 +1322,7 @@ static const struct of_device_id dpu_dt_match[] = {
- 	{ .compatible = "qcom,sc8180x-dpu", },
- 	{ .compatible = "qcom,sm8150-dpu", },
- 	{ .compatible = "qcom,sm8250-dpu", },
-+	{ .compatible = "qcom,sm8350-dpu", },
- 	{ .compatible = "qcom,sm8450-dpu", },
+diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+index a2264fb517a1..39746b972cdd 100644
+--- a/drivers/gpu/drm/msm/msm_mdss.c
++++ b/drivers/gpu/drm/msm/msm_mdss.c
+@@ -293,6 +293,9 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
+ 		/* UBWC_2_0 */
+ 		msm_mdss_setup_ubwc_dec_20(msm_mdss, 0x1e);
+ 		break;
++	case DPU_HW_VER_700:
++		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_4_0, 6, 1, 1, 1);
++		break;
+ 	case DPU_HW_VER_720:
+ 		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_3_0, 6, 1, 1, 1);
+ 		break;
+@@ -530,6 +533,7 @@ static const struct of_device_id mdss_dt_match[] = {
+ 	{ .compatible = "qcom,sc8180x-mdss" },
+ 	{ .compatible = "qcom,sm8150-mdss" },
+ 	{ .compatible = "qcom,sm8250-mdss" },
++	{ .compatible = "qcom,sm8350-mdss" },
+ 	{ .compatible = "qcom,sm8450-mdss" },
  	{}
  };
 -- 
