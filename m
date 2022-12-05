@@ -2,140 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC81F642AC2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C430642AC6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiLEO4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 09:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S229970AbiLEO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 09:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiLEO4T (ORCPT
+        with ESMTP id S229753AbiLEO5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 09:56:19 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2103.outbound.protection.outlook.com [40.107.255.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1353F1CFDF
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:56:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HbRTuZPb9Oxh9wMNZlX2MFdygJSgt/H/mAMzvgjAKKVzMUSutGNUhc7gzlsfgO///JAZFuNuF231F7ESaIzZubMw5z3jM+sYoJwMzf1BdKjIrR/kZcXAGo/T7gBEM4cahK8lChZXIcbmoDC4EhaQ+T6UnBkpMriyLTq0ck3F1Nk5102kZygeJQc/rJwjqlVOrOYEEcO8kj4EzNTcpwNGlSoMUpiCa50tnsAARCeZd8ZO8btrlvHTPTi0ZuVf76X2VEn/95QbHPmE5lVRQH+JwqnacZh+J+jKSIjaf92PrNwhdAdsni4hu2o8YloWeK5HJR96hyX7hrd/zUz6iSzgcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qwZPEk0/yDwOeWJJRjEiTYic+YzaSVaIcjeYboXWcow=;
- b=J9Bis7fg3Iq5zs0NdMoW/T/eGgMJvsfPEZNpGxAwv1/NJMh+jwlxIeGpOC/eJXwvtPZ8z1OXHgQkE+xWalsSH1isMGFHtG6RRcrUV4fuExIVKPfH+IwAumEVtdIjLHVLq5vfs41XY6cyzzSfg4swg8p4OsXxBA6Fw9PQ7H7yhf6KtHjlTGjZEJKKTV2P4DKlNnyYPgkExnTrwCaHzTgRZiM2eJJ8pW+wcZYTql7EO/gKuoFZ94wJWYEZfSlCG6LcjSvAjnS8DHByV7xvlA6WmLXoTunrm5xLRn7X3NBYJN+cyK7ZYHn6JmeEvNGlrm/xNroAkS3IJW3iUf5rYozByA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qwZPEk0/yDwOeWJJRjEiTYic+YzaSVaIcjeYboXWcow=;
- b=bcaWHSyGxz22YR0Djujrq8MK24gY4KsAtvxrxFS+941pF+oWpqzOYHVoqZhPfk8obJEN1RKgcNrTo3ndzjvho5mvtJsVE2RDu8J4pCNFyqkm4j0rTZqTSk4c+M0TLivXJHsEAQZtpFZTnJkB3rV9ORtnoM+AsBFKRYFSJCruVRgPVR7GTQsufvnFx0lGUk0fvRVKzA46c9hDa+A0xBHtacf44Bo/dc2yLTmdoUAnp2ruIGDcpuaigmzXYMY0MZhfvsaXDzbuEBvTe5t+f1WuyiBO4NZ2tcS15Sqm87pmKjq4H38/VyAZwOHMAgQovUhC4mgYINfzrKZL7L47c8BlSw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
- by TYZPR06MB4015.apcprd06.prod.outlook.com (2603:1096:400:28::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
- 2022 14:56:13 +0000
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::1a6b:98db:3289:3369]) by TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::1a6b:98db:3289:3369%8]) with mapi id 15.20.5880.013; Mon, 5 Dec 2022
- 14:56:13 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: fix iostat parameter for discard
-Date:   Mon,  5 Dec 2022 22:56:03 +0800
-Message-Id: <20221205145603.70779-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0130.apcprd02.prod.outlook.com
- (2603:1096:4:188::8) To TYZPR06MB5275.apcprd06.prod.outlook.com
- (2603:1096:400:1f5::6)
+        Mon, 5 Dec 2022 09:57:13 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDF71CFD5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:57:12 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id qk9so10680958ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 06:57:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/YavQRn8ABNnl6VLXMYcIqKWjcCYjTfj3xzmJuUcqTc=;
+        b=bHkTvgpAVQT205acFfyNmm1rOtDvyKoT0fEnfw3WP4KnXTzCnwSOalRlsqnWkr2D6n
+         YceU4iZ3HR4uOrb/DqUtQkDpgBxSA236XsCjo6IG1n4k7PR1+g9yTIevGx+O1H7G2YuG
+         bBV/nB6s7FsazZnXq1wngyGmw9eIgjL6++jHhz6iwVQq/+0PixDk/7NpJg0aGTbe67il
+         CZiWHSCPQA1oAEpvwZ2JaoO0lajrqbZj5Vs43Xrg90TqF58w5WNpnjMXCnF9kH+XMMK2
+         /Qx7FTqAcYs30IaHEFtWliEtZxmjth3Pi8j4RbxFw4eQxKDfe3+iuc2WGcHxa32Nfb1b
+         Qceg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/YavQRn8ABNnl6VLXMYcIqKWjcCYjTfj3xzmJuUcqTc=;
+        b=CKnVnldwytX2RmhFMBn/9wSiGAf+QkavPc55eQQJEH06EFFzX7k3itmnbZqZa7TJcp
+         sO8G2udQpBHriWUXPtknfnUVf0MjLHhUdFiwzd/XKkvR6FjB290zCK3Hs4R81b0rL8G+
+         FVu9oOmzNQsD/eY1FrhQk/Jk1PMJaMapFGDINokPgwBO+zhqYQnERDiKLEjEqTM2cQyu
+         ONGaWK/AMMWVsQ1mAldsshPB9ntDpo7kG7ZoggapAXTU4WFSnBmSL0oeiC72N6IB6KOu
+         FJHMZOiTTeo4vLoasgAck5ZjBzqG7uXP8h/ZxESdss7LgxTFpu37qzncqpB/ziY1+oAM
+         tFLA==
+X-Gm-Message-State: ANoB5pmgoBcvkXoq1anI3UAztYqaNo+kAwdoKXuei84wJNu6RAhBZMkD
+        NdwBaAugUwcbPAp1Mg+T0XCgag==
+X-Google-Smtp-Source: AA0mqf4Qe5/y8pAKeMPpbuflQ6QNpod32NOLuouIvb3mtnoBiuFhmp9x7E1KYexhFn8/9rItbper9w==
+X-Received: by 2002:a17:906:a0d7:b0:7b2:7af0:c231 with SMTP id bh23-20020a170906a0d700b007b27af0c231mr27245234ejb.240.1670252231113;
+        Mon, 05 Dec 2022 06:57:11 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
+        by smtp.gmail.com with ESMTPSA id kw26-20020a170907771a00b00783f32d7eaesm6264724ejc.164.2022.12.05.06.57.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 06:57:10 -0800 (PST)
+Date:   Mon, 5 Dec 2022 15:57:10 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
+Message-ID: <20221205145710.xzb4prrc44gv7mwm@kamzik>
+References: <20221204174632.3677-1-jszhang@kernel.org>
+ <20221204174632.3677-2-jszhang@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|TYZPR06MB4015:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2d6fd88-fe49-4986-b863-08dad6d0da4b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: udJCzo3SZOhmgMv/AbCMJcnBRQLdCJ96RMnIxbodlq41jVK8qKo8iknZVetSOaW4B/rbbXMLMl3coxNga2jIs4MN2LRd+d9yu5gMzg0jjVJMCKfjj5Yc/eLzimPVyM3fFVJVGG3f7wbZA6JTGWSj6KCQTdUSQ977BI0FuxnS46Mz2UactKzxR3Kjqv9fi5hLuTxsasN7IvhnCMGwyopJez0PE9/WZmKABYtDkuk/KfzXBbPHzYMzI6o65V6KgIu5H+UuZT6wKil/Auo6jLyh5FedtEV3DU606e8006mvOneKnwtwM7G7WYGzhZP07V7HTY8/QsNZ4GSjHLlUbcGhOB/BbBtaZKawjauM/DN/k21BmDUL7rRO8GJCmZoYPOSCQZf8HoD50/HGa39hKSKg5vLhSob38be5Iakf64Nv0KeStd1HWiPubeQDyq7qf8MLai05NzqygJf58QpHkRYAmhiquyM8JoDO+UOypGlrEabi/L6VyWAFhg4hneOyh8XTzeQXhMa7sCLwYzvX0h5JBo0uLFKAPxd5bWgA3/u4JxcxPYP0E40ceF9jSlTv1ljrcmkAJ4n9yNE5x6yThGVNuYjKvsa8IBatsPyKVoHZUfmMWeKF6I3GfFa5gVBozPJ7nQ3PWdAu+n/01+boWursY8d1HF2BbM+f+2rhZOmEmjOYBLGePBdOhUKsmlAwimQ8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(396003)(346002)(136003)(39860400002)(451199015)(83380400001)(38350700002)(38100700002)(4744005)(5660300002)(41300700001)(2906002)(8936002)(4326008)(86362001)(8676002)(52116002)(6506007)(6512007)(186003)(26005)(107886003)(6666004)(1076003)(316002)(2616005)(66946007)(66476007)(66556008)(478600001)(6486002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tp/JBY5jBjydYP4qTci3r2+E8ZQkIunJLvnn3fy60cKKIw9rfKP74RnYIBbN?=
- =?us-ascii?Q?PeLUdk5rCo9WBy7HWf170T8EpS9b7ACXpn/kDTBRXRQMXQhort4moiy1cxfI?=
- =?us-ascii?Q?WqkA8lXMMcS997GSEr2gWfETAL3U+ETz1+yWFCfMKML9E09p+N9NLR3wSXzk?=
- =?us-ascii?Q?rlmbsdmrFOc3Mkq0tz7gbuv0Sw8IajeKMi+Lxsb1Ngo60ubxDtpCMx42WFai?=
- =?us-ascii?Q?o1w5tPiL/aiFM9i2WFXm30nL0poRnY1VXXOO3fXjhh89k5QtQ9S0tTe8+X7i?=
- =?us-ascii?Q?kLZszm+kkojJ4wci6dvmfMt558ej2C8WEyrYDSUZVJSeL4mjznDa/AzlD2ZV?=
- =?us-ascii?Q?VSuNeCExkkkGYVBhTK9X47WaT5MxF5J/2L+FVKqlUmY1uUOZfvSXTMBqemZ6?=
- =?us-ascii?Q?0Ypi995OC3M2yYtS7kC9Tg31Vm/fvVIXcYuKR5MoIscYJ10BC9Isxh9172T4?=
- =?us-ascii?Q?jSNfSFN7E/EM+BREcpgfTnplkkdOPrsK3URH+BiME0L+bf5iZPCvYDNMJZfJ?=
- =?us-ascii?Q?1KkGne4rGtjNqKV/fI2iSL5yH1rpcTqxf7AbjFSSjOf2cV48vN2nhj7DsfbY?=
- =?us-ascii?Q?/bYpCD2c8kUkrLHKKK223W3qMJhNKuvVntcUat1a7+1s9lIOStOZZSacQQ0b?=
- =?us-ascii?Q?1Ml5hCJm4fz+eJ63Rh8KGLbFwJ9qZTBpC+5RDCMUraOqrkAqnpXyXvRl1Rlo?=
- =?us-ascii?Q?GpCs5EwztHCGLe4+SzKs77bS/qk6wfhH8h+gikqyLl3Y2tPYngZR7isVl/Zq?=
- =?us-ascii?Q?3lpb7B6De2j+lrzRroL83u5F+xSRmDaTGmo7qRv8FwUK4mTqEoJG8qVzqtsI?=
- =?us-ascii?Q?Q4DQcXTDyUhhnmeB8xNl+k/0JB05HU2fbCByhv/ALqt8pv9SDdkEctDUX74N?=
- =?us-ascii?Q?zhEu56PQd4UvW8Qy3qLYCn1t8aED4Q+hRIFrnGZKA9FjjeJFlrqtJO+DRhLC?=
- =?us-ascii?Q?Ev9V790GR31frBa0TLWqXOS/JJIEIb/QXmckz/8q1zBs5FL07tMgfxgRDufn?=
- =?us-ascii?Q?+XKA3zDYDkvD+yVSkfGOqLErQllmj5YqsMHH2LD/JHVe5VDPM6ouBsWmzQkz?=
- =?us-ascii?Q?+w5AJFd8g+nC1C+qeUq3HOeO8c+aNn10rgUorxMCQY14VwFg2OcBhEzllwQP?=
- =?us-ascii?Q?hFbJNbcyFTauwm3yybVeh65JqtsTcmE4ZH/UTDzg4ba9ZWNl3gLy4jt8yYwP?=
- =?us-ascii?Q?mdL9xaF1qlzgu0KqpSBiT11FM6E9KdBdLsd2cspRSJde7eJATZ/OqgIUYrS7?=
- =?us-ascii?Q?WTVmH0sSeBCDlQ996SXpTN65imAcNFywt+OntO3zqtMkpt51aSYjDpwqOOFn?=
- =?us-ascii?Q?l72NAFplOQih40rHwZ6fag18LPYfeDSpq6D8cHPh/mHTp/J/w8Kk9WPRkm5F?=
- =?us-ascii?Q?TjQ/zjTR7J97OVLYzPhlRHELXka+WqmEWsm+kgOkNCh6m9LrT84ylmlLPm9g?=
- =?us-ascii?Q?tVqTbaV00e7U2bDSFbvzTTTcXMvDYMo+KetEA5sCy5BvhL/HqkFZkYUIT9VG?=
- =?us-ascii?Q?G0/JgtAD19+yfY9hFzd3A0WJ+29IlqtqrBmcy27UTLPbFMerlKYN6gujlX7K?=
- =?us-ascii?Q?Zh67CBogTJ3W8k2wHIyv0lWMahp7BkkzLtSV3Rjn?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2d6fd88-fe49-4986-b863-08dad6d0da4b
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 14:56:13.3564
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HA9u29/Hl9OvHXg5TKnDDwDc4JnsTpt+2kocUGEfp4pkbBFvTKPG2ijvoK1sQyiLEH33BHnAhRRgwnEOC2k/MQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4015
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221204174632.3677-2-jszhang@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just like other data we count uses the number of bytes as the basic unit,
-but discard uses the number of cmds as the statistical unit. In fact the
-discard command contains the number of blocks, so let's change to the
-number of bytes as the base unit.
+On Mon, Dec 05, 2022 at 01:46:20AM +0800, Jisheng Zhang wrote:
+> Alternatives live in a different section, so offsets used by jal
+> instruction will point to wrong locations after the patch got applied.
+> 
+> Similar to arm64, adjust the location to consider that offset.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/alternative.h |  2 ++
+>  arch/riscv/kernel/alternative.c      | 38 ++++++++++++++++++++++++++++
+>  arch/riscv/kernel/cpufeature.c       |  3 +++
+>  3 files changed, 43 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
+> index c58ec3cc4bc3..33eae9541684 100644
+> --- a/arch/riscv/include/asm/alternative.h
+> +++ b/arch/riscv/include/asm/alternative.h
+> @@ -29,6 +29,8 @@ void apply_module_alternatives(void *start, size_t length);
+>  
+>  void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
+>  				      int patch_offset);
+> +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
+> +			       int patch_offset);
+>  
+>  struct alt_entry {
+>  	void *old_ptr;		 /* address of original instruciton or data  */
+> diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+> index 292cc42dc3be..9d88375624b5 100644
+> --- a/arch/riscv/kernel/alternative.c
+> +++ b/arch/riscv/kernel/alternative.c
+> @@ -125,6 +125,44 @@ void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
+>  	}
+>  }
+>  
+> +#define to_jal_imm(value)						\
+> +	(((value & (RV_J_IMM_10_1_MASK << RV_J_IMM_10_1_OFF)) << RV_I_IMM_11_0_OPOFF) | \
+                                                                 ^ RV_J_IMM_10_1_OPOFF
 
-Fixes: b0af6d491a6b ("f2fs: add app/fs io stat")
+> +	 ((value & (RV_J_IMM_11_MASK << RV_J_IMM_11_OFF)) << RV_J_IMM_11_OPOFF) | \
+> +	 ((value & (RV_J_IMM_19_12_OPOFF << RV_J_IMM_19_12_OFF)) << RV_J_IMM_19_12_OPOFF) | \
+> +	 ((value & (1 << RV_J_IMM_SIGN_OFF)) << RV_J_IMM_SIGN_OPOFF))
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/segment.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Should put () around value
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 9486ca49ecb1..bc262e17b279 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -1181,7 +1181,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
- 
- 		atomic_inc(&dcc->issued_discard);
- 
--		f2fs_update_iostat(sbi, NULL, FS_DISCARD, 1);
-+		f2fs_update_iostat(sbi, NULL, FS_DISCARD, len * F2FS_BLKSIZE);
- 
- 		lstart += len;
- 		start += len;
--- 
-2.25.1
+> +
+> +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
+> +			       int patch_offset)
+> +{
+> +	int num_instr = len / sizeof(u32);
+> +	unsigned int call;
+> +	int i;
+> +	int imm;
+> +
+> +	for (i = 0; i < num_instr; i++) {
+> +		u32 inst = riscv_instruction_at(alt_ptr, i);
+> +
+> +		if (!riscv_insn_is_jal(inst))
+> +			continue;
+> +
+> +		/* get and adjust new target address */
+> +		imm = RV_EXTRACT_JTYPE_IMM(inst);
+> +		imm -= patch_offset;
+> +
+> +		/* pick the original jal */
+> +		call = inst;
+> +
+> +		/* drop the old IMMs, all jal imm bits sit at 31:12 */
+> +		call &= ~GENMASK(31, 12);
 
+It'd be nice if this had a define.
+
+> +
+> +		/* add the adapted IMMs */
+> +		call |= to_jal_imm(imm);
+> +
+> +		/* patch the call place again */
+> +		patch_text_nosync(alt_ptr + i * sizeof(u32), &call, 4);
+> +	}
+> +}
+> +
+>  /*
+>   * This is called very early in the boot process (directly after we run
+>   * a feature detect on the boot CPU). No need to worry about other CPUs
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index ba62a4ff5ccd..c743f0adc794 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -324,6 +324,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+>  			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
+>  							 alt->alt_len,
+>  							 alt->old_ptr - alt->alt_ptr);
+> +			riscv_alternative_fix_jal(alt->old_ptr,
+> +						  alt->alt_len,
+> +						  alt->old_ptr - alt->alt_ptr);
+>  		}
+>  	}
+>  }
+> -- 
+> 2.37.2
+>
+
+Thanks,
+drew
