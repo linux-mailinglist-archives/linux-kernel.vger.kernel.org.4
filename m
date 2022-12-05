@@ -2,109 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3123642CA8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9532C642CB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiLEQSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        id S231722AbiLEQYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLEQSP (ORCPT
+        with ESMTP id S230475AbiLEQX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:18:15 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CE412BCAB
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:18:14 -0800 (PST)
-Received: (qmail 621638 invoked by uid 1000); 5 Dec 2022 11:18:13 -0500
-Date:   Mon, 5 Dec 2022 11:18:13 -0500
-From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tools: memory-model: Make plain accesses carry
- dependencies
-Message-ID: <Y44ZxWYQkMN60a1E@rowland.harvard.edu>
-References: <Y4pIwqK7SWft1xCl@boqun-archlinux>
- <4262e55407294a5989e766bc4dc48293@huawei.com>
- <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4uyzDl49Zm3TSLh@rowland.harvard.edu>
- <20221203204405.GW4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4vAYzJTTQtNkXFh@rowland.harvard.edu>
- <20221203231122.GZ4001@paulmck-ThinkPad-P17-Gen-1>
- <43c7ea9ebdd14497b85633950b014240@huawei.com>
- <Y4xbQmnDEbFTvgQ/@Boquns-Mac-mini.local>
- <d86295788ad14a02874ab030ddb8a6f8@huawei.com>
+        Mon, 5 Dec 2022 11:23:59 -0500
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCCE13D66;
+        Mon,  5 Dec 2022 08:23:57 -0800 (PST)
+Received: from amadeus-VLT-WX0.lan (unknown [218.85.118.194])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 9A038800056;
+        Tue,  6 Dec 2022 00:23:39 +0800 (CST)
+From:   Chukun Pan <amadeus@jmu.edu.cn>
+To:     aholmes@omnom.net
+Cc:     devicetree@vger.kernel.org, ezequiel@vanguardiasur.com.ar,
+        frank-w@public-files.de, frattaroli.nicolas@gmail.com,
+        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, macromorgan@hotmail.com,
+        mark.kettenis@xs4all.nl, megi@xff.cz,
+        michael.riesch@wolfvision.net, pgwipeout@gmail.com,
+        robh+dt@kernel.org, robin.murphy@arm.com, s.hauer@pengutronix.de,
+        yifeng.zhao@rock-chips.com, Chukun Pan <amadeus@jmu.edu.cn>
+Subject: Re: [PATCH 1/1] arm64: dts: rockchip: rk356x: Fix PCIe register and range mappings
+Date:   Tue,  6 Dec 2022 00:23:22 +0800
+Message-Id: <20221205162322.149967-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221112114125.1637543-2-aholmes@omnom.net>
+References: <20221112114125.1637543-2-aholmes@omnom.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d86295788ad14a02874ab030ddb8a6f8@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHRkYVhhMSxhMHUlDGkpNTFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlKQ1VDTlVKSkNVSkJPWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQw6KQw4Ez0fSw8*TA0VNSsP
+        DUswCQJVSlVKTUxLSU5MT0lLT01JVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlK
+        Q1VDTlVKSkNVSkJPWVdZCAFZQUlNTE43Bg++
+X-HM-Tid: 0a84e319a72bb03akuuu9a038800056
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 01:42:46PM +0000, Jonas Oberhauser wrote:
-> > Besides, could you also explain a little bit why only "data;rfi" can be "carry-dep" but "ctrl;rfi" and "addr;rfi" cannot? I think it's because there are special cases when compilers can figure out a condition being true or an address being constant therefore break the dependency
-> 
-> Oh, good question. A bit hard for me to write down the answer clearly 
-> (which some people will claim that I don't understand it well myself, 
-> but I beg to differ :) :( :) ).
-> 
-> In a nutshell, it's because x ->data [Plain] ->rfi y ->... z fulfils 
-> the same role as storing something in a register and then using it in 
-> a subsequent computation; x ->ctrl y ->... z (and ->addr) don't. So 
-> it's not due to smart compilers, just the fact that the other two 
-> cases seem unrelated to the problem being solved, and including them 
-> might introduce some unsoundness (not that I have checked if they do).
+> The register and range mappings for the PCIe controller in Rockchip's
+> RK356x SoCs are incorrect. Replace them with corrected values from the
+> vendor BSP sources, updated to match current DT schema.
 
-More can be said here.  Consider the following simple example:
+Hi, Andrew
 
-	void P0(int *x, int *y)
-	{
-		int r1, r2;
-		int a[10];
+This patch broken pcie3x2 on my board.
+And the wireless card on pcie2x1 is still not working.
 
-		r1 = READ_ONCE(*x);
-		a[r1] = 1;
-		r2 = a[r1];
-		WRITE_ONCE(*y, r2);
-	}
+[    0.405341] pcieport 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
+[    0.670522] rockchip-dw-pcie 3c0800000.pcie: can't request region for resource [mem 0xf2000000-0xf2ffffff]
+[    0.671527] rockchip-dw-pcie: probe of 3c0800000.pcie failed with error -16
+[    7.354521] pci 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
+[    7.355116] mt7921e 0000:01:00.0: enabling device (0000 -> 0002)
+[    7.355812] mt7921e: probe of 0000:01:00.0 failed with error -28
 
-There is an address dependency from the READ_ONCE to the plain store in 
-a[r1].  Then there is an rfi and a data dependency to the WRITE_ONCE.
+--
+Thanks,
+Chukun
 
-But in this example, the WRITE_ONCE is _not_ ordered after the 
-READ_ONCE, even though they are linked by (addr ; rfi ; data).  The 
-compiler knows that the value of r1 does not change between the two 
-plain accesses, so it knows that it can optimize the code to be:
+-- 
+2.25.1
 
-	r1 = READ_ONCE(*x);
-	r2 = 1;
-	WRITE_ONCE(*y, r2);
-	a[r1] = r2;
-
-And then the CPU can execute the WRITE_ONCE before the READ_ONCE.  This 
-shows that (addr ; rfi) must not be included in the carry-deps relation.
-
-You may be able to come up with a similar argument for (ctrl ; rfi), 
-although it might not be quite as clear.
-
-Alan
