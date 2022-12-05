@@ -2,136 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2059C642382
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6328B642384
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiLEHUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 02:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S231651AbiLEHVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 02:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbiLEHUY (ORCPT
+        with ESMTP id S231782AbiLEHUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 02:20:24 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AE11004C
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:20:22 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id d14so4725213ilq.11
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 23:20:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TFBuZgmPhW5LWntAwnJs0BrrqusNQIYCnHrYxYRlVks=;
-        b=lkVVjG0Z8biqffn+OcAxsV1R0osXrCwi99bUnP2ndNZ3RweZZUHZ7VQyJmGuBmPjTI
-         CpEgr1GsyGSbxYh2KToeaLCzobKs429ZafFNtxbE4nDlqdI8OA6fUQ1VfTjrL2AcziYA
-         SYobP9ouwyxsQJalBeaFVZC8SWurgcVnPludY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TFBuZgmPhW5LWntAwnJs0BrrqusNQIYCnHrYxYRlVks=;
-        b=TsCDlSfUYClt3UBxzyVTW15j/weUgRZYxjh51SGzqDZGurscX/vD1f5brAtKxDmL8S
-         cY3/OUmXRrFUyPtl+enIH3tYiMn+kmutPLRuBPYiU5M2bxfNmqEHQ5KLNRAhRaBreZAn
-         z7UoB7OwsiFdhB2jcCzZWJXiQLdVSd2vYaPETA5QcOODBnXDk3Px1MG/EDfjrWW0/rlb
-         UW2LwrbNLzBms19F0TgfqBCENV47aZc9B9dhMrWNGhION1plYHAGsHYa5yMW/vEDOrLp
-         jpY4bXAe43ovTkLZAR5biZ/JzH4zTBHty0ekyLV74Cwpc5llsFELBHMAze1UcPl3yR+M
-         woOQ==
-X-Gm-Message-State: ANoB5pl4wjwQUVMtd3G1K5uLPY4avP1fbjsvdda91Ot/YXplkOk2PUGK
-        oEZEbxxlroG15UiBEd/zM3W0rS7hrs6OVnNC
-X-Google-Smtp-Source: AA0mqf5UQ+K5oGoOgAf0qW6vHXRTW1JfVIl85uBn5614aWT7wRKgHIDraWpOGZLqOSOKx+zjm/JYaA==
-X-Received: by 2002:a05:6e02:1785:b0:303:542:f2c5 with SMTP id y5-20020a056e02178500b003030542f2c5mr18835048ilu.176.1670224821754;
-        Sun, 04 Dec 2022 23:20:21 -0800 (PST)
-Received: from markhas1.roam.corp.google.com (63-225-246-100.hlrn.qwest.net. [63.225.246.100])
-        by smtp.gmail.com with ESMTPSA id a8-20020a021608000000b003755aa71fffsm5581184jaa.105.2022.12.04.23.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 23:20:21 -0800 (PST)
-From:   Mark Hasemeyer <markhas@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Raul Rangel <rrangel@chromium.org>,
-        Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        chrome-platform@lists.linux.dev
-Subject: [PATCH v9 3/3] platform/chrome: cros_ec_uart: Add DT enumeration support
-Date:   Mon,  5 Dec 2022 00:20:01 -0700
-Message-Id: <20221205001932.v9.3.Ie23c217d69ff25d7354db942613f143bbc8ef891@changeid>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-In-Reply-To: <20221205001932.v9.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
-References: <20221205001932.v9.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+        Mon, 5 Dec 2022 02:20:55 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847D3F020
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:20:53 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 08BC7425EA;
+        Mon,  5 Dec 2022 07:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1670224852; bh=X9riitV1+2ZWDLkgkw28xLwImCPxVEWhVJCBjFMEpvk=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=Vx0ka+UU3MjTUrLbSasxkFMyD42J+MM7ehGUQlLbZAEjdaopdK5ugKUKXye1l5x3w
+         IfK7pW2pIWgv4TjB49WXFgA5UzsW52s29QJiybducg3gM6F6131Od6oDhRMU3daI9h
+         Z5l3NQMXsmvkTXbH56x3IEidfY5DXMfYnRTIcJGx4CkT5F77VJdmwshmCtBS3rF6na
+         gSYwGDnYWl76QXcn63Mo8sJNhiM7Bj/gSojoEbAcbftCLBtuD3qT1QsFo3t01ufqkO
+         i6gOcLja0Yzcc7muxzsLmSDeqp+sebI5rXv1jabSN6HnBPLV4JwrKsIovjudxWDPTC
+         azGj/DB35bLjw==
+Message-ID: <87dc326b-a12c-7377-ff37-6008795598e5@marcan.st>
+Date:   Mon, 5 Dec 2022 16:20:45 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+References: <20221203064629.1601299-1-apatel@ventanamicro.com>
+ <20221203064629.1601299-4-apatel@ventanamicro.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v15 3/9] genirq: Add mechanism to multiplex a single HW
+ IPI
+In-Reply-To: <20221203064629.1601299-4-apatel@ventanamicro.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+On 03/12/2022 15.46, Anup Patel wrote:
+> All RISC-V platforms have a single HW IPI provided by the INTC local
+> interrupt controller. The HW method to trigger INTC IPI can be through
+> external irqchip (e.g. RISC-V AIA), through platform specific device
+> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> 
+> To support multiple IPIs on RISC-V, add a generic IPI multiplexing
+> mechanism which help us create multiple virtual IPIs using a single
+> HW IPI. This generic IPI multiplexing is inspired by the Apple AIC
+> irqchip driver and it is shared by various RISC-V irqchip drivers.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  include/linux/irq.h  |   3 +
+>  kernel/irq/Kconfig   |   5 ++
+>  kernel/irq/Makefile  |   1 +
+>  kernel/irq/ipi-mux.c | 207 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 216 insertions(+)
+>  create mode 100644 kernel/irq/ipi-mux.c
+> 
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index c3eb89606c2b..b1b28affb32a 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -1266,6 +1266,9 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+>  int ipi_send_single(unsigned int virq, unsigned int cpu);
+>  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
+>  
+> +void ipi_mux_process(void);
+> +int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu));
+> +
+>  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+>  /*
+>   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> index db3d174c53d4..df17dbc54b02 100644
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+>  	depends on SMP
+>  	select IRQ_DOMAIN_HIERARCHY
+>  
+> +# Generic IRQ IPI Mux support
+> +config GENERIC_IRQ_IPI_MUX
+> +	bool
+> +	depends on SMP
+> +
+>  # Generic MSI interrupt support
+>  config GENERIC_MSI_IRQ
+>  	bool
+> diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> index b4f53717d143..f19d3080bf11 100644
+> --- a/kernel/irq/Makefile
+> +++ b/kernel/irq/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+>  obj-$(CONFIG_PM_SLEEP) += pm.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+>  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+>  obj-$(CONFIG_SMP) += affinity.o
+>  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+>  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> new file mode 100644
+> index 000000000000..3a403c3a785d
+> --- /dev/null
+> +++ b/kernel/irq/ipi-mux.c
+> @@ -0,0 +1,207 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Multiplex several virtual IPIs over a single HW IPI.
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#define pr_fmt(fmt) "ipi-mux: " fmt
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/jump_label.h>
+> +#include <linux/percpu.h>
+> +#include <linux/smp.h>
+> +
+> +struct ipi_mux_cpu {
+> +	atomic_t			enable;
+> +	atomic_t			bits;
+> +};
+> +
+> +static struct ipi_mux_cpu __percpu *ipi_mux_pcpu;
+> +static struct irq_domain *ipi_mux_domain;
+> +static void (*ipi_mux_send)(unsigned int cpu);
+> +
+> +static void ipi_mux_mask(struct irq_data *d)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +
+> +	atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
+> +}
+> +
+> +static void ipi_mux_unmask(struct irq_data *d)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +	u32 ibit = BIT(irqd_to_hwirq(d));
+> +
+> +	atomic_or(ibit, &icpu->enable);
+> +
+> +	/*
+> +	 * The atomic_or() above must complete before the atomic_read()
+> +	 * below to avoid racing ipi_mux_send_mask().
+> +	 */
+> +	smp_mb__after_atomic();
+> +
+> +	/* If a pending IPI was unmasked, raise a parent IPI immediately. */
+> +	if (atomic_read(&icpu->bits) & ibit)
+> +		ipi_mux_send(smp_processor_id());
+> +}
+> +
+> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +	u32 ibit = BIT(irqd_to_hwirq(d));
+> +	unsigned long pending;
+> +	int cpu;
+> +
+> +	for_each_cpu(cpu, mask) {
+> +		icpu = per_cpu_ptr(ipi_mux_pcpu, cpu);
+> +
+> +		/*
+> +		 * This sequence is the mirror of the one in ipi_mux_unmask();
+> +		 * see the comment there. Additionally, release semantics
+> +		 * ensure that the vIPI flag set is ordered after any shared
+> +		 * memory accesses that precede it. This therefore also pairs
+> +		 * with the atomic_fetch_andnot in ipi_mux_process().
+> +		 */
+> +		pending = atomic_fetch_or_release(ibit, &icpu->bits);
+> +
+> +		/*
+> +		 * The atomic_fetch_or_release() above must complete
+> +		 * before the atomic_read() below to avoid racing with
+> +		 * ipi_mux_unmask().
+> +		 */
+> +		smp_mb__after_atomic();
+> +
+> +		/*
+> +		 * The flag writes must complete before the physical IPI is
+> +		 * issued to another CPU. This is implied by the control
+> +		 * dependency on the result of atomic_read() below, which is
+> +		 * itself already ordered after the vIPI flag write.
+> +		 */
+> +		if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
+> +			ipi_mux_send(cpu);
+> +	}
+> +}
+> +
+> +static const struct irq_chip ipi_mux_chip = {
+> +	.name		= "IPI Mux",
+> +	.irq_mask	= ipi_mux_mask,
+> +	.irq_unmask	= ipi_mux_unmask,
+> +	.ipi_send_mask	= ipi_mux_send_mask,
+> +};
+> +
+> +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> +				unsigned int nr_irqs, void *arg)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < nr_irqs; i++) {
+> +		irq_set_percpu_devid(virq + i);
+> +		irq_domain_set_info(d, virq + i, i, &ipi_mux_chip, NULL,
+> +				    handle_percpu_devid_irq, NULL, NULL);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> +	.alloc		= ipi_mux_domain_alloc,
+> +	.free		= irq_domain_free_irqs_top,
+> +};
+> +
+> +/**
+> + * ipi_mux_process - Process multiplexed virtual IPIs
+> + */
+> +void ipi_mux_process(void)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> +	irq_hw_number_t hwirq;
+> +	unsigned long ipis;
+> +	unsigned int en;
+> +
+> +	/*
+> +	 * Reading enable mask does not need to be ordered as long as
+> +	 * this function is called from interrupt handler because only
+> +	 * the CPU itself can change it's own enable mask.
+> +	 */
+> +	en = atomic_read(&icpu->enable);
+> +
+> +	/*
+> +	 * Clear the IPIs we are about to handle. This pairs with the
+> +	 * atomic_fetch_or_release() in ipi_mux_send_mask().
+> +	 */
+> +	ipis = atomic_fetch_andnot(en, &icpu->bits) & en;
+> +
+> +	for_each_set_bit(hwirq, &ipis, BITS_PER_TYPE(int))
+> +		generic_handle_domain_irq(ipi_mux_domain, hwirq);
+> +}
+> +
+> +/**
+> + * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
+> + * parent IPI.
+> + * @nr_ipi:		number of virtual IPIs to create. This should
+> + *			be <= BITS_PER_TYPE(int)
+> + * @mux_send:		callback to trigger parent IPI for a particular CPU
+> + *
+> + * Returns first virq of the newly created virtual IPIs upon success
+> + * or <=0 upon failure
+> + */
+> +int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu))
+> +{
+> +	struct fwnode_handle *fwnode;
+> +	struct irq_domain *domain;
+> +	int rc;
+> +
+> +	if (ipi_mux_domain)
+> +		return -EEXIST;
+> +
+> +	if (BITS_PER_TYPE(int) < nr_ipi || !mux_send)
+> +		return -EINVAL;
+> +
+> +	ipi_mux_pcpu = alloc_percpu(typeof(*ipi_mux_pcpu));
+> +	if (!ipi_mux_pcpu)
+> +		return -ENOMEM;
+> +
+> +	fwnode = irq_domain_alloc_named_fwnode("IPI-Mux");
+> +	if (!fwnode) {
+> +		pr_err("unable to create IPI Mux fwnode\n");
+> +		rc = -ENOMEM;
+> +		goto fail_free_cpu;
+> +	}
+> +
+> +	domain = irq_domain_create_linear(fwnode, nr_ipi,
+> +					  &ipi_mux_domain_ops, NULL);
+> +	if (!domain) {
+> +		pr_err("unable to add IPI Mux domain\n");
+> +		rc = -ENOMEM;
+> +		goto fail_free_fwnode;
+> +	}
+> +
+> +	domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
+> +	irq_domain_update_bus_token(domain, DOMAIN_BUS_IPI);
+> +
+> +	rc = __irq_domain_alloc_irqs(domain, -1, nr_ipi,
+> +				     NUMA_NO_NODE, NULL, false, NULL);
+> +	if (rc <= 0) {
+> +		pr_err("unable to alloc IRQs from IPI Mux domain\n");
+> +		goto fail_free_domain;
+> +	}
+> +
+> +	ipi_mux_domain = domain;
+> +	ipi_mux_send = mux_send;
+> +
+> +	return rc;
+> +
+> +fail_free_domain:
+> +	irq_domain_remove(domain);
+> +fail_free_fwnode:
+> +	irq_domain_free_fwnode(fwnode);
+> +fail_free_cpu:
+> +	free_percpu(ipi_mux_pcpu);
+> +	return rc;
+> +}
 
-Existing firmware uses the "PRP0001" _HID and an associated compatible
-string to enumerate the cros_ec_uart.
+Reviewed-by: Hector Martin <marcan@marcan.st>
+Tested-by: Hector Martin <marcan@marcan.st>
 
-Add DT enumeration support for already shipped firmware.
+I was actually surprised this wasn't already a solved problem when I
+first had to write this code. Glad RISC-V found it useful :)
 
-Signed-off-by: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
-Co-developed-by: Mark Hasemeyer <markhas@chromium.org>
-Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
+Note: we agonized over the memory ordering here quite a bit when this
+was first written, and all that was viewed through the lens of the ARM64
+memory model. You might want to do a similarly thorough review from a
+RISC-V perspective to make sure it isn't relying on any ARMisms (or that
+RISC-V isn't failing to meet the underlying Linux model - we already ran
+into a core kernel bitop issue once for ARM too!).
 
----
-
-Changes in v9:
-- Rebase onto for-next
-- Update authorship
-
-Changes in v8:
-- No change
-
-Changes in v7:
-- Move PRP0001 enumeration support to its own commit
-
- drivers/platform/chrome/cros_ec_uart.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/platform/chrome/cros_ec_uart.c b/drivers/platform/chrome/cros_ec_uart.c
-index 4b416441f973c..ea4922238eaae 100644
---- a/drivers/platform/chrome/cros_ec_uart.c
-+++ b/drivers/platform/chrome/cros_ec_uart.c
-@@ -11,6 +11,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/serdev.h>
-@@ -347,6 +348,12 @@ static int __maybe_unused cros_ec_uart_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(cros_ec_uart_pm_ops, cros_ec_uart_suspend,
- 			 cros_ec_uart_resume);
- 
-+static const struct of_device_id cros_ec_uart_of_match[] = {
-+	{ .compatible = "google,cros-ec-uart" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, cros_ec_uart_of_match);
-+
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id cros_ec_uart_acpi_id[] = {
- 	{ "GOOG0019", 0 },
-@@ -360,6 +367,7 @@ static struct serdev_device_driver cros_ec_uart_driver = {
- 	.driver	= {
- 		.name	= "cros-ec-uart",
- 		.acpi_match_table = ACPI_PTR(cros_ec_uart_acpi_id),
-+		.of_match_table = cros_ec_uart_of_match,
- 		.pm	= &cros_ec_uart_pm_ops,
- 	},
- 	.probe		= cros_ec_uart_probe,
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
-
+- Hector
