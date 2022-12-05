@@ -2,77 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B405642BE9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C49642BEF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiLEPgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
+        id S232767AbiLEPhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiLEPgH (ORCPT
+        with ESMTP id S232934AbiLEPhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:36:07 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F162D2;
-        Mon,  5 Dec 2022 07:36:06 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id o12so11550312pjo.4;
-        Mon, 05 Dec 2022 07:36:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U1vH1dvrgSyDnedzoMQstWazi20nrn3iOOtx2zZamBg=;
-        b=gXYdttr/hZGmqCeq49R45h++zeLTuzTtdy5viSA5VeqJIUlCP4fCq4hGlPTuXAeWSB
-         O85YPq35CJQsSpSf70AJyL8tYDKuSdAcQbswkkGD9FFUnYwUqISjZP1QYQVBBifGHp/+
-         qsfkDKv4Li/ZFV9U6Nf5AtKHblX8swFcifPv/fmqtJ13I+Y+56bm67T7Lw7YwHbPbWEX
-         m1OBU2jafVf49PlIKOKMgN9+g9Sixh1NVRppGTIKQL5e30YZ3d/YKiw954tq2+A74Gyr
-         emZ6e6zrZaVXPbZLgthM1zGLncjLx9F3IIVchi0q8A3cCM52w8EjbETOjw2TvBxYrltA
-         qgUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U1vH1dvrgSyDnedzoMQstWazi20nrn3iOOtx2zZamBg=;
-        b=EilNxQhnVc4WEeuK4ohahOvQJNtooKLAIgxSzNLu2nGtOPEoXv3OLQ/TGddmhhRN45
-         ajFlEykyrGpCpkr79tnki4Lmux51sqmpIRZuZVQvwzJU1FqFYMnbZ9bLtn36biYXD18j
-         cfzJIZKKbhzUrYf9pk7pGmgMg2ECjQ7Eeemr5R/N280k9M2ETkDQVX7k2BN8ZZj2aLTF
-         9yagjihs9Jkd7RDUjd56gjUAIccipNvrXhsoj+hXEBb0uX7YvwWyk6XvLMRZb3y40Q/4
-         D+0bSrPUf2MztO0nIuxf/55e29MttPy7Zjwcr9E3pPo2RL4nCkld3ade60P944WmebGT
-         VNjg==
-X-Gm-Message-State: ANoB5pkCVlAHaMGStx5a8d7GQAl5XFGaiA1bQCqjnO+AtnOxdkXffpeG
-        Qb7zf3SBKMU15stoZT16C8A=
-X-Google-Smtp-Source: AA0mqf5c4Cau2Vpe+MTJhXmVTeWAFvXgR1+7eJNPK0+/QMr+kP4KI5MC3I3jE/FLZwxuUJisPRQDhQ==
-X-Received: by 2002:a17:903:3306:b0:189:7d4d:b9a3 with SMTP id jk6-20020a170903330600b001897d4db9a3mr43284505plb.156.1670254566271;
-        Mon, 05 Dec 2022 07:36:06 -0800 (PST)
-Received: from sol (110-174-14-241.tpgi.com.au. [110.174.14.241])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090adb0200b0020ad53b5883sm9440899pjv.14.2022.12.05.07.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 07:36:05 -0800 (PST)
-Date:   Mon, 5 Dec 2022 23:35:59 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v1 2/3] Documentation: gpio: Add a section on what to
- return in ->get() callback
-Message-ID: <Y44P3811P1KB5pEl@sol>
-References: <20221130155519.20362-1-andriy.shevchenko@linux.intel.com>
- <20221130155519.20362-2-andriy.shevchenko@linux.intel.com>
- <CACRpkdaQWZE6=BNEh5hSH9=jBK=TcLoD1uUb=JyNYmHFvaSAfg@mail.gmail.com>
- <Y41MxPthLjitvzEl@sol>
- <Y43fQFBcPgKtuKRZ@smile.fi.intel.com>
+        Mon, 5 Dec 2022 10:37:06 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2012.outbound.protection.outlook.com [40.92.98.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124A2CD8;
+        Mon,  5 Dec 2022 07:37:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aYyNM5umB/YlYyZFjHHO83Nsk29pNBut/O3cYc6qwQImzDXea5JAaDwaiA5JyYfxifWl1vwR5/6+g8puQUU7FljDX3Z8Jji/Jxm5J0eGNI0TLnxGtNJVMaQ51wmllQRgBHWWQp1Oa7lPbo6JanngWlg8hw9RTIuz2qXJ9q6zbCNN1CMRCrjsFhjiRxZS6pcAUsf2jDq1yAVDWDk96bTN09aaCCFgQ0qQNQW+vse0oaa3YF/CA13Bd8bRICjgKw0hhr09oPetcgae2pFLvqtuGPSgxRhN0SUDtkt+L4ibeGP1/qnawhEhB9ouCZbMgukGUo0vLEBHabfy+jE9TBMYQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=idjo0qiw5FRuENJqgeM1GJb0xhD361R10FEVg+6EwgI=;
+ b=grQV9OBfNncScimeEqcCsVRnAKQKBpUbGR6clhTSMxy9GeKRV8CSIJsp4KSYtBc6xkHAi6dYM66J3SQbstkTITdY8XgdgKWUHK9fJ8xmSmmY1e/2zWoeCdbSZ0rSTXdqYlTyNh+wBEYUgwGL5dW2wFLc7pnxnk1tcZjdy1fRNGmR042c0JAYJvzIBHnRhudhu0dn/uBPrt9P8yb8oL0N/7S5fZZxId25hOK2asTvWRoI3tEtkYEmWNX35yZp8f4zIXtU8pUZ5wkkIkt9Cnfp540PIs//rUN11X6sc4paa14pU4fua3wK98xuHD/0bE7I7ywSAvD9ScbfOyBP3xS2RQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=idjo0qiw5FRuENJqgeM1GJb0xhD361R10FEVg+6EwgI=;
+ b=vDsXVUhltjwMXORD4KVdUt1GOkZIu1tdiTJ3BOgVzx0KMEzqjh89CWCetQMV0MyTgCdA4wqLphkA1XWc/fFVnzvb6Ukt73yun15vq31uj16L0Cw5UPaLcIgKKnG4q4IWeqsDWZLFD+BLe1Ar40HJNZHWLPg3XS+AlEx6q7oOZui11xUUYuW8yuUfiKWViATafCUJJdXOOMElIGRjuEwmcPD9ehhqfpXkyzE7Rl6KYHLSQ4qDjQj0PNyy0krIL4e2Hss6nM9F4xaEzaWaFI390C+m6/16s80jUO4zf2u7nrIS4wR6c9IlV55VjNMvv1SOkA6xx7IZ8n4mZVHUMPVuxg==
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
+ by TYYP286MB1787.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:f9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
+ 2022 15:37:00 +0000
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ff96:9cb6:e047:c605%5]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
+ 15:37:00 +0000
+From:   Dawei Li <set_pte_at@outlook.com>
+To:     gregkh@linuxfoundation.org
+Cc:     johannes@sipsolutions.net, robert.jarzmik@free.fr, jgross@suse.com,
+        sstabellini@kernel.org, oleksandr_tyshchenko@epam.com,
+        roger.pau@citrix.com, srinivas.kandagatla@linaro.org,
+        bgoswami@quicinc.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        xen-devel@lists.xenproject.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
+Subject: [PATCH 0/6] Make remove() of any bus based driver void returned
+Date:   Mon,  5 Dec 2022 23:36:38 +0800
+Message-ID: <TYCP286MB23234ABCCF40E3FC42FD09A4CA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [UNXCpyl4RA3GK+ciwc5f+GWb8JB5tMkE]
+X-ClientProxiedBy: SG2PR02CA0046.apcprd02.prod.outlook.com
+ (2603:1096:3:18::34) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:152::9)
+X-Microsoft-Original-Message-ID: <20221205153644.60909-1-set_pte_at@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y43fQFBcPgKtuKRZ@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYYP286MB1787:EE_
+X-MS-Office365-Filtering-Correlation-Id: aedce035-d51e-41c8-6e4b-08dad6d68b90
+X-MS-Exchange-SLBlob-MailProps: ZRuQdVKRmYsFuMRaXb5//B01o/cN+noGWrg39EjfTQXunQwIDnBNGuuug4/KoHir8EFf0cr6w6gPVExnXvsev3xsuBD1BIaekqlE/uEzcar4E7aoIN5bHHWITdhmJaYXDpd2HhJ3IAFOHLAbqtmiSvinQwUiPLaEyPm9vT8zZrNiqCMSBC05XKFo/uDKXwjVjxlkFEK3e3rg5N0Q5L22vuMhcTe2EGhHqtDomBhXjX30qXqKLq9J4g3VEqSgx4zLmuOhQPIy2VO4rtZz4M11WAswWRGLfW0APpfqcV3IN0LtccA9TptjLTABsB47yWZVdyb7o+tCgAb5NeEb0Oo7kQg0ULtoR4+qLRx0KU12DgccklSt38OPJhKFa3PnXjLhpAI4jcHDXHqx3NIE8jdq2C4HS7igGHXO5B3CnXCzCx1EWhidysbyP4K2A9hc1ENARed57QK31bHvb5BH+6ZeBNCI8OmnbRJt6bG9PSe1L34f55RGXCGqqhwV7m41Se6ysolhquogekoWbDLZH5bSRxifpbdEEIxU/sCcMFxvqtAWR+AiQCmwaR72ottkjxbIM4BXPAAhrIXF+USAlrCJOqOzSxuMu1U/clROYqxwUV6vFyLMGp7Muxm2z689tT2K9HlaJRkAJxH47uUfpOL2WrUl3IxDEQzCNppe+yCIJihgwsZu+Hhj3RF9OLwPnELMuGJyZNC3zhLga7o7wYdGT2v2H4fcm1bH
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zGLnvyXv0fD6CDEHBIolniphzNkSmzBHMpXSdaYDHfiFUo506g9rEVf1fEJ45TUnM2aq5pjVIx3FKoZ94IhH2ranBQWlRiuxF6NRlH/kB+N8GAiLLbyIFD9qyrv5C8bk2h/i6ZV9yeENrY1e2SbZU4RXurxXaUZ1i9Amsq5tKmrEl8RSzcZ1r24MIF1p6zI+BjZSgokOZUunPrY5cDtq/PJzxD1EYVZnaq8o4t2+4xNvWJ/86jo/NspBOHOt7Wr355BVQabP5xU5CuXst41Z8ABPti/kmb0IS8urxRTboYB9r+Kc5K/4MdqDaKeB7YTQUgcBX2AQ7P4kmSaEPgQ5dKJJ6KIRSoQC3m8a5kt8k4wSYdCoDOJbMO5mDtQFaZo6xCvqiPoA6cWo5sQtY9j/F1croiOQFteX9Cn1AhTCyzRWkhnoY3swt5SP//843zbfYdpmfOoXHQ/pBJUs7k+BxKnPZi2svhH73cm+LujSUcje5baRUWtQm9gffSjivZR+yEtCVVckjYmf71iJnMfcWTs01Gog8SFAmOzGjOlXFjdUWs1IL3rp9XNbNDpvqUj6nDcAIXVYqzH6GwnPZa7qdtqZ7mCGJR2xzrhQ4C4XgrCj80grl2tkzk24fwQLgiYx91LCWm112cCSMBXC6gwrRQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QRBTP8FnMx9BraTxM3xGIeujBWDR1n1+I3fxhWoTJSykREz6EqHLu90Zidj+?=
+ =?us-ascii?Q?6UOogrOop8rfehSZb1RqSN5+dqjHmo0ByE3kyOrpY9T8UQGYAvXdOBPzv2BM?=
+ =?us-ascii?Q?iyUiOESAAGutorftWnaH6GFJPdCjantLSBEyUXH+oNOnurQJv65ds6gzcGgc?=
+ =?us-ascii?Q?p2OS6DCPFzLBsYgm42evehpZVjWh/5MBX8CGjtveguaxihJD94Vld7p1rBY3?=
+ =?us-ascii?Q?6K3tzfEZYtFWnoiCUhYSkdJoNmwoo1zzx4d40kQy+dAyn2HVsmDGxQIVutO9?=
+ =?us-ascii?Q?xEplfkhbLDdZcgSYqEXcJvSJOQU2BYXBrUmWAPqeNNd7lz/XMe8N3u22kAWZ?=
+ =?us-ascii?Q?EeK2EtBbEznK4IhILxnb5rMS6pNjicdH2RpenTnLT7y2IrwG7K+nkFVRtCbs?=
+ =?us-ascii?Q?RtEhltW46OZkxIFsAsUd5kZpffYoPjYEKdCTVOodl46+4dReg26gO0KFAp3t?=
+ =?us-ascii?Q?vvjzoWow6VIBfWXUD/ftguEJPfLeLA9TSVDUKbtwivzKrnxDlnrgyYzqtl96?=
+ =?us-ascii?Q?FbGnPqXNJufWQIBCESeiHYKpWW10OB0R7+tobIPI72Dgcw1dVfPy9uxjSVpd?=
+ =?us-ascii?Q?aM0L9r8/ikA4aOLLzzAw5u87v9MmWN0wvvmAO80pMb5eefKlTYH9AVhXzgX/?=
+ =?us-ascii?Q?qy+iM4b3xo0WFVRljQ0wzA/514sxeOOyauGNJxa0OrLo2dsBQP5KUSY4rpp0?=
+ =?us-ascii?Q?yySYPsbsP92rBnryZSgHLzRclhq3Dr5LoFNHQlvfNG0YQWvo5XSUr/z/3Lju?=
+ =?us-ascii?Q?yLTaFgHlFOCXXzB611uLgcQz2SdI0ZctPCC1jRG5A7Xu4nzW7pkT1Tr7Dtz9?=
+ =?us-ascii?Q?AZ/T3JMRN5fvG5KJNg4wiTTXBIOsHasT7+shJIN0VAbdf63EQo/iHQWXDWY+?=
+ =?us-ascii?Q?QuoIuURBpTxW34FpEQyMDUNrhluNKmrc1Hg2/Bs2zcJDlU1iVRyZNkQjqPvX?=
+ =?us-ascii?Q?BgO+W0BY1IIu6V3mrEyc9J0Qjkbk7UeX1iavS+2rGLHeYzjKhiJkiazDilMR?=
+ =?us-ascii?Q?EeYsJxiHj4+K7PPru7RYrtYnghs2RsrSzzxFA18VihfPgqKsPaWp5t3cXdpU?=
+ =?us-ascii?Q?pEGR9UxdUuw67b7kLXZ1ncKkcHcrIPN5/6wYuC/5eON0mmxLIkcK6WbXfXrP?=
+ =?us-ascii?Q?/Qvo7nzmjz7SO/ItZhpOEOx6xoaH/mUB6E3uE4MPjc9RYUTLmqv6WNx1+sds?=
+ =?us-ascii?Q?DDTliP/mBqgvUQeM7pYBzyo40XQzuL3Ppq0XJIHDj9tK6b4zJHaewNFWXnjH?=
+ =?us-ascii?Q?ojHK1SmW45QnQOaPqs1nZafLveMIfUwNN+ITvqj+gw=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aedce035-d51e-41c8-6e4b-08dad6d68b90
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 15:37:00.2471
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYP286MB1787
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,72 +111,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:08:32PM +0200, Andy Shevchenko wrote:
-> On Mon, Dec 05, 2022 at 09:43:32AM +0800, Kent Gibson wrote:
-> > On Sat, Dec 03, 2022 at 10:38:45AM +0100, Linus Walleij wrote:
-> > > On Wed, Nov 30, 2022 at 4:55 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > 
-> > > > +The below table gathered the most used cases.
-> > > > +
-> > > > +==========  ==========  ===============  =======================
-> > > > +  Input       Output         State        What value to return?
-> > > > +==========  ==========  ===============  =======================
-> > > > + Disabled    Disabled    Hi-Z             input buffer
-> > > > + Disabled    OS/OD/etc   Single ended     [cached] output buffer
-> > > > +    x        Push-Pull   Out              [cached] output buffer
-> > > > + Enabled     Disabled    In               input buffer
-> > > > + Enabled     OS/OD/etc   Bidirectional    input buffer
-> > > > +==========  ==========  ===============  =======================
-> > > 
-> > > This looks about right to me, but we need more input, Kent?
-> > > 
-> > 
-> > Firstly, I'm all for tightening up the driver contract, and hope that
-> > whatever is decided will also be updated in driver.h itself.
-> > 
-> > I can also understand Andy wanting to add support for Bidirectional
-> > using the existing API.
-> > 
-> > But, and please correct me if I'm wrong, the user has no control over
-> > whether an open drain output is single ended or bidirectional, and
-> > no visibility as to which the driver supports or chooses.
-> > So the contract is still vague.
-> > 
-> > My preference would be for the driver API to be extended with a new
-> > callback for the output buffer, say get_output(), and have the existing
-> > get() always return the input buffer.  Both would return an error if the
-> > buffer is unavailable or disconnected, e.g. in the Hi-Z case.
-> > As per Hans' suggestions, this would keep the drivers simple.
-> 
-> That's not about keeping driver simple, it's about how from hardware
-> (electrical) point of view we should recognize the GPIO signal value.
-> And I disagree on the input buffer to be always involved (in particular,
-> not all hardware may support that anyway). That said, I will send an answer
-> to all you guys, but just to make sure that we are on the different pages
-> here I state yet another time that this is not about solely software p.o.v.
-> And yes, there is no simple answer to the question.
-> 
+For bus-based driver, device removal is implemented as:
+device_remove() => bus->remove() => driver->remove()
 
-To be clear, my suggestion is focussed on providing visibility to allow
-the user to determine if their hardware supports their use case - without
-them having to get out a scope to check.
-And it doesn't care what those use cases are.
+Driver core needs no feedback from bus driver about the result of
+remove callback. In which case, commit fc7a6209d571 ("bus: Make
+remove callback return void") forces bus_type::remove be void-returned.
 
-The fact that it also keeps the driver logic simple is a happy
-coincidence, but I agree with Hans that that is a huge benefit and so
-reiterated it above.  My bad if that gave the impression that was my
-primary focus.
+Now we have the situation that both 1st & 2nd part of calling chain
+are void returned, so it does not make much sense for the last one
+(driver->remove) to return non-void to its caller.
 
-> > Then cdev could determine the approriate buffer to return, depending
-> > on the mode.  Or, better yet, we extend that through the uAPI and
-> > handball that decision to the user.
-> 
-> TL;DR: I don't like this idea.
-> 
+So the basic idea behind this patchset is making remove() callback of
+any bus-based driver to be void returned.
 
-And yours paints us into a corner.
+This patchset includes changes for drivers below:
+1. hyperv
+2. macio
+3. apr
+4. xen
+5. ac87
+6. soundbus
 
-Cheers,
-Kent.
+Q: Why not platform drivers?
+A: Too many of them.(maybe 4K+)
+
+Dawei Li (6):
+  hyperv: Make remove callback of hyperv driver void returned
+  macio: Make remove callback of macio driver void returned
+  apr: make remove callback of apr driver void returned
+  xen: make remove callback of xen driver void returned
+  ac97: make remove callback of ac97 driver void returned
+  soundbus: make remove callback of soundbus driver void returned
+
+ arch/powerpc/include/asm/macio.h                | 12 ++++++------
+ drivers/ata/pata_macio.c                        |  4 +---
+ drivers/block/xen-blkback/xenbus.c              |  4 +---
+ drivers/block/xen-blkfront.c                    |  3 +--
+ drivers/char/tpm/xen-tpmfront.c                 |  3 +--
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c         |  4 +---
+ drivers/gpu/drm/xen/xen_drm_front.c             |  3 +--
+ drivers/hid/hid-hyperv.c                        |  4 +---
+ drivers/hv/hv_balloon.c                         |  5 +----
+ drivers/hv/hv_util.c                            |  4 +---
+ drivers/input/misc/xen-kbdfront.c               |  5 ++---
+ drivers/input/serio/hyperv-keyboard.c           |  4 +---
+ drivers/macintosh/rack-meter.c                  |  4 +---
+ drivers/mfd/wm97xx-core.c                       |  4 +---
+ drivers/net/ethernet/apple/bmac.c               |  4 +---
+ drivers/net/ethernet/apple/mace.c               |  4 +---
+ drivers/net/hyperv/netvsc_drv.c                 |  4 +---
+ drivers/net/wireless/intersil/orinoco/airport.c |  4 +---
+ drivers/net/xen-netback/xenbus.c                |  3 +--
+ drivers/net/xen-netfront.c                      |  4 +---
+ drivers/pci/controller/pci-hyperv.c             |  3 +--
+ drivers/pci/xen-pcifront.c                      |  4 +---
+ drivers/scsi/mac53c94.c                         |  5 +----
+ drivers/scsi/mesh.c                             |  5 +----
+ drivers/scsi/storvsc_drv.c                      |  4 +---
+ drivers/scsi/xen-scsifront.c                    |  4 +---
+ drivers/tty/hvc/hvc_xen.c                       |  4 ++--
+ drivers/tty/serial/pmac_zilog.c                 |  7 ++-----
+ drivers/uio/uio_hv_generic.c                    |  5 ++---
+ drivers/usb/host/xen-hcd.c                      |  4 +---
+ drivers/video/fbdev/hyperv_fb.c                 |  5 +----
+ drivers/video/fbdev/xen-fbfront.c               |  6 ++----
+ drivers/xen/pvcalls-back.c                      |  3 +--
+ drivers/xen/pvcalls-front.c                     |  3 +--
+ drivers/xen/xen-pciback/xenbus.c                |  4 +---
+ drivers/xen/xen-scsiback.c                      |  4 +---
+ include/linux/hyperv.h                          |  2 +-
+ include/linux/soc/qcom/apr.h                    |  2 +-
+ include/sound/ac97/codec.h                      |  6 +++---
+ include/xen/xenbus.h                            |  2 +-
+ net/9p/trans_xen.c                              |  3 +--
+ net/vmw_vsock/hyperv_transport.c                |  4 +---
+ sound/ac97/bus.c                                |  5 ++---
+ sound/aoa/fabrics/layout.c                      |  3 +--
+ sound/aoa/soundbus/i2sbus/core.c                |  4 +---
+ sound/aoa/soundbus/soundbus.h                   |  6 +++---
+ sound/soc/qcom/qdsp6/q6core.c                   |  4 +---
+ sound/xen/xen_snd_front.c                       |  3 +--
+ 48 files changed, 63 insertions(+), 137 deletions(-)
+
+-- 
+2.25.1
 
