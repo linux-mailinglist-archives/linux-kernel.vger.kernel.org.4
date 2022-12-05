@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CDB6429E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED8B6429E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbiLENwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S230404AbiLENwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbiLENwM (ORCPT
+        with ESMTP id S232432AbiLENwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 08:52:12 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B851181E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:52:10 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id d1so18645540wrs.12
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:52:10 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B01611A16
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:52:11 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id ay27-20020a05600c1e1b00b003d070f4060bso10042242wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:52:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hU8awQZE7orgladXdlo0GTxR4zpxwbwcESgIpxJ13kM=;
-        b=W3u+C+W4iy5BKYadzGKEwrhnX+WHxjNavB8D/PC0lF1Fg8Pe/ekhb2jrUSCOQBbdxx
-         8N2KRN/GPH3DObr5sim0ov12JwqPrWTJ1o3lzijoudRm1w8LQ45gAXxVBQHn5mnT9oTf
-         OAE1WebEs4Pv5KCp7lu0pAgvuoaQ6FUeIN/KOIIuR+80p/Exr625rhjENGDee28wLqy1
-         Hm3kWYHWdA7ZYksYwPb0aDiA7Q6eQ9wwdFw0jH4N2LruSG//NsoWgDUVA0wMSSstGuhk
-         UVywvmbJ6IMMhvdWY7hKXisfrNCOLpkC3SVBPV6u/z26MHkxZHbGqwfmSFB18vTnhgFw
-         PCNA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tY5QKpgq2/3jzaTOJQNlt/Q86yQh5wKQ2sDulmkg2KI=;
+        b=IKDFAlrDyxXK2EEK+ACFA1JPj32DVH9XgXokFfk+Yxaz7H2tgkE+MwTdD0iWz34gT2
+         kGu/7VCPmfBZSD0bSQi1NaquemVdzGnINllybPA3DuggEyxpLkCDportqRPdfaQdHHb5
+         8vJnYNRf+kq/YfRdjhkHNSw0AComi83Du6PJCNa80DInUGelaQ5gBo2QoVGV7S9PMFQ2
+         EB7xLFbfI4duQ+816dRZz5wuUf3/uwpuN7H8Us3+fwHC8B/5HI5kz5+M7AA+wMlpz6Ai
+         Gn6oFyyKp5BXQ4GwQdiFZVWDv6QyBKD6PLBtb0JCCB5Q6XS/BN3XowRQqVOGV7sRNJgO
+         R2Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hU8awQZE7orgladXdlo0GTxR4zpxwbwcESgIpxJ13kM=;
-        b=4SQxUSTyYad+VoSV1Xom/W0j1tO2UuuNUmgBLfYj2Dr7kg4mW0cb71XPN6LYQCLwhY
-         cAVcvmRLBs9W4SfkSYHSa2O5pILd2i+/VTCcpoFS3zanTnJ6rWscEFGZzb7zO83mTA7B
-         jSwkJ05vnYCRYp1YrI2XeD4xW8ztThdDmBoGSXZoXtG74VUJlTwwKkcBJklk4iwpa2VX
-         UJ1jznImyzXXde2ztIlMYPKdNDEnl42GGwLTgFjhhfzUx0aq2XReV9eazTBfMdtH5RZv
-         COAiWaOKVPBbhBFZoWJerKBPxgtFs9amSoEWx3XSmBj9oBIDdFDDrgq8rCoMKxnXD69P
-         X8mg==
-X-Gm-Message-State: ANoB5pnxyEgmgHvdLpClxHWhBtm8KFL/xQOMbCil16Llcb/1kWYS1KJ+
-        2RWmIsYfLhF5w910EOzi4S1VrA==
-X-Google-Smtp-Source: AA0mqf4zO/xd3fS5xAzDq3lcKBOsM7eSke1rV0b1O0YU+j5ch0a7K+qqm+Ozk8+g6W3Ara2pPKMung==
-X-Received: by 2002:adf:ea8f:0:b0:242:5afd:bc5d with SMTP id s15-20020adfea8f000000b002425afdbc5dmr4459827wrm.305.1670248328876;
-        Mon, 05 Dec 2022 05:52:08 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tY5QKpgq2/3jzaTOJQNlt/Q86yQh5wKQ2sDulmkg2KI=;
+        b=icrr0YlT0ySaa6iY1mw5RD3cSQaThEM4LqaK/vX5L/jVRGyOO2lGw/f68GdXuqw51l
+         JfB4kqw0FnMxC4dd8/axrbbP8+dk3RWQt4H1teIOd26DdRO4vOxtNt45oD8mPEAy9iGB
+         Ekmrlca/4ppu8EESPtOb14qtA/w21PgIKQMjJHyiSFUDOZdu/FSHATc7HFUOuLRA0LKS
+         pdi84UFah8DmgySEqoQYEbY2IRGqU8MpcjA/vaSb6fYzgC+pW6ZqKe8HijQ+EA5amg22
+         8wNA2JLkI7qykzP6oOh+rGGy34oTeK9BEoi9AMT5U1rBSLDKMME4lH9yNo85khOH1a27
+         iEvQ==
+X-Gm-Message-State: ANoB5pndYqTNVmlK+IqXRGcGJpWqLvNYfydBD9btBICkYcVxDHEsLIQv
+        RZzv/bj2+WqCrtsdg+JovR7wuA==
+X-Google-Smtp-Source: AA0mqf6QY6Tthxm6x2fqOOdM80szIi1eOKD06IVk7s/SIwGmjuxQjE19iKfLT/DaINP5IMUfgk0RLg==
+X-Received: by 2002:a05:600c:4e88:b0:3b5:477:1e80 with SMTP id f8-20020a05600c4e8800b003b504771e80mr60778976wmq.200.1670248329707;
+        Mon, 05 Dec 2022 05:52:09 -0800 (PST)
 Received: from predatorhelios.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
         by smtp.gmail.com with ESMTPSA id a3-20020adffac3000000b0024245e543absm9012700wrs.88.2022.12.05.05.52.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 05:52:08 -0800 (PST)
+        Mon, 05 Dec 2022 05:52:09 -0800 (PST)
 From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
 To:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -56,77 +58,98 @@ To:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
         krzysztof.kozlowski@linaro.org, matthias.bgg@gmail.com,
         angelogioacchino.delregno@collabora.com, khilman@baylibre.com,
         linux-gpio@vger.kernel.org
-Subject: [PATCH v4 0/3] Remove the pins-are-numbered DT property
-Date:   Mon,  5 Dec 2022 14:51:55 +0100
-Message-Id: <20221205135158.1842465-1-bero@baylibre.com>
+Subject: [PATCH v4 1/3] arm64: dts: mediatek: Remove pins-are-numbered property
+Date:   Mon,  5 Dec 2022 14:51:56 +0100
+Message-Id: <20221205135158.1842465-2-bero@baylibre.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221205135158.1842465-1-bero@baylibre.com>
+References: <20221205135158.1842465-1-bero@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the review of my MT8365 support patchset
-(https://lore.kernel.org/linux-mediatek/20221117210356.3178578-1-bero@baylibre.com/),
-the issue of the "pins-are-numbered" DeviceTree property has come up.
+Remove the unnecessary pins-are-numbered property from
+arm64 Mediatek DeviceTrees
 
-This property is unique to Mediatek MT65xx and STM32 pinctrls, and
-doesn't seem to serve any purpose (both the Mediatek and STM32 drivers
-simply refuse to deal with a device unless pins-are-numbered is set to
-true).
-
-There is no other use of this property in the kernel or in other projects
-using DeviceTrees (checked u-boot and FreeBSD -- in both of those, the
-flag is present in Mediatek and STM devicetrees, but not used anywhere).
-
-There is also no known use in userspace (in fact, a userland application
-relying on the property would be broken because it would get true on
-any Mediatek or STM chipset and false on all others, even though other
-chipsets use numbered pins).
-
-This patchset removes all uses of pins-are-numbered and marks the
-property as deprecated.
-
-v4:
-  - The generic pinctrl related patches are now in the pinctrl tree
-    for v6.2 - remove them and repost the remaining bits of the patch
-    set. No other changes.
-
-v3:
-  - No functional changes; add recent Reviewed-Bys and Acked-Bys,
-    add linux-gpio to Cc
-
-v2:
-  - Deprecate the property instead of removing it completely from
-    schemas
-  - squash some related commits
-
-Bernhard Rosenkränzer (3):
-  arm64: dts: mediatek: Remove pins-are-numbered property
-  ARM: dts: mediatek: Remove pins-are-numbered property
-  ARM: dts: stm32: Remove the pins-are-numbered property
-
- arch/arm/boot/dts/mt2701.dtsi                | 1 -
- arch/arm/boot/dts/mt7623.dtsi                | 1 -
- arch/arm/boot/dts/mt8135.dtsi                | 1 -
- arch/arm/boot/dts/stm32f4-pinctrl.dtsi       | 1 -
- arch/arm/boot/dts/stm32f7-pinctrl.dtsi       | 1 -
- arch/arm/boot/dts/stm32h743.dtsi             | 1 -
- arch/arm/boot/dts/stm32mp131.dtsi            | 1 -
- arch/arm/boot/dts/stm32mp151.dtsi            | 2 --
+Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Kevin Hilman <khilman@baylibre.com>
+---
  arch/arm64/boot/dts/mediatek/mt2712e.dtsi    | 1 -
  arch/arm64/boot/dts/mediatek/mt8167.dtsi     | 1 -
  arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 1 -
  arch/arm64/boot/dts/mediatek/mt8173.dtsi     | 1 -
  arch/arm64/boot/dts/mediatek/mt8516.dtsi     | 1 -
- 13 files changed, 14 deletions(-)
+ 5 files changed, 5 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+index 92212cddd37e6..879dff24dcd3b 100644
+--- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+@@ -270,7 +270,6 @@ pio: pinctrl@1000b000 {
+ 		compatible = "mediatek,mt2712-pinctrl";
+ 		reg = <0 0x1000b000 0 0x1000>;
+ 		mediatek,pctl-regmap = <&syscfg_pctl_a>;
+-		pins-are-numbered;
+ 		gpio-controller;
+ 		#gpio-cells = <2>;
+ 		interrupt-controller;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8167.dtsi b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
+index fbe1a1128cc6a..6a54315cf6502 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8167.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8167.dtsi
+@@ -117,7 +117,6 @@ pio: pinctrl@1000b000 {
+ 			compatible = "mediatek,mt8167-pinctrl";
+ 			reg = <0 0x1000b000 0 0x1000>;
+ 			mediatek,pctl-regmap = <&syscfg_pctl>;
+-			pins-are-numbered;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+index e21feb85d822b..18e214464a2d3 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+@@ -929,7 +929,6 @@ clock: mt6397clock {
+ 
+ 		pio6397: pinctrl {
+ 			compatible = "mediatek,mt6397-pinctrl";
+-			pins-are-numbered;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+ 		};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+index 7640b5158ff9d..c47d7d900f283 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+@@ -375,7 +375,6 @@ pio: pinctrl@1000b000 {
+ 			compatible = "mediatek,mt8173-pinctrl";
+ 			reg = <0 0x1000b000 0 0x1000>;
+ 			mediatek,pctl-regmap = <&syscfg_pctl_a>;
+-			pins-are-numbered;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8516.dtsi b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
+index d1b67c82d7617..118025263a29b 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8516.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8516.dtsi
+@@ -229,7 +229,6 @@ pio: pinctrl@1000b000 {
+ 			compatible = "mediatek,mt8516-pinctrl";
+ 			reg = <0 0x1000b000 0 0x1000>;
+ 			mediatek,pctl-regmap = <&syscfg_pctl>;
+-			pins-are-numbered;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
 -- 
 2.38.1
 
