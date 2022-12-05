@@ -2,411 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A294643864
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E050643865
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbiLEWuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 17:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
+        id S233619AbiLEWua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiLEWuC (ORCPT
+        with ESMTP id S233808AbiLEWuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 17:50:02 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9231AE7E;
-        Mon,  5 Dec 2022 14:50:01 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d3so12220885plr.10;
-        Mon, 05 Dec 2022 14:50:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mEJT63/ebEV8nE2k+296ikdpXGayJJGqm8kpIGaoaTA=;
-        b=oAqqU9j84c6YOx3mroEkMxM6YMetkUUWVzLw+JJcuGZLSLUYEdsbvd1w3iKEpBVWiZ
-         mgl/HD63Z32IrWobCtYjG5Ok9UMN/0bRMZEUyMAlMqOzHLFtO9eUzjIvtC5gv1+hiZot
-         jHqCdDQc/5ZAX7hPRXu5qCKkm9TEI7LQ9Qv4pznRp1MbR78kSLcpO/3Pw95uB1Y364PB
-         eG2LHF6TOHPXO/FNu5rejuBqofRzWv7wyE4lBEH5r8CHJ0Y5UiBcTihx4/S442tEV1w9
-         BQM7YKsymn6FuEYL3PYOvCdi7U3iF2lYvg/4dIbv5wNZkyS9mMlcNgqduvVUYx5WTEQB
-         AWnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mEJT63/ebEV8nE2k+296ikdpXGayJJGqm8kpIGaoaTA=;
-        b=zcBvaCPEze57dpBbNi2uxp0TGeUMMWyebYfRpUgu9Wai/XMeun06Ob3A7zBwC2c7zp
-         fOXU1iEpqXDsoZ7Z8RXQsSJtdNl1JGH2BQMXqEKg6iY3rHYO/2pzxOOc7v0XgnF1i7cs
-         YTCuY/5aWylU4/nm4zF7qpldO0+wqKP/1vkGFciZ/SnQWyCKfBdnbHueFW6rJSMtMtaO
-         QvUwmwHHY7SXILej+17+E4WmGgBWJ2h5sm96z33sNjYs4YWbzixipnvnk+Xsnf4kY6Jj
-         1+uhu4ezGYP7ujjD6H/OeYIvXNA1sMuX3EflejgFch3m/T1nTwW/UWa6n2LFQBVswD4V
-         D52A==
-X-Gm-Message-State: ANoB5pmtethR8o/usUmUF5WZYe46bc6ABsOcuWfB/mcdfFNZ+9kUBTwn
-        MuX1gp6XSEFDaziCTELKifk=
-X-Google-Smtp-Source: AA0mqf6x4qxGEGc0UvCWIP95rsbEVOo+BIKSMIFjrBQ7buDa06aNa7YKb34re86eUz50AIBJ/X3JNg==
-X-Received: by 2002:a17:90a:c70b:b0:219:c2f0:6483 with SMTP id o11-20020a17090ac70b00b00219c2f06483mr9962471pjt.153.1670280600940;
-        Mon, 05 Dec 2022 14:50:00 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id a6-20020aa794a6000000b0056bb6dc882fsm10382899pfl.130.2022.12.05.14.49.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 14:50:00 -0800 (PST)
-Date:   Mon, 5 Dec 2022 14:49:59 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v10 7/9] KVM: Update lpage info when private/shared
- memory are mixed
-Message-ID: <20221205224959.GA3632095@ls.amr.corp.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-8-chao.p.peng@linux.intel.com>
+        Mon, 5 Dec 2022 17:50:24 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F559FF0;
+        Mon,  5 Dec 2022 14:50:17 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQzJx3NtCz4xP9;
+        Tue,  6 Dec 2022 09:50:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1670280611;
+        bh=FNsUgJ4FY4mftzXnZsxTHw8V/RkJzfvhTQjoxw+A9u8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=sBNn/PWDAk5aGDHOQQNW1NEGjnuKVmBDghLBo+OS97RfnE9Y49J4BQvAzkLvi5XE6
+         UXOy6IZMJCfhCyRP9N5oFPnb4ooxy+m+MtJazKxH4va1fIFJUIeOTlNCNia4zPhQPy
+         nA69eP4m0wz6AbNVR697lJK821TSPTvzorKgRkEbsp4t95knr8VPw+18W+yZjjZJcS
+         ghNbSyKQqgiXnpEmoQd1NGQO+O6O4BIuoCxzJ5kopp0rnbhSDyXGM0FnZ6W1KXkkpS
+         8PeAEjbeRLgZ3ltZjP5BJNCDan2h2qYAEMT1gdFg5SUlRgccqy6Xf5dA0momIcWAvY
+         n/TfJUdI8GRLw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Michael Jeanson <mjeanson@efficios.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] powerpc/ftrace: fix syscall tracing on PPC64_ELF_ABI_V1
+In-Reply-To: <dfe0b9ba-828d-e1a5-f9a3-416c6b5b1cf3@efficios.com>
+References: <20221201161442.2127231-1-mjeanson@efficios.com>
+ <87pmcys9ae.fsf@mpe.ellerman.id.au>
+ <d5dd1491-5d59-7987-9b5b-83f5fb1b29ee@efficios.com>
+ <219580de-7473-f142-5ef2-1ed40e41d13d@csgroup.eu>
+ <323f83c7-38fe-8a12-d77a-0a7249aad316@efficios.com>
+ <dfe0b9ba-828d-e1a5-f9a3-416c6b5b1cf3@efficios.com>
+Date:   Tue, 06 Dec 2022 09:50:08 +1100
+Message-ID: <87mt81sbxb.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221202061347.1070246-8-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 02:13:45PM +0800,
-Chao Peng <chao.p.peng@linux.intel.com> wrote:
+Michael Jeanson <mjeanson@efficios.com> writes:
+> On 2022-12-05 15:11, Michael Jeanson wrote:
+>>>>> Michael Jeanson <mjeanson@efficios.com> writes:
+>>>>>> In v5.7 the powerpc syscall entry/exit logic was rewritten in C, on
+>>>>>> PPC64_ELF_ABI_V1 this resulted in the symbols in the syscall table
+>>>>>> changing from their dot prefixed variant to the non-prefixed ones.
+>>>>>>
+>>>>>> Since ftrace prefixes a dot to the syscall names when matching them to
+>>>>>> build its syscall event list, this resulted in no syscall events being
+>>>>>> available.
+>>>>>>
+>>>>>> Remove the PPC64_ELF_ABI_V1 specific version of
+>>>>>> arch_syscall_match_sym_name to have the same behavior across all powerpc
+>>>>>> variants.
+>>>>>
+>>>>> This doesn't seem to work for me.
+>>>>>
+>>>>> Event with it applied I still don't see anything in
+>>>>> /sys/kernel/debug/tracing/events/syscalls
+>>>>>
+>>>>> Did we break it in some other way recently?
+>>>>>
+>>>>> cheers
+>
+> I did some further testing, my config also enabled KALLSYMS_ALL, when I remove 
+> it there is indeed no syscall events.
 
-> A large page with mixed private/shared subpages can't be mapped as large
-> page since its sub private/shared pages are from different memory
-> backends and may also treated by architecture differently. When
-> private/shared memory are mixed in a large page, the current lpage_info
-> is not sufficient to decide whether the page can be mapped as large page
-> or not and additional private/shared mixed information is needed.
-> 
-> Tracking this 'mixed' information with the current 'count' like
-> disallow_lpage is a bit challenge so reserve a bit in 'disallow_lpage'
-> to indicate a large page has mixed private/share subpages and update
-> this 'mixed' bit whenever the memory attribute is changed between
-> private and shared.
-> 
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |   8 ++
->  arch/x86/kvm/mmu/mmu.c          | 134 +++++++++++++++++++++++++++++++-
->  arch/x86/kvm/x86.c              |   2 +
->  include/linux/kvm_host.h        |  19 +++++
->  virt/kvm/kvm_main.c             |   9 ++-
->  5 files changed, 169 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 283cbb83d6ae..7772ab37ac89 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -38,6 +38,7 @@
->  #include <asm/hyperv-tlfs.h>
->  
->  #define __KVM_HAVE_ARCH_VCPU_DEBUGFS
-> +#define __KVM_HAVE_ARCH_SET_MEMORY_ATTRIBUTES
->  
->  #define KVM_MAX_VCPUS 1024
->  
-> @@ -1011,6 +1012,13 @@ struct kvm_vcpu_arch {
->  #endif
->  };
->  
-> +/*
-> + * Use a bit in disallow_lpage to indicate private/shared pages mixed at the
-> + * level. The remaining bits are used as a reference count.
-> + */
-> +#define KVM_LPAGE_PRIVATE_SHARED_MIXED		(1U << 31)
-> +#define KVM_LPAGE_COUNT_MAX			((1U << 31) - 1)
-> +
->  struct kvm_lpage_info {
->  	int disallow_lpage;
->  };
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index e2c70b5afa3e..2190fd8c95c0 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -763,11 +763,16 @@ static void update_gfn_disallow_lpage_count(const struct kvm_memory_slot *slot,
->  {
->  	struct kvm_lpage_info *linfo;
->  	int i;
-> +	int disallow_count;
->  
->  	for (i = PG_LEVEL_2M; i <= KVM_MAX_HUGEPAGE_LEVEL; ++i) {
->  		linfo = lpage_info_slot(gfn, slot, i);
-> +
-> +		disallow_count = linfo->disallow_lpage & KVM_LPAGE_COUNT_MAX;
-> +		WARN_ON(disallow_count + count < 0 ||
-> +			disallow_count > KVM_LPAGE_COUNT_MAX - count);
-> +
->  		linfo->disallow_lpage += count;
-> -		WARN_ON(linfo->disallow_lpage < 0);
->  	}
->  }
->  
-> @@ -6986,3 +6991,130 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
->  	if (kvm->arch.nx_huge_page_recovery_thread)
->  		kthread_stop(kvm->arch.nx_huge_page_recovery_thread);
->  }
-> +
-> +static bool linfo_is_mixed(struct kvm_lpage_info *linfo)
-> +{
-> +	return linfo->disallow_lpage & KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> +}
-> +
-> +static void linfo_set_mixed(gfn_t gfn, struct kvm_memory_slot *slot,
-> +			    int level, bool mixed)
-> +{
-> +	struct kvm_lpage_info *linfo = lpage_info_slot(gfn, slot, level);
-> +
-> +	if (mixed)
-> +		linfo->disallow_lpage |= KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> +	else
-> +		linfo->disallow_lpage &= ~KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> +}
-> +
-> +static bool is_expected_attr_entry(void *entry, unsigned long expected_attrs)
-> +{
-> +	bool expect_private = expected_attrs & KVM_MEMORY_ATTRIBUTE_PRIVATE;
-> +
-> +	if (xa_to_value(entry) & KVM_MEMORY_ATTRIBUTE_PRIVATE) {
-> +		if (!expect_private)
-> +			return false;
-> +	} else if (expect_private)
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +static bool mem_attrs_mixed_2m(struct kvm *kvm, unsigned long attrs,
-> +			       gfn_t start, gfn_t end)
-> +{
-> +	XA_STATE(xas, &kvm->mem_attr_array, start);
-> +	gfn_t gfn = start;
-> +	void *entry;
-> +	bool mixed = false;
-> +
-> +	rcu_read_lock();
-> +	entry = xas_load(&xas);
-> +	while (gfn < end) {
-> +		if (xas_retry(&xas, entry))
-> +			continue;
-> +
-> +		KVM_BUG_ON(gfn != xas.xa_index, kvm);
-> +
-> +		if (!is_expected_attr_entry(entry, attrs)) {
-> +			mixed = true;
-> +			break;
-> +		}
-> +
-> +		entry = xas_next(&xas);
-> +		gfn++;
-> +	}
-> +
-> +	rcu_read_unlock();
-> +	return mixed;
-> +}
-> +
-> +static bool mem_attrs_mixed(struct kvm *kvm, struct kvm_memory_slot *slot,
-> +			    int level, unsigned long attrs,
-> +			    gfn_t start, gfn_t end)
-> +{
-> +	unsigned long gfn;
-> +
-> +	if (level == PG_LEVEL_2M)
-> +		return mem_attrs_mixed_2m(kvm, attrs, start, end);
-> +
-> +	for (gfn = start; gfn < end; gfn += KVM_PAGES_PER_HPAGE(level - 1))
-> +		if (linfo_is_mixed(lpage_info_slot(gfn, slot, level - 1)) ||
-> +		    !is_expected_attr_entry(xa_load(&kvm->mem_attr_array, gfn),
-> +					    attrs))
-> +			return true;
-> +	return false;
-> +}
-> +
-> +static void kvm_update_lpage_private_shared_mixed(struct kvm *kvm,
-> +						  struct kvm_memory_slot *slot,
-> +						  unsigned long attrs,
-> +						  gfn_t start, gfn_t end)
-> +{
-> +	unsigned long pages, mask;
-> +	gfn_t gfn, gfn_end, first, last;
-> +	int level;
-> +	bool mixed;
-> +
-> +	/*
-> +	 * The sequence matters here: we set the higher level basing on the
-> +	 * lower level's scanning result.
-> +	 */
-> +	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
-> +		pages = KVM_PAGES_PER_HPAGE(level);
-> +		mask = ~(pages - 1);
-> +		first = start & mask;
-> +		last = (end - 1) & mask;
-> +
-> +		/*
-> +		 * We only need to scan the head and tail page, for middle pages
-> +		 * we know they will not be mixed.
-> +		 */
-> +		gfn = max(first, slot->base_gfn);
-> +		gfn_end = min(first + pages, slot->base_gfn + slot->npages);
-> +		mixed = mem_attrs_mixed(kvm, slot, level, attrs, gfn, gfn_end);
-> +		linfo_set_mixed(gfn, slot, level, mixed);
-> +
-> +		if (first == last)
-> +			return;
+Aha, OK that explains it I guess.
 
+I was using ppc64_guest_defconfig which has ABI_V1 and FTRACE_SYSCALLS,
+but does not have KALLSYMS_ALL. So I guess there's some other bug
+lurking in there.
 
-continue.
-
-> +
-> +		for (gfn = first + pages; gfn < last; gfn += pages)
-> +			linfo_set_mixed(gfn, slot, level, false);
-> +
-> +		gfn = last;
-> +		gfn_end = min(last + pages, slot->base_gfn + slot->npages);
-
-if (gfn == gfn_end) continue.
-
-
-> +		mixed = mem_attrs_mixed(kvm, slot, level, attrs, gfn, gfn_end);
-> +		linfo_set_mixed(gfn, slot, level, mixed);
-> +	}
-> +}
-> +
-> +void kvm_arch_set_memory_attributes(struct kvm *kvm,
-> +				    struct kvm_memory_slot *slot,
-> +				    unsigned long attrs,
-> +				    gfn_t start, gfn_t end)
-> +{
-> +	if (kvm_slot_can_be_private(slot))
-> +		kvm_update_lpage_private_shared_mixed(kvm, slot, attrs,
-> +						      start, end);
-> +}
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 9a07380f8d3c..5aefcff614d2 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -12362,6 +12362,8 @@ static int kvm_alloc_memslot_metadata(struct kvm *kvm,
->  		if ((slot->base_gfn + npages) & (KVM_PAGES_PER_HPAGE(level) - 1))
->  			linfo[lpages - 1].disallow_lpage = 1;
->  		ugfn = slot->userspace_addr >> PAGE_SHIFT;
-> +		if (kvm_slot_can_be_private(slot))
-> +			ugfn |= slot->restricted_offset >> PAGE_SHIFT;
-
-Is there any alignment restriction? If no, It should be +=.
-In practice, alignment will hold though.
-
-Thanks,
-
->  		/*
->  		 * If the gfn and userspace address are not aligned wrt each
->  		 * other, disable large page support for this slot.
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 3331c0c92838..25099c94e770 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -592,6 +592,11 @@ struct kvm_memory_slot {
->  	struct restrictedmem_notifier notifier;
->  };
->  
-> +static inline bool kvm_slot_can_be_private(const struct kvm_memory_slot *slot)
-> +{
-> +	return slot && (slot->flags & KVM_MEM_PRIVATE);
-> +}
-> +
->  static inline bool kvm_slot_dirty_track_enabled(const struct kvm_memory_slot *slot)
->  {
->  	return slot->flags & KVM_MEM_LOG_DIRTY_PAGES;
-> @@ -2316,4 +2321,18 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
->  /* Max number of entries allowed for each kvm dirty ring */
->  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
->  
-> +#ifdef __KVM_HAVE_ARCH_SET_MEMORY_ATTRIBUTES
-> +void kvm_arch_set_memory_attributes(struct kvm *kvm,
-> +				    struct kvm_memory_slot *slot,
-> +				    unsigned long attrs,
-> +				    gfn_t start, gfn_t end);
-> +#else
-> +static inline void kvm_arch_set_memory_attributes(struct kvm *kvm,
-> +						  struct kvm_memory_slot *slot,
-> +						  unsigned long attrs,
-> +						  gfn_t start, gfn_t end)
-> +{
-> +}
-> +#endif /* __KVM_HAVE_ARCH_SET_MEMORY_ATTRIBUTES */
-> +
->  #endif
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 4e1e1e113bf0..e107afea32f0 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2354,7 +2354,8 @@ static u64 kvm_supported_mem_attributes(struct kvm *kvm)
->  	return 0;
->  }
->  
-> -static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
-> +static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end,
-> +				unsigned long attrs)
->  {
->  	struct kvm_gfn_range gfn_range;
->  	struct kvm_memory_slot *slot;
-> @@ -2378,6 +2379,10 @@ static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
->  			gfn_range.slot = slot;
->  
->  			r |= kvm_unmap_gfn_range(kvm, &gfn_range);
-> +
-> +			kvm_arch_set_memory_attributes(kvm, slot, attrs,
-> +						       gfn_range.start,
-> +						       gfn_range.end);
->  		}
->  	}
->  
-> @@ -2427,7 +2432,7 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->  		idx = srcu_read_lock(&kvm->srcu);
->  		KVM_MMU_LOCK(kvm);
->  		if (i > start)
-> -			kvm_unmap_mem_range(kvm, start, i);
-> +			kvm_unmap_mem_range(kvm, start, i, attrs->attributes);
->  		kvm_mmu_invalidate_end(kvm);
->  		KVM_MMU_UNLOCK(kvm);
->  		srcu_read_unlock(&kvm->srcu, idx);
-> -- 
-> 2.25.1
-> 
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+cheers
