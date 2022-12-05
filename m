@@ -2,97 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE506429CE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6536429CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbiLENpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S230012AbiLENpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiLENpD (ORCPT
+        with ESMTP id S231345AbiLENpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:45:03 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1AE1DF34
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:44:27 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id i15so7625029edf.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:44:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FocuR5aXn3z28LzYD0rCmA/t4By4lcIW0G986gs+i74=;
-        b=lom2Vi5sCCOveQ43uV5aFfivJ/lb9WyLmJlav5lPG/KsVYAvFFOfF0a+f384bJ/SSX
-         FQGlRV0un1Zk1lA4nK5+Sm456jetvJv9mh+b+AMB0Pmd8eNNI4qbSaVH/YF+1L294mQ/
-         kUH0vKsi4yFl2jNKB4oK1EJLgV8WDHTnUutR/1M7Nc9QcqwjF+a/gVURx5PO/VVYrycz
-         9Gu1UufFzhdUZY7GgsGR1zfpcD+Sd/0Zz5HdgfD/XnNlOPl9y7He/LFOI44vi4dlpqZ0
-         14lOEQOzgr8hfP9T+0VGyAfxZh4TnupGPPB7qPaEucbjtX/SPo9DlgpDyuvz01Na+7Vo
-         kyHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FocuR5aXn3z28LzYD0rCmA/t4By4lcIW0G986gs+i74=;
-        b=T9wSS/lORzJ+9e2lnXQP4FTLj745++xHD8/b8mE/5WFqtdXLrLfGPAOb/irqMbDOqW
-         2YD/Ju0J0w7sT24lXyCT53UeBrh6YV12ICv0iOVFuoIunNfe0vB2jGuFRFxVb0zRgbaQ
-         E8hV/4kpzG9W2OOaiMWjbuxRNxbRaO+CBLAYHqR2onNKGCwJuMDXHSyxzsI0o+QMUjy4
-         Y+ekDlUCPGR+KLw5m0nPCU19+vUplE4c7WDiSIGI7tZvhz6YtLwqcMwxV+h/Xhfy2vwv
-         8BgQ0/0YKCLHfQFXKAS6mzCBAiXOlGPBsNdH8jyWiI7fNXnoavjbThF0pIJ1kSokciQg
-         Gmcw==
-X-Gm-Message-State: ANoB5pk7h9/OjPcYDuM9OyR5DGuuCe/iZPYE0arbCjd+PStM3sHFMQx6
-        GzHCXGNun8zlGDLQxGjNM/ZFh08w96ooUwSURK4=
-X-Google-Smtp-Source: AA0mqf6rXwGEZm96RNanpLAvFcJyyL7ySNGfozuc6sJWvQzSEiMqynT4cj6fFHOu/ayNu3hbBF6xC3xV8LTluJmHHcU=
-X-Received: by 2002:aa7:c046:0:b0:461:54f0:f7dc with SMTP id
- k6-20020aa7c046000000b0046154f0f7dcmr73796847edo.117.1670247865719; Mon, 05
- Dec 2022 05:44:25 -0800 (PST)
+        Mon, 5 Dec 2022 08:45:05 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2AB1DA5C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:44:30 -0800 (PST)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NQlBN2C1hzFpdD;
+        Mon,  5 Dec 2022 21:43:40 +0800 (CST)
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Dec 2022 21:44:26 +0800
+Subject: Re: [PATCH v4 3/5] hisi_acc_vfio_pci: register debugfs for hisilicon
+ migration driver
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <alex.williamson@redhat.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <john.garry@huawei.com>,
+        <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>
+References: <20221202092625.35075-1-liulongfang@huawei.com>
+ <20221202092625.35075-4-liulongfang@huawei.com> <Y4oX4zC0eUbZsmMW@nvidia.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <6b3a0220-2a17-fabf-4aed-9ad91bf071f5@huawei.com>
+Date:   Mon, 5 Dec 2022 21:44:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Received: by 2002:a98:c58f:0:b0:190:b6df:8a2e with HTTP; Mon, 5 Dec 2022
- 05:44:24 -0800 (PST)
-Reply-To: khalil588577@gmail.com
-From:   Abdul Latif <anthoniushermanus1969@gmail.com>
-Date:   Mon, 5 Dec 2022 13:44:24 +0000
-Message-ID: <CAA=EwkKWy+dPBfVae3SE-zHSxsRdv5ySngdEyQJ7S4Z-E7gg4A@mail.gmail.com>
-Subject: GET BACK TO ME
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4863]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [anthoniushermanus1969[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [khalil588577[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [anthoniushermanus1969[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+In-Reply-To: <Y4oX4zC0eUbZsmMW@nvidia.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am Mr.Abdul Latif i have something to discuss with you
+On 2022/12/2 23:21, Jason Gunthorpe wrote:
+> On Fri, Dec 02, 2022 at 05:26:23PM +0800, Longfang Liu wrote:
+>> On the debugfs framework of VFIO, register the debug function
+>> for the live migration driver of the hisilicon accelerator device.
+>>
+>> On the basis of the original public debug function, a private debug
+>> function is added, so that the single-step debugging function
+>> during live migration can be realized.
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+>> ---
+>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 250 ++++++++++++++++++
+>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |   9 +
+>>  drivers/vfio/pci/vfio_pci_debugfs.c           |  10 +-
+>>  3 files changed, 268 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+>> index eb18edffbd5f..0f35cde6e8ec 100644
+>> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+>> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+>> @@ -15,6 +15,7 @@
+>>  #include <linux/anon_inodes.h>
+>>  
+>>  #include "hisi_acc_vfio_pci.h"
+>> +#include "../vfio_pci_debugfs.h"
+>>  
+>>  /* Return 0 on VM acc device ready, -ETIMEDOUT hardware timeout */
+>>  static int qm_wait_dev_not_ready(struct hisi_qm *qm)
+>> @@ -609,6 +610,18 @@ hisi_acc_check_int_state(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>>  	}
+>>  }
+>>  
+>> +static void hisi_acc_vf_migf_save(struct hisi_acc_vf_migration_file *src_migf,
+>> +	struct hisi_acc_vf_migration_file *dst_migf)
+>> +{
+>> +	if (!dst_migf)
+>> +		return;
+>> +
+>> +	dst_migf->disabled = false;
+>> +	dst_migf->total_length = src_migf->total_length;
+>> +	memcpy(&dst_migf->vf_data, &src_migf->vf_data,
+>> +		    sizeof(struct acc_vf_data));
+>> +}
+>> +
+>>  static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
+>>  {
+>>  	mutex_lock(&migf->lock);
+>> @@ -621,12 +634,16 @@ static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
+>>  static void hisi_acc_vf_disable_fds(struct hisi_acc_vf_core_device *hisi_acc_vdev)
+>>  {
+>>  	if (hisi_acc_vdev->resuming_migf) {
+>> +		hisi_acc_vf_migf_save(hisi_acc_vdev->resuming_migf,
+>> +						hisi_acc_vdev->debug_migf);
+>>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->resuming_migf);
+>>  		fput(hisi_acc_vdev->resuming_migf->filp);
+>>  		hisi_acc_vdev->resuming_migf = NULL;
+>>  	}
+>>  
+>>  	if (hisi_acc_vdev->saving_migf) {
+>> +		hisi_acc_vf_migf_save(hisi_acc_vdev->saving_migf,
+>> +						hisi_acc_vdev->debug_migf);
+>>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->saving_migf);
+>>  		fput(hisi_acc_vdev->saving_migf->filp);
+>>  		hisi_acc_vdev->saving_migf = NULL;
+>> @@ -1188,6 +1205,231 @@ static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int
+>>  	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
+>>  }
+>>  
+>> +static int hisi_acc_vf_debug_io(struct vfio_device *vdev)
+>> +{
+>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
+>> +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+>> +	struct device *dev = vdev->dev;
+>> +	u64 data;
+>> +	int ret;
+>> +
+>> +	data = readl(vf_qm->io_base + QM_MB_CMD_SEND_BASE);
+>> +	dev_info(dev, "debug mailbox val: 0x%llx\n", data);
+>> +
+>> +	ret = qm_wait_dev_not_ready(vf_qm);
+>> +	if (ret)
+>> +		dev_err(dev, "VF device not ready!\n");
+> 
+> debugfs has helpers for this, you should use debugfs_print_regs32()
+> 
+
+Yes, it is now possible to use this public interface in debugfs to
+implement this read register function.
+
+Thanks,
+Longfang.
+
+>> +static int hisi_acc_vf_debug_resume(struct vfio_device *vdev)
+>> +{
+>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
+>> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
+>> +	struct device *dev = vdev->dev;
+>> +	int ret;
+>> +
+>> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to save device data!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ret = vf_qm_check_match(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to match the VF!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ret = vf_qm_load_data(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to recover the VF!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	vf_qm_fun_reset(&hisi_acc_vdev->vf_qm);
+>> +	dev_info(dev, "successful to resume device data!\n");
+>> +
+>> +	return 0;
+>> +}
+> 
+> This doesn't seem like it belongs in debugfs at all, please just write
+> a test progam using normal vfio ioctls to do these steps and put in
+> the kernel selftests directory.
+> 
+>> +static int hisi_acc_vf_debug_save(struct vfio_device *vdev)
+>> +{
+>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
+>> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
+>> +	struct device *dev = vdev->dev;
+>> +	int ret;
+>> +
+>> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to save device data!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +	dev_info(dev, "successful to save device data!\n");
+>> +
+>> +	return 0;
+>> +}
+> 
+> Ditto, I don't think debugfs should be accessing the device state
+> independently of the main FSM.
+> 
+> Jason
+> .
+> 
