@@ -2,228 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF00C643768
+	by mail.lfdr.de (Postfix) with ESMTP id 13518643766
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiLEVwu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Dec 2022 16:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S233456AbiLEVwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234341AbiLEVwR (ORCPT
+        with ESMTP id S234347AbiLEVwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 16:52:17 -0500
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA738112F;
-        Mon,  5 Dec 2022 13:51:06 -0800 (PST)
-Received: by mail-vk1-f181.google.com with SMTP id 6so3892711vkz.0;
-        Mon, 05 Dec 2022 13:51:06 -0800 (PST)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC879FF8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 13:51:08 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id y6-20020a25b9c6000000b006c1c6161716so13602103ybj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 13:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aQehZmP5Z6GlJolWh2Uea8JAEAV0C8y97tfVfmjJ0OY=;
+        b=ClTZizZ7ekm3CbVJxv2iG9VWuHDNQkCOamEqTzIsn0RUmq/y/MR9k0MiapQK9PLL1w
+         arRm5vB+G4ub+ZST4MhS81DJQ1qTb/R2QI+kyEWd1aNvg17zTMbXP+9I2K6aBZWOw9Is
+         mSiKQctNOcGlNqYT8JnKCN0lTQ2adPAuE6eSFzg1THWJwQ3PPbygyUDo71uWwRUfIMP9
+         PDqaTlsv/I7BWObxWF8PrOxFsBpvhzjLy6CM9hl4SSIyuG3j1aQ1ajxP3xFS/6ofD6A3
+         rAwDudZRKClPQCQ2FltkCW85gsovTRT+OrNk4TP1RhE9ehNau1+N1axdg9+ZmLyW0AlW
+         GxFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mFdsLFzswFTMipJStVwFiJsipVOV+7MBmY79S1gML8g=;
-        b=pN3iVsdUe89rB2QlXMZtfkRVEpP/2SDisnAA6dUj78/RsyB2q5TvT2ck1KCZvusOFz
-         fVZ8EU1nSJcwfyV7GfnK+1sB1HYxBg/1BMgA6Kcl8VttbTDksyK8no0OttBbUM4rSJn9
-         hr5pV5R1JuKnd1pl0w/L1pp8kDDYbnfEG+CCBB8DIp2CLtXboOo5l129rvMLM+pjo70e
-         pwSi1kyXeL7jcASyS+kpjJqdFJZviMxanRiD5pfJ387pYMh2+95aHtTM1rHufr0U4sRQ
-         V4P9MM7meej3b+MyfKiLkFh/7KyJ8KU1XJtiOcWRlKiflwdf59ZVvemGOapS70s+BzDC
-         wi/Q==
-X-Gm-Message-State: ANoB5pmxVA90FWZy0SYOEADcj+8sKMKQLSKqjs2m947pv9wM4E44ESDb
-        DLJX5+YWCv9Cuxx2+xItXvAnc7NfCfCYWA==
-X-Google-Smtp-Source: AA0mqf4VsF/MmDcoGXN+DmdBHP+zaV9q/Nr0d2lwAXRkoUQj75D0qLdVJQsskplAGWImSoXFq9FpeQ==
-X-Received: by 2002:a05:6122:2a8:b0:3b8:b112:5eed with SMTP id 8-20020a05612202a800b003b8b1125eedmr37783652vkq.24.1670277065315;
-        Mon, 05 Dec 2022 13:51:05 -0800 (PST)
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
-        by smtp.gmail.com with ESMTPSA id j125-20020a1f5583000000b003a9993cdda6sm2367947vkb.54.2022.12.05.13.51.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 13:51:04 -0800 (PST)
-Received: by mail-vs1-f46.google.com with SMTP id 125so12422225vsi.9;
-        Mon, 05 Dec 2022 13:51:04 -0800 (PST)
-X-Received: by 2002:a05:6102:2221:b0:3b0:4a83:954d with SMTP id
- d1-20020a056102222100b003b04a83954dmr38222003vsb.62.1670277064155; Mon, 05
- Dec 2022 13:51:04 -0800 (PST)
-MIME-Version: 1.0
-References: <CAEdEoBYXHq9cCzsbMYTpG1B41Yz=-QAjFx7bJDOnPanN5Tmo7A@mail.gmail.com>
- <20221204175142.658d5c37.alex.williamson@redhat.com> <1e4d62cf-8893-0bff-51f5-5a2e419ed5a0@suse.de>
- <CAEdEoBYZa9cg0nq=P7EDsDS9m2EKYrd8M8ucqi8U0Csj0mtjDg@mail.gmail.com> <c1c8bfa5-8ba4-c365-1663-535f656ca353@suse.de>
-In-Reply-To: <c1c8bfa5-8ba4-c365-1663-535f656ca353@suse.de>
-From:   "mb@lab.how" <mb@lab.how>
-Date:   Mon, 5 Dec 2022 14:50:52 -0700
-X-Gmail-Original-Message-ID: <CAEdEoBaixaTEuNfQGv1das7TwHKV9MiRMKQM0kLspveJmipzyg@mail.gmail.com>
-Message-ID: <CAEdEoBaixaTEuNfQGv1das7TwHKV9MiRMKQM0kLspveJmipzyg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     kvm@vger.kernel.org, airlied@linux.ie,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        kraxel@redhat.com, lersek@redhat.com
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aQehZmP5Z6GlJolWh2Uea8JAEAV0C8y97tfVfmjJ0OY=;
+        b=XyAkTi3Iw45BBhTZ83NjS+FT6LBA8IVWNyRwoPpcf+TCfVsZG0VMh0AK8UY4cqwXr6
+         gp41AH+cPMLdZePi3+RFZIV6TaCn18C9WIvvfm1fqsHf1I/i2L0cuMfnDk9TWSSaK1qn
+         dCtLix14BRuFTH8nhHcG7qVOMscdMhXJqrTif6CbdOo+B8RNrOiQSPGZWonaOfSbxA4a
+         x8PeunanWPUp85BeHz8thGFFSPpWLLgTJI0cNuwmE4N8/JcACohdWH7keZVwCSd7E5ri
+         jauSmEqGX3LHgGiR7rN+BjsP87ESVbKo/jsA1zojfHW/oPEhHGWANIcrS3P3nQo4aa4A
+         p/zQ==
+X-Gm-Message-State: ANoB5plZcQ2csgMPa0R4d8rQkyMqnz0C2kDYZeNoWsSJmOFepyBg/Pll
+        I2VlfEdLjXfdn3l+eZNWU4ZdPJgrIQ==
+X-Google-Smtp-Source: AA0mqf5EPhG918+r/V18YIF64tI+ryCFH9xVMCeaNf3s5EzjGqdEnGAcztTgoLt61qwaOmybhhxj/ywaPg==
+X-Received: from rmoar.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:4259])
+ (user=rmoar job=sendgmr) by 2002:a25:a0c5:0:b0:6f7:e78d:cbee with SMTP id
+ i5-20020a25a0c5000000b006f7e78dcbeemr34248052ybm.30.1670277068093; Mon, 05
+ Dec 2022 13:51:08 -0800 (PST)
+Date:   Mon,  5 Dec 2022 21:50:56 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221205215058.143688-1-rmoar@google.com>
+Subject: [PATCH v2 0/2] kunit: add macro to allow conditionally exposing
+ static symbols to tests
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        dlatypov@google.com, john.johansen@canonical.com
+Cc:     skhan@linuxfoundation.org, tales.aparecida@gmail.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, apparmor@lists.ubuntu.com,
+        Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Currently in order to test a static function, tests must be included in the
+same translation unit as the function. However, this can cause issues with
+including implementation and test code in the same file. As an alternative,
+the first patch in this series creates a macro that will set a function to
+be static or not depending on whether CONFIG_KUNIT is enabled. This allows
+the function to be visible during testing and static otherwise.
 
-On Mon, Dec 5, 2022 at 3:11 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
->
-> Hi
->
-> Am 05.12.22 um 10:32 schrieb mb@lab.how:
-> > I have a rtx 3070 and a 3090, I am absolutely sure I am binding vfio-pci
-> > to the 3090 and not the 3070.
-> >
-> > I have bound the driver in two different ways, first by passing the IDs
-> > to the module and alternatively by manipulating the system interface and
-> > use the override (this is what I originally had to do when I used two
-> > 1080s, so I know it works).
-> >
-> > While the 3090 doesn't show a console, there's a remnant from the refund
-> > (and grub previously) there.
-> >
-> > The assessment Alex made previously, where
-> > aperture_remove_conflicting_pci_devices() is removing the driver (EFIFB)
-> > instead of the device seems correct, but it could also can be a quirky
-> > of how EFIFB is implemented. I recall reading a long time ago that EFIFB
-> > is a special device and once it detects changes it would simply give up.
-> > There was also no way to attach a device to it again as it depends on
-> > being preloaded outside the kernel; once something takes over the buffer
-> > reinitializing is "impossible". I never went deeper to try and
-> > understand it.
->
-> We recently reworked fbdev's interaction with the aperture helpers. [1]
-> All devices should now be removed iff the driver has been bound to it
-> (which should be the case here) The patches went into an v6.1-rc.
->
-> Could you try the most recent v6.1-rc and report if this fixes the problem?
+As an example, the current status quo to test static functions is:
 
-I just tried the latest one, v6.1-rc8, and I can see all the commits
-for the series you mentioned there.
+=== test.c ===
 
-The same freeze behavior happens when I load vfio-pci:
+static void test_case(struct kunit *test)
+{
+  KUNIT_EXPECT_EQ(test, my_func_to_test(), 2);
+}
 
-[ 6.525463] VFIO - User Level meta-driver version: 0.3
-[ 6.528231] Console: switching to colour dummy device 320x90
+Then the tests are included in the implementation file as a workaround to
+the issue of testing static functions:
 
---
-Carlos
+=== implementation.c ===
 
->
-> Best regards
-> Thomas
->
-> [1] https://patchwork.freedesktop.org/series/106040/
->
-> >
-> >
-> > On Mon, Dec 5, 2022, 2:00 AM Thomas Zimmermann <tzimmermann@suse.de
-> > <mailto:tzimmermann@suse.de>> wrote:
-> >
-> >     Hi
-> >
-> >     Am 05.12.22 um 01:51 schrieb Alex Williamson:
-> >      > On Sat, 3 Dec 2022 17:12:38 -0700
-> >      > "mb@lab.how" <mb@lab.how> wrote:
-> >      >
-> >      >> Hi,
-> >      >>
-> >      >> I hope it is ok to reply to this old thread.
-> >      >
-> >      > It is, but the only relic of the thread is the subject.  For
-> >     reference,
-> >      > the latest version of this posted is here:
-> >      >
-> >      >
-> >     https://lore.kernel.org/all/20220622140134.12763-4-tzimmermann@suse.de/ <https://lore.kernel.org/all/20220622140134.12763-4-tzimmermann@suse.de/>
-> >      >
-> >      > Which is committed as:
-> >      >
-> >      > d17378062079 ("vfio/pci: Remove console drivers")
-> >      >
-> >      >> Unfortunately, I found a
-> >      >> problem only now after upgrading to 6.0.
-> >      >>
-> >      >> My setup has multiple GPUs (2), and I depend on EFIFB to have a
-> >     working console.
-> >
-> >     Which GPUs do you have?
-> >
-> >      >> pre-patch behavior, when I bind the vfio-pci to my secondary GPU
-> >     both
-> >      >> the passthrough and the EFIFB keep working fine.
-> >      >> post-patch behavior, when I bind the vfio-pci to the secondary GPU,
-> >      >> the EFIFB disappears from the system, binding the console to the
-> >      >> "dummy console".
-> >
-> >     The efifb would likely use the first GPU. And vfio-pci should only
-> >     remove the generic driver from the second device. Are you sure that
-> >     you're not somehow using the first GPU with vfio-pci.
-> >
-> >      >> Whenever you try to access the terminal, you have the screen
-> >     stuck in
-> >      >> whatever was the last buffer content, which gives the impression of
-> >      >> "freezing," but I can still type.
-> >      >> Everything else works, including the passthrough.
-> >      >
-> >      > This sounds like the call to
-> >     aperture_remove_conflicting_pci_devices()
-> >      > is removing the conflicting driver itself rather than removing the
-> >      > device from the driver.  Is it not possible to unbind the GPU from
-> >      > efifb before binding the GPU to vfio-pci to effectively nullify the
-> >      > added call?
-> >      >
-> >      >> I can only think about a few options:
-> >      >>
-> >      >> - Is there a way to have EFIFB show up again? After all it looks
-> >     like
-> >      >> the kernel has just abandoned it, but the buffer is still there. I
-> >      >> can't find a single message about the secondary card and EFIFB in
-> >      >> dmesg, but there's a message for the primary card and EFIFB.
-> >      >> - Can we have a boolean controlling the behavior of vfio-pci
-> >      >> altogether or at least controlling the behavior of vfio-pci for that
-> >      >> specific ID? I know there's already some option for vfio-pci and VGA
-> >      >> cards, would it be appropriate to attach this behavior to that
-> >     option?
-> >      >
-> >      > I suppose we could have an opt-out module option on vfio-pci to skip
-> >      > the above call, but clearly it would be better if things worked by
-> >      > default.  We cannot make full use of GPUs with vfio-pci if they're
-> >      > still in use by host console drivers.  The intention was certainly to
-> >      > unbind the device from any low level drivers rather than disable
-> >     use of
-> >      > a console driver entirely.  DRM/GPU folks, is that possibly an
-> >      > interface we could implement?  Thanks,
-> >
-> >     When vfio-pci gives the GPU device to the guest, which driver driver is
-> >     bound to it?
-> >
-> >     Best regards
-> >     Thomas
-> >
-> >      >
-> >      > Alex
-> >      >
-> >
-> >     --
-> >     Thomas Zimmermann
-> >     Graphics Driver Developer
-> >     SUSE Software Solutions Germany GmbH
-> >     Maxfeldstr. 5, 90409 Nürnberg, Germany
-> >     (HRB 36809, AG Nürnberg)
-> >     Geschäftsführer: Ivo Totev
-> >
->
-> --
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
+static int my_func_to_test() {...}
+...
+#include "test.c"
+
+Instead, the function could be defined with this new macro:
+
+=== implementation.c ===
+
+VISIBLE_IF_KUNIT int my_func_to_test() {...}
+
+The first patch also creates a macro that will export a symbol into a kunit
+testing namespace only if CONFIG_KUNIT is enabled. This follows the logic
+above and allows symbols to be conditionally exported based on the testing
+status.
+
+The second patch in the series updates the policy_unpack test in AppArmor
+to show an example of how to use both of these macros in order to address
+the issue of testing static functions.
+
+Thanks!
+-Rae
+
+Changes since v1:
+ - Changed the namespace of exported symbols for the apparmor
+   policy_unpack_test by adding the aa_ prefix.
+ - Separated the documentation comments for macros in
+   include/kunit/visibility.h.
+ - Changed copyright date and author for include/kunit/visibility.h.
+
+Rae Moar (2):
+  kunit: add macro to allow conditionally exposing static symbols to
+    tests
+  apparmor: test: make static symbols visible during kunit testing
+
+ include/kunit/visibility.h                |  33 +++
+ security/apparmor/Kconfig                 |   4 +-
+ security/apparmor/Makefile                |   2 +
+ security/apparmor/include/policy_unpack.h |  50 +++++
+ security/apparmor/policy_unpack.c         | 238 ++++++++++------------
+ security/apparmor/policy_unpack_test.c    |  69 ++++---
+ 6 files changed, 228 insertions(+), 168 deletions(-)
+ create mode 100644 include/kunit/visibility.h
+
+
+base-commit: 0f08f3e2a0186dfb8e33cb46105228eb18448a0e
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
