@@ -2,168 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B18D642BD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C40642BDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiLEPcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S232920AbiLEPcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbiLEPcB (ORCPT
+        with ESMTP id S232841AbiLEPc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:32:01 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C035225C9;
-        Mon,  5 Dec 2022 07:31:15 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1p2DQy-0004NP-Vn; Mon, 05 Dec 2022 16:31:09 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Jisheng Zhang <jszhang@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
-Date:   Mon, 05 Dec 2022 16:31:08 +0100
-Message-ID: <4764569.GXAFRqVoOG@diego>
-In-Reply-To: <20221204174632.3677-2-jszhang@kernel.org>
-References: <20221204174632.3677-1-jszhang@kernel.org> <20221204174632.3677-2-jszhang@kernel.org>
+        Mon, 5 Dec 2022 10:32:26 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94878646D;
+        Mon,  5 Dec 2022 07:31:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=yaI4qE0EV8RXXGz7LMptqyqSzHKyYM1QhdDb6i2151E=; b=I2P4WMW3lDlAXK7/VB+ngPl/C1
+        v7Wrd16l2wTC92m+PPZIcceAMUEpjEZyby6/5o/By74NuDOBtDiEBuIY4Zj7qS2mGXU50SzOxgTL6
+        L5bvXnSY+o4jng8vj0vlnU0TuF0X21eMBwDATwzFvktUZMM+N0Yw5DxHkzdfdslCtY/I=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2DR1-004PxO-Ez; Mon, 05 Dec 2022 16:31:11 +0100
+Date:   Mon, 5 Dec 2022 16:31:11 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 1/4] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y44Ov+Z7fXukxQNu@lunn.ch>
+References: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
+ <20221205060057.GA10297@pengutronix.de>
+ <Y43CDqAjvlAfLK1v@gvm01>
+ <20221205102209.GA17619@pengutronix.de>
+ <Y43+z+xJxZiSJpRm@gvm01>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y43+z+xJxZiSJpRm@gvm01>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 4. Dezember 2022, 18:46:20 CET schrieb Jisheng Zhang:
-> Alternatives live in a different section, so offsets used by jal
-> instruction will point to wrong locations after the patch got applied.
-> 
-> Similar to arm64, adjust the location to consider that offset.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/alternative.h |  2 ++
->  arch/riscv/kernel/alternative.c      | 38 ++++++++++++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c       |  3 +++
->  3 files changed, 43 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> index c58ec3cc4bc3..33eae9541684 100644
-> --- a/arch/riscv/include/asm/alternative.h
-> +++ b/arch/riscv/include/asm/alternative.h
-> @@ -29,6 +29,8 @@ void apply_module_alternatives(void *start, size_t length);
->  
->  void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
->  				      int patch_offset);
-> +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> +			       int patch_offset);
->  
->  struct alt_entry {
->  	void *old_ptr;		 /* address of original instruciton or data  */
-> diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-> index 292cc42dc3be..9d88375624b5 100644
-> --- a/arch/riscv/kernel/alternative.c
-> +++ b/arch/riscv/kernel/alternative.c
-> @@ -125,6 +125,44 @@ void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
->  	}
->  }
->  
-> +#define to_jal_imm(value)						\
-> +	(((value & (RV_J_IMM_10_1_MASK << RV_J_IMM_10_1_OFF)) << RV_I_IMM_11_0_OPOFF) | \
-> +	 ((value & (RV_J_IMM_11_MASK << RV_J_IMM_11_OFF)) << RV_J_IMM_11_OPOFF) | \
-> +	 ((value & (RV_J_IMM_19_12_OPOFF << RV_J_IMM_19_12_OFF)) << RV_J_IMM_19_12_OPOFF) | \
-> +	 ((value & (1 << RV_J_IMM_SIGN_OFF)) << RV_J_IMM_SIGN_OPOFF))
+> +PLCA_GET_CFG
+> +=======
+
+You probably get a warning from this. The === needs to be as long as
+what it underlines.
+
 > +
-> +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> +			       int patch_offset)
-> +{
-
-I think we might want to unfiy this into a common function like
-
-	riscv_alternative_fix_offsets(...)
-
-so that we only run through the code block once
-
-	for (i = 0; i < num_instr; i++) {
-		if (riscv_insn_is_auipc_jalr(inst1, inst2)) {
-			riscv_alternative_fix_auipc_jalr(...)
-			continue;
-		}
-
-		if (riscv_insn_is_jal(inst)) {
-			riscv_alternative_fix_jal(...)
-			continue;
-		}
-	}
-
-This would also remove the need from calling multiple functions
-after patching alternatives.
-
-Thoughts?
-
-
-Heiko
-
-> +	int num_instr = len / sizeof(u32);
-> +	unsigned int call;
-> +	int i;
-> +	int imm;
+> +Gets PLCA RS attributes.
 > +
-> +	for (i = 0; i < num_instr; i++) {
-> +		u32 inst = riscv_instruction_at(alt_ptr, i);
+> +Request contents:
 > +
-> +		if (!riscv_insn_is_jal(inst))
-> +			continue;
+> +  =====================================  ======  ==========================
+> +  ``ETHTOOL_A_PLCA_HEADER``              nested  request header
+> +  =====================================  ======  ==========================
 > +
-> +		/* get and adjust new target address */
-> +		imm = RV_EXTRACT_JTYPE_IMM(inst);
-> +		imm -= patch_offset;
+> +Kernel response contents:
 > +
-> +		/* pick the original jal */
-> +		call = inst;
-> +
-> +		/* drop the old IMMs, all jal imm bits sit at 31:12 */
-> +		call &= ~GENMASK(31, 12);
-> +
-> +		/* add the adapted IMMs */
-> +		call |= to_jal_imm(imm);
-> +
-> +		/* patch the call place again */
-> +		patch_text_nosync(alt_ptr + i * sizeof(u32), &call, 4);
-> +	}
-> +}
-> +
->  /*
->   * This is called very early in the boot process (directly after we run
->   * a feature detect on the boot CPU). No need to worry about other CPUs
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index ba62a4ff5ccd..c743f0adc794 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -324,6 +324,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
->  			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
->  							 alt->alt_len,
->  							 alt->old_ptr - alt->alt_ptr);
-> +			riscv_alternative_fix_jal(alt->old_ptr,
-> +						  alt->alt_len,
-> +						  alt->old_ptr - alt->alt_ptr);
->  		}
->  	}
->  }
-> 
+> +  ======================================  ======  =============================
+> +  ``ETHTOOL_A_PLCA_HEADER``               nested  reply header
+> +  ``ETHTOOL_A_PLCA_VERSION``              u16     Supported PLCA management
+> +                                                  interface standard/version
+> +  ``ETHTOOL_A_PLCA_ENABLED``              u8      PLCA Admin State
+> +  ``ETHTOOL_A_PLCA_NODE_ID``              u8      PLCA unique local node ID
+> +  ``ETHTOOL_A_PLCA_NODE_CNT``             u8      Number of PLCA nodes on the
+> +                                                  netkork, including the
+> +						  coordinator
 
+tabs vs spaces. The indentation needs to be correct here or you will
+get warnings when the documentation is built.
 
+You can build the documentation with
 
+make htmldocs
 
+Not looked at the actual contents yet, just the markup.
+
+    Andrew
