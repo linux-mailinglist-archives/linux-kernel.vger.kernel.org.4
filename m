@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2574464219F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 03:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F2D64217C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 03:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiLECji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 21:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S231185AbiLECWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 21:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiLECjh (ORCPT
+        with ESMTP id S230470AbiLECWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 21:39:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55572FCC4
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 18:39:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E329860EF7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:39:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AD4C433C1;
-        Mon,  5 Dec 2022 02:39:34 +0000 (UTC)
-Date:   Sun, 4 Dec 2022 21:39:29 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] trace: Fix some checker warnings
-Message-ID: <20221204213929.2edc730b@rorschach.local.home>
-In-Reply-To: <20221205112236.f99c6104e988aa4f3dd89cd0@kernel.org>
-References: <166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk>
-        <202212022034.OqPXTS9u-lkp@intel.com>
-        <20221205112236.f99c6104e988aa4f3dd89cd0@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 4 Dec 2022 21:22:44 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C71010D5
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 18:22:42 -0800 (PST)
+Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NQS3j1s7BzRpj3;
+        Mon,  5 Dec 2022 10:21:53 +0800 (CST)
+Received: from zelda.huawei.com (10.175.103.14) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Dec 2022 10:22:39 +0800
+From:   Wang Jingjin <wangjingjin1@huawei.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <heiko@sntech.de>, <sugar.zhang@rock-chips.com>,
+        <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <wangjingjin1@huawei.com>
+Subject: [PATCH] ASoC: rockchip: spdif: Add missing clk_disable_unprepare() in rockchip_pdm_runtime_resume()
+Date:   Mon, 5 Dec 2022 10:43:17 +0800
+Message-ID: <20221205024317.2422223-1-wangjingjin1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.14]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Dec 2022 11:22:36 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+The clk_disable_unprepare() should be called in the error handling of
+rockchip_pdm_runtime_resume().
 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 5cfc95a52bc3..14f18edfe5bc 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -6572,7 +6572,8 @@ tracing_thresh_write(struct file *filp, const char __user *ubuf,
->  	return ret;
->  }
->  
-> -#if defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER)
-> +#if defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER) \
-> +	|| defined(CONFIG_OSNOISE_TRACER)
->  
+Fixes: fc05a5b22253 ("ASoC: rockchip: add support for pdm controller")
+Signed-off-by: Wang Jingjin <wangjingjin1@huawei.com>
+---
+ sound/soc/rockchip/rockchip_pdm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-When it gets this much, we need to put it into the trace.h header and
-define it. Actually, we have something that handles this too.
+diff --git a/sound/soc/rockchip/rockchip_pdm.c b/sound/soc/rockchip/rockchip_pdm.c
+index a7549f827235..5b1e47bdc376 100644
+--- a/sound/soc/rockchip/rockchip_pdm.c
++++ b/sound/soc/rockchip/rockchip_pdm.c
+@@ -431,6 +431,7 @@ static int rockchip_pdm_runtime_resume(struct device *dev)
 
-#if (defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER) \
-        || defined(CONFIG_OSNOISE_TRACER)) && defined(CONFIG_FSNOTIFY)
-#define LATENCY_FS_NOTIFY
-#endif
+ 	ret = clk_prepare_enable(pdm->hclk);
+ 	if (ret) {
++		clk_disable_unprepare(pdm->clk);
+ 		dev_err(pdm->dev, "hclock enable failed %d\n", ret);
+ 		return ret;
+ 	}
+--
+2.25.1
 
-
-We can add:
-
- #if (defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER) \
-	|| defined(CONFIG_OSNOISE_TRACER)) && defined(CONFIG_FSNOTIFY)
- #define LATENCY_FS_NOTIFY
-+#define USES_MAX_TRACE
- #endif
-
-And use that instead.
-
--- Steve
