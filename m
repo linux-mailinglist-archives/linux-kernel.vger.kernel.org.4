@@ -2,181 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C430642AC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F63642ACB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiLEO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 09:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        id S232023AbiLEO6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 09:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiLEO5N (ORCPT
+        with ESMTP id S231797AbiLEO6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 09:57:13 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDF71CFD5
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:57:12 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id qk9so10680958ejc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 06:57:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/YavQRn8ABNnl6VLXMYcIqKWjcCYjTfj3xzmJuUcqTc=;
-        b=bHkTvgpAVQT205acFfyNmm1rOtDvyKoT0fEnfw3WP4KnXTzCnwSOalRlsqnWkr2D6n
-         YceU4iZ3HR4uOrb/DqUtQkDpgBxSA236XsCjo6IG1n4k7PR1+g9yTIevGx+O1H7G2YuG
-         bBV/nB6s7FsazZnXq1wngyGmw9eIgjL6++jHhz6iwVQq/+0PixDk/7NpJg0aGTbe67il
-         CZiWHSCPQA1oAEpvwZ2JaoO0lajrqbZj5Vs43Xrg90TqF58w5WNpnjMXCnF9kH+XMMK2
-         /Qx7FTqAcYs30IaHEFtWliEtZxmjth3Pi8j4RbxFw4eQxKDfe3+iuc2WGcHxa32Nfb1b
-         Qceg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/YavQRn8ABNnl6VLXMYcIqKWjcCYjTfj3xzmJuUcqTc=;
-        b=CKnVnldwytX2RmhFMBn/9wSiGAf+QkavPc55eQQJEH06EFFzX7k3itmnbZqZa7TJcp
-         sO8G2udQpBHriWUXPtknfnUVf0MjLHhUdFiwzd/XKkvR6FjB290zCK3Hs4R81b0rL8G+
-         FVu9oOmzNQsD/eY1FrhQk/Jk1PMJaMapFGDINokPgwBO+zhqYQnERDiKLEjEqTM2cQyu
-         ONGaWK/AMMWVsQ1mAldsshPB9ntDpo7kG7ZoggapAXTU4WFSnBmSL0oeiC72N6IB6KOu
-         FJHMZOiTTeo4vLoasgAck5ZjBzqG7uXP8h/ZxESdss7LgxTFpu37qzncqpB/ziY1+oAM
-         tFLA==
-X-Gm-Message-State: ANoB5pmgoBcvkXoq1anI3UAztYqaNo+kAwdoKXuei84wJNu6RAhBZMkD
-        NdwBaAugUwcbPAp1Mg+T0XCgag==
-X-Google-Smtp-Source: AA0mqf4Qe5/y8pAKeMPpbuflQ6QNpod32NOLuouIvb3mtnoBiuFhmp9x7E1KYexhFn8/9rItbper9w==
-X-Received: by 2002:a17:906:a0d7:b0:7b2:7af0:c231 with SMTP id bh23-20020a170906a0d700b007b27af0c231mr27245234ejb.240.1670252231113;
-        Mon, 05 Dec 2022 06:57:11 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
-        by smtp.gmail.com with ESMTPSA id kw26-20020a170907771a00b00783f32d7eaesm6264724ejc.164.2022.12.05.06.57.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 06:57:10 -0800 (PST)
-Date:   Mon, 5 Dec 2022 15:57:10 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
-Message-ID: <20221205145710.xzb4prrc44gv7mwm@kamzik>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-2-jszhang@kernel.org>
+        Mon, 5 Dec 2022 09:58:01 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4665363D4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:57:59 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B54uh1Z015435;
+        Mon, 5 Dec 2022 08:57:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=c7x/qQVbB5y+L+elrUKFfYzMACzD6HbBUpL317TwXgQ=;
+ b=MSnMzBqCbWx1sWMn05rAdoeNlhDXqpHquTzf3bLr+aPvqjwcSCH8Z5Pg4k4Ojve/wiiu
+ tFNE8bLvP1wu5aXmvFxb0Y1fqBEaINtoDnyMdPip5/nM+ljvNKHRKfBnx4ODdqSO4kBg
+ kAcCg8cgydPzhS8EOZ0ZP4pFPaAKD4hKUmuauB4aOL1DhZzHHA5HCEzveC4qASi7u/nD
+ QbKVFsT7+AY6YpOJ+QOgWSbM0mH2footCrcuZuYhfEqXnmGRAq2fpp3tBYnlR0DtSq6l
+ UV49Ns5Nv03kFeOLZ5vVDURnDsLHibl11mXuidBNu8hd+QaA+Sg75XChQCRZSzb3VQsP CA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3m83rt9vr9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Dec 2022 08:57:15 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 5 Dec
+ 2022 08:57:14 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Mon, 5 Dec 2022 08:57:14 -0600
+Received: from legion.ad.cirrus.com (londmb751293.ad.cirrus.com [198.90.238.109])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CCF48B12;
+        Mon,  5 Dec 2022 14:57:13 +0000 (UTC)
+From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ALSA: hda/cirrus: Add extra 10 ms delay to allow PLL settle and lock.
+Date:   Mon, 5 Dec 2022 14:57:13 +0000
+Message-ID: <20221205145713.23852-1-vitalyr@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221204174632.3677-2-jszhang@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: fyBzRj7SDDWKls60G-AfQoMavE1CEUKO
+X-Proofpoint-GUID: fyBzRj7SDDWKls60G-AfQoMavE1CEUKO
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 01:46:20AM +0800, Jisheng Zhang wrote:
-> Alternatives live in a different section, so offsets used by jal
-> instruction will point to wrong locations after the patch got applied.
-> 
-> Similar to arm64, adjust the location to consider that offset.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/alternative.h |  2 ++
->  arch/riscv/kernel/alternative.c      | 38 ++++++++++++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c       |  3 +++
->  3 files changed, 43 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> index c58ec3cc4bc3..33eae9541684 100644
-> --- a/arch/riscv/include/asm/alternative.h
-> +++ b/arch/riscv/include/asm/alternative.h
-> @@ -29,6 +29,8 @@ void apply_module_alternatives(void *start, size_t length);
->  
->  void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
->  				      int patch_offset);
-> +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> +			       int patch_offset);
->  
->  struct alt_entry {
->  	void *old_ptr;		 /* address of original instruciton or data  */
-> diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-> index 292cc42dc3be..9d88375624b5 100644
-> --- a/arch/riscv/kernel/alternative.c
-> +++ b/arch/riscv/kernel/alternative.c
-> @@ -125,6 +125,44 @@ void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
->  	}
->  }
->  
-> +#define to_jal_imm(value)						\
-> +	(((value & (RV_J_IMM_10_1_MASK << RV_J_IMM_10_1_OFF)) << RV_I_IMM_11_0_OPOFF) | \
-                                                                 ^ RV_J_IMM_10_1_OPOFF
+New HW platforms with multiple CS42L42 parts, faster CPU and i2c
+requre some extra delay to allow PLL to settle and lock. Adding
+extra 10ms delay.
 
-> +	 ((value & (RV_J_IMM_11_MASK << RV_J_IMM_11_OFF)) << RV_J_IMM_11_OPOFF) | \
-> +	 ((value & (RV_J_IMM_19_12_OPOFF << RV_J_IMM_19_12_OFF)) << RV_J_IMM_19_12_OPOFF) | \
-> +	 ((value & (1 << RV_J_IMM_SIGN_OFF)) << RV_J_IMM_SIGN_OPOFF))
+Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+---
+ sound/pci/hda/patch_cs8409.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Should put () around value
+diff --git a/sound/pci/hda/patch_cs8409.c b/sound/pci/hda/patch_cs8409.c
+index 754aa8ddd2e4..0ba1fbcbb21e 100644
+--- a/sound/pci/hda/patch_cs8409.c
++++ b/sound/pci/hda/patch_cs8409.c
+@@ -888,7 +888,7 @@ static void cs42l42_resume(struct sub_codec *cs42l42)
+ 
+ 	/* Initialize CS42L42 companion codec */
+ 	cs8409_i2c_bulk_write(cs42l42, cs42l42->init_seq, cs42l42->init_seq_num);
+-	usleep_range(20000, 25000);
++	usleep_range(30000, 35000);
+ 
+ 	/* Clear interrupts, by reading interrupt status registers */
+ 	cs8409_i2c_bulk_read(cs42l42, irq_regs, ARRAY_SIZE(irq_regs));
+-- 
+2.34.1
 
-> +
-> +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> +			       int patch_offset)
-> +{
-> +	int num_instr = len / sizeof(u32);
-> +	unsigned int call;
-> +	int i;
-> +	int imm;
-> +
-> +	for (i = 0; i < num_instr; i++) {
-> +		u32 inst = riscv_instruction_at(alt_ptr, i);
-> +
-> +		if (!riscv_insn_is_jal(inst))
-> +			continue;
-> +
-> +		/* get and adjust new target address */
-> +		imm = RV_EXTRACT_JTYPE_IMM(inst);
-> +		imm -= patch_offset;
-> +
-> +		/* pick the original jal */
-> +		call = inst;
-> +
-> +		/* drop the old IMMs, all jal imm bits sit at 31:12 */
-> +		call &= ~GENMASK(31, 12);
-
-It'd be nice if this had a define.
-
-> +
-> +		/* add the adapted IMMs */
-> +		call |= to_jal_imm(imm);
-> +
-> +		/* patch the call place again */
-> +		patch_text_nosync(alt_ptr + i * sizeof(u32), &call, 4);
-> +	}
-> +}
-> +
->  /*
->   * This is called very early in the boot process (directly after we run
->   * a feature detect on the boot CPU). No need to worry about other CPUs
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index ba62a4ff5ccd..c743f0adc794 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -324,6 +324,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
->  			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
->  							 alt->alt_len,
->  							 alt->old_ptr - alt->alt_ptr);
-> +			riscv_alternative_fix_jal(alt->old_ptr,
-> +						  alt->alt_len,
-> +						  alt->old_ptr - alt->alt_ptr);
->  		}
->  	}
->  }
-> -- 
-> 2.37.2
->
-
-Thanks,
-drew
