@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE41C642EB9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFC0642EC1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiLER3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 12:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S232156AbiLER3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 12:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiLER3F (ORCPT
+        with ESMTP id S232397AbiLER3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 12:29:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BE7AE51;
-        Mon,  5 Dec 2022 09:29:04 -0800 (PST)
+        Mon, 5 Dec 2022 12:29:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8319A2229B;
+        Mon,  5 Dec 2022 09:29:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 554C9611E8;
-        Mon,  5 Dec 2022 17:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E8AC433C1;
-        Mon,  5 Dec 2022 17:29:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37124B8119F;
+        Mon,  5 Dec 2022 17:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66111C43470;
+        Mon,  5 Dec 2022 17:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670261343;
-        bh=9o+sSMrq9KvnPjqoO20e62XLRYjEsVjPF5T8c8sl2AI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=egNrSPlAOL93I5JG/09Vuxnvw/YqWVYDq/oPwabaIgp8v+aTD1IqwlYTLtPZMzne2
-         Nz4Xg82e6fiCIDhnCRhW01AVV3+gFdLB6z6FmKanPng7yMX794lup0NKNGVpUWOjnG
-         l4zB8nYBmiNSzui2ZaMkE93Uw2FPmhFIb9tDVMNw7DrQh7lmtJBvHrSdF3X0ZfCOtE
-         Z7ou2C57xHlPaspol+EeeAqaH1huH46yIOH6E7VQPq3AwYp67Y0Oza6TdTnNX667WK
-         Lim3mOueKiIrh1mzRIk6i5U92ROURHdrob/POMNcYROTlgCE5qeXnh6ziJSAaA9X6w
-         +CvREZ0dKxe4g==
+        s=k20201202; t=1670261363;
+        bh=9Bv5VAebQCBrUk+ze61/ojBiqIgNhZa2+JQ5Gajt0wY=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=P7mSE3arucma5t0M0p6afPox4bqYjk/9lMR/+AFc3hMkwfv+9p/pBufC9gQxcEOOY
+         P5B8sjTHRE7MinEWglzwsPwU0Mm0rv1srFss1Qd0H7d90Sd5cXjTKmFOu9ASodoREl
+         bzEPRRMkps5Q+4XbB/Ze7yXSh72x94v0INK5KKFHDMBJDROs3Z1/Y+HUclqxHkHLOL
+         usTipOaJhVd3LT3q7yukczO75+P1HoT4qt2OK05K19WVA+4ud1yiN0OhThsBhe8u0U
+         8xsQ43SNuWF1fhTReWDC7umuRBhYjWZJ7hn+D1XraWjTgcSoEiUQSrYZr6dUuvanwb
+         XDljV16IB/g9A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>, Takashi Iwai <tiwai@suse.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        Oder Chiou <oder_chiou@realtek.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-In-Reply-To: <20221202171450.1815346-1-colin.i.king@gmail.com>
-References: <20221202171450.1815346-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH][next] ASoC: rt715: Make read-only arrays capture_reg_H and capture_reg_L static const
-Message-Id: <167026134182.536379.4326237833077091583.b4-ty@kernel.org>
-Date:   Mon, 05 Dec 2022 17:29:01 +0000
+To:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+In-Reply-To: <20221203162144.99225-1-krzysztof.kozlowski@linaro.org>
+References: <20221203162144.99225-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: Drop Jee Heng Sia
+Message-Id: <167026136113.536379.13410215961783875750.b4-ty@kernel.org>
+Date:   Mon, 05 Dec 2022 17:29:21 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,10 +61,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Dec 2022 17:14:50 +0000, Colin Ian King wrote:
-> Don't populate the read-only arrays capture_reg_H and capture_reg_L
-> on the stack but instead make them static const. Also makes the
-> object code a little smaller.
+On Sat, 3 Dec 2022 17:21:43 +0100, Krzysztof Kozlowski wrote:
+> Emails to Jee Heng Sia bounce ("550 #5.1.0 Address rejected.").  Add
+> Keembay platform maintainers as Keembay I2S maintainers.
 > 
 > 
 
@@ -69,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: rt715: Make read-only arrays capture_reg_H and capture_reg_L static const
-      commit: b5d5051971b44c9952b62f261509cf837b9d21ba
+[2/2] ASoC: dt-bindings: Correct Alexandre Belloni email
+      commit: 1cd7de447cbbc49876f4df3f269b0562b8fe5b2f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
