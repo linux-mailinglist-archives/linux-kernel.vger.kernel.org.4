@@ -2,134 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65516430B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3286430B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbiLESn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        id S231826AbiLESoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiLESnq (ORCPT
+        with ESMTP id S230372AbiLESoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:43:46 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F3612627
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:43:44 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id v8so17101909edi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 10:43:43 -0800 (PST)
+        Mon, 5 Dec 2022 13:44:30 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD13138;
+        Mon,  5 Dec 2022 10:44:29 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id v8so17104573edi.3;
+        Mon, 05 Dec 2022 10:44:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wAi9wb/ccr1V0J6asFIl7Azn5bhshYuD4nE6CW5xW+g=;
-        b=OPVtqaGQfZNdZ4DF7z8NeObdT3sHluUFseqPw49KCbN+wqTHkRGDlCNAdrUqnU5qq6
-         M/dZcdpbg6LMDtINPMHagxvEiD/e+KnOjJz+nt7H4s3lp1pprnp3qe4GMLa/QhYvpUQp
-         yZVn5ofbBDCap0LFHONiDAaGYHExRbkxKOdis=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dlHbPYWA6349Ak4E81TJrxbwnHl0AOIrx3H6Nh0+tbA=;
+        b=UyO2bJTpFVjMY/0tBBDoPGsNfZlMI2tQ6T9TO0Se8rWkVDepqwR5LDaw5qoE6k4Xl6
+         RUrKk1f7VKjgKTMvPFJYmmJgoSqHZZhZNJFoYrZozl4LGj+6lPmbHwNhtbc0+PHGW/p4
+         aOQbKkS73nEae24oBKL/BgSlhEjBni+mcX+cZt2k6B9khxwMiVgAP+dFzzT8gI41hGGZ
+         FAMJ2c58IbkULB91g9pGA2CvSqvXhj+pViCw8xF7BsSO8wM5/KiG5f7ZIhG908Oz8k4k
+         07BRzeIfxNZCBKvnV6Mp3VDOVNQdnbiJV8RRNUXpOjMFNuOUsSXB3jjZiHJ96+dsQSGJ
+         5AuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wAi9wb/ccr1V0J6asFIl7Azn5bhshYuD4nE6CW5xW+g=;
-        b=5rB6EMkXMvDlRCCUJqRD+02cRCa9GyEmgoXbktw2K1DKuTQXg50gLlfi45esoBuzqR
-         1UBRnZsc3UulcRlLGj4QpxN9lHfjbGUY0u6wiwne5tvzf8qM/St+03TbP3IftPPtJFNL
-         Yy5Zl7MxWcHIjC8a5hb9eF7uijzp7itubF+kwBc+lx6pYrHYDgzobM+9D4IcCqH3wHMX
-         xq7OhbOZi2q+8ldSZFJhYaL0P83SgfcZkVcQg4o/0+AihB/JWmZ3E80wxoHIdJHlGceS
-         r+bEkUf9SCpSIkmuMGKxFO3qMM54ShLnSHre/D7Eg/cGTFOFATDFU3XACVwDbeXkX18I
-         dwOQ==
-X-Gm-Message-State: ANoB5pkGBurJQhGG31fbf5lq8VNuCQ8ts6i1VCNXtEMJJmfP7wT7kZhq
-        hICabf3NK5/qUyhyb1zOHZl0nqK8CCl0sL63
-X-Google-Smtp-Source: AA0mqf75+SZxiJOpba8s+syaTh/9KGSViJGhtjWKI3qOa7DfjnP4ItzPrjGozbEh13P/QWYwxwlLuA==
-X-Received: by 2002:a05:6402:399a:b0:468:fdf2:477f with SMTP id fk26-20020a056402399a00b00468fdf2477fmr46232421edb.329.1670265822394;
-        Mon, 05 Dec 2022 10:43:42 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id o3-20020a170906768300b007b27fc3a1ffsm6492349ejm.121.2022.12.05.10.43.41
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dlHbPYWA6349Ak4E81TJrxbwnHl0AOIrx3H6Nh0+tbA=;
+        b=EkvbhSvietVkW9Fn+uEZslFS3nyG0U+8ESxTx7LSpJTDYTqePqj3TpfkDCYD0rNiMb
+         4OXfuYPAnbwyneoGHkJBuIcdZ+vDQ7v9elQ9RR2CTdtVHX4SR7NRTjh28p54gHsY4+UQ
+         czeWyjZd5vwgL5r9t50QQxKmFiGb06SLBQJny2lPDvD+JoW9bj4wbG6eoMJtzz2UN8F2
+         VsvqVvI3SmCeq3l/Kg3IGmTjCNJmvcM7m9txotOeUe2BUOMObmzzdblT6qg2fc9oyfWP
+         Fx97JfzNkDlcW/OXRLKlRm+1OAZR4gxagSjb3tyIlUmX6lUVEnHwwz69cGV0+4K2wTQa
+         ygTg==
+X-Gm-Message-State: ANoB5pkJW2fZVnZ/OAvK68led2q7VUB+T3hh/fmc08xfJ7A6llI7CNxc
+        /Gt720CTGQ212j7o5XTDBYA=
+X-Google-Smtp-Source: AA0mqf6Ts/kNLWVJ/stt694d1GxznEbV+QnGfRt4nf9Wu50yMePzguJgq41aTGP0fEAvkbNYwvPaJw==
+X-Received: by 2002:aa7:c046:0:b0:461:54f0:f7dc with SMTP id k6-20020aa7c046000000b0046154f0f7dcmr74844673edo.117.1670265868344;
+        Mon, 05 Dec 2022 10:44:28 -0800 (PST)
+Received: from [192.168.0.131] ([194.183.54.57])
+        by smtp.gmail.com with ESMTPSA id y20-20020a50eb94000000b004589da5e5cesm103090edr.41.2022.12.05.10.44.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 10:43:41 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so10809913wmi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 10:43:41 -0800 (PST)
-X-Received: by 2002:a05:600c:4e4c:b0:3cf:87c6:890b with SMTP id
- e12-20020a05600c4e4c00b003cf87c6890bmr62524251wmq.194.1670265821267; Mon, 05
- Dec 2022 10:43:41 -0800 (PST)
+        Mon, 05 Dec 2022 10:44:27 -0800 (PST)
+Message-ID: <38c9aae4-0cae-a5a6-7c76-f23edf259dab@gmail.com>
+Date:   Mon, 5 Dec 2022 19:44:25 +0100
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
- <Y3FfhrgvBNey6T7V@sol.localdomain> <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
- <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com>
- <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
- <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
- <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com> <6f66f174af92a9b23bddd72945e94e888b0c9420.camel@linux.ibm.com>
-In-Reply-To: <6f66f174af92a9b23bddd72945e94e888b0c9420.camel@linux.ibm.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 5 Dec 2022 10:43:05 -0800
-X-Gmail-Original-Message-ID: <CAE=gft4wvxOZ4CS2hJzYANRNbCtYUznmsEE-3n4=EDx-+L_f9Q@mail.gmail.com>
-Message-ID: <CAE=gft4wvxOZ4CS2hJzYANRNbCtYUznmsEE-3n4=EDx-+L_f9Q@mail.gmail.com>
-Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation data
-To:     jejb@linux.ibm.com
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-integrity@vger.kernel.org,
-        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
+Content-Language: en-US
+To:     Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@dh-electronics.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+ <Y3y/S5COG7VPbsqL@duo.ucw.cz> <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
+ <20221130191905.GA2631320-robh@kernel.org>
+ <4043d693-7739-4709-8551-9f476031db70@denx.de>
+From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
+In-Reply-To: <4043d693-7739-4709-8551-9f476031db70@denx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 1:03 PM James Bottomley <jejb@linux.ibm.com> wrote:
->
-> On Mon, 2022-11-14 at 13:00 -0500, James Bottomley wrote:
-> > On Mon, 2022-11-14 at 09:43 -0800, Evan Green wrote:
-> > > On Mon, Nov 14, 2022 at 8:56 AM James Bottomley
-> > > <jejb@linux.ibm.com>
-> > > wrote:
-> > [...]
-> > > > Of course, since openssl_tpm2_engine is the complete reference
-> > > > implementation that means I'll have to add the creation PCRs
-> > > > implementation to it ... unless you'd like to do it?
-> > >
-> > > I am willing to help as I'm the one making the mess. How does it
-> > > sequence along with your draft submission (before, after,
-> > > simultaneous)?
-> >
-> > At the moment, just send patches.  The openssl_tpm2_engine is
-> > developed on a groups.io mailing list:
-> >
-> > https://groups.io/g/openssl-tpm2-engine/
-> >
-> > You need an IETF specific tool (xml2rfc) to build the rfc from the
-> > xml, but it's available in most distros as python3-xml2rfc.  If you
-> > don't want to learn the IETF XML I can help you code up the patch to
-> > add that to the draft spec.
->
-> Just as a heads up, the patch series implementing signed policy (and
-> thus taking option [3]) is on the mailing list for review:
->
-> https://groups.io/g/openssl-tpm2-engine/message/296
->
-> With apologies for the awful lack of threading in the groups.io
-> interface.
->
-> So you don't have to build the RFC yourself, I published the proposed
-> update on my website:
->
-> https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
-> https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.txt
->
-> If you want to use option [4] for the creation data, it's available.
+Hi all,
 
-Perfect, thanks James!
--Evan
+On 12/2/22 00:41, Marek Vasut wrote:
+> On 11/30/22 20:19, Rob Herring wrote:
+>> On Fri, Nov 25, 2022 at 10:26:30PM +0100, Marek Vasut wrote:
+>>> On 11/22/22 13:23, Pavel Machek wrote:
+>>>> Hi!
+>>>
+>>> Hi,
+>>>
+>>>>> Mark the label property as deprecated as it is mentioned
+>>>>> in the description.
+>>>>
+>>>> Lets do it the other way around. Functions (etc) don't really provide
+>>>> good enough description of LED, and label is still needed.
+>>>
+>>> Can you please provide a clear explanation which property or approach 
+>>> is the
+>>> correct one for new DTs ?
+>>>
+>>> So far, the documentation states that "label" is deprecated, and users
+>>> should replace it with "function" and "color".
+>>
+>> 'function' is what activity/operation the LED is associated with. It is
+>> a fixed set of strings which s/w may use. It is a replacement for
+>> 'linux,default-trigger'.
+> 
+> Isn't this 'function' more of a standardized replacement for 'label' ?
+
+Yes it is. Introduction of function and color properties aimed at 
+standardizing LED naming. Before there was only 'label' used for that,
+with DT node name as fallback if 'label' property was not provided.
+With introduction of 'function' and 'color' label was deprecated in
+the sense that if the former two are present, they are used for
+composing the LED name.
+
+In LED documentation [0] people are encouraged to use definitions from
+include/dt-bindings/leds/common.h to keep LED naming uniform.
+It allows to avoid duplicates like "wlan" and "wifi".
+
+> $ git grep LED_FUNCTION_ include/
+> ...
+> include/dt-bindings/leds/common.h:#define LED_FUNCTION_PLAYER5 "player-5"
+> include/dt-bindings/leds/common.h:#define LED_FUNCTION_ACTIVITY "activity"
+> include/dt-bindings/leds/common.h:#define LED_FUNCTION_ALARM "alarm"
+> include/dt-bindings/leds/common.h:#define LED_FUNCTION_BACKLIGHT 
+> "backlight"
+> include/dt-bindings/leds/common.h:#define LED_FUNCTION_BLUETOOTH 
+> "bluetooth"
+> include/dt-bindings/leds/common.h:#define LED_FUNCTION_BOOT "boot"
+> ...
+> 
+> Seems to me that ^ is closer to a "standardized" form of 'label' .
+> 
+> The LED subsystem does not infer any behavior of those LEDs based on 
+> their 'function' property as far as I can tell, at least not in the way 
+> 'linux,default-trigger' behaves.
+> 
+>> 'label' is what is printed next to the LED for a human to read. 'label'
+>> can be anything and the OS shouldn't care what it is.
+> 
+> This part I understand. What is not clear to me is, why is 'label' being 
+> un-deprecated.
+
+It shouldn't be. It seems to be Pavel's ad-hoc decision.
+
+> We newly have 'function', 'function-enumerator' and 'color' DT 
+> properties for LEDs, which seem to be standardized forms of describing 
+> what the LED is used for, which LED it is (if there are multiple), and 
+> color of that LED. This was previously described in the 'label' 
+> property, usually in free form of e.g. "beaglebone:green:usr2" .
+> 
+>> They serve 2 different purposes.
+> 
+> [...]
+
+[0] Documentation/leds/leds-class.rst
+-- 
+Best regards,
+Jacek Anaszewski
