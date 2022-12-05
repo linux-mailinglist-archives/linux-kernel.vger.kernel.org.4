@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7FB6424D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B91F6424D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbiLEIkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S232170AbiLEIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiLEIkS (ORCPT
+        with ESMTP id S232082AbiLEIkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:40:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC1ADF43;
-        Mon,  5 Dec 2022 00:40:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 678FA60FC8;
-        Mon,  5 Dec 2022 08:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4693EC433D6;
-        Mon,  5 Dec 2022 08:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670229616;
-        bh=FnGsUFy5sYWAfmF2yzspb8rioGnomy2eD9q3k4siupc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LxlvvCoQn9Yw37WvFvN6nEpWCOyjzPSt/NiWGp0+Ux90+dSHb2BpdHfZ2Tatlnp0Q
-         EZElfk2w9ovBwKfKV8kk1o0l+QZrVZhL3BZch4zvplwqXO/ms3Dn4/BBO0/IESs2xj
-         uxquQ56riHfX4JK+cwXoR81ByQcJmvIKxVD2POgsTDMsRRNeay8/rwalRshZH2QiZs
-         uwp6tp/3bkChisigYT0R6zw7dCzWdV9YaNmqYjAwvsNCCDeWSjbdAnDLoP5BTgoGGK
-         VkBPVOciHg3sKnKCLw/Pgi19BW8LKJ7Fl2boQYKfaeHseccSkqDDtVSjrYm63ki/B3
-         f0mqVyjSZt3KA==
-Date:   Mon, 5 Dec 2022 09:40:13 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] i2c: loongson: add bus driver for the loongson
- i2c controller
-Message-ID: <Y42ubaVQclaTA7Eh@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
+        Mon, 5 Dec 2022 03:40:21 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B74CFD3D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:40:19 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id 125-20020a1c0283000000b003d076ee89d6so8542204wmc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:40:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OcD3CaGFzs1PLkrODWghhljl7q5gdf6UquBrIlu96c8=;
+        b=fomgni0P+Kvz4zbYfBoYDXmTuwlwU0ixPV9zc2axslY/d3jzwxQh+dMWD/1qEnnnDL
+         GOnQOnW9csawE/QeXDaXZdgQsfHVgXYS9ZrhrNS0q9U6NJEV+H4EGJ9ve3hhMDD7sFmL
+         7Wl3U5Ccme74YPkR2qPy7wlOmEy4EJacZd3RBFPwvpyZWERlOiMX3vqIBPoTallXMSak
+         qbOJsU3adQBBtGRBwSmY2FBbyClZ3xEMzQzQ89FRj+icQaZ/umrCRzU+vrExLVPG/7YD
+         3NdH0e+qfQ8CcOMyDwFFqt8PcKe8ms8ct1puaClTg6rXPCFwNBalHAailEbC38Eb4KI2
+         EA3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OcD3CaGFzs1PLkrODWghhljl7q5gdf6UquBrIlu96c8=;
+        b=RSoms4oljNN7eUCHeOqibM557WFxk5Hac2Xy0NrckH14pzoj3gO2XKl4B+jwLf89cc
+         opmlxGAyn0D+jy6Q9/y0hmg8tthC4NEFw5wh4dyIIpblSeBqk0v2a91QYQN8cfwM7oGG
+         tppN5kWm6sYMeHf0rkeGL79AOZFr/hvGLA0c1jJiJVZeBwKsg8zle2aGLRW/rvCgAplw
+         NJleArVt9SZCE2vsZouv5ugFtKaxZ4Lzxg+1S2CF/jYdlTtv3WFEUt6+DmlfbTt/OtnD
+         P/gYY/DM40ozRA0mYgrn7uf8etEuuDPk6TPcw/eeb9ZM5hFKSx8Id6YK7D9uJjEgqSOL
+         8fug==
+X-Gm-Message-State: ANoB5pn/ULCXfekh4CcwvigWjoRRyZYl5dlCVBUkoekACi7h1o9Gp4S8
+        VdXdg3cdyLuZKzg3lLlQILxkDA==
+X-Google-Smtp-Source: AA0mqf6by0jvDO+tidzDyqYI7lQOw3jHImDUmuwrlf9PDMqGT6N+VCFo+1Uc7Sj1Kqj8tGslwUYr9g==
+X-Received: by 2002:a05:600c:511b:b0:3d0:128a:6d1e with SMTP id o27-20020a05600c511b00b003d0128a6d1emr14608390wms.108.1670229617859;
+        Mon, 05 Dec 2022 00:40:17 -0800 (PST)
+Received: from [192.168.7.93] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id v6-20020adfe286000000b00241f467f888sm13601383wri.74.2022.12.05.00.40.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 00:40:17 -0800 (PST)
+Message-ID: <6e0dcfa8-6855-cc80-5e23-443d44cae07b@linaro.org>
+Date:   Mon, 5 Dec 2022 09:40:16 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ae0viO7PKLMg849Y"
-Content-Disposition: inline
-In-Reply-To: <20221128130025.23184-1-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] arm64: defconfig: Add Meson DDR PMU as module
+Content-Language: en-US
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Chris Healy <healych@amazon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>
+References: <20221204043530.1673752-1-jiucheng.xu@amlogic.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20221204043530.1673752-1-jiucheng.xu@amlogic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,54 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++CC linux-amlogic@lists.infradead.org
 
---ae0viO7PKLMg849Y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 04/12/2022 05:35, Jiucheng Xu wrote:
+> Add Meson DDR PMU to defconfig so that build errors are caught.
+> 
+> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+> ---
+>   arch/arm64/configs/defconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 0b6af3348e79..f2324b54a6ba 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -1265,6 +1265,7 @@ CONFIG_ARM_DMC620_PMU=m
+>   CONFIG_QCOM_L2_PMU=y
+>   CONFIG_QCOM_L3_PMU=y
+>   CONFIG_HISI_PMU=y
+> +CONFIG_MESON_DDR_PMU=m
+>   CONFIG_NVMEM_IMX_OCOTP=y
+>   CONFIG_NVMEM_IMX_OCOTP_SCU=y
+>   CONFIG_NVMEM_MTK_EFUSE=y
 
-On Mon, Nov 28, 2022 at 09:00:24PM +0800, Yinbo Zhu wrote:
-> This bus driver supports the Loongson i2c hardware controller in the
-> Loongson platforms and supports to use DTS and ACPI framework to
-> register i2c adapter device resources.
->=20
-> The Loongson i2c controller supports operating frequencty is 50MHZ
-> and supports the maximum transmission rate is 400kbps.
->=20
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-
-There are currently two people submitting a driver for this hardware.
-This is the other driver:
-
-https://lore.kernel.org/all/f6cc2dbe5cd190031ab4f772d1cf250934288546.166977=
-7792.git.zhoubinbin@loongson.cn/
-
-Can you guys please decide which one is "better" or combine the two to
-make a better one?
-
-Thanks,
-
-   Wolfram
-
-
---ae0viO7PKLMg849Y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONrm0ACgkQFA3kzBSg
-KbYizxAAsxQb5yyGCMIeSopmZK+v8I/skPq/XvnFG61ON5mkTQ5cDyRu1bKpt+qz
-3Ym0xhdmrStCJLXqGN2SeNoWhV/Kw0tcgxH/bz7Fg2AZWMUuhqFUQTynOPJpC99b
-Uwvj4pxlsxOJubjzGY2HfbX+WibtjkE4GWRRUHLcZtuDcA9FN3m1vssGhu5mLU5i
-5rSw22CiYi+Bnu5Ra4Pq4AgvJoVUINGaEgoA5jnrbkPkP+qEzUh/dxJaK6SdqCmh
-DETgGL+IfzZnVcaka3wR00Aoz5JVTUXnm19QMOq+veuLCcaoFMI3rUk61xAVyulg
-np9gM5Ud1bClA1sN/imZmFrh/fdRUE9ZK8MPny0vj6kYi/rLzTzQs4gwGBbswE8V
-+AXTTJzMYvZs5u2o4eWCHC2JoWYkmWUO84dPpi/LL5gSCKgEvk3CYbZfUT5b0+jo
-gB+2TXwBUUW6AEESsdrkHO4GveODbXfeoQBEx6jotCrydWet7mfvRaz/DKWmS00m
-7nhdxkqrzLiAeDq/p3UNgy4fqDm3NlnnUwJUslj2ZHfLL4GNz7AvKAfjIyVJqBWM
-MpwFBoqypHxBBucpPgPVJ43dxY+55OZ89T3/FhVfgNqi0RSW3BJR1QDa761abgbO
-zmsih5T6iov6gXcTcLw4G7h9e19y91Jspa4bw9ev255ad3oxxag=
-=gBwl
------END PGP SIGNATURE-----
-
---ae0viO7PKLMg849Y--
