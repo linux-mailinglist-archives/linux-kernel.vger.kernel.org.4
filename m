@@ -2,824 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003576428D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 356626428D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbiLEMyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
+        id S231985AbiLEM4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231940AbiLEMyC (ORCPT
+        with ESMTP id S229917AbiLEM4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:54:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45C51A392;
-        Mon,  5 Dec 2022 04:53:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75445B81071;
-        Mon,  5 Dec 2022 12:53:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB4FDC433C1;
-        Mon,  5 Dec 2022 12:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670244836;
-        bh=/gE4ff8x+Z7lVtAO4KPJWYQ410wgSXVKZ1xjSaDTztw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uMnkB1K/k2/x7I4V1IRZa7sKzzZrrln+jzUIIb4XjGN6NtKRa3SttRq21AaVQZ6hG
-         /DhZq49JP+Co/Rrs5ARPmMwyyOoPfMzEWxoepLm7+Td3s19JOyW5kgJDzx6Pg3BA0X
-         EJvKg7uoFOYtakdv8DVGAA+C9PBeLnRTs80X3883Wpfi0Jx/Hrkc2+UKVo4MBRuKk2
-         EUh0wRWvCiwhzI36QiKHF4UBTvP3FkM1OBi2VM5p1F/r6Rp7ttT5uNFllmHR1m0NF5
-         7X2Ks8jtPMKO9/JD9tK+f3bnHatB+1es10Ojr+71VPX+NgfYep12iKhzoWbTL2XUUx
-         AZ8AZ9y0UwmtQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 46B5540404; Mon,  5 Dec 2022 09:53:53 -0300 (-03)
-Date:   Mon, 5 Dec 2022 09:53:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v3] perf jevents: Parse metrics during conversion
-Message-ID: <Y43p4Xmitg7dD1B7@kernel.org>
-References: <20221201034138.417972-1-irogers@google.com>
+        Mon, 5 Dec 2022 07:56:35 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1951A3BF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:56:34 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id z4so13418601ljq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 04:56:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MNizMxTAJQcCerVNPojMjVYQUThcKeI/6F+iAZVM61E=;
+        b=LoM4ZvQsmSIuu2v5/WOVXLHUPhjPjZKvAvKw7ppYq7FOFTyo8eFQ40euk6uUal8ca/
+         f4FcDS2k74EaENuC8SKrdfkO4r4zI94k6AANBExnMb/NGNbUc5Q/g3SmrZBM++rc2fRi
+         Mvq/FgyW20b7S/QDS2u9mkIjfZhvwLX+GDHXtW1Dc/fDx/H/gJMe/qWedSoBDajI6OCa
+         Iy1zXCVFUpz+u3JlTe5WYx5fjg8jDEg6jL7RBK/aZ8tfso/juT1/lWrf3m3F1uA/XWUD
+         iUANfPIFLzASlDjKPtKEr/AwYdzMIBsl3l1xebHJfWzcKYdcxjqU5/8dmSHEGLXG/LI2
+         Bckw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MNizMxTAJQcCerVNPojMjVYQUThcKeI/6F+iAZVM61E=;
+        b=n0g9dvWkrEfByXMkhJNqpiTQNWvTeHVZIssTn6NeTFixO3/9iWW70BOGhWEbg6DokT
+         yARg1Z2ikIQA3n0hZBMKuh+UHDZQDB5mSsNe6YfpOqWcttFUjJZtaY/xPR3Ydf67y3na
+         qJZDaVzh+ljdrgawhEcGQApF9s4Y1U+J9tXESf01q0BK4Dqi9dw52t1kFe0nlzh2QICq
+         fWtivoXBej9/kjPLRJ08p/5iprKsT5COAH1oO6GAZg/2ypijPQUQxEhhApuQrQoHtne1
+         Exe1CLaiqIzafO5N1OBoVLf18qTXwkdJOlY3fYnXQENQ8phOmsh5WApSfR6FYMMoY3c5
+         lkng==
+X-Gm-Message-State: ANoB5plOEciXg0YakKQX8PZgK2mIBH+5IOVJoHB+ot4QSOh0KgySbzZm
+        WCvSYcZDRpgTODptCKmRPZk=
+X-Google-Smtp-Source: AA0mqf6PmvS8jf6HU82mhQ98ZgGkGOidYsoFHSWwPdtJQpFz9zyG591eeD+XLTWGRozdUMVBjYZgdQ==
+X-Received: by 2002:a2e:a9a7:0:b0:26e:2de:49ad with SMTP id x39-20020a2ea9a7000000b0026e02de49admr21169013ljq.511.1670244992807;
+        Mon, 05 Dec 2022 04:56:32 -0800 (PST)
+Received: from pc636 (host-90-235-25-230.mobileonline.telia.com. [90.235.25.230])
+        by smtp.gmail.com with ESMTPSA id s9-20020ac24649000000b004b5634f9b9dsm878455lfo.115.2022.12.05.04.56.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 04:56:32 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Mon, 5 Dec 2022 13:56:29 +0100
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stephen.s.brennan@oracle.com, urezki@gmail.com,
+        willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v1 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
+Message-ID: <Y43qfdseyq0zizJO@pc636>
+References: <20221204013046.154960-1-bhe@redhat.com>
+ <20221204013046.154960-3-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221201034138.417972-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221204013046.154960-3-bhe@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Nov 30, 2022 at 07:41:38PM -0800, Ian Rogers escreveu:
-> Currently the 'MetricExpr' json value is passed from the json
-> file to the pmu-events.c. This change introduces an expression
-> tree that is parsed into. The parsing is done largely by using
-> operator overloading and python's 'eval' function. Two advantages
-> in doing this are:
+> Through vmalloc API, a virtual kernel area is reserved for physical
+> address mapping. And vmap_area is used to track them, while vm_struct
+> is allocated to associate with the vmap_area to store more information
+> and passed out.
 > 
-> 1) Broken metrics fail at compile time rather than relying on
->    `perf test` to detect. `perf test` remains relevant for checking
->    event encoding and actual metric use.
+> However, area reserved via vm_map_ram() is an exception. It doesn't have
+> vm_struct to associate with vmap_area. And we can't recognize the
+> vmap_area with '->vm == NULL' as a vm_map_ram() area because the normal
+> freeing path will set va->vm = NULL before unmapping, please see
+> function remove_vm_area().
 > 
-> 2) The conversion to a string from the tree can minimize the metric's
->    string size, for example, preferring 1e6 over 1000000, avoiding
->    multiplication by 1 and removing unnecessary whitespace. On x86
->    this reduces the string size by 3,050bytes (0.07%).
+> Meanwhile, there are two types of vm_map_ram area. One is the whole
+> vmap_area being reserved and mapped at one time; the other is the
+> whole vmap_area with VMAP_BLOCK_SIZE size being reserved, while mapped
+> into split regions with smaller size several times via vb_alloc().
 > 
-> In future changes it would be possible to programmatically
-> generate the json expressions (a single line of text and so a
-> pain to write manually) for an architecture using the expression
-> tree. This could avoid copy-pasting metrics for all architecture
-> variants.
+> To mark the area reserved through vm_map_ram(), add flags field into
+> struct vmap_area. Bit 0 indicates whether it's a vm_map_ram area,
+> while bit 1 indicates whether it's a vmap_block type of vm_map_ram
+> area.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> This is a preparatoin for later use.
 > 
-> v3. Avoids generic types on standard types like set that aren't
->     supported until Python 3.9, fixing an issue with Python 3.6
->     reported-by John Garry. v3 also fixes minor pylint issues and adds
->     a call to Simplify on the read expression tree.
-
-Cool, John looked reviewed it (may I add the tag?). Applying to my local
-tree, will do some light testing.
-
-- Arnaldo
-
-> v2. Improvements to type information.
+> Signed-off-by: Baoquan He <bhe@redhat.com>
 > ---
->  tools/perf/pmu-events/Build          |   2 +-
->  tools/perf/pmu-events/jevents.py     |  12 +-
->  tools/perf/pmu-events/metric.py      | 498 +++++++++++++++++++++++++++
->  tools/perf/pmu-events/metric_test.py | 148 ++++++++
->  4 files changed, 656 insertions(+), 4 deletions(-)
->  create mode 100644 tools/perf/pmu-events/metric.py
->  create mode 100644 tools/perf/pmu-events/metric_test.py
+>  include/linux/vmalloc.h |  1 +
+>  mm/vmalloc.c            | 18 +++++++++++++++++-
+>  2 files changed, 18 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-> index 04ef95174660..15b9e8fdbffa 100644
-> --- a/tools/perf/pmu-events/Build
-> +++ b/tools/perf/pmu-events/Build
-> @@ -21,7 +21,7 @@ $(OUTPUT)pmu-events/pmu-events.c: pmu-events/empty-pmu-events.c
->  	$(call rule_mkdir)
->  	$(Q)$(call echo-cmd,gen)cp $< $@
->  else
-> -$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY)
-> +$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY) pmu-events/metric.py
->  	$(call rule_mkdir)
->  	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) pmu-events/arch $@
->  endif
-> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> index 0daa3e007528..4c398e0eeb2f 100755
-> --- a/tools/perf/pmu-events/jevents.py
-> +++ b/tools/perf/pmu-events/jevents.py
-> @@ -4,6 +4,7 @@
->  import argparse
->  import csv
->  import json
-> +import metric
->  import os
->  import sys
->  from typing import (Callable, Dict, Optional, Sequence, Set, Tuple)
-> @@ -268,9 +269,10 @@ class JsonEvent:
->      self.metric_name = jd.get('MetricName')
->      self.metric_group = jd.get('MetricGroup')
->      self.metric_constraint = jd.get('MetricConstraint')
-> -    self.metric_expr = jd.get('MetricExpr')
-> -    if self.metric_expr:
-> -      self.metric_expr = self.metric_expr.replace('\\', '\\\\')
-> +    self.metric_expr = None
-> +    if 'MetricExpr' in jd:
-> +       self.metric_expr = metric.ParsePerfJson(jd['MetricExpr']).Simplify()
-> +
->      arch_std = jd.get('ArchStdEvent')
->      if precise and self.desc and '(Precise Event)' not in self.desc:
->        extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
-> @@ -322,6 +324,10 @@ class JsonEvent:
->      s = ''
->      for attr in _json_event_attributes:
->        x = getattr(self, attr)
-> +      if x and attr == 'metric_expr':
-> +        # Convert parsed metric expressions into a string. Slashes
-> +        # must be doubled in the file.
-> +        x = x.ToPerfJson().replace('\\', '\\\\')
->        s += f'{x}\\000' if x else '\\000'
->      return s
+> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> index 096d48aa3437..69250efa03d1 100644
+> --- a/include/linux/vmalloc.h
+> +++ b/include/linux/vmalloc.h
+> @@ -76,6 +76,7 @@ struct vmap_area {
+>  		unsigned long subtree_max_size; /* in "free" tree */
+>  		struct vm_struct *vm;           /* in "busy" tree */
+>  	};
+> +	unsigned long flags; /* mark type of vm_map_ram area */
+>  };
 >  
-> diff --git a/tools/perf/pmu-events/metric.py b/tools/perf/pmu-events/metric.py
-> new file mode 100644
-> index 000000000000..65025a95de00
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/metric.py
-> @@ -0,0 +1,498 @@
-> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-> +"""Parse or generate representations of perf metrics."""
-> +import ast
-> +import decimal
-> +import json
-> +import re
-> +from typing import Dict, List, Optional, Set, Union
-> +
-> +
-> +class Expression:
-> +  """Abstract base class of elements in a metric expression."""
-> +
-> +  def ToPerfJson(self) -> str:
-> +    """Returns a perf json file encoded representation."""
-> +    raise NotImplementedError()
-> +
-> +  def ToPython(self) -> str:
-> +    """Returns a python expr parseable representation."""
-> +    raise NotImplementedError()
-> +
-> +  def Simplify(self):
-> +    """Returns a simplified version of self."""
-> +    raise NotImplementedError()
-> +
-> +  def Equals(self, other) -> bool:
-> +    """Returns true when two expressions are the same."""
-> +    raise NotImplementedError()
-> +
-> +  def __str__(self) -> str:
-> +    return self.ToPerfJson()
-> +
-> +  def __or__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('|', self, other)
-> +
-> +  def __ror__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('|', other, self)
-> +
-> +  def __xor__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('^', self, other)
-> +
-> +  def __and__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('&', self, other)
-> +
-> +  def __lt__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('<', self, other)
-> +
-> +  def __gt__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('>', self, other)
-> +
-> +  def __add__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('+', self, other)
-> +
-> +  def __radd__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('+', other, self)
-> +
-> +  def __sub__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('-', self, other)
-> +
-> +  def __rsub__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('-', other, self)
-> +
-> +  def __mul__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('*', self, other)
-> +
-> +  def __rmul__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('*', other, self)
-> +
-> +  def __truediv__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('/', self, other)
-> +
-> +  def __rtruediv__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('/', other, self)
-> +
-> +  def __mod__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-> +    return Operator('%', self, other)
-> +
-> +
-> +def _Constify(val: Union[bool, int, float, Expression]) -> Expression:
-> +  """Used to ensure that the nodes in the expression tree are all Expression."""
-> +  if isinstance(val, bool):
-> +    return Constant(1 if val else 0)
-> +  if isinstance(val, (int, float)):
-> +    return Constant(val)
-> +  return val
-> +
-> +
-> +# Simple lookup for operator precedence, used to avoid unnecessary
-> +# brackets. Precedence matches that of python and the simple expression parser.
-> +_PRECEDENCE = {
-> +    '|': 0,
-> +    '^': 1,
-> +    '&': 2,
-> +    '<': 3,
-> +    '>': 3,
-> +    '+': 4,
-> +    '-': 4,
-> +    '*': 5,
-> +    '/': 5,
-> +    '%': 5,
-> +}
-> +
-> +
-> +class Operator(Expression):
-> +  """Represents a binary operator in the parse tree."""
-> +
-> +  def __init__(self, operator: str, lhs: Union[int, float, Expression],
-> +               rhs: Union[int, float, Expression]):
-> +    self.operator = operator
-> +    self.lhs = _Constify(lhs)
-> +    self.rhs = _Constify(rhs)
-> +
-> +  def Bracket(self,
-> +              other: Expression,
-> +              other_str: str,
-> +              rhs: bool = False) -> str:
-> +    """If necessary brackets the given other value.
-> +
-> +    If ``other`` is an operator then a bracket is necessary when
-> +    this/self operator has higher precedence. Consider: '(a + b) * c',
-> +    ``other_str`` will be 'a + b'. A bracket is necessary as without
-> +    the bracket 'a + b * c' will evaluate 'b * c' first. However, '(a
-> +    * b) + c' doesn't need a bracket as 'a * b' will always be
-> +    evaluated first. For 'a / (b * c)' (ie the same precedence level
-> +    operations) then we add the bracket to best match the original
-> +    input, but not for '(a / b) * c' where the bracket is unnecessary.
-> +
-> +    Args:
-> +      other (Expression): is a lhs or rhs operator
-> +      other_str (str): ``other`` in the appropriate string form
-> +      rhs (bool):  is ``other`` on the RHS
-> +
-> +    Returns:
-> +      str: possibly bracketed other_str
-> +    """
-> +    if isinstance(other, Operator):
-> +      if _PRECEDENCE.get(self.operator, -1) > _PRECEDENCE.get(
-> +          other.operator, -1):
-> +        return f'({other_str})'
-> +      if rhs and _PRECEDENCE.get(self.operator, -1) == _PRECEDENCE.get(
-> +          other.operator, -1):
-> +        return f'({other_str})'
-> +    return other_str
-> +
-> +  def ToPerfJson(self):
-> +    return (f'{self.Bracket(self.lhs, self.lhs.ToPerfJson())} {self.operator} '
-> +            f'{self.Bracket(self.rhs, self.rhs.ToPerfJson(), True)}')
-> +
-> +  def ToPython(self):
-> +    return (f'{self.Bracket(self.lhs, self.lhs.ToPython())} {self.operator} '
-> +            f'{self.Bracket(self.rhs, self.rhs.ToPython(), True)}')
-> +
-> +  def Simplify(self) -> Expression:
-> +    lhs = self.lhs.Simplify()
-> +    rhs = self.rhs.Simplify()
-> +    if isinstance(lhs, Constant) and isinstance(rhs, Constant):
-> +      return Constant(ast.literal_eval(lhs + self.operator + rhs))
-> +
-> +    if isinstance(self.lhs, Constant):
-> +      if self.operator in ('+', '|') and lhs.value == '0':
-> +        return rhs
-> +
-> +      if self.operator == '*' and lhs.value == '0':
-> +        return Constant(0)
-> +
-> +      if self.operator == '*' and lhs.value == '1':
-> +        return rhs
-> +
-> +    if isinstance(rhs, Constant):
-> +      if self.operator in ('+', '|') and rhs.value == '0':
-> +        return lhs
-> +
-> +      if self.operator == '*' and rhs.value == '0':
-> +        return Constant(0)
-> +
-> +      if self.operator == '*' and self.rhs.value == '1':
-> +        return lhs
-> +
-> +    return Operator(self.operator, lhs, rhs)
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    if isinstance(other, Operator):
-> +      return self.operator == other.operator and self.lhs.Equals(
-> +          other.lhs) and self.rhs.Equals(other.rhs)
-> +    return False
-> +
-> +
-> +class Select(Expression):
-> +  """Represents a select ternary in the parse tree."""
-> +
-> +  def __init__(self, true_val: Union[int, float, Expression],
-> +               cond: Union[int, float, Expression],
-> +               false_val: Union[int, float, Expression]):
-> +    self.true_val = _Constify(true_val)
-> +    self.cond = _Constify(cond)
-> +    self.false_val = _Constify(false_val)
-> +
-> +  def ToPerfJson(self):
-> +    true_str = self.true_val.ToPerfJson()
-> +    cond_str = self.cond.ToPerfJson()
-> +    false_str = self.false_val.ToPerfJson()
-> +    return f'({true_str} if {cond_str} else {false_str})'
-> +
-> +  def ToPython(self):
-> +    return (f'Select({self.true_val.ToPython()}, {self.cond.ToPython()}, '
-> +            f'{self.false_val.ToPython()})')
-> +
-> +  def Simplify(self) -> Expression:
-> +    cond = self.cond.Simplify()
-> +    true_val = self.true_val.Simplify()
-> +    false_val = self.false_val.Simplify()
-> +    if isinstance(cond, Constant):
-> +      return false_val if cond.value == '0' else true_val
-> +
-> +    if true_val.Equals(false_val):
-> +      return true_val
-> +
-> +    return Select(true_val, cond, false_val)
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    if isinstance(other, Select):
-> +      return self.cond.Equals(other.cond) and self.false_val.Equals(
-> +          other.false_val) and self.true_val.Equals(other.true_val)
-> +    return False
-> +
-> +
-> +class Function(Expression):
-> +  """A function in an expression like min, max, d_ratio."""
-> +
-> +  def __init__(self,
-> +               fn: str,
-> +               lhs: Union[int, float, Expression],
-> +               rhs: Optional[Union[int, float, Expression]] = None):
-> +    self.fn = fn
-> +    self.lhs = _Constify(lhs)
-> +    self.rhs = _Constify(rhs)
-> +
-> +  def ToPerfJson(self):
-> +    if self.rhs:
-> +      return f'{self.fn}({self.lhs.ToPerfJson()}, {self.rhs.ToPerfJson()})'
-> +    return f'{self.fn}({self.lhs.ToPerfJson()})'
-> +
-> +  def ToPython(self):
-> +    if self.rhs:
-> +      return f'{self.fn}({self.lhs.ToPython()}, {self.rhs.ToPython()})'
-> +    return f'{self.fn}({self.lhs.ToPython()})'
-> +
-> +  def Simplify(self) -> Expression:
-> +    lhs = self.lhs.Simplify()
-> +    rhs = self.rhs.Simplify() if self.rhs else None
-> +    if isinstance(lhs, Constant) and isinstance(rhs, Constant):
-> +      if self.fn == 'd_ratio':
-> +        if rhs.value == '0':
-> +          return Constant(0)
-> +        Constant(ast.literal_eval(f'{lhs} / {rhs}'))
-> +      return Constant(ast.literal_eval(f'{self.fn}({lhs}, {rhs})'))
-> +
-> +    return Function(self.fn, lhs, rhs)
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    if isinstance(other, Function):
-> +      return self.fn == other.fn and self.lhs.Equals(
-> +          other.lhs) and self.rhs.Equals(other.rhs)
-> +    return False
-> +
-> +
-> +def _FixEscapes(s: str) -> str:
-> +  s = re.sub(r'([^\\]),', r'\1\\,', s)
-> +  return re.sub(r'([^\\])=', r'\1\\=', s)
-> +
-> +
-> +class Event(Expression):
-> +  """An event in an expression."""
-> +
-> +  def __init__(self, name: str, legacy_name: str = ''):
-> +    self.name = _FixEscapes(name)
-> +    self.legacy_name = _FixEscapes(legacy_name)
-> +
-> +  def ToPerfJson(self):
-> +    result = re.sub('/', '@', self.name)
-> +    return result
-> +
-> +  def ToPython(self):
-> +    return f'Event(r"{self.name}")'
-> +
-> +  def Simplify(self) -> Expression:
-> +    return self
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    return isinstance(other, Event) and self.name == other.name
-> +
-> +
-> +class Constant(Expression):
-> +  """A constant within the expression tree."""
-> +
-> +  def __init__(self, value: Union[float, str]):
-> +    ctx = decimal.Context()
-> +    ctx.prec = 20
-> +    dec = ctx.create_decimal(repr(value) if isinstance(value, float) else value)
-> +    self.value = dec.normalize().to_eng_string()
-> +    self.value = self.value.replace('+', '')
-> +    self.value = self.value.replace('E', 'e')
-> +
-> +  def ToPerfJson(self):
-> +    return self.value
-> +
-> +  def ToPython(self):
-> +    return f'Constant({self.value})'
-> +
-> +  def Simplify(self) -> Expression:
-> +    return self
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    return isinstance(other, Constant) and self.value == other.value
-> +
-> +
-> +class Literal(Expression):
-> +  """A runtime literal within the expression tree."""
-> +
-> +  def __init__(self, value: str):
-> +    self.value = value
-> +
-> +  def ToPerfJson(self):
-> +    return self.value
-> +
-> +  def ToPython(self):
-> +    return f'Literal({self.value})'
-> +
-> +  def Simplify(self) -> Expression:
-> +    return self
-> +
-> +  def Equals(self, other: Expression) -> bool:
-> +    return isinstance(other, Literal) and self.value == other.value
-> +
-> +
-> +def min(lhs: Union[int, float, Expression], rhs: Union[int, float,
-> +                                                       Expression]) -> Function:
-> +  # pylint: disable=redefined-builtin
-> +  # pylint: disable=invalid-name
-> +  return Function('min', lhs, rhs)
-> +
-> +
-> +def max(lhs: Union[int, float, Expression], rhs: Union[int, float,
-> +                                                       Expression]) -> Function:
-> +  # pylint: disable=redefined-builtin
-> +  # pylint: disable=invalid-name
-> +  return Function('max', lhs, rhs)
-> +
-> +
-> +def d_ratio(lhs: Union[int, float, Expression],
-> +            rhs: Union[int, float, Expression]) -> Function:
-> +  # pylint: disable=redefined-builtin
-> +  # pylint: disable=invalid-name
-> +  return Function('d_ratio', lhs, rhs)
-> +
-> +
-> +def source_count(event: Event) -> Function:
-> +  # pylint: disable=redefined-builtin
-> +  # pylint: disable=invalid-name
-> +  return Function('source_count', event)
-> +
-> +
-> +class Metric:
-> +  """An individual metric that will specifiable on the perf command line."""
-> +  groups: Set[str]
-> +  expr: Expression
-> +  scale_unit: str
-> +  constraint: bool
-> +
-> +  def __init__(self,
-> +               name: str,
-> +               description: str,
-> +               expr: Expression,
-> +               scale_unit: str,
-> +               constraint: bool = False):
-> +    self.name = name
-> +    self.description = description
-> +    self.expr = expr.Simplify()
-> +    # Workraound valid_only_metric hiding certain metrics based on unit.
-> +    scale_unit = scale_unit.replace('/sec', ' per sec')
-> +    if scale_unit[0].isdigit():
-> +      self.scale_unit = scale_unit
-> +    else:
-> +      self.scale_unit = f'1{scale_unit}'
-> +    self.constraint = constraint
-> +    self.groups = set()
-> +
-> +  def __lt__(self, other):
-> +    """Sort order."""
-> +    return self.name < other.name
-> +
-> +  def AddToMetricGroup(self, group):
-> +    """Callback used when being added to a MetricGroup."""
-> +    self.groups.add(group.name)
-> +
-> +  def Flatten(self) -> Set['Metric']:
-> +    """Return a leaf metric."""
-> +    return set([self])
-> +
-> +  def ToPerfJson(self) -> Dict[str, str]:
-> +    """Return as dictionary for Json generation."""
-> +    result = {
-> +        'MetricName': self.name,
-> +        'MetricGroup': ';'.join(sorted(self.groups)),
-> +        'BriefDescription': self.description,
-> +        'MetricExpr': self.expr.ToPerfJson(),
-> +        'ScaleUnit': self.scale_unit
-> +    }
-> +    if self.constraint:
-> +      result['MetricConstraint'] = 'NO_NMI_WATCHDOG'
-> +
-> +    return result
-> +
-> +
-> +class _MetricJsonEncoder(json.JSONEncoder):
-> +  """Special handling for Metric objects."""
-> +
-> +  def default(self, o):
-> +    if isinstance(o, Metric):
-> +      return o.ToPerfJson()
-> +    return json.JSONEncoder.default(self, o)
-> +
-> +
-> +class MetricGroup:
-> +  """A group of metrics.
-> +
-> +  Metric groups may be specificd on the perf command line, but within
-> +  the json they aren't encoded. Metrics may be in multiple groups
-> +  which can facilitate arrangements similar to trees.
-> +  """
-> +
-> +  def __init__(self, name: str, metric_list: List[Union[Metric,
-> +                                                        'MetricGroup']]):
-> +    self.name = name
-> +    self.metric_list = metric_list
-> +    for metric in metric_list:
-> +      metric.AddToMetricGroup(self)
-> +
-> +  def AddToMetricGroup(self, group):
-> +    """Callback used when a MetricGroup is added into another."""
-> +    for metric in self.metric_list:
-> +      metric.AddToMetricGroup(group)
-> +
-> +  def Flatten(self) -> Set[Metric]:
-> +    """Returns a set of all leaf metrics."""
-> +    result = set()
-> +    for x in self.metric_list:
-> +      result = result.union(x.Flatten())
-> +
-> +    return result
-> +
-> +  def ToPerfJson(self) -> str:
-> +    return json.dumps(sorted(self.Flatten()), indent=2, cls=_MetricJsonEncoder)
-> +
-> +  def __str__(self) -> str:
-> +    return self.ToPerfJson()
-> +
-> +
-> +class _RewriteIfExpToSelect(ast.NodeTransformer):
-> +
-> +  def visit_IfExp(self, node):
-> +    # pylint: disable=invalid-name
-> +    call = ast.Call(
-> +        func=ast.Name(id='Select', ctx=ast.Load()),
-> +        args=[node.body, node.test, node.orelse],
-> +        keywords=[])
-> +    ast.copy_location(call, node.test)
-> +    return call
-> +
-> +
-> +def ParsePerfJson(orig: str) -> Expression:
-> +  """A simple json metric expression decoder.
-> +
-> +  Converts a json encoded metric expression by way of python's ast and
-> +  eval routine. First tokens are mapped to Event calls, then
-> +  accidentally converted keywords or literals are mapped to their
-> +  appropriate calls. Python's ast is used to match if-else that can't
-> +  be handled via operator overloading. Finally the ast is evaluated.
-> +
-> +  Args:
-> +    orig (str): String to parse.
-> +
-> +  Returns:
-> +    Expression: The parsed string.
-> +  """
-> +  # pylint: disable=eval-used
-> +  py = orig.strip()
-> +  py = re.sub(r'([a-zA-Z][^-+/\* \\\(\),]*(?:\\.[^-+/\* \\\(\),]*)*)',
-> +              r'Event(r"\1")', py)
-> +  py = re.sub(r'#Event\(r"([^"]*)"\)', r'Literal("#\1")', py)
-> +  py = re.sub(r'([0-9]+)Event\(r"(e[0-9]+)"\)', r'\1\2', py)
-> +  keywords = ['if', 'else', 'min', 'max', 'd_ratio', 'source_count']
-> +  for kw in keywords:
-> +    py = re.sub(rf'Event\(r"{kw}"\)', kw, py)
-> +
-> +  parsed = ast.parse(py, mode='eval')
-> +  _RewriteIfExpToSelect().visit(parsed)
-> +  parsed = ast.fix_missing_locations(parsed)
-> +  return _Constify(eval(compile(parsed, orig, 'eval')))
-> diff --git a/tools/perf/pmu-events/metric_test.py b/tools/perf/pmu-events/metric_test.py
-> new file mode 100644
-> index 000000000000..66be55893de0
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/metric_test.py
-> @@ -0,0 +1,148 @@
-> +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-> +import unittest
-> +from metric import Constant
-> +from metric import Event
-> +from metric import ParsePerfJson
-> +
-> +
-> +class TestMetricExpressions(unittest.TestCase):
-> +
-> +  def test_Operators(self):
-> +    a = Event('a')
-> +    b = Event('b')
-> +    self.assertEqual((a | b).ToPerfJson(), 'a | b')
-> +    self.assertEqual((a ^ b).ToPerfJson(), 'a ^ b')
-> +    self.assertEqual((a & b).ToPerfJson(), 'a & b')
-> +    self.assertEqual((a < b).ToPerfJson(), 'a < b')
-> +    self.assertEqual((a > b).ToPerfJson(), 'a > b')
-> +    self.assertEqual((a + b).ToPerfJson(), 'a + b')
-> +    self.assertEqual((a - b).ToPerfJson(), 'a - b')
-> +    self.assertEqual((a * b).ToPerfJson(), 'a * b')
-> +    self.assertEqual((a / b).ToPerfJson(), 'a / b')
-> +    self.assertEqual((a % b).ToPerfJson(), 'a % b')
-> +    one = Constant(1)
-> +    self.assertEqual((a + one).ToPerfJson(), 'a + 1')
-> +
-> +  def test_Brackets(self):
-> +    a = Event('a')
-> +    b = Event('b')
-> +    c = Event('c')
-> +    self.assertEqual((a * b + c).ToPerfJson(), 'a * b + c')
-> +    self.assertEqual((a + b * c).ToPerfJson(), 'a + b * c')
-> +    self.assertEqual(((a + a) + a).ToPerfJson(), 'a + a + a')
-> +    self.assertEqual(((a + b) * c).ToPerfJson(), '(a + b) * c')
-> +    self.assertEqual((a + (b * c)).ToPerfJson(), 'a + b * c')
-> +    self.assertEqual(((a / b) * c).ToPerfJson(), 'a / b * c')
-> +    self.assertEqual((a / (b * c)).ToPerfJson(), 'a / (b * c)')
-> +
-> +  def test_ParsePerfJson(self):
-> +    # Based on an example of a real metric.
-> +    before = '(a + b + c + d) / (2 * e)'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Parsing should handle events with '-' in their name. Note, in
-> +    # the json file the '\' are doubled to '\\'.
-> +    before = r'topdown\-fe\-bound / topdown\-slots - 1'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Parsing should handle escaped modifiers. Note, in the json file
-> +    # the '\' are doubled to '\\'.
-> +    before = r'arb@event\=0x81\,umask\=0x1@ + arb@event\=0x84\,umask\=0x1@'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Parsing should handle exponents in numbers.
-> +    before = r'a + 1e12 + b'
-> +    after = before
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +  def test_IfElseTests(self):
-> +    # if-else needs rewriting to Select and back.
-> +    before = r'Event1 if #smt_on else Event2'
-> +    after = f'({before})'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    before = r'Event1 if 0 else Event2'
-> +    after = f'({before})'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    before = r'Event1 if 1 else Event2'
-> +    after = f'({before})'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +    # Ensure the select is evaluate last.
-> +    before = r'Event1 + 1 if Event2 < 2 else Event3 + 3'
-> +    after = (r'Select(Event(r"Event1") + Constant(1), Event(r"Event2") < '
-> +             r'Constant(2), Event(r"Event3") + Constant(3))')
-> +    self.assertEqual(ParsePerfJson(before).ToPython(), after)
-> +
-> +    before = r'Event1 > 1 if Event2 < 2 else Event3 > 3'
-> +    after = (r'Select(Event(r"Event1") > Constant(1), Event(r"Event2") < '
-> +             r'Constant(2), Event(r"Event3") > Constant(3))')
-> +    self.assertEqual(ParsePerfJson(before).ToPython(), after)
-> +
-> +    before = r'min(a + b if c > 1 else c + d, e + f)'
-> +    after = r'min((a + b if c > 1 else c + d), e + f)'
-> +    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-> +
-> +  def test_ToPython(self):
-> +    # pylint: disable=eval-used
-> +    # Based on an example of a real metric.
-> +    before = '(a + b + c + d) / (2 * e)'
-> +    py = ParsePerfJson(before).ToPython()
-> +    after = eval(py).ToPerfJson()
-> +    self.assertEqual(before, after)
-> +
-> +  def test_Simplify(self):
-> +    before = '1 + 2 + 3'
-> +    after = '6'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a + 0'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '0 + a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a | 0'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '0 | a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a * 0'
-> +    after = '0'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '0 * a'
-> +    after = '0'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a * 1'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = '1 * a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a if 0 else b'
-> +    after = 'b'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a if 1 else b'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +    before = 'a if b else a'
-> +    after = 'a'
-> +    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-> +
-> +if __name__ == '__main__':
-> +  unittest.main()
-> -- 
-> 2.38.1.584.g0f3c55d4c2-goog
+>  /* archs that select HAVE_ARCH_HUGE_VMAP should override one or more of these */
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 5d3fd3e6fe09..d6f376060d83 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -1815,6 +1815,7 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+>  
+>  	spin_lock(&vmap_area_lock);
+>  	unlink_va(va, &vmap_area_root);
+> +	va->flags = 0;
+>  	spin_unlock(&vmap_area_lock);
+>  
+This is not a good place to set flags to zero. It looks to me like
+corner and kind of specific.
 
--- 
 
-- Arnaldo
+>  	nr_lazy = atomic_long_add_return((va->va_end - va->va_start) >>
+> @@ -1887,6 +1888,10 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+>  
+>  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
+>  
+> +#define VMAP_RAM		0x1
+> +#define VMAP_BLOCK		0x2
+> +#define VMAP_FLAGS_MASK		0x3
+> +
+>  struct vmap_block_queue {
+>  	spinlock_t lock;
+>  	struct list_head free;
+> @@ -1967,6 +1972,9 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+>  		kfree(vb);
+>  		return ERR_CAST(va);
+>  	}
+> +	spin_lock(&vmap_area_lock);
+> +	va->flags = VMAP_RAM|VMAP_BLOCK;
+> +	spin_unlock(&vmap_area_lock);
+>
+The per-cpu code was created as a fast per-cpu allocator because of high
+vmalloc lock contention. If possible we should avoid of locking of the
+vmap_area_lock. Because it has a high contention.
+
+>  
+>  	vaddr = vmap_block_vaddr(va->va_start, 0);
+>  	spin_lock_init(&vb->lock);
+> @@ -2229,8 +2237,12 @@ void vm_unmap_ram(const void *mem, unsigned int count)
+>  		return;
+>  	}
+>  
+> -	va = find_vmap_area(addr);
+> +	spin_lock(&vmap_area_lock);
+> +	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+>  	BUG_ON(!va);
+> +	if (va)
+> +		va->flags &= ~VMAP_RAM;
+> +	spin_unlock(&vmap_area_lock);
+>  	debug_check_no_locks_freed((void *)va->va_start,
+>  				    (va->va_end - va->va_start));
+>  	free_unmap_vmap_area(va);
+> @@ -2269,6 +2281,10 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
+>  		if (IS_ERR(va))
+>  			return NULL;
+>  
+> +		spin_lock(&vmap_area_lock);
+> +		va->flags = VMAP_RAM;
+> +		spin_unlock(&vmap_area_lock);
+> +
+>
+Same here.
+
+--
+Uladzislau Rezki
