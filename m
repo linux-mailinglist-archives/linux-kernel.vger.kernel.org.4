@@ -2,174 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE6564213E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E087642123
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiLEBxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S231300AbiLEBmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiLEBxA (ORCPT
+        with ESMTP id S231244AbiLEBmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:53:00 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581DC767C;
-        Sun,  4 Dec 2022 17:52:49 -0800 (PST)
-X-UUID: aa2886e5d5254e58b70ea0296d1fbece-20221205
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=g9BsRHMoVPm+BDBuWg0FYyhlA3PQRobIouKG13VEGoA=;
-        b=DMZ3WnpTUv1rQqtHCswAtQPL8L+UvNwrjYzAEWtkV2KqgDbHQb0CxvoJBgzbAIz5D803xklFTAD1oFvRPWJe4jC5RncV2ip7QzCneZ5Pgux09odcQN++mo7mczCZOLkH7CFUKzwYx/Uy48yniWuwCDaJXmHxT3yJXJF1c68aqJc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:a6fb3763-ad12-4f96-97d2-c155db137212,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.14,REQID:a6fb3763-ad12-4f96-97d2-c155db137212,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:dcaaed0,CLOUDID:7e381f1f-5e1d-4ab5-ab8e-3e04efc02b30,B
-        ulkID:221205095245Y940Y0T2,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: aa2886e5d5254e58b70ea0296d1fbece-20221205
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <mason.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 191979232; Mon, 05 Dec 2022 09:52:42 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 5 Dec 2022 09:52:41 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 5 Dec 2022 09:52:40 +0800
-From:   Mason Zhang <mason.zhang@mediatek.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Peng Zhou <peng.zhou@mediatek.com>,
-        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
-Subject: [PATCH v2 1/1] scsi: ufs: core: fix device management cmd timeout flow
-Date:   Mon, 5 Dec 2022 09:42:03 +0800
-Message-ID: <20221205014202.2672-1-mason.zhang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Sun, 4 Dec 2022 20:42:09 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A1B10FC2;
+        Sun,  4 Dec 2022 17:42:08 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id fc4so17405689ejc.12;
+        Sun, 04 Dec 2022 17:42:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yAnNhUIc75L7bzftAYIBnuJYYdnWwo2VJ8qhC6wHghU=;
+        b=SM8w6aoaAzYh0mWdY1iUktzrHjZcXmYP2Rm0ebSYKTJbzMQ3koJPEL06i+fgtyEd9B
+         0T42Tm0mxRzMmxUwelEl+1Ds3pWl3kk82V6Daza0AIqdNwpITurkGCKNaf+c1qGo9qgh
+         GtXUSBfRYcNYMFdIdx6FTUDdtLQSH8SgNOosMvU9qp+SNlkBueJjOX9pmb9t276brye4
+         QdfyMZARzG57uRLBMFsDICK0rEtcMCR7KWZCJP+8cTX6ptXPpuOmX3w2vCtLjpLBVRRp
+         JPXYftG0K+NrPMXvLW8EsAfi68LgUGAL2Nkeu5MuIgZw+bt26xKrjokry3Q44jO2p8CI
+         CkFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yAnNhUIc75L7bzftAYIBnuJYYdnWwo2VJ8qhC6wHghU=;
+        b=ysPxCm4kKP/zZ1Lu5HgQg1Op7o/GGjGDC5je5avmsfnHAxMLonlAMLpIBZXZVUE6eQ
+         Jz+RAcGqIpF6qP7V+LN/r7QbKj6qPSArua78RVadADxeyWZeTrKY/OUmyb2+pZ4ajfNl
+         GIpYdqv5KgYt0c7W9ftKRWR9nbtXTbmi74juqGKm+ww+HmftTPhZuSus1KLmiOppa2yy
+         cyRMYzFz9TMc8amAPhUh6OrMuXWHdvYORa/1EQWQ/PPTwdVQl07RFRcrcX5nguaH5ueD
+         zO8TdDgLnA3WQiLkrZDCXph8s7P4leXTBTwjhPDeFSx1TKQlEqF58G07snIvSW4J7930
+         3m7Q==
+X-Gm-Message-State: ANoB5pnMo1i7QwglKGkHjZlJWiFbu8dGtvESc7JTq3j/2KIL8eRF9xDb
+        AitIfd1PmDOJJdXKwV+rFxA=
+X-Google-Smtp-Source: AA0mqf5F5VqVWv0XbUW3QXrtR+efOr9agIrzyoQiqVzNtbmSJiz8HeGemFdJZAsxylEgr2pvJD16eA==
+X-Received: by 2002:a17:906:6acc:b0:78d:b371:16e5 with SMTP id q12-20020a1709066acc00b0078db37116e5mr53099586ejs.456.1670204527076;
+        Sun, 04 Dec 2022 17:42:07 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id v6-20020a170906180600b007c0c679ca2fsm3299537eje.26.2022.12.04.17.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Dec 2022 17:42:06 -0800 (PST)
+Date:   Mon, 5 Dec 2022 02:42:15 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v2 net-next 2/4] drivers/net/phy: add the link modes for the
+ 10BASE-T1S Ethernet PHY
+Message-ID: <ccebae6d8726a1a94f3d5d29a19ef9b70d33206d.1670204277.git.piergiorgio.beruto@gmail.com>
+References: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mason Zhang <Mason.Zhang@mediatek.com>
+This patch adds the link modes for the IEEE 802.3cg Clause 147 10BASE-T1S
+Ethernet PHY. According to the specifications, the 10BASE-T1S supports
+Point-To-Point Full-Duplex, Point-To-Point Half-Duplex and/or
+Point-To-Multipoint (AKA Multi-Drop) Hal-Duplex operations.
 
-In ufs error handler flow, host will send device management cmd(NOP OUT)
-to device for recovery link. If cmd response timeout, and clear doorbell
-fail, ufshcd_wait_for_dev_cmd will do nothing and return,
-hba->dev_cmd.complete struct not set to null.
-
-In this time, if cmd has been responsed by device, then it will
-call complete() in __ufshcd_transfer_req_compl, because of complete
-struct is alloced in stack, then the KE will occur.
-
-Fix the following crash:
-  ipanic_die+0x24/0x38 [mrdump]
-  die+0x344/0x748
-  arm64_notify_die+0x44/0x104
-  do_debug_exception+0x104/0x1e0
-  el1_dbg+0x38/0x54
-  el1_sync_handler+0x40/0x88
-  el1_sync+0x8c/0x140
-  queued_spin_lock_slowpath+0x2e4/0x3c0
-  __ufshcd_transfer_req_compl+0x3b0/0x1164
-  ufshcd_trc_handler+0x15c/0x308
-  ufshcd_host_reset_and_restore+0x54/0x260
-  ufshcd_reset_and_restore+0x28c/0x57c
-  ufshcd_err_handler+0xeb8/0x1b6c
-  process_one_work+0x288/0x964
-  worker_thread+0x4bc/0xc7c
-  kthread+0x15c/0x264
-  ret_from_fork+0x10/0x30
-
-Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
+Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
 ---
- drivers/ufs/core/ufshcd.c | 46 ++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 25 deletions(-)
+ drivers/net/phy/phy-core.c   | 5 ++++-
+ drivers/net/phy/phylink.c    | 6 +++++-
+ include/uapi/linux/ethtool.h | 3 +++
+ net/ethtool/common.c         | 8 ++++++++
+ 4 files changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index b1f59a5fe632..2b4934a562a6 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2979,35 +2979,31 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- 		err = -ETIMEDOUT;
- 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
- 			__func__, lrbp->task_tag);
--		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0) {
-+		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0)
- 			/* successfully cleared the command, retry if needed */
- 			err = -EAGAIN;
-+		/*
-+		 * Since clearing the command succeeded we also need to
-+		 * clear the task tag bit from the outstanding_reqs
-+		 * variable.
-+		 */
-+		spin_lock_irqsave(&hba->outstanding_lock, flags);
-+		pending = test_bit(lrbp->task_tag,
-+				   &hba->outstanding_reqs);
-+		if (pending) {
-+			hba->dev_cmd.complete = NULL;
-+			__clear_bit(lrbp->task_tag,
-+				    &hba->outstanding_reqs);
-+		}
-+		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
-+
-+		if (!pending) {
- 			/*
--			 * Since clearing the command succeeded we also need to
--			 * clear the task tag bit from the outstanding_reqs
--			 * variable.
-+			 * The completion handler ran while we tried to
-+			 * clear the command.
- 			 */
--			spin_lock_irqsave(&hba->outstanding_lock, flags);
--			pending = test_bit(lrbp->task_tag,
--					   &hba->outstanding_reqs);
--			if (pending) {
--				hba->dev_cmd.complete = NULL;
--				__clear_bit(lrbp->task_tag,
--					    &hba->outstanding_reqs);
--			}
--			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
--
--			if (!pending) {
--				/*
--				 * The completion handler ran while we tried to
--				 * clear the command.
--				 */
--				time_left = 1;
--				goto retry;
--			}
--		} else {
--			dev_err(hba->dev, "%s: failed to clear tag %d\n",
--				__func__, lrbp->task_tag);
-+			time_left = 1;
-+			goto retry;
- 		}
+diff --git a/drivers/net/phy/phy-core.c b/drivers/net/phy/phy-core.c
+index 5d08c627a516..a64186dc53f8 100644
+--- a/drivers/net/phy/phy-core.c
++++ b/drivers/net/phy/phy-core.c
+@@ -13,7 +13,7 @@
+  */
+ const char *phy_speed_to_str(int speed)
+ {
+-	BUILD_BUG_ON_MSG(__ETHTOOL_LINK_MODE_MASK_NBITS != 99,
++	BUILD_BUG_ON_MSG(__ETHTOOL_LINK_MODE_MASK_NBITS != 102,
+ 		"Enum ethtool_link_mode_bit_indices and phylib are out of sync. "
+ 		"If a speed or mode has been added please update phy_speed_to_str "
+ 		"and the PHY settings array.\n");
+@@ -260,6 +260,9 @@ static const struct phy_setting settings[] = {
+ 	PHY_SETTING(     10, FULL,     10baseT_Full		),
+ 	PHY_SETTING(     10, HALF,     10baseT_Half		),
+ 	PHY_SETTING(     10, FULL,     10baseT1L_Full		),
++	PHY_SETTING(     10, FULL,     10baseT1S_Full		),
++	PHY_SETTING(     10, HALF,     10baseT1S_Half		),
++	PHY_SETTING(     10, HALF,     10baseT1S_P2MP_Half	),
+ };
+ #undef PHY_SETTING
+ 
+diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+index 09cc65c0da93..319790221d7f 100644
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+@@ -241,12 +241,16 @@ void phylink_caps_to_linkmodes(unsigned long *linkmodes, unsigned long caps)
+ 	if (caps & MAC_ASYM_PAUSE)
+ 		__set_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT, linkmodes);
+ 
+-	if (caps & MAC_10HD)
++	if (caps & MAC_10HD) {
+ 		__set_bit(ETHTOOL_LINK_MODE_10baseT_Half_BIT, linkmodes);
++		__set_bit(ETHTOOL_LINK_MODE_10baseT1S_Half_BIT, linkmodes);
++		__set_bit(ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT, linkmodes);
++	}
+ 
+ 	if (caps & MAC_10FD) {
+ 		__set_bit(ETHTOOL_LINK_MODE_10baseT_Full_BIT, linkmodes);
+ 		__set_bit(ETHTOOL_LINK_MODE_10baseT1L_Full_BIT, linkmodes);
++		__set_bit(ETHTOOL_LINK_MODE_10baseT1S_Full_BIT, linkmodes);
  	}
  
+ 	if (caps & MAC_100HD) {
+diff --git a/include/uapi/linux/ethtool.h b/include/uapi/linux/ethtool.h
+index 58e587ba0450..5f414deacf23 100644
+--- a/include/uapi/linux/ethtool.h
++++ b/include/uapi/linux/ethtool.h
+@@ -1741,6 +1741,9 @@ enum ethtool_link_mode_bit_indices {
+ 	ETHTOOL_LINK_MODE_800000baseDR8_2_Full_BIT	 = 96,
+ 	ETHTOOL_LINK_MODE_800000baseSR8_Full_BIT	 = 97,
+ 	ETHTOOL_LINK_MODE_800000baseVR8_Full_BIT	 = 98,
++	ETHTOOL_LINK_MODE_10baseT1S_Full_BIT		 = 99,
++	ETHTOOL_LINK_MODE_10baseT1S_Half_BIT		 = 100,
++	ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT	 = 101,
+ 
+ 	/* must be last entry */
+ 	__ETHTOOL_LINK_MODE_MASK_NBITS
+diff --git a/net/ethtool/common.c b/net/ethtool/common.c
+index 21cfe8557205..c586db0c5e68 100644
+--- a/net/ethtool/common.c
++++ b/net/ethtool/common.c
+@@ -208,6 +208,9 @@ const char link_mode_names[][ETH_GSTRING_LEN] = {
+ 	__DEFINE_LINK_MODE_NAME(800000, DR8_2, Full),
+ 	__DEFINE_LINK_MODE_NAME(800000, SR8, Full),
+ 	__DEFINE_LINK_MODE_NAME(800000, VR8, Full),
++	__DEFINE_LINK_MODE_NAME(10, T1S, Full),
++	__DEFINE_LINK_MODE_NAME(10, T1S, Half),
++	__DEFINE_LINK_MODE_NAME(10, T1S_P2MP, Half),
+ };
+ static_assert(ARRAY_SIZE(link_mode_names) == __ETHTOOL_LINK_MODE_MASK_NBITS);
+ 
+@@ -244,6 +247,8 @@ static_assert(ARRAY_SIZE(link_mode_names) == __ETHTOOL_LINK_MODE_MASK_NBITS);
+ #define __LINK_MODE_LANES_X		1
+ #define __LINK_MODE_LANES_FX		1
+ #define __LINK_MODE_LANES_T1L		1
++#define __LINK_MODE_LANES_T1S		1
++#define __LINK_MODE_LANES_T1S_P2MP	1
+ #define __LINK_MODE_LANES_VR8		8
+ #define __LINK_MODE_LANES_DR8_2		8
+ 
+@@ -366,6 +371,9 @@ const struct link_mode_info link_mode_params[] = {
+ 	__DEFINE_LINK_MODE_PARAMS(800000, DR8_2, Full),
+ 	__DEFINE_LINK_MODE_PARAMS(800000, SR8, Full),
+ 	__DEFINE_LINK_MODE_PARAMS(800000, VR8, Full),
++	__DEFINE_LINK_MODE_PARAMS(10, T1S, Full),
++	__DEFINE_LINK_MODE_PARAMS(10, T1S, Half),
++	__DEFINE_LINK_MODE_PARAMS(10, T1S_P2MP, Half),
+ };
+ static_assert(ARRAY_SIZE(link_mode_params) == __ETHTOOL_LINK_MODE_MASK_NBITS);
+ 
 -- 
-2.18.0
+2.35.1
 
