@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9916430A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E10643093
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbiLESlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S233453AbiLESkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbiLESkk (ORCPT
+        with ESMTP id S230295AbiLESjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:40:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091FD20F4D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:34:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670265292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WSqj19ShjO/7vxtuZI+dUviEQUmeLdI4Lm1aF+a+dOQ=;
-        b=hBgx9+UuvPamavD7UaT4ZvmQSbtLOIM5jW0QILlnIyfVC/yyzvO/ZNlyZAwKT5DmMsgNqX
-        /4kA+tX/NVVd8AaOjOSwVLrmDuMRvFWMPir6AT8th4BGJiVNGAQO1+LiztVj9mCo2Db6Nu
-        VcOmt/8hK+gCk4vEWZB/eSL+pVi2o4Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-Ema1oqdPPVeJJZtUykzAeQ-1; Mon, 05 Dec 2022 13:34:46 -0500
-X-MC-Unique: Ema1oqdPPVeJJZtUykzAeQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A8FF3C38FE4;
-        Mon,  5 Dec 2022 18:34:46 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.84])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 560C39E70;
-        Mon,  5 Dec 2022 18:34:43 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v11 1/4] random: add vgetrandom_alloc() syscall
-References: <20221205020046.1876356-1-Jason@zx2c4.com>
-        <20221205020046.1876356-2-Jason@zx2c4.com>
-Date:   Mon, 05 Dec 2022 19:34:39 +0100
-In-Reply-To: <20221205020046.1876356-2-Jason@zx2c4.com> (Jason A. Donenfeld's
-        message of "Mon, 5 Dec 2022 03:00:43 +0100")
-Message-ID: <87cz8xr96o.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Mon, 5 Dec 2022 13:39:43 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B710722B35;
+        Mon,  5 Dec 2022 10:35:10 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id fc4so564867ejc.12;
+        Mon, 05 Dec 2022 10:35:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K0Pz7z9Of4EXIWcqlWFyc4frtFe9XDNLDU6rlxGKy64=;
+        b=gH5C4Dx7Fn/K58xCRUqDMImP3lfARcST7X9QQ70IVAzCCijzqJkzYWRjbBLHxZ/sH+
+         C9TXzumfbru/sp/PaqODIb5QkUUY8K0HKI6VREyeQVsTT0Nqgpo3WirixuDxy60ZHy3h
+         Pvm4wm8uE0zdQYtbU/T44TQpZjxc9lOCIfb/sZmgP+LZAlpuF/D9ZI5lfcEeYv4pc3JF
+         R0vSKQPgvNcopkYSVToyhvF6iyrINuRgGOddC9mLmYkdyTw5C27UuUN+NB6bEKUBxPOl
+         pZNFyjZ9ECCb02O4bl/0sPRoPz2VdOANWu3XYUm4NgdhVU1Iq/q9JLkmYqe3aRuEtBHq
+         eOCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K0Pz7z9Of4EXIWcqlWFyc4frtFe9XDNLDU6rlxGKy64=;
+        b=1iRkSvYTcmSI3cxquFiTKtvuohJOsnuYw16Wt2LEA1SXg9bBT/nyiIObt5KDpceE2G
+         xlkX+c43JnmqOZaz5xFRCpBgdUhgeqnOhHpRWr+oD3ULBMxMd/r4Z9TbpXO1dgnwL6R4
+         GfCbKU8MDW6qCc0zlDfyvptawNEhnnrC6Jl8KB3Mk4eZRjSxzuPSy/f+2+lHQwJUx0Rm
+         lBuC1UMfB6/BCNgQQCuPRp9TAUiVegHJNU84JdDFDxm1Gmk6qxkRyG/zccY3+6UO3qZn
+         DLmSb1dsaf2iYMI6cn71sKVPwGtdVPJMTqEpz2yTldchOxDaZto1eHA+KquaqxOp2qbR
+         TYjg==
+X-Gm-Message-State: ANoB5pl4v4cyGED/3+oRyd+SGmOb4lpclABRvTQsWntO4mT/DlF9LhCo
+        H/lXwWX78F+Je4zDtdIVDm9HsHygMEvexnAA
+X-Google-Smtp-Source: AA0mqf5JgdtOy64lEsSGxkVOg6fJkLgntjMSHlgtwIfPGR8N4yp4br4I1QNSL3EdPT/5ddS6sHSVGg==
+X-Received: by 2002:a17:906:7f09:b0:7c0:b3a8:a5f9 with SMTP id d9-20020a1709067f0900b007c0b3a8a5f9mr16379127ejr.154.1670265309253;
+        Mon, 05 Dec 2022 10:35:09 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id g15-20020a170906348f00b007bf86800a0asm6440907ejb.28.2022.12.05.10.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 10:35:08 -0800 (PST)
+Date:   Mon, 5 Dec 2022 19:35:18 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v3 net-next 1/4] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y4455r631my4LNIU@gvm01>
+References: <d53ffecdde8d3950a24155228a3439f2c9b10b9b.1670259123.git.piergiorgio.beruto@gmail.com>
+ <Y44y05M+6NGod+4x@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y44y05M+6NGod+4x@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,76 +78,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Jason A. Donenfeld:
+On Mon, Dec 05, 2022 at 06:05:07PM +0000, Russell King (Oracle) wrote:
+> On Mon, Dec 05, 2022 at 06:17:37PM +0100, Piergiorgio Beruto wrote:
+> > diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
+> > index e5b6cb1a77f9..99e3497b6aa1 100644
+> > --- a/drivers/net/phy/phy.c
+> > +++ b/drivers/net/phy/phy.c
+> > @@ -543,6 +543,40 @@ int phy_ethtool_get_stats(struct phy_device *phydev,
+> >  }
+> >  EXPORT_SYMBOL(phy_ethtool_get_stats);
+> >  
+> > +/**
+> > + *
+> > + */
+> > +int phy_ethtool_get_plca_cfg(struct phy_device *dev,
+> > +			     struct phy_plca_cfg *plca_cfg)
+> > +{
+> > +	// TODO
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL(phy_ethtool_get_plca_cfg);
+> > +
+> > +/**
+> > + *
+> > + */
+> > +int phy_ethtool_set_plca_cfg(struct phy_device *dev,
+> > +			     struct netlink_ext_ack *extack,
+> > +			     const struct phy_plca_cfg *plca_cfg)
+> > +{
+> > +	// TODO
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL(phy_ethtool_set_plca_cfg);
+> > +
+> > +/**
+> > + *
+> > + */
+> > +int phy_ethtool_get_plca_status(struct phy_device *dev,
+> > +				struct phy_plca_status *plca_st)
+> > +{
+> > +	// TODO
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL(phy_ethtool_get_plca_status);
+> > +
+> >  /**
+> >   * phy_start_cable_test - Start a cable test
+> >   *
+> > diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+> > index 716870a4499c..f248010c403d 100644
+> > --- a/drivers/net/phy/phy_device.c
+> > +++ b/drivers/net/phy/phy_device.c
+> > @@ -3262,6 +3262,9 @@ static const struct ethtool_phy_ops phy_ethtool_phy_ops = {
+> >  	.get_sset_count		= phy_ethtool_get_sset_count,
+> >  	.get_strings		= phy_ethtool_get_strings,
+> >  	.get_stats		= phy_ethtool_get_stats,
+> > +	.get_plca_cfg		= phy_ethtool_get_plca_cfg,
+> > +	.set_plca_cfg		= phy_ethtool_set_plca_cfg,
+> > +	.get_plca_status	= phy_ethtool_get_plca_status,
+> >  	.start_cable_test	= phy_start_cable_test,
+> >  	.start_cable_test_tdr	= phy_start_cable_test_tdr,
+> >  };
+> 
+> From what I can see, none of the above changes need to be part of
+> patch 1 - nothing in the rest of the patch requires these members to be
+> filled in, since you explicitly test to see whether they are before
+> calling them.
+My apologies, in my understanding of this process (which is new to me)
+the idea of dividing the patches into smaller parts is to facilitate the
+review. It was not clear to me that the single patches had to be
+self-consistent also from a formal perspective. I was assuming that a
+patchset can be accepted or rejected as a whole. Is this the case, or
+can you accept only a subset of patches in a set?
 
-> +/********************************************************************
-> + *
-> + * vDSO support helpers.
-> + *
-> + * The actual vDSO function is defined over in lib/vdso/getrandom.c,
-> + * but this section contains the kernel-mode helpers to support that.
-> + *
-> + ********************************************************************/
-> +
-> +#ifdef CONFIG_VDSO_GETRANDOM
-> +/**
-> + * sys_vgetrandom_alloc - Allocate opaque states for use with vDSO getra=
-ndom().
-> + *
-> + * @num:	   On input, a pointer to a suggested hint of how many states to
-> + * 		   allocate, and on return the number of states actually allocated.
-> + *
-> + * @size_per_each: On input, must be zero. On return, the size of each s=
-tate allocated,
-> + * 		   so that the caller can split up the returned allocation into
-> + * 		   individual states.
-> + *
-> + * @addr:	   Reserved, must be zero.
-> + *
-> + * @flags:	   Reserved, must be zero.
-> + *
-> + * The getrandom() vDSO function in userspace requires an opaque state, =
-which
-> + * this function allocates by mapping a certain number of special pages =
-into
-> + * the calling process. It takes a hint as to the number of opaque states
-> + * desired, and provides the caller with the number of opaque states act=
-ually
-> + * allocated, the size of each one in bytes, and the address of the first
-> + * state, which may be split up into @num states of @size_per_each bytes=
- each,
-> + * by adding @size_per_each to the returned first state @num times.
-> + *
-> + * Returns the address of the first state in the allocation on success, =
-or a
-> + * negative error value on failure.
-> + *
-> + * The returned address of the first state may be passed to munmap(2) wi=
-th a
-> + * length of `(size_t)num * (size_t)size_per_each`, in order to dealloca=
-te the
-> + * memory, after which it is invalid to pass it to vDSO getrandom().
-> + *
-> + * States allocated by this function must not be dereferenced, written, =
-read,
-> + * or otherwise manipulated. The *only* supported operations are:
-> + *   - Splitting up the states in intervals of @size_per_each, no more t=
-han
-> + *     @num times from the first state.
-> + *   - Passing a state to the getrandom() vDSO function's @opaque_state
-> + *     parameter, but not passing the same state at the same time to two=
- such
-> + *     calls.
-> + *   - Passing the first state to munmap(2), as described above.
-> + * All other uses are undefined behavior, which is subject to change or =
-removal
+In short, I did this because I -thought- it would help the reader
+understanding what the intention of the change would be. If this is not
+the case, fair enough, I'll not do this in the future.
 
-Suggest: =E2=80=9CPassing the first state *and total length* to munmap(2)=
-=E2=80=9D
+> 
+> So, rather than introducing docbook stubs and stub functions that
+> do nothing, marked with "TODO" comments, just merge these changes
+> above with patch 3, where you actually populate these functions.
+Clear. Do you want me to regenerate the patches into a v4 or do you
+think we can move forward with v3 anyway?
 
-Rest of the documentation looks good to me.  It addresses my concerns
-about future evolution of this interface.
+> Also, why do they need to be exported to modules? From what I can see,
+> the only user of these functions is phy_device.c, which is part of
+> the same module as phy.c where the functions live, meaning that they
+> don't need to be exported.
+I did this because similar functions in the same file are all exported
+to modules (e.g. phy_config_aneg, phy_speed_down, phy_start_cable_test).
+Therefore, I assumed the intention was to let modules (maybe out-of-tree
+modules?) make use of these functions. If you think we should not do
+this, would kindly explain why for example the phy_start_cable_test is
+exported? I'm really asking because I'm trying to learn the rationales
+behind the architectural choices that I see here.
 
-Thanks,
-Florian
+> 
+> It's also surely wrong to introduce stubs that return success but
+> do nothing.
+No doubt it would be wrong if the patch can be integrated regardless of
+the other patches in the same set.
 
+> 
+> -- 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
