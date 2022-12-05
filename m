@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB92164226F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18BD64220F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 04:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiLEFCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 00:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S231436AbiLED6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 22:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiLEFCO (ORCPT
+        with ESMTP id S230307AbiLED6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 00:02:14 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CDFADF
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 21:02:13 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id b11so10126300pjp.2
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 21:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RaPN84Uxf892uugyR0/feAI2xM9TuK0z8cP4MEIBR8c=;
-        b=XPzQWo9Aig7b540V7TojrYhvSH53zgLOaQkg0q3giQu2YDrfVnTZIMTRRi3iCqD9+c
-         sAUbjJ50eTtwtIrPQqlDVcLb50kh1nyvmElQpnBMqBM7Ds0lNjxEcEmbYuiosrUZnNRU
-         b+24kKscS6YJnUHalv8THRhltm0XxrIk5t4LI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RaPN84Uxf892uugyR0/feAI2xM9TuK0z8cP4MEIBR8c=;
-        b=4uIztfUnEzPeCT+8lDo94Yhq4FNT8DNOI++rS4D+e0nSf1lxRCg8gSbuuYN7rdbKYE
-         LlrA+svZeaURCyByEXDsenTzHbv0/+061IrRRio9Xa9eM4e//iHlibikeVU0meOHAvkE
-         /TeWMe06RGwyiTVXhNIjcbx7+X4wqNK/o6VPZ2PdspLHRCgCmIojekIrpfAARS+8sf19
-         vnDMOzPsyTxbZz2YKR1pmxO6mEbCy8sRXzwpqesECIqBponrG1NDentSAw2fXga6fM+N
-         NHr51kQZL3mKC6Fj98YQODUGeGj0r+ryeDrZ++dzxvWuoZkH1QForU9arkadfV72PhGW
-         cf6Q==
-X-Gm-Message-State: ANoB5pnc3YEJps8yAaoqLUKBiBnk+INkKpgNfH4HuLs8eskD7iyMIOxU
-        lY1PEtBHXTcRTYoIkPMOsE/dHPyO/OeGldNxe5Mdo6cN5VYH/ZbC
-X-Google-Smtp-Source: AA0mqf6psoRKWmJz/JSqESjSHaDjM+aeAcK9X2GX1CQDKXqq0KqtubyUdxlKbqLSiT3wHzGn2ZcdBessKGx3W3DrpKI=
-X-Received: by 2002:a17:90a:f189:b0:219:996c:6bfc with SMTP id
- bv9-20020a17090af18900b00219996c6bfcmr12489960pjb.134.1670216533438; Sun, 04
- Dec 2022 21:02:13 -0800 (PST)
+        Sun, 4 Dec 2022 22:58:01 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A99FCD3;
+        Sun,  4 Dec 2022 19:57:58 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NQVBS4RdJz4f3rpv;
+        Mon,  5 Dec 2022 11:57:52 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP1 (Coremail) with SMTP id cCh0CgDXfq1CbI1jRaRVBg--.57323S2;
+        Mon, 05 Dec 2022 11:57:55 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shikemeng@huawei.com,
+        linfeilong@huawei.com, liuzhiqiang26@huawei.com
+Subject: [PATCH v3 0/9] A few bugfix and cleanup patches for blk-throttle
+Date:   Mon,  5 Dec 2022 19:57:00 +0800
+Message-Id: <20221205115709.251489-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org> <20220920-resend-meta-v4-1-3ac355b66723@chromium.org>
-In-Reply-To: <20220920-resend-meta-v4-1-3ac355b66723@chromium.org>
-From:   Yunke Cao <yunkec@chromium.org>
-Date:   Mon, 5 Dec 2022 14:02:02 +0900
-Message-ID: <CAEDqmY4F5fmcBydBtvyUQdUOBCs9N1HjrWBJAc-p0Smgj8VE2g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] media: v4l2-dev.c: Add Meta: to the name of
- metadata devices
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDXfq1CbI1jRaRVBg--.57323S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrWkKr13Gr4kCrykJrW7XFb_yoW8KFyxpr
+        WfZr1rGr4UXrnrGr1Sk3WavayrtaykJw4aqwnF9rZ3JF1vk34kKr129F18Zry7uFZ2ka1v
+        vr42yr97GF1DZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_
+        tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+        r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87
+        Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU01mh7UUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,49 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 3, 2022 at 2:08 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Devices with Metadata output (like uvc), create two video devices, one
-> for the data itself and another one for the metadata.
->
-> Add a "Meta: " to the beginning of the device name, as suggested by Mauro,
-> to avoid having multiple devices with the same name.
->
-> Fixes v4l2-compliance:
-> Media Controller ioctls:
->      fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
->    test MEDIA_IOC_G_TOPOLOGY: FAIL
->      fail: v4l2-test-media.cpp(394): num_data_links != num_links
->    test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
->
-> Suggested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/v4l2-core/v4l2-dev.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-> index 397d553177fa..5c2c9ebb6b96 100644
-> --- a/drivers/media/v4l2-core/v4l2-dev.c
-> +++ b/drivers/media/v4l2-core/v4l2-dev.c
-> @@ -901,6 +901,15 @@ int __video_register_device(struct video_device *vdev,
->         if (WARN_ON(type != VFL_TYPE_SUBDEV && !vdev->device_caps))
->                 return -EINVAL;
->
-> +       /* Add Meta: to metadata device names */
-> +       if (vdev->device_caps &
-> +           (V4L2_CAP_META_CAPTURE | V4L2_CAP_META_OUTPUT)) {
-> +               char aux[sizeof(vdev->name)];
-> +
-> +               snprintf(aux, sizeof(aux), "Meta: %s", vdev->name);
-> +               strscpy(vdev->name, aux, sizeof(aux));
-> +       }
-> +
->         /* v4l2_fh support */
->         spin_lock_init(&vdev->fh_lock);
->         INIT_LIST_HEAD(&vdev->fh_list);
->
-> --
-> 2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
+Hi, this series contain a few patches to fix problem when on the default
+hierarchy, corret comment and so on. More details can be found in
+respective changelogs. Thanks.
 
-Reviewed-by: Yunke Cao <yunkec@chromium.org>
+---
+V2->V3:
+ -Thanks for the review and advice from Tejun. Now all patches are acked
+  by Tejun.
+ -remove quotes around parent in corrected comment in patch "blk-throttle:
+  correct stale comment in throtl_pd_init"
+ -improve log message and rename throtl_tg_reach_low_limit to
+  throtl_low_limit_reached.
+ -drop patch "blk-throttle: avoid dead code in
+  throtl_hierarchy_can_upgrade"
+---
+V1->V2:
+ -Thanks for the review and advice from Tejun. The corrected comment of
+  "blk-throttle: correct stale comment in throtl_pd_init" and the
+  solution of "blk-throttle: Fix that bps of child could exceed bps
+  limited in parent" are from reply of Tejun.
+ -Collect Ack from Tejun.
+ -Fix the compile problem when CONFIG_BLK_DEV_THROTTLING_LOW is set.
+ -Drop "blk-throttle: Limit whole system if root group is configured
+  when on the default hierarchy", "blk-throttle: remove unnecessary check
+  for validation of limit index" and "blk-throttle: remove unused variable
+  td in tg_update_has_rules"
+ -Add "blk-throttle: correct stale comment in throtl_pd_init" and
+  "blk-throttle: avoid dead code in throtl_hierarchy_can_upgrade"
+ -Use solution that set the BIO_BPS_THROTTLED flag only when the bio
+  traversed the entire tree to fix that bps of child could exceed bps
+  limited in parent in patch 2/10.
+ -Improve the description and comment of most commits.
+---
+
+Kemeng Shi (9):
+  blk-throttle: correct stale comment in throtl_pd_init
+  blk-throttle: Fix that bps of child could exceed bps limited in parent
+  blk-throttle: ignore cgroup without io queued in
+    blk_throtl_cancel_bios
+  blk-throttle: correct calculation of wait time in tg_may_dispatch
+  blk-throttle: simpfy low limit reached check in throtl_tg_can_upgrade
+  blk-throttle: fix typo in comment of throtl_adjusted_limit
+  blk-throttle: remove incorrect comment for tg_last_low_overflow_time
+  blk-throttle: remove repeat check of elapsed time from last upgrade in
+    throtl_hierarchy_can_downgrade
+  blk-throttle: Use more siutable time_after check for update of
+    slice_start
+
+ block/blk-throttle.c | 102 +++++++++++++++++++++++--------------------
+ 1 file changed, 55 insertions(+), 47 deletions(-)
+
+-- 
+2.30.0
+
