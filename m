@@ -2,184 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBEA642A30
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C28F642A33
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbiLEOS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 09:18:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S231787AbiLEOTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 09:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiLEOSZ (ORCPT
+        with ESMTP id S230293AbiLEOTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 09:18:25 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7246C13DF5;
-        Mon,  5 Dec 2022 06:18:24 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id a27so11432108qtw.10;
-        Mon, 05 Dec 2022 06:18:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7fDqf1wSMUKDLZsKxEzPDkS9hYvTku/z6Qoj5KCP6Qg=;
-        b=ZHzIejlViGeY54HhY5Bx8HBEbu+yYY0qBUmZVOO0dCKIIZh/QofswS5ldWI4HAUyTQ
-         zbxLu1RseU/06klPi/Ai7D5Zfs5gM7nYyEhx4clHyyfmDDVjMud70TeXMARy8M56OTQw
-         aeG9PmCZ/y4EYMh545azDVC2h/eTg4cyOKdWzFdpIZnlzV6IwohIZawrn6aZAcrSJaWu
-         uY41p7nlJO9FIkctBhevUliWExxUHoAvtlUUkJ4D5g19Sx3EQX3qrvQsI5ohDKMhpFJr
-         beyTOrdie4le47fhAL8n27OosaXKaTfP6MKjtHbiDWdBFj4AejEsg3yY9jCMguq8FUYI
-         FEMA==
+        Mon, 5 Dec 2022 09:19:44 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1235D13DF5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:19:43 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id i7-20020a056e021b0700b003033a763270so10866154ilv.19
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 06:19:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7fDqf1wSMUKDLZsKxEzPDkS9hYvTku/z6Qoj5KCP6Qg=;
-        b=7wyrqM4jLUu/0UawfV0OG/qBM+6kGAEuMoVVD6L9GsFvCtGkK1OSF3KJxkLx6QsFYG
-         r/adM614edvQrsceNuXmcG/zNp+xx+IRnm329o5jlliTK7cU6o3u6YndNslQy9UDbiC0
-         YVD7iL3cF5SQLyHR3Lamx6qwznslmfh++WhPeZ+8R9vhRePxxx82BJxT8QgojM7p74vi
-         eg28TiNcuuZUNNW7PWdWNU5tBxI/611AFDeSLhR21Barhc6bifeTAq4p1L+p7E7J1yZw
-         pAD3W5To58PhAfTS2v56ouZO9kTpDQsjZYOV7eM0+QCym8jDZkUfNJqbL4CjABXu6cQI
-         4aWA==
-X-Gm-Message-State: ANoB5pks3IJNdEB4VAgBd3vJc2bFCJz4sycGQ8/Hl/JpILDh/Uhy7LMM
-        UXRMqfiO29B2xbteYu3Elh5kHI+f1B+JRTe2G4A=
-X-Google-Smtp-Source: AA0mqf59ZojC+8guP4DOWysVR9Oon2vtcBP3NEkk9JfdPWQSphe/niF2Ax2JjO/G+vnghJZG91azo+9rNdbLa59usKc=
-X-Received: by 2002:ac8:5501:0:b0:3a5:cb82:109b with SMTP id
- j1-20020ac85501000000b003a5cb82109bmr77193629qtq.61.1670249903499; Mon, 05
- Dec 2022 06:18:23 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/8Jk8KOOFBxQyZWRhL6bo/qrStKvX/xfP+IaTpaySrc=;
+        b=owuF5B24w86NVmD+WgkFmN+4cbTQ0RErmZ6y/YBtzezmK9wmstnuINHaPRFwqvXFAG
+         8O/TkA9ZwlcCDH+Ju8zT97aJUySxAm39U7YN0j5Ihf5rtZEPWPyTzPjTTjtOgCEEf9vW
+         I2CpOcEaq16MpHKZ6u4hWliT2YIC/BS0FO/Kg/OlRAlOivwx7VEvJt7yPxRRNsyVB04E
+         2hezW7OrBU6q/wmkhocSggnkqpHAxq80LBx9FsEGi0dUz8AGl6j7gsjirxNmCRbWAqKC
+         4vflJGYs8ssaKVUObOjfiBxU74eIHaRn9oHlffoY4OsOYjXBxYaBoCfOFcMWayBKrXc8
+         kP3w==
+X-Gm-Message-State: ANoB5pk/iJuCp3oHXRRrQ0dVoeTf28xD10FRfAfgxvAzbiiAPWC3cNDo
+        7ZoHG8GKEOXArYYWhJ/xm2IRufBND4SMMZbUMhRTUrAvOCyV
+X-Google-Smtp-Source: AA0mqf6nJfXe1VS1PVIyKS0X/i2Qm5cE4J7MVXPFd+/DAvBa0aMgqaJDYbQ0rkWZULR2oqOK7DDJsoSqjaxIlovg/tVXWn/TPHGR
 MIME-Version: 1.0
-References: <20221205085351.27566-1-tmaimon77@gmail.com> <20221205085351.27566-3-tmaimon77@gmail.com>
- <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com>
- <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
- <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
- <c200557f-c30a-62f9-287a-af804e818cf1@intel.com> <CAHp75VczbNpHPi-TBe81Ad=P=eXJZpAmkj=m4-apGF1e0uh5kg@mail.gmail.com>
-In-Reply-To: <CAHp75VczbNpHPi-TBe81Ad=P=eXJZpAmkj=m4-apGF1e0uh5kg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Dec 2022 16:17:47 +0200
-Message-ID: <CAHp75VemBiGUTspEYDe3hwA9pEzjNMQGY6_kUoVMJyCuEWgChw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
+X-Received: by 2002:a02:2206:0:b0:371:d6e:c33a with SMTP id
+ o6-20020a022206000000b003710d6ec33amr38687666jao.204.1670249982365; Mon, 05
+ Dec 2022 06:19:42 -0800 (PST)
+Date:   Mon, 05 Dec 2022 06:19:42 -0800
+In-Reply-To: <0000000000007f649605ee57c509@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e29cae05ef1560ab@google.com>
+Subject: Re: [syzbot] WARNING in diUnmount
+From:   syzbot <syzbot+47366a6b503c7edf6bbb@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        okanatov@gmail.com, shaggy@kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 4:14 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Dec 5, 2022 at 3:41 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > On 5/12/22 15:25, Andy Shevchenko wrote:
-> > > On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> > >> On Mon, 5 Dec 2022 at 12:54, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > >>> On Mon, Dec 5, 2022 at 10:54 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> ...
->
-> > >>>> +       pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
-> > >>>
-> > >>> You can't mix devm with non-devm in this way.
-> > >> Can you explain what you mean You can't mix devm with non-devm in this
-> > >> way, where is the mix?
-> > >> In version 1 used devm_clk_get, is it problematic?
-> > >
-> > > devm_ is problematic in your case.
-> > > TL;DR: you need to use clk_get_optional() and clk_put().
-> >
-> > devm_ calls exactly those, so what is the issue?
->
-> The issue is the error path or removal stage where it may or may be
-> not problematic. To be on the safe side, the best approach is to make
-> sure that allocated resources are being deallocated in the reversed
-> order. That said, the
->
-> 1. call non-devm_func()
-> 2. call devm_func()
->
-> is wrong strictly speaking.
+syzbot has found a reproducer for the following issue on:
 
-To elaborate more, the
+HEAD commit:    9e46a7996732 Add linux-next specific files for 20221125
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17e16583880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
+dashboard link: https://syzkaller.appspot.com/bug?extid=47366a6b503c7edf6bbb
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12170129880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d77d6b880000
 
-1. call all devm_func()
-2. call only non-devm_func()
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/758d818cf966/disk-9e46a799.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f7c8696b40a5/vmlinux-9e46a799.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/810f9750b87f/bzImage-9e46a799.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/87349f941ac3/mount_0.gz
 
-is the correct order.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+47366a6b503c7edf6bbb@syzkaller.appspotmail.com
 
-Hence in this case the driver can be worked around easily (by
-shuffling the order in ->probe() to call devm_ first), but as I said
-looking into implementation of the _unregister() I'm pretty sure that
-clock management should be in sdhci-pltfm, rather than in all callers
-who won't need the full customization.
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+jfs_mount_rw: diMount failed!
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5299 at mm/slab_common.c:923 mod_lruvec_page_state include/linux/vmstat.h:563 [inline]
+WARNING: CPU: 1 PID: 5299 at mm/slab_common.c:923 free_large_kmalloc+0xad/0xe0 mm/slab_common.c:930
+Modules linked in:
+CPU: 1 PID: 5299 Comm: syz-executor293 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:free_large_kmalloc+0xad/0xe0 mm/slab_common.c:923
+Code: ee 48 89 ef 5d 41 5c 41 5d e9 cf bd 0d 00 e8 3a 22 d1 ff 44 89 e2 be 06 00 00 00 48 89 ef e8 2a fc 1f 00 e8 95 23 d1 ff eb c6 <0f> 0b 80 3d 06 a4 a6 0c 00 0f 84 e5 75 0b 08 48 8b 74 24 20 4c 89
+RSP: 0018:ffffc90003dafbc8 EFLAGS: 00010246
+RAX: 00fff00000000000 RBX: ffff8880765b2930 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffff88801d468000 RDI: ffffea0000751a00
+RBP: ffffea0000751a00 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801d468000
+R13: ffff88802009c200 R14: ffff8880765b0d70 R15: ffff8880765b2930
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000559d632cbd28 CR3: 000000000c48e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ diUnmount+0xf1/0x130 fs/jfs/jfs_imap.c:195
+ jfs_umount+0x189/0x410 fs/jfs/jfs_umount.c:63
+ jfs_put_super+0x85/0x1a0 fs/jfs/super.c:194
+ generic_shutdown_super+0x158/0x410 fs/super.c:492
+ kill_block_super+0x9b/0xf0 fs/super.c:1428
+ deactivate_locked_super+0x98/0x160 fs/super.c:332
+ deactivate_super+0xb1/0xd0 fs/super.c:363
+ cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1291
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xaa8/0x28d0 kernel/exit.c:820
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:950
+ __do_sys_exit_group kernel/exit.c:961 [inline]
+ __se_sys_exit_group kernel/exit.c:959 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:959
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fdcfc9f6ce9
+Code: Unable to access opcode bytes at 0x7fdcfc9f6cbf.
+RSP: 002b:00007ffe9b47d4c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fdcfca713f0 RCX: 00007fdcfc9f6ce9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007ffe9b47d6b8
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdcfca713f0
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
 
-Hope this helps to understand my point.
-
-> > > Your ->remove() callback doesn't free resources in the reversed order
-> > > which may or, by luck, may not be the case of all possible crashes,
-> > > UAFs, races, etc during removal stage. All the same for error path in
-> > > ->probe().
->
-> I also pointed out above what would be the outcome of neglecting this rule.
->
-> > >>>> +       if (IS_ERR(pltfm_host->clk))
-> > >>>> +               return PTR_ERR(pltfm_host->clk);
-> > >>>> +
-> > >>>> +       ret = clk_prepare_enable(pltfm_host->clk);
-> > >>>> +       if (ret)
-> > >>>> +               return ret;
-> > >>>> +
-> > >>>> +       caps = sdhci_readl(host, SDHCI_CAPABILITIES);
-> > >>>> +       if (caps & SDHCI_CAN_DO_8BIT)
-> > >>>> +               host->mmc->caps |= MMC_CAP_8_BIT_DATA;
-> > >>>> +
-> > >>>> +       ret = mmc_of_parse(host->mmc);
-> > >>>> +       if (ret)
-> > >>>> +               goto err_sdhci_add;
-> > >>>> +
-> > >>>> +       ret = sdhci_add_host(host);
-> > >>>> +       if (ret)
-> > >>>> +               goto err_sdhci_add;
-> > >>>
-> > >>> Why can't you use sdhci_pltfm_register()?
-> > >> two things are missing in sdhci_pltfm_register
-> > >> 1. clock.
-> > >
-> > > Taking into account the implementation of the corresponding
-> > > _unregister() I would add the clock handling to the _register() one.
-> > > Perhaps via a new member of the platform data that supplies the name
-> > > and index of the clock and hence all clk_get_optional() / clk_put will
-> > > be moved there.
-> > >
-> > >> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
-> > >
-> > > All the same, why can't platform data be utilised for this?
-> > >
-> > >>>> +       return 0;
-> > >>>> +
-> > >>>> +err_sdhci_add:
-> > >>>> +       clk_disable_unprepare(pltfm_host->clk);
-> > >>>> +       sdhci_pltfm_free(pdev);
-> > >>>> +       return ret;
-> > >>>> +}
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko
