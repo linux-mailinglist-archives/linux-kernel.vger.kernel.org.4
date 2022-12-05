@@ -2,81 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B91F6424D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31416424DA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiLEIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:40:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
+        id S232177AbiLEIkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiLEIkV (ORCPT
+        with ESMTP id S232086AbiLEIkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 03:40:21 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B74CFD3D
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11719DF43
         for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:40:19 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id 125-20020a1c0283000000b003d076ee89d6so8542204wmc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:40:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=OcD3CaGFzs1PLkrODWghhljl7q5gdf6UquBrIlu96c8=;
-        b=fomgni0P+Kvz4zbYfBoYDXmTuwlwU0ixPV9zc2axslY/d3jzwxQh+dMWD/1qEnnnDL
-         GOnQOnW9csawE/QeXDaXZdgQsfHVgXYS9ZrhrNS0q9U6NJEV+H4EGJ9ve3hhMDD7sFmL
-         7Wl3U5Ccme74YPkR2qPy7wlOmEy4EJacZd3RBFPwvpyZWERlOiMX3vqIBPoTallXMSak
-         qbOJsU3adQBBtGRBwSmY2FBbyClZ3xEMzQzQ89FRj+icQaZ/umrCRzU+vrExLVPG/7YD
-         3NdH0e+qfQ8CcOMyDwFFqt8PcKe8ms8ct1puaClTg6rXPCFwNBalHAailEbC38Eb4KI2
-         EA3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OcD3CaGFzs1PLkrODWghhljl7q5gdf6UquBrIlu96c8=;
-        b=RSoms4oljNN7eUCHeOqibM557WFxk5Hac2Xy0NrckH14pzoj3gO2XKl4B+jwLf89cc
-         opmlxGAyn0D+jy6Q9/y0hmg8tthC4NEFw5wh4dyIIpblSeBqk0v2a91QYQN8cfwM7oGG
-         tppN5kWm6sYMeHf0rkeGL79AOZFr/hvGLA0c1jJiJVZeBwKsg8zle2aGLRW/rvCgAplw
-         NJleArVt9SZCE2vsZouv5ugFtKaxZ4Lzxg+1S2CF/jYdlTtv3WFEUt6+DmlfbTt/OtnD
-         P/gYY/DM40ozRA0mYgrn7uf8etEuuDPk6TPcw/eeb9ZM5hFKSx8Id6YK7D9uJjEgqSOL
-         8fug==
-X-Gm-Message-State: ANoB5pn/ULCXfekh4CcwvigWjoRRyZYl5dlCVBUkoekACi7h1o9Gp4S8
-        VdXdg3cdyLuZKzg3lLlQILxkDA==
-X-Google-Smtp-Source: AA0mqf6by0jvDO+tidzDyqYI7lQOw3jHImDUmuwrlf9PDMqGT6N+VCFo+1Uc7Sj1Kqj8tGslwUYr9g==
-X-Received: by 2002:a05:600c:511b:b0:3d0:128a:6d1e with SMTP id o27-20020a05600c511b00b003d0128a6d1emr14608390wms.108.1670229617859;
-        Mon, 05 Dec 2022 00:40:17 -0800 (PST)
-Received: from [192.168.7.93] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id v6-20020adfe286000000b00241f467f888sm13601383wri.74.2022.12.05.00.40.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:40:17 -0800 (PST)
-Message-ID: <6e0dcfa8-6855-cc80-5e23-443d44cae07b@linaro.org>
-Date:   Mon, 5 Dec 2022 09:40:16 +0100
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C131BB80BA7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F844C433D7;
+        Mon,  5 Dec 2022 08:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670229616;
+        bh=Py7U0J9lhyhMmERlESNqJ/l87ZCQ8dpAgBdNRMRcqGM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PJyocrVDKyVYKt9w4LONlrFDWTeUDGTNJgovQ9yzyF/WWKk2MO0fLjXYOFEuv7kaU
+         ZauGeRi5g4r1tIZV6+V0UTzYnbhS/xSiJVbeXK6OyJgJlWdMMTgMaZ8gzI/gNNpPeO
+         WL/bg2cp4Z7XYZlghgpixWfySue5GUu99J/pG2GN0ckRXCaITVXFk0wFxC4pyFt0YM
+         ew6qHJ+FODJtpGWUriVpqwLjZ4v2zSdloXtQb4JuN6hX9umIS9wkRPArpDb4ynDIHO
+         tKO07OVeHJxt94CpsLA/Lh/dM9KXcgt7P81FNz02ytlGSFzlb6V7DpAoU12P9wwx6N
+         nRuiQsXJMyVgg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2EFF9C5C7C6;
+        Mon,  5 Dec 2022 08:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] arm64: defconfig: Add Meson DDR PMU as module
-Content-Language: en-US
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Chris Healy <healych@amazon.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>
-References: <20221204043530.1673752-1-jiucheng.xu@amlogic.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221204043530.1673752-1-jiucheng.xu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: =?utf-8?q?=5BPATCH=5D_platform/chrome=3A_use_sysfs=5Femit=28=29_to_?=
+        =?utf-8?q?instead_of_scnprintf=28=29?=
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167022961618.18204.6417258868175494719.git-patchwork-notify@kernel.org>
+Date:   Mon, 05 Dec 2022 08:40:16 +0000
+References: <202212021656040995199@zte.com.cn>
+In-Reply-To: <202212021656040995199@zte.com.cn>
+To:     <ye.xingchen@zte.com.cn>
+Cc:     bleung@chromium.org, groeck@chromium.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,26 +57,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC linux-amlogic@lists.infradead.org
+Hello:
 
-On 04/12/2022 05:35, Jiucheng Xu wrote:
-> Add Meson DDR PMU to defconfig so that build errors are caught.
+This patch was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
+
+On Fri, 2 Dec 2022 16:56:04 +0800 (CST) you wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> ---
->   arch/arm64/configs/defconfig | 1 +
->   1 file changed, 1 insertion(+)
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
 > 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 0b6af3348e79..f2324b54a6ba 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1265,6 +1265,7 @@ CONFIG_ARM_DMC620_PMU=m
->   CONFIG_QCOM_L2_PMU=y
->   CONFIG_QCOM_L3_PMU=y
->   CONFIG_HISI_PMU=y
-> +CONFIG_MESON_DDR_PMU=m
->   CONFIG_NVMEM_IMX_OCOTP=y
->   CONFIG_NVMEM_IMX_OCOTP_SCU=y
->   CONFIG_NVMEM_MTK_EFUSE=y
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> [...]
+
+Here is the summary with links:
+  - platform/chrome: use sysfs_emit() to instead of scnprintf()
+    https://git.kernel.org/chrome-platform/c/7af6ee18ad6e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
