@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC94642AE2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDCB642AE3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiLEPA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S232088AbiLEPAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiLEPAZ (ORCPT
+        with ESMTP id S231923AbiLEPA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:00:25 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB206BC85
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:00:24 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5EZsYo010692
-        for <linux-kernel@vger.kernel.org>; Mon, 5 Dec 2022 07:00:24 -0800
+        Mon, 5 Dec 2022 10:00:28 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA071DFCE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:00:25 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2B5C0SIX000740
+        for <linux-kernel@vger.kernel.org>; Mon, 5 Dec 2022 07:00:25 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=jW6N9lNs9aHxnq0Gv9Edz1amHHS3PbY2z2d5+0qT2t4=;
- b=ZDve+bapQAu7yDP8M4eZ++3X7Atj7Oi/MPdhOX8GOyN0o96Th+aa0aFtIrmp5gNK3eZS
- HzF3xxhFebuIGv3tqNRl5XfJNX9K6+4lD6lgY1dexHfkteTL8RPOFw97DAomCtSxxIsr
- 8acc7jar+0AVMiwkV8Vx32lnj+RfkqLMkgaenN7XvgNfN1U+/1N4HHpWpGQ3o1urOyRK
- 3Ti0b6tZ4n5xjP0Q2j7bZESHDlrEai4sXBg3oCxGH4HeWr2AeTRCouymw4bcvB/XmFO4
- MvgXj2mCpC2mM6M7tvXpT6At2VZAC++PdbSJSZkV5CO26DjSDOIEXr/LZODVH26ZmerN qQ== 
+ bh=YU1RvihRnvDJ0EI7aPZRW/ndJTmtKABPXXQKd2XE/QM=;
+ b=h72aB84uF535vhqcSF/upzVkRKlcy1O4YHQ33llTxkXXqGNEv07PJm/9UT0GamvqFm69
+ letw054sf96K2yDECmaBk5enLnO0+h+gBqXZpn3F9n3gVsFu4VqjzsvjyQUHNSWvgrsH
+ ZYetGQPpLXxAeBwNCLvHfg+F6A153f/jl5EwJ17EI7tbQ5br8Zz0ZbAHA16VCXqzRSKp
+ yMbMqL1mylZiV7qWL1Zmk1MRN/59JJuWSaNU8zWZiPNEAKZ11tvspWwFc9X4MX/uo989
+ +XykDO8PcS9Hz6d+i8hEd+kGzILJyBRYQoaU9DJOf749WEbwODmDaNso2QkV4OFWjpcB vA== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m82ntux7x-1
+        by m0001303.ppops.net (PPS) with ESMTPS id 3m9g8c1kks-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:00:23 -0800
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:00:24 -0800
 Received: from twshared10308.07.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Mon, 5 Dec 2022 07:00:22 -0800
 Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id A52D2C6156DD; Mon,  5 Dec 2022 07:00:09 -0800 (PST)
+        id C5CE2C6156E0; Mon,  5 Dec 2022 07:00:09 -0800 (PST)
 From:   Keith Busch <kbusch@meta.com>
 To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Matthew Wilcox <willy@infradead.org>
 CC:     Tony Battersby <tonyb@cybernetics.com>,
         Keith Busch <kbusch@kernel.org>
-Subject: [PATCH 01/11] dmapool: add alloc/free performance test
-Date:   Mon, 5 Dec 2022 06:59:27 -0800
-Message-ID: <20221205145937.54367-2-kbusch@meta.com>
+Subject: [PATCH 02/11] dmapool: remove checks for dev == NULL
+Date:   Mon, 5 Dec 2022 06:59:28 -0800
+Message-ID: <20221205145937.54367-3-kbusch@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221205145937.54367-1-kbusch@meta.com>
 References: <20221205145937.54367-1-kbusch@meta.com>
@@ -52,8 +52,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 0P1HgfABaooqcOIgzK216V-MDpPTcDvG
-X-Proofpoint-GUID: 0P1HgfABaooqcOIgzK216V-MDpPTcDvG
+X-Proofpoint-GUID: SIAsFnmQprUPdP9asPoy9-ng49KiGAL9
+X-Proofpoint-ORIG-GUID: SIAsFnmQprUPdP9asPoy9-ng49KiGAL9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
@@ -67,197 +67,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+From: Tony Battersby <tonyb@cybernetics.com>
 
-Provide a module that allocates and frees many blocks of various sizes
-and report how long it takes. This is intended to provide a consistent
-way to measure how changes to the dma_pool_alloc/free routines affect
-timing.
+dmapool originally tried to support pools without a device because
+dma_alloc_coherent() supports allocations without a device.  But nobody
+ended up using dma pools without a device, and trying to do so will
+result in an oops.  So remove the checks for pool->dev =3D=3D NULL since =
+they
+are unneeded bloat.
 
+Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+[added check for null dev on create]
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- mm/Kconfig        |   9 +++
- mm/Makefile       |   1 +
- mm/dmapool_test.c | 138 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 148 insertions(+)
- create mode 100644 mm/dmapool_test.c
+ mm/dmapool.c | 45 ++++++++++++++-------------------------------
+ 1 file changed, 14 insertions(+), 31 deletions(-)
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 57e1d8c5b5052..12a78d64eeb72 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -1044,6 +1044,15 @@ config GUP_TEST
- comment "GUP_TEST needs to have DEBUG_FS enabled"
- 	depends on !GUP_TEST && !DEBUG_FS
+diff --git a/mm/dmapool.c b/mm/dmapool.c
+index a7eb5d0eb2da7..559207e1c3339 100644
+--- a/mm/dmapool.c
++++ b/mm/dmapool.c
+@@ -134,6 +134,9 @@ struct dma_pool *dma_pool_create(const char *name, st=
+ruct device *dev,
+ 	size_t allocation;
+ 	bool empty =3D false;
 =20
-+config DMAPOOL_TEST
-+	tristate "Enable a module to run time tests on dma_pool"
-+	depends on HAS_DMA
-+	help
-+	  Provides a module that will allocate and free many blocks of various
-+	  sizes and report how long it takes. This is intended to provide a
-+	  consistent way to measure how changes to the dma_pool_alloc/free
-+	  routines affect performance.
++	if (!dev)
++		return NULL;
 +
- config GUP_GET_PTE_LOW_HIGH
- 	bool
+ 	if (align =3D=3D 0)
+ 		align =3D 1;
+ 	else if (align & (align - 1))
+@@ -275,7 +278,7 @@ void dma_pool_destroy(struct dma_pool *pool)
+ 	mutex_lock(&pools_reg_lock);
+ 	mutex_lock(&pools_lock);
+ 	list_del(&pool->pools);
+-	if (pool->dev && list_empty(&pool->dev->dma_pools))
++	if (list_empty(&pool->dev->dma_pools))
+ 		empty =3D true;
+ 	mutex_unlock(&pools_lock);
+ 	if (empty)
+@@ -284,12 +287,8 @@ void dma_pool_destroy(struct dma_pool *pool)
 =20
-diff --git a/mm/Makefile b/mm/Makefile
-index 8e105e5b3e293..3a08f5d7b1782 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -103,6 +103,7 @@ obj-$(CONFIG_MEMCG) +=3D swap_cgroup.o
- endif
- obj-$(CONFIG_CGROUP_HUGETLB) +=3D hugetlb_cgroup.o
- obj-$(CONFIG_GUP_TEST) +=3D gup_test.o
-+obj-$(CONFIG_DMAPOOL_TEST) +=3D dmapool_test.o
- obj-$(CONFIG_MEMORY_FAILURE) +=3D memory-failure.o
- obj-$(CONFIG_HWPOISON_INJECT) +=3D hwpoison-inject.o
- obj-$(CONFIG_DEBUG_KMEMLEAK) +=3D kmemleak.o
-diff --git a/mm/dmapool_test.c b/mm/dmapool_test.c
-new file mode 100644
-index 0000000000000..2873d91f509b4
---- /dev/null
-+++ b/mm/dmapool_test.c
-@@ -0,0 +1,138 @@
-+#include <linux/device.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/dmapool.h>
-+#include <linux/kernel.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+
-+#define NR_TESTS (100)
-+
-+struct dma_pool_pair {
-+	dma_addr_t dma;
-+	void *v;
-+};
-+
-+static const int block_sizes[] =3D {
-+	16,
-+	64,
-+	256,
-+	1024,
-+	4096
-+};
-+
-+static struct dma_pool *pool;
-+struct device test_dev;
-+u64 dma_mask;
-+
-+static inline int nr_blocks(int size)
-+{
-+	return clamp_t(int, (PAGE_SIZE / size) * 512, 1024, 8192);
-+}
-+
-+static int dmapool_test_alloc(struct dma_pool_pair *p, int blocks)
-+{
-+	int i;
-+
-+	for (i =3D 0; i < blocks; i++) {
-+		p[i].v =3D dma_pool_alloc(pool, GFP_KERNEL,
-+					&p[i].dma);
-+		if (!p[i].v)
-+			goto pool_fail;
-+	}
-+
-+	for (i =3D 0; i < blocks; i++)
-+		dma_pool_free(pool, p[i].v, p[i].dma);
-+
-+	return 0;
-+
-+pool_fail:
-+	for (--i; i >=3D 0; i--)
-+		dma_pool_free(pool, p[i].v, p[i].dma);
-+	return -ENOMEM;
-+}
-+
-+static int dmapool_test_block(int block_size)
-+{
-+	int blocks =3D nr_blocks(block_size);
-+	ktime_t start_time, end_time;
-+	struct dma_pool_pair *p;
-+	int i, ret;
-+
-+	p =3D kcalloc(blocks, sizeof(*p), GFP_KERNEL);
-+	if (!p)
-+		return -ENOMEM;
-+
-+	pool =3D dma_pool_create("test pool", &test_dev, block_size,
-+			       block_size, 0);
-+	if (!pool) {
-+		ret =3D -ENOMEM;
-+		goto free_pairs;
-+	}
-+
-+	start_time =3D ktime_get();
-+	for (i =3D 0; i < NR_TESTS; i++) {
-+		ret =3D dmapool_test_alloc(p, blocks);
-+		if (ret)
-+			goto free_pool;
-+		if (need_resched())
-+			cond_resched();
-+	}
-+	end_time =3D ktime_get();
-+
-+	printk("dmapool test: size:%-4d blocks:%-6d time:%llu\n", block_size,
-+	       blocks, ktime_us_delta(end_time, start_time));
-+
-+free_pool:
-+	dma_pool_destroy(pool);
-+free_pairs:
-+	kfree(p);
-+	return ret;
-+}
-+
-+static void dmapool_test_release(struct device *dev)
-+{
-+}
-+
-+static int dmapool_checks(void)
-+{
-+	int i, ret;
-+
-+	ret =3D dev_set_name(&test_dev, "dmapool-test");
-+	if (ret)
-+		return ret;
-+
-+	ret =3D device_register(&test_dev);
-+	if (ret) {
-+		printk("%s: register failed:%d\n", __func__, ret);
-+		goto put_device;
-+	}
-+
-+	test_dev.release =3D dmapool_test_release;
-+	test_dev.dma_ops =3D NULL;
-+	test_dev.dma_mask =3D &dma_mask;
-+	ret =3D dma_set_mask_and_coherent(&test_dev, DMA_BIT_MASK(64));
-+	if (ret) {
-+		printk("%s: mask failed:%d\n", __func__, ret);
-+		goto del_device;
-+	}
-+
-+	for (i =3D 0; i < ARRAY_SIZE(block_sizes); i++) {
-+		ret =3D dmapool_test_block(block_sizes[i]);
-+		if (ret)
-+			break;
-+	}
-+
-+del_device:
-+	device_del(&test_dev);
-+put_device:
-+	put_device(&test_dev);
-+	return ret;
-+}
-+
-+static void dmapool_exit(void)
-+{
-+}
-+
-+module_init(dmapool_checks);
-+module_exit(dmapool_exit);
-+MODULE_LICENSE("GPL");
+ 	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
+ 		if (is_page_busy(page)) {
+-			if (pool->dev)
+-				dev_err(pool->dev, "%s %s, %p busy\n", __func__,
+-					pool->name, page->vaddr);
+-			else
+-				pr_err("%s %s, %p busy\n", __func__,
+-				       pool->name, page->vaddr);
++			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
++				pool->name, page->vaddr);
+ 			/* leak the still-in-use consistent memory */
+ 			list_del(&page->page_list);
+ 			kfree(page);
+@@ -351,12 +350,8 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t me=
+m_flags,
+ 		for (i =3D sizeof(page->offset); i < pool->size; i++) {
+ 			if (data[i] =3D=3D POOL_POISON_FREED)
+ 				continue;
+-			if (pool->dev)
+-				dev_err(pool->dev, "%s %s, %p (corrupted)\n",
+-					__func__, pool->name, retval);
+-			else
+-				pr_err("%s %s, %p (corrupted)\n",
+-					__func__, pool->name, retval);
++			dev_err(pool->dev, "%s %s, %p (corrupted)\n",
++				__func__, pool->name, retval);
+=20
+ 			/*
+ 			 * Dump the first 4 bytes even if they are not
+@@ -411,12 +406,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
+r, dma_addr_t dma)
+ 	page =3D pool_find_page(pool, dma);
+ 	if (!page) {
+ 		spin_unlock_irqrestore(&pool->lock, flags);
+-		if (pool->dev)
+-			dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
+-				__func__, pool->name, vaddr, &dma);
+-		else
+-			pr_err("%s %s, %p/%pad (bad dma)\n",
+-			       __func__, pool->name, vaddr, &dma);
++		dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
++			__func__, pool->name, vaddr, &dma);
+ 		return;
+ 	}
+=20
+@@ -426,12 +417,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
+r, dma_addr_t dma)
+ #ifdef	DMAPOOL_DEBUG
+ 	if ((dma - page->dma) !=3D offset) {
+ 		spin_unlock_irqrestore(&pool->lock, flags);
+-		if (pool->dev)
+-			dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
+-				__func__, pool->name, vaddr, &dma);
+-		else
+-			pr_err("%s %s, %p (bad vaddr)/%pad\n",
+-			       __func__, pool->name, vaddr, &dma);
++		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
++			__func__, pool->name, vaddr, &dma);
+ 		return;
+ 	}
+ 	{
+@@ -442,12 +429,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
+r, dma_addr_t dma)
+ 				continue;
+ 			}
+ 			spin_unlock_irqrestore(&pool->lock, flags);
+-			if (pool->dev)
+-				dev_err(pool->dev, "%s %s, dma %pad already free\n",
+-					__func__, pool->name, &dma);
+-			else
+-				pr_err("%s %s, dma %pad already free\n",
+-				       __func__, pool->name, &dma);
++			dev_err(pool->dev, "%s %s, dma %pad already free\n",
++				__func__, pool->name, &dma);
+ 			return;
+ 		}
+ 	}
 --=20
 2.30.2
 
