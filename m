@@ -2,221 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEC564211B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86E364211A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiLEBgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        id S231265AbiLEBg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbiLEBgH (ORCPT
+        with ESMTP id S231266AbiLEBgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:36:07 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A83E081
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 17:36:06 -0800 (PST)
-Received: from dggpemm500015.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NQQy51B3yzqSr5;
-        Mon,  5 Dec 2022 09:31:57 +0800 (CST)
-Received: from [10.174.177.133] (10.174.177.133) by
- dggpemm500015.china.huawei.com (7.185.36.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Dec 2022 09:36:04 +0800
-Subject: Re: [RFC PATCH] gfs2: Fix missing cleanup quota in gfs2_put_super()
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-CC:     <liwei391@huawei.com>, <rpeterso@redhat.com>,
-        <cluster-devel@redhat.com>, <syzkaller-bugs@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221201115032.3540859-1-bobo.shaobowang@huawei.com>
- <5c66dbe3-5701-ba42-7933-73a31c2dc891@huawei.com>
- <CAHc6FU7b3geKS7sjt5ehiaenALemWtaGTdWJvNt2JftRFuLG_Q@mail.gmail.com>
-From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
-Message-ID: <7ca13049-c828-9506-c3a6-cb4a7dbb8bd4@huawei.com>
-Date:   Mon, 5 Dec 2022 09:36:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
-MIME-Version: 1.0
-In-Reply-To: <CAHc6FU7b3geKS7sjt5ehiaenALemWtaGTdWJvNt2JftRFuLG_Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.133]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500015.china.huawei.com (7.185.36.181)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 4 Dec 2022 20:36:24 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590D11054C;
+        Sun,  4 Dec 2022 17:36:22 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NQR3811dHz501Qf;
+        Mon,  5 Dec 2022 09:36:20 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl2.zte.com.cn with SMTP id 2B51aB3v062841;
+        Mon, 5 Dec 2022 09:36:11 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Mon, 5 Dec 2022 09:36:12 +0800 (CST)
+Date:   Mon, 5 Dec 2022 09:36:12 +0800 (CST)
+X-Zmail-TransId: 2b04638d4b0cffffffff9459153f
+X-Mailer: Zmail v1.0
+Message-ID: <202212050936120314474@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>
+Cc:     <pabeni@redhat.com>, <bigeasy@linutronix.de>,
+        <imagedong@tencent.com>, <kuniyu@amazon.com>, <petrm@nvidia.com>,
+        <liu3101@purdue.edu>, <wujianguo@chinatelecom.cn>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIG5ldDogcmVjb3JkIHRpbWVzIG9mIG5ldGRldl9idWRnZXQgZXhoYXVzdGVk?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B51aB3v062841
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638D4B14.000 by FangMail milter!
+X-FangMail-Envelope: 1670204180/4NQR3811dHz501Qf/638D4B14.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638D4B14.000/4NQR3811dHz501Qf
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yang Yang <yang.yang29@zte.com>
 
+A long time ago time_squeeze was used to only record netdev_budget
+exhausted[1]. Then we added netdev_budget_usecs to enable softirq
+tuning[2]. And when polling elapsed netdev_budget_usecs, it's also
+record by time_squeeze.
+For tuning netdev_budget and netdev_budget_usecs respectively, we'd
+better distinguish from netdev_budget exhausted and netdev_budget_usecs
+elapsed, so add budget_exhaust to record netdev_budget exhausted.
 
-在 2022/12/3 21:15, Andreas Gruenbacher 写道:
-> Hello,
-> 
-> thank you for this bug report.
-> 
-> On Sat, Dec 3, 2022 at 8:28 AM Wangshaobo (bobo)
-> <bobo.shaobowang@huawei.com> wrote:
->> 在 2022/12/1 19:50, Wang ShaoBo 写道:
->>> syzbot has reported an interesting issue:
->>>
->>> INFO: task syz-executor888:3126 blocked for more than 143 seconds.
->>>         Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
->>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->>> task:syz-executor888 state:D stack:0     pid:3126  ppid:3124   flags:0x00000000
->>> Call trace:
->>>    __switch_to+0x180/0x298 arch/arm64/kernel/process.c:553
->>>    context_switch kernel/sched/core.c:5209 [inline]
->>>    __schedule+0x408/0x594 kernel/sched/core.c:6521
->>>    schedule+0x64/0xa4 kernel/sched/core.c:6597
->>>    schedule_timeout+0x108/0x1b4 kernel/time/timer.c:1935
->>>    gfs2_gl_hash_clear+0xd4/0x1b0 fs/gfs2/glock.c:2263
->>>    gfs2_put_super+0x318/0x390 fs/gfs2/super.c:620
->>>    generic_shutdown_super+0x94/0x198 fs/super.c:492
->>>    kill_block_super+0x30/0x78 fs/super.c:1428
->>>    gfs2_kill_sb+0x68/0x78
->>>    deactivate_locked_super+0x70/0xe8 fs/super.c:332
->>>    deactivate_super+0xd0/0xd4 fs/super.c:363
->>>    cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
->>>    __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
->>>    task_work_run+0x100/0x148 kernel/task_work.c:179
->>>    resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->>>    do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
->>>    prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
->>>    exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
->>>    el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
->>>    el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
->>>    el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
->>>
->>> Showing all locks held in the system:
->>> 1 lock held by rcu_tasks_kthre/11:
->>>    #0: ffff80000d4a4768 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
->>> 1 lock held by rcu_tasks_trace/12:
->>>    #0: ffff80000d4a4db8 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
->>> 1 lock held by khungtaskd/27:
->>>    #0: ffff80000d4a4640 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:303
->>> 2 locks held by getty/2759:
->>>    #0: ffff0000c7d7e098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
->>>    #1: ffff80000f6be2f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x89c drivers/tty/n_tty.c:2177
->>> 1 lock held by syz-executor888/3126:
->>>    #0: ffff0000cae680e0 (&type->s_umount_key#41){+.+.}-{3:3}, at: deactivate_super+0xc8/0xd4 fs/super.c:362
->>>
->>> =============================================
->>>
->>> One task blocked after executing gfs2_gl_hash_clear(), it looks
->>> like go to sleep for waiting the condition (&sdp->sd_glock_disposal == 0),
->>> this field sd_glock_disposal is used to count the getting times
->>> that calling gfs2_glock_get() success, In most cases, when we operate
->>> the mount interface, we will finally call this function:
->>>
->>>                                 do_mount()
->>>                                 path_mount()
->>>                                 vfs_get_tree()
->>>                                 gfs2_get_tree()
->>>                                 get_tree_bdev()
->>>                                 gfs2_fill_super()
->>>                        ________ init_inodes()_____________
->>>                       V                                   V
->>>          gfs2_lookup_simple()                         gfs2_rindex_update()
->>>          gfs2_lookupi()                               gfs2_ri_update()
->>>          gfs2_dir_search()                         -> read_rindex_entry() //*gfs2_rgrpd->rd_gl
->>>       -> gfs2_inode_lookup() //*gfs2_inode->i_gl  |__ gfs2_glock_get()
->>>      |__gfs2_glock_get()
->>>
->>> Correspondingly, release this glock's reference and decrease
->>> sdp->sd_glock_disposal through this path when umount:
->>>
->>>                                 cleanup_mnt()
->>>                                 deactivate_super()
->>>                                 deactivate_locked_super()
->>>                                 gfs2_kill_sb()
->>>                                 kill_block_super()
->>>                                 generic_shutdown_super()
->>>             _gfs2_rgrpd->rd_gl__gfs2_put_super()__gfs2_inode->i_gl__
->>>            V                                                        V
->>>        gfs2_clear_rgrpd()                           gfs2_put_super()
->>>        gfs2_glock_put()                             iput()
->>>           gfs2_glock_free()                            evict()
->>>                                                        gfs2_evict_inode()
->>>                                                        gfs2_glock_put_eventually()
->>>                                                        gfs2_glock_put()
->>>                                                        gfs2_glock_free()
->>>
->>> But if calling reconfigure_super() from sysfs between mount and umount,
-> 
-> How are you doing that?
-> 
-I tested multiple times and trace corresponding path, and analyzed the 
-trigger mechanism, it looks a bit complicated - -.
+[1] commit 1da177e4c3f4("Linux-2.6.12-rc2")
+[2] commit 7acf8a1e8a28("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
 
->>> this path will also take the glock lock and increase sdp->sd_glock_disposal
->>> as it also call gfs2_glock_get():
->>>
->>>      reconfigure_super()
->>>       gfs2_reconfigure()
->>>         gfs2_make_fs_rw() //remount filesystem read-write
->>>          gfs2_quota_init()
->>>        -> qd_alloc()      //*gfs2_quota_data->qd_gl
->>>       |___ gfs2_glock_get()
->>>
->>> This relies on gfs2_quota_cleanup() that is eventually called by
->>> gfs2_make_fs_ro() to clean up but unfortunately the file system
->>> has not been remounted at this time, the condition (!sb_rdonly(sb))
->>> is false and gfs2_make_fs_ro() can not be called, ultimately makes
->>> sdp->sd_glock_disposal never be 0.
->>>
->>> This add calling gfs2_quota_cleanup() when this filesystem remains
->>> readOnly, in this case we don't need sync quota or other operation
->>> otherwise the filesystem was really remounted.
->>>
->>> But this modification will trigger this warning:
->>>
->>>      WARNING: CPU: 7 PID: 2595 at include/linux/backing-dev.h:246 __folio_mark_dirty+0x559/0x7b0
->> I paste wrong, the warning is:
->> gfs2: fsid=mounts.0: warning: assertion "!qd->qd_change" failed at
->> function = gfs2_quota_cleanup, file = fs/gfs2/quota.c, line = 1474
-> 
-> Thanks, this is making more sense now.
-> 
-why it makes more sense now ?
->> qd->qd_change has been changed in gfs2_quota_init(), but it looks
->> we don't need to do anything before remounting the file system as
->> read-write.
->>>
->>> We can filter this warning with adding a parameter as it doesn't
->>> really make sense here.
->>>
->>> Fixes: 9e6e0a128bca ("GFS2: Merge mount.c and ops_super.c into super.c")
->>> Reported-by: syzbot+ed7d0f71a89e28557a77@syzkaller.appspotmail.com
->>> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
->>> ---
->>>    fs/gfs2/super.c | 3 +++
->>>    1 file changed, 3 insertions(+)
->>>
->>> diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
->>> index b018957a1bb2..9a3c6da8db55 100644
->>> --- a/fs/gfs2/super.c
->>> +++ b/fs/gfs2/super.c
->>> @@ -586,7 +586,10 @@ static void gfs2_put_super(struct super_block *sb)
->>>
->>>        if (!sb_rdonly(sb)) {
->>>                gfs2_make_fs_ro(sdp);
->>> +     } else {
->>> +             gfs2_quota_cleanup(sdp);
->>>        }
->>> +
->>>        WARN_ON(gfs2_withdrawing(sdp));
->>>
->>>        /*  At this point, we're through modifying the disk  */
->>>
->>
-> 
-> Andreas
-> 
-> .
-> 
--- Wang ShaoBo
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
+Reviewed-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+---
+Changes since v1: - Fix compile error of patch making error
+---
+ include/linux/netdevice.h |  1 +
+ net/core/dev.c            | 11 +++++++----
+ net/core/net-procfs.c     |  5 +++--
+ 3 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 5aa35c58c342..a77719b956a6 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3135,6 +3135,7 @@ struct softnet_data {
+ 	/* stats */
+ 	unsigned int		processed;
+ 	unsigned int		time_squeeze;
++	unsigned int		budget_exhaust;
+ #ifdef CONFIG_RPS
+ 	struct softnet_data	*rps_ipi_list;
+ #endif
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 7627c475d991..42ae2dc62661 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -6663,11 +6663,14 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
+ 		budget -= napi_poll(n, &repoll);
+
+ 		/* If softirq window is exhausted then punt.
+-		 * Allow this to run for 2 jiffies since which will allow
+-		 * an average latency of 1.5/HZ.
++		 * The window is controlled by packets budget and time.
++		 * See Documentation/admin-guide/sysctl/net.rst for details.
+ 		 */
+-		if (unlikely(budget <= 0 ||
+-			     time_after_eq(jiffies, time_limit))) {
++		if (unlikely(budget <= 0)) {
++			sd->budget_exhaust++;
++			break;
++		}
++		if (unlikely(time_after_eq(jiffies, time_limit))) {
+ 			sd->time_squeeze++;
+ 			break;
+ 		}
+diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
+index 1ec23bf8b05c..e09e245125f0 100644
+--- a/net/core/net-procfs.c
++++ b/net/core/net-procfs.c
+@@ -169,12 +169,13 @@ static int softnet_seq_show(struct seq_file *seq, void *v)
+ 	 * mapping the data a specific CPU
+ 	 */
+ 	seq_printf(seq,
+-		   "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
++		   "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x\n",
+ 		   sd->processed, sd->dropped, sd->time_squeeze, 0,
+ 		   0, 0, 0, 0, /* was fastroute */
+ 		   0,	/* was cpu_collision */
+ 		   sd->received_rps, flow_limit_count,
+-		   softnet_backlog_len(sd), (int)seq->index);
++		   softnet_backlog_len(sd), (int)seq->index,
++		   sd->budget_exhaust);
+ 	return 0;
+ }
+
+-- 
+2.15.2
