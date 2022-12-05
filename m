@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EC16428F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A961F6428FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiLENJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S230092AbiLENLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiLENJo (ORCPT
+        with ESMTP id S230012AbiLENLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:09:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8606BDF4B;
-        Mon,  5 Dec 2022 05:09:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E781B810A2;
-        Mon,  5 Dec 2022 13:09:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D96C433D6;
-        Mon,  5 Dec 2022 13:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670245779;
-        bh=JGe7A2mKPNwISfXUyKM/xAD82YV2mzxDTWEoLEbnyVM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aMG8Li8P2nmWIjukJsiXe7RmCS1MnjA3TpdGjdg4cZmMJoreI+YRGsKMl0V2BPfn5
-         AJYIyap2lGDFIpe6Hca/nfPN70jceWnqglbSmbvt+Bc2etTh7lapPSd5zk/EapkW+p
-         QNyQdDQyCeHTZtHUbKf7qeTrT0TLkvlC8mE8cnbcmUqquwEKYv+U3QtHw2OFJTPaRn
-         tS3/XwC2MIufljrnrQDQ9t4bHwyP0hrsm4sZbdHZ6akl9TeKBylCY7B8SAywIFrgOO
-         DONXkqudP6C29gIl/0dmRE3zn/azAC7aCeHbLPKbbeIeyoVIeIdENsA3A+hnXyS2qv
-         E0UyAjlPnPy7g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0720B40404; Mon,  5 Dec 2022 10:09:37 -0300 (-03)
-Date:   Mon, 5 Dec 2022 10:09:36 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH] Revert "perf stat: Rename "aggregate-number" to
- "cpu-count" in JSON"
-Message-ID: <Y43tkBsn5gZhIkXa@kernel.org>
-References: <20221130193613.1046804-1-namhyung@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130193613.1046804-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Dec 2022 08:11:15 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D75DF62
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:11:14 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id h28so11270850pfq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:11:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:in-reply-to:references
+         :thread-topic:message-id:cc:to:from:subject:date:user-agent:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5nMGbrXGhiB4HhM2ObWO+aQ3wI1+eF07URsd7WNtM24=;
+        b=DncO5p0pU7swZj9TY8hDwpgM6IAwHfAvqOdCHNyviwn2S/yFTQHi6Zjd0VDKzPCbyn
+         Xd7Wdfiy/6AHcRt9jBbuPpcMYSGwwAanxbukVUYklGkg+JKrFA5scFfBTynu53q9x6XJ
+         kQ4DoYbawrCK413XOJvk3xdEMAz2n9pxkT7x9zr0WNYR4l9RYBvrsUS4HvbSgBGDg/4a
+         GtCkXwbvxsxbpCP+7zAwSx4WZzJjVPv4zd1AbWbRIVNIlwDzbPZsJygwcfM+AUVFber6
+         Th6kEHpoN+Nlva3IncSgACB+W1QfZXxCednFuGbPoECvhsyMG4/5wBHARN7QC8Og+9Ni
+         1RCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:in-reply-to:references
+         :thread-topic:message-id:cc:to:from:subject:date:user-agent
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5nMGbrXGhiB4HhM2ObWO+aQ3wI1+eF07URsd7WNtM24=;
+        b=EsNyss3o2w6BebnfdGdWtobKu1e+ES4iVAfMPIPjdoBPgr8PDemdxikbDoOr3+8UtQ
+         vfkriiJ1HJmeQgDA4IebsYhnKGSUNzlHix/goB7vRqB1BKCj+Rvu5HtddN2+yD3t998I
+         yPLHUZRoawKaS1BuRHMVHtPtzrWORAnXtkNWTlXB5MECGJq6nz6uzK1tIzi5ySz+Ficl
+         NI6IGWqIY3cIkhvagxRJHyo4UX7fbq6fFbz3LYB3nszDZJ8PeoM5N4zAVKGGwiZXUBat
+         fshjUZb01/g7VEIS91DvvD+7A+aXO3zR73kI5aQInUTYYvrdm8kOfPj732c7TBH9H6uq
+         1Ovw==
+X-Gm-Message-State: ANoB5pmGoeTIBeou+9cASnymsgbXBxiTfESbd0lbuYw6vv/H8AcbW2FD
+        lsUhNQ/Qnc5Li6wbbT2EZ+0=
+X-Google-Smtp-Source: AA0mqf4Fw9H8urJb4u5255XB0j6dp4JZ1HDpEIUtTR+NLigc5OiABlHz7vFWIJ56BzghnFtBFB9dow==
+X-Received: by 2002:a63:4643:0:b0:477:751a:4169 with SMTP id v3-20020a634643000000b00477751a4169mr57149906pgk.300.1670245873763;
+        Mon, 05 Dec 2022 05:11:13 -0800 (PST)
+Received: from [30.20.53.28] ([43.132.98.43])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b001766a3b2a26sm10535133pli.105.2022.12.05.05.11.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Dec 2022 05:11:13 -0800 (PST)
+User-Agent: Microsoft-MacOutlook/16.67.22111300
+Date:   Mon, 05 Dec 2022 21:11:10 +0800
+Subject: Re: [PATCH] checkpatch: Add the backport commit format check
+From:   Xinghui Li <korantwork@gmail.com>
+To:     Joe Perches <joe@perches.com>, <apw@canonical.com>,
+        <dwaipayanray1@gmail.com>, <lukas.bulwahn@gmail.com>
+CC:     <alexs@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Xinghui Li <korantli@tencent.com>
+Message-ID: <E4ACC146-581D-4D38-81F5-873BBCC61A9B@gmail.com>
+Thread-Topic: [PATCH] checkpatch: Add the backport commit format check
+References: <20221205094826.44844-1-korantwork@gmail.com>
+ <b0194f880b217e905a9ce571e5b86b974beaef0b.camel@perches.com>
+In-Reply-To: <b0194f880b217e905a9ce571e5b86b974beaef0b.camel@perches.com>
+Mime-version: 1.0
+Content-type: text/plain;
+        charset="UTF-8"
+Content-transfer-encoding: quoted-printable
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        MALFORMED_FREEMAIL,MIME_QP_LONG_LINE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Nov 30, 2022 at 11:36:13AM -0800, Namhyung Kim escreveu:
-> This reverts commit c4b41b83c25073c09bfcc4e5ec496c9dd316656b.
-> 
-> As Ian said, the "cpu-count" is not appropriate for uncore events, also it
-> caused a perf test failure.
+=E5=9C=A8 2022/12/5 20:46=EF=BC=8C=E2=80=9CJoe Perches=E2=80=9D<joe@perches.com> =E5=86=99=E5=85=A5:
+>    nak.
+>
+>   I don't believe this should be an accepted style.
 
-This was applied, thanks.
+Sorry for my confusion between LTS and mainline.
 
-- Arnaldo
- 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/stat-display.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> index 847acdb5dc40..f1ee4b052198 100644
-> --- a/tools/perf/util/stat-display.c
-> +++ b/tools/perf/util/stat-display.c
-> @@ -281,19 +281,19 @@ static void print_aggr_id_json(struct perf_stat_config *config,
->  
->  	switch (config->aggr_mode) {
->  	case AGGR_CORE:
-> -		fprintf(output, "\"core\" : \"S%d-D%d-C%d\", \"cpu-count\" : %d, ",
-> +		fprintf(output, "\"core\" : \"S%d-D%d-C%d\", \"aggregate-number\" : %d, ",
->  			id.socket, id.die, id.core, nr);
->  		break;
->  	case AGGR_DIE:
-> -		fprintf(output, "\"die\" : \"S%d-D%d\", \"cpu-count\" : %d, ",
-> +		fprintf(output, "\"die\" : \"S%d-D%d\", \"aggregate-number\" : %d, ",
->  			id.socket, id.die, nr);
->  		break;
->  	case AGGR_SOCKET:
-> -		fprintf(output, "\"socket\" : \"S%d\", \"cpu-count\" : %d, ",
-> +		fprintf(output, "\"socket\" : \"S%d\", \"aggregate-number\" : %d, ",
->  			id.socket, nr);
->  		break;
->  	case AGGR_NODE:
-> -		fprintf(output, "\"node\" : \"N%d\", \"cpu-count\" : %d, ",
-> +		fprintf(output, "\"node\" : \"N%d\", \"aggregate-number\" : %d, ",
->  			id.node, nr);
->  		break;
->  	case AGGR_NONE:
-> -- 
-> 2.38.1.584.g0f3c55d4c2-goog
+Thanks for your reply.
 
--- 
 
-- Arnaldo
