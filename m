@@ -2,84 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0933F643603
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE17E64360E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiLEUsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S231978AbiLEUvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiLEUso (ORCPT
+        with ESMTP id S230108AbiLEUvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:48:44 -0500
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAACF309
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:48:37 -0800 (PST)
-Received: by mail-qt1-x843.google.com with SMTP id g7so1020610qts.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 12:48:37 -0800 (PST)
+        Mon, 5 Dec 2022 15:51:17 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1BD29347
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:51:16 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id a19so15006061ljk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 12:51:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=newo-com-co.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:subject:reply-to
-         :from:to:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G87DnUAiii3iK2ESprf59SrkRQzux29Sco0voF578tw=;
-        b=vCinPglihYKzA3+rfmPD+/Zj8GjRL4f8O8AcQ2DPTe+UyrkKtumWqWXXGjLCjIcMG1
-         HoKivAQ/s6B89skCvd8yf6vGn5qYyETv/EvE9eKvBqQXcN13HlKYolJLszX5JdDjZ/AD
-         tna+bKU8mN5Zwr5EBhBCW/pm6UqmO9yi41B/zzlwC7GWZxbN7+KnIy8MAULtlctLx66j
-         O9YmS5+G7IXMUpe2lPqywxtlqAnRwwqyDK2kjpdSR5Wtl++nE/2zd+EpXoML2mxCwBgi
-         2QQStG+0lLfptRX7v2tDFrN+27lnSjBHw4MSnsfUj3/m/xj2g1VTyTxSQy+FlxOGzUI2
-         TK4A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Z2XpYiD/ntYKWMtGcoP22Vxvmru2pM1Nsi3jqANT0Rk=;
+        b=cOSYWKjXUDbi5y3AIxWi01YF61DZ9ZNKMHn9yOgeHXmrxiv+s3K0CMfKoVSfUt3rjG
+         0AKDtxond5QdIsglUBvFvFHjOjB80Bqhj86a+C74/tRnAF32bc4H0tVSW/C+G4XWtDyO
+         PdooF6HHjlOX6eFwd4dLhkGgL3lDNIY6VhmmNhZDpP7mYuexMNzSnMmAtC4ebn/qjLK4
+         WFqV5FcwvZMjuDJnj6Zw1HPacDdSDCCfB+/ALbU14rmAALSJfdjVBiZ4SVDfUKJd9jRm
+         qG+f94wGkK/2KOc/SyqoEzG/2zt8ZSN/JgexZWos+WoO/YJjj3ss82+DHLsBMtbho7Sd
+         0pzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:subject:reply-to
-         :from:to:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G87DnUAiii3iK2ESprf59SrkRQzux29Sco0voF578tw=;
-        b=eFnl1OJruiPIVUddURTlhs4esTiG3Im5eyEjHHh7SLNI4NirIQq9sHAooUgKa3YmZP
-         pJnjMPLMXro9hT4LeXszPXMZoREOt7x2nqLo+yZ2AknMu/grTFLnr8YMN9YIRZshmepA
-         UTQTnQ2PYG5C/7ViJGFd2H0cvRc8sYHWtbFtkGxpMj0A6LvaPgM3SZie2CUH5TDfnPCh
-         EJdiE5jAcXjCZChyf0CYQcUneIR9vj15CeqYOLmWj/NLqMA3Zo8AoNsVWjQ+TNfWhp6c
-         lh307B/iFtX4+YEzxzTpPjnSHEBozw6rOztW+M6GR+RL+tq1MLKclsuQOc79MqzFlRjZ
-         OITg==
-X-Gm-Message-State: ANoB5pkKp32FJizSV1HK9CqSxc0SQSx+PU4VdQ3eYU0INoG7EnChB33p
-        eprlS1ODfINh2zhXO0okxzNAyL7Y5eYotxPqGPI=
-X-Google-Smtp-Source: AA0mqf4ST/PpRiSTcSR9DFMMezeG5EMF6nB0xhWX1gmOvhyP+BqxXKJB8O3OcEhtD2RTBA/jq8Ee8g==
-X-Received: by 2002:ac8:7fc3:0:b0:35d:42d0:25f with SMTP id b3-20020ac87fc3000000b0035d42d0025fmr62092965qtk.18.1670273316818;
-        Mon, 05 Dec 2022 12:48:36 -0800 (PST)
-Received: from www.tucolegio.co (23.220.167.72.host.secureserver.net. [72.167.220.23])
-        by smtp.gmail.com with ESMTPSA id k17-20020ac84791000000b003a50c9993e1sm10371915qtq.16.2022.12.05.12.48.36
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2XpYiD/ntYKWMtGcoP22Vxvmru2pM1Nsi3jqANT0Rk=;
+        b=PdKDkxZ+UJScx6ZXE0Ho4zJRE1+arv8nkM+KformSQYzRe8RIqYwrz65igw9U2KesM
+         ciUY1B2BegZ7v2mzZBD0duQpnxjnpqmjh1E5VPVC8FPPAgoyD2mCr6Cb3nVE0YDEFJy+
+         AXV1ReLYEW3XQEYp/WsoLetRlKgL2LaMeZJkG6bgqvjq12A8r81+N0ju9vK5rz3ZB+hI
+         9EMAVx2szJydcYqBrhH2esklQbJMRHE8qc+Hy7Yr6viESrHEvex/+nM+KGwT303lpQ+t
+         pewcITK7Im/4JZrLsCDXjMsUi374tNjLk3NLaxlBvBPYMBX+nMo8PqgwTpHkR6OSj8jd
+         TV6A==
+X-Gm-Message-State: ANoB5plsMh2IUn6hDRbfJqvtt6+2FyQxFMhe1g8B4TyiQzi0L1WR6vYL
+        kaYp6CmLnvIFqd6yPXxgLX55ug==
+X-Google-Smtp-Source: AA0mqf7SyCarcsRC8IOaK+qAfXMjpkGjzn1YGRp10LvTsSAbg66dy+LzP+D/fg9rb7Tk/wTKQLbJCQ==
+X-Received: by 2002:a2e:a37c:0:b0:26e:93:980d with SMTP id i28-20020a2ea37c000000b0026e0093980dmr28205439ljn.488.1670273474926;
+        Mon, 05 Dec 2022 12:51:14 -0800 (PST)
+Received: from [127.0.0.1] ([94.25.229.129])
+        by smtp.gmail.com with ESMTPSA id q8-20020a19f208000000b0048b0696d0b1sm2217877lfh.90.2022.12.05.12.51.14
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Dec 2022 12:48:36 -0800 (PST)
-Date:   Mon, 5 Dec 2022 15:48:36 -0500
-To:     linux-kernel@vger.kernel.org
-From:   NEWO SAS <soporte@newo.com.co>
-Reply-To: =?utf-8?Q?i46=D0=92o=D1=82=5Fo=D0=BD=D0=B8=5F=D0=B4e=D0=BDb=D0=B3=D0=B8?=
-           =?utf-8?Q?=5F39914rubl_https=3A//telegra=2Eph/VN-861378-12-03=23?= 
-          <linux-kernel@vger.kernel.org>
-Subject: =?utf-8?Q?Copia_de:_2mb=D0=97a=D0=BFo=D0=BBy=D1=87=D0=B8=D1=82e=5F=D1=8D?=
- =?utf-8?Q?=D1=82o=5F33239rub_https://telegra.ph/VN-84335-12-03#?=
-Message-ID: <ccc03b6a11a52ecaa9dea9abdb9d8a23@www.tucolegio.co>
+        Mon, 05 Dec 2022 12:51:14 -0800 (PST)
+Date:   Mon, 05 Dec 2022 23:49:08 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        airlied@gmail.com
+CC:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_1/5=5D_arm64=3A_dts=3A_qcom=3A_add_data-?= =?US-ASCII?Q?lanes_and_link-freuencies_into_dp=5Fout_endpoint?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1670267670-15832-2-git-send-email-quic_khsieh@quicinc.com>
+References: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com> <1670267670-15832-2-git-send-email-quic_khsieh@quicinc.com>
+Message-ID: <0E711F23-A5C6-4AA1-A4EF-F6097ADA91AE@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Esto es una copia del mensaje que envió a Servicio al cliente vía TuColegio.co
 
-Esto es una petición de correo vía https://www.tucolegio.co/ de:
-i46Вoт_oни_дeнbги_39914rubl
- https://telegra.ph/VN-861378-12-03#
- <linux-kernel@vger.kernel.org
+
+On 5 December 2022 22:14:26 GMT+03:00, Kuogee Hsieh <quic_khsieh@quicinc=
+=2Ecom> wrote:
+>Move data-lanes property from mdss_dp node to dp_out endpoint=2E Also
+>add link-frequencies property into dp_out endpoint as well=2E The last
+>frequency specified at link-frequencies will be the max link rate
+>supported by DP=2E
 >
+>Changes in v5:
+>-- revert changes at sc7180=2Edtsi and sc7280=2Edtsi
+>-- add &dp_out to sc7180-trogdor=2Edtsi and sc7280-herobrine=2Edtsi
+>
+>Changes in v6:
+>-- add data-lanes and link-frequencies to yaml
+>
+>Changes in v7:
+>-- change 160000000 to 1620000000
+>-- separate yaml to different patch
+>
+>Changes in v8:
+>-- correct Bjorn mail address to kernel=2Eorg
+>
+>Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>
+>---
+> arch/arm64/boot/dts/qcom/sc7180-trogdor=2Edtsi   | 6 +++++-
+> arch/arm64/boot/dts/qcom/sc7280-herobrine=2Edtsi | 6 +++++-
+> 2 files changed, 10 insertions(+), 2 deletions(-)
+>
+>diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor=2Edtsi b/arch/arm64/=
+boot/dts/qcom/sc7180-trogdor=2Edtsi
+>index eae22e6=2E=2E0ad50e2 100644
+>--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor=2Edtsi
+>+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor=2Edtsi
+>@@ -814,7 +814,11 @@ hp_i2c: &i2c9 {
+> 	status =3D "okay";
+> 	pinctrl-names =3D "default";
+> 	pinctrl-0 =3D <&dp_hot_plug_det>;
+>-	data-lanes =3D <0 1>;
+>+};
+>+
+>+&dp_out {
+>+    data-lanes =3D <0  1>;
+>+    link-frequencies =3D /bits/ 64 <162000000 270000000 540000000>;
 
-5p6Выгoднo_зabpaтb_11837rubl
- https://telegra.ph/VN-341581-12-03#
+This property still uses old values, it was not updated to Hz=2E
 
+> };
+>=20
+> &pm6150_adc {
+>diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine=2Edtsi b/arch/arm6=
+4/boot/dts/qcom/sc7280-herobrine=2Edtsi
+>index c11e371=2E=2E3c7a9d8 100644
+>--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine=2Edtsi
+>+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine=2Edtsi
+>@@ -442,7 +442,11 @@ ap_i2c_tpm: &i2c14 {
+> 	status =3D "okay";
+> 	pinctrl-names =3D "default";
+> 	pinctrl-0 =3D <&dp_hot_plug_det>;
+>-	data-lanes =3D <0 1>;
+>+};
+>+
+>+&dp_out {
+>+	data-lanes =3D <0  1>;
+>+	link-frequencies =3D /bits/ 64 <1620000000 2700000000 5400000000 810000=
+0000>;
+> };
+>=20
+> &mdss_mdp {
+
+--=20
+With best wishes
+Dmitry
