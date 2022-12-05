@@ -2,564 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840FC64215A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 03:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF9764215D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 03:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiLECCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 21:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S230522AbiLECFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 21:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiLECBu (ORCPT
+        with ESMTP id S230307AbiLECE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 21:01:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A6B13D44;
-        Sun,  4 Dec 2022 18:01:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92051B80D3E;
-        Mon,  5 Dec 2022 02:01:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98AEC433B5;
-        Mon,  5 Dec 2022 02:01:15 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lgk30oEz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670205674;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Op3OGtpYFefv7wwJNL4oNw4HnNnPVWLlXugIoJjaoeE=;
-        b=lgk30oEzqJwvKqR9H7xC6MOYofPslyR/RCmXAr7q0+hdqpye/IPAvnxm8Hshw5spTX/RXx
-        WO0ySJ0RKoJRuwJojkXr4+Cn72poIp2PEaFfNd7z7lbaI92S1RFU0W0/+9wds2tR7gywMg
-        84uai49iJxvnMJfdGPhb5DhzwqbudEI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6310b718 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 5 Dec 2022 02:01:14 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Samuel Neves <sneves@dei.uc.pt>
-Subject: [PATCH v11 4/4] x86: vdso: Wire up getrandom() vDSO implementation
-Date:   Mon,  5 Dec 2022 03:00:46 +0100
-Message-Id: <20221205020046.1876356-5-Jason@zx2c4.com>
-In-Reply-To: <20221205020046.1876356-1-Jason@zx2c4.com>
-References: <20221205020046.1876356-1-Jason@zx2c4.com>
+        Sun, 4 Dec 2022 21:04:59 -0500
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B052926E7;
+        Sun,  4 Dec 2022 18:04:55 -0800 (PST)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id ZEJ00039;
+        Mon, 05 Dec 2022 10:04:39 +0800
+Received: from localhost.localdomain (10.180.204.101) by
+ jtjnmail201608.home.langchao.com (10.100.2.8) with Microsoft SMTP Server id
+ 15.1.2507.16; Mon, 5 Dec 2022 10:04:39 +0800
+From:   wangchuanlei <wangchuanlei@inspur.com>
+To:     <echaudro@redhat.com>
+CC:     <simon.horman@corigine.com>, <kuba@kernel.org>,
+        <alexandr.lobakin@intel.com>, <pabeni@redhat.com>,
+        <pshelar@ovn.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <wangpeihui@inspur.com>, <netdev@vger.kernel.org>,
+        <dev@openvswitch.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] [PATCH v6 net-next] net: openvswitch: Add support to count upcall packets
+Date:   Sun, 4 Dec 2022 21:04:37 -0500
+Message-ID: <20221205020437.3958934-1-wangchuanlei@inspur.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="y"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.180.204.101]
+tUid:   202212051004397ebaa9072c1cab7f088d8179e151692e
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hook up the generic vDSO implementation to the x86 vDSO data page. Since
-the existing vDSO infrastructure is heavily based on the timekeeping
-functionality, which works over arrays of bases, a new macro is
-introduced for vvars that are not arrays.
+Hi, Eelco,
+    Thank you for review again !  I will give a new version of patch based on your comments 
+today!
 
-The vDSO function requires a ChaCha20 implementation that does not write
-to the stack, yet can still do an entire ChaCha20 permutation, so
-provide this using SSE2, since this is userland code that must work on
-all x86-64 processors. There's a simple test for this code as well.
+Best regards!
+wangchuanlei
 
-Reviewed-by: Samuel Neves <sneves@dei.uc.pt> # for vgetrandom-chacha.S
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/x86/Kconfig                              |   1 +
- arch/x86/entry/vdso/Makefile                  |   3 +-
- arch/x86/entry/vdso/vdso.lds.S                |   2 +
- arch/x86/entry/vdso/vgetrandom-chacha.S       | 177 ++++++++++++++++++
- arch/x86/entry/vdso/vgetrandom.c              |  17 ++
- arch/x86/include/asm/vdso/getrandom.h         |  55 ++++++
- arch/x86/include/asm/vdso/vsyscall.h          |   2 +
- arch/x86/include/asm/vvar.h                   |  16 ++
- tools/testing/selftests/vDSO/.gitignore       |   1 +
- tools/testing/selftests/vDSO/Makefile         |   9 +
- .../testing/selftests/vDSO/vdso_test_chacha.c |  43 +++++
- 11 files changed, 325 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/entry/vdso/vgetrandom-chacha.S
- create mode 100644 arch/x86/entry/vdso/vgetrandom.c
- create mode 100644 arch/x86/include/asm/vdso/getrandom.h
- create mode 100644 tools/testing/selftests/vDSO/vdso_test_chacha.c
+-------------------------------------------------------------------------
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 67745ceab0db..357148c4a3a4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -269,6 +269,7 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select VDSO_GETRANDOM			if X86_64
- 	select HOTPLUG_SMT			if SMP
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 3e88b9df8c8f..2de64e52236a 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -27,7 +27,7 @@ VDSO32-$(CONFIG_X86_32)		:= y
- VDSO32-$(CONFIG_IA32_EMULATION)	:= y
- 
- # files to link into the vdso
--vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
-+vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o vgetrandom-chacha.o
- vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
- vobjs32-y += vdso32/vclock_gettime.o
- vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
-@@ -104,6 +104,7 @@ CFLAGS_REMOVE_vclock_gettime.o = -pg
- CFLAGS_REMOVE_vdso32/vclock_gettime.o = -pg
- CFLAGS_REMOVE_vgetcpu.o = -pg
- CFLAGS_REMOVE_vsgx.o = -pg
-+CFLAGS_REMOVE_vgetrandom.o = -pg
- 
- #
- # X32 processes use x32 vDSO to access 64bit kernel data.
-diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
-index 4bf48462fca7..1919cc39277e 100644
---- a/arch/x86/entry/vdso/vdso.lds.S
-+++ b/arch/x86/entry/vdso/vdso.lds.S
-@@ -28,6 +28,8 @@ VERSION {
- 		clock_getres;
- 		__vdso_clock_getres;
- 		__vdso_sgx_enter_enclave;
-+		getrandom;
-+		__vdso_getrandom;
- 	local: *;
- 	};
- }
-diff --git a/arch/x86/entry/vdso/vgetrandom-chacha.S b/arch/x86/entry/vdso/vgetrandom-chacha.S
-new file mode 100644
-index 000000000000..91fbb7ac7af4
---- /dev/null
-+++ b/arch/x86/entry/vdso/vgetrandom-chacha.S
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+
-+#include <linux/linkage.h>
-+#include <asm/frame.h>
-+
-+.section	.rodata.cst16.CONSTANTS, "aM", @progbits, 16
-+.align 16
-+CONSTANTS:	.octa 0x6b20657479622d323320646e61707865
-+.text
-+
-+/*
-+ * Very basic SSE2 implementation of ChaCha20. Produces a given positive number
-+ * of blocks of output with a nonce of 0, taking an input key and 8-byte
-+ * counter. Importantly does not spill to the stack. Its arguments are:
-+ *
-+ *	rdi: output bytes
-+ *	rsi: 32-byte key input
-+ *	rdx: 8-byte counter input/output
-+ *	rcx: number of 64-byte blocks to write to output
-+ */
-+SYM_FUNC_START(__arch_chacha20_blocks_nostack)
-+
-+#define output  %rdi
-+#define key     %rsi
-+#define counter %rdx
-+#define nblocks %rcx
-+#define i       %al
-+#define state0  %xmm0
-+#define state1  %xmm1
-+#define state2  %xmm2
-+#define state3  %xmm3
-+#define copy0   %xmm4
-+#define copy1   %xmm5
-+#define copy2   %xmm6
-+#define copy3   %xmm7
-+#define temp    %xmm8
-+#define one     %xmm9
-+
-+	/* copy0 = "expand 32-byte k" */
-+	movaps		CONSTANTS(%rip),copy0
-+	/* copy1,copy2 = key */
-+	movups		0x00(key),copy1
-+	movups		0x10(key),copy2
-+	/* copy3 = counter || zero nonce */
-+	movq		0x00(counter),copy3
-+	/* one = 1 || 0 */
-+	movq		$1,%rax
-+	movq		%rax,one
-+
-+.Lblock:
-+	/* state0,state1,state2,state3 = copy0,copy1,copy2,copy3 */
-+	movdqa		copy0,state0
-+	movdqa		copy1,state1
-+	movdqa		copy2,state2
-+	movdqa		copy3,state3
-+
-+	movb		$10,i
-+.Lpermute:
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$16,temp
-+	psrld		$16,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$12,temp
-+	psrld		$20,state1
-+	por		temp,state1
-+
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$8,temp
-+	psrld		$24,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$7,temp
-+	psrld		$25,state1
-+	por		temp,state1
-+
-+	/* state1[0,1,2,3] = state1[0,3,2,1] */
-+	pshufd		$0x39,state1,state1
-+	/* state2[0,1,2,3] = state2[1,0,3,2] */
-+	pshufd		$0x4e,state2,state2
-+	/* state3[0,1,2,3] = state3[2,1,0,3] */
-+	pshufd		$0x93,state3,state3
-+
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$16,temp
-+	psrld		$16,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$12,temp
-+	psrld		$20,state1
-+	por		temp,state1
-+
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$8,temp
-+	psrld		$24,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$7,temp
-+	psrld		$25,state1
-+	por		temp,state1
-+
-+	/* state1[0,1,2,3] = state1[2,1,0,3] */
-+	pshufd		$0x93,state1,state1
-+	/* state2[0,1,2,3] = state2[1,0,3,2] */
-+	pshufd		$0x4e,state2,state2
-+	/* state3[0,1,2,3] = state3[0,3,2,1] */
-+	pshufd		$0x39,state3,state3
-+
-+	decb		i
-+	jnz		.Lpermute
-+
-+	/* output0 = state0 + copy0 */
-+	paddd		copy0,state0
-+	movups		state0,0x00(output)
-+	/* output1 = state1 + copy1 */
-+	paddd		copy1,state1
-+	movups		state1,0x10(output)
-+	/* output2 = state2 + copy2 */
-+	paddd		copy2,state2
-+	movups		state2,0x20(output)
-+	/* output3 = state3 + copy3 */
-+	paddd		copy3,state3
-+	movups		state3,0x30(output)
-+
-+	/* ++copy3.counter */
-+	paddq		one,copy3
-+
-+	/* output += 64, --nblocks */
-+	addq		$64,output
-+	decq		nblocks
-+	jnz		.Lblock
-+
-+	/* counter = copy3.counter */
-+	movq		copy3,0x00(counter)
-+
-+	/* Zero out the potentially sensitive regs, in case nothing uses these again. */
-+	pxor		state0,state0
-+	pxor		state1,state1
-+	pxor		state2,state2
-+	pxor		state3,state3
-+	pxor		copy1,copy1
-+	pxor		copy2,copy2
-+	pxor		temp,temp
-+
-+	ret
-+SYM_FUNC_END(__arch_chacha20_blocks_nostack)
-diff --git a/arch/x86/entry/vdso/vgetrandom.c b/arch/x86/entry/vdso/vgetrandom.c
-new file mode 100644
-index 000000000000..6045ded5da90
---- /dev/null
-+++ b/arch/x86/entry/vdso/vgetrandom.c
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+#include <linux/types.h>
-+
-+#include "../../../../lib/vdso/getrandom.c"
-+
-+ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state);
-+
-+ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state)
-+{
-+	return __cvdso_getrandom(buffer, len, flags, state);
-+}
-+
-+ssize_t getrandom(void *, size_t, unsigned int, void *)
-+	__attribute__((weak, alias("__vdso_getrandom")));
-diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
-new file mode 100644
-index 000000000000..46f99d735ae6
---- /dev/null
-+++ b/arch/x86/include/asm/vdso/getrandom.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+#ifndef __ASM_VDSO_GETRANDOM_H
-+#define __ASM_VDSO_GETRANDOM_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/unistd.h>
-+#include <asm/vvar.h>
-+
-+/**
-+ * getrandom_syscall - Invoke the getrandom() syscall.
-+ * @buffer:	Destination buffer to fill with random bytes.
-+ * @len:	Size of @buffer in bytes.
-+ * @flags:	Zero or more GRND_* flags.
-+ * Returns the number of random bytes written to @buffer, or a negative value indicating an error.
-+ */
-+static __always_inline ssize_t getrandom_syscall(void *buffer, size_t len, unsigned int flags)
-+{
-+	long ret;
-+
-+	asm ("syscall" : "=a" (ret) :
-+	     "0" (__NR_getrandom), "D" (buffer), "S" (len), "d" (flags) :
-+	     "rcx", "r11", "memory");
-+
-+	return ret;
-+}
-+
-+#define __vdso_rng_data (VVAR(_vdso_rng_data))
-+
-+static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
-+{
-+	if (__vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
-+		return (void *)&__vdso_rng_data + ((void *)&__timens_vdso_data - (void *)&__vdso_data);
-+	return &__vdso_rng_data;
-+}
-+
-+/**
-+ * __arch_chacha20_blocks_nostack - Generate ChaCha20 stream without using the stack.
-+ * @dst_bytes:	Destination buffer to hold @nblocks * 64 bytes of output.
-+ * @key:	32-byte input key.
-+ * @counter:	8-byte counter, read on input and updated on return.
-+ * @nblocks:	Number of blocks to generate.
-+ *
-+ * Generates a given positive number of blocks of ChaCha20 output with nonce=0, and does not write
-+ * to any stack or memory outside of the parameters passed to it, in order to mitigate stack data
-+ * leaking into forked child processes.
-+ */
-+extern void __arch_chacha20_blocks_nostack(u8 *dst_bytes, const u32 *key, u32 *counter, size_t nblocks);
-+
-+#endif /* !__ASSEMBLY__ */
-+
-+#endif /* __ASM_VDSO_GETRANDOM_H */
-diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
-index be199a9b2676..71c56586a22f 100644
---- a/arch/x86/include/asm/vdso/vsyscall.h
-+++ b/arch/x86/include/asm/vdso/vsyscall.h
-@@ -11,6 +11,8 @@
- #include <asm/vvar.h>
- 
- DEFINE_VVAR(struct vdso_data, _vdso_data);
-+DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
-+
- /*
-  * Update the vDSO data page to keep in sync with kernel timekeeping.
-  */
-diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
-index 183e98e49ab9..9d9af37f7cab 100644
---- a/arch/x86/include/asm/vvar.h
-+++ b/arch/x86/include/asm/vvar.h
-@@ -26,6 +26,8 @@
-  */
- #define DECLARE_VVAR(offset, type, name) \
- 	EMIT_VVAR(name, offset)
-+#define DECLARE_VVAR_SINGLE(offset, type, name) \
-+	EMIT_VVAR(name, offset)
- 
- #else
- 
-@@ -37,6 +39,10 @@ extern char __vvar_page;
- 	extern type timens_ ## name[CS_BASES]				\
- 	__attribute__((visibility("hidden")));				\
- 
-+#define DECLARE_VVAR_SINGLE(offset, type, name)				\
-+	extern type vvar_ ## name					\
-+	__attribute__((visibility("hidden")));				\
-+
- #define VVAR(name) (vvar_ ## name)
- #define TIMENS(name) (timens_ ## name)
- 
-@@ -44,12 +50,22 @@ extern char __vvar_page;
- 	type name[CS_BASES]						\
- 	__attribute__((section(".vvar_" #name), aligned(16))) __visible
- 
-+#define DEFINE_VVAR_SINGLE(type, name)					\
-+	type name							\
-+	__attribute__((section(".vvar_" #name), aligned(16))) __visible
-+
- #endif
- 
- /* DECLARE_VVAR(offset, type, name) */
- 
- DECLARE_VVAR(128, struct vdso_data, _vdso_data)
- 
-+#if !defined(_SINGLE_DATA)
-+#define _SINGLE_DATA
-+DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
-+#endif
-+
- #undef DECLARE_VVAR
-+#undef DECLARE_VVAR_SINGLE
- 
- #endif
-diff --git a/tools/testing/selftests/vDSO/.gitignore b/tools/testing/selftests/vDSO/.gitignore
-index 7dbfdec53f3d..30d5c8f0e5c7 100644
---- a/tools/testing/selftests/vDSO/.gitignore
-+++ b/tools/testing/selftests/vDSO/.gitignore
-@@ -7,3 +7,4 @@ vdso_test_gettimeofday
- vdso_test_getcpu
- vdso_standalone_test_x86
- vdso_test_getrandom
-+vdso_test_chacha
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index a33b4d200a32..1b9057974693 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -3,6 +3,7 @@ include ../lib.mk
- 
- uname_M := $(shell uname -m 2>/dev/null || echo not)
- ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+SODIUM := $(shell pkg-config --libs libsodium 2>/dev/null)
- 
- TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday $(OUTPUT)/vdso_test_getcpu
- TEST_GEN_PROGS += $(OUTPUT)/vdso_test_abi
-@@ -12,9 +13,15 @@ TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
- endif
- TEST_GEN_PROGS += $(OUTPUT)/vdso_test_correctness
- TEST_GEN_PROGS += $(OUTPUT)/vdso_test_getrandom
-+ifeq ($(uname_M),x86_64)
-+ifneq ($(SODIUM),)
-+TEST_GEN_PROGS += $(OUTPUT)/vdso_test_chacha
-+endif
-+endif
- 
- CFLAGS := -std=gnu99
- CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-+CFLAGS_vdso_test_chacha := $(SODIUM) -idirafter $(top_srcdir)/include -idirafter $(top_srcdir)/arch/$(ARCH)/include -D__ASSEMBLY__ -Wa,--noexecstack
- LDFLAGS_vdso_test_correctness := -ldl
- ifeq ($(CONFIG_X86_32),y)
- LDLIBS += -lgcc_s
-@@ -35,3 +42,5 @@ $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
- 		-o $@ \
- 		$(LDFLAGS_vdso_test_correctness)
- $(OUTPUT)/vdso_test_getrandom: parse_vdso.c
-+$(OUTPUT)/vdso_test_chacha: CFLAGS += $(CFLAGS_vdso_test_chacha)
-+$(OUTPUT)/vdso_test_chacha: $(top_srcdir)/arch/$(ARCH)/entry/vdso/vgetrandom-chacha.S
-diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha.c b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-new file mode 100644
-index 000000000000..1c76aeb3de68
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+
-+#include <sodium/crypto_stream_chacha20.h>
-+#include <sys/random.h>
-+#include <string.h>
-+#include <stdint.h>
-+#include "../kselftest.h"
-+
-+extern void __arch_chacha20_blocks_nostack(uint8_t *dst_bytes, const uint8_t *key, uint32_t *counter, size_t nblocks);
-+
-+int main(int argc, char *argv[])
-+{
-+	enum { TRIALS = 1000, BLOCKS = 128, BLOCK_SIZE = 64 };
-+	static const uint8_t nonce[8] = { 0 };
-+	uint32_t counter[2];
-+	uint8_t key[32];
-+	uint8_t output1[BLOCK_SIZE * BLOCKS], output2[BLOCK_SIZE * BLOCKS];
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	for (unsigned int trial; trial < TRIALS; ++trial) {
-+		if (getrandom(key, sizeof(key), 0) != sizeof(key)) {
-+			printf("getrandom() failed!\n");
-+			return KSFT_SKIP;
-+		}
-+		crypto_stream_chacha20(output1, sizeof(output1), nonce, key);
-+		for (unsigned int split = 0; split < BLOCKS; ++split) {
-+			memset(output2, 'X', sizeof(output2));
-+			memset(counter, 0, sizeof(counter));
-+			if (split)
-+				__arch_chacha20_blocks_nostack(output2, key, counter, split);
-+			__arch_chacha20_blocks_nostack(output2 + split * BLOCK_SIZE, key, counter, BLOCKS - split);
-+			if (memcmp(output1, output2, sizeof(output1)))
-+				return KSFT_FAIL;
-+		}
-+	}
-+	ksft_test_result_pass("chacha: PASS\n");
-+	return KSFT_PASS;
-+}
--- 
-2.38.1
+
+On 30 Nov 2022, at 10:15, wangchuanlei wrote:
+
+> Add support to count upall packets, when kmod of openvswitch upcall to 
+> userspace , here count the number of packets for upcall succeed and 
+> failed, which is a better way to see how many packets upcalled to 
+> userspace(ovs-vswitchd) on every interfaces.
+>
+> Here modify format of code used by comments of v6.
+>
+> Changes since v4 & v5:
+> - optimize the function used by comments
+>
+> Changes since v3:
+> - use nested NLA_NESTED attribute in netlink message
+>
+> Changes since v2:
+> - add count of upcall failed packets
+>
+> Changes since v1:
+> - add count of upcall succeed packets
+>
+> Signed-off-by: wangchuanlei <wangchuanlei@inspur.com>
+> ---
+>  include/uapi/linux/openvswitch.h | 14 +++++++++
+>  net/openvswitch/datapath.c       | 50 ++++++++++++++++++++++++++++++++
+>  net/openvswitch/vport.c          | 44 ++++++++++++++++++++++++++++
+>  net/openvswitch/vport.h          | 24 +++++++++++++++
+>  4 files changed, 132 insertions(+)
+>
+> diff --git a/include/uapi/linux/openvswitch.h 
+> b/include/uapi/linux/openvswitch.h
+> index 94066f87e9ee..8422ebf6885b 100644
+> --- a/include/uapi/linux/openvswitch.h
+> +++ b/include/uapi/linux/openvswitch.h
+> @@ -277,11 +277,25 @@ enum ovs_vport_attr {
+>  	OVS_VPORT_ATTR_PAD,
+>  	OVS_VPORT_ATTR_IFINDEX,
+>  	OVS_VPORT_ATTR_NETNSID,
+> +	OVS_VPORT_ATTR_UPCALL_STATS,
+>  	__OVS_VPORT_ATTR_MAX
+>  };
+>
+>  #define OVS_VPORT_ATTR_MAX (__OVS_VPORT_ATTR_MAX - 1)
+>
+> +/**
+> + * enum ovs_vport_upcall_attr - attributes for %OVS_VPORT_UPCALL* 
+> +commands
+> + * @OVS_VPORT_UPCALL_SUCCESS: 64-bit upcall success packets.
+> + * @OVS_VPORT_UPCALL_FAIL: 64-bit upcall fail packets.
+> + */
+> +enum ovs_vport_upcall_attr {
+> +	OVS_VPORT_UPCALL_SUCCESS,
+> +	OVS_VPORT_UPCALL_FAIL,
+> +	__OVS_VPORT_UPCALL_MAX
+> +};
+> +
+> +#define OVS_VPORT_UPCALL_MAX (__OVS_VPORT_UPCALL_MAX - 1)
+> +
+>  enum {
+>  	OVS_VXLAN_EXT_UNSPEC,
+>  	OVS_VXLAN_EXT_GBP,	/* Flag or __u32 */
+> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c 
+> index c8a9075ddd0a..f9279aee2adb 100644
+> --- a/net/openvswitch/datapath.c
+> +++ b/net/openvswitch/datapath.c
+> @@ -209,6 +209,26 @@ static struct vport *new_vport(const struct vport_parms *parms)
+>  	return vport;
+>  }
+>
+> +static void ovs_vport_upcalls(struct sk_buff *skb,
+
+This function name does not really represent what this function does.
+It’s only taking care of statistics, so it should probably be called something like:
+
+  ovs_vport_update_upcall_stats() or ovs_vport_inc_upcall_stats()
+
+> +			      const struct dp_upcall_info *upcall_info,
+> +			      bool upcall_result)
+> +{
+> +	struct vport *p = OVS_CB(skb)->input_vport;
+> +	struct vport_upcall_stats_percpu *vport_stats;
+
+If you just call vport_stats, stats, the reverse Christmas tree order is achieved.
+
+> +
+> +	if (upcall_info->cmd != OVS_PACKET_CMD_MISS &&
+> +	    upcall_info->cmd != OVS_PACKET_CMD_ACTION)
+> +		return;
+> +
+> +	vport_stats = this_cpu_ptr(p->upcall_stats);
+> +	u64_stats_update_begin(&vport_stats->syncp);
+> +	if (upcall_result)
+> +		u64_stats_inc(&vport_stats->n_success);
+> +	else
+> +		u64_stats_inc(&vport_stats->n_fail);
+> +	u64_stats_update_end(&vport_stats->syncp);
+> +}
+> +
+>  void ovs_dp_detach_port(struct vport *p)  {
+>  	ASSERT_OVSL();
+> @@ -216,6 +236,9 @@ void ovs_dp_detach_port(struct vport *p)
+>  	/* First drop references to device. */
+>  	hlist_del_rcu(&p->dp_hash_node);
+>
+> +	/* Free percpu memory */
+> +	free_percpu(p->upcall_stats);
+> +
+>  	/* Then destroy it. */
+>  	ovs_vport_del(p);
+>  }
+> @@ -305,6 +328,8 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_buff *skb,
+>  		err = queue_userspace_packet(dp, skb, key, upcall_info, cutlen);
+>  	else
+>  		err = queue_gso_packets(dp, skb, key, upcall_info, cutlen);
+> +
+> +	ovs_vport_upcalls(skb, upcall_info, !err);
+>  	if (err)
+>  		goto err;
+>
+> @@ -1825,6 +1850,12 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+>  		goto err_destroy_portids;
+>  	}
+>
+> +	vport->upcall_stats = netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
+> +	if (!vport->upcall_stats) {
+> +		err = -ENOMEM;
+> +		goto err_destroy_portids;
+> +	}
+> +
+>  	err = ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
+>  				   info->snd_seq, 0, OVS_DP_CMD_NEW);
+>  	BUG_ON(err < 0);
+> @@ -2068,6 +2099,8 @@ static int ovs_vport_cmd_fill_info(struct vport 
+> *vport, struct sk_buff *skb,  {
+>  	struct ovs_header *ovs_header;
+>  	struct ovs_vport_stats vport_stats;
+> +	struct ovs_vport_upcall_stats stat;
+> +	struct nlattr *nla;
+>  	int err;
+>
+>  	ovs_header = genlmsg_put(skb, portid, seq, &dp_vport_genl_family, @@ 
+> -2097,6 +2130,15 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
+>  			  OVS_VPORT_ATTR_PAD))
+>  		goto nla_put_failure;
+>
+> +	nla = nla_nest_start_noflag(skb, OVS_VPORT_ATTR_UPCALL_STATS);
+> +	if (!nla)
+> +		goto nla_put_failure;
+> +
+> +	ovs_vport_get_upcall_stats(vport, &stat);
+> +	if (ovs_vport_put_upcall_stats(skb, &stat))
+> +		goto nla_put_failure;
+> +	nla_nest_end(skb, nla);
+> +
+
+See the comment below, as I think this all should be wrapped in ovs_vport_get_upcall_stats(vport, skb).
+
+>  	if (ovs_vport_get_upcall_portids(vport, skb))
+>  		goto nla_put_failure;
+>
+> @@ -2278,6 +2320,13 @@ static int ovs_vport_cmd_new(struct sk_buff *skb, struct genl_info *info)
+>  		goto exit_unlock_free;
+>  	}
+>
+> +	vport->upcall_stats = netdev_alloc_pcpu_stats(struct 
+> +vport_upcall_stats_percpu);
+> +
+
+nit: I think the extra new line is not needed.
+
+> +	if (!vport->upcall_stats) {
+> +		err = -ENOMEM;
+> +		goto exit_unlock_free;
+> +	}
+> +
+>  	err = ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
+>  				      info->snd_portid, info->snd_seq, 0,
+>  				      OVS_VPORT_CMD_NEW, GFP_KERNEL); @@ -2507,6 +2556,7 @@ 
+> static const struct nla_policy vport_policy[OVS_VPORT_ATTR_MAX + 1] = {
+>  	[OVS_VPORT_ATTR_OPTIONS] = { .type = NLA_NESTED },
+>  	[OVS_VPORT_ATTR_IFINDEX] = { .type = NLA_U32 },
+>  	[OVS_VPORT_ATTR_NETNSID] = { .type = NLA_S32 },
+> +	[OVS_VPORT_ATTR_UPCALL_STATS] = { .type = NLA_NESTED },
+>  };
+>
+>  static const struct genl_small_ops dp_vport_genl_ops[] = { diff --git 
+> a/net/openvswitch/vport.c b/net/openvswitch/vport.c index 
+> 82a74f998966..fd95536b35ef 100644
+> --- a/net/openvswitch/vport.c
+> +++ b/net/openvswitch/vport.c
+> @@ -284,6 +284,50 @@ void ovs_vport_get_stats(struct vport *vport, struct ovs_vport_stats *stats)
+>  	stats->tx_packets = dev_stats->tx_packets;  }
+>
+> +/**
+> + *	ovs_vport_get_upcall_stats - retrieve upcall stats
+> + *
+> + * @vport: vport from which to retrieve the stats
+> + * @ovs_vport_upcall_stats: location to store stats
+> + *
+> + * Retrieves upcall stats for the given device.
+> + *
+> + * Must be called with ovs_mutex or rcu_read_lock.
+> + */
+> +void ovs_vport_get_upcall_stats(struct vport *vport, struct 
+> +ovs_vport_upcall_stats *stats) {
+> +	int i;
+> +
+> +	stats->tx_success = 0;
+> +	stats->tx_fail = 0;
+> +
+> +	for_each_possible_cpu(i) {
+> +		const struct vport_upcall_stats_percpu *upcall_stats;
+> +		unsigned int start;
+> +
+> +		upcall_stats = per_cpu_ptr(vport->upcall_stats, i);
+> +		do {
+> +			start = u64_stats_fetch_begin(&upcall_stats->syncp);
+> +			stats->tx_success += u64_stats_read(&upcall_stats->n_success);
+> +			stats->tx_fail += u64_stats_read(&upcall_stats->n_fail);
+> +		} while (u64_stats_fetch_retry(&upcall_stats->syncp, start));
+> +	}
+> +}
+> +
+> +int ovs_vport_put_upcall_stats(struct sk_buff *skb,
+> +			       struct ovs_vport_upcall_stats *stats) {
+> +	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_SUCCESS, stats->tx_success,
+> +			      OVS_VPORT_ATTR_PAD))
+> +		return -EMSGSIZE;
+> +
+> +	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_FAIL, stats->tx_fail,
+> +			      OVS_VPORT_ATTR_PAD))
+> +		return -EMSGSIZE;
+> +
+> +	return 0;
+> +}
+
+I think we should wrap ovs_vport_put_upcall_stats() into ovs_vport_get_upcall_stats(), so we have a single function. This would be similar to ovs_vport_get_options(). This way we will also get rid of the extra “struct ovs_vport_upcall_stats” definition, i.e.,
+
+  ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb)
+
+> +
+>  /**
+>   *	ovs_vport_get_options - retrieve device options
+>   *
+> diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h index 
+> 7d276f60c000..5ba9f14df55a 100644
+> --- a/net/openvswitch/vport.h
+> +++ b/net/openvswitch/vport.h
+> @@ -32,6 +32,16 @@ struct vport *ovs_vport_locate(const struct net 
+> *net, const char *name);
+>
+>  void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
+>
+> +struct ovs_vport_upcall_stats {
+> +	__u64   tx_success;	/* total packets upcalls succeed */
+> +	__u64   tx_fail;	/* total packets upcalls failed  */
+> +};
+> +
+> +void ovs_vport_get_upcall_stats(struct vport *vport,
+> +				struct ovs_vport_upcall_stats *stats); int 
+> +ovs_vport_put_upcall_stats(struct sk_buff *skb,
+> +			       struct ovs_vport_upcall_stats *stats);
+> +
+>  int ovs_vport_set_options(struct vport *, struct nlattr *options);  
+> int ovs_vport_get_options(const struct vport *, struct sk_buff *);
+>
+> @@ -65,6 +75,7 @@ struct vport_portids {
+>   * @hash_node: Element in @dev_table hash table in vport.c.
+>   * @dp_hash_node: Element in @datapath->ports hash table in datapath.c.
+>   * @ops: Class structure.
+> + * @upcall_stats: Upcall stats of every ports.
+>   * @detach_list: list used for detaching vport in net-exit call.
+>   * @rcu: RCU callback head for deferred destruction.
+>   */
+> @@ -78,6 +89,7 @@ struct vport {
+>  	struct hlist_node hash_node;
+>  	struct hlist_node dp_hash_node;
+>  	const struct vport_ops *ops;
+> +	struct vport_upcall_stats_percpu __percpu *upcall_stats;
+>
+>  	struct list_head detach_list;
+>  	struct rcu_head rcu;
+> @@ -137,6 +149,18 @@ struct vport_ops {
+>  	struct list_head list;
+>  };
+>
+> +/**
+> + * struct vport_upcall_stats_percpu - per-cpu packet upcall 
+> +statistics for
+> + * a given vport.
+> + * @n_success: Number of packets that upcall to userspace succeed.
+> + * @n_fail:    Number of packets that upcall to userspace failed.
+> + */
+> +struct vport_upcall_stats_percpu {
+> +	struct u64_stats_sync syncp;
+> +	u64_stats_t n_success;
+> +	u64_stats_t n_fail;
+> +};
+> +
+>  struct vport *ovs_vport_alloc(int priv_size, const struct vport_ops *,
+>  			      const struct vport_parms *);  void ovs_vport_free(struct 
+> vport *);
+> --
+> 2.27.0
+
 
