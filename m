@@ -2,154 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074E0642992
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAB4642996
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbiLENkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+        id S231535AbiLENlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiLENkL (ORCPT
+        with ESMTP id S229954AbiLENlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:40:11 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F1CD2F2;
-        Mon,  5 Dec 2022 05:40:10 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5DOfS0031381;
-        Mon, 5 Dec 2022 13:39:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=5VWO3RY6Hy7tOEJFafX/5QXIEDhkqxX0hUduwOyPF+o=;
- b=X7+TN4liMjRc4us7bNUbn7HQ5WZDQkPkx1c7Z4Pmb0StSp9sloabV4ygo1GCljDDWvmu
- jOmAmJbVF0c+kCzMDS7pSx5cpQ0CkI5xESOPq+zGID654ASAw0W5nzdKaMlbFdU2T2HG
- qn3MW682mqBIVNFxJUH8hYZ8Kf7z7D+M1HkpJwRG3fnbS3NIW6ddo4Ws26n4F2vvAF58
- GKz0iwYsGjE+hKJ454cJUzc/qhVdkJuvbd5h5rwdjLPoTymlGtomWXWS2axvmy71xlF6
- +phrpeRqiBZLoItDl+RYjDy4P1BsmKH2rQTeOHzJCGKZTcKFEUXqH7kzZly6TvjnZ08g 1g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m8gd1caev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 13:39:56 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B4NBAGa014087;
-        Mon, 5 Dec 2022 13:39:55 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m8gd1caek-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 13:39:55 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B5DZbNh020703;
-        Mon, 5 Dec 2022 13:39:54 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma05wdc.us.ibm.com with ESMTP id 3m7x39wrjs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 13:39:54 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B5DdrOd65798598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Dec 2022 13:39:54 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C7D95805C;
-        Mon,  5 Dec 2022 13:39:53 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B97145805D;
-        Mon,  5 Dec 2022 13:39:52 +0000 (GMT)
-Received: from [9.60.75.234] (unknown [9.60.75.234])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  5 Dec 2022 13:39:52 +0000 (GMT)
-Message-ID: <86aa8ae3-060a-6b73-99ce-c8706f1ce723@linux.ibm.com>
-Date:   Mon, 5 Dec 2022 08:39:52 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] vfio/ap/ccw/samples: Fix device_register() unwind path
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     ruanjinjie <ruanjinjie@huawei.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Eric Farman <farman@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <166999942139.645727.12439756512449846442.stgit@omen>
-Content-Language: en-US
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-In-Reply-To: <166999942139.645727.12439756512449846442.stgit@omen>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tL39Vy4-TnWHPqBICWuKSdz-_tJVkGQE
-X-Proofpoint-ORIG-GUID: FjXj0edfjGKMUY-WbWAXYQ6ve3raRSIk
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 5 Dec 2022 08:41:06 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53912DF5C;
+        Mon,  5 Dec 2022 05:41:02 -0800 (PST)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0ED2BFF807;
+        Mon,  5 Dec 2022 13:40:47 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+To:     Samuel Holland <samuel@sholland.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Angus Ainslie <angus@akkea.ca>,
+        Ondrej Jirman <megous@megous.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Andy Gross <agross@kernel.org>,
+        Aleksei Mamlin <mamlinav@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        David Jander <david@protonic.nl>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Lukasz Majewski <lukma@denx.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH v3 0/9] fix reset line polarity for Goodix touchscreen controllers
+Date:   Mon,  5 Dec 2022 14:40:29 +0100
+Message-Id: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999
- bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212050110
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.10.1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
+The Goodix touchscreen controller has a reset line active low. It happens to
+also be used to configure its i2c address at runtime. If the reset line is
+incorrectly asserted, the address will be wrongly configured. This cost me a few
+hours, trying to figure out why the touchscreen wouldn't work.
 
-On 12/2/22 11:46 AM, Alex Williamson wrote:
-> We always need to call put_device() if device_register() fails.
-> All vfio drivers calling device_register() include a similar unwind
-> stack via gotos, therefore split device_unregister() into its
-> device_del() and put_device() components in the unwind path, and
-> add a goto target to handle only the put_device() requirement.
-> 
-> Reported-by: Ruan Jinjie <ruanjinjie@huawei.com>
-> Link: https://lore.kernel.org/all/20221118032827.3725190-1-ruanjinjie@huawei.com
-> Fixes: d61fc96f47fd ("sample: vfio mdev display - host device")
-> Fixes: 9d1a546c53b4 ("docs: Sample driver to demonstrate how to use Mediated device framework.")
-> Fixes: a5e6e6505f38 ("sample: vfio bochs vbe display (host device for bochs-drm)")
-> Fixes: 9e6f07cd1eaa ("vfio/ccw: create a parent struct")
-> Fixes: 36360658eb5a ("s390: vfio_ap: link the vfio_ap devices to the vfio_ap bus subsystem")
-> Cc: Tony Krowiak <akrowiak@linux.ibm.com>
-> Cc: Halil Pasic <pasic@linux.ibm.com>
-> Cc: Jason Herne <jjherne@linux.ibm.com>
-> Cc: Kirti Wankhede <kwankhede@nvidia.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Reviewed-by: Eric Farman <farman@linux.ibm.com>
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-> ---
-> 
-> I didn't intend to usurp Ruan's patch, but since the inline version is
-> collecting reviews, formally post it and include additional fixes tags
-> for vfio-ccw and vfio-ap.
-> 
->   drivers/s390/cio/vfio_ccw_drv.c   |    3 ++-
->   drivers/s390/crypto/vfio_ap_drv.c |    2 +-
->   samples/vfio-mdev/mbochs.c        |    7 ++++---
->   samples/vfio-mdev/mdpy.c          |    7 ++++---
->   samples/vfio-mdev/mtty.c          |    7 ++++---
->   5 files changed, 15 insertions(+), 11 deletions(-)
-> 
-> ...
-> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
-> index f43cfeabd2cc..997b524bdd2b 100644
-> --- a/drivers/s390/crypto/vfio_ap_drv.c
-> +++ b/drivers/s390/crypto/vfio_ap_drv.c
-> @@ -122,7 +122,7 @@ static int vfio_ap_matrix_dev_create(void)
->   	return 0;
->   
->   matrix_drv_err:
-> -	device_unregister(&matrix_dev->device);
-> +	device_del(&matrix_dev->device);
->   matrix_reg_err:
->   	put_device(&matrix_dev->device);
->   matrix_alloc_err:
+The driver is "asserting" this reset GPIO by setting its output to 0, probably
+to reflect the physical state of the line. However, this relies on the fact that
+the Device Tree node setting the reset line polarity to active high, which is
+incorrect since the reset is active low in hardware.
 
-Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>
+To fix this inconsistency, the polarity is inverted to not confuse the user
+about the reset line polarity. This obviously requires to fix the DT since most
+users had the "incorrect" value in there, it needs to be inverted.
+Note that the v2 highlighted that I was not the only one that got confused since
+PRT8MM board has the "correct" HW representation for this line in DT (which does
+not match what the driver was expecting).
 
+This is marked as RFC because I can neither test ACPI support nor boards I don't
+own. Please test on the boards you have that are impacted by this patchset and
+give your Tested-By.
+Do we also make this patch series only one patchset since the DT patches depend
+on the driver patch and vice-versa? In which tree would this go?
 
+Thanks,
+Quentin
+
+To: Bastien Nocera <hadess@hadess.net>
+To: Hans de Goede <hdegoede@redhat.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Shawn Guo <shawnguo@kernel.org>
+To: Sascha Hauer <s.hauer@pengutronix.de>
+To: Pengutronix Kernel Team <kernel@pengutronix.de>
+To: Fabio Estevam <festevam@gmail.com>
+To: NXP Linux Team <linux-imx@nxp.com>
+To: Chen-Yu Tsai <wens@csie.org>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>
+To: Samuel Holland <samuel@sholland.org>
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Heiko Stuebner <heiko@sntech.de>
+To: David Jander <david@protonic.nl>
+To: Angus Ainslie <angus@akkea.ca>
+To: Peter Geis <pgwipeout@gmail.com>
+To: Michael Riesch <michael.riesch@wolfvision.net>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+To: Guido Günther <agx@sigxcpu.org>
+To: Jagan Teki <jagan@amarulasolutions.com>
+To: Ondrej Jirman <megous@megous.com>
+To: Icenowy Zheng <icenowy@aosc.io>
+To: Aleksei Mamlin <mamlinav@gmail.com>
+To: Lukasz Majewski <lukma@denx.de>
+To: Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc: linux-input@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-sunxi@lists.linux.dev
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-rockchip@lists.infradead.org
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
+Changes in v3:
+- Cc'ing people who contributed to DTS of impacted boards,
+- removed PRT8MM DTS change since it's been reported the polarity is actually
+  correct (goes through an inverter), keeping the appropriate folks in Cc though
+  since it'd be a good idea to check this patch series anyways,
+- added ACPI_GPIO_QUIRK_NO_IO_RESTRICTION to acpi_gpio_mapping quirks to make
+  gpiolib-acpi core respect GPIOD_ASIS flag in gpiod_get,
+- checked schematics of:
+  - pinephone: https://files.pine64.org/doc/PinePhone/PinePhone%20v1.2%20Released%20Schematic.pdf
+  - pinetab: https://files.pine64.org/doc/PineTab/PineTab%20Schematic%20v1.2-20191125.pdf
+  - px30 evb: https://opensource.rock-chips.com/images/d/db/Px30_mini_evb_v10_20180528.pdf
+  - rockpro64: https://files.pine64.org/doc/rockpro64/rockpro64_v21-SCH.pdf
+  - librem5 devkit: https://source.puri.sm/Librem5/dvk-mx8m-bsb/blob/master/dvk-mx8m-bsb.pdf
+
+  All seems to be directly connected to the GPIO on the SoC side, without an
+  inverter on the line.
+- Link to v2: https://lore.kernel.org/r/20221103-upstream-goodix-reset-v2-0-2c38fb03a300@theobroma-systems.com
+
+Changes in v2:
+- implemented ACPI support as suggested by Hans,
+- removed Qcom SC7180 Trogdor-based devices changes as they are not using this Goodix driver,
+- added comment on how to read gpiod_request_output and the GPIO DT polarity,
+- Link to v1: https://lore.kernel.org/r/20221103-upstream-goodix-reset-v1-0-87b49ae589f1@theobroma-systems.com
+
+---
+Quentin Schulz (9):
+      Input: goodix - add macro for gpio mapping
+      Input: goodix - make gpiod_get honor GPIOD_ASIS
+      Input: goodix - fix reset polarity
+      ARM: dts: imx: fix touchscreen reset GPIO polarity
+      ARM: dts: sunxi: fix touchscreen reset GPIO polarity on Wexler TAB7200 tablet
+      arm64: dts: allwinner: fix touchscreen reset GPIO polarity
+      arm64: dts: librem5: fix touchscreen reset GPIO polarity
+      arm64: dts: qcom: msm8998-fxtec: fix touchscreen reset GPIO polarity
+      arm64: dts: rockchip: fix touchscreen reset GPIO polarity
+
+ arch/arm/boot/dts/imx6q-kp.dtsi                    |  2 +-
+ arch/arm/boot/dts/imx6ul-kontron-bl-43.dts         |  2 +-
+ arch/arm/boot/dts/sun7i-a20-wexler-tab7200.dts     |  2 +-
+ .../dts/allwinner/sun50i-a64-amarula-relic.dts     |  2 +-
+ .../allwinner/sun50i-a64-oceanic-5205-5inmfd.dts   |  2 +-
+ .../boot/dts/allwinner/sun50i-a64-pinephone.dtsi   |  2 +-
+ .../boot/dts/allwinner/sun50i-a64-pinetab.dts      |  2 +-
+ .../boot/dts/freescale/imx8mq-librem5-devkit.dts   |  2 +-
+ arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts    |  2 +-
+ arch/arm64/boot/dts/rockchip/px30-evb.dts          |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts   |  2 +-
+ drivers/input/touchscreen/goodix.c                 | 54 ++++++++++++++++++----
+ 13 files changed, 56 insertions(+), 22 deletions(-)
+---
+base-commit: 76dcd734eca23168cb008912c0f69ff408905235
+change-id: 20221103-upstream-goodix-reset-aa1c65994f57
+
+Best regards,
+-- 
+Quentin Schulz <quentin.schulz@theobroma-systems.com>
