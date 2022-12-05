@@ -2,120 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1DB64252E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F49642531
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbiLEI5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S231742AbiLEI5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbiLEI4Y (ORCPT
+        with ESMTP id S232476AbiLEI47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:56:24 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA2718377
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:55:31 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bp15so17417746lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:55:31 -0800 (PST)
+        Mon, 5 Dec 2022 03:56:59 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB27186D5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:55:44 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id c1so17448559lfi.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:55:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dLWzdPiDhqNrCWntC1/FUKJpulZ8HdtXHKh/ol869SA=;
-        b=hjCxc3ezNh4mCmjQ8w7ZYRHweJpE8HnNlruc6kTLhdRUifGDAW/morztX0r4/rPlhe
-         roz8gZaATRgK/ih62swWoHw+0k/Jlqqdphp2VHqz8wVWTcYsS75caY5+82XTXlArE/Jb
-         7gIO/uer9U7JMswofvaJxCsz6Lmmia2AePIjtsnVIElnNdC9L36ata3SssDYTBnAHfQ6
-         2xiZ9rK3/z9obmp+KK9U9okTJksMvJFt0VetJn+gqgVk/DXo0apE289c3+pBlJK/PoYo
-         P1yuPyWSc7l7Lty1eK3D6AOGMFqimS9niyQpmPwYrdyeq0CR6l1SbQVsAtD9tt020O9y
-         HicA==
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xfg1yHqtX0q12ifIkBoCcowFenHMwDLU9Aqmhql/1bM=;
+        b=IDrbX64GmS8b+LNLFOReZkvoEfZxUM6UZGnodlCyKKbbV27VDRJiEeHTNgUg2Z0VcK
+         j9TLnGcx/5q9yxhHXf+Nn+6HTNQWQoeu1RmrYUW3KaeANTcXuyKNsli+Xhn9Uf/Lsm17
+         Dlk2g0N8T4EvD6KEsi0H/oblhJc6NYhjElPxtdbdPCWv50TvtbvJ7idC+KRsPQXvlkse
+         z4ExG+DpCnVwpH5T1dyDZ+JJn/4aZstmCCyn3Qz0N3sDivUlSC2HDuhP32RWUTAyahnj
+         qayfb9kVj87lc9nLr7OAcx2MbG3MlwhFI6cJie7Q25+VwdQXkTXCkEK95qgNZUkuWsDu
+         Zjtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dLWzdPiDhqNrCWntC1/FUKJpulZ8HdtXHKh/ol869SA=;
-        b=p1/yu6AaUAt1VGbzWQRz0qKEy1L54jrYJSddl2x12RlCDybAM6ehR3UPhRo6LpTErp
-         rpI1V0OXOfc5Fdfv+mzF5vn79sJpbNRf0OVrpEa2gRfEU4myilugtBmiHfyjnHGtFydv
-         GopLSZVPkB8IBon6fZMeUUAHVweehTBN28d4YuFhEsLoCCcfEzLSGShQXIJmlrEazrTR
-         e0ROuL8pFUkcTtkPC5TOL9JbW36WFf17BA+Yy63PPLqhkhWmZVyPNS3QzB+vOI+fkyfV
-         ZfS9bCylao4GxZKLxqW/iy58QmiMlVcY7Fm9e03FgmjGZp29lBoVeQDyPJ/mRxcwgZLz
-         BqEg==
-X-Gm-Message-State: ANoB5pnEv/iYxTBKR4M/5B5+ajdvd6MrgpL1aWg+Cxpn2OPwi4tfcueW
-        ss1LS0poLskufgl9ONw/dXVjHZ9lVz+GF8cqBPfw8A==
-X-Google-Smtp-Source: AA0mqf6GX+TnJ7Exv96fcy3Uo4snviPJbX7NeDqFYptUQiQXTe8Mb4VGt20HctmD6/lwKqfriXgvBRTU78d2fUWewto=
-X-Received: by 2002:a05:6512:3413:b0:4aa:b3d1:9c83 with SMTP id
- i19-20020a056512341300b004aab3d19c83mr20227525lfr.260.1670230529349; Mon, 05
- Dec 2022 00:55:29 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xfg1yHqtX0q12ifIkBoCcowFenHMwDLU9Aqmhql/1bM=;
+        b=SUfrNfCTjY9zlT1DkqkwRM4JSHk2yE2264IJQH+2rwhd5uIiqKsDy4S0lT62Ks8I2u
+         VcumtFn8WYOGJWGnCLvopa6peLgOQ+JxmrD4037gK1fTaO8PBhUYwAUo2PjA7he6i2YL
+         UbwdJUsySb1pIXRGkB4x5PrA6CXFX4G7I0Mo+tygwDdJ5J+zSJW2ueP0V7miRqpEYvYV
+         FFsGQK7D47Hi+osNe8/2K8OzWymXhzZo5ASD2UgFGma3I13NjfxyJYkmT56+jImqeToI
+         UmMGUx4o5AawcrHzRmANxNxQMK+4lgmt7qQRP1o3Kh3ywrL6AhdSr6vzUYD3d0Kq2vLu
+         k6pA==
+X-Gm-Message-State: ANoB5pkF8isaujPgtkfnFibwLIEND3AJ3Tiutud6ApBfPbatzIDYKLEd
+        OT4rTXV+CEa5S3mS0BJacPh16qUwLv+W4JA463k=
+X-Google-Smtp-Source: AA0mqf51OQRphoCP+4uJweGZvapM+0agWx3FNr/wgHdYZQfwi37Ra6dU7e4LVM9n9/3PDpWxryXt2g==
+X-Received: by 2002:ac2:4c54:0:b0:4a2:7e2a:d2e1 with SMTP id o20-20020ac24c54000000b004a27e2ad2e1mr23313316lfk.641.1670230542363;
+        Mon, 05 Dec 2022 00:55:42 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056512118100b004aab0ca795csm2066258lfr.211.2022.12.05.00.55.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 00:55:41 -0800 (PST)
+Message-ID: <3908e923-a063-0377-1854-ccbb3ecc704d@linaro.org>
+Date:   Mon, 5 Dec 2022 09:55:40 +0100
 MIME-Version: 1.0
-References: <CABymUCOsVcpaS+uXqzB7-hm0FZwm2ZXD8J=6m0NKAh8WyrTiwA@mail.gmail.com>
-In-Reply-To: <CABymUCOsVcpaS+uXqzB7-hm0FZwm2ZXD8J=6m0NKAh8WyrTiwA@mail.gmail.com>
-From:   Jun Nie <jun.nie@linaro.org>
-Date:   Mon, 5 Dec 2022 16:54:02 +0800
-Message-ID: <CABymUCP32_95eTeEbfWCPEUBCj4XBMU5=2-hRBLw9SoTFt_6XQ@mail.gmail.com>
-Subject: [BUG REPORT] kernel BUG in ext4_write_inline_data_end or ext4_writepages
-To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ye Bin <yebin@huaweicloud.com>
-Cc:     Lee Jones <joneslee@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
+ glue driver
+To:     Chester Lin <clin@suse.com>
+Cc:     =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jan Petrous <jan.petrous@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        s32@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        ghennadi.procopciuc@oss.nxp.com
+References: <20221128054920.2113-1-clin@suse.com>
+ <20221128054920.2113-3-clin@suse.com>
+ <4a7a9bf7-f831-e1c1-0a31-8afcf92ae84c@linaro.org>
+ <560c38a5-318a-7a72-dc5f-8b79afb664ca@suse.de>
+ <9778695f-f8a9-e361-e28f-f99525c96689@linaro.org>
+ <Y42jqDiiq+rOurV+@linux-8mug>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y42jqDiiq+rOurV+@linux-8mug>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-syzbot find a new bug[1] in ext4 that's similar with bug[0], that
-leads to reboot.
-While the bug[0] can be fixed with patch[2] from Bin. This new bug is still
-triggered with the patch[2], and log[3] is collected. Both log[1] and
-log[3] are
-collected when testing bug[4] on the mainline.
+On 05/12/2022 08:54, Chester Lin wrote:
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>>>> +
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_AXI
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_PCS
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RGMII
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RMII
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_MII
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_PCS
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RGMII
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RMII
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_MII
+>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TS
+>>>>
+>>>> Why defines? Your clock controller is not ready? If so, just use raw
+>>>> numbers.
+>>>
+>>> Please compare v1: There is no Linux-driven clock controller here but 
+>>> rather a fluid SCMI firmware interface. Work towards getting clocks into 
+>>> a kernel-hosted .dtsi was halted in favor of (downstream) TF-A, which 
+>>> also explains the ugly examples here and for pinctrl.
+>>
+>> This does not explain to me why you added defines in the example. Are
+>> you saying these can change any moment?
+>>
+> 
+> Actually these GMAC-related SCMI clock IDs changed once in NXP's downstream TF-A,
+> some redundant TS clock IDs were removed and the rest of clock IDs were all moved
+> forward. 
 
-[0] https://syzkaller.appspot.com/bug?id=5bafe4554067100b70f58a81268aa06ea3f9c345
-[1] https://syzkaller.appspot.com/text?tag=CrashLog&x=16325fc3880000
-[2] https://lore.kernel.org/lkml/CABymUCN+NSzkunRqFs8LgqjT6vXz-gyyZYn0hQWf8V9kmcO0Hw@mail.gmail.com/T/
-[3] https://syzkaller.appspot.com/text?tag=CrashLog&x=155abe7b880000
-[4] https://syzkaller.appspot.com/bug?id=899b37f20ce4072bcdfecfe1647b39602e956e36
+This is not accepted. Your downstream TF-A cannot change bindings. As an
+upstream contributor you should push this back and definitely not try to
+upstream such approach.
 
+> Apart from GMAC-related IDs, some other clock IDs were also appended
+> in both base-clock IDs and platform-specific clock IDs [The first plat ID =
+> The last base ID + 1]. Due to the current design of the clk-scmi driver and the
+> SCMI clock protocol, IIUC, it's better to keep all clock IDs in sequence without
+> a blank in order to avoid query miss, which could affect the probe speed.
 
-[   38.932317][  T494] Call Trace:
-[   38.935437][  T494]  <TASK>
-[   38.938393][  T494]  ext4_write_inline_data_end+0xa39/0xdf0
-[   38.943946][  T494]  ? put_page+0xa0/0xa0
-[   38.947936][  T494]  ? ext4_da_write_begin+0x6f0/0x8d0
-[   38.953055][  T494]  ? pipe_zero+0x240/0x240
-[   38.957308][  T494]  ext4_da_write_end+0x1e2/0x950
-[   38.962082][  T494]  ? ext4_da_write_begin+0x8d0/0x8d0
-[   38.967204][  T494]  generic_perform_write+0x401/0x5f0
-[   38.972326][  T494]  ? generic_file_direct_write+0x6c0/0x6c0
-[   38.977994][  T494]  ? generic_write_checks_count+0x4b0/0x4b0
-[   38.983694][  T494]  ext4_buffered_write_iter+0x35f/0x640
-[   38.989074][  T494]  ext4_file_write_iter+0x198/0x1cd0
-[   38.994194][  T494]  ? futex_unqueue+0x156/0x180
-[   38.998795][  T494]  ? futex_wait+0x4c5/0x5c0
-[   39.003307][  T494]  ? futex_wait_setup+0x320/0x320
-[   39.008168][  T494]  ? avc_policy_seqno+0x1b/0x70
-[   39.012862][  T494]  ? ext4_file_read_iter+0x470/0x470
-[   39.017976][  T494]  vfs_write+0x8b5/0xef0
-[   39.022056][  T494]  ? file_end_write+0x1b0/0x1b0
-[   39.026739][  T494]  ? mutex_lock+0xb6/0x130
-[   39.030994][  T494]  ? bit_wait_io_timeout+0x110/0x110
-[   39.036117][  T494]  ? __fget_files+0x2d9/0x330
-[   39.040630][  T494]  ? __fdget_pos+0x268/0x300
-[   39.045054][  T494]  ? ksys_write+0x77/0x2c0
-[   39.049307][  T494]  ksys_write+0x198/0x2c0
-[   39.053472][  T494]  ? save_fpregs_to_fpstate+0x210/0x210
-[   39.058855][  T494]  ? __ia32_sys_read+0x90/0x90
-[   39.063465][  T494]  ? __kasan_check_write+0x14/0x20
-[   39.068403][  T494]  ? switch_fpu_return+0x129/0x270
-[   39.073348][  T494]  __x64_sys_write+0x7b/0x90
-[   39.077783][  T494]  do_syscall_64+0x2f/0x50
-[   39.082030][  T494]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+You miss here broken ABI! Any change in IDs causes all DTBs to be
+broken. Downstream, upstream, other projects, everywhere.
 
-Regards,
-Jun
+Therefore thank you for clarifying that we need to be more careful about
+stuff coming from (or for) NXP. Here you need to drop all defines and
+all your patches must assume the ID is fixed. Once there, it's
+unchangeable without breaking the ABI.
+
+Best regards,
+Krzysztof
+
