@@ -2,197 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35476424A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3C36424B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiLEIeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S232120AbiLEIf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiLEIeV (ORCPT
+        with ESMTP id S232037AbiLEIfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:34:21 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2822B9FEB;
-        Mon,  5 Dec 2022 00:34:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670229256; x=1701765256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IATEYJx4a5AMyo7aV0mVnSZjiA+z3IBbzmRcgsGBH20=;
-  b=k9+OxuMtX1h4nLXiz3DgavC0ItGFzQoRF5ihz/k2l7LK+4FKh7Xzng/N
-   DsZvUpaPifNpjXQUESt9minfhyb8pYJPv7PgR4vVfzOl0hpjLaMdWk8Bw
-   D9Riqab+5WkkO5tR5dXWU0/N3y13X3Da0zu6bZN04ie2YDgOByryhJd8n
-   FBEtbnLxTGn36nzVgqUGQhng746p/dSR4lzsRu3RKW6jtavDiKtLccDV+
-   amiHVEn5dPkfxBnxtVLRgyawdXMZLBGt8jTkpLGg4F0VyeBYJlRdpbrQb
-   IGozFmv8cLgsezHQsYBhUCp0oCer9vHOt0PAGDmDadk1p5Ui9kB/UKl9x
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
-   d="scan'208";a="190018603"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Dec 2022 01:34:15 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 5 Dec 2022 01:34:15 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 5 Dec 2022 01:34:12 -0700
-Date:   Mon, 5 Dec 2022 08:33:53 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Samuel Holland <samuel@sholland.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Rob Herring <robh@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v5 3/3] clocksource: timer-riscv: Set
- CLOCK_EVT_FEAT_C3STOP based on DT
-Message-ID: <Y42s8d+RSPMkrR6j@wendy>
-References: <20221201123954.1111603-1-apatel@ventanamicro.com>
- <20221201123954.1111603-4-apatel@ventanamicro.com>
- <20221202000603.GA1720201-robh@kernel.org>
- <CAK9=C2VbM+CP0Y9Xx-SM9O4TFrQmOKvVWy-u5mxdPxrhacK4JQ@mail.gmail.com>
- <Y40ueQiTZK6hi7RS@spud>
- <0515dc20-2e82-bd16-301a-6ffff010af13@sholland.org>
+        Mon, 5 Dec 2022 03:35:55 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2086.outbound.protection.outlook.com [40.107.21.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC96F5A7;
+        Mon,  5 Dec 2022 00:35:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aNllKreQhGKyBQ0XXMrm5fuPsQExp1k2Pc7ZVLwvmLEkvapoSEoP0DiLZ0G/R15GU0xevWu5Mta4idwejRpbsPzbp1YP/VBIFc13k6YgS3ulQu9bOgG0INPeQS9VIDyF7jdlyo6EOEGn9Rl8z07dGOmFemI9/2sk7Z9NVPVPCP8ZaYdz8j03xmKDJ5tW67vVnFkYRU1Vo5UKf3XrpJbO/iyXCc+ceWkN9srG5i7Vh6cIo0oMH94nDLWYGEfUMeCq3QleBe/IgYB/7xvrygvYgcY3l5aklH/3gklLW11W/E70A//qcrdkd3lDusUxMB05E5HuY+q85lxW4PfY95/u5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vfJziV/CttUi/YAdzQ+bN5x/ybvCV4/v3hPh+6atuxk=;
+ b=AtoV4pRJ6CtERgw0Xm+ZSxJknNHPCop5n0IH+32gcKA6Dmt0NRshqqUHjBDQN4CUBvnqPmuwzBjY6ZqFucXpqKp+kp5tjqNtVZrkm/K0rk3U/h0qHK5ye+nrikGizkfl1TUkRSv2VBHbUIJ+SL0R1NmH9vCv+mQwNyjEx+PQUOeueOlOxpDftQskblqUXN6D252PY+zKQSKHRBm5mHPvnXUkFck2hEX4LGWBk65GVdtTpL8h0AgeQ+nNv1BHv2h5EJ7QDL5uD4gBDL7L0i2rVZUQFw8EszE+vV9+/fTOFTV07qga5kP7fhlNILBV1amTZfOdwf4uVp5Z4J14dHlnVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vfJziV/CttUi/YAdzQ+bN5x/ybvCV4/v3hPh+6atuxk=;
+ b=Jkdyk7lThGushMCAkndMrb5LqIpCjskFYl7xrU1F3xiOo4m7Pf5lqCvPtVcOrTUJxwNvU5jDUv/PHJY2JZFEjC+HDa42mhLpClsFR2McAiHfkFMNUypcB422vsMI1nTjypXg9xwDLHsX6Vp/IXPsCdQJB4cguF+BThrii5SlcwPCYbLTzNUjavxw/UPDYdjHe06FHxOJp7H8ERfKgP6dLf/+XMTqSYt2nIxHXWsrrYpXBwJqi72q5loUMmMVx+b6X2KVLicmbrmXrdfaR5j/y4MrWcc238Zc8bb6l9K9r3WPK3AacoJGP+RjtBM0gG3sk6F8LYqxspH8QYF3Gk6H4A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by PAXPR04MB9424.eurprd04.prod.outlook.com (2603:10a6:102:2b2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
+ 2022 08:35:51 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae59:a542:9cbc:5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae59:a542:9cbc:5b3%9]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
+ 08:35:51 +0000
+Message-ID: <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+Date:   Mon, 5 Dec 2022 09:35:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
+ drivers' disconnect()
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        =?UTF-8?Q?Christoph_M=c3=b6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
+Content-Language: en-US
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0202.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a5::6) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0515dc20-2e82-bd16-301a-6ffff010af13@sholland.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PAXPR04MB9424:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bbfcb66-9785-4b53-9072-08dad69bb728
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: H+Uf3ScZHxIsPk5HcMZzHMyebU2xdSm/G60I+XiPGmQ7LPI5f6ueoHHTUsCxD1sk8klsV0pUDRQjYQZz6GdujvekqdAkuUWqL9Ia0aK9BfxnQLmE2Izp/0a9Wuh/BV3R/Ow0jTRKX4UY3Yuqhj7mITNITheCH0XV1AN6u/3Qk9C0E29TG3cpv7p5Wa7W20avQLuxOUoywuCUCdBRU3JPX9nfItomm1H32nmbSTTV/WUD6gXhkSNp2Vww58J9rU0OURJtMbMaTNc6/BLyG4+rgsZ0ddaEdeAykh6e2LZqOpKsABYkSJFOFdq1WGX7nqZAUaX6JeQljuVityUJUSEuGu9HD8cFqVWpGldVrQgrCe70w2S9LaXNMtT4XSor9UQ/AmZw/6vXpW/flDziyhEX/LvTkEliFlPzv4fgQT7i8JebjjYFkFYMUbItuy6P2EjuY1V6GaHdjyB8ec1u3912vKTWmhH1wKwHn4mD3ksbKiio0WI1QNVUpW/pAPsXskrFzAZOnabPXpVOMT4xXtQKQsmcjGOHztevTKE3RV0vdS/gKVTc2yz8PpmlhiX5Nd9e36KMmD93OtqGXxCzPSP6vz14ruWOoHBqGlFHFnmtbnUDZ3XcEDdJt3ArmHnyRUZw9hguHmdZCS3ZpJFrWsmMQBLumdEzkHeG2jIdIr77wTfMs63BAl7rA3exKie6rIvhuttB4YA6MSK3RGijeOwVbxARjEPJifLOUmvxKh2EFss=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199015)(2906002)(7416002)(7406005)(8936002)(38100700002)(31686004)(66946007)(66476007)(66556008)(83380400001)(8676002)(4326008)(36756003)(86362001)(186003)(2616005)(41300700001)(5660300002)(316002)(110136005)(53546011)(54906003)(6666004)(6512007)(6506007)(31696002)(6486002)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkMzOW9vN1BXZFk2WXRzeTJEQ0JpZkNrbFoxU0NGYlRPRTJpc0RQdkpKdWpQ?=
+ =?utf-8?B?YytWRHc0a0Q2aCtaa2NzcEFueld0NHFvdUNueEQ3anlxS0lqckh1MnZ2MGov?=
+ =?utf-8?B?SGEvYS8xdmVDUjhyU0R2VVNDSGMwMlpZWmE0cWxuSDgyOWNTc3NlZktqaUd6?=
+ =?utf-8?B?dkUya09GVndSRWNlT0UyclBQa0ZkV0JRUm9qK2hIZ3RSbnBza3I5eDBta1I3?=
+ =?utf-8?B?VElEUU9OemxYL1pJYzV6NTFrOGlmTnQzNitaMFcwZVdDdlJrb1A0VjRNWnNi?=
+ =?utf-8?B?aWpJL2sxR2pRTXJsVFNMNzdxbWZhbThBR2Z3V1lCVmIwWnhZUFZvOXFPUWJN?=
+ =?utf-8?B?dzRhOUVEK0FIbG1PUDlNaHRnWTduVE9JRk1FUDcxQ3hYMjduZlcrTkxwKy96?=
+ =?utf-8?B?L0lYNVlZbjgyZEZxNWVPYnU0SFlBS3pGWERlL01HVlM0eHZXdmlKMGhLaTdE?=
+ =?utf-8?B?NTlzTXNEZWRFd3RDWng4bXdxaElXUjB0TU1lckNMTU84bEhIcmVmSUt1YWlv?=
+ =?utf-8?B?RU1BeDFndGZ0Y1o1Yngrb0NWTzFyckROZ1dzNXhKaThnSkJ2dmNBUzRuRUoy?=
+ =?utf-8?B?YmVydjVVbzMrSDBnSU5QalVndGx6SldNQU1oM3pkK2NUUGFHSk9LTnRNSG9J?=
+ =?utf-8?B?RzdxY0V3dmdxQlRQelVvTDdXQWgyY0l4YWs0Qm96MVJwUjdyNTdDc3haU3BG?=
+ =?utf-8?B?bEk0REgrUkxUQ1VzZFRaTUM1QVN4WTlCNU56NnRNUWxQMmVnalVOVjRJTDFB?=
+ =?utf-8?B?R2swYlBhRzgwR1AyU3oyZ2VVZFVvUVAzUm5BTW9DVm5WdUJ1bk5NZkFFVWs0?=
+ =?utf-8?B?WmhoelNQUk9KMWRlNm9EVU1oUGhjK0NCMGZUczNKY2QzK2JRd3RvQ3BhQXlZ?=
+ =?utf-8?B?R2VSamhvREFDa2VlSzc4U3hlRVExeU5hZlltSk05MDlCaVZkZXNXd2VXbi95?=
+ =?utf-8?B?N1NQWDFDVVU1d2RXNWlGblVUbkNvdFYvMEF5UzhKc09HTGFUTGZRQkdKUFcy?=
+ =?utf-8?B?NThwVlZLYXJzdm1oeGNVWTBZMnlMbDFKRGlXb1RZdUVGOTNBWElKUkVqTDht?=
+ =?utf-8?B?OFR2RFBqNGdMQzhTTklhQnovallmTHlXN3gzWW1EdVRuN2REL2dEOXZJb0g5?=
+ =?utf-8?B?NE5zRUtGcFVQYmRpRkh5Vjh4bzMyNW9adEpxVE5SMi9NbithL1JtTkRTU1RF?=
+ =?utf-8?B?REt3Mk9KcVRtMmhEQlpYRU1EcXlTZlRzUnVod0ZnTVpzaUVhU3dRWkhaQ3lK?=
+ =?utf-8?B?bytsckR3aysybDFPMGs4WFRZTXF4N1QzayszS28wZlg4YktZdmh1ejBwU2pq?=
+ =?utf-8?B?OHFRRklya0JmOWVQLzhWOWhEaEZkZEZtM1hvWHd1RC9OMUw2YWh3TjY4aHZP?=
+ =?utf-8?B?eGhWTUlQQVByLzVYdXhKWkhRZVd1ZGxOM3QwMUc2YXJsQm81aXl4RFFrRFVv?=
+ =?utf-8?B?SEtOa2d4djdPa1ptcUZGNjgrYlZiTzZvN1RiQWQwRHQ5dklrcG54U1ZqWFl4?=
+ =?utf-8?B?ZEtzZnlIMWVyMDdmaUdSby9BRDFTT2NGZ2h0RlBjUmltRjdHOUpncmFKVGpq?=
+ =?utf-8?B?aXZXekRxUXBDRzJQbTVFdndNdjlOSW9RZXVUcHdPRS9qZ0FHeWRHMGl6ck9h?=
+ =?utf-8?B?YjNlMmxBei9rcTZtR2d3Y1Ewb1lLaHpwL1RXbVNOdjZYMGYrYXl5VldoVFZS?=
+ =?utf-8?B?NFpwUEtVcVorb1dzMnMxSjY1bGxlUEJkL0doV0IxOEsvTWNEN3ZNVEo4QnJ3?=
+ =?utf-8?B?SUZybUExQ0p2VFhiTi91TXYxSVNlOUZmUHBLc3hVWjZHSXhhZG9VZ1QwTHlp?=
+ =?utf-8?B?aHNNSTBKSEZoeUlVV3BxbjgrdlRzWWVFOFBMTmxBdS9GRTREYUMxNyt5OWdz?=
+ =?utf-8?B?Z29OVWhkWjk5RXJjcVJaZ2FIc1VNM0kwNUpycEhNT1NuVDM3QjFnT0FyK0ov?=
+ =?utf-8?B?cU52Yi9hYlhTS01KWDJqejQ4Y0xxVGl6MmZSWUpOWW5iZXNLcGtlTWNSa2NP?=
+ =?utf-8?B?OXU4Z09IUHpBeE9IMlgySHZVRzFxQ1FRWklHKzlqV1BRem9MV3BtaTdleFQr?=
+ =?utf-8?B?a0ptVFd0VjdqSVl1eCtIWEJHSmVRdW5SMUwzbkZqaFF5WnU2a2Z3NU5pdkVC?=
+ =?utf-8?B?cjFqQWppSEtZcS9CaU9ITDNpOFRDYTNuVWM5VWdCcEs0QlRnendlSXUxSEpk?=
+ =?utf-8?Q?meLg2OdDZ35uc8IW2qnFLqPgJf88ZHibOFCDzQe/+LVR?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bbfcb66-9785-4b53-9072-08dad69bb728
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 08:35:51.1103
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wHM7VEvw4EC09GKV2TJb6hZj2EIxIKgGNrhPFO4tv1ZGlsr/w2EohwKOpUgZ/g0t4tGw/IVNUE2kOGrLMzdq1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9424
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:17:40AM -0600, Samuel Holland wrote:
-> On 12/4/22 17:34, Conor Dooley wrote:
-> > Hey Rob, Anup, Prabhakar,
-> > 
-> > On Fri, Dec 02, 2022 at 12:03:05PM +0530, Anup Patel wrote:
-> >> On Fri, Dec 2, 2022 at 5:36 AM Rob Herring <robh@kernel.org> wrote:
-> >>>
-> >>> On Thu, Dec 01, 2022 at 06:09:54PM +0530, Anup Patel wrote:
-> >>>> We should set CLOCK_EVT_FEAT_C3STOP for a clock_event_device only
-> >>>> when riscv,timer-cannot-wake-cpu DT property is present in the RISC-V
-> >>>> timer DT node.
-> >>>>
-> >>>> This way CLOCK_EVT_FEAT_C3STOP feature is set for clock_event_device
-> >>>> based on RISC-V platform capabilities rather than having it set for
-> >>>> all RISC-V platforms.
-> >>>>
-> >>>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> >>>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >>>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >>>> ---
-> >>>>  drivers/clocksource/timer-riscv.c | 12 +++++++++++-
-> >>>>  1 file changed, 11 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-> >>>> index 969a552da8d2..1b4b36df5484 100644
-> >>>> --- a/drivers/clocksource/timer-riscv.c
-> >>>> +++ b/drivers/clocksource/timer-riscv.c
-> >>>> @@ -28,6 +28,7 @@
-> >>>>  #include <asm/timex.h>
-> >>>>
-> >>>>  static DEFINE_STATIC_KEY_FALSE(riscv_sstc_available);
-> >>>> +static bool riscv_timer_cannot_wake_cpu;
-> >>>>
-> >>>>  static int riscv_clock_next_event(unsigned long delta,
-> >>>>               struct clock_event_device *ce)
-> >>>> @@ -51,7 +52,7 @@ static int riscv_clock_next_event(unsigned long delta,
-> >>>>  static unsigned int riscv_clock_event_irq;
-> >>>>  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
-> >>>>       .name                   = "riscv_timer_clockevent",
-> >>>> -     .features               = CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
-> >>>> +     .features               = CLOCK_EVT_FEAT_ONESHOT,
-> >>>
-> >>> A platform that depended on CLOCK_EVT_FEAT_C3STOP being set will break
-> >>> with this change because its existing DT will not have the new property.
-> >>>
-> >>> It needs to be the other way around which would effectively be the
-> >>> existing 'always-on' property.
-> >>
-> >> There are no RISC-V platforms using C3STOP. The patch which
-> >> added C3STOP has been reverted.
-> >> (Refer, https://lore.kernel.org/lkml/a218ebf8-0fba-168d-6598-c970bbff5faf@sholland.org/T/)
-> >>
-> >> I just need to rebase this patch upon the C3STOP revert patch.
-> > 
-> > I guess you could say that the C3STOP addition was done spec-ulatively*,
-> > as the platform that actually exhibits that behaviour does not use the
-> > riscv-timer & its maintainer acked the revert (allwinner d1 family).
-> 
-> For clarity: that doesn't mean the platform will _never_ use the SBI
-> timer facility, just that Linux happens to not use it right now.
 
-Yeah sorry - should have been a bit clearer there. There's a few other
-SoCs about that are using the thead cores, so I'd be "worried" that they
-share the timer behaviour but do not have an alternative like you do on
-the D1. That's part of what's kinda given me cold feet on the current
-approach.
 
-> > *The spec does not make any guarantees about whether events arrive
-> > during suspend, only the behaviour *if* they arrive.
-> > 
-> > Switching the property to "always-on" would require retrofitting that
-> > property to every other existing platform (and therefore regressing some
-> > behaviour there, no?).
-> > 
-> > Most of the existing platforms are "toys" or demo platforms though, so
-> > it would not, I guess, be the end of the world to do so. Doubly so since
-> > none of them actually implement any sleep states that making it an
-> > "always-on" property.
-> 
-> Specifically, only sleep states with a "local-timer-stop" property would
-> be inhibited by the C3STOP flag, so there is only possibility of a
-> regression if some DT declaring such a sleep state exists anywhere.
-> 
-> Regards,
-> Samuel
-> 
-> > I've said since the start that defaulting to C3STOP is the "safer" thing
-> > to do, and although we disagreed on this last time Anup, I think the
-> > better outcome of someone missing a DT property is inaccessible sleep
-> > states rather than going into sleep states they cannot get out of.
-> > 
-> > For PolarFire SoC, which I guess is one of the few "commerical"
-> > platforms, I'd be willing to accept retrofitting, since we have not yet
-> > implemented such sleep states yet.
-> > 
-> > Maybe Prabhakar knows whether the RZ/Five has either a) implemented
-> > sleep states and b) which side of the "timer events arrive in suspend"
-> > divide their platform lies on.
-> > I'm particular interested here since that is not a SiFive core complex.
-> > 
-> > I would like to get DT maintainer approval of an approach here soon-ish
-> > so that we can something sorted for the jh7110 stuff and for the
-> > bouffalolabs SoC - the latter of which may very well be in the "no
-> > events in suspend" camp as it also uses thead stuff.
-> > 
-> > Sorry for kinda rowing back on my previous acceptance of the approach,
-> > but I am really between two minds on this.
-> > 
-> > Thanks,
-> > Conor.
-> > 
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+On 03.12.22 14:31, Vincent Mailhol wrote:
+> The core sets the usb_interface to NULL in [1]. Also setting it to
+> NULL in usb_driver::disconnects() is at best useless, at worse risky.
+
+Hi,
+
+I am afraid there is a major issue with your series of patches.
+The drivers you are removing this from often have a subsequent check
+for the data they got from usb_get_intfdata() being NULL.
+
+That pattern is taken from drivers like btusb or CDC-ACM, which
+claim secondary interfaces disconnect() will be called a second time
+for.
+In addition, a driver can use setting intfdata to NULL as a flag
+for disconnect() having proceeded to a point where certain things
+can no longer be safely done. You need to check for that in every driver
+you remove this code from and if you decide that it can safely be removed,
+which is likely, then please also remove checks like this:
+
+  	struct ems_usb *dev = usb_get_intfdata(intf);
+  
+	usb_set_intfdata(intf, NULL);
+
+  	if (dev) {
+  		unregister_netdev(dev->netdev);
+
+Either it can be called a second time, then you need to leave it
+as is, or the check for NULL is superfluous. But only removing setting
+the pointer to NULL never makes sense.
+
+	Regards
+		Oliver
+
