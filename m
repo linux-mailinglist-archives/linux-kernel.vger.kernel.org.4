@@ -2,206 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F83A64378D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59223643791
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiLEV7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S231895AbiLEWAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiLEV7q (ORCPT
+        with ESMTP id S230154AbiLEWAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:59:46 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0840819A;
-        Mon,  5 Dec 2022 13:59:45 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so16186980pje.5;
-        Mon, 05 Dec 2022 13:59:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sXTgHGkIn9AhAzxhCQIsbw3eRAhTdrwQh9s5Ax3GiLA=;
-        b=IKzztMWjAp+1B2x3JkBXLdVmjR66kLJOW1rd0oWVobJgKA1Gw+jY6XShIg3njUIYg5
-         Pze2gEMMik+x9MgDtUO6r2tWlo3V9Ag/q3X6iHOadeOb/zZoUi7OqcIvM9UPnGuvohJO
-         9tfACJFsVcGdn5mbSeJ/ZF/VBHvJfdXEBPV+V41P4YX+9Y6YXfZeTHK2iNHiIvL3dnJj
-         GIwYVGV5jetCdhOE3av5PpdE5VMN5yuqNeF+k1wvyeQtmngXbwkQQBkK/CUxkGAUqrUZ
-         Fl6uV5Wg0D0o5mwZss2nfiTG4cpErP2i3FcU+oloz47y/Bvy5szmJy4gYLrm6Uo7nwNp
-         2jUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sXTgHGkIn9AhAzxhCQIsbw3eRAhTdrwQh9s5Ax3GiLA=;
-        b=4SrsekAYsGH4yNAlC9MQuW6hu747kBB8Z60tJZhS5NQ7fX84PNNZZvNGnIlgNSR7zI
-         ke+FS+c9tZqRjIRa0FQwzLA+ISIN0vP6cEvumQmR/F35DuOUUAPM/YZ7/Sc4IWAmoZe7
-         dbqBflN+vJ7wXlNY7r17dyYBQ9b4Kf/0GZaWxByyYz98IMXOn1e7LpyBSkBiV72SuEHw
-         cfas0NvpfoKdTBtBDfeVD+pUMKcDMWw5qtt4xNtfyCNPk030UJIeVeo2B4nfXoAYEcK+
-         p7NqkyxdyYA/mkZ4aw+TI6YjaFJfJQyN1tWeOKMt7nBgpolKnJHanaMiFlUHE7RgVNkm
-         hjIg==
-X-Gm-Message-State: ANoB5pl19OJbNSikYYKFaIURyzp2oVU207+Ng2Sh2XFZqNhs6BnG1eS4
-        0GuYipoNrF5XSy1AqTI76rA=
-X-Google-Smtp-Source: AA0mqf4sXm/lDSJ+nfmn3ME0dNTpUezIOtnE0o0XXZBahaRtrZPmYhBo83v6CHngYspslj/HlrCjWg==
-X-Received: by 2002:a17:902:ef85:b0:189:c8ff:f260 with SMTP id iz5-20020a170902ef8500b00189c8fff260mr12052416plb.24.1670277584296;
-        Mon, 05 Dec 2022 13:59:44 -0800 (PST)
-Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:11da])
-        by smtp.gmail.com with ESMTPSA id jc18-20020a17090325d200b001891a17bd93sm11127565plb.43.2022.12.05.13.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 13:59:43 -0800 (PST)
-Date:   Mon, 5 Dec 2022 13:59:39 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-input@vger.kernel.org,
+        Mon, 5 Dec 2022 17:00:20 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071B4388;
+        Mon,  5 Dec 2022 14:00:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670277620; x=1701813620;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=26w5Qk0mw1pq4C2adTNF7rCV7moHaCoFedV/pTnaEpg=;
+  b=Ce1eAKbDjfcEqHrwH/UkUMIjoLeyGlFR8DcOEtrACVOtrJwLkq0QGCNF
+   spf7axlfAmHpKfW+iHjJGJy2FoaEgiUFBX9TmSmuuZC01uoDRweXwxaW7
+   yHXjEG7LiGgYLoedzyTXdlFKbRL4/rspZAZ7Sa2PRM1V8TLflndbHkxix
+   /7U3rJvK2pU1/JGtmnB7Op9iSXA9LiEmzJcVxD8EcwVN2da9wZSIGyODI
+   BpqZ179q2MdC/1iy1vn7iNswW1E887WfFDsyY2syY32puoOYfbiXhGh8U
+   SLc0oDkKRnbbXlYtOGK5gtkEPxuMFjQKXOm86VG3AZ0EzhDuVgWk3vJT+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="317617585"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="317617585"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 14:00:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="714562862"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="714562862"
+Received: from han1-mobl4.jf.intel.com (HELO [10.54.74.10]) ([10.54.74.10])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 14:00:19 -0800
+Message-ID: <576a57c3e8d9f7ad5bc28637ceac36d576309ca9.camel@linux.intel.com>
+Subject: Re: [PATCH] Bluetooth: btintel: Fix missing free skb in
+ btintel_setup_combined()
+From:   Tedd Ho-Jeong An <tedd.an@linux.intel.com>
+To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
+Cc:     liwei391@huawei.com, marcel@holtmann.org, luiz.dentz@gmail.com,
+        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH HID for-next v2 1/4] bpf: do not rely on
- ALLOW_ERROR_INJECTION for fmod_ret
-Message-ID: <Y45py14LVP/bn2r5@macbook-pro-6.dhcp.thefacebook.com>
-References: <20221205164856.705656-1-benjamin.tissoires@redhat.com>
- <20221205164856.705656-2-benjamin.tissoires@redhat.com>
+Date:   Mon, 05 Dec 2022 14:00:18 -0800
+In-Reply-To: <20221205135357.3961836-1-bobo.shaobowang@huawei.com>
+References: <20221205135357.3961836-1-bobo.shaobowang@huawei.com>
+Organization: Intel Corporation
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205164856.705656-2-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 05:48:53PM +0100, Benjamin Tissoires wrote:
-> The current way of expressing that a non-bpf kernel component is willing
-> to accept that bpf programs can be attached to it and that they can change
-> the return value is to abuse ALLOW_ERROR_INJECTION.
-> This is debated in the link below, and the result is that it is not a
-> reasonable thing to do.
-> 
-> Reuse the kfunc declaration structure to also tag the kernel functions
-> we want to be fmodret. This way we can control from any subsystem which
-> functions are being modified by bpf without touching the verifier.
-> 
-> 
-> Link: https://lore.kernel.org/all/20221121104403.1545f9b5@gandalf.local.home/
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> ---
->  include/linux/btf.h   |  3 +++
->  kernel/bpf/btf.c      | 41 +++++++++++++++++++++++++++++++++++++++++
->  kernel/bpf/verifier.c | 17 +++++++++++++++--
->  net/bpf/test_run.c    | 14 +++++++++++---
->  4 files changed, 70 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index f9aababc5d78..f71cfb20b9bf 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -412,8 +412,11 @@ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
->  u32 *btf_kfunc_id_set_contains(const struct btf *btf,
->  			       enum bpf_prog_type prog_type,
->  			       u32 kfunc_btf_id);
-> +u32 *btf_kern_func_is_modify_return(const struct btf *btf,
-> +				    u32 kfunc_btf_id);
->  int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
->  			      const struct btf_kfunc_id_set *s);
-> +int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset);
->  s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id);
->  int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
->  				struct module *owner);
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 35c07afac924..a22f3f45aca3 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -204,6 +204,7 @@ enum btf_kfunc_hook {
->  	BTF_KFUNC_HOOK_STRUCT_OPS,
->  	BTF_KFUNC_HOOK_TRACING,
->  	BTF_KFUNC_HOOK_SYSCALL,
-> +	BTF_KFUNC_HOOK_FMODRET,
->  	BTF_KFUNC_HOOK_MAX,
->  };
->  
-> @@ -7448,6 +7449,19 @@ u32 *btf_kfunc_id_set_contains(const struct btf *btf,
->  	return __btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
->  }
->  
-> +/* Caution:
-> + * Reference to the module (obtained using btf_try_get_module) corresponding to
-> + * the struct btf *MUST* be held when calling this function from verifier
-> + * context. This is usually true as we stash references in prog's kfunc_btf_tab;
-> + * keeping the reference for the duration of the call provides the necessary
-> + * protection for looking up a well-formed btf->kfunc_set_tab.
-> + */
+SGkgU2hhb0JvLAoKT24gTW9uLCAyMDIyLTEyLTA1IGF0IDIxOjUzICswODAwLCBXYW5nIFNoYW9C
+byB3cm90ZToKPiBza2IgYWxsb2NhdGVkIGJ5IF9faGNpX2NtZF9zeW5jIHdvdWxkIG5vdCBiZSB1
+c2VkIHdoZXRoZXIgaW4gY2hlY2tpbmcKPiBmb3Igc3VwcG9ydGVkIGlCVCBoYXJkd2FyZSB2YXJp
+YW50cyBvciBhZnRlciwgd2Ugc2hvdWxkIGZyZWUgaXQgaW4gYWxsCj4gZXJyb3IgYnJhbmNoZXMs
+IHRoaXMgcGF0Y2ggbWFrZXMgdGhlIGNhc2UgcmVhZCB2ZXJzaW9uIGZhaWxlZCBvciBkZWZhdWx0
+Cj4gZXJyb3IgY2FzZSBmcmVlIHNrYiBiZWZvcmUgcmV0dXJuLgo+IAo+IEZpeGVzOiBjODZjNzI4
+NWJiMDggKCJCbHVldG9vdGg6IGJ0aW50ZWw6IEZpeCB0aGUgbGVnYWN5IGJvb3Rsb2FkZXIgcmV0
+dXJucyB0bHYgYmFzZWQgdmVyc2lvbiIpCj4gRml4ZXM6IDAxOWExY2FhN2ZkMiAoIkJsdWV0b290
+aDogYnRpbnRlbDogUmVmYWN0b3Jpbmcgc2V0dXAgcm91dGluZSBmb3IgYm9vdGxvYWRlciBkZXZp
+Y2VzIikKPiBTaWduZWQtb2ZmLWJ5OiBXYW5nIFNoYW9CbyA8Ym9iby5zaGFvYm93YW5nQGh1YXdl
+aS5jb20+CgpSZXZpZXdlZC1ieTogVGVkZCBIby1KZW9uZyBBbiA8dGVkZC5hbkBpbnRlbC5jb20+
+Cgo+IC0tLQo+IMKgZHJpdmVycy9ibHVldG9vdGgvYnRpbnRlbC5jIHwgNSArKystLQo+IMKgMSBm
+aWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9ibHVldG9vdGgvYnRpbnRlbC5jIGIvZHJpdmVycy9ibHVldG9vdGgvYnRp
+bnRlbC5jCj4gaW5kZXggYTY1N2U5YTNlOTZhLi5mNmI0YjdhMWJlNGMgMTAwNjQ0Cj4gLS0tIGEv
+ZHJpdmVycy9ibHVldG9vdGgvYnRpbnRlbC5jCj4gKysrIGIvZHJpdmVycy9ibHVldG9vdGgvYnRp
+bnRlbC5jCj4gQEAgLTI1MjQsNyArMjUyNCw3IEBAIHN0YXRpYyBpbnQgYnRpbnRlbF9zZXR1cF9j
+b21iaW5lZChzdHJ1Y3QgaGNpX2RldiAqaGRldikKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAqLwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXJyID0gYnRpbnRl
+bF9yZWFkX3ZlcnNpb24oaGRldiwgJnZlcik7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBpZiAoZXJyKQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcmV0dXJuIGVycjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGJyZWFrOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAv
+KiBBcHBseSB0aGUgZGV2aWNlIHNwZWNpZmljIEhDSSBxdWlya3MKPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCAqCj4gQEAgLTI1NjYsNyArMjU2Niw4IEBAIHN0YXRpYyBpbnQgYnRp
+bnRlbF9zZXR1cF9jb21iaW5lZChzdHJ1Y3QgaGNpX2RldiAqaGRldikKPiDCoMKgwqDCoMKgwqDC
+oMKgZGVmYXVsdDoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJ0X2Rldl9lcnIo
+aGRldiwgIlVuc3VwcG9ydGVkIEludGVsIGh3IHZhcmlhbnQgKCV1KSIsCj4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBJTlRFTF9IV19WQVJJQU5U
+KHZlcl90bHYuY252aV9idCkpOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1
+cm4gLUVJTlZBTDsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXJyID0gLUVJTlZB
+TDsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gwqDCoMKgwqDCoMKg
+wqDCoH0KPiDCoAo+IMKgZXhpdF9lcnJvcjoKClJlZ2FyZHMsClRlZGQgSG8tSmVvbmcgQW4K
 
-There is no need to copy paste that comment from btf_kfunc_id_set_contains().
-One place is enough.
-
-> +u32 *btf_kern_func_is_modify_return(const struct btf *btf,
-> +				    u32 kfunc_btf_id)
-
-How about btf_kfunc_is_modify_return ? 
-For consistency.
-
-> +{
-> +	return __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_FMODRET, kfunc_btf_id);
-> +}
-> +
->  /* This function must be invoked only from initcalls/module init functions */
->  int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
->  			      const struct btf_kfunc_id_set *kset)
-> @@ -7478,6 +7492,33 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
->  }
->  EXPORT_SYMBOL_GPL(register_btf_kfunc_id_set);
->  
-> +/* This function must be invoked only from initcalls/module init functions */
-> +int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset)
-> +{
-> +	struct btf *btf;
-> +	int ret;
-> +
-> +	btf = btf_get_module_btf(kset->owner);
-> +	if (!btf) {
-> +		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
-> +			pr_err("missing vmlinux BTF, cannot register kfuncs\n");
-> +			return -ENOENT;
-> +		}
-> +		if (kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES)) {
-> +			pr_err("missing module BTF, cannot register kfuncs\n");
-> +			return -ENOENT;
-> +		}
-> +		return 0;
-> +	}
-> +	if (IS_ERR(btf))
-> +		return PTR_ERR(btf);
-> +
-> +	ret = btf_populate_kfunc_set(btf, BTF_KFUNC_HOOK_FMODRET, kset->set);
-> +	btf_put(btf);
-> +	return ret;
-> +}
-
-This is a bit too much copy-paste from register_btf_kfunc_id_set().
-Please share the code. Like:
-
-int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook, const struct btf_kfunc_id_set *kset)
-{
-  ...
-}
-
-int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
-                              const struct btf_kfunc_id_set *kset)
-{
-  hook = bpf_prog_type_to_kfunc_hook(prog_type);
-  return __register_btf_kfunc_id_set(hook, kset);
-}
-
-int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset)
-{
-  return __register_btf_kfunc_id_set(BTF_KFUNC_HOOK_FMODRET, kset);
-}
