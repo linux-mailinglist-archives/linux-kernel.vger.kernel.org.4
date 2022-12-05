@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97256435FE
+	by mail.lfdr.de (Postfix) with ESMTP id 3714F6435FC
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbiLEUqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S232239AbiLEUqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbiLEUqL (ORCPT
+        with ESMTP id S233578AbiLEUqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:46:11 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7C92A95A
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:46:08 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id qk9so1421325ejc.3
+        Mon, 5 Dec 2022 15:46:12 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AD51740D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:46:09 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id a9so11956133pld.7
         for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 12:46:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuFAQ0v5aLWdC7HoyL7gWW2N4Fcoas9srNPvbE2PlSI=;
-        b=Kh9022foKHxv2IuneGH3KcskvUGhatfsHW9pjdrTewUvyQ4ouVTRQf63B9VThbyG/V
-         lgH7Qp+FZwJq5DuniTFh7ihD5jt2Q+AKlAcKHKrf7mSZuibkbFf8fspeBx7/hBAs1r/1
-         KYBCp9EFJL7YgVR956qPSVu+aWeRzUFJctbxY=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DXyrpJdo+UCHtqk4rvzCMrlf12yHI5XT5NQfrdPusNM=;
+        b=hyvU997fHxXAg5pMw5Q7EANvosZU2uDUChKMrapmNJSBQaDVC6u3v7umlxStwBzbzs
+         E0FHXqjNcKiwKBWUtDZLau0zGl+mmk39gdLUIK333XcKQxRdP9fkLqdqVFoOCzc5OLAi
+         dvxI82cc54kdeoVo9wjn5+eKQmUb3E9QvxmvzSWdwT1xVskE2Y9/EGenbJogom6FZMMw
+         dfqLiDjFrD2pWVQ/vS+3I9rw5Zi9zFZrHPyFwFZWsHtozrm8iTpsRPfrfrWm9wfnzdhG
+         J2PM6ul1d2Mj2z9za7R3PCMZr5idEWkstHcALa9ucoqKRhwiFZnjyDu8rOLCZdjE3poG
+         1g0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WuFAQ0v5aLWdC7HoyL7gWW2N4Fcoas9srNPvbE2PlSI=;
-        b=vMLMIf41MigaJuvuStlEOy9Cl72dMS64vfryDTDv1ASHh+p09t3BMt/i3CzHGngzSZ
-         K8fqqprupW6otnQtJ3A+tNYnJzsziIXIYZ/572Ja8+KbSo7iYKDp78oyIm4gIlvHljns
-         oe78R6pJmSpbGZc1HDXi/3Mx3tKXmoO+z2Wj85j3D/O05n/gVXgQzuAw8eEhxgYMsdtd
-         SofAaAEwGXb3mYdJKw6BRNAqeXDsAqVgYWSEZTQu28tndPKP3GhR8AtiHuV7Tel1S8gk
-         fIeSiEmXvJr72OYqcE9JQmioI7IIBs1G2ZtxRsZ9Th+q0jrTwbpirxeOftwIG8PkmXFC
-         tn4w==
-X-Gm-Message-State: ANoB5pk7RuFsGwz3KQml4Z6RWG1muY4raiSsti2CE+eSHjggFIrdNcMK
-        awOmtAReszPSQ92yYgUeXTbyHA==
-X-Google-Smtp-Source: AA0mqf6Ff/YPDvYU4XmfxDeXWo8Pxe41pVK2kq7G17XK99TY5VKTtdXzb9kyGYZtgUSb0wGH9Mjdug==
-X-Received: by 2002:a17:906:7f90:b0:7c0:ba2c:a4e8 with SMTP id f16-20020a1709067f9000b007c0ba2ca4e8mr15296522ejr.642.1670273166741;
-        Mon, 05 Dec 2022 12:46:06 -0800 (PST)
-Received: from localhost.localdomain ([80.208.71.65])
-        by smtp.gmail.com with ESMTPSA id d21-20020a170906305500b007838e332d78sm6584829ejd.128.2022.12.05.12.46.05
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DXyrpJdo+UCHtqk4rvzCMrlf12yHI5XT5NQfrdPusNM=;
+        b=R3wGDplDKkU/nkajoEAvuuPpXGYuh0DEmhky9tXUonLp21OUe/rLIwvHOdfkDA9Sqb
+         wn0mE5XSTCCOnrpUQETiZqIKUwO+8+50ISrPrnt/c06iw6pk/BaI9QnFlxdkXkV5v3xt
+         japhXjh/nwrySJiUZvY6KvFePOdMIX002thDrVCdzg7v9ssJqq6yGi49R9EzfhCvsVIW
+         WcWA3WQVkJnJ+cPAQSYTl5AwIlhrWSJRu0gAYGZFnzhwEcvTvIUpSzf6hwFpn3frKUtu
+         6dmPoeIzA5zyjTMhBBgQ02pi2Oq4fde9V48U0ZGam7FVmadvf4cxNvQj5by+nlDE5g6Q
+         Nzog==
+X-Gm-Message-State: ANoB5pmr0NaWcAxomqsVPXVAkLVD8YrMp9Mh5eH6dB2grE+afS9WmaeW
+        ioT360bw9s67Z0S+x2ZBGuMI+Q==
+X-Google-Smtp-Source: AA0mqf5NuVtxki00wyBlo9Q/hqZ/9WskPSkJgzi8OQhXjgR79B1nlfP1XysAIJKkIYive6WD4C0rkA==
+X-Received: by 2002:a17:903:26ce:b0:189:c267:19cc with SMTP id jg14-20020a17090326ce00b00189c26719ccmr15204721plb.101.1670273168440;
+        Mon, 05 Dec 2022 12:46:08 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e8-20020a056a0000c800b0053e38ac0ff4sm3344135pfj.115.2022.12.05.12.46.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 12:46:06 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Greg Ungerer <gregungerer@westnet.com.au>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: fec: properly guard irq coalesce setup
-Date:   Mon,  5 Dec 2022 21:46:04 +0100
-Message-Id: <20221205204604.869853-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Mon, 05 Dec 2022 12:46:08 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     tj@kernel.org, josef@toxicpanda.com,
+        Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shikemeng@huawei.com,
+        linfeilong@huawei.com, liuzhiqiang26@huawei.com
+In-Reply-To: <20221205115709.251489-1-shikemeng@huaweicloud.com>
+References: <20221205115709.251489-1-shikemeng@huaweicloud.com>
+Subject: Re: [PATCH v3 0/9] A few bugfix and cleanup patches for blk-throttle
+Message-Id: <167027316733.161635.16505872806618790217.b4-ty@kernel.dk>
+Date:   Mon, 05 Dec 2022 13:46:07 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.0-dev-50ba3
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to the Fixes: commit, the initialization code went through the
-same fec_enet_set_coalesce() function as used by ethtool, and that
-function correctly checks whether the current variant has support for
-irq coalescing.
 
-Now that the initialization code instead calls fec_enet_itr_coal_set()
-directly, that call needs to be guarded by a check for the
-FEC_QUIRK_HAS_COALESCE bit.
+On Mon, 05 Dec 2022 19:57:00 +0800, Kemeng Shi wrote:
+> hierarchy, corret comment and so on. More details can be found in
+> respective changelogs. Thanks.
+> 
 
-Fixes: df727d4547de (net: fec: don't reset irq coalesce settings to defaults on "ip link up")
-Reported-by: Greg Ungerer <gregungerer@westnet.com.au>
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/net/ethernet/freescale/fec_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Applied, thanks!
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 2ca2b61b451f..23e1a94b9ce4 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1220,7 +1220,8 @@ fec_restart(struct net_device *ndev)
- 		writel(0, fep->hwp + FEC_IMASK);
- 
- 	/* Init the interrupt coalescing */
--	fec_enet_itr_coal_set(ndev);
-+	if (fep->quirks & FEC_QUIRK_HAS_COALESCE)
-+		fec_enet_itr_coal_set(ndev);
- }
- 
- static int fec_enet_ipc_handle_init(struct fec_enet_private *fep)
+[1/9] blk-throttle: correct stale comment in throtl_pd_init
+      commit: f56019aef353576f43f945fdd065858145090582
+[2/9] blk-throttle: Fix that bps of child could exceed bps limited in parent
+      commit: 84aca0a7e039c8735abc0f89f3f48e9006c0dfc7
+[3/9] blk-throttle: ignore cgroup without io queued in blk_throtl_cancel_bios
+      commit: eb184791821409c37fef4f67638bb56bdaa82900
+[4/9] blk-throttle: correct calculation of wait time in tg_may_dispatch
+      commit: 183daeb11de871b073515d14ec1e3bc0da79e038
+[5/9] blk-throttle: simpfy low limit reached check in throtl_tg_can_upgrade
+      commit: a4d508e333829a8394e59efa06ce56e51f3e2b29
+[6/9] blk-throttle: fix typo in comment of throtl_adjusted_limit
+      commit: 009df341714c6c20a44dd9268681a8bff10bb050
+[7/9] blk-throttle: remove incorrect comment for tg_last_low_overflow_time
+      commit: e3031d4c7d2c5bff6b5944d61d4e31319739d216
+[8/9] blk-throttle: remove repeat check of elapsed time from last upgrade in throtl_hierarchy_can_downgrade
+      commit: 9c9f209d9d81ea67cd84f53f470a592c252d845d
+[9/9] blk-throttle: Use more siutable time_after check for update of slice_start
+      commit: eea3e8b74aa1648fc96b739458d067a6e498c302
+
+Best regards,
 -- 
-2.37.2
+Jens Axboe
+
 
