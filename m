@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CCC642539
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C298864253D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbiLEI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S231671AbiLEI7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiLEI5v (ORCPT
+        with ESMTP id S231865AbiLEI6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:57:51 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38CB101EC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:56:35 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p27Gz-00065M-Gc; Mon, 05 Dec 2022 09:56:25 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p27Gw-002QBr-3u; Mon, 05 Dec 2022 09:56:22 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p27Gw-002hzv-68; Mon, 05 Dec 2022 09:56:22 +0100
-Date:   Mon, 5 Dec 2022 09:56:22 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     kernel@pengutronix.de, Arnd Bergmann <arnd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-kernel@vger.kernel.org,
+        Mon, 5 Dec 2022 03:58:15 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D222ADEF3
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:56:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=K7LkyI3EyZtAporb19ChbmQpds4O
+        ChSNzIOkIRouAdM=; b=gmo3iwVfGineystUR+8I7+fJPbd1BFQVff/L03zkTjqv
+        rY8Qn3/XjmRIuQGwgw0KEbGni7ctVfKgwZ/mf6PaZ0KPygxI6ttt0xbqA2BxH5Nv
+        VmuDr3NYgMkq8rJPkPiU6j7T5rcDGoQJwm/WuuRqrV6TPFwcy0CFZJc7Zr74a2Y=
+Received: (qmail 2245272 invoked from network); 5 Dec 2022 09:56:37 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Dec 2022 09:56:37 +0100
+X-UD-Smtp-Session: l3s3148p1@0ulr3RDvRIRehhrO
+Date:   Mon, 5 Dec 2022 09:56:36 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] memory: renesas-rpc-if: Rebind fixes and misc
+ cleanups
+Message-ID: <Y42yRFSai6XKnLiC@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-next@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        dmaengine@vger.kernel.org, Simtec Linux Team <linux@simtec.co.uk>
-Subject: Re: Regression in dmaengine/next was removed
-Message-ID: <20221205085622.75yyfztkahmrlrz4@pengutronix.de>
-References: <20221021203329.4143397-14-arnd@kernel.org>
- <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
- <f0425349-d965-0a40-0672-27dfbe45eb44@linaro.org>
- <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
- <20221125085117.23p7yv6wgo6b5l3v@pengutronix.de>
- <7f5cf3d8-4a3b-41eb-fed9-1ade4ba1e4e2@linaro.org>
- <20221202112003.kanwr7bixbaiqdgz@pengutronix.de>
- <Y4nkvT+R8t6eGrWj@matsya>
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <cover.1669213027.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7eoiblj4p2fvpvxp"
+        protocol="application/pgp-signature"; boundary="3141AOsAMOMu/lh9"
 Content-Disposition: inline
-In-Reply-To: <Y4nkvT+R8t6eGrWj@matsya>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cover.1669213027.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,93 +67,57 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---7eoiblj4p2fvpvxp
-Content-Type: text/plain; charset=iso-8859-1
+--3141AOsAMOMu/lh9
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello Vinod,
-
-On Fri, Dec 02, 2022 at 05:12:53PM +0530, Vinod Koul wrote:
-> On 02-12-22, 12:20, Uwe Kleine-K=F6nig wrote:
-> > I made the subject a bit more expressive.
-
-I wonder what I intended to write there, something like "Regression in
-dmaengine/next in arm/s3c2410_defconfig", sorry to make it look as if
-you already fixed the regression :-)
-
-> > On Fri, Nov 25, 2022 at 09:52:51AM +0100, Krzysztof Kozlowski wrote:
-> > > On 25/11/2022 09:51, Uwe Kleine-K=F6nig wrote:
-> > > > On Sun, Nov 20, 2022 at 12:22:31PM +0100, Krzysztof Kozlowski wrote:
-> > > >> On 20/11/2022 11:31, Krzysztof Kozlowski wrote:
-> > > >>> On 18/11/2022 22:54, Uwe Kleine-K=F6nig wrote:
-> > > >>>> The linux/platform_data/dma-s3c24xx.h header file was removed. I=
-t didn't
-> > > >>>> declare or define any symbol needed in devs.c though, so the #in=
-clude
-> > > >>>> can just be dropped.
-> > > >>>>
-> > > >>>> Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
-> > > >>>> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.d=
-e>
-> > > >>>> ---
-> > > >>>
-> > > >>> The file was not removed... or it should not have been yet. The s=
-3c24xx
-> > > >>> dma driver removal should be part of Arnd series taken via SoC AR=
-M.
-> > > >=20
-> > > > The patch enters next with the merge of
-> > > >=20
-> > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git =
-next
-> > > >=20
-> > > > Ah, the patch that became cccc46ae3623 (i.e. patch #14) is part of a
-> > > > bigger series. Its patch #1 removes s3c24xx.c (which you pointed ou=
-t to be still
-> > > > broken) and patch #2 includes the change I suggested here.
-> > > >=20
-> > > >> I think that commit should be just dropped instead.
-> > > >=20
-> > > > +1
-> > > >=20
-> > > > BTW, cccc46ae3623 is included in next since next-20221107 and breaks
-> > > > (at least) arm/s3c2410_defconfig. So I would consider reverting
-> > > > cccc46ae3623 a fix. (Added linux-next to Cc:)
-> > >=20
-> > > Yes. The build failure of next was reported already by kernel test ro=
-bot.
-> > >=20
-> > > Vinod, can we drop this patch?
-> >=20
-> > That patch is still contained in the next tags of this week. :-(
+On Wed, Nov 23, 2022 at 03:41:16PM +0100, Geert Uytterhoeven wrote:
+> 	Hi all,
 >=20
-> Apologies for delay, I was moving...
+> The Renesas RPC-IF provides either HyperFlash or SPI host access.
+> To handle this, three drivers are used:
+>   1. The RPC-IF core diver,
+>   2. An HyperFlash child driver,
+>   3. An SPI child driver.
 >=20
-> I have reverted and pushed now
+> Currently this driver collection suffers from a sub-optimal division of
+> roles and reponsibilities, leading to (un)bind issues: after manually
+> unbinding the child driver, rebinding the child driver fails with
+> -EBUSY.
+>=20
+> This patch series aims to fix this, by splitting off private data and
+> making the RPC-IF core driver responsible for resource acquisition.
+> After that, a few customary cleanups are provided.
+>=20
+> This has been tested on the Salvator-X(S) and Ebisu-4D (HyperFlash) and
+> White-Hawk (QSPI FLASH) development boards.
 
-Thanks!
+Sadly, I don't have the bandwidth to do a full review. But from a
+glimpse, it all looks good. And from a high level PoV, this all makes a
+lot of sense. So:
 
-Best regards
-Uwe
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---7eoiblj4p2fvpvxp
+--3141AOsAMOMu/lh9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmONsjMACgkQwfwUeK3K
-7AmXSwf/VZuQ2FjkiIN+56r+5b4pEZ6q5pmktLnS0zhETdeXoiKfbQl2nRhk8YOk
-DKhMlUpD5jGS4r5PXYhct9n10dSquwOQDSrDRtf3HO2VTroTREEJ48vEjOkpu7TY
-th0TIWt/ZoXjfASyFi8Vpx7Y26Mi6rye9pLZk96FLiYGCfTX5G0ygi1/Fh4uMUeY
-teQIqSUg7C1hN56rYP37btxYBehUlhWmxW3P+rLGUYT+ZPGvsEXWv0K2XIajrPTd
-pKr+xmec6C2GuHsc3EN0YtPITdrHGBC9RTrMaC8XDXKaGYVAEEYzueSCTCTvcRQ5
-sDUzioR2cnq37vyUneeVlX043ZBszA==
-=9QGH
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONskQACgkQFA3kzBSg
+KbYZCQ/+J9lcmKr9+8n+KR8ECOOyla6PiySP7OhFib9ryO+tOUhFcBwRrNJaDj0J
+Q58ZuHzdo9mDoHct3MZaDuurFDKydb0VtUh/KBfrygvI4iSPK8KKELc3NXMyjBuY
+fdHISN3kPD8dZ4kER+g6NuQ/9xFI2QRfFSFYQm4BsztJgenHkqeVbgERs8j5zBZF
+I49AiK7zYq1bwRSOHV7T2ZVzUB1wpzDIHJNOBdZiXyeVejkB3stHfRvASlksFF6g
+VTTPsBLQ79mZV6o/+FiFYotY+wv34mqkBykBd6wxxcUqjusgW3ty33iyALUHySEK
+P2UrNBxUcNW9NHBh5FDhXaF8Wo9tHjYbdtZuRfKkvIqLVEJye7RkJ+wbDdG3QKyd
+z7BLyFGL4e0+2L18ClK3DzUV+sJYY1a8jw6aKZNKlrjbdirKwq9ZtIlvo9FtrzHM
+7a6jHGH88QpD0nsSBZt5llMqileVG75EiyrY/VsWRZZKYk1kP+qw6boK7y1HZcmu
+uKjPqtHVDPXnZAWJh8KkgV9ogYnwaqijxqt9SPlaB7bJoUOA1pXLNeyXZj+UTMHd
+hR+xmD/u5Q//rJ+wiO3HXfofl/ql4r2l/p67FRmVnKlFg0k75cYEddOYu2PXxGtU
+B64Za2UdTYGdXm0XUPJptoOeajBRo6FlSggm9q+kDCOfeSOw41Q=
+=QLgK
 -----END PGP SIGNATURE-----
 
---7eoiblj4p2fvpvxp--
+--3141AOsAMOMu/lh9--
