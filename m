@@ -2,59 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADA0642BC1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3533A642B4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbiLEP3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S232332AbiLEPTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiLEP3Z (ORCPT
+        with ESMTP id S231963AbiLEPSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:29:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CA96347;
-        Mon,  5 Dec 2022 07:28:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36433611AB;
-        Mon,  5 Dec 2022 15:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667D3C433D6;
-        Mon,  5 Dec 2022 15:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670254093;
-        bh=Jmkt/6PesiLUerzNDnaGjzQezxhRSVgH7lMImePJ31s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pWuA7w+3ChSIKV1HA4BQStqdKUZjj1LShIyPMNiAF/48YCCahdCX4dPBNBJIZBI5O
-         EBCMhUMfeahlRTKCSzCW9G8iVQoJ505nEXSabfl+EbZsWOk76Dlqe8/3hFpjE29Qln
-         HmPI1hW4QvUuWRxUGNuIPBu5bWaHhN1fBpgWIJOI5ie8sN4DJ7T/iCg9om7AMbD7eJ
-         3uc8cYt4iLIieQuq9S4IbP9bemT27vLg+sYy/7j87v6KhUV0YwMJLW5l0+lwkdZwhk
-         i3ERH6ZailqNT8+m+wJuBDMaOaTZ7uU9NON4wynTiTnkUrHximEp+iX1NRvoGahFMV
-         SBHwu5a1D1ZQQ==
-Date:   Mon, 5 Dec 2022 23:18:17 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 09/13] riscv: switch to relative alternative entries
-Message-ID: <Y44LuRcQYPnVnFje@xhacker>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-10-jszhang@kernel.org>
- <CAJF2gTRxm7LJFtups5fexJ5ishm9_j3e+yzfKv3nTtQqUtXPtA@mail.gmail.com>
+        Mon, 5 Dec 2022 10:18:52 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39165C77C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:18:51 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id j4so19129413lfk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:18:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LozJakmRPJFzg/ckcv3lU7gBQVZGydFuBGaw+4YvyO4=;
+        b=oMvyFE0xe1taULlgGWwpo0L3fNBGDWl7ouUma06HK+xzS/giIFDv6sTx2ukPaNwBdI
+         EhtJgBi2oo8UjDDZwQN5xZSn7svkEqtLmanWSSVpHGUA4ab5h3KvRtsH3CeM27Gv76bI
+         qYVdTpt0bdvih9008vnv5C1piDSi0+oCksAAv7X9aPdO3gtYnb1zISVb2bmqga4JGVJP
+         azwp12cVK6th/Uxjay0ezjU7TqvEkPTjDr0hfs3xsw2wzbzNpnbvma4lVKIkoWrgiEll
+         lMVsa6qDieYq1EpaDNwc1hkRgGEjEp+7xlpKSq3NlabZPdO2EZd4OYj3X8WGdcoA9MrX
+         cdew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LozJakmRPJFzg/ckcv3lU7gBQVZGydFuBGaw+4YvyO4=;
+        b=v7K20Vqs83MBfkyCUGlfp9oool2V2iKec/FbZQ7MJaPWyDxVlNObs6iRVq1Y7sh4n/
+         U9FbTtkphHAQor5H+/7UhLuOK403vPLmDOuAC4YXK1C59VSi/1TUuXxjeLXPIGAZl/gp
+         GkyUGUinYZSJ10kFv457xTRkyg0y+o7qOTud3oLCNsuSiLfQOK+PAZzuOL/j3Z6/BHqS
+         VUDFYktyXcxdYw/nMaFTYzzMFn/LE00ZqBy1EcIpbmO53SUK9nTTc/TZmWOUEasRZepL
+         DOPFq5+BbNi0E6kq6wKuj1RvcNAa1fxQgPaIERbWR7/A2k1j9XKOm0T5Gg5q3n23IbKj
+         zPZQ==
+X-Gm-Message-State: ANoB5pnCXuV1s9RujJu7OiqwA+fVu515N+h7kc1vYo6BvWEk+W5XIsjA
+        r24vnRYM+Vh5nIlXlW682rRpOA==
+X-Google-Smtp-Source: AA0mqf5UN+gvwEFT7C47c6GOWtYi7O2hdR8MEJdkd6EoMWIUWc8ywJfP2cZJGIe/M+Lo2TQUVJpcIg==
+X-Received: by 2002:ac2:4e07:0:b0:4a2:2a60:ecf5 with SMTP id e7-20020ac24e07000000b004a22a60ecf5mr29212296lfr.57.1670253528289;
+        Mon, 05 Dec 2022 07:18:48 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w26-20020a05651204da00b004b55f60c65asm1012470lfq.284.2022.12.05.07.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 07:18:47 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Joe Tessler <jrt@google.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 0/9] media: dt-bindings: common CEC properties
+Date:   Mon,  5 Dec 2022 16:18:36 +0100
+Message-Id: <20221205151845.21618-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTRxm7LJFtups5fexJ5ishm9_j3e+yzfKv3nTtQqUtXPtA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,183 +87,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 08:51:41AM +0800, Guo Ren wrote:
-> On Mon, Dec 5, 2022 at 1:57 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > Instead of using absolute addresses for both the old instrucions and
-> > the alternative instructions, use offsets relative to the alt_entry
-> > values. So we can not only cut the size of the alternative entry, but
-> > also meet the prerequisite for patching alternatives in the vDSO,
-> > since absolute alternative entries are subject to dynamic relocation,
-> > which is incompatible with the vDSO building.
-> >
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > ---
-> >  arch/riscv/errata/sifive/errata.c           |  4 +++-
-> >  arch/riscv/errata/thead/errata.c            | 11 ++++++++---
-> >  arch/riscv/include/asm/alternative-macros.h | 20 ++++++++++----------
-> >  arch/riscv/include/asm/alternative.h        | 12 ++++++------
-> >  arch/riscv/kernel/cpufeature.c              | 13 ++++++-------
-> >  5 files changed, 33 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
-> > index 1031038423e7..0e537cdfd324 100644
-> > --- a/arch/riscv/errata/sifive/errata.c
-> > +++ b/arch/riscv/errata/sifive/errata.c
-> > @@ -107,7 +107,9 @@ void __init_or_module sifive_errata_patch_func(struct alt_entry *begin,
-> >
-> >                 tmp = (1U << alt->errata_id);
-> >                 if (cpu_req_errata & tmp) {
-> > -                       patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> > +                       patch_text_nosync((void *)&alt->old_offset + alt->old_offset,
-> > +                                         (void *)&alt->alt_offset + alt->alt_offset,
->  (void *)&alt->alt_offset + alt->alt_offset. ??!!
+Hi,
 
-Hi Guo,
+Changes since v1
+================
+1. chrontel,ch7322: fix node name to 'cec'.
+2. Add ack tags.
 
-what's the problem? I can't catch your meaning, could you please proide
-more details?
+Best regards,
+Krzysztof
 
-Thanks
+Krzysztof Kozlowski (9):
+  media: dt-bindings: amlogic,meson-gx-ao-cec: move to cec subfolder
+  media: dt-bindings: st,stm32-cec: move to cec subfolder
+  media: dt-bindings: cec: convert common CEC properties to DT schema
+  media: dt-bindings: amlogic,meson-gx-ao-cec: reference common CEC
+    properties
+  media: dt-bindings: chrontel,ch7322: reference common CEC properties
+  media: dt-bindings: samsung,s5p-cec: convert to DT schema
+  media: dt-bindings: cec-gpio: convert to DT schema
+  media: dt-bindings: nvidia,tegra-cec: convert to DT schema
+  media: dt-bindings: st,stih-cec: convert to DT schema
 
-> 
-> > +                                         alt->alt_len);
-> >                         cpu_apply_errata |= tmp;
-> >                 }
-> >         }
-> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> > index 21546937db39..2a6e335b5a32 100644
-> > --- a/arch/riscv/errata/thead/errata.c
-> > +++ b/arch/riscv/errata/thead/errata.c
-> > @@ -68,6 +68,7 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
-> >         struct alt_entry *alt;
-> >         u32 cpu_req_errata = thead_errata_probe(stage, archid, impid);
-> >         u32 tmp;
-> > +       void *oldptr, *updptr;
-> >
-> >         for (alt = begin; alt < end; alt++) {
-> >                 if (alt->vendor_id != THEAD_VENDOR_ID)
-> > @@ -77,12 +78,16 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
-> >
-> >                 tmp = (1U << alt->errata_id);
-> >                 if (cpu_req_errata & tmp) {
-> > +                       oldptr = (void *)&alt->old_offset + alt->old_offset;
-> > +                       updptr = (void *)&alt->alt_offset + alt->alt_offset;
-> > +
-> >                         /* On vm-alternatives, the mmu isn't running yet */
-> >                         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> > -                               memcpy((void *)__pa_symbol(alt->old_ptr),
-> > -                                      (void *)__pa_symbol(alt->alt_ptr), alt->alt_len);
-> > +                               memcpy((void *)__pa_symbol(oldptr),
-> > +                                      (void *)__pa_symbol(updptr),
-> > +                                      alt->alt_len);
-> >                         else
-> > -                               patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> > +                               patch_text_nosync(oldptr, updptr, alt->alt_len);
-> >                 }
-> >         }
-> >
-> > diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> > index ec2f3f1b836f..dd40727bc859 100644
-> > --- a/arch/riscv/include/asm/alternative-macros.h
-> > +++ b/arch/riscv/include/asm/alternative-macros.h
-> > @@ -7,11 +7,11 @@
-> >  #ifdef __ASSEMBLY__
-> >
-> >  .macro ALT_ENTRY oldptr newptr vendor_id errata_id new_len
-> > -       RISCV_PTR \oldptr
-> > -       RISCV_PTR \newptr
-> > -       REG_ASM \vendor_id
-> > -       REG_ASM \new_len
-> > -       .word   \errata_id
-> > +       .long \oldptr - .
-> > +       .long \newptr - .
-> > +       .short \vendor_id
-> > +       .short \new_len
-> > +       .long \errata_id
-> >  .endm
-> >
-> >  .macro ALT_NEW_CONTENT vendor_id, errata_id, enable = 1, new_c : vararg
-> > @@ -75,11 +75,11 @@
-> >  #include <linux/stringify.h>
-> >
-> >  #define ALT_ENTRY(oldptr, newptr, vendor_id, errata_id, newlen)                \
-> > -       RISCV_PTR " " oldptr "\n"                                       \
-> > -       RISCV_PTR " " newptr "\n"                                       \
-> > -       REG_ASM " " vendor_id "\n"                                      \
-> > -       REG_ASM " " newlen "\n"                                         \
-> > -       ".word " errata_id "\n"
-> > +       ".long  ((" oldptr ") - .) \n"                                  \
-> > +       ".long  ((" newptr ") - .) \n"                                  \
-> > +       ".short " vendor_id "\n"                                        \
-> > +       ".short " newlen "\n"                                           \
-> > +       ".long  " errata_id "\n"
-> >
-> >  #define ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)           \
-> >         ".if " __stringify(enable) " == 1\n"                            \
-> > diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> > index 33eae9541684..3baf32e05b46 100644
-> > --- a/arch/riscv/include/asm/alternative.h
-> > +++ b/arch/riscv/include/asm/alternative.h
-> > @@ -33,12 +33,12 @@ void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> >                                int patch_offset);
-> >
-> >  struct alt_entry {
-> > -       void *old_ptr;           /* address of original instruciton or data  */
-> > -       void *alt_ptr;           /* address of replacement instruction or data */
-> > -       unsigned long vendor_id; /* cpu vendor id */
-> > -       unsigned long alt_len;   /* The replacement size */
-> > -       unsigned int errata_id;  /* The errata id */
-> > -} __packed;
-> > +       s32 old_offset;         /* offset to original instruciton or data  */
-> > +       s32 alt_offset;         /* offset to replacement instruction or data */
-> > +       u16 vendor_id;          /* cpu vendor id */
-> > +       u16 alt_len;            /* The replacement size */
-> > +       u32 errata_id;          /* The errata id */
-> > +};
-> >
-> >  struct errata_checkfunc_id {
-> >         unsigned long vendor_id;
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index 6244be5cd94a..adeac90b1d8e 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -257,6 +257,7 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
-> >                                                   unsigned int stage)
-> >  {
-> >         struct alt_entry *alt;
-> > +       void *oldptr, *updptr;
-> >
-> >         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> >                 return;
-> > @@ -270,17 +271,15 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
-> >                         continue;
-> >                 }
-> >
-> > +               oldptr = (void *)&alt->old_offset + alt->old_offset;
-> > +               updptr = (void *)&alt->alt_offset + alt->alt_offset;
-> >                 if (!__riscv_isa_extension_available(NULL, alt->errata_id))
-> >                         continue;
-> >
-> >                 /* do the basic patching */
-> > -               patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> > -               riscv_alternative_fix_auipc_jalr(alt->old_ptr,
-> > -                                                alt->alt_len,
-> > -                                                alt->old_ptr - alt->alt_ptr);
-> > -               riscv_alternative_fix_jal(alt->old_ptr,
-> > -                                         alt->alt_len,
-> > -                                         alt->old_ptr - alt->alt_ptr);
-> > +               patch_text_nosync(oldptr, updptr, alt->alt_len);
-> > +               riscv_alternative_fix_auipc_jalr(oldptr, alt->alt_len, oldptr - updptr);
-> > +               riscv_alternative_fix_jal(oldptr, alt->alt_len, oldptr - updptr);
-> >         }
-> >  }
-> >  #endif
-> > --
-> > 2.37.2
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
+ .../devicetree/bindings/media/cec-gpio.txt    | 42 -----------
+ .../devicetree/bindings/media/cec.txt         |  8 --
+ .../{ => cec}/amlogic,meson-gx-ao-cec.yaml    | 11 +--
+ .../bindings/media/cec/cec-common.yaml        | 28 +++++++
+ .../bindings/media/cec/cec-gpio.yaml          | 73 +++++++++++++++++++
+ .../bindings/media/cec/nvidia,tegra-cec.yaml  | 58 +++++++++++++++
+ .../bindings/media/cec/samsung,s5p-cec.yaml   | 66 +++++++++++++++++
+ .../bindings/media/cec/st,stih-cec.yaml       | 66 +++++++++++++++++
+ .../media/{ => cec}/st,stm32-cec.yaml         |  4 +-
+ .../bindings/media/i2c/chrontel,ch7322.yaml   | 11 ++-
+ .../devicetree/bindings/media/s5p-cec.txt     | 36 ---------
+ .../devicetree/bindings/media/stih-cec.txt    | 27 -------
+ .../devicetree/bindings/media/tegra-cec.txt   | 27 -------
+ MAINTAINERS                                   | 12 +--
+ 14 files changed, 308 insertions(+), 161 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/cec-gpio.txt
+ delete mode 100644 Documentation/devicetree/bindings/media/cec.txt
+ rename Documentation/devicetree/bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml (86%)
+ create mode 100644 Documentation/devicetree/bindings/media/cec/cec-common.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/cec/cec-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/cec/nvidia,tegra-cec.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/cec/samsung,s5p-cec.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
+ rename Documentation/devicetree/bindings/media/{ => cec}/st,stm32-cec.yaml (89%)
+ delete mode 100644 Documentation/devicetree/bindings/media/s5p-cec.txt
+ delete mode 100644 Documentation/devicetree/bindings/media/stih-cec.txt
+ delete mode 100644 Documentation/devicetree/bindings/media/tegra-cec.txt
+
+-- 
+2.34.1
+
