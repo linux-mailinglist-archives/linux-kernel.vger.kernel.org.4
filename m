@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFEA642912
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060AE64290F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbiLENQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S231856AbiLENQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiLENQZ (ORCPT
+        with ESMTP id S231443AbiLENQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:16:25 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD8B13D45;
-        Mon,  5 Dec 2022 05:16:24 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id v8so4841808qkg.12;
-        Mon, 05 Dec 2022 05:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1IEd4mI8XLAQBexIi+9IpqUT3OWzPJE+9etDyFsEtDA=;
-        b=oE4GEmTdC5yMQ2N4/NNW936SbQWyASzL2GuhCgJV06hdVm6aJV1VE+JWgnNKKaeEfo
-         sNEfc0zY8Q4FnCXI+p0D7cXW5Atsp9oZJtjSe0d3OhOvJ8SKC9o43u5rA+4Xkt8+mGgm
-         Ti4wx1Dz8q8Tcw951dsL7GPoSCVh+hqMEQ9i+BAO1UbkFAyFQLpifCAlIqZ89C4gkVHL
-         01nWkpKl09O9Tigi+S9k+tLIO+N+BCVbWrVclaS9+Cj2YZYVbovBP8eqlynW72hrYtt0
-         hp1iSQwBJ2fqvaLioSbqT0M4pAbEJkRL/GWK7oH2E6ojmEXRMneyPE05JXf+HlZU20AJ
-         0hyg==
+        Mon, 5 Dec 2022 08:16:13 -0500
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6C010B49
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:16:10 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id 124so11347736pfy.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:16:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1IEd4mI8XLAQBexIi+9IpqUT3OWzPJE+9etDyFsEtDA=;
-        b=q0XPZU+GalljuOBJa+88px4QEhIn3355JVzqiyYam8Dk6PEX+4AqCYRsY65TFBhp24
-         YcoZAZn5aQ5U8w6jcBTVNcjvNLOFQcuzaxQPlPSJwLNVEFTYgmSMbcj3Jr4vX4N4Ff6g
-         l3lTuUeIzkJ/yg3PyxtR3f7ZiVg6se7z2v2scVm0Vp8qgztv/EGbIm4QKuTuKJ9KYd4k
-         UEWBaGusC0+J+BVTN28MLgAe3uCtZSCo8MWpGpSZ3mSuQEJgZE3cRX43HVB2jWlegj1I
-         G2eCHAmPQvmxtxsChbk5yQeLz3THc6VOxsCEVMOPe1EgpjGuR3vJRTRxROKAEPOJvbxe
-         MZVg==
-X-Gm-Message-State: ANoB5pkR8Fd/o8KfBjUZYAems3yGl/YgSetyoHcyKm+0dTF+U4wNw71h
-        ngHz1GXB8nW84L97HG8nyx8P1+zi6o5LHQIwBp2BgLCmppg14Q==
-X-Google-Smtp-Source: AA0mqf5TkqKS5PRYCTdZo/ape7Psorn6DyU3gXrBcn4hxmOu1OKIkxxU/2lykVYJOjas/5oWPAneioPTyI0njsujhq0=
-X-Received: by 2002:a05:620a:2053:b0:6fc:abc1:d154 with SMTP id
- d19-20020a05620a205300b006fcabc1d154mr14630302qka.320.1670246183553; Mon, 05
- Dec 2022 05:16:23 -0800 (PST)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3eJf8i7mbE4W5KmZ65ut7au95IAJO/5SeyyJ7PBLcow=;
+        b=B5HzJk0Lmb2J1UgFkuV8H/+VsaGYe4YaIOiGHP0danLyAE/grLGMJXQSOZT482xWuR
+         b5lQfwjuH7yExvHgh42wDLLgTP+w50u3C9GY/ldN4YyXVEYN7A2FV6tyFw3TknTcdrap
+         yHxisFIOzm2SVOcBkYRlkng4VTa+NxQZXT99D7QMrBDV5TSC8LL/vPrw1MCJb4qjUshG
+         B54e2g6ZFenjpoiIWIYJ/HvqYJcursDirNUvuQSzncI8c1HpZrw1iAxcMDM+kYUEmqD3
+         fxT3Pe3uj0P8aEhjrnMYDp8cmsgZveA7FQr7f+1KTVLuZqlW3YzGw1+3cJ3SCYrWyBwY
+         JA3A==
+X-Gm-Message-State: ANoB5pmP5BAPCb2Shpij3C3zpCHdnwbsXqwCxpeD7F1enNHWEqrqXXzQ
+        rXlZJ2NOuT61RiG603iq9pi1mg==
+X-Google-Smtp-Source: AA0mqf7cuZEWFKflQSkI5L3ytUqAJesB15FOOlmdmmqL/kbAzYcaptcZPVkjel2Bw6FR7Aj4Wy6qjQ==
+X-Received: by 2002:a63:4246:0:b0:477:98cc:3d01 with SMTP id p67-20020a634246000000b0047798cc3d01mr52742551pga.505.1670246169869;
+        Mon, 05 Dec 2022 05:16:09 -0800 (PST)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id p7-20020a625b07000000b0056246403534sm7923917pfb.88.2022.12.05.05.16.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 05:16:09 -0800 (PST)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Flora Fu <flora.fu@mediatek.com>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>, Lee Jones <lee@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-leds@vger.kernel.org
+Subject: Re: [PATCH v7 0/8] Add MediaTek MT6357 PMIC support
+In-Reply-To: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
+References: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
+Date:   Mon, 05 Dec 2022 05:16:08 -0800
+Message-ID: <7hr0xe56uf.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <202212051942082259437@zte.com.cn> <CAHp75Vc-gMuv=HpiF-LURrpy+0MDiQUe0hVv24pRezhQg2E-Lw@mail.gmail.com>
-In-Reply-To: <CAHp75Vc-gMuv=HpiF-LURrpy+0MDiQUe0hVv24pRezhQg2E-Lw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Dec 2022 15:15:47 +0200
-Message-ID: <CAHp75VfLGUF4vqeObEOjRKzc+R+oYgsUZSdvVd+Echnq2DNRqw@mail.gmail.com>
-Subject: Re: [PATCH linux-next v2] x86/platform/uv: use strscpy to instead of strncpy()
-To:     yang.yang29@zte.com.cn
-Cc:     steve.wahl@hpe.com, mike.travis@hpe.com, dimitri.sivanich@hpe.com,
-        russ.anderson@hpe.com, dvhart@infradead.org, andy@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +81,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 3:13 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Mon, Dec 5, 2022 at 1:42 PM <yang.yang29@zte.com.cn> wrote:
+Matthias,
 
-...
+Alexandre Mergnat <amergnat@baylibre.com> writes:
 
-> >         char arg[ACTION_LEN], *p;
-> >
-> >         /* (remove possible '\n') */
-> > -       strncpy(arg, val, ACTION_LEN - 1);
-> > -       arg[ACTION_LEN - 1] = '\0';
-> > -       p = strchr(arg, '\n');
-> > -       if (p)
-> > -               *p = '\0';
-> > +       strscpy(arg, val, strnchrnul(val, ACTION_LEN, '\n') - val);
->
-> And even better is to replace ACTION_LEN by sizeof(arg).
+> This patch series adds MFD, PMIC keys, and regulator support for MT6357.
+> MT6357 is a MediaTek PMIC very similar to MT6358.
 
-Btw, have you compiled this with `make W=1 ...`? I believe you will
-get a new warning after your change.
+The regulator driver (and bindings) were merged by Mark.  Could you take
+the rest of this series via your mediatek tree?  The input driver (and
+bindings) are ack'd by Dmitry.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Kevin
+
+
+
+
