@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0532642524
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D15642525
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbiLEIzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S232250AbiLEIzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbiLEIyn (ORCPT
+        with ESMTP id S232237AbiLEIyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 03:54:43 -0500
 Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDC5E64C1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0C5D240;
         Mon,  5 Dec 2022 00:54:01 -0800 (PST)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 454FC1C8128E;
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 8EDFB1C81290;
         Mon,  5 Dec 2022 16:53:59 +0800 (CST)
-Received: from NTHCML01A.nuvoton.com (10.1.8.177) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 5 Dec 2022
+Received: from NTHCCAS02.nuvoton.com (10.1.9.121) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 5 Dec
+ 2022 16:53:59 +0800
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS02.nuvoton.com
+ (10.1.9.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Mon, 5 Dec 2022
  16:53:59 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01A.nuvoton.com
- (10.1.8.177) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 5 Dec 2022
- 16:53:58 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
  Transport; Mon, 5 Dec 2022 16:53:58 +0800
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id AAE45637C4; Mon,  5 Dec 2022 10:53:57 +0200 (IST)
+        id 2507563A1E; Mon,  5 Dec 2022 10:53:58 +0200 (IST)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     <ulf.hansson@linaro.org>, <avifishman70@gmail.com>,
         <tali.perry1@gmail.com>, <joel@jms.id.au>, <venture@google.com>,
@@ -42,10 +42,12 @@ To:     <ulf.hansson@linaro.org>, <avifishman70@gmail.com>,
 CC:     <openbmc@lists.ozlabs.org>, <linux-mmc@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v2 0/2] MMC: add NPCM SDHCI driver support
-Date:   Mon, 5 Dec 2022 10:53:49 +0200
-Message-ID: <20221205085351.27566-1-tmaimon77@gmail.com>
+Subject: [PATCH v2 1/2] dt-bindings: mmc: npcm,sdhci: Document NPCM SDHCI controller
+Date:   Mon, 5 Dec 2022 10:53:50 +0200
+Message-ID: <20221205085351.27566-2-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20221205085351.27566-1-tmaimon77@gmail.com>
+References: <20221205085351.27566-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -59,35 +61,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set adds SDHCI support for the Nuvoton NPCM Baseboard 
-Management Controller (BMC).
+Add binding for Nuvoton NPCM SDHCI controller.
 
-The NPCM SDHCI driver tested on NPCM750 and NPCM845 EVB.
-
-Addressed comments from:
- - Rob Herring : https://www.spinics.net/lists/devicetree/msg556099.html
- - Andy Shevchenko : https://www.spinics.net/lists/devicetree/msg555247.html
- - Adrian Hunter : https://www.spinics.net/lists/devicetree/msg555583.html
-
-Changes since version 1:
- - Use correct spaces in the dt-bindings.
- - Drop unused labels from dt-bindings.
- - Order by module name in the make a configuration.
- - Remove unnecessary blank lines.
- - Using devm_clk_get_optional instead of devm_clk_get.
-
-Tomer Maimon (2):
-  dt-bindings: mmc: npcm,sdhci: Document NPCM SDHCI controller
-  mmc: sdhci-npcm: Add NPCM SDHCI driver
-
- .../devicetree/bindings/mmc/npcm,sdhci.yaml   | 45 ++++++++++
- drivers/mmc/host/Kconfig                      |  8 ++
- drivers/mmc/host/Makefile                     |  1 +
- drivers/mmc/host/sdhci-npcm.c                 | 84 +++++++++++++++++++
- 4 files changed, 138 insertions(+)
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ .../devicetree/bindings/mmc/npcm,sdhci.yaml   | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml
- create mode 100644 drivers/mmc/host/sdhci-npcm.c
 
+diff --git a/Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml b/Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml
+new file mode 100644
+index 000000000000..196fdbfa16ed
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mmc/npcm,sdhci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NPCM SDHCI Controller
++
++maintainers:
++  - Tomer Maimon <tmaimon77@gmail.com>
++
++allOf:
++  - $ref: mmc-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,npcm750-sdhci
++      - nuvoton,npcm845-sdhci
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    mmc@f0840000 {
++      compatible = "nuvoton,npcm750-sdhci";
++      reg = <0xf0840000 0x200>;
++      interrupts = <0 27 4>;
++      clocks = <&clk 4>;
++    };
 -- 
 2.33.0
 
