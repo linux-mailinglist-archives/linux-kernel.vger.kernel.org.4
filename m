@@ -2,272 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51ADF642A72
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4A2642A81
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiLEOeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 09:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S232141AbiLEOjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 09:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiLEOed (ORCPT
+        with ESMTP id S229970AbiLEOjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 09:34:33 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06EE186D5;
-        Mon,  5 Dec 2022 06:34:31 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id bs21so18892007wrb.4;
-        Mon, 05 Dec 2022 06:34:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cztX5Ue33tQ3eMiQbG6qcXAJ75+hHLZXrTtuSbFa9F4=;
-        b=W6c7NEmuUfQ8+4lVrVaU30vp1q9GAU4udyMiNHpVxYgcTRjmuxC+EdB/ZxPzS8KgVn
-         Q7XDq3N0jwMv11o6peTlai0RfxlTsi2Tlnz9SIMipmlrTwoeR/UdWSHdx1hFzEBnMP+g
-         v5FdXm1oIEo7kSEvGR7zxd6e9qU6Sgy7I07ttKGqPME3YpqVrK0neqoMzrTSu9kZNhLq
-         CIjTVJD5+X7p/tANcaopIqE99Txa12m3rWtKeE5QJHDoeMmSmBReqoMK/PP3Ng4F6RKM
-         KysKaspO9sj/ujAeZOVhwEHd9vrB6NYttrO83hdHsvVfwQoya/IxYcPGrFldAq4T/W2Y
-         MXHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cztX5Ue33tQ3eMiQbG6qcXAJ75+hHLZXrTtuSbFa9F4=;
-        b=UHPgqDX4x1nbweQIbIyOX3ZMUl+wE3FQk4VXafUGaZALxlFJsnAYp1ArY/vPxPkQWR
-         8lJpjCBrpuTIBhc+Cg5gNYo1PJq3Wknj7+TR41RJt8k2FuTyg2UpkmHrrqE+6F0uyQKa
-         WZnU52SJ/tPRx5H7nw+dbct3gtB46N/b8Uya3rgn7HbIkF/GCfsdYKCYJGmIzx3j02Rj
-         MEnfq2J9J3xQ+LZMSbfGKKXbHlsYgl/b6CYjyXMJAgZ650l7W7ukZGMQp3ASy9PhVRXu
-         921P2wJloUEWw7hL2uEq0aPgLsR3nnIziHZheZ4dwyk839zF+/lgFW7ZYMzf2WOd03wy
-         0czA==
-X-Gm-Message-State: ANoB5pmIRIU+7D5e1Drwk/N8dDNzjkP65KPC1OoHK3WUI8YkDIdiU0h4
-        rz0cqN3sIJuqHEOlPijLD2l53aMae3hGwmDnFSxN7uuzaixdrH5n
-X-Google-Smtp-Source: AA0mqf563T7zMkt+85nHmLQqY3CwK5GpWtZ5WrXRuMZ0xJ2xp8EQiLwr9FtYo8v8YQPI1dZl/gaDFRWmLb6o3RZDxdY=
-X-Received: by 2002:a5d:51ce:0:b0:236:78cd:f3e7 with SMTP id
- n14-20020a5d51ce000000b0023678cdf3e7mr48591560wrv.140.1670250870227; Mon, 05
- Dec 2022 06:34:30 -0800 (PST)
+        Mon, 5 Dec 2022 09:39:09 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE26EC753
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:39:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670251148; x=1701787148;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=X/OaUUccJ6aVbt1i5kPK5CWBlyIw2MVLh2grme16+8o=;
+  b=dl4U8y4IW51LliWKIwEH1ktsgEH3BNSfoADOtwdQDO9iW76gCZorW+mu
+   +iinmbZ/8qZIjb+6Nhe2AWJFjrcLEz/pSASMXFVGfpD6LGNuSJI5gjStq
+   i3+oTOax+SZULpDt1sHLVIZEgciO8tMRsZwCS0xs/SUfrnxPtAzLrmCih
+   rUT8wg8DjUy+cchIsWLwsOfJn/O1rWlSDclssz4NcpYRwhMxMrKduteF+
+   Isw+74FJMTx4j8TXtQbzRKo1k0UkFC0P/81+FRFXYBXpY1DekvWettoNC
+   i0+N2t6h04oF8nhovRqPppW/dFewY6HNmaCvU1Sq1sGS8iavQisvDvrGN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="378521392"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="378521392"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 06:39:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="788093358"
+X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
+   d="scan'208";a="788093358"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Dec 2022 06:39:07 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 5 Dec 2022 06:39:06 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 5 Dec 2022 06:39:06 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.49) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 5 Dec 2022 06:39:05 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lG5M2EY106nkw8f3XNdQecbd/1m3tD7rls74XbfJiol/tgMnRexrLxcgR3U95tfZ38dl1TTiYibQlHQHcrUJ26kapM4a31XxJyw8g62AUDdLf3iMiOU3t2ytj9o2INYA3s7daMOpMQTwZNODfxumvO76ltg/xBNtvaaRxnMONEpGZZ2aTweajthuvswas3aqpo+b5QFmozBxOhM7YWRJjGK4TiymwwwseznIpiRx9YoEvt0tJoV+Bi9oKnGQ4TpcHLWMTxHBOH5p4i0rmYt68kPOMjcnxcZAhF2gub/xBj5Uu2zzt3gt1ZF9Y4WmK9Ba9vWNPJYf1h1raPbH1+pPGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ojCMnVu01QngXbmrChPcynta55E9I9FYt8NKXbvl20A=;
+ b=co5L7RGExU6/Wv9tpw0BGvZtykLdklPZdtYDMQP19O6VcXnEaEsogbsybCSii83E3Of8z8DeZVg4/GzN2/Ly1FCIzP1nWyTPHwxU0YgkCcUpYGmS5dSK6G6dOmFbIL+q19yDe9SI1Bgytt4kfs+6iU98pJjsbln8hnuyu1zn/QqoJsZbqZfWZ98UGIbKksJgbAtXi8h7AXwwKtMhEcWV3oM9EolfFXTvUIEj6ZnJ+QJi3dRRXseRFD/+gNwkQoARQTqOkYcxxNEZSmBRO7i+/MERtfQjTWrEbOm1Z9/VVDBDrNla9E9ngix4SCuCKMu94HqR10aJMCGHitP///eknA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by PH0PR11MB5611.namprd11.prod.outlook.com (2603:10b6:510:ed::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
+ 2022 14:39:03 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::828c:e5f0:6f82:63b7]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::828c:e5f0:6f82:63b7%8]) with mapi id 15.20.5880.013; Mon, 5 Dec 2022
+ 14:39:03 +0000
+Date:   Mon, 5 Dec 2022 22:38:44 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Joel Fernandes <joel@joelfernandes.org>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Tim Chen" <tim.c.chen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Juri Lelli" <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Josh Don <joshdon@google.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] sched/fair: Introduce short duration task check
+Message-ID: <Y44CdKrQoFKGH+1j@chenyu5-mobl1>
+References: <Y4r/iuqyLG4MOK4d@chenyu5-mobl1>
+ <3A5DA66F-4330-4FC4-9229-998CF98F663E@joelfernandes.org>
+ <Y42uH5fglluWYOm7@chenyu5-mobl1>
+ <CAKfTPtA61DDk-VbNDvAycp8Et5fTwaOS=Q3559rBF7QDHDpJfQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKfTPtA61DDk-VbNDvAycp8Et5fTwaOS=Q3559rBF7QDHDpJfQ@mail.gmail.com>
+X-ClientProxiedBy: SG2PR02CA0106.apcprd02.prod.outlook.com
+ (2603:1096:4:92::22) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
-References: <CAHnGgyHAo+XQPchU4HaKshFbnyHYuD0EuHy17QvPRAZ4MFVq-w@mail.gmail.com>
- <20221129102524.ulsthvmf6tbfwhmb@wittgenstein> <CAHnGgyEQjcGSDPC=k-ikGQC460jov2bum0AzjD+Jm-8fDwXGbg@mail.gmail.com>
-In-Reply-To: <CAHnGgyEQjcGSDPC=k-ikGQC460jov2bum0AzjD+Jm-8fDwXGbg@mail.gmail.com>
-From:   ditang chen <ditang.c@gmail.com>
-Date:   Mon, 5 Dec 2022 22:34:19 +0800
-Message-ID: <CAHnGgyEX9ZnK6FabDOs8=Y_kCX=QkhTiryW4AQDURaepJWNh6w@mail.gmail.com>
-Subject: Re: fs/pnode.c: propagate_one Oops in ltp/fs_bind test
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, ebiederm@xmission.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|PH0PR11MB5611:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e3d84b9-d65d-4602-d53b-08dad6ce7481
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KzW0uVXa4TFMAQyITU0oana+xs6gAnp4JWHJOOYxh2xSnXzQrUpx7SslEh42H/cJSx5OVs3I0FcdKPrUyIdEzlipBu1n/9Q/z0PEPOeJigo5AlLr9QLoiVzVWQV302hlq4cBhx/m/a6HLjfpWiB+0LwTVQ9CDqpug4vRF2MzrXKDTRGsSPK9Ag9HNo7u0AA+7CDeZhdeV+LoUslCgAb5p0QRz8cw+r20fXAhkpi8Ohkyjz0N2HkCSzDTS4GQ+NKGQ3IDlKFAI3H1Z8LQb6OwgdQVkciyQrcnQ1csX30JBZ0TIqT5is68KrznZtV17x8gscyeys0wgbSBz1AGK+m3ulEVP8yacTJU7/fb1SyCLHsr+BurhY7uaDLdpGvPD5ai5SqfhCbYfS2ep9cqECDT24ChzbUsn7jhqWHGMPJbKFi24+lR0ks79XdT5ZMS9V0hXJsiFufqWichKJyq6BHtdp07/7981NGPj4KBoo4A+eftU8YAD1yDee4FOQ5FaYWVyGC2hl6cYYHulm1osrF+Bw4X/xkocm9c5T6ly19fmpVWcfi3/4YTrtONazOicYBfcwmiwLijQvJ80V6i+AFKDfXtJzOvc6Ulnt2Xbox5/bbC1KEfZHuKTH7wBuTZkZH03U7ABOY7G6HD/nndEYPIZMwj5DnSxElTmU/j0KP54GB3nS6xnSU/Nc6fK4zoLdBz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199015)(38100700002)(83380400001)(86362001)(7416002)(66946007)(8936002)(2906002)(4326008)(66476007)(41300700001)(8676002)(66556008)(33716001)(5660300002)(6512007)(6506007)(9686003)(26005)(53546011)(186003)(6666004)(6916009)(316002)(54906003)(478600001)(6486002)(82960400001)(66899015)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3hrekFwd3NGVmFpY2FLancvRzc3STJkSTNSamc2SjNqOWUrUTZYdk5RL213?=
+ =?utf-8?B?VU1lTnlNNHBqMEgxaERZNk9aYkQ3dWt2cFBPMUtsSllhS1EzVzJWWWVJTGtG?=
+ =?utf-8?B?QmRkM3ZNL3YxQXQyS0ZIdHpRWStKR29nQTVnRXZoSzhSdzUxQlNxNlg0ZkRX?=
+ =?utf-8?B?VVhWcjVwMjRqMXQ4QkgvRXg5WjVDRmtSaWl4Y29FVWdNRjVIbDZuSTJyRmNk?=
+ =?utf-8?B?bTEyenphbmZ5UElYaFhyNlJGUm9Rc1FpTG5PRm96b283dlZjd0liR04raGRk?=
+ =?utf-8?B?cHlJMllUb29zMlhvZWhqdUZwSVlxTlJJSzYvdTh6MmxEYi9xVlp1MVB1VFVz?=
+ =?utf-8?B?ZXRGcWtEWjhPelVxbCtYQ3VVaXFrM3hPUllpNUhNbXJuZ3VtM0ZRblNxeVhw?=
+ =?utf-8?B?K1VwbzB5eTVLSkYxdG9abDVPK01GWHRFVDlIYjUxTlAvRGNxUWp0NVRQTi9Z?=
+ =?utf-8?B?dVZFYkJmTC95b3hoYmp5RmI5L0pqMTVoUzFuQ2VYZkgwV3JBTU5oMy9CdEpS?=
+ =?utf-8?B?cWZFY2ZQdzJUdnBMNm1IbUVNYkVzQjkvZnVZeWFuS3I1QXZRRkJkMG5ZUE85?=
+ =?utf-8?B?NjZwK1FWMDFodFNDTGpUWEEyU0VQVktGR1dJTEpkYVJoVXA4bW1YMmZJRUxw?=
+ =?utf-8?B?YzVyR0IyN3VrS1U0Uy9oNnJOdjlzTWphVDZnVytjeG9pbjhKZGpkV0VsdFFD?=
+ =?utf-8?B?aldYa3hFRDFvaFA2L0xZekwwY2kxaTZpYTBJRmVINE5GYzYxNFJmRnZteEQ4?=
+ =?utf-8?B?WHF3aWhlUitkeC9ROE1EbGJGa2htNUtoOGg2WGRkOFpKNnlDdDVOS1Z0SU9w?=
+ =?utf-8?B?SFpzNFJkcFRlcm9JYjJjTHoycktkalVudmVtSDBwemhtNFhiYm0xMEVxQ09x?=
+ =?utf-8?B?NjBmSXZTQWU1TncrVnl5eE1oeC9RVzBYN0NodWJaYy9helVYWlQza3FpS0ho?=
+ =?utf-8?B?Ny83MnpPMjN0TlhKaTcxODlWNWRORWxWazhJQzh6K2lSSW5nczBwV09saDgr?=
+ =?utf-8?B?Tjl0cXNVdytHeVE3WHduMWJocXJFMXQwTmhucVRJMGJzV1ZvdmtSZ0YrQ1dF?=
+ =?utf-8?B?dlBpc1NpNU9yd1FYdGpJTHpOY1c1cVZxb3lDY2FuTXpXSm01MjZOdVF6U2xH?=
+ =?utf-8?B?VGVDNFZ2eVpyN2NVbnhVRldKUlRNdGxYZE5wcGxZUWdBTUlwQkQ0azdZSDhH?=
+ =?utf-8?B?cmxhSlQ3aUNhZndqZVZSY3dTNVNkWFVTWk9BbWVTaVJvQjBNSkV2T2hlcXlB?=
+ =?utf-8?B?NE1vK0RBRXU0M0VYYXdPVnNJbUZrWHJHcEh0N0Y5elVLSmVsUTQzek1DUE5m?=
+ =?utf-8?B?eGtGb3Q3NkIxNU1jTjJDaEFQWVVYejhHeGtweVpqWUxNMGxEQkdkaUZaU2k2?=
+ =?utf-8?B?WC8zVHh0UGRFa1ZTNFpSY0owakdxY2N1YngzR1BhVUwzNk1JSHZybURZOFRZ?=
+ =?utf-8?B?SEFJOXc1MnUyV21sMkE3ZXROUHpwMEdkQVRwTE9LOERYdXVrcytpZnRjTmZN?=
+ =?utf-8?B?WEUrT09CM0cxOTA0a3lKd1RtbW4xeHE1SU5PTGRHZjVDT1NXWmJGa1l4bEVQ?=
+ =?utf-8?B?MFUveFJlZEx3RFNhZkZuL3VydC9raGJzVUhPQ202U2F4VWtMSnVKL0Vxd3ZW?=
+ =?utf-8?B?WVM2dU5OcGx5ZFpTMldURGRQa3d6cStnamN1OUJLQk5vRXRlWWJBa1NqOVda?=
+ =?utf-8?B?OHVHK0dqUTByYithcXR4OEZpMXZmMlB2Ymh4d0ZCTmJaWmlvaGRhTE9qUzhD?=
+ =?utf-8?B?c0IyR1FNMlZpMjAxaEttYzFaK0ZIOTFEUWhCc3lIaForYk5TUEM3RTcyTFpo?=
+ =?utf-8?B?ZEdFM1pQcmxZZC9zUjFONlMvbWkxQnc0MWQ3T0N5bS9GQW9kR0V6bTByK2Zj?=
+ =?utf-8?B?YWJ3NFZabndlVkd2UjBvM0xTbFlJWEp0UTJ4eFcxS3hLdjZsMUFwaTliNHI5?=
+ =?utf-8?B?Y1RLc3c5TWhnc1dDa2dabVRMRmZ5aUhvTGJrQm4rbVJSZ1hMdFdYZkpJZnlL?=
+ =?utf-8?B?SWVUd0Myc3lNNmNZVGtTYU1XR3psSERuckwxcmZPUXpML2cyVlBYWU5CS0sw?=
+ =?utf-8?B?N2lRSSthT29JbDlzNUFTbUE3U0FwWUthdUxyMnNlSEQ4UFJUVy9oTWZacEFS?=
+ =?utf-8?Q?xPeEcNKHLNpaDCf+3f0A08J3e?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e3d84b9-d65d-4602-d53b-08dad6ce7481
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 14:39:03.5587
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cP0fX49ZAsw6M2Exmo3k0OtkfMnUL+d0tzeneuYK6R3fQjkyw3qiKckFtc94BE96fq7+JxaCBQKBlw9xIsy2LQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5611
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cc linux-fsdevel@vger.kernel.org linux-kernel@vger.kernel.org
+On 2022-12-05 at 10:59:06 +0100, Vincent Guittot wrote:
+> On Mon, 5 Dec 2022 at 09:39, Chen Yu <yu.c.chen@intel.com> wrote:
+> >
+> > Hi Joel,
+> > On 2022-12-03 at 10:35:46 -0500, Joel Fernandes wrote:
+> > >
+> > >
+> > > > On Dec 3, 2022, at 2:50 AM, Chen Yu <yu.c.chen@intel.com> wrote:
+> > > >
+> > > > ﻿Hi Honglei,
+> > > >> On 2022-12-02 at 15:44:18 +0800, Honglei Wang wrote:
+> > > >>
+> > > >>
+> > > >>> On 2022/12/1 16:44, Chen Yu wrote:
+> > > >>> Introduce short-duration task checks, as there is requirement
+> > > >>> to leverage this attribute for better task placement.
+> > > >>>
+> > > >>> There are several choices of metrics that could be used to
+> > > >>> indicate if a task is a short-duration task.
+> > > >>>
+> > > >>> At first thought the (p->se.sum_exec_runtime / p->nvcsw)
+> > > >>> could be used to measure the task duration. However, the
+> > > >>> history long past was factored too heavily in such a formula.
+> > > >>> Ideally, the old activity should decay and not affect
+> > > >>> the current status too much.
+> > > >>>
+> > > >>> Although something based on PELT could be used, se.util_avg might
+> > > >>> not be appropriate to describe the task duration:
+> > > >>> 1. Task p1 and task p2 are doing frequent ping-pong scheduling on
+> > > >>>    one CPU, both p1 and p2 have a short duration, but the util_avg
+> > > >>>    can be up to 50%.
+> > > >>> 2. Suppose a task lasting less than 4ms is regarded as a short task.
+> > > >>>    If task p3 runs for 6ms and sleeps for 32ms, p3 should not be a
+> > > >>>    short-duration task. However, PELT would decay p3's accumulated
+> > > >>>    running time from 6ms to 3ms, because 32ms is the half-life in PELT.
+> > > >>>    As a result, p3 would be incorrectly treated as a short task.
+> > > >>>
+> > > >>> It was found that there was once a similar feature to track the
+> > > >>> duration of a task, which is in Commit ad4b78bbcbab ("sched: Add
+> > > >>> new wakeup preemption mode: WAKEUP_RUNNING"). Unfortunately, it
+> > > >>> was reverted because it was an experiment. So pick the patch up
+> > > >>> again, by recording the average duration when a task voluntarily
+> > > >>> switches out. Introduce SIS_SHORT to control this strategy.
+> > > >>>
+> > > >>> The threshold of short duration reuses sysctl_sched_min_granularity,
+> > > >>> so it can be tuned by the user. Ideally there should be a dedicated
+> > > >>> parameter for the threshold, but that might introduce complexity.
+> > > >>>
+> > > >>> Suggested-by: Tim Chen <tim.c.chen@intel.com>
+> > > >>> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > >>> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > >>> ---
+> > > >>>  include/linux/sched.h   |  4 ++++
+> > > >>>  kernel/sched/core.c     |  2 ++
+> > > >>>  kernel/sched/fair.c     | 17 +++++++++++++++++
+> > > >>>  kernel/sched/features.h |  1 +
+> > > >>>  4 files changed, 24 insertions(+)
+> > > >>>
+> > > >>> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > >>> index ffb6eb55cd13..64b7acb77a11 100644
+> > > >>> --- a/include/linux/sched.h
+> > > >>> +++ b/include/linux/sched.h
+> > > >>> @@ -558,6 +558,10 @@ struct sched_entity {
+> > > >>>      u64                nr_migrations;
+> > > >>> +    u64                prev_sum_exec_runtime_vol;
+> > > >>> +    /* average duration of a task */
+> > > >>> +    u64                dur_avg;
+> > > >>> +
+> > > >>>  #ifdef CONFIG_FAIR_GROUP_SCHED
+> > > >>>      int                depth;
+> > > >>>      struct sched_entity        *parent;
+> > > >>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > > >>> index daff72f00385..c5202f1be3f7 100644
+> > > >>> --- a/kernel/sched/core.c
+> > > >>> +++ b/kernel/sched/core.c
+> > > >>> @@ -4348,6 +4348,8 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+> > > >>>      p->se.prev_sum_exec_runtime    = 0;
+> > > >>>      p->se.nr_migrations        = 0;
+> > > >>>      p->se.vruntime            = 0;
+> > > >>> +    p->se.dur_avg            = 0;
+> > > >>> +    p->se.prev_sum_exec_runtime_vol    = 0;
+> > > >>>      INIT_LIST_HEAD(&p->se.group_node);
+> > > >>>  #ifdef CONFIG_FAIR_GROUP_SCHED
+> > > >>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > >>> index e4a0b8bd941c..a4b314b664f8 100644
+> > > >>> --- a/kernel/sched/fair.c
+> > > >>> +++ b/kernel/sched/fair.c
+> > > >>> @@ -6200,6 +6200,16 @@ static int wake_wide(struct task_struct *p)
+> > > >>>      return 1;
+> > > >>>  }
+> > > >>> +/*
+> > > >>> + * If a task switches in and then voluntarily relinquishes the
+> > > >>> + * CPU quickly, it is regarded as a short duration task.
+> > > >>> + */
+> > > >>> +static inline int is_short_task(struct task_struct *p)
+> > > >>> +{
+> > > >>> +    return sched_feat(SIS_SHORT) &&
+> > > >>> +        (p->se.dur_avg <= sysctl_sched_min_granularity);
+> > > >>> +}
+> > > >>> +
+> > > >>
+> > > >> Hi Yu,
+> > > >>
+> > > >> I still have a bit concern about the sysctl_sched_min_granularity stuff..
+> > > >> This grab can be set to different value which will impact the action of this
+> > > >> patch and make things not totally under control.
+> > >
+> > > There are already ways to misconfigure sched sysctl to make bad/weird things happen.
+> > >
+> > > >> Not sure if we can add a new grab for this.. The test result shows good
+> > > >> improvement for short task, and with this grab, admins will be able to
+> > > >> custom the system base on their own 'short task' view.
+> > > >>
+> > > > It would be ideal to have a dedicated parameter to tweak this. For example,
+> > > > something under /sys/kernel/debug/sched/, and initilized to sysctl_sched_min_granularity
+> > > > by default.
+> > >
+> > > It would be nice to not have to introduce a new knob for this. IMO, min_granularity is reasonable.
+> > >
+> > OK, got it, thanks for the suggestion.
+> 
+> Sorry for the late answer.
+> We don't want to add more dedicated knobs. So using
+> sysctl_sched_min_granularity as you are doing in this patch looks ok
+>
+I see, thanks Vincent.
 
-ditang chen <ditang.c@gmail.com> =E4=BA=8E2022=E5=B9=B412=E6=9C=884=E6=97=
-=A5=E5=91=A8=E6=97=A5 23:46=E5=86=99=E9=81=93=EF=BC=9A
->
-> Thank you for your reply ~~
->
-> In the second step, it's easier to reproduce using the following script=
-=EF=BC=9A
-> # cat /opt/ltp/testcases/bin/fs_bind24.sh
-> #!/bin/sh
-> FS_BIND_TESTFUNC=3Dtest
->
-> test()
-> {
->         tst_res TINFO "bind: shared child to shared parent"
->
->         fs_bind_makedir rshared dir1
->         mkdir dir1/1 dir1/1/2 dir1/1/2/3 dir1/1/2/fs_bind_check dir2 dir3=
- dir4
->         touch dir4/ls
->
->         EXPECT_PASS mount --bind dir1/1/2 dir2
->         EXPECT_PASS mount --make-rslave dir1
->         EXPECT_PASS mount --make-rshared dir1
->
->         EXPECT_PASS mount --bind dir1/1/2/3 dir3
->         EXPECT_PASS mount --make-rslave dir1
->
->         while true
->         do
->                 EXPECT_PASS mount --bind dir4 dir2/fs_bind_check
->                 EXPECT_PASS umount dir2/fs_bind_check
->         done
->
->         fs_bind_check dir1/1/2/fs_bind_check/ dir4
->
->         EXPECT_PASS umount dir2/fs_bind_check
->         EXPECT_PASS umount dir3
->         EXPECT_PASS umount dir2
->         EXPECT_PASS umount dir1
-> }
->
-> . fs_bind_lib.sh
-> tst_run
->
-> And then=EF=BC=8Crun netns.sh while running fs_bind:
-> # /opt/ltp/runltp -f fs_bind
->
-> Here is a reproducer in 6.1.0-rc7:
-> [  115.848393] BUG: kernel NULL pointer dereference, address: 00000000000=
-00010
-> [  115.848967] #PF: supervisor read access in kernel mode
-> [  115.849386] #PF: error_code(0x0000) - not-present page
-> [  115.849803] PGD 0 P4D 0
-> [  115.850012] Oops: 0000 [#1] PREEMPT SMP PTI
-> [  115.850354] CPU: 0 PID: 15591 Comm: mount Not tainted 6.1.0-rc7 #3
-> [  115.850851] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS
-> VirtualBox 12/01/2006
-> [  115.851510] RIP: 0010:propagate_one.part.0+0x7f/0x1a0
-> [  115.851924] Code: 75 eb 4c 8b 05 c2 25 37 02 4c 89 ca 48 8b 4a 10
-> 49 39 d0 74 1e 48 3b 81 e0 00 00 00 74 26 48 8b 92 e0 00 00 00 be 01
-> 00 00 00 <48> 8b 4a 10 49 39 d0 75 e2 40 84 f6 74 38 4c 89 05 84 25 37
-> 02 4d
-> [  115.853441] RSP: 0018:ffffb8d5443d7d50 EFLAGS: 00010282
-> [  115.853865] RAX: ffff8e4d87c41c80 RBX: ffff8e4d88ded780 RCX: ffff8e4da=
-4333a00
-> [  115.854458] RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff8e4d8=
-8ded780
-> [  115.855044] RBP: ffff8e4d88ded780 R08: ffff8e4da4338000 R09: ffff8e4da=
-43388c0
-> [  115.855693] R10: 0000000000000002 R11: ffffb8d540158000 R12: ffffb8d54=
-43d7da8
-> [  115.856304] R13: ffff8e4d88ded780 R14: 0000000000000000 R15: 000000000=
-0000000
-> [  115.856859] FS:  00007f92c90c9800(0000) GS:ffff8e4dfdc00000(0000)
-> knlGS:0000000000000000
-> [  115.857531] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  115.858006] CR2: 0000000000000010 CR3: 0000000022f4c002 CR4: 000000000=
-00706f0
-> [  115.858598] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000=
-0000000
-> [  115.859393] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000000000=
-0000400
-> [  115.860099] Call Trace:
-> [  115.860358]  <TASK>
-> [  115.860535]  propagate_mnt+0x14d/0x190
-> [  115.860848]  attach_recursive_mnt+0x274/0x3e0
-> [  115.861212]  path_mount+0x8c8/0xa60
-> [  115.861503]  __x64_sys_mount+0xf6/0x140
-> [  115.861819]  do_syscall_64+0x5b/0x80
-> [  115.862117]  ? do_faccessat+0x123/0x250
-> [  115.862435]  ? syscall_exit_to_user_mode+0x17/0x40
-> [  115.862826]  ? do_syscall_64+0x67/0x80
-> [  115.863133]  ? syscall_exit_to_user_mode+0x17/0x40
-> [  115.863527]  ? do_syscall_64+0x67/0x80
-> [  115.863835]  ? do_syscall_64+0x67/0x80
-> [  115.864144]  ? do_syscall_64+0x67/0x80
-> [  115.864452]  ? exc_page_fault+0x70/0x170
-> [  115.864775]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [  115.865187] RIP: 0033:0x7f92c92b0ebe
-> [  115.865480] Code: 48 8b 0d 75 4f 0c 00 f7 d8 64 89 01 48 83 c8 ff
-> c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 a5 00 00
-> 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 42 4f 0c 00 f7 d8 64 89
-> 01 48
-> [  115.866984] RSP: 002b:00007fff000aa728 EFLAGS: 00000246 ORIG_RAX:
-> 00000000000000a5
-> [  115.867607] RAX: ffffffffffffffda RBX: 000055a77888d6b0 RCX: 00007f92c=
-92b0ebe
-> [  115.868240] RDX: 000055a77888d8e0 RSI: 000055a77888e6e0 RDI: 000055a77=
-888e620
-> [  115.868823] RBP: 0000000000000000 R08: 0000000000000000 R09: 000000000=
-0000001
-> [  115.869403] R10: 0000000000001000 R11: 0000000000000246 R12: 000055a77=
-888e620
-> [  115.869994] R13: 000055a77888d8e0 R14: 00000000ffffffff R15: 00007f92c=
-93e4076
-> [  115.870581]  </TASK>
-> [  115.870763] Modules linked in: nft_fib_inet nft_fib_ipv4
-> nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6
-> nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6
-> nf_defrag_ipv4 ip_set rfkill nf_tables nfnetlink qrtr snd_intel8x0
-> sunrpc snd_ac97_codec ac97_bus snd_pcm snd_timer intel_rapl_msr
-> intel_rapl_common snd vboxguest intel_powerclamp video rapl joydev
-> soundcore i2c_piix4 wmi fuse zram xfs vmwgfx crct10dif_pclmul
-> crc32_pclmul crc32c_intel polyval_clmulni polyval_generic
-> drm_ttm_helper ttm e1000 ghash_clmulni_intel serio_raw ata_generic
-> pata_acpi scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_multipath
-> [  115.875288] CR2: 0000000000000010
-> [  115.875641] ---[ end trace 0000000000000000 ]---
-> [  115.876135] RIP: 0010:propagate_one.part.0+0x7f/0x1a0
-> [  115.876551] Code: 75 eb 4c 8b 05 c2 25 37 02 4c 89 ca 48 8b 4a 10
-> 49 39 d0 74 1e 48 3b 81 e0 00 00 00 74 26 48 8b 92 e0 00 00 00 be 01
-> 00 00 00 <48> 8b 4a 10 49 39 d0 75 e2 40 84 f6 74 38 4c 89 05 84 25 37
-> 02 4d
-> [  115.878086] RSP: 0018:ffffb8d5443d7d50 EFLAGS: 00010282
-> [  115.878511] RAX: ffff8e4d87c41c80 RBX: ffff8e4d88ded780 RCX: ffff8e4da=
-4333a00
-> [  115.879128] RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff8e4d8=
-8ded780
-> [  115.879715] RBP: ffff8e4d88ded780 R08: ffff8e4da4338000 R09: ffff8e4da=
-43388c0
-> [  115.880359] R10: 0000000000000002 R11: ffffb8d540158000 R12: ffffb8d54=
-43d7da8
-> [  115.880962] R13: ffff8e4d88ded780 R14: 0000000000000000 R15: 000000000=
-0000000
-> [  115.881548] FS:  00007f92c90c9800(0000) GS:ffff8e4dfdc00000(0000)
-> knlGS:0000000000000000
-> [  115.882234] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  115.882713] CR2: 0000000000000010 CR3: 0000000022f4c002 CR4: 000000000=
-00706f0
-> [  115.883314] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000=
-0000000
-> [  115.883966] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000000000=
-0000400
->
-> Best regards,
-> --
->
->
-> Christian Brauner <brauner@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=882=
-9=E6=97=A5=E5=91=A8=E4=BA=8C 18:25=E5=86=99=E9=81=93=EF=BC=9A
->
->
+thanks,
+Chenyu 
 > >
-> > On Tue, Nov 15, 2022 at 11:04:01PM +0800, ditang chen wrote:
-> > > Here is a reproducer:
-> > > 1. Run netns.sh script in loop
-> > > # while true; do ./netns.sh; done
-> > > # cat netns.sh
-> > > #!/bin/bash
-> > > num=3D1000
-> > > function create_netns()
-> > > {
-> > > for((i=3D0; i<$num; i++))
-> > > do
-> > >   ip netns add local$i
-> > >   ip netns exec local$i pwd &
-> > > done
-> > > }
-> > > function clean_netns()
-> > > {
-> > > for((i=3D0; i<$num; i++))
-> > > do
-> > >     ip netns del local$i
-> > > done
-> > > }
-> > > create_netns
-> > > clean_netns
-> > >
-> > > 2.  run fs_bind/fs_bind24 in loop, fs_bind24 only
-> > > # cat /opt/ltp/runtest/fs_bind
-> > > #DESCRIPTION:Bind mounts and shared subtrees
-> > > fs_bind24_sh fs_bind24.sh
-> > > # while true; do /opt/ltp/runltp -f fs_bind; done
-> > >
-> > > This oops also exists in the latest kernel code=EF=BC=9A
-> >
-> > I've been running this since yesterday on v6.1-rc7 to reproduce and it
-> > didn't trigger. It's unclear whether you're saying that you've managed
-> > to reproduce this on mainline. It doesn't seem to be.
+> > thanks,
+> > Chenyu
