@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E9E642534
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CCC642539
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiLEI60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S232417AbiLEI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbiLEI5b (ORCPT
+        with ESMTP id S232301AbiLEI5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:57:31 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1FDF6276;
-        Mon,  5 Dec 2022 00:56:11 -0800 (PST)
-Received: from loongson.cn (unknown [117.133.84.183])
-        by gateway (Coremail) with SMTP id _____8Dx++oqso1jRjwDAA--.7604S3;
-        Mon, 05 Dec 2022 16:56:10 +0800 (CST)
-Received: from [192.168.1.2] (unknown [117.133.84.183])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxR1cpso1j0tolAA--.9179S3;
-        Mon, 05 Dec 2022 16:56:09 +0800 (CST)
-Message-ID: <2a8fe97f-75c6-c481-1e37-1126ae1f97f6@loongson.cn>
-Date:   Mon, 5 Dec 2022 16:56:09 +0800
+        Mon, 5 Dec 2022 03:57:51 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38CB101EC
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:56:35 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p27Gz-00065M-Gc; Mon, 05 Dec 2022 09:56:25 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p27Gw-002QBr-3u; Mon, 05 Dec 2022 09:56:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p27Gw-002hzv-68; Mon, 05 Dec 2022 09:56:22 +0100
+Date:   Mon, 5 Dec 2022 09:56:22 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     kernel@pengutronix.de, Arnd Bergmann <arnd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-next@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        dmaengine@vger.kernel.org, Simtec Linux Team <linux@simtec.co.uk>
+Subject: Re: Regression in dmaengine/next was removed
+Message-ID: <20221205085622.75yyfztkahmrlrz4@pengutronix.de>
+References: <20221021203329.4143397-14-arnd@kernel.org>
+ <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
+ <f0425349-d965-0a40-0672-27dfbe45eb44@linaro.org>
+ <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
+ <20221125085117.23p7yv6wgo6b5l3v@pengutronix.de>
+ <7f5cf3d8-4a3b-41eb-fed9-1ade4ba1e4e2@linaro.org>
+ <20221202112003.kanwr7bixbaiqdgz@pengutronix.de>
+ <Y4nkvT+R8t6eGrWj@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/2] i2c: loongson: add bus driver for the loongson i2c
- controller
-To:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
- <Y42ubaVQclaTA7Eh@ninjato>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-In-Reply-To: <Y42ubaVQclaTA7Eh@ninjato>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxR1cpso1j0tolAA--.9179S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Xr1ftrW8GFy8Jry8XrWxXrb_yoWfCFbEkr
-        yYkFn7Cwn5Grs29348Kw1xuryag34Yqw4kGw1aqF1rZw1Fy398Xr4Dur97uw13ArZ7XFn5
-        Xan0qa48C348ujkaLaAFLSUrUUUUYb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        b7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq
-        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxV
-        WUtVW8ZwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIdWrDUUUU
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7eoiblj4p2fvpvxp"
+Content-Disposition: inline
+In-Reply-To: <Y4nkvT+R8t6eGrWj@matsya>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,34 +66,93 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/12/5 16:40, Wolfram Sang 写道:
-> On Mon, Nov 28, 2022 at 09:00:24PM +0800, Yinbo Zhu wrote:
->> This bus driver supports the Loongson i2c hardware controller in the
->> Loongson platforms and supports to use DTS and ACPI framework to
->> register i2c adapter device resources.
->>
->> The Loongson i2c controller supports operating frequencty is 50MHZ
->> and supports the maximum transmission rate is 400kbps.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> There are currently two people submitting a driver for this hardware.
-> This is the other driver:
->
-> https://lore.kernel.org/all/f6cc2dbe5cd190031ab4f772d1cf250934288546.1669777792.git.zhoubinbin@loongson.cn/
->
-> Can you guys please decide which one is "better" or combine the two to
-> make a better one?
->
-> Thanks,
->
->     Wolfram
+--7eoiblj4p2fvpvxp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks your feedback,  please help review zhoubingbing's i2c patch.
+Hello Vinod,
 
+On Fri, Dec 02, 2022 at 05:12:53PM +0530, Vinod Koul wrote:
+> On 02-12-22, 12:20, Uwe Kleine-K=F6nig wrote:
+> > I made the subject a bit more expressive.
 
-Thanks,
+I wonder what I intended to write there, something like "Regression in
+dmaengine/next in arm/s3c2410_defconfig", sorry to make it look as if
+you already fixed the regression :-)
 
-Yinbo.
+> > On Fri, Nov 25, 2022 at 09:52:51AM +0100, Krzysztof Kozlowski wrote:
+> > > On 25/11/2022 09:51, Uwe Kleine-K=F6nig wrote:
+> > > > On Sun, Nov 20, 2022 at 12:22:31PM +0100, Krzysztof Kozlowski wrote:
+> > > >> On 20/11/2022 11:31, Krzysztof Kozlowski wrote:
+> > > >>> On 18/11/2022 22:54, Uwe Kleine-K=F6nig wrote:
+> > > >>>> The linux/platform_data/dma-s3c24xx.h header file was removed. I=
+t didn't
+> > > >>>> declare or define any symbol needed in devs.c though, so the #in=
+clude
+> > > >>>> can just be dropped.
+> > > >>>>
+> > > >>>> Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
+> > > >>>> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.d=
+e>
+> > > >>>> ---
+> > > >>>
+> > > >>> The file was not removed... or it should not have been yet. The s=
+3c24xx
+> > > >>> dma driver removal should be part of Arnd series taken via SoC AR=
+M.
+> > > >=20
+> > > > The patch enters next with the merge of
+> > > >=20
+> > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git =
+next
+> > > >=20
+> > > > Ah, the patch that became cccc46ae3623 (i.e. patch #14) is part of a
+> > > > bigger series. Its patch #1 removes s3c24xx.c (which you pointed ou=
+t to be still
+> > > > broken) and patch #2 includes the change I suggested here.
+> > > >=20
+> > > >> I think that commit should be just dropped instead.
+> > > >=20
+> > > > +1
+> > > >=20
+> > > > BTW, cccc46ae3623 is included in next since next-20221107 and breaks
+> > > > (at least) arm/s3c2410_defconfig. So I would consider reverting
+> > > > cccc46ae3623 a fix. (Added linux-next to Cc:)
+> > >=20
+> > > Yes. The build failure of next was reported already by kernel test ro=
+bot.
+> > >=20
+> > > Vinod, can we drop this patch?
+> >=20
+> > That patch is still contained in the next tags of this week. :-(
+>=20
+> Apologies for delay, I was moving...
+>=20
+> I have reverted and pushed now
 
->
+Thanks!
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7eoiblj4p2fvpvxp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmONsjMACgkQwfwUeK3K
+7AmXSwf/VZuQ2FjkiIN+56r+5b4pEZ6q5pmktLnS0zhETdeXoiKfbQl2nRhk8YOk
+DKhMlUpD5jGS4r5PXYhct9n10dSquwOQDSrDRtf3HO2VTroTREEJ48vEjOkpu7TY
+th0TIWt/ZoXjfASyFi8Vpx7Y26Mi6rye9pLZk96FLiYGCfTX5G0ygi1/Fh4uMUeY
+teQIqSUg7C1hN56rYP37btxYBehUlhWmxW3P+rLGUYT+ZPGvsEXWv0K2XIajrPTd
+pKr+xmec6C2GuHsc3EN0YtPITdrHGBC9RTrMaC8XDXKaGYVAEEYzueSCTCTvcRQ5
+sDUzioR2cnq37vyUneeVlX043ZBszA==
+=9QGH
+-----END PGP SIGNATURE-----
+
+--7eoiblj4p2fvpvxp--
