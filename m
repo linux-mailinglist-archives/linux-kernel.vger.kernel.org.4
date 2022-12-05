@@ -2,100 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A87642934
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDBD642936
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiLENUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S232130AbiLENVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiLENUf (ORCPT
+        with ESMTP id S231686AbiLENVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:20:35 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B7E1C126
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:20:34 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id cm20so11190415pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:20:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VttxQNRn5wLcDZe0QBlfyaPIZnI+zBiatgv1ExvlsSA=;
-        b=xSQoB37UuJKY4tgp5wdRFk+Jl7R8ZVhz7LrwXSbrbklLb9YmO/YJV3aWfjWuMzXxvj
-         omoun5S6Ud66T3ElLc81i5TsPhZoAR39ojH/1Wi5QSdttzgYrmTsy/M4lIBg/B3IOetD
-         h3immFNZ5DIsJUSfnVrO9h21CRqUHIJN/0LBiCEmBco61C1XqF4DCSnQhvABC3ephT/4
-         t6YCxd/sJ5lVnZo36pg543Hs6D6FRmWspx4S9qqt3OQQzZxATzMCC0hOnzJxbyH+GkjI
-         OHTDUczl1V59I2H72EN1VUfq/Tfhm3rHppWTPBzCK7D5gJz+f1cu9mH1cgy2xVjA5cdz
-         6OFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VttxQNRn5wLcDZe0QBlfyaPIZnI+zBiatgv1ExvlsSA=;
-        b=QWEAT8B6i8o6/RRuFZhVTyBiUMcqF6nbUm91ZoaR7lHLNmlvrnlrFyQC2nSX2WFZpN
-         e3C87Rf1JgKwt5XUuFN0WWPVDLUiNkXHX7aAfsD8u5rmXnqdsBwE4uxD+YRe9HzeeKdC
-         M7Oy6Y3bl21Ss8uYqvOBB66exLSye2WHxfGy+vS1I4iPqbPbzXbx+E3Kn6Q6+xahzTcD
-         0BRa5IgvSxK5XcFSSIjrPAuNzrQDUh+99I/xdCQjTlvyNkQm9wqVGqUAVLVhQ6BFx1d2
-         xBiZo7O+fcLY3JTsBHD1Lx4Wzlf8iW1A1jz8ZTEsjigZxQoC9WOQbkrO8W3hc7AocHlI
-         iKmg==
-X-Gm-Message-State: ANoB5pkLypIheoFlydHIXKy48wAXKP03T9FJm4U/+p65lW7sND3U4Ncn
-        5+HzDIf4V+OSD6qTk7OKAVNQ9Q==
-X-Google-Smtp-Source: AA0mqf4PU5MhibxptEdBYx/Cd3SYioOJVCBMu5pSY3SfrC83bIr+4Og81l5n1VthaeXFLy+b7Gr+uw==
-X-Received: by 2002:a17:90a:5298:b0:217:e054:9ac8 with SMTP id w24-20020a17090a529800b00217e0549ac8mr96191538pjh.246.1670246434046;
-        Mon, 05 Dec 2022 05:20:34 -0800 (PST)
-Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
-        by smtp.gmail.com with ESMTPSA id p7-20020a170902780700b001899007a721sm10496368pll.193.2022.12.05.05.20.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 05:20:33 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     matthias.bgg@gmail.com,
-        Bernhard =?utf-8?Q?Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        devicetree@vger.kernel.org
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        krzysztof.kozlowski@linaro.org,
-        angelogioacchino.delregno@collabora.com,
-        linux-gpio@vger.kernel.org, linus.walleij@linaro.org
-Subject: Re: [PATCH v3 5/7] arm64: dts: mediatek: Remove pins-are-numbered
- property
-In-Reply-To: <20221129023401.278780-6-bero@baylibre.com>
-References: <20221129023401.278780-1-bero@baylibre.com>
- <20221129023401.278780-6-bero@baylibre.com>
-Date:   Mon, 05 Dec 2022 05:20:32 -0800
-Message-ID: <7ho7si56n3.fsf@baylibre.com>
+        Mon, 5 Dec 2022 08:21:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050391BEAB
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:21:12 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p2BP7-0002oO-Nc; Mon, 05 Dec 2022 14:21:05 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p2BP4-002U1D-UU; Mon, 05 Dec 2022 14:21:03 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p2BP5-00CLIZ-00; Mon, 05 Dec 2022 14:21:03 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH net-next v1 1/1] net: asix: add support for the Linux Automation GmbH USB 10Base-T1L
+Date:   Mon,  5 Dec 2022 14:21:02 +0100
+Message-Id: <20221205132102.2941732-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthias,
+Add ASIX based USB 10Base-T1L adapter support:
+https://linux-automation.com/en/products/usb-t1l.html
 
-Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com> writes:
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/usb/asix_devices.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-> Remove the unnecessary pins-are-numbered property from
-> arm64 Mediatek DeviceTrees
->
-> Signed-off-by: Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
-> Acked-by: Kevin Hilman <khilman@baylibre.com>
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 0fe3773c5bca..1a2302dd5ff8 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -1350,6 +1350,20 @@ static const struct driver_info ax88772b_info = {
+ 	.data = FLAG_EEPROM_MAC,
+ };
+ 
++static const struct driver_info lxausb_t1l_info = {
++	.description = "Linux Automation GmbH USB 10Base-T1L",
++	.bind = ax88772_bind,
++	.unbind = ax88772_unbind,
++	.status = asix_status,
++	.reset = ax88772_reset,
++	.stop = ax88772_stop,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
++	         FLAG_MULTI_PACKET,
++	.rx_fixup = asix_rx_fixup_common,
++	.tx_fixup = asix_tx_fixup,
++	.data = FLAG_EEPROM_MAC,
++};
++
+ static const struct driver_info ax88178_info = {
+ 	.description = "ASIX AX88178 USB 2.0 Ethernet",
+ 	.bind = ax88178_bind,
+@@ -1538,6 +1552,10 @@ static const struct usb_device_id	products [] = {
+ 	 */
+ 	USB_DEVICE(0x066b, 0x20f9),
+ 	.driver_info = (unsigned long) &hg20f9_info,
++}, {
++	// Linux Automation GmbH USB 10Base-T1L
++	USB_DEVICE(0x33f7, 0x0004),
++	.driver_info = (unsigned long) &lxausb_t1l_info,
+ },
+ 	{ },		// END
+ };
+-- 
+2.30.2
 
-Now that the driver/binding parts are queued, I'm assuming you'll take this=
- patch
-(and patch 6) via the mediatek tree?
-
-Thanks,
-
-Kevin
