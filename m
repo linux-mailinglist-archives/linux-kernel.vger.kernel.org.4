@@ -2,125 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4A7643777
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2550A64377A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbiLEVy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:54:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S232463AbiLEVzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233046AbiLEVxv (ORCPT
+        with ESMTP id S233529AbiLEVyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:53:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F3B1C129;
-        Mon,  5 Dec 2022 13:52:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Dec 2022 16:54:37 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625FF01E;
+        Mon,  5 Dec 2022 13:53:16 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6EEFB81151;
-        Mon,  5 Dec 2022 21:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537DFC433C1;
-        Mon,  5 Dec 2022 21:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670277176;
-        bh=IgKvO2pTgDtqxJCdjeqES53WonPY2/VY3lrlG8YhaPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VR9hqnwZXb/aa72RHD1NKo6cqSeJSoNdAmwPrw6OUOrPc7fBwBWEbmmWRdADfIyni
-         20FTzfCAY0zNj6lnQPHJH1x5TYJnaRXz06CXQa2+Qli1SbJbyy3mrEY1Kfy4Ef6str
-         L6+NpdqjzZpAqEYFxz3JLFK6bFf/FUQ+Rjswg2FnhWIwschJCkY6JWLUzPvsJjgNOx
-         H5whEfiI5SIrQlc/XIEGAIFoM2RGYEEfKSAkk0arOWApuSy970PXHTYfIcva6Izm9p
-         4AqK39EkcBx2HVePJcJ/HfrGfa9wOZgCh8jatkZpXBxVHEjJ1QGHAfu47u3eKLTmD0
-         SA4jV5sg7DAxQ==
-Date:   Mon, 5 Dec 2022 15:52:53 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mani@kernel.org, lpieralisi@kernel.org, kw@linux.com,
-        svarbanov@mm-sol.com, shawn.guo@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe QMP PHY
-Message-ID: <20221205215253.itobukkyiecn7xi7@builder.lan>
-References: <20221116214841.1116735-1-robimarko@gmail.com>
- <20221116214841.1116735-2-robimarko@gmail.com>
+        by mail.3ffe.de (Postfix) with ESMTPSA id 7B275124C;
+        Mon,  5 Dec 2022 22:53:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1670277194;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9JU4/lrJ7GV2uyecrNqE/O11dV0jCnMb8hnnKpYJnPk=;
+        b=eeakvmE97XoN1a1Ouy/oA2+t53U/cPndIPxffhCQyZ1L9EO/gOBdLUtZ35wpWSr0oNwcR+
+        uWGeGKm1SAh0Zeepd7ULB1HF6Cyou499gUlQAVVjDvnc13juDEX5QVwuB5R95S8RUOlYuD
+        j4+i4LCNij4SqE9O6Ps++GsgtK2stPTtTH8mNQg3ThveCZXONYJcwKtkfq336tGOCc2J3B
+        6zq0vugkJSqmUOU1Bx4ldrJhqRuET4d4RmvUVHOJxBnAdLNn9hi1GqGTKqmr/V4qrap0A+
+        9g89MYCR3eP5Uj5xoGehbMde4L1WMzHKPR9KkEyc/GREdZMncwwpT77bqoTKCA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116214841.1116735-2-robimarko@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 05 Dec 2022 22:53:14 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: phy: add MaxLinear
+ GPY2xx bindings
+In-Reply-To: <20221205212924.GA2638223-robh@kernel.org>
+References: <20221202151204.3318592-1-michael@walle.cc>
+ <20221202151204.3318592-4-michael@walle.cc>
+ <20221205212924.GA2638223-robh@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <99d4f476d4e0ce5945fa7e1823d9824a@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 10:48:34PM +0100, Robert Marko wrote:
-> IPQ8074 comes in 2 silicon versions:
-> * v1 with 2x Gen2 PCIe ports and QMP PHY-s
-> * v2 with 1x Gen3 and 1x Gen2 PCIe ports and QMP PHY-s
+Am 2022-12-05 22:29, schrieb Rob Herring:
+> On Fri, Dec 02, 2022 at 04:12:03PM +0100, Michael Walle wrote:
+>> Add the device tree bindings for the MaxLinear GPY2xx PHYs.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>> 
+>> Is the filename ok? I was unsure because that flag is only for the 
+>> GPY215
+>> for now. But it might also apply to others. Also there is no 
+>> compatible
+>> string, so..
+>> 
+>>  .../bindings/net/maxlinear,gpy2xx.yaml        | 47 
+>> +++++++++++++++++++
+>>  1 file changed, 47 insertions(+)
+>>  create mode 100644 
+>> Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>> 
+>> diff --git 
+>> a/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml 
+>> b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>> new file mode 100644
+>> index 000000000000..d71fa9de2b64
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>> @@ -0,0 +1,47 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/net/maxlinear,gpy2xx.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: MaxLinear GPY2xx PHY
+>> +
+>> +maintainers:
+>> +  - Andrew Lunn <andrew@lunn.ch>
+>> +  - Michael Walle <michael@walle.cc>
+>> +
+>> +allOf:
+>> +  - $ref: ethernet-phy.yaml#
+>> +
+>> +properties:
+>> +  maxlinear,use-broken-interrupts:
+>> +    description: |
+>> +      Interrupts are broken on some GPY2xx PHYs in that they keep the
+>> +      interrupt line asserted even after the interrupt status 
+>> register is
+>> +      cleared. Thus it is blocking the interrupt line which is 
+>> usually bad
+>> +      for shared lines. By default interrupts are disabled for this 
+>> PHY and
+>> +      polling mode is used. If one can live with the consequences, 
+>> this
+>> +      property can be used to enable interrupt handling.
 > 
-> v2 is the final and production version that is actually supported by the
-> kernel, however it looks like PCIe related nodes were added for the v1 SoC.
-> 
-> Now that we have Gen3 QMP PHY support, we can start fixing the PCIe support
-> by fixing the Gen3 QMP PHY node first.
-> 
-> Change the compatible to the Gen3 QMP PHY, correct the register space start
-> and size, add the missing misc PCS register space.
-> 
+> Just omit the interrupt property if you don't want interrupts and add 
+> it
+> if you do.
 
-Does this imply that the current node doesn't actually work?
+How does that work together with "the device tree describes
+the hardware and not the configuration". The interrupt line
+is there, its just broken sometimes and thus it's disabled
+by default for these PHY revisions/firmwares. With this
+flag the user can say, "hey on this hardware it is not
+relevant because we don't have shared interrupts or because
+I know what I'm doing".
 
-If that's the case, could we perhaps adopt Johan Hovolds' new binding
-and drop the subnode in favor of just a flat reg covering the whole
-QMP region?
-
-Regards,
-Bjorn
-
-> Fixes: 33057e1672fe ("ARM: dts: ipq8074: Add pcie nodes")
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+>> +
+>> +      Affected PHYs (as far as known) are GPY215B and GPY215C.
+>> +    type: boolean
+>> +
+>> +dependencies:
+>> +  maxlinear,use-broken-interrupts: [ interrupts ]
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    ethernet {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        ethernet-phy@0 {
+>> +            reg = <0>;
+>> +            interrupts-extended = <&intc 0>;
+>> +            maxlinear,use-broken-interrupts;
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> index 6649a758d8df..9503dfb25d50 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> @@ -232,9 +232,9 @@ qusb_phy_0: phy@79000 {
->  			status = "disabled";
->  		};
->  
-> -		pcie_qmp0: phy@86000 {
-> -			compatible = "qcom,ipq8074-qmp-pcie-phy";
-> -			reg = <0x00086000 0x1c4>;
-> +		pcie_qmp0: phy@84000 {
-> +			compatible = "qcom,ipq8074-qmp-gen3-pcie-phy";
-> +			reg = <0x00084000 0x1bc>;
->  			#address-cells = <1>;
->  			#size-cells = <1>;
->  			ranges;
-> @@ -248,10 +248,11 @@ pcie_qmp0: phy@86000 {
->  				      "common";
->  			status = "disabled";
->  
-> -			pcie_phy0: phy@86200 {
-> -				reg = <0x86200 0x16c>,
-> -				      <0x86400 0x200>,
-> -				      <0x86800 0x4f4>;
-> +			pcie_phy0: phy@84200 {
-> +				reg = <0x84200 0x16c>,
-> +				      <0x84400 0x200>,
-> +				      <0x84800 0x1f0>,
-> +				      <0x84c00 0xf4>;
->  				#phy-cells = <0>;
->  				#clock-cells = <0>;
->  				clocks = <&gcc GCC_PCIE0_PIPE_CLK>;
-> -- 
-> 2.38.1
-> 
+> This is never actually checked by be schema because there is nothing to
+> match on. If you want custom properties, then you need a compatible.
+
+This seems to be a problem for any phy bindings then.
+
+-michael
