@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C507964293E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8C664294A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiLENVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S232208AbiLENYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiLENVi (ORCPT
+        with ESMTP id S230035AbiLENYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:21:38 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1EE1C420
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:21:37 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id w37so10476394pga.5
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:21:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9z1JhFIl54hhe1hJzAGSFqm4Ab0z60pwIOimmNR2/Lc=;
-        b=bA7kTiuyMy0akuLe9I6Y5TgP9Gy1UA4+voCgPw03Dv31AGXnaMq3Tu3xCLVfTtBYuT
-         BmEHqWRXfM4T0tjjyfH0OPzCnL56qn2UHFc63E/NNkDRq1UyeZ+LZcH5nSiRFJCcB1GU
-         aWom9nox5uFGWQj8KSr7ur8u7qzEutw3B0+D32rFqRRV62cAXlUZdFHg6e8mDpao/8Vg
-         iJkRjCgxZLp2Y7MtBQcwFlWMXcrEUllkujlYGIQOkZbpsS85kaD//C+49imHis3uiDNX
-         jFB4Hwp/hOxExMtsTQtiqDVOD6l7M4SZ59B4NsAsAAEJvbXqyp0SRf5BFKM2opyA09di
-         1Xyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9z1JhFIl54hhe1hJzAGSFqm4Ab0z60pwIOimmNR2/Lc=;
-        b=oj1V4U4ma0bCnTXIhLIRCO22RVh1W2ASpxFMtEP2dAnJRlvfEe8GfYG9CtMJAjgMjR
-         clwjsuskJ5DUP6O2CaSffIauDRDyHg8O15jjivNa2csGm11aenElyY4rycVn8GR42Ve0
-         OaRqaMg+eJIrT6aNBhczwYRTt90HIFpz96Oa7Y2++XwY29E1tB7s2rd4orT+HWtXJZVI
-         zdVspqlNQxb41rTBWtmLJzghzPbJTyCO7FVYyvswv1uQvQOA13BMKY6OPRoPjdwGBXO/
-         m9z9+Mg+qulHbrjq4P2AsOBrwdbfLUpgGEu+LR/iXMtc0htAXermC/+ebyjQYz6R2Jip
-         Kr4Q==
-X-Gm-Message-State: ANoB5pkvqYTil7iJDGTS/FIUoCbGgChgJGoWOxZBOVkkcdb2W14PvYHw
-        xl/ZtGshM2inkW5PHZYumI1r1w==
-X-Google-Smtp-Source: AA0mqf7MiItBstwxtCl5bK9j7nFlFPOtd2lA9WFHspdb9k/DZyXPDYMrLQK0IU6wIzVKzqL9WVWUQw==
-X-Received: by 2002:a63:4742:0:b0:478:cd7d:3f55 with SMTP id w2-20020a634742000000b00478cd7d3f55mr1407966pgk.624.1670246496752;
-        Mon, 05 Dec 2022 05:21:36 -0800 (PST)
-Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
-        by smtp.gmail.com with ESMTPSA id g2-20020a655942000000b00476c2180dbcsm8250956pgu.29.2022.12.05.05.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 05:21:36 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     alexandre.torgue@foss.st.com,
-        Bernhard =?utf-8?Q?Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        devicetree@vger.kernel.org
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        mcoquelin.stm32@gmail.com, krzysztof.kozlowski@linaro.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-gpio@vger.kernel.org, linus.walleij@linaro.org
-Subject: Re: [PATCH v3 7/7] ARM: dts: stm32: Remove the pins-are-numbered
- property
-In-Reply-To: <20221129023401.278780-8-bero@baylibre.com>
-References: <20221129023401.278780-1-bero@baylibre.com>
- <20221129023401.278780-8-bero@baylibre.com>
-Date:   Mon, 05 Dec 2022 05:21:36 -0800
-Message-ID: <7hlenm56lb.fsf@baylibre.com>
+        Mon, 5 Dec 2022 08:24:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657661AF0C;
+        Mon,  5 Dec 2022 05:24:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14932B80F79;
+        Mon,  5 Dec 2022 13:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F5AC433C1;
+        Mon,  5 Dec 2022 13:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670246637;
+        bh=wY8WWEhsULxUa+5zkLjOJ6JIAAUgwhZ1yANEZ6F4tNc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nv/TzyyF7Lsl7b2ve7RRq3FM+MHaDZjr1oLk5n3sFfOED0UCCblTzwckroNUUl7SO
+         ToitNqOLxAsua4ashRVZyskpY1Cq0buEgUqBTXkr1SsLCwpbHzegCp3Tr9XplBtp5d
+         G/9bXvJHlAE/LVhzJp7XqdHGLxmhdtBMa9+d6rgZtnLmJV4b2v9uI4vCKKUBRlKJvD
+         ftvibbHcqq6SaN/GXyPNXCEWTX1ZvIkvsj1pk3NQjLt65saSUSR9ijR2B12K477oLE
+         CG/EAYLn13cVMR0wG5JiX9sTFqY6vMa2tTKm7ofSC25cvU3QcMfpIjSPunXR3WaQyc
+         OrQuf5yW/AkXg==
+Date:   Mon, 5 Dec 2022 14:23:53 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zheng Yejian <zhengyejian1@huawei.com>, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Fix kernel stack overflow caused by kprobe on
+ rcu_irq_enter_check_tick()
+Message-ID: <20221205132353.GB1796992@lothringen>
+References: <20221119040049.795065-1-zhengyejian1@huawei.com>
+ <20221121195703.GO4001@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121195703.GO4001@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexandre,
+On Mon, Nov 21, 2022 at 11:57:03AM -0800, Paul E. McKenney wrote:
+> On Sat, Nov 19, 2022 at 12:00:49PM +0800, Zheng Yejian wrote:
+> > Register kprobe on __rcu_irq_enter_check_tick() can cause kernel stack
+> > overflow [1]. This issue is first found in v5.10 and can be reproduced
+> > by enabling CONFIG_NO_HZ_FULL and doing like:
+> >   # cd /sys/kernel/debug/tracing/
+> >   # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
+> >   # echo 1 > events/kprobes/enable
+> > 
+> > So __rcu_irq_enter_check_tick() should not be kprobed, mark it as noinstr.
+> 
+> Good catch!
+> 
+> I am inclined to queue this, but noticed that one of its callers need
+> it to be noinstr but that the others do not.
+> 
+> Need noinstr:
+> 
+> o	enter_from_kernel_mode() -> __enter_from_kernel_mode() ->
+> 	rcu_irq_enter_check_tick() -> __rcu_irq_enter_check_tick()
+> 
+> Doesn't need noinstr:
+> 
+> o	ct_nmi_enter() -> rcu_irq_enter_check_tick() ->
+> 	__rcu_irq_enter_check_tick(), courtesy of the call to
+> 	instrumentation_begin() in ct_nmi_enter() that precedes the call
+> 	to rcu_irq_enter_check_tick().
+> 
+> o	irqentry_enter() -> rcu_irq_enter_check_tick() ->
+> 	__rcu_irq_enter_check_tick(), courtesy of the call to
+> 	instrumentation_begin() in irqentry_enter() that precedes the
+> 	call to rcu_irq_enter_check_tick().
+> 
+> Is tagging __rcu_irq_enter_check_tick() with noinstr as
+> proposed in this patch the right thing to do, or should there
+> be calls to instrumentation_begin() and instrumentation_end() in
+> enter_from_kernel_mode()?  Or something else entirely?
 
-Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com> writes:
+Tagging as noinstr doesn't look right as there are functions in
+__rcu_irq_enter_check_tick() that can be traced anyway. Also that
+function has the constraint that it can't be called while RCU is idle
+so it's up to the caller to call instrumentation_begin()/end().
 
-> Remove the pins-are-numbered property from STM32 DeviceTrees
->
-> Signed-off-by: Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-Now that the driver & binding qre queued, I'm assuming you'll queue this
-one via the stm32 tree?
-
-Thanks,
-
-Kevin
+Thanks.
