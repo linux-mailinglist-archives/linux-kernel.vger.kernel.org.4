@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0856425FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17CA6425FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbiLEJnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
+        id S231334AbiLEJpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiLEJnp (ORCPT
+        with ESMTP id S230189AbiLEJpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:43:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E20AE52;
-        Mon,  5 Dec 2022 01:43:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76E8560FF2;
-        Mon,  5 Dec 2022 09:43:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78EE6C433D6;
-        Mon,  5 Dec 2022 09:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670233422;
-        bh=5xf073/b961k8/MjmEOBXqIE5kkvS82SCt+RaD93kNQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dDMy2d+nA+QcxIvDmIyhA40HpJ0ZguqkBLLWbm7rTZ74FsuCzcbaMsq1lDJ4gpsrE
-         ZBwyHolbKy1MVcmpEFzcjdIVHn/Og12ajl99PtFag6EBmiGE3RJDfdJj4wnAtO9JrI
-         7+Xmkp4aXsu3uY0R5fjT5RSlsL2punPXVfEsyx71ORI+aGzdcNNnNw2WPkhM1nux0s
-         ZTCFIOuT1Bs4LZBYz20pzY9HftoxnwoEokBzl+vYnf2rUWvn6xq8cp0mLHEV9gsovE
-         8VPDJJG10dpd73dMSMUZiHc2Top60CJGBmyY5awhwpHe0ETSKkWQNkvd7TfbJRV9W7
-         S7+7Rd+tBnOqQ==
-Date:   Mon, 5 Dec 2022 10:43:39 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/i2c: use simple i2c probe
-Message-ID: <Y429SywVngrf2Q9I@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stephen Kitt <steve@sk2.org>, Guenter Roeck <linux@roeck-us.net>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        Mon, 5 Dec 2022 04:45:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B933AE52
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:45:13 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p2827-0004t1-VD; Mon, 05 Dec 2022 10:45:08 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:c1b8:7ff9:10eb:2660])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7D4821362AB;
+        Mon,  5 Dec 2022 09:45:06 +0000 (UTC)
+Date:   Mon, 5 Dec 2022 10:44:58 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221012163647.3930565-1-steve@sk2.org>
+Subject: Re: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
+Message-ID: <20221205094458.xkvlvp7fnygf23fq@pengutronix.de>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-15-msp@baylibre.com>
+ <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
+ <20221205093013.kpsqyb3fhd5njubm@blmsp>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qTaLEuURhpk3LiI/"
+        protocol="application/pgp-signature"; boundary="d45yhfs3ex7kqilv"
 Content-Disposition: inline
-In-Reply-To: <20221012163647.3930565-1-steve@sk2.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221205093013.kpsqyb3fhd5njubm@blmsp>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,94 +59,73 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---qTaLEuURhpk3LiI/
-Content-Type: text/plain; charset=us-ascii
+--d45yhfs3ex7kqilv
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 12, 2022 at 06:36:47PM +0200, Stephen Kitt wrote:
-> All these drivers have an i2c probe function which doesn't use the
-> "struct i2c_device_id *id" parameter, so they can trivially be
-> converted to the "probe_new" style of probe with a single argument.
+On 05.12.2022 10:30:13, Markus Schneider-Pargmann wrote:
+> Hi Marc,
 >=20
-> This is part of an ongoing transition to single-argument i2c probe
-> functions. Old-style probe functions involve a call to i2c_match_id:
-> in drivers/i2c/i2c-core-base.c,
+> On Fri, Dec 02, 2022 at 03:28:10PM +0100, Marc Kleine-Budde wrote:
+> > On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
+> > > According to the datasheet 0x1c is the last register in the first blo=
+ck,
+> > > not register 0x2c.
+> >=20
+> > The datasheet "SLLSF91A =E2=80=93 DECEMBER 2018 =E2=80=93 REVISED JANUA=
+RY 2020" says:
+> >=20
+> > | 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
+> > | 16'h002F
+> >=20
+> > While the last described register is at 0xc.
 >=20
->          /*
->           * When there are no more users of probe(),
->           * rename probe_new to probe.
->           */
->          if (driver->probe_new)
->                  status =3D driver->probe_new(client);
->          else if (driver->probe)
->                  status =3D driver->probe(client,
->                                         i2c_match_id(driver->id_table, cl=
-ient));
->          else
->                  status =3D -EINVAL;
->=20
-> Drivers which don't need the second parameter can be declared using
-> probe_new instead, avoiding the call to i2c_match_id. Drivers which do
-> can still be converted to probe_new-style, calling i2c_match_id
-> themselves (as is done currently for of_match_id).
->=20
-> This change was done using the following Coccinelle script, and fixed
-> up for whitespace changes:
->=20
-> @ rule1 @
-> identifier fn;
-> identifier client, id;
-> @@
->=20
-> - static int fn(struct i2c_client *client, const struct i2c_device_id *id)
-> + static int fn(struct i2c_client *client)
-> {
-> ...when !=3D id
-> }
->=20
-> @ rule2 depends on rule1 @
-> identifier rule1.fn;
-> identifier driver;
-> @@
->=20
-> struct i2c_driver driver =3D {
-> -       .probe
-> +       .probe_new
->                 =3D
-> (
->                    fn
-> |
-> -                  &fn
-> +                  fn
-> )
->                 ,
-> };
->=20
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> Sorry, not sure what I looked up here. The last described register is
+> 0x10 SPI Error status mask in my datasheet:
+> 'SLLSEZ5D =E2=80=93 JANUARY 2018 =E2=80=93 REVISED JUNE 2022'
 
-Dropped the mux-part because I applied an older patch doing the same.
-Despite that, applied the rest to for-next, thanks!
+The TCAN4550-Q1 variant has the 0x10 register documented, while the
+TCAN4550 (w/o -Q1) doesn't have.
 
+> I would prefer using the actual registers if that is ok with you, so
+> 0x10 here because I assume the remaining registers have internal use or
+> maybe don't exist at all?! If there is an undocumented register that
+> needs to be used at some point we can still modify the ranges.
 
---qTaLEuURhpk3LiI/
+I'm fine with using 0x10 as the last register.
+
+> Also it seems the existing ranges are following the same logic and don't
+> list the whole range, just the documented registers.
+>=20
+> The second range is wrong as well. The last register is 0x830, will
+> fix.
+
+IIRC I used the register ranges from the section titles ("8.6.1 Device
+ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to 16'h002F") when
+I added the {wr,rd}_table.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--d45yhfs3ex7kqilv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONvUsACgkQFA3kzBSg
-KbaZtw/7Bw8qWJ/EO16/DWsZFw3b7UK+vssIrQB0ygAmIGAyef7b9VN9nuJAw+fD
-fqbA/xTn0bylU4In7nB7ld0YJ9l1iPTnoXsK7J1QkEg1T65MDHugz0iwLXopc+lx
-y3WvupwfSa2D3o9R1YR4iBOGYjcc3+XAGF+9WFwoZ21Az2HDGPVChQQHAQHplJpN
-nYepLm1/MZ2qqoEpB1kZoNSdgvCtXBCVCutWpufRA6TqZSOxs6hARBsQ/mFAGL7K
-STSlrzybN/UVhI27Z03x6kiEC3sCcXlCo/pXu5hY4dRZpkcO80TXJ1jaXnR40nWh
-T6EiNzAHsqCDdy7/OysCDVrZAOyxynxjaILrhdxQdRnKauTEsa+3S90rXpgXCEkf
-Y3iE8mh2Lpaq87zPTEPgQqH2uETsnJb/f3CD1igjTA95wx5+WwNNzNm7H+G2c0be
-Zoiv6iJgNOtb+JzYDhz175owFV8zVuXWK6crOScywqVndUR3P4mpbbSbWsq/YjTi
-9lElGSIVZt3CKKccdHojPBdK15cTD7O/EUDSOdOlK88fkxeVhQG93d07QqQ/oeoq
-ra4oX+ewiEY7v2cm+jnob3O6RBBn1f6USOACQRvaolKq9V2aCWmPC6ppxPgSLnBX
-JhL01EkzdVsOgHAEXt+cZT2qvzaBjuHw65vEM4EU5nXsW0RcUuA=
-=f7EH
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmONvZYACgkQrX5LkNig
+013z1QgAjPwBzVU/x6eVgTdQF2PdBSxxR0pwfZ5/P+K/RPjyWJaXjXlt/gjgeR0Y
+GHY6YFgMg1DoyVP8AQmJQzoX+fkNKNbkpbmO8gF034cE5W3Grxz2A4mG7fRYQpnb
+u1vQvzfRDROsmr257PgNQHy84zTVjK9l5KSmdSGZxsj+uA/Y8W+1LmsHyQDa3pBZ
+qmhhKtCKJ0hkUP7Az7ujfeiKsMzwdXqyvfdcbEzm2ytW89pa9361lTJ0/eCB9Zke
+OUin8fexcYc0pzx3fu5BdTt0uU1KWK4gvmR49ku8KtkEJmE9SvReQRbUwvzjY1B8
+Kz+lrElpIK7kmuH/3i/poGELti3y5A==
+=oU/3
 -----END PGP SIGNATURE-----
 
---qTaLEuURhpk3LiI/--
+--d45yhfs3ex7kqilv--
