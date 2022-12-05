@@ -2,85 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB9064399F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C82A6439A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbiLEXhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 18:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S232860AbiLEXiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 18:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbiLEXhr (ORCPT
+        with ESMTP id S233397AbiLEXiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 18:37:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1212F201B5
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:36:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670283395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bnO7sa7gSzPB4vbpmgmHXbkc9bOWdh6rM7DpO68yVMw=;
-        b=HdtR8fA7VlUQQX2YVI2sn0lx2ovmcifY9bngAzQCEYM6v5RDMj/bc2jeZzFXn/0m9S1cWB
-        x842IqcKJc0NVB4cVPwUXckOjLLLg6UYrsy61WCpp4ZJtrITxICBJI0zs2Soi8v0t5txVq
-        eQL1NFv9ifgvmV4t9e/7e2F2S+5+Ads=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-357-5aTqJlXZNYu4UGR9gOyNQw-1; Mon, 05 Dec 2022 18:36:33 -0500
-X-MC-Unique: 5aTqJlXZNYu4UGR9gOyNQw-1
-Received: by mail-qv1-f70.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso31398408qvr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:36:33 -0800 (PST)
+        Mon, 5 Dec 2022 18:38:08 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EF81FF9D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:38:04 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so13128884pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:38:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bNLoUhiYobmP9bOtj7/XkDyvOhLAhDsxAU1nXkGHdyM=;
+        b=fOuWe2ZA5NZUMq4NUtvsO/z6eY5hOMUUUzgZkRNwMH1XjOT7Hivq9r+UV19vma2M6b
+         F5GjAtwRFsODWgNItqjyucOrnJuh0441y58c96fLfPKwl6iR8efOj/OWoQZzv4NO5rT0
+         HGGAaZbd+sy+YjZBQV5/CdZIVQOyLhIPmgsJbuhGvn8ZIwD9WIJ0uGYcf/kvPnBwnzG3
+         HZ59T/MYwza2dFAIe+epjUUyCjKTdIVjnqUE7aH0hwtvE7DrMuH6BpFlJ3YITDlsrGMg
+         9VLLLhKSelBOsrbMhCUOsVG4kXWaThyNPse2oaY0JoH99et7gAJBPWA7yRepAHyFcGT/
+         tFKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bnO7sa7gSzPB4vbpmgmHXbkc9bOWdh6rM7DpO68yVMw=;
-        b=GaIUanV3g16LqcKCQ3wC4rmWXss6PhsnfrSsbv+CEoJ2NDHJ8yNl+/mSIcRobFvCXI
-         xOtmTYzGQCiWQPcCMas3fyond+Udt4bpZ2pry0VfnrSrXTABdXYe3zdDeFbKppvMjPCe
-         9bfgJTuzlrtlqPkVL9NJr0dOFuyzm+3Uho4Pqsu0pGu2cdhGgPUehyxvRc0Gaqtm4Dq3
-         ka7AHzmy6M/87oyuaSsqihZC/ISbqXijocCPTzMIHF0stXGiwwRorynmDNOCUv7Auh4U
-         K456KVw+oh58jnoGemZCrPGKdEcN4xMQ2DNPvRqJ5MgUMni1wd194DJabga1cd59xpDq
-         yVJg==
-X-Gm-Message-State: ANoB5pm2/ZXXgWZUENfoTwHv3lW9d18m9knipiT41D26TlUYiBEOxTYA
-        OkdRBhXc0j1qxC7p9SFNR3UUUMImlvF2b3nAEqjj6V6VaA2XR5h1owgSb/DtWNHSWtbIZstq2g5
-        FqzMSyfGzQW84nihOAKcv9KvI
-X-Received: by 2002:ad4:5849:0:b0:4c7:933:144c with SMTP id de9-20020ad45849000000b004c70933144cmr30574158qvb.80.1670283393225;
-        Mon, 05 Dec 2022 15:36:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4lr+1n1Z+ukiqEUTq0BmC2P5iDPk1qbzmNGUgtKxSx5t+iR8zsMGwkhO4+Jhs1P04Va1COBg==
-X-Received: by 2002:ad4:5849:0:b0:4c7:933:144c with SMTP id de9-20020ad45849000000b004c70933144cmr30574141qvb.80.1670283392964;
-        Mon, 05 Dec 2022 15:36:32 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id g13-20020a05620a40cd00b006fc7c5d456asm10575370qko.136.2022.12.05.15.36.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 15:36:32 -0800 (PST)
-Date:   Mon, 5 Dec 2022 18:36:31 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH 04/10] mm/hugetlb: Move swap entry handling into vma lock
- when faulted
-Message-ID: <Y46Af21YstNXfvW6@x1n>
-References: <20221129193526.3588187-1-peterx@redhat.com>
- <20221129193526.3588187-5-peterx@redhat.com>
- <Y45tTl3tleVP8fA6@monkey>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bNLoUhiYobmP9bOtj7/XkDyvOhLAhDsxAU1nXkGHdyM=;
+        b=AV3uHMRd5IU3OfP8Z/+okcbg58GYfzU9oh8JLow0G3w89yapzzr2d8FByThYAUZlhq
+         JgFSO0ShxRZD1R07Km2cPq+eAb4Y2/ekVz7790AH47zfrsLgwpurYPM2dScQ4JfC1U6f
+         v1YHnx5+mJ2EiR067x20vABhQ/Q2S54JPe2s/idFc0xqNBMyAkUNZ8Qhf65RXHYNuHxr
+         3IahPCE1bg5MVn6owRtA4g+vK9qVz0tmDBwoQL5ibzVTv9slaH7bmq6ZpQ8dy2tG7unb
+         nWUepNbROxD3JRlNV8/peqbFy9xCRFsENlUsDpm2N87Zi28EItvb/FncQBq8ZLVu7TlA
+         BOKg==
+X-Gm-Message-State: ANoB5pmU+YeeM7+RDrjdKVXnj6Tpi9i1HiUvUzVkP2Ha6TBcdIIZ4W3v
+        V0qWY0i6UHVIGs/z6FalowrpuLWpBbemHL6qVvs=
+X-Google-Smtp-Source: AA0mqf4/T85GnagMf8xKs0oq6Ky1c0Quf5SrKMRVY4uZVBTBFEVHFzGTks3vgUpgKZHnWNzVsgv9lHqGLVkCBEBHfe4=
+X-Received: by 2002:a17:90a:4889:b0:20d:d531:97cc with SMTP id
+ b9-20020a17090a488900b0020dd53197ccmr93180378pjh.164.1670283484324; Mon, 05
+ Dec 2022 15:38:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y45tTl3tleVP8fA6@monkey>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221201233317.1394958-1-almasrymina@google.com>
+In-Reply-To: <20221201233317.1394958-1-almasrymina@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 5 Dec 2022 15:37:52 -0800
+Message-ID: <CAHbLzkpuJAx4LGpHMSfLUscsFR5Z5BRXdce2tPGdf=uHxfhCLQ@mail.gmail.com>
+Subject: Re: [PATCH v1] mm: disable top-tier fallback to reclaim on proactive reclaim
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,56 +72,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:14:38PM -0800, Mike Kravetz wrote:
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index dfe677fadaf8..776e34ccf029 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -5826,22 +5826,6 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
-> >  	int need_wait_lock = 0;
-> >  	unsigned long haddr = address & huge_page_mask(h);
-> >  
-> > -	ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
-> > -	if (ptep) {
-> > -		/*
-> > -		 * Since we hold no locks, ptep could be stale.  That is
-> > -		 * OK as we are only making decisions based on content and
-> > -		 * not actually modifying content here.
-> > -		 */
-> > -		entry = huge_ptep_get(ptep);
-> > -		if (unlikely(is_hugetlb_entry_migration(entry))) {
-> > -			migration_entry_wait_huge(vma, ptep);
-> > -			return 0;
-> > -		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry)))
-> > -			return VM_FAULT_HWPOISON_LARGE |
-> > -				VM_FAULT_SET_HINDEX(hstate_index(h));
-> > -	}
-> > -
-> 
-> Before acquiring the vma_lock, there is this comment:
-> 
-> 	/*
-> 	 * Acquire vma lock before calling huge_pte_alloc and hold
-> 	 * until finished with ptep.  This prevents huge_pmd_unshare from
-> 	 * being called elsewhere and making the ptep no longer valid.
-> 	 *
-> 	 * ptep could have already be assigned via hugetlb_walk().  That
-> 	 * is OK, as huge_pte_alloc will return the same value unless
-> 	 * something has changed.
-> 	 */
-> 
-> The second sentence in that comment about ptep being already assigned no
-> longer applies and can be deleted.
+On Thu, Dec 1, 2022 at 3:33 PM Mina Almasry <almasrymina@google.com> wrote:
+>
+> Reclaiming directly from top tier nodes breaks the aging pipeline of
+> memory tiers.  If we have a RAM -> CXL -> storage hierarchy, we
+> should demote from RAM to CXL and from CXL to storage. If we reclaim
+> a page from RAM, it means we 'demote' it directly from RAM to storage,
+> bypassing potentially a huge amount of pages colder than it in CXL.
+>
+> However disabling reclaim from top tier nodes entirely would cause ooms
+> in edge scenarios where lower tier memory is unreclaimable for whatever
+> reason, e.g. memory being mlocked() or too hot to reclaim.  In these
+> cases we would rather the job run with a performance regression rather
+> than it oom altogether.
+>
+> However, we can disable reclaim from top tier nodes for proactive reclaim.
+> That reclaim is not real memory pressure, and we don't have any cause to
+> be breaking the aging pipeline.
 
-Correct, this can be removed.
+Makes sense to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-One thing to mention is there's an inline touch-up above in the last patch
-of the series when introducing hugetlb_walk() to s/pte_offset/walk/, but I
-saw that Andrew has already done the right thing on the fixup one in his
-local tree, so I think we're all good.
-
-Thanks!
-
--- 
-Peter Xu
-
+>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> ---
+>  mm/vmscan.c | 27 ++++++++++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 23fc5b523764..6eb130e57920 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2088,10 +2088,31 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>         nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
+>         /* Folios that could not be demoted are still in @demote_folios */
+>         if (!list_empty(&demote_folios)) {
+> -               /* Folios which weren't demoted go back on @folio_list for retry: */
+> +               /*
+> +                * Folios which weren't demoted go back on @folio_list.
+> +                */
+>                 list_splice_init(&demote_folios, folio_list);
+> -               do_demote_pass = false;
+> -               goto retry;
+> +
+> +               /*
+> +                * goto retry to reclaim the undemoted folios in folio_list if
+> +                * desired.
+> +                *
+> +                * Reclaiming directly from top tier nodes is not often desired
+> +                * due to it breaking the LRU ordering: in general memory
+> +                * should be reclaimed from lower tier nodes and demoted from
+> +                * top tier nodes.
+> +                *
+> +                * However, disabling reclaim from top tier nodes entirely
+> +                * would cause ooms in edge scenarios where lower tier memory
+> +                * is unreclaimable for whatever reason, eg memory being
+> +                * mlocked or too hot to reclaim. We can disable reclaim
+> +                * from top tier nodes in proactive reclaim though as that is
+> +                * not real memory pressure.
+> +                */
+> +               if (!sc->proactive) {
+> +                       do_demote_pass = false;
+> +                       goto retry;
+> +               }
+>         }
+>
+>         pgactivate = stat->nr_activate[0] + stat->nr_activate[1];
+> --
+> 2.39.0.rc0.267.gcb52ba06e7-goog
+>
