@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59644642ACA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930DF642AE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiLEO54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 09:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S232145AbiLEPAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiLEO5w (ORCPT
+        with ESMTP id S231994AbiLEPA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 09:57:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC5063D4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:57:51 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p2Cuj-00080K-C8; Mon, 05 Dec 2022 15:57:49 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p2Cui-00043z-3f; Mon, 05 Dec 2022 15:57:48 +0100
-Date:   Mon, 5 Dec 2022 15:57:48 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Lukas Wunner <lukas@wunner.de>, kernel@pengutronix.de,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 1/1] net: asix: add support for the Linux
- Automation GmbH USB 10Base-T1L
-Message-ID: <20221205145748.GA19179@pengutronix.de>
-References: <20221205132102.2941732-1-o.rempel@pengutronix.de>
- <Y432JzWOzV89I59J@lunn.ch>
+        Mon, 5 Dec 2022 10:00:29 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF140FCE9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:00:27 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B53dX10030342
+        for <linux-kernel@vger.kernel.org>; Mon, 5 Dec 2022 07:00:27 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=O8qc/bFe9w/fCN/thcn9te7Vf2qgtrHRPgqkuMvStjc=;
+ b=M7Gk9IXC0ki83SDHANSpfmKOmD0842hUs4eai3Zi5w2rfls72Tk3F6YNn4EFyWTfEip6
+ OIcV677DzxjkTFN6/eWvwY+mDvXtiD1rbtsMpZAqOc61WcmLU9CuT9ITuhYXLpI/ixPQ
+ CWVihn/9QqsNDr7AfzyfSr+3/dCy5HwsNQ/zKaZ8/9iYQcIy5u95kaVWv5LCZJbBho+F
+ dpKQtS1Pz51BzHmlZjkPy9vUH9HDX3WHTIuuzNc0hkfxdOYy3W24Z/mo/nAOnCf/ltmB
+ UPY9gTKar8VNXaNF8YMOarTXGbFx/aram2W2+QK/Vvr6Um2nqPq83Jb+cgwRZKuuExh8 3A== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m84eyucgq-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:00:27 -0800
+Received: from twshared24004.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Dec 2022 07:00:25 -0800
+Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
+        id 9A551C6156DA; Mon,  5 Dec 2022 07:00:09 -0800 (PST)
+From:   Keith Busch <kbusch@meta.com>
+To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+CC:     Tony Battersby <tonyb@cybernetics.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: [PATCH 00/11] dmapool enhancements
+Date:   Mon, 5 Dec 2022 06:59:26 -0800
+Message-ID: <20221205145937.54367-1-kbusch@meta.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y432JzWOzV89I59J@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Xrcd1udeGDHEIOytm5-pX3rW1y3l_vxO
+X-Proofpoint-GUID: Xrcd1udeGDHEIOytm5-pX3rW1y3l_vxO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:46:15PM +0100, Andrew Lunn wrote:
-> On Mon, Dec 05, 2022 at 02:21:02PM +0100, Oleksij Rempel wrote:
-> > Add ASIX based USB 10Base-T1L adapter support:
-> > https://linux-automation.com/en/products/usb-t1l.html
-> 
-> Interesting.
-> 
-> I don't know the ASIX driver. Is Linux driving the PHY? So you get the
-> correct link mode for a T1L PHY?
+From: Keith Busch <kbusch@kernel.org>
 
-Yes. This part of the driver is using PHYlink. It is possible to see and
-do what ever thy PHY is capable of :)
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+Keith Busch (7):
+  dmapool: add alloc/free performance test
+  dmapool: move debug code to own functions
+  dmapool: rearrange page alloc failure handling
+  dmapool: consolidate page initialization
+  dmapool: simplify freeing
+  dmapool: don't memset on free twice
+  dmapool: link blocks across pages
+
+Tony Battersby (4):
+  dmapool: remove checks for dev =3D=3D NULL
+  dmapool: use sysfs_emit() instead of scnprintf()
+  dmapool: cleanup integer types
+  dmapool: speedup DMAPOOL_DEBUG with init_on_alloc
+
+ mm/Kconfig        |   9 ++
+ mm/Makefile       |   1 +
+ mm/dmapool.c      | 354 ++++++++++++++++++++++------------------------
+ mm/dmapool_test.c | 138 ++++++++++++++++++
+ 4 files changed, 315 insertions(+), 187 deletions(-)
+ create mode 100644 mm/dmapool_test.c
+
+--=20
+2.30.2
+
