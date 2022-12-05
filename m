@@ -2,145 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F40D642F90
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5356642F93
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiLESF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
+        id S231735AbiLESHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiLESFQ (ORCPT
+        with ESMTP id S231434AbiLESGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:05:16 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746701F627;
-        Mon,  5 Dec 2022 10:05:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+uOk4r1kIs18BqPaDqirsB9HgQ0g7FLtL1ZZXGSiEKU=; b=lqr+/KfZhLszcIftHEIUNAlYg1
-        QlcwhP1ucDSt1TIxecMDZGtTws9RndvoTXGnJCrfD9shwfJshEb/nPqe/+MWEhQOudaqctfdRvSEO
-        qNB6eOlaG4d3hNpgquf8xAXzRxoIujTbRvLvrWuUEK5X7fVeIHfCoT5K6ceZscvgLzC0X8NLqUo1i
-        5w+TKMTx8U1sdfGlhp5cPSnzGHIhhyefvNEE5ViU1onStG/6JW0f6/wMfCs+xbbBm6MnQwbF7kAYg
-        7S04T/04Eku9qREnPuhKxqhj761io8WRWmI7Rxg2XQ3QZuQija2wN4JeYokp5yC/mz4it4TC03zdz
-        FrTM+SQg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35586)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p2Fq1-00072b-HS; Mon, 05 Dec 2022 18:05:09 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p2Fpz-0007Qv-6K; Mon, 05 Dec 2022 18:05:07 +0000
-Date:   Mon, 5 Dec 2022 18:05:07 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v3 net-next 1/4] net/ethtool: add netlink interface for
- the PLCA RS
-Message-ID: <Y44y05M+6NGod+4x@shell.armlinux.org.uk>
-References: <d53ffecdde8d3950a24155228a3439f2c9b10b9b.1670259123.git.piergiorgio.beruto@gmail.com>
+        Mon, 5 Dec 2022 13:06:34 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FCC1FF9C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:06:33 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id 1so6224684lfz.4
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 10:06:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vu0CtkB3guUPfMS7CpRIQ8Dt+ybBzQKNPH967OkF8/Y=;
+        b=g4pIHPDZX+J+V9jbIhleYoPH4Ky6J49WImIDyRq+xZGDBfM1kXOdGOH+nF8mvI3dKw
+         VrQ8/1Ozz6coJQZ/Hlhc6lls89bIXCW7UpAFco/beUfUmvgSkfCyudHrogv0zUmUvO56
+         O8Kbeeuk+PqOUPqQEYiSg2pvDMn9J/MiHpZj20Sc6NUysfGzCcVGDnUN3ouarV3kxjyS
+         0QuXBaREDv5LWVp3MLPwbZlXuT4hD/Kz7RSkavWjSBQbD/3Ft5Wnfme2N15xwy2DpaVy
+         ehK2F+xBNCyyy48eQHgXYsv1L+ReAxO+Ebu6TIQuLeZZJBZWicqW1HbqBOwPgyHw10J+
+         INOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Vu0CtkB3guUPfMS7CpRIQ8Dt+ybBzQKNPH967OkF8/Y=;
+        b=Ovasud26qpW8XmfZOnuYwQdQRHgY/LqIeedLUlKFEv0bb1gIkdkPrh2LM2J//9ctbs
+         e5MqShpRdCO4KCbcTlnHrjh2t68NwIcVSYpmsKMKy/n4uk2IRnRJDkG6xdKFFqskaa+9
+         +qfJxT4Vm9b+i3lzlRKPHOCqxmPFCQDYhEzkqjomZFcWeWtBsfhnKbY5gfFMrXtknAPb
+         XF3lZrJGxgzuITwOA2QTRuHrpoO9JLYf4RUYawciDqAibITjzNvQH9p0ZqXuVGDxtwbL
+         niCUtzoLoZhmH0tQBDzbUMRsmf/HQZxvV5hmL5oYsQiNNKIvV1cz3+qwarlGqymulK3t
+         //4A==
+X-Gm-Message-State: ANoB5pnRwHVVWMzmyLVn1nNL0W9dptyMTh32WzThXpgKxaWxjbIupgN0
+        ewqb14U4+3FkReZO+BZxdJQMog==
+X-Google-Smtp-Source: AA0mqf7WZnJMfbF8n+RBXU4uu5pM8fReKBOlV5mHLtDEaIRnYn8/ZKFur+vdSSzkmPlELLWK+afIfg==
+X-Received: by 2002:a19:674a:0:b0:4b1:3931:af with SMTP id e10-20020a19674a000000b004b1393100afmr25019742lfj.394.1670263591688;
+        Mon, 05 Dec 2022 10:06:31 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id o18-20020a05651205d200b004b5323639d8sm2179775lfo.155.2022.12.05.10.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 10:06:30 -0800 (PST)
+Message-ID: <2761807c-b4b1-9c8d-50e3-efe8258ba610@linaro.org>
+Date:   Mon, 5 Dec 2022 19:06:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d53ffecdde8d3950a24155228a3439f2c9b10b9b.1670259123.git.piergiorgio.beruto@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH] arm64: dts: qcom: sa8295p-adp: Add RTC node
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221205174309.16733-1-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221205174309.16733-1-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 06:17:37PM +0100, Piergiorgio Beruto wrote:
-> diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-> index e5b6cb1a77f9..99e3497b6aa1 100644
-> --- a/drivers/net/phy/phy.c
-> +++ b/drivers/net/phy/phy.c
-> @@ -543,6 +543,40 @@ int phy_ethtool_get_stats(struct phy_device *phydev,
->  }
->  EXPORT_SYMBOL(phy_ethtool_get_stats);
->  
-> +/**
-> + *
-> + */
-> +int phy_ethtool_get_plca_cfg(struct phy_device *dev,
-> +			     struct phy_plca_cfg *plca_cfg)
-> +{
-> +	// TODO
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(phy_ethtool_get_plca_cfg);
+
+
+On 05/12/2022 18:43, Bjorn Andersson wrote:
+> The first PM8540 PMIC has an available RTC block, describe this in the
+> SA8295P ADP. Mark it as wakeup-source to allow waking the system from
+> sleep.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>   arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> index d55c8c5304cc..d2eb3d870f5a 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> @@ -510,6 +510,14 @@ pm8450a: pmic@0 {
+>   		#address-cells = <1>;
+>   		#size-cells = <0>;
+>   
+> +		rtc@6000 {
+> +			compatible = "qcom,pm8941-rtc";
+> +			reg = <0x6000>;
+> +			reg-names = "rtc", "alarm";
+> +			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+> +			wakeup-source;
+> +		};
 > +
-> +/**
-> + *
-> + */
-> +int phy_ethtool_set_plca_cfg(struct phy_device *dev,
-> +			     struct netlink_ext_ack *extack,
-> +			     const struct phy_plca_cfg *plca_cfg)
-> +{
-> +	// TODO
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(phy_ethtool_set_plca_cfg);
-> +
-> +/**
-> + *
-> + */
-> +int phy_ethtool_get_plca_status(struct phy_device *dev,
-> +				struct phy_plca_status *plca_st)
-> +{
-> +	// TODO
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(phy_ethtool_get_plca_status);
-> +
->  /**
->   * phy_start_cable_test - Start a cable test
->   *
-> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-> index 716870a4499c..f248010c403d 100644
-> --- a/drivers/net/phy/phy_device.c
-> +++ b/drivers/net/phy/phy_device.c
-> @@ -3262,6 +3262,9 @@ static const struct ethtool_phy_ops phy_ethtool_phy_ops = {
->  	.get_sset_count		= phy_ethtool_get_sset_count,
->  	.get_strings		= phy_ethtool_get_strings,
->  	.get_stats		= phy_ethtool_get_stats,
-> +	.get_plca_cfg		= phy_ethtool_get_plca_cfg,
-> +	.set_plca_cfg		= phy_ethtool_set_plca_cfg,
-> +	.get_plca_status	= phy_ethtool_get_plca_status,
->  	.start_cable_test	= phy_start_cable_test,
->  	.start_cable_test_tdr	= phy_start_cable_test_tdr,
->  };
-
-From what I can see, none of the above changes need to be part of
-patch 1 - nothing in the rest of the patch requires these members to be
-filled in, since you explicitly test to see whether they are before
-calling them.
-
-So, rather than introducing docbook stubs and stub functions that
-do nothing, marked with "TODO" comments, just merge these changes
-above with patch 3, where you actually populate these functions.
-
-Also, why do they need to be exported to modules? From what I can see,
-the only user of these functions is phy_device.c, which is part of
-the same module as phy.c where the functions live, meaning that they
-don't need to be exported.
-
-It's also surely wrong to introduce stubs that return success but
-do nothing.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>   		pm8450a_gpios: gpio@c000 {
+>   			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
+>   			reg = <0xc000>;
