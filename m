@@ -2,122 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD16E64212A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D520A64212D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiLEBno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S231292AbiLEBoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbiLEBnm (ORCPT
+        with ESMTP id S230307AbiLEBoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:43:42 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FCA11A0D;
-        Sun,  4 Dec 2022 17:43:40 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 62so9166546pgb.13;
-        Sun, 04 Dec 2022 17:43:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CNMafDYB6fFOhMeLCFBhocV85I901cqUWy+zYzgU/+A=;
-        b=CcKYdzH9sH1aup47JAWXgTTzOSCAXuOQIOTXwgCDADvT6pELae63ql1xb8GxQcdhmp
-         FMvFd955pItJ1noIOEF2MRDq78O+eh07dYd6E9SAlW+vi+UuWhwvWY/WLQWP9SHSXgVm
-         /Sp1a3qVcf+uCB8ICu+lEoNiU1rME/1YuuOKgcYGeFVmFtxQqHFeM5FyK1KLZA6qrIjI
-         w+ZRblKqlt5DaZPsG0vZaiOoAsl/IDqp0zp5tM8o29sc4EJPCUD0lRzi3yLqsCx2CgwB
-         Uk1ZSf99NmpvO7D7X45+O/AY1qm6ccMWAgh6c3edjEVVq4pAK4siyImVHD6jJnKcylBo
-         S0dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CNMafDYB6fFOhMeLCFBhocV85I901cqUWy+zYzgU/+A=;
-        b=3+BeysnQBT1s2WDfthcrMFJJpOSaERpw4BULrObKs7koNUZCeAtX9xEGqBLTI3NNsR
-         cMyTLYXOEOTBVWT1yAwtWsHqWPtHjeQoCK4EN+fR8AqTW61PFglICJpDWbkxo0nx3Ijo
-         yBnrQFEGm4y9XsHzK38dO6zbOc8HK+glpYo/ch5lKIJKI6Zl6EpLvtDNQ20Ztj/B8VU9
-         IiMyY834dmeKQdpM9vDLkWr9cpE44jCmduL3I2XsIbXzt5pALQ3zkAvUH1yyajjn1Hu0
-         RrQKugpaPaQcm2c9D540C37OUGIF4PwFRQH7Pf5jFvIPX2SmX2UtJ5vq0lnUEzRX5ApQ
-         RbGw==
-X-Gm-Message-State: ANoB5pm1oBw7fr4fBTpmF9f3bW30mFDg1XJXHv5JlvCctRvf7ImEoeiD
-        mqLYWXEIwoMAm7YitlODEHc=
-X-Google-Smtp-Source: AA0mqf4v14Ev65Y4uH0oqDEhOh8gjfDQqOjIRgj0b1FJvkJb7iB5hHurHGblso4ZBldrYbGEzLYL5Q==
-X-Received: by 2002:a05:6a00:2908:b0:56b:d738:9b with SMTP id cg8-20020a056a00290800b0056bd738009bmr62308196pfb.61.1670204619863;
-        Sun, 04 Dec 2022 17:43:39 -0800 (PST)
-Received: from sol (110-174-14-241.tpgi.com.au. [110.174.14.241])
-        by smtp.gmail.com with ESMTPSA id n9-20020aa79849000000b005769ccca18csm3049702pfq.85.2022.12.04.17.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 17:43:39 -0800 (PST)
-Date:   Mon, 5 Dec 2022 09:43:32 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marc Zyngier <maz@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v1 2/3] Documentation: gpio: Add a section on what to
- return in ->get() callback
-Message-ID: <Y41MxPthLjitvzEl@sol>
-References: <20221130155519.20362-1-andriy.shevchenko@linux.intel.com>
- <20221130155519.20362-2-andriy.shevchenko@linux.intel.com>
- <CACRpkdaQWZE6=BNEh5hSH9=jBK=TcLoD1uUb=JyNYmHFvaSAfg@mail.gmail.com>
+        Sun, 4 Dec 2022 20:44:54 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B4BD5F91;
+        Sun,  4 Dec 2022 17:44:51 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxuPESTY1jjiwDAA--.7267S3;
+        Mon, 05 Dec 2022 09:44:50 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuIOTY1jsK8lAA--.27845S3;
+        Mon, 05 Dec 2022 09:44:46 +0800 (CST)
+Subject: Re: [PATCH 0/2] Update links of LoongArch ISA Vol1 and ELF psABI
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, Xi Ruoyao <xry111@xry111.site>
+References: <1669892345-7763-1-git-send-email-yangtiezhu@loongson.cn>
+ <87h6ycoist.fsf@meer.lwn.net>
+Cc:     loongarch@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <aea656cb-f3ad-8668-9131-f294235f78da@loongson.cn>
+Date:   Mon, 5 Dec 2022 09:44:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdaQWZE6=BNEh5hSH9=jBK=TcLoD1uUb=JyNYmHFvaSAfg@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87h6ycoist.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxHuIOTY1jsK8lAA--.27845S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7CFyDCF45CF4kAr17ZF48Crg_yoW8WF1fpF
+        yS9FyagF1vyr47uw1kK345WF4FvFWfGayxJF4Utw15WwnxAw1DCFyFqrs8tFZrZ3yfJFWF
+        qryFkws5J3W8A3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 10:38:45AM +0100, Linus Walleij wrote:
-> On Wed, Nov 30, 2022 at 4:55 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > +The below table gathered the most used cases.
-> > +
-> > +==========  ==========  ===============  =======================
-> > +  Input       Output         State        What value to return?
-> > +==========  ==========  ===============  =======================
-> > + Disabled    Disabled    Hi-Z             input buffer
-> > + Disabled    OS/OD/etc   Single ended     [cached] output buffer
-> > +    x        Push-Pull   Out              [cached] output buffer
-> > + Enabled     Disabled    In               input buffer
-> > + Enabled     OS/OD/etc   Bidirectional    input buffer
-> > +==========  ==========  ===============  =======================
-> 
-> This looks about right to me, but we need more input, Kent?
-> 
 
-Firstly, I'm all for tightening up the driver contract, and hope that
-whatever is decided will also be updated in driver.h itself.
 
-I can also understand Andy wanting to add support for Bidirectional
-using the existing API.
+On 12/03/2022 06:58 PM, Jonathan Corbet wrote:
+> Tiezhu Yang <yangtiezhu@loongson.cn> writes:
+>
+>> Tiezhu Yang (2):
+>>   docs/LoongArch: Update links of LoongArch ISA Vol1 and ELF psABI
+>>   docs/zh_CN/LoongArch: Update links of LoongArch ISA Vol1 and ELF psABI
+>>
+>>  Documentation/loongarch/introduction.rst                    | 8 ++++----
+>>  Documentation/translations/zh_CN/loongarch/introduction.rst | 8 ++++----
+>>  2 files changed, 8 insertions(+), 8 deletions(-)
+>
+> I've applied these - working links are better than broken ones.  I
+> assume, though, that the new URLs, too, will break the next time the
+> manual is updated?  Is there any chance Loongson could provide a stable
+> URL for the current version of this manual instead?
+>
+> Thanks,
+>
+> jon
+>
 
-But, and please correct me if I'm wrong, the user has no control over
-whether an open drain output is single ended or bidirectional, and
-no visibility as to which the driver supports or chooses.
-So the contract is still vague.
+Here are my thoughts:
 
-My preference would be for the driver API to be extended with a new
-callback for the output buffer, say get_output(), and have the existing
-get() always return the input buffer.  Both would return an error if the
-buffer is unavailable or disconnected, e.g. in the Hi-Z case.
-As per Hans' suggestions, this would keep the drivers simple.
+(1) Just use the release link without file name, simple and timeless.
 
-Then cdev could determine the approriate buffer to return, depending
-on the mode.  Or, better yet, we extend that through the uAPI and
-handball that decision to the user.
+https://github.com/loongson/LoongArch-Documentation/releases
 
-Cheers,
-Kent.
+(2) Use the online html links, but the Chinese html version of ISA
+Vol1 is unavailable now.
+
+https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-CN.html 
+(unavailable now)
+https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html
+
+https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-CN.html
+https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html
+
+(3) As Ruoyao said, use a link with tag name instead of "latest",
+may be outdated but always valid.
+
+https://github.com/loongson/LoongArch-Documentation/releases/download/2022.08.12/LoongArch-Vol1-v1.02-CN.pdf
+
+Thanks,
+Tiezhu
 
