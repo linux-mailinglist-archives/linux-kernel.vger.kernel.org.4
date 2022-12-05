@@ -2,113 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71517642CC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAA0642CC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiLEQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S232058AbiLEQ02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiLEQ0K (ORCPT
+        with ESMTP id S231969AbiLEQ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:26:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3FE1DF12;
-        Mon,  5 Dec 2022 08:26:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A742AB81144;
-        Mon,  5 Dec 2022 16:26:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9690BC433D6;
-        Mon,  5 Dec 2022 16:26:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670257566;
-        bh=IXjbw3od9RX52LgJlY0q/QMMPB1bl3URr+bdkX9l9ow=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ABcF1w6j4l/W2nE40FUo6h9qxYW5EDKXgluAYok40DSQsdXi8xaBnr1imFdy7ZG6x
-         1Lu4aT39+UBc6krnJv3sC7WLYewF66c5sz+wdVkF4Xbf9uTgtNqZoYVW52U864zwXr
-         tTRpbqUMZITFNlCkfCI7l+qztQfbhGZdQgU+K2nMYChHUnlTrQ0GyEV4HCnxUL3t8g
-         9bkyOVFkvrvAzEsSLEwm//ICLlWBtO2QMH/ABI0faCHHGkj5QrkXpyl8q7JeS/i2Mh
-         bdabqDHQ6IwfKOZAxqmY4jaZqWHNHJ5fBbX2K9EhVWPLzOkj1XNTQc86BGEHAATWEx
-         9n+ANSlx+PACQ==
-Date:   Mon, 5 Dec 2022 17:26:00 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     John Thomson <git@johnthomson.fastmail.com.au>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] PCI: mt7621: add sentinel to quirks table
-Message-ID: <Y44bmGfgEJNd8VhK@lpieralisi>
-References: <20221104205242.3440388-1-git@johnthomson.fastmail.com.au>
- <20221104205242.3440388-3-git@johnthomson.fastmail.com.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104205242.3440388-3-git@johnthomson.fastmail.com.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Dec 2022 11:26:23 -0500
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2901E3EA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:26:20 -0800 (PST)
+X-KPN-MessageId: 8bb85bc4-74b9-11ed-8ce8-005056ab378f
+Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 8bb85bc4-74b9-11ed-8ce8-005056ab378f;
+        Mon, 05 Dec 2022 17:26:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=subject:to:from:message-id:date;
+        bh=CfEttA1FTi4AQiwQc2S061M8eH1bU8ujIZnK8AP1oeQ=;
+        b=tuxrP4iDj3gFH2k+uiOY5AfY+VDm6lVhO28bzix8YLolw2WAb9dOlUjt6DU1RYah/hqPen25aYdBj
+         Lzxz6CzqzzxZZ1ADc1Wfswn3J3cI3A1zYphYND/h+RB5++kN0VXm4o7yMIaChUXEWwsE26bXpgVd2d
+         Gx0QhmtFMTh9HEiqQ51WT8cqWmow/+zkN5jFOIBfMmWjay79ZStZD0jO3Now+514+yuc0CUotJU0J8
+         rKsRltX3NP6CSHdR2UsmT8jiZLX/kc6xgjj5ph8F46lHvlW6Gt9QNIoRPObzd+0r/uIp+8XBTHCiAm
+         A6uTNRabcexvUPTUsus1Q3wy+CQihyQ==
+X-KPN-MID: 33|/HodZ7OyzfPhmz8Wusw/hvCrbfwF8XAK2F6SsbeLUeM5/1JFyfL42Q6rfOIUZT5
+ vs4/subOAw9WbxRrOMNUpjys7KE1IU/78c9NChulDz6k=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|HlvWMV6eR643KdYhfvNggMVMrOq6Fo+jZ0b/IE5gCpz70CJjmaqY8DBfnSwYzJL
+ Vv4nF2ndQQ97M5SSCHFJAHA==
+X-Originating-IP: 80.61.163.207
+Received: from bloch.sibelius.xs4all.nl (80-61-163-207.fixed.kpn.net [80.61.163.207])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 8aa4c61b-74b9-11ed-b8b1-005056ab7447;
+        Mon, 05 Dec 2022 17:26:16 +0100 (CET)
+Date:   Mon, 05 Dec 2022 17:26:16 +0100
+Message-Id: <87tu293jh3.fsf@bloch.sibelius.xs4all.nl>
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     povik+lin@cutebit.org, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        devicetree@vger.kernel.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, marcan@marcan.st
+In-Reply-To: <20221205100211.3155-1-marcan@marcan.st> (message from Hector
+        Martin on Mon, 5 Dec 2022 19:02:11 +0900)
+Subject: Re: [PATCH] arm64: dts: apple: Rename dart-sio* to sio-dart*
+References: <20221205100211.3155-1-marcan@marcan.st>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always capitalize the sentence in the subject.
-
-"PCI: mt7621: Add sentinel to quirks table"
-
-On Sat, Nov 05, 2022 at 06:52:42AM +1000, John Thomson wrote:
-> With mt7621 soc_dev_attr fixed to register the soc as a device,
-> kernel will experience an oops in soc_device_match_attr
-
-Can we reword this please ? What you are describing *exposes* the
-bug but it is not describing the bug per-se.
-
-The bug is related to a missing sentinel in the struct
-soc_device_attribute array and that's true regardless of whether it is
-actually triggered or not.
-
-Please update the commit log promptly and I shall send it upstream.
-
-Thanks,
-Lorenzo
-
-> This quirk test was introduced in the staging driver in
-> commit b483b4e4d3f6 ("staging: mt7621-pci: add quirks for 'E2' revision
-> using 'soc_device_attribute'"), and the staging driver was moved in
-> commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host
-> controller driver") for the 5.16 kernel
+> From: Hector Martin <marcan@marcan.st>
+> Date: Mon,  5 Dec 2022 19:02:11 +0900
 > 
-> Link: https://lore.kernel.org/lkml/26ebbed1-0fe9-4af9-8466-65f841d0b382@app.fastmail.com
-> Fixes: b483b4e4d3f6 ("staging: mt7621-pci: add quirks for 'E2' revision
-> using 'soc_device_attribute'")
-> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+> All the other DARTs are named foo-dart, so let's keep things consistent.
+> 
+> Fixes: 51979fbb7fb8 ("arm64: dts: apple: t600x: Add MCA and its support")
+> Fixes: 8a3df85ad87d ("arm64: dts: apple: t8103: Add MCA and its support")
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+
+Consistency is good!
+
+Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+
 > ---
->  drivers/pci/controller/pcie-mt7621.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  arch/arm64/boot/dts/apple/t600x-die0.dtsi | 6 +++---
+>  arch/arm64/boot/dts/apple/t8103.dtsi      | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-> index 4bd1abf26008..ee7aad09d627 100644
-> --- a/drivers/pci/controller/pcie-mt7621.c
-> +++ b/drivers/pci/controller/pcie-mt7621.c
-> @@ -466,7 +466,8 @@ static int mt7621_pcie_register_host(struct pci_host_bridge *host)
->  }
+> diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
+> index 0b8958a8db77..e2f972c2c147 100644
+> --- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
+> @@ -53,7 +53,7 @@ wdt: watchdog@2922b0000 {
+>  		interrupts = <AIC_IRQ 0 631 IRQ_TYPE_LEVEL_HIGH>;
+>  	};
 >  
->  static const struct soc_device_attribute mt7621_pcie_quirks_match[] = {
-> -	{ .soc_id = "mt7621", .revision = "E2" }
-> +	{ .soc_id = "mt7621", .revision = "E2" },
-> +	{ /* sentinel */ }
->  };
+> -	dart_sio_0: iommu@39b004000 {
+> +	sio_dart_0: iommu@39b004000 {
+>  		compatible = "apple,t6000-dart";
+>  		reg = <0x3 0x9b004000 0x0 0x4000>;
+>  		interrupt-parent = <&aic>;
+> @@ -62,7 +62,7 @@ dart_sio_0: iommu@39b004000 {
+>  		power-domains = <&ps_sio_cpu>;
+>  	};
 >  
->  static int mt7621_pcie_probe(struct platform_device *pdev)
+> -	dart_sio_1: iommu@39b008000 {
+> +	sio_dart_1: iommu@39b008000 {
+>  		compatible = "apple,t6000-dart";
+>  		reg = <0x3 0x9b008000 0x0 0x8000>;
+>  		interrupt-parent = <&aic>;
+> @@ -179,7 +179,7 @@ admac: dma-controller@39b400000 {
+>  				      <&aic AIC_IRQ 0 1118 IRQ_TYPE_LEVEL_HIGH>,
+>  				      <0>,
+>  				      <0>;
+> -		iommus = <&dart_sio_0 2>, <&dart_sio_1 2>;
+> +		iommus = <&sio_dart_0 2>, <&sio_dart_1 2>;
+>  		power-domains = <&ps_sio_adma>;
+>  		resets = <&ps_audio_p>;
+>  	};
+> diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
+> index 6f5a2334e5b1..1ea760ef2c25 100644
+> --- a/arch/arm64/boot/dts/apple/t8103.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t8103.dtsi
+> @@ -318,7 +318,7 @@ cpufreq_p: performance-controller@211e20000 {
+>  			#performance-domain-cells = <0>;
+>  		};
+>  
+> -		dart_sio: iommu@235004000 {
+> +		sio_dart: iommu@235004000 {
+>  			compatible = "apple,t8103-dart";
+>  			reg = <0x2 0x35004000 0x0 0x4000>;
+>  			interrupt-parent = <&aic>;
+> @@ -431,7 +431,7 @@ admac: dma-controller@238200000 {
+>  					      <0>,
+>  					      <0>;
+>  			#dma-cells = <1>;
+> -			iommus = <&dart_sio 2>;
+> +			iommus = <&sio_dart 2>;
+>  			power-domains = <&ps_sio_adma>;
+>  			resets = <&ps_audio_p>;
+>  		};
 > -- 
-> 2.37.2
+> 2.35.1
+> 
+> 
 > 
