@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FF6642744
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B597A642748
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiLELL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S230289AbiLELNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiLELLZ (ORCPT
+        with ESMTP id S230020AbiLELN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:11:25 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E19C17076
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:11:24 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id f7so15254501edc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:11:24 -0800 (PST)
+        Mon, 5 Dec 2022 06:13:29 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815FEE0F8;
+        Mon,  5 Dec 2022 03:13:28 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id t18so662961pfq.13;
+        Mon, 05 Dec 2022 03:13:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZJJtNA+DieBEwpC/PKHHOAVscfQH+d0n40gQGNhN75E=;
-        b=WNAD2t8DThcWeghjWuYZ9udO6RGRV6Ak/0SAIKq8RMUBp8NVfp8TXdU1PzTF3J6wWJ
-         hQLMd/YwRn+vGFBIvkayQWG4FdPGAOBG00Az3f5MRt/Vleu9RkVY5Gmu+CR0qOUHdAT4
-         C5GcDQfgTwGt9G0KGzSBfPj+hES6QhADzjuol9LgiOuhzVK29IotdFD4y+RG+RvtWAha
-         2caR+5l1vJVQqJIY2yu7S2edoD13nHJLlkgKhyWZg+pEDQwGdDDcJGVnvFMy1wVYRpmi
-         Kcq0rOB9ED1hRYz2RVJNW//lBGLW9jZGuVmvQpNYhKPj0XCZfnRzk2hqbJLqYfb8SaXZ
-         JA7g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ezM354WUyURnk3aBsQpH9AdjtAKWzRvOHekOCgMnEDk=;
+        b=dk1Lj7pW18BGK9twIOysIh8MsJrlRULxtQAQHL0nAE6ZSRbwUyuvpLW/MtXqGczu70
+         15nZNU030tsE/fk/j6mpIFwTEtg74wtr+UP5CIPvjtVMfOiUZJbELxNpyWqy+jtiTMTw
+         bg1YZG7c8Vjat+c9CO9xLoa6ioeoqizRfurtrx7WSUBnNqjWUP5GkdH7iSOSNDaHaQjc
+         VBe3Byt2hBQaehkOJzOS6ilIGKNtkXU2e23e7y6kZNspltM4vBxNRLk9us9co42RQGJK
+         Gjj+MSJ1P+GKdJJ4CgmT4g6+Yq+W1+xTZQjnNkVOlOam4BrMwlHtgc1zHue3lkRpd1bz
+         LGwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZJJtNA+DieBEwpC/PKHHOAVscfQH+d0n40gQGNhN75E=;
-        b=BBDoZFl3Z7dH7t9fbK4sXfSjdB9x5U4gyclFe900NZhI7Pllds6qcM1EQZ/iKjPUns
-         pBxbBb2+1Hh5+34zQc9RTTQMKHy1/q6/TtaQB5U2bBSMrbi6yRPl+MUBlMNruLz44O54
-         UHfNkcc5469QarSGJMmmI4xkW2h1XDkYlE2wiYktkrc9IDARH5hKvNEj1pxGW1lWdlTJ
-         b1U7aW5UPo6yktsaR5EPxWCcwUTwJG5hdR8dK/XDPXL3GzBe/uQx3gUlG4SIgYJ8LkQw
-         kSIO46KxT3t972yOqYwVFBHzEK4/DuW1wubd5LMXui+erc67q6wpj2YGAwrFElFqWV6w
-         McNA==
-X-Gm-Message-State: ANoB5pnbXJ4TCToLULvm9A0hLOtNneJh6HL97UG7T1NBXNeZne1SkN7A
-        n/Ss4LHpYdqhHi8p5ohZkWn3xg==
-X-Google-Smtp-Source: AA0mqf5EzYKW1V6ApqmB0gxMJ4JmVOyNJBS89l9K2WMhS5Rg2mj5MpCg3xW4C+3ZTCXxRQvR+jGSEA==
-X-Received: by 2002:a05:6402:b5b:b0:46c:80f3:c0c0 with SMTP id bx27-20020a0564020b5b00b0046c80f3c0c0mr6701973edb.424.1670238682943;
-        Mon, 05 Dec 2022 03:11:22 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id fi22-20020a1709073ad600b007c0d4d3a0c1sm2935338ejc.32.2022.12.05.03.11.21
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezM354WUyURnk3aBsQpH9AdjtAKWzRvOHekOCgMnEDk=;
+        b=3tIDg5Pxxs8cwLGMIlrVL589B1c8U7uvy+crJQOtdWnmgIdP+OA2IgGB4wINAoqTQJ
+         tNIrwHkyY+yHnl0FsBCSAdKqqxT0oAMhyukc38/faCQu1LVCUiabjSt9ubc38Rchmoo0
+         NCHCNwkN0qh5FrdNkZInmNNf8WSgRUyOlFW6Mx2XXXLTBGB4fYIVp4VQXj9r9dHlvTXW
+         U4v67F4gUGsfZ8/VzasiSc0j8EtG/mryHrLq6O7JrsoheSjrwtldmAq52WfZx/mdcJPG
+         o8O0g/CPvWRW68AmA6lfmqzAwvZRvvYir5paKkkU5uoeArJWhURO1S4CmdFNxRrGTdFg
+         aDQA==
+X-Gm-Message-State: ANoB5pk6gk33hd9aUaRrUeclb8SAcQiq04gwUxbyMklAJ7l+lBM7Yjq+
+        iBNjsAd3zA+Vtdg8Mq3tRng=
+X-Google-Smtp-Source: AA0mqf5eTF5VHxGpJoYQjvvd4ghlWoN/5P16oE7OYcAx1IhroCZS30D0Ik5OidqTVUmLiuAaRaW2iQ==
+X-Received: by 2002:aa7:8d5a:0:b0:560:eec2:d0ab with SMTP id s26-20020aa78d5a000000b00560eec2d0abmr84681403pfe.43.1670238807908;
+        Mon, 05 Dec 2022 03:13:27 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170902784900b001895d871c95sm10269420pln.70.2022.12.05.03.13.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 03:11:22 -0800 (PST)
-Message-ID: <754db8bc-6f89-83c7-f2e4-9d7be9d44f57@linaro.org>
-Date:   Mon, 5 Dec 2022 12:11:21 +0100
+        Mon, 05 Dec 2022 03:13:27 -0800 (PST)
+Message-ID: <05188606-395e-acd0-b821-2526d5808aca@gmail.com>
+Date:   Mon, 5 Dec 2022 19:13:19 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH 6/6] arm64: dts: qcom: sm8250-sony-xperia-edo: fix no-mmc
- property for SDHCI
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221204094438.73288-1-krzysztof.kozlowski@linaro.org>
- <20221204094438.73288-6-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221204094438.73288-6-krzysztof.kozlowski@linaro.org>
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH] KVM: x86: remove unnecessary exports
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm@vger.kernel.org
+References: <20221202183727.1033906-1-pbonzini@redhat.com>
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20221202183727.1033906-1-pbonzini@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/12/2022 2:37 am, Paolo Bonzini wrote:
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -898,7 +898,6 @@ bool kvm_hv_assist_page_enabled(struct kvm_vcpu *vcpu)
+>   		return false;
+>   	return vcpu->arch.pv_eoi.msr_val & KVM_MSR_ENABLED;
+>   }
+> -EXPORT_SYMBOL_GPL(kvm_hv_assist_page_enabled);
 
+The kvm_hv_verify_vp_assist() is used in svm object where 
+kvm_hv_assist_page_enabled() is called,
+so the deletion of this line now brings a link failure. The first version of the 
+patch set did not catch
+such a simple error, and I assume another discussion thread's in-flight changes 
+were merged into.
 
-On 04/12/2022 10:44, Krzysztof Kozlowski wrote:
-> There is no "no-emmc" property, so intention for SD/SDIO only nodes was
-> to use "no-mmc":
-> 
->    qcom/sm8250-sony-xperia-edo-pdx206.dtb: mmc@8804000: Unevaluated properties are not allowed ('no-emmc' was unexpected)
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+We may add this line back to easily fix this merge conflict.
 
-Konrad
->   arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
-> index 2a223ed50102..a9dc318e45f2 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
-> @@ -587,7 +587,7 @@ &sdhc_2 {
->   	vqmmc-supply = <&vreg_l6c_2p9>;
->   	bus-width = <4>;
->   	no-sdio;
-> -	no-emmc;
-> +	no-mmc;
->   };
->   
->   &slpi {
