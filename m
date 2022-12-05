@@ -2,246 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD025643084
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9916430A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiLESig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S232517AbiLESlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbiLESiT (ORCPT
+        with ESMTP id S233569AbiLESkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:38:19 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E5E2CDD1;
-        Mon,  5 Dec 2022 10:31:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670265002; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=d39PER/uA0WU7GJHb00ysvyLArJZ6UUUuKcmZ84WE9VEHbhHR2Q4D9NcZ6+x5W6zfAXtxaVtNmYTNH7ZFDAtIQJOi6bS/u0crLgjLNK6RPBRr3IQMUT6rtnKRVSjtqJtxaPLJ1ol0baxxOFSzKAaQSe6O54UswOlJug2jrWrjjI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1670265002; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=9HVdrBThZ7f9kI3x9rrZ++0Pvhvtd65Mi6XXfbUOn9c=; 
-        b=AL2nQEsnMcKMtUOYykXfMvmcbkQLcpedDcvrdxyjy5fiMTZjK9pMeg2rBO0+1j3NHRi63c57ikBPN3sRl+oOZeAJ972EMH22w9j6SOReZFHsmkKwGE66XzMS4AYafqoRXU53e/pbMsaZPJ9SDvnh5G6oqVQ6kmUllHPfzuJylmI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670265002;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=9HVdrBThZ7f9kI3x9rrZ++0Pvhvtd65Mi6XXfbUOn9c=;
-        b=XhdGy4YeG9Falqel0Qndo43n2Mp+f7bOMMrpz6rL/JRYMsWSXTxLZRYkakSfPPhG
-        CICCMMpu3VUk1yS49eAIOUYLP0i2pGDGwB+m34k7Zg0pVoCgUzqvBCilnadCSLJb/UA
-        N6hPXawTLamOoRrjmsBVoQmHwVI7JHubtr63QQoQ=
-Received: from [192.168.100.172] (86.121.172.71 [86.121.172.71]) by mx.zohomail.com
-        with SMTPS id 1670264999977312.89271187774307; Mon, 5 Dec 2022 10:29:59 -0800 (PST)
-Message-ID: <25804819-f767-6272-4ef1-9b9e92d825cb@arinc9.com>
-Date:   Mon, 5 Dec 2022 21:29:50 +0300
+        Mon, 5 Dec 2022 13:40:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091FD20F4D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:34:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670265292;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WSqj19ShjO/7vxtuZI+dUviEQUmeLdI4Lm1aF+a+dOQ=;
+        b=hBgx9+UuvPamavD7UaT4ZvmQSbtLOIM5jW0QILlnIyfVC/yyzvO/ZNlyZAwKT5DmMsgNqX
+        /4kA+tX/NVVd8AaOjOSwVLrmDuMRvFWMPir6AT8th4BGJiVNGAQO1+LiztVj9mCo2Db6Nu
+        VcOmt/8hK+gCk4vEWZB/eSL+pVi2o4Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-343-Ema1oqdPPVeJJZtUykzAeQ-1; Mon, 05 Dec 2022 13:34:46 -0500
+X-MC-Unique: Ema1oqdPPVeJJZtUykzAeQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A8FF3C38FE4;
+        Mon,  5 Dec 2022 18:34:46 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.84])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 560C39E70;
+        Mon,  5 Dec 2022 18:34:43 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v11 1/4] random: add vgetrandom_alloc() syscall
+References: <20221205020046.1876356-1-Jason@zx2c4.com>
+        <20221205020046.1876356-2-Jason@zx2c4.com>
+Date:   Mon, 05 Dec 2022 19:34:39 +0100
+In-Reply-To: <20221205020046.1876356-2-Jason@zx2c4.com> (Jason A. Donenfeld's
+        message of "Mon, 5 Dec 2022 03:00:43 +0100")
+Message-ID: <87cz8xr96o.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 net-next 3/9] dt-bindings: net: dsa: utilize base
- definitions for standard dsa switches
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221202204559.162619-1-colin.foster@in-advantage.com>
- <20221202204559.162619-4-colin.foster@in-advantage.com>
- <bfc6810b-3c21-201b-3c4f-a0def3928597@arinc9.com>
- <Y46m3/oqtoqJWFlv@COLIN-DESKTOP1.localdomain>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <Y46m3/oqtoqJWFlv@COLIN-DESKTOP1.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6.12.2022 05:20, Colin Foster wrote:
-> On Sat, Dec 03, 2022 at 12:45:34AM +0300, Arınç ÜNAL wrote:
->> On 2.12.2022 23:45, Colin Foster wrote:
->>> DSA switches can fall into one of two categories: switches where all ports
->>> follow standard '(ethernet-)?port' properties, and switches that have
->>> additional properties for the ports.
->>>
->>> The scenario where DSA ports are all standardized can be handled by
->>> swtiches with a reference to the new 'dsa.yaml#/$defs/ethernet-ports'.
->>>
->>> The scenario where DSA ports require additional properties can reference
->>> '$dsa.yaml#' directly. This will allow switches to reference these standard
->>> defitions of the DSA switch, but add additional properties under the port
->>> nodes.
->>>
->>> Suggested-by: Rob Herring <robh@kernel.org>
->>> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
->>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
->>> Acked-by: Alvin Šipraga <alsi@bang-olufsen.dk> # realtek
->>> ---
->>>
->>> v3 -> v4
->>>     * Rename "$defs/base" to "$defs/ethernet-ports" to avoid implication of a
->>>       "base class" and fix commit message accordingly
->>>     * Add the following to the common etherent-ports node:
->>>         "additionalProperties: false"
->>>         "#address-cells" property
->>>         "#size-cells" property
->>>     * Fix "etherenet-ports@[0-9]+" to correctly be "ethernet-port@[0-9]+"
->>>     * Remove unnecessary newline
->>>     * Apply changes to mediatek,mt7530.yaml that were previously in a separate patch
->>>     * Add Reviewed and Acked tags
->>>
->>> v3
->>>     * New patch
->>>
->>> ---
->>>    .../bindings/net/dsa/arrow,xrs700x.yaml       |  2 +-
->>>    .../devicetree/bindings/net/dsa/brcm,b53.yaml |  2 +-
->>>    .../devicetree/bindings/net/dsa/dsa.yaml      | 25 ++++++++++++++++---
->>>    .../net/dsa/hirschmann,hellcreek.yaml         |  2 +-
->>>    .../bindings/net/dsa/mediatek,mt7530.yaml     | 16 +++---------
->>>    .../bindings/net/dsa/microchip,ksz.yaml       |  2 +-
->>>    .../bindings/net/dsa/microchip,lan937x.yaml   |  2 +-
->>>    .../bindings/net/dsa/mscc,ocelot.yaml         |  2 +-
->>>    .../bindings/net/dsa/nxp,sja1105.yaml         |  2 +-
->>>    .../devicetree/bindings/net/dsa/realtek.yaml  |  2 +-
->>>    .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  2 +-
->>>    11 files changed, 35 insertions(+), 24 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml b/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
->>> index 259a0c6547f3..5888e3a0169a 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml
->>> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>    title: Arrow SpeedChips XRS7000 Series Switch Device Tree Bindings
->>>    allOf:
->>> -  - $ref: dsa.yaml#
->>> +  - $ref: dsa.yaml#/$defs/ethernet-ports
->>>    maintainers:
->>>      - George McCollister <george.mccollister@gmail.com>
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
->>> index 1219b830b1a4..5bef4128d175 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
->>> @@ -66,7 +66,7 @@ required:
->>>      - reg
->>>    allOf:
->>> -  - $ref: dsa.yaml#
->>> +  - $ref: dsa.yaml#/$defs/ethernet-ports
->>>      - if:
->>>          properties:
->>>            compatible:
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
->>> index b9d48e357e77..b9e366e46aed 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
->>> @@ -19,9 +19,6 @@ description:
->>>    select: false
->>>    properties:
->>> -  $nodename:
->>> -    pattern: "^(ethernet-)?switch(@.*)?$"
->>> -
->>>      dsa,member:
->>>        minItems: 2
->>>        maxItems: 2
->>> @@ -58,4 +55,26 @@ oneOf:
->>>    additionalProperties: true
->>> +$defs:
->>> +  ethernet-ports:
->>> +    description: A DSA switch without any extra port properties
->>> +    $ref: '#/'
->>> +
->>> +    patternProperties:
->>> +      "^(ethernet-)?ports$":
->>> +        type: object
->>> +        additionalProperties: false
->>> +
->>> +        properties:
->>> +          '#address-cells':
->>> +            const: 1
->>> +          '#size-cells':
->>> +            const: 0
->>> +
->>> +        patternProperties:
->>> +          "^(ethernet-)?port@[0-9]+$":
->>> +            description: Ethernet switch ports
->>> +            $ref: dsa-port.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>>    ...
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
->>> index 73b774eadd0b..748ef9983ce2 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
->>> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>    title: Hirschmann Hellcreek TSN Switch Device Tree Bindings
->>>    allOf:
->>> -  - $ref: dsa.yaml#
->>> +  - $ref: dsa.yaml#/$defs/ethernet-ports
->>>    maintainers:
->>>      - Andrew Lunn <andrew@lunn.ch>
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> index f2e9ff3f580b..b815272531fa 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> @@ -156,17 +156,6 @@ patternProperties:
->>>        patternProperties:
->>>          "^(ethernet-)?port@[0-9]+$":
->>> -        type: object
->>> -        description: Ethernet switch ports
->>> -
->>> -        unevaluatedProperties: false
->>> -
->>> -        properties:
->>> -          reg:
->>> -            description:
->>> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
->>> -              for user ports.
->>
->> This shouldn't be moved. Please reread our conversation on the previous
->> version.
-> 
-> I see - I missed your point. My apologies. This binding should keep the
-> reg properties where they were. I'll wait a few more days for any
-> additional feedback.
+* Jason A. Donenfeld:
 
-Feel free to add my acked-by with the next version.
+> +/********************************************************************
+> + *
+> + * vDSO support helpers.
+> + *
+> + * The actual vDSO function is defined over in lib/vdso/getrandom.c,
+> + * but this section contains the kernel-mode helpers to support that.
+> + *
+> + ********************************************************************/
+> +
+> +#ifdef CONFIG_VDSO_GETRANDOM
+> +/**
+> + * sys_vgetrandom_alloc - Allocate opaque states for use with vDSO getra=
+ndom().
+> + *
+> + * @num:	   On input, a pointer to a suggested hint of how many states to
+> + * 		   allocate, and on return the number of states actually allocated.
+> + *
+> + * @size_per_each: On input, must be zero. On return, the size of each s=
+tate allocated,
+> + * 		   so that the caller can split up the returned allocation into
+> + * 		   individual states.
+> + *
+> + * @addr:	   Reserved, must be zero.
+> + *
+> + * @flags:	   Reserved, must be zero.
+> + *
+> + * The getrandom() vDSO function in userspace requires an opaque state, =
+which
+> + * this function allocates by mapping a certain number of special pages =
+into
+> + * the calling process. It takes a hint as to the number of opaque states
+> + * desired, and provides the caller with the number of opaque states act=
+ually
+> + * allocated, the size of each one in bytes, and the address of the first
+> + * state, which may be split up into @num states of @size_per_each bytes=
+ each,
+> + * by adding @size_per_each to the returned first state @num times.
+> + *
+> + * Returns the address of the first state in the allocation on success, =
+or a
+> + * negative error value on failure.
+> + *
+> + * The returned address of the first state may be passed to munmap(2) wi=
+th a
+> + * length of `(size_t)num * (size_t)size_per_each`, in order to dealloca=
+te the
+> + * memory, after which it is invalid to pass it to vDSO getrandom().
+> + *
+> + * States allocated by this function must not be dereferenced, written, =
+read,
+> + * or otherwise manipulated. The *only* supported operations are:
+> + *   - Splitting up the states in intervals of @size_per_each, no more t=
+han
+> + *     @num times from the first state.
+> + *   - Passing a state to the getrandom() vDSO function's @opaque_state
+> + *     parameter, but not passing the same state at the same time to two=
+ such
+> + *     calls.
+> + *   - Passing the first state to munmap(2), as described above.
+> + * All other uses are undefined behavior, which is subject to change or =
+removal
 
-Acked-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Suggest: =E2=80=9CPassing the first state *and total length* to munmap(2)=
+=E2=80=9D
 
-Arınç
+Rest of the documentation looks good to me.  It addresses my concerns
+about future evolution of this interface.
+
+Thanks,
+Florian
+
