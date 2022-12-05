@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA22464356E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA5F643571
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbiLEUQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
+        id S232964AbiLEUQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbiLEUP5 (ORCPT
+        with ESMTP id S231965AbiLEUQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:15:57 -0500
-Received: from mailfilter02-out40.webhostingserver.nl (mailfilter02-out40.webhostingserver.nl [195.211.72.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B965A28725
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:15:55 -0800 (PST)
+        Mon, 5 Dec 2022 15:16:49 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352D275D1;
+        Mon,  5 Dec 2022 12:16:49 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id gu23so1184994ejb.10;
+        Mon, 05 Dec 2022 12:16:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-         subject:cc:to:from:from;
-        bh=AL68zLQaEqSRdRgznjgITv4ps8SL1cEIOEoowj++pC0=;
-        b=LdS12PfvgO5v8km82BezuW5J7/N+8R0QJmVHg5WCv4c2rBVONAILw2o5N2+KXgYO91Zy0658TRUPf
-         o8lpPyIMVCTlQe5ipASaefd3/OsYLGbhrvKQ8g3e+xtusdTdgrwBZilus7V2RkwbgPLhNF1V1Tlc0Z
-         VS/3AT8MmDjNPk9ZfG4vyVS9VCF2K6futTKdwrkRfeXN/WpzXr55i6yaKmaMfgMrOiNOyfN2vkpaQ0
-         wNtEah/xcTLXS0v28pHx1ZATXIeYXDSsFjdKg40jkO7SmBKqpbMC3HIPbbN/hGl8pW9xyB/r0wqcMW
-         CVGeBWDep4K/pm9cCKIIhUumeLXMMmw==
-X-Halon-ID: 9e8bd91a-74d9-11ed-aeca-001a4a4cb922
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
-        id 9e8bd91a-74d9-11ed-aeca-001a4a4cb922;
-        Mon, 05 Dec 2022 21:15:53 +0100 (CET)
-Received: from 2a02-a466-68ed-1-f633-1bb8-92a6-ba5d.fixed6.kpn.net ([2a02:a466:68ed:1:f633:1bb8:92a6:ba5d] helo=delfion.fritz.box)
-        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
-        (envelope-from <ftoth@exalondelft.nl>)
-        id 1p2HsX-001b54-0z;
-        Mon, 05 Dec 2022 21:15:53 +0100
-From:   Ferry Toth <ftoth@exalondelft.nl>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ferry Toth <ftoth@exalondelft.nl>, stable@vger.kernel.org
-Subject: [PATCH v5 2/2] usb: dwc3: core: defer probe on ulpi_read_id timeout
-Date:   Mon,  5 Dec 2022 21:15:27 +0100
-Message-Id: <20221205201527.13525-3-ftoth@exalondelft.nl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221205201527.13525-1-ftoth@exalondelft.nl>
-References: <20221205201527.13525-1-ftoth@exalondelft.nl>
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z/8PD+0FCsCI5+iBj2b9lGbdoNFHsSi0yThSh9yKErQ=;
+        b=fUbiS0O5RNRd/6YLOHExF2EWqK3wCnZYEzYQ4vhl8yHzO9NXLOjsX5fBHsMsG/YpO5
+         0EuncsVTRMxs4LWoQgA/NRhKu14AudrbM/hnQQb9DQC4LB9c+qntnAXbRNQApfSWxs6V
+         j4xx3bRA+KLz+Celw7jK8swAP29jnoPHm74MD/uhy42TMmO0zTzfEumgpztQz96OaGvK
+         E/N/JbvJrOhBiqz3bXE4j0RryuTnVT4kxSbGltjKjd391OvIgsl9i5u67jLFFJ61tI/J
+         X5nRNnN/n87a4iR+vgfECNf8cvmKsCgWpUBB1GlJUknuMkThb5hDhceDlLS2kZNKPhFw
+         OxFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z/8PD+0FCsCI5+iBj2b9lGbdoNFHsSi0yThSh9yKErQ=;
+        b=XQZ3pFxuhYc8K6lbVomIFs/Lfu+KZu/J9GrtvCCdRDkeYh5CP1TM31DDODVrAjKU/a
+         FGDg6ViQVtIifycp93H9pwmbspyYxy/1NtMm1tp9G26GMKfZCvTxc8qrEoviRHMll+ns
+         9xnQnf9pBPmTKcsXakrooTaWe8qW91pbzrRQ9a5Cb6vpiLl30iMtziPNcMTaiRRciWyN
+         FoY3SdUhmyeSKn8JSf2akt/eCqpylU5B/3YOyKLhtu3SEFfdkG2itrMjOifaWidFzwqq
+         6utAT9Uj4MYrT7hDJTZUCof7uWjPPRtx//p61kD2GKt6lMXldzPY2HyBWxpsDN2CEwhj
+         qT+w==
+X-Gm-Message-State: ANoB5pl/fhqktQmehCLWFpLP6SDepJ2Gri8c4cUEIAEUB597wS/+nq5L
+        mG6kUgHF/psJg15HfLr37SU=
+X-Google-Smtp-Source: AA0mqf74Gku64+ob6YAE4dV316Y74LBb5vnlKktLNPxs0a6p3f6Hx/aBnfk8Np3/5dcuHpYly/Z3Ww==
+X-Received: by 2002:a17:906:830f:b0:7c0:a3c6:e788 with SMTP id j15-20020a170906830f00b007c0a3c6e788mr8193345ejx.476.1670271407686;
+        Mon, 05 Dec 2022 12:16:47 -0800 (PST)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id og40-20020a1709071de800b007c0d6b34d54sm3218302ejc.129.2022.12.05.12.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 12:16:47 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 2/5] clk: sunxi-ng: Move SoC driver conditions to dependencies
+Date:   Mon, 05 Dec 2022 21:16:46 +0100
+Message-ID: <1834760.tdWV9SEqCh@kista>
+In-Reply-To: <20221126191319.6404-3-samuel@sholland.org>
+References: <20221126191319.6404-1-samuel@sholland.org> <20221126191319.6404-3-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
-if extcon is present"), Dual Role support on Intel Merrifield platform
-broke due to rearranging the call to dwc3_get_extcon().
+Dne sobota, 26. november 2022 ob 20:13:16 CET je Samuel Holland napisal(a):
+> Do not duplicate the same expression on the `default` line, so the two
+> lines do not need to be kept in sync. Drivers stay disabled under
+> COMPILE_TEST because of the `default ARCH_SUNXI` applied to SUNXI_CCU.
+> 
+> Three drivers had no conditions.
+>  - SUN6I_RTC_CCU and SUN8I_DE2_CCU are used on current hardware
+>    regardless of CPU architecture.
+>  - SUN8I_R_CCU is only used on pre-H6 SoCs, which means no RISCV SoCs.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-It appears to be caused by ulpi_read_id() masking the timeout on the first
-test write. In the past dwc3 probe continued by calling dwc3_core_soft_reset()
-followed by dwc3_get_extcon() which happend to return -EPROBE_DEFER.
-On deferred probe ulpi_read_id() finally succeeded. Due to above mentioned
-rearranging -EPROBE_DEFER is not returned and probe completes without phy.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-On Intel Merrifield the timeout on the first test write issue is reproducible
-but it is difficult to find the root cause. Using a mainline kernel and
-rootfs with buildroot ulpi_read_id() succeeds. As soon as adding
-ftrace / bootconfig to find out why, ulpi_read_id() fails and we can't
-analyze the flow. Using another rootfs ulpi_read_id() fails even without
-adding ftrace. We suspect the issue is some kind of timing / race, but
-merely retrying ulpi_read_id() does not resolve the issue.
+Best regards,
+Jernej
 
-As we now changed ulpi_read_id() to return -ETIMEDOUT in this case, we
-need to handle the error by calling dwc3_core_soft_reset() and request
--EPROBE_DEFER. On deferred probe ulpi_read_id() is retried and succeeds.
-
-Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
----
- drivers/usb/dwc3/core.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 648f1c570021..2779f17bffaf 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1106,8 +1106,13 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 
- 	if (!dwc->ulpi_ready) {
- 		ret = dwc3_core_ulpi_init(dwc);
--		if (ret)
-+		if (ret) {
-+			if (ret == -ETIMEDOUT) {
-+				dwc3_core_soft_reset(dwc);
-+				ret = -EPROBE_DEFER;
-+			}
- 			goto err0;
-+		}
- 		dwc->ulpi_ready = true;
- 	}
- 
--- 
-2.37.2
 
