@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6F3642E0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E90642DE7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiLEQ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S233321AbiLEQvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiLEQ7w (ORCPT
+        with ESMTP id S232176AbiLEQu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:59:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1809AC774;
-        Mon,  5 Dec 2022 08:59:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDE5EB8115E;
-        Mon,  5 Dec 2022 16:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B78C433C1;
-        Mon,  5 Dec 2022 16:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670259588;
-        bh=Y+VfOwujqLiRK+8Vt5JKnnrrSDJXUcvZkBZwvuU56qM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lij/yBUtAcFKnQlyoRcEmNJx1fI/GNzAvDFqNnvA534iSh0JIulGtPWGsb/K7JJ4U
-         p5j1XFLJbZrUIzKdG+kllZqcf3SDNuzZ+ikkce1aJJJ5iO353LOcaVSgQjRjX+FQe8
-         1HwfB1obAYblQ/pY50asOsBP4DekMreFTYnOCoYusq17ZlIwHIZHdfPZinzVv0oe2r
-         wTrK7DGCRuSHjXcBkMOO5QWqR6iTb4N211mrwJgg1AOtxmFHInD6dVvuPCBn9U419i
-         nIeK9xekHpJY8XTmWBM7G5vKdLXxBgnig/uClW0Ihqqs8+fJiiOCIqMHOwjO8bpufm
-         ohcIvGrrE6Izw==
-Date:   Tue, 6 Dec 2022 00:49:51 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
-Message-ID: <Y44hL3l8Uqg+JgWI@xhacker>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-2-jszhang@kernel.org>
- <20221205145710.xzb4prrc44gv7mwm@kamzik>
- <Y44fY5tCC1hHDfcw@xhacker>
+        Mon, 5 Dec 2022 11:50:57 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD262BF4E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:49:57 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id d20so16688345edn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 08:49:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OmbRhFoEX+2zLzyBtDeN3v1+jbWEErrwHpEUGgptp/s=;
+        b=AKa7bBrXUFLEo7+yTlrl43wgFvRNWWkV/Oj65/9/+1YnvHZTc+WJ0k2vMjmgRSzL8/
+         mA5bGTfRdoJpS+SKKk5AKd9GrO4IOASpNnpk8E5/plwvWjdGvTQvkFf5PWIy7K6AXDvh
+         +XY5UHN099TZISLy+svWHn9s15kI2+kVsmg9qYt5plmPFTM2ngb2uzrMuSMYGOL7kNcG
+         BNc3u89omhfkSToSE8ZgbSvmJY1cnch4+prEHR80dzCZMBxhADoJPAyXDpwZJ8Y1Fn6w
+         en7FcksBtb8w5kKXN+jIsD6JpsR+zasnPe52nZh5rQPH4haozYxV9oruTF19X/zpUvJS
+         03EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OmbRhFoEX+2zLzyBtDeN3v1+jbWEErrwHpEUGgptp/s=;
+        b=EHv8yQepcKCeoW6UEnCPPpiO74/EhCflBhgiqt7Lr1tQEVpA40F7kPyM22NaxGL4Jn
+         IZUJ209wKcqJx/h3+wcjRFdlDiGAqmLy7elvULB7Nnk6L1TUyf/uBj48gOKxscJEO0qU
+         ko9cMPfae8iBus3Qh9mgBaqq0Xr9Rx+LBXBMWdatCG1qTon/Ovx7AwNc9JtTSTGjuPND
+         +VAGa56DM4jViZSLi6whDtAGu79n5zguhRivXw68uku01uhSReK1B2uOsBPDsaCK3lcV
+         cIEltlslmOGBCLKq6J7JkkTFGwm+y1haxbq/qbgCRrD6NJlBqpIKKMlZKxUOl1P5oN2B
+         USWQ==
+X-Gm-Message-State: ANoB5pkP+dt79eFBRIy6UhgCOncViGPpaFDrTCLxk/KiZTHK2QLk2H3G
+        cFTJ3ikl7rDBsT8r4uGaJF2KIQ==
+X-Google-Smtp-Source: AA0mqf5VU9XSaeM55klchfdUEM78X31MeC820ny7k7ADhRph1/Zd+ruLYwdKvh0Y6mNhHK1R4eoTwA==
+X-Received: by 2002:aa7:d659:0:b0:46b:1687:2e5d with SMTP id v25-20020aa7d659000000b0046b16872e5dmr33667281edr.136.1670258996422;
+        Mon, 05 Dec 2022 08:49:56 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id ku11-20020a170907788b00b007c0c91eae04sm3900313ejc.151.2022.12.05.08.49.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 08:49:55 -0800 (PST)
+Message-ID: <5aea6717-8a16-0316-ae6e-d89082d390a8@linaro.org>
+Date:   Mon, 5 Dec 2022 17:49:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y44fY5tCC1hHDfcw@xhacker>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH v3 09/11] arm64: dts: qcom: sm8350: Add display system
+ nodes
+To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_kalyant@quicinc.com, angelogioacchino.delregno@somainline.org,
+        loic.poulain@linaro.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
+        andersson@kernel.org
+References: <20221205163754.221139-1-robert.foss@linaro.org>
+ <20221205163754.221139-10-robert.foss@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221205163754.221139-10-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,129 +85,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 12:42:16AM +0800, Jisheng Zhang wrote:
-> On Mon, Dec 05, 2022 at 03:57:10PM +0100, Andrew Jones wrote:
-> > On Mon, Dec 05, 2022 at 01:46:20AM +0800, Jisheng Zhang wrote:
-> > > Alternatives live in a different section, so offsets used by jal
-> > > instruction will point to wrong locations after the patch got applied.
-> > > 
-> > > Similar to arm64, adjust the location to consider that offset.
-> > > 
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > ---
-> > >  arch/riscv/include/asm/alternative.h |  2 ++
-> > >  arch/riscv/kernel/alternative.c      | 38 ++++++++++++++++++++++++++++
-> > >  arch/riscv/kernel/cpufeature.c       |  3 +++
-> > >  3 files changed, 43 insertions(+)
-> > > 
-> > > diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> > > index c58ec3cc4bc3..33eae9541684 100644
-> > > --- a/arch/riscv/include/asm/alternative.h
-> > > +++ b/arch/riscv/include/asm/alternative.h
-> > > @@ -29,6 +29,8 @@ void apply_module_alternatives(void *start, size_t length);
-> > >  
-> > >  void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
-> > >  				      int patch_offset);
-> > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> > > +			       int patch_offset);
-> > >  
-> > >  struct alt_entry {
-> > >  	void *old_ptr;		 /* address of original instruciton or data  */
-> > > diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-> > > index 292cc42dc3be..9d88375624b5 100644
-> > > --- a/arch/riscv/kernel/alternative.c
-> > > +++ b/arch/riscv/kernel/alternative.c
-> > > @@ -125,6 +125,44 @@ void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
-> > >  	}
-> > >  }
-> > >  
-> > > +#define to_jal_imm(value)						\
-> > > +	(((value & (RV_J_IMM_10_1_MASK << RV_J_IMM_10_1_OFF)) << RV_I_IMM_11_0_OPOFF) | \
-> >                                                                  ^ RV_J_IMM_10_1_OPOFF
-> > 
-> > > +	 ((value & (RV_J_IMM_11_MASK << RV_J_IMM_11_OFF)) << RV_J_IMM_11_OPOFF) | \
-> > > +	 ((value & (RV_J_IMM_19_12_OPOFF << RV_J_IMM_19_12_OFF)) << RV_J_IMM_19_12_OPOFF) | \
-> > > +	 ((value & (1 << RV_J_IMM_SIGN_OFF)) << RV_J_IMM_SIGN_OPOFF))
-> 
-> Hi all,
-> 
-> I believe there's bug in the to_jal_imm() macro implementation, the
-> correct one should be like this:
-> 
-> #define to_jal_imm(value)                                               \
->         ((RV_X(value, RV_J_IMM_10_1_OFF, RV_J_IMM_10_1_MASK) << RV_J_IMM_10_1_OPOFF) | \
->         (RV_X(value, RV_J_IMM_11_OFF, RV_J_IMM_11_MASK) << RV_J_IMM_11_OPOFF) | \
->         (RV_X(value, RV_J_IMM_19_12_OFF, RV_J_IMM_19_12_MASK) << RV_J_IMM_19_12_OPOFF) | \
->         (RV_X(value, RV_J_IMM_SIGN_OFF, 1) << RV_J_IMM_SIGN_OPOFF))
 
-And I just tested to_jal_imm() vs RV_EXTRACT_JTYPE_IMM(), they match perfectly.
-E.g:
-RV_EXTRACT_JTYPE_IMM(to_jal_imm(imm)) == imm is alway true when imm is a jal
-valid offset.
 
+On 05/12/2022 17:37, Robert Foss wrote:
+> Add mdss, mdss_mdp, dsi0, dsi0_phy nodes. With these
+> nodes the display subsystem is configured to support
+> one DSI output.
 > 
-> Will fix it in next version.
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8350.dtsi | 199 ++++++++++++++++++++++++++-
+>   1 file changed, 195 insertions(+), 4 deletions(-)
 > 
-> Thanks
-> > 
-> > Should put () around value
-> > 
-> > > +
-> > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> > > +			       int patch_offset)
-> > > +{
-> > > +	int num_instr = len / sizeof(u32);
-> > > +	unsigned int call;
-> > > +	int i;
-> > > +	int imm;
-> > > +
-> > > +	for (i = 0; i < num_instr; i++) {
-> > > +		u32 inst = riscv_instruction_at(alt_ptr, i);
-> > > +
-> > > +		if (!riscv_insn_is_jal(inst))
-> > > +			continue;
-> > > +
-> > > +		/* get and adjust new target address */
-> > > +		imm = RV_EXTRACT_JTYPE_IMM(inst);
-> > > +		imm -= patch_offset;
-> > > +
-> > > +		/* pick the original jal */
-> > > +		call = inst;
-> > > +
-> > > +		/* drop the old IMMs, all jal imm bits sit at 31:12 */
-> > > +		call &= ~GENMASK(31, 12);
-> > 
-> > It'd be nice if this had a define.
-> > 
-> > > +
-> > > +		/* add the adapted IMMs */
-> > > +		call |= to_jal_imm(imm);
-> > > +
-> > > +		/* patch the call place again */
-> > > +		patch_text_nosync(alt_ptr + i * sizeof(u32), &call, 4);
-> > > +	}
-> > > +}
-> > > +
-> > >  /*
-> > >   * This is called very early in the boot process (directly after we run
-> > >   * a feature detect on the boot CPU). No need to worry about other CPUs
-> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > > index ba62a4ff5ccd..c743f0adc794 100644
-> > > --- a/arch/riscv/kernel/cpufeature.c
-> > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > @@ -324,6 +324,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
-> > >  			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
-> > >  							 alt->alt_len,
-> > >  							 alt->old_ptr - alt->alt_ptr);
-> > > +			riscv_alternative_fix_jal(alt->old_ptr,
-> > > +						  alt->alt_len,
-> > > +						  alt->old_ptr - alt->alt_ptr);
-> > >  		}
-> > >  	}
-> > >  }
-> > > -- 
-> > > 2.37.2
-> > >
-> > 
-> > Thanks,
-> > drew
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index 434f8e8b12c1..fb1c616c5e89 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -3,6 +3,7 @@
+>    * Copyright (c) 2020, Linaro Limited
+>    */
+>   
+> +#include <dt-bindings/interconnect/qcom,sm8350.h>
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/clock/qcom,dispcc-sm8350.h>
+>   #include <dt-bindings/clock/qcom,gcc-sm8350.h>
+> @@ -2536,14 +2537,203 @@ usb_2_dwc3: usb@a800000 {
+>   			};
+>   		};
+>   
+> +		mdss: mdss@ae00000 {
+> +			compatible = "qcom,sm8350-mdss";
+> +			reg = <0 0x0ae00000 0 0x1000>;
+> +			reg-names = "mdss";
+> +
+> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&mmss_noc MASTER_MDP1 0 &mc_virt SLAVE_EBI1 0>;
+> +			interconnect-names = "mdp0-mem", "mdp1-mem";
+> +
+> +			power-domains = <&dispcc MDSS_GDSC>;
+> +			resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
+> +
+> +			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +				 <&gcc GCC_DISP_HF_AXI_CLK>,
+> +				 <&gcc GCC_DISP_SF_AXI_CLK>,
+> +				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+> +			clock-names = "iface", "bus", "nrt_bus", "core";
+> +
+> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +
+> +			iommus = <&apps_smmu 0x820 0x402>;
+> +
+> +			status = "disabled";
+> +
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			mdss_mdp: display-controller@ae01000 {
+> +				compatible = "qcom,sm8350-dpu";
+> +				reg = <0 0x0ae01000 0 0x8f000>,
+> +				      <0 0x0aeb0000 0 0x2008>;
+> +				reg-names = "mdp", "vbif";
+> +
+> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+> +					<&gcc GCC_DISP_SF_AXI_CLK>,
+> +					<&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_CLK>,
+> +					<&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				clock-names = "bus",
+> +					      "nrt_bus",
+> +					      "iface",
+> +					      "lut",
+> +					      "core",
+> +					      "vsync";
+> +
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				assigned-clock-rates = <19200000>;
+> +
+> +				operating-points-v2 = <&mdp_opp_table>;
+> +				power-domains = <&rpmhpd SM8350_MMCX>;
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <0>;
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						dpu_intf1_out: endpoint {
+> +							remote-endpoint = <&dsi0_in>;
+> +						};
+> +					};
+> +				};
+> +			};
+> +
+> +			dsi0: dsi@ae94000 {
+With the 8280 patchset [1], it was decided that mdss nodes should now 
+have a mdss_ prefix in their labels, to keep them near each other when 
+referencing them in device DTSes.
+
+
+> +				compatible = "qcom,mdss-dsi-ctrl";
+> +				reg = <0 0x0ae94000 0 0x400>;
+> +				reg-names = "dsi_ctrl";
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <4>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&gcc GCC_DISP_HF_AXI_CLK>;
+> +				clock-names = "byte",
+> +					      "byte_intf",
+> +					      "pixel",
+> +					      "core",
+> +					      "iface",
+> +					      "bus";
+> +
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
+> +						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
+> +				assigned-clock-parents = <&dsi0_phy 0>,
+> +							 <&dsi0_phy 1>;
+> +
+> +				operating-points-v2 = <&dsi_opp_table>;
+> +				power-domains = <&rpmhpd SM8350_MMCX>;
+> +
+> +				phys = <&dsi0_phy>;
+> +
+> +				status = "disabled";
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						dsi0_in: endpoint {
+> +							remote-endpoint = <&dpu_intf1_out>;
+> +						};
+> +					};
+> +
+> +					port@1 {
+> +						reg = <1>;
+> +						dsi0_out: endpoint {
+> +						};
+> +					};
+> +				};
+> +
+> +				mdp_opp_table: opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					/* TODO: opp-200000000 should work with
+/*
+  * TODO:
+
+and the wrapping looks rather weird.. or is that my email client?
+
+
+Other than that, lgtm!
+
+Konrad
+
+[1] 
+https://lore.kernel.org/linux-arm-msm/20221130200739.ube7hvobythkbhuy@builder.lan/T/#m93e15b290b40c2d2c2ec6f639135ffa38882d0b2
+> +					 * &rpmhpd_opp_low_svs, but one some of
+> +					 * sm8350_hdk boards reboot using this
+> +					 * opp.
+> +					 */
+> +					opp-200000000 {
+> +						opp-hz = /bits/ 64 <200000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-300000000 {
+> +						opp-hz = /bits/ 64 <300000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-345000000 {
+> +						opp-hz = /bits/ 64 <345000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +
+> +					opp-460000000 {
+> +						opp-hz = /bits/ 64 <460000000>;
+> +						required-opps = <&rpmhpd_opp_nom>;
+> +					};
+> +				};
+> +			};
+> +
+> +			dsi0_phy: phy@ae94400 {
+> +				compatible = "qcom,dsi-phy-5nm-8350";
+> +				reg = <0 0x0ae94400 0 0x200>,
+> +				      <0 0x0ae94600 0 0x280>,
+> +				      <0 0x0ae94900 0 0x260>;
+> +				reg-names = "dsi_phy",
+> +					    "dsi_phy_lane",
+> +					    "dsi_pll";
+> +
+> +				#clock-cells = <1>;
+> +				#phy-cells = <0>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&rpmhcc RPMH_CXO_CLK>;
+> +				clock-names = "iface", "ref";
+> +
+> +				status = "disabled";
+> +
+> +				dsi_opp_table: dsi-opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-187500000 {
+> +						opp-hz = /bits/ 64 <187500000>;
+> +						required-opps = <&rpmhpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-300000000 {
+> +						opp-hz = /bits/ 64 <300000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-358000000 {
+> +						opp-hz = /bits/ 64 <358000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>   		dispcc: clock-controller@af00000 {
+>   			compatible = "qcom,sm8350-dispcc";
+>   			reg = <0 0x0af00000 0 0x10000>;
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> +				 <&dsi0_phy 0>, <&dsi0_phy 1>,
+> +				 <0>, <0>,
+>   				 <0>,
+>   				 <0>;
+>   			clock-names = "bi_tcxo",
+> @@ -2558,6 +2748,7 @@ dispcc: clock-controller@af00000 {
+>   			#power-domain-cells = <1>;
+>   
+>   			power-domains = <&rpmhpd SM8350_MMCX>;
+> +			required-opps = <&rpmhpd_opp_low_svs>;
+>   		};
+>   
+>   		adsp: remoteproc@17300000 {
