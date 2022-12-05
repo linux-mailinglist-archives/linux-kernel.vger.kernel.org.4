@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CB1642D39
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AF6642D42
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbiLEQkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S233221AbiLEQk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbiLEQjZ (ORCPT
+        with ESMTP id S232957AbiLEQjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 11:39:25 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0702035C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:38:10 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id n21so29152257ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 08:38:10 -0800 (PST)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38194205C4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:38:11 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id x22so6822028ejs.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 08:38:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tH0W6Q+n5Go7kNaJjIz/J403hZWvc6cemePnkkWb/v0=;
-        b=dZ4M1LL8Op3l+Rb8bBfN0q3fnNSQREE29DUO9Src6RwketawSB+KCCxWmTz1XoEeIM
-         7IkHQFGPFjOhFQQsWIH+nij37ov6ACjsk+PksuLwcZecwF3I0PI2F21jOvSP2KhYHven
-         A8se9P304w8a4t+ahScyVp+u5BFw+zD16CNnrpt1iZQ85wEyyt+ebDGmfqDwy5zVF/5m
-         Sx/Bk8CkBgRij32jE9azfx+0UD+GJvh8cGUpUPDyGGP0Esmhakl/67RqS1hroDNQZWIU
-         uarwxX/J0oTWzJ0c/9CLImURo8hpkgkMT2IKwxyeiS8NJ5e0nGBhiKGKwnOSpp6mPWvw
-         5hxQ==
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b7SDPTYTDrfGEJ+RynD2emKN+BNWTJBfUnEQ5w+gbNU=;
+        b=ZhC2zj14H0eBmdnWzrKouWVPbOm5dk5S/NuWAx5+8eAyP12MMQahYkPEr4yqoDddt3
+         FWiVAw+SwGMBeFuo8I9hrXXoOw2UYPVWB4Y2qovyyQQEUua9mkJmCNzwOYtFmH8CNJdO
+         NcCFZ9m4OyPlFWF/mfgWGhblIf8mwPIFxcFji4inEG9hgANnHgEVPfkhz3qw8n+ZbeUO
+         ELznAooSanBdflFmyqAe9bLrP056n0G5733Eb+edIhJaMITf9WB9zuRvy1OgPUNSIic5
+         3pfhp3sskn2oNhh4YOX1O5nTkAifEu2gmtpPIa5VSwTQMjIzxfefj43/tf9FPb0EhE7u
+         Xkag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tH0W6Q+n5Go7kNaJjIz/J403hZWvc6cemePnkkWb/v0=;
-        b=Uqnk2jcxwEJHx92am6TNJtegE40I6itFiyJi73h1ahzr2O1ibv2f4i+gNaVxps7ib5
-         3fIEs1KfNJ0tEm2GGUhXHK4SGhQgYNHcIiPu6LwWV2uS1UTzFa+P6xikrSqebE1TytEK
-         fnzbOD4um5qQiYfJHoNMMt45by4LyAZN0en4YS9OzwIpjD2Mee/hhW0llCmSlQrZ6qwQ
-         29Bg+nylPBWI/zQUHjgBJM1LIHLcW9TkljU+CG7MDpfoLdxd/5cYYjhGY5+dHrwGarr1
-         D28nPB3Y91u9TaDO1BB6tWDnN+tEirF9W3ZWYoAgNWUO8dYM2/C6KwzH5GOah4EnI7rs
-         Am8Q==
-X-Gm-Message-State: ANoB5plP0B83MUD3boRBv81UWx/O6QzKHqczsiDTVJVM8keUeXXeZoik
-        /4Fg/nBR0oAQb67He33VjOYFLQ==
-X-Google-Smtp-Source: AA0mqf75RDx/GQjdWXXRJAAYmDg1BAnjFPqibz4mqRABC7pDEDjOLBigXiI2VW5EKb4pvAFS4zlvvw==
-X-Received: by 2002:a17:906:5055:b0:78d:cdce:bc52 with SMTP id e21-20020a170906505500b0078dcdcebc52mr56413954ejk.469.1670258289023;
-        Mon, 05 Dec 2022 08:38:09 -0800 (PST)
+        bh=b7SDPTYTDrfGEJ+RynD2emKN+BNWTJBfUnEQ5w+gbNU=;
+        b=6oyW8MjfUyl/oao4hgnApNHflOfkzkYKUAmF2YbnSoSr4N3VovYyyzQrm+mWtnsY6T
+         xerNC+UIM2KyA+oXEMO8QmIoZ2QK0qC0Ge7fbwuvibygIPseJr7VZTBfEnNWwYMEUZba
+         UyeB3TNlfyTjyxI9GYgaEGZB9RZPF2pW0Pp5/XnSwJT3Z0YbBgH5wbz/XkBzeVd53D7b
+         sum0RxhFdn6x/UbN/2HdEoHQty3fX/DfPsm0OStUc4PpzGR9uyKdC67Z6IOzCfkSA8Vf
+         Yre/SgobXJYhB7X1FB1UZpjVDyrYG6eeLmF6bVUrUUX/ogwPT47BQIIfj1BI1+AYpVnb
+         iVAg==
+X-Gm-Message-State: ANoB5plXB1gX/6r/7Ymk5cuHq8rFJBXGzvT81NZ0TxVDMP6daA5cUNFv
+        wOAHupimHGv616dx61h6IjWjwA==
+X-Google-Smtp-Source: AA0mqf43JomvYsw3VZj9x6ZUq2+n2hGeCCKmwzrPs7hKUSlkv5/K9Lwfty0KSSSuXHZrRy0kTQrtVg==
+X-Received: by 2002:a17:906:4087:b0:7c0:e6d8:7661 with SMTP id u7-20020a170906408700b007c0e6d87661mr6269511ejj.242.1670258290825;
+        Mon, 05 Dec 2022 08:38:10 -0800 (PST)
 Received: from prec5560.localdomain (ip5f58f364.dynamic.kabel-deutschland.de. [95.88.243.100])
-        by smtp.gmail.com with ESMTPSA id e21-20020a170906315500b007bed316a6d9sm6413610eje.18.2022.12.05.08.38.07
+        by smtp.gmail.com with ESMTPSA id e21-20020a170906315500b007bed316a6d9sm6413610eje.18.2022.12.05.08.38.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 08:38:08 -0800 (PST)
+        Mon, 05 Dec 2022 08:38:10 -0800 (PST)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@linux.ie,
@@ -64,247 +64,46 @@ To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
         quic_jesszhan@quicinc.com, andersson@kernel.org
-Subject: [PATCH v3 06/11] arm64: dts: qcom: sm8350: Add &tlmm gpio-line-names
-Date:   Mon,  5 Dec 2022 17:37:49 +0100
-Message-Id: <20221205163754.221139-7-robert.foss@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v3 07/11] arm64: dts: qcom: sm8350: Remove mmxc power-domain-name
+Date:   Mon,  5 Dec 2022 17:37:50 +0100
+Message-Id: <20221205163754.221139-8-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221205163754.221139-1-robert.foss@linaro.org>
 References: <20221205163754.221139-1-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add GPIO line names as described by the sm8350-hdk schematic.
+The mmxc power-domain-name is not required, and is not
+used by either earlier or later SoC versions (sm8250 / sm8450).
 
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 205 ++++++++++++++++++++++++
- 1 file changed, 205 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-index 0fcf5bd88fc7..e6deb08c6da0 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-@@ -233,6 +233,211 @@ &slpi {
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index cbd48f248df4..805d53d91952 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -2558,7 +2558,6 @@ dispcc: clock-controller@af00000 {
+ 			#power-domain-cells = <1>;
  
- &tlmm {
- 	gpio-reserved-ranges = <52 8>;
-+
-+	gpio-line-names =
-+		"APPS_I2C_SDA", /* GPIO_0 */
-+		"APPS_I2C_SCL",
-+		"FSA_INT_N",
-+		"USER_LED3_EN",
-+		"SMBUS_SDA_1P8",
-+		"SMBUS_SCL_1P8",
-+		"2M2_3P3_EN",
-+		"ALERT_DUAL_M2_N",
-+		"EXP_UART_CTS",
-+		"EXP_UART_RFR",
-+		"EXP_UART_TX", /* GPIO_10 */
-+		"EXP_UART_RX",
-+		"NC",
-+		"NC",
-+		"RCM_MARKER1",
-+		"WSA0_EN",
-+		"CAM1_RESET_N",
-+		"CAM0_RESET_N",
-+		"DEBUG_UART_TX",
-+		"DEBUG_UART_RX",
-+		"TS_I2C_SDA", /* GPIO_20 */
-+		"TS_I2C_SCL",
-+		"TS_RESET_N",
-+		"TS_INT_N",
-+		"DISP0_RESET_N",
-+		"DISP1_RESET_N",
-+		"ETH_RESET",
-+		"RCM_MARKER2",
-+		"CAM_DC_MIPI_MUX_EN",
-+		"CAM_DC_MIPI_MUX_SEL",
-+		"AFC_PHY_TA_D_PLUS", /* GPIO_30 */
-+		"AFC_PHY_TA_D_MINUS",
-+		"PM8008_1_IRQ",
-+		"PM8008_1_RESET_N",
-+		"PM8008_2_IRQ",
-+		"PM8008_2_RESET_N",
-+		"CAM_DC_I3C_SDA",
-+		"CAM_DC_I3C_SCL",
-+		"FP_INT_N",
-+		"FP_WUHB_INT_N",
-+		"SMB_SPMI_DATA", /* GPIO_40 */
-+		"SMB_SPMI_CLK",
-+		"USB_HUB_RESET",
-+		"FORCE_USB_BOOT",
-+		"LRF_IRQ",
-+		"NC",
-+		"IMU2_INT",
-+		"HDMI_3P3_EN",
-+		"HDMI_RSTN",
-+		"HDMI_1P2_EN",
-+		"HDMI_INT", /* GPIO_50 */
-+		"USB1_ID",
-+		"FP_SPI_MISO",
-+		"FP_SPI_MOSI",
-+		"FP_SPI_CLK",
-+		"FP_SPI_CS_N",
-+		"NFC_ESE_SPI_MISO",
-+		"NFC_ESE_SPI_MOSI",
-+		"NFC_ESE_SPI_CLK",
-+		"NFC_ESE_SPI_CS",
-+		"NFC_I2C_SDA", /* GPIO_60 */
-+		"NFC_I2C_SCLC",
-+		"NFC_EN",
-+		"NFC_CLK_REQ",
-+		"HST_WLAN_EN",
-+		"HST_BT_EN",
-+		"HST_SW_CTRL",
-+		"NC",
-+		"HST_BT_UART_CTS",
-+		"HST_BT_UART_RFR",
-+		"HST_BT_UART_TX", /* GPIO_70 */
-+		"HST_BT_UART_RX",
-+		"CAM_DC_SPI0_MISO",
-+		"CAM_DC_SPI0_MOSI",
-+		"CAM_DC_SPI0_CLK",
-+		"CAM_DC_SPI0_CS_N",
-+		"CAM_DC_SPI1_MISO",
-+		"CAM_DC_SPI1_MOSI",
-+		"CAM_DC_SPI1_CLK",
-+		"CAM_DC_SPI1_CS_N",
-+		"HALL_INT_N", /* GPIO_80 */
-+		"USB_PHY_PS",
-+		"MDP_VSYNC_P",
-+		"MDP_VSYNC_S",
-+		"ETH_3P3_EN",
-+		"RADAR_INT",
-+		"NFC_DWL_REQ",
-+		"SM_GPIO_87",
-+		"WCD_RESET_N",
-+		"ALSP_INT_N",
-+		"PRESS_INT", /* GPIO_90 */
-+		"SAR_INT_N",
-+		"SD_CARD_DET_N",
-+		"NC",
-+		"PCIE0_RESET_N",
-+		"PCIE0_CLK_REQ_N",
-+		"PCIE0_WAKE_N",
-+		"PCIE1_RESET_N",
-+		"PCIE1_CLK_REQ_N",
-+		"PCIE1_WAKE_N",
-+		"CAM_MCLK0", /* GPIO_100 */
-+		"CAM_MCLK1",
-+		"CAM_MCLK2",
-+		"CAM_MCLK3",
-+		"CAM_MCLK4",
-+		"CAM_MCLK5",
-+		"CAM2_RESET_N",
-+		"CCI_I2C0_SDA",
-+		"CCI_I2C0_SCL",
-+		"CCI_I2C1_SDA",
-+		"CCI_I2C1_SCL", /* GPIO_110 */
-+		"CCI_I2C2_SDA",
-+		"CCI_I2C2_SCL",
-+		"CCI_I2C3_SDA",
-+		"CCI_I2C3_SCL",
-+		"CAM5_RESET_N",
-+		"CAM4_RESET_N",
-+		"CAM3_RESET_N",
-+		"IMU1_INT",
-+		"MAG_INT_N",
-+		"MI2S2_I2S_SCK", /* GPIO_120 */
-+		"MI2S2_I2S_DAT0",
-+		"MI2S2_I2S_WS",
-+		"HIFI_DAC_I2S_MCLK",
-+		"MI2S2_I2S_DAT1",
-+		"HIFI_DAC_I2S_SCK",
-+		"HIFI_DAC_I2S_DAT0",
-+		"NC",
-+		"HIFI_DAC_I2S_WS",
-+		"HST_BT_WLAN_SLIMBUS_CLK",
-+		"HST_BT_WLAN_SLIMBUS_DAT0", /* GPIO_130 */
-+		"BT_LED_EN",
-+		"WLAN_LED_EN",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"UIM2_PRESENT",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"UIM1_PRESENT", /* GPIO_140 */
-+		"NC",
-+		"SM_RFFE0_DATA",
-+		"NC",
-+		"SM_RFFE1_DATA",
-+		"SM_MSS_GRFC4",
-+		"SM_MSS_GRFC5",
-+		"SM_MSS_GRFC6",
-+		"SM_MSS_GRFC7",
-+		"SM_RFFE4_CLK",
-+		"SM_RFFE4_DATA", /* GPIO_150 */
-+		"WLAN_COEX_UART1_RX",
-+		"WLAN_COEX_UART1_TX",
-+		"HST_SW_CTRL",
-+		"DSI0_STATUS",
-+		"DSI1_STATUS",
-+		"APPS_PBL_BOOT_SPEED_1",
-+		"APPS_BOOT_FROM_ROM",
-+		"APPS_PBL_BOOT_SPEED_0",
-+		"QLINK0_REQ",
-+		"QLINK0_EN", /* GPIO_160 */
-+		"QLINK0_WMSS_RESET_N",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"WCD_SWR_TX_CLK",
-+		"WCD_SWR_TX_DATA0",
-+		"WCD_SWR_TX_DATA1", /* GPIO_170 */
-+		"WCD_SWR_RX_CLK",
-+		"WCD_SWR_RX_DATA0",
-+		"WCD_SWR_RX_DATA1",
-+		"DMIC01_CLK",
-+		"DMIC01_DATA",
-+		"DMIC23_CLK",
-+		"DMIC23_DATA",
-+		"WSA_SWR_CLK",
-+		"WSA_SWR_DATA",
-+		"DMIC45_CLK", /* GPIO_180 */
-+		"DMIC45_DATA",
-+		"WCD_SWR_TX_DATA2",
-+		"SENSOR_I3C_SDA",
-+		"SENSOR_I3C_SCL",
-+		"CAM_OIS0_I3C_SDA",
-+		"CAM_OIS0_I3C_SCL",
-+		"IMU_SPI_MISO",
-+		"IMU_SPI_MOSI",
-+		"IMU_SPI_CLK",
-+		"IMU_SPI_CS_N", /* GPIO_190 */
-+		"MAG_I2C_SDA",
-+		"MAG_I2C_SCL",
-+		"SENSOR_I2C_SDA",
-+		"SENSOR_I2C_SCL",
-+		"RADAR_SPI_MISO",
-+		"RADAR_SPI_MOSI",
-+		"RADAR_SPI_CLK",
-+		"RADAR_SPI_CS_N",
-+		"HST_BLE_UART_TX",
-+		"HST_BLE_UART_RX", /* GPIO_200 */
-+		"HST_WLAN_UART_TX",
-+		"HST_WLAN_UART_RX";
- };
+ 			power-domains = <&rpmhpd SM8350_MMCX>;
+-			power-domain-names = "mmcx";
+ 		};
  
- &uart2 {
+ 		adsp: remoteproc@17300000 {
 -- 
 2.34.1
 
