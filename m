@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DE064243C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55572642439
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiLEINm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S231774AbiLEIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiLEINi (ORCPT
+        with ESMTP id S231906AbiLEINZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:13:38 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4664514D15;
-        Mon,  5 Dec 2022 00:13:37 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 82so9881931pgc.0;
-        Mon, 05 Dec 2022 00:13:37 -0800 (PST)
+        Mon, 5 Dec 2022 03:13:25 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04ADAE52
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:13:22 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id o5so17380140wrm.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:13:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GK4jKzSG54RvyZ+KEwdYXduEIUelDiosExxd97OqALY=;
-        b=GzEiHBvWfxb9iLcZDo76VVhe4LVU+PAq3Q10apUfIyG+gfqKIrCG5J77Tf/Lrg51rF
-         NYy009DkwlcuWtYFyWiqmD+YecQKQ3K/8biUs3W/4Z2Tsf8QE7BJJoww/ulP7mj59DJn
-         v2uvIMWWsYho1jFlD1ARb2HmXc4GaMjCzBifrPdvId8or3CxT7+kFJha+GjAIpUghyST
-         HcMkyIfCV6Jbzhc/CIV2/3KyOMeKNz8kVqr6ifKvl+iJA46ZauyIl7Bj20BwP3sLjsEf
-         AbD+By5Wi/a7YQCIHBpaYsq6uE/neU1n3w7eTOnADdlJGo5LJmPakMo/IEA23fwc/HE6
-         RBPg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9HQObmrwSMX8vA4JHKJaj2b6CjK14qWpD9rpN9nU90U=;
+        b=hH8EH4emacWt/i3dinMgGS8nSqTXKGuNzRdVns89xp9lootuIhBo2OtYbrD8lkN1nC
+         My+UVHjJw/oudKcISaxuAMfMeXv9FW/cX5R/Vkd4B1O5WU08dx8bw7PBC+kidyn/bINY
+         qZi5EgJQD3FezXn6kyyA4EJlsO+b7YSOUK7A5lZrlCP9/CHrKE+R1EnIkfjwppZsZBQT
+         4KFTZWay7o3jQZ1jVQsjLLUyGtdXHx1XVkRvxjI44hT/vnfsNMlzAMnEWZWTfr8cl61h
+         SdxwhsbqUnqud1MpVoNIX6o7ozKyrgJU3rXXWjygMst1MvcCv7RojdyVlzk6dj08P93d
+         bo+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GK4jKzSG54RvyZ+KEwdYXduEIUelDiosExxd97OqALY=;
-        b=AVaroJ0sanKq2aFjc/1Ui51pelMJDk3emm+es/RCn/CNZV/O8Kpc0bq+MDDIESy9Po
-         v0ypbQjWLWCGDHo1qXn8Gzt1HDofjWZ3IJ5I2De6cpqS4DurduDjJbmFco24gc2Y9HBV
-         12za8PC/FHsx55kyNDmFkd3Bl9EC6Kldcrow1NIZEjZ+BbSRiCmfozuUAO80zPBECX2D
-         gs8sbIxL6P3IO3sM9sldoldPiwdRfbDFYY1O/YNpqesmWnxtiDaHdNt3Elx9+3XEP/RV
-         MBq7z4/cWBoCw+HM7qjCvOXntdUB30VeH8pOVTVCGEBBUpkVivO2sDEd7ftH/6Sriv3p
-         1Dmw==
-X-Gm-Message-State: ANoB5pnu0T3n8gpahEE42xr1z1w2qwF0v70dWGQc6QFndqxXgcUEbRdl
-        onDRQTzweHX0QMP1mSEqfQw=
-X-Google-Smtp-Source: AA0mqf7xjtw5uSPFh0atK5cZUscBp8iw+GZgmBOOQ4XMGt4GR48VE7r2MAtBdYddGmkrnko0rNc4/g==
-X-Received: by 2002:a05:6a00:1303:b0:561:7dc7:510b with SMTP id j3-20020a056a00130300b005617dc7510bmr84700767pfu.3.1670228016724;
-        Mon, 05 Dec 2022 00:13:36 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id x193-20020a6331ca000000b00412a708f38asm7827883pgx.35.2022.12.05.00.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 00:13:36 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] bpftool: Fix memory leak in do_build_table_cb
-Date:   Mon,  5 Dec 2022 12:13:00 +0400
-Message-Id: <20221205081300.561974-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=9HQObmrwSMX8vA4JHKJaj2b6CjK14qWpD9rpN9nU90U=;
+        b=lxdCwL41NhbgoiyMqcSEuBvcGbhYYoY/aRUYVrZEStoH63WOH2/4lYYtOpHvsRotSN
+         KM4mdrFdzSG0+CXW06K1+JFf7IevcG1NC1StFpUY2s7WaldpWRVrgzfuzPjomfsFEGwN
+         6A8FL1/3TofxPsyhFayxeJoDm+uNo2ZCYHXT2hHQiuL8odVRNH9t1HMjg4ZHcp88dteb
+         TZAQaQwE/aZ0auD02wNDQaHVh+WTi4rm/uCE3AwyG6/jggLGWVTcHoaoe5q/r8olSOMO
+         eA/fSK4/5bi2f+jOsNLX5NgIw9PscfinK+kiXrZDIBC9Gu9Ukem4bPXJ8wQTQoVEY4/I
+         MK3A==
+X-Gm-Message-State: ANoB5pmBlsjjvCf1OJPkQTXYs8F1rqpWyBsErvB+qgrEMRxkQxTU/KVH
+        B3fomlKEi1mD1aVuRCjRNbmNMw==
+X-Google-Smtp-Source: AA0mqf7ai5wgiIRIYciqsXgXnPof4ogfREHeWVAWQiK2meZ1Z7k5m4sdbH7en5NgAmqIhis69vieQA==
+X-Received: by 2002:a05:6000:1c15:b0:242:28c9:d112 with SMTP id ba21-20020a0560001c1500b0024228c9d112mr15235142wrb.294.1670228001367;
+        Mon, 05 Dec 2022 00:13:21 -0800 (PST)
+Received: from [192.168.7.93] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id z2-20020a5d4402000000b00226dba960b4sm13376083wrq.3.2022.12.05.00.13.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 00:13:20 -0800 (PST)
+Message-ID: <b258ce94-627f-c029-6aa5-3723a87c0002@linaro.org>
+Date:   Mon, 5 Dec 2022 09:13:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/9] media: dt-bindings: amlogic,meson-gx-ao-cec: move to
+ cec subfolder
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Joe Tessler <jrt@google.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20221204182908.138910-1-krzysztof.kozlowski@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20221204182908.138910-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strdup() allocates memory for path. We need to release the memory in
-the following error paths. Add free() to avoid memory leak.
+On 04/12/2022 19:29, Krzysztof Kozlowski wrote:
+> Move amlogic,meson-gx-ao-cec.yaml bindings to cec subfolder and drop
+> unneeded quotes.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   .../bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml     | 4 ++--
+>   MAINTAINERS                                                   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+>   rename Documentation/devicetree/bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml (93%)
 
-Fixes: 8f184732b60b ("bpftool: Switch to libbpf's hashmap for pinned paths of BPF objects")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- tools/bpf/bpftool/common.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+<snip>
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 0cdb4f711510..8a820356525e 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -499,9 +499,11 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
- 	if (err) {
- 		p_err("failed to append entry to hashmap for ID %u, path '%s': %s",
- 		      pinned_info.id, path, strerror(errno));
--		goto out_close;
-+		goto out_free;
- 	}
- 
-+out_free:
-+	free(path);
- out_close:
- 	close(fd);
- out_ret:
--- 
-2.25.1
 
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
