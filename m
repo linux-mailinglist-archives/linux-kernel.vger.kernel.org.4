@@ -2,83 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6846964279C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A75264279F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiLELgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
+        id S230522AbiLELhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiLELgp (ORCPT
+        with ESMTP id S230050AbiLELhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:36:45 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2891A19299
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:36:45 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NQhMv42LCz4xpy7;
-        Mon,  5 Dec 2022 19:36:43 +0800 (CST)
-Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
-        by mse-fl1.zte.com.cn with SMTP id 2B5BaaYY051373;
-        Mon, 5 Dec 2022 19:36:36 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Mon, 5 Dec 2022 19:36:40 +0800 (CST)
-Date:   Mon, 5 Dec 2022 19:36:40 +0800 (CST)
-X-Zmail-TransId: 2b04638dd7c8ffffffffa569f048
-X-Mailer: Zmail v1.0
-Message-ID: <202212051936400309332@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <minyard@acm.org>
-Cc:     <openipmi-developer@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGlwbWkvd2F0Y2hkb2c6IHVzZSBzdHJzY3B5KCkgdG8gaW5zdGVhZCBvZiBzdHJuY3B5KCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B5BaaYY051373
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638DD7CB.000 by FangMail milter!
-X-FangMail-Envelope: 1670240203/4NQhMv42LCz4xpy7/638DD7CB.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638DD7CB.000/4NQhMv42LCz4xpy7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Dec 2022 06:37:09 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B80B1A059
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:37:08 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id qk9so9304917ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:37:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cYONg2TQ0L+lF1d2DaA1qurYIm2vbfwZznXqOxGFnmA=;
+        b=c6r33dyZUaRAYBqp/c+s1bzmydiZw5C/25gSmwq1LrhxlFMOfo3mmIL+0QbPQwYSFG
+         kqpWcZtwGiQn0fFTjXFC/50jtt2pUTslqjMFR5hAEFnbg4I2sJloV4Lp0jldsCg+j58p
+         Xrwz1c/VFjPeiRiN73DZPWNwdGyYocY6rhjsX8DodU8ePNeITAY6IrEHzdwzXvqfi5DP
+         uv7tBzYvRNuVi+TxAIDkGH0eWKBYQzKSKN5Sqi5jlp/DtnrNpHk9IGzCXLzbGJRTmYCo
+         aUzkeTl0Gtf4rHd8T0xO3ZIwEFltRyy18adXMsvjtWVRZX64d3BX7ydvsMFpWsZeFkrq
+         jVSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cYONg2TQ0L+lF1d2DaA1qurYIm2vbfwZznXqOxGFnmA=;
+        b=fJR912AICYZQ1xZPM6e43+WBHCPYQfSkwIimbfNYkx/a+MLdz06veDwyF8Pj7UBqyL
+         6xLjwy+l8uRCmHEctXAG+ENsWZtl89hN1ApfmkQW95XBLEibTQkA53Sbx3AYd7nyAIwL
+         ZNbEM+pKoUaJoWVx/Yr3aEAQ2HY6mCZpnN86b5zSeHIq0b8nx4vBd2KzkyoL+JPc0ZPl
+         OKDsz2RcSbeoOA/K6ZoYRTCpnWr48EUN+rkplK/iIS6BLK0mo7H/4iZIajKzWY9Td+PE
+         ke2zPt3E5q7IHVI838ig5h3xU9BJLXqFuub6i43NHIwZsGz+R084Rt5L8FWAcaZX+xcA
+         7cXA==
+X-Gm-Message-State: ANoB5plUjI4albsIiQ2eMTLQwJbfi9LWwwt4uehXLB8Swoca+qWT9GBW
+        3q3JuiHDMeNKtgbizAVUfjK49Q==
+X-Google-Smtp-Source: AA0mqf4aKgFODxGCPta1Nv/wxBzu3tePNi5o9NMN2dx34jz14blVeWDZMfQ/sArMoICgz3V9zSWnpQ==
+X-Received: by 2002:a17:907:9842:b0:7b9:9492:b3f4 with SMTP id jj2-20020a170907984200b007b99492b3f4mr47621577ejc.688.1670240227134;
+        Mon, 05 Dec 2022 03:37:07 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id ca24-20020a170906a3d800b007abafe43c3bsm6140594ejb.86.2022.12.05.03.37.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 03:37:06 -0800 (PST)
+Message-ID: <61f2c58a-9ca8-3868-e3e0-31283e8b1728@linaro.org>
+Date:   Mon, 5 Dec 2022 12:37:06 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20221205100837.29212-1-johan+linaro@kernel.org>
+ <20221205100837.29212-3-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221205100837.29212-3-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xu Panda <xu.panda@zte.com.cn>
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL terminated strings.
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- drivers/char/ipmi/ipmi_watchdog.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 05/12/2022 11:08, Johan Hovold wrote:
+> The SC8280XP UFS controllers are cache coherent and must be marked as
+> such in the devicetree to avoid potential data corruption.
+> 
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> Cc: stable@vger.kernel.org      # 6.0
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
-index 47365150e431..0d4a8dcacfd4 100644
---- a/drivers/char/ipmi/ipmi_watchdog.c
-+++ b/drivers/char/ipmi/ipmi_watchdog.c
-@@ -213,8 +213,7 @@ static int set_param_str(const char *val, const struct kernel_param *kp)
- 	char       valcp[16];
- 	char       *s;
-
--	strncpy(valcp, val, 15);
--	valcp[15] = '\0';
-+	strscpy(valcp, val, 16);
-
- 	s = strstrip(valcp);
-
--- 
-2.15.2
+Konrad
+>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index c4947c563099..23d1f51527aa 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1430,6 +1430,7 @@ ufs_mem_hc: ufs@1d84000 {
+>   			required-opps = <&rpmhpd_opp_nom>;
+>   
+>   			iommus = <&apps_smmu 0xe0 0x0>;
+> +			dma-coherent;
+>   
+>   			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+>   				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+> @@ -1491,6 +1492,7 @@ ufs_card_hc: ufs@1da4000 {
+>   			power-domains = <&gcc UFS_CARD_GDSC>;
+>   
+>   			iommus = <&apps_smmu 0x4a0 0x0>;
+> +			dma-coherent;
+>   
+>   			clocks = <&gcc GCC_UFS_CARD_AXI_CLK>,
+>   				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
