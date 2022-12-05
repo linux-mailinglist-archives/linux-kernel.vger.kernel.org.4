@@ -2,190 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDCB642AE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B542642AE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbiLEPAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S231454AbiLEPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbiLEPA2 (ORCPT
+        with ESMTP id S232169AbiLEPBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:00:28 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA071DFCE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:00:25 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2B5C0SIX000740
-        for <linux-kernel@vger.kernel.org>; Mon, 5 Dec 2022 07:00:25 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=YU1RvihRnvDJ0EI7aPZRW/ndJTmtKABPXXQKd2XE/QM=;
- b=h72aB84uF535vhqcSF/upzVkRKlcy1O4YHQ33llTxkXXqGNEv07PJm/9UT0GamvqFm69
- letw054sf96K2yDECmaBk5enLnO0+h+gBqXZpn3F9n3gVsFu4VqjzsvjyQUHNSWvgrsH
- ZYetGQPpLXxAeBwNCLvHfg+F6A153f/jl5EwJ17EI7tbQ5br8Zz0ZbAHA16VCXqzRSKp
- yMbMqL1mylZiV7qWL1Zmk1MRN/59JJuWSaNU8zWZiPNEAKZ11tvspWwFc9X4MX/uo989
- +XykDO8PcS9Hz6d+i8hEd+kGzILJyBRYQoaU9DJOf749WEbwODmDaNso2QkV4OFWjpcB vA== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3m9g8c1kks-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:00:24 -0800
-Received: from twshared10308.07.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Dec 2022 07:00:22 -0800
-Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id C5CE2C6156E0; Mon,  5 Dec 2022 07:00:09 -0800 (PST)
-From:   Keith Busch <kbusch@meta.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-CC:     Tony Battersby <tonyb@cybernetics.com>,
-        Keith Busch <kbusch@kernel.org>
-Subject: [PATCH 02/11] dmapool: remove checks for dev == NULL
-Date:   Mon, 5 Dec 2022 06:59:28 -0800
-Message-ID: <20221205145937.54367-3-kbusch@meta.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221205145937.54367-1-kbusch@meta.com>
-References: <20221205145937.54367-1-kbusch@meta.com>
+        Mon, 5 Dec 2022 10:01:01 -0500
+Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1A61DA6C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:00:59 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=0;PH=DS;RN=4;SR=0;TI=SMTPD_---0VWWWV.3_1670252451;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VWWWV.3_1670252451)
+          by smtp.aliyun-inc.com;
+          Mon, 05 Dec 2022 23:00:57 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH 1/2] erofs: fix missing unmap if z_erofs_get_extent_compressedlen() fails
+Date:   Mon,  5 Dec 2022 23:00:49 +0800
+Message-Id: <20221205150050.47784-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: SIAsFnmQprUPdP9asPoy9-ng49KiGAL9
-X-Proofpoint-ORIG-GUID: SIAsFnmQprUPdP9asPoy9-ng49KiGAL9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Battersby <tonyb@cybernetics.com>
+Otherwise, meta buffers could be leaked.
 
-dmapool originally tried to support pools without a device because
-dma_alloc_coherent() supports allocations without a device.  But nobody
-ended up using dma pools without a device, and trying to do so will
-result in an oops.  So remove the checks for pool->dev =3D=3D NULL since =
-they
-are unneeded bloat.
-
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
-[added check for null dev on create]
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+Fixes: cec6e93beadf ("erofs: support parsing big pcluster compress indexes")
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
- mm/dmapool.c | 45 ++++++++++++++-------------------------------
- 1 file changed, 14 insertions(+), 31 deletions(-)
+ fs/erofs/zmap.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index a7eb5d0eb2da7..559207e1c3339 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -134,6 +134,9 @@ struct dma_pool *dma_pool_create(const char *name, st=
-ruct device *dev,
- 	size_t allocation;
- 	bool empty =3D false;
-=20
-+	if (!dev)
-+		return NULL;
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 749a5ac943f4..98eff1259de4 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -694,7 +694,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 		map->m_pa = blknr_to_addr(m.pblk);
+ 		err = z_erofs_get_extent_compressedlen(&m, initial_lcn);
+ 		if (err)
+-			goto out;
++			goto unmap_out;
+ 	}
+ 
+ 	if (m.headtype == Z_EROFS_VLE_CLUSTER_TYPE_PLAIN) {
+@@ -718,14 +718,12 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 		if (!err)
+ 			map->m_flags |= EROFS_MAP_FULL_MAPPED;
+ 	}
 +
- 	if (align =3D=3D 0)
- 		align =3D 1;
- 	else if (align & (align - 1))
-@@ -275,7 +278,7 @@ void dma_pool_destroy(struct dma_pool *pool)
- 	mutex_lock(&pools_reg_lock);
- 	mutex_lock(&pools_lock);
- 	list_del(&pool->pools);
--	if (pool->dev && list_empty(&pool->dev->dma_pools))
-+	if (list_empty(&pool->dev->dma_pools))
- 		empty =3D true;
- 	mutex_unlock(&pools_lock);
- 	if (empty)
-@@ -284,12 +287,8 @@ void dma_pool_destroy(struct dma_pool *pool)
-=20
- 	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
- 		if (is_page_busy(page)) {
--			if (pool->dev)
--				dev_err(pool->dev, "%s %s, %p busy\n", __func__,
--					pool->name, page->vaddr);
--			else
--				pr_err("%s %s, %p busy\n", __func__,
--				       pool->name, page->vaddr);
-+			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
-+				pool->name, page->vaddr);
- 			/* leak the still-in-use consistent memory */
- 			list_del(&page->page_list);
- 			kfree(page);
-@@ -351,12 +350,8 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t me=
-m_flags,
- 		for (i =3D sizeof(page->offset); i < pool->size; i++) {
- 			if (data[i] =3D=3D POOL_POISON_FREED)
- 				continue;
--			if (pool->dev)
--				dev_err(pool->dev, "%s %s, %p (corrupted)\n",
--					__func__, pool->name, retval);
--			else
--				pr_err("%s %s, %p (corrupted)\n",
--					__func__, pool->name, retval);
-+			dev_err(pool->dev, "%s %s, %p (corrupted)\n",
-+				__func__, pool->name, retval);
-=20
- 			/*
- 			 * Dump the first 4 bytes even if they are not
-@@ -411,12 +406,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
-r, dma_addr_t dma)
- 	page =3D pool_find_page(pool, dma);
- 	if (!page) {
- 		spin_unlock_irqrestore(&pool->lock, flags);
--		if (pool->dev)
--			dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
--				__func__, pool->name, vaddr, &dma);
--		else
--			pr_err("%s %s, %p/%pad (bad dma)\n",
--			       __func__, pool->name, vaddr, &dma);
-+		dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
-+			__func__, pool->name, vaddr, &dma);
- 		return;
- 	}
-=20
-@@ -426,12 +417,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
-r, dma_addr_t dma)
- #ifdef	DMAPOOL_DEBUG
- 	if ((dma - page->dma) !=3D offset) {
- 		spin_unlock_irqrestore(&pool->lock, flags);
--		if (pool->dev)
--			dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
--				__func__, pool->name, vaddr, &dma);
--		else
--			pr_err("%s %s, %p (bad vaddr)/%pad\n",
--			       __func__, pool->name, vaddr, &dma);
-+		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
-+			__func__, pool->name, vaddr, &dma);
- 		return;
- 	}
- 	{
-@@ -442,12 +429,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
-r, dma_addr_t dma)
- 				continue;
- 			}
- 			spin_unlock_irqrestore(&pool->lock, flags);
--			if (pool->dev)
--				dev_err(pool->dev, "%s %s, dma %pad already free\n",
--					__func__, pool->name, &dma);
--			else
--				pr_err("%s %s, dma %pad already free\n",
--				       __func__, pool->name, &dma);
-+			dev_err(pool->dev, "%s %s, dma %pad already free\n",
-+				__func__, pool->name, &dma);
- 			return;
- 		}
- 	}
---=20
-2.30.2
+ unmap_out:
+ 	erofs_unmap_metabuf(&m.map->buf);
+-
+-out:
+ 	erofs_dbg("%s, m_la %llu m_pa %llu m_llen %llu m_plen %llu m_flags 0%o",
+ 		  __func__, map->m_la, map->m_pa,
+ 		  map->m_llen, map->m_plen, map->m_flags);
+-
+ 	return err;
+ }
+ 
+-- 
+2.24.4
 
