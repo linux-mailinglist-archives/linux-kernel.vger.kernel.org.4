@@ -2,92 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9FB64357B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EC6643582
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbiLEUUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S233231AbiLEUUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiLEUUC (ORCPT
+        with ESMTP id S230228AbiLEUUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:20:02 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A778B23EB5;
-        Mon,  5 Dec 2022 12:20:01 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id bj12so1173717ejb.13;
-        Mon, 05 Dec 2022 12:20:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TV3EVJDFpv4jOhLs+2U0Y+CL7NCFB0EHmk1Lgv928eY=;
-        b=BSQJhsS3OA+Ovo0B4IA5Je8a9KnMZOgilgB96Hqy83RmfZIu8I/3bF8NuJD4Bees1s
-         LZ56j4nj5Z3SUuvqOJ+MuopONKJCBSwTalZH2rU8+JNhYeJ5QoyCTotj47BN/86AIyny
-         mK69ky+rSmdHF5AWDgv12DToeZ+qqiDOEilVD3ULnKBahQzA8VfmEnEo4SMAGS25VIR9
-         S/KW6AExvmAGyNWusrzTVOsdaviAT2WIG7SidYuCvZDCPuEVfqIw7ZjtB2JTvsfqWgOm
-         6yh6cZ5ewu4GraN+COcaZVrYgTsdfedbiPMdz7yXok3Ood+meGLxZle6rUNQBwdooxmV
-         1PjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TV3EVJDFpv4jOhLs+2U0Y+CL7NCFB0EHmk1Lgv928eY=;
-        b=Kvg/bwnXwyxPwSzRE9cz9cfHpoO6HWqAm8O4jvKSFywyGEhTH+es0iA5Mc4OLrh+DX
-         dPUsjvxDVmZgCA2gDvBoO5+YNI7dYj2V4qQqr98y7VXh/vq2DnzJ92z0Pa2uGCpnchCm
-         m62KIKul3bXN4lMHiWUWfm+jUWtfSZ5PPIfjyt8ctp/+e4BAFhgpmnBvFEDrcPz91fGy
-         Npd9nQN19UGkhR1Q6EaAWJE3xycdNgXrfCO7nk7a6J4NbwKEUylYAfYd2NN2Wg7NJuoo
-         kdVX8H4lPIO/04I3hCtqlWdAbi6kpbCVcaSrTaFCRh1ENkNjoN0zlqht81T4OR/AhFX1
-         f05w==
-X-Gm-Message-State: ANoB5plfuaVdzPR4cEs/f3LPZK9Bp4ErxBDeKOjYUBS192MTVUloNFL5
-        lO4PmKwekYWW3qTip5EDSPNSt4FWIim3Uw==
-X-Google-Smtp-Source: AA0mqf4ItSWy6T3/K9bcouoUMH6PqWFkMCl6j7AE3eINXvaqYbYe9sBm4iEB2h+5BCwvs63xemtfOQ==
-X-Received: by 2002:a17:906:99cb:b0:7bb:7dda:7d3c with SMTP id s11-20020a17090699cb00b007bb7dda7d3cmr22532235ejn.182.1670271600173;
-        Mon, 05 Dec 2022 12:20:00 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id o3-20020a170906768300b007c099174a12sm6718941ejm.178.2022.12.05.12.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 12:19:59 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 1/5] clk: sunxi-ng: Remove duplicate ARCH_SUNXI dependencies
-Date:   Mon, 05 Dec 2022 21:19:58 +0100
-Message-ID: <13153056.uLZWGnKmhe@kista>
-In-Reply-To: <20221126191319.6404-2-samuel@sholland.org>
-References: <20221126191319.6404-1-samuel@sholland.org> <20221126191319.6404-2-samuel@sholland.org>
+        Mon, 5 Dec 2022 15:20:35 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B2624BFD;
+        Mon,  5 Dec 2022 12:20:34 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7ff329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ff:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 60CCD1EC0495;
+        Mon,  5 Dec 2022 21:20:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670271633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rzSa+Wsyy/7tHolsq+uIwTLK7rgEbXkeG0z5lGgrqQk=;
+        b=Wbp2YupO4ZJpe1PQtTQtkJMqQRAoJH2w2QLKQtwN14ditkcAImMfeVh2fNhqbQzUm8BnOZ
+        c7aqB/ibQd87InObtHHG+XrekM285qqAzm5evmz5XesqZoes8tghvuiOr3lGZJM6L5BLkx
+        VYAX0KvbAWYIs3+i1OAJUFmmON+6oKY=
+Date:   Mon, 5 Dec 2022 21:20:33 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kim Phillips <kim.phillips@amd.com>
+Cc:     x86@kernel.org, Babu Moger <Babu.Moger@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/7] x86/cpu: Define a scattered No Nested Data
+ Breakpoints feature bit
+Message-ID: <Y45SkWalmZJ/zB1j@zn.tnic>
+References: <20221201015003.295769-1-kim.phillips@amd.com>
+ <20221201015003.295769-2-kim.phillips@amd.com>
+ <Y43GpD9fgnOGNEcu@zn.tnic>
+ <53393726-5a8a-1a13-c620-32c65872278c@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <53393726-5a8a-1a13-c620-32c65872278c@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 26. november 2022 ob 20:13:15 CET je Samuel Holland napisal(a):
-> SUNXI_CCU already depends on ARCH_SUNXI, so adding the dependency to
-> individual SoC drivers is redundant.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+On Mon, Dec 05, 2022 at 11:32:01AM -0600, Kim Phillips wrote:
+> This is starting to get off-topic. 
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+What does that mean?
 
-Best regards,
-Jernej
+Are you saying I'm not allowed to ask why stuff is added?
 
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
