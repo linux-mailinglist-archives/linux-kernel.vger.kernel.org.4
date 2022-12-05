@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607CC6420DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 01:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8715E6420D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 01:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiLEAws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 19:52:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
+        id S230483AbiLEAv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 19:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiLEAwn (ORCPT
+        with ESMTP id S229529AbiLEAvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 19:52:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5141A1147D
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 16:51:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670201507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jyOn0zCqUHzr00gkE+WrihCChip5DaN83C5WKz94T9o=;
-        b=A+dBBL1B/EHpZlQ3rMH8QniN2FOrTCh5qvvAN6Qpr5u0hNOI4WuLxNPEAfjqhDkuW0+bm4
-        Z8B8amgvh45/4hjsCHcdv/c6jkb+2Ij/OdG//I5l0oq48oJn1cfLH6fVta+tMqhpOMKTh1
-        9L8iAqwhr/+Baoo6MNRfyILIta8xuQI=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-32-cIDA3Di8P-eEUcHpaE2Ybg-1; Sun, 04 Dec 2022 19:51:46 -0500
-X-MC-Unique: cIDA3Di8P-eEUcHpaE2Ybg-1
-Received: by mail-il1-f197.google.com with SMTP id h10-20020a056e021b8a00b00302671bb5fdso11059061ili.21
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 16:51:46 -0800 (PST)
+        Sun, 4 Dec 2022 19:51:55 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904441147F
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 16:51:53 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id cg5so10447990qtb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 16:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pTY2l+gjqfB9RBAkMQhNeterlNdKjU202ghxsWo7JAA=;
+        b=eWtMKpca6u53309Xb+1JRA0s3CGPDyUCyaLuDVcyQUosW1r9K/S2622XXUTZ9zf8B1
+         b0Hw6qk3aAig0bEJUj3wtr9zx+TZ1ow3R5LR6LKkLR+12U7f+wDDX7YWhTJQW3r2Z0N4
+         Y1ChWiyhdX24+WJT5RX86JXogacO6sIo/oXGmI2DyFx3z6OweYrHouWxmXrFOncExgyl
+         v3XbOIcW0EZfplSS0PkE5/Nwgixv5qvJ330v0UNkt/Yy5HxJlfF/xkYoubvm+bn2qN1C
+         FFqDNS+k5Wr3QRtqs5NWG3Lyfs8DTkDIAB/zzf6fLUT6eCtXsHepy02K47sxZ9j2JhMt
+         FgpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jyOn0zCqUHzr00gkE+WrihCChip5DaN83C5WKz94T9o=;
-        b=Msa7nQgbbvVkP2l4bCCJ3K/X9WqDwo7LxsdwU2kLa4NWaUUrKmloz94DhicB6o9oG9
-         8qRayyDfJow8zWO5e/+baYVgifPAgyMoNv0o9CNpYzVsoyu/VyJOFQFOOEOE8GZp7uQh
-         KjW6aOzX5/ByMegGfrnqAauu1C4vxkyKc0+lMy6bsog57+5y3vAIhWDSCbnoSDhjo9LM
-         Rlz7fW+jNEPnI0LLe30d+ndJqWKdqH6+OaAi88G22CCWd3kpv5SAtJy9q5tqdflgaiMK
-         qbShudEXFWun8xFGW4FLc6Ze3BAQ2nmY0RZiklOLxVeX03hANzLU76fA/wAM/avEqBkL
-         vhww==
-X-Gm-Message-State: ANoB5plO+ZGM5F+uX2LwO0UQ6renSm42vAEUbo8LFosJr8Mj5JwLVOjT
-        hzzKLshHzQhfXYM3ONhi8dV183BzD9WKXQiahCx+wGiOPTpPBFN4lLn8oP7t5+FXt++iXts0j9B
-        4MDH7wPFyyDJZKaX7j68S//8k
-X-Received: by 2002:a05:6602:2143:b0:6bc:6352:9853 with SMTP id y3-20020a056602214300b006bc63529853mr35427223ioy.65.1670201505084;
-        Sun, 04 Dec 2022 16:51:45 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6qBOm8mQO/x/Lw1rl0Iy6Xk4eFLp0sKfVqFatl9b10bhQP9TrpcKRN/3msQCFGy6Z8h84OCA==
-X-Received: by 2002:a05:6602:2143:b0:6bc:6352:9853 with SMTP id y3-20020a056602214300b006bc63529853mr35427215ioy.65.1670201504802;
-        Sun, 04 Dec 2022 16:51:44 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id h20-20020a056e020d5400b0030287ff00fesm4715510ilj.60.2022.12.04.16.51.43
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pTY2l+gjqfB9RBAkMQhNeterlNdKjU202ghxsWo7JAA=;
+        b=gq1ESows1HnpKmYYlOjTrVXYc1MAAs1rcTFikByihd68dOBQF3RmX1yBwxw0TuT9Kp
+         VqZvxGYpX8Jc8qDGoPW+k7fXRSmcqaBCSWDh9BpQe5Cnb46k5oFqdGmoPG4WtC+nekea
+         dLC/VJRR9xDdULqFRi5vyeQrIgiv6V2UU7ImMEpX3z+kcaqOPHgNntquLkXaWPIGkrQ4
+         VT9DSYO2hVU0DrguZybROsDsfW5OJIHHnKuyOP76frZAzKK8OtAT3STo0YDw1hd6CqbF
+         vryxoqxgdynDWno9DUskVU0GIZfQQlb7i+4pv4mxKqGH2y76t0L9Vsmwlr09dacyV8nG
+         Cnkg==
+X-Gm-Message-State: ANoB5pluYEaVEUyEUyW9WXn+HYt7YWkWpjlHAXylHl6Auq9IsRzsiyr5
+        0q4iKI7vw9e0lpBt0l4dAvyIqA==
+X-Google-Smtp-Source: AA0mqf7FH3twKpzV3XbhsCtS6L5iw9mLMcoJX/nFWX7DCzhg/0FdEF5ViLHrNlvHJ+DaihnUfi0QjA==
+X-Received: by 2002:ac8:4995:0:b0:3a6:a35e:8256 with SMTP id f21-20020ac84995000000b003a6a35e8256mr7681681qtq.636.1670201512383;
+        Sun, 04 Dec 2022 16:51:52 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id d18-20020ac847d2000000b003a611cb2a95sm1329245qtr.9.2022.12.04.16.51.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 16:51:44 -0800 (PST)
-Date:   Sun, 4 Dec 2022 17:51:42 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "mb@lab.how" <mb@lab.how>
-Cc:     airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        kraxel@redhat.com, kvm@vger.kernel.org, lersek@redhat.com,
-        linux-kernel@vger.kernel.org, tzimmermann@suse.de
-Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
-Message-ID: <20221204175142.658d5c37.alex.williamson@redhat.com>
-In-Reply-To: <CAEdEoBYXHq9cCzsbMYTpG1B41Yz=-QAjFx7bJDOnPanN5Tmo7A@mail.gmail.com>
-References: <CAEdEoBYXHq9cCzsbMYTpG1B41Yz=-QAjFx7bJDOnPanN5Tmo7A@mail.gmail.com>
-Organization: Red Hat
+        Sun, 04 Dec 2022 16:51:52 -0800 (PST)
+Date:   Sun, 4 Dec 2022 16:51:50 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Rui Wang <kernel@hev.cc>, Matthew Wilcox <willy@infradead.org>,
+        Guoqi Chen <chenguoqic@163.com>,
+        Huacai Chen <chenhuacai@loongson.cn>, Rui Wang <r@hev.cc>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] tmpfs: fix data loss from failed fallocate
+In-Reply-To: <5889e4e3-e054-7654-1436-8d2bcbefe3c6@google.com>
+Message-ID: <a5dac112-cf4b-7af-a33-f386e347fd38@google.com>
+References: <20221101032248.819360-1-kernel@hev.cc> <Y2KBovUHODJJ8ZnV@casper.infradead.org> <CAHirt9h2CrLhYML3XW=Vj4=BD5eVDoRAbULVGgNbEdYnAzwCzA@mail.gmail.com> <9984f58e-826-74c6-1cd4-65366cc01549@google.com>
+ <5889e4e3-e054-7654-1436-8d2bcbefe3c6@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,60 +75,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 3 Dec 2022 17:12:38 -0700
-"mb@lab.how" <mb@lab.how> wrote:
+Fix tmpfs data loss when the fallocate system call is interrupted by a
+signal, or fails for some other reason.  The partial folio handling in
+shmem_undo_range() forgot to consider this unfalloc case, and was liable
+to erase or truncate out data which had already been committed earlier.
 
-> Hi,
-> 
-> I hope it is ok to reply to this old thread.
+It turns out that none of the partial folio handling there is appropriate
+for the unfalloc case, which just wants to proceed to removal of whole
+folios: which find_get_entries() provides, even when partially covered.
 
-It is, but the only relic of the thread is the subject.  For reference,
-the latest version of this posted is here:
+Link: https://lore.kernel.org/linux-mm/33b85d82.7764.1842e9ab207.Coremail.chenguoqic@163.com/
+Fixes: b9a8a4195c7d ("truncate,shmem: Handle truncates that split large folios")
+Reported-by: Guoqi Chen <chenguoqic@163.com>
+Original-patch-by: Rui Wang <kernel@hev.cc>
+Cc: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+Cc: stable@vger.kernel.org # 5.17+
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
 
-https://lore.kernel.org/all/20220622140134.12763-4-tzimmermann@suse.de/
+ mm/shmem.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Which is committed as:
-
-d17378062079 ("vfio/pci: Remove console drivers")
-
-> Unfortunately, I found a
-> problem only now after upgrading to 6.0.
-> 
-> My setup has multiple GPUs (2), and I depend on EFIFB to have a working console.
-> pre-patch behavior, when I bind the vfio-pci to my secondary GPU both
-> the passthrough and the EFIFB keep working fine.
-> post-patch behavior, when I bind the vfio-pci to the secondary GPU,
-> the EFIFB disappears from the system, binding the console to the
-> "dummy console".
-> Whenever you try to access the terminal, you have the screen stuck in
-> whatever was the last buffer content, which gives the impression of
-> "freezing," but I can still type.
-> Everything else works, including the passthrough.
-
-This sounds like the call to aperture_remove_conflicting_pci_devices()
-is removing the conflicting driver itself rather than removing the
-device from the driver.  Is it not possible to unbind the GPU from
-efifb before binding the GPU to vfio-pci to effectively nullify the
-added call?
+--- 6.1-rc8/mm/shmem.c
++++ linux/mm/shmem.c
+@@ -948,6 +948,15 @@ static void shmem_undo_range(struct inod
+ 		index++;
+ 	}
  
-> I can only think about a few options:
-> 
-> - Is there a way to have EFIFB show up again? After all it looks like
-> the kernel has just abandoned it, but the buffer is still there. I
-> can't find a single message about the secondary card and EFIFB in
-> dmesg, but there's a message for the primary card and EFIFB.
-> - Can we have a boolean controlling the behavior of vfio-pci
-> altogether or at least controlling the behavior of vfio-pci for that
-> specific ID? I know there's already some option for vfio-pci and VGA
-> cards, would it be appropriate to attach this behavior to that option?
-
-I suppose we could have an opt-out module option on vfio-pci to skip
-the above call, but clearly it would be better if things worked by
-default.  We cannot make full use of GPUs with vfio-pci if they're
-still in use by host console drivers.  The intention was certainly to
-unbind the device from any low level drivers rather than disable use of
-a console driver entirely.  DRM/GPU folks, is that possibly an
-interface we could implement?  Thanks,
-
-Alex
-
++	/*
++	 * When undoing a failed fallocate, we want none of the partial folio
++	 * zeroing and splitting below, but shall want to truncate the whole
++	 * folio when !uptodate indicates that it was added by this fallocate,
++	 * even when [lstart, lend] covers only a part of the folio.
++	 */
++	if (unfalloc)
++		goto whole_folios;
++
+ 	same_folio = (lstart >> PAGE_SHIFT) == (lend >> PAGE_SHIFT);
+ 	folio = shmem_get_partial_folio(inode, lstart >> PAGE_SHIFT);
+ 	if (folio) {
+@@ -973,6 +982,8 @@ static void shmem_undo_range(struct inod
+ 		folio_put(folio);
+ 	}
+ 
++whole_folios:
++
+ 	index = start;
+ 	while (index < end) {
+ 		cond_resched();
