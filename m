@@ -2,204 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C407764270B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEB1642719
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiLELAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
+        id S231164AbiLELCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbiLEK7x (ORCPT
+        with ESMTP id S230353AbiLELCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 05:59:53 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F71D1A061
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:59:47 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so4893728ilt.9
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 02:59:47 -0800 (PST)
+        Mon, 5 Dec 2022 06:02:05 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE700F034
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:02:03 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id y16so18006595wrm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:02:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=50n9+I4ZxZRBd4Gzgxnr+F5t6glYKeTWrpBn2vhsZRE=;
+        b=k6LIQd5Iev9CRSssx9gOdJxTMz6B/GodnspKI9plJT4mnElcDfYL/C6O2GzZSQG4uJ
+         kZV8xkD0fGRN5PWuAqtrKW+FOq7Va24G6hgmtAmtVa9bzmEhHe2UqfjagkG7EC8jyNbN
+         GPC+MaUgIo8FSovEfpkMbBit5cKQjAzi7v8EvH7Zk+5SG9xuMujJCzjSL3+vP6PDs+7x
+         QC0DV55+7C6Nx5Fr7dFDrhGvgQw/4Xeqi6+MCNYCrGy1GrO9s5H6GRmHY6SiZmWd8jZ5
+         +Ge5s0T1GJTM4K4+uC29OEvM09ycL7f9KdrUq0Kak+zWvtd4oI0edjm+6k5Ym9e3GyQH
+         xrdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Q09y+0WVDGX3EBpuTWBRmc0Jup7UDTLHY2sj4+gc78=;
-        b=d5hmQK/zKt8u2rCJ2MgZH4TsFJgA9VpFfMD/MnushKLw44In4Bj8+yrmMw0LP8AQAS
-         kdgQbXPWb0d/JhmwYpAT5Q1oJ4IUjBVw8gzvD6ex/0Eu3cdjiKlR+JwOE07p9MgU4qWn
-         9pJVefLVYBanFPSHE8brqFTiLR6C2DBAZiCge8Qa4gF3ApseCtfHgFa9muXIq5oaKaZd
-         HmNoP6erotydbIvZzhRTO2pV7QXO8FsUldbEuaSSrgU8HdY/XOeL7ohbe6PKzC4ggBhF
-         AdBwQseCEwTId2V+0twNuaASomgOz0Fc4LOYc6nVzeHoxME7dneePI8BcUcecP6Ll/qj
-         h/oQ==
-X-Gm-Message-State: ANoB5pnxwG75TokdqXvPc4wxOHrKVCRT7Py5WzxoVOrBeDFQzfwe0EGP
-        U8RidarX021ucJtZeh3Exd/i9pdi4eN6FOiXCCVwFaOvG/VW
-X-Google-Smtp-Source: AA0mqf51eAsxUKc0FI3OkYWLu/krp5V35ijPsNojWum9HsEtozqxjO2eK/abruaXQKiKcAS2Ez0eTWfLXD9Mi28CP1/baNpX/jxA
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=50n9+I4ZxZRBd4Gzgxnr+F5t6glYKeTWrpBn2vhsZRE=;
+        b=OmtkJCrPFmf8bUoPZKAaZj6KkFqrg3AwgCaIjHqnNZIt2qBCkAtfW4t04h9Uvt3r48
+         QsmTVERAWjUescEAR2Ewyt9tcVwgYy4GfSEAR9qkVMm+kUcyiwgxoqrJsxDngRUYZ8qK
+         IgWkmtBVNVrGvownIna2oZwt/oBNesJ+FxOqNPXRSiRDrSekZVw2w3nqMAmIX7sha9Qq
+         UicNTbhLULcW+YSN2nEyo0xWvyEQjYYztaGI52Nr7k9+FFkGmly+fDktvZrsTFiaOYWx
+         eGa1qa8bCskhKhzANV4OWmzAktP+nhCV8Py0MZjdGgGSR8jyhVe8tSCkFWq0KJvR9lpg
+         kFSw==
+X-Gm-Message-State: ANoB5plXC/6HL4bkhIGzQhhKRBPjTEN8PfnJAGkIRrdztXQ7Bpl9cuwp
+        3BvTZYKgYup1B0bPbqgSn+I6vw==
+X-Google-Smtp-Source: AA0mqf6GC/DR99Gk2V2xSkqMAURWxlcI35iVbq9UMoouyXgZDMFQIevH6e6v28xtjFDFcu4GhmK56Q==
+X-Received: by 2002:adf:e305:0:b0:236:6089:cc5e with SMTP id b5-20020adfe305000000b002366089cc5emr40746437wrj.118.1670238122223;
+        Mon, 05 Dec 2022 03:02:02 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b003b47e75b401sm23742162wmq.37.2022.12.05.03.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 03:02:01 -0800 (PST)
+Date:   Mon, 5 Dec 2022 11:01:59 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+Message-ID: <20221205110159.nd5igwvsaj55jar7@airbuntu>
+References: <20221127141742.1644023-1-qyousef@layalina.io>
+ <20221127141742.1644023-4-qyousef@layalina.io>
+ <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
+ <20221203143323.w32boxa6asqvvdnp@airbuntu>
+ <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:884e:0:b0:6df:5f05:40b6 with SMTP id
- t14-20020a5d884e000000b006df5f0540b6mr19356583ios.74.1670237986714; Mon, 05
- Dec 2022 02:59:46 -0800 (PST)
-Date:   Mon, 05 Dec 2022 02:59:46 -0800
-In-Reply-To: <00000000000031714f05ee5b2257@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e37a4005ef129563@google.com>
-Subject: Re: [syzbot] possible deadlock in hfsplus_file_truncate
-From:   syzbot <syzbot+6030b3b1b9bf70e538c4@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 12/04/22 12:35, Vincent Guittot wrote:
+> On Sat, 3 Dec 2022 at 15:33, Qais Yousef <qyousef@layalina.io> wrote:
+> >
+> > On 12/02/22 15:57, Vincent Guittot wrote:
+> >
+> > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > > index 7c0dd57e562a..4bbbca85134b 100644
+> > > > --- a/kernel/sched/fair.c
+> > > > +++ b/kernel/sched/fair.c
+> > > > @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+> > > >          *   * Thermal pressure will impact all cpus in this perf domain
+> > > >          *     equally.
+> > > >          */
+> > > > -       if (sched_energy_enabled()) {
+> > > > +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+> > > >                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> > > > -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
+> > > > +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
+> > > >
+> > > >                 rq->cpu_capacity_inverted = 0;
+> > > >
+> > > > -               SCHED_WARN_ON(!rcu_read_lock_held());
+> > > > -
+> > > > -               for (; pd; pd = pd->next) {
+> > > > -                       struct cpumask *pd_span = perf_domain_span(pd);
+> > > > +               for_each_active_policy_safe(policy, policy_n) {
+> > >
+> > > So you are looping all cpufreq policy (and before the perf domain) in
+> > > the period load balance. That' really not something we should or want
+> > > to do
+> >
+> > Why is it not acceptable in the period load balance but acceptable in the hot
+> > wake up path in feec()? What's the difference?
+> 
+> This patch loops on all cpufreq policy in sched softirq, how can this
+> be sane ? and not only in eas mode but also in the default asymmetric
 
-HEAD commit:    0ba09b173387 Revert "mm: align larger anonymous mappings o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1517e983880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=6030b3b1b9bf70e538c4
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b4d2cb880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d90fc3880000
+Hmm I'm still puzzled. Why it's not sane to do it here but it's okay to do it
+in the wake up path in feec()?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9758ec2c06f4/disk-0ba09b17.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/06781dbfd581/vmlinux-0ba09b17.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3d44a22d15fa/bzImage-0ba09b17.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/57266b2eb2c9/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/5f557bd13d34/mount_2.gz
+AFAICT the number of cpufreq policies and perf domains have 1:1 mapping. In
+feec() we not only loop perf domains, but we go through each cpu of each domain
+to find max_spare_cap then compute_energy(). Which is more intensive.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6030b3b1b9bf70e538c4@syzkaller.appspotmail.com
+In worst case scenario where there's a perf domain for each cpu, then we'll
+loop through every CPU *and* compute energy its energy cost in the wake up
+path.
 
-loop0: detected capacity change from 0 to 1024
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc7-syzkaller-00211-g0ba09b173387 #0 Not tainted
-------------------------------------------------------
-syz-executor955/3635 is trying to acquire lock:
-ffff8880279780b0 (&tree->tree_lock){+.+.}-{3:3}, at: hfsplus_file_truncate+0x871/0xbb0 fs/hfsplus/extents.c:595
+Why it's deemed acceptable in wake up path which is more critical AFAIU but not
+period load balance which is expected to do more work? What am I missing?
 
-but task is already holding lock:
-ffff8880189a3708 (&HFSPLUS_I(inode)->extents_lock){+.+.}-{3:3}, at: hfsplus_file_truncate+0x280/0xbb0 fs/hfsplus/extents.c:576
+> performance  one.
+> 
+> This inverted detection doesn't look like the right way to fix your
+> problem IMO. That being said, i agree that I haven't made any other
+> proposal apart that I think that you should use a different rules for
+> task and for overutilized and part of your problem comes from this.
 
-which lock already depends on the new lock.
+We discussed this before; I need to revisit the thread but I can't see how
+overutilized different than task will fix the issue. They should be unified by
+design.
+
+I'm all ears if there's a simpler way to address the problem :-)
+
+The problem is that thermal pressure on big cpu is not important from
+uclamp perspective until it is in inversion state. It is quite common to have
+a system where the medium capacity is in 500 range. If the big is under thermal
+pressure that it drops to 800, then it is still a fitting CPU from uclamp
+perspective. Keep in mind uclamp_min is useful for tasks whose utilization is
+small So we need to be selective when thermal pressure is actually helping out
+or just creating unnecessary problems.
+
+The only other option I had in mind was to do the detection when we update the
+thermal_pressure in the topology code. But that didn't look better alternative
+to me.
+
+> 
+> Then this make eas and util_fits_cpu even more Arm specific and I
+
+What is the Arm specific part about it? Why it wouldn't work on non-Arm
+systems?
+
+> still hope to merge sched_asym_cpucapacity and asym_packing a some
+> levels because they looks  more and more similar but each side is
+> trying to add some SoC specific policy
+
+Oh, it seems Intel relies on asym_packing for their hybrid support approach?
+I think sched_asym_cpucapacity was designed to be generic. If I gathered
+correctly lack of support for SMT and inability to provide energy model outside
+of DT were some required extensions.
+
+To be honest, I personally think EAS can be useful on SMP systems and it would
+be nice to enable it outside of sched_asym_cpucapacity.
+
+I'm interested to hear more about this unification idea actually. If you feel
+a bit chatty to describe in more detail how do you see this being unified, that
+could be enlightening for some of us who work in this area :-)
 
 
-the existing dependency chain (in reverse order) is:
+Thanks!
 
--> #1 (&HFSPLUS_I(inode)->extents_lock){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       hfsplus_get_block+0x3a3/0x1560 fs/hfsplus/extents.c:260
-       block_read_full_folio+0x3b3/0xfa0 fs/buffer.c:2271
-       filemap_read_folio+0x187/0x7d0 mm/filemap.c:2407
-       do_read_cache_folio+0x2d3/0x790 mm/filemap.c:3534
-       do_read_cache_page mm/filemap.c:3576 [inline]
-       read_cache_page+0x56/0x270 mm/filemap.c:3585
-       read_mapping_page include/linux/pagemap.h:756 [inline]
-       __hfs_bnode_create+0x4d5/0x7f0 fs/hfsplus/bnode.c:440
-       hfsplus_bnode_find+0x23d/0xd80 fs/hfsplus/bnode.c:486
-       hfsplus_brec_find+0x145/0x520 fs/hfsplus/bfind.c:183
-       hfsplus_brec_read+0x27/0x100 fs/hfsplus/bfind.c:222
-       hfsplus_find_cat+0x168/0x6d0 fs/hfsplus/catalog.c:202
-       hfsplus_iget+0x402/0x630 fs/hfsplus/super.c:82
-       hfsplus_fill_super+0xc6a/0x1b50 fs/hfsplus/super.c:503
-       mount_bdev+0x26c/0x3a0 fs/super.c:1401
-       legacy_get_tree+0xea/0x180 fs/fs_context.c:610
-       vfs_get_tree+0x88/0x270 fs/super.c:1531
-       do_new_mount+0x289/0xad0 fs/namespace.c:3040
-       do_mount fs/namespace.c:3383 [inline]
-       __do_sys_mount fs/namespace.c:3591 [inline]
-       __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&tree->tree_lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       hfsplus_file_truncate+0x871/0xbb0 fs/hfsplus/extents.c:595
-       hfsplus_delete_inode+0x16d/0x210
-       hfsplus_unlink+0x4e2/0x7d0 fs/hfsplus/dir.c:405
-       hfsplus_rename+0xc3/0x1b0 fs/hfsplus/dir.c:547
-       vfs_rename+0xd53/0x1130 fs/namei.c:4779
-       do_renameat2+0xb53/0x1370 fs/namei.c:4930
-       __do_sys_rename fs/namei.c:4976 [inline]
-       __se_sys_rename fs/namei.c:4974 [inline]
-       __x64_sys_rename+0x82/0x90 fs/namei.c:4974
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&HFSPLUS_I(inode)->extents_lock);
-                               lock(&tree->tree_lock);
-                               lock(&HFSPLUS_I(inode)->extents_lock);
-  lock(&tree->tree_lock);
-
- *** DEADLOCK ***
-
-6 locks held by syz-executor955/3635:
- #0: ffff888075a6c460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
- #1: ffff8880189a2b80 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: lock_rename+0x182/0x1a0
- #2: ffff8880189a3240 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #2: ffff8880189a3240 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: lock_two_nondirectories+0xdd/0x130 fs/inode.c:1121
- #3: ffff8880189a3900 (&sb->s_type->i_mutex_key#15/4){+.+.}-{3:3}, at: vfs_rename+0x80a/0x1130 fs/namei.c:4749
- #4: ffff888027abb198 (&sbi->vh_mutex){+.+.}-{3:3}, at: hfsplus_unlink+0x135/0x7d0 fs/hfsplus/dir.c:370
- #5: ffff8880189a3708 (&HFSPLUS_I(inode)->extents_lock){+.+.}-{3:3}, at: hfsplus_file_truncate+0x280/0xbb0 fs/hfsplus/extents.c:576
-
-stack backtrace:
-CPU: 1 PID: 3635 Comm: syz-executor955 Not tainted 6.1.0-rc7-syzkaller-00211-g0ba09b173387 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- hfsplus_file_truncate+0x871/0xbb0 fs/hfsplus/extents.c:595
- hfsplus_delete_inode+0x16d/0x210
- hfsplus_unlink+0x4e2/0x7d0 fs/hfsplus/dir.c:405
- hfsplus_rename+0xc3/0x1b0 fs/hfsplus/dir.c:547
- vfs_rename+0xd53/0x1130 fs/namei.c:4779
- do_renameat2+0xb53/0x1370 fs/namei.c:4930
- __do_sys_rename fs/namei.c:4976 [inline]
- __se_sys_rename fs/namei.c:4974 [inline]
- __x64_sys_rename+0x82/0x90 fs/namei.c:4974
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f462a64f3f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f462a5da2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f462a64f3f9
-RDX: 0000000000000031 RSI: 00000000200001c0 RDI: 0000000020000180
-RBP: 00007f462a6d4798 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000000005fb R11: 0000000000000246 R12: 00007f462a6d4790
-R13: 736f706d6f636564 R14: 0030656c69662f2e R15: 0073756c70736668
- </TASK>
-
+--
+Qais Yousef
