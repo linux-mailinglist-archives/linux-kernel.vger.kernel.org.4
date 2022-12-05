@@ -2,192 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88580643117
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1906430FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiLETIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S232055AbiLETEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233178AbiLETIX (ORCPT
+        with ESMTP id S230035AbiLETEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:08:23 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59878E0E9;
-        Mon,  5 Dec 2022 11:08:21 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 7ac16176b1bff097; Mon, 5 Dec 2022 20:08:19 +0100
-Received: from kreacher.localnet (unknown [213.134.188.181])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 5 Dec 2022 14:04:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0664F017
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 11:04:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 0501A2801EA0;
-        Mon,  5 Dec 2022 20:08:18 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v1 1/5] ACPI: processor: perflib: Adjust white space
-Date:   Mon, 05 Dec 2022 20:03:30 +0100
-Message-ID: <13154277.uLZWGnKmhe@kreacher>
-In-Reply-To: <1836012.tdWV9SEqCh@kreacher>
-References: <1836012.tdWV9SEqCh@kreacher>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73018B811E6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A66C433D6;
+        Mon,  5 Dec 2022 19:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670267048;
+        bh=Yb0dClbFV8k9lVOuLWFdRLqaOmW9bC5EhWjjokQe8Fs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Us2EILCevfFxMVwmhFzbrtHf/fSeKlO6QmazjpUAvGcgVJ8otip6DVtOZDthkMayu
+         MBvMwjWVzM3Fw0ivm78UFH6Cy9+fD1H5usMVI9/vdJ78cagpK2AN63Wmh8TDVddp+2
+         EcMw8XoUBFf1L367xWWBMHSsT4oXNe9p1DQ55thMk3JuJ7OSjl8nSzwifDvEIRUddl
+         57Pr4JpvLfIosYhJgiCr8redeqbYovhKH4E0kyybkpkkJkvJ1yRp3WxQPRNT8nRboC
+         DJ1JVeSd2OBAdksImkla1IOyC3VbZjedwawN6Nrl6aSrie30EGqJpUX8dtuoUqZQNb
+         VVeTNjFqnXoQA==
+Date:   Mon, 5 Dec 2022 11:04:06 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     qixiaoyu1 <qxy65535@gmail.com>
+Cc:     xiongping1 <xiongping1@xiaomi.com>,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH 1/5] f2fs: record total data blocks allocated
+ since mount
+Message-ID: <Y45ApqnHXf1ierdg@google.com>
+References: <20221128085859.5295-1-qixiaoyu1@xiaomi.com>
+ <20221128085859.5295-2-qixiaoyu1@xiaomi.com>
+ <Y4VzmiShMvp87z3p@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.181
-X-CLIENT-HOSTNAME: 213.134.188.181
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddukeekrddukedunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudekuddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthht
- ohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4VzmiShMvp87z3p@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 11/28, Jaegeuk Kim wrote:
+> On 11/28, qixiaoyu1 wrote:
+> > From: xiongping1 <xiongping1@xiaomi.com>
+> > 
+> > Signed-off-by: xiongping1 <xiongping1@xiaomi.com>
+> > Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+> > ---
+> >  fs/f2fs/Kconfig     |  7 +++++++
+> >  fs/f2fs/Makefile    |  1 +
+> >  fs/f2fs/block_age.c | 28 ++++++++++++++++++++++++++++
+> >  fs/f2fs/debug.c     |  7 +++++++
+> >  fs/f2fs/f2fs.h      | 15 +++++++++++++++
+> >  fs/f2fs/segment.c   |  4 ++++
+> >  fs/f2fs/super.c     |  4 ++++
+> >  7 files changed, 66 insertions(+)
+> >  create mode 100644 fs/f2fs/block_age.c
+> > 
+> > diff --git a/fs/f2fs/Kconfig b/fs/f2fs/Kconfig
+> > index 03ef087537c7..84915f9c6bc8 100644
+> > --- a/fs/f2fs/Kconfig
+> > +++ b/fs/f2fs/Kconfig
+> > @@ -150,3 +150,10 @@ config F2FS_UNFAIR_RWSEM
+> >  	help
+> >  	  Use unfair rw_semaphore, if system configured IO priority by block
+> >  	  cgroup.
+> > +
+> > +config F2FS_FS_DATA_SEPARATION
+> > +	bool "F2FS hot/cold data separation feature"
+> > +	depends on F2FS_FS
+> > +	help
+> > +	  Enable data blocks separation according to block update frequency.
+> > +
+> > diff --git a/fs/f2fs/Makefile b/fs/f2fs/Makefile
+> > index 8a7322d229e4..70d8f0e23b46 100644
+> > --- a/fs/f2fs/Makefile
+> > +++ b/fs/f2fs/Makefile
+> > @@ -10,3 +10,4 @@ f2fs-$(CONFIG_F2FS_FS_POSIX_ACL) += acl.o
+> >  f2fs-$(CONFIG_FS_VERITY) += verity.o
+> >  f2fs-$(CONFIG_F2FS_FS_COMPRESSION) += compress.o
+> >  f2fs-$(CONFIG_F2FS_IOSTAT) += iostat.o
+> > +f2fs-$(CONFIG_F2FS_FS_DATA_SEPARATION) += block_age.o
+> > diff --git a/fs/f2fs/block_age.c b/fs/f2fs/block_age.c
+> > new file mode 100644
+> > index 000000000000..1e8711a03959
+> > --- /dev/null
+> > +++ b/fs/f2fs/block_age.c
+> > @@ -0,0 +1,28 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * fs/f2fs/block_age.c
+> > + *
+> > + * Copyright (c) 2022 xiaomi Co., Ltd.
+> > + *             http://www.xiaomi.com/
+> 
+> I don't think this is a right way, since it seems you copied lots of codes
+> from extent_cache.c which has another copyrights.
+> 
+> I'm thinking to integrate your extent_cache code into the original path in
+> order to keep the single code path for easy debugging. Stay tuned.
 
-Some inconsistent usage of white space in the ACPI processor performance
-library code causes that code to be somewhat harder to read that it
-would have been otherwise, so adjust the white space in there to
-address that.
+Hi,
 
-No expected functional impact.
+Could you please check this patch series?
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/processor_perflib.c |   35 +++++++++++++++--------------------
- 1 file changed, 15 insertions(+), 20 deletions(-)
-
-Index: linux-pm/drivers/acpi/processor_perflib.c
-===================================================================
---- linux-pm.orig/drivers/acpi/processor_perflib.c
-+++ linux-pm/drivers/acpi/processor_perflib.c
-@@ -142,6 +142,7 @@ int acpi_processor_get_bios_limit(int cp
- 	pr = per_cpu(processors, cpu);
- 	if (!pr || !pr->performance || !pr->performance->state_count)
- 		return -ENODEV;
-+
- 	*limit = pr->performance->states[pr->performance_platform_limit].
- 		core_frequency * 1000;
- 	return 0;
-@@ -201,8 +202,7 @@ static int acpi_processor_get_performanc
- 	}
- 
- 	pct = (union acpi_object *)buffer.pointer;
--	if (!pct || (pct->type != ACPI_TYPE_PACKAGE)
--	    || (pct->package.count != 2)) {
-+	if (!pct || (pct->type != ACPI_TYPE_PACKAGE) || (pct->package.count != 2)) {
- 		pr_err("Invalid _PCT data\n");
- 		result = -EFAULT;
- 		goto end;
-@@ -214,9 +214,9 @@ static int acpi_processor_get_performanc
- 
- 	obj = pct->package.elements[0];
- 
--	if ((obj.type != ACPI_TYPE_BUFFER)
--	    || (obj.buffer.length < sizeof(struct acpi_pct_register))
--	    || (obj.buffer.pointer == NULL)) {
-+	if ((obj.type != ACPI_TYPE_BUFFER) ||
-+	    (obj.buffer.length < sizeof(struct acpi_pct_register)) ||
-+	    (obj.buffer.pointer == NULL)) {
- 		pr_err("Invalid _PCT data (control_register)\n");
- 		result = -EFAULT;
- 		goto end;
-@@ -230,9 +230,9 @@ static int acpi_processor_get_performanc
- 
- 	obj = pct->package.elements[1];
- 
--	if ((obj.type != ACPI_TYPE_BUFFER)
--	    || (obj.buffer.length < sizeof(struct acpi_pct_register))
--	    || (obj.buffer.pointer == NULL)) {
-+	if ((obj.type != ACPI_TYPE_BUFFER) ||
-+	    (obj.buffer.length < sizeof(struct acpi_pct_register)) ||
-+	    (obj.buffer.pointer == NULL)) {
- 		pr_err("Invalid _PCT data (status_register)\n");
- 		result = -EFAULT;
- 		goto end;
-@@ -260,8 +260,8 @@ static void amd_fixup_frequency(struct a
- 	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
- 		return;
- 
--	if ((boot_cpu_data.x86 == 0x10 && boot_cpu_data.x86_model < 10)
--	    || boot_cpu_data.x86 == 0x11) {
-+	if ((boot_cpu_data.x86 == 0x10 && boot_cpu_data.x86_model < 10) ||
-+	    boot_cpu_data.x86 == 0x11) {
- 		rdmsr(MSR_AMD_PSTATE_DEF_BASE + index, lo, hi);
- 		/*
- 		 * MSR C001_0064+:
-@@ -353,8 +353,7 @@ static int acpi_processor_get_performanc
- 		 * Check that ACPI's u64 MHz will be valid as u32 KHz in cpufreq
- 		 */
- 		if (!px->core_frequency ||
--		    ((u32)(px->core_frequency * 1000) !=
--		     (px->core_frequency * 1000))) {
-+		    ((u32)(px->core_frequency * 1000) != (px->core_frequency * 1000))) {
- 			pr_err(FW_BUG
- 			       "Invalid BIOS _PSS frequency found for processor %d: 0x%llx MHz\n",
- 			       pr->id, px->core_frequency);
-@@ -499,7 +498,6 @@ int acpi_processor_notify_smm(struct mod
- 
- 	return 0;
- }
--
- EXPORT_SYMBOL(acpi_processor_notify_smm);
- 
- int acpi_processor_get_psd(acpi_handle handle, struct acpi_psd_package *pdomain)
-@@ -532,8 +530,7 @@ int acpi_processor_get_psd(acpi_handle h
- 	state.length = sizeof(struct acpi_psd_package);
- 	state.pointer = pdomain;
- 
--	status = acpi_extract_package(&(psd->package.elements[0]),
--		&format, &state);
-+	status = acpi_extract_package(&(psd->package.elements[0]), &format, &state);
- 	if (ACPI_FAILURE(status)) {
- 		pr_err("Invalid _PSD data\n");
- 		result = -EFAULT;
-@@ -716,9 +713,8 @@ err_out:
- }
- EXPORT_SYMBOL(acpi_processor_preregister_performance);
- 
--int
--acpi_processor_register_performance(struct acpi_processor_performance
--				    *performance, unsigned int cpu)
-+int acpi_processor_register_performance(struct acpi_processor_performance
-+					*performance, unsigned int cpu)
- {
- 	struct acpi_processor *pr;
- 
-@@ -751,7 +747,6 @@ acpi_processor_register_performance(stru
- 	mutex_unlock(&performance_mutex);
- 	return 0;
- }
--
- EXPORT_SYMBOL(acpi_processor_register_performance);
- 
- void acpi_processor_unregister_performance(unsigned int cpu)
-@@ -768,11 +763,11 @@ void acpi_processor_unregister_performan
- 
- 	if (pr->performance)
- 		kfree(pr->performance->states);
-+
- 	pr->performance = NULL;
- 
- 	mutex_unlock(&performance_mutex);
- 
- 	return;
- }
--
- EXPORT_SYMBOL(acpi_processor_unregister_performance);
+https://lore.kernel.org/linux-f2fs-devel/20221205185433.3479699-1-jaegeuk@kernel.org/T/#t
 
 
+Thanks,
 
+> 
+> > + */
+> > +#include <linux/fs.h>
+> > +#include <linux/f2fs_fs.h>
+> > +
+> > +#include "f2fs.h"
+> > +#include "segment.h"
+> > +
+> > +static inline void f2fs_inc_data_block_alloc(struct f2fs_sb_info *sbi)
+> > +{
+> > +	atomic64_inc(&sbi->total_data_alloc);
+> > +}
+> > +
+> > +void f2fs_init_block_age_info(struct f2fs_sb_info *sbi)
+> > +{
+> > +	atomic64_set(&sbi->total_data_alloc, 0);
+> > +}
+> > +
+> > +void f2fs_inc_block_alloc_count(struct f2fs_sb_info *sbi, int type)
+> > +{
+> > +	if (IS_DATASEG(type))
+> > +		f2fs_inc_data_block_alloc(sbi);
+> > +}
+> > diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+> > index a216dcdf6941..d24abdac20bb 100644
+> > --- a/fs/f2fs/debug.c
+> > +++ b/fs/f2fs/debug.c
+> > @@ -81,6 +81,9 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+> >  	si->ext_tree = atomic_read(&sbi->total_ext_tree);
+> >  	si->zombie_tree = atomic_read(&sbi->total_zombie_tree);
+> >  	si->ext_node = atomic_read(&sbi->total_ext_node);
+> > +#ifdef CONFIG_F2FS_FS_DATA_SEPARATION
+> > +	si->total_data_blocks_alloc = atomic64_read(&sbi->total_data_alloc);
+> > +#endif
+> >  	si->ndirty_node = get_pages(sbi, F2FS_DIRTY_NODES);
+> >  	si->ndirty_dent = get_pages(sbi, F2FS_DIRTY_DENTS);
+> >  	si->ndirty_meta = get_pages(sbi, F2FS_DIRTY_META);
+> > @@ -373,6 +376,10 @@ static int stat_show(struct seq_file *s, void *v)
+> >  			seq_printf(s, "Utilization: %u%% (%u valid blocks)\n",
+> >  				si->utilization, si->valid_count);
+> >  
+> > +#ifdef CONFIG_F2FS_FS_DATA_SEPARATION
+> > +		seq_printf(s, "  - Data Block Allocated: %llu\n",
+> > +			   si->total_data_blocks_alloc);
+> > +#endif
+> >  		seq_printf(s, "  - Node: %u (Inode: %u, ",
+> >  			   si->valid_node_count, si->valid_inode_count);
+> >  		seq_printf(s, "Other: %u)\n  - Data: %u\n",
+> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > index e6355a5683b7..686f09846de4 100644
+> > --- a/fs/f2fs/f2fs.h
+> > +++ b/fs/f2fs/f2fs.h
+> > @@ -1807,6 +1807,10 @@ struct f2fs_sb_info {
+> >  	u64 sectors_written_start;
+> >  	u64 kbytes_written;
+> >  
+> > +#ifdef CONFIG_F2FS_FS_DATA_SEPARATION
+> > +	atomic64_t total_data_alloc;
+> > +#endif
+> > +
+> >  	/* Reference to checksum algorithm driver via cryptoapi */
+> >  	struct crypto_shash *s_chksum_driver;
+> >  
+> > @@ -3858,6 +3862,9 @@ struct f2fs_stat_info {
+> >  	int main_area_segs, main_area_sections, main_area_zones;
+> >  	unsigned long long hit_largest, hit_cached, hit_rbtree;
+> >  	unsigned long long hit_total, total_ext;
+> > +#ifdef CONFIG_F2FS_FS_DATA_SEPARATION
+> > +	unsigned long long total_data_blocks_alloc;
+> > +#endif
+> >  	int ext_tree, zombie_tree, ext_node;
+> >  	int ndirty_node, ndirty_dent, ndirty_meta, ndirty_imeta;
+> >  	int ndirty_data, ndirty_qdata;
+> > @@ -4166,6 +4173,14 @@ void f2fs_init_extent_cache_info(struct f2fs_sb_info *sbi);
+> >  int __init f2fs_create_extent_cache(void);
+> >  void f2fs_destroy_extent_cache(void);
+> >  
+> > +#ifdef CONFIG_F2FS_FS_DATA_SEPARATION
+> > +/*
+> > + * block_age.c
+> > + */
+> > +void f2fs_init_block_age_info(struct f2fs_sb_info *sbi);
+> > +void f2fs_inc_block_alloc_count(struct f2fs_sb_info *sbi, int type);
+> > +#endif
+> > +
+> >  /*
+> >   * sysfs.c
+> >   */
+> > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> > index acf3d3fa4363..0cf022fd3560 100644
+> > --- a/fs/f2fs/segment.c
+> > +++ b/fs/f2fs/segment.c
+> > @@ -3280,6 +3280,10 @@ void f2fs_allocate_data_block(struct f2fs_sb_info *sbi, struct page *page,
+> >  	locate_dirty_segment(sbi, GET_SEGNO(sbi, old_blkaddr));
+> >  	locate_dirty_segment(sbi, GET_SEGNO(sbi, *new_blkaddr));
+> >  
+> > +#ifdef CONFIG_F2FS_FS_DATA_SEPARATION
+> > +	f2fs_inc_block_alloc_count(sbi, type);
+> > +#endif
+> > +
+> >  	up_write(&sit_i->sentry_lock);
+> >  
+> >  	if (page && IS_NODESEG(type)) {
+> > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> > index 3834ead04620..bf799d92282a 100644
+> > --- a/fs/f2fs/super.c
+> > +++ b/fs/f2fs/super.c
+> > @@ -4475,6 +4475,10 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+> >  
+> >  	f2fs_join_shrinker(sbi);
+> >  
+> > +#ifdef CONFIG_F2FS_FS_DATA_SEPARATION
+> > +	f2fs_init_block_age_info(sbi);
+> > +#endif
+> > +
+> >  	f2fs_tuning_parameters(sbi);
+> >  
+> >  	f2fs_notice(sbi, "Mounted with checkpoint version = %llx",
+> > -- 
+> > 2.36.1
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
