@@ -2,103 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8AE642410
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C082642411
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiLEIFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
+        id S231822AbiLEIGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:06:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiLEIE6 (ORCPT
+        with ESMTP id S231393AbiLEIGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:04:58 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FE115FD1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:04:49 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B8E091FE3B;
-        Mon,  5 Dec 2022 08:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670227487; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yMianIWALJeEq31IWXfqs8+ymd+X0ZqlQ5HivhuglU8=;
-        b=O0TiN9vK31fNPKt8r4pZQ5mbZFzXECyGM25P8HGOrmC1GzxFUTz26b283hzdUJXe6TMtL1
-        p9MEznH483Zd26pK9SovhTX/vXVV4jZsh/PYocav+3+FiW/5NUrsXvqO6vxXK0JE2UszWN
-        BZMPgguXzGB16djGyLpqfVMSt1Qer5U=
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 7A6751348F;
-        Mon,  5 Dec 2022 08:04:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id px+rHB+mjWNTNAAAGKfGzw
-        (envelope-from <jgross@suse.com>); Mon, 05 Dec 2022 08:04:47 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     kirill@shutemov.name, Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH 2/2] x86/mtrr: make message for disabled MTRRs more descriptive
-Date:   Mon,  5 Dec 2022 09:04:33 +0100
-Message-Id: <20221205080433.16643-3-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221205080433.16643-1-jgross@suse.com>
-References: <20221205080433.16643-1-jgross@suse.com>
+        Mon, 5 Dec 2022 03:06:48 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA0C5581
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:06:45 -0800 (PST)
+Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NQbhh2yzrzRpmQ;
+        Mon,  5 Dec 2022 16:05:56 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 5 Dec
+ 2022 16:06:43 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <zbr@ioremap.net>, <gregkh@linuxfoundation.org>
+Subject: [PATCH] w1: fix deadloop in __w1_remove_master_device()
+Date:   Mon, 5 Dec 2022 16:04:34 +0800
+Message-ID: <20221205080434.3149205-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of just saying "Disabled" when MTRRs are disabled for any
-reason, tell what is disabled and why.
+I got a deadloop report while doing device(ds2482) add/remove test:
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
+  [  162.241881] w1_master_driver w1_bus_master1: Waiting for w1_bus_master1 to become free: refcnt=1.
+  [  163.272251] w1_master_driver w1_bus_master1: Waiting for w1_bus_master1 to become free: refcnt=1.
+  [  164.296157] w1_master_driver w1_bus_master1: Waiting for w1_bus_master1 to become free: refcnt=1.
+  ...
+
+__w1_remove_master_device() can't return, because the dev->refcnt is not zero.
+
+w1_add_master_device()			|
+  w1_alloc_dev()			|
+    atomic_set(&dev->refcnt, 2)		|
+  kthread_run()				|
+					|__w1_remove_master_device()
+					|  kthread_stop()
+  // KTHREAD_SHOULD_STOP is set,	|
+  // threadfn(w1_process) won't be	|
+  // called.				|
+  kthread()				|
+					|  // refcnt will never be 0, it's deadloop.
+					|  while (atomic_read(&dev->refcnt)) {...}
+
+After calling w1_add_master_device(), w1_process() is not really
+invoked, before w1_process() starting, if kthread_stop() is called
+in __w1_remove_master_device(), w1_process() will never be called,
+the refcnt can not be decreased, then it causes deadloop in remove
+function because of non-zero refcnt.
+
+We need to make sure w1_process() is really started, so move the
+set refcnt into w1_process() to fix this problem.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- arch/x86/kernel/cpu/mtrr/mtrr.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/w1/w1.c     | 2 ++
+ drivers/w1/w1_int.c | 5 ++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 6432abccbf56..94d5739758ba 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -630,6 +630,7 @@ int __initdata changed_by_mtrr_cleanup;
- void __init mtrr_bp_init(void)
- {
- 	u32 phys_addr;
-+	const char *why = "(not available)";
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index f2ae2e563dc5..8b35fae4cd61 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -1166,6 +1166,8 @@ int w1_process(void *data)
+ 	/* remainder if it woke up early */
+ 	unsigned long jremain = 0;
  
- 	phys_addr = 32;
++	atomic_inc(&dev->refcnt);
++
+ 	for (;;) {
  
-@@ -705,12 +706,13 @@ void __init mtrr_bp_init(void)
- 				changed_by_mtrr_cleanup = mtrr_cleanup(phys_addr);
- 			} else {
- 				mtrr_if = NULL;
-+				why = "by BIOS";
- 			}
- 		}
- 	}
+ 		if (!jremain && dev->search_count) {
+diff --git a/drivers/w1/w1_int.c b/drivers/w1/w1_int.c
+index b3e1792d9c49..3a71c5eb2f83 100644
+--- a/drivers/w1/w1_int.c
++++ b/drivers/w1/w1_int.c
+@@ -51,10 +51,9 @@ static struct w1_master *w1_alloc_dev(u32 id, int slave_count, int slave_ttl,
+ 	dev->search_count	= w1_search_count;
+ 	dev->enable_pullup	= w1_enable_pullup;
  
- 	if (!mtrr_enabled())
--		pr_info("Disabled\n");
-+		pr_info("MTRRs disabled %s\n", why);
- }
+-	/* 1 for w1_process to decrement
+-	 * 1 for __w1_remove_master_device to decrement
++	/* For __w1_remove_master_device to decrement
+ 	 */
+-	atomic_set(&dev->refcnt, 2);
++	atomic_set(&dev->refcnt, 1);
  
- /**
+ 	INIT_LIST_HEAD(&dev->slist);
+ 	INIT_LIST_HEAD(&dev->async_list);
 -- 
-2.35.3
+2.25.1
 
