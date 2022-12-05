@@ -2,116 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F2C643514
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D6264351C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiLET6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S231602AbiLET70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233480AbiLET5x (ORCPT
+        with ESMTP id S231375AbiLET7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:57:53 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6905E8C;
-        Mon,  5 Dec 2022 11:57:44 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5JlTO4009094;
-        Mon, 5 Dec 2022 19:57:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=mJaizdTflZ9fNDW50Jnh2x2j8AnArQaBZlh7CenVXIU=;
- b=QEFfCGgSRTDBctF+TGpLaVAntVvpd+WxphFrrUTTGGxpoFFppR5MOmc0sgdSMAM+VR6P
- gbg9rCj+UftPypn35FAJ3tuXGpYOyLdxxFlCBdz1UsVVtM8oz8Yh+6SlOG9+zYUGDbx8
- XKDcLN4kJw7SHmiVDxXjy+cN/zTYFa325tzJHVTwT98TtlHRlgk+fbIRZte020eshRHM
- 7YwlbPqDh2aaJ75/HKmwjcOK+dY+COS3YX7DXAsglFx6xxvb0HDVF7Hq+vvUBJTPoeBI
- jI3KRQriuP+9PyjCxWoO45vsKZT1l8dChwsbKQaQXN4ILpHafdLMeSFYs/SNGRahn59W 7A== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7xp8n4n9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 19:57:30 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B5JvT0p004254
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Dec 2022 19:57:29 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 5 Dec 2022 11:57:29 -0800
-Date:   Mon, 5 Dec 2022 11:57:28 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>,
-        <andersson@kernel.org>, <vkoul@kernel.org>,
-        <quic_cang@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-scsi@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <ahalaney@redhat.com>, <abel.vesa@linaro.org>,
-        <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <bvanassche@acm.org>
-Subject: Re: [PATCH v4 16/23] scsi: ufs: ufs-qcom: Use dev_err_probe() for
- printing probe error
-Message-ID: <20221205195728.GE15334@asutoshd-linux1.qualcomm.com>
-References: <20221201174328.870152-1-manivannan.sadhasivam@linaro.org>
- <20221201174328.870152-17-manivannan.sadhasivam@linaro.org>
+        Mon, 5 Dec 2022 14:59:07 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE02C6;
+        Mon,  5 Dec 2022 11:59:05 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so14776254fac.2;
+        Mon, 05 Dec 2022 11:59:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jEAnu7uzdyKxi6uACyBWEuDTuRvgDtHrA+B4q7yunNI=;
+        b=D+Lui1HyMAxPV19DwKn6gzMS4TiVuLqjFN3SK24q6j3RGSrCbn0Iu13/DTK6dUBaPt
+         o2lBaFVCFpdKAXYq2RNkHuVN2czGtqrSEbVK4Q5yFYV0GeJ13OG3tuCkonjGBq8vBkWZ
+         06j2b/DrnoR4TETqtiDTZytVxGyppWt5O9cPBeTEABgyUHJ2bMRkrKiMk8p/d6SiIKha
+         zkYIk3/i815zDvcVhpyziO0REDM93fuARw44O8MoFkT3dpUYbmBhHtxxrtzVjkkLMQ48
+         n5oEa6G0OCbkZJLUHv9D/aSgHepdr3d5M0tlKnFf2nyRUej+jOGffrIt627hdqkK4SVu
+         cAEA==
+X-Gm-Message-State: ANoB5pmm2AVBtGu1chP501r9KZMlmtYygEBzn9raInfGNyaZBw0V1BKf
+        a+KZpCm0lgduEETbVTO6aLo6xgQNmw==
+X-Google-Smtp-Source: AA0mqf7fMiFCbI8Ep2v3J4RDnUbCcrXNHnij3aDhkcB8B5lNYqwmPndSfV/2xe9bU+mWpxxsCJnq7w==
+X-Received: by 2002:a05:6870:9a8c:b0:144:9227:7292 with SMTP id hp12-20020a0568709a8c00b0014492277292mr3959634oab.10.1670270343555;
+        Mon, 05 Dec 2022 11:59:03 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c14-20020a9d784e000000b0066e83a74b99sm5256954otm.35.2022.12.05.11.59.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 11:59:03 -0800 (PST)
+Received: (nullmailer pid 2494946 invoked by uid 1000);
+        Mon, 05 Dec 2022 19:59:02 -0000
+Date:   Mon, 5 Dec 2022 13:59:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     andersson@kernel.org, quic_abhinavk@quicinc.com,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        robdclark@gmail.com, swboyd@chromium.org, david@ixit.cz,
+        krzysztof.kozlowski+dt@linaro.org, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, devicetree@vger.kernel.org,
+        konrad.dybcio@somainline.org, daniel@ffwll.ch,
+        freedreno@lists.freedesktop.org, agross@kernel.org,
+        airlied@gmail.com, dianders@chromium.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v4 05/18] dt-bindings: msm: dsi-controller-main: Document
+ clocks on a per compatible basis
+Message-ID: <167027034166.2494886.3657636401660788311.robh@kernel.org>
+References: <20221125123638.823261-1-bryan.odonoghue@linaro.org>
+ <20221125123638.823261-6-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221201174328.870152-17-manivannan.sadhasivam@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Yg0jTjvMsd87H4FEoFDgJEhuVSR6blnf
-X-Proofpoint-GUID: Yg0jTjvMsd87H4FEoFDgJEhuVSR6blnf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=999 malwarescore=0 bulkscore=0
- impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2212050166
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221125123638.823261-6-bryan.odonoghue@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01 2022 at 09:45 -0800, Manivannan Sadhasivam wrote:
->Make use of dev_err_probe() for printing the probe error.
->
->Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
->Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->---
-> drivers/ufs/host/ufs-qcom.c | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->
-Reviewed-by: Asutosh Das <quic_asutoshd@quicinc.com>
 
+On Fri, 25 Nov 2022 12:36:25 +0000, Bryan O'Donoghue wrote:
+> Each compatible has a different set of clocks which are associated with it.
+> Add in the list of clocks for each compatible.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  .../display/msm/dsi-controller-main.yaml      | 152 ++++++++++++++++--
+>  1 file changed, 142 insertions(+), 10 deletions(-)
+> 
 
-
->diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
->index 8bb0f4415f1a..38e2ed749d75 100644
->--- a/drivers/ufs/host/ufs-qcom.c
->+++ b/drivers/ufs/host/ufs-qcom.c
->@@ -1441,9 +1441,9 @@ static int ufs_qcom_probe(struct platform_device *pdev)
-> 	/* Perform generic probe */
-> 	err = ufshcd_pltfrm_init(pdev, &ufs_hba_qcom_vops);
-> 	if (err)
->-		dev_err(dev, "ufshcd_pltfrm_init() failed %d\n", err);
->+		return dev_err_probe(dev, err, "ufshcd_pltfrm_init() failed\n");
->
->-	return err;
->+	return 0;
-> }
->
-> /**
->-- 
->2.25.1
->
+Acked-by: Rob Herring <robh@kernel.org>
