@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F07664371B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F14643722
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiLEVmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S233960AbiLEVma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiLEVlw (ORCPT
+        with ESMTP id S233804AbiLEVlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:41:52 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A4D27904;
+        Mon, 5 Dec 2022 16:41:53 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262AC2B619;
         Mon,  5 Dec 2022 13:41:52 -0800 (PST)
 Date:   Mon, 05 Dec 2022 21:41:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GHAaAKFaSzlMYMVDJBVPWGjBBLmEsISs8adZvUKpx6k=;
-        b=C205CIM9U7BvJzoGZ84nF+0r8gfs0W0vegXvayO1eaz37CYFOv+PwKQ8Fs5iXQ9bnGJLHC
-        jDc6FLFqxFEcdUVrstaSK163U3K6Frp5+zNqaNEQ5ByAGZYOihL1mKUrAlpuTb5SIuV62e
-        9DnmgeVbR7Enmgdw1muiMb+3pgDp7VKGrg/mojv8fUNLpLXWiHlajDc4XMIZ942Ogq5rJf
-        X7dnUDURRJ45RDBiGAXQtIK/7LzLa4EyfGDiyrWJPvQvJgk52GqOj8jMSZoEbvbXN9uL+d
-        htoUCxzbxORQKOlQHRGfDP0WwcBfF9BrMmo+osuLdKe+3g3u+MUp9hQ1smZPjw==
+        bh=O0qgrS9EuulO5jnl+4Zw1LlIhN5IGgt9g2X5sKFKWZM=;
+        b=DKY4HWh9oBZiwHE6OlTu5outU5/kL+kZYhcubsTwwOCEGcdwwAPZgNFp7FR4lUqtbhGzC/
+        k8eLZ/hMdp4BmrkJIa/eEGdmexant14NwjYBI55KUgCUItOMjTBADcAQYQ1rveMaJm8wd5
+        jEYhmgfac6Vah7Jxw7WNY/QW0hw2BTgcuAiuIKoaszcLhyWwedzvxN0vdSQIBevmtW3qzP
+        ZkQvIv5pqD/WVj9AGsBp2EiBtm2qjlvoeM4pT/6Qtwjkeox+rtwwd5NahnuEr6NT467u2z
+        4AYaVG0UflWZZmyqTEz5cdiZ/+jJ9TQxrYgsvTLN1t+bnvhpq5rzLxbbTd0YCQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1670276507;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,24 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GHAaAKFaSzlMYMVDJBVPWGjBBLmEsISs8adZvUKpx6k=;
-        b=WQbPvXp1J2t0sriRYmfi1ZofW7Zwx1Pg0XhQEz3o+vB3Q84OAm7htJsnkF+2/Dw3bu9OtY
-        /vMNj5HWXCIpvWAw==
+        bh=O0qgrS9EuulO5jnl+4Zw1LlIhN5IGgt9g2X5sKFKWZM=;
+        b=apJkme7oZT2cX6PYJrI/0bXW0zJqCnuvE8QL5d9S8vCLUCFThjPlVuVARsXQivPItYve0p
+        QXIBYqyT88qsAMCA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] x86/apic/msi: Enable MSI_FLAG_PCI_MSIX_ALLOC_DYN
+Subject: [tip: irq/core] PCI/MSI: Provide post-enable dynamic allocation
+ interfaces for MSI-X
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Kevin Tian <kevin.tian@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Marc Zyngier <maz@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221124232326.787373104@linutronix.de>
-References: <20221124232326.787373104@linutronix.de>
+In-Reply-To: <20211126232735.547996838@linutronix.de>
+References: <20211126232735.547996838@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <167027650732.4906.2697847868957858271.tip-bot2@tip-bot2>
+Message-ID: <167027650746.4906.2615383258348029502.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,39 +69,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     486254ad967dbef37fd797dd296fe69b465aa0f9
-Gitweb:        https://git.kernel.org/tip/486254ad967dbef37fd797dd296fe69b465aa0f9
+Commit-ID:     34026364df8eca05ee32e706a2c014511a19af02
+Gitweb:        https://git.kernel.org/tip/34026364df8eca05ee32e706a2c014511a19af02
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 25 Nov 2022 00:26:26 +01:00
+AuthorDate:    Fri, 25 Nov 2022 00:26:24 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 05 Dec 2022 22:22:34 +01:00
 
-x86/apic/msi: Enable MSI_FLAG_PCI_MSIX_ALLOC_DYN
+PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X
 
-x86 MSI irqdomains can handle MSI-X allocation post MSI-X enable just out
-of the box - on the vector domain and on the remapping domains,
+MSI-X vectors can be allocated after the initial MSI-X enablement, but this
+needs explicit support of the underlying interrupt domains.
 
-Add the feature flag to the supported feature list
+Provide a function to query the ability and functions to allocate/free
+individual vectors post-enable.
+
+The allocation can either request a specific index in the MSI-X table or
+with the index argument MSI_ANY_INDEX it allocates the next free vector.
+
+The return value is a struct msi_map which on success contains both index
+and the Linux interrupt number. In case of failure index is negative and
+the Linux interrupt number is 0.
+
+The allocation function is for a single MSI-X index at a time as that's
+sufficient for the most urgent use case VFIO to get rid of the 'disable
+MSI-X, reallocate, enable-MSI-X' cycle which is prone to lost interrupts
+and redirections to the legacy and obviously unhandled INTx.
+
+As single index allocation is also sufficient for the use cases Jason
+Gunthorpe pointed out: Allocation of a MSI-X or IMS vector for a network
+queue. See Link below.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221124232326.787373104@linutronix.de
+Link: https://lore.kernel.org/all/20211126232735.547996838@linutronix.de
+Link: https://lore.kernel.org/r/20221124232326.731233614@linutronix.de
 
 ---
- arch/x86/include/asm/msi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/msi/api.c       | 67 ++++++++++++++++++++++++++++++++++++-
+ drivers/pci/msi/irqdomain.c |  3 +-
+ include/linux/pci.h         |  6 +++-
+ 3 files changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/msi.h b/arch/x86/include/asm/msi.h
-index 7702958..935c6d4 100644
---- a/arch/x86/include/asm/msi.h
-+++ b/arch/x86/include/asm/msi.h
-@@ -63,7 +63,7 @@ struct msi_msg;
- u32 x86_msi_msg_get_destid(struct msi_msg *msg, bool extid);
+diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
+index 2d46a0c..c8816db 100644
+--- a/drivers/pci/msi/api.c
++++ b/drivers/pci/msi/api.c
+@@ -113,6 +113,73 @@ int pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries,
+ EXPORT_SYMBOL(pci_enable_msix_range);
  
- #define X86_VECTOR_MSI_FLAGS_SUPPORTED					\
--	(MSI_GENERIC_FLAGS_MASK | MSI_FLAG_PCI_MSIX)
-+	(MSI_GENERIC_FLAGS_MASK | MSI_FLAG_PCI_MSIX | MSI_FLAG_PCI_MSIX_ALLOC_DYN)
+ /**
++ * pci_msix_can_alloc_dyn - Query whether dynamic allocation after enabling
++ *			    MSI-X is supported
++ *
++ * @dev:	PCI device to operate on
++ *
++ * Return: True if supported, false otherwise
++ */
++bool pci_msix_can_alloc_dyn(struct pci_dev *dev)
++{
++	if (!dev->msix_cap)
++		return false;
++
++	return pci_msi_domain_supports(dev, MSI_FLAG_PCI_MSIX_ALLOC_DYN, DENY_LEGACY);
++}
++EXPORT_SYMBOL_GPL(pci_msix_can_alloc_dyn);
++
++/**
++ * pci_msix_alloc_irq_at - Allocate an MSI-X interrupt after enabling MSI-X
++ *			   at a given MSI-X vector index or any free vector index
++ *
++ * @dev:	PCI device to operate on
++ * @index:	Index to allocate. If @index == MSI_ANY_INDEX this allocates
++ *		the next free index in the MSI-X table
++ * @affdesc:	Optional pointer to an affinity descriptor structure. NULL otherwise
++ *
++ * Return: A struct msi_map
++ *
++ *	On success msi_map::index contains the allocated index (>= 0) and
++ *	msi_map::virq contains the allocated Linux interrupt number (> 0).
++ *
++ *	On fail msi_map::index contains the error code and msi_map::virq
++ *	is set to 0.
++ */
++struct msi_map pci_msix_alloc_irq_at(struct pci_dev *dev, unsigned int index,
++				     const struct irq_affinity_desc *affdesc)
++{
++	struct msi_map map = { .index = -ENOTSUPP };
++
++	if (!dev->msix_enabled)
++		return map;
++
++	if (!pci_msix_can_alloc_dyn(dev))
++		return map;
++
++	return msi_domain_alloc_irq_at(&dev->dev, MSI_DEFAULT_DOMAIN, index, affdesc, NULL);
++}
++EXPORT_SYMBOL_GPL(pci_msix_alloc_irq_at);
++
++/**
++ * pci_msix_free_irq - Free an interrupt on a PCI/MSIX interrupt domain
++ *		      which was allocated via pci_msix_alloc_irq_at()
++ *
++ * @dev:	The PCI device to operate on
++ * @map:	A struct msi_map describing the interrupt to free
++ *		as returned from the allocation function.
++ */
++void pci_msix_free_irq(struct pci_dev *dev, struct msi_map map)
++{
++	if (WARN_ON_ONCE(map.index < 0 || map.virq <= 0))
++		return;
++	if (WARN_ON_ONCE(!pci_msix_can_alloc_dyn(dev)))
++		return;
++	msi_domain_free_irqs_range(&dev->dev, MSI_DEFAULT_DOMAIN, map.index, map.index);
++}
++EXPORT_SYMBOL_GPL(pci_msix_free_irq);
++
++/**
+  * pci_disable_msix() - Disable MSI-X interrupt mode on device
+  * @dev: the PCI device to operate on
+  *
+diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
+index 8afaef1..deb1930 100644
+--- a/drivers/pci/msi/irqdomain.c
++++ b/drivers/pci/msi/irqdomain.c
+@@ -225,7 +225,8 @@ static const struct msi_domain_template pci_msix_template = {
+ 	},
  
- #define X86_VECTOR_MSI_FLAGS_REQUIRED					\
- 	(MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS)
+ 	.info = {
+-		.flags			= MSI_COMMON_FLAGS | MSI_FLAG_PCI_MSIX,
++		.flags			= MSI_COMMON_FLAGS | MSI_FLAG_PCI_MSIX |
++					  MSI_FLAG_PCI_MSIX_ALLOC_DYN,
+ 		.bus_token		= DOMAIN_BUS_PCI_DEVICE_MSIX,
+ 	},
+ };
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 243e48f..68b14ba 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -38,6 +38,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/resource_ext.h>
++#include <linux/msi_api.h>
+ #include <uapi/linux/pci.h>
+ 
+ #include <linux/pci_ids.h>
+@@ -1559,6 +1560,11 @@ int pci_alloc_irq_vectors_affinity(struct pci_dev *dev, unsigned int min_vecs,
+ 				   unsigned int max_vecs, unsigned int flags,
+ 				   struct irq_affinity *affd);
+ 
++bool pci_msix_can_alloc_dyn(struct pci_dev *dev);
++struct msi_map pci_msix_alloc_irq_at(struct pci_dev *dev, unsigned int index,
++				     const struct irq_affinity_desc *affdesc);
++void pci_msix_free_irq(struct pci_dev *pdev, struct msi_map map);
++
+ void pci_free_irq_vectors(struct pci_dev *dev);
+ int pci_irq_vector(struct pci_dev *dev, unsigned int nr);
+ const struct cpumask *pci_irq_get_affinity(struct pci_dev *pdev, int vec);
