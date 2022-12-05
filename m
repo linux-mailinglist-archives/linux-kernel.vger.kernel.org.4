@@ -2,208 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB55B64249F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74871642453
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbiLEIbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S231960AbiLEIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbiLEIbV (ORCPT
+        with ESMTP id S231959AbiLEIQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:31:21 -0500
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57C0167C7;
-        Mon,  5 Dec 2022 00:31:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670228159; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=im1tnFABP6Gq5f5JgX0Hlm4K4O61YYWtd/r1+1NTljCowLPOqjaGZmT6GszUALt805dTNEF2r7u/o2smKe5g0oeSxG+bQ1i9IGj+Z7d33oEVz8AjpPKrOAx1IPqRcsJDpRS8/dnNF1d+vjfjOp0gPCsd5cF/A8U1OSfQpkri4sc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1670228159; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=G6hbPiBt/fhMbeRAyCrqatnfivN1dw3GU+vvJg5sKf0=; 
-        b=BqEXUBHV9uCV0MCmPrylLpkyOdC8rz6ABe4X+QtUuxN/TFYBAEB547n+RiWsR3rh/x4uaAlBeFO64HLHNzplClYrNMC9q6XdWAA9q4rnBKqe4Xrop1ussRhaucavhI5ElyELmKyIfQxaKH7oCiyt0YJTvq/MIXdTPhHdE7JipLQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670228159;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=G6hbPiBt/fhMbeRAyCrqatnfivN1dw3GU+vvJg5sKf0=;
-        b=c31wsBQmxQnjKdYlMWxWKqAUw5y7jjGRURbD/homkCVKVSnUSxg92EOmRzTnJwfS
-        a1dNpVsqCrz0nppdUzXbXCJTHHhzWsvgl3KcEhcgk9B53NMX7Js1H3BLjYb9sDs1LOM
-        Olb+D6mIxGOUD1UTFVgmykvqLZc8TX1T3oLIrKlw=
-Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
-        with SMTPS id 1670228157594162.27257640298603; Mon, 5 Dec 2022 00:15:57 -0800 (PST)
-Message-ID: <f5a07ab14341d3a7ce8faf38f1d603eb4aed3c7b.camel@icenowy.me>
-Subject: Re: [PATCH v2 7/9] riscv: dts: bouffalolab: add Sipeed M1s SoM and
- Dock devicetree
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Samuel Holland <samuel@sholland.org>,
-        Jisheng Zhang <jszhang@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date:   Mon, 05 Dec 2022 16:15:46 +0800
-In-Reply-To: <91d7eebd-7433-c06d-6d14-a01d11af9df9@sholland.org>
-References: <20221127132448.4034-1-jszhang@kernel.org>
-         <20221127132448.4034-8-jszhang@kernel.org>
-         <91d7eebd-7433-c06d-6d14-a01d11af9df9@sholland.org>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
-MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+        Mon, 5 Dec 2022 03:16:59 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A3DBC06;
+        Mon,  5 Dec 2022 00:16:56 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NQbxM1jhJz8RV7G;
+        Mon,  5 Dec 2022 16:16:55 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B58Gf6p028925;
+        Mon, 5 Dec 2022 16:16:41 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Mon, 5 Dec 2022 16:16:43 +0800 (CST)
+Date:   Mon, 5 Dec 2022 16:16:43 +0800 (CST)
+X-Zmail-TransId: 2af9638da8eb41c9fedb
+X-Mailer: Zmail v1.0
+Message-ID: <202212051616434207425@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <deller@gmx.de>
+Cc:     <javierm@redhat.com>, <tzimmermann@suse.de>,
+        <geert+renesas@glider.be>, <linux-fbdev@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIGZiZGV2OiB1c2Ugc3lzZnNfZW1pdCgpIHRvIGluc3RlYWQgb2Ygc2NucHJpbnRmKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B58Gf6p028925
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 638DA8F7.000 by FangMail milter!
+X-FangMail-Envelope: 1670228215/4NQbxM1jhJz8RV7G/638DA8F7.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638DA8F7.000/4NQbxM1jhJz8RV7G
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-11-30=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 01:25 -0600=EF=BC=
-=8CSamuel Holland=E5=86=99=E9=81=93=EF=BC=9A
-> On 11/27/22 07:24, Jisheng Zhang wrote:
-> > Sipeed manufactures a M1s system-on-module and dock board, add
-> > basic
-> > support for them.
-> >=20
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > ---
-> > =C2=A0arch/riscv/boot/dts/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 =
-1 +
-> > =C2=A0arch/riscv/boot/dts/bouffalolab/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0 2 ++
-> > =C2=A0.../dts/bouffalolab/bl808-sipeed-m1s-dock.dts | 25
-> > +++++++++++++++++++
-> > =C2=A0.../dts/bouffalolab/bl808-sipeed-m1s.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
- | 21
-> > ++++++++++++++++
-> > =C2=A04 files changed, 49 insertions(+)
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-
-> > m1s-dock.dts
-> > =C2=A0create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-
-> > m1s.dtsi
-> >=20
-> > diff --git a/arch/riscv/boot/dts/Makefile
-> > b/arch/riscv/boot/dts/Makefile
-> > index ff174996cdfd..b525467152b2 100644
-> > --- a/arch/riscv/boot/dts/Makefile
-> > +++ b/arch/riscv/boot/dts/Makefile
-> > @@ -1,4 +1,5 @@
-> > =C2=A0# SPDX-License-Identifier: GPL-2.0
-> > +subdir-y +=3D bouffalolab
-> > =C2=A0subdir-y +=3D sifive
-> > =C2=A0subdir-y +=3D starfive
-> > =C2=A0subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) +=3D canaan
-> > diff --git a/arch/riscv/boot/dts/bouffalolab/Makefile
-> > b/arch/riscv/boot/dts/bouffalolab/Makefile
-> > new file mode 100644
-> > index 000000000000..5419964e892d
-> > --- /dev/null
-> > +++ b/arch/riscv/boot/dts/bouffalolab/Makefile
-> > @@ -0,0 +1,2 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +dtb-$(CONFIG_SOC_BOUFFALOLAB) +=3D bl808-sipeed-m1s-dock.dtb
-> > diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-
-> > dock.dts b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-
-> > dock.dts
-> > new file mode 100644
-> > index 000000000000..c6b4894a7b88
-> > --- /dev/null
-> > +++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
-> > @@ -0,0 +1,25 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> > +/*
-> > + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include "bl808-sipeed-m1s.dtsi"
-> > +
-> > +/ {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0model =3D "Sipeed M1s Dock";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "sipeed,m1s-d=
-ock", "sipeed,m1s",
-> > "bouffalolab,bl808";
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0aliases {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0serial0 =3D &uart0;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chosen {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0stdout-path =3D "serial0:2000000n8";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> > +};
-> > +
-> > +&uart0 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0status =3D "okay";
-> > +};
-> > diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
-> > b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
-> > new file mode 100644
-> > index 000000000000..5026de768534
-> > --- /dev/null
-> > +++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
-> > @@ -0,0 +1,21 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> > +/*
-> > + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include "bl808.dtsi"
-> > +
-> > +/ {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "sipeed,m1s",=
- "bouffalolab,bl808";
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0memory@50000000 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0device_type =3D "memory";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0reg =3D <0x50000000 0x04000000>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
->=20
-> The PSRAM is part of the BL808, so this should go in the SoC .dtsi
-> file.
-> (Unless I'm missing something and there are BL808 variants with
-> different amounts of memory. The PSRAM init code in the SDK does size
-> detection, so I suppose it is possible.)
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-I think it really has variants.
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
->=20
-> Regards,
-> Samuel
->=20
-> > +};
-> > +
-> > +&xtal {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0clock-frequency =3D <4000000=
-0>;
-> > +};
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+v1 -> v2
+Add another patch about this in ./video/fbdev/
+ drivers/video/fbdev/sh_mobile_lcdcfb.c |  8 ++++----
+ drivers/video/fbdev/uvesafb.c          | 10 +++++-----
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/video/fbdev/sh_mobile_lcdcfb.c b/drivers/video/fbdev/sh_mobile_lcdcfb.c
+index 6d00893d41f4..ad9323ed8e2e 100644
+--- a/drivers/video/fbdev/sh_mobile_lcdcfb.c
++++ b/drivers/video/fbdev/sh_mobile_lcdcfb.c
+@@ -1188,7 +1188,7 @@ overlay_alpha_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->alpha);
++	return sysfs_emit(buf, "%u\n", ovl->alpha);
+ }
+
+ static ssize_t
+@@ -1226,7 +1226,7 @@ overlay_mode_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->mode);
++	return sysfs_emit(buf, "%u\n", ovl->mode);
+ }
+
+ static ssize_t
+@@ -1265,7 +1265,7 @@ overlay_position_show(struct device *dev, struct device_attribute *attr,
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d,%d\n", ovl->pos_x, ovl->pos_y);
++	return sysfs_emit(buf, "%d,%d\n", ovl->pos_x, ovl->pos_y);
+ }
+
+ static ssize_t
+@@ -1306,7 +1306,7 @@ overlay_rop3_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct sh_mobile_lcdc_overlay *ovl = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->rop3);
++	return sysfs_emit(buf, "%u\n", ovl->rop3);
+ }
+
+ static ssize_t
+diff --git a/drivers/video/fbdev/uvesafb.c b/drivers/video/fbdev/uvesafb.c
+index 00d789b6c0fa..ba8028a0cc7a 100644
+--- a/drivers/video/fbdev/uvesafb.c
++++ b/drivers/video/fbdev/uvesafb.c
+@@ -1580,7 +1580,7 @@ static ssize_t uvesafb_show_vendor(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_vendor_name_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
++		return sysfs_emit(buf, "%s\n", (char *)
+ 			(&par->vbe_ib) + par->vbe_ib.oem_vendor_name_ptr);
+ 	else
+ 		return 0;
+@@ -1595,7 +1595,7 @@ static ssize_t uvesafb_show_product_name(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_product_name_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
++		return sysfs_emit(buf, "%s\n", (char *)
+ 			(&par->vbe_ib) + par->vbe_ib.oem_product_name_ptr);
+ 	else
+ 		return 0;
+@@ -1610,7 +1610,7 @@ static ssize_t uvesafb_show_product_rev(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_product_rev_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
++		return sysfs_emit(buf, "%s\n", (char *)
+ 			(&par->vbe_ib) + par->vbe_ib.oem_product_rev_ptr);
+ 	else
+ 		return 0;
+@@ -1625,7 +1625,7 @@ static ssize_t uvesafb_show_oem_string(struct device *dev,
+ 	struct uvesafb_par *par = info->par;
+
+ 	if (par->vbe_ib.oem_string_ptr)
+-		return scnprintf(buf, PAGE_SIZE, "%s\n",
++		return sysfs_emit(buf, "%s\n",
+ 			(char *)(&par->vbe_ib) + par->vbe_ib.oem_string_ptr);
+ 	else
+ 		return 0;
+@@ -1639,7 +1639,7 @@ static ssize_t uvesafb_show_nocrtc(struct device *dev,
+ 	struct fb_info *info = dev_get_drvdata(dev);
+ 	struct uvesafb_par *par = info->par;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", par->nocrtc);
++	return sysfs_emit(buf, "%d\n", par->nocrtc);
+ }
+
+ static ssize_t uvesafb_store_nocrtc(struct device *dev,
+-- 
+2.25.1
