@@ -2,151 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C75D643799
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1296064379B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiLEWC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 17:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
+        id S232636AbiLEWDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbiLEWB5 (ORCPT
+        with ESMTP id S232018AbiLEWDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 17:01:57 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9CA2612;
-        Mon,  5 Dec 2022 14:01:56 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id fu10so4025453qtb.0;
-        Mon, 05 Dec 2022 14:01:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ufEai0X98xSIbsVv1GkGx7mHK14NYcBCVwyl1M7ZF5A=;
-        b=MK/ItkuQPb8RLVH7CJVvYOR8KqvNXDTYztejtrxtg4gBuUUDGIiZ6rpbq+GhV0+bcG
-         mQ3aOSWyHHHRV/Buhpenug7FTQb/cgS0ZOVeAG4fIWcNoDLz/owUh+/ZhYe8NxjDKlnY
-         GBX+hcGyS0KdQPAmkXVBwbKQVDaW5nrURn9045U1D9D9UISRggh2rU3pFLf5aH7AoYq4
-         E5koJlZgXt65ZvLeiz/6DDdgavEHfh+Gdya6HDKq4mWtMqQxf3lubqQiY5rImyuo3W8d
-         /79hYZDNRn5HDY/uleDvyCJo7pz7tQ2xzMonqfR7QpnQ5vP16S78ohDH+XzMbaU/VngL
-         9fbA==
-X-Gm-Message-State: ANoB5pmoeycalfeqVL0oqZYTzNqa9CfUk4A6uaDjfYf1GLuhuqFkQ8Kj
-        f+4BpJN4xnSNfRbjybUl8MkoPr8hX8gEElVc
-X-Google-Smtp-Source: AA0mqf4iYk9DTB78BHYbz1btTx6XFsfTXEBLChBWd1h+ESfc3uHV856UH11JUKxA4Hl+Fy6GUOmLeg==
-X-Received: by 2002:a05:622a:581a:b0:3a6:59d5:5ec9 with SMTP id fg26-20020a05622a581a00b003a659d55ec9mr55244611qtb.349.1670277715006;
-        Mon, 05 Dec 2022 14:01:55 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:cc23])
-        by smtp.gmail.com with ESMTPSA id o6-20020ac85546000000b003a69225c2cdsm8841069qtr.56.2022.12.05.14.01.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 14:01:54 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH bpf-next v2 2/2] bpf/docs: Document struct cgroup * kfuncs
-Date:   Mon,  5 Dec 2022 16:01:44 -0600
-Message-Id: <20221205220144.63885-3-void@manifault.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221205220144.63885-1-void@manifault.com>
-References: <20221205220144.63885-1-void@manifault.com>
+        Mon, 5 Dec 2022 17:03:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4152C7;
+        Mon,  5 Dec 2022 14:03:12 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3C11C589;
+        Mon,  5 Dec 2022 23:03:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670277790;
+        bh=R9c+OK/QPNRPg641/oRs3vSbSAY/lw4zvCkJ30yFVJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KM0GT23gcFzckrirUJPZHUHs8sNnm3m3U0umeR2qmWhQ4ecqIRp8gLbiiZTVTrbcu
+         yhbF7p1qfmqPUlr+x6S0sGBmiZvk7hclhVdemSDBWlWNv3zl6MtZcRLgmJQIA6blHu
+         xfvjPi5k0c2YjqG9U/JBvNyeToTmAfmTtzxI7gkc=
+Date:   Tue, 6 Dec 2022 00:03:07 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Yunke Cao <yunkec@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] media: v4l2-dev.c: Add Meta: to the name of
+ metadata devices
+Message-ID: <Y45qmwEAGKvfewCh@pendragon.ideasonboard.com>
+References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
+ <20220920-resend-meta-v4-1-3ac355b66723@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-meta-v4-1-3ac355b66723@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bpf_cgroup_acquire(), bpf_cgroup_release(), bpf_cgroup_kptr_get(), and
-bpf_cgroup_ancestor(), are kfuncs that were recnetly added to
-kernel/bpf/helpers.c. These are "core" kfuncs in that they're available
-for use in any tracepoint or struct_ops BPF program. Though they have no
-ABI stability guarantees, we should still document them. This patch adds
-a struct cgroup * subsection to the Core kfuncs section which describes
-each of these kfuncs.
+Hi Ricardo,
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- Documentation/bpf/kfuncs.rst | 49 ++++++++++++++++++++++++++++++++++++
- kernel/bpf/helpers.c         |  2 +-
- 2 files changed, 50 insertions(+), 1 deletion(-)
+Thank you for the patch.
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 59bff92f313c..0eadb28a6ee2 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -370,3 +370,52 @@ Here is an example of it being used:
- 		bpf_task_release(lookup);
- 		return 0;
- 	}
-+
-+3.2 struct cgroup * kfuncs
-+--------------------------
-+
-+``struct cgroup *`` objects also have acquire, release, and kptr_get functions:
-+
-+.. kernel-doc:: kernel/bpf/helpers.c
-+   :identifiers: bpf_cgroup_acquire bpf_cgroup_release
-+
-+.. kernel-doc:: kernel/bpf/helpers.c
-+   :identifiers: bpf_cgroup_kptr_get
-+
-+These kfuncs are used in exactly the same manner as bpf_task_acquire(),
-+bpf_task_release(), and bpf_task_kptr_get() respectively, so we won't provide
-+examples for them.
-+
-+Another kfunc available for interacting with ``struct cgroup *`` objects is
-+bpf_cgroup_ancestor(). This allows callers to access the ancestor of a cgroup,
-+and return it as a cgroup kptr.
-+
-+.. kernel-doc:: kernel/bpf/helpers.c
-+   :identifiers: bpf_cgroup_ancestor
-+
-+Eventually, BPF should be updated to allow this to happen with a normal memory
-+load in the program itself. This is currently not possible without more work in
-+the verifier. bpf_cgroup_ancestor() can be used as follows:
-+
-+.. code-block:: c
-+
-+	/**
-+	 * Simple tracepoint example that illustrates how a cgroup's
-+	 * ancestor can be accessed using bpf_cgroup_ancestor().
-+	 */
-+	SEC("tp_btf/cgroup_mkdir")
-+	int BPF_PROG(cgrp_ancestor_example, struct cgroup *cgrp, const char *path)
-+	{
-+		struct cgroup *parent;
-+
-+		/* The parent cgroup resides at the level before the current cgroup's level. */
-+		parent = bpf_cgroup_ancestor(cgrp, cgrp->level - 1);
-+		if (!parent)
-+			return -ENOENT;
-+
-+		bpf_printk("Parent id is %d", parent->self.id);
-+
-+		/* Return the parent cgroup that was acquired above. */
-+		bpf_cgroup_release(parent);
-+		return 0;
-+	}
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index a05880f05a78..bc569fce217f 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1940,7 +1940,7 @@ struct cgroup *bpf_cgroup_kptr_get(struct cgroup **cgrpp)
- }
- 
- /**
-- * bpf_cgroup_release - Release the reference acquired on a struct cgroup *.
-+ * bpf_cgroup_release - Release the reference acquired on a struct cgroup kptr.
-  * If this kfunc is invoked in an RCU read region, the cgroup is guaranteed to
-  * not be freed until the current grace period has ended, even if its refcount
-  * drops to 0.
+On Fri, Dec 02, 2022 at 06:08:17PM +0100, Ricardo Ribalda wrote:
+> Devices with Metadata output (like uvc), create two video devices, one
+> for the data itself and another one for the metadata.
+> 
+> Add a "Meta: " to the beginning of the device name, as suggested by Mauro,
+> to avoid having multiple devices with the same name.
+> 
+> Fixes v4l2-compliance:
+> Media Controller ioctls:
+>      fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
+>    test MEDIA_IOC_G_TOPOLOGY: FAIL
+>      fail: v4l2-test-media.cpp(394): num_data_links != num_links
+>    test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+> 
+> Suggested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/v4l2-core/v4l2-dev.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+> index 397d553177fa..5c2c9ebb6b96 100644
+> --- a/drivers/media/v4l2-core/v4l2-dev.c
+> +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> @@ -901,6 +901,15 @@ int __video_register_device(struct video_device *vdev,
+>  	if (WARN_ON(type != VFL_TYPE_SUBDEV && !vdev->device_caps))
+>  		return -EINVAL;
+>  
+> +	/* Add Meta: to metadata device names */
+> +	if (vdev->device_caps &
+> +	    (V4L2_CAP_META_CAPTURE | V4L2_CAP_META_OUTPUT)) {
+> +		char aux[sizeof(vdev->name)];
+> +
+> +		snprintf(aux, sizeof(aux), "Meta: %s", vdev->name);
+
+This will break userspace I'm afraid. libcamera looks up video devices
+by entity names for multiple platforms. I wouldn't be surprised if other
+userspace applications did something similar.
+
+> +		strscpy(vdev->name, aux, sizeof(aux));
+> +	}
+> +
+>  	/* v4l2_fh support */
+>  	spin_lock_init(&vdev->fh_lock);
+>  	INIT_LIST_HEAD(&vdev->fh_list);
+> 
+
 -- 
-2.38.1
+Regards,
 
+Laurent Pinchart
