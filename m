@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43553642146
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C68642148
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiLEB5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S231197AbiLEB6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiLEB5M (ORCPT
+        with ESMTP id S231130AbiLEB6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:57:12 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3067E13D56
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 17:57:11 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id jr1so10529654qtb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 17:57:11 -0800 (PST)
+        Sun, 4 Dec 2022 20:58:22 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15C41144E;
+        Sun,  4 Dec 2022 17:58:21 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s5so13781708edc.12;
+        Sun, 04 Dec 2022 17:58:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zm8T1Im5lQZlS8KmDG8ug3k7vKs3MbAFvEQ/V/+qGMs=;
-        b=oBiXLQ2qH0u4bTX6QnOElzutUIbpUCqJcRYVD0Rc8+cYgu8GHeNCMt2Nsg8Q6JTZpA
-         gO8BvvOiANjRddJMlUsTl/CYkfqW05Xf/zq0LDB7ZBUOwynxQCkdcLQSAoqvBFGgjAyx
-         Vg9LmyDDCwiY9X38XiMMewAgZC1/rw9AcayJMnNee7NuGUhSkZ5gHOC5Rt1HCcCYCSZx
-         kRx1SL7HeRRvVvy37bTAPdiCx1iWbBp3n8yh1HXpJpzGNIe8Pbat5KzP7R6HP9//Vqpg
-         rpFs8UzLiB9lE0IkEmRShOyrYFXHcjf3nY4pDhTkW2vO54ZYzH8YupuPBCXP8XxbwJHR
-         LUiA==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tiw1kR5Fj9mSQPY+/a11FtsTXdBXPQZ0NfAI3+WT5gw=;
+        b=oV6A5niSrMlQaL/PRvwZQFEdjN8kUtbgvZjJMo8UyV8eYM9Tb5m07Cyj3JQ38U7kYs
+         VCu56GImf0EKcN38n1hyDdlqkHf6IQC2UKdM+D8nMIhvWo4yV0iBGL+EbZ7IRCxGvrwc
+         IjQQ5Zx5U7w5NbZrL+9IjhLAN/i5BexKpb56t1KeKuY41/DvahoRbURlBiIbInCkAsHb
+         3aodawn6qIBAxnb7aYjQz1WLvb1qMp4/T+/vyXEii9SWqZ63HFqeXOtPNz69Bf9yp3O6
+         uX9nnnxI3U9oGmX18PE3mM4g1lSBcfzy5rC4UaKW88SUCAcyWJmw5qISead1L+p2EGzL
+         EJcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zm8T1Im5lQZlS8KmDG8ug3k7vKs3MbAFvEQ/V/+qGMs=;
-        b=MUDmHDWItEUd/nNA4kchL/zKsfIHmXDMqZLAibdSAa1mcFHIBcQ6ghqgmyxUK0i/B6
-         z8RprzfsuT3+CwpXbgUK+XfdYL5aj2HbCwhyxJ302XUVmhTYVL/VlXv+gvWrZrBES+DN
-         nQS+u1bxvm0waJRqe+MzhXFggITa38cKec3V+1SuLBnu45gnCCpJwlJFAelz+rXcr6rS
-         bdpxf0iUb4e+Prs6Y7t3ckVgvw1+9jO7lhIHkpnEWtzcVOO3wkqoMnXQ4XglXqmgOX78
-         8uPA7IvB77V7bbQLQXcoQx+Ulk42rMLVMNmA5xhcvC4mQIjz9vLInEB5MzpYef/s4hcm
-         TpiQ==
-X-Gm-Message-State: ANoB5pnkbIYKpCtV8B/7gtNSHFgP+PTLOdGs6DsSZml6I9EbIznjwVn2
-        IVdell38VAqqDcAjPbERQg7w3w==
-X-Google-Smtp-Source: AA0mqf4FF+tKOxOy5vd4ImmVGJI9e9n6QvIzATrmRSsYm/4BUA9QXWDnuf5DBHmxRxo0MJsg33bcRw==
-X-Received: by 2002:a05:622a:40ca:b0:3a6:328d:ee8e with SMTP id ch10-20020a05622a40ca00b003a6328dee8emr59163925qtb.421.1670205430201;
-        Sun, 04 Dec 2022 17:57:10 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id ck15-20020a05622a230f00b0039953dcc480sm9094377qtb.88.2022.12.04.17.57.08
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tiw1kR5Fj9mSQPY+/a11FtsTXdBXPQZ0NfAI3+WT5gw=;
+        b=5KtFzvg6VxTIwzjTjKyyUPCd+MPnFMvX09rjJK30lL3eym8OZsnjoHF0YyZ77mG/xf
+         vYIX3riupbN26BjSFnjW3jntD4Q6gY7uSMYVFXcpTx7fXdOy5EEOgGDMsiqf8GTuokxB
+         SHBhp0ZguKsS8jr3R+AEi+LACZw2OWES2M31GhlcBwcQe1vzR2Te1UuCEg6JXSxlt8yV
+         2EjP/EyQfN9mIbcIKNqsXrXU+9GBRKepEm1/h0RfSx7+fPU216wLgov8xqwTkCPGGYQx
+         Bf6IJJGvl94VbbBtw3DRcSG/EEYpRMCby1ywY/e1kK/NsAgYL55nt3/95yx2AFPXOhZr
+         cjsw==
+X-Gm-Message-State: ANoB5pkC/OTPr4zoOuXhIEKtZ9hxnUNzJe6R4If74HcqnKHaXDRLrm7Y
+        S04C3lPb/X53LzG8/jpvXTe1KaI11DpuAvyu
+X-Google-Smtp-Source: AA0mqf4+vIIcd4V+SIYvFiklshQgnV8pEbbMRR6/A4Oi+RVWGjOPp43eRTlDgu4pT0vzTikVSJwWlA==
+X-Received: by 2002:a05:6402:221b:b0:46c:6707:1036 with SMTP id cq27-20020a056402221b00b0046c67071036mr6528109edb.308.1670205500480;
+        Sun, 04 Dec 2022 17:58:20 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906219200b0078d22b0bcf2sm5650505eju.168.2022.12.04.17.58.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 17:57:09 -0800 (PST)
-Date:   Sun, 4 Dec 2022 17:57:07 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH] mm,thp,rmap: fix races between updates of
- subpages_mapcount
-Message-ID: <4388158-3092-a960-ff2d-55f2b0fe4ef8@google.com>
+        Sun, 04 Dec 2022 17:58:20 -0800 (PST)
+Date:   Mon, 5 Dec 2022 02:58:29 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Michal Kubecek <mkubecek@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH ethtool-next 1/2] update UAPI header copies
+Message-ID: <f9712cc0a62fb1a2e4ab5016b2dc91a26b0e3891.1670205306.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,134 +74,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4b51634cd16a, introducing the COMPOUND_MAPPED bit, paid attention
-to the impossibility of subpages_mapcount ever appearing negative; but
-did not attend to those races in which it can momentarily appear larger
-than thought possible.
+Update to kernel commit b71fb5b0b802.
 
-These arise from how page_remove_rmap() first decrements page->_mapcount
-or compound_mapcount, then, if that transition goes negative (logical 0),
-decrements subpages_mapcount.  The initial decrement lets a racing
-page_add_*_rmap() reincrement _mapcount or compound_mapcount immediately,
-and then in rare cases its corresponding increment of subpages_mapcount
-may be completed before page_remove_rmap()'s decrement.  There could even
-(with increasing unlikelihood) be a series of increments intermixed with
-the decrements.
-
-In practice, checking subpages_mapcount with a temporary WARN on range,
-has caught values of 0x1000000 (2*COMPOUND_MAPPED, when move_pages() was
-using remove_migration_pmd()) and 0x800201 (do_huge_pmd_wp_page() using
-__split_huge_pmd()): page_add_anon_rmap() racing page_remove_rmap(), as
-predicted.
-
-I certainly found it harder to reason about than when bit_spin_locked,
-but the easy case gives a clue to how to handle the harder case.  The
-easy case being the three !(nr & COMPOUND_MAPPED) checks, which should
-obviously be replaced by (nr < COMPOUND_MAPPED) checks - to count a
-page as compound mapped, even while the bit in that position is 0.
-
-The harder case is when trying to decide how many subpages are newly
-covered or uncovered, when compound map is first added or last removed:
-not knowing all that racily happened between first and second atomic ops.
-
-But the easy way to handle that, is again to count the page as compound
-mapped all the while that its subpages_mapcount indicates so - ignoring
-the _mapcount or compound_mapcount transition while it is on the way to
-being reversed.
-
-Fixes: 4b51634cd16a ("mm,thp,rmap: subpages_mapcount COMPOUND_MAPPED if PMD-mapped")
-Signed-off-by: Hugh Dickins <hughd@google.com>
+Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
 ---
- mm/rmap.c | 42 +++++++++++++++++++++++++++++++++---------
- 1 file changed, 33 insertions(+), 9 deletions(-)
+ uapi/linux/ethtool.h         |  3 +++
+ uapi/linux/ethtool_netlink.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 459dc1c44d8a..b616870a09be 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1232,7 +1232,7 @@ void page_add_anon_rmap(struct page *page,
- 		if (first && PageCompound(page)) {
- 			mapped = subpages_mapcount_ptr(compound_head(page));
- 			nr = atomic_inc_return_relaxed(mapped);
--			nr = !(nr & COMPOUND_MAPPED);
-+			nr = (nr < COMPOUND_MAPPED);
- 		}
- 	} else if (PageTransHuge(page)) {
- 		/* That test is redundant: it's for safety or to optimize out */
-@@ -1241,8 +1241,16 @@ void page_add_anon_rmap(struct page *page,
- 		if (first) {
- 			mapped = subpages_mapcount_ptr(page);
- 			nr = atomic_add_return_relaxed(COMPOUND_MAPPED, mapped);
--			nr_pmdmapped = thp_nr_pages(page);
--			nr = nr_pmdmapped - (nr & SUBPAGES_MAPPED);
-+			if (likely(nr < COMPOUND_MAPPED + COMPOUND_MAPPED)) {
-+				nr_pmdmapped = thp_nr_pages(page);
-+				nr = nr_pmdmapped - (nr & SUBPAGES_MAPPED);
-+				/* Raced ahead of a remove and another add? */
-+				if (unlikely(nr < 0))
-+					nr = 0;
-+			} else {
-+				/* Raced ahead of a remove of COMPOUND_MAPPED */
-+				nr = 0;
-+			}
- 		}
- 	}
+diff --git a/uapi/linux/ethtool.h b/uapi/linux/ethtool.h
+index d1748702bddc..78bf6fad9e02 100644
+--- a/uapi/linux/ethtool.h
++++ b/uapi/linux/ethtool.h
+@@ -1739,6 +1739,9 @@ enum ethtool_link_mode_bit_indices {
+ 	ETHTOOL_LINK_MODE_800000baseDR8_2_Full_BIT	 = 96,
+ 	ETHTOOL_LINK_MODE_800000baseSR8_Full_BIT	 = 97,
+ 	ETHTOOL_LINK_MODE_800000baseVR8_Full_BIT	 = 98,
++	ETHTOOL_LINK_MODE_10baseT1S_Full_BIT		 = 99,
++	ETHTOOL_LINK_MODE_10baseT1S_Half_BIT		 = 100,
++	ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT	 = 101,
  
-@@ -1330,7 +1338,7 @@ void page_add_file_rmap(struct page *page,
- 		if (first && PageCompound(page)) {
- 			mapped = subpages_mapcount_ptr(compound_head(page));
- 			nr = atomic_inc_return_relaxed(mapped);
--			nr = !(nr & COMPOUND_MAPPED);
-+			nr = (nr < COMPOUND_MAPPED);
- 		}
- 	} else if (PageTransHuge(page)) {
- 		/* That test is redundant: it's for safety or to optimize out */
-@@ -1339,8 +1347,16 @@ void page_add_file_rmap(struct page *page,
- 		if (first) {
- 			mapped = subpages_mapcount_ptr(page);
- 			nr = atomic_add_return_relaxed(COMPOUND_MAPPED, mapped);
--			nr_pmdmapped = thp_nr_pages(page);
--			nr = nr_pmdmapped - (nr & SUBPAGES_MAPPED);
-+			if (likely(nr < COMPOUND_MAPPED + COMPOUND_MAPPED)) {
-+				nr_pmdmapped = thp_nr_pages(page);
-+				nr = nr_pmdmapped - (nr & SUBPAGES_MAPPED);
-+				/* Raced ahead of a remove and another add? */
-+				if (unlikely(nr < 0))
-+					nr = 0;
-+			} else {
-+				/* Raced ahead of a remove of COMPOUND_MAPPED */
-+				nr = 0;
-+			}
- 		}
- 	}
+ 	/* must be last entry */
+ 	__ETHTOOL_LINK_MODE_MASK_NBITS
+diff --git a/uapi/linux/ethtool_netlink.h b/uapi/linux/ethtool_netlink.h
+index d581c43d592d..11a0efbf815c 100644
+--- a/uapi/linux/ethtool_netlink.h
++++ b/uapi/linux/ethtool_netlink.h
+@@ -51,6 +51,9 @@ enum {
+ 	ETHTOOL_MSG_MODULE_SET,
+ 	ETHTOOL_MSG_PSE_GET,
+ 	ETHTOOL_MSG_PSE_SET,
++	ETHTOOL_MSG_PLCA_GET_CFG,
++	ETHTOOL_MSG_PLCA_SET_CFG,
++	ETHTOOL_MSG_PLCA_GET_STATUS,
  
-@@ -1387,7 +1403,7 @@ void page_remove_rmap(struct page *page,
- 		if (last && PageCompound(page)) {
- 			mapped = subpages_mapcount_ptr(compound_head(page));
- 			nr = atomic_dec_return_relaxed(mapped);
--			nr = !(nr & COMPOUND_MAPPED);
-+			nr = (nr < COMPOUND_MAPPED);
- 		}
- 	} else if (PageTransHuge(page)) {
- 		/* That test is redundant: it's for safety or to optimize out */
-@@ -1396,8 +1412,16 @@ void page_remove_rmap(struct page *page,
- 		if (last) {
- 			mapped = subpages_mapcount_ptr(page);
- 			nr = atomic_sub_return_relaxed(COMPOUND_MAPPED, mapped);
--			nr_pmdmapped = thp_nr_pages(page);
--			nr = nr_pmdmapped - (nr & SUBPAGES_MAPPED);
-+			if (likely(nr < COMPOUND_MAPPED)) {
-+				nr_pmdmapped = thp_nr_pages(page);
-+				nr = nr_pmdmapped - (nr & SUBPAGES_MAPPED);
-+				/* Raced ahead of another remove and an add? */
-+				if (unlikely(nr < 0))
-+					nr = 0;
-+			} else {
-+				/* An add of COMPOUND_MAPPED raced ahead */
-+				nr = 0;
-+			}
- 		}
- 	}
+ 	/* add new constants above here */
+ 	__ETHTOOL_MSG_USER_CNT,
+@@ -97,6 +100,9 @@ enum {
+ 	ETHTOOL_MSG_MODULE_GET_REPLY,
+ 	ETHTOOL_MSG_MODULE_NTF,
+ 	ETHTOOL_MSG_PSE_GET_REPLY,
++	ETHTOOL_MSG_PLCA_GET_CFG_REPLY,
++	ETHTOOL_MSG_PLCA_GET_STATUS_REPLY,
++	ETHTOOL_MSG_PLCA_NTF,
  
+ 	/* add new constants above here */
+ 	__ETHTOOL_MSG_KERNEL_CNT,
+@@ -880,6 +886,25 @@ enum {
+ 	ETHTOOL_A_PSE_MAX = (__ETHTOOL_A_PSE_CNT - 1)
+ };
+ 
++/* PLCA */
++
++enum {
++	ETHTOOL_A_PLCA_UNSPEC,
++	ETHTOOL_A_PLCA_HEADER,				/* nest - _A_HEADER_* */
++	ETHTOOL_A_PLCA_VERSION,				/* u16 */
++	ETHTOOL_A_PLCA_ENABLED,				/* u8 */
++	ETHTOOL_A_PLCA_STATUS,				/* u8 */
++	ETHTOOL_A_PLCA_NODE_CNT,			/* u8 */
++	ETHTOOL_A_PLCA_NODE_ID,				/* u8 */
++	ETHTOOL_A_PLCA_TO_TMR,				/* u8 */
++	ETHTOOL_A_PLCA_BURST_CNT,			/* u8 */
++	ETHTOOL_A_PLCA_BURST_TMR,			/* u8 */
++
++	/* add new constants above here */
++	__ETHTOOL_A_PLCA_CNT,
++	ETHTOOL_A_PLCA_MAX = (__ETHTOOL_A_PLCA_CNT - 1)
++};
++
+ /* generic netlink info */
+ #define ETHTOOL_GENL_NAME "ethtool"
+ #define ETHTOOL_GENL_VERSION 1
 -- 
-2.35.3
+2.35.1
+
