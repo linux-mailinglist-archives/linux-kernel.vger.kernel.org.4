@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A75264279F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA376427A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiLELhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S231151AbiLELhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiLELhJ (ORCPT
+        with ESMTP id S231375AbiLELhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:37:09 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B80B1A059
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:37:08 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id qk9so9304917ejc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 03:37:08 -0800 (PST)
+        Mon, 5 Dec 2022 06:37:40 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545A2E2E;
+        Mon,  5 Dec 2022 03:37:39 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id s7so10519726plk.5;
+        Mon, 05 Dec 2022 03:37:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cYONg2TQ0L+lF1d2DaA1qurYIm2vbfwZznXqOxGFnmA=;
-        b=c6r33dyZUaRAYBqp/c+s1bzmydiZw5C/25gSmwq1LrhxlFMOfo3mmIL+0QbPQwYSFG
-         kqpWcZtwGiQn0fFTjXFC/50jtt2pUTslqjMFR5hAEFnbg4I2sJloV4Lp0jldsCg+j58p
-         Xrwz1c/VFjPeiRiN73DZPWNwdGyYocY6rhjsX8DodU8ePNeITAY6IrEHzdwzXvqfi5DP
-         uv7tBzYvRNuVi+TxAIDkGH0eWKBYQzKSKN5Sqi5jlp/DtnrNpHk9IGzCXLzbGJRTmYCo
-         aUzkeTl0Gtf4rHd8T0xO3ZIwEFltRyy18adXMsvjtWVRZX64d3BX7ydvsMFpWsZeFkrq
-         jVSQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KFQHLYXEhvLwqH5TYvoapPT/lEw1a01Q5YmU44e+sHk=;
+        b=M80cJZmAOTqLsmxJMavm8jqVic1TepS37Ipu6dZMWyx0nyOTubp1KMtTBtwZ9ApgYU
+         KTalkwGpv2T+YQlQbsvg7HVPG061u42nZVmgtZdrv2OPw81go3nmhz6t7FABahlwuKmn
+         4P0vVsXyj+ixPTUBSk5BYbQ0tlVu3tjrdBSi26B6FhRjD91vRgek+7t3tI5TCi/w2iQz
+         wnigXB8csfmOccXBqrohXb5XOTgNcbqn736/2WEdJaaAt+oEarv1KKY6b+UCEF2nsKMH
+         LTm73cboePXX/YpiKOa0dZ5RmJAg9iFZGDkxdMvyBW+xj2OaG3/VPVxuWbc+0eiYH3mN
+         r1yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cYONg2TQ0L+lF1d2DaA1qurYIm2vbfwZznXqOxGFnmA=;
-        b=fJR912AICYZQ1xZPM6e43+WBHCPYQfSkwIimbfNYkx/a+MLdz06veDwyF8Pj7UBqyL
-         6xLjwy+l8uRCmHEctXAG+ENsWZtl89hN1ApfmkQW95XBLEibTQkA53Sbx3AYd7nyAIwL
-         ZNbEM+pKoUaJoWVx/Yr3aEAQ2HY6mCZpnN86b5zSeHIq0b8nx4vBd2KzkyoL+JPc0ZPl
-         OKDsz2RcSbeoOA/K6ZoYRTCpnWr48EUN+rkplK/iIS6BLK0mo7H/4iZIajKzWY9Td+PE
-         ke2zPt3E5q7IHVI838ig5h3xU9BJLXqFuub6i43NHIwZsGz+R084Rt5L8FWAcaZX+xcA
-         7cXA==
-X-Gm-Message-State: ANoB5plUjI4albsIiQ2eMTLQwJbfi9LWwwt4uehXLB8Swoca+qWT9GBW
-        3q3JuiHDMeNKtgbizAVUfjK49Q==
-X-Google-Smtp-Source: AA0mqf4aKgFODxGCPta1Nv/wxBzu3tePNi5o9NMN2dx34jz14blVeWDZMfQ/sArMoICgz3V9zSWnpQ==
-X-Received: by 2002:a17:907:9842:b0:7b9:9492:b3f4 with SMTP id jj2-20020a170907984200b007b99492b3f4mr47621577ejc.688.1670240227134;
-        Mon, 05 Dec 2022 03:37:07 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id ca24-20020a170906a3d800b007abafe43c3bsm6140594ejb.86.2022.12.05.03.37.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 03:37:06 -0800 (PST)
-Message-ID: <61f2c58a-9ca8-3868-e3e0-31283e8b1728@linaro.org>
-Date:   Mon, 5 Dec 2022 12:37:06 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KFQHLYXEhvLwqH5TYvoapPT/lEw1a01Q5YmU44e+sHk=;
+        b=K1+9eYz0E4a3Dn3FBew0FUlZLvstK6JY1TQYIcq4Gkg52zx1MWTBQMKyj2xRL9tDbL
+         KF+KHka7CK9ctvM6j5IDz8EecZo9yHL5fmLBX1i9+mGmfV3BfxgV6Xmfqhxg/hUCsxiN
+         Hm2Ab7jdVdLVcYtMM1xdN936Ky57J1Z2DXalJ/oVPm4L95Rvi8cuNvsGAOEQs1qqBa/k
+         sWmo/u+esMo6YbNlhSgzi5rW/HZPFSojhRS1CDiBoHzjNPvykeK1haiTkT236EFLSVqR
+         CILI+x6F4i/yB1fRf0Y2cX9+igt4Hb0JRNwCQVz8NuRy74AMgVlw+pJPB3csf3ccuurE
+         35Yw==
+X-Gm-Message-State: ANoB5pl055H39zhlxbigidrFUBIaualzWA3nqga3T/sMlQlUNu5heQXn
+        +4678FMLiwtYNIIRhYRsaqc=
+X-Google-Smtp-Source: AA0mqf73p05qfaoI01ifWj80/DGFPBfVqbGuKzxhFLakycVPgMGoV3H/JckECUZlvBSgYtOMbCC4VA==
+X-Received: by 2002:a17:90b:264a:b0:213:7030:f69a with SMTP id pa10-20020a17090b264a00b002137030f69amr88900345pjb.231.1670240258868;
+        Mon, 05 Dec 2022 03:37:38 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902710300b001895b2d48a1sm1106394pll.253.2022.12.05.03.37.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 03:37:38 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Avoid ternary operator by directly referring to counters->type
+Date:   Mon,  5 Dec 2022 19:37:18 +0800
+Message-Id: <20221205113718.1487-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221205100837.29212-1-johan+linaro@kernel.org>
- <20221205100837.29212-3-johan+linaro@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221205100837.29212-3-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Like Xu <likexu@tencent.com>
 
+In either case, the counters will point to fixed or gp pmc array, and
+taking advantage of the C pointer, it's reasonable to use an almost known
+mem load operation directly without disturbing the branch predictor.
 
-On 05/12/2022 11:08, Johan Hovold wrote:
-> The SC8280XP UFS controllers are cache coherent and must be marked as
-> such in the devicetree to avoid potential data corruption.
-> 
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Cc: stable@vger.kernel.org      # 6.0
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/vmx/pmu_intel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Konrad
->   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index c4947c563099..23d1f51527aa 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1430,6 +1430,7 @@ ufs_mem_hc: ufs@1d84000 {
->   			required-opps = <&rpmhpd_opp_nom>;
->   
->   			iommus = <&apps_smmu 0xe0 0x0>;
-> +			dma-coherent;
->   
->   			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
->   				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> @@ -1491,6 +1492,7 @@ ufs_card_hc: ufs@1da4000 {
->   			power-domains = <&gcc UFS_CARD_GDSC>;
->   
->   			iommus = <&apps_smmu 0x4a0 0x0>;
-> +			dma-coherent;
->   
->   			clocks = <&gcc GCC_UFS_CARD_AXI_CLK>,
->   				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index e5cec07ca8d9..28b0a784f6e9 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -142,7 +142,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+ 	}
+ 	if (idx >= num_counters)
+ 		return NULL;
+-	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
++	*mask &= pmu->counter_bitmask[counters->type];
+ 	return &counters[array_index_nospec(idx, num_counters)];
+ }
+ 
+-- 
+2.38.1
+
