@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3286430B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2544E6430BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiLESoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S232187AbiLESsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiLESoa (ORCPT
+        with ESMTP id S231497AbiLESr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:44:30 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD13138;
-        Mon,  5 Dec 2022 10:44:29 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id v8so17104573edi.3;
-        Mon, 05 Dec 2022 10:44:29 -0800 (PST)
+        Mon, 5 Dec 2022 13:47:57 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA5767D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:47:56 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id k79so12275147pfd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 10:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dlHbPYWA6349Ak4E81TJrxbwnHl0AOIrx3H6Nh0+tbA=;
-        b=UyO2bJTpFVjMY/0tBBDoPGsNfZlMI2tQ6T9TO0Se8rWkVDepqwR5LDaw5qoE6k4Xl6
-         RUrKk1f7VKjgKTMvPFJYmmJgoSqHZZhZNJFoYrZozl4LGj+6lPmbHwNhtbc0+PHGW/p4
-         aOQbKkS73nEae24oBKL/BgSlhEjBni+mcX+cZt2k6B9khxwMiVgAP+dFzzT8gI41hGGZ
-         FAMJ2c58IbkULB91g9pGA2CvSqvXhj+pViCw8xF7BsSO8wM5/KiG5f7ZIhG908Oz8k4k
-         07BRzeIfxNZCBKvnV6Mp3VDOVNQdnbiJV8RRNUXpOjMFNuOUsSXB3jjZiHJ96+dsQSGJ
-         5AuA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YrigZB+zmGJr5Zr508QSWdYu0zn32gW/8ZNDwNQuw7g=;
+        b=gSYORyZKVRjLACv6wQaHjSP9S7Pl9wLf7iQVGOXsrs0R4h5msPwAtRg2zHHoTtqHuq
+         KtVURmXwLvL0R6xQiAZ9/g2oJrjFTkdmXUxs50u9XEk2ZtIGm7LeTDAt+eyuSzBhwa4D
+         a2+Yv8ae6BCLyzcK1RjfKTmH6NjU0A2Fz0BMEx1QXpqeQOdugFYnNzaPCr3JJBFuuxJM
+         KDtEu+kO8MYua1hWG2EfeHXI3LAAQstbjQsATz/VzJ8po1WcZMrtUu+k/6ZJijvrMc+G
+         qXiI9Ft1dcXRD8o5Zh4E0M6SybmBhLLLgQWsOLyul5/5t+hwcqZawYpzLSY9GF1ulLDc
+         QNPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dlHbPYWA6349Ak4E81TJrxbwnHl0AOIrx3H6Nh0+tbA=;
-        b=EkvbhSvietVkW9Fn+uEZslFS3nyG0U+8ESxTx7LSpJTDYTqePqj3TpfkDCYD0rNiMb
-         4OXfuYPAnbwyneoGHkJBuIcdZ+vDQ7v9elQ9RR2CTdtVHX4SR7NRTjh28p54gHsY4+UQ
-         czeWyjZd5vwgL5r9t50QQxKmFiGb06SLBQJny2lPDvD+JoW9bj4wbG6eoMJtzz2UN8F2
-         VsvqVvI3SmCeq3l/Kg3IGmTjCNJmvcM7m9txotOeUe2BUOMObmzzdblT6qg2fc9oyfWP
-         Fx97JfzNkDlcW/OXRLKlRm+1OAZR4gxagSjb3tyIlUmX6lUVEnHwwz69cGV0+4K2wTQa
-         ygTg==
-X-Gm-Message-State: ANoB5pkJW2fZVnZ/OAvK68led2q7VUB+T3hh/fmc08xfJ7A6llI7CNxc
-        /Gt720CTGQ212j7o5XTDBYA=
-X-Google-Smtp-Source: AA0mqf6Ts/kNLWVJ/stt694d1GxznEbV+QnGfRt4nf9Wu50yMePzguJgq41aTGP0fEAvkbNYwvPaJw==
-X-Received: by 2002:aa7:c046:0:b0:461:54f0:f7dc with SMTP id k6-20020aa7c046000000b0046154f0f7dcmr74844673edo.117.1670265868344;
-        Mon, 05 Dec 2022 10:44:28 -0800 (PST)
-Received: from [192.168.0.131] ([194.183.54.57])
-        by smtp.gmail.com with ESMTPSA id y20-20020a50eb94000000b004589da5e5cesm103090edr.41.2022.12.05.10.44.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 10:44:27 -0800 (PST)
-Message-ID: <38c9aae4-0cae-a5a6-7c76-f23edf259dab@gmail.com>
-Date:   Mon, 5 Dec 2022 19:44:25 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YrigZB+zmGJr5Zr508QSWdYu0zn32gW/8ZNDwNQuw7g=;
+        b=7T4Z3R3Tg0y/Zr5cFZzHympQso02NrIRcHfR40EFV0N16uLiugMJKDjHSgQ8aSG0cN
+         mXu3p1PeP7qsdSIFRjv7aNMKOWWj9iA936Uh/oQEF2yUuOWQZIxW74aaJQoVmvwl292g
+         iMIXqevWVPw/HJFjLL0jFRZGbmuhjIbGgBr5PEjirsUtUaiOZJFfog/Iqx3KLWALMTPQ
+         HT2DaHjIBV/CGbr/QfiHbTMM0MAYsWoBbv3UyO7odvZOdsE/cGdTM2kKXGuVZMR8AFHZ
+         GRCZad/eUXpPlrsVCtKAwlATYvb68IqmdjQiOuJNDJCDMYP/3HQNFCbRwu34v4ZdcY4J
+         Covg==
+X-Gm-Message-State: ANoB5pnm4Uyd59MapLv3iOaa/69zw0HAYIMNB71ipxVAG5S6z3qxzcAp
+        QKNMuaBqtIKeelci/+ZNEDO4DA==
+X-Google-Smtp-Source: AA0mqf7eSz+OKER6mMRXKfL3nLzDoJzbbQPyH8j5i4FRo1/xDCtpYH2euAUKt5wRJ3P7imcwMrOoSw==
+X-Received: by 2002:a63:164f:0:b0:477:f9fa:2a1e with SMTP id 15-20020a63164f000000b00477f9fa2a1emr39836735pgw.87.1670266073492;
+        Mon, 05 Dec 2022 10:47:53 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 129-20020a620687000000b00574ee8cfdabsm7395799pfg.148.2022.12.05.10.47.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 10:47:53 -0800 (PST)
+Date:   Mon, 5 Dec 2022 18:47:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Vipin Sharma <vipinsh@google.com>, dmatlack@google.com,
+        pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2 1/2] KVM: x86/mmu: Allocate page table pages on TDP
+ splits during dirty log enable on the underlying page's numa node
+Message-ID: <Y4481WPLstNidb9X@google.com>
+References: <20221201195718.1409782-1-vipinsh@google.com>
+ <20221201195718.1409782-2-vipinsh@google.com>
+ <CANgfPd_sZoW6gRNgs44BbBu4RhwqNPjUO-=biJ++L5d8LpU3zg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
-Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel@dh-electronics.com, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
- <Y3y/S5COG7VPbsqL@duo.ucw.cz> <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
- <20221130191905.GA2631320-robh@kernel.org>
- <4043d693-7739-4709-8551-9f476031db70@denx.de>
-From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
-In-Reply-To: <4043d693-7739-4709-8551-9f476031db70@denx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANgfPd_sZoW6gRNgs44BbBu4RhwqNPjUO-=biJ++L5d8LpU3zg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,83 +76,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Side topic, the shortlog is way, way too long.  The purpose of the shortlog is
+to provide a synopsis of the change, not to describe the change in detail.
 
-On 12/2/22 00:41, Marek Vasut wrote:
-> On 11/30/22 20:19, Rob Herring wrote:
->> On Fri, Nov 25, 2022 at 10:26:30PM +0100, Marek Vasut wrote:
->>> On 11/22/22 13:23, Pavel Machek wrote:
->>>> Hi!
->>>
->>> Hi,
->>>
->>>>> Mark the label property as deprecated as it is mentioned
->>>>> in the description.
->>>>
->>>> Lets do it the other way around. Functions (etc) don't really provide
->>>> good enough description of LED, and label is still needed.
->>>
->>> Can you please provide a clear explanation which property or approach 
->>> is the
->>> correct one for new DTs ?
->>>
->>> So far, the documentation states that "label" is deprecated, and users
->>> should replace it with "function" and "color".
->>
->> 'function' is what activity/operation the LED is associated with. It is
->> a fixed set of strings which s/w may use. It is a replacement for
->> 'linux,default-trigger'.
-> 
-> Isn't this 'function' more of a standardized replacement for 'label' ?
+I also think this patch should be 2/2, with the more generic support added along
+with the module param (or capability) in 1/2.  E.g. to yield something like
 
-Yes it is. Introduction of function and color properties aimed at 
-standardizing LED naming. Before there was only 'label' used for that,
-with DT node name as fallback if 'label' property was not provided.
-With introduction of 'function' and 'color' label was deprecated in
-the sense that if the former two are present, they are used for
-composing the LED name.
+  KVM: x86/mmu: Add a module param to make per-vCPU SPTs NUMA aware
+  KVM: x86/mmu: Honor NUMA awareness for per-VM page table allocations
 
-In LED documentation [0] people are encouraged to use definitions from
-include/dt-bindings/leds/common.h to keep LED naming uniform.
-It allows to avoid duplicates like "wlan" and "wifi".
+On Mon, Dec 05, 2022, Ben Gardon wrote:
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 4736d7849c60..0554dfc55553 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -90,6 +90,9 @@ __MODULE_PARM_TYPE(nx_huge_pages_recovery_period_ms, "uint");
+> >  static bool __read_mostly force_flush_and_sync_on_reuse;
+> >  module_param_named(flush_on_reuse, force_flush_and_sync_on_reuse, bool, 0644);
+> >
+> > +static bool __read_mostly numa_aware_pagetable = true;
+> > +module_param_named(numa_aware_pagetable, numa_aware_pagetable, bool, 0644);
+> > +
+> 
+> I'm usually all for having module params to control things, but in
+> this case I don't think it provides much value because whether this
+> NUMA optimization is useful or not is going to depend more on VM size
+> and workload than anything else. If we wanted to make this
+> configurable, a VM capability would probably be a better mechanism so
+> that userspace could leave it off when running small,
+> non-performance-sensitive VMs
 
-> $ git grep LED_FUNCTION_ include/
-> ...
-> include/dt-bindings/leds/common.h:#define LED_FUNCTION_PLAYER5 "player-5"
-> include/dt-bindings/leds/common.h:#define LED_FUNCTION_ACTIVITY "activity"
-> include/dt-bindings/leds/common.h:#define LED_FUNCTION_ALARM "alarm"
-> include/dt-bindings/leds/common.h:#define LED_FUNCTION_BACKLIGHT 
-> "backlight"
-> include/dt-bindings/leds/common.h:#define LED_FUNCTION_BLUETOOTH 
-> "bluetooth"
-> include/dt-bindings/leds/common.h:#define LED_FUNCTION_BOOT "boot"
-> ...
-> 
-> Seems to me that ^ is closer to a "standardized" form of 'label' .
-> 
-> The LED subsystem does not infer any behavior of those LEDs based on 
-> their 'function' property as far as I can tell, at least not in the way 
-> 'linux,default-trigger' behaves.
-> 
->> 'label' is what is printed next to the LED for a human to read. 'label'
->> can be anything and the OS shouldn't care what it is.
-> 
-> This part I understand. What is not clear to me is, why is 'label' being 
-> un-deprecated.
+Would we actually want to turn it off in this case?  IIUC, @nid is just the
+preferred node, i.e. failure to allocate for the preferred @nid will result in
+falling back to other nodes, not outright failure.  So the pathological worst
+case scenario would be that for a system with VMs that don't care about performance,
+all of a nodes memory is allocated due to all VMs starting on that node.
 
-It shouldn't be. It seems to be Pavel's ad-hoc decision.
+On the flip side, if a system had a mix of VM shapes, I think we'd want even the
+performance insensitive VMs to be NUMA aware so that they can be sequestered on
+their own node(s), i.e. don't "steal" memory from the VMs that are performance
+sensitive and have been affined to a single node.
 
-> We newly have 'function', 'function-enumerator' and 'color' DT 
-> properties for LEDs, which seem to be standardized forms of describing 
-> what the LED is used for, which LED it is (if there are multiple), and 
-> color of that LED. This was previously described in the 'label' 
-> property, usually in free form of e.g. "beaglebone:green:usr2" .
-> 
->> They serve 2 different purposes.
-> 
-> [...]
-
-[0] Documentation/leds/leds-class.rst
--- 
-Best regards,
-Jacek Anaszewski
+> and turn it on when running large, multi-node VMs. A whole-host module
+> parameter seems overly restrictive.
