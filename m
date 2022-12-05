@@ -2,53 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DC1642100
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D21642108
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiLEBPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S231249AbiLEBTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiLEBPs (ORCPT
+        with ESMTP id S231235AbiLEBTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:15:48 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363E99FDE;
-        Sun,  4 Dec 2022 17:15:46 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQQbL1dL5z4xN8;
-        Mon,  5 Dec 2022 12:15:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670202944;
-        bh=va+ER1GinBW/ZbxfHD/We3OdldRGmNelHCbNhtA+I08=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LUiOAsmxErriObZ4GNeT4CErqp+Xlt6RFwjfddFzTwvL3jPnkDLHQJ6Fdd7wUXto3
-         iOPIhzSXzyQko5Ec6CH9xdq6WGmTOQTZlZn/RDWUqo7d1pqvFJGme1OBjNLT1innkY
-         8Th63qUjUT12CVTvt3nX0qD6RmLDceM69/0eb4YnXVBZ56lv02Max6IjQxuRf2x0uX
-         bFSsmsunqM5NhrzY8x6WIK1UyBNXlfvVDZeRW3un4JzJPrfLUmnGkJuBQ9NmBNEzxy
-         TJ/fUip4tC0hRFiLkzXEF/wWHoM2s3EhT5XFy+daZjqByZgxsaSnqmj9Y8g8lTZhXZ
-         b9r76AcovcZWA==
-Date:   Mon, 5 Dec 2022 12:15:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20221205121540.25a993c2@canb.auug.org.au>
+        Sun, 4 Dec 2022 20:19:45 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5EE12AF5;
+        Sun,  4 Dec 2022 17:19:43 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NQQg26jXFzmVRP;
+        Mon,  5 Dec 2022 09:18:54 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Dec 2022 09:19:40 +0800
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Adapt 32-bit return value kfunc for
+ 32-bit ARM when zext extension
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        <colin.i.king@gmail.com>, Artem Savkov <asavkov@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>, bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20221126094530.226629-1-yangjihong1@huawei.com>
+ <20221126094530.226629-2-yangjihong1@huawei.com>
+ <20221128015758.aekybr3qlahfopwq@MacBook-Pro-5.local>
+ <dc9d1823-80f2-e2d9-39a8-c39b6f52dec5@huawei.com>
+ <CAADnVQJPRCnESmJ92W39bo-btqNbYaNsGQO0is6FD3JLU_mSjQ@mail.gmail.com>
+ <8cb54255-4dce-6d50-d6f0-ac9af0e56f37@huawei.com>
+ <CAADnVQJXr6XxpG2E-AkO7__qg-sujrhyO+JWWa1iwYmAO4S0Pw@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <4a2b8cd5-78c4-360a-6eb0-33fcf689d26a@huawei.com>
+Date:   Mon, 5 Dec 2022 09:19:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ta_TCegbeHFhMSoB1X7m4ax";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <CAADnVQJXr6XxpG2E-AkO7__qg-sujrhyO+JWWa1iwYmAO4S0Pw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,106 +80,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ta_TCegbeHFhMSoB1X7m4ax
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+On 2022/12/4 0:40, Alexei Starovoitov wrote:
+> On Fri, Dec 2, 2022 at 6:58 PM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>
+>>
+>>
+>> On 2022/11/29 0:41, Alexei Starovoitov wrote:
+>>> On Mon, Nov 28, 2022 at 4:40 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 2022/11/28 9:57, Alexei Starovoitov wrote:
+>>>>> On Sat, Nov 26, 2022 at 05:45:27PM +0800, Yang Jihong wrote:
+>>>>>> For ARM32 architecture, if data width of kfunc return value is 32 bits,
+>>>>>> need to do explicit zero extension for high 32-bit, insn_def_regno should
+>>>>>> return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
+>>>>>> opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
+>>>>>>
+>>>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>>>>>> ---
+>>>>>>     kernel/bpf/verifier.c | 44 ++++++++++++++++++++++++++++++++++++++++---
+>>>>>>     1 file changed, 41 insertions(+), 3 deletions(-)
+>>>>>>
+>>>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>>>>> index 264b3dc714cc..193ea927aa69 100644
+>>>>>> --- a/kernel/bpf/verifier.c
+>>>>>> +++ b/kernel/bpf/verifier.c
+>>>>>> @@ -1927,6 +1927,21 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
+>>>>>>                       sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
+>>>>>>     }
+>>>>>>
+>>>>>> +static int kfunc_desc_cmp_by_imm(const void *a, const void *b);
+>>>>>> +
+>>>>>> +static const struct bpf_kfunc_desc *
+>>>>>> +find_kfunc_desc_by_imm(const struct bpf_prog *prog, s32 imm)
+>>>>>> +{
+>>>>>> +    struct bpf_kfunc_desc desc = {
+>>>>>> +            .imm = imm,
+>>>>>> +    };
+>>>>>> +    struct bpf_kfunc_desc_tab *tab;
+>>>>>> +
+>>>>>> +    tab = prog->aux->kfunc_tab;
+>>>>>> +    return bsearch(&desc, tab->descs, tab->nr_descs,
+>>>>>> +                   sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm);
+>>>>>> +}
+>>>>>> +
+>>>>>>     static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+>>>>>>                                         s16 offset)
+>>>>>>     {
+>>>>>> @@ -2342,6 +2357,13 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>>>>>                         */
+>>>>>>                        if (insn->src_reg == BPF_PSEUDO_CALL)
+>>>>>>                                return false;
+>>>>>> +
+>>>>>> +                    /* Kfunc call will reach here because of insn_has_def32,
+>>>>>> +                     * conservatively return TRUE.
+>>>>>> +                     */
+>>>>>> +                    if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
+>>>>>> +                            return true;
+>>>>>> +
+>>>>>>                        /* Helper call will reach here because of arg type
+>>>>>>                         * check, conservatively return TRUE.
+>>>>>>                         */
+>>>>>> @@ -2405,10 +2427,26 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>>>>>     }
+>>>>>>
+>>>>>>     /* Return the regno defined by the insn, or -1. */
+>>>>>> -static int insn_def_regno(const struct bpf_insn *insn)
+>>>>>> +static int insn_def_regno(struct bpf_verifier_env *env, const struct bpf_insn *insn)
+>>>>>>     {
+>>>>>>        switch (BPF_CLASS(insn->code)) {
+>>>>>>        case BPF_JMP:
+>>>>>> +            if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>>>>>> +                    const struct bpf_kfunc_desc *desc;
+>>>>>> +
+>>>>>> +                    /* The value of desc cannot be NULL */
+>>>>>> +                    desc = find_kfunc_desc_by_imm(env->prog, insn->imm);
+>>>>>> +
+>>>>>> +                    /* A kfunc can return void.
+>>>>>> +                     * The btf type of the kfunc's return value needs
+>>>>>> +                     * to be checked against "void" first
+>>>>>> +                     */
+>>>>>> +                    if (desc->func_model.ret_size == 0)
+>>>>>> +                            return -1;
+>>>>>> +                    else
+>>>>>> +                            return insn->dst_reg;
+>>>>>> +            }
+>>>>>> +            fallthrough;
+>>>>>
+>>>>> I cannot make any sense of this patch.
+>>>>> insn->dst_reg above is 0.
+>>>>> The kfunc call doesn't define a register from insn_def_regno() pov.
+>>>>>
+>>>>> Are you hacking insn_def_regno() to return 0 so that
+>>>>> if (WARN_ON(load_reg == -1)) {
+>>>>>      verbose(env, "verifier bug. zext_dst is set, but no reg is defined\n");
+>>>>>      return -EFAULT;
+>>>>> }
+>>>>> in opt_subreg_zext_lo32_rnd_hi32() doesn't trigger ?
+>>>>>
+>>>>> But this verifier message should have been a hint that you need
+>>>>> to analyze why zext_dst is set on this kfunc call.
+>>>>> Maybe it shouldn't ?
+>>>>> Did you analyze the logic of mark_btf_func_reg_size() ?
+>>>> make r0 zext is not caused by mark_btf_func_reg_size.
+>>>>
+>>>> This problem occurs when running the kfunc_call_test_ref_btf_id test
+>>>> case in the 32-bit ARM environment.
+>>>
+>>> Why is it not failing on x86-32 ?
+>> Use the latest mainline kernel code to test on the x86_32 machine. The
+>> test also fails:
+>>
+>>     # ./test_progs -t kfunc_call/kfunc_call_test_ref_btf_id
+>>     Failed to load bpf_testmod.ko into the kernel: -8
+>>     WARNING! Selftests relying on bpf_testmod.ko will be skipped.
+>>     libbpf: prog 'kfunc_call_test_ref_btf_id': BPF program load failed:
+>> Bad address
+>>     libbpf: prog 'kfunc_call_test_ref_btf_id': -- BEGIN PROG LOAD LOG --
+>>     processed 25 insns (limit 1000000) max_states_per_insn 0 total_states
+>> 2 peak_states 2 mark_read 1
+>>     -- END PROG LOAD LOG --
+>>     libbpf: prog 'kfunc_call_test_ref_btf_id': failed to load: -14
+>>     libbpf: failed to load object 'kfunc_call_test'
+>>     libbpf: failed to load BPF skeleton 'kfunc_call_test': -14
+>>     verify_success:FAIL:skel unexpected error: -14
+>>
+>> Therefore, this problem also exists on x86_32:
+>> "verifier bug. zext_dst is set, but no reg is defined"
+> 
+> The kernel returns -14 == EFAULT.
+> That's a completely different issue.
+It's the same problem. The opt_subreg_zext_lo32_rnd_hi32 function fails 
+to check here and returns -EFAULT
 
-In file included from include/linux/uaccess.h:11,
-                 from include/linux/sched/task.h:11,
-                 from include/linux/sched/signal.h:9,
-                 from include/linux/rcuwait.h:6,
-                 from include/linux/percpu-rwsem.h:7,
-                 from include/linux/fs.h:33,
-                 from include/linux/huge_mm.h:8,
-                 from include/linux/mm.h:726,
-                 from drivers/media/common/videobuf2/frame_vector.c:5:
-drivers/media/common/videobuf2/frame_vector.c: In function 'get_vaddr_frame=
-s':
-drivers/media/common/videobuf2/frame_vector.c:46:31: error: 'mm' undeclared=
- (first use in this function); did you mean 'tm'?
-   46 |         start =3D untagged_addr(mm, start);
-      |                               ^~
-arch/x86/include/asm/uaccess.h:38:28: note: in definition of macro 'untagge=
-d_addr'
-   38 |                 __addr &=3D (mm)->context.untag_mask | sign;       =
-       \
-      |                            ^~
-drivers/media/common/videobuf2/frame_vector.c:46:31: note: each undeclared =
-identifier is reported only once for each function it appears in
-   46 |         start =3D untagged_addr(mm, start);
-      |                               ^~
-arch/x86/include/asm/uaccess.h:38:28: note: in definition of macro 'untagge=
-d_addr'
-   38 |                 __addr &=3D (mm)->context.untag_mask | sign;       =
-       \
-      |                            ^~
+opt_subreg_zext_lo32_rnd_hi32 {
+   ...
+    if (WARN_ON(load_reg == -1)) { 
 
-Caused by commit
+            verbose(env, "verifier bug. zext_dst is set, but no reg is 
+defined\n");
+            return -EFAULT; 
 
-  062c9b2996e9 ("mm: Pass down mm_struct to untagged_addr()")
+    }
+   ...
+} 
 
-interacting with commit
-
-  6647e76ab623 ("v4l2: don't fall back to follow_pfn() if pin_user_pages_fa=
-st() fails")
-
-from Linus' tree.
-
-I have applied the following merge fix patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 5 Dec 2022 11:55:52 +1100
-Subject: [PATCH] fix up for "mm: Pass down mm_struct to untagged_addr()"
-
-interacting with "v4l2: don't fall back to follow_pfn() if pin_user_pages_f=
-ast() fails"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/media/common/videobuf2/frame_vector.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/=
-common/videobuf2/frame_vector.c
-index 18124929b18d..13455a76a37e 100644
---- a/drivers/media/common/videobuf2/frame_vector.c
-+++ b/drivers/media/common/videobuf2/frame_vector.c
-@@ -43,7 +43,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr=
-_frames,
- 	if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
- 		nr_frames =3D vec->nr_allocated;
-=20
--	start =3D untagged_addr(mm, start);
-+	start =3D untagged_addr(current->mm, start);
-=20
- 	ret =3D pin_user_pages_fast(start, nr_frames,
- 				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ta_TCegbeHFhMSoB1X7m4ax
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONRjwACgkQAVBC80lX
-0GyglQf/XuQWW31A/19o3r+K3CnPRal4dtU0hcX4mqfxfQUdwUFZtUOqhkAXUK5C
-ElbQ2RReZCtTZbYVK/Q4TMSN1IfPYQZ1S01qG8mbr5SwtMsRGst5jyIL5+DxIb4C
-K9MOqXug2hz10VyYCkLRWj9GBBGqGyyK4sweo42i8Cfuv1YfJ8OcyqdRhDnwVyK0
-lYfGHtmLMYP9xWbMwkDLBqwp99P/vtaGTF4Jvx+ilPkLtOiDVhCMA6F9nAH+7HS0
-13oWdWzdjRj6q/o0zxGlwzVEuZzwtFnaMd/9ZOJh+30WnZ/2rIIrpc8mz1x7jshR
-kHB0MwWajKVrZLvqMod33Z6oWygEiw==
-=7UPh
------END PGP SIGNATURE-----
-
---Sig_/ta_TCegbeHFhMSoB1X7m4ax--
+> .
+> 
