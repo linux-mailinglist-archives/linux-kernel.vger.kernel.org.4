@@ -2,294 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B26C6428B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB83A6428B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiLEMnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
+        id S231912AbiLEMoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:44:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiLEMni (ORCPT
+        with ESMTP id S231916AbiLEMoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:43:38 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1D255B9;
-        Mon,  5 Dec 2022 04:43:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670244217; x=1701780217;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IUKqw4fNGwWQubPbN+4XH14TACNyuJfdZTat+2XlqW8=;
-  b=WU2kTDrWsttsITxLBjRdI3F52EtiWL4aMcB4Fy/Y7fikFJXwRVZPYJ0i
-   7bDCGOy9IDb4xRgZp2nvBaTPAMyk+qAObWbAsyY3zOra1+ZVCMkAN59+W
-   cst6xvkKuwG9cXWrXk/MZoVmqFaFWUOjJjn1RD1FFl28xUAEWHruCJEdD
-   CZD+uYnWWsePV5XZw9pkIRdrzQjhsybLCv5Bi17jQHz5lL7Br4RESVf6N
-   UOlACld+yvXu/ut9Kodisp6lXWeR0tBCrcThuH9tUjVyEFcgQC2DPQAqz
-   qTBMegozHFyVE0ur2l6a59+1nL1VNPMrINsW/8vaHBde679dYnQFfGdHa
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="402610082"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="402610082"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 04:43:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="974670732"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="974670732"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Dec 2022 04:43:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p2Aol-004sBg-2w;
-        Mon, 05 Dec 2022 14:43:31 +0200
-Date:   Mon, 5 Dec 2022 14:43:31 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] soc: fsl: qe: request pins non-exclusively
-Message-ID: <Y43ncwKEsZbej2tk@smile.fi.intel.com>
-References: <Y400YXnWBdz1e/L5@google.com>
+        Mon, 5 Dec 2022 07:44:02 -0500
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF655B9;
+        Mon,  5 Dec 2022 04:44:01 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id g10so4794417qkl.6;
+        Mon, 05 Dec 2022 04:44:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TzUzCOp5X19qeZL1cceQwqgkE2PSOUqJ0E86UtOHRyA=;
+        b=SP9lITzDqy5eX7H4sqNy5xHmfdl8TBUlplVspn6L1KswcRtTJcLHwhVl4gBBstf3ML
+         VzUg+fklykSsQIXHh43vReEzTEYhUadJw81l1mYmDyIGwriacFp1+2XLwn8RWyyIPjuJ
+         QIJQNGuYiThVY4MhKuROBHNWJOiv9ZvTrdxEBwakaseP8aIKwZfZqe+96rjwNmClGGqx
+         GBK3HgEufrby6Z7+ylEWNqzse7c/y+eEqmxdlXSLmTTEoU2TSaNccFHjDbSdlEFJJwSK
+         WLLcH5ufd9RuZgV8/08/QNw3qKjbNkwI60l6DuR2FsBKHXWXpBLsnh427I6yjgZr2wmf
+         u8Gw==
+X-Gm-Message-State: ANoB5pnOf6AjAWVGqfCSiYXc25tSpOADnhHwkPbp31Ugk4cmuIr7MLSl
+        RIJjX57keDeglf/vWjC9pGgux5tp0cOwPi0vfpc=
+X-Google-Smtp-Source: AA0mqf7S7sVxeiHwSk0PWz9FjQsjzPmSWEmNWlCSfo35QAYSIjKR/w40D+fWE7Xl8AAOqsw1/bu/5QeSfAflW3D8jGM=
+X-Received: by 2002:a05:620a:22fa:b0:6fb:c38e:e5dd with SMTP id
+ p26-20020a05620a22fa00b006fbc38ee5ddmr72744089qki.23.1670244240586; Mon, 05
+ Dec 2022 04:44:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y400YXnWBdz1e/L5@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+ <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
+ <Y4zm9T+WYmyWwik4@zn.tnic> <7a094893-0c2e-a09b-3a10-02fe7aa8680b@gmail.com>
+In-Reply-To: <7a094893-0c2e-a09b-3a10-02fe7aa8680b@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Dec 2022 13:43:45 +0100
+Message-ID: <CAJZ5v0gthM-shi9udDmjiknKV29DYOr5o6b4b=taJEwZedM5=w@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: acpi: Defer setting boost MSRs
+To:     stuart hayes <stuart.w.hayes@gmail.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 03:59:29PM -0800, Dmitry Torokhov wrote:
-> Commit 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()") changed
-> qe_pin_request() to request and hold GPIO corresponding to a given pin.
-> Unfortunately this does not work, as fhci-hcd requests these GPIOs
-> first, befor calling qe_pin_request() (see
+On Sun, Dec 4, 2022 at 8:20 PM stuart hayes <stuart.w.hayes@gmail.com> wrote:
+>
+>
+>
+> On 12/4/2022 12:29 PM, Borislav Petkov wrote:
+> > On Thu, Nov 03, 2022 at 07:19:47PM +0100, Rafael J. Wysocki wrote:
+> >> On Wed, Nov 2, 2022 at 9:01 PM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
+> >>>
+> >>> When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
+> >>> MSR) before the driver is registered with cpufreq.  This can be very time
+> >>> consuming, because it is done with a CPU hotplug startup callback, and
+> >>> cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
+> >>> on each CPU one at a time, waiting for each to run before calling the next.
+> >>>
+> >>> If cpufreq_register_driver() fails--if, for example, there are no ACPI
+> >>> P-states present--this is wasted time.
+> >>>
+> >>> Since cpufreq already sets up a CPU hotplug startup callback if and when
+> >>> acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
+> >>> which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
+> >>> exit quickly if it is loaded but not needed.
+> >>>
+> >>> On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
+> >>>
+> >>> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> >>> ---
+> >>>   drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
+> >>>   1 file changed, 3 insertions(+), 28 deletions(-)
+> >
+> > ...
+> >
+> >> Applied as 6.2 material, thanks!
+> >
+> > My 32-bit Atom doesn't like this one. Reverting fixes it ofc.
+> >
+> > [   22.780260] unchecked MSR access error: WRMSR to 0x1a0 (tried to write 0x0000004364950488) at rIP: 0xf80b37d4 (boost_set_msr.isra.0+0x9c/0x114 [acpi_cpufreq])
+> > [   22.781186] Call Trace:
+> > [   22.781186]  boost_set_msr_each+0x15/0x1c [acpi_cpufreq]
+> > [   22.781186]  __flush_smp_call_function_queue+0x132/0x1cc
+> > [   22.781186]  ? sysvec_call_function+0x30/0x30
+> > [   22.781186]  generic_smp_call_function_single_interrupt+0x12/0x18
+> > [   22.781186]  __sysvec_call_function_single.constprop.0+0x43/0x1d8
+> > [   22.781186]  sysvec_call_function_single+0x18/0x30
+> > [   22.781186]  handle_exception+0x133/0x133
+> > [   22.781186] EIP: finish_task_switch.isra.0+0x124/0x3a8
+> > [   22.781186] Code: d8 e8 8c 16 92 00 85 f6 75 e8 a1 04 24 6c c2 85 c0 0f 8f 9b 00 00 00 89 d8 e8 e4 02 92 00 e8 53 9e 0b 00 fb 64 a1 40 f9 69 c2 <8b> 80 5c 0f 00 00 85 c0 0f 85 72 01 00 00 a1 28 24 6c c2 64 8b 15
+> > [   22.781186] EAX: c32e2700 EBX: f748af40 ECX: 00000000 EDX: c1c3876e
+> > [   22.781186] ESI: 00000000 EDI: 00000000 EBP: c3241f90 ESP: c3241f78
+> > [   22.781186] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00000206
+> > [   22.781186]  ? uevent_seqnum_show+0x1b/0x28
+> > [   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+> > [   22.781186]  ? sysvec_call_function+0x30/0x30
+> > [   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+> > [   22.781186]  ? sysvec_call_function+0x30/0x30
+> > [   22.781186]  ? finish_task_switch.isra.0+0x124/0x3a8
+> > [   22.781186]  schedule_tail+0x12/0x78
+> > [   22.781186]  schedule_tail_wrapper+0x9/0x10
+> > [   22.781186]  ret_from_fork+0x5/0x28
+> > [   22.781186] EIP: 0xb7fba549
+> > [   22.781186] Code: Unable to access opcode bytes at 0xb7fba51f.
+> > [   22.781186] EAX: 00000000 EBX: 01200011 ECX: 00000000 EDX: 00000000
+> > [   22.781186] ESI: 00000000 EDI: b7bfe868 EBP: 00000000 ESP: bfcfedc0
+> > [   22.781186] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
+> >
+>
+> I believe I see the problem... acpi_cpufreq_cpu_init is calling set_boost() directly without checking to see if acpi_cpufreq_driver.set_boost was set, so it is trying to set the MSR on CPUs that don't support it.
+>
+> Thanks, I can submit a patch to fix this.
 
-before ?
+Yes, please.
 
-> drivers/usb/host/fhci-hcd.c::of_fhci_probe()).
-> To fix it change qe_pin_request() to request GPIOs non-exclusively, and
-> free them once the code determines GPIO controller and offset for each
-> GPIO/pin.
-> 
-> Also reaching deep into gpiolib implementation is not the best idea. We
-> should either export gpio_chip_hwgpio() or keep converting to the global
-> gpio numbers space until we fix the driver to implement proper pin
-
-GPIO number
-
-> control.
-
-With or without being rebased on top of the PR that in conflict with this
-change,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-(see some nit-picks below)
-
-> Fixes: 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
-> 
-> v2:
-> 
->  - rebased on top of soc/driver. This will conflict with
->    c9eb6e546a23 soc: fsl: qe: Switch to use fwnode instead of of_node
->    found in next, the resolution is trivial: accept
->    fwnode_device_is_compatible() line found in next.
->  - fixed leak of gpiod when gc is not found
->  - dropped Linus' reviewed-by as the patch changed
-> 
->  drivers/soc/fsl/qe/gpio.c   | 51 +++++++++++++++++--------------------
->  drivers/usb/host/fhci-hcd.c |  2 +-
->  include/soc/fsl/qe/qe.h     |  5 ++--
->  3 files changed, 28 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/soc/fsl/qe/gpio.c b/drivers/soc/fsl/qe/gpio.c
-> index af9193e7e49b..1440922341d8 100644
-> --- a/drivers/soc/fsl/qe/gpio.c
-> +++ b/drivers/soc/fsl/qe/gpio.c
-> @@ -13,19 +13,12 @@
->  #include <linux/err.h>
->  #include <linux/io.h>
->  #include <linux/of.h>
-> -#include <linux/of_gpio.h>
-> +#include <linux/of_gpio.h>	/* for of_mm_gpio_chip */
->  #include <linux/gpio/consumer.h>
->  #include <linux/gpio/driver.h>
->  #include <linux/slab.h>
->  #include <linux/export.h>
->  #include <soc/fsl/qe/qe.h>
-> -/*
-> - * FIXME: this is legacy code that is accessing gpiolib internals in order
-> - * to implement a custom pin controller. The proper solution is to create
-> - * a real combined pin control and GPIO driver in drivers/pinctrl. However
-> - * this hack is here for legacy code reasons.
-> - */
-> -#include "../../../gpio/gpiolib.h"
->  
->  struct qe_gpio_chip {
->  	struct of_mm_gpio_chip mm_gc;
-> @@ -147,65 +140,70 @@ struct qe_pin {
->  	 * something like qe_pio_controller. Someday.
->  	 */
->  	struct qe_gpio_chip *controller;
-> -	struct gpio_desc *gpiod;
->  	int num;
->  };
->  
->  /**
->   * qe_pin_request - Request a QE pin
-> - * @np:		device node to get a pin from
-> - * @index:	index of a pin in the device tree
-> + * @dev:	device to get the pin from
-> + * @index:	index of the pin in the device tree
->   * Context:	non-atomic
->   *
->   * This function return qe_pin so that you could use it with the rest of
->   * the QE Pin Multiplexing API.
->   */
-> -struct qe_pin *qe_pin_request(struct device_node *np, int index)
-> +struct qe_pin *qe_pin_request(struct device *dev, int index)
->  {
->  	struct qe_pin *qe_pin;
->  	struct gpio_chip *gc;
->  	struct gpio_desc *gpiod;
-> +	int gpio_num;
->  	int err;
->  
->  	qe_pin = kzalloc(sizeof(*qe_pin), GFP_KERNEL);
->  	if (!qe_pin) {
-> -		pr_debug("%s: can't allocate memory\n", __func__);
-> +		dev_dbg(dev, "%s: can't allocate memory\n", __func__);
->  		return ERR_PTR(-ENOMEM);
->  	}
->  
-> -	gpiod = fwnode_gpiod_get_index(of_fwnode_handle(np), NULL, index, GPIOD_ASIS, "qe");
-> -	if (IS_ERR(gpiod)) {
-> -		err = PTR_ERR(gpiod);
-> -		goto err0;
-> -	}
-> -	if (!gpiod) {
-> -		err = -EINVAL;
-> +	/*
-> +	 * Request gpio as nonexclusive as it was likely reserved by the
-
-GPIO
-
-> +	 * caller, and we are not planning on controlling it, we only need
-> +	 * the descriptor to the to the gpio chip structure.
-
-GPIO
-
-> +	 */
-> +	gpiod = gpiod_get_index(dev, NULL, index,
-> +			        GPIOD_ASIS | GPIOD_FLAGS_BIT_NONEXCLUSIVE);
-> +	err = PTR_ERR_OR_ZERO(gpiod);
-> +	if (err)
->  		goto err0;
-> -	}
-> +
->  	gc = gpiod_to_chip(gpiod);
-> +	gpio_num = desc_to_gpio(gpiod);
-> +	/* We no longer need this descriptor */
-> +	gpiod_put(gpiod);
-> +
->  	if (WARN_ON(!gc)) {
->  		err = -ENODEV;
->  		goto err0;
->  	}
-> -	qe_pin->gpiod = gpiod;
-> +
->  	qe_pin->controller = gpiochip_get_data(gc);
->  	/*
->  	 * FIXME: this gets the local offset on the gpio_chip so that the driver
->  	 * can manipulate pin control settings through its custom API. The real
->  	 * solution is to create a real pin control driver for this.
->  	 */
-> -	qe_pin->num = gpio_chip_hwgpio(gpiod);
-> +	qe_pin->num = gpio_num - gc->base;
->  
->  	if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
-> -		pr_debug("%s: tried to get a non-qe pin\n", __func__);
-> -		gpiod_put(gpiod);
-> +		dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
->  		err = -EINVAL;
->  		goto err0;
->  	}
->  	return qe_pin;
->  err0:
->  	kfree(qe_pin);
-> -	pr_debug("%s failed with status %d\n", __func__, err);
-
-> +	dev_dbg(dev, "%s failed with status %d\n", __func__, err);
-
-You can kill these __func__ in dev_dbg():s.
-
->  	return ERR_PTR(err);
->  }
->  EXPORT_SYMBOL(qe_pin_request);
-> @@ -220,7 +218,6 @@ EXPORT_SYMBOL(qe_pin_request);
->   */
->  void qe_pin_free(struct qe_pin *qe_pin)
->  {
-> -	gpiod_put(qe_pin->gpiod);
->  	kfree(qe_pin);
->  }
->  EXPORT_SYMBOL(qe_pin_free);
-> diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
-> index 95a44462bed0..1f666804fa91 100644
-> --- a/drivers/usb/host/fhci-hcd.c
-> +++ b/drivers/usb/host/fhci-hcd.c
-> @@ -651,7 +651,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
->  	}
->  
->  	for (j = 0; j < NUM_PINS; j++) {
-> -		fhci->pins[j] = qe_pin_request(node, j);
-> +		fhci->pins[j] = qe_pin_request(dev, j);
->  		if (IS_ERR(fhci->pins[j])) {
->  			ret = PTR_ERR(fhci->pins[j]);
->  			dev_err(dev, "can't get pin %d: %d\n", j, ret);
-> diff --git a/include/soc/fsl/qe/qe.h b/include/soc/fsl/qe/qe.h
-> index b02e9fe69146..eb5079904cc8 100644
-> --- a/include/soc/fsl/qe/qe.h
-> +++ b/include/soc/fsl/qe/qe.h
-> @@ -172,14 +172,15 @@ static inline int par_io_data_set(u8 port, u8 pin, u8 val) { return -ENOSYS; }
->  /*
->   * Pin multiplexing functions.
->   */
-> +struct device;
->  struct qe_pin;
->  #ifdef CONFIG_QE_GPIO
-> -extern struct qe_pin *qe_pin_request(struct device_node *np, int index);
-> +extern struct qe_pin *qe_pin_request(struct device *dev, int index);
->  extern void qe_pin_free(struct qe_pin *qe_pin);
->  extern void qe_pin_set_gpio(struct qe_pin *qe_pin);
->  extern void qe_pin_set_dedicated(struct qe_pin *pin);
->  #else
-> -static inline struct qe_pin *qe_pin_request(struct device_node *np, int index)
-> +static inline struct qe_pin *qe_pin_request(struct device *dev, int index)
->  {
->  	return ERR_PTR(-ENOSYS);
->  }
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
-> 
-> -- 
-> Dmitry
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Note that I need to get this fix shortly, though, or I will just
+revert the problemating commit before the 6.2 merge window opens.
