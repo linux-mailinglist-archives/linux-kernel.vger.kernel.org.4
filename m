@@ -2,138 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9137D64282B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9D664283E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbiLEMNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S231738AbiLEMRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiLEMNg (ORCPT
+        with ESMTP id S231717AbiLEMQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:13:36 -0500
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A014EAA;
-        Mon,  5 Dec 2022 04:13:35 -0800 (PST)
-Received: by mail-qk1-f171.google.com with SMTP id z1so4733849qkl.9;
-        Mon, 05 Dec 2022 04:13:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eHdyoJWg5eG6rs658NAInWWGVgURCxiUmVnybR6Jh4s=;
-        b=DfXGUaSp9nr4uv4pJ5yp+SzA506DocGivsPxiaudL0zaXs6MGBcJEV5gRJ8TNbzfOe
-         ceEkurlxaKil6K4JRZNn6AJSLGM/7AFA745+dnVNv4Kx26IhYZsaDVQiFWpMlPE+YQ8O
-         ncMlB0WGiLTBXvwpRGjqq+WjnLcnqU4cb93eRE7r90iJZvaZKraMl5I+1jj1qyGfQahU
-         HvgXXG6uJ5+Ypgt2k4iopFLLDe0IcCUxDwy8OLHTc0+tyfydyBQ1WRlifH95E2fqnWQD
-         Q5k7LkEPxu6y5RcIlBNx11mLPmq1Wn7giQ8TTsYH4ZUM5eh0bZZsuMTAb/0OiXU1tcdt
-         5A/w==
-X-Gm-Message-State: ANoB5plcpxkbbZNTLYZ7cM6sHplKesw9/ymo7eUc7r3epxudIax33lvZ
-        i7HGgRYJeQa6pyCp8LfcY945rA1x9F9586qRlp4=
-X-Google-Smtp-Source: AA0mqf5bhqXHGFp6uGZlvRF4UDs3tG353SxBZ3dcUhRUzMCx5wlbrPZ3IKslDTVbUvTdFKnddlzjeu0bcsui8wmA3SA=
-X-Received: by 2002:a05:620a:51ca:b0:6ec:fa04:d97c with SMTP id
- cx10-20020a05620a51ca00b006ecfa04d97cmr55214682qkb.764.1670242414772; Mon, 05
- Dec 2022 04:13:34 -0800 (PST)
+        Mon, 5 Dec 2022 07:16:57 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B28C2B8;
+        Mon,  5 Dec 2022 04:16:53 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5930hN031201;
+        Mon, 5 Dec 2022 13:16:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=F4E0mOmoaIAZJ9PkMgG7OOIOTBy4rN4EPATDJlorF/8=;
+ b=TMbUdr1leDNXrqT78SlEXwx5O845Hlaf1jBS/tYqPq57OMs5bloLbXdrd0qsPYnYxsg7
+ 5rOnD8NPDaCUZ6T/NbiSbdzdXBUm4JtLlD/Djy3LHuYV2V5Kb8N8CdviqI7Fb3RRvyxK
+ 43dYjhbk6UnUHSP779EgH2oBjlD0T8raz+ch1pV8/m5GeEgWTE9FhckD7j4rVHdz1+Oq
+ XN+2+kvcf6qe9hf9HwlG4Q7uRZaDV2dRenQbenTzlmfEIKNDQc1lRsMAy+Gt6EsMRhcL
+ VyauH+cQ01gZapcJz0wcHUhqsVa++QUsKBswMlzf/f9WiTI08lUuJCV2g+V7IjjDtDVn 9g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3m7xp6t12y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Dec 2022 13:16:32 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BC96D10002A;
+        Mon,  5 Dec 2022 13:16:27 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B56AD21ED31;
+        Mon,  5 Dec 2022 13:16:27 +0100 (CET)
+Received: from localhost (10.201.20.178) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 5 Dec
+ 2022 13:16:27 +0100
+From:   Olivier Moysan <olivier.moysan@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] ASoC: stm32: update sound card on stm32mp15xx-dkx
+Date:   Mon, 5 Dec 2022 13:16:00 +0100
+Message-ID: <20221205121602.17187-1-olivier.moysan@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <5627469.DvuYhMxLoT@kreacher> <4789678.31r3eYUQgx@kreacher> <CAPDyKFqu9-=L9B-Vkzqom6akVpim0R2_DPj__3t3dp9Y_oUEEg@mail.gmail.com>
-In-Reply-To: <CAPDyKFqu9-=L9B-Vkzqom6akVpim0R2_DPj__3t3dp9Y_oUEEg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Dec 2022 13:13:20 +0100
-Message-ID: <CAJZ5v0jWBREsP4UN98+d8f35zDNA3PwisAxZDq03mZ1JkAg1ww@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] PM: runtime: Do not call __rpm_callback() from rpm_idle()
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.178]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 1:08 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Fri, 2 Dec 2022 at 15:32, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Calling __rpm_callback() from rpm_idle() after adding device links
-> > support to the former is a clear mistake.
-> >
-> > Not only it causes rpm_idle() to carry out unnecessary actions, but it
-> > is also against the assumption regarding the stability of PM-runtime
-> > status accross __rpm_callback() invocations, because rpm_suspend() and
-> > rpm_resume() may run in parallel with __rpm_callback() when it is called
-> > by rpm_idle() and the device's PM-runtime status can be updated by any
-> > of them.
->
-> Urgh, that's a nasty bug you are fixing here. Is there perhaps some
-> links to some error reports that can make sense to include here?
+This patchset introduces the following changes on STMP32MP15 DK boards
+sound card:
+- Rename the sound card to ease SOC diversity management
+- Cleanup of useless clock property in SAI2A node
 
-There is a bug report, but I have no confirmation that this fix is
-sufficient to address it (even though I'm quite confident that it will
-be).
+Olivier Moysan (2):
+  ARM: dts: stm32: remove sai kernel clock on stm32mp15xx-dkx
+  ARM: dts: rename sound card on stm32mp15xx-dkx
 
-> >
-> > Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/base/power/runtime.c |   12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> >
-> > Index: linux-pm/drivers/base/power/runtime.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/base/power/runtime.c
-> > +++ linux-pm/drivers/base/power/runtime.c
-> > @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
-> >
-> >         dev->power.idle_notification = true;
-> >
-> > -       retval = __rpm_callback(callback, dev);
->
-> Couldn't we just extend __rpm_callback() to take another in-parameter,
-> rather than open-coding the below?
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-I'd rather not do that.
+-- 
+2.25.1
 
-I'd prefer rpm_callback() to be used only in rpm_suspend() and
-rpm_resume() where all of the assumptions hold and rpm_idle() really
-is a special case.
-
-And there is not much open-coding here, just the locking part.
-
-> Note that, __rpm_callback() already uses a "bool use_links" internal
-> variable, that indicates whether the device links should be used or
-> not.
-
-Yes, it does, but why does that matter?
-
-> > +       if (dev->power.irq_safe)
-> > +               spin_unlock(&dev->power.lock);
-> > +       else
-> > +               spin_unlock_irq(&dev->power.lock);
-> > +
-> > +       retval = callback(dev);
-> > +
-> > +       if (dev->power.irq_safe)
-> > +               spin_lock(&dev->power.lock);
-> > +       else
-> > +               spin_lock_irq(&dev->power.lock);
-> >
-> >         dev->power.idle_notification = false;
-> >         wake_up_all(&dev->power.wait_queue);
-> >
-> >
-> >
