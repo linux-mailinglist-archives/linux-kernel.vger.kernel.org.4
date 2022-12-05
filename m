@@ -2,168 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B38F6429C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DB46429C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiLENnd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Dec 2022 08:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S231349AbiLENoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiLENm6 (ORCPT
+        with ESMTP id S232391AbiLENnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:42:58 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6472707
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:42:48 -0800 (PST)
-Received: from lhrpeml500002.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NQl6226FJz6H7WK;
-        Mon,  5 Dec 2022 21:39:54 +0800 (CST)
-Received: from lhrpeml500002.china.huawei.com (7.191.160.78) by
- lhrpeml500002.china.huawei.com (7.191.160.78) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 5 Dec 2022 13:42:46 +0000
-Received: from lhrpeml500002.china.huawei.com ([7.191.160.78]) by
- lhrpeml500002.china.huawei.com ([7.191.160.78]) with mapi id 15.01.2375.034;
- Mon, 5 Dec 2022 13:42:46 +0000
-From:   Jonas Oberhauser <jonas.oberhauser@huawei.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-CC:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] tools: memory-model: Make plain accesses carry
- dependencies
-Thread-Topic: [PATCH v2] tools: memory-model: Make plain accesses carry
- dependencies
-Thread-Index: AQHZBkwkjuVXrORfWke+OSARjbJ/o65a8RAAgAEcUfCAAHmXAIAAGa0AgAACuoCAAA15gIAAG60AgAAPKuCAAI3IAIAB2Mmw
-Date:   Mon, 5 Dec 2022 13:42:46 +0000
-Message-ID: <d86295788ad14a02874ab030ddb8a6f8@huawei.com>
-References: <20221202125100.30146-1-jonas.oberhauser@huaweicloud.com>
- <Y4pIwqK7SWft1xCl@boqun-archlinux>
- <4262e55407294a5989e766bc4dc48293@huawei.com>
- <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4uyzDl49Zm3TSLh@rowland.harvard.edu>
- <20221203204405.GW4001@paulmck-ThinkPad-P17-Gen-1>
- <Y4vAYzJTTQtNkXFh@rowland.harvard.edu>
- <20221203231122.GZ4001@paulmck-ThinkPad-P17-Gen-1>
- <43c7ea9ebdd14497b85633950b014240@huawei.com>
- <Y4xbQmnDEbFTvgQ/@Boquns-Mac-mini.local>
-In-Reply-To: <Y4xbQmnDEbFTvgQ/@Boquns-Mac-mini.local>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.222.55]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 5 Dec 2022 08:43:47 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0325E1DA6D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:43:15 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id w15so18628328wrl.9
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:43:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PSfDwZPeG8ibIdq5sbKvkL1VsqUlUscnguEB5oSOxSc=;
+        b=ZhFQOk5sHEFKzbm8fBjTNTecUMb6srGFq09hOHXW6kISqLW8gBDE3jNN0izPXaaE3X
+         DVOXi2YDNUqfzOv8xB3pFAgcYIuK1FmRV4esx3+KJ3cyZFEiVKFzu7NPXpA2+JEoADaD
+         13amI67POzIZYrUkAoNZH8B4OE4iZiDvYqvAJYQnER8FK5PwsZr6ShoWEvnTLGky3x/A
+         HhQd1huG4wKL1p1O37IhT2z73k7GLly9/OUH08rQU99hjNPkV9UzyOOqX2HNMEd3rXei
+         1tFaqBk4u8sgKKmkYUA8ncwGRbe6Jl7fYsJpJVyDCV6HGhhlyfUEgS5LpfZztLytNEiy
+         wlog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PSfDwZPeG8ibIdq5sbKvkL1VsqUlUscnguEB5oSOxSc=;
+        b=hRJEE/E2s6uVRuuUWCBVqqo0/pWKP2q6OM5y9Tcz5DtLgXlseoxj75X278VJC7Bx3n
+         hqiAtU7rVWDCDevz3owhUNgndKa65mcZ7H6RPIC0/eR9lp2pBPVEQ9qR//GnE487ohSm
+         gaTQijCx9mCF9EDi7wd31wGxCnsJo2ON+r5nd+PqIbOmUcYrNXEwKwpoLpTbjdYFC1LK
+         EZqjvYszPyaKFBrcC3Z+YP7Si6SbTVpiEJJD5kAZSvV8FOxNtjXwrMAwUaIjsI8OSywe
+         7Jd0ouYZzv6HmLamnwxhUp91yFYscEwFff/pv9kwkK9tbAjG0tfxWtGqDGMYsoRnKtuR
+         W+Fw==
+X-Gm-Message-State: ANoB5pmbx2bS3FopkglQBrkQBXbh/eCxizmZcDlwKnTa37LfMqdCF381
+        r/71k81CsVaDLRXb5ZBa8WwblIQOQHG4+T2hHzg=
+X-Google-Smtp-Source: AA0mqf68CFsZMOCd88AhAlMizn4w9UrnERv3KIachtaDvBlHTCAHLOEwLF5Gb8KkdqSMJF8Id58Pag==
+X-Received: by 2002:a5d:6e8e:0:b0:236:5e77:b58e with SMTP id k14-20020a5d6e8e000000b002365e77b58emr44809235wrz.320.1670247793408;
+        Mon, 05 Dec 2022 05:43:13 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b4bd:0:4759:d90c:43ca:e8f0? ([2a02:6b6a:b4bd:0:4759:d90c:43ca:e8f0])
+        by smtp.gmail.com with ESMTPSA id n3-20020a05600c3b8300b003cfbbd54178sm28603622wms.2.2022.12.05.05.43.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 05:43:12 -0800 (PST)
+Message-ID: <66bc7368-aabc-9ec3-f4ba-a3bbeed5938b@bytedance.com>
+Date:   Mon, 5 Dec 2022 13:43:12 +0000
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [External] Re: [v2 0/6] KVM: arm64: implement vcpu_is_preempted
+ check
+Content-Language: en-US
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        steven.price@arm.com, mark.rutland@arm.com, bagasdotme@gmail.com,
+        fam.zheng@bytedance.com, liangma@liangbit.com,
+        punit.agrawal@bytedance.com
+References: <20221104062105.4119003-1-usama.arif@bytedance.com>
+ <87k048f3cm.wl-maz@kernel.org>
+ <180b91af-a2aa-2cfd-eb7f-b2825c4e3dbe@bytedance.com>
+ <86r0y1nmep.wl-maz@kernel.org>
+ <95efd030-27f6-5668-a25e-9fbf210bfa1c@bytedance.com>
+In-Reply-To: <95efd030-27f6-5668-a25e-9fbf210bfa1c@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Without it, I guess the rationale of this patch is "plain accesses shouldn't be weaker than registers" or "This (plain accesses don't provide dependencies) is too conservative", and these don't seem very strong without a bigger motivation behind it.
-
-Good points, thanks.
 
 
------Original Message-----
-From: Boqun Feng [mailto:boqun.feng@gmail.com] 
-Sent: Sunday, December 4, 2022 9:33 AM
->
->  a real world code usage that needs this fix
+On 24/11/2022 13:55, Usama Arif wrote:
+> 
+> 
+> On 18/11/2022 00:20, Marc Zyngier wrote:
+>> On Mon, 07 Nov 2022 12:00:44 +0000,
+>> Usama Arif <usama.arif@bytedance.com> wrote:
+>>>
+>>>
+>>>
+>>> On 06/11/2022 16:35, Marc Zyngier wrote:
+>>>> On Fri, 04 Nov 2022 06:20:59 +0000,
+>>>> Usama Arif <usama.arif@bytedance.com> wrote:
+>>>>>
+>>>>> This patchset adds support for vcpu_is_preempted in arm64, which
+>>>>> allows the guest to check if a vcpu was scheduled out, which is
+>>>>> useful to know incase it was holding a lock. vcpu_is_preempted can
+>>>>> be used to improve performance in locking (see owner_on_cpu usage in
+>>>>> mutex_spin_on_owner, mutex_can_spin_on_owner, rtmutex_spin_on_owner
+>>>>> and osq_lock) and scheduling (see available_idle_cpu which is used
+>>>>> in several places in kernel/sched/fair.c for e.g. in wake_affine to
+>>>>> determine which CPU can run soonest):
+>>>>
+>>>> [...]
+>>>>
+>>>>> pvcy shows a smaller overall improvement (50%) compared to
+>>>>> vcpu_is_preempted (277%).  Host side flamegraph analysis shows that
+>>>>> ~60% of the host time when using pvcy is spent in kvm_handle_wfx,
+>>>>> compared with ~1.5% when using vcpu_is_preempted, hence
+>>>>> vcpu_is_preempted shows a larger improvement.
+>>>>
+>>>> And have you worked out *why* we spend so much time handling WFE?
+>>>>
+>>>>     M.
+>>>
+>>> Its from the following change in pvcy patchset:
+>>>
+>>> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
+>>> index e778eefcf214..915644816a85 100644
+>>> --- a/arch/arm64/kvm/handle_exit.c
+>>> +++ b/arch/arm64/kvm/handle_exit.c
+>>> @@ -118,7 +118,12 @@ static int kvm_handle_wfx(struct kvm_vcpu *vcpu)
+>>>          }
+>>>
+>>>          if (esr & ESR_ELx_WFx_ISS_WFE) {
+>>> -               kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
+>>> +               int state;
+>>> +               while ((state = kvm_pvcy_check_state(vcpu)) == 0)
+>>> +                       schedule();
+>>> +
+>>> +               if (state == -1)
+>>> +                       kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
+>>>          } else {
+>>>                  if (esr & ESR_ELx_WFx_ISS_WFxT)
+>>>                          vcpu_set_flag(vcpu, IN_WFIT);
+>>>
+>>>
+>>> If my understanding is correct of the pvcy changes, whenever pvcy
+>>> returns an unchanged vcpu state, we would schedule to another
+>>> vcpu. And its the constant scheduling where the time is spent. I guess
+>>> the affects are much higher when the lock contention is very
+>>> high. This can be seem from the pvcy host side flamegraph as well with
+>>> (~67% of the time spent in the schedule() call in kvm_handle_wfx), For
+>>> reference, I have put the graph at:
+>>> https://uarif1.github.io/pvlock/perf_host_pvcy_nmi.svg
+>>
+>> The real issue here is that we don't try to pick the right vcpu to
+>> run, and strictly rely on schedule() to eventually pick something that
+>> can run.
+>>
+>> An interesting to do would be to try and fit the directed yield
+>> mechanism there. It would be a lot more interesting than the one-off
+>> vcpu_is_preempted hack, as it gives us a low-level primitive on which
+>> to construct things (pvcy is effectively a mwait-like primitive).
+> 
+> We could use kvm_vcpu_yield_to to yield to a specific vcpu, but how 
+> would we determine which vcpu to yield to?
+> 
+> IMO vcpu_is_preempted is very well integrated in a lot of core kernel 
+> code, i.e. mutex, rtmutex, rwsem and osq_lock. It is also used in 
+> scheduler to determine better which vCPU we can run on soonest, select 
+> idle core, etc. I am not sure if all of these cases will be optimized by 
+> pvcy? Also, with vcpu_is_preempted, some of the lock heavy benchmarks 
+> come down from spending around 50% of the time in lock to less than 1% 
+> (so not sure how much more room is there for improvement).
+> 
+> We could also use vcpu_is_preempted to optimize IPI performance (along 
+> with directed yield to target IPI vCPU) similar to how its done in x86 
+> (https://lore.kernel.org/all/1560255830-8656-2-git-send-email-wanpengli@tencent.com/). 
+> This case definitely wont be covered by pvcy.
+> 
+> Considering all the above, i.e. the core kernel integration already 
+> present and possible future usecases of vcpu_is_preempted, maybe its 
+> worth making vcpu_is_preempted work on arm independently of pvcy?
+> 
 
-Note that in the standard C world, 'int a' (and even 'register int a') declares an object, i.e., a memory location that is accessed with plain accesses. In my opinion, that 'int a' is a "register" in herd7 is an implementation artifact that hides the current weakness addressed by this patch.
-So if you would actually analyze pretty much any code that looks like
+Hi,
 
-   int a = <some atomic load>
-   if (a == ...) { <some atomic store> }
+Just wanted to check if there are any comments on above? I can send a v3 
+with the doc and code fixes suggested in the earlier reviews if it makes 
+sense?
 
-then under the standard interpretation of that code, a is a memory location, and there is (in current LKMM) no control dependency, and the code would be considered broken by LKMM.
+Thanks,
+Usama
 
-Or in another view, whether something that is (provably) never accessed externally is to be considered a 'register' or a 'memory location' should be an implementation detail of the compiler etc. (with the possibility to freely do reg2mem/mem2reg), and not have any effect on the ordering guarantees.
-Notably most tools (GenMC for sure and I think also Dat3M) use such compiler transformations (especially mem2reg) because they live under the assumption that it doesn't change anything, but of course with current LKMM that renders all of these tools unsound; if you would carefully avoid to do any such transformations, then these tools would also report bugs in a lot more linux code.
-
-
-
-
-> Also I'm in the impression that people love to put READ_ONCE()/WRITE_ONCE() when they have some ordering issues (in real world or with LKMM). 
-
-Note that this would require to do 
-
-  int a;
-  WRITE_ONCE(&a, <some_atomic_load>);
-  if (READ_ONCE(&a) == ...) { <some_atomic_store>; }
-
-to get a control dependency, and imho violate the point of relaxed marked accesses -- to point out where races are, but no (additional) ordering is required.
-
-> Although I don't like this
-
-I like this and I have forwarded Paul's email to some friends who like not to put relaxed marked/atomic accesses in their code "because it makes the code less readable". I completely disagree -- marking racy accesses makes the code more readable because it lets us know when something is subject to concurrent access, and modifying the logic may break code of other threads.
-
-What I don't like is relying on dependencies in the first place, since they are hard to maintain -- some innocuous optimizations that people might want to do (like adding some read in front of a bunch of writes to see if they're really necessary) bypass the ordering imposed by the dependency. So I generally advise to use acq loads instead, unless there is a measurable performance impact. But that's a completely separate discussion...
-
-> Besides, could you also explain a little bit why only "data;rfi" can be "carry-dep" but "ctrl;rfi" and "addr;rfi" cannot? I think it's because there are special cases when compilers can figure out a condition being true or an address being constant therefore break the dependency
-
-Oh, good question. A bit hard for me to write down the answer clearly (which some people will claim that I don't understand it well myself, but I beg to differ :) :( :) ).
-
-In a nutshell, it's because  x ->data  [Plain]  ->rfi  y ->... z  fulfils the same role as storing something in a register and then using it in a subsequent computation; x ->ctrl y ->... z (and ->addr) don't. So it's not due to smart compilers, just the fact that the other two cases seem unrelated to the problem being solved, and including them might introduce some unsoundness (not that I have checked if they do).
-
-Mathematically I imagine the computation graph between register accesses/computations r_1,...,r_n and memory accesses m_1,...m_k that has an unlabeled edge  m_i -> r_j when m_i loads some data that is an input to the access/computation r_j, similarly it has an unlabeled edge r_i -> r_j  when the result of r_i is used as an input of r_j, and finally r_i ->data/ctrl/addr m_j when the value computed by r_j is the address/data or affects the ctrl of m_j.  So for example, if 'int a' were to declare a register, then
-    int a = READ_ONCE(&x);
-    if (a == 5) { WRITE_ONCE(&y,5); }
-would have something like (*) 4 events  (*= since I'm avoiding fully formalizing the graph model here I don't really define to which extent one splits up register reads, computations, etc., so I'll do it somewhat arbitrarily)
-m_1 = READ_ONCE(&x)
-r_1 = store the result of m_1 in a
-r_2 = compare the content of a to 5
-m_2 = WRITE_ONCE(&y, 5)
-
-with the edges m_1 -> r_1 -> r_2 ->ctrl m_2
-
-Then in the LKMM graph, we would have m_i ->ctrl m_j (or data or addr) iff there is a path m_i -> r_x1 -> ... -> r_xl ->ctrl m_j (or data or addr).
-So in the example above, m_1 ->ctrl m_2.
-
-Now what we would do is look at what happens if the compiler/a tool/me/whatever interprets 'int a' as a memory location. Instead of r_1 and r_2 from above, we would have something like
-
-m_1 = READ_ONCE(&x)
-r_3 = the result of m_1 (stored in a CPU register)
-m_3 = a := the r_3 result
-m_4 = load from a
-r_4 = the result of m_4 (stored in a CPU register)
-m_2 = WRITE_ONCE(&y, 5)
-
-with m_1 -> r_3 ->data -> m_3  ->rfi  m_4 -> r_4 ->ctrl m_2
-and hence
-m_1 ->data m_3 ->rfi m_4 ->ctrl m_2
-
-What the patch does is make sure that even under this interpretation, we still have 
-m_1 ->ctrl m_2
-Note that this ->data ->rfi applies in every case where something is considered a register is turned into a memory location, because those cases always introduce a store with a fixed address (that memory location) where the data is the current content of the register, which is then read (internally) at the next time that data is picked up. A store to register never becomes a ctrl or addr edge, hence they are not included in the patch.
-
-Please let me know if this is convincing and clear. If so we could link to your e-mail and my response to provide context, without having to put a huge explanation into the commit message. If that's not desirable I can also think about how to compress this into a shorter explanation.
-
-Best wishes,
-Jonas
-
-PS:
-
-> sometimes I'm just slow to understand things ;-)
-
-Well, welcome in the club :D
+> Thanks,
+> Usama
+> 
+>>
+>>     M.
+>>
