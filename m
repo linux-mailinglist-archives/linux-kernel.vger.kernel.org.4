@@ -2,106 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F24E6421D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 04:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57546421D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 04:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiLEDLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 22:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S231205AbiLEDN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 22:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiLEDL1 (ORCPT
+        with ESMTP id S230439AbiLEDN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 22:11:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FCA13CD9
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 19:11:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABDB9B80D3F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:11:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F08DC433B5;
-        Mon,  5 Dec 2022 03:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670209883;
-        bh=XuVmaRKXZFhhKLjZ4ujeTbBrJEN6ZUSuXY9MlbnOpZM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Kf9xpYflXEG0Ayg/QFxHVPUTn8ooVBjXm1b6qG2vZa+tQxw42sk+uHgL+4UIxBZoi
-         ljB5OA5kLheloLMQNWlnrM95egm83RNiyr8Hh0Z0aXn9TCbsdx9XzZ4h3wITGX/Wqq
-         eU2l/ud3e6O2HpqiBFkqOOSr4rRrv3ZAm4tbnUCS76B0XZRDqNErkA9Y0+4jM+pnoN
-         yWdxqwmCLupFdEi2rkVXPjIPEkGrgy3o45s0TujN80P8/Sh/MXxnjGyaBl3097G90U
-         0ydmbNA78AKvFoXrCHB9EKzxSw1ynTiYZPFlqCK0WKL7r5SzsAO9uuap2xcPB3VFd/
-         lLxPtucQw5gfw==
-Date:   Mon, 5 Dec 2022 12:11:19 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] trace: Fix some checker warnings
-Message-Id: <20221205121119.537fa922bbd8147b9df5ae6c@kernel.org>
-In-Reply-To: <20221204213929.2edc730b@rorschach.local.home>
-References: <166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk>
-        <202212022034.OqPXTS9u-lkp@intel.com>
-        <20221205112236.f99c6104e988aa4f3dd89cd0@kernel.org>
-        <20221204213929.2edc730b@rorschach.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 4 Dec 2022 22:13:56 -0500
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97A713CD8;
+        Sun,  4 Dec 2022 19:13:54 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R641e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VWMLxrT_1670210030;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VWMLxrT_1670210030)
+          by smtp.aliyun-inc.com;
+          Mon, 05 Dec 2022 11:13:52 +0800
+Date:   Mon, 5 Dec 2022 11:13:50 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Al Viro <viro@ZenIV.linux.org.uk>, Gao Xiang <xiang@kernel.org>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the vfs tree with the erofs tree
+Message-ID: <Y41h7hz12QXQaSYS@B-P7TQMD6M-0146.local>
+References: <20221205092415.56cc6e19@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221205092415.56cc6e19@canb.auug.org.au>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Dec 2022 21:39:29 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hi Stephen,
 
-> On Mon, 5 Dec 2022 11:22:36 +0900
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+On Mon, Dec 05, 2022 at 09:24:15AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> > index 5cfc95a52bc3..14f18edfe5bc 100644
-> > --- a/kernel/trace/trace.c
-> > +++ b/kernel/trace/trace.c
-> > @@ -6572,7 +6572,8 @@ tracing_thresh_write(struct file *filp, const char __user *ubuf,
-> >  	return ret;
-> >  }
-> >  
-> > -#if defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER)
-> > +#if defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER) \
-> > +	|| defined(CONFIG_OSNOISE_TRACER)
-> >  
+> Today's linux-next merge of the vfs tree got a conflict in:
 > 
-> When it gets this much, we need to put it into the trace.h header and
-> define it. Actually, we have something that handles this too.
+>   fs/erofs/fscache.c
 > 
-> #if (defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER) \
->         || defined(CONFIG_OSNOISE_TRACER)) && defined(CONFIG_FSNOTIFY)
-> #define LATENCY_FS_NOTIFY
-> #endif
+> between commits:
 > 
+>   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
+>   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
 > 
-> We can add:
+> from the erofs tree and commit:
 > 
->  #if (defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER) \
-> 	|| defined(CONFIG_OSNOISE_TRACER)) && defined(CONFIG_FSNOTIFY)
->  #define LATENCY_FS_NOTIFY
-> +#define USES_MAX_TRACE
->  #endif
+>   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
 > 
-> And use that instead.
+> from the vfs tree.
 
-BTW, why can't HWLAT_TRACER and OSNOISE_TRACER depend on TRACER_MAX_TRACE?
-I think it is better to reduce combinations of those, especially partially
-enabling a feature seems a bit dangerous.
+Is the commit from the vfs tree correct?
 
-Thank you,
+The conflict fix looks good to me (we tend to enable large folios in the
+next cycle.)
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Gao Xiang
+
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc fs/erofs/fscache.c
+> index f14886c479bd,4c837be3b6e3..000000000000
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@@ -126,28 -159,47 +126,28 @@@ static int erofs_fscache_read_folios_as
+>   
+>   	ret = fscache_begin_read_operation(cres, cookie);
+>   	if (ret)
+>  -		goto out;
+>  +		return ret;
+>   
+>   	while (done < len) {
+>  -		subreq = kzalloc(sizeof(struct netfs_io_subrequest),
+>  -				 GFP_KERNEL);
+>  -		if (subreq) {
+>  -			INIT_LIST_HEAD(&subreq->rreq_link);
+>  -			refcount_set(&subreq->ref, 2);
+>  -			subreq->rreq = rreq;
+>  -			refcount_inc(&rreq->ref);
+>  -		} else {
+>  -			ret = -ENOMEM;
+>  -			goto out;
+>  -		}
+>  -
+>  -		subreq->start = pstart + done;
+>  -		subreq->len	=  len - done;
+>  -		subreq->flags = 1 << NETFS_SREQ_ONDEMAND;
+>  +		loff_t sstart = pstart + done;
+>  +		size_t slen = len - done;
+>  +		unsigned long flags = 1 << NETFS_SREQ_ONDEMAND;
+>   
+>  -		list_add_tail(&subreq->rreq_link, &rreq->subrequests);
+>  -
+>  -		source = cres->ops->prepare_read(subreq, LLONG_MAX);
+>  -		if (WARN_ON(subreq->len == 0))
+>  +		source = cres->ops->prepare_ondemand_read(cres,
+>  +				sstart, &slen, LLONG_MAX, &flags, 0);
+>  +		if (WARN_ON(slen == 0))
+>   			source = NETFS_INVALID_READ;
+>   		if (source != NETFS_READ_FROM_CACHE) {
+>  -			erofs_err(sb, "failed to fscache prepare_read (source %d)",
+>  -				  source);
+>  -			ret = -EIO;
+>  -			subreq->error = ret;
+>  -			erofs_fscache_put_subrequest(subreq);
+>  -			goto out;
+>  +			erofs_err(sb, "failed to fscache prepare_read (source %d)", source);
+>  +			return -EIO;
+>   		}
+>   
+>  -		atomic_inc(&rreq->nr_outstanding);
+>  +		refcount_inc(&req->ref);
+> - 		iov_iter_xarray(&iter, READ, &req->mapping->i_pages,
+> ++		iov_iter_xarray(&iter, ITER_DEST, &req->mapping->i_pages,
+>  +				lstart + done, slen);
+>   
+>  -		iov_iter_xarray(&iter, ITER_DEST, &rreq->mapping->i_pages,
+>  -				start + done, subreq->len);
+>  -
+>  -		ret = fscache_read(cres, subreq->start, &iter,
+>  -				   NETFS_READ_HOLE_FAIL,
+>  -				   erofc_fscache_subreq_complete, subreq);
+>  +		ret = fscache_read(cres, sstart, &iter, NETFS_READ_HOLE_FAIL,
+>  +				   erofs_fscache_subreq_complete, req);
+>   		if (ret == -EIOCBQUEUED)
+>   			ret = 0;
+>   		if (ret) {
+> @@@ -233,19 -297,17 +233,19 @@@ static int erofs_fscache_data_read_slic
+>   		}
+>   		iov_iter_zero(PAGE_SIZE - size, &iter);
+>   		erofs_put_metabuf(&buf);
+>  -		return PAGE_SIZE;
+>  +		primary->submitted += PAGE_SIZE;
+>  +		return 0;
+>   	}
+>   
+>  +	count = primary->len - primary->submitted;
+>   	if (!(map.m_flags & EROFS_MAP_MAPPED)) {
+> - 		iov_iter_xarray(&iter, READ, &mapping->i_pages, pos, count);
+>  -		count = len;
+> + 		iov_iter_xarray(&iter, ITER_DEST, &mapping->i_pages, pos, count);
+>   		iov_iter_zero(count, &iter);
+>  -		return count;
+>  +		primary->submitted += count;
+>  +		return 0;
+>   	}
+>   
+>  -	count = min_t(size_t, map.m_llen - (pos - map.m_la), len);
+>  +	count = min_t(size_t, map.m_llen - (pos - map.m_la), count);
+>   	DBG_BUGON(!count || count % PAGE_SIZE);
+>   
+>   	mdev = (struct erofs_map_dev) {
+
+
