@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0006425EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0856425FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiLEJjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S231307AbiLEJnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiLEJji (ORCPT
+        with ESMTP id S231258AbiLEJnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:39:38 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C1A18B14;
-        Mon,  5 Dec 2022 01:39:37 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NQdmg5WH9z4f3k6N;
-        Mon,  5 Dec 2022 17:39:31 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgAH_qxVvI1jJs9iBg--.28715S3;
-        Mon, 05 Dec 2022 17:39:34 +0800 (CST)
-Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
- warnning
-To:     Yu Kuai <yukuai1@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     hch@lst.de, josef@toxicpanda.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
- <20221104023938.2346986-5-yukuai1@huaweicloud.com>
- <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
- <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
- <Y306xJV6aNXd94kb@slm.duckdns.org>
- <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
- <Y31sYFdA2lHIvjt3@slm.duckdns.org>
- <ec3754a6-3249-51ab-b659-fd795884e346@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <f227e4bd-c74b-a02e-2a02-11a1376ee4f9@huaweicloud.com>
-Date:   Mon, 5 Dec 2022 17:39:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 5 Dec 2022 04:43:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E20AE52;
+        Mon,  5 Dec 2022 01:43:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76E8560FF2;
+        Mon,  5 Dec 2022 09:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78EE6C433D6;
+        Mon,  5 Dec 2022 09:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670233422;
+        bh=5xf073/b961k8/MjmEOBXqIE5kkvS82SCt+RaD93kNQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dDMy2d+nA+QcxIvDmIyhA40HpJ0ZguqkBLLWbm7rTZ74FsuCzcbaMsq1lDJ4gpsrE
+         ZBwyHolbKy1MVcmpEFzcjdIVHn/Og12ajl99PtFag6EBmiGE3RJDfdJj4wnAtO9JrI
+         7+Xmkp4aXsu3uY0R5fjT5RSlsL2punPXVfEsyx71ORI+aGzdcNNnNw2WPkhM1nux0s
+         ZTCFIOuT1Bs4LZBYz20pzY9HftoxnwoEokBzl+vYnf2rUWvn6xq8cp0mLHEV9gsovE
+         8VPDJJG10dpd73dMSMUZiHc2Top60CJGBmyY5awhwpHe0ETSKkWQNkvd7TfbJRV9W7
+         S7+7Rd+tBnOqQ==
+Date:   Mon, 5 Dec 2022 10:43:39 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/i2c: use simple i2c probe
+Message-ID: <Y429SywVngrf2Q9I@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>, Guenter Roeck <linux@roeck-us.net>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221012163647.3930565-1-steve@sk2.org>
 MIME-Version: 1.0
-In-Reply-To: <ec3754a6-3249-51ab-b659-fd795884e346@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgAH_qxVvI1jJs9iBg--.28715S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr1UJF17JFWUZr17AFy7ZFb_yoWDKrb_ur
-        yvvr4UJ3s8uF4v9a90kryDAFZag3W7Jr1kGryfJF17Zw1Fvay7JF1xXr93JFZaqrW0vr4U
-        Cryj93ya9w129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUp6wZUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qTaLEuURhpk3LiI/"
+Content-Disposition: inline
+In-Reply-To: <20221012163647.3930565-1-steve@sk2.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,55 +58,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tejun
 
-在 2022/11/23 18:22, Yu Kuai 写道:
-> Hi, Tejun
-> 
-> 在 2022/11/23 8:42, Tejun Heo 写道:
->> On Tue, Nov 22, 2022 at 05:14:29PM -0700, Jens Axboe wrote:
->>>>> Then match_strdup() and kfree() in match_NUMBER() can be replaced with
->>>>> get_buffer() and put_buffer().
->>>>
->>>> Sorry about the late reply. Yeah, something like this.
-> 
+--qTaLEuURhpk3LiI/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I wonder can we just use arary directly in stack? The max size is just
-24 bytes, which should be fine:
+On Wed, Oct 12, 2022 at 06:36:47PM +0200, Stephen Kitt wrote:
+> All these drivers have an i2c probe function which doesn't use the
+> "struct i2c_device_id *id" parameter, so they can trivially be
+> converted to the "probe_new" style of probe with a single argument.
+>=20
+> This is part of an ongoing transition to single-argument i2c probe
+> functions. Old-style probe functions involve a call to i2c_match_id:
+> in drivers/i2c/i2c-core-base.c,
+>=20
+>          /*
+>           * When there are no more users of probe(),
+>           * rename probe_new to probe.
+>           */
+>          if (driver->probe_new)
+>                  status =3D driver->probe_new(client);
+>          else if (driver->probe)
+>                  status =3D driver->probe(client,
+>                                         i2c_match_id(driver->id_table, cl=
+ient));
+>          else
+>                  status =3D -EINVAL;
+>=20
+> Drivers which don't need the second parameter can be declared using
+> probe_new instead, avoiding the call to i2c_match_id. Drivers which do
+> can still be converted to probe_new-style, calling i2c_match_id
+> themselves (as is done currently for of_match_id).
+>=20
+> This change was done using the following Coccinelle script, and fixed
+> up for whitespace changes:
+>=20
+> @ rule1 @
+> identifier fn;
+> identifier client, id;
+> @@
+>=20
+> - static int fn(struct i2c_client *client, const struct i2c_device_id *id)
+> + static int fn(struct i2c_client *client)
+> {
+> ...when !=3D id
+> }
+>=20
+> @ rule2 depends on rule1 @
+> identifier rule1.fn;
+> identifier driver;
+> @@
+>=20
+> struct i2c_driver driver =3D {
+> -       .probe
+> +       .probe_new
+>                 =3D
+> (
+>                    fn
+> |
+> -                  &fn
+> +                  fn
+> )
+>                 ,
+> };
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-HEX: "0xFFFFFFFFFFFFFFFF" --> 18
-DEC: "18446744073709551615" --> 20
-OCT: "01777777777777777777777" --> 23
+Dropped the mux-part because I applied an older patch doing the same.
+Despite that, applied the rest to for-next, thanks!
 
-Something like:
-#define U64_MAX_SIZE 23
-static int match_strdup_local(const substring_t *s, char *buf)
-{
-	size_t len = s->to - s->from;
 
-	if (len > U64_MAX_SIZE)
-		return -ERANGE;
+--qTaLEuURhpk3LiI/
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	if (!s->from)
-		return -EINVAL;
+-----BEGIN PGP SIGNATURE-----
 
-	memcpy(buf, s->from, len);
-	buf[len] = '\0';
-	return 0;
-}
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONvUsACgkQFA3kzBSg
+KbaZtw/7Bw8qWJ/EO16/DWsZFw3b7UK+vssIrQB0ygAmIGAyef7b9VN9nuJAw+fD
+fqbA/xTn0bylU4In7nB7ld0YJ9l1iPTnoXsK7J1QkEg1T65MDHugz0iwLXopc+lx
+y3WvupwfSa2D3o9R1YR4iBOGYjcc3+XAGF+9WFwoZ21Az2HDGPVChQQHAQHplJpN
+nYepLm1/MZ2qqoEpB1kZoNSdgvCtXBCVCutWpufRA6TqZSOxs6hARBsQ/mFAGL7K
+STSlrzybN/UVhI27Z03x6kiEC3sCcXlCo/pXu5hY4dRZpkcO80TXJ1jaXnR40nWh
+T6EiNzAHsqCDdy7/OysCDVrZAOyxynxjaILrhdxQdRnKauTEsa+3S90rXpgXCEkf
+Y3iE8mh2Lpaq87zPTEPgQqH2uETsnJb/f3CD1igjTA95wx5+WwNNzNm7H+G2c0be
+Zoiv6iJgNOtb+JzYDhz175owFV8zVuXWK6crOScywqVndUR3P4mpbbSbWsq/YjTi
+9lElGSIVZt3CKKccdHojPBdK15cTD7O/EUDSOdOlK88fkxeVhQG93d07QqQ/oeoq
+ra4oX+ewiEY7v2cm+jnob3O6RBBn1f6USOACQRvaolKq9V2aCWmPC6ppxPgSLnBX
+JhL01EkzdVsOgHAEXt+cZT2qvzaBjuHw65vEM4EU5nXsW0RcUuA=
+=f7EH
+-----END PGP SIGNATURE-----
 
-  static int match_u64int(substring_t *s, u64 *result, int base)
-  {
-	char buf[U64_MAX_SIZE + 1];
-  	int ret;
-  	u64 val;
-
-	ret = match_strdup_local(s, buf);
-	if (ret)
-		return ret;
-  	ret = kstrtoull(buf, base, &val);
-  	if (!ret)
-  		*result = val;;
-  	return ret;
-  }
-
+--qTaLEuURhpk3LiI/--
