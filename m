@@ -2,100 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403A664233E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 07:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10248642348
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbiLEG6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 01:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
+        id S231511AbiLEHBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 02:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiLEG6X (ORCPT
+        with ESMTP id S231421AbiLEHAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 01:58:23 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1BE6586;
-        Sun,  4 Dec 2022 22:58:22 -0800 (PST)
-X-UUID: 9d1c86db20344440a807e9f8cc158056-20221205
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=u8/NwowXK2YbUna8Ai7oL8XOLUBZKDsKd5Yc07Xpqao=;
-        b=VVypaLm3IGVh2XzFIm8xzU4LLXP0AIymE1ejrwQwq3JlHaWc0uT96Q4FTSDLt0oFquVzFG6ZyjeUH6ieLR46duzQCSy9uJKzeTGEV8pPfeCPlUOno+h6j3v/rGi91eIYwTfcmaD9OwthFnqMk/cv4PeTVdV9LhPv7g8VktjLmNA=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:56dce3cd-4f36-4cc9-b615-869e0a20024a,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.14,REQID:56dce3cd-4f36-4cc9-b615-869e0a20024a,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:dcaaed0,CLOUDID:2f21916c-41fe-47b6-8eb4-ec192dedaf7d,B
-        ulkID:221205145821RYLXN5IF,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9d1c86db20344440a807e9f8cc158056-20221205
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <xiangsheng.hou@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1034183909; Mon, 05 Dec 2022 14:58:19 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 5 Dec 2022 14:58:18 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 5 Dec 2022 14:58:17 +0800
-From:   Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>
-CC:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <benliang.zhao@mediatek.com>, <bin.zhang@mediatek.com>
-Subject: [PATCH v2 9/9] dt-bindings: mtd: ecc-mtk: Add compatible for MT7986
-Date:   Mon, 5 Dec 2022 14:57:56 +0800
-Message-ID: <20221205065756.26875-10-xiangsheng.hou@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
+        Mon, 5 Dec 2022 02:00:51 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9100BF7C
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:00:46 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3704852322fso108443177b3.8
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 23:00:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=coRXOHRNz//WTvn8iz/sAzTb1yJBt0dUNQrHlt2mpPs=;
+        b=cp2c4vLvpDWA0mcSMbgN+VRWTA9DqaDSNKkxVBxIu7MdTZray7sSNLrIl20bdFnlL0
+         KuswNgOgKZuar9qFfg3zDSP4eB3V30hL4u4a+vthyZ1dLzDdOwLeqFzDA1SxC2oD2F/K
+         c5K1UCDm42XTnU8MaTGaMgVCR9zjcLmPb/VNuXAGVsFac9utRPXA7IvkYQ1vxJtAhX/z
+         PkdIujfBoBkGmeir5HfFGNu1a0u5KsmdQEUE0YEc2CvTj7XseBcUhWCeqaREWYmEz8Ow
+         6Hivt5EJmmtmp6I60cJKxtybuRswUNjkPAK69gPiKXRrGAl++llFBfg3Fyh5/C2ZxsSz
+         xquA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=coRXOHRNz//WTvn8iz/sAzTb1yJBt0dUNQrHlt2mpPs=;
+        b=wn/j/c9ZKj7LLnnoYLDmhimvLFdS35WSa0uoYgBrec6IpxNJzRUm5jNKg0ktHVCTqj
+         5m/MHLcTG9Vv0ljVBTd8nbmVTdDjmR1SHmkPgTrNariybnVW5JCUcUr+1PLF/3y7bAH9
+         3QuIVcpXH94XaC7sTPXViqjJtE2ZA+2ZkhnkENhBRRVpHJekal2BpkMCevi1rB3ePbeU
+         diEMoAER+bOKBSQlCEkyvschzm6AcgrpCSjorgusvW60r+PwJtsiqlV3N1JyphYPed2a
+         PYy4Tvd10OQoILelvgJCXU5ReRSp8ANZbuspdZChB4TUOROlEVcUNYTPBcjbw3mG3M8r
+         cn8w==
+X-Gm-Message-State: ANoB5pmXrosFZ2jvAgesAqqr9gojEyKglf/rP89YbUvp5Ndwrxl9xIMS
+        481GMakJNW18DfIz8vQijZvJJQvUpVrUc4M++k6w+g==
+X-Google-Smtp-Source: AA0mqf4ZStaU2n0mz3tYU7jDd0FFF3gERFNnwStcE0ObpDr+z9rd9bCvhr7OcdlOgWqCo28NPuV1ZIRM2HRWjs21t78=
+X-Received: by 2002:a81:1915:0:b0:3bf:9e45:1139 with SMTP id
+ 21-20020a811915000000b003bf9e451139mr39230763ywz.267.1670223645646; Sun, 04
+ Dec 2022 23:00:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYsK5WUxs6p9NaE4e3p7ew_+s0SdW0+FnBgiLWdYYOvoMg@mail.gmail.com>
+ <CANpmjNOQxZ--jXZdqN3tjKE=sd4X6mV4K-PyY40CMZuoB5vQTg@mail.gmail.com>
+ <CA+G9fYs55N3J8TRA557faxvAZSnCTUqnUx+p1GOiCiG+NVfqnw@mail.gmail.com>
+ <Y4e3WC4UYtszfFBe@codewreck.org> <CA+G9fYuJZ1C3802+uLvqJYMjGged36wyW+G1HZJLzrtmbi1bJA@mail.gmail.com>
+ <Y4ttC/qESg7Np9mR@codewreck.org> <CANpmjNNcY0LQYDuMS2pG2R3EJ+ed1t7BeWbLK2MNxnzPcD=wZw@mail.gmail.com>
+ <Y4vW4CncDucES8m+@codewreck.org>
+In-Reply-To: <Y4vW4CncDucES8m+@codewreck.org>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 5 Dec 2022 08:00:00 +0100
+Message-ID: <CANpmjNPXhEB6GeMT70UT1e-8zTHf3gY21E3wx-27VjChQ0x2gA@mail.gmail.com>
+Subject: Re: arm64: allmodconfig: BUG: KCSAN: data-race in p9_client_cb / p9_client_rpc
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        rcu <rcu@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        kunit-dev@googlegroups.com, lkft-triage@lists.linaro.org,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt-bindings documentation of ECC for MediaTek MT7986 SoC
-platform.
+On Sun, 4 Dec 2022 at 00:08, Dominique Martinet <asmadeus@codewreck.org> wrote:
+>
+> Marco Elver wrote on Sat, Dec 03, 2022 at 05:46:46PM +0100:
+> > > But I can't really find a problem with what KCSAN complains about --
+> > > we are indeed accessing status from two threads without any locks.
+> > > Instead of a lock, we're using a barrier so that:
+> > >  - recv thread/cb: writes to req stuff || write to req status
+> > >  - p9_client_rpc: reads req status || reads other fields from req
+> > >
+> > > Which has been working well enough (at least, without the barrier things
+> > > blow up quite fast).
+> > >
+> > > So can I'll just consider this a false positive, but if someone knows
+> > > how much one can read into this that'd be appreciated.
+> >
+> > The barriers only ensure ordering, but not atomicity of the accesses
+> > themselves (for one, the compiler is well in its right to transform
+> > plain accesses in ways that the concurrent algorithm wasn't designed
+> > for). In this case it looks like it's just missing
+> > READ_ONCE()/WRITE_ONCE().
+>
+> Aha! Thanks for this!
+>
+> I've always believed plain int types accesses are always atomic and the
+> only thing to watch for would be compilers reordering instrucions, which
+> would be ensured by the barrier in this case, but I guess there are some
+> architectures or places where this isn't true?
+>
+>
+> I'm a bit confused though, I can only see five places where wait_event*
+> functions use READ_ONCE and I believe they more or less all would
+> require such a marker -- I guess non-equality checks might be safe
+> (waiting for a value to change from a known value) but if non-atomic
+> updates are on the table equality and comparisons checks all would need
+> to be decorated with READ_ONCE; afaiu, unlike usespace loops with
+> pthread_cond_wait there is nothing protecting the condition itself.
+>
+> Should I just update the wrapped condition, as below?
+>
+> -       err = wait_event_killable(req->wq, req->status >= REQ_STATUS_RCVD);
+> +       err = wait_event_killable(req->wq,
+> +                                 READ_ONCE(req->status) >= REQ_STATUS_RCVD);
 
-Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
----
- .../devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml        | 1 +
- 1 file changed, 1 insertion(+)
+Yes, this looks good!
 
-diff --git a/Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml b/Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
-index b13d801eda76..505baf1e8830 100644
---- a/Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
-+++ b/Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
-@@ -18,6 +18,7 @@ properties:
-       - mediatek,mt2701-ecc
-       - mediatek,mt2712-ecc
-       - mediatek,mt7622-ecc
-+      - mediatek,mt7986-ecc
- 
-   reg:
-     items:
--- 
-2.25.1
+> The writes all are straightforward, there's all the error paths to
+> convert to WRITE_ONCE too but that's not difficult (leaving only the
+> init without such a marker); I'll send a patch when you've confirmed the
+> read looks good.
+> (the other reads are a bit less obvious as some are protected by a lock
+> in trans_fd, which should cover all cases of possible concurrent updates
+> there as far as I can see, but this mixed model is definitely hard to
+> reason with... Well, that's how it was written and I won't ever have time
+> to rewrite any of this. Enough ranting.)
 
+If the lock-protected accesses indeed are non-racy, they should be
+left unmarked. If some assumption here turns out to be wrong, KCSAN
+would (hopefully) tell us one way or another.
+
+Thanks!
+
+-- Marco
