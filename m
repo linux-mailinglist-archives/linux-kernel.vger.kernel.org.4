@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FFA643687
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AF9643680
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiLEVJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S233413AbiLEVJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbiLEVJZ (ORCPT
+        with ESMTP id S233309AbiLEVIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:09:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4838324940
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 13:08:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670274496;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FZ9h4MWEriQjSU6cqdcDY6NrBbd8n2iFEddnFpDJGM4=;
-        b=g7jAMWsBwAUIDIJDTCrMZpHStLkdnh0lXqj6WLMgV9qBge5nVwvkuz965IzrbthyZIBWkU
-        MjMcKXP5FkFceEsO5ZCUWuF8nmqtcp9Qq0SFKtENm2vZFwco4DwvLgEdBjfJvmngPal1tv
-        tuqRSdJsBQjo0n/mfKFbwLAXrlUi8Zo=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-12-3MIjU_44N9yC--xIF6Gcug-1; Mon, 05 Dec 2022 16:08:14 -0500
-X-MC-Unique: 3MIjU_44N9yC--xIF6Gcug-1
-Received: by mail-qk1-f198.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so18438831qkn.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 13:08:14 -0800 (PST)
+        Mon, 5 Dec 2022 16:08:40 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F464CF9;
+        Mon,  5 Dec 2022 13:08:28 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id t17so1564650eju.1;
+        Mon, 05 Dec 2022 13:08:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=agcdnOZfTcz01ftPLLH5YMZ3Fbx9lBJzltNoiQrFR+s=;
+        b=j6yTJsTL8qepaX8DqJDzhxPqyMFSSr9UHtJaYRq7pFTo1scVBVAoPoNO9fd+w9+mtw
+         KlVZ8BQQoW6Jn+Ssdy7FYNrxyHTyRAx9Rmmjusl795QXgGtD49cmNWIi9YMjZWiCluIt
+         7NMLQHB2P4TURyMU2Ynj0YtMRw2QgqGQ1NK+iU9u4+QpyYNL0nVYfqQaxb7rVBES6q5q
+         Hre4+TyC0DIRhJlVzUexoqOIBMYo0AILJEeJlWtFrM4fmm++vIhISCLhkNDt9bG7d59R
+         08EZnTv1BCpvgIkrva/r/54hBJGfv4wmnwrZXW03qN754GM9mxOmTa0k7hdbzEEdG1M3
+         WtYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FZ9h4MWEriQjSU6cqdcDY6NrBbd8n2iFEddnFpDJGM4=;
-        b=jRzX6C8tKDjsZ/5ikOzM9UiW2nhc0/Oq6oNiIOkTAR7vx71Rfnn8MMWfsJYOKPpFqZ
-         ERT/P5W9vXsOExDjvKDCLZQaRZKquUJ+y8ESaRowYk3VxmML5SRPOTxq0WGAlpQX5HOV
-         ugROVd6AAoNuNNAd3fEPw/9DXrKOuVdgXhDytIr/8IFwOWL+DYYD5Rwj4SLH7khmKPEo
-         uAPlW2e2zgnPH/9TErBVvygmVsQ853oVu6Nx4A489DW2i2WiSFvkbghgsdhcgym8romR
-         9pVUMSgp0V0RGOnqozm46rr4yv8gaJo1vGebFmLNdy2mm2cD6iU6q+TmPpdPJ2YC6bGx
-         6Zrg==
-X-Gm-Message-State: ANoB5pk5ZHaEzzBfbtCzDuhDTZ0g9yK0xfDke1lzZsQ+62c4xgf+APwc
-        XbojM0t5UTcFQ3kORXGOV/EVuFEUKGnqOy4vCBuNHyLe7AZv33e/xwB4l3/MhF4iRPZlAM3sbh6
-        y8rkH9+TDPuirEo3BKrCgAn3H
-X-Received: by 2002:a05:6214:5d8b:b0:4c7:79b4:523c with SMTP id mf11-20020a0562145d8b00b004c779b4523cmr2942457qvb.45.1670274494109;
-        Mon, 05 Dec 2022 13:08:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6sxXU4X6JPbMzDXRVemRo9kME5rTW0DWx47Msl220IhYWiaSPOjAVrwh1RXToKz5OoRFLG3Q==
-X-Received: by 2002:a05:6214:5d8b:b0:4c7:79b4:523c with SMTP id mf11-20020a0562145d8b00b004c779b4523cmr2942430qvb.45.1670274493743;
-        Mon, 05 Dec 2022 13:08:13 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id dt4-20020a05620a478400b006fc9847d207sm12973263qkb.79.2022.12.05.13.08.12
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=agcdnOZfTcz01ftPLLH5YMZ3Fbx9lBJzltNoiQrFR+s=;
+        b=3FdIXI0smOmPuM8wSLVt9p1qN91h8zyYkEsafPuXMNzPkvPx6LjLS4imxx+pg7WVtt
+         NCbh4XBTC90sKxv8impohcUSnhT7VvT6fUTjVJihhD8myYWIhf28qQumW5vux9Lr3BAf
+         TB4ip7um1/fD1op7Kawvi5GHeb2VEMWfz1keNZVVIdG6lue7ACdtnuBoJyM7lEPxtV0L
+         zv3aymnlucGQAJMO1juVQxhJN/L3jO/xGR/jWL4k69wLzHAXxE94y1VsNPbgw1DgNJzq
+         2ZW8LnC1aDN5eJ/hQ92kMlFbCYhQ3Bnx5nujecS5BGqrkG0I+6+bAFxuT7czXCkiTbbZ
+         Aopg==
+X-Gm-Message-State: ANoB5pnDcREGgWFy6wIVjRTvFdgq3glBg5dsBrkAxyMaByD+NLhrGMKx
+        GCscq/lqYI+b2Yay/eMVD6o=
+X-Google-Smtp-Source: AA0mqf7UYHn6BfmpFxzltOtoTcchK9jnayi5HlZKBfCxXnfdPKi82ql/WWuz+zmdC/wM54/tLPE1tw==
+X-Received: by 2002:a17:906:e244:b0:7c0:f9ec:1dff with SMTP id gq4-20020a170906e24400b007c0f9ec1dffmr4431123ejb.283.1670274506851;
+        Mon, 05 Dec 2022 13:08:26 -0800 (PST)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id u15-20020aa7d0cf000000b0045ce419ecffsm221838edo.58.2022.12.05.13.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 13:08:13 -0800 (PST)
-Date:   Mon, 5 Dec 2022 16:08:11 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ives van Hoorne <ives@codesandbox.io>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH RFC] mm/userfaultfd: enable writenotify while
- userfaultfd-wp is enabled for a VMA
-Message-ID: <Y45duzmGGUT0+u8t@x1n>
-References: <20221202122748.113774-1-david@redhat.com>
- <Y4oo6cN1a4Yz5prh@x1n>
- <690afe0f-c9a0-9631-b365-d11d98fdf56f@redhat.com>
- <19800718-9cb6-9355-da1c-c7961b01e922@redhat.com>
+        Mon, 05 Dec 2022 13:08:26 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v4 4/4] soc: sunxi: sram: Only iterate over SRAM children
+Date:   Mon, 05 Dec 2022 22:08:25 +0100
+Message-ID: <5320657.Sb9uPGUboI@kista>
+In-Reply-To: <20221125040112.18160-5-samuel@sholland.org>
+References: <20221125040112.18160-1-samuel@sholland.org> <20221125040112.18160-5-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="q5IFF/aTDPAhV49v"
-Content-Disposition: inline
-In-Reply-To: <19800718-9cb6-9355-da1c-c7961b01e922@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,349 +79,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---q5IFF/aTDPAhV49v
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-On Fri, Dec 02, 2022 at 06:11:17PM +0100, David Hildenbrand wrote:
-> On 02.12.22 17:56, David Hildenbrand wrote:
-> > On 02.12.22 17:33, Peter Xu wrote:
-> > > On Fri, Dec 02, 2022 at 01:27:48PM +0100, David Hildenbrand wrote:
-> > > > Currently, we don't enable writenotify when enabling userfaultfd-wp on
-> > > > a shared writable mapping (for now we only support SHMEM). The consequence
-> > > 
-> > > and hugetlbfs
-> > > 
-> > > > is that vma->vm_page_prot will still include write permissions, to be set
-> > > > as default for all PTEs that get remapped (e.g., mprotect(), NUMA hinting,
-> > > > page migration, ...).
-> > > 
-> > > The thing is by default I think we want the write bit..
-> > > 
-> > > The simple example is (1) register UFFD_WP on shmem writable, (2) write a
-> > > page.  Here we didn't wr-protect anything, so we want the write bit there.
-> > > 
-> > > Or the other example is when UFFDIO_COPY with flags==0 even if with
-> > > VM_UFFD_WP.  We definitely wants the write bit.
-> > > 
-> > > We only doesn't want the write bit when uffd-wp is explicitly set.
-> > > 
-> > > I think fundamentally the core is uffd-wp is pte-based, so the information
-> > > resides in pte not vma.  I'm not strongly objecting this patch, especially
-> > > you mentioned auto-numa so I need to have a closer look later there.
-> > > However I do think uffd-wp is slightly special because we always need to
-> > > consider pte information anyway, so a per-vma information doesn't hugely
-> > > help, IMHO.
-> > 
-> > That's the same as softdirty tracking, IMHO.
-
-Soft-dirty doesn't have a bit in the pte showing whether the page is
-protected.
-
-One wr-protects in soft-dirty with either ALL or NONE.  That's per-vma.
-
-One wr-protects in uffd-wp by wr-protect specific page or range of pages.
-That's per-page.
-
-> > 
-> > [...]
-> > 
-> > > > Running the mprotect() reproducer [1] without this commit:
-> > > >     $ ./uffd-wp-mprotect
-> > > >     FAIL: uffd-wp did not fire
-> > > > Running the mprotect() reproducer with this commit:
-> > > >     $ ./uffd-wp-mprotect
-> > > >     PASS: uffd-wp fired
-> > > > 
-> > > > [1] https://lore.kernel.org/all/222fc0b2-6ec0-98e7-833f-ea868b248446@redhat.com/T/#u
-> > > 
-> > > I still hope for a formal patch (non-rfc) we can have a reproducer outside
-> > > mprotect().  IMHO mprotect() is really ambiguously here being used with
-> > > uffd-wp, so not a good example IMO as I explained in the other thread [1].
-> > 
-> > I took the low hanging fruit to showcase that this is a more generic problem.
-> > The reproducer is IMHO nice because it's simple and race-free.
-
-If no one is using mprotect() with uffd-wp like that, then the reproducer
-may not be valid - the reproducer is defining how it should work, but does
-that really stand?  That's why I said it's ambiguous, because the
-definition in this case is unclear.
-
-I think numa has the problem too which I agree with you.  If you attach a
-numa reproducer it'll be nicer.  But again I'm not convinced uffd-wp is a
-per-vma thing, which seems to be what this patch is based upon.
-
-Now I really wonder whether I should just simply wr-protect pte for
-pte_mkuffd_wp() always, attached.  I didn't do that from the start because
-I wanted to keep the helpers operate on one bit only.  But I found that
-it's actually common technique to use in pgtable arch code, and it really
-doesn't make sense to not wr-protect a pte if uffd-wp is set on a present
-entry.  It's much safer.
-
-> > 
-> > > 
-> > > I'll need to off-work most of the rest of today, but maybe I can also have
-> > > a look in the weekend or Monday more on the numa paths.  Before that, can
-> > > we first reach a consensus that we have the mm/migrate patch there to be
-> > > merged first?  These are two issues, IMHO.
-> > > 
-> > > I know you're against me for some reason, but until now I sincerely don't
-> > > know why.  That patch sololy recovers write bit status (by removing it for
-> > > read-only) for a migration entry and that definitely makes sense to me.  As
-> > > I also mentioned in the old version of that thread, we can rework migration
-> > > entries and merge READ|WRITE entries into a GENERIC entry one day if you
-> > > think proper, but that's for later.
-> > 
-> > I'm not against you. I'm against changing well-working, common code
-> > when it doesn't make any sense to me to change it.
-
-This goes back to the original question of whether we should remove the
-write bit for read migration entry.  Well, let's just focus on others;
-we're all tired of this one.
-
-> > And now we have proof that
-> > mprotect() just behaves exactly the same way, using the basic rules of vma->vm_page_prot.
-> > 
-> > Yes, there is broken sparc64 (below), but that shouldn't dictate our implementation.
-
-I doubt whether sparc64 is broken if it has been like that anyway, because
-I know little on sparc64 so I guess I'd not speak on that.
-
-> > 
-> > 
-> > What *would* make sense to me, as I raised, is:
-> > 
-> > diff --git a/mm/migrate.c b/mm/migrate.c
-> > index dff333593a8a..9fc181fd3c5a 100644
-> > --- a/mm/migrate.c
-> > +++ b/mm/migrate.c
-> > @@ -213,8 +213,10 @@ static bool remove_migration_pte(struct folio *folio,
-> >                           pte = pte_mkdirty(pte);
-> >                   if (is_writable_migration_entry(entry))
-> >                           pte = maybe_mkwrite(pte, vma);
-> > -               else if (pte_swp_uffd_wp(*pvmw.pte))
-> > +               else if (pte_swp_uffd_wp(*pvmw.pte)) {
-> >                           pte = pte_mkuffd_wp(pte);
-> > +                       pt = pte_wrprotect(pte);
-> > +               }
-> >                   if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
-> >                           rmap_flags |= RMAP_EXCLUSIVE;
-> > 
-> > 
-> > It still requires patch each and every possible code location, which I dislike as
-> > described in the patch description. The fact that there are still uffd-wp bugs
-> > with your patch makes that hopefully clear. I'd be interested if they can be
-> > reproduced witht his patch.
-> > 
+Dne petek, 25. november 2022 ob 05:01:12 CET je Samuel Holland napisal(a):
+> Now that a regulators child is accepted by the controller binding, the
+> debugfs show routine must be explicitly limited to mmio-sram children.
 > 
-> And if NUMA hinting is indeed the problem, without this patch what would
-> be required would most probably be:
-> 
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 8a6d5c823f91..869d35ef0e24 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4808,6 +4808,8 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
->         pte = pte_mkyoung(pte);
->         if (was_writable)
->                 pte = pte_mkwrite(pte);
-> +       if (pte_uffd_wp(pte))
-> +               pte = pte_wrprotect(pte);
->         ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
->         update_mmu_cache(vma, vmf->address, vmf->pte);
->         pte_unmap_unlock(vmf->pte, vmf->ptl);
-> 
-> 
-> And just to make my point about the migration path clearer: doing it your way
-> would be:
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 8a6d5c823f91..a7c4c1a57f6a 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4808,6 +4808,8 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
->         pte = pte_mkyoung(pte);
->         if (was_writable)
->                 pte = pte_mkwrite(pte);
-> +       else
-> +               pte = pte_wrprotect(pte);
->         ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
->         update_mmu_cache(vma, vmf->address, vmf->pte);
->         pte_unmap_unlock(vmf->pte, vmf->ptl);
-> 
-> 
-> And I don't think that's the right approach.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Yes, but now I'm prone to the patch I attached which should just cover all
-pte_mkuffd_wp().
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Side note: since looking at the numa code, I found that after the recent
-rework of removing savedwrite for numa, cdb205f9e220 ("mm/autonuma: use
-can_change_(pte|pmd)_writable() to replace savedwrite"), I think it can
-happen that after numa balancing one pte under uffd-wp vma (but not
-wr-protected) can have its write bit lost if the migration failed during
-recovering, because vma_wants_manual_pte_write_upgrade() will return false
-for such case.  Is it true?
+Best regards,
+Jernej
 
--- 
-Peter Xu
-
---q5IFF/aTDPAhV49v
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-mm-uffd-Always-wr-protect-pte-in-pte_mkuffd_wp.patch"
-
-From de45385070c960056433bfd6ac575f50937717d6 Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Mon, 5 Dec 2022 15:30:53 -0500
-Subject: [PATCH] mm/uffd: Always wr-protect pte in pte_mkuffd_wp()
-Content-type: text/plain
-
-It's never valid to have write bit set for any pte that is uffd
-wr-protected.  Remove the write bit explicitly in pte_mkuffd_wp() so we
-never forget to do that in any callers.
-
-Remove the rest paths where we explicitly wr-protect the pte just for
-uffd-wp because they're not needed anymore.
-
-This should make sure all the places (e.g. do_numa_page for writable shmem)
-will not have the write bit set as long as when uffd-wp is set.
-
-Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
-Reported-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/x86/include/asm/pgtable.h | 2 +-
- include/asm-generic/hugetlb.h  | 2 +-
- mm/hugetlb.c                   | 4 ++--
- mm/memory.c                    | 8 +++-----
- mm/mprotect.c                  | 6 ++----
- mm/userfaultfd.c               | 6 ------
- 6 files changed, 9 insertions(+), 19 deletions(-)
-
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 0564edd24ffb..b6e348f7610f 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -313,7 +313,7 @@ static inline int pte_uffd_wp(pte_t pte)
- 
- static inline pte_t pte_mkuffd_wp(pte_t pte)
- {
--	return pte_set_flags(pte, _PAGE_UFFD_WP);
-+	return pte_wrprotect(pte_set_flags(pte, _PAGE_UFFD_WP));
- }
- 
- static inline pte_t pte_clear_uffd_wp(pte_t pte)
-diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
-index a57d667addd2..a190ad12b7cc 100644
---- a/include/asm-generic/hugetlb.h
-+++ b/include/asm-generic/hugetlb.h
-@@ -37,7 +37,7 @@ static inline pte_t huge_pte_modify(pte_t pte, pgprot_t newprot)
- 
- static inline pte_t huge_pte_mkuffd_wp(pte_t pte)
- {
--	return pte_mkuffd_wp(pte);
-+	return huge_pte_wrprotect(pte_mkuffd_wp(pte));
- }
- 
- static inline pte_t huge_pte_clear_uffd_wp(pte_t pte)
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 9d97c9a2a15d..943aa96b6f68 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5751,7 +5751,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	 * if populated.
- 	 */
- 	if (unlikely(pte_marker_uffd_wp(old_pte)))
--		new_pte = huge_pte_wrprotect(huge_pte_mkuffd_wp(new_pte));
-+		new_pte = huge_pte_mkuffd_wp(new_pte);
- 	set_huge_pte_at(mm, haddr, ptep, new_pte);
- 
- 	hugetlb_count_add(pages_per_huge_page(h), mm);
-@@ -6552,7 +6552,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
- 			pte = huge_pte_modify(old_pte, newprot);
- 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
- 			if (uffd_wp)
--				pte = huge_pte_mkuffd_wp(huge_pte_wrprotect(pte));
-+				pte = huge_pte_mkuffd_wp(pte);
- 			else if (uffd_wp_resolve)
- 				pte = huge_pte_clear_uffd_wp(pte);
- 			huge_ptep_modify_prot_commit(vma, address, ptep, old_pte, pte);
-diff --git a/mm/memory.c b/mm/memory.c
-index aad226daf41b..1e2628bf8de1 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -882,7 +882,7 @@ copy_present_page(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma
- 	pte = maybe_mkwrite(pte_mkdirty(pte), dst_vma);
- 	if (userfaultfd_pte_wp(dst_vma, *src_pte))
- 		/* Uffd-wp needs to be delivered to dest pte as well */
--		pte = pte_wrprotect(pte_mkuffd_wp(pte));
-+		pte = pte_mkuffd_wp(pte);
- 	set_pte_at(dst_vma->vm_mm, addr, dst_pte, pte);
- 	return 0;
- }
-@@ -3950,10 +3950,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	flush_icache_page(vma, page);
- 	if (pte_swp_soft_dirty(vmf->orig_pte))
- 		pte = pte_mksoft_dirty(pte);
--	if (pte_swp_uffd_wp(vmf->orig_pte)) {
-+	if (pte_swp_uffd_wp(vmf->orig_pte))
- 		pte = pte_mkuffd_wp(pte);
--		pte = pte_wrprotect(pte);
--	}
- 	vmf->orig_pte = pte;
- 
- 	/* ksm created a completely new copy */
-@@ -4296,7 +4294,7 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 	if (unlikely(uffd_wp))
--		entry = pte_mkuffd_wp(pte_wrprotect(entry));
-+		entry = pte_mkuffd_wp(entry);
- 	/* copy-on-write page */
- 	if (write && !(vma->vm_flags & VM_SHARED)) {
- 		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 093cb50f2fc4..a816ec34c234 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -177,12 +177,10 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 			oldpte = ptep_modify_prot_start(vma, addr, pte);
- 			ptent = pte_modify(oldpte, newprot);
- 
--			if (uffd_wp) {
--				ptent = pte_wrprotect(ptent);
-+			if (uffd_wp)
- 				ptent = pte_mkuffd_wp(ptent);
--			} else if (uffd_wp_resolve) {
-+			else if (uffd_wp_resolve)
- 				ptent = pte_clear_uffd_wp(ptent);
--			}
- 
- 			/*
- 			 * In some writable, shared mappings, we might want
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 650ab6cfd5f4..29015ad73e69 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -85,12 +85,6 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 
- 	if (writable)
- 		_dst_pte = pte_mkwrite(_dst_pte);
--	else
--		/*
--		 * We need this to make sure write bit removed; as mk_pte()
--		 * could return a pte with write bit set.
--		 */
--		_dst_pte = pte_wrprotect(_dst_pte);
- 
- 	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
- 
--- 
-2.37.3
-
-
---q5IFF/aTDPAhV49v--
 
