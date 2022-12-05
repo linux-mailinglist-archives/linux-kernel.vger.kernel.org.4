@@ -2,231 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D21642108
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C5F64210C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiLEBTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S230444AbiLEBYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiLEBTp (ORCPT
+        with ESMTP id S231213AbiLEBYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:19:45 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5EE12AF5;
-        Sun,  4 Dec 2022 17:19:43 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NQQg26jXFzmVRP;
-        Mon,  5 Dec 2022 09:18:54 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Dec 2022 09:19:40 +0800
-Subject: Re: [PATCH bpf-next v3 1/4] bpf: Adapt 32-bit return value kfunc for
- 32-bit ARM when zext extension
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Sun, 4 Dec 2022 20:24:09 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FE812D30
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 17:24:07 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so2028850pjj.4
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 17:24:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igorinstitute-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=udJjLFsIsuNM+D3lyGnLy0JwlIO+NVedMCgCplH0XXs=;
+        b=2sodOIYqDSiSgt9c4aOcnZzMycrCLMB+S0oc/UblasgK8rW84vy4R/wwVZEnNlVY93
+         dVOmV12xvGZ4Oujmwz1r3dUvMOPMVaD0UHuC7nxTuYX1ZsR1ZxnqJL9/U86lKZ3CsYC0
+         wRRuLNZhYVg+RkW7uXJjyINUWtDmDvcslOU+/WpBe+vPm2tI/jkIT7jDr84wBsQW6PZ/
+         577d1OB826wBRXpLZlfIqClwq+/M5pT9pYUA/GGVIdbpLxheD6C67ZXr2wucXtLnWNXx
+         mESa5q578cQ3zESImbIxA0wk1glfr0h4sQZ8FbmVYghHbA94d3IbJjd5o2j6gfbDSPfB
+         NMBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=udJjLFsIsuNM+D3lyGnLy0JwlIO+NVedMCgCplH0XXs=;
+        b=TBlCS37s71WOH4XOFtTCZMQ5Qed6GdBt7l4P0mHZ8ILEQNt2IIkjhraDM1QASDQNFJ
+         I1yrCy2DzrsvmWpBd/hftd1mAycdKHlWpLEkfA5FCcGL4sJfuE+QUrVhNzksjz+M5Z/f
+         jImkKX1OE0yoLNgHinzfJMTcfVYUSMnmV4YOMYKUZMafV+Phv0Ig8HsQX9mxPN5X+mLy
+         KS2x9hEPx+kKcY3RsdpLH6IIKsV7WEsce+1LDkuRX4xwQXBGYlRAGP6W5PALsx4M4f81
+         gh8RU5lFT6ovoqQIaOWTtyoIAOb9D5K6t8udzwch30HEZ3NzkexZnSRRG87oNiS2Nfe8
+         b9OA==
+X-Gm-Message-State: ANoB5pmoZ8+SjJbmt5P7/bCGBkjLGW6qczbj32tvMmD7lq3JQEJ8sk10
+        cgsHbNCYQMRvc1/FuGYeQKGtFw==
+X-Google-Smtp-Source: AA0mqf5qIK01sWvLtVrvTGJppmqa9AVW7iYDN5qPvMB9YJRe16Mwf2rVSwykwYB2y8WjCGkUQH5HtQ==
+X-Received: by 2002:a17:902:8604:b0:186:fe2d:f3cb with SMTP id f4-20020a170902860400b00186fe2df3cbmr66231522plo.132.1670203446986;
+        Sun, 04 Dec 2022 17:24:06 -0800 (PST)
+Received: from localhost ([121.99.145.49])
+        by smtp.gmail.com with ESMTPSA id r13-20020aa7962d000000b00576d4d69909sm1481840pfg.8.2022.12.04.17.24.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Dec 2022 17:24:06 -0800 (PST)
+Date:   Mon, 5 Dec 2022 14:24:03 +1300
+From:   Daniel Beer <daniel.beer@igorinstitute.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        <colin.i.king@gmail.com>, Artem Savkov <asavkov@redhat.com>,
-        Delyan Kratunov <delyank@fb.com>, bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20221126094530.226629-1-yangjihong1@huawei.com>
- <20221126094530.226629-2-yangjihong1@huawei.com>
- <20221128015758.aekybr3qlahfopwq@MacBook-Pro-5.local>
- <dc9d1823-80f2-e2d9-39a8-c39b6f52dec5@huawei.com>
- <CAADnVQJPRCnESmJ92W39bo-btqNbYaNsGQO0is6FD3JLU_mSjQ@mail.gmail.com>
- <8cb54255-4dce-6d50-d6f0-ac9af0e56f37@huawei.com>
- <CAADnVQJXr6XxpG2E-AkO7__qg-sujrhyO+JWWa1iwYmAO4S0Pw@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <4a2b8cd5-78c4-360a-6eb0-33fcf689d26a@huawei.com>
-Date:   Mon, 5 Dec 2022 09:19:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Michael Zaidman <michael.zaidman@gmail.com>,
+        Christina Quast <contact@christina-quast.de>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] hid-ft260: add UART support.
+Message-ID: <20221205012403.GA14904@nyquist.nev>
+References: <638c51a2.170a0220.3af16.18f8@mx.google.com>
+ <Y4xX7ILXMFHZtJkv@kroah.com>
+ <20221204091247.GA11195@nyquist.nev>
+ <Y4xqyRERBdr8fT7F@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQJXr6XxpG2E-AkO7__qg-sujrhyO+JWWa1iwYmAO4S0Pw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4xqyRERBdr8fT7F@kroah.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/12/4 0:40, Alexei Starovoitov wrote:
-> On Fri, Dec 2, 2022 at 6:58 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->>
->>
->> On 2022/11/29 0:41, Alexei Starovoitov wrote:
->>> On Mon, Nov 28, 2022 at 4:40 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->>>>
->>>>
->>>>
->>>> On 2022/11/28 9:57, Alexei Starovoitov wrote:
->>>>> On Sat, Nov 26, 2022 at 05:45:27PM +0800, Yang Jihong wrote:
->>>>>> For ARM32 architecture, if data width of kfunc return value is 32 bits,
->>>>>> need to do explicit zero extension for high 32-bit, insn_def_regno should
->>>>>> return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
->>>>>> opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
->>>>>>
->>>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->>>>>> ---
->>>>>>     kernel/bpf/verifier.c | 44 ++++++++++++++++++++++++++++++++++++++++---
->>>>>>     1 file changed, 41 insertions(+), 3 deletions(-)
->>>>>>
->>>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>>>> index 264b3dc714cc..193ea927aa69 100644
->>>>>> --- a/kernel/bpf/verifier.c
->>>>>> +++ b/kernel/bpf/verifier.c
->>>>>> @@ -1927,6 +1927,21 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
->>>>>>                       sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
->>>>>>     }
->>>>>>
->>>>>> +static int kfunc_desc_cmp_by_imm(const void *a, const void *b);
->>>>>> +
->>>>>> +static const struct bpf_kfunc_desc *
->>>>>> +find_kfunc_desc_by_imm(const struct bpf_prog *prog, s32 imm)
->>>>>> +{
->>>>>> +    struct bpf_kfunc_desc desc = {
->>>>>> +            .imm = imm,
->>>>>> +    };
->>>>>> +    struct bpf_kfunc_desc_tab *tab;
->>>>>> +
->>>>>> +    tab = prog->aux->kfunc_tab;
->>>>>> +    return bsearch(&desc, tab->descs, tab->nr_descs,
->>>>>> +                   sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm);
->>>>>> +}
->>>>>> +
->>>>>>     static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
->>>>>>                                         s16 offset)
->>>>>>     {
->>>>>> @@ -2342,6 +2357,13 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>>>>>                         */
->>>>>>                        if (insn->src_reg == BPF_PSEUDO_CALL)
->>>>>>                                return false;
->>>>>> +
->>>>>> +                    /* Kfunc call will reach here because of insn_has_def32,
->>>>>> +                     * conservatively return TRUE.
->>>>>> +                     */
->>>>>> +                    if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
->>>>>> +                            return true;
->>>>>> +
->>>>>>                        /* Helper call will reach here because of arg type
->>>>>>                         * check, conservatively return TRUE.
->>>>>>                         */
->>>>>> @@ -2405,10 +2427,26 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>>>>>     }
->>>>>>
->>>>>>     /* Return the regno defined by the insn, or -1. */
->>>>>> -static int insn_def_regno(const struct bpf_insn *insn)
->>>>>> +static int insn_def_regno(struct bpf_verifier_env *env, const struct bpf_insn *insn)
->>>>>>     {
->>>>>>        switch (BPF_CLASS(insn->code)) {
->>>>>>        case BPF_JMP:
->>>>>> +            if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
->>>>>> +                    const struct bpf_kfunc_desc *desc;
->>>>>> +
->>>>>> +                    /* The value of desc cannot be NULL */
->>>>>> +                    desc = find_kfunc_desc_by_imm(env->prog, insn->imm);
->>>>>> +
->>>>>> +                    /* A kfunc can return void.
->>>>>> +                     * The btf type of the kfunc's return value needs
->>>>>> +                     * to be checked against "void" first
->>>>>> +                     */
->>>>>> +                    if (desc->func_model.ret_size == 0)
->>>>>> +                            return -1;
->>>>>> +                    else
->>>>>> +                            return insn->dst_reg;
->>>>>> +            }
->>>>>> +            fallthrough;
->>>>>
->>>>> I cannot make any sense of this patch.
->>>>> insn->dst_reg above is 0.
->>>>> The kfunc call doesn't define a register from insn_def_regno() pov.
->>>>>
->>>>> Are you hacking insn_def_regno() to return 0 so that
->>>>> if (WARN_ON(load_reg == -1)) {
->>>>>      verbose(env, "verifier bug. zext_dst is set, but no reg is defined\n");
->>>>>      return -EFAULT;
->>>>> }
->>>>> in opt_subreg_zext_lo32_rnd_hi32() doesn't trigger ?
->>>>>
->>>>> But this verifier message should have been a hint that you need
->>>>> to analyze why zext_dst is set on this kfunc call.
->>>>> Maybe it shouldn't ?
->>>>> Did you analyze the logic of mark_btf_func_reg_size() ?
->>>> make r0 zext is not caused by mark_btf_func_reg_size.
->>>>
->>>> This problem occurs when running the kfunc_call_test_ref_btf_id test
->>>> case in the 32-bit ARM environment.
->>>
->>> Why is it not failing on x86-32 ?
->> Use the latest mainline kernel code to test on the x86_32 machine. The
->> test also fails:
->>
->>     # ./test_progs -t kfunc_call/kfunc_call_test_ref_btf_id
->>     Failed to load bpf_testmod.ko into the kernel: -8
->>     WARNING! Selftests relying on bpf_testmod.ko will be skipped.
->>     libbpf: prog 'kfunc_call_test_ref_btf_id': BPF program load failed:
->> Bad address
->>     libbpf: prog 'kfunc_call_test_ref_btf_id': -- BEGIN PROG LOAD LOG --
->>     processed 25 insns (limit 1000000) max_states_per_insn 0 total_states
->> 2 peak_states 2 mark_read 1
->>     -- END PROG LOAD LOG --
->>     libbpf: prog 'kfunc_call_test_ref_btf_id': failed to load: -14
->>     libbpf: failed to load object 'kfunc_call_test'
->>     libbpf: failed to load BPF skeleton 'kfunc_call_test': -14
->>     verify_success:FAIL:skel unexpected error: -14
->>
->> Therefore, this problem also exists on x86_32:
->> "verifier bug. zext_dst is set, but no reg is defined"
+On Sun, Dec 04, 2022 at 10:39:21AM +0100, Greg Kroah-Hartman wrote:
+> > Thanks for reviewing. This device is quite strange -- it presents itself
+> > as a USB HID, but it provides both an I2C master and a UART. The
+> > existing driver supports only the I2C functionality currently.
 > 
-> The kernel returns -14 == EFAULT.
-> That's a completely different issue.
-It's the same problem. The opt_subreg_zext_lo32_rnd_hi32 function fails 
-to check here and returns -EFAULT
+> Lots of devices are a "fake HID" device as other operating systems make
+> it easy to write userspace drivers that way.  Linux included.  What
+> userspace programs are going to want to interact with this device and
+> what api are they going to use?
 
-opt_subreg_zext_lo32_rnd_hi32 {
-   ...
-    if (WARN_ON(load_reg == -1)) { 
+Hi Greg,
 
-            verbose(env, "verifier bug. zext_dst is set, but no reg is 
-defined\n");
-            return -EFAULT; 
+The application I'm looking at uses it as a debug console, so personally
+I'd like to be able to use it with picocom and other terminal programs.
 
-    }
-   ...
-} 
-
-> .
+> > > > --- a/include/uapi/linux/major.h
+> > > > +++ b/include/uapi/linux/major.h
+> > > > @@ -175,4 +175,6 @@
+> > > >  #define BLOCK_EXT_MAJOR		259
+> > > >  #define SCSI_OSD_MAJOR		260	/* open-osd's OSD scsi device */
+> > > >  
+> > > > +#define FT260_MAJOR		261
+> > > 
+> > > A whole new major for just a single tty port?  Please no, use dynamic
+> > > majors if you have to, or better yet, tie into the usb-serial
+> > > implementation (this is a USB device, right?) and then you don't have to
+> > > mess with this at all.
+> > 
+> > As far as I understand it, I don't think usb-serial is usable, due to
+> > the fact that this is already an HID driver.
 > 
+> That should not be a restriction at all.  You are adding a tty device to
+> this driver, no reason you can't interact with usb-serial instead.  That
+> way you share the correct userspace tty name and major/minor numbers and
+> all userspace tools should "just work" as they know that name and how to
+> interact with it already.
+> 
+> Try doing that instead of your own "raw" tty device please.
+
+Maybe I've misunderstood something. The reason I thought usb-serial was
+unusable in this instance was that I couldn't see a way to create a port
+except via usb-serial's own probe function (otherwise, the API looked
+fine).
+
+I don't know whether I'm looking at a serial or an I2C interface until
+after it's already been probed by HID core, I have a struct hid_device
+and I've asked what type of interface it is via an HID feature report.
+This can't be determined otherwise, because strapping pins affect the
+presentation of interfaces.
+
+At that point, I (currently) call uart_add_one_port. I might have missed
+it, but I didn't see anything analogous in the usb-serial API. Am I
+going about this the wrong way?
+
+Cheers,
+Daniel
+
+-- 
+Daniel Beer
+Firmware Engineer at Igor Institute
+daniel.beer@igorinstitute.com or +64-27-420-8101
+Offices in Seattle, San Francisco, and Vancouver BC or (206) 494-3312
