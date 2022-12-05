@@ -2,73 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D116437D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F87C6437D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbiLEWP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 17:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S233398AbiLEWQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiLEWP0 (ORCPT
+        with ESMTP id S231213AbiLEWQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 17:15:26 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06153FD16
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 14:15:26 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id gh17so1853074ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 14:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zamXeam1VeIeggifJ5GOOWVrNzqJw8U6YgcWunmxdZI=;
-        b=h8/53zGuh3NJo5m+HjnOirsSzWmwta9DV39yHLdUaegbigSP8aS3m9jYqf9Gs4BgUp
-         vm2K/C6Bc6TS/S2h5/7w54dNJmyPiGeM903N1LGpqx2Yo54QAMWrAjOVRrMPnDzv8idH
-         +nQnW9n/MSQOj+eyHkDHfIZ58GWOzTiAwUkXXeFnUdgLM71yz/5s/LaQqAkNZw07K7MX
-         kF+1Odpdiv5OyvEThncbJAXqmeup9V94g46YxYzVzZS9EvbOxHMzHAVektknOnE8BNex
-         OC42YsQ79Sr1q9e4J/tQFxSRZTZGzi90c6H04bzRPsLpCnsOwYxhKFIaHeQuKvMuA/dW
-         Lo+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zamXeam1VeIeggifJ5GOOWVrNzqJw8U6YgcWunmxdZI=;
-        b=no+65jetOfybdHRdSFmB9QTfOQ+Df/LFeNQenq0nSv+T6D/7r6A5Qjk3xN+syY38JU
-         /eh/q/mhS3P6rarG1sdAmBmZiRQMNZPErjfBOCuT4cu+zh2SPjxfRkiFUdmXLpUiHtiE
-         Un4dlv8GFCSEb6yIlTsYigFyduO5vR4HA9XOjljprjGWCG7wCVydeu277ny1mTLo4Kpm
-         aLEdn3Oah8WUfVM53bAkf4N5Yz7iqCm2ZK2Mmx2HPKSgnLlQ6bGv9bpzMv0cQF7sdrW6
-         SN9ZJ6x76WKr9RejCecW0ZCSLO+DmP6GgnMvfTZIJHxGT/EgCtAtVTC2zhkT1a9KhgPB
-         H2Iw==
-X-Gm-Message-State: ANoB5plYjIK1/gOGBygq0usLImpivLAjWri2z0dQe6O9ZVKI2vMNz+Nl
-        ayrzWlghUKKyFQLezuK3H1EYOe2WWaEFGgIZ9/4=
-X-Google-Smtp-Source: AA0mqf7Tf7agS1Cwcn3glcraelH+i9a+VizdXXztMnhOL0ZWpVwpKN8cBDTXb+QxSNVTNuoV7oMzblhSkeEaSbD1dR0=
-X-Received: by 2002:a17:906:2604:b0:78a:d0a4:176 with SMTP id
- h4-20020a170906260400b0078ad0a40176mr72663414ejc.720.1670278524374; Mon, 05
- Dec 2022 14:15:24 -0800 (PST)
+        Mon, 5 Dec 2022 17:16:03 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB131A3B0;
+        Mon,  5 Dec 2022 14:16:03 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 56774589;
+        Mon,  5 Dec 2022 23:16:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670278561;
+        bh=VUJiv+oCI97fmhJGQU37Erv4U9yGfxnZ6q1/K988UdU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S22/ku8G8YBkzdK1yYQX+Lo9rdI31jJzASi5nDgNWJbbqr0JTYZaEHU0EDOqm++jw
+         XdnhY9whN9SnynzPbIL0XeANHDblWPSW6q7C5daYg5GFRRFcrdNRbTohWuhRT6SiCJ
+         2ug0/UZnnOkuJIYOc1FweCf9dYGvy/zSXsxFG11E=
+Date:   Tue, 6 Dec 2022 00:15:58 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Yunke Cao <yunkec@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] media: uvcvideo: Add a unique suffix to camera
+ names
+Message-ID: <Y45tnp0naosOrYCY@pendragon.ideasonboard.com>
+References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
+ <20220920-resend-meta-v4-3-3ac355b66723@chromium.org>
 MIME-Version: 1.0
-References: <CAEYL+X_X7OsP3BQ3poK4n+DWEOxAais6d9At9nz2TzLFV2HinA@mail.gmail.com>
- <1716b73b-77f4-da8e-801f-7521872697bb@infradead.org>
-In-Reply-To: <1716b73b-77f4-da8e-801f-7521872697bb@infradead.org>
-From:   Zopolis0 <creatorsmithmdt@gmail.com>
-Date:   Tue, 6 Dec 2022 09:15:14 +1100
-Message-ID: <CAEYL+X8KAg58c32LXL8ksfxnDvPPLwJwBRxMFdu6wB7HU+kXBQ@mail.gmail.com>
-Subject: Re: PATCH [1/2] gamecube/wii: graphic quantization registers driver (GQR)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-meta-v4-3-3ac355b66723@chromium.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> and lastly, gmail has (apparently) munged the whitespace in the patch
-> so that it is awful... or it was never done correctly if gmail didn't
-> munge it.
+Hi Ricardo,
 
-In that case, would it be acceptable to send the patches as attatchements?
+Thank you for the patch.
+
+On Fri, Dec 02, 2022 at 06:08:19PM +0100, Ricardo Ribalda wrote:
+> Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
+> append a unique number to the device name.
+> 
+> Fixes v4l2-compliance:
+>     Media Controller ioctls:
+>          fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
+>        test MEDIA_IOC_G_TOPOLOGY: FAIL
+>          fail: v4l2-test-media.cpp(394): num_data_links != num_links
+>        test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 215fb483efb0..f4032ebb3689 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -1963,7 +1963,8 @@ int uvc_register_video_device(struct uvc_device *dev,
+>  		break;
+>  	}
+>  
+> -	strscpy(vdev->name, dev->name, sizeof(vdev->name));
+> +	snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
+> +		 stream->header.bTerminalLink);
+
+This won't be perfect as the string is not guaranteed to fit in
+vdev->name, but I suppose it will help as a quick fix for some devices.
+How about the other devices ? Won't they still exhibit the above
+v4l2-compliance failure ? Isn't that something that will still affect
+Chrome OS devices ?
+
+The change should not cause any regression as big as in patch 1/3.
+However, unless I'm mistaken users will notice a device name change,
+especially when selecting a device in their web browser. Could that be a
+problem ?
+
+>  	/*
+>  	 * Set the driver data before calling video_register_device, otherwise
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
