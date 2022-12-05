@@ -2,154 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE56642849
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6819F64284B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiLEMVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S231756AbiLEMVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiLEMVJ (ORCPT
+        with ESMTP id S231744AbiLEMVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:21:09 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5279CE0A8;
-        Mon,  5 Dec 2022 04:21:08 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id jl24so10609713plb.8;
-        Mon, 05 Dec 2022 04:21:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ujNogmjXUzAdISFdb+k3CYrlxMM8u71cOZOj6myJAqE=;
-        b=No09YoJkVDU4OufxqqO6sN8dTeRdkfVar42K6FmDqjxSn+V79DeZYHgDGMSsUc+yzO
-         swE56S7z6QryfN/O2b0ocCjHnBapNqaZ8CecL9o7yMKRbI55uVtvwOmgcZVeLy5y4+KT
-         zPpULhsThc+raDCqC+Ul923r0ZeCPoslYvCIVPv/nYjWvJRIf9k+BGNDEwquTmNQaqFY
-         XNCG6rG9/tQ7R6/sZ750f4sc7cJACL7xZ/LF7z57lggPqbyCO4GQelqspkBSVZeYZgAN
-         R9hpJAhTVco0U12Vi++ttYjU7WeQkW6TjnPlJVCiCO9nCZU9mSOwAObmBE/Xu/nXYihu
-         YbKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ujNogmjXUzAdISFdb+k3CYrlxMM8u71cOZOj6myJAqE=;
-        b=kSJ4Ndu1FDtCp3o+5TnaEFspnqH4Bj6cyyKftgsceL84cmC0HCL6AEHRKmaC1q7NDy
-         uqrOg3giPFLgZtzdx8HdCf2R8FOnC7LmvM4JjG3Ax2o13Rt2MR4oL9V44+52dZJbIeSz
-         I8dvUU7vXv+cOc0EHKwsKwN9FKrp8Fmq9YZDopLrU5UCXUe9vbPlU6agXDG42wga9cqs
-         3eQCVSgD3QQhqp2m5k/9Hxhci9LTYi1ltFOG7Mp7Cc5/Kd6jDdqqjhC8zIXbQAzOQ0cq
-         kS0qF1Q6nCu0qZvIUc+d5fORGRBmHGyWm21F+WXdx6Mgds/8lroflGFGZmcyP94JWaig
-         dvNA==
-X-Gm-Message-State: ANoB5plYsdFD6rORoAsmGmYoAnKvaGY54c9wJN3SVRbVz1uVcR4mrt59
-        hlpfXcsrMZRAZeABjxsWptSD58FuxjaLng==
-X-Google-Smtp-Source: AA0mqf6J2G6JDn5Wk7NDveDevBtWVzpm+g15JdSbwO9wxgEMv+vSRBvdSsyR6//5Z5G6Oc2wXA9GHA==
-X-Received: by 2002:a17:902:b184:b0:189:1d01:a4ae with SMTP id s4-20020a170902b18400b001891d01a4aemr65843926plr.93.1670242867768;
-        Mon, 05 Dec 2022 04:21:07 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b00186b7443082sm10458256plb.195.2022.12.05.04.21.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 04:21:07 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Drop event_type and rename "struct kvm_event_hw_type_mapping"
-Date:   Mon,  5 Dec 2022 20:20:48 +0800
-Message-Id: <20221205122048.16023-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 5 Dec 2022 07:21:35 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7A8F5B8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:21:33 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 8B01B320091F;
+        Mon,  5 Dec 2022 07:21:30 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 05 Dec 2022 07:21:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1670242890; x=1670329290; bh=8c
+        0wk4OjXRa/QesbL2vsgHn8e80nbdEdde63Cqs79LU=; b=V00lIOL6pRsSMCtU95
+        vKHxeJ4m9ufk9wwAspWvf1e3s6HrMeTbhsuyPc6OenXh52/DZ908dt0LANk8Vx0S
+        rLL/MG16b64cOopmHEBwbZwf2fY4Crqhnv4G3mO4Dwaghlc6Nk32EpzscJS5nLzb
+        LmDjElro2B1yCMpQYu6A8M8cnpWuHfixu1sI/L9Vw2MuimSj7k/HPQLDcuJJo1TQ
+        6SJ45XSBha1WanrCd+qshB+b5VH/9HZvLfuPsOEkX2MblPXwlf4P+e1o0uIF52ev
+        LA0KAkHX6o4Yi2DyTYUTztR2XyNkBMoyNIy7kZsqtk2/qOHQ/dMZxHFoEUVsuDOS
+        SV/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1670242890; x=1670329290; bh=8c0wk4OjXRa/QesbL2vsgHn8e80n
+        bdEdde63Cqs79LU=; b=Ymhyjo4CLdPwJWL2RhBjtEKy6dSusKREfgc87T61vKIf
+        CGj+zLKQL3C+rUPN6gxZH/40+YixrKB/OwcIPwFsjI0rVzzjBwMziYyum+ZYeYjz
+        BB/HlkZlyU8usAhwwA3m9FsfripbzN/+jCHvVMxYNx4mOFRstdd8wPippq6Iugtp
+        hU74td094dahVYhv5jS+rBZ3CHooGrUMVfdxIF+k8qH689U3NgXb2sDnjz1mS3+L
+        d7RIYZaJ9VMDu2mt6RTiImlkGH3JH+KyarVKwklBY3FTAuYU8Hxyt1X4gw2SGCfG
+        +Y0tOVnRg/qR+FdmXbGAJK/jAqn3vLXX6d8V6ltdvw==
+X-ME-Sender: <xms:SeKNYwzby81n_Ik1yWuw7FbU6XHj6gT1MpOcxBQo0npxGZ9wJGX8vw>
+    <xme:SeKNY0Qon2VKhKeEy2fsCSX9c2CR5rU7_39FFUaohkiLotopG-xSLIpLq-nYML1yR
+    WUZkWrUez6jMhVYMN0>
+X-ME-Received: <xmr:SeKNYyWVAVFt-7NaJhKpZlsbdJsINfdQjOzw8DIeyhTPx2sPRORC1FWote4m_G-iZaM3Bg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggdefkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhepfeeileeffeeiteeljeekheetieehhffhfeeuheel
+    tdetgfeuvddvffegvdelhfdunecuffhomhgrihhnpehinhhtvghlrdgtohhmnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehs
+    hhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:SeKNY-gqq8KBVaqdhbT8aLT9CSgceXac2jwCevb7eSxY3VnBOGrWGA>
+    <xmx:SeKNYyB5kaXxPKzax80FocyvquEdW7mtabPwsJWUPYt16T6FS9WJlw>
+    <xmx:SeKNY_LuKRwfZ_PFkXwRtVJngfJ_VhMTDYDsEaR5e1yZKTDkX5lKjw>
+    <xmx:SuKNY-0QBEEogwSFShv4Ahif-Nbx2x2FkaNqRB2FahP8xAb3yYLztA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Dec 2022 07:21:28 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 6994610948F; Mon,  5 Dec 2022 15:21:24 +0300 (+03)
+Date:   Mon, 5 Dec 2022 15:21:24 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v5 13/16] x86: decouple PAT and MTRR handling
+Message-ID: <20221205122124.3sixqn52i4xsdxbt@box.shutemov.name>
+References: <20221102074713.21493-14-jgross@suse.com>
+ <20221201162639.omlr5ff55go7uhlf@box.shutemov.name>
+ <6d642051-31d8-81d5-f379-568360c5cb60@suse.com>
+ <20221201235753.ybfc7gkgj7hlfkru@box.shutemov.name>
+ <eded3906-0720-a300-50c7-f8dad61c32c0@suse.com>
+ <20221202132701.ymcp7a2yv3st33so@box.shutemov.name>
+ <f4e9b9bb-6906-084c-4b9e-144b2abb024b@suse.com>
+ <20221202143316.mtjz6dghecshldk2@box.shutemov.name>
+ <d7000f26-2640-074e-10f2-c5232feaa9fd@suse.com>
+ <cf7db285-deaf-8e3e-2b35-7cecbaff7d61@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf7db285-deaf-8e3e-2b35-7cecbaff7d61@suse.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Mon, Dec 05, 2022 at 08:40:06AM +0100, Juergen Gross wrote:
+> > That's a question for the Intel architects, I guess.
+> > 
+> > I'd just ask them how to setup PAT in TDX guests. Either they need to
+> > change the recommended setup sequence, or the PAT support bit needs to
+> > be cleared IMO.
+> 
+> I've forwarded the question to Intel, BTW.
 
-After commit ("02791a5c362b KVM: x86/pmu: Use PERF_TYPE_RAW
-to merge reprogram_{gp,fixed}counter()"), vPMU starts to directly
-use the hardware event eventsel and unit_mask to reprogram perf_event,
-and the event_type field in the "struct kvm_event_hw_type_mapping"
-is simply no longer being used.
+I've initiated the talk internally too.
 
-After discarding this field, the name of the structure also lost
-its mapping semantics, renaming it "struct kvm_pmu_hw_event" and
-reorganizing the comments to continue to help newcomers.
+> Another question to you: where does the initial PAT MSR value come from?
+> I guess from UEFI?
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/kvm/pmu.h           |  3 +--
- arch/x86/kvm/vmx/pmu_intel.c | 34 +++++++++++++++++++++++++---------
- 2 files changed, 26 insertions(+), 11 deletions(-)
+It is set by TDX module on initialization. See section 21.2.4.1.2. "TD
+VMCS Guest MSRs" of TDX module spec[1]
 
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 85ff3c0588ba..2aef09eafb70 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -18,10 +18,9 @@
- #define VMWARE_BACKDOOR_PMC_REAL_TIME		0x10001
- #define VMWARE_BACKDOOR_PMC_APPARENT_TIME	0x10002
- 
--struct kvm_event_hw_type_mapping {
-+struct kvm_pmu_hw_event {
- 	u8 eventsel;
- 	u8 unit_mask;
--	unsigned event_type;
- };
- 
- struct kvm_pmu_ops {
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 28b0a784f6e9..d34e9f85bdce 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -20,16 +20,32 @@
- 
- #define MSR_PMC_FULL_WIDTH_BIT      (MSR_IA32_PMC0 - MSR_IA32_PERFCTR0)
- 
--static struct kvm_event_hw_type_mapping intel_arch_events[] = {
--	[0] = { 0x3c, 0x00, PERF_COUNT_HW_CPU_CYCLES },
--	[1] = { 0xc0, 0x00, PERF_COUNT_HW_INSTRUCTIONS },
--	[2] = { 0x3c, 0x01, PERF_COUNT_HW_BUS_CYCLES  },
--	[3] = { 0x2e, 0x4f, PERF_COUNT_HW_CACHE_REFERENCES },
--	[4] = { 0x2e, 0x41, PERF_COUNT_HW_CACHE_MISSES },
--	[5] = { 0xc4, 0x00, PERF_COUNT_HW_BRANCH_INSTRUCTIONS },
--	[6] = { 0xc5, 0x00, PERF_COUNT_HW_BRANCH_MISSES },
-+/*
-+ * The first part of hw_events in the following array represent Intel's
-+ * Pre-defined Architectural Performance Events in an ordered manner:
-+ *
-+ * 0 - PERF_COUNT_HW_CPU_CYCLES
-+ * 1 - PERF_COUNT_HW_INSTRUCTIONS
-+ * 2 - PERF_COUNT_HW_BUS_CYCLES
-+ * 3 - PERF_COUNT_HW_CACHE_REFERENCES
-+ * 4 - PERF_COUNT_HW_CACHE_MISSES
-+ * 5 - PERF_COUNT_HW_BRANCH_INSTRUCTIONS
-+ * 6 - PERF_COUNT_HW_BRANCH_MISSES
-+ *
-+ * the second part of hw_events is defined by the generic kernel perf:
-+ *
-+ * 7 - PERF_COUNT_HW_REF_CPU_CYCLES
-+ */
-+static struct kvm_pmu_hw_event intel_arch_events[] = {
-+	[0] = { 0x3c, 0x00 },
-+	[1] = { 0xc0, 0x00 },
-+	[2] = { 0x3c, 0x01 },
-+	[3] = { 0x2e, 0x4f },
-+	[4] = { 0x2e, 0x41 },
-+	[5] = { 0xc4, 0x00 },
-+	[6] = { 0xc5, 0x00 },
- 	/* The above index must match CPUID 0x0A.EBX bit vector */
--	[7] = { 0x00, 0x03, PERF_COUNT_HW_REF_CPU_CYCLES },
-+	[7] = { 0x00, 0x03 },
- };
- 
- /* mapping between fixed pmc index and intel_arch_events array */
+[1] https://cdrdv2.intel.com/v1/dl/getContent/733568
+
 -- 
-2.38.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
