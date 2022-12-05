@@ -2,73 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0A96420F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327D86420FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiLEBGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S231229AbiLEBLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiLEBGg (ORCPT
+        with ESMTP id S231213AbiLEBLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:06:36 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5FF12AB4;
-        Sun,  4 Dec 2022 17:06:35 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id r18so9108057pgr.12;
-        Sun, 04 Dec 2022 17:06:35 -0800 (PST)
+        Sun, 4 Dec 2022 20:11:10 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2234E020;
+        Sun,  4 Dec 2022 17:11:09 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id a19so11910556ljk.0;
+        Sun, 04 Dec 2022 17:11:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JcTA+lzhR3ar+0ip03v9kDBhC+z8PXGNGAXFJN8VUu8=;
-        b=UsjQtVaPLZd4nN/BoxX4Fy97ZmOLjsn1F0zMtGRioYj+MkuVQ8HpjdQwbBXsBfMQoa
-         BXj8Iu7ZK8ywiikOrn0t6MGmystj5e9x7+7HKzEPC98Yh7dFWuhn/gWxhq2EFHZBOq9+
-         1vhZslGUilYaLBmo4MAiXQcQoGZmsvx3kwmTA6YkpgEPMXQstYG79gq3+2UJTALV9aNd
-         7MVzZ3ApHObDZyJbaVeEUd3vulfl4wB38JyG600S5vjrUa45nvaMJRcF1YByrShfoM/w
-         HuehfLwHiKexh3AyRandYqsjpQfRkZ9NhUs+ISTV2e2Ni7SRX/aG1+d0ifla+rAUp7XT
-         vh9A==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=db2wPaycUL//qoVLgOQfvWWZ0ow+Tx+jkZYnsnlD7ow=;
+        b=Nlwao8fskd0vjpROGbeTL1jKzadX0RYQFWwtQerZlyqjDQouFH6xJlwNCKjkzPVWJh
+         UfTDZDio4W1ZJDw1I3LoWZ6OqENmQh19F+dbB3vbF8wz4juBbRgE2027dJvUcRcgYc6x
+         DeWb2wcNvYrCFs4bKS+UaBweesx0OS4w6nNIMmDUl+bkYgiNRD39oqBBDX+ubhXUm3Nm
+         pte1D7bI5KBVwjcZpLv/up4lba7U1pWBSb3SgQoM0oYu2ntErdUtjbfc5hJDQW7CImYw
+         /x5pqja0ht1y3at+q9TP8NQi2kYmdSmPm2afmnNUedA7p8meaQBqZhlhvQ4SeOfcSiVV
+         psdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JcTA+lzhR3ar+0ip03v9kDBhC+z8PXGNGAXFJN8VUu8=;
-        b=xCmVkCszUOFciCPnlD8KloiHySJg0iFxwpWqtEWIUy/GX1mffYUM7+I+LClPKj1bHB
-         hNndInHuMljDUY5/+Ccj26m851lGdYWrcgg1c9Cz9cuJRo8j6vuX7U1dxDGzBTBbaOyi
-         LkPCko9AXK/zAe0PAnwBlSKBCOAIkZ2xR6HPircYHx1NCPeVyGjHGlhHvNtYXbrNTMFm
-         tkokd1iTb5c7/dEZt7b4YULL8eCeTomEnEBlhxPrxpmzZvgXcdQRMUcfh8crwlMvwrzR
-         IZBrsuh1+TpeqslVIF4CFQqLt9TYU12BS0wWQn9qOm7OPxbCawpLzAFlHFaTmXzQmD+m
-         8arg==
-X-Gm-Message-State: ANoB5plhGXv56ZXP55Ps2Ss1LkYPc/80/LOOZrHCkk8t//Tj4QvU5nOT
-        BNA5aCNH09vZk/0iXEzmZv8=
-X-Google-Smtp-Source: AA0mqf7WmE1btk4IzBiwD2NejRa0hmjHYYEN12TC5JcPJkyLBW9u7TwyqPVv5MqvOhqsI2KI+Hmfaw==
-X-Received: by 2002:aa7:815a:0:b0:562:d99c:2f66 with SMTP id d26-20020aa7815a000000b00562d99c2f66mr68703284pfn.42.1670202394892;
-        Sun, 04 Dec 2022 17:06:34 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id k17-20020aa79991000000b00574ab0e053bsm3285064pfh.187.2022.12.04.17.06.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 17:06:34 -0800 (PST)
-Message-ID: <a019a3f1-7ff1-15b2-d930-e1d722847e0c@gmail.com>
-Date:   Mon, 5 Dec 2022 10:06:28 +0900
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=db2wPaycUL//qoVLgOQfvWWZ0ow+Tx+jkZYnsnlD7ow=;
+        b=4ctAQiysq3pJQAdHom/G7LJOceT+mPKneVVjDWVzh8cJcvPDKKb9n4RHd9v4wpOl+z
+         Vay9Lt5n42nnYdppgkpnjCG9hegnswS8H8pmWPG0Vj9tcf3oysmkppu3oA0Ecsb8AZao
+         F+WKzO7e2fpXqae2NIkG3TkZLtjkDzsD/5VK7LtQd4ATLjjXl7YGA0CH64AnLadJW0Uj
+         8GgrU6AJC2AHWCgaD6wQyeHwaMz2GIzt1YKQ50L2IEUJETF7nMcUc7Zc1eqDAsN5Fh77
+         H6Ncn9kL5DzGbAnQZzfndwIyXaDV3V1gxg1QTQW/GSwqZl2SKRogIRW8fXjK9FMFi04/
+         394A==
+X-Gm-Message-State: ANoB5pnewWnsk5+8GyoSKID0JVfFPpxYXH1dWNkpRiGZy9n3kdwH+ZfW
+        9cYA7rlhUY1VUg0euY5WyZo=
+X-Google-Smtp-Source: AA0mqf4ulcuyEj4bIDFxsEiEWlX41RzQoekZOJ8VAEwdpNTXZj5fUhIZIl3d7MBugYwpTJ8O8BBciw==
+X-Received: by 2002:a2e:a881:0:b0:26f:a855:c415 with SMTP id m1-20020a2ea881000000b0026fa855c415mr12010302ljq.443.1670202667819;
+        Sun, 04 Dec 2022 17:11:07 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id b13-20020a0565120b8d00b004b373f61a60sm1939171lfv.96.2022.12.04.17.11.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Dec 2022 17:11:07 -0800 (PST)
+Date:   Mon, 5 Dec 2022 04:11:05 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Niklas Cassel <Niklas.Cassel@wdc.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Praneeth Bajjuri <praneeth@ti.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Carlos Hernandez <ceh@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006
+ tag
+Message-ID: <20221205011105.4do4trbytq4bfw5b@mobilestation>
+References: <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com>
+ <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
+ <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com>
+ <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
+ <20221014140633.mlypet7skkxvt453@mobilestation>
+ <CADYN=9LrKHRNMON3GA4piDvWeSWTASQ1u2=D30rXFdvo1L18bg@mail.gmail.com>
+ <20221017155246.zxal2cfehjgaajcu@mobilestation>
+ <CA+G9fYtYetV5sZVD14WkZxCE_tgTC4VVKm8BcBw5_NwXD6U=Sw@mail.gmail.com>
+ <Y4cqcTRcni5H7UAU@x1-carbon>
+ <CADYN=9KKGBXn-YkiiFxsUzsanTALbDV1c+tB0oUQPouE1idnuQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v2] docs: Integrate rustdoc into Rust documentation
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        bilbao@vt.edu, corbet@lwn.net, konstantin@linuxfoundation.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20221130220825.1545758-1-carlos.bilbao@amd.com>
- <20221201204814.2141401-1-carlos.bilbao@amd.com>
-Content-Language: en-US
-In-Reply-To: <20221201204814.2141401-1-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADYN=9KKGBXn-YkiiFxsUzsanTALbDV1c+tB0oUQPouE1idnuQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,145 +94,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, 1 Dec 2022 14:48:14 -0600, Carlos Bilbao wrote:
-> Include HTML output generated with rustdoc into the Linux kernel
-> documentation on Rust. Change target `make htmldocs` to combine RST Sphinx
-> and the generation of Rust documentation, when support is available.
+On Thu, Dec 01, 2022 at 12:48:32PM +0100, Anders Roxell wrote:
+> On Wed, 30 Nov 2022 at 11:03, Niklas Cassel <Niklas.Cassel@wdc.com> wrote:
+> >
+> > On Wed, Nov 30, 2022 at 03:10:37PM +0530, Naresh Kamboju wrote:
+> > > On Mon, 17 Oct 2022 at 21:22, Serge Semin <fancer.lancer@gmail.com> wrote:
+> > >
+> > > FYI,
+> > >
+> > > We have been noticing this problem [a] & [b] on Linux mainline master 6.1.0-rc7
+> > >
+> > >     Test error: mkfs.ext4
+> > > /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 failed; job
+> > > exit
+> > >
+> > > Please suggest a way forward on this reported issue on arm32 TI BeagleBoard X15
+> > > device. Build and Kernel configs details provided in the metadata section.
+> > >
+> > > metadata:
+> > >   git_ref: master
+> > >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+> > >   git_sha: b7b275e60bcd5f89771e865a8239325f86d9927d
+> > >   git_describe: v6.1-rc7
+> > >   kernel_version: 6.1.0-rc7
+> > >   kernel-config: https://builds.tuxbuild.com/2I9I42JhhQqS9GOpFppfRiuqtRW/config
+> > >   build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/706371149
+> > >   artifact-location: https://builds.tuxbuild.com/2I9I42JhhQqS9GOpFppfRiuqtRW
+> > >   toolchain: gcc-10
+> > >
+> > > [a] https://lkft.validation.linaro.org/scheduler/job/5892099
+> > > [b] https://lore.kernel.org/all/20221017155246.zxal2cfehjgaajcu@mobilestation/
+> > >
+> > > - Naresh
+> >
+> > Hello Naresh,
+> >
+> >
+> > Looking at the error from the log:
+> >
+> > + mkfs.ext4 /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
+> > mke2fs 1.46.5 (30-Dec-2021)
+> > The file /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 does not exist and no size was specified.
+> >
+> > It seems like the device that you are trying to format does not exist.
+> >
+> >
+> >
+> > On October 17th Serge suggested that you guys should try to enable:
+> > CONFIG_AHCI_DWC
+> > and see if that does solve your problem.
+> >
+> > There was never any reply to his suggestion.
 > 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> ---
+> I re-tested this on todays linux tree v6.1-rc7-103-gef4d3ea40565.
 > 
-> Changes since V1:
->  - Work on top of v6.1-rc1.
-
-Thank you for the rebase.
-
->  - Don't use rustdoc.rst, instead add link to Documentation/rust/index.rst.
->  - In Documentation/Makefile, replace @make rustdoc for $(Q)$(MAKE) rustdoc.
->  - Don't do LLVM=1 for all rustdoc generation within `make htmldocs`.
->  - Add spaces on definition of RUSTDOC_OUTPUT, for consistency.
+> With CONFIG_AHCI_DWC=y the kernel fell on its back and no output was produced
+> So changing  the ahci_dwc_init to be a late_initcall [1] made me see
+> what was going on [2].
 > 
-> ---
->  Documentation/Makefile       |  4 ++++
->  Documentation/rust/index.rst |  3 +++
->  rust/Makefile                | 15 +++++++++------
->  3 files changed, 16 insertions(+), 6 deletions(-)
+> The kernel booted fine with CONFIG_AHCI_DWC=y + this patch [3]
 > 
-> diff --git a/Documentation/Makefile b/Documentation/Makefile
-> index 64d44c1ecad3..f537cf558af6 100644
-> --- a/Documentation/Makefile
-> +++ b/Documentation/Makefile
-> @@ -92,6 +92,10 @@ quiet_cmd_sphinx = SPHINX  $@ --> file://$(abspath $(BUILDDIR)/$3/$4)
->  	fi
->  
->  htmldocs:
-> +# If Rust support is available, add rustdoc generated contents
-> +ifdef CONFIG_RUST
-> +	$(Q)$(MAKE) rustdoc
-> +endif
->  	@$(srctree)/scripts/sphinx-pre-install --version-check
->  	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,html,$(var),,$(var)))
-
-So, this means "make htmldocs" will require kernel .config if CONFIG_RUST=y.
-I'm not sure this new requirement is acceptable for kernel documentation
-testers who just want to build kernel documentation.
-
-You are doing three things in this patch.
-
- 1) Change the destination of rustdoc to under Documentation/output/
- 2) Add a cross reference to the generated rustdoc in
-    Documentation/rust/index.rst.
- 3) Integrate rustdoc generation into htmldocs.
-
-I'm OK with 1) and 2).
-Can you separate 3) into another patch and respin?
-
-By the way, is rustdoc's requirement of .config only for CONFIG_RUST?
-In other words, are contents of rustdoc affected by other config settings?
-
-If not, I think rustdoc can be generated regardless of config settings as
-far as necessary tools (rustc, bindgen, etc.) are available.
-
->  
-> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
-> index 4ae8c66b94fa..4005326c3ba9 100644
-> --- a/Documentation/rust/index.rst
-> +++ b/Documentation/rust/index.rst
-> @@ -6,6 +6,9 @@ Rust
->  Documentation related to Rust within the kernel. To start using Rust
->  in the kernel, please read the quick-start.rst guide.
->  
-> +If this documentation includes rustdoc-generated HTML, the entry point can
-> +be found `here. <rustdoc/kernel/index.html>`_
-
-This cross reference will only make sense in htmldocs build.
-Perhaps, you can use the "only::" directive [1] as follows:
-
-.. only:: html
-
-    If this documentation includes rustdoc-generated HTML, the entry point can
-    be found `here. <rustdoc/kernel/index.html>`_
-
-[1]: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-only
-
-        Thanks, Akira
-
-> +
->  .. toctree::
->      :maxdepth: 1
->  
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 7700d3853404..080c07048065 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -1,5 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> +# Where to place rustdoc generated documentation
-> +RUSTDOC_OUTPUT = $(objtree)/Documentation/output/rust/rustdoc
-> +
->  always-$(CONFIG_RUST) += target.json
->  no-clean-files += target.json
->  
-> @@ -58,7 +61,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
->  	OBJTREE=$(abspath $(objtree)) \
->  	$(RUSTDOC) $(if $(rustdoc_host),$(rust_common_flags),$(rust_flags)) \
->  		$(rustc_target_flags) -L$(objtree)/$(obj) \
-> -		--output $(objtree)/$(obj)/doc \
-> +		--output $(RUSTDOC_OUTPUT) \
->  		--crate-name $(subst rustdoc-,,$@) \
->  		@$(objtree)/include/generated/rustc_cfg $<
->  
-> @@ -75,15 +78,15 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
->  # and then retouch the generated files.
->  rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins \
->      rustdoc-alloc rustdoc-kernel
-> -	$(Q)cp $(srctree)/Documentation/images/logo.svg $(objtree)/$(obj)/doc
-> -	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(objtree)/$(obj)/doc
-> -	$(Q)find $(objtree)/$(obj)/doc -name '*.html' -type f -print0 | xargs -0 sed -Ei \
-> +	$(Q)cp $(srctree)/Documentation/images/logo.svg $(RUSTDOC_OUTPUT)
-> +	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(RUSTDOC_OUTPUT)
-> +	$(Q)find $(RUSTDOC_OUTPUT) -name '*.html' -type f -print0 | xargs -0 sed -Ei \
->  		-e 's:rust-logo\.svg:logo.svg:g' \
->  		-e 's:rust-logo\.png:logo.svg:g' \
->  		-e 's:favicon\.svg:logo.svg:g' \
->  		-e 's:<link rel="alternate icon" type="image/png" href="[./]*favicon-(16x16|32x32)\.png">::g'
->  	$(Q)echo '.logo-container > img { object-fit: contain; }' \
-> -		>> $(objtree)/$(obj)/doc/rustdoc.css
-> +		>> $(RUSTDOC_OUTPUT)/rustdoc.css
->  
->  rustdoc-macros: private rustdoc_host = yes
->  rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
-> @@ -141,7 +144,7 @@ quiet_cmd_rustdoc_test = RUSTDOC T $<
->  		@$(objtree)/include/generated/rustc_cfg \
->  		$(rustc_target_flags) $(rustdoc_test_target_flags) \
->  		--sysroot $(objtree)/$(obj)/test/sysroot $(rustdoc_test_quiet) \
-> -		-L$(objtree)/$(obj)/test --output $(objtree)/$(obj)/doc \
-> +		-L$(objtree)/$(obj)/test --output $(RUSTDOC_OUTPUT) \
->  		--crate-name $(subst rusttest-,,$@) $<
->  
->  # We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
+> --- a/drivers/ata/libahci_platform.c
+> +++ b/drivers/ata/libahci_platform.c
+> @@ -109,7 +109,8 @@ struct clk *ahci_platform_find_clk(struct
+> ahci_host_priv *hpriv, const char *con
+>   int i;
 > 
-> base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+>   for (i = 0; i < hpriv->n_clks; i++) {
+> - if (!strcmp(hpriv->clks[i].id, con_id))
+> + if (hpriv->clks && hpriv->clks[i].id &&
+> +    !strcmp(hpriv->clks[i].id, con_id))
+>   return hpriv->clks[i].clk;
+>   }
+
+Indeed I should have taken into account that devm_clk_bulk_get_all()
+can get unnamed clocks too. But checking the hpriv->clks pointer for
+being not null is redundant, since the ahci_platform_get_resources()
+procedure makes sure that the array is always allocated. At the very
+least you shouldn't check the pointer in the loop, but can make sure
+that the clks array is available before it.
+
+-Serge(y)
+
+> 
+> Bootlog [4].
+> Thank you Arnd for helping out with the investigation and for
+> proposing the patch for me to test.
+> 
+> >
+> >
+> >
+> > Looking at the config in:
+> > >   kernel-config: https://builds.tuxbuild.com/2I9I42JhhQqS9GOpFppfRiuqtRW/config
+> >
+> > # CONFIG_AHCI_DWC is not set
+> >
+> > This Kconfig is indeed not enabled.
+> >
+> > Could you guys please try the suggestion from Serge?
+> 
+> The patch was also tested [5] without enabling CONFIG_AHCI_DWC, this
+> also worked fine.
+> 
+> Cheers,
+> Anders
+> [1] http://ix.io/4hmt
+> [2] https://lkft.validation.linaro.org/scheduler/job/5902935
+> [3] http://ix.io/4hmv
+> [4] https://lkft.validation.linaro.org/scheduler/job/5903220
+> [5] http://ix.io/4hmw
