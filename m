@@ -2,220 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2B96426CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 855716426CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiLEKhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 05:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S230314AbiLEKh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 05:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiLEKhC (ORCPT
+        with ESMTP id S230100AbiLEKhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 05:37:02 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C7A14D29;
-        Mon,  5 Dec 2022 02:37:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670236622; x=1701772622;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jYfx+B+UAYkydHRZ5isoOVyDSGssXGO6Y1vwW6SpTNk=;
-  b=Nn+2nSFPnrJ2h4fyHPtf3i65vm835co49Ec5zMgba88JQODBSTsKZZoI
-   qrCfH9OJ/qFgBCUJlxDmb227itwn5Vtj/B2yeD6Jf4n1pyIDcDOy7LSI7
-   axBx2EraM7gMcM8WCqhVqyT8AMBN2PDB1y6YfSV20UXAYT0ShAZOHiEuE
-   CNypLy/8P1yZh1dY6lW5sSWcvMGqI6A+YdwAGkN4OPds+gLvMcTXEHeUG
-   VmCx5XEoJbpo3f72+DAOaqJCwVv5KOrTiCe+N90KY92oWQx3l73W1NgDG
-   /AjZBSzfEsqg54iOpNiJ9REVtHeWmJApiJKfAX0awWWazJh3zg920VFv4
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="asc'?scan'208";a="191713849"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Dec 2022 03:37:01 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 5 Dec 2022 03:37:00 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 5 Dec 2022 03:36:58 -0700
-Date:   Mon, 5 Dec 2022 10:36:39 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Icenowy Zheng <uwu@icenowy.me>
-CC:     Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 2/3] dt-bindings: timer: sifive,clint: add compatible for
- OpenC906
-Message-ID: <Y43Jt3YOSbFyh954@wendy>
-References: <20221121041757.418645-1-uwu@icenowy.me>
- <20221121041757.418645-3-uwu@icenowy.me>
- <98005150-83a7-5439-0db1-d93d459c3809@linaro.org>
- <b924d37d716fa8b1fd93102b1d51fac221f43d59.camel@icenowy.me>
- <d0f3ce4f-5676-f5e1-f04f-dd069679b2d3@linaro.org>
- <81C2234E-C92D-4F78-8295-7C6DD0A9BBC4@icenowy.me>
- <20221130181330.GA2544489-robh@kernel.org>
- <Y4j+Gpptk3NAFBNV@spud>
- <4ad56fa249a30167844abcedac53d198606511d8.camel@icenowy.me>
+        Mon, 5 Dec 2022 05:37:20 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED25E120A3;
+        Mon,  5 Dec 2022 02:37:19 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 62BD366015ED;
+        Mon,  5 Dec 2022 10:37:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670236638;
+        bh=wGqb7ACQ+MHfk+veHSj5RJ2KW3qb/huM5iIZKEw4K08=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=M+JupQ1rW6I493IZz4illgYstesxy0BsgG+SqGiOupm/st42LrVWYE5Y/wgME82l4
+         772FW1OS2KF388EsPf8PzShW7XUtFpBkku4jw8QMai2aS1ppMEFJjL4aDV0Ndyn58G
+         3LlLEaSz+ahxygFOB4K8OyHl4VycL1GLQzJ13Df6uvJij1BJvfKWFVTRnBWOxUn9VM
+         649wKVFwZOoDwIYpvSqDfLtQ8JIX5JDSM0nr9HeiR4+ZDh34W5oF3TQuE8fG4U6jDK
+         uL+yUUHAQaHfy56y49BwveE6XS2UGxc2vDuCbxfAto6V06SAmxk5Tw5kLvnCP+D8GH
+         5y6OmtYcjJYgw==
+Message-ID: <4ab6ce42-4769-8a8b-495a-8a7edda91dea@collabora.com>
+Date:   Mon, 5 Dec 2022 11:37:14 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="CSc7m2POAGcYksfe"
-Content-Disposition: inline
-In-Reply-To: <4ad56fa249a30167844abcedac53d198606511d8.camel@icenowy.me>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] cpufreq: mediatek: Raise proc and sram max voltage for
+ MT7622/7623
+Content-Language: en-US
+To:     Nick <vincent@systemli.org>, viresh.kumar@linaro.org
+Cc:     rafael@kernel.org, matthias.bgg@gmail.com,
+        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, frank-w@public-files.de,
+        daniel@makrotopia.org
+References: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
+ <75216e0c-9d36-7ada-1507-1bb4a91a3326@systemli.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <75216e0c-9d36-7ada-1507-1bb4a91a3326@systemli.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---CSc7m2POAGcYksfe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Il 02/12/22 13:37, Nick ha scritto:
+> It now starts, however, with a lot of those messages (I applied the patch to 
+> linux/master and not to linux-next, because next is currently not compiling anymore 
+> for me):
+> 
+>> [   10.777041] cpufreq: __target_index: Failed to change cpu frequency: -22
+>> [   10.791577] cpu cpu0: cpu0: failed to scale up voltage!
+> The complete log:
+> https://gist.githubusercontent.com/PolynomialDivision/267c83c7a21a359cbb4e8d99d0303201/raw/28d3568a26634bebef2d91ebe37fc5f76ae58add/mt7622-patch-cpufreq.log
+> 
 
-On Fri, Dec 02, 2022 at 02:12:54PM +0800, Icenowy Zheng wrote:
-> =E5=9C=A8 2022-12-01=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 19:18 +0000=EF=
-=BC=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
-> > On Wed, Nov 30, 2022 at 12:13:30PM -0600, Rob Herring wrote:
-> > > On Tue, Nov 22, 2022 at 03:41:27PM +0800, Icenowy Zheng wrote:
-> > > >=20
-> > > >=20
-> > > > =E4=BA=8E 2022=E5=B9=B411=E6=9C=8822=E6=97=A5 GMT+08:00 =E4=B8=8B=
-=E5=8D=883:35:48, Krzysztof Kozlowski
-> > > > <krzysztof.kozlowski@linaro.org> =E5=86=99=E5=88=B0:
-> > > > > On 22/11/2022 08:18, Icenowy Zheng wrote:
-> > > > > > =E5=9C=A8 2022-11-21=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 11:06 =
-+0100=EF=BC=8CKrzysztof Kozlowski=E5=86=99=E9=81=93=EF=BC=9A
-> > > > > > > On 21/11/2022 05:17, Icenowy Zheng wrote:
-> > > > > > > > T-Head OpenC906 is a open-source-licensed fixed-
-> > > > > > > > configuration of
-> > > > > > > > C906,
-> > > > > > > > which is now public and able to be integrated.
-> > > > > > > >=20
-> > > > > > > > Add a compatible for the CLINT shipped as part of
-> > > > > > > > OpenC906, which
-> > > > > > > > should
-> > > > > > > > just be ordinary C9xx CLINT.
-> > > > > > > >=20
-> > > > > > > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > > > > > > > ---
-> > > > > > > > =C2=A0Documentation/devicetree/bindings/timer/sifive,clint.=
-yam
-> > > > > > > > l | 1 +
-> > > > > > > > =C2=A01 file changed, 1 insertion(+)
-> > > > > > > >=20
-> > > > > > > > diff --git
-> > > > > > > > a/Documentation/devicetree/bindings/timer/sifive,clint.ya
-> > > > > > > > ml
-> > > > > > > > b/Documentation/devicetree/bindings/timer/sifive,clint.ya
-> > > > > > > > ml
-> > > > > > > > index aada6957216c..86703e995e31 100644
-> > > > > > > > ---
-> > > > > > > > a/Documentation/devicetree/bindings/timer/sifive,clint.ya
-> > > > > > > > ml
-> > > > > > > > +++
-> > > > > > > > b/Documentation/devicetree/bindings/timer/sifive,clint.ya
-> > > > > > > > ml
-> > > > > > > > @@ -35,6 +35,7 @@ properties:
-> > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 - const: sifive,clint0
-> > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 - enum:
-> > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 - thead,openc906-clint
-> > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 - allwinner,sun20i-d1-clint
-> > > > > > >=20
-> > > > > > > Add entries sorted alphabetically. This should be squashed
-> > > > > > > with
-> > > > > > > previous
-> > > > > > > patch.
-> > > > > >=20
-> > > > > > I make it a seperated patch because I think it's a
-> > > > > > questionable
-> > > > > > approach.
-> > > > > >=20
-> > > > > > If you think it's okay, I will just squash it and put it as
-> > > > > > the second
-> > > > > > patch in the next iteration, with adding openc906-plic as the
-> > > > > > first
-> > > > > > one.
-> > > > >=20
-> > > > > What is a questionable approach? Why commit msg is not saying
-> > > > > this?
-> > > >=20
-> > > > Ah I mentioned it in the cover letter. The problem is just I
-> > > > doubt whether
-> > > > binding strings for single SoCs are necessary.
-> > >=20
-> > > They are.
-> > >=20
-> > > Unless all the quirks/bugs/features are somehow guaranteed to be
-> > > exactly=20
-> > > the same as other SoCs sharing the same compatible string, or there
-> > > is=20
-> > > another mechanism to identify the exact version (e.g. a version=20
-> > > register).
-> >=20
-> > Icenowy,
-> >=20
-> > Having thought about this a little - are we not *more* likely to see
-> > bug/quirk disparity between implementations of the OpenC906 stuff by
-> > the very nature of being an open-source IP?
->=20
-> It's an open-source edition of a specific version of the commercial IP,
-> a fixed configuration.
->=20
-> In addition, maybe we can just retrieve the version infomation via a T-
-> Head custom CPU configuration register, mcpuid. Despite the
-> implementation of this register is weird -- it contains 7 different
-> read-only values, with the most significant nibble behaving as an
-> index.
+Thanks for the feedback!
 
-You lot all know the situation here a lot more than I do...
-I don't think "letting" people use the bare "thead,c900-foo" makes much
-sense as it gives us no chance to deal with quirks down the line.
-I don't think that using "thead,openc906-clint", "thead,c900-clint"
-makes all that much sense either, in case someone does something wacky
-with the open-source version of the core.
+I am totally sure that the platform_data is correct as that's based on datasheets.
 
-That leaves us with either:
-"vendor,soc-clint", "thead,openc906-clint", "thead,c900-clint"
-or:
-"vendor,soc-clint", "thead,c900-clint"
-right?
+Checking mt6380-regulator.c and mt6380.dtsi also confirms that the min/max volt
+shift and proc/sram max voltage that I've specified is currently supported.
 
-The first one seems like possibly the better option as you'd kinda
-expect that, in a perfect word, all of the open-source IP
-implementations would share quirks etc?
+That "failed to scale up voltage!" is a bit strange, as this means that
+the regulator_set_voltage() call returns -EINVAL for .. reasons, and that's a bit
+strange, since the constraints look good in the code, unless there's anything that
+I'm missing here.
 
-Thanks,
-Conor.
+Can you please try a vanilla kernel?
 
+Also, since I don't have any MT7622/7623 board to test with, if the issue persists,
+it would be helpful if you could place some debugging prints in mediatek-cpufreq.c
+to specifically check which regulator_set_voltage() call fails, as to try to make
+me have a better overview on the problem that you're facing.
 
---CSc7m2POAGcYksfe
-Content-Type: application/pgp-signature; name="signature.asc"
+Alternatively, we can eventually setup a debugging session on IRC to make things
+a bit faster.
 
------BEGIN PGP SIGNATURE-----
+Cheers,
+Angelo
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY43JtwAKCRB4tDGHoIJi
-0toiAP0Wp6WtOkNedxf/lHQRpp41vBitePX07cxy201boMcEOAD/Wp9iYknpe+Ir
-SYzdybJGmgh0saRrntCdz76LUhf4vAw=
-=Nmh2
------END PGP SIGNATURE-----
+> Bests
+> Nick
+> 
+> On 12/2/22 10:52, AngeloGioacchino Del Regno wrote:
+>> During the addition of SRAM voltage tracking for CCI scaling, this
+>> driver got some voltage limits set for the vtrack algorithm: these
+>> were moved to platform data first, then enforced in a later commit
+>> 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+>> using these as max values for the regulator_set_voltage() calls.
+>>
+>> In this case, the vsram/vproc constraints for MT7622 and MT7623
+>> were supposed to be the same as MT2701 (and a number of other SoCs),
+>> but that turned out to be a mistake because the aforementioned two
+>> SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
+>>
+>> Fix that by adding new platform data for MT7622/7623 declaring the
+>> right {proc,sram}_max_volt parameter.
+>>
+>> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
+>> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
+>>   1 file changed, 11 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+>> index 7f2680bc9a0f..f9a9f08c75c4 100644
+>> --- a/drivers/cpufreq/mediatek-cpufreq.c
+>> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+>> @@ -695,6 +695,15 @@ static const struct mtk_cpufreq_platform_data 
+>> mt2701_platform_data = {
+>>       .ccifreq_supported = false,
+>>   };
+>> +static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
+>> +    .min_volt_shift = 100000,
+>> +    .max_volt_shift = 200000,
+>> +    .proc_max_volt = 1360000,
+>> +    .sram_min_volt = 0,
+>> +    .sram_max_volt = 1360000,
+>> +    .ccifreq_supported = false,
+>> +};
+>> +
+>>   static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
+>>       .min_volt_shift = 100000,
+>>       .max_volt_shift = 200000,
+>> @@ -717,8 +726,8 @@ static const struct mtk_cpufreq_platform_data 
+>> mt8186_platform_data = {
+>>   static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+>>       { .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
+>>       { .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+>> -    { .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
+>> -    { .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
+>> +    { .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
+>> +    { .compatible = "mediatek,mt7623", .data = &mt7622_platform_data },
+>>       { .compatible = "mediatek,mt8167", .data = &mt2701_platform_data },
+>>       { .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+>>       { .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
 
---CSc7m2POAGcYksfe--
