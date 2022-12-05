@@ -2,151 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACC4642BAE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE977642BBD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbiLEP1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S232766AbiLEP27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbiLEP1F (ORCPT
+        with ESMTP id S231958AbiLEP2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:27:05 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5291FF4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:25:44 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id b2so28653079eja.7
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:25:44 -0800 (PST)
+        Mon, 5 Dec 2022 10:28:39 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EC42629
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:27:03 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id h193so10766735pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:27:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1z97OrGTU/hJWYAfqZfW/MI++6sXrfXzrMwpvG8EePg=;
-        b=dCM178E8Suk100QO/ms7b3XLKbOF+8tZvEEe9/zk+YQFvI3lnSe87JvStybbKAIfub
-         awqCa8ezZ4Uu3oKML0aHEtQOrVWM0NOjSyxTARAgBYK/FwVOxscrIDZb0vo9C0F1vhTv
-         CVlVKF5k1rIiSR4jcc1yHO9lBRBOEi2eHTk67Em7XOp7ByTQwljVXxY+ojE4+ei+ajt8
-         TEkAfU/7OsPg0uqxbXrxu8GBaSxhxorn+jHdkq93jedGn6DJ+7fXOLXWI5Q/4PjAoldP
-         831OfGZiiaXYkhnPAWplr8SxMrNd9DsxE7ZD4/4GiOHVOhoemq1Qq6Zm+ib+IqnFJXjX
-         Ns7g==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xTaksTMhrvdwxwSo2T6GMW0VI0cIQaqvSTpIlmBV7Ss=;
+        b=DeU03rPLUdchElNhZSnVTjlCs2eNksOMONdHq6QbA94lZUPSr1MksYOVcPVSVz6yDP
+         s4tI+LPlFLIQ72vA1tbELCcLqSCa676EJOMD9ztrAi18N5RAj64ZSKEtIcce6ROIVh/G
+         udulq10NlwhGMYV6RhKCNfEMFRCl7hGGhu9Svg9HYjRQyzZaNGkax84FD6DdYYtPGL32
+         Q36eqsj89UjPlraizhSpYbXlcFs3yVh3ezGHTdo2JzbaNVXIu6z+uqQ+wBLljCZWJk0S
+         IPJ5RC/vzSBg4DX60+zvEG3l/6lXUnokv4VNiJCKoPZRytojepWwkZRMXqGxFOwX4squ
+         RL3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1z97OrGTU/hJWYAfqZfW/MI++6sXrfXzrMwpvG8EePg=;
-        b=CwjC6cmEv2SLZwj6agODE21MHKD96TnB2FWDGn/4PK4a25Tk3YZv46KjFNj38UTK8j
-         sWJYWVtw5CmcIfONptc1cIW0Jf8xnW6x00qTlX8D1Ov8esBUOUPc3abIqpC4n195o4Bm
-         A3wV/4FmgX4ss1mm9WwNcY4jspKM76LzIJfuNbaoBZQSOeAsePGVDyPpSsdZBAcBe8Ac
-         lPFTqU2xZZ6kNcrLfeXrnq0SUxquTfCsrw81xhxZDwgfWlPSdsnynO/PKNwZKqDIk6KP
-         Ld6hQwd2oxgC9/buhe/MGdYYax3l4oIE7o+fz+3cy9YrI0NCHbkfhTao85gGyY6uSAW0
-         lUvA==
-X-Gm-Message-State: ANoB5pmhNM9JBbcKYB7OXL1ar6G8NVFvZMzccSIWN0MYZPf36HzWWmMR
-        mtTVQgMil1GcJSd7B2QCma/4gckO50IzpOw8
-X-Google-Smtp-Source: AA0mqf6QxKwgJA2/+pD4o+mt3tAj8MLTz+WBlne9oWrdNVyr9G8GnF6kna89ihFcFCFx1zccpM/vew==
-X-Received: by 2002:a17:906:94e:b0:7ba:4617:3f17 with SMTP id j14-20020a170906094e00b007ba46173f17mr47839324ejd.226.1670253942928;
-        Mon, 05 Dec 2022 07:25:42 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
-        by smtp.gmail.com with ESMTPSA id ca13-20020a170906a3cd00b007c08439161dsm6338597ejb.50.2022.12.05.07.25.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 07:25:42 -0800 (PST)
-Date:   Mon, 5 Dec 2022 16:25:41 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 08/13] riscv: module: move find_section to module.h
-Message-ID: <20221205152541.5ahiqvlb7lt6np7w@kamzik>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-9-jszhang@kernel.org>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xTaksTMhrvdwxwSo2T6GMW0VI0cIQaqvSTpIlmBV7Ss=;
+        b=rPH8JBy75idQbURmU6Q8IlBvd2kUVZC1n3044Dl7a7HrqS+rN6odniSY6hS6acfh0U
+         f5ARfRB0MA3AtlUyeFspnvnhwsZyn+oSy60gWnDxQPcKNtgHLzCIM0dmIxxb+xSBfJw5
+         Rqu4vPYDjlAjP4PyrhepaZP16G82itBWeqgXpN8Ng85qPQpbU6LC7hKIZ1lCCwkufy4V
+         2UI8Lf1VRKuflQ2JgYhsnEmP4Bu0GQH1Klv7FVyHGakZRHDu5NTv9yT57YKsyrkdtiqB
+         ZxiRSdxxvf8W1XJ/+UpU9Ndl8kp9fDya2eLsFK7oJ+GG62sWKnnYR7M9dt/hVfmYUpTf
+         fe+Q==
+X-Gm-Message-State: ANoB5pkzh17JcG3b2M9X7Mal33Uh8JXOP/CEFY2Yc2U6DKw4ln52rmZP
+        IO0Fx4wTCndnAZhhwDmWv1KSEe2Npu/XfnS7Cj4=
+X-Google-Smtp-Source: AA0mqf5D/4QG6PNyqls/TBPlts+Y3hNbrNxeIAUFThK0LBmAS9ACBqVldaPYHHkik+PRylXjsZWnPMTBCGg7kDXSjWQ=
+X-Received: by 2002:a63:4643:0:b0:477:751a:4169 with SMTP id
+ v3-20020a634643000000b00477751a4169mr57646081pgk.300.1670254023534; Mon, 05
+ Dec 2022 07:27:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221204174632.3677-9-jszhang@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:248c:b0:47:300:1003 with HTTP; Mon, 5 Dec 2022
+ 07:27:03 -0800 (PST)
+Reply-To: sgtkaylla202@gmail.com
+From:   kayla manthey <atchrimiv@gmail.com>
+Date:   Mon, 5 Dec 2022 15:27:03 +0000
+Message-ID: <CAO95NvWV2mdYbQetuAFhHMKqawMuvRjbJDxn8Dk06jxazw4fVw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 01:46:27AM +0800, Jisheng Zhang wrote:
-> Move it to the header so that the implementation can be shared
-> by the alternatives code.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/module.h | 15 +++++++++++++++
->  arch/riscv/kernel/module.c      | 15 ---------------
->  2 files changed, 15 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/module.h b/arch/riscv/include/asm/module.h
-> index 76aa96a9fc08..78722a79fc59 100644
-> --- a/arch/riscv/include/asm/module.h
-> +++ b/arch/riscv/include/asm/module.h
-> @@ -111,4 +111,19 @@ static inline struct plt_entry *get_plt_entry(unsigned long val,
->  
->  #endif /* CONFIG_MODULE_SECTIONS */
-
-Should probably add an explicit #include <linux/elf.h>
-
-Otherwise
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
-
->  
-> +static inline const Elf_Shdr *find_section(const Elf_Ehdr *hdr,
-> +					   const Elf_Shdr *sechdrs,
-> +					   const char *name)
-> +{
-> +	const Elf_Shdr *s, *se;
-> +	const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
-> +
-> +	for (s = sechdrs, se = sechdrs + hdr->e_shnum; s < se; s++) {
-> +		if (strcmp(name, secstrs + s->sh_name) == 0)
-> +			return s;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->  #endif /* _ASM_RISCV_MODULE_H */
-> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
-> index 91fe16bfaa07..76f4b9c2ec5b 100644
-> --- a/arch/riscv/kernel/module.c
-> +++ b/arch/riscv/kernel/module.c
-> @@ -429,21 +429,6 @@ void *module_alloc(unsigned long size)
->  }
->  #endif
->  
-> -static const Elf_Shdr *find_section(const Elf_Ehdr *hdr,
-> -				    const Elf_Shdr *sechdrs,
-> -				    const char *name)
-> -{
-> -	const Elf_Shdr *s, *se;
-> -	const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
-> -
-> -	for (s = sechdrs, se = sechdrs + hdr->e_shnum; s < se; s++) {
-> -		if (strcmp(name, secstrs + s->sh_name) == 0)
-> -			return s;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -
->  int module_finalize(const Elf_Ehdr *hdr,
->  		    const Elf_Shdr *sechdrs,
->  		    struct module *me)
-> -- 
-> 2.37.2
-> 
+ Please, did you receive my previous message, thanks.
