@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957B0642C2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A91642C29
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbiLEPnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S232860AbiLEPnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiLEPnc (ORCPT
+        with ESMTP id S232898AbiLEPnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 10:43:32 -0500
 Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BC1AE76;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CC7BF54;
         Mon,  5 Dec 2022 07:43:30 -0800 (PST)
 Received: from canpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NQnmZ61PtzJnfJ;
-        Mon,  5 Dec 2022 23:39:58 +0800 (CST)
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NQnmb48l0zJnQc;
+        Mon,  5 Dec 2022 23:39:59 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  canpemm500001.china.huawei.com (7.192.104.163) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -31,10 +31,12 @@ To:     <catalin.marinas@arm.com>, <will@kernel.org>,
 CC:     <tanxiaofei@huawei.com>, <wangxiongfeng2@huawei.com>,
         <lvying6@huawei.com>, <naoya.horiguchi@nec.com>,
         <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3 0/4] arm64: improve handle synchronous External Data Abort
-Date:   Tue, 6 Dec 2022 00:00:39 +0800
-Message-ID: <20221205160043.57465-1-xiexiuqi@huawei.com>
+Subject: [PATCH v3 1/4] ACPI: APEI: include missing acpi/apei.h
+Date:   Tue, 6 Dec 2022 00:00:40 +0800
+Message-ID: <20221205160043.57465-2-xiexiuqi@huawei.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221205160043.57465-1-xiexiuqi@huawei.com>
+References: <20221205160043.57465-1-xiexiuqi@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -50,38 +52,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fix some issue for arm64 synchronous External Data Abort.
+kernel test robot reported this warning with 'make W=1':
 
-1. fix unhandled processor error
-According to the RAS documentation, if we cannot determine the impact
-of the error based on the details of the error when an SEA occurs, the
-process cannot safely continue to run. Therefore, for unhandled error,
-we should signal the system and terminate the process immediately.
+drivers/acpi/apei/apei-base.c:763:12: warning: no previous prototype for 'arch_apei_enable_cmcff' [-Wmissing-prototypes]
+  763 | int __weak arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr,
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+drivers/acpi/apei/apei-base.c:770:13: warning: no previous prototype for 'arch_apei_report_mem_error' [-Wmissing-prototypes]
+  770 | void __weak arch_apei_report_mem_error(int sev,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2. improve for handling memory errors
+Include missing acpi/apei.h to avoid this warning.
 
-If error happened in current execution context, we need pass
-MF_ACTION_REQUIRED flag to memory_failure(), and if memory_failure()
-recovery failed, we must handle this case, other than ignore it.
-
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 9dae3d0d9e64 ("apei, mce: Factor out APEI architecture specific MCE calls")
+Signed-off-by: Xie XiuQi <xiexiuqi@huawei.com>
 ---
-v3: add improve for handing memory errors
-v2: fix compile warning reported by kernel test robot.
+ drivers/acpi/apei/apei-base.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Xie XiuQi (4):
-  ACPI: APEI: include missing acpi/apei.h
-  arm64: ghes: fix error unhandling in synchronous External Data Abort
-  arm64: ghes: handle the case when memory_failure recovery failed
-  arm64: ghes: pass MF_ACTION_REQUIRED to memory_failure when sea
-
- arch/arm64/kernel/acpi.c      |  6 ++++++
- drivers/acpi/apei/apei-base.c |  5 +++++
- drivers/acpi/apei/ghes.c      | 31 ++++++++++++++++++++++++-------
- include/acpi/apei.h           |  1 +
- include/linux/mm.h            |  2 +-
- mm/memory-failure.c           | 24 +++++++++++++++++-------
- 6 files changed, 54 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/acpi/apei/apei-base.c b/drivers/acpi/apei/apei-base.c
+index 9b52482b4ed5..02196a312dc5 100644
+--- a/drivers/acpi/apei/apei-base.c
++++ b/drivers/acpi/apei/apei-base.c
+@@ -28,6 +28,7 @@
+ #include <linux/rculist.h>
+ #include <linux/interrupt.h>
+ #include <linux/debugfs.h>
++#include <acpi/apei.h>
+ #include <asm/unaligned.h>
+ 
+ #include "apei-internal.h"
 -- 
 2.20.1
 
