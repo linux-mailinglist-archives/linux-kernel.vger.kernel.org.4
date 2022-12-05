@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA376427A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB286427A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiLELhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S229938AbiLELih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiLELhk (ORCPT
+        with ESMTP id S231430AbiLELiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:37:40 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545A2E2E;
-        Mon,  5 Dec 2022 03:37:39 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id s7so10519726plk.5;
-        Mon, 05 Dec 2022 03:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KFQHLYXEhvLwqH5TYvoapPT/lEw1a01Q5YmU44e+sHk=;
-        b=M80cJZmAOTqLsmxJMavm8jqVic1TepS37Ipu6dZMWyx0nyOTubp1KMtTBtwZ9ApgYU
-         KTalkwGpv2T+YQlQbsvg7HVPG061u42nZVmgtZdrv2OPw81go3nmhz6t7FABahlwuKmn
-         4P0vVsXyj+ixPTUBSk5BYbQ0tlVu3tjrdBSi26B6FhRjD91vRgek+7t3tI5TCi/w2iQz
-         wnigXB8csfmOccXBqrohXb5XOTgNcbqn736/2WEdJaaAt+oEarv1KKY6b+UCEF2nsKMH
-         LTm73cboePXX/YpiKOa0dZ5RmJAg9iFZGDkxdMvyBW+xj2OaG3/VPVxuWbc+0eiYH3mN
-         r1yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KFQHLYXEhvLwqH5TYvoapPT/lEw1a01Q5YmU44e+sHk=;
-        b=K1+9eYz0E4a3Dn3FBew0FUlZLvstK6JY1TQYIcq4Gkg52zx1MWTBQMKyj2xRL9tDbL
-         KF+KHka7CK9ctvM6j5IDz8EecZo9yHL5fmLBX1i9+mGmfV3BfxgV6Xmfqhxg/hUCsxiN
-         Hm2Ab7jdVdLVcYtMM1xdN936Ky57J1Z2DXalJ/oVPm4L95Rvi8cuNvsGAOEQs1qqBa/k
-         sWmo/u+esMo6YbNlhSgzi5rW/HZPFSojhRS1CDiBoHzjNPvykeK1haiTkT236EFLSVqR
-         CILI+x6F4i/yB1fRf0Y2cX9+igt4Hb0JRNwCQVz8NuRy74AMgVlw+pJPB3csf3ccuurE
-         35Yw==
-X-Gm-Message-State: ANoB5pl055H39zhlxbigidrFUBIaualzWA3nqga3T/sMlQlUNu5heQXn
-        +4678FMLiwtYNIIRhYRsaqc=
-X-Google-Smtp-Source: AA0mqf73p05qfaoI01ifWj80/DGFPBfVqbGuKzxhFLakycVPgMGoV3H/JckECUZlvBSgYtOMbCC4VA==
-X-Received: by 2002:a17:90b:264a:b0:213:7030:f69a with SMTP id pa10-20020a17090b264a00b002137030f69amr88900345pjb.231.1670240258868;
-        Mon, 05 Dec 2022 03:37:38 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id a3-20020a170902710300b001895b2d48a1sm1106394pll.253.2022.12.05.03.37.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 03:37:38 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Avoid ternary operator by directly referring to counters->type
-Date:   Mon,  5 Dec 2022 19:37:18 +0800
-Message-Id: <20221205113718.1487-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 5 Dec 2022 06:38:13 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514521A07E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:38:05 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NQhPS0bFsz8RSdJ;
+        Mon,  5 Dec 2022 19:38:04 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl2.zte.com.cn with SMTP id 2B5Bbxpw076280;
+        Mon, 5 Dec 2022 19:37:59 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Mon, 5 Dec 2022 19:38:02 +0800 (CST)
+Date:   Mon, 5 Dec 2022 19:38:02 +0800 (CST)
+X-Zmail-TransId: 2b04638dd81affffffffbefa11df
+X-Mailer: Zmail v1.0
+Message-ID: <202212051938026789359@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <amit@kernel.org>
+Cc:     <arnd@arndb.de>, <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHZpcnRpb19jb25zb2xlOiB1c2Ugc3Ryc2NweSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B5Bbxpw076280
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 638DD81C.000 by FangMail milter!
+X-FangMail-Envelope: 1670240284/4NQhPS0bFsz8RSdJ/638DD81C.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638DD81C.000/4NQhPS0bFsz8RSdJ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+From: Xu Panda <xu.panda@zte.com.cn>
 
-In either case, the counters will point to fixed or gp pmc array, and
-taking advantage of the C pointer, it's reasonable to use an almost known
-mem load operation directly without disturbing the branch predictor.
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL terminated strings.
 
-Signed-off-by: Like Xu <likexu@tencent.com>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
- arch/x86/kvm/vmx/pmu_intel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/virtio_console.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index e5cec07ca8d9..28b0a784f6e9 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -142,7 +142,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
- 	}
- 	if (idx >= num_counters)
- 		return NULL;
--	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
-+	*mask &= pmu->counter_bitmask[counters->type];
- 	return &counters[array_index_nospec(idx, num_counters)];
- }
- 
+diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+index 6a821118d553..d5ac4d955bc8 100644
+--- a/drivers/char/virtio_console.c
++++ b/drivers/char/virtio_console.c
+@@ -1666,9 +1666,8 @@ static void handle_control_message(struct virtio_device *vdev,
+ 				"Not enough space to store port name\n");
+ 			break;
+ 		}
+-		strncpy(port->name, buf->buf + buf->offset + sizeof(*cpkt),
+-			name_size - 1);
+-		port->name[name_size - 1] = 0;
++		strscpy(port->name, buf->buf + buf->offset + sizeof(*cpkt),
++			name_size);
+
+ 		/*
+ 		 * Since we only have one sysfs attribute, 'name',
 -- 
-2.38.1
-
+2.15.2
