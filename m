@@ -2,81 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE256426B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514976426B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbiLEKav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 05:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S230317AbiLEKd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 05:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiLEKat (ORCPT
+        with ESMTP id S229544AbiLEKdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 05:30:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC30B867
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:29:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670236192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=phOwtpixfGU37TofD4pPByNZ2ZF8uqxHGHVZJ4vEjkM=;
-        b=J2hF+6AbPNGSPKiuaVkXZAywrQjtoyBdv019YHTNWjEAdjcEHNMTuE7qQWg6cqpidZXjMe
-        6w4LmbnEcnuepnwwi1LSCwVo/CKW4BsBULBxgobjg4QdwM7uM9uCFvNr0D4PGOvQgZIUBW
-        fUWubOh67JKgyklrS4neNsK1PxD8LCY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-102-OlIu11UkP4C84hCVocjUqg-1; Mon, 05 Dec 2022 05:29:50 -0500
-X-MC-Unique: OlIu11UkP4C84hCVocjUqg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 5 Dec 2022 05:33:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C91FCE4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:33:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D854B8630C6;
-        Mon,  5 Dec 2022 10:29:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5340140C6EC3;
-        Mon,  5 Dec 2022 10:29:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20221205180617.9b9d3971cbe06ee536603523@kernel.org>
-References: <20221205180617.9b9d3971cbe06ee536603523@kernel.org> <20221205123200.51539846cb9dd9dc158cc871@kernel.org> <166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk> <276025.1670228915@warthog.procyon.org.uk>
-To:     Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc:     dhowells@redhat.com, rostedt@goodmis.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] trace: Fix some checker warnings
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <382776.1670236186.1@warthog.procyon.org.uk>
-Date:   Mon, 05 Dec 2022 10:29:46 +0000
-Message-ID: <382777.1670236186@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C51260A3C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CC3C433D6;
+        Mon,  5 Dec 2022 10:33:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670236401;
+        bh=u9XNbhuW7y3ZHOHe/ymMnVXErFBb7ENPHhBSXK1wjuE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GunDkzPfxfF6mE+5il7y2z9pN81wOId+Z9Y/jot6J/r84E5lhepoAi1xTBv8cGz1G
+         /Ji2UOiLK6cbaZJnN6qycdzdBblP5AVZf7jAIWP2bUAcrypH+4jOSiffZLhZBTuXGY
+         3t3P6WHGsi+vXD5Mh5JjrOEV46/C2hkw8GznZqFdK31G3nVCSocwemP4aT2zsW5seF
+         eVZ+bNOaPWr47kL+4PbDFAEWhwClneXW63BHD4nOFgwidOltJtUThrwlYFr62S3mfl
+         EIxCH+7HudUZity+/jM7zhpxp2JsxSJpHGFvC6xdZlwqDhVKRBou594lqvQZpmJun+
+         84pnqEGQOR2hQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p28ml-00AXx8-4K;
+        Mon, 05 Dec 2022 10:33:19 +0000
+Date:   Mon, 05 Dec 2022 10:33:18 +0000
+Message-ID: <864juam975.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+Subject: Re: [PATCH v15 3/9] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <CAK9=C2WBm8fxQeD+=n7vGb=aPSW_kk=0qpgKRi4sXEFdV+w_pw@mail.gmail.com>
+References: <20221203064629.1601299-1-apatel@ventanamicro.com>
+        <20221203064629.1601299-4-apatel@ventanamicro.com>
+        <87dc326b-a12c-7377-ff37-6008795598e5@marcan.st>
+        <CAK9=C2WBm8fxQeD+=n7vGb=aPSW_kk=0qpgKRi4sXEFdV+w_pw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, marcan@marcan.st, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, sven@svenpeter.dev, alyssa@rosenzweig.io, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Btw, do you know how to deal with:
+On Mon, 05 Dec 2022 08:46:59 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> On Mon, Dec 5, 2022 at 12:50 PM Hector Martin <marcan@marcan.st> wrote:
+> >
+> > On 03/12/2022 15.46, Anup Patel wrote:
+> > > All RISC-V platforms have a single HW IPI provided by the INTC local
+> > > interrupt controller. The HW method to trigger INTC IPI can be through
+> > > external irqchip (e.g. RISC-V AIA), through platform specific device
+> > > (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> > >
+> > > To support multiple IPIs on RISC-V, add a generic IPI multiplexing
+> > > mechanism which help us create multiple virtual IPIs using a single
+> > > HW IPI. This generic IPI multiplexing is inspired by the Apple AIC
+> > > irqchip driver and it is shared by various RISC-V irqchip drivers.
+> > >
+> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > ---
+> > >  include/linux/irq.h  |   3 +
+> > >  kernel/irq/Kconfig   |   5 ++
+> > >  kernel/irq/Makefile  |   1 +
+> > >  kernel/irq/ipi-mux.c | 207 +++++++++++++++++++++++++++++++++++++++++++
+> > >  4 files changed, 216 insertions(+)
+> > >  create mode 100644 kernel/irq/ipi-mux.c
+> > >
+> > > diff --git a/include/linux/irq.h b/include/linux/irq.h
+> > > index c3eb89606c2b..b1b28affb32a 100644
+> > > --- a/include/linux/irq.h
+> > > +++ b/include/linux/irq.h
+> > > @@ -1266,6 +1266,9 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+> > >  int ipi_send_single(unsigned int virq, unsigned int cpu);
+> > >  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
+> > >
+> > > +void ipi_mux_process(void);
+> > > +int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu));
+> > > +
+> > >  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+> > >  /*
+> > >   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> > > diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> > > index db3d174c53d4..df17dbc54b02 100644
+> > > --- a/kernel/irq/Kconfig
+> > > +++ b/kernel/irq/Kconfig
+> > > @@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+> > >       depends on SMP
+> > >       select IRQ_DOMAIN_HIERARCHY
+> > >
+> > > +# Generic IRQ IPI Mux support
+> > > +config GENERIC_IRQ_IPI_MUX
+> > > +     bool
+> > > +     depends on SMP
+> > > +
+> > >  # Generic MSI interrupt support
+> > >  config GENERIC_MSI_IRQ
+> > >       bool
+> > > diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> > > index b4f53717d143..f19d3080bf11 100644
+> > > --- a/kernel/irq/Makefile
+> > > +++ b/kernel/irq/Makefile
+> > > @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+> > >  obj-$(CONFIG_PM_SLEEP) += pm.o
+> > >  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+> > >  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> > > +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+> > >  obj-$(CONFIG_SMP) += affinity.o
+> > >  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+> > >  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> > > diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> > > new file mode 100644
+> > > index 000000000000..3a403c3a785d
+> > > --- /dev/null
+> > > +++ b/kernel/irq/ipi-mux.c
+> > > @@ -0,0 +1,207 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > +/*
+> > > + * Multiplex several virtual IPIs over a single HW IPI.
+> > > + *
+> > > + * Copyright The Asahi Linux Contributors
+> > > + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> > > + */
+> > > +
+> > > +#define pr_fmt(fmt) "ipi-mux: " fmt
+> > > +#include <linux/cpu.h>
+> > > +#include <linux/init.h>
+> > > +#include <linux/irq.h>
+> > > +#include <linux/irqchip.h>
+> > > +#include <linux/irqchip/chained_irq.h>
+> > > +#include <linux/irqdomain.h>
+> > > +#include <linux/jump_label.h>
+> > > +#include <linux/percpu.h>
+> > > +#include <linux/smp.h>
+> > > +
+> > > +struct ipi_mux_cpu {
+> > > +     atomic_t                        enable;
+> > > +     atomic_t                        bits;
+> > > +};
+> > > +
+> > > +static struct ipi_mux_cpu __percpu *ipi_mux_pcpu;
+> > > +static struct irq_domain *ipi_mux_domain;
+> > > +static void (*ipi_mux_send)(unsigned int cpu);
+> > > +
+> > > +static void ipi_mux_mask(struct irq_data *d)
+> > > +{
+> > > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> > > +
+> > > +     atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
+> > > +}
+> > > +
+> > > +static void ipi_mux_unmask(struct irq_data *d)
+> > > +{
+> > > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> > > +     u32 ibit = BIT(irqd_to_hwirq(d));
+> > > +
+> > > +     atomic_or(ibit, &icpu->enable);
+> > > +
+> > > +     /*
+> > > +      * The atomic_or() above must complete before the atomic_read()
+> > > +      * below to avoid racing ipi_mux_send_mask().
+> > > +      */
+> > > +     smp_mb__after_atomic();
+> > > +
+> > > +     /* If a pending IPI was unmasked, raise a parent IPI immediately. */
+> > > +     if (atomic_read(&icpu->bits) & ibit)
+> > > +             ipi_mux_send(smp_processor_id());
+> > > +}
+> > > +
+> > > +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> > > +{
+> > > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> > > +     u32 ibit = BIT(irqd_to_hwirq(d));
+> > > +     unsigned long pending;
+> > > +     int cpu;
+> > > +
+> > > +     for_each_cpu(cpu, mask) {
+> > > +             icpu = per_cpu_ptr(ipi_mux_pcpu, cpu);
+> > > +
+> > > +             /*
+> > > +              * This sequence is the mirror of the one in ipi_mux_unmask();
+> > > +              * see the comment there. Additionally, release semantics
+> > > +              * ensure that the vIPI flag set is ordered after any shared
+> > > +              * memory accesses that precede it. This therefore also pairs
+> > > +              * with the atomic_fetch_andnot in ipi_mux_process().
+> > > +              */
+> > > +             pending = atomic_fetch_or_release(ibit, &icpu->bits);
+> > > +
+> > > +             /*
+> > > +              * The atomic_fetch_or_release() above must complete
+> > > +              * before the atomic_read() below to avoid racing with
+> > > +              * ipi_mux_unmask().
+> > > +              */
+> > > +             smp_mb__after_atomic();
+> > > +
+> > > +             /*
+> > > +              * The flag writes must complete before the physical IPI is
+> > > +              * issued to another CPU. This is implied by the control
+> > > +              * dependency on the result of atomic_read() below, which is
+> > > +              * itself already ordered after the vIPI flag write.
+> > > +              */
+> > > +             if (!(pending & ibit) && (atomic_read(&icpu->enable) & ibit))
+> > > +                     ipi_mux_send(cpu);
+> > > +     }
+> > > +}
+> > > +
+> > > +static const struct irq_chip ipi_mux_chip = {
+> > > +     .name           = "IPI Mux",
+> > > +     .irq_mask       = ipi_mux_mask,
+> > > +     .irq_unmask     = ipi_mux_unmask,
+> > > +     .ipi_send_mask  = ipi_mux_send_mask,
+> > > +};
+> > > +
+> > > +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> > > +                             unsigned int nr_irqs, void *arg)
+> > > +{
+> > > +     int i;
+> > > +
+> > > +     for (i = 0; i < nr_irqs; i++) {
+> > > +             irq_set_percpu_devid(virq + i);
+> > > +             irq_domain_set_info(d, virq + i, i, &ipi_mux_chip, NULL,
+> > > +                                 handle_percpu_devid_irq, NULL, NULL);
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> > > +     .alloc          = ipi_mux_domain_alloc,
+> > > +     .free           = irq_domain_free_irqs_top,
+> > > +};
+> > > +
+> > > +/**
+> > > + * ipi_mux_process - Process multiplexed virtual IPIs
+> > > + */
+> > > +void ipi_mux_process(void)
+> > > +{
+> > > +     struct ipi_mux_cpu *icpu = this_cpu_ptr(ipi_mux_pcpu);
+> > > +     irq_hw_number_t hwirq;
+> > > +     unsigned long ipis;
+> > > +     unsigned int en;
+> > > +
+> > > +     /*
+> > > +      * Reading enable mask does not need to be ordered as long as
+> > > +      * this function is called from interrupt handler because only
+> > > +      * the CPU itself can change it's own enable mask.
+> > > +      */
+> > > +     en = atomic_read(&icpu->enable);
+> > > +
+> > > +     /*
+> > > +      * Clear the IPIs we are about to handle. This pairs with the
+> > > +      * atomic_fetch_or_release() in ipi_mux_send_mask().
+> > > +      */
+> > > +     ipis = atomic_fetch_andnot(en, &icpu->bits) & en;
+> > > +
+> > > +     for_each_set_bit(hwirq, &ipis, BITS_PER_TYPE(int))
+> > > +             generic_handle_domain_irq(ipi_mux_domain, hwirq);
+> > > +}
+> > > +
+> > > +/**
+> > > + * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
+> > > + * parent IPI.
+> > > + * @nr_ipi:          number of virtual IPIs to create. This should
+> > > + *                   be <= BITS_PER_TYPE(int)
+> > > + * @mux_send:                callback to trigger parent IPI for a particular CPU
+> > > + *
+> > > + * Returns first virq of the newly created virtual IPIs upon success
+> > > + * or <=0 upon failure
+> > > + */
+> > > +int ipi_mux_create(unsigned int nr_ipi, void (*mux_send)(unsigned int cpu))
+> > > +{
+> > > +     struct fwnode_handle *fwnode;
+> > > +     struct irq_domain *domain;
+> > > +     int rc;
+> > > +
+> > > +     if (ipi_mux_domain)
+> > > +             return -EEXIST;
+> > > +
+> > > +     if (BITS_PER_TYPE(int) < nr_ipi || !mux_send)
+> > > +             return -EINVAL;
+> > > +
+> > > +     ipi_mux_pcpu = alloc_percpu(typeof(*ipi_mux_pcpu));
+> > > +     if (!ipi_mux_pcpu)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     fwnode = irq_domain_alloc_named_fwnode("IPI-Mux");
+> > > +     if (!fwnode) {
+> > > +             pr_err("unable to create IPI Mux fwnode\n");
+> > > +             rc = -ENOMEM;
+> > > +             goto fail_free_cpu;
+> > > +     }
+> > > +
+> > > +     domain = irq_domain_create_linear(fwnode, nr_ipi,
+> > > +                                       &ipi_mux_domain_ops, NULL);
+> > > +     if (!domain) {
+> > > +             pr_err("unable to add IPI Mux domain\n");
+> > > +             rc = -ENOMEM;
+> > > +             goto fail_free_fwnode;
+> > > +     }
+> > > +
+> > > +     domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
+> > > +     irq_domain_update_bus_token(domain, DOMAIN_BUS_IPI);
+> > > +
+> > > +     rc = __irq_domain_alloc_irqs(domain, -1, nr_ipi,
+> > > +                                  NUMA_NO_NODE, NULL, false, NULL);
+> > > +     if (rc <= 0) {
+> > > +             pr_err("unable to alloc IRQs from IPI Mux domain\n");
+> > > +             goto fail_free_domain;
+> > > +     }
+> > > +
+> > > +     ipi_mux_domain = domain;
+> > > +     ipi_mux_send = mux_send;
+> > > +
+> > > +     return rc;
+> > > +
+> > > +fail_free_domain:
+> > > +     irq_domain_remove(domain);
+> > > +fail_free_fwnode:
+> > > +     irq_domain_free_fwnode(fwnode);
+> > > +fail_free_cpu:
+> > > +     free_percpu(ipi_mux_pcpu);
+> > > +     return rc;
+> > > +}
+> >
+> > Reviewed-by: Hector Martin <marcan@marcan.st>
+> > Tested-by: Hector Martin <marcan@marcan.st>
+> >
+> > I was actually surprised this wasn't already a solved problem when I
+> > first had to write this code. Glad RISC-V found it useful :)
 
-	add_ftrace_export(struct trace_export **list, struct trace_export *export)
+There are a few other potential customers for this code, such as
+openrisc (see drivers/irqchip/irq-ompic.c as a scary example).
 
-being called by:
+> >
+> > Note: we agonized over the memory ordering here quite a bit when this
+> > was first written, and all that was viewed through the lens of the ARM64
+> > memory model. You might want to do a similarly thorough review from a
+> > RISC-V perspective to make sure it isn't relying on any ARMisms (or that
+> > RISC-V isn't failing to meet the underlying Linux model - we already ran
+> > into a core kernel bitop issue once for ARM too!).
+> >
+> 
+> Thanks, your work is certainly useful to the RISC-V. We already have
+> three RISC-V irqchip drivers (SBI IPI, CLINT,and IMSIC) which benefit
+> from this code. The RISC-V IMSIC driver was recently submitted on
+> LKML whereas the other two are already used on existing platforms.
+> 
+> Regarding memory-model, RISC-V platforms by default have weak
+> memory ordering (same as ARM). We also have optional TSO extension
+> but currently there are no platforms implementing it.
 
-	add_ftrace_export(&ftrace_exports_list, export);
+Weak doesn't mean similar. See Power for an example of "weak but
+different".
 
-but ftrace_exports_list has an __rcu annotation, so the list argument in the
-former should have an __rcu annotation in it somewhere too.
+> 
+> Regarding atomics used in this patch, there is only one difference
+> in atomic_fetch_or_release() where RISC-V implements it as
+> __atomic_release_fence() plus atomic_fetch_or_relaxed().
 
-OTOH - there's only one user of add_trace_export() and add_ftrace_export(), so
-can they be collapsed into register_ftrace_export()?
+But the point here is that we're using the Linux memory model, not the
+arm64 one. Both architectures are free to implement it as they want,
+as long as the implementation is not weaker than what the kernel
+requires.
 
-David
+I'm sure we'll find issues along the way, but the more common code we
+have around this, the better.
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
