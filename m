@@ -2,101 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5380642570
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F794642576
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiLEJIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:08:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S230035AbiLEJKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiLEJH7 (ORCPT
+        with ESMTP id S229949AbiLEJKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:07:59 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEB91834A
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:06:35 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id l8so12735295ljh.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:06:35 -0800 (PST)
+        Mon, 5 Dec 2022 04:10:18 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B4BDE8C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:09:35 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id s5so14768503edc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:09:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x5ZTncPZSmmM8YtV3eOV41TWmby1NfBlelF9byY72Kg=;
-        b=FmQg61AYiojSXcPEVg2/VcRA64ZyruSZKCoC8eQjQAszR39C32EmyyE2UMnY2+JKrr
-         /+YJm4qduR5MqPaRFPOInuqZRtsCX+o//SjummVVvTG5PSnA7mWhjRfnGcZ5sX+RO0Rw
-         9brAMt46fQjdDgokS3QsGPh51/SIcvwFe1qLji8P7vleSGlgxmqQgvjJxgVTqGxo/iaM
-         SkdrA3fA6MqHKUVYjLJg2T+Bckj8JUhspL9poqyf4q8lABjkj7sJJB9xethmES8kzIs2
-         Dy3ZpSa9wxj2P2Oymp1Pq9oELhS5JQz8bIJ85VoNEhpkQGaLnymh6NnqZrP02boVg/9p
-         puXg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+mqkHAvBv1y5qS2y58nAD/iFpsVKp/726AYMa4PGL3o=;
+        b=wjJlMPQFvu5r3taMHZ7MUIsm8Y8OlsIkDMO05PgJsPs10HD6/mSS6m0uS1B3uXHyuJ
+         Zx8f3AQsRj27lhL7oAgx0ggwJvcJx5JItoPWXovLhk9mlAhoXzJNy3iokvxTjChNDLNa
+         wk2TyEe/S2g+Ww12WtM9km3V/aJo1QEghKMBZkghK7EY/VOpVhfVqq3Netjy9wlLKKs8
+         5a+QXKJmClAT1PPbHbqkX+T9B2zAsZZwbkpEhfd7MlAWEyy6i5DXMhpzPncwYBc6uZwO
+         wiFjYkpDOqD/VLUuEWdJ6aQ4Q9GJMA94PecIzJRhQ61BFNT2r5B7YPzz+IEdax2XbDkh
+         vJCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x5ZTncPZSmmM8YtV3eOV41TWmby1NfBlelF9byY72Kg=;
-        b=ONuF6wEjyyBn8wVwZeVR7+3wypZ2jMeEGxrO0HNKV83iXSgiK/wrtezVLJ9UdhM5MK
-         Dwu7hU9os1wDJGrpDGnO4b88bfUKZNdqzPfMVE3IE+2lCjbbeRYbzH65jwlfBYr5PcVp
-         x8xwZYA0360/iZj+kNCZvMIR2TfoFU8JFoqXoG9ocWGPqixzCpkMEHNnUKLWLZS4amqB
-         YUDPhQpNg9eau2fc2Bl7+3rCbiuQ/JertHXfxRDbYywrlrDX8J7fhFnFw65QgjgpGY7z
-         58pqPaTyZRGO92H+9GzFkW5qIk8co/hZLXVO/0aEjmPMvOhBOYWAllgIDqmZvN8CcR3V
-         ewgQ==
-X-Gm-Message-State: ANoB5ploW6dGEh6QQYzFt8Rj+h0xzWMjsUNMXFLKsDhNB65PO0M3pSs6
-        Umv+SAu9z6zDXW4v12LXkd1jIg==
-X-Google-Smtp-Source: AA0mqf5S6gXj5coEIP8nqbgaKkxlyuQq8uWDpyo0HJ5TZT9TjGF08Asdm4bnWFPa0NFzDd9kn9gA9A==
-X-Received: by 2002:a2e:a9a0:0:b0:278:f1a5:a365 with SMTP id x32-20020a2ea9a0000000b00278f1a5a365mr24403347ljq.29.1670231193792;
-        Mon, 05 Dec 2022 01:06:33 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bu4-20020a056512168400b004b51ab265f8sm2041942lfb.193.2022.12.05.01.06.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 01:06:33 -0800 (PST)
-Message-ID: <d320f49f-b304-4ef7-1d50-5c909c6fd108@linaro.org>
-Date:   Mon, 5 Dec 2022 10:06:32 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+mqkHAvBv1y5qS2y58nAD/iFpsVKp/726AYMa4PGL3o=;
+        b=uxUNFv+yLqZzwnKUK5iH78C2zPRBcQvKL84mpo0pVfC/0N64s4mgmYyazO1ZSDlcrz
+         VFglD6yincIUKKCyNDwG99wGmRBuIhsXzEUVlyc9E5GMkJFDYfj7t2XDjG2/ap9dADJx
+         Eet/uAmllTvbgDZNS+BdMJxC+GtMHfzeIf7ZcrVgIfEx0Ra7ozJwYvEfbDaqqrCdpCMQ
+         ZzkAySJ/4ChLNCC29o/NEMUnbGlcsFQSKeyz3ajAYLEdd4Ca04tFPT7T2abr4t4hVYXR
+         aQD0OSogjKCWQEwMSIDLWjQoxNWvOLQHH5OKZwTe25xLTQ1cIYKD4Uud0gUoIz8B70/4
+         G3Vw==
+X-Gm-Message-State: ANoB5pkoesJ7n9owHjNzCzEecl/hQyuVsl5lt3UFYLmWoQSvRqXQCGWP
+        3wIlib2WPXtCWM6MKaF99nifgg==
+X-Google-Smtp-Source: AA0mqf7zDgFbgzzL9zXGb6oaRV02L0v0dT9PAg4S7vuf7JqCuhV2WiTd4pIf7FjDQkpvwEGAHc2Ydg==
+X-Received: by 2002:a05:6402:290:b0:46b:81d2:e3d0 with SMTP id l16-20020a056402029000b0046b81d2e3d0mr23709060edv.314.1670231373853;
+        Mon, 05 Dec 2022 01:09:33 -0800 (PST)
+Received: from blmsp ([185.238.219.11])
+        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b007b4bc423b41sm5917994ejh.190.2022.12.05.01.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 01:09:33 -0800 (PST)
+Date:   Mon, 5 Dec 2022 10:09:32 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/15] can: m_can: Optimizations for tcan and peripheral
+ chips
+Message-ID: <20221205090932.zdoqxifsf6aty4k6@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221202140306.n3iy74ru5f6bxmco@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 7/9] dt-bindings: spi: mtk-snfi: Add read latch latency
- property
-Content-Language: en-US
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-8-xiangsheng.hou@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221205065756.26875-8-xiangsheng.hou@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221202140306.n3iy74ru5f6bxmco@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12/2022 07:57, Xiangsheng Hou wrote:
-> Add mediatek,rx-latch-latency property which adjust read delay in the
-> unit of clock cycle.
+Good Morning Marc,
+
+On Fri, Dec 02, 2022 at 03:03:06PM +0100, Marc Kleine-Budde wrote:
+> On 16.11.2022 21:52:53, Markus Schneider-Pargmann wrote:
+> > Hi,
+> > 
+> > this series is aimed at optimizing the driver code for tcan chips and
+> > more generally for peripheral m_can chips.
+> > 
+> > I did different things to improve the performance:
+> > - Reduce the number of SPI transfers.
+> > - Reduce the number of interrupts.
+> > - Enable use of FIFOs.
+> > 
+> > I am working with a tcan4550 in loopback mode attached to a beaglebone
+> > black. I am currently working on optimizing the receive path as well
+> > which will be submitted in another series once it is done.
 > 
-> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> The patches I've not commented on look fine. If you re-spin the series
+> only containing those, I'll include them in my next pull request, which
+> I'll send out soonish.
 
+Ok, thank you, I will send a subset of the patches today.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> regards,
+> Marc
+> 
+> > Best,
+> > Markus
+> > 
+> > Markus Schneider-Pargmann (15):
+> >   can: m_can: Eliminate double read of TXFQS in tx_handler
+> >   can: m_can: Wakeup net queue once tx was issued
+> >   can: m_can: Cache tx putidx and transmits in flight
+> >   can: m_can: Use transmit event FIFO watermark level interrupt
+> >   can: m_can: Disable unused interrupts
+> >   can: m_can: Avoid reading irqstatus twice
+> >   can: m_can: Read register PSR only on error
+> >   can: m_can: Count TXE FIFO getidx in the driver
+> >   can: m_can: Count read getindex in the driver
+> >   can: m_can: Batch acknowledge rx fifo
+> >   can: m_can: Batch acknowledge transmit events
+> >   can: tcan4x5x: Remove invalid write in clear_interrupts
+> >   can: tcan4x5x: Fix use of register error status mask
+> >   can: tcan4x5x: Fix register range of first block
+> >   can: tcan4x5x: Specify separate read/write ranges
+> > 
+> >  drivers/net/can/m_can/m_can.c           | 140 +++++++++++++++---------
+> >  drivers/net/can/m_can/m_can.h           |   5 +
+> >  drivers/net/can/m_can/tcan4x5x-core.c   |  19 ++--
+> >  drivers/net/can/m_can/tcan4x5x-regmap.c |  45 ++++++--
+> >  4 files changed, 141 insertions(+), 68 deletions(-)
+> > 
+> > 
+> > base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+> > prerequisite-patch-id: e9df6751d43bb0d1e3b8938d7e93bc1cfa22cef2
+> > prerequisite-patch-id: dad9ec37af766bcafe54cb156f896267a0f47fe1
+> > prerequisite-patch-id: f4e6f1a213a31df2741a5fa3baa87aa45ef6707a
+> 
+> BTW: I don't have access to these prerequisite-patch-id.
 
-Best regards,
-Krzysztof
+I think I messed up here. I have three patches, SPI fixes and devicetree
+snippet that this series is based on. I guess I shouldn't have used
+--base then or rebase on something without these patches first.
+
+Thanks,
+Markus
 
