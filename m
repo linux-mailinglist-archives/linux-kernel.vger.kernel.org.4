@@ -2,103 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8C664294A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C2F64294E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiLENYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S232224AbiLENZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLENYC (ORCPT
+        with ESMTP id S230505AbiLENZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:24:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657661AF0C;
-        Mon,  5 Dec 2022 05:24:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14932B80F79;
-        Mon,  5 Dec 2022 13:23:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F5AC433C1;
-        Mon,  5 Dec 2022 13:23:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670246637;
-        bh=wY8WWEhsULxUa+5zkLjOJ6JIAAUgwhZ1yANEZ6F4tNc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nv/TzyyF7Lsl7b2ve7RRq3FM+MHaDZjr1oLk5n3sFfOED0UCCblTzwckroNUUl7SO
-         ToitNqOLxAsua4ashRVZyskpY1Cq0buEgUqBTXkr1SsLCwpbHzegCp3Tr9XplBtp5d
-         G/9bXvJHlAE/LVhzJp7XqdHGLxmhdtBMa9+d6rgZtnLmJV4b2v9uI4vCKKUBRlKJvD
-         ftvibbHcqq6SaN/GXyPNXCEWTX1ZvIkvsj1pk3NQjLt65saSUSR9ijR2B12K477oLE
-         CG/EAYLn13cVMR0wG5JiX9sTFqY6vMa2tTKm7ofSC25cvU3QcMfpIjSPunXR3WaQyc
-         OrQuf5yW/AkXg==
-Date:   Mon, 5 Dec 2022 14:23:53 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Zheng Yejian <zhengyejian1@huawei.com>, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Fix kernel stack overflow caused by kprobe on
- rcu_irq_enter_check_tick()
-Message-ID: <20221205132353.GB1796992@lothringen>
-References: <20221119040049.795065-1-zhengyejian1@huawei.com>
- <20221121195703.GO4001@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 5 Dec 2022 08:25:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A3E1AF00
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:24:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670246655;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nntNqJI+IggSSFHH2KpYxbpn7ZZuTtPLk8uU1mNP8JI=;
+        b=gEM0UXqBJgoMfTdv2IylQr+1RE9OvcF6mO7IaWJob21/gpSC9rvQyOobWGNLOLD7UvldtS
+        xMlCVxero3JZQrMGGT6jV0MYHu0BE43+jFC/HZmKD/t5OC+s6X64wQ6W5fHPlfrp9XKGuv
+        GR5AFEZlzf6+y5EEJ+71FOc+KtkPJ9A=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-Ntq9gzvxNA2Xocnw7PsUzg-1; Mon, 05 Dec 2022 08:24:12 -0500
+X-MC-Unique: Ntq9gzvxNA2Xocnw7PsUzg-1
+Received: by mail-wr1-f70.google.com with SMTP id p2-20020adfaa02000000b00241d7fb17d7so2287914wrd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:24:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nntNqJI+IggSSFHH2KpYxbpn7ZZuTtPLk8uU1mNP8JI=;
+        b=f8PFaBeVGnnaftajpWvwbo0N60eBOWapleu2YLbYG5pkevzk6JUJ2a4xuaESsM7zUp
+         zl/IZ172zy7U8MkRDXii1sx7BufMRAy/7qKZO1ohuway2DtT8ndqpvDxBorjTqUsDVAI
+         7cSuC+NkDIhGaTTONFkaxYV/jjhs22zKEcAr+WRtP6QbIRzB9J4NPlnaBNEhFmnpAlQ9
+         D2nXKD+9At6cZS/V9X4ZqCdQo4afvHryHSU/dPoxAAwhZIcu1GlQDQGq+2UEQH1h4/hx
+         yoiTz9pu86IyjxdPfsmU1rjam17w4yeXhp6TV5K8VDbMyYYV8m9blyvVO6n+9LqhpI35
+         Q4PA==
+X-Gm-Message-State: ANoB5pmOXyMOtRRbP0GHRhUbp4EjDTE1IcBwKfzfiduGz2b0sgDoTjIe
+        VN6/GGcK43FWKhCahrqKHeLnaFCw49iO/FL40yrERXMVGoLj0wxk92SWRDbAngKtEkpxM1QwbX2
+        SsZBbI0jZyJg+pOZd6xy4CWMs
+X-Received: by 2002:a5d:6090:0:b0:242:3a63:9e6a with SMTP id w16-20020a5d6090000000b002423a639e6amr11305114wrt.375.1670246650882;
+        Mon, 05 Dec 2022 05:24:10 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6FLWhvxYqtr/+fBZixW+KEyHrn7aW4tETP3vGEOxYFhN2uG1XasSfSi+TsgKYY4+LVacrY8Q==
+X-Received: by 2002:a5d:6090:0:b0:242:3a63:9e6a with SMTP id w16-20020a5d6090000000b002423a639e6amr11305095wrt.375.1670246650616;
+        Mon, 05 Dec 2022 05:24:10 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id g13-20020a05600c310d00b003a2f2bb72d5sm27122624wmo.45.2022.12.05.05.24.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 05:24:10 -0800 (PST)
+Date:   Mon, 5 Dec 2022 14:24:03 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "edumazet@google.com" <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v3 2/4] test/vsock: rework message bounds test
+Message-ID: <20221205132403.oobyrog4chcdqk4z@sgarzare-redhat>
+References: <6bd77692-8388-8693-f15f-833df1fa6afd@sberdevices.ru>
+ <bdecf9ed-6c9d-ecf8-f159-d4610d5e7cb1@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221121195703.GO4001@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bdecf9ed-6c9d-ecf8-f159-d4610d5e7cb1@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:57:03AM -0800, Paul E. McKenney wrote:
-> On Sat, Nov 19, 2022 at 12:00:49PM +0800, Zheng Yejian wrote:
-> > Register kprobe on __rcu_irq_enter_check_tick() can cause kernel stack
-> > overflow [1]. This issue is first found in v5.10 and can be reproduced
-> > by enabling CONFIG_NO_HZ_FULL and doing like:
-> >   # cd /sys/kernel/debug/tracing/
-> >   # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
-> >   # echo 1 > events/kprobes/enable
-> > 
-> > So __rcu_irq_enter_check_tick() should not be kprobed, mark it as noinstr.
-> 
-> Good catch!
-> 
-> I am inclined to queue this, but noticed that one of its callers need
-> it to be noinstr but that the others do not.
-> 
-> Need noinstr:
-> 
-> o	enter_from_kernel_mode() -> __enter_from_kernel_mode() ->
-> 	rcu_irq_enter_check_tick() -> __rcu_irq_enter_check_tick()
-> 
-> Doesn't need noinstr:
-> 
-> o	ct_nmi_enter() -> rcu_irq_enter_check_tick() ->
-> 	__rcu_irq_enter_check_tick(), courtesy of the call to
-> 	instrumentation_begin() in ct_nmi_enter() that precedes the call
-> 	to rcu_irq_enter_check_tick().
-> 
-> o	irqentry_enter() -> rcu_irq_enter_check_tick() ->
-> 	__rcu_irq_enter_check_tick(), courtesy of the call to
-> 	instrumentation_begin() in irqentry_enter() that precedes the
-> 	call to rcu_irq_enter_check_tick().
-> 
-> Is tagging __rcu_irq_enter_check_tick() with noinstr as
-> proposed in this patch the right thing to do, or should there
-> be calls to instrumentation_begin() and instrumentation_end() in
-> enter_from_kernel_mode()?  Or something else entirely?
+On Sun, Dec 04, 2022 at 07:20:52PM +0000, Arseniy Krasnov wrote:
+>This updates message bound test making it more complex. Instead of
+>sending 1 bytes messages with one MSG_EOR bit, it sends messages of
+>random length(one half of messages are smaller than page size, second
+>half are bigger) with random number of MSG_EOR bits set. Receiver
+>also don't know total number of messages.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> tools/testing/vsock/control.c    |  28 +++++++
+> tools/testing/vsock/control.h    |   2 +
+> tools/testing/vsock/util.c       |  13 ++++
+> tools/testing/vsock/util.h       |   1 +
+> tools/testing/vsock/vsock_test.c | 124 +++++++++++++++++++++++++++----
+> 5 files changed, 155 insertions(+), 13 deletions(-)
+>
+>diff --git a/tools/testing/vsock/control.c b/tools/testing/vsock/control.c
+>index 4874872fc5a3..d2deb4b15b94 100644
+>--- a/tools/testing/vsock/control.c
+>+++ b/tools/testing/vsock/control.c
+>@@ -141,6 +141,34 @@ void control_writeln(const char *str)
+> 	timeout_end();
+> }
+>
+>+void control_writeulong(unsigned long value)
+>+{
+>+	char str[32];
+>+
+>+	if (snprintf(str, sizeof(str), "%lu", value) >= sizeof(str)) {
+>+		perror("snprintf");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	control_writeln(str);
+>+}
+>+
+>+unsigned long control_readulong(void)
+>+{
+>+	unsigned long value;
+>+	char *str;
+>+
+>+	str = control_readln();
+>+
+>+	if (!str)
+>+		exit(EXIT_FAILURE);
+>+
+>+	value = strtoul(str, NULL, 10);
+>+	free(str);
+>+
+>+	return value;
+>+}
+>+
+> /* Return the next line from the control socket (without the trailing newline).
+>  *
+>  * The program terminates if a timeout occurs.
+>diff --git a/tools/testing/vsock/control.h b/tools/testing/vsock/control.h
+>index 51814b4f9ac1..c1f77fdb2c7a 100644
+>--- a/tools/testing/vsock/control.h
+>+++ b/tools/testing/vsock/control.h
+>@@ -9,7 +9,9 @@ void control_init(const char *control_host, const char *control_port,
+> void control_cleanup(void);
+> void control_writeln(const char *str);
+> char *control_readln(void);
+>+unsigned long control_readulong(void);
+> void control_expectln(const char *str);
+> bool control_cmpln(char *line, const char *str, bool fail);
+>+void control_writeulong(unsigned long value);
+>
+> #endif /* CONTROL_H */
+>diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
+>index 2acbb7703c6a..01b636d3039a 100644
+>--- a/tools/testing/vsock/util.c
+>+++ b/tools/testing/vsock/util.c
+>@@ -395,3 +395,16 @@ void skip_test(struct test_case *test_cases, size_t test_cases_len,
+>
+> 	test_cases[test_id].skip = true;
+> }
+>+
+>+unsigned long hash_djb2(const void *data, size_t len)
+>+{
+>+	unsigned long hash = 5381;
+>+	int i = 0;
+>+
+>+	while (i < len) {
+>+		hash = ((hash << 5) + hash) + ((unsigned char *)data)[i];
+>+		i++;
+>+	}
+>+
+>+	return hash;
+>+}
+>diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
+>index a3375ad2fb7f..fb99208a95ea 100644
+>--- a/tools/testing/vsock/util.h
+>+++ b/tools/testing/vsock/util.h
+>@@ -49,4 +49,5 @@ void run_tests(const struct test_case *test_cases,
+> void list_tests(const struct test_case *test_cases);
+> void skip_test(struct test_case *test_cases, size_t test_cases_len,
+> 	       const char *test_id_str);
+>+unsigned long hash_djb2(const void *data, size_t len);
+> #endif /* UTIL_H */
+>diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
+>index bb6d691cb30d..a5904ee39e91 100644
+>--- a/tools/testing/vsock/vsock_test.c
+>+++ b/tools/testing/vsock/vsock_test.c
+>@@ -284,10 +284,14 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
+> 	close(fd);
+> }
+>
+>-#define MESSAGES_CNT 7
+>-#define MSG_EOR_IDX (MESSAGES_CNT / 2)
+>+#define SOCK_BUF_SIZE (2 * 1024 * 1024)
+>+#define MAX_MSG_SIZE (32 * 1024)
+>+
+> static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
+> {
+>+	unsigned long curr_hash;
+>+	int page_size;
+>+	int msg_count;
+> 	int fd;
+>
+> 	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
+>@@ -296,18 +300,79 @@ static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
+> 		exit(EXIT_FAILURE);
+> 	}
+>
+>-	/* Send several messages, one with MSG_EOR flag */
+>-	for (int i = 0; i < MESSAGES_CNT; i++)
+>-		send_byte(fd, 1, (i == MSG_EOR_IDX) ? MSG_EOR : 0);
+>+	/* Wait, until receiver sets buffer size. */
+>+	control_expectln("SRVREADY");
+>+
+>+	curr_hash = 0;
+>+	page_size = getpagesize();
+>+	msg_count = SOCK_BUF_SIZE / MAX_MSG_SIZE;
+>+
+>+	for (int i = 0; i < msg_count; i++) {
+>+		ssize_t send_size;
+>+		size_t buf_size;
+>+		int flags;
+>+		void *buf;
+>+
+>+		/* Use "small" buffers and "big" buffers. */
+>+		if (i & 1)
+>+			buf_size = page_size +
+>+					(rand() % (MAX_MSG_SIZE - page_size));
+>+		else
+>+			buf_size = 1 + (rand() % page_size);
+>+
+>+		buf = malloc(buf_size);
+>+
+>+		if (!buf) {
+>+			perror("malloc");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		memset(buf, rand() & 0xff, buf_size);
+>+		/* Set at least one MSG_EOR + some random. */
+>+		if (i == (msg_count / 2) || (rand() & 1)) {
+>+			flags = MSG_EOR;
+>+			curr_hash++;
+>+		} else {
+>+			flags = 0;
+>+		}
+>+
+>+		send_size = send(fd, buf, buf_size, flags);
+>+
+>+		if (send_size < 0) {
+>+			perror("send");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		if (send_size != buf_size) {
+>+			fprintf(stderr, "Invalid send size\n");
+>+			exit(EXIT_FAILURE);
+>+		}
+>+
+>+		/*
+>+		 * Hash sum is computed at both client and server in
+>+		 * the same way:
+>+		 * H += hash('message data')
+>+		 * Such hash "contols" both data integrity and message
 
-Tagging as noinstr doesn't look right as there are functions in
-__rcu_irq_enter_check_tick() that can be traced anyway. Also that
-function has the constraint that it can't be called while RCU is idle
-so it's up to the caller to call instrumentation_begin()/end().
+Little typo s/contols/controls. Maybe is better to use checks.
 
-Thanks.
+>+		 * bounds. After data exchange, both sums are compared
+>+		 * using control socket, and if message bounds wasn't
+>+		 * broken - two values must be equal.
+>+		 */
+>+		curr_hash += hash_djb2(buf, buf_size);
+>+		free(buf);
+>+	}
+>
+> 	control_writeln("SENDDONE");
+>+	control_writeulong(curr_hash);
+> 	close(fd);
+> }
+>
+> static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
+> {
+>+	unsigned long sock_buf_size;
+>+	unsigned long remote_hash;
+>+	unsigned long curr_hash;
+> 	int fd;
+>-	char buf[16];
+>+	char buf[MAX_MSG_SIZE];
+> 	struct msghdr msg = {0};
+> 	struct iovec iov = {0};
+>
+>@@ -317,25 +382,57 @@ static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
+> 		exit(EXIT_FAILURE);
+> 	}
+>
+>+	sock_buf_size = SOCK_BUF_SIZE;
+>+
+>+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_MAX_SIZE,
+>+		       &sock_buf_size, sizeof(sock_buf_size))) {
+>+		perror("getsockopt");
+
+s/getsockopt/setsockopt
+
+I would add also the SO_VM_SOCKETS_BUFFER_MAX_SIZE, I mean something
+like this:
+                 perror("setsockopt(SO_VM_SOCKETS_BUFFER_MAX_SIZE)");
+
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
+>+		       &sock_buf_size, sizeof(sock_buf_size))) {
+>+		perror("getsockopt");
+
+Ditto.
+
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	/* Ready to receive data. */
+>+	control_writeln("SRVREADY");
+>+	/* Wait, until peer sends whole data. */
+> 	control_expectln("SENDDONE");
+> 	iov.iov_base = buf;
+> 	iov.iov_len = sizeof(buf);
+> 	msg.msg_iov = &iov;
+> 	msg.msg_iovlen = 1;
+>
+>-	for (int i = 0; i < MESSAGES_CNT; i++) {
+>-		if (recvmsg(fd, &msg, 0) != 1) {
+>-			perror("message bound violated");
+>-			exit(EXIT_FAILURE);
+>-		}
+>+	curr_hash = 0;
+>
+>-		if ((i == MSG_EOR_IDX) ^ !!(msg.msg_flags & MSG_EOR)) {
+>-			perror("MSG_EOR");
+>+	while (1) {
+>+		ssize_t recv_size;
+>+
+>+		recv_size = recvmsg(fd, &msg, 0);
+>+
+>+		if (!recv_size)
+>+			break;
+>+
+>+		if (recv_size < 0) {
+>+			perror("recvmsg");
+> 			exit(EXIT_FAILURE);
+> 		}
+>+
+>+		if (msg.msg_flags & MSG_EOR)
+>+			curr_hash++;
+>+
+>+		curr_hash += hash_djb2(msg.msg_iov[0].iov_base, recv_size);
+> 	}
+>
+> 	close(fd);
+>+	remote_hash = control_readulong();
+>+
+>+	if (curr_hash != remote_hash) {
+>+		fprintf(stderr, "Message bounds broken\n");
+>+		exit(EXIT_FAILURE);
+>+	}
+> }
+>
+> #define MESSAGE_TRUNC_SZ 32
+>@@ -837,6 +934,7 @@ int main(int argc, char **argv)
+> 		.peer_cid = VMADDR_CID_ANY,
+> 	};
+>
+>+	srand(time(NULL));
+> 	init_signals();
+>
+> 	for (;;) {
+>-- 
+>2.25.1
+
