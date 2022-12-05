@@ -2,50 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A7D64260F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFF4642611
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbiLEJsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S231444AbiLEJs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiLEJsK (ORCPT
+        with ESMTP id S231468AbiLEJsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:48:10 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8220531D;
-        Mon,  5 Dec 2022 01:48:08 -0800 (PST)
-Received: from localhost (mdns.lwn.net [45.79.72.68])
+        Mon, 5 Dec 2022 04:48:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF8CF5A6;
+        Mon,  5 Dec 2022 01:48:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 483972C5;
-        Mon,  5 Dec 2022 09:48:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 483972C5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1670233688; bh=PA9hQFJgCtk68OD5hAoWj68bJSPD076D1QMQekUjfk8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mduFeciCq2cjBgjg9O4xkyN1ZlKg4Ql7zxIg3vBwJ4oV3NMOBgCeUVSuET31ImvZy
-         Ntgner7meSZBiRGe7vSZ1gt92p6m9NCgKc6tumKKMkixNLxTepUkJ3jWxZXjDRSXlr
-         B7K6NgmZUoEwCpoGywSvCR5D9lQ4VUDQxJbzX9soD+dJRHxEbZrNVnHfgr0/XiYZGl
-         opuY4sUN94fwsKUdV+w1p3YZkA0NzpO9ss2PDr/Tx2s1NJeZimpIIeGeYqYWfzybuR
-         xMfIq3QLlhFLezICS+TUoNBNYmJRHJhxxPOT2Gs4ATPcm4E/M87TeI+oEbL2Xb2pGz
-         zyjsiN926B3xQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Alex Shi <alexs@kernel.org>, Wu XiangCheng <bobwxc@email.cn>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH] docs/zh_CN: Fix '.. only::' directive's expression
-In-Reply-To: <20221205032622.8697-1-akiyks@gmail.com>
-References: <20221205032622.8697-1-akiyks@gmail.com>
-Date:   Mon, 05 Dec 2022 02:48:01 -0700
-Message-ID: <87r0xembam.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E057E60FF6;
+        Mon,  5 Dec 2022 09:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEFE7C433D6;
+        Mon,  5 Dec 2022 09:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670233701;
+        bh=CjMtCNiSzqVcTrZPKeGy/5zPln3a+DGX1EoUYcoZQ6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=otaMfrIhR1CWMoPrV3mkfYyz1i156Iv08BuGNTh0voqvvWlJg8APV7B9IQseF41AC
+         InisWpbiIQrCkcPv0fBeAbPnzyBc18TmSigVVTWtfYJv8Z4LSErhBZKb09mZOP+wi6
+         3oM224Zhm8WsmRKLBhjuzJxrzdgaqIgQ4U8BQ8mbPgULaBqAMpxm2Y8qALclwvVs5O
+         IWHs8iTwIqkmg3XnrhvCHX0cooTV6KQr11RjMBqokEdT198tkk504R6PeKFePfM1dj
+         +QcSvy/KAjJ0rBY8zTd5kKzT0rt7Hp5fjzzaghtz9dL3Fv4cFIBhiafEN8+tmnVJ6o
+         +X9yyuJWbNYhQ==
+Date:   Mon, 5 Dec 2022 10:48:18 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 046/606] i2c: smbus: Convert to i2c's .probe_new()
+Message-ID: <Y42+YrUJEnvWNx4m@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-47-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IoIlWn7kb8MnFBpT"
+Content-Disposition: inline
+In-Reply-To: <20221118224540.619276-47-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,40 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Akira Yokosawa <akiyks@gmail.com> writes:
 
-> Commit febe6c2f859e ("docs/zh_CN: Add translation
-> zh_CN/doc-guide/index.rst") translated ".. only::" directive too much.
-> Use the one as found in the original doc-guide/index.rst.
->
-> Fixes: febe6c2f859e ("docs/zh_CN: Add translation zh_CN/doc-guide/index.r=
-st")
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Wu XiangCheng <bobwxc@email.cn>
-> Cc: Yanteng Si <siyanteng@loongson.cn>
-> Cc: Alex Shi <alexs@kernel.org>
-> ---
-> Hi,
->
-> I came across this error while grepping ".. only::" under Documentation/.
->
->         Thanks, Akira
-> ---
->  Documentation/translations/zh_CN/doc-guide/index.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/translations/zh_CN/doc-guide/index.rst b/Docum=
-entation/translations/zh_CN/doc-guide/index.rst
-> index 5151953c196f..78c2e9a1697f 100644
-> --- a/Documentation/translations/zh_CN/doc-guide/index.rst
-> +++ b/Documentation/translations/zh_CN/doc-guide/index.rst
-> @@ -19,7 +19,7 @@
->     contributing
->     maintainer-profile
->=20=20
-> -.. only::  =E5=AD=90=E9=A1=B9=E7=9B=AE=E4=B8=8EHTML
-> +.. only::  subproject and html
->=20=20
-Heh ... that's only been there for a year and a half...applied, thanks.
+--IoIlWn7kb8MnFBpT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-jon
+On Fri, Nov 18, 2022 at 11:36:20PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+
+Found an older patch doing the same, but still thanks!
+
+
+--IoIlWn7kb8MnFBpT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONvmIACgkQFA3kzBSg
+KbbxXQ//ZleXRIKoAMRDsN5MyVpyQCHlKYwsSLEVDkOBp/NroAy+XZvG9RzPWDnE
+11dWCoGNOp+RJzjIOkTKdaaid1HQd+PsO1/eY9IHJ/e2AA6Q9kL5tcWKuVFzYWBo
+dHgh2PrWeLRXVO9bx0gOpwcExOi2rELiOAOgeOxvSud50xH9NXyx+yQshj0o11M5
+byGpowQn7VrnkW+hKTSxYULmtt3Fxn+SQZI+AQkn3tBbRnCo9F3rLrhqOeEFtbAM
+UlNewtnjxaoo85DG5Ezm7SjQYHCUNHFWQp288w/qmqynp6uAGkbTnA4351YsAtSR
+z+2EbZ04QDQwigIAD0TmxxQbiHGgaJ7jN0hZXeXY51l9+bla6M1BfBNH22Rt9MJW
+jASMjItW23vk0FOsnbQMUzZAsMMtSNvCXRAvQlE4Ud7yt3aT3m14CjuLcTbj7A4c
+xJJ0EBnZ33ngoBa2ZMUpj0ubvPuKqHrD/KmeaC0nKboNYmpahbTJQSpk+ISehbl7
+OMiOdj5xqhmlEP4bYC5WuRyDRSXDFyHunH7w/cUDZIycVBPtJESArgyrpv4JY2ml
+Fsur+6oBCEwd8wV9YYZyXk7XpDFXhUA6Wrj21hvtvcdP36KvZi9C07vlKREQDNE9
+LvsxH4vxUn0QZj77IYLkENTjaw1AkPsORGo6nKoFUq7udQPy7oo=
+=yEYb
+-----END PGP SIGNATURE-----
+
+--IoIlWn7kb8MnFBpT--
