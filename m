@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E956425E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2106425E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiLEJff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S231230AbiLEJhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiLEJfN (ORCPT
+        with ESMTP id S230092AbiLEJhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:35:13 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A161D18B07;
-        Mon,  5 Dec 2022 01:35:11 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NQdgZ1Q0tz4f3kpH;
-        Mon,  5 Dec 2022 17:35:06 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgCHL65Lu41jRqNiBg--.49659S3;
-        Mon, 05 Dec 2022 17:35:08 +0800 (CST)
-Subject: Re: [PATCH -next v2 9/9] blk-iocost: fix walk_list corruption
-To:     Tejun Heo <tj@kernel.org>, Li Nan <linan122@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221130132156.2836184-1-linan122@huawei.com>
- <20221130132156.2836184-10-linan122@huawei.com>
- <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <2f9495ff-130a-ce1d-5887-0448bdbceedd@huaweicloud.com>
-Date:   Mon, 5 Dec 2022 17:35:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 5 Dec 2022 04:37:21 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D47B11143;
+        Mon,  5 Dec 2022 01:37:20 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id f7so14917230edc.6;
+        Mon, 05 Dec 2022 01:37:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xoLfzXVkjo8xAm6ZoyhPEG35GhkaRRBgemIJLYp+/88=;
+        b=at/2Q0D1obdj6fS8XI2naRo6awU7eHZGEWqXOPYMdiqm/57m6I4dCLR4lDQgud15Pz
+         U0z5ByppO1SWj8t/Hs/vTne54kXZ1lj4eufTYHCXVHeJKD8Qk1MpNQ+yTOTRQ0ETWs7z
+         kpHvAPbAn6to7RVtzTyQAN0r0JPL+2Y4c77gZPDMpO4w8jKCcHKUZrhhKvtQYNT+i2Zj
+         YhUrY70Hsuqm6j7ykLSvj35Rhecx0cjGBA3bRVXpGgV/wPg8NsO8ObTj6S8vdznANRPQ
+         28K9D4ihK0Qa561S26ZOKBPPPSMYkWhatoUFL47qFdWVs8aGDOy3+XXwiAPR+bhp2O/m
+         5A/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xoLfzXVkjo8xAm6ZoyhPEG35GhkaRRBgemIJLYp+/88=;
+        b=uufjK1DOWmyv2SbdqJ5ixlU6SptxFB40F3FgGjxIggPytml1RfKyOH6Q5YzXwXxFF0
+         yvD5gSNdJ7TYskxz5sBfqlLERC5o+0gInwFQiesknT46dG4c3VmITKCxS5y8SVhM452r
+         YBvq/2SiSSLL/EQTSqomGEVu1XwEyGJjulERt5q+/EUdRcn643102fIenN9OGY7x3Ogr
+         UXe1GH3bJ7O/b19M4HKDDbnW8jPmYCDwS0om2/ij5YCskbPNDqSGHeQUICxIqIgHf/VK
+         A7GT2q6zNBXJYuhbX4D0TIcwl4743BGdKoVjaGpajxPoZpVVR79jp4+GXRk6EOc3ZfET
+         9f2Q==
+X-Gm-Message-State: ANoB5pnHS1K/mAeIWPZsyySfvrRdhJxQjB+I32f+yfDhplh4182mU06M
+        C63TgdC47La6+uFYUs67aVI=
+X-Google-Smtp-Source: AA0mqf4fUQ3NHRpbK75rvYp1ggcfz2u/V59ZyPPyJB7GBmjQw1CnuM1UGpJU+Mg1st12qJjnUrJK6Q==
+X-Received: by 2002:a05:6402:d6:b0:458:b42e:46e6 with SMTP id i22-20020a05640200d600b00458b42e46e6mr73681443edu.375.1670233038822;
+        Mon, 05 Dec 2022 01:37:18 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id x3-20020a05640226c300b004677b1b1a70sm5960294edd.61.2022.12.05.01.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 01:37:17 -0800 (PST)
+Date:   Mon, 5 Dec 2022 10:37:25 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v2 net-next 1/4] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y4271Y9TtdiEgjn2@gvm01>
+References: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
+ <Y42509XkIN1S73Er@shell.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <Y4fEKZy4rTE5rG/5@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgCHL65Lu41jRqNiBg--.49659S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFW7Cr4DGF1kCw4UGF18AFb_yoW8AFyrpF
-        WfKana9rW8tw1I9F10q3Z0q3WSyF40vry7JrWfW340y3W2yw17Jr1qyF48WF98WFW8A3yU
-        Xa1UK3WkXw4DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbPEf5UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y42509XkIN1S73Er@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tejun
+On Mon, Dec 05, 2022 at 09:28:51AM +0000, Russell King (Oracle) wrote:
+> On Mon, Dec 05, 2022 at 02:41:35AM +0100, Piergiorgio Beruto wrote:
+> > +int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
+> > +{
+> > +	struct ethnl_req_info req_info = {};
+> > +	struct nlattr **tb = info->attrs;
+> > +	const struct ethtool_phy_ops *ops;
+> > +	struct phy_plca_cfg plca_cfg;
+> > +	struct net_device *dev;
+> > +
+> > +	bool mod = false;
+> > +	int ret;
+> > +
+> > +	ret = ethnl_parse_header_dev_get(&req_info,
+> > +					 tb[ETHTOOL_A_PLCA_HEADER],
+> > +					 genl_info_net(info), info->extack,
+> > +					 true);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	dev = req_info.dev;
+> > +
+> > +	// check that the PHY device is available and connected
+> > +	if (!dev->phydev) {
+> > +		ret = -EOPNOTSUPP;
+> > +		goto out;
+> > +	}
+> 
+> This check should really be done under the RTNL lock. phydevs can come
+> and go with SFP cages.
+> 
+> > +
+> > +	rtnl_lock();
+Good point Russell, I'll fix that. And I wish to seize the opportunity
+to remark that the same problem may be present in cabletest.c
+(see below).
 
-ÔÚ 2022/12/01 4:59, Tejun Heo Ð´µÀ:
-> On Wed, Nov 30, 2022 at 09:21:56PM +0800, Li Nan wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Our test report a problem:
->>
->> ------------[ cut here ]------------
->> list_del corruption. next->prev should be ffff888127e0c4b0, but was ffff888127e090b0
->> WARNING: CPU: 2 PID: 3117789 at lib/list_debug.c:62 __list_del_entry_valid+0x119/0x130
->> RIP: 0010:__list_del_entry_valid+0x119/0x130
->> RIP: 0010:__list_del_entry_valid+0x119/0x130
->> Call Trace:
->>   <IRQ>
->>   iocg_flush_stat.isra.0+0x11e/0x230
->>   ? ioc_rqos_done+0x230/0x230
->>   ? ioc_now+0x14f/0x180
->>   ioc_timer_fn+0x569/0x1640
->>
->> We haven't reporduced it yet, but we think this is due to parent iocg is
->> freed before child iocg, and then in ioc_timer_fn, walk_list is
->> corrupted.
->>
->> 1) Remove child cgroup can concurrent with remove parent cgroup, and
->> ioc_pd_free for parent iocg can be called before child iocg. This can be
->> fixed by moving the handle of walk_list to ioc_pd_offline, since that
->> offline from child is ensured to be called before parent.
-> 
-> Which you already did in a previous patch, right?
-> 
->> 2) ioc_pd_free can be triggered from both removing device and removing
->> cgroup, this patch fix the problem by deleting timer before deactivating
->> policy, so that free parent iocg first in this case won't matter.
-> 
-> Okay, so, yeah, css's pin parents but blkg's don't. I think the right thing
-> to do here is making sure that a child blkg pins its parent (and eventually
-> ioc).
-
-Sorry about this, actually it's can be ensured that pd_offline
-from child will be called before parent. Hence just moving he handle of
-walk_list to ioc_pd_offline can fix this problem thoroughly.
+Maybe we should post a patch to fix that?
 
 Thanks,
-Kuai
+Piergiorgio
+
+int ethnl_act_cable_test(struct sk_buff *skb, struct genl_info *info)
+{
+	struct ethnl_req_info req_info = {};
+	const struct ethtool_phy_ops *ops;
+	struct nlattr **tb = info->attrs;
+	struct net_device *dev;
+	int ret;
+
+	ret = ethnl_parse_header_dev_get(&req_info,
+					 tb[ETHTOOL_A_CABLE_TEST_HEADER],
+					 genl_info_net(info), info->extack,
+					 true);
+	if (ret < 0)
+		return ret;
+
+	dev = req_info.dev;
+	if (!dev->phydev) {
+		ret = -EOPNOTSUPP;
+		goto out_dev_put;
+	}
+
+	rtnl_lock();
 
