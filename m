@@ -2,184 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1CB6439BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04696439AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbiLEX6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 18:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S232135AbiLEXtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 18:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbiLEX6u (ORCPT
+        with ESMTP id S229982AbiLEXtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 18:58:50 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE9510556
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:58:49 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id bp15so21047373lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:58:49 -0800 (PST)
+        Mon, 5 Dec 2022 18:49:39 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B012C64C8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:49:37 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id m5so4453353uah.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=doSWp/8FuNr+NEV3HjPTJkGGPY6r8PL0hvET2gbpcas=;
-        b=Qerm5bC31eCO/u9ZcVP1OcqKBknqnslFPZd1KK3o1V2jy51sySmxFQBQZRAhfyjlr5
-         0iF9IRsEbwty3qVO1wOSB1T87h54s4gx2dJ/E70LBpDUfxeBT2cSM76kwX5YzDpxthuy
-         UnYbMgHX4IGFYzj1YAZQBQTpVChrQM5rc9K3429C+Jc0ZgfYBnYlDrz+7g2oiSPSXnK2
-         QHFngs5DeLtpPzW019h10iP/OTn9g1CjjuZZRz4zuO33qvD06K6FnsWDYHMpslkxGyAW
-         kCsR8n5tZFQ550S05KB+1mMT0htMsGwqyCLZkyGESXATDlNoAS3dU+8IhaYxSoZUBpq5
-         Kgiw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ldNCDX/APtWVkIDjTqA4OBk1LuXyTxcfhfZyvH0Ni2g=;
+        b=RtbFU+VptCoVMwYp/9anhqVtRxjzIpSgurgnR3UUHtESxVF+O+ny/vbUm57kY0xgNp
+         FwSVBpLyTzRh8LfcLcaynRTeXlgkGIuudO+jvb9xXpx6y+YqvtIsFmqzlpfRD5GhK2/j
+         ZbJ/vH3oKKXMSPwyDtUSeOANh5hMZDq2lGvfMT04FrJ2zPo0ktDKx8LbmFTujezFTpE5
+         fT+9lIwMVg0yPpy3Uq8ysO3IYRV8cuwd30wRevtPTE0rxh2wyKXSZ5xOZ3zkiJX7iffa
+         o50EKtEOuD9nOyQVCLfs1DUU3yupoHkCsHOBPGWiWqnVcL6cyTYd56J/RA4Tw0j+l6gO
+         i5ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=doSWp/8FuNr+NEV3HjPTJkGGPY6r8PL0hvET2gbpcas=;
-        b=lXDUeyWQX1+Hl+EeAZeKNWDnzIUOasJ2mvqxCnznTa5w+kMt+lcGIn2XmikCHpDi0T
-         9BRVDuyiMkfIsM6dotu6xMwt/iR2AUzJBadzgW3LJBIXmLwdLrGKiUHhJQ3Xtbu5H/oy
-         K4jkfZznovvgsWVBdhNT1cS+7oYBTEwdS9Moc8cH73cp9pa6UJSDiUpdxrqEYc3RUYpp
-         sXuaCfABjz7qAGGVp1RsTAzgsUCh3qKfhnrs2hzbNu1lck9hghNt+6cj1DhlILXIOlBj
-         hmZWdN7kk/jvSHLAZZwZ9fKpBx/4+FAQjKyxx9dGx9uA7/4vo56UeZtKlJeO9jWmkFVh
-         0V4w==
-X-Gm-Message-State: ANoB5pk3rP485xNH946JHbvibWQ4Jfh2CCh8YdIuU/KCaduu9Wn9yBNG
-        OIbokPrlfnFbNGWaLw3h0E1/Bw==
-X-Google-Smtp-Source: AA0mqf4iVNbwTKjN8IO9W2OPq2uXL5c4w2KkFC+MzkP3JxqHL9eP3wjuwJUr9hB+oLt1r/8eCoxMEA==
-X-Received: by 2002:ac2:4e14:0:b0:4af:f5a0:8786 with SMTP id e20-20020ac24e14000000b004aff5a08786mr26291071lfr.265.1670284727601;
-        Mon, 05 Dec 2022 15:58:47 -0800 (PST)
-Received: from [127.0.0.1] ([188.170.72.128])
-        by smtp.gmail.com with ESMTPSA id bp33-20020a05651215a100b004b5701b5337sm721215lfb.104.2022.12.05.15.58.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 15:58:47 -0800 (PST)
-Date:   Tue, 06 Dec 2022 02:41:21 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        airlied@gmail.com
-CC:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v9_4/5=5D_drm/msm/dp=3A_parser_link?= =?US-ASCII?Q?-frequencies_as_property_of_dp=5Fout_endpoint?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1670281694-13281-5-git-send-email-quic_khsieh@quicinc.com>
-References: <1670281694-13281-1-git-send-email-quic_khsieh@quicinc.com> <1670281694-13281-5-git-send-email-quic_khsieh@quicinc.com>
-Message-ID: <90C493B1-E7E3-46A9-89F0-443922B8FEF5@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ldNCDX/APtWVkIDjTqA4OBk1LuXyTxcfhfZyvH0Ni2g=;
+        b=DnqiolM/NXykr9ECiYGitpUtlPKx6G1DTi1FMJQDXdGqBlKWy0LkrRscTTY9DpbtBn
+         DxSa7YAw6grQgGYpJSqTOSlDfL9Euxs+6MuimZCOco1oXjy/G+PB48JsiPg/dtrwl2ex
+         vJEFsf4uvCbd7+jRolBcroLPnXQDL8BrKpayI/+MJaZss6jOfmk2M7D1TYHlEEn3jr/R
+         t1K1dqhyUXC+AoIfK6uQGn2OVe59kEvN6OXY9bUD7aT85uTTfwD4FEMPUXudIkA63Kg8
+         cj9GZG3ZmMCMzSjc/5Z8yZhTu5BITbgzUaSGZFqXp3DyIlBUYm4t6B5jcaE+kH3GlmZw
+         n/Yw==
+X-Gm-Message-State: ANoB5pk5rd2N09JnW3oWxpC6RYXyCzkQDEUhe5qadSIP7szwGo6T94j9
+        /fHjc4CCUp3cO3YmfDhKP2MyTji/9GWQCRemo2izbG1wG7QsKA==
+X-Google-Smtp-Source: AA0mqf7eHzYF3qJPbgjyqywlKuykP0mrWTOTufXeNzSWSHZsnY+hlLkqylq5ISEM9jmyEmJRVSEcVypadzRGWtsgq+Q=
+X-Received: by 2002:ab0:5517:0:b0:409:5403:c18 with SMTP id
+ t23-20020ab05517000000b0040954030c18mr38761352uaa.51.1670284176750; Mon, 05
+ Dec 2022 15:49:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221205175140.1543229-1-nphamcs@gmail.com> <20221205175140.1543229-3-nphamcs@gmail.com>
+In-Reply-To: <20221205175140.1543229-3-nphamcs@gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 5 Dec 2022 16:49:00 -0700
+Message-ID: <CAOUHufZKTqoD2rFwrX9-eCknBmeWqP88rZ7X7A_5KHHbGBUP=A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] workingset: refactor LRU refault to expose refault
+ recency check
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-6 =D0=B4=D0=B5=D0=BA=D0=B0=D0=B1=D1=80=D1=8F 2022 =D0=B3=2E 02:08:13 GMT+03=
-:00, Kuogee Hsieh <quic_khsieh@quicinc=2Ecom> =D0=BF=D0=B8=D1=88=D0=B5=D1=
-=82:
->Add capability to parser and retrieve max DP link supported rate from
->link-frequencies property of dp_out endpoint=2E
+On Mon, Dec 5, 2022 at 10:51 AM Nhat Pham <nphamcs@gmail.com> wrote:
 >
->Changes in v6:
->-- second patch after split parser patch into two patches
+> In preparation for computing recently evicted pages in cachestat,
+> refactor workingset_refault and lru_gen_refault to expose a helper
+> function that would test if an evicted page is recently evicted.
 >
->Changes in v7:
->-- without checking cnt against DP_MAX_NUM_DP_LANES to retrieve link rate
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  include/linux/swap.h |   1 +
+>  mm/workingset.c      | 143 +++++++++++++++++++++++++++++--------------
+>  2 files changed, 99 insertions(+), 45 deletions(-)
 >
->Changes in v9:
->-- separate parser link-frequencies out of data-lanes
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index a18cf4b7c724..dae6f6f955eb 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -361,6 +361,7 @@ static inline void folio_set_swap_entry(struct folio *folio, swp_entry_t entry)
+>  }
 >
->Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>
->---
-> drivers/gpu/drm/msm/dp/dp_parser=2Ec | 20 ++++++++++++++++++--
-> drivers/gpu/drm/msm/dp/dp_parser=2Eh |  2 ++
-> 2 files changed, 20 insertions(+), 2 deletions(-)
+>  /* linux/mm/workingset.c */
+> +bool workingset_test_recent(void *shadow, bool file, bool *workingset);
+>  void workingset_age_nonresident(struct lruvec *lruvec, unsigned long nr_pages);
+>  void *workingset_eviction(struct folio *folio, struct mem_cgroup *target_memcg);
+>  void workingset_refault(struct folio *folio, void *shadow);
+> diff --git a/mm/workingset.c b/mm/workingset.c
+> index 79585d55c45d..44b331ce3040 100644
+> --- a/mm/workingset.c
+> +++ b/mm/workingset.c
+> @@ -244,6 +244,30 @@ static void *lru_gen_eviction(struct folio *folio)
+>         return pack_shadow(mem_cgroup_id(memcg), pgdat, token, refs);
+>  }
 >
->diff --git a/drivers/gpu/drm/msm/dp/dp_parser=2Ec b/drivers/gpu/drm/msm/d=
-p/dp_parser=2Ec
->index b5f7e70=2E=2Efdea843 100644
->--- a/drivers/gpu/drm/msm/dp/dp_parser=2Ec
->+++ b/drivers/gpu/drm/msm/dp/dp_parser=2Ec
->@@ -94,15 +94,17 @@ static int dp_parser_ctrl_res(struct dp_parser *parse=
-r)
-> static int dp_parser_misc(struct dp_parser *parser)
-> {
-> 	struct device_node *of_node =3D parser->pdev->dev=2Eof_node;
->+	struct device_node *endpoint;
->+	u64 frequency;
-> 	int cnt;
->=20
-> 	/*
-> 	 * data-lanes is the property of dp_out endpoint
-> 	 */
-> 	cnt =3D drm_of_get_data_lanes_count_ep(of_node, 1, 0, 1, DP_MAX_NUM_DP_=
-LANES);
->-	if (cnt > 0)
->+	if (cnt > 0) {
-> 		parser->max_dp_lanes =3D cnt;
->-	else {
->+	} else {
+> +/*
+> + * Test if the folio is recently evicted.
+> + *
+> + * As a side effect, also populates the references with
+> + * values unpacked from the shadow of the evicted folio.
+> + */
+> +static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> +       struct pglist_data **pgdat, unsigned long *token, bool *workingset)
+> +{
+> +       struct mem_cgroup *eviction_memcg;
+> +       struct lruvec *lruvec;
+> +       struct lru_gen_struct *lrugen;
+> +       unsigned long min_seq;
+> +
+> +       unpack_shadow(shadow, memcgid, pgdat, token, workingset);
+> +       eviction_memcg = mem_cgroup_from_id(*memcgid);
+> +
+> +       lruvec = mem_cgroup_lruvec(eviction_memcg, *pgdat);
+> +       lrugen = &lruvec->lrugen;
+> +
+> +       min_seq = READ_ONCE(lrugen->min_seq[file]);
+> +       return !((*token >> LRU_REFS_WIDTH) != (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH)));
+> +}
 
-This belongs to the previous patch=20
-
-> 		/*
-> 		 * legacy code, data-lanes is the property of mdss_dp node
-> 		 */
->@@ -113,6 +115,20 @@ static int dp_parser_misc(struct dp_parser *parser)
-> 			parser->max_dp_lanes =3D DP_MAX_NUM_DP_LANES; /* 4 lanes */
-> 	}
->=20
->+	cnt =3D 0;
->+	endpoint =3D of_graph_get_endpoint_by_regs(of_node, 1, 0); /* port@1 */
->+	if (endpoint)
->+		cnt =3D of_property_count_u64_elems(endpoint, "link-frequencies");
->+	of_node_put(endpoint);
->+	if (cnt > 0) {
->+		of_property_read_u64_index(endpoint, "link-frequencies",
-
-And this is use after free=2E
-
-I still think than an additional function would make code simpler=2E You c=
-an return an error code at any point=2E And then handle it in the calling c=
-ode=2E
-
->+						cnt - 1, &frequency);
->+		frequency /=3D 10;	/* from symbol rate to link rate */
->+		parser->max_dp_link_rate =3D (frequency / 1000); /* kbits */
->+	} else {
->+		parser->max_dp_link_rate =3D DP_LINK_RATE_HBR2; /* 540000 khz */
->+	}
->+
-> 	return 0;
-> }
->=20
->diff --git a/drivers/gpu/drm/msm/dp/dp_parser=2Eh b/drivers/gpu/drm/msm/d=
-p/dp_parser=2Eh
->index 866c1a8=2E=2E3ddf639 100644
->--- a/drivers/gpu/drm/msm/dp/dp_parser=2Eh
->+++ b/drivers/gpu/drm/msm/dp/dp_parser=2Eh
->@@ -15,6 +15,7 @@
-> #define DP_LABEL "MDSS DP DISPLAY"
-> #define DP_MAX_PIXEL_CLK_KHZ	675000
-> #define DP_MAX_NUM_DP_LANES	4
->+#define DP_LINK_RATE_HBR2       540000
->=20
-> enum dp_pm_type {
-> 	DP_CORE_PM,
->@@ -119,6 +120,7 @@ struct dp_parser {
-> 	struct dp_io io;
-> 	struct dp_display_data disp_data;
-> 	u32 max_dp_lanes;
->+	u32 max_dp_link_rate;
-> 	struct drm_bridge *next_bridge;
->=20
-> 	int (*parse)(struct dp_parser *parser);
-
+Nit: not refactoring actually looks cleaner to me -- there are only a
+few lines of duplicated code and you can get rid of 4 parameters
+including the unused workingset in the next patch.
