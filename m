@@ -2,189 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC7964383D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9460B64383E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbiLEWjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 17:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S233529AbiLEWkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiLEWjE (ORCPT
+        with ESMTP id S230235AbiLEWkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 17:39:04 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55719C31;
-        Mon,  5 Dec 2022 14:39:03 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5EFC3589;
-        Mon,  5 Dec 2022 23:39:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670279941;
-        bh=ECF4/ggfsJHS1bBwpAA9kt0ujQT/67nmOpBkwOK9+/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qslbiqk6nhdSh6yDX0DvE8z1K5c2lqcfWzttSH1qCUHW9ygWc/xxZ3IjXGuopI5VG
-         brJk6kynbGfMwWrkBmv5koTy9MJCdbD2WerqY02sqY00RC1G1yFPb4MKYrfzB2n3dS
-         14yizv8JOcjjlykuHKpO2z5Z71O93xoeUfAog5LQ=
-Date:   Tue, 6 Dec 2022 00:38:58 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Yunke Cao <yunkec@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v3] media: uvcvideo: Recover stalled ElGato devices
-Message-ID: <Y45zApHY34WocyeM@pendragon.ideasonboard.com>
-References: <20220920-resend-elgato-v3-0-57668054127f@chromium.org>
+        Mon, 5 Dec 2022 17:40:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260A9CCA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 14:40:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE76CB81598
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 628D0C433D7;
+        Mon,  5 Dec 2022 22:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670280015;
+        bh=GJt2tQnd1Xeds2lIE0ThsvUpUJvK+iSYvNujEq1ftUg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ULBvvhhRvzK9LCZR4X9G0JzAec6adclarvUv/8MLd/rjJzfztFmatqkSoyCgJRuGL
+         SIi2UK/GRQW9t8WokcK0Wbd/p6AR/cWPn6gAJ/y/7DH3i/mgoJrCHkjRFzYxmKmB/w
+         urjm3vyEWuL0YxU22XjqgwZ8BQwiq1LLYpB0BAj8JCNtD+BFmfnv0vxsBtBH3k1HIz
+         f827gvGp4Ryr9gJcPyQCW1UTXJKG8feJj92SF3hbOXoKgJqyhKEVUa7oI7DaSEKDPS
+         UZrryZGmvAdqq1qEpKzICkzKLZHie3ShizgtkK5hXETBgPIi2e3XdkbiekmcQtO78A
+         pH653pZlFQXyQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47B59C395E5;
+        Mon,  5 Dec 2022 22:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220920-resend-elgato-v3-0-57668054127f@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] RISC-V: kexec: Fix memory leak of fdt buffer
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167028001528.27830.840137402099225328.git-patchwork-notify@kernel.org>
+Date:   Mon, 05 Dec 2022 22:40:15 +0000
+References: <20221104095658.141222-1-lihuafei1@huawei.com>
+In-Reply-To: <20221104095658.141222-1-lihuafei1@huawei.com>
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, lizhengyu3@huawei.com,
+        liaochang1@huawei.com, u.kleine-koenig@pengutronix.de,
+        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+Hello:
 
-Thank you for the patch.
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Mon, Dec 05, 2022 at 01:53:01PM +0100, Ricardo Ribalda wrote:
-> Elgato Cam Link 4k can be in a stalled state if the resolution of
-> the external source has changed while the firmware initializes.
-> Once in this state, the device is useless until it receives a
-> USB reset. It has even been observed that the stalled state will
-> continue even after unplugging the device.
-
-Why, ô, why :'-(
-
-> lsusb -v
+On Fri, 4 Nov 2022 17:56:57 +0800 you wrote:
+> This is reported by kmemleak detector:
 > 
-> Bus 002 Device 002: ID 0fd9:0066 Elgato Systems GmbH Cam Link 4K
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               3.00
->   bDeviceClass          239 Miscellaneous Device
->   bDeviceSubClass         2
->   bDeviceProtocol         1 Interface Association
->   bMaxPacketSize0         9
->   idVendor           0x0fd9 Elgato Systems GmbH
->   idProduct          0x0066
->   bcdDevice            0.00
->   iManufacturer           1 Elgato
->   iProduct                2 Cam Link 4K
->   iSerial                 4 0005AC52FE000
->   bNumConfigurations      1
+> unreferenced object 0xff60000082864000 (size 9588):
+>   comm "kexec", pid 146, jiffies 4294900634 (age 64.788s)
+>   hex dump (first 32 bytes):
+>     d0 0d fe ed 00 00 12 ed 00 00 00 48 00 00 11 40  ...........H...@
+>     00 00 00 28 00 00 00 11 00 00 00 02 00 00 00 00  ...(............
+>   backtrace:
+>     [<00000000f95b17c4>] kmemleak_alloc+0x34/0x3e
+>     [<00000000b9ec8e3e>] kmalloc_order+0x9c/0xc4
+>     [<00000000a95cf02e>] kmalloc_order_trace+0x34/0xb6
+>     [<00000000f01e68b4>] __kmalloc+0x5c2/0x62a
+>     [<000000002bd497b2>] kvmalloc_node+0x66/0xd6
+>     [<00000000906542fa>] of_kexec_alloc_and_setup_fdt+0xa6/0x6ea
+>     [<00000000e1166bde>] elf_kexec_load+0x206/0x4ec
+>     [<0000000036548e09>] kexec_image_load_default+0x40/0x4c
+>     [<0000000079fbe1b4>] sys_kexec_file_load+0x1c4/0x322
+>     [<0000000040c62c03>] ret_from_syscall+0x0/0x2
 > 
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> Recover stalled ElGato devices
-> 
-> Just a resend of this hw fix.
-> 
-> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> To: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Cc: Yunke Cao <yunkec@chromium.org>
-> ---
-> Changes in v3:
-> - Add Reviewed-by: Sergey
-> - Improve identation (Thanks Sergey!)
-> - Link to v2: https://lore.kernel.org/r/20220920-resend-elgato-v2-0-06b48b3b486a@chromium.org
-> 
-> Changes in v2:
-> - Remove info from lsusb 
-> - Link to v1: https://lore.kernel.org/r/20220920-resend-elgato-v1-0-8672a2380e3d@chromium.org
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 23 +++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index 170a008f4006..a8323cf0e9f9 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -129,12 +129,13 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
->  	return -EPIPE;
->  }
->  
-> +static const struct usb_device_id elgato_cam_link_4k = {
-> +	USB_DEVICE(0x0fd9, 0x0066)
-> +};
-> +
->  static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
->  	struct uvc_streaming_control *ctrl)
->  {
-> -	static const struct usb_device_id elgato_cam_link_4k = {
-> -		USB_DEVICE(0x0fd9, 0x0066)
-> -	};
->  	struct uvc_format *format = NULL;
->  	struct uvc_frame *frame = NULL;
->  	unsigned int i;
-> @@ -297,7 +298,7 @@ static int uvc_get_video_ctrl(struct uvc_streaming *stream,
->  		dev_err(&stream->intf->dev,
->  			"Failed to query (%u) UVC %s control : %d (exp. %u).\n",
->  			query, probe ? "probe" : "commit", ret, size);
-> -		ret = -EIO;
-> +		ret = (ret == -EPROTO) ? -EPROTO : -EIO;
+> [...]
 
-This will change the error returned by VIDIOC_S_FMT and VIDIOC_TRY_FMT,
-but I don't think that will cause issues.
+Here is the summary with links:
+  - [1/2] RISC-V: kexec: Fix memory leak of fdt buffer
+    https://git.kernel.org/riscv/c/96df59b1ae23
+  - [2/2] RISC-V: kexec: Fix memory leak of elf header buffer
+    https://git.kernel.org/riscv/c/cbc32023ddbd
 
->  		goto out;
->  	}
->  
-> @@ -2121,6 +2122,20 @@ int uvc_video_init(struct uvc_streaming *stream)
->  	 * request on the probe control, as required by the UVC specification.
->  	 */
->  	ret = uvc_get_video_ctrl(stream, probe, 1, UVC_GET_CUR);
-> +
-> +	/*
-> +	 * Elgato Cam Link 4k can be in a stalled state if the resolution of
-> +	 * the external source has changed while the firmware initializes.
-> +	 * Once in this state, the device is useless until it receives a
-> +	 * USB reset. It has even been observed that the stalled state will
-> +	 * continue even after unplugging the device.
-> +	 */
-> +	if (usb_match_one_id(stream->dev->intf, &elgato_cam_link_4k) &&
-> +	    (ret == -EPROTO)) {
-
-I'd swap the tests, as the second one is cheaper. You also don't need
-the inner parentheses.
-
-> +		usb_reset_device(stream->dev->udev);
-> +		dev_err(&stream->intf->dev, "Restarting Elgato Cam Link 4K\n");
-
-I would also swap those two lines, if an error occurs when resetting the
-device, it's good to have the "restarting" message printed first.
-
-If I understand this correctly, probe will still fail, and the user will
-have to unplug and replug the device to fix this, right ? If so I'd
-expand the error message, maybe something along those lines:
-
-		dev_err(&stream->intf->dev, "Elgato Cam Link 4K firmware crash detected\n");
-		dev_err(&stream->intf->dev, "Resetting the device, unplug and replug to recover\n");
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +	}
-> +
->  	if (ret < 0)
->  		return ret;
->  
-> 
-> ---
-> base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
-> change-id: 20220920-resend-elgato-a845482bdd02
-
+You are awesome, thank you!
 -- 
-Regards,
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Laurent Pinchart
+
