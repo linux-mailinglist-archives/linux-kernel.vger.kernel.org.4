@@ -2,130 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D72A642C45
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B99642C20
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiLEPvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S232369AbiLEPm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiLEPvn (ORCPT
+        with ESMTP id S232082AbiLEPm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:51:43 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DF811459;
-        Mon,  5 Dec 2022 07:51:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670255502; x=1701791502;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/MxMSWAumjaR4B7gfinrrCVoXvPVOfwPZVTJARGywLQ=;
-  b=L2Y66EBupbfRCXOakG+muXOQ00AgPCE4z8QZKZQ+JGst29LiINb9R0Dm
-   eKzby+mMkAY1CbbH13mjyMSXHHVsAe85Z1uaYcCkQ1BWXDfDEJAkIfyhQ
-   qWpcqDraKhG1mMMh0OEQ2ZcDDhmZyi0lkrpr2gQmJYW3VwRk7k0LKN0Ge
-   dTadDlRbTo0fNFfaBxp6j3iudYePkyoVlIgbJn17TMiKS15G4WZtNorbP
-   0wnR8J9aOFqtV7rSVtQg2G1yHuJqjjXPsq4YklY2c9az4yt1Q6j2x3HV2
-   XtKtMUg505ulv00R/UnXq4mdPV3NXJBj8aMOecwYpQ90iTd9fAfLtFRBw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="343376043"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="343376043"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 07:51:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="752237461"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="752237461"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Dec 2022 07:51:39 -0800
-Date:   Mon, 5 Dec 2022 23:41:55 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Russ Weight <russell.h.weight@intel.com>,
-        linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 6/9] mfd: intel-m10-bmc: Downscope SPI defines &
- prefix with M10BMC_SPI
-Message-ID: <Y44RQ4Wutr/I1xsp@yilunxu-OptiPlex-7050>
-References: <20221202100841.4741-1-ilpo.jarvinen@linux.intel.com>
- <20221202100841.4741-7-ilpo.jarvinen@linux.intel.com>
- <Y4onmwWT8duVV0Sv@yilunxu-OptiPlex-7050>
- <2b253321-72ff-f15a-8879-aa41dce48055@intel.com>
- <b09aabe4-3f82-70f0-aca2-f1cdf7d6a26@linux.intel.com>
+        Mon, 5 Dec 2022 10:42:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129AC324;
+        Mon,  5 Dec 2022 07:42:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9990FB8111A;
+        Mon,  5 Dec 2022 15:42:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0D5C433C1;
+        Mon,  5 Dec 2022 15:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670254942;
+        bh=thdvIuqkHEyKbS/JWTCnvmyNhW8nCqY9ZAj9HmhLcRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bmCKOBUn7w+x0qf7dg84Jm7pOjsEYvUi7Af1oAkuQ4tGYQ8hoV8BSvVv0uq45iayZ
+         OVrRz8G2vrhalIgV6JCmHKipu+yrujU8nrnjO85fFY/ANIbClr5xKaHTvObqSuaCye
+         oWdcgSocbqP/sx7j908NY3aUkIPaLGNTYhp5XDO8=
+Date:   Mon, 5 Dec 2022 16:42:19 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v6 1/5] module: Add empty modalias sysfs attribute
+Message-ID: <Y44RW8Fd/WnW/4Ub@kroah.com>
+References: <20221202224540.1446952-1-allenwebb@google.com>
+ <20221202224744.1447448-1-allenwebb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b09aabe4-3f82-70f0-aca2-f1cdf7d6a26@linux.intel.com>
+In-Reply-To: <20221202224744.1447448-1-allenwebb@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-05 at 11:31:06 +0200, Ilpo Järvinen wrote:
-> On Fri, 2 Dec 2022, Russ Weight wrote:
-> > On 12/2/22 08:28, Xu Yilun wrote:
-> > > On 2022-12-02 at 12:08:38 +0200, Ilpo Järvinen wrote:
-> > >> Move SPI based board definitions to per interface file from the global
-> > >> header. This makes it harder to use them accidently in the
-> > >> generic/interface agnostic code. Prefix the defines with M10BMC_SPI
-> > > I'm not sure if the register layout is actually bound to the bus
-> > > interface. My experience is the register layout is always decided by
-> > > board type. Is it possible there will be a new SPI based board but
-> > > has different register layout in future?
-> > >
-> > > So is M10BMC_SPI_XXX a good nam
-> > 
-> > There could be future devices, spi or pmci based, that require different
-> > addresses for some of these values, and at that time we would need to
-> > additional versions of some of these macros using different names.
-> > Right now, spi and pmci are the primary differentiating factors. I'm not
-> > sure how to improve on the naming. Do you have any suggestions?
-> 
-> It's per board type yes, but there's a strong clustering currently on 
-> spi/pmci differentiation. That implies a one define applies to multiple 
-> board types so naming it, e.g., after a single board type seems not much 
-> better than the current approach.
+On Fri, Dec 02, 2022 at 04:47:40PM -0600, Allen Webb wrote:
+> This adds the modalias sysfs attribute in preparation for its
+> implementation.
 
-I think it is better to name after one of the board type among all its
-supported types. At least it clearly indicates they are related to board
-type.
+What implementation?
 
-Actually it is normal for many driver modules. A driver was initially
-implemented for one board type, and was named by the initial board.
-But later you have more board types compatible to the driver, you don't
-change the driver name, just use it.
+This changelog doesn't make too much sense on it's own, and that's not
+good.  Please explain what this attribute is for and what it is going to
+do, AND include the documentation for the attribute please.
 
-Thanks,
-Yilun
 
 > 
-> I've even thought myself of removing those defines as they seem one-time 
-> use ones after introducing the csr_map. Defining the csr_map using members
-> kinda documents what a literal is about if I'd put just a number there.
-> The added benefit a few capital letters in a define provides is IMHO very
-> questionable.
+> Signed-off-by: Allen Webb <allenwebb@google.com>
+> ---
+>  include/linux/module.h   |  1 +
+>  kernel/module/internal.h |  2 ++
+>  kernel/module/sysfs.c    | 33 +++++++++++++++++++++++++++++++++
+>  kernel/params.c          |  7 +++++++
+>  4 files changed, 43 insertions(+)
 > 
-> Also m10bmc_spi_csr_map name suffers from the same problem, BTW.
-> 
-> I could, of course now that they're downscoped, drop _SPI_ or _PMCI_ from 
-> their names if that's ok for you? ...But that wouldn't address the next 
-> version naming problem at all. But I don't anyway know, without a crystal 
-> ball, know how to address the future naming needs.
-> 
-> -- 
->  i.
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index ec61fb53979a9..0bfa859a21566 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -47,6 +47,7 @@ struct module_kobject {
+>  	struct kobject *drivers_dir;
+>  	struct module_param_attrs *mp;
+>  	struct completion *kobj_completion;
+> +	struct bin_attribute modalias_attr;
+>  } __randomize_layout;
+>  
+>  struct module_attribute {
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index 2e2bf236f5582..8d7ae37584868 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -259,11 +259,13 @@ static inline void add_kallsyms(struct module *mod, const struct load_info *info
+>  #endif /* CONFIG_KALLSYMS */
+>  
+>  #ifdef CONFIG_SYSFS
+> +void add_modalias_attr(struct module_kobject *mk);
 
+This can not fail?
+
+> +static ssize_t module_modalias_read(struct file *filp, struct kobject *kobj,
+> +				    struct bin_attribute *bin_attr,
+> +				    char *buf, loff_t pos, size_t count)
+> +{
+> +	return 0;
+> +}
+> +
+> +/* Used in kernel/params.c for builtin modules.
+> + *
+> + * `struct module_kobject` is used instead of `struct module` because for
+> + * builtin modules, the `struct module` is not available when this is called.
+> + */
+> +void add_modalias_attr(struct module_kobject *mk)
+> +{
+> +	sysfs_bin_attr_init(&mk->modalias_attr);
+> +	mk->modalias_attr.attr.name = "modalias";
+> +	mk->modalias_attr.attr.mode = 0444;
+> +	mk->modalias_attr.read = module_modalias_read;
+> +	if (sysfs_create_bin_file(&mk->kobj, &mk->modalias_attr)) {
+> +		/* We shouldn't ignore the return type, but there is nothing to
+> +		 * do.
+> +		 */
+
+Odd commenting style.
+
+And yes, if this fails, that is NOT good, please fix that up.
+
+But why is this a static attribute like this as part of the
+module_kobject structure and not just a "normal" attribute that is
+shared by all kobjects?
+
+
+> +		return;
+> +	}
+> +}
+> +
+> +static void remove_modalias_attr(struct module_kobject *mk)
+> +{
+> +	sysfs_remove_bin_file(&mk->kobj, &mk->modalias_attr);
+
+Why?  Isn't this automatically cleaned up by the kobject core?
+
+
+> +}
+> +
+>  static void del_usage_links(struct module *mod)
+>  {
+>  #ifdef CONFIG_MODULE_UNLOAD
+> @@ -398,6 +429,7 @@ int mod_sysfs_setup(struct module *mod,
+>  
+>  	add_sect_attrs(mod, info);
+>  	add_notes_attrs(mod, info);
+> +	add_modalias_attr(&mod->mkobj);
+
+Again, error checking :(
+
+>  
+>  	return 0;
+>  
+> @@ -415,6 +447,7 @@ int mod_sysfs_setup(struct module *mod,
+>  
+>  static void mod_sysfs_fini(struct module *mod)
+>  {
+> +	remove_modalias_attr(&mod->mkobj);
+>  	remove_notes_attrs(mod);
+>  	remove_sect_attrs(mod);
+>  	mod_kobject_put(mod);
+> diff --git a/kernel/params.c b/kernel/params.c
+> index 5b92310425c50..b7fd5313a3118 100644
+> --- a/kernel/params.c
+> +++ b/kernel/params.c
+> @@ -14,6 +14,12 @@
+>  #include <linux/ctype.h>
+>  #include <linux/security.h>
+>  
+> +#ifdef CONFIG_MODULES
+> +#include "module/internal.h"
+> +#else
+> +static inline void add_modalias_attr(struct module_kobject *mk) {}
+> +#endif /* !CONFIG_MODULES */
+
+#ifdef does not belong in .c files, and mucking around in kernel/params
+to go into module/internal.h feels like a layering problem.
+
+> +
+>  #ifdef CONFIG_SYSFS
+>  /* Protects all built-in parameters, modules use their own param_lock */
+>  static DEFINE_MUTEX(param_lock);
+> @@ -815,6 +821,7 @@ static void __init kernel_add_sysfs_param(const char *name,
+>  	BUG_ON(err);
+>  	kobject_uevent(&mk->kobj, KOBJ_ADD);
+>  	kobject_put(&mk->kobj);
+> +	add_modalias_attr(mk);
+
+You drop the reference on a kobject and then add a sysfs file to it?
+
+Why is this being called here at all?
+
+thanks,
+
+greg k-h
