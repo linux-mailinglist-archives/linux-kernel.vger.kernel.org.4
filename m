@@ -2,114 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBA9642D02
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62145642D06
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbiLEQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S232783AbiLEQiH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Dec 2022 11:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiLEQgq (ORCPT
+        with ESMTP id S232748AbiLEQhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:36:46 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC12126F;
-        Mon,  5 Dec 2022 08:35:00 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id t62so13628046oib.12;
-        Mon, 05 Dec 2022 08:35:00 -0800 (PST)
+        Mon, 5 Dec 2022 11:37:35 -0500
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755881F60A;
+        Mon,  5 Dec 2022 08:36:03 -0800 (PST)
+Received: by mail-lj1-f182.google.com with SMTP id n1so14168580ljg.3;
+        Mon, 05 Dec 2022 08:36:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3LmueXUXyGNVa79/vNF3eg0gla6XRQeVcGtQ/SX2HD4=;
-        b=ck82cPaf9J+Khv3IcJpj7vnCJTA1CdFnMQrGyaSxCGp1D9a5SKJQ+9qXnETjfmPbDS
-         fYBsnL1xQ3QTa9JMvwLhvQ55MR1hwuwEZsPia2trROTqypBh6dS2pBbMFFnawbyaD0he
-         2v/Tq50sq6vE0cMtgf26lbnu8ABgmZ8X1/wEryrJ38U87cQzCoEWtNSoluG9mo9jwdgB
-         F7BBoUxwcGVlp26Q53s1ISiF6w9ogJx2DE8Y8XZWeE5Ola2Sk7NzWpi1NyWtYSiWwTH7
-         qAzLBlFoTiqjAELH7Mo3tlrNPr6gxqbhxOWxuI8hCmuIVCicfg5rtUZSIScNNXn+dNiF
-         Ustg==
-X-Gm-Message-State: ANoB5pk8cqsH+mEn4XYhyelBml7wqISGtlj4KqE22wX/n22gHmv8t2KX
-        RjrWGJNE7fWsWwpwKxAXMw==
-X-Google-Smtp-Source: AA0mqf6CoNtePO5bj+mi2MYlTeJfbtyVVhhECDsbwer0VjrJUMrf9hVTNLDwy5cYNa3POnSH40rVuA==
-X-Received: by 2002:a54:4407:0:b0:34f:9f93:1f17 with SMTP id k7-20020a544407000000b0034f9f931f17mr38439368oiw.203.1670258094210;
-        Mon, 05 Dec 2022 08:34:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 18-20020aca1112000000b00354d9b9f6b4sm4152761oir.27.2022.12.05.08.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 08:34:53 -0800 (PST)
-Received: (nullmailer pid 2036863 invoked by uid 1000);
-        Mon, 05 Dec 2022 16:34:53 -0000
-Date:   Mon, 5 Dec 2022 10:34:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
-        "Paul J. Murphy" <paul.j.murphy@intel.com>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 1/2] dt-bindings: Drop Jee Heng Sia
-Message-ID: <20221205163453.GA2034441-robh@kernel.org>
-References: <20221203162144.99225-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tj18A3YT1VXcGKwkVQNGdZXvKJxipZMiPmJ3cwUe6+4=;
+        b=CVc+Deu73veD7jX/M/LxIauvUd4LmZ8hIhkEmahrWepxRV8aHAKM26hSBWS+ysaYIH
+         sF03LDKbwcCDInELewQ4G/O+LcJLzH203KgmlYKNKJLf0CWxTMvwMXp72+sERzD3drqk
+         VUa/FB+m7DkUAsgBdUiI2DoJrqf/DOYZVzlUbAtLmNhxVZZ1WAEPSKqg7KX44zpYiwTj
+         B5Ja00nG7np3YF1oykX8iEUq0/eZBeUWLuGsUfqAAFxzZunWTqfdjbDu1xV/5V5DeHUY
+         lKvA/VZl+G3cawWeMcCQDid/5E8wGKXM9qjZotX0oT01cTJMs/Ud6g6N4MutHOhJ+XtO
+         y2dQ==
+X-Gm-Message-State: ANoB5pnBIftuZO3cu4bMD6F6KJD+KSExLjgnJmt06xXrl+BwD746QQ7Y
+        BOGmbyE2Kfut91E/0mW9hcpuwt6PDTFwpcc2
+X-Google-Smtp-Source: AA0mqf6lVA/Cf2jCCKgZDHoH/K8lch6LA/QgqttHYA2+vl//jfF0xXfMTO39Fu8zt90000NsU/Iq9Q==
+X-Received: by 2002:a2e:b6c5:0:b0:279:d61b:181 with SMTP id m5-20020a2eb6c5000000b00279d61b0181mr5933409ljo.166.1670258116112;
+        Mon, 05 Dec 2022 08:35:16 -0800 (PST)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id l12-20020ac2430c000000b004b523766c23sm2174097lfh.202.2022.12.05.08.35.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 08:35:15 -0800 (PST)
+Received: by mail-lf1-f49.google.com with SMTP id p8so19419726lfu.11;
+        Mon, 05 Dec 2022 08:35:14 -0800 (PST)
+X-Received: by 2002:ac2:4f0e:0:b0:4a2:9248:e276 with SMTP id
+ k14-20020ac24f0e000000b004a29248e276mr26840275lfr.605.1670258114461; Mon, 05
+ Dec 2022 08:35:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221203162144.99225-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <14722778-dda0-cb9f-8647-892493d94a5c@leemhuis.info>
+ <2026016246ef719605c9932feeb56b105833593b.camel@intel.com>
+ <CAMfi-DRE-u5TNu2zAL-7A-ENHM9EiJeYJ38BL_FMdk6QmW7c9w@mail.gmail.com>
+ <9a03c244-adff-afaf-7385-d8e89cd3f338@leemhuis.info> <02F8DDF1-EC0D-4EBD-88F5-7E000841C337@holtmann.org>
+ <CAMfi-DQfuro4c_VUrFHBTv8sPnwuV8XhTV_W7qswGeCC2t-wzg@mail.gmail.com> <457D8649-B855-43BB-B3AD-334E166FED31@holtmann.org>
+In-Reply-To: <457D8649-B855-43BB-B3AD-334E166FED31@holtmann.org>
+From:   Dave Chiluk <chiluk@ubuntu.com>
+Date:   Mon, 5 Dec 2022 10:35:02 -0600
+X-Gmail-Original-Message-ID: <CAMfi-DQXkhG6DSWECpxZ+vH_Qi5boDMx5jNj7v7puLEEXRjUaw@mail.gmail.com>
+Message-ID: <CAMfi-DQXkhG6DSWECpxZ+vH_Qi5boDMx5jNj7v7puLEEXRjUaw@mail.gmail.com>
+Subject: Re: [regression] Bug 216753 - 6e 6 ghz bands are disabled since 5.16
+ on intel ax211
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        "Coelho, Luciano" <luciano.coelho@intel.com>,
+        "Greenman, Gregory" <gregory.greenman@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 05:21:43PM +0100, Krzysztof Kozlowski wrote:
-> Emails to Jee Heng Sia bounce ("550 #5.1.0 Address rejected.").  Add
-> Keembay platform maintainers as Keembay I2S maintainers.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml    | 1 -
->  Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml | 3 ++-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> index 67aa7bb6d36a..ad107a4d3b33 100644
-> --- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> +++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> @@ -8,7 +8,6 @@ title: Synopsys DesignWare AXI DMA Controller
->  
->  maintainers:
->    - Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
-> -  - Jee Heng Sia <jee.heng.sia@intel.com>
->  
->  description:
->    Synopsys DesignWare AXI DMA Controller DT Binding
-> diff --git a/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml b/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
-> index 2ac0a4b3cd18..33ab0be036a1 100644
-> --- a/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
-> +++ b/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
-> @@ -8,7 +8,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Intel KeemBay I2S
->  
->  maintainers:
-> -  - Sia, Jee Heng <jee.heng.sia@intel.com>
-> +  - Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-> +  - Paul J. Murphy <paul.j.murphy@intel.com
+On Fri, Dec 2, 2022 at 11:46 AM Marcel Holtmann <marcel@holtmann.org> wrote:
+>
+> Hi Dave,
+>
+> can you run iwd and set Country=DE (or US) in its main.conf. I think
+> most distros have a 2.0 package of iwd available. With iwd we have
+> implemented all the handling and re-scanning to make sure we actually
+> get to use 6Ghz is available.
+>
+> Btw. you can run iwd from its source tree. No need to install it if
+> You don’t want to mess up your system. Just make sure to disable
+> wpa_supplicant so it doesn’t interfere.
 
-Missing '>'
+@Marcel, I was able to build iwd from source, but was unable to get it
+to run due to dbus namespace conflicts. I don't know enough about dbus
+to debug that further.  Running iwd from the archives (v1.26-3), and
+setting COUNTRY=US in main.conf did not enable the 6e bands.
 
->  
->  description: |
->   Intel KeemBay I2S
-> -- 
-> 2.34.1
-> 
-> 
+I don't think setting the global region is the issue, as iw reg set US
+works fine, and results in the following iw reg get.  Even before
+$iw reg set US
+phy#0 sets itself to the correct region.  I think the issue is that
+the bios, or the firmware blob being loaded by the ax211 that has some
+bits improperly set that is causing the 6ghz to be disabled by the
+kernel before userspace ever gets involved.
+
+_________________snip_________________
+$ sudo iw reg get
+global
+country US: DFS-FCC
+(902 - 904 @ 2), (N/A, 30), (N/A)
+(904 - 920 @ 16), (N/A, 30), (N/A)
+(920 - 928 @ 8), (N/A, 30), (N/A)
+(2400 - 2472 @ 40), (N/A, 30), (N/A)
+(5150 - 5250 @ 80), (N/A, 23), (N/A), AUTO-BW
+(5250 - 5350 @ 80), (N/A, 24), (0 ms), DFS, AUTO-BW
+(5470 - 5730 @ 160), (N/A, 24), (0 ms), DFS
+(5730 - 5850 @ 80), (N/A, 30), (N/A), AUTO-BW
+(5850 - 5895 @ 40), (N/A, 27), (N/A), NO-OUTDOOR, AUTO-BW, PASSIVE-SCAN
+(5925 - 7125 @ 320), (N/A, 12), (N/A), NO-OUTDOOR, PASSIVE-SCAN
+(57240 - 71000 @ 2160), (N/A, 40), (N/A)
+
+phy#0 (self-managed)
+country US: DFS-UNSET
+(2402 - 2437 @ 40), (6, 22), (N/A), AUTO-BW, NO-HT40MINUS, NO-80MHZ, NO-160MHZ
+(2422 - 2462 @ 40), (6, 22), (N/A), AUTO-BW, NO-80MHZ, NO-160MHZ
+(2447 - 2482 @ 40), (6, 22), (N/A), AUTO-BW, NO-HT40PLUS, NO-80MHZ, NO-160MHZ
+(5170 - 5190 @ 160), (6, 22), (N/A), AUTO-BW, NO-HT40MINUS
+(5190 - 5210 @ 160), (6, 22), (N/A), AUTO-BW, NO-HT40PLUS
+(5210 - 5230 @ 160), (6, 22), (N/A), AUTO-BW, NO-HT40MINUS
+(5230 - 5250 @ 160), (6, 22), (N/A), AUTO-BW, NO-HT40PLUS
+(5250 - 5270 @ 160), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, PASSIVE-SCAN
+(5270 - 5290 @ 160), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, PASSIVE-SCAN
+(5290 - 5310 @ 160), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, PASSIVE-SCAN
+(5310 - 5330 @ 160), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, PASSIVE-SCAN
+(5490 - 5510 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, PASSIVE-SCAN
+(5510 - 5530 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, PASSIVE-SCAN
+(5530 - 5550 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, PASSIVE-SCAN
+(5550 - 5570 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, PASSIVE-SCAN
+(5570 - 5590 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, PASSIVE-SCAN
+(5590 - 5610 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, PASSIVE-SCAN
+(5610 - 5630 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS, PASSIVE-SCAN
+(5630 - 5650 @ 240), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS, PASSIVE-SCAN
+(5650 - 5670 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS,
+NO-160MHZ, PASSIVE-SCAN
+(5670 - 5690 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS,
+NO-160MHZ, PASSIVE-SCAN
+(5690 - 5710 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40MINUS,
+NO-160MHZ, PASSIVE-SCAN
+(5710 - 5730 @ 80), (6, 22), (0 ms), DFS, AUTO-BW, NO-HT40PLUS,
+NO-160MHZ, PASSIVE-SCAN
+(5735 - 5755 @ 80), (6, 22), (N/A), AUTO-BW, NO-HT40MINUS, NO-160MHZ
+(5755 - 5775 @ 80), (6, 22), (N/A), AUTO-BW, NO-HT40PLUS, NO-160MHZ
+(5775 - 5795 @ 80), (6, 22), (N/A), AUTO-BW, NO-HT40MINUS, NO-160MHZ
+(5795 - 5815 @ 80), (6, 22), (N/A), AUTO-BW, NO-HT40PLUS, NO-160MHZ
+(5815 - 5835 @ 40), (6, 22), (N/A), AUTO-BW, NO-HT40MINUS, NO-80MHZ, NO-160MHZ
+_________________snip_________________
+
+I wanted to call out the DFS-UNSET setting on phy#0
+
+Dave.
