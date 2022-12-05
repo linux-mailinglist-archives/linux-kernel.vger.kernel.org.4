@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6205E642825
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856AB642824
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiLEMM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
+        id S231574AbiLEMMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiLEMMU (ORCPT
+        with ESMTP id S230243AbiLEMMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:12:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1B41A20E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:12:19 -0800 (PST)
+        Mon, 5 Dec 2022 07:12:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ECB63A0
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:12:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F019B80F88
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0ACC433D7;
-        Mon,  5 Dec 2022 12:12:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D926861033
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:12:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F0CC433B5;
+        Mon,  5 Dec 2022 12:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670242337;
-        bh=/ZRjwpE8MVqj9FdbA8dKxciOYI4zz5mw0HeE6Kg7bRk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QsCo3793g7Ra5twgUwIr6bTot9wdAbhKra1sKjxB8gkTtHeGO/8xp/FT2Lis6+Clc
-         7xuHvWZt6CPou5KxdSC/d19dEnOp9hXXFerGlHmQtVUOYl8stFSwtIkOWNSvvhilQf
-         kKXVWcvqqTZUDev5m+5dAGALqL8IKcsBr4LUzUGU=
+        s=korg; t=1670242334;
+        bh=Zfzn7t/aoLl1bnoeeef2orf49auREGHo/fAXlzjp3fE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LE2UwKATTCTKngMKl28GW95O3hhK7O8/wg87DUl8PrvwJodYpoH/vZzrhuTCY62kU
+         9aLcccALdPnOm9o3cNxAFF7ldsTnJtYRD0feSVrTR0x7wjqiSOoGNA69RG5Bq2z9er
+         Vmy+MKImTcMUwtkWf1zQTrSfQCGtcOrVjmLKajAY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v2 1/4] container_of: add container_of_const() that preserves const-ness of the pointer
-Date:   Mon,  5 Dec 2022 13:12:03 +0100
-Message-Id: <20221205121206.166576-1-gregkh@linuxfoundation.org>
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH v2 2/4] device.h: move kobj_to_dev() to use container_of_const()
+Date:   Mon,  5 Dec 2022 13:12:04 +0100
+Message-Id: <20221205121206.166576-2-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221205121206.166576-1-gregkh@linuxfoundation.org>
+References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1916; i=gregkh@linuxfoundation.org; h=from:subject; bh=/ZRjwpE8MVqj9FdbA8dKxciOYI4zz5mw0HeE6Kg7bRk=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm9D/irvr074783v8dpCcuj9bfyIjdHSTyZYMB2RTfI5nJk R/mNjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAbjIEYaZjM4dtUz2HukXJuVod7f9Fa p6u8iLYcFMzklTRBisDvw5xDRD9v8NMfGkXysB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1718; i=gregkh@linuxfoundation.org; h=from:subject; bh=Zfzn7t/aoLl1bnoeeef2orf49auREGHo/fAXlzjp3fE=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm9D0SnT/oy535sY9iJtwVZ/CdLTH/3R9hk7Mibwn1lU1Db vwNqHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRuGCGeeZ2B1cZTPVLvZ/S9v9Qdc oRadliMYb5JbJPCxPnKwkxbJn4K6tZfoP61z0JAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -55,51 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-container_of does not preserve the const-ness of a pointer that is
-passed into it, which can cause C code that passes in a const pointer to
-get a pointer back that is not const and then scribble all over the data
-in it.  To prevent this, container_of_const() will preserve the const
-status of the pointer passed into it using the newly available _Generic()
-method.
+Instead of rolling our own const-checking logic, use the newly
+introduced container_of_const() to handle it all for us automatically.
 
-Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-v2: - removed one parameter, now matches container_of(), thanks to
-      suggestion from Sakari
-    - changed Jason's tag to suggested-by and reviewed-by
-    - added Andy's tag
+v2: - respin with changed container_of_const() parameters
 
- include/linux/container_of.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ include/linux/device.h | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
 
-diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-index 2008e9f4058c..1d898f9158b4 100644
---- a/include/linux/container_of.h
-+++ b/include/linux/container_of.h
-@@ -22,4 +22,17 @@
- 		      "pointer type mismatch in container_of()");	\
- 	((type *)(__mptr - offsetof(type, member))); })
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 84ae52de6746..8d172d06b8c1 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -680,26 +680,7 @@ struct device_link {
+ 	bool supplier_preactivated; /* Owned by consumer probe. */
+ };
  
-+/**
-+ * container_of_const - cast a member of a structure out to the containing
-+ *			structure and preserve the const-ness of the pointer
-+ * @ptr:		the pointer to the member
-+ * @type:		the type of the container struct this is embedded in.
-+ * @member:		the name of the member within the struct.
-+ */
-+#define container_of_const(ptr, type, member)				\
-+	_Generic(ptr,							\
-+		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
-+		default: ((type *)container_of(ptr, type, member))	\
-+	)
-+
- #endif	/* _LINUX_CONTAINER_OF_H */
+-static inline struct device *__kobj_to_dev(struct kobject *kobj)
+-{
+-	return container_of(kobj, struct device, kobj);
+-}
+-
+-static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
+-{
+-	return container_of(kobj, const struct device, kobj);
+-}
+-
+-/*
+- * container_of() will happily take a const * and spit back a non-const * as it
+- * is just doing pointer math.  But we want to be a bit more careful in the
+- * driver code, so manually force any const * of a kobject to also be a const *
+- * to a device.
+- */
+-#define kobj_to_dev(kobj)					\
+-	_Generic((kobj),					\
+-		 const struct kobject *: __kobj_to_dev_const,	\
+-		 struct kobject *: __kobj_to_dev)(kobj)
++#define kobj_to_dev(__kobj)	container_of_const(__kobj, struct device, kobj)
+ 
+ /**
+  * device_iommu_mapped - Returns true when the device DMA is translated
 -- 
 2.38.1
 
