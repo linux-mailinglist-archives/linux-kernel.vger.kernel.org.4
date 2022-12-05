@@ -2,130 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17CA6425FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF8A642606
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiLEJpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S230189AbiLEJqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiLEJpN (ORCPT
+        with ESMTP id S231366AbiLEJqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:45:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B933AE52
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:45:13 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p2827-0004t1-VD; Mon, 05 Dec 2022 10:45:08 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:c1b8:7ff9:10eb:2660])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7D4821362AB;
-        Mon,  5 Dec 2022 09:45:06 +0000 (UTC)
-Date:   Mon, 5 Dec 2022 10:44:58 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
-Message-ID: <20221205094458.xkvlvp7fnygf23fq@pengutronix.de>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-15-msp@baylibre.com>
- <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
- <20221205093013.kpsqyb3fhd5njubm@blmsp>
+        Mon, 5 Dec 2022 04:46:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1982319284;
+        Mon,  5 Dec 2022 01:46:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6761760FFB;
+        Mon,  5 Dec 2022 09:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6519C433C1;
+        Mon,  5 Dec 2022 09:46:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670233588;
+        bh=vlbWmQAQsqVoCP5/iGG9T+Mh7FPLIm+omDon8p2JA10=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bMM7gHLW3WMCRoSscjKR3d5B7dFagYLse28B06cubnjjcjtgrJoAZ+mozdLgS7ydy
+         y5ZCvY/WCTD6z2bVf0C1W9CFnw59bAxUF9kadLyEG+2HzQMm5/HYH7bd49MnBMdfKR
+         1tUBwdYYB96V8fKRqnLE7PL+41HSeabo+7seDSyYP7esxY81ZbM7zLbDny4pH5HZk+
+         y4KdxMaWjF2YIU0+lVh1Z5UVdSsnd8Fuh68iEMqfXaZyaga+vK/ZDp5V+38ankjxya
+         +YoHo9+l/4aIqIJhEV6dNz+CPgjzQen0DRn7EjrZWkEWWpqeZOc7B23iJdH0Z7M/0F
+         talFkUPKSoOlQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1p283U-0003MH-Im; Mon, 05 Dec 2022 10:46:33 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] dt-bindings: PCI: qcom: Allow 'dma-coherent' property
+Date:   Mon,  5 Dec 2022 10:45:30 +0100
+Message-Id: <20221205094530.12883-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d45yhfs3ex7kqilv"
-Content-Disposition: inline
-In-Reply-To: <20221205093013.kpsqyb3fhd5njubm@blmsp>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Devices on some PCIe buses may be cache coherent and must be marked as
+such in the devicetree to avoid data corruption.
 
---d45yhfs3ex7kqilv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is specifically needed on recent Qualcomm platforms like SC8280XP.
 
-On 05.12.2022 10:30:13, Markus Schneider-Pargmann wrote:
-> Hi Marc,
->=20
-> On Fri, Dec 02, 2022 at 03:28:10PM +0100, Marc Kleine-Budde wrote:
-> > On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
-> > > According to the datasheet 0x1c is the last register in the first blo=
-ck,
-> > > not register 0x2c.
-> >=20
-> > The datasheet "SLLSF91A =E2=80=93 DECEMBER 2018 =E2=80=93 REVISED JANUA=
-RY 2020" says:
-> >=20
-> > | 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
-> > | 16'h002F
-> >=20
-> > While the last described register is at 0xc.
->=20
-> Sorry, not sure what I looked up here. The last described register is
-> 0x10 SPI Error status mask in my datasheet:
-> 'SLLSEZ5D =E2=80=93 JANUARY 2018 =E2=80=93 REVISED JUNE 2022'
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
 
-The TCAN4550-Q1 variant has the 0x10 register documented, while the
-TCAN4550 (w/o -Q1) doesn't have.
+Lorenzo, the corresponding SC8280XP DT fix is heading for 6.2 so it
+would be nice if this one could be merged for 6.2-rc1 (or -rc2) as well
+to avoid the corresponding DT validation warnings.
 
-> I would prefer using the actual registers if that is ok with you, so
-> 0x10 here because I assume the remaining registers have internal use or
-> maybe don't exist at all?! If there is an undocumented register that
-> needs to be used at some point we can still modify the ranges.
+Johan
 
-I'm fine with using 0x10 as the last register.
 
-> Also it seems the existing ranges are following the same logic and don't
-> list the whole range, just the documented registers.
->=20
-> The second range is wrong as well. The last register is 0x830, will
-> fix.
+ Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-IIRC I used the register ranges from the section titles ("8.6.1 Device
-ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to 16'h002F") when
-I added the {wr,rd}_table.
+diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+index 2f851c804bb0..a5859bb3dc28 100644
+--- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+@@ -62,6 +62,8 @@ properties:
+     minItems: 3
+     maxItems: 13
+ 
++  dma-coherent: true
++
+   interconnects:
+     maxItems: 2
+ 
+-- 
+2.37.4
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---d45yhfs3ex7kqilv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmONvZYACgkQrX5LkNig
-013z1QgAjPwBzVU/x6eVgTdQF2PdBSxxR0pwfZ5/P+K/RPjyWJaXjXlt/gjgeR0Y
-GHY6YFgMg1DoyVP8AQmJQzoX+fkNKNbkpbmO8gF034cE5W3Grxz2A4mG7fRYQpnb
-u1vQvzfRDROsmr257PgNQHy84zTVjK9l5KSmdSGZxsj+uA/Y8W+1LmsHyQDa3pBZ
-qmhhKtCKJ0hkUP7Az7ujfeiKsMzwdXqyvfdcbEzm2ytW89pa9361lTJ0/eCB9Zke
-OUin8fexcYc0pzx3fu5BdTt0uU1KWK4gvmR49ku8KtkEJmE9SvReQRbUwvzjY1B8
-Kz+lrElpIK7kmuH/3i/poGELti3y5A==
-=oU/3
------END PGP SIGNATURE-----
-
---d45yhfs3ex7kqilv--
