@@ -2,134 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2244F64374F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386DF643758
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbiLEVuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S232500AbiLEVuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233917AbiLEVto (ORCPT
+        with ESMTP id S232903AbiLEVtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:49:44 -0500
-Received: from CAN01-YQB-obe.outbound.protection.outlook.com (mail-yqbcan01on2081.outbound.protection.outlook.com [40.107.116.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CB05592;
-        Mon,  5 Dec 2022 13:46:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PR3KD4LjHn5URRzxE8CN7rmCwj/fR7tMvd31h/RzHyqRtN5xtgcWFe0fZZ56knCzOqS0V2TuTTPXJ6hSGXIew9CuoXXalbkvNaKrKUy0f25g12j3SD/wb10mI4pWRTu7F/BgAsMhWCx8yaCuAKMsv9mpowPCmh/dzMvS0id/TAtqREIDMjuET4mL1X/zqPkhOhrbzSrp5qVhv0VCbOYbFQ1cBkIzR3qcpT0TU019aYrF29f58wBkDevZrz/lFA9pjStpEnZ3EpBwOVgjBsRG1yj99t0koBsVb0TyUmev9EtgbZoUoLlzrOTVDlK78qN7o/RUm6w3l5TDTb/1yHvZmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6rE/MkSHEjAXiLj8hxFHYkDyfdTJh5iCbuauJNidYtU=;
- b=SXHs5l7mvZJ8X5SfQ/TsWM2ezdEjfrbFYqDN21ldVTuFApjvVuStGYgD5YR2bfpzk0MjwZ/NeUnbO6ARK7+DuGIrbioX49+MtC0LxGpuDZfm/8Ivwdok80wA5ZAtzH1Wz5S8YF5JOrY9UphgAQbZgCewIGREm9Emsfr/r5LGIiDdI7dfz2TqCxgi77FMPSuqb3QT3JaC673z4qlBzOucA0TDq/snjtlD8h+O9JbQ15lA4rCMhZRGR0vflQuoQdeNTDaoNLM2XVNbLcdIB8s+DcNKuYbnMDbYRJ2AfXLFgzUeT9LJ0ysPRX4MTV8fXmSzREvqR9QAeSGpHuH0KulpaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6rE/MkSHEjAXiLj8hxFHYkDyfdTJh5iCbuauJNidYtU=;
- b=ne3bFZOS6keVCmbtY1hZr2JuiOL4yeNap8FstDnDQj0aYlZoXCsvujZOKNqGsRUNO1XNGJve22XfKCpJjwF/ZINm6ABzDET//TasXiCxPqkl75HRr8h7UEKo3vIpB4eVugEicM3xtgM+RUFfFnEFvZ/jltLiLiB6K1OMq8McoxSRMnImWycWZqNNhdE7w4TOdNbVg11a1U4at945iapBx5GvgK08IVeoTyaW9N9c3P6j+ovRLdmeGIVG9eTdtEgjEsCoCoogIYVIPDBwIp0MciXAQWK4YwZS+MXlPRQdYEb59iaARquBPkW6yliNuVefJn5HR/HIo4Py1QDahiSj2A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:24::5)
- by YT2PR01MB5773.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
- 2022 21:46:22 +0000
-Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::2bff:5fa3:434e:517]) by YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::2bff:5fa3:434e:517%9]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
- 21:46:22 +0000
-Message-ID: <dfe0b9ba-828d-e1a5-f9a3-416c6b5b1cf3@efficios.com>
-Date:   Mon, 5 Dec 2022 16:46:18 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] powerpc/ftrace: fix syscall tracing on PPC64_ELF_ABI_V1
-Content-Language: en-US
-From:   Michael Jeanson <mjeanson@efficios.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <20221201161442.2127231-1-mjeanson@efficios.com>
- <87pmcys9ae.fsf@mpe.ellerman.id.au>
- <d5dd1491-5d59-7987-9b5b-83f5fb1b29ee@efficios.com>
- <219580de-7473-f142-5ef2-1ed40e41d13d@csgroup.eu>
- <323f83c7-38fe-8a12-d77a-0a7249aad316@efficios.com>
-In-Reply-To: <323f83c7-38fe-8a12-d77a-0a7249aad316@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4P288CA0040.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d3::21) To YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:24::5)
+        Mon, 5 Dec 2022 16:49:47 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EDA7643;
+        Mon,  5 Dec 2022 13:47:49 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-14449b7814bso10147295fac.3;
+        Mon, 05 Dec 2022 13:47:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mjzds2RzECUq1xcqjJsP8nfg2ZPV+dnkXlgwu7if9PE=;
+        b=t+gfM+a6ADFjr169f1qZXmh2Y+iLccK8cb6xXtYsc2lWB/vGHbQCwAnVGLnl9ysD3s
+         UIxfhqlw94va1T67ZXrwD9tN3rzGD6HbeVipduEDKWXxUA5WWqJ8LyCkNESNr6V6a8FD
+         vWUF3eiHvV83ANoj5kRw7eQF9O4FMa1GN1grg+KGmdxfg6OtX0iWmW+WjqH7cBUH6Q0W
+         FAo5A2rc4wBwsDfOwNrvNUc0FzLhKlDjAKISmAYzB1cJRGJ4GeJk5q/ESJmR7RGlm+lf
+         +nXkan0sTHJfBZuUlceXRT4YOidnQxir/0FJ/UPAQ1AaF1QDvCx3qMFGC6ybKQr2BTB3
+         YM5w==
+X-Gm-Message-State: ANoB5pmazc9ZaZMXjmHQ+AitrhBj+TLHibHNVEB8dKszix/z/AEbC+gr
+        b36U9LsndKeBDssJu+29gw==
+X-Google-Smtp-Source: AA0mqf4QO8UMt6OJ+ls46GBA4Vjcws9My+eLdy2ZBabpLPBkFaP2SMxFEfNh2jRUy5s9QIaB0EhSmg==
+X-Received: by 2002:a05:6870:7988:b0:13c:84e6:96d2 with SMTP id he8-20020a056870798800b0013c84e696d2mr4030384oab.72.1670276869061;
+        Mon, 05 Dec 2022 13:47:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y7-20020a4ac407000000b0049ea9654facsm7064489oop.32.2022.12.05.13.47.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 13:47:48 -0800 (PST)
+Received: (nullmailer pid 2682645 invoked by uid 1000);
+        Mon, 05 Dec 2022 21:47:47 -0000
+Date:   Mon, 5 Dec 2022 15:47:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?UTF-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>
+Subject: Re: [PATCH v4 net-next 7/9] dt-bindings: net: add generic
+ ethernet-switch
+Message-ID: <20221205214747.GA2679200-robh@kernel.org>
+References: <20221202204559.162619-1-colin.foster@in-advantage.com>
+ <20221202204559.162619-8-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YQBPR0101MB5080:EE_|YT2PR01MB5773:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ceaf85e-0e89-436f-e458-08dad70a256a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gMU3nW+OC3RtV00fc5qXcFkVBR91XRJr5gtjyZEgfKvmQ5TnvgWwuDYXWaNx+PHKsuRX2G0tJ1O+ETmAx1LNFTpBLZz0QvjUyXquyLC1ATNS9/4tyz0ViUa+wgIlLAqRDfFjV2RZAiBEt7c5i7BE2lSEJnFfGQY6OtelUxQ92BtoBvoRde06IAAGJqH3vQIqnkqw7lfKN2CTDYgXZGFhHd3Ge5l8GZBrD7zMoymBWcmuDsWK4N6Vaoa2JSqVH+FG+FuqZ9Vx1IILLKP09FA5Va2jPrpKSPEgt8mLutaHhDr5IKD//HFp14ah2cypDlSwqZ+e23dGth6pJJwR+zNmBiw48i8vkczm1bTvlS4YBoj55IbBpPuw2XqDLEsjG8AQNNYFvXfGOruhG1WnWTlWaRWfhwCihrOjKjjdojJ9gPstB0/v67whv0N6xCCp3DpHV3x5JCRBHD6OOfb2uC0JZlJyxQor9u3G7PVu5ZOomNImGKO7sv5sHrF0hAeg+gxfo8vqr46E0cgwIx+ngBGdgiF7AWbOSXOBWSSzTRvth7ZS5gLoJuMc0eA0ks1/GIyMWu5mVCnVoJkO+k1WFJBetBzA2JwCjVLjlQsATTcyDphn11vzbMqLu4e5Ub/1AQ8j4FCV9L4J5DSJLtiIBqsMfHMAV5VafBU2u7Ujr29XYsajD+TsJRMyMC0IxeH1nIEq0DqPOSC5eLBSxkYUVo7MZDtNUpzgBHb5SThPWyo13VQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(136003)(376002)(366004)(39830400003)(451199015)(8936002)(83380400001)(38100700002)(53546011)(5660300002)(4744005)(31686004)(7416002)(2616005)(36756003)(2906002)(41300700001)(6486002)(186003)(478600001)(6666004)(107886003)(4326008)(6506007)(31696002)(66476007)(66946007)(66556008)(8676002)(6512007)(26005)(86362001)(316002)(110136005)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OWhmei9WbitWaDZGcnY5M1ZWREJaRWNOTHQxeXhiQ2lYZkY5SFZMMnlwVFpo?=
- =?utf-8?B?S1dnZWIrbVg2TTJFTGc2WVhBNnNvQ25BZWhRQlRlRGFjVFNGY0creE4vVDcx?=
- =?utf-8?B?aE93ZkNIb1FSZkl0OEIxSHlsbGIvY3lCZE1Mc2lsdlY5N2hwVkZsd2xaTUky?=
- =?utf-8?B?QVU5ZEFycERvMjNyZnpKWWRnU0RsNnFsQjRvZk9NeGNzalBBUnkzZ09VV1F6?=
- =?utf-8?B?Lzkxb0d5OWRmTE5tSXRqamo2SGhIRkxKdnNDc0k5MEtxYS85S1lqcHlteStB?=
- =?utf-8?B?Y2V4dzI0T0lZK24zRFczTjI0dGZ2UitGdzBkbUZSK1U1WDgyc2gvTEZzL2NC?=
- =?utf-8?B?M1FUeVZHT2lzQTdqZUttcFBBV3RrODAycEtRRnZJclNmdFdmb3lDVGg2ZkhM?=
- =?utf-8?B?ZVBKeW80NTZ6VVNEWkF3Z2dxTHlrM3dMLy9Ed0xvQmVyWXdWT0lxU21nNXhz?=
- =?utf-8?B?dnJpNWdjV0FlSWdiYkJpT3FhNjNhQjNyVGhZamtXRUxjdzVHMHFmRHFSbnFD?=
- =?utf-8?B?TTlpaG81N0FvaHJKZld6amNuWDMzYzgvWWQ4S1N2aHJQVTVFSThZUlVodXhV?=
- =?utf-8?B?SUhuVVU5RG5HNmtYUGhMTVJsOGpjbjRCMHFwMGJQR1RtaFRoaXYvdTZrbzZL?=
- =?utf-8?B?b2ZNS0ZuYU9oR0VncnNiTGFzZXZaNFh2ZFVIYjA5aVA5Tis1c096Qmwrak94?=
- =?utf-8?B?S2Q1aE5tQ1pxeUVmUU5UT1lHVEtCaEFubVZrQ3FpN0lQa3ZPMDBEZ1B0MFlH?=
- =?utf-8?B?Z09sVWduRFAyWFpSQy9FTUQxMkNDODlad09KKzZOa1ZNbVN0TXMvOXdFTzhl?=
- =?utf-8?B?SVlDWkhtMzFwUHJYa2Z4ZmgzMVpQWGYzSGFWSnNhNjlDSFVxbVEzVHZvNUov?=
- =?utf-8?B?RnpGY1JYd094WGxJcllNakdabW5ZSFBpcmxUVVl0dERFQWU0TWZUTUVpcGsy?=
- =?utf-8?B?WDNURU1TeGhrcjN1TVF4SnBtbzRtTG5jeFdYN2xUd2RPU2hzRXVpbURCM0py?=
- =?utf-8?B?S0pRdUg4WGNYVnZ4aXBERTNGby9WZjdKSFNpS3hkZmtRcnY0ZmVPbHJXNXZl?=
- =?utf-8?B?dm92MnVvdENwWWp1dk85eTlyQnJDT3VOVkZYTi80bE9ROGtVcDRwN01lMXdh?=
- =?utf-8?B?Z1l5WEp4cWZaaEJsN1hBankrOTd3UXpTZTFqRldKMU4wWXJaVUQ5TEFMV1kr?=
- =?utf-8?B?ZEFIRTRnRnNqQ082a0NnSDUwUE9lMlFuRHVYNUFNZXZaMnRUSENsd29hUmo4?=
- =?utf-8?B?MTEyNkkxUHQxSmpJaDk4dzBHOG1GdmxaL2cwQ3RqWUpBVGFvOTZMWjcwTzJU?=
- =?utf-8?B?Q0t0bXYzS1BwQ3BwV3lVeXA3amxTd3ZMZzJZeitjOEVCOHBrUFRpZEhMeFlN?=
- =?utf-8?B?aWh4T3pCZWI0WlY1cEI2WlZaSCtCU3B5dWpUSVZ1UnFyTlplbDRzcmF6NFNB?=
- =?utf-8?B?NXQrMEh5ZllXUm5LTmhiNi9KaFZVUFZLNDNrNklnUnpFenNDUExOVlU0SnZk?=
- =?utf-8?B?ZS84QXZzTTZ0WW9wZytlQTQ1eGFEakh5b3B6YzJTZjhYUFdXSEtlNk4xbzht?=
- =?utf-8?B?TkJML0cvWWNxek54bkc2NW9XeDJrZTl1UEdWUWtxWk92Wm1JRDRRSjNGTnJz?=
- =?utf-8?B?dWNuUXV4QlF0R2pKQUNvdXQ4dk81SjR6N1kxRnptQThXajRteXJOOEJaYk82?=
- =?utf-8?B?Wkd4T016V1Z5UGVuUTNMTFpFSkNGVnJ4N3dKZTduOFBpdmZ2Qm5uTVZjczJs?=
- =?utf-8?B?eEdRQTVTbGhDY3A3cnF6b0ZCU0RNcFF6VW1NME5WM0Q5eFZHeTJTajR0c3li?=
- =?utf-8?B?RUMzS3dXeTZScnNPYlhWdk84Z25hekE4QkV4YWdJQ0tVTDVRdHlwK0FEN0lT?=
- =?utf-8?B?OTRIOThtUEpBUXFQUWNoMUYyeEU3Q3ZJVEttbVpHekpITlRwMklTandQczZQ?=
- =?utf-8?B?VUNSVXYyQnV6anB5YnN4M1d2d3ZCOHRJUkNGNC93WnFKWElsNm1DTktMVUwx?=
- =?utf-8?B?bW1Hald0dzU0cDUwMVRQTzd0WGROM052YytxZ21McWRpTW5NNHAyU0tVWjda?=
- =?utf-8?B?V1BURmxMd0RhN2YvWm0yK1V4dU9HM3QxS3VnaHprTDcxYXo2Wk51OUtaRXVQ?=
- =?utf-8?Q?tiU/YD2SQdsCnYsMw63XsXfSj?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ceaf85e-0e89-436f-e458-08dad70a256a
-X-MS-Exchange-CrossTenant-AuthSource: YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 21:46:21.9534
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bs/NY5apc/A9eToPrDs5nk13zgga/ooRJmnuvECFmEOxB7sbjzxitm/d2//48QkPSHFanStPCKgqAiYlVaIKXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB5773
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202204559.162619-8-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,29 +92,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-05 15:11, Michael Jeanson wrote:
->>>> Michael Jeanson <mjeanson@efficios.com> writes:
->>>>> In v5.7 the powerpc syscall entry/exit logic was rewritten in C, on
->>>>> PPC64_ELF_ABI_V1 this resulted in the symbols in the syscall table
->>>>> changing from their dot prefixed variant to the non-prefixed ones.
->>>>>
->>>>> Since ftrace prefixes a dot to the syscall names when matching them to
->>>>> build its syscall event list, this resulted in no syscall events being
->>>>> available.
->>>>>
->>>>> Remove the PPC64_ELF_ABI_V1 specific version of
->>>>> arch_syscall_match_sym_name to have the same behavior across all powerpc
->>>>> variants.
->>>>
->>>> This doesn't seem to work for me.
->>>>
->>>> Event with it applied I still don't see anything in
->>>> /sys/kernel/debug/tracing/events/syscalls
->>>>
->>>> Did we break it in some other way recently?
->>>>
->>>> cheers
+On Fri, Dec 02, 2022 at 12:45:57PM -0800, Colin Foster wrote:
+> The dsa.yaml bindings had references that can apply to non-dsa switches. To
+> prevent duplication of this information, keep the dsa-specific information
+> inside dsa.yaml and move the remaining generic information to the newly
+> created ethernet-switch.yaml.
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+> 
+> v3 -> v4
+>   * Update ethernet-ports and ethernet-port nodes to match what the new
+>     dsa.yaml has. Namely:
+>       "unevaluatedProperties: false" instead of "additionalProperties: true"
+>       "additionalProperties: true" instead of "unevaluatedProperties: true"
+>     for ethernet-ports and ethernet-port, respectively.
+>   * Add Florian Reviewed tag
+> 
+> v2 -> v3
+>   * Change ethernet-switch.yaml title from "Ethernet Switch Device
+>     Tree Bindings" to "Generic Ethernet Switch"
+>   * Rework ethernet-switch.yaml description
+>   * Add base defs structure for switches that don't have any additional
+>     properties.
+>   * Add "additionalProperties: true" under "^(ethernet-)?ports$" node
+>   * Correct port reference from /schemas/net/dsa/dsa-port.yaml# to
+>     ethernet-controller.yaml#
+> 
+> v1 -> v2
+>   * No net change, but deletions from dsa.yaml included the changes for
+>     "addionalProperties: true" under ports and "unevaluatedProperties:
+>     true" under port.
+> 
+> ---
+>  .../devicetree/bindings/net/dsa/dsa.yaml      | 28 +-------
+>  .../bindings/net/ethernet-switch.yaml         | 66 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  3 files changed, 69 insertions(+), 26 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/ethernet-switch.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> index 5081f4979f1b..843205ea722d 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> @@ -18,6 +18,8 @@ description:
+>  
+>  select: false
+>  
+> +$ref: "/schemas/net/ethernet-switch.yaml#"
 
-I did some further testing, my config also enabled KALLSYMS_ALL, when I remove 
-it there is indeed no syscall events.
+You can drop quotes here.
 
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+This is a nice clean-up.
+
+Rob
