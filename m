@@ -2,153 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D716436DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C986436EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbiLEV33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S233199AbiLEVcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiLEV30 (ORCPT
+        with ESMTP id S232543AbiLEVcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:29:26 -0500
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EBD1DDE6;
-        Mon,  5 Dec 2022 13:29:26 -0800 (PST)
-Received: by mail-oo1-f46.google.com with SMTP id j1-20020a4ad181000000b0049e6e8c13b4so1900487oor.1;
-        Mon, 05 Dec 2022 13:29:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vC4tdvbf2E2K4ti6yOrkzWwYWETV/yDk+VqUvTEIAnI=;
-        b=VK1qTcwmD0hKHOUYj4nUfU/W271HFyeWSwkfHDl+naEk0C02ghHIoxlpD87JcQK/IX
-         eJZlvnL+DnyvMnUwk6X7LgZ1mLUXsKtBx4XlFlEMQJ2QesfSJj8HASARmpB/iUyKHE+K
-         qMUa/XmyTTp4vHMT5Ywtbh5LJpxzQ8Wae22PxkyQljfAZtKOeG4thlrv1CJ1NU+fc73q
-         nY0Ze+2ETsG5DAUCQlhJo/aWrs4wll1oFgYoabVo8Ybx5LnBfmyb8m3gP+YIfrnA+SfG
-         5EOhDXScqrl8D0m5noPaKjuhf1yZRo9Pv4wZ1v9zC/Appu+LTweIFC8ivyiI/m6jDCyy
-         6dBQ==
-X-Gm-Message-State: ANoB5pmOLJzphTFbcScqI3Q4vbNTNngCET6cW3agj+M3g0dKbuJytBfC
-        /7VXY0abgJ+jHddjmPUxb6QjUA2QYQ==
-X-Google-Smtp-Source: AA0mqf5OZgz/MQPOz+i5saP+kvL6ekR7h8OYa1bu+t7jVzYObokIaPmTsxi/ttXdbBE/P1yurFQvKg==
-X-Received: by 2002:a4a:9563:0:b0:4a0:62e4:a192 with SMTP id n32-20020a4a9563000000b004a062e4a192mr14335344ooi.78.1670275765442;
-        Mon, 05 Dec 2022 13:29:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t26-20020a05683014da00b0066cb9069e0bsm8351772otq.42.2022.12.05.13.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 13:29:24 -0800 (PST)
-Received: (nullmailer pid 2657326 invoked by uid 1000);
-        Mon, 05 Dec 2022 21:29:24 -0000
-Date:   Mon, 5 Dec 2022 15:29:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Mon, 5 Dec 2022 16:32:15 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B642BB09;
+        Mon,  5 Dec 2022 13:32:14 -0800 (PST)
+Received: from notapiano (unknown [IPv6:2804:14c:1a9:3b3c::1000])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7E9CA66015B4;
+        Mon,  5 Dec 2022 21:32:09 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670275933;
+        bh=50/6QIo85oB6JxRj95P+uB219lfikFqskeQx/8eOvno=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lRQUJmwna1Fd3WRydn/u93hKBrfttIOdTcafin+jSSCYjr8s1GC7M6p2HGiatKbtM
+         dw3/omlPJCPUvvIgvS1mZkuutCWS18K758oZj6pZrK96KiwBrh6PwsBhwsS6x8WRCZ
+         D/ZviTmlAkrpSKOigl4ACIML7N9J6ZGh3CkfXhuMDK2mQa37es2OIctUDX5itDZT+m
+         neu34try3QNXbu4wn3s9rqq7sE/HkJagVPpvFShgr97iqqxw4NfM0evX5yysOwVWFU
+         /tHa61VDvgghxpot4Q/5Q1TbgR4WHQZPJBtA1C1RFFEjnjCVpsTxLiyOiQ0t99oyby
+         //suG3cbYJkKw==
+Date:   Mon, 5 Dec 2022 18:32:04 -0300
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: phy: add MaxLinear
- GPY2xx bindings
-Message-ID: <20221205212924.GA2638223-robh@kernel.org>
-References: <20221202151204.3318592-1-michael@walle.cc>
- <20221202151204.3318592-4-michael@walle.cc>
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, yunfei.dong@mediatek.com
+Subject: Re: [PATCH v5 1/3] media: dt-bindings: media: mediatek: Rename child
+ node names for decoder
+Message-ID: <20221205213204.ftnarhtsk33pprq3@notapiano>
+References: <20221128143832.25584-1-allen-kh.cheng@mediatek.com>
+ <20221128143832.25584-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221202151204.3318592-4-michael@walle.cc>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221128143832.25584-2-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:12:03PM +0100, Michael Walle wrote:
-> Add the device tree bindings for the MaxLinear GPY2xx PHYs.
+On Mon, Nov 28, 2022 at 10:38:30PM +0800, Allen-KH Cheng wrote:
+> In order to make the names of the child nodes more generic, we rename
+> "vcodec-lat" and "vcodec-core" to "video-codec" for decoder in
+> patternProperties and example.
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 > ---
+>  .../media/mediatek,vcodec-subdev-decoder.yaml | 60 ++-----------------
+>  1 file changed, 4 insertions(+), 56 deletions(-)
 > 
-> Is the filename ok? I was unsure because that flag is only for the GPY215
-> for now. But it might also apply to others. Also there is no compatible
-> string, so..
-> 
->  .../bindings/net/maxlinear,gpy2xx.yaml        | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
-> new file mode 100644
-> index 000000000000..d71fa9de2b64
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/maxlinear,gpy2xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MaxLinear GPY2xx PHY
-> +
-> +maintainers:
-> +  - Andrew Lunn <andrew@lunn.ch>
-> +  - Michael Walle <michael@walle.cc>
-> +
-> +allOf:
-> +  - $ref: ethernet-phy.yaml#
-> +
-> +properties:
-> +  maxlinear,use-broken-interrupts:
-> +    description: |
-> +      Interrupts are broken on some GPY2xx PHYs in that they keep the
-> +      interrupt line asserted even after the interrupt status register is
-> +      cleared. Thus it is blocking the interrupt line which is usually bad
-> +      for shared lines. By default interrupts are disabled for this PHY and
-> +      polling mode is used. If one can live with the consequences, this
-> +      property can be used to enable interrupt handling.
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> index c4f20acdc1f8..695402041e04 100644
+> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+> @@ -91,12 +91,13 @@ properties:
+>  
+>  # Required child node:
+>  patternProperties:
+> -  '^vcodec-lat@[0-9a-f]+$':
+> +  '^video-codec@[0-9a-f]+$':
+>      type: object
+>  
+>      properties:
+>        compatible:
+>          enum:
+> +          - mediatek,mtk-vcodec-core
+>            - mediatek,mtk-vcodec-lat
+>            - mediatek,mtk-vcodec-lat-soc
+>  
+> @@ -145,59 +146,6 @@ patternProperties:
+>  
+>      additionalProperties: false
+>  
+> -  '^vcodec-core@[0-9a-f]+$':
+> -    type: object
+> -
+> -    properties:
+> -      compatible:
+> -        const: mediatek,mtk-vcodec-core
+> -
+> -      reg:
+> -        maxItems: 1
+> -
+> -      interrupts:
+> -        maxItems: 1
+> -
+> -      iommus:
+> -        minItems: 1
+> -        maxItems: 32
+> -        description: |
+> -          List of the hardware port in respective IOMMU block for current Socs.
+> -          Refer to bindings/iommu/mediatek,iommu.yaml.
+> -
+> -      clocks:
+> -        maxItems: 5
+> -
+> -      clock-names:
+> -        items:
+> -          - const: sel
+> -          - const: soc-vdec
+> -          - const: soc-lat
+> -          - const: vdec
+> -          - const: top
+> -
+> -      assigned-clocks:
+> -        maxItems: 1
+> -
+> -      assigned-clock-parents:
+> -        maxItems: 1
+> -
+> -      power-domains:
+> -        maxItems: 1
+> -
+> -    required:
+> -      - compatible
+> -      - reg
+> -      - interrupts
 
-Just omit the interrupt property if you don't want interrupts and add it 
-if you do.
+Looks like interrupts was required for vcodec-core, but it isn't for the generic
+video-codec node. Which seems correct, given that the vcodec-lat-soc doesn't
+have an interrupt [1]. So I guess this is just the generic video-codec node in
+the binding being too generic for some cases. Ideally we would override
+interrupts to be required based on which subnode we're dealing with (for lat and
+core, but not lat-soc), but given these are subnodes matched through
+patternProperties, I'm not sure that would be possible.
 
-> +
-> +      Affected PHYs (as far as known) are GPY215B and GPY215C.
-> +    type: boolean
-> +
-> +dependencies:
-> +  maxlinear,use-broken-interrupts: [ interrupts ]
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    ethernet {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ethernet-phy@0 {
-> +            reg = <0>;
-> +            interrupts-extended = <&intc 0>;
-> +            maxlinear,use-broken-interrupts;
+[1] https://lore.kernel.org/all/20221202034450.3808-3-yunfei.dong@mediatek.com/
 
-This is never actually checked by be schema because there is nothing to 
-match on. If you want custom properties, then you need a compatible. 
+Thanks,
+Nícolas
 
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.30.2
-> 
-> 
+> -      - iommus
+> -      - clocks
+> -      - clock-names
+> -      - assigned-clocks
+> -      - assigned-clock-parents
+> -      - power-domains
+> -
+> -    additionalProperties: false
+> -
