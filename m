@@ -2,74 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D849364384C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E983643850
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbiLEWo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 17:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S232135AbiLEWr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLEWoZ (ORCPT
+        with ESMTP id S230465AbiLEWrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 17:44:25 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94835EE1C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 14:44:23 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id h11so20987899wrw.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 14:44:23 -0800 (PST)
+        Mon, 5 Dec 2022 17:47:24 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604ECFCC9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 14:47:22 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5KNvic002036;
+        Mon, 5 Dec 2022 22:45:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=7GEX+lMSuLO5AZR24OJtMlaZIyxCEdgP0f0HCMhszqU=;
+ b=vRLKcYX3a2uP9V1qZDLRHPwx6TXSVnJakATmnPCn9Sym96lScWQwSkmFRjPLliyZ94MJ
+ 6EHnLNZy8CA19SVrwRTF7iiHVhOG/ObWD9H2T46+RZe7yuTOC6SVX+OL2iQ0eovBkyop
+ /YbDAe8xLNPX43Gv7T9AF+rIK3k1cr68daGX4PMCKQj4EkBods0ev/eU/iO0R0qemYyN
+ FfmPJgjPgrRTOH8GqoljqAZ2sKT9c2jchUyp1QO7zfOfr46uNcj72M2O71AF8ECyfv8V
+ pSyLZCyEgUtAP4IscHMPnkDfwjTds+xgAdL4nRHjop7R1c6OM2OZ9Xd6B3z1/aUGkMkW qA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7ybgnff5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 05 Dec 2022 22:45:09 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B5L8pS0028054;
+        Mon, 5 Dec 2022 22:45:09 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2045.outbound.protection.outlook.com [104.47.56.45])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m8ua9xbnj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 05 Dec 2022 22:45:09 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U1BkIkdvKLcxE2BgogaX7mURLULcaYpBCwQ3AXrRFq8iqHklKZveYyNaywbgn95CydO+V7qrqGGH8o95yXvW6GkxEgqt9LYr4avBx0le67rG6CteXX9CIjamsdCscRUIoVXMlz8GlES/xXcKgUFMEcfL4V3gOLiaJZqloSg5lysp7oItRZHBTpcl2ffKNnIcyPSJ400yXXzod/JB/s5VZFNU9ITy35FU6nPk5m5/UIAKZ5G56DYaJhZ7R//N89QAuYqIoHnEFhbXmtjzz2I+tjRs3an2rjf/nzL9Ui/AQt3yzDT+ySH6P/Fh6rvs72fSgRGaNpBGnr8RJIgXelX7fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7GEX+lMSuLO5AZR24OJtMlaZIyxCEdgP0f0HCMhszqU=;
+ b=JRVPMr1K24jd3GPBAs3qcOohGpA0xBGN17W0YJiRrXY2xGxUrV0HMyaZFTMLVQvMujlsRiEj+5cCTTaWsuY0wE0QX2zKvLhjTsp2ExxpK0uY6xZPQON0sgUF53sJ7wIfmt6cuHIabq/HzF/lf6AzYpkP8pkiBeJU0OYmmi6RUvELAtBPtt5oKU3ABF8tjQtpvZHWTJ89aM+6CH/z0DbhXtqF2o2e3PVh5Ds9oS7rlsec1fQ9MF39pgC+alJuzN+bMAq9q3Ic4losHV7jTmOp6pQzetxHnKY1gjSt3Qdpc8MWKYL0zDJGnJ+dIEdx83sLzMCOCQMVUYiTbJCi6QmP9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4OCax83xDsYSpyiNzI9sqYOdkCRRhZ6cCXQ1yHGNJjg=;
-        b=WAnXLY/b3nV5yl5dYmp8ymC7g0Kx6oh6t3SRZC7gUj+tPrCWXQI+bihwrEO/Qo6tEK
-         QKwzYCxY6Rtf+Ui5lyfu9C/OgLMuumwpqkydYEcgRygkHT7PJTtNb79ke3P0cQn2iVTh
-         02s3H21WbMOCe+uUYiKwPrGBKTvRxlm7sfyHSCEA5JjxFekyn70Rf9s/y0+/fAcTBXks
-         ImGbCsMQC+8i2onLiQlyKGTGZYNO9HTkt2HX8DXM1L0eo5zcO2bmKtnvJZDUGHu3l3j0
-         6SxesCX5Df88c1Cv2SyK86han8fArbcZ2A4UhGukDuZP7Pl8GIfHrEtBLUFcyxjpH0h9
-         1DVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4OCax83xDsYSpyiNzI9sqYOdkCRRhZ6cCXQ1yHGNJjg=;
-        b=bT8UR49sWXxHWMcFuJHDjlDjLoZlmQ+kzoY20qhSddC/Rg43DSelBYRCrsMCZzJs2p
-         iKjinKczANETOVozNZ89if8eKnSza8HisWGZFmCZOF12pClql0ee0w5kbjyn0NkRjqlF
-         sjDfy7kdwYGUUipj8jiU251jNdyDlqTv2tn32aGEv/ASOd2qlnoatw7YMHcQP2C60B4N
-         aryoqRHPuI4+NP0zR0Y9Dbe2jUgrn8NraeMPkHN5HDUvcp0Fh9fNzZB0RWgkd+EVf8Nw
-         o4OOZtoCdQCVy3vjsbzKBpg+WLGMMiYknn6KMehKFNV2wySENCCXYvJVPhl6OmDz441O
-         fFFQ==
-X-Gm-Message-State: ANoB5pkDyLSNrU3MuVJw7tlnw0qtKzD1MCOGEd++aAq5aoER1CJXCLon
-        tAjYVSEgeSmxT3Ere0PLBUTKwMk6+6ul3zH6gmn8wA==
-X-Google-Smtp-Source: AA0mqf7gU/+7r0Fj2+0b35BhYbym5BUbTbio+hF2/U2DuUO1zT0jymIqa7BoPnMM54h2EvfsUmearGJhn7uuiIQpc2Q=
-X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id
- d9-20020adfe2c9000000b00241db86176dmr41412374wrj.40.1670280261674; Mon, 05
- Dec 2022 14:44:21 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7GEX+lMSuLO5AZR24OJtMlaZIyxCEdgP0f0HCMhszqU=;
+ b=yTP7NavilF94VyyO2xkTRfpkEjUgiVmY8whvv3jd+Sc9PYMaKWlpNFp86dVdZTrEvJwPw/uCFWDuow0HJ3suGr67vJEjHaN/f1cchbopOdc1D3aAONVtxBXSRvESd5ERNsYx9oFZYIssUXRHoNabrCwPVobEPgOy4frz7hEqlic=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SN4PR10MB5591.namprd10.prod.outlook.com (2603:10b6:806:206::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
+ 2022 22:45:07 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721%4]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
+ 22:45:06 +0000
+Date:   Mon, 5 Dec 2022 14:45:02 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH 07/10] mm/hugetlb: Make follow_hugetlb_page() safe to pmd
+ unshare
+Message-ID: <Y450bsp9JRdNTcyO@monkey>
+References: <20221129193526.3588187-1-peterx@redhat.com>
+ <20221129193526.3588187-8-peterx@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129193526.3588187-8-peterx@redhat.com>
+X-ClientProxiedBy: MW4PR04CA0031.namprd04.prod.outlook.com
+ (2603:10b6:303:6a::6) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-References: <20221129192924.1580537-1-irogers@google.com> <Y43qt8YRP1M8lTvP@kernel.org>
-In-Reply-To: <Y43qt8YRP1M8lTvP@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 5 Dec 2022 14:44:09 -0800
-Message-ID: <CAP-5=fXgAhqpGUCxWM1V48TtyGTBPT-=uihoyaEDdGLZD_S4=w@mail.gmail.com>
-Subject: Re: [PATCH] perf build: Fixes for LIBTRACEEVENT_DYNAMIC
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SN4PR10MB5591:EE_
+X-MS-Office365-Filtering-Correlation-Id: d62bad00-53e6-412f-385f-08dad7125a54
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Pr6NBHL4UobAZRzHTPoLk7t861ODqEtkgbwYRVyrFvSYBAxeVXuAGAG8Rw+MmtwuavE5OwoEKQecBYzGXUJU/vbONY5RFi/HQ+5IPNhDGvd7T9dZQek6RoUeCs5QSaXJrkdMDaCY3ZXCDeFVBMyTARmX4x4OQtCUeW4r4jkZQR/vXLaamYj+QEk9KagEuAqsk28AZaIh6z5mWpTyq5QFIP71IJYrS9ZGatxPyZf7SQJ7NbaiNMqFq2lAm4AzVTA4RJZO/l5m9pgU3YJ4yeZBVnkFNpg4VA2efNEczViWjghYpq+offc8cjLVh7yYyEn8mWxCD2jVEi27MQQQBDvzydQ9fw0kYELrC9kvMJmfmwsB2HTVevlmwDnRyroiR3LzQ5NuZpd6xcWT98HpyH+TriWylnh2MbN4aY5bkIYg0bnMtmv/3ZYYBXYuRtosrKfYXT4ov0hDCuCAeOrd6y0+/6jc0OhLixEJFlhIWusK5QLjc0lBjgDUedda5OjhU8ninZNCUPiAyACQno+E0CuKQXDaeyRTLyAyXhcl+bB4JXdJMjwJUjqQCFA8u0s9dRNDuJbHaMkvlXOpNphSAOluNB78kcuKb4XUGT6UDrfEA1RMYDg/ydnlKkai1QiqyLCUyV4bUFug3L3L50/V4P+IYA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(39860400002)(366004)(376002)(396003)(451199015)(8676002)(6506007)(4326008)(83380400001)(38100700002)(6916009)(316002)(54906003)(53546011)(6512007)(186003)(9686003)(26005)(5660300002)(7416002)(4744005)(33716001)(44832011)(66476007)(66556008)(66946007)(2906002)(8936002)(41300700001)(6666004)(6486002)(86362001)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0uFPbhxF3m8JqIrS1gtQZFMYEtqDIJQ9zQqyza5Dao81YxCD8R5FmnfQZvQR?=
+ =?us-ascii?Q?IHJZXiCaR80ZdBcSwWw/mOwqIxfEld7L7kdf/ZgrKdgW4bw3P7zfr57HgWjA?=
+ =?us-ascii?Q?l2f9cK2ZnZwUqSYSC3X9V62Jy3aKE9AA469tQNFSk5quiqPXrowz8OXJ/wCH?=
+ =?us-ascii?Q?2iN1OIzdcGkFEMunbFG6+Xtc0lTw91wJUM/JEfSj+P8vdEAk8j9Fr/ER8LIp?=
+ =?us-ascii?Q?9O0ulF6SsEMoUjqVJj8wbtT/w2xirY8C5W5SFIzhLKWvD8GHWMeBLfyJsslM?=
+ =?us-ascii?Q?OjF7+cqEUEzlija9B/W5zIDpAEzfHUWqA3exa7ZSjPuifnCuUa9DqG4di73N?=
+ =?us-ascii?Q?6SVJAqtz9J9w3EvvTgo/zTBTfe5vP2VqKUAZNRubqXziXwstKKaVTCRIu0aN?=
+ =?us-ascii?Q?b7bv7vAAPL4glXzilQyx/6D0jOqQcXbMq0rIf/3D0rVN8Hfb1X5a6sPXHkEU?=
+ =?us-ascii?Q?5A43dCjK0mTAZKNw2z774K6EnqRmMhknMWpQz3qVyIsnKfkMseCLargWCapZ?=
+ =?us-ascii?Q?DwQQu0gUYOfSVDzy/y1JJsCacsW9Ozd6knEpdlJKEvKswgIvJd0UqY7sRrix?=
+ =?us-ascii?Q?L22e6/hOn/Dpcd9VCwFbFRIB6wEja/pUKJgfvA9HB8wY5SM6AQKtcDQpSnGm?=
+ =?us-ascii?Q?AvNM5LvMRWlaeNIqKq7w3RYBgRsdNJlNA1K5quBGYmEWSlRkUHTpM3T+Ue4a?=
+ =?us-ascii?Q?DA56QCN9fHg9CcThpLPiQgGSTgFul3vX1xrLLT7jAAZZ41xuxrkLzDHNgGcp?=
+ =?us-ascii?Q?egBJipCX9RaHdUHTYStjEzRen7W3BNtVk0ulUggjcePFcljUdpOjZfKB+Agg?=
+ =?us-ascii?Q?lGKYaDw1DZVQloD5TLs+l4nv7vwLP+GnfPwTNF+uk3bA9a6rjCEZzp8fGqMd?=
+ =?us-ascii?Q?5f6BNfh8/eE918cZCPiXN6fvsZuSlYvhj38j8dymaZw3AW87u2tpXT3EK4MG?=
+ =?us-ascii?Q?LWvu1YOtIJQyVoCqUn5wTPjlnaPmdgwqDu4d5CGoHxtTkD2Sm1TOnr9s7a46?=
+ =?us-ascii?Q?ym43w3klEiqmZFwO0dSFueAUSF10hxXWA8RqePo+nk1G9yCv0mIIA/4NrthP?=
+ =?us-ascii?Q?rYeDt4GRM9kGW+1zn1myH2DsdERxZBR+z/H5bfZZPm8uGdP6BZSG+ZkJIJ0T?=
+ =?us-ascii?Q?bCfAznqnDFkp5urvJ7k8Lz3/yUTuUg3KtsRgVCMsCQRbRDNZMhywyYsxZTt/?=
+ =?us-ascii?Q?mj0n27uIRvoLtKx3NpKU/8TCeDOwfJNmwBZ4DR1YVr6NWQDIPaWNc67jEJVR?=
+ =?us-ascii?Q?iaW/DwHL3VVdPNwPa8yA+8e7ima80AVFEzSPDaGnYnmc7A5fB8p7SYhul2u5?=
+ =?us-ascii?Q?O3bWEOLtM9XI4Y5NOHpbHjUah0Jm3tBt4nv8XtzMPua3i8eDiav0Y/RZD/iu?=
+ =?us-ascii?Q?Tn2Uao+5gnzB2G9mN2fgHtJOLE4WMWk7unmIYfu011ZZ0Wq4GEvnDLjyIP8F?=
+ =?us-ascii?Q?QxrQmWoqe+P8lXjVc8u5UYb50AeV2lq4wVtegrufFTOUsvsJzKH+j9KW/219?=
+ =?us-ascii?Q?9BDGXDV+/sG0JCme+dQuuaLD8d38iLFEAhq223qp5wt18gJYuj998joC6qlo?=
+ =?us-ascii?Q?iiuIat0WhlLYzscd0taaC4UyqBD8758KyNtejO0YWwCXHATBjq88lGjGoYBn?=
+ =?us-ascii?Q?LQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?189eByUSMyTlnrGT2+T/vsh3hiXh3zfLMO0rrfd6EafIR1hs60eeYrssoDpB?=
+ =?us-ascii?Q?VVqsI5mbgkNfmC8txuVENGsTycneZWl2IFiSRru2Jb266ULxwBKjXzhIOvja?=
+ =?us-ascii?Q?jXJr2TCJBBFfUvfChBb0ZcXc995cpvDIsWCFErHXny2GSSOAuodiopuQP7cw?=
+ =?us-ascii?Q?HbaEvJoUFt5vyA8KtTZBQPiUCW00hRyW8L/QkiwOs94OstR4RDJvTHvHfd0R?=
+ =?us-ascii?Q?f2jR+TjIBYrTw5lJi8kulaxFZMTVyE4wsUIxTymq4UOQM6WRfIwskNJ15jwQ?=
+ =?us-ascii?Q?9J9WZGSS/NHUmjrrOOcU+A/GW3phRvYxvcf8bS3RCEVh9ClIITxrF5amD30+?=
+ =?us-ascii?Q?P0Ob1VMf4K9U+dYpGNNutq9D5I1kAAwbfng/4Qne11fRHpqj65ccI5BN8jVp?=
+ =?us-ascii?Q?HnwacXxIJeBhcjykp/RqnCQ83QKB/vJ6i+1+rmnA8IJ2C6omjEJm7tbg6ywF?=
+ =?us-ascii?Q?OB41xfulo2i07r6HQHnouZvJLnpqHux1VpOF9nSo343JjaMaaL+X4HFuOf7Q?=
+ =?us-ascii?Q?jv+kvZagrqxR9GFEbxo5DJYLIgubxPGH4WY/YC+Fc9Wlm8O9zwE/VgY8yorf?=
+ =?us-ascii?Q?fySQvX32sWE0kin2spekcp13KV8Y1a9L/IqQPEobBed1h4qlIvOt4x6Vv/sI?=
+ =?us-ascii?Q?sYgxxVbfWICOX2lAOsKkIht1i56jAcw//ZCXzAbPNnIflYiTga++CJh2nolh?=
+ =?us-ascii?Q?/bokhfvzTcX6J/EteMXbWxVYmBB7zr1d3GMcO5rTWGROj+8oG0FGmYl72Mrb?=
+ =?us-ascii?Q?hY8H87AMUECjumXTz8F1nlPXXyBrbcol0+X0nykyNP3A4QotUBVEBHasgkL9?=
+ =?us-ascii?Q?McT8xJ+94qUh5RB8nLYtlvZJtM8dFp7KFPeVyZVj5Ir9pZevigwvFtvOatwJ?=
+ =?us-ascii?Q?ICDEcBpEZcIGVf9kKMZwEhIiSohsXmcDujFhej4MsZW6K767NxQj2TMcjuod?=
+ =?us-ascii?Q?Fc4cqHW8gxGxnknZac5tsrG1htXntli+1R5tWKnv0sD39aGSdgbX3kd/UOop?=
+ =?us-ascii?Q?7V3nS/omtt9YCOke0oiC/uspe/amXr2YjlMf+6/I1v8iSeNqZNaD1B86SxRR?=
+ =?us-ascii?Q?rk/gT0euU/n4mccxyfgpJnHSOyhsOeamZkXzMBJRKO9rcj08nyM=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d62bad00-53e6-412f-385f-08dad7125a54
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 22:45:06.8095
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OxlNsa+ub+wBHEQaAIrcZMGFdWbHE3kyJg+43kb0CY+CxywsCMQqTBH9SNVJTmiTMoIhXcL90dZd7wZbNIeeHw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5591
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212050188
+X-Proofpoint-ORIG-GUID: RKDcNhAfSbW0jM_HxpG6sSkvZIWCBe3e
+X-Proofpoint-GUID: RKDcNhAfSbW0jM_HxpG6sSkvZIWCBe3e
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,262 +174,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 4:57 AM Arnaldo Carvalho de Melo <acme@kernel.org> w=
-rote:
->
-> Em Tue, Nov 29, 2022 at 11:29:24AM -0800, Ian Rogers escreveu:
-> > If LIBTRACEEVENT_DYNAMIC is enabled then avoid the install step for
-> > the plugins. If disabled correct DESTDIR so that the plugins are
-> > installed under <lib>/traceevent/plugins.
-> >
-> > Fixes: ef019df01e20 ("perf build: Install libtraceevent locally when bu=
-ilding")
-> > Reported-by: Alexander Gordeev <agordeev@linux.ibm.com>
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/Makefile.perf | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > index a17a6ea85e81..f4cd946fe91a 100644
-> > --- a/tools/perf/Makefile.perf
-> > +++ b/tools/perf/Makefile.perf
-> > @@ -884,7 +884,7 @@ $(LIBTRACEEVENT_DYNAMIC_LIST): libtraceevent_plugin=
-s
-> >
-> >  install-traceevent-plugins: libtraceevent_plugins
-> >       $(Q)$(MAKE) -C $(LIBTRACEEVENT_PLUGINS_DIR) O=3D$(LIBTRACEEVENT_P=
-LUGINS_OUTPUT) \
-> > -             DESTDIR=3D$(LIBTRACEEVENT_PLUGINS_DESTDIR) prefix=3D \
-> > +             DESTDIR=3D$(DESTDIR_SQ) prefix=3D \
-> >               $(LIBTRACEEVENT_FLAGS) install
-> >  endif
-> >
-> > @@ -1093,7 +1093,11 @@ install-tests: all install-gtk
-> >               $(INSTALL) tests/shell/coresight/*.sh '$(DESTDIR_SQ)$(per=
-fexec_instdir_SQ)/tests/shell/coresight'
-> >       $(Q)$(MAKE) -C tests/shell/coresight install-tests
-> >
-> > -install-bin: install-tools install-tests install-traceevent-plugins
-> > +install-bin: install-tools install-tests
-> > +
-> > +ifndef LIBTRACEEVENT_DYNAMIC
-> > +install-bin: install-traceevent-plugins
-> > +endif
-> >
-> >  install: install-bin try-install-man
->
-> After applying this:
->
-> =E2=AC=A2[acme@toolbox perf]$ alias m
-> alias m=3D'perf stat -e cycles:u,instructions:u make -k BUILD_BPF_SKEL=3D=
-1 CORESIGHT=3D1 O=3D/tmp/build/perf -C tools/perf install-bin && git status=
- && perf test python'
-> =E2=AC=A2[acme@toolbox perf]$
->
-> =E2=AC=A2[acme@toolbox perf]$ m
-> make: Entering directory '/var/home/acme/git/perf/tools/perf'
->   BUILD:   Doing 'make -j32' parallel build
-> Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' di=
-ffers from latest version at 'arch/x86/include/asm/msr-index.h'
-> diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-i=
-ndex.h
-> Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_reg=
-s.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.=
-h'
-> diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/=
-uapi/asm/perf_regs.h
-> Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h' di=
-ffers from latest version at 'arch/arm64/include/asm/cputype.h'
-> diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cpu=
-type.h
-> Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/sys=
-call.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/sysc=
-all.tbl'
-> diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/k=
-ernel/syscalls/syscall.tbl
->
->   INSTALL libsubcmd_headers
->   INSTALL traceevent_headers
->   INSTALL libapi_headers
->   INSTALL libperf_headers
->   INSTALL libsymbol_headers
->   INSTALL libbpf_headers
->   CC      /tmp/build/perf/builtin-annotate.o
->   CC      /tmp/build/perf/builtin-diff.o
->   CC      /tmp/build/perf/builtin-evlist.o
->   CC      /tmp/build/perf/builtin-sched.o
->   CC      /tmp/build/perf/builtin-buildid-list.o
->   CC      /tmp/build/perf/builtin-buildid-cache.o
->   CC      /tmp/build/perf/builtin-record.o
->   INSTALL trace_plugins
->   GEN     /tmp/build/perf/python/perf.so
->   CC      /tmp/build/perf/builtin-report.o
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-stat.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-timechart.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-top.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-script.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-kmem.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
->   CC      /tmp/build/perf/builtin-lock.o
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-kvm.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-inject.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
->   CC      /tmp/build/perf/builtin-mem.o
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
->   CC      /tmp/build/perf/builtin-c2c.o
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
->   CC      /tmp/build/perf/builtin-kwork.o
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
->   CC      /tmp/build/perf/builtin-trace.o
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> install: cannot create directory =E2=80=98/lib64/traceevent=E2=80=99: Per=
-mission denied
-> install: cannot create regular file '/lib64/traceevent/plugins': No such =
-file or directory
-> make[3]: *** [Makefile:211: install] Error 1
-> make[2]: *** [Makefile.perf:886: install-traceevent-plugins] Error 2
-> make[2]: *** Waiting for unfinished jobs....
->   CC      /tmp/build/perf/scripts/perl/Perf-Trace-Util/Context.o
->   CC      /tmp/build/perf/scripts/python/Perf-Trace-Util/Context.o
->   CC      /tmp/build/perf/bench/synthesize.o
->   CC      /tmp/build/perf/bench/inject-buildid.o
->   CC      /tmp/build/perf/ui/browsers/header.o
->   CC      /tmp/build/perf/tests/evsel-tp-sched.o
->   CC      /tmp/build/perf/arch/x86/util/intel-pt.o
->   CC      /tmp/build/perf/arch/x86/util/intel-bts.o
->   LD      /tmp/build/perf/scripts/python/Perf-Trace-Util/perf-in.o
->   LD      /tmp/build/perf/bench/perf-in.o
->   LD      /tmp/build/perf/ui/browsers/perf-in.o
->   CC      /tmp/build/perf/tests/code-reading.o
->   CC      /tmp/build/perf/tests/sample-parsing.o
->   LD      /tmp/build/perf/arch/x86/util/perf-in.o
->   CC      /tmp/build/perf/tests/topology.o
->   LD      /tmp/build/perf/ui/perf-in.o
->   CC      /tmp/build/perf/util/build-id.o
->   CC      /tmp/build/perf/tests/time-utils-test.o
->   CC      /tmp/build/perf/util/event.o
->   CC      /tmp/build/perf/tests/demangle-java-test.o
->   CC      /tmp/build/perf/tests/demangle-ocaml-test.o
->   LD      /tmp/build/perf/arch/x86/perf-in.o
->   CC      /tmp/build/perf/util/evsel.o
->   CC      /tmp/build/perf/util/evsel_fprintf.o
->   LD      /tmp/build/perf/arch/perf-in.o
->   LD      /tmp/build/perf/tests/perf-in.o
->   CC      /tmp/build/perf/util/header.o
->   CC      /tmp/build/perf/util/session.o
->   CC      /tmp/build/perf/util/s390-sample-raw.o
->   CC      /tmp/build/perf/util/amd-sample-raw.o
->   CC      /tmp/build/perf/util/ordered-events.o
->   CC      /tmp/build/perf/util/thread.o
->   CC      /tmp/build/perf/util/trace-event-parse.o
->   CC      /tmp/build/perf/util/trace-event-read.o
->   CC      /tmp/build/perf/util/trace-event-info.o
->   CC      /tmp/build/perf/util/trace-event-scripting.o
->   CC      /tmp/build/perf/util/trace-event.o
->   CC      /tmp/build/perf/util/sort.o
->   CC      /tmp/build/perf/util/hist.o
->   CC      /tmp/build/perf/util/stat.o
->   CC      /tmp/build/perf/util/synthetic-events.o
->   CC      /tmp/build/perf/util/auxtrace.o
->   CC      /tmp/build/perf/util/intel-pt.o
->   CC      /tmp/build/perf/util/intel-bts.o
->   CC      /tmp/build/perf/util/arm-spe.o
->   CC      /tmp/build/perf/util/hisi-ptt.o
->   CC      /tmp/build/perf/util/s390-cpumsf.o
->   CC      /tmp/build/perf/util/scripting-engines/trace-event-perl.o
->   CC      /tmp/build/perf/util/cs-etm.o
->   CC      /tmp/build/perf/util/scripting-engines/trace-event-python.o
->   CC      /tmp/build/perf/util/dlfilter.o
->   CC      /tmp/build/perf/util/time-utils.o
->   CC      /tmp/build/perf/util/bpf_off_cpu.o
->   CC      /tmp/build/perf/util/probe-file.o
->   CC      /tmp/build/perf/util/probe-event.o
->   LD      /tmp/build/perf/util/scripting-engines/perf-in.o
->   CC      /tmp/build/perf/util/unwind-libunwind-local.o
->   CC      /tmp/build/perf/util/unwind-libunwind.o
->   CC      /tmp/build/perf/util/data-convert-bt.o
->   CC      /tmp/build/perf/util/data-convert-json.o
->   LD      /tmp/build/perf/scripts/perl/Perf-Trace-Util/perf-in.o
->   CC      /tmp/build/perf/util/jitdump.o
->   LD      /tmp/build/perf/scripts/perf-in.o
->   CC      /tmp/build/perf/util/bpf-event.o
->   LD      /tmp/build/perf/util/perf-in.o
->   LD      /tmp/build/perf/perf-in.o
-> make[1]: *** [Makefile.perf:240: sub-make] Error 2
-> make: *** [Makefile:113: install-bin] Error 2
-> make: Leaving directory '/var/home/acme/git/perf/tools/perf'
->
->  Performance counter stats for 'make -k BUILD_BPF_SKEL=3D1 CORESIGHT=3D1 =
-O=3D/tmp/build/perf -C tools/perf install-bin':
->
->      9,363,188,016      cycles:u
->     17,153,393,661      instructions:u                   #    1.83  insn =
-per cycle
->
->        2.837743632 seconds time elapsed
->
->        2.316326000 seconds user
->        2.136834000 seconds sys
->
->
-> =E2=AC=A2[acme@toolbox perf]$
+On 11/29/22 14:35, Peter Xu wrote:
+> Since follow_hugetlb_page() walks the pgtable, it needs the vma lock
+> to make sure the pgtable page will not be freed concurrently.
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  mm/hugetlb.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-Thanks the following fixes it:
+Thanks!  The flow of that routine is difficult to follow.
 
-```
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -884,7 +884,7 @@ $(LIBTRACEEVENT_DYNAMIC_LIST): libtraceevent_plugins
-
-install-traceevent-plugins: libtraceevent_plugins
-       $(Q)$(MAKE) -C $(LIBTRACEEVENT_PLUGINS_DIR)
-O=3D$(LIBTRACEEVENT_PLUGINS_OUTPUT) \
--               DESTDIR=3D$(DESTDIR_SQ) prefix=3D \
-+               DESTDIR=3D$(DESTDIR_SQ)$(prefix) prefix=3D \
-               $(LIBTRACEEVENT_FLAGS) install
-endif
-```
-
-I'll rebase on tmp.perf/core and send the outstanding patches.
-
-Thanks,
-Ian
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+-- 
+Mike Kravetz
