@@ -2,185 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E10643093
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFC664309A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbiLESkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S233187AbiLESki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiLESjn (ORCPT
+        with ESMTP id S233171AbiLESkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:39:43 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B710722B35;
-        Mon,  5 Dec 2022 10:35:10 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id fc4so564867ejc.12;
-        Mon, 05 Dec 2022 10:35:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K0Pz7z9Of4EXIWcqlWFyc4frtFe9XDNLDU6rlxGKy64=;
-        b=gH5C4Dx7Fn/K58xCRUqDMImP3lfARcST7X9QQ70IVAzCCijzqJkzYWRjbBLHxZ/sH+
-         C9TXzumfbru/sp/PaqODIb5QkUUY8K0HKI6VREyeQVsTT0Nqgpo3WirixuDxy60ZHy3h
-         Pvm4wm8uE0zdQYtbU/T44TQpZjxc9lOCIfb/sZmgP+LZAlpuF/D9ZI5lfcEeYv4pc3JF
-         R0vSKQPgvNcopkYSVToyhvF6iyrINuRgGOddC9mLmYkdyTw5C27UuUN+NB6bEKUBxPOl
-         pZNFyjZ9ECCb02O4bl/0sPRoPz2VdOANWu3XYUm4NgdhVU1Iq/q9JLkmYqe3aRuEtBHq
-         eOCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K0Pz7z9Of4EXIWcqlWFyc4frtFe9XDNLDU6rlxGKy64=;
-        b=1iRkSvYTcmSI3cxquFiTKtvuohJOsnuYw16Wt2LEA1SXg9bBT/nyiIObt5KDpceE2G
-         xlkX+c43JnmqOZaz5xFRCpBgdUhgeqnOhHpRWr+oD3ULBMxMd/r4Z9TbpXO1dgnwL6R4
-         GfCbKU8MDW6qCc0zlDfyvptawNEhnnrC6Jl8KB3Mk4eZRjSxzuPSy/f+2+lHQwJUx0Rm
-         lBuC1UMfB6/BCNgQQCuPRp9TAUiVegHJNU84JdDFDxm1Gmk6qxkRyG/zccY3+6UO3qZn
-         DLmSb1dsaf2iYMI6cn71sKVPwGtdVPJMTqEpz2yTldchOxDaZto1eHA+KquaqxOp2qbR
-         TYjg==
-X-Gm-Message-State: ANoB5pl4v4cyGED/3+oRyd+SGmOb4lpclABRvTQsWntO4mT/DlF9LhCo
-        H/lXwWX78F+Je4zDtdIVDm9HsHygMEvexnAA
-X-Google-Smtp-Source: AA0mqf5JgdtOy64lEsSGxkVOg6fJkLgntjMSHlgtwIfPGR8N4yp4br4I1QNSL3EdPT/5ddS6sHSVGg==
-X-Received: by 2002:a17:906:7f09:b0:7c0:b3a8:a5f9 with SMTP id d9-20020a1709067f0900b007c0b3a8a5f9mr16379127ejr.154.1670265309253;
-        Mon, 05 Dec 2022 10:35:09 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id g15-20020a170906348f00b007bf86800a0asm6440907ejb.28.2022.12.05.10.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 10:35:08 -0800 (PST)
-Date:   Mon, 5 Dec 2022 19:35:18 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v3 net-next 1/4] net/ethtool: add netlink interface for
- the PLCA RS
-Message-ID: <Y4455r631my4LNIU@gvm01>
-References: <d53ffecdde8d3950a24155228a3439f2c9b10b9b.1670259123.git.piergiorgio.beruto@gmail.com>
- <Y44y05M+6NGod+4x@shell.armlinux.org.uk>
+        Mon, 5 Dec 2022 13:40:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F6F23159;
+        Mon,  5 Dec 2022 10:36:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E142B80E6F;
+        Mon,  5 Dec 2022 18:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B86C433D6;
+        Mon,  5 Dec 2022 18:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670265410;
+        bh=OQdvaLSoaiBbTTeKD827k+4rYmwOJ9xbFSL1aPRYkUc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G+9IUmmxBh5gC369f8/d/uPzj6Zkb+7CI3SvLvLo7xJHLH0rBA21oTgkmVrPWOViT
+         rBQy1UaWCVNWSCxSCPIsD0emZrqBpxiBVLv3QYarlQaYthhWsUkj1x0WCRTHeM1Wfd
+         D0BEi6k9iFMCNmtqzN+bd0wndTufsRWdRrd+1yJH5Pi6xCLbUzOyki2MUBtjCK7BUr
+         IuOqXY0BT0velhXHVw2msD1Iuf4jDJ6hh8LttPHoxVnbAFFmpw4gENyBZV41CNb2R7
+         QTOchzLUTlY/Hb/Wpq7nlC/ShzOBLStlp9KyP7Mfe+ERAYA69bfrwQFjsiL4r2KrG5
+         uU05A4S2JhIYg==
+Date:   Mon, 5 Dec 2022 18:36:45 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
+Message-ID: <Y446PdlUPGw5iB71@spud>
+References: <20221204174632.3677-1-jszhang@kernel.org>
+ <20221204174632.3677-2-jszhang@kernel.org>
+ <4764569.GXAFRqVoOG@diego>
+ <Y44Q/B6THtP38eyL@xhacker>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ygsvAbVCNFXeErrf"
 Content-Disposition: inline
-In-Reply-To: <Y44y05M+6NGod+4x@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y44Q/B6THtP38eyL@xhacker>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 06:05:07PM +0000, Russell King (Oracle) wrote:
-> On Mon, Dec 05, 2022 at 06:17:37PM +0100, Piergiorgio Beruto wrote:
-> > diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-> > index e5b6cb1a77f9..99e3497b6aa1 100644
-> > --- a/drivers/net/phy/phy.c
-> > +++ b/drivers/net/phy/phy.c
-> > @@ -543,6 +543,40 @@ int phy_ethtool_get_stats(struct phy_device *phydev,
-> >  }
-> >  EXPORT_SYMBOL(phy_ethtool_get_stats);
-> >  
-> > +/**
-> > + *
-> > + */
-> > +int phy_ethtool_get_plca_cfg(struct phy_device *dev,
-> > +			     struct phy_plca_cfg *plca_cfg)
-> > +{
-> > +	// TODO
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL(phy_ethtool_get_plca_cfg);
-> > +
-> > +/**
-> > + *
-> > + */
-> > +int phy_ethtool_set_plca_cfg(struct phy_device *dev,
-> > +			     struct netlink_ext_ack *extack,
-> > +			     const struct phy_plca_cfg *plca_cfg)
-> > +{
-> > +	// TODO
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL(phy_ethtool_set_plca_cfg);
-> > +
-> > +/**
-> > + *
-> > + */
-> > +int phy_ethtool_get_plca_status(struct phy_device *dev,
-> > +				struct phy_plca_status *plca_st)
-> > +{
-> > +	// TODO
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL(phy_ethtool_get_plca_status);
-> > +
-> >  /**
-> >   * phy_start_cable_test - Start a cable test
-> >   *
-> > diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-> > index 716870a4499c..f248010c403d 100644
-> > --- a/drivers/net/phy/phy_device.c
-> > +++ b/drivers/net/phy/phy_device.c
-> > @@ -3262,6 +3262,9 @@ static const struct ethtool_phy_ops phy_ethtool_phy_ops = {
-> >  	.get_sset_count		= phy_ethtool_get_sset_count,
-> >  	.get_strings		= phy_ethtool_get_strings,
-> >  	.get_stats		= phy_ethtool_get_stats,
-> > +	.get_plca_cfg		= phy_ethtool_get_plca_cfg,
-> > +	.set_plca_cfg		= phy_ethtool_set_plca_cfg,
-> > +	.get_plca_status	= phy_ethtool_get_plca_status,
-> >  	.start_cable_test	= phy_start_cable_test,
-> >  	.start_cable_test_tdr	= phy_start_cable_test_tdr,
-> >  };
-> 
-> From what I can see, none of the above changes need to be part of
-> patch 1 - nothing in the rest of the patch requires these members to be
-> filled in, since you explicitly test to see whether they are before
-> calling them.
-My apologies, in my understanding of this process (which is new to me)
-the idea of dividing the patches into smaller parts is to facilitate the
-review. It was not clear to me that the single patches had to be
-self-consistent also from a formal perspective. I was assuming that a
-patchset can be accepted or rejected as a whole. Is this the case, or
-can you accept only a subset of patches in a set?
 
-In short, I did this because I -thought- it would help the reader
-understanding what the intention of the change would be. If this is not
-the case, fair enough, I'll not do this in the future.
+--ygsvAbVCNFXeErrf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> So, rather than introducing docbook stubs and stub functions that
-> do nothing, marked with "TODO" comments, just merge these changes
-> above with patch 3, where you actually populate these functions.
-Clear. Do you want me to regenerate the patches into a v4 or do you
-think we can move forward with v3 anyway?
+Heiko, Jisheng,
 
-> Also, why do they need to be exported to modules? From what I can see,
-> the only user of these functions is phy_device.c, which is part of
-> the same module as phy.c where the functions live, meaning that they
-> don't need to be exported.
-I did this because similar functions in the same file are all exported
-to modules (e.g. phy_config_aneg, phy_speed_down, phy_start_cable_test).
-Therefore, I assumed the intention was to let modules (maybe out-of-tree
-modules?) make use of these functions. If you think we should not do
-this, would kindly explain why for example the phy_start_cable_test is
-exported? I'm really asking because I'm trying to learn the rationales
-behind the architectural choices that I see here.
+On Mon, Dec 05, 2022 at 11:40:44PM +0800, Jisheng Zhang wrote:
+> On Mon, Dec 05, 2022 at 04:31:08PM +0100, Heiko St=FCbner wrote:
+> > Am Sonntag, 4. Dezember 2022, 18:46:20 CET schrieb Jisheng Zhang:
+> > > Alternatives live in a different section, so offsets used by jal
+> > > instruction will point to wrong locations after the patch got applied.
+> > >=20
+> > > Similar to arm64, adjust the location to consider that offset.
+> > >=20
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > ---
+> > >  arch/riscv/include/asm/alternative.h |  2 ++
+> > >  arch/riscv/kernel/alternative.c      | 38 ++++++++++++++++++++++++++=
+++
+> > >  arch/riscv/kernel/cpufeature.c       |  3 +++
+> > >  3 files changed, 43 insertions(+)
+> > >=20
+> > > diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/includ=
+e/asm/alternative.h
+> > > index c58ec3cc4bc3..33eae9541684 100644
+> > > --- a/arch/riscv/include/asm/alternative.h
+> > > +++ b/arch/riscv/include/asm/alternative.h
+> > > @@ -29,6 +29,8 @@ void apply_module_alternatives(void *start, size_t =
+length);
+> > > =20
+> > >  void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int le=
+n,
+> > >  				      int patch_offset);
+> > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
+> > > +			       int patch_offset);
+> > > =20
+> > >  struct alt_entry {
+> > >  	void *old_ptr;		 /* address of original instruciton or data  */
+> > > diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alte=
+rnative.c
+> > > index 292cc42dc3be..9d88375624b5 100644
+> > > --- a/arch/riscv/kernel/alternative.c
+> > > +++ b/arch/riscv/kernel/alternative.c
+> > > @@ -125,6 +125,44 @@ void riscv_alternative_fix_auipc_jalr(void *alt_=
+ptr, unsigned int len,
+> > >  	}
+> > >  }
+> > > =20
+> > > +#define to_jal_imm(value)						\
+> > > +	(((value & (RV_J_IMM_10_1_MASK << RV_J_IMM_10_1_OFF)) << RV_I_IMM_1=
+1_0_OPOFF) | \
+> > > +	 ((value & (RV_J_IMM_11_MASK << RV_J_IMM_11_OFF)) << RV_J_IMM_11_OP=
+OFF) | \
+> > > +	 ((value & (RV_J_IMM_19_12_OPOFF << RV_J_IMM_19_12_OFF)) << RV_J_IM=
+M_19_12_OPOFF) | \
+> > > +	 ((value & (1 << RV_J_IMM_SIGN_OFF)) << RV_J_IMM_SIGN_OPOFF))
+> > > +
+> > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
+> > > +			       int patch_offset)
+> > > +{
+> >=20
+> > I think we might want to unfiy this into a common function like
+> >=20
+> > 	riscv_alternative_fix_offsets(...)
+> >=20
+> > so that we only run through the code block once
+> >=20
+> > 	for (i =3D 0; i < num_instr; i++) {
+> > 		if (riscv_insn_is_auipc_jalr(inst1, inst2)) {
+> > 			riscv_alternative_fix_auipc_jalr(...)
+> > 			continue;
+> > 		}
+> >=20
+> > 		if (riscv_insn_is_jal(inst)) {
+> > 			riscv_alternative_fix_jal(...)
+> > 			continue;
+> > 		}
+> > 	}
+> >=20
+> > This would also remove the need from calling multiple functions
+> > after patching alternatives.
+>=20
+> Yesterday, I also wanted to unify the two instruction fix into
+> one. But that would need to roll back the
+> riscv_alternative_fix_auipc_jalr() to your v1 version. And IMHO,
+> it's better if you can split the Zbb string optimizations series
+> into two: one for alternative improvements, another for Zbb. Then
+> we may get the alternative improvements and this inst extension
+> series merged in v6.2-rc1.
 
-> 
-> It's also surely wrong to introduce stubs that return success but
-> do nothing.
-No doubt it would be wrong if the patch can be integrated regardless of
-the other patches in the same set.
+Heiko, perhaps you can correct me here:
 
-> 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Last Wednesday you & Palmer agreed that it was too late in the cycle to
+apply any of the stuff touching alternatives?
+If I do recall correctly, gives plenty of time to sort out any
+interdependent changes here.
+
+Could easily be misremembering, wouldn't be the first time!
+
+Thanks,
+Conor.
+
+> > > +	int num_instr =3D len / sizeof(u32);
+> > > +	unsigned int call;
+> > > +	int i;
+> > > +	int imm;
+> > > +
+> > > +	for (i =3D 0; i < num_instr; i++) {
+> > > +		u32 inst =3D riscv_instruction_at(alt_ptr, i);
+> > > +
+> > > +		if (!riscv_insn_is_jal(inst))
+> > > +			continue;
+> > > +
+> > > +		/* get and adjust new target address */
+> > > +		imm =3D RV_EXTRACT_JTYPE_IMM(inst);
+> > > +		imm -=3D patch_offset;
+> > > +
+> > > +		/* pick the original jal */
+> > > +		call =3D inst;
+> > > +
+> > > +		/* drop the old IMMs, all jal imm bits sit at 31:12 */
+> > > +		call &=3D ~GENMASK(31, 12);
+> > > +
+> > > +		/* add the adapted IMMs */
+> > > +		call |=3D to_jal_imm(imm);
+> > > +
+> > > +		/* patch the call place again */
+> > > +		patch_text_nosync(alt_ptr + i * sizeof(u32), &call, 4);
+> > > +	}
+> > > +}
+> > > +
+> > >  /*
+> > >   * This is called very early in the boot process (directly after we =
+run
+> > >   * a feature detect on the boot CPU). No need to worry about other C=
+PUs
+> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufe=
+ature.c
+> > > index ba62a4ff5ccd..c743f0adc794 100644
+> > > --- a/arch/riscv/kernel/cpufeature.c
+> > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > @@ -324,6 +324,9 @@ void __init_or_module riscv_cpufeature_patch_func=
+(struct alt_entry *begin,
+> > >  			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
+> > >  							 alt->alt_len,
+> > >  							 alt->old_ptr - alt->alt_ptr);
+> > > +			riscv_alternative_fix_jal(alt->old_ptr,
+> > > +						  alt->alt_len,
+> > > +						  alt->old_ptr - alt->alt_ptr);
+> > >  		}
+> > >  	}
+> > >  }
+> > >=20
+> >=20
+> >=20
+> >=20
+> >=20
+
+--ygsvAbVCNFXeErrf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY446PQAKCRB4tDGHoIJi
+0ldEAPwJgljT3AEEEsnqENoQ+sR344tG9T7LxDrQkdoYyWpvjgEAuK3E28qSwJLI
+qWSBSkWndIm2Tg+iQ+ibDY6yCGsg5w4=
+=2L1g
+-----END PGP SIGNATURE-----
+
+--ygsvAbVCNFXeErrf--
