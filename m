@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82CB6421F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 04:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E316421F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 04:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbiLEDqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 22:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S231397AbiLEDvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 22:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiLEDqh (ORCPT
+        with ESMTP id S231161AbiLEDvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 22:46:37 -0500
-Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91C3DFFA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 19:46:35 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=0;PH=DS;RN=8;SR=0;TI=SMTPD_---0VWMSRjo_1670211991;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VWMSRjo_1670211991)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Dec 2022 11:46:32 +0800
-Date:   Mon, 5 Dec 2022 11:46:30 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     syzbot+6f8cd9a0155b366d227f@syzkaller.appspotmail.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        jefflexu@linux.alibaba.com
-Subject: Re: [PATCH v2] erofs: Fix pcluster memleak when m_pa is zero
-Message-ID: <Y41plqKOpuhhpsCi@B-P7TQMD6M-0146.local>
-References: <20221205015024.66868-1-chenzhongjin@huawei.com>
+        Sun, 4 Dec 2022 22:51:19 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58114FCFA
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 19:51:17 -0800 (PST)
+Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NQV1x3F51z15N58;
+        Mon,  5 Dec 2022 11:50:29 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 5 Dec
+ 2022 11:51:15 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>, <pavel@ucw.cz>
+Subject: [PATCH] driver core: fix potential null-ptr-deref in device_add()
+Date:   Mon, 5 Dec 2022 11:49:04 +0800
+Message-ID: <20221205034904.2077765-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221205015024.66868-1-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 09:50:24AM +0800, Chen Zhongjin wrote:
-> syzkaller reported a memleak:
-> https://syzkaller.appspot.com/bug?id=62f37ff612f0021641eda5b17f056f1668aa9aed
-> 
-> unreferenced object 0xffff88811009c7f8 (size 136):
->   ...
->   backtrace:
->     [<ffffffff821db19b>] z_erofs_do_read_page+0x99b/0x1740
->     [<ffffffff821dee9e>] z_erofs_readahead+0x24e/0x580
->     [<ffffffff814bc0d6>] read_pages+0x86/0x3d0
->     ...
-> 
-> syzkaller constructed a case: in z_erofs_register_pcluster(),
-> ztailpacking = false and map->m_pa = zero. This makes pcl->obj.index be
-> zero although pcl is not a inline pcluster.
-> 
-> Then following path adds refcount for grp, but the refcount won't be put
-> because pcl is inline.
-> 
-> z_erofs_readahead()
->   z_erofs_do_read_page() # for another page
->     z_erofs_collector_begin()
->       erofs_find_workgroup()
->         erofs_workgroup_get()
-> 
-> Since it's illegal for map->m_pa to be zero, add check here to avoid
+I got the following null-ptr-deref report while doing fault injection test:
 
-			the block address of a pcluster to be zero,
+BUG: kernel NULL pointer dereference, address: 0000000000000058
+CPU: 2 PID: 278 Comm: 37-i2c-ds2482 Tainted: G    B   W        N 6.1.0-rc3+
+RIP: 0010:klist_put+0x2d/0xd0
+Call Trace:
+ <TASK>
+ klist_remove+0xf1/0x1c0
+ device_release_driver_internal+0x196/0x210
+ bus_remove_device+0x1bd/0x240
+ device_add+0xd3d/0x1100
+ w1_add_master_device+0x476/0x490 [wire]
+ ds2482_probe+0x303/0x3e0 [ds2482]
 
-not just map->m_pa == 0.
+This is how it happened:
 
-Also subject line needs to be updated as well,
-"Fix pcluster memleak when its block address is zero"
+w1_alloc_dev()
+  // The dev->driver is set to w1_master_driver.
+  memcpy(&dev->dev, device, sizeof(struct device));
+  device_add()
+    bus_add_device()
+    dpm_sysfs_add() // It fails, calls bus_remove_device.
 
-> registering the pcluster which would be leaked.
-> 
-> Fixes: cecf864d3d76 ("erofs: support inline data decompression")
-> Reported-by: syzbot+6f8cd9a0155b366d227f@syzkaller.appspotmail.com
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+    // error path
+    bus_remove_device()
+      // The dev->driver is not null, but driver is not bound.
+      __device_release_driver()
+        klist_remove(&dev->p->knode_driver) <-- It causes null-ptr-deref.
 
-Otherwise it looks good to me,
+    // normal path
+    bus_probe_device() // It's not called yet.
+      device_bind_driver()
 
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+If dev->driver is set, in the error path after calling bus_add_device()
+in device_add(), bus_remove_device() is called, then the device will be
+detached from driver. But device_bind_driver() is not called yet, so it
+causes null-ptr-deref while access the 'knode_driver'. To fix this, set
+dev->driver to null in the error path before calling bus_remove_device().
 
-(Would you mind sending a next version for this so I can apply it?)
+Fixes: 57eee3d23e88 ("Driver core: Call device_pm_add() after bus_add_device() in device_add()")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/base/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Gao Xiang
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index d02501933467..e5c15061070b 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3551,6 +3551,7 @@ int device_add(struct device *dev)
+ 	device_pm_remove(dev);
+ 	dpm_sysfs_remove(dev);
+  DPMError:
++	dev->driver = NULL;
+ 	bus_remove_device(dev);
+  BusError:
+ 	device_remove_attrs(dev);
+-- 
+2.25.1
 
-> ---
-> As Gao's advice, we should fail to register pcluster if m_pa is zero.
-> Maked it this way and changed the commit message.
-> ---
->  fs/erofs/zdata.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-> index b792d424d774..7826634f4f51 100644
-> --- a/fs/erofs/zdata.c
-> +++ b/fs/erofs/zdata.c
-> @@ -488,7 +488,8 @@ static int z_erofs_register_pcluster(struct z_erofs_decompress_frontend *fe)
->  	struct erofs_workgroup *grp;
->  	int err;
->  
-> -	if (!(map->m_flags & EROFS_MAP_ENCODED)) {
-> +	if (!(map->m_flags & EROFS_MAP_ENCODED) ||
-> +		!(map->m_pa >> PAGE_SHIFT)) {
->  		DBG_BUGON(1);
->  		return -EFSCORRUPTED;
->  	}
-> -- 
-> 2.17.1
