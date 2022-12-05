@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BC66427D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB616427DA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiLELvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S231602AbiLELxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiLELu4 (ORCPT
+        with ESMTP id S231706AbiLELwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:50:56 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C48E19299;
-        Mon,  5 Dec 2022 03:50:56 -0800 (PST)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NQhgL0VGgzRphm;
-        Mon,  5 Dec 2022 19:50:06 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 5 Dec
- 2022 19:50:52 +0800
-From:   Lv Ying <lvying6@huawei.com>
-To:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
-        <tony.luck@intel.com>, <bp@alien8.de>, <naoya.horiguchi@nec.com>,
-        <linmiaohe@huawei.com>, <akpm@linux-foundation.org>,
-        <xueshuai@linux.alibaba.com>, <ashish.kalra@amd.com>
-CC:     <xiezhipeng1@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <xiexiuqi@huawei.com>, <tanxiaofei@huawei.com>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>
-Subject: [RFC 2/2] ACPI: APEI: fix reboot caused by synchronous error loop because of memory_failure() failed
-Date:   Mon, 5 Dec 2022 19:51:11 +0800
-Message-ID: <20221205115111.131568-3-lvying6@huawei.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221205115111.131568-1-lvying6@huawei.com>
-References: <20221205115111.131568-1-lvying6@huawei.com>
+        Mon, 5 Dec 2022 06:52:47 -0500
+Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3DBF1A805;
+        Mon,  5 Dec 2022 03:52:06 -0800 (PST)
+Received: from localhost.biz (unknown [10.81.81.211])
+        by gw.red-soft.ru (Postfix) with ESMTPA id 2CFCF3E6085;
+        Mon,  5 Dec 2022 14:52:04 +0300 (MSK)
+From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        Vishnu Dasa <vdasa@vmware.com>
+Cc:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH v3] net: vmw_vsock: vmci: Check memcpy_from_msg()
+Date:   Mon,  5 Dec 2022 14:52:00 +0300
+Message-Id: <20221205115200.2987942-1-artem.chernyshev@red-soft.ru>
+X-Mailer: git-send-email 2.30.3
+In-Reply-To: <20221205094736.k3yuwk7emijpitvw@sgarzare-redhat>
+References: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 173924 [Dec 05 2022]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;localhost.biz:7.1.1;red-soft.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2022/12/05 07:18:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2022/12/05 09:01:00 #20651080
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Synchronous error was detected as a result of user-space accessing a
-corrupt memory location the CPU may take an abort instead. On arm64 this
-is a 'synchronous external abort' which can be notified by SEA.
+vmci_transport_dgram_enqueue() does not check the return value
+of memcpy_from_msg(). Return with an error if the memcpy fails.
 
-If memory_failure() failed, we return to user-space will trigger SEA again,
-such loop may cause platform firmware to exceed some threshold and reboot
-when Linux could have recovered from this error. Not all memory_failure()
-processing failures will cause the reboot, VM_FAULT_HWPOISON[_LARGE]
-handling in arm64 page fault will send SIGBUS signal to the user-space
-accessing process to terminate this loop.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-If process mapping fault page, but memory_failure() abnormal return before
-try_to_unmap(), for example, the fault page process mapping is KSM page.
-In this case, arm64 cannot use the page fault process to terminate the
-loop.
-
-Add judgement of memory_failure() result in task_work before returning to
-user-space. If memory_failure() failed, send SIGBUS signal to the current
-process to avoid SEA loop.
-
-Signed-off-by: Lv Ying <lvying6@huawei.com>
+Fixes: 0f7db23a07af ("vmci_transport: switch ->enqeue_dgram, ->enqueue_stream and ->dequeue_stream to msghdr")
+Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
 ---
- mm/memory-failure.c | 6 +++++-
+V1->V2 Fix memory leaking and updates for description
+V2->V3 Return the value of memcpy_from_msg()
+
+ net/vmw_vsock/vmci_transport.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 3b6ac3694b8d..4c1c558f7161 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2266,7 +2266,11 @@ static void __memory_failure_work_func(struct work_struct *work, bool sync)
- 			break;
- 		if (entry.flags & MF_SOFT_OFFLINE)
- 			soft_offline_page(entry.pfn, entry.flags);
--		else if (!sync || (entry.flags & MF_ACTION_REQUIRED))
-+		else if (sync) {
-+			if ((entry.flags & MF_ACTION_REQUIRED) &&
-+					memory_failure(entry.pfn, entry.flags))
-+				force_sig_mceerr(BUS_MCEERR_AR, 0, 0);
-+		} else
- 			memory_failure(entry.pfn, entry.flags);
- 	}
- }
+diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+index 842c94286d31..36eb16a40745 100644
+--- a/net/vmw_vsock/vmci_transport.c
++++ b/net/vmw_vsock/vmci_transport.c
+@@ -1711,7 +1711,11 @@ static int vmci_transport_dgram_enqueue(
+ 	if (!dg)
+ 		return -ENOMEM;
+ 
+-	memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len);
++	err = memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len);
++	if (err) {
++		kfree(dg);
++		return err;
++	}
+ 
+ 	dg->dst = vmci_make_handle(remote_addr->svm_cid,
+ 				   remote_addr->svm_port);
 -- 
-2.33.0
+2.30.3
 
