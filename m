@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AF9643680
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6924B643682
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiLEVJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S232720AbiLEVJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbiLEVIk (ORCPT
+        with ESMTP id S233111AbiLEVI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:08:40 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F464CF9;
-        Mon,  5 Dec 2022 13:08:28 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id t17so1564650eju.1;
-        Mon, 05 Dec 2022 13:08:28 -0800 (PST)
+        Mon, 5 Dec 2022 16:08:57 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084DA24BD2;
+        Mon,  5 Dec 2022 13:08:47 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id j26so6038199qki.10;
+        Mon, 05 Dec 2022 13:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=agcdnOZfTcz01ftPLLH5YMZ3Fbx9lBJzltNoiQrFR+s=;
-        b=j6yTJsTL8qepaX8DqJDzhxPqyMFSSr9UHtJaYRq7pFTo1scVBVAoPoNO9fd+w9+mtw
-         KlVZ8BQQoW6Jn+Ssdy7FYNrxyHTyRAx9Rmmjusl795QXgGtD49cmNWIi9YMjZWiCluIt
-         7NMLQHB2P4TURyMU2Ynj0YtMRw2QgqGQ1NK+iU9u4+QpyYNL0nVYfqQaxb7rVBES6q5q
-         Hre4+TyC0DIRhJlVzUexoqOIBMYo0AILJEeJlWtFrM4fmm++vIhISCLhkNDt9bG7d59R
-         08EZnTv1BCpvgIkrva/r/54hBJGfv4wmnwrZXW03qN754GM9mxOmTa0k7hdbzEEdG1M3
-         WtYg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5/GV8VNa16pKMcgfrYYM0FiCObRvy591fmJOaAa4LAE=;
+        b=k6o2Mc2cwgDsunbzKQvn7qCjIp//ox8KqetOD+3/wb/3i/X/8ZNK5yWqK2oxM5Vo51
+         MMv0g71MHpFz+h9El0cW4gRIIr0JdV7D1qqjqNKq6mU3y5heNGbC0yWlWHYZnFrYY2OZ
+         9Lry3+zbShpIyJm/pNrnI6DgS083vjXyCLcALpfHGkpsf8l6zIBf0b/+ZH5UHwYpw9wA
+         VfW2iKy8agea6HchL3AAhU51uq/E0muJ4lCxzbMSmwFUcbfCrvKC9fucGrZ1bQAyVMyK
+         gBr/lUAC3asyN4kLsByGzJINTQIHGfx41joP9nNFzmlhEWLgN4I6hovC2zuvCb+rjVWW
+         jSoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=agcdnOZfTcz01ftPLLH5YMZ3Fbx9lBJzltNoiQrFR+s=;
-        b=3FdIXI0smOmPuM8wSLVt9p1qN91h8zyYkEsafPuXMNzPkvPx6LjLS4imxx+pg7WVtt
-         NCbh4XBTC90sKxv8impohcUSnhT7VvT6fUTjVJihhD8myYWIhf28qQumW5vux9Lr3BAf
-         TB4ip7um1/fD1op7Kawvi5GHeb2VEMWfz1keNZVVIdG6lue7ACdtnuBoJyM7lEPxtV0L
-         zv3aymnlucGQAJMO1juVQxhJN/L3jO/xGR/jWL4k69wLzHAXxE94y1VsNPbgw1DgNJzq
-         2ZW8LnC1aDN5eJ/hQ92kMlFbCYhQ3Bnx5nujecS5BGqrkG0I+6+bAFxuT7czXCkiTbbZ
-         Aopg==
-X-Gm-Message-State: ANoB5pnDcREGgWFy6wIVjRTvFdgq3glBg5dsBrkAxyMaByD+NLhrGMKx
-        GCscq/lqYI+b2Yay/eMVD6o=
-X-Google-Smtp-Source: AA0mqf7UYHn6BfmpFxzltOtoTcchK9jnayi5HlZKBfCxXnfdPKi82ql/WWuz+zmdC/wM54/tLPE1tw==
-X-Received: by 2002:a17:906:e244:b0:7c0:f9ec:1dff with SMTP id gq4-20020a170906e24400b007c0f9ec1dffmr4431123ejb.283.1670274506851;
-        Mon, 05 Dec 2022 13:08:26 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id u15-20020aa7d0cf000000b0045ce419ecffsm221838edo.58.2022.12.05.13.08.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 13:08:26 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v4 4/4] soc: sunxi: sram: Only iterate over SRAM children
-Date:   Mon, 05 Dec 2022 22:08:25 +0100
-Message-ID: <5320657.Sb9uPGUboI@kista>
-In-Reply-To: <20221125040112.18160-5-samuel@sholland.org>
-References: <20221125040112.18160-1-samuel@sholland.org> <20221125040112.18160-5-samuel@sholland.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/GV8VNa16pKMcgfrYYM0FiCObRvy591fmJOaAa4LAE=;
+        b=YKGAhM8IPJZFycerRnkaRaSGpdCRGZpSrcDct06AhCtlEl9Lr8P9LA2XswEuSV4WW6
+         KQcrrlk+0hppKJl7dG7PgrmdsGe8fgRzZSV5Qp0rcXKsu6VcNkfuqLz/O3uWxCiSuuCM
+         QtKCMTHbCP/9ucfd70Tl2bWmHev/UkV30fSn7Yej8tqcMj6uK0AW4stAHXaGHJxBfXjZ
+         1K4tykV0moR7DaHN7OVamHsxbWBinTRLxm8PgddoxCRX6iydPJS18/6qMtlL7MKZL3gc
+         sbD2oX4NDx7nvGbuSlSRJwUBrQ1MlvJmo9TjUu2Ky94unmVSOM5W+kmD7u/CEtN0Izsj
+         f3cw==
+X-Gm-Message-State: ANoB5pmsQE6vMdP6poBIvqHqZHBXqLHKH5x+q/wwL48b7KMz1ryj71tw
+        akB0wwsEi5IwZdmSI0RQIgo=
+X-Google-Smtp-Source: AA0mqf6UWpQcmTwf7we9GQqWOV1BCXBfo1L7eATa41eEfVrSKaarPMVbIZGDRk7SbPe+8YMYTjEsIg==
+X-Received: by 2002:ae9:f701:0:b0:6fc:9f87:6961 with SMTP id s1-20020ae9f701000000b006fc9f876961mr20909382qkg.171.1670274526019;
+        Mon, 05 Dec 2022 13:08:46 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id j6-20020a05620a288600b006fc7302cf89sm13567641qkp.28.2022.12.05.13.08.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 13:08:45 -0800 (PST)
+Message-ID: <adbcc0f7-31ed-5b92-27ef-8f6f4981a3e2@gmail.com>
+Date:   Mon, 5 Dec 2022 13:08:42 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] net: fec: properly guard irq coalesce setup
+Content-Language: en-US
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     Greg Ungerer <gregungerer@westnet.com.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221205204604.869853-1-linux@rasmusvillemoes.dk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221205204604.869853-1-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,15 +80,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 25. november 2022 ob 05:01:12 CET je Samuel Holland napisal(a):
-> Now that a regulators child is accepted by the controller binding, the
-> debugfs show routine must be explicitly limited to mmio-sram children.
+On 12/5/22 12:46, Rasmus Villemoes wrote:
+> Prior to the Fixes: commit, the initialization code went through the
+> same fec_enet_set_coalesce() function as used by ethtool, and that
+> function correctly checks whether the current variant has support for
+> irq coalescing.
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Now that the initialization code instead calls fec_enet_itr_coal_set()
+> directly, that call needs to be guarded by a check for the
+> FEC_QUIRK_HAS_COALESCE bit.
+> 
+> Fixes: df727d4547de (net: fec: don't reset irq coalesce settings to defaults on "ip link up")
+> Reported-by: Greg Ungerer <gregungerer@westnet.com.au>
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Best regards,
-Jernej
+> ---
+>   drivers/net/ethernet/freescale/fec_main.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+> index 2ca2b61b451f..23e1a94b9ce4 100644
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
+> @@ -1220,7 +1220,8 @@ fec_restart(struct net_device *ndev)
+>   		writel(0, fep->hwp + FEC_IMASK);
+>   
+>   	/* Init the interrupt coalescing */
+> -	fec_enet_itr_coal_set(ndev);
+> +	if (fep->quirks & FEC_QUIRK_HAS_COALESCE)
+> +		fec_enet_itr_coal_set(ndev);
 
+There is already a guard in fec_enet_set_coalesce() so this makes sense, 
+thanks!
+-- 
+Florian
 
