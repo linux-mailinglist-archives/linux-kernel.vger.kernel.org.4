@@ -2,153 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2882F642404
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78E864240D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbiLEIDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S231838AbiLEIEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiLEIDg (ORCPT
+        with ESMTP id S231728AbiLEIEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:03:36 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA39A5583
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:03:34 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id j4so17329267lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:03:34 -0800 (PST)
+        Mon, 5 Dec 2022 03:04:10 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B6715733
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:04:02 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1443a16b71cso9068086fac.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:04:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H+uTtN8xZ5dZQSWV9r1hcnd1qKrZ8UQsR2z3ws2RHkA=;
-        b=qtCmKK6E6PIgMLP7oCS0itWhZU0DwUy3/+Zhj0EnOeAGLNJFnp4XAcUXWeamyoyfEx
-         l1IqmygGR+Uem/VweGGugEbuLSw6KmABGZOQ0puLC8vSZPfC8lGrKYixlqP8PQ2pw+bQ
-         j0n9f2/3ySrOQgavcF22Qs3xTfov+0nVlPDJf9iJ/+1su9YQQ/F73b0dKJuzeyO/z8Ed
-         64liIYMO2F3L753Ym6QrWBcq0SwUXgPatJCmTdiTSSpCLbfJ/jhK1XruyV4ofAzB9WOb
-         HTPj1IU2w8gaRhiAACPRDX9rG58N6x+Pa77gSVRcHEc/r+K45XW7LotU9mXZBSaOzpl5
-         DoyA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eGlAqvTht1mSNcbJZLEDsOza/yCze1M2hdyhkbVZYw4=;
+        b=Y6SatBDQv+DutqCjKxAc1ybocrGCiKCxMhNuA+GTFZAqaJb/B0zYMDO8RsZhI7nVe6
+         IYmfcCkt/htwcEtxNPLWCbBqhnVhywNEbPVINO5K5TT4GK/r3GauMJos4xCoxG4DZUkQ
+         UCaRbnL7yjCbkv7u0qngkwRBvsWegAH3v4+siiYGl4GIR+mZhND3RGy+c6eBUQtxJAa0
+         UfEK7aTTgyZ7K9Xk9aI6bv0iDe2RjE8vNtLAYy5sQpfTqCRfxfeEo6UVRUVq7YCX8v+C
+         r2Bn1KVkS5FK53Nmf/sHLkpFZeOnwab13FI4YeidOraIcsgID8MMVShErk/mubH//Lo/
+         R60w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+uTtN8xZ5dZQSWV9r1hcnd1qKrZ8UQsR2z3ws2RHkA=;
-        b=M77gWz7DgWUfBVdzlDXYo+YocgQpUriBlasW+hD3Dwjd0AHWe/edEuTcxP3tzwwgSR
-         +YNiC4QeUbIS/PlDAH2x63xhxpzJMaPfCtkPLr1Q7n3aVq//LUCDFDNt2rV6yHNlW03b
-         fqcJmRnXfAmrqxHhjq1Lto9W0n80W4jqIL0sDcOn4ct58ObLJQZtB2k0HbgyoZD9Rqxy
-         ggUbBY2eshYMAlAa6wRJk/VSb+RtWytrn147ooOOTnitl/3l4B9E+in9n2J32BH6NDkG
-         JWGoB4fTK8kCX0V6LFh4TNSlc81NyznLmjC+/bE4AcJcM4KgNS8gkGJd4vzuziYVWvew
-         Vo5g==
-X-Gm-Message-State: ANoB5plVmn9ixWCCYwOjjVnjWT58rT9YyVNYBcKYCE5fNE/LV439aTZc
-        OfnI/eUAav1u97/Phi67ESMvcw==
-X-Google-Smtp-Source: AA0mqf5E/SarGgr2D2OXWZ/49zr2poOvPBDCHCLckhu/QV0t+EvkWqhoBZaJJ/UxTIbBIxDCzY/tjQ==
-X-Received: by 2002:ac2:53a2:0:b0:4b5:29f5:8635 with SMTP id j2-20020ac253a2000000b004b529f58635mr8203988lfh.282.1670227412997;
-        Mon, 05 Dec 2022 00:03:32 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056512370f00b004b4b69af17dsm1623100lfr.214.2022.12.05.00.03.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:03:32 -0800 (PST)
-Message-ID: <7b024087-cf20-a14e-2ab1-8bba71493135@linaro.org>
-Date:   Mon, 5 Dec 2022 09:03:31 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eGlAqvTht1mSNcbJZLEDsOza/yCze1M2hdyhkbVZYw4=;
+        b=yXl0/GVHf/3QQ6s35cVWlcInJxm32jQzqhsrXqXBMaIvN/RZTDTQFMCQYl99z+bCx7
+         ac4InU7F67AF2XorScAp5bHgFBchzIUT9E+cy6hjQth48B1GVnEEDErdMZzW1lW5eIvt
+         MHnJ07cc0hShw4CHDyUEImUc+a7p5vGwrjzkgDfKyIYjLg2AQgdM30j+Mz1TlbmM+1wL
+         UgpOxNEyfP/x/lvDpg2a0QeQrw5Ze+OZNuHQCvv8fWvDa7dIWtuWRdxTFZmd+2rG1OtH
+         833m7KDMQEnGzeLCQBVayiHZRQSpWBTY16TF8XqlRg5LijsJAa+FGg0uUm37wZDy+R0z
+         Hj9w==
+X-Gm-Message-State: ANoB5pn2cjbktBN57l5/Je1rNl1020mjFDrFDPclRGvPjwqt6whJ5XBg
+        reQTavJ7ybjO/6ThUOuB+e/JkXgrcwQ/yvXVJf0fmw==
+X-Google-Smtp-Source: AA0mqf6HXnDDZ7dpqFJiz8f/ikkYER8y8gDnI1lcKQnFJ9Wl2v8oW4qX26QL1Sy5ozhNtRg2vHheJ7KBY08wolYGv7I=
+X-Received: by 2002:a05:6871:4609:b0:143:955d:ed7 with SMTP id
+ nf9-20020a056871460900b00143955d0ed7mr22253914oab.233.1670227441360; Mon, 05
+ Dec 2022 00:04:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC PATCH v1 2/2] usb: host: add xhci-exynos to support Exynos
- SOCs
-Content-Language: en-US
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Artur Bujdoso <artur.bujdoso@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
-        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
-        eomji.oh@samsung.com
-References: <1669860811-171746-1-git-send-email-dh10.jung@samsung.com>
- <CGME20221201021942epcas2p2429ed37e1f6146b6e1a5bef23141b3f7@epcas2p2.samsung.com>
- <1669860811-171746-3-git-send-email-dh10.jung@samsung.com>
- <Y4hgnxGMEuizJumr@kroah.com>
- <c524cba6-4438-461a-ab05-9325fe09f832@app.fastmail.com>
- <ec0ce90c-b165-d84f-340d-4973b65609b3@linux.intel.com>
- <f633b0f3-9fdb-8beb-7edf-7967c7c0c3d5@linaro.org>
- <20221205023413.GD54922@ubuntu>
- <92df8e1d-eb7b-ec0b-264f-a1a090cececc@linaro.org>
- <20221205075342.GG54922@ubuntu>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221205075342.GG54922@ubuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000fa798505ee880a25@google.com> <ac0d8823-e7b3-4524-8864-89b4c85315b5n@googlegroups.com>
+In-Reply-To: <ac0d8823-e7b3-4524-8864-89b4c85315b5n@googlegroups.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 5 Dec 2022 09:03:49 +0100
+Message-ID: <CACT4Y+bz-z9s+sDh916rfw9ezW0XROkAKfMDvdVi-wDuf849MQ@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in __build_skb_around
+To:     pepsipu <soopthegoop@gmail.com>,
+        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
+        Kees Cook <keescook@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, martin.lau@linux.dev,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12/2022 08:53, Jung Daehwan wrote:
-> On Mon, Dec 05, 2022 at 08:33:39AM +0100, Krzysztof Kozlowski wrote:
->> On 05/12/2022 03:34, Jung Daehwan wrote:
->>
->>>>> Am I missing something here?
->>>>
->>>> Because it is not a driver for Exynos... it's a driver for wakelocks for
->>>> their specific Android use-cases which the manufacturer ships for their
->>>> Android devices. Due to Google GKI, they try to squeeze into upstream.
->>>> But this is huge misconception what should go to upstream and Samsung
->>>> does not want to keep discussing. They just send random patches and
->>>> disappear...
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>>
->>>>
->>>
->>> No. It's driver for Exynos. Currently It only has wakelocks but I will
->>> submit one by one. Please think as the first patch of exynos not
->>> squeezed.
->>
->> That's not how upstream kernel development works... Your code has
->> nothing for Exynos. It's Android driver, not Exynos. If you say there is
->> something for Exynos it must be visible here. Wakelocks are not relevant
->> to Exynos, so after dropping them there would be empty stub in upstream
->> kernel which obviously cannot be accepted.
->>
->> Best regards,
->> Krzysztof
->>
->>
-> 
-> Well, Exynos only uses wakelocks when I see mainline because it seems no
+On Sun, 4 Dec 2022 at 19:16, pepsipu <soopthegoop@gmail.com> wrote:
+>
+> I believe this is a KASAN bug.
+>
+> I made an easier to read version that still triggers KASAN:
+>
+> #define _GNU_SOURCE
+>
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <string.h>
+> #include <sys/syscall.h>
+> #include <sys/types.h>
+> #include <linux/bpf.h>
+> #include <unistd.h>
+>
+> #include "bpf.h"
+>
+> int main(void)
+> {
+>     __u64 insns[] = {
+>         (BPF_CALL | BPF_JMP) | ((__u64)0x61 << 32),
+>         (BPF_AND | BPF_ALU),
+>         (BPF_EXIT | BPF_JMP),
+>     };
+>     bpf_load_attr_t load_attr = {
+>         .prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+>         .insn_cnt = sizeof(insns) / sizeof(__u64),
+>         .insns = (__u64)insns,
+>         .license = (__u64) "GPL",
+>     };
+>     long prog_fd = syscall(__NR_bpf, BPF_PROG_LOAD, &load_attr, sizeof(bpf_load_attr_t));
+>     if (prog_fd == -1)
+>     {
+>         printf("could not load bpf prog");
+>         exit(-1);
+>     }
+>     bpf_trun_attr_t trun_attr = {
+>         .prog_fd = prog_fd,
+>         .data_size_in = 0x81,
+>         .data_size_out = -1,
+>         .data_in = (__u64) "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+>     };
+>
+>     syscall(__NR_bpf, BPF_PROG_TEST_RUN, &trun_attr, sizeof(bpf_trun_attr_t));
+>     return 0;
+> }
+>
+> It looks like KASAN believes the tail access of SKB's backing buffer, the SKB shared info struct, allocated by bpf_test_init is out-of-bounds.
+> This is likely because when the SKB is setup, in build_skb, the tail is calculated as "data + ksize(data) - sizeof(skb_shared_info)". ksize returns the size of the slab, not the allocation, so the tail is much further past the allocation.
+> However, KASAN is usually supposed to correct for ksize calls by unpoisioning the entire slab it's called on... I'm not sure why this is happening.
 
-Exynos does not use wakelocks at all. Please explain me for what
-hardware feature the wakelocks are needed when you do not use Android on
-Exynos? Stop mixing Exynos with Android. One is hardware, second is
-operating system.
+Hi,
 
-> other driver use it. That's why I thought it could be a exynos specific.
-> Do you agree that if I put wakelocks into xhci platform driver?
+[+orignal CC list, please keep it in replies, almost none of relevant
+receivers read syzkaller-bugs@ mailing list]
 
-It's not related problem. Whether it suits there, I don't know.
+Also +Kees and kasan-dev for ksize.
 
-Best regards,
-Krzysztof
+After the following patch the behavior has changed and KASAN does not
+unpoison the fail of the object:
 
+mm: Make ksize() a reporting-only function
+https://lore.kernel.org/all/20221118035656.gonna.698-kees@kernel.org/
+
+Kees, is this bpf case is a remaining ksize() use that needs to be fixed?
+
+
+> On Monday, November 28, 2022 at 5:42:31 AM UTC-8 syzbot wrote:
+>>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit: c35bd4e42885 Add linux-next specific files for 20221124
+>> git tree: linux-next
+>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=15e5d7e5880000
+>> kernel config: https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=fda18eaa8c12534ccb3b
+>> compiler: gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> syz repro: https://syzkaller.appspot.com/x/repro.syz?x=1096f205880000
+>> C reproducer: https://syzkaller.appspot.com/x/repro.c?x=10b2d68d880000
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/968fee464d14/disk-c35bd4e4.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/4f46fe801b5b/vmlinux-c35bd4e4.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/c2cdf8fb264e/bzImage-c35bd4e4.xz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+fda18e...@syzkaller.appspotmail.com
+>>
+>> ==================================================================
+>> BUG: KASAN: slab-out-of-bounds in __build_skb_around+0x235/0x340 net/core/skbuff.c:294
+>> Write of size 32 at addr ffff88802aa172c0 by task syz-executor413/5295
+>>
+>> CPU: 0 PID: 5295 Comm: syz-executor413 Not tainted 6.1.0-rc6-next-20221124-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>> Call Trace:
+>> <TASK>
+>> __dump_stack lib/dump_stack.c:88 [inline]
+>> dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+>> print_address_description mm/kasan/report.c:253 [inline]
+>> print_report+0x15e/0x45d mm/kasan/report.c:364
+>> kasan_report+0xbf/0x1f0 mm/kasan/report.c:464
+>> check_region_inline mm/kasan/generic.c:183 [inline]
+>> kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
+>> memset+0x24/0x50 mm/kasan/shadow.c:44
+>> __build_skb_around+0x235/0x340 net/core/skbuff.c:294
+>> __build_skb+0x4f/0x60 net/core/skbuff.c:328
+>> build_skb+0x22/0x280 net/core/skbuff.c:340
+>> bpf_prog_test_run_skb+0x343/0x1e10 net/bpf/test_run.c:1131
+>> bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
+>> __sys_bpf+0x1599/0x4ff0 kernel/bpf/syscall.c:4997
+>> __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+>> __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+>> __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> RIP: 0033:0x7f30de9aad19
+>> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007ffeaee34318 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+>> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f30de9aad19
+>> RDX: 0000000000000028 RSI: 0000000020000180 RDI: 000000000000000a
+>> RBP: 00007f30de96eec0 R08: 0000000000000000 R09: 0000000000000000
+>> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f30de96ef50
+>> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>> </TASK>
+>>
+>> Allocated by task 5295:
+>> kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+>> kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+>> ____kasan_kmalloc mm/kasan/common.c:376 [inline]
+>> ____kasan_kmalloc mm/kasan/common.c:335 [inline]
+>> __kasan_kmalloc+0xa5/0xb0 mm/kasan/common.c:385
+>> kasan_kmalloc include/linux/kasan.h:212 [inline]
+>> __do_kmalloc_node mm/slab_common.c:955 [inline]
+>> __kmalloc+0x5a/0xd0 mm/slab_common.c:968
+>> kmalloc include/linux/slab.h:575 [inline]
+>> kzalloc include/linux/slab.h:711 [inline]
+>> bpf_test_init.isra.0+0xa5/0x150 net/bpf/test_run.c:778
+>> bpf_prog_test_run_skb+0x22e/0x1e10 net/bpf/test_run.c:1097
+>> bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
+>> __sys_bpf+0x1599/0x4ff0 kernel/bpf/syscall.c:4997
+>> __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+>> __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+>> __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> The buggy address belongs to the object at ffff88802aa17000
+>> which belongs to the cache kmalloc-1k of size 1024
+>> The buggy address is located 704 bytes inside of
+>> 1024-byte region [ffff88802aa17000, ffff88802aa17400)
+>>
+>> The buggy address belongs to the physical page:
+>> page:ffffea0000aa8400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2aa10
+>> head:ffffea0000aa8400 order:3 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+>> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+>> raw: 00fff00000010200 ffff888012441dc0 dead000000000122 0000000000000000
+>> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+>> page dumped because: kasan: bad access detected
+>> page_owner tracks the page as allocated
+>> page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5295, tgid 5295 (strace-static-x), ts 57049914920, free_ts 56991966201
+>> prep_new_page mm/page_alloc.c:2541 [inline]
+>> get_page_from_freelist+0x119c/0x2cd0 mm/page_alloc.c:4293
+>> __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5551
+>> alloc_pages+0x1aa/0x270 mm/mempolicy.c:2285
+>> alloc_slab_page mm/slub.c:1833 [inline]
+>> allocate_slab+0x25e/0x350 mm/slub.c:1980
+>> new_slab mm/slub.c:2033 [inline]
+>> ___slab_alloc+0xa91/0x1400 mm/slub.c:3211
+>> __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3310
+>> slab_alloc_node mm/slub.c:3395 [inline]
+>> __kmem_cache_alloc_node+0x1a9/0x430 mm/slub.c:3472
+>> __do_kmalloc_node mm/slab_common.c:954 [inline]
+>> __kmalloc+0x4a/0xd0 mm/slab_common.c:968
+>> kmalloc include/linux/slab.h:575 [inline]
+>> kzalloc include/linux/slab.h:711 [inline]
+>> tomoyo_init_log+0x1282/0x1ec0 security/tomoyo/audit.c:275
+>> tomoyo_supervisor+0x354/0xf10 security/tomoyo/common.c:2088
+>> tomoyo_audit_env_log security/tomoyo/environ.c:36 [inline]
+>> tomoyo_env_perm+0x183/0x200 security/tomoyo/environ.c:63
+>> tomoyo_environ security/tomoyo/domain.c:672 [inline]
+>> tomoyo_find_next_domain+0x13d2/0x1f80 security/tomoyo/domain.c:879
+>> tomoyo_bprm_check_security security/tomoyo/tomoyo.c:101 [inline]
+>> tomoyo_bprm_check_security+0x133/0x1c0 security/tomoyo/tomoyo.c:91
+>> security_bprm_check+0x49/0xb0 security/security.c:897
+>> search_binary_handler fs/exec.c:1723 [inline]
+>> exec_binprm fs/exec.c:1777 [inline]
+>> bprm_execve fs/exec.c:1851 [inline]
+>> bprm_execve+0x732/0x19f0 fs/exec.c:1808
+>> do_execveat_common+0x724/0x890 fs/exec.c:1956
+>> page last free stack trace:
+>> reset_page_owner include/linux/page_owner.h:24 [inline]
+>> free_pages_prepare mm/page_alloc.c:1448 [inline]
+>> free_pcp_prepare+0x65c/0xc00 mm/page_alloc.c:1498
+>> free_unref_page_prepare mm/page_alloc.c:3379 [inline]
+>> free_unref_page+0x1d/0x490 mm/page_alloc.c:3474
+>> __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2617
+>> qlink_free mm/kasan/quarantine.c:168 [inline]
+>> qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+>> kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+>> __kasan_slab_alloc+0x66/0x90 mm/kasan/common.c:307
+>> kasan_slab_alloc include/linux/kasan.h:202 [inline]
+>> slab_post_alloc_hook mm/slab.h:761 [inline]
+>> slab_alloc_node mm/slub.c:3433 [inline]
+>> slab_alloc mm/slub.c:3441 [inline]
+>> __kmem_cache_alloc_lru mm/slub.c:3448 [inline]
+>> kmem_cache_alloc+0x1e3/0x430 mm/slub.c:3457
+>> vm_area_alloc+0x20/0x100 kernel/fork.c:458
+>> mmap_region+0x44c/0x1dd0 mm/mmap.c:2605
+>> do_mmap+0x831/0xf60 mm/mmap.c:1412
+>> vm_mmap_pgoff+0x1af/0x280 mm/util.c:520
+>> ksys_mmap_pgoff+0x7d/0x5a0 mm/mmap.c:1458
+>> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>> do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> Memory state around the buggy address:
+>> ffff88802aa17180: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>> ffff88802aa17200: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+>> >ffff88802aa17280: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>> ^
+>> ffff88802aa17300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>> ffff88802aa17380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>> ==================================================================
+>>
+>>
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzk...@googlegroups.com.
+>>
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>> syzbot can test patches for this issue, for details see:
+>> https://goo.gl/tpsmEJ#testing-patches
