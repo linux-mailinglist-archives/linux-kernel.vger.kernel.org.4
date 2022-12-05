@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9375C642297
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705EE642299
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiLEFUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 00:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S231599AbiLEFUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 00:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiLEFTz (ORCPT
+        with ESMTP id S231598AbiLEFUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 00:19:55 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7039FCD2;
-        Sun,  4 Dec 2022 21:19:54 -0800 (PST)
+        Mon, 5 Dec 2022 00:20:01 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD8AFCEA;
+        Sun,  4 Dec 2022 21:19:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670217595; x=1701753595;
+  t=1670217599; x=1701753599;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=97m/dDy4gUxTGV0oPsWMYrepMwx9K5cDv4BzNhP8KWE=;
-  b=IAN5d1oEeRitONRjTADBrKCYfD3gqPHmOY9WunQo8a33/SiRsqQM7B7k
-   Y4nggMk/gJvBL7cTkn7r7gVN3BG08qsEJDd5NevZ3OEDxTmb2w7t9ACwN
-   rZh2/T7eYSnlC7nENMnt0n3JVq2rLF0yXzlpDsJk2OZlgun0qWb8GMZ2C
-   ogvB6MNouqJ1dTziGdej0eML6GUQ9V6wYkN6Hb48OGvK5TvRCTqx0q+QB
-   ctXuv67aiKmRba2/EPZv0ABU6IREmJXsxdIB+Xyon6TeJGJo92P9JZklM
-   vSNpC2gNANV7hOpmWQV3+jxE21weddgux91IiK9KvntMew+UISoR3tmyu
-   A==;
+  bh=qsJvK2VpBu4Gb2ZvUzYx5074zsrdEggN0+SM/yXO0po=;
+  b=edbBy1VEfC0r9nrKbEExqCo8Ll5HauQO/+sqcFXWGCzh8RsV7hkCB2l6
+   cv5AXkQUWBHfX9p5A2E2iIxBg4/FjQl5id2iWsUAmKhV+Wfhwbz8m6d5U
+   7YzhqPkSr8+OxMNhDuhj7BHC1HD8oypwZgoSxSi/zOeHsqm3slxyBNf2A
+   dJ/SAbj67hd3LRO7eHLacMeSSG4UqgXfdoFtKvYWE7ogFKIRiAv8v9/iG
+   R/XIi0M9SM/aDcP2ADOTeN3DzgSYkEjXHm8ioG7BHM5IG474jxbGUNJTh
+   3AdElTydz/ukCVUsdyd5zeQ8HgY8DpWoHABuTT4WvSbwEeN2n4js2PaT+
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
-   d="scan'208";a="186499742"
+   d="scan'208";a="202580518"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Dec 2022 22:19:54 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Dec 2022 22:19:58 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sun, 4 Dec 2022 22:19:53 -0700
+ 15.1.2507.12; Sun, 4 Dec 2022 22:19:57 -0700
 Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Sun, 4 Dec 2022 22:19:51 -0700
+ 15.1.2507.12 via Frontend Transport; Sun, 4 Dec 2022 22:19:55 -0700
 From:   shravan kumar <shravan.chippa@microchip.com>
 To:     <paul.j.murphy@intel.com>, <daniele.alessandrelli@intel.com>,
         <mchehab@kernel.org>
 CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Shravan Chippa" <shravan.chippa@microchip.com>
-Subject: [PATCH v6 1/5] media: i2c: imx334: modify link frequency as for the configureation
-Date:   Mon, 5 Dec 2022 10:49:32 +0530
-Message-ID: <20221205051937.3897001-2-shravan.chippa@microchip.com>
+        "Shravan Chippa" <shravan.chippa@microchip.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v6 2/5] media: i2c: imx334: replace __v4l2_ctrl_s_ctrl to __v4l2_ctrl_modify_range
+Date:   Mon, 5 Dec 2022 10:49:33 +0530
+Message-ID: <20221205051937.3897001-3-shravan.chippa@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221205051937.3897001-1-shravan.chippa@microchip.com>
 References: <20221205051937.3897001-1-shravan.chippa@microchip.com>
@@ -55,7 +56,8 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,35 +66,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Shravan Chippa <shravan.chippa@microchip.com>
 
-Currently imx334 sensor driver is configured for 1782Mbps/lane for
-3840x2160@60 resolution with reqired reg mode values but if we run the
-command "v4l2-ctl --all -d /dev/v4l-subdevX" it is showing incorrect link
-frequeny, This is because of the incorrect value of IMX334_LINK_FREQ
-witch is 891000000. it should be 1782000000.
+For evry mode we will get new set of values for hbalnk so use
+__v4l2_ctrl_modify_range() to support multi modes for hblank.
 
-In general with the value of 891000000 link frequency it is not possible
-to configure 3840x2160@60 resolution.
+The hblank value is readonly in the driver. because of this the function
+returns error if we try to change. so added dumy return case in
+imx334_set_ctrl function
 
-Fixes: 9746b11715c3 ("media: i2c: Add imx334 camera sensor driver")
-
+Suggested-by: Jacopo Mondi <jacopo@jmondi.org>
 Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
 ---
- drivers/media/i2c/imx334.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/imx334.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index 7b0a9086447d..acc9f9f15e47 100644
+index acc9f9f15e47..a742b60ea3b0 100644
 --- a/drivers/media/i2c/imx334.c
 +++ b/drivers/media/i2c/imx334.c
-@@ -49,7 +49,7 @@
- #define IMX334_INCLK_RATE	24000000
+@@ -382,7 +382,8 @@ static int imx334_update_controls(struct imx334 *imx334,
+ 	if (ret)
+ 		return ret;
  
- /* CSI2 HW configuration */
--#define IMX334_LINK_FREQ	891000000
-+#define IMX334_LINK_FREQ	1782000000
- #define IMX334_NUM_DATA_LANES	4
+-	ret = __v4l2_ctrl_s_ctrl(imx334->hblank_ctrl, mode->hblank);
++	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
++				       mode->hblank, 1, mode->hblank);
+ 	if (ret)
+ 		return ret;
  
- #define IMX334_REG_MIN		0x00
+@@ -480,6 +481,9 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 		pm_runtime_put(imx334->dev);
+ 
++		break;
++	case V4L2_CID_HBLANK:
++		ret = 0;
+ 		break;
+ 	default:
+ 		dev_err(imx334->dev, "Invalid control %d", ctrl->id);
 -- 
 2.34.1
 
