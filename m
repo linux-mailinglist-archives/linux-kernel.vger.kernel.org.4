@@ -2,241 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72719642D22
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBAA642D15
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbiLEQj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S231156AbiLEQii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiLEQjF (ORCPT
+        with ESMTP id S232849AbiLEQiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:39:05 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B093CDF;
-        Mon,  5 Dec 2022 08:37:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670258255; x=1701794255;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=oD/Rab1cK9SPuo8VsmfAqAiCovkuC684q1jJvuoBW0o=;
-  b=X2UDizhfD6qEyPNUFylgabgC+S/Val0pQ38e3R1+8vSkjVzJuR7an5R9
-   pV6zlaPJ8FrZXby7T7YVEXVp+IAVRZ4KFOb1DdS4M54VjoTWT0qEJoPNZ
-   37EE6EzTjkXVoNaDf6+xYGFp9iZyHTDi5R6VO2Er8LBh9mLdfWjZM40Ss
-   DnFPEYU9nCtU+S70EmrwEjQFRInqHDqYFulrWHsUTfWtbhFKaQQFWOOw7
-   oykvm7bRwChJkSM5pqx/bmb9OV5CgviBKr7KrSCjOA8bAXbxp2S5F4vTw
-   QIZz3sUEj1FjzMOheO5qjIq8bJTN2nOEzpw8Gtgy4tL0unNFSeCWPaT6C
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="296754242"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="296754242"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 08:35:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="974744758"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="974744758"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Dec 2022 08:35:42 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 5 Dec 2022 08:35:42 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 5 Dec 2022 08:35:42 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 5 Dec 2022 08:35:42 -0800
+        Mon, 5 Dec 2022 11:38:13 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F5B209BF;
+        Mon,  5 Dec 2022 08:36:34 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ClTvX1nsDe9rX9lyOnt6flajzPDwba9vjiWxYp7AMHasJEu8ubefH5SQAFFKWopHt/FrxblPtSEvTrY+xE+1VfYplCvtCfzJBmRl911SkdApiZxEBnEF36ygtL0mtA4woP6opYm9fBkEwG1J3cAweexCyzmeHL8K6jwuWCkURjYum8DsavSKyDm9xBKL4ke+pbwlpw6yurf9xbkXLYKWNoJq2Pwl6ybUfu/YdK2ZqADcwYLC48xZy8tsISEud/vZYWKfN7Ud63UPVPxMePqlR4w4rcv8S2qkdzkRaIVf2/2B3hBG6lbtI8Mvb7Ax+/tcLMcAkUDe876d/WaJa9w/MQ==
+ b=lcW3kJOYxnFxPxBSUY9ORd2pQUUVPDBasu2uE6FvzUiolhxZkAUgkgMJ+m7OM6+SbwOz7/mgcvQDtx1NpcfP5nLKOy0rm4Gag/Y4gPOYeOU4zRB2wK1rWFEr0K8nHN7skogcv3kyEaSB+r/QSJo3Ap/GnZRitM4hnB9DxHn8C6b2a52AB2QyrvqPbuu1JupDhGjlYVZHrbAFDeV7rqnWbgUG/Wx4UsWKU/aFyvuCa6J5SWeRzaHk1Isqat9DDRGf2dzQixFJyQKNXpLL8P59Tar57nim0/xXreS9Q4zJz2K4YYJd4vwNHvSFyWSIt3Jte9dYKc+8ubwZ/DyK22qKFQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IREAcznB0uwBOp+c2C7A92sN2mnR8fiCWwU+4/wTEfI=;
- b=kN86hwcLEcngCDf3rKecIlG4/EqOgDjGT1BcYoSrkUXi6HpBx8oEA9oWYmgUFuP9I8DQ5uEjizDjgZevudumfieMCaKt9DWRXrPdJxZ1Ruq/qKvzoEULAI49Evn9B3qs/QMM/bW4ihwW3tvDLtd17tdgP68UfwbPviv5MHlJVFoHk69GSgTBhVptA0W4ie/NpK4FlZ5eHM8KHv/Tw2RMeURlPHyq/e8VhbjCmv21yjEUTzxvjJiO4+T1W/1HYQNeLurqGkH7ptbfVa6dDlu/sW6jfG/OsEpy0rRTFcUKpPGNPIRG1mdFcS12C1PAxGfvPwH8hpO+YjmTD6mC8spUjg==
+ bh=vqsohskPssaDUTq5I83mr5skMe4Og12KGVWpJPVnabw=;
+ b=n/HqSDr/ynx7qe4FvDKFE/bE/aZF2fKSZ1t+vNWvXvK7sSm8WR12IA81N6N9vQE8U6MUpezwlWVQ1qRo9pGiiV43TLVHG1qwXysoUWuYY0563gUybQEOLvBvZNWlsh3Ll96gHMnecbK+wZUKv9c3/PT2wdmrWLnGyhJdY49FSgoh+uT+M4rGwdNjvOINLeu9y/1mT5apC/vpGrICUipP7rprm4a9N3GqTejoiJG5oapzq/9g0ytRDSopOrEhn1iFlpNUUSkd/OJdwif17zUTJeCUVnbOYg7MlNvM6uzkwJg+pcYhoNQgq7qO9rEKdcX0LXWpI498lNH/3nzqhlkVYw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vqsohskPssaDUTq5I83mr5skMe4Og12KGVWpJPVnabw=;
+ b=ilkurI8E0dhDJite48omCaIDZ/x9ceokecsTAjP3k03M6jJ7kxkVW20JsqdjfHm4U68Y0IC2hrNInlDrfCqOk778cBF6Qv2sanZcCFV74r2Jg3CgAXQD+5Fd4j3lyImRmqW0WeC2Gdf3cwUkE+a/K1/IS03ZkEW5s2vasx+HAy0=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by DM8PR11MB5703.namprd11.prod.outlook.com
- (2603:10b6:8:22::5) with Microsoft SMTP Server (version=TLS1_2,
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by PH7PR12MB7331.namprd12.prod.outlook.com (2603:10b6:510:20e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Mon, 5 Dec
- 2022 16:35:38 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
- 16:35:38 +0000
-Date:   Mon, 5 Dec 2022 08:35:34 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     <ira.weiny@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 08/11] cxl/mem: Wire up event interrupts
-Message-ID: <638e1dd6aa7bb_25af829435@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
- <20221201002719.2596558-9-ira.weiny@intel.com>
- <6389ab5156083_c9572947c@dwillia2-mobl3.amr.corp.intel.com.notmuch>
- <20221202141901.00003016@Huawei.com>
- <638a55611405d_3cbe02942c@dwillia2-xfh.jf.intel.com.notmuch>
- <20221205130129.00000cc1@Huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221205130129.00000cc1@Huawei.com>
-X-ClientProxiedBy: BY5PR17CA0018.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::31) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ 2022 16:36:13 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::45b1:34fb:e14d:96e4]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::45b1:34fb:e14d:96e4%5]) with mapi id 15.20.5880.013; Mon, 5 Dec 2022
+ 16:36:13 +0000
+Message-ID: <dd0a67d6-0ba3-66e2-851c-7498b0bc99d1@amd.com>
+Date:   Mon, 5 Dec 2022 10:36:11 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] docs: Integrate rustdoc into Rust documentation
+Content-Language: en-US
+To:     Akira Yokosawa <akiyks@gmail.com>, ojeda@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        bilbao@vt.edu, corbet@lwn.net, konstantin@linuxfoundation.org
+References: <20221130220825.1545758-1-carlos.bilbao@amd.com>
+ <20221201204814.2141401-1-carlos.bilbao@amd.com>
+ <a019a3f1-7ff1-15b2-d930-e1d722847e0c@gmail.com>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <a019a3f1-7ff1-15b2-d930-e1d722847e0c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR10CA0020.namprd10.prod.outlook.com
+ (2603:10b6:610:4c::30) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|DM8PR11MB5703:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3d2a9bb-357e-4727-4d89-08dad6debd30
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|PH7PR12MB7331:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5725dee1-4ad5-431e-029b-08dad6ded2af
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vq9RvF89jV5U2sNVFN/nwTL3hNmjm74hFJnza5TbfQ2qkW97tMp4ly9/Wo74TcA29DNp/lpS8LGvdJC7jJiLZN/1xcC/IqegacOF2g9U5DuGzjdzUlg8jiusEjRU3BqbT6D8mq15rCSQAWO1IGXJT4NsxFKKV0DD4A2ceKJrIQ11vDHy5NFWtBvpddL8IoaCYS1gW8+H2Sfr1EC8NB58g1LDZQZpEmcwLH5u8wpD9C9TDEGJ7Bm1WwQ95d6QPfkETilCVz1YyZcX1V0Z2QOnDOxMeIP1pv5Tp+2TJuWx+DzkpGdBuFdpEy4ViInZLOs5ZtVuypxLzN+28S4RM+3Ot/e2XZeaJxjhrcuJ+TSkZPO2pfKb9ngek964mtfBJD9lqV09FwsdMEdFQVDYxrMGXIfg0YOXR4J6hJPFtmAW1cT/Usquwdt9nY+MM1naeB8ppjGm+2cJ+eTBp85ynbZDSYDWmlXPnsVDDJDvd9k/Lg4g3ui0CKtbXvD+LSREp6D+EGtuW+EikvduoyXCtX/ae5bfvQCDrpqmYeAiZoSkTxU5KKIL1fe57UNxC4zpY8ZXCS/W92ehR/H/n1gveFsGchvN9/OMk6tyZL5SD32t62IdP2YfiUm80u7sS2+MMb1ftTVJByL4DVFYQYTrolsnoQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(396003)(366004)(136003)(346002)(451199015)(66556008)(66476007)(2906002)(8676002)(4326008)(66946007)(6486002)(316002)(110136005)(5660300002)(54906003)(6666004)(86362001)(186003)(6506007)(9686003)(6512007)(26005)(8936002)(478600001)(38100700002)(83380400001)(41300700001)(82960400001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: HAhQP+3FkQiMhg1ZdnrQSDAmtUtfyAqmog7hGxGiEc9412a/WDIvcyKxOtCbijDpdSsNV4NGJklrQNBG4iIkd+wJixns6+qmNlRkM0rhTU4xWLJqHLv4fhz29pjtsQbowZi6KI8uyrP/mc4OETBbZJVtgA+EIoerJ9tX9twGeuQs9rT7BaSVadT6XXFbN5GOTre72YS9YXRZBhkIopUOirNmkZVclTNet7iyaaEheBFmH1UBR34tqt+yHgySpdDOou9HgtoLlUkCJk8zHxTrRT72OigcIMHAV/3Z7ypLv7/7NcJPUMqIVz+iZsReZuSeFWc8vbvPkfz5Tmmx3GLBTNG2QCtCw/du4vS7FI5r7ZrAdRMadjPdZvGW/F2F0dOT1qBU6JJ/Gs3/8ACF6AA+1hnp8fHZjGNjW0TKWhB0ZdiDOOawQplz+N+ZKHG67n7hfQow7VubpmjGpscxEAB+xVsuUeYOoWvC26YYNvsaj/7ZZ+b1PjPX4RvV5/6rgvS4TxXjhSdKzdn5d2Mhq2BGrek1dHVcmtnOt+YU0aB4EkFbLQCr11FEtiyP2bcaTSJkbOX2b3OKqubV+6nYKbmAmXFlPxHdC0H4xb8AzM/3uadVfT3Auz475UnRPcM8szK6PEc6in+CPBbuWeziLWJCxKbXe3KDRVbj8GYAobUYiMuAK6NcfzWMjS3VzcY4Ap8YmvyvmYzD7PRZvVJTOScrRN8cEoixEuGYMu9hWByJbEv+LN9Iy1DNMG7GRJQu4npq
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(39860400002)(396003)(376002)(451199015)(36756003)(316002)(966005)(45080400002)(83380400001)(6486002)(53546011)(6512007)(6506007)(26005)(186003)(2906002)(31696002)(86362001)(66476007)(66556008)(31686004)(4326008)(8676002)(38100700002)(66946007)(478600001)(2616005)(8936002)(41300700001)(5660300002)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?02eGaeFKW30IZOAQ8cU9mNBnowKvCqjGOwcm0nXAvrNf4yM2YCxiJe7NkmWG?=
- =?us-ascii?Q?gRsD+V0TrMtrGzKhztnb7Makps4FWnCrC8nZdIQl8lYWdJCSo8IcjkrzW7a9?=
- =?us-ascii?Q?yGEs4NjLWKP2Htpf52Z0IO/H6PD9z+Y9LSEds+64WzNEYAsqSaX5CsqBdoA1?=
- =?us-ascii?Q?C8wiScngHDaLhfLdd6X2DWDJBTRT417ZCrdlZ8z3ibtbpBipIEY/qGk42C79?=
- =?us-ascii?Q?2nIZRPa/zhTtRx3h07FLTZp42Gs0UGKFaZXZibm9Nzd+6WUbSaNo0C5nENBD?=
- =?us-ascii?Q?JgYzcKiIXlaa9uvWT8D+FwsIK4qa3p2iEb2J4XKBG8NW+mIJmooCbqR3iZ8N?=
- =?us-ascii?Q?TUhjEGVTaxD3kufAz1J1p5Z2jkzI16S2XORKFZDG2xbZtjhPBfiwca6VDziF?=
- =?us-ascii?Q?fE6RiD0xiu6MpOYRlLeaR+kftwhOxIzyhcUs5HUKKnwmD5eaxdO6p3gCA6PA?=
- =?us-ascii?Q?bPgO93dfdeg6eC7NYbIii11Rg6sb9NgxLoRBy/kETgkNNUnq2BbNIwFIT1E5?=
- =?us-ascii?Q?RLys0hBmU2qRKJecIOqbG+0QtKXcj30auDjPskdTHQGbJZgEXXmbXeOouvVA?=
- =?us-ascii?Q?fTkknqCyeCNmUitRD5AmVuyaNlbUSlOPX5e7Xh5xE6CFwjpzP/1wduEbHiON?=
- =?us-ascii?Q?IIEp8vb2oA138bPHj1HugeBwoVn7g2bBZY9ZJuTJ9vbh17t3aULE+KvtMM9Q?=
- =?us-ascii?Q?2fGqkqRIjBmkLqzpMpG3wLwi1h2mJBrNphnjOuRIctRmDa+Urif6H0MLW5lt?=
- =?us-ascii?Q?mkIQzrYyXxCqL4YUk1+MQdn7VT1vhV2OgzEvKxXAOzcXn6RSjcYKXHcVJBQO?=
- =?us-ascii?Q?JIViBIRMQePazP+m0/dd5HfRAujyJYK4VNtH6xHo79XWdKYcOx4QqeejFDn3?=
- =?us-ascii?Q?2M4G+5VtLJhK8y67kCT2qroP8DnYN/n6fuDglatxDR+q47AcBaDLNpvg9dIe?=
- =?us-ascii?Q?2pwfX2ZyyNVeD5NzfRam+eKEVYEtbcSgXWZ5l4xaDsy936iEvPoyaL64QOVv?=
- =?us-ascii?Q?xb5+9RoykPd6mWGZqAEcucIp0V4M5IvmLz0A4rj2zNaKO6CMCYqRYC9YvCXD?=
- =?us-ascii?Q?PGszz+caVg0aX4815b5+adH/NOxBIWeu1Mdd332VrwOZsz4Nt2NWqMOccRJX?=
- =?us-ascii?Q?9xvkNTpzvMItDtGvgSFPtUxgUt5WtVKJ+Qa4yWHLB3AtZ55GdQ0qnNitDoqp?=
- =?us-ascii?Q?JK0/I+uxYY1a9u+i2crJ3CNvBxKgToIPVq/kAu+LZXawI31shgWG7IrDVHV+?=
- =?us-ascii?Q?6aGCx9Z1xsW4tsfXczFvCmdpvBql4UljU5oto8YIKu+PHNxuFiXWzQQpEcm1?=
- =?us-ascii?Q?4CdF7LS+NEa+D4MhBcRGT3TgoqmqwDcMv407V5a23EUb6Z79VJTa1QpqvpiI?=
- =?us-ascii?Q?gs146WvFYkixuhT2rREAsXqRmkpKFaNkzOOVBKhx7OkLsCOnoZLQ7Ne+r60j?=
- =?us-ascii?Q?3Mh/x8euGcPSjfCYr5BCG+Gx2xerkECPxfhwyB4xV4vpZr/YcuRguPAMdenv?=
- =?us-ascii?Q?XEvnsWIP8aM8BR8QOupPZlo962V5p8a3y2nHfAHfACm3M2Sl6sYYdgyn0tmV?=
- =?us-ascii?Q?llv4a02zqp6AGB2dPS2Xl+jHoiOuhTwOOOfd1gBPYIi9tm1t+kWnd/FlGCf0?=
- =?us-ascii?Q?NA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3d2a9bb-357e-4727-4d89-08dad6debd30
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VXlsbWpwVDQ0ZC9KSjIxS2NyLzdRc20xUnkxT0N5ZVdHd1VJcWhEOTM5TElV?=
+ =?utf-8?B?cERUWC9GdXJXTDhIbGd6TW1kOXdrbTkwR0tTa3lwSHRsb2NpWGlYUElqVFJM?=
+ =?utf-8?B?UDhGOFFERXl4Y0FBalVObnlsSEdBakd0and5N0hzZDJzZGw3d1FZQXRvK1Vk?=
+ =?utf-8?B?NEY1Q0F6MU1lQzdhWE40MXkvOUNxS1pYeEFWTk94UkIxOWRKRENTdTd6Qngv?=
+ =?utf-8?B?dDVsbGtKZmJhSS82eU5UR0JTeHppTzBvR2FqbGRmelBLMGNvUTBQM0pYVE15?=
+ =?utf-8?B?RDlrbjRUVERIeGUycHpGWCtLb2dCc1F4ZHdpNE1kcHhKTEZNVVlrK1FPemE4?=
+ =?utf-8?B?a1JYUGNZN0czT0ZkQVB0bmJ4bHhFZ0lpeWtHcVJKWUdNZTh1VzJFZ2U0Um04?=
+ =?utf-8?B?K2l2U29yT2pLVkkrZTVxb3NzOGo2STVsK01qRGMzUGdpV3pyQk5BMENZVndr?=
+ =?utf-8?B?OWZvWXo2Q2NGaXFPM1kzRThiOEF5R1kyamEzK3BqMFNWOGJETjIyd1Q0L3BG?=
+ =?utf-8?B?ODhoVjROMXdldGE4ckQ3WkJuWmJJdXAzaVZLaHJlcU9rUW1WK2ZTQ25nck8y?=
+ =?utf-8?B?VHR5Zy94U2JhaUpFQXVxZEhFWllQcjZTaVpBRm5aRkpmTVVqVXdpL2diVVBB?=
+ =?utf-8?B?NmR0WFVab3RIQzdIMmNVeFI3Q3RyY3ZGeFIyQmxQaW9ZaHUzSXo1V0NDMnA2?=
+ =?utf-8?B?bVVCV29halhJZTJSK1RneEdBQUl4UnFCNWpPVUZ3T3Bud0dxeXpQSjNGRE82?=
+ =?utf-8?B?L2kzQXliWmJ3c21RT3JBZE9vaVJ6QUYrZmNLY0dmVDdQR3lBNU5nY1N1amxa?=
+ =?utf-8?B?bGp2TUdhbDVpUHlpWGdzV0NHMVllWXA4ZjdxNHFCTUVoNTExVHc4WVZWR0JM?=
+ =?utf-8?B?Z0R0WWg3d0VjVXhUQ3FSNVBrQWgzVTdMM3NJR25NZVFDLytJdWRHODJYSGwr?=
+ =?utf-8?B?SFJIS1lCRG9ySExkL3lnc2dtaTlmMjU1eWEwdWFqMmNCUWVrN3MwTm1CaDhx?=
+ =?utf-8?B?SU4zYk1wNytYbFhnZ3JsQWtUOXE5bVFnM3hwL1lER3RjVTFrRnJHdTR4N2Rp?=
+ =?utf-8?B?aUpGOVlURjFtNjdNa2JmUi81Q0tyZkdDRFIvR1FTRXRjSk44NkRCUjZJdmdk?=
+ =?utf-8?B?OGhPeFVoNGV1ODFURDN6ekxmU2tiZFo2azcyMVRhb01HSzM1TytRdWxxKzJU?=
+ =?utf-8?B?UnRRa2xuTFp1N1FBeWNSWUp6YmNmQ256TkRReDEycVhxWEk2bG1lWGFIalhw?=
+ =?utf-8?B?MHIrRlpwUlJVMGI5RWJXTkFqQVRZME9rczdBYy8zeU1BSFl2akkzQnlkbGNa?=
+ =?utf-8?B?MU1YclZqVWV6aGJ0cXNIWEdHUnNNZldkLzc4VEZUcnlNR0pwTUViL1hsNnBT?=
+ =?utf-8?B?Q0c2bW9Sd3pYRFVyVVBmRFRpNGNxclFJWWxOVndSYWZDbjRXSm02a0hoeEw0?=
+ =?utf-8?B?a3pSN2k2UklxZDVFZzZxL1NXSW5mQml2UGNreHZpYmEvQ2dsT2xzR0FhbHRn?=
+ =?utf-8?B?ZE1GYko4em5sa3RvREZKRmxMaXp2dE95YUFJTDMrZ1JWRGppUWlzSHVMTVl0?=
+ =?utf-8?B?aWhqbnU3dWhYUGhJWCttRFlDQlduRjBHRWRFMWZQbjhYVDliLzRTeFpMQXlk?=
+ =?utf-8?B?YTk3cUtIVGp0T2RlZ291OWU1REwyK2NQc3NrQm1DSENnc1JxVFpqTVdyZVlK?=
+ =?utf-8?B?VEU3VlA2UFpQSTBTRHQxMW1WejArTU1lNkFqaVBqRnBweUw3dHhybE5RN1M3?=
+ =?utf-8?B?WGhlczFDKzE4WmwySmZYNTBTR3dZUnpMQ2pBdGFuTndFOEhTYnVHZ3FKVURJ?=
+ =?utf-8?B?d1hGYXJTanRBaHpDQzh6YnRENllrYTZkenlHeTdIdXB1TXZnWEs1RVJIVXJj?=
+ =?utf-8?B?dnFxV3UvWmZZSWlhQ2h2cTlvdFAxUVdoeTVOS0lMUzdQT1FHd0d1dzJ5dWxh?=
+ =?utf-8?B?UUhUU2ZtbEkvaUZzclhNVWFpbjBGSXNvV2ZBTERMWXBNTkdZWEdxM21MdUFT?=
+ =?utf-8?B?dml1NXlBM1JidFNzUFdpV3FYYm1EcXJoeStaOStmYXRXY0JTK2FNRFZ5ZVZL?=
+ =?utf-8?B?ZnBSK1p2N0ZuRUpzdXM2WTg2Qi9JUEo2WTVJUStIWmFQUzd5K09wQ0Y1QkR0?=
+ =?utf-8?Q?WuF/MXL75cDvnu9LwU/karQTY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5725dee1-4ad5-431e-029b-08dad6ded2af
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 16:35:38.5707
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 16:36:13.6489
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yXn/VdXfjNSL8OPimRtsJuzVDbT7Xr1JlihnwHPhQVq0F54eRfBJHuX92SnVpWDxmlB9Qvc6zeDzUJFdhz4u3IhZR3+q7Hwn0QDdyRqHnDA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5703
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: e98JtQwlrhDEq5FoE2GFzTVmko3S7J3NUMlP89uGarwKG5g1zizd9KYXXwO9ItMfKaDs4mj6KRSdsxHbSUhQkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7331
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Cameron wrote:
-> On Fri, 2 Dec 2022 11:43:29 -0800
-> Dan Williams <dan.j.williams@intel.com> wrote:
-> 
-> > Jonathan Cameron wrote:
-> > >   
-> > > > > +int cxl_event_config_msgnums(struct cxl_dev_state *cxlds,
-> > > > > +			     struct cxl_event_interrupt_policy *policy)
-> > > > > +{
-> > > > > +	int rc;
-> > > > > +
-> > > > > +	policy->info_settings = CXL_INT_MSI_MSIX;
-> > > > > +	policy->warn_settings = CXL_INT_MSI_MSIX;
-> > > > > +	policy->failure_settings = CXL_INT_MSI_MSIX;
-> > > > > +	policy->fatal_settings = CXL_INT_MSI_MSIX;    
-> > > > 
-> > > > I think this needs to be careful not to undo events that the BIOS
-> > > > steered to itself in firmware-first mode, which raises another question,
-> > > > does firmware-first mean more the OS needs to backoff on some event-log
-> > > > handling as well?  
-> > > 
-> > > Hmm. Does the _OSC cover these.  There is one for Memory error reporting
-> > > that I think covers it (refers to 12.2.3.2)
-> > > 
-> > > Note that should cover any means of obtaining these, not just interrupt
-> > > driven - so including the initial record clear.
-> > > 
-> > > ..
-> > >   
-> > > > > +
-> > > > > +static irqreturn_t cxl_event_failure_thread(int irq, void *id)
-> > > > > +{
-> > > > > +	struct cxl_dev_state *cxlds = id;
-> > > > > +
-> > > > > +	cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
-> > > > > +	return IRQ_HANDLED;
-> > > > > +}    
-> > > > 
-> > > > So I think one of the nice side effects of moving log priorty handling
-> > > > inside of cxl_mem_get_records_log() and looping through all log types in
-> > > > priority order until all status is clear is that an INFO interrupt also
-> > > > triggers a check of the FATAL status for free.
-> > > >   
-> > > 
-> > > I go the opposite way on this in thinking that an interrupt should only
-> > > ever be used to handle the things it was registered for - so we should
-> > > not be clearing fatal records in the handler triggered for info events.  
-> > 
-> > I would agree with you if this was a fast path and if the hardware
-> > mechanism did not involve shared status register that tells you
-> > that both FATAL and INFO are pending retrieval through a mechanism.
-> > Compare that to the separation between admin and IO queues in NVME.
-> > 
-> > If the handler is going to loop on the status register then it must be
-> > careful not to starve out FATAL while processing INFO.
-> > 
-> > > Doing other actions like this relies on subtlies of the generic interrupt
-> > > handling code which happens to force interrupt threads on a shared interrupt
-> > > line to be serialized.  I'm not sure we are safe at all the interrupt
-> > > isn't shared unless we put a lock around the whole thing (we have one
-> > > because of the buffer mutex though).  
-> > 
-> > The interrupt is likely shared since there is no performance benefit to
-> > entice hardware vendors spend transistor budget on more vector space for
-> > events. The events architecture does not merit that spend.
-> > 
-> > > If going this way I think the lock needs a rename.
-> > > It's not just protecting the buffer used, but also serialize multiple
-> > > interrupt threads.  
-> > 
-> > I will let Ira decide if he wants to rename, but in my mind the shared
-> > event buffer *is* the data being locked, the fact that multiple threads
-> > might be contending for it is immaterial.
-> 
-> It isn't he only thing being protected.  Access to the device is also
-> being serialized including the data in it's registers.
-> 
-> If someone comes along later and decides to implement multiple buffers
-> and there for gets rid of the lock. boom.
+On 12/4/22 19:06, Akira Yokosawa wrote:
 
-That's what the mailbox mutex is protecting against. If there is an
-aspect of the hardware state that is not protected by that then that's a
-bug.
+> Hi,
+>
+> On Thu, 1 Dec 2022 14:48:14 -0600, Carlos Bilbao wrote:
+>> Include HTML output generated with rustdoc into the Linux kernel
+>> documentation on Rust. Change target `make htmldocs` to combine RST Sphinx
+>> and the generation of Rust documentation, when support is available.
+>>
+>> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+>> ---
+>>
+>> Changes since V1:
+>>   - Work on top of v6.1-rc1.
+> Thank you for the rebase.
+>
+>>   - Don't use rustdoc.rst, instead add link to Documentation/rust/index.rst.
+>>   - In Documentation/Makefile, replace @make rustdoc for $(Q)$(MAKE) rustdoc.
+>>   - Don't do LLVM=1 for all rustdoc generation within `make htmldocs`.
+>>   - Add spaces on definition of RUSTDOC_OUTPUT, for consistency.
+>>
+>> ---
+>>   Documentation/Makefile       |  4 ++++
+>>   Documentation/rust/index.rst |  3 +++
+>>   rust/Makefile                | 15 +++++++++------
+>>   3 files changed, 16 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/Documentation/Makefile b/Documentation/Makefile
+>> index 64d44c1ecad3..f537cf558af6 100644
+>> --- a/Documentation/Makefile
+>> +++ b/Documentation/Makefile
+>> @@ -92,6 +92,10 @@ quiet_cmd_sphinx = SPHINX  $@ --> file://$(abspath $(BUILDDIR)/$3/$4)
+>>   	fi
+>>   
+>>   htmldocs:
+>> +# If Rust support is available, add rustdoc generated contents
+>> +ifdef CONFIG_RUST
+>> +	$(Q)$(MAKE) rustdoc
+>> +endif
+>>   	@$(srctree)/scripts/sphinx-pre-install --version-check
+>>   	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,html,$(var),,$(var)))
+> So, this means "make htmldocs" will require kernel .config if CONFIG_RUST=y.
+> I'm not sure this new requirement is acceptable for kernel documentation
+> testers who just want to build kernel documentation.
+
+
+This is already kind of the case for Rust-related business.
+
+
+>
+> You are doing three things in this patch.
+>
+>   1) Change the destination of rustdoc to under Documentation/output/
+>   2) Add a cross reference to the generated rustdoc in
+>      Documentation/rust/index.rst.
+>   3) Integrate rustdoc generation into htmldocs.
+>
+> I'm OK with 1) and 2).
+> Can you separate 3) into another patch and respin?
+
+
+Glad we can agree on 1) and 2). Why moving 3)? This is a small patch with
+one overall purpose (Integrate rustdoc into website).
+
+
+>
+> By the way, is rustdoc's requirement of .config only for CONFIG_RUST?
+> In other words, are contents of rustdoc affected by other config settings?
+>
+> If not, I think rustdoc can be generated regardless of config settings as
+> far as necessary tools (rustc, bindgen, etc.) are available.
+
+
+Yes, but someone with the tools may not want to use them. Keep in mind that
+generating rustdoc takes a few extra seconds.
+
+
+>
+>>   
+>> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
+>> index 4ae8c66b94fa..4005326c3ba9 100644
+>> --- a/Documentation/rust/index.rst
+>> +++ b/Documentation/rust/index.rst
+>> @@ -6,6 +6,9 @@ Rust
+>>   Documentation related to Rust within the kernel. To start using Rust
+>>   in the kernel, please read the quick-start.rst guide.
+>>   
+>> +If this documentation includes rustdoc-generated HTML, the entry point can
+>> +be found `here. <rustdoc/kernel/index.html>`_
+> This cross reference will only make sense in htmldocs build.
+> Perhaps, you can use the "only::" directive [1] as follows:
+>
+> .. only:: html
+
+
+This I can gladly do on a V3. I will wait for an answer on issues above.
+
+
+>
+>      If this documentation includes rustdoc-generated HTML, the entry point can
+>      be found `here. <rustdoc/kernel/index.html>`_
+>
+> [1]: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.sphinx-doc.org%2Fen%2Fmaster%2Fusage%2Frestructuredtext%2Fdirectives.html%23directive-only&amp;data=05%7C01%7Ccarlos.bilbao%40amd.com%7C163763a795284a542e4f08dad65cf4c6%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638057991984040258%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=DU8nmQp7gCCGNMUR6urtHHCz5nXAtomeV17%2BzB%2F4L38%3D&amp;reserved=0
+>
+>          Thanks, Akira
+>
+>> +
+>>   .. toctree::
+>>       :maxdepth: 1
+>>   
+>> diff --git a/rust/Makefile b/rust/Makefile
+>> index 7700d3853404..080c07048065 100644
+>> --- a/rust/Makefile
+>> +++ b/rust/Makefile
+>> @@ -1,5 +1,8 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   
+>> +# Where to place rustdoc generated documentation
+>> +RUSTDOC_OUTPUT = $(objtree)/Documentation/output/rust/rustdoc
+>> +
+>>   always-$(CONFIG_RUST) += target.json
+>>   no-clean-files += target.json
+>>   
+>> @@ -58,7 +61,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
+>>   	OBJTREE=$(abspath $(objtree)) \
+>>   	$(RUSTDOC) $(if $(rustdoc_host),$(rust_common_flags),$(rust_flags)) \
+>>   		$(rustc_target_flags) -L$(objtree)/$(obj) \
+>> -		--output $(objtree)/$(obj)/doc \
+>> +		--output $(RUSTDOC_OUTPUT) \
+>>   		--crate-name $(subst rustdoc-,,$@) \
+>>   		@$(objtree)/include/generated/rustc_cfg $<
+>>   
+>> @@ -75,15 +78,15 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
+>>   # and then retouch the generated files.
+>>   rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins \
+>>       rustdoc-alloc rustdoc-kernel
+>> -	$(Q)cp $(srctree)/Documentation/images/logo.svg $(objtree)/$(obj)/doc
+>> -	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(objtree)/$(obj)/doc
+>> -	$(Q)find $(objtree)/$(obj)/doc -name '*.html' -type f -print0 | xargs -0 sed -Ei \
+>> +	$(Q)cp $(srctree)/Documentation/images/logo.svg $(RUSTDOC_OUTPUT)
+>> +	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(RUSTDOC_OUTPUT)
+>> +	$(Q)find $(RUSTDOC_OUTPUT) -name '*.html' -type f -print0 | xargs -0 sed -Ei \
+>>   		-e 's:rust-logo\.svg:logo.svg:g' \
+>>   		-e 's:rust-logo\.png:logo.svg:g' \
+>>   		-e 's:favicon\.svg:logo.svg:g' \
+>>   		-e 's:<link rel="alternate icon" type="image/png" href="[./]*favicon-(16x16|32x32)\.png">::g'
+>>   	$(Q)echo '.logo-container > img { object-fit: contain; }' \
+>> -		>> $(objtree)/$(obj)/doc/rustdoc.css
+>> +		>> $(RUSTDOC_OUTPUT)/rustdoc.css
+>>   
+>>   rustdoc-macros: private rustdoc_host = yes
+>>   rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
+>> @@ -141,7 +144,7 @@ quiet_cmd_rustdoc_test = RUSTDOC T $<
+>>   		@$(objtree)/include/generated/rustc_cfg \
+>>   		$(rustc_target_flags) $(rustdoc_test_target_flags) \
+>>   		--sysroot $(objtree)/$(obj)/test/sysroot $(rustdoc_test_quiet) \
+>> -		-L$(objtree)/$(obj)/test --output $(objtree)/$(obj)/doc \
+>> +		-L$(objtree)/$(obj)/test --output $(RUSTDOC_OUTPUT) \
+>>   		--crate-name $(subst rusttest-,,$@) $<
+>>   
+>>   # We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
+>>
+>> base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+
+
+Thanks,
+Carlos
