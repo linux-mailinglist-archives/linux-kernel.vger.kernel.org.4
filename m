@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502C9642515
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E981642519
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbiLEIyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S231745AbiLEIy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbiLEIxc (ORCPT
+        with ESMTP id S231540AbiLEIxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:53:32 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39E22190
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:51:05 -0800 (PST)
-Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NQccl1b4LzkXnx;
-        Mon,  5 Dec 2022 16:47:35 +0800 (CST)
+        Mon, 5 Dec 2022 03:53:51 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7095F7678;
+        Mon,  5 Dec 2022 00:52:57 -0800 (PST)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NQck06QY8z15N6H;
+        Mon,  5 Dec 2022 16:52:08 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Dec 2022 16:51:03 +0800
+ 15.1.2375.31; Mon, 5 Dec 2022 16:52:55 +0800
 From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-CC:     <chenzhongjin@huawei.com>, <martyn@welchs.me.uk>,
-        <manohar.vanga@gmail.com>, <gregkh@linuxfoundation.org>,
-        <arnd@arndb.de>
-Subject: [PATCH] vme: Fix error not catched in fake_init()
-Date:   Mon, 5 Dec 2022 16:48:05 +0800
-Message-ID: <20221205084805.147436-1-chenzhongjin@huawei.com>
+To:     <linux-fbdev@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <stable@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <chenzhongjin@huawei.com>, <daniel@ffwll.ch>, <deller@gmx.de>,
+        <sam@ravnborg.org>, <tzimmermann@suse.de>,
+        <geert+renesas@glider.be>,
+        <syzbot+25bdb7b1703639abd498@syzkaller.appspotmail.com>
+Subject: [PATCH] fbcon: Fix memleak when fbcon_set_font() fails
+Date:   Mon, 5 Dec 2022 16:49:59 +0800
+Message-ID: <20221205084959.147904-1-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpemm500013.china.huawei.com (7.185.36.172)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -45,40 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In fake_init(), __root_device_register() is possible to fail but it's
-ignored, which can cause unregistering vme_root fail when exit.
+syzkaller reported a memleak:
+https://syzkaller.appspot.com/bug?id=7cc8bce62e201c60e36ef0133dab7f6b8afbc626
 
- general protection fault,
- probably for non-canonical address 0xdffffc000000008c
- KASAN: null-ptr-deref in range [0x0000000000000460-0x0000000000000467]
- RIP: 0010:root_device_unregister+0x26/0x60
- Call Trace:
-  <TASK>
-  __x64_sys_delete_module+0x34f/0x540
-  do_syscall_64+0x38/0x90
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+BUG: memory leak
+unreferenced object 0xffff888111648000 (size 18448):
+  backtrace:
+    [<ffffffff8250c359>] kmalloc
+    [<ffffffff8250c359>] fbcon_set_font+0x1a9/0x470
+    [<ffffffff8262cd59>] con_font_set
+    [<ffffffff8262cd59>] con_font_op+0x3a9/0x600
+    ...
 
-Return error when __root_device_register() fails.
+It's because when fbcon_do_set_font() fails in fbcon_set_font(), it
+return error directly and doesn't free allocated memory 'new_data'.
 
-Fixes: 658bcdae9c67 ("vme: Adding Fake VME driver")
+Reported-by: syzbot+25bdb7b1703639abd498@syzkaller.appspotmail.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- drivers/staging/vme_user/vme_fake.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/video/fbdev/core/fbcon.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/vme_user/vme_fake.c b/drivers/staging/vme_user/vme_fake.c
-index dd646b0c531d..1ee432c223e2 100644
---- a/drivers/staging/vme_user/vme_fake.c
-+++ b/drivers/staging/vme_user/vme_fake.c
-@@ -1073,6 +1073,8 @@ static int __init fake_init(void)
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+index c0143d38df83..edb01d200b5b 100644
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -2480,7 +2480,7 @@ static int fbcon_set_font(struct vc_data *vc, struct console_font *font,
+ 	int w = font->width;
+ 	int h = font->height;
+ 	int size;
+-	int i, csum;
++	int i, csum, ret;
+ 	u8 *new_data, *data = font->data;
+ 	int pitch = PITCH(font->width);
  
- 	/* We need a fake parent device */
- 	vme_root = __root_device_register("vme", THIS_MODULE);
-+	if (IS_ERR(vme_root))
-+		return PTR_ERR(vme_root);
+@@ -2539,7 +2539,11 @@ static int fbcon_set_font(struct vc_data *vc, struct console_font *font,
+ 			break;
+ 		}
+ 	}
+-	return fbcon_do_set_font(vc, font->width, font->height, charcount, new_data, 1);
++
++	ret = fbcon_do_set_font(vc, font->width, font->height, charcount, new_data, 1);
++	if (ret && i > last_fb_vc)
++		kfree(new_data - FONT_EXTRA_WORDS * sizeof(int));
++	return ret;
+ }
  
- 	/* If we want to support more than one bridge at some point, we need to
- 	 * dynamically allocate this so we get one per device.
+ static int fbcon_set_def_font(struct vc_data *vc, struct console_font *font, char *name)
 -- 
 2.17.1
 
