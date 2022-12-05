@@ -2,126 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7E76423CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8C36423D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbiLEHpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 02:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S231755AbiLEHrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 02:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiLEHpO (ORCPT
+        with ESMTP id S231528AbiLEHrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 02:45:14 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1FA13F22;
-        Sun,  4 Dec 2022 23:45:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670226313; x=1701762313;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Dy6cUKU1bDtIuKsKSF9kSgG90krsYCMVDXa1HRQdkdE=;
-  b=DCbReg8jdqWFedmuMCmgG8JWmozUbZIrAAClViDZTuAzyhLS724263lc
-   nb5jUJbuTvxevszUOQwTrRBIqoWLewadDSJWLjsotSILpWTH0ApJGk7S6
-   ImXRvobF8wMeLlXk2ejsf7X6Gda1P1LhsZUD7BRxFK64dgpc4ApQ9ofx4
-   VSvxuH8ez5AKzlHg+AaAN/cUxGKl4WxhQvztWaF6xIvK+woELXBP4ZdSp
-   dDW4RSAzB5fhzxNjWdhzxrlGU0UNd09QEmfD7sJv4mzX9VEYQKRWWXzF8
-   4b7MXEHl/toQh+nDtm9b2bGkiJe8WTufFO/F8p7LxRTiuhxM0UUyuRztW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="313933380"
-X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
-   d="scan'208";a="313933380"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2022 23:45:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="645727543"
-X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
-   d="scan'208";a="645727543"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.55.104])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2022 23:45:10 -0800
-Message-ID: <cea65857-071f-e68e-9825-b88d64eeca81@intel.com>
-Date:   Mon, 5 Dec 2022 09:45:06 +0200
+        Mon, 5 Dec 2022 02:47:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C8212761;
+        Sun,  4 Dec 2022 23:47:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72190B80D5F;
+        Mon,  5 Dec 2022 07:47:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D5CBC433C1;
+        Mon,  5 Dec 2022 07:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670226437;
+        bh=XJcX69GGs4sfa8CI4cIXi9zjr1DKHpxfdL4uRgkTwQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fxdED2gEdRRIhsQUuvTDRrNJj9VpHDVbA3lh0eDGhKf3B1Eo4x+EGpUbHt5f47NRC
+         xYVVLaQ/tqC355xve9eeI8sdiWUPVe7DJAavYhZRW0JLlwAyVhS3oSflPmKgDHpUWR
+         y99tZ9eMXzCtL7xQS28BH34l/n3OHsfFUl9ahzx7WNYKLlme6i0k1qZQZW8DIe9wr0
+         j6qVvg9iJHrRXOAG3i9s2+n41Q6JXO0SmLCEuPvoBVqxIGSpo+mECMZ5TnKaG1CS1M
+         rI8y8GQAKwVBFtzycIu4z1JafMqVwQ1x0I7qmMPvf35wGQjK/f03STShkceI3vj5sz
+         dOyVo1WbSmqZA==
+Date:   Mon, 5 Dec 2022 09:47:12 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     davem@davemloft.net, ecree.xilinx@gmail.com,
+        habetsm.xilinx@gmail.com, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, petrm@nvidia.com, khalasa@piap.pl,
+        shayagr@amazon.com, wsa+renesas@sang-engineering.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2] sfc: use sysfs_emit() to instead of
+ scnprintf()
+Message-ID: <Y42iAAH7Yvk6rOP+@unreal>
+References: <202212051021451139126@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v1 1/2] PM: runtime: Do not call __rpm_callback() from
- rpm_idle()
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-References: <5627469.DvuYhMxLoT@kreacher> <4789678.31r3eYUQgx@kreacher>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <4789678.31r3eYUQgx@kreacher>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212051021451139126@zte.com.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/12/22 16:30, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Dec 05, 2022 at 10:21:45AM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> Calling __rpm_callback() from rpm_idle() after adding device links
-> support to the former is a clear mistake.
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
 > 
-> Not only it causes rpm_idle() to carry out unnecessary actions, but it
-> is also against the assumption regarding the stability of PM-runtime
-> status accross __rpm_callback() invocations, because rpm_suspend() and
-
-accross -> across
-
-> rpm_resume() may run in parallel with __rpm_callback() when it is called
-> by rpm_idle() and the device's PM-runtime status can be updated by any
-> of them.
-> 
-> Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
-
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 > ---
->  drivers/base/power/runtime.c |   12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> Index: linux-pm/drivers/base/power/runtime.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/runtime.c
-> +++ linux-pm/drivers/base/power/runtime.c
-> @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
->  
->  	dev->power.idle_notification = true;
->  
-> -	retval = __rpm_callback(callback, dev);
-> +	if (dev->power.irq_safe)
-> +		spin_unlock(&dev->power.lock);
-> +	else
-> +		spin_unlock_irq(&dev->power.lock);
-> +
-> +	retval = callback(dev);
-> +
-> +	if (dev->power.irq_safe)
-> +		spin_lock(&dev->power.lock);
-> +	else
-> +		spin_lock_irq(&dev->power.lock);
->  
->  	dev->power.idle_notification = false;
->  	wake_up_all(&dev->power.wait_queue);
-> 
-> 
+> v1 -> v2
+> Fix the Subject.
+>  drivers/net/ethernet/sfc/efx_common.c       | 2 +-
+>  drivers/net/ethernet/sfc/siena/efx_common.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
 
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
