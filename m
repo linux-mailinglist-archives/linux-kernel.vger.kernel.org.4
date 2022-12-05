@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D159642619
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EF564261F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiLEJuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S231509AbiLEJvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiLEJuR (ORCPT
+        with ESMTP id S230352AbiLEJvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:50:17 -0500
+        Mon, 5 Dec 2022 04:51:13 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A77F59F;
-        Mon,  5 Dec 2022 01:50:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DBA192BB;
+        Mon,  5 Dec 2022 01:51:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64BB460FF0;
-        Mon,  5 Dec 2022 09:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3CD5C433C1;
-        Mon,  5 Dec 2022 09:50:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FE2860F60;
+        Mon,  5 Dec 2022 09:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527DFC433D6;
+        Mon,  5 Dec 2022 09:51:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670233815;
-        bh=ubvaaB4pk7dW3yKhtx+/4OXxdTTndIk3pSKSzPTdX7E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Pi2IVjSk0ssn8feM6q2TaEgwOjEhUM4myvuI1w29g7oYy7p9Nlj6jqI5htmAh0/pv
-         86/MT3OZ3HJj55nQMaap+J1vATgwBtO0HK0J2b2c1ImLvv3aNu1ehTmFR5WzGFaquK
-         iKA38WMy+cTFWM6iGkLTs2w/e4onqIs6oydXJ434mA0BxG8an+Qqbta2B95GHQeE/x
-         kKbaErJRq3PPFXrtd2kIRqdfzhfo4LYmCZ0ru/QbfDUEtb2Alsmed9C9CZeQugKzG+
-         1XKPGuDoc+bodxbMTMDwEvsFEgWvS9qhVS3A5q/Nqv0rpmBRnDoG6YsWI6AeYjgzyU
-         /YXyaLqMVYNtA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A2760C395EA;
-        Mon,  5 Dec 2022 09:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1670233871;
+        bh=ffapI+LGOzZ7Rcb4+XP7ILKCeRPuTyUmvKy3VD13zZg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ozeZlQDUZsfVO7b2d9o/kepxbfCv/ya0tboR80GzkSUja/HRVHwuCIZoXoMbhGTwC
+         jHkSph3UlErq1CWREPI9iTlZ6iApdwuxDuc7L+K0hTjmL9lYicteNC7bWU57mdfNJM
+         GC3YanVzJQGLEjHXUK2p/Lj6cVDrGJJQg85wKBwNdq3iTbr9BohoFfpNU9ln6zpvu+
+         Z8HdQ1M9XFgt/TBTjEvPNRaUr8E5LJdlCjNW12LeIdFGyx/6yyhHdDeADt/Y56HHcB
+         famYfAIL6QZRtVcytcllGV15SDblr4J5vzffjAC8usRFGEcJn9bbvz16MmaEZ5G7zo
+         o+l1ArgH484wg==
+Date:   Mon, 5 Dec 2022 10:51:09 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 045/606] i2c: slave-eeprom: Convert to i2c's .probe_new()
+Message-ID: <Y42/DaOqq1yrTxbc@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-46-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/2] net: encx24j600: Add parentheses to fix precedence
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167023381566.8030.441453693172726774.git-patchwork-notify@kernel.org>
-Date:   Mon, 05 Dec 2022 09:50:15 +0000
-References: <20221201173408.26954-1-goncharenko.vp@ispras.ru>
-In-Reply-To: <20221201173408.26954-1-goncharenko.vp@ispras.ru>
-To:     Valentina Goncharenko <goncharenko.vp@ispras.ru>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, jringle@gridpoint.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4959fioAu7NJK4pi"
+Content-Disposition: inline
+In-Reply-To: <20221118224540.619276-46-uwe@kleine-koenig.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,30 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+--4959fioAu7NJK4pi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu,  1 Dec 2022 20:34:07 +0300 you wrote:
-> In functions regmap_encx24j600_phy_reg_read() and
-> regmap_encx24j600_phy_reg_write() in the conditions of the waiting
-> cycles for filling the variable 'ret' it is necessary to add parentheses
-> to prevent wrong assignment due to logical operations precedence.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> [...]
+On Fri, Nov 18, 2022 at 11:36:19PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Here is the summary with links:
-  - [1/2] net: encx24j600: Add parentheses to fix precedence
-    https://git.kernel.org/netdev/net/c/167b3f2dcc62
-  - [2/2] net: encx24j600: Fix invalid logic in reading of MISTAT register
-    https://git.kernel.org/netdev/net/c/25f427ac7b8d
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Applied to for-next, thanks!
 
 
+--4959fioAu7NJK4pi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONvw0ACgkQFA3kzBSg
+KbZ4XRAAin5cGGMVPByJwseTxzNfA93CQpEtvB1uB2vfpWftxE7p24vISmsG4l3U
+pAyyJFLUKCAb3F6B/XU7w+GL8x9kdEILRk69CtzCV5yHAZhix1Xa+7F7uXnsec2Z
+RJFFjUQk4BFtQbW4lmQptyTJUHNm7NVGViQBFHhEsW/NjGe3pO9ttuBuuVunhU55
+HhLeSCNrrv3A4mNnfP8awIaql2K71TbeGEm2v78Dv4EAVqM+eSNhsrmPPd6l1ZGE
+n8S13ZqmxJT++rVXad62uakDCgpHB1bRbxCvR6p6KhHEwqC/1lGq7U8GliA1yCLq
+5dX6fvveIq2qejUAXaiosVJIT26WHs046GndRn08xUet+d8luiGuV3oBG5vsin4a
+RhlJlQ1hFX3tAMANJCBYTRrA8XMgWJ1wy3sdOjvxkZZ1SH2zyQEPOAujuakCUkWL
+x4W4z1dFDAeo7sefUSfa+1qeQZEi5N8uxjwDRkeLIvy/s1F8VcJs7fB/MfSWzadV
+vkYXxFn853PtdCE3iiSKybtvz+kJ109JcdgbydG80Rn6HVFsOpHMS7V7J7TwERBW
+0VmwhDCLaMo0KXsHF6gFyY0cCeAl+lFzPh113HbDuqurOhACi/nMXWop08XOJF14
+UPmuC9mTv3cLXsOdxn433KiBmclDphMmvBbbP1zuuisGENxDagY=
+=rKk0
+-----END PGP SIGNATURE-----
+
+--4959fioAu7NJK4pi--
