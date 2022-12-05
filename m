@@ -2,194 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA00B6422B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091736422BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiLEF3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 00:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        id S231444AbiLEFaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 00:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiLEF3Q (ORCPT
+        with ESMTP id S231365AbiLEFaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 00:29:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CC310573
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 21:29:15 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p242O-0005F6-28; Mon, 05 Dec 2022 06:29:08 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p242L-002OOZ-Tt; Mon, 05 Dec 2022 06:29:06 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p242M-00BtW6-0P; Mon, 05 Dec 2022 06:29:06 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64 support for ksz8 series of switches
-Date:   Mon,  5 Dec 2022 06:29:04 +0100
-Message-Id: <20221205052904.2834962-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Dec 2022 00:30:21 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5C910573;
+        Sun,  4 Dec 2022 21:30:21 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id h33so9521726pgm.9;
+        Sun, 04 Dec 2022 21:30:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iqTqtUH4SGu1jZyiQDeCWeieBWj4y0izBZGPp2Zpk7I=;
+        b=MvDa0gz2S1pkesbkXJQajaXu9MsFphwcjvHX57EhueCxKWUmh8BJoSUaI9oOdIQwj9
+         4GoCz1hPlAYUhoeiQ1oRzeMpWr+DTtHiviVoARdaF8snNKZU/OsNotRFpvXYyggMt1tp
+         pN0l9JCq44V9OKcMx565ASHNCJcG5ogY6F/sKdQLNY+3jquMcqlhraLHET0qx7MF1ipc
+         GhGSUNBE3kp7Aef+Q/69j4/FqMKuzGkCP68D8GaTr+Alc2lYY0+MRROHLMr6zmOaI2cB
+         M+iQM2Da/+ZdxzMQ8LADBzlaJTd9413Jm+mf6rA7JpZm8jDZx9G7u+P5TfcpUAnIQHx1
+         xzQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iqTqtUH4SGu1jZyiQDeCWeieBWj4y0izBZGPp2Zpk7I=;
+        b=yLHdgzAWLa6uFYSmRyRn3wSAAH4IBlwOFADi+rFY5E0HjRNrbNcNU79YKOWG7jOJuS
+         Ic7N0nYASY1YZvkt+wyEtHNQKce0mIinjqF7/1AREZy6VaX+vUSoMHdmidRqL4AcHhjk
+         aKv46vfERdSiKeYtJEh8puQeXhC+6c/ha45oCLqTvjfwBaZNCdG04N55+SO8ag1DXxbC
+         YiKz/STQP4hhe+ww0+GhdX7kzRU2ZUhLFRBW8XorY5/743sMCq2fVs9Ho+up312cTO/n
+         YWaLD392m/lWkLT+AkSllsvC0wSAmJaDqHmhFvdxbf1N7UgCG6D7vVwczW8SLi619Ade
+         abOw==
+X-Gm-Message-State: ANoB5plPJh4194H0zZS4wIGtzzGnuujycGb+vPQEv2nU4uPolHPpI2e+
+        j55PuWy5moiMB2c3fQu9j+T2vExBXLU=
+X-Google-Smtp-Source: AA0mqf66qduVLZhP4T/e5mH6CJEsnoy0jTRRNV34xJAKzug/p+wgWeoLtnrd3nudduT1wxkNb4XGGQ==
+X-Received: by 2002:a63:4081:0:b0:46f:e657:7d25 with SMTP id n123-20020a634081000000b0046fe6577d25mr71093325pga.347.1670218220365;
+        Sun, 04 Dec 2022 21:30:20 -0800 (PST)
+Received: from localhost.localdomain (2001-b400-e2d4-7fe5-c00b-8015-d148-489d.emome-ip6.hinet.net. [2001:b400:e2d4:7fe5:c00b:8015:d148:489d])
+        by smtp.gmail.com with ESMTPSA id 13-20020a17090a190d00b00218cd71781csm8239556pjg.51.2022.12.04.21.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Dec 2022 21:30:19 -0800 (PST)
+From:   Owen Yang <ecs.taipeikernel@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Bob Moragues <moragues@google.com>, Harvey <hunge@google.com>,
+        Matthias Kaehlcke <mka@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Gavin Lee <gavin.lee@ecs.com.tw>,
+        Abner Yen <abner.yen@ecs.com.tw>,
+        Owen Yang <ecs.taipeikernel@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v14 1/2] dt-bindings: arm: qcom: Add zombie
+Date:   Mon,  5 Dec 2022 13:29:59 +0800
+Message-Id: <20221205132913.v14.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add stats64 support for ksz8xxx series of switches.
+Add entries in the device tree binding for sc7280-zombie.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
 ---
- drivers/net/dsa/microchip/ksz_common.c | 87 ++++++++++++++++++++++++++
- drivers/net/dsa/microchip/ksz_common.h |  1 +
- 2 files changed, 88 insertions(+)
 
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index f39b041765fb..423f944cc34c 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -70,6 +70,43 @@ struct ksz_stats_raw {
- 	u64 tx_discards;
- };
+Changes in v14:
+- None.
+
+Changes in v13:
+- None.
+
+Changes in v12:
+- None.
+
+Changes in v11:
+- Put all tags togather as As requested by Douglas.
+
+Changes in v10:
+- Add "Reviewed-by" tags in this patch log.
+- Fixed history log list.
+
+Changes in v9:
+- Fixed version number (v7 and v8 were erroneously posted as v6)
+
+Changes in v8:
+- Correct commit log. Use "entries" instead of "an entry". As requested by Krzysztof, Matthias and Douglas.
+
+Changes in v7:
+- None.
+
+Changes in v6:
+- None.
+
+Changes in v5:
+- None.
+
+Changes in v4:
+- None.
+
+Changes in v3:
+- None.
+
+Changes in v2:
+- Fixed patch order.
+
+ Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 463509f0f23a..7ec6240311db 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -655,6 +655,16 @@ properties:
+           - const: google,villager-sku512
+           - const: qcom,sc7280
  
-+struct ksz88xx_stats_raw {
-+	u64 rx;
-+	u64 rx_hi;
-+	u64 rx_undersize;
-+	u64 rx_fragments;
-+	u64 rx_oversize;
-+	u64 rx_jabbers;
-+	u64 rx_symbol_err;
-+	u64 rx_crc_err;
-+	u64 rx_align_err;
-+	u64 rx_mac_ctrl;
-+	u64 rx_pause;
-+	u64 rx_bcast;
-+	u64 rx_mcast;
-+	u64 rx_ucast;
-+	u64 rx_64_or_less;
-+	u64 rx_65_127;
-+	u64 rx_128_255;
-+	u64 rx_256_511;
-+	u64 rx_512_1023;
-+	u64 rx_1024_1522;
-+	u64 tx;
-+	u64 tx_hi;
-+	u64 tx_late_col;
-+	u64 tx_pause;
-+	u64 tx_bcast;
-+	u64 tx_mcast;
-+	u64 tx_ucast;
-+	u64 tx_deferred;
-+	u64 tx_total_col;
-+	u64 tx_exc_col;
-+	u64 tx_single_col;
-+	u64 tx_mult_col;
-+	u64 rx_discards;
-+	u64 tx_discards;
-+};
++      - description: Google Zombie (newest rev)
++        items:
++          - const: google,zombie
++          - const: qcom,sc7280
 +
- static const struct ksz_mib_names ksz88xx_mib_names[] = {
- 	{ 0x00, "rx" },
- 	{ 0x01, "rx_hi" },
-@@ -156,6 +193,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
- 	.w_phy = ksz8_w_phy,
- 	.r_mib_cnt = ksz8_r_mib_cnt,
- 	.r_mib_pkt = ksz8_r_mib_pkt,
-+	.r_mib_stat64 = ksz88xx_r_mib_stats64,
- 	.freeze_mib = ksz8_freeze_mib,
- 	.port_init_cnt = ksz8_port_init_cnt,
- 	.fdb_dump = ksz8_fdb_dump,
-@@ -1583,6 +1621,55 @@ void ksz_r_mib_stats64(struct ksz_device *dev, int port)
- 	spin_unlock(&mib->stats64_lock);
- }
- 
-+void ksz88xx_r_mib_stats64(struct ksz_device *dev, int port)
-+{
-+	struct ethtool_pause_stats *pstats;
-+	struct rtnl_link_stats64 *stats;
-+	struct ksz88xx_stats_raw *raw;
-+	struct ksz_port_mib *mib;
++      - description: Google Zombie with LTE (newest rev)
++        items:
++          - const: google,zombie-sku512
++          - const: qcom,sc7280
 +
-+	mib = &dev->ports[port].mib;
-+	stats = &mib->stats64;
-+	pstats = &mib->pause_stats;
-+	raw = (struct ksz88xx_stats_raw *)mib->counters;
-+
-+	spin_lock(&mib->stats64_lock);
-+
-+	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast +
-+		raw->rx_pause;
-+	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast +
-+		raw->tx_pause;
-+
-+	/* HW counters are counting bytes + FCS which is not acceptable
-+	 * for rtnl_link_stats64 interface
-+	 */
-+	stats->rx_bytes = raw->rx + raw->rx_hi - stats->rx_packets * ETH_FCS_LEN;
-+	stats->tx_bytes = raw->tx + raw->tx_hi - stats->tx_packets * ETH_FCS_LEN;
-+
-+	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
-+		raw->rx_oversize;
-+
-+	stats->rx_crc_errors = raw->rx_crc_err;
-+	stats->rx_frame_errors = raw->rx_align_err;
-+	stats->rx_dropped = raw->rx_discards;
-+	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
-+		stats->rx_frame_errors  + stats->rx_dropped;
-+
-+	stats->tx_window_errors = raw->tx_late_col;
-+	stats->tx_fifo_errors = raw->tx_discards;
-+	stats->tx_aborted_errors = raw->tx_exc_col;
-+	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
-+		stats->tx_aborted_errors;
-+
-+	stats->multicast = raw->rx_mcast;
-+	stats->collisions = raw->tx_total_col;
-+
-+	pstats->tx_pause_frames = raw->tx_pause;
-+	pstats->rx_pause_frames = raw->rx_pause;
-+
-+	spin_unlock(&mib->stats64_lock);
-+}
-+
- static void ksz_get_stats64(struct dsa_switch *ds, int port,
- 			    struct rtnl_link_stats64 *s)
- {
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index cb27f5a180c7..055d61ff3fb8 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -345,6 +345,7 @@ void ksz_switch_remove(struct ksz_device *dev);
- 
- void ksz_init_mib_timer(struct ksz_device *dev);
- void ksz_r_mib_stats64(struct ksz_device *dev, int port);
-+void ksz88xx_r_mib_stats64(struct ksz_device *dev, int port);
- void ksz_port_stp_state_set(struct dsa_switch *ds, int port, u8 state);
- bool ksz_get_gbit(struct ksz_device *dev, int port);
- phy_interface_t ksz_get_xmii(struct ksz_device *dev, int port, bool gbit);
+       - items:
+           - enum:
+               - lenovo,flex-5g
 -- 
-2.30.2
+2.17.1
 
