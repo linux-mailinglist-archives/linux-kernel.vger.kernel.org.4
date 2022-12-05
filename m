@@ -2,163 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECA6643947
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E394C643939
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbiLEXJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 18:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        id S232374AbiLEXIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 18:08:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbiLEXIq (ORCPT
+        with ESMTP id S231722AbiLEXIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 18:08:46 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAC212776;
-        Mon,  5 Dec 2022 15:08:43 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5LuBPB001750;
-        Mon, 5 Dec 2022 23:08:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=HIhtSWlTSNGiCll3cr07ynxNzkRjJzJljGUF5zCpQAQ=;
- b=NBpkRbkYFiwJ1lGqFtOWYY2JN/Z8RrsnNgzRD+PQ+rVj7ftNTCDSaJrvUDLctMOl3QLf
- WNp97tRk7Bq649k9MavYR/KQ8RB/kRfnESVrX5GiXPOh3XoWupgtCrQRZhtXK41jz6dk
- LZUZnJZ5ST84Rz9cLBH4YcwmzjMoi8fXaEvfgXVUmt6ETBeYlic77xp5R4raVbPDqEhn
- s/ELanW6qboDopp9eD+Yk6cimJMy68Fil8QlqWI/Dckk3ruAHUYjzb2IRDyiKyQOkFHK
- gBDxk5cx8ojSBN6Wuiu5HRbmuVRRytu2ytFNc65vU9pQuRLH587iuRhpxymFc/LpXANH YQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m9ryp85dg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Dec 2022 23:08:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B5N8Xqb032038
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Dec 2022 23:08:34 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 5 Dec 2022 15:08:33 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <airlied@gmail.com>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v9 5/5] drm/msm/dp: add support of max dp link rate
-Date:   Mon, 5 Dec 2022 15:08:14 -0800
-Message-ID: <1670281694-13281-6-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1670281694-13281-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1670281694-13281-1-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 5 Dec 2022 18:08:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F04CE16;
+        Mon,  5 Dec 2022 15:08:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C771B8111A;
+        Mon,  5 Dec 2022 23:08:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C3FC433C1;
+        Mon,  5 Dec 2022 23:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670281716;
+        bh=uCWJLFwuqt/uYoggtv+VNAi//FJy9wJmlgEE2fqnn4o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aGqyxLYt1i6BDlsSZ6G18PysS9WnfLLylfgdhFqtdKBOAm3qRisSadwy3k1YYAdeO
+         ZUC71L0yBEisbpAmbSWq+qwPE9KRhHuzSLyB3VdBIK602dey9h2NB8gyteHWIoxY4Y
+         VnwEiHyHqOV54fiw1mA8qRyZe5XgC8bMShy/e0GfReb6KYXSHKI2CoO3Y1vU7lviHo
+         iJAEIvRLYAK2zzQI+PeBI6CDLrQx2hNgmajXloGgeP0HS/hBc0YyIQMAVSZshAC+qN
+         JoX5NvYhkghvFp9zJfG96l0J5P8FT78CxOOVBoZkx+bcWKqbMYnB5EmrTLh36FDqxt
+         NG9qqJcSfcEsQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] implement DAMOS filtering for anon pages and
+Date:   Mon,  5 Dec 2022 23:08:19 +0000
+Message-Id: <20221205230830.144349-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gW3XXVo1tlRA9Ii1sIrXSlTd34WycWKA
-X-Proofpoint-GUID: gW3XXVo1tlRA9Ii1sIrXSlTd34WycWKA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
- impostorscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212050191
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, HBR2 (5.4G) is the max link link be supported. This patch uses the
-actual limit specified by DT and removes the artificial limitation to 5.4 Gbps.
-Supporting HBR3 is a consequence of that.
+Changes from RFC v2
+(https://lore.kernel.org/damon/20221130200937.118005-1-sj@kernel.org/)
+- Rebased on latest mm-unstable
 
-Changes in v2:
--- add max link rate from dtsi
+----
 
-Changes in v3:
--- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+DAMOS let users do system operations in a data access pattern oriented
+way.  The data access pattern, which is extracted by DAMON, is somewhat
+accurate more than what user space could know in many cases.  However,
+in some situation, users could know something more than the kernel about
+the pattern or some special requirements for some types of memory or
+processes.  For example, some users would have slow swap devices and
+knows latency-ciritical processes and therefore want to use DAMON-based
+proactive reclamation (DAMON_RECLAIM) for only non-anonymous pages of
+non-latency-critical processes.
 
-Changes in v4:
--- delete unnecessary pr_err
+For such restriction, users could exclude the memory regions from the
+initial monitoring regions and use non-dynamic monitoring regions update
+monitoring operations set including fvaddr and paddr.  They could also
+adjust the DAMOS target access pattern.  For dynamically changing memory
+layout and access pattern, those would be not enough.
 
-Changes in v5:
--- split parser function into different patch
+To help the case, add an interface, namely DAMOS filters, which can be
+used to avoid the DAMOS actions be applied to specific types of memory,
+to DAMON kernel API (damon.h).  At the moment, it supports filtering
+anonymous pages and/or specific memory cgroups in or out for each DAMOS
+scheme.
 
-Changes in v9:
--- revised commit test
+This patchset adds the support for all DAMOS actions that 'paddr'
+monitoring operations set supports ('pageout', 'lru_prio', and
+'lru_deprio'), and the functionality is exposed via DAMON kernel API
+(damon.h) the DAMON sysfs interface (/sys/kernel/mm/damon/admins/), and
+DAMON_RECLAIM module parameters.
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 4 ++++
- drivers/gpu/drm/msm/dp/dp_panel.c   | 7 ++++---
- drivers/gpu/drm/msm/dp/dp_panel.h   | 1 +
- 3 files changed, 9 insertions(+), 3 deletions(-)
+Patches Sequence
+----------------
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index bfd0aef..edee550 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
- 	struct edid *edid;
- 
- 	dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
-+	dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
-+
-+	drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
-+		dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
- 
- 	rc = dp_panel_read_sink_caps(dp->panel, dp->dp_display.connector);
- 	if (rc)
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index 5149ceb..933fa9c 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
- 	link_info->rate = drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
- 	link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & DP_MAX_LANE_COUNT_MASK;
- 
-+	/* Limit data lanes from data-lanes of endpoint properity of dtsi */
- 	if (link_info->num_lanes > dp_panel->max_dp_lanes)
- 		link_info->num_lanes = dp_panel->max_dp_lanes;
- 
--	/* Limit support upto HBR2 until HBR3 support is added */
--	if (link_info->rate >= (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
--		link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
-+	/* Limit link rate from link-frequencies of endpoint properity of dtsi */
-+	if (link_info->rate > dp_panel->max_dp_link_rate)
-+		link_info->rate = dp_panel->max_dp_link_rate;
- 
- 	drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
- 	drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
-index d861197a..f04d021 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.h
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.h
-@@ -50,6 +50,7 @@ struct dp_panel {
- 
- 	u32 vic;
- 	u32 max_dp_lanes;
-+	u32 max_dp_link_rate;
- 
- 	u32 max_bw_code;
- };
+First patch implements DAMOS filter interface to DAMON kernel API.
+Second patch makes the physical address space monitoring operations set
+to support the filters from all supporting DAMOS actions.  Third patch
+adds anonymous pages filter support to DAMON_RECLAIM, and the fourth
+patch documents the DAMON_RECLAIM's new feature.  Fifth to seventh
+patches implement DAMON sysfs files for support of the filters, and
+eighth patch connects the file to use DAMOS filters feature.  Ninth
+patch adds simple self test cases for DAMOS filters of the sysfs
+interface.  Finally, following two patches (tenth and eleventh) document
+the new features and interfaces.
+
+Patchset History
+----------------
+
+Changes from RFC v2
+(https://lore.kernel.org/damon/20221130200937.118005-1-sj@kernel.org/)
+- Rebased on latest mm-unstable
+
+Changes from RFC v1
+(https://lore.kernel.org/damon/20221124212114.136863-1-sj@kernel.org/)
+- sysfs: Clean up filters directory from scheme directory cleanup path
+- sysfs: Link newly created filter to the scheme
+- sysfs: Ignore removed memcg when checking path
+- sysfs: Guard 'struct mem_cgroup' access with CONFIG_MEMCG
+  (kernel test robot)
+
+SeongJae Park (11):
+  mm/damon/core: implement damos filter
+  mm/damon/paddr: support DAMOS filters
+  mm/damon/reclaim: add a parameter called skip_anon for avoiding
+    anonymous pages reclamation
+  Docs/admin-guide/damon/reclaim: document 'skip_anon' parameter
+  mm/damon/sysfs-schemes: implement filters directory
+  mm/damon/sysfs-schemes: implement filter directory
+  mm/damon/sysfs-schemes: connect filter directory and filters directory
+  mm/damon/sysfs-schemes: implement scheme filters
+  selftests/damon/sysfs: test filters directory
+  Docs/admin-guide/mm/damon/usage: document DAMOS filters of sysfs
+  Docs/ABI/damon: document scheme filters files
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  29 ++
+ .../admin-guide/mm/damon/reclaim.rst          |   9 +
+ Documentation/admin-guide/mm/damon/usage.rst  |  48 ++-
+ include/linux/damon.h                         |  51 +++
+ mm/damon/core.c                               |  39 ++
+ mm/damon/paddr.c                              |  71 +++-
+ mm/damon/reclaim.c                            |  19 +
+ mm/damon/sysfs-schemes.c                      | 370 +++++++++++++++++-
+ tools/testing/selftests/damon/sysfs.sh        |  29 ++
+ 9 files changed, 652 insertions(+), 13 deletions(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.25.1
 
