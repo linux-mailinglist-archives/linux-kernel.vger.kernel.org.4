@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886F0642671
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E08642673
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbiLEKKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 05:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S231615AbiLEKKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 05:10:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiLEKKc (ORCPT
+        with ESMTP id S230148AbiLEKKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 05:10:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02738183B5;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E60183B4;
         Mon,  5 Dec 2022 02:10:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7865B80E60;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A900B80E5E;
         Mon,  5 Dec 2022 10:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55EF1C433B5;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F25AC433D6;
         Mon,  5 Dec 2022 10:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1670235029;
-        bh=YMlE6nWRDtF//ri9V9yKEVsMMR4A33b7UQugBFmOK7Q=;
+        bh=IEH5+SklrZeRvcXZ7x5oYjnP26+lXJJ2RNphQwvxjSM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s8AB7kPviA+CsoLJTDlHHp0Ikx1yznlxLrVS43pQzT6D0sdKkbEiZSEJUKp1LxALF
-         xhXyEboNzeqWBEGRw9vJNejXBVR8/WZdHC33robFiJkSzYiaPTj8SzOMURYnpByu8I
-         SWBJzKWg97UAmcJcIkpgL7IJ3KGxVw6IpAbpW5a3dra0dft/XyFwV8fGfM0LpnAZ5/
-         gfG80lxdQQGyksTrtMAVZ6qGR5VnFztHvu10tvT/pGaUNfiG+16Nkhc1XxJU8ekw4k
-         0OIUa/GHTE12Wx95wkPARz7k6WL+ny+ZN01swZZnzc5VBx1misR6YMTe+6MMZPClFi
-         BpPO/wLhiUXvQ==
+        b=it3VXqPNUYO6b3CpFHhBT/sPrSRTn45NGpy3vOHKBgv70rhrrMK10Yb/M6oPvTUsV
+         xIZTgKbm4BoDhrygucNiU+qxsJzo34op+S9z0SHdqA15Zy4JQx0zJrK37jcjOWwVbl
+         i2R4p8MtGE7lQD2lQAPsAdx8j1Nc55kfSSzQ3hztdmwfMH+o/hvdh9bM51mwudHxi/
+         F8XqCAFNW+rJd4Yivw2TPNZbY60iEIg/ZRDbM+QutZcFhczQrn7OSIBroVEfE9kkF3
+         uO5T6rAzwrY1R6Ysp3uWGPpUUYGuyLgeBsQ32eW5xnlQEhrmxYNOwUK/PV9wSqdCTj
+         eruE5i/wBahBw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1p28Qk-0007c8-AI; Mon, 05 Dec 2022 11:10:34 +0100
+        id 1p28Qk-0007cA-DB; Mon, 05 Dec 2022 11:10:34 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
@@ -47,10 +47,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 1/2] dt-bindings: ufs: qcom: allow 'dma-coherent' property
-Date:   Mon,  5 Dec 2022 11:08:36 +0100
-Message-Id: <20221205100837.29212-2-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 2/2] arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
+Date:   Mon,  5 Dec 2022 11:08:37 +0100
+Message-Id: <20221205100837.29212-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221205100837.29212-1-johan+linaro@kernel.org>
 References: <20221205100837.29212-1-johan+linaro@kernel.org>
@@ -65,29 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UFS controllers may be cache coherent and must be marked as such in the
-devicetree to avoid data corruption.
+The SC8280XP UFS controllers are cache coherent and must be marked as
+such in the devicetree to avoid potential data corruption.
 
-This is specifically needed on recent Qualcomm platforms like SC8280XP.
-
+Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+Cc: stable@vger.kernel.org      # 6.0
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index f2d6298d926c..1f1d286749c0 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -44,6 +44,8 @@ properties:
-     minItems: 8
-     maxItems: 11
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index c4947c563099..23d1f51527aa 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -1430,6 +1430,7 @@ ufs_mem_hc: ufs@1d84000 {
+ 			required-opps = <&rpmhpd_opp_nom>;
  
-+  dma-coherent: true
-+
-   interconnects:
-     minItems: 2
-     maxItems: 2
+ 			iommus = <&apps_smmu 0xe0 0x0>;
++			dma-coherent;
+ 
+ 			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+ 				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+@@ -1491,6 +1492,7 @@ ufs_card_hc: ufs@1da4000 {
+ 			power-domains = <&gcc UFS_CARD_GDSC>;
+ 
+ 			iommus = <&apps_smmu 0x4a0 0x0>;
++			dma-coherent;
+ 
+ 			clocks = <&gcc GCC_UFS_CARD_AXI_CLK>,
+ 				 <&gcc GCC_AGGRE_UFS_CARD_AXI_CLK>,
 -- 
 2.37.4
 
