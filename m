@@ -2,139 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31197642862
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531C0642867
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiLEMZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S231779AbiLEM0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiLEMZ5 (ORCPT
+        with ESMTP id S230262AbiLEM02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:25:57 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AD763BE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:25:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670243156; x=1701779156;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=neMU4Ok0awO5Rq5skIsVHn5TxIHDupVu3e9O7MCpojQ=;
-  b=pTDUK1wUz7tmxn0Cd/iIQNWCHZzCyHTNl+sepQNL4JrtcOGWg+Qy1/S5
-   oZY8AwetLFlE4G9DE/oyACmxo4tYHU1kZwy+KDIu7nBgOv5jP+L8seF3W
-   RUp3Q8hyAH1GnqMhjh+zy7X85FSyRIB4KnubsjIAYU06bG9p05fuPhczJ
-   9MRdLZF6J4aIsC5lVI7mpCFZvQNk+4Xj1TnS9J4uJqMKaNkrDYQdjMk5G
-   G3YCuv2T9Pery9m/owL3QzOrjp/jElPP3KDGGEoE9GhtwQ8tqGaT3qahZ
-   rMWZxZZl2teVmOXziYtpFQl04JH7kKOVgpPB7rZCM9Mt/BebjzwvkUJfG
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,219,1665417600"; 
-   d="scan'208";a="330010009"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Dec 2022 20:25:55 +0800
-IronPort-SDR: t0TBNtJ1ixCUr7i5lP8b6mFGFv1RlOLYASdL10zawhkWEiw/PvTmB46PKHu7VFUPT7px+YmlN+
- /m/V+p6bH2kNGg9RThbpaVlGFXL9evhXY/8tRVTzXZC6b30pOK1utdkrZiHNGUxJO3vk/p2J3W
- DCaqr7ktNdGpGb3+BdvSC6md/YSqQtbaRvwWbVVgxTetrnaXzKmKepy99g/o1ifPl7Ux5Kk0Yc
- d/AHf1na0WQW0aSXElmMWZ9z7u+xF9reStUSzyfmbV67m2FBBbu4F4OvmiMHt11BpDImGlPxfV
- Y1Y=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Dec 2022 03:38:45 -0800
-IronPort-SDR: RS2c9f8HzNKezlusL2nDZ7kyJc8v2Wrlo12R0XfMgNVnF16T8IgWBDSP34Yw4phRuQUdaDF4u+
- AGkqFC6ODkuiLx8HiagzEDd/LnapIOCwSxEBRDtzCJkkcfKaebtb08W/FyniLyuE0pEDJg5TQR
- kfj1KFJEHCuHj3MB3j+tzREBuYYT18VoeTx59a0sG2CxSXSIHJshUHv7UuVXuh7A80rI6Gk3KY
- WQIT4z1JKpNiLkiGBsAeB5AtVd1OkGkSE9kPsdRUE8TUA0dLSr9rCGLVfR8dfAKWYcK1Mk1GEl
- PEc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Dec 2022 04:25:56 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NQjSg3Nzsz1Rwrq
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:25:55 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1670243153; x=1672835154; bh=neMU4Ok0awO5Rq5skIsVHn5TxIHDupVu3e9
-        O7MCpojQ=; b=hLPMbnYEZZc1sD43hh+tarQWN21QTPeRtHy0AzFV4v4psQ2nsc1
-        q8+gV8DYQs70y+rtMU/IKMX7WLT+kyZ2rQQdnx/Rs1CHsi4t9dK6R+f2wvZOxGHh
-        wOJ7eo+S3X1N+38s0lj05mgkKh6NqX6T4EkRW/RwSAvlh0L87N+ib3UyOltTMCdI
-        wVkKNCoFDL2AcmumZkksgTfSRYJ32AdFvvL8SRiRdWebk01E/ivFVoFxfgjLPmiE
-        PlE9xHcMgyNE6PIOhjMjcTZz2ygBD1zlU+JpmcisE4C17GwpJFUCzXDXTxwLR7NF
-        EgofFXKEnf3ZdXOYHrIuKDQiEr4pji88eVw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id c_qJjTjvay33 for <linux-kernel@vger.kernel.org>;
-        Mon,  5 Dec 2022 04:25:53 -0800 (PST)
-Received: from [10.225.163.74] (unknown [10.225.163.74])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NQjSW6BW3z1RvLy;
-        Mon,  5 Dec 2022 04:25:47 -0800 (PST)
-Message-ID: <e62bc865-3b6f-2790-3dbf-6485cb233c4e@opensource.wdc.com>
-Date:   Mon, 5 Dec 2022 21:25:45 +0900
+        Mon, 5 Dec 2022 07:26:28 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D97F25CA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:26:27 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 145E23200933;
+        Mon,  5 Dec 2022 07:26:25 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 05 Dec 2022 07:26:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1670243185; x=1670329585; bh=yI
+        qDSI5A7PcdM3ZE7CaXgNn6948WUVwhu1z8w40I5rg=; b=IA2A3+3Wqw8RQ6OgvL
+        yOJ5SwtfZBLQQqxVdeDMbr5HdzZNjqj7dZp8e0ayopPkhgSZ/o34pFoYCAQIOZxK
+        dzHx3gep5tN5i8CgzVL5jZMASo4VSbQJzjiRf5H+3gmt/erfirSlNrDxRid4A8YM
+        rPs6tMNRrqsVbUMI/vLFi3bso5vvQV+q7x65fP6M1p25kVBTVB3GCsfX5JeONQyi
+        XHpQPlyL27zHoykFk8nVkad2VGUq5UzeuU0DwlKPDD/pKLFWmBBFpzQQqQs/2A6D
+        98RL3P6/wRcO59ICi9TxMfEhYjfIVFU2zrUq5ZtvN2ZOGLVpFOIA2/4nvh05N/XG
+        juxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1670243185; x=1670329585; bh=yIqDSI5A7PcdM3ZE7CaXgNn6948W
+        UVwhu1z8w40I5rg=; b=NN5tv1jVYxtA5KaIMk8Wfi53JTDEVgD7/td7Yg2+K1Hl
+        +cIBnk+MvuXb7S7NGkzYbrwH6VEoN5KzTTYovLA85qTRtbpDO2TwWCuAQni5Dhxw
+        MHVbWEr34yin0msM+sCIBdlwKpU6eTb/s/+sS3VXqLmBcqquzMquTPE1Ax7BPJu8
+        aii2jCBviaR3Rfp+tDMgZqPz/3UG3opcQjY8uxVTeiuEvAT0Az7wpJAvuaCWcun5
+        HsQvMtb9lYVkRZnF/aQnqDkz0GAx1hFKJDrUUycPEFzb6tl8miujbLwlQRQjj9km
+        MbTTZpUHtD8/EBtcqYs0OAteIFl5IshgBqB/iWqqOw==
+X-ME-Sender: <xms:ceONYz3pDXcoTgAGboiWeSO2lPB1aoOdys8bOZNQVMWBpG8X_FD6Vw>
+    <xme:ceONYyE5q2Itwmm0vXmMcG3CW7WwdEXpiVi6S6prPixTh0r3tKJw6mtERlZZoGQMD
+    WZfT2N3ZLEBFxzYM6w>
+X-ME-Received: <xmr:ceONYz5RBxgfR6DGfnWpReXL43vDAVNBVuCfj_tweSHSCgvlK20e6HmecuO3xqkfYx6rKA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggdegtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpehkihhrihhl
+    lhesshhhuhhtvghmohhvrdhnrghmvgenucggtffrrghtthgvrhhnpeehleevveejudejke
+    evueevteevfffhkeejgfehleethefhueejvdehieejgffhhfenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmoh
+    hvrdhnrghmvg
+X-ME-Proxy: <xmx:ceONY423Jrzk_vD9jrMrqHhOQ4RyGsQM-CrpAjf-wE6PeDDi21uR_A>
+    <xmx:ceONY2GZpJ2NlC8Xky-_CLTgY_UhavYDNs7poSAxmZanCAxUFNDCzg>
+    <xmx:ceONY58QNQXmMEC6ABY_22NtQOHKbF9oaxRvc010xmI9clTnCXgs3Q>
+    <xmx:ceONY0YFRXCH7STZo_rrLynnIt0Qsem3eOB8WNc7HHUCLjOFibTKTQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Dec 2022 07:26:24 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 0C37B10948F; Mon,  5 Dec 2022 15:26:23 +0300 (+03)
+Date:   Mon, 5 Dec 2022 15:26:23 +0300
+From:   kirill@shutemov.name
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 1/2] x86/pat: fix TDX guest PAT initialization
+Message-ID: <20221205122623.2px6y63rkkgvpxo5@box.shutemov.name>
+References: <20221205080433.16643-1-jgross@suse.com>
+ <20221205080433.16643-2-jgross@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 12/12] mm, slob: rename CONFIG_SLOB to
- CONFIG_SLOB_DEPRECATED
-To:     Palmer Dabbelt <palmer@dabbelt.com>, vbabka@suse.cz
-Cc:     cl@linux.com, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        penberg@kernel.org, 42.hyeyoo@gmail.com, roman.gushchin@linux.dev,
-        akpm@linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        willy@infradead.org, patches@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        aaro.koskinen@iki.fi, jmkrzyszt@gmail.com, tony@atomide.com,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        Arnd Bergmann <arnd@arndb.de>, josh@joshtriplett.org,
-        Conor Dooley <conor@kernel.org>, christophe.leroy@csgroup.eu,
-        geert@linux-m68k.org, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org
-References: <mhng-b0214281-7ee5-4698-a158-980427a97472@palmer-ri-x1c9a>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <mhng-b0214281-7ee5-4698-a158-980427a97472@palmer-ri-x1c9a>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205080433.16643-2-jgross@suse.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/22 02:59, Palmer Dabbelt wrote:
-[...]
->> diff --git a/arch/riscv/configs/nommu_virt_defconfig b/arch/riscv/configs/nommu_virt_defconfig
->> index 1a56eda5ce46..4cf0f297091e 100644
->> --- a/arch/riscv/configs/nommu_virt_defconfig
->> +++ b/arch/riscv/configs/nommu_virt_defconfig
->> @@ -22,7 +22,8 @@ CONFIG_EXPERT=y
->>  # CONFIG_KALLSYMS is not set
->>  # CONFIG_VM_EVENT_COUNTERS is not set
->>  # CONFIG_COMPAT_BRK is not set
->> -CONFIG_SLOB=y
->> +CONFIG_SLUB=y
->> +CONFIG_SLUB_TINY=y
->>  # CONFIG_MMU is not set
->>  CONFIG_SOC_VIRT=y
->>  CONFIG_NONPORTABLE=y
+On Mon, Dec 05, 2022 at 09:04:32AM +0100, Juergen Gross wrote:
+> With the decoupling of PAT and MTRR initialization, PAT will be used
+> even with MTRRs disabled. This seems to break booting up as TDX guest,
+> as the recommended sequence to set the PAT MSR across CPUs can't work
+> in TDX guests due to disabling caches via setting CR0.CD isn't allowed
+> in TDX mode.
 > 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> This is an inconsistency in the Intel documentation between the SDM
+> and the TDX specification. For now handle TDX mode the same way as Xen
+> PV guest mode by just accepting the current PAT MSR setting without
+> trying to modify it.
 > 
-> Though I don't have a K210 to test against, maybe Damien still does?
+> Signed-off-by: Juergen Gross <jgross@suse.com>
 
-I did test and it is OK.
+Good enough for now. I will follow up if something comes up from the
+discussion around the topic.
+
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+
+> ---
+>  arch/x86/mm/pat/memtype.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+> index 9aab17d660cd..4e50add760ad 100644
+> --- a/arch/x86/mm/pat/memtype.c
+> +++ b/arch/x86/mm/pat/memtype.c
+> @@ -296,8 +296,12 @@ void __init pat_bp_init(void)
+>  	/*
+>  	 * Xen PV doesn't allow to set PAT MSR, but all cache modes are
+>  	 * supported.
+> +	 * When running as TDX guest setting the PAT MSR won't work either
+> +	 * due to the requirement to set CR0.CD when doing so. Rely on
+> +	 * firmware to have set the PAT MSR correctly.
+
+s/firmware/TDX module/
+
+>  	 */
+> -	if (pat_disabled || cpu_feature_enabled(X86_FEATURE_XENPV)) {
+> +	if (pat_disabled || cpu_feature_enabled(X86_FEATURE_XENPV) ||
+> +	    cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+>  		init_cache_modes(pat_msr_val);
+>  		return;
+>  	}
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+  Kiryl Shutsemau / Kirill A. Shutemov
