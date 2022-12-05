@@ -2,172 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3486436B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FFE6436B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbiLEVVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S233189AbiLEVXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiLEVVH (ORCPT
+        with ESMTP id S230100AbiLEVXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:21:07 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6742224BE1;
-        Mon,  5 Dec 2022 13:21:04 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2A3CB66015B4;
-        Mon,  5 Dec 2022 21:21:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670275263;
-        bh=yZ1n3g/TSJjCi84p9pjKVWPvGbn2hvORKezmMbo0dSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LR5y41FJKwR6V4TCoOJBGsIjIdLh5jW5VlCZXgaXsWn+DYysi+8QzId+Cc7PyUVZf
-         +ulkePN40TWCHVysoqlea5VLOpat/IUxuh4LWHt9FEoIAzH/Ph736/cLv3xGhvIFRL
-         FZ8zSuzQucky9s2tLpAznxsDuTCmoT3chzFRlFQXt6lzeZKZ6Iy/RcOr12qG2c3HNi
-         7vgH6NM7TC1+W5vx+0++M0oW14SHcLyCPDfdt+MNj5F0FyJuHLejy7ApXim9uzQtjq
-         rTZuDfhQHDsNaLXttsmj/RAwu5dGBQbCX62yMNrVE0RUCkHuLBFENo9wFMQ6HLIEEb
-         8zoRoZXzydbaA==
-Received: by mercury (Postfix, from userid 1000)
-        id 6C1611060F2F; Mon,  5 Dec 2022 22:21:00 +0100 (CET)
-Date:   Mon, 5 Dec 2022 22:21:00 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hermes Zhang <Hermes.Zhang@axis.com>
-Cc:     kernel <kernel@axis.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] power: supply: bq256xx: Remove init ichg/vbat with max
- value
-Message-ID: <20221205212100.mldqqlv3mp5z7gwg@mercury.elektranox.org>
-References: <20221129090112.3451501-1-chenhuiz@axis.com>
- <20221129152715.4hwtobuv57hrndzu@mercury.elektranox.org>
- <60ca0aa6-508a-4350-f892-98d1368e3783@axis.com>
- <20221203010303.it5urfo2i7pj4n3n@mercury.elektranox.org>
- <cf37715e-8bff-b38c-cee9-fdcc3b1d3a6b@axis.com>
+        Mon, 5 Dec 2022 16:23:47 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178B9240AD;
+        Mon,  5 Dec 2022 13:23:47 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d3so12046132plr.10;
+        Mon, 05 Dec 2022 13:23:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oqw42TAUE/YjCYP3ea6wZv0qMyuIlb809z0kPS2OjGs=;
+        b=JqkVPPUtlEvwJH9hNkzmERSCuPsycqZ4Nonb2GJZ4fnDUW8wAD45oIvSXGsX7CMxxX
+         bdZeW0j9NQUkzXTsrDVpWsF+MP1J6HsyHsSGksh5qguXsAw3BRSNA0b8NXCUGO6SEI0h
+         yiwER9nO1QzVUuGMjn1TbBExW/2Vz+jncI+kdHmZjq1R3CxIPW9ERxbad1yicKCGnU2d
+         QomOc+zWh5+aWGbHHVpOxCTdFvXt6+dn0ylZXCy6/lcS3mh+J+ATVAPUv2sh7QqBMX1i
+         jItaOXASi2IEEHa5xk7PTzemAU9wnmH9uaofVm5zyckpEunAH+/glfnoxhwCHwmGihZU
+         BERw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Oqw42TAUE/YjCYP3ea6wZv0qMyuIlb809z0kPS2OjGs=;
+        b=MVpfcFv0b8sEQU+OsX62PSdZzrgxcInbU2SB5fApgrX4/Jr9htz37v9WUifoE5hhw4
+         wgOJ2eCHhnPqS5Fc5WsYSum5463RCjBXxLdogq+0t7HTNjEkoJXu7jOqm3cbEQNKTE+X
+         WLU9kSv/AD/8/HzEbrhMQhHTN/prz1iq5AZ+1SM5nKgoJKBwgxLSVMGgNrlh+CpRi9z1
+         SmI2fLkKdE6DU3n+1twKCa3QNfMnTHY/DuiFZDchIWUtsHrDy1kh0a2GJ/J4tbHRoyO3
+         bJj5AiZt1BacP5HA4uIf719KwOomrBYnb34g2E1uXk00ydAOoCTGKZ8lg7pDkpx3z8if
+         uN5A==
+X-Gm-Message-State: ANoB5pmGZoQKwGvihrFkKBdaow23NPT476vZIQaFUisstkYFD3BVFQI/
+        MX6DtnUQ34TW5n5OE8cvwuARi2iLe96eog==
+X-Google-Smtp-Source: AA0mqf4TRoFef9dAkjio+oQlREb9eLb0nDBwFsWGmKK3Xoc35/cWfiLvLYe9e6VSdk9p+UbnMohRmg==
+X-Received: by 2002:a17:902:8604:b0:186:fe2d:f3cb with SMTP id f4-20020a170902860400b00186fe2df3cbmr70106898plo.132.1670275426148;
+        Mon, 05 Dec 2022 13:23:46 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090264c200b00189348ab156sm4029270pli.283.2022.12.05.13.23.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 13:23:45 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-kernel@vger.kernel.org (open list:IRQCHIP DRIVERS),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE)
+Subject: [PATCH net 0/2] Update Joakim Zhang entries
+Date:   Mon,  5 Dec 2022 13:23:38 -0800
+Message-Id: <20221205212340.1073283-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="icjjtdliya2ciysi"
-Content-Disposition: inline
-In-Reply-To: <cf37715e-8bff-b38c-cee9-fdcc3b1d3a6b@axis.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Shawn, since you are the i.MX maintainer I added you and the NXP Linux
+Team as the de-facto maintainers for those entries, however there may be
+other people to list, thanks!
 
---icjjtdliya2ciysi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Florian Fainelli (2):
+  MAINTAINERS: Update NXP FEC maintainer
+  dt-bindings: FEC/i.MX DWMAC and INTMUX maintainer
 
-Hi,
+ .../devicetree/bindings/interrupt-controller/fsl,intmux.yaml   | 3 ++-
+ Documentation/devicetree/bindings/net/fsl,fec.yaml             | 3 ++-
+ Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml       | 3 ++-
+ MAINTAINERS                                                    | 3 ++-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
 
-On Mon, Dec 05, 2022 at 03:23:53AM +0000, Hermes Zhang wrote:
-> Init the ichg and vbat reg with max value is not good. First the chip
-> already has a default value for ichg and vbat (small value). Init these
-> two reg with max value will result an unsafe case (e.g. battery is over
-> charging in a hot environment) if no user space change them later.
->=20
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com><mailto:chenhuiz@axis.com>
-> ---
->=20
->=20
-> It's the driver's task to setup safe initial maximum values.
-> Pre-kernel values may or may not be safe if you consider things
-> like kexec. If you get unsafe values programmed, then fix the
-> values instead.
->=20
-> -- Sebastian
->=20
->=20
->=20
-> The constant_charge_current_max_ua is either from dts or default value
-> for each chip in the code, but I guess I could ot change them because it
-> has their own meaning (it will be used to check if the setting is valid
-> or not). Do you mean I can set some other value here instead of
-> constant_xxx_max?
->=20
->=20
->=20
-> You can just change the DT value to something safe as it is meant to be?
->=20
->=20
-> Hi,
+-- 
+2.34.1
 
-Please use proper quoting.
-
-> I tried it but it doesn't work. As the property in dts (constant_charge_c=
-urrent_max_microamp
-> and constant_charge_voltage_max_microvolt) means the max current and volt=
-age in CC phase, if
-> I change them to a safe(small) value, we could not apply any vlaue bigger=
- than them in the
-> furture:
-
-Right, because the bigger values are not safe.
-
-> in
-> bq256xx_set_ichg_curr()
->=20
-> ichg =3D clamp(ichg, BQ256XX_ICHG_MIN_uA, ichg_max);
->=20
-> So the DT value are not match/sutiable for what we want to set here. Eith=
-er we introduce two
-> new DT property (for init purpose) to set here or we just remove the sett=
-ing here as the chip
-> already has the default values.
-
-There are no chip defaults if you use kexec.
-
-I'm trying to read between the lines. My understanding is, that you
-have some kind of userspace based solution to monitor the charging
-process and reduce the current if it gets dangerous. This process
-should use higher charge currents then what is considered safe; when
-it's not running charging should not go above the safe threshold.
-
-This effectively means, that you want to take over the decision what
-is considered safe to userspace. So I suggest adding a module parameter
-to disable the safety clamp like this:
-
-static unsigned bool no_safety =3D false;
-module_param(no_safety, bool, 0644);
-MODULE_PARM_DESC(no_safety, "allow charge currents/voltages considered unsa=
-fe by the kernel [default: disallowed]");
-
-=2E..
-
-int ichg_max =3D bq->init_data.ichg_max;
-if (no_safety)
-    ichg_max =3D bq->init_data.ichg_chip_max;
-
--- Sebastian
-
---icjjtdliya2ciysi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOOYLgACgkQ2O7X88g7
-+pqcLhAAp68cKmwqkijxcISHP0G69lgr9wDaxmI8FQxiWiREZSHipD7wYP0ViNy1
-nyOsaOakKIkSDbxwyzutJHvv5+kmZAghwRcrPaI04FXuSTJPf1jnGirCcRFi366h
-WNyrzUdk+i7TkG0OMDMK8phvkKp5HGrAS7CuL97pB78lmTc0DPGHJ8AsGpb9sUK2
-tLGCrhacg4BSzaR2nwSIbHSvqkHxfPsbOTolze+zgz3/PmYJhXqqnjCsem9UhcKk
-An3+fWUORKbTEmT+m7eH/P9HZtQ9x+Y1vepgNhEIh9x9/XGqgbdtDRxheSkHdazI
-CV1e2dOPLEoRg2hNmYPd2fU3lW0wjcyjaOkKp6FIHTij3FvsHkNZqKdYygXVapV+
-Yqz+HUp3a201vdbBmzDxTMSjdl2eWpJm0cFoNtm+sITVgJ4rOGc6xvS2cgE+uMqz
-pqSSMRqGI6bdWYqa+aNOOXhDjp5wRhbBiHwwbUEtI6FnfYqmz6xMqNprWurE/DC1
-Q2ZlOI/SjZZaAQbNVfUYJRsA5ClMPcxDdPlhOrnKr/p0GkMKjiHVPF/NxOFOPQ6u
-Z1jcNGTvTTCt2cM3xWanplaKjm8v7KHbGAaYyojY+hi6QmqQ48kNlILorgiBKAEs
-bx7X0DLAv2p0s1nbv6FJps+OKFbLGqVZ+quXPppDuakC9OUphDM=
-=2hXN
------END PGP SIGNATURE-----
-
---icjjtdliya2ciysi--
