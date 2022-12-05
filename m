@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772C1642FE0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17A8642FE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbiLESY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
+        id S232357AbiLESYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiLESY1 (ORCPT
+        with ESMTP id S232266AbiLESYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:24:27 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAE9F1F2D0;
-        Mon,  5 Dec 2022 10:24:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71ACED6E;
-        Mon,  5 Dec 2022 10:24:23 -0800 (PST)
-Received: from [10.57.71.118] (unknown [10.57.71.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B37F3F73B;
-        Mon,  5 Dec 2022 10:24:10 -0800 (PST)
-Message-ID: <fa9729b7-5d20-fb3d-4bf9-e073d18235b3@arm.com>
-Date:   Mon, 5 Dec 2022 18:24:04 +0000
+        Mon, 5 Dec 2022 13:24:33 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52912209B0
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:24:32 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id p18so5687284qkg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 10:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2P9EsS2tsbUaY4dcD49BmgQjZYX6Yb1webDSZ03mbXw=;
+        b=tSik+6xRk+SrYoWiJnRXnocphBDMpyh53ucwgGxIO7ZFeAEqD7VHCaOjr38zARzj8I
+         r2bVblVctpS7IbK6mkamgY7TJI9Rm6g86zEa38nBYh2LD5/Ere8TbLF4Q9qzqZWIu8ND
+         it+xe0OtYzmqqYhGr+4ZfgCBVkMztqbfLFMz/v5rPBKCmz9IS30QQcP/hF2+y/nX/X43
+         MaiL+peuROUFwTdNTjnDEUIIPp+nNKkaDs62xKBzhLZEBHhq448QoENSNoDXt1Q45/RZ
+         8hZ96cqDmRYB2OEqRIsrDQaLE7+s+6Vv0Q+mYPXT1W5J+/b2hH0Wn3YQ7IR4FW4y30Fg
+         eLmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2P9EsS2tsbUaY4dcD49BmgQjZYX6Yb1webDSZ03mbXw=;
+        b=uAmwUBAAuujwZ0ODdOsTfHpvE0p+134EdGyZRG+K2DDmbccA1kK36GHAyk/YZGiayY
+         jSIrnfmSGrnImua41ju/PtI7TOJs369/ndwdVpbZqxlF7yp3VPYXwWInH0iNCQ/dutHg
+         osxW8Jj4Q1Qbk/fih0yYy3cjAcT9ABa9hC+swqyOhubF1JF4iCH0Tft0zmOTXJllfKsU
+         bxDedhQLtUKz46ZJOCb2UshynBJd4011TFxZ8pomIeksEIG4FQ1V51/sOVSiyzWl28A2
+         tmowRhoeBahjpVhCge9M7OK+bzPygrcoDzG5wO+hp1cPUyMZ/RrKXixdn9EUo7AkQTmg
+         qSqA==
+X-Gm-Message-State: ANoB5pl5teq9dreSXbzNwxDUi/KuFJah1V0vMvZMYerM4wyxsGNPJvc3
+        TtiFHMaUb8uLKoliz553DcjmMbiviLUQRrHGyKqBNA==
+X-Google-Smtp-Source: AA0mqf5Hb1GPcOEkgj/1xs5WXa3rdESQFMj847BK6VJDMjvdE2UYWIz8hpSJQF9ggzYC8A83Ji4eerK6Ajeyuyhspg8=
+X-Received: by 2002:a37:464b:0:b0:6fa:3431:1f2f with SMTP id
+ t72-20020a37464b000000b006fa34311f2fmr59252381qka.81.1670264671267; Mon, 05
+ Dec 2022 10:24:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 7/7] iommu/s390: flush queued IOVAs on RPCIT out of
- resource indication
-Content-Language: en-GB
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-References: <20221116171656.4128212-1-schnelle@linux.ibm.com>
- <20221116171656.4128212-8-schnelle@linux.ibm.com>
- <cf0fed35-2d9d-3d19-3538-1ddcbfd563b0@arm.com>
- <8ae4c9b196aec34df4644ffecb66cfa4ce953244.camel@linux.ibm.com>
- <6cd52999-7b01-a613-a9fb-f09a845a27b3@arm.com>
- <c6c4458bb49d1144a304e34c65a70dc2ebbb4082.camel@linux.ibm.com>
- <c06dc451129127b660d40886afe89c92471a913a.camel@linux.ibm.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <c06dc451129127b660d40886afe89c92471a913a.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221201195718.1409782-1-vipinsh@google.com> <20221201195718.1409782-2-vipinsh@google.com>
+In-Reply-To: <20221201195718.1409782-2-vipinsh@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 5 Dec 2022 10:24:20 -0800
+Message-ID: <CANgfPd_sZoW6gRNgs44BbBu4RhwqNPjUO-=biJ++L5d8LpU3zg@mail.gmail.com>
+Subject: Re: [Patch v2 1/2] KVM: x86/mmu: Allocate page table pages on TDP
+ splits during dirty log enable on the underlying page's numa node
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     dmatlack@google.com, seanjc@google.com, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,152 +69,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-02 14:29, Niklas Schnelle wrote:
-> On Tue, 2022-11-29 at 15:40 +0100, Niklas Schnelle wrote:
->> On Tue, 2022-11-29 at 12:53 +0000, Robin Murphy wrote:
->>> On 2022-11-29 12:00, Niklas Schnelle wrote:
->>>> On Mon, 2022-11-28 at 14:52 +0000, Robin Murphy wrote:
->>>>> On 2022-11-16 17:16, Niklas Schnelle wrote:
->>>>>> When RPCIT indicates that the underlying hypervisor has run out of
->>>>>> resources it often means that its IOVA space is exhausted and IOVAs need
->>>>>> to be freed before new ones can be created. By triggering a flush of the
->>>>>> IOVA queue we can get the queued IOVAs freed and also get the new
->>>>>> mapping established during the global flush.
->>>>>
->>>>> Shouldn't iommu_dma_alloc_iova() already see that the IOVA space is
->>>>> exhausted and fail the DMA API call before even getting as far as
->>>>> iommu_map(), though? Or is there some less obvious limitation like a
->>>>> maximum total number of distinct IOVA regions regardless of size?
->>>>
->>>> Well, yes and no. Your thinking is of course correct if the advertised
->>>> available IOVA space can be fully utilized without exhausting
->>>> hypervisor resources we won't trigger this case. However sadly there
->>>> are complications. The most obvious being that in QEMU/KVM the
->>>> restriction of the IOVA space to what QEMU can actually have mapped at
->>>> once was just added recently[0] prior to that we would regularly go
->>>> through this "I'm out of resources free me some IOVAs" dance with our
->>>> existing DMA API implementation where this just triggers an early cycle
->>>> of freeing all unused IOVAs followed by a global flush. On z/VM I know
->>>> of no situations where this is triggered. That said this signalling is
->>>> architected so z/VM may have corner cases where it does this. On our
->>>> bare metal hypervisor (no paging) this return code is unused and IOTLB
->>>> flushes are simply hardware cache flushes as on bare metal platforms.
->>>>
->>>> [0]
->>>> https://lore.kernel.org/qemu-devel/20221028194758.204007-4-mjrosato@linux.ibm.com/
->>>
->>> That sheds a bit more light, thanks, although I'm still not confident I
->>> fully understand the whole setup. AFAICS that patch looks to me like
->>> it's putting a fixed limit on the size of the usable address space. That
->>> in turn implies that "free some IOVAs and try again" might be a red
->>> herring and never going to work; for your current implementation, what
->>> that presumably means in reality is "free some IOVAs, resetting the
->>> allocator to start allocating lower down in the address space where it
->>> will happen to be below that limit, and try again", but the iommu-dma
->>> allocator won't do that. If it doesn't know that some arbitrary range
->>> below the top of the driver-advertised aperture is unusable, it will
->>> just keep allocating IOVAs up there and mappings will always fail.
->>>
->>> If the driver can't accurately represent the usable IOVA space via the
->>> aperture and/or reserved regions, then this whole approach seems doomed.
->>> If on the other hand I've misunderstood and you can actually still use
->>> any address, just not all of them at the same time,
->>
->>
->> This is exactly it, the problem is a limit on the number of IOVAs that
->> are concurrently mapped. In QEMU pass-through the tightest limit is
->> usually the one set by the host kernel parameter
->> vfio_iommu_type1.dma_entry_limit which defaults to 65535 mappings. With
->> IOMMU_DOMAIN_DMA we stay under this limit without extra action but once
->> there is a flush queue (including the existing per-CPU one) where each
->> entry may keep many pages lazily unmapped this is easly hit with fio
->> bandwidth tests on an NVMe. For this case this patch works reliably
->> because of course the number of actually active mappings without the
->> lazily freed ones is similar to the number of active ones with
->> IOMMU_DOMAIN_DMA.
->>
->>>   then it might in
->>> fact be considerably easier to skip the flush queue mechanism entirely
->>> and implement this internally to the driver - basically make .iotlb_sync
->>> a no-op for non-strict DMA domains,
->>
->> I'm assuming you mean .iotlb_sync_map above.
+On Thu, Dec 1, 2022 at 11:57 AM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> Huge pages are split when dirty log is enabled. New page table pages are
+> allocated based on the current thread NUMA node or mempolicy. This
+> causes inefficient page table accesses if underlying page is on a
+> different NUMA node
+>
+> Allocate page table pages on the same NUMA node as the underlying huge
+> page when dirty log is enabled and huge pages are split.
+>
+> The performance gain during the pre-copy phase of live migrations of a
+> 416 vCPUs and 11 TiB memory VM  on a 8 node host was seen in the range
+> of 130% to 150%.
+>
+> Suggested-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  arch/x86/kvm/mmu.h         |  1 +
+>  arch/x86/kvm/mmu/mmu.c     | 19 +++++++++++++++++++
+>  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++----
+>  include/linux/kvm_host.h   | 15 +++++++++++++++
+>  4 files changed, 43 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 6bdaacb6faa0..c960fb096e5c 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -119,6 +119,7 @@ void kvm_mmu_unload(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_free_obsolete_roots(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_sync_prev_roots(struct kvm_vcpu *vcpu);
+> +void *kvm_mmu_get_free_page(int nid, gfp_t gfp);
+>
+>  static inline int kvm_mmu_reload(struct kvm_vcpu *vcpu)
+>  {
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 4736d7849c60..0554dfc55553 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -90,6 +90,9 @@ __MODULE_PARM_TYPE(nx_huge_pages_recovery_period_ms, "uint");
+>  static bool __read_mostly force_flush_and_sync_on_reuse;
+>  module_param_named(flush_on_reuse, force_flush_and_sync_on_reuse, bool, 0644);
+>
+> +static bool __read_mostly numa_aware_pagetable = true;
+> +module_param_named(numa_aware_pagetable, numa_aware_pagetable, bool, 0644);
+> +
 
-No, I did mean .iotlb_sync, however on reflection that was under the 
-assumption that it's OK for the hypervisor to see a new mapping for a 
-previously-used IOVA without having seen it explicitly unmapped in 
-between. Fair enough if that isn't the case, but if it is then your 
-pagetable can essentially act as the "flush queue" by itself.
+I'm usually all for having module params to control things, but in
+this case I don't think it provides much value because whether this
+NUMA optimization is useful or not is going to depend more on VM size
+and workload than anything else. If we wanted to make this
+configurable, a VM capability would probably be a better mechanism so
+that userspace could leave it off when running small,
+non-performance-sensitive VMs and turn it on when running large,
+multi-node VMs. A whole-host module parameter seems overly
+restrictive.
 
->>>   put the corresponding RPCIT flush
->>> and retry in .sync_map, then allow that to propagate an error back to
->>> iommu_map() if the new mapping still hasn't taken.
->>>
->>> Thanks,
->>> Robin.
->>
->> Hmm, interesting. This would leave the IOVAs in the flush queue lazily
->> unmapped and thus still block their re-use but free their host
->> resources via a global RPCIT allowing the guest to use a different
->> porition of the IOVA space with those resources. It could work, though
->> I need to test it, but it feels a bit clunky.
->>
->> Maybe we can go cleaner while using this idea of not having to flush
->> the queue but just freeing their host side resources. If we allowed
->> .iotlb_sync_map to return an error that fails the mapping operation,
->> then we could do it all in there. In the normal case it just does the
->> RPCIT but if that returns that the hypervisor ran out of resources it
->> does another global RPCIT allowing the hypervisor to free IOVAs that
->> were lazily unmapped. If the latter succeeds all is good if not then
->> the mapping operation failed. Logically it makes sense too,
->> .iotlb_sync_map is the final step of syncing the mapping to the host
->> which can fail just like the mapping operation itself.
->>
->> Apart from the out of active IOVAs case this would also handle the
->> other useful error case when using .iotlb_sync_map for shadowing where
->> it fails because the host ran against a pinned pages limit or out of
->> actual memory. Not by fixing it but at least we would get a failed
->> mapping operation.
->>
->> The other callbacks .flush_iotlb_all and .iotlb_sync
->> could stay the same as they are only used for unmapped pages where we
->> can't reasonably run out of resources in the host neither active IOVAs
->> nor pinned pages.
->>
-> 
-> Ok, I've done some testing with the above idea and this seems to work
-> great. I've verified that my version of QEMU (without Matt's IOVA
-> aperture resrtriction patch) creates the RPCIT out of resource
-> indications and then the global flush in .iotlb_sync_map is triggered
-> and allows QEMU to unpin pages and free IOVAs while the guest still has
-> them lazily unpapeg (sitting in the flush queue) and thus uses
-> different IOVAs.
-> 
-> @Robin @Joerg, if you are open to changing .iotlb_sync_map such that it
-> can return and error and then failing the mapping operation I think
-> this is a great approach. One advantage over the previous approach of
-> flushing the queue isthat this should work for the pure IOMMU API too.
-
-Whatever happens I think allowing .iotlb_sync_map to propagate an error 
-out through iommu_map() is an appropriate thing to do - it sounds like 
-s390 might technically need that for regular IOMMU API correctness in 
-some circumstances anyway. Besides, even in the cases where it 
-represents "simple" TLB maintenance, there are potentially ways that 
-could fail (like timing out if the IOMMU has gone completely wrong), so 
-it wouldn't seem entirely unreasonable if a driver might want to report 
-overall failure if it can't guarantee that the new mapping will actually 
-be usable.
-
-Thanks,
-Robin.
-
-> If you don't want to change the signature of .iotlb_sync_map I think we
-> can do Robin's idea and have .iotlb_sync_map as a no-op and do the
-> RPCIT sync as part of the s390_iommu_map_pages(). This would hide what
-> really is our variant of .iotlb_sync_map in the mapping code though
-> which I don't super like. Besides that it would also cause more RPCITs
-> in __iommu_map_sg() as we could no longer use a single RPCIT for the
-> entire range.
-> 
-> Thanks,
-> Niklas
+>  /*
+>   * When setting this variable to true it enables Two-Dimensional-Paging
+>   * where the hardware walks 2 page tables:
+> @@ -6984,3 +6987,19 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+>         if (kvm->arch.nx_huge_page_recovery_thread)
+>                 kthread_stop(kvm->arch.nx_huge_page_recovery_thread);
+>  }
+> +
+> +void *kvm_mmu_get_free_page(int nid, gfp_t gfp)
+> +{
+> +       struct page *spt_page;
+> +       void *address = NULL;
+> +
+> +       if (numa_aware_pagetable) {
+> +               spt_page = alloc_pages_node(nid, gfp, 0);
+> +               if (spt_page)
+> +                       address = page_address(spt_page);
+> +       } else {
+> +               address = (void *)__get_free_page(gfp);
+> +       }
+> +
+> +       return address;
+> +}
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 771210ce5181..1607afbfcc0b 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1413,7 +1413,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
+>         return spte_set;
+>  }
+>
+> -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+> +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
+>  {
+>         struct kvm_mmu_page *sp;
+>
+> @@ -1423,7 +1423,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+>         if (!sp)
+>                 return NULL;
+>
+> -       sp->spt = (void *)__get_free_page(gfp);
+> +       sp->spt = kvm_mmu_get_free_page(nid, gfp);
+> +
+>         if (!sp->spt) {
+>                 kmem_cache_free(mmu_page_header_cache, sp);
+>                 return NULL;
+> @@ -1437,6 +1438,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>                                                        bool shared)
+>  {
+>         struct kvm_mmu_page *sp;
+> +       int nid;
+> +
+> +       nid = kvm_pfn_to_refcounted_page_nid(spte_to_pfn(iter->old_spte));
+>
+>         /*
+>          * Since we are allocating while under the MMU lock we have to be
+> @@ -1447,7 +1451,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>          * If this allocation fails we drop the lock and retry with reclaim
+>          * allowed.
+>          */
+> -       sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
+> +       sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
+>         if (sp)
+>                 return sp;
+>
+> @@ -1459,7 +1463,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>                 write_unlock(&kvm->mmu_lock);
+>
+>         iter->yielded = true;
+> -       sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
+> +       sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
+>
+>         if (shared)
+>                 read_lock(&kvm->mmu_lock);
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 8f874a964313..558ded73f660 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1596,6 +1596,21 @@ void kvm_arch_sync_events(struct kvm *kvm);
+>  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
+>
+>  struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
+> +
+> +/*
+> + * Returns the nid of a 'struct page' if pfn is valid and backed by a refcounted
+> + * page, NUMA_NO_NODE otherwise.
+> + */
+> +static inline int kvm_pfn_to_refcounted_page_nid(kvm_pfn_t pfn)
+> +{
+> +       struct page *page = kvm_pfn_to_refcounted_page(pfn);
+> +
+> +       if (page)
+> +               return page_to_nid(page);
+> +       else
+> +               return NUMA_NO_NODE;
+> +}
+> +
+>  bool kvm_is_zone_device_page(struct page *page);
+>
+>  struct kvm_irq_ack_notifier {
+> --
+> 2.39.0.rc0.267.gcb52ba06e7-goog
+>
