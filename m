@@ -2,237 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C524643854
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AF7643858
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbiLEWsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 17:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S233144AbiLEWs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiLEWr7 (ORCPT
+        with ESMTP id S233584AbiLEWsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 17:47:59 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823F6193E7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 14:47:57 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id gh17so2001242ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 14:47:57 -0800 (PST)
+        Mon, 5 Dec 2022 17:48:15 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E2FB494;
+        Mon,  5 Dec 2022 14:48:08 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o12so12652511pjo.4;
+        Mon, 05 Dec 2022 14:48:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8vjWkcP9dkaDQuL6t3P8CfBYdGiY7BIp4n9Ipq5W2Pw=;
-        b=fpo7T7QF40PSNx8vSX9bJXl0g07cdZ3CaXApxnYbQy5pUpdLpwG50o2Ydxjd/WI5hm
-         CzRLY+lcFdDyvQv7BTrhujM/gyo1c6SZGarfXiPjehMURlDxbMN3WCFlp32cdxn7YG/8
-         ibe03OKKLvO4EF3CeeX+Xvgkb3o0NunTyz5a8=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FIM8cOZnFf+hJ/RzssfzC4c3e6l34LrRCuOKeBtFZkw=;
+        b=Uy3vLli75PvUovwv3R6LxBei9NdEpaSxYl0ovO9Si0tXUgAvolVy6v0AHA6gcaXEGe
+         SRc5mROuDqeN/io4TtI2jn9JiS16HLdfoCIysIB8RunhhKSOQLvO3OB7xAM5SdiKXYOk
+         npQhkIKbKT2AHFIFewvc74aSLPdBLMC5B0Cy9iFxg63hPfFB3b2h9YRwkcaB1N/Q8eNB
+         UkC/60IJH3svb64yV1WlhXTT5yz/7pNlADVF95oMtBXiF9n7dxcurBoSpC9UxW4c+F1J
+         QfIIcsKex4Hgxr0AgGYu/tV0PGEPSujao98o6gioSm02HZZ1tJUOb6/FRwCJm7GhxGdp
+         MtYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8vjWkcP9dkaDQuL6t3P8CfBYdGiY7BIp4n9Ipq5W2Pw=;
-        b=iYNiJZjnajAfoKvWGTl7HVM7xN9Vm2+PMAbb1KdAvZNqhfZ1Ls8n4ynCXg0BNKcp4P
-         govHev56cFi3ycrWV2gziHfeVYdgWpQFEh93HdIyDM5kc+ftXJqwC50HFrfi8SwDpjer
-         WckQ+zo84pyJvXRr2s/uJVouZh3ZjQlmrffbB13u5AygeiNkf+wI28BFAzNd2VFzAnQS
-         wZynsX9WWJBzTKHjKS6RZaLs3UBF/xbelUEXdB0/s8B8FEytppazTNGQjxqEuCKVxvd2
-         RZyuJ/PX9KxsCs7Yw3aAOWd+fj69zgbNehAnA03WsE2DyF5T3TpnMZVFnmUDr3gjjL0l
-         cSUQ==
-X-Gm-Message-State: ANoB5pm0YYwakLGaVpkSEk17np5z+Xrl7N7jU3Jsi0v60aK8ZJrPFqL0
-        +MelLP75U3EI4xGmdYgX/oa4RGTJY1nQMuOLRjqb0A==
-X-Google-Smtp-Source: AA0mqf6KfyHLvTLy7V/yXKihGXqIoAHlH8gDzlbZkod9defz/Pv7pAhiHoAo1801sGm/yi80AMKDSJUex28FefdMDi8=
-X-Received: by 2002:a17:906:fc9:b0:7ae:ef99:6fb2 with SMTP id
- c9-20020a1709060fc900b007aeef996fb2mr70279585ejk.761.1670280475805; Mon, 05
- Dec 2022 14:47:55 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FIM8cOZnFf+hJ/RzssfzC4c3e6l34LrRCuOKeBtFZkw=;
+        b=66rbDRdk3M7aNkWC8X1UEsdEDwvMW2M4i2AF2WilJKBxuniX2FobgF1/VeEZPaJ3AK
+         kdairNyf7FUzvfJ4CQNf2OFUtQoXjAtvq2kFY4cDHh69uTc3N6nNJnP+V7A3Pjr3+5ta
+         gcgr/l3tiYHL2yJ5PLhCmPq2aS8y9ecbhjNWEmbzhzYe0v4UHsAT4SxkPEPT4i5SsMSi
+         BsLdnxKw75NeiimPLVtsMWvRsFdDCsxoEJXyi2vueoInAifMnBvx/SC7/JH3/rDlfQrN
+         AiMtHVwabWNIYXQcjCxUsYrJVsKcDMAH7m06pWWybGVxSnFBbAynj7M3zbGODvPndtM/
+         SENg==
+X-Gm-Message-State: ANoB5pkHvvg38VmxFhkVHPazMwSzT22gCA7l0uBC9vfdtjwgaYm6UMbx
+        zLfBzkN/FefcFc7uqtgTC+o=
+X-Google-Smtp-Source: AA0mqf414ZUiW8PrWeib6fKdHGgyKZi5tmPVx/zBfMsY62OY/7jl9MeCItNH0XOcxs9Aouhu7tMaug==
+X-Received: by 2002:a17:90b:108:b0:219:36d3:678d with SMTP id p8-20020a17090b010800b0021936d3678dmr41751133pjz.187.1670280487958;
+        Mon, 05 Dec 2022 14:48:07 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id a3-20020a170902710300b0018963b8e131sm1814407pll.290.2022.12.05.14.48.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 14:48:07 -0800 (PST)
+Message-ID: <2bb37989-7c22-ae06-6568-8419ce57e44b@gmail.com>
+Date:   Mon, 5 Dec 2022 14:48:05 -0800
 MIME-Version: 1.0
-References: <20221202221213.236564-1-lixiaoyan@google.com> <20221202221213.236564-2-lixiaoyan@google.com>
- <CANn89iLx7WM4ih6EM8LAdXHN6W2Pd61awPz4FLL82FEBbXeRuA@mail.gmail.com>
-In-Reply-To: <CANn89iLx7WM4ih6EM8LAdXHN6W2Pd61awPz4FLL82FEBbXeRuA@mail.gmail.com>
-From:   Michael Chan <michael.chan@broadcom.com>
-Date:   Mon, 5 Dec 2022 14:47:44 -0800
-Message-ID: <CACKFLi=nJgVLC+PaXsyGFd4x+QbbMrk6_hRY9APqshrP0xo31w@mail.gmail.com>
-Subject: Re: [RFC net-next v4 2/2] bnxt: Use generic HBH removal helper in tx path
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Coco Li <lixiaoyan@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000076815a05ef1c7a8e"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 4.9 00/62] 4.9.335-rc1 review
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221205190758.073114639@linuxfoundation.org>
+ <80305ea1-4d52-b1d3-e078-3c1084d96cc7@nvidia.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <80305ea1-4d52-b1d3-e078-3c1084d96cc7@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000076815a05ef1c7a8e
-Content-Type: text/plain; charset="UTF-8"
+On 12/5/22 14:28, Jon Hunter wrote:
+> Hi Greg,
+> 
+> On 05/12/2022 19:08, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 4.9.335 release.
+>> There are 62 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Wed, 07 Dec 2022 19:07:46 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.335-rc1.gz
+>> or in the git tree and branch at:
+>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+>> and the diffstat can be found below.
+>>
+>> thanks,
+>>
+>> greg k-h
+>>
+>> -------------
+>> Pseudo-Shortlog of commits:
+>>
+>> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>      Linux 4.9.335-rc1
+>>
+>> Adrian Hunter <adrian.hunter@intel.com>
+>>      mmc: sdhci: Fix voltage switch delay
+> 
+> 
+> I am seeing a boot regression on a couple boards and bisect is pointing 
+> to the above commit.
 
-On Sun, Dec 4, 2022 at 9:14 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Fri, Dec 2, 2022 at 11:12 PM Coco Li <lixiaoyan@google.com> wrote:
-> >
-> > Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
-> > for IPv6 traffic. See patch series:
-> > 'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
-> >
-> > This reduces the number of packets traversing the networking stack and
-> > should usually improves performance. However, it also inserts a
-> > temporary Hop-by-hop IPv6 extension header.
-> >
-> > Using the HBH header removal method in the previous path, the extra header
-> > be removed in bnxt drivers to allow it to send big TCP packets (bigger
-> > TSO packets) as well.
-> >
-> > Tested:
-> > Compiled locally
-> >
-> > To further test functional correctness, update the GSO/GRO limit on the
-> > physical NIC:
-> >
-> > ip link set eth0 gso_max_size 181000
-> > ip link set eth0 gro_max_size 181000
-> >
-> > Note that if there are bonding or ipvan devices on top of the physical
-> > NIC, their GSO sizes need to be updated as well.
-> >
-> > Then, IPv6/TCP packets with sizes larger than 64k can be observed.
-> >
-> > Big TCP functionality is tested by Michael, feature checks not yet.
-> >
-> > Tested by Michael:
-> > I've confirmed with our hardware team that this is supported by our
-> > chips, and I've tested it up to gso_max_size of 524280.  Thanks.
-> >
-> > Tested-by: Michael Chan <michael.chan@broadcom.com>
-> > Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-> > Signed-off-by: Coco Li <lixiaoyan@google.com>
-> > ---
-> >  drivers/net/ethernet/broadcom/bnxt/bnxt.c | 26 ++++++++++++++++++++++-
-> >  1 file changed, 25 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > index 0fe164b42c5d..c2713cb5debd 100644
-> > --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > @@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
-> >                         return NETDEV_TX_BUSY;
-> >         }
-> >
-> > +       if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
-> > +               goto tx_free;
-> > +
-> >         length = skb->len;
-> >         len = skb_headlen(skb);
-> >         last_frag = skb_shinfo(skb)->nr_frags;
-> > @@ -11342,9 +11345,28 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
-> >
-> >                 if (hdrlen > 64)
-> >                         return false;
-> > +
-> > +               /* The ext header may be a hop-by-hop header inserted for
-> > +                * big TCP purposes. This will be removed before sending
-> > +                * from NIC, so do not count it.
-> > +                */
-> > +               if (*nexthdr == NEXTHDR_HOP) {
-> > +                       if (likely(skb->len <= GRO_LEGACY_MAX_SIZE))
-> > +                               goto increment_hdr;
-> > +
-> > +                       struct hop_jumbo_hdr *jhdr = (struct hop_jumbo_hdr *)(nexthdr + hdrlen);
->
-> We discourage adding a variable declaration in the middle of code.
->
+Same thing here, getting a hard lock for our devices with the SDHCI 
+controller enabled, sometimes we are lucky to see the following:
 
-This doesn't work.  Initially nexthdr points to the nexthdr in the
-ipv6 header.  It should be coded like this:
+[    4.790367] mmc0: SDHCI controller on 84b0000.sdhci [84b0000.sdhci] 
+using ADMA 64-bit
+[   25.802351] INFO: rcu_sched detected stalls on CPUs/tasks:
+[   25.807871]  1-...: (1 GPs behind) idle=561/140000000000000/0 
+softirq=728/728 fqs=5252
+[   25.815892]  (detected by 0, t=21017 jiffies, g=61, c=60, q=55)
+[   25.821834] Task dump for CPU 1:
+[   25.825069] kworker/1:1     R  running task        0   509      2 
+0x00000002
+[   25.832164] Workqueue: events_freezable mmc_rescan
+[   25.836974] Backtrace:
+[   25.839440] [<ce32fea4>] (0xce32fea4) from [<ce32fed4>] (0xce32fed4)
+[   25.845803] Backtrace aborted due to bad frame pointer <cd2f0a54>
 
-struct hop_jumbo_hdr *jhdr = (struct hop_jumbo_hdr *)hp;
+Also confirmed that reverting that change ("mmc: sdhci: Fix voltage 
+switch delay") allows devices to boot properly.
 
-Thanks.
+Had not a chance to test the change when submitted for mainline despite 
+being copied, sorry about that.
 
---00000000000076815a05ef1c7a8e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Since that specific commit is also included in the other stable trees 
+(5.4, 5.10, 5.15 and 6.0) I will let you know whether the same issue is 
+present in those trees shortly thereafter.
+-- 
+Florian
 
-MIIQbQYJKoZIhvcNAQcCoIIQXjCCEFoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3EMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBUwwggQ0oAMCAQICDF5AaMOe0cZvaJpCQjANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODIxMzhaFw0yNTA5MTAwODIxMzhaMIGO
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFTATBgNVBAMTDE1pY2hhZWwgQ2hhbjEoMCYGCSqGSIb3DQEJ
-ARYZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
-ggEBALhEmG7egFWvPKcrDxuNhNcn2oHauIHc8AzGhPyJxU4S6ZUjHM/psoNo5XxlMSRpYE7g7vLx
-J4NBefU36XTEWVzbEkAuOSuJTuJkm98JE3+wjeO+aQTbNF3mG2iAe0AZbAWyqFxZulWitE8U2tIC
-9mttDjSN/wbltcwuti7P57RuR+WyZstDlPJqUMm1rJTbgDqkF2pnvufc4US2iexnfjGopunLvioc
-OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
-/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
-L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
-kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
-5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
-hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
-E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILjsxREZK4LyHn0lBCgTnMB73fDLVzyy
-TH2jgLBa/3/oMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIw
-NTIyNDc1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQA3Pvy4/ARfeiAqBx29pmdRrcQL5Tl5dlMk0kPdQN2JrZypRexW
-Pjixy9OOk9n8hoI6HrAyKqVliY6sRwJVFL+E+z3Z3rO5XHCKawFwXuklP3RwXSDPn9t8iC3scN7W
-86bcEVzzZHb7ZJ7kCgvMcwCKNK2/xqcRPCo7pZerJzcaDhWlQKWQkD/BFmGVnyxxnngLssOviRQQ
-Qy82oX0aCbg5ZFXoY2zMlmrG/m+DHqC5BHB/18/pS5PGHDAs9jmWLo23RCnNPklwT1H1KHV2QYBF
-Uw+g7+JGN9LrdGJQCIUBGDc3ixEHd9iSxeIOkHkxNQZ9d6YfccuvWjYHeWj8+weW
---00000000000076815a05ef1c7a8e--
