@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6ED64297A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCE9642959
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiLENfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S232248AbiLEN1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:27:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiLENfW (ORCPT
+        with ESMTP id S231599AbiLEN1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:35:22 -0500
-X-Greylist: delayed 488 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Dec 2022 05:35:20 PST
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DDB10FC9;
-        Mon,  5 Dec 2022 05:35:20 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 8C311C80094;
-        Mon,  5 Dec 2022 14:27:10 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id CoHbXArkXHk7; Mon,  5 Dec 2022 14:27:10 +0100 (CET)
-Received: from [192.168.178.52] (business-24-134-105-141.pool2.vodafone-ip.de [24.134.105.141])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id A5FDFC80091;
-        Mon,  5 Dec 2022 14:27:09 +0100 (CET)
-Message-ID: <9869d438-a715-fa5e-2877-b58f1bb6fc91@tuxedocomputers.com>
-Date:   Mon, 5 Dec 2022 14:27:09 +0100
+        Mon, 5 Dec 2022 08:27:46 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2652263C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:27:43 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id h26so1979011vsr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BWHrd3aLhgiG+UaB7zepCdXrcCvVH/+UbuBW6Y4vPms=;
+        b=oQaqYktN4GfhVf6d4AhOUfJBWdgUz4tAneBabWPCmF5z2H9n3CKigTPgxfAgMzJsIc
+         U7gdvKqweprQ//B0jNc21O0y0vfKA7F1YXPOnDYCwdl92RRDTYjVtEgfdjxmg3j7c7YV
+         /RBZ2xO4hHr6btntRxN6YDaQVAMeV2yYqe7tSuhpeCD0gsLbs6v0gHdenT867wxHgcHd
+         tu3Q4758DeSfblHE/0w6pIsavo0AVmO8P0Np5u/vL+Wvfc/ciCys22PjV8ndvKvWR/3m
+         M1JYrJri5xu1WTYXcR9nWWJwOOlD7qQF33G4BKjf6etIEuntKVgD7WU8g9Est1M5dwRO
+         zd7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BWHrd3aLhgiG+UaB7zepCdXrcCvVH/+UbuBW6Y4vPms=;
+        b=Z5RcrXq14R+gijHQ4aOpGx3L7ZJ6XxwPjCodErKdMVN37TnFpkYxvEIFmvBu5sGaTX
+         uw0irbp256j+JtiG2gk92HIYe0klAavQmqG/EeGw9cRUGguVrkzalRfSPVpJT65rnWt8
+         LeDDJJ55upEV/TEkQR85qbQ7xyeqRcY5zM1BtSYD3aLIugcJhiDn8gDbP2tFUDC2iYOc
+         XJRC9Wv4wzsWYy0HJ9gIPRU4X1mHhZQOAEAsVuLQGNowoUD62b77/d717e1FYuz5kRdI
+         WyUIfpuucGv2gzRhzNU/+daMi3SkPkP6BmKV8vYWCLi0FynR0lUO0M94z0wI6IHODEL+
+         ipFA==
+X-Gm-Message-State: ANoB5pmpCXHb76AyP70cZRoCF5eJdLhR12E9gqQrJoV12zik38QzI3NZ
+        IB6EOQ8hDQJjpKJcWIAIGr+iJ3k3D0MdXQT9AfOl3XKuR4eErg==
+X-Google-Smtp-Source: AA0mqf5A4j7MgpGLkC3roqQQoGqGMJqzd2JWHpfvBJdQpbm0KVMQ3bcwRnlZNug9SoQuKy3j9YKfb7jMFBNmx8VPeH8=
+X-Received: by 2002:a67:ca86:0:b0:3b1:33bd:7fc7 with SMTP id
+ a6-20020a67ca86000000b003b133bd7fc7mr3453591vsl.13.1670246862914; Mon, 05 Dec
+ 2022 05:27:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221203175743.GA1121812@bhelgaas>
- <d7f1408d-ae9f-ad55-5fc9-9d9886384a3d@redhat.com>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <d7f1408d-ae9f-ad55-5fc9-9d9886384a3d@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205123903.159838-1-brgl@bgdev.pl> <Y43rPdus/9INC390@smile.fi.intel.com>
+ <Y43rmRW1S8PvMJW4@smile.fi.intel.com> <Y43vgFY+qnqH8+0P@sol>
+In-Reply-To: <Y43vgFY+qnqH8+0P@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 5 Dec 2022 14:27:32 +0100
+Message-ID: <CAMRc=MeMA+11Gdb2kaCrS5G+05PONT7i9Nw0VH+B7bJA3apydw@mail.gmail.com>
+Subject: Re: [PATCH v8 0/2] gpiolib: don't allow user-space to crash the
+ kernel with hot-unplugs
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nick Hainke <vincent@systemli.org>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Mon, Dec 5, 2022 at 2:17 PM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> On Mon, Dec 05, 2022 at 03:01:13PM +0200, Andy Shevchenko wrote:
+> > On Mon, Dec 05, 2022 at 02:59:42PM +0200, Andy Shevchenko wrote:
+> > > On Mon, Dec 05, 2022 at 01:39:01PM +0100, Bartosz Golaszewski wrote:
+> > > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > > >
+> > > > Linus Torvalds pointed out that using trylock here is wrong. This iteration
+> > > > drops it in favor of unconditional locks but keeps all the fixes that came
+> > > > later.
+> > > >
+> > > > I will also not send it for this release but make it part of the updates PR
+> > > > for v6.2 to give it some time in next.
+> > > >
+> > > > v7 -> v8:
+> > > > - don't use down_read_trylock(), just go straight for a full lock
+> > >
+> > > Yep, it was a good wrap-up explanation.
+> >
+> > But he also suggested to fold NULL check into call_*_locked(). Any points why
+> > you decided not to go that way?
+> >
+>
+> He also mentioned making it more back-portable.
+> Does that mean splitting out the patches for uAPI v1 and v2, if not for
+> each of the Fixes? Or does he mean back-porting it to 6.1?
 
-Am 04.12.22 um 10:29 schrieb Hans de Goede:
-> Hi Bjorn,
-> 
-> On 12/3/22 18:57, Bjorn Helgaas wrote:
->> On Sat, Dec 03, 2022 at 01:44:10PM +0100, Hans de Goede wrote:
->>> Hi Bjorn,
->>>
->>> On 12/2/22 22:18, Bjorn Helgaas wrote:
->>>> From: Bjorn Helgaas <bhelgaas@google.com>
->>>>
->>>> When allocating space for PCI BARs, Linux avoids allocating space mentioned
->>>> in the E820 map.  This was originally done by 4dc2287c1805 ("x86: avoid
->>>> E820 regions when allocating address space") to work around BIOS defects
->>>> that included unusable space in host bridge _CRS.
->>>>
->>>> Some recent machines use EfiMemoryMappedIO for PCI MMCONFIG and host bridge
->>>> apertures, and bootloaders and EFI stubs convert those to E820 regions,
->>>> which means we can't allocate space for hot-added PCI devices (often a
->>>> dock) or for devices the BIOS didn't configure (often a touchpad)
->>>>
->>>> The current strategy is to add DMI quirks that disable the E820 filtering
->>>> on these machines and to disable it entirely starting with 2023 BIOSes:
->>>>
->>>>    d341838d776a ("x86/PCI: Disable E820 reserved region clipping via quirks")
->>>>    0ae084d5a674 ("x86/PCI: Disable E820 reserved region clipping starting in 2023")
->>>>
->>>> But the quirks are problematic because it's really hard to list all the
->>>> machines that need them.
->>>>
->>>> This series is an attempt at a more generic approach.  I'm told by firmware
->>>> folks that EfiMemoryMappedIO means "the OS should map this area so EFI
->>>> runtime services can use it in virtual mode," but does not prevent the OS
->>>> from using it.
->>>>
->>>> The first patch removes any EfiMemoryMappedIO areas from the E820 map.
->>>> This doesn't affect any virtual mapping of those areas (that would have to
->>>> be done directly from the EFI memory map) but it means Linux can allocate
->>>> space for PCI MMIO.
->>>>
->>>> The rest are basically cosmetic log message changes.
->>>
->>> Thank you for working on this. I'm a bit worried about this series though.
->>>
->>> The 2 things which I worry about are:
->>>
->>>
->>> 1. I think this will not help when people boot in BIOS (CSM) mode rather
->>> then UEFI mode which quite a few Linux users still do because they learned
->>> to do this years ago when Linux EFI support (and EFI fw itself) was still
->>> a bit in flux.
->>>
->>> IIRC from the last time we looked at this in CSM mode the BIOS itself
->>> translates the EfiMemoryMappedIO areas to reserved E820 regions. So when
->>> people use the BIOS CSM mode to boot, then this patch will not help
->>> since the kernel lacks the info to do the translation.
->>
->> Right, if BIOS CSM puts EfiMemoryMappedIO in the E820 map the same way
->> bootloaders do, and the kernel doesn't have the EFI memory map, this
->> series won't help.
-> 
-> So I just got the requested dmesg in BIOS CSM mode from:
-> https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> 
-> And it says:
-> 
-> [    0.000000] BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
-> [    0.316140] pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
-> 
-> So I'm afraid that I remembered correctly and the CSM adds
-> the EfiMemoryMappedIO regions to the E820 map as reserved :(
-> 
-> So as you said, this series won't help for people booting in
-> BIOS compatibility mode. Which means that we should at least keep
-> the current list of no_e820 quirks to avoid regressing those models
-> when booted in BIOS compatibility mode.
-> 
-> And maybe still add at least the Clevo model for which I recently
-> submitted a new no_e820 quirk so that that will work in BIOS CSM
-> mode too ?
-Do you mean the X170KM-G? I don't think it has the option to switch to Legacy 
-BIOS mode (At least i didn't found an option in the bios version i have)
-> 
-> Note I know you did not propose to drop the quirks in this series,
-> just covering all the bases here.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-Kind regards,
-Werner Sembach
+I think he mentioned not sending it for v6.1 that late in the cycle
+and instead sending it for v6.2 and backporting it to v6.1. I'm afraid
+that backporting of this fix will require some manual labor anyway.
+We'll want to backport it to branches that don't have v2 yet after
+all, where that code resided elsewhere.
+
+Bartosz
