@@ -2,92 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C97A642CFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBA9642D02
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbiLEQgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S232705AbiLEQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbiLEQf7 (ORCPT
+        with ESMTP id S232904AbiLEQgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:35:59 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2218B20BE9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:34:44 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e72f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72f:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 881861EC0674;
-        Mon,  5 Dec 2022 17:34:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670258082;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=OWySjEls0A0JPnCrAeWGbZQ7X3VTy9vDof3TMx9kHEY=;
-        b=e8GtFL74wSJxh4Vv+47mv6GenHmzZQ7umuQKuNjFCDW4XxGA7ViK9lOJ5YMU05Ao0Dbd8S
-        sL+k71MS/MENybjP49Acnnkszpo+BJJ9PgRCPFs86NPvG4/VAb+9mreNtpoMT03OUq0g3B
-        9b7q78V9VoxQjqE9y1occuFOFpQzwiA=
-Date:   Mon, 5 Dec 2022 17:34:42 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dionna Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-Subject: Re: [PATCH v8 2/4] x86/sev: Change snp_guest_issue_request's fw_err
-Message-ID: <Y44dohVKo7MAqmxK@zn.tnic>
-References: <20221104230040.2346862-1-dionnaglaze@google.com>
- <20221104230040.2346862-3-dionnaglaze@google.com>
+        Mon, 5 Dec 2022 11:36:46 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC12126F;
+        Mon,  5 Dec 2022 08:35:00 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id t62so13628046oib.12;
+        Mon, 05 Dec 2022 08:35:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3LmueXUXyGNVa79/vNF3eg0gla6XRQeVcGtQ/SX2HD4=;
+        b=ck82cPaf9J+Khv3IcJpj7vnCJTA1CdFnMQrGyaSxCGp1D9a5SKJQ+9qXnETjfmPbDS
+         fYBsnL1xQ3QTa9JMvwLhvQ55MR1hwuwEZsPia2trROTqypBh6dS2pBbMFFnawbyaD0he
+         2v/Tq50sq6vE0cMtgf26lbnu8ABgmZ8X1/wEryrJ38U87cQzCoEWtNSoluG9mo9jwdgB
+         F7BBoUxwcGVlp26Q53s1ISiF6w9ogJx2DE8Y8XZWeE5Ola2Sk7NzWpi1NyWtYSiWwTH7
+         qAzLBlFoTiqjAELH7Mo3tlrNPr6gxqbhxOWxuI8hCmuIVCicfg5rtUZSIScNNXn+dNiF
+         Ustg==
+X-Gm-Message-State: ANoB5pk8cqsH+mEn4XYhyelBml7wqISGtlj4KqE22wX/n22gHmv8t2KX
+        RjrWGJNE7fWsWwpwKxAXMw==
+X-Google-Smtp-Source: AA0mqf6CoNtePO5bj+mi2MYlTeJfbtyVVhhECDsbwer0VjrJUMrf9hVTNLDwy5cYNa3POnSH40rVuA==
+X-Received: by 2002:a54:4407:0:b0:34f:9f93:1f17 with SMTP id k7-20020a544407000000b0034f9f931f17mr38439368oiw.203.1670258094210;
+        Mon, 05 Dec 2022 08:34:54 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 18-20020aca1112000000b00354d9b9f6b4sm4152761oir.27.2022.12.05.08.34.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 08:34:53 -0800 (PST)
+Received: (nullmailer pid 2036863 invoked by uid 1000);
+        Mon, 05 Dec 2022 16:34:53 -0000
+Date:   Mon, 5 Dec 2022 10:34:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 1/2] dt-bindings: Drop Jee Heng Sia
+Message-ID: <20221205163453.GA2034441-robh@kernel.org>
+References: <20221203162144.99225-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104230040.2346862-3-dionnaglaze@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221203162144.99225-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 11:00:38PM +0000, Dionna Glaze wrote:
-> The GHCB specification declares that the firmware error value for a
-> guest request will be stored in the lower 32 bits of EXIT_INFO_2.
-> The upper 32 bits are for the VMM's own error code. The fw_err argument
-> is thus a misnomer, and callers will need access to all 64 bits.
+On Sat, Dec 03, 2022 at 05:21:43PM +0100, Krzysztof Kozlowski wrote:
+> Emails to Jee Heng Sia bounce ("550 #5.1.0 Address rejected.").  Add
+> Keembay platform maintainers as Keembay I2S maintainers.
 > 
-> The type of unsigned long also causes problems, since sw_exit_info2 is
-> u64 (unsigned long long) vs the argument's previous unsigned long*.
-> The signature change requires the follow-up change to
-> drivers/virt/coco/sev-guest to use the new expected type in order to
-> compile.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml    | 1 -
+>  Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml | 3 ++-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> The firmware might not even be called, so we bookend the call with the
+> diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> index 67aa7bb6d36a..ad107a4d3b33 100644
+> --- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> +++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> @@ -8,7 +8,6 @@ title: Synopsys DesignWare AXI DMA Controller
+>  
+>  maintainers:
+>    - Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+> -  - Jee Heng Sia <jee.heng.sia@intel.com>
+>  
+>  description:
+>    Synopsys DesignWare AXI DMA Controller DT Binding
+> diff --git a/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml b/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
+> index 2ac0a4b3cd18..33ab0be036a1 100644
+> --- a/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
+> +++ b/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml
+> @@ -8,7 +8,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Intel KeemBay I2S
+>  
+>  maintainers:
+> -  - Sia, Jee Heng <jee.heng.sia@intel.com>
+> +  - Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+> +  - Paul J. Murphy <paul.j.murphy@intel.com
 
-Please use passive voice in your commit message: no "we" or "I",
-etc, and describe your changes in imperative mood.
+Missing '>'
 
-Personal pronouns are ambiguous in text, especially with so many
-parties/companies/etc developing the kernel so let's avoid them please.
-
-Otherwise, LGTM.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>  
+>  description: |
+>   Intel KeemBay I2S
+> -- 
+> 2.34.1
+> 
+> 
