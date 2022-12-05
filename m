@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BD96435B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43EA6435BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiLEUdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S233413AbiLEUet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233497AbiLEUdQ (ORCPT
+        with ESMTP id S230232AbiLEUer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:33:16 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B253C11151;
-        Mon,  5 Dec 2022 12:33:10 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id bj12so1248439ejb.13;
-        Mon, 05 Dec 2022 12:33:10 -0800 (PST)
+        Mon, 5 Dec 2022 15:34:47 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0584714084;
+        Mon,  5 Dec 2022 12:34:46 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3b56782b3f6so130549427b3.13;
+        Mon, 05 Dec 2022 12:34:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1y4+o5+3VTQ2cJHFB9l2XaUG0/wHW8D/s+vsN99BVaE=;
-        b=iOXDEcLuqwSherSXE4U5w9gQCgyvR2cm/LugX2hw47DYz1qiypw3Az7NEAsK9etGZ1
-         R9Wc7jHvQ1EDOovASiJdlnEZGoS+sZ55uSBB0iBfoFUKeUQsE1Co9JftkJgDgt+zhpVp
-         A9TV6HOF3p7oJWQ8fnSast3ZANpdE1lqxkLUJZGE4YaIktmGrooce/zw3aTJCl9ZR/Aw
-         +Iy2UZXquCzjBtHeODlWshoR6nVHh0cUPm9VnYmACQXSHaMbg7muAuZnY/P5n1J35DfT
-         PmM405Xz/pL16rowVhHyRjWe2vqChetT73pJ564SYg1ChclWQJG080/7wX6OPnvshXWS
-         nuDQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GeLGTXERGukeSNOQDu2YmR7uT9/qpiRMDyykHkleQ2o=;
+        b=pV6KI/HZBQddAaryd4yKdtAZIjXHM+fQOQl8vls8oCF/Y0syljnC36hzxgQFzf3t1W
+         ZEfFPue68nbSQYyN45g3vyc1tKTsDhhDmdhY4NZzbyws1OLLs/EBYBCLeHMjUZ7AqQkG
+         bPHpYPqJ1AEZL4uauJNarKOb8Kjs0EiXHDayRbW+LvH0eVfIfd+Kt4GAhbisw/fJv8H5
+         ye4ctWjmmYNQlCsceyNtIQIp7VQQPqFfnpnwbiE6A67xPTrxsvIZPcz5N+C3swPGuMEV
+         zdL6BSwaRQTncT/q4vMGhtHQUJU0KVbms8kPcPSjUkErq0sjFtA3tGrr1dDn23Y/Q2aR
+         UEOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1y4+o5+3VTQ2cJHFB9l2XaUG0/wHW8D/s+vsN99BVaE=;
-        b=Ei+O3qpUV/osqemaOnC8Jy2qteSFc50Ktn6dR1ELPM0bXOu05+LSy/EVi3y+8DOPbN
-         DbSBCdXgLdhHs8vDEwQHtHCAI8aE4FRgNwvL1luPySdPxPvL4rD55wYr1ha+UtmG7NOD
-         //M+2PiPNeL35Fj826chCu/q7wYOOhR9ZaBDZq3r6PL7e8+tfdXxTmikSmrZnsXvBOGg
-         oCoNipP7rvtkWzI+v+iUxaMzg20ODeCBJNeP/VdRA7B/QDqwRErIy82Lom9aZjT7vri8
-         0pRNBJVUD8ny3V1xoa+/ugPBTY8riF5PdtXaEH+kDVqvyTklkMQwmEZTpQlZqF6zbte0
-         UbbA==
-X-Gm-Message-State: ANoB5pnfe2ghhPESXNSBgtlglDZuIMiga25dxEyS+wTjYiZwKilAO2rD
-        8PshJCyMxJX14D9RdGjUFjo=
-X-Google-Smtp-Source: AA0mqf7L5DepZPykpakDz8MEhCAqHhMgcvBT0fnFKGlH2luNDKCM3xQ0hRd5HOR5Fvc1yUeli+Pdog==
-X-Received: by 2002:a17:906:3da2:b0:7ac:a2b7:6c96 with SMTP id y2-20020a1709063da200b007aca2b76c96mr68446980ejh.412.1670272388905;
-        Mon, 05 Dec 2022 12:33:08 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b00779a605c777sm6581013ejg.192.2022.12.05.12.33.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 12:33:08 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, linux-sunxi@lists.linux.dev,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>
-Subject: Re: [PATCH v2 06/12] riscv: dts: allwinner: Add Allwinner D1 Nezha devicetree
-Date:   Mon, 05 Dec 2022 21:33:07 +0100
-Message-ID: <7457885.EvYhyI6sBW@kista>
-In-Reply-To: <20221125234656.47306-7-samuel@sholland.org>
-References: <20221125234656.47306-1-samuel@sholland.org> <20221125234656.47306-7-samuel@sholland.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GeLGTXERGukeSNOQDu2YmR7uT9/qpiRMDyykHkleQ2o=;
+        b=7Xvmzz+819vhpwQqnUVItJFWwv95vzbsCNcb8bWbsISlJEMOFqTBBU8gHBlO8KfYld
+         QBfhl6l5ncv3fbdZXc2VSZHQ0fuqTplXQZ5bE4w0SPo74ga+23SGGbjBcolWdL6mTxrP
+         usqs+tsA/f9NjVwV3OBRlpQ5hhS0qQG9my2YY2lHLDMiT2zOx21LwVt47Fueq3qtTn6c
+         8e1BEbV6KaMa/CINCWNYqZtmZFybHztyM4uLfVtDoQYF4IBKHtRs9QNH8rpHOhftELML
+         KYt18bq30JA80z4EsQZhKsFySgTFSB5RIIOBJhhIxNbPtQZREoGr07hsqUSMri9Vk1WU
+         9hMg==
+X-Gm-Message-State: ANoB5pmvPbTPorojTAjsaDb7WA+CggN+6JXeBBDYx3MUgp2Zrk3AhP94
+        7BU4WWPaMGi7am0TdrrPSnfbsNP0a0qDYOYq7Yc=
+X-Google-Smtp-Source: AA0mqf6gVcUjGEuTNRozrYnWxY5uXjxRLCGPLpX8tEkUr/ot069nsH0uaNB29RtGgsmUEgc5iySKcYLMmK606QxvYxY=
+X-Received: by 2002:a81:4905:0:b0:3a8:fad9:13c0 with SMTP id
+ w5-20020a814905000000b003a8fad913c0mr60110141ywa.23.1670272485151; Mon, 05
+ Dec 2022 12:34:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-15-vishal.moola@gmail.com>
+ <9c01bb74-97b3-d1c0-6a5f-dc8b11113e1a@kernel.org> <CAOzc2pweRFtsUj65=U-N-+ASf3cQybwMuABoVB+ciHzD1gKWhQ@mail.gmail.com>
+ <CAOzc2pzoG1CN3Bpx5oe37GwRv71TpTQmFH6m58kTqOmeW7KLOw@mail.gmail.com>
+In-Reply-To: <CAOzc2pzoG1CN3Bpx5oe37GwRv71TpTQmFH6m58kTqOmeW7KLOw@mail.gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 5 Dec 2022 12:34:33 -0800
+Message-ID: <CAOzc2pzp0JEanJTgzSrRt3ziRCrR6rGCjpwJvAD8uCqsHqXnHg@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH v3 14/23] f2fs: Convert f2fs_write_cache_pages()
+ to use filemap_get_folios_tag()
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        fengnan chang <fengnanchang@gmail.com>,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -92,20 +72,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 26. november 2022 ob 00:46:50 CET je Samuel Holland napisal(a):
-> "D1 Nezha" is Allwinner's first-party development board for the D1 SoC.
-> It was shipped with 512M, 1G, or 2G of DDR3. It supports onboard audio,
-> HDMI, gigabit Ethernet, WiFi and Bluetooth, USB 2.0 host and OTG ports,
-> plus low-speed I/O from the SoC and a GPIO expander chip.
-> 
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Tested-by: Conor Dooley <conor.dooley@microchip.com>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+On Tue, Nov 22, 2022 at 6:26 PM Vishal Moola <vishal.moola@gmail.com> wrote:
+>
+> On Mon, Nov 14, 2022 at 1:38 PM Vishal Moola <vishal.moola@gmail.com> wrote:
+> >
+> > On Sun, Nov 13, 2022 at 11:02 PM Chao Yu <chao@kernel.org> wrote:
+> > >
+> > > On 2022/10/18 4:24, Vishal Moola (Oracle) wrote:
+> > > > Converted the function to use a folio_batch instead of pagevec. This is in
+> > > > preparation for the removal of find_get_pages_range_tag().
+> > > >
+> > > > Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
+> > > > of pagevec. This does NOT support large folios. The function currently
+> > >
+> > > Vishal,
+> > >
+> > > It looks this patch tries to revert Fengnan's change:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=01fc4b9a6ed8eacb64e5609bab7ac963e1c7e486
+> > >
+> > > How about doing some tests to evaluate its performance effect?
+> >
+> > Yeah I'll play around with it to see how much of a difference it makes.
+>
+> I did some testing. Looks like reverting Fengnan's change allows for
+> occasional, but significant, spikes in write latency. I'll work on a variation
+> of the patch that maintains the use of F2FS_ONSTACK_PAGES and send
+> that in the next version of the patch series. Thanks for pointing that out!
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Following Matthew's comment, I'm thinking we should go with this patch
+as is. The numbers between both variations did not have substantial
+differences with regard to latency.
 
-Best regards,
-Jernej
+While the new variant would maintain the use of F2FS_ONSTACK_PAGES,
+the code becomes messier and would end up limiting the number of
+folios written back once large folio support is added. This means it would
+have to be converted down to this version later anyways.
 
+Does leaving this patch as is sound good to you?
 
+For reference, here's what the version continuing to use a page
+array of size F2FS_ONSTACK_PAGES would change:
+
++               nr_pages = 0;
++again:
++               nr_folios = filemap_get_folios_tag(mapping, &index, end,
++                               tag, &fbatch);
++               if (nr_folios == 0) {
++                       if (nr_pages)
++                               goto write;
++                               goto write;
+                        break;
++               }
+
++               for (i = 0; i < nr_folios; i++) {
++                       struct folio* folio = fbatch.folios[i];
++
++                       idx = 0;
++                       p = folio_nr_pages(folio);
++add_more:
++                       pages[nr_pages] = folio_page(folio,idx);
++                       folio_ref_inc(folio);
++                       if (++nr_pages == F2FS_ONSTACK_PAGES) {
++                               index = folio->index + idx + 1;
++                               folio_batch_release(&fbatch);
++                               goto write;
++                       }
++                       if (++idx < p)
++                               goto add_more;
++               }
++               folio_batch_release(&fbatch);
++               goto again;
++write:
+
+> How do the remaining f2fs patches in the series look to you?
+> Patch 16/23 f2fs_sync_meta_pages() in particular seems like it may
+> be prone to problems. If there are any changes that need to be made to
+> it I can include those in the next version as well.
+
+Thanks for reviewing the patches so far. I wanted to follow up on asking
+for review of the last couple of patches.
