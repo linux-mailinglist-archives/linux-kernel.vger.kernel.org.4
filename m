@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1547464254B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BEE64254E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiLEJBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
+        id S231753AbiLEJCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbiLEJAp (ORCPT
+        with ESMTP id S232383AbiLEJBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:00:45 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CCE18B11
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:59:11 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id fc4so19117465ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:59:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFVG2GHKql4mObap2ourAu7QFKuQou+XwSrycPDhCj4=;
-        b=h0mnTCNOjIf3URNf8DcO22NFH34k+ScsW5BQAoDEFdCuHnl5B1JZhm9PA5niOgIBeH
-         5+d5a0WEeZbzqX044JciEYRXR4sz9I2SVL0NMHIxbDh0/trQbfTOOja0p8DfqkdVbG76
-         ssFwjAtjDjrdwYLcSMayNxcfux3pweAH1CMCc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFVG2GHKql4mObap2ourAu7QFKuQou+XwSrycPDhCj4=;
-        b=CgZW0B+6/yAtwEGu7bcazIcTpELJPMkzU3nsNOmXp3Bp1D+QvQ1oEiOKdtK3gNo6mw
-         KbV5jmZOek3KoreoSAF3LHLTiP5AMlsMZKAuHFgt+cFd/FcOiltWjbnibItS8QMTTsqF
-         4HNNKhbsHbDUrwbI1M1+IlXzpdsWDpl+NbDt4YHjIbHYUS/pKTV8UPpUzCjn3FYz0mIc
-         +sah5YKSpMQRcIF+sP0/bhoXnj9wrjNaAr/X8whwu4K+XJbn4S3509yHYoWpyuECH6pQ
-         +I7HIul7X2nIGnSUFta9brK2IJM0XeHUw+3RfUAdYqF6/XeZUrPnFdw4ZkXqA9qC0xWu
-         zZYA==
-X-Gm-Message-State: ANoB5pnXjsduxiK/E+bxaYZeGcDFbAwGxs7c15CP/RuVwN1zishvEl7j
-        YcgZHxw5NWRJBosInzfpbhYKeA==
-X-Google-Smtp-Source: AA0mqf4qIT7jRbrwZ33Vg9jF3l0QT6efgVndCgFN9dWGR81zwv/iapk5WBmvw1GEVILBSLdIZgsv9Q==
-X-Received: by 2002:a17:906:7e4c:b0:7c0:e990:27c4 with SMTP id z12-20020a1709067e4c00b007c0e99027c4mr4789870ejr.677.1670230750347;
-        Mon, 05 Dec 2022 00:59:10 -0800 (PST)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id l4-20020aa7c304000000b00458dc7e8ecasm5946590edq.72.2022.12.05.00.59.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:59:09 -0800 (PST)
-Message-ID: <58ec9951-32d7-6967-3571-d18c667ae478@rasmusvillemoes.dk>
-Date:   Mon, 5 Dec 2022 09:59:08 +0100
+        Mon, 5 Dec 2022 04:01:23 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023DBD12C;
+        Mon,  5 Dec 2022 01:00:22 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 590B51FE42;
+        Mon,  5 Dec 2022 09:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1670230821; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9mE8JW+82N0Nc8L3Y+5ne8li6B8o4ESVFkptCM1+tJk=;
+        b=SZFUgZbgw8ddwqWWKYIj9UFJMxD9Gq4WowkNcxDCOVM/JfdBshKd6K/FYtOAjsWpZgiodX
+        EM2WPlKMy/OJuKmocTNrc4W3Jp1ZxjE3nzU7jAWCISkIzOUGY/dhzz4pikBefUDb3IzAdy
+        62gI1ZinTDsLcN/v9zpy0NMlK4113nw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1670230821;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9mE8JW+82N0Nc8L3Y+5ne8li6B8o4ESVFkptCM1+tJk=;
+        b=/kn5HI/a/+Y44g8QBwSSSltAw1g/q6vRDfCUCItQMAJb1m9qP4RMBc6PPBAmeUp5RqSVE5
+        hWM1+9yCFCHsHvCA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 1983813326;
+        Mon,  5 Dec 2022 09:00:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id AHbpBCWzjWO4UgAAGKfGzw
+        (envelope-from <tzimmermann@suse.de>); Mon, 05 Dec 2022 09:00:21 +0000
+Message-ID: <1e4d62cf-8893-0bff-51f5-5a2e419ed5a0@suse.de>
+Date:   Mon, 5 Dec 2022 10:00:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] Input: edt-ft5x06 - always do msleep(300) during
- initialization
-Content-Language: en-US, da
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org
-References: <20221202105800.653982-1-linux@rasmusvillemoes.dk>
- <Y4pCtm4J3HWhYl8/@nixie71>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <Y4pCtm4J3HWhYl8/@nixie71>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
+Content-Language: en-US
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        "mb@lab.how" <mb@lab.how>
+Cc:     kvm@vger.kernel.org, airlied@linux.ie,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kraxel@redhat.com, lersek@redhat.com
+References: <CAEdEoBYXHq9cCzsbMYTpG1B41Yz=-QAjFx7bJDOnPanN5Tmo7A@mail.gmail.com>
+ <20221204175142.658d5c37.alex.williamson@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221204175142.658d5c37.alex.williamson@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------1xuPk2XMwFJoYTbm2jYGXdQJ"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,64 +75,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 19.23, Jeff LaBundy wrote:
-> + Mark
-> 
-> Hi Rasmus,
-> 
-> On Fri, Dec 02, 2022 at 11:57:59AM +0100, Rasmus Villemoes wrote:
->> We have a board with an FT5446, which is close enough to a
->> FT5506 (i.e. it also supports up to 10 touch points and has similar
->> register layout) for this driver to work. However, on our board the
->> iovcc and vcc regulators are indeed controllable (so not always-on),
->> but there is no reset or wakeup gpio hooked up.
->>
->> Without a large enough delay between the regulator_enable() calls and
->> edt_ft5x06_ts_identify(), the first edt_ft5x06_ts_readwrite() call
->> fails with -ENXIO and thus the device fails to probe. So
->> unconditionally do an mdelay(300) instead of only when a reset-gpio is
->> present.
->>
->> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> 
-> This is just my $.02, but it does not seem we are on the correct path
-> here. 300 ms sounds more like bulk capacitor charge time rather than
-> anything to do with this specific IC; is that a reasonable assumption?
-> 
-> Normally, we want to do the following:
-> 
-> 1. Enable regulator
-> 2. Wait for voltage rail to stabilize (RC time constant)
-> 3. Wait for any applicable POR delay (IC datasheet)
-> 4. Deassert reset
-> 5. Wait for any applicable reset delay (IC datasheet)
-> 6. Start communication
-> 
-> Here we are dealing with step (2), 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------1xuPk2XMwFJoYTbm2jYGXdQJ
+Content-Type: multipart/mixed; boundary="------------8hWQJUaJQcB4rdEGAVAwfJxL";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Alex Williamson <alex.williamson@redhat.com>, "mb@lab.how" <mb@lab.how>
+Cc: kvm@vger.kernel.org, airlied@linux.ie, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, kraxel@redhat.com, lersek@redhat.com
+Message-ID: <1e4d62cf-8893-0bff-51f5-5a2e419ed5a0@suse.de>
+Subject: Re: [PATCH 2/2] vfio/pci: Remove console drivers
+References: <CAEdEoBYXHq9cCzsbMYTpG1B41Yz=-QAjFx7bJDOnPanN5Tmo7A@mail.gmail.com>
+ <20221204175142.658d5c37.alex.williamson@redhat.com>
+In-Reply-To: <20221204175142.658d5c37.alex.williamson@redhat.com>
 
-Nope, we are really essentially dealing with step 5, even if there's no
-reset gpio that we've flipped around. The data sheet says to wait 200 ms
-(and I don't know why the driver does 300, perhaps there's some other
-chip in the family with that value, or perhaps it was just a
-belt-and-suspenders choice) after releasing reset. It's just that
-"releasing reset" is, in my case, effectively happens at the same time
-as the regulators are enabled.
+--------------8hWQJUaJQcB4rdEGAVAwfJxL
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I also played around with some smaller values. As I wrote, with no
-delay, I would get -ENXIO, but with both 50 and 100, the chip would
-"respond", but the values were essentially garbage (and not reproducible
-from one boot to the next). So even if it's a rather long time, it most
-definitely is a hard requirement to wait that long - perhaps we could
-make it 200, but I'd rather not reduce that time when I don't know if
-other variants have that 300 as a requirement.
+SGkNCg0KQW0gMDUuMTIuMjIgdW0gMDE6NTEgc2NocmllYiBBbGV4IFdpbGxpYW1zb246DQo+
+IE9uIFNhdCwgMyBEZWMgMjAyMiAxNzoxMjozOCAtMDcwMA0KPiAibWJAbGFiLmhvdyIgPG1i
+QGxhYi5ob3c+IHdyb3RlOg0KPiANCj4+IEhpLA0KPj4NCj4+IEkgaG9wZSBpdCBpcyBvayB0
+byByZXBseSB0byB0aGlzIG9sZCB0aHJlYWQuDQo+IA0KPiBJdCBpcywgYnV0IHRoZSBvbmx5
+IHJlbGljIG9mIHRoZSB0aHJlYWQgaXMgdGhlIHN1YmplY3QuICBGb3IgcmVmZXJlbmNlLA0K
+PiB0aGUgbGF0ZXN0IHZlcnNpb24gb2YgdGhpcyBwb3N0ZWQgaXMgaGVyZToNCj4gDQo+IGh0
+dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIyMDYyMjE0MDEzNC4xMjc2My00LXR6aW1t
+ZXJtYW5uQHN1c2UuZGUvDQo+IA0KPiBXaGljaCBpcyBjb21taXR0ZWQgYXM6DQo+IA0KPiBk
+MTczNzgwNjIwNzkgKCJ2ZmlvL3BjaTogUmVtb3ZlIGNvbnNvbGUgZHJpdmVycyIpDQo+IA0K
+Pj4gVW5mb3J0dW5hdGVseSwgSSBmb3VuZCBhDQo+PiBwcm9ibGVtIG9ubHkgbm93IGFmdGVy
+IHVwZ3JhZGluZyB0byA2LjAuDQo+Pg0KPj4gTXkgc2V0dXAgaGFzIG11bHRpcGxlIEdQVXMg
+KDIpLCBhbmQgSSBkZXBlbmQgb24gRUZJRkIgdG8gaGF2ZSBhIHdvcmtpbmcgY29uc29sZS4N
+Cg0KV2hpY2ggR1BVcyBkbyB5b3UgaGF2ZT8NCg0KPj4gcHJlLXBhdGNoIGJlaGF2aW9yLCB3
+aGVuIEkgYmluZCB0aGUgdmZpby1wY2kgdG8gbXkgc2Vjb25kYXJ5IEdQVSBib3RoDQo+PiB0
+aGUgcGFzc3Rocm91Z2ggYW5kIHRoZSBFRklGQiBrZWVwIHdvcmtpbmcgZmluZS4NCj4+IHBv
+c3QtcGF0Y2ggYmVoYXZpb3IsIHdoZW4gSSBiaW5kIHRoZSB2ZmlvLXBjaSB0byB0aGUgc2Vj
+b25kYXJ5IEdQVSwNCj4+IHRoZSBFRklGQiBkaXNhcHBlYXJzIGZyb20gdGhlIHN5c3RlbSwg
+YmluZGluZyB0aGUgY29uc29sZSB0byB0aGUNCj4+ICJkdW1teSBjb25zb2xlIi4NCg0KVGhl
+IGVmaWZiIHdvdWxkIGxpa2VseSB1c2UgdGhlIGZpcnN0IEdQVS4gQW5kIHZmaW8tcGNpIHNo
+b3VsZCBvbmx5IA0KcmVtb3ZlIHRoZSBnZW5lcmljIGRyaXZlciBmcm9tIHRoZSBzZWNvbmQg
+ZGV2aWNlLiBBcmUgeW91IHN1cmUgdGhhdCANCnlvdSdyZSBub3Qgc29tZWhvdyB1c2luZyB0
+aGUgZmlyc3QgR1BVIHdpdGggdmZpby1wY2kuDQoNCj4+IFdoZW5ldmVyIHlvdSB0cnkgdG8g
+YWNjZXNzIHRoZSB0ZXJtaW5hbCwgeW91IGhhdmUgdGhlIHNjcmVlbiBzdHVjayBpbg0KPj4g
+d2hhdGV2ZXIgd2FzIHRoZSBsYXN0IGJ1ZmZlciBjb250ZW50LCB3aGljaCBnaXZlcyB0aGUg
+aW1wcmVzc2lvbiBvZg0KPj4gImZyZWV6aW5nLCIgYnV0IEkgY2FuIHN0aWxsIHR5cGUuDQo+
+PiBFdmVyeXRoaW5nIGVsc2Ugd29ya3MsIGluY2x1ZGluZyB0aGUgcGFzc3Rocm91Z2guDQo+
+IA0KPiBUaGlzIHNvdW5kcyBsaWtlIHRoZSBjYWxsIHRvIGFwZXJ0dXJlX3JlbW92ZV9jb25m
+bGljdGluZ19wY2lfZGV2aWNlcygpDQo+IGlzIHJlbW92aW5nIHRoZSBjb25mbGljdGluZyBk
+cml2ZXIgaXRzZWxmIHJhdGhlciB0aGFuIHJlbW92aW5nIHRoZQ0KPiBkZXZpY2UgZnJvbSB0
+aGUgZHJpdmVyLiAgSXMgaXQgbm90IHBvc3NpYmxlIHRvIHVuYmluZCB0aGUgR1BVIGZyb20N
+Cj4gZWZpZmIgYmVmb3JlIGJpbmRpbmcgdGhlIEdQVSB0byB2ZmlvLXBjaSB0byBlZmZlY3Rp
+dmVseSBudWxsaWZ5IHRoZQ0KPiBhZGRlZCBjYWxsPw0KPiAgIA0KPj4gSSBjYW4gb25seSB0
+aGluayBhYm91dCBhIGZldyBvcHRpb25zOg0KPj4NCj4+IC0gSXMgdGhlcmUgYSB3YXkgdG8g
+aGF2ZSBFRklGQiBzaG93IHVwIGFnYWluPyBBZnRlciBhbGwgaXQgbG9va3MgbGlrZQ0KPj4g
+dGhlIGtlcm5lbCBoYXMganVzdCBhYmFuZG9uZWQgaXQsIGJ1dCB0aGUgYnVmZmVyIGlzIHN0
+aWxsIHRoZXJlLiBJDQo+PiBjYW4ndCBmaW5kIGEgc2luZ2xlIG1lc3NhZ2UgYWJvdXQgdGhl
+IHNlY29uZGFyeSBjYXJkIGFuZCBFRklGQiBpbg0KPj4gZG1lc2csIGJ1dCB0aGVyZSdzIGEg
+bWVzc2FnZSBmb3IgdGhlIHByaW1hcnkgY2FyZCBhbmQgRUZJRkIuDQo+PiAtIENhbiB3ZSBo
+YXZlIGEgYm9vbGVhbiBjb250cm9sbGluZyB0aGUgYmVoYXZpb3Igb2YgdmZpby1wY2kNCj4+
+IGFsdG9nZXRoZXIgb3IgYXQgbGVhc3QgY29udHJvbGxpbmcgdGhlIGJlaGF2aW9yIG9mIHZm
+aW8tcGNpIGZvciB0aGF0DQo+PiBzcGVjaWZpYyBJRD8gSSBrbm93IHRoZXJlJ3MgYWxyZWFk
+eSBzb21lIG9wdGlvbiBmb3IgdmZpby1wY2kgYW5kIFZHQQ0KPj4gY2FyZHMsIHdvdWxkIGl0
+IGJlIGFwcHJvcHJpYXRlIHRvIGF0dGFjaCB0aGlzIGJlaGF2aW9yIHRvIHRoYXQgb3B0aW9u
+Pw0KPiANCj4gSSBzdXBwb3NlIHdlIGNvdWxkIGhhdmUgYW4gb3B0LW91dCBtb2R1bGUgb3B0
+aW9uIG9uIHZmaW8tcGNpIHRvIHNraXANCj4gdGhlIGFib3ZlIGNhbGwsIGJ1dCBjbGVhcmx5
+IGl0IHdvdWxkIGJlIGJldHRlciBpZiB0aGluZ3Mgd29ya2VkIGJ5DQo+IGRlZmF1bHQuICBX
+ZSBjYW5ub3QgbWFrZSBmdWxsIHVzZSBvZiBHUFVzIHdpdGggdmZpby1wY2kgaWYgdGhleSdy
+ZQ0KPiBzdGlsbCBpbiB1c2UgYnkgaG9zdCBjb25zb2xlIGRyaXZlcnMuICBUaGUgaW50ZW50
+aW9uIHdhcyBjZXJ0YWlubHkgdG8NCj4gdW5iaW5kIHRoZSBkZXZpY2UgZnJvbSBhbnkgbG93
+IGxldmVsIGRyaXZlcnMgcmF0aGVyIHRoYW4gZGlzYWJsZSB1c2Ugb2YNCj4gYSBjb25zb2xl
+IGRyaXZlciBlbnRpcmVseS4gIERSTS9HUFUgZm9sa3MsIGlzIHRoYXQgcG9zc2libHkgYW4N
+Cj4gaW50ZXJmYWNlIHdlIGNvdWxkIGltcGxlbWVudD8gIFRoYW5rcywNCg0KV2hlbiB2Zmlv
+LXBjaSBnaXZlcyB0aGUgR1BVIGRldmljZSB0byB0aGUgZ3Vlc3QsIHdoaWNoIGRyaXZlciBk
+cml2ZXIgaXMgDQpib3VuZCB0byBpdD8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiAN
+Cj4gQWxleA0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVy
+IERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhm
+ZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7D
+vHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Even if we could interrogate the regulator and ask it if "are you
-actually always-on", I'd rather not make the delay conditional on that;
-we cannot know if it has been on for 300+ ms, and since the device does
-respond, but not correctly, we could end up with probing and
-initializing the device, but in a wrong state. That's a recipe for
-impossible debugging (add a single printk somewhere earlier and the
-timing changes so that suddenly it gets initialized correctly...).
+--------------8hWQJUaJQcB4rdEGAVAwfJxL--
 
-Rasmus
+--------------1xuPk2XMwFJoYTbm2jYGXdQJ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmONsyQFAwAAAAAACgkQlh/E3EQov+Dj
+pg//a0JvZ00shXVwnKjlTJ95+HaaY3O7oW9BsTsyGZOvVcG1zlSES2XBMkMV0MTpM/C69KnWXld6
+WNcntoouweVEbZj3XCfSCA+FPWPavl7x3gFRG3hL7LiiWQQqc26g6v43aO+9XOXMN3jYpmhZYXlB
+bwBBoZhlPSmWFzZAJArbPaHw3XiC8TErNyxsaTs8J4sM9D6maLbvodvomWJlQ/HCWPAshSTRMrRP
+/IkSjNWtPv0L60L+VqVqSqZ6IhIexdcbx27UtcdmnxwM3tsVfIw6hcSDUKzT949Rpw756ye+C/zz
+YRdRxKislvhn/fh8rVvpjabI3uUFcuPOBH5+Mm8Qi+uLJZbbtblL2W5+L5r8dT0ikznenrprfaoj
+hU5OcUxOcBQ4n8Y/1gQ8/k6nNDLKOi4InseZTL/gaw5F1eACd/gJGii7lpNQcDdiy2GmVcrJJ+7I
+tWW1nrxV6pMYCjvXYR4VsmosMUoy1Qzd+1Sdu494Pni66R5AMcxdvDx/STh15Xk6HELrXTgqVrPt
+3xhebo2OXJjy9eW/mXJx8eYyTWk6R3kYlLFvkCbTpwalOJQegZxUWDP52IhGqX0RVCFSdik70ixe
+Ba+gN00EfQPKMTDInXvufbxCJ2UNq2HGovB69UNK6QzyN/8e/a2qhbsY4/U/ov+3ZCdPX5FOYHp4
+2sk=
+=nMjh
+-----END PGP SIGNATURE-----
+
+--------------1xuPk2XMwFJoYTbm2jYGXdQJ--
