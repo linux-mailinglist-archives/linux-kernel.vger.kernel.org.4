@@ -2,162 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DF6642F83
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B952642F87
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiLERzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 12:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S231387AbiLER5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 12:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbiLERz3 (ORCPT
+        with ESMTP id S229999AbiLER5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 12:55:29 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0941AD;
-        Mon,  5 Dec 2022 09:54:32 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id l127so13917887oia.8;
-        Mon, 05 Dec 2022 09:54:32 -0800 (PST)
+        Mon, 5 Dec 2022 12:57:53 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE71D12ABA;
+        Mon,  5 Dec 2022 09:57:51 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id p18so5620633qkg.2;
+        Mon, 05 Dec 2022 09:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7F0TLMUFiwR3iCnsvoeF7vGdv4a+JS2sxocOvhZdEjg=;
+        b=Ni9TZbp61wZ/nJkqkWBATXcK110ZcuHrNa4AJ5A9L7yz/6gyxhIN500aDkuwRyRY9z
+         Qz+UZguYSPmUxhqWHPG34lGIvHVN51Ss9wTTycAUVPUTEgTyF0lmjO2x+9JDHNriMKjp
+         qgzOnylRG8MyJ2YyCKEujtHMu6LaEczexztyawRsl/nCMjmOnVS3+qWbNWLRoHbavZx/
+         fsDpeRPW3bDhkfFDx2wwOcGKAYA7k2L8TJ1Qri37w31RlFmakw6BTPlYBpOMmgmlIJG8
+         BtTNhDGTFDitf0277pxO8NwtHl8S3luOd5ry5w4RrfAuwB7+8K3QQtxMsDgpBPxc6gwB
+         9hVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qjD5jvfs1Q2x/cdcxaQ+cfzZKHiqKwOk2YSAqbwKlVo=;
-        b=X12WQ97Y1cgdbJd+Eq81q+PZMhgnH2VWJ7k8nas1LVX7HtErvLPJmbZnbKfPvHgyaZ
-         /P7eBRWTHI3zClC0vfSSSEy4rs1C7JoMTBE0Uc9Na9kipWBZzjkBJoyrI5UuXtaQfPU+
-         JppG1awGmtr8B9T4xceJPpgsv4x520zIxWfsV37RPEYj3xowGnK3++CSXr9CtnZY/MiI
-         Q7l1kTfKzpkSxjIEnGb8PvNQMKOabTE/B2vIs4aAJpMp6bKB80pONIn/uh1BSsRxUamT
-         Nz47oUWRALat8n1bVZfbJvMSZRMtcio5ttxtBUX8U70OJ8rrniJ1kVNpXazpsF6umkJl
-         +kXQ==
-X-Gm-Message-State: ANoB5pmwX1kNReqCmNg6lXSW/lWmTeTutk9gS98uenkkZ6hc4iTWkbX+
-        WfQBByfpzj5RXGOIkpyHUQ==
-X-Google-Smtp-Source: AA0mqf7MQR4VlM3j15dfYZl5T10+IaF4xou+7DEW3p2t0/AF/R9GuAMvPe+A/m3AS1CZqrt91T0rvQ==
-X-Received: by 2002:a05:6808:1246:b0:354:4b35:2809 with SMTP id o6-20020a056808124600b003544b352809mr40266726oiv.256.1670262871784;
-        Mon, 05 Dec 2022 09:54:31 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056870a40600b0012d939eb0bfsm9448668oal.34.2022.12.05.09.54.30
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7F0TLMUFiwR3iCnsvoeF7vGdv4a+JS2sxocOvhZdEjg=;
+        b=3E7hpaXjmhEhRtyTSOAjrJChYz6JJgADzvlqiZA3Zzw/y/HBM967ok2q4zbqS3V9an
+         J5XpjKFumXkUJ4bDUJrVp8FjtcArUE5QkGMl5XOpUHHkgNGf0RjJOoOpY4EuJHsU8+AQ
+         W0o0Gg0a+cnSoqCnC+62lM2ivkLpKZbrTRgs+RAKWefrpAqEMTDc6OE5JAgWanUmzQyv
+         pG0IArMXmr8+Bw78xS1MXR4iNPiqriflJnwWd0WxS75ESW+brUgmYf/vfm/v2KJ65rDO
+         XtH55Qslrvi2CwNS8OWSy0b4ESrf4Et8kNiBYcNkYiyXAPiABCdWM3z9kwR7zeEiW3DH
+         zA8A==
+X-Gm-Message-State: ANoB5pkLm5ekPmokRXz9qrXUsHbsO/lbKSKmbvUFrMDEekquAJQsVnPh
+        2UEAxJv39xi8y9tCwtSEgABGHzvvmns=
+X-Google-Smtp-Source: AA0mqf62l0FZyHcUjh2+T9ookFicFEYJCdwdxNB85dlw5UTB8EX82xmUZ2CKVcYajS5acJbRTE8Cyg==
+X-Received: by 2002:a05:620a:13ab:b0:6fe:b81b:b34d with SMTP id m11-20020a05620a13ab00b006feb81bb34dmr5232347qki.670.1670263070796;
+        Mon, 05 Dec 2022 09:57:50 -0800 (PST)
+Received: from localhost.localdomain ([143.166.81.254])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006fc5a1d9cd4sm12903721qko.34.2022.12.05.09.57.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 09:54:31 -0800 (PST)
-Received: (nullmailer pid 2143933 invoked by uid 1000);
-        Mon, 05 Dec 2022 17:54:30 -0000
-Date:   Mon, 5 Dec 2022 11:54:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v4,1/3] media: dt-bindings: media: mediatek: vcodec:
- adapt to the 'clock-names' of different platforms
-Message-ID: <20221205175430.GA2136513-robh@kernel.org>
-References: <20221202034450.3808-1-yunfei.dong@mediatek.com>
+        Mon, 05 Dec 2022 09:57:50 -0800 (PST)
+From:   Stuart Hayes <stuart.w.hayes@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kyle Meyer <kyle.meyer@hpe.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stuart Hayes <stuart.w.hayes@gmail.com>
+Subject: [PATCH] cpufreq: acpi: Only set boost MSRs on supported CPUs
+Date:   Mon,  5 Dec 2022 11:57:44 -0600
+Message-Id: <20221205175744.9746-1-stuart.w.hayes@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202034450.3808-1-yunfei.dong@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 11:44:48AM +0800, Yunfei Dong wrote:
-> mt8195 and mt8192 have different clock numbers, separate 'clock-names'
-> according to compatible name.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
-> compared with v3:
-> - rewrite clock-names according to different platforms.
-> 
-> Reference series:
-> [1]: v5 of this series is presend by Allen-KH Cheng.
->      message-id: 20221128143832.25584-4-allen-kh.cheng@mediatek.com
-> ---
->  .../media/mediatek,vcodec-subdev-decoder.yaml | 41 ++++++++++++++++---
->  1 file changed, 35 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> index 7c5b4a91c59b..a08b2c814f40 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -110,15 +110,12 @@ patternProperties:
->            Refer to bindings/iommu/mediatek,iommu.yaml.
->  
->        clocks:
-> +        minItems: 1
+Stop trying to set boost MSRs on CPUs that don't support boost.
 
-Why 1? Looks like it should be 4 or 5 clocks.
+This corrects a bug in the recent patch "Defer setting boost MSRs".
 
->          maxItems: 5
->  
->        clock-names:
-> -        items:
-> -          - const: sel
-> -          - const: soc-vdec
-> -          - const: soc-lat
-> -          - const: vdec
-> -          - const: top
-> +        minItems: 1
-> +        maxItems: 5
->  
->        assigned-clocks:
->          maxItems: 1
-> @@ -159,6 +156,38 @@ then:
->    required:
->      - interrupts
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8192-vcodec-dec
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: sel
-> +            - const: soc-vdec
-> +            - const: soc-lat
-> +            - const: vdec
-> +            - const: top
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8195-vcodec-dec
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: sel
-> +            - const: vdec
-> +            - const: lat
-> +            - const: top
-> +
->  additionalProperties: false
->  
->  examples:
-> -- 
-> 2.18.0
-> 
-> 
+Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+---
+ drivers/cpufreq/acpi-cpufreq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index bb58175a8d40..a7c5e312340e 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -888,7 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
+ 		pr_warn(FW_WARN "P-state 0 is not max freq\n");
+ 
+-	set_boost(policy, acpi_cpufreq_driver.boost_enabled);
++	if (acpi_cpufreq_driver.set_boost)
++		set_boost(policy, acpi_cpufreq_driver.boost_enabled);
+ 
+ 	return result;
+ 
+-- 
+2.31.1
+
