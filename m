@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA946422A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D27F6422A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 06:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiLEFU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 00:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S231620AbiLEFWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 00:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbiLEFUa (ORCPT
+        with ESMTP id S231367AbiLEFWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 00:20:30 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3779B13F91;
-        Sun,  4 Dec 2022 21:20:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670217617; x=1701753617;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mXhoSw88V/7yBb8oczsmPuNJJvEtejt3CszxH0XbUxo=;
-  b=Pix+f2m3QxHXoRZXM2Pna9AkTv1gjctfmYnRxgJXF77YzBHZsXiYWv98
-   hEyAys1SYP8jwhR+DvFr7Iuett4LZiqbjeTCWqlLyj/kwDLPwHkJsxJRL
-   fXpsq/7bPNbdhu+FAr39wlkJCJgXmwRU3u2pwtQnobW/4fCAsj7M8OHo2
-   oR9BICMKJxkYmeW2FnH1prCq5cceb3nM2vXOPmksvSWAWEf/nSHj4JOvK
-   /9Ava2vHS/8RZU+5j23o2Rydg0uS//L2JIDx3LHXPGDyxE7PWbp84JNG0
-   0i8EkV/qRkndwTJukNzIAzRwX3dxq9oJ13aLVt3tZWp37ADau6MAb2rpB
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
-   d="scan'208";a="126455461"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Dec 2022 22:20:15 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sun, 4 Dec 2022 22:20:15 -0700
-Received: from microchip1-OptiPlex-9020.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Sun, 4 Dec 2022 22:20:13 -0700
-From:   shravan kumar <shravan.chippa@microchip.com>
-To:     <paul.j.murphy@intel.com>, <daniele.alessandrelli@intel.com>,
-        <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Shravan Chippa" <shravan.chippa@microchip.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v6 5/5] media: i2c: imx334: update pixel and link frequency
-Date:   Mon, 5 Dec 2022 10:49:37 +0530
-Message-ID: <20221205051937.3897001-7-shravan.chippa@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221205051937.3897001-1-shravan.chippa@microchip.com>
-References: <20221205051937.3897001-1-shravan.chippa@microchip.com>
+        Mon, 5 Dec 2022 00:22:51 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E65B847
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 21:22:48 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p23w4-0004GG-Rz; Mon, 05 Dec 2022 06:22:36 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p23w2-002ONF-Ac; Mon, 05 Dec 2022 06:22:35 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p23w1-00BtJL-SV; Mon, 05 Dec 2022 06:22:33 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com
+Subject: [PATCH net-next v7 0/6] net: dsa: microchip: add MTU support for KSZ8 series 
+Date:   Mon,  5 Dec 2022 06:22:26 +0100
+Message-Id: <20221205052232.2834166-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravan Chippa <shravan.chippa@microchip.com>
+changes v7:
+- add Acked-bys and Reviewed-bys
 
-Update pixel_rate and link frequency for 1920x1080@30
-while changing mode.
+changes v6:
+- move dsa configuration to ksz8_setup 
 
-Add dummy ctrl cases for pixel_rate and link frequency
-to avoid error while changing the modes dynamically
+changes v5:
+- add mtu normalization patch
 
-Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
-Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
----
- drivers/media/i2c/imx334.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+changes v4:
+- remove per port max_frame cache
+- remove port variable for ksz88* variants
+- add KSZ9563_CHIP_ID
+- not start a new line with an operator
 
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index d5b566085da9..64ed77c4258c 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -50,6 +50,7 @@
- 
- /* CSI2 HW configuration */
- #define IMX334_LINK_FREQ	1782000000
-+#define IMX334_LINK_FREQ_891M	891000000
- #define IMX334_NUM_DATA_LANES	4
- 
- #define IMX334_REG_MIN		0x00
-@@ -145,6 +146,7 @@ struct imx334 {
- 
- static const s64 link_freq[] = {
- 	IMX334_LINK_FREQ,
-+	IMX334_LINK_FREQ_891M,
- };
- 
- /* Sensor mode registers */
-@@ -468,7 +470,7 @@ static const struct imx334_mode supported_modes[] = {
- 		.vblank_min = 90,
- 		.vblank_max = 132840,
- 		.pclk = 74250000,
--		.link_freq_idx = 0,
-+		.link_freq_idx = 1,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
- 			.regs = mode_1920x1080_regs,
-@@ -598,6 +600,11 @@ static int imx334_update_controls(struct imx334 *imx334,
- 	if (ret)
- 		return ret;
- 
-+	ret = __v4l2_ctrl_modify_range(imx334->pclk_ctrl, mode->pclk,
-+				       mode->pclk, 1, mode->pclk);
-+	if (ret)
-+		return ret;
-+
- 	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
- 				       mode->hblank, 1, mode->hblank);
- 	if (ret)
-@@ -698,6 +705,8 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
- 		pm_runtime_put(imx334->dev);
- 
- 		break;
-+	case V4L2_CID_PIXEL_RATE:
-+	case V4L2_CID_LINK_FREQ:
- 	case V4L2_CID_HBLANK:
- 		ret = 0;
- 		break;
+changes v3:
+- rename KSZ8863_LEGAL_PACKET_SIZE -> KSZ8_LEGAL_PACKET_SIZE
+
+changes v2:
+- add ksz_rmw8() helper
+- merge all max MTUs to one location
+
+Oleksij Rempel (6):
+  net: dsa: microchip: move max mtu to one location
+  net: dsa: microchip: do not store max MTU for all ports
+  net: dsa: microchip: add ksz_rmw8() function
+  net: dsa: microchip: ksz8: add MTU configuration support
+  net: dsa: microchip: enable MTU normalization for KSZ8795 and KSZ9477
+    compatible switches
+  net: dsa: microchip: ksz8: move all DSA configurations to one location
+
+ drivers/net/dsa/microchip/ksz8.h        |  1 +
+ drivers/net/dsa/microchip/ksz8795.c     | 75 +++++++++++++++++++++----
+ drivers/net/dsa/microchip/ksz8795_reg.h |  3 +
+ drivers/net/dsa/microchip/ksz9477.c     | 21 +++----
+ drivers/net/dsa/microchip/ksz9477.h     |  1 -
+ drivers/net/dsa/microchip/ksz9477_reg.h |  2 -
+ drivers/net/dsa/microchip/ksz_common.c  | 29 ++++++++--
+ drivers/net/dsa/microchip/ksz_common.h  | 13 ++++-
+ 8 files changed, 109 insertions(+), 36 deletions(-)
+
 -- 
-2.34.1
+2.30.2
 
