@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7A2642C21
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E986642C22
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiLEPnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        id S231175AbiLEPnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:43:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiLEPnL (ORCPT
+        with ESMTP id S232494AbiLEPnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:43:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637DDBC0C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:43:10 -0800 (PST)
+        Mon, 5 Dec 2022 10:43:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E65A1B9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:43:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 083BB611A9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:43:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F138AC433C1;
-        Mon,  5 Dec 2022 15:43:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5058B8113E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:43:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E573BC433B5;
+        Mon,  5 Dec 2022 15:43:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670254989;
-        bh=D/+BKVIlShuhR+UQ6Pz52NTeoGKKkf+tJ77kNXk0hZk=;
+        s=k20201202; t=1670254991;
+        bh=cxX7OqX/cXJwBjusfM54M1kq63daJR6r2DWENROPhRw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n7bquxzMr78fGNDfb9ivVZpS+1pTFDeSVwEFyDCPtrVpAk3ZeMEObpDsnyHBzMnaK
-         zCOBxkdkyjWU5cXf7WpE9599BSUeSfm7kWettx5rIezCBqGLtx+zSg9v20AXSpgrWD
-         N3iPqzaHkd3nwOOy/hRPoWoyBSm9UgNIFSJ2EpnFUxBvOk/7YbCfowwg9eo5NwvuGE
-         NKBi/ey06eRe+0no/1VI9xJVUhwjo+BzpeVyrqLSuBx8pPzVjrYno8pTKOiB5ygOne
-         Qr7awKLrAisGUDeN4aO4AEY7Hx6ogTOrkArEwL10XPaUAfIjAe25ZI3gQ80y9G/quP
-         cXWnSoPlz0FSw==
+        b=W70Fqw8zkk+4fTK8lr0LcVwP0d7hjqMTDPrpFw26PozXRH9YJBr/KwB+XSn7HPpBK
+         /BN8TZppkiUBSWmZG3dUCbLzLcnxsg9fgdIz6qRHaHM/GksM1cbHGw0zAp3E/C71UO
+         qa6DW1v0hsGeZhbHhq7AixdWffAThz7AGFN+QWv3S4/fEB7LRqIE1ITG0AJjuERl4v
+         oOfMrcE4B3qyoSMsaciCJWwSX9QUiz72Di2L5PeQcdeZsPbVhLT14K1V6es4bjioOH
+         +PU8kmDGfBphV18LccHLP3boebycnE4fGg3OrkL0uT/0yhDfX9dJhudjWyS8AiMM22
+         Qk52JyhvmGMxQ==
 From:   Will Deacon <will@kernel.org>
-To:     catalin.marinas@arm.com, guo.ziliang@zte.com.cn
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
 Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        huang.junhua@zte.com.cn
-Subject: Re: [PATCH] arm64:uprobe fix the uprobe SWBP_INSN in big-endian
-Date:   Mon,  5 Dec 2022 15:43:02 +0000
-Message-Id: <167024898950.269185.3140250803235881009.b4-ty@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] arm64: alternatives: add __init/__initconst to some functions/variables
+Date:   Mon,  5 Dec 2022 15:43:03 +0000
+Message-Id: <167024802631.265501.9713886317204741032.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <202212021511106844809@zte.com.cn>
-References: <202212021511106844809@zte.com.cn>
+In-Reply-To: <20221202161859.2228-1-jszhang@kernel.org>
+References: <20221202161859.2228-1-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,21 +56,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Dec 2022 15:11:10 +0800 (CST), guo.ziliang@zte.com.cn wrote:
-> From: junhua huang <huang.junhua@zte.com.cn>
+On Sat, 3 Dec 2022 00:18:59 +0800, Jisheng Zhang wrote:
+> apply_alternatives_vdso(), __apply_alternatives_multi_stop() and
+> kernel_alternatives are not needed after booting, so mark the two
+> functions as __init and the var as __initconst.
 > 
-> We use uprobe in aarch64_be, which we found the tracee task would exit
-> due to SIGILL when we enable the uprobe trace.
-> We can see the replace inst from uprobe is not correct in aarch big-endian.
-> As in Armv8-A, instruction fetches are always treated as little-endian,
-> we should treat the UPROBE_SWBP_INSN as little-endian。
 > 
-> [...]
 
-Applied to arm64 (for-next/insn), thanks!
+Applied to arm64 (for-next/trivial), thanks!
 
-[1/1] arm64:uprobe fix the uprobe SWBP_INSN in big-endian
-      https://git.kernel.org/arm64/c/60f07e22a73d
+[1/1] arm64: alternatives: add __init/__initconst to some functions/variables
+      https://git.kernel.org/arm64/c/67bc5b2d6d48
 
 Cheers,
 -- 
