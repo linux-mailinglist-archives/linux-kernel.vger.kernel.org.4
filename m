@@ -2,151 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C626434C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C0C6434C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiLETwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        id S233760AbiLETwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:52:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235292AbiLETwA (ORCPT
+        with ESMTP id S235031AbiLETwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:52:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6662C66D;
-        Mon,  5 Dec 2022 11:49:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3886161307;
-        Mon,  5 Dec 2022 19:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3429FC433D6;
-        Mon,  5 Dec 2022 19:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670269771;
-        bh=gpqDWSWbXSjKg40I3kv9dGH01C0Fe67Bhy3F34jRTBE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c4HnnmhP1SKtWfDiRy4ddvgwR2Fv32UwFEwm+R7CK+6FV5Y9LSMFvXXoy/Nj8NpuG
-         YhJL9kfEgliu6fQs/UkH1fcFE7TmBDHtjTifD37ok/u4P3aVJlaLVslXDMUI8B8hbM
-         +t/3sBllwFNE3yEkzZ3zRJY2/DeytO8EDf3Y3fvhp0PHuuciEpldmCnmuODU8BLQwz
-         p9Nzmk79TKOU0bFtADERPr0KYEeqY5LCBWENqG4N9WYNuNKGO5xZKn9f3VlMqX0YGb
-         xaxh9jrOJv6Sa+H2jmssKdOcGDLTRmR/PqTRiDv1SqXJIiXK58miEph0Jy2jZqbyv+
-         VGtyk1PfQJ4vw==
-Date:   Mon, 5 Dec 2022 19:49:26 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
-Message-ID: <Y45LRu0Gvrurm5Rh@spud>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <Y44Q/B6THtP38eyL@xhacker>
- <Y446PdlUPGw5iB71@spud>
- <10190559.nUPlyArG6x@diego>
+        Mon, 5 Dec 2022 14:52:14 -0500
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF422C67E;
+        Mon,  5 Dec 2022 11:49:35 -0800 (PST)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1443a16b71cso11211286fac.13;
+        Mon, 05 Dec 2022 11:49:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WF6ng5m2itRiuJ7lnIkeTvq8cFNvXklppaaRKX7UGTg=;
+        b=ZvqL+N1cFzc9fjhCaxfp4Q/g2QU+Wd6saT1/EaE8dufuk92Ae4Ie7jiwZqrLQpdYOJ
+         Ae+zJ7+jykw0e1TmaZQECsXkMk5f4p9qzv3y9uMwENnQ5zdYgkF/KePikTDMjwv0HC9f
+         GKxWA6mo4CXqcJIHaH8FKWn4w3DdUwJi5lcs77vnxpLzFEpJzyzHdzjUrH5aYYg7GVhL
+         vfmHINIuUI8944+NNtr2D8Wx2YhxY1WXUWOthuD3HJ8g8cggy131LYvxGjp9qmJnSDpH
+         YyE044/VACQvfmRF4gDJkVDKL43IaKhDVxHu0TrKW6foxLCSp/j8+m1Gvm9dnp4pdBU8
+         cQgQ==
+X-Gm-Message-State: ANoB5pm3VzDVwRgDYw5wKPexXHuGZMVEaBlXQhetHz3oCjcAp26BjgAg
+        5EeV+LaBVzQC2zf28uHlUDpBJDmcRg==
+X-Google-Smtp-Source: AA0mqf6SKObACkoAq/BTaSQXXX27hSFzMgOd8GS/+JY7J6S6nZqiBO+ur0213ZcibiO+Qf8KBRwWBA==
+X-Received: by 2002:a05:6871:430a:b0:142:397c:ae63 with SMTP id lu10-20020a056871430a00b00142397cae63mr47891313oab.269.1670269775164;
+        Mon, 05 Dec 2022 11:49:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j125-20020acab983000000b0035b451d80afsm7358427oif.58.2022.12.05.11.49.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 11:49:34 -0800 (PST)
+Received: (nullmailer pid 2481339 invoked by uid 1000);
+        Mon, 05 Dec 2022 19:49:34 -0000
+Date:   Mon, 5 Dec 2022 13:49:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 08/15] dt-bindings: remoteproc: qcom,sm8150-pas: split
+ into separate file
+Message-ID: <20221205194934.GA2476927-robh@kernel.org>
+References: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
+ <20221124184333.133911-9-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0eq6YNiH5eo8OX+V"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10190559.nUPlyArG6x@diego>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221124184333.133911-9-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 24, 2022 at 07:43:26PM +0100, Krzysztof Kozlowski wrote:
+> Split SM8150 and SM8250 remote processor Peripheral Authentication
+> Service bindings into their own file to reduce complexity and make
+> maintenance easier.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v2:
+> 1. Drop if:then: for the clock and put it directly under properties.
+> 2. Merge two if:then: clauses for setting interrupts.
+> 
+> Changes since v1:
+> 1. Add qcom,qmp (not part of qcom,pas-common.yaml# anymore).
+> 2. Add firmware-name to example.
+> ---
+>  .../bindings/remoteproc/qcom,adsp.yaml        |  27 ---
+>  .../bindings/remoteproc/qcom,sm8150-pas.yaml  | 166 ++++++++++++++++++
+>  2 files changed, 166 insertions(+), 27 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+> index 67941e79a4a0..e8d66eefd522 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+> @@ -40,13 +40,6 @@ properties:
+>        - qcom,sm6350-adsp-pas
+>        - qcom,sm6350-cdsp-pas
+>        - qcom,sm6350-mpss-pas
+> -      - qcom,sm8150-adsp-pas
+> -      - qcom,sm8150-cdsp-pas
+> -      - qcom,sm8150-mpss-pas
+> -      - qcom,sm8150-slpi-pas
+> -      - qcom,sm8250-adsp-pas
+> -      - qcom,sm8250-cdsp-pas
+> -      - qcom,sm8250-slpi-pas
+>  
+>    reg:
+>      maxItems: 1
+> @@ -94,13 +87,6 @@ allOf:
+>                - qcom,sm6350-adsp-pas
+>                - qcom,sm6350-cdsp-pas
+>                - qcom,sm6350-mpss-pas
+> -              - qcom,sm8150-adsp-pas
+> -              - qcom,sm8150-cdsp-pas
+> -              - qcom,sm8150-mpss-pas
+> -              - qcom,sm8150-slpi-pas
+> -              - qcom,sm8250-adsp-pas
+> -              - qcom,sm8250-cdsp-pas
+> -              - qcom,sm8250-slpi-pas
+>      then:
+>        properties:
+>          clocks:
+> @@ -150,12 +136,6 @@ allOf:
+>                - qcom,sdm845-cdsp-pas
+>                - qcom,sm6350-adsp-pas
+>                - qcom,sm6350-cdsp-pas
+> -              - qcom,sm8150-adsp-pas
+> -              - qcom,sm8150-cdsp-pas
+> -              - qcom,sm8150-slpi-pas
+> -              - qcom,sm8250-adsp-pas
+> -              - qcom,sm8250-cdsp-pas
+> -              - qcom,sm8250-slpi-pas
+>      then:
+>        properties:
+>          interrupts:
+> @@ -173,7 +153,6 @@ allOf:
+>                - qcom,sc8180x-mpss-pas
+>                - qcom,sdx55-mpss-pas
+>                - qcom,sm6350-mpss-pas
+> -              - qcom,sm8150-mpss-pas
+>      then:
+>        properties:
+>          interrupts:
+> @@ -199,8 +178,6 @@ allOf:
+>                - qcom,msm8226-adsp-pil
+>                - qcom,msm8996-adsp-pil
+>                - qcom,msm8998-adsp-pas
+> -              - qcom,sm8150-adsp-pas
+> -              - qcom,sm8150-cdsp-pas
+>      then:
+>        properties:
+>          power-domains:
+> @@ -272,7 +249,6 @@ allOf:
+>                - qcom,sc7280-mpss-pas
+>                - qcom,sdx55-mpss-pas
+>                - qcom,sm6350-mpss-pas
+> -              - qcom,sm8150-mpss-pas
+>      then:
+>        properties:
+>          power-domains:
+> @@ -293,9 +269,6 @@ allOf:
+>                - qcom,sc8180x-cdsp-pas
+>                - qcom,sc8280xp-adsp-pas
+>                - qcom,sm6350-adsp-pas
+> -              - qcom,sm8150-slpi-pas
+> -              - qcom,sm8250-adsp-pas
+> -              - qcom,sm8250-slpi-pas
+>      then:
+>        properties:
+>          power-domains:
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
+> new file mode 100644
+> index 000000000000..b934252cf02b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
+> @@ -0,0 +1,166 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/qcom,sm8150-pas.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SM8150/SM8250 Peripheral Authentication Service
+> +
+> +maintainers:
+> +  - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> +
+> +description:
+> +  Qualcomm SM8150/SM8250 SoC Peripheral Authentication Service loads and boots
+> +  firmware on the Qualcomm DSP Hexagon cores.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sm8150-adsp-pas
+> +      - qcom,sm8150-cdsp-pas
+> +      - qcom,sm8150-mpss-pas
+> +      - qcom,sm8150-slpi-pas
+> +      - qcom,sm8250-adsp-pas
+> +      - qcom,sm8250-cdsp-pas
+> +      - qcom,sm8250-slpi-pas
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: XO clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xo
+> +
+> +  qcom,qmp:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Reference to the AOSS side-channel message RAM.
 
---0eq6YNiH5eo8OX+V
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Not ideal that we are defining the type here multiple times.
 
-On Mon, Dec 05, 2022 at 07:49:01PM +0100, Heiko St=FCbner wrote:
-> Am Montag, 5. Dezember 2022, 19:36:45 CET schrieb Conor Dooley:
-> > Heiko, Jisheng,
-> > On Mon, Dec 05, 2022 at 11:40:44PM +0800, Jisheng Zhang wrote:
-> > > Yesterday, I also wanted to unify the two instruction fix into
-> > > one. But that would need to roll back the
-> > > riscv_alternative_fix_auipc_jalr() to your v1 version. And IMHO,
-> > > it's better if you can split the Zbb string optimizations series
-> > > into two: one for alternative improvements, another for Zbb. Then
-> > > we may get the alternative improvements and this inst extension
-> > > series merged in v6.2-rc1.
-> >=20
-> > Heiko, perhaps you can correct me here:
-> >=20
-> > Last Wednesday you & Palmer agreed that it was too late in the cycle to
-> > apply any of the stuff touching alternatives?
-> > If I do recall correctly, gives plenty of time to sort out any
-> > interdependent changes here.
-> >=20
-> > Could easily be misremembering, wouldn't be the first time!
->=20
-> You slightly misremembered, but are still correct with the above ;-) .
->=20
-> I.e. what we talked about was stuff for fixes for 6.1-rc, were Palmers
-> wisely wanted to limit additions to really easy fixes for the remaining
-> last rc, to not upset any existing boards.
+Otherwise,
 
-Ahh right. I was 50-50 on whether something like that was said so at
-least I am not going crazy.
-
-> But you are still correct that we also shouldn't target the 6.2 merge win=
-dow
-> anymore :-) .
->=20
-> We're after -rc8 now (which is in itself uncommon) and in his -rc7
-> announcement [0], Linus stated
->=20
-> "[...] the usual rule is that things that I get sent for the
-> merge window should have been all ready _before_ the merge window
-> opened. But with the merge window happening largely during the holiday
-> season, I'll just be enforcing that pretty strictly."
-
-Yah, of all the windows to land patchsets that are being re-spun a few
-days before it opens this probably isn't the best one to pick!
-
-> That means new stuff should be reviewed and in linux-next _way before_ the
-> merge window opens next weekend. Taking into account that people need
-> to review stuff (and maybe the series needing another round), I really do=
-n't
-> see this happening this week and everything else will get us shouted at
-> from atop a christmas tree ;-) .
->=20
-> That's the reason most maintainer-trees stop accepting stuff after -rc7
-
-Aye, in RISC-V land maybe we will get there one day :)
-
-For the original question though, breaking them up into 3 or 4 smaller
-bits that could get applied on their own is probably a good idea?
-
-Between yourselves, Drew and Prabhakar there's a couple series touching
-the same bits. Certainly don't want to seem like I am speaking for the
-Higher Powers here, but some sort of logical ordering would probably be
-a good idea so as not to hold each other up?
-The non-string bit of your series has been fairly well reviewed & would,
-in theory, be mergeable once the tree re-opens? Timing aside, Jisheng's
-idea seems like a good one, no?
-
-
---0eq6YNiH5eo8OX+V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY45LRgAKCRB4tDGHoIJi
-0h/yAPoClGkccfHN0If2EOKH3NZmBJCUaoEgyf+E45t3FZ0FRgD+MTXdEYEJhPHI
-1popxrLDGDwBWadBaE4lr/cv8t7ZVwE=
-=JYwo
------END PGP SIGNATURE-----
-
---0eq6YNiH5eo8OX+V--
+Acked-by: Rob Herring <robh@kernel.org>
