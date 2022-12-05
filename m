@@ -2,110 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AA5642247
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 05:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8357A642248
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 05:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiLEEaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 23:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S231475AbiLEEbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 23:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiLEEat (ORCPT
+        with ESMTP id S231165AbiLEEbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 23:30:49 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E191263C
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 20:30:48 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id q71so9440095pgq.8
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 20:30:48 -0800 (PST)
+        Sun, 4 Dec 2022 23:31:33 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26717120A9
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 20:31:33 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id v19-20020a9d5a13000000b0066e82a3872dso4541858oth.5
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 20:31:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9GCEA+SSJQob9uLrpSyNUMykzy3VL+SnBP5yRlvK1eo=;
-        b=WdEG7G34TfSohxVW9Q+va8i1yUPOGQf/M6WmLtC9heVeKK2gExscC77yAx6CqPfdHi
-         cRvSxc1m65yCLFHrzSLTwLaRHOhfsRz/5V19R8mGii4xaLLmVumM1Et3q3FiV11JeVCd
-         zmj2LR9JBNZU9ZZ8UAEPZ37+2z97MiQbL1aR+BUlFXSO8t1GAUMq8WEpEvmtDJpac83a
-         YF63+Fe7kpGPw1Cg/OFqe0F3s0XAUNqBwvaoDCTIOkO2OLp0XSoiMzZjlRntBEVAKdmq
-         lqVAqDOxqyP6Ci1Gvk2rRQ1l7a9UnMXmzm4Gn4+CPct8bNpEs+xNdc9pvwGizWj/l0Yu
-         FONw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HD0C+vijYy0hCXPKpjsTOCXB37VEeR3fSALh7dwqTLc=;
+        b=g50b6j4VfKITLK2EnLMcpoP13+4YuP68wILK/qONsCvVjwlLMjqauguEDyKMH2B9bo
+         muOVlY6BO/ctqUuz1aK+pweUmnK44KiPjWLgJOb76h0YW2GJjkzoh/sa7gcMUB7Ch3Co
+         oj+hWxp+vDBAQZMLSfE08XjGvGwflbP012eEKoaaDmlLA8NOD6vK08B6bNChAMztUSvN
+         vmhV1aq+ogKjJvf/V2f387hHsp5gyDmRHVWPmcVKmm9WPQbLFlezengzB2LgIi2nsgUL
+         b64Vrmvq3fyWEFeDpTO2aTJ3neG+TFQFdhRL2DtawyfZR/dzxuG51Ol6VTAoE82vpY0L
+         qYMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9GCEA+SSJQob9uLrpSyNUMykzy3VL+SnBP5yRlvK1eo=;
-        b=vGZZbitPY4mIZECz9B071d4aOH2hUCKMeEQyA9ezGz1nZuk6F4V2YtSlxiygJxRXJx
-         QvUqVJzfJxRDIzREmloP1YIG9VuLJ+IEHTc0JahaCvlm6GfnYum4nlgWoeU0URDx19bA
-         4rJuJMAswWM7jA12O/cEe6AuboKrWqx/jHc711mo+UHHa3lcgwY+HHpd1eKi8e0Cac6u
-         ZMTaET4K0IMZxaXeEzvzS8+jJvJ7u6V84vs6rfAX2Z2ahIKI75J5f9/G8/VHHiUQTWdS
-         +q6Ef7uV8CA8JtvtYZqi7RP6Tv5Owjx4j2ZzpZMko3kPCeG14l9bAvuIPrh5zoOhM+sX
-         Uncg==
-X-Gm-Message-State: ANoB5pkMX3xpPsr6QSbtnukzAZK22DUkz5XNge/8CnCyaFboUUjAfOnN
-        urJ1sZDUuv7B7jBkaXTIm4ESFIk/YYLzSQZt
-X-Google-Smtp-Source: AA0mqf6rJI2yAAtTzCc5R8ix0sglB93D7T4rOHrW51DOxVwN6cVLQy/R1rzvudeCKEm6YcqArp3EnQ==
-X-Received: by 2002:aa7:810e:0:b0:56b:f23a:7854 with SMTP id b14-20020aa7810e000000b0056bf23a7854mr68378113pfi.66.1670214647512;
-        Sun, 04 Dec 2022 20:30:47 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id m1-20020a17090a5a4100b00219396d795esm8236199pji.15.2022.12.04.20.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 20:30:46 -0800 (PST)
-Date:   Mon, 5 Dec 2022 10:00:44 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        regressions@leemhuis.info, daniel@makrotopia.org,
-        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
-        Nick <vincent@systemli.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] Revert "cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()"
-Message-ID: <20221205043044.bgecubnw7d3xlyi5@vireshk-i7>
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
- <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
- <CAJZ5v0ixHocQbu6-zs3dMDsiw8vdPyv=8Re7N4kUckeGkLhUzg@mail.gmail.com>
- <CAJZ5v0hc8CsvqLKxi5iRq7iR0bkt25dRnLBd23mx-zdi2Sjgsw@mail.gmail.com>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HD0C+vijYy0hCXPKpjsTOCXB37VEeR3fSALh7dwqTLc=;
+        b=QFKgkfPrxloEXJkCw+TXVnXtE6LsQCzIqXrTkxR6olucp/sA+RUsUEGoKV985LMzkR
+         ARTnrTtHvWP8LlVVAf7IoEpH4efcDDmhv2x03nRPDZgLJcnKBXwtBqx76ETvupCpB8fi
+         IlBZMKHTJ0iW/WrE/hcJER1ugDH7F+QcSmI0LRQbSP7jvHQe+xuqz2yF2EACGJIztFs2
+         3KUDHnC5D4kTeFX2ZKrZQfy6TxDytcJsRfmBMnQfxLf+QGddJAcBY/eacv+boxAz/DEk
+         Utnh/xtQ1fcv0iMS3V7DPbB/a8JXp9xleOwIpjxSBMsdbs18sjZ6ebhU3U7PFI8PUb2V
+         0WKg==
+X-Gm-Message-State: ANoB5plTnyYlkXblbuuJ60QWfMApHkmNh1Aep+xJZrBVl0csIklu7X4D
+        6B34qjbpYl+JLySwNxJOPyvO+BtIhfPFj9td5fk=
+X-Google-Smtp-Source: AA0mqf7YUAz+5EvLwcag2IQgvokpDUn3gVHkFc6ROteMHmcV8/JitaMzxXY+siNxF16tOM5utA+61Z6QtSc1nuLxLV0=
+X-Received: by 2002:a9d:282:0:b0:66c:794e:f8c6 with SMTP id
+ 2-20020a9d0282000000b0066c794ef8c6mr41141111otl.343.1670214692406; Sun, 04
+ Dec 2022 20:31:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hc8CsvqLKxi5iRq7iR0bkt25dRnLBd23mx-zdi2Sjgsw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:78b:b0:e0:44f5:f678 with HTTP; Sun, 4 Dec 2022
+ 20:31:32 -0800 (PST)
+Reply-To: jennifermbaya036@gmail.com
+From:   "Mrs.Jennifer Mbaya" <basileelegbe@gmail.com>
+Date:   Mon, 5 Dec 2022 05:31:32 +0100
+Message-ID: <CALgXR7BADx2av2QKfSKU5-Or2HzuojSbvGyHi1OxUrvTgucnyg@mail.gmail.com>
+Subject: Mottaker
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02-12-22, 20:46, Rafael J. Wysocki wrote:
-> On Fri, Dec 2, 2022 at 1:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Fri, Dec 2, 2022 at 6:26 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > This reverts commit 6a17b3876bc8303612d7ad59ecf7cbc0db418bcd.
-> > >
-> > > This commit caused regression on Banana Pi R64 (MT7622), revert until
-> > > the problem is identified and fixed properly.
-> > >
-> > > Link: https://lore.kernel.org/all/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
-> > > Cc: v5.19+ <stable@vger.kernel.org> # v5.19+
-> > > Reported-by: Nick <vincent@systemli.org>
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> >
-> > Do you want me to push this revert for -rc8?
-
-No, I was planning to make it part of my pull request.
-
-> After all, I've decided to queue it up for 6.2, thanks!
-
-Can you please drop that ? AngeloGioacchino already reported that
-Reverting the proposed commit will make MT8183 unstable.
-
-So the right thing to do now is apply the fix, which is on the list
-and getting tested.
-
--- 
-viresh
+Mottaker
+Det er en pris i ditt navn fra FN og Verdens helseorganisasjon
+tilknyttet det internasjonale pengefondet der e-postadressen og fondet
+ble frigitt til oss for overf=C3=B8ring, vennligst bekreft dataene for
+overf=C3=B8ringen.
+Vi ble bedt om =C3=A5 overf=C3=B8re alle ventende transaksjoner innen de ne=
+ste
+to, men hvis du har mottatt din fond vennlig ignorere denne meldingen,
+hvis ikke overholde umiddelbart.
+Vi trenger din presserende svar p=C3=A5 denne meldingen, dette er ikke en
+av de internett svindlere der ute, det er pandemisk lettelse.
+Jennifer
