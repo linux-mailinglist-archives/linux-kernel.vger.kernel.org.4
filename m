@@ -2,312 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1334464237A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC54642389
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiLEHPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 02:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S231430AbiLEHYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 02:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiLEHPF (ORCPT
+        with ESMTP id S230037AbiLEHYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 02:15:05 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF6412741
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:15:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 96D0C425EA;
-        Mon,  5 Dec 2022 07:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1670224501; bh=hVJZFwKCPTntcp35N/eazjq7Urb5u5fINx8mvznpmTU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Eeb/UNa5pYjDLE+moAUp4d24r2sjPTT0HZp2+I3O3pKkiRqqTYmPYTA0Vox2qWpbP
-         /GzxOwq0TrPbBj46swXE9AATZ44ElOX4ad7PS0YKRd+ethiiBXEBDHXybmDYYbcYNZ
-         C+zAi4gjwSL/zfokZzi0XgGpeRturFoEhGTO1lwY8BItxJZJHY11cne99LbDk9X1iN
-         8/K0pUkt+gUEiTbQSRFYtL9MfOAoDKxbo+E0Rn/f6E+NLzs9j7dbhJPBH1MJLRnbz0
-         a/CZ6ihB5uNkieuT7aBcKcIOcHdZ8oEYBsgsbQ6HefXY79fEEhHK24EfaGbLivhki6
-         81ReHw8P8WWQA==
-Message-ID: <18abbb1b-ec5e-11c6-ab16-b523f329064e@marcan.st>
-Date:   Mon, 5 Dec 2022 16:14:54 +0900
+        Mon, 5 Dec 2022 02:24:17 -0500
+X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Dec 2022 23:24:15 PST
+Received: from hfcrelay.icp-osb-irony-out8.external.iinet.net.au (hfcrelay.icp-osb-irony-out8.external.iinet.net.au [203.59.1.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68EB26476
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:24:15 -0800 (PST)
+IronPort-SDR: V9fknfqS3qV63liEyjfM0VZZ515I35kUq9qZcuVSQpxxGxBno9ZcMhpaF9c2jPjPs0Cg+sPVz5
+ JIY7ZyHoQL6U2q9HSmCYprhkW8vyL8o7pNuRY0ihR8Tah6nOZiXAsgup5gt4Nhoc0WgzA3B1Tk
+ kg7p5KGALVif9SIgIIv9OBq6m8eOCoO6wIcSGMGWXF+4MKFUt3/4/YhvfybFMgoTJvUyBxoapS
+ 3dPH1u3saKX4Fv4mzoOTK0tq/IV49jEND2dP+QYZ6AdrNfRMqf70LYicl3dNfWAgZp/F/2fFRx
+ WPg=
+X-SMTP-MATCH: 1
+IronPort-Data: A9a23:IKRPqazsm3yZ1NiN9sB6t+c7xyrEfRIJ4+MujC+fZmUNrF6WrkU3e
+ hirod39jgY+HhL3funC5f239Uo2DfZgF+fXKXJsnZ1XZysiRfHtWJLIcC8cAwvIdpeZFRg/s
+ 51EAjX9BJtcokH090/F3ofJ8CEUOZGgHtIQ38adZ0id7Sc9IMsQoUoLd9wR2+aEsvDga++5g
+ u4eluWEULOTN5+YBUpPg06LgEsHUP3a5GhC5gRmDRxBlAe2e3I9VPrzKYntdCGgGtE88uOSH
+ 47+IL+FEmzx8E8iBcGktpHBckBQRa6VYyino3xQYv336vRCjnRaPqcTB6NNMwEO1WXPx5Yrk
+ uAlWZ6YEFZyePSVxqJDDV8BQ34W0a5uodcrJVCwq8Gc0kvJfmHh2d1xAVoqO4AEvO1wBCdH6
+ JT0LRhRMkve3Lrrnu/Tpu9EjcASdNLqF78k/VZQ7GDpHbEcbM/xTPCfjTNf9HJq7ixUJt7aZ
+ swEeRJ1ZQ/FfgZRO1MTBZc5kfzuinqXWyRZoVSavKsx7C7BzAV335DrIMKTcduPLe1Zl1iVo
+ 0rK9nr0BxUdOsDZzzeZmlqhivLKlDH2RKodE7q38vMsi1qWrkQQFRcffVi2u/+0jgi5Qd03A
+ 1Qd8CcorIAo+UCrR8W7VBq9yFaCswIQVsR4DeI38keOx7DS7gLfAXILJhZFado7pIo1SCYs2
+ 1uhgdzkH3psvaeTRHbb8a2bxQ5eIgBMfDRHPHZaCFVbpoCz/8cvlh3OCN1kFei8k7UZBA3N/
+ txDlwBm7517sCLB//jTEYzv6950mqX0cw==
+IronPort-HdrOrdr: A9a23:g20XiKzUTP0NMIuZrGVlKrPwBL1zdoMgy1knxilNoH1uHvBw8v
+ rEoB1173DJYVoqNk3I++rhBEDwexLhHPdOiOF6UItKOjOW2ldAR7sSjrcKrQeQYhHWx6pw0r
+ phbrg7KPCYNykDsS6siDPId+rIGeP3l5xAU92uqUuEV2lRGsRd0zs=
+X-IronPort-AV: E=Sophos;i="5.96,218,1665417600"; 
+   d="scan'208";a="443530565"
+Received: from 193-116-66-187.tpgi.com.au (HELO [192.168.0.22]) ([193.116.66.187])
+  by icp-osb-irony-out8.iinet.net.au with ESMTP; 05 Dec 2022 15:15:05 +0800
+Message-ID: <c69c1ff1-4da9-89f8-df2e-824cb7183fe9@westnet.com.au>
+Date:   Mon, 5 Dec 2022 17:15:04 +1000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v15 9/9] irqchip/apple-aic: Move over to core ipi-mux
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
 Content-Language: en-US
-To:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-References: <20221203064629.1601299-1-apatel@ventanamicro.com>
- <20221203064629.1601299-10-apatel@ventanamicro.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <20221203064629.1601299-10-apatel@ventanamicro.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Greg Ungerer <gregungerer@westnet.com.au>
+Subject: Re: [PATCH] net: fec: don't reset irq coalesce settings to defaults
+ on "ip link up"
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/12/2022 15.46, Anup Patel wrote:
-> From: Marc Zyngier <maz@kernel.org>
+Hi Rasmus,
+
+On 23 Nov 2022, Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+> Currently, when a FEC device is brought up, the irq coalesce settings
+> are reset to their default values (1000us, 200 frames). That's
+> unexpected, and breaks for example use of an appropriate .link file to
+> make systemd-udev apply the desired
+> settings (https://www.freedesktop.org/software/systemd/man/systemd.link.html),
+> or any other method that would do a one-time setup during early boot.
 > 
-> Now that the complexity of the AIC IPI mux has been copied into
-> the core code for the benefit of the riscv architecture,
-> shrink the AIC driver by the same amount by using that infrastructure.
+> Refactor the code so that fec_restart() instead uses
+> fec_enet_itr_coal_set(), which simply applies the settings that are
+> stored in the private data, and initialize that private data with the
+> default values.
 > 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+
+This breaks The ColdFire parts that use the FEC hardware module at the
+very least. It results in an access to a register (FEC_TXIC0) that does
+not exist in the ColdFire FEC. Reverting this change fixes it.
+
+So for me this is now broken in 6.1-rc8.
+
+Regards
+Greg
+
+
 > ---
->  drivers/irqchip/Kconfig         |   1 +
->  drivers/irqchip/irq-apple-aic.c | 161 ++------------------------------
->  2 files changed, 9 insertions(+), 153 deletions(-)
+>  drivers/net/ethernet/freescale/fec_main.c | 22 ++++++----------------
+>  1 file changed, 6 insertions(+), 16 deletions(-)
 > 
-> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> index 131379aa8424..0fd452b49ed9 100644
-> --- a/drivers/irqchip/Kconfig
-> +++ b/drivers/irqchip/Kconfig
-> @@ -675,6 +675,7 @@ config APPLE_AIC
->  	bool "Apple Interrupt Controller (AIC)"
->  	depends on ARM64
->  	depends on ARCH_APPLE || COMPILE_TEST
-> +	select GENERIC_IRQ_IPI_MUX
->  	help
->  	  Support for the Apple Interrupt Controller found on Apple Silicon SoCs,
->  	  such as the M1.
-> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-> index 1c2813ad8bbe..1fa81fcff788 100644
-> --- a/drivers/irqchip/irq-apple-aic.c
-> +++ b/drivers/irqchip/irq-apple-aic.c
-> @@ -292,7 +292,6 @@ struct aic_irq_chip {
->  	void __iomem *base;
->  	void __iomem *event;
->  	struct irq_domain *hw_domain;
-> -	struct irq_domain *ipi_domain;
->  	struct {
->  		cpumask_t aff;
->  	} *fiq_aff[AIC_NR_FIQ];
-> @@ -307,9 +306,6 @@ struct aic_irq_chip {
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+> index f623c12eaf95..2ca2b61b451f 100644
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
+> @@ -74,7 +74,7 @@
+>  #include "fec.h"
 >  
->  static DEFINE_PER_CPU(uint32_t, aic_fiq_unmasked);
+>  static void set_multicast_list(struct net_device *ndev);
+> -static void fec_enet_itr_coal_init(struct net_device *ndev);
+> +static void fec_enet_itr_coal_set(struct net_device *ndev);
 >  
-> -static DEFINE_PER_CPU(atomic_t, aic_vipi_flag);
-> -static DEFINE_PER_CPU(atomic_t, aic_vipi_enable);
+>  #define DRIVER_NAME	"fec"
+>  
+> @@ -1220,8 +1220,7 @@ fec_restart(struct net_device *ndev)
+>  		writel(0, fep->hwp + FEC_IMASK);
+>  
+>  	/* Init the interrupt coalescing */
+> -	fec_enet_itr_coal_init(ndev);
 > -
->  static struct aic_irq_chip *aic_irqc;
->  
->  static void aic_handle_ipi(struct pt_regs *regs);
-> @@ -751,98 +747,8 @@ static void aic_ipi_send_fast(int cpu)
->  	isb();
+> +	fec_enet_itr_coal_set(ndev);
 >  }
 >  
-> -static void aic_ipi_mask(struct irq_data *d)
-> -{
-> -	u32 irq_bit = BIT(irqd_to_hwirq(d));
-> -
-> -	/* No specific ordering requirements needed here. */
-> -	atomic_andnot(irq_bit, this_cpu_ptr(&aic_vipi_enable));
-> -}
-> -
-> -static void aic_ipi_unmask(struct irq_data *d)
-> -{
-> -	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
-> -	u32 irq_bit = BIT(irqd_to_hwirq(d));
-> -
-> -	atomic_or(irq_bit, this_cpu_ptr(&aic_vipi_enable));
-> -
-> -	/*
-> -	 * The atomic_or() above must complete before the atomic_read()
-> -	 * below to avoid racing aic_ipi_send_mask().
-> -	 */
-> -	smp_mb__after_atomic();
-> -
-> -	/*
-> -	 * If a pending vIPI was unmasked, raise a HW IPI to ourselves.
-> -	 * No barriers needed here since this is a self-IPI.
-> -	 */
-> -	if (atomic_read(this_cpu_ptr(&aic_vipi_flag)) & irq_bit) {
-> -		if (static_branch_likely(&use_fast_ipi))
-> -			aic_ipi_send_fast(smp_processor_id());
-> -		else
-> -			aic_ic_write(ic, AIC_IPI_SEND, AIC_IPI_SEND_CPU(smp_processor_id()));
-> -	}
-> -}
-> -
-> -static void aic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
-> -{
-> -	struct aic_irq_chip *ic = irq_data_get_irq_chip_data(d);
-> -	u32 irq_bit = BIT(irqd_to_hwirq(d));
-> -	u32 send = 0;
-> -	int cpu;
-> -	unsigned long pending;
-> -
-> -	for_each_cpu(cpu, mask) {
-> -		/*
-> -		 * This sequence is the mirror of the one in aic_ipi_unmask();
-> -		 * see the comment there. Additionally, release semantics
-> -		 * ensure that the vIPI flag set is ordered after any shared
-> -		 * memory accesses that precede it. This therefore also pairs
-> -		 * with the atomic_fetch_andnot in aic_handle_ipi().
-> -		 */
-> -		pending = atomic_fetch_or_release(irq_bit, per_cpu_ptr(&aic_vipi_flag, cpu));
-> -
-> -		/*
-> -		 * The atomic_fetch_or_release() above must complete before the
-> -		 * atomic_read() below to avoid racing aic_ipi_unmask().
-> -		 */
-> -		smp_mb__after_atomic();
-> -
-> -		if (!(pending & irq_bit) &&
-> -		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
-> -			if (static_branch_likely(&use_fast_ipi))
-> -				aic_ipi_send_fast(cpu);
-> -			else
-> -				send |= AIC_IPI_SEND_CPU(cpu);
-> -		}
-> -	}
-> -
-> -	/*
-> -	 * The flag writes must complete before the physical IPI is issued
-> -	 * to another CPU. This is implied by the control dependency on
-> -	 * the result of atomic_read_acquire() above, which is itself
-> -	 * already ordered after the vIPI flag write.
-> -	 */
-> -	if (send)
-> -		aic_ic_write(ic, AIC_IPI_SEND, send);
-> -}
-> -
-> -static struct irq_chip ipi_chip = {
-> -	.name = "AIC-IPI",
-> -	.irq_mask = aic_ipi_mask,
-> -	.irq_unmask = aic_ipi_unmask,
-> -	.ipi_send_mask = aic_ipi_send_mask,
-> -};
-> -
-> -/*
-> - * IPI IRQ domain
-> - */
-> -
->  static void aic_handle_ipi(struct pt_regs *regs)
->  {
-> -	int i;
-> -	unsigned long enabled, firing;
-> -
->  	/*
->  	 * Ack the IPI. We need to order this after the AIC event read, but
->  	 * that is enforced by normal MMIO ordering guarantees.
-> @@ -857,27 +763,7 @@ static void aic_handle_ipi(struct pt_regs *regs)
->  		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_OTHER);
->  	}
->  
-> -	/*
-> -	 * The mask read does not need to be ordered. Only we can change
-> -	 * our own mask anyway, so no races are possible here, as long as
-> -	 * we are properly in the interrupt handler (which is covered by
-> -	 * the barrier that is part of the top-level AIC handler's readl()).
-> -	 */
-> -	enabled = atomic_read(this_cpu_ptr(&aic_vipi_enable));
-> -
-> -	/*
-> -	 * Clear the IPIs we are about to handle. This pairs with the
-> -	 * atomic_fetch_or_release() in aic_ipi_send_mask(), and needs to be
-> -	 * ordered after the aic_ic_write() above (to avoid dropping vIPIs) and
-> -	 * before IPI handling code (to avoid races handling vIPIs before they
-> -	 * are signaled). The former is taken care of by the release semantics
-> -	 * of the write portion, while the latter is taken care of by the
-> -	 * acquire semantics of the read portion.
-> -	 */
-> -	firing = atomic_fetch_andnot(enabled, this_cpu_ptr(&aic_vipi_flag)) & enabled;
-> -
-> -	for_each_set_bit(i, &firing, AIC_NR_SWIPI)
-> -		generic_handle_domain_irq(aic_irqc->ipi_domain, i);
-> +	ipi_mux_process();
->  
->  	/*
->  	 * No ordering needed here; at worst this just changes the timing of
-> @@ -887,55 +773,24 @@ static void aic_handle_ipi(struct pt_regs *regs)
->  		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
->  }
->  
-> -static int aic_ipi_alloc(struct irq_domain *d, unsigned int virq,
-> -			 unsigned int nr_irqs, void *args)
-> +static void aic_ipi_send_single(unsigned int cpu)
->  {
-> -	int i;
-> -
-> -	for (i = 0; i < nr_irqs; i++) {
-> -		irq_set_percpu_devid(virq + i);
-> -		irq_domain_set_info(d, virq + i, i, &ipi_chip, d->host_data,
-> -				    handle_percpu_devid_irq, NULL, NULL);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static void aic_ipi_free(struct irq_domain *d, unsigned int virq, unsigned int nr_irqs)
-> -{
-> -	/* Not freeing IPIs */
-> +	if (static_branch_likely(&use_fast_ipi))
-> +		aic_ipi_send_fast(cpu);
-> +	else
-> +		aic_ic_write(aic_irqc, AIC_IPI_SEND, AIC_IPI_SEND_CPU(cpu));
->  }
->  
-> -static const struct irq_domain_ops aic_ipi_domain_ops = {
-> -	.alloc = aic_ipi_alloc,
-> -	.free = aic_ipi_free,
-> -};
-> -
->  static int __init aic_init_smp(struct aic_irq_chip *irqc, struct device_node *node)
->  {
-> -	struct irq_domain *ipi_domain;
->  	int base_ipi;
->  
-> -	ipi_domain = irq_domain_create_linear(irqc->hw_domain->fwnode, AIC_NR_SWIPI,
-> -					      &aic_ipi_domain_ops, irqc);
-> -	if (WARN_ON(!ipi_domain))
-> -		return -ENODEV;
-> -
-> -	ipi_domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
-> -	irq_domain_update_bus_token(ipi_domain, DOMAIN_BUS_IPI);
-> -
-> -	base_ipi = __irq_domain_alloc_irqs(ipi_domain, -1, AIC_NR_SWIPI,
-> -					   NUMA_NO_NODE, NULL, false, NULL);
-> -
-> -	if (WARN_ON(!base_ipi)) {
-> -		irq_domain_remove(ipi_domain);
-> +	base_ipi = ipi_mux_create(AIC_NR_SWIPI, aic_ipi_send_single);
-> +	if (WARN_ON(base_ipi <= 0))
->  		return -ENODEV;
-> -	}
->  
->  	set_smp_ipi_range(base_ipi, AIC_NR_SWIPI);
->  
-> -	irqc->ipi_domain = ipi_domain;
-> -
+>  static int fec_enet_ipc_handle_init(struct fec_enet_private *fep)
+> @@ -2856,19 +2855,6 @@ static int fec_enet_set_coalesce(struct net_device *ndev,
 >  	return 0;
 >  }
 >  
+> -static void fec_enet_itr_coal_init(struct net_device *ndev)
+> -{
+> -	struct ethtool_coalesce ec;
+> -
+> -	ec.rx_coalesce_usecs = FEC_ITR_ICTT_DEFAULT;
+> -	ec.rx_max_coalesced_frames = FEC_ITR_ICFT_DEFAULT;
+> -
+> -	ec.tx_coalesce_usecs = FEC_ITR_ICTT_DEFAULT;
+> -	ec.tx_max_coalesced_frames = FEC_ITR_ICFT_DEFAULT;
+> -
+> -	fec_enet_set_coalesce(ndev, &ec, NULL, NULL);
+> -}
+> -
+>  static int fec_enet_get_tunable(struct net_device *netdev,
+>  				const struct ethtool_tunable *tuna,
+>  				void *data)
+> @@ -3623,6 +3609,10 @@ static int fec_enet_init(struct net_device *ndev)
+>  	fep->rx_align = 0x3;
+>  	fep->tx_align = 0x3;
+>  #endif
+> +	fep->rx_pkts_itr = FEC_ITR_ICFT_DEFAULT;
+> +	fep->tx_pkts_itr = FEC_ITR_ICFT_DEFAULT;
+> +	fep->rx_time_itr = FEC_ITR_ICTT_DEFAULT;
+> +	fep->tx_time_itr = FEC_ITR_ICTT_DEFAULT;
+>  
+>  	/* Check mask of the streaming and coherent API */
+>  	ret = dma_set_mask_and_coherent(&fep->pdev->dev, DMA_BIT_MASK(32));
+> -- 
+> 2.37.2
 
-Reviewed-by: Hector Martin <marcan@marcan.st>
-Tested-by: Hector Martin <marcan@marcan.st>
-
-Smoke tested on t8112, nothing exploded :)
-
-- Hector
