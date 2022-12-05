@@ -2,741 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BC5642120
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE6564213E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbiLEBld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:41:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S231267AbiLEBxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 20:53:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiLEBlb (ORCPT
+        with ESMTP id S230161AbiLEBxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:41:31 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4D101FE;
-        Sun,  4 Dec 2022 17:41:29 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id i15so5617726edf.2;
-        Sun, 04 Dec 2022 17:41:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i3OEIU/Ti0ZZEMecpcQlpyO3oV76lbxSXN6KPD6zsOw=;
-        b=M8aW2vGXXpLW5v2ldwTWc/KS3tFtyJ9CkUO8wLK1jSwls/Nc6U6PvbKkqJwlgkkgzi
-         iwIEKT9HqldlKAhDPsWswdj1A9EpD0jtZWUl+kED9zARHEVM6ojnTeWBr3IFEo/VG0YW
-         NzcfSMd6/WHuEHLK9i5DZ7jUE+BnreoZsBvpRLBrog7FwUfS0lHAlssax7SdGRynSiCI
-         cMcD4iAmnfHhpwst1YI6Dh5Qv8tXpEFx2njSMWEC5MJ16rwLQad7LZ8Xx85FjDXdEwAA
-         qJSUozQV05wDyZ0c+YfCvl8SFk/qt4U/tBQ1eJ3e7dmutaig1Qk+qAyROoUxgOLvh1hu
-         XvvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3OEIU/Ti0ZZEMecpcQlpyO3oV76lbxSXN6KPD6zsOw=;
-        b=YhptCHe8uItWOK1cfCHKPSG+CRO7cYCfF7+DVln+He7v4Aokb4z4q/OZlt6A9SCiaQ
-         OXM5XCFSANJXn9C/reYHQyoNb2gEx5IT94A6l+qvNPHVNuwnMp2bEd3pAd0VIQ6gTYof
-         2/RmyjVb0myck/C+dsuYjX4GJx2HaH/UV75BEKHvcHuJwHQkvJKIYv2yR/aPSwHYyxrw
-         3w82//5+u66lg4PpuL7ONkAm7NZ3hdPuo7xtYcGij8/Z3Mp2yMzVRTPRLEbuDNO1p8X9
-         yNeGrs3C22KwVvUceH8JnX8MZe/miySNYdq6g1Oh0WBtapVHUyRo+2PV8kdMFFfEyWfo
-         ZTFQ==
-X-Gm-Message-State: ANoB5plAZMDJe9rMiBS0RmcD2rIeZHERK5vLBtCI2f6YreDdqmPHFlyP
-        UGuwUrndH21YFikOO3n/jcgGF1ZewNEEK/4x
-X-Google-Smtp-Source: AA0mqf6bwkR758ftYW/44xN2WRh50wUeGWjjpvseIZmouXw74P7vhG+VV/9TUzIhlUE+g4a4Pj3mxA==
-X-Received: by 2002:aa7:dac9:0:b0:46a:be65:4906 with SMTP id x9-20020aa7dac9000000b0046abe654906mr40262217eds.207.1670204487360;
-        Sun, 04 Dec 2022 17:41:27 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170906410300b0077a201f6d1esm5692003ejk.87.2022.12.04.17.41.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 17:41:26 -0800 (PST)
-Date:   Mon, 5 Dec 2022 02:41:35 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH v2 net-next 1/4] net/ethtool: add netlink interface for the
- PLCA RS
-Message-ID: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
+        Sun, 4 Dec 2022 20:53:00 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581DC767C;
+        Sun,  4 Dec 2022 17:52:49 -0800 (PST)
+X-UUID: aa2886e5d5254e58b70ea0296d1fbece-20221205
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=g9BsRHMoVPm+BDBuWg0FYyhlA3PQRobIouKG13VEGoA=;
+        b=DMZ3WnpTUv1rQqtHCswAtQPL8L+UvNwrjYzAEWtkV2KqgDbHQb0CxvoJBgzbAIz5D803xklFTAD1oFvRPWJe4jC5RncV2ip7QzCneZ5Pgux09odcQN++mo7mczCZOLkH7CFUKzwYx/Uy48yniWuwCDaJXmHxT3yJXJF1c68aqJc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:a6fb3763-ad12-4f96-97d2-c155db137212,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.14,REQID:a6fb3763-ad12-4f96-97d2-c155db137212,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:dcaaed0,CLOUDID:7e381f1f-5e1d-4ab5-ab8e-3e04efc02b30,B
+        ulkID:221205095245Y940Y0T2,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: aa2886e5d5254e58b70ea0296d1fbece-20221205
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <mason.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 191979232; Mon, 05 Dec 2022 09:52:42 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 5 Dec 2022 09:52:41 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 5 Dec 2022 09:52:40 +0800
+From:   Mason Zhang <mason.zhang@mediatek.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Peng Zhou <peng.zhou@mediatek.com>,
+        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
+Subject: [PATCH v2 1/1] scsi: ufs: core: fix device management cmd timeout flow
+Date:   Mon, 5 Dec 2022 09:42:03 +0800
+Message-ID: <20221205014202.2672-1-mason.zhang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for configuring the PLCA Reconciliation Sublayer on
-multi-drop PHYs that support IEEE802.3cg-2019 Clause 148 (e.g.,
-10BASE-T1S). This patch adds the appropriate netlink interface
-to ethtool.
+From: Mason Zhang <Mason.Zhang@mediatek.com>
 
-Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+In ufs error handler flow, host will send device management cmd(NOP OUT)
+to device for recovery link. If cmd response timeout, and clear doorbell
+fail, ufshcd_wait_for_dev_cmd will do nothing and return,
+hba->dev_cmd.complete struct not set to null.
+
+In this time, if cmd has been responsed by device, then it will
+call complete() in __ufshcd_transfer_req_compl, because of complete
+struct is alloced in stack, then the KE will occur.
+
+Fix the following crash:
+  ipanic_die+0x24/0x38 [mrdump]
+  die+0x344/0x748
+  arm64_notify_die+0x44/0x104
+  do_debug_exception+0x104/0x1e0
+  el1_dbg+0x38/0x54
+  el1_sync_handler+0x40/0x88
+  el1_sync+0x8c/0x140
+  queued_spin_lock_slowpath+0x2e4/0x3c0
+  __ufshcd_transfer_req_compl+0x3b0/0x1164
+  ufshcd_trc_handler+0x15c/0x308
+  ufshcd_host_reset_and_restore+0x54/0x260
+  ufshcd_reset_and_restore+0x28c/0x57c
+  ufshcd_err_handler+0xeb8/0x1b6c
+  process_one_work+0x288/0x964
+  worker_thread+0x4bc/0xc7c
+  kthread+0x15c/0x264
+  ret_from_fork+0x10/0x30
+
+Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
 ---
- MAINTAINERS                          |   6 +
- drivers/net/phy/phy.c                |  34 ++++
- drivers/net/phy/phy_device.c         |   3 +
- include/linux/ethtool.h              |  11 +
- include/linux/phy.h                  |  64 ++++++
- include/uapi/linux/ethtool_netlink.h |  25 +++
- net/ethtool/Makefile                 |   2 +-
- net/ethtool/netlink.c                |  30 +++
- net/ethtool/netlink.h                |   6 +
- net/ethtool/plca.c                   | 290 +++++++++++++++++++++++++++
- 10 files changed, 470 insertions(+), 1 deletion(-)
- create mode 100644 net/ethtool/plca.c
+ drivers/ufs/core/ufshcd.c | 46 ++++++++++++++++++---------------------
+ 1 file changed, 21 insertions(+), 25 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 955c1be1efb2..7952243e4b43 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16396,6 +16396,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/chemical/plantower,pms7003.yaml
- F:	drivers/iio/chemical/pms7003.c
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index b1f59a5fe632..2b4934a562a6 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2979,35 +2979,31 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
+ 		err = -ETIMEDOUT;
+ 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
+ 			__func__, lrbp->task_tag);
+-		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0) {
++		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0)
+ 			/* successfully cleared the command, retry if needed */
+ 			err = -EAGAIN;
++		/*
++		 * Since clearing the command succeeded we also need to
++		 * clear the task tag bit from the outstanding_reqs
++		 * variable.
++		 */
++		spin_lock_irqsave(&hba->outstanding_lock, flags);
++		pending = test_bit(lrbp->task_tag,
++				   &hba->outstanding_reqs);
++		if (pending) {
++			hba->dev_cmd.complete = NULL;
++			__clear_bit(lrbp->task_tag,
++				    &hba->outstanding_reqs);
++		}
++		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++
++		if (!pending) {
+ 			/*
+-			 * Since clearing the command succeeded we also need to
+-			 * clear the task tag bit from the outstanding_reqs
+-			 * variable.
++			 * The completion handler ran while we tried to
++			 * clear the command.
+ 			 */
+-			spin_lock_irqsave(&hba->outstanding_lock, flags);
+-			pending = test_bit(lrbp->task_tag,
+-					   &hba->outstanding_reqs);
+-			if (pending) {
+-				hba->dev_cmd.complete = NULL;
+-				__clear_bit(lrbp->task_tag,
+-					    &hba->outstanding_reqs);
+-			}
+-			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
+-
+-			if (!pending) {
+-				/*
+-				 * The completion handler ran while we tried to
+-				 * clear the command.
+-				 */
+-				time_left = 1;
+-				goto retry;
+-			}
+-		} else {
+-			dev_err(hba->dev, "%s: failed to clear tag %d\n",
+-				__func__, lrbp->task_tag);
++			time_left = 1;
++			goto retry;
+ 		}
+ 	}
  
-+PLCA RECONCILIATION SUBLAYER (IEEE802.3 Clause 148)
-+M:	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-+L:	netdev@vger.kernel.org
-+S:	Maintained
-+F:	net/ethtool/plca.c
-+
- PLDMFW LIBRARY
- M:	Jacob Keller <jacob.e.keller@intel.com>
- S:	Maintained
-diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-index e5b6cb1a77f9..99e3497b6aa1 100644
---- a/drivers/net/phy/phy.c
-+++ b/drivers/net/phy/phy.c
-@@ -543,6 +543,40 @@ int phy_ethtool_get_stats(struct phy_device *phydev,
- }
- EXPORT_SYMBOL(phy_ethtool_get_stats);
- 
-+/**
-+ *
-+ */
-+int phy_ethtool_get_plca_cfg(struct phy_device *dev,
-+			     struct phy_plca_cfg *plca_cfg)
-+{
-+	// TODO
-+	return 0;
-+}
-+EXPORT_SYMBOL(phy_ethtool_get_plca_cfg);
-+
-+/**
-+ *
-+ */
-+int phy_ethtool_set_plca_cfg(struct phy_device *dev,
-+			     struct netlink_ext_ack *extack,
-+			     const struct phy_plca_cfg *plca_cfg)
-+{
-+	// TODO
-+	return 0;
-+}
-+EXPORT_SYMBOL(phy_ethtool_set_plca_cfg);
-+
-+/**
-+ *
-+ */
-+int phy_ethtool_get_plca_status(struct phy_device *dev,
-+				struct phy_plca_status *plca_st)
-+{
-+	// TODO
-+	return 0;
-+}
-+EXPORT_SYMBOL(phy_ethtool_get_plca_status);
-+
- /**
-  * phy_start_cable_test - Start a cable test
-  *
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 716870a4499c..f248010c403d 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -3262,6 +3262,9 @@ static const struct ethtool_phy_ops phy_ethtool_phy_ops = {
- 	.get_sset_count		= phy_ethtool_get_sset_count,
- 	.get_strings		= phy_ethtool_get_strings,
- 	.get_stats		= phy_ethtool_get_stats,
-+	.get_plca_cfg		= phy_ethtool_get_plca_cfg,
-+	.set_plca_cfg		= phy_ethtool_set_plca_cfg,
-+	.get_plca_status	= phy_ethtool_get_plca_status,
- 	.start_cable_test	= phy_start_cable_test,
- 	.start_cable_test_tdr	= phy_start_cable_test_tdr,
- };
-diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
-index 9e0a76fc7de9..4bfe95ec1f0a 100644
---- a/include/linux/ethtool.h
-+++ b/include/linux/ethtool.h
-@@ -802,12 +802,16 @@ int ethtool_virtdev_set_link_ksettings(struct net_device *dev,
- 
- struct phy_device;
- struct phy_tdr_config;
-+struct phy_plca_cfg;
-+struct phy_plca_status;
- 
- /**
-  * struct ethtool_phy_ops - Optional PHY device options
-  * @get_sset_count: Get number of strings that @get_strings will write.
-  * @get_strings: Return a set of strings that describe the requested objects
-  * @get_stats: Return extended statistics about the PHY device.
-+ * @get_plca_cfg: Return PLCA configuration.
-+ * @set_plca_cfg: Set PLCA configuration.
-  * @start_cable_test: Start a cable test
-  * @start_cable_test_tdr: Start a Time Domain Reflectometry cable test
-  *
-@@ -819,6 +823,13 @@ struct ethtool_phy_ops {
- 	int (*get_strings)(struct phy_device *dev, u8 *data);
- 	int (*get_stats)(struct phy_device *dev,
- 			 struct ethtool_stats *stats, u64 *data);
-+	int (*get_plca_cfg)(struct phy_device *dev,
-+			    struct phy_plca_cfg *plca_cfg);
-+	int (*set_plca_cfg)(struct phy_device *dev,
-+			    struct netlink_ext_ack *extack,
-+			    const struct phy_plca_cfg *plca_cfg);
-+	int (*get_plca_status)(struct phy_device *dev,
-+			       struct phy_plca_status *plca_st);
- 	int (*start_cable_test)(struct phy_device *phydev,
- 				struct netlink_ext_ack *extack);
- 	int (*start_cable_test_tdr)(struct phy_device *phydev,
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 71eeb4e3b1fd..ab2c134d0a05 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -765,6 +765,63 @@ struct phy_tdr_config {
- };
- #define PHY_PAIR_ALL -1
- 
-+/**
-+ * struct phy_plca_cfg - Configuration of the PLCA (Physical Layer Collision
-+ * Avoidance) Reconciliation Sublayer.
-+ *
-+ * @version: read-only PLCA register map version. 0 = not available. Ignored
-+ *   when setting the configuration. Format is the same as reported by the PLCA
-+ *   IDVER register (31.CA00). -1 = not available.
-+ * @enabled: PLCA configured mode (enabled/disabled). -1 = not available / don't
-+ *   set. 0 = disabled, anything else = enabled.
-+ * @node_id: the PLCA local node identifier. -1 = not available / don't set.
-+ *   Allowed values [0 .. 254]. 255 = node disabled.
-+ * @node_cnt: the PLCA node count (maximum number of nodes having a TO). Only
-+ *   meaningful for the coordinator (node_id = 0). -1 = not available / don't
-+ *   set. Allowed values [0 .. 255].
-+ * @to_tmr: The value of the PLCA to_timer in bit-times, which determines the
-+ *   PLCA transmit opportunity window opening. See IEEE802.3 Clause 148 for
-+ *   more details. The to_timer shall be set equal over all nodes.
-+ *   -1 = not available / don't set. Allowed values [0 .. 255].
-+ * @burst_cnt: controls how many additional frames a node is allowed to send in
-+ *   single transmit opportunity (TO). The default value of 0 means that the
-+ *   node is allowed exactly one frame per TO. A value of 1 allows two frames
-+ *   per TO, and so on. -1 = not available / don't set.
-+ *   Allowed values [0 .. 255].
-+ * @burst_tmr: controls how many bit times to wait for the MAC to send a new
-+ *   frame before interrupting the burst. This value should be set to a value
-+ *   greater than the MAC inter-packet gap (which is typically 96 bits).
-+ *   -1 = not available / don't set. Allowed values [0 .. 255].
-+ *
-+ * A structure containing configuration parameters for setting/getting the PLCA
-+ * RS configuration. The driver does not need to implement all the parameters,
-+ * but should report what is actually used.
-+ */
-+struct phy_plca_cfg {
-+	s32 version;
-+	s16 enabled;
-+	s16 node_id;
-+	s16 node_cnt;
-+	s16 to_tmr;
-+	s16 burst_cnt;
-+	s16 burst_tmr;
-+};
-+
-+/**
-+ * struct phy_plca_status - Status of the PLCA (Physical Layer Collision
-+ * Avoidance) Reconciliation Sublayer.
-+ *
-+ * @pst: The PLCA status as reported by the PST bit in the PLCA STATUS
-+ *	register(31.CA03), indicating BEACON activity.
-+ *
-+ * A structure containing status information of the PLCA RS configuration.
-+ * The driver does not need to implement all the parameters, but should report
-+ * what is actually used.
-+ */
-+struct phy_plca_status {
-+	bool pst;
-+};
-+
- /**
-  * struct phy_driver - Driver structure for a particular PHY type
-  *
-@@ -1775,6 +1832,13 @@ int phy_ethtool_get_strings(struct phy_device *phydev, u8 *data);
- int phy_ethtool_get_sset_count(struct phy_device *phydev);
- int phy_ethtool_get_stats(struct phy_device *phydev,
- 			  struct ethtool_stats *stats, u64 *data);
-+int phy_ethtool_get_plca_cfg(struct phy_device *dev,
-+			     struct phy_plca_cfg *plca_cfg);
-+int phy_ethtool_set_plca_cfg(struct phy_device *dev,
-+			     struct netlink_ext_ack *extack,
-+			     const struct phy_plca_cfg *plca_cfg);
-+int phy_ethtool_get_plca_status(struct phy_device *dev,
-+				struct phy_plca_status *plca_st);
- 
- static inline int phy_package_read(struct phy_device *phydev, u32 regnum)
- {
-diff --git a/include/uapi/linux/ethtool_netlink.h b/include/uapi/linux/ethtool_netlink.h
-index aaf7c6963d61..81e3d7b42d0f 100644
---- a/include/uapi/linux/ethtool_netlink.h
-+++ b/include/uapi/linux/ethtool_netlink.h
-@@ -51,6 +51,9 @@ enum {
- 	ETHTOOL_MSG_MODULE_SET,
- 	ETHTOOL_MSG_PSE_GET,
- 	ETHTOOL_MSG_PSE_SET,
-+	ETHTOOL_MSG_PLCA_GET_CFG,
-+	ETHTOOL_MSG_PLCA_SET_CFG,
-+	ETHTOOL_MSG_PLCA_GET_STATUS,
- 
- 	/* add new constants above here */
- 	__ETHTOOL_MSG_USER_CNT,
-@@ -97,6 +100,9 @@ enum {
- 	ETHTOOL_MSG_MODULE_GET_REPLY,
- 	ETHTOOL_MSG_MODULE_NTF,
- 	ETHTOOL_MSG_PSE_GET_REPLY,
-+	ETHTOOL_MSG_PLCA_GET_CFG_REPLY,
-+	ETHTOOL_MSG_PLCA_GET_STATUS_REPLY,
-+	ETHTOOL_MSG_PLCA_NTF,
- 
- 	/* add new constants above here */
- 	__ETHTOOL_MSG_KERNEL_CNT,
-@@ -880,6 +886,25 @@ enum {
- 	ETHTOOL_A_PSE_MAX = (__ETHTOOL_A_PSE_CNT - 1)
- };
- 
-+/* PLCA */
-+
-+enum {
-+	ETHTOOL_A_PLCA_UNSPEC,
-+	ETHTOOL_A_PLCA_HEADER,				/* nest - _A_HEADER_* */
-+	ETHTOOL_A_PLCA_VERSION,				/* u16 */
-+	ETHTOOL_A_PLCA_ENABLED,				/* u8 */
-+	ETHTOOL_A_PLCA_STATUS,				/* u8 */
-+	ETHTOOL_A_PLCA_NODE_CNT,			/* u8 */
-+	ETHTOOL_A_PLCA_NODE_ID,				/* u8 */
-+	ETHTOOL_A_PLCA_TO_TMR,				/* u8 */
-+	ETHTOOL_A_PLCA_BURST_CNT,			/* u8 */
-+	ETHTOOL_A_PLCA_BURST_TMR,			/* u8 */
-+
-+	/* add new constants above here */
-+	__ETHTOOL_A_PLCA_CNT,
-+	ETHTOOL_A_PLCA_MAX = (__ETHTOOL_A_PLCA_CNT - 1)
-+};
-+
- /* generic netlink info */
- #define ETHTOOL_GENL_NAME "ethtool"
- #define ETHTOOL_GENL_VERSION 1
-diff --git a/net/ethtool/Makefile b/net/ethtool/Makefile
-index 72ab0944262a..b18930e2ce9a 100644
---- a/net/ethtool/Makefile
-+++ b/net/ethtool/Makefile
-@@ -8,4 +8,4 @@ ethtool_nl-y	:= netlink.o bitset.o strset.o linkinfo.o linkmodes.o \
- 		   linkstate.o debug.o wol.o features.o privflags.o rings.o \
- 		   channels.o coalesce.o pause.o eee.o tsinfo.o cabletest.o \
- 		   tunnels.o fec.o eeprom.o stats.o phc_vclocks.o module.o \
--		   pse-pd.o
-+		   pse-pd.o plca.o
-diff --git a/net/ethtool/netlink.c b/net/ethtool/netlink.c
-index 1a4c11356c96..eb044f48cb24 100644
---- a/net/ethtool/netlink.c
-+++ b/net/ethtool/netlink.c
-@@ -287,6 +287,8 @@ ethnl_default_requests[__ETHTOOL_MSG_USER_CNT] = {
- 	[ETHTOOL_MSG_PHC_VCLOCKS_GET]	= &ethnl_phc_vclocks_request_ops,
- 	[ETHTOOL_MSG_MODULE_GET]	= &ethnl_module_request_ops,
- 	[ETHTOOL_MSG_PSE_GET]		= &ethnl_pse_request_ops,
-+	[ETHTOOL_MSG_PLCA_GET_CFG]	= &ethnl_plca_cfg_request_ops,
-+	[ETHTOOL_MSG_PLCA_GET_STATUS]	= &ethnl_plca_status_request_ops,
- };
- 
- static struct ethnl_dump_ctx *ethnl_dump_context(struct netlink_callback *cb)
-@@ -602,6 +604,7 @@ ethnl_default_notify_ops[ETHTOOL_MSG_KERNEL_MAX + 1] = {
- 	[ETHTOOL_MSG_EEE_NTF]		= &ethnl_eee_request_ops,
- 	[ETHTOOL_MSG_FEC_NTF]		= &ethnl_fec_request_ops,
- 	[ETHTOOL_MSG_MODULE_NTF]	= &ethnl_module_request_ops,
-+	[ETHTOOL_MSG_PLCA_NTF]		= &ethnl_plca_cfg_request_ops,
- };
- 
- /* default notification handler */
-@@ -695,6 +698,7 @@ static const ethnl_notify_handler_t ethnl_notify_handlers[] = {
- 	[ETHTOOL_MSG_EEE_NTF]		= ethnl_default_notify,
- 	[ETHTOOL_MSG_FEC_NTF]		= ethnl_default_notify,
- 	[ETHTOOL_MSG_MODULE_NTF]	= ethnl_default_notify,
-+	[ETHTOOL_MSG_PLCA_NTF]		= ethnl_default_notify,
- };
- 
- void ethtool_notify(struct net_device *dev, unsigned int cmd, const void *data)
-@@ -1040,6 +1044,32 @@ static const struct genl_ops ethtool_genl_ops[] = {
- 		.policy = ethnl_pse_set_policy,
- 		.maxattr = ARRAY_SIZE(ethnl_pse_set_policy) - 1,
- 	},
-+	{
-+		.cmd	= ETHTOOL_MSG_PLCA_GET_CFG,
-+		.doit	= ethnl_default_doit,
-+		.start	= ethnl_default_start,
-+		.dumpit	= ethnl_default_dumpit,
-+		.done	= ethnl_default_done,
-+		.policy = ethnl_plca_get_cfg_policy,
-+		.maxattr = ARRAY_SIZE(ethnl_plca_get_cfg_policy) - 1,
-+	},
-+	{
-+		.cmd	= ETHTOOL_MSG_PLCA_SET_CFG,
-+		.flags	= GENL_UNS_ADMIN_PERM,
-+		.doit	= ethnl_set_plca_cfg,
-+		.policy = ethnl_plca_set_cfg_policy,
-+		.maxattr = ARRAY_SIZE(ethnl_plca_set_cfg_policy) - 1,
-+	},
-+	{
-+		.cmd	= ETHTOOL_MSG_PLCA_GET_STATUS,
-+		.doit	= ethnl_default_doit,
-+		.start	= ethnl_default_start,
-+		.dumpit	= ethnl_default_dumpit,
-+		.done	= ethnl_default_done,
-+		.policy = ethnl_plca_get_status_policy,
-+		.maxattr = ARRAY_SIZE(ethnl_plca_get_status_policy) - 1,
-+	},
-+
- };
- 
- static const struct genl_multicast_group ethtool_nl_mcgrps[] = {
-diff --git a/net/ethtool/netlink.h b/net/ethtool/netlink.h
-index 1bfd374f9718..c0ed1a6d0833 100644
---- a/net/ethtool/netlink.h
-+++ b/net/ethtool/netlink.h
-@@ -346,6 +346,8 @@ extern const struct ethnl_request_ops ethnl_stats_request_ops;
- extern const struct ethnl_request_ops ethnl_phc_vclocks_request_ops;
- extern const struct ethnl_request_ops ethnl_module_request_ops;
- extern const struct ethnl_request_ops ethnl_pse_request_ops;
-+extern const struct ethnl_request_ops ethnl_plca_cfg_request_ops;
-+extern const struct ethnl_request_ops ethnl_plca_status_request_ops;
- 
- extern const struct nla_policy ethnl_header_policy[ETHTOOL_A_HEADER_FLAGS + 1];
- extern const struct nla_policy ethnl_header_policy_stats[ETHTOOL_A_HEADER_FLAGS + 1];
-@@ -386,6 +388,9 @@ extern const struct nla_policy ethnl_module_get_policy[ETHTOOL_A_MODULE_HEADER +
- extern const struct nla_policy ethnl_module_set_policy[ETHTOOL_A_MODULE_POWER_MODE_POLICY + 1];
- extern const struct nla_policy ethnl_pse_get_policy[ETHTOOL_A_PSE_HEADER + 1];
- extern const struct nla_policy ethnl_pse_set_policy[ETHTOOL_A_PSE_MAX + 1];
-+extern const struct nla_policy ethnl_plca_get_cfg_policy[ETHTOOL_A_PLCA_HEADER + 1];
-+extern const struct nla_policy ethnl_plca_set_cfg_policy[ETHTOOL_A_PLCA_MAX + 1];
-+extern const struct nla_policy ethnl_plca_get_status_policy[ETHTOOL_A_PLCA_HEADER + 1];
- 
- int ethnl_set_linkinfo(struct sk_buff *skb, struct genl_info *info);
- int ethnl_set_linkmodes(struct sk_buff *skb, struct genl_info *info);
-@@ -406,6 +411,7 @@ int ethnl_tunnel_info_dumpit(struct sk_buff *skb, struct netlink_callback *cb);
- int ethnl_set_fec(struct sk_buff *skb, struct genl_info *info);
- int ethnl_set_module(struct sk_buff *skb, struct genl_info *info);
- int ethnl_set_pse(struct sk_buff *skb, struct genl_info *info);
-+int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info);
- 
- extern const char stats_std_names[__ETHTOOL_STATS_CNT][ETH_GSTRING_LEN];
- extern const char stats_eth_phy_names[__ETHTOOL_A_STATS_ETH_PHY_CNT][ETH_GSTRING_LEN];
-diff --git a/net/ethtool/plca.c b/net/ethtool/plca.c
-new file mode 100644
-index 000000000000..ab50d8b48bd6
---- /dev/null
-+++ b/net/ethtool/plca.c
-@@ -0,0 +1,290 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/phy.h>
-+#include <linux/ethtool_netlink.h>
-+
-+#include "netlink.h"
-+#include "common.h"
-+
-+struct plca_req_info {
-+	struct ethnl_req_info		base;
-+};
-+
-+struct plca_reply_data {
-+	struct ethnl_reply_data		base;
-+	struct phy_plca_cfg		plca_cfg;
-+	struct phy_plca_status		plca_st;
-+};
-+
-+#define PLCA_REPDATA(__reply_base) \
-+	container_of(__reply_base, struct plca_reply_data, base)
-+
-+// PLCA get configuration message ------------------------------------------- //
-+
-+const struct nla_policy ethnl_plca_get_cfg_policy[] = {
-+	[ETHTOOL_A_PLCA_HEADER]		=
-+		NLA_POLICY_NESTED(ethnl_header_policy),
-+};
-+
-+static int plca_get_cfg_prepare_data(const struct ethnl_req_info *req_base,
-+				     struct ethnl_reply_data *reply_base,
-+				     struct genl_info *info)
-+{
-+	struct plca_reply_data *data = PLCA_REPDATA(reply_base);
-+	struct net_device *dev = reply_base->dev;
-+	const struct ethtool_phy_ops *ops;
-+	int ret;
-+
-+	// check that the PHY device is available and connected
-+	if (!dev->phydev) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	// note: rtnl_lock is held already by ethnl_default_doit
-+	ops = ethtool_phy_ops;
-+	if (!ops || !ops->get_plca_cfg) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	ret = ethnl_ops_begin(dev);
-+	if (ret < 0)
-+		goto out;
-+
-+	ret = ops->get_plca_cfg(dev->phydev, &data->plca_cfg);
-+	if (ret < 0)
-+		goto out;
-+
-+	ethnl_ops_complete(dev);
-+
-+out:
-+	return ret;
-+}
-+
-+static int plca_get_cfg_reply_size(const struct ethnl_req_info *req_base,
-+				   const struct ethnl_reply_data *reply_base)
-+{
-+	return nla_total_size(sizeof(u16)) +	/* _VERSION */
-+	       nla_total_size(sizeof(u8)) +	/* _ENABLED */
-+	       nla_total_size(sizeof(u8)) +	/* _STATUS  */
-+	       nla_total_size(sizeof(u8)) +	/* _NODE_CNT */
-+	       nla_total_size(sizeof(u8)) +	/* _NODE_ID */
-+	       nla_total_size(sizeof(u8)) +	/* _TO_TIMER */
-+	       nla_total_size(sizeof(u8)) +	/* _BURST_COUNT */
-+	       nla_total_size(sizeof(u8));	/* _BURST_TIMER */
-+}
-+
-+static int plca_get_cfg_fill_reply(struct sk_buff *skb,
-+				   const struct ethnl_req_info *req_base,
-+				   const struct ethnl_reply_data *reply_base)
-+{
-+	const struct plca_reply_data *data = PLCA_REPDATA(reply_base);
-+	const struct phy_plca_cfg *plca = &data->plca_cfg;
-+
-+	if ((plca->version >= 0 &&
-+	     nla_put_u16(skb, ETHTOOL_A_PLCA_VERSION, (u16)plca->version)) ||
-+	    (plca->enabled >= 0 &&
-+	     nla_put_u8(skb, ETHTOOL_A_PLCA_ENABLED, !!plca->enabled)) ||
-+	    (plca->node_id >= 0 &&
-+	     nla_put_u8(skb, ETHTOOL_A_PLCA_NODE_ID, (u8)plca->node_id)) ||
-+	    (plca->node_cnt >= 0 &&
-+	     nla_put_u8(skb, ETHTOOL_A_PLCA_NODE_CNT, (u8)plca->node_cnt)) ||
-+	    (plca->to_tmr >= 0 &&
-+	     nla_put_u8(skb, ETHTOOL_A_PLCA_TO_TMR, (u8)plca->to_tmr)) ||
-+	    (plca->burst_cnt >= 0 &&
-+	     nla_put_u8(skb, ETHTOOL_A_PLCA_BURST_CNT, (u8)plca->burst_cnt)) ||
-+	    (plca->burst_tmr >= 0 &&
-+	     nla_put_u8(skb, ETHTOOL_A_PLCA_BURST_TMR, (u8)plca->burst_tmr)))
-+		return -EMSGSIZE;
-+
-+	return 0;
-+};
-+
-+const struct ethnl_request_ops ethnl_plca_cfg_request_ops = {
-+	.request_cmd		= ETHTOOL_MSG_PLCA_GET_CFG,
-+	.reply_cmd		= ETHTOOL_MSG_PLCA_GET_CFG_REPLY,
-+	.hdr_attr		= ETHTOOL_A_PLCA_HEADER,
-+	.req_info_size		= sizeof(struct plca_req_info),
-+	.reply_data_size	= sizeof(struct plca_reply_data),
-+
-+	.prepare_data		= plca_get_cfg_prepare_data,
-+	.reply_size		= plca_get_cfg_reply_size,
-+	.fill_reply		= plca_get_cfg_fill_reply,
-+};
-+
-+// PLCA set configuration message ------------------------------------------- //
-+
-+const struct nla_policy ethnl_plca_set_cfg_policy[] = {
-+	[ETHTOOL_A_PLCA_HEADER]		=
-+		NLA_POLICY_NESTED(ethnl_header_policy),
-+	[ETHTOOL_A_PLCA_ENABLED]	= { .type = NLA_U8 },
-+	[ETHTOOL_A_PLCA_NODE_ID]	= { .type = NLA_U8 },
-+	[ETHTOOL_A_PLCA_NODE_CNT]	= { .type = NLA_U8 },
-+	[ETHTOOL_A_PLCA_TO_TMR]		= { .type = NLA_U8 },
-+	[ETHTOOL_A_PLCA_BURST_CNT]	= { .type = NLA_U8 },
-+	[ETHTOOL_A_PLCA_BURST_TMR]	= { .type = NLA_U8 },
-+};
-+
-+int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
-+{
-+	struct ethnl_req_info req_info = {};
-+	struct nlattr **tb = info->attrs;
-+	const struct ethtool_phy_ops *ops;
-+	struct phy_plca_cfg plca_cfg;
-+	struct net_device *dev;
-+
-+	bool mod = false;
-+	int ret;
-+
-+	ret = ethnl_parse_header_dev_get(&req_info,
-+					 tb[ETHTOOL_A_PLCA_HEADER],
-+					 genl_info_net(info), info->extack,
-+					 true);
-+	if (ret < 0)
-+		return ret;
-+
-+	dev = req_info.dev;
-+
-+	// check that the PHY device is available and connected
-+	if (!dev->phydev) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	rtnl_lock();
-+
-+	ops = ethtool_phy_ops;
-+	if (!ops || !ops->set_plca_cfg) {
-+		ret = -EOPNOTSUPP;
-+		goto out_rtnl;
-+	}
-+
-+	ret = ethnl_ops_begin(dev);
-+	if (ret < 0)
-+		goto out_rtnl;
-+
-+	memset(&plca_cfg, 0xFF, sizeof(plca_cfg));
-+
-+	if (tb[ETHTOOL_A_PLCA_ENABLED]) {
-+		plca_cfg.enabled = !!nla_get_u8(tb[ETHTOOL_A_PLCA_ENABLED]);
-+		mod = true;
-+	}
-+
-+	if (tb[ETHTOOL_A_PLCA_NODE_ID]) {
-+		plca_cfg.node_id = nla_get_u8(tb[ETHTOOL_A_PLCA_NODE_ID]);
-+		mod = true;
-+	}
-+
-+	if (tb[ETHTOOL_A_PLCA_NODE_CNT]) {
-+		plca_cfg.node_cnt = nla_get_u8(tb[ETHTOOL_A_PLCA_NODE_CNT]);
-+		mod = true;
-+	}
-+
-+	if (tb[ETHTOOL_A_PLCA_TO_TMR]) {
-+		plca_cfg.to_tmr = nla_get_u8(tb[ETHTOOL_A_PLCA_TO_TMR]);
-+		mod = true;
-+	}
-+
-+	if (tb[ETHTOOL_A_PLCA_BURST_CNT]) {
-+		plca_cfg.burst_cnt = nla_get_u8(tb[ETHTOOL_A_PLCA_BURST_CNT]);
-+		mod = true;
-+	}
-+
-+	if (tb[ETHTOOL_A_PLCA_BURST_TMR]) {
-+		plca_cfg.burst_tmr = nla_get_u8(tb[ETHTOOL_A_PLCA_BURST_TMR]);
-+		mod = true;
-+	}
-+
-+	ret = 0;
-+	if (!mod)
-+		goto out_ops;
-+
-+	ret = ops->set_plca_cfg(dev->phydev, info->extack, &plca_cfg);
-+
-+	if (ret < 0)
-+		goto out_ops;
-+
-+	ethtool_notify(dev, ETHTOOL_MSG_PLCA_NTF, NULL);
-+
-+out_ops:
-+	ethnl_ops_complete(dev);
-+out_rtnl:
-+	rtnl_unlock();
-+	ethnl_parse_header_dev_put(&req_info);
-+out:
-+	return ret;
-+}
-+
-+// PLCA get status message -------------------------------------------------- //
-+
-+const struct nla_policy ethnl_plca_get_status_policy[] = {
-+	[ETHTOOL_A_PLCA_HEADER]		=
-+		NLA_POLICY_NESTED(ethnl_header_policy),
-+};
-+
-+static int plca_get_status_prepare_data(const struct ethnl_req_info *req_base,
-+					struct ethnl_reply_data *reply_base,
-+					struct genl_info *info)
-+{
-+	struct plca_reply_data *data = PLCA_REPDATA(reply_base);
-+	struct net_device *dev = reply_base->dev;
-+	const struct ethtool_phy_ops *ops;
-+	int ret;
-+
-+	// check that the PHY device is available and connected
-+	if (!dev->phydev) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	// note: rtnl_lock is held already by ethnl_default_doit
-+	ops = ethtool_phy_ops;
-+	if (!ops || !ops->get_plca_status) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	ret = ethnl_ops_begin(dev);
-+	if (ret < 0)
-+		goto out;
-+
-+	ret = ops->get_plca_status(dev->phydev, &data->plca_st);
-+	if (ret < 0)
-+		goto out;
-+
-+	ethnl_ops_complete(dev);
-+out:
-+	return ret;
-+}
-+
-+static int plca_get_status_reply_size(const struct ethnl_req_info *req_base,
-+				      const struct ethnl_reply_data *reply_base)
-+{
-+	return nla_total_size(sizeof(u8));	/* _STATUS */
-+}
-+
-+static int plca_get_status_fill_reply(struct sk_buff *skb,
-+				      const struct ethnl_req_info *req_base,
-+				      const struct ethnl_reply_data *reply_base)
-+{
-+	const struct plca_reply_data *data = PLCA_REPDATA(reply_base);
-+	const u8 status = data->plca_st.pst;
-+
-+	if (nla_put_u8(skb, ETHTOOL_A_PLCA_STATUS, !!status))
-+		return -EMSGSIZE;
-+
-+	return 0;
-+};
-+
-+const struct ethnl_request_ops ethnl_plca_status_request_ops = {
-+	.request_cmd		= ETHTOOL_MSG_PLCA_GET_STATUS,
-+	.reply_cmd		= ETHTOOL_MSG_PLCA_GET_STATUS_REPLY,
-+	.hdr_attr		= ETHTOOL_A_PLCA_HEADER,
-+	.req_info_size		= sizeof(struct plca_req_info),
-+	.reply_data_size	= sizeof(struct plca_reply_data),
-+
-+	.prepare_data		= plca_get_status_prepare_data,
-+	.reply_size		= plca_get_status_reply_size,
-+	.fill_reply		= plca_get_status_fill_reply,
-+};
 -- 
-2.35.1
+2.18.0
 
