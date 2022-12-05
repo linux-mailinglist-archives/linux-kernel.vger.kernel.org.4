@@ -2,186 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD871642FC2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D177D642FC5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbiLESTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S231963AbiLESTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiLESTS (ORCPT
+        with ESMTP id S231949AbiLESTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:19:18 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C847B1583D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670264356; x=1701800356;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=cD0czx1X6nfjsI1a02GNEMyD/vppgXk9mztvB1qz07I=;
-  b=ao7AGeddfylPh3ASmTZ0wd5TEQv1ToU5e5ftz3TgxMr0L4zmMz8We+uh
-   1sFiP31nf8f2PzifrzyWy1lun+MJXHdmSMjh6TWu5M2LHaiLtbHjlYZbo
-   z1E8SptnGpkfYbXSZH3Rp7cAkd7JopMcuqHJSbhJ7JHSFaImsdm50cC40
-   fjngAZcBV6RJWHqsQ/bykjzip6NQTsTxk0uxd7GHqTYSa3SIGNb0LNspD
-   myqKMM91n280U/W7eJ0SYyTvsAOExcy8KxsiJt2LI+yccAgHnGItbApvI
-   PZcFHz6Nd9nIJgAKf0IX6UTgfiL1uN6Y8pFt/GelDBZ3flH06twDJ3MY8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="343440289"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="343440289"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 10:19:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="623601474"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="623601474"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga006.jf.intel.com with ESMTP; 05 Dec 2022 10:19:15 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 5 Dec 2022 10:19:15 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 5 Dec 2022 10:19:15 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 5 Dec 2022 10:19:15 -0800
+        Mon, 5 Dec 2022 13:19:40 -0500
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2072.outbound.protection.outlook.com [40.107.115.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52D315A38;
+        Mon,  5 Dec 2022 10:19:37 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EASKM+zaNXUoP/qRT4RBJS3ErgbrTv5yOHlJGir1MgZjo3d7Sm7xeBwPMCGbbun7gw5UMqdzXf9R05ltI9d6CaXE/qTeyGq5cHgP4GvTaD49ZbBaATWSkOs47wa76t2FDkmxL+7tr8Ry5yjG3QE0pZTffMHuMKSNBYO8qjC64VxVO/lBzBBSfTPPEbtWPfirxxKL9u41qsLVpFBsi41vHXFjqd2TifkvSZfyFtpV+sBgjRQr2AEEUnvEfgHhqWPmS8R8q7bJXQ9fpujK+a/YdvJbfDdVOguuKZK1PUdnpT6MhYxjEZxi51p6THm0QAqpfbf44WnC0puhS2S1mr+iKg==
+ b=g9mCyS/YJ11bzOuQoQ8Hst0iSs2ICahvIdkX/SGqgIz7JYAczbCkoszv2zYfR4kIV3DmawRyn6XmIgfxbjGkkreWgGhJ6ezvmLFP4TrJw5w1g71RlrZPIiG2FQkHYLwkUwM6rSX8K5FDVhrm0lefWlClOcAhH2mU4gCE5MwJP1bBhdE7RZGMh4gr8zA+VzthcOQeYyYZDVn7nm5Ciq1n9CyNX/al3XaujgrsIs7qwcIdtdUqaN3DzFoa3oROaWEMFGLOdDggZHgmS27+PEJiqvi3wPpdHv4vQByB8j51gG7wXXS2pWRruQa+8mKduwvp3ociSiEK82n/Jvd5aaAa6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dn1MU+ODRAUB8902KZvoRR9rhyH3ovve2bFuH1JJ/js=;
- b=OJvK6R7JUk44aojMtdUQCD7vAcl5s4vDb3WEdLQx3wj9tFaF9xDMWqKtT4xdgegNNPfBx3FB6jsITkGThNC/YYLBJQIcGNg93NBsvnX6ib8h1YIAnb9IIXvna4enx9lfD3lUrKIA6WgGIrGFVbKjZfnOOlkzGGf1/vxsHb6YyxFJBj6fNG+mlDBS3HFjLpLP6K/8feAiVM7DaAfrDCg+HHbberSHyOdZd6SFXrWckNvanoKRN5AJO3JS965UImOb83IZZlt8YQD+kaxEBQ8HPDUe28SRDfMazUq6WeX7WiFEUa/y2cWUtNHa/gwSE9OnW8aiJfalCwjKtNzJ0X1ymg==
+ bh=WMnMbx4rJanvF5XYl7vu/KqMDWlxDbdBuO9UUzu2JJQ=;
+ b=C3h/JYY21tqUP++RqxqVOPkzZT0CkBkN08UQSvMdtZiN5SjM6POjgvbJv9BHdvxjBinfN6+BLjOlHfJxhh3yytcQ8iOfYPzwRTRVJQJmn4ZvP0HtvHgBdRcG6wJ5j+JzRZxMp8EC4sT3Lj6NAvX0nwH1RxN9XDjGmNTrr+HP5CUcHhVshBkfQw4+nRMHnepV9n037e4HBkbCggQ9A3PklhTEHgOCmMUqCQqcFZoCUG4Hhfcmw0BgU4RqsfVoYTXO/5OYGxLIIjoePTcg3vHkjjuS7ZA7drkZFCQyCtfizWNDIET+N49KzFBMVTUMrH7JPX6yVkTl6dsZTrbZ9s7+mg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WMnMbx4rJanvF5XYl7vu/KqMDWlxDbdBuO9UUzu2JJQ=;
+ b=kbmFv4oDZDxF6LmBmta9BNS+oEkIsliQVL7VqaySn3lSpp8Ln/8cD9GfSsBZyT3RuzSINKJ93s5UCRNQ+3W32oo5ZhAf6lqb4w1LnASGNvoM6KvKuW57x7iuugG3BLwHygmV6qnKklZo+d2PUj8AQoIcBf+79OeSWSrtKRJJ/QPi4O7FEzQwk0WEt/6s49aVozO70aQaqR3hgKJnDxsiDzrFHnF2n1uDAj35csV/DMSwf1b0PzE6mwolS3qD+WsE73Ca+sD5uHXsZDL9t+bCJNZoPWl/21lfaHdtjyDCoEZV22rYr5QL6a5PHicpBTXIucJ1NptHyTCeeb/R7ai+kg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by SA3PR11MB7464.namprd11.prod.outlook.com (2603:10b6:806:31b::15) with
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:24::5)
+ by YT3PR01MB5529.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:61::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Mon, 5 Dec
- 2022 18:19:13 +0000
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::6dd2:a8a3:7f9:ad]) by SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::6dd2:a8a3:7f9:ad%3]) with mapi id 15.20.5880.013; Mon, 5 Dec 2022
- 18:19:13 +0000
-Date:   Mon, 5 Dec 2022 10:19:07 -0800
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     Borislav Petkov <bp@alien8.de>, X86-kernel <x86@kernel.org>,
-        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>, <alison.schofield@intel.com>,
-        <reinette.chatre@intel.com>, Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [Patch V1 7/7] x86/microcode/intel: Print when early microcode
- loading fails
-Message-ID: <Y442GzMi1EE9SV5R@a4bf019067fa.jf.intel.com>
-References: <20221129210832.107850-1-ashok.raj@intel.com>
- <20221129210832.107850-8-ashok.raj@intel.com>
- <87v8mtob6b.ffs@tglx>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87v8mtob6b.ffs@tglx>
-X-ClientProxiedBy: BYAPR01CA0065.prod.exchangelabs.com (2603:10b6:a03:94::42)
- To SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
+ 2022 18:19:36 +0000
+Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::2bff:5fa3:434e:517]) by YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::2bff:5fa3:434e:517%9]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
+ 18:19:36 +0000
+Message-ID: <d5dd1491-5d59-7987-9b5b-83f5fb1b29ee@efficios.com>
+Date:   Mon, 5 Dec 2022 13:19:34 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] powerpc/ftrace: fix syscall tracing on PPC64_ELF_ABI_V1
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michal Suchanek <msuchanek@suse.de>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20221201161442.2127231-1-mjeanson@efficios.com>
+ <87pmcys9ae.fsf@mpe.ellerman.id.au>
+From:   Michael Jeanson <mjeanson@efficios.com>
+In-Reply-To: <87pmcys9ae.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0019.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01::27)
+ To YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:24::5)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|SA3PR11MB7464:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac460faa-f5d6-404b-97fc-08dad6ed3622
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: YQBPR0101MB5080:EE_|YT3PR01MB5529:EE_
+X-MS-Office365-Filtering-Correlation-Id: aabf21d6-815d-4cb0-03ab-08dad6ed43bf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sz/P4YT83ATauUOA9PUhfQKJnVT+K/w/GoZdaMCpFAVzWYVydUdZY57bR3dZbzDjRIoyuDPzDcK3XpJkm/Dls/RcdYiHpUZt1JLukRj1H4BEV2X+wfkWkqHlnPVCB4ycafMd3irklJq72My5TTx9DG6zirn/mp+rgNe9RjDTvUOFlfTVptmFN+bAdFeCwfzi91UItiTPsOy6WBEj+22bMhQQNKaiWPWyaSWa0hng17v8Hn9QIeTdqkjfiT4Ht2B0xuT8oez93H2/UKOvQpZel87gduu99UDB2YMCNlG9igq33qeyYtACffq3sJAXz6IClcfmb19oYRLLtomwPXA1cQ/IWmJQH+x0Ocmm3z6TmiqglMLro983ZoFJDqf0FLKjiRj/d4+3H9GwzW5xwr7AZofXCU5MDsaJsdjHUchX/E5CB+WB0EjbY/2epru0cZ0wCYmwCmDdzO8SyVKMzJ/3gaVDXRqhJX7UHvNja/She0+g4m8i42kW3bMvDMchyhx9wULGIA5rqTaeQWrSA5pvQjbavO3HTYhUcJe0eNCwWZcFg6O1ob8PXYFdTeUYHndTp4tFl4ogMhlOjM2XSYugy+99dJQadovTsbWk38cPMI8tZHonEG5zDqIB5DIZmaiNQAblfk1vCWQd9fKAIBqlfu8FkdFxO0QvsdfqCTOIAcg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(396003)(346002)(39860400002)(366004)(451199015)(5660300002)(478600001)(6486002)(4326008)(8676002)(966005)(66946007)(41300700001)(66476007)(66556008)(6916009)(316002)(54906003)(82960400001)(38100700002)(6512007)(107886003)(6666004)(186003)(26005)(6506007)(86362001)(83380400001)(44832011)(2906002)(4744005)(8936002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: cx9YD518GG3AnWdxhj9HPLeu6xPFQRAAxCTs5nRkOoayrm3CK1vKsiaLpb4ZVPdkiyqGymu+77IxK4CoMEClUZ8IomNmKpLOMp0fdhtQ0lS+DC/qZZMCACyUKRfmgFRn7JBtpIVig743YNSUd5QraBe426EhfWWjGD8Hu/t8YFODmgc7QcuqwpP9zmX0APH47ZcBywprnkv6vm+MAe5Vll83+gQXZOI3MVKy1kGK/MwjJL69AZloJN34QSGmpfWu+JQK82QDOkHrwL+TqhwimmkwOteJhnUVxXUrGDRz8cmIGHGKiBNJwcIyYUWWjsdZFbnJFPyNZBY19+HtOPWRTVyrTO0j05rhXw6ZTJ4/aB5LvNIdhy+W4evPHcM2U1s9c6xC2khMbTQNFGDkZjWXD+wrchZkHh5PFEtr/KcG7eTFXG5r0hQ8TmJ4IsKHid+FGm1qiwdRLv1mlmGKlefGqsylqnJDaauTOtGADsyFa0u5CJLw8DK3qbHc6v9V2jSq/o6MwrFj96shWTIQGJqEtJd4YPxXFfh2g29x/QpekNC0uS6qITdXWpNqVzCnhJ1Dlo3OTI6LxzD7YSjR/SB3OGNb9IB2FPDepU4p9a6Cz/0Jq9xyZse3TbYNFsIJwp8ZB8X+975SqoUIZM8X0ATOhch6PFm7HZBwsR3g1I55sNCyxWjsBNKZsG+Y9UZfCU2q6ABRs6CoeWi0FvZQrGvIaMjvMhkwT6kbuSNpWIK+SRM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(39830400003)(136003)(366004)(396003)(451199015)(316002)(2906002)(66946007)(8676002)(66556008)(4326008)(66476007)(36756003)(6512007)(38100700002)(26005)(186003)(478600001)(6486002)(53546011)(110136005)(54906003)(2616005)(107886003)(86362001)(31696002)(6506007)(8936002)(41300700001)(83380400001)(31686004)(5660300002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7maRhAesVmAOzLZb2ee74GsEkoJN4KVVs6dnBv72deC0A8aj203BChvSK3gB?=
- =?us-ascii?Q?WLk7KK4erXGzw7ziHvit1npOIHrl8cIjj3+O88X6pK6eLq/ccVh4ZtIZFtuS?=
- =?us-ascii?Q?f8/7Ws/ROXg+hFQ7paWHYTKCjgV3hQN/18Pv0r9S1O/eob379BUNio/0GPHf?=
- =?us-ascii?Q?WA5m9vAbzMG/Fqf3y6GWaHN3EhSsYak2sGIcY7SPlNnpISVWkmOX6WEMRaiD?=
- =?us-ascii?Q?ZR3aM0RQIyBrbkl74G5VRo01k/AfN+KpYRfBSRXD4D9aGeLFERzNPBqmReFY?=
- =?us-ascii?Q?vwapDUuYJ9qt1agmTSUnLViVp0aPSxrkm34H2LqvihOBI8kubOffAu1bg936?=
- =?us-ascii?Q?07pOy2ys/I4VH6bngNQK7IOf3jav7oIvETF6EXSQNzD3Zq/rOkxOFhplSOko?=
- =?us-ascii?Q?kp56gOt01R+e9mj4qioWXb9aK3XPsZL/cI5v4x6NDT+X7KxQqVfBERT9rho/?=
- =?us-ascii?Q?4ZjysNKfVSlB9HbGBRUXYOEl4Ul9MSZ4ABOO+OgS4t1HCFXmdk3l6LQQYhjQ?=
- =?us-ascii?Q?5ngDhIv9dsPRpLmRk5vcudDdgubG9B5npAuTMDVow+5iN0kXB5x3jva+M7Wf?=
- =?us-ascii?Q?vKvM2eIedrstamAIjH2dRb9gl24Bh+8KJKYiWUk+oxhHFEVDL491bay8sLIX?=
- =?us-ascii?Q?DY9DJFRqVp8pMpxBlz5C5gLqfwcRc3ALgg6eOm4xw/zkvk0N+h+pddsxx5Fx?=
- =?us-ascii?Q?fsFl3Co4WwIltwySjeqVTtbf0sWDhDjmgS9Ph04JfPZzFLfHGO3evyLJAr1g?=
- =?us-ascii?Q?F+gfPWoAaZs6pXRnz1xpAfLS52SK/m/837k++Z0t0iPgtbLEQR+KUpID7JfK?=
- =?us-ascii?Q?TfGkY1aG3xnBMVJA/Skhl+7NJTwJ48B2yEPOUNEjqd6i8oVvrDD56aFJz+8z?=
- =?us-ascii?Q?f9xXw0Ncl4ZgScXZ6Uj/tLCCW/V2YP9pA0cvWOgB8YOS0cpcgtzZffviqjKg?=
- =?us-ascii?Q?XxOaIzvIqV92yePjmlKG1GedheAcbLMLkiE/jiAe2QIzb3x33z3ZaIZBQ5w8?=
- =?us-ascii?Q?BqUaaZ7cw+AGr9LXTJQ+avDE1mFEEzU733UypwH10pNt51WOpkts5qfMByPK?=
- =?us-ascii?Q?b4XBck6gVI2ZOUXtN0FaPpgQ5At/ZwJN6FAj6EhDK69YQT7gdQEl/EXdtN38?=
- =?us-ascii?Q?d4+PXKuyZ8IFjJjTaUWbLkFnj+/9GfzettiDl3HSAbz01SzNXm205hpuja0E?=
- =?us-ascii?Q?ghJawNFfUjXyzTAmpUPP2SsJYhWGoeOvo5mQB/6TZ26Y4qZ9kVfQ8cDCwzMC?=
- =?us-ascii?Q?YnDbBdQffey38rNq9/nKNLPj1WF2AYne6sn5gY1PM9K9R+wE0fL6fg3+0n9C?=
- =?us-ascii?Q?dk/zAMV0sykSW09BpVu5paknbalQCm7cjhCFCZJv6fvvYlH8HiGGMiGZBVZ0?=
- =?us-ascii?Q?btp9l8E6rTzLnvY+3gBR0cm1/LsUk7oaItYfc/RdG81+mM2buvRRbbdAK8jY?=
- =?us-ascii?Q?Iqgxi0+fn3ctA1644Ba8y319PQ9fBQV/qRVlAbfYMA6ofevrABe4CPXUaMKc?=
- =?us-ascii?Q?Wcp2YUfgo3Fj1KxKn+Qc61ZyTx/EFNbXQzcAB21o033RHBMZbnxLBJJ8CdJ0?=
- =?us-ascii?Q?xf8i+TTjYvQ4ZQRAmKO/rlShMGKxtuV+m2SD9lexcfJnu0MxUSMaie+4RBcd?=
- =?us-ascii?Q?cQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac460faa-f5d6-404b-97fc-08dad6ed3622
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFZvY2o3QVIvcEhERVhmT1R6Mkd6TTVQQ0NRcjFURG9CaUNnNW1QTzJMMVIr?=
+ =?utf-8?B?Tk05WkhWd1pRLzRtUm9SQTRnc0hXNGh5V0JXVDlheG5kc2ZMMzZaQW1aRnAx?=
+ =?utf-8?B?QThNV3hJWGVCblZlYUhVaDlnM1BZUWk3eXo2MG1KZ1NYbzhMSkVEazh1ZGl0?=
+ =?utf-8?B?aUpQblJPMnhBQ2NnOWVTK2JHSzM3RFpneWdUbGoxcFAyalh4cWVoaEY2Zndx?=
+ =?utf-8?B?N0hVd3lPckYvYTlSK1J6TGd2QTVIT2tuTGxiSit6eUpMQSt6aFF2K1hHOVcz?=
+ =?utf-8?B?citDMFpjWEdWMnVxcTdJWGMremdNbVJCV29MdmhTZURTQ2tWZ1dPQVp3dGZt?=
+ =?utf-8?B?RFpyUDNPdFVKbEVHRFlrSW1QNDB5Q1htRWpha294YVZLMHc5SEZmSGFDa1lp?=
+ =?utf-8?B?OUZZOEJobGNDNDdxeE82cW9NY3Vqb1RvZ2k0ZmMxSkhrR3MzSnBvTHROQi9G?=
+ =?utf-8?B?TkhQMU1iU2gwTzBZdFNqVGlPQllaa05Wa0g5c1plY1h2ZGx0bThUbkpOTjNJ?=
+ =?utf-8?B?K3FrUVpGR2ZPQjNxaW5LbFhaOEpMbHltSlZ1T1FmOUJsWTU5elBiSmttSk9B?=
+ =?utf-8?B?MkFha3BvZjByQWVTOWFKOGlxMHJpc2RzcUVmMkR4MVllMC9pZG80UG1QSGV1?=
+ =?utf-8?B?ZDhaRkRqMkFUZEFNQjFCQmI2MjdpSUhrRnhyNGpHU09rZXlmSjIvU3VST3hL?=
+ =?utf-8?B?SGpxM1NNalVmSjhKRmJmdTUrZEU3UjNhZmVCMW9Zd0xpeVk4OXVXWFRiK0Vs?=
+ =?utf-8?B?MXhzcHFPY1IzeDFaRk1lQWpYaGk2SUl1T3lXR21YK3VRaGxuM3g1a3pKVVNQ?=
+ =?utf-8?B?OGxGeHF4Z3c3bW5HNjN6TlpsUk5kWGk2VW4yQk91Z09WUkZ5NjNYcW1ObmV5?=
+ =?utf-8?B?NS9zOC9kWlcwaWhZeUh0VE4zalpJVUoybEE4NnBOMjAzSVdxMzI3WncwRTVN?=
+ =?utf-8?B?d0haV2EyM2ZEZldnR3RjQXVxa0lmUGxHTythN0pqM3N1d3JocGNRNGFOa0Fk?=
+ =?utf-8?B?bjhKbjJXY1dTRzdocnZuZGdGNzc4dXZ3Y2cyWlNDQzlTMlMwQnJGS2d3TFY3?=
+ =?utf-8?B?Rit2LzloeXdMSEZrVDVlN1l2V3NaNFFFbVJ2djNzeTNzRHJjYS9jQ1FaRlZ4?=
+ =?utf-8?B?aDZGd0lDMUV0aVNZbkZweEpDUm5BK1V6dCs0QktUWUc5elBXZVJxRGZnbzBn?=
+ =?utf-8?B?U0NGM3JYamp6bGJaRGZLUmxFSEdrcmxtYXRqMVFEZVRZREViam1iTS9pUUJ2?=
+ =?utf-8?B?bmlnWm5ZWnJORndPM01hTGNVNURSZ0VDRzBXdmdpbnJkNlNhcmk0bGprZzlh?=
+ =?utf-8?B?bzNHdG10RkJHTHB4TzBFRDJ1WU8rZGNZNVJpYzNxMzU2dGZzOWlFTXluWjFn?=
+ =?utf-8?B?MlpEV281UUtSVzVoLzVzZEdoQW1CMENBMU95a3JaYW1zeFUxYm14ckFEQ1pt?=
+ =?utf-8?B?NUZwaXJ6SkNEWXVWV1FoQ1dxYzNoNDhKMjIzS0Q3V0JRZDZpWHlqamc5Y1lp?=
+ =?utf-8?B?M3Z3TnZEOEIyU2lzbXVGaytUZ1Ara3RxNmp4WW5tUExYdjFSMUpUUUxxakI4?=
+ =?utf-8?B?ZTlCRjlPVTNVTmM4QVUvUU4zV2VzZXd5dzdVZXQxU1pjaVhVMlRSSGtWeXNa?=
+ =?utf-8?B?K0hQS1VaVWZySWgzZE5zTzU0Q1diMUlJbFFodFB5MGMxU3VheWdiQ1pXeVNa?=
+ =?utf-8?B?ZHlRM3FUWThaYjdGWUFkYjQzaTYyRnh1RnZwbEVZYnMwQUs0MkhXaW9jK2V1?=
+ =?utf-8?B?S0ZrWWorYTNNSGc0WVNwSVN2b3ovamZYZG01bGlhaEVnb1RrbTZPNVZOckdZ?=
+ =?utf-8?B?ZG1BWUE1V2VUNXVJTkN6OTJQTFMvM3ZDSmtBSTM3OEpYNVFVM2h0YW42cEZj?=
+ =?utf-8?B?L3IxeHhSNzFUUTJJekEvZEI4RWdxQ1RITExITTlET2Y1TlRqRXEyeWxURWJ4?=
+ =?utf-8?B?NG5ON0srZVR0NnNTbzZGRithTEdoZkpZVlkvUFRCVUJWdlI4SlNnbG5ITnVs?=
+ =?utf-8?B?eWZsOXQ2TnJDcjQ5SUMrZ2NLYnd2Skl0VkNrQnpFV05XZ0ZKWTlTK1drbVd0?=
+ =?utf-8?B?QVZHWUpYRWFiWDh1ejV6ZmpGN2dKdmo0NmtQNXRXSjlZa25UT2p2ZTlPWWpm?=
+ =?utf-8?Q?QxkjtzCiGL23PkXciwo+BPez/?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aabf21d6-815d-4cb0-03ab-08dad6ed43bf
+X-MS-Exchange-CrossTenant-AuthSource: YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 18:19:13.1582
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 18:19:35.9937
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jJiIXIRsYiJU0DsvajJLZSxf2B7D2yyiiIa3fiuI2bjAX5pMQhxUJl/h/8HlCKRdIULdpYDdv3A08xxnITEBGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7464
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: vP5j47LlmzGHVvLbZbS0h05TdFdc3K8UZ5R5g0abCNvwnlyD85z/AU5rBykDKB35GcmuJhfCgvPLf5gKzwFbtw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB5529
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 08:30:52PM +0100, Thomas Gleixner wrote:
-> On Tue, Nov 29 2022 at 13:08, Ashok Raj wrote:
+On 2022-12-05 00:34, Michael Ellerman wrote:
+> Michael Jeanson <mjeanson@efficios.com> writes:
+>> In v5.7 the powerpc syscall entry/exit logic was rewritten in C, on
+>> PPC64_ELF_ABI_V1 this resulted in the symbols in the syscall table
+>> changing from their dot prefixed variant to the non-prefixed ones.
+>>
+>> Since ftrace prefixes a dot to the syscall names when matching them to
+>> build its syscall event list, this resulted in no syscall events being
+>> available.
+>>
+>> Remove the PPC64_ELF_ABI_V1 specific version of
+>> arch_syscall_match_sym_name to have the same behavior across all powerpc
+>> variants.
 > 
-> > Currently when early microcode loading fails there is no way for user to
+> This doesn't seem to work for me.
 > 
-> the user
+> Event with it applied I still don't see anything in /sys/kernel/debug/tracing/events/syscalls
 > 
-> > know that the update failed.
-> >
-> > Store the failed status and pass it to print_ucode_info() to let early
-> > loading failures to captured in console log.
+> Did we break it in some other way recently?
 > 
-> so that early loading failures are captured in dmesg.
+> cheers
+
+I've just tried this change on top of v6.1-rc8 in qemu with a base config of 
+'corenet32_smp_defconfig' and these options on top:
+
+CONFIG_FTRACE=y
+CONFIG_FTRACE_SYSCALLS=y
+
+And I can trace syscalls with ftrace.
+
+What kernel tree and config are you using?
+
+Thanks for looking into this.
+
 > 
-> Hmm?
+> 
+>> Fixes: 68b34588e202 ("powerpc/64/sycall: Implement syscall entry/exit logic in C")
+>> Cc: stable@vger.kernel.org # v5.7+
+>> Cc: Steven Rostedt <rostedt@goodmis.org>
+>> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Nicholas Piggin <npiggin@gmail.com>
+>> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> Cc: Michal Suchanek <msuchanek@suse.de>
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+>> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> ---
+>>   arch/powerpc/include/asm/ftrace.h | 12 ------------
+>>   1 file changed, 12 deletions(-)
+>>
+>> diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
+>> index 3cee7115441b..e3d1f377bc5b 100644
+>> --- a/arch/powerpc/include/asm/ftrace.h
+>> +++ b/arch/powerpc/include/asm/ftrace.h
+>> @@ -64,17 +64,6 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>>    * those.
+>>    */
+>>   #define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
+>> -#ifdef CONFIG_PPC64_ELF_ABI_V1
+>> -static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
+>> -{
+>> -	/* We need to skip past the initial dot, and the __se_sys alias */
+>> -	return !strcmp(sym + 1, name) ||
+>> -		(!strncmp(sym, ".__se_sys", 9) && !strcmp(sym + 6, name)) ||
+>> -		(!strncmp(sym, ".ppc_", 5) && !strcmp(sym + 5, name + 4)) ||
+>> -		(!strncmp(sym, ".ppc32_", 7) && !strcmp(sym + 7, name + 4)) ||
+>> -		(!strncmp(sym, ".ppc64_", 7) && !strcmp(sym + 7, name + 4));
+>> -}
+>> -#else
+>>   static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
+>>   {
+>>   	return !strcmp(sym, name) ||
+>> @@ -83,7 +72,6 @@ static inline bool arch_syscall_match_sym_name(const char *sym, const char *name
+>>   		(!strncmp(sym, "ppc32_", 6) && !strcmp(sym + 6, name + 4)) ||
+>>   		(!strncmp(sym, "ppc64_", 6) && !strcmp(sym + 6, name + 4));
+>>   }
+>> -#endif /* CONFIG_PPC64_ELF_ABI_V1 */
+>>   #endif /* CONFIG_FTRACE_SYSCALLS */
+>>   
+>>   #if defined(CONFIG_PPC64) && defined(CONFIG_FUNCTION_TRACER)
+>> -- 
+>> 2.34.1
 
-Thanks for the review Thomas. 
-
-Boris, I have fixups to address all of Thomas's comments. Would you
-like me to repost a new series with those fixups?
-
-I'll drop patch1, since you have merged it in tip. You have a candidate for
-patch2 as well, maybe I can drop that as well.
-
-This patch has a type cast warning for 32bit compiles that I have fixed as
-well.
-
-I added a new patch to address Thomas's comment to print revs only when
-loading succeeds[1].
-
-Cheers,
-Ashok
-
-[1] https://lore.kernel.org/lkml/874judpqqd.ffs@tglx/
