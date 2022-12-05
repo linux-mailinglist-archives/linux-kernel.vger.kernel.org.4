@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9532C642CB8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF100642CBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiLEQYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S231961AbiLEQZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:25:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiLEQX7 (ORCPT
+        with ESMTP id S231883AbiLEQZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:23:59 -0500
-Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCCE13D66;
-        Mon,  5 Dec 2022 08:23:57 -0800 (PST)
-Received: from amadeus-VLT-WX0.lan (unknown [218.85.118.194])
-        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 9A038800056;
-        Tue,  6 Dec 2022 00:23:39 +0800 (CST)
-From:   Chukun Pan <amadeus@jmu.edu.cn>
-To:     aholmes@omnom.net
-Cc:     devicetree@vger.kernel.org, ezequiel@vanguardiasur.com.ar,
-        frank-w@public-files.de, frattaroli.nicolas@gmail.com,
-        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, macromorgan@hotmail.com,
-        mark.kettenis@xs4all.nl, megi@xff.cz,
-        michael.riesch@wolfvision.net, pgwipeout@gmail.com,
-        robh+dt@kernel.org, robin.murphy@arm.com, s.hauer@pengutronix.de,
-        yifeng.zhao@rock-chips.com, Chukun Pan <amadeus@jmu.edu.cn>
-Subject: Re: [PATCH 1/1] arm64: dts: rockchip: rk356x: Fix PCIe register and range mappings
-Date:   Tue,  6 Dec 2022 00:23:22 +0800
-Message-Id: <20221205162322.149967-1-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221112114125.1637543-2-aholmes@omnom.net>
-References: <20221112114125.1637543-2-aholmes@omnom.net>
+        Mon, 5 Dec 2022 11:25:24 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F14A1DDE9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:25:23 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e72f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72f:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ADE5D1EC0674;
+        Mon,  5 Dec 2022 17:25:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670257521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=u/8q7IKW2/01CTBav2jPOwHr2XBf6TJfCZXjOCyErE0=;
+        b=LJEbfxJg4EX5NT7mZBZ29X7gc/20e8bCJ8TryrYd/etq4n/YKZHzGoRIQ/74+sB8byPsms
+        DT0MvV8fpK0sBDa1OIktH4Id8l98lK7/KXKhyDLNF222qC9pLgoD38OY80z6GjnBmGrz/Q
+        yCnxRt0vZ1EDKD41hSbNO6dczj3dO+Y=
+Date:   Mon, 5 Dec 2022 17:25:17 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     X86-kernel <x86@kernel.org>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>, alison.schofield@intel.com,
+        reinette.chatre@intel.com
+Subject: Re: [Patch V1 3/7] x86/microcode/core: Move microcode_check() to
+ cpu/microcode/core.c
+Message-ID: <Y44bbZMMf8I6Lzl/@zn.tnic>
+References: <20221129210832.107850-1-ashok.raj@intel.com>
+ <20221129210832.107850-4-ashok.raj@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHRkYVhhMSxhMHUlDGkpNTFUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlKQ1VDTlVKSkNVSkJPWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVSktLVUtZBg++
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQw6KQw4Ez0fSw8*TA0VNSsP
-        DUswCQJVSlVKTUxLSU5MT0lLT01JVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlK
-        Q1VDTlVKSkNVSkJPWVdZCAFZQUlNTE43Bg++
-X-HM-Tid: 0a84e319a72bb03akuuu9a038800056
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221129210832.107850-4-ashok.raj@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The register and range mappings for the PCIe controller in Rockchip's
-> RK356x SoCs are incorrect. Replace them with corrected values from the
-> vendor BSP sources, updated to match current DT schema.
+On Tue, Nov 29, 2022 at 01:08:28PM -0800, Ashok Raj wrote:
+> microcode_check() is only called from microcode/core.c. Move it and make
+> it static to prepare for upcoming fix of false negative when checking CPU
+> features after a microcode update.
 
-Hi, Andrew
+So this function is there in cpu/common.c because it uses CPU facilities
+like cpuinfo_x86 and get_cpu_cap() so the logical place was there.
+So that I don't have to export a bunch of things but rather have the
+microcode loader call into it only.
 
-This patch broken pcie3x2 on my board.
-And the wireless card on pcie2x1 is still not working.
+Your next patch is using more of those CPU-specific facilities so
+"bleeding" them into the microcode loader looks like the wrong way
+around.
 
-[    0.405341] pcieport 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
-[    0.670522] rockchip-dw-pcie 3c0800000.pcie: can't request region for resource [mem 0xf2000000-0xf2ffffff]
-[    0.671527] rockchip-dw-pcie: probe of 3c0800000.pcie failed with error -16
-[    7.354521] pci 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
-[    7.355116] mt7921e 0000:01:00.0: enabling device (0000 -> 0002)
-[    7.355812] mt7921e: probe of 0000:01:00.0 failed with error -28
-
---
-Thanks,
-Chukun
+get_cpu_cap() deals with all those c->x86_capability arrays and other
+functions which do that, should be there too.
 
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
