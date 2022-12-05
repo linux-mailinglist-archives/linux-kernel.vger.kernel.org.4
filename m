@@ -2,107 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE596425CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD476425CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiLEJaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S231160AbiLEJao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiLEJaS (ORCPT
+        with ESMTP id S231148AbiLEJae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:30:18 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9209A15800
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:30:16 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id x22so3889530ejs.11
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:30:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FDSrwTaiYkeBidVUL1wtnaARBnuugrDybG4J4B7KjRQ=;
-        b=Ek0fC49oSagD3Ul+L5jopBmUBuROZhyg8VcZqkQLTLLSW289nCIWsDjmqkq4Lfw3jn
-         6JTFUVwUuz/ucY7tHQ7rjwKWqiLvK4QBoG2qCjn/7uTS+IxdOeI19s/gXRup1X8kZZTq
-         NHkqvHENyjPX4T6Ko8Z0crqu/RPwk48aBb4ZhEv8pAjM1BZTGxx9FlYJfTEp57nCwAhy
-         sB9Ntjtk70cgt8Zpy4oHiVoRCcCWyNwGuyvebX9d7ovvFMpTNf4VlyXVEl2QIm3wkPch
-         s84BmvXPo33pDnXrac/2nfzR/irs9Ufr+UFiGKtljIbiwaTllL77iZJsEL4SSshmW1xY
-         z4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDSrwTaiYkeBidVUL1wtnaARBnuugrDybG4J4B7KjRQ=;
-        b=z1eI4s1A/MPnVrmxH63vQP2S2/4ah6KpYysxR4gh4myoc/EmV6eyah2ABCNMZbclQe
-         ftiIMqMX3yGp7fB2XtDSV0zTowc48qLYfxttwqZDp3pHgxGMdCf4cF/INeIanV77U1ne
-         hmUhY7V1m08yCTkcPaTGPJ68dK0yeMjdMYQQuqdZ9BDFjIwELY+rOjH85X7UMWADyemi
-         GWZedfwVDkaS5tR0t+IHFP3IqPnDBZkanGwwHdLUGw3cHB0VB2ADGTR63nRhGLkY8MY/
-         MBJL23QlqtTf0qWKo+wU5QFZ/+xKcVzoB8cNvRyGC84VYUmaxqcOtW66PjoZF4dC6B5S
-         qRgA==
-X-Gm-Message-State: ANoB5pl7ZKlCIqZ/vJwvUCw24PRWEmFdpTRQpZaRM8t0iJe+mM+Dr6oB
-        5HrgzwNphHrfc+Gcln56+bMwCA==
-X-Google-Smtp-Source: AA0mqf4TucuADXPXXqE+4vnUK9TP8V9mLlh1wYufLkkd/GzpBoGLKx7nJ3ZNqqhERafJoj9+vyiZjg==
-X-Received: by 2002:a17:906:a1a:b0:79e:9aea:7b60 with SMTP id w26-20020a1709060a1a00b0079e9aea7b60mr70679116ejf.444.1670232615061;
-        Mon, 05 Dec 2022 01:30:15 -0800 (PST)
-Received: from blmsp ([185.238.219.11])
-        by smtp.gmail.com with ESMTPSA id o26-20020a170906289a00b007415f8ffcbbsm6136319ejd.98.2022.12.05.01.30.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 01:30:14 -0800 (PST)
-Date:   Mon, 5 Dec 2022 10:30:13 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
-Message-ID: <20221205093013.kpsqyb3fhd5njubm@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-15-msp@baylibre.com>
- <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
+        Mon, 5 Dec 2022 04:30:34 -0500
+Received: from out30-1.freemail.mail.aliyun.com (out30-1.freemail.mail.aliyun.com [115.124.30.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F04186DA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:30:31 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=0;PH=DS;RN=8;SR=0;TI=SMTPD_---0VWQvSYN_1670232627;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VWQvSYN_1670232627)
+          by smtp.aliyun-inc.com;
+          Mon, 05 Dec 2022 17:30:29 +0800
+Date:   Mon, 5 Dec 2022 17:30:26 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     syzbot <syzbot+2ae90e873e97f1faf6f2@syzkaller.appspotmail.com>
+Cc:     chao@kernel.org, huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, xiang@kernel.org
+Subject: Re: [syzbot] KASAN: use-after-free Read in z_erofs_transform_plain
+Message-ID: <Y426Mo9cweiBi77q@B-P7TQMD6M-0146.local>
+References: <00000000000041127805ef10446a@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <00000000000041127805ef10446a@google.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
-
-On Fri, Dec 02, 2022 at 03:28:10PM +0100, Marc Kleine-Budde wrote:
-> On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
-> > According to the datasheet 0x1c is the last register in the first block,
-> > not register 0x2c.
+On Mon, Dec 05, 2022 at 12:13:47AM -0800, syzbot wrote:
+> Hello,
 > 
-> The datasheet "SLLSF91A – DECEMBER 2018 – REVISED JANUARY 2020" says:
+> syzbot found the following issue on:
 > 
-> | 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
-> | 16'h002F
+> HEAD commit:    97ee9d1c1696 Merge tag 'block-6.1-2022-12-02' of git://git..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1786b2f5880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2ae90e873e97f1faf6f2
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=115e5c47880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=170fa3d5880000
 > 
-> While the last described register is at 0xc.
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/6a6a9ff34dfa/disk-97ee9d1c.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/2a01a4182c2b/vmlinux-97ee9d1c.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/4371158e8c25/bzImage-97ee9d1c.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/22dcea976d97/mount_0.gz
+> 
 
-Sorry, not sure what I looked up here. The last described register is
-0x10 SPI Error status mask in my datasheet:
-'SLLSEZ5D – JANUARY 2018 – REVISED JUNE 2022'
+It seems another report due to mixed ztailpacking (inline) and
+non-inlined pclusters at once.
 
-I would prefer using the actual registers if that is ok with you, so
-0x10 here because I assume the remaining registers have internal use or
-maybe don't exist at all?! If there is an undocumented register that
-needs to be used at some point we can still modify the ranges.
+(Although I need to add another check for mixed algorithm formats for
+ a single pcluster as well..)
 
-Also it seems the existing ranges are following the same logic and don't
-list the whole range, just the documented registers.
+#syz fix: erofs: Fix pcluster memleak when its block address is zero 
 
-The second range is wrong as well. The last register is 0x830, will fix.
+> The issue was bisected to:
+> 
+> commit dcbe6803fffd387f72b48c2373b5f5ed12a5804b
+> Author: Gao Xiang <hsiangkao@linux.alibaba.com>
+> Date:   Thu May 12 11:58:33 2022 +0000
+> 
+>     erofs: fix buffer copy overflow of ztailpacking feature
+> 
 
-Best,
-Markus
+It caused KASAN to begin to report, but it's not the root cause. Just
+ignore it.
+
+Thanks,
+Gao Xiang
