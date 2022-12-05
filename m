@@ -2,218 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455166439B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30636439B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbiLEX5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 18:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S232481AbiLEX6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 18:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiLEX5v (ORCPT
+        with ESMTP id S230151AbiLEX6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 18:57:51 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C1C6268
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:57:50 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id o189so3050579iof.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:57:50 -0800 (PST)
+        Mon, 5 Dec 2022 18:58:32 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8DB65E5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:58:31 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id p24so12365215plw.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GSIqPXduJlFanom97XBLoEuLvh8SiPtbTgxfQXMpbc0=;
-        b=kkNSWN2zeC0fdFsxdmzfipXeOEUbzILOt6EOpxumoJHrTAPZ0+VK8dI4YAfrt/x3Vj
-         bD2vugxlIPivNs94+1JmU2kQhkNfkJelQhRN6Kh6mAUpm5HuNKWpp3/Am305Pvi03tkq
-         1UJ4F995pxzAwdmAF2yiwfmtZdXbllziUDo54=
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/HXLTVye+YBHgwzsVjQE7IM6Q/B5dkMbda8W38AW5U=;
+        b=1VD2+yeaoB56MIKwkZMtD+CBgiolHgSXmTJSsOr/tV472LlQ73j5kvScI62kK8NbAi
+         aVmtI6CIeeQOAjd+FXaXzwo3EqBEqvIP44z+9wSz2KAI/UPJWgoPibpt6lyOyF384rJ+
+         3JYob4Wb1wWXGsPJsenKlizwLwW6RghQ9/GlhqmKKZeCxASyzFaK3e6JoYsDz37X+/G5
+         QuGrU/RZUO9mVY4C3bDZ/p36gB5z8AlLbhox2ewY48LURtH5KY4A+4ch+4f+J1cM9Nyc
+         BGM2AO5l1lIbb3WyQPZx6o4USCsOOq2Nw4/BcVVsPV69jZLYibOTjlqbMl9QN9nvIFp/
+         En/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GSIqPXduJlFanom97XBLoEuLvh8SiPtbTgxfQXMpbc0=;
-        b=fM2Z08oAIgKIKuPSYcUCdH//vrdGgt+/TppNy0uKFxSI4kf+BvutKevWEvovAuae+n
-         fx8I2fP+kWvussOr1SpYOBixdNsXzwK304xX9RbufgAes4xHUfZ8IKA3Mqpwl5e2sSU2
-         Q5fJ3QicHBTjGFbz/jL0YLuePYpi3NRU0P2bG0RS5nCktUypV12Y2EmPRUrHNVh9n5d7
-         30xYM6AO5Gnb2wkLbpbjXn6dX6Kgs6xFNpSuPG3m/AcIKYbLupDUvUTuJvAGe1DB3r8B
-         DbbFupHIgazc9jvp0Jel6s0XM/+bsA9+qX+53eSjLsqmApTHDgp4eWshO+bKyCV/Kn1k
-         m6wQ==
-X-Gm-Message-State: ANoB5pnjHifMAe3v+X5xawIuYwtN90Us+GQ3d+d4vbPL13837enRKe0r
-        0+TuMnkZWEoCUziSi3z4k/kKCgj1BG2llhLXgHv3cQ==
-X-Google-Smtp-Source: AA0mqf5VoIOH9QFbpAB4o5gTYC527MWyFJflUGxzkBDyOuWYxJkHGOEqztGfwWZZIsMDaPdg2v2T/g3kgrpW4+z/cTo=
-X-Received: by 2002:a02:ce9a:0:b0:389:e42b:89fb with SMTP id
- y26-20020a02ce9a000000b00389e42b89fbmr17113953jaq.281.1670284669913; Mon, 05
- Dec 2022 15:57:49 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U/HXLTVye+YBHgwzsVjQE7IM6Q/B5dkMbda8W38AW5U=;
+        b=nTV+Xb1cp6TpsokU4Fc+XjzhVjXxwHIm84CarZGtGxoIAxgKC3rsv1d0vSxSsc3mct
+         h55ZukknFNGld9iRzc/BBd4zudMLbSmCaTGsWEnd7ngC4KaT5ootFZLOPacLlKblGkgm
+         8uULipKIu1nzGOkkSxKcsNMe0063Wn6JgL1DuWHEONYkBzo3VTfQyswqcqEj9g3vs+mj
+         Kec2PbOXzP6GSPXnvfZvS/2fUN3On9DmbDLJ1Q+2qSCrJMRr1jwb2HBW2LVXlmHs+Kd5
+         5g7tROWGxUGm8duPsqtF3HYDLCG+dxJ1X/YXc48+JdZ9tR+cjhfg2go6BkQW/ufkfPqC
+         q5qw==
+X-Gm-Message-State: ANoB5plsYRGUrHByCq9M1vcxdrpOZcGzPQHWIRIYexB2ykNk4/Y77xgB
+        z6zT0uL+WcpcrCiCKpKXDe8CHQ==
+X-Google-Smtp-Source: AA0mqf75pQcKCeUlHim+EYQnMg/KLDWrpiR4pcZDA7OzIc1fg1wmHYfyVg/dUk9hamdjldnFtxbhLA==
+X-Received: by 2002:a17:90a:dc18:b0:219:b8f8:9b80 with SMTP id i24-20020a17090adc1800b00219b8f89b80mr11859093pjv.54.1670284711125;
+        Mon, 05 Dec 2022 15:58:31 -0800 (PST)
+Received: from dread.disaster.area (pa49-181-54-199.pa.nsw.optusnet.com.au. [49.181.54.199])
+        by smtp.gmail.com with ESMTPSA id i17-20020a170902c95100b00189847cd4acsm11282927pla.237.2022.12.05.15.58.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 15:58:30 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1p2LLv-004z6x-PA; Tue, 06 Dec 2022 10:58:27 +1100
+Date:   Tue, 6 Dec 2022 10:58:27 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>
+Cc:     djwong@kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
+Message-ID: <20221205235827.GR3600936@dread.disaster.area>
+References: <000000000000abbde005ef113644@google.com>
+ <0000000000009a423705ef123f9a@google.com>
 MIME-Version: 1.0
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
- <Y30rdnZ+lrfOxjTB@cmpxchg.org> <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
- <CABWYdi0qhWs56WK=k+KoQBAMh+Tb6Rr0nY4kJN+E5YqfGhKTmQ@mail.gmail.com> <Y4T43Tc54vlKjTN0@cmpxchg.org>
-In-Reply-To: <Y4T43Tc54vlKjTN0@cmpxchg.org>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Mon, 5 Dec 2022 15:57:39 -0800
-Message-ID: <CABWYdi0z6-46PrNWumSXWki6Xf4G_EP1Nvc-2t00nEi0PiOU3Q@mail.gmail.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000009a423705ef123f9a@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 10:07 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Tue, Nov 22, 2022 at 05:28:24PM -0800, Ivan Babrou wrote:
-> > On Tue, Nov 22, 2022 at 2:11 PM Ivan Babrou <ivan@cloudflare.com> wrote:
-> > >
-> > > On Tue, Nov 22, 2022 at 12:05 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > > >
-> > > > On Mon, Nov 21, 2022 at 04:53:43PM -0800, Ivan Babrou wrote:
-> > > > > Hello,
-> > > > >
-> > > > > We have observed a negative TCP throughput behavior from the following commit:
-> > > > >
-> > > > > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
-> > > > >
-> > > > > It landed back in 2016 in v4.5, so it's not exactly a new issue.
-> > > > >
-> > > > > The crux of the issue is that in some cases with swap present the
-> > > > > workload can be unfairly throttled in terms of TCP throughput.
-> > > >
-> > > > Thanks for the detailed analysis, Ivan.
-> > > >
-> > > > Originally, we pushed back on sockets only when regular page reclaim
-> > > > had completely failed and we were about to OOM. This patch was an
-> > > > attempt to be smarter about it and equalize pressure more smoothly
-> > > > between socket memory, file cache, anonymous pages.
-> > > >
-> > > > After a recent discussion with Shakeel, I'm no longer quite sure the
-> > > > kernel is the right place to attempt this sort of balancing. It kind
-> > > > of depends on the workload which type of memory is more imporant. And
-> > > > your report shows that vmpressure is a flawed mechanism to implement
-> > > > this, anyway.
-> > > >
-> > > > So I'm thinking we should delete the vmpressure thing, and go back to
-> > > > socket throttling only if an OOM is imminent. This is in line with
-> > > > what we do at the system level: sockets get throttled only after
-> > > > reclaim fails and we hit hard limits. It's then up to the users and
-> > > > sysadmin to allocate a reasonable amount of buffers given the overall
-> > > > memory budget.
-> > > >
-> > > > Cgroup accounting, limiting and OOM enforcement is still there for the
-> > > > socket buffers, so misbehaving groups will be contained either way.
-> > > >
-> > > > What do you think? Something like the below patch?
-> > >
-> > > The idea sounds very reasonable to me. I can't really speak for the
-> > > patch contents with any sort of authority, but it looks ok to my
-> > > non-expert eyes.
-> > >
-> > > There were some conflicts when cherry-picking this into v5.15. I think
-> > > the only real one was for the "!sc->proactive" condition not being
-> > > present there. For the rest I just accepted the incoming change.
-> > >
-> > > I'm going to be away from my work computer until December 5th, but
-> > > I'll try to expedite my backported patch to a production machine today
-> > > to confirm that it makes the difference. If I can get some approvals
-> > > on my internal PRs, I should be able to provide the results by EOD
-> > > tomorrow.
-> >
-> > I tried the patch and something isn't right here.
->
-> Thanks for giving it a sping.
->
-> > With the patch applied I'm capped at ~120MB/s, which is a symptom of a
-> > clamped window.
-> >
-> > I can't find any sockets with memcg->socket_pressure = 1, but at the
-> > same time I only see the following rcv_ssthresh assigned to sockets:
->
-> Hm, I don't see how socket accounting would alter the network behavior
-> other than through socket_pressure=1.
->
-> How do you look for that flag? If you haven't yet done something
-> comparable, can you try with tracing to rule out sampling errors?
+On Mon, Dec 05, 2022 at 02:35:39AM -0800, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    0ba09b173387 Revert "mm: align larger anonymous mappings o..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15550c47880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=912776840162c13db1a3
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=128c9e23880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/9758ec2c06f4/disk-0ba09b17.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/06781dbfd581/vmlinux-0ba09b17.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/3d44a22d15fa/bzImage-0ba09b17.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/335889b2d730/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+912776840162c13db1a3@syzkaller.appspotmail.com
 
-Apologies for a delayed reply, I took a week off away from computers.
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-I looked with bpftrace (from my bash_history):
 
-$ sudo bpftrace -e 'kprobe:tcp_try_rmem_schedule { @sk[cpu] = arg0; }
-kretprobe:tcp_try_rmem_schedule { $arg = @sk[cpu]; if ($arg) { $sk =
-(struct sock *) $arg; $id = $sk->sk_memcg->css.cgroup->kn->id;
-$socket_pressure = $sk->sk_memcg->socket_pressure; if ($id == 21379) {
-printf("id = %d, socket_pressure = %d\n", $id, $socket_pressure); } }
-}'
+xfs: dquot shrinker doesn't check for XFS_DQFLAG_FREEING
 
-I tried your patch on top of v6.1-rc8 (where it produced no conflicts)
-in my vm and it still gave me low numbers and nothing in
-/sys/kernel/debug/tracing/trace. To be extra sure, I changed it from
-trace_printk to just printk and it still didn't show up in dmesg, even
-with constant low throughput:
+From: Dave Chinner <dchinner@redhat.com>
 
-ivan@vm:~$ curl -o /dev/null https://sim.cfperf.net/cached-assets/zero-5g.bin
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
- 14 4768M   14  685M    0     0  12.9M      0  0:06:08  0:00:52  0:05:16 13.0M
+Resulting in a UAF if the shrinker races with some other dquot
+freeing mechanism that sets XFS_DQFLAG_FREEING before the dquot is
+removed from the LRU. This can occur if a dquot purge races with
+drop_caches.
 
-I still saw clamped rcv_ssthresh:
+Reported-by: syzbot+912776840162c13db1a3@syzkaller.appspotmail.com
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+---
+ fs/xfs/xfs_qm.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-$ sudo ss -tinm dport 443
-State                  Recv-Q                  Send-Q
-                 Local Address:Port
-  Peer Address:Port                  Process
-ESTAB                  0                       0
-                     10.2.0.15:35800
-162.159.136.82:443
-skmem:(r0,rb2577228,t0,tb46080,f0,w0,o0,bl0,d0) cubic rto:201
-rtt:0.42/0.09 ato:40 mss:1460 pmtu:1500 rcvmss:1440 advmss:1460
-cwnd:10 bytes_sent:12948 bytes_acked:12949 bytes_received:2915062731
-segs_out:506592 segs_in:2025111 data_segs_out:351 data_segs_in:2024911
-send 278095238bps lastsnd:824 lastrcv:154 lastack:154 pacing_rate
-556190472bps delivery_rate 47868848bps delivered:352 app_limited
-busy:147ms rcv_rtt:0.011 rcv_space:82199 rcv_ssthresh:5840
-minrtt:0.059 snd_wnd:65535 tcp-ulp-tls rxconf: none txconf: none
-
-I also tried with my detection program for ebpf_exporter (fexit based version):
-
-* https://github.com/cloudflare/ebpf_exporter/pull/172/files
-
-Which also showed signs of a clamped window:
-
-# HELP ebpf_exporter_tcp_window_clamps_total Number of times that TCP
-window was clamped to a low value
-# TYPE ebpf_exporter_tcp_window_clamps_total counter
-ebpf_exporter_tcp_window_clamps_total 53887
-
-In fact, I can replicate this with just curl to a public URL and fio running,
-
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 066166aebbef..134b623bee6a 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -7211,6 +7211,7 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
->                 goto success;
->         }
->         memcg->socket_pressure = 1;
-> +       trace_printk("skmem charge failed nr_pages=%u gfp=%pGg\n", nr_pages, &gfp_mask);
->         if (gfp_mask & __GFP_NOFAIL) {
->                 try_charge(memcg, gfp_mask, nr_pages);
->                 goto success;
+diff --git a/fs/xfs/xfs_qm.c b/fs/xfs/xfs_qm.c
+index 18bb4ec4d7c9..ff53d40a2dae 100644
+--- a/fs/xfs/xfs_qm.c
++++ b/fs/xfs/xfs_qm.c
+@@ -422,6 +422,14 @@ xfs_qm_dquot_isolate(
+ 	if (!xfs_dqlock_nowait(dqp))
+ 		goto out_miss_busy;
+ 
++	/*
++	 * If something else is freeing this dquot and hasn't yet removed it
++	 * from the LRU, leave it for the freeing task to complete the freeing
++	 * process rather than risk it being free from under us here.
++	 */
++	if (dqp->q_flags & XFS_DQFLAG_FREEING)
++		goto out_miss_unlock;
++
+ 	/*
+ 	 * This dquot has acquired a reference in the meantime remove it from
+ 	 * the freelist and try again.
+@@ -441,10 +449,8 @@ xfs_qm_dquot_isolate(
+ 	 * skip it so there is time for the IO to complete before we try to
+ 	 * reclaim it again on the next LRU pass.
+ 	 */
+-	if (!xfs_dqflock_nowait(dqp)) {
+-		xfs_dqunlock(dqp);
+-		goto out_miss_busy;
+-	}
++	if (!xfs_dqflock_nowait(dqp))
++		goto out_miss_unlock;
+ 
+ 	if (XFS_DQ_IS_DIRTY(dqp)) {
+ 		struct xfs_buf	*bp = NULL;
+@@ -478,6 +484,8 @@ xfs_qm_dquot_isolate(
+ 	XFS_STATS_INC(dqp->q_mount, xs_qm_dqreclaims);
+ 	return LRU_REMOVED;
+ 
++out_miss_unlock:
++	xfs_dqunlock(dqp);
+ out_miss_busy:
+ 	trace_xfs_dqreclaim_busy(dqp);
+ 	XFS_STATS_INC(dqp->q_mount, xs_qm_dqreclaim_misses);
