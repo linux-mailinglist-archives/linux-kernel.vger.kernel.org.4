@@ -2,115 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1FE642351
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856F9642354
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiLEHEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 02:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S231582AbiLEHFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 02:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiLEHEQ (ORCPT
+        with ESMTP id S231365AbiLEHFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 02:04:16 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3284EBC1F
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:04:16 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 136so9716811pga.1
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 23:04:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h1bJFFDrDxQsc4ff8Y0/CXofAwUfqeUT0bE4h35AYNs=;
-        b=Felel6oVSSOeWo9WtY3lbL22k+EDE+7nyP+Qd+OBtBrevi4M6iaRzTQ/eNKgUh1r8I
-         4P2rqcxXP4yLd3r+vJw8EfRlBJprKkfnIFsxSiZFPyBwuFy+pdXecuWOwQiZMYV4M/+g
-         pkh4XAhE2/ZTKtnq3m/QAZ4aEABmnM+LFJgjW+u+W5CTQKs4r+W9hn7wquyoa8aMYTLl
-         FK6E9fSIfLYo1rjJ9WWKYOXlLgXQ4JjIT3xsez4pwdtHLOIqQT4CZoSa4CpxREQ6i4yI
-         xBM4hFm4J0MQahDqNQ71M+luup1FFfiT+YELFlrpqVyq4w6AkoL0eZv1jiKM5MuRQWft
-         ry/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h1bJFFDrDxQsc4ff8Y0/CXofAwUfqeUT0bE4h35AYNs=;
-        b=OfU+qvYrOh0Exba9lzsPYVvbmwpJcWmE44KqjqnidZzc/WfNMI7AWnN3e3UBFJiyeJ
-         Jw3oCkkiS4sBWlDb5+qN316P9gLJBW5sJoT/FaImqVJ98nUvlbux2PFu9fUwjxekZ3lP
-         XMka6+isft2UM758oJhBzCi/fenciWSzvNL5egRYZ+t4zGuLu3vB5Xlo2EEgSkGFWl8x
-         HgEYWKYDxOsDc1OiLrLD0hPJLpEw9K7Nz3ySIGdmyHMlwpC3oylnHkiEUZjz1Xy95LHd
-         QjfM1KpnD9z5X/fbmD44bkVKlM6uzjI7u58OqZ1imFdGJT4g8c19EcEiuAF5b6igyZoT
-         buFQ==
-X-Gm-Message-State: ANoB5pm9Kynkh6XmR0RfJazlQS6AvpRAW/pX8ZUnnf/U+6X/F/Wn8rGN
-        NupIRTuDmQ9YDt834O3egjSHuQ==
-X-Google-Smtp-Source: AA0mqf6vGyhJfE52eV9y6PzkBHCXdFvyEl+8lWX22unoM+rheK6oYjMO3iEPc3EPmL6c59Vo/KVNbQ==
-X-Received: by 2002:aa7:9892:0:b0:576:4aef:f1e7 with SMTP id r18-20020aa79892000000b005764aeff1e7mr15811346pfl.18.1670223855619;
-        Sun, 04 Dec 2022 23:04:15 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id px13-20020a17090b270d00b00218fb3bec27sm8532066pjb.56.2022.12.04.23.04.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 23:04:15 -0800 (PST)
-Message-ID: <67b0db30-49d5-4ba7-1764-dbae16f13d7e@9elements.com>
-Date:   Mon, 5 Dec 2022 12:34:11 +0530
+        Mon, 5 Dec 2022 02:05:39 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF391BC93;
+        Sun,  4 Dec 2022 23:05:38 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B4NRLY5032413;
+        Sun, 4 Dec 2022 23:05:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=J51TjlbGZxngqrd64GNJBARAUG5iCA1resE94iExrZI=;
+ b=graz+9WY4V4jVIBgF8J13Wbqua4vlwGjdfyen6dUjHuUosJGyg9cbkQDbq0z7bR6j+2o
+ tnO+/Rn+nJRQ8/Fti8dQKLVz6Pasm3C6GAlwJzvcsc+dghhjRcVybzdMGPyiJVuviusi
+ GqH0HMWVD5cI8JeMPSXr1rNYu/c8qHaJM2CmWmRZsWyNNqZ43uxSQE43rAngWtEj7+7b
+ uZijmlZf0U5DuCGDkdcLuvW5Qosk/NIAFtrRIXr0nBhFrm7m0xuw/iy7KhiyuAUbITNH
+ 8B/2H+khYIfE5dGAuKxx1R4+FtSHQ/qWXQWmdX/VAhpKJVClnizt1fYskoIe/qy3hdtu dg== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3m84pumnvr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 04 Dec 2022 23:05:29 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 4 Dec
+ 2022 23:05:25 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 4 Dec 2022 23:05:25 -0800
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 7EE803F707A;
+        Sun,  4 Dec 2022 23:05:22 -0800 (PST)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <pabeni@redhat.com>,
+        <edumazet@google.com>, <sgoutham@marvell.com>,
+        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
+        <sbhatta@marvell.com>
+Subject: [net-next Patch v4 0/4] CN10KB MAC block support
+Date:   Mon, 5 Dec 2022 12:35:17 +0530
+Message-ID: <20221205070521.21860-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RESEND PATCH v11 1/2] dt-bindings: mfd: Add MAX5970 and MAX5978
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        devicetree@vger.kernel.org
-References: <20221124110210.3905092-1-Naresh.Solanki@9elements.com>
- <20221124110210.3905092-2-Naresh.Solanki@9elements.com>
- <166976687726.552364.17379342841980861555.robh@kernel.org>
-Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <166976687726.552364.17379342841980861555.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: TAQatKYat40nPoe5_SEq1ZpJkPPOeftT
+X-Proofpoint-GUID: TAQatKYat40nPoe5_SEq1ZpJkPPOeftT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-05_01,2022-12-01_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+OcteonTx2's next gen platform the CN10KB has RPM_USX MAC which has a
+different serdes when compared to RPM MAC. Though the underlying
+HW is different, the CSR interface has been designed largely inline
+with RPM MAC, with few exceptions though. So we are using the same
+CGX driver for RPM_USX MAC as well and will have a different set of APIs
+for RPM_USX where ever necessary.
 
-On 30-11-2022 05:38 am, Rob Herring wrote:
-> On Thu, 24 Nov 2022 12:02:08 +0100, Naresh Solanki wrote:
->> From: Marcello Sylvester Bauer <sylv@sylv.io>
->>
->> The MAX597x is a hot swap controller with configurable fault protection.
->> It also has 10bit ADC for current & voltage measurements.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Co-developed-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   .../bindings/mfd/maxim,max5970.yaml           | 151 ++++++++++++++++++
->>   1 file changed, 151 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
->>
-> 
-> 
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
-> 
-> If a tag was not added on purpose, please state why and what changed.
-> 
-> Missing tags:
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> 
-I was not sure about adding tag for patch resend.
+The RPM and RPM_USX blocks support a different number of LMACS.
+RPM_USX support 8 LMACS per MAC block whereas legacy RPM supports only 4
+LMACS per MAC. with this RPM_USX support double the number of DMAC filters
+and fifo size.
 
-Regards,
-Naresh
+This patchset adds initial support for CN10KB's RPM_USX  MAC i.e
+registering the driver and defining MAC operations (mac_ops). With these
+changes PF and VF netdev packet path will work and PF and VF netdev drivers
+are able to configure MAC features like pause frames,PFC and loopback etc.
+
+Also implements FEC stats for CN10K Mac block RPM and CN10KB Mac block
+RPM_USX and extends ethtool support for PF and VF drivers by defining
+get_fec_stats API to display FEC stats.
+
+Hariprasad Kelam (3):
+  octeontx2-af: cn10kb: Add RPM_USX MAC support
+  octeontx2-pf: ethtool: Implement get_fec_stats
+  octeontx2-af: Add FEC stats for RPM/RPM_USX block
+
+Rakesh Babu Saladi (1):
+  octeontx2-af: Support variable number of lmacs
+
+ .../net/ethernet/marvell/octeontx2/af/cgx.c   |  78 ++++--
+ .../net/ethernet/marvell/octeontx2/af/cgx.h   |   9 +-
+ .../marvell/octeontx2/af/lmac_common.h        |  15 +-
+ .../net/ethernet/marvell/octeontx2/af/rpm.c   | 262 ++++++++++++++++--
+ .../net/ethernet/marvell/octeontx2/af/rpm.h   |  36 ++-
+ .../net/ethernet/marvell/octeontx2/af/rvu.h   |  12 +-
+ .../ethernet/marvell/octeontx2/af/rvu_cgx.c   |  49 +++-
+ .../marvell/octeontx2/af/rvu_debugfs.c        |   2 +-
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |  10 +-
+ .../marvell/octeontx2/af/rvu_npc_hash.c       |   4 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |  34 +++
+ 11 files changed, 428 insertions(+), 83 deletions(-)
+
+--
+2.17.1
