@@ -2,155 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5E16423E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB33E6423E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 08:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiLEH5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 02:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S231810AbiLEH54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 02:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiLEH5E (ORCPT
+        with ESMTP id S231186AbiLEH5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 02:57:04 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139B51144B;
-        Sun,  4 Dec 2022 23:57:01 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NQbVN46vkz5BNRf;
-        Mon,  5 Dec 2022 15:57:00 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2B57ukZw098774;
-        Mon, 5 Dec 2022 15:56:46 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Mon, 5 Dec 2022 15:56:47 +0800 (CST)
-Date:   Mon, 5 Dec 2022 15:56:47 +0800 (CST)
-X-Zmail-TransId: 2af9638da43fffffffff9e6764cf
-X-Mailer: Zmail v1.0
-Message-ID: <202212051556478226726@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <lee@kernel.org>, <daniel.thompson@linaro.org>
-Cc:     <jingoohan1@gmail.com>, <deller@gmx.de>,
-        <dri-devel@lists.freedesktop.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGJhY2tsaWdodDogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B57ukZw098774
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 638DA44C.000 by FangMail milter!
-X-FangMail-Envelope: 1670227020/4NQbVN46vkz5BNRf/638DA44C.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638DA44C.000/4NQbVN46vkz5BNRf
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Dec 2022 02:57:54 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE03101C4
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Dec 2022 23:57:51 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id z24so12598160ljn.4
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Dec 2022 23:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+mjY+Aw33vNoLhNFW8eR1AS84QQXckLSL348+SjEoWA=;
+        b=xCZcOwkZPfg3Uj0MJRscHTJ3VLWj6/ZAOA6mLurLh0S79Dcz2Kk5UcmbSXdzoz24lS
+         yJZ3JCxY7mfS+DRWvueqoV6Ep0pL6HX9ViCuIBMsZOHHyOdLU3fYNeooX+hTWKR7OEEr
+         jzRDP/GRYjE9ytVUZGXX+oUv3uTWUe/+8xW1s7wg+vpeyyTuDXKUOYJQNJS4lS/Euqpv
+         6f8lzhCg5Dp1Ll143TMuEJRbWWBhaEy7RTlollOGALdzgg78Yeer0fsw0dWwUtFV491E
+         S3olL1EhbrE+wzb6Cvp0tjPIEbJpqzHGaodQMgdNe3VAYNA/CuMnsDDrXPQ5GySvYTxR
+         h5rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+mjY+Aw33vNoLhNFW8eR1AS84QQXckLSL348+SjEoWA=;
+        b=yXFFjslyRcpx+y/f3hBbut8yrKKo2o/Rl0byR1rRqCGEHFOVqC1zDbAxPyK4bTK4M9
+         IxANcDO4fkQFDz8vRZZmuWMjUI0FbqO4UcABMOypSjTdDFHX5B/+k1VtXnCDTf+BKpFO
+         9/6kS75vNQbKFhivgKauu1ELvkk9eFecjMa/OqPA3Zw0mKS7gDvDp1b/SvNeojS4sjf6
+         ZUHiZlp/Tx1yqEbUNAUNfiwmR3pDuFbA1nKfY0cy4+Dha5b7hVsbrozFQPiomw+YZA7j
+         zRq3gyfBI36VlXTYBhjJlbtFMB+K/m53iIKHiOMgWOWAvbp8EovSXnRpce46M6yh+rW0
+         Bp7w==
+X-Gm-Message-State: ANoB5pl+TJShwKQ2JrC0sL7J+ByholYHVfWWoF7sabamdolWzW4McbUw
+        qfPGMX3lXics5Bq1kgmvfOpjYg==
+X-Google-Smtp-Source: AA0mqf7jeQcW2QaF0esimh/26E6TOXETmSNLrgMmf1UWasHde1ZnI5PqVPQR32ARJfwORw0EXyhlRQ==
+X-Received: by 2002:a05:651c:179e:b0:26d:fcef:7d84 with SMTP id bn30-20020a05651c179e00b0026dfcef7d84mr21323466ljb.9.1670227069916;
+        Sun, 04 Dec 2022 23:57:49 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y12-20020a056512044c00b004b529517d95sm2033485lfk.40.2022.12.04.23.57.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Dec 2022 23:57:49 -0800 (PST)
+Message-ID: <bc5c070e-4e9f-2bc2-ed07-788b29117143@linaro.org>
+Date:   Mon, 5 Dec 2022 08:57:48 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [syzbot] WARNING in nci_add_new_protocol
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     syzbot <syzbot+210e196cef4711b65139@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <0000000000001c590f05ee7b3ff4@google.com>
+ <202212021327.FEABB55@keescook>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <202212021327.FEABB55@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 02/12/2022 22:36, Kees Cook wrote:
+> On Sun, Nov 27, 2022 at 02:26:30PM -0800, syzbot wrote:
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    4312098baf37 Merge tag 'spi-fix-v6.1-rc6' of git://git.ker..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=12e25bb5880000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=b1129081024ee340
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=210e196cef4711b65139
+>> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> userspace arch: arm
+>>
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+210e196cef4711b65139@syzkaller.appspotmail.com
+>>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 0 PID: 7843 at net/nfc/nci/ntf.c:260 nci_add_new_protocol+0x268/0x30c net/nfc/nci/ntf.c:260
+>> memcpy: detected field-spanning write (size 129) of single field "target->sensf_res" at net/nfc/nci/ntf.c:260 (size 18)
+> 
+> This looks like a legitimate overflow flaw to me. Likely introduced with
+> commit 019c4fbaa790 ("NFC: Add NCI multiple targets support").
+> 
+> These appear to be explicitly filling fixed-size arrays:
+> 
+> struct nfc_target {
+>         u32 idx;
+>         u32 supported_protocols;
+>         u16 sens_res;
+>         u8 sel_res;
+>         u8 nfcid1_len;
+>         u8 nfcid1[NFC_NFCID1_MAXSIZE];
+>         u8 nfcid2_len;
+>         u8 nfcid2[NFC_NFCID2_MAXSIZE];
+>         u8 sensb_res_len;
+>         u8 sensb_res[NFC_SENSB_RES_MAXSIZE];
+>         u8 sensf_res_len;
+>         u8 sensf_res[NFC_SENSF_RES_MAXSIZE];
+>         u8 hci_reader_gate;
+>         u8 logical_idx;
+>         u8 is_iso15693;
+>         u8 iso15693_dsfid;
+>         u8 iso15693_uid[NFC_ISO15693_UID_MAXSIZE];
+> };
+> 
+> static int nci_add_new_protocol(..., struct nfc_target *target, ...)
+> {
+> 	...
+>         } else if (rf_tech_and_mode == NCI_NFC_B_PASSIVE_POLL_MODE) {
+>                 nfcb_poll = (struct rf_tech_specific_params_nfcb_poll *)params;
+> 
+>                 target->sensb_res_len = nfcb_poll->sensb_res_len;
+>                 if (target->sensb_res_len > 0) {
+>                         memcpy(target->sensb_res, nfcb_poll->sensb_res,
+>                                target->sensb_res_len);
+>                 }
+>         } else if (rf_tech_and_mode == NCI_NFC_F_PASSIVE_POLL_MODE) {
+>                 nfcf_poll = (struct rf_tech_specific_params_nfcf_poll *)params;
+> 
+>                 target->sensf_res_len = nfcf_poll->sensf_res_len;
+>                 if (target->sensf_res_len > 0) {
+>                         memcpy(target->sensf_res, nfcf_poll->sensf_res,
+>                                target->sensf_res_len);
+>                 }
+>         } else if (rf_tech_and_mode == NCI_NFC_V_PASSIVE_POLL_MODE) {
+>                 nfcv_poll = (struct rf_tech_specific_params_nfcv_poll *)params;
+> 
+>                 target->is_iso15693 = 1;
+>                 target->iso15693_dsfid = nfcv_poll->dsfid;
+>                 memcpy(target->iso15693_uid, nfcv_poll->uid, NFC_ISO15693_UID_MAXSIZE);
+> 	}
+> 	...
+> 
+> But the sizes are unbounds-checked, which means the buffers can be
+> overwritten (as seen with the syzkaller report).
+> 
+> Perhaps this to fix it?
+> 
+> diff --git a/net/nfc/nci/ntf.c b/net/nfc/nci/ntf.c
+> index 282c51051dcc..3a79f07bfea7 100644
+> --- a/net/nfc/nci/ntf.c
+> +++ b/net/nfc/nci/ntf.c
+> @@ -240,6 +240,8 @@ static int nci_add_new_protocol(struct nci_dev *ndev,
+>  		target->sens_res = nfca_poll->sens_res;
+>  		target->sel_res = nfca_poll->sel_res;
+>  		target->nfcid1_len = nfca_poll->nfcid1_len;
+> +		if (target->nfcid1_len > ARRAY_SIZE(target->target->nfcid1))
+> +			return -EPROTO;
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+Or truncate (copy up to size of array) but both solutions look fine to me.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/video/backlight/lm3533_bl.c | 10 +++++-----
- drivers/video/backlight/lp855x_bl.c |  4 ++--
- drivers/video/backlight/lp8788_bl.c |  2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+> 
 
-diff --git a/drivers/video/backlight/lm3533_bl.c b/drivers/video/backlight/lm3533_bl.c
-index 1df1b6643c0b..5e2ce9285245 100644
---- a/drivers/video/backlight/lm3533_bl.c
-+++ b/drivers/video/backlight/lm3533_bl.c
-@@ -66,7 +66,7 @@ static ssize_t show_id(struct device *dev,
- {
- 	struct lm3533_bl *bl = dev_get_drvdata(dev);
+Best regards,
+Krzysztof
 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", bl->id);
-+	return sysfs_emit(buf, "%d\n", bl->id);
- }
-
- static ssize_t show_als_channel(struct device *dev,
-@@ -75,7 +75,7 @@ static ssize_t show_als_channel(struct device *dev,
- 	struct lm3533_bl *bl = dev_get_drvdata(dev);
- 	unsigned channel = lm3533_bl_get_ctrlbank_id(bl);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", channel);
-+	return sysfs_emit(buf, "%u\n", channel);
- }
-
- static ssize_t show_als_en(struct device *dev,
-@@ -95,7 +95,7 @@ static ssize_t show_als_en(struct device *dev,
- 	mask = 1 << (2 * ctrlbank);
- 	enable = val & mask;
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", enable);
-+	return sysfs_emit(buf, "%d\n", enable);
- }
-
- static ssize_t store_als_en(struct device *dev,
-@@ -147,7 +147,7 @@ static ssize_t show_linear(struct device *dev,
- 	else
- 		linear = 0;
-
--	return scnprintf(buf, PAGE_SIZE, "%x\n", linear);
-+	return sysfs_emit(buf, "%x\n", linear);
- }
-
- static ssize_t store_linear(struct device *dev,
-@@ -190,7 +190,7 @@ static ssize_t show_pwm(struct device *dev,
- 	if (ret)
- 		return ret;
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
-
- static ssize_t store_pwm(struct device *dev,
-diff --git a/drivers/video/backlight/lp855x_bl.c b/drivers/video/backlight/lp855x_bl.c
-index bd0bdeae23a4..fafc1a9e76ef 100644
---- a/drivers/video/backlight/lp855x_bl.c
-+++ b/drivers/video/backlight/lp855x_bl.c
-@@ -293,7 +293,7 @@ static ssize_t lp855x_get_chip_id(struct device *dev,
- {
- 	struct lp855x *lp = dev_get_drvdata(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%s\n", lp->chipname);
-+	return sysfs_emit(buf, "%s\n", lp->chipname);
- }
-
- static ssize_t lp855x_get_bl_ctl_mode(struct device *dev,
-@@ -307,7 +307,7 @@ static ssize_t lp855x_get_bl_ctl_mode(struct device *dev,
- 	else if (lp->mode == REGISTER_BASED)
- 		strmode = "register based";
-
--	return scnprintf(buf, PAGE_SIZE, "%s\n", strmode);
-+	return sysfs_emit(buf, "%s\n", strmode);
- }
-
- static DEVICE_ATTR(chip_id, S_IRUGO, lp855x_get_chip_id, NULL);
-diff --git a/drivers/video/backlight/lp8788_bl.c b/drivers/video/backlight/lp8788_bl.c
-index ba42f3fe0c73..00d79c0cfee9 100644
---- a/drivers/video/backlight/lp8788_bl.c
-+++ b/drivers/video/backlight/lp8788_bl.c
-@@ -240,7 +240,7 @@ static ssize_t lp8788_get_bl_ctl_mode(struct device *dev,
- 	else
- 		strmode = "Invalid mode";
-
--	return scnprintf(buf, PAGE_SIZE, "%s\n", strmode);
-+	return sysfs_emit(buf, "%s\n", strmode);
- }
-
- static DEVICE_ATTR(bl_ctl_mode, S_IRUGO, lp8788_get_bl_ctl_mode, NULL);
--- 
-2.25.1
