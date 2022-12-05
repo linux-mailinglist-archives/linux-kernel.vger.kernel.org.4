@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5422B643568
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E155F64356B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbiLEUPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S233149AbiLEUPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiLEUPi (ORCPT
+        with ESMTP id S232688AbiLEUPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:15:38 -0500
-Received: from mailfilter02-out40.webhostingserver.nl (mailfilter02-out40.webhostingserver.nl [195.211.72.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A11B26AEF
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:15:34 -0800 (PST)
+        Mon, 5 Dec 2022 15:15:47 -0500
+Received: from mailfilter05-out40.webhostingserver.nl (mailfilter05-out40.webhostingserver.nl [195.211.74.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBE027FCF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:15:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=ZlYUR3PbRpjAK/I0nwV7gXPJw+2rK1/JUG79YjFwvwk=;
-        b=UGtWw6EXA8gX2pkVBC4OvDFiafMQ9RnSWuLmhFZ0+ZXLj5XZtcD7cR2Aes1rkmVwJIIxqF+6C8mnu
-         xTbgiTFf1PatMaRHbed5JYH9XXTZVIOg9wa5syhmICdFYm8DHQlhwkiroS+DVBWHxVHqxsH1p/AmQY
-         ZDQEqE4Iv8tSPUxY2NUjbylrQdEE/IOKsNS/I3UBiLSZ3QR3RNLWyWIWNuXQmtKm4Ao9W+750+WLFL
-         zgc6p3fLJ/egzzs8QL1aq+hJKluPJNYlx60G1OU29RiqDPtr/Z2JtEMiABzEcUpjgyBVXgtUHqkqN3
-         1xNvhSVfn+pZSYV0HFoSG06dSbHFr1w==
-X-Halon-ID: 91c869d7-74d9-11ed-aeca-001a4a4cb922
+        h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
+         subject:cc:to:from:from;
+        bh=dr7UwJp1aWEnCa4twHC7nPXuky/8LKPXZIlvLw50gwY=;
+        b=FiilAHVFYovMsp/DEEMDbX1gG3gpcz315Q+nUTOTDXIpWcAtxGcD8sZLL9ktJL4PIRCsErdW7wg3g
+         XHkTxxmyHesDqCOW1RY435eaIdzPyrbjZ82N2dIRJ9xukVQFf2X78WN9HG1denjgG27VBTQA/xzze8
+         W1Put4fi07ZFyhsMChyyIEgy/dNqFKalQ5Rd2FGXs47/+NtY/wypFUalv0719UFnWxmPzTGC5mlsIU
+         c8WiWhFZbyIWoI/Izi9qpejhBBJ3QLUKW7ROanWuvv3eZC26eiKhBH/fzet+u+V+69WWLpJkGfL0tY
+         vEIPbfGrQSXT4FPGd+3NclRd62C5szQ==
+X-Halon-ID: 985df67c-74d9-11ed-9686-001a4a4cb933
 Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
-        id 91c869d7-74d9-11ed-aeca-001a4a4cb922;
-        Mon, 05 Dec 2022 21:15:32 +0100 (CET)
+        by mailfilter05.webhostingserver.nl (Halon) with ESMTPSA
+        id 985df67c-74d9-11ed-9686-001a4a4cb933;
+        Mon, 05 Dec 2022 21:15:43 +0100 (CET)
 Received: from 2a02-a466-68ed-1-f633-1bb8-92a6-ba5d.fixed6.kpn.net ([2a02:a466:68ed:1:f633:1bb8:92a6:ba5d] helo=delfion.fritz.box)
         by s198.webhostingserver.nl with esmtpa (Exim 4.96)
         (envelope-from <ftoth@exalondelft.nl>)
-        id 1p2HsB-001b54-1B;
-        Mon, 05 Dec 2022 21:15:31 +0100
+        id 1p2HsM-001b54-2t;
+        Mon, 05 Dec 2022 21:15:42 +0100
 From:   Ferry Toth <ftoth@exalondelft.nl>
 To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -45,11 +45,13 @@ Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Ferry Toth <fntoth@gmail.com>,
         Andrey Smirnov <andrew.smirnov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Subject: [PATCH v5 0/2] usb: dwc3: core: defer probe on ulpi_read_id timeout
-Date:   Mon,  5 Dec 2022 21:15:25 +0100
-Message-Id: <20221205201527.13525-1-ftoth@exalondelft.nl>
+        Ferry Toth <ftoth@exalondelft.nl>, stable@vger.kernel.org
+Subject: [PATCH v5 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+Date:   Mon,  5 Dec 2022 21:15:26 +0100
+Message-Id: <20221205201527.13525-2-ftoth@exalondelft.nl>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20221205201527.13525-1-ftoth@exalondelft.nl>
+References: <20221205201527.13525-1-ftoth@exalondelft.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
@@ -62,31 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v5:
-- Fix the tag block (Andy)
-- Rephrasing, typo's (Andy, Thinh)
+Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
+if extcon is present") Dual Role support on Intel Merrifield platform
+broke due to rearranging the call to dwc3_get_extcon().
 
-v4:
-- Sent in correct version (Andy, Thinh)
-- Add details on reproducing on Intel Merrifield (Thinh)
+It appears to be caused by ulpi_read_id() on the first test write failing
+with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+DT when the test write fails and returns 0 in that case, even if DT does not
+provide the phy. As a result usb probe completes without phy.
 
-v3:
-- Correct commit message (Greg)
-- Add Fixes: and Cc: stable (Greg)
+Make ulpi_read_id() return -ETIMEDOUT to its user if the first test write
+fails. The user should then handle it appropriately. A follow up patch
+will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
 
-v2:
-- Split into separate commits (Thinh)
-- Only defer probe on -ETIMEDOUT (Thinh)
-- Loose curly brackets (Heikki)
-
-Ferry Toth (2):
-  usb: ulpi: defer ulpi_register on ulpi_read_id timeout
-  usb: dwc3: core: defer probe on ulpi_read_id timeout
-
+Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+---
  drivers/usb/common/ulpi.c | 2 +-
- drivers/usb/dwc3/core.c   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index d7c8461976ce..60e8174686a1 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
+ 	/* Test the interface */
+ 	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+ 	if (ret < 0)
+-		goto err;
++		return ret;
+ 
+ 	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+ 	if (ret < 0)
 -- 
 2.37.2
 
