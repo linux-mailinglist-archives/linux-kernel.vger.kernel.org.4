@@ -2,84 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEC364252C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0532642524
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbiLEI41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
+        id S231817AbiLEIzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:55:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiLEIzt (ORCPT
+        with ESMTP id S232354AbiLEIyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:55:49 -0500
-Received: from forward105j.mail.yandex.net (forward105j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3827B876
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:54:44 -0800 (PST)
-Received: from myt6-bd59def10a3e.qloud-c.yandex.net (myt6-bd59def10a3e.qloud-c.yandex.net [IPv6:2a02:6b8:c12:2487:0:640:bd59:def1])
-        by forward105j.mail.yandex.net (Yandex) with ESMTP id 6B5204ECA42D;
-        Mon,  5 Dec 2022 11:53:48 +0300 (MSK)
-Received: by myt6-bd59def10a3e.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id hrRE5NnYLGk1-jjaJR5Oi;
-        Mon, 05 Dec 2022 11:53:47 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1670230427;
-        bh=nlHUmVYpdftndnegSElvuzQFYDoRyQq2iItNKu1ivvk=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=gKqBBB63dzgbuvZ/QR3Kl0SILSBrpIp/v4Z2BgpD9dtEXRleuFo893iPsY2DYSKdZ
-         bRSRu9NjS/KSl/Qjwk3ZK9Ys9/HSuK/jLPLSneX+vn26L+thpCFlUOYafomEmEjFnj
-         e1eKxRk/mXiXOHotxWwuk2ZTvLuqE52gwCrrii7c=
-Authentication-Results: myt6-bd59def10a3e.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
-From:   Peter Kosyh <pkosyh@yandex.ru>
-To:     Ping-Ke Shih <pkshih@realtek.com>
-Cc:     Peter Kosyh <pkosyh@yandex.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] rtlwifi: rtl8192se: remove redundant rtl_get_bbreg call
-Date:   Mon,  5 Dec 2022 11:53:42 +0300
-Message-Id: <20221205085342.677329-1-pkosyh@yandex.ru>
-X-Mailer: git-send-email 2.38.1
+        Mon, 5 Dec 2022 03:54:43 -0500
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDC5E64C1;
+        Mon,  5 Dec 2022 00:54:01 -0800 (PST)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 454FC1C8128E;
+        Mon,  5 Dec 2022 16:53:59 +0800 (CST)
+Received: from NTHCML01A.nuvoton.com (10.1.8.177) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 5 Dec 2022
+ 16:53:59 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01A.nuvoton.com
+ (10.1.8.177) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 5 Dec 2022
+ 16:53:58 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Mon, 5 Dec 2022 16:53:58 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id AAE45637C4; Mon,  5 Dec 2022 10:53:57 +0200 (IST)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <ulf.hansson@linaro.org>, <avifishman70@gmail.com>,
+        <tali.perry1@gmail.com>, <joel@jms.id.au>, <venture@google.com>,
+        <yuenn@google.com>, <benjaminfair@google.com>,
+        <adrian.hunter@intel.com>, <skhan@linuxfoundation.org>,
+        <davidgow@google.com>, <pbrobinson@gmail.com>, <gsomlo@gmail.com>,
+        <briannorris@chromium.org>, <arnd@arndb.de>,
+        <krakoczy@antmicro.com>, <andy.shevchenko@gmail.com>
+CC:     <openbmc@lists.ozlabs.org>, <linux-mmc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v2 0/2] MMC: add NPCM SDHCI driver support
+Date:   Mon, 5 Dec 2022 10:53:49 +0200
+Message-ID: <20221205085351.27566-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extra rtl_get_bbreg looks like redundant reading. The read has
-already been done in the "else" branch. Compile test only.
+This patch set adds SDHCI support for the Nuvoton NPCM Baseboard 
+Management Controller (BMC).
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+The NPCM SDHCI driver tested on NPCM750 and NPCM845 EVB.
 
-Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>
----
-If this code is important for the operation of the hardware, then it would
-be nice to comment on it.
+Addressed comments from:
+ - Rob Herring : https://www.spinics.net/lists/devicetree/msg556099.html
+ - Andy Shevchenko : https://www.spinics.net/lists/devicetree/msg555247.html
+ - Adrian Hunter : https://www.spinics.net/lists/devicetree/msg555583.html
 
- drivers/net/wireless/realtek/rtlwifi/rtl8192se/phy.c | 3 ---
- 1 file changed, 3 deletions(-)
+Changes since version 1:
+ - Use correct spaces in the dt-bindings.
+ - Drop unused labels from dt-bindings.
+ - Order by module name in the make a configuration.
+ - Remove unnecessary blank lines.
+ - Using devm_clk_get_optional instead of devm_clk_get.
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/phy.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/phy.c
-index aaa004d4d6d0..09591a0b5a81 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/phy.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/phy.c
-@@ -115,9 +115,6 @@ static u32 _rtl92s_phy_rf_serial_read(struct ieee80211_hw *hw,
- 		retvalue = rtl_get_bbreg(hw, pphyreg->rf_rb,
- 					 BLSSI_READBACK_DATA);
- 
--	retvalue = rtl_get_bbreg(hw, pphyreg->rf_rb,
--				 BLSSI_READBACK_DATA);
--
- 	rtl_dbg(rtlpriv, COMP_RF, DBG_TRACE, "RFR-%d Addr[0x%x]=0x%x\n",
- 		rfpath, pphyreg->rf_rb, retvalue);
- 
+Tomer Maimon (2):
+  dt-bindings: mmc: npcm,sdhci: Document NPCM SDHCI controller
+  mmc: sdhci-npcm: Add NPCM SDHCI driver
+
+ .../devicetree/bindings/mmc/npcm,sdhci.yaml   | 45 ++++++++++
+ drivers/mmc/host/Kconfig                      |  8 ++
+ drivers/mmc/host/Makefile                     |  1 +
+ drivers/mmc/host/sdhci-npcm.c                 | 84 +++++++++++++++++++
+ 4 files changed, 138 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mmc/npcm,sdhci.yaml
+ create mode 100644 drivers/mmc/host/sdhci-npcm.c
+
 -- 
-2.38.1
+2.33.0
 
