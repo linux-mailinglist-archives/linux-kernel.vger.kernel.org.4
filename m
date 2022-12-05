@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8D9642FED
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53446642FFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiLESZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:25:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S232819AbiLESZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiLESZO (ORCPT
+        with ESMTP id S232372AbiLESZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 13:25:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8F720BE8;
-        Mon,  5 Dec 2022 10:25:12 -0800 (PST)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF1220BFD;
+        Mon,  5 Dec 2022 10:25:13 -0800 (PST)
 Date:   Mon, 05 Dec 2022 18:25:10 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670264710;
+        s=2020; t=1670264711;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1aV7J3QuScxKl1k3EtjWYIpQ27RM/miR/AHYADE+pWc=;
-        b=Wc0h/3zDWQA/Q80wtxFUpHwtSow8QS7L0MZvnZDne7dez5ONpPoP+xuTNUj0mYNR9Nz107
-        qfUFnVQI2OSM1/2whXbXAjhmJFhJhlls6N0AyHy0T+hyHChj+W+yU3BW83iQ2yvRNsGVj7
-        of37zjAzwpPTdppU9Zr85kN2MLVHDHGEJv26GRtKvYuyzWM8KIEH/0QxcbJO8nTnbhRO7Y
-        KN1RsYDObi0SMATTKIk4SOW3+0FlSb+4MiKL1DQ3Vh3ePKqaqBSwj+XZATLCDyIJIN5EAG
-        9l3XCBuGyQ4K4thFGY9XEDoeOzatTiLAf4Kin59cza5cIhk6izCiG5RH/OQZyQ==
+        bh=EQd2hGgB/yRhWx8RU8z9DPIWHZJG+3iAv+YE6tbXlM8=;
+        b=yaCgfjWOHQZLAFdGOBmbN2ctOXS2xjhgmifyUMK+skpfhvh68INHWDevNsa2MrSfRmeWnp
+        TEEWoGqrOG0hy37ptVG/zzGIKIl75ZrlFWd/tQvUCH37s7tNG1+M0vYooCgQfNhyr0LEMX
+        nLmF4jfjpGcVtYWcQiNI+S+e3euJVectvxrgCV2mUwhnDY0arbiY4FwNpXxllk7C8PX0gZ
+        5SBRpW4Y3R1o6uzaQaXFkMpoymSitfgBm0XmUafHFkzMr5EVojJNIicp/RULT8bVFi1GhX
+        p4gWa6WQCAvm3/wCanj+cmdkBqIA39UWFlKBxi6beG4L5V+ktHXfqlhmIbp/kQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670264710;
+        s=2020e; t=1670264711;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1aV7J3QuScxKl1k3EtjWYIpQ27RM/miR/AHYADE+pWc=;
-        b=/lp7XoA10aCe/hgxNKzqRPkMRYrYmaj8baRs1KCY1DGBcQEuzsCCKdtYvlgozPTbcXcCDM
-        V9k/EzHNBv5aZhAQ==
+        bh=EQd2hGgB/yRhWx8RU8z9DPIWHZJG+3iAv+YE6tbXlM8=;
+        b=ofA3B6cL8zUWLeuHk2E1Cjnv6RCvL3S1W8CsM5tLEE4nSme44XJ0G8XmFy0CmhJZVheWGq
+        yR9rUdxGQYPu00CQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] iommu/vt-d: Enable PCI/IMS
+Subject: [tip: irq/core] x86/apic/msi: Enable PCI/IMS
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Kevin Tian <kevin.tian@intel.com>,
         Marc Zyngier <maz@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221124232327.081482253@linutronix.de>
-References: <20221124232327.081482253@linutronix.de>
+In-Reply-To: <20221124232327.022658817@linutronix.de>
+References: <20221124232327.022658817@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <167026471037.4906.13014604167814802778.tip-bot2@tip-bot2>
+Message-ID: <167026471067.4906.13288838482564117896.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,74 +67,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     4f8d12389509c80f275a12926901d6619f2046c7
-Gitweb:        https://git.kernel.org/tip/4f8d12389509c80f275a12926901d6619f2046c7
+Commit-ID:     ddd98f1b7b57dad5ae5efbe54154722aa6368b11
+Gitweb:        https://git.kernel.org/tip/ddd98f1b7b57dad5ae5efbe54154722aa6368b11
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 25 Nov 2022 00:26:34 +01:00
+AuthorDate:    Fri, 25 Nov 2022 00:26:32 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 05 Dec 2022 19:21:04 +01:00
 
-iommu/vt-d: Enable PCI/IMS
+x86/apic/msi: Enable PCI/IMS
 
-PCI/IMS works like PCI/MSI-X in the remapping. Just add the feature flag,
-but only when on real hardware.
+Enable IMS in the domain init and allocation mapping code, but do not
+enable it on the vector domain as discussed in various threads on LKML.
 
-Virtualized IOMMUs need additional support, e.g. for PASID.
+The interrupt remap domains can expand this setting like they do with
+PCI multi MSI.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221124232327.081482253@linutronix.de
+Link: https://lore.kernel.org/r/20221124232327.022658817@linutronix.de
 
 ---
- drivers/iommu/intel/irq_remapping.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ arch/x86/kernel/apic/msi.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index 6fab407..a723f53 100644
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -82,7 +82,7 @@ static const struct irq_domain_ops intel_ir_domain_ops;
- 
- static void iommu_disable_irq_remapping(struct intel_iommu *iommu);
- static int __init parse_ioapics_under_ir(void);
--static const struct msi_parent_ops dmar_msi_parent_ops;
-+static const struct msi_parent_ops dmar_msi_parent_ops, virt_dmar_msi_parent_ops;
- 
- static bool ir_pre_enabled(struct intel_iommu *iommu)
- {
-@@ -577,7 +577,11 @@ static int intel_setup_irq_remapping(struct intel_iommu *iommu)
- 
- 	irq_domain_update_bus_token(iommu->ir_domain,  DOMAIN_BUS_DMAR);
- 	iommu->ir_domain->flags |= IRQ_DOMAIN_FLAG_MSI_PARENT;
--	iommu->ir_domain->msi_parent_ops = &dmar_msi_parent_ops;
-+
-+	if (cap_caching_mode(iommu->cap))
-+		iommu->ir_domain->msi_parent_ops = &virt_dmar_msi_parent_ops;
-+	else
-+		iommu->ir_domain->msi_parent_ops = &dmar_msi_parent_ops;
- 
- 	ir_table->base = page_address(pages);
- 	ir_table->bitmap = bitmap;
-@@ -1429,11 +1433,20 @@ static const struct irq_domain_ops intel_ir_domain_ops = {
- };
- 
- static const struct msi_parent_ops dmar_msi_parent_ops = {
--	.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED | MSI_FLAG_MULTI_PCI_MSI,
-+	.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED |
-+				  MSI_FLAG_MULTI_PCI_MSI |
-+				  MSI_FLAG_PCI_IMS,
- 	.prefix			= "IR-",
- 	.init_dev_msi_info	= msi_parent_init_dev_msi_info,
- };
- 
-+static const struct msi_parent_ops virt_dmar_msi_parent_ops = {
-+	.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED |
-+				  MSI_FLAG_MULTI_PCI_MSI,
-+	.prefix			= "vIR-",
-+	.init_dev_msi_info	= msi_parent_init_dev_msi_info,
-+};
-+
- /*
-  * Support of Interrupt Remapping Unit Hotplug
-  */
+diff --git a/arch/x86/kernel/apic/msi.c b/arch/x86/kernel/apic/msi.c
+index 682f51a..35d5b8f 100644
+--- a/arch/x86/kernel/apic/msi.c
++++ b/arch/x86/kernel/apic/msi.c
+@@ -184,6 +184,7 @@ static int x86_msi_prepare(struct irq_domain *domain, struct device *dev,
+ 		alloc->type = X86_IRQ_ALLOC_TYPE_PCI_MSI;
+ 		return 0;
+ 	case DOMAIN_BUS_PCI_DEVICE_MSIX:
++	case DOMAIN_BUS_PCI_DEVICE_IMS:
+ 		alloc->type = X86_IRQ_ALLOC_TYPE_PCI_MSIX;
+ 		return 0;
+ 	default:
+@@ -230,6 +231,10 @@ static bool x86_init_dev_msi_info(struct device *dev, struct irq_domain *domain,
+ 	case DOMAIN_BUS_PCI_DEVICE_MSI:
+ 	case DOMAIN_BUS_PCI_DEVICE_MSIX:
+ 		break;
++	case DOMAIN_BUS_PCI_DEVICE_IMS:
++		if (!(pops->supported_flags & MSI_FLAG_PCI_IMS))
++			return false;
++		break;
+ 	default:
+ 		WARN_ON_ONCE(1);
+ 		return false;
