@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C500642868
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544FF64286C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiLEM1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S231167AbiLEM1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:27:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiLEM04 (ORCPT
+        with ESMTP id S230400AbiLEM1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:26:56 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A5B5F8E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:26:56 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 463CB3200942;
-        Mon,  5 Dec 2022 07:26:55 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 05 Dec 2022 07:26:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670243214; x=1670329614; bh=xi
-        Nj68kj+E8I04RquOccPksnaIcx/vzfb5uv8IIux00=; b=DI1NHSMmxG0qrRWAQN
-        9aT872w8rr1iiPaLfqh/qZ1XSyStqljS+geqUiVtKtqqa72abPFVi8z/BddmLbMT
-        DwqYpITKwGjtp3yL4y+IXQz0+Sk2yeC1Do+P6fEHLQs4WJ1x1L3XK2mK0X5GAeJT
-        0blrMne+k7HR5TAdpw8g5dTsYj/5nzLMHC8m6k5Xc8MNTwfbfupGJZ+j9TGN6x6I
-        8HZstxl8QX9NJH0J4Cl6plLlE5NnO3iN788OS1QLsddBmccmjUKMAmpyDawSB79s
-        K4VOhyQdqmMjFadlio7ENjYzE88Ewc2RN6CwFxj7bWOzk0PcJ6VartSFhZDRODwf
-        argA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670243214; x=1670329614; bh=xiNj68kj+E8I04RquOccPksnaIcx
-        /vzfb5uv8IIux00=; b=p5BYjcDXJh8S59EEE/DmVYmburpgAfPUp5T7l8RSphYm
-        gTG8wzPEXb+gv0zcnEi2+Rlgap8Rd1Sa8BLKjpWqwNbFbY3LCmkG3X80+nuo67ma
-        XxC5B7Wpba6RvEvWoSMliaw1UlOMmJJcehDPNTTsC0fOm9q9MgZoPP/yKhnf/3Bj
-        +k7RF0yvG9nq0QVHCFXwLsrX+4zL1FQQ+bpdliyRAQKwEWanzqB+UrbtKlAwybBb
-        7J5GRJwHaSN53xPv8rRDnozMdilLiPJqEGdfpXulPycLT777vLRPRZx56ID+CeYm
-        DzbJI0T2jMkFr7rzkMco0qE1/aEIOwtWBUTp57Tirw==
-X-ME-Sender: <xms:juONYywpurbgApvg_mfjKhsT5ZtKdx9FXqowTerHKC8Oe-617DAZmw>
-    <xme:juONY-Qrx3KnCb3WziD9B1v6pkg7OHtcW4hDEY0iEDZV1AhhnDCmQAv_AxwR8rh_1
-    MscPsU2K1wDEvNoKSc>
-X-ME-Received: <xmr:juONY0XgzPWgcbK49NIbZ-XlGWZJ9y3ZytZq27TLNuNrDrtD31yy6Y1awR3OeZx5QuHVBw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeggdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpehkihhrihhl
-    lhesshhhuhhtvghmohhvrdhnrghmvgenucggtffrrghtthgvrhhnpeehleevveejudejke
-    evueevteevfffhkeejgfehleethefhueejvdehieejgffhhfenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmoh
-    hvrdhnrghmvg
-X-ME-Proxy: <xmx:juONY4jnOJRNusmf_aVLE_8elINz1CEFLfEBr_Sx19lYVjB_h2v4Vg>
-    <xmx:juONY0CJ4tn-4gX_dKPdtTbeWrSq9c7hFdUsDYuuIghGsuzPjWRIsA>
-    <xmx:juONY5KMqtRknrJsXC6Ol1fZ7amaGPivtt2OCteGPBql2x3hzhapoA>
-    <xmx:juONY20x9KwBIVl71jt6H4viKSOaMqZX_wygjqoymfivALF9h3lUGQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Dec 2022 07:26:54 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 95CD810948F; Mon,  5 Dec 2022 15:26:52 +0300 (+03)
-Date:   Mon, 5 Dec 2022 15:26:52 +0300
-From:   kirill@shutemov.name
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 2/2] x86/mtrr: make message for disabled MTRRs more
- descriptive
-Message-ID: <20221205122652.ursq3cba4ozysbmg@box.shutemov.name>
-References: <20221205080433.16643-1-jgross@suse.com>
- <20221205080433.16643-3-jgross@suse.com>
+        Mon, 5 Dec 2022 07:27:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27216387;
+        Mon,  5 Dec 2022 04:27:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FDD06106C;
+        Mon,  5 Dec 2022 12:27:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECA0C433C1;
+        Mon,  5 Dec 2022 12:27:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670243249;
+        bh=L1YNfHSIuiHZcP1HrrM4bGQckMyCRA5hADfzIoelQ1Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X4MaHDrLLhmwj4rM/09fVzStptvEpYtFiMqZ/aP3/kT2Y2cydTBinXwR2w6/nu49H
+         zMMPwDyoORkUuzkBaQqEVTD15DN4VmVQ+R/DBtYrzNUD2IeJcwNiLzJM9lTgkgShnM
+         NuaBK6PPHJBBq6e4M7K0/9bXQufQOM91FuIK/Qcn2X1kzfiAJ4+0cRY+icosb1wOLQ
+         pQ5Pp+d7CHCc4LRiGROqJXGjXF7kFdZPtNb/9WetY21wJk2n4CuwkT2xf9sSsAO/ho
+         Z7xX/JTdGbjjV0R4G3fEjyRuMaOSgGA63zCUH1tE4f6vTExKzVzjgrRlAOqCTMWFHW
+         C3TvNZ2pFv3Zg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p2AZK-0000Tp-88; Mon, 05 Dec 2022 13:27:34 +0100
+Date:   Mon, 5 Dec 2022 13:27:34 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: ufs: qcom: allow 'dma-coherent' property
+Message-ID: <Y43jtpHqlyiIEZ0S@hovoldconsulting.com>
+References: <20221205100837.29212-1-johan+linaro@kernel.org>
+ <20221205100837.29212-2-johan+linaro@kernel.org>
+ <20221205115906.GA20192@thinkpad>
+ <Y43e9KRDsTCS5VI4@hovoldconsulting.com>
+ <20221205122018.GC20192@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205080433.16643-3-jgross@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221205122018.GC20192@thinkpad>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 09:04:33AM +0100, Juergen Gross wrote:
-> Instead of just saying "Disabled" when MTRRs are disabled for any
-> reason, tell what is disabled and why.
+On Mon, Dec 05, 2022 at 05:50:18PM +0530, Manivannan Sadhasivam wrote:
+> On Mon, Dec 05, 2022 at 01:07:16PM +0100, Johan Hovold wrote:
+> > On Mon, Dec 05, 2022 at 05:29:06PM +0530, Manivannan Sadhasivam wrote:
+> > > On Mon, Dec 05, 2022 at 11:08:36AM +0100, Johan Hovold wrote:
+> > > > UFS controllers may be cache coherent and must be marked as such in the
+> > > > devicetree to avoid data corruption.
+> > > > 
+> > > > This is specifically needed on recent Qualcomm platforms like SC8280XP.
+> > > > 
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> > > > index f2d6298d926c..1f1d286749c0 100644
+> > > > --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> > > > +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> > > > @@ -44,6 +44,8 @@ properties:
+> > > >      minItems: 8
+> > > >      maxItems: 11
+> > > >  
+> > > > +  dma-coherent: true
+> > > > +
+> > > 
+> > > This property is not applicable to all SoCs. So setting true here will make it
+> > > valid for all.
+> > 
+> > Yes, it would be a valid, but it will only be added to the DTs of SoCs
+> > that actually require it. No need to re-encode the dtsi in the binding.
+> > 
 > 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+> But if you make a property valid in the binding then it implies that anyone
+> could add it to DTS which is wrong. You should make this property valid for
+> SoCs that actually support it.
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+No, it's not wrong.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Note that the binding only requires 'compatible' and 'regs', all other
+properties are optional, and you could, for example, add a
+'reset' property to a node for a device which does not have a reset
+without the DT validation failing.
+
+It's the devicetree which is supposed to describe hardware, you don't
+have to encode it also in the binding.
+
+Johan
