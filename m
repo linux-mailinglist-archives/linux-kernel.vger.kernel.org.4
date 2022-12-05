@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8922D643678
+	by mail.lfdr.de (Postfix) with ESMTP id 32534643677
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbiLEVIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S233122AbiLEVIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:08:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbiLEVHf (ORCPT
+        with ESMTP id S232926AbiLEVHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:07:35 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9436CC27;
-        Mon,  5 Dec 2022 13:07:23 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id c66so11293103edf.5;
-        Mon, 05 Dec 2022 13:07:23 -0800 (PST)
+        Mon, 5 Dec 2022 16:07:42 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EEDA9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 13:07:38 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id y4so12023946plb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 13:07:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5YyjWNhacttlG/+fLR1iZBtdi1pM5GJQVC7qwybysfY=;
-        b=b5OX02cg7SErXkv4WY3gJwWSacUK9wlUWppABaoFuNN+gGzLCR6G0TWPiizgWwbRiH
-         4JnzvXpCbRbY+6kR8rzADqQ9u91D76LD794OjSyevq3Z8M5erx8f+VjYMhhMW70obv2k
-         gi1rzWHjW2ROOIpiBPdqsArA6dMyQMMFOA5W7LDUR5bECF4xg7XC64dDtQEmQWthN4L2
-         Lcl3ugi1seZewMO0N0Zzjs0NWsbLomjuwsyylLroCl0b9io5Fu5Tte/FW+wxvtXLTSzH
-         V5qfhCyLEasVrbKquMyUxCXTmbwhU/AW86pvoRyHeqBY8PN9DZX97OusD12jBFMhNVJc
-         KE4Q==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QA2MzMsd0vuuYCPGUbjX3aMbFPF0uh5aiGOLQv86y2M=;
+        b=iKNcyG5YkNWv5Z+6VdoSPEY79EBvKe/mFAT5vt1llK4e1FGh9eJ3FMN8xXWld1lMwO
+         iznG9nA2KVxjO6tryux/JRMhDQqYbHwP3o6wHmQLMPXas2vbkQbmJ6B0SAnluQMy17Kg
+         u9kyNrTwbsB4OO+Y62WYVWoaym6VhwmEUcujHza4TZXx+HOSBzs9yK7f9T69UpgbIgRh
+         hbToEXqwaP0F/8oDemewK/4VY4OBXaRLoEfRT4vXs/UizfxBsO7nPSFCVsgZHfqa1FBY
+         mVOvBgDGHcIOYGdX/u9da3FQbGrum8giLR6Uumaj7YboRyOM4eCnb79rP5LCH29gPUgY
+         tQAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5YyjWNhacttlG/+fLR1iZBtdi1pM5GJQVC7qwybysfY=;
-        b=nyRyXW9xasgakVgRgRTomWRDqffSknWz3k+nVNisCrRXCofTKioE2+f3DM9prreWcl
-         3XkxRwIO4RnjG0vU72F8uAtP2cruqJqFrQsKOhLVGHEV+Tl0lVa0EXv2A/oSuB6no+kN
-         rRa2SwaAR0oY9yvcvJluyw8KUF6DKQm5BHpaKjS+LGyLsyb4cNCa3IhzqT4eHSeJoATd
-         SNhT3l5ilns6fVN64zkbM1IKYR4kmaCvLRrtkiILf/GCIKdKuM2kZy5fHVd770PWjAxJ
-         k6wEjJBcGfp0WvBw6NJtfaPrOjMMDsqAmrmSWXKxcpkbMEmz0dX+BXbq/rtGSpaZHutz
-         mYhg==
-X-Gm-Message-State: ANoB5pkAgGd5QUvG7HspLU9MZXj7TfJs6AjISR1OcDzTTH+Lin33Ls+T
-        gWbyWzVHiNy59f3IGnHqx6g=
-X-Google-Smtp-Source: AA0mqf5XnFwWpw+Bq5wUA3Blf/UMVsZH5iz85hcQ0084cyKJEKCGzQLnnYAQrR5En+CrMn2lauzzNQ==
-X-Received: by 2002:a05:6402:1c1a:b0:46c:74f0:c064 with SMTP id ck26-20020a0564021c1a00b0046c74f0c064mr8969352edb.85.1670274442174;
-        Mon, 05 Dec 2022 13:07:22 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id dk21-20020a0564021d9500b0045723aa48ccsm206135edb.93.2022.12.05.13.07.21
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QA2MzMsd0vuuYCPGUbjX3aMbFPF0uh5aiGOLQv86y2M=;
+        b=svBSwCMp2vsLzx2hFDU14bI2HDaKCMtiaVmHN2EIyVo/TkwlOqjf1IYCzH/necyKQ8
+         Q3m0V2+5yntylGWxb77PdVJM8uPpnlZi4q6spU+OdV+w3df04eP/MhmpPxY6o8gOeYLE
+         WHPYPZd1KrKIzHV0mf1bZlzM62e6lvwtXz+STQX89d2Jwpg5B7qpMcrKvfPFrlLOKNUk
+         kU3NxcZoFD+hMSyWyAAKCmcjJHA+JwQZDTQr+LrATmvkwdU/twbRYYg2hf3XnJcKD57p
+         s54XmZpAolM3ej+kCyrQygItCNOj5wSA3wygAwIxfmEfl+AKEB+tgvCy+kyn1qcN/iLR
+         3ecw==
+X-Gm-Message-State: ANoB5pk/21I7tBdQDRkIpxaNcH7x5ax5vuD6CcMYBbWMR8z6x93My3x8
+        zT6nLw/m9IqpB0DTNoBM3YNjRg==
+X-Google-Smtp-Source: AA0mqf41ZK9n1wlZFdbwnhKQkUhBNRJbFXmsevls+2zF3E5RdkfpdC+SPdWqSZYgt/LF84o4UvHUwg==
+X-Received: by 2002:a17:90a:1bc3:b0:218:fdd7:6ded with SMTP id r3-20020a17090a1bc300b00218fdd76dedmr58431079pjr.240.1670274457280;
+        Mon, 05 Dec 2022 13:07:37 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a14-20020a170902ecce00b00186b1bfbe79sm11084394plh.66.2022.12.05.13.07.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 13:07:21 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: Re: [PATCH 1/2] ARM: dts: sunxi: Fix GPIO LED node names
-Date:   Mon, 05 Dec 2022 22:07:20 +0100
-Message-ID: <2324364.NG923GbCHz@kista>
-In-Reply-To: <2979be86-e561-e5ff-b348-367a7c20fab1@sholland.org>
-References: <20221125195401.61642-1-samuel@sholland.org> <20221125214050.711997f1@slackpad.lan> <2979be86-e561-e5ff-b348-367a7c20fab1@sholland.org>
+        Mon, 05 Dec 2022 13:07:36 -0800 (PST)
+Date:   Mon, 5 Dec 2022 21:07:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Vipin Sharma <vipinsh@google.com>, dmatlack@google.com,
+        pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2 1/2] KVM: x86/mmu: Allocate page table pages on TDP
+ splits during dirty log enable on the underlying page's numa node
+Message-ID: <Y45dldZnI6OIf+a5@google.com>
+References: <20221201195718.1409782-1-vipinsh@google.com>
+ <20221201195718.1409782-2-vipinsh@google.com>
+ <CANgfPd_sZoW6gRNgs44BbBu4RhwqNPjUO-=biJ++L5d8LpU3zg@mail.gmail.com>
+ <Y4481WPLstNidb9X@google.com>
+ <CANgfPd_Ya0TeSBp5ipseA3fT1C0L3NPGSaZ=0ACjyKa_PvrZxA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANgfPd_Ya0TeSBp5ipseA3fT1C0L3NPGSaZ=0ACjyKa_PvrZxA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,108 +78,340 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
-
-Dne petek, 25. november 2022 ob 22:50:07 CET je Samuel Holland napisal(a):
-> Hi Andre,
+On Mon, Dec 05, 2022, Ben Gardon wrote:
+> On Mon, Dec 5, 2022 at 10:47 AM Sean Christopherson <seanjc@google.com> wrote:
+> > > > +static bool __read_mostly numa_aware_pagetable = true;
+> > > > +module_param_named(numa_aware_pagetable, numa_aware_pagetable, bool, 0644);
+> > > > +
+> > >
+> > > I'm usually all for having module params to control things, but in
+> > > this case I don't think it provides much value because whether this
+> > > NUMA optimization is useful or not is going to depend more on VM size
+> > > and workload than anything else. If we wanted to make this
+> > > configurable, a VM capability would probably be a better mechanism so
+> > > that userspace could leave it off when running small,
+> > > non-performance-sensitive VMs
+> >
+> > Would we actually want to turn it off in this case?  IIUC, @nid is just the
+> > preferred node, i.e. failure to allocate for the preferred @nid will result in
+> > falling back to other nodes, not outright failure.  So the pathological worst
+> > case scenario would be that for a system with VMs that don't care about performance,
+> > all of a nodes memory is allocated due to all VMs starting on that node.
+> >
+> > On the flip side, if a system had a mix of VM shapes, I think we'd want even the
+> > performance insensitive VMs to be NUMA aware so that they can be sequestered on
+> > their own node(s), i.e. don't "steal" memory from the VMs that are performance
+> > sensitive and have been affined to a single node.
 > 
-> On 11/25/22 15:40, Andre Przywara wrote:
-> > On Fri, 25 Nov 2022 13:54:00 -0600
-> > Samuel Holland <samuel@sholland.org> wrote:
-> > 
-> > Hi Samuel,
-> > 
-> >> These board devicetrees fail to validate because the gpio-leds schema
-> >> requires its child nodes to have "led" in the node name.
-> >> 
-> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> > 
-> > That looks alright, though the comment in the binding says that we
-> > should just have led-0, led-1 instead, so just (hex) numbers. The
-> > "status" name is also in the label, so we wouldn't lose information.
-> 
-> I am not a fan of giving the LEDs meaningless enumerators, but I can do
-> that if the maintainers insist.
+> Yeah, the only reason to turn it off would be to save memory. As a
+> strawman, if you had 100 1-vCPU VMs on a 2 node system, you'd have
+> 4000 pages allocated in caches, doing nothing.
 
-I'm not a fan of that either, but binding really wants enumerator. So let's 
-conform to that.
+The management of the caches really should be addressed separately, and this is
+the perfect excuse to finally get some traction on mmu_shrink_scan().
 
-Best regards,
-Jernej
+From a while back[1]:
 
-> 
-> > Actually, also "label" is deprecated, in favour of "color" and
-> > "function", shall this be fixed on the way? Or is there anything that
-> > breaks (older kernels) when removing the label property?
-> 
-> The label is exposed to userspace as the path in sysfs, so we cannot
-> change it. There is no way to construct that exact label using function
-> and color -- see led_compose_name().
-> 
-> Regards,
-> Samuel
-> 
-> >> ---
-> >> 
-> >>  arch/arm/boot/dts/sun5i-gr8-chip-pro.dts | 2 +-
-> >>  arch/arm/boot/dts/sun5i-r8-chip.dts      | 2 +-
-> >>  arch/arm/boot/dts/sun6i-a31s-sina31s.dts | 2 +-
-> >>  3 files changed, 3 insertions(+), 3 deletions(-)
-> >> 
-> >> diff --git a/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts
-> >> b/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts index
-> >> a32cde3e32eb..3222f1490716 100644
-> >> --- a/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts
-> >> +++ b/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts
-> >> @@ -70,7 +70,7 @@ chosen {
-> >> 
-> >>  	leds {
-> >>  	
-> >>  		compatible = "gpio-leds";
-> >> 
-> >> -		status {
-> >> +		led-status {
-> >> 
-> >>  			label = "chip-pro:white:status";
-> >>  			gpios = <&axp_gpio 2 GPIO_ACTIVE_HIGH>;
-> >>  			default-state = "on";
-> >> 
-> >> diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts
-> >> b/arch/arm/boot/dts/sun5i-r8-chip.dts index 4bf4943d4eb7..303191c926c2
-> >> 100644
-> >> --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
-> >> +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
-> >> @@ -70,7 +70,7 @@ chosen {
-> >> 
-> >>  	leds {
-> >>  	
-> >>  		compatible = "gpio-leds";
-> >> 
-> >> -		status {
-> >> +		led-status {
-> >> 
-> >>  			label = "chip:white:status";
-> >>  			gpios = <&axp_gpio 2 GPIO_ACTIVE_HIGH>;
-> >>  			default-state = "on";
-> >> 
-> >> diff --git a/arch/arm/boot/dts/sun6i-a31s-sina31s.dts
-> >> b/arch/arm/boot/dts/sun6i-a31s-sina31s.dts index
-> >> 0af48e143b66..b84822453381 100644
-> >> --- a/arch/arm/boot/dts/sun6i-a31s-sina31s.dts
-> >> +++ b/arch/arm/boot/dts/sun6i-a31s-sina31s.dts
-> >> @@ -67,7 +67,7 @@ hdmi_con_in: endpoint {
-> >> 
-> >>  	leds {
-> >>  	
-> >>  		compatible = "gpio-leds";
-> >> 
-> >> -		status {
-> >> +		led-status {
-> >> 
-> >>  			label = "sina31s:status:usr";
-> >>  			gpios = <&pio 7 13 GPIO_ACTIVE_HIGH>; /* 
-PH13 */
-> >>  		
-> >>  		};
+ : I know we proposed dropping mmu_shrink_scan(), but the more I think about that,
+ : the more I think that an outright drop is wrong.  The real issue is that KVM as
+ : quite literally the dumbest possible "algorithm" for zapping possibly-in-use
+ : shadow pages, and doesn't target the zapping to fit the cgroup that's under
+ : pressure.
+ : 
+ : So for this, IMO rather than assume that freeing the caches when any memslot
+ : disables dirty logging, I think it makes sense to initially keep the caches and
+ : only free them at VM destruction.  Then in follow-up patches, if we want, free
+ : the caches in the mmu_shrink_scan(), and/or add a function hook for toggling
+ : eager_page_split to topup/free the caches accordingly.  That gives userspace
+ : explicit control over when the caches are purged, and does the logical thing of
+ : freeing the caches when eager_page_split is disabled.
 
+The current mmu_shrink_scan() implementation is basically useless.  It's so naive
+that relying on it to react to memory pressure all but guarantees that guest
+performance will tank if the shrinker kicks in.  E.g. KVM zaps the oldest pages,
+which are likely upper level SPTEs and thus most likely to be reused.  And prior
+to the TDP MMU, a guest running nested VMs would more than likely zap L1's SPTEs
+even if the majority of shadow pages were allocated for L2.
 
+And as pointed out in the RFC to drop shrinker support entirely[1], for well over
+a decade KVM zapped a single page in each call from the shrinker, i.e. it was
+_really_ useless.  And although in [1] I said adding memcg would be easy, doing
+so in a performant way would be quite difficult as the per-cpu counter would need
+to be made memcg aware (didn't think about that before).
+
+Lastly, given that I completely broke the shrink logic for ~6 months and someone
+only noticed when n_max_mmu_pages kicked in (commit 8fc517267fb2 "KVM: x86: Zap
+the oldest MMU pages, not the newest"), I highly doubt anyone is relying on the
+current shrinker logic, i.e. KVM_SET_NR_MMU_PAGES is used for setups that actually
+need to limit the number of MMU pages beyond KVM's default.
+
+My vote is to do something like the below: repurpose KVM's shrinker integration
+to only purge the shadow page caches.  That can be done with almost no impact on
+guest performance, e.g. with a dedicated spinlock, reclaiming from the caches
+wouldn't even need to kick the vCPU.  Supporting reclaim of the caches would allow
+us to change the cache capacity and/or behavior without having to worry too much
+about exploding memory, and would make KVM's shrinker support actually usable.
+
+[1] https://lore.kernel.org/all/YqzRGj6ryBZfGBSl@google.com
+[2] https://lore.kernel.org/all/20220503221357.943536-1-vipinsh@google.com
+
+---
+ arch/x86/include/asm/kvm_host.h |   2 +
+ arch/x86/kvm/mmu/mmu.c          | 131 ++++++++++++++++----------------
+ 2 files changed, 69 insertions(+), 64 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 283cbb83d6ae..f123bd985e1a 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -786,6 +786,8 @@ struct kvm_vcpu_arch {
+ 	struct kvm_mmu_memory_cache mmu_shadowed_info_cache;
+ 	struct kvm_mmu_memory_cache mmu_page_header_cache;
+ 
++	spinlock_t mmu_shadow_page_cache_lock;
++
+ 	/*
+ 	 * QEMU userspace and the guest each have their own FPU state.
+ 	 * In vcpu_run, we switch between the user and guest FPU contexts.
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 4736d7849c60..fca74cb1f2ce 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -157,7 +157,12 @@ struct kvm_shadow_walk_iterator {
+ 
+ static struct kmem_cache *pte_list_desc_cache;
+ struct kmem_cache *mmu_page_header_cache;
+-static struct percpu_counter kvm_total_used_mmu_pages;
++
++/*
++ * The total number of allocated, unused MMU pages, i.e. the total number of
++ * unused pages sitting in kvm_mmu_memory_cache structures.
++ */
++static struct percpu_counter kvm_total_unused_mmu_pages;
+ 
+ static void mmu_spte_set(u64 *sptep, u64 spte);
+ 
+@@ -643,6 +648,23 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+ 	}
+ }
+ 
++static int kvm_mmu_topup_sp_cache(struct kvm_vcpu *vcpu)
++{
++	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_shadow_page_cache;
++	int orig_nobjs = cache->nobjs;
++	int r;
++
++	spin_lock(&vcpu->arch.mmu_shadow_page_cache_lock);
++	r = kvm_mmu_topup_memory_cache(cache, PT64_ROOT_MAX_LEVEL);
++
++	if (cache->nobjs != orig_nobjs)
++		percpu_counter_add(&kvm_total_unused_mmu_pages,
++				   cache->nobjs - orig_nobjs);
++	spin_unlock(&vcpu->arch.mmu_shadow_page_cache_lock);
++
++	return r;
++}
++
+ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+ {
+ 	int r;
+@@ -652,10 +674,11 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+ 				       1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
+ 	if (r)
+ 		return r;
+-	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
+-				       PT64_ROOT_MAX_LEVEL);
++
++	r = kvm_mmu_topup_sp_cache(vcpu);
+ 	if (r)
+ 		return r;
++
+ 	if (maybe_indirect) {
+ 		r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadowed_info_cache,
+ 					       PT64_ROOT_MAX_LEVEL);
+@@ -1681,28 +1704,23 @@ static int is_empty_shadow_page(u64 *spt)
+ }
+ #endif
+ 
+-/*
+- * This value is the sum of all of the kvm instances's
+- * kvm->arch.n_used_mmu_pages values.  We need a global,
+- * aggregate version in order to make the slab shrinker
+- * faster
+- */
+-static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
+-{
+-	kvm->arch.n_used_mmu_pages += nr;
+-	percpu_counter_add(&kvm_total_used_mmu_pages, nr);
+-}
+-
+ static void kvm_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+ {
+-	kvm_mod_used_mmu_pages(kvm, +1);
++	kvm->arch.n_used_mmu_pages++;
+ 	kvm_account_pgtable_pages((void *)sp->spt, +1);
++
++	percpu_counter_dec(&kvm_total_unused_mmu_pages);
+ }
+ 
+ static void kvm_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+ {
+-	kvm_mod_used_mmu_pages(kvm, -1);
++	kvm->arch.n_used_mmu_pages--;
+ 	kvm_account_pgtable_pages((void *)sp->spt, -1);
++
++	/*
++	 * KVM doesn't put freed pages back into the cache, thus freeing a page
++	 * doesn't affect the number of unused MMU pages.
++	 */
+ }
+ 
+ static void kvm_mmu_free_shadow_page(struct kvm_mmu_page *sp)
+@@ -5859,6 +5877,7 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+ 	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+ 
+ 	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
++	spin_lock_init(&vcpu->arch.mmu_shadow_page_cache_lock);
+ 
+ 	vcpu->arch.mmu = &vcpu->arch.root_mmu;
+ 	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+@@ -5994,11 +6013,6 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+ 		kvm_tdp_mmu_zap_invalidated_roots(kvm);
+ }
+ 
+-static bool kvm_has_zapped_obsolete_pages(struct kvm *kvm)
+-{
+-	return unlikely(!list_empty_careful(&kvm->arch.zapped_obsolete_pages));
+-}
+-
+ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
+ 			struct kvm_memory_slot *slot,
+ 			struct kvm_page_track_notifier_node *node)
+@@ -6583,69 +6597,58 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
+ 	}
+ }
+ 
+-static unsigned long
+-mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
++static unsigned long mmu_shrink_scan(struct shrinker *shrink,
++				     struct shrink_control *sc)
+ {
++	struct kvm_mmu_memory_cache *cache;
++	struct kvm_vcpu *vcpu;
+ 	struct kvm *kvm;
+-	int nr_to_scan = sc->nr_to_scan;
+ 	unsigned long freed = 0;
++	unsigned long i;
+ 
+ 	mutex_lock(&kvm_lock);
+ 
+ 	list_for_each_entry(kvm, &vm_list, vm_list) {
+-		int idx;
+-		LIST_HEAD(invalid_list);
++		kvm_for_each_vcpu(i, vcpu, kvm) {
++			cache = &vcpu->arch.mmu_shadow_page_cache;
+ 
+-		/*
+-		 * Never scan more than sc->nr_to_scan VM instances.
+-		 * Will not hit this condition practically since we do not try
+-		 * to shrink more than one VM and it is very unlikely to see
+-		 * !n_used_mmu_pages so many times.
+-		 */
+-		if (!nr_to_scan--)
+-			break;
+-		/*
+-		 * n_used_mmu_pages is accessed without holding kvm->mmu_lock
+-		 * here. We may skip a VM instance errorneosly, but we do not
+-		 * want to shrink a VM that only started to populate its MMU
+-		 * anyway.
+-		 */
+-		if (!kvm->arch.n_used_mmu_pages &&
+-		    !kvm_has_zapped_obsolete_pages(kvm))
+-			continue;
++			if (!READ_ONCE(cache->nobjs))
++				continue;
+ 
+-		idx = srcu_read_lock(&kvm->srcu);
+-		write_lock(&kvm->mmu_lock);
+-
+-		if (kvm_has_zapped_obsolete_pages(kvm)) {
+-			kvm_mmu_commit_zap_page(kvm,
+-			      &kvm->arch.zapped_obsolete_pages);
+-			goto unlock;
++			spin_lock(&vcpu->arch.mmu_shadow_page_cache_lock);
++			while (cache->nobjs) {
++				free_page((unsigned long)cache->objects[--cache->nobjs]);
++				++freed;
++			}
++			spin_unlock(&vcpu->arch.mmu_shadow_page_cache_lock);
+ 		}
+ 
+-		freed = kvm_mmu_zap_oldest_mmu_pages(kvm, sc->nr_to_scan);
+-
+-unlock:
+-		write_unlock(&kvm->mmu_lock);
+-		srcu_read_unlock(&kvm->srcu, idx);
+-
+ 		/*
+ 		 * unfair on small ones
+ 		 * per-vm shrinkers cry out
+ 		 * sadness comes quickly
+ 		 */
+ 		list_move_tail(&kvm->vm_list, &vm_list);
+-		break;
++
++		/*
++		 * Process all vCPUs before checking if enough pages have been
++		 * freed as a very naive way of providing fairness, e.g. to
++		 * avoid starving a single vCPU.
++		 */
++		if (freed >= sc->nr_to_scan)
++			break;
+ 	}
+ 
+ 	mutex_unlock(&kvm_lock);
++
++	sc->nr_scanned = freed;
+ 	return freed;
+ }
+ 
+-static unsigned long
+-mmu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
++static unsigned long mmu_shrink_count(struct shrinker *shrink,
++				      struct shrink_control *sc)
+ {
+-	return percpu_counter_read_positive(&kvm_total_used_mmu_pages);
++	return percpu_counter_read_positive(&kvm_total_unused_mmu_pages);
+ }
+ 
+ static struct shrinker mmu_shrinker = {
+@@ -6753,7 +6756,7 @@ int kvm_mmu_vendor_module_init(void)
+ 	if (!mmu_page_header_cache)
+ 		goto out;
+ 
+-	if (percpu_counter_init(&kvm_total_used_mmu_pages, 0, GFP_KERNEL))
++	if (percpu_counter_init(&kvm_total_unused_mmu_pages, 0, GFP_KERNEL))
+ 		goto out;
+ 
+ 	ret = register_shrinker(&mmu_shrinker, "x86-mmu");
+@@ -6763,7 +6766,7 @@ int kvm_mmu_vendor_module_init(void)
+ 	return 0;
+ 
+ out_shrinker:
+-	percpu_counter_destroy(&kvm_total_used_mmu_pages);
++	percpu_counter_destroy(&kvm_total_unused_mmu_pages);
+ out:
+ 	mmu_destroy_caches();
+ 	return ret;
+@@ -6780,7 +6783,7 @@ void kvm_mmu_destroy(struct kvm_vcpu *vcpu)
+ void kvm_mmu_vendor_module_exit(void)
+ {
+ 	mmu_destroy_caches();
+-	percpu_counter_destroy(&kvm_total_used_mmu_pages);
++	percpu_counter_destroy(&kvm_total_unused_mmu_pages);
+ 	unregister_shrinker(&mmu_shrinker);
+ }
+ 
+
+base-commit: d709db0a0c05a6a2973655ed88690d4d43128d60
+-- 
