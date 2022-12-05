@@ -2,121 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14313642BB9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396EE642B37
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbiLEP2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S230236AbiLEPSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiLEP10 (ORCPT
+        with ESMTP id S230317AbiLEPSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:27:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE55E12627;
-        Mon,  5 Dec 2022 07:26:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6632B61189;
-        Mon,  5 Dec 2022 15:26:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108D6C433C1;
-        Mon,  5 Dec 2022 15:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670253987;
-        bh=3y+uaXO+kxCid8d08Ki1sQHHOYibYWoGV7Nme9/CknM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GstjGtnXbwCmkuruQRDKXhMSIrl3dVDX8eI1wmQkVOYQJg3U+JYa+lRF3OxUxWSJN
-         r8/wQv74XWzmiSlGBPzrCZagXqX+N6SVLcufSbPSk1/iQBwdQ1Fyggc2x5+6oaEvQG
-         r3RHFY1WAPCtpY5FzOb+zda7JXr76mhgcTkFtPLxCLodC3+wDpyYfyKidVNPuMJTdZ
-         fqoWNswKBrIP/Z8MiJ01cP41hHZRr0kajuuzrJsmABSR0+FcsaJp4SgmikRHz8WE1q
-         OUlCF0sUgmwvfJatGaFVAmOs2VOqy9IDvsRI9NJZ+OFftE7gIm7uuTcAW7lXwdnnWB
-         mtEjLwrO41MHw==
-Date:   Mon, 5 Dec 2022 23:16:30 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 02/13] riscv: move riscv_noncoherent_supported() out
- of ZICBOM probe
-Message-ID: <Y44LTqySUMCtKoUi@xhacker>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-3-jszhang@kernel.org>
- <5629547.DvuYhMxLoT@diego>
+        Mon, 5 Dec 2022 10:18:00 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30813B87C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:17:58 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id n1so13896817ljg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:17:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tubnq3Lb1VVWqLrhjxAXy/EV/eNx6+cm8xh6RrNzzTM=;
+        b=AIqfGwx71gO9vLfBYjXxUMedb1KiG2HcnbySTeVyFNkdrqm8R/q3bAmVtiE5e60CZD
+         XoCsOQnTeTO+JJrXz5TfPqzGSiaCdlVb5BRFShvlZhVsgTpbNmbF6bqv/FP/UPPXFRXU
+         WPydXGV2z2bawxqjAGyoAaQUAdYybDPyf210uMSFDVTf/zOspHXc9GAHCeFhl6r+kNFU
+         +6cWu+DrfJQiUaaUQ3bs7PZeQWf0X4UlhiHKkU15yVojPN6mRWhavScbZCCPAr2DZucN
+         Kct+cf6ygsaSMG2MoCWMSeTNM8QmP/hp/zFZQJbsgmsjCqCOlbHfVpe000NAM6eTbxkk
+         LMPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tubnq3Lb1VVWqLrhjxAXy/EV/eNx6+cm8xh6RrNzzTM=;
+        b=6M4TjMy4Pt7Rn39rJ0cq90LQwujH/fBGYRjLQwcF0+UMKPATH46+0+VC5+bfTnkive
+         xB2oznn28bGXxqXbxhA1FDjvL/G6DieM2K0z4XswPwW2fXESQJUa4jO6TNFvRXl4Md+5
+         rL9vhGWoCF64L6+925uoBS5aUH4vCXoHyLF/oyo6UCywYdVlQXWoMOA6EN51jttBl6ip
+         yHzV2b1pMPebvVQkYSWgjz7UkGtcc5KDAlLDlD7k6OV2caz9uH5F7BAc1eiAFqMwzL5F
+         g5ecxJF9TZtRjy9CFz/TqSHAosaoaxs8FItw7YY4nMlKtc+tFrMDp/e1acTvqAGWOcTF
+         P72Q==
+X-Gm-Message-State: ANoB5pnOzXNEhHDgSDw4ME4vLSPPtZbX8wezjIftnZa2zM8TuTv1o108
+        JqjpqK+9I0+mnfoYJHc9fn6qcA==
+X-Google-Smtp-Source: AA0mqf7AXb6jmtQHyKyaAg541NUdZ6ve9Xm0GWLbAM0+giRLqWCe+D+MTsptwcE1Dlw0gletu1rDVg==
+X-Received: by 2002:a2e:b5d5:0:b0:27a:37c:cd59 with SMTP id g21-20020a2eb5d5000000b0027a037ccd59mr1038330ljn.157.1670253476392;
+        Mon, 05 Dec 2022 07:17:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id x3-20020a056512130300b004b551cdfe13sm1350223lfu.279.2022.12.05.07.17.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 07:17:55 -0800 (PST)
+Message-ID: <da51f5db-b697-47f1-208f-e710e491299e@linaro.org>
+Date:   Mon, 5 Dec 2022 16:17:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5629547.DvuYhMxLoT@diego>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 5/9] media: dt-bindings: chrontel,ch7322: reference common
+ CEC properties
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-amlogic@lists.infradead.org, Joe Tessler <jrt@google.com>,
+        Jeff Chase <jnchase@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221204182908.138910-1-krzysztof.kozlowski@linaro.org>
+ <20221204182908.138910-5-krzysztof.kozlowski@linaro.org>
+ <167025248440.1785019.8058849269946787324.robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <167025248440.1785019.8058849269946787324.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 10:52:03PM +0100, Heiko Stübner wrote:
-> Am Sonntag, 4. Dezember 2022, 18:46:21 CET schrieb Jisheng Zhang:
-> > It's a bit weird to call riscv_noncoherent_supported() each time when
-> > insmoding a module. Move the calling out of feature patch func.
-> > 
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  arch/riscv/kernel/cpufeature.c | 1 -
-> >  arch/riscv/kernel/setup.c      | 2 ++
-> >  2 files changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index c743f0adc794..364d1fe86bea 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -274,7 +274,6 @@ static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
-> >  	if (!riscv_isa_extension_available(NULL, ZICBOM))
-> >  		return false;
-> >  
-> > -	riscv_noncoherent_supported();
-> >  	return true;
-> >  }
-> >  
-> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > index 86acd690d529..6eea40bf8c6b 100644
-> > --- a/arch/riscv/kernel/setup.c
-> > +++ b/arch/riscv/kernel/setup.c
-> > @@ -300,6 +300,8 @@ void __init setup_arch(char **cmdline_p)
-> >  	riscv_init_cbom_blocksize();
-> >  	riscv_fill_hwcap();
-> >  	apply_boot_alternatives();
-> > +	if (riscv_isa_extension_available(NULL, ZICBOM))
-> > +		riscv_noncoherent_supported();
+On 05/12/2022 16:07, Rob Herring wrote:
 > 
-> hmm, this changes the behaviour slightly. In the probe function there
-> is the
-> 	if (!IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM))
-> 		return false;
-> at the top, so with this change the second WARN_TAINT in arch_setup_dma_ops
-> will behave differently
+> On Sun, 04 Dec 2022 19:29:04 +0100, Krzysztof Kozlowski wrote:
+>> Reference common HDMI CEC adapter properties to simplify the binding and
+>> have only one place of definition for common properties.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../devicetree/bindings/media/i2c/chrontel,ch7322.yaml   | 9 ++++-----
+>>  1 file changed, 4 insertions(+), 5 deletions(-)
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.example.dtb: ch7322@75: $nodename:0: 'ch7322@75' does not match 
 
-thanks for the information. below code can keep the behavior:
+I'll fix it.
 
-	if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
-	    riscv_isa_extension_available(NULL, ZICBOM))
-		riscv_noncoherent_supported();
+Best regards,
+Krzysztof
 
-will wait for one more day for more review comments, then will send out
-a v3
-> 
-> Heiko
-> 
-> 
-> 
