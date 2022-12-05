@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53496437C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB716437CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 23:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbiLEWLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 17:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
+        id S232748AbiLEWNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 17:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiLEWL0 (ORCPT
+        with ESMTP id S230254AbiLEWNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 17:11:26 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3A31AD90;
-        Mon,  5 Dec 2022 14:11:25 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so8173201otb.1;
-        Mon, 05 Dec 2022 14:11:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=92zrpPL2isoOuIrrH1my3HzkOjBY0w33Uv97jaygHyA=;
-        b=XzKS7tDPf0kBvctKaxc0w6UYoT7SDelAGsE28PhNjuMm387doxp3j0+pcKCo1qvl0I
-         rXmL4SDfXH6FWu81oO6RxumsWi86T/E6S7fcFO4tHKiK2kz4h60NS7UJ5s8IZTx6iTEY
-         z15rYC4kBNw2HgGcYiQmJu+9LQafIS0AquM1T9JNbu4RQh72vJJHpfcztB8i9rVdzhlc
-         U4vYHDvoEpk6Q6zyDSYv2nsnyEWEOU08wukSfo8ALHExXvw+EX8v4aTKXEQCW4cOPLBO
-         UibNNoZn7s1XB2JJkuoKxWLoqJmm2iCY3gJrcrMiVrtuXqe/GfR00Sr1PVO905zq6EQ8
-         Ei1g==
-X-Gm-Message-State: ANoB5pkibaU/FobdruAbvD8xZy7FUk0oWuUu8bmZfzjoEEnrHciH35MN
-        pCbLYtd1CK3BUw1Xd7GWXxxhEsXu4A==
-X-Google-Smtp-Source: AA0mqf46PUZGYgfyzVmCFYfo10rkkbg5CujUG8ZpHy+XzOEZvhateOumUCSz8PB99OAf44ddLA1sSA==
-X-Received: by 2002:a9d:628b:0:b0:66c:6afa:5006 with SMTP id x11-20020a9d628b000000b0066c6afa5006mr36135099otk.233.1670278284631;
-        Mon, 05 Dec 2022 14:11:24 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j125-20020acab983000000b0035b451d80afsm7486305oif.58.2022.12.05.14.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 14:11:24 -0800 (PST)
-Received: (nullmailer pid 2778814 invoked by uid 1000);
-        Mon, 05 Dec 2022 22:11:23 -0000
-Date:   Mon, 5 Dec 2022 16:11:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>, linux-mmc@vger.kernel.org,
-        abel.vesa@linaro.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH 5/5] dt-bindings: mmc: sdhci-msm: allow dma-coherent
-Message-ID: <167027828316.2778752.10639863966103490623.robh@kernel.org>
-References: <20221204094717.74016-1-krzysztof.kozlowski@linaro.org>
- <20221204094717.74016-5-krzysztof.kozlowski@linaro.org>
+        Mon, 5 Dec 2022 17:13:15 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A011A4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 14:13:14 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C467721BF4;
+        Mon,  5 Dec 2022 22:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670278392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VoAnhUb0oelaApjHcv+l7NCW5POXG2u/N59IC5DVgok=;
+        b=rImC6wY5zHJCAqTTD5LYBhzeqMUbWNe25UIxKTmpQNRXMYDyoCHSfJQRlMbH+6nP7H+V7M
+        DYK/S99Jdt0W+kYagHNbs6pRjR4M9fgvBEqhmxR0kYeN8WSN7m6H663tDPZHKAeKqhr3OQ
+        t8gh/eae/xa1IrW6zP4lhNrfSdhsTis=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670278392;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VoAnhUb0oelaApjHcv+l7NCW5POXG2u/N59IC5DVgok=;
+        b=dNh7tcCc/DDvCHpndefZPOn6AlPa0huoMsUK3ihPtr1ozJDoaOpwjm0nug5fnILmFsJlDI
+        nEbgafmFrhnUZXDg==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 9222813326;
+        Mon,  5 Dec 2022 22:13:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id 3vPqIvhsjmObcAAAGKfGzw
+        (envelope-from <vbabka@suse.cz>); Mon, 05 Dec 2022 22:13:12 +0000
+Message-ID: <b1b80402-2c90-8006-bcf8-716e6ef719c2@suse.cz>
+Date:   Mon, 5 Dec 2022 23:13:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221204094717.74016-5-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] mmap: Fix do_brk_flags() modifying obviously incorrect
+ VMAs
+To:     Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Liam Howlett <liam.howlett@oracle.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>, Jason Donenfeld <Jason@zx2c4.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        SeongJae Park <sj@kernel.org>
+References: <20221205192304.1957418-1-Liam.Howlett@oracle.com>
+ <20221205123250.3fc552d96fcca5dc58be8443@linux-foundation.org>
+ <CAG48ez26s0R6DsPKJ1dUomwSwCfhWcpQD6Zb0GU0rbYcFD1hww@mail.gmail.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CAG48ez26s0R6DsPKJ1dUomwSwCfhWcpQD6Zb0GU0rbYcFD1hww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/5/22 22:55, Jann Horn wrote:
+> On Mon, Dec 5, 2022 at 9:32 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>> On Mon, 5 Dec 2022 19:23:17 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+>> > Add more sanity checks to the VMA that do_brk_flags() will expand.
+>> > Ensure the VMA matches basic merge requirements within the function
+>> > before calling can_vma_merge_after().
+>>
+>> I't unclear what's actually being fixed here.
+>>
+>> Why do you feel we need the above changes?
+>>
+>> > Drop the duplicate checks from vm_brk_flags() since they will be
+>> > enforced later.
+>> >
+>> > Fixes: 2e7ce7d354f2 ("mm/mmap: change do_brk_flags() to expand existing VMA and add do_brk_munmap()")
+>>
+>> Fixes in what way?  Removing the duplicate checks?
+> 
+> The old code would expand file VMAs on brk(), which is functionally
+> wrong and also dangerous in terms of locking because the brk() path
+> isn't designed for file VMAs and therefore doesn't lock the file
+> mapping. Checking can_vma_merge_after() ensures that new anonymous
+> VMAs can't be merged into file VMAs.
+> 
+> See https://lore.kernel.org/linux-mm/CAG48ez1tJZTOjS_FjRZhvtDA-STFmdw8PEizPDwMGFd_ui0Nrw@mail.gmail.com/
+> .
 
-On Sun, 04 Dec 2022 10:47:17 +0100, Krzysztof Kozlowski wrote:
-> SM8350, SM8450 and SM8550 SDHCI controllers for SD card are marked with
-> dma-coherent, so allow it.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> dma-coherent was first added to SM8450... then to SM8350 (not merged
-> yet) and now it appeared in SM8550 patches, but I actually do not know
-> if this is copy-paste or real need.
-> ---
->  Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+I guess the point is that if we fix it still within 6.1, we don't have to
+devise how exactly this is exploitable, but due to the insufficient locking
+it most likely is, right?
