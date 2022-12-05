@@ -2,90 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6FB642DF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09EA642DA5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiLEQwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        id S232132AbiLEQuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiLEQvR (ORCPT
+        with ESMTP id S231615AbiLEQtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:51:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859B22182B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:49:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670258957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MeP0F0l2ivVD7SK1oXYbUrrM9DEwmjD0zsNJt80fRpk=;
-        b=OCZu2v7vwaWJHymZ5qThqC42uMhGqSNvGNtB8xSXeeBgghfvS5ws/M+PnY/Y7HUS0kyjj+
-        ldUBaA1HGNKF58KIblhdOCa8Qgx5puoHtKJCD8UlksJ8M/D0c0QnTK6O3RZRoxvhhl0XUM
-        6aqRiHWeJgW1FDBK9xfqGNNGutIFqLc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-oeRv5yESPf66qvbMUdFfDg-1; Mon, 05 Dec 2022 11:49:12 -0500
-X-MC-Unique: oeRv5yESPf66qvbMUdFfDg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9041638164C3;
-        Mon,  5 Dec 2022 16:49:10 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.194.203])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED5A51410DD9;
-        Mon,  5 Dec 2022 16:49:08 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH HID for-next v2 4/4] selftests: hid: ensures we have the proper requirements in config
-Date:   Mon,  5 Dec 2022 17:48:56 +0100
-Message-Id: <20221205164856.705656-5-benjamin.tissoires@redhat.com>
-In-Reply-To: <20221205164856.705656-1-benjamin.tissoires@redhat.com>
-References: <20221205164856.705656-1-benjamin.tissoires@redhat.com>
+        Mon, 5 Dec 2022 11:49:47 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E8621804
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:49:04 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so10560178wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 08:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
+         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
+         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
+         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
+         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
+         BSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=dG2aY/GOV5W14ZIky+BEDLmr1TR0Qu/QoD49xcb1ZYQe1gc/ftSUqmIO20/kD1DI3y
+         NnA5kT2fEeMAn/CjLBmJwi6+qGuQ+XYsRDkiib8Xs+2bGCOkAWUok+eTJvVb0ZM5Tmd7
+         yWpaBELdVUz2BaczzQyKYSKoRxQakonbSSoauHW/OcO2R82Q2XxT6kUr19MkdQUXWlRV
+         ZOx5HCdMqKXEloVSY82a2c9X1Ns+ZZzYSpOpVjPCUh536OhzMEnjsjSakzVmzMllg866
+         bqYw2mpR4FeRW/cCq4buCtHaDyIuXBGEFsqT0bGctTr3/jsvLhLQKM/43jIGLUz1MubX
+         cAtA==
+X-Gm-Message-State: ANoB5pnLQRdCZ7NUjdq10kJNcERK4YT5SBIoNHMkcYCxrPixHFLpCf7U
+        S4xAezXuuBtCrtDc3F0bR3nCVhxc+T6QcXZtH34=
+X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
+X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
+ f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
+ Dec 2022 08:49:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
+ -0800 (PST)
+Reply-To: phmanu14@hotmail.com
+From:   Philip Manul <zagbamdjala@gmail.com>
+Date:   Mon, 5 Dec 2022 08:49:02 -0800
+Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DYNAMIC_FTRACE_WITH_DIRECT_CALLS is implicit on x86_64 but is still a
-WIP on aarm64. Ensure we get it selected to not have any surprises.
-
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
----
- tools/testing/selftests/hid/config | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/hid/config b/tools/testing/selftests/hid/config
-index d4130489c1b1..9c5a55abca6b 100644
---- a/tools/testing/selftests/hid/config
-+++ b/tools/testing/selftests/hid/config
-@@ -11,6 +11,7 @@ CONFIG_BPF_SYSCALL=y
- CONFIG_BPF=y
- CONFIG_CGROUP_BPF=y
- CONFIG_DEBUG_INFO_BTF=y
-+CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
- CONFIG_FPROBE=y
- CONFIG_FTRACE_SYSCALLS=y
- CONFIG_FUNCTION_TRACER=y
--- 
-2.38.1
-
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
