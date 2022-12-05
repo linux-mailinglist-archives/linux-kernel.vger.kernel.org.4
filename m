@@ -2,145 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286DB64395B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8879164395C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 00:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbiLEXQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 18:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S233171AbiLEXQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 18:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbiLEXQR (ORCPT
+        with ESMTP id S233231AbiLEXQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 18:16:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8520AB1C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 15:16:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27B61B81202
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 23:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4896C433C1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 23:16:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670282173;
-        bh=tTj6xlqwZkkawn6eAfGzgzhH58kjDBepMPSTaEkO1+o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZY/GeL7d56Z67JgEQuUyLY6Vqk/2mg/lRDQfmu9taP+IPjTF2dez5CemaGs4DPpYL
-         CgyKfBXI+PqKJRC83bS6qkJfpHd/OzMbTBFn3+l80OxFvLe0BK1sPfEeZUifZZyEdE
-         rvpR/Kt12dVHkYg+waOl98VivJ0ehO/vGyL6mU09EoTvIIemI5onOJFhyncIVpU1i2
-         JtoJ5GkzOVP26LCAAfv3dEFLvoxqkzmuJek6SYtu6LGcP6cvJ9AYBdKzaMobtt98b4
-         sfY87Zjv0psr4D33dFMKY8U9uGj8l5ivstsDoDLky8TPELLx6Nf2RynaYJE/JXrZeD
-         PQTjYxbdOYcWg==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so15370240fac.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 15:16:13 -0800 (PST)
-X-Gm-Message-State: ANoB5pl+jApMxs/ibd5sdcvYPP6Ch/5eYFyboU/oCdYetQ7eMfqqff+F
-        Bxk/Z4PKEHjkCrmHj79B1qjYYMwTxkjKf4kg4g==
-X-Google-Smtp-Source: AA0mqf7VhWuGDHZgIsW7euFPqGB81veoXwRhbmr7m/MxNUsi4J+BsvBrNEz7hgNDnExfLJ6wGZ3fogI8TRhYee8qtkQ=
-X-Received: by 2002:a05:6870:b00f:b0:13a:f4fd:7d81 with SMTP id
- y15-20020a056870b00f00b0013af4fd7d81mr39025319oae.139.1670282172886; Mon, 05
- Dec 2022 15:16:12 -0800 (PST)
+        Mon, 5 Dec 2022 18:16:34 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661FDFAC9;
+        Mon,  5 Dec 2022 15:16:33 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id v3so11834285pgh.4;
+        Mon, 05 Dec 2022 15:16:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1eMXUb35CswTS4yMhs6a5ng51PFHAvAxv8mok77/yY=;
+        b=bpq4PJbPK9gkYXgRg+nxuqvx2NBP04RUBKdEzYu9tlvBrrJG6sA9KirAUtoNNkrvv7
+         dg1iwSuojPzB5Wqn48xfpWbmGW0ccXkQE4hVBaW4/NWV6+8+KFx3674rt8VAsx5+mIcZ
+         r0Mrl3JZ/f71Ra4lgKzNyLhgN4C3hW/pvWUawAJueSAYrrJO9MSn9e+lGagdU1vPEhZr
+         /WqDbiyDynKbWqPc5lKnTbDdhuwNbPnLW0QxzuWbt0qQe5/WmWgo0wKrXhYwxAi8yFFD
+         g6tt0njpEurEPl+VXk2Xf4rsgbdLLq1DXEsuaRPGInKYL0b66DHwMJxMqODZOuM0NtIh
+         0LYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l1eMXUb35CswTS4yMhs6a5ng51PFHAvAxv8mok77/yY=;
+        b=xsmYGDVKQJ9MO/cpShP7CqJgSLRWroM0Le1IRO9qXE/g20RUoKa7C6lGBcVy+uKtUc
+         OXSEh8zaTwv3Rso7++KuwV54/ERxV7e0iit64r1y/zZgcF+OskPHCzCYMgbzQs1Bv6Lp
+         RFWk2zz4sceMnNbnjMbEEaP4tj795T07yOC6Oi3Ro/I7z6OYW9tgj4i0AnxIHr1tCJhu
+         OvTbBTozwUipDZ5LGidbscjNjIuyvZv3QrhxHe3bDTheyK2+PK7LDmhLNzo/qxVdOhki
+         ZG/HY43bZvl0Lpr/nfMYxErtHeIlC477o1MskW1costn2QfGPw3llJdbyA5GcwmyQNe9
+         jNaw==
+X-Gm-Message-State: ANoB5pmYMV4jOTKoc/KZYFbJi3HkUIUwlQY/mIW+7L32hvcc6hn9xEQZ
+        Kf+HPVw1rgIl3Ddhc8VAVts=
+X-Google-Smtp-Source: AA0mqf7Zt0JiQq/jVcV4BbK4E2NDYPYC4BF9OlA7SzOMkRCGrgqSS1un9XF14Kl3g0spU2YvA+clnw==
+X-Received: by 2002:a62:60c7:0:b0:56b:94f5:400c with SMTP id u190-20020a6260c7000000b0056b94f5400cmr66412045pfb.31.1670282192786;
+        Mon, 05 Dec 2022 15:16:32 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:8f7c:b9c9:e06c:7b30])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902ea0d00b001891b01addfsm11039616plg.274.2022.12.05.15.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 15:16:32 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Subject: [PATCH] perf stat: Update event skip condition
+Date:   Mon,  5 Dec 2022 15:16:30 -0800
+Message-Id: <20221205231630.319759-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
 MIME-Version: 1.0
-References: <20221125-mtk-mailbox-v3-0-c4b635052b65@chromium.org>
-In-Reply-To: <20221125-mtk-mailbox-v3-0-c4b635052b65@chromium.org>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Tue, 6 Dec 2022 07:16:02 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__8uYdjFHGTrtq-ZTqvt7gaXeEKv9T3X0e=v4iZ52EE9g@mail.gmail.com>
-Message-ID: <CAAOTY__8uYdjFHGTrtq-ZTqvt7gaXeEKv9T3X0e=v4iZ52EE9g@mail.gmail.com>
-Subject: Re: [PATCH v3] mailbox: mtk-cmdq: Do not request irq until we are ready
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ricardo Ribalda <ribalda@chromium.org> =E6=96=BC 2022=E5=B9=B411=E6=9C=8830=
-=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A8:59=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> If the system comes from kexec() the peripheral might trigger an IRQ
-> befoe we are ready for it. Triggering a crash due to an access to
-> invalid memory.
+In print_counter_aggrdata(), it skips some events that has no aggregate
+count.  It's actually for system-wide per-thread mode and merged uncore
+and hybrid events.
 
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Let's update the condition to check them explicitly.
 
->
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> To: Jassi Brar <jassisinghbrar@gmail.com>
-> To: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> ---
-> Changes in v3:
-> - Rebase on top of https://patchwork.kernel.org/project/linux-mediatek/pa=
-tch/20221102100736.37815-1-angelogioacchino.delregno@collabora.com/
-> - Link to v2: https://lore.kernel.org/r/20221125-mtk-mailbox-v2-0-886f70c=
-7173c@chromium.org
->
-> Changes in v2:
-> - I have managed to repro a different panic. Moving the irq enabling to t=
-he very end of probe.
-> - Link to v1: https://lore.kernel.org/r/20221125-mtk-mailbox-v1-0-2e3ee12=
-0850c@chromium.org
-> ---
->  drivers/mailbox/mtk-cmdq-mailbox.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmd=
-q-mailbox.c
-> index a460ee26eb11..b18d47ea13a0 100644
-> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
-> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-> @@ -569,12 +569,6 @@ static int cmdq_probe(struct platform_device *pdev)
->         }
->
->         cmdq->irq_mask =3D GENMASK(cmdq->pdata->thread_nr - 1, 0);
-> -       err =3D devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_S=
-HARED,
-> -                              "mtk_cmdq", cmdq);
-> -       if (err < 0) {
-> -               dev_err(dev, "failed to register ISR (%d)\n", err);
-> -               return err;
-> -       }
->
->         dev_dbg(dev, "cmdq device: addr:0x%p, va:0x%p, irq:%d\n",
->                 dev, cmdq->base, cmdq->irq);
-> @@ -641,6 +635,13 @@ static int cmdq_probe(struct platform_device *pdev)
->
->         cmdq_init(cmdq);
->
-> +       err =3D devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_S=
-HARED,
-> +                              "mtk_cmdq", cmdq);
-> +       if (err < 0) {
-> +               dev_err(dev, "failed to register ISR (%d)\n", err);
-> +               return err;
-> +       }
-> +
->         return 0;
->  }
->
->
-> ---
-> base-commit: 1642107db81361b4339643eb90af4839e2cf229f
-> change-id: 20221125-mtk-mailbox-ba6cbd1d91b6
->
-> Best regards,
-> --
-> Ricardo Ribalda <ribalda@chromium.org>
->
+Fixes: 91f85f98da7a ("Display event stats using aggr counts")
+Reported-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+Athira, could you please check this fixes the problem?
+
+ tools/perf/util/stat-display.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 847acdb5dc40..6c0de52ac4be 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -814,7 +814,8 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 	os->nr = aggr->nr;
+ 	os->evsel = counter;
+ 
+-	if (counter->supported && aggr->nr == 0)
++	/* Skip already merged uncore/hybrid events */
++	if (counter->merged_stat)
+ 		return;
+ 
+ 	uniquify_counter(config, counter);
+@@ -823,6 +824,13 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 	ena = aggr->counts.ena;
+ 	run = aggr->counts.run;
+ 
++	/*
++	 * Skip value 0 when enabling --per-thread globally, otherwise it will
++	 * have too many 0 output.
++	 */
++	if (val == 0 && config->aggr_mode == AGGR_THREAD && config->system_wide)
++		return;
++
+ 	if (!metric_only) {
+ 		if (config->json_output)
+ 			fputc('{', output);
+@@ -899,9 +907,6 @@ static void print_aggr(struct perf_stat_config *config,
+ 		print_metric_begin(config, evlist, os, s);
+ 
+ 		evlist__for_each_entry(evlist, counter) {
+-			if (counter->merged_stat)
+-				continue;
+-
+ 			print_counter_aggrdata(config, counter, s, os);
+ 		}
+ 		print_metric_end(config, os);
+@@ -928,9 +933,6 @@ static void print_aggr_cgroup(struct perf_stat_config *config,
+ 			print_metric_begin(config, evlist, os, s);
+ 
+ 			evlist__for_each_entry(evlist, counter) {
+-				if (counter->merged_stat)
+-					continue;
+-
+ 				if (counter->cgrp != os->cgrp)
+ 					continue;
+ 
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
