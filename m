@@ -2,197 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983096436EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E67C6436EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbiLEVdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S233452AbiLEVeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbiLEVdR (ORCPT
+        with ESMTP id S231941AbiLEVeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 16:33:17 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA492C64E;
-        Mon,  5 Dec 2022 13:33:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1670275996;
-        bh=b4IyhGJ3m6zNxw3owWYA/BBCmtAr/iUj4osvu+wxLOQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=u0gJQoTAMIcEyoxuj0pO7sjGJluy9w2J6EaiBtWm09eobUUbeXqpAsAf1i0Au+xbi
-         bRCIm7bXVd0y/JPID9dXR2zs/VA+C5LuYxEZsv/txXQw87WsI4S/Iy/0xYCIqFGnEI
-         tIwHD1QOxvFY6SBGZuFIEgfpE91z1knxpZ4a0G/rHzUOaMd2sGZV6xng9XwC6qtIsr
-         udRJnNkjyt5haFM61XjGEIwkcxOY3ajaE8Mpz0U6tpSujDZsyOJN0Hzs/Fi+jB0P44
-         NVZYr30EIgk8JKaUyKrZVcUs8pQD2s3vYYaY4ciug5e2H7Kd6kRsfdPALlD5NZivhD
-         JsdAKlDDQPW+w==
-Received: from [172.16.0.118] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NQxcC66zdzZ7l;
-        Mon,  5 Dec 2022 16:33:15 -0500 (EST)
-Message-ID: <18c4f109-522d-989d-23bb-2794791c2688@efficios.com>
-Date:   Mon, 5 Dec 2022 16:33:34 -0500
+        Mon, 5 Dec 2022 16:34:21 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0713C2C674
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 13:34:19 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id l8so15038868ljh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 13:34:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/AFtgz+lK9M2V4Cs5/9PoWBFJhdcyuHdw2Q3pWcGYM0=;
+        b=YUevHO9XgqPvry6HSJ6/W2BJQQU25R4upN0Typd6FaqC5gRATvHgY7MXNV3I064Uit
+         nFsS1oQIWZ3bcFOEW6RP4tJmb543mBunzrJK8QjQGHoK97Z2MLio0b4rznLjay2U+afj
+         qFly6OL7t9m2GhCC4P35fJtgFIlVWHZNDMbCCDlzD7b9IbaX2rscEBxya/UMGCZaB/3w
+         GInkZJ0435TBwAFZ8J1xMD60ZjO52UhcbdKENSnASGDa464v/GDfgTWMCd5VjEfcVZql
+         W1Ky8ikqcdYSkWb8EGPrM+UV08V3XNFDa/1OWa93VsbsAn0buH6/OpKDGu3YNWUYmVfr
+         tfFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/AFtgz+lK9M2V4Cs5/9PoWBFJhdcyuHdw2Q3pWcGYM0=;
+        b=ArMsbQPxLQzeVW/TCwLJS4tqufiztML2zQFHwGLjofu1HwZdvGAzkgs/XxgRVaFMQk
+         Fes4uiaNqsD4VLIK4KXH5EVSbeikgFVR9FmRp0dT/Uaumi5AOpEkrr+HsJs2Yi/zhgoz
+         GB6VrD5ZhXZyJgFo5KTONwBXu1CCUe7elI49CqTrO4uojw/rStfWlzBWZAqPulBxvBT5
+         jBx/2Etq186b+KzkL4/X/c+ZqoIVTqw6Q1sjuOVk++8QrpxTHxXwXVFV+Sr6y8EWjGzf
+         zkN6KRBSjh3e4+kspM5qucF5ma1IOX+7e3v+yTt6B8VEPqGCw0fpf9A4ZXgxOyWMEXJt
+         hzqQ==
+X-Gm-Message-State: ANoB5pkIPulLBKmX02l7I3zviU8aOkkkLIfPge0H1LH5jXWAMHstB9vE
+        e3UYi/LEBucCgVidIrudanO1rw==
+X-Google-Smtp-Source: AA0mqf4BfnB/i1w1SRHpcZzPmtxt7+I3WAaF8JW8L4rYmlZYdEqUFnQ4Z7gOet/Ue5qWPSJ4tfTtbA==
+X-Received: by 2002:a2e:b4a3:0:b0:279:edbf:118c with SMTP id q3-20020a2eb4a3000000b00279edbf118cmr3085208ljm.425.1670276058362;
+        Mon, 05 Dec 2022 13:34:18 -0800 (PST)
+Received: from [127.0.0.1] ([94.25.229.129])
+        by smtp.gmail.com with ESMTPSA id s8-20020a2eb628000000b002776eb5b1cesm1516828ljn.8.2022.12.05.13.34.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Dec 2022 13:34:18 -0800 (PST)
+Date:   Tue, 06 Dec 2022 00:34:10 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        airlied@gmail.com
+CC:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_2/5=5D_dt-bindings=3A_msm/dp=3A_ad?= =?US-ASCII?Q?d_data-lanes_and_link-frequencies_property?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1670267670-15832-3-git-send-email-quic_khsieh@quicinc.com>
+References: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com> <1670267670-15832-3-git-send-email-quic_khsieh@quicinc.com>
+Message-ID: <5552E92A-2059-4D1E-AC88-3214D93D93E3@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 11/11] tracing/user_events: Limit global user_event
- count
-Content-Language: en-US
-To:     Beau Belgrave <beaub@linux.microsoft.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, dcook@linux.microsoft.com,
-        alanau@linux.microsoft.com, brauner@kernel.org,
-        akpm@linux-foundation.org
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221205210017.23440-1-beaub@linux.microsoft.com>
- <20221205210017.23440-12-beaub@linux.microsoft.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221205210017.23440-12-beaub@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-05 16:00, Beau Belgrave wrote:
-> Operators want to be able to ensure enough tracepoints exist on the
-> system for kernel components as well as for user components. Since there
-> are only up to 64K events, by default allow up to half to be used by
-> user events.
-> 
-> Add a boot parameter (user_events_max=%d) and a kernel sysctl parameter
-> (kernel.user_events_max) to set a global limit that is honored among all
-> groups on the system. This ensures hard limits can be setup to prevent
-> user processes from consuming all event IDs on the system.
-> 
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> ---
->   kernel/trace/trace_events_user.c | 57 ++++++++++++++++++++++++++++++++
->   1 file changed, 57 insertions(+)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 36def244a755..754942ba92a1 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -20,6 +20,7 @@
->   #include <linux/types.h>
->   #include <linux/uaccess.h>
->   #include <linux/highmem.h>
-> +#include <linux/init.h>
->   #include <linux/user_events.h>
->   #include "trace.h"
->   #include "trace_dynevent.h"
-> @@ -61,6 +62,12 @@ struct user_event_group {
->   /* Group for init_user_ns mapping, top-most group */
->   static struct user_event_group *init_group;
->   
-> +/* Max allowed events for the whole system */
-> +static unsigned int max_user_events = 32768;
-> +
-> +/* Current number of events on the whole system */
-> +static unsigned int current_user_events;
-> +
->   /*
->    * Stores per-event properties, as users register events
->    * within a file a user_event might be created if it does not
-> @@ -1247,6 +1254,11 @@ static int destroy_user_event(struct user_event *user)
->   	kfree(EVENT_NAME(user));
->   	kfree(user);
->   
-> +	if (current_user_events > 0)
-> +		current_user_events--;
 
-What holds the user_events mutex that guarantees that non-atomic 
-decrement is safe here ?
 
-Thanks,
+On 5 December 2022 22:14:27 GMT+03:00, Kuogee Hsieh <quic_khsieh@quicinc=
+=2Ecom> wrote:
+>Add both data-lanes and link-frequencies property into endpoint
+>
+>Changes in v7:
+>-- split yaml out of dtsi patch
+>-- link-frequencies from link rate to symbol rate
+>-- deprecation of old data-lanes property
+>
+>Changes in v8:
+>-- correct Bjorn mail address to kernel=2Eorg
+>
+>Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>
+>---
+> =2E=2E=2E/bindings/display/msm/dp-controller=2Eyaml        | 22 ++++++++=
+++++++++------
+> 1 file changed, 16 insertions(+), 6 deletions(-)
+>
+>diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller=
+=2Eyaml b/Documentation/devicetree/bindings/display/msm/dp-controller=2Eyam=
+l
+>index f2515af=2E=2E13d2c3c 100644
+>--- a/Documentation/devicetree/bindings/display/msm/dp-controller=2Eyaml
+>+++ b/Documentation/devicetree/bindings/display/msm/dp-controller=2Eyaml
+>@@ -79,12 +79,6 @@ properties:
+>   aux-bus:
+>     $ref: /schemas/display/dp-aux-bus=2Eyaml#
+>=20
+>-  data-lanes:
+>-    $ref: /schemas/types=2Eyaml#/definitions/uint32-array
+>-    minItems: 1
+>-    maxItems: 4
+>-    items:
+>-      maximum: 3
 
-Mathieu
+These properties can still be used, e=2Eg=2E Bjorn is submitting patches w=
+ith the old property=2E I think this should be marked with deprecated: true=
+ instead of removal=2E
 
-> +	else
-> +		pr_alert("BUG: Bad current_user_events\n");
-> +
->   	return ret;
->   }
->   
-> @@ -1732,6 +1744,11 @@ static int user_event_parse(struct user_event_group *group, char *name,
->   
->   	mutex_lock(&event_mutex);
->   
-> +	if (current_user_events >= max_user_events) {
-> +		ret = -EMFILE;
-> +		goto put_user_lock;
-> +	}
-> +
->   	ret = user_event_trace_register(user);
->   
->   	if (ret)
-> @@ -1743,6 +1760,7 @@ static int user_event_parse(struct user_event_group *group, char *name,
->   	dyn_event_init(&user->devent, &user_event_dops);
->   	dyn_event_add(&user->devent, &user->call);
->   	hash_add(group->register_table, &user->node, key);
-> +	current_user_events++;
->   
->   	mutex_unlock(&event_mutex);
->   
-> @@ -2369,6 +2387,43 @@ static int create_user_tracefs(void)
->   	return -ENODEV;
->   }
->   
-> +static int __init set_max_user_events(char *str)
-> +{
-> +	if (!str)
-> +		return 0;
-> +
-> +	if (kstrtouint(str, 0, &max_user_events))
-> +		return 0;
-> +
-> +	return 1;
-> +}
-> +__setup("user_events_max=", set_max_user_events);
-> +
-> +static int set_max_user_events_sysctl(struct ctl_table *table, int write,
-> +				      void *buffer, size_t *lenp, loff_t *ppos)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&event_mutex);
-> +
-> +	ret = proc_douintvec(table, write, buffer, lenp, ppos);
-> +
-> +	mutex_unlock(&event_mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct ctl_table user_event_sysctls[] = {
-> +	{
-> +		.procname	= "user_events_max",
-> +		.data		= &max_user_events,
-> +		.maxlen		= sizeof(unsigned int),
-> +		.mode		= 0644,
-> +		.proc_handler	= set_max_user_events_sysctl,
-> +	},
-> +	{}
-> +};
-> +
->   static int __init trace_events_user_init(void)
->   {
->   	int ret;
-> @@ -2398,6 +2453,8 @@ static int __init trace_events_user_init(void)
->   	if (dyn_event_register(&user_event_dops))
->   		pr_warn("user_events could not register with dyn_events\n");
->   
-> +	register_sysctl_init("kernel", user_event_sysctls);
-> +
->   	return 0;
->   }
->   
+>=20
+>   "#sound-dai-cells":
+>     const: 0
+>@@ -105,6 +99,19 @@ properties:
+>         $ref: /schemas/graph=2Eyaml#/properties/port
+>         description: Output endpoint of the controller
+>=20
+>+        properties:
+>+          endpoint:
+>+            $ref: /schemas/media/video-interfaces=2Eyaml#
+>+
+>+          properties:
+>+            data-lanes:
+>+              $ref: /schemas/types=2Eyaml#/definitions/uint32-array
+>+
+>+            link-frequencies:
+>+              $ref: /schemas/types=2Eyaml#/definitions/uint64-array
+>+
+>+          additionalProperties: false
+>+
+> required:
+>   - compatible
+>   - reg
+>@@ -193,6 +200,9 @@ examples:
+>                 reg =3D <1>;
+>                 endpoint {
+>                     remote-endpoint =3D <&typec>;
+>+                    data-lanes =3D <1 2>;
+>+                    link-frequencies =3D /bits/ 64 <1620000000 270000000=
+0
+>+                                                  5400000000 8100000000>=
+;
+>                 };
+>             };
+>         };
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+--=20
+With best wishes
+Dmitry
