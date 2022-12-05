@@ -2,121 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C90764361F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F81A643627
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbiLEUx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S232120AbiLEUzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiLEUx1 (ORCPT
+        with ESMTP id S231990AbiLEUzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:53:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE48B1FD;
-        Mon,  5 Dec 2022 12:53:25 -0800 (PST)
-Date:   Mon, 05 Dec 2022 20:53:22 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670273603;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CmsGGjpzr0dBe6axNex6kpBFOEjvbolY0Nmn4TPRCvc=;
-        b=JMAgtz+xhtBoishR8oGm3vgwgwuOoQb+DlLCKFJZB0lHHt88mZTH/xoHVSHO/EFBgkOjO2
-        LWr6PgPEm/BBqYTA42St/ZGKfBSJqFdvLSlVkju84Q2EqyKNsCcr1oPpUEPEl1fVOgeyBN
-        R2N0sJUYg9jQHSwwNzJo/CBe/kV4Lgn4fnHFuR+ew/zrwgceAr+mgtIjtfvhLWWdpl75Vu
-        GlttJUThATB1buCJpF0o4j7bHtYQZHhn7bk9fKG4bzBJHz53NnIpj7P1/3b8o1oNp24aZK
-        TgISUl/2p82DkFVzwQiY+MrPVk1uFBpF2a3U+Dl8qJFojOg3l9Z5wTJ01eKUzQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670273603;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CmsGGjpzr0dBe6axNex6kpBFOEjvbolY0Nmn4TPRCvc=;
-        b=eZF06C9aemDd9Np90Kk0EQVhbC0Drqzoj+mOTbK+IKQy+qsMBjxJBXW6a8NvS6+N0rD2Qt
-        cK6hMdYbqNO4C1DQ==
-From:   "tip-bot2 for Ashok Raj" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode/intel: Do not retry microcode
- reloading on the APs
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221129210832.107850-3-ashok.raj@intel.com>
-References: <20221129210832.107850-3-ashok.raj@intel.com>
+        Mon, 5 Dec 2022 15:55:49 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A028910B9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:55:47 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id f16so3310149ljc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 12:55:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ocYjA6QpQH0iEq1Vf2TrXA6nHz4QLZhRSsfXvZluncA=;
+        b=g/7miiH2oAGR3+nRqVDPOrJ626yTRpMTySivkSz4t9d92gxefz4CEU17Ks3qH5aYkR
+         SUPi/up/Us/RVer291Mhmjw4+cDqyHjWqHI9GbAckZ8muOgt2bZi077qlvkAy9ymekDy
+         5e/faUiTtZPbH21jjkzS6QQbDZLMUk6+1VB03pCQZy8fgifBxXn7lXObb5dJHfQr1d2L
+         n6bJk00zEm5HIm76SOklgpPkFeq5n+goPiaHlReg+G12xfWdgK0/yiDohxS3aTwaEfUD
+         xTW0J9/LHnU76RyzsJR2/jHKyIhihy9i4obcf2kzfGznMADhYR3tcmF+S2P65F/socgr
+         Phbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ocYjA6QpQH0iEq1Vf2TrXA6nHz4QLZhRSsfXvZluncA=;
+        b=jq3S2eJTx0dM9JomPs9s/3agshWQfXPLsLTy1QhgVy9VCbNMZ+X59UclCkdIt4axvN
+         j+D9jJrisf2atVMFcMikLIa7us2qDAx7/umt/2gpCKGk8ApJUXyqmJMNK/Hw1xeK4As+
+         DsL25VadgwuA2sGa656Rw5/f9FLe4VvuRnhBMrRnEw+x6jBCsDJ2p6/FiehVS6Ey3XjK
+         7h7gwNbfb+Qnzxj6Do8d6f2ebHwRe/Z9vY6ApvaXd9Db6+MGS5SZO/3I9nKFFJBaVDRV
+         BqZNNDLpnRfeKxcXnZbymiw5UO+DBtopRHwieFhgO2uvC2Zw6f8WF/fex6UE+znpTOSW
+         NKgA==
+X-Gm-Message-State: ANoB5plgdu7Y9+YTiT5qOs8yBK8nbQnlP/17ZPKUe/PhNPubbRWW6ICt
+        HjDOVD6nfWfqmL01vnsbyjtp1g==
+X-Google-Smtp-Source: AA0mqf4pFzfwQM8n0RiCiZ81HlSwQY5Nbe4erlyvLoTagwgP7cgxx2eJCbeqwZzIhNpW99kPxN8c8A==
+X-Received: by 2002:a2e:9589:0:b0:277:7c00:e12b with SMTP id w9-20020a2e9589000000b002777c00e12bmr23190338ljh.431.1670273746067;
+        Mon, 05 Dec 2022 12:55:46 -0800 (PST)
+Received: from [127.0.0.1] ([94.25.229.129])
+        by smtp.gmail.com with ESMTPSA id a10-20020a056512200a00b004ad5f5c2b28sm2222957lfb.119.2022.12.05.12.55.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Dec 2022 12:55:45 -0800 (PST)
+Date:   Mon, 05 Dec 2022 23:55:32 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        airlied@gmail.com
+CC:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 5/5] drm/msm/dp: add support of max dp link rate
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1670267670-15832-6-git-send-email-quic_khsieh@quicinc.com>
+References: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com> <1670267670-15832-6-git-send-email-quic_khsieh@quicinc.com>
+Message-ID: <F989A827-65A8-4CBC-BAC8-B7032CDA5394@linaro.org>
 MIME-Version: 1.0
-Message-ID: <167027360301.4906.8791952647948114025.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
 
-Commit-ID:     be1b670f61443aa5d0d01782e9b8ea0ee825d018
-Gitweb:        https://git.kernel.org/tip/be1b670f61443aa5d0d01782e9b8ea0ee825d018
-Author:        Ashok Raj <ashok.raj@intel.com>
-AuthorDate:    Tue, 29 Nov 2022 13:08:27 -08:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 05 Dec 2022 21:22:21 +01:00
 
-x86/microcode/intel: Do not retry microcode reloading on the APs
+On 5 December 2022 22:14:30 GMT+03:00, Kuogee Hsieh <quic_khsieh@quicinc=
+=2Ecom> wrote:
+>By default, HBR2 (5=2E4G) is the max link link be supported=2E This patch=
+ add
+>the capability to support max link rate at HBR3 (8=2E1G)=2E
 
-The retries in load_ucode_intel_ap() were in place to support systems
-with mixed steppings. Mixed steppings are no longer supported and there is
-only one microcode image at a time. Any retries will simply reattempt to
-apply the same image over and over without making progress.
+This patch uses the actual limit specified by DT and removes the artificia=
+l limitation to 5=2E4 Gbps=2E Supporting HBR3 is a consequence of that=2E
 
-  [ bp: Zap the circumstantial reasoning from the commit message. ]
 
-Fixes: 06b8534cb728 ("x86/microcode: Rework microcode loading")
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20221129210832.107850-3-ashok.raj@intel.com
----
- arch/x86/kernel/cpu/microcode/intel.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+>
+>Changes in v2:
+>-- add max link rate from dtsi
+>
+>Changes in v3:
+>-- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+>
+>Changes in v4:
+>-- delete unnecessary pr_err
+>
+>Changes in v5:
+>-- split parser function into different patch
+>
+>Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>
+>Reviewed-by: Dmitry Baryshkov <dmitry=2Ebaryshkov@linaro=2Eorg>
+>---
+> drivers/gpu/drm/msm/dp/dp_display=2Ec | 4 ++++
+> drivers/gpu/drm/msm/dp/dp_panel=2Ec   | 7 ++++---
+> drivers/gpu/drm/msm/dp/dp_panel=2Eh   | 1 +
+> 3 files changed, 9 insertions(+), 3 deletions(-)
+>
+>diff --git a/drivers/gpu/drm/msm/dp/dp_display=2Ec b/drivers/gpu/drm/msm/=
+dp/dp_display=2Ec
+>index bfd0aef=2E=2Eedee550 100644
+>--- a/drivers/gpu/drm/msm/dp/dp_display=2Ec
+>+++ b/drivers/gpu/drm/msm/dp/dp_display=2Ec
+>@@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct dp_dis=
+play_private *dp)
+> 	struct edid *edid;
+>=20
+> 	dp->panel->max_dp_lanes =3D dp->parser->max_dp_lanes;
+>+	dp->panel->max_dp_link_rate =3D dp->parser->max_dp_link_rate;
+>+
+>+	drm_dbg_dp(dp->drm_dev, "max_lanes=3D%d max_link_rate=3D%d\n",
+>+		dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
+>=20
+> 	rc =3D dp_panel_read_sink_caps(dp->panel, dp->dp_display=2Econnector);
+> 	if (rc)
+>diff --git a/drivers/gpu/drm/msm/dp/dp_panel=2Ec b/drivers/gpu/drm/msm/dp=
+/dp_panel=2Ec
+>index 5149ceb=2E=2E933fa9c 100644
+>--- a/drivers/gpu/drm/msm/dp/dp_panel=2Ec
+>+++ b/drivers/gpu/drm/msm/dp/dp_panel=2Ec
+>@@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_pan=
+el)
+> 	link_info->rate =3D drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE])=
+;
+> 	link_info->num_lanes =3D dpcd[DP_MAX_LANE_COUNT] & DP_MAX_LANE_COUNT_MA=
+SK;
+>=20
+>+	/* Limit data lanes from data-lanes of endpoint properity of dtsi */
+> 	if (link_info->num_lanes > dp_panel->max_dp_lanes)
+> 		link_info->num_lanes =3D dp_panel->max_dp_lanes;
+>=20
+>-	/* Limit support upto HBR2 until HBR3 support is added */
+>-	if (link_info->rate >=3D (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
+>-		link_info->rate =3D drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
+>+	/* Limit link rate from link-frequencies of endpoint properity of dtsi =
+*/
+>+	if (link_info->rate > dp_panel->max_dp_link_rate)
+>+		link_info->rate =3D dp_panel->max_dp_link_rate;
+>=20
+> 	drm_dbg_dp(panel->drm_dev, "version: %d=2E%d\n", major, minor);
+> 	drm_dbg_dp(panel->drm_dev, "link_rate=3D%d\n", link_info->rate);
+>diff --git a/drivers/gpu/drm/msm/dp/dp_panel=2Eh b/drivers/gpu/drm/msm/dp=
+/dp_panel=2Eh
+>index d861197a=2E=2Ef04d021 100644
+>--- a/drivers/gpu/drm/msm/dp/dp_panel=2Eh
+>+++ b/drivers/gpu/drm/msm/dp/dp_panel=2Eh
+>@@ -50,6 +50,7 @@ struct dp_panel {
+>=20
+> 	u32 vic;
+> 	u32 max_dp_lanes;
+>+	u32 max_dp_link_rate;
+>=20
+> 	u32 max_bw_code;
+> };
 
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 4f93875..2dba4b5 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -495,7 +495,6 @@ void load_ucode_intel_ap(void)
- 	else
- 		iup = &intel_ucode_patch;
- 
--reget:
- 	if (!*iup) {
- 		patch = __load_ucode_intel(&uci);
- 		if (!patch)
-@@ -506,12 +505,7 @@ reget:
- 
- 	uci.mc = *iup;
- 
--	if (apply_microcode_early(&uci, true)) {
--		/* Mixed-silicon system? Try to refetch the proper patch: */
--		*iup = NULL;
--
--		goto reget;
--	}
-+	apply_microcode_early(&uci, true);
- }
- 
- static struct microcode_intel *find_patch(struct ucode_cpu_info *uci)
+--=20
+With best wishes
+Dmitry
