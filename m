@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260DB64299D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2960E6429A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbiLENlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S231640AbiLENld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiLENlV (ORCPT
+        with ESMTP id S232143AbiLENl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:41:21 -0500
+        Mon, 5 Dec 2022 08:41:28 -0500
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692591CFD8;
-        Mon,  5 Dec 2022 05:41:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5011CFDB;
+        Mon,  5 Dec 2022 05:41:27 -0800 (PST)
 Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3D32DFF802;
-        Mon,  5 Dec 2022 13:41:00 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 79BC4FF811;
+        Mon,  5 Dec 2022 13:41:14 +0000 (UTC)
 From:   Quentin Schulz <foss+kernel@0leil.net>
 To:     Samuel Holland <samuel@sholland.org>,
         Bastien Nocera <hadess@hadess.net>,
@@ -54,9 +54,9 @@ Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v3 1/9] Input: goodix - add macro for gpio mapping
-Date:   Mon,  5 Dec 2022 14:40:30 +0100
-Message-Id: <20221103-upstream-goodix-reset-v3-1-0975809eb183@theobroma-systems.com>
+Subject: [PATCH v3 2/9] Input: goodix - make gpiod_get honor GPIOD_ASIS
+Date:   Mon,  5 Dec 2022 14:40:31 +0100
+Message-Id: <20221103-upstream-goodix-reset-v3-2-0975809eb183@theobroma-systems.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
 References: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
@@ -75,55 +75,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-To prepare for the quirks member to be set for all pins, which would
-make the line longer than allowed, let's move all mappings into a macro.
+For some reason the ACPI GPIO lookup code (acpi_find_gpio followed by
+acpi_gpio_update_gpiod_flags) will override the gpiod_flags
+passed to gpiod_get() if it can determine a set of flags from the ACPI
+GpioIo entry.
 
+For output pins like the reset pin, this requires a pull bias to be set,
+which often is not the case, so then the GPIOD_ASIS which we pass in is
+used.
+
+But if a pull bias is specified in the ACPI GpioIo entry for the reset
+pin then that gets translated to GPIOD_OUT_LOW or GPIOD_OUT_HIGH meaning
+we cannot guarantee the same behavior on all boards.
+
+So this may cause unintended side-effects, c.f. commit a2fd46cd3dbb
+("Input: goodix - try not to touch the reset-pin on x86/ACPI devices")
+for some background.
+
+This is something which we can fix though, we can force the ACPI GPIO
+code to honor the GPIOD_ASIS we pass in by passing
+ACPI_GPIO_QUIRK_NO_IO_RESTRICTION to the ACPI gpio mapping.
+
+Suggested-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- drivers/input/touchscreen/goodix.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ drivers/input/touchscreen/goodix.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index c281e49826c23..d73d4272a8ea5 100644
+index d73d4272a8ea5..1639f2f8a31e3 100644
 --- a/drivers/input/touchscreen/goodix.c
 +++ b/drivers/input/touchscreen/goodix.c
-@@ -797,23 +797,31 @@ static int goodix_reset(struct goodix_ts_data *ts)
- }
+@@ -803,6 +803,7 @@ static int goodix_reset(struct goodix_ts_data *ts)
+ 		.name = _name, \
+ 		.data = _params, \
+ 		.size = _size, \
++		.quirks = ACPI_GPIO_QUIRK_NO_IO_RESTRICTION, \
+ 	}
  
- #ifdef ACPI_GPIO_SUPPORT
-+
-+#define GOODIX_GPIO_MAPPING(_name, _params, _size) \
-+	{ \
-+		.name = _name, \
-+		.data = _params, \
-+		.size = _size, \
-+	}
-+
  static const struct acpi_gpio_params first_gpio = { 0, 0, false };
- static const struct acpi_gpio_params second_gpio = { 1, 0, false };
- 
- static const struct acpi_gpio_mapping acpi_goodix_int_first_gpios[] = {
--	{ GOODIX_GPIO_INT_NAME "-gpios", &first_gpio, 1 },
--	{ GOODIX_GPIO_RST_NAME "-gpios", &second_gpio, 1 },
-+	GOODIX_GPIO_MAPPING(GOODIX_GPIO_INT_NAME "-gpios", &first_gpio, 1),
-+	GOODIX_GPIO_MAPPING(GOODIX_GPIO_RST_NAME "-gpios", &second_gpio, 1),
- 	{ },
- };
- 
- static const struct acpi_gpio_mapping acpi_goodix_int_last_gpios[] = {
--	{ GOODIX_GPIO_RST_NAME "-gpios", &first_gpio, 1 },
--	{ GOODIX_GPIO_INT_NAME "-gpios", &second_gpio, 1 },
-+	GOODIX_GPIO_MAPPING(GOODIX_GPIO_RST_NAME "-gpios", &first_gpio, 1),
-+	GOODIX_GPIO_MAPPING(GOODIX_GPIO_INT_NAME "-gpios", &second_gpio, 1),
- 	{ },
- };
- 
- static const struct acpi_gpio_mapping acpi_goodix_reset_only_gpios[] = {
--	{ GOODIX_GPIO_RST_NAME "-gpios", &first_gpio, 1 },
-+	GOODIX_GPIO_MAPPING(GOODIX_GPIO_RST_NAME "-gpios", &first_gpio, 1),
- 	{ },
- };
- 
 
 -- 
 b4 0.10.1
