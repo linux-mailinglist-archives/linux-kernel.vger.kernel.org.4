@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D35464214A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 02:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EE764214F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 03:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiLEB7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 20:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S230492AbiLECBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 21:01:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiLEB7B (ORCPT
+        with ESMTP id S230480AbiLECBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 20:59:01 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBD111470;
-        Sun,  4 Dec 2022 17:58:59 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id s5so13782834edc.12;
-        Sun, 04 Dec 2022 17:58:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbpjXJzdTAO9JepFbvBnD12JSSi+Xmb+zn7Y3aMVEdg=;
-        b=loDp1iQtLEbaCHmgMyZGgod69uS8OjIxFIQIKXkenQZ4eMfKOIuFIEd5JiLKT5Fg0M
-         jGPfbY8fuIj/gINT1hUpQBhWhy1HRxVtytR/O2WSZPMXBjTc9Rv/jc9ppMBc1qdGJRG+
-         +77fNve+Ugbg6SLU7JeP26LdR9w5T9WwFx8ig53W6MSpaYDg91FDnGQHcmOiNzWdFTJR
-         Qm5c2MI9U3615e0wCAZuXDgKmD5IwzGZtt0R5QBnxiEwqad7PuIpjv1BM5iy7xUMH/mb
-         pzfs08PRT3ZldFEN6nxitvgvPMpQaJZen+6iWve0qG7/1MGq959c1N4lywfW+nReSeMu
-         4/uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cbpjXJzdTAO9JepFbvBnD12JSSi+Xmb+zn7Y3aMVEdg=;
-        b=FvXIsLXyoZR1lKP81QAVu1fu1PlkUmX63+dBaCQ2fqZYJKcDEK/WCXMXvMwsEb681T
-         aoluQLL6/nK/1ER861xnGF+qtRnQP5THrf7oNHDgLeEXWcPdhqcWYvWbVSIJhTrpb5EM
-         CM59SYMSkr+VLVS0R2dK8gjx0HoiM3dWP0REwM566nCGiF4Tukv3NvZrDakWjIO9m/mC
-         HK5OGCmk85ElGL3KwqS1XszAqjJt8S2SAt+zXlc3Apb7L1iBOTS3Ibht8H2d2BIyMzxG
-         fZ5Wwl9zlmzk2UtzqZqGT2qSxd/y1MydXbdcm8/plT8Yqm7wqp0NnN3GIhYIG76vT8CV
-         v5MQ==
-X-Gm-Message-State: ANoB5pmGS40wmJgcS6R/aATAtwXGuSCeDULPE9EFqAkKUGWPYlhHGx5d
-        dK/ZyhXXJDMMNgPviQXZ8gg=
-X-Google-Smtp-Source: AA0mqf40ZSrRvD53vUvcWhfGWhRLGYeLibdiu5BHiDxNLp9mxQIsaV5zP5oJTeAk5PxW2ftESVvRwg==
-X-Received: by 2002:a05:6402:1013:b0:463:f3a:32ce with SMTP id c19-20020a056402101300b004630f3a32cemr56522888edu.366.1670205537859;
-        Sun, 04 Dec 2022 17:58:57 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b0073dc5bb7c32sm5687352eja.64.2022.12.04.17.58.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 17:58:57 -0800 (PST)
-Date:   Mon, 5 Dec 2022 02:59:06 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Michal Kubecek <mkubecek@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH ethtool-next 2/2] add support for IEEE 802.3cg-2019 Clause
- 148 - PLCA RS
-Message-ID: <fc8c905af3c68df563a281d3b69ae02e5e939a65.1670205306.git.piergiorgio.beruto@gmail.com>
-References: <f9712cc0a62fb1a2e4ab5016b2dc91a26b0e3891.1670205306.git.piergiorgio.beruto@gmail.com>
+        Sun, 4 Dec 2022 21:01:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD84411C2B;
+        Sun,  4 Dec 2022 18:01:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B27160F33;
+        Mon,  5 Dec 2022 02:01:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B79C433B5;
+        Mon,  5 Dec 2022 02:01:03 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ng1SOcsj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1670205660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=y039S5PSKwnF+15QEQ9xdpGKr1s+Su7mXWxHMfByAw4=;
+        b=Ng1SOcsjGQsnhBFCY8qvkAn8yjGQBe6CxzCaeHRIoFQg4DJCzp9p9eAP48W5XI7UqHTvEi
+        2XkMKhP27XQopvxeHn31oxLJ8pWfFSVH/QV4TDJ3mRq+t1JoQtV0Ml/1sceOrM1gCZtWyX
+        VPuqthEdyUnzpzeTPCaDHMTqYxuxcxg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d4239dd3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 5 Dec 2022 02:01:00 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH v11 0/4] implement getrandom() in vDSO
+Date:   Mon,  5 Dec 2022 03:00:42 +0100
+Message-Id: <20221205020046.1876356-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9712cc0a62fb1a2e4ab5016b2dc91a26b0e3891.1670205306.git.piergiorgio.beruto@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,539 +61,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for the Physical Layer Collision Avoidance
-Reconciliation Sublayer which was introduced in the IEEE 802.3
-standard by the 802.3cg working group in 2019.
+Changes v10->v11:
+-----------------
+- Adhemerval's latest glibc patch currently lives here:
+  https://github.com/zatrazz/glibc/commits/azanella/getrandom-vdso
+  It's still in flux (he hasn't posted it to glibc-alpha yet), but that
+  should still give some idea.
 
-The ethtool interface has been extended as follows:
-- show if the device supports PLCA when ethtool is invoked without FLAGS
-   - additionally show what PLCA version is supported
-   - show the current PLCA status
-- add FLAGS for getting and setting the PLCA configuration
+- Substantially increase documentation detail throughout.
 
-Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
----
- Makefile.am        |   1 +
- ethtool.c          |  21 ++++
- netlink/extapi.h   |   6 +
- netlink/plca.c     | 304 +++++++++++++++++++++++++++++++++++++++++++++
- netlink/settings.c |  89 ++++++++++++-
- 5 files changed, 419 insertions(+), 2 deletions(-)
- create mode 100644 netlink/plca.c
+- Numerous fixes to style and clarity.
 
-diff --git a/Makefile.am b/Makefile.am
-index fcc912edd7e4..b184b8ceb28a 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -41,6 +41,7 @@ ethtool_SOURCES += \
- 		  netlink/desc-ethtool.c netlink/desc-genlctrl.c \
- 		  netlink/module-eeprom.c netlink/module.c \
- 		  netlink/desc-rtnl.c netlink/cable_test.c netlink/tunnels.c \
-+		  netlink/plca.c \
- 		  uapi/linux/ethtool_netlink.h \
- 		  uapi/linux/netlink.h uapi/linux/genetlink.h \
- 		  uapi/linux/rtnetlink.h uapi/linux/if_link.h
-diff --git a/ethtool.c b/ethtool.c
-index 3207e49137c4..d23406f54a37 100644
---- a/ethtool.c
-+++ b/ethtool.c
-@@ -6075,6 +6075,27 @@ static const struct option args[] = {
- 		.help	= "Set transceiver module settings",
- 		.xhelp	= "		[ power-mode-policy high|auto ]\n"
- 	},
-+	{
-+		.opts	= "--get-plca-cfg",
-+		.nlfunc	= nl_plca_get_cfg,
-+		.help	= "Get PLCA configuration",
-+	},
-+	{
-+		.opts	= "--set-plca-cfg",
-+		.nlfunc	= nl_plca_set_cfg,
-+		.help	= "Set PLCA configuration",
-+		.xhelp  = "             [ enable on|off ]\n"
-+			  "             [ node-id N ]\n"
-+			  "             [ node-cnt N ]\n"
-+			  "             [ to-tmr N ]\n"
-+			  "             [ burst-cnt N ]\n"
-+			  "             [ burst-tmr N ]\n"
-+	},
-+	{
-+		.opts	= "--get-plca-status",
-+		.nlfunc	= nl_plca_get_status,
-+		.help	= "Get PLCA status information",
-+	},
- 	{
- 		.opts	= "-h|--help",
- 		.no_dev	= true,
-diff --git a/netlink/extapi.h b/netlink/extapi.h
-index 1bb580a889a8..0add156e644a 100644
---- a/netlink/extapi.h
-+++ b/netlink/extapi.h
-@@ -47,6 +47,9 @@ int nl_gmodule(struct cmd_context *ctx);
- int nl_smodule(struct cmd_context *ctx);
- int nl_monitor(struct cmd_context *ctx);
- int nl_getmodule(struct cmd_context *ctx);
-+int nl_plca_get_cfg(struct cmd_context *ctx);
-+int nl_plca_set_cfg(struct cmd_context *ctx);
-+int nl_plca_get_status(struct cmd_context *ctx);
- 
- void nl_monitor_usage(void);
- 
-@@ -114,6 +117,9 @@ nl_get_eeprom_page(struct cmd_context *ctx __maybe_unused,
- #define nl_getmodule		NULL
- #define nl_gmodule		NULL
- #define nl_smodule		NULL
-+#define nl_get_plca_cfg		NULL
-+#define nl_set_plca_cfg		NULL
-+#define nl_get_plca_status	NULL
- 
- #endif /* ETHTOOL_ENABLE_NETLINK */
- 
-diff --git a/netlink/plca.c b/netlink/plca.c
-new file mode 100644
-index 000000000000..215638959502
---- /dev/null
-+++ b/netlink/plca.c
-@@ -0,0 +1,304 @@
-+/*
-+ * plca.c - netlink implementation of plca command
-+ *
-+ * Implementation of "ethtool --show-plca <dev>" and
-+ * "ethtool --set-plca <dev> ..."
-+ */
-+
-+#include <errno.h>
-+#include <string.h>
-+#include <stdio.h>
-+
-+#include "../internal.h"
-+#include "../common.h"
-+#include "netlink.h"
-+#include "bitset.h"
-+#include "parser.h"
-+
-+/* PLCA_GET_CFG */
-+
-+int plca_get_cfg_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	bool silent;
-+	int err_ret;
-+	u8 id = 255;
-+	int ret;
-+	u8 val;
-+
-+	silent = nlctx->is_dump || nlctx->is_monitor;
-+	err_ret = silent ? MNL_CB_OK : MNL_CB_ERROR;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return err_ret;
-+
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return err_ret;
-+
-+	if (silent)
-+		putchar('\n');
-+
-+	printf("PLCA settings for %s:\n", nlctx->devname);
-+
-+	// check if PLCA is enabled
-+	printf("\tEnabled: ");
-+
-+	if (!tb[ETHTOOL_A_PLCA_ENABLED]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_ENABLED]);
-+		printf(val ? "Yes" : "No");
-+	}
-+	putchar('\n');
-+
-+	// get node ID
-+	printf("\tlocal node ID: ");
-+
-+	if (!tb[ETHTOOL_A_PLCA_NODE_ID]) {
-+		printf("not supported");
-+	} else {
-+		id = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_NODE_ID]);
-+		printf("%u (%s)", (unsigned int)id,
-+		       id == 0 ? "coordinator" :
-+		       id == 255 ? "unconfigured" : "follower");
-+	}
-+	putchar('\n');
-+
-+	// get node count
-+	printf("\tNode count: ");
-+	if (!tb[ETHTOOL_A_PLCA_NODE_CNT]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_NODE_CNT]);
-+		printf("%u", (unsigned int)val);
-+
-+		// The node count is ignored by follower nodes. However, it can
-+		// be pre-set to enable fast coordinator role switchover.
-+		// Therefore, on a follower node we still wanto to show it,
-+		// indicating it is not currently used.
-+		if (tb[ETHTOOL_A_PLCA_NODE_ID] && id != 0)
-+			printf(" (ignored)");
-+	}
-+	putchar('\n');
-+
-+	// get TO timer (transmit opportunity timer)
-+	printf("\tTO timer: ");
-+	if (!tb[ETHTOOL_A_PLCA_TO_TMR]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_TO_TMR]);
-+		printf("%u BT", (unsigned int) val);
-+	}
-+	putchar('\n');
-+
-+	// get burst count
-+	printf("\tBurst count: ");
-+	if (!tb[ETHTOOL_A_PLCA_BURST_CNT]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_BURST_CNT]);
-+		printf("%u (%s)", (unsigned int) val,
-+		       val > 0 ? "enabled" : "disabled");
-+	}
-+	putchar('\n');
-+
-+	// get burst timer
-+	printf("\tBurst timer: ");
-+	if (!tb[ETHTOOL_A_PLCA_BURST_TMR]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_BURST_TMR]);
-+		printf("%u BT", (unsigned int) val);
-+	}
-+	putchar('\n');
-+
-+	return MNL_CB_OK;
-+}
-+
-+
-+int nl_plca_get_cfg(struct cmd_context *ctx)
-+{
-+	struct nl_context *nlctx = ctx->nlctx;
-+	struct nl_socket *nlsk = nlctx->ethnl_socket;
-+	int ret;
-+
-+	if (netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_CFG, true))
-+		return -EOPNOTSUPP;
-+
-+	if (ctx->argc > 0) {
-+		fprintf(stderr, "ethtool: unexpected parameter '%s'\n",
-+			*ctx->argp);
-+		return 1;
-+	}
-+
-+	ret = nlsock_prep_get_request(
-+				      nlsk,
-+				      ETHTOOL_MSG_PLCA_GET_CFG,
-+				      ETHTOOL_A_PLCA_HEADER,
-+				      0
-+				     );
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return nlsock_send_get_request(nlsk, plca_get_cfg_reply_cb);
-+}
-+
-+/* PLCA_SET_CFG */
-+
-+static const struct param_parser set_plca_params[] = {
-+	{
-+		.arg		= "enable",
-+		.type		= ETHTOOL_A_PLCA_ENABLED,
-+		.handler	= nl_parse_u8bool,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "node-id",
-+		.type		= ETHTOOL_A_PLCA_NODE_ID,
-+		.handler	= nl_parse_direct_u8,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "node-cnt",
-+		.type		= ETHTOOL_A_PLCA_NODE_CNT,
-+		.handler	= nl_parse_direct_u8,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "to-tmr",
-+		.type		= ETHTOOL_A_PLCA_TO_TMR,
-+		.handler	= nl_parse_direct_u8,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "burst-cnt",
-+		.type		= ETHTOOL_A_PLCA_BURST_CNT,
-+		.handler	= nl_parse_direct_u8,
-+		.min_argc	= 1,
-+	},
-+	{
-+		.arg		= "burst-tmr",
-+		.type		= ETHTOOL_A_PLCA_BURST_TMR,
-+		.handler	= nl_parse_direct_u8,
-+		.min_argc	= 1,
-+	},
-+	{}
-+};
-+
-+int nl_plca_set_cfg(struct cmd_context *ctx)
-+{
-+	struct nl_context *nlctx = ctx->nlctx;
-+	struct nl_msg_buff *msgbuff;
-+	struct nl_socket *nlsk;
-+	int ret;
-+
-+	if (netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_SET_CFG, false))
-+		return -EOPNOTSUPP;
-+	if (!ctx->argc) {
-+		fprintf(stderr,
-+			"ethtool (--set-plca-cfg): parameters missing\n");
-+		return 1;
-+	}
-+
-+	nlctx->cmd = "--set-plca-cfg";
-+	nlctx->argp = ctx->argp;
-+	nlctx->argc = ctx->argc;
-+	nlctx->devname = ctx->devname;
-+	nlsk = nlctx->ethnl_socket;
-+	msgbuff = &nlsk->msgbuff;
-+
-+	ret = msg_init(nlctx, msgbuff, ETHTOOL_MSG_PLCA_SET_CFG,
-+		       NLM_F_REQUEST | NLM_F_ACK);
-+	if (ret < 0)
-+		return 2;
-+	if (ethnla_fill_header(msgbuff, ETHTOOL_A_PLCA_HEADER,
-+			       ctx->devname, 0))
-+		return -EMSGSIZE;
-+
-+	ret = nl_parser(nlctx, set_plca_params, NULL, PARSER_GROUP_NONE, NULL);
-+	if (ret < 0)
-+		return 1;
-+
-+	ret = nlsock_sendmsg(nlsk, NULL);
-+	if (ret < 0)
-+		return 76;
-+	ret = nlsock_process_reply(nlsk, nomsg_reply_cb, nlctx);
-+	if (ret == 0)
-+		return 0;
-+	else
-+		return nlctx->exit_code ?: 76;
-+}
-+
-+/* PLCA_GET_STATUS */
-+
-+int plca_get_status_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	bool silent;
-+	int err_ret;
-+	int ret;
-+	u8 val;
-+
-+	silent = nlctx->is_dump || nlctx->is_monitor;
-+	err_ret = silent ? MNL_CB_OK : MNL_CB_ERROR;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return err_ret;
-+
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return err_ret;
-+
-+	if (silent)
-+		putchar('\n');
-+
-+	printf("PLCA status of %s:\n", nlctx->devname);
-+
-+	// check whether the Open Alliance TC14 standard memory map is supported
-+	printf("\tStatus: ");
-+
-+	if (!tb[ETHTOOL_A_PLCA_STATUS]) {
-+		printf("not supported");
-+	} else {
-+		val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_STATUS]);
-+		printf(val ? "on" : "off");
-+	}
-+	putchar('\n');
-+
-+	return MNL_CB_OK;
-+}
-+
-+
-+int nl_plca_get_status(struct cmd_context *ctx)
-+{
-+	struct nl_context *nlctx = ctx->nlctx;
-+	struct nl_socket *nlsk = nlctx->ethnl_socket;
-+	int ret;
-+
-+	if (netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_STATUS, true))
-+		return -EOPNOTSUPP;
-+
-+	if (ctx->argc > 0) {
-+		fprintf(stderr, "ethtool: unexpected parameter '%s'\n",
-+			*ctx->argp);
-+		return 1;
-+	}
-+
-+	ret = nlsock_prep_get_request(
-+				      nlsk,
-+				      ETHTOOL_MSG_PLCA_GET_STATUS,
-+				      ETHTOOL_A_PLCA_HEADER,
-+				      0
-+				     );
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return nlsock_send_get_request(nlsk, plca_get_status_reply_cb);
-+}
-diff --git a/netlink/settings.c b/netlink/settings.c
-index 14ad0b46e102..e0ed827547a0 100644
---- a/netlink/settings.c
-+++ b/netlink/settings.c
-@@ -166,6 +166,9 @@ static const struct link_mode_info link_modes[] = {
- 	[ETHTOOL_LINK_MODE_100baseFX_Half_BIT]		= __HALF_DUPLEX(100),
- 	[ETHTOOL_LINK_MODE_100baseFX_Full_BIT]		= __REAL(100),
- 	[ETHTOOL_LINK_MODE_10baseT1L_Full_BIT]		= __REAL(10),
-+	[ETHTOOL_LINK_MODE_10baseT1S_Full_BIT]		= __REAL(10),
-+	[ETHTOOL_LINK_MODE_10baseT1S_Half_BIT]		= __REAL(10),
-+	[ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT]	= __REAL(10),
- };
- const unsigned int link_modes_count = ARRAY_SIZE(link_modes);
- 
-@@ -890,6 +893,73 @@ int debug_reply_cb(const struct nlmsghdr *nlhdr, void *data)
- 	return MNL_CB_OK;
- }
- 
-+int plca_cfg_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	int ret;
-+
-+	if (nlctx->is_dump || nlctx->is_monitor)
-+		nlctx->no_banner = false;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return ret;
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return MNL_CB_OK;
-+
-+	print_banner(nlctx);
-+	printf("\tPLCA support: ");
-+
-+	if (tb[ETHTOOL_A_PLCA_VERSION]) {
-+		uint16_t val = mnl_attr_get_u16(tb[ETHTOOL_A_PLCA_VERSION]);
-+
-+		if ((val >> 8) == 0x0A) {
-+			printf("OPEN Alliance v%u.%u",
-+			       (unsigned int)((val >> 4) & 0xF),
-+			       (unsigned int)(val & 0xF));
-+		} else
-+			printf("unknown standard");
-+	} else
-+		printf("non-standard");
-+
-+	printf("\n");
-+
-+	return MNL_CB_OK;
-+}
-+
-+int plca_status_reply_cb(const struct nlmsghdr *nlhdr, void *data)
-+{
-+	const struct nlattr *tb[ETHTOOL_A_PLCA_MAX + 1] = {};
-+	DECLARE_ATTR_TB_INFO(tb);
-+	struct nl_context *nlctx = data;
-+	int ret;
-+
-+	if (nlctx->is_dump || nlctx->is_monitor)
-+		nlctx->no_banner = false;
-+	ret = mnl_attr_parse(nlhdr, GENL_HDRLEN, attr_cb, &tb_info);
-+	if (ret < 0)
-+		return ret;
-+	nlctx->devname = get_dev_name(tb[ETHTOOL_A_PLCA_HEADER]);
-+	if (!dev_ok(nlctx))
-+		return MNL_CB_OK;
-+
-+	print_banner(nlctx);
-+	printf("\tPLCA status: ");
-+
-+	if (tb[ETHTOOL_A_PLCA_STATUS]) {
-+		uint8_t val = mnl_attr_get_u8(tb[ETHTOOL_A_PLCA_STATUS]);
-+
-+		printf(val ? "up" : "down");
-+	} else
-+		printf("unknown");
-+
-+	printf("\n");
-+
-+	return MNL_CB_OK;
-+}
-+
- static int gset_request(struct nl_context *nlctx, uint8_t msg_type,
- 			uint16_t hdr_attr, mnl_cb_t cb)
- {
-@@ -914,7 +984,10 @@ int nl_gset(struct cmd_context *ctx)
- 	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKINFO_GET, true) ||
- 	    netlink_cmd_check(ctx, ETHTOOL_MSG_WOL_GET, true) ||
- 	    netlink_cmd_check(ctx, ETHTOOL_MSG_DEBUG_GET, true) ||
--	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKSTATE_GET, true))
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKSTATE_GET, true) ||
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_LINKSTATE_GET, true) ||
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_CFG, true) ||
-+	    netlink_cmd_check(ctx, ETHTOOL_MSG_PLCA_GET_STATUS, true))
- 		return -EOPNOTSUPP;
- 
- 	nlctx->suppress_nlerr = 1;
-@@ -934,6 +1007,12 @@ int nl_gset(struct cmd_context *ctx)
- 	if (ret == -ENODEV)
- 		return ret;
- 
-+	ret = gset_request(nlctx, ETHTOOL_MSG_PLCA_GET_CFG,
-+			   ETHTOOL_A_PLCA_HEADER, plca_cfg_reply_cb);
-+
-+	if (ret == -ENODEV)
-+		return ret;
-+
- 	ret = gset_request(nlctx, ETHTOOL_MSG_DEBUG_GET, ETHTOOL_A_DEBUG_HEADER,
- 			   debug_reply_cb);
- 	if (ret == -ENODEV)
-@@ -941,6 +1020,13 @@ int nl_gset(struct cmd_context *ctx)
- 
- 	ret = gset_request(nlctx, ETHTOOL_MSG_LINKSTATE_GET,
- 			   ETHTOOL_A_LINKSTATE_HEADER, linkstate_reply_cb);
-+
-+	if (ret == -ENODEV)
-+		return ret;
-+
-+
-+	ret = gset_request(nlctx, ETHTOOL_MSG_PLCA_GET_STATUS,
-+			   ETHTOOL_A_PLCA_HEADER, plca_status_reply_cb);
- 	if (ret == -ENODEV)
- 		return ret;
- 
-@@ -949,7 +1035,6 @@ int nl_gset(struct cmd_context *ctx)
- 		return 75;
- 	}
- 
--
- 	return 0;
- }
- 
+- Add two kselftests - one for the chacha20 assembly implementation, which
+  compares its output to that of libsodium, and one for the actual vDSO
+  function and vgetrandom_alloc() syscall, which also has some built-in quick &
+  dirty benchmarking functionality.
+
+- Add reserved `unsigned long addr` argument to syscall, for future use.
+
+- Enforce that `flags`, `addr`, and `*size_per_each` are all zero on input, so
+  that they can actually be used in the future.
+
+- Use VM_LOCKONFAULT|VM_NORESERVE so that memory isn't wasted until it's used.
+
+- Set VM_DONTDUMP to prevent state from being written out to core dumps.
+
+- Do mapping and flag setting all in one operation, so that it's not racy, and
+  so that dropping the mm lock between operations isn't required.
+
+- Due to the above, there's no longer any purpose in selecting
+  VGETRANDOM_ALLOC_SYSCALL, so remove that.
+
+- Don't update *num or *size_per_each until the mapping has succeeded.
+
+- Introduce vdso_kernel_ulong type for representing the long type that
+  the kernel uses, even when in 32-bit compat code on a 64-bit kernel.
+
+- Don't use 'bool' type in the vDSO page, in case of compiler quirks resulting
+  in a different interpretation of the type in different compilation contexts.
+
+--------------
+
+Two statements:
+
+  1) Userspace wants faster cryptographically secure random numbers of
+     arbitrary size, big or small.
+
+  2) Userspace is currently unable to safely roll its own RNG with the
+     same security profile as getrandom().
+
+Statement (1) has been debated for years, with arguments ranging from
+"we need faster cryptographically secure card shuffling!" to "the only
+things that actually need good randomness are keys, which are few and
+far between" to "actually, TLS CBC nonces are frequent" and so on. I
+don't intend to wade into that debate substantially, except to note that
+recently glibc added arc4random(), whose goal is to return a
+cryptographically secure uint32_t, and there are real user reports of it
+being too slow. So here we are.
+
+Statement (2) is more interesting. The kernel is the nexus of all
+entropic inputs that influence the RNG. It is in the best position, and
+probably the only position, to decide anything at all about the current
+state of the RNG and of its entropy. One of the things it uniquely knows
+about is when reseeding is necessary.
+
+For example, when a virtual machine is forked, restored, or duplicated,
+it's imparative that the RNG doesn't generate the same outputs. For this
+reason, there's a small protocol between hypervisors and the kernel that
+indicates this has happened, alongside some ID, which the RNG uses to
+immediately reseed, so as not to return the same numbers. Were userspace
+to expand a getrandom() seed from time T1 for the next hour, and at some
+point T2 < hour, the virtual machine forked, userspace would continue to
+provide the same numbers to two (or more) different virtual machines,
+resulting in potential cryptographic catastrophe. Something similar
+happens on resuming from hibernation (or even suspend), with various
+compromise scenarios there in mind.
+
+There's a more general reason why userspace rolling its own RNG from a
+getrandom() seed is fraught. There's a lot of attention paid to this
+particular Linuxism we have of the RNG being initialized and thus
+non-blocking or uninitialized and thus blocking until it is initialized.
+These are our Two Big States that many hold to be the holy
+differentiating factor between safe and not safe, between
+cryptographically secure and garbage. The fact is, however, that the
+distinction between these two states is a hand-wavy wishy-washy inexact
+approximation. Outside of a few exceptional cases (e.g. a HW RNG is
+available), we actually don't really ever know with any rigor at all
+when the RNG is safe and ready (nor when it's compromised). We do the
+best we can to "estimate" it, but entropy estimation is fundamentally
+impossible in the general case. So really, we're just doing guess work,
+and hoping it's good and conservative enough. Let's then assume that
+there's always some potential error involved in this differentiator.
+
+In fact, under the surface, the RNG is engineered around a different
+principal, and that is trying to *use* new entropic inputs regularly and
+at the right specific moments in time. For example, close to boot time,
+the RNG reseeds itself more often than later. At certain events, like VM
+fork, the RNG reseeds itself immediately. The various heuristics for
+when the RNG will use new entropy and how often is really a core aspect
+of what the RNG has some potential to do decently enough (and something
+that will probably continue to improve in the future from random.c's
+present set of algorithms). So in your mind, put away the metal
+attachment to the Two Big States, which represent an approximation with
+a potential margin of error. Instead keep in mind that the RNG's primary
+operating heuristic is how often and exactly when it's going to reseed.
+
+So, if userspace takes a seed from getrandom() at point T1, and uses it
+for the next hour (or N megabytes or some other meaningless metric),
+during that time, potential errors in the Two Big States approximation
+are amplified. During that time potential reseeds are being lost,
+forgotten, not reflected in the output stream. That's not good.
+
+The simplest statement you could make is that userspace RNGs that expand
+a getrandom() seed at some point T1 are nearly always *worse*, in some
+way, than just calling getrandom() every time a random number is
+desired.
+
+For those reasons, after some discussion on libc-alpha, glibc's
+arc4random() now just calls getrandom() on each invocation. That's
+trivially safe, and gives us latitude to then make the safe thing faster
+without becoming unsafe at our leasure. Card shuffling isn't
+particularly fast, however.
+
+How do we rectify this? By putting a safe implementation of getrandom()
+in the vDSO, which has access to whatever information a
+particular iteration of random.c is using to make its decisions. I use
+that careful language of "particular iteration of random.c", because the
+set of things that a vDSO getrandom() implementation might need for making
+decisions as good as the kernel's will likely change over time. This
+isn't just a matter of exporting certain *data* to userspace. We're not
+going to commit to a "data API" where the various heuristics used are
+exposed, locking in how the kernel works for decades to come, and then
+leave it to various userspaces to roll something on top and shoot
+themselves in the foot and have all sorts of complexity disasters.
+Rather, vDSO getrandom() is supposed to be the *same exact algorithm*
+that runs in the kernel, except it's been hoisted into userspace as
+much as possible. And so vDSO getrandom() and kernel getrandom() will
+always mirror each other hermetically.
+
+API-wise, the vDSO gains this function:
+
+  ssize_t vgetrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state);
+
+The return value and the first 3 arguments are the same as ordinary
+getrandom(), while the last argument is a pointer to some state
+allocated with vgetrandom_alloc(), explained below. Were all four
+arguments passed to the getrandom syscall, nothing different would
+happen, and the functions would have the exact same behavior.
+
+Then, we introduce a new syscall:
+
+  void *vgetrandom_alloc(unsigned int *num, unsigned int *size_per_each,
+                         unsigned long addr, unsigned int flags);
+
+This takes a hinted number of opaque states in `num`, and returns a
+pointer to an array of opaque states, the number actually allocated back
+in `num`, and the size in bytes of each one in `size_per_each`, enabling
+a libc to slice up the returned array into a state per each thread. (The
+`flags` and `addr` arguments, as well as the `*size_per_each` input
+value, are reserved for the future and are forced to be zero for now.)
+
+Libc is expected to allocate a chunk of these on first use, and then
+dole them out to threads as they're created, allocating more when
+needed. The returned address of the first state may be passed to
+munmap(2) with a length of `num * size_per_each`, in order to deallocate
+the memory.
+
+We very intentionally do *not* leave state allocation up to the caller
+of vgetrandom, but provide vgetrandom_alloc for that allocation. There
+are too many weird things that can go wrong, and it's important that
+vDSO does not provide too generic of a mechanism. It's not going to
+store its state in just any old memory address. It'll do it only in ones
+it allocates.
+
+Right now this means it's a mlock'd page with WIPEONFORK set. In the
+future maybe there will be other interesting page flags or
+anti-heartbleed measures, or other platform-specific kernel-specific
+things that can be set from the syscall. Again, it's important that the
+kernel has a say in how this works rather than agreeing to operate on
+any old address; memory isn't neutral.
+
+The interesting meat of the implementation is in lib/vdso/getrandom.c,
+as generic C code, and it aims to mainly follow random.c's buffered fast
+key erasure logic. Before the RNG is initialized, it falls back to the
+syscall. Right now it uses a simple generation counter to make its decisions
+on reseeding (though this could be made more extensive over time).
+
+The actual place that has the most work to do is in all of the other
+files. Most of the vDSO shared page infrastructure is centered around
+gettimeofday, and so the main structs are all in arrays for different
+timestamp types, and attached to time namespaces, and so forth. I've
+done the best I could to add onto this in an unintrusive way.
+
+In my test results, performance is pretty stellar (around 15x for uint32_t
+generation), and it seems to be working. There's an extended example in the
+second commit of this series, showing how the syscall and the vDSO function
+are meant to be used together.
+
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-api@vger.kernel.org
+Cc: x86@kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
+Cc: Carlos O'Donell <carlos@redhat.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Christian Brauner <brauner@kernel.org>  
+
+Jason A. Donenfeld (4):
+  random: add vgetrandom_alloc() syscall
+  arch: allocate vgetrandom_alloc() syscall number
+  random: introduce generic vDSO getrandom() implementation
+  x86: vdso: Wire up getrandom() vDSO implementation
+
+ MAINTAINERS                                   |   2 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/x86/entry/vdso/Makefile                  |   3 +-
+ arch/x86/entry/vdso/vdso.lds.S                |   2 +
+ arch/x86/entry/vdso/vgetrandom-chacha.S       | 177 +++++++++++
+ arch/x86/entry/vdso/vgetrandom.c              |  17 ++
+ arch/x86/include/asm/vdso/getrandom.h         |  55 ++++
+ arch/x86/include/asm/vdso/vsyscall.h          |   2 +
+ arch/x86/include/asm/vvar.h                   |  16 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ drivers/char/random.c                         | 137 +++++++++
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/vdso/datapage.h                       |  12 +
+ include/vdso/getrandom.h                      |  44 +++
+ include/vdso/types.h                          |  35 +++
+ kernel/sys_ni.c                               |   3 +
+ lib/vdso/Kconfig                              |   5 +
+ lib/vdso/getrandom.c                          | 205 +++++++++++++
+ tools/include/uapi/asm-generic/unistd.h       |   5 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   1 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   1 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   1 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ tools/testing/selftests/vDSO/.gitignore       |   2 +
+ tools/testing/selftests/vDSO/Makefile         |  11 +
+ .../testing/selftests/vDSO/vdso_test_chacha.c |  43 +++
+ .../selftests/vDSO/vdso_test_getrandom.c      | 279 ++++++++++++++++++
+ 45 files changed, 1084 insertions(+), 4 deletions(-)
+ create mode 100644 arch/x86/entry/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/x86/entry/vdso/vgetrandom.c
+ create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+ create mode 100644 include/vdso/getrandom.h
+ create mode 100644 include/vdso/types.h
+ create mode 100644 lib/vdso/getrandom.c
+ create mode 100644 tools/testing/selftests/vDSO/vdso_test_chacha.c
+ create mode 100644 tools/testing/selftests/vDSO/vdso_test_getrandom.c
+
 -- 
-2.35.1
+2.38.1
 
