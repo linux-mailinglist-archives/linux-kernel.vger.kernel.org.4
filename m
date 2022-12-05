@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE13642601
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:46:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0949642608
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiLEJqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S231372AbiLEJrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiLEJqW (ORCPT
+        with ESMTP id S231356AbiLEJrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:46:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9696BE39;
-        Mon,  5 Dec 2022 01:46:21 -0800 (PST)
+        Mon, 5 Dec 2022 04:47:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC14F19030;
+        Mon,  5 Dec 2022 01:46:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8691B80CAC;
-        Mon,  5 Dec 2022 09:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C58A2C433D6;
-        Mon,  5 Dec 2022 09:46:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 895BB60FF0;
+        Mon,  5 Dec 2022 09:46:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F628C433C1;
+        Mon,  5 Dec 2022 09:46:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670233579;
-        bh=0YjvjMAnNv7s1I0om4H4oTt2LREvILW1JxecagiIFq0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g35rVn3IyApPV1ACg8yq6IusfHaby2iYe6xL/LDwWYfJJp3aZV9j0DpNCD3Nx2oj9
-         ZVoH7i/D2D+mPvcyPUPgz4RR6gXKsVKKe63s1nb/jYpkUMQ3cz0BKegpySLX3c8u1z
-         NSeXYHEMWPJV04354YVycJuUkPc5C1UzWXFK2Fs3MDPD//BKLYNzkok9Ke782wpIQm
-         P/9oQ9/3YNq8AQyuTckso3kxOrAvfU+fO6oxa8h2pHktAYZGgN7m/eKuggc6FvzmdV
-         mPZxvYlTd9dwCGsqs9KZvgdDMtljXpHIRWAKeqhnd0X7OmFB3RyH26OL6MJ8w/EwT/
-         jRDxrSaylnGbw==
-Date:   Mon, 5 Dec 2022 10:46:16 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 047/606] i2c: mux: pca9541: Convert to i2c's .probe_new()
-Message-ID: <Y4296PEnzgtNyAo6@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-48-uwe@kleine-koenig.org>
+        s=k20201202; t=1670233618;
+        bh=ATIjD4eir5XBkS5wpUUkHOY7bfI0wqvtDyCyhmJDvJU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fMmdYErt1K0gAmnAgiPHlIRvDzToBywyrW/wS50HU9jcAzg3IMoocz1TabriHd4v1
+         GF5OMO9+IHu9/hBRTQ96a1by65RAMZVKmcVQnDYU31EFRrH6JDPF0l2J9J7R8OTsWI
+         bn3S4S4AU2u9n4YSfSl6boVpF5g/TdD+bE9EH4LCS0S3CmxHcGvTlgCUrdIqtBYwRJ
+         J9YIx7yAdyYtU0AUrhbvtSRpr7lOIyiM0n354wkfUqljeWST5OVMtkVFLHOk+Gb4Ah
+         0DI5pIZGWRSHbtwipF8qVvGPF+gda6Cf+PL0iSgpMAoFtT10YwuQZiYlbtW0MFQ2RH
+         ONcsIfI9zBqyQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     guoren@kernel.org, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH -next V8 00/14] riscv: Add GENERIC_ENTRY support and
+ related features
+In-Reply-To: <20221103075047.1634923-1-guoren@kernel.org>
+References: <20221103075047.1634923-1-guoren@kernel.org>
+Date:   Mon, 05 Dec 2022 10:46:56 +0100
+Message-ID: <877cz69o8f.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XJx8u3EcQvX1eaUF"
-Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-48-uwe@kleine-koenig.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,41 +63,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+guoren@kernel.org writes:
 
---XJx8u3EcQvX1eaUF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The patches convert riscv to use the generic entry infrastructure from
+> kernel/entry/*. Additionally, add independent irq stacks (IRQ_STACKS)
+> for percpu to prevent kernel stack overflows. Add generic_entry based
+> STACKLEAK support. Some optimization for entry.S with new .macro and
+> merge ret_from_kernel_thread into ret_from_fork.
+>
+> We have tested it with rv64, rv32, rv64 + 32rootfs, all are passed.
+>
+> You can directly try it with:
+> [1] https://github.com/guoren83/linux/tree/generic_entry_v8
 
-On Fri, Nov 18, 2022 at 11:36:21PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->=20
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Guo, this is a really nice work, and I'm looking forward having generic
+entry support for RV. However, there are many patches in this series
+that really shouldn't be part of the series.
 
-Found an older patch doing the same, but still thanks!
+Patch 2, 3, 4, and 10 should defintely be pulled out.
+
+I'm not sure 7, 8, and 9 belong to series, as it's really a separate
+feature.
+
+Dito for patch 11, it just makes the series harder to review.
+
+For GENERIC_ENTRY support only patch 1, 5, 6, 12, 13, and 14, really
+required. The others are unrelated.
 
 
---XJx8u3EcQvX1eaUF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONvegACgkQFA3kzBSg
-KbasKA//ben0upJnQObZCSEwaSJ33ysgv9XFm/KCe+kkWqMlz3gNSiN315An7ODj
-JLoYmRL23YmxJyHu1vlmN5bBH81bEf5ShQr6LJe4QnovAQzw0E416WK7SWZv4TZn
-pJe+Ku9/FZeM/xNkbDj0diI12Px1RyWgnDtpNPrHr4nAvZbD5qorJC4/GGun3/0K
-mjSCMlmt87MZpH0x/nYUBQWZ6Jw6w8QvL7S6HPFYF0Uez/HAQM9RFBjEU1srbcG4
-lU95CnFAhqQVf1IDLYXTpAdLW9ZvJ1fM84dVs6GCnwlr6JiBhU2mWDAZMTmIexrp
-RzBik3j9h/lKR8LntzapvMDZAKv7huo8tGtBqI+9QyuyxMe9o/K08blkM3fR5v6n
-x0L5dUCaI1W2nQlNwJl96NwD6VcRAtQgyiJ/Ha3XkuU6Ro40VLPIaRVnOYB1kD/u
-Gi4AO+SadQrqlgGiXFH9rXQVbn4bdc4aZqqQI/+8FzB6l9YY89AQsBg4pRvopy4T
-UeP1/xagQv1ZS6xRnAnyxL/YMSKPozpzJl2eQp4HwRsS+wHSpxqZRZUvmaH0V8pY
-pz1MFtK09rh0dU7S+vUAhOJ8tBesPUiym/6+eqXTwA7gUDS+1AsCraeGZTutoXxj
-j4Fuui94fqWqfe9+TSScrBMEgnSVL+hsxPjD2+mFBB2jvmNOtU4=
-=7AOJ
------END PGP SIGNATURE-----
-
---XJx8u3EcQvX1eaUF--
+Thanks,
+Bj=C3=B6rn
