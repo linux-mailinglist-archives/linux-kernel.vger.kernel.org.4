@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB616427DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31276427DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbiLELxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S230138AbiLELy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiLELwr (ORCPT
+        with ESMTP id S231598AbiLELxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:52:47 -0500
-Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3DBF1A805;
-        Mon,  5 Dec 2022 03:52:06 -0800 (PST)
-Received: from localhost.biz (unknown [10.81.81.211])
-        by gw.red-soft.ru (Postfix) with ESMTPA id 2CFCF3E6085;
-        Mon,  5 Dec 2022 14:52:04 +0300 (MSK)
-From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Cc:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH v3] net: vmw_vsock: vmci: Check memcpy_from_msg()
-Date:   Mon,  5 Dec 2022 14:52:00 +0300
-Message-Id: <20221205115200.2987942-1-artem.chernyshev@red-soft.ru>
-X-Mailer: git-send-email 2.30.3
-In-Reply-To: <20221205094736.k3yuwk7emijpitvw@sgarzare-redhat>
-References: 
+        Mon, 5 Dec 2022 06:53:16 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E14F00F
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 03:52:59 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3DBF8660036C;
+        Mon,  5 Dec 2022 11:52:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670241177;
+        bh=S/XvQmPdf7xMwJPdBoXrFet0+92expZQ8DEbjSPs9BE=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=LQX47Qe0z7znEVhDoNSSdUh7pP3jMhJr8d35xJi2Xgs2Fabwnz5f9Z96mZxbEaM6T
+         hPxZ2gsDs2bFxn1rloMJ7hWJ8qwjBWHe6KPKXIaewVeLSZYBw+sPG1f8OY8joB5KcR
+         WKQQyA2K5Dn5Z+/H9SB9IGQjHRjDIvZYIkZyhgBZZeq5SKRfIoa8igNYvw/knHvpnr
+         rwN83h15Xh+tcMkIjfJ92lX2kFRpVBotJc5ngmVkBCeWGvqMyRB5oFRfJUeWoBrEfm
+         NPTE8LjIJW/fmtedA8lZce4N03YZgpcH2mzaAvPNegkM3HQu1NTkjyfjv+oab77wQJ
+         kB3cipqSoiB+A==
+Message-ID: <378232f4-5c2e-ad56-c4ec-4d9f72f08755@collabora.com>
+Date:   Mon, 5 Dec 2022 12:52:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 173924 [Dec 05 2022]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;localhost.biz:7.1.1;red-soft.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2022/12/05 07:18:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2022/12/05 09:01:00 #20651080
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] drm/mediatek: mtk_drm_crtc: Add checks for devm_kcalloc
+Content-Language: en-US
+To:     ruanjinjie <ruanjinjie@huawei.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, seanpaul@chromium.org, ck.hu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221205095115.2905090-1-ruanjinjie@huawei.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221205095115.2905090-1-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmci_transport_dgram_enqueue() does not check the return value
-of memcpy_from_msg(). Return with an error if the memcpy fails.
+Il 05/12/22 10:51, ruanjinjie ha scritto:
+> As the devm_kcalloc may return NULL, the return value needs to be checked
+> to avoid NULL poineter dereference.
+> 
+> Fixes: 31c5558dae05 ("drm/mediatek: Refactor plane init")
+> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: 0f7db23a07af ("vmci_transport: switch ->enqeue_dgram, ->enqueue_stream and ->dequeue_stream to msghdr")
-Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
----
-V1->V2 Fix memory leaking and updates for description
-V2->V3 Return the value of memcpy_from_msg()
-
- net/vmw_vsock/vmci_transport.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
-index 842c94286d31..36eb16a40745 100644
---- a/net/vmw_vsock/vmci_transport.c
-+++ b/net/vmw_vsock/vmci_transport.c
-@@ -1711,7 +1711,11 @@ static int vmci_transport_dgram_enqueue(
- 	if (!dg)
- 		return -ENOMEM;
- 
--	memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len);
-+	err = memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len);
-+	if (err) {
-+		kfree(dg);
-+		return err;
-+	}
- 
- 	dg->dst = vmci_make_handle(remote_addr->svm_cid,
- 				   remote_addr->svm_port);
--- 
-2.30.3
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
