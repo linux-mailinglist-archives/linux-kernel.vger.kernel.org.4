@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBBC64305B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2066364305C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbiLES2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
+        id S233497AbiLES3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbiLESZX (ORCPT
+        with ESMTP id S232266AbiLESZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:25:23 -0500
+        Mon, 5 Dec 2022 13:25:24 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE5F21258;
-        Mon,  5 Dec 2022 10:25:22 -0800 (PST)
-Date:   Mon, 05 Dec 2022 18:25:20 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9142125F;
+        Mon,  5 Dec 2022 10:25:23 -0800 (PST)
+Date:   Mon, 05 Dec 2022 18:25:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1670264721;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jYMdxOjrmMzCmM4u/uAuk2BiIOk27UYvmrRTh6VQeCI=;
-        b=fOd054/VkzJw/MJbTA3HytfzBZFuAINUo/RX/ncXPzc6y8bw4vJvW/1NSieQTIplIUTGWL
-        rb3GiaCOotX51SUt7CENTIbg0lhHti+lgQnnNsVoB28zN159It1oog3tk5KNRQJHsExeuA
-        ke5zYGfHFhtr3XLO7IGhCihwmymnUMazz/3ZGFOurGItR4y0mC4YtkVsdWSVfwoqrPsyu+
-        u7IHHdGvKV0a1/eoff0aqylIc6y8iCaSIJdB3E+kdr7E0SVb7kzQRs2BKuZW0JdF/i5L62
-        kdEOZomLRZWl8dgWAdTnsta4VgzqX7j2rblA1sMCWWgvKawgpwscAnQRACE7Zw==
+        bh=KXVakGKH2LOihN+bIN4jS+1Evn0MKrSAk5MxXyMx8N4=;
+        b=jodtXJnROUurpjr2mp5+VFrk+U/8BAOzAjMVKNK58RtS94ejqmWhBDLlhZp2ZiH/ZomHNw
+        sg0VgtLyIlIzj+Q9CW9GHorblWvVkJROeoV2QxxSfCzSmNbeJZ1GnhO53sONP3y3GguIx6
+        yumQSlwHrbuQTUqTFUiZgbMqRHgSavMpGWhja6toqbpMnDhS3CBidxnx6C56DtZeGv32dB
+        BmA7LTrwy4WVCYhRq248OTrtgqIF7B3UJtwI2cpWJjVPfxjA+AmqRC8Rvq1A/MBeu0T1RE
+        T88TL9TJPJCpLAbmD52n3GG8z2yMowYHWxPKlMRxg91xQQJNoNUNWqIOi0c2jw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1670264721;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jYMdxOjrmMzCmM4u/uAuk2BiIOk27UYvmrRTh6VQeCI=;
-        b=y102esKNDLoEcdT2R3oA59AKQGjqtEYuhOWVmRfwZmnjMkJHJiHHGvbQ/5O4wdXC2y7qfD
-        Gcwdk6Fr4XWOjRCg==
+        bh=KXVakGKH2LOihN+bIN4jS+1Evn0MKrSAk5MxXyMx8N4=;
+        b=O4QXpuyK4JfboFmr/UPjGAURzT+gep5/Zpom/yIF6dDWHWewpIdkqZx2J7S9j53FkXzR5R
+        zjMsY1FRnD7qNiDg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq/msi: Move xarray into a separate struct and
- create an array
+Subject: [tip: irq/core] genirq/irqdomain: Provide IRQ_DOMAIN_FLAG_MSI_PARENT
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Kevin Tian <kevin.tian@intel.com>,
         Marc Zyngier <maz@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221124230313.864887773@linutronix.de>
-References: <20221124230313.864887773@linutronix.de>
+In-Reply-To: <20221124230313.690038274@linutronix.de>
+References: <20221124230313.690038274@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <167026472071.4906.6714377473651545960.tip-bot2@tip-bot2>
+Message-ID: <167026472142.4906.9843449600680865188.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,205 +68,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     f1139f905bd2d8bec59be0c1404b592279ae0ac9
-Gitweb:        https://git.kernel.org/tip/f1139f905bd2d8bec59be0c1404b592279ae0ac9
+Commit-ID:     b749e6d31c88cff2202b968aaba246e5d7379038
+Gitweb:        https://git.kernel.org/tip/b749e6d31c88cff2202b968aaba246e5d7379038
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 25 Nov 2022 00:24:20 +01:00
+AuthorDate:    Fri, 25 Nov 2022 00:24:15 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 05 Dec 2022 19:20:59 +01:00
+CommitterDate: Mon, 05 Dec 2022 19:20:58 +01:00
 
-genirq/msi: Move xarray into a separate struct and create an array
+genirq/irqdomain: Provide IRQ_DOMAIN_FLAG_MSI_PARENT
 
-The upcoming support for multiple MSI domains per device requires storage
-for the MSI descriptors and in a second step storage for the irqdomain
-pointers.
+The new PCI/IMS (Interrupt Message Store) functionality is allowing
+hardware vendors to provide implementation specific storage for the MSI
+messages. This can be device memory and also host/guest memory, e.g. in
+queue memory which is shared with the hardware.
 
-Move the xarray into a separate data structure msi_dev_domain and create an
-array with size 1 in msi_device_data, which can be expanded later when the
-support for per device domains is implemented.
+This requires device specific MSI interrupt domains, which cannot be
+achieved by expanding the existing PCI/MSI interrupt domain concept which is
+a global interrupt domain shared by all PCI devices on a particular (IOMMU)
+segment:
+
+                                         |--- device 1
+     [Vector]---[Remapping]---[PCI/MSI]--|...
+                                         |--- device N
+
+This works because the PCI/MSI[-X] space is uniform, but falls apart with
+PCI/IMS which is implementation defined and must be available along with
+PCI/MSI[-X] on the same device.
+
+To support PCI/MSI[-X] plus PCI/IMS on the same device it is required to
+rework the PCI/MSI interrupt domain hierarchy concept in the following way:
+
+                              |--- [PCI/MSI] device 1
+     [Vector]---[Remapping]---|...
+                              |--- [PCI/MSI] device N
+
+That allows in the next step to create multiple interrupt domains per device:
+
+
+                              |--- [PCI/MSI] device 1
+                              |--- [PCI/IMS] device 1
+     [Vector]---[Remapping]---|...
+                              |--- [PCI/MSI] device N
+                              |--- [PCI/IMS] device N
+
+So the domain which previously created the global PCI/MSI domain must now
+act as parent domain for the per device domains.
+
+The hierarchy depth is the same as before, but the PCI/MSI domains are then
+device specific and not longer global.
+
+Provide IRQ_DOMAIN_FLAG_MSI_PARENT, which allows to identify these parent
+domains, along with helpers to query it.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221124230313.864887773@linutronix.de
+Link: https://lore.kernel.org/r/20221124230313.690038274@linutronix.de
 
 ---
- include/linux/msi.h     | 13 +++++++++++--
- include/linux/msi_api.h |  8 ++++++++
- kernel/irq/msi.c        | 32 ++++++++++++++++++++++----------
- 3 files changed, 41 insertions(+), 12 deletions(-)
+ include/linux/irqdomain.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 9f72494..f7b9c41 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -173,19 +173,28 @@ enum msi_desc_filter {
- 	MSI_DESC_ASSOCIATED,
- };
+diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+index aa76da8..f837db9 100644
+--- a/include/linux/irqdomain.h
++++ b/include/linux/irqdomain.h
+@@ -189,6 +189,9 @@ enum {
+ 	/* Irq domain doesn't translate anything */
+ 	IRQ_DOMAIN_FLAG_NO_MAP		= (1 << 6),
  
++	/* Irq domain is a MSI parent domain */
++	IRQ_DOMAIN_FLAG_MSI_PARENT	= (1 << 8),
 +
-+/**
-+ * struct msi_dev_domain - The internals of MSI domain info per device
-+ * @store:		Xarray for storing MSI descriptor pointers
-+ */
-+struct msi_dev_domain {
-+	struct xarray		store;
-+};
+ 	/*
+ 	 * Flags starting from IRQ_DOMAIN_FLAG_NONCORE are reserved
+ 	 * for implementation specific purposes and ignored by the
+@@ -551,6 +554,11 @@ static inline bool irq_domain_is_msi_remap(struct irq_domain *domain)
+ 
+ extern bool irq_domain_hierarchical_is_msi_remap(struct irq_domain *domain);
+ 
++static inline bool irq_domain_is_msi_parent(struct irq_domain *domain)
++{
++	return domain->flags & IRQ_DOMAIN_FLAG_MSI_PARENT;
++}
 +
- /**
-  * msi_device_data - MSI per device data
-  * @properties:		MSI properties which are interesting to drivers
-  * @platform_data:	Platform-MSI specific data
-  * @mutex:		Mutex protecting the MSI descriptor store
-- * @__store:		Xarray for storing MSI descriptor pointers
-+ * @__domains:		Internal data for per device MSI domains
-  * @__iter_idx:		Index to search the next entry for iterators
-  */
- struct msi_device_data {
- 	unsigned long			properties;
- 	struct platform_msi_priv_data	*platform_data;
- 	struct mutex			mutex;
--	struct xarray			__store;
-+	struct msi_dev_domain		__domains[MSI_MAX_DEVICE_IRQDOMAINS];
- 	unsigned long			__iter_idx;
- };
- 
-diff --git a/include/linux/msi_api.h b/include/linux/msi_api.h
-index 57d27cf..4dbbce6 100644
---- a/include/linux/msi_api.h
-+++ b/include/linux/msi_api.h
-@@ -10,6 +10,14 @@
- 
- struct device;
- 
-+/*
-+ * Per device interrupt domain related constants.
-+ */
-+enum msi_domain_ids {
-+	MSI_DEFAULT_DOMAIN,
-+	MSI_MAX_DEVICE_IRQDOMAINS,
-+};
-+
- unsigned int msi_get_virq(struct device *dev, unsigned int index);
- 
- #endif
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 5939dc6..c2bc94e 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -60,10 +60,11 @@ static void msi_free_desc(struct msi_desc *desc)
- 
- static int msi_insert_desc(struct msi_device_data *md, struct msi_desc *desc, unsigned int index)
+ #else	/* CONFIG_IRQ_DOMAIN_HIERARCHY */
+ static inline int irq_domain_alloc_irqs(struct irq_domain *domain,
+ 			unsigned int nr_irqs, int node, void *arg)
+@@ -596,6 +604,12 @@ irq_domain_hierarchical_is_msi_remap(struct irq_domain *domain)
  {
-+	struct xarray *xa = &md->__domains[MSI_DEFAULT_DOMAIN].store;
- 	int ret;
- 
- 	desc->msi_index = index;
--	ret = xa_insert(&md->__store, index, desc, GFP_KERNEL);
-+	ret = xa_insert(xa, index, desc, GFP_KERNEL);
- 	if (ret)
- 		msi_free_desc(desc);
- 	return ret;
-@@ -147,7 +148,7 @@ static bool msi_desc_match(struct msi_desc *desc, enum msi_desc_filter filter)
- void msi_free_msi_descs_range(struct device *dev, unsigned int first_index,
- 			      unsigned int last_index)
- {
--	struct xarray *xa = &dev->msi.data->__store;
-+	struct xarray *xa = &dev->msi.data->__domains[MSI_DEFAULT_DOMAIN].store;
- 	struct msi_desc *desc;
- 	unsigned long idx;
- 
-@@ -179,9 +180,12 @@ EXPORT_SYMBOL_GPL(get_cached_msi_msg);
- static void msi_device_data_release(struct device *dev, void *res)
- {
- 	struct msi_device_data *md = res;
-+	int i;
- 
--	WARN_ON_ONCE(!xa_empty(&md->__store));
--	xa_destroy(&md->__store);
-+	for (i = 0; i < MSI_MAX_DEVICE_IRQDOMAINS; i++) {
-+		WARN_ON_ONCE(!xa_empty(&md->__domains[i].store));
-+		xa_destroy(&md->__domains[i].store);
-+	}
- 	dev->msi.data = NULL;
+ 	return false;
  }
- 
-@@ -198,7 +202,7 @@ static void msi_device_data_release(struct device *dev, void *res)
- int msi_setup_device_data(struct device *dev)
- {
- 	struct msi_device_data *md;
--	int ret;
-+	int ret, i;
- 
- 	if (dev->msi.data)
- 		return 0;
-@@ -213,7 +217,9 @@ int msi_setup_device_data(struct device *dev)
- 		return ret;
- 	}
- 
--	xa_init(&md->__store);
-+	for (i = 0; i < MSI_MAX_DEVICE_IRQDOMAINS; i++)
-+		xa_init(&md->__domains[i].store);
 +
- 	mutex_init(&md->mutex);
- 	dev->msi.data = md;
- 	devres_add(dev, md);
-@@ -236,7 +242,7 @@ EXPORT_SYMBOL_GPL(msi_lock_descs);
-  */
- void msi_unlock_descs(struct device *dev)
- {
--	/* Invalidate the index wich was cached by the iterator */
-+	/* Invalidate the index which was cached by the iterator */
- 	dev->msi.data->__iter_idx = MSI_MAX_INDEX;
- 	mutex_unlock(&dev->msi.data->mutex);
- }
-@@ -244,9 +250,10 @@ EXPORT_SYMBOL_GPL(msi_unlock_descs);
- 
- static struct msi_desc *msi_find_desc(struct msi_device_data *md, enum msi_desc_filter filter)
- {
-+	struct xarray *xa = &md->__domains[MSI_DEFAULT_DOMAIN].store;
- 	struct msi_desc *desc;
- 
--	xa_for_each_start(&md->__store, md->__iter_idx, desc, md->__iter_idx) {
-+	xa_for_each_start(xa, md->__iter_idx, desc, md->__iter_idx) {
- 		if (msi_desc_match(desc, filter))
- 			return desc;
- 	}
-@@ -320,6 +327,7 @@ unsigned int msi_get_virq(struct device *dev, unsigned int index)
- {
- 	struct msi_desc *desc;
- 	unsigned int ret = 0;
-+	struct xarray *xa;
- 	bool pcimsi;
- 
- 	if (!dev->msi.data)
-@@ -328,7 +336,8 @@ unsigned int msi_get_virq(struct device *dev, unsigned int index)
- 	pcimsi = dev_is_pci(dev) ? to_pci_dev(dev)->msi_enabled : false;
- 
- 	msi_lock_descs(dev);
--	desc = xa_load(&dev->msi.data->__store, pcimsi ? 0 : index);
-+	xa = &dev->msi.data->__domains[MSI_DEFAULT_DOMAIN].store;
-+	desc = xa_load(xa, pcimsi ? 0 : index);
- 	if (desc && desc->irq) {
- 		/*
- 		 * PCI-MSI has only one descriptor for multiple interrupts.
-@@ -707,6 +716,7 @@ int msi_domain_populate_irqs(struct irq_domain *domain, struct device *dev,
- 	struct msi_domain_info *info = domain->host_data;
- 	struct msi_domain_ops *ops = info->ops;
- 	struct msi_desc *desc;
-+	struct xarray *xa;
- 	int ret, virq;
- 
- 	msi_lock_descs(dev);
-@@ -714,8 +724,10 @@ int msi_domain_populate_irqs(struct irq_domain *domain, struct device *dev,
- 	if (ret)
- 		goto unlock;
- 
-+	xa = &dev->msi.data->__domains[MSI_DEFAULT_DOMAIN].store;
++static inline bool irq_domain_is_msi_parent(struct irq_domain *domain)
++{
++	return false;
++}
 +
- 	for (virq = virq_base; virq < virq_base + nvec; virq++) {
--		desc = xa_load(&dev->msi.data->__store, virq);
-+		desc = xa_load(xa, virq);
- 		desc->irq = virq;
+ #endif	/* CONFIG_IRQ_DOMAIN_HIERARCHY */
  
- 		ops->set_desc(arg, desc);
+ #else /* CONFIG_IRQ_DOMAIN */
