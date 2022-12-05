@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5086428BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A116428C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiLEMta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S231786AbiLEMuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 07:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiLEMt3 (ORCPT
+        with ESMTP id S229919AbiLEMut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 07:49:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885581A205;
-        Mon,  5 Dec 2022 04:49:28 -0800 (PST)
+        Mon, 5 Dec 2022 07:50:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482E217585;
+        Mon,  5 Dec 2022 04:50:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C1DCB81065;
-        Mon,  5 Dec 2022 12:49:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBA6C43470;
-        Mon,  5 Dec 2022 12:49:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E55566103C;
+        Mon,  5 Dec 2022 12:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E0AC433D6;
+        Mon,  5 Dec 2022 12:50:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670244566;
-        bh=WVWZU6ZtReEdwq+R7Uw2OX4bdjjS/26KRvhimlJgxp8=;
+        s=k20201202; t=1670244647;
+        bh=qf/NfO2N/WqW2ZAtOS02wKfWAQc4h++cVVZ9fzqJa84=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tfwWPLTEJ8iv0zOw+gJRHiAVX3EbqRT3fQdCogL35xzUgYgFNqxBZ8EdYr7hLWtrz
-         HViZLdyPPv54G7AkzXRaBg8by6WlIu9zWoKfyAbSoLqmROUctcwSf9hfBkpOTveIdX
-         GvrvF63bQOyUulBcl2qXBEY9L6uZqv1BJZcav295Z6o/IjXfssHyOOH/Q9Amu/YIEp
-         MaszihYS3LAcajt68+rt+yEIxpIEmpAEoifNcbfh+2//ykAFHRJbIO227D4v55OMbR
-         UFUlWeD56vdPksUKsleBxs5nwMumVvKKmMk2J0OY2kD55GYN84/xpSKqIkRN/EZNWH
-         Lag+lmx/OvUWA==
+        b=GaeUSIDpPqwpdzLNKCPdj7nuICOGrt1+m6i5rReASNq/bfRSVAVCLQeZfTILJAoTv
+         g20Wu+YlLIym5Uouextf0VdZNsfVYpcpneL1U0pToMEzRNnO0uKfjx3j0VKSZQkEAu
+         F23F6NH+NhYuaJgoGqVdQ0+w3E2TlyRLh66M0CTJSPHt1RRyN0sNqPjwimgKLSAEnC
+         b2otiNYxOxXiIr6MITQVppAKXoTEcqM0D8Wdofys85r90OoS+uuMR5o+8mNxsR3o/2
+         tT01lZtswgLYsEFGiFWQLLlLnTyEGDHIbyPWH4VSDQadNSYjMbDg466Aybrm+eJFQ4
+         4qvSbZI3W+8LQ==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 761EF40404; Mon,  5 Dec 2022 09:49:23 -0300 (-03)
-Date:   Mon, 5 Dec 2022 09:49:23 -0300
+        id EFCFE40404; Mon,  5 Dec 2022 09:50:44 -0300 (-03)
+Date:   Mon, 5 Dec 2022 09:50:44 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, james.clark@arm.com,
-        Peter Zijlstra <peterz@infradead.org>,
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] perf/tool: Add remaining branch filters to perf record
-Message-ID: <Y43o05Fhs2zXI3Nv@kernel.org>
-References: <20221205064443.533587-1-anshuman.khandual@arm.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 0/5] Improvements to incremental builds
+Message-ID: <Y43pJOmF1y3JWrX8@kernel.org>
+References: <20221202045743.2639466-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221205064443.533587-1-anshuman.khandual@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221202045743.2639466-1-irogers@google.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -58,68 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Dec 05, 2022 at 12:14:43PM +0530, Anshuman Khandual escreveu:
-> This adds all remaining branch filters i.e no_cycles, no_flags and hw_index
-> to perf record tool. While here, also updates the documentation.
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  tools/perf/Documentation/perf-record.txt | 5 +++++
->  tools/perf/util/parse-branch-options.c   | 3 +++
->  2 files changed, 8 insertions(+)
+Em Thu, Dec 01, 2022 at 08:57:38PM -0800, Ian Rogers escreveu:
+> Switching to using install_headers caused incremental builds to always
+> rebuild most targets. This was caused by the headers always being
+> reinstalled and then getting new timestamps causing dependencies to be
+> rebuilt. Follow the convention in libbpf where the install targets are
+> separated and trigger when the target isn't present or is out-of-date.
 > 
-> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-> index e41ae950fdc3..7803c0c4c8f9 100644
-> --- a/tools/perf/Documentation/perf-record.txt
-> +++ b/tools/perf/Documentation/perf-record.txt
-> @@ -388,6 +388,7 @@ following filters are defined:
->          - any_call: any function call or system call
->          - any_ret: any function return or system call return
->          - ind_call: any indirect branch
-> +        - ind_jmp: any indirect jump
->          - call: direct calls, including far (to/from kernel) calls
->          - u:  only when the branch target is at the user level
->          - k: only when the branch target is in the kernel
-> @@ -396,6 +397,10 @@ following filters are defined:
->  	- no_tx: only when the target is not in a hardware transaction
->  	- abort_tx: only when the target is a hardware transaction abort
->  	- cond: conditional branches
-> +	- call_stack: save call stack
-> +	- no_flags: don't save branch flags e.g prediction, misprediction etc
-> +	- no_cycles: don't save branch cycles
-> +	- hw_index: save branch hardware index
->  	- save_type: save branch type during sampling in case binary is not available later
->  		     For the platforms with Intel Arch LBR support (12th-Gen+ client or
->  		     4th-Gen Xeon+ server), the save branch type is unconditionally enabled
-> diff --git a/tools/perf/util/parse-branch-options.c b/tools/perf/util/parse-branch-options.c
-> index 31faf2bb49ff..fd67d204d720 100644
-> --- a/tools/perf/util/parse-branch-options.c
-> +++ b/tools/perf/util/parse-branch-options.c
-> @@ -30,8 +30,11 @@ static const struct branch_mode branch_modes[] = {
->  	BRANCH_OPT("cond", PERF_SAMPLE_BRANCH_COND),
->  	BRANCH_OPT("ind_jmp", PERF_SAMPLE_BRANCH_IND_JUMP),
->  	BRANCH_OPT("call", PERF_SAMPLE_BRANCH_CALL),
-> +	BRANCH_OPT("no_flags", PERF_SAMPLE_BRANCH_NO_FLAGS),
-> +	BRANCH_OPT("no_cycles", PERF_SAMPLE_BRANCH_NO_CYCLES),
->  	BRANCH_OPT("save_type", PERF_SAMPLE_BRANCH_TYPE_SAVE),
->  	BRANCH_OPT("stack", PERF_SAMPLE_BRANCH_CALL_STACK),
-> +	BRANCH_OPT("hw_index", PERF_SAMPLE_BRANCH_HW_INDEX),
->  	BRANCH_OPT("priv", PERF_SAMPLE_BRANCH_PRIV_SAVE),
->  	BRANCH_END
->  };
-> -- 
-> 2.25.1
+> Further, fix an issue in the perf build with libpython where
+> python/perf.so was also regenerated as the target name was incorrect.
+> 
+> Ian Rogers (5):
+>   tools lib api: Add dependency test to install_headers
+>   tools lib perf: Add dependency test to install_headers
+>   tools lib subcmd: Add dependency test to install_headers
+>   tools lib symbol: Add dependency test to install_headers
+>   perf build: Fix python/perf.so library's name
 
--- 
+The last one isn't applying:
+
+Applying: perf build: Fix python/perf.so library's name
+error: patch failed: tools/perf/Makefile.perf:642
+error: tools/perf/Makefile.perf: patch does not apply
+Patch failed at 0005 perf build: Fix python/perf.so library's name
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+⬢[acme@toolbox perf]$
+
+I'll have the first 4 applied to make progress, later I'll check what
+went wrong and to fix it.
 
 - Arnaldo
