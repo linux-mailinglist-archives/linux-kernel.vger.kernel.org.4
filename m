@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285386429BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE3A6429C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiLENnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S232386AbiLENnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiLENmn (ORCPT
+        with ESMTP id S232381AbiLENnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:42:43 -0500
+        Mon, 5 Dec 2022 08:43:22 -0500
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F119B;
-        Mon,  5 Dec 2022 05:42:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BA51B1EA;
+        Mon,  5 Dec 2022 05:42:57 -0800 (PST)
 Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5BA12FF802;
-        Mon,  5 Dec 2022 13:42:29 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id E6ABCFF808;
+        Mon,  5 Dec 2022 13:42:40 +0000 (UTC)
 From:   Quentin Schulz <foss+kernel@0leil.net>
 To:     Samuel Holland <samuel@sholland.org>,
         Bastien Nocera <hadess@hadess.net>,
@@ -54,9 +54,9 @@ Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v3 7/9] arm64: dts: librem5: fix touchscreen reset GPIO polarity
-Date:   Mon,  5 Dec 2022 14:40:36 +0100
-Message-Id: <20221103-upstream-goodix-reset-v3-7-0975809eb183@theobroma-systems.com>
+Subject: [PATCH v3 8/9] arm64: dts: qcom: msm8998-fxtec: fix touchscreen reset GPIO polarity
+Date:   Mon,  5 Dec 2022 14:40:37 +0100
+Message-Id: <20221103-upstream-goodix-reset-v3-8-0975809eb183@theobroma-systems.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
 References: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
@@ -80,22 +80,22 @@ let's fix the polarity in the Device Tree node.
 
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts | 2 +-
+ arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts b/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts
-index 6445c6b90b5bb..b038300812b1e 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts
-@@ -542,7 +542,7 @@ touchscreen@5d {
- 		pinctrl-0 = <&pinctrl_ts>;
- 		interrupt-parent = <&gpio3>;
- 		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
--		reset-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&gpio1 5 GPIO_ACTIVE_LOW>;
- 		irq-gpios = <&gpio3 0 GPIO_ACTIVE_HIGH>;
- 		touchscreen-size-x = <720>;
- 		touchscreen-size-y = <1440>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+index 429ba57e20f71..8f738cade2652 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+@@ -249,7 +249,7 @@ touchscreen@14 {
+ 		reg = <0x14>;
+ 		interrupt-parent = <&tlmm>;
+ 		interrupts = <125 IRQ_TYPE_LEVEL_LOW>;
+-		reset-gpios = <&tlmm 89 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&tlmm 89 GPIO_ACTIVE_LOW>;
+ 		AVDD28-supply = <&vreg_l28_3p0>;
+ 		VDDIO-supply = <&ts_vio_vreg>;
+ 		pinctrl-names = "active";
 
 -- 
 b4 0.10.1
