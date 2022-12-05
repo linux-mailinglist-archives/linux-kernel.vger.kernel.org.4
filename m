@@ -2,157 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E6B64294D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658C4642953
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbiLENYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S232243AbiLEN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbiLENYa (ORCPT
+        with ESMTP id S230170AbiLEN0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:24:30 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D521AF0C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670246669; x=1701782669;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eIuVPi2oKlmfmwkWcq2jyJdIlCtdykKp0CE/vjbqIHc=;
-  b=mV1N6HVlLVX4ZqBUdig3WlXDrmGlRq4O5xYOFMBXrx5AxH+ZJJfliyMI
-   H6vpcXWHmukbmjNfyLorUjzseuE+fLyNw7hf3JEXdH0VWYV+EiCpOFM8n
-   UTPoW3N0RQgvmabqh0ddMW7TwFFqepq//2U3C0r8tBDeYCSzSMvcA5FZC
-   75G/BezpFvnzdGOAlGLeNkbiu8oNjMYhKH/xDAI9IS+F7CP71TsEuKPCa
-   lo4AdKAKf39fYlsSLBUMa2NJpvfu8LTXmCk5a2oGx6fSeEWpY/Cf12AjT
-   WLhhaxacEg2XmukqJG3DXim8VW4CyQoZvfE3DlD9EHV5MK4TAFmOZvOCC
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,219,1665417600"; 
-   d="scan'208";a="322277618"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Dec 2022 21:24:27 +0800
-IronPort-SDR: ScDLH6KvzKaUUg3ze4pxGRJEl7uiQvAIfCBQZewqEVR1ep1vZWLrb0vhzRNS81bNHknTQmCSWD
- 7MMWQZKu2DSkfHCiMPdfI/kNsufORp7xpuTNYuNIaXopSwD+c8W0Omi0Qx0/7Oq6hVpT6KkL+w
- QYuft0qrlL5kL+2NYOTpjX15OAgreL5Ix6K5mofhmi6uYChkpzdykYmnETbZuIN36eZ+wMJtlu
- aODK2VCundbiItZ2NKYlYNb/vj9bSsPurQFxiMIuEzLHwIUB3LeeDWYYrfH6Sea068Y9mECgpt
- Las=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Dec 2022 04:43:00 -0800
-IronPort-SDR: c5+6BPxXicLZW46NxcI1HCpEucip1AwUaaO4qGB2rDiRsnB3Mbtmi4EZoYAq5We7LLMZqO0RIA
- gEdp1tAr4zSLfBrtJ/erE2r1S7xghggsFVvrANqEgM69fmviznHOuqXOch3u7cv8/V7cH0QhP7
- PX7crEvSt1ezFgH6hyHSXTPf4Gh0GVndQ0Rvwbsj59GeJNzK+xUnc0FpMR6NlnqPXUJWTE/6V2
- t/ncyMon5PnCdAqd/GDbjQz6f0C/VcMrjTOM5mnsu9pn5LnZi8CYfs/hRkhana0lClaFa4RSR0
- 4c0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Dec 2022 05:24:27 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NQkmC11Ynz1Rwtm
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:24:27 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1670246666; x=1672838667; bh=eIuVPi2oKlmfmwkWcq2jyJdIlCtdykKp0CE
-        /vjbqIHc=; b=Ecs0n0q1JF4Cx8NoxRMgMJtMXrKuW5Q0cv0SaH2nQVL9z4d2Ksw
-        oXbrqsUEPpNvntcx7VwaNyBirMaNJS7u6cxvS+6r6SdY0IDZvFdaEnJskr7PVtWr
-        gHK5ubpd82Muow3h6emPVVyTAINaxclwgIQalI/+3b57j4xK9Q0+jsckqpd4Ii1H
-        +BDqqFFoSkq6T41xsJpOp2mBPDUGNPTws4LYze04nhIRaWGPAIswyb8xC0qSMLq7
-        rnpIGvaYv4IYho1sv5tWhQyD6SEuRMgvGW1FKEtCwC+pID4Zkc0A6gfv0I+pxHvK
-        Nn8gTg7NPDm23gcFTGFUnNHWvjrxAbt/esA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Iy7ulSKxNn5U for <linux-kernel@vger.kernel.org>;
-        Mon,  5 Dec 2022 05:24:26 -0800 (PST)
-Received: from [10.225.163.74] (unknown [10.225.163.74])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NQkm75kCwz1RvLy;
-        Mon,  5 Dec 2022 05:24:23 -0800 (PST)
-Message-ID: <f440a8ff-7657-c1be-e733-4ad69b6b7b0b@opensource.wdc.com>
-Date:   Mon, 5 Dec 2022 22:24:22 +0900
+        Mon, 5 Dec 2022 08:26:32 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD08F1C915;
+        Mon,  5 Dec 2022 05:26:31 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id r19so11329753qtx.6;
+        Mon, 05 Dec 2022 05:26:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fqO7gETqNiqkQHJ70u+gRoEEZZbEF0uchp8/3StvR/w=;
+        b=qC4qOoUiygaHcIcrhaQHV710EKKfWWefLKnQ3oKru+iD1vRQ7OAPRvSKvSYJjLTVEx
+         GB6THHRMOgPyolYORzCLGm1kOMUfPLP2w7pTn59xzaoFM3WfNFpsrUsF8K8eOxlQUyFi
+         k4mqiqqWZTLNiDQbj426UMKLz7jVgRlSivyo6kyG5KbM08UiKPN863qcBfbg+Tb3paQv
+         H7iX82FtdhXY/nHWCwT+cythGxdJDtkkOf888FJmUFEeZ4njbfJvhti18TaGd7g9zZh+
+         Qu6uSWYi5wpwzm9prkw9yAKqBWMgpGOWbmXVbGPHMJciqA5RzTEFcApOrzFPS0ZD82nf
+         J50A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fqO7gETqNiqkQHJ70u+gRoEEZZbEF0uchp8/3StvR/w=;
+        b=0+6i5dMReb/Hm9L1l/5Erm9UFp+qOwN290tCi9Hs0ibR27IRk5Wzg8NV7t/hJlLRnO
+         tKf2xBfLtiA7MFpk654adG2OVVpsQi39FwBwxc0HcuOah081q63jkJRTashEXfTe3ZWK
+         T/o2YyCvxi/y9E9deA2xoAbhUmEukZyE1doaTCVHJUNbsEv7QdSfUGtfthsFIpQ2aPX+
+         hdXDSjaGRalRKKxPpyaY/PoZMUyQN/Zoj5msPEs9RZcj5iSFxMOpg1nUI+J4JAktzsbi
+         hFOtYIOXIGWXVMOzThVGRM0hHXk/jEOed5g7Q3XazZwoRWow4BrPzhtpNmVqEaEpohIc
+         NZeg==
+X-Gm-Message-State: ANoB5pmA4NocaJLHvrnvfII7ELpseE5NMwn8QNFktCWoV20jJRWNG61B
+        UIRfmFI0paflIQ0mRSrJnlSL74HsIF+sEnYpQBs=
+X-Google-Smtp-Source: AA0mqf4dvL/+Sat88nAYdYD7lP5p89SnGizPGaaXtTpRp9ieg6LHpcABFhjTocjv4QvpR07o/YZlNOMmACR1oMaJBY4=
+X-Received: by 2002:ac8:5501:0:b0:3a5:cb82:109b with SMTP id
+ j1-20020ac85501000000b003a5cb82109bmr76982863qtq.61.1670246790901; Mon, 05
+ Dec 2022 05:26:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006
- tag
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Cc:     Niklas Cassel <Niklas.Cassel@wdc.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Carlos Hernandez <ceh@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com>
- <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
- <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com>
- <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
- <20221014140633.mlypet7skkxvt453@mobilestation>
- <CADYN=9LrKHRNMON3GA4piDvWeSWTASQ1u2=D30rXFdvo1L18bg@mail.gmail.com>
- <20221017155246.zxal2cfehjgaajcu@mobilestation>
- <CA+G9fYtYetV5sZVD14WkZxCE_tgTC4VVKm8BcBw5_NwXD6U=Sw@mail.gmail.com>
- <Y4cqcTRcni5H7UAU@x1-carbon>
- <CADYN=9KKGBXn-YkiiFxsUzsanTALbDV1c+tB0oUQPouE1idnuQ@mail.gmail.com>
- <20221205011105.4do4trbytq4bfw5b@mobilestation>
- <98670e23-6553-4788-8662-9403c480af82@app.fastmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <98670e23-6553-4788-8662-9403c480af82@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221205085351.27566-1-tmaimon77@gmail.com> <20221205085351.27566-3-tmaimon77@gmail.com>
+ <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com> <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
+In-Reply-To: <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 5 Dec 2022 15:25:55 +0200
+Message-ID: <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, adrian.hunter@intel.com,
+        skhan@linuxfoundation.org, davidgow@google.com,
+        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
+        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/22 19:08, Arnd Bergmann wrote:
-> On Mon, Dec 5, 2022, at 02:11, Serge Semin wrote:
->> On Thu, Dec 01, 2022 at 12:48:32PM +0100, Anders Roxell wrote:
-> 
->>>
->>>   for (i = 0; i < hpriv->n_clks; i++) {
->>> - if (!strcmp(hpriv->clks[i].id, con_id))
->>> + if (hpriv->clks && hpriv->clks[i].id &&
->>> +    !strcmp(hpriv->clks[i].id, con_id))
->>>   return hpriv->clks[i].clk;
->>>   }
->>
->> Indeed I should have taken into account that devm_clk_bulk_get_all()
->> can get unnamed clocks too. But checking the hpriv->clks pointer for
->> being not null is redundant, since the ahci_platform_get_resources()
->> procedure makes sure that the array is always allocated. At the very
->> least you shouldn't check the pointer in the loop, but can make sure
->> that the clks array is available before it.
-> 
-> Do you think this is otherwise the correct fix then? Any chance we
-> can still get a version of it into 6.1?
+On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> On Mon, 5 Dec 2022 at 12:54, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > On Mon, Dec 5, 2022 at 10:54 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
 
-If someone sends me a proper patch to apply, I can send a last PR for 6.1
-to Linus before week end.
+...
 
+> > > +#include <linux/clk.h>
+> > > +#include <linux/err.h>
+> > > +#include <linux/io.h>
+> > > +#include <linux/mmc/host.h>
+> > > +#include <linux/mmc/mmc.h>
+> > > +#include <linux/module.h>
+> >
+> > I guess platform_device.h is missing here.
+> Build and work without platform_device.h, do I need it for module use?
 
-> 
->      Arnd
+The rule of thumb is to include headers we are the direct user of. I
+believe you have a data type and API that are defined in that header.
+
+...
+
+> > > +static int npcm_sdhci_probe(struct platform_device *pdev)
+> > > +{
+> > > +       struct sdhci_pltfm_host *pltfm_host;
+> > > +       struct sdhci_host *host;
+> > > +       u32 caps;
+> > > +       int ret;
+> > > +
+> > > +       host = sdhci_pltfm_init(pdev, &npcm_sdhci_pdata, 0);
+> > > +       if (IS_ERR(host))
+> > > +               return PTR_ERR(host);
+> > > +
+> > > +       pltfm_host = sdhci_priv(host);
+> >
+> > > +       pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
+> >
+> > You can't mix devm with non-devm in this way.
+> Can you explain what you mean You can't mix devm with non-devm in this
+> way, where is the mix?
+> In version 1 used devm_clk_get, is it problematic?
+
+devm_ is problematic in your case.
+TL;DR: you need to use clk_get_optional() and clk_put().
+
+Your ->remove() callback doesn't free resources in the reversed order
+which may or, by luck, may not be the case of all possible crashes,
+UAFs, races, etc during removal stage. All the same for error path in
+->probe().
+
+> > > +       if (IS_ERR(pltfm_host->clk))
+> > > +               return PTR_ERR(pltfm_host->clk);
+> > > +
+> > > +       ret = clk_prepare_enable(pltfm_host->clk);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       caps = sdhci_readl(host, SDHCI_CAPABILITIES);
+> > > +       if (caps & SDHCI_CAN_DO_8BIT)
+> > > +               host->mmc->caps |= MMC_CAP_8_BIT_DATA;
+> > > +
+> > > +       ret = mmc_of_parse(host->mmc);
+> > > +       if (ret)
+> > > +               goto err_sdhci_add;
+> > > +
+> > > +       ret = sdhci_add_host(host);
+> > > +       if (ret)
+> > > +               goto err_sdhci_add;
+> >
+> > Why can't you use sdhci_pltfm_register()?
+> two things are missing in sdhci_pltfm_register
+> 1. clock.
+
+Taking into account the implementation of the corresponding
+_unregister() I would add the clock handling to the _register() one.
+Perhaps via a new member of the platform data that supplies the name
+and index of the clock and hence all clk_get_optional() / clk_put will
+be moved there.
+
+> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
+
+All the same, why can't platform data be utilised for this?
+
+> > > +       return 0;
+> > > +
+> > > +err_sdhci_add:
+> > > +       clk_disable_unprepare(pltfm_host->clk);
+> > > +       sdhci_pltfm_free(pdev);
+> > > +       return ret;
+> > > +}
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+With Best Regards,
+Andy Shevchenko
