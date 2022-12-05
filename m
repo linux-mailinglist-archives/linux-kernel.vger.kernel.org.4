@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00663642B18
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA071642B23
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiLEPLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S230156AbiLEPNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbiLEPL0 (ORCPT
+        with ESMTP id S231694AbiLEPMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:11:26 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B02D2DD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:11:20 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id b16so5991594yba.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 07:11:20 -0800 (PST)
+        Mon, 5 Dec 2022 10:12:41 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54C7271F;
+        Mon,  5 Dec 2022 07:12:39 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so7429356otb.1;
+        Mon, 05 Dec 2022 07:12:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pyRHwGs1sujZO5RfggaV9pp2Ao2COgwbgvIFOoVzGUY=;
-        b=qH/lGxfFLt8XtksTK1OA2eiXjyso5sgA2kdxPo2exqLDMrHU1EPjhgDX2SZ9mkSGCu
-         AI3lvyGXcXeZ+ZuDRs6pwiAhaS+UKH+l9NYYaQbEpDRrbnYaD7exOHXExiVBUzvri2lZ
-         euWW54LalnUwQXtgg0Ndut+AIMVG0RaBk57bbd06DS5sOa5g2F/tEV3wrxg/xz+6xipm
-         gK3ObFQbxAr5FRKxEK6uSf4fPX0EY9bvMvbaPHbRu/rVQ09PATaVEY+2Jg6REYWmEqMa
-         G/3xGGKxcCJT1LZ4CSVZhpTvdmJh+A1WZwMNBX9sTs4SM74JQx0VyO9Id2xGs/89L20D
-         uHnw==
+        bh=PPBqbySTXATzozEbLBZecs9jcnWXaQpJ4ipGl050YEg=;
+        b=nH2iZzM9ApCfezIAEC9x39cuyoWpFZxoiRfp/Cr9m6UCEe/L1fK+ndytb/qYGCM9MU
+         S6Y5x8mAJThsonwLgrI59Md3RMGkO1cZnxi1Xjz4BQc5/P3KzBZZr2B51aBDs/V72lHx
+         pcnflFeW4m35kFaM8vF3swaZazGRpl0CGMU6FkKQ92a3x8plfIEtG8JLU2jAvJ9Oz/mG
+         nMlls4xpMxY3N3TOC9TxW69Ttgvc/e00Q0tVDnfJfnYw56RLNo17FA3PzLzs8C2/4IJf
+         ufuK4WXEf1ktrt6bcEvvybMIDooLoyWYVN3vEyvAxF53nzgE86DkAwYn62EmWpz3Dmvs
+         ryzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pyRHwGs1sujZO5RfggaV9pp2Ao2COgwbgvIFOoVzGUY=;
-        b=4nEfZkiGwKpXX97RqoszZTsXfkIK69LuUFc2H7Lx5ocUBj/PZveAHwmw8Mo9RgXS/8
-         026uGyVV+456JIQrfvPZErTG/OR2TM4inh3geAHduGBegCqWnF6fYCr6ArTzchRfjHDG
-         77rJQ4SLIUZyEd1DaZgaE1t2zN9TmpzVcz8g5cYrvBYu0y3gtKQQahmQ2QftlTeFyc2N
-         J/eoj8wbll+sEbDCSwW5/SyNmlEdcHa5zoJYjBZ0gbYM5b8TeKTI8kBCscC5i8OwFdbo
-         ZsyNeSBPI31K4R48/F93TdKPMwaRqmDxh/ZN2K+dKW16m1xR5oNU3cWUz3Y6vl+c8XfT
-         N60w==
-X-Gm-Message-State: ANoB5pkRbmiV/xU99M6cH5IgL8icQ1rJVMCc+NweorUfpA4OxfKh8RXb
-        yWkZtSt6hFtF6DAkEnyNm4yl6uujOKQYCgwAYU0OMw==
-X-Google-Smtp-Source: AA0mqf4+JIJ/rY5uOH6i3gj2zZ4mvZhSq/mvTQ0P3MHkbWIrf54rGRE08IAxaKAtO4DD/4Kz2LlWS+kU7tZHRQnxyAw=
-X-Received: by 2002:a25:e749:0:b0:6f1:9eb8:76d4 with SMTP id
- e70-20020a25e749000000b006f19eb876d4mr48947486ybh.143.1670253079669; Mon, 05
- Dec 2022 07:11:19 -0800 (PST)
+        bh=PPBqbySTXATzozEbLBZecs9jcnWXaQpJ4ipGl050YEg=;
+        b=vEoJ7zdxTTBxV0+P+/WLlSolKEgZXkWlg5n3CzRfiDdY0EXyy4wHdFecUr5nNzORcv
+         DxZaBHtXH0f6L7GuFl3xu+C83B2nO9+/vqPIcO5epmVkA6KIAx95DXeg+Kdh6VMizp+4
+         in+VIj6IKdWtCD7xoMZGia/8vLmqGvdbpNFASKBqGP/MCA9hvojNKoFrGRm3Thst1+8z
+         myBCVdTtGyHeqizgDoc49FBJNiEMdLboad1PwzvnWYN/TBRcHVm3BpI3vI542KLQMOY3
+         zj6bLzzNWHDZ17obAMHpi7y8JI0ZQJ1C3hCyqGXStuUhRO0cEzGTCPG5/y7J3MswuiCp
+         SYCg==
+X-Gm-Message-State: ANoB5pnzgFe+u7O8QdNFcCnF5oH8kQrQbHqbggpt2FYfy28nL270Trqe
+        Hk5bczquhN79IOMzDUKFs0ELuvvkYVgDrS472V8=
+X-Google-Smtp-Source: AA0mqf4xxmJweLjSmwR4AjAAP3UK0trE9dsrshk5r1DWy3yLvZfMnTG/86QaRqemLYHn+c9xICft0WkKVQyH94JowRs=
+X-Received: by 2002:a05:6830:1e65:b0:661:b632:4259 with SMTP id
+ m5-20020a0568301e6500b00661b6324259mr32439951otr.304.1670253159124; Mon, 05
+ Dec 2022 07:12:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20221205132558.63484-1-glider@google.com> <20221205145740.694038-1-glider@google.com>
-In-Reply-To: <20221205145740.694038-1-glider@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 5 Dec 2022 16:10:43 +0100
-Message-ID: <CANpmjNNhdDfovyRr04nF1K5uNth1Hh+KVzBKBNJMd0VsY5WWDA@mail.gmail.com>
-Subject: Re: [PATCH v2] kmsan: fix memcpy tests
-To:     Alexander Potapenko <glider@google.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        dvyukov@google.com, linux-mm@kvack.org
+References: <20221114012036.2870067-1-git@johnthomson.fastmail.com.au> <CAMhs-H-uKrn-OXX2POPr3ewXUx=h835yBSUcJWun7pC3dPj66w@mail.gmail.com>
+In-Reply-To: <CAMhs-H-uKrn-OXX2POPr3ewXUx=h835yBSUcJWun7pC3dPj66w@mail.gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 5 Dec 2022 16:12:26 +0100
+Message-ID: <CAMhs-H8uCgCgPvesXXg+p-t_CnfChYGNk2oZC2yfs8+s06Nbsg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] PCI: mt7621: add sentinel to quirks table
+To:     John Thomson <git@johnthomson.fastmail.com.au>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Dec 2022 at 15:57, Alexander Potapenko <glider@google.com> wrote:
+On Mon, Nov 14, 2022 at 7:05 AM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
 >
-> Recent Clang changes may cause it to delete calls of memcpy(), if the
-> source is an uninitialized volatile local.
-> This happens because passing a pointer to a volatile local into memcpy()
-> discards the volatile qualifier, giving the compiler a free hand to
-> optimize the memcpy() call away.
+> Hi John,
 >
-> Use OPTIMIZER_HIDE_VAR() to hide the uninitialized var from the
-> too-smart compiler.
+> On Mon, Nov 14, 2022 at 2:20 AM John Thomson
+> <git@johnthomson.fastmail.com.au> wrote:
+> >
+> > With mt7621 soc_dev_attr fixed to register the soc as a device,
+> > kernel will experience an oops in soc_device_match_attr
+> >
+> > This quirk test was introduced in the staging driver in
+> > commit b483b4e4d3f6 ("staging: mt7621-pci: add quirks for 'E2' revision
+> > using 'soc_device_attribute'"), and the staging driver was moved in
+> > commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host
+> > controller driver") for the 5.16 kernel
+> >
+> > Link: https://lore.kernel.org/lkml/26ebbed1-0fe9-4af9-8466-65f841d0b382@app.fastmail.com
+> > Fixes: b483b4e4d3f6 ("staging: mt7621-pci: add quirks for 'E2' revision using 'soc_device_attribute'")
+> > Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+> > ---
+> > v1 Link: https://lore.kernel.org/lkml/20221104205242.3440388-3-git@johnthomson.fastmail.com.au/#t
+> > v2: no newline in middle of Fixes tag
+> > ---
+> >  drivers/pci/controller/pcie-mt7621.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> Suggested-by: Marco Elver <elver@google.com>
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+> I am pretty sure I already gave my Acked-by in the previous version of
+> this patch. You should add tags when you submit new versiones. Anyway:
+>
+> Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>
+> Thanks,
+>     Sergio Paracuellos
 
-Reviewed-by: Marco Elver <elver@google.com>
+Gentle ping for this patch :)
 
-> ---
->  mm/kmsan/kmsan_test.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
-> index 9a29ea2dbfb9b..eb44ef3c5f290 100644
-> --- a/mm/kmsan/kmsan_test.c
-> +++ b/mm/kmsan/kmsan_test.c
-> @@ -419,6 +419,7 @@ static void test_memcpy_aligned_to_aligned(struct kunit *test)
->         kunit_info(
->                 test,
->                 "memcpy()ing aligned uninit src to aligned dst (UMR report)\n");
-> +       OPTIMIZER_HIDE_VAR(uninit_src);
->         memcpy((void *)&dst, (void *)&uninit_src, sizeof(uninit_src));
->         kmsan_check_memory((void *)&dst, sizeof(dst));
->         KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> @@ -441,6 +442,7 @@ static void test_memcpy_aligned_to_unaligned(struct kunit *test)
->         kunit_info(
->                 test,
->                 "memcpy()ing aligned uninit src to unaligned dst (UMR report)\n");
-> +       OPTIMIZER_HIDE_VAR(uninit_src);
->         memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
->         kmsan_check_memory((void *)dst, 4);
->         KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> @@ -464,6 +466,7 @@ static void test_memcpy_aligned_to_unaligned2(struct kunit *test)
->         kunit_info(
->                 test,
->                 "memcpy()ing aligned uninit src to unaligned dst - part 2 (UMR report)\n");
-> +       OPTIMIZER_HIDE_VAR(uninit_src);
->         memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
->         kmsan_check_memory((void *)&dst[4], sizeof(uninit_src));
->         KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> --
-> 2.39.0.rc0.267.gcb52ba06e7-goog
->
+Thanks,
+    Sergio Paracuellos
