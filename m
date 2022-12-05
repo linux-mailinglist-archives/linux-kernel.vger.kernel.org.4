@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69500643020
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C380A643027
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiLES04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
+        id S233317AbiLES0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiLESZT (ORCPT
+        with ESMTP id S232414AbiLESZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 13:25:19 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FB020BC4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5902A20BDA;
         Mon,  5 Dec 2022 10:25:17 -0800 (PST)
 Date:   Mon, 05 Dec 2022 18:25:14 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670264715;
+        s=2020; t=1670264714;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sZMeVQlKxtxT5C/R0qUnxuk6C9rozNcTf6Dp2+ZNY2c=;
-        b=yBZM6C3yTfL2ehEFkwk1O7PfWOoYMz4Re92wo6gVT/IR0772SWdG3Xroha4xStijEJLF62
-        zEjqLyOIDlRoQSyFcU8Khe7TVPUNkn0ZwmffuYrL3Zo5QoYwjY6l4RT4Rmtfz+p49pbFRo
-        gPYqS0K4nNgeOFTPi2oJp9PdQQ5vPhc6Yidnij4P4cGXSqPlFsCfYiALmVOhQNilQu4mwJ
-        VaZxObKcW4Xkp5xncd6TPE5M3cwu97nOb3O1B/IZSbRRgdhZ+yzMTffhU+veHQZK7Et153
-        Wzz8nhg8dzAFPMYf7TtrsFLT/PcolFs99uePlXfQjLQgCK926z3f72hoU8XPuQ==
+        bh=dxYZp75+n1m4oe1u+WV4gWWwd8DXVGrrB+Ur6R0YEuE=;
+        b=r5nIwLiVBKUAjyg0jHg2agw+DMH9AgTE4aB06Y/90NNLvk9yJK6biooHAeuFnPenEDN9Hl
+        EzXxI5AmpUbHB1dmkyxmip4qqlFw6S43VcRLHNUUonO7FwGIgjV4Vk4sUOQ7BhujhHjNmC
+        MoDmk94svRWJeia+PVJ4dFsT/sQ7CcVvQ2JD3txNlRLyEf3GbHaYMdazQY/NXbQZpjFep7
+        McaUdP9xD45XgXolr3UGNQeYsqCCth/0i/vRPpoJ/GQPFTGgUp90QU59nNDE0d5Spid+NX
+        RFGBGenOiYblRZDUY4kELVTYkRhm7rhxar9lwyXWvbpLAfBc3WkEsbCZhCs8qA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670264715;
+        s=2020e; t=1670264714;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sZMeVQlKxtxT5C/R0qUnxuk6C9rozNcTf6Dp2+ZNY2c=;
-        b=OnwVS0HHTzVfNxfi7W1cwGraPQF6JB2zHiN1cTQrTpEoNYnIisRBeG1h9K7HvGuEhmh3qn
-        0xD234h5k+VCzYBA==
+        bh=dxYZp75+n1m4oe1u+WV4gWWwd8DXVGrrB+Ur6R0YEuE=;
+        b=ydJVw5THFSeNDIqf1+NtGtbK28BkA+eWLfbj0EuFSrf/OCDIco9cGFN9tVOepHnGqV2bsH
+        EMX9Y8O1IVAW29BQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] PCI/MSI: Add support for per device MSI[X] domains
-Cc:     "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
+Subject: [tip: irq/core] iommu/vt-d: Switch to MSI parent domains
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Kevin Tian <kevin.tian@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
         Marc Zyngier <maz@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221124232325.975388241@linutronix.de>
-References: <20221124232325.975388241@linutronix.de>
+In-Reply-To: <20221124232326.151226317@linutronix.de>
+References: <20221124232326.151226317@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <167026471470.4906.15949045224096665425.tip-bot2@tip-bot2>
+Message-ID: <167026471406.4906.5560609467786500456.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,309 +67,138 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     e893c81d302e9b2f9ef2258f09d9b696ea67b5b9
-Gitweb:        https://git.kernel.org/tip/e893c81d302e9b2f9ef2258f09d9b696ea67b5b9
+Commit-ID:     01290527cfe8bb5aa8bb6c29ba5f3493d75652ca
+Gitweb:        https://git.kernel.org/tip/01290527cfe8bb5aa8bb6c29ba5f3493d75652ca
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 25 Nov 2022 00:26:04 +01:00
+AuthorDate:    Fri, 25 Nov 2022 00:26:08 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 05 Dec 2022 19:21:02 +01:00
 
-PCI/MSI: Add support for per device MSI[X] domains
+iommu/vt-d: Switch to MSI parent domains
 
-Provide a template and the necessary callbacks to create PCI/MSI and
-PCI/MSI-X domains.
+Remove the global PCI/MSI irqdomain implementation and provide the required
+MSI parent ops so the PCI/MSI code can detect the new parent and setup per
+device domains.
 
-The domains are created when MSI or MSI-X is enabled. The domain's lifetime
-is either the device lifetime or in case that e.g. MSI-X was tried first
-and failed, then the MSI-X domain is removed and a MSI domain is created as
-both are mutually exclusive and reside in the default domain ID slot of the
-per device domain pointer array.
-
-Also expand pci_msi_domain_supports() to handle feature checks correctly
-even in the case that the per device domain was not yet created by checking
-the features supported by the MSI parent.
-
-Add the necessary setup calls into the MSI and MSI-X enable code path.
-These setup calls are backwards compatible. They return success when there
-is no parent domain found, which means the existing global domains or the
-legacy allocation path keep just working.
-
-Co-developed-by: Ahmed S. Darwish <darwi@linutronix.de>
-Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221124232325.975388241@linutronix.de
+Link: https://lore.kernel.org/r/20221124232326.151226317@linutronix.de
 
 ---
- drivers/pci/msi/irqdomain.c | 188 ++++++++++++++++++++++++++++++++++-
- drivers/pci/msi/msi.c       |  16 ++-
- drivers/pci/msi/msi.h       |   2 +-
- 3 files changed, 201 insertions(+), 5 deletions(-)
+ arch/x86/kernel/apic/msi.c          |  2 ++
+ drivers/iommu/intel/iommu.h         |  1 -
+ drivers/iommu/intel/irq_remapping.c | 27 ++++++++++++---------------
+ include/linux/irqdomain_defs.h      |  1 +
+ 4 files changed, 15 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
-index f4338fb..be3d50f 100644
---- a/drivers/pci/msi/irqdomain.c
-+++ b/drivers/pci/msi/irqdomain.c
-@@ -139,6 +139,170 @@ struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
- }
- EXPORT_SYMBOL_GPL(pci_msi_create_irq_domain);
+diff --git a/arch/x86/kernel/apic/msi.c b/arch/x86/kernel/apic/msi.c
+index db96bfc..a8dccb0 100644
+--- a/arch/x86/kernel/apic/msi.c
++++ b/arch/x86/kernel/apic/msi.c
+@@ -217,6 +217,8 @@ static bool x86_init_dev_msi_info(struct device *dev, struct irq_domain *domain,
+ 		/* See msi_set_affinity() for the gory details */
+ 		info->flags |= MSI_FLAG_NOMASK_QUIRK;
+ 		break;
++	case DOMAIN_BUS_DMAR:
++		break;
+ 	default:
+ 		WARN_ON_ONCE(1);
+ 		return false;
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index 92023df..6eadb86 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -600,7 +600,6 @@ struct intel_iommu {
+ #ifdef CONFIG_IRQ_REMAP
+ 	struct ir_table *ir_table;	/* Interrupt remapping info */
+ 	struct irq_domain *ir_domain;
+-	struct irq_domain *ir_msi_domain;
+ #endif
+ 	struct iommu_device iommu;  /* IOMMU core code handle */
+ 	int		node;
+diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
+index 08bbf08..6fab407 100644
+--- a/drivers/iommu/intel/irq_remapping.c
++++ b/drivers/iommu/intel/irq_remapping.c
+@@ -82,6 +82,7 @@ static const struct irq_domain_ops intel_ir_domain_ops;
  
-+/*
-+ * Per device MSI[-X] domain functionality
-+ */
-+static void pci_device_domain_set_desc(msi_alloc_info_t *arg, struct msi_desc *desc)
-+{
-+	arg->desc = desc;
-+	arg->hwirq = desc->msi_index;
-+}
-+
-+static void pci_irq_mask_msi(struct irq_data *data)
-+{
-+	struct msi_desc *desc = irq_data_get_msi_desc(data);
-+
-+	pci_msi_mask(desc, BIT(data->irq - desc->irq));
-+}
-+
-+static void pci_irq_unmask_msi(struct irq_data *data)
-+{
-+	struct msi_desc *desc = irq_data_get_msi_desc(data);
-+
-+	pci_msi_unmask(desc, BIT(data->irq - desc->irq));
-+}
-+
-+#ifdef CONFIG_GENERIC_IRQ_RESERVATION_MODE
-+# define MSI_REACTIVATE		MSI_FLAG_MUST_REACTIVATE
-+#else
-+# define MSI_REACTIVATE		0
-+#endif
-+
-+#define MSI_COMMON_FLAGS	(MSI_FLAG_FREE_MSI_DESCS |	\
-+				 MSI_FLAG_ACTIVATE_EARLY |	\
-+				 MSI_FLAG_DEV_SYSFS |		\
-+				 MSI_REACTIVATE)
-+
-+static const struct msi_domain_template pci_msi_template = {
-+	.chip = {
-+		.name			= "PCI-MSI",
-+		.irq_mask		= pci_irq_mask_msi,
-+		.irq_unmask		= pci_irq_unmask_msi,
-+		.irq_write_msi_msg	= pci_msi_domain_write_msg,
-+		.flags			= IRQCHIP_ONESHOT_SAFE,
-+	},
-+
-+	.ops = {
-+		.set_desc		= pci_device_domain_set_desc,
-+	},
-+
-+	.info = {
-+		.flags			= MSI_COMMON_FLAGS | MSI_FLAG_MULTI_PCI_MSI,
-+		.bus_token		= DOMAIN_BUS_PCI_DEVICE_MSI,
-+	},
-+};
-+
-+static void pci_irq_mask_msix(struct irq_data *data)
-+{
-+	pci_msix_mask(irq_data_get_msi_desc(data));
-+}
-+
-+static void pci_irq_unmask_msix(struct irq_data *data)
-+{
-+	pci_msix_unmask(irq_data_get_msi_desc(data));
-+}
-+
-+static const struct msi_domain_template pci_msix_template = {
-+	.chip = {
-+		.name			= "PCI-MSIX",
-+		.irq_mask		= pci_irq_mask_msix,
-+		.irq_unmask		= pci_irq_unmask_msix,
-+		.irq_write_msi_msg	= pci_msi_domain_write_msg,
-+		.flags			= IRQCHIP_ONESHOT_SAFE,
-+	},
-+
-+	.ops = {
-+		.set_desc		= pci_device_domain_set_desc,
-+	},
-+
-+	.info = {
-+		.flags			= MSI_COMMON_FLAGS | MSI_FLAG_PCI_MSIX,
-+		.bus_token		= DOMAIN_BUS_PCI_DEVICE_MSIX,
-+	},
-+};
-+
-+static bool pci_match_device_domain(struct pci_dev *pdev, enum irq_domain_bus_token bus_token)
-+{
-+	return msi_match_device_irq_domain(&pdev->dev, MSI_DEFAULT_DOMAIN, bus_token);
-+}
-+
-+static bool pci_create_device_domain(struct pci_dev *pdev, const struct msi_domain_template *tmpl,
-+				     unsigned int hwsize)
-+{
-+	struct irq_domain *domain = dev_get_msi_domain(&pdev->dev);
-+
-+	if (!domain || !irq_domain_is_msi_parent(domain))
-+		return true;
-+
-+	return msi_create_device_irq_domain(&pdev->dev, MSI_DEFAULT_DOMAIN, tmpl,
-+					    hwsize, NULL, NULL);
-+}
-+
-+/**
-+ * pci_setup_msi_device_domain - Setup a device MSI interrupt domain
-+ * @pdev:	The PCI device to create the domain on
-+ *
-+ * Return:
-+ *  True when:
-+ *	- The device does not have a MSI parent irq domain associated,
-+ *	  which keeps the legacy architecture specific and the global
-+ *	  PCI/MSI domain models working
-+ *	- The MSI domain exists already
-+ *	- The MSI domain was successfully allocated
-+ *  False when:
-+ *	- MSI-X is enabled
-+ *	- The domain creation fails.
-+ *
-+ * The created MSI domain is preserved until:
-+ *	- The device is removed
-+ *	- MSI is disabled and a MSI-X domain is created
-+ */
-+bool pci_setup_msi_device_domain(struct pci_dev *pdev)
-+{
-+	if (WARN_ON_ONCE(pdev->msix_enabled))
-+		return false;
-+
-+	if (pci_match_device_domain(pdev, DOMAIN_BUS_PCI_DEVICE_MSI))
-+		return true;
-+	if (pci_match_device_domain(pdev, DOMAIN_BUS_PCI_DEVICE_MSIX))
-+		msi_remove_device_irq_domain(&pdev->dev, MSI_DEFAULT_DOMAIN);
-+
-+	return pci_create_device_domain(pdev, &pci_msi_template, 1);
-+}
-+
-+/**
-+ * pci_setup_msix_device_domain - Setup a device MSI-X interrupt domain
-+ * @pdev:	The PCI device to create the domain on
-+ * @hwsize:	The size of the MSI-X vector table
-+ *
-+ * Return:
-+ *  True when:
-+ *	- The device does not have a MSI parent irq domain associated,
-+ *	  which keeps the legacy architecture specific and the global
-+ *	  PCI/MSI domain models working
-+ *	- The MSI-X domain exists already
-+ *	- The MSI-X domain was successfully allocated
-+ *  False when:
-+ *	- MSI is enabled
-+ *	- The domain creation fails.
-+ *
-+ * The created MSI-X domain is preserved until:
-+ *	- The device is removed
-+ *	- MSI-X is disabled and a MSI domain is created
-+ */
-+bool pci_setup_msix_device_domain(struct pci_dev *pdev, unsigned int hwsize)
-+{
-+	if (WARN_ON_ONCE(pdev->msi_enabled))
-+		return false;
-+
-+	if (pci_match_device_domain(pdev, DOMAIN_BUS_PCI_DEVICE_MSIX))
-+		return true;
-+	if (pci_match_device_domain(pdev, DOMAIN_BUS_PCI_DEVICE_MSI))
-+		msi_remove_device_irq_domain(&pdev->dev, MSI_DEFAULT_DOMAIN);
-+
-+	return pci_create_device_domain(pdev, &pci_msix_template, hwsize);
-+}
-+
- /**
-  * pci_msi_domain_supports - Check for support of a particular feature flag
-  * @pdev:		The PCI device to operate on
-@@ -152,13 +316,33 @@ bool pci_msi_domain_supports(struct pci_dev *pdev, unsigned int feature_mask,
+ static void iommu_disable_irq_remapping(struct intel_iommu *iommu);
+ static int __init parse_ioapics_under_ir(void);
++static const struct msi_parent_ops dmar_msi_parent_ops;
+ 
+ static bool ir_pre_enabled(struct intel_iommu *iommu)
  {
- 	struct msi_domain_info *info;
- 	struct irq_domain *domain;
-+	unsigned int supported;
+@@ -230,7 +231,7 @@ static struct irq_domain *map_dev_to_ir(struct pci_dev *dev)
+ {
+ 	struct dmar_drhd_unit *drhd = dmar_find_matched_drhd_unit(dev);
  
- 	domain = dev_get_msi_domain(&pdev->dev);
- 
- 	if (!domain || !irq_domain_is_hierarchy(domain))
- 		return mode == ALLOW_LEGACY;
--	info = domain->host_data;
--	return (info->flags & feature_mask) == feature_mask;
-+
-+	if (!irq_domain_is_msi_parent(domain)) {
-+		/*
-+		 * For "global" PCI/MSI interrupt domains the associated
-+		 * msi_domain_info::flags is the authoritive source of
-+		 * information.
-+		 */
-+		info = domain->host_data;
-+		supported = info->flags;
-+	} else {
-+		/*
-+		 * For MSI parent domains the supported feature set
-+		 * is avaliable in the parent ops. This makes checks
-+		 * possible before actually instantiating the
-+		 * per device domain because the parent is never
-+		 * expanding the PCI/MSI functionality.
-+		 */
-+		supported = domain->msi_parent_ops->supported_flags;
-+	}
-+
-+	return (supported & feature_mask) == feature_mask;
+-	return drhd ? drhd->iommu->ir_msi_domain : NULL;
++	return drhd ? drhd->iommu->ir_domain : NULL;
  }
  
- /*
-diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-index 76a3d44..b8d74df 100644
---- a/drivers/pci/msi/msi.c
-+++ b/drivers/pci/msi/msi.c
-@@ -436,6 +436,9 @@ int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
- 	if (rc)
- 		return rc;
- 
-+	if (!pci_setup_msi_device_domain(dev))
-+		return -ENODEV;
+ static int clear_entries(struct irq_2_iommu *irq_iommu)
+@@ -573,10 +574,10 @@ static int intel_setup_irq_remapping(struct intel_iommu *iommu)
+ 		pr_err("IR%d: failed to allocate irqdomain\n", iommu->seq_id);
+ 		goto out_free_fwnode;
+ 	}
+-	iommu->ir_msi_domain =
+-		arch_create_remap_msi_irq_domain(iommu->ir_domain,
+-						 "INTEL-IR-MSI",
+-						 iommu->seq_id);
 +
- 	for (;;) {
- 		if (affd) {
- 			nvec = irq_calc_affinity_vectors(minvec, nvec, affd);
-@@ -787,9 +790,13 @@ int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int
- 	if (!pci_msix_validate_entries(dev, entries, nvec, hwsize))
- 		return -EINVAL;
++	irq_domain_update_bus_token(iommu->ir_domain,  DOMAIN_BUS_DMAR);
++	iommu->ir_domain->flags |= IRQ_DOMAIN_FLAG_MSI_PARENT;
++	iommu->ir_domain->msi_parent_ops = &dmar_msi_parent_ops;
  
--	/* PCI_IRQ_VIRTUAL is a horrible hack! */
--	if (nvec > hwsize && !(flags & PCI_IRQ_VIRTUAL))
--		nvec = hwsize;
-+	if (hwsize < nvec) {
-+		/* Keep the IRQ virtual hackery working */
-+		if (flags & PCI_IRQ_VIRTUAL)
-+			hwsize = nvec;
-+		else
-+			nvec = hwsize;
-+	}
+ 	ir_table->base = page_address(pages);
+ 	ir_table->bitmap = bitmap;
+@@ -620,9 +621,6 @@ static int intel_setup_irq_remapping(struct intel_iommu *iommu)
+ 	return 0;
  
- 	if (nvec < minvec)
- 		return -ENOSPC;
-@@ -798,6 +805,9 @@ int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int
- 	if (rc)
- 		return rc;
+ out_free_ir_domain:
+-	if (iommu->ir_msi_domain)
+-		irq_domain_remove(iommu->ir_msi_domain);
+-	iommu->ir_msi_domain = NULL;
+ 	irq_domain_remove(iommu->ir_domain);
+ 	iommu->ir_domain = NULL;
+ out_free_fwnode:
+@@ -644,13 +642,6 @@ static void intel_teardown_irq_remapping(struct intel_iommu *iommu)
+ 	struct fwnode_handle *fn;
  
-+	if (!pci_setup_msix_device_domain(dev, hwsize))
-+		return -ENODEV;
-+
- 	for (;;) {
- 		if (affd) {
- 			nvec = irq_calc_affinity_vectors(minvec, nvec, affd);
-diff --git a/drivers/pci/msi/msi.h b/drivers/pci/msi/msi.h
-index 9d75b6f..74408cc 100644
---- a/drivers/pci/msi/msi.h
-+++ b/drivers/pci/msi/msi.h
-@@ -105,6 +105,8 @@ enum support_mode {
+ 	if (iommu && iommu->ir_table) {
+-		if (iommu->ir_msi_domain) {
+-			fn = iommu->ir_msi_domain->fwnode;
+-
+-			irq_domain_remove(iommu->ir_msi_domain);
+-			irq_domain_free_fwnode(fn);
+-			iommu->ir_msi_domain = NULL;
+-		}
+ 		if (iommu->ir_domain) {
+ 			fn = iommu->ir_domain->fwnode;
+ 
+@@ -1437,6 +1428,12 @@ static const struct irq_domain_ops intel_ir_domain_ops = {
+ 	.deactivate = intel_irq_remapping_deactivate,
  };
  
- bool pci_msi_domain_supports(struct pci_dev *dev, unsigned int feature_mask, enum support_mode mode);
-+bool pci_setup_msi_device_domain(struct pci_dev *pdev);
-+bool pci_setup_msix_device_domain(struct pci_dev *pdev, unsigned int hwsize);
++static const struct msi_parent_ops dmar_msi_parent_ops = {
++	.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED | MSI_FLAG_MULTI_PCI_MSI,
++	.prefix			= "IR-",
++	.init_dev_msi_info	= msi_parent_init_dev_msi_info,
++};
++
+ /*
+  * Support of Interrupt Remapping Unit Hotplug
+  */
+diff --git a/include/linux/irqdomain_defs.h b/include/linux/irqdomain_defs.h
+index b3f4b7e..3a09396 100644
+--- a/include/linux/irqdomain_defs.h
++++ b/include/linux/irqdomain_defs.h
+@@ -23,6 +23,7 @@ enum irq_domain_bus_token {
+ 	DOMAIN_BUS_VMD_MSI,
+ 	DOMAIN_BUS_PCI_DEVICE_MSI,
+ 	DOMAIN_BUS_PCI_DEVICE_MSIX,
++	DOMAIN_BUS_DMAR,
+ };
  
- /* Legacy (!IRQDOMAIN) fallbacks */
- 
+ #endif /* _LINUX_IRQDOMAIN_DEFS_H */
