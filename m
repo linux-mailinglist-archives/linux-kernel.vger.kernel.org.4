@@ -2,143 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178826426A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E0964269E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiLEKYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 05:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S230514AbiLEKWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 05:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiLEKXA (ORCPT
+        with ESMTP id S229753AbiLEKWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 05:23:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5689518E24
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:22:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670235719;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Tz1CTZfjZXf6X6nP9mO/30eW25Wox/j1ITKdav6l++Y=;
-        b=P7PVDssqdGKNEZQSNptGjJKUOUggBJeuoiPBPiLNpFuPZsVEj7gBBFUrqb41r71qhff4f8
-        GcMKao8xNYs+I6ed6eRS7REcmTXWUfTC2zXvz1tqmTGBWP6syMF3RhmqlZ5b3zeWdy2khA
-        waGJ/0q4EzxWroeskHleE0O9MPatlvw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-hPQmErVbOWqpoDTAgFsznA-1; Mon, 05 Dec 2022 05:21:56 -0500
-X-MC-Unique: hPQmErVbOWqpoDTAgFsznA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E849E101A52A;
-        Mon,  5 Dec 2022 10:21:55 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 66D1AC19145;
-        Mon,  5 Dec 2022 10:21:55 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v2] trace: Fix some checker warnings
-From:   David Howells <dhowells@redhat.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Mon, 05 Dec 2022 10:21:52 +0000
-Message-ID: <167023571258.382307.15314866482834835192.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Mon, 5 Dec 2022 05:22:22 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82D319286
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:22:21 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p28bz-0001Qv-C5; Mon, 05 Dec 2022 11:22:11 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p28bx-0005bw-DV; Mon, 05 Dec 2022 11:22:09 +0100
+Date:   Mon, 5 Dec 2022 11:22:09 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 1/4] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <20221205102209.GA17619@pengutronix.de>
+References: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
+ <20221205060057.GA10297@pengutronix.de>
+ <Y43CDqAjvlAfLK1v@gvm01>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y43CDqAjvlAfLK1v@gvm01>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix some checker warnings in the trace code by adding __printf attributes
-to a number of trace functions and their declarations.
+On Mon, Dec 05, 2022 at 11:03:58AM +0100, Piergiorgio Beruto wrote:
+> Hello Oleksij, and thank you for your review!
+> Please see my comments below.
+> 
+> On Mon, Dec 05, 2022 at 07:00:57AM +0100, Oleksij Rempel wrote:
+> > > diff --git a/include/uapi/linux/ethtool_netlink.h b/include/uapi/linux/ethtool_netlink.h
+> > > index aaf7c6963d61..81e3d7b42d0f 100644
+> > > --- a/include/uapi/linux/ethtool_netlink.h
+> > > +++ b/include/uapi/linux/ethtool_netlink.h
+> > > @@ -51,6 +51,9 @@ enum {
+> > >  	ETHTOOL_MSG_MODULE_SET,
+> > >  	ETHTOOL_MSG_PSE_GET,
+> > >  	ETHTOOL_MSG_PSE_SET,
+> > > +	ETHTOOL_MSG_PLCA_GET_CFG,
+> > > +	ETHTOOL_MSG_PLCA_SET_CFG,
+> > > +	ETHTOOL_MSG_PLCA_GET_STATUS,
+> > >  
+> > >  	/* add new constants above here */
+> > >  	__ETHTOOL_MSG_USER_CNT,
+> > > @@ -97,6 +100,9 @@ enum {
+> > >  	ETHTOOL_MSG_MODULE_GET_REPLY,
+> > >  	ETHTOOL_MSG_MODULE_NTF,
+> > >  	ETHTOOL_MSG_PSE_GET_REPLY,
+> > > +	ETHTOOL_MSG_PLCA_GET_CFG_REPLY,
+> > > +	ETHTOOL_MSG_PLCA_GET_STATUS_REPLY,
+> > > +	ETHTOOL_MSG_PLCA_NTF,
+> > >  
+> > >  	/* add new constants above here */
+> > >  	__ETHTOOL_MSG_KERNEL_CNT,
+> > > @@ -880,6 +886,25 @@ enum {
+> > >  	ETHTOOL_A_PSE_MAX = (__ETHTOOL_A_PSE_CNT - 1)
+> > >  };
+> > >  
+> > > +/* PLCA */
+> > > +
+> > 
+> > Please use names used in the specification as close as possible and
+> > document in comments real specification names.
+> I was actually following the names in the OPEN Alliance SIG
+> specifications which I referenced. Additionally, the OPEN names are more
+> similar to those that you can find in Clause 147. As I was trying to
+> explain in other threads, the names in Clause 30 were sort of a workaround
+> because we were not allowed to add registers in Clause 45.
+> 
+> I can change the names if you really want to, but I'm inclined to keep
+> it simple and "user-friendly". People using this technology are more
+> used to these names, and they totally ignore Clause 30.
+> 
+> Please, let me know what you think.
 
-Changes:
-========
-ver #2)
- - Dropped the fix for the unconditional tracing_max_lat_fops decl[1].
+A comment about name mapping to specification, spec version and reason
+to take one variants instead of other one will be enough Somewhat similar to
+what i did for PoDL. See ETHTOOL_A_PODL_* in
+Documentation/networking/ethtool-netlink.rst and include/uapi/linux/ethtool.h
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steven Rostedt <rostedt@goodmis.org>
-cc: Masami Hiramatsu <mhiramat@kernel.org>
-Link: https://lore.kernel.org/r/20221205180617.9b9d3971cbe06ee536603523@kernel.org/ [1]
-Link: https://lore.kernel.org/r/166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk/ # v1
----
+It will help people who use spec to review or extend this UAPI. 
 
- include/linux/trace_events.h |    3 ++-
- include/linux/trace_seq.h    |    3 ++-
- kernel/trace/trace.h         |    2 +-
- kernel/trace/trace_output.c  |    5 +++--
- 4 files changed, 8 insertions(+), 5 deletions(-)
+> > > +
+> > > +	/* add new constants above here */
+> > > +	__ETHTOOL_A_PLCA_CNT,
+> > > +	ETHTOOL_A_PLCA_MAX = (__ETHTOOL_A_PLCA_CNT - 1)
+> > > +};
+> > 
+> > Should we have access to 30.16.1.2.2 acPLCAReset in user space?
+> I omitted that parameter on purpose. The reason is that again, we were
+> "forced" to do this in IEEE802.3cg, but it was a poor choice. I
+> understand purity of the specifications, but in the real-world where
+> PLCA is implemented in the PHY, resetting the PLCA layer independently
+> of the PCS/PMA is all but a good idea: it does more harm than good. As a
+> matter of fact, PHY vendors typically map the PLCA reset bit to the PHY
+> soft reset bit, or at least to the PCS reset bit.
+> 
+> I'm inclined to keep this as-is and see in the future if and why someone
+> would need this feature. What you think?
 
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 20749bd9db71..112b08ca2c5c 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -235,7 +235,8 @@ void tracing_record_taskinfo_sched_switch(struct task_struct *prev,
- void tracing_record_cmdline(struct task_struct *task);
- void tracing_record_tgid(struct task_struct *task);
- 
--int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...);
-+int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
-+	 __printf(3, 4);
- 
- struct event_filter;
- 
-diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
-index 5a2c650d9e1c..0c4c7587d6c3 100644
---- a/include/linux/trace_seq.h
-+++ b/include/linux/trace_seq.h
-@@ -97,7 +97,8 @@ extern int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
- 			      const void *buf, size_t len, bool ascii);
- 
- #else /* CONFIG_TRACING */
--static inline void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
-+static inline __printf(2, 3)
-+void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
- {
- }
- static inline void
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index d42e24507152..ecc6120116da 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -615,7 +615,7 @@ void trace_buffer_unlock_commit_nostack(struct trace_buffer *buffer,
- bool trace_is_tracepoint_string(const char *str);
- const char *trace_event_format(struct trace_iterator *iter, const char *fmt);
- void trace_check_vprintf(struct trace_iterator *iter, const char *fmt,
--			 va_list ap);
-+			 va_list ap) __printf(2, 0);
- 
- int trace_empty(struct trace_iterator *iter);
- 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 67f47ea27921..7039cd883c8b 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -323,8 +323,9 @@ void trace_event_printf(struct trace_iterator *iter, const char *fmt, ...)
- }
- EXPORT_SYMBOL(trace_event_printf);
- 
--static int trace_output_raw(struct trace_iterator *iter, char *name,
--			    char *fmt, va_list ap)
-+static __printf(3, 0)
-+int trace_output_raw(struct trace_iterator *iter, char *name,
-+		     char *fmt, va_list ap)
- {
- 	struct trace_seq *s = &iter->seq;
- 
+Ok. Sounds good.
 
-
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
