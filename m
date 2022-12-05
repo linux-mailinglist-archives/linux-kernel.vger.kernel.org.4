@@ -2,72 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C068642D4A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B85642D4D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiLEQlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S233104AbiLEQnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiLEQlN (ORCPT
+        with ESMTP id S233062AbiLEQml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:41:13 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E601FF83
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:39:20 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id b9-20020a056602218900b006dfecfefcfbso6631814iob.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 08:39:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPWpLiid+Wyro5Ye4DA60dyaWVhxV4ZHkH8qNNA7KLA=;
-        b=b2yX1k7SDVpbHc2MzEqQU0GnaOhNL/Vd8MVLeaxv0NWfQ/XS0lJNwiOBNyeIWRS1dc
-         0oRtjuMscIb13W93WBaaMLOuWxImpQKX6eP3JyYEHEh/UJSne41+BV5cWwWngLVDIfLU
-         NTR7oTSxYUvVe/aPFu5XnjAMmy/bixOv9tSkebuIPvKMlhGxATj7Do13zVXLGGbVT4S2
-         SztEBP07MIC5JCRZjadA1ZVjvK0mnFHS9w19D8kr3NF3tt7ZUpXOMKRUuEizOxe9gOmn
-         nk+96J2kyJ5Yd1YYUCTJ8NLclgn8julkyn6zfD3bKBT1o427WxZemG95Vps+hDGZil5x
-         g8wA==
-X-Gm-Message-State: ANoB5pl0bsZcc31f4cLMQ03ANEmLIDqpP8YILI/GhYHqvOI5vrYTUJYL
-        ZIVayMvNxcc8xHxbc5byBTFAQ3/50yXa8XH3zIFAT3y3Q0tD
-X-Google-Smtp-Source: AA0mqf4+rI8v+xc7vAWZyJK0wow3b2uzCUbjt6iBLrB7FH8dfoYlIS9+StfKDI55Ruzf3PVTKPZB9AkPx3muWB/OD0tbDR0tEJDm
+        Mon, 5 Dec 2022 11:42:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71CD20F4E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 08:39:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670258394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UwGVjXumPQzL40l8TfKHByp/JK2YeK0whUHeU5OwBrM=;
+        b=YMbzHNhQUOH10LZM0rtrFAskiEcjYyLp8y7g1nPXGNk4OvzYQpQGOuw77j5RacZT0XuXQn
+        KNCv/mFaPV9qUZ1XUbLNbVjeCB8W/jUpiSNqlKtSxw5GR8wszI/wLz0hYHwr2Pg1DlVN4M
+        nH3zIwmA10CEi8mz+MTQav4iSzBnSpw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-264-DhehImJqOyeSNq2O_-dU1w-1; Mon, 05 Dec 2022 11:39:52 -0500
+X-MC-Unique: DhehImJqOyeSNq2O_-dU1w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 428381C08787;
+        Mon,  5 Dec 2022 16:39:52 +0000 (UTC)
+Received: from llong.com (unknown [10.22.9.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AA72A492B07;
+        Mon,  5 Dec 2022 16:39:51 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-tip v3] sched: Use kfree_rcu() in do_set_cpus_allowed()
+Date:   Mon,  5 Dec 2022 11:39:36 -0500
+Message-Id: <20221205163936.2149640-1-longman@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:dc5:b0:302:e604:f814 with SMTP id
- l5-20020a056e020dc500b00302e604f814mr25516640ilj.113.1670258360339; Mon, 05
- Dec 2022 08:39:20 -0800 (PST)
-Date:   Mon, 05 Dec 2022 08:39:20 -0800
-In-Reply-To: <20221205100829.7319-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000040556c05ef175474@google.com>
-Subject: Re: [syzbot] possible deadlock in attr_data_get_block
-From:   syzbot <syzbot+36bb70085ef6edc2ebb9@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
+do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
+set. Unfortunately, some of the callers of do_set_cpus_allowed()
+may have pi_lock held when calling it. So the following splats may be
+printed especially when running with a PREEMPT_RT kernel:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+   WARNING: possible circular locking dependency detected
+   BUG: sleeping function called from invalid context
 
-Reported-and-tested-by: syzbot+36bb70085ef6edc2ebb9@syzkaller.appspotmail.com
+To avoid these problems, kfree_rcu() is used instead. An internal
+cpumask_rcuhead union is created for the sole purpose of facilitating
+the use of kfree_rcu() to free the cpumask.
 
-Tested on:
+Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/sched/core.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-commit:         c2bf05db Merge tag 'i2c-for-6.1-rc8' of git://git.kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ac7d47880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=36bb70085ef6edc2ebb9
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14f9c10f880000
+ [v3: Fix build problem reported by kernel test robot]
 
-Note: testing is done by a robot and is best-effort only.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 57e5932f81a9..155b6cfe119a 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2604,9 +2604,19 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+ 		.user_mask = NULL,
+ 		.flags     = SCA_USER,	/* clear the user requested mask */
+ 	};
++	union cpumask_rcuhead {
++		cpumask_t cpumask;
++		struct rcu_head rcu;
++	};
+ 
+ 	__do_set_cpus_allowed(p, &ac);
+-	kfree(ac.user_mask);
++
++	/*
++	 * Because this is called with p->pi_lock held, it is not possible
++	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
++	 * kfree_rcu().
++	 */
++	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
+ }
+ 
+ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+@@ -8220,7 +8230,7 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 	struct affinity_context ac;
+ 	struct cpumask *user_mask;
+ 	struct task_struct *p;
+-	int retval;
++	int retval, size;
+ 
+ 	rcu_read_lock();
+ 
+@@ -8253,7 +8263,11 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 	if (retval)
+ 		goto out_put_task;
+ 
+-	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
++	/*
++	 * See do_set_cpus_allowed() for the rcu_head usage.
++	 */
++	size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
++	user_mask = kmalloc(size, GFP_KERNEL);
+ 	if (!user_mask) {
+ 		retval = -ENOMEM;
+ 		goto out_put_task;
+-- 
+2.31.1
+
