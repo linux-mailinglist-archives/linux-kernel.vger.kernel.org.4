@@ -2,145 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F360B6424E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE0E6424F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbiLEInr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S231858AbiLEIpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232167AbiLEIng (ORCPT
+        with ESMTP id S232260AbiLEIon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:43:36 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532CF6305;
-        Mon,  5 Dec 2022 00:43:35 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id r19so10927621qtx.6;
-        Mon, 05 Dec 2022 00:43:35 -0800 (PST)
+        Mon, 5 Dec 2022 03:44:43 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F42101D6;
+        Mon,  5 Dec 2022 00:44:42 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 140so10683475pfz.6;
+        Mon, 05 Dec 2022 00:44:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mfpI91j/Y0e7n9kSIKkB1eB3wJUrqLVm9u9ZvFip/8I=;
+        b=VHG9BGw4G2xPBjZhyKDaIVmzz/QAFQ7pTzfNThhC9EAw3R6E9hL+pCGISJoH7Kz7eC
+         2I2RPf1nH8+0duwh0RdsypagnCjxw+XFIlVu8cuxAS16n71Yr8pETszT7ulv9XX1I5qD
+         IZiGDrk4Ldmb1G3zJQyFsOH90LoVGs0uFAaeq81cAWyZ92RZ0Ki6ECCkXprPRRIx0qwa
+         pGkWE5f+CtAxa18zPZS4Vbgtz2rVfYJYPUdCiDr+CYR9lN1icqOJtb+x6u2RFibOhpXr
+         PImnH+5qkcnb/ZAm7Is56SmkXjSvOVmnEFo8L/k6ECSo8hCm1nXmuQej0DhyHV/T19KG
+         VPLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TBMfq/T9pVt74NINWFPN13PsYwGHM/ql2acng2MzNpk=;
-        b=XLPwdPgWvFFoFQN+IzToIE+Rp+PBxH/j3QeCEWWNPdY1UmiHjMuAPOk1cCBIOUo/92
-         KEZ0nyYJijwYDRCkFphkit/6vh7Ed5uApsdp6x8XNq0TnJc8QH4JYiHoTQ5f4E68nso2
-         wurDT/2KgY0NhLOFCfN3una6P+FYxLUdxoPXGPXY1xFbfNiVMZHZ/4/5CdkyBCO/ouSo
-         dLvz9c7NIAIHCp577lDKyfrxYVGEY7WA5pP2UU38lLotA4m3ItbzIRh6e3w8VJgdWhJc
-         28n30M/sQlXTQDtyVm61pIsyiYlNwMdwlRZ1zx6IPxs3OTVyecHCo2nw38AH0VNiK59F
-         TInA==
-X-Gm-Message-State: ANoB5pn2tAvVakXuEDo+3ajWep8eO9HLlhUrofqCuGY6dIyZgrT05xZB
-        so3eEiYazjlfVekFTUs6nObcTCQXqYA0AA==
-X-Google-Smtp-Source: AA0mqf7LljSCKLMpTtLeL1eI9+y7kuEj12tHYQC/QBTSLfMrgoTGoYRyUB+qr1CPxH4lrMtXVsPKvA==
-X-Received: by 2002:ac8:1183:0:b0:3a5:8517:c3f3 with SMTP id d3-20020ac81183000000b003a58517c3f3mr74725249qtj.618.1670229813895;
-        Mon, 05 Dec 2022 00:43:33 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id bs17-20020a05620a471100b006bbc3724affsm12123722qkb.45.2022.12.05.00.43.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:43:33 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3b5d9050e48so110914357b3.2;
-        Mon, 05 Dec 2022 00:43:33 -0800 (PST)
-X-Received: by 2002:a81:148c:0:b0:3e5:f2ca:7be8 with SMTP id
- 134-20020a81148c000000b003e5f2ca7be8mr7694852ywu.358.1670229812835; Mon, 05
- Dec 2022 00:43:32 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mfpI91j/Y0e7n9kSIKkB1eB3wJUrqLVm9u9ZvFip/8I=;
+        b=0UQ71PIqg9MpHcry28Ksi9bNF32kpSKXx4xT+4y7Ob3LICTzurAIUzzZ5ri9+W3mJh
+         /Oaj7wzXWRZ9JTOAXcX38xUD3fC2vblGE7aOP28UJDency1iTkCbTyH9J5pqM+2LI/h1
+         1Ifajr0GFbVb3NOpNyCZhYvj7I6OVANpw9H5r3mzBeKbzoeCWDEOtk82afFJhHVnawP4
+         o3kqm1KjU2NrAHKgyDuqE79PxPaYHOXTK8aO216tT2rLDgoZdavX0hETjNAnH3fJUSK/
+         nNWdR0mOp2MYlCvUStoaXWG3m/HcvQeXe8uvvnEdw/IgBkADrERFuXaDavgJfplkrF7G
+         RiAg==
+X-Gm-Message-State: ANoB5pl12BdZPRNxrfyXqDMnm4vCM9sZGNNbQAOlyIMQyoA/04xWzeV+
+        bB0m6zsL3LrYeNvmCGQrJmg=
+X-Google-Smtp-Source: AA0mqf4c9Aw2+V+i2qnJjaDCHslItpgdR1g1SCuzHmCPiG/NYtL3k6ZxQnBTweH92Q4OiFFuyJIKfA==
+X-Received: by 2002:a63:941:0:b0:478:a350:77ed with SMTP id 62-20020a630941000000b00478a35077edmr7255134pgj.417.1670229882404;
+        Mon, 05 Dec 2022 00:44:42 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id u11-20020a170902e80b00b0018996404dd5sm10045370plg.109.2022.12.05.00.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 00:44:41 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Shuah Khan <shuah@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/powerpc: Fix resource leaks
+Date:   Mon,  5 Dec 2022 12:44:27 +0400
+Message-Id: <20221205084429.570654-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221203092941.10880-1-yuehaibing@huawei.com> <OS0PR01MB592214C639E060C5AD3A67BF86169@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB592214C639E060C5AD3A67BF86169@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 5 Dec 2022 09:43:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXs1jNgOD4u2ncW81rfxC7xb1+hc3N2VH_Gom8f9zB+vw@mail.gmail.com>
-Message-ID: <CAMuHMdXs1jNgOD4u2ncW81rfxC7xb1+hc3N2VH_Gom8f9zB+vw@mail.gmail.com>
-Subject: Re: [PATCH net] ravb: Fix potential use-after-free in ravb_rx_gbeth()
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     YueHaibing <yuehaibing@huawei.com>,
-        "s.shtylyov@omp.ru" <s.shtylyov@omp.ru>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+In check_all_cpu_dscr_defaults, opendir() opens the directory stream.
+Add missing closedir() in the error path to release it.
 
-On Sat, Dec 3, 2022 at 11:29 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > Subject: [PATCH net] ravb: Fix potential use-after-free in
-> > ravb_rx_gbeth()
-> >
-> > The skb is delivered to napi_gro_receive() which may free it, after
-> > calling this, dereferencing skb may trigger use-after-free.
->
-> Can you please reconfirm the changes you have done is actually fixing any issue?
-> If yes, please provide the details.
->
-> Current code,
->
-> napi_gro_receive(&priv->napi[q], priv->rx_1st_skb);
+In check_cpu_dscr_default, open() creates an open file descriptor.
+Add missing close() in the error path to release it.
 
-IIUIC, after this, priv->rx_1st_skb may have been freed...
+Fixes: ebd5858c904b ("selftests/powerpc: Add test for all DSCR sysfs interfaces")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ tools/testing/selftests/powerpc/dscr/dscr_sysfs_test.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
->
-> - stats->rx_bytes += priv->rx_1st_skb->len;
+diff --git a/tools/testing/selftests/powerpc/dscr/dscr_sysfs_test.c b/tools/testing/selftests/powerpc/dscr/dscr_sysfs_test.c
+index fbbdffdb2e5d..f20d1c166d1e 100644
+--- a/tools/testing/selftests/powerpc/dscr/dscr_sysfs_test.c
++++ b/tools/testing/selftests/powerpc/dscr/dscr_sysfs_test.c
+@@ -24,6 +24,7 @@ static int check_cpu_dscr_default(char *file, unsigned long val)
+ 	rc = read(fd, buf, sizeof(buf));
+ 	if (rc == -1) {
+ 		perror("read() failed");
++		close(fd);
+ 		return 1;
+ 	}
+ 	close(fd);
+@@ -65,8 +66,10 @@ static int check_all_cpu_dscr_defaults(unsigned long val)
+ 		if (access(file, F_OK))
+ 			continue;
+ 
+-		if (check_cpu_dscr_default(file, val))
++		if (check_cpu_dscr_default(file, val)) {
++			closedir(sysfs);
+ 			return 1;
++		}
+ 	}
+ 	closedir(sysfs);
+ 	return 0;
+-- 
+2.25.1
 
-... so accessing priv->rx_1st_skb->len here may be a UAF.
-
-> + stats->rx_bytes += pkt_len;
-
-So this change looks correct to me, as pkt_len was stored to
-priv->rx_1st_skb->len using skb_put() before.
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
->
-> Note: I haven't tested your patch yet to see it cause any regression.
->
-> Cheers,
-> Biju
->
-> >
-> > Fixes: 1c59eb678cbd ("ravb: Fillup ravb_rx_gbeth() stub")
-> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> > ---
-> >  drivers/net/ethernet/renesas/ravb_main.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/ethernet/renesas/ravb_main.c
-> > b/drivers/net/ethernet/renesas/ravb_main.c
-> > index 6bc923326268..33f723a9f471 100644
-> > --- a/drivers/net/ethernet/renesas/ravb_main.c
-> > +++ b/drivers/net/ethernet/renesas/ravb_main.c
-> > @@ -841,7 +841,7 @@ static bool ravb_rx_gbeth(struct net_device *ndev,
-> > int *quota, int q)
-> >                               napi_gro_receive(&priv->napi[q],
-> >                                                priv->rx_1st_skb);
-> >                               stats->rx_packets++;
-> > -                             stats->rx_bytes += priv->rx_1st_skb->len;
-> > +                             stats->rx_bytes += pkt_len;
-> >                               break;
-> >                       }
-> >               }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
